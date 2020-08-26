@@ -1,0 +1,62 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+compileJava {
+    targetCompatibility = 1.7
+    sourceCompatibility = 1.7
+}
+
+dependencies {
+    testCompile 'org.testng:testng:6.9.10'
+}
+
+test {
+    useTestNG()
+
+    testLogging.showStandardStreams = true
+    beforeTest { descriptor ->
+        logger.lifecycle("Running test: " + descriptor)
+    }
+    onOutput { descriptor, event ->
+        logger.lifecycle("Test: " + descriptor + " output: " + event.message )
+    }
+}
+
+archivesBaseName = 'constraintlayout-solver'
+
+project.ext.pomName = 'Android ConstraintLayout Solver'
+project.ext.pomDesc = 'Solver for ConstraintLayout'
+
+task publishLocal(type: Upload) {
+    configuration = configurations.archives
+    repositories {
+        mavenDeployer {
+            repository(url: uri("$rootProject.ext.localRepo"))
+            pom.project {
+                name project.ext.pomName
+                description project.ext.pomDesc
+
+                url 'http://tools.android.com'
+                inceptionYear '2007'
+
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'repo'
+                    }
+                }
+
+                scm {
+                    url 'https://android.googlesource.com/platform/tools/sherpa'
+                    connection 'git://android.googlesource.com/platform/tools/sherpa.git'
+                }
+                developers {
+                    developer {
+                        name 'The Android Open Source Project'
+                    }
+                }
+            }
+        }
+    }
+}

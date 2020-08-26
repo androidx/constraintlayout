@@ -1,0 +1,131 @@
+package androidx.constraintlayout.motion.widget;
+
+import android.content.Context;
+import android.content.res.TypedArray;
+import androidx.constraintlayout.widget.ConstraintHelper;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.R;
+import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewGroup;
+
+/**
+ * @hide
+ */
+public class MotionHelper extends ConstraintHelper implements Animatable, MotionLayout.TransitionListener {
+
+    private boolean mUseOnShow = false;
+    private boolean mUseOnHide = false;
+    private float mProgress;
+    protected View[] views;
+
+    public MotionHelper(Context context) {
+        super(context);
+    }
+
+    public MotionHelper(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(attrs);
+    }
+
+    public MotionHelper(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(attrs);
+    }
+
+    /**
+     * @hide
+     */
+    protected void init(AttributeSet attrs) {
+        super.init(attrs);
+        if (attrs != null) {
+            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.MotionHelper);
+            final int N = a.getIndexCount();
+            for (int i = 0; i < N; i++) {
+                int attr = a.getIndex(i);
+                if (attr == R.styleable.MotionHelper_onShow) {
+                    mUseOnShow = a.getBoolean(attr, mUseOnShow);
+                } else if (attr == R.styleable.MotionHelper_onHide) {
+                    mUseOnHide = a.getBoolean(attr, mUseOnHide);
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     * @return
+     * @hide
+     */
+    public boolean isUsedOnShow() {
+        return mUseOnShow;
+    }
+
+    /**
+     *
+     * @return
+     * @hide
+     */
+    public boolean isUseOnHide() {
+        return mUseOnHide;
+    }
+
+    @Override
+    public float getProgress() {
+        return mProgress;
+    }
+
+    @Override
+    public void setProgress(float progress) {
+        mProgress = progress;
+        if (this.mCount > 0) {
+            this.views = this.getViews((ConstraintLayout)this.getParent());
+
+            for(int i = 0; i < this.mCount; ++i) {
+                View view = this.views[i];
+                this.setProgress(view, progress);
+            }
+        } else {
+            ViewGroup group = (ViewGroup)this.getParent();
+            int count = group.getChildCount();
+
+            for(int i = 0; i < count; ++i) {
+                View view = group.getChildAt(i);
+                if (view instanceof MotionHelper) {
+                    continue;
+                }
+                this.setProgress(view, progress);
+            }
+        }
+    }
+
+    /**
+     *
+     * @param view
+     * @param progress
+     * @hide
+     */
+    public void setProgress(View view, float progress) {
+        // nothing
+    }
+
+    @Override
+    public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
+
+    }
+
+    @Override
+    public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
+
+    }
+
+    @Override
+    public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
+
+    }
+
+    @Override
+    public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
+
+    }
+}

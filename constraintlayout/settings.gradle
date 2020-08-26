@@ -1,0 +1,6 @@
+include ':solver', ':constraintlayout'
+
+//File externalRoot = new File(rootDir, '../external')
+//File externalRoot = new File("$System.env.DOCLAVA_PREBUILTS")
+//include ':doclava'
+//project(':doclava').projectDir = new File(externalRoot, 'doclava')

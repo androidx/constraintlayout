@@ -1,0 +1,116 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven'
+
+def latestSdkVersion = 28
+
+android {
+    compileSdkVersion latestSdkVersion
+    buildToolsVersion "28"
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion latestSdkVersion
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    // TODO replace with https://issuetracker.google.com/issues/72050365 once released.
+    libraryVariants.all {
+        it.generateBuildConfig.enabled = false
+    }
+}
+
+repositories {
+    google()
+    jcenter()
+}
+
+configurations {
+    //doclava
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.core:core:1.3.1'
+    implementation project(':solver')
+    // doclava project(':doclava')
+}
+
+archivesBaseName = 'constraintlayout'
+
+project.ext.pomName = 'Android ConstraintLayout'
+project.ext.pomDesc = 'ConstraintLayout for Android'
+
+task publishLocal(type: Upload) {
+    configuration = configurations.archives
+    repositories {
+        mavenDeployer {
+            repository(url: uri("$rootProject.ext.localRepo"))
+            pom.project {
+                name project.ext.pomName
+                description project.ext.pomDesc
+
+                url 'http://tools.android.com'
+                inceptionYear '2007'
+
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'repo'
+                    }
+                }
+
+                scm {
+                    url 'https://android.googlesource.com/platform/tools/sherpa'
+                    connection 'git://android.googlesource.com/platform/tools/sherpa.git'
+                }
+                developers {
+                    developer {
+                        name 'The Android Open Source Project'
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Call upon the DocLava tool to generate API reference
+/*
+task makeJavadocs(type: Javadoc, dependsOn: project.configurations.doclava) {
+    def docDir = "javadoc-offline"
+    if (project.hasProperty("online")) {
+        docDir = "javadoc-online"
+        options.addStringOption("dac_libraryroot", "android/support/constraint")
+        options.addStringOption("dac_dataname", "CONSTRAINT_DATA")
+        options.addStringOption("toroot", "/")
+        options.addStringOption("hdf", "dac")
+        options.addBooleanOption("devsite", true)
+        options.addBooleanOption("yamlV2", true)
+    }
+
+    title = null
+    destinationDir = new File(buildDir, docDir)
+    source = 'src/main/java'
+    def docRootDir = "$System.env.DOCLAVA_ROOTDIR"
+    classpath = files("${docRootDir}/../../prebuilts/sdk/${latestSdkVersion}/public/android.jar")
+    options.addStringOption "resourcesdir", "${docRootDir}/constraintlayout/resources/"
+    options.addStringOption "resourcesoutdir", "reference/android/support/constraint/resources/"
+    options.addStringOption "federate Android", "http://developer.android.com"
+    options.addStringOption "federationapi Android",
+                "${docRootDir}/../../prebuilts/sdk/${latestSdkVersion}/public/api/android.txt"
+    options.encoding = "UTF-8"
+    options.doclet = "com.google.doclava.Doclava"
+    options.docletpath = configurations.doclava.files.asType(List)
+    options.addStringOption("templatedir", "${docRootDir}/../../external/doclava/res/assets/templates-sdk/")
+    exclude '**/
+//BuildConfig.java'
+//    exclude '**/R.java'
+//}

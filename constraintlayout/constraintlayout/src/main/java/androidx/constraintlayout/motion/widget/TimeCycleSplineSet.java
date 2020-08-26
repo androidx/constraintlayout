@@ -1,0 +1,453 @@
+/*
+ * Copyright (C) 2018 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package androidx.constraintlayout.motion.widget;
+
+import android.os.Build;
+import androidx.constraintlayout.widget.ConstraintAttribute;
+import androidx.constraintlayout.motion.utils.CurveFit;
+import android.util.Log;
+import android.util.SparseArray;
+import android.view.View;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.text.DecimalFormat;
+
+import androidx.constraintlayout.motion.utils.Oscillator;
+
+/**
+ * This engine allows manipulation of attributes by wave shapes oscillating in time
+ *
+ * @hide
+ */
+public abstract class TimeCycleSplineSet {
+    private static final String TAG = "SplineSet";
+    protected CurveFit mCurveFit;
+    protected int mWaveShape = 0;
+    protected int[] mTimePoints = new int[10];
+    protected float[][] mValues = new float[10][3];
+    private int count;
+    private String mType;
+    private float[] mCache = new float[3];
+    private static final int CURVE_VALUE = 0;
+    private static final int CURVE_PERIOD = 1;
+    private static final int CURVE_OFFSET = 2;
+    private static float VAL_2PI = (float) (2 * Math.PI);
+    protected boolean mContinue = false;
+    long last_time;
+    float last_cycle = Float.NaN;
+
+    @Override
+    public String toString() {
+        String str = mType;
+        DecimalFormat df = new DecimalFormat("##.##");
+        for (int i = 0; i < count; i++) {
+            str += "[" + mTimePoints[i] + " , " + df.format(mValues[i]) + "] ";
+        }
+        return str;
+    }
+
+    public void setType(String type) {
+        mType = type;
+    }
+
+    public abstract boolean setProperty(View view, float t, long time, KeyCache cache);
+
+    public float get(float pos, long time, View view, KeyCache cache) {
+        mCurveFit.getPos(pos, mCache);
+        float period = mCache[CURVE_PERIOD];
+        if (period == 0) {
+            mContinue = false;
+            return mCache[CURVE_OFFSET];
+        }
+        if (Float.isNaN(last_cycle)) { // it has not been set
+            last_cycle = cache.getFloatValue(view, mType, 0); // check the cache
+            if (Float.isNaN(last_cycle)) {  // not in cache so set to 0 (start)
+                last_cycle = 0;
+            }
+        }
+        long delta_time = time - last_time;
+        last_cycle = (float) ((last_cycle + delta_time * 1E-9 * period) % 1.0);
+        cache.setFloatValue(view, mType, 0, last_cycle);
+        last_time = time;
+        float v = mCache[CURVE_VALUE];
+        float wave = calcWave(last_cycle);
+        float offset = mCache[CURVE_OFFSET];
+        float value = v * wave + offset;
+        mContinue = v != 0.0f || period != 0.0f;
+        return value;
+    }
+
+    /**
+     * @param period cycles per second
+     * @return
+     */
+    protected float calcWave(float period) {
+        float p = period;
+        switch (mWaveShape) {
+            default:
+            case Oscillator.SIN_WAVE:
+                return (float) Math.sin(p * VAL_2PI);
+            case Oscillator.SQUARE_WAVE:
+                return (float) Math.signum(p * VAL_2PI);
+            case Oscillator.TRIANGLE_WAVE:
+                return 1 - Math.abs(p);
+            case Oscillator.SAW_WAVE:
+                return ((p * 2 + 1) % 2) - 1;
+            case Oscillator.REVERSE_SAW_WAVE:
+                return (1 - ((p * 2 + 1) % 2));
+            case Oscillator.COS_WAVE:
+                return (float) Math.cos(p * VAL_2PI);
+            case Oscillator.BOUNCE:
+                float x = 1 - Math.abs((p * 4) % 4 - 2);
+                return 1 - x * x;
+        }
+    }
+
+    public CurveFit getCurveFit() {
+        return mCurveFit;
+    }
+
+    static TimeCycleSplineSet makeCustomSpline(String str, SparseArray<ConstraintAttribute> attrList) {
+        return new CustomSet(str, attrList);
+    }
+
+    static TimeCycleSplineSet makeSpline(String str, long currentTime) {
+        TimeCycleSplineSet timeCycle;
+        switch (str) {
+            case Key.ALPHA:
+                timeCycle = new AlphaSet();
+                break;
+            case Key.ELEVATION:
+                timeCycle = new ElevationSet();
+                break;
+            case Key.ROTATION:
+                timeCycle = new RotationSet();
+                break;
+            case Key.ROTATION_X:
+                timeCycle = new RotationXset();
+                break;
+            case Key.ROTATION_Y:
+                timeCycle = new RotationYset();
+                break;
+            case Key.TRANSITION_PATH_ROTATE:
+                timeCycle = new PathRotate();
+                break;
+            case Key.SCALE_X:
+                timeCycle = new ScaleXset();
+                break;
+            case Key.SCALE_Y:
+                timeCycle = new ScaleYset();
+                break;
+            case Key.TRANSLATION_X:
+                timeCycle = new TranslationXset();
+                break;
+            case Key.TRANSLATION_Y:
+                timeCycle = new TranslationYset();
+                break;
+            case Key.TRANSLATION_Z:
+                timeCycle = new TranslationZset();
+                break;
+            case Key.PROGRESS:
+                timeCycle = new ProgressSet();
+                break;
+            default:
+                return null;
+        }
+        timeCycle.setStartTime(currentTime);
+        return timeCycle;
+    }
+
+    protected void setStartTime(long currentTime) {
+        last_time = currentTime;
+    }
+
+    public void setPoint(int position, float value, float period, int shape, float offset) {
+        mTimePoints[count] = position;
+        mValues[count][CURVE_VALUE] = value;
+        mValues[count][CURVE_PERIOD] = period;
+        mValues[count][CURVE_OFFSET] = offset;
+        mWaveShape = Math.max(mWaveShape, shape); // the highest value shape is chosen
+        count++;
+    }
+
+    public void setup(int curveType) {
+        if (count == 0) {
+            Log.e(TAG, "Error no points added to " + mType);
+            return;
+        }
+        Sort.doubleQuickSort(mTimePoints, mValues, 0, count - 1);
+        int unique = 0;
+        for (int i = 1; i < mTimePoints.length; i++) {
+            if (mTimePoints[i] != mTimePoints[i - 1]) {
+                unique++;
+            }
+        }
+        if (unique==0) {
+            unique = 1;
+        }
+        double[] time = new double[unique];
+        double[][] values = new double[unique][3];
+        int k = 0;
+
+        for (int i = 0; i < count; i++) {
+            if (i > 0 && mTimePoints[i] == mTimePoints[i - 1]) {
+                continue;
+            }
+            time[k] = mTimePoints[i] * 1E-2;
+            values[k][0] = mValues[i][0];
+            values[k][1] = mValues[i][1];
+            values[k][2] = mValues[i][2];
+            k++;
+        }
+        mCurveFit = CurveFit.get(curveType, time, values);
+    }
+
+    static class ElevationSet extends TimeCycleSplineSet {
+        @Override
+        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                view.setElevation(get(t, time, view, cache));
+            }
+            return mContinue;
+        }
+    }
+
+    static class AlphaSet extends TimeCycleSplineSet {
+        @Override
+        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+            view.setAlpha(get(t, time, view, cache));
+            return mContinue;
+        }
+    }
+
+    static class RotationSet extends TimeCycleSplineSet {
+        @Override
+        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+            view.setRotation(get(t, time, view, cache));
+            return mContinue;
+        }
+    }
+
+    static class RotationXset extends TimeCycleSplineSet {
+        @Override
+        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+            view.setRotationX(get(t, time, view, cache));
+            return mContinue;
+        }
+    }
+
+    static class RotationYset extends TimeCycleSplineSet {
+        @Override
+        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+            view.setRotationY(get(t, time, view, cache));
+            return mContinue;
+        }
+    }
+
+    static class PathRotate extends TimeCycleSplineSet {
+        @Override
+        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+            return mContinue;
+        }
+
+        public boolean setPathRotate(View view, KeyCache cache, float t, long time, double dx, double dy) {
+            view.setRotation(get(t, time, view, cache) + (float) Math.toDegrees(Math.atan2(dy, dx)));
+            return mContinue;
+        }
+    }
+
+    static class ScaleXset extends TimeCycleSplineSet {
+        @Override
+        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+            view.setScaleX(get(t, time, view, cache));
+            return mContinue;
+        }
+    }
+
+    static class ScaleYset extends TimeCycleSplineSet {
+        @Override
+        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+            view.setScaleY(get(t, time, view, cache));
+            return mContinue;
+        }
+    }
+
+    static class TranslationXset extends TimeCycleSplineSet {
+        @Override
+        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+            view.setTranslationX(get(t, time, view, cache));
+            return mContinue;
+        }
+    }
+
+    static class TranslationYset extends TimeCycleSplineSet {
+        @Override
+        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+            view.setTranslationY(get(t, time, view, cache));
+            return mContinue;
+        }
+    }
+
+    static class TranslationZset extends TimeCycleSplineSet {
+        @Override
+        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                view.setTranslationZ(get(t, time, view, cache));
+            }
+            return mContinue;
+        }
+    }
+
+    static class CustomSet extends TimeCycleSplineSet {
+        String mAttributeName;
+        SparseArray<ConstraintAttribute> mConstraintAttributeList;
+        SparseArray<float[]> mWaveProperties = new SparseArray<>();
+        float[] mTempValues;
+        float[] mCache;
+
+        public CustomSet(String attribute, SparseArray<ConstraintAttribute> attrList) {
+            mAttributeName = attribute.split(",")[1];
+            mConstraintAttributeList = attrList;
+        }
+
+        public void setup(int curveType) {
+            int size = mConstraintAttributeList.size();
+            int dimensionality = mConstraintAttributeList.valueAt(0).noOfInterpValues();
+            double[] time = new double[size];
+            mTempValues = new float[dimensionality + 2];
+            mCache = new float[dimensionality];
+            double[][] values = new double[size][dimensionality + 2];
+            for (int i = 0; i < size; i++) {
+                int key = mConstraintAttributeList.keyAt(i);
+                ConstraintAttribute ca = mConstraintAttributeList.valueAt(i);
+                float[] waveProp = mWaveProperties.valueAt(i);
+                time[i] = key * 1E-2;
+                ca.getValuesToInterpolate(mTempValues);
+                for (int k = 0; k < mTempValues.length; k++) {
+                    values[i][k] = mTempValues[k];
+                }
+                values[i][dimensionality] = waveProp[0];
+                values[i][dimensionality + 1] = waveProp[1];
+            }
+            mCurveFit = CurveFit.get(curveType, time, values);
+        }
+
+        public void setPoint(int position, float value, float period, int shape, float offset) {
+            throw new RuntimeException("don't call for custom attribute call setPoint(pos, ConstraintAttribute,...)");
+        }
+
+        public void setPoint(int position, ConstraintAttribute value, float period, int shape, float offset) {
+            mConstraintAttributeList.append(position, value);
+            mWaveProperties.append(position, new float[]{period, offset});
+            mWaveShape = Math.max(mWaveShape, shape); // the highest value shape is chosen
+        }
+
+        @Override
+        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+            mCurveFit.getPos(t, mTempValues);
+            float period = mTempValues[mTempValues.length - 2];
+            float offset = mTempValues[mTempValues.length - 1];
+            long delta_time = time - last_time;
+            last_cycle = (float) ((last_cycle + delta_time * 1E-9 * period) % 1.0);
+            last_time = time;
+            float wave = calcWave(last_cycle);
+            mContinue = false;
+            for (int i = 0; i < mCache.length; i++) {
+                mContinue |= mTempValues[i] != 0.0;
+                mCache[i] = mTempValues[i] * wave + offset;
+            }
+            mConstraintAttributeList.valueAt(0).setInterpolatedValue(view, mCache);
+            if (period != 0.0f) {
+                mContinue = true;
+            }
+            return mContinue;
+        }
+    }
+
+    static class ProgressSet extends TimeCycleSplineSet {
+        boolean mNoMethod = false;
+
+        @Override
+        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+            if (view instanceof MotionLayout) {
+                ((MotionLayout) view).setProgress(get(t, time, view, cache));
+            } else {
+                if (mNoMethod) {
+                    return false;
+                }
+                Method method = null;
+                try {
+                    method = view.getClass().getMethod("setProgress", Float.TYPE);
+                } catch (NoSuchMethodException e) {
+                    mNoMethod = true;
+                }
+                if (method != null) {
+                    try {
+                        method.invoke(view, get(t, time, view, cache));
+                    } catch (IllegalAccessException e) {
+                        Log.e(TAG, "unable to setProgress", e);
+                    } catch (InvocationTargetException e) {
+                        Log.e(TAG, "unable to setProgress", e);
+                    }
+                }
+            }
+            return mContinue;
+        }
+    }
+
+    private static class Sort {
+        static void doubleQuickSort(int[] key, float[][] value, int low, int hi) {
+            int[] stack = new int[key.length + 10];
+            int count = 0;
+            stack[count++] = hi;
+            stack[count++] = low;
+            while (count > 0) {
+                low = stack[--count];
+                hi = stack[--count];
+                if (low < hi) {
+                    int p = partition(key, value, low, hi);
+                    stack[count++] = p - 1;
+                    stack[count++] = low;
+                    stack[count++] = hi;
+                    stack[count++] = p + 1;
+                }
+            }
+        }
+
+        private static int partition(int[] array, float[][] value, int low, int hi) {
+            int pivot = array[hi];
+            int i = low;
+            for (int j = low; j < hi; j++) {
+                if (array[j] <= pivot) {
+                    swap(array, value, i, j);
+                    i++;
+                }
+            }
+            swap(array, value, i, hi);
+            return i;
+        }
+
+        private static void swap(int[] array, float[][] value, int a, int b) {
+            int tmp = array[a];
+            array[a] = array[b];
+            array[b] = tmp;
+            float[] tmpv = value[a];
+            value[a] = value[b];
+            value[b] = tmpv;
+        }
+    }
+}
