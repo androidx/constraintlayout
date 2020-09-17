@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/motion_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+     app:layoutDescription="@xml/verification_scene_16"
+    app:motionDebug="SHOW_ALL">
+<!--    app:currentState="@+id/center_on_bottom"-->
+    <View
+        android:id="@+id/left_card"
+         android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#AFB"
+        app:layout_constraintTop_toTopOf="parent"
+
+         app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintWidth_percent="0.5" />
+
+    <View
+        android:id="@+id/right_card"
+
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        android:background="#FFD9AA"
+        app:layout_constraintTop_toTopOf="parent"
+
+         app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintWidth_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="left_card,right_card" />
+<!--    <android.support.constraint.Guideline-->
+<!--        android:id="@+id/barrier"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        />-->
+    <View
+        android:id="@+id/center_card"
+
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#CDAAFF"
+
+        app:layout_constraintHeight_percent="0.8"
+        app:layout_constraintTop_toBottomOf="@id/barrier" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

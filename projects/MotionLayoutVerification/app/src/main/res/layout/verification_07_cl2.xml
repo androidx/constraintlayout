@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#432">
+
+
+    <ImageButton
+        android:id="@+id/imageButton6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#0000"
+        app:layout_constraintBottom_toTopOf="@+id/button8"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton7"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_wifi" />
+
+    <ImageButton
+        android:id="@+id/imageButton7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#0000"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton8"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageButton6"
+        app:layout_constraintTop_toTopOf="@+id/imageButton6"
+        app:srcCompat="@drawable/ic_cell" />
+
+    <ImageButton
+        android:id="@+id/imageButton8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#0000"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton9"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageButton7"
+        app:layout_constraintTop_toTopOf="@+id/imageButton7"
+        app:srcCompat="@drawable/ic_battery" />
+
+    <ImageButton
+        android:id="@+id/imageButton9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#0000"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton10"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageButton8"
+        app:layout_constraintTop_toTopOf="@+id/imageButton8"
+        app:srcCompat="@drawable/ic_disturb" />
+
+    <ImageButton
+        android:id="@+id/imageButton10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#0000"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton11"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageButton9"
+        app:layout_constraintTop_toTopOf="@+id/imageButton9"
+        app:srcCompat="@drawable/ic_flash" />
+
+    <ImageButton
+        android:id="@+id/imageButton11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#0000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageButton10"
+        app:layout_constraintTop_toTopOf="@+id/imageButton10"
+        app:srcCompat="@drawable/ic_screen_rotation" />
+
+    <ImageButton
+        android:id="@+id/imageButton12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#0000"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/button8"
+        app:layout_constraintStart_toStartOf="@+id/imageButton9"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_bluetooth" />
+
+    <ImageButton
+        android:id="@+id/imageButton13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#0000"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/button8"
+        app:layout_constraintStart_toStartOf="@+id/imageButton10"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_cast" />
+
+    <ImageButton
+        android:id="@+id/imageButton14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#0000"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/button8"
+        app:layout_constraintStart_toStartOf="@+id/imageButton11"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_airplane" />
+
+    <Button
+        android:id="@+id/button8"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="96dp"
+        android:text="Button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+          />
+</androidx.constraintlayout.widget.ConstraintLayout>

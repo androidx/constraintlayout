@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/motion_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:motionDebug="SHOW_ALL"
+     app:layoutDescription="@xml/verification_scene_17a"
+  >
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:background="@android:color/holo_purple"
+        app:layoutDescription="@xml/verification_scene_17b"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:motionDebug="SHOW_ALL">
+
+        <View
+            android:id="@+id/innerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@android:color/holo_blue_bright"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/innerView2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@android:color/holo_red_light"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.motion.widget.MotionLayout>
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@android:color/holo_green_light"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view" />
+
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

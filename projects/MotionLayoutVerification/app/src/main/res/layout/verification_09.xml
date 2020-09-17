@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motion_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#99D"
+    app:layoutDescription="@xml/verification_scene_09"
+    tools:context=".VerificationActivity">
+ <Button
+     android:id="@+id/left"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     app:layout_constraintStart_toStartOf="parent"
+     app:layout_constraintTop_toTopOf="parent"
+     android:text="left"
+     android:textColor="#FFF"
+     android:onClick="toggleColor"
+     android:background="#733"
+     />
+
+    <Button
+        android:id="@+id/right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="right"
+        android:textColor="#FFF"
+        android:onClick="toggleColor"
+        android:background="#733"
+        />
+
+
+    <TextView
+        android:id="@+id/moving_view"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:text="RecyclerView swipe should stop in place and not auto closse and clicking should toggle / text should wrap word by word"
+        android:background="#A66" />
+<!-- recycler view populated by MainActivity -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@id/inner_end"
+        motion:constraintSetStart="@id/inner_start" />
+
+    <ConstraintSet android:id="@+id/inner_start" />
+
+    <ConstraintSet android:id="@+id/inner_end">
+        <Constraint android:id="@+id/innerView2">
+            <Layout
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintRight_toRightOf="parent" />
+        </Constraint>
+    </ConstraintSet>
+</MotionScene>

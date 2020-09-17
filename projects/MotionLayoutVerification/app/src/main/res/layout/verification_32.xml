@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FF00"
+    tools:context=".VerificationActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F0F0"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.motion.widget.MotionLayout
+            android:id="@+id/motionLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#F00F"
+            app:layoutDescription="@xml/verification_scene_32"
+             >
+            <androidx.cardview.widget.CardView
+                android:id="@+id/test_card"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:background="#F888"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                app:layout_constraintTop_toTopOf="parent" >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="in card"
+                    android:textColor="#FF8F" />
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.motion.widget.MotionLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="cancel"
+            android:textColor="#FF8F" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
