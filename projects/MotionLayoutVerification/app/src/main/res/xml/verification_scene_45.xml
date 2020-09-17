@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto"
+    motion:defaultDuration="1000">
+
+<!--    motion:constraintSetEnd="@+id/tx1"-->
+<!--    motion:constraintSetStart="@id/start"-->
+    <Transition
+
+        motion:duration="1000">
+       <KeyFrameSet>
+           <KeyPosition
+               motion:motionTarget="@+id/view5"
+               motion:framePosition="48"
+               motion:keyPositionType="pathRelative"
+               motion:percentY="0.4" />
+           <KeyAttribute
+               motion:motionTarget="@+id/view5"
+               motion:framePosition="49"
+               android:alpha="0.3" />
+           <KeyCycle
+               motion:motionTarget="@+id/view5"
+               motion:framePosition="50"
+               motion:wavePeriod="1"
+               android:scaleX="0.2"
+               motion:waveOffset="1"
+               android:scaleY="0.2" />
+       </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:id="@+id/view5"
+            motion:layout_constraintEnd_toEndOf="@+id/editTextText1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            motion:layout_constraintBottom_toBottomOf="@+id/editTextText1"
+            motion:layout_constraintTop_toTopOf="@+id/editTextText1"
+            motion:layout_constraintStart_toStartOf="@+id/editTextText1">
+            <CustomAttribute
+                motion:attributeName="backgroundColor"
+                motion:customColorValue="#8FB" />
+        </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/tx1" >
+        <Constraint
+            android:layout_height="0dp"
+            motion:layout_constraintTop_toTopOf="@+id/editTextText"
+            motion:layout_constraintBottom_toBottomOf="@+id/editTextText"
+            motion:layout_constraintEnd_toEndOf="@+id/editTextText"
+            android:layout_width="0dp"
+            android:id="@+id/view5"
+            motion:layout_constraintStart_toStartOf="@+id/editTextText" >
+            <CustomAttribute
+                motion:attributeName="backgroundColor"
+                motion:customColorValue="#8AF" />
+        </Constraint>
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/tx2" >
+        <Constraint
+            android:layout_height="0dp"
+            motion:layout_constraintStart_toStartOf="@+id/editTextText2"
+            motion:layout_constraintTop_toTopOf="@+id/editTextText2"
+            motion:layout_constraintBottom_toBottomOf="@+id/editTextText2"
+            motion:layout_constraintEnd_toEndOf="@+id/editTextText2"
+            android:layout_width="0dp"
+            android:id="@+id/view5"
+            android:rotation="360" >
+            <CustomAttribute
+                motion:attributeName="backgroundColor"
+                motion:customColorValue="#FA8" />
+        </Constraint>
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/tx3" >
+        <Constraint
+            android:layout_height="0dp"
+            motion:layout_constraintStart_toStartOf="@+id/editTextText3"
+            motion:layout_constraintTop_toTopOf="@+id/editTextText3"
+            motion:layout_constraintBottom_toBottomOf="@+id/editTextText3"
+            motion:layout_constraintEnd_toEndOf="@+id/editTextText3"
+            android:layout_width="0dp"
+            android:id="@+id/view5" >
+            <CustomAttribute
+                motion:attributeName="backgroundColor"
+                motion:customColorValue="#8AF" />
+        </Constraint>
+    </ConstraintSet>
+</MotionScene>

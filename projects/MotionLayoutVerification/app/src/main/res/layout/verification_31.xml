@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".VerificationActivity">
+
+    <!--    <com.hjq.myapplication.CustomView-->
+    <View
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@android:color/holo_blue_bright"/>
+
+    <!--    <com.hjq.myapplication.CustomMotionLayout-->
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/motionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutDescription="@xml/verification_scene_31"
+        android:layout_below="@id/top"
+        >
+
+        <RelativeLayout
+            android:id="@+id/ani"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="#cccccc"
+            android:transformPivotY="-50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+
+            <TextView
+                android:id="@+id/titleView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/holo_orange_dark"
+                android:gravity="center"
+                android:text="title"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </RelativeLayout>
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
+</RelativeLayout>

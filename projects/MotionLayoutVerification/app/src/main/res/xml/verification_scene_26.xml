@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+    <Transition
+        motion:constraintSetEnd="@+id/start"
+        motion:constraintSetStart="@+id/prestart"
+        motion:autoTransition="animateToEnd"
+        motion:duration="1000"
+        />
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@+id/start"
+        motion:duration="1000">
+
+        <OnClick   />
+    </Transition>
+
+    <ConstraintSet android:id="@+id/prestart">
+        <Constraint
+            android:id="@+id/counter"  >
+            <Transform android:scaleY="10" android:scaleX="10"/>
+        </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:id="@+id/counter"  >
+        <Transform android:scaleY="1" android:scaleX="1"/>
+        </Constraint>
+    </ConstraintSet>
+
+
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@+id/counter"  >
+            <Transform android:scaleY="10" android:scaleX="10"/>
+        </Constraint>
+    </ConstraintSet>
+
+</MotionScene>

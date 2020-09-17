@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetStart="@id/content_hidden"
+        motion:constraintSetEnd="@id/content_visible"
+        motion:duration="1000">
+
+        <OnClick motion:targetId="@+id/motion_button" />
+
+        <!-- It was suggested that adding this
+        KeyAttribute to control the alpha on the target
+        would fix the issue, but it does not... -->
+        <KeyFrameSet>
+            <KeyAttribute
+                android:alpha="1.0"
+                motion:motionTarget="@+id/toggled_content"
+                motion:framePosition="1" />
+        </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet  android:id="@+id/content_hidden">
+        <Constraint android:id="@+id/toggled_content">
+            <Layout
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                motion:layout_constraintBottom_toBottomOf="@id/motion_top_bar"
+                motion:layout_constraintEnd_toEndOf="parent" />
+            <PropertySet android:visibility="gone" />
+        </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/content_visible">
+        <Constraint android:id="@+id/toggled_content">
+            <Layout
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                motion:layout_constraintTop_toBottomOf="@id/motion_top_bar"
+                motion:layout_constraintEnd_toEndOf="parent" />
+            <PropertySet android:visibility="visible" />
+        </Constraint>
+    </ConstraintSet>
+
+</MotionScene>

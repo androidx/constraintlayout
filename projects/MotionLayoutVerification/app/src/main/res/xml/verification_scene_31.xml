@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+    <ConstraintSet android:id="@+id/start">
+
+        <Constraint
+            android:id="@+id/ani"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="#cccccc"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+        </Constraint>
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+
+        <Constraint
+            android:id="@+id/ani"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#cccccc"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </Constraint>
+
+    </ConstraintSet>
+
+    <Transition
+        app:constraintSetEnd="@id/end"
+        app:constraintSetStart="@id/start"
+        app:duration="500">
+
+
+        <OnSwipe
+            app:dragDirection="dragUp"
+            app:touchAnchorId="@id/ani"
+            app:touchAnchorSide="top" />
+
+
+    </Transition>
+</MotionScene>

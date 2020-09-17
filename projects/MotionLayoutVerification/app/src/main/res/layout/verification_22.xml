@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ml_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eeeeee">
+
+
+    <TextView
+        android:id="@+id/top_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#FCF"
+        android:text="Content Header"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/motion_instructions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FF9"
+        android:padding="4dp"
+        android:text="This whole view is a motion layout.
+\nClick the Header above to trigger the primary motion on this layout (moving the header back and forth).
+\n\nThe white area below is a child motion layout. Click the Toggle Motion button to trigger it's motion, revealing another view below the button."
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_content" />
+
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/ml_child"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        app:layoutDescription="@xml/verification_scene_21c"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/motion_instructions">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/motion_top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="1dp"
+            android:padding="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
+            android:background="#FDB"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/my_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Child Motion Layout"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/motion_button"
+                app:layout_constraintEnd_toStartOf="@id/motion_button"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/motion_button" />
+
+            <Button
+                android:id="@+id/motion_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#9AF"
+                android:text="Toggle Motion"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/my_text"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <TextView
+            android:id="@+id/toggled_content"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:background="#FCF"
+            android:text="This is toggled content"
+            android:textColor="#000"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/motion_top_bar"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
+
+    <TextView
+        android:id="@+id/bottom_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="4dp"
+        android:text="Note how when the motion animation runs on the child
+motionLayout, the height does not animate smoothly, and instead snaps into place at the end
+of the transition. There are 2 ways you can fix the issue, neither of which is ideal.\n
+\nFirst, you can remove the duration on the transition in the child motionLayout. However,
+then the animation runs very fast, and you loose the ability to specify how fast the animation should run.
+\n\nSecond, you can remove the MotionLayout from the containing (root) layout and just make it a ConstraintLayout.
+Then, the animation runs smoothly, even with a duration set. But then you lose the ability to have motion on the Content Header.
+\n\nThis example is admittedly contrived, and you could probably find a solution that eliminates the nesting
+and only requires a single MotionLayout. But a real app very well may need to nest MotionLayouts, and
+so this defect is ery real."
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ml_child" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@+id/start"
+        motion:duration="100"
+        motion:motionInterpolator="easeInOut">
+
+        <OnSwipe
+            motion:dragDirection="dragDown"
+            motion:touchAnchorId="@+id/button"
+            motion:touchAnchorSide="top"
+        />
+    </Transition>
+    <ConstraintSet android:id="@+id/start">
+        <Constraint android:id="@+id/button"
+            motion:layout_constraintVertical_bias="0.167"
+            android:layout_height="64dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintHorizontal_bias="0.256"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="64dp">
+
+            <CustomAttribute
+                motion:attributeName="brightness"
+                motion:customFloatValue="1" />
+            <CustomAttribute
+                motion:attributeName="roundPercent"
+                motion:customFloatValue="0" />
+            <CustomAttribute
+                motion:attributeName="saturation"
+                motion:customFloatValue="0.5" />
+            <CustomAttribute
+                motion:attributeName="warmth"
+                motion:customFloatValue="1" />
+            <CustomAttribute
+                motion:attributeName="imageAlpha" motion:customIntegerValue="128"/>
+        </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint android:id="@id/button"
+            motion:layout_constraintVertical_bias="0.699"
+            android:layout_height="128dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintHorizontal_bias="0.637"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="128dp">
+
+            <CustomAttribute
+                motion:attributeName="brightness"
+                motion:customFloatValue="0.9" />
+            <CustomAttribute
+                motion:attributeName="roundPercent"
+                motion:customFloatValue="1" />
+            <CustomAttribute
+                motion:attributeName="saturation"
+                motion:customFloatValue="1" />
+            <CustomAttribute
+                motion:attributeName="warmth"
+                motion:customFloatValue="1.5" />
+            <CustomAttribute
+                motion:attributeName="imageAlpha" motion:customIntegerValue="255"/>
+        </Constraint>
+    </ConstraintSet>
+</MotionScene>

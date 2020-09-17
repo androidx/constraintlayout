@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bob"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#CFC"
+    app:layoutDescription="@xml/verification_scene_02"
+    app:showPaths="true">
+
+    <Button
+        android:id="@+id/button_east"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="east"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_south"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="south"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button_north"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="north"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_west"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="west"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="64dp"
+        android:background="#A66"
+        android:onClick="click"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Multi-state swipe, This test multi state swiping you should be able to swip in 4 directions from the center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <!--ndroid.support.constraint.motion.MotionLayout-->
+</androidx.constraintlayout.motion.widget.MotionLayout>
