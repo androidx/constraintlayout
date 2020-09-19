@@ -20,7 +20,7 @@ export DOCLAVA_ROOTDIR=$STUDIO_MASTER/tools/sherpa/
 To compile and publish to your local offline M2 repository, you need to run:
 
 ```bash
-./buildLocally.sh
+./localBuild.sh
 ```
 
 To generate the maven artifact, you then need to run:
