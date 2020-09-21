@@ -1,0 +1,84 @@
+{
+  "duration": "469500",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "48",
+          "left": "48",
+          "bottom": "216",
+          "right": "216"
+        },
+        "id": "cancel_button",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "1920",
+          "right": "1080"
+        },
+        "id": "playback_space",
+        "class": "Space"
+      },
+      {
+        "bounds": {
+          "top": "1536",
+          "left": "0",
+          "bottom": "1536",
+          "right": "0"
+        },
+        "id": "parent_bottom",
+        "class": "Space"
+      },
+      {
+        "bounds": {
+          "top": "1920",
+          "left": "0",
+          "bottom": "1920",
+          "right": "0"
+        },
+        "id": "playback_bottom",
+        "class": "Space"
+      },
+      {
+        "bounds": {
+          "top": "804",
+          "left": "468",
+          "bottom": "948",
+          "right": "612"
+        },
+        "id": "progress_circular",
+        "class": "ProgressBar"
+      },
+      {
+        "bounds": {
+          "top": "1536",
+          "left": "0",
+          "bottom": "1536",
+          "right": "0"
+        },
+        "id": "bottom",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "1536",
+          "left": "0",
+          "bottom": "1536",
+          "right": "0"
+        },
+        "id": "test",
+        "class": "AppCompatImageView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "duration": "162192",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "732",
+          "left": "48",
+          "bottom": "804",
+          "right": "120"
+        },
+        "id": "ic__checkout_header_icon",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "715",
+          "left": "168",
+          "bottom": "821",
+          "right": "912"
+        },
+        "id": "ic__checkout_header_title",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "ic__checkout_header_subtitle",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "ic__checkout_highlighted_title",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "ic__checkout_header_error",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "732",
+          "left": "960",
+          "bottom": "804",
+          "right": "1032"
+        },
+        "id": "ic__checkout_header_drop_down_indicator",
+        "class": "AppCompatImageView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "id": "ic__checkout_header_container",
+    "class": "ConstraintLayout"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "duration": "634000",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "618",
+          "left": "30",
+          "bottom": "918",
+          "right": "420"
+        },
+        "id": "text_container",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "618",
+          "left": "447",
+          "bottom": "918",
+          "right": "747"
+        },
+        "id": "tablet_experience_preview",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "1083",
+          "left": "420",
+          "bottom": "1296",
+          "right": "747"
+        },
+        "id": "get_started_button",
+        "class": "Button"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "777"
+    },
+    "class": "ConstraintLayout"
+  }
+}

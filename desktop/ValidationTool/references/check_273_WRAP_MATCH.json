@@ -1,0 +1,34 @@
+{
+  "duration": "168650",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "715",
+          "left": "180",
+          "bottom": "821",
+          "right": "1080"
+        },
+        "id": "textView34",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "678",
+          "left": "0",
+          "bottom": "858",
+          "right": "180"
+        },
+        "id": "button102",
+        "class": "AppCompatButton"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

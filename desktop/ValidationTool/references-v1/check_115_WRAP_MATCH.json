@@ -1,0 +1,79 @@
+{
+  "duration": "39469",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "45",
+          "bottom": "0",
+          "right": "45"
+        },
+        "id": "guideline",
+        "class": "Guideline"
+      },
+      {
+        "children": [],
+        "bounds": {
+          "top": "48",
+          "left": "45",
+          "bottom": "326",
+          "right": "60"
+        },
+        "id": "hr_5_peak",
+        "class": "FrameLayout"
+      },
+      {
+        "children": [],
+        "bounds": {
+          "top": "338",
+          "left": "45",
+          "bottom": "617",
+          "right": "60"
+        },
+        "id": "hr_4_anaerobic",
+        "class": "FrameLayout"
+      },
+      {
+        "children": [],
+        "bounds": {
+          "top": "629",
+          "left": "45",
+          "bottom": "907",
+          "right": "60"
+        },
+        "id": "hr_3_aerobic",
+        "class": "FrameLayout"
+      },
+      {
+        "children": [],
+        "bounds": {
+          "top": "919",
+          "left": "45",
+          "bottom": "1198",
+          "right": "60"
+        },
+        "id": "hr_2_fatburn",
+        "class": "FrameLayout"
+      },
+      {
+        "children": [],
+        "bounds": {
+          "top": "1210",
+          "left": "45",
+          "bottom": "1488",
+          "right": "60"
+        },
+        "id": "hr_1_warm",
+        "class": "FrameLayout"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "60"
+    },
+    "class": "ConstraintLayout"
+  }
+}

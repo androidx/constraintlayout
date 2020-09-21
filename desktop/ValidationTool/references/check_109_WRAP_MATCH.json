@@ -1,0 +1,74 @@
+{
+  "duration": "154962",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "48",
+          "bottom": "57",
+          "right": "48"
+        },
+        "id": "textView1",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "48",
+          "bottom": "0",
+          "right": "48"
+        },
+        "id": "myBarrier",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "180",
+          "left": "48",
+          "bottom": "237",
+          "right": "48"
+        },
+        "id": "textView2",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "textView3",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "237",
+          "left": "48",
+          "bottom": "294",
+          "right": "48"
+        },
+        "id": "textView4",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "57",
+          "left": "48",
+          "bottom": "114",
+          "right": "48"
+        },
+        "id": "textView5",
+        "class": "AppCompatTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "96"
+    },
+    "class": "ConstraintLayout"
+  }
+}

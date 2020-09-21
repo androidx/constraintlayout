@@ -1,0 +1,55 @@
+{
+  "duration": "161062",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "30",
+          "left": "30",
+          "bottom": "300",
+          "right": "300"
+        },
+        "id": "image",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "300",
+          "left": "90",
+          "bottom": "570",
+          "right": "360"
+        },
+        "id": "image2",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "390",
+          "bottom": "0",
+          "right": "390"
+        },
+        "id": "barrierEnd",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "barrierStart",
+        "class": "Barrier"
+      }
+    ],
+    "bounds": {
+      "top": "15",
+      "left": "180",
+      "bottom": "570",
+      "right": "390"
+    },
+    "id": "activity_main",
+    "class": "ConstraintLayout"
+  }
+}

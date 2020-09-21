@@ -1,0 +1,34 @@
+{
+  "duration": "12725",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "336",
+          "right": "1080"
+        },
+        "id": "appBar",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "168",
+          "left": "24",
+          "bottom": "505",
+          "right": "249"
+        },
+        "id": "ivPreview",
+        "class": "AppCompatImageView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

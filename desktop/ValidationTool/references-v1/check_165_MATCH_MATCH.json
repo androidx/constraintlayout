@@ -1,0 +1,54 @@
+{
+  "duration": "40307",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "732",
+          "left": "0",
+          "bottom": "804",
+          "right": "72"
+        },
+        "id": "icon",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "711",
+          "left": "144",
+          "bottom": "768",
+          "right": "960"
+        },
+        "id": "title",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "768",
+          "left": "144",
+          "bottom": "825",
+          "right": "960"
+        },
+        "id": "subtitle",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "720",
+          "left": "984",
+          "bottom": "816",
+          "right": "1080"
+        },
+        "id": "progress_bar",
+        "class": "ProgressBar"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

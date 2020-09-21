@@ -1,0 +1,420 @@
+{
+  "duration": "8621",
+  "layout": {
+    "children": [
+      {
+        "children": [{
+          "children": [{
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "168",
+              "right": "168"
+            },
+            "class": "AppCompatImageButton"
+          }],
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "168",
+            "right": "216"
+          },
+          "id": "toolbar",
+          "class": "Toolbar"
+        }],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "168",
+          "right": "216"
+        },
+        "id": "appBarLayout",
+        "class": "AppBarLayout"
+      },
+      {
+        "children": [{
+          "children": [
+            {
+              "children": [],
+              "bounds": {
+                "top": "0",
+                "left": "0",
+                "bottom": "96",
+                "right": "324"
+              },
+              "id": "media_list",
+              "class": "RecyclerView"
+            },
+            {
+              "bounds": {
+                "top": "144",
+                "left": "0",
+                "bottom": "325",
+                "right": "324"
+              },
+              "class": "View"
+            },
+            {
+              "bounds": {
+                "top": "144",
+                "left": "0",
+                "bottom": "325",
+                "right": "276"
+              },
+              "id": "productName",
+              "class": "AppCompatEditText"
+            },
+            {
+              "bounds": {
+                "top": "211",
+                "left": "276",
+                "bottom": "268",
+                "right": "276"
+              },
+              "id": "tv_item_count",
+              "class": "AppCompatTextView"
+            },
+            {
+              "bounds": {
+                "top": "325",
+                "left": "0",
+                "bottom": "695",
+                "right": "324"
+              },
+              "id": "product_description",
+              "class": "AppCompatEditText"
+            },
+            {
+              "children": [],
+              "bounds": {
+                "top": "743",
+                "left": "0",
+                "bottom": "1435",
+                "right": "324"
+              },
+              "class": "FrameLayout"
+            },
+            {
+              "bounds": {
+                "top": "743",
+                "left": "0",
+                "bottom": "1435",
+                "right": "145"
+              },
+              "id": "tv_inventory_track",
+              "class": "AppCompatTextView"
+            },
+            {
+              "bounds": {
+                "top": "1049",
+                "left": "145",
+                "bottom": "1130",
+                "right": "285"
+              },
+              "id": "switch_inventory_track",
+              "class": "SwitchCompat"
+            },
+            {
+              "children": [],
+              "bounds": {
+                "top": "1435",
+                "left": "0",
+                "bottom": "2127",
+                "right": "324"
+              },
+              "class": "FrameLayout"
+            },
+            {
+              "bounds": {
+                "top": "1435",
+                "left": "0",
+                "bottom": "2127",
+                "right": "145"
+              },
+              "id": "tv_overselling_allowed",
+              "class": "AppCompatTextView"
+            },
+            {
+              "bounds": {
+                "top": "1741",
+                "left": "145",
+                "bottom": "1822",
+                "right": "285"
+              },
+              "id": "switch_overselling_allowed",
+              "class": "SwitchCompat"
+            },
+            {
+              "children": [],
+              "bounds": {
+                "top": "2175",
+                "left": "0",
+                "bottom": "2438",
+                "right": "324"
+              },
+              "class": "FrameLayout"
+            },
+            {
+              "bounds": {
+                "top": "2175",
+                "left": "48",
+                "bottom": "2438",
+                "right": "204"
+              },
+              "id": "tv_price",
+              "class": "AppCompatTextView"
+            },
+            {
+              "bounds": {
+                "top": "325",
+                "left": "0",
+                "bottom": "328",
+                "right": "324"
+              },
+              "class": "View"
+            },
+            {
+              "bounds": {
+                "top": "1435",
+                "left": "0",
+                "bottom": "1438",
+                "right": "324"
+              },
+              "class": "View"
+            },
+            {
+              "bounds": {
+                "top": "695",
+                "left": "0",
+                "bottom": "698",
+                "right": "324"
+              },
+              "class": "View"
+            },
+            {
+              "bounds": {
+                "top": "2278",
+                "left": "228",
+                "bottom": "2335",
+                "right": "276"
+              },
+              "id": "textView24",
+              "class": "AppCompatTextView"
+            },
+            {
+              "children": [],
+              "bounds": {
+                "top": "2175",
+                "left": "0",
+                "bottom": "2438",
+                "right": "324"
+              },
+              "id": "price_mask",
+              "class": "FrameLayout"
+            },
+            {
+              "children": [],
+              "bounds": {
+                "top": "2438",
+                "left": "0",
+                "bottom": "2603",
+                "right": "324"
+              },
+              "class": "FrameLayout"
+            },
+            {
+              "bounds": {
+                "top": "2438",
+                "left": "48",
+                "bottom": "2603",
+                "right": "252"
+              },
+              "id": "tv_stock",
+              "class": "AppCompatTextView"
+            },
+            {
+              "bounds": {
+                "top": "2492",
+                "left": "276",
+                "bottom": "2549",
+                "right": "276"
+              },
+              "id": "tv_stock_value",
+              "class": "AppCompatTextView"
+            },
+            {
+              "children": [],
+              "bounds": {
+                "top": "2438",
+                "left": "0",
+                "bottom": "2603",
+                "right": "324"
+              },
+              "id": "stock_mask",
+              "class": "FrameLayout"
+            },
+            {
+              "bounds": {
+                "top": "0",
+                "left": "0",
+                "bottom": "0",
+                "right": "0"
+              },
+              "class": "Group"
+            },
+            {
+              "bounds": {
+                "top": "0",
+                "left": "0",
+                "bottom": "0",
+                "right": "0"
+              },
+              "class": "Group"
+            },
+            {
+              "bounds": {
+                "top": "2438",
+                "left": "0",
+                "bottom": "2441",
+                "right": "324"
+              },
+              "class": "View"
+            },
+            {
+              "children": [],
+              "bounds": {
+                "top": "2651",
+                "left": "0",
+                "bottom": "2804",
+                "right": "324"
+              },
+              "id": "variant_mask",
+              "class": "FrameLayout"
+            },
+            {
+              "children": [],
+              "bounds": {
+                "top": "2651",
+                "left": "0",
+                "bottom": "2651",
+                "right": "324"
+              },
+              "id": "list",
+              "class": "RecyclerView"
+            },
+            {
+              "bounds": {
+                "top": "2686",
+                "left": "24",
+                "bottom": "2770",
+                "right": "108"
+              },
+              "id": "icon_view",
+              "class": "AppCompatImageView"
+            },
+            {
+              "bounds": {
+                "top": "2651",
+                "left": "144",
+                "bottom": "2804",
+                "right": "324"
+              },
+              "id": "tv_add",
+              "class": "AppCompatTextView"
+            },
+            {
+              "bounds": {
+                "top": "0",
+                "left": "0",
+                "bottom": "0",
+                "right": "0"
+              },
+              "class": "Group"
+            },
+            {
+              "bounds": {
+                "top": "2840",
+                "left": "0",
+                "bottom": "2946",
+                "right": "324"
+              },
+              "id": "tv_variants_hint",
+              "class": "AppCompatTextView"
+            },
+            {
+              "children": [],
+              "bounds": {
+                "top": "2994",
+                "left": "0",
+                "bottom": "3392",
+                "right": "324"
+              },
+              "id": "publish_mask",
+              "class": "FrameLayout"
+            },
+            {
+              "bounds": {
+                "top": "2994",
+                "left": "0",
+                "bottom": "3392",
+                "right": "145"
+              },
+              "id": "tv_publish",
+              "class": "AppCompatTextView"
+            },
+            {
+              "bounds": {
+                "top": "3153",
+                "left": "145",
+                "bottom": "3234",
+                "right": "285"
+              },
+              "id": "switch_publish",
+              "class": "SwitchCompat"
+            },
+            {
+              "bounds": {
+                "top": "3428",
+                "left": "0",
+                "bottom": "3534",
+                "right": "324"
+              },
+              "id": "tv_publish_hint",
+              "class": "AppCompatTextView"
+            },
+            {
+              "bounds": {
+                "top": "0",
+                "left": "0",
+                "bottom": "0",
+                "right": "0"
+              },
+              "class": "Group"
+            }
+          ],
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "3582",
+            "right": "324"
+          },
+          "class": "ConstraintLayout"
+        }],
+        "bounds": {
+          "top": "168",
+          "left": "0",
+          "bottom": "1776",
+          "right": "324"
+        },
+        "class": "NestedScrollView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1608",
+      "right": "324"
+    },
+    "class": "CoordinatorLayout"
+  }
+}

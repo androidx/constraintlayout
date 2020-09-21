@@ -1,0 +1,34 @@
+{
+  "duration": "12663",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "720",
+          "left": "960",
+          "bottom": "816",
+          "right": "1056"
+        },
+        "id": "iconImage",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "786",
+          "left": "930",
+          "bottom": "846",
+          "right": "990"
+        },
+        "id": "uncheckedInboxItemCountText",
+        "class": "AppCompatTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

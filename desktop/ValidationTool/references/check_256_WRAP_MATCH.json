@@ -1,0 +1,243 @@
+{
+  "duration": "184607",
+  "layout": {
+    "children": [
+      {
+        "children": [{
+          "children": [
+            {
+              "bounds": {
+                "top": "0",
+                "left": "0",
+                "bottom": "72",
+                "right": "0"
+              },
+              "id": "recordTimer",
+              "class": "AppCompatTextView"
+            },
+            {
+              "bounds": {
+                "top": "72",
+                "left": "0",
+                "bottom": "373",
+                "right": "0"
+              },
+              "id": "volume_envelope",
+              "class": "View"
+            },
+            {
+              "children": [
+                {
+                  "bounds": {
+                    "top": "0",
+                    "left": "0",
+                    "bottom": "57",
+                    "right": "0"
+                  },
+                  "id": "recordingNameText",
+                  "class": "AppCompatTextView"
+                },
+                {
+                  "bounds": {
+                    "top": "0",
+                    "left": "0",
+                    "bottom": "57",
+                    "right": "0"
+                  },
+                  "id": "recordingGainText",
+                  "class": "AppCompatTextView"
+                },
+                {
+                  "bounds": {
+                    "top": "0",
+                    "left": "0",
+                    "bottom": "57",
+                    "right": "0"
+                  },
+                  "id": "recordingAndStorageSize",
+                  "class": "AppCompatTextView"
+                }
+              ],
+              "bounds": {
+                "top": "373",
+                "left": "0",
+                "bottom": "430",
+                "right": "0"
+              },
+              "id": "recordingDetailsHolder",
+              "class": "ConstraintLayout"
+            }
+          ],
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "430",
+            "right": "0"
+          },
+          "id": "lcd",
+          "class": "ConstraintLayout"
+        }],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "430",
+          "right": "0"
+        },
+        "id": "lcdHolder",
+        "class": "CardView"
+      },
+      {
+        "children": [
+          {
+            "children": [],
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "0",
+              "right": "0"
+            },
+            "id": "smallControlsHolder",
+            "class": "ConstraintLayout"
+          },
+          {
+            "children": [
+              {
+                "bounds": {
+                  "top": "177",
+                  "left": "0",
+                  "bottom": "177",
+                  "right": "0"
+                },
+                "id": "recButtonSplitterTop",
+                "class": "Guideline"
+              },
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "0",
+                  "right": "0"
+                },
+                "id": "recButtonSplitterStart",
+                "class": "Guideline"
+              },
+              {
+                "bounds": {
+                  "top": "177",
+                  "left": "0",
+                  "bottom": "412",
+                  "right": "0"
+                },
+                "id": "recordButton",
+                "class": "AppCompatImageView"
+              },
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "0",
+                  "right": "0"
+                },
+                "id": "recButtonSplitterEnd",
+                "class": "Guideline"
+              },
+              {
+                "bounds": {
+                  "top": "412",
+                  "left": "0",
+                  "bottom": "412",
+                  "right": "0"
+                },
+                "id": "recButtonSplitterBottom",
+                "class": "Guideline"
+              }
+            ],
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "589",
+              "right": "0"
+            },
+            "id": "recPauseHolder",
+            "class": "ConstraintLayout"
+          }
+        ],
+        "bounds": {
+          "top": "430",
+          "left": "0",
+          "bottom": "1019",
+          "right": "0"
+        },
+        "class": "ConstraintLayout"
+      },
+      {
+        "children": [
+          {
+            "bounds": {
+              "top": "223",
+              "left": "30",
+              "bottom": "295",
+              "right": "30"
+            },
+            "id": "buyMeButton",
+            "class": "AppCompatImageView"
+          },
+          {
+            "bounds": {
+              "top": "30",
+              "left": "30",
+              "bottom": "234",
+              "right": "30"
+            },
+            "id": "advertTitle",
+            "class": "AppCompatTextView"
+          },
+          {
+            "bounds": {
+              "top": "30",
+              "left": "30",
+              "bottom": "185",
+              "right": "30"
+            },
+            "id": "buyMeButtonTitle",
+            "class": "AppCompatTextView"
+          },
+          {
+            "bounds": {
+              "top": "185",
+              "left": "30",
+              "bottom": "487",
+              "right": "30"
+            },
+            "class": "AppCompatTextView"
+          },
+          {
+            "bounds": {
+              "top": "259",
+              "left": "30",
+              "bottom": "259",
+              "right": "30"
+            },
+            "id": "buyMeButtonTap",
+            "class": "AppCompatImageView"
+          }
+        ],
+        "bounds": {
+          "top": "1019",
+          "left": "0",
+          "bottom": "1536",
+          "right": "0"
+        },
+        "id": "buyMeButtonHolder",
+        "class": "ConstraintLayout"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "0"
+    },
+    "class": "ConstraintLayout"
+  }
+}

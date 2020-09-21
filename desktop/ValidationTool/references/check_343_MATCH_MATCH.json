@@ -1,0 +1,34 @@
+{
+  "duration": "188000",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "740",
+          "left": "0",
+          "bottom": "797",
+          "right": "277"
+        },
+        "id": "module_header_title",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "module_header_disclaimer",
+        "class": "AppCompatButton"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

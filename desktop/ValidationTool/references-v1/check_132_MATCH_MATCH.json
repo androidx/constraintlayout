@@ -1,0 +1,74 @@
+{
+  "duration": "9714",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "300",
+          "left": "0",
+          "bottom": "300",
+          "right": "0"
+        },
+        "id": "guideline1",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "1236",
+          "left": "0",
+          "bottom": "1236",
+          "right": "0"
+        },
+        "id": "guideline2",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "307",
+          "left": "0",
+          "bottom": "307",
+          "right": "0"
+        },
+        "id": "guideline3",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "780",
+          "bottom": "0",
+          "right": "780"
+        },
+        "id": "guideline4",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "300",
+          "bottom": "0",
+          "right": "300"
+        },
+        "id": "guideline5",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "864",
+          "bottom": "0",
+          "right": "864"
+        },
+        "id": "guideline6",
+        "class": "Guideline"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

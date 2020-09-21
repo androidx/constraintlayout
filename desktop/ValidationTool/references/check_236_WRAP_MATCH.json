@@ -1,0 +1,55 @@
+{
+  "duration": "1406635",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "710",
+          "left": "0",
+          "bottom": "827",
+          "right": "60"
+        },
+        "id": "flow",
+        "class": "Flow"
+      },
+      {
+        "bounds": {
+          "top": "685",
+          "left": "0",
+          "bottom": "851",
+          "right": "0"
+        },
+        "id": "textView1",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "685",
+          "left": "30",
+          "bottom": "851",
+          "right": "30"
+        },
+        "id": "textView2",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "685",
+          "left": "60",
+          "bottom": "851",
+          "right": "60"
+        },
+        "id": "textView3",
+        "class": "AppCompatTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "60"
+    },
+    "id": "cl_body",
+    "class": "ConstraintLayout"
+  }
+}

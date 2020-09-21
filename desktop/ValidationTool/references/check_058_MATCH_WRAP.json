@@ -1,0 +1,134 @@
+{
+  "duration": "779407",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "288",
+          "left": "0",
+          "bottom": "432",
+          "right": "264"
+        },
+        "id": "button88",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "288",
+          "left": "264",
+          "bottom": "432",
+          "right": "528"
+        },
+        "id": "button89",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "288",
+          "left": "528",
+          "bottom": "432",
+          "right": "816"
+        },
+        "id": "button90",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "144",
+          "left": "816",
+          "bottom": "288",
+          "right": "1080"
+        },
+        "id": "button91",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "144",
+          "right": "264"
+        },
+        "id": "button01",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "264",
+          "bottom": "144",
+          "right": "528"
+        },
+        "id": "button02",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "816",
+          "bottom": "144",
+          "right": "1080"
+        },
+        "id": "button03",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "528",
+          "bottom": "144",
+          "right": "816"
+        },
+        "id": "button04",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "144",
+          "left": "0",
+          "bottom": "288",
+          "right": "264"
+        },
+        "id": "button05",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "133",
+          "left": "264",
+          "bottom": "299",
+          "right": "430"
+        },
+        "id": "button06",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "144",
+          "left": "430",
+          "bottom": "288",
+          "right": "816"
+        },
+        "id": "button07",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "288",
+          "left": "816",
+          "bottom": "432",
+          "right": "1080"
+        },
+        "id": "button09",
+        "class": "AppCompatButton"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "432",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

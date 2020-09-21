@@ -1,0 +1,34 @@
+{
+  "duration": "62335",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "182",
+          "left": "48",
+          "bottom": "1182",
+          "right": "1032"
+        },
+        "id": "imageView",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "1281",
+          "left": "48",
+          "bottom": "1354",
+          "right": "1032"
+        },
+        "id": "textView",
+        "class": "AppCompatTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "duration": "2000",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "300",
+          "right": "300"
+        },
+        "id": "view2",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "300",
+          "left": "0",
+          "bottom": "300",
+          "right": "0"
+        },
+        "id": "guideline14",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "300",
+          "left": "0",
+          "bottom": "600",
+          "right": "300"
+        },
+        "id": "view3",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "600",
+          "left": "0",
+          "bottom": "900",
+          "right": "300"
+        },
+        "id": "view4",
+        "class": "View"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "900",
+      "right": "300"
+    },
+    "class": "ConstraintLayout"
+  }
+}

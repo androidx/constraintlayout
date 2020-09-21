@@ -1,0 +1,125 @@
+{
+  "duration": "2178847",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "60",
+          "left": "66",
+          "bottom": "458",
+          "right": "464"
+        },
+        "id": "episode_image_iv",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "60",
+          "left": "515",
+          "bottom": "239",
+          "right": "1267"
+        },
+        "id": "episode_title_tv",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "275",
+          "left": "515",
+          "bottom": "341",
+          "right": "581"
+        },
+        "id": "episode_live_icon",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "275",
+          "left": "593",
+          "bottom": "332",
+          "right": "655"
+        },
+        "id": "episode_live_tv",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "356",
+          "left": "300",
+          "bottom": "429",
+          "right": "581"
+        },
+        "id": "users_count_icon",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "356",
+          "left": "605",
+          "bottom": "413",
+          "right": "701"
+        },
+        "id": "users_count",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "701",
+          "bottom": "0",
+          "right": "701"
+        },
+        "id": "barrier",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "267",
+          "left": "752",
+          "bottom": "340",
+          "right": "1070"
+        },
+        "id": "duration_icon",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "275",
+          "left": "1094",
+          "bottom": "332",
+          "right": "1152"
+        },
+        "id": "duration_tv",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "348",
+          "left": "752",
+          "bottom": "421",
+          "right": "1243"
+        },
+        "id": "heart_icon",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "356",
+          "left": "1267",
+          "bottom": "413",
+          "right": "1267"
+        },
+        "id": "heart_tv",
+        "class": "AppCompatTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "518",
+      "right": "1080"
+    },
+    "id": "live_status_body",
+    "class": "ConstraintLayout"
+  }
+}

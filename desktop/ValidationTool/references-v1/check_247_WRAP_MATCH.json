@@ -1,0 +1,64 @@
+{
+  "duration": "209849",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "196",
+          "left": "0",
+          "bottom": "268",
+          "right": "72"
+        },
+        "id": "view1",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "464",
+          "left": "0",
+          "bottom": "536",
+          "right": "72"
+        },
+        "id": "view2",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "732",
+          "left": "0",
+          "bottom": "804",
+          "right": "72"
+        },
+        "id": "view3",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "1000",
+          "left": "0",
+          "bottom": "1072",
+          "right": "72"
+        },
+        "id": "view4",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "1268",
+          "left": "0",
+          "bottom": "1340",
+          "right": "72"
+        },
+        "id": "view5",
+        "class": "View"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "72"
+    },
+    "class": "ConstraintLayout"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "duration": "5466",
+  "layout": {
+    "children": [{
+      "children": [],
+      "bounds": {
+        "top": "48",
+        "left": "48",
+        "bottom": "48",
+        "right": "48"
+      },
+      "id": "listView",
+      "class": "ListView"
+    }],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "48"
+    },
+    "id": "activity_main",
+    "class": "ConstraintLayout"
+  }
+}
