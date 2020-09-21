@@ -1,0 +1,66 @@
+{
+  "duration": "102964",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "210"
+        },
+        "id": "left_space",
+        "class": "Space"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "210",
+          "bottom": "0",
+          "right": "420"
+        },
+        "id": "right_space",
+        "class": "Space"
+      },
+      {
+        "children": [
+          {
+            "bounds": {
+              "top": "0",
+              "left": "-909",
+              "bottom": "1536",
+              "right": "0"
+            },
+            "id": "image_view",
+            "class": "AppCompatImageView"
+          },
+          {
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "0",
+              "right": "0"
+            },
+            "id": "text_view",
+            "class": "AppCompatTextView"
+          }
+        ],
+        "bounds": {
+          "top": "0",
+          "left": "210",
+          "bottom": "1536",
+          "right": "210"
+        },
+        "id": "inner_container",
+        "class": "ConstraintLayout"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "420"
+    },
+    "class": "ConstraintLayout"
+  }
+}

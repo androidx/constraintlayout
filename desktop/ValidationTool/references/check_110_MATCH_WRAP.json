@@ -1,0 +1,34 @@
+{
+  "duration": "30018",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "48",
+          "left": "0",
+          "bottom": "105",
+          "right": "1080"
+        },
+        "id": "titleTVc",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "descriptionTVc",
+        "class": "AppCompatTextView"
+      }
+    ],
+    "bounds": {
+      "top": "216",
+      "left": "0",
+      "bottom": "153",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

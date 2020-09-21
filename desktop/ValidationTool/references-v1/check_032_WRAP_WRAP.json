@@ -1,0 +1,114 @@
+{
+  "duration": "343424",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "44",
+          "left": "0",
+          "bottom": "101",
+          "right": "24"
+        },
+        "id": "textView11",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "145",
+          "left": "0",
+          "bottom": "202",
+          "right": "26"
+        },
+        "id": "textView12",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "245",
+          "left": "0",
+          "bottom": "302",
+          "right": "27"
+        },
+        "id": "textView13",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "346",
+          "left": "0",
+          "bottom": "403",
+          "right": "28"
+        },
+        "id": "textView14",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "156",
+          "left": "0",
+          "bottom": "213",
+          "right": "27"
+        },
+        "id": "textView7",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "textView8",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "213",
+          "left": "0",
+          "bottom": "270",
+          "right": "27"
+        },
+        "id": "textView9",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "textView10",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "132",
+          "left": "0",
+          "bottom": "132",
+          "right": "0"
+        },
+        "id": "guideline9",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "270",
+          "left": "0",
+          "bottom": "270",
+          "right": "0"
+        },
+        "id": "guideline10",
+        "class": "Guideline"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "447",
+      "right": "28"
+    },
+    "class": "ConstraintLayout"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "duration": "9582",
+  "layout": {
+    "children": [
+      {
+        "children": [{
+          "bounds": {
+            "top": "30",
+            "left": "30",
+            "bottom": "90",
+            "right": "978"
+          },
+          "class": "AppCompatTextView"
+        }],
+        "bounds": {
+          "top": "36",
+          "left": "36",
+          "bottom": "156",
+          "right": "1044"
+        },
+        "class": "ConstraintLayout"
+      },
+      {
+        "children": [{
+          "bounds": {
+            "top": "30",
+            "left": "30",
+            "bottom": "90",
+            "right": "978"
+          },
+          "class": "AppCompatTextView"
+        }],
+        "bounds": {
+          "top": "216",
+          "left": "36",
+          "bottom": "336",
+          "right": "1044"
+        },
+        "class": "FrameLayout"
+      },
+      {
+        "children": [{
+          "bounds": {
+            "top": "30",
+            "left": "30",
+            "bottom": "90",
+            "right": "978"
+          },
+          "class": "AppCompatTextView"
+        }],
+        "bounds": {
+          "top": "396",
+          "left": "36",
+          "bottom": "516",
+          "right": "1044"
+        },
+        "class": "RelativeLayout"
+      },
+      {
+        "children": [{
+          "bounds": {
+            "top": "30",
+            "left": "30",
+            "bottom": "90",
+            "right": "978"
+          },
+          "class": "AppCompatTextView"
+        }],
+        "bounds": {
+          "top": "576",
+          "left": "36",
+          "bottom": "696",
+          "right": "1044"
+        },
+        "class": "LinearLayout"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "732",
+      "right": "1080"
+    },
+    "id": "activity_main",
+    "class": "LinearLayout"
+  }
+}

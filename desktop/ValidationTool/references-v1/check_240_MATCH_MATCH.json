@@ -1,0 +1,23 @@
+{
+  "duration": "7208",
+  "layout": {
+    "children": [{
+      "bounds": {
+        "top": "24",
+        "left": "24",
+        "bottom": "1056",
+        "right": "1056"
+      },
+      "id": "bottom_sheet_album_art",
+      "class": "AppCompatImageView"
+    }],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "id": "cl_body",
+    "class": "ConstraintLayout"
+  }
+}

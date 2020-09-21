@@ -1,0 +1,144 @@
+{
+  "duration": "63347",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "153",
+          "left": "0",
+          "bottom": "559",
+          "right": "0"
+        },
+        "id": "titleTv",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "559",
+          "left": "0",
+          "bottom": "566",
+          "right": "0"
+        },
+        "id": "belowTitleSpace",
+        "class": "Space"
+      },
+      {
+        "bounds": {
+          "top": "566",
+          "left": "0",
+          "bottom": "831",
+          "right": "0"
+        },
+        "id": "descTv",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "831",
+          "left": "0",
+          "bottom": "838",
+          "right": "0"
+        },
+        "id": "belowDescSpace",
+        "class": "Space"
+      },
+      {
+        "bounds": {
+          "top": "838",
+          "left": "0",
+          "bottom": "1015",
+          "right": "0"
+        },
+        "id": "dateTv",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "1015",
+          "left": "0",
+          "bottom": "1022",
+          "right": "0"
+        },
+        "id": "belowDateSpace",
+        "class": "Space"
+      },
+      {
+        "bounds": {
+          "top": "1022",
+          "left": "0",
+          "bottom": "1198",
+          "right": "0"
+        },
+        "id": "locationTv",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "1198",
+          "left": "0",
+          "bottom": "1205",
+          "right": "0"
+        },
+        "id": "belowLocationSpace",
+        "class": "Space"
+      },
+      {
+        "bounds": {
+          "top": "1205",
+          "left": "0",
+          "bottom": "1382",
+          "right": "0"
+        },
+        "id": "hostTv",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "textContainerRightGuideline",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "textContainerLeftGuideline",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "154",
+          "left": "0",
+          "bottom": "154",
+          "right": "0"
+        },
+        "id": "textContainerTopGuideline",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "1382",
+          "left": "0",
+          "bottom": "1382",
+          "right": "0"
+        },
+        "id": "textContainerBottomGuideline",
+        "class": "Guideline"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "0"
+    },
+    "class": "ConstraintLayout"
+  }
+}

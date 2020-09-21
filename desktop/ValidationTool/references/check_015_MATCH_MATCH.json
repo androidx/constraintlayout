@@ -1,0 +1,31 @@
+{
+  "duration": "7149",
+  "layout": {
+    "children": [{
+      "children": [{
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "900",
+          "right": "900"
+        },
+        "class": "TestTextView"
+      }],
+      "bounds": {
+        "top": "0",
+        "left": "0",
+        "bottom": "900",
+        "right": "900"
+      },
+      "id": "activity_main",
+      "class": "ConstraintLayout"
+    }],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "LinearLayoutCompat"
+  }
+}

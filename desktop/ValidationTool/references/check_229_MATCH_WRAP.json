@@ -1,0 +1,44 @@
+{
+  "duration": "56512",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "button105",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "184",
+          "bottom": "144",
+          "right": "448"
+        },
+        "id": "button106",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "632",
+          "bottom": "144",
+          "right": "896"
+        },
+        "id": "button107",
+        "class": "AppCompatButton"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "176",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

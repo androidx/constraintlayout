@@ -1,0 +1,189 @@
+{
+  "duration": "135321",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "24",
+          "left": "24",
+          "bottom": "159",
+          "right": "159"
+        },
+        "id": "product_icon",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "24",
+          "left": "183",
+          "bottom": "81",
+          "right": "207"
+        },
+        "id": "product_title",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "93",
+          "left": "183",
+          "bottom": "150",
+          "right": "207"
+        },
+        "id": "product_description",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "174",
+          "left": "183",
+          "bottom": "231",
+          "right": "207"
+        },
+        "id": "singleUomView",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "231",
+          "left": "0",
+          "bottom": "231",
+          "right": "0"
+        },
+        "id": "barrier",
+        "class": "Barrier"
+      },
+      {
+        "children": [
+          {
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "96",
+              "right": "96"
+            },
+            "id": "radioButton1",
+            "class": "AppCompatRadioButton"
+          },
+          {
+            "bounds": {
+              "top": "96",
+              "left": "0",
+              "bottom": "192",
+              "right": "96"
+            },
+            "id": "radioButton2",
+            "class": "AppCompatRadioButton"
+          },
+          {
+            "bounds": {
+              "top": "192",
+              "left": "0",
+              "bottom": "288",
+              "right": "96"
+            },
+            "id": "radioButton3",
+            "class": "AppCompatRadioButton"
+          }
+        ],
+        "bounds": {
+          "top": "231",
+          "left": "69",
+          "bottom": "519",
+          "right": "231"
+        },
+        "id": "radioGroup",
+        "class": "RadioGroup"
+      },
+      {
+        "children": [
+          {
+            "bounds": {
+              "top": "0",
+              "left": "6",
+              "bottom": "48",
+              "right": "54"
+            },
+            "id": "icon_promo",
+            "class": "AppCompatImageView"
+          },
+          {
+            "bounds": {
+              "top": "0",
+              "left": "60",
+              "bottom": "48",
+              "right": "108"
+            },
+            "id": "icon_preferred",
+            "class": "AppCompatImageView"
+          },
+          {
+            "bounds": {
+              "top": "0",
+              "left": "114",
+              "bottom": "48",
+              "right": "162"
+            },
+            "id": "icon_new_product",
+            "class": "AppCompatImageView"
+          },
+          {
+            "bounds": {
+              "top": "0",
+              "left": "168",
+              "bottom": "48",
+              "right": "216"
+            },
+            "id": "substituted_product_icon",
+            "class": "AppCompatImageView"
+          },
+          {
+            "bounds": {
+              "top": "0",
+              "left": "222",
+              "bottom": "57",
+              "right": "222"
+            },
+            "id": "substituted_product_text",
+            "class": "AppCompatTextView"
+          }
+        ],
+        "bounds": {
+          "top": "519",
+          "left": "183",
+          "bottom": "576",
+          "right": "405"
+        },
+        "id": "icon_area",
+        "class": "LinearLayout"
+      },
+      {
+        "bounds": {
+          "top": "600",
+          "left": "24",
+          "bottom": "657",
+          "right": "207"
+        },
+        "id": "product_eta",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "24",
+          "left": "231",
+          "bottom": "174",
+          "right": "381"
+        },
+        "id": "product_add_to_basket",
+        "class": "AppCompatImageButton"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "405"
+    },
+    "id": "constraintLayout",
+    "class": "ConstraintLayout"
+  }
+}

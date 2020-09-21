@@ -1,0 +1,155 @@
+{
+  "duration": "42878",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "372",
+          "left": "240",
+          "bottom": "492",
+          "right": "360"
+        },
+        "id": "view3",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "660",
+          "left": "96",
+          "bottom": "780",
+          "right": "216"
+        },
+        "id": "view2",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "660",
+          "left": "444",
+          "bottom": "780",
+          "right": "570"
+        },
+        "id": "view4",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "780",
+          "left": "240",
+          "bottom": "900",
+          "right": "360"
+        },
+        "id": "view5",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "312",
+          "left": "516",
+          "bottom": "432",
+          "right": "636"
+        },
+        "id": "view6",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "372",
+          "left": "768",
+          "bottom": "492",
+          "right": "888"
+        },
+        "id": "view11",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "564",
+          "left": "768",
+          "bottom": "684",
+          "right": "888"
+        },
+        "id": "view12",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "756",
+          "left": "768",
+          "bottom": "876",
+          "right": "888"
+        },
+        "id": "view13",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "108",
+          "left": "360",
+          "bottom": "228",
+          "right": "480"
+        },
+        "id": "view",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "384",
+          "left": "96",
+          "bottom": "504",
+          "right": "216"
+        },
+        "id": "view9",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "336",
+          "left": "444",
+          "bottom": "456",
+          "right": "564"
+        },
+        "id": "view10",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "552",
+          "left": "864",
+          "bottom": "672",
+          "right": "984"
+        },
+        "id": "view15",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "312",
+          "left": "828",
+          "bottom": "432",
+          "right": "948"
+        },
+        "id": "view16",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "588",
+          "left": "276",
+          "bottom": "708",
+          "right": "396"
+        },
+        "id": "view14",
+        "class": "View"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "900",
+      "right": "1080"
+    },
+    "id": "activity_main",
+    "class": "ConstraintLayout"
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "duration": "306639",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "guide_x",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "1014",
+          "left": "0",
+          "bottom": "1014",
+          "right": "0"
+        },
+        "id": "guide_y",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "714",
+          "left": "0",
+          "bottom": "1314",
+          "right": "600"
+        },
+        "id": "frame_right",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "1014",
+          "left": "0",
+          "bottom": "1014",
+          "right": "0"
+        },
+        "id": "frame_wrong",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "1536",
+          "right": "1"
+        },
+        "id": "vertical_line",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "1013",
+          "left": "0",
+          "bottom": "1014",
+          "right": "0"
+        },
+        "id": "horizontal_line",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "1011",
+          "left": "-2",
+          "bottom": "1017",
+          "right": "4"
+        },
+        "id": "the_center_point",
+        "class": "View"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "0"
+    },
+    "id": "activity_main",
+    "class": "ConstraintLayout"
+  }
+}

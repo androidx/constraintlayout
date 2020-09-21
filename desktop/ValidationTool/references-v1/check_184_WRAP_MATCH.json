@@ -1,0 +1,74 @@
+{
+  "duration": "37834",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "744",
+          "left": "0",
+          "bottom": "792",
+          "right": "48"
+        },
+        "id": "leg_1",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "750",
+          "left": "108",
+          "bottom": "786",
+          "right": "144"
+        },
+        "id": "leg_2_transfer",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "744",
+          "left": "204",
+          "bottom": "792",
+          "right": "252"
+        },
+        "id": "leg_2",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "leg_3_transfer",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "leg_3",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "740",
+          "left": "312",
+          "bottom": "797",
+          "right": "454"
+        },
+        "id": "length",
+        "class": "AppCompatTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "454"
+    },
+    "class": "ConstraintLayout"
+  }
+}

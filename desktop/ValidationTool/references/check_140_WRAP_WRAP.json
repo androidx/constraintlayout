@@ -1,0 +1,113 @@
+{
+  "duration": "380831",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "186",
+          "bottom": "0",
+          "right": "186"
+        },
+        "id": "guideline",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "24",
+          "left": "24",
+          "bottom": "162",
+          "right": "162"
+        },
+        "id": "box",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "24",
+          "left": "210",
+          "bottom": "81",
+          "right": "237"
+        },
+        "id": "t1",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "24",
+          "left": "338",
+          "bottom": "81",
+          "right": "364"
+        },
+        "id": "t1_2",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "81",
+          "left": "0",
+          "bottom": "81",
+          "right": "0"
+        },
+        "id": "t1_barrier",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "105",
+          "left": "210",
+          "bottom": "162",
+          "right": "237"
+        },
+        "id": "t2",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "105",
+          "left": "337",
+          "bottom": "162",
+          "right": "365"
+        },
+        "id": "t2_2",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "162",
+          "left": "0",
+          "bottom": "162",
+          "right": "0"
+        },
+        "id": "t2_barrier",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "162",
+          "left": "0",
+          "bottom": "162",
+          "right": "0"
+        },
+        "id": "header_barrier",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "186",
+          "left": "24",
+          "bottom": "186",
+          "right": "441"
+        },
+        "class": "View"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "210",
+      "right": "465"
+    },
+    "class": "ConstraintLayout"
+  }
+}

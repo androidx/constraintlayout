@@ -1,0 +1,45 @@
+{
+  "duration": "22012",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "38",
+          "left": "15",
+          "bottom": "38",
+          "right": "15"
+        },
+        "id": "compass_holder",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "23",
+          "left": "0",
+          "bottom": "23",
+          "right": "0"
+        },
+        "id": "guideline_h30",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "53",
+          "left": "0",
+          "bottom": "53",
+          "right": "0"
+        },
+        "id": "guideline_h70",
+        "class": "Guideline"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "75",
+      "right": "30"
+    },
+    "id": "root_layout",
+    "class": "ConstraintLayout"
+  }
+}

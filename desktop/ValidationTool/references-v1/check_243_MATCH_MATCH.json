@@ -1,0 +1,224 @@
+{
+  "duration": "144637",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "60",
+          "left": "60",
+          "bottom": "117",
+          "right": "145"
+        },
+        "id": "title",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "177",
+          "left": "60",
+          "bottom": "345",
+          "right": "389"
+        },
+        "id": "todayButtonBackground",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "177",
+          "left": "60",
+          "bottom": "261",
+          "right": "389"
+        },
+        "id": "todayButton",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "261",
+          "left": "143",
+          "bottom": "345",
+          "right": "307"
+        },
+        "id": "todaySubtitle",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "177",
+          "left": "473",
+          "bottom": "345",
+          "right": "848"
+        },
+        "id": "tomorrowButtonBackground",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "177",
+          "left": "473",
+          "bottom": "261",
+          "right": "848"
+        },
+        "id": "tomorrowButton",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "261",
+          "left": "579",
+          "bottom": "345",
+          "right": "743"
+        },
+        "id": "tomorrowSubtitle",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "177",
+          "left": "896",
+          "bottom": "345",
+          "right": "1020"
+        },
+        "id": "weekendButtonBackground",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "177",
+          "left": "896",
+          "bottom": "261",
+          "right": "1020"
+        },
+        "id": "weekendButton",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "261",
+          "left": "876",
+          "bottom": "345",
+          "right": "1040"
+        },
+        "id": "weekendSubtitle",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "345",
+          "left": "0",
+          "bottom": "345",
+          "right": "0"
+        },
+        "id": "exactBottom",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "405",
+          "left": "60",
+          "bottom": "822",
+          "right": "1020"
+        },
+        "id": "exactBackground",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "405",
+          "left": "60",
+          "bottom": "573",
+          "right": "1020"
+        },
+        "id": "exactButton",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "573",
+          "left": "60",
+          "bottom": "822",
+          "right": "540"
+        },
+        "id": "exactDateButton",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "573",
+          "left": "60",
+          "bottom": "576",
+          "right": "1020"
+        },
+        "id": "exact_horizontal_separator",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "573",
+          "left": "540",
+          "bottom": "822",
+          "right": "543"
+        },
+        "id": "exact_vertical_separator",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "573",
+          "left": "540",
+          "bottom": "822",
+          "right": "1020"
+        },
+        "id": "exactTimeButton",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "exactButtonGroup",
+        "class": "Group"
+      },
+      {
+        "bounds": {
+          "top": "822",
+          "left": "0",
+          "bottom": "822",
+          "right": "0"
+        },
+        "id": "exactButtonBottomBarrier",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "1219",
+          "left": "60",
+          "bottom": "1476",
+          "right": "1020"
+        },
+        "id": "save",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "1312",
+          "left": "504",
+          "bottom": "1384",
+          "right": "576"
+        },
+        "id": "progressBar",
+        "class": "ProgressBar"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "duration": "580",
+  "layout": {
+    "children": [{
+      "children": [{
+        "children": [{
+          "children": [
+            {
+              "bounds": {
+                "top": "0",
+                "left": "0",
+                "bottom": "324",
+                "right": "0"
+              },
+              "class": "Space"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "bounds": {
+                        "top": "457",
+                        "left": "0",
+                        "bottom": "529",
+                        "right": "1052"
+                      },
+                      "class": "View"
+                    },
+                    {
+                      "bounds": {
+                        "top": "0",
+                        "left": "0",
+                        "bottom": "72",
+                        "right": "1052"
+                      },
+                      "class": "View"
+                    },
+                    {
+                      "bounds": {
+                        "top": "0",
+                        "left": "0",
+                        "bottom": "529",
+                        "right": "72"
+                      },
+                      "class": "View"
+                    },
+                    {
+                      "bounds": {
+                        "top": "0",
+                        "left": "980",
+                        "bottom": "529",
+                        "right": "1052"
+                      },
+                      "class": "View"
+                    }
+                  ],
+                  "bounds": {
+                    "top": "76",
+                    "left": "14",
+                    "bottom": "605",
+                    "right": "1066"
+                  },
+                  "class": "FrameLayout"
+                },
+                {
+                  "bounds": {
+                    "top": "0",
+                    "left": "0",
+                    "bottom": "0",
+                    "right": "0"
+                  },
+                  "id": "left",
+                  "class": "Guideline"
+                },
+                {
+                  "bounds": {
+                    "top": "0",
+                    "left": "1080",
+                    "bottom": "0",
+                    "right": "1080"
+                  },
+                  "id": "right",
+                  "class": "Guideline"
+                },
+                {
+                  "bounds": {
+                    "top": "76",
+                    "left": "0",
+                    "bottom": "76",
+                    "right": "0"
+                  },
+                  "id": "top",
+                  "class": "Guideline"
+                },
+                {
+                  "bounds": {
+                    "top": "605",
+                    "left": "0",
+                    "bottom": "605",
+                    "right": "0"
+                  },
+                  "id": "bottom",
+                  "class": "Guideline"
+                }
+              ],
+              "bounds": {
+                "top": "324",
+                "left": "0",
+                "bottom": "1080",
+                "right": "1080"
+              },
+              "class": "ConstraintLayout"
+            }
+          ],
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "1080",
+            "right": "1080"
+          },
+          "class": "LinearLayout"
+        }],
+        "bounds": {
+          "top": "456",
+          "left": "0",
+          "bottom": "1536",
+          "right": "1080"
+        },
+        "class": "FrameLayout"
+      }],
+      "bounds": {
+        "top": "0",
+        "left": "0",
+        "bottom": "1536",
+        "right": "1080"
+      },
+      "class": "ConstraintLayout"
+    }],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "id": "my_content",
+    "class": "FrameLayout"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "duration": "10142",
+  "layout": {
+    "children": [{
+      "bounds": {
+        "top": "0",
+        "left": "7",
+        "bottom": "600",
+        "right": "1073"
+      },
+      "class": "View"
+    }],
+    "bounds": {
+      "top": "48",
+      "left": "48",
+      "bottom": "600",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

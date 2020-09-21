@@ -1,0 +1,73 @@
+{
+  "duration": "27853",
+  "layout": {
+    "children": [
+      {
+        "children": [{
+          "children": [{
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "65",
+              "right": "840"
+            },
+            "id": "itsme",
+            "class": "AppCompatEditText"
+          }],
+          "bounds": {
+            "top": "60",
+            "left": "60",
+            "bottom": "125",
+            "right": "900"
+          },
+          "class": "RelativeLayout"
+        }],
+        "bounds": {
+          "top": "0",
+          "left": "60",
+          "bottom": "185",
+          "right": "1020"
+        },
+        "id": "itsmecard",
+        "class": "CardView"
+      },
+      {
+        "children": [{
+          "children": [{
+            "bounds": {
+              "top": "60",
+              "left": "60",
+              "bottom": "188",
+              "right": "900"
+            },
+            "id": "itsyou",
+            "class": "AppCompatEditText"
+          }],
+          "bounds": {
+            "top": "0",
+            "left": "60",
+            "bottom": "248",
+            "right": "1020"
+          },
+          "id": "itsyoucard",
+          "class": "CardView"
+        }],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "248",
+          "right": "1080"
+        },
+        "id": "inputFieldAtSignIn",
+        "class": "ConstraintLayout"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "248",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "duration": "7344",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "textView",
+        "class": "AppCompatEditText"
+      },
+      {
+        "bounds": {
+          "top": "96",
+          "left": "408",
+          "bottom": "240",
+          "right": "672"
+        },
+        "id": "fire",
+        "class": "AppCompatButton"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "240",
+      "right": "1080"
+    },
+    "id": "activity_main",
+    "class": "ConstraintLayout"
+  }
+}

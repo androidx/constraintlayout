@@ -1,0 +1,94 @@
+{
+  "duration": "25151",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "24",
+          "left": "0",
+          "bottom": "24",
+          "right": "0"
+        },
+        "id": "guideline_message_top",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "216",
+          "bottom": "0",
+          "right": "216"
+        },
+        "id": "guideline_message_start",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "1056",
+          "bottom": "0",
+          "right": "1056"
+        },
+        "id": "guideline_message_end",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "649",
+          "bottom": "0",
+          "right": "649"
+        },
+        "id": "barrier_start_of_bubble",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "24",
+          "left": "649",
+          "bottom": "162",
+          "right": "1056"
+        },
+        "id": "message_background",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "24",
+          "left": "748",
+          "bottom": "81",
+          "right": "1056"
+        },
+        "id": "message_sender",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "81",
+          "left": "649",
+          "bottom": "162",
+          "right": "1056"
+        },
+        "id": "message_content",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "162",
+          "left": "926",
+          "bottom": "219",
+          "right": "1032"
+        },
+        "id": "message_timestamp",
+        "class": "AppCompatTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

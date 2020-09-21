@@ -1,0 +1,55 @@
+{
+  "duration": "26227",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "39",
+          "left": "12",
+          "bottom": "96",
+          "right": "183"
+        },
+        "id": "textView1",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "button5",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "textView2",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "12",
+          "left": "39",
+          "bottom": "69",
+          "right": "210"
+        },
+        "id": "textView3",
+        "class": "AppCompatTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "96",
+      "right": "210"
+    },
+    "id": "activity_main",
+    "class": "ConstraintLayout"
+  }
+}

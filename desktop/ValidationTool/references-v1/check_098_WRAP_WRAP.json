@@ -1,0 +1,43 @@
+{
+  "duration": "84593",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "313",
+          "left": "156",
+          "bottom": "394",
+          "right": "296"
+        },
+        "id": "switchSetting",
+        "class": "Switch"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "649",
+          "right": "156"
+        },
+        "id": "top",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "649",
+          "left": "0",
+          "bottom": "706",
+          "right": "296"
+        },
+        "class": "AppCompatTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "706",
+      "right": "296"
+    },
+    "class": "ConstraintLayout"
+  }
+}

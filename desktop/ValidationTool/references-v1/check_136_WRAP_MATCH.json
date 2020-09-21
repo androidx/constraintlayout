@@ -1,0 +1,77 @@
+{
+  "duration": "47090",
+  "layout": {
+    "children": [{
+      "children": [
+        {
+          "bounds": {
+            "top": "17",
+            "left": "-46",
+            "bottom": "41",
+            "right": "-22"
+          },
+          "id": "serverFavIcon",
+          "class": "AppCompatImageView"
+        },
+        {
+          "children": [
+            {
+              "bounds": {
+                "top": "0",
+                "left": "0",
+                "bottom": "57",
+                "right": "0"
+              },
+              "id": "hostSponsor_textView",
+              "class": "AppCompatTextView"
+            },
+            {
+              "bounds": {
+                "top": "0",
+                "left": "24",
+                "bottom": "57",
+                "right": "54"
+              },
+              "id": "caret",
+              "class": "AppCompatImageView"
+            }
+          ],
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "57",
+            "right": "0"
+          },
+          "id": "hostTextWithCaretContainer",
+          "class": "ConstraintLayout"
+        },
+        {
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "57",
+            "right": "0"
+          },
+          "id": "hostname_textView",
+          "class": "AppCompatTextView"
+        }
+      ],
+      "bounds": {
+        "top": "0",
+        "left": "0",
+        "bottom": "114",
+        "right": "0"
+      },
+      "id": "topTextInnerContainer_constraintLayout",
+      "class": "ConstraintLayout"
+    }],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "0"
+    },
+    "id": "hostAssembly_constraintLayout",
+    "class": "ConstraintLayout"
+  }
+}

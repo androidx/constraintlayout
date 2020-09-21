@@ -1,0 +1,115 @@
+{
+  "duration": "111052",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "120",
+          "left": "42",
+          "bottom": "144",
+          "right": "66"
+        },
+        "id": "class1",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "120",
+          "left": "66",
+          "bottom": "144",
+          "right": "90"
+        },
+        "id": "class2",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "120",
+          "left": "90",
+          "bottom": "144",
+          "right": "114"
+        },
+        "id": "class3",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "120",
+          "left": "114",
+          "bottom": "144",
+          "right": "138"
+        },
+        "id": "class4",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "class5",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "class6",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "class7",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "class8",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "180",
+          "bottom": "0",
+          "right": "180"
+        },
+        "id": "guideline",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "15",
+          "left": "195",
+          "bottom": "72",
+          "right": "1065"
+        },
+        "id": "title",
+        "class": "AppCompatTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "144",
+      "right": "1080"
+    },
+    "id": "moduleContainer",
+    "class": "ConstraintLayout"
+  }
+}

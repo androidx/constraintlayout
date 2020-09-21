@@ -1,0 +1,44 @@
+{
+  "duration": "59507",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "48",
+          "bottom": "0",
+          "right": "48"
+        },
+        "id": "you_label",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "144",
+          "bottom": "0",
+          "right": "144"
+        },
+        "id": "citizen_label",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "240",
+          "bottom": "0",
+          "right": "240"
+        },
+        "id": "earthling_label",
+        "class": "View"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "0",
+      "right": "288"
+    },
+    "class": "ConstraintLayout"
+  }
+}

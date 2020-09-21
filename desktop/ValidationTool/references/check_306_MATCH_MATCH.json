@@ -1,0 +1,84 @@
+{
+  "duration": "1145460",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "618",
+          "left": "-269",
+          "bottom": "918",
+          "right": "31"
+        },
+        "id": "v1",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "618",
+          "left": "60",
+          "bottom": "918",
+          "right": "360"
+        },
+        "id": "v2",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "618",
+          "left": "390",
+          "bottom": "918",
+          "right": "690"
+        },
+        "id": "v3",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "618",
+          "left": "720",
+          "bottom": "918",
+          "right": "1020"
+        },
+        "id": "v4",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "v5",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "618",
+          "left": "1050",
+          "bottom": "918",
+          "right": "1350"
+        },
+        "id": "v6",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "1536",
+          "right": "1080"
+        },
+        "id": "flow",
+        "class": "Flow"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

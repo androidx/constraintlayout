@@ -1,0 +1,34 @@
+{
+  "duration": "6854",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "90",
+          "right": "1080"
+        },
+        "id": "progress",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "1080",
+          "bottom": "90",
+          "right": "1080"
+        },
+        "id": "progress_remaining",
+        "class": "View"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

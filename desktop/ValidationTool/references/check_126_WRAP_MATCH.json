@@ -1,0 +1,144 @@
+{
+  "duration": "145380",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "696",
+          "left": "240",
+          "bottom": "840",
+          "right": "384"
+        },
+        "id": "image",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "440",
+          "left": "288",
+          "bottom": "497",
+          "right": "336"
+        },
+        "id": "text1",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "480",
+          "left": "450",
+          "bottom": "537",
+          "right": "474"
+        },
+        "id": "text2",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "590",
+          "left": "560",
+          "bottom": "647",
+          "right": "584"
+        },
+        "id": "text3",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "740",
+          "left": "600",
+          "bottom": "797",
+          "right": "624"
+        },
+        "id": "text4",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "890",
+          "left": "560",
+          "bottom": "947",
+          "right": "584"
+        },
+        "id": "text5",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "999",
+          "left": "450",
+          "bottom": "1056",
+          "right": "474"
+        },
+        "id": "text6",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "1040",
+          "left": "300",
+          "bottom": "1097",
+          "right": "324"
+        },
+        "id": "text7",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "999",
+          "left": "150",
+          "bottom": "1056",
+          "right": "174"
+        },
+        "id": "text8",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "890",
+          "left": "40",
+          "bottom": "947",
+          "right": "64"
+        },
+        "id": "text9",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "739",
+          "left": "0",
+          "bottom": "796",
+          "right": "24"
+        },
+        "id": "text10",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "590",
+          "left": "28",
+          "bottom": "647",
+          "right": "76"
+        },
+        "id": "text11",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "480",
+          "left": "138",
+          "bottom": "537",
+          "right": "186"
+        },
+        "id": "text12",
+        "class": "AppCompatTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "624"
+    },
+    "class": "ConstraintLayout"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "duration": "33325",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "24",
+          "left": "408",
+          "bottom": "168",
+          "right": "672"
+        },
+        "id": "button10",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "button11",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "258",
+          "left": "696",
+          "bottom": "348",
+          "right": "786"
+        },
+        "id": "imageView",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "282",
+          "left": "966",
+          "bottom": "372",
+          "right": "1056"
+        },
+        "id": "imageView2",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "114",
+          "left": "24",
+          "bottom": "258",
+          "right": "288"
+        },
+        "id": "button16",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "button17",
+        "class": "AppCompatButton"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "372",
+      "right": "1080"
+    },
+    "id": "activity_main",
+    "class": "ConstraintLayout"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "duration": "16253",
+  "layout": {
+    "children": [{
+      "bounds": {
+        "top": "636",
+        "left": "0",
+        "bottom": "900",
+        "right": "264"
+      },
+      "id": "button25",
+      "class": "AppCompatButton"
+    }],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "264"
+    },
+    "class": "ConstraintLayout"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "duration": "530",
+  "layout": {
+    "children": [{
+      "children": [{
+        "children": [{
+          "bounds": {
+            "top": "342",
+            "left": "342",
+            "bottom": "558",
+            "right": "558"
+          },
+          "id": "icon",
+          "class": "AppCompatImageView"
+        }],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "900",
+          "right": "900"
+        },
+        "class": "ConstraintLayout"
+      }],
+      "bounds": {
+        "top": "0",
+        "left": "0",
+        "bottom": "900",
+        "right": "900"
+      },
+      "class": "RoundBoxInsetLayout"
+    }],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "900"
+    },
+    "class": "LinearLayout"
+  }
+}

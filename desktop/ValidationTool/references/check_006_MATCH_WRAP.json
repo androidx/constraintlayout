@@ -1,0 +1,45 @@
+{
+  "duration": "17019",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "344",
+          "bottom": "57",
+          "right": "515"
+        },
+        "id": "textView1",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "691",
+          "bottom": "0",
+          "right": "691"
+        },
+        "id": "guideline",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "153",
+          "left": "0",
+          "bottom": "153",
+          "right": "0"
+        },
+        "id": "guideline5",
+        "class": "Guideline"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "354",
+      "right": "1080"
+    },
+    "id": "activity_main",
+    "class": "ConstraintLayout"
+  }
+}
