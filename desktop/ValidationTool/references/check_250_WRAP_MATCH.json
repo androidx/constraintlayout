@@ -1,0 +1,170 @@
+{
+  "duration": "62095",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "284",
+          "left": "24",
+          "bottom": "464",
+          "right": "204"
+        },
+        "id": "fragLogin_img_logo",
+        "class": "AppCompatImageView"
+      },
+      {
+        "children": [
+          {
+            "children": [{
+              "children": [],
+              "bounds": {
+                "top": "0",
+                "left": "30",
+                "bottom": "96",
+                "right": "180"
+              },
+              "id": "fragLogin_spin_logintype",
+              "class": "AppCompatSpinner"
+            }],
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "96",
+              "right": "180"
+            },
+            "class": "CardView"
+          },
+          {
+            "bounds": {
+              "top": "96",
+              "left": "0",
+              "bottom": "102",
+              "right": "180"
+            },
+            "class": "View"
+          },
+          {
+            "children": [
+              {
+                "children": [{
+                  "bounds": {
+                    "top": "0",
+                    "left": "0",
+                    "bottom": "96",
+                    "right": "180"
+                  },
+                  "id": "fragLogin_spin_domain",
+                  "class": "AppCompatEditText"
+                }],
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "96",
+                  "right": "180"
+                },
+                "class": "CardView"
+              },
+              {
+                "bounds": {
+                  "top": "96",
+                  "left": "0",
+                  "bottom": "102",
+                  "right": "180"
+                },
+                "class": "View"
+              },
+              {
+                "children": [{
+                  "bounds": {
+                    "top": "0",
+                    "left": "0",
+                    "bottom": "96",
+                    "right": "180"
+                  },
+                  "id": "fragLogin_edit_username",
+                  "class": "AppCompatEditText"
+                }],
+                "bounds": {
+                  "top": "102",
+                  "left": "0",
+                  "bottom": "198",
+                  "right": "180"
+                },
+                "class": "CardView"
+              },
+              {
+                "bounds": {
+                  "top": "198",
+                  "left": "0",
+                  "bottom": "204",
+                  "right": "180"
+                },
+                "class": "View"
+              },
+              {
+                "children": [{
+                  "bounds": {
+                    "top": "0",
+                    "left": "0",
+                    "bottom": "96",
+                    "right": "180"
+                  },
+                  "id": "fragLogin_edit_password",
+                  "class": "AppCompatEditText"
+                }],
+                "bounds": {
+                  "top": "204",
+                  "left": "0",
+                  "bottom": "300",
+                  "right": "180"
+                },
+                "class": "CardView"
+              }
+            ],
+            "bounds": {
+              "top": "102",
+              "left": "0",
+              "bottom": "402",
+              "right": "180"
+            },
+            "class": "LinearLayout"
+          },
+          {
+            "bounds": {
+              "top": "402",
+              "left": "0",
+              "bottom": "432",
+              "right": "180"
+            },
+            "class": "View"
+          },
+          {
+            "bounds": {
+              "top": "432",
+              "left": "0",
+              "bottom": "528",
+              "right": "180"
+            },
+            "id": "fragLogin_btn_auth",
+            "class": "AppCompatButton"
+          }
+        ],
+        "bounds": {
+          "top": "724",
+          "left": "24",
+          "bottom": "1252",
+          "right": "204"
+        },
+        "id": "linearLayout",
+        "class": "LinearLayout"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "228"
+    },
+    "class": "ConstraintLayout"
+  }
+}

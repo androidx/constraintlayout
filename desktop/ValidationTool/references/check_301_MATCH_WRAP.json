@@ -1,0 +1,74 @@
+{
+  "duration": "1054894",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "1536",
+          "right": "1080"
+        },
+        "id": "flow",
+        "class": "Flow"
+      },
+      {
+        "bounds": {
+          "top": "210",
+          "left": "0",
+          "bottom": "768",
+          "right": "432"
+        },
+        "id": "button2",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "357",
+          "left": "432",
+          "bottom": "621",
+          "right": "972"
+        },
+        "id": "button3",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "-278",
+          "left": "972",
+          "bottom": "1257",
+          "right": "1080"
+        },
+        "id": "button4",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "1257",
+          "left": "0",
+          "bottom": "1815",
+          "right": "432"
+        },
+        "id": "button5",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "1380",
+          "left": "432",
+          "bottom": "1693",
+          "right": "972"
+        },
+        "id": "button6",
+        "class": "AppCompatButton"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

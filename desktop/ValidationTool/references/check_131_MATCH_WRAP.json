@@ -1,0 +1,42 @@
+{
+  "duration": "24723",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "57",
+          "right": "1080"
+        },
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "105",
+          "left": "0",
+          "bottom": "105",
+          "right": "0"
+        },
+        "id": "guideline",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "153",
+          "left": "0",
+          "bottom": "210",
+          "right": "1080"
+        },
+        "class": "AppCompatTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "420",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

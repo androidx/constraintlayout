@@ -1,0 +1,271 @@
+{
+  "duration": "2000",
+  "layout": {
+    "children": [{
+      "children": [
+        {
+          "bounds": {
+            "top": "140",
+            "left": "291",
+            "bottom": "221",
+            "right": "479"
+          },
+          "id": "textViewSignInLabel",
+          "class": "AppCompatTextView"
+        },
+        {
+          "bounds": {
+            "top": "380",
+            "left": "92",
+            "bottom": "530",
+            "right": "677"
+          },
+          "id": "editTextEmail",
+          "class": "AppCompatEditText"
+        },
+        {
+          "bounds": {
+            "top": "566",
+            "left": "92",
+            "bottom": "716",
+            "right": "677"
+          },
+          "id": "editTextPassword",
+          "class": "AppCompatEditText"
+        },
+        {
+          "bounds": {
+            "top": "0",
+            "left": "92",
+            "bottom": "0",
+            "right": "92"
+          },
+          "id": "guideline",
+          "class": "Guideline"
+        },
+        {
+          "bounds": {
+            "top": "0",
+            "left": "677",
+            "bottom": "0",
+            "right": "677"
+          },
+          "id": "guideline2",
+          "class": "Guideline"
+        },
+        {
+          "bounds": {
+            "top": "380",
+            "left": "0",
+            "bottom": "380",
+            "right": "0"
+          },
+          "id": "guideline3",
+          "class": "Guideline"
+        },
+        {
+          "bounds": {
+            "top": "140",
+            "left": "0",
+            "bottom": "140",
+            "right": "0"
+          },
+          "id": "guideline4",
+          "class": "Guideline"
+        },
+        {
+          "bounds": {
+            "top": "752",
+            "left": "358",
+            "bottom": "809",
+            "right": "677"
+          },
+          "id": "textViewForgotPassword",
+          "class": "AppCompatTextView"
+        },
+        {
+          "bounds": {
+            "top": "893",
+            "left": "92",
+            "bottom": "1043",
+            "right": "677"
+          },
+          "id": "buttonSignIn",
+          "class": "AppCompatButton"
+        },
+        {
+          "bounds": {
+            "top": "1209",
+            "left": "92",
+            "bottom": "1212",
+            "right": "236"
+          },
+          "id": "view2",
+          "class": "View"
+        },
+        {
+          "bounds": {
+            "top": "1209",
+            "left": "533",
+            "bottom": "1212",
+            "right": "677"
+          },
+          "id": "view4",
+          "class": "View"
+        },
+        {
+          "bounds": {
+            "top": "1182",
+            "left": "251",
+            "bottom": "1239",
+            "right": "518"
+          },
+          "id": "textViewOrConnectWith",
+          "class": "AppCompatTextView"
+        },
+        {
+          "bounds": {
+            "top": "1284",
+            "left": "0",
+            "bottom": "1284",
+            "right": "0"
+          },
+          "id": "guideline5",
+          "class": "Guideline"
+        },
+        {
+          "bounds": {
+            "top": "1940",
+            "left": "0",
+            "bottom": "1940",
+            "right": "0"
+          },
+          "id": "guideline6",
+          "class": "Guideline"
+        },
+        {
+          "children": [{
+            "bounds": {
+              "top": "61",
+              "left": "61",
+              "bottom": "133",
+              "right": "133"
+            },
+            "class": "AppCompatImageView"
+          }],
+          "bounds": {
+            "top": "1345",
+            "left": "92",
+            "bottom": "1540",
+            "right": "287"
+          },
+          "id": "cardViewTwitter",
+          "class": "CardView"
+        },
+        {
+          "children": [{
+            "bounds": {
+              "top": "61",
+              "left": "61",
+              "bottom": "133",
+              "right": "133"
+            },
+            "class": "AppCompatImageView"
+          }],
+          "bounds": {
+            "top": "1345",
+            "left": "287",
+            "bottom": "1540",
+            "right": "482"
+          },
+          "id": "cardViewFacebook",
+          "class": "CardView"
+        },
+        {
+          "children": [{
+            "bounds": {
+              "top": "69",
+              "left": "61",
+              "bottom": "141",
+              "right": "133"
+            },
+            "class": "AppCompatImageView"
+          }],
+          "bounds": {
+            "top": "1337",
+            "left": "482",
+            "bottom": "1547",
+            "right": "677"
+          },
+          "id": "cardViewGoogle",
+          "class": "CardView"
+        },
+        {
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "0",
+            "right": "0"
+          },
+          "id": "group",
+          "class": "Group"
+        },
+        {
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "0",
+            "right": "0"
+          },
+          "id": "group2",
+          "class": "Group"
+        },
+        {
+          "bounds": {
+            "top": "1600",
+            "left": "0",
+            "bottom": "1600",
+            "right": "0"
+          },
+          "id": "guideline7",
+          "class": "Guideline"
+        },
+        {
+          "bounds": {
+            "top": "1875",
+            "left": "563",
+            "bottom": "1940",
+            "right": "729"
+          },
+          "id": "textViewSignUp",
+          "class": "AppCompatTextView"
+        },
+        {
+          "bounds": {
+            "top": "1875",
+            "left": "41",
+            "bottom": "1940",
+            "right": "551"
+          },
+          "id": "textViewDontHaveAnAccount",
+          "class": "AppCompatTextView"
+        }
+      ],
+      "bounds": {
+        "top": "0",
+        "left": "0",
+        "bottom": "2000",
+        "right": "770"
+      },
+      "id": "clWelcome",
+      "class": "ConstraintLayout"
+    }],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "770"
+    },
+    "class": "ScrollView"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "duration": "54451",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "93",
+          "left": "81",
+          "bottom": "144",
+          "right": "281"
+        },
+        "id": "textView1",
+        "class": "TestTextView"
+      },
+      {
+        "bounds": {
+          "top": "312",
+          "left": "413",
+          "bottom": "363",
+          "right": "520"
+        },
+        "id": "button2",
+        "class": "TestTextView"
+      },
+      {
+        "bounds": {
+          "top": "405",
+          "left": "282",
+          "bottom": "456",
+          "right": "389"
+        },
+        "id": "button3",
+        "class": "TestTextView"
+      },
+      {
+        "bounds": {
+          "top": "456",
+          "left": "139",
+          "bottom": "507",
+          "right": "246"
+        },
+        "id": "button4",
+        "class": "TestTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "507",
+      "right": "520"
+    },
+    "id": "activity_main",
+    "class": "ConstraintLayout"
+  }
+}

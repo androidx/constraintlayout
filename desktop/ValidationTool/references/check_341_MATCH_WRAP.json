@@ -1,0 +1,44 @@
+{
+  "duration": "2884500",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "453",
+          "left": "30",
+          "bottom": "753",
+          "right": "480"
+        },
+        "id": "text_container",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "453",
+          "left": "480",
+          "bottom": "753",
+          "right": "1050"
+        },
+        "id": "tablet_experience_preview",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "753",
+          "left": "723",
+          "bottom": "966",
+          "right": "1050"
+        },
+        "id": "get_started_button",
+        "class": "Button"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1206",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

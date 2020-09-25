@@ -1,0 +1,134 @@
+{
+  "duration": "2874500",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "621",
+          "right": "1080"
+        },
+        "id": "grid1flow",
+        "class": "Flow"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "153",
+          "right": "1080"
+        },
+        "id": "switch2",
+        "class": "Switch"
+      },
+      {
+        "bounds": {
+          "top": "153",
+          "left": "0",
+          "bottom": "156",
+          "right": "1080"
+        },
+        "id": "divider3",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "156",
+          "left": "0",
+          "bottom": "309",
+          "right": "540"
+        },
+        "id": "textView6",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "156",
+          "left": "540",
+          "bottom": "309",
+          "right": "1080"
+        },
+        "id": "textView7",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "309",
+          "left": "0",
+          "bottom": "312",
+          "right": "1080"
+        },
+        "id": "divider4",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "312",
+          "left": "0",
+          "bottom": "465",
+          "right": "840"
+        },
+        "id": "textView8",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "341",
+          "left": "840",
+          "bottom": "437",
+          "right": "1032"
+        },
+        "id": "view1",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "312",
+          "left": "1032",
+          "bottom": "465",
+          "right": "1080"
+        },
+        "id": "space3",
+        "class": "Space"
+      },
+      {
+        "bounds": {
+          "top": "465",
+          "left": "0",
+          "bottom": "468",
+          "right": "1080"
+        },
+        "id": "divider5",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "468",
+          "left": "0",
+          "bottom": "621",
+          "right": "540"
+        },
+        "id": "textView9",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "468",
+          "left": "540",
+          "bottom": "621",
+          "right": "1080"
+        },
+        "id": "textView10",
+        "class": "AppCompatTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "621",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

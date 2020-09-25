@@ -1,0 +1,103 @@
+{
+  "duration": "2000",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "30",
+          "left": "30",
+          "bottom": "90",
+          "right": "90"
+        },
+        "id": "icon_1",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "32",
+          "left": "96",
+          "bottom": "89",
+          "right": "210"
+        },
+        "id": "text_1",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "30",
+          "left": "1014",
+          "bottom": "90",
+          "right": "1074"
+        },
+        "id": "icon_left_1",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "32",
+          "left": "668",
+          "bottom": "89",
+          "right": "862"
+        },
+        "id": "text_left_1",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "32",
+          "left": "862",
+          "bottom": "89",
+          "right": "1056"
+        },
+        "id": "text_left_2",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "114",
+          "left": "30",
+          "bottom": "174",
+          "right": "90"
+        },
+        "id": "icon_2",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "116",
+          "left": "90",
+          "bottom": "173",
+          "right": "204"
+        },
+        "id": "text_2",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "173",
+          "left": "0",
+          "bottom": "173",
+          "right": "0"
+        },
+        "id": "barrier",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "173",
+          "left": "0",
+          "bottom": "191",
+          "right": "1080"
+        },
+        "class": "View"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "191",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

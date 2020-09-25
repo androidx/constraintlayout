@@ -1,0 +1,34 @@
+{
+  "duration": "10446",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "307",
+          "left": "0",
+          "bottom": "1536",
+          "right": "1080"
+        },
+        "id": "gradient_background",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "140",
+          "left": "75",
+          "bottom": "475",
+          "right": "409"
+        },
+        "id": "artist_image",
+        "class": "AppCompatImageView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "duration": "208378",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "96",
+          "left": "432",
+          "bottom": "312",
+          "right": "648"
+        },
+        "id": "ic__rate_step_avatar",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "360",
+          "left": "72",
+          "bottom": "433",
+          "right": "1008"
+        },
+        "id": "ic_rate_step_title",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "457",
+          "left": "72",
+          "bottom": "506",
+          "right": "1008"
+        },
+        "id": "ic_rate_step_sub_title",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "578",
+          "left": "444",
+          "bottom": "578",
+          "right": "444"
+        },
+        "id": "ic_rate_step_rate_1",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "578",
+          "left": "492",
+          "bottom": "578",
+          "right": "492"
+        },
+        "id": "ic_rate_step_rate_2",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "578",
+          "left": "540",
+          "bottom": "578",
+          "right": "540"
+        },
+        "id": "ic_rate_step_rate_3",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "578",
+          "left": "588",
+          "bottom": "578",
+          "right": "588"
+        },
+        "id": "ic_rate_step_rate_4",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "578",
+          "left": "636",
+          "bottom": "578",
+          "right": "636"
+        },
+        "id": "ic_rate_step_rate_5",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "674",
+          "left": "72",
+          "bottom": "803",
+          "right": "1008"
+        },
+        "id": "ic_rate_step_pills_header",
+        "class": "AppCompatTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "803",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

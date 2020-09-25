@@ -1,0 +1,34 @@
+{
+  "duration": "9367",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "540",
+          "bottom": "0",
+          "right": "540"
+        },
+        "id": "halfScreenGuideline",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "732",
+          "left": "540",
+          "bottom": "805",
+          "right": "1080"
+        },
+        "class": "AppCompatEditText"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "id": "cl_body",
+    "class": "ConstraintLayout"
+  }
+}

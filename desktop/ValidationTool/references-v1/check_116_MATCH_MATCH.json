@@ -1,0 +1,74 @@
+{
+  "duration": "40118",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "180",
+          "left": "96",
+          "bottom": "1380",
+          "right": "984"
+        },
+        "id": "bounding_layout",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "180",
+          "left": "96",
+          "bottom": "277",
+          "right": "984"
+        },
+        "id": "title",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "313",
+          "left": "96",
+          "bottom": "428",
+          "right": "984"
+        },
+        "id": "message",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "813",
+          "left": "96",
+          "bottom": "947",
+          "right": "984"
+        },
+        "id": "devices_streaming",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "1331",
+          "left": "420",
+          "bottom": "1380",
+          "right": "554"
+        },
+        "id": "cancel_button",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "1331",
+          "left": "554",
+          "bottom": "1380",
+          "right": "660"
+        },
+        "id": "retry_button",
+        "class": "AppCompatTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

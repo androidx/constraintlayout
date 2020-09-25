@@ -1,0 +1,45 @@
+{
+  "duration": "19222",
+  "layout": {
+    "children": [
+      {
+        "children": [],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "240",
+          "right": "0"
+        },
+        "id": "clLoginStub",
+        "class": "ConstraintLayout"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "xviewGuideline",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "240",
+          "right": "0"
+        },
+        "id": "rvLoginMethods",
+        "class": "View"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "240",
+      "right": "0"
+    },
+    "class": "ConstraintLayout"
+  }
+}

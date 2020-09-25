@@ -1,0 +1,244 @@
+{
+  "duration": "2158229",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "120",
+          "bottom": "192",
+          "right": "312"
+        },
+        "id": "imgPhoto",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "72",
+          "left": "312",
+          "bottom": "192",
+          "right": "432"
+        },
+        "id": "cmdPhoto",
+        "class": "AppCompatImageButton"
+      },
+      {
+        "bounds": {
+          "top": "198",
+          "left": "0",
+          "bottom": "255",
+          "right": "112"
+        },
+        "id": "lblEventName",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "192",
+          "left": "213",
+          "bottom": "257",
+          "right": "432"
+        },
+        "id": "txtEventName",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "263",
+          "left": "0",
+          "bottom": "320",
+          "right": "213"
+        },
+        "id": "lblDesc",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "257",
+          "left": "213",
+          "bottom": "322",
+          "right": "432"
+        },
+        "id": "txtDesc",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "322",
+          "left": "216",
+          "bottom": "387",
+          "right": "216"
+        },
+        "id": "txtTimeRange",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "387",
+          "left": "0",
+          "bottom": "452",
+          "right": "312"
+        },
+        "id": "txtAddress",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "387",
+          "left": "312",
+          "bottom": "507",
+          "right": "432"
+        },
+        "id": "cmdAddress",
+        "class": "AppCompatImageButton"
+      },
+      {
+        "bounds": {
+          "top": "507",
+          "left": "59",
+          "bottom": "564",
+          "right": "373"
+        },
+        "id": "lblEventCategories",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "564",
+          "left": "0",
+          "bottom": "629",
+          "right": "312"
+        },
+        "id": "txtEventCategories",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "564",
+          "left": "312",
+          "bottom": "684",
+          "right": "432"
+        },
+        "id": "cmdEventCategories",
+        "class": "AppCompatImageButton"
+      },
+      {
+        "bounds": {
+          "top": "684",
+          "left": "88",
+          "bottom": "741",
+          "right": "344"
+        },
+        "id": "lblMusicGenres",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "741",
+          "left": "0",
+          "bottom": "806",
+          "right": "312"
+        },
+        "id": "txtMusicGenres",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "741",
+          "left": "312",
+          "bottom": "861",
+          "right": "432"
+        },
+        "id": "cmdMusicGenres",
+        "class": "AppCompatImageButton"
+      },
+      {
+        "bounds": {
+          "top": "867",
+          "left": "0",
+          "bottom": "924",
+          "right": "95"
+        },
+        "id": "lblPrice",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "861",
+          "left": "213",
+          "bottom": "926",
+          "right": "432"
+        },
+        "id": "txtPrice",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "932",
+          "left": "0",
+          "bottom": "989",
+          "right": "132"
+        },
+        "id": "lblGuests",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "926",
+          "left": "213",
+          "bottom": "991",
+          "right": "432"
+        },
+        "id": "txtGuests",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "507",
+          "left": "0",
+          "bottom": "507",
+          "right": "0"
+        },
+        "id": "bottomAddress",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "684",
+          "left": "0",
+          "bottom": "684",
+          "right": "0"
+        },
+        "id": "bottomEventCategories",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "861",
+          "left": "0",
+          "bottom": "861",
+          "right": "0"
+        },
+        "id": "bottomMusicGenres",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "213",
+          "bottom": "0",
+          "right": "213"
+        },
+        "id": "rightLabels",
+        "class": "Barrier"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "991",
+      "right": "432"
+    },
+    "class": "ConstraintLayout"
+  }
+}

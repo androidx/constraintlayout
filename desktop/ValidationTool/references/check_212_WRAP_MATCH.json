@@ -1,0 +1,21 @@
+{
+  "duration": "17535",
+  "layout": {
+    "children": [{
+      "bounds": {
+        "top": "633",
+        "left": "0",
+        "bottom": "903",
+        "right": "360"
+      },
+      "class": "AppCompatImageView"
+    }],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "360"
+    },
+    "class": "ConstraintLayout"
+  }
+}

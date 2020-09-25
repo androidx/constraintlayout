@@ -1,0 +1,54 @@
+{
+  "duration": "87640",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "48",
+          "left": "48",
+          "bottom": "192",
+          "right": "192"
+        },
+        "id": "competition_scorer_vh_image",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "51",
+          "left": "240",
+          "bottom": "108",
+          "right": "912"
+        },
+        "id": "competition_scorer_vh_name",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "108",
+          "left": "240",
+          "bottom": "165",
+          "right": "912"
+        },
+        "id": "competition_scorer_vh_details",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "80",
+          "left": "960",
+          "bottom": "137",
+          "right": "1032"
+        },
+        "id": "competition_scorer_vh_goals",
+        "class": "AppCompatTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "216",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

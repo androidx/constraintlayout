@@ -1,0 +1,23 @@
+{
+  "duration": "13314",
+  "layout": {
+    "children": [{
+      "bounds": {
+        "top": "60",
+        "left": "66",
+        "bottom": "384",
+        "right": "390"
+      },
+      "id": "episode_image_iv",
+      "class": "View"
+    }],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "444",
+      "right": "1080"
+    },
+    "id": "live_status_body",
+    "class": "ConstraintLayout"
+  }
+}

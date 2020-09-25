@@ -1,0 +1,164 @@
+{
+  "duration": "1606000",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "24",
+          "left": "737",
+          "bottom": "24",
+          "right": "737"
+        },
+        "id": "offer_barrier",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "26",
+          "left": "72",
+          "bottom": "83",
+          "right": "203"
+        },
+        "id": "offer_price",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "offer_shipping_info",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "offer_return_policy",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "offer_local_offer_details",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "offer_space",
+        "class": "Space"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "offer_deal_annotation",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "114",
+          "left": "72",
+          "bottom": "162",
+          "right": "120"
+        },
+        "id": "offer_merchant_logo",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "109",
+          "left": "132",
+          "bottom": "166",
+          "right": "295"
+        },
+        "id": "offer_merchant_name",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "offer_disclaimer",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "offer_seller_rating",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "168",
+          "left": "72",
+          "bottom": "168",
+          "right": "72"
+        },
+        "id": "offer_action_button_barrier",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "24",
+          "left": "737",
+          "bottom": "168",
+          "right": "1008"
+        },
+        "id": "offer_action_button",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "offer_add_to_cart_button",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "offer_crowded_offers_button",
+        "class": "AppCompatButton"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "192",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "duration": "3384000",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "401",
+          "bottom": "57",
+          "right": "679"
+        },
+        "id": "top_text",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "285",
+          "left": "389",
+          "bottom": "342",
+          "right": "692"
+        },
+        "id": "bottom_text",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "144",
+          "right": "264"
+        },
+        "id": "switch_gone",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "57",
+          "left": "339",
+          "bottom": "114",
+          "right": "741"
+        },
+        "id": "list_top_text",
+        "class": "AppCompatTextView"
+      },
+      {
+        "children": [
+          {
+            "children": [{
+              "bounds": {
+                "top": "0",
+                "left": "0",
+                "bottom": "57",
+                "right": "1080"
+              },
+              "id": "tv_stop_address",
+              "class": "AppCompatTextView"
+            }],
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "57",
+              "right": "1080"
+            },
+            "id": "list339",
+            "class": "ConstraintLayout"
+          },
+          {
+            "children": [{
+              "bounds": {
+                "top": "0",
+                "left": "0",
+                "bottom": "57",
+                "right": "1080"
+              },
+              "id": "tv_stop_address",
+              "class": "AppCompatTextView"
+            }],
+            "bounds": {
+              "top": "57",
+              "left": "0",
+              "bottom": "114",
+              "right": "1080"
+            },
+            "id": "list339",
+            "class": "ConstraintLayout"
+          },
+          {
+            "children": [{
+              "bounds": {
+                "top": "0",
+                "left": "0",
+                "bottom": "57",
+                "right": "1080"
+              },
+              "id": "tv_stop_address",
+              "class": "AppCompatTextView"
+            }],
+            "bounds": {
+              "top": "114",
+              "left": "0",
+              "bottom": "171",
+              "right": "1080"
+            },
+            "id": "list339",
+            "class": "ConstraintLayout"
+          }
+        ],
+        "bounds": {
+          "top": "114",
+          "left": "0",
+          "bottom": "285",
+          "right": "1080"
+        },
+        "id": "list_view",
+        "class": "RecyclerView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "342",
+      "right": "1080"
+    },
+    "id": "root",
+    "class": "ConstraintLayout"
+  }
+}

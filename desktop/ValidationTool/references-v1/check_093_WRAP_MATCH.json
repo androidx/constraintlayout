@@ -1,0 +1,34 @@
+{
+  "duration": "89182",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "46",
+          "left": "15",
+          "bottom": "1342",
+          "right": "1095"
+        },
+        "id": "red_square",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "1373",
+          "left": "304",
+          "bottom": "1490",
+          "right": "806"
+        },
+        "id": "text",
+        "class": "AppCompatTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

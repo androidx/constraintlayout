@@ -1,0 +1,125 @@
+{
+  "duration": "5687",
+  "layout": {
+    "children": [{
+      "children": [
+        {
+          "children": [
+            {
+              "bounds": {
+                "top": "48",
+                "left": "48",
+                "bottom": "2165",
+                "right": "48"
+              },
+              "id": "title_text_view",
+              "class": "AppCompatTextView"
+            },
+            {
+              "bounds": {
+                "top": "2177",
+                "left": "48",
+                "bottom": "58535",
+                "right": "48"
+              },
+              "id": "description_text_view",
+              "class": "AppCompatTextView"
+            },
+            {
+              "bounds": {
+                "top": "2177",
+                "left": "48",
+                "bottom": "2234",
+                "right": "48"
+              },
+              "id": "switch_spacer",
+              "class": "AppCompatTextView"
+            },
+            {
+              "bounds": {
+                "top": "1101",
+                "left": "96",
+                "bottom": "1182",
+                "right": "236"
+              },
+              "id": "switch_compat",
+              "class": "SwitchCompat"
+            }
+          ],
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "58583",
+            "right": "284"
+          },
+          "class": "ConstraintLayout"
+        },
+        {
+          "children": [
+            {
+              "bounds": {
+                "top": "48",
+                "left": "48",
+                "bottom": "2165",
+                "right": "48"
+              },
+              "id": "title_text_view",
+              "class": "AppCompatTextView"
+            },
+            {
+              "bounds": {
+                "top": "2177",
+                "left": "48",
+                "bottom": "58535",
+                "right": "48"
+              },
+              "id": "description_text_view",
+              "class": "AppCompatTextView"
+            },
+            {
+              "bounds": {
+                "top": "2177",
+                "left": "48",
+                "bottom": "2234",
+                "right": "48"
+              },
+              "id": "switch_spacer",
+              "class": "AppCompatTextView"
+            },
+            {
+              "bounds": {
+                "top": "1101",
+                "left": "96",
+                "bottom": "1182",
+                "right": "236"
+              },
+              "id": "switch_compat",
+              "class": "SwitchCompat"
+            }
+          ],
+          "bounds": {
+            "top": "58583",
+            "left": "0",
+            "bottom": "117166",
+            "right": "284"
+          },
+          "class": "ConstraintLayout"
+        }
+      ],
+      "bounds": {
+        "top": "0",
+        "left": "0",
+        "bottom": "117166",
+        "right": "284"
+      },
+      "class": "LinearLayout"
+    }],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "284"
+    },
+    "class": "ScrollView"
+  }
+}

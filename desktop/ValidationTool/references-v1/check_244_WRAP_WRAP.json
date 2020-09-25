@@ -1,0 +1,124 @@
+{
+  "duration": "1985179",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "86",
+          "left": "66",
+          "bottom": "420",
+          "right": "399"
+        },
+        "id": "episode_image_iv",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "60",
+          "left": "450",
+          "bottom": "296",
+          "right": "1051"
+        },
+        "id": "episode_title_tv",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "332",
+          "left": "450",
+          "bottom": "398",
+          "right": "516"
+        },
+        "id": "episode_live_icon",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "332",
+          "left": "528",
+          "bottom": "389",
+          "right": "613"
+        },
+        "id": "episode_live_tv",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "413",
+          "left": "385",
+          "bottom": "486",
+          "right": "516"
+        },
+        "id": "users_count_icon",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "413",
+          "left": "540",
+          "bottom": "470",
+          "right": "636"
+        },
+        "id": "users_count",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "636",
+          "bottom": "0",
+          "right": "636"
+        },
+        "id": "barrier",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "324",
+          "left": "687",
+          "bottom": "397",
+          "right": "1005"
+        },
+        "id": "duration_icon",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "332",
+          "left": "1029",
+          "bottom": "389",
+          "right": "1111"
+        },
+        "id": "duration_tv",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "405",
+          "left": "687",
+          "bottom": "478",
+          "right": "856"
+        },
+        "id": "heart_icon",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "413",
+          "left": "880",
+          "bottom": "470",
+          "right": "1051"
+        },
+        "id": "heart_tv",
+        "class": "AppCompatTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "506",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}
