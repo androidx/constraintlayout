@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+    <!--motion:interpolator="@interpolator/foo"-->
+    <!--motion:interpolator="@anim/bar"-->
+
+    <Transition
+        motion:constraintSetStart="@+id/center"
+        motion:constraintSetEnd="@+id/north"
+        motion:duration="1000">
+        <OnClick motion:targetId="@id/button_north"
+            motion:clickAction="jumpToEnd|transitionToStart"/>
+
+        <OnSwipe
+            motion:dragDirection="dragUp"
+            motion:touchAnchorId="@+id/button"
+            motion:touchAnchorSide="top" />
+    </Transition>
+
+    <Transition
+        motion:constraintSetStart="@+id/west"
+        motion:constraintSetEnd="@+id/north"
+        motion:duration="1000">
+
+        <OnSwipe
+            motion:dragDirection="dragUp"
+            motion:touchAnchorId="@+id/button"
+            motion:touchAnchorSide="top" />
+    </Transition>
+
+    <Transition
+        motion:constraintSetStart="@+id/center"
+        motion:constraintSetEnd="@+id/west"
+        motion:duration="1000">
+        <OnClick motion:targetId="@id/button_west"
+            motion:clickAction="transitionToEnd|transitionToStart"/>
+
+        <OnSwipe
+            motion:dragDirection="dragLeft"
+            motion:touchAnchorId="@+id/button"
+            motion:touchAnchorSide="right" />
+    </Transition>
+
+    <Transition
+        motion:constraintSetStart="@+id/center"
+        motion:constraintSetEnd="@+id/east"
+        motion:duration="1000">
+        <OnClick motion:targetId="@id/button_east"
+            motion:clickAction="jumpToEnd|jumpToStart"/>
+
+        <OnSwipe
+            motion:dragDirection="dragRight"
+            motion:touchAnchorId="@+id/button"
+            motion:touchAnchorSide="right" />
+    </Transition>
+
+
+    <Transition
+        motion:constraintSetStart="@+id/center"
+        motion:constraintSetEnd="@+id/south"
+        motion:duration="1000">
+        <OnClick motion:targetId="@id/button_south"
+            motion:clickAction="jumpToStart|transitionToEnd"/>
+
+        <OnSwipe
+            motion:dragDirection="dragDown"
+            motion:touchAnchorId="@+id/button"
+            motion:touchAnchorSide="top" />
+    </Transition>
+
+    <ConstraintSet android:id="@+id/center">
+        <Constraint
+            android:id="@+id/button"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            motion:layout_constraintHorizontal_bias="0.50"
+            motion:layout_constraintVertical_bias="0.50"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            >
+            <CustomAttribute
+                motion:attributeName="imageRotate"
+                motion:customFloatValue="0" />
+            <CustomAttribute
+                motion:attributeName="imagePanX"
+                motion:customFloatValue="0"  />
+            <CustomAttribute
+                motion:attributeName="imagePanY"
+                motion:customFloatValue="0"  />
+            <CustomAttribute
+                motion:attributeName="roundPercent"
+                motion:customFloatValue="0"  />
+            <CustomAttribute
+                motion:attributeName="imageZoom"
+                motion:customFloatValue="1.4"  />
+        </Constraint>
+    </ConstraintSet>
+
+
+    <ConstraintSet android:id="@+id/north">
+        <Constraint
+            android:id="@+id/button"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            motion:layout_constraintVertical_bias="0.1"
+            motion:layout_constraintHorizontal_bias="0.501"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            >
+            <CustomAttribute
+                motion:attributeName="imageRotate"
+                motion:customFloatValue="0"  />
+            <CustomAttribute
+                motion:attributeName="imagePanX"
+                motion:customFloatValue="0"  />
+            <CustomAttribute
+                motion:attributeName="imagePanY"
+                motion:customFloatValue="-1"  />
+        </Constraint>
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/west">
+        <Constraint
+            android:id="@+id/button"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            motion:layout_constraintHorizontal_bias="0.1"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            >
+            <CustomAttribute
+                motion:attributeName="imageRotate"
+                motion:customFloatValue="0"  />
+            <CustomAttribute
+                motion:attributeName="imagePanX"
+                motion:customFloatValue="-1"  />
+        </Constraint>
+    </ConstraintSet>
+
+
+    <ConstraintSet android:id="@+id/east">
+        <Constraint
+            android:id="@+id/button"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            motion:layout_constraintHorizontal_bias="0.9"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            >
+            <CustomAttribute
+                motion:attributeName="imageRotate"
+                motion:customFloatValue="180"  />
+            <CustomAttribute
+                motion:attributeName="imagePanX"
+                motion:customFloatValue="1"  />
+            <CustomAttribute
+                motion:attributeName="roundPercent"
+                motion:customFloatValue="1"  />
+        </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/south">
+        <Constraint
+            android:id="@+id/button"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            motion:layout_constraintVertical_bias="0.9"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            >
+            <CustomAttribute
+                motion:attributeName="imageRotate"
+                motion:customFloatValue="180"  />
+            <CustomAttribute
+                motion:attributeName="imagePanX"
+                motion:customFloatValue="0"  />
+            <CustomAttribute
+                motion:attributeName="imageZoom"
+                motion:customFloatValue="4"  />
+        </Constraint>
+    </ConstraintSet>
+
+</MotionScene>

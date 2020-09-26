@@ -1126,6 +1126,10 @@
         <attr name="round" format="dimension" />
         <attr name="overlay" format="boolean" />
         <attr name="roundPercent" format="float" />
+        <attr name="imagePanX" format="float" />
+        <attr name="imagePanY" format="float" />
+        <attr name="imageZoom" format="float" />
+        <attr name="imageRotate" format="float" />
     </declare-styleable>
 
 
