@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto"
+    motion:defaultDuration="2000">
+
+
+    <ConstraintSet
+        android:id="@+id/small"
+        motion:deriveConstraintsFrom="@id/base"
+ >
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/base">
+        <Constraint android:id="@id/region1">
+            <Motion
+                motion:motionStagger="1"
+                motion:animateRelativeTo="@+id/center"
+                />
+        </Constraint>
+        <Constraint android:id="@id/region2">
+            <Motion
+                motion:motionStagger="2"
+                motion:animateRelativeTo="@+id/center"
+                />
+        </Constraint>
+        <Constraint android:id="@id/region3">
+            <Motion
+                motion:motionStagger="3"
+                motion:animateRelativeTo="@+id/center"
+                />
+        </Constraint>
+        <Constraint android:id="@id/region4">
+            <Motion
+                motion:motionStagger="4"
+                motion:animateRelativeTo="@+id/center"
+                />
+        </Constraint>
+        <Constraint android:id="@id/region5">
+            <Motion
+                motion:motionStagger="5"
+                motion:animateRelativeTo="@+id/center"
+                />
+        </Constraint>
+        <Constraint android:id="@id/region6">
+            <Motion
+                motion:motionStagger="6"
+                motion:animateRelativeTo="@+id/center"
+                />
+        </Constraint>
+        <Constraint android:id="@id/region7">
+            <Motion
+                motion:motionStagger="7"
+                motion:animateRelativeTo="@+id/center"
+                />
+        </Constraint>
+        <Constraint android:id="@id/region8">
+            <Motion
+                motion:motionStagger="8"
+                motion:animateRelativeTo="@+id/center"
+                />
+        </Constraint>
+        <Constraint android:id="@id/region9">
+            <Motion
+                motion:motionStagger="9"
+                motion:animateRelativeTo="@+id/center"
+                />
+        </Constraint>
+        <Constraint android:id="@id/region10">
+            <Motion
+                motion:motionStagger="10"
+                motion:animateRelativeTo="@+id/center"
+                />
+        </Constraint>
+        <Constraint android:id="@id/region11">
+            <Motion
+                motion:motionStagger="11"
+                motion:animateRelativeTo="@+id/center"
+
+                />
+        </Constraint>
+        <Constraint android:id="@id/region12">
+            <Motion
+                motion:motionStagger="12"
+                motion:animateRelativeTo="@+id/center"
+            />
+        </Constraint>
+
+
+
+    </ConstraintSet>
+
+
+
+    <Transition
+        motion:constraintSetEnd="@+id/base"
+        motion:constraintSetStart="@+id/small"
+        motion:duration="20000"
+        motion:staggered="0.1"
+        motion:motionInterpolator="linear"
+        >
+        <OnClick motion:clickAction="toggle"  />
+
+        <KeyFrameSet>
+            <KeyCycle
+                android:translationX="0dp"
+                motion:framePosition="0"
+                motion:motionTarget="hop"
+                motion:wavePeriod="0"
+                motion:waveShape="sin" />
+            <KeyCycle
+                android:translationX="0dp"
+                motion:framePosition="15"
+                motion:motionTarget="hop"
+                motion:wavePeriod="4"
+                motion:waveShape="sin" />
+            <KeyCycle
+                android:translationX="200dp"
+                motion:framePosition="75"
+                motion:motionTarget="hop"
+                motion:wavePeriod="4"
+                motion:waveShape="sin" />
+            <KeyCycle
+                android:translationX="0dp"
+                motion:framePosition="100"
+                motion:motionTarget="hop"
+                motion:wavePeriod="0"
+                motion:waveShape="sin" />
+
+            <KeyCycle
+                android:translationY="0dp"
+                motion:framePosition="0"
+                motion:motionTarget="hop"
+                motion:wavePeriod="0"
+                motion:wavePhase="0"
+                motion:waveShape="sin"  />
+            <KeyCycle
+                android:translationY="0dp"
+                motion:framePosition="15"
+                motion:motionTarget="hop"
+                motion:wavePeriod="4"
+                motion:wavePhase="-90"
+                motion:waveShape="sin"  />
+            <KeyCycle
+                android:translationY="200dp"
+                motion:framePosition="75"
+                motion:motionTarget="hop"
+                motion:wavePeriod="4"
+                motion:wavePhase="90"
+                motion:waveShape="sin"  />
+
+            <KeyCycle
+                android:translationY="0dp"
+                motion:framePosition="0100"
+                motion:motionTarget="hop"
+                motion:wavePeriod="0"
+                motion:wavePhase="90"
+                motion:waveShape="sin"  />
+        </KeyFrameSet>
+
+    </Transition>
+
+
+
+</MotionScene>

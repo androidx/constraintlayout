@@ -113,23 +113,24 @@ public class Oscillator {
         return p;
     }
 
-    public double getValue(double time) {
+    public double getValue(double time, double phase) {
+        double angle = phase + getP(time); // angle is / by 360
         switch (mType) {
             default:
             case SIN_WAVE:
-                return Math.sin(PI2 * getP(time));
+                return Math.sin(PI2 * (angle));
             case SQUARE_WAVE:
-                return Math.signum(0.5 - getP(time) % 1);
+                return Math.signum(0.5 - angle % 1);
             case TRIANGLE_WAVE:
-                return 1 - Math.abs(((getP(time)) * 4 + 1) % 4 - 2);
+                return 1 - Math.abs(((angle) * 4 + 1) % 4 - 2);
             case SAW_WAVE:
-                return ((getP(time) * 2 + 1) % 2) - 1;
+                return ((angle * 2 + 1) % 2) - 1;
             case REVERSE_SAW_WAVE:
-                return (1 - ((getP(time) * 2 + 1) % 2));
+                return (1 - ((angle * 2 + 1) % 2));
             case COS_WAVE:
-                return Math.cos(PI2 * getP(time));
+                return Math.cos(PI2 * (phase + angle));
             case BOUNCE:
-                double x = 1 - Math.abs(((getP(time)) * 4) % 4 - 2);
+                double x = 1 - Math.abs(((angle) * 4) % 4 - 2);
                 return 1 - x * x;
         }
     }
@@ -154,23 +155,26 @@ public class Oscillator {
         return p;
     }
 
-    public double getSlope(double time) {
+    public double getSlope(double time, double phase, double dphase) {
+        double angle = phase + getP(time);
+
+        double dangle_dtime = getDP(time) + dphase;
         switch (mType) {
             default:
             case SIN_WAVE:
-                return PI2 * getDP(time) * Math.cos(PI2 * getP(time));
+                return PI2 * dangle_dtime * Math.cos(PI2 * angle);
             case SQUARE_WAVE:
                 return 0;
             case TRIANGLE_WAVE:
-                return 4 * getDP(time) * Math.signum(((getP(time)) * 4 + 3) % 4 - 2);
+                return 4 * dangle_dtime * Math.signum(((angle) * 4 + 3) % 4 - 2);
             case SAW_WAVE:
-                return getDP(time) * 2;
+                return dangle_dtime * 2;
             case REVERSE_SAW_WAVE:
-                return -getDP(time) * 2;
+                return -dangle_dtime * 2;
             case COS_WAVE:
-                return -PI2 * getDP(time) * Math.sin(PI2 * getP(time));
+                return -PI2 * dangle_dtime * Math.sin(PI2 * angle);
             case BOUNCE:
-                return 4 * getDP(time) * (((getP(time)) * 4 + 2) % 4 - 2);
+                return 4 * dangle_dtime * (((angle) * 4 + 2) % 4 - 2);
         }
     }
 }

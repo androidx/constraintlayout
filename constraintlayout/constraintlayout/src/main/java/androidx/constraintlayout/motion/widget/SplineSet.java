@@ -210,6 +210,8 @@ public abstract class SplineSet {
         }
 
         public void setPathRotate(View view, float t, double dx, double dy) {
+//       TODO     Log.v(TAG, Debug.getName(view)+ Debug.getLoc()+ " get(t) = " + get(t));
+
             view.setRotation(get(t) + (float) Math.toDegrees(Math.atan2(dy, dx)));
         }
     }

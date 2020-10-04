@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motionLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layoutDescription="@xml/verification_scene_61"
+    android:background="#cfc">
+    <!--    <androidx.constraintlayout.motion.widget.MotionLayout-->
+    <!--    app:layoutDescription="@xml/motion_testscene_28_scene"
+-->
+    <!--    app:layoutDescription="@xml/motion_testscene_01_scene"-->
+
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:text="This explors dynamicly changing phase"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region1"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#FF9999"
+        android:text="1"
+        app:motionStagger="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="hop"
+        />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region2"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#FFCA99"
+        android:text="2"
+        app:motionStagger="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="hop" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region3"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#FCFF99"
+        android:text="3"
+        app:motionStagger="3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="hop" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region4"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#F0FF99"
+        android:text="4"
+        app:motionStagger="4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="hop" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region5"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#AFFF99"
+        android:text="5"
+        app:motionStagger="5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="hop" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region6"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#99FFA5"
+        android:text="6"
+        app:motionStagger="6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="hop" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region7"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#99FFD8"
+        android:text="7"
+        app:motionStagger="7"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="hop" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region8"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#99F6FF"
+        android:text="8"
+        app:motionStagger="8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="hop" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region9"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#99DBFF"
+        android:text="9"
+        app:motionStagger="9"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="hop" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region10"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#99CCFF"
+        android:text="10"
+        app:motionStagger="10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="hop" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region11"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#FF9"
+        android:text="11"
+        app:motionStagger="11"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="hop" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region12"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#FF9"
+        android:text="12"
+        app:motionStagger="12"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="hop" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region13"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#FF9"
+        android:text="13"
+        app:motionStagger="13"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="hop" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region14"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#FF9"
+        android:text="14"
+        app:motionStagger="14"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="hop" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region15"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#FF9"
+        android:text="15"
+        app:motionStagger="15"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="hop" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region16"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#FF9999"
+        android:text="16"
+        app:motionStagger="16"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="hop"/>
+<!--    <Button-->
+<!--        android:id="@+id/go"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="run"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        />-->
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

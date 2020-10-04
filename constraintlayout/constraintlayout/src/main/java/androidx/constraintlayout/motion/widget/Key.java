@@ -50,6 +50,7 @@ public abstract class Key {
     static final String SCALE_Y = "scaleY";
     static final String WAVE_PERIOD = "wavePeriod";
     static final String WAVE_OFFSET = "waveOffset";
+    static final String WAVE_PHASE = "wavePhase";
     static final String WAVE_VARIES_BY = "waveVariesBy";
     static final String TRANSLATION_X = "translationX";
     static final String TRANSLATION_Y = "translationY";

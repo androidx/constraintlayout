@@ -88,6 +88,7 @@
     <attr name="layout_constraintEnd_toEndOf" format="reference|enum">
         <enum name="parent" value="0" />
     </attr>
+    <attr name="transformPivotTarget" format="reference" />
 
     <!-- the left margin value to be used when connected to an object that is GONE -->
     <attr name="layout_goneMarginLeft" format="dimension" />
@@ -280,6 +281,7 @@
 
     <!-- Defines the relative ordering of one view to another for purpose of staggering -->
     <attr name="motionStagger" format="float" />
+    <attr name="quantizeMotionSteps" format="integer" />
 
     <!-- Specify the visibility of a placeholder -->
     <attr name="placeholder_emptyVisibility">
@@ -316,7 +318,14 @@
         <attr name="placeholder_emptyVisibility" />
         <attr name="content" />
     </declare-styleable>
-    <attr name="animate_relativeTo" format="reference" />
+    <attr name="animateRelativeTo" format="reference" />
+    <attr name="animateCircleAngleTo" format="enum" >
+        <enum name="bestChoice" value="0"/>
+        <enum name="closest" value="1"/>
+        <enum name="clockwise" value="2"/>
+        <enum name="antiClockwise" value="3"/>
+        <enum name="constraint" value="4"/>
+    </attr>
 
     <declare-styleable name="MotionHelper">
         <attr name="onShow" format="boolean" />
@@ -468,6 +477,9 @@
         <enum name="flip" value="3" />
     </attr>
 
+    <attr name="polarRelativeTo" format="reference" />
+
+
     <!--Rotate the view along the path it is taking if set defines the angle the
         view will be rotate relative to the path. This is applied before rotation -->
     <attr name="transitionPathRotate" format="float" />
@@ -604,11 +616,15 @@
         <attr name="flow_lastHorizontalBias" />
         <attr name="flow_lastVerticalBias" />
 
-        <attr name="animate_relativeTo" />
+        <attr name="animateRelativeTo" />
+        <attr name="animateCircleAngleTo" />
+
         <attr name="transitionEasing" />
         <attr name="pathMotionArc" />
+        <attr name="polarRelativeTo" />
         <attr name="transitionPathRotate" />
         <attr name="motionStagger"/>
+        <attr name="quantizeMotionSteps"/>
         <attr name="drawPath" />
         <attr name="motionProgress" />
         <attr name="layout_constraintTag" />
@@ -648,6 +664,8 @@
 
         <attr name="android:transformPivotX" />
         <attr name="android:transformPivotY" />
+        <attr name="transformPivotTarget" />
+
         <!-- translation in x of the view. This value is added post-layout to the left
              property of the view, which is set by its layout. -->
         <attr name="android:translationX" />
@@ -775,12 +793,15 @@
         <attr name="flow_lastHorizontalBias" />
         <attr name="flow_lastVerticalBias" />
 
-        <attr name="animate_relativeTo" />
+        <attr name="animateRelativeTo" />
+        <attr name="animateCircleAngleTo" />
         <attr name="transitionEasing" />
         <attr name="pathMotionArc" />
+        <attr name="polarRelativeTo" />
         <attr name="transitionPathRotate" />
         <attr name="drawPath" />
         <attr name="motionProgress" />
+        <attr name="quantizeMotionSteps"/>
         <attr name="layout_constraintTag" />
         <attr name="motionStagger" />
 
@@ -836,6 +857,8 @@
     </attr>
 
     <attr name="wavePeriod" format="float" />
+    <attr name="wavePhase" format="float" />
+
     <attr name="waveOffset" format="float|dimension" />
     <attr name="defaultDuration" format="integer" />
 
@@ -988,6 +1011,8 @@
         <attr name="android:rotationY" />
         <attr name="android:transformPivotX" />
         <attr name="android:transformPivotY" />
+        <attr name="transformPivotTarget" />
+
         <attr name="transitionPathRotate" />
         <attr name="android:scaleX" />
         <attr name="android:scaleY" />
@@ -1034,6 +1059,7 @@
         <attr name="transitionEasing" />
         <attr name="motionProgress" />
         <attr name="waveShape" />
+        <attr name="wavePhase"/>
         <attr name="wavePeriod" />
         <attr name="waveOffset" />
         <attr name="waveVariesBy" />
@@ -1059,6 +1085,7 @@
         <attr name="wavePeriod" />
         <attr name="motionProgress" />
         <attr name="waveOffset" />
+        <attr name="wavePhase"/>
 
         <!--  The time in milliseconds before the wave decays to less than 1/256-->
         <attr name="waveDecay" />
@@ -1245,13 +1272,15 @@
         <!-- scale of the view in the y direction. -->
         <attr name="android:scaleY"   />
 
-        <!-- deprecated  x location of the pivot point around which the view will rotate and scale.
+        <!--  x location of the pivot point around which the view will rotate and scale.
      This xml attribute sets the pivotX property of the View. -->
         <attr name="android:transformPivotX"  />
 
-        <!-- deprecated  y location of the pivot point around which the view will rotate and scale.
+        <!--   y location of the pivot point around which the view will rotate and scale.
              This xml attribute sets the pivotY property of the View. -->
         <attr name="android:transformPivotY"  />
+
+        <attr name="transformPivotTarget"  />
 
         <!-- translation in x of the view. This value is added post-layout to the left
            property of the view, which is set by its layout. -->
@@ -1267,12 +1296,14 @@
     </declare-styleable>
 
     <declare-styleable name="Motion">
-        <attr name="animate_relativeTo" />
+        <attr name="animateRelativeTo" />
+        <attr name="animateCircleAngleTo" />
         <attr name="transitionEasing" />
         <attr name="pathMotionArc" />
         <attr name="motionPathRotate" />
         <attr name="motionStagger" />
         <attr name="drawPath" />
+        <attr name="quantizeMotionSteps" />
     </declare-styleable>
 
     <declare-styleable name="KeyTrigger">

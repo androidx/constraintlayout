@@ -304,8 +304,9 @@ public class ConstraintSet {
     private static final int MOTION_STAGGER = 79;
     private static final int CONSTRAINED_WIDTH = 80;
     private static final int CONSTRAINED_HEIGHT = 81;
+    private static final int ANIMATE_CIRCLE_ANGLE_TO = 82;
 
-    private static final int UNUSED = 82;
+    private static final int UNUSED = 83;
 
     static {
         mapToConstant.append(R.styleable.Constraint_layout_constraintLeft_toLeftOf, LEFT_TO_LEFT);
@@ -377,7 +378,7 @@ public class ConstraintSet {
         mapToConstant.append(R.styleable.Constraint_layout_constraintCircle, CIRCLE);
         mapToConstant.append(R.styleable.Constraint_layout_constraintCircleRadius, CIRCLE_RADIUS);
         mapToConstant.append(R.styleable.Constraint_layout_constraintCircleAngle, CIRCLE_ANGLE);
-        mapToConstant.append(R.styleable.Constraint_animate_relativeTo, ANIMATE_RELATIVE_TO);
+        mapToConstant.append(R.styleable.Constraint_animateRelativeTo, ANIMATE_RELATIVE_TO);
         mapToConstant.append(R.styleable.Constraint_transitionEasing, TRANSITION_EASING);
         mapToConstant.append(R.styleable.Constraint_drawPath, DRAW_PATH);
         mapToConstant.append(R.styleable.Constraint_transitionPathRotate, TRANSITION_PATH_ROTATE);
@@ -397,6 +398,8 @@ public class ConstraintSet {
         mapToConstant.append(R.styleable.Constraint_visibilityMode, VISIBILITY_MODE);
         mapToConstant.append(R.styleable.Constraint_layout_constrainedWidth, CONSTRAINED_WIDTH);
         mapToConstant.append(R.styleable.Constraint_layout_constrainedHeight, CONSTRAINED_HEIGHT);
+        mapToConstant.append(R.styleable.Constraint_polarRelativeTo, ANIMATE_CIRCLE_ANGLE_TO);
+
     }
 
     public HashMap<String, ConstraintAttribute> getCustomAttributeSet() {
@@ -1179,10 +1182,12 @@ public class ConstraintSet {
     public static class Motion {
         public boolean mApply = false;
         public int mAnimateRelativeTo = Layout.UNSET;
+        public int mAnimateCircleAngleTo = 0;
         public String mTransitionEasing = null;
         public int mPathMotionArc = Layout.UNSET;
         public int mDrawPath = 0;
         public float mMotionStagger = Float.NaN;
+        public int mPolarRelativeTo = Layout.UNSET;
         public float mPathRotate = Float.NaN;
 
         public void copyFrom(Motion src) {
@@ -1193,6 +1198,7 @@ public class ConstraintSet {
             mDrawPath = src.mDrawPath;
             mPathRotate = src.mPathRotate;
             mMotionStagger = src.mMotionStagger;
+            mPolarRelativeTo = src.mPolarRelativeTo;
         }
 
         private static SparseIntArray mapToConstant = new SparseIntArray();
@@ -1201,14 +1207,18 @@ public class ConstraintSet {
         private static final int TRANSITION_EASING = 3;
         private static final int MOTION_DRAW_PATH = 4;
         private static final int ANIMATE_RELATIVE_TO = 5;
-        private static final int MOTION_STAGGER = 6;
+        private static final int ANIMATE_CIRCLE_ANGLE_TO = 6;
+        private static final int MOTION_STAGGER = 7;
+
+
 
         static {
             mapToConstant.append(R.styleable.Motion_motionPathRotate, TRANSITION_PATH_ROTATE);
             mapToConstant.append(R.styleable.Motion_pathMotionArc, PATH_MOTION_ARC);
             mapToConstant.append(R.styleable.Motion_transitionEasing, TRANSITION_EASING);
             mapToConstant.append(R.styleable.Motion_drawPath, MOTION_DRAW_PATH);
-            mapToConstant.append(R.styleable.Motion_animate_relativeTo, ANIMATE_RELATIVE_TO);
+            mapToConstant.append(R.styleable.Motion_animateRelativeTo, ANIMATE_RELATIVE_TO);
+            mapToConstant.append(R.styleable.Motion_animateCircleAngleTo, ANIMATE_CIRCLE_ANGLE_TO);
             mapToConstant.append(R.styleable.Motion_motionStagger, MOTION_STAGGER);
         }
 
@@ -1240,9 +1250,13 @@ public class ConstraintSet {
                     case ANIMATE_RELATIVE_TO:
                         mAnimateRelativeTo = lookupID(a, attr, mAnimateRelativeTo);
                         break;
+                    case ANIMATE_CIRCLE_ANGLE_TO:
+                        mAnimateCircleAngleTo = a.getInteger(attr, mAnimateCircleAngleTo);
+                      break;
                     case MOTION_STAGGER:
                         mMotionStagger = a.getFloat(attr, mMotionStagger);
                         break;
+
                 }
             }
             a.recycle();
@@ -3695,6 +3709,9 @@ public class ConstraintSet {
                     break;
                 case ANIMATE_RELATIVE_TO:
                     c.motion.mAnimateRelativeTo = lookupID(a, attr, c.motion.mAnimateRelativeTo);
+                    break;
+                case ANIMATE_CIRCLE_ANGLE_TO:
+                    c.motion.mAnimateCircleAngleTo = a.getInteger(attr, c.motion.mAnimateCircleAngleTo);
                     break;
                 case TRANSITION_EASING:
                     TypedValue type = a.peekValue(attr);

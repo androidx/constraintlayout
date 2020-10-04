@@ -43,6 +43,7 @@ import androidx.constraintlayout.solver.widgets.Helper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
+import android.util.SparseBooleanArray;
 import android.util.SparseIntArray;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -1497,7 +1498,11 @@ public class MotionLayout extends ConstraintLayout implements
 
         mModel.build();
         mInTransition = true;
-
+        SparseArray<MotionController> controllers = new SparseArray<>();
+        for (int i = 0; i < n; i++) {
+            View child = getChildAt(i);
+            controllers.put(child.getId(),mFrameArrayList.get(child));
+        }
         int layoutWidth = getWidth();
         int layoutHeight = getHeight();
         int arc = mScene.gatPathMotionArc();
@@ -1509,10 +1514,34 @@ public class MotionLayout extends ConstraintLayout implements
                 }
             }
         }
-        // getMap the KeyFrames for each view
-        for (int i = 0; i < n; i++) {
-            MotionController motionController = mFrameArrayList.get(getChildAt(i));
+
+        SparseBooleanArray sparseBooleanArray = new SparseBooleanArray();
+        int[] depends = new int[mFrameArrayList.size()];
+          int count = 0;
+         for (int i = 0; i < n; i++) {
+            View view = getChildAt(i);
+            MotionController motionController = mFrameArrayList.get(view);
+            if (motionController.getAnimateRelativeTo() != UNSET) {
+                sparseBooleanArray.put( motionController.getAnimateRelativeTo(),true);
+                depends[count++]=motionController.getAnimateRelativeTo();
+            }
+        }
+        for (int i = 0; i < count; i++) {
+            MotionController motionController = mFrameArrayList.get(findViewById(depends[i]));
             if (motionController != null) {
+                mScene.getKeyFrames(motionController);
+                motionController.setup(layoutWidth, layoutHeight, mTransitionDuration, getNanoTime());
+            }
+        }
+            // getMap the KeyFrames for each view
+        for (int i = 0; i < n; i++) {
+            View v = getChildAt(i);
+            MotionController motionController = mFrameArrayList.get(v);
+            if (sparseBooleanArray.get(v.getId())) {
+                continue;
+            }
+
+                if (motionController != null) {
                 mScene.getKeyFrames(motionController);
                 motionController.setup(layoutWidth, layoutHeight, mTransitionDuration, getNanoTime());
             }
@@ -1864,15 +1893,20 @@ public class MotionLayout extends ConstraintLayout implements
         mTransitionDuration = mScene.getDuration() / 1000f;
         mBeginState = UNSET;
         mScene.setTransition(mBeginState, mEndState);
+        SparseArray<MotionController> controllers = new SparseArray<>();
+
+
 
         int startId = mScene.getStartId();
         int targetID = id;
         int n = getChildCount();
+
         mFrameArrayList.clear();
         for (int i = 0; i < n; i++) {
             View v = getChildAt(i);
             MotionController f = new MotionController(v);
             mFrameArrayList.put(v, f);
+            controllers.put(v.getId(),mFrameArrayList.get(v));
         }
         mInTransition = true;
 
@@ -1891,7 +1925,6 @@ public class MotionLayout extends ConstraintLayout implements
 
         float stagger = mScene.getStaggered();
         if (stagger != 0.0f) {
-
             float min = Float.MAX_VALUE, max = -Float.MAX_VALUE;
             for (int i = 0; i < n; i++) {
                 MotionController f = mFrameArrayList.get(getChildAt(i));
@@ -2264,11 +2297,12 @@ public class MotionLayout extends ConstraintLayout implements
         public void build() {
             final int n = getChildCount();
             mFrameArrayList.clear();
-
+            SparseArray<MotionController> controllers = new SparseArray<>();
+            int []ids = new int[n];
             for (int i = 0; i < n; i++) {
                 View v = getChildAt(i);
                 MotionController motionController = new MotionController(v);
-
+                controllers.put(ids[i] = v.getId(),motionController);
                 mFrameArrayList.put(v, motionController);
             }
             for (int i = 0; i < n; i++) {
@@ -2296,6 +2330,13 @@ public class MotionLayout extends ConstraintLayout implements
                             Log.e(TAG, Debug.getLocation() + "no widget for  " + Debug.getName(v) + " (" + v.getClass().getName() + ")");
                         }
                     }
+                }
+            }
+            for (int i = 0; i < n; i++) {
+                MotionController controller = controllers.get(ids[i]);
+                int relativeToId = controller.getAnimateRelativeTo();
+                if (relativeToId != UNSET) {
+                    controller.setupRelative(controllers.get(relativeToId));
                 }
             }
         }

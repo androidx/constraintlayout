@@ -80,6 +80,7 @@ public class MotionController {
     float mMotionStagger = Float.NaN;
     float mStaggerOffset = 0;
     float mStaggerScale = 1.0f;
+    float mCurrentCenterX,mCurrentCenterY;
     private int[] mInterpolateVariables;
     private double[] mInterpolateData; // scratch data created during setup
     private double[] mInterpolateVelocity; // scratch data created during setup
@@ -121,6 +122,47 @@ public class MotionController {
     float getFinalY() {
         return mEndMotionPath.y;
     }
+
+    /**
+     * Will the id of the view to move relative to
+     * @return
+     */
+    int getAnimateRelativeTo() {
+       return mStartMotionPath.mAnimateRelativeTo;
+    }
+
+    public void setupRelative(MotionController motionController) {
+        mStartMotionPath.setupRelative(motionController, motionController.mStartMotionPath);
+        mEndMotionPath.setupRelative(motionController, motionController.mEndMotionPath);
+    }
+
+    public float getCenterX() {
+        return mCurrentCenterX;
+    }
+
+    public float getCenterY() {
+        return mCurrentCenterY;
+    }
+
+    public void getCenter(double p, float[] pos, float[]vel) {
+        double [] position = new double[4];
+        double [] velocity = new double[4];
+        int [] temp = new int[4];
+
+//        double [] position = new double[2];
+//        double [] velocity = new double[2];
+//
+//        mSpline[0].getPos(p, position);
+//        mSpline[0].getPos(p, mInterpolateData);
+//        mSpline[0].getSlope(p, mInterpolateVelocity);
+        mSpline[0].getPos(p, position);
+        mSpline[0].getSlope(p, velocity);
+        Arrays.fill(vel,0);
+     //    mStartMotionPath.getCenter(p, mInterpolateVariables, position, pos, 0);
+       mStartMotionPath.getCenter(p, mInterpolateVariables, position ,pos,velocity, vel  );
+
+    }
+
 
     /**
      * fill the array point with the center coordinates point[0] is filled with the
@@ -183,7 +225,7 @@ public class MotionController {
                     mArcSpline.getPos(p, mInterpolateData);
                 }
             }
-            mStartMotionPath.getCenter(mInterpolateVariables, mInterpolateData, points, i * 2);
+            mStartMotionPath.getCenter(p, mInterpolateVariables, mInterpolateData, points, i * 2);
 
             if (osc_x != null) {
                 points[i * 2] += osc_x.get(position);
@@ -198,6 +240,15 @@ public class MotionController {
         }
     }
 
+    double[] getPos(double position) {
+        mSpline[0].getPos(position, mInterpolateData);
+        if (mArcSpline != null) {
+            if (mInterpolateData.length > 0) {
+                mArcSpline.getPos(position, mInterpolateData);
+            }
+        }
+        return mInterpolateData;
+    }
     /**
      * fill the array point with the center coordinates point[0] is filled with the
      * x coordinate of "time" 0.0 mPoints[point.length-1] is filled with the y coordinate of "time"
@@ -301,7 +352,7 @@ public class MotionController {
             }
 
             mSpline[0].getPos(p, mInterpolateData);
-            mStartMotionPath.getCenter(mInterpolateVariables, mInterpolateData, points, 0);
+            mStartMotionPath.getCenter(p, mInterpolateVariables, mInterpolateData, points, 0);
             if (i > 0) {
                 sum += Math.hypot(y - points[1], x - points[0]);
             }
@@ -345,7 +396,7 @@ public class MotionController {
 
             for (int i = 0; i < time.length; i++) {
                 mSpline[0].getPos(time[i], mInterpolateData);
-                mStartMotionPath.getCenter(mInterpolateVariables, mInterpolateData, keyFrames, count);
+                mStartMotionPath.getCenter(time[i], mInterpolateVariables, mInterpolateData, keyFrames, count);
                 count += 2;
             }
             return count / 2;
@@ -959,7 +1010,15 @@ public class MotionController {
                     mArcSpline.getSlope(position, mInterpolateVelocity);
                 }
             }
-            mStartMotionPath.setView(child, mInterpolateVariables, mInterpolateData, mInterpolateVelocity, null);
+
+            mStartMotionPath.setView(position, child, mInterpolateVariables, mInterpolateData, mInterpolateVelocity, null);
+//            mCurrentCenterX = child.getX()+child.getWidth()/2.0f;
+//            mCurrentCenterY = child.getY()+child.getHeight()/2.0f;
+//
+           // Log.v(TAG, Debug.getName(child)+ Debug.getLoc()+ " mInterpolateVelocity = " + Arrays.toString(mInterpolateVelocity));
+//            Log.v(TAG, Debug.getLoc()+ Debug.getName(child)+ " position = " +  position);
+
+
             if (mAttributesMap != null) {
                 for (SplineSet aSpline : mAttributesMap.values()) {
                     if (aSpline instanceof SplineSet.PathRotate)
@@ -1209,7 +1268,7 @@ public class MotionController {
             type[i++] = key.mFramePosition + 1000*key.mType;
             float time = key.mFramePosition / 100.0f;
             mSpline[0].getPos(time , mInterpolateData);
-            mStartMotionPath.getCenter(mInterpolateVariables, mInterpolateData, pos, count);
+            mStartMotionPath.getCenter(time, mInterpolateVariables, mInterpolateData, pos, count);
             count +=2;
         }
 
@@ -1248,7 +1307,7 @@ public class MotionController {
 
             float time = key.mFramePosition / 100.0f;
             mSpline[0].getPos(time, mInterpolateData);
-            mStartMotionPath.getCenter(mInterpolateVariables, mInterpolateData, pos, 0);
+            mStartMotionPath.getCenter(time, mInterpolateVariables, mInterpolateData, pos, 0);
             info[++cursor] = Float.floatToIntBits(pos[0]);
             info[++cursor] = Float.floatToIntBits(pos[1]);
             if (key instanceof KeyPosition) {
