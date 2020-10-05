@@ -98,6 +98,25 @@ public class MotionController {
     private HashMap<String, KeyCycleOscillator> mCycleMap; // splines to calculate values of attributes
     private KeyTrigger[] mKeyTriggers; // splines to calculate values of attributes
     private int mPathMotionArc = UNSET;
+    private int mTransformPivotTarget = UNSET; // if set piviot point is maintained as the other object
+    private View mTransformPivotView = null; // if set piviot point is maintained as the other object
+
+    /**
+     * get the view to pivot around
+     * @return id of view or UNSET if not set
+     */
+    public int getTransformPivotTarget() {
+        return mTransformPivotTarget;
+    }
+
+    /**
+     * Set a view to pivot around
+     * @param transformPivotTarget id of view
+     */
+    public void setTransformPivotTarget(int transformPivotTarget) {
+        mTransformPivotTarget = transformPivotTarget;
+        mTransformPivotView = null;
+    }
 
     MotionPaths getKeyFrame(int i) {
         return mMotionPaths.get(i);
@@ -902,6 +921,7 @@ public class MotionController {
         mStartMotionPath.applyParameters(constraint);
         mMotionStagger = constraint.motion.mMotionStagger;
         mStartPoint.setState(cw, constraintSet, mId);
+        mTransformPivotTarget = constraint.transform.transformPivotTarget;
     }
 
     void setEndState(ConstraintWidget cw, ConstraintSet constraintSet) {
@@ -976,7 +996,7 @@ public class MotionController {
      * @param global_position
      * @param time
      * @param keyCache
-     * @return
+     * @return do you need to keep animating
      */
     boolean interpolate(View child, float global_position, long time, KeyCache keyCache) {
         boolean timeAnimation = false;
@@ -1012,16 +1032,28 @@ public class MotionController {
             }
 
             mStartMotionPath.setView(position, child, mInterpolateVariables, mInterpolateData, mInterpolateVelocity, null);
-//            mCurrentCenterX = child.getX()+child.getWidth()/2.0f;
-//            mCurrentCenterY = child.getY()+child.getHeight()/2.0f;
-//
-           // Log.v(TAG, Debug.getName(child)+ Debug.getLoc()+ " mInterpolateVelocity = " + Arrays.toString(mInterpolateVelocity));
-//            Log.v(TAG, Debug.getLoc()+ Debug.getName(child)+ " position = " +  position);
 
+            if (mTransformPivotTarget != UNSET) {
+                if (mTransformPivotView == null) {
+                    View layout = (View) child.getParent();
+                    mTransformPivotView = layout.findViewById(mTransformPivotTarget);
+                }
+                if (mTransformPivotView != null) {
+                    float cy = (mTransformPivotView.getTop() + mTransformPivotView.getBottom()) / 2.0f;
+                    float cx = (mTransformPivotView.getLeft() + mTransformPivotView.getRight()) / 2.0f;
+                    if (child.getRight() - child.getLeft() > 0 && child.getBottom() - child.getTop() > 0) {
+                        float px = (cx - child.getLeft());
+                        float py = (cy - child.getTop()) ;
+                        child.setPivotX(px);
+                        child.setPivotY(py);
+                    }
+                }
+
+            }
 
             if (mAttributesMap != null) {
                 for (SplineSet aSpline : mAttributesMap.values()) {
-                    if (aSpline instanceof SplineSet.PathRotate)
+                    if (aSpline instanceof SplineSet.PathRotate && mInterpolateVelocity.length > 1 )
                         ((SplineSet.PathRotate) aSpline).setPathRotate(child, position,
                                 mInterpolateVelocity[0], mInterpolateVelocity[1]);
                 }

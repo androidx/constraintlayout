@@ -503,7 +503,6 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View view) {
         Object tag = view.getTag();
-        Log.v(TAG, Debug.getLoc() + "======= Starting " + ((Button) view).getText() + " =======");
         launch((String) view.getTag());
     }
 

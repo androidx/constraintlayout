@@ -305,8 +305,9 @@ public class ConstraintSet {
     private static final int CONSTRAINED_WIDTH = 80;
     private static final int CONSTRAINED_HEIGHT = 81;
     private static final int ANIMATE_CIRCLE_ANGLE_TO = 82;
+    private static final int TRANSFORM_PIVOT_TARGET = 83;
 
-    private static final int UNUSED = 83;
+    private static final int UNUSED = 84;
 
     static {
         mapToConstant.append(R.styleable.Constraint_layout_constraintLeft_toLeftOf, LEFT_TO_LEFT);
@@ -399,6 +400,7 @@ public class ConstraintSet {
         mapToConstant.append(R.styleable.Constraint_layout_constrainedWidth, CONSTRAINED_WIDTH);
         mapToConstant.append(R.styleable.Constraint_layout_constrainedHeight, CONSTRAINED_HEIGHT);
         mapToConstant.append(R.styleable.Constraint_polarRelativeTo, ANIMATE_CIRCLE_ANGLE_TO);
+        mapToConstant.append(R.styleable.Constraint_transformPivotTarget, TRANSFORM_PIVOT_TARGET);
 
     }
 
@@ -1035,6 +1037,7 @@ public class ConstraintSet {
         public float scaleY = 1;
         public float transformPivotX = Float.NaN;
         public float transformPivotY = Float.NaN;
+        public int transformPivotTarget = UNSET;
         public float translationX = 0;
         public float translationY = 0;
         public float translationZ = 0;
@@ -1050,6 +1053,7 @@ public class ConstraintSet {
             scaleY = src.scaleY;
             transformPivotX = src.transformPivotX;
             transformPivotY = src.transformPivotY;
+            transformPivotTarget = src.transformPivotTarget;
             translationX = src.translationX;
             translationY = src.translationY;
             translationZ = src.translationZ;
@@ -1069,6 +1073,8 @@ public class ConstraintSet {
         private static final int TRANSLATION_Y = 9;
         private static final int TRANSLATION_Z = 10;
         private static final int ELEVATION = 11;
+        private static final int TRANSFORM_PIVOT_TARGET = 12;
+
 
         static {
             mapToConstant.append(R.styleable.Transform_android_rotation, ROTATION);
@@ -1082,6 +1088,8 @@ public class ConstraintSet {
             mapToConstant.append(R.styleable.Transform_android_translationY, TRANSLATION_Y);
             mapToConstant.append(R.styleable.Transform_android_translationZ, TRANSLATION_Z);
             mapToConstant.append(R.styleable.Transform_android_elevation, ELEVATION);
+            mapToConstant.append(R.styleable.Transform_transformPivotTarget, TRANSFORM_PIVOT_TARGET);
+
         }
 
         void fillFromAttributeList(Context context, AttributeSet attrs) {
@@ -1112,6 +1120,9 @@ public class ConstraintSet {
                         break;
                     case TRANSFORM_PIVOT_Y:
                         transformPivotY = a.getDimension(attr, transformPivotY);
+                        break;
+                    case TRANSFORM_PIVOT_TARGET:
+                        transformPivotTarget = lookupID(a, attr, transformPivotTarget);
                         break;
                     case TRANSLATION_X:
                         translationX = a.getDimension(attr, translationX);
@@ -1735,11 +1746,26 @@ public class ConstraintSet {
                     view.setRotationY(constraint.transform.rotationY);
                     view.setScaleX(constraint.transform.scaleX);
                     view.setScaleY(constraint.transform.scaleY);
-                    if (!Float.isNaN(constraint.transform.transformPivotX)) {
-                        view.setPivotX(constraint.transform.transformPivotX);
-                    }
-                    if (!Float.isNaN(constraint.transform.transformPivotY)) {
-                        view.setPivotY(constraint.transform.transformPivotY);
+                    if (constraint.transform.transformPivotTarget != UNSET) {
+                        View layout = (View) view.getParent();
+                        View center = layout.findViewById(constraint.transform.transformPivotTarget);
+                        if (center != null) {
+                            float cy = (center.getTop() + center.getBottom()) / 2.0f;
+                            float cx = (center.getLeft() + center.getRight()) / 2.0f;
+                            if (view.getRight() - view.getLeft() > 0 && view.getBottom() - view.getTop() > 0) {
+                                float px = (cx - view.getLeft() );
+                                float py = (cy - view.getTop()  );
+                                view.setPivotX(px);
+                                view.setPivotY(py);
+                            }
+                        }
+                    }  else {
+                        if (!Float.isNaN(constraint.transform.transformPivotX)) {
+                            view.setPivotX(constraint.transform.transformPivotX);
+                        }
+                        if (!Float.isNaN(constraint.transform.transformPivotY)) {
+                            view.setPivotY(constraint.transform.transformPivotY);
+                        }
                     }
                     view.setTranslationX(constraint.transform.translationX);
                     view.setTranslationY(constraint.transform.translationY);
@@ -3680,6 +3706,9 @@ public class ConstraintSet {
                         c.transform.translationZ = a.getDimension(attr, c.transform.translationZ);
                     }
                     break;
+               case TRANSFORM_PIVOT_TARGET:
+                    c.transform.transformPivotTarget = lookupID(a, attr, c.transform.transformPivotTarget);
+                   break;
                 case VERTICAL_WEIGHT:
                     c.layout.verticalWeight = a.getFloat(attr, c.layout.verticalWeight);
                     break;

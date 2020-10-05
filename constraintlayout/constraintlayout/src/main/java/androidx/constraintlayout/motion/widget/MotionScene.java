@@ -293,9 +293,19 @@ public class MotionScene {
                     }
 
                     float val = transition.mTouchResponse.dot(dx, dy);
+                    if (transition.mTouchResponse.mIsRotateMode) {
+                        float startX = mLastTouchDown.getX() - transition.mTouchResponse.mRotateCenterX;
+                        float startY = mLastTouchDown.getY() - transition.mTouchResponse.mRotateCenterY;;
+                        float endX = dx +startX;
+                        float endY = dy + startY;
+                        double endAngle = Math.atan2(endY,endX);
+                        double startAngle = Math.atan2(startX,startY);
+                        val = (float)(endAngle - startAngle)*10;
+
+                    }
                     if (DEBUG) {
-                        Log.v(TAG, Debug.getLocation() + "  ### " + transition.debugString(mMotionLayout.getContext()) + "  rank = " + val);
-                        Log.v(TAG, "mTouchResponse " + transition.mTouchResponse);
+                        Log.v(TAG, Debug.getLoc() + "  ### " + transition.debugString(mMotionLayout.getContext()) + "  rank = " + val);
+                        Log.v(TAG, Debug.getLoc()+" mTouchResponse " + transition.mTouchResponse);
                     }
                     if (transition.mConstraintSetEnd == currentState) { // flip because this would be backwards
                         val *= -1;
