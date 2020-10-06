@@ -82,6 +82,7 @@ public class MotionScene {
     public static final int LAYOUT_IGNORE_REQUEST = 0;
     public static final int LAYOUT_HONOR_REQUEST = 1;
     private MotionEvent mLastTouchDown;
+    private boolean mIgnoreTouch = false;
     private boolean mMotionOutsideRegion = false;
     private MotionLayout.MotionTracker mVelocityTracker; // used to support fling
     private boolean mRtl;
@@ -1260,10 +1261,13 @@ public class MotionScene {
                     mLastTouchX = event.getRawX();
                     mLastTouchY = event.getRawY();
                     mLastTouchDown = event;
+                    mIgnoreTouch = false;
+
                     if (mCurrentTransition.mTouchResponse != null) {
                         region = mCurrentTransition.mTouchResponse.getLimitBoundsTo(mMotionLayout, cache);
                         if (region != null && !region.contains(mLastTouchDown.getX(), mLastTouchDown.getY())) {
                             mLastTouchDown = null;
+                            mIgnoreTouch = true;
                             return;
                         }
                         region = mCurrentTransition.mTouchResponse.getTouchRegion(mMotionLayout, cache);
@@ -1279,6 +1283,9 @@ public class MotionScene {
                     }
                     return;
                 case MotionEvent.ACTION_MOVE:
+                    if (mIgnoreTouch) {
+                        break;
+                    }
                     float dy = event.getRawY() - mLastTouchY;
                     float dx = event.getRawX() - mLastTouchX;
                     if (DEBUG) {
@@ -1304,6 +1311,9 @@ public class MotionScene {
             }
         }
 
+        if (mIgnoreTouch) {
+            return;
+        }
         if (mCurrentTransition != null && mCurrentTransition.mTouchResponse != null && !mMotionOutsideRegion) {
             mCurrentTransition.mTouchResponse.processTouchEvent(event, mVelocityTracker, currentState, this);
         }
