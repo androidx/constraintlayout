@@ -950,6 +950,10 @@ public class MotionLayout extends ConstraintLayout implements
     private boolean mInLayout = false;
     private StateCache mStateCache;
 
+    MotionController getMotionController(int mTouchAnchorId) {
+        return mFrameArrayList.get(findViewById(mTouchAnchorId));
+    }
+
     enum TransitionState {
         UNDEFINED,
         SETUP,

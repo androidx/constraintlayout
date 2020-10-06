@@ -772,8 +772,9 @@ public class MotionController {
         }
 
         mInterpolateVariables = new int[count];
-        mInterpolateData = new double[mInterpolateVariables.length];
-        mInterpolateVelocity = new double[mInterpolateVariables.length];
+        int varLen = Math.max(2, count);
+        mInterpolateData = new double[varLen];
+        mInterpolateVelocity = new double[varLen];
 
         count = 0;
         for (int i = 1; i < mask.length; i++) {

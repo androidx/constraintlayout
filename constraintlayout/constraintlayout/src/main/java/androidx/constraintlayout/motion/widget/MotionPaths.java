@@ -583,10 +583,10 @@ class MotionPaths implements Comparable<MotionPaths> {
             dv_y = dpos_y;
             v_x = pos_x;
             v_y = pos_y;
-            slope[0] = dpos_x;
-            slope[1] = dpos_y;
-            Log.v(TAG, Debug.getLoc() + " == dradius = " + dradius + "," + dpos_y);
-            Log.v(TAG, Debug.getLoc() + " == slope = " + dpos_x + "," + dpos_y);
+            if (slope.length >= 2) {
+                slope[0] = dpos_x;
+                slope[1] = dpos_y;
+            }
             if (!Float.isNaN(path_rotate)) {
                 float rot = (float) (path_rotate + Math.toDegrees(Math.atan2(dv_y, dv_x)));
                 view.setRotation(rot);

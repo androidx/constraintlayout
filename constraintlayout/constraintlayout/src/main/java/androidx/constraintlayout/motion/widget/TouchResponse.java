@@ -19,8 +19,10 @@ package androidx.constraintlayout.motion.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.RectF;
+
 import androidx.constraintlayout.widget.R;
 import androidx.core.widget.NestedScrollView;
+
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Xml;
@@ -113,11 +115,11 @@ class TouchResponse {
             TOUCH_SIDES[SIDE_START] = TOUCH_SIDES[SIDE_RIGHT];
             TOUCH_SIDES[SIDE_END] = TOUCH_SIDES[SIDE_LEFT];
         } else {
-                TOUCH_DIRECTION[TOUCH_START] = TOUCH_DIRECTION[TOUCH_LEFT];
-                TOUCH_DIRECTION[TOUCH_END] = TOUCH_DIRECTION[TOUCH_RIGHT];
-                TOUCH_SIDES[SIDE_START] = TOUCH_SIDES[SIDE_LEFT];
-                TOUCH_SIDES[SIDE_END] = TOUCH_SIDES[SIDE_RIGHT];
-            }
+            TOUCH_DIRECTION[TOUCH_START] = TOUCH_DIRECTION[TOUCH_LEFT];
+            TOUCH_DIRECTION[TOUCH_END] = TOUCH_DIRECTION[TOUCH_RIGHT];
+            TOUCH_SIDES[SIDE_START] = TOUCH_SIDES[SIDE_LEFT];
+            TOUCH_SIDES[SIDE_END] = TOUCH_SIDES[SIDE_RIGHT];
+        }
 
         mTouchAnchorX = TOUCH_SIDES[mTouchAnchorSide][0];
         mTouchAnchorY = TOUCH_SIDES[mTouchAnchorSide][1];
@@ -127,6 +129,7 @@ class TouchResponse {
         mTouchDirectionX = TOUCH_DIRECTION[mTouchSide][0];
         mTouchDirectionY = TOUCH_DIRECTION[mTouchSide][1];
     }
+
     private void fillFromAttributeList(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.OnSwipe);
         fill(a);
@@ -166,10 +169,10 @@ class TouchResponse {
                 mTouchRegionId = a.getResourceId(attr, mTouchRegionId);
             } else if (attr == R.styleable.OnSwipe_onTouchUp) {
                 mOnTouchUp = a.getInt(attr, mOnTouchUp);
-            } else  if (attr == R.styleable.OnSwipe_nestedScrollFlags) {
-                mFlags = a.getInteger(attr,0);
-            } else  if (attr == R.styleable.OnSwipe_limitBoundsTo) {
-                mLimitBoundsTo = a.getResourceId(attr,0);
+            } else if (attr == R.styleable.OnSwipe_nestedScrollFlags) {
+                mFlags = a.getInteger(attr, 0);
+            } else if (attr == R.styleable.OnSwipe_limitBoundsTo) {
+                mLimitBoundsTo = a.getResourceId(attr, 0);
             }
 
         }
@@ -183,81 +186,60 @@ class TouchResponse {
 
 
     /**
-     *
      * @param event
      * @param velocityTracker
      * @param currentState
      * @param motionScene
      */
     void processTouchRotateEvent(MotionEvent event, MotionLayout.MotionTracker velocityTracker, int currentState, MotionScene motionScene) {
-        Log.v(TAG, Debug.getLoc() + " best   ");
-
         velocityTracker.addMovement(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                Log.v(TAG, Debug.getLoc() + "#># ACTION_DOWN   ");
 
                 mLastTouchX = event.getRawX();
                 mLastTouchY = event.getRawY();
                 mDragStarted = false;
-                Log.v(TAG, Debug.getLoc() + "#>#      mLastTouch = "+mLastTouchX+","+mLastTouchY);
-
                 break;
             case MotionEvent.ACTION_MOVE:
-                Log.v(TAG, Debug.getLoc() + "#># ACTION_MOVE   ");
 
                 float dy = event.getRawY() - mLastTouchY;
                 float dx = event.getRawX() - mLastTouchX;
-                Log.v(TAG, Debug.getLoc() + "#>#            dx,dy = " + dx + ", " + dy);
 
                 float drag;
 
                 float rcx = mMotionLayout.getWidth() / 2.0f; //mRotateCenterX
                 float rcy = mMotionLayout.getHeight() / 2.0f; //mRotateCenterY
+                if (mTouchAnchorId != MotionScene.UNSET) {
+                    MotionController mc = mMotionLayout.getMotionController(mTouchAnchorId);
+                    View v = mMotionLayout.findViewById(mc.getAnimateRelativeTo());
+                    rcx = (v.getLeft() + v.getRight()) / 2.0f;
+                    rcy = (v.getTop() + v.getBottom()) / 2.0f;
+                }
                 float relativePosX = event.getRawX() - rcx;
                 float relativePosY = event.getRawY() - rcy;
-
-                Log.v(TAG, Debug.getLoc() + "#>#     mRotateCente = " + rcx + ", " + rcy);
-                Log.v(TAG, Debug.getLoc() + "#>#       mLastTouch = " + mLastTouchX + ", " + mLastTouchY);
-                Log.v(TAG, Debug.getLoc() + "#>#            orig = " + (mLastTouchX - rcx) + ", " + (mLastTouchY - rcy));
-                Log.v(TAG, Debug.getLoc() + "#>#            move = " + (relativePosX) + ", " + (relativePosY));
 
                 double angle1 = Math.atan2(event.getRawY() - rcy, event.getRawX() - rcx);
                 double angle2 = Math.atan2(mLastTouchY - rcy, mLastTouchX - rcx);
                 drag = (float) ((angle1 - angle2) * 180.0f / Math.PI);
                 if (drag > 330) {
-                        drag -= 360;
-                    } else if (drag < -330) {
-                        drag += 360;
-                    }
-                    Log.v(TAG, Debug.getLoc()+"#>#         angles = " + drag +
-                            " "+ Math.toDegrees(angle1) +" - "+Math.toDegrees(angle2));
+                    drag -= 360;
+                } else if (drag < -330) {
+                    drag += 360;
+                }
 
                 if (Math.abs(drag) > 0.01 || mDragStarted) {
-                         Log.v(TAG, Debug.getLoc()+"#># ACTION_MOVE  mDragStarted  ");
-
                     float pos = mMotionLayout.getProgress();
                     if (!mDragStarted) {
                         mDragStarted = true;
                         mMotionLayout.setProgress(pos);
-                        Log.v(TAG, Debug.getLoc() + "#>#        progress = " + pos);
-
                     }
                     if (mTouchAnchorId != MotionScene.UNSET) {
                         mMotionLayout.getAnchorDpDt(mTouchAnchorId, pos, mTouchAnchorX, mTouchAnchorY, mAnchorDpDt);
+                        mAnchorDpDt[1] = (float) Math.toDegrees(mAnchorDpDt[1]);
                     } else {
-                        Log.v(TAG, Debug.getLoc() + "#>#            noid = " + pos);
-
-                            mAnchorDpDt[1] = 360;
-                            mAnchorDpDt[0] = 0;
+                        mAnchorDpDt[1] = 360;
                     }
-
-
-                      mAnchorDpDt[1] = 360;
-
                     float change = drag * mDragScale / mAnchorDpDt[1];
-
-                    Log.v(TAG, Debug.getLoc() + "#>#          change = " + change);
 
                     pos = Math.max(Math.min(pos + change, 1), 0);
 
@@ -265,52 +247,54 @@ class TouchResponse {
                         mMotionLayout.setProgress(pos);
 
 
-                        velocityTracker.computeCurrentVelocity(1000);
-                        float tvx = velocityTracker.getXVelocity();
-                        float tvy = velocityTracker.getYVelocity();
-                        float angularVelocity = (float)( Math.hypot(tvy, tvx)  * Math.sin(Math.atan2(tvy,tvx)-angle1) / Math.hypot(relativePosX,relativePosY)) ; //v * sin (angle) / r
-                        //float velocity = (float) Math.toDegrees(angularVelocity)/mAnchorDpDt[1] ;
-                        mMotionLayout.mLastVelocity = 0;
+//                        velocityTracker.computeCurrentVelocity(1000);
+//                        float tvx = velocityTracker.getXVelocity();
+//                        float tvy = velocityTracker.getYVelocity();
+//                        float angularVelocity = (float) (Math.hypot(tvy, tvx) * Math.sin(Math.atan2(tvy, tvx) - angle1) / Math.hypot(relativePosX, relativePosY)); //v * sin (angle) / r
+//                        mMotionLayout.mLastVelocity = angularVelocity;
                     } else {
                         mMotionLayout.mLastVelocity = 0;
                     }
                     mLastTouchX = event.getRawX();
                     mLastTouchY = event.getRawY();
                 }
-                Log.v(TAG, Debug.getLoc()+"#># ---------------------------------------- ");
 
                 break;
             case MotionEvent.ACTION_UP:
                 mDragStarted = false;
-                velocityTracker.computeCurrentVelocity(1000);
+                velocityTracker.computeCurrentVelocity(16);
+
                 float tvx = velocityTracker.getXVelocity();
                 float tvy = velocityTracker.getYVelocity();
                 float currentPos = mMotionLayout.getProgress();
                 float pos = currentPos;
-                 rcx = mMotionLayout.getWidth() / 2.0f; //mRotateCenterX
-                  rcy = mMotionLayout.getHeight() / 2.0f; //mRotateCenterY
-                  relativePosX = event.getRawX() - rcx;
-                  relativePosY = event.getRawY() - rcy;
-                 angle1 = Math.atan2(event.getRawY() - rcy, event.getRawX() - rcx);
-
-                if (DEBUG) {
-                    Log.v(TAG, "# ACTION_UP progress  = " + pos);
+                rcx = mMotionLayout.getWidth() / 2.0f; //mRotateCenterX
+                rcy = mMotionLayout.getHeight() / 2.0f; //mRotateCenterY
+                if (mTouchAnchorId != MotionScene.UNSET) {
+                    MotionController mc = mMotionLayout.getMotionController(mTouchAnchorId);
+                    View v = mMotionLayout.findViewById(mc.getAnimateRelativeTo());
+                    rcx = (v.getLeft() + v.getRight()) / 2.0f;
+                    rcy = (v.getTop() + v.getBottom()) / 2.0f;
                 }
+                relativePosX = event.getRawX() - rcx;
+                relativePosY = event.getRawY() - rcy;
+                angle1 = Math.toDegrees(Math.atan2(relativePosY, relativePosX));
+
                 if (mTouchAnchorId != MotionScene.UNSET) {
                     mMotionLayout.getAnchorDpDt(mTouchAnchorId, pos, mTouchAnchorX, mTouchAnchorY, mAnchorDpDt);
+                    mAnchorDpDt[1] = (float) Math.toDegrees(mAnchorDpDt[1]);
                 } else {
-                    float minSize = Math.min(mMotionLayout.getWidth(), mMotionLayout.getHeight());
                     mAnchorDpDt[1] = 360;
                 }
-                float angularVelocity = (float)( Math.hypot(tvy, tvx)  * Math.sin(Math.atan2(tvy,tvx)-angle1) / Math.hypot(relativePosX,relativePosY)) ; //v * sin (angle) / r
-
-
-
+                  angle2 = Math.toDegrees(Math.atan2(tvy+relativePosY, tvx+relativePosX));
+                drag = (float) ((angle2 -angle1));
+                float angularVelocity = drag * 1000/16.f; // tweaked parameters
                 if (!Float.isNaN(angularVelocity)) {
-                    pos += angularVelocity / 3; // TODO calibration & animation speed based on velocity
+                    pos +=    3* angularVelocity  * mDragScale / mAnchorDpDt[1]; // TODO calibration & animation speed based on velocity
                 }
                 if (pos != 0.0f && pos != 1.0f && mOnTouchUp != MotionLayout.TOUCH_UP_STOP) {
-                    mMotionLayout.touchAnimateTo(mOnTouchUp, (pos < 0.5) ? 0.0f : 1.0f, angularVelocity/3);
+                    angularVelocity = (float) angularVelocity  * mDragScale / mAnchorDpDt[1];
+                    mMotionLayout.touchAnimateTo(mOnTouchUp, (pos < 0.5) ? 0.0f : 1.0f,  3*angularVelocity);
                     if (0.0f >= currentPos || 1.0f <= currentPos) {
                         mMotionLayout.setState(MotionLayout.TransitionState.FINISHED);
                     }
@@ -322,22 +306,22 @@ class TouchResponse {
 
     }
 
-        /**
-         * Process touch events
-         *
-         * @param event        The event coming from the touch
-         * @param currentState
-         * @param motionScene  The relevant MotionScene
-         */
+    /**
+     * Process touch events
+     *
+     * @param event        The event coming from the touch
+     * @param currentState
+     * @param motionScene  The relevant MotionScene
+     */
     void processTouchEvent(MotionEvent event, MotionLayout.MotionTracker velocityTracker, int currentState, MotionScene motionScene) {
         if (DEBUG) {
             Log.v(TAG, Debug.getLocation() + " best processTouchEvent For ");
         }
         if (mIsRotateMode) {
-            processTouchRotateEvent(event,   velocityTracker,   currentState,   motionScene);
+            processTouchRotateEvent(event, velocityTracker, currentState, motionScene);
             return;
         }
-            velocityTracker.addMovement(event);
+        velocityTracker.addMovement(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 mLastTouchX = event.getRawX();
@@ -413,7 +397,7 @@ class TouchResponse {
                         velocityTracker.computeCurrentVelocity(1000);
                         float tvx = velocityTracker.getXVelocity();
                         float tvy = velocityTracker.getYVelocity();
-                        float velocity = (mTouchDirectionX != 0)? tvx / mAnchorDpDt[0]:tvy / mAnchorDpDt[1];
+                        float velocity = (mTouchDirectionX != 0) ? tvx / mAnchorDpDt[0] : tvy / mAnchorDpDt[1];
                         mMotionLayout.mLastVelocity = velocity;
                     } else {
                         mMotionLayout.mLastVelocity = 0;
@@ -476,6 +460,7 @@ class TouchResponse {
 
     /**
      * Calculate if a drag in this direction results in an increase or decrease in progress.
+     *
      * @param dx drag direction in x
      * @param dy drag direction in y
      * @return the change in progress given that dx and dy
@@ -483,14 +468,14 @@ class TouchResponse {
     float getProgressDirection(float dx, float dy) {
         float pos = mMotionLayout.getProgress();
         mMotionLayout.getAnchorDpDt(mTouchAnchorId, pos, mTouchAnchorX, mTouchAnchorY, mAnchorDpDt);
-         float velocity;
+        float velocity;
         if (mTouchDirectionX != 0) {
-            if (mAnchorDpDt[0]== 0) {
+            if (mAnchorDpDt[0] == 0) {
                 mAnchorDpDt[0] = 0.0000001f;
             }
             velocity = dx * mTouchDirectionX / mAnchorDpDt[0];
         } else {
-            if (mAnchorDpDt[1]== 0) {
+            if (mAnchorDpDt[1] == 0) {
                 mAnchorDpDt[1] = 0.0000001f;
             }
             velocity = dy * mTouchDirectionY / mAnchorDpDt[1];
@@ -650,8 +635,9 @@ class TouchResponse {
     /**
      * This calculates the bounds of the mTouchRegionId view.
      * This reuses rect for efficiency as this class will be called many times.
+     *
      * @param layout The layout containing the view (findviewid)
-     * @param rect the rectangle to fill provided so this function does not have to create memory
+     * @param rect   the rectangle to fill provided so this function does not have to create memory
      * @return the rect or null
      */
     RectF getTouchRegion(ViewGroup layout, RectF rect) {
@@ -666,13 +652,16 @@ class TouchResponse {
         return rect;
     }
 
-    int getTouchRegionId() { return mTouchRegionId; }
+    int getTouchRegionId() {
+        return mTouchRegionId;
+    }
 
     /**
      * This calculates the bounds of the mTouchRegionId view.
      * This reuses rect for efficiency as this class will be called many times.
+     *
      * @param layout The layout containing the view (findviewid)
-     * @param rect the rectangle to fill provided so this function does not have to create memory
+     * @param rect   the rectangle to fill provided so this function does not have to create memory
      * @return the rect or null
      */
     RectF getLimitBoundsTo(ViewGroup layout, RectF rect) {
@@ -687,18 +676,21 @@ class TouchResponse {
         return rect;
     }
 
-    int getLimitBoundsToId() { return mLimitBoundsTo; }
+    int getLimitBoundsToId() {
+        return mLimitBoundsTo;
+    }
 
     float dot(float dx, float dy) {
         return dx * mTouchDirectionX + dy * mTouchDirectionY;
     }
 
     public String toString() {
-        return (Float.isNaN(mTouchDirectionX))?"rotation" :(mTouchDirectionX + " , " + mTouchDirectionY);
+        return (Float.isNaN(mTouchDirectionX)) ? "rotation" : (mTouchDirectionX + " , " + mTouchDirectionY);
     }
 
     /**
      * flags to control
+     *
      * @return
      */
     public int getFlags() {

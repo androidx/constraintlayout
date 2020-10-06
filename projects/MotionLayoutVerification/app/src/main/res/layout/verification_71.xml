@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motionLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layoutDescription="@xml/verification_scene_71"
+    app:motionDebug="SHOW_ALL"
+    android:background="#cfc">
+
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:text="The demo's pathRotate in polar mode"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/center"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/globe"
+        app:layout_constraintVertical_bias="0.9"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="center"
+        />
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/region1"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+         android:src="@drawable/ic_airplane"
+        app:motionStagger="1"
+        android:tint="#20BF1B"
+        app:layout_constraintTag="hop"
+        app:layout_constraintCircleRadius="90dp"
+        app:layout_constraintCircleAngle="0"
+        app:layout_constraintCircle="@id/center"
+        />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>
