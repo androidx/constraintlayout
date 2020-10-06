@@ -306,8 +306,10 @@ public class ConstraintSet {
     private static final int CONSTRAINED_HEIGHT = 81;
     private static final int ANIMATE_CIRCLE_ANGLE_TO = 82;
     private static final int TRANSFORM_PIVOT_TARGET = 83;
-
-    private static final int UNUSED = 84;
+    private static final int QUANTIZE_MOTION_STEPS = 84;
+    private static final int QUANTIZE_MOTION_PHASE = 85;
+    private static final int QUANTIZE_MOTION_INTERPOLATOR = 86;
+    private static final int UNUSED = 87;
 
     static {
         mapToConstant.append(R.styleable.Constraint_layout_constraintLeft_toLeftOf, LEFT_TO_LEFT);
@@ -401,6 +403,9 @@ public class ConstraintSet {
         mapToConstant.append(R.styleable.Constraint_layout_constrainedHeight, CONSTRAINED_HEIGHT);
         mapToConstant.append(R.styleable.Constraint_polarRelativeTo, ANIMATE_CIRCLE_ANGLE_TO);
         mapToConstant.append(R.styleable.Constraint_transformPivotTarget, TRANSFORM_PIVOT_TARGET);
+        mapToConstant.append(R.styleable.Constraint_quantizeMotionSteps, QUANTIZE_MOTION_STEPS);
+        mapToConstant.append(R.styleable.Constraint_quantizeMotionPhase, QUANTIZE_MOTION_PHASE);
+        mapToConstant.append(R.styleable.Constraint_quantizeMotionInterpolator, QUANTIZE_MOTION_INTERPOLATOR);
 
     }
 
@@ -1200,6 +1205,15 @@ public class ConstraintSet {
         public float mMotionStagger = Float.NaN;
         public int mPolarRelativeTo = Layout.UNSET;
         public float mPathRotate = Float.NaN;
+        public float mQuantizeMotionPhase = Float.NaN;
+        public int mQuantizeMotionSteps = Layout.UNSET;
+        public String mQuantizeInterpolatorString = null;
+        public int mQuantizeInterpolatorType = -3; // undefined
+        public int mQuantizeInterpolatorID = -1;
+        private static final int INTERPOLATOR_REFRENCE_ID = -2;
+        private static final int SPLINE_STRING = -1;
+
+
 
         public void copyFrom(Motion src) {
             mApply = src.mApply;
@@ -1220,6 +1234,9 @@ public class ConstraintSet {
         private static final int ANIMATE_RELATIVE_TO = 5;
         private static final int ANIMATE_CIRCLE_ANGLE_TO = 6;
         private static final int MOTION_STAGGER = 7;
+        private static final int QUANTIZE_MOTION_STEPS = 8;
+        private static final int QUANTIZE_MOTION_PHASE = 9;
+        private static final int QUANTIZE_MOTION_INTERPOLATOR = 10;
 
 
 
@@ -1231,6 +1248,9 @@ public class ConstraintSet {
             mapToConstant.append(R.styleable.Motion_animateRelativeTo, ANIMATE_RELATIVE_TO);
             mapToConstant.append(R.styleable.Motion_animateCircleAngleTo, ANIMATE_CIRCLE_ANGLE_TO);
             mapToConstant.append(R.styleable.Motion_motionStagger, MOTION_STAGGER);
+            mapToConstant.append(R.styleable.Motion_quantizeMotionSteps, QUANTIZE_MOTION_STEPS);
+            mapToConstant.append(R.styleable.Motion_quantizeMotionPhase, QUANTIZE_MOTION_PHASE);
+            mapToConstant.append(R.styleable.Motion_quantizeMotionInterpolator, QUANTIZE_MOTION_INTERPOLATOR);
         }
 
         void fillFromAttributeList(Context context, AttributeSet attrs) {
@@ -1267,7 +1287,33 @@ public class ConstraintSet {
                     case MOTION_STAGGER:
                         mMotionStagger = a.getFloat(attr, mMotionStagger);
                         break;
+                    case QUANTIZE_MOTION_STEPS:
+                        mQuantizeMotionSteps = a.getInteger(attr, mQuantizeMotionSteps);
+                         break;
+                    case QUANTIZE_MOTION_PHASE:
+                        mQuantizeMotionPhase = a.getFloat(attr, mQuantizeMotionPhase);
+                        break;
+                    case QUANTIZE_MOTION_INTERPOLATOR:
+                          type = a.peekValue(attr);
 
+                        if (type.type == TypedValue.TYPE_REFERENCE) {
+                            mQuantizeInterpolatorID = a.getResourceId(attr, -1);
+                            if (mQuantizeInterpolatorID != -1) {
+                                mQuantizeInterpolatorType = INTERPOLATOR_REFRENCE_ID;
+                            }
+                        } else if (type.type == TypedValue.TYPE_STRING) {
+                            mQuantizeInterpolatorString = a.getString(attr);
+                            if (mQuantizeInterpolatorString.indexOf("/") > 0) {
+                                mQuantizeInterpolatorID = a.getResourceId(attr, -1);
+                                mQuantizeInterpolatorType = INTERPOLATOR_REFRENCE_ID;
+                            } else {
+                                mQuantizeInterpolatorType = SPLINE_STRING;
+                            }
+                        } else {
+                            mQuantizeInterpolatorType = a.getInteger(attr, mQuantizeInterpolatorID);
+                        }
+
+                        break;
                 }
             }
             a.recycle();
@@ -3759,6 +3805,37 @@ public class ConstraintSet {
                 case MOTION_STAGGER:
                     c.motion.mMotionStagger = a.getFloat(attr, c.motion.mMotionStagger);
                     break;
+
+                case QUANTIZE_MOTION_STEPS:
+                    c.motion.mQuantizeMotionSteps = a.getInteger(attr, c.motion.mQuantizeMotionSteps);
+                    break;
+                case QUANTIZE_MOTION_PHASE:
+                    c.motion. mQuantizeMotionPhase = a.getFloat(attr, c.motion.mQuantizeMotionPhase);
+                    break;
+                case QUANTIZE_MOTION_INTERPOLATOR:
+                    type = a.peekValue(attr);
+
+                    if (type.type == TypedValue.TYPE_REFERENCE) {
+                        c.motion.mQuantizeInterpolatorID = a.getResourceId(attr, -1);
+                        if (c.motion.mQuantizeInterpolatorID != -1) {
+                            c.motion.mQuantizeInterpolatorType = Motion.INTERPOLATOR_REFRENCE_ID;
+                        }
+                    } else if (type.type == TypedValue.TYPE_STRING) {
+                        c.motion.mQuantizeInterpolatorString = a.getString(attr);
+                        if (c.motion.mQuantizeInterpolatorString.indexOf("/") > 0) {
+                            c.motion.mQuantizeInterpolatorID = a.getResourceId(attr, -1);
+                            c.motion.mQuantizeInterpolatorType = Motion.INTERPOLATOR_REFRENCE_ID;
+                        } else {
+                            c.motion.mQuantizeInterpolatorType = Motion.SPLINE_STRING;
+                        }
+                    } else {
+                        c.motion.mQuantizeInterpolatorType = a.getInteger(attr, c.motion.mQuantizeInterpolatorID);
+                    }
+
+                    break;
+
+
+
                 case DRAW_PATH:
                     c.motion.mDrawPath = a.getInt(attr, 0);
                     break;

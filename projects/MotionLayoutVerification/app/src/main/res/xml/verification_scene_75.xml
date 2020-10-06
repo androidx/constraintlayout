@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto"
+    motion:defaultDuration="2000">
+
+
+    <ConstraintSet
+        android:id="@+id/up" >
+        <Constraint android:id="@+id/region1">
+            <Transform
+                motion:transformPivotTarget="@id/center"
+                android:rotation="0"
+                />
+
+        </Constraint>
+        <Constraint android:id="@+id/region2">
+            <Transform
+                motion:transformPivotTarget="@id/center"
+                android:rotation="0"
+                />
+
+        </Constraint>
+        <Constraint android:id="@+id/region3">
+            <Transform
+                motion:transformPivotTarget="@id/center"
+                android:rotation="0"
+                />
+
+        </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint android:id="@id/region1">
+            <Transform
+                motion:transformPivotTarget="@id/center"
+                android:rotation="360"
+                />
+
+        </Constraint>
+        <Constraint android:id="@id/region2">
+            <Transform
+                motion:transformPivotTarget="@id/center"
+                android:rotation="360"
+                />
+            <Motion motion:quantizeMotionSteps="12"/>
+        </Constraint>
+        <Constraint android:id="@id/region3">
+            <Transform
+                motion:transformPivotTarget="@id/center"
+                android:rotation="360"
+                />
+            <Motion
+                motion:quantizeMotionSteps="12"
+                motion:quantizeMotionInterpolator="bounce"
+                />
+        </Constraint>
+    </ConstraintSet>
+
+
+
+    <Transition
+        motion:constraintSetEnd="@+id/up"
+        motion:constraintSetStart="@+id/start"
+        motion:duration="10000"
+
+        motion:motionInterpolator="linear"
+        >
+        <OnClick  />
+
+        <KeyFrameSet>
+
+        </KeyFrameSet>
+
+    </Transition>
+
+
+
+</MotionScene>

@@ -223,9 +223,9 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
 
                 @Override
                 public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
-                    Log.v(TAG, Debug.getLoc() +
-                            "               " + Debug.getName(getApplicationContext(), startId) +
-                            "->" + Debug.getName(getApplicationContext(), endId) + " " + df.format(progress) + " --------- " + df.format(motionLayout.getVelocity()));
+//                    Log.v(TAG, Debug.getLoc() +
+//                            "               " + Debug.getName(getApplicationContext(), startId) +
+//                            "->" + Debug.getName(getApplicationContext(), endId) + " " + df.format(progress) + " --------- " + df.format(motionLayout.getVelocity()));
 
                     float dur = (System.nanoTime() - start) * 1E-6f;
                     mSid = startId;

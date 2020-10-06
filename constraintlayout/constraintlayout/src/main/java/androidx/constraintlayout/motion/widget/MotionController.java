@@ -29,6 +29,13 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AnimationUtils;
+import android.view.animation.AnticipateInterpolator;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -100,6 +107,9 @@ public class MotionController {
     private int mPathMotionArc = UNSET;
     private int mTransformPivotTarget = UNSET; // if set piviot point is maintained as the other object
     private View mTransformPivotView = null; // if set piviot point is maintained as the other object
+    private int mQuantizeMotionSteps = UNSET;
+    private float mQuantizeMotionPhase = Float.NaN;
+    private Interpolator mQuantizeMotionInterpolator = null;
 
     /**
      * get the view to pivot around
@@ -923,6 +933,49 @@ public class MotionController {
         mMotionStagger = constraint.motion.mMotionStagger;
         mStartPoint.setState(cw, constraintSet, mId);
         mTransformPivotTarget = constraint.transform.transformPivotTarget;
+        mQuantizeMotionSteps = constraint.motion.mQuantizeMotionSteps;
+        mQuantizeMotionPhase = constraint.motion.mQuantizeMotionPhase;
+        mQuantizeMotionInterpolator =  getInterpolator(mView.getContext(),
+                constraint.motion.mQuantizeInterpolatorType,
+                constraint.motion.mQuantizeInterpolatorString,
+                constraint.motion.mQuantizeInterpolatorID
+                );
+    }
+    static final int EASE_IN_OUT = 0;
+    static final int EASE_IN = 1;
+    static final int EASE_OUT = 2;
+    static final int LINEAR = 3;
+    static final int ANTICIPATE = 4;
+    static final int BOUNCE = 5;
+    private static final int SPLINE_STRING = -1;
+    private static final int INTERPOLATOR_REFRENCE_ID = -2;
+
+    private static Interpolator getInterpolator(Context context, int type,String interpolatorString, int id ) {
+        switch (type) {
+            case SPLINE_STRING:
+                final Easing easing = Easing.getInterpolator(interpolatorString);
+                return new Interpolator() {
+                    @Override
+                    public float getInterpolation(float v) {
+                        return (float) easing.get(v);
+                    }
+                };
+            case INTERPOLATOR_REFRENCE_ID:
+                return AnimationUtils.loadInterpolator(context, id);
+            case EASE_IN_OUT:
+                return new AccelerateDecelerateInterpolator();
+            case EASE_IN:
+                return new AccelerateInterpolator();
+            case EASE_OUT:
+                return new DecelerateInterpolator();
+            case LINEAR:
+                return null;
+            case ANTICIPATE:
+                return new AnticipateInterpolator();
+            case BOUNCE:
+                return new BounceInterpolator();
+        }
+        return null;
     }
 
     void setEndState(ConstraintWidget cw, ConstraintSet constraintSet) {
@@ -1002,7 +1055,23 @@ public class MotionController {
     boolean interpolate(View child, float global_position, long time, KeyCache keyCache) {
         boolean timeAnimation = false;
         float position = getAdjustedPosition(global_position, null);
+        // This quantize the position into steps e.g 4 steps = 0-0.25,0.25-0.50 etc
+        if (mQuantizeMotionSteps != UNSET) {
+            float pin = position;
+            float steps = 1.0f/mQuantizeMotionSteps; // the length of a step
+            float jump =  (float) Math.floor(position/steps)*steps; // step jumps
+            float section = (position%steps)/steps; // float from 0 to 1 in a step
 
+            if (!Float.isNaN(mQuantizeMotionPhase)) {
+                section = (section + mQuantizeMotionPhase) % 1;
+            }
+            if (mQuantizeMotionInterpolator != null) {
+                section = mQuantizeMotionInterpolator.getInterpolation(section);
+            } else {
+                section = section>0.5?1:0;
+            }
+            position = section * steps + jump;
+        }
         TimeCycleSplineSet.PathRotate timePathRotate = null;
         if (mAttributesMap != null) {
             for (SplineSet aSpline : mAttributesMap.values()) {

@@ -282,6 +282,14 @@
     <!-- Defines the relative ordering of one view to another for purpose of staggering -->
     <attr name="motionStagger" format="float" />
     <attr name="quantizeMotionSteps" format="integer" />
+    <attr name="quantizeMotionPhase" format="float" />
+    <attr name="quantizeMotionInterpolator" format="string|reference|enum">
+        <enum name="easeInOut" value="0" />
+        <enum name="easeIn" value="1" />
+        <enum name="easeOut" value="2" />
+        <enum name="linear" value="3" />
+        <enum name="bounce" value="5" />
+    </attr>
 
     <!-- Specify the visibility of a placeholder -->
     <attr name="placeholder_emptyVisibility">
@@ -801,10 +809,11 @@
         <attr name="transitionPathRotate" />
         <attr name="drawPath" />
         <attr name="motionProgress" />
-        <attr name="quantizeMotionSteps"/>
-        <attr name="layout_constraintTag" />
+         <attr name="layout_constraintTag" />
         <attr name="motionStagger" />
-
+        <attr name="quantizeMotionSteps" />
+        <attr name="quantizeMotionPhase" />
+        <attr name="quantizeMotionInterpolator" />
     </declare-styleable>
 
     <!-- frame position is an integer from 0 to 100 -->
@@ -1306,6 +1315,9 @@
         <attr name="motionStagger" />
         <attr name="drawPath" />
         <attr name="quantizeMotionSteps" />
+        <attr name="quantizeMotionPhase" />
+        <attr name="quantizeMotionInterpolator" />
+
     </declare-styleable>
 
     <declare-styleable name="KeyTrigger">
