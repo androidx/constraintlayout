@@ -110,10 +110,12 @@ public class DependencyGraph {
 
         if (mNeedBuildGraph || mNeedRedoMeasures) {
             for (ConstraintWidget widget : container.mChildren) {
+                widget.ensureWidgetRuns();
                 widget.measured = false;
                 widget.horizontalRun.reset();
                 widget.verticalRun.reset();
             }
+            container.ensureWidgetRuns();
             container.measured = false;
             container.horizontalRun.reset();
             container.verticalRun.reset();
@@ -229,21 +231,23 @@ public class DependencyGraph {
     public boolean directMeasureSetup(boolean optimizeWrap) {
         if (mNeedBuildGraph) {
             for (ConstraintWidget widget : container.mChildren) {
+                widget.ensureWidgetRuns();
                 widget.measured = false;
-                    widget.horizontalRun.dimension.resolved = false;
-                    widget.horizontalRun.resolved = false;
-                    widget.horizontalRun.reset();
-                    widget.verticalRun.dimension.resolved = false;
-                    widget.verticalRun.resolved = false;
-                    widget.verticalRun.reset();
+                widget.horizontalRun.dimension.resolved = false;
+                widget.horizontalRun.resolved = false;
+                widget.horizontalRun.reset();
+                widget.verticalRun.dimension.resolved = false;
+                widget.verticalRun.resolved = false;
+                widget.verticalRun.reset();
             }
+            container.ensureWidgetRuns();
             container.measured = false;
-                container.horizontalRun.dimension.resolved = false;
-                container.horizontalRun.resolved = false;
-                container.horizontalRun.reset();
-                container.verticalRun.dimension.resolved = false;
-                container.verticalRun.resolved = false;
-                container.verticalRun.reset();
+            container.horizontalRun.dimension.resolved = false;
+            container.horizontalRun.resolved = false;
+            container.horizontalRun.reset();
+            container.verticalRun.dimension.resolved = false;
+            container.verticalRun.resolved = false;
+            container.verticalRun.reset();
             buildGraph();
         }
 

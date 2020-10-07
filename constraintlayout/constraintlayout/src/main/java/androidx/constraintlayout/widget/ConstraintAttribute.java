@@ -111,7 +111,7 @@ public class ConstraintAttribute {
             case STRING_TYPE:
                 throw new RuntimeException("Cannot interpolate String");
             case BOOLEAN_TYPE:
-                return mBooleanValue ? 0 : 1;
+                return mBooleanValue ? 1 : 0;
             case DIMENSION_TYPE:
                 return mFloatValue;
         }
@@ -143,7 +143,7 @@ public class ConstraintAttribute {
             case STRING_TYPE:
                 throw new RuntimeException("Color does not have a single color to interpolate");
             case BOOLEAN_TYPE:
-                ret[0] = mBooleanValue ? 0 : 1;
+                ret[0] = mBooleanValue ? 1 : 0;
                 break;
             case DIMENSION_TYPE:
                 ret[0] = mFloatValue;

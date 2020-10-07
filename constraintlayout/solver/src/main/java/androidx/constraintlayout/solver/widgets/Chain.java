@@ -19,6 +19,7 @@ package androidx.constraintlayout.solver.widgets;
 import androidx.constraintlayout.solver.ArrayRow;
 import androidx.constraintlayout.solver.LinearSystem;
 import androidx.constraintlayout.solver.SolverVariable;
+import androidx.constraintlayout.solver.widgets.analyzer.Direct;
 
 import java.util.ArrayList;
 
@@ -27,20 +28,20 @@ import static androidx.constraintlayout.solver.widgets.ConstraintWidget.*;
 /**
  * Chain management and constraints creation
  */
-class Chain {
+public class Chain {
 
     private static final boolean DEBUG = false;
+    public static final boolean USE_CHAIN_OPTIMIZATION = false;
 
     /**
      * Apply specific rules for dealing with chains of widgets.
      * Chains are defined as a list of widget linked together with bi-directional connections
-     *
-     * @param constraintWidgetContainer root container
+     *  @param constraintWidgetContainer root container
      * @param system the linear system we add the equations to
+     * @param widgets
      * @param orientation HORIZONTAL or VERTICAL
      */
-    static void applyChainConstraints(ConstraintWidgetContainer constraintWidgetContainer, LinearSystem system, int orientation) {
-
+    public static void applyChainConstraints(ConstraintWidgetContainer constraintWidgetContainer, LinearSystem system, ArrayList<ConstraintWidget> widgets, int orientation) {
         // what to do:
         // Don't skip things. Either the element is GONE or not.
         int offset = 0;
@@ -61,7 +62,9 @@ class Chain {
             // we have to make sure we define the ChainHead here, otherwise the values we use may not
             // be correctly initialized (as we initialize them in the ConstraintWidget.addToSolver())
             first.define();
-            applyChainConstraints(constraintWidgetContainer, system, orientation, offset, first);
+            if (widgets == null || widgets != null && widgets.contains(first.mFirst)) {
+                applyChainConstraints(constraintWidgetContainer, system, orientation, offset, first);
+            }
         }
     }
 
@@ -106,10 +109,19 @@ class Chain {
             isChainPacked = head.mVerticalChainStyle == ConstraintWidget.CHAIN_PACKED;
         }
 
-        // The first traversal will:
+        if (USE_CHAIN_OPTIMIZATION && !isWrapContent && Direct.solveChain(container, system, orientation, offset, chainHead,
+                isChainSpread, isChainSpreadInside, isChainPacked)) {
+            if (LinearSystem.FULL_DEBUG) {
+                System.out.println("### CHAIN FULLY SOLVED! ###");
+            }
+            return; // done with the chain!
+        } else if (LinearSystem.FULL_DEBUG) {
+            System.out.println("### CHAIN WASN'T SOLVED DIRECTLY... ###");
+        }
+
+        // This traversal will:
         // - set up some basic ordering constraints
         // - build a linked list of matched constraints widgets
-
         while (!done) {
             ConstraintAnchor begin = widget.mListAnchors[offset];
 
@@ -126,7 +138,7 @@ class Chain {
             }
 
             if (isChainPacked && widget != first && widget != firstVisibleWidget) {
-                strength = SolverVariable.STRENGTH_EQUALITY;
+                strength = SolverVariable.STRENGTH_FIXED;
             }
 
             if (begin.mTarget != null) {

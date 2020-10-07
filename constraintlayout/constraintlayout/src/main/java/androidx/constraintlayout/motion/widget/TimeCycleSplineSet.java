@@ -362,6 +362,14 @@ public abstract class TimeCycleSplineSet {
             float period = mTempValues[mTempValues.length - 2];
             float offset = mTempValues[mTempValues.length - 1];
             long delta_time = time - last_time;
+
+            if (Float.isNaN(last_cycle)) { // it has not been set
+                last_cycle = cache.getFloatValue(view, mAttributeName, 0); // check the cache
+                if (Float.isNaN(last_cycle)) {  // not in cache so set to 0 (start)
+                    last_cycle = 0;
+                }
+            }
+
             last_cycle = (float) ((last_cycle + delta_time * 1E-9 * period) % 1.0);
             last_time = time;
             float wave = calcWave(last_cycle);

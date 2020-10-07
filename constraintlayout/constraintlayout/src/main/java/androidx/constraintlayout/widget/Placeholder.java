@@ -82,6 +82,7 @@ public class Placeholder extends View {
           }
         }
       }
+      a.recycle();
     }
   }
 

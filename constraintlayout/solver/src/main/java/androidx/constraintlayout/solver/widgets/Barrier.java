@@ -19,8 +19,6 @@ package androidx.constraintlayout.solver.widgets;
 import androidx.constraintlayout.solver.LinearSystem;
 import androidx.constraintlayout.solver.SolverVariable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -32,11 +30,18 @@ public class Barrier extends HelperWidget {
     public static final int RIGHT = 1;
     public static final int TOP = 2;
     public static final int BOTTOM = 3;
+    private static final boolean USE_RESOLUTION = true;
 
     private int mBarrierType = LEFT;
 
     private boolean mAllowsGoneWidget = true;
     private int mMargin = 0;
+    boolean resolved = false;
+
+    public Barrier() {}
+    public Barrier(String debugName) {
+        setDebugName(debugName);
+    }
 
     @Override
     public boolean allowedInBarrier() {
@@ -52,6 +57,14 @@ public class Barrier extends HelperWidget {
     public void setAllowsGoneWidget(boolean allowsGoneWidget) { mAllowsGoneWidget = allowsGoneWidget; }
 
     public boolean allowsGoneWidget() { return mAllowsGoneWidget; }
+
+    public boolean isResolvedHorizontally() {
+        return resolved;
+    }
+
+    public boolean isResolvedVertically() {
+        return resolved;
+    }
 
     @Override
     public void copy(ConstraintWidget src, HashMap<ConstraintWidget,ConstraintWidget> map) {
@@ -91,9 +104,10 @@ public class Barrier extends HelperWidget {
      * Add this widget to the solver
      *
      * @param system the solver we want to add the widget to
+     * @param optimize true if {@link Optimizer#OPTIMIZATION_GRAPH} is on
      */
     @Override
-    public void addToSolver(LinearSystem system) {
+    public void addToSolver(LinearSystem system, boolean optimize) {
         if (LinearSystem.FULL_DEBUG) {
             System.out.println("\n----------------------------------------------");
             System.out.println("-- adding " + getDebugName() + " to the solver");
@@ -113,6 +127,24 @@ public class Barrier extends HelperWidget {
         } else {
             return;
         }
+
+        if (USE_RESOLUTION) {
+            if (!resolved) {
+                allSolved();
+            }
+            if (resolved) {
+                resolved = false;
+                if (mBarrierType == LEFT || mBarrierType == RIGHT) {
+                    system.addEquality(mLeft.mSolverVariable, mX);
+                    system.addEquality(mRight.mSolverVariable, mX);
+                } else if (mBarrierType == TOP || mBarrierType == BOTTOM) {
+                    system.addEquality(mTop.mSolverVariable, mY);
+                    system.addEquality(mBottom.mSolverVariable, mY);
+                }
+                return;
+            }
+        }
+
         // We have to handle the case where some of the elements referenced in the barrier are set as
         // match_constraint; we have to take it in account to set the strength of the barrier.
         boolean hasMatchConstraintWidgets = false;
@@ -193,5 +225,80 @@ public class Barrier extends HelperWidget {
 
     public int getMargin() {
         return mMargin;
+    }
+
+    public int getOrientation() {
+        switch (mBarrierType) {
+            case LEFT:
+            case RIGHT:
+                return HORIZONTAL;
+            case TOP:
+            case BOTTOM:
+                return VERTICAL;
+        }
+        return UNKNOWN;
+    }
+
+    public boolean allSolved() {
+        if (!USE_RESOLUTION) {
+            return false;
+        }
+        boolean hasAllWidgetsResolved = true;
+        for (int i = 0; i < mWidgetsCount; i++) {
+            ConstraintWidget widget = mWidgets[i];
+            if (!mAllowsGoneWidget && !widget.allowedInBarrier()) {
+                continue;
+            }
+            if ((mBarrierType == LEFT || mBarrierType == RIGHT) && !widget.isResolvedHorizontally()) {
+                hasAllWidgetsResolved = false;
+            } else if ((mBarrierType == TOP || mBarrierType == BOTTOM) && !widget.isResolvedVertically()) {
+                hasAllWidgetsResolved = false;
+            }
+        }
+
+        if (hasAllWidgetsResolved && mWidgetsCount > 0) {
+            // we're done!
+            int barrierPosition = 0;
+            boolean initialized = false;
+            for (int i = 0; i < mWidgetsCount; i++) {
+                ConstraintWidget widget = mWidgets[i];
+                if (!mAllowsGoneWidget && !widget.allowedInBarrier()) {
+                    continue;
+                }
+                if (!initialized) {
+                    if (mBarrierType == LEFT) {
+                        barrierPosition = widget.getAnchor(ConstraintAnchor.Type.LEFT).getFinalValue();
+                    } else if (mBarrierType == RIGHT) {
+                        barrierPosition = widget.getAnchor(ConstraintAnchor.Type.RIGHT).getFinalValue();
+                    } else if (mBarrierType == TOP) {
+                        barrierPosition = widget.getAnchor(ConstraintAnchor.Type.TOP).getFinalValue();
+                    } else if (mBarrierType == BOTTOM) {
+                        barrierPosition = widget.getAnchor(ConstraintAnchor.Type.BOTTOM).getFinalValue();
+                    }
+                    initialized = true;
+                }
+                if (mBarrierType == LEFT) {
+                    barrierPosition = Math.min(barrierPosition, widget.getAnchor(ConstraintAnchor.Type.LEFT).getFinalValue());
+                } else if (mBarrierType == RIGHT) {
+                    barrierPosition = Math.max(barrierPosition, widget.getAnchor(ConstraintAnchor.Type.RIGHT).getFinalValue());
+                } else if (mBarrierType == TOP) {
+                    barrierPosition = Math.min(barrierPosition, widget.getAnchor(ConstraintAnchor.Type.TOP).getFinalValue());
+                } else if (mBarrierType == BOTTOM) {
+                    barrierPosition = Math.max(barrierPosition, widget.getAnchor(ConstraintAnchor.Type.BOTTOM).getFinalValue());
+                }
+            }
+            barrierPosition += mMargin;
+            if (mBarrierType == LEFT || mBarrierType == RIGHT) {
+                setFinalHorizontal(barrierPosition, barrierPosition);
+            } else {
+                setFinalVertical(barrierPosition, barrierPosition);
+            }
+            if (LinearSystem.FULL_DEBUG) {
+                System.out.println("*** BARRIER " + getDebugName() + " SOLVED TO " + barrierPosition + " ***");
+            }
+            resolved = true;
+            return true;
+        }
+        return false;
     }
 }

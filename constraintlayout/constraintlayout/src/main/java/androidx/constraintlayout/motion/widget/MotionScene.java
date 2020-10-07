@@ -82,6 +82,7 @@ public class MotionScene {
     public static final int LAYOUT_IGNORE_REQUEST = 0;
     public static final int LAYOUT_HONOR_REQUEST = 1;
     private MotionEvent mLastTouchDown;
+    private boolean mIgnoreTouch = false;
     private boolean mMotionOutsideRegion = false;
     private MotionLayout.MotionTracker mVelocityTracker; // used to support fling
     private boolean mRtl;
@@ -364,6 +365,9 @@ public class MotionScene {
             if (transition.mAutoTransition == Transition.AUTO_NONE) {
                 continue;
             }
+            if (mCurrentTransition == transition){
+                continue;
+            }
             if (currentState == transition.mConstraintSetStart && (
                     transition.mAutoTransition == Transition.AUTO_ANIMATE_TO_END ||
                             transition.mAutoTransition == Transition.AUTO_JUMP_TO_END)) {
@@ -374,14 +378,12 @@ public class MotionScene {
                     motionLayout.setState(MotionLayout.TransitionState.SETUP);
                     motionLayout.setState(MotionLayout.TransitionState.MOVING);
                 } else {
-
                     motionLayout.setProgress(1);
                     motionLayout.evaluate(true);
                     motionLayout.setState(MotionLayout.TransitionState.SETUP);
                     motionLayout.setState(MotionLayout.TransitionState.MOVING);
-
                     motionLayout.setState(MotionLayout.TransitionState.FINISHED);
-
+                    motionLayout.onNewStateAttachHandlers();
                 }
                 return true;
             }
@@ -394,13 +396,13 @@ public class MotionScene {
                     motionLayout.transitionToStart();
                     motionLayout.setState(MotionLayout.TransitionState.SETUP);
                     motionLayout.setState(MotionLayout.TransitionState.MOVING);
-
                 } else {
                     motionLayout.setProgress(0);
                     motionLayout.evaluate(true);
                     motionLayout.setState(MotionLayout.TransitionState.SETUP);
                     motionLayout.setState(MotionLayout.TransitionState.MOVING);
                     motionLayout.setState(MotionLayout.TransitionState.FINISHED);
+                    motionLayout.onNewStateAttachHandlers();
                 }
                 return true;
             }
@@ -460,6 +462,27 @@ public class MotionScene {
 
         public void addOnClick(Context context, XmlPullParser parser) {
             mOnClicks.add(new TransitionOnClick(context, this, parser));
+        }
+
+        /**
+         * sets the autoTransitionType
+         * On reaching a state auto transitions may be run based on
+         * one of AUTO_NONE, AUTO_JUMP_TO_START, AUTO_JUMP_TO_END, AUTO_ANIMATE_TO_START, AUTO_ANIMATE_TO_END
+         *
+         * @return 0=NONE, 1=JUMP_TO_START, 2=JUMP_TO_END, 3=ANIMATE_TO_START, 4=ANIMATE_TO_END
+         */
+        public void setAutoTransition(int type) {
+            mAutoTransition = type;
+        }
+
+        /**
+         * return the autoTransitionType.
+         * one of AUTO_NONE, AUTO_JUMP_TO_START, AUTO_JUMP_TO_END, AUTO_ANIMATE_TO_START, AUTO_ANIMATE_TO_END
+         *
+         * @return 0=NONE, 1=JUMP_TO_START, 2=JUMP_TO_END, 3=ANIMATE_TO_START, 4=ANIMATE_TO_END
+         */
+        public int getAutoTransition() {
+            return mAutoTransition;
         }
 
         /**
@@ -1250,10 +1273,12 @@ public class MotionScene {
                     mLastTouchX = event.getRawX();
                     mLastTouchY = event.getRawY();
                     mLastTouchDown = event;
+                    mIgnoreTouch = false;
                     if (mCurrentTransition.mTouchResponse != null) {
                         region = mCurrentTransition.mTouchResponse.getLimitBoundsTo(mMotionLayout, cache);
                         if (region != null && !region.contains(mLastTouchDown.getX(), mLastTouchDown.getY())) {
                             mLastTouchDown = null;
+                            mIgnoreTouch = true;
                             return;
                         }
                         region = mCurrentTransition.mTouchResponse.getTouchRegion(mMotionLayout, cache);
@@ -1269,6 +1294,9 @@ public class MotionScene {
                     }
                     return;
                 case MotionEvent.ACTION_MOVE:
+                    if (mIgnoreTouch) {
+                        break;
+                    }
                     float dy = event.getRawY() - mLastTouchY;
                     float dx = event.getRawX() - mLastTouchX;
                     if (DEBUG) {
@@ -1293,7 +1321,9 @@ public class MotionScene {
                     }
             }
         }
-
+        if (mIgnoreTouch) {
+            return;
+        }
         if (mCurrentTransition != null && mCurrentTransition.mTouchResponse != null && !mMotionOutsideRegion) {
             mCurrentTransition.mTouchResponse.processTouchEvent(event, mVelocityTracker, currentState, this);
         }

@@ -18,6 +18,8 @@ package android.support.constraint.solver;
 import android.support.constraint.solver.widgets.*;
 import android.support.constraint.solver.widgets.ConstraintAnchor.Type;
 import android.support.constraint.solver.widgets.ConstraintWidget.DimensionBehaviour;
+import android.support.constraint.solver.widgets.analyzer.BasicMeasure;
+
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -26,12 +28,12 @@ public class OptimizationsTest {
     @Test
     public void testGoneMatchConstraint() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 800);
-        ConstraintWidget A = new ConstraintWidget( 0, 10);
-
+        ConstraintWidget A = new ConstraintWidget("A", 0, 10);
+        ConstraintWidget B = new ConstraintWidget("B", 10, 10);
         root.setDebugName("root");
-        A.setDebugName("A");
 
         root.add(A);
+        root.add(B);
 
         A.connect(Type.TOP, root, Type.TOP, 8);
         A.connect(Type.LEFT, root, Type.LEFT, 8);
@@ -40,6 +42,7 @@ public class OptimizationsTest {
         A.setVerticalBiasPercent(0.2f);
         A.setHorizontalBiasPercent(0.2f);
         A.setHorizontalDimensionBehaviour(DimensionBehaviour.MATCH_CONSTRAINT);
+        B.connect(Type.TOP, A, Type.BOTTOM);
 
         Metrics metrics = new Metrics();
         root.fillMetrics(metrics);
@@ -106,7 +109,7 @@ public class OptimizationsTest {
         System.out.println("2) root: " + root + " A: " + A + " B: " + B + " C: " + C);
         System.out.println(metrics);
         assertEquals(A.getLeft(), 40);
-        assertEquals(B.getLeft(), 217,1);
+        assertEquals(B.getLeft(), 217, 1);
         assertEquals(C.getLeft(), 393);
         assertEquals(A.getWidth(), 177, 1);
         assertEquals(B.getWidth(), 176, 1);
@@ -137,7 +140,7 @@ public class OptimizationsTest {
         System.out.println(metrics);
         assertEquals(A.getLeft(), 0);
         assertEquals(B.getLeft(), 3);
-        assertEquals(C.getLeft(), 292,1 );
+        assertEquals(C.getLeft(), 292, 1);
         assertEquals(A.getWidth(), 0);
         assertEquals(B.getWidth(), 279, 1);
         assertEquals(C.getWidth(), 278, 1);
@@ -440,7 +443,7 @@ public class OptimizationsTest {
         root.layout();
         time = System.nanoTime() - time;
         System.out.println("A) execution time: " + time);
-        System.out.println("root: " + root + " A: " + A + " guide: " +guidelineA);
+        System.out.println("root: " + root + " A: " + A + " guide: " + guidelineA);
         assertEquals(A.getTop(), 266);
         assertEquals(guidelineA.getTop(), 533);
     }
@@ -712,7 +715,7 @@ public class OptimizationsTest {
         C.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP, 32);
         root.layout();
         System.out.println("res: " + directResolution + " root: " + root
-            + " A: " + A + " B: " + B + " C: " + C);
+                + " A: " + A + " B: " + B + " C: " + C);
         assertEquals(A.getLeft(), 10);
         assertEquals(A.getTop(), 32);
         assertEquals(B.getLeft(), 126);
@@ -1001,5 +1004,787 @@ public class OptimizationsTest {
         assertEquals(F.getTop(), 580);
         assertEquals(G.getLeft(), 16);
         assertEquals(G.getTop(), 580);
+    }
+
+    static BasicMeasure.Measurer sMeasurer = new BasicMeasure.Measurer() {
+
+        @Override
+        public void measure(ConstraintWidget widget, BasicMeasure.Measure measure) {
+            ConstraintWidget.DimensionBehaviour horizontalBehavior = measure.horizontalBehavior;
+            ConstraintWidget.DimensionBehaviour verticalBehavior = measure.verticalBehavior;
+            int horizontalDimension = measure.horizontalDimension;
+            int verticalDimension = measure.verticalDimension;
+            System.out.println("*** MEASURE " + widget + " ***");
+
+            if (horizontalBehavior == ConstraintWidget.DimensionBehaviour.FIXED) {
+                measure.measuredWidth = horizontalDimension;
+            } else if (horizontalBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT) {
+                measure.measuredWidth = horizontalDimension;
+            }
+            if (verticalBehavior == ConstraintWidget.DimensionBehaviour.FIXED) {
+                measure.measuredHeight = verticalDimension;
+                measure.measuredBaseline = 8;
+            } else {
+                measure.measuredHeight = verticalDimension;
+                measure.measuredBaseline = 8;
+            }
+        }
+
+        @Override
+        public void didMeasures() {
+
+        }
+    };
+
+    @Test
+    public void testComplexLayout() {
+        ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 600);
+        root.setOptimizationLevel(Optimizer.OPTIMIZATION_GROUPING);
+        ConstraintWidget A = new ConstraintWidget(100, 100);
+        ConstraintWidget B = new ConstraintWidget(100, 20);
+        ConstraintWidget C = new ConstraintWidget(100, 20);
+        ConstraintWidget D = new ConstraintWidget(30, 30);
+        ConstraintWidget E = new ConstraintWidget(30, 30);
+        ConstraintWidget F = new ConstraintWidget(30, 30);
+        ConstraintWidget G = new ConstraintWidget(100, 20);
+        ConstraintWidget H = new ConstraintWidget(100, 20);
+        root.setDebugName("root");
+        A.setDebugName("A");
+        B.setDebugName("B");
+        C.setDebugName("C");
+        D.setDebugName("D");
+        E.setDebugName("E");
+        F.setDebugName("F");
+        G.setDebugName("G");
+        H.setDebugName("H");
+        root.add(G);
+        root.add(A);
+        root.add(B);
+        root.add(E);
+        root.add(C);
+        root.add(D);
+        root.add(F);
+        root.add(H);
+        B.setBaselineDistance(8);
+        C.setBaselineDistance(8);
+        D.setBaselineDistance(8);
+        E.setBaselineDistance(8);
+        F.setBaselineDistance(8);
+        G.setBaselineDistance(8);
+        H.setBaselineDistance(8);
+
+        A.connect(Type.TOP, root, Type.TOP, 16);
+        A.connect(Type.LEFT, root, Type.LEFT, 16);
+        A.connect(Type.BOTTOM, root, Type.BOTTOM, 16);
+
+        B.connect(Type.TOP, A, Type.TOP);
+        B.connect(Type.LEFT, A, Type.RIGHT, 16);
+
+        C.connect(Type.TOP, root, Type.TOP);
+        C.connect(Type.LEFT, A, Type.RIGHT, 16);
+        C.connect(Type.BOTTOM, root, Type.BOTTOM);
+
+        D.connect(Type.BOTTOM, A, Type.BOTTOM);
+        D.connect(Type.LEFT, A, Type.RIGHT, 16);
+
+        E.connect(Type.BOTTOM, D, Type.BOTTOM);
+        E.connect(Type.LEFT, D, Type.RIGHT, 16);
+
+        F.connect(Type.BOTTOM, E, Type.BOTTOM);
+        F.connect(Type.LEFT, E, Type.RIGHT, 16);
+
+        G.connect(Type.TOP, root, Type.TOP);
+        G.connect(Type.RIGHT, root, Type.RIGHT, 16);
+        G.connect(Type.BOTTOM, root, Type.BOTTOM);
+
+        H.connect(Type.BOTTOM, root, Type.BOTTOM, 16);
+        H.connect(Type.RIGHT, root, Type.RIGHT, 16);
+
+        root.setMeasurer(sMeasurer);
+        root.layout();
+        System.out.println(" direct: -> A: " + A + " B: " + B + " C: " + C + " D: " + D + " E: " + E + " F: " + F + " G: " + G + " H: " + H);
+
+        assertEquals(A.getLeft(), 16);
+        assertEquals(A.getTop(), 250);
+
+        assertEquals(B.getLeft(), 132);
+        assertEquals(B.getTop(), 250);
+
+        assertEquals(C.getLeft(), 132);
+        assertEquals(C.getTop(), 290);
+
+        assertEquals(D.getLeft(), 132);
+        assertEquals(D.getTop(), 320);
+
+        assertEquals(E.getLeft(), 178);
+        assertEquals(E.getTop(), 320);
+
+        assertEquals(F.getLeft(), 224);
+        assertEquals(F.getTop(), 320);
+
+        assertEquals(G.getLeft(), 484);
+        assertEquals(G.getTop(), 290);
+
+        assertEquals(H.getLeft(), 484);
+        assertEquals(H.getTop(), 564);
+    }
+
+    @Test
+    public void testComplexLayoutWrap() {
+        ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 600);
+        root.setOptimizationLevel(Optimizer.OPTIMIZATION_DIRECT);
+        ConstraintWidget A = new ConstraintWidget(100, 100);
+        ConstraintWidget B = new ConstraintWidget(100, 20);
+        ConstraintWidget C = new ConstraintWidget(100, 20);
+        ConstraintWidget D = new ConstraintWidget(30, 30);
+        ConstraintWidget E = new ConstraintWidget(30, 30);
+        ConstraintWidget F = new ConstraintWidget(30, 30);
+        ConstraintWidget G = new ConstraintWidget(100, 20);
+        ConstraintWidget H = new ConstraintWidget(100, 20);
+        root.setDebugName("root");
+        A.setDebugName("A");
+        B.setDebugName("B");
+        C.setDebugName("C");
+        D.setDebugName("D");
+        E.setDebugName("E");
+        F.setDebugName("F");
+        G.setDebugName("G");
+        H.setDebugName("H");
+        root.add(G);
+        root.add(A);
+        root.add(B);
+        root.add(E);
+        root.add(C);
+        root.add(D);
+        root.add(F);
+        root.add(H);
+        B.setBaselineDistance(8);
+        C.setBaselineDistance(8);
+        D.setBaselineDistance(8);
+        E.setBaselineDistance(8);
+        F.setBaselineDistance(8);
+        G.setBaselineDistance(8);
+        H.setBaselineDistance(8);
+
+        A.connect(Type.TOP, root, Type.TOP, 16);
+        A.connect(Type.LEFT, root, Type.LEFT, 16);
+        A.connect(Type.BOTTOM, root, Type.BOTTOM, 16);
+
+        B.connect(Type.TOP, A, Type.TOP);
+        B.connect(Type.LEFT, A, Type.RIGHT, 16);
+
+        C.connect(Type.TOP, root, Type.TOP);
+        C.connect(Type.LEFT, A, Type.RIGHT, 16);
+        C.connect(Type.BOTTOM, root, Type.BOTTOM);
+
+        D.connect(Type.BOTTOM, A, Type.BOTTOM);
+        D.connect(Type.LEFT, A, Type.RIGHT, 16);
+
+        E.connect(Type.BOTTOM, D, Type.BOTTOM);
+        E.connect(Type.LEFT, D, Type.RIGHT, 16);
+
+        F.connect(Type.BOTTOM, E, Type.BOTTOM);
+        F.connect(Type.LEFT, E, Type.RIGHT, 16);
+
+        G.connect(Type.TOP, root, Type.TOP);
+        G.connect(Type.RIGHT, root, Type.RIGHT, 16);
+        G.connect(Type.BOTTOM, root, Type.BOTTOM);
+
+        H.connect(Type.BOTTOM, root, Type.BOTTOM, 16);
+        H.connect(Type.RIGHT, root, Type.RIGHT, 16);
+
+        root.setMeasurer(sMeasurer);
+        root.setVerticalDimensionBehaviour(DimensionBehaviour.WRAP_CONTENT);
+        root.layout();
+
+        System.out.println(" direct: -> A: " + A + " B: " + B + " C: " + C + " D: " + D + " E: " + E + " F: " + F + " G: " + G + " H: " + H);
+
+        assertEquals(A.getLeft(), 16);
+        assertEquals(A.getTop(), 16);
+
+        assertEquals(B.getLeft(), 132);
+        assertEquals(B.getTop(), 16);
+
+        assertEquals(C.getLeft(), 132);
+        assertEquals(C.getTop(), 56);
+
+        assertEquals(D.getLeft(), 132);
+        assertEquals(D.getTop(), 86);
+
+        assertEquals(E.getLeft(), 178);
+        assertEquals(E.getTop(), 86);
+
+        assertEquals(F.getLeft(), 224);
+        assertEquals(F.getTop(), 86);
+
+        assertEquals(G.getLeft(), 484);
+        assertEquals(G.getTop(), 56);
+
+        assertEquals(H.getLeft(), 484);
+        assertEquals(H.getTop(), 96);
+    }
+
+    @Test
+    public void testChainLayoutWrap() {
+        ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 600);
+        root.setOptimizationLevel(Optimizer.OPTIMIZATION_GROUPING);
+        ConstraintWidget A = new ConstraintWidget(100, 100);
+        ConstraintWidget B = new ConstraintWidget(100, 20);
+        ConstraintWidget C = new ConstraintWidget(100, 20);
+        root.setDebugName("root");
+        A.setDebugName("A");
+        B.setDebugName("B");
+        C.setDebugName("C");
+        root.add(A);
+        root.add(B);
+        root.add(C);
+        A.setBaselineDistance(28);
+        B.setBaselineDistance(8);
+        C.setBaselineDistance(8);
+
+        A.connect(Type.TOP, root, Type.TOP, 16);
+        A.connect(Type.LEFT, root, Type.LEFT, 16);
+        A.connect(Type.RIGHT, B, Type.LEFT);
+        A.connect(Type.BOTTOM, root, Type.BOTTOM, 16);
+
+        B.connect(Type.BASELINE, A, Type.BASELINE);
+        B.connect(Type.LEFT, A, Type.RIGHT);
+        B.connect(Type.RIGHT, C, Type.LEFT);
+
+        C.connect(Type.BASELINE, B, Type.BASELINE);
+        C.connect(Type.LEFT, B, Type.RIGHT);
+        C.connect(Type.RIGHT, root, Type.RIGHT, 16);
+
+        root.setMeasurer(sMeasurer);
+        //root.setWidth(332);
+        root.setHorizontalDimensionBehaviour(DimensionBehaviour.WRAP_CONTENT);
+        //root.setVerticalDimensionBehaviour(DimensionBehaviour.WRAP_CONTENT);
+        root.layout();
+
+        System.out.println(" direct: -> A: " + A + " B: " + B + " C: " + C);
+
+        assertEquals(A.getLeft(), 16);
+        assertEquals(A.getTop(), 250);
+
+        assertEquals(B.getLeft(), 116);
+        assertEquals(B.getTop(), 270);
+
+        assertEquals(C.getLeft(), 216);
+        assertEquals(C.getTop(), 270);
+    }
+
+    @Test
+    public void testChainLayoutWrap2() {
+        ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 600);
+        root.setOptimizationLevel(Optimizer.OPTIMIZATION_GROUPING);
+        ConstraintWidget A = new ConstraintWidget(100, 100);
+        ConstraintWidget B = new ConstraintWidget(100, 20);
+        ConstraintWidget C = new ConstraintWidget(100, 20);
+        ConstraintWidget D = new ConstraintWidget(100, 20);
+        root.setDebugName("root");
+        A.setDebugName("A");
+        B.setDebugName("B");
+        C.setDebugName("C");
+        D.setDebugName("D");
+        root.add(A);
+        root.add(B);
+        root.add(C);
+        root.add(D);
+        A.setBaselineDistance(28);
+        B.setBaselineDistance(8);
+        C.setBaselineDistance(8);
+        D.setBaselineDistance(8);
+
+        A.connect(Type.TOP, root, Type.TOP, 16);
+        A.connect(Type.LEFT, root, Type.LEFT, 16);
+        A.connect(Type.RIGHT, B, Type.LEFT);
+        A.connect(Type.BOTTOM, root, Type.BOTTOM, 16);
+
+        B.connect(Type.BASELINE, A, Type.BASELINE);
+        B.connect(Type.LEFT, A, Type.RIGHT);
+        B.connect(Type.RIGHT, C, Type.LEFT);
+
+        C.connect(Type.BASELINE, B, Type.BASELINE);
+        C.connect(Type.LEFT, B, Type.RIGHT);
+        C.connect(Type.RIGHT, D, Type.LEFT, 16);
+
+        D.connect(Type.RIGHT, root, Type.RIGHT);
+        D.connect(Type.BOTTOM, root, Type.BOTTOM);
+
+        root.setMeasurer(sMeasurer);
+        //root.setWidth(332);
+        root.setHorizontalDimensionBehaviour(DimensionBehaviour.WRAP_CONTENT);
+        //root.setVerticalDimensionBehaviour(DimensionBehaviour.WRAP_CONTENT);
+        root.layout();
+
+        System.out.println(" direct: -> A: " + A + " B: " + B + " C: " + C + " D: " + D);
+
+        assertEquals(A.getLeft(), 16);
+        assertEquals(A.getTop(), 250);
+
+        assertEquals(B.getLeft(), 116);
+        assertEquals(B.getTop(), 270);
+
+        assertEquals(C.getLeft(), 216);
+        assertEquals(C.getTop(), 270);
+
+        assertEquals(D.getLeft(), 332);
+        assertEquals(D.getTop(), 580);
+    }
+
+    @Test
+    public void testChainLayoutWrapGuideline() {
+        ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 600);
+        root.setOptimizationLevel(Optimizer.OPTIMIZATION_GROUPING);
+        ConstraintWidget A = new ConstraintWidget(100, 20);
+        Guideline guideline = new Guideline();
+        guideline.setOrientation(Guideline.VERTICAL);
+        guideline.setGuideEnd(100);
+        root.setDebugName("root");
+        A.setDebugName("A");
+        guideline.setDebugName("guideline");
+        root.add(A);
+        root.add(guideline);
+        A.setBaselineDistance(28);
+
+        A.connect(Type.LEFT, guideline, Type.LEFT, 16);
+        A.connect(Type.BOTTOM, root, Type.BOTTOM, 16);
+
+
+        root.setMeasurer(sMeasurer);
+        //root.setHorizontalDimensionBehaviour(DimensionBehaviour.WRAP_CONTENT);
+        root.setVerticalDimensionBehaviour(DimensionBehaviour.WRAP_CONTENT);
+        root.layout();
+
+        System.out.println(" direct: -> A: " + A + " guideline: " + guideline);
+
+        assertEquals(A.getLeft(), 516);
+        assertEquals(A.getTop(), 0);
+
+        assertEquals(guideline.getLeft(), 500);
+    }
+
+
+    @Test
+    public void testChainLayoutWrapGuidelineChain() {
+        ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 600);
+        root.setOptimizationLevel(Optimizer.OPTIMIZATION_GROUPING);
+        ConstraintWidget A = new ConstraintWidget(20, 20);
+        ConstraintWidget B = new ConstraintWidget(20, 20);
+        ConstraintWidget C = new ConstraintWidget(20, 20);
+        ConstraintWidget D = new ConstraintWidget(20, 20);
+        ConstraintWidget A2 = new ConstraintWidget(20, 20);
+        ConstraintWidget B2 = new ConstraintWidget(20, 20);
+        ConstraintWidget C2 = new ConstraintWidget(20, 20);
+        ConstraintWidget D2 = new ConstraintWidget(20, 20);
+        Guideline guidelineStart = new Guideline();
+        Guideline guidelineEnd = new Guideline();
+        guidelineStart.setOrientation(Guideline.VERTICAL);
+        guidelineEnd.setOrientation(Guideline.VERTICAL);
+        guidelineStart.setGuideBegin(30);
+        guidelineEnd.setGuideEnd(30);
+        root.setDebugName("root");
+        A.setDebugName("A");
+        B.setDebugName("B");
+        C.setDebugName("C");
+        D.setDebugName("D");
+        A2.setDebugName("A2");
+        B2.setDebugName("B2");
+        C2.setDebugName("C2");
+        D2.setDebugName("D2");
+        guidelineStart.setDebugName("guidelineStart");
+        guidelineEnd.setDebugName("guidelineEnd");
+        root.add(A);
+        root.add(B);
+        root.add(C);
+        root.add(D);
+        root.add(A2);
+        root.add(B2);
+        root.add(C2);
+        root.add(D2);
+        root.add(guidelineStart);
+        root.add(guidelineEnd);
+
+        C.setVisibility(ConstraintWidget.GONE);
+        ChainConnect(Type.LEFT, guidelineStart, Type.RIGHT, guidelineEnd, A, B, C, D);
+        ChainConnect(Type.LEFT, root, Type.RIGHT, root, A2, B2, C2, D2);
+
+
+        root.setMeasurer(sMeasurer);
+        root.setHorizontalDimensionBehaviour(DimensionBehaviour.WRAP_CONTENT);
+        //root.setVerticalDimensionBehaviour(DimensionBehaviour.WRAP_CONTENT);
+        root.layout();
+
+        System.out.println(" direct: -> A: " + A + " guideline: " + guidelineStart + " ebnd " + guidelineEnd + " B: " + B +  " C: "  + C + " D: " + D);
+        System.out.println(" direct: -> A2: " + A2 + " B2: " + B2 +  " C2: "  + C2 + " D2: " + D2);
+
+        assertEquals(A.getLeft(), 30);
+        assertEquals(B.getLeft(), 50);
+        assertEquals(C.getLeft(), 70);
+        assertEquals(D.getLeft(), 70);
+        assertEquals(guidelineStart.getLeft(), 30);
+        assertEquals(guidelineEnd.getLeft(), 90);
+        assertEquals(A2.getLeft(), 8);
+        assertEquals(B2.getLeft(), 36);
+        assertEquals(C2.getLeft(), 64);
+        assertEquals(D2.getLeft(), 92);
+    }
+
+    private void ChainConnect(Type start, ConstraintWidget startTarget, Type end,
+                              ConstraintWidget endTarget, ConstraintWidget ... widgets) {
+        widgets[0].connect(start, startTarget, start);
+        ConstraintWidget previousWidget = null;
+        for (int i = 0; i < widgets.length; i++) {
+            if (previousWidget != null) {
+                widgets[i].connect(start, previousWidget, end);
+            }
+            if (i < widgets.length - 1) {
+                widgets[i].connect(end, widgets[i + 1], start);
+            }
+            previousWidget = widgets[i];
+        }
+        if (previousWidget != null) {
+            previousWidget.connect(end, endTarget, end);
+        }
+    }
+
+    @Test
+    public void testChainLayoutWrapGuidelineChainVertical() {
+        ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 600);
+        root.setOptimizationLevel(Optimizer.OPTIMIZATION_GROUPING);
+        ConstraintWidget A = new ConstraintWidget(20, 20);
+        ConstraintWidget B = new ConstraintWidget(20, 20);
+        ConstraintWidget C = new ConstraintWidget(20, 20);
+        ConstraintWidget D = new ConstraintWidget(20, 20);
+        ConstraintWidget A2 = new ConstraintWidget(20, 20);
+        ConstraintWidget B2 = new ConstraintWidget(20, 20);
+        ConstraintWidget C2 = new ConstraintWidget(20, 20);
+        ConstraintWidget D2 = new ConstraintWidget(20, 20);
+        Guideline guidelineStart = new Guideline();
+        Guideline guidelineEnd = new Guideline();
+        guidelineStart.setOrientation(Guideline.HORIZONTAL);
+        guidelineEnd.setOrientation(Guideline.HORIZONTAL);
+        guidelineStart.setGuideBegin(30);
+        guidelineEnd.setGuideEnd(30);
+        root.setDebugName("root");
+        A.setDebugName("A");
+        B.setDebugName("B");
+        C.setDebugName("C");
+        D.setDebugName("D");
+        A2.setDebugName("A2");
+        B2.setDebugName("B2");
+        C2.setDebugName("C2");
+        D2.setDebugName("D2");
+        guidelineStart.setDebugName("guidelineStart");
+        guidelineEnd.setDebugName("guidelineEnd");
+        root.add(A);
+        root.add(B);
+        root.add(C);
+        root.add(D);
+        root.add(A2);
+        root.add(B2);
+        root.add(C2);
+        root.add(D2);
+        root.add(guidelineStart);
+        root.add(guidelineEnd);
+
+        C.setVisibility(ConstraintWidget.GONE);
+        ChainConnect(Type.TOP, guidelineStart, Type.BOTTOM, guidelineEnd, A, B, C, D);
+        ChainConnect(Type.TOP, root, Type.BOTTOM, root, A2, B2, C2, D2);
+
+
+        root.setMeasurer(sMeasurer);
+        //root.setHorizontalDimensionBehaviour(DimensionBehaviour.WRAP_CONTENT);
+        root.setVerticalDimensionBehaviour(DimensionBehaviour.WRAP_CONTENT);
+        root.layout();
+
+        System.out.println(" direct: -> A: " + A + " guideline: " + guidelineStart + " ebnd " + guidelineEnd + " B: " + B +  " C: "  + C + " D: " + D);
+        System.out.println(" direct: -> A2: " + A2 + " B2: " + B2 +  " C2: "  + C2 + " D2: " + D2);
+
+        assertEquals(A.getTop(), 30);
+        assertEquals(B.getTop(), 50);
+        assertEquals(C.getTop(), 70);
+        assertEquals(D.getTop(), 70);
+        assertEquals(guidelineStart.getTop(), 30);
+        assertEquals(guidelineEnd.getTop(), 90);
+        assertEquals(A2.getTop(), 8);
+        assertEquals(B2.getTop(), 36);
+        assertEquals(C2.getTop(), 64);
+        assertEquals(D2.getTop(), 92);
+
+        assertEquals(A.getLeft(), 0);
+        assertEquals(B.getLeft(), 0);
+        assertEquals(C.getLeft(), 0);
+        assertEquals(D.getLeft(), 0);
+        assertEquals(A2.getLeft(), 0);
+        assertEquals(B2.getLeft(), 0);
+        assertEquals(C2.getLeft(), 0);
+        assertEquals(D2.getLeft(), 0);
+    }
+
+    @Test
+    public void testChainLayoutWrapRatioChain() {
+        ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 600);
+        root.setOptimizationLevel(Optimizer.OPTIMIZATION_GROUPING);
+        ConstraintWidget A = new ConstraintWidget(20, 20);
+        ConstraintWidget B = new ConstraintWidget(20, 20);
+        ConstraintWidget C = new ConstraintWidget(20, 20);
+        root.setDebugName("root");
+        A.setDebugName("A");
+        B.setDebugName("B");
+        C.setDebugName("C");
+        root.add(A);
+        root.add(B);
+        root.add(C);
+
+        ChainConnect(Type.TOP, root, Type.BOTTOM, root, A, B, C);
+        A.connect(Type.LEFT, root, Type.LEFT);
+        B.connect(Type.LEFT, root, Type.LEFT);
+        C.connect(Type.LEFT, root, Type.LEFT);
+        A.connect(Type.RIGHT, root, Type.RIGHT);
+        B.connect(Type.RIGHT, root, Type.RIGHT);
+        C.connect(Type.RIGHT, root, Type.RIGHT);
+        A.setVerticalChainStyle(ConstraintWidget.CHAIN_SPREAD_INSIDE);
+        B.setHorizontalDimensionBehaviour(DimensionBehaviour.MATCH_CONSTRAINT);
+        B.setVerticalDimensionBehaviour(DimensionBehaviour.MATCH_CONSTRAINT);
+        B.setDimensionRatio("1:1");
+
+        root.setMeasurer(sMeasurer);
+        //root.setHorizontalDimensionBehaviour(DimensionBehaviour.WRAP_CONTENT);
+//        root.layout();
+//
+//        System.out.println(" direct: -> A: " + A + " B: " + B +  " C: "  + C);
+//
+//        assertEquals(A.getTop(), 0);
+//        assertEquals(B.getTop(), 20);
+//        assertEquals(C.getTop(), 580);
+//        assertEquals(A.getLeft(), 290);
+//        assertEquals(B.getLeft(), 20);
+//        assertEquals(C.getLeft(), 290);
+//        assertEquals(B.getWidth(), 560);
+//        assertEquals(B.getHeight(), B.getWidth());
+//
+//        //root.setHorizontalDimensionBehaviour(DimensionBehaviour.WRAP_CONTENT);
+//        root.setVerticalDimensionBehaviour(DimensionBehaviour.WRAP_CONTENT);
+//        root.layout();
+
+        root.setHorizontalDimensionBehaviour(DimensionBehaviour.WRAP_CONTENT);
+        root.setVerticalDimensionBehaviour(DimensionBehaviour.FIXED);
+        root.setHeight(600);
+        root.layout();
+
+        System.out.println(" direct: -> A: " + A + " B: " + B +  " C: "  + C);
+
+        assertEquals(A.getTop(), 0);
+        assertEquals(B.getTop(), 290);
+        assertEquals(C.getTop(), 580);
+        assertEquals(A.getLeft(), 0);
+        assertEquals(B.getLeft(), 0);
+        assertEquals(C.getLeft(), 0);
+        assertEquals(B.getWidth(), 20);
+        assertEquals(B.getHeight(), B.getWidth());
+    }
+
+    @Test
+    public void testLayoutWrapBarrier() {
+        ConstraintWidgetContainer root = new ConstraintWidgetContainer("root", 600, 600);
+        root.setOptimizationLevel(Optimizer.OPTIMIZATION_GROUPING);
+        ConstraintWidget A = new ConstraintWidget("A",20, 20);
+        ConstraintWidget B = new ConstraintWidget("B",20, 20);
+        ConstraintWidget C = new ConstraintWidget("C",20, 20);
+        Barrier barrier = new Barrier("Barrier");
+        barrier.setBarrierType(Barrier.BOTTOM);
+        root.add(A);
+        root.add(B);
+        root.add(C);
+        root.add(barrier);
+
+        A.connect(Type.TOP, root, Type.TOP);
+        B.connect(Type.TOP, A, Type.BOTTOM);
+        B.setVisibility(ConstraintWidget.GONE);
+        C.connect(Type.TOP, barrier, Type.TOP);
+        barrier.add(A);
+        barrier.add(B);
+
+        root.setMeasurer(sMeasurer);
+        root.setVerticalDimensionBehaviour(DimensionBehaviour.WRAP_CONTENT);
+        root.layout();
+
+        System.out.println(" direct: -> root: " + root + " A: " + A + " B: " + B +  " C: "  + C + " Barrier: " + barrier.getTop());
+
+        assertEquals(A.getLeft(), 0);
+        assertEquals(A.getTop(), 0);
+        assertEquals(B.getLeft(), 0);
+        assertEquals(B.getTop(), 20);
+        assertEquals(C.getLeft(), 0);
+        assertEquals(C.getTop(), 20);
+        assertEquals(barrier.getTop(), 20);
+        assertEquals(root.getHeight(), 40);
+    }
+
+    @Test
+    public void testLayoutWrapGuidelinesMatch() {
+        ConstraintWidgetContainer root = new ConstraintWidgetContainer("root", 600, 600);
+        root.setOptimizationLevel(Optimizer.OPTIMIZATION_GROUPING);
+        //root.setOptimizationLevel(Optimizer.OPTIMIZATION_NONE);
+        ConstraintWidget A = new ConstraintWidget("A",20, 20);
+        Guideline left = new Guideline(); left.setOrientation(Guideline.VERTICAL); left.setGuideBegin(30); left.setDebugName("L");
+        Guideline right = new Guideline(); right.setOrientation(Guideline.VERTICAL); right.setGuideEnd(30); right.setDebugName("R");
+        Guideline top = new Guideline(); top.setOrientation(Guideline.HORIZONTAL); top.setGuideBegin(30); top.setDebugName("T");
+        Guideline bottom = new Guideline(); bottom.setOrientation(Guideline.HORIZONTAL); bottom.setGuideEnd(30); bottom.setDebugName("B");
+
+        root.add(A);
+        root.add(left);
+        root.add(right);
+        root.add(top);
+        root.add(bottom);
+
+        A.setHorizontalDimensionBehaviour(DimensionBehaviour.MATCH_CONSTRAINT);
+        A.setVerticalDimensionBehaviour(DimensionBehaviour.MATCH_CONSTRAINT);
+        A.connect(Type.LEFT, left, Type.LEFT);
+        A.connect(Type.RIGHT, right, Type.RIGHT);
+        A.connect(Type.TOP, top, Type.TOP);
+        A.connect(Type.BOTTOM, bottom, Type.BOTTOM);
+
+        root.setMeasurer(sMeasurer);
+        root.setVerticalDimensionBehaviour(DimensionBehaviour.WRAP_CONTENT);
+        root.layout();
+
+        System.out.println(" direct: -> root: " + root + " A: " + A + " L: " + left + " R: " + right
+                + " T: " + top + " B: " + bottom);
+
+        assertEquals(root.getHeight(), 60);
+        assertEquals(A.getLeft(), 30);
+        assertEquals(A.getTop(), 30);
+        assertEquals(A.getWidth(), 540);
+        assertEquals(A.getHeight(), 0);
+
+    }
+
+    @Test
+    public void testLayoutWrapMatch() {
+        ConstraintWidgetContainer root = new ConstraintWidgetContainer("root", 600, 600);
+        root.setOptimizationLevel(Optimizer.OPTIMIZATION_GROUPING);
+//        root.setOptimizationLevel(Optimizer.OPTIMIZATION_NONE);
+        ConstraintWidget A = new ConstraintWidget("A",50, 20);
+        ConstraintWidget B = new ConstraintWidget("B",50, 30);
+        ConstraintWidget C = new ConstraintWidget("C",50, 20);
+
+        root.add(A);
+        root.add(B);
+        root.add(C);
+
+        A.connect(Type.LEFT, root, Type.LEFT);
+        A.connect(Type.TOP, root, Type.TOP);
+        B.connect(Type.LEFT, A, Type.RIGHT);
+        B.connect(Type.RIGHT, C, Type.LEFT);
+        B.connect(Type.TOP, A, Type.BOTTOM);
+        B.connect(Type.BOTTOM, C, Type.TOP);
+        C.connect(Type.RIGHT, root, Type.RIGHT);
+        C.connect(Type.BOTTOM, root, Type.BOTTOM);
+
+        B.setHorizontalDimensionBehaviour(DimensionBehaviour.MATCH_CONSTRAINT);
+        B.setVerticalDimensionBehaviour(DimensionBehaviour.WRAP_CONTENT);
+
+        root.setMeasurer(sMeasurer);
+        root.setVerticalDimensionBehaviour(DimensionBehaviour.WRAP_CONTENT);
+        root.layout();
+
+        System.out.println(" direct: -> root: " + root + " A: " + A + " B: " + B + " C: " + C);
+        assertEquals(B.getTop(), 20);
+        assertEquals(B.getBottom(), 50);
+        assertEquals(B.getLeft(), 50);
+        assertEquals(B.getRight(), 550);
+        assertEquals(root.getHeight(), 70);
+    }
+
+    @Test
+    public void testLayoutWrapBarrier2() {
+        ConstraintWidgetContainer root = new ConstraintWidgetContainer("root", 600, 600);
+        root.setOptimizationLevel(Optimizer.OPTIMIZATION_GROUPING);
+        //root.setOptimizationLevel(Optimizer.OPTIMIZATION_NONE);
+        ConstraintWidget A = new ConstraintWidget("A",50, 20);
+        ConstraintWidget B = new ConstraintWidget("B",50, 30);
+        ConstraintWidget C = new ConstraintWidget("C",50, 20);
+        Guideline guideline = new Guideline(); guideline.setDebugName("end"); guideline.setGuideEnd(40); guideline.setOrientation(ConstraintWidget.VERTICAL);
+        Barrier barrier = new Barrier();
+        barrier.setBarrierType(Barrier.LEFT);
+        barrier.setDebugName("barrier");
+        barrier.add(B);
+        barrier.add(C);
+
+        root.add(A);
+        root.add(B);
+        root.add(C);
+        root.add(barrier);
+        root.add(guideline);
+
+        A.connect(Type.LEFT, root, Type.LEFT);
+        A.connect(Type.RIGHT, barrier, Type.LEFT);
+        B.connect(Type.RIGHT, guideline, Type.RIGHT);
+        C.connect(Type.RIGHT, root, Type.RIGHT);
+
+        root.setMeasurer(sMeasurer);
+        root.setHorizontalDimensionBehaviour(DimensionBehaviour.WRAP_CONTENT);
+        root.layout();
+
+        System.out.println(" direct: -> root: " + root + " A: " + A + " B: " + B + " C: " + C);
+        assertEquals(root.getWidth(), 140);
+    }
+
+    @Test
+    public void testLayoutWrapBarrier3() {
+        ConstraintWidgetContainer root = new ConstraintWidgetContainer("root", 600, 600);
+        root.setOptimizationLevel(Optimizer.OPTIMIZATION_GROUPING);
+        root.setOptimizationLevel(Optimizer.OPTIMIZATION_NONE);
+        ConstraintWidget A = new ConstraintWidget("A",50, 20);
+        ConstraintWidget B = new ConstraintWidget("B",50, 30);
+        ConstraintWidget C = new ConstraintWidget("C",50, 20);
+        Guideline guideline = new Guideline(); guideline.setDebugName("end"); guideline.setGuideEnd(40); guideline.setOrientation(ConstraintWidget.VERTICAL);
+        Barrier barrier = new Barrier();
+        barrier.setBarrierType(Barrier.LEFT);
+        barrier.setDebugName("barrier");
+        barrier.add(B);
+        barrier.add(C);
+
+        root.add(A);
+        root.add(B);
+        root.add(C);
+        root.add(barrier);
+        root.add(guideline);
+
+        A.connect(Type.LEFT, root, Type.LEFT);
+        A.connect(Type.RIGHT, barrier, Type.LEFT);
+        B.connect(Type.RIGHT, guideline, Type.RIGHT);
+        C.connect(Type.RIGHT, root, Type.RIGHT);
+
+        root.setMeasurer(sMeasurer);
+        root.setHorizontalDimensionBehaviour(DimensionBehaviour.WRAP_CONTENT);
+        root.layout();
+
+        System.out.println(" direct: -> root: " + root + " A: " + A + " B: " + B + " C: " + C);
+        assertEquals(root.getWidth(), 140);
+    }
+
+    @Test
+    public void testSimpleGuideline2() {
+        ConstraintWidgetContainer root = new ConstraintWidgetContainer("root", 600, 600);
+        Guideline guidelineStart = new Guideline(); guidelineStart.setDebugName("start"); guidelineStart.setGuidePercent(0.1f); guidelineStart.setOrientation(ConstraintWidget.VERTICAL);
+        Guideline guidelineEnd = new Guideline(); guidelineEnd.setDebugName("end"); guidelineEnd.setGuideEnd(40); guidelineEnd.setOrientation(ConstraintWidget.VERTICAL);
+        ConstraintWidget A = new ConstraintWidget("A",50, 20);
+        root.add(A);
+        root.add(guidelineStart);
+        root.add(guidelineEnd);
+
+        A.setHorizontalDimensionBehaviour(DimensionBehaviour.MATCH_CONSTRAINT);
+        A.connect(Type.LEFT, guidelineStart, Type.LEFT);
+        A.connect(Type.RIGHT, guidelineEnd, Type.RIGHT);
+
+        root.setMeasurer(sMeasurer);
+        //root.setHorizontalDimensionBehaviour(DimensionBehaviour.WRAP_CONTENT);
+        root.layout();
+        System.out.println(" root: " + root);
+        System.out.println("guideline start: " + guidelineStart);
+        System.out.println("guideline end: " + guidelineEnd);
     }
 }

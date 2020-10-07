@@ -27,6 +27,7 @@ import static org.testng.Assert.assertTrue;
 public class WidgetsPositioningTest {
 
     LinearSystem s = new LinearSystem();
+    boolean optimize = false;
 
     @BeforeMethod
     public void setUp() {
@@ -269,7 +270,7 @@ public class WidgetsPositioningTest {
                 previous = widget;
             }
             for (ConstraintWidget widget : widgets) {
-                widget.addToSolver(s);
+                widget.addToSolver(s, optimize);
             }
             try {
                 s.minimize();
@@ -278,7 +279,7 @@ public class WidgetsPositioningTest {
             }
             for (int i = 0; i < widgets.size(); i++) {
                 ConstraintWidget widget = widgets.get(i);
-                widget.updateFromSolver(s);
+                widget.updateFromSolver(s, optimize);
                 int left = widget.getLeft();
                 int top = widget.getTop();
                 int right = widget.getRight();
@@ -744,7 +745,7 @@ public class WidgetsPositioningTest {
                 widget.setDebugSolverName(s, widget.getDebugName());
             }
             widget.resetSolverVariables(s.getCache());
-            widget.addToSolver(s);
+            widget.addToSolver(s, optimize);
         }
         try {
             s.minimize();
@@ -753,7 +754,7 @@ public class WidgetsPositioningTest {
         }
         for (int j = 0; j < widgets.size(); j++) {
             ConstraintWidget w = widgets.get(j);
-            w.updateFromSolver(s);
+            w.updateFromSolver(s, optimize);
             System.out.println(" " + w);
         }
     }
@@ -785,7 +786,7 @@ public class WidgetsPositioningTest {
                 if (widget.getDebugName() != null) {
                     widget.setDebugSolverName(s, widget.getDebugName());
                 }
-                widget.addToSolver(s);
+                widget.addToSolver(s, optimize);
             }
 //            System.out.println("");
 //            s.displayReadableRows();
@@ -796,7 +797,7 @@ public class WidgetsPositioningTest {
             }
             for (int j = 0; j < widgets.size(); j++) {
                 ConstraintWidget w = widgets.get(j);
-                w.updateFromSolver(s);
+                w.updateFromSolver(s, optimize);
             }
 //            try {
                 check.run();

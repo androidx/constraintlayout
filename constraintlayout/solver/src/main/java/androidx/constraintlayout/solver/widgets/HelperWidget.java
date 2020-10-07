@@ -1,5 +1,9 @@
 package androidx.constraintlayout.solver.widgets;
 
+import androidx.constraintlayout.solver.widgets.analyzer.Grouping;
+import androidx.constraintlayout.solver.widgets.analyzer.WidgetGroup;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -48,5 +52,29 @@ public class HelperWidget extends ConstraintWidget implements Helper {
     public void removeAllIds() {
         mWidgetsCount = 0;
         Arrays.fill(mWidgets, null);
+    }
+
+    public void addDependents(ArrayList<WidgetGroup> dependencyLists, int orientation, WidgetGroup group) {
+        for (int i = 0; i < mWidgetsCount; i++) {
+            ConstraintWidget widget = mWidgets[i];
+            group.add(widget);
+        }
+        for (int i = 0; i < mWidgetsCount; i++) {
+            ConstraintWidget widget = mWidgets[i];
+            Grouping.findDependents(widget, orientation, dependencyLists, group);
+        }
+    }
+
+    public int findGroupInDependents(int orientation) {
+        for (int i = 0; i < mWidgetsCount; i++) {
+            ConstraintWidget widget = mWidgets[i];
+            if (orientation == HORIZONTAL && widget.horizontalGroup != -1) {
+                return widget.horizontalGroup;
+            }
+            if (orientation == VERTICAL && widget.verticalGroup != -1) {
+                return widget.verticalGroup;
+            }
+        }
+        return -1;
     }
 }

@@ -18,10 +18,8 @@ package androidx.constraintlayout.solver.widgets;
 import androidx.constraintlayout.solver.LinearSystem;
 import androidx.constraintlayout.solver.SolverVariable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import static androidx.constraintlayout.solver.widgets.ConstraintWidget.DimensionBehaviour.FIXED;
 import static androidx.constraintlayout.solver.widgets.ConstraintWidget.DimensionBehaviour.WRAP_CONTENT;
 
 /**
@@ -43,6 +41,7 @@ public class Guideline extends ConstraintWidget {
     private ConstraintAnchor mAnchor = mTop;
     private int mOrientation = HORIZONTAL;
     private int mMinimumPosition = 0;
+    private boolean resolved;
 
     public Guideline() {
         mAnchors.clear();
@@ -188,8 +187,25 @@ public class Guideline extends ConstraintWidget {
         return mRelativeEnd;
     }
 
+    public void setFinalValue(int position) {
+        if (LinearSystem.FULL_DEBUG) {
+            System.out.println("*** SET FINAL GUIDELINE VALUE " + position + " FOR " + getDebugName());
+        }
+        mAnchor.setFinalValue(position);
+        resolved = true;
+    }
+
+    public boolean isResolvedHorizontally() {
+        return resolved;
+    }
+
+    public boolean isResolvedVertically() {
+        return resolved;
+    }
+
+
     @Override
-    public void addToSolver(LinearSystem system) {
+    public void addToSolver(LinearSystem system, boolean optimize) {
         if (LinearSystem.FULL_DEBUG) {
             System.out.println("\n----------------------------------------------");
             System.out.println("-- adding " + getDebugName() + " to the solver");
@@ -207,6 +223,26 @@ public class Guideline extends ConstraintWidget {
             begin = parent.getAnchor(ConstraintAnchor.Type.TOP);
             end = parent.getAnchor(ConstraintAnchor.Type.BOTTOM);
             parentWrapContent = mParent != null ? mParent.mListDimensionBehaviors[DIMENSION_VERTICAL] == WRAP_CONTENT : false;
+        }
+        if (resolved && mAnchor.hasFinalValue()) {
+            SolverVariable guide = system.createObjectVariable(mAnchor);
+            if (LinearSystem.FULL_DEBUG) {
+                System.out.println("*** SET FINAL POSITION FOR GUIDELINE " + getDebugName() + " TO " + mAnchor.getFinalValue());
+            }
+            system.addEquality(guide, mAnchor.getFinalValue());
+            if (mRelativeBegin != -1) {
+                if (parentWrapContent) {
+                    system.addGreaterThan(system.createObjectVariable(end), guide, 0, SolverVariable.STRENGTH_EQUALITY);
+                }
+            } else if (mRelativeEnd != -1) {
+                if (parentWrapContent) {
+                    SolverVariable parentRight = system.createObjectVariable(end);
+                    system.addGreaterThan(guide, system.createObjectVariable(begin), 0, SolverVariable.STRENGTH_EQUALITY);
+                    system.addGreaterThan(parentRight, guide, 0, SolverVariable.STRENGTH_EQUALITY);
+                }
+            }
+            resolved = false;
+            return;
         }
         if (mRelativeBegin != -1) {
             SolverVariable guide = system.createObjectVariable(mAnchor);
@@ -233,7 +269,7 @@ public class Guideline extends ConstraintWidget {
     }
 
     @Override
-    public void updateFromSolver(LinearSystem system) {
+    public void updateFromSolver(LinearSystem system, boolean optimize) {
         if (getParent() == null) {
             return;
         }

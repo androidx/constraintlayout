@@ -161,6 +161,11 @@ public class PriorityGoalRow extends ArrayRow {
         mCache = cache;
     }
 
+    @Override
+    public boolean isEmpty() {
+        return numGoals == 0;
+    }
+
     final static int NOT_FOUND = -1;
 
     @Override
@@ -235,7 +240,7 @@ public class PriorityGoalRow extends ArrayRow {
     }
 
     @Override
-    public void updateFromRow(ArrayRow definition, boolean removeFromDefinition) {
+    public void updateFromRow(LinearSystem system, ArrayRow definition, boolean removeFromDefinition) {
         SolverVariable goalVariable = definition.variable;
         if (goalVariable == null) {
             return;

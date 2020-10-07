@@ -123,6 +123,7 @@ public class Constraints extends ViewGroup {
           }
         }
       }
+      a.recycle();
     }
   }
 

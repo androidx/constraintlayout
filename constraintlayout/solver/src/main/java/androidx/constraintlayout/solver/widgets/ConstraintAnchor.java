@@ -17,6 +17,8 @@ package androidx.constraintlayout.solver.widgets;
 
 import androidx.constraintlayout.solver.Cache;
 import androidx.constraintlayout.solver.SolverVariable;
+import androidx.constraintlayout.solver.widgets.analyzer.Grouping;
+import androidx.constraintlayout.solver.widgets.analyzer.WidgetGroup;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +34,18 @@ public class ConstraintAnchor {
     private static final boolean ALLOW_BINARY = false;
 
     private HashSet<ConstraintAnchor> mDependents = null;
+    private int mFinalValue;
+    private boolean mHasFinalValue;
+
+    public void findDependents(int orientation, ArrayList<WidgetGroup> list, WidgetGroup group) {
+        if (mDependents != null) {
+            for (ConstraintAnchor anchor : mDependents) {
+                Grouping.findDependents(anchor.mOwner, orientation, list, group);
+            }
+        }
+    }
+
+    public HashSet<ConstraintAnchor> getDependents() { return mDependents; }
     public boolean hasDependents() {
         if (mDependents == null) {
             return false;
@@ -51,6 +65,25 @@ public class ConstraintAnchor {
         }
         return false;
     }
+
+    public void setFinalValue(int finalValue) {
+        this.mFinalValue = finalValue;
+        this.mHasFinalValue = true;
+    }
+
+    public int getFinalValue() {
+        if (!mHasFinalValue) {
+            return 0;
+        }
+        return mFinalValue;
+    }
+
+    public void resetFinalResolution() {
+        mHasFinalValue = false;
+        mFinalValue = 0;
+    }
+
+    public boolean hasFinalValue() { return mHasFinalValue; }
 
     /**
      * Define the type of anchor
@@ -154,14 +187,18 @@ public class ConstraintAnchor {
      * Resets the anchor's connection.
      */
     public void reset() {
-        if (mTarget != null) {
-            if (mTarget.mDependents != null) {
-                mTarget.mDependents.remove(this);
+        if (mTarget != null && mTarget.mDependents != null) {
+            mTarget.mDependents.remove(this);
+            if (mTarget.mDependents.size() == 0) {
+                mTarget.mDependents = null;
             }
         }
+        mDependents = null;
         mTarget = null;
         mMargin = 0;
         mGoneMargin = UNSET_GONE_MARGIN;
+        mHasFinalValue = false;
+        mFinalValue = 0;
     }
 
     /**
@@ -186,7 +223,9 @@ public class ConstraintAnchor {
         if (mTarget.mDependents == null) {
             mTarget.mDependents = new HashSet<>();
         }
-        mTarget.mDependents.add(this);
+        if (mTarget.mDependents != null) {
+            mTarget.mDependents.add(this);
+        }
         if (margin > 0) {
             mMargin = margin;
         } else {

@@ -116,7 +116,7 @@ public class KeyAttributes extends Key {
         if (!Float.isNaN(mScaleX)) {
             attributes.add(Key.SCALE_X);
         }
-        if (!Float.isNaN(mScaleX)) {
+        if (!Float.isNaN(mScaleY)) {
             attributes.add(Key.SCALE_Y);
         }
         if (!Float.isNaN(mProgress)) {

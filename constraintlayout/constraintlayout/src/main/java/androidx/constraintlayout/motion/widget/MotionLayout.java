@@ -1444,6 +1444,9 @@ public class MotionLayout extends ConstraintLayout implements
      * @param pos the position in the transition from 0...1
      */
     public void setProgress(float pos) {
+        if (pos < 0.0f || pos > 1.0f) {
+            Log.w(TAG, "Warning! Progress is defined for values between 0.0 and 1.0 inclusive");
+        }
         if (!isAttachedToWindow()) {
             if (mStateCache == null) {
                 mStateCache = new StateCache();
@@ -3479,6 +3482,12 @@ public class MotionLayout extends ConstraintLayout implements
         onNewStateAttachHandlers();
         if (mStateCache != null) {
             mStateCache.apply();
+        } else {
+            if (mScene.mCurrentTransition.getAutoTransition() == MotionScene.Transition.AUTO_ANIMATE_TO_END) {
+                transitionToEnd();
+                setState(MotionLayout.TransitionState.SETUP);
+                setState(MotionLayout.TransitionState.MOVING);
+            }
         }
     }
 
@@ -3493,7 +3502,7 @@ public class MotionLayout extends ConstraintLayout implements
      * This function will set up various handlers (swipe, click...) whenever
      * a new state is reached.
      */
-    private void onNewStateAttachHandlers() {
+     void onNewStateAttachHandlers() {
         if (mScene == null) {
             return;
         }

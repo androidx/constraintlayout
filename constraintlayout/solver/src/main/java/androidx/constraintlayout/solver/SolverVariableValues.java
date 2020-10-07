@@ -96,7 +96,7 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
 
     @Override
     public int indexOf(SolverVariable variable) {
-        if (mCount == 0) {
+        if (mCount == 0 || variable == null) {
             return NONE;
         }
         int id = variable.id;

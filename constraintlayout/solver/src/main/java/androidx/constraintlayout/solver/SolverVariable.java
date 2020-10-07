@@ -65,6 +65,9 @@ public class SolverVariable {
     ArrayRow[] mClientEquations = new ArrayRow[16];
     int mClientEquationsCount = 0;
     public int usageInRowCount = 0;
+    boolean isSynonym = false;
+    int synonym = -1;
+    float synonymDelta = 0;
 
     /**
      * Type of variables
@@ -202,29 +205,52 @@ public class SolverVariable {
         }
     }
 
-    public final void updateReferencesWithNewDefinition(ArrayRow definition) {
+    public final void updateReferencesWithNewDefinition(LinearSystem system, ArrayRow definition) {
         if (VAR_USE_HASH) {
             for (ArrayRow row : inRows) {
-                row.updateFromRow(definition, false);
+                row.updateFromRow(system, definition, false);
             }
             inRows.clear();
         } else {
             final int count = mClientEquationsCount;
             for (int i = 0; i < count; i++) {
-                mClientEquations[i].updateFromRow(definition, false);
+                mClientEquations[i].updateFromRow(system, definition, false);
             }
             mClientEquationsCount = 0;
         }
     }
 
     public void setFinalValue(LinearSystem system, float value) {
+        if (false && INTERNAL_DEBUG) {
+            System.out.println("Set final value for " + this + " of "+ value);
+        }
         computedValue = value;
         isFinalValue = true;
+        isSynonym = false;
+        synonym = -1;
+        synonymDelta = 0;
         final int count = mClientEquationsCount;
+        definitionId = -1;
         for (int i = 0; i < count; i++) {
             mClientEquations[i].updateFromFinalVariable(system,this, false);
         }
         mClientEquationsCount = 0;
+    }
+
+    public void setSynonym(LinearSystem system, SolverVariable synonymVariable, float value) {
+        if (INTERNAL_DEBUG) {
+            System.out.println("Set synonym for " + this + " = " + synonymVariable + " + " + value);
+        }
+        isSynonym = true;
+        synonym = synonymVariable.id;
+        synonymDelta = value;
+        final int count = mClientEquationsCount;
+        definitionId = -1;
+        for (int i = 0; i < count; i++) {
+            mClientEquations[i].updateFromSynonymVariable(system,this, false);
+        }
+        mClientEquationsCount = 0;
+        system.displayReadableRows();
     }
 
     public void reset() {
@@ -235,6 +261,9 @@ public class SolverVariable {
         definitionId = -1;
         computedValue = 0;
         isFinalValue = false;
+        isSynonym = false;
+        synonym = -1;
+        synonymDelta = 0;
         if (VAR_USE_HASH) {
             inRows.clear();
         } else {
@@ -274,6 +303,12 @@ public class SolverVariable {
         String result = "";
         if (INTERNAL_DEBUG) {
             result += mName + "(" + id + "):" + strength;
+            if (isSynonym) {
+                result += ":S(" + synonym + ")";
+            }
+            if (isFinalValue) {
+                result += ":F(" + computedValue + ")";
+            }
         } else {
             if (mName != null) {
                 result += mName;

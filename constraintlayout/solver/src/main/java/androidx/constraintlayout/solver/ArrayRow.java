@@ -536,6 +536,7 @@ public class ArrayRow implements LinearSystem.Row {
         if (variable != null) {
             // first, move back the variable to its column
             variables.put(variable, -1f);
+            variable.definitionId = -1;
             variable = null;
         }
 
@@ -546,10 +547,6 @@ public class ArrayRow implements LinearSystem.Row {
         }
         constantValue = constantValue / amount;
         variables.divideByAmount(amount);
-        if (LinearSystem.SIMPLIFY_SYNONYMS
-            && variables.getCurrentSize() == 0 && variable != null) {
-            isSimpleDefinition = true;
-        }
     }
 
     // Row compatibility
@@ -560,12 +557,17 @@ public class ArrayRow implements LinearSystem.Row {
     }
 
     @Override
-    public void updateFromRow(ArrayRow definition, boolean removeFromDefinition) {
+    public void updateFromRow(LinearSystem system, ArrayRow definition, boolean removeFromDefinition) {
         float value = variables.use(definition, removeFromDefinition);
 
         constantValue += definition.constantValue * value;
         if (removeFromDefinition) {
             definition.variable.removeFromRow(this);
+        }
+        if (LinearSystem.SIMPLIFY_SYNONYMS
+                && variable != null && variables.getCurrentSize() == 0) {
+            isSimpleDefinition = true;
+            system.hasSimpleDefinition = true;
         }
     }
 
@@ -582,7 +584,25 @@ public class ArrayRow implements LinearSystem.Row {
         if (LinearSystem.SIMPLIFY_SYNONYMS
                 && variable != null && variables.getCurrentSize() == 0) {
             isSimpleDefinition = true;
-            system.removeRow(this);
+            system.hasSimpleDefinition = true;
+        }
+    }
+
+    public void updateFromSynonymVariable(LinearSystem system, SolverVariable variable, boolean removeFromDefinition) {
+        if (!variable.isSynonym) {
+            return;
+        }
+        float value = variables.get(variable);
+        constantValue += variable.synonymDelta * value;
+        variables.remove(variable, removeFromDefinition);
+        if (removeFromDefinition) {
+            variable.removeFromRow(this);
+        }
+        variables.add(system.mCache.mIndexedVariables[variable.synonym], value, removeFromDefinition);
+        if (LinearSystem.SIMPLIFY_SYNONYMS
+                && variable != null && variables.getCurrentSize() == 0) {
+            isSimpleDefinition = true;
+            system.hasSimpleDefinition = true;
         }
     }
 
@@ -698,16 +718,20 @@ public class ArrayRow implements LinearSystem.Row {
             int currentSize = variables.getCurrentSize();
             for (int i = 0; i < currentSize; i++) {
                 SolverVariable variable = variables.getVariable(i);
-                if (variable.definitionId != -1 || variable.isFinalValue) {
+                if (variable.definitionId != -1 || variable.isFinalValue || variable.isSynonym) {
                     variablesToUpdate.add(variable);
                 }
             }
-            if (variablesToUpdate.size() > 0) {
-                for (SolverVariable variable : variablesToUpdate) {
+            final int size = variablesToUpdate.size();
+            if (size > 0) {
+                for (int i = 0; i < size; i++) {
+                    SolverVariable variable = variablesToUpdate.get(i);
                     if (variable.isFinalValue) {
                         updateFromFinalVariable(system, variable, true);
+                    } else if (variable.isSynonym) {
+                        updateFromSynonymVariable(system, variable, true);
                     } else {
-                        updateFromRow(system.mRows[variable.definitionId], true);
+                        updateFromRow(system, system.mRows[variable.definitionId], true);
                     }
                 }
                 variablesToUpdate.clear();
@@ -718,7 +742,7 @@ public class ArrayRow implements LinearSystem.Row {
         if (LinearSystem.SIMPLIFY_SYNONYMS
             && variable != null && variables.getCurrentSize() == 0) {
             isSimpleDefinition = true;
-            system.removeRow(this);
+            system.hasSimpleDefinition = true;
         }
     }
 }

@@ -117,6 +117,7 @@ public class KeyCycle extends Key {
                 if (cvalue != null && cvalue.getType() == ConstraintAttribute.AttributeType.FLOAT_TYPE) {
                     oscSet.get(key).setPoint(mFramePosition, mWaveShape, mWaveVariesBy, mWavePeriod, mWaveOffset, cvalue.getValueToInterpolate(), cvalue);
                 }
+                continue;
             }
             float value = getValue(key);
             if (!Float.isNaN(value)) {
@@ -154,7 +155,7 @@ public class KeyCycle extends Key {
             case Key.PROGRESS:
                 return mProgress;
             default:
-                Log.v("WARNING! KeyCycle", "  UNKNOWN  " + key);
+                Log.v(TAG, "WARNING! KeyCycle UNKNOWN  " + key);
                 return Float.NaN;
         }
     }
@@ -205,7 +206,7 @@ public class KeyCycle extends Key {
                     splineSet.setPoint(mFramePosition, mProgress);
                     break;
                 default:
-                    Log.v("WARNING KeyCycle", "  UNKNOWN  " + s);
+                    Log.v(TAG, "WARNING KeyCycle UNKNOWN  " + s);
             }
         }
     }

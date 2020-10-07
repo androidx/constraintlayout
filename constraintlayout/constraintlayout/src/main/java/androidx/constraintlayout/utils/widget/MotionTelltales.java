@@ -80,6 +80,7 @@ public class MotionTelltales extends MockView {
                         mTailScale = a.getFloat(attr, mTailScale);
                 }
             }
+            a.recycle();
         }
         mPaintTelltales.setColor(mTailColor);
         mPaintTelltales.setStrokeWidth(5);

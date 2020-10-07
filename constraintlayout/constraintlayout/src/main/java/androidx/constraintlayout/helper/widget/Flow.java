@@ -18,6 +18,7 @@ package androidx.constraintlayout.helper.widget;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Build;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.R;
@@ -208,9 +209,13 @@ public class Flow extends VirtualLayout {
                 } else if (attr == R.styleable.ConstraintLayout_Layout_android_padding) {
                     mFlow.setPadding(a.getDimensionPixelSize(attr, 0));
                 } else if (attr == R.styleable.ConstraintLayout_Layout_android_paddingStart) {
-                    mFlow.setPaddingStart(a.getDimensionPixelSize(attr, 0));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        mFlow.setPaddingStart(a.getDimensionPixelSize(attr, 0));
+                    }
                 } else if (attr == R.styleable.ConstraintLayout_Layout_android_paddingEnd) {
-                    mFlow.setPaddingEnd(a.getDimensionPixelSize(attr, 0));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        mFlow.setPaddingEnd(a.getDimensionPixelSize(attr, 0));
+                    }
                 } else if (attr == R.styleable.ConstraintLayout_Layout_android_paddingLeft) {
                     mFlow.setPaddingLeft(a.getDimensionPixelSize(attr, 0));
                 } else if (attr == R.styleable.ConstraintLayout_Layout_android_paddingTop) {
@@ -257,6 +262,7 @@ public class Flow extends VirtualLayout {
                     mFlow.setMaxElementsWrap(a.getInt(attr, -1));
                 }
             }
+            a.recycle();
         }
 
         mHelperWidget = mFlow;

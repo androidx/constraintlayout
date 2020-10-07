@@ -183,6 +183,7 @@ public class Flow extends VirtualLayout {
             } else if (widget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_PERCENT) {
                 int value = (int) (widget.mMatchConstraintPercentWidth * max);
                 if (value != widget.getWidth()) {
+                    widget.setMeasureRequested(true);
                     measure(widget, DimensionBehaviour.FIXED, value, widget.getVerticalDimensionBehaviour(), widget.getHeight());
                 }
                 return value;
@@ -205,6 +206,7 @@ public class Flow extends VirtualLayout {
             } else if (widget.mMatchConstraintDefaultHeight== MATCH_CONSTRAINT_PERCENT) {
                 int value = (int) (widget.mMatchConstraintPercentHeight * max);
                 if (value != widget.getHeight()) {
+                    widget.setMeasureRequested(true);
                     measure(widget, widget.getHorizontalDimensionBehaviour(), widget.getWidth(), DimensionBehaviour.FIXED, value);
                 }
                 return value;
@@ -1209,10 +1211,11 @@ public class Flow extends VirtualLayout {
      * Add this widget to the solver
      *
      * @param system the solver we want to add the widget to
+     * @param optimize true if {@link Optimizer#OPTIMIZATION_GRAPH} is on
      */
     @Override
-    public void addToSolver(LinearSystem system) {
-        super.addToSolver(system);
+    public void addToSolver(LinearSystem system, boolean optimize) {
+        super.addToSolver(system, optimize);
 
         boolean isInRtl = getParent() != null ? ((ConstraintWidgetContainer) getParent()).isRtl() : false;
         switch (mWrapMode) {

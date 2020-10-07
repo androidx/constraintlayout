@@ -64,6 +64,8 @@ public class Metrics {
     public long measuresWrapInfeasible;
     public long infeasibleDetermineGroups;
     public long determineGroups;
+    public long layouts;
+    public long grouping;
 
     public String toString() {
         return "\n*** Metrics ***\n"

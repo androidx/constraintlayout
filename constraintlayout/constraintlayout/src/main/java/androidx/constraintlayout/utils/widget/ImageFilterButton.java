@@ -125,9 +125,13 @@ public class ImageFilterButton extends androidx.appcompat.widget.AppCompatImageB
                 } else if (attr == R.styleable.ImageFilterView_contrast) {
                     setContrast(a.getFloat(attr, 0));
                 } else if (attr == R.styleable.ImageFilterView_round) {
-                    setRound(a.getDimension(attr, 0));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        setRound(a.getDimension(attr, 0));
+                    }
                 } else if (attr == R.styleable.ImageFilterView_roundPercent) {
-                    setRoundPercent(a.getFloat(attr, 0));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        setRoundPercent(a.getFloat(attr, 0));
+                    }
                 } else if (attr == R.styleable.ImageFilterView_overlay) {
                     setOverlay(a.getBoolean(attr, mOverlay));
                 }

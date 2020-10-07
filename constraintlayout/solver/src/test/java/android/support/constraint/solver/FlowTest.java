@@ -35,9 +35,15 @@ public class FlowTest {
                 if (layout.getHorizontalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
                     widthSize = layout.getParent() != null ? layout.getParent().getWidth() : 0;
                     widthMode = EXACTLY;
+                } else if (horizontalBehavior == ConstraintWidget.DimensionBehaviour.FIXED) {
+                    widthSize = horizontalDimension;
+                    widthMode = EXACTLY;
                 }
                 if (layout.getVerticalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
                     heightSize = layout.getParent() != null ? layout.getParent().getHeight() : 0;
+                    heightMode = EXACTLY;
+                } else if (verticalBehavior == ConstraintWidget.DimensionBehaviour.FIXED) {
+                    heightSize = verticalDimension;
                     heightMode = EXACTLY;
                 }
                 layout.measure(widthMode, widthSize, heightMode, heightSize);
@@ -98,8 +104,8 @@ public class FlowTest {
         System.out.println("A: " + A);
         System.out.println("B: " + B);
         assertEquals(flow.getWidth(), 1080);
-        assertEquals(flow.getHeight(), 20);
-        assertEquals(flow.getTop(), 758);
+        assertEquals(flow.getHeight(), 30);
+        assertEquals(flow.getTop(), 753);
         assertEquals(A.getLeft(), 320);
         assertEquals(A.getTop(), 758);
         assertEquals(B.getLeft(), 740);

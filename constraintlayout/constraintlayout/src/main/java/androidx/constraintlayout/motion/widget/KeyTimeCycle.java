@@ -56,8 +56,6 @@ public class KeyTimeCycle extends Key {
     private float mWavePeriod = Float.NaN;
     private float mWaveOffset = 0;
     public static final int KEY_TYPE = 3;
-    private CurveFit mWaveOffsetSpline;
-    private CurveFit mWavePeriodSpline;
 
     {
         mType = KEY_TYPE;
@@ -73,11 +71,7 @@ public class KeyTimeCycle extends Key {
     /**
      * Gets the curve fit type this drives the interpolation
      *
-     * @return
      */
-    int getCurveFit() {
-        return mCurveFit;
-    }
 
     @Override
     public void getAttributeNames(HashSet<String> attributes) {
@@ -170,6 +164,7 @@ public class KeyTimeCycle extends Key {
             }
         }
     }
+
 
     @Override
     public void addValues(HashMap<String, SplineSet> splines) {
