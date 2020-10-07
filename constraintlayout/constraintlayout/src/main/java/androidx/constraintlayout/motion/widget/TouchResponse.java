@@ -54,6 +54,7 @@ class TouchResponse {
     private float mTouchAnchorX = 0.5f;
     float mRotateCenterX = 0.5f;
     float mRotateCenterY = 0.5f;
+    private int mRotationCenterId = MotionScene.UNSET;
     boolean mIsRotateMode = false;
     private float mTouchDirectionX = 0;
     private float mTouchDirectionY = 1;
@@ -173,6 +174,8 @@ class TouchResponse {
                 mFlags = a.getInteger(attr, 0);
             } else if (attr == R.styleable.OnSwipe_limitBoundsTo) {
                 mLimitBoundsTo = a.getResourceId(attr, 0);
+            } else if (attr == R.styleable.OnSwipe_rotationCenterId) {
+                mRotationCenterId = a.getResourceId(attr, mRotationCenterId);
             }
 
         }
@@ -209,7 +212,11 @@ class TouchResponse {
 
                 float rcx = mMotionLayout.getWidth() / 2.0f; //mRotateCenterX
                 float rcy = mMotionLayout.getHeight() / 2.0f; //mRotateCenterY
-                if (mTouchAnchorId != MotionScene.UNSET) {
+                if (mRotationCenterId !=   MotionScene.UNSET) {
+                    View v = mMotionLayout.findViewById(mRotationCenterId);
+                    rcx = (v.getLeft() + v.getRight()) / 2.0f;
+                    rcy = (v.getTop() + v.getBottom()) / 2.0f;
+                } else if (mTouchAnchorId != MotionScene.UNSET) {
                     MotionController mc = mMotionLayout.getMotionController(mTouchAnchorId);
                     View v = mMotionLayout.findViewById(mc.getAnimateRelativeTo());
                     rcx = (v.getLeft() + v.getRight()) / 2.0f;
@@ -270,7 +277,11 @@ class TouchResponse {
                 float pos = currentPos;
                 rcx = mMotionLayout.getWidth() / 2.0f; //mRotateCenterX
                 rcy = mMotionLayout.getHeight() / 2.0f; //mRotateCenterY
-                if (mTouchAnchorId != MotionScene.UNSET) {
+                if (mRotationCenterId !=   MotionScene.UNSET) {
+                    View v = mMotionLayout.findViewById(mRotationCenterId);
+                    rcx = (v.getLeft() + v.getRight()) / 2.0f;
+                    rcy = (v.getTop() + v.getBottom()) / 2.0f;
+                } else if (mTouchAnchorId != MotionScene.UNSET) {
                     MotionController mc = mMotionLayout.getMotionController(mTouchAnchorId);
                     View v = mMotionLayout.findViewById(mc.getAnimateRelativeTo());
                     rcx = (v.getLeft() + v.getRight()) / 2.0f;

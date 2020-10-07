@@ -966,6 +966,7 @@
         <attr name="dragDirection" />
         <attr name="touchAnchorId" />
         <attr name="touchAnchorSide" />
+        <attr name="rotationCenterId" format="reference" />
         <attr name="touchRegionId" format="reference" />
         <attr name="limitBoundsTo" format="reference" />
         <attr name="nestedScrollFlags" format="flags">
