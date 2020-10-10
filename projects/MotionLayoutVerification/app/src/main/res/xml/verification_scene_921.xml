@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto"
+    motion:defaultDuration="2000">
+
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint android:id="@+id/dial">
+            <Transform android:rotation="360"
+                motion:transformPivotTarget="@+id/earth"/>
+        </Constraint>
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint android:id="@+id/dial">
+            <Transform android:rotation="0"
+                motion:transformPivotTarget="@+id/earth"/>
+        </Constraint>
+        <Constraint android:id="@+id/hour12">
+            <Motion motion:motionStagger="0"/>
+        </Constraint>
+        <Constraint android:id="@+id/hour1">
+            <Motion motion:motionStagger="1"/>
+        </Constraint>
+        <Constraint android:id="@+id/hour2">
+            <Motion motion:motionStagger="2"/>
+        </Constraint>
+        <Constraint android:id="@+id/hour3">
+            <Motion motion:motionStagger="3"/>
+        </Constraint>
+        <Constraint android:id="@+id/hour4">
+            <Motion motion:motionStagger="4"/>
+        </Constraint>
+        <Constraint android:id="@+id/hour5">
+            <Motion motion:motionStagger="5"/>
+        </Constraint>
+        <Constraint android:id="@+id/hour6">
+            <Motion motion:motionStagger="6"/>
+        </Constraint>
+        <Constraint android:id="@+id/hour7">
+            <Motion motion:motionStagger="7"/>
+        </Constraint>
+        <Constraint android:id="@+id/hour8">
+            <Motion motion:motionStagger="8"/>
+        </Constraint>
+        <Constraint android:id="@+id/hour9">
+            <Motion motion:motionStagger="9"/>
+        </Constraint>
+        <Constraint android:id="@+id/hour10">
+            <Motion motion:motionStagger="10"/>
+        </Constraint>
+        <Constraint android:id="@+id/hour11">
+            <Motion motion:motionStagger="11"/>
+        </Constraint>
+
+
+    </ConstraintSet>
+
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@+id/start"
+        motion:duration="1000"
+        motion:staggered="-0.9"
+        motion:autoTransition="animateToStart"
+        motion:motionInterpolator="linear"
+        >
+        <OnSwipe motion:dragDirection="dragClockwise" motion:onTouchUp="autoCompleteToStart"
+            motion:maxAcceleration="10"
+            motion:dragScale=".9"
+            motion:rotationCenterId="@+id/earth"
+            motion:maxVelocity="50" />
+
+        <KeyFrameSet>
+<KeyAttribute motion:motionTarget="hour" motion:framePosition="50" android:scaleX="3" android:scaleY="3"/>
+        </KeyFrameSet>
+
+    </Transition>
+
+
+
+</MotionScene>

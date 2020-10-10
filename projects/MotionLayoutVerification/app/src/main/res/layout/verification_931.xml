@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motionLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/blue_grad"
+
+    app:layoutDescription="@xml/verification_scene_931"
+   >
+    <!--.motion.widget.MotionLayout-->
+    <!--        app:layoutDescription="@xml/verification_scene_80"
+-->
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/big_blue"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:background="#005495"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintHeight_percent="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.71000004"
+        app:roundPercent="1" />
+
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/medium_blue"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="220dp"
+        android:layout_marginLeft="220dp"
+        android:background="#00a2e0"
+        app:layout_constraintBottom_toBottomOf="@+id/big_blue"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintEnd_toEndOf="@+id/big_blue"
+        app:layout_constraintHeight_percent=".9"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintVertical_bias="0.0"
+
+        app:layout_constraintStart_toStartOf="@+id/big_blue"
+        app:layout_constraintTop_toTopOf="@+id/big_blue"
+        app:roundPercent="1" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="220dp"
+        android:layout_marginLeft="220dp"
+        android:background="#00a2e0"
+        android:src="@drawable/img3"
+        app:layout_constraintBottom_toBottomOf="@+id/big_blue"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintEnd_toEndOf="@+id/big_blue"
+        app:layout_constraintHeight_percent=".89"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/big_blue"
+        app:layout_constraintTop_toTopOf="@+id/big_blue"
+        app:roundPercent="1" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Test ImageFilterView features"
+        android:textColor="#FFB334"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motionLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layoutDescription="@xml/verification_scene_930"
+    android:background="#27130D">
+    <!--motion.widget.MotionLayout-->
+    <!--        app:layoutDescription="@xml/verification_scene_930"-->
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="watch with complication"
+        android:textSize="24sp"
+        android:textColor="#FFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/face"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+app:roundPercent="1"
+android:background="#B8CFEC"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/brand"
+        android:text="MotionLayout"
+        android:textSize="24sp"
+        android:textColor="#876464"
+        android:fontFamily="cursive"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/center"
+        />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/sky"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        app:roundPercent="1"
+        android:background="#F000"
+
+        app:layout_constraintEnd_toEndOf="@id/moon_axis"
+        app:layout_constraintStart_toStartOf="@id/moon_axis"
+        app:layout_constraintBottom_toBottomOf="@id/moon_axis"
+        app:layout_constraintTop_toTopOf="@id/moon_axis"
+     />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/moon_left"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:roundPercent="1"
+        android:src="@drawable/moon"
+        android:layout_marginEnd="10dp"
+         app:layout_constraintEnd_toStartOf="@id/moon_axis"
+        app:layout_constraintBottom_toBottomOf="@id/moon_axis"
+        app:layout_constraintTop_toTopOf="@id/moon_axis"
+        android:layout_marginRight="10dp" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/moon_right"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:roundPercent="1"
+        android:src="@drawable/moon"
+        android:layout_marginStart="10dp"
+         app:layout_constraintStart_toEndOf="@id/moon_axis"
+         app:layout_constraintBottom_toBottomOf="@id/moon_axis"
+        app:layout_constraintTop_toTopOf="@id/moon_axis"
+        android:layout_marginLeft="10dp" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/moon_axis"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        app:roundPercent="1"
+        android:background="#FF9800"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.65"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/moon_cover"
+        android:layout_width="110dp"
+        android:layout_height="60dp"
+         android:background="#B8CFEC"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintBottom_toBottomOf="@id/moon_axis"
+        app:layout_constraintEnd_toEndOf="@id/moon_axis"
+        app:layout_constraintStart_toStartOf="@id/moon_axis"
+        app:layout_constraintTop_toTopOf="@id/moon_axis"
+        />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/moon_coverleft"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:roundPercent="1"
+        android:background="#B8CFEC"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/moon_axis"
+        app:layout_constraintEnd_toStartOf="@id/moon_axis"
+        app:layout_constraintTop_toTopOf="@id/moon_axis"
+        android:layout_marginRight="10dp" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/moon_coverright"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:roundPercent="1"
+        android:background="#B8CFEC"
+        android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/moon_axis"
+        app:layout_constraintStart_toEndOf="@id/moon_axis"
+        app:layout_constraintTop_toTopOf="@id/moon_axis"
+        android:layout_marginLeft="10dp" />
+
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/second"
+        android:layout_width="3dp"
+        android:layout_height="240dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/watch_hand"
+        android:tint="#858585"
+        app:layout_constraintBottom_toBottomOf="@+id/center"
+        app:layout_constraintEnd_toEndOf="@+id/center"
+        app:layout_constraintStart_toStartOf="@+id/center"
+        app:layout_constraintTop_toTopOf="@+id/center"
+        app:layout_constraintVertical_bias="0.81" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/minutes"
+        android:layout_width="8dp"
+        android:layout_height="200dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/watch_hand"
+        android:tint="#858585"
+
+        app:layout_constraintBottom_toBottomOf="@+id/center"
+        app:layout_constraintEnd_toEndOf="@+id/center"
+        app:layout_constraintStart_toStartOf="@+id/center"
+        app:layout_constraintTop_toTopOf="@+id/center"
+        app:layout_constraintVertical_bias="0.81" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/hours"
+        android:layout_width="8dp"
+        android:layout_height="120dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/watch_hand"
+        android:tint="#5A5A5A"
+
+        app:layout_constraintBottom_toBottomOf="@+id/center"
+        app:layout_constraintEnd_toEndOf="@+id/center"
+        app:layout_constraintStart_toStartOf="@+id/center"
+        app:layout_constraintTop_toTopOf="@+id/center"
+        app:layout_constraintVertical_bias="0.81" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/center"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:src="@drawable/globe"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/face2"
+        android:layout_width="395dp"
+        android:layout_height="395dp"
+        app:roundPercent="1"
+        android:src="@drawable/watch_face"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.motion.widget.MotionLayout>

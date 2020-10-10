@@ -468,7 +468,7 @@
         motion:constraintSetEnd="@id/state1"
         motion:constraintSetStart="@id/small"
         motion:motionInterpolator="easeIn"
-        motion:duration="20000"
+        motion:duration="2000"
         motion:staggered="-0.4">
 
         <KeyFrameSet>
@@ -541,7 +541,7 @@
         motion:constraintSetEnd="@id/state1"
         motion:constraintSetStart="@id/base"
         motion:motionInterpolator="easeIn"
-        motion:duration="20000"
+        motion:duration="2000"
         motion:staggered="-0.4">
 
         <KeyFrameSet>

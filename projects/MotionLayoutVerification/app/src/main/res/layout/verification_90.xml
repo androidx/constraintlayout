@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motionLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layoutDescription="@xml/verification_scene_930"
+    android:background="#cfc">
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:text="transformPivotTarget, dragDirection, rotationCenterId"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/numbers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text=" 1  2  3  4  5  6  7  8  9 10 11 12"
+        android:textSize="20sp"
+        android:fontFamily="monospace"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+      />
+
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/dial"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@drawable/arrow"
+    android:tint="#FF32"
+        app:layout_constraintHorizontal_bias="0"
+    app:layout_constraintTop_toBottomOf="@id/numbers"
+    app:layout_constraintEnd_toEndOf="@id/numbers"
+    app:layout_constraintStart_toStartOf="@id/numbers"
+    />
+    <View
+        android:id="@+id/dial2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        android:background="#8822FF85"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintTop_toTopOf="@id/dial"
+        app:layout_constraintBottom_toBottomOf="@id/dial"
+        app:layout_constraintEnd_toEndOf="@id/dial"
+        app:layout_constraintStart_toStartOf="@id/dial"
+        />
+
+
+</androidx.constraintlayout.motion.widget.MotionLayout>
