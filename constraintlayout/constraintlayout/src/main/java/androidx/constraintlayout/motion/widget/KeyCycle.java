@@ -301,7 +301,7 @@ public class KeyCycle extends Key {
                         break;
                     case WAVE_SHAPE:
                         if (a.peekValue(attr).type == TypedValue.TYPE_STRING) {
-                            c.mTargetString = a.getString(attr);
+                            c.mCustomWaveShpe = a.getString(attr);
                             c.mWaveShape = Oscillator.CUSTOM;
                         } else {
                             c.mWaveShape = a.getInt(attr, c.mWaveShape);
