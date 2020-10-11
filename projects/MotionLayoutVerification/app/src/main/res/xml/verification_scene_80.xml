@@ -27,7 +27,7 @@
                 />
             <Motion
                 motion:quantizeMotionSteps="12"
-                motion:quantizeMotionInterpolator="bounce"
+                motion:quantizeMotionInterpolator="spline(0,1.2,1)"
                 />
         </Constraint>
     </ConstraintSet>

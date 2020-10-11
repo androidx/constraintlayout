@@ -46,6 +46,8 @@ public abstract class KeyCycleOscillator {
     protected ConstraintAttribute mCustom; // used if it manipulates a custom attribute
     private String mType;
     private int mWaveShape = 0;
+    private String mWaveString = null;
+
     public int mVariesBy = 0; // 0 = position, 2=path
     ArrayList<WavePoint> mWavePoints = new ArrayList<>();
 
@@ -145,7 +147,7 @@ public abstract class KeyCycleOscillator {
      * @param value         the adder
      * @param custom        The ConstraintAttribute used to set the value
      */
-    public void setPoint(int framePosition, int shape, int variesBy, float period, float offset, float phase,
+    public void setPoint(int framePosition, int shape, String waveString, int variesBy, float period, float offset, float phase,
                          float value, ConstraintAttribute custom) {
         mWavePoints.add(new WavePoint(framePosition, period, offset, phase, value));
         if (variesBy != -1) {
@@ -153,6 +155,8 @@ public abstract class KeyCycleOscillator {
         }
         mWaveShape = shape;
         mCustom = custom;
+        mWaveString = waveString;
+
     }
 
     /**
@@ -164,12 +168,13 @@ public abstract class KeyCycleOscillator {
      * @param offset        the offset value
      * @param value         the adder
      */
-    public void setPoint(int framePosition, int shape, int variesBy, float period, float offset, float phase, float value) {
+    public void setPoint(int framePosition, int shape, String waveString, int variesBy, float period, float offset, float phase, float value) {
         mWavePoints.add(new WavePoint(framePosition, period, offset, phase, value));
         if (variesBy != -1) {
             mVariesBy = variesBy;
         }
         mWaveShape = shape;
+        mWaveString = waveString;
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -186,7 +191,7 @@ public abstract class KeyCycleOscillator {
         });
         double[] time = new double[count];
         double[][] values = new double[count][3];
-        mCycleOscillator = new CycleOscillator(mWaveShape, mVariesBy, count);
+        mCycleOscillator = new CycleOscillator(mWaveShape, mWaveString, mVariesBy, count);
         int i = 0;
         for (WavePoint wp : mWavePoints) {
             time[i] = wp.mPeriod * 1E-2;
@@ -432,10 +437,10 @@ public abstract class KeyCycleOscillator {
         double[] mSplineSlopeCache; // for the return value of the curve fit
         float mPathLength;
 
-        CycleOscillator(int waveShape, int variesBy, int steps) {
+        CycleOscillator(int waveShape, String customShape, int variesBy, int steps) {
             mWaveShape = waveShape;
             mVariesBy = variesBy;
-            mOscillator.setType(waveShape);
+            mOscillator.setType(waveShape, customShape);
             mValues = new float[steps];
             mPosition = new double[steps];
             mPeriod = new float[steps];

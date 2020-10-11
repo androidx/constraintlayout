@@ -34,6 +34,9 @@ public class Oscillator {
     public static final int REVERSE_SAW_WAVE = 4;
     public static final int COS_WAVE = 5;
     public static final int BOUNCE = 6;
+    public static final int CUSTOM = 7;
+    String mCustomType;
+    MonotonicCurveFit mCustomCurve;
     int mType;
     double PI2 = Math.PI * 2;
     private boolean mNormalized = false;
@@ -46,8 +49,12 @@ public class Oscillator {
         return "pos =" + Arrays.toString(mPosition) + " period=" + Arrays.toString(mPeriod);
     }
 
-    public void setType(int type) {
+    public void setType(int type, String customType) {
         mType = type;
+        mCustomType = customType;
+        if (mCustomType != null) {
+            mCustomCurve = MonotonicCurveFit.buildWave(customType);
+        }
     }
 
     public void addPoint(double position, float period) {
@@ -132,6 +139,8 @@ public class Oscillator {
             case BOUNCE:
                 double x = 1 - Math.abs(((angle) * 4) % 4 - 2);
                 return 1 - x * x;
+            case CUSTOM:
+                return mCustomCurve.getPos(angle % 1, 0);
         }
     }
 
@@ -175,6 +184,8 @@ public class Oscillator {
                 return -PI2 * dangle_dtime * Math.sin(PI2 * angle);
             case BOUNCE:
                 return 4 * dangle_dtime * (((angle) * 4 + 2) % 4 - 2);
+            case CUSTOM:
+                return mCustomCurve.getSlope(angle % 1, 0);
         }
     }
 }

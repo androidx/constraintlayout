@@ -850,7 +850,7 @@
         <enum name="flip" value="2" />
     </attr>
 
-    <attr name="waveShape" format="enum">
+    <attr name="waveShape" format="enum|string">
         <enum name="sin" value="0" />
         <enum name="square" value="1" />
         <enum name="triangle" value="2" />

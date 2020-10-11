@@ -18,6 +18,8 @@ package androidx.constraintlayout.motion.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+
+import androidx.constraintlayout.motion.utils.Oscillator;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.R;
 import android.util.AttributeSet;
@@ -40,6 +42,7 @@ public class KeyCycle extends Key {
     private String mTransitionEasing = null;
     private int mCurveFit = 0;
     private int mWaveShape = -1;
+    private String mCustomWaveShpe = null;
     private float mWavePeriod = Float.NaN;
     private float mWaveOffset = 0;
     private float mWavePhase = 0;
@@ -116,12 +119,12 @@ public class KeyCycle extends Key {
                 String ckey = key.substring(Key.CUSTOM.length() + 1);
                 ConstraintAttribute cvalue = mCustomConstraints.get(ckey);
                 if (cvalue != null && cvalue.getType() == ConstraintAttribute.AttributeType.FLOAT_TYPE) {
-                    oscSet.get(key).setPoint(mFramePosition, mWaveShape, mWaveVariesBy, mWavePeriod, mWaveOffset, mWavePhase, cvalue.getValueToInterpolate(), cvalue);
+                    oscSet.get(key).setPoint(mFramePosition, mWaveShape,mCustomWaveShpe, mWaveVariesBy, mWavePeriod, mWaveOffset, mWavePhase, cvalue.getValueToInterpolate(), cvalue);
                 }
             }
             float value = getValue(key);
             if (!Float.isNaN(value)) {
-                oscSet.get(key).setPoint(mFramePosition, mWaveShape, mWaveVariesBy, mWavePeriod, mWaveOffset, mWavePhase, value);
+                oscSet.get(key).setPoint(mFramePosition, mWaveShape,mCustomWaveShpe, mWaveVariesBy, mWavePeriod, mWaveOffset, mWavePhase, value);
             }
         }
     }
@@ -297,7 +300,12 @@ public class KeyCycle extends Key {
                         c.mCurveFit = a.getInteger(attr, c.mCurveFit);
                         break;
                     case WAVE_SHAPE:
-                        c.mWaveShape = a.getInt(attr, c.mWaveShape);
+                        if (a.peekValue(attr).type == TypedValue.TYPE_STRING) {
+                            c.mTargetString = a.getString(attr);
+                            c.mWaveShape = Oscillator.CUSTOM;
+                        } else {
+                            c.mWaveShape = a.getInt(attr, c.mWaveShape);
+                        }
                         break;
                     case WAVE_PERIOD:
                         c.mWavePeriod = a.getFloat(attr, c.mWavePeriod);
