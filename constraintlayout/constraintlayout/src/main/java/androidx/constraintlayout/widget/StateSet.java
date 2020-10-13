@@ -77,6 +77,7 @@ public class StateSet {
                 mDefaultState = a.getResourceId(attr, mDefaultState);
             }
         }
+        a.recycle();
 
         String tagName = null;
         try {

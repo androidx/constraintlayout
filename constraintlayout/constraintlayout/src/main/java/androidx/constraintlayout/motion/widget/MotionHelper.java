@@ -49,6 +49,7 @@ public class MotionHelper extends ConstraintHelper implements Animatable, Motion
                     mUseOnHide = a.getBoolean(attr, mUseOnHide);
                 }
             }
+            a.recycle();
         }
     }
 

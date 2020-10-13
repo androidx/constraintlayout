@@ -107,6 +107,7 @@ public abstract class ConstraintHelper extends View {
                     setIds(mReferenceIds);
                 }
             }
+            a.recycle();
         }
     }
 

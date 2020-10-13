@@ -57,6 +57,7 @@ public abstract class VirtualLayout extends ConstraintHelper {
                     mApplyElevationOnAttach = true;
                 }
             }
+            a.recycle();
         }
     }
 

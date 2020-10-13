@@ -206,6 +206,7 @@ public class Barrier extends ConstraintHelper {
                     mBarrier.setMargin(margin);
                 }
             }
+            a.recycle();
         }
         mHelperWidget = mBarrier;
         validateParams();

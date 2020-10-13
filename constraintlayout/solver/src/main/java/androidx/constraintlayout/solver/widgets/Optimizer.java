@@ -36,12 +36,13 @@ public class Optimizer {
     public static final int OPTIMIZATION_GROUPS = 1 << 5;
     public static final int OPTIMIZATION_GRAPH = 1 << 6;
     public static final int OPTIMIZATION_GRAPH_WRAP = 1 << 7;
-    public static final int OPTIMIZATION_ENGINE = 1 << 8;
-    public static final int OPTIMIZATION_STANDARD =
-            OPTIMIZATION_DIRECT
-            | OPTIMIZATION_BARRIER
-            | OPTIMIZATION_CHAIN
-            | OPTIMIZATION_ENGINE
+    public static final int OPTIMIZATION_CACHE_MEASURES = 1 << 8;
+    public static final int OPTIMIZATION_DEPENDENCY_ORDERING = 1 << 9;
+    public static final int OPTIMIZATION_GROUPING = 1 << 10;
+    public static final int OPTIMIZATION_STANDARD = OPTIMIZATION_DIRECT
+            /* | OPTIMIZATION_GROUPING */
+            /* | OPTIMIZATION_DEPENDENCY_ORDERING */
+               | OPTIMIZATION_CACHE_MEASURES
             /* | OPTIMIZATION_GRAPH */
             /* | OPTIMIZATION_GRAPH_WRAP */
             /* | OPTIMIZATION_DIMENSIONS */

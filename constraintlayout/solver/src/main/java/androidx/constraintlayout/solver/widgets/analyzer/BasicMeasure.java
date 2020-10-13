@@ -17,6 +17,7 @@
 package androidx.constraintlayout.solver.widgets.analyzer;
 
 import androidx.constraintlayout.solver.LinearSystem;
+import androidx.constraintlayout.solver.widgets.Barrier;
 import androidx.constraintlayout.solver.widgets.ConstraintAnchor;
 import androidx.constraintlayout.solver.widgets.ConstraintWidget;
 import androidx.constraintlayout.solver.widgets.ConstraintWidgetContainer;
@@ -26,9 +27,11 @@ import androidx.constraintlayout.solver.widgets.Optimizer;
 import androidx.constraintlayout.solver.widgets.VirtualLayout;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import static androidx.constraintlayout.solver.widgets.ConstraintWidget.GONE;
 import static androidx.constraintlayout.solver.widgets.ConstraintWidget.HORIZONTAL;
+import static androidx.constraintlayout.solver.widgets.ConstraintWidget.MATCH_CONSTRAINT_SPREAD;
 import static androidx.constraintlayout.solver.widgets.ConstraintWidget.MATCH_CONSTRAINT_WRAP;
 import static androidx.constraintlayout.solver.widgets.ConstraintWidget.VERTICAL;
 
@@ -56,17 +59,11 @@ public class BasicMeasure {
         for (int i = 0; i < childCount; i++) {
             ConstraintWidget widget = layout.mChildren.get(i);
             if (widget.getHorizontalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
-                    || widget.getHorizontalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.MATCH_PARENT
-                    || widget.getVerticalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
-                    || widget.getVerticalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
+                || widget.getVerticalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT) {
                 mVariableDimensionsWidgets.add(widget);
             }
         }
         layout.invalidateGraph();
-    }
-
-    public enum MeasureType {
-
     }
 
     private ConstraintWidgetContainer constraintWidgetContainer;
@@ -77,14 +74,23 @@ public class BasicMeasure {
 
     private void measureChildren(ConstraintWidgetContainer layout) {
         final int childCount = layout.mChildren.size();
+        boolean optimize = layout.optimizeFor(Optimizer.OPTIMIZATION_GRAPH);
         Measurer measurer = layout.getMeasurer();
         for (int i = 0; i < childCount; i++) {
             ConstraintWidget child = layout.mChildren.get(i);
             if (child instanceof Guideline) {
                 continue;
             }
+            if (child instanceof Barrier) {
+                continue;
+            }
+            if (child.isInVirtualLayout()) {
+                continue;
+            }
 
-            if (child.horizontalRun.dimension.resolved && child.verticalRun.dimension.resolved) {
+            if (optimize && child.horizontalRun != null && child.verticalRun != null &&
+                child.horizontalRun.dimension.resolved &&
+                child.verticalRun.dimension.resolved) {
                 continue;
             }
 
@@ -95,6 +101,22 @@ public class BasicMeasure {
                     && child.mMatchConstraintDefaultWidth != MATCH_CONSTRAINT_WRAP
                     && heightBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
                     && child.mMatchConstraintDefaultHeight != MATCH_CONSTRAINT_WRAP;
+
+            if (!skip && layout.optimizeFor(Optimizer.OPTIMIZATION_DIRECT)
+                    && !(child instanceof VirtualLayout)) {
+                if (widthBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+                        && child.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_SPREAD
+                        && heightBehavior != ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+                        && !child.isInHorizontalChain()) {
+                    skip = true;
+                }
+                if (heightBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+                        && child.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_SPREAD
+                        && widthBehavior != ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+                        && !child.isInHorizontalChain()) {
+                    skip = true;
+                }
+            }
 
             if (skip) {
                 // we don't need to measure here as the dimension of the widget
@@ -125,7 +147,7 @@ public class BasicMeasure {
         layout.setMinWidth(minWidth);
         layout.setMinHeight(minHeight);
         if (DEBUG) {
-            System.out.println("solve <" + reason + ">");
+            System.out.println("### Solve <" + reason + "> ###");
         }
         constraintWidgetContainer.layout();
         if (LinearSystem.MEASURE && layout.mMetrics != null) {
@@ -243,13 +265,13 @@ public class BasicMeasure {
         }
 
         if (!allSolved || computations != 2) {
+            int optimizations = layout.getOptimizationLevel();
             if (childCount > 0) {
                 measureChildren(layout);
             }
             if (LinearSystem.MEASURE) {
                 layoutTime = System.nanoTime();
             }
-            int optimizations = layout.getOptimizationLevel();
 
             // let's update the size dependent widgets if any...
             final int sizeDependentWidgetsCount = mVariableDimensionsWidgets.size();
@@ -321,7 +343,8 @@ public class BasicMeasure {
                         if (widget.getVisibility() == GONE) {
                             continue;
                         }
-                        if (widget.horizontalRun.dimension.resolved && widget.verticalRun.dimension.resolved) {
+                        if (optimize &&
+                            widget.horizontalRun.dimension.resolved && widget.verticalRun.dimension.resolved) {
                             continue;
                         }
                         if (widget instanceof VirtualLayout) {
@@ -332,7 +355,14 @@ public class BasicMeasure {
                         int preHeight = widget.getHeight();
                         int preBaselineDistance = widget.getBaselineDistance();
 
-                        needSolverPass |= measure(measurer, widget, true);
+                        boolean hasMeasure = measure(measurer, widget, true);
+                        if (false && !widget.hasDependencies()) {
+                            hasMeasure = false;
+                        }
+                        needSolverPass |= hasMeasure;
+                        if (DEBUG && hasMeasure) {
+                            System.out.println("{#} Needs Solver pass as measure true for " + widget.getDebugName());
+                        }
                         if (layout.mMetrics != null) {
                             layout.mMetrics.measuredMatchWidgets++;
                         }
@@ -347,6 +377,9 @@ public class BasicMeasure {
                                         + widget.getAnchor(ConstraintAnchor.Type.RIGHT).getMargin();
                                 minWidth = Math.max(minWidth, w);
                             }
+                            if (DEBUG) {
+                                System.out.println("{#} Needs Solver pass as Width for " + widget.getDebugName() + " changed: " + measuredWidth + " != " + preWidth);
+                            }
                             needSolverPass = true;
                         }
                         if (measuredHeight != preHeight) {
@@ -356,15 +389,23 @@ public class BasicMeasure {
                                         + widget.getAnchor(ConstraintAnchor.Type.BOTTOM).getMargin();
                                 minHeight = Math.max(minHeight, h);
                             }
+                            if (DEBUG) {
+                                System.out.println("{#} Needs Solver pass as Height for " + widget.getDebugName() + " changed: " + measuredHeight + " != " + preHeight);
+                            }
                             needSolverPass = true;
                         }
                         if (widget.hasBaseline() && preBaselineDistance != widget.getBaselineDistance()) {
+                            if (DEBUG) {
+                                System.out.println("{#} Needs Solver pass as Baseline for " + widget.getDebugName() + " changed: " + widget.getBaselineDistance() + " != " + preBaselineDistance);
+                            }
                             needSolverPass = true;
                         }
                     }
                     if (needSolverPass) {
                         solveLinearSystem(layout, "intermediate pass", startingWidth, startingHeight);
                         needSolverPass = false;
+                    } else {
+                        break;
                     }
                 }
                 if (needSolverPass) {

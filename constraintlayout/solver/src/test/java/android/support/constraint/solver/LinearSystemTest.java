@@ -250,7 +250,7 @@ public class LinearSystemTest {
         //s.rebuildGoalFromErrors();
         String result = s.getGoal().toString();
         assertTrue((result.equals("0 = 0.0") || result.equals(" goal -> (0.0) : ")));
-        assertEquals(s.getRow(0).toReadableString(), "W3.left = 0.0");
+        assertEquals(s.getValueFor("W3.left"), 0.0f);
     }
 
     @Test
@@ -264,8 +264,8 @@ public class LinearSystemTest {
         //s.rebuildGoalFromErrors();
         String result = s.getGoal().toString();
         assertTrue((result.equals("0 = 0.0") || result.equals(" goal -> (0.0) : ")));
-        assertEquals(s.getRow(0).toReadableString(), "W3.left = 0.0");
-        assertEquals(s.getRow(1).toReadableString(), "W3.right = 600.0");
+        assertEquals(s.getValueFor("W3.left"), 0.0f);
+        assertEquals(s.getValueFor("W3.right"), 600.0f);
     }
 
     @Test
@@ -280,9 +280,9 @@ public class LinearSystemTest {
         s.addConstraint(LinearEquation.createRowFromEquation(s, e2));
         s.addConstraint(LinearEquation.createRowFromEquation(s, left_constraint)); // left
         //s.rebuildGoalFromErrors();
-        assertEquals(s.getRow(0).toReadableString(), "W3.left = 0.0");
-        assertEquals(s.getRow(1).toReadableString(), "W3.right = 600.0");
-        assertEquals(s.getRow(2).toReadableString(), "W4.left = 0.0");
+        assertEquals(s.getValueFor("W3.left"), 0.0f);
+        assertEquals(s.getValueFor("W3.right"), 600.0f);
+        assertEquals(s.getValueFor("W4.left"), 0.0f);
     }
 
     @Test

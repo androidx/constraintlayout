@@ -28,6 +28,7 @@ import android.graphics.Paint;
 import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.solver.LinearSystem;
 import androidx.constraintlayout.solver.Metrics;
 import androidx.constraintlayout.solver.widgets.*;
 import androidx.constraintlayout.solver.widgets.ConstraintAnchor;
@@ -482,11 +483,11 @@ public class ConstraintLayout extends ViewGroup {
     /**
      * @hide
      */
-    public static final String VERSION = "ConstraintLayout-2.0.1";
+    public static final String VERSION = "ConstraintLayout-2.0.2";
     private static final String TAG = "ConstraintLayout";
 
     private static final boolean USE_CONSTRAINTS_HELPER = true;
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = LinearSystem.FULL_DEBUG;
     private static final boolean DEBUG_DRAW_CONSTRAINTS = false;
     private static final boolean MEASURE = false;
 
@@ -635,7 +636,6 @@ public class ConstraintLayout extends ViewGroup {
             long startMeasure;
             long endMeasure;
 
-
             if (MEASURE) {
                 startMeasure = System.nanoTime();
             }
@@ -736,6 +736,32 @@ public class ConstraintLayout extends ViewGroup {
                 break;
             }
 
+            ConstraintWidgetContainer container = (ConstraintWidgetContainer) widget.getParent();
+            if (container != null && Optimizer.enabled(mOptimizationLevel, Optimizer.OPTIMIZATION_CACHE_MEASURES)) {
+                if (child.getMeasuredWidth() == widget.getWidth()
+                        // note: the container check replicates legacy behavior, but we might want
+                        // to not enforce that in 3.0
+                        && child.getMeasuredWidth() < container.getWidth()
+                        && child.getMeasuredHeight() == widget.getHeight()
+                        && child.getMeasuredHeight() < container.getHeight()
+                        && child.getBaseline() == widget.getBaselineDistance()
+                        && !widget.isMeasureRequested()
+                ) {
+                    boolean similar = isSimilarSpec(widget.getLastHorizontalMeasureSpec(), horizontalSpec, widget.getWidth())
+                            && isSimilarSpec(widget.getLastVerticalMeasureSpec(), verticalSpec, widget.getHeight());
+                    if (similar) {
+                        measure.measuredWidth = widget.getWidth();
+                        measure.measuredHeight = widget.getHeight();
+                        measure.measuredBaseline = widget.getBaselineDistance();
+                        // if the dimensions of the solver widget are already the same as the real view, no need to remeasure.
+                        if (DEBUG) {
+                            System.out.println("SKIPPED " + widget);
+                        }
+                        return;
+                    }
+                }
+            }
+
             boolean horizontalMatchConstraints = (horizontalBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
             boolean verticalMatchConstraints = (verticalBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
 
@@ -761,6 +787,7 @@ public class ConstraintLayout extends ViewGroup {
                     ((VirtualLayout) child).onMeasure(layout, horizontalSpec, verticalSpec);
                 } else {
                     child.measure(horizontalSpec, verticalSpec);
+                    widget.setLastMeasureSpec(horizontalSpec, verticalSpec);
                 }
 
                 int w = child.getMeasuredWidth();
@@ -772,7 +799,7 @@ public class ConstraintLayout extends ViewGroup {
 
                 if (DEBUG) {
                     String measurement = MeasureSpec.toString(horizontalSpec) + " x " + MeasureSpec.toString(verticalSpec) + " => " + width + " x " + height;
-                    System.out.println("    measure " + widget.getDebugName() + " : " + measurement);
+                    System.out.println("    (M) measure " + " (" + widget.getDebugName() + ") : " + measurement);
                 }
 
                 if (didHorizontalWrap) {
@@ -803,12 +830,15 @@ public class ConstraintLayout extends ViewGroup {
                     height = Math.min(widget.mMatchConstraintMaxHeight, height);
                 }
 
-                if (horizontalUseRatio && verticalDimensionKnown) {
-                    float ratio = widget.mDimensionRatio;
-                    width = (int) (0.5f + height * ratio);
-                } else if (verticalUseRatio && horizontalDimensionKnown) {
-                    float ratio = widget.mDimensionRatio;
-                    height = (int) (0.5f + width / ratio);
+                boolean optimizeDirect = Optimizer.enabled(mOptimizationLevel, Optimizer.OPTIMIZATION_DIRECT);
+                if (!optimizeDirect) {
+                    if (horizontalUseRatio && verticalDimensionKnown) {
+                        float ratio = widget.mDimensionRatio;
+                        width = (int) (0.5f + height * ratio);
+                    } else if (verticalUseRatio && horizontalDimensionKnown) {
+                        float ratio = widget.mDimensionRatio;
+                        height = (int) (0.5f + width / ratio);
+                    }
                 }
 
                 if (w != width || h != height) {
@@ -819,6 +849,7 @@ public class ConstraintLayout extends ViewGroup {
                         verticalSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
                     }
                     child.measure(horizontalSpec, verticalSpec);
+                    widget.setLastMeasureSpec(horizontalSpec, verticalSpec);
                     width = child.getMeasuredWidth();
                     height = child.getMeasuredHeight();
                     baseline = child.getBaseline();
@@ -850,6 +881,33 @@ public class ConstraintLayout extends ViewGroup {
                     mMetrics.measuresWidgetsDuration += (endMeasure - startMeasure);
                 }
             }
+        }
+
+        /**
+         * Returns true if the previous measure spec is equivalent to the new one.
+         * - if it's the same...
+         * - if it's not, but the previous was AT_MOST or UNSPECIFIED and the new one
+         *   is EXACTLY with the same size.
+         *
+         * @param lastMeasureSpec
+         * @param spec
+         * @param widgetSize
+         * @return
+         */
+        private boolean isSimilarSpec(int lastMeasureSpec, int spec, int widgetSize) {
+            if (lastMeasureSpec == spec) {
+                return true;
+            }
+            int lastMode = MeasureSpec.getMode(lastMeasureSpec);
+            int lastSize = MeasureSpec.getSize(lastMeasureSpec);
+            int mode = MeasureSpec.getMode(spec);
+            int size = MeasureSpec.getSize(spec);
+            if (mode == MeasureSpec.EXACTLY
+                    && (lastMode == MeasureSpec.AT_MOST || lastMode == MeasureSpec.UNSPECIFIED)
+                    && widgetSize == size) {
+                return true;
+            }
+            return false;
         }
 
         @Override
@@ -1587,11 +1645,34 @@ public class ConstraintLayout extends ViewGroup {
             time = System.currentTimeMillis();
         }
 
+        if (!mDirtyHierarchy) {
+            if (mOnMeasureWidthMeasureSpec == widthMeasureSpec && mOnMeasureHeightMeasureSpec == heightMeasureSpec) {
+                resolveMeasuredDimension(widthMeasureSpec, heightMeasureSpec, mLayoutWidget.getWidth(), mLayoutWidget.getHeight(),
+                        mLayoutWidget.isWidthMeasuredTooSmall(), mLayoutWidget.isHeightMeasuredTooSmall());
+                return;
+            }
+            if (mOnMeasureWidthMeasureSpec == widthMeasureSpec
+                    && MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.EXACTLY
+                    && MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.AT_MOST
+                    && MeasureSpec.getMode(mOnMeasureHeightMeasureSpec) == MeasureSpec.AT_MOST) {
+                int newSize = MeasureSpec.getSize(heightMeasureSpec);
+                if (DEBUG) {
+                    System.out.println("### COMPATIBLE REQ " + newSize + " >= ? " + mLayoutWidget.getHeight());
+                }
+                if (newSize >= mLayoutWidget.getHeight()) {
+                    mOnMeasureWidthMeasureSpec = widthMeasureSpec;
+                    mOnMeasureHeightMeasureSpec = heightMeasureSpec;
+                    resolveMeasuredDimension(widthMeasureSpec, heightMeasureSpec, mLayoutWidget.getWidth(), mLayoutWidget.getHeight(),
+                            mLayoutWidget.isWidthMeasuredTooSmall(), mLayoutWidget.isHeightMeasuredTooSmall());
+                    return;
+                }
+            }
+        }
         mOnMeasureWidthMeasureSpec = widthMeasureSpec;
         mOnMeasureHeightMeasureSpec = heightMeasureSpec;
 
         if (DEBUG) {
-            System.out.println(mLayoutWidget.getDebugName() + " onMeasure width: " + MeasureSpec.toString(widthMeasureSpec)
+            System.out.println("### ON MEASURE " + mDirtyHierarchy + " of " + mLayoutWidget.getDebugName() + " onMeasure width: " + MeasureSpec.toString(widthMeasureSpec)
                     + " height: " + MeasureSpec.toString(heightMeasureSpec) + this);
         }
 

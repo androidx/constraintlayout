@@ -121,6 +121,7 @@ public class KeyCycle extends Key {
                 if (cvalue != null && cvalue.getType() == ConstraintAttribute.AttributeType.FLOAT_TYPE) {
                     oscSet.get(key).setPoint(mFramePosition, mWaveShape,mCustomWaveShpe, mWaveVariesBy, mWavePeriod, mWaveOffset, mWavePhase, cvalue.getValueToInterpolate(), cvalue);
                 }
+                continue;
             }
             float value = getValue(key);
             if (!Float.isNaN(value)) {

@@ -192,7 +192,7 @@
         <enum name="baseline" value="3" />
     </attr>
 
-    <attr name="flow_horizontalAlign" format="float">
+    <attr name="flow_horizontalAlign" format="enum">
         <enum name="start" value="0" />
         <enum name="end" value="1" />
         <enum name="center" value="2" />
@@ -236,7 +236,7 @@
     <!-- Used to set the type of optimization we apply. This is a mask. -->
     <attr name="layout_optimizationLevel">
         <flag name="none" value="0" />
-        <flag name="standard" value="7" /> <!-- direct, barriers, chains -->
+        <flag name="standard" value="257" /> <!-- direct, measure caches -->
         <flag name="direct" value="1"/>
         <flag name="barrier" value="2"/>
         <flag name="chains" value="4"/>
@@ -245,6 +245,9 @@
         <flag name="groups" value="32"/>
         <flag name="graph" value="64"/>
         <flag name="graph_wrap" value="128"/>
+        <flag name="cache_measures" value="256"/>
+        <flag name="dependency_ordering" value="512"/>
+        <flag name="grouping" value="1024"/>
     </attr>
 
     <!-- Specify the style of match constraint -->

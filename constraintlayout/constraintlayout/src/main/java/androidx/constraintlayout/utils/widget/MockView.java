@@ -67,6 +67,7 @@ public class MockView extends View {
                     mDrawLabel = a.getBoolean(attr, mDrawLabel);
                 }
             }
+            a.recycle();
         }
         if (mText == null) {
             try {
