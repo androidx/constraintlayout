@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto"
+    motion:defaultDuration="1000"
+    >
+
+    <ConstraintSet android:id="@+id/start"/>
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rotation="0"
+            motion:layout_constraintTag="Image1"
+            motion:layout_constraintCircleRadius="@dimen/radius"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleAngle="45" />
+        <Constraint
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rotation="45"
+            motion:layout_constraintTag="Image1"
+            motion:layout_constraintCircleRadius="@dimen/radius"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleAngle="90" />
+        <Constraint
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rotation="0"
+            motion:layout_constraintTag="Image1"
+            motion:layout_constraintCircleRadius="@dimen/radius"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleAngle="135" />
+        <Constraint
+            android:id="@+id/imageView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rotation="45"
+            motion:layout_constraintTag="Image1"
+            motion:layout_constraintCircleRadius="@dimen/radius"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleAngle="180"/>
+        <Constraint
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rotation="0"
+            motion:layout_constraintTag="Image1"
+            motion:layout_constraintCircleRadius="@dimen/radius"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleAngle="225" />
+        <Constraint
+            android:id="@+id/imageView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rotation="45"
+            motion:layout_constraintTag="Image1"
+            motion:layout_constraintCircleRadius="@dimen/radius"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleAngle="270" />
+        <Constraint
+            android:id="@+id/imageView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rotation="0"
+            motion:layout_constraintTag="Image1"
+            motion:layout_constraintCircleRadius="@dimen/radius"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleAngle="315"/>
+        <Constraint
+            android:id="@+id/imageView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rotation="45"
+            motion:layout_constraintTag="Image1"
+            motion:layout_constraintCircleRadius="@dimen/radius"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleAngle="360" />
+    </ConstraintSet>
+    <ConstraintSet
+        android:id="@+id/overlayStart"
+        motion:deriveConstraintsFrom="@+id/start" >
+        <Constraint
+            android:id="@+id/overlay1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:rotation="0"
+            motion:layout_constraintTag="Image1"
+            motion:layout_constraintCircleRadius="@dimen/radius2"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleAngle="0" />
+        <Constraint
+            android:id="@+id/overlay2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:rotation="90"
+            motion:layout_constraintCircleRadius="@dimen/radius2"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleAngle="90" />
+        <Constraint
+            android:id="@+id/overlay3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:rotation="180"
+            motion:layout_constraintCircleRadius="@dimen/radius2"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleAngle="180" />
+        <Constraint
+            android:id="@+id/overlay4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:rotation="270"
+            motion:layout_constraintCircleRadius="@dimen/radius2"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleAngle="270" />
+        <Constraint
+            android:id="@+id/center"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="136dp"
+            android:layout_height="136dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="visible"
+            motion:layout_constraintHorizontal_bias="0.5"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent" />
+    </ConstraintSet>
+    <ConstraintSet
+        android:id="@+id/overlayEnd"
+        motion:deriveConstraintsFrom="@+id/overlayStart" >
+        <Constraint
+            android:id="@+id/overlay1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:rotation="45"
+            motion:layout_constraintCircleRadius="@dimen/radius2"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleAngle="45" />
+        <Constraint
+            android:id="@+id/overlay2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:rotation="135"
+            motion:layout_constraintCircleRadius="@dimen/radius2"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleAngle="135" />
+        <Constraint
+            android:id="@+id/overlay3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:rotation="225"
+            motion:layout_constraintCircleRadius="@dimen/radius2"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleAngle="225" />
+        <Constraint
+            android:id="@+id/overlay4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:rotation="315"
+            motion:layout_constraintCircleRadius="@dimen/radius2"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleAngle="315" />
+        <Constraint
+            android:id="@+id/center2"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="57dp"
+            android:layout_height="57dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="visible"
+            motion:layout_constraintHorizontal_bias="0.5"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:rotation="45" />
+    </ConstraintSet>
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:autoTransition="animateToEnd">
+
+        <KeyFrameSet>
+<!--                        <KeyPosition-->
+<!--                            motion:motionTarget="Imag.*"-->
+<!--                            motion:framePosition="50"-->
+<!--                            motion:keyPositionType="pathRelative"-->
+<!--                            motion:percentY="@dimen/extension"-->
+<!--                            motion:percentX="0.5" />-->
+            <KeyPosition
+                motion:motionTarget="@+id/imageView1"
+                motion:framePosition="50"
+                motion:keyPositionType="pathRelative"
+                motion:percentY="@dimen/extension"
+                motion:percentX="0.5" />
+            <KeyPosition
+                motion:motionTarget="@+id/imageView2"
+                motion:framePosition="50"
+                motion:keyPositionType="pathRelative"
+                motion:percentY="@dimen/extension"
+                motion:percentX="0.5" />
+            <KeyPosition
+                motion:motionTarget="@+id/imageView3"
+                motion:framePosition="50"
+                motion:keyPositionType="pathRelative"
+                motion:percentY="@dimen/extension"
+                motion:percentX="0.5" />
+            <KeyPosition
+                motion:motionTarget="@+id/imageView4"
+                motion:framePosition="50"
+                motion:keyPositionType="pathRelative"
+                motion:percentY="@dimen/extension"
+                motion:percentX="0.5" />
+            <KeyPosition
+                motion:motionTarget="@+id/imageView5"
+                motion:framePosition="50"
+                motion:keyPositionType="pathRelative"
+                motion:percentY="@dimen/extension"
+                motion:percentX="0.5" />
+            <KeyPosition
+                motion:motionTarget="@+id/imageView6"
+                motion:framePosition="50"
+                motion:keyPositionType="pathRelative"
+                motion:percentY="@dimen/extension"
+                motion:percentX="0.5" />
+            <KeyPosition
+                motion:motionTarget="@+id/imageView7"
+                motion:framePosition="50"
+                motion:keyPositionType="pathRelative"
+                motion:percentY="@dimen/extension"
+                motion:percentX="0.5" />
+            <KeyPosition
+                motion:motionTarget="@+id/imageView8"
+                motion:framePosition="50"
+                motion:keyPositionType="pathRelative"
+                motion:percentY="@dimen/extension"
+                motion:percentX="0.5" />
+            <KeyAttribute
+                motion:motionTarget="Image1"
+                motion:framePosition="50"
+                android:rotationX="-28"
+                android:rotationY="-35"
+                android:rotation="15" />
+        </KeyFrameSet>
+        <OnClick />
+    </Transition>
+    <Transition
+        motion:constraintSetStart="@+id/end"
+        motion:constraintSetEnd="@+id/overlayStart"
+        motion:autoTransition="jumpToEnd">
+    </Transition>
+
+
+    <Transition
+        motion:constraintSetStart="@+id/overlayStart"
+        motion:constraintSetEnd="@+id/overlayEnd"
+        motion:autoTransition="animateToEnd">
+        <OnClick />
+        <KeyFrameSet>
+            <KeyPosition
+                motion:motionTarget="@+id/overlay1"
+                motion:framePosition="50"
+                motion:keyPositionType="pathRelative"
+                motion:percentY="-0.1"
+                motion:percentX="0.5" />
+            <KeyPosition
+                motion:motionTarget="@+id/overlay2"
+                motion:framePosition="50"
+                motion:keyPositionType="pathRelative"
+                motion:percentY="-0.1"
+                motion:percentX="0.5" />
+            <KeyPosition
+                motion:motionTarget="@+id/overlay3"
+                motion:framePosition="50"
+                motion:keyPositionType="pathRelative"
+                motion:percentY="-0.1"
+                motion:percentX="0.5" />
+            <KeyPosition
+                motion:motionTarget="@+id/overlay4"
+                motion:framePosition="50"
+                motion:keyPositionType="pathRelative"
+                motion:percentY="-0.1"
+                motion:percentX="0.5" />
+        </KeyFrameSet>
+    </Transition>
+    <Transition
+        motion:constraintSetStart="@+id/overlayEnd"
+        motion:constraintSetEnd="@+id/start"
+        motion:autoTransition="jumpToEnd">
+    </Transition>
+</MotionScene>

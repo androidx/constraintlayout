@@ -925,6 +925,7 @@ public class MotionLayout extends ConstraintLayout implements
 
     private ArrayList<MotionHelper> mOnShowHelpers = null;
     private ArrayList<MotionHelper> mOnHideHelpers = null;
+    private ArrayList<MotionHelper> mDecoratorsHelpers = null;
     private ArrayList<TransitionListener> mTransitionListeners = null;
     private int mFrames = 0;
     private long mLastDrawTime = -1;
@@ -2923,6 +2924,11 @@ public class MotionLayout extends ConstraintLayout implements
         if (DEBUG) {
             Log.v(TAG, " dispatchDraw " + getProgress() + Debug.getLocation());
         }
+        if (mDecoratorsHelpers != null) {
+            for (MotionHelper decor : mDecoratorsHelpers) {
+                decor.onPreDraw(canvas);
+            }
+        }
         evaluate(false);
 
         if (DEBUG) {
@@ -2970,6 +2976,11 @@ public class MotionLayout extends ConstraintLayout implements
                 mDevModeDraw = new DevModeDraw();
             }
             mDevModeDraw.draw(canvas, mFrameArrayList, mScene.getDuration(), mDebugPath);
+        }
+        if (mDecoratorsHelpers != null) {
+            for (MotionHelper decor : mDecoratorsHelpers) {
+                decor.onPostDraw(canvas);
+            }
         }
     }
 
@@ -3839,6 +3850,12 @@ public class MotionLayout extends ConstraintLayout implements
                     mOnHideHelpers = new ArrayList<>();
                 }
                 mOnHideHelpers.add(helper);
+            }
+            if (helper.isDecorator()) {
+                if (mDecoratorsHelpers == null) {
+                    mDecoratorsHelpers = new ArrayList<>();
+                }
+                mDecoratorsHelpers.add(helper);
             }
         }
     }

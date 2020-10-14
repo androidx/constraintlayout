@@ -52,7 +52,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 /**
  * The information to transition between multiple ConstraintSets
- * This Class is meant to be used from XML
+ * This Class is meant to be us                             ed from XML
  *
  * @hide
  */

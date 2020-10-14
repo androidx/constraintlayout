@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="100000"
+        motion:autoTransition="animateToEnd"
+        motion:motionInterpolator="linear"
+
+        >
+       <KeyFrameSet>
+
+            <KeyCycle
+                motion:motionTarget="@+id/image"
+                motion:framePosition="0"
+                motion:wavePeriod="0"
+                android:translationY="10dp"
+                >
+                <CustomAttribute
+                    motion:attributeName="imagePanX"
+                    motion:customFloatValue="1"
+                    />
+            </KeyCycle>
+
+            <KeyCycle
+                motion:motionTarget="@+id/image"
+                motion:framePosition="30"
+                motion:wavePeriod="1"
+                android:translationY="10dp"
+                >
+                <CustomAttribute
+                    motion:attributeName="imagePanX"
+                    motion:customFloatValue="1"
+                    />
+            </KeyCycle>
+            <KeyCycle
+                motion:motionTarget="@+id/image"
+                motion:framePosition="100"
+                motion:wavePeriod="1"
+                android:translationY="10dp"
+                >
+                <CustomAttribute
+                    motion:attributeName="imagePanX"
+                    motion:customFloatValue="1"
+                    />
+            </KeyCycle>
+          <KeyAttribute
+              motion:motionTarget="@+id/big_blue"
+              motion:framePosition="2"
+              android:translationX="0dp"/>
+
+           <KeyAttribute
+               motion:motionTarget="@+id/medium_blue"
+               motion:framePosition="2"
+               android:translationX="0dp"/>
+           <KeyAttribute
+               motion:motionTarget="@+id/image"
+               motion:framePosition="3"
+             android:translationX="1dp">
+               <CustomAttribute
+                   motion:attributeName="imageZoom" motion:customFloatValue="2" />
+           </KeyAttribute>
+        </KeyFrameSet>
+    </Transition>
+
+
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint android:id="@+id/big_blue">
+            <Motion motion:transitionEasing="decelerate"/>
+
+            <Transform android:translationX="200dp"/>
+        </Constraint>
+        <Constraint  android:id="@+id/medium_blue">
+            <Motion motion:transitionEasing="decelerate"/>
+            <Transform android:translationX="300dp"/>
+        </Constraint>
+        <Constraint  android:id="@+id/image">
+            <Motion motion:transitionEasing="standard"/>
+            <Transform android:translationX="300dp"/>
+            <CustomAttribute motion:attributeName="imageZoom" motion:customFloatValue="1" />
+        </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint android:id="@+id/big_blue">
+            <Transform android:translationX="0dp"/>
+        </Constraint>
+        <Constraint  android:id="@+id/medium_blue">
+            <Transform android:translationX="0dp"/>
+        </Constraint>
+        <Constraint  android:id="@+id/image">
+            <Transform android:translationX="1dp"/>
+            <CustomAttribute
+                motion:attributeName="imageZoom" motion:customFloatValue="2" />
+        </Constraint>
+    </ConstraintSet>
+
+
+
+</MotionScene>
