@@ -874,6 +874,7 @@ public class MotionLayout extends ConstraintLayout implements
 
     MotionScene mScene;
     Interpolator mInterpolator;
+    Interpolator mProgressInterpolator = null;
     float mLastVelocity = 0;
     private int mBeginState = UNSET;
     int mCurrentState = UNSET;
@@ -1768,7 +1769,8 @@ public class MotionLayout extends ConstraintLayout implements
         mTransitionGoalPosition = position;
         mTransitionDuration = mScene.getDuration() / 1000f;
         setProgress(mTransitionGoalPosition);
-        mInterpolator = mScene.getInterpolator();
+        mInterpolator = null;
+        mProgressInterpolator = mScene.getInterpolator();
         mTransitionInstantly = false;
         mAnimationStartTime = getNanoTime();
         mInTransition = true;
@@ -1991,6 +1993,7 @@ public class MotionLayout extends ConstraintLayout implements
 
         if (mInterpolator instanceof MotionInterpolator) {
             v = ((MotionInterpolator) mInterpolator).getVelocity();
+
         }
 
         MotionController f = mFrameArrayList.get(view);
@@ -2005,6 +2008,7 @@ public class MotionLayout extends ConstraintLayout implements
             returnVelocity[0] *= v;
             returnVelocity[1] *= v;
         }
+
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -3022,11 +3026,12 @@ public class MotionLayout extends ConstraintLayout implements
         mPostInterpolationPosition = position;
         int n = getChildCount();
         long time = getNanoTime();
+        float interPos = mProgressInterpolator == null ? position : mProgressInterpolator.getInterpolation(position);
         for (int i = 0; i < n; i++) {
             final View child = getChildAt(i);
             final MotionController frame = mFrameArrayList.get(child);
             if (frame != null) {
-                frame.interpolate(child, position, time, mKeyCache);
+                frame.interpolate(child, interPos, time, mKeyCache);
             }
         }
         if (mMeasureDuringTransition) {
@@ -3051,7 +3056,8 @@ public class MotionLayout extends ConstraintLayout implements
             float deltaPos = 0f;
             if (!(mInterpolator instanceof MotionInterpolator)) { // if we are not in a drag
                 deltaPos = dir * (currentTime - mTransitionLastTime) * 1E-9f / mTransitionDuration;
-                mLastVelocity = deltaPos;
+//                mLastVelocity = 1/mTransitionDuration;
+//                mLastVelocity = deltaPos;
             }
             float position = mTransitionLastPosition + deltaPos;
 
@@ -3134,11 +3140,16 @@ public class MotionLayout extends ConstraintLayout implements
                 Log.v(TAG, "LAYOUT frame.interpolate at " + position);
             }
             mPostInterpolationPosition = position;
+            float interPos = mProgressInterpolator == null ? position : mProgressInterpolator.getInterpolation(position);
+            if (mProgressInterpolator != null) {
+                mLastVelocity = mProgressInterpolator.getInterpolation(position+dir/mTransitionDuration) ;
+                mLastVelocity -= mProgressInterpolator.getInterpolation(position);
+            }
             for (int i = 0; i < n; i++) {
                 final View child = getChildAt(i);
                 final MotionController frame = mFrameArrayList.get(child);
                 if (frame != null) {
-                    mKeepAnimating |= frame.interpolate(child, position, time, mKeyCache);
+                    mKeepAnimating |= frame.interpolate(child, interPos, time, mKeyCache);
                 }
             }
             if (DEBUG) {
@@ -3539,7 +3550,7 @@ public class MotionLayout extends ConstraintLayout implements
         if (mStateCache != null) {
             mStateCache.apply();
         } else {
-            if (mScene.mCurrentTransition.getAutoTransition() == MotionScene.Transition.AUTO_ANIMATE_TO_END) {
+            if (mScene.mCurrentTransition != null && mScene.mCurrentTransition.getAutoTransition() == MotionScene.Transition.AUTO_ANIMATE_TO_END) {
                 transitionToEnd();
                 setState(MotionLayout.TransitionState.SETUP);
                 setState(MotionLayout.TransitionState.MOVING);

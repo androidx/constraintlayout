@@ -517,8 +517,8 @@ public abstract class KeyCycleOscillator {
         public void setup(float pathLength) {
             mPathLength = pathLength;
             double[][] splineValues = new double[mPosition.length][3];
-            mSplineValueCache = new double[1 + mValues.length];
-            mSplineSlopeCache = new double[1 + mValues.length];
+            mSplineValueCache = new double[2 + mValues.length];
+            mSplineSlopeCache = new double[2 + mValues.length];
             if (mPosition[0] > 0) {
                 mOscillator.addPoint(0, mPeriod[0]);
             }

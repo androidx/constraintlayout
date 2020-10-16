@@ -21,10 +21,12 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.content.res.XmlResourceParser;
 import android.graphics.RectF;
+
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.R;
 import androidx.constraintlayout.widget.StateSet;
 import androidx.constraintlayout.motion.utils.Easing;
+
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
@@ -43,12 +45,15 @@ import android.view.animation.Interpolator;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
+
+import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
 
 /**
  * The information to transition between multiple ConstraintSets
@@ -296,17 +301,12 @@ public class MotionScene {
                     float val = transition.mTouchResponse.dot(dx, dy);
                     if (transition.mTouchResponse.mIsRotateMode) {
                         float startX = mLastTouchDown.getX() - transition.mTouchResponse.mRotateCenterX;
-                        float startY = mLastTouchDown.getY() - transition.mTouchResponse.mRotateCenterY;;
-                        float endX = dx +startX;
+                        float startY = mLastTouchDown.getY() - transition.mTouchResponse.mRotateCenterY;
+                        float endX = dx + startX;
                         float endY = dy + startY;
-                        double endAngle = Math.atan2(endY,endX);
-                        double startAngle = Math.atan2(startX,startY);
-                        val = (float)(endAngle - startAngle)*10;
-
-                    }
-                    if (DEBUG) {
-                        Log.v(TAG, Debug.getLoc() + "  ### " + transition.debugString(mMotionLayout.getContext()) + "  rank = " + val);
-                        Log.v(TAG, Debug.getLoc()+" mTouchResponse " + transition.mTouchResponse);
+                        double endAngle = Math.atan2(endY, endX);
+                        double startAngle = Math.atan2(startX, startY);
+                        val = (float) (endAngle - startAngle) * 10;
                     }
                     if (transition.mConstraintSetEnd == currentState) { // flip because this would be backwards
                         val *= -1;
@@ -375,7 +375,7 @@ public class MotionScene {
             if (transition.mAutoTransition == Transition.AUTO_NONE) {
                 continue;
             }
-            if (mCurrentTransition == transition){
+            if (mCurrentTransition == transition) {
                 continue;
             }
             if (currentState == transition.mConstraintSetStart && (
@@ -429,7 +429,6 @@ public class MotionScene {
         if (mCurrentTransition != null && mCurrentTransition.mTouchResponse != null) {
             mCurrentTransition.mTouchResponse.setRTL(mRtl);
         }
-
     }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -497,6 +496,7 @@ public class MotionScene {
 
         /**
          * Transitions can be given and ID. If unset it returns UNSET (-1)
+         *
          * @return The Id of the Transition set in the MotionScene File or UNSET (-1)
          */
         public int getId() {
@@ -712,7 +712,7 @@ public class MotionScene {
                 }
                 int dest = mTransition.mConstraintSetEnd;
                 int from = mTransition.mConstraintSetStart;
-                if (from == UNSET)  {
+                if (from == UNSET) {
                     return tl.mCurrentState != dest;
                 }
                 return (tl.mCurrentState == from) || (tl.mCurrentState == dest);
@@ -726,7 +726,7 @@ public class MotionScene {
                     return;
                 }
                 if (mTransition.mConstraintSetStart == UNSET) {
-                    int currentState =  tl.getCurrentState();
+                    int currentState = tl.getCurrentState();
                     if (currentState == UNSET) {
                         tl.transitionToState(mTransition.mConstraintSetEnd);
                         return;
@@ -824,7 +824,7 @@ public class MotionScene {
             for (int i = 0; i < N; i++) {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.Transition_constraintSetEnd) {
-                    mConstraintSetEnd = a.getResourceId(attr, mConstraintSetEnd);
+                    mConstraintSetEnd = a.getResourceId(attr, UNSET);
                     String type = context.getResources().getResourceTypeName(mConstraintSetEnd);
                     if ("layout".equals(type)) {
                         ConstraintSet cSet = new ConstraintSet();
@@ -833,8 +833,10 @@ public class MotionScene {
                         if (DEBUG) {
                             Log.v(TAG, " constraint Set end loaded from layout " + Debug.getName(context, mConstraintSetEnd));
                         }
+                    } else if ("xml".equals(type)) {
+                        int id = motionScene.parseInclude(context, mConstraintSetEnd);
+                        mConstraintSetEnd = id;
                     }
-
                 } else if (attr == R.styleable.Transition_constraintSetStart) {
                     mConstraintSetStart = a.getResourceId(attr, mConstraintSetStart);
                     String type = context.getResources().getResourceTypeName(mConstraintSetStart);
@@ -842,6 +844,9 @@ public class MotionScene {
                         ConstraintSet cSet = new ConstraintSet();
                         cSet.load(context, mConstraintSetStart);
                         motionScene.mConstraintSetMap.append(mConstraintSetStart, cSet);
+                    } else if ("xml".equals(type)) {
+                        int id = motionScene.parseInclude(context, mConstraintSetStart);
+                        mConstraintSetStart = id;
                     }
                 } else if (attr == R.styleable.Transition_motionInterpolator) {
                     TypedValue type = a.peekValue(attr);
@@ -972,12 +977,15 @@ public class MotionScene {
                             case "ConstraintSet":
                                 parseConstraintSet(context, parser);
                                 break;
+                            case "Include":
+                                parseInclude(context, parser);
+                                break;
                             case "KeyFrameSet":
                                 KeyFrames keyFrames = new KeyFrames(context, parser);
                                 transition.mKeyFramesList.add(keyFrames);
                                 break;
                             default:
-                                Log.v(TAG, "WARNING UNKNOWN ATTRIBUTE " + tagName);
+                                Log.v(TAG, getLine(context, resourceId, parser) + "WARNING UNKNOWN ATTRIBUTE " + tagName);
                                 break;
                         }
 
@@ -990,8 +998,10 @@ public class MotionScene {
                 }
             }
         } catch (XmlPullParserException e) {
+            Log.v(TAG, getLine(context, resourceId, parser) + " " + e.getMessage());
             e.printStackTrace();
         } catch (IOException e) {
+            Log.v(TAG, getLine(context, resourceId, parser) + " " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -1030,7 +1040,42 @@ public class MotionScene {
         return id;
     }
 
-    private void parseConstraintSet(Context context, XmlPullParser parser) {
+    private void parseInclude(Context context, XmlPullParser mainParser) {
+        TypedArray a = context.obtainStyledAttributes(Xml.asAttributeSet(mainParser), R.styleable.Include);
+        final int N = a.getIndexCount();
+        for (int i = 0; i < N; i++) {
+            int attr = a.getIndex(i);
+            if (attr == R.styleable.Include_constraintSet) {
+                int resourceId = a.getResourceId(attr, UNSET);
+                parseInclude(context, resourceId);
+            }
+        }
+    }
+
+    private int parseInclude(Context context, int resourceId) {
+        Resources res = context.getResources();
+        XmlPullParser includeParser = res.getXml(resourceId);
+        try {
+            for (int eventType = includeParser.getEventType();
+                 eventType != XmlResourceParser.END_DOCUMENT;
+                 eventType = includeParser.next()) {
+                String tagName = includeParser.getName();
+                if (XmlResourceParser.START_TAG == eventType
+                        && "ConstraintSet".equals(tagName)) {
+                    return parseConstraintSet(context, includeParser);
+                }
+            }
+        } catch (XmlPullParserException e) {
+            Log.v(TAG, getLine(context, resourceId, includeParser) + " " + e.getMessage());
+            e.printStackTrace();
+        } catch (IOException e) {
+            Log.v(TAG, getLine(context, resourceId, includeParser) + " " + e.getMessage());
+            e.printStackTrace();
+        }
+        return UNSET;
+    }
+
+    private int parseConstraintSet(Context context, XmlPullParser parser) {
         ConstraintSet set = new ConstraintSet();
         set.setForceId(false);
         int count = parser.getAttributeCount();
@@ -1062,10 +1107,10 @@ public class MotionScene {
             }
             mConstraintSetMap.put(id, set);
         }
+        return id;
     }
 
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-
     }
 
     public ConstraintSet getConstraintSet(Context context, String id) {
@@ -1605,5 +1650,18 @@ public class MotionScene {
      */
     public void disableAutoTransition(boolean disable) {
         mDisableAutoTransition = disable;
+    }
+
+    /**
+     * Construct a user friendly error string
+     *
+     * @param context    the context
+     * @param resourceId the xml being parsed
+     * @param pullParser the XML parser
+     * @return
+     */
+    static String getLine(Context context, int resourceId, XmlPullParser pullParser) {
+        return ".(" + Debug.getName(context, resourceId) + ".xml:" + pullParser.getLineNumber() +
+                ") \"" + pullParser.getName() + "\"";
     }
 }

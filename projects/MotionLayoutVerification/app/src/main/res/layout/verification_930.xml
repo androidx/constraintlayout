@@ -24,8 +24,8 @@
         android:id="@+id/face"
         android:layout_width="400dp"
         android:layout_height="400dp"
-app:roundPercent="1"
-android:background="#B8CFEC"
+        app:roundPercent="1"
+        android:background="#B8CFEC"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -43,8 +43,7 @@ android:background="#B8CFEC"
         android:layout_marginBottom="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/center"
-        />
+        app:layout_constraintBottom_toTopOf="@+id/center" />
 
     <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/sky"
@@ -52,12 +51,10 @@ android:background="#B8CFEC"
         android:layout_height="110dp"
         app:roundPercent="1"
         android:background="#F000"
-
         app:layout_constraintEnd_toEndOf="@id/moon_axis"
         app:layout_constraintStart_toStartOf="@id/moon_axis"
         app:layout_constraintBottom_toBottomOf="@id/moon_axis"
-        app:layout_constraintTop_toTopOf="@id/moon_axis"
-     />
+        app:layout_constraintTop_toTopOf="@id/moon_axis" />
 
     <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/moon_left"
@@ -66,7 +63,7 @@ android:background="#B8CFEC"
         app:roundPercent="1"
         android:src="@drawable/moon"
         android:layout_marginEnd="10dp"
-         app:layout_constraintEnd_toStartOf="@id/moon_axis"
+        app:layout_constraintEnd_toStartOf="@id/moon_axis"
         app:layout_constraintBottom_toBottomOf="@id/moon_axis"
         app:layout_constraintTop_toTopOf="@id/moon_axis"
         android:layout_marginRight="10dp" />
@@ -78,8 +75,8 @@ android:background="#B8CFEC"
         app:roundPercent="1"
         android:src="@drawable/moon"
         android:layout_marginStart="10dp"
-         app:layout_constraintStart_toEndOf="@id/moon_axis"
-         app:layout_constraintBottom_toBottomOf="@id/moon_axis"
+        app:layout_constraintStart_toEndOf="@id/moon_axis"
+        app:layout_constraintBottom_toBottomOf="@id/moon_axis"
         app:layout_constraintTop_toTopOf="@id/moon_axis"
         android:layout_marginLeft="10dp" />
 
@@ -99,13 +96,12 @@ android:background="#B8CFEC"
         android:id="@+id/moon_cover"
         android:layout_width="110dp"
         android:layout_height="60dp"
-         android:background="#B8CFEC"
+        android:background="#B8CFEC"
         app:layout_constraintVertical_bias="0"
         app:layout_constraintBottom_toBottomOf="@id/moon_axis"
         app:layout_constraintEnd_toEndOf="@id/moon_axis"
         app:layout_constraintStart_toStartOf="@id/moon_axis"
-        app:layout_constraintTop_toTopOf="@id/moon_axis"
-        />
+        app:layout_constraintTop_toTopOf="@id/moon_axis" />
 
     <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/moon_coverleft"

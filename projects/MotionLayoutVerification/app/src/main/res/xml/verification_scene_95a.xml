@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ConstraintSet xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/end">
+    <Constraint
+        android:id="@+id/view"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:rotation="45"
+        motion:layout_constraintBottom_toBottomOf="parent"
+        motion:layout_constraintEnd_toEndOf="parent"
+        motion:layout_constraintStart_toStartOf="parent" />
+</ConstraintSet>

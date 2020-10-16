@@ -90,7 +90,7 @@
         motion:constraintSetEnd="@+id/up"
         motion:constraintSetStart="@+id/start"
         motion:duration="4000"
-        motion:motionInterpolator="linear"  >
+        motion:motionInterpolator="bounce"  >
         <OnClick/>
 <!--        <OnSwipe motion:dragDirection="dragClockwise"-->
 <!--            motion:touchAnchorId="@id/earth"-->

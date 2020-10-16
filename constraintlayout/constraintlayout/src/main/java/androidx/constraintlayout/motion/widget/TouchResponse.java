@@ -219,8 +219,12 @@ class TouchResponse {
                 } else if (mTouchAnchorId != MotionScene.UNSET) {
                     MotionController mc = mMotionLayout.getMotionController(mTouchAnchorId);
                     View v = mMotionLayout.findViewById(mc.getAnimateRelativeTo());
-                    rcx = (v.getLeft() + v.getRight()) / 2.0f;
-                    rcy = (v.getTop() + v.getBottom()) / 2.0f;
+                    if (v == null) {
+                        Log.e(TAG, "could not find view to animate to");
+                    } else {
+                        rcx = (v.getLeft() + v.getRight()) / 2.0f;
+                        rcy = (v.getTop() + v.getBottom()) / 2.0f;
+                    }
                 }
                 float relativePosX = event.getRawX() - rcx;
                 float relativePosY = event.getRawY() - rcy;
@@ -254,11 +258,11 @@ class TouchResponse {
                         mMotionLayout.setProgress(pos);
 
 
-//                        velocityTracker.computeCurrentVelocity(1000);
-//                        float tvx = velocityTracker.getXVelocity();
-//                        float tvy = velocityTracker.getYVelocity();
-//                        float angularVelocity = (float) (Math.hypot(tvy, tvx) * Math.sin(Math.atan2(tvy, tvx) - angle1) / Math.hypot(relativePosX, relativePosY)); //v * sin (angle) / r
-//                        mMotionLayout.mLastVelocity = angularVelocity;
+                        velocityTracker.computeCurrentVelocity(1000);
+                        float tvx = velocityTracker.getXVelocity();
+                        float tvy = velocityTracker.getYVelocity();
+                        float angularVelocity = (float) (Math.hypot(tvy, tvx) * Math.sin(Math.atan2(tvy, tvx) - angle1) / Math.hypot(relativePosX, relativePosY)); //v * sin (angle) / r
+                        mMotionLayout.mLastVelocity = (float) Math.toDegrees(angularVelocity);
                     } else {
                         mMotionLayout.mLastVelocity = 0;
                     }

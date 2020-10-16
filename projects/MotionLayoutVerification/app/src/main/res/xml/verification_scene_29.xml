@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetStart="@+id/start"
+        motion:constraintSetEnd="@+id/end"
+        motion:duration="10000">
+        <OnClick motion:targetId="@id/go" />
+        <OnSwipe
+            motion:dragDirection="dragDown"
+            motion:touchAnchorId="@+id/button1"
+            motion:onTouchUp="autoComplete"
+            motion:touchAnchorSide="top" />
+
+
+        <KeyFrameSet>
+            <KeyCycle
+                motion:framePosition="0"
+                motion:motionTarget="tail"
+                motion:wavePeriod="0"
+                motion:waveOffset="0"
+                motion:waveShape="sin"
+                android:rotation="0" />
+
+            <KeyCycle
+                motion:framePosition="20"
+                motion:motionTarget="tail"
+                motion:wavePeriod="0"
+                motion:waveOffset="0"
+                motion:waveShape="sin"
+                android:rotation="0" />
+
+            <KeyCycle
+                motion:framePosition="50"
+                motion:motionTarget="tail"
+                motion:wavePeriod="5"
+                motion:waveOffset="0"
+                motion:waveShape="sin"
+                android:rotation="30" />
+
+            <KeyCycle
+                motion:framePosition="70"
+                motion:motionTarget="tail"
+                motion:wavePeriod="0"
+                motion:waveOffset="0"
+                motion:waveShape="sin"
+                android:rotation="0" />
+
+            <KeyCycle
+                motion:framePosition="100"
+                motion:motionTarget="tail"
+                motion:wavePeriod="0"
+                motion:waveOffset="0"
+                motion:waveShape="sin"
+                android:rotation="0" />
+
+            <KeyCycle
+                motion:framePosition="0"
+                motion:motionTarget="tail"
+                motion:wavePeriod="1"
+                motion:waveOffset="0dp"
+                motion:waveShape="sin"
+                android:translationX="0dp" />
+
+            <KeyCycle
+                motion:framePosition="50"
+                motion:motionTarget="tail"
+                motion:wavePeriod="5"
+                motion:waveOffset="0dp"
+                motion:waveShape="sin"
+                android:translationX="10dp" />
+
+            <KeyCycle
+                motion:framePosition="100"
+                motion:motionTarget="tail"
+                motion:wavePeriod="0"
+                motion:waveOffset="0dp"
+                motion:waveShape="sin"
+                android:translationX="0dp" />
+
+        </KeyFrameSet>
+    </Transition>
+
+    <Transition
+        motion:constraintSetStart="@+id/end"
+        motion:constraintSetEnd="@+id/end2"
+        motion:duration="10000">
+
+    <OnClick motion:targetId="@id/go" />
+    <OnSwipe
+        motion:dragDirection="dragClockwise"
+        motion:touchAnchorId="@+id/button4"
+        motion:rotationCenterId="@+id/button1"
+        motion:onTouchUp="autoComplete"
+        />
+        <KeyFrameSet>
+            <KeyAttribute motion:motionTarget="tail" motion:framePosition="50"
+                android:rotation="45"/>
+        </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+
+        <Constraint
+            android:id="@+id/button1"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="8dp"
+            motion:layout_constraintHorizontal_bias=".4"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="32dp"/>
+
+        <Constraint
+            android:id="@+id/button2"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="8dp"
+            motion:layout_constraintHorizontal_bias=".6"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="32dp"/>
+
+        <Constraint
+            android:id="@+id/button3"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="8dp"
+            motion:layout_constraintHorizontal_bias=".8"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="32dp"/>
+
+        <Constraint
+            android:id="@+id/button4"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="8dp"
+            motion:layout_constraintHorizontal_bias="1.0"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="32dp"/>
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+
+        <Constraint
+            android:id="@+id/button1"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="8dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"/>
+
+        <Constraint
+            android:id="@+id/button2"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="8dp"
+            motion:layout_constraintCircle="@+id/button1"
+            motion:animateRelativeTo="@+id/button1"
+            motion:layout_constraintCircleAngle="90"
+            motion:layout_constraintCircleRadius="72dp"
+            />
+
+        <Constraint
+            android:id="@+id/button3"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="8dp"
+            motion:animateRelativeTo="@+id/button1"
+            motion:layout_constraintCircle="@+id/button1"
+            motion:layout_constraintCircleAngle="90"
+            motion:layout_constraintCircleRadius="144dp"/>
+
+        <Constraint
+            android:id="@+id/button4"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="8dp"
+            motion:animateRelativeTo="@+id/button1"
+            motion:layout_constraintCircle="@+id/button1"
+            motion:layout_constraintCircleAngle="90"
+            motion:layout_constraintCircleRadius="216dp"/>
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end2">
+
+        <Constraint
+            android:id="@+id/button1"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="8dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"/>
+
+        <Constraint
+            android:id="@+id/button2"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="8dp"
+            motion:layout_constraintCircle="@+id/button1"
+            motion:layout_constraintCircleAngle="180"
+            motion:layout_constraintCircleRadius="72dp"
+            />
+
+        <Constraint
+            android:id="@+id/button3"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="8dp"
+            motion:layout_constraintCircle="@+id/button1"
+            motion:layout_constraintCircleAngle="180"
+            motion:layout_constraintCircleRadius="144dp"/>
+
+        <Constraint
+            android:id="@+id/button4"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="8dp"
+            motion:layout_constraintCircle="@+id/button1"
+            motion:layout_constraintCircleAngle="180"
+            motion:layout_constraintCircleRadius="216dp"/>
+
+    </ConstraintSet>
+</MotionScene>

@@ -1338,5 +1338,8 @@
          <!-- Trigger if the motionTarget collides with the other motionTarget-->
          <attr name="motion_triggerOnCollision" format="reference" />
     </declare-styleable>
+    <declare-styleable name="Include">
+      <attr name="constraintSet"/>
+    </declare-styleable>
 
 </resources>

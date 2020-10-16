@@ -3,19 +3,7 @@
     xmlns:motion="http://schemas.android.com/apk/res-auto"
     motion:defaultDuration="2000">
 
-
-    <ConstraintSet
-        android:id="@+id/end" >
-
-
-        <Constraint
-            android:id="@+id/view"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintEnd_toEndOf="parent"
-            motion:layout_constraintStart_toStartOf="parent" />
-    </ConstraintSet>
+    <Include motion:constraintSet="@xml/verification_scene_95a" />
 
     <ConstraintSet android:id="@+id/start">
 
@@ -23,23 +11,20 @@
             android:id="@+id/view"
             android:layout_width="90dp"
             android:layout_height="90dp"
-            motion:transitionPathRotate="0"
+
+            android:rotation="0"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintStart_toStartOf="parent" />
     </ConstraintSet>
 
-
-
     <Transition
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@+id/start"
-        motion:duration="3000"
-        motion:autoTransition="animateToStart"
-        motion:motionInterpolator="linear"
-        >
-      <OnSwipe motion:touchAnchorId="@id/view" motion:dragDirection="dragDown"/>
-
+        motion:duration="9000"
+        motion:motionInterpolator="cubic(1,0,0,1)"
+        motion:autoTransition="animateToStart">
+        <OnClick />
         <KeyFrameSet>
             <KeyCycle
                 motion:motionTarget="@+id/view"

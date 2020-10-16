@@ -129,7 +129,6 @@ class MotionPaths implements Comparable<MotionPaths> {
      * @param endTimePoint
      */
     public MotionPaths(int parentWidth, int parentHeight, KeyPosition c, MotionPaths startTimePoint, MotionPaths endTimePoint) {
-        Log.v(TAG, Debug.getLoc()+ " " +startTimePoint+" ");
         if (startTimePoint.mAnimateRelativeTo != UNSET) {
             initPolar(parentWidth, parentHeight, c, startTimePoint, endTimePoint);
             return;
@@ -826,6 +825,7 @@ class MotionPaths implements Comparable<MotionPaths> {
                 Log.v(TAG, "setDpDt " + mod);
             }
         }
+
         float deltaX = d_x - deltaScaleX * d_width / 2;
         float deltaY = d_y - deltaScaleY * d_height / 2;
         float deltaWidth = d_width * (1 + deltaScaleX);

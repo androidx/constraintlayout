@@ -1210,7 +1210,7 @@ public class MotionController {
      */
     void getDpDt(float position, float locationX, float locationY, float[] mAnchorDpDt) {
         if (DEBUG) {
-            Log.v(TAG, " position= " + position + " location= " + locationX + " , " + locationY);
+            Log.v(TAG, Debug.getLoc()+ " "+ Debug.getName(mView)+" position= " + position + " location= " + locationX + " , " + locationY);
         }
         position = getAdjustedPosition(position, mVelocity);
 
@@ -1299,7 +1299,6 @@ public class MotionController {
                 mInterpolateVelocity[i] *= v;
             }
             mStartMotionPath.setDpDt(locationX, locationY, mAnchorDpDt, mInterpolateVariables, mInterpolateVelocity, mInterpolateData);
-
             vmat.applyTransform(locationX, locationY, width, height, mAnchorDpDt);
             return;
         }
