@@ -4088,18 +4088,6 @@ public class ConstraintSet {
             case ORIENTATION:
                 c.layout.orientation = value;
                 break;
-            case START_TO_END:
-                c.layout.startToEnd = value;
-                break;
-            case START_TO_START:
-                c.layout.startToStart = value;
-                break;
-            case END_TO_START:
-                c.layout.endToStart = value;
-                break;
-            case END_TO_END:
-                c.layout.endToEnd = value;
-                break;
             case CIRCLE:
                 c.layout.circleConstraint = value;
                 break;
