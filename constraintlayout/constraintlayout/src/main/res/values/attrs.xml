@@ -819,6 +819,184 @@
         <attr name="quantizeMotionInterpolator" />
     </declare-styleable>
 
+<!--    This is used in constraintset to allow a more compact expression of changes to the original-->
+<!--    Only changes need be defined. It does not support layout_constraint*_to* attributes  -->
+    <declare-styleable name="ConstraintOverride">
+        <attr name="android:orientation" />
+        <attr name="android:id" />
+
+        <!-- Controls the initial visibility of the view.  -->
+        <attr name="android:visibility" />
+        <attr name="visibilityMode"/>
+
+        <!-- alpha property of the view, as a value between 0 (completely transparent) and 1
+             (completely opaque). -->
+        <attr name="android:alpha" />
+
+        <!-- base z depth of the view. -->
+        <attr name="android:elevation" />
+
+        <!-- rotation of the view, in degrees. -->
+        <attr name="android:rotation" />
+
+        <!-- rotation of the view around the x axis, in degrees. -->
+        <attr name="android:rotationX" />
+
+        <!-- rotation of the view around the y axis, in degrees. -->
+        <attr name="android:rotationY" />
+
+        <!-- scale of the view in the x direction. -->
+        <attr name="android:scaleX" />
+
+        <!-- scale of the view in the y direction. -->
+        <attr name="android:scaleY" />
+        <attr name="pivotAnchor" />
+
+        <attr name="android:transformPivotX" />
+        <attr name="android:transformPivotY" />
+        <attr name="transformPivotTarget" />
+
+        <!-- translation in x of the view. This value is added post-layout to the left
+             property of the view, which is set by its layout. -->
+        <attr name="android:translationX" />
+        <!-- translation in y of the view. This value is added post-layout to the top
+             property of the view, which is set by its layout. -->
+        <attr name="android:translationY" />
+        <!-- translation in z of the view. This value is added to its elevation. -->
+        <attr name="android:translationZ" />
+        <!-- Specifies the basic width of the view.  This is a required attribute
+             for any view inside of a containing layout manager.  Its value may
+             be a dimension (such as "12dip") for a constant width or one of
+             the special constants. -->
+        <attr name="android:layout_width" />
+        <!-- Specifies the basic height of the view.  This is a required attribute
+             for any view inside of a containing layout manager.  Its value may
+             be a dimension (such as "12dip") for a constant height or one of
+             the special constants. -->
+        <attr name="android:layout_height" />
+        <!--  Specifies extra space on the start side of this view.
+              This space is outside this view's bounds.
+              Margin values should be positive.-->
+        <attr name="android:layout_marginStart" />
+        <!--  Specifies extra space on the bottom side of this view.
+              This space is outside this view's bounds.
+              Margin values should be positive.-->
+        <attr name="android:layout_marginBottom" />
+        <!--  Specifies extra space on the top side of this view.
+              This space is outside this view's bounds.
+              Margin values should be positive.-->
+        <attr name="android:layout_marginTop" />
+        <!--  Specifies extra space on the end side of this view.
+              This space is outside this view's bounds.
+              Margin values should be positive.-->
+        <attr name="android:layout_marginEnd" />
+        <!--  Specifies extra space on the left side of this view.
+              This space is outside this view's bounds.
+              Margin values should be positive. -->
+        <attr name="android:layout_marginLeft" />
+        <!--  Specifies extra space on the right side of this view.
+              This space is outside this view's bounds.
+              Margin values should be positive.-->
+        <attr name="android:layout_marginRight" />
+
+        <attr name="layout_constraintCircleRadius" />
+        <attr name="layout_constraintCircleAngle" />
+
+<!--        <attr name="layout_constraintGuide_begin" />-->
+<!--        <attr name="layout_constraintGuide_end" />-->
+<!--        <attr name="layout_constraintGuide_percent" />-->
+<!--        <attr name="layout_constraintLeft_toLeftOf" />-->
+<!--        <attr name="layout_constraintLeft_toRightOf" />-->
+<!--        <attr name="layout_constraintRight_toLeftOf" />-->
+<!--        <attr name="layout_constraintRight_toRightOf" />-->
+<!--        <attr name="layout_constraintTop_toTopOf" />-->
+<!--        <attr name="layout_constraintTop_toBottomOf" />-->
+<!--        <attr name="layout_constraintBottom_toTopOf" />-->
+<!--        <attr name="layout_constraintBottom_toBottomOf" />-->
+<!--        <attr name="layout_constraintBaseline_toBaselineOf" />-->
+<!--        <attr name="layout_constraintStart_toEndOf" />-->
+<!--        <attr name="layout_constraintStart_toStartOf" />-->
+<!--        <attr name="layout_constraintEnd_toStartOf" />-->
+<!--        <attr name="layout_constraintEnd_toEndOf" />-->
+        <attr name="layout_goneMarginLeft" />
+        <attr name="layout_goneMarginTop" />
+        <attr name="layout_goneMarginRight" />
+        <attr name="layout_goneMarginBottom" />
+        <attr name="layout_goneMarginStart" />
+        <attr name="layout_goneMarginEnd" />
+        <attr name="layout_constrainedWidth" />
+        <attr name="layout_constrainedHeight" />
+        <attr name="layout_constraintHorizontal_bias" />
+        <attr name="layout_constraintVertical_bias" />
+        <attr name="layout_constraintWidth_default" />
+        <attr name="layout_constraintHeight_default" />
+        <attr name="layout_constraintWidth_min" />
+        <attr name="layout_constraintWidth_max" />
+        <attr name="layout_constraintWidth_percent" />
+        <attr name="layout_constraintHeight_min" />
+        <attr name="layout_constraintHeight_max" />
+        <attr name="layout_constraintHeight_percent" />
+        <attr name="layout_constraintLeft_creator" />
+        <attr name="layout_constraintTop_creator" />
+        <attr name="layout_constraintRight_creator" />
+        <attr name="layout_constraintBottom_creator" />
+        <attr name="layout_constraintBaseline_creator" />
+        <attr name="layout_constraintDimensionRatio" />
+        <attr name="layout_constraintHorizontal_weight" />
+        <attr name="layout_constraintVertical_weight" />
+        <attr name="layout_constraintHorizontal_chainStyle" />
+        <attr name="layout_constraintVertical_chainStyle" />
+        <attr name="layout_editor_absoluteX" />
+        <attr name="layout_editor_absoluteY" />
+
+        <attr name="barrierDirection" />
+        <attr name="barrierMargin" />
+        <attr name="constraint_referenced_ids" />
+        <attr name="android:maxHeight" />
+        <attr name="android:maxWidth" />
+        <attr name="android:minHeight" />
+        <attr name="android:minWidth" />
+        <attr name="barrierAllowsGoneWidgets" />
+        <attr name="chainUseRtl" />
+
+        <attr name="flow_horizontalStyle" />
+        <attr name="flow_verticalStyle" />
+        <attr name="flow_verticalAlign" />
+        <attr name="flow_horizontalAlign" />
+        <attr name="flow_verticalBias" />
+        <attr name="flow_horizontalBias" />
+        <attr name="flow_wrapMode" />
+        <attr name="flow_maxElementsWrap" />
+        <attr name="flow_horizontalGap" />
+        <attr name="flow_verticalGap" />
+        <!--        <attr name="flow_horizontalSeparator" />-->
+        <!--        <attr name="flow_verticalSeparator" />-->
+
+        <attr name="flow_firstHorizontalStyle" />
+        <attr name="flow_firstVerticalStyle" />
+        <attr name="flow_firstHorizontalBias" />
+        <attr name="flow_firstVerticalBias" />
+
+        <attr name="flow_lastHorizontalStyle" />
+        <attr name="flow_lastVerticalStyle" />
+        <attr name="flow_lastHorizontalBias" />
+        <attr name="flow_lastVerticalBias" />
+
+        <attr name="animateRelativeTo" />
+        <attr name="animateCircleAngleTo" />
+        <attr name="transitionEasing" />
+        <attr name="pathMotionArc" />
+        <attr name="polarRelativeTo" />
+        <attr name="transitionPathRotate" />
+        <attr name="drawPath" />
+        <attr name="motionProgress" />
+        <attr name="layout_constraintTag" />
+        <attr name="motionStagger" />
+        <attr name="quantizeMotionSteps" />
+        <attr name="quantizeMotionPhase" />
+        <attr name="quantizeMotionInterpolator" />
+    </declare-styleable>
+
     <!-- frame position is an integer from 0 to 100 -->
     <attr name="framePosition" format="integer" />
 

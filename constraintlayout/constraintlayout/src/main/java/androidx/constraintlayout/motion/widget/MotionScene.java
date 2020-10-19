@@ -1091,6 +1091,7 @@ public class MotionScene {
                 case "id":
                     id = getId(context, value);
                     mConstraintSetIdMap.put(stripID(value), id);
+                    set.mIdString = Debug.getName(context, id);
                     break;
                 case "deriveConstraintsFrom":
                     derivedId = getId(context, value);
