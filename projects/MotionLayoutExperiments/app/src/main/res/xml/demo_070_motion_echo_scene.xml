@@ -4,8 +4,7 @@
     motion:defaultDuration="2000">
 
 
-    <ConstraintSet
-        android:id="@+id/end" >
+    <ConstraintSet android:id="@+id/end">
 
 
         <Constraint
@@ -13,8 +12,7 @@
             android:layout_width="90dp"
             android:layout_height="90dp"
             motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintEnd_toEndOf="parent"
-       />
+            motion:layout_constraintEnd_toEndOf="parent" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/start">
@@ -29,24 +27,23 @@
             motion:layout_constraintStart_toStartOf="parent" />
     </ConstraintSet>
 
-
-
     <Transition
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@+id/start"
         motion:duration="3000"
         motion:autoTransition="animateToStart"
-        motion:pathMotionArc="startVertical"
-        motion:motionInterpolator="linear" >
+        motion:motionInterpolator="linear">
 
-<OnSwipe motion:dragDirection="dragDown" motion:touchAnchorId="@id/view"/>
+        <OnSwipe
+            motion:dragDirection="dragDown"
+            motion:touchAnchorId="@id/view" />
         <KeyFrameSet>
             <KeyPosition
                 motion:motionTarget="@id/view"
                 motion:framePosition="50"
                 motion:percentX="0.5"
                 motion:pathMotionArc="flip"
-                motion:percentY="0.5" />
+                motion:percentY="0.3" />
             <KeyCycle
                 motion:motionTarget="@+id/view"
                 motion:framePosition="0"

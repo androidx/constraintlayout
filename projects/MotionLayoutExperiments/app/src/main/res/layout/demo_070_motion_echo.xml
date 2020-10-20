@@ -32,7 +32,7 @@
         app:layout_constraintStart_toStartOf="parent"
         />
 
-<androidx.constraintlayout.motion.helper.widget.MotionBlur
+<android.support.motionlayout.experiments.MotionBlur
     android:id="@+id/help"
     android:layout_width="90dp"
     android:layout_height="90dp"
