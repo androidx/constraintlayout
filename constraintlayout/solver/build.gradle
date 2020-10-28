@@ -22,7 +22,7 @@ test {
     }
 }
 
-archivesBaseName = 'constraintlayout-solver'
+archivesBaseName = 'constraintlayout-core'
 
 project.ext.pomName = 'Android ConstraintLayout Solver'
 project.ext.pomDesc = 'Solver for ConstraintLayout'

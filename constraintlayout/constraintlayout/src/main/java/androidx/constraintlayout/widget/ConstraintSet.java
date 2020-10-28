@@ -29,8 +29,9 @@ import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams;
 import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.MotionScene;
 import androidx.constraintlayout.motion.utils.Easing;
-import androidx.constraintlayout.solver.widgets.ConstraintWidget;
-import androidx.constraintlayout.solver.widgets.HelperWidget;
+
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
+import androidx.constraintlayout.core.widgets.HelperWidget;
 
 import android.util.AttributeSet;
 import android.util.Log;

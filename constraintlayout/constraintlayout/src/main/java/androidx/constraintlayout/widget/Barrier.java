@@ -19,9 +19,9 @@ package androidx.constraintlayout.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
-import androidx.constraintlayout.solver.widgets.ConstraintWidget;
-import androidx.constraintlayout.solver.widgets.ConstraintWidgetContainer;
-import androidx.constraintlayout.solver.widgets.HelperWidget;
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
+import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
+import androidx.constraintlayout.core.widgets.HelperWidget;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.View;
@@ -83,22 +83,22 @@ public class Barrier extends ConstraintHelper {
     /**
      * Left direction constant
      */
-    public static final int LEFT = androidx.constraintlayout.solver.widgets.Barrier.LEFT;
+    public static final int LEFT = androidx.constraintlayout.core.widgets.Barrier.LEFT;
 
     /**
      * Top direction constant
      */
-    public static final int TOP = androidx.constraintlayout.solver.widgets.Barrier.TOP;
+    public static final int TOP = androidx.constraintlayout.core.widgets.Barrier.TOP;
 
     /**
      * Right direction constant
      */
-    public static final int RIGHT = androidx.constraintlayout.solver.widgets.Barrier.RIGHT;
+    public static final int RIGHT = androidx.constraintlayout.core.widgets.Barrier.RIGHT;
 
     /**
      * Bottom direction constant
      */
-    public static final int BOTTOM = androidx.constraintlayout.solver.widgets.Barrier.BOTTOM;
+    public static final int BOTTOM = androidx.constraintlayout.core.widgets.Barrier.BOTTOM;
 
     /**
      * Start direction constant
@@ -112,7 +112,7 @@ public class Barrier extends ConstraintHelper {
 
     private int mIndicatedType;
     private int mResolvedType;
-    private androidx.constraintlayout.solver.widgets.Barrier mBarrier;
+    private androidx.constraintlayout.core.widgets.Barrier mBarrier;
 
     public Barrier(Context context) {
         super(context);
@@ -173,8 +173,8 @@ public class Barrier extends ConstraintHelper {
                 }
             }
         }
-        if (widget instanceof androidx.constraintlayout.solver.widgets.Barrier) {
-            androidx.constraintlayout.solver.widgets.Barrier barrier = (androidx.constraintlayout.solver.widgets.Barrier) widget;
+        if (widget instanceof androidx.constraintlayout.core.widgets.Barrier) {
+            androidx.constraintlayout.core.widgets.Barrier barrier = (androidx.constraintlayout.core.widgets.Barrier) widget;
             barrier.setBarrierType(mResolvedType);
         }
     }
@@ -191,7 +191,7 @@ public class Barrier extends ConstraintHelper {
     @Override
     protected void init(AttributeSet attrs) {
         super.init(attrs);
-        mBarrier = new androidx.constraintlayout.solver.widgets.Barrier();
+        mBarrier = new androidx.constraintlayout.core.widgets.Barrier();
         if (attrs != null) {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ConstraintLayout_Layout);
             final int N = a.getIndexCount();
@@ -252,8 +252,8 @@ public class Barrier extends ConstraintHelper {
     @Override
     public void loadParameters(ConstraintSet.Constraint constraint, HelperWidget child, ConstraintLayout.LayoutParams layoutParams, SparseArray<ConstraintWidget> mapIdToWidget) {
         super.loadParameters(constraint, child, layoutParams, mapIdToWidget);
-        if (child instanceof androidx.constraintlayout.solver.widgets.Barrier) {
-            androidx.constraintlayout.solver.widgets.Barrier barrier = (androidx.constraintlayout.solver.widgets.Barrier) child;
+        if (child instanceof androidx.constraintlayout.core.widgets.Barrier) {
+            androidx.constraintlayout.core.widgets.Barrier barrier = (androidx.constraintlayout.core.widgets.Barrier) child;
             ConstraintWidgetContainer container = (ConstraintWidgetContainer) child.getParent();
             boolean isRtl = container.isRtl();
             updateType(barrier, constraint.layout.mBarrierDirection, isRtl);

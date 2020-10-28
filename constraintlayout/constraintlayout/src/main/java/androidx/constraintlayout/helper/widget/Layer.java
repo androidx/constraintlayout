@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import androidx.constraintlayout.widget.*;
-import androidx.constraintlayout.solver.widgets.ConstraintWidget;
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import android.view.ViewParent;
 
 /**
