@@ -64,6 +64,8 @@ public class Direct {
             child.resetFinalResolution();
         }
 
+        boolean isRtl = layout.isRtl();
+
         // First, let's solve the horizontal dependencies, as it's a lot more common to have
         // a container with a fixed horizontal dimension (e.g. match_parent) than the opposite.
 
@@ -106,14 +108,14 @@ public class Direct {
                 if (child instanceof Guideline) {
                     Guideline guideline = (Guideline) child;
                     if (guideline.getOrientation() == Guideline.VERTICAL) {
-                        horizontalSolvingPass(guideline, measurer);
+                        horizontalSolvingPass(guideline, measurer, isRtl);
                     }
                 }
             }
         }
 
         // Now let's resolve what we can in the dependencies of the container
-        horizontalSolvingPass(layout, measurer);
+        horizontalSolvingPass(layout, measurer, isRtl);
 
         // Finally, let's go through barriers, as they depends on widgets that may have been solved.
         if (hasBarrier) {
@@ -122,7 +124,7 @@ public class Direct {
                 if (child instanceof Barrier) {
                     Barrier barrier = (Barrier) child;
                     if (barrier.getOrientation() == HORIZONTAL) {
-                        solveBarrier(barrier, measurer, HORIZONTAL);
+                        solveBarrier(barrier, measurer, HORIZONTAL, isRtl);
                     }
                 }
             }
@@ -182,7 +184,7 @@ public class Direct {
                 if (child instanceof Barrier) {
                     Barrier barrier = (Barrier) child;
                     if (barrier.getOrientation() == ConstraintWidget.VERTICAL) {
-                        solveBarrier(barrier, measurer, VERTICAL);
+                        solveBarrier(barrier, measurer, VERTICAL, isRtl);
                     }
                 }
             }
@@ -192,8 +194,8 @@ public class Direct {
         for (int i = 0; i < count; i++) {
             ConstraintWidget child = children.get(i);
             if (child.isMeasureRequested() && canMeasure(child)) {
-                ConstraintWidgetContainer.measure(child, measurer, measure, false);
-                horizontalSolvingPass(child, measurer);
+                ConstraintWidgetContainer.measure(child, measurer, measure, BasicMeasure.Measure.SELF_DIMENSIONS);
+                horizontalSolvingPass(child, measurer, isRtl);
                 verticalSolvingPass(child, measurer);
             }
         }
@@ -201,14 +203,14 @@ public class Direct {
 
     /**
      * Ask the barrier if it's resolved, and if so do a solving pass
-     *
-     * @param barrier
+     *  @param barrier
      * @param measurer
+     * @param isRtl
      */
-    private static void solveBarrier(Barrier barrier, BasicMeasure.Measurer measurer, int orientation) {
+    private static void solveBarrier(Barrier barrier, BasicMeasure.Measurer measurer, int orientation, boolean isRtl) {
         if (barrier.allSolved()) {
             if (orientation == HORIZONTAL) {
-                horizontalSolvingPass(barrier, measurer);
+                horizontalSolvingPass(barrier, measurer, isRtl);
             } else {
                 verticalSolvingPass(barrier, measurer);
             }
@@ -218,18 +220,18 @@ public class Direct {
     /**
      * Does an horizontal solving pass for the given widget. This will walk through the widget's
      * horizontal dependencies and if they can be resolved directly, do so.
-     *
-     * @param layout the widget we want to solve the dependencies
+     *  @param layout the widget we want to solve the dependencies
      * @param measurer the measurer object to measure the widgets.
+     * @param isRtl
      */
-    private static void horizontalSolvingPass(ConstraintWidget layout, BasicMeasure.Measurer measurer) {
+    private static void horizontalSolvingPass(ConstraintWidget layout, BasicMeasure.Measurer measurer, boolean isRtl) {
         if (DEBUG) {
             System.out.println("HORIZONTAL SOLVING PASS ON " + layout.getDebugName());
         }
 
         if (!(layout instanceof ConstraintWidgetContainer) && layout.isMeasureRequested() && canMeasure(layout)) {
             BasicMeasure.Measure measure = new BasicMeasure.Measure();
-            ConstraintWidgetContainer.measure(layout, measurer, measure, false);
+            ConstraintWidgetContainer.measure(layout, measurer, measure, BasicMeasure.Measure.SELF_DIMENSIONS);
         }
 
         ConstraintAnchor left = layout.getAnchor(ConstraintAnchor.Type.LEFT);
@@ -245,7 +247,7 @@ public class Direct {
                 boolean canMeasure = canMeasure(widget);
                 if (widget.isMeasureRequested() && canMeasure) {
                     BasicMeasure.Measure measure = new BasicMeasure.Measure();
-                    ConstraintWidgetContainer.measure(widget, measurer, measure, false);
+                    ConstraintWidgetContainer.measure(widget, measurer, measure, BasicMeasure.Measure.SELF_DIMENSIONS);
                 }
 
                 if (widget.getHorizontalDimensionBehaviour() != ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
@@ -261,26 +263,27 @@ public class Direct {
                         x1 = l + widget.mLeft.getMargin();
                         x2 = x1 + widget.getWidth();
                         widget.setFinalHorizontal(x1, x2);
-                        horizontalSolvingPass(widget, measurer);
+                        horizontalSolvingPass(widget, measurer, isRtl);
                     } else if (first == widget.mRight && widget.mLeft.mTarget == null) {
                         x2 = l - widget.mRight.getMargin();
                         x1 = x2 - widget.getWidth();
                         widget.setFinalHorizontal(x1, x2);
-                        horizontalSolvingPass(widget, measurer);
+                        horizontalSolvingPass(widget, measurer, isRtl);
                     } else if (first == widget.mLeft && widget.mRight.mTarget != null
                             && widget.mRight.mTarget.hasFinalValue() && !widget.isInHorizontalChain()) {
-                        solveHorizontalCenterConstraints(measurer, widget);
+                        solveHorizontalCenterConstraints(measurer, widget, isRtl);
                     } else if (APPLY_MATCH_PARENT && widget.getHorizontalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
                         widget.setFinalHorizontal(0, widget.getWidth());
-                        horizontalSolvingPass(widget, measurer);
+                        horizontalSolvingPass(widget, measurer, isRtl);
                     }
                 } else if (widget.getHorizontalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+                        && widget.mMatchConstraintMaxWidth >= 0 && widget.mMatchConstraintMinWidth >= 0
                         && (widget.getVisibility() == ConstraintWidget.GONE || ((widget.mMatchConstraintDefaultWidth == ConstraintWidget.MATCH_CONSTRAINT_SPREAD) && widget.getDimensionRatio() == 0))
                         && !widget.isInHorizontalChain() && !widget.isInVirtualLayout()) {
                     boolean bothConnected = (first == widget.mLeft && widget.mRight.mTarget != null && widget.mRight.mTarget.hasFinalValue())
                             || (first == widget.mRight && widget.mLeft.mTarget != null && widget.mLeft.mTarget.hasFinalValue());
                     if (bothConnected && !widget.isInHorizontalChain()) {
-                        solveHorizontalMatchConstraint(layout, measurer, widget);
+                        solveHorizontalMatchConstraint(layout, measurer, widget, isRtl);
                     }
                 }
             }
@@ -294,7 +297,7 @@ public class Direct {
                 boolean canMeasure = canMeasure(widget);
                 if (widget.isMeasureRequested() && canMeasure) {
                     BasicMeasure.Measure measure = new BasicMeasure.Measure();
-                    ConstraintWidgetContainer.measure(widget, measurer, measure, false);
+                    ConstraintWidgetContainer.measure(widget, measurer, measure, BasicMeasure.Measure.SELF_DIMENSIONS);
                 }
 
                 int x1 = 0;
@@ -314,20 +317,21 @@ public class Direct {
                         x1 = r + widget.mLeft.getMargin();
                         x2 = x1 + widget.getWidth();
                         widget.setFinalHorizontal(x1, x2);
-                        horizontalSolvingPass(widget, measurer);
+                        horizontalSolvingPass(widget, measurer, isRtl);
                     } else if (first == widget.mRight && widget.mLeft.mTarget == null) {
                         x2 = r - widget.mRight.getMargin();
                         x1 = x2 - widget.getWidth();
                         widget.setFinalHorizontal(x1, x2);
-                        horizontalSolvingPass(widget, measurer);
+                        horizontalSolvingPass(widget, measurer, isRtl);
                     } else if (bothConnected && !widget.isInHorizontalChain()) {
-                        solveHorizontalCenterConstraints(measurer, widget);
+                        solveHorizontalCenterConstraints(measurer, widget, isRtl);
                     }
                 } else if (widget.getHorizontalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+                        && widget.mMatchConstraintMaxWidth >= 0 && widget.mMatchConstraintMinWidth >= 0
                         && (widget.getVisibility() == ConstraintWidget.GONE || ((widget.mMatchConstraintDefaultWidth == ConstraintWidget.MATCH_CONSTRAINT_SPREAD) && widget.getDimensionRatio() == 0))
                         && !widget.isInHorizontalChain() && !widget.isInVirtualLayout()) {
                     if (bothConnected && !widget.isInHorizontalChain()) {
-                        solveHorizontalMatchConstraint(layout, measurer, widget);
+                        solveHorizontalMatchConstraint(layout, measurer, widget, isRtl);
                     }
                 }
             }
@@ -348,7 +352,7 @@ public class Direct {
 
         if (!(layout instanceof ConstraintWidgetContainer) && layout.isMeasureRequested() && canMeasure(layout)) {
             BasicMeasure.Measure measure = new BasicMeasure.Measure();
-            ConstraintWidgetContainer.measure(layout, measurer, measure, false);
+            ConstraintWidgetContainer.measure(layout, measurer, measure, BasicMeasure.Measure.SELF_DIMENSIONS);
         }
 
         ConstraintAnchor top = layout.getAnchor(ConstraintAnchor.Type.TOP);
@@ -364,7 +368,7 @@ public class Direct {
                 boolean canMeasure = canMeasure(widget);
                 if (widget.isMeasureRequested() && canMeasure) {
                     BasicMeasure.Measure measure = new BasicMeasure.Measure();
-                    ConstraintWidgetContainer.measure(widget, measurer, measure, false);
+                    ConstraintWidgetContainer.measure(widget, measurer, measure, BasicMeasure.Measure.SELF_DIMENSIONS);
                 }
 
                 if (widget.getVerticalDimensionBehaviour() != ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
@@ -394,6 +398,7 @@ public class Direct {
                         verticalSolvingPass(widget, measurer);
                     }
                 } else if (widget.getVerticalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+                        && widget.mMatchConstraintMaxHeight >= 0 && widget.mMatchConstraintMinHeight >= 0
                         && (widget.getVisibility() == ConstraintWidget.GONE || ((widget.mMatchConstraintDefaultHeight == ConstraintWidget.MATCH_CONSTRAINT_SPREAD) && widget.getDimensionRatio() == 0))
                         && !widget.isInVerticalChain() && !widget.isInVirtualLayout()) {
                     boolean bothConnected = (first == widget.mTop && widget.mBottom.mTarget != null && widget.mBottom.mTarget.hasFinalValue())
@@ -413,7 +418,7 @@ public class Direct {
                 boolean canMeasure = canMeasure(widget);
                 if (widget.isMeasureRequested() && canMeasure) {
                     BasicMeasure.Measure measure = new BasicMeasure.Measure();
-                    ConstraintWidgetContainer.measure(widget, measurer, measure, false);
+                    ConstraintWidgetContainer.measure(widget, measurer, measure, BasicMeasure.Measure.SELF_DIMENSIONS);
                 }
 
                 int y1 = 0;
@@ -443,6 +448,7 @@ public class Direct {
                         solveVerticalCenterConstraints(measurer, widget);
                     }
                 } else if (widget.getVerticalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+                        && widget.mMatchConstraintMaxHeight >= 0 && widget.mMatchConstraintMinHeight >= 0
                         && (widget.getVisibility() == ConstraintWidget.GONE || ((widget.mMatchConstraintDefaultHeight == ConstraintWidget.MATCH_CONSTRAINT_SPREAD) && widget.getDimensionRatio() == 0))
                         && !widget.isInVerticalChain() && !widget.isInVirtualLayout()) {
                     if (bothConnected && !widget.isInVerticalChain()) {
@@ -460,7 +466,7 @@ public class Direct {
                 boolean canMeasure = canMeasure(widget);
                 if (widget.isMeasureRequested() && canMeasure) {
                     BasicMeasure.Measure measure = new BasicMeasure.Measure();
-                    ConstraintWidgetContainer.measure(widget, measurer, measure, false);
+                    ConstraintWidgetContainer.measure(widget, measurer, measure, BasicMeasure.Measure.SELF_DIMENSIONS);
                 }
                 if (widget.getVerticalDimensionBehaviour() != ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
                     || canMeasure) {
@@ -483,11 +489,11 @@ public class Direct {
 
     /**
      * Solve horizontal centering constraints
-     *
-     * @param measurer
+     *  @param measurer
      * @param widget
+     * @param isRtl
      */
-    private static void solveHorizontalCenterConstraints(BasicMeasure.Measurer measurer, ConstraintWidget widget) {
+    private static void solveHorizontalCenterConstraints(BasicMeasure.Measurer measurer, ConstraintWidget widget, boolean isRtl) {
         int x1;
         int x2;
         float bias = widget.getHorizontalBiasPercent();
@@ -505,9 +511,6 @@ public class Direct {
         if (s1 > s2) {
             distance = s1 - s2 - width;
         }
-        if (((ConstraintWidgetContainer) widget.getParent()).isRtl()) {
-            bias = 1 - bias;
-        }
         int d1 = (int) (0.5f + bias * distance);
         x1 = s1 + d1;
         x2 = x1 + width;
@@ -516,7 +519,7 @@ public class Direct {
             x2 = x1 - width;
         }
         widget.setFinalHorizontal(x1, x2);
-        horizontalSolvingPass(widget, measurer);
+        horizontalSolvingPass(widget, measurer, isRtl);
     }
 
     /**
@@ -556,11 +559,11 @@ public class Direct {
 
     /**
      * Solve horizontal match constraints
-     *
-     * @param measurer
+     *  @param measurer
      * @param widget
+     * @param isRtl
      */
-    private static void solveHorizontalMatchConstraint(ConstraintWidget layout, BasicMeasure.Measurer measurer, ConstraintWidget widget) {
+    private static void solveHorizontalMatchConstraint(ConstraintWidget layout, BasicMeasure.Measurer measurer, ConstraintWidget widget, boolean isRtl) {
         int x1;
         int x2;
         float bias = widget.getHorizontalBiasPercent();
@@ -590,7 +593,7 @@ public class Direct {
             x1 = s1 + d1;
             x2 = x1 + width;
             widget.setFinalHorizontal(x1, x2);
-            horizontalSolvingPass(widget, measurer);
+            horizontalSolvingPass(widget, measurer, isRtl);
         }
     }
 
@@ -706,6 +709,8 @@ public class Direct {
             }
         }
 
+        boolean isRtl = container.isRtl();
+
         ConstraintWidget first = chainHead.getFirst();
         ConstraintWidget last = chainHead.getLast();
         ConstraintWidget firstVisibleWidget = chainHead.getFirstVisibleWidget();
@@ -753,7 +758,7 @@ public class Direct {
             }
 
             if (widget.isMeasureRequested()) {
-                ConstraintWidgetContainer.measure(widget, container.getMeasurer(), measure, false);
+                ConstraintWidgetContainer.measure(widget, container.getMeasurer(), measure, BasicMeasure.Measure.SELF_DIMENSIONS);
             }
 
             totalSize += widget.mListAnchors[offset].getMargin();
@@ -822,7 +827,7 @@ public class Direct {
             } else {
                 firstVisibleWidget.setFinalVertical(p1, p1 + firstVisibleWidget.getHeight());
             }
-            Direct.horizontalSolvingPass(firstVisibleWidget, container.getMeasurer());
+            Direct.horizontalSolvingPass(firstVisibleWidget, container.getMeasurer(), isRtl);
             return true;
         }
 
@@ -836,7 +841,7 @@ public class Direct {
                 if (widget.getVisibility() == GONE) {
                     if (orientation == HORIZONTAL) {
                         widget.setFinalHorizontal(current, current);
-                        Direct.horizontalSolvingPass(widget, container.getMeasurer());
+                        Direct.horizontalSolvingPass(widget, container.getMeasurer(), isRtl);
                     } else {
                         widget.setFinalVertical(current, current);
                         Direct.verticalSolvingPass(widget, container.getMeasurer());
@@ -845,7 +850,7 @@ public class Direct {
                     current += widget.mListAnchors[offset].getMargin();
                     if (orientation == HORIZONTAL) {
                         widget.setFinalHorizontal(current, current + widget.getWidth());
-                        Direct.horizontalSolvingPass(widget, container.getMeasurer());
+                        Direct.horizontalSolvingPass(widget, container.getMeasurer(), isRtl);
                         current += widget.getWidth();
                     } else {
                         widget.setFinalVertical(current, current + widget.getHeight());
@@ -880,8 +885,8 @@ public class Direct {
                 if (orientation == HORIZONTAL) {
                     firstVisibleWidget.setFinalHorizontal(startPoint, startPoint + firstVisibleWidget.getWidth());
                     lastVisibleWidget.setFinalHorizontal(endPoint - lastVisibleWidget.getWidth(), endPoint);
-                    Direct.horizontalSolvingPass(firstVisibleWidget, container.getMeasurer());
-                    Direct.horizontalSolvingPass(lastVisibleWidget, container.getMeasurer());
+                    Direct.horizontalSolvingPass(firstVisibleWidget, container.getMeasurer(), isRtl);
+                    Direct.horizontalSolvingPass(lastVisibleWidget, container.getMeasurer(), isRtl);
                 } else {
                     firstVisibleWidget.setFinalVertical(startPoint, startPoint + firstVisibleWidget.getHeight());
                     lastVisibleWidget.setFinalVertical(endPoint - lastVisibleWidget.getHeight(), endPoint);

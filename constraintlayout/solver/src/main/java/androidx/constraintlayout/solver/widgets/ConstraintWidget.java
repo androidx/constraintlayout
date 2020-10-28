@@ -67,7 +67,6 @@ public class ConstraintWidget {
     public VerticalWidgetRun verticalRun = null;
 
     public boolean[] isTerminalWidget = {true, true};
-    public int[] wrapMeasure = { 0, 0, 0, 0 };
     boolean mResolvedHasRatio = false;
     private boolean mMeasureRequested = true;
     private boolean OPTIMIZE_WRAP = false;
