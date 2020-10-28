@@ -20,7 +20,7 @@ import android.os.Build;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.motion.utils.Easing;
-import androidx.constraintlayout.solver.widgets.ConstraintWidget;
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import android.util.Log;
 import android.view.View;
 
