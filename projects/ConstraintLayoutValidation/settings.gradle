@@ -1,4 +1,0 @@
-rootProject.name = "DeveloperTemplate"
-include ':app'
-include ':constraintlayout'
-include ':solver'
