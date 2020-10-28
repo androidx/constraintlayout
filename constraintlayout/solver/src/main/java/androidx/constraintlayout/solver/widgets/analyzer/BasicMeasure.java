@@ -27,7 +27,6 @@ import androidx.constraintlayout.solver.widgets.Optimizer;
 import androidx.constraintlayout.solver.widgets.VirtualLayout;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import static androidx.constraintlayout.solver.widgets.ConstraintWidget.GONE;
 import static androidx.constraintlayout.solver.widgets.ConstraintWidget.HORIZONTAL;
@@ -110,10 +109,18 @@ public class BasicMeasure {
                         && !child.isInHorizontalChain()) {
                     skip = true;
                 }
+
                 if (heightBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
                         && child.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_SPREAD
                         && widthBehavior != ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
                         && !child.isInHorizontalChain()) {
+                    skip = true;
+                }
+
+                // Don't measure yet -- let the direct solver have a shot at it.
+                if ((widthBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+                        || heightBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT)
+                        && child.mDimensionRatio > 0) {
                     skip = true;
                 }
             }
@@ -124,7 +131,7 @@ public class BasicMeasure {
                 continue;
             }
 
-            measure(measurer, child, false);
+            measure(measurer, child, Measure.SELF_DIMENSIONS);
             if (layout.mMetrics != null) {
                 layout.mMetrics.measuredWidgets++;
             }
@@ -304,7 +311,7 @@ public class BasicMeasure {
                     }
                     int preWidth = widget.getWidth();
                     int preHeight = widget.getHeight();
-                    needSolverPass |= measure(measurer, widget, true);
+                    needSolverPass |= measure(measurer, widget, Measure.TRY_GIVEN_DIMENSIONS);
                     if (layout.mMetrics != null) {
                         layout.mMetrics.measuredMatchWidgets++;
                     }
@@ -355,7 +362,11 @@ public class BasicMeasure {
                         int preHeight = widget.getHeight();
                         int preBaselineDistance = widget.getBaselineDistance();
 
-                        boolean hasMeasure = measure(measurer, widget, true);
+                        int measureStrategy = Measure.TRY_GIVEN_DIMENSIONS;
+                        if (j == maxIterations -1) {
+                            measureStrategy = Measure.USE_GIVEN_DIMENSIONS;
+                        }
+                        boolean hasMeasure = measure(measurer, widget, measureStrategy);
                         if (false && !widget.hasDependencies()) {
                             hasMeasure = false;
                         }
@@ -437,16 +448,16 @@ public class BasicMeasure {
      *
      * @param measurer the measurer callback
      * @param widget the widget to measure
-     * @param useCurrentDimensions use the current ConstraintWidget dimensions during the measure
+     * @param measureStrategy how to use the current ConstraintWidget dimensions during the measure
      * @return true if needs another solver pass
      */
-    private boolean measure(Measurer measurer, ConstraintWidget widget, boolean useCurrentDimensions) {
+    private boolean measure(Measurer measurer, ConstraintWidget widget, int measureStrategy) {
         mMeasure.horizontalBehavior = widget.getHorizontalDimensionBehaviour();
         mMeasure.verticalBehavior = widget.getVerticalDimensionBehaviour();
         mMeasure.horizontalDimension = widget.getWidth();
         mMeasure.verticalDimension = widget.getHeight();
         mMeasure.measuredNeedsSolverPass = false;
-        mMeasure.useCurrentDimensions = useCurrentDimensions;
+        mMeasure.measureStrategy = measureStrategy;
 
         boolean horizontalMatchConstraints = (mMeasure.horizontalBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
         boolean verticalMatchConstraints = (mMeasure.verticalBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
@@ -469,7 +480,7 @@ public class BasicMeasure {
         widget.setHeight(mMeasure.measuredHeight);
         widget.setHasBaseline(mMeasure.measuredHasBaseline);
         widget.setBaselineDistance(mMeasure.measuredBaseline);
-        mMeasure.useCurrentDimensions = false;
+        mMeasure.measureStrategy = Measure.SELF_DIMENSIONS;
         return mMeasure.measuredNeedsSolverPass;
     }
 
@@ -479,6 +490,9 @@ public class BasicMeasure {
     }
 
     public static class Measure {
+        public static int SELF_DIMENSIONS = 0;
+        public static int TRY_GIVEN_DIMENSIONS = 1;
+        public static int USE_GIVEN_DIMENSIONS = 2;
         public ConstraintWidget.DimensionBehaviour horizontalBehavior;
         public ConstraintWidget.DimensionBehaviour verticalBehavior;
         public int horizontalDimension;
@@ -488,6 +502,6 @@ public class BasicMeasure {
         public int measuredBaseline;
         public boolean measuredHasBaseline;
         public boolean measuredNeedsSolverPass;
-        public boolean useCurrentDimensions;
+        public int measureStrategy;
     }
 }

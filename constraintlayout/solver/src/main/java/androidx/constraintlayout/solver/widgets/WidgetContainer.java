@@ -96,7 +96,7 @@ public class WidgetContainer extends ConstraintWidget {
      */
     public void remove(ConstraintWidget widget) {
         mChildren.remove(widget);
-        widget.setParent(null);
+        widget.reset();
     }
 
     /**

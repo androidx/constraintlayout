@@ -91,7 +91,7 @@ public class Grouping {
             ConstraintWidget child = children.get(i);
             if (!validInGroup(layout.getHorizontalDimensionBehaviour(), layout.getVerticalDimensionBehaviour(),
                     child.getHorizontalDimensionBehaviour(), child.getVerticalDimensionBehaviour())) {
-                ConstraintWidgetContainer.measure(child, measurer, layout.mMeasure, false);
+                ConstraintWidgetContainer.measure(child, measurer, layout.mMeasure, BasicMeasure.Measure.SELF_DIMENSIONS);
             }
             if (child instanceof Guideline) {
                 Guideline guideline = (Guideline) child;
