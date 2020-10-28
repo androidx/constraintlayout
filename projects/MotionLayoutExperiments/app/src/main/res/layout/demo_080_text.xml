@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#438"
+    app:motionDebug="SHOW_ALL"
+    app:layoutDescription="@xml/demo_080_text_scene">
+    <View android:id="@+id/v"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="#FFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <android.support.motionlayout.experiments.TextMorph
+        android:id="@+id/t0"
+        app:layout_constraintTag="text"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        app:textFillColor="#99D88181"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.motionlayout.experiments.TextMorph
+        android:id="@+id/t1"
+        app:layout_constraintTag="text"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        app:textFillColor="#99F67B7B"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <android.support.motionlayout.experiments.TextMorph
+        android:id="@+id/t2"
+        app:layout_constraintTag="text"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        app:textFillColor="#99F67B7B"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.motionlayout.experiments.TextMorph
+        android:id="@+id/t3"
+        app:layout_constraintTag="text"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        app:textFillColor="#99F6C97B"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <android.support.motionlayout.experiments.TextMorph
+        android:id="@+id/t4"
+        app:layout_constraintTag="text"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        app:textFillColor="#99FBEA7B"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.motionlayout.experiments.TextMorph
+        android:id="@+id/t5"
+        app:layout_constraintTag="text"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        app:textFillColor="#99CAFA7C"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.motionlayout.experiments.TextMorph
+        android:id="@+id/t6"
+        app:layout_constraintTag="text"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        app:textFillColor="#9983FD7F"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.motionlayout.experiments.TextMorph
+        android:id="@+id/t7"
+        app:layout_constraintTag="text"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        app:textFillColor="#997E80FA"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.motionlayout.experiments.TextMorph
+        android:id="@+id/t8"
+        app:layout_constraintTag="text"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        app:textFillColor="#99887FFF"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.motionlayout.experiments.TextMorph
+        android:id="@+id/t9"
+        app:layout_constraintTag="text"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        app:textFillColor="#AAFFFFFF"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+<!--        app:textFillColor="#AAF87CC0"
+-->
+</androidx.constraintlayout.motion.widget.MotionLayout>

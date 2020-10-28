@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layoutDescription="@xml/demo_100_test_scene">
+
+    <View
+        android:id="@+id/background"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="#F33"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/cir1"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="#E1A86F"
+        android:src="@drawable/cat"
+        app:layout_constraintCircle="@+id/background"
+        app:layout_constraintCircleAngle="0"
+        app:layout_constraintCircleRadius="9dp"
+        app:roundPercent="1" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/cir2"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="#E1A86F"
+        android:src="@drawable/cat"
+        app:layout_constraintCircle="@+id/background"
+        app:layout_constraintCircleAngle="135"
+        app:layout_constraintCircleRadius="17dp"
+        app:constraint_referenced_ids=""
+        app:roundPercent="1" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/cir3"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="#E1A86F"
+        android:src="@drawable/cat"
+        app:layout_constraintCircle="@+id/background"
+        app:layout_constraintCircleAngle="225"
+        app:layout_constraintCircleRadius="17dp"
+        app:roundPercent="1" />
+</androidx.constraintlayout.motion.widget.MotionLayout>

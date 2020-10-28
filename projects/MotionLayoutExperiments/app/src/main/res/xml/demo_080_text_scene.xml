@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:staggered="0.1"
+        motion:duration="1000">
+
+        <OnSwipe
+            motion:touchAnchorId="@id/t0"
+            motion:dragDirection="dragDown"
+            motion:maxVelocity="20"
+            motion:maxAcceleration="20"/>
+       <KeyFrameSet>
+           <KeyTimeCycle motion:motionTarget="text"
+               motion:framePosition="0"
+               motion:wavePeriod="0"
+               motion:waveShape="sin"
+               motion:waveOffset="0">
+               <CustomAttribute motion:attributeName="outlineWidth"
+                   motion:customFloatValue="0"
+                   />
+           </KeyTimeCycle>
+           <KeyTimeCycle motion:motionTarget="text"
+               motion:framePosition="50"
+               motion:wavePeriod="0.5"
+               motion:waveShape="sin"
+               motion:waveOffset="10">
+               <CustomAttribute motion:attributeName="outlineWidth"
+                   motion:customFloatValue="9"
+                   />
+           </KeyTimeCycle>
+           <KeyTimeCycle motion:motionTarget="text"
+               motion:framePosition="100"
+               motion:wavePeriod="0"
+               motion:waveShape="sin"
+               motion:waveOffset="0">
+               <CustomAttribute motion:attributeName="outlineWidth"
+                   motion:customFloatValue="0"
+                   />
+           </KeyTimeCycle>
+           <KeyAttribute motion:framePosition="50"
+               motion:motionTarget="text"
+               android:rotation="360"
+               />
+       </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+        <ConstraintOverride
+            motion:layout_constraintVertical_bias="0.0"
+            motion:layout_constraintHorizontal_bias="0.0"
+            motion:motionStagger="0"
+            android:id="@id/t0" />
+        <ConstraintOverride
+            motion:layout_constraintVertical_bias="0.0"
+            motion:layout_constraintHorizontal_bias="0.0"
+            motion:motionStagger="1"
+            android:id="@id/t1" />
+        <ConstraintOverride
+            motion:layout_constraintVertical_bias="0.0"
+            motion:layout_constraintHorizontal_bias="0.0"
+            motion:motionStagger="2"
+            android:id="@id/t2" />
+        <ConstraintOverride
+            motion:layout_constraintVertical_bias="0.0"
+            motion:layout_constraintHorizontal_bias="0.0"
+            motion:motionStagger="3"
+            android:id="@id/t3" />
+        <ConstraintOverride
+            motion:layout_constraintVertical_bias="0.0"
+            motion:layout_constraintHorizontal_bias="0.0"
+            motion:motionStagger="4"
+            android:id="@id/t4" />
+        <ConstraintOverride
+            motion:layout_constraintVertical_bias="0.0"
+            motion:layout_constraintHorizontal_bias="0.0"
+            motion:motionStagger="5"
+            android:id="@id/t5" />
+        <ConstraintOverride
+            motion:layout_constraintVertical_bias="0.0"
+            motion:layout_constraintHorizontal_bias="0.0"
+            motion:motionStagger="6"
+            android:id="@id/t6" />
+        <ConstraintOverride
+            motion:layout_constraintVertical_bias="0.0"
+            motion:layout_constraintHorizontal_bias="0.0"
+            motion:motionStagger="7"
+            android:id="@id/t7" />
+        <ConstraintOverride
+            motion:layout_constraintVertical_bias="0.0"
+            motion:layout_constraintHorizontal_bias="0.0"
+            motion:motionStagger="8"
+            android:id="@id/t8" />
+        <ConstraintOverride
+            motion:layout_constraintVertical_bias="0.0"
+            motion:layout_constraintHorizontal_bias="0.0"
+            motion:motionStagger="9"
+            android:id="@id/t9" />
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <ConstraintOverride
+            motion:layout_constraintVertical_bias="1.0"
+            motion:layout_constraintHorizontal_bias="1.0"
+            motion:motionStagger="0"
+            android:id="@id/t0" />
+        <ConstraintOverride
+            motion:layout_constraintVertical_bias="1.0"
+            motion:layout_constraintHorizontal_bias="1.0"
+            motion:motionStagger="1"
+            android:id="@id/t1" />
+        <ConstraintOverride
+            motion:layout_constraintVertical_bias="1.0"
+            motion:layout_constraintHorizontal_bias="1.0"
+            motion:motionStagger="2"
+            android:id="@id/t2" />
+        <ConstraintOverride
+            motion:layout_constraintVertical_bias="1.0"
+            motion:layout_constraintHorizontal_bias="1.0"
+            motion:motionStagger="3"
+            android:id="@id/t3" />
+        <ConstraintOverride
+            motion:layout_constraintVertical_bias="1.0"
+            motion:layout_constraintHorizontal_bias="1.0"
+            motion:motionStagger="4"
+            android:id="@id/t4" />
+        <ConstraintOverride
+            motion:layout_constraintVertical_bias="1.0"
+            motion:layout_constraintHorizontal_bias="1.0"
+            motion:motionStagger="5"
+            android:id="@id/t5" />
+        <ConstraintOverride
+            motion:layout_constraintVertical_bias="1.0"
+            motion:layout_constraintHorizontal_bias="1.0"
+            motion:motionStagger="6"
+            android:id="@id/t6" />
+        <ConstraintOverride
+            motion:layout_constraintVertical_bias="1.0"
+            motion:layout_constraintHorizontal_bias="1.0"
+            motion:motionStagger="7"
+            android:id="@id/t7" />
+        <ConstraintOverride
+            motion:layout_constraintVertical_bias="1.0"
+            motion:layout_constraintHorizontal_bias="1.0"
+            motion:motionStagger="8"
+            android:id="@id/t8" />
+        <ConstraintOverride
+            motion:layout_constraintVertical_bias="1.0"
+            motion:layout_constraintHorizontal_bias="1.0"
+            motion:motionStagger="9"
+            android:id="@id/t9" />
+
+    </ConstraintSet>
+</MotionScene>

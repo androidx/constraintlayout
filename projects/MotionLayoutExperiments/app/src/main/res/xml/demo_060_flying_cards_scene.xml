@@ -4,7 +4,15 @@
     motion:defaultDuration="2000">
     <ConstraintSet
         android:id="@+id/alt"
-        motion:deriveConstraintsFrom="@id/base"/>
+        motion:deriveConstraintsFrom="@id/base">
+        <Constraint
+            android:layout_height="64dp"
+            motion:layout_constraintBottom_toTopOf="@+id/region14"
+            android:layout_width="64dp"
+            motion:layout_constraintTop_toBottomOf="@+id/region6"
+            motion:layout_constraintEnd_toStartOf="@+id/region11"
+            android:id="@+id/region10" />
+    </ConstraintSet>
 
     <ConstraintSet
         android:id="@+id/small"

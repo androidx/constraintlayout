@@ -16,8 +16,10 @@
 package androidx.constraintlayout.motion.widget;
 
 import android.os.Build;
+
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.motion.utils.CurveFit;
+
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
@@ -196,7 +198,7 @@ public abstract class TimeCycleSplineSet {
                 unique++;
             }
         }
-        if (unique==0) {
+        if (unique == 0) {
             unique = 1;
         }
         double[] time = new double[unique];

@@ -425,6 +425,8 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
                     setSaturation(a.getFloat(attr, 0));
                 } else if (attr == R.styleable.ImageFilterView_contrast) {
                     setContrast(a.getFloat(attr, 0));
+                }  else if (attr == R.styleable.ImageFilterView_brightness) {
+                    setBrightness(a.getFloat(attr, 0));
                 } else if (attr == R.styleable.ImageFilterView_round) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         setRound(a.getDimension(attr, 0));
