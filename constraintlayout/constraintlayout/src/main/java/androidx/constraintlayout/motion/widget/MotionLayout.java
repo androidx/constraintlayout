@@ -35,11 +35,11 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.Constraints;
 import androidx.constraintlayout.widget.R;
 import androidx.constraintlayout.motion.utils.StopLogic;
-import androidx.constraintlayout.solver.widgets.ConstraintAnchor;
-import androidx.constraintlayout.solver.widgets.ConstraintWidget;
-import androidx.constraintlayout.solver.widgets.ConstraintWidgetContainer;
-import androidx.constraintlayout.solver.widgets.Flow;
-import androidx.constraintlayout.solver.widgets.Helper;
+import androidx.constraintlayout.core.widgets.ConstraintAnchor;
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
+import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
+import androidx.constraintlayout.core.widgets.Flow;
+import androidx.constraintlayout.core.widgets.Helper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
@@ -2007,14 +2007,14 @@ public class MotionLayout extends ConstraintLayout implements
             dest.copy(src, map);
             for (ConstraintWidget child_s : children) {
                 ConstraintWidget child_d;
-                if (child_s instanceof androidx.constraintlayout.solver.widgets.Barrier) {
-                    child_d = new androidx.constraintlayout.solver.widgets.Barrier();
-                } else if (child_s instanceof androidx.constraintlayout.solver.widgets.Guideline) {
-                    child_d = new androidx.constraintlayout.solver.widgets.Guideline();
+                if (child_s instanceof androidx.constraintlayout.core.widgets.Barrier) {
+                    child_d = new androidx.constraintlayout.core.widgets.Barrier();
+                } else if (child_s instanceof androidx.constraintlayout.core.widgets.Guideline) {
+                    child_d = new androidx.constraintlayout.core.widgets.Guideline();
                 } else if (child_s instanceof Flow) {
                     child_d = new Flow();
-                } else if (child_s instanceof androidx.constraintlayout.solver.widgets.Helper) {
-                    child_d = new androidx.constraintlayout.solver.widgets.HelperWidget();
+                } else if (child_s instanceof androidx.constraintlayout.core.widgets.Helper) {
+                    child_d = new androidx.constraintlayout.core.widgets.HelperWidget();
                 } else {
                     child_d = new ConstraintWidget();
                 }
@@ -2129,11 +2129,11 @@ public class MotionLayout extends ConstraintLayout implements
                 }
             }
             for (ConstraintWidget child : base.getChildren()) {
-                if (child instanceof androidx.constraintlayout.solver.widgets.VirtualLayout) {
+                if (child instanceof androidx.constraintlayout.core.widgets.VirtualLayout) {
                     ConstraintHelper view = (ConstraintHelper) child.getCompanionWidget();
                     Helper helper = (Helper) child;
                     view.updatePreLayout(base, helper, mapIdToWidget);
-                    androidx.constraintlayout.solver.widgets.VirtualLayout virtualLayout = (androidx.constraintlayout.solver.widgets.VirtualLayout) helper;
+                    androidx.constraintlayout.core.widgets.VirtualLayout virtualLayout = (androidx.constraintlayout.core.widgets.VirtualLayout) helper;
                     virtualLayout.captureWidgets();
                 }
             }

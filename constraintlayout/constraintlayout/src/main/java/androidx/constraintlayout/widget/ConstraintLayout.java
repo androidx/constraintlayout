@@ -28,14 +28,14 @@ import android.graphics.Paint;
 import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.solver.LinearSystem;
-import androidx.constraintlayout.solver.Metrics;
-import androidx.constraintlayout.solver.widgets.*;
-import androidx.constraintlayout.solver.widgets.ConstraintAnchor;
-import androidx.constraintlayout.solver.widgets.ConstraintWidget;
-import androidx.constraintlayout.solver.widgets.ConstraintWidgetContainer;
-import androidx.constraintlayout.solver.widgets.Guideline;
-import androidx.constraintlayout.solver.widgets.analyzer.BasicMeasure;
+import androidx.constraintlayout.core.LinearSystem;
+import androidx.constraintlayout.core.Metrics;
+import androidx.constraintlayout.core.widgets.*;
+import androidx.constraintlayout.core.widgets.ConstraintAnchor;
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
+import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
+import androidx.constraintlayout.core.widgets.Guideline;
+import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
@@ -785,8 +785,8 @@ public class ConstraintLayout extends ViewGroup {
                     !(horizontalMatchConstraints && widget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_SPREAD
                             && verticalMatchConstraints && widget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_SPREAD)) {
 
-                if (child instanceof VirtualLayout && widget instanceof androidx.constraintlayout.solver.widgets.VirtualLayout) {
-                    androidx.constraintlayout.solver.widgets.VirtualLayout layout = (androidx.constraintlayout.solver.widgets.VirtualLayout) widget;
+                if (child instanceof VirtualLayout && widget instanceof androidx.constraintlayout.core.widgets.VirtualLayout) {
+                    androidx.constraintlayout.core.widgets.VirtualLayout layout = (androidx.constraintlayout.core.widgets.VirtualLayout) widget;
                     ((VirtualLayout) child).onMeasure(layout, horizontalSpec, verticalSpec);
                 } else {
                     child.measure(horizontalSpec, verticalSpec);

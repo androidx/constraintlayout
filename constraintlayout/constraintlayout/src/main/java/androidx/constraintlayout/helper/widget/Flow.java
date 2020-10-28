@@ -23,8 +23,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.R;
 import androidx.constraintlayout.widget.VirtualLayout;
-import androidx.constraintlayout.solver.widgets.ConstraintWidget;
-import androidx.constraintlayout.solver.widgets.HelperWidget;
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
+import androidx.constraintlayout.core.widgets.HelperWidget;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 
@@ -100,26 +100,26 @@ import android.util.SparseArray;
 public class Flow extends VirtualLayout {
     private static final String TAG = "Flow";
 
-    private androidx.constraintlayout.solver.widgets.Flow mFlow;
+    private androidx.constraintlayout.core.widgets.Flow mFlow;
 
-    public static final int HORIZONTAL = androidx.constraintlayout.solver.widgets.Flow.HORIZONTAL;
-    public static final int VERTICAL = androidx.constraintlayout.solver.widgets.Flow.VERTICAL;
-    public static final int WRAP_NONE = androidx.constraintlayout.solver.widgets.Flow.WRAP_NONE;
-    public static final int WRAP_CHAIN = androidx.constraintlayout.solver.widgets.Flow.WRAP_CHAIN;
-    public static final int WRAP_ALIGNED = androidx.constraintlayout.solver.widgets.Flow.WRAP_ALIGNED;
+    public static final int HORIZONTAL = androidx.constraintlayout.core.widgets.Flow.HORIZONTAL;
+    public static final int VERTICAL = androidx.constraintlayout.core.widgets.Flow.VERTICAL;
+    public static final int WRAP_NONE = androidx.constraintlayout.core.widgets.Flow.WRAP_NONE;
+    public static final int WRAP_CHAIN = androidx.constraintlayout.core.widgets.Flow.WRAP_CHAIN;
+    public static final int WRAP_ALIGNED = androidx.constraintlayout.core.widgets.Flow.WRAP_ALIGNED;
 
     public static final int CHAIN_SPREAD = ConstraintWidget.CHAIN_SPREAD;
     public static final int CHAIN_SPREAD_INSIDE = ConstraintWidget.CHAIN_SPREAD_INSIDE;
     public static final int CHAIN_PACKED = ConstraintWidget.CHAIN_PACKED;
 
-    public static final int HORIZONTAL_ALIGN_START = androidx.constraintlayout.solver.widgets.Flow.HORIZONTAL_ALIGN_START;
-    public static final int HORIZONTAL_ALIGN_END = androidx.constraintlayout.solver.widgets.Flow.HORIZONTAL_ALIGN_END;
-    public static final int HORIZONTAL_ALIGN_CENTER = androidx.constraintlayout.solver.widgets.Flow.HORIZONTAL_ALIGN_CENTER;
+    public static final int HORIZONTAL_ALIGN_START = androidx.constraintlayout.core.widgets.Flow.HORIZONTAL_ALIGN_START;
+    public static final int HORIZONTAL_ALIGN_END = androidx.constraintlayout.core.widgets.Flow.HORIZONTAL_ALIGN_END;
+    public static final int HORIZONTAL_ALIGN_CENTER = androidx.constraintlayout.core.widgets.Flow.HORIZONTAL_ALIGN_CENTER;
 
-    public static final int VERTICAL_ALIGN_TOP = androidx.constraintlayout.solver.widgets.Flow.VERTICAL_ALIGN_TOP;
-    public static final int VERTICAL_ALIGN_BOTTOM = androidx.constraintlayout.solver.widgets.Flow.VERTICAL_ALIGN_BOTTOM;
-    public static final int VERTICAL_ALIGN_CENTER = androidx.constraintlayout.solver.widgets.Flow.VERTICAL_ALIGN_CENTER;
-    public static final int VERTICAL_ALIGN_BASELINE = androidx.constraintlayout.solver.widgets.Flow.VERTICAL_ALIGN_BASELINE;
+    public static final int VERTICAL_ALIGN_TOP = androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_TOP;
+    public static final int VERTICAL_ALIGN_BOTTOM = androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_BOTTOM;
+    public static final int VERTICAL_ALIGN_CENTER = androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_CENTER;
+    public static final int VERTICAL_ALIGN_BASELINE = androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_BASELINE;
 
     public Flow(Context context) {
         super(context);
@@ -158,7 +158,7 @@ public class Flow extends VirtualLayout {
      * @param heightMeasureSpec
      */
     @Override
-    public void onMeasure(androidx.constraintlayout.solver.widgets.VirtualLayout layout, int widthMeasureSpec, int heightMeasureSpec) {
+    public void onMeasure(androidx.constraintlayout.core.widgets.VirtualLayout layout, int widthMeasureSpec, int heightMeasureSpec) {
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
@@ -182,8 +182,8 @@ public class Flow extends VirtualLayout {
     @Override
     public void loadParameters(ConstraintSet.Constraint constraint, HelperWidget child, ConstraintLayout.LayoutParams layoutParams, SparseArray<ConstraintWidget> mapIdToWidget) {
         super.loadParameters(constraint,child,layoutParams, mapIdToWidget);
-        if (child instanceof androidx.constraintlayout.solver.widgets.Flow) {
-            androidx.constraintlayout.solver.widgets.Flow flow = (androidx.constraintlayout.solver.widgets.Flow) child;
+        if (child instanceof androidx.constraintlayout.core.widgets.Flow) {
+            androidx.constraintlayout.core.widgets.Flow flow = (androidx.constraintlayout.core.widgets.Flow) child;
             if (layoutParams.orientation != -1) {
                 flow.setOrientation(layoutParams.orientation);
             }
@@ -198,7 +198,7 @@ public class Flow extends VirtualLayout {
     @Override
     protected void init(AttributeSet attrs) {
         super.init(attrs);
-        mFlow = new androidx.constraintlayout.solver.widgets.Flow();
+        mFlow = new androidx.constraintlayout.core.widgets.Flow();
         if (attrs != null) {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ConstraintLayout_Layout);
             final int N = a.getIndexCount();
@@ -225,7 +225,7 @@ public class Flow extends VirtualLayout {
                 } else if (attr == R.styleable.ConstraintLayout_Layout_android_paddingBottom) {
                     mFlow.setPaddingBottom(a.getDimensionPixelSize(attr, 0));
                 } else if (attr == R.styleable.ConstraintLayout_Layout_flow_wrapMode) {
-                    mFlow.setWrapMode(a.getInt(attr, androidx.constraintlayout.solver.widgets.Flow.WRAP_NONE));
+                    mFlow.setWrapMode(a.getInt(attr, androidx.constraintlayout.core.widgets.Flow.WRAP_NONE));
                 } else if (attr == R.styleable.ConstraintLayout_Layout_flow_horizontalStyle) {
                     mFlow.setHorizontalStyle(a.getInt(attr, 0));
                 } else if (attr == R.styleable.ConstraintLayout_Layout_flow_verticalStyle) {
@@ -251,9 +251,9 @@ public class Flow extends VirtualLayout {
                 } else if (attr == R.styleable.ConstraintLayout_Layout_flow_verticalBias) {
                     mFlow.setVerticalBias(a.getFloat(attr, 0.5f));
                 } else if (attr == R.styleable.ConstraintLayout_Layout_flow_horizontalAlign) {
-                    mFlow.setHorizontalAlign(a.getInt(attr, androidx.constraintlayout.solver.widgets.Flow.HORIZONTAL_ALIGN_CENTER));
+                    mFlow.setHorizontalAlign(a.getInt(attr, androidx.constraintlayout.core.widgets.Flow.HORIZONTAL_ALIGN_CENTER));
                 } else if (attr == R.styleable.ConstraintLayout_Layout_flow_verticalAlign) {
-                    mFlow.setVerticalAlign(a.getInt(attr, androidx.constraintlayout.solver.widgets.Flow.VERTICAL_ALIGN_CENTER));
+                    mFlow.setVerticalAlign(a.getInt(attr, androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_CENTER));
                 } else if (attr == R.styleable.ConstraintLayout_Layout_flow_horizontalGap) {
                     mFlow.setHorizontalGap(a.getDimensionPixelSize(attr, 0));
                 } else if (attr == R.styleable.ConstraintLayout_Layout_flow_verticalGap) {
