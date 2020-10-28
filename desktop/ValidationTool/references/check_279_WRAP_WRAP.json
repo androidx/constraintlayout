@@ -1,0 +1,117 @@
+{
+  "duration": "46266",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "48",
+          "bottom": "57",
+          "right": "262"
+        },
+        "id": "recording_name_id",
+        "class": "AppCompatTextView"
+      },
+      {
+        "children": [
+          {
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "0",
+              "right": "0"
+            },
+            "id": "record_item_guideline_up",
+            "class": "Guideline"
+          },
+          {
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "0",
+              "right": "0"
+            },
+            "id": "record_item_guideline_down",
+            "class": "Guideline"
+          },
+          {
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "0",
+              "right": "0"
+            },
+            "id": "record_item_distance_icon",
+            "class": "AppCompatImageView"
+          },
+          {
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "0",
+              "right": "0"
+            },
+            "id": "record_item_distance_stat",
+            "class": "AppCompatTextView"
+          },
+          {
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "0",
+              "right": "0"
+            },
+            "id": "record_item_up_icon",
+            "class": "AppCompatImageView"
+          },
+          {
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "0",
+              "right": "0"
+            },
+            "id": "record_item_up_stat",
+            "class": "AppCompatTextView"
+          },
+          {
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "0",
+              "right": "0"
+            },
+            "id": "record_item_down_icon",
+            "class": "AppCompatImageView"
+          },
+          {
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "0",
+              "right": "0"
+            },
+            "id": "record_item_down_stat",
+            "class": "AppCompatTextView"
+          }
+        ],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "stats_view_holder",
+        "class": "ConstraintLayout"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "120",
+      "right": "310"
+    },
+    "id": "record_item_layout",
+    "class": "ConstraintLayout"
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "duration": "45344",
+  "layout": {
+    "children": [
+      {
+        "children": [{
+          "bounds": {
+            "top": "462",
+            "left": "0",
+            "bottom": "1062",
+            "right": "0"
+          },
+          "class": "View"
+        }],
+        "bounds": {
+          "top": "12",
+          "left": "12",
+          "bottom": "1536",
+          "right": "12"
+        },
+        "id": "map_fragment_setting_btn",
+        "class": "FrameLayout"
+      },
+      {
+        "children": [{
+          "bounds": {
+            "top": "462",
+            "left": "0",
+            "bottom": "1062",
+            "right": "0"
+          },
+          "class": "View"
+        }],
+        "bounds": {
+          "top": "12",
+          "left": "36",
+          "bottom": "1536",
+          "right": "36"
+        },
+        "id": "map_fragment_support_btn",
+        "class": "FrameLayout"
+      },
+      {
+        "children": [{
+          "bounds": {
+            "top": "462",
+            "left": "0",
+            "bottom": "1062",
+            "right": "0"
+          },
+          "class": "View"
+        }],
+        "bounds": {
+          "top": "12",
+          "left": "60",
+          "bottom": "1536",
+          "right": "60"
+        },
+        "id": "map_fragment_map_btn",
+        "class": "FrameLayout"
+      }
+    ],
+    "bounds": {
+      "top": "30",
+      "left": "30",
+      "bottom": "1536",
+      "right": "72"
+    },
+    "class": "ConstraintLayout"
+  }
+}

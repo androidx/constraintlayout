@@ -1,0 +1,22 @@
+{
+  "duration": "8164",
+  "layout": {
+    "children": [{
+      "bounds": {
+        "top": "618",
+        "left": "0",
+        "bottom": "918",
+        "right": "1080"
+      },
+      "id": "text",
+      "class": "AppCompatEditText"
+    }],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

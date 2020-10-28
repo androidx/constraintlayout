@@ -1,0 +1,214 @@
+{
+  "duration": "109360",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "24",
+          "left": "24",
+          "bottom": "81",
+          "right": "136"
+        },
+        "id": "dialog_title",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "93",
+          "left": "24",
+          "bottom": "96",
+          "right": "1056"
+        },
+        "id": "divider",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "24",
+          "left": "319",
+          "bottom": "24",
+          "right": "319"
+        },
+        "id": "barrier",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "96",
+          "left": "24",
+          "bottom": "165",
+          "right": "165"
+        },
+        "id": "app_label",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "96",
+          "left": "319",
+          "bottom": "181",
+          "right": "1056"
+        },
+        "id": "app_version",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "181",
+          "left": "24",
+          "bottom": "238",
+          "right": "148"
+        },
+        "id": "device_label",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "181",
+          "left": "343",
+          "bottom": "254",
+          "right": "1056"
+        },
+        "id": "device_version",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "254",
+          "left": "24",
+          "bottom": "311",
+          "right": "319"
+        },
+        "id": "android_label",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "254",
+          "left": "343",
+          "bottom": "327",
+          "right": "1056"
+        },
+        "id": "android_version",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "359",
+          "left": "24",
+          "bottom": "416",
+          "right": "173"
+        },
+        "id": "support_label",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "327",
+          "left": "681",
+          "bottom": "448",
+          "right": "1056"
+        },
+        "id": "support_email",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "448",
+          "left": "687",
+          "bottom": "569",
+          "right": "1056"
+        },
+        "id": "support_phone",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "569",
+          "left": "526",
+          "bottom": "690",
+          "right": "1056"
+        },
+        "id": "support_terms",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "690",
+          "left": "714",
+          "bottom": "811",
+          "right": "1056"
+        },
+        "id": "support_privacy",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "843",
+          "left": "24",
+          "bottom": "900",
+          "right": "100"
+        },
+        "id": "url_label",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "811",
+          "left": "100",
+          "bottom": "932",
+          "right": "1056"
+        },
+        "id": "support_url",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "964",
+          "left": "24",
+          "bottom": "1021",
+          "right": "89"
+        },
+        "id": "api_label",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "932",
+          "left": "89",
+          "bottom": "1053",
+          "right": "1056"
+        },
+        "id": "support_api",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "1053",
+          "left": "24",
+          "bottom": "1197",
+          "right": "288"
+        },
+        "id": "button_debug",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "1053",
+          "left": "792",
+          "bottom": "1197",
+          "right": "1056"
+        },
+        "id": "button_close",
+        "class": "AppCompatButton"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

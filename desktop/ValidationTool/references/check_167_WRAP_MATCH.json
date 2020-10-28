@@ -1,0 +1,84 @@
+{
+  "duration": "211486",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "103",
+          "left": "48",
+          "bottom": "160",
+          "right": "184"
+        },
+        "id": "label_1",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "63",
+          "left": "525",
+          "bottom": "199",
+          "right": "825"
+        },
+        "id": "entry_1",
+        "class": "AppCompatEditText"
+      },
+      {
+        "bounds": {
+          "top": "254",
+          "left": "48",
+          "bottom": "311",
+          "right": "490"
+        },
+        "id": "label_2",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "214",
+          "left": "525",
+          "bottom": "350",
+          "right": "825"
+        },
+        "id": "entry_2",
+        "class": "AppCompatEditText"
+      },
+      {
+        "bounds": {
+          "top": "405",
+          "left": "48",
+          "bottom": "462",
+          "right": "266"
+        },
+        "id": "label_3",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "365",
+          "left": "525",
+          "bottom": "501",
+          "right": "825"
+        },
+        "id": "entry_3",
+        "class": "AppCompatEditText"
+      },
+      {
+        "bounds": {
+          "top": "48",
+          "left": "510",
+          "bottom": "48",
+          "right": "510"
+        },
+        "id": "guideline",
+        "class": "Guideline"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "888"
+    },
+    "class": "ConstraintLayout"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "duration": "12337",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "864",
+          "bottom": "0",
+          "right": "864"
+        },
+        "id": "verticalGuideline",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "226",
+          "right": "864"
+        },
+        "id": "textView",
+        "class": "AppCompatTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "226",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

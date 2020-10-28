@@ -1,0 +1,115 @@
+{
+  "duration": "103355",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "1455",
+          "left": "48",
+          "bottom": "1512",
+          "right": "219"
+        },
+        "id": "textView28",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "1479",
+          "left": "243",
+          "bottom": "1536",
+          "right": "414"
+        },
+        "id": "textView29",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "1584",
+          "left": "243",
+          "bottom": "1728",
+          "right": "414"
+        },
+        "id": "textView10",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "1641",
+          "left": "462",
+          "bottom": "1929",
+          "right": "726"
+        },
+        "id": "button12",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "1347",
+          "left": "774",
+          "bottom": "1758",
+          "right": "1038"
+        },
+        "id": "button2",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "24",
+          "left": "48",
+          "bottom": "81",
+          "right": "219"
+        },
+        "id": "textView33",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "129",
+          "left": "48",
+          "bottom": "186",
+          "right": "219"
+        },
+        "id": "textView30",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "86",
+          "left": "243",
+          "bottom": "230",
+          "right": "507"
+        },
+        "id": "button104",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "258",
+          "left": "48",
+          "bottom": "315",
+          "right": "219"
+        },
+        "id": "textView31",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "254",
+          "left": "963",
+          "bottom": "311",
+          "right": "1134"
+        },
+        "id": "textView32",
+        "class": "AppCompatTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "id": "activity_main",
+    "class": "ConstraintLayout"
+  }
+}

@@ -1,0 +1,264 @@
+{
+  "duration": "2000",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "48",
+          "bottom": "0",
+          "right": "48"
+        },
+        "id": "gl_start_16dp",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "72",
+          "bottom": "0",
+          "right": "72"
+        },
+        "id": "gl_start_24dp",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "216",
+          "bottom": "0",
+          "right": "216"
+        },
+        "id": "gl_start_72dp",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "1032",
+          "bottom": "0",
+          "right": "1032"
+        },
+        "id": "gl_end_16dp",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "48",
+          "bottom": "144",
+          "right": "1032"
+        },
+        "id": "tv_details",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "144",
+          "left": "0",
+          "bottom": "360",
+          "right": "1080"
+        },
+        "id": "cl_serial",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "216",
+          "left": "72",
+          "bottom": "288",
+          "right": "144"
+        },
+        "id": "v_icon_serial",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "195",
+          "left": "216",
+          "bottom": "252",
+          "right": "1032"
+        },
+        "id": "tv_serial",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "252",
+          "left": "216",
+          "bottom": "309",
+          "right": "1032"
+        },
+        "id": "tv_desc_serial",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "360",
+          "left": "0",
+          "bottom": "576",
+          "right": "1080"
+        },
+        "id": "cl_type",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "432",
+          "left": "72",
+          "bottom": "504",
+          "right": "144"
+        },
+        "id": "v_icon_type",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "411",
+          "left": "216",
+          "bottom": "468",
+          "right": "1032"
+        },
+        "id": "tv_type",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "468",
+          "left": "216",
+          "bottom": "525",
+          "right": "1032"
+        },
+        "id": "tv_desc_type",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "576",
+          "left": "0",
+          "bottom": "792",
+          "right": "1080"
+        },
+        "id": "cl_registration",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "648",
+          "left": "72",
+          "bottom": "720",
+          "right": "144"
+        },
+        "id": "v_icon_registration",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "627",
+          "left": "216",
+          "bottom": "684",
+          "right": "1032"
+        },
+        "id": "tv_registration",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "684",
+          "left": "216",
+          "bottom": "741",
+          "right": "1032"
+        },
+        "id": "tv_desc_registration",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "792",
+          "left": "0",
+          "bottom": "1008",
+          "right": "1080"
+        },
+        "id": "cl_content",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "864",
+          "left": "72",
+          "bottom": "936",
+          "right": "144"
+        },
+        "id": "v_icon_content",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "843",
+          "left": "216",
+          "bottom": "900",
+          "right": "1032"
+        },
+        "id": "tv_content",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "900",
+          "left": "216",
+          "bottom": "957",
+          "right": "1032"
+        },
+        "id": "tv_desc_content",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "1008",
+          "left": "0",
+          "bottom": "1224",
+          "right": "1080"
+        },
+        "id": "cl_content2",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "1080",
+          "left": "72",
+          "bottom": "1152",
+          "right": "144"
+        },
+        "id": "v_icon_content2",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "1059",
+          "left": "216",
+          "bottom": "1116",
+          "right": "1032"
+        },
+        "id": "tv_content2",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "1116",
+          "left": "216",
+          "bottom": "1173",
+          "right": "1032"
+        },
+        "id": "tv_desc_content2",
+        "class": "AppCompatTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

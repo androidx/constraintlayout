@@ -1,0 +1,74 @@
+{
+  "duration": "661742",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "24",
+          "left": "24",
+          "bottom": "96",
+          "right": "1056"
+        },
+        "id": "flow",
+        "class": "Flow"
+      },
+      {
+        "bounds": {
+          "top": "27",
+          "left": "24",
+          "bottom": "94",
+          "right": "531"
+        },
+        "id": "episode_title",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "39",
+          "left": "543",
+          "bottom": "91",
+          "right": "587"
+        },
+        "id": "episode_number",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "24",
+          "left": "599",
+          "bottom": "96",
+          "right": "888"
+        },
+        "id": "space",
+        "class": "Space"
+      },
+      {
+        "bounds": {
+          "top": "24",
+          "left": "900",
+          "bottom": "96",
+          "right": "972"
+        },
+        "id": "episode_watches_pending",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "24",
+          "left": "984",
+          "bottom": "96",
+          "right": "1056"
+        },
+        "id": "episode_watched",
+        "class": "AppCompatImageView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "120",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

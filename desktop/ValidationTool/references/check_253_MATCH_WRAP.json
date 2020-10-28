@@ -1,0 +1,53 @@
+{
+  "duration": "50877",
+  "layout": {
+    "children": [
+      {
+        "children": [{
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "300",
+            "right": "1080"
+          },
+          "class": "TextView"
+        }],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "300",
+          "right": "1080"
+        },
+        "id": "view0",
+        "class": "LinearLayout"
+      },
+      {
+        "bounds": {
+          "top": "300",
+          "left": "456",
+          "bottom": "468",
+          "right": "624"
+        },
+        "id": "view1",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "468",
+          "left": "456",
+          "bottom": "636",
+          "right": "624"
+        },
+        "id": "view2",
+        "class": "View"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "636",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

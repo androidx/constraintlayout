@@ -1,0 +1,95 @@
+{
+  "duration": "357727",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "120",
+          "right": "720"
+        },
+        "id": "remote_top_bar",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "144",
+          "left": "24",
+          "bottom": "816",
+          "right": "696"
+        },
+        "id": "remote_control_buttons",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "840",
+          "left": "24",
+          "bottom": "1512",
+          "right": "696"
+        },
+        "id": "remote_control",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "20",
+          "bottom": "120",
+          "right": "140"
+        },
+        "id": "remote_home",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "160",
+          "bottom": "120",
+          "right": "280"
+        },
+        "id": "remote_movies",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "300",
+          "bottom": "120",
+          "right": "420"
+        },
+        "id": "remote_tv",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "440",
+          "bottom": "120",
+          "right": "560"
+        },
+        "id": "remote_music",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "580",
+          "bottom": "120",
+          "right": "700"
+        },
+        "id": "remote_picture",
+        "class": "View"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "720"
+    },
+    "id": "remote_global",
+    "class": "ConstraintLayout"
+  }
+}

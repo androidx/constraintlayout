@@ -1,0 +1,174 @@
+{
+  "duration": "744226",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "24",
+          "left": "0",
+          "bottom": "109",
+          "right": "216"
+        },
+        "id": "score",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "24",
+          "left": "840",
+          "bottom": "216",
+          "right": "1032"
+        },
+        "id": "preview",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "24",
+          "left": "216",
+          "bottom": "326",
+          "right": "792"
+        },
+        "id": "title",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "350",
+          "left": "216",
+          "bottom": "423",
+          "right": "404"
+        },
+        "id": "flair",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "350",
+          "left": "428",
+          "bottom": "423",
+          "right": "627"
+        },
+        "id": "nsfw",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "423",
+          "left": "0",
+          "bottom": "423",
+          "right": "0"
+        },
+        "id": "flair_barrier",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "435",
+          "left": "216",
+          "bottom": "484",
+          "right": "681"
+        },
+        "id": "subreddits_comments",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "484",
+          "left": "216",
+          "bottom": "533",
+          "right": "873"
+        },
+        "id": "user_domain_time",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "533",
+          "left": "0",
+          "bottom": "533",
+          "right": "0"
+        },
+        "id": "barrier",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "upvote",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "downvote",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "reply",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "save",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "browser",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "share",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "557",
+          "left": "216",
+          "bottom": "558",
+          "right": "1032"
+        },
+        "id": "divider",
+        "class": "View"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "558",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

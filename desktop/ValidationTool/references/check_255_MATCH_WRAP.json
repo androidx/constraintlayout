@@ -1,0 +1,70 @@
+{
+  "duration": "6063",
+  "layout": {
+    "children": [{
+      "children": [{
+        "children": [{
+          "children": [
+            {
+              "bounds": {
+                "top": "0",
+                "left": "60",
+                "bottom": "0",
+                "right": "60"
+              },
+              "id": "start",
+              "class": "Guideline"
+            },
+            {
+              "bounds": {
+                "top": "0",
+                "left": "960",
+                "bottom": "0",
+                "right": "960"
+              },
+              "id": "end",
+              "class": "Guideline"
+            },
+            {
+              "bounds": {
+                "top": "0",
+                "left": "60",
+                "bottom": "600",
+                "right": "960"
+              },
+              "class": "View"
+            }
+          ],
+          "bounds": {
+            "top": "0",
+            "left": "30",
+            "bottom": "600",
+            "right": "1050"
+          },
+          "class": "ConstraintLayout"
+        }],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "600",
+          "right": "1080"
+        },
+        "class": "ConstraintLayout"
+      }],
+      "bounds": {
+        "top": "0",
+        "left": "0",
+        "bottom": "600",
+        "right": "1080"
+      },
+      "class": "ScrollView"
+    }],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "600",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

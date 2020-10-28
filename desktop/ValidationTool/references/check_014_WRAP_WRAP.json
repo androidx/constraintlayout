@@ -1,0 +1,105 @@
+{
+  "duration": "133034",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "108",
+          "left": "654",
+          "bottom": "252",
+          "right": "918"
+        },
+        "id": "button6",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "108",
+          "left": "366",
+          "bottom": "252",
+          "right": "630"
+        },
+        "id": "button7",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "108",
+          "left": "78",
+          "bottom": "252",
+          "right": "342"
+        },
+        "id": "button8",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "336",
+          "left": "192",
+          "bottom": "480",
+          "right": "456"
+        },
+        "id": "button9",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "168",
+          "left": "192",
+          "bottom": "312",
+          "right": "456"
+        },
+        "id": "button10",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "192",
+          "bottom": "144",
+          "right": "456"
+        },
+        "id": "button11",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "48",
+          "bottom": "144",
+          "right": "312"
+        },
+        "id": "button13",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "432",
+          "bottom": "144",
+          "right": "696"
+        },
+        "id": "button14",
+        "class": "AppCompatButton"
+      },
+      {
+        "bounds": {
+          "top": "216",
+          "left": "384",
+          "bottom": "360",
+          "right": "648"
+        },
+        "id": "button15",
+        "class": "AppCompatButton"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "528",
+      "right": "918"
+    },
+    "id": "activity_main",
+    "class": "ConstraintLayout"
+  }
+}

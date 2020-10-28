@@ -1,0 +1,23 @@
+{
+  "duration": "17571",
+  "layout": {
+    "children": [{
+      "bounds": {
+        "top": "48",
+        "left": "48",
+        "bottom": "1584",
+        "right": "48"
+      },
+      "id": "textView4",
+      "class": "AppCompatTextView"
+    }],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "96"
+    },
+    "id": "activity_main",
+    "class": "ConstraintLayout"
+  }
+}

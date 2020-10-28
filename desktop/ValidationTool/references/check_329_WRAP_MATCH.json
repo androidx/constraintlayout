@@ -1,0 +1,154 @@
+{
+  "duration": "472757",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "813",
+          "right": "1080"
+        },
+        "id": "form_bg",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "72",
+          "right": "1080"
+        },
+        "id": "form_top_spacer",
+        "class": "Space"
+      },
+      {
+        "bounds": {
+          "top": "72",
+          "left": "48",
+          "bottom": "250",
+          "right": "1032"
+        },
+        "id": "row_1_bg",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "72",
+          "left": "96",
+          "bottom": "250",
+          "right": "546"
+        },
+        "id": "label_1",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "65",
+          "left": "846",
+          "bottom": "209",
+          "right": "984"
+        },
+        "id": "field_1",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "250",
+          "left": "0",
+          "bottom": "250",
+          "right": "0"
+        },
+        "id": "row_1_bottom_barrier",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "286",
+          "left": "48",
+          "bottom": "520",
+          "right": "1032"
+        },
+        "id": "row_2_bg",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "286",
+          "left": "96",
+          "bottom": "430",
+          "right": "232"
+        },
+        "id": "label_2",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "293",
+          "left": "280",
+          "bottom": "520",
+          "right": "984"
+        },
+        "id": "field_2",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "520",
+          "left": "0",
+          "bottom": "520",
+          "right": "0"
+        },
+        "id": "row_2_bottom_barrier",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "556",
+          "left": "48",
+          "bottom": "741",
+          "right": "1032"
+        },
+        "id": "row_3_bg",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "556",
+          "left": "96",
+          "bottom": "700",
+          "right": "232"
+        },
+        "id": "label_3",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "563",
+          "left": "280",
+          "bottom": "741",
+          "right": "984"
+        },
+        "id": "field_3",
+        "class": "AppCompatTextView"
+      },
+      {
+        "bounds": {
+          "top": "741",
+          "left": "0",
+          "bottom": "813",
+          "right": "1080"
+        },
+        "id": "form_bottom_spacer",
+        "class": "Space"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}
