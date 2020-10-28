@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#55aa55"
+    android:tag="0,0,409,450"
+    android:minHeight="150dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- b/123623310 -->
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,1080,1920 0,366,594,1188 594,0,0,0 594,0,486,1839 1056,1839,0,57"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,1188 0,0,594,1188 594,0,0,0 594,0,486,1107 1056,1107,0,57"/>
+
+    <ImageView
+        android:background="@color/colorAccent"
+        android:id="@+id/post_thumb"
+        android:tag="0,366,594,1188"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/guideline"
+        app:layout_constraintDimensionRatio="1:2"
+        app:layout_constrainedWidth="true"
+        />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:tag="594,0,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".55" />
+
+    <TextView
+        android:id="@+id/post_text"
+        android:tag="594,0,486,1839"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/guideline"
+        app:layout_constraintBottom_toTopOf="@id/hf_post_stats"
+        app:layout_constraintVertical_chainStyle="spread_inside"  />
+
+    <TextView
+        android:id="@+id/hf_post_stats"
+        android:tag="1056,1839,0,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:textAlignment="viewEnd"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/post_text" />
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:tag="0,0,404,1920">
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,404,1920 0,24,105,106 105,24,200,57 105,81,299,49 161,863,195,195 275,977,81,81 320,0,84,84 0,148,161,65 0,95,161,1920"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,545 0,24,105,106 105,24,200,57 105,81,299,49 837,175,195,195 951,289,81,81 996,0,84,84 0,148,837,65 0,213,837,308"/>
+
+    <ImageView
+        android:id="@+id/content_icon"
+        android:layout_width="35dp"
+        android:layout_height="0dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:tag="0,24,105,106"
+        app:layout_constraintBottom_toBottomOf="@+id/content_date_textview"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/content_type_textview" />
+
+    <TextView
+        android:id="@+id/content_type_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:tag="105,24,200,57"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@id/content_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Availability" />
+
+    <TextView
+        android:id="@+id/content_date_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:tag="105,81,299,49"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@id/content_type_textview"
+        app:layout_constraintTop_toBottomOf="@+id/content_type_textview"
+        android:text="11/08/2013 15h00" />
+
+    <ImageView
+        android:id="@+id/last_user_image"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_marginEnd="16dp"
+        android:padding="5dp"
+        android:tag="837,863,195,195"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="W,1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/user_count"
+        android:layout_width="27dp"
+        android:layout_height="27dp"
+        android:gravity="center"
+        android:tag="951,977,81,81"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="@id/last_user_image"
+        app:layout_constraintEnd_toEndOf="@id/last_user_image"
+        android:text="+23" />
+
+    <TextView
+        android:id="@+id/content_unread_textview"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_centerVertical="true"
+        android:gravity="top|right"
+        android:paddingEnd="6dp"
+        android:paddingTop="3dp"
+        android:tag="996,0,84,84"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="2" />
+
+    <TextView
+        android:id="@+id/content_title_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:tag="0,148,837,65"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@id/last_user_image"
+        app:layout_constraintStart_toStartOf="@id/content_icon"
+        app:layout_constraintTop_toBottomOf="@+id/content_icon"
+        android:text="Raquette" />
+
+    <TextView
+        android:id="@+id/content_description_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:ellipsize="end"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:paddingTop="2dp"
+        android:tag="0,901,837,308"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/content_title_textview"
+        app:layout_constraintStart_toStartOf="@id/content_title_textview"
+        app:layout_constraintTop_toBottomOf="@+id/content_title_textview"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat" />
+
+</android.support.constraint.ConstraintLayout>

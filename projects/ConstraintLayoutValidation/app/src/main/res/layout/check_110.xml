@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:tag="0,0,0,349"
+    android:layout_marginTop="72dp"
+    android:background="#932567">
+
+    <!-- b/37460648 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,0,1920 0,834,0,253 0,0,0,0"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,153 0,48,1080,57 0,0,0,0"/>
+
+    <TextView
+        android:id="@+id/titleTVc"
+        android:tag="0,932,1080,57"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="#31eadb"
+        android:text="Title"
+        android:textColor="#0d1339"
+        app:layout_constraintBottom_toTopOf="@+id/descriptionTVc"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_goneMarginBottom="16dp"/>
+
+    <TextView
+        android:id="@+id/descriptionTVc"
+        android:tag="0,0,0,0"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Description"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleTVc"/>
+
+</android.support.constraint.ConstraintLayout>

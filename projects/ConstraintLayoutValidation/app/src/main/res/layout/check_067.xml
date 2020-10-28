@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layout_optimizationLevel="none"
+    android:padding="10dp"
+    android:tag="0,0,624,234">
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,624,1920 330,60,264,1710"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,234 330,60,720,144"/>
+
+    <Button
+        android:id="@+id/button112"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="40dp"
+        android:layout_marginLeft="21dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="10dp"
+        android:tag="330,60,720,1710"
+        android:text="Button"
+        tools:layout_editor_absoluteX="59dp"
+        tools:layout_editor_absoluteY="45dp" />
+</android.support.constraint.ConstraintLayout>

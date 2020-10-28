@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layoutDirection="rtl"
+    android:tag="0,0,154,57"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- b/70181930 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,154,1920 80,0,74,57 0,0,80,57"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,57 543,0,74,57 463,0,80,57"/>
+
+    <TextView
+        android:id="@+id/text_one"
+        android:tag="543,0,74,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="One"
+        app:layout_constraintEnd_toStartOf="@+id/text_two"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_two"
+        android:tag="463,0,80,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Two"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/text_one"
+        app:layout_constraintTop_toTopOf="parent" />
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="0,0,1080,763"
+    android:background="@android:color/black">
+
+    <!-- bug b/63444274 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,1080,1920 31,347,1020,768 175,1175,732,73 31,1284,924,73 49,1453,468,120 565,1453,468,120"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,763 31,0,1020,305 175,365,732,73 31,474,924,73 49,643,468,120 565,643,468,120"/>
+
+    <TextView
+        android:id="@+id/top_text_view"
+        android:tag="30,347,1020,768"
+        android:layout_width="340dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginRight="48dp"
+        android:layout_marginStart="48dp"
+        android:scaleType="fitCenter"
+        android:text="In the words of Lionel Richie"
+        app:layout_constraintBottom_toTopOf="@+id/line_1"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.4"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/line_1"
+        android:tag="174,1175,732,73"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="48dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/line_2"
+        app:layout_constraintLeft_toLeftOf="@+id/top_text_view"
+        app:layout_constraintRight_toRightOf="@+id/top_text_view"
+        app:layout_constraintTop_toBottomOf="@id/top_text_view"
+        tools:text="Hello" />
+
+    <TextView
+        android:id="@+id/line_2"
+        android:tag="30,1284,924,73"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/positive_button"
+        app:layout_constraintLeft_toLeftOf="@+id/top_text_view"
+        app:layout_constraintRight_toRightOf="@+id/top_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/line_1"
+        tools:text="Is it me you're looking for?" />
+
+    <Button
+        android:id="@+id/negative_button"
+        android:tag="48,1453,468,120"
+        android:layout_width="156dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:text="No"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="@+id/top_text_view"
+        app:layout_constraintRight_toLeftOf="@+id/positive_button"
+        app:layout_constraintTop_toTopOf="@+id/positive_button"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/positive_button"
+        android:tag="564,1453,468,120"
+        android:layout_width="156dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:maxWidth="140dp"
+        android:text="Yes"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintLeft_toRightOf="@+id/negative_button"
+        app:layout_constraintRight_toRightOf="@+id/top_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/line_2"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- b/158285667 -->
+
+
+    <android.support.constraint.helper.Flow
+        android:background="#0FF"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:flow_horizontalGap="20dp"
+        app:constraint_referenced_ids="tv_blue, tv_green, tv_red"
+        app:flow_maxElementsWrap="2"
+        app:layout_constrainedHeight="true"
+        app:flow_wrapMode="chain"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_blue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#00F"
+        android:padding="8dp"
+        android:text="Blue"
+        app:layout_constraintWidth_percent="0.5"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/tv_green"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#0F0"
+        android:padding="8dp"
+        android:text="Green"
+        app:layout_constraintWidth_percent="0.5"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/tv_red"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#F00"
+        android:padding="8dp"
+        android:text="Red"
+        app:layout_constraintWidth_percent="0.5"
+        tools:ignore="MissingConstraints" />
+
+
+</android.support.constraint.ConstraintLayout>

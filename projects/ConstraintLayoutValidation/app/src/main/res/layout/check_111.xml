@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:tag="0,0,218,300"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- b/38016945 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,218,1920 0,0,0,300 0,0,218,153 0,0,0,0"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,153 0,0,862,153 862,0,218,153 0,0,0,0"/>
+
+    <TextView
+        android:id="@+id/lefttv3"
+        android:tag="0,0,862,153"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Left"
+        android:padding="16dp"
+        app:layout_constraintRight_toLeftOf="@+id/centertv3"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/centertv3"
+        android:tag="862,0,218,153"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Center"
+        android:padding="16dp"
+        app:layout_constraintLeft_toRightOf="@+id/lefttv3"
+        app:layout_constraintRight_toLeftOf="@+id/righttv3"/>
+
+    <TextView
+        android:id="@+id/righttv3"
+        android:tag="0,0,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Right"
+        android:padding="16dp"
+        app:layout_constraintLeft_toRightOf="@+id/centertv3"
+        app:layout_constraintRight_toRightOf="parent"
+        android:visibility="gone"/>
+
+</android.support.constraint.ConstraintLayout>

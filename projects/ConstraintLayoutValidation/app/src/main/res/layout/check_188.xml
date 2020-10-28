@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:tag="0,0,300,300"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- b/77991323 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,300,1920 0,0,300,300 0,300,0,0"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,1080 0,0,1080,1080 0,300,0,0"/>
+
+    <View
+        android:id="@+id/view2"
+        android:background="@color/colorAccent"
+        android:tag="390,0,300,300"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline14"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline14"
+        android:tag="0,300,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="100dp" />
+</android.support.constraint.ConstraintLayout>

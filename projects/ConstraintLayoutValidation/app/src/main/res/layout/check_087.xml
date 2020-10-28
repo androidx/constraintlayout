@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:tag="0,0,54,57"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,54,1920 0,0,27,57 0,0,0,0 27,0,27,57 0,0,0,0 0,0,27,57 0,0,0,0 27,0,27,57 0,0,0,0 0,0,0,0 54,0,0,0"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,57 342,0,27,57 0,0,0,0 711,0,27,57 0,0,0,0 342,0,27,57 0,0,0,0 711,0,27,57 0,0,0,0 0,0,0,0 1080,0,0,0"/>
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="A"
+        android:tag="342,0,27,57"
+        tools:layout_editor_absoluteY="173dp"
+        app:layout_constraintRight_toLeftOf="@+id/textView20"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="B"
+        android:tag="0,0,0,0"
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="@+id/textView19"
+        app:layout_constraintRight_toLeftOf="@+id/textView21"
+        tools:layout_editor_absoluteY="173dp" />
+
+    <TextView
+        android:id="@+id/textView21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="C"
+        android:tag="711,0,27,57"
+        tools:layout_editor_absoluteY="173dp"
+        app:layout_constraintRight_toLeftOf="@+id/textView22"
+        app:layout_constraintLeft_toRightOf="@+id/textView20" />
+
+    <TextView
+        android:id="@+id/textView22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="D"
+        android:tag="0,0,0,0"
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="@+id/textView21"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_editor_absoluteY="173dp" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="A"
+        android:tag="342,0,27,57"
+        tools:layout_editor_absoluteY="123dp"
+        app:layout_constraintRight_toLeftOf="@+id/textView16"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline12"/>
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="B"
+        android:tag="0,0,0,0"
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="@+id/textView15"
+        app:layout_constraintRight_toLeftOf="@+id/textView17"
+        tools:layout_editor_absoluteY="123dp" />
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="C"
+        android:tag="711,0,27,57"
+        tools:layout_editor_absoluteY="123dp"
+        app:layout_constraintRight_toLeftOf="@+id/textView18"
+        app:layout_constraintLeft_toRightOf="@+id/textView16" />
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="D"
+        android:tag="0,0,0,0"
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="@+id/textView17"
+        app:layout_constraintRight_toLeftOf="@+id/guideline13"
+        tools:layout_editor_absoluteY="123dp" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline12"
+        android:tag="0,0,0,0"
+        app:layout_constraintGuide_begin="0dp"
+        android:orientation="vertical" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline13"
+        android:tag="1080,0,0,0"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="0dp" />
+</android.support.constraint.ConstraintLayout>

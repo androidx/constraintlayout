@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:tag="0,0,1080,168"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- b/72683078 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,1080,1920 164,0,753,168 0,168,1080,1752"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,168 0,0,1080,168 0,168,1080,0"/>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:tag="0,0,1080,168"
+        android:layout_width="match_parent"
+        android:layout_height="?android:actionBarSize"
+        android:background="#999"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/app_name"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/subTitle"
+                app:layout_constraintStart_toEndOf="@+id/logo"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/subTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:text="projects list"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/logo"
+                app:layout_constraintTop_toBottomOf="@+id/title" />
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:tag="0,168,1080,1752"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@android:drawable/dialog_holo_light_frame"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:animateLayoutChanges="true"
+                android:descendantFocusability="blocksDescendants">
+
+                <View
+                    android:id="@+id/downloadedGroupTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:background="#BBB"
+                    app:layout_constraintBottom_toBottomOf="@id/downloadedGroupIndicator"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:text="downloaded projects"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/downloadedGroupTitle"
+                    app:layout_constraintLeft_toLeftOf="@id/downloadedGroupTitle"
+                    app:layout_constraintTop_toTopOf="@id/downloadedGroupTitle" />
+
+                <TextView
+                    android:id="@+id/textDownloadedGroupCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/downloadedGroupTitle"
+                    app:layout_constraintRight_toLeftOf="@id/downloadedGroupIndicator"
+                    app:layout_constraintTop_toTopOf="@id/downloadedGroupTitle" />
+
+                <ImageView
+                    android:id="@+id/downloadedGroupIndicator"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/downloadedGroupTitle" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerViewDownloadedProjects"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:layout_constraintTop_toBottomOf="@+id/downloadedGroupTitle" />
+
+                <TextView
+                    android:id="@+id/textViewDownloadedEmpty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="common_group_is_empty"
+                    android:textSize="18sp"
+                    android:visibility='visible'
+                    app:layout_constraintTop_toBottomOf="@+id/downloadedGroupTitle" />
+
+                <android.support.constraint.Barrier
+                    android:id="@+id/downloadedBarrier"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="recyclerViewDownloadedProjects,textViewDownloadedEmpty" />
+
+                <View
+                    android:id="@+id/notDownloadedGroupTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:background="#BBB"
+                    app:layout_constraintBottom_toBottomOf="@id/notDownloadedGroupIndicator"
+                    app:layout_constraintTop_toBottomOf="@id/downloadedBarrier" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:text="available_for_download_projects"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/notDownloadedGroupTitle"
+                    app:layout_constraintLeft_toLeftOf="@id/notDownloadedGroupTitle"
+                    app:layout_constraintTop_toTopOf="@id/notDownloadedGroupTitle" />
+
+                <TextView
+                    android:id="@+id/textNotDownloadedGroupCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/notDownloadedGroupTitle"
+                    app:layout_constraintRight_toLeftOf="@id/notDownloadedGroupIndicator"
+                    app:layout_constraintTop_toTopOf="@id/notDownloadedGroupTitle" />
+
+                <ImageView
+                    android:id="@+id/notDownloadedGroupIndicator"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/notDownloadedGroupTitle" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerViewNotDownloadedProjects"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:layout_constraintTop_toBottomOf="@+id/notDownloadedGroupTitle" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="common_group_is_empty"
+                    android:textSize="18sp"
+                    android:visibility='visible'
+                    app:layout_constraintTop_toBottomOf="@+id/notDownloadedGroupTitle" />
+            </android.support.constraint.ConstraintLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</android.support.constraint.ConstraintLayout>

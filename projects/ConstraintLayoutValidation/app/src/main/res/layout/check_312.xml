@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="contentDescription,hardcodedText,rtlHardcoded"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layoutDirection="rtl">
+
+    <!-- b/73186245 -->
+    <!-- same as 311 but with a specified visibility in Flow XML -->
+
+    <android.support.constraint.helper.Flow
+        android:id="@+id/flow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        android:background="#F0F"
+        android:paddingStart="50dp"
+        app:constraint_referenced_ids="v1,v2,v3,v4,v5,v6"
+        app:flow_horizontalBias="0"
+        app:flow_horizontalGap="10dp"
+        app:flow_wrapMode="chain"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingLeft="100dp"
+        android:paddingRight="50dp" />
+
+    <View
+        android:id="@+id/v1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="#ff0000"
+        android:visibility="visible"
+        tools:layout_editor_absoluteX="10dp"
+        tools:layout_editor_absoluteY="10dp" />
+
+    <View
+        android:id="@+id/v2"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="#00ff00"
+        android:visibility="visible"
+        tools:layout_editor_absoluteX="120dp"
+        tools:layout_editor_absoluteY="10dp" />
+
+    <View
+        android:id="@+id/v3"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="#0000ff"
+        android:visibility="visible"
+        tools:layout_editor_absoluteX="230dp"
+        tools:layout_editor_absoluteY="10dp" />
+
+    <View
+        android:id="@+id/v4"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="#0000ff"
+        android:visibility="visible"
+        tools:layout_editor_absoluteX="10dp"
+        tools:layout_editor_absoluteY="110dp" />
+
+    <View
+        android:id="@+id/v5"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="#ff0000"
+        android:visibility="gone"
+        tools:layout_editor_absoluteX="120dp"
+        tools:layout_editor_absoluteY="110dp" />
+
+    <View
+        android:id="@+id/v6"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="#00ff00"
+        android:visibility="visible"
+        tools:layout_editor_absoluteX="230dp"
+        tools:layout_editor_absoluteY="110dp" />
+
+
+</android.support.constraint.ConstraintLayout>

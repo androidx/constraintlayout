@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:tag="0,0,405,669"
+    android:paddingBottom="4dp">
+
+    <!-- b/72874413 -->
+
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,669 24,24,135,135 183,24,699,57 183,93,699,57 183,174,699,57 0,231,0,0 69,231,837,288 183,519,222,57 24,600,858,57 906,24,150,150"/>
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,405,1920 24,24,135,135 183,24,24,57 183,93,24,57 183,174,24,57 0,231,0,0 69,231,162,288 183,519,222,57 24,600,183,57 231,24,150,150"/>
+
+    <ImageView
+        android:id="@+id/product_icon"
+        android:tag="24,24,135,135"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@android:color/darker_gray"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/product_title"
+        android:tag="183,24,699,57"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintEnd_toStartOf="@+id/product_add_to_basket"
+        app:layout_constraintStart_toEndOf="@+id/product_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Booster Chicken Gluten Free - DRY" />
+
+    <TextView
+        android:id="@+id/product_description"
+        android:tag="183,93,699,57"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintEnd_toStartOf="@+id/product_add_to_basket"
+        app:layout_constraintStart_toEndOf="@+id/product_icon"
+        app:layout_constraintTop_toBottomOf="@+id/product_title"
+        tools:text="6X2.4KG (Continental) [40995]" />
+
+    <TextView
+        android:id="@+id/singleUomView"
+        android:tag="183,174,699,57"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/product_add_to_basket"
+        app:layout_constraintStart_toEndOf="@+id/product_icon"
+        app:layout_constraintTop_toBottomOf="@+id/product_description"
+        tools:text="$75.05 per Each. - Stock: 30" />
+
+    <android.support.constraint.Barrier
+        android:id="@+id/barrier"
+        android:tag="0,231,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="product_icon,singleUomView"
+        tools:layout_editor_absoluteY="8dp" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:tag="69,231,837,288"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="23dp"
+        android:layout_marginStart="23dp"
+        app:layout_constraintEnd_toStartOf="@+id/product_add_to_basket"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/barrier">
+
+        <RadioButton
+            android:id="@+id/radioButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            tools:text="$75.05 per Each. - Stock: 30" />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            tools:text="$75.05 per Each. - Stock: 30" />
+
+        <RadioButton
+            android:id="@+id/radioButton3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            tools:text="$75.05 per Each. - Stock: 30" />
+    </RadioGroup>
+
+    <LinearLayout
+        android:id="@+id/icon_area"
+        android:tag="183,519,222,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toEndOf="@+id/product_icon"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup">
+
+        <ImageView
+            android:id="@+id/icon_promo"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginStart="2dp"
+            android:src="@android:color/darker_gray" />
+
+        <ImageView
+            android:id="@+id/icon_preferred"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginStart="2dp"
+            android:src="@android:color/darker_gray" />
+
+        <ImageView
+            android:id="@+id/icon_new_product"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginStart="2dp"
+            android:src="@android:color/darker_gray" />
+
+
+        <ImageView
+            android:id="@+id/substituted_product_icon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:src="@android:color/darker_gray" />
+
+        <TextView
+            android:id="@+id/substituted_product_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Substituted for ..." />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/product_eta"
+        android:tag="24,600,858,57"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/product_add_to_basket"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/icon_area"
+        tools:text="More stock due: 15/15/15" />
+
+    <ImageButton
+        android:id="@+id/product_add_to_basket"
+        android:tag="906,24,150,150"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

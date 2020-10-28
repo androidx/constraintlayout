@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:tag="0,0,281,1920"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- b/67680098 -->
+
+    <!-- This works in 1.1.0-beta1 but breaks in 1.1.0-beta2.
+    textView3 is always constrained to textView1, even when the barrier
+    should clearly be at the guideline -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,281,1920 48,48,209,57 84,0,0,0 257,0,0,0 281,0,0,1920"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,792 48,48,209,57 324,0,0,0 324,0,0,0 348,0,732,792"/>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:tag="48,48,209,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Warehouse"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:tag="324,0,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.3" />
+
+    <android.support.constraint.Barrier
+        android:id="@+id/barrier1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="324,0,0,0"
+        app:barrierDirection="end"
+        app:constraint_referenced_ids="textView1,guideline"
+        tools:layout_editor_absoluteX="108dp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:tag="348,0,732,792"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/barrier1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

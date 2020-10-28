@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:tag="0,0,620,452"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <!-- b/67766457 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,620,1920 144,1680,264,144 356,1468,264,144"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,452 144,212,264,144 356,0,264,144"/>
+
+    <Button
+        android:id="@+id/A"
+        android:tag="144,1680,264,144"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:layout_marginStart="48dp"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/B"
+        android:tag="356,1468,264,144"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        app:layout_constraintCircle="@id/A"
+        app:layout_constraintCircleRadius="100dp"
+        app:layout_constraintCircleAngle="45"
+        tools:layout_editor_absoluteX="205dp"
+        tools:layout_editor_absoluteY="45dp" />
+</android.support.constraint.ConstraintLayout>

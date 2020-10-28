@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:tag="0,0,139,114"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- b/70754853 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,139,1920 0,0,81,57 0,57,0,0 0,57,139,57"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,114 0,0,81,57 0,57,0,0 0,57,139,57"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:tag="0,0,81,57"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <android.support.constraint.Barrier
+        android:id="@+id/barrier"
+        android:tag="0,57,0,0"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="title"/>
+
+    <TextView
+        android:id="@+id/subtitle"
+        android:tag="0,57,139,57"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="subtitle"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barrier"/>
+
+</android.support.constraint.ConstraintLayout>

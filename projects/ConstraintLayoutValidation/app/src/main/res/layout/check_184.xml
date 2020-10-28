@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="0,0,454,57"
+    tools:ignore="HardcodedText,ContentDescription">
+
+    <!-- b/78613911-->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,454,1920 0,936,48,48 108,942,36,36 204,936,48,48 0,0,0,0 0,0,0,0 312,932,142,57"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,57 313,5,48,48 421,11,36,36 517,5,48,48 0,0,0,0 0,0,0,0 625,0,142,57"/>
+
+    <!-- The margins need a bit of explanation:
+             The length label (1h 10m) only needs a left margin when there are icons visible.
+             Since the 3 legs are optionally visible the last visible item needs to provide a right margin.
+             To implement this goneMarginEnd is set on the icons which is only visible when the arrow
+             after them is gone. For this to work the views must be packed-chained in both directions.
+    -->
+
+    <ImageView
+        android:id="@+id/leg_1"
+        android:tag="313,936,48,48"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:src="@android:drawable/sym_def_app_icon"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/leg_2_transfer"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginEnd="8dp" />
+
+    <ImageView
+        android:id="@+id/leg_2_transfer"
+        android:tag="421,942,36,36"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:src="@android:drawable/ic_input_add"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/leg_2"
+        app:layout_constraintEnd_toStartOf="@+id/leg_2"
+        app:layout_constraintStart_toEndOf="@+id/leg_1"
+        app:layout_constraintTop_toTopOf="@+id/leg_2" />
+
+    <ImageView
+        android:id="@+id/leg_2"
+        android:tag="517,936,48,48"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:src="@android:drawable/sym_def_app_icon"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/leg_3_transfer"
+        app:layout_constraintStart_toEndOf="@+id/leg_2_transfer"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginEnd="20dp" />
+
+    <ImageView
+        android:id="@+id/leg_3_transfer"
+        android:tag="0,0,0,0"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="20dp"
+        android:src="@android:drawable/ic_input_add"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/leg_3"
+        app:layout_constraintEnd_toStartOf="@+id/leg_3"
+        app:layout_constraintStart_toEndOf="@+id/leg_2"
+        app:layout_constraintTop_toTopOf="@+id/leg_3" />
+
+    <ImageView
+        android:id="@+id/leg_3"
+        android:tag="0,0,0,0"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:src="@android:drawable/sym_def_app_icon"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/length"
+        app:layout_constraintStart_toEndOf="@+id/leg_3_transfer"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/length"
+        android:tag="625,931,142,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1h 10m"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/leg_3"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

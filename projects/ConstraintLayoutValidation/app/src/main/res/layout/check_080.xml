@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="0,0,534,315">
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,534,1920 0,0,534,315 0,0,95,57 439,0,95,57 0,0,27,57 254,0,26,57 507,0,27,57"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,315 273,0,534,315 273,0,95,57 712,0,95,57 273,0,27,57 527,0,26,57 780,0,27,57"/>
+
+    <View
+        android:id="@+id/background"
+        android:layout_width="178dp"
+        android:layout_height="105dp"
+        android:background="#ff0000"
+        android:tag="273,0,534,315"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:layout_editor_absoluteY="69dp" />
+
+    <TextView
+        android:id="@+id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:tag="273,0,95,57"
+        android:text="text1"
+        app:layout_constraintRight_toLeftOf="@+id/text2"
+        app:layout_constraintLeft_toLeftOf="@+id/background"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        tools:layout_editor_absoluteY="216dp" />
+
+    <TextView
+        android:id="@+id/text2"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:tag="712,0,95,57"
+        android:text="text2"
+        app:layout_constraintRight_toRightOf="@+id/background"
+        app:layout_constraintLeft_toRightOf="@+id/text1"
+        tools:layout_editor_absoluteY="216dp" />
+
+    <TextView
+        android:id="@+id/A"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="273,0,27,57"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        android:text="A"
+        app:layout_constraintLeft_toLeftOf="@+id/background"
+        app:layout_constraintRight_toLeftOf="@+id/B"
+        tools:layout_editor_absoluteY="293dp" />
+
+    <TextView
+        android:id="@+id/B"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="527,0,26,57"
+        android:text="B"
+        app:layout_constraintRight_toLeftOf="@+id/C"
+        app:layout_constraintLeft_toRightOf="@+id/A"
+        tools:layout_editor_absoluteY="293dp" />
+
+    <TextView
+        android:id="@+id/C"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="780,0,27,57"
+        android:text="C"
+        app:layout_constraintLeft_toRightOf="@+id/B"
+        app:layout_constraintRight_toRightOf="@+id/background"
+        tools:layout_editor_absoluteY="293dp" />
+
+</android.support.constraint.ConstraintLayout>

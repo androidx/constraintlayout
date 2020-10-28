@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:tag="0,0,408,1829"
+    android:minHeight="72dp">
+
+    <!-- b/67522133 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,408,1920 48,48,144,144 240,46,0,890 240,936,0,939 288,932,72,57"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,216 48,48,144,144 240,51,672,57 240,108,672,57 960,80,72,57"/>
+
+    <ImageView
+        android:id="@+id/competition_scorer_vh_image"
+        android:tag="48,48,144,144"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="#999"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/competition_scorer_vh_name"
+        android:tag="240,903,672,57"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Christiano Ronaldo"
+        app:layout_constraintBottom_toTopOf="@+id/competition_scorer_vh_details"
+        app:layout_constraintLeft_toRightOf="@+id/competition_scorer_vh_image"
+        app:layout_constraintRight_toLeftOf="@+id/competition_scorer_vh_goals"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/competition_scorer_vh_details"
+        android:tag="240,960,672,57"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Real Madrid Forward"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/competition_scorer_vh_name"
+        app:layout_constraintRight_toLeftOf="@id/competition_scorer_vh_goals"
+        app:layout_constraintTop_toBottomOf="@id/competition_scorer_vh_name" />
+
+    <TextView
+        android:id="@+id/competition_scorer_vh_goals"
+        android:tag="960,932,72,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:gravity="center_horizontal"
+        android:minWidth="24dp"
+        android:text="38"
+        app:layout_constraintBottom_toBottomOf="@id/competition_scorer_vh_details"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/competition_scorer_vh_name" />
+
+</android.support.constraint.ConstraintLayout>

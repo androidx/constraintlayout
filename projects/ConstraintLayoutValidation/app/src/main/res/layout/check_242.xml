@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="0,0,420,1920"
+    android:clickable="true"
+    android:focusable="true">
+
+    <!-- b/134082517 -->
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,420,1920 0,0,210,0 210,0,210,0 210,0,0,1920"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,933 0,0,210,0 870,0,210,0 210,0,660,933"/>
+
+    <!-- modifying those spaces widths affects how much the text is being clipped, removing nesting of constraint layout also seems to be fixing the issue -->
+    <Space
+        android:id="@+id/left_space"
+        android:tag="0,0,210,0"
+        android:layout_width="70dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <Space
+        android:id="@+id/right_space"
+        android:tag="870,0,210,0"
+        android:layout_width="70dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/inner_container"
+        android:tag="210,494,660,933"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/right_space"
+        app:layout_constraintStart_toEndOf="@+id/left_space"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- removing layout_constraintDimensionRatio and setting this view's width to 154dp fixes the issue -->
+        <ImageView
+            android:id="@+id/image_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:srcCompat="@color/colorPrimary"
+            app:layout_constraintDimensionRatio="154:260"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@null"/>
+
+        <TextView
+            android:id="@+id/text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constrainedWidth="true"
+            android:letterSpacing="-0.04"
+            android:lineSpacingExtra="0sp"
+            android:text="Very very very long text that causes a bug test test. This text is clipped but shouldn't be test test test. Blah blah blah test."
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/image_view"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.constraint.ConstraintLayout>

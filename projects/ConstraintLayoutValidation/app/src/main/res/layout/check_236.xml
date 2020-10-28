@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_body"
+    android:tag="0,0,60,166"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#55aa55">
+
+    <!-- basic flow check -->
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,60,1920 0,902,60,117 0,877,0,166 30,877,0,166 60,877,0,166"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,117 0,0,1080,117 0,0,340,117 370,0,340,117 740,0,340,117"/>
+
+    <android.support.constraint.helper.Flow
+        android:id="@+id/flow"
+        android:tag="0,902,1080,117"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#FF0"
+        android:padding="0dp"
+        app:constraint_referenced_ids="textView1,textView2,textView3"
+        app:flow_horizontalStyle="spread_inside"
+        app:flow_horizontalGap="10dp"
+        app:flow_wrapMode="aligned"
+        app:flow_maxElementsWrap="3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+
+    </android.support.constraint.helper.Flow>
+
+
+    <TextView
+        android:id="@+id/textView1"
+        android:tag="0,902,340,117"
+        android:padding="10dp"
+        android:visibility="visible"
+        android:background="@color/colorAccent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteY="352dp"
+        tools:layout_editor_absoluteX="247dp"
+        android:text="T1" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:tag="370,902,340,117"
+        android:padding="10dp"
+        android:background="#FFF"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:layout_editor_absoluteY="352dp"
+        tools:layout_editor_absoluteX="247dp"
+        android:text="T2" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:tag="740,902,340,117"
+        android:padding="10dp"
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="visible"
+        tools:layout_editor_absoluteY="352dp"
+        tools:layout_editor_absoluteX="247dp"
+        android:text="T3" />
+
+</android.support.constraint.ConstraintLayout>

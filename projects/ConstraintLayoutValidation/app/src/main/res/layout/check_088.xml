@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:tag="0,0,312,1655"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,312,1920 0,48,312,1607"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,1535 0,48,1080,1487"/>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:tag="0,48,1080,1487"
+        android:layout_marginTop="16dp">
+
+        <ImageView
+            android:id="@+id/img_location"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <TextView
+            android:id="@+id/txtCompanyName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Example text"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintLeft_toRightOf="@+id/img_location"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/img_location"
+            app:layout_constraintVertical_bias="0.33"/>
+
+        <TextView
+            android:id="@+id/txtStreetAddress"
+            android:text="Example text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:layout_constraintLeft_toLeftOf="@+id/txtCompanyName"
+            app:layout_constraintRight_toRightOf="@+id/txtCompanyName"
+            app:layout_constraintTop_toBottomOf="@+id/txtCompanyName"
+            app:layout_constraintBottom_toBottomOf="@+id/img_location"
+            app:layout_constraintVertical_bias="0.33"/>
+
+        <View
+            android:id="@+id/locationDivider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@+id/img_location"
+            app:layout_constraintLeft_toLeftOf="@+id/img_location"
+            app:layout_constraintRight_toRightOf="@+id/txtStreetAddress" />
+
+        <ImageView
+            android:id="@+id/img_phone"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintLeft_toLeftOf="@+id/img_location"
+            app:layout_constraintRight_toRightOf="@+id/img_location"
+            app:layout_constraintWidth_default="spread"
+            app:layout_constraintHeight_default="spread"
+            app:layout_constraintTop_toBottomOf="@+id/locationDivider" />
+
+        <EditText
+            android:id="@+id/txtPhoneNumber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="phone"
+            app:layout_constraintLeft_toLeftOf="@+id/txtStreetAddress"
+            app:layout_constraintRight_toRightOf="@+id/txtStreetAddress"
+            app:layout_constraintTop_toTopOf="@+id/img_phone"
+            app:layout_constraintBottom_toBottomOf="@+id/img_phone"
+            android:hint="(555) 555-1234" />
+
+        <View
+            android:id="@+id/phoneDivider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@+id/txtPhoneNumber"
+            app:layout_constraintLeft_toLeftOf="@+id/img_phone"
+            app:layout_constraintRight_toRightOf="@+id/txtPhoneNumber" />
+
+        <ImageView
+            android:id="@+id/img_sign"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@+id/phoneDivider"
+            app:layout_constraintRight_toRightOf="@+id/img_phone"
+            app:layout_constraintLeft_toLeftOf="@+id/img_phone" />
+
+        <Spinner
+            android:id="@+id/spnSignType"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            app:layout_constraintTop_toTopOf="@+id/img_sign"
+            app:layout_constraintBottom_toBottomOf="@+id/img_sign"
+            app:layout_constraintLeft_toLeftOf="@+id/txtPhoneNumber"
+            app:layout_constraintRight_toRightOf="@+id/txtPhoneNumber" />
+
+        <Spinner
+            android:id="@+id/spnSignIssue"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@+id/spnSignType"
+            app:layout_constraintLeft_toLeftOf="@+id/spnSignType"
+            app:layout_constraintRight_toRightOf="@+id/spnSignType" />
+
+        <View
+            android:id="@+id/signInfoDivider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@+id/spnSignIssue"
+            app:layout_constraintLeft_toLeftOf="@+id/img_sign"
+            app:layout_constraintRight_toRightOf="@+id/spnSignIssue" />
+
+        <EditText
+            android:id="@+id/txtNotes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:lines="3"
+            android:minLines="1"
+            android:maxLines="6"
+            android:inputType="textMultiLine|textCapSentences"
+            app:layout_constraintTop_toBottomOf="@+id/signInfoDivider"
+            app:layout_constraintLeft_toLeftOf="@+id/signInfoDivider"
+            app:layout_constraintRight_toRightOf="@+id/signInfoDivider"/>
+
+        <View
+            android:id="@+id/notesDivider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@+id/txtNotes"
+            app:layout_constraintLeft_toLeftOf="@+id/txtNotes"
+            app:layout_constraintRight_toRightOf="@+id/txtNotes" />
+
+        <TextView
+            android:id="@+id/txtViewPhotos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Images"
+            app:layout_constraintTop_toTopOf="@+id/btnManagePhotos"
+            app:layout_constraintBottom_toBottomOf="@+id/btnManagePhotos"
+            app:layout_constraintLeft_toLeftOf="@+id/notesDivider" />
+
+        <Button style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/btnManagePhotos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Manage"
+            app:layout_constraintTop_toTopOf="@+id/notesDivider"
+            app:layout_constraintRight_toRightOf="@+id/notesDivider"/>
+
+        <GridLayout
+            android:id="@+id/imageGrid"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/colorAccent"
+            app:layout_constraintTop_toBottomOf="@+id/btnManagePhotos"
+            app:layout_constraintLeft_toLeftOf="@+id/txtViewPhotos"
+            app:layout_constraintRight_toRightOf="@+id/btnManagePhotos"/>
+
+        <android.support.v7.widget.ButtonBarLayout
+            android:id="@+id/buttonBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center_horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/imageGrid"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:layout_editor_absoluteX="0dp">
+
+            <Button style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save" />
+
+            <Button style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Send"/>
+
+        </android.support.v7.widget.ButtonBarLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+</ScrollView>

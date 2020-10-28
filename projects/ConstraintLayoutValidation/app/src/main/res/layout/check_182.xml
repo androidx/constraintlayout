@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layoutDirection="rtl"
+    android:tag="0,0,150,156"
+    android:layout_height="match_parent">
+
+    <!-- b/77672715 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,150,1920 30,912,96,96 0,978,60,60"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,156 960,30,96,96 930,96,60,60"/>
+
+    <ImageView
+        android:id="@+id/iconImage"
+        android:tag="960,912,96,96"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:layout_margin="8dp"
+        android:background="#0f0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/uncheckedInboxItemCountText"
+        android:tag="930,978,60,60"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:background="#f00"
+        android:gravity="center"
+        android:minWidth="20dp"
+        android:textColor="#fff"
+        android:textSize="6dp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/iconImage"
+        app:layout_constraintEnd_toEndOf="@id/iconImage"
+        app:layout_constraintStart_toEndOf="@id/iconImage"
+        app:layout_constraintTop_toBottomOf="@id/iconImage"
+        tools:text="..." />
+
+</android.support.constraint.ConstraintLayout>
