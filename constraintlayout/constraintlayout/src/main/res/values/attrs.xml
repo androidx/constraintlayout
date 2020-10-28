@@ -37,6 +37,9 @@
     <!-- the ides used in helpers -->
     <attr name="constraint_referenced_ids" format="string" />
 
+    <!-- the to match tags set using layout_constraintTag used in helpers -->
+    <attr name="constraint_referenced_tags" format="string" />
+
     <attr name="layout_constraintLeft_toLeftOf" format="reference|enum">
         <enum name="parent" value="0" />
     </attr>
@@ -381,6 +384,7 @@
         <attr name="barrierAllowsGoneWidgets" />
         <attr name="barrierMargin" />
         <attr name="constraint_referenced_ids" />
+        <attr name="constraint_referenced_tags" />
         <attr name="chainUseRtl" />
 
         <attr name="flow_horizontalStyle" />
@@ -596,6 +600,7 @@
 
         <attr name="barrierDirection" />
         <attr name="constraint_referenced_ids" />
+        <attr name="constraint_referenced_tags" />
         <attr name="barrierMargin" />
         <attr name="android:maxHeight" />
         <attr name="android:maxWidth" />
@@ -774,6 +779,8 @@
         <attr name="barrierDirection" />
         <attr name="barrierMargin" />
         <attr name="constraint_referenced_ids" />
+        <attr name="constraint_referenced_tags" />
+
         <attr name="android:maxHeight" />
         <attr name="android:maxWidth" />
         <attr name="android:minHeight" />
@@ -1441,6 +1448,7 @@
         <attr name="barrierDirection" />
         <attr name="barrierMargin" />
         <attr name="constraint_referenced_ids" />
+        <attr name="constraint_referenced_tags" />
         <attr name="maxHeight" format="dimension" />
         <attr name="maxWidth" format="dimension" />
         <attr name="minHeight" format="dimension" />

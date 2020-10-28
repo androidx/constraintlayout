@@ -31,6 +31,7 @@ public class Barrier extends HelperWidget {
     public static final int TOP = 2;
     public static final int BOTTOM = 3;
     private static final boolean USE_RESOLUTION = true;
+    private static final boolean USE_RELAX_GONE = false;
 
     private int mBarrierType = LEFT;
 
@@ -194,7 +195,13 @@ public class Barrier extends HelperWidget {
             } else {
                 system.addGreaterBarrier(position.mSolverVariable, target, mMargin + margin, hasMatchConstraintWidgets);
             }
-            system.addEquality(position.mSolverVariable, target, mMargin + margin, equalityOnReferencesStrength);
+            if (USE_RELAX_GONE) {
+                if (widget.getVisibility() != GONE || widget instanceof Guideline || widget instanceof Barrier) {
+                    system.addEquality(position.mSolverVariable, target, mMargin + margin, equalityOnReferencesStrength);
+                }
+            } else {
+                system.addEquality(position.mSolverVariable, target, mMargin + margin, equalityOnReferencesStrength);
+            }
         }
 
         int barrierParentStrength = SolverVariable.STRENGTH_HIGHEST;

@@ -1084,13 +1084,17 @@ public class MotionLayout extends ConstraintLayout implements
 
         @Override
         public void recycle() {
-            tracker.recycle();
-            tracker = null; // not allowed to call after recycle
+            if (tracker != null) {
+                tracker.recycle();
+                tracker = null; // not allowed to call after recycle
+            }
         }
 
         @Override
         public void clear() {
-            tracker.clear();
+            if (tracker != null) {
+                tracker.clear();
+            }
         }
 
         @Override
@@ -1102,32 +1106,48 @@ public class MotionLayout extends ConstraintLayout implements
 
         @Override
         public void computeCurrentVelocity(int units) {
-            tracker.computeCurrentVelocity(units);
+            if (tracker != null) {
+                tracker.computeCurrentVelocity(units);
+            }
         }
 
         @Override
         public void computeCurrentVelocity(int units, float maxVelocity) {
-            tracker.computeCurrentVelocity(units, maxVelocity);
+            if (tracker != null) {
+                tracker.computeCurrentVelocity(units, maxVelocity);
+            }
         }
 
         @Override
         public float getXVelocity() {
-            return tracker.getXVelocity();
+            if (tracker != null) {
+                return tracker.getXVelocity();
+            }
+            return 0;
         }
 
         @Override
         public float getYVelocity() {
-            return tracker.getYVelocity();
+            if (tracker != null) {
+                return tracker.getYVelocity();
+            }
+            return 0;
         }
 
         @Override
         public float getXVelocity(int id) {
-            return tracker.getXVelocity(id);
+            if (tracker != null) {
+                return tracker.getXVelocity(id);
+            }
+            return 0;
         }
 
         @Override
         public float getYVelocity(int id) {
-            return getYVelocity(id);
+            if (tracker != null) {
+                return getYVelocity(id);
+            }
+            return 0;
         }
     }
 
@@ -3550,10 +3570,12 @@ public class MotionLayout extends ConstraintLayout implements
         if (mStateCache != null) {
             mStateCache.apply();
         } else {
-            if (mScene.mCurrentTransition != null && mScene.mCurrentTransition.getAutoTransition() == MotionScene.Transition.AUTO_ANIMATE_TO_END) {
-                transitionToEnd();
-                setState(MotionLayout.TransitionState.SETUP);
-                setState(MotionLayout.TransitionState.MOVING);
+            if (mScene != null && mScene.mCurrentTransition != null) {
+                if (mScene.mCurrentTransition.getAutoTransition() == MotionScene.Transition.AUTO_ANIMATE_TO_END) {
+                    transitionToEnd();
+                    setState(MotionLayout.TransitionState.SETUP);
+                    setState(MotionLayout.TransitionState.MOVING);
+                }
             }
         }
     }
