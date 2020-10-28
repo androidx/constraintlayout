@@ -507,7 +507,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     }
 
     void focusJump() {
-        if (!"verification_45".startsWith(layout_name)) {
+        if (!"verification_045".startsWith(layout_name)) {
             return;
         }
         MotionLayout ml = findViewById(R.id.base);
