@@ -479,7 +479,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
 
     public BasicMeasure.Measure mMeasure = new BasicMeasure.Measure();
 
-    public static boolean measure(ConstraintWidget widget, BasicMeasure.Measurer measurer, BasicMeasure.Measure measure, boolean useCurrentDimensions) {
+    public static boolean measure(ConstraintWidget widget, BasicMeasure.Measurer measurer, BasicMeasure.Measure measure, int measureStrategy) {
         if (DEBUG) {
             System.out.println("(M) call to measure " + widget.getDebugName());
         }
@@ -492,7 +492,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
         measure.horizontalDimension = widget.getWidth();
         measure.verticalDimension = widget.getHeight();
         measure.measuredNeedsSolverPass = false;
-        measure.useCurrentDimensions = useCurrentDimensions;
+        measure.measureStrategy = measureStrategy;
 
         boolean horizontalMatchConstraints = (measure.horizontalBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
         boolean verticalMatchConstraints = (measure.verticalBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
@@ -585,7 +585,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
         widget.setHeight(measure.measuredHeight);
         widget.setHasBaseline(measure.measuredHasBaseline);
         widget.setBaselineDistance(measure.measuredBaseline);
-        measure.useCurrentDimensions = false;
+        measure.measureStrategy = BasicMeasure.Measure.SELF_DIMENSIONS;
         if (DEBUG) {
             System.out.println("(M) Measured " + widget.getDebugName() + " with : "
                     + widget.getHorizontalDimensionBehaviour() + " x " + widget.getVerticalDimensionBehaviour()
@@ -679,7 +679,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
                             && child.mMatchConstraintDefaultHeight != MATCH_CONSTRAINT_WRAP;
                     if (!skip) {
                         BasicMeasure.Measure measure = new BasicMeasure.Measure();
-                        ConstraintWidgetContainer.measure(child, mMeasurer, measure, false);
+                        ConstraintWidgetContainer.measure(child, mMeasurer, measure, BasicMeasure.Measure.SELF_DIMENSIONS);
                     }
                 }
             }

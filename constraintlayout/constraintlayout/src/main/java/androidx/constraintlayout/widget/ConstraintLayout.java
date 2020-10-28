@@ -483,7 +483,7 @@ public class ConstraintLayout extends ViewGroup {
     /**
      * @hide
      */
-    public static final String VERSION = "ConstraintLayout-2.0.2";
+    public static final String VERSION = "ConstraintLayout-2.0.3";
     private static final String TAG = "ConstraintLayout";
 
     private static final boolean USE_CONSTRAINTS_HELPER = true;
@@ -652,44 +652,40 @@ public class ConstraintLayout extends ViewGroup {
             int heightPadding = paddingTop + paddingBottom;
             int widthPadding = paddingWidth;
 
-            boolean didHorizontalWrap = false;
-            boolean didVerticalWrap = false;
-
             View child = (View) widget.getCompanionWidget();
 
             switch (horizontalBehavior) {
                 case FIXED: {
                     horizontalSpec = MeasureSpec.makeMeasureSpec(horizontalDimension, MeasureSpec.EXACTLY);
-                    widget.wrapMeasure[HORIZONTAL + 2] = horizontalDimension;
                 }
                 break;
                 case WRAP_CONTENT: {
                     horizontalSpec = getChildMeasureSpec(layoutWidthSpec, widthPadding, WRAP_CONTENT);
-                    didHorizontalWrap = true;
-                    widget.wrapMeasure[HORIZONTAL + 2] = WRAP_CONTENT;
                 }
                 break;
                 case MATCH_PARENT: {
                     // Horizontal spec must account for margin as well as padding here.
                     horizontalSpec = getChildMeasureSpec(layoutWidthSpec,
                             widthPadding + widget.getHorizontalMargin(), LayoutParams.MATCH_PARENT);
-                    widget.wrapMeasure[HORIZONTAL + 2] = MATCH_PARENT;
                 }
                 break;
                 case MATCH_CONSTRAINT: {
                     horizontalSpec = getChildMeasureSpec(layoutWidthSpec, widthPadding, WRAP_CONTENT);
-                    didHorizontalWrap = true;
                     boolean shouldDoWrap = widget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_WRAP;
-                    widget.wrapMeasure[HORIZONTAL + 2] = 0;
-                    if (measure.useCurrentDimensions) {
-                        boolean useCurrent = (shouldDoWrap &&
-                                                (widget.wrapMeasure[VERTICAL + 2] != 0 && // make sure the other dimension was stable
-                                                 widget.wrapMeasure[HORIZONTAL] != widget.getWidth()))
-                                            || (child instanceof Placeholder);
-
-                        if (!shouldDoWrap || useCurrent) {
+                    if (measure.measureStrategy == BasicMeasure.Measure.TRY_GIVEN_DIMENSIONS
+                        || measure.measureStrategy == BasicMeasure.Measure.USE_GIVEN_DIMENSIONS) {
+                        // the solver gives us our new dimension, but if we previously had it measured with
+                        // a wrap, it can be incorrect if the other side was also variable.
+                        // So in that case, we have to double-check the other side is stable (else we can't
+                        // just assume the wrap value will be correct).
+                        boolean otherDimensionStable = child.getMeasuredHeight() == widget.getHeight();
+                        boolean useCurrent = measure.measureStrategy == BasicMeasure.Measure.USE_GIVEN_DIMENSIONS
+                                            || !shouldDoWrap
+                                            || (shouldDoWrap && otherDimensionStable)
+                                            || (child instanceof Placeholder)
+                                            || (widget.isResolvedHorizontally());
+                        if (useCurrent) {
                             horizontalSpec = MeasureSpec.makeMeasureSpec(widget.getWidth(), MeasureSpec.EXACTLY);
-                            didHorizontalWrap = false;
                         }
                     }
                 }
@@ -699,37 +695,37 @@ public class ConstraintLayout extends ViewGroup {
             switch (verticalBehavior) {
                 case FIXED: {
                     verticalSpec = MeasureSpec.makeMeasureSpec(verticalDimension, MeasureSpec.EXACTLY);
-                    widget.wrapMeasure[VERTICAL + 2] = verticalDimension;
                 }
                 break;
                 case WRAP_CONTENT: {
                     verticalSpec = getChildMeasureSpec(layoutHeightSpec,
                             heightPadding, WRAP_CONTENT);
-                    didVerticalWrap = true;
-                    widget.wrapMeasure[VERTICAL + 2] = WRAP_CONTENT;
                 }
                 break;
                 case MATCH_PARENT: {
                     // Vertical spec must account for margin as well as padding here.
                     verticalSpec = getChildMeasureSpec(layoutHeightSpec,
                             heightPadding + widget.getVerticalMargin(), LayoutParams.MATCH_PARENT);
-                    widget.wrapMeasure[VERTICAL + 2] = MATCH_PARENT;
                 }
                 break;
                 case MATCH_CONSTRAINT: {
                     verticalSpec = getChildMeasureSpec(layoutHeightSpec,
                             heightPadding, WRAP_CONTENT);
-                    didVerticalWrap = true;
                     boolean shouldDoWrap = widget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_WRAP;
-                    widget.wrapMeasure[VERTICAL + 2] = 0;
-                    if (measure.useCurrentDimensions) {
-                        boolean useCurrent = (shouldDoWrap &&
-                                                (widget.wrapMeasure[HORIZONTAL + 2] != 0 && // make sure the other dimension was stable
-                                                 widget.wrapMeasure[VERTICAL] != widget.getHeight()))
-                                            || (child instanceof Placeholder);
-                        if (!shouldDoWrap || useCurrent) {
+                    if (measure.measureStrategy == BasicMeasure.Measure.TRY_GIVEN_DIMENSIONS
+                            || measure.measureStrategy == BasicMeasure.Measure.USE_GIVEN_DIMENSIONS) {
+                        // the solver gives us our new dimension, but if we previously had it measured with
+                        // a wrap, it can be incorrect if the other side was also variable.
+                        // So in that case, we have to double-check the other side is stable (else we can't
+                        // just assume the wrap value will be correct).
+                        boolean otherDimensionStable = child.getMeasuredWidth() == widget.getWidth();
+                        boolean useCurrent = measure.measureStrategy == BasicMeasure.Measure.USE_GIVEN_DIMENSIONS
+                                            || !shouldDoWrap
+                                            || (shouldDoWrap && otherDimensionStable)
+                                            || (child instanceof Placeholder)
+                                            || (widget.isResolvedVertically());
+                        if (useCurrent) {
                             verticalSpec = MeasureSpec.makeMeasureSpec(widget.getHeight(), MeasureSpec.EXACTLY);
-                            didVerticalWrap = false;
                         }
                     }
                 }
@@ -778,7 +774,8 @@ public class ConstraintLayout extends ViewGroup {
             int height = 0;
             int baseline = 0;
 
-            if (measure.useCurrentDimensions ||
+            if ((measure.measureStrategy == BasicMeasure.Measure.TRY_GIVEN_DIMENSIONS
+                    || measure.measureStrategy == BasicMeasure.Measure.USE_GIVEN_DIMENSIONS) ||
                     !(horizontalMatchConstraints && widget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_SPREAD
                             && verticalMatchConstraints && widget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_SPREAD)) {
 
@@ -787,8 +784,8 @@ public class ConstraintLayout extends ViewGroup {
                     ((VirtualLayout) child).onMeasure(layout, horizontalSpec, verticalSpec);
                 } else {
                     child.measure(horizontalSpec, verticalSpec);
-                    widget.setLastMeasureSpec(horizontalSpec, verticalSpec);
                 }
+                widget.setLastMeasureSpec(horizontalSpec, verticalSpec);
 
                 int w = child.getMeasuredWidth();
                 int h = child.getMeasuredHeight();
@@ -800,21 +797,6 @@ public class ConstraintLayout extends ViewGroup {
                 if (DEBUG) {
                     String measurement = MeasureSpec.toString(horizontalSpec) + " x " + MeasureSpec.toString(verticalSpec) + " => " + width + " x " + height;
                     System.out.println("    (M) measure " + " (" + widget.getDebugName() + ") : " + measurement);
-                }
-
-                if (didHorizontalWrap) {
-                    widget.wrapMeasure[HORIZONTAL] = w;
-                    widget.wrapMeasure[HORIZONTAL + 2] = h;
-                } else {
-                    widget.wrapMeasure[HORIZONTAL] = 0;
-                    widget.wrapMeasure[HORIZONTAL + 2] = 0;
-                }
-                if (didVerticalWrap) {
-                    widget.wrapMeasure[VERTICAL] = h;
-                    widget.wrapMeasure[VERTICAL + 2] = w;
-                } else {
-                    widget.wrapMeasure[VERTICAL] = 0;
-                    widget.wrapMeasure[VERTICAL + 2] = 0;
                 }
 
                 if (widget.mMatchConstraintMinWidth > 0) {
@@ -1646,6 +1628,20 @@ public class ConstraintLayout extends ViewGroup {
         }
 
         if (!mDirtyHierarchy) {
+            // it's possible that, if we are already marked for a relayout, a view would not call to request a layout;
+            // in that case we'd miss updating the hierarchy correctly.
+            // We have to iterate on our children to verify that none set a request layout flag...
+            final int count = getChildCount();
+            for (int i = 0; i < count; i++) {
+                final View child = getChildAt(i);
+                if (child.isLayoutRequested()) {
+                    mDirtyHierarchy = true;
+                    break;
+                }
+            }
+        }
+
+        if (!mDirtyHierarchy) {
             if (mOnMeasureWidthMeasureSpec == widthMeasureSpec && mOnMeasureHeightMeasureSpec == heightMeasureSpec) {
                 resolveMeasuredDimension(widthMeasureSpec, heightMeasureSpec, mLayoutWidget.getWidth(), mLayoutWidget.getHeight(),
                         mLayoutWidget.isWidthMeasuredTooSmall(), mLayoutWidget.isHeightMeasuredTooSmall());
@@ -1837,7 +1833,17 @@ public class ConstraintLayout extends ViewGroup {
             int b = t + widget.getHeight();
 
             if (DEBUG) {
-                System.out.println("    layout " + widget);
+                if (child.getVisibility() != View.GONE
+                        && (child.getMeasuredWidth() != widget.getWidth()
+                        || child.getMeasuredHeight() != widget.getHeight())) {
+                    int deltaX = Math.abs(child.getMeasuredWidth() - widget.getWidth());
+                    int deltaY = Math.abs(child.getMeasuredHeight() - widget.getHeight());
+                    if (deltaX > 1 || deltaY > 1) {
+                        System.out.println("child " + child + " measuredWidth " + child.getMeasuredWidth()
+                                + " vs " + widget.getWidth() + " x measureHeight " + child.getMeasuredHeight()
+                                + " vs " + widget.getHeight());
+                    }
+                }
             }
 
             child.layout(l, t, r, b);

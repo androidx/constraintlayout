@@ -67,6 +67,10 @@ public abstract class ConstraintHelper extends View {
      * @hide
      */
     protected String mReferenceIds;
+    /**
+     * @hide
+     */
+    protected String mReferenceTags;
 
     /**
      * @hide
@@ -105,6 +109,9 @@ public abstract class ConstraintHelper extends View {
                 if (attr == R.styleable.ConstraintLayout_Layout_constraint_referenced_ids) {
                     mReferenceIds = a.getString(attr);
                     setIds(mReferenceIds);
+                } else if (attr == R.styleable.ConstraintLayout_Layout_constraint_referenced_tags) {
+                    mReferenceTags = a.getString(attr);
+                    setReferenceTags(mReferenceTags);
                 }
             }
             a.recycle();
@@ -116,6 +123,9 @@ public abstract class ConstraintHelper extends View {
         super.onAttachedToWindow();
         if (mReferenceIds != null) {
             setIds(mReferenceIds);
+        }
+        if (mReferenceTags != null) {
+            setReferenceTags(mReferenceTags);
         }
     }
 
@@ -262,6 +272,45 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
+     * @hide
+     */
+    private void addTag(String tagString) {
+        if (tagString == null || tagString.length() == 0) {
+            return;
+        }
+        if (myContext == null) {
+            return;
+        }
+
+        tagString = tagString.trim();
+
+        ConstraintLayout parent = null;
+        if (getParent() instanceof ConstraintLayout) {
+            parent = (ConstraintLayout) getParent();
+        }
+        if (parent == null) {
+            Log.w("ConstraintHelper", "Parent not a ConstraintLayout");
+            return;
+        }
+        int count = parent.getChildCount();
+        for (int i = 0; i < count; i++) {
+            View v = parent.getChildAt(i);
+            ViewGroup.LayoutParams params = v.getLayoutParams();
+            if (params instanceof ConstraintLayout.LayoutParams) {
+                ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) params;
+                if (tagString.equals(lp.constraintTag)) {
+                    if (v.getId() == View.NO_ID) {
+                        Log.w("ConstraintHelper", "to use ConstraintTag view "+v.getClass().getSimpleName()+" must have an ID");
+                    } else {
+                        addRscID(v.getId());
+                    }
+                }
+            }
+
+        }
+    }
+
+    /**
      * Attempt to find the id given a reference string
      * @param referenceId
      * @return
@@ -361,6 +410,27 @@ public abstract class ConstraintHelper extends View {
             begin = end + 1;
         }
     }
+    /**
+     * @hide
+     */
+    protected void setReferenceTags(String tagList) {
+        mReferenceTags = tagList;
+        if (tagList == null) {
+            return;
+        }
+        int begin = 0;
+        mCount = 0;
+        while (true) {
+            int end = tagList.indexOf(',', begin);
+            if (end == -1) {
+                addTag(tagList.substring(begin));
+                break;
+            }
+            addTag(tagList.substring(begin, end));
+            begin = end + 1;
+        }
+    }
+
 
     /**
      * @hide
@@ -521,5 +591,13 @@ public abstract class ConstraintHelper extends View {
 
     public void resolveRtl(ConstraintWidget widget, boolean isRtl) {
         // nothing here
+    }
+
+    @Override
+    public void setTag(int key, Object tag) {
+        super.setTag(key, tag);
+        if (tag == null && mReferenceIds == null) {
+            addRscID(key);
+        }
     }
 }
