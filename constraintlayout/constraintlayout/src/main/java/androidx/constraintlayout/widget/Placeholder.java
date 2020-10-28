@@ -22,7 +22,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import androidx.constraintlayout.solver.widgets.ConstraintWidget;
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import android.util.AttributeSet;
 import android.view.View;
 

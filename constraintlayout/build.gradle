@@ -25,7 +25,7 @@ task('checkJavaVersion') doLast {
 }
 final def checkJavaVersionTask = tasks['checkJavaVersion']
 
-ext.version = '2.0.1'
+ext.version = '2.0.3'
 
 /*
  * With the build server you are given two env variables.
@@ -61,8 +61,8 @@ project(':constraintlayout') {
 }
 
 project(':solver') {
-    ext.pomName = 'Android ConstraintLayout Solver'
-    ext.pomDesc = 'Solver for ConstraintLayout'
+    ext.pomName = 'Android ConstraintLayout Core'
+    ext.pomDesc = 'ConstraintLayout core'
 }
 
 subprojects { Project project ->
