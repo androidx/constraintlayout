@@ -3562,7 +3562,9 @@ public class ConstraintSet {
                         if (tagName.equalsIgnoreCase("Guideline")) {
                             constraint.layout.mIsGuideline = true;
                         }
-                        Log.v(TAG,Debug.getLoc()+ " cache "+ Debug.getName(context,constraint.mViewId)+ " "+constraint.mViewId);
+                        if (DEBUG) {
+                            Log.v(TAG,Debug.getLoc()+ " cache "+ Debug.getName(context,constraint.mViewId)+ " "+constraint.mViewId);
+                        }    
                         mConstraints.put(constraint.mViewId, constraint);
                         break;
                     case XmlResourceParser.END_TAG:

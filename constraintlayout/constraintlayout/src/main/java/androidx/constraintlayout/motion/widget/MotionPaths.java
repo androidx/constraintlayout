@@ -147,8 +147,6 @@ class MotionPaths implements Comparable<MotionPaths> {
         }
     }
     void initPolar(int parentWidth, int parentHeight, KeyPosition c, MotionPaths s, MotionPaths e) {
-        Debug.logStack(TAG,   " == kp "+c.mFramePosition+"  "
-                ,5);
         float position = c.mFramePosition / 100f;
         this.time = position;
         mDrawPath = c.mDrawPath;
@@ -176,7 +174,6 @@ class MotionPaths implements Comparable<MotionPaths> {
             case KeyPosition.TYPE_CARTESIAN:
                 this.x = (Float.isNaN(c.mPercentX)?position:c.mPercentX)*(e.x-s.x)+s.x;
                 this.y = (Float.isNaN(c.mPercentY)?position: c.mPercentY)*(e.y-s.y)+s.y;
-                Log.v(TAG, Debug.getLoc()+ " cart "+x+","+y);
                 break;
         }
 
@@ -358,6 +355,7 @@ class MotionPaths implements Comparable<MotionPaths> {
         point[offset] = v_x + v_width / 2 + translationX;
         point[offset + 1] = v_y + v_height / 2 + translationY;
     }
+
     void getCenter(double p, int[] toUse, double[] data, float[] point, double[] vdata, float []velocity) {
         float v_x = x;
         float v_y = y;
@@ -574,8 +572,6 @@ class MotionPaths implements Comparable<MotionPaths> {
             // TODO Debug angle
             float pos_x = (float) (rx + radius * Math.sin(angle) - v_width / 2);
             float pos_y = (float) (ry - radius * Math.cos(angle) - v_height / 2);
-//            float dpos_x = (float) (drx + dradius*Math.sin(angle)+radius*Math.cos(dangle) - dv_width/2);
-//            float dpos_y = (float) (dry - dradius*Math.cos(angle) +radius*Math.sin(dangle) - dv_height/2);
             float dpos_x = (float) (drx + dradius * Math.sin(angle) + radius*Math.cos(angle) * dangle);
             float dpos_y = (float) (dry - dradius * Math.cos(angle) + radius*Math.sin(angle) * dangle);
             dv_x = dpos_x;

@@ -280,7 +280,7 @@ class TouchResponse {
                 float currentPos = mMotionLayout.getProgress();
                 float pos = currentPos;
                 rcx = mMotionLayout.getWidth() / 2.0f;
-                rcy = mMotionLayout.getHeight() / 2.0f; //mRotateCenterY
+                rcy = mMotionLayout.getHeight() / 2.0f;
                 if (mRotationCenterId !=   MotionScene.UNSET) {
                     View v = mMotionLayout.findViewById(mRotationCenterId);
                     rcx = (v.getLeft() + v.getRight()) / 2.0f;
