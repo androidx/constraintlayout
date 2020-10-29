@@ -91,6 +91,14 @@ public class MotionScene {
     private boolean mMotionOutsideRegion = false;
     private MotionLayout.MotionTracker mVelocityTracker; // used to support fling
     private boolean mRtl;
+    private static final String MOTIONSCENE_TAG = "MotionScene";
+    private static final String TRANSITION_TAG = "Transition";
+    private static final String ONSWIPE_TAG = "OnSwipe";
+    private static final String ONCLICK_TAG = "OnClick";
+    private static final String STATESET_TAG = "StateSet";
+    private static final String INCLUDE_TAG = "Include";
+    private static final String KEYFRAMESET_TAG = "KeyFrameSet";
+    private static final String CONSTRAINTSET_TAG = "ConstraintSet";
 
     /**
      * Set the transition between two constraint set / states.
@@ -940,10 +948,10 @@ public class MotionScene {
                             Log.v(TAG, "MotionScene ----------- START_TAG " + tagName);
                         }
                         switch (tagName) {
-                            case "MotionScene":
+                            case MOTIONSCENE_TAG:
                                 parseMotionSceneTags(context, parser);
                                 break;
-                            case "Transition":
+                            case TRANSITION_TAG:
                                 mTransitionList.add(transition = new Transition(this, context, parser));
                                 if (mCurrentTransition == null && !transition.mIsAbstract) {
                                     mCurrentTransition = transition;
@@ -960,7 +968,7 @@ public class MotionScene {
                                     mTransitionList.remove(transition);
                                 }
                                 break;
-                            case "OnSwipe":
+                            case ONSWIPE_TAG:
                                 if (DEBUG || transition == null) {
                                     String name = context.getResources().getResourceEntryName(resourceId);
                                     int line = parser.getLineNumber();
@@ -968,19 +976,19 @@ public class MotionScene {
                                 }
                                 transition.mTouchResponse = new TouchResponse(context, mMotionLayout, parser);
                                 break;
-                            case "OnClick":
+                            case ONCLICK_TAG:
                                 transition.addOnClick(context, parser);
                                 break;
-                            case "StateSet":
+                            case STATESET_TAG:
                                 mStateSet = new StateSet(context, parser);
                                 break;
-                            case "ConstraintSet":
+                            case CONSTRAINTSET_TAG:
                                 parseConstraintSet(context, parser);
                                 break;
-                            case "Include":
+                            case INCLUDE_TAG:
                                 parseInclude(context, parser);
                                 break;
-                            case "KeyFrameSet":
+                            case KEYFRAMESET_TAG:
                                 KeyFrames keyFrames = new KeyFrames(context, parser);
                                 transition.mKeyFramesList.add(keyFrames);
                                 break;
@@ -1061,7 +1069,7 @@ public class MotionScene {
                  eventType = includeParser.next()) {
                 String tagName = includeParser.getName();
                 if (XmlResourceParser.START_TAG == eventType
-                        && "ConstraintSet".equals(tagName)) {
+                        && CONSTRAINTSET_TAG.equals(tagName)) {
                     return parseConstraintSet(context, includeParser);
                 }
             }
