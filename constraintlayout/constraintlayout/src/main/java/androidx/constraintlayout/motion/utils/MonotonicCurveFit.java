@@ -252,7 +252,7 @@ public class MonotonicCurveFit extends CurveFit {
     }
 
     /**
-     * This builds a monotonic splne to be used as a wave function
+     * This builds a monotonic spline to be used as a wave function
      * @param configString
      * @return
      */
