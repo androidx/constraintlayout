@@ -270,6 +270,7 @@ public class MotionController {
         }
         return mInterpolateData;
     }
+
     /**
      * fill the array point with the center coordinates point[0] is filled with the
      * x coordinate of "time" 0.0 mPoints[point.length-1] is filled with the y coordinate of "time"
@@ -933,6 +934,7 @@ public class MotionController {
                 constraint.motion.mQuantizeInterpolatorID
                 );
     }
+
     static final int EASE_IN_OUT = 0;
     static final int EASE_IN = 1;
     static final int EASE_OUT = 2;
