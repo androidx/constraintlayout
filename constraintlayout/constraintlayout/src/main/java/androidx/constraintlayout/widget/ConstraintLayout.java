@@ -483,7 +483,7 @@ public class ConstraintLayout extends ViewGroup {
     /**
      * @hide
      */
-    public static final String VERSION = "ConstraintLayout-2.0.3";
+    public static final String VERSION = "ConstraintLayout-2.0.4";
     private static final String TAG = "ConstraintLayout";
 
     private static final boolean USE_CONSTRAINTS_HELPER = true;
@@ -632,6 +632,9 @@ public class ConstraintLayout extends ViewGroup {
                 measure.measuredBaseline = 0;
                 return;
             }
+            if (widget.getParent() == null) {
+                return;
+            }
 
             long startMeasure;
             long endMeasure;
@@ -768,6 +771,9 @@ public class ConstraintLayout extends ViewGroup {
             boolean horizontalUseRatio = horizontalMatchConstraints && widget.mDimensionRatio > 0;
             boolean verticalUseRatio = verticalMatchConstraints && widget.mDimensionRatio > 0;
 
+            if (child == null) {
+                return;
+            }
             LayoutParams params = (LayoutParams) child.getLayoutParams();
 
             int width = 0;
