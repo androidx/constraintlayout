@@ -57,7 +57,7 @@ import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
 
 /**
  * The information to transition between multiple ConstraintSets
- * This Class is meant to be us                             ed from XML
+ * This Class is meant to be used from XML
  *
  * @hide
  */

@@ -106,13 +106,13 @@ public class MotionController {
     private KeyTrigger[] mKeyTriggers; // splines to calculate values of attributes
     private int mPathMotionArc = UNSET;
     private int mTransformPivotTarget = UNSET; // if set, pivot point is maintained as the other object
-    private View mTransformPivotView = null; // if set piviot point is maintained as the other object
+    private View mTransformPivotView = null; // if set, pivot point is maintained as the other object
     private int mQuantizeMotionSteps = UNSET;
     private float mQuantizeMotionPhase = Float.NaN;
     private Interpolator mQuantizeMotionInterpolator = null;
 
     /**
-     * get the view to pivot around
+     * Get the view to pivot around
      * @return id of view or UNSET if not set
      */
     public int getTransformPivotTarget() {
@@ -178,18 +178,10 @@ public class MotionController {
         double [] velocity = new double[4];
         int [] temp = new int[4];
 
-//        double [] position = new double[2];
-//        double [] velocity = new double[2];
-//
-//        mSpline[0].getPos(p, position);
-//        mSpline[0].getPos(p, mInterpolateData);
-//        mSpline[0].getSlope(p, mInterpolateVelocity);
         mSpline[0].getPos(p, position);
         mSpline[0].getSlope(p, velocity);
         Arrays.fill(vel,0);
-     //    mStartMotionPath.getCenter(p, mInterpolateVariables, position, pos, 0);
-       mStartMotionPath.getCenter(p, mInterpolateVariables, position ,pos,velocity, vel  );
-
+       mStartMotionPath.getCenter(p, mInterpolateVariables, position, pos, velocity, vel);
     }
 
 
