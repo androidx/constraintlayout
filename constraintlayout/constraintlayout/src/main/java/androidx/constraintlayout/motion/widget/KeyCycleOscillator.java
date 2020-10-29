@@ -156,7 +156,6 @@ public abstract class KeyCycleOscillator {
         mWaveShape = shape;
         mCustom = custom;
         mWaveString = waveString;
-
     }
 
     /**
