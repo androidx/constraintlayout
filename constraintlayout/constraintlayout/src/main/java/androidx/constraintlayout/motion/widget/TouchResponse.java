@@ -210,8 +210,8 @@ class TouchResponse {
 
                 float drag;
 
-                float rcx = mMotionLayout.getWidth() / 2.0f; //mRotateCenterX
-                float rcy = mMotionLayout.getHeight() / 2.0f; //mRotateCenterY
+                float rcx = mMotionLayout.getWidth() / 2.0f;
+                float rcy = mMotionLayout.getHeight() / 2.0f;
                 if (mRotationCenterId !=   MotionScene.UNSET) {
                     View v = mMotionLayout.findViewById(mRotationCenterId);
                     rcx = (v.getLeft() + v.getRight()) / 2.0f;
@@ -279,7 +279,7 @@ class TouchResponse {
                 float tvy = velocityTracker.getYVelocity();
                 float currentPos = mMotionLayout.getProgress();
                 float pos = currentPos;
-                rcx = mMotionLayout.getWidth() / 2.0f; //mRotateCenterX
+                rcx = mMotionLayout.getWidth() / 2.0f;
                 rcy = mMotionLayout.getHeight() / 2.0f; //mRotateCenterY
                 if (mRotationCenterId !=   MotionScene.UNSET) {
                     View v = mMotionLayout.findViewById(mRotationCenterId);

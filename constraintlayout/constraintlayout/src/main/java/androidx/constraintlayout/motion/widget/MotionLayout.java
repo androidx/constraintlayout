@@ -3076,8 +3076,6 @@ public class MotionLayout extends ConstraintLayout implements
             float deltaPos = 0f;
             if (!(mInterpolator instanceof MotionInterpolator)) { // if we are not in a drag
                 deltaPos = dir * (currentTime - mTransitionLastTime) * 1E-9f / mTransitionDuration;
-//                mLastVelocity = 1/mTransitionDuration;
-//                mLastVelocity = deltaPos;
             }
             float position = mTransitionLastPosition + deltaPos;
 
