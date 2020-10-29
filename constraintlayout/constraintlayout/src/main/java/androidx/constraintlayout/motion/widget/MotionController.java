@@ -184,7 +184,6 @@ public class MotionController {
        mStartMotionPath.getCenter(p, mInterpolateVariables, position, pos, velocity, vel);
     }
 
-
     /**
      * fill the array point with the center coordinates point[0] is filled with the
      * x coordinate of "time" 0.0 mPoints[point.length-1] is filled with the y coordinate of "time"
