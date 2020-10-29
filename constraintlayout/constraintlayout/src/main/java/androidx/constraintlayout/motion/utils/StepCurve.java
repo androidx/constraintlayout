@@ -37,7 +37,6 @@ public class StepCurve extends Easing {
         int count = 0;
         while (off1 != -1) {
             String tmp = configString.substring(start, off1).trim();
-            System.out.println(" parse#$# tmp \"" + tmp + "\"");
             values[count++] = Double.parseDouble(tmp);
             off1 = configString.indexOf(',', start = off1 + 1);
         }
