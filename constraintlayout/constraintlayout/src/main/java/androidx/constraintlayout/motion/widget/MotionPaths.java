@@ -146,6 +146,7 @@ class MotionPaths implements Comparable<MotionPaths> {
                 return;
         }
     }
+
     void initPolar(int parentWidth, int parentHeight, KeyPosition c, MotionPaths s, MotionPaths e) {
         float position = c.mFramePosition / 100f;
         this.time = position;
@@ -181,6 +182,7 @@ class MotionPaths implements Comparable<MotionPaths> {
         this.mKeyFrameEasing = Easing.getInterpolator(c.mTransitionEasing);
         this.mPathMotionArc = c.mPathMotionArc;
     }
+
     public void setupRelative(MotionController mc, MotionPaths relative) {
         double dx = x + width / 2 - relative.x - relative.width / 2;
         double dy = y + height / 2 - relative.y - relative.height / 2;

@@ -630,7 +630,6 @@ public class ConstraintSet {
             if (constraint.mDelta != null) {
                 constraint.mDelta.applyDelta(constraint);
             }
-
         }
     }
 
