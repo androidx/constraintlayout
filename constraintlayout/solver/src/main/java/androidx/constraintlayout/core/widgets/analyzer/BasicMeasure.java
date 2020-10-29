@@ -280,6 +280,8 @@ public class BasicMeasure {
                 layoutTime = System.nanoTime();
             }
 
+            updateHierarchy(layout);
+
             // let's update the size dependent widgets if any...
             final int sizeDependentWidgetsCount = mVariableDimensionsWidgets.size();
 
