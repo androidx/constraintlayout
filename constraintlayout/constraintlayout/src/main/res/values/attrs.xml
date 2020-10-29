@@ -1070,7 +1070,7 @@
             <enum name="easeIn" value="1" />
             <enum name="easeOut" value="2" />
             <enum name="linear" value="3" />
-            <enum name="bounce" value="5" />
+            <enum name="bounce" value="4" />
         </attr>
 
         <attr name="duration" />

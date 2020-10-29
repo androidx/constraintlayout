@@ -939,10 +939,10 @@ public class MotionController {
     static final int EASE_IN = 1;
     static final int EASE_OUT = 2;
     static final int LINEAR = 3;
-    static final int ANTICIPATE = 4;
     static final int BOUNCE = 5;
     private static final int SPLINE_STRING = -1;
     private static final int INTERPOLATOR_REFRENCE_ID = -2;
+    private static final int INTERPOLATOR_UNDEFINED = -3;
 
     private static Interpolator getInterpolator(Context context, int type,String interpolatorString, int id ) {
         switch (type) {
@@ -964,8 +964,6 @@ public class MotionController {
                 return new DecelerateInterpolator();
             case LINEAR:
                 return null;
-            case ANTICIPATE:
-                return new AnticipateInterpolator();
             case BOUNCE:
                 return new BounceInterpolator();
         }

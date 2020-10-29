@@ -62,6 +62,9 @@ class TouchResponse {
     private float[] mAnchorDpDt = new float[2];
     private float mLastTouchX, mLastTouchY;
     private final MotionLayout mMotionLayout;
+    private final static int SEC_TO_MILLISECONDS = 1000;
+    private final static float EPSILON =  0.0000001f;
+
     private static final float[][] TOUCH_SIDES = {
             {0.5f, 0.0f}, // top
             {0.0f, 0.5f}, // left
@@ -258,7 +261,7 @@ class TouchResponse {
                         mMotionLayout.setProgress(pos);
 
 
-                        velocityTracker.computeCurrentVelocity(1000);
+                        velocityTracker.computeCurrentVelocity(SEC_TO_MILLISECONDS);
                         float tvx = velocityTracker.getXVelocity();
                         float tvy = velocityTracker.getYVelocity();
                         float angularVelocity = (float) (Math.hypot(tvy, tvx) * Math.sin(Math.atan2(tvy, tvx) - angle1) / Math.hypot(relativePosX, relativePosY)); //v * sin (angle) / r
@@ -303,7 +306,8 @@ class TouchResponse {
                 }
                   angle2 = Math.toDegrees(Math.atan2(tvy+relativePosY, tvx+relativePosX));
                 drag = (float) ((angle2 -angle1));
-                float angularVelocity = drag * 1000/16.f; // tweaked parameters
+                float velocity_tweek = SEC_TO_MILLISECONDS/16f;
+                float angularVelocity = drag * velocity_tweek;
                 if (!Float.isNaN(angularVelocity)) {
                     pos +=    3* angularVelocity  * mDragScale / mAnchorDpDt[1]; // TODO calibration & animation speed based on velocity
                 }
@@ -409,7 +413,7 @@ class TouchResponse {
                         if (DEBUG) {
                             Log.v(TAG, "# ACTION_MOVE progress <- " + pos);
                         }
-                        velocityTracker.computeCurrentVelocity(1000);
+                        velocityTracker.computeCurrentVelocity(SEC_TO_MILLISECONDS);
                         float tvx = velocityTracker.getXVelocity();
                         float tvy = velocityTracker.getYVelocity();
                         float velocity = (mTouchDirectionX != 0) ? tvx / mAnchorDpDt[0] : tvy / mAnchorDpDt[1];
@@ -423,7 +427,7 @@ class TouchResponse {
                 break;
             case MotionEvent.ACTION_UP:
                 mDragStarted = false;
-                velocityTracker.computeCurrentVelocity(1000);
+                velocityTracker.computeCurrentVelocity(SEC_TO_MILLISECONDS);
                 float tvx = velocityTracker.getXVelocity();
                 float tvy = velocityTracker.getYVelocity();
                 float currentPos = mMotionLayout.getProgress();
@@ -486,12 +490,12 @@ class TouchResponse {
         float velocity;
         if (mTouchDirectionX != 0) {
             if (mAnchorDpDt[0] == 0) {
-                mAnchorDpDt[0] = 0.0000001f;
+                mAnchorDpDt[0] = EPSILON;
             }
             velocity = dx * mTouchDirectionX / mAnchorDpDt[0];
         } else {
             if (mAnchorDpDt[1] == 0) {
-                mAnchorDpDt[1] = 0.0000001f;
+                mAnchorDpDt[1] = EPSILON;
             }
             velocity = dy * mTouchDirectionY / mAnchorDpDt[1];
         }

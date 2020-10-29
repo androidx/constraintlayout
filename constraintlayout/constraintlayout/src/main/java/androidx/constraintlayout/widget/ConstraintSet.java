@@ -1322,10 +1322,11 @@ public class ConstraintSet {
         public float mQuantizeMotionPhase = Float.NaN;
         public int mQuantizeMotionSteps = Layout.UNSET;
         public String mQuantizeInterpolatorString = null;
-        public int mQuantizeInterpolatorType = -3; // undefined
+        public int mQuantizeInterpolatorType = INTERPOLATOR_UNDEFINED; // undefined
         public int mQuantizeInterpolatorID = -1;
         private static final int INTERPOLATOR_REFRENCE_ID = -2;
         private static final int SPLINE_STRING = -1;
+        private static final int INTERPOLATOR_UNDEFINED = -3;
 
 
         public void copyFrom(Motion src) {
