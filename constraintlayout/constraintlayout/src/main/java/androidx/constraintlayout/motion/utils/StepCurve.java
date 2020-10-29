@@ -58,7 +58,6 @@ public class StepCurve extends Easing {
     }
 
     private static MonotonicCurveFit genSpline(double[] values) {
-
         int length = values.length * 3 - 2;
         int len = values.length - 1;
         double gap = 1.0 / len;
