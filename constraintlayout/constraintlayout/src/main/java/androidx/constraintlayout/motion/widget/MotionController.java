@@ -105,7 +105,7 @@ public class MotionController {
     private HashMap<String, KeyCycleOscillator> mCycleMap; // splines to calculate values of attributes
     private KeyTrigger[] mKeyTriggers; // splines to calculate values of attributes
     private int mPathMotionArc = UNSET;
-    private int mTransformPivotTarget = UNSET; // if set piviot point is maintained as the other object
+    private int mTransformPivotTarget = UNSET; // if set, pivot point is maintained as the other object
     private View mTransformPivotView = null; // if set piviot point is maintained as the other object
     private int mQuantizeMotionSteps = UNSET;
     private float mQuantizeMotionPhase = Float.NaN;
