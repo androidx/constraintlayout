@@ -133,6 +133,7 @@ public class MotionHelper extends ConstraintHelper implements Animatable, Motion
     public boolean isDecorator() {
         return false;
     }
+
     public void onPreDraw(Canvas canvas) {
 
     }
