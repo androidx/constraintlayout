@@ -137,6 +137,7 @@ public class MotionHelper extends ConstraintHelper implements Animatable, Motion
     public void onPreDraw(Canvas canvas) {
 
     }
+    
     public void onPostDraw(Canvas canvas) {
 
     }
