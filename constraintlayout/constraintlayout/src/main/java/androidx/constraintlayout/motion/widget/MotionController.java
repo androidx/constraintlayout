@@ -153,7 +153,7 @@ public class MotionController {
     }
 
     /**
-     * Will the id of the view to move relative to
+     * Will return the id of the view to move relative to
      * @return
      */
     int getAnimateRelativeTo() {
