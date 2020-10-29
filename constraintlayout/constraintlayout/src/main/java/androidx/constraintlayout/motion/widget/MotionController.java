@@ -87,7 +87,7 @@ public class MotionController {
     float mMotionStagger = Float.NaN;
     float mStaggerOffset = 0;
     float mStaggerScale = 1.0f;
-    float mCurrentCenterX,mCurrentCenterY;
+    float mCurrentCenterX, mCurrentCenterY;
     private int[] mInterpolateVariables;
     private double[] mInterpolateData; // scratch data created during setup
     private double[] mInterpolateVelocity; // scratch data created during setup
