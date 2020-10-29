@@ -49,7 +49,7 @@ public class Easing {
             return new StepCurve(configString);
         } else if (configString.startsWith("Schlick")) {
             return new Schlick(configString);
-        }else {
+        } else {
             switch (configString) {
                 case STANDARD_NAME:
                     return new CubicEasing(STANDARD);

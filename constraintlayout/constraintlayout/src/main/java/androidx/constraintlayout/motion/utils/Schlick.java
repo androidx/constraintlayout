@@ -28,6 +28,7 @@ public class Schlick extends Easing {
     private final static boolean DEBUG = false;
     double mS, mT;
     double eps;
+
     Schlick(String configString) {
         // done this way for efficiency
 
@@ -38,17 +39,19 @@ public class Schlick extends Easing {
         int off2 = configString.indexOf(',', off1 + 1);
         mT = Double.parseDouble(configString.substring(off1 + 1, off2).trim());
     }
+
     private double func(double x) {
-      if (x<mT) {
-          return mT * x / (x + mS * (mT - x));
-      }
-        return ((1-mT)*(x-1))/(1-x-mS*(mT-x));
+        if (x < mT) {
+            return mT * x / (x + mS * (mT - x));
+        }
+        return ((1 - mT) * (x - 1)) / (1 - x - mS * (mT - x));
     }
-    private  double dfunc(double x) {
-        if (x<mT) {
+
+    private double dfunc(double x) {
+        if (x < mT) {
             return (mS * mT * mT) / ((mS * (mT - x) + x) * (mS * (mT - x) + x));
         }
-        return  (mS * (mT - 1) *  (mT - 1)) / ((-mS* (mT - x) - x + 1)*(-mS* (mT - x) - x + 1) );
+        return (mS * (mT - 1) * (mT - 1)) / ((-mS * (mT - x) - x + 1) * (-mS * (mT - x) - x + 1));
     }
 
     public double getDiff(double x) {

@@ -20,6 +20,7 @@ import java.util.Arrays;
 
 /**
  * This performs a spline interpolation in multiple dimensions
+ *
  * @hide
  */
 public class MonotonicCurveFit extends CurveFit {
@@ -253,6 +254,7 @@ public class MonotonicCurveFit extends CurveFit {
 
     /**
      * This builds a monotonic spline to be used as a wave function
+     *
      * @param configString
      * @return
      */
