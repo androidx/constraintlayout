@@ -1374,7 +1374,6 @@
         <attr name="textOutlineColor" format="color" />
         <attr name="borderRound" format="dimension" />
         <attr name="borderRoundPercent" format="float" />
-
     </declare-styleable>
 
     <declare-styleable name="Layout">
