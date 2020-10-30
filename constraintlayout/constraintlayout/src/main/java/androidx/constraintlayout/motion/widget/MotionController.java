@@ -1109,7 +1109,6 @@ public class MotionController {
                         child.setPivotY(py);
                     }
                 }
-
             }
 
             if (mAttributesMap != null) {
