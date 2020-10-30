@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ConstraintSet xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/up" >
+
+        <Constraint android:id="@+id/region1">
+            <Transform
+                motion:transformPivotTarget="@id/center"
+                android:rotation="40"
+                />
+
+        </Constraint>
+        <Constraint android:id="@+id/region2">
+            <Transform
+                motionTtransformPivotTarget="@id/center"
+                android:rotation="40"
+                android:rotationX="180"
+                />
+
+        </Constraint>
+        <Constraint android:id="@+id/region3">
+            <Transform
+                motion:transformPivotTarget="@id/center"
+                android:rotation="40"
+                />
+
+        </Constraint>
+    </ConstraintSet>

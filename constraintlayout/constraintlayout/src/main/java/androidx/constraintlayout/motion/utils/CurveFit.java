@@ -18,6 +18,7 @@ package androidx.constraintlayout.motion.utils;
 
 /**
  * Base class for interpolator
+ *
  * @hide
  */
 
@@ -40,7 +41,7 @@ public abstract class CurveFit {
         }
     }
 
-    public static CurveFit getArc(int []arcModes, double[] time, double[][] y) {
+    public static CurveFit getArc(int[] arcModes, double[] time, double[][] y) {
         return new ArcCurveFit(arcModes, time, y);
     }
 

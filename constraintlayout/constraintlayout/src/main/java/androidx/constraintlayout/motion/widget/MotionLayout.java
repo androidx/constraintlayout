@@ -43,6 +43,7 @@ import androidx.constraintlayout.core.widgets.Helper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
+import android.util.SparseBooleanArray;
 import android.util.SparseIntArray;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -873,6 +874,7 @@ public class MotionLayout extends ConstraintLayout implements
 
     MotionScene mScene;
     Interpolator mInterpolator;
+    Interpolator mProgressInterpolator = null;
     float mLastVelocity = 0;
     private int mBeginState = UNSET;
     int mCurrentState = UNSET;
@@ -924,6 +926,7 @@ public class MotionLayout extends ConstraintLayout implements
 
     private ArrayList<MotionHelper> mOnShowHelpers = null;
     private ArrayList<MotionHelper> mOnHideHelpers = null;
+    private ArrayList<MotionHelper> mDecoratorsHelpers = null;
     private ArrayList<TransitionListener> mTransitionListeners = null;
     private int mFrames = 0;
     private long mLastDrawTime = -1;
@@ -948,6 +951,10 @@ public class MotionLayout extends ConstraintLayout implements
     private KeyCache mKeyCache = new KeyCache();
     private boolean mInLayout = false;
     private StateCache mStateCache;
+
+    MotionController getMotionController(int mTouchAnchorId) {
+        return mFrameArrayList.get(findViewById(mTouchAnchorId));
+    }
 
     enum TransitionState {
         UNDEFINED,
@@ -1520,7 +1527,11 @@ public class MotionLayout extends ConstraintLayout implements
 
         mModel.build();
         mInTransition = true;
-
+        SparseArray<MotionController> controllers = new SparseArray<>();
+        for (int i = 0; i < n; i++) {
+            View child = getChildAt(i);
+            controllers.put(child.getId(),mFrameArrayList.get(child));
+        }
         int layoutWidth = getWidth();
         int layoutHeight = getHeight();
         int arc = mScene.gatPathMotionArc();
@@ -1532,10 +1543,34 @@ public class MotionLayout extends ConstraintLayout implements
                 }
             }
         }
-        // getMap the KeyFrames for each view
-        for (int i = 0; i < n; i++) {
-            MotionController motionController = mFrameArrayList.get(getChildAt(i));
+
+        SparseBooleanArray sparseBooleanArray = new SparseBooleanArray();
+        int[] depends = new int[mFrameArrayList.size()];
+          int count = 0;
+         for (int i = 0; i < n; i++) {
+            View view = getChildAt(i);
+            MotionController motionController = mFrameArrayList.get(view);
+            if (motionController.getAnimateRelativeTo() != UNSET) {
+                sparseBooleanArray.put( motionController.getAnimateRelativeTo(),true);
+                depends[count++]=motionController.getAnimateRelativeTo();
+            }
+        }
+        for (int i = 0; i < count; i++) {
+            MotionController motionController = mFrameArrayList.get(findViewById(depends[i]));
             if (motionController != null) {
+                mScene.getKeyFrames(motionController);
+                motionController.setup(layoutWidth, layoutHeight, mTransitionDuration, getNanoTime());
+            }
+        }
+            // getMap the KeyFrames for each view
+        for (int i = 0; i < n; i++) {
+            View v = getChildAt(i);
+            MotionController motionController = mFrameArrayList.get(v);
+            if (sparseBooleanArray.get(v.getId())) {
+                continue;
+            }
+
+                if (motionController != null) {
                 mScene.getKeyFrames(motionController);
                 motionController.setup(layoutWidth, layoutHeight, mTransitionDuration, getNanoTime());
             }
@@ -1754,7 +1789,8 @@ public class MotionLayout extends ConstraintLayout implements
         mTransitionGoalPosition = position;
         mTransitionDuration = mScene.getDuration() / 1000f;
         setProgress(mTransitionGoalPosition);
-        mInterpolator = mScene.getInterpolator();
+        mInterpolator = null;
+        mProgressInterpolator = mScene.getInterpolator();
         mTransitionInstantly = false;
         mAnimationStartTime = getNanoTime();
         mInTransition = true;
@@ -1887,15 +1923,20 @@ public class MotionLayout extends ConstraintLayout implements
         mTransitionDuration = mScene.getDuration() / 1000f;
         mBeginState = UNSET;
         mScene.setTransition(mBeginState, mEndState);
+        SparseArray<MotionController> controllers = new SparseArray<>();
+
+
 
         int startId = mScene.getStartId();
         int targetID = id;
         int n = getChildCount();
+
         mFrameArrayList.clear();
         for (int i = 0; i < n; i++) {
             View v = getChildAt(i);
             MotionController f = new MotionController(v);
             mFrameArrayList.put(v, f);
+            controllers.put(v.getId(),mFrameArrayList.get(v));
         }
         mInTransition = true;
 
@@ -1914,7 +1955,6 @@ public class MotionLayout extends ConstraintLayout implements
 
         float stagger = mScene.getStaggered();
         if (stagger != 0.0f) {
-
             float min = Float.MAX_VALUE, max = -Float.MAX_VALUE;
             for (int i = 0; i < n; i++) {
                 MotionController f = mFrameArrayList.get(getChildAt(i));
@@ -1973,6 +2013,7 @@ public class MotionLayout extends ConstraintLayout implements
 
         if (mInterpolator instanceof MotionInterpolator) {
             v = ((MotionInterpolator) mInterpolator).getVelocity();
+
         }
 
         MotionController f = mFrameArrayList.get(view);
@@ -1987,6 +2028,7 @@ public class MotionLayout extends ConstraintLayout implements
             returnVelocity[0] *= v;
             returnVelocity[1] *= v;
         }
+
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -2287,11 +2329,12 @@ public class MotionLayout extends ConstraintLayout implements
         public void build() {
             final int n = getChildCount();
             mFrameArrayList.clear();
-
+            SparseArray<MotionController> controllers = new SparseArray<>();
+            int []ids = new int[n];
             for (int i = 0; i < n; i++) {
                 View v = getChildAt(i);
                 MotionController motionController = new MotionController(v);
-
+                controllers.put(ids[i] = v.getId(),motionController);
                 mFrameArrayList.put(v, motionController);
             }
             for (int i = 0; i < n; i++) {
@@ -2319,6 +2362,13 @@ public class MotionLayout extends ConstraintLayout implements
                             Log.e(TAG, Debug.getLocation() + "no widget for  " + Debug.getName(v) + " (" + v.getClass().getName() + ")");
                         }
                     }
+                }
+            }
+            for (int i = 0; i < n; i++) {
+                MotionController controller = controllers.get(ids[i]);
+                int relativeToId = controller.getAnimateRelativeTo();
+                if (relativeToId != UNSET) {
+                    controller.setupRelative(controllers.get(relativeToId));
                 }
             }
         }
@@ -2898,6 +2948,11 @@ public class MotionLayout extends ConstraintLayout implements
         if (DEBUG) {
             Log.v(TAG, " dispatchDraw " + getProgress() + Debug.getLocation());
         }
+        if (mDecoratorsHelpers != null) {
+            for (MotionHelper decor : mDecoratorsHelpers) {
+                decor.onPreDraw(canvas);
+            }
+        }
         evaluate(false);
 
         if (DEBUG) {
@@ -2946,6 +3001,11 @@ public class MotionLayout extends ConstraintLayout implements
             }
             mDevModeDraw.draw(canvas, mFrameArrayList, mScene.getDuration(), mDebugPath);
         }
+        if (mDecoratorsHelpers != null) {
+            for (MotionHelper decor : mDecoratorsHelpers) {
+                decor.onPostDraw(canvas);
+            }
+        }
     }
 
     /**
@@ -2986,11 +3046,12 @@ public class MotionLayout extends ConstraintLayout implements
         mPostInterpolationPosition = position;
         int n = getChildCount();
         long time = getNanoTime();
+        float interPos = mProgressInterpolator == null ? position : mProgressInterpolator.getInterpolation(position);
         for (int i = 0; i < n; i++) {
             final View child = getChildAt(i);
             final MotionController frame = mFrameArrayList.get(child);
             if (frame != null) {
-                frame.interpolate(child, position, time, mKeyCache);
+                frame.interpolate(child, interPos, time, mKeyCache);
             }
         }
         if (mMeasureDuringTransition) {
@@ -3015,7 +3076,6 @@ public class MotionLayout extends ConstraintLayout implements
             float deltaPos = 0f;
             if (!(mInterpolator instanceof MotionInterpolator)) { // if we are not in a drag
                 deltaPos = dir * (currentTime - mTransitionLastTime) * 1E-9f / mTransitionDuration;
-                mLastVelocity = deltaPos;
             }
             float position = mTransitionLastPosition + deltaPos;
 
@@ -3098,11 +3158,16 @@ public class MotionLayout extends ConstraintLayout implements
                 Log.v(TAG, "LAYOUT frame.interpolate at " + position);
             }
             mPostInterpolationPosition = position;
+            float interPos = mProgressInterpolator == null ? position : mProgressInterpolator.getInterpolation(position);
+            if (mProgressInterpolator != null) {
+                mLastVelocity = mProgressInterpolator.getInterpolation(position+dir/mTransitionDuration) ;
+                mLastVelocity -= mProgressInterpolator.getInterpolation(position);
+            }
             for (int i = 0; i < n; i++) {
                 final View child = getChildAt(i);
                 final MotionController frame = mFrameArrayList.get(child);
                 if (frame != null) {
-                    mKeepAnimating |= frame.interpolate(child, position, time, mKeyCache);
+                    mKeepAnimating |= frame.interpolate(child, interPos, time, mKeyCache);
                 }
             }
             if (DEBUG) {
@@ -3816,6 +3881,12 @@ public class MotionLayout extends ConstraintLayout implements
                     mOnHideHelpers = new ArrayList<>();
                 }
                 mOnHideHelpers.add(helper);
+            }
+            if (helper.isDecorator()) {
+                if (mDecoratorsHelpers == null) {
+                    mDecoratorsHelpers = new ArrayList<>();
+                }
+                mDecoratorsHelpers.add(helper);
             }
         }
     }

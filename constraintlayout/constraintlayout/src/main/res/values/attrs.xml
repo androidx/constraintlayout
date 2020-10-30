@@ -91,6 +91,7 @@
     <attr name="layout_constraintEnd_toEndOf" format="reference|enum">
         <enum name="parent" value="0" />
     </attr>
+    <attr name="transformPivotTarget" format="reference" />
 
     <!-- the left margin value to be used when connected to an object that is GONE -->
     <attr name="layout_goneMarginLeft" format="dimension" />
@@ -286,6 +287,15 @@
 
     <!-- Defines the relative ordering of one view to another for purpose of staggering -->
     <attr name="motionStagger" format="float" />
+    <attr name="quantizeMotionSteps" format="integer" />
+    <attr name="quantizeMotionPhase" format="float" />
+    <attr name="quantizeMotionInterpolator" format="string|reference|enum">
+        <enum name="easeInOut" value="0" />
+        <enum name="easeIn" value="1" />
+        <enum name="easeOut" value="2" />
+        <enum name="linear" value="3" />
+        <enum name="bounce" value="5" />
+    </attr>
 
     <!-- Specify the visibility of a placeholder -->
     <attr name="placeholder_emptyVisibility">
@@ -322,7 +332,14 @@
         <attr name="placeholder_emptyVisibility" />
         <attr name="content" />
     </declare-styleable>
-    <attr name="animate_relativeTo" format="reference" />
+    <attr name="animateRelativeTo" format="reference" />
+    <attr name="animateCircleAngleTo" format="enum" >
+        <enum name="bestChoice" value="0"/>
+        <enum name="closest" value="1"/>
+        <enum name="clockwise" value="2"/>
+        <enum name="antiClockwise" value="3"/>
+        <enum name="constraint" value="4"/>
+    </attr>
 
     <declare-styleable name="MotionHelper">
         <attr name="onShow" format="boolean" />
@@ -475,6 +492,9 @@
         <enum name="flip" value="3" />
     </attr>
 
+    <attr name="polarRelativeTo" format="reference" />
+
+
     <!--Rotate the view along the path it is taking if set defines the angle the
         view will be rotate relative to the path. This is applied before rotation -->
     <attr name="transitionPathRotate" format="float" />
@@ -612,11 +632,15 @@
         <attr name="flow_lastHorizontalBias" />
         <attr name="flow_lastVerticalBias" />
 
-        <attr name="animate_relativeTo" />
+        <attr name="animateRelativeTo" />
+        <attr name="animateCircleAngleTo" />
+
         <attr name="transitionEasing" />
         <attr name="pathMotionArc" />
+        <attr name="polarRelativeTo" />
         <attr name="transitionPathRotate" />
         <attr name="motionStagger"/>
+        <attr name="quantizeMotionSteps"/>
         <attr name="drawPath" />
         <attr name="motionProgress" />
         <attr name="layout_constraintTag" />
@@ -656,6 +680,8 @@
 
         <attr name="android:transformPivotX" />
         <attr name="android:transformPivotY" />
+        <attr name="transformPivotTarget" />
+
         <!-- translation in x of the view. This value is added post-layout to the left
              property of the view, which is set by its layout. -->
         <attr name="android:translationX" />
@@ -785,15 +811,181 @@
         <attr name="flow_lastHorizontalBias" />
         <attr name="flow_lastVerticalBias" />
 
-        <attr name="animate_relativeTo" />
+        <attr name="animateRelativeTo" />
+        <attr name="animateCircleAngleTo" />
         <attr name="transitionEasing" />
         <attr name="pathMotionArc" />
+        <attr name="polarRelativeTo" />
+        <attr name="transitionPathRotate" />
+        <attr name="drawPath" />
+        <attr name="motionProgress" />
+         <attr name="layout_constraintTag" />
+        <attr name="motionStagger" />
+        <attr name="quantizeMotionSteps" />
+        <attr name="quantizeMotionPhase" />
+        <attr name="quantizeMotionInterpolator" />
+    </declare-styleable>
+
+<!--    This is used in constraintset to allow a more compact expression of changes to the original-->
+<!--    Only changes need be defined. It does not support layout_constraint*_to* attributes  -->
+    <declare-styleable name="ConstraintOverride">
+        <attr name="android:orientation" />
+        <attr name="android:id" />
+
+        <!-- Controls the initial visibility of the view.  -->
+        <attr name="android:visibility" />
+        <attr name="visibilityMode"/>
+
+        <!-- alpha property of the view, as a value between 0 (completely transparent) and 1
+             (completely opaque). -->
+        <attr name="android:alpha" />
+
+        <!-- base z depth of the view. -->
+        <attr name="android:elevation" />
+
+        <!-- rotation of the view, in degrees. -->
+        <attr name="android:rotation" />
+
+        <!-- rotation of the view around the x axis, in degrees. -->
+        <attr name="android:rotationX" />
+
+        <!-- rotation of the view around the y axis, in degrees. -->
+        <attr name="android:rotationY" />
+
+        <!-- scale of the view in the x direction. -->
+        <attr name="android:scaleX" />
+
+        <!-- scale of the view in the y direction. -->
+        <attr name="android:scaleY" />
+        <attr name="pivotAnchor" />
+
+        <attr name="android:transformPivotX" />
+        <attr name="android:transformPivotY" />
+        <attr name="transformPivotTarget" />
+
+        <!-- translation in x of the view. This value is added post-layout to the left
+             property of the view, which is set by its layout. -->
+        <attr name="android:translationX" />
+        <!-- translation in y of the view. This value is added post-layout to the top
+             property of the view, which is set by its layout. -->
+        <attr name="android:translationY" />
+        <!-- translation in z of the view. This value is added to its elevation. -->
+        <attr name="android:translationZ" />
+        <!-- Specifies the basic width of the view.  This is a required attribute
+             for any view inside of a containing layout manager.  Its value may
+             be a dimension (such as "12dip") for a constant width or one of
+             the special constants. -->
+        <attr name="android:layout_width" />
+        <!-- Specifies the basic height of the view.  This is a required attribute
+             for any view inside of a containing layout manager.  Its value may
+             be a dimension (such as "12dip") for a constant height or one of
+             the special constants. -->
+        <attr name="android:layout_height" />
+        <!--  Specifies extra space on the start side of this view.
+              This space is outside this view's bounds.
+              Margin values should be positive.-->
+        <attr name="android:layout_marginStart" />
+        <!--  Specifies extra space on the bottom side of this view.
+              This space is outside this view's bounds.
+              Margin values should be positive.-->
+        <attr name="android:layout_marginBottom" />
+        <!--  Specifies extra space on the top side of this view.
+              This space is outside this view's bounds.
+              Margin values should be positive.-->
+        <attr name="android:layout_marginTop" />
+        <!--  Specifies extra space on the end side of this view.
+              This space is outside this view's bounds.
+              Margin values should be positive.-->
+        <attr name="android:layout_marginEnd" />
+        <!--  Specifies extra space on the left side of this view.
+              This space is outside this view's bounds.
+              Margin values should be positive. -->
+        <attr name="android:layout_marginLeft" />
+        <!--  Specifies extra space on the right side of this view.
+              This space is outside this view's bounds.
+              Margin values should be positive.-->
+        <attr name="android:layout_marginRight" />
+
+        <attr name="layout_constraintCircleRadius" />
+        <attr name="layout_constraintCircleAngle" />
+
+        <attr name="layout_goneMarginLeft" />
+        <attr name="layout_goneMarginTop" />
+        <attr name="layout_goneMarginRight" />
+        <attr name="layout_goneMarginBottom" />
+        <attr name="layout_goneMarginStart" />
+        <attr name="layout_goneMarginEnd" />
+        <attr name="layout_constrainedWidth" />
+        <attr name="layout_constrainedHeight" />
+        <attr name="layout_constraintHorizontal_bias" />
+        <attr name="layout_constraintVertical_bias" />
+        <attr name="layout_constraintWidth_default" />
+        <attr name="layout_constraintHeight_default" />
+        <attr name="layout_constraintWidth_min" />
+        <attr name="layout_constraintWidth_max" />
+        <attr name="layout_constraintWidth_percent" />
+        <attr name="layout_constraintHeight_min" />
+        <attr name="layout_constraintHeight_max" />
+        <attr name="layout_constraintHeight_percent" />
+        <attr name="layout_constraintLeft_creator" />
+        <attr name="layout_constraintTop_creator" />
+        <attr name="layout_constraintRight_creator" />
+        <attr name="layout_constraintBottom_creator" />
+        <attr name="layout_constraintBaseline_creator" />
+        <attr name="layout_constraintDimensionRatio" />
+        <attr name="layout_constraintHorizontal_weight" />
+        <attr name="layout_constraintVertical_weight" />
+        <attr name="layout_constraintHorizontal_chainStyle" />
+        <attr name="layout_constraintVertical_chainStyle" />
+        <attr name="layout_editor_absoluteX" />
+        <attr name="layout_editor_absoluteY" />
+
+        <attr name="barrierDirection" />
+        <attr name="barrierMargin" />
+        <attr name="constraint_referenced_ids" />
+        <attr name="android:maxHeight" />
+        <attr name="android:maxWidth" />
+        <attr name="android:minHeight" />
+        <attr name="android:minWidth" />
+        <attr name="barrierAllowsGoneWidgets" />
+        <attr name="chainUseRtl" />
+
+        <attr name="flow_horizontalStyle" />
+        <attr name="flow_verticalStyle" />
+        <attr name="flow_verticalAlign" />
+        <attr name="flow_horizontalAlign" />
+        <attr name="flow_verticalBias" />
+        <attr name="flow_horizontalBias" />
+        <attr name="flow_wrapMode" />
+        <attr name="flow_maxElementsWrap" />
+        <attr name="flow_horizontalGap" />
+        <attr name="flow_verticalGap" />
+        <!--        <attr name="flow_horizontalSeparator" />-->
+        <!--        <attr name="flow_verticalSeparator" />-->
+
+        <attr name="flow_firstHorizontalStyle" />
+        <attr name="flow_firstVerticalStyle" />
+        <attr name="flow_firstHorizontalBias" />
+        <attr name="flow_firstVerticalBias" />
+
+        <attr name="flow_lastHorizontalStyle" />
+        <attr name="flow_lastVerticalStyle" />
+        <attr name="flow_lastHorizontalBias" />
+        <attr name="flow_lastVerticalBias" />
+
+        <attr name="animateRelativeTo" />
+        <attr name="animateCircleAngleTo" />
+        <attr name="transitionEasing" />
+        <attr name="pathMotionArc" />
+        <attr name="polarRelativeTo" />
         <attr name="transitionPathRotate" />
         <attr name="drawPath" />
         <attr name="motionProgress" />
         <attr name="layout_constraintTag" />
         <attr name="motionStagger" />
-
+        <attr name="quantizeMotionSteps" />
+        <attr name="quantizeMotionPhase" />
+        <attr name="quantizeMotionInterpolator" />
     </declare-styleable>
 
     <!-- frame position is an integer from 0 to 100 -->
@@ -830,7 +1022,7 @@
         <enum name="flip" value="2" />
     </attr>
 
-    <attr name="waveShape" format="enum">
+    <attr name="waveShape" format="enum|string">
         <enum name="sin" value="0" />
         <enum name="square" value="1" />
         <enum name="triangle" value="2" />
@@ -846,6 +1038,8 @@
     </attr>
 
     <attr name="wavePeriod" format="float" />
+    <attr name="wavePhase" format="float" />
+
     <attr name="waveOffset" format="float|dimension" />
     <attr name="defaultDuration" format="integer" />
 
@@ -876,7 +1070,7 @@
             <enum name="easeIn" value="1" />
             <enum name="easeOut" value="2" />
             <enum name="linear" value="3" />
-            <enum name="bounce" value="5" />
+            <enum name="bounce" value="4" />
         </attr>
 
         <attr name="duration" />
@@ -921,6 +1115,8 @@
         <enum name="dragRight" value="3" />
         <enum name="dragStart" value="4" />
         <enum name="dragEnd" value="5" />
+        <enum name="dragClockwise" value="6" />
+        <enum name="dragAnticlockwise" value="7" />
     </attr>
 
     <attr name="touchAnchorId" format="reference" />
@@ -942,6 +1138,7 @@
         <attr name="dragDirection" />
         <attr name="touchAnchorId" />
         <attr name="touchAnchorSide" />
+        <attr name="rotationCenterId" format="reference" />
         <attr name="touchRegionId" format="reference" />
         <attr name="limitBoundsTo" format="reference" />
         <attr name="nestedScrollFlags" format="flags">
@@ -998,6 +1195,8 @@
         <attr name="android:rotationY" />
         <attr name="android:transformPivotX" />
         <attr name="android:transformPivotY" />
+        <attr name="transformPivotTarget" />
+
         <attr name="transitionPathRotate" />
         <attr name="android:scaleX" />
         <attr name="android:scaleY" />
@@ -1044,6 +1243,7 @@
         <attr name="transitionEasing" />
         <attr name="motionProgress" />
         <attr name="waveShape" />
+        <attr name="wavePhase"/>
         <attr name="wavePeriod" />
         <attr name="waveOffset" />
         <attr name="waveVariesBy" />
@@ -1069,6 +1269,7 @@
         <attr name="wavePeriod" />
         <attr name="motionProgress" />
         <attr name="waveOffset" />
+        <attr name="wavePhase"/>
 
         <!--  The time in milliseconds before the wave decays to less than 1/256-->
         <attr name="waveDecay" />
@@ -1136,8 +1337,28 @@
         <attr name="round" format="dimension" />
         <attr name="overlay" format="boolean" />
         <attr name="roundPercent" format="float" />
+        <attr name="imagePanX" format="float" />
+        <attr name="imagePanY" format="float" />
+        <attr name="imageZoom" format="float" />
+        <attr name="imageRotate" format="float" />
     </declare-styleable>
 
+    <declare-styleable name="MotionLabel">
+        <attr name="android:text"/>
+        <attr name="android:textSize"/>
+        <attr name="android:fontFamily"/>
+        <attr name="android:typeface"/>
+        <attr name="android:shadowColor"/>
+        <attr name="android:shadowDx"/>
+        <attr name="android:shadowDy"/>
+        <attr name="android:shadowRadius"/>
+        <attr name="android:textStyle"/>
+        <attr name="textFillColor" format="color"/>
+        <attr name="textOutlineThickness" format="dimension" />
+        <attr name="textOutlineColor" format="color" />
+        <attr name="borderRound" format="dimension" />
+        <attr name="borderRoundPercent" format="float" />
+    </declare-styleable>
 
     <declare-styleable name="Layout">
 
@@ -1252,13 +1473,15 @@
         <!-- scale of the view in the y direction. -->
         <attr name="android:scaleY"   />
 
-        <!-- deprecated  x location of the pivot point around which the view will rotate and scale.
+        <!--  x location of the pivot point around which the view will rotate and scale.
      This xml attribute sets the pivotX property of the View. -->
         <attr name="android:transformPivotX"  />
 
-        <!-- deprecated  y location of the pivot point around which the view will rotate and scale.
+        <!--   y location of the pivot point around which the view will rotate and scale.
              This xml attribute sets the pivotY property of the View. -->
         <attr name="android:transformPivotY"  />
+
+        <attr name="transformPivotTarget"  />
 
         <!-- translation in x of the view. This value is added post-layout to the left
            property of the view, which is set by its layout. -->
@@ -1274,12 +1497,17 @@
     </declare-styleable>
 
     <declare-styleable name="Motion">
-        <attr name="animate_relativeTo" />
+        <attr name="animateRelativeTo" />
+        <attr name="animateCircleAngleTo" />
         <attr name="transitionEasing" />
         <attr name="pathMotionArc" />
         <attr name="motionPathRotate" />
         <attr name="motionStagger" />
         <attr name="drawPath" />
+        <attr name="quantizeMotionSteps" />
+        <attr name="quantizeMotionPhase" />
+        <attr name="quantizeMotionInterpolator" />
+
     </declare-styleable>
 
     <declare-styleable name="KeyTrigger">
@@ -1295,6 +1523,9 @@
          <attr name="motion_postLayoutCollision" format="boolean" />
          <!-- Trigger if the motionTarget collides with the other motionTarget-->
          <attr name="motion_triggerOnCollision" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="Include">
+      <attr name="constraintSet"/>
     </declare-styleable>
 
 </resources>

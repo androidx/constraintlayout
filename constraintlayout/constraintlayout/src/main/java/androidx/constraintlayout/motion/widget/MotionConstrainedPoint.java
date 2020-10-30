@@ -61,6 +61,7 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
     private float height;
     private float mPathRotate = Float.NaN;
     private float mProgress = Float.NaN;
+    private int mAnimateRelativeTo = -1;
 
     static final int PERPENDICULAR = 1;
     static final int CARTESIAN = 2;
@@ -240,6 +241,7 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
         this.mKeyFrameEasing = Easing.getInterpolator(c.motion.mTransitionEasing);
         this.mPathRotate = c.motion.mPathRotate;
         this.mDrawPath = c.motion.mDrawPath;
+        this.mAnimateRelativeTo = c.motion.mAnimateRelativeTo;
         this.mProgress = c.propertySet.mProgress;
         Set<String> at = c.mCustomConstraints.keySet();
         for (String s : at) {

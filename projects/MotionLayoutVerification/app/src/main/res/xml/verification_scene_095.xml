@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto"
+    motion:defaultDuration="2000">
+
+    <ConstraintSet android:id="@+id/start">
+
+        <Constraint
+            android:id="@+id/view"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+
+            android:rotation="0"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent" />
+    </ConstraintSet>
+
+    <Transition
+        motion:constraintSetEnd="@xml/verification_scene_95a"
+        motion:constraintSetStart="@+id/start"
+        motion:duration="3000"
+        motion:autoTransition="animateToStart">
+        <OnClick />
+        <KeyFrameSet>
+            <KeyCycle
+                motion:motionTarget="@+id/view"
+                motion:framePosition="0"
+                motion:wavePeriod="1"
+                motion:waveShape="custom(0,0.3,0,-0.1,1,-0.5,0,0,0,0)"
+                android:translationX="100dp"
+                motion:waveOffset="0dp" />
+            <KeyCycle
+                motion:motionTarget="@+id/view"
+                motion:framePosition="50"
+                motion:waveShape="custom(0,0.3,0,-0.1,1,-0.5,0,0,0,0)"
+                motion:wavePeriod="1"
+                android:translationX="100dp"
+                motion:waveOffset="0dp" />
+            <KeyCycle
+                motion:motionTarget="@+id/view"
+                motion:framePosition="100"
+                motion:waveShape="custom(0,0.3,0,-0.1,1,-0.5,0,0,0,0)"
+                motion:wavePeriod="1"
+                android:translationX="100dp"
+                motion:waveOffset="0dp" />
+        </KeyFrameSet>
+
+    </Transition>
+
+
+</MotionScene>

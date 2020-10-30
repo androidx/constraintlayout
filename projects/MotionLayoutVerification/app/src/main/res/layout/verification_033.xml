@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motionLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF"
+    app:layoutDescription="@xml/verification_scene_033"
+    app:motionDebug="SHOW_ALL">
+
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rotation="45"
+        android:src="@drawable/cube"
+        app:layout_constraintTag="Image1"
+        app:layout_constraintCircle="@+id/center"
+        app:layout_constraintCircleAngle="0"
+        app:layout_constraintCircleRadius="@dimen/radius"/>
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rotation="0"
+        android:src="@drawable/cube"
+        app:layout_constraintTag="Image2"
+        app:layout_constraintCircle="@+id/center"
+        app:layout_constraintCircleAngle="45"
+        app:layout_constraintCircleRadius="@dimen/radius" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rotation="45"
+        android:src="@drawable/cube"
+        app:layout_constraintTag="Image3"
+        app:layout_constraintCircle="@+id/center"
+        app:layout_constraintCircleAngle="90"
+        app:layout_constraintCircleRadius="@dimen/radius"/>
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rotation="0"
+        android:src="@drawable/cube"
+        app:layout_constraintTag="Image4"
+        app:layout_constraintCircle="@+id/center"
+        app:layout_constraintCircleAngle="135"
+        app:layout_constraintCircleRadius="@dimen/radius"/>
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rotation="45"
+        android:src="@drawable/cube"
+        app:layout_constraintTag="Image5"
+        app:layout_constraintCircle="@+id/center"
+        app:layout_constraintCircleAngle="180"
+        app:layout_constraintCircleRadius="@dimen/radius" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rotation="0"
+        android:src="@drawable/cube"
+        app:layout_constraintTag="Image6"
+        app:layout_constraintCircle="@+id/center"
+        app:layout_constraintCircleAngle="225"
+        app:layout_constraintCircleRadius="@dimen/radius" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rotation="45"
+        android:src="@drawable/cube"
+        app:layout_constraintTag="Image7"
+        app:layout_constraintCircle="@+id/center"
+        app:layout_constraintCircleAngle="270"
+        app:layout_constraintCircleRadius="@dimen/radius" />
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rotation="0"
+        app:layout_constraintTag="Image8"
+        android:src="@drawable/cube"
+        app:layout_constraintCircle="@+id/center"
+        app:layout_constraintCircleAngle="315"
+        app:layout_constraintCircleRadius="@dimen/radius" />
+
+
+    <ImageView
+        android:id="@+id/center"
+        android:layout_width="135dp"
+        android:layout_height="135dp"
+        android:src="@drawable/cube"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/center2"
+        android:layout_width="57dp"
+        android:layout_height="57dp"
+        android:background="#FFF"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/overlay1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rotation="0"
+        android:src="@drawable/triangle"
+        android:visibility="invisible"
+        app:layout_constraintCircle="@+id/center"
+        app:layout_constraintCircleAngle="0"
+        app:layout_constraintCircleRadius="@dimen/radius2"/>
+
+    <ImageView
+        android:id="@+id/overlay2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rotation="90"
+        android:src="@drawable/triangle"
+        android:visibility="invisible"
+        app:layout_constraintCircle="@+id/center"
+        app:layout_constraintCircleAngle="90"
+        app:layout_constraintCircleRadius="@dimen/radius2"/>
+
+    <ImageView
+        android:id="@+id/overlay3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rotation="180"
+        android:background="#FF32"
+        android:src="@drawable/triangle"
+        android:visibility="invisible"
+        app:layout_constraintCircle="@+id/center"
+        app:layout_constraintCircleAngle="180"
+        app:layout_constraintCircleRadius="@dimen/radius2" />
+
+    <ImageView
+        android:id="@+id/overlay4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rotation="270"
+        android:src="@drawable/triangle"
+        android:visibility="invisible"
+        app:layout_constraintCircle="@+id/center"
+        app:layout_constraintCircleAngle="270"
+        app:layout_constraintCircleRadius="@dimen/radius2"/>
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

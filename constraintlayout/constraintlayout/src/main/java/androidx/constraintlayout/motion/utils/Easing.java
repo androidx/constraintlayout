@@ -45,6 +45,10 @@ public class Easing {
         }
         if (configString.startsWith("cubic")) {
             return new CubicEasing(configString);
+        } else if (configString.startsWith("spline")) {
+            return new StepCurve(configString);
+        } else if (configString.startsWith("Schlick")) {
+            return new Schlick(configString);
         } else {
             switch (configString) {
                 case STANDARD_NAME:

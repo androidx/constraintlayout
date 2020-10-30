@@ -17,6 +17,7 @@
 package androidx.constraintlayout.motion.utils;
 
 import androidx.constraintlayout.motion.widget.MotionInterpolator;
+
 import android.util.Log;
 import android.view.animation.Interpolator;
 
@@ -152,7 +153,7 @@ public class StopLogic extends MotionInterpolator {
 
     @Override
     public float getVelocity() {
-        return (mBackwards)?-getVelocity(mLastPosition):getVelocity(mLastPosition);
+        return (mBackwards) ? -getVelocity(mLastPosition) : getVelocity(mLastPosition);
     }
 
     private void setup(float velocity, float distance, float maxAcceleration, float maxVelocity,

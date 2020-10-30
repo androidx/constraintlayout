@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motionLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layoutDescription="@xml/verification_scene_916"
+    android:background="#FF003b60">
+
+
+
+    <ImageView
+        android:id="@+id/sun"
+        android:layout_width="210dp"
+        android:layout_height="210dp"
+        android:src="@drawable/sun"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="center"
+        />
+    <TextView
+        android:id="@+id/rocket"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🚀"
+        android:textSize="28sp"
+        app:layout_constraintCircleRadius="60dp"
+        app:layout_constraintCircleAngle="0"
+        app:layout_constraintCircle="@id/earth"
+        />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/moon"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:src="@drawable/moon"
+        android:rotation="-240"
+        app:layout_constraintCircleRadius="180dp"
+        app:layout_constraintCircleAngle="0"
+        app:layout_constraintCircle="@id/earth"
+        />
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/earth"
+        android:layout_width="196dp"
+        android:layout_height="196dp"
+        android:src="@drawable/earth"
+        android:rotation="15"
+        app:layout_constraintCircleRadius="300dp"
+        app:layout_constraintCircleAngle="315"
+        app:layout_constraintCircle="@id/sun"
+        />
+
+
+
+
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

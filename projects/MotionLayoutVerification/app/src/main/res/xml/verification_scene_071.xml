@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto"
+    motion:defaultDuration="2000">
+
+
+    <ConstraintSet
+        android:id="@+id/up"
+        motion:deriveConstraintsFrom="@id/start"
+ >
+        <Constraint
+            android:id="@+id/center"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            motion:layout_constraintVertical_bias="0.9"
+            motion:layout_constraintHorizontal_bias="0.6"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTag="center"
+            />
+        <Constraint
+            android:id="@+id/region1"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            motion:motionStagger="1"
+            motion:transitionPathRotate="90"
+            motion:layout_constraintTag="hop"
+            motion:layout_constraintCircleRadius="90dp"
+            motion:layout_constraintCircleAngle="90"
+            motion:layout_constraintCircle="@id/center"
+            />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/start">
+
+        <Constraint android:id="@id/region1">
+
+            <Motion
+                motion:motionPathRotate="90"
+                motion:animateRelativeTo="@+id/center"
+            />
+        </Constraint>
+
+        <Constraint android:id="@id/center">
+<!--This makes no sense but should not crash -->
+            <Motion
+                 motion:motionPathRotate="90"
+                 />
+        </Constraint>
+
+    </ConstraintSet>
+
+
+
+    <Transition
+        motion:constraintSetEnd="@+id/up"
+        motion:constraintSetStart="@+id/start"
+        motion:duration="4000"
+        motion:motionInterpolator="linear"  >
+        <OnSwipe motion:dragDirection="dragClockwise" motion:touchAnchorId="@+id/region1"/>
+
+        <KeyFrameSet>
+        </KeyFrameSet>
+
+    </Transition>
+
+
+
+</MotionScene>

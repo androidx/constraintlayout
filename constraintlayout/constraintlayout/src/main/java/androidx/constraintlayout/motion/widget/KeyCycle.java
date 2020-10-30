@@ -18,6 +18,8 @@ package androidx.constraintlayout.motion.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+
+import androidx.constraintlayout.motion.utils.Oscillator;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.R;
 import android.util.AttributeSet;
@@ -40,8 +42,10 @@ public class KeyCycle extends Key {
     private String mTransitionEasing = null;
     private int mCurveFit = 0;
     private int mWaveShape = -1;
+    private String mCustomWaveShpe = null;
     private float mWavePeriod = Float.NaN;
     private float mWaveOffset = 0;
+    private float mWavePhase = 0;
     private float mProgress = Float.NaN;
     private int mWaveVariesBy = -1;
     private float mAlpha = Float.NaN;
@@ -115,13 +119,13 @@ public class KeyCycle extends Key {
                 String ckey = key.substring(Key.CUSTOM.length() + 1);
                 ConstraintAttribute cvalue = mCustomConstraints.get(ckey);
                 if (cvalue != null && cvalue.getType() == ConstraintAttribute.AttributeType.FLOAT_TYPE) {
-                    oscSet.get(key).setPoint(mFramePosition, mWaveShape, mWaveVariesBy, mWavePeriod, mWaveOffset, cvalue.getValueToInterpolate(), cvalue);
+                    oscSet.get(key).setPoint(mFramePosition, mWaveShape,mCustomWaveShpe, mWaveVariesBy, mWavePeriod, mWaveOffset, mWavePhase, cvalue.getValueToInterpolate(), cvalue);
                 }
                 continue;
             }
             float value = getValue(key);
             if (!Float.isNaN(value)) {
-                oscSet.get(key).setPoint(mFramePosition, mWaveShape, mWaveVariesBy, mWavePeriod, mWaveOffset, value);
+                oscSet.get(key).setPoint(mFramePosition, mWaveShape,mCustomWaveShpe, mWaveVariesBy, mWavePeriod, mWaveOffset, mWavePhase, value);
             }
         }
     }
@@ -152,10 +156,14 @@ public class KeyCycle extends Key {
                 return mTranslationZ;
             case Key.WAVE_OFFSET:
                 return mWaveOffset;
+            case Key.WAVE_PHASE:
+                return mWavePhase;
             case Key.PROGRESS:
                 return mProgress;
             default:
-                Log.v(TAG, "WARNING! KeyCycle UNKNOWN  " + key);
+                if (!key.startsWith("CUSTOM")) {
+                    Log.v("WARNING! KeyCycle", "  UNKNOWN  " + key);
+                }
                 return Float.NaN;
         }
     }
@@ -202,11 +210,16 @@ public class KeyCycle extends Key {
                 case Key.WAVE_OFFSET:
                     splineSet.setPoint(mFramePosition, mWaveOffset);
                     break;
+                case Key.WAVE_PHASE:
+                    splineSet.setPoint(mFramePosition, mWavePhase);
+                    break;
                 case Key.PROGRESS:
                     splineSet.setPoint(mFramePosition, mProgress);
                     break;
                 default:
-                    Log.v(TAG, "WARNING KeyCycle UNKNOWN  " + s);
+                    if (!s.startsWith("CUSTOM")) {
+                        Log.v("WARNING KeyCycle", "  UNKNOWN  " + s);
+                    }
             }
         }
     }
@@ -232,6 +245,7 @@ public class KeyCycle extends Key {
         private static final int ANDROID_TRANSLATION_Y = 18;
         private static final int ANDROID_TRANSLATION_Z = 19;
         private static final int PROGRESS = 20;
+        private static final int WAVE_PHASE = 21;
         private static SparseIntArray mAttrMap = new SparseIntArray();
 
         static {
@@ -255,6 +269,7 @@ public class KeyCycle extends Key {
             mAttrMap.append(R.styleable.KeyCycle_android_translationY, ANDROID_TRANSLATION_Y);
             mAttrMap.append(R.styleable.KeyCycle_android_translationZ, ANDROID_TRANSLATION_Z);
             mAttrMap.append(R.styleable.KeyCycle_motionProgress, PROGRESS);
+            mAttrMap.append(R.styleable.KeyCycle_wavePhase, WAVE_PHASE);
         }
 
         private static void read(KeyCycle c, TypedArray a) {
@@ -286,7 +301,12 @@ public class KeyCycle extends Key {
                         c.mCurveFit = a.getInteger(attr, c.mCurveFit);
                         break;
                     case WAVE_SHAPE:
-                        c.mWaveShape = a.getInt(attr, c.mWaveShape);
+                        if (a.peekValue(attr).type == TypedValue.TYPE_STRING) {
+                            c.mCustomWaveShpe = a.getString(attr);
+                            c.mWaveShape = Oscillator.CUSTOM;
+                        } else {
+                            c.mWaveShape = a.getInt(attr, c.mWaveShape);
+                        }
                         break;
                     case WAVE_PERIOD:
                         c.mWavePeriod = a.getFloat(attr, c.mWavePeriod);
@@ -339,6 +359,9 @@ public class KeyCycle extends Key {
                         break;
                     case PROGRESS:
                         c.mProgress = a.getFloat(attr, c.mProgress);
+                        break;
+                    case WAVE_PHASE:
+                        c.mWavePhase = a.getFloat(attr, c.mWavePhase)/360;
                         break;
                     default:
                         Log.e(TAG, "unused attribute 0x" + Integer.toHexString(attr) + "   " + mAttrMap.get(attr));

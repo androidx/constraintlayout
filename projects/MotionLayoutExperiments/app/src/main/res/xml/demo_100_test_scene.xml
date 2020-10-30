@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="1000">
+        <OnClick/>
+       <KeyFrameSet>
+       </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint android:id="@+id/cir1" >
+        <Motion motion:animateRelativeTo="@+id/background"/>
+        </Constraint>
+        <Constraint android:id="@+id/cir2" >
+            <Motion motion:animateRelativeTo="@+id/background"/>
+        </Constraint>
+        <Constraint android:id="@+id/cir3" >
+            <Motion motion:animateRelativeTo="@+id/background"/>
+        </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <ConstraintOverride  android:id="@+id/cir1"  motion:layout_constraintCircleAngle="360" />
+        <ConstraintOverride  android:id="@+id/cir2"  motion:layout_constraintCircleAngle="495" />
+        <ConstraintOverride  android:id="@+id/cir3"  motion:layout_constraintCircleAngle="585" />
+
+    </ConstraintSet>
+</MotionScene>

@@ -23,13 +23,16 @@ import android.content.res.XmlResourceParser;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
+
 import androidx.constraintlayout.widget.ConstraintAttribute.AttributeType;
 import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams;
 import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.MotionScene;
 import androidx.constraintlayout.motion.utils.Easing;
+
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.HelperWidget;
+
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
@@ -47,6 +50,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -75,7 +79,7 @@ public class ConstraintSet {
     private static final String TAG = "ConstraintSet";
     private static final String ERROR_MESSAGE = "XML parser error must be within a Constraint ";
     private boolean mValidate;
-
+    public String mIdString;
     private HashMap<String, ConstraintAttribute> mSavedAttributes = new HashMap<>();
 
     /**
@@ -223,6 +227,7 @@ public class ConstraintSet {
     private HashMap<Integer, Constraint> mConstraints = new HashMap<Integer, Constraint>();
 
     private static SparseIntArray mapToConstant = new SparseIntArray();
+    private static SparseIntArray overrideMapToConstant = new SparseIntArray();
     private static final int BASELINE_TO_BASELINE = 1;
     private static final int BOTTOM_MARGIN = 2;
     private static final int BOTTOM_TO_BOTTOM = 3;
@@ -304,8 +309,15 @@ public class ConstraintSet {
     private static final int MOTION_STAGGER = 79;
     private static final int CONSTRAINED_WIDTH = 80;
     private static final int CONSTRAINED_HEIGHT = 81;
-
-    private static final int UNUSED = 82;
+    private static final int ANIMATE_CIRCLE_ANGLE_TO = 82;
+    private static final int TRANSFORM_PIVOT_TARGET = 83;
+    private static final int QUANTIZE_MOTION_STEPS = 84;
+    private static final int QUANTIZE_MOTION_PHASE = 85;
+    private static final int QUANTIZE_MOTION_INTERPOLATOR = 86;
+    private static final int UNUSED = 87;
+    private static final int QUANTIZE_MOTION_INTERPOLATOR_TYPE = 88;
+    private static final int QUANTIZE_MOTION_INTERPOLATOR_ID = 89;
+    private static final int QUANTIZE_MOTION_INTERPOLATOR_STR = 90;
 
     static {
         mapToConstant.append(R.styleable.Constraint_layout_constraintLeft_toLeftOf, LEFT_TO_LEFT);
@@ -377,7 +389,7 @@ public class ConstraintSet {
         mapToConstant.append(R.styleable.Constraint_layout_constraintCircle, CIRCLE);
         mapToConstant.append(R.styleable.Constraint_layout_constraintCircleRadius, CIRCLE_RADIUS);
         mapToConstant.append(R.styleable.Constraint_layout_constraintCircleAngle, CIRCLE_ANGLE);
-        mapToConstant.append(R.styleable.Constraint_animate_relativeTo, ANIMATE_RELATIVE_TO);
+        mapToConstant.append(R.styleable.Constraint_animateRelativeTo, ANIMATE_RELATIVE_TO);
         mapToConstant.append(R.styleable.Constraint_transitionEasing, TRANSITION_EASING);
         mapToConstant.append(R.styleable.Constraint_drawPath, DRAW_PATH);
         mapToConstant.append(R.styleable.Constraint_transitionPathRotate, TRANSITION_PATH_ROTATE);
@@ -397,6 +409,110 @@ public class ConstraintSet {
         mapToConstant.append(R.styleable.Constraint_visibilityMode, VISIBILITY_MODE);
         mapToConstant.append(R.styleable.Constraint_layout_constrainedWidth, CONSTRAINED_WIDTH);
         mapToConstant.append(R.styleable.Constraint_layout_constrainedHeight, CONSTRAINED_HEIGHT);
+        mapToConstant.append(R.styleable.Constraint_polarRelativeTo, ANIMATE_CIRCLE_ANGLE_TO);
+        mapToConstant.append(R.styleable.Constraint_transformPivotTarget, TRANSFORM_PIVOT_TARGET);
+        mapToConstant.append(R.styleable.Constraint_quantizeMotionSteps, QUANTIZE_MOTION_STEPS);
+        mapToConstant.append(R.styleable.Constraint_quantizeMotionPhase, QUANTIZE_MOTION_PHASE);
+        mapToConstant.append(R.styleable.Constraint_quantizeMotionInterpolator, QUANTIZE_MOTION_INTERPOLATOR);
+
+
+        /*
+        The tags not available in constraintOverride
+        Left here to help with documentation and understanding
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintLeft_toLeftOf, LEFT_TO_LEFT);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintLeft_toRightOf, LEFT_TO_RIGHT);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintRight_toLeftOf, RIGHT_TO_LEFT);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintRight_toRightOf, RIGHT_TO_RIGHT);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintTop_toTopOf, TOP_TO_TOP);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintTop_toBottomOf, TOP_TO_BOTTOM);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintBottom_toTopOf, BOTTOM_TO_TOP);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintBottom_toBottomOf, BOTTOM_TO_BOTTOM);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintBaseline_toBaselineOf, BASELINE_TO_BASELINE);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintGuide_begin, GUIDE_BEGIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintGuide_end, GUIDE_END);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintGuide_percent, GUIDE_PERCENT);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintStart_toEndOf, START_TO_END);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintStart_toStartOf, START_TO_START);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintEnd_toStartOf, END_TO_START);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintEnd_toEndOf, END_TO_END);
+        */
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_editor_absoluteY, EDITOR_ABSOLUTE_X);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_editor_absoluteY, EDITOR_ABSOLUTE_Y);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_orientation, ORIENTATION);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_goneMarginLeft, GONE_LEFT_MARGIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_goneMarginTop, GONE_TOP_MARGIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_goneMarginRight, GONE_RIGHT_MARGIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_goneMarginBottom, GONE_BOTTOM_MARGIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_goneMarginStart, GONE_START_MARGIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_goneMarginEnd, GONE_END_MARGIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintVertical_weight, VERTICAL_WEIGHT);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintHorizontal_weight, HORIZONTAL_WEIGHT);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintHorizontal_chainStyle, HORIZONTAL_STYLE);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintVertical_chainStyle, VERTICAL_STYLE);
+
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintHorizontal_bias, HORIZONTAL_BIAS);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintVertical_bias, VERTICAL_BIAS);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintDimensionRatio, DIMENSION_RATIO);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintLeft_creator, UNUSED);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintTop_creator, UNUSED);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintRight_creator, UNUSED);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintBottom_creator, UNUSED);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintBaseline_creator, UNUSED);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_marginLeft, LEFT_MARGIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_marginRight, RIGHT_MARGIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_marginStart, START_MARGIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_marginEnd, END_MARGIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_marginTop, TOP_MARGIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_marginBottom, BOTTOM_MARGIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_width, LAYOUT_WIDTH);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_height, LAYOUT_HEIGHT);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_visibility, LAYOUT_VISIBILITY);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_alpha, ALPHA);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_elevation, ELEVATION);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_rotationX, ROTATION_X);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_rotationY, ROTATION_Y);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_rotation, ROTATION);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_scaleX, SCALE_X);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_scaleY, SCALE_Y);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_transformPivotX, TRANSFORM_PIVOT_X);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_transformPivotY, TRANSFORM_PIVOT_Y);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_translationX, TRANSLATION_X);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_translationY, TRANSLATION_Y);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_translationZ, TRANSLATION_Z);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintWidth_default, WIDTH_DEFAULT);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintHeight_default, HEIGHT_DEFAULT);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintWidth_max, WIDTH_MAX);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintHeight_max, HEIGHT_MAX);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintWidth_min, WIDTH_MIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintHeight_min, HEIGHT_MIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintCircleRadius, CIRCLE_RADIUS);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintCircleAngle, CIRCLE_ANGLE);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_animateRelativeTo, ANIMATE_RELATIVE_TO);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_transitionEasing, TRANSITION_EASING);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_drawPath, DRAW_PATH);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_transitionPathRotate, TRANSITION_PATH_ROTATE);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_motionStagger, MOTION_STAGGER);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_id, VIEW_ID);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_motionProgress, PROGRESS);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintWidth_percent, WIDTH_PERCENT);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintHeight_percent, HEIGHT_PERCENT);
+
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_chainUseRtl, CHAIN_USE_RTL);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_barrierDirection, BARRIER_DIRECTION);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_barrierMargin, BARRIER_MARGIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_constraint_referenced_ids, CONSTRAINT_REFERENCED_IDS);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_barrierAllowsGoneWidgets, BARRIER_ALLOWS_GONE_WIDGETS);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_pathMotionArc, PATH_MOTION_ARC);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintTag, CONSTRAINT_TAG);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_visibilityMode, VISIBILITY_MODE);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constrainedWidth, CONSTRAINED_WIDTH);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constrainedHeight, CONSTRAINED_HEIGHT);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_polarRelativeTo, ANIMATE_CIRCLE_ANGLE_TO);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_transformPivotTarget, TRANSFORM_PIVOT_TARGET);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_quantizeMotionSteps, QUANTIZE_MOTION_STEPS);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_quantizeMotionPhase, QUANTIZE_MOTION_PHASE);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_quantizeMotionInterpolator, QUANTIZE_MOTION_INTERPOLATOR);
+
     }
 
     public HashMap<String, ConstraintAttribute> getCustomAttributeSet() {
@@ -422,6 +538,7 @@ public class ConstraintSet {
                 mConstraints.put(id, new Constraint());
             }
             Constraint constraint = mConstraints.get(id);
+            constraint.mDelta = parent.mDelta;
             if (!constraint.layout.mApply) {
                 constraint.layout.copyFrom(parent.layout);
             }
@@ -448,7 +565,6 @@ public class ConstraintSet {
      * @param constraintLayout
      */
     public void readFallback(ConstraintLayout constraintLayout) {
-
         int count = constraintLayout.getChildCount();
         for (int i = 0; i < count; i++) {
             View view = constraintLayout.getChildAt(i);
@@ -509,6 +625,12 @@ public class ConstraintSet {
                 }
             }
         }
+
+        for (Constraint constraint : mConstraints.values()) {
+            if (constraint.mDelta != null) {
+                constraint.mDelta.applyDelta(constraint);
+            }
+        }
     }
 
     /**
@@ -517,6 +639,7 @@ public class ConstraintSet {
     public static class Layout {
         public boolean mIsGuideline = false;
         public boolean mApply = false;
+        public boolean mOverride = false;
         public int mWidth;
         public int mHeight;
         public static final int UNSET = ConstraintSet.UNSET;
@@ -1032,6 +1155,7 @@ public class ConstraintSet {
         public float scaleY = 1;
         public float transformPivotX = Float.NaN;
         public float transformPivotY = Float.NaN;
+        public int transformPivotTarget = UNSET;
         public float translationX = 0;
         public float translationY = 0;
         public float translationZ = 0;
@@ -1047,6 +1171,7 @@ public class ConstraintSet {
             scaleY = src.scaleY;
             transformPivotX = src.transformPivotX;
             transformPivotY = src.transformPivotY;
+            transformPivotTarget = src.transformPivotTarget;
             translationX = src.translationX;
             translationY = src.translationY;
             translationZ = src.translationZ;
@@ -1066,6 +1191,8 @@ public class ConstraintSet {
         private static final int TRANSLATION_Y = 9;
         private static final int TRANSLATION_Z = 10;
         private static final int ELEVATION = 11;
+        private static final int TRANSFORM_PIVOT_TARGET = 12;
+
 
         static {
             mapToConstant.append(R.styleable.Transform_android_rotation, ROTATION);
@@ -1079,6 +1206,8 @@ public class ConstraintSet {
             mapToConstant.append(R.styleable.Transform_android_translationY, TRANSLATION_Y);
             mapToConstant.append(R.styleable.Transform_android_translationZ, TRANSLATION_Z);
             mapToConstant.append(R.styleable.Transform_android_elevation, ELEVATION);
+            mapToConstant.append(R.styleable.Transform_transformPivotTarget, TRANSFORM_PIVOT_TARGET);
+
         }
 
         void fillFromAttributeList(Context context, AttributeSet attrs) {
@@ -1109,6 +1238,9 @@ public class ConstraintSet {
                         break;
                     case TRANSFORM_PIVOT_Y:
                         transformPivotY = a.getDimension(attr, transformPivotY);
+                        break;
+                    case TRANSFORM_PIVOT_TARGET:
+                        transformPivotTarget = lookupID(a, attr, transformPivotTarget);
                         break;
                     case TRANSLATION_X:
                         translationX = a.getDimension(attr, translationX);
@@ -1179,11 +1311,22 @@ public class ConstraintSet {
     public static class Motion {
         public boolean mApply = false;
         public int mAnimateRelativeTo = Layout.UNSET;
+        public int mAnimateCircleAngleTo = 0;
         public String mTransitionEasing = null;
         public int mPathMotionArc = Layout.UNSET;
         public int mDrawPath = 0;
         public float mMotionStagger = Float.NaN;
+        public int mPolarRelativeTo = Layout.UNSET;
         public float mPathRotate = Float.NaN;
+        public float mQuantizeMotionPhase = Float.NaN;
+        public int mQuantizeMotionSteps = Layout.UNSET;
+        public String mQuantizeInterpolatorString = null;
+        public int mQuantizeInterpolatorType = INTERPOLATOR_UNDEFINED; // undefined
+        public int mQuantizeInterpolatorID = -1;
+        private static final int INTERPOLATOR_REFRENCE_ID = -2;
+        private static final int SPLINE_STRING = -1;
+        private static final int INTERPOLATOR_UNDEFINED = -3;
+
 
         public void copyFrom(Motion src) {
             mApply = src.mApply;
@@ -1193,6 +1336,7 @@ public class ConstraintSet {
             mDrawPath = src.mDrawPath;
             mPathRotate = src.mPathRotate;
             mMotionStagger = src.mMotionStagger;
+            mPolarRelativeTo = src.mPolarRelativeTo;
         }
 
         private static SparseIntArray mapToConstant = new SparseIntArray();
@@ -1201,15 +1345,24 @@ public class ConstraintSet {
         private static final int TRANSITION_EASING = 3;
         private static final int MOTION_DRAW_PATH = 4;
         private static final int ANIMATE_RELATIVE_TO = 5;
-        private static final int MOTION_STAGGER = 6;
+        private static final int ANIMATE_CIRCLE_ANGLE_TO = 6;
+        private static final int MOTION_STAGGER = 7;
+        private static final int QUANTIZE_MOTION_STEPS = 8;
+        private static final int QUANTIZE_MOTION_PHASE = 9;
+        private static final int QUANTIZE_MOTION_INTERPOLATOR = 10;
+
 
         static {
             mapToConstant.append(R.styleable.Motion_motionPathRotate, TRANSITION_PATH_ROTATE);
             mapToConstant.append(R.styleable.Motion_pathMotionArc, PATH_MOTION_ARC);
             mapToConstant.append(R.styleable.Motion_transitionEasing, TRANSITION_EASING);
             mapToConstant.append(R.styleable.Motion_drawPath, MOTION_DRAW_PATH);
-            mapToConstant.append(R.styleable.Motion_animate_relativeTo, ANIMATE_RELATIVE_TO);
+            mapToConstant.append(R.styleable.Motion_animateRelativeTo, ANIMATE_RELATIVE_TO);
+            mapToConstant.append(R.styleable.Motion_animateCircleAngleTo, ANIMATE_CIRCLE_ANGLE_TO);
             mapToConstant.append(R.styleable.Motion_motionStagger, MOTION_STAGGER);
+            mapToConstant.append(R.styleable.Motion_quantizeMotionSteps, QUANTIZE_MOTION_STEPS);
+            mapToConstant.append(R.styleable.Motion_quantizeMotionPhase, QUANTIZE_MOTION_PHASE);
+            mapToConstant.append(R.styleable.Motion_quantizeMotionInterpolator, QUANTIZE_MOTION_INTERPOLATOR);
         }
 
         void fillFromAttributeList(Context context, AttributeSet attrs) {
@@ -1240,8 +1393,38 @@ public class ConstraintSet {
                     case ANIMATE_RELATIVE_TO:
                         mAnimateRelativeTo = lookupID(a, attr, mAnimateRelativeTo);
                         break;
+                    case ANIMATE_CIRCLE_ANGLE_TO:
+                        mAnimateCircleAngleTo = a.getInteger(attr, mAnimateCircleAngleTo);
+                        break;
                     case MOTION_STAGGER:
                         mMotionStagger = a.getFloat(attr, mMotionStagger);
+                        break;
+                    case QUANTIZE_MOTION_STEPS:
+                        mQuantizeMotionSteps = a.getInteger(attr, mQuantizeMotionSteps);
+                        break;
+                    case QUANTIZE_MOTION_PHASE:
+                        mQuantizeMotionPhase = a.getFloat(attr, mQuantizeMotionPhase);
+                        break;
+                    case QUANTIZE_MOTION_INTERPOLATOR:
+                        type = a.peekValue(attr);
+
+                        if (type.type == TypedValue.TYPE_REFERENCE) {
+                            mQuantizeInterpolatorID = a.getResourceId(attr, -1);
+                            if (mQuantizeInterpolatorID != -1) {
+                                mQuantizeInterpolatorType = INTERPOLATOR_REFRENCE_ID;
+                            }
+                        } else if (type.type == TypedValue.TYPE_STRING) {
+                            mQuantizeInterpolatorString = a.getString(attr);
+                            if (mQuantizeInterpolatorString.indexOf("/") > 0) {
+                                mQuantizeInterpolatorID = a.getResourceId(attr, -1);
+                                mQuantizeInterpolatorType = INTERPOLATOR_REFRENCE_ID;
+                            } else {
+                                mQuantizeInterpolatorType = SPLINE_STRING;
+                            }
+                        } else {
+                            mQuantizeInterpolatorType = a.getInteger(attr, mQuantizeInterpolatorID);
+                        }
+
                         break;
                 }
             }
@@ -1249,18 +1432,90 @@ public class ConstraintSet {
         }
     }
 
-
     /**
      * @hide
      */
     public static class Constraint {
         int mViewId;
-
         public final PropertySet propertySet = new PropertySet();
         public final Motion motion = new Motion();
         public final Layout layout = new Layout();
         public final Transform transform = new Transform();
         public HashMap<String, ConstraintAttribute> mCustomConstraints = new HashMap<>();
+        Delta mDelta;
+
+        static class Delta {
+            private static final int INITAL_BOOLEAN = 4;
+            private static final int INITAL_INT = 10;
+            private static final int INITAL_FLOAT = 10;
+            private static final int INITAL_STRING = 5;
+            int[] mTypeInt = new int[INITAL_INT];
+            int[] mValueInt = new int[INITAL_INT];
+            int mCountInt = 0;
+
+            void add(int type, int value) {
+                if (mCountInt >= mTypeInt.length) {
+                    mTypeInt = Arrays.copyOf(mTypeInt, mTypeInt.length * 2);
+                    mValueInt = Arrays.copyOf(mValueInt, mValueInt.length * 2);
+                }
+                mTypeInt[mCountInt] = type;
+                mValueInt[mCountInt++] = value;
+            }
+
+            int[] mTypeFloat = new int[INITAL_FLOAT];
+            float[] mValueFloat = new float[INITAL_FLOAT];
+            int mCountFloat = 0;
+
+            void add(int type, float value) {
+                if (mCountFloat >= mTypeFloat.length) {
+                    mTypeFloat = Arrays.copyOf(mTypeFloat, mTypeFloat.length * 2);
+                    mValueFloat = Arrays.copyOf(mValueFloat, mValueFloat.length * 2);
+                }
+                mTypeFloat[mCountFloat] = type;
+                mValueFloat[mCountFloat++] = value;
+            }
+
+            int[] mTypeString = new int[INITAL_STRING];
+            String[] mValueString = new String[INITAL_STRING];
+            int mCountString = 0;
+
+            void add(int type, String value) {
+                if (mCountString >= mTypeString.length) {
+                    mTypeString = Arrays.copyOf(mTypeString, mTypeString.length * 2);
+                    mValueString = Arrays.copyOf(mValueString, mValueString.length * 2);
+                }
+                mTypeString[mCountString] = type;
+                mValueString[mCountString++] = value;
+            }
+
+            int[] mTypeBoolean = new int[INITAL_BOOLEAN];
+            boolean[] mValueBoolean = new boolean[INITAL_BOOLEAN];
+            int mCountBoolean = 0;
+
+            void add(int type, boolean value) {
+                if (mCountBoolean >= mTypeBoolean.length) {
+                    mTypeBoolean = Arrays.copyOf(mTypeBoolean, mTypeBoolean.length * 2);
+                    mValueBoolean = Arrays.copyOf(mValueBoolean, mValueBoolean.length * 2);
+                }
+                mTypeBoolean[mCountBoolean] = type;
+                mValueBoolean[mCountBoolean++] = value;
+            }
+
+            void applyDelta(Constraint c) {
+                for (int i = 0; i < mCountInt; i++) {
+                    setDeltaValue(c, mTypeInt[i], mValueInt[i]);
+                }
+                for (int i = 0; i < mCountFloat; i++) {
+                    setDeltaValue(c, mTypeFloat[i], mValueFloat[i]);
+                }
+                for (int i = 0; i < mCountString; i++) {
+                    setDeltaValue(c, mTypeString[i], mValueString[i]);
+                }
+                for (int i = 0; i < mCountBoolean; i++) {
+                    setDeltaValue(c, mTypeBoolean[i], mValueBoolean[i]);
+                }
+            }
+        }
 
         private ConstraintAttribute get(String attributeName, AttributeType attributeType) {
             ConstraintAttribute ret;
@@ -1300,7 +1555,7 @@ public class ConstraintSet {
             clone.propertySet.copyFrom(propertySet);
             clone.transform.copyFrom(transform);
             clone.mViewId = mViewId;
-
+            clone.mDelta = mDelta;
             return clone;
         }
 
@@ -1721,11 +1976,26 @@ public class ConstraintSet {
                     view.setRotationY(constraint.transform.rotationY);
                     view.setScaleX(constraint.transform.scaleX);
                     view.setScaleY(constraint.transform.scaleY);
-                    if (!Float.isNaN(constraint.transform.transformPivotX)) {
-                        view.setPivotX(constraint.transform.transformPivotX);
-                    }
-                    if (!Float.isNaN(constraint.transform.transformPivotY)) {
-                        view.setPivotY(constraint.transform.transformPivotY);
+                    if (constraint.transform.transformPivotTarget != UNSET) {
+                        View layout = (View) view.getParent();
+                        View center = layout.findViewById(constraint.transform.transformPivotTarget);
+                        if (center != null) {
+                            float cy = (center.getTop() + center.getBottom()) / 2.0f;
+                            float cx = (center.getLeft() + center.getRight()) / 2.0f;
+                            if (view.getRight() - view.getLeft() > 0 && view.getBottom() - view.getTop() > 0) {
+                                float px = (cx - view.getLeft());
+                                float py = (cy - view.getTop());
+                                view.setPivotX(px);
+                                view.setPivotY(py);
+                            }
+                        }
+                    } else {
+                        if (!Float.isNaN(constraint.transform.transformPivotX)) {
+                            view.setPivotX(constraint.transform.transformPivotX);
+                        }
+                        if (!Float.isNaN(constraint.transform.transformPivotY)) {
+                            view.setPivotY(constraint.transform.transformPivotY);
+                        }
                     }
                     view.setTranslationX(constraint.transform.translationX);
                     view.setTranslationY(constraint.transform.translationY);
@@ -1890,7 +2160,7 @@ public class ConstraintSet {
      * Spaces a set of widgets vertically between the view topId and bottomId.
      * Widgets can be spaced with weights.
      * This operation sets all the related margins to 0.
-     *
+     * <p>
      * (for sides see: {@link #TOP, {@link #BOTTOM})
      *
      * @param topId      The id of the widget to connect to or PARENT_ID
@@ -1930,7 +2200,7 @@ public class ConstraintSet {
      * Spaces a set of widgets horizontally between the view startID and endId.
      * Widgets can be spaced with weights.
      * This operation sets all the related margins to 0.
-     *
+     * <p>
      * (for sides see: {@link #START, {@link #END},
      * {@link #LEFT, {@link #RIGHT}
      *
@@ -3093,7 +3363,7 @@ public class ConstraintSet {
     }
 
     /**
-     *  get the refrence id's of a helper.
+     * get the refrence id's of a helper.
      *
      * @param id
      * @return array of id's
@@ -3103,11 +3373,11 @@ public class ConstraintSet {
         if (constraint.layout.mReferenceIds == null) {
             return new int[0];
         }
-       return Arrays.copyOf(constraint.layout.mReferenceIds,constraint.layout.mReferenceIds.length);
+        return Arrays.copyOf(constraint.layout.mReferenceIds, constraint.layout.mReferenceIds.length);
     }
 
     /**
-     *  sets the refrence id's of a barrier.
+     * sets the refrence id's of a barrier.
      *
      * @param id
      * @param referenced
@@ -3288,10 +3558,13 @@ public class ConstraintSet {
                         break;
                     case XmlResourceParser.START_TAG:
                         tagName = parser.getName();
-                        Constraint constraint = fillFromAttributeList(context, Xml.asAttributeSet(parser));
+                        Constraint constraint = fillFromAttributeList(context, Xml.asAttributeSet(parser), false);
                         if (tagName.equalsIgnoreCase("Guideline")) {
                             constraint.layout.mIsGuideline = true;
                         }
+                        if (DEBUG) {
+                            Log.v(TAG,Debug.getLoc()+ " cache "+ Debug.getName(context,constraint.mViewId)+ " "+constraint.mViewId);
+                        }    
                         mConstraints.put(constraint.mViewId, constraint);
                         break;
                     case XmlResourceParser.END_TAG:
@@ -3329,19 +3602,22 @@ public class ConstraintSet {
                     case XmlResourceParser.START_TAG:
                         tagName = parser.getName();
                         if (DEBUG) {
-                            Log.v(TAG, " view .... tagName=" + tagName);
+                            Log.v(TAG, Debug.getLoc() + " view .... tagName=" + tagName);
                         }
                         switch (tagName) {
                             case "Constraint":
-                                constraint = fillFromAttributeList(context, Xml.asAttributeSet(parser));
+                                constraint = fillFromAttributeList(context, Xml.asAttributeSet(parser), false);
+                                break;
+                            case "ConstraintOverride":
+                                constraint = fillFromAttributeList(context, Xml.asAttributeSet(parser), true);
                                 break;
                             case "Guideline":
-                                constraint = fillFromAttributeList(context, Xml.asAttributeSet(parser));
+                                constraint = fillFromAttributeList(context, Xml.asAttributeSet(parser), false);
                                 constraint.layout.mIsGuideline = true;
                                 constraint.layout.mApply = true;
                                 break;
                             case "Barrier":
-                                constraint = fillFromAttributeList(context, Xml.asAttributeSet(parser));
+                                constraint = fillFromAttributeList(context, Xml.asAttributeSet(parser), false);
                                 constraint.layout.mHelperType = BARRIER_TYPE;
                                 break;
                             case "PropertySet":
@@ -3386,9 +3662,12 @@ public class ConstraintSet {
                         break;
                     case XmlResourceParser.END_TAG:
                         tagName = parser.getName();
-                        if ("ConstraintSet".equals(tagName)) {
-                            return;
-                        } else if (tagName.equalsIgnoreCase("Constraint")) {
+                        switch (tagName.toLowerCase()) {
+                            case "constraintset":
+                                return;
+                            case "constraint":
+                            case "constraintoverride":
+                            case "guideline":
                             mConstraints.put(constraint.mViewId, constraint);
                             constraint = null;
                         }
@@ -3413,15 +3692,581 @@ public class ConstraintSet {
         return ret;
     }
 
-    private Constraint fillFromAttributeList(Context context, AttributeSet attrs) {
+    private Constraint fillFromAttributeList(Context context, AttributeSet attrs, boolean override) {
         Constraint c = new Constraint();
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Constraint);
-        populateConstraint(context, c, a);
+        TypedArray a = context.obtainStyledAttributes(attrs, override ? R.styleable.ConstraintOverride : R.styleable.Constraint);
+        populateConstraint(context, c, a, override);
         a.recycle();
         return c;
     }
 
-    private void populateConstraint(Context ctx, Constraint c, TypedArray a) {
+    private void populateOverride(Context ctx, Constraint c, TypedArray a) {
+
+        final int N = a.getIndexCount();
+        TypedValue type;
+        Constraint.Delta delta = new Constraint.Delta();
+        c.mDelta = delta;
+        c.motion.mApply = false;
+        c.layout.mApply = false;
+        c.propertySet.mApply = false;
+        c.transform.mApply = false;
+        for (int i = 0; i < N; i++) {
+            int attr = a.getIndex(i);
+
+
+            int attrType = overrideMapToConstant.get(attr);
+            if (DEBUG) {
+                Log.v(TAG, Debug.getLoc() + " > " + attrType + " " + getDebugName(attrType));
+            }
+
+            switch (attrType) {
+
+                case EDITOR_ABSOLUTE_X:
+                    delta.add(EDITOR_ABSOLUTE_X, a.getDimensionPixelOffset(attr, c.layout.editorAbsoluteX));
+                    break;
+                case EDITOR_ABSOLUTE_Y:
+                    delta.add(EDITOR_ABSOLUTE_Y, a.getDimensionPixelOffset(attr, c.layout.editorAbsoluteY));
+                    break;
+                case GUIDE_BEGIN:
+                    delta.add(GUIDE_BEGIN, a.getDimensionPixelOffset(attr, c.layout.guideBegin));
+                    break;
+                case GUIDE_END:
+                    delta.add(GUIDE_END, a.getDimensionPixelOffset(attr, c.layout.guideEnd));
+                    break;
+                case GUIDE_PERCENT:
+                    delta.add(GUIDE_PERCENT, a.getFloat(attr, c.layout.guidePercent));
+                    break;
+                case ORIENTATION:
+                    delta.add(ORIENTATION, a.getInt(attr, c.layout.orientation));
+                    break;
+                case CIRCLE_RADIUS:
+                    delta.add(CIRCLE_RADIUS, a.getDimensionPixelSize(attr, c.layout.circleRadius));
+                    break;
+                case CIRCLE_ANGLE:
+                    delta.add(CIRCLE_ANGLE, a.getFloat(attr, c.layout.circleAngle));
+                    break;
+                case GONE_LEFT_MARGIN:
+                    delta.add(GONE_LEFT_MARGIN, a.getDimensionPixelSize(attr, c.layout.goneLeftMargin));
+                    break;
+                case GONE_TOP_MARGIN:
+                    delta.add(GONE_TOP_MARGIN, a.getDimensionPixelSize(attr, c.layout.goneTopMargin));
+                    break;
+                case GONE_RIGHT_MARGIN:
+                    delta.add(GONE_RIGHT_MARGIN, a.getDimensionPixelSize(attr, c.layout.goneRightMargin));
+                    break;
+                case GONE_BOTTOM_MARGIN:
+                    delta.add(GONE_BOTTOM_MARGIN, a.getDimensionPixelSize(attr, c.layout.goneBottomMargin));
+                    break;
+                case GONE_START_MARGIN:
+                    delta.add(GONE_START_MARGIN, a.getDimensionPixelSize(attr, c.layout.goneStartMargin));
+                    break;
+                case GONE_END_MARGIN:
+                    delta.add(GONE_END_MARGIN, a.getDimensionPixelSize(attr, c.layout.goneEndMargin));
+                    break;
+                case HORIZONTAL_BIAS:
+                    delta.add(HORIZONTAL_BIAS, a.getFloat(attr, c.layout.horizontalBias));
+                    break;
+                case VERTICAL_BIAS:
+                    delta.add(VERTICAL_BIAS, a.getFloat(attr, c.layout.verticalBias));
+                    break;
+                case LEFT_MARGIN:
+                    delta.add(LEFT_MARGIN, a.getDimensionPixelSize(attr, c.layout.leftMargin));
+                    break;
+                case RIGHT_MARGIN:
+                    delta.add(RIGHT_MARGIN, a.getDimensionPixelSize(attr, c.layout.rightMargin));
+                    break;
+                case START_MARGIN:
+                    if (Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
+                        delta.add(EDITOR_ABSOLUTE_X, a.getDimensionPixelSize(attr, c.layout.startMargin));
+                    }
+                    break;
+                case END_MARGIN:
+                    if (Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
+                        delta.add(EDITOR_ABSOLUTE_X, a.getDimensionPixelSize(attr, c.layout.endMargin));
+                    }
+                    break;
+                case TOP_MARGIN:
+                    delta.add(TOP_MARGIN, a.getDimensionPixelSize(attr, c.layout.topMargin));
+                    break;
+                case BOTTOM_MARGIN:
+                    delta.add(BOTTOM_MARGIN, a.getDimensionPixelSize(attr, c.layout.bottomMargin));
+                    break;
+                case LAYOUT_WIDTH:
+                    delta.add(LAYOUT_WIDTH, a.getLayoutDimension(attr, c.layout.mWidth));
+                    break;
+                case LAYOUT_HEIGHT:
+                    delta.add(LAYOUT_HEIGHT, a.getLayoutDimension(attr, c.layout.mHeight));
+                    break;
+                case WIDTH_DEFAULT:
+                    delta.add(WIDTH_DEFAULT, a.getInt(attr, c.layout.widthDefault));
+                    break;
+                case HEIGHT_DEFAULT:
+                    delta.add(HEIGHT_DEFAULT, a.getInt(attr, c.layout.heightDefault));
+                    break;
+                case HEIGHT_MAX:
+                    delta.add(HEIGHT_MAX, a.getDimensionPixelSize(attr, c.layout.heightMax));
+                    break;
+                case WIDTH_MAX:
+                    delta.add(WIDTH_MAX, a.getDimensionPixelSize(attr, c.layout.widthMax));
+                    break;
+                case HEIGHT_MIN:
+                    delta.add(HEIGHT_MIN, a.getDimensionPixelSize(attr, c.layout.heightMin));
+                    break;
+                case WIDTH_MIN:
+                    delta.add(WIDTH_MIN, a.getDimensionPixelSize(attr, c.layout.widthMin));
+                    break;
+                case CONSTRAINED_WIDTH:
+                    delta.add(CONSTRAINED_WIDTH, a.getBoolean(attr, c.layout.constrainedWidth));
+                    break;
+                case CONSTRAINED_HEIGHT:
+                    delta.add(CONSTRAINED_HEIGHT, a.getBoolean(attr, c.layout.constrainedHeight));
+                    break;
+                case LAYOUT_VISIBILITY:
+                    c.propertySet.visibility = a.getInt(attr, c.propertySet.visibility);
+                    delta.add(EDITOR_ABSOLUTE_X, c.propertySet.visibility = VISIBILITY_FLAGS[c.propertySet.visibility]);
+                    break;
+                case VISIBILITY_MODE:
+                    delta.add(VISIBILITY_MODE, a.getInt(attr, c.propertySet.mVisibilityMode));
+                    break;
+                case ALPHA:
+                    delta.add(ALPHA, a.getFloat(attr, c.propertySet.alpha));
+                    break;
+                case ELEVATION:
+                    if (Build.VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
+                        delta.add(ELEVATION, true);
+                        delta.add(ELEVATION, a.getDimension(attr, c.transform.elevation));
+                    }
+                    break;
+                case ROTATION:
+                    delta.add(ROTATION, a.getFloat(attr, c.transform.rotation));
+                    break;
+                case ROTATION_X:
+                    delta.add(ROTATION_X, a.getFloat(attr, c.transform.rotationX));
+                    break;
+                case ROTATION_Y:
+                    delta.add(ROTATION_Y, a.getFloat(attr, c.transform.rotationY));
+                    break;
+                case SCALE_X:
+                    delta.add(SCALE_X, a.getFloat(attr, c.transform.scaleX));
+                    break;
+                case SCALE_Y:
+                    delta.add(SCALE_Y, a.getFloat(attr, c.transform.scaleY));
+                    break;
+                case TRANSFORM_PIVOT_X:
+                    delta.add(TRANSFORM_PIVOT_X, a.getDimension(attr, c.transform.transformPivotX));
+                    break;
+                case TRANSFORM_PIVOT_Y:
+                    delta.add(TRANSFORM_PIVOT_Y, a.getDimension(attr, c.transform.transformPivotY));
+                    break;
+                case TRANSLATION_X:
+                    delta.add(TRANSLATION_X, a.getDimension(attr, c.transform.translationX));
+                    break;
+                case TRANSLATION_Y:
+                    delta.add(TRANSLATION_Y, a.getDimension(attr, c.transform.translationY));
+                    break;
+                case TRANSLATION_Z:
+                    if (Build.VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
+                        delta.add(TRANSLATION_Z, a.getDimension(attr, c.transform.translationZ));
+                    }
+                    break;
+                case TRANSFORM_PIVOT_TARGET:
+                    delta.add(TRANSFORM_PIVOT_TARGET, lookupID(a, attr, c.transform.transformPivotTarget));
+                    break;
+                case VERTICAL_WEIGHT:
+                    delta.add(VERTICAL_WEIGHT, a.getFloat(attr, c.layout.verticalWeight));
+                    break;
+                case HORIZONTAL_WEIGHT:
+                    delta.add(HORIZONTAL_WEIGHT, a.getFloat(attr, c.layout.horizontalWeight));
+                    break;
+                case VERTICAL_STYLE:
+                    delta.add(VERTICAL_STYLE, a.getInt(attr, c.layout.verticalChainStyle));
+                    break;
+                case HORIZONTAL_STYLE:
+                    delta.add(HORIZONTAL_STYLE, a.getInt(attr, c.layout.horizontalChainStyle));
+                    break;
+                case VIEW_ID:
+                    c.mViewId = a.getResourceId(attr, c.mViewId);
+                    delta.add(VIEW_ID,  c.mViewId);
+                    break;
+                case DIMENSION_RATIO:
+                    delta.add(DIMENSION_RATIO, a.getString(attr));
+                    break;
+                case WIDTH_PERCENT:
+                    delta.add(WIDTH_PERCENT, a.getFloat(attr, 1));
+                    break;
+                case HEIGHT_PERCENT:
+                    delta.add(HEIGHT_PERCENT, a.getFloat(attr, 1));
+                    break;
+                case PROGRESS:
+                    delta.add(PROGRESS, a.getFloat(attr, c.propertySet.mProgress));
+                    break;
+                case ANIMATE_RELATIVE_TO:
+                    delta.add(ANIMATE_RELATIVE_TO, lookupID(a, attr, c.motion.mAnimateRelativeTo));
+                    break;
+                case ANIMATE_CIRCLE_ANGLE_TO:
+                    delta.add(ANIMATE_CIRCLE_ANGLE_TO, a.getInteger(attr, c.motion.mAnimateCircleAngleTo));
+                    break;
+                case TRANSITION_EASING:
+                    type = a.peekValue(attr);
+                    if (type.type == TypedValue.TYPE_STRING) {
+                        delta.add(TRANSITION_EASING, a.getString(attr));
+                    } else {
+                        delta.add(TRANSITION_EASING, Easing.NAMED_EASING[a.getInteger(attr, 0)]);
+                    }
+                    break;
+                case PATH_MOTION_ARC:
+                    delta.add(PATH_MOTION_ARC, a.getInt(attr, c.motion.mPathMotionArc));
+                    break;
+                case TRANSITION_PATH_ROTATE:
+                    delta.add(TRANSITION_PATH_ROTATE, a.getFloat(attr, c.motion.mPathRotate));
+                    break;
+                case MOTION_STAGGER:
+                    delta.add(MOTION_STAGGER, a.getFloat(attr, c.motion.mMotionStagger));
+                    break;
+
+                case QUANTIZE_MOTION_STEPS:
+                    delta.add(QUANTIZE_MOTION_STEPS, a.getInteger(attr, c.motion.mQuantizeMotionSteps));
+                    break;
+                case QUANTIZE_MOTION_PHASE:
+                    delta.add(QUANTIZE_MOTION_PHASE, a.getFloat(attr, c.motion.mQuantizeMotionPhase));
+                    break;
+                case QUANTIZE_MOTION_INTERPOLATOR:
+                    type = a.peekValue(attr);
+                    if (type.type == TypedValue.TYPE_REFERENCE) {
+                        c.motion.mQuantizeInterpolatorID = a.getResourceId(attr, -1);
+                        delta.add(QUANTIZE_MOTION_INTERPOLATOR_ID, c.motion.mQuantizeInterpolatorID);
+                        if (c.motion.mQuantizeInterpolatorID != -1) {
+                            c.motion.mQuantizeInterpolatorType = Motion.INTERPOLATOR_REFRENCE_ID;
+                            delta.add(QUANTIZE_MOTION_INTERPOLATOR_TYPE, c.motion.mQuantizeInterpolatorType);
+                        }
+                    } else if (type.type == TypedValue.TYPE_STRING) {
+                        c.motion.mQuantizeInterpolatorString = a.getString(attr);
+                        delta.add(QUANTIZE_MOTION_INTERPOLATOR_STR, c.motion.mQuantizeInterpolatorString);
+
+                        if (c.motion.mQuantizeInterpolatorString.indexOf("/") > 0) {
+                            c.motion.mQuantizeInterpolatorID = a.getResourceId(attr, -1);
+                            delta.add(QUANTIZE_MOTION_INTERPOLATOR_ID, c.motion.mQuantizeInterpolatorID);
+
+                            c.motion.mQuantizeInterpolatorType = Motion.INTERPOLATOR_REFRENCE_ID;
+                            delta.add(QUANTIZE_MOTION_INTERPOLATOR_TYPE, c.motion.mQuantizeInterpolatorType);
+
+                        } else {
+                            c.motion.mQuantizeInterpolatorType = Motion.SPLINE_STRING;
+                            delta.add(QUANTIZE_MOTION_INTERPOLATOR_TYPE, c.motion.mQuantizeInterpolatorType);
+                        }
+                    } else {
+                        c.motion.mQuantizeInterpolatorType = a.getInteger(attr, c.motion.mQuantizeInterpolatorID);
+                        delta.add(QUANTIZE_MOTION_INTERPOLATOR_TYPE, c.motion.mQuantizeInterpolatorType);
+                    }
+                    break;
+                case DRAW_PATH:
+                    delta.add(DRAW_PATH, a.getInt(attr, 0));
+                    break;
+                case CHAIN_USE_RTL:
+                    Log.e(TAG, "CURRENTLY UNSUPPORTED"); // TODO add support or remove
+                    //  TODO add support or remove  c.mChainUseRtl = a.getBoolean(attr,c.mChainUseRtl);
+                    break;
+                case BARRIER_DIRECTION:
+                    delta.add(BARRIER_DIRECTION, a.getInt(attr, c.layout.mBarrierDirection));
+                    break;
+                case BARRIER_MARGIN:
+                    delta.add(BARRIER_MARGIN, a.getDimensionPixelSize(attr, c.layout.mBarrierMargin));
+                    break;
+                case CONSTRAINT_REFERENCED_IDS:
+                    delta.add(CONSTRAINT_REFERENCED_IDS, a.getString(attr));
+                    break;
+                case CONSTRAINT_TAG:
+                    delta.add(CONSTRAINT_TAG, a.getString(attr));
+                    break;
+                case BARRIER_ALLOWS_GONE_WIDGETS:
+                    delta.add(BARRIER_ALLOWS_GONE_WIDGETS, a.getBoolean(attr, c.layout.mBarrierAllowsGoneWidgets));
+                    break;
+                case UNUSED:
+                    Log.w(TAG,
+                            "unused attribute 0x" + Integer.toHexString(attr) + "   " + mapToConstant.get(attr));
+                    break;
+                default:
+                    Log.w(TAG,
+                            "Unknown attribute 0x" + Integer.toHexString(attr) + "   " + mapToConstant.get(attr));
+            }
+        }
+    }
+
+    private static void setDeltaValue(Constraint c, int type, float value) {
+        switch (type) {
+            case GUIDE_PERCENT:
+                c.layout.guidePercent = value;
+                break;
+            case CIRCLE_ANGLE:
+                c.layout.circleAngle = value;
+                break;
+            case HORIZONTAL_BIAS:
+                c.layout.horizontalBias = value;
+                break;
+            case VERTICAL_BIAS:
+                c.layout.verticalBias = value;
+                break;
+            case ALPHA:
+                c.propertySet.alpha = value;
+                break;
+            case ELEVATION:
+                c.transform.elevation = value;
+                break;
+            case ROTATION:
+                c.transform.rotation = value;
+                break;
+            case ROTATION_X:
+                c.transform.rotationX = value;
+                break;
+            case ROTATION_Y:
+                c.transform.rotationY = value;
+                break;
+            case SCALE_X:
+                c.transform.scaleX = value;
+                break;
+            case SCALE_Y:
+                c.transform.scaleY = value;
+                break;
+            case TRANSFORM_PIVOT_X:
+                c.transform.transformPivotX = value;
+                break;
+            case TRANSFORM_PIVOT_Y:
+                c.transform.transformPivotY = value;
+                break;
+            case TRANSLATION_X:
+                c.transform.translationX = value;
+                break;
+            case TRANSLATION_Y:
+                c.transform.translationY = value;
+                break;
+            case TRANSLATION_Z:
+                c.transform.translationZ = value;
+                break;
+            case VERTICAL_WEIGHT:
+                c.layout.verticalWeight = value;
+                break;
+            case HORIZONTAL_WEIGHT:
+                c.layout.horizontalWeight = value;
+                break;
+            case WIDTH_PERCENT:
+                c.layout.widthPercent = value;
+                break;
+            case HEIGHT_PERCENT:
+                c.layout.heightPercent = value;
+                break;
+            case PROGRESS:
+                c.propertySet.mProgress = value;
+                break;
+            case TRANSITION_PATH_ROTATE:
+                c.motion.mPathRotate = value;
+                break;
+            case MOTION_STAGGER:
+                c.motion.mMotionStagger = value;
+                break;
+            case QUANTIZE_MOTION_PHASE:
+                c.motion.mQuantizeMotionPhase = value;
+                break;
+            case UNUSED:
+                break;
+            default:
+                Log.w(TAG,
+                        "Unknown attribute 0x");
+        }
+    }
+
+    private static void setDeltaValue(Constraint c, int type, int value) {
+        switch (type) {
+            case EDITOR_ABSOLUTE_X:
+                c.layout.editorAbsoluteX = value;
+                break;
+            case EDITOR_ABSOLUTE_Y:
+                c.layout.editorAbsoluteY = value;
+                break;
+            case GUIDE_BEGIN:
+                c.layout.guideBegin = value;
+                break;
+            case GUIDE_END:
+                c.layout.guideEnd = value;
+                break;
+            case ORIENTATION:
+                c.layout.orientation = value;
+                break;
+            case CIRCLE:
+                c.layout.circleConstraint = value;
+                break;
+            case CIRCLE_RADIUS:
+                c.layout.circleRadius = value;
+                break;
+            case GONE_LEFT_MARGIN:
+                c.layout.goneLeftMargin = value;
+                break;
+            case GONE_TOP_MARGIN:
+                c.layout.goneTopMargin = value;
+                break;
+            case GONE_RIGHT_MARGIN:
+                c.layout.goneRightMargin = value;
+                break;
+            case GONE_BOTTOM_MARGIN:
+                c.layout.goneBottomMargin = value;
+                break;
+            case GONE_START_MARGIN:
+                c.layout.goneStartMargin = value;
+                break;
+            case GONE_END_MARGIN:
+                c.layout.goneEndMargin = value;
+                break;
+            case LEFT_MARGIN:
+                c.layout.leftMargin = value;
+                break;
+            case RIGHT_MARGIN:
+                c.layout.rightMargin = value;
+                break;
+            case START_MARGIN:
+                c.layout.startMargin = value;
+                break;
+            case END_MARGIN:
+                c.layout.endMargin = value;
+                break;
+            case TOP_MARGIN:
+                c.layout.topMargin = value;
+                break;
+            case BOTTOM_MARGIN:
+                c.layout.bottomMargin = value;
+                break;
+            case LAYOUT_WIDTH:
+                c.layout.mWidth = value;
+                break;
+            case LAYOUT_HEIGHT:
+                c.layout.mHeight = value;
+                break;
+            case WIDTH_DEFAULT:
+                c.layout.widthDefault = value;
+                break;
+            case HEIGHT_DEFAULT:
+                c.layout.heightDefault = value;
+                break;
+            case HEIGHT_MAX:
+                c.layout.heightMax = value;
+                break;
+            case WIDTH_MAX:
+                c.layout.widthMax = value;
+                break;
+            case HEIGHT_MIN:
+                c.layout.heightMin = value;
+                break;
+            case WIDTH_MIN:
+                c.layout.widthMin = value;
+                break;
+            case LAYOUT_VISIBILITY:
+                c.propertySet.visibility = value;
+                break;
+            case VISIBILITY_MODE:
+                c.propertySet.mVisibilityMode = value;
+                break;
+            case TRANSFORM_PIVOT_TARGET:
+                c.transform.transformPivotTarget = value;
+                break;
+            case VERTICAL_STYLE:
+                c.layout.verticalChainStyle = value;
+                break;
+            case HORIZONTAL_STYLE:
+                c.layout.horizontalChainStyle = value;
+                break;
+            case VIEW_ID:
+                c.mViewId = value;
+                break;
+            case ANIMATE_RELATIVE_TO:
+                c.motion.mAnimateRelativeTo = value;
+                break;
+            case ANIMATE_CIRCLE_ANGLE_TO:
+                c.motion.mAnimateCircleAngleTo = value;
+                break;
+            case PATH_MOTION_ARC:
+                c.motion.mPathMotionArc = value;
+                break;
+            case QUANTIZE_MOTION_STEPS:
+                c.motion.mQuantizeMotionSteps = value;
+                break;
+            case QUANTIZE_MOTION_INTERPOLATOR_TYPE:
+                c.motion.mQuantizeInterpolatorType = value;
+                break;
+            case QUANTIZE_MOTION_INTERPOLATOR_ID:
+                c.motion.mQuantizeInterpolatorID = value;
+                break;
+            case DRAW_PATH:
+                c.motion.mDrawPath = value;
+                break;
+            case BARRIER_DIRECTION:
+                c.layout.mBarrierDirection = value;
+                break;
+            case BARRIER_MARGIN:
+                c.layout.mBarrierMargin = value;
+                break;
+
+            case UNUSED:
+
+                break;
+            default:
+                Log.w(TAG,
+                        "Unknown attribute 0x");
+        }
+    }
+
+    private static void setDeltaValue(Constraint c, int type, String value) {
+        switch (type) {
+
+            case DIMENSION_RATIO:
+                c.layout.dimensionRatio = value;
+                break;
+
+            case TRANSITION_EASING:
+                c.motion.mTransitionEasing = value;
+                break;
+            case QUANTIZE_MOTION_INTERPOLATOR_STR:
+                c.motion.mQuantizeInterpolatorString = value;
+                break;
+            case CONSTRAINT_REFERENCED_IDS:
+                c.layout.mReferenceIdString = value;
+                break;
+            case CONSTRAINT_TAG:
+                c.layout.mConstraintTag = value;
+                break;
+
+            case UNUSED:
+
+                break;
+            default:
+                Log.w(TAG,
+                        "Unknown attribute 0x");
+        }
+    }
+
+    private static void setDeltaValue(Constraint c, int type, boolean value) {
+        switch (type) {
+            case CONSTRAINED_WIDTH:
+                c.layout.constrainedWidth = value;
+                break;
+            case CONSTRAINED_HEIGHT:
+                c.layout.constrainedHeight = value;
+                break;
+            case ELEVATION:
+                c.transform.applyElevation = value;
+                break;
+            case BARRIER_ALLOWS_GONE_WIDGETS:
+                c.layout.mBarrierAllowsGoneWidgets = value;
+                break;
+            case UNUSED:
+                break;
+            default:
+                Log.w(TAG, "Unknown attribute 0x");
+        }
+    }
+
+    private void populateConstraint(Context ctx, Constraint c, TypedArray a, boolean override) {
+        if (override) {
+            populateOverride(ctx, c, a);
+            return;
+        }
         final int N = a.getIndexCount();
         for (int i = 0; i < N; i++) {
             int attr = a.getIndex(i);
@@ -3467,6 +4312,8 @@ public class ConstraintSet {
                     Log.v(TAG, " " + e.toString());
                 }
             }
+
+
             if (attr != R.styleable.Constraint_android_id &&
                     R.styleable.Constraint_android_layout_marginStart != attr &&
                     R.styleable.Constraint_android_layout_marginEnd != attr) {
@@ -3475,6 +4322,7 @@ public class ConstraintSet {
                 c.propertySet.mApply = true;
                 c.transform.mApply = true;
             }
+
             switch (mapToConstant.get(attr)) {
                 case LEFT_TO_LEFT:
                     c.layout.leftToLeft = lookupID(a, attr, c.layout.leftToLeft);
@@ -3666,6 +4514,9 @@ public class ConstraintSet {
                         c.transform.translationZ = a.getDimension(attr, c.transform.translationZ);
                     }
                     break;
+                case TRANSFORM_PIVOT_TARGET:
+                    c.transform.transformPivotTarget = lookupID(a, attr, c.transform.transformPivotTarget);
+                    break;
                 case VERTICAL_WEIGHT:
                     c.layout.verticalWeight = a.getFloat(attr, c.layout.verticalWeight);
                     break;
@@ -3696,6 +4547,9 @@ public class ConstraintSet {
                 case ANIMATE_RELATIVE_TO:
                     c.motion.mAnimateRelativeTo = lookupID(a, attr, c.motion.mAnimateRelativeTo);
                     break;
+                case ANIMATE_CIRCLE_ANGLE_TO:
+                    c.motion.mAnimateCircleAngleTo = a.getInteger(attr, c.motion.mAnimateCircleAngleTo);
+                    break;
                 case TRANSITION_EASING:
                     TypedValue type = a.peekValue(attr);
                     if (type.type == TypedValue.TYPE_STRING) {
@@ -3713,6 +4567,36 @@ public class ConstraintSet {
                 case MOTION_STAGGER:
                     c.motion.mMotionStagger = a.getFloat(attr, c.motion.mMotionStagger);
                     break;
+
+                case QUANTIZE_MOTION_STEPS:
+                    c.motion.mQuantizeMotionSteps = a.getInteger(attr, c.motion.mQuantizeMotionSteps);
+                    break;
+                case QUANTIZE_MOTION_PHASE:
+                    c.motion.mQuantizeMotionPhase = a.getFloat(attr, c.motion.mQuantizeMotionPhase);
+                    break;
+                case QUANTIZE_MOTION_INTERPOLATOR:
+                    type = a.peekValue(attr);
+
+                    if (type.type == TypedValue.TYPE_REFERENCE) {
+                        c.motion.mQuantizeInterpolatorID = a.getResourceId(attr, -1);
+                        if (c.motion.mQuantizeInterpolatorID != -1) {
+                            c.motion.mQuantizeInterpolatorType = Motion.INTERPOLATOR_REFRENCE_ID;
+                        }
+                    } else if (type.type == TypedValue.TYPE_STRING) {
+                        c.motion.mQuantizeInterpolatorString = a.getString(attr);
+                        if (c.motion.mQuantizeInterpolatorString.indexOf("/") > 0) {
+                            c.motion.mQuantizeInterpolatorID = a.getResourceId(attr, -1);
+                            c.motion.mQuantizeInterpolatorType = Motion.INTERPOLATOR_REFRENCE_ID;
+                        } else {
+                            c.motion.mQuantizeInterpolatorType = Motion.SPLINE_STRING;
+                        }
+                    } else {
+                        c.motion.mQuantizeInterpolatorType = a.getInteger(attr, c.motion.mQuantizeInterpolatorID);
+                    }
+
+                    break;
+
+
                 case DRAW_PATH:
                     c.motion.mDrawPath = a.getInt(attr, 0);
                     break;
@@ -3856,12 +4740,46 @@ public class ConstraintSet {
             Constraint constraint = mConstraints.get(id);
 
             stringBuilder.append("<Constraint id=");
-            stringBuilder.append( id);
+            stringBuilder.append(id);
             stringBuilder.append(" \n");
             constraint.layout.dump(scene, stringBuilder);
             stringBuilder.append("/>\n");
         }
         System.out.println(stringBuilder.toString());
 
+    }
+
+    /**
+     * Construct a user friendly error string
+     *
+     * @param context    the context
+     * @param resourceId the xml being parsed
+     * @param pullParser the XML parser
+     * @return
+     */
+    static String getLine(Context context, int resourceId, XmlPullParser pullParser) {
+        return ".(" + Debug.getName(context, resourceId) + ".xml:" + pullParser.getLineNumber() +
+                ") \"" + pullParser.getName() + "\"";
+    }
+
+    static String getDebugName(int v) {
+        for (Field field : ConstraintSet.class.getDeclaredFields()) {
+            if (field.getName().contains("_") &&
+                    field.getType() == int.class &&
+                    java.lang.reflect.Modifier.isStatic(field.getModifiers()) &&
+                    java.lang.reflect.Modifier.isFinal(field.getModifiers())) {
+                int val = 0;
+                try {
+                    val = field.getInt(null);
+                    if (val == v) {
+                        return field.getName();
+                    }
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+        return "UNKNOWN";
     }
 }

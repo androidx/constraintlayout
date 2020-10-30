@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motionLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layoutDescription="@xml/demo_060_flying_cards_scene"
+    android:background="#cfc">
+    <!--    <androidx.constraintlayout.motion.widget.MotionLayout-->
+    <!--    app:layoutDescription="@xml/motion_testscene_28_scene"
+-->
+    <!--    app:layoutDescription="@xml/motion_testscene_01_scene"-->
+
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:text="This test derivedConstraints, performance (should be smooth), arc mode, stagger, Tap backgrount to animate"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region1"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#FF9999"
+        android:text="1"
+        app:layout_constraintBottom_toTopOf="@+id/region5"
+        app:layout_constraintEnd_toStartOf="@+id/region2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="hop"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region2"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#FFCA99"
+        android:text="2"
+        app:layout_constraintBottom_toTopOf="@+id/region6"
+        app:layout_constraintEnd_toStartOf="@+id/region3"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/region1"
+        app:layout_constraintTag="hop"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region3"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#FCFF99"
+        android:text="3"
+        app:layout_constraintBottom_toTopOf="@+id/region7"
+        app:layout_constraintEnd_toStartOf="@+id/region4"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/region2"
+        app:layout_constraintTag="hop"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region4"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#F0FF99"
+        android:text="4"
+
+        app:layout_constraintBottom_toTopOf="@+id/region8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/region3"
+        app:layout_constraintTag="hop"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region5"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#AFFF99"
+        android:text="5"
+
+        app:layout_constraintBottom_toTopOf="@+id/region9"
+        app:layout_constraintEnd_toStartOf="@+id/region6"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="hop"
+        app:layout_constraintTop_toBottomOf="@+id/region1" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region6"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#99FFA5"
+        android:text="6"
+        app:layout_constraintBottom_toTopOf="@+id/region10"
+        app:layout_constraintEnd_toStartOf="@+id/region7"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/region5"
+        app:layout_constraintTag="hop"
+        app:layout_constraintTop_toBottomOf="@+id/region2" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region7"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#99FFD8"
+        android:text="7"
+
+        app:layout_constraintBottom_toTopOf="@+id/region11"
+
+        app:layout_constraintEnd_toStartOf="@+id/region8"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/region6"
+        app:layout_constraintTag="hop"
+        app:layout_constraintTop_toBottomOf="@+id/region3" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region8"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#99F6FF"
+        android:text="8"
+        app:layout_constraintBottom_toTopOf="@+id/region12"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/region7"
+        app:layout_constraintTag="hop"
+        app:layout_constraintTop_toBottomOf="@+id/region4" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region9"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#99DBFF"
+        android:text="9"
+        app:layout_constraintBottom_toTopOf="@+id/region13"
+
+        app:layout_constraintEnd_toStartOf="@+id/region10"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="hop"
+        app:layout_constraintTop_toBottomOf="@+id/region5" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region10"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#99CCFF"
+        android:text="10"
+        app:layout_constraintBottom_toTopOf="@+id/region14"
+
+        app:layout_constraintEnd_toStartOf="@+id/region11"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/region9"
+        app:layout_constraintTag="hop"
+        app:layout_constraintTop_toBottomOf="@+id/region6" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region11"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#FF9"
+        android:text="11"
+        app:layout_constraintBottom_toTopOf="@+id/region15"
+
+        app:layout_constraintEnd_toStartOf="@+id/region12"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/region10"
+        app:layout_constraintTag="hop"
+        app:layout_constraintTop_toBottomOf="@+id/region7" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region12"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#FF9"
+        android:text="12"
+        app:layout_constraintBottom_toTopOf="@+id/region16"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/region11"
+        app:layout_constraintTag="hop"
+        app:layout_constraintTop_toBottomOf="@+id/region8" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region13"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#FF9"
+        android:text="13"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toStartOf="@+id/region14"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="hop"
+        app:layout_constraintTop_toBottomOf="@+id/region9" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region14"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#FF9"
+        android:text="14"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toStartOf="@+id/region15"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/region13"
+        app:layout_constraintTag="hop"
+        app:layout_constraintTop_toBottomOf="@+id/region10" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region15"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#FF9"
+        android:text="15"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toStartOf="@+id/region16"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/region14"
+        app:layout_constraintTag="hop"
+        app:layout_constraintTop_toBottomOf="@+id/region11" />
+
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/region16"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="#FF9999"
+        android:text="16"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/region15"
+        app:layout_constraintTag="hop"
+        app:layout_constraintTop_toBottomOf="@+id/region12" />
+<!--    <Button-->
+<!--        android:id="@+id/go"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="run"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        />-->
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

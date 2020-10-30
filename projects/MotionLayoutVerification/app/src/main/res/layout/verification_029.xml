@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/motionLayout"
+    app:layoutDescription="@xml/verification_scene_029"
+    android:background="#787"
+    app:showPaths="true"
+    app:motionDebug = "SHOW_ALL"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This should show the telltails moving in there 4 modes"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+    <Button
+        android:id="@+id/go"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="run"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/button1"
+        android:background="#FFAFA1"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:text="layout"
+        app:layout_constraintTag="tail"
+        app:telltales_velocityMode = "layout"
+        app:telltales_tailColor="#50350C"
+        app:telltales_tailScale="0.1"
+        tools:layout_editor_absoluteX="147dp"
+        tools:layout_editor_absoluteY="230dp" />
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/button2"
+        android:background="#FFF391"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:text="postLayout"
+        app:layout_constraintTag="tail"
+        app:telltales_velocityMode = "postLayout"
+        app:telltales_tailColor="#50350C"
+        app:telltales_tailScale="0.1"
+        tools:layout_editor_absoluteX="147dp"
+        tools:layout_editor_absoluteY="230dp" />
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/button3"
+        android:background="#99FF80"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:text="staticPostLayout"
+        app:layout_constraintTag="tail"
+        app:telltales_velocityMode = "staticPostLayout"
+        app:telltales_tailColor="#50350C"
+        app:telltales_tailScale="0.1"
+        tools:layout_editor_absoluteX="147dp"
+        tools:layout_editor_absoluteY="230dp" />
+    <androidx.constraintlayout.utils.widget.MotionTelltales
+        android:id="@+id/button4"
+        android:background="#82A6FF"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:text="staticLayout"
+        app:layout_constraintTag="tail"
+        app:telltales_velocityMode = "staticLayout"
+        app:telltales_tailColor="#50350C"
+        app:telltales_tailScale="0.1"
+        tools:layout_editor_absoluteX="147dp"
+        tools:layout_editor_absoluteY="230dp" />
+</androidx.constraintlayout.motion.widget.MotionLayout>

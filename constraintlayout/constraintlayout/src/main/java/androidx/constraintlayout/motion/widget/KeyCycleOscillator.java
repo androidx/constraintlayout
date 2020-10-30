@@ -17,10 +17,12 @@ package androidx.constraintlayout.motion.widget;
 
 import android.annotation.TargetApi;
 import android.os.Build;
+
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.motion.utils.CurveFit;
 import androidx.constraintlayout.motion.utils.Oscillator;
+
 import android.util.Log;
 import android.view.View;
 
@@ -44,6 +46,8 @@ public abstract class KeyCycleOscillator {
     protected ConstraintAttribute mCustom; // used if it manipulates a custom attribute
     private String mType;
     private int mWaveShape = 0;
+    private String mWaveString = null;
+
     public int mVariesBy = 0; // 0 = position, 2=path
     ArrayList<WavePoint> mWavePoints = new ArrayList<>();
 
@@ -56,12 +60,14 @@ public abstract class KeyCycleOscillator {
         float mValue;
         float mOffset;
         float mPeriod;
+        float mPhase;
 
-        public WavePoint(int position, float period, float offset, float value) {
+        public WavePoint(int position, float period, float offset, float phase, float value) {
             mPosition = position;
             mValue = value;
             mOffset = offset;
             mPeriod = period;
+            mPhase = phase;
         }
     }
 
@@ -141,14 +147,15 @@ public abstract class KeyCycleOscillator {
      * @param value         the adder
      * @param custom        The ConstraintAttribute used to set the value
      */
-    public void setPoint(int framePosition, int shape, int variesBy, float period, float offset,
+    public void setPoint(int framePosition, int shape, String waveString, int variesBy, float period, float offset, float phase,
                          float value, ConstraintAttribute custom) {
-        mWavePoints.add(new WavePoint(framePosition, period, offset, value));
+        mWavePoints.add(new WavePoint(framePosition, period, offset, phase, value));
         if (variesBy != -1) {
             mVariesBy = variesBy;
         }
         mWaveShape = shape;
         mCustom = custom;
+        mWaveString = waveString;
     }
 
     /**
@@ -160,12 +167,13 @@ public abstract class KeyCycleOscillator {
      * @param offset        the offset value
      * @param value         the adder
      */
-    public void setPoint(int framePosition, int shape, int variesBy, float period, float offset, float value) {
-        mWavePoints.add(new WavePoint(framePosition, period, offset, value));
+    public void setPoint(int framePosition, int shape, String waveString, int variesBy, float period, float offset, float phase, float value) {
+        mWavePoints.add(new WavePoint(framePosition, period, offset, phase, value));
         if (variesBy != -1) {
             mVariesBy = variesBy;
         }
         mWaveShape = shape;
+        mWaveString = waveString;
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -181,14 +189,15 @@ public abstract class KeyCycleOscillator {
             }
         });
         double[] time = new double[count];
-        double[][] values = new double[count][2];
-        mCycleOscillator = new CycleOscillator(mWaveShape, mVariesBy, count);
+        double[][] values = new double[count][3];
+        mCycleOscillator = new CycleOscillator(mWaveShape, mWaveString, mVariesBy, count);
         int i = 0;
         for (WavePoint wp : mWavePoints) {
             time[i] = wp.mPeriod * 1E-2;
             values[i][0] = wp.mValue;
             values[i][1] = wp.mOffset;
-            mCycleOscillator.setPoint(i, wp.mPosition, wp.mPeriod, wp.mOffset, wp.mValue);
+            values[i][2] = wp.mPhase;
+            mCycleOscillator.setPoint(i, wp.mPosition, wp.mPeriod, wp.mOffset, wp.mPhase, wp.mValue);
             i++;
         }
         mCycleOscillator.setup(pathLength);
@@ -411,10 +420,15 @@ public abstract class KeyCycleOscillator {
         private static final String TAG = "CycleOscillator";
         private final int mVariesBy;
         Oscillator mOscillator = new Oscillator();
+        private final int OFFST = 0;
+        private final int PHASE = 1;
+        private final int VALUE = 2;
+
         float[] mValues;
         double[] mPosition;
         float[] mPeriod;
         float[] mOffset; // offsets will be spline interpolated
+        float[] mPhase; // phase will be spline interpolated
         float[] mScale; // scales will be spline interpolated
         int mWaveShape;
         CurveFit mCurveFit;
@@ -422,14 +436,15 @@ public abstract class KeyCycleOscillator {
         double[] mSplineSlopeCache; // for the return value of the curve fit
         float mPathLength;
 
-        CycleOscillator(int waveShape, int variesBy, int steps) {
+        CycleOscillator(int waveShape, String customShape, int variesBy, int steps) {
             mWaveShape = waveShape;
             mVariesBy = variesBy;
-            mOscillator.setType(waveShape);
+            mOscillator.setType(waveShape, customShape);
             mValues = new float[steps];
             mPosition = new double[steps];
             mPeriod = new float[steps];
             mOffset = new float[steps];
+            mPhase = new float[steps];
             mScale = new float[steps];
         }
 
@@ -437,12 +452,19 @@ public abstract class KeyCycleOscillator {
             if (mCurveFit != null) {
                 mCurveFit.getPos(time, mSplineValueCache);
             } else { // only one value no need to interpolate
-                mSplineValueCache[0] = mOffset[0];
-                mSplineValueCache[1] = mValues[0];
+                mSplineValueCache[OFFST] = mOffset[0];
+                mSplineValueCache[PHASE] = mPhase[0];
+                mSplineValueCache[VALUE] = mValues[0];
+
             }
-            double offset = mSplineValueCache[0];
-            double waveValue = mOscillator.getValue(time);
-            return offset + waveValue * mSplineValueCache[1];
+            double offset = mSplineValueCache[OFFST];
+            double phase = mSplineValueCache[PHASE];
+            double waveValue = mOscillator.getValue(time, phase);
+            return offset + waveValue * mSplineValueCache[VALUE];
+        }
+
+        public double getLastPhase() {
+            return mSplineValueCache[1];
         }
 
         public double getSlope(float time) {
@@ -450,12 +472,13 @@ public abstract class KeyCycleOscillator {
                 mCurveFit.getSlope(time, mSplineSlopeCache);
                 mCurveFit.getPos(time, mSplineValueCache);
             } else { // only one value no need to interpolate
-                mSplineSlopeCache[0] = 0;
-                mSplineSlopeCache[1] = 0;
+                mSplineSlopeCache[OFFST] = 0;
+                mSplineSlopeCache[PHASE] = 0;
+                mSplineSlopeCache[VALUE] = 0;
             }
-            double waveValue = mOscillator.getValue(time);
-            double waveSlope = mOscillator.getSlope(time);
-            return mSplineSlopeCache[0] + waveValue * mSplineSlopeCache[1] + waveSlope * mSplineValueCache[1];
+            double waveValue = mOscillator.getValue(time, mSplineValueCache[PHASE]);
+            double waveSlope = mOscillator.getSlope(time, mSplineValueCache[PHASE], mSplineSlopeCache[PHASE]);
+            return mSplineSlopeCache[OFFST] + waveValue * mSplineSlopeCache[VALUE] + waveSlope * mSplineValueCache[VALUE];
         }
 
         public HashMap<String, ConstraintAttribute> mCustomConstraints = new HashMap<>();
@@ -482,18 +505,19 @@ public abstract class KeyCycleOscillator {
          * @param offset
          * @param values
          */
-        public void setPoint(int index, int framePosition, float wavePeriod, float offset, float values) {
+        public void setPoint(int index, int framePosition, float wavePeriod, float offset, float phase, float values) {
             mPosition[index] = framePosition / 100.0;
             mPeriod[index] = wavePeriod;
             mOffset[index] = offset;
+            mPhase[index] = phase;
             mValues[index] = values;
         }
 
         public void setup(float pathLength) {
             mPathLength = pathLength;
-            double[][] splineValues = new double[mPosition.length][2];
-            mSplineValueCache = new double[1 + mValues.length];
-            mSplineSlopeCache = new double[1 + mValues.length];
+            double[][] splineValues = new double[mPosition.length][3];
+            mSplineValueCache = new double[2 + mValues.length];
+            mSplineSlopeCache = new double[2 + mValues.length];
             if (mPosition[0] > 0) {
                 mOscillator.addPoint(0, mPeriod[0]);
             }
@@ -501,13 +525,14 @@ public abstract class KeyCycleOscillator {
             if (mPosition[last] < 1.0f) {
                 mOscillator.addPoint(1, mPeriod[last]);
             }
+
             for (int i = 0; i < splineValues.length; i++) {
-                splineValues[i][0] = mOffset[i];
-                for (int j = 0; j < mValues.length; j++) {
-                    splineValues[j][1] = mValues[j];
-                }
+                splineValues[i][OFFST] = mOffset[i];
+                splineValues[i][PHASE] = mPhase[i];
+                splineValues[i][VALUE] = mValues[i];
                 mOscillator.addPoint(mPosition[i], mPeriod[i]);
             }
+
             // TODO: add mVariesBy and get total time and path length
             mOscillator.normalize();
             if (mPosition.length > 1) {

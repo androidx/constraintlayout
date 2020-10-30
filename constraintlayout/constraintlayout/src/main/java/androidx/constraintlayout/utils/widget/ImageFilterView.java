@@ -20,6 +20,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Matrix;
 import android.graphics.Outline;
 import android.graphics.Path;
 import android.graphics.RectF;
@@ -293,6 +294,128 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
     Drawable[] mLayers;
     LayerDrawable mLayer;
 
+    // ======================== support for pan/zoom/rotate =================
+    // defined as 0 = center of screen
+    // if with < scree with,  1 is the right edge lines up with screen
+    // if width > screen width, 1 is thee left edge lines up
+    // -1 works similarly
+    // zoom 1 = the image fits such that the view is filed
+
+    float mPanX = Float.NaN;
+    float mPanY = Float.NaN;
+    float mZoom = Float.NaN;
+    float mRotate = Float.NaN;
+    /**
+     * Gets the pan from the center
+     * pan of 1 the image is "all the way to the right"
+     * if the images width is greater than the screen width, pan = 1 results in the left edge lining up
+     * if the images width is less than the screen width, pan = 1 results in the right edges lining up
+     * if image width == screen width it does nothing
+     * @return the pan in X. Where 0 is centered = Float. NaN if not set
+     */
+    public float getImagePanX( ) {
+        return  mPanX;
+    }
+    /**
+     * gets the pan from the center
+     * pan of 1 the image is "all the way to the bottom"
+     * if the images width is greater than the screen height, pan = 1 results in the bottom edge lining up
+     * if the images width is less than the screen height, pan = 1 results in the top edges lining up
+     * if image height == screen height it does nothing
+     * @return pan in y. Where 0 is centered NaN if not set
+     */
+    public  float getImagePanY( ) {
+        return mPanY;
+    }
+
+    /**
+     * gets the zoom where 1 scales the image just enough to fill the view
+     * @return the zoom factor
+     */
+    public  float getImageZoom( ) {
+        return mZoom;
+    }
+
+    /**
+     * gets the rotation
+     * @return the rotation in degrees
+     */
+    public  float getImageRotate( ) {
+        return mRotate;
+    }
+
+    /**
+     * sets the pan from the center
+     * pan of 1 the image is "all the way to the right"
+     * if the images width is greater than the screen width, pan = 1 results in the left edge lining up
+     * if the images width is less than the screen width, pan = 1 results in the right edges lining up
+     * if image width == screen width it does nothing
+     * @param pan  sets the pan in X. Where 0 is centered
+     */
+    public void setImagePanX(float pan) {
+        mPanX = pan;
+        updateViewMatrix();
+    }
+    /**
+     * sets the pan from the center
+     * pan of 1 the image is "all the way to the bottom"
+     * if the images width is greater than the screen height, pan = 1 results in the bottom edge lining up
+     * if the images width is less than the screen height, pan = 1 results in the top edges lining up
+     * if image height == screen height it does nothing
+     * @param pan  sets the pan in X. Where 0 is centered
+     */
+    public  void setImagePanY(float pan) {
+        mPanY = pan;
+        updateViewMatrix();
+    }
+    /**
+     * sets the zoom where 1 scales the image just enough to fill the view
+     * @param zoom the zoom factor
+     */
+    public  void setImageZoom(float zoom) {
+        mZoom = zoom;
+        updateViewMatrix();
+    }
+
+    /**
+     * sets the rotation angle of the image in degrees
+     * @rotation the rotation in degrees
+     */
+    public  void setImageRotate(float rotation) {
+        mRotate = rotation;
+        updateViewMatrix();
+    }
+
+    private void  updateViewMatrix() {
+        if (Float.isNaN(mPanX) &&
+                Float.isNaN(mPanY) &&
+                Float.isNaN(mZoom) &&
+                Float.isNaN(mRotate)
+        ) {
+            setScaleType(ScaleType.FIT_CENTER);
+            return;
+        }
+        float panX = (Float.isNaN(mPanX)) ? 0 : mPanX;
+        float panY = (Float.isNaN(mPanY)) ? 0 : mPanY;
+        float zoom = (Float.isNaN(mZoom)) ? 0 : mZoom;
+        float rota = (Float.isNaN(mRotate)) ? 0 : mRotate;
+        Matrix imageMatrix = new Matrix();
+        imageMatrix.reset();
+        float iw = getDrawable().getIntrinsicWidth();
+        float ih = getDrawable().getIntrinsicHeight();
+        float sw = getWidth();
+        float sh = getHeight();
+        float scale = zoom * ((iw * sh < ih * sw) ? sw / iw : sh / ih);
+        imageMatrix.postScale(scale, scale);
+        float tx = 0.5f * (panX * (sw-scale*iw) + sw - (scale * iw));
+        float ty = 0.5f * (panY * (sh-scale*ih) + sh - (scale * ih));
+        imageMatrix.postTranslate(tx, ty);
+        imageMatrix.postRotate(rota, sw / 2, sh / 2);
+        setImageMatrix(imageMatrix);
+        setScaleType(ScaleType.MATRIX);
+    }
+
+
     public ImageFilterView(Context context) {
         super(context);
         init(context, null);
@@ -325,6 +448,8 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
                     setSaturation(a.getFloat(attr, 0));
                 } else if (attr == R.styleable.ImageFilterView_contrast) {
                     setContrast(a.getFloat(attr, 0));
+                }  else if (attr == R.styleable.ImageFilterView_brightness) {
+                    setBrightness(a.getFloat(attr, 0));
                 } else if (attr == R.styleable.ImageFilterView_round) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         setRound(a.getDimension(attr, 0));
@@ -335,6 +460,14 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
                     }
                 } else if (attr == R.styleable.ImageFilterView_overlay) {
                     setOverlay(a.getBoolean(attr, mOverlay));
+                } else if (attr == R.styleable.ImageFilterView_imagePanX) {
+                    setImagePanX(a.getFloat(attr, mPanX));
+                } else if (attr == R.styleable.ImageFilterView_imagePanY) {
+                    setImagePanY(a.getFloat(attr, mPanY));
+                } else if (attr == R.styleable.ImageFilterView_imageRotate) {
+                    setImageRotate(a.getFloat(attr, mRotate));
+                } else if (attr == R.styleable.ImageFilterView_imageZoom) {
+                    setImageZoom(a.getFloat(attr, mZoom));
                 }
             }
             a.recycle();

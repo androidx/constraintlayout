@@ -5,7 +5,10 @@ import android.content.res.TypedArray;
 import androidx.constraintlayout.widget.ConstraintHelper;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.R;
+
+import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -107,26 +110,35 @@ public class MotionHelper extends ConstraintHelper implements Animatable, Motion
      * @hide
      */
     public void setProgress(View view, float progress) {
-        // nothing
+
     }
 
     @Override
     public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
-
     }
 
     @Override
     public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
-
-    }
+     }
 
     @Override
     public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
-
     }
 
     @Override
     public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
+
+    }
+
+    public boolean isDecorator() {
+        return false;
+    }
+
+    public void onPreDraw(Canvas canvas) {
+
+    }
+    
+    public void onPostDraw(Canvas canvas) {
 
     }
 }

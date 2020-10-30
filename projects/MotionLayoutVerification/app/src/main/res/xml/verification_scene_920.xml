@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto"
+    motion:defaultDuration="2000">
+
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint android:id="@+id/dial">
+            <Transform android:rotation="360"
+                motion:transformPivotTarget="@+id/earth"/>
+        </Constraint>
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint android:id="@+id/dial">
+            <Transform android:rotation="0"
+                motion:transformPivotTarget="@+id/earth"/>
+        </Constraint>
+    </ConstraintSet>
+
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@+id/start"
+        motion:duration="1000"
+        motion:autoTransition="animateToStart"
+        motion:motionInterpolator="linear"
+        >
+        <OnSwipe motion:dragDirection="dragClockwise" motion:onTouchUp="autoCompleteToStart"
+            motion:maxAcceleration="10"
+            motion:dragScale=".9"
+            motion:rotationCenterId="@+id/earth"
+            motion:maxVelocity="50" />
+
+        <KeyFrameSet>
+
+        </KeyFrameSet>
+
+    </Transition>
+
+
+
+</MotionScene>

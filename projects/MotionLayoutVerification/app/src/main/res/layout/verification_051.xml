@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bob"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#CFC"
+    app:layoutDescription="@xml/verification_scene_050"
+    >
+
+    <Button
+        android:id="@+id/button_east"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="east"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_south"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="south"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button_north"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="north"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_west"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="west"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterButton
+        android:id="@+id/button"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_marginTop="64dp"
+        android:background="#A66"
+        android:onClick="click"
+        app:imageZoom="1.5"
+        android:elevation="10dp"
+        android:src="@drawable/img3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This test the rotate/pan/zoom APIs on ImageFilterButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <!--ndroid.support.constraint.motion.MotionLayout-->
+</androidx.constraintlayout.motion.widget.MotionLayout>

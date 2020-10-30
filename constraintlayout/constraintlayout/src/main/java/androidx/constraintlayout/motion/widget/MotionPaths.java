@@ -20,7 +20,9 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.motion.utils.Easing;
+
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 
 import java.util.Arrays;
@@ -46,9 +48,10 @@ class MotionPaths implements Comparable<MotionPaths> {
     static final int OFF_HEIGHT = 4;
     static final int OFF_PATH_ROTATE = 5;
 
-    static final int PERPENDICULAR = 1;
-    static final int CARTESIAN = 2;
-    static final int SCREEN = 3;
+    // mode and type have same numbering scheme
+    static final int PERPENDICULAR = KeyPosition.TYPE_PATH;
+    static final int CARTESIAN = KeyPosition.TYPE_CARTESIAN;
+    static final int SCREEN =  KeyPosition.TYPE_SCREEN;
     static String[] names = {"position", "x", "y", "width", "height", "pathRotate"};
     Easing mKeyFrameEasing;
     int mDrawPath = 0;
@@ -61,9 +64,13 @@ class MotionPaths implements Comparable<MotionPaths> {
     float mPathRotate = Float.NaN;
     float mProgress = Float.NaN;
     int mPathMotionArc = UNSET;
+    int mAnimateRelativeTo = UNSET;
+    float mRelativeAngle = Float.NaN;
+    MotionController mRelativeToController = null;
 
     LinkedHashMap<String, ConstraintAttribute> attributes = new LinkedHashMap<>();
     int mMode = 0; // how was this point computed 1=perpendicular 2=deltaRelative
+    int mAnimateCircleAngleTo; // since angles loop there are 4 ways we can pic direction
 
     public MotionPaths() {
 
@@ -122,6 +129,10 @@ class MotionPaths implements Comparable<MotionPaths> {
      * @param endTimePoint
      */
     public MotionPaths(int parentWidth, int parentHeight, KeyPosition c, MotionPaths startTimePoint, MotionPaths endTimePoint) {
+        if (startTimePoint.mAnimateRelativeTo != UNSET) {
+            initPolar(parentWidth, parentHeight, c, startTimePoint, endTimePoint);
+            return;
+        }
         switch (c.mPositionType) {
             case KeyPosition.TYPE_SCREEN:
                 initScreen(parentWidth, parentHeight, c, startTimePoint, endTimePoint);
@@ -133,6 +144,58 @@ class MotionPaths implements Comparable<MotionPaths> {
             case KeyPosition.TYPE_CARTESIAN:
                 initCartesian(c, startTimePoint, endTimePoint);
                 return;
+        }
+    }
+
+    void initPolar(int parentWidth, int parentHeight, KeyPosition c, MotionPaths s, MotionPaths e) {
+        float position = c.mFramePosition / 100f;
+        this.time = position;
+        mDrawPath = c.mDrawPath;
+        this.mMode = c.mPositionType; // mode and type have same numbering scheme
+        float scaleWidth = Float.isNaN(c.mPercentWidth) ? position : c.mPercentWidth;
+        float scaleHeight = Float.isNaN(c.mPercentHeight) ? position : c.mPercentHeight;
+        float scaleX = e.width - s.width;
+        float scaleY = e.height - s.height;
+        this.position = this.time;
+        width = (int) (s.width + scaleX * scaleWidth);
+        height = (int) (s.height + scaleY * scaleHeight);
+        float startfactor = 1-position;
+        float endfactor = position;
+        switch (c.mPositionType) {
+            case KeyPosition.TYPE_SCREEN:
+                this.x = Float.isNaN(c.mPercentX)?(position*(e.x-s.x)+s.x):c.mPercentX*Math.min(scaleHeight,scaleWidth);
+                this.y = Float.isNaN(c.mPercentY)? (position*(e.y-s.y)+s.y):c.mPercentY;
+                break;
+
+            case KeyPosition.TYPE_PATH:
+                this.x = (Float.isNaN(c.mPercentX)?position:c.mPercentX)*(e.x-s.x)+s.x;
+                this.y = (Float.isNaN(c.mPercentY)?position: c.mPercentY)*(e.y-s.y)+s.y;
+                break;
+            default:
+            case KeyPosition.TYPE_CARTESIAN:
+                this.x = (Float.isNaN(c.mPercentX)?position:c.mPercentX)*(e.x-s.x)+s.x;
+                this.y = (Float.isNaN(c.mPercentY)?position: c.mPercentY)*(e.y-s.y)+s.y;
+                break;
+        }
+
+        this.mAnimateRelativeTo = s.mAnimateRelativeTo;
+        this.mKeyFrameEasing = Easing.getInterpolator(c.mTransitionEasing);
+        this.mPathMotionArc = c.mPathMotionArc;
+    }
+
+    public void setupRelative(MotionController mc, MotionPaths relative) {
+        double dx = x + width / 2 - relative.x - relative.width / 2;
+        double dy = y + height / 2 - relative.y - relative.height / 2;
+        mRelativeToController = mc;
+
+        x = (float) Math.hypot(dy, dx);
+        Log.v(TAG, Debug.getLoc()+" atan2 = "+ Math.toDegrees((float) (Math.atan2(dy, dx)+Math.PI/2)));
+        if (Float.isNaN(mRelativeAngle)) {
+            y = (float) (Math.atan2(dy, dx)+Math.PI/2);
+       } else {
+            y = (float) Math.toRadians(mRelativeAngle);
+            Log.v(TAG, Debug.getLoc()+" mRelativeAngle = "+mRelativeAngle);
+
         }
     }
 
@@ -173,6 +236,7 @@ class MotionPaths implements Comparable<MotionPaths> {
             point.y = (int) (c.mPercentY * parentHeight);
         }
 
+        point.mAnimateRelativeTo = mAnimateRelativeTo;
         point.mKeyFrameEasing = Easing.getInterpolator(c.mTransitionEasing);
         point.mPathMotionArc = c.mPathMotionArc;
     }
@@ -216,6 +280,7 @@ class MotionPaths implements Comparable<MotionPaths> {
         point.x += normalX;
         point.y += normalY;
 
+        point.mAnimateRelativeTo = mAnimateRelativeTo;
         point.mKeyFrameEasing = Easing.getInterpolator(c.mTransitionEasing);
         point.mPathMotionArc = c.mPathMotionArc;
     }
@@ -241,15 +306,17 @@ class MotionPaths implements Comparable<MotionPaths> {
 
     void different(MotionPaths points, boolean[] mask, String[] custom, boolean arcMode) {
         int c = 0;
+        boolean diffx = diff(x, points.x);
+        boolean diffy = diff(y, points.y);
         mask[c++] |= diff(position, points.position);
-        mask[c++] |= diff(x, points.x) | arcMode;
-        mask[c++] |= diff(y, points.y) | arcMode;
+        mask[c++] |= diffx | diffy | arcMode;
+        mask[c++] |= diffx | diffy | arcMode;
         mask[c++] |= diff(width, points.width);
         mask[c++] |= diff(height, points.height);
 
     }
 
-    void getCenter(int[] toUse, double[] data, float[] point, int offset) {
+    void getCenter(double p, int[] toUse, double[] data, float[] point, int offset) {
         float v_x = x;
         float v_y = y;
         float v_width = width;
@@ -273,9 +340,126 @@ class MotionPaths implements Comparable<MotionPaths> {
                     break;
             }
         }
+        if (mRelativeToController != null) {
+            float[] pos = new float[2];
+            float[] vel = new float[2];
+
+            mRelativeToController.getCenter(p, pos,vel);
+            float rx = pos[0];
+            float ry =  pos[1];
+            float radius = v_x;
+            float angle = v_y;
+            // TODO Debug angle
+            v_x = (float) (rx + radius*Math.sin(angle) - v_width/2);
+            v_y = (float) (ry - radius*Math.cos(angle) - v_height/2);
+        }
+
         point[offset] = v_x + v_width / 2 + translationX;
         point[offset + 1] = v_y + v_height / 2 + translationY;
     }
+
+    void getCenter(double p, int[] toUse, double[] data, float[] point, double[] vdata, float []velocity) {
+        float v_x = x;
+        float v_y = y;
+        float v_width = width;
+        float v_height = height;
+        float dv_x = 0;
+        float dv_y = 0;
+        float dv_width = 0;
+        float dv_height = 0;
+
+        float translationX = 0, translationY = 0;
+        for (int i = 0; i < toUse.length; i++) {
+            float value = (float) data[i];
+            float dvalue = (float) vdata[i];
+
+            switch (toUse[i]) {
+                case OFF_X:
+                    v_x = value;
+                    dv_x = dvalue;
+                    break;
+                case OFF_Y:
+                    v_y = value;
+                    dv_y = dvalue;
+                    break;
+                case OFF_WIDTH:
+                    v_width = value;
+                    dv_width = dvalue;
+                    break;
+                case OFF_HEIGHT:
+                    v_height = value;
+                    dv_height = dvalue;
+                    break;
+            }
+        }
+        float dpos_x =  dv_x + dv_width / 2;
+        float dpos_y =  dv_y + dv_height / 2;
+
+        if (mRelativeToController != null) {
+            float[] pos = new float[2];
+            float[] vel = new float[2];
+            mRelativeToController.getCenter(p, pos, vel);
+            float rx = pos[0];
+            float ry =  pos[1];
+            float radius = v_x;
+            float angle = v_y;
+            float dradius = dv_x;
+            float dangle = dv_y;
+            float drx  = vel[0];
+            float dry = vel[1];
+            // TODO Debug angle
+            v_x = (float) (rx + radius*Math.sin(angle) - v_width/2);
+            v_y = (float) (ry - radius*Math.cos(angle) - v_height/2);
+             dpos_x = (float) (drx + dradius*Math.sin(angle)+  Math.cos(angle)*dangle  );
+             dpos_y = (float) (dry - dradius*Math.cos(angle) +  Math.sin(angle)*dangle  );
+        }
+
+        point[0] = v_x + v_width / 2 + translationX;
+        point[1] = v_y + v_height / 2 + translationY;
+        velocity[0] = dpos_x;
+        velocity[1] = dpos_y;
+    }
+    void getCenterVelocity(double p, int[] toUse, double[] data, float[] point, int offset) {
+        float v_x = x;
+        float v_y = y;
+        float v_width = width;
+        float v_height = height;
+        float translationX = 0, translationY = 0;
+        for (int i = 0; i < toUse.length; i++) {
+            float value = (float) data[i];
+
+            switch (toUse[i]) {
+                case OFF_X:
+                    v_x = value;
+                    break;
+                case OFF_Y:
+                    v_y = value;
+                    break;
+                case OFF_WIDTH:
+                    v_width = value;
+                    break;
+                case OFF_HEIGHT:
+                    v_height = value;
+                    break;
+            }
+        }
+        if (mRelativeToController != null) {
+            float[] pos = new float[2];
+            float[] vel = new float[2];
+            mRelativeToController.getCenter(p, pos, vel);
+            float rx = pos[0];
+            float ry =  pos[1];
+            float radius = v_x;
+            float angle = v_y;
+            // TODO Debug angle
+            v_x = (float) (rx + radius*Math.sin(angle) - v_width/2);
+            v_y = (float) (ry - radius*Math.cos(angle) - v_height/2);
+        }
+
+        point[offset] = v_x + v_width / 2 + translationX;
+        point[offset + 1] = v_y + v_height / 2 + translationY;
+    }
+
 
     void getBounds(int[] toUse, double[] data, float[] point, int offset) {
         float v_x = x;
@@ -301,15 +485,15 @@ class MotionPaths implements Comparable<MotionPaths> {
                     break;
             }
         }
-        point[offset] =   v_width ;
-        point[offset + 1] =  v_height  ;
+        point[offset] = v_width;
+        point[offset + 1] = v_height;
     }
 
     double[] mTempValue = new double[18];
     double[] mTempDelta = new double[18];
 
     // Called on the start Time Point
-    void setView(View view, int[] toUse, double[] data, double[] slope, double[] cycle) {
+    void setView(float position, View view, int[] toUse, double[] data, double[] slope, double[] cycle) {
         float v_x = x;
         float v_y = y;
         float v_width = width;
@@ -319,7 +503,6 @@ class MotionPaths implements Comparable<MotionPaths> {
         float dv_width = 0;
         float dv_height = 0;
         float delta_path = 0;
-        float view_rotate = Float.NaN;
         float path_rotate = Float.NaN;
         String mod;
 
@@ -371,30 +554,61 @@ class MotionPaths implements Comparable<MotionPaths> {
                 case OFF_PATH_ROTATE:
                     path_rotate = value;
                     break;
-
             }
         }
-        if (Float.isNaN(path_rotate)) {
-            if (!Float.isNaN(view_rotate)) {
-                view.setRotation(view_rotate);
+
+        if (mRelativeToController != null) {
+            float[] pos = new float[2];
+            float[] vel = new float[2];
+
+            mRelativeToController.getCenter(position, pos, vel);
+            float rx = pos[0];
+            float ry = pos[1];
+            float radius = v_x;
+            float angle = v_y;
+            float dradius = dv_x;
+            float dangle = dv_y;
+            float drx = vel[0];
+            float dry = vel[1];
+
+            // TODO Debug angle
+            float pos_x = (float) (rx + radius * Math.sin(angle) - v_width / 2);
+            float pos_y = (float) (ry - radius * Math.cos(angle) - v_height / 2);
+            float dpos_x = (float) (drx + dradius * Math.sin(angle) + radius*Math.cos(angle) * dangle);
+            float dpos_y = (float) (dry - dradius * Math.cos(angle) + radius*Math.sin(angle) * dangle);
+            dv_x = dpos_x;
+            dv_y = dpos_y;
+            v_x = pos_x;
+            v_y = pos_y;
+            if (slope.length >= 2) {
+                slope[0] = dpos_x;
+                slope[1] = dpos_y;
             }
+            if (!Float.isNaN(path_rotate)) {
+                float rot = (float) (path_rotate + Math.toDegrees(Math.atan2(dv_y, dv_x)));
+                view.setRotation(rot);
+            }
+
         } else {
-            float rot = Float.isNaN(view_rotate) ? 0 : view_rotate;
-            float dx = dv_x + dv_width / 2;
-            float dy = dv_y + dv_height / 2;
-            if (DEBUG) {
-                Log.v(TAG, "dv_x       =" + dv_x);
-                Log.v(TAG, "dv_y       =" + dv_y);
-                Log.v(TAG, "dv_width   =" + dv_width);
-                Log.v(TAG, "dv_height  =" + dv_height);
-            }
-            rot += path_rotate + Math.toDegrees(Math.atan2(dy, dx));
-            view.setRotation(rot);
-            if (DEBUG) {
-                Log.v(TAG, "Rotated " + rot + "  = " + dx + "," + dy);
-            }
 
+            if (!Float.isNaN(path_rotate)) {
+                float rot = 0;
+                float dx = dv_x + dv_width / 2;
+                float dy = dv_y + dv_height / 2;
+                if (DEBUG) {
+                    Log.v(TAG, "dv_x       =" + dv_x);
+                    Log.v(TAG, "dv_y       =" + dv_y);
+                    Log.v(TAG, "dv_width   =" + dv_width);
+                    Log.v(TAG, "dv_height  =" + dv_height);
+                }
+                rot += path_rotate + Math.toDegrees(Math.atan2(dy, dx));
+                view.setRotation(rot);
+                if (DEBUG) {
+                    Log.v(TAG, "Rotated " + rot + "  = " + dx + "," + dy);
+                }
+            }
         }
+
 
         int l = (int) (0.5f + v_x);
         int t = (int) (0.5f + v_y);
@@ -468,6 +682,17 @@ class MotionPaths implements Comparable<MotionPaths> {
                     break;
             }
         }
+
+        if (mRelativeToController != null) {
+            float rx = mRelativeToController.getCenterX();
+            float ry = mRelativeToController.getCenterY();
+            float radius = v_x;
+            float angle = v_y;
+            // TODO Debug angle
+            v_x = (float) (rx + radius*Math.sin(angle) - v_width/2);
+            v_y = (float) (ry - radius*Math.cos(angle) - v_height/2);
+        }
+
         float x1 = v_x;
         float y1 = v_y;
 
@@ -598,6 +823,7 @@ class MotionPaths implements Comparable<MotionPaths> {
                 Log.v(TAG, "setDpDt " + mod);
             }
         }
+
         float deltaX = d_x - deltaScaleX * d_width / 2;
         float deltaY = d_y - deltaScaleY * d_height / 2;
         float deltaWidth = d_width * (1 + deltaScaleX);
@@ -680,9 +906,12 @@ class MotionPaths implements Comparable<MotionPaths> {
         MotionPaths point = this;
         point.mKeyFrameEasing = Easing.getInterpolator(c.motion.mTransitionEasing);
         point.mPathMotionArc = c.motion.mPathMotionArc;
+        point.mAnimateRelativeTo = c.motion.mAnimateRelativeTo;
         point.mPathRotate = c.motion.mPathRotate;
         point.mDrawPath = c.motion.mDrawPath;
+        point.mAnimateCircleAngleTo = c.motion.mAnimateCircleAngleTo;
         point.mProgress = c.propertySet.mProgress;
+        point.mRelativeAngle = c.layout.circleAngle;
         Set<String> at = c.mCustomConstraints.keySet();
         for (String s : at) {
             ConstraintAttribute attr = c.mCustomConstraints.get(s);
@@ -692,4 +921,7 @@ class MotionPaths implements Comparable<MotionPaths> {
         }
     }
 
+    public void configureRelativeTo(MotionController toOrbit) {
+       double []p = toOrbit.getPos(mProgress); // get the position in the orbit
+    }
 }

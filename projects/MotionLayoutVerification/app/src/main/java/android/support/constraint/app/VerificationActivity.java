@@ -78,7 +78,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     String s = AppCompatActivity.class.getName();
 
     private static boolean REVERSE = false;
-    private final String LAYOUTS_MATCHES = "verification_..";
+    private final String LAYOUTS_MATCHES = "verification_\\d+";
     private static String SHOW_FIRST = "";
     MotionLayout mMotionLayout;
     private Flow mFlow;
@@ -223,9 +223,9 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
 
                 @Override
                 public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
-                    Log.v(TAG, Debug.getLoc() +
-                            "               " + Debug.getName(getApplicationContext(), startId) +
-                            "->" + Debug.getName(getApplicationContext(), endId) + " " + df.format(progress) + " --------- " + df.format(motionLayout.getVelocity()));
+//                    Log.v(TAG, Debug.getLoc() +
+//                            "               " + Debug.getName(getApplicationContext(), startId) +
+//                            "->" + Debug.getName(getApplicationContext(), endId) + " " + df.format(progress) + " --------- " + df.format(motionLayout.getVelocity()));
 
                     float dur = (System.nanoTime() - start) * 1E-6f;
                     mSid = startId;
@@ -503,12 +503,11 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View view) {
         Object tag = view.getTag();
-        Log.v(TAG, Debug.getLoc() + "======= Starting " + ((Button) view).getText() + " =======");
         launch((String) view.getTag());
     }
 
     void focusJump() {
-        if (!"verification_45".startsWith(layout_name)) {
+        if (!"verification_045".startsWith(layout_name)) {
             return;
         }
         MotionLayout ml = findViewById(R.id.base);

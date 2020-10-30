@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetStart="@layout/verification_007_cl1"
+        motion:constraintSetEnd="@layout/verification_007_cl2"
+
+        motion:duration="1000">
+        <OnSwipe
+            motion:dragDirection="dragUp"
+            motion:touchAnchorId="@+id/button8"
+            motion:touchAnchorSide="top" />
+        <KeyFrameSet>
+
+            <KeyPosition
+                motion:framePosition="50"
+                motion:percentX="1"
+                motion:motionTarget="@id/imageButton6" />
+            <KeyPosition
+                motion:framePosition="50"
+                motion:percentX="1"
+                motion:motionTarget="@id/imageButton7" />
+            <KeyPosition
+                motion:framePosition="50"
+                motion:percentX="1"
+                motion:motionTarget="@id/imageButton8" />
+
+            <KeyPosition
+                motion:framePosition="50"
+                motion:percentX="1"
+                motion:motionTarget="@id/imageButton9" />
+            <KeyPosition
+                motion:framePosition="50"
+                motion:percentX="1"
+                motion:motionTarget="@id/imageButton10" />
+            <KeyPosition
+                motion:framePosition="50"
+                motion:percentX="1"
+                motion:motionTarget="@id/imageButton11" />
+
+            <KeyPosition
+                motion:framePosition="50"
+                motion:percentX="1"
+                motion:motionTarget="@id/imageButton12" />
+            <KeyPosition
+                motion:framePosition="50"
+                motion:percentX="1"
+                motion:motionTarget="@id/imageButton13" />
+            <KeyPosition
+                motion:framePosition="50"
+                motion:percentX="1"
+                motion:motionTarget="@id/imageButton14" />
+        </KeyFrameSet>
+    </Transition>
+
+</MotionScene>

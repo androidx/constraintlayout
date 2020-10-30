@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motionLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layoutDescription="@xml/verification_scene_920"
+    android:background="#cfc">
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:text="transformPivotTarget, dragDirection, rotationCenterId"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/hour12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="12"
+        android:textSize="24sp"
+        app:layout_constraintCircle="@id/earth"
+        app:layout_constraintCircleAngle="0"
+        app:layout_constraintCircleRadius="112dp"
+        app:layout_constraintTag="hop"
+        tools:layout_editor_absoluteX="178dp"
+        tools:layout_editor_absoluteY="335dp" />
+
+    <TextView
+        android:id="@+id/hour1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="1"
+        android:textSize="24sp"
+        app:layout_constraintCircle="@id/earth"
+        app:layout_constraintCircleAngle="30"
+        app:layout_constraintCircleRadius="112dp"
+        app:layout_constraintTag="hop"
+        tools:layout_editor_absoluteX="178dp"
+        tools:layout_editor_absoluteY="335dp" />
+
+
+    <TextView
+        android:id="@+id/hour2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="2"
+        android:textSize="24sp"
+        app:layout_constraintCircle="@id/earth"
+        app:layout_constraintCircleAngle="60"
+        app:layout_constraintCircleRadius="112dp"
+        app:layout_constraintTag="hop"
+        tools:layout_editor_absoluteX="178dp"
+        tools:layout_editor_absoluteY="335dp" />
+
+
+    <TextView
+        android:id="@+id/hour3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3"
+        android:textSize="24sp"
+        app:layout_constraintCircle="@id/earth"
+        app:layout_constraintCircleAngle="90"
+        app:layout_constraintCircleRadius="112dp"
+        app:layout_constraintTag="hop"
+        tools:layout_editor_absoluteX="178dp"
+        tools:layout_editor_absoluteY="335dp" />
+
+    <TextView
+        android:id="@+id/hour4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="4"
+        android:textSize="24sp"
+        app:layout_constraintCircle="@id/earth"
+        app:layout_constraintCircleAngle="120"
+        app:layout_constraintCircleRadius="112dp"
+        app:layout_constraintTag="hop"
+        tools:layout_editor_absoluteX="178dp"
+        tools:layout_editor_absoluteY="335dp" />
+
+    <TextView
+        android:id="@+id/hour5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5"
+        android:textSize="24sp"
+        app:layout_constraintCircle="@id/earth"
+        app:layout_constraintCircleAngle="150"
+        app:layout_constraintCircleRadius="112dp"
+        app:layout_constraintTag="hop"
+        tools:layout_editor_absoluteX="178dp"
+        tools:layout_editor_absoluteY="335dp" />
+
+
+    <TextView
+        android:id="@+id/hour6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="6"
+        android:textSize="24sp"
+        app:layout_constraintCircle="@id/earth"
+        app:layout_constraintCircleAngle="180"
+        app:layout_constraintCircleRadius="112dp"
+        app:layout_constraintTag="hop"
+        tools:layout_editor_absoluteX="178dp"
+        tools:layout_editor_absoluteY="335dp" />
+
+
+    <TextView
+        android:id="@+id/hour7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="7"
+        android:textSize="24sp"
+        app:layout_constraintCircle="@id/earth"
+        app:layout_constraintCircleAngle="210"
+        app:layout_constraintCircleRadius="112dp"
+        app:layout_constraintTag="hop"
+        tools:layout_editor_absoluteX="178dp"
+        tools:layout_editor_absoluteY="335dp" />
+
+
+    <TextView
+        android:id="@+id/hour8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="8"
+        android:textSize="24sp"
+        app:layout_constraintCircle="@id/earth"
+        app:layout_constraintCircleAngle="240"
+        app:layout_constraintCircleRadius="112dp"
+        app:layout_constraintTag="hop"
+        tools:layout_editor_absoluteX="178dp"
+        tools:layout_editor_absoluteY="335dp" />
+
+
+    <TextView
+        android:id="@+id/hour9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="9"
+        android:textSize="24sp"
+        app:layout_constraintCircle="@id/earth"
+        app:layout_constraintCircleAngle="270"
+        app:layout_constraintCircleRadius="112dp"
+        app:layout_constraintTag="hop"
+        tools:layout_editor_absoluteX="178dp"
+        tools:layout_editor_absoluteY="335dp" />
+    
+    <TextView
+        android:id="@+id/hour10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10"
+        android:textSize="24sp"
+        app:layout_constraintCircle="@id/earth"
+        app:layout_constraintCircleAngle="300"
+        app:layout_constraintCircleRadius="112dp"
+        app:layout_constraintTag="hop"
+        tools:layout_editor_absoluteX="178dp"
+        tools:layout_editor_absoluteY="335dp" />
+
+    <TextView
+        android:id="@+id/hour11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="11"
+        android:textSize="24sp"
+        app:layout_constraintCircle="@id/earth"
+        app:layout_constraintCircleAngle="330"
+        app:layout_constraintCircleRadius="112dp"
+        app:layout_constraintTag="hop"
+        tools:layout_editor_absoluteX="178dp"
+        tools:layout_editor_absoluteY="335dp" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/dial"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/arrow"
+        android:tint="#FF32"
+        app:layout_constraintCircle="@id/earth"
+        app:layout_constraintCircleAngle="0"
+        app:layout_constraintCircleRadius="96dp"
+        />
+    <ImageView
+        android:id="@+id/earth"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:src="@drawable/earth"
+        app:layout_constraintVertical_bias="0.8"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="center"
+        />
+
+ 
+
+</androidx.constraintlayout.motion.widget.MotionLayout>
