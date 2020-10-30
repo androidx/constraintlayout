@@ -170,22 +170,40 @@ public class ImageFilterButton extends androidx.appcompat.widget.AppCompatImageB
     private float mZoom = Float.NaN;
     private float mRotate = Float.NaN;
     /**
-     * sets the pan from the center
+     * gts the pan from the center
      * pan of 1 the image is "all the way to the right"
      * if the images width is greater than the screen width, pan = 1 results in the left edge lining up
      * if the images width is less than the screen width, pan = 1 results in the right edges lining up
      * if image width == screen width it does nothing
-     * @return the pan in X. Where 0 is centered = Float.NaN if not set
+     * @return the pan in X. Where 0 is centered = Float. NaN if not set
      */
     public float getImagePanX( ) {
         return  mPanX;
     }
+    /**
+     * gets the pan from the center
+     * pan of 1 the image is "all the way to the bottom"
+     * if the images width is greater than the screen height, pan = 1 results in the bottom edge lining up
+     * if the images width is less than the screen height, pan = 1 results in the top edges lining up
+     * if image height == screen height it does nothing
+     * @return  pan in Y. Where 0 is centered
+     */
     public  float getImagePanY( ) {
         return mPanY;
     }
+
+    /**
+     * sets the zoom where 1 scales the image just enough to fill the view
+     * @return  the zoom
+     */
     public  float getImageZoom( ) {
         return mZoom;
     }
+
+    /**
+     * gets the rotation
+     * @return the rotation in degrees
+     */
     public  float getImageRotate( ) {
         return mRotate;
     }
@@ -204,11 +222,11 @@ public class ImageFilterButton extends androidx.appcompat.widget.AppCompatImageB
     }
     /**
      * sets the pan from the center
-     * pan of 1 the image is "all the way to the right"
-     * if the images width is greater than the screen width, pan = 1 results in the left edge lining up
-     * if the images width is less than the screen width, pan = 1 results in the right edges lining up
-     * if image width == screen width it does nothing
-     * @param pan  sets the pan in X. Where 0 is centered
+     * pan of 1 the image is "all the way to the bottom"
+     * if the images width is greater than the screen height, pan = 1 results in the bottom edge lining up
+     * if the images width is less than the screen height, pan = 1 results in the top edges lining up
+     * if image height == screen height it does nothing
+     * @param pan  sets the pan in Y. Where 0 is centered
      */
     public  void setImagePanY(float pan) {
         mPanY = pan;
@@ -216,12 +234,17 @@ public class ImageFilterButton extends androidx.appcompat.widget.AppCompatImageB
     }
     /**
      * sets the zoom where 1 scales the image just enough to fill the view
-     * @param zoom  sets the pan in X. Where 0 is centered
+     * @param zoom the zoom factor
      */
     public  void setImageZoom(float zoom) {
         mZoom = zoom;
         updateViewMatrix();
     }
+
+    /**
+     * sets the rotation angle of the image in degrees
+     * @rotation the rotation in degrees
+     */
     public  void setImageRotate(float rotation) {
         mRotate = rotation;
         updateViewMatrix();
