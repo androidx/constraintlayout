@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.ButtonBarLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:tag="0,0,1056,612"
+    app:allowStacking="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,1056,1920 0,0,1056,555 565,555,491,57"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,612 24,0,1056,555 589,555,491,57"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:text="Test Measure TOO SMALL"
+        android:tag="589,555,491,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:tag="24,0,1056,555"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            app:layout_constraintRight_toLeftOf="@+id/button2"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBaseline_toBaselineOf="@+id/button2"
+            tools:layout_constraintBaseline_creator="1" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            app:layout_constraintRight_toLeftOf="@+id/button3"
+            app:layout_constraintLeft_toRightOf="@+id/button"
+            tools:layout_constraintTop_creator="1"
+            android:layout_marginTop="65dp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            app:layout_constraintRight_toLeftOf="@+id/button4"
+            app:layout_constraintLeft_toRightOf="@+id/button2"
+            app:layout_constraintBaseline_toBaselineOf="@+id/button2"
+            tools:layout_constraintBaseline_creator="1" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/button3"
+            app:layout_constraintBaseline_toBaselineOf="@+id/button3"
+            tools:layout_constraintBaseline_creator="1" />
+
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            tools:layout_constraintRight_creator="1"
+            tools:layout_constraintBottom_creator="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:layout_constraintLeft_creator="1"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/button3"
+            app:layout_constraintVertical_bias="1.0" />
+    </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.ButtonBarLayout>

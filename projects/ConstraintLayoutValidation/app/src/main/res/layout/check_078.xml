@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:tag="0,0,228,1920"
+    tools:ignore="HardcodedText">
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,228,1920 0,0,228,300 0,126,0,1920"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,1761 0,0,1080,160 0,160,852,1553"/>
+
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#FFC107"
+        android:text="MIDDLE"
+        android:textColor="#FFF"
+        android:textSize="40sp"
+        android:tag="0,0,1080,160"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="76dp"
+        android:background="#8BC34A"
+        android:text="LOREM IPSUM DOLOR SIT AMET AB"
+        android:textColor="#FFF"
+        android:textSize="72sp"
+        android:tag="0,240,852,1553"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subtitle"/>
+
+</android.support.constraint.ConstraintLayout>

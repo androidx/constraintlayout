@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:tag="0,0,300,900"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <!-- b/79477300 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,450,1920 150,490,150,300 75,1280,300,150 150,490,300,300 150,1280,150,150"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,900 465,150,150,300 390,600,300,150 465,225,150,150 390,600,300,300"/>
+
+    <View
+        android:id="@+id/tall_outer"
+        android:tag="465,490,150,300"
+        android:layout_width="50dp"
+        android:layout_height="100dp"
+        android:background="#F00"
+        app:layout_constraintBottom_toTopOf="@id/wide_outer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <View
+        android:id="@+id/wide_outer"
+        android:tag="390,1280,300,150"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:background="#F00"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tall_outer"
+        />
+
+    <View
+        android:id="@+id/top_inner_square"
+        android:tag="465,565,150,150"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#80F0"
+        app:layout_constraintBottom_toBottomOf="@id/tall_outer"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="@id/tall_outer"
+        app:layout_constraintStart_toStartOf="@id/tall_outer"
+        app:layout_constraintTop_toTopOf="@id/tall_outer"
+        />
+
+    <View
+        android:id="@+id/bottom_inner_square"
+        android:tag="465,1280,150,150"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#80F0"
+        app:layout_constraintBottom_toBottomOf="@id/wide_outer"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="@id/wide_outer"
+        app:layout_constraintStart_toStartOf="@id/wide_outer"
+        app:layout_constraintTop_toTopOf="@id/wide_outer"
+        />
+
+</android.support.constraint.ConstraintLayout>

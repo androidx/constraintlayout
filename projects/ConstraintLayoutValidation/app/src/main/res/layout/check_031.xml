@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteY="81dp"
+    tools:layout_editor_absoluteX="0dp"
+    android:tag="0,0,273,57"
+    android:padding="0dp">
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,273,1920 102,0,24,57 126,0,26,57 0,0,0,0 152,0,28,57 33,0,27,57 93,0,26,57 152,0,27,57 212,0,28,57 102,0,0,0 180,0,0,0"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,57 304,0,24,57 530,0,26,57 0,0,0,0 757,0,28,57 194,0,27,57 416,0,26,57 636,0,27,57 858,0,28,57 102,0,0,0 987,0,0,0"/>
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="8dp"
+        android:layout_height="wrap_content"
+        android:tag="304,0,24,57"
+        android:text="A"
+        android:visibility="visible"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline7"
+        app:layout_constraintRight_toLeftOf="@+id/textView12"
+        tools:layout_editor_absoluteY="123dp" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="530,0,26,57"
+        android:text="B"
+        android:visibility="visible"
+        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintLeft_toRightOf="@+id/textView11"
+        app:layout_constraintRight_toLeftOf="@+id/textView13"
+        app:layout_constraintTop_toTopOf="@+id/textView11" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="0,0,0,0"
+        android:text="C"
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="@+id/textView12"
+        app:layout_constraintRight_toLeftOf="@+id/textView14"
+        app:layout_constraintTop_toTopOf="@+id/textView12" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="757,0,28,57"
+        android:text="D"
+        android:visibility="visible"
+        app:layout_constraintLeft_toRightOf="@+id/textView13"
+        app:layout_constraintRight_toLeftOf="@+id/guideline8"
+        app:layout_constraintTop_toTopOf="@+id/textView13" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="194,0,27,57"
+        android:text="A"
+        android:visibility="visible"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/textView8"
+        tools:layout_editor_absoluteY="230dp" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="416,0,26,57"
+        android:text="B"
+        android:visibility="visible"
+        app:layout_constraintLeft_toRightOf="@+id/textView7"
+        app:layout_constraintRight_toLeftOf="@+id/textView9"
+        tools:layout_editor_absoluteY="230dp" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="636,0,27,57"
+        android:text="C"
+        android:visibility="visible"
+        app:layout_constraintLeft_toRightOf="@+id/textView8"
+        app:layout_constraintRight_toLeftOf="@+id/textView10"
+        tools:layout_editor_absoluteY="230dp" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="858,0,28,57"
+        android:text="D"
+        android:visibility="visible"
+        app:layout_constraintLeft_toRightOf="@+id/textView9"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_editor_absoluteY="230dp" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="102,0,0,0"
+        android:id="@+id/guideline7"
+        app:layout_constraintGuide_begin="34dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="34dp" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="987,0,0,0"
+        android:id="@+id/guideline8"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="31dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="381dp" />
+
+</android.support.constraint.ConstraintLayout>

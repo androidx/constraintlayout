@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:tag="0,0,600,57"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- b/67737056 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,600,1920 120,1863,107,57 227,1863,186,57 413,1863,67,57"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,57 120,0,107,57 467,0,186,57 893,0,67,57"/>
+
+
+    <TextView
+        android:id="@+id/share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:gravity="center"
+        android:tag="120,1863,107,57"
+        android:text="Share"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/subscribe"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/subscribe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="467,1863,186,57"
+        android:text="Subscribe"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/share"
+        app:layout_constraintEnd_toStartOf="@+id/sell"
+        android:layout_marginEnd="0dp"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/sell"
+        android:text="Sell"
+        android:tag="893,1863,67,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/subscribe"
+        android:layout_marginEnd="40dp"
+        android:gravity="center"/>
+
+</android.support.constraint.ConstraintLayout>

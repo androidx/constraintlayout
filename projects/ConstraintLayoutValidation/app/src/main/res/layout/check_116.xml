@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="40dp"
+    android:paddingBottom="32dp"
+    android:paddingStart="32dp"
+    android:paddingEnd="32dp"
+    android:tag="0,0,432,1416"
+    android:background="#000">
+
+    <!-- https://buganizer.corp.google.com/issues/62357931 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,432,1920 96,372,240,1200 96,372,240,194 96,602,240,511 96,1113,240,410 96,1523,134,49 230,1523,106,49"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,647 96,120,888,431 96,120,888,97 96,253,888,115 96,368,888,134 420,502,134,49 554,502,106,49"/>
+
+    <View
+        android:id="@+id/bounding_layout"
+        android:tag="96,372,888,1200"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#BBB"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_max="500dp"
+        app:layout_constraintHeight_max="400dp"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:tag="96,372,888,97"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textColor="#FFF"
+        android:textSize="24sp"
+        android:text="screen limit"
+        android:lineSpacingExtra="4sp"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="@id/bounding_layout"
+        app:layout_constraintEnd_toEndOf="@id/bounding_layout"
+        app:layout_constraintTop_toTopOf="@+id/bounding_layout"
+        tools:layout_editor_absoluteX="230dp" />
+
+    <TextView
+        android:id="@+id/message"
+        android:tag="96,505,888,115"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:textColor="#888"
+        android:textSize="12sp"
+        android:lineSpacingExtra="8sp"
+        android:gravity="center"
+        android:text="Too many people are using your account right now.  Stop playing on one of these screens:"
+        app:layout_constraintStart_toStartOf="@id/bounding_layout"
+        app:layout_constraintEnd_toEndOf="@id/bounding_layout"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        tools:layout_editor_absoluteX="230dp" />
+
+    <TextView
+        android:id="@+id/devices_streaming"
+        android:tag="96,1005,888,134"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="#FFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:maxWidth="500dp"
+        android:lineSpacingExtra="4sp"
+        android:text="Android Phone - Arrow\nXbox One - Stranger Things"
+        app:layout_constraintStart_toStartOf="@id/bounding_layout"
+        app:layout_constraintEnd_toEndOf="@id/bounding_layout"
+        app:layout_constraintTop_toBottomOf="@+id/message"
+        tools:layout_editor_absoluteX="480dp"
+        app:layout_constraintBottom_toTopOf="@+id/cancel_button" />
+
+    <TextView
+        android:id="@+id/cancel_button"
+        android:tag="420,1523,134,49"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:text="CANCEL"
+        android:textColor="#FFF"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/bounding_layout"
+        app:layout_constraintEnd_toStartOf="@+id/retry_button"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="@id/bounding_layout" />
+
+    <TextView
+        android:id="@+id/retry_button"
+        android:tag="554,1523,106,49"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFF"
+        android:focusable="true"
+        android:textSize="12sp"
+        android:text="RETRY"
+        app:layout_constraintStart_toEndOf="@+id/cancel_button"
+        app:layout_constraintEnd_toEndOf="@+id/bounding_layout"
+        app:layout_constraintBottom_toBottomOf="@id/bounding_layout"
+        tools:layout_editor_absoluteX="343dp" />
+
+</android.support.constraint.ConstraintLayout>

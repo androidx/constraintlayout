@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layoutDirection="rtl"
+    android:tag="0,0,225,171"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- b/71765609 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,225,1920 0,875,225,57 0,932,225,57 0,989,225,57"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,171 428,0,225,57 428,57,225,57 428,114,225,57"/>
+
+    <TextView
+        android:id="@+id/top"
+        android:tag="428,875,225,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        app:layout_constraintBottom_toTopOf="@id/middle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/middle"
+        android:tag="428,932,225,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        app:layout_constraintBottom_toTopOf="@id/bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top" />
+
+    <TextView
+        android:id="@+id/bottom"
+        android:tag="428,989,225,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/middle" />
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:tag="0,0,8,6"
+    app:layout_optimizationLevel="none"
+    android:layout_height="wrap_content">
+
+    <!-- b/79122164 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,6,1920 6,0,0,0 6,5,0,0 0,0,0,0 0,0,6,5"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,810 6,0,1074,402 6,408,1074,402 0,0,0,0 0,0,1080,810"/>
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="2dp"
+        android:background="@android:color/black"
+        android:scaleType="centerCrop"
+        android:src="@android:drawable/alert_dark_frame"
+        android:visibility="visible"
+        android:tag="6,0,1074,402"
+        app:layout_constraintBottom_toTopOf="@+id/imageView3"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginLeft="0dp" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="2dp"
+        android:background="@android:color/black"
+        android:scaleType="centerCrop"
+        android:src="@android:drawable/alert_dark_frame"
+        android:visibility="visible"
+        android:tag="6,408,1074,402"
+        app:layout_constraintBottom_toTopOf="@+id/imageView4"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:layout_goneMarginLeft="0dp"
+        app:layout_goneMarginTop="0dp" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="2dp"
+        android:background="@android:color/black"
+        android:scaleType="centerCrop"
+        android:src="@android:drawable/alert_dark_frame"
+        android:visibility="gone"
+        android:tag="0,0,0,0"
+        app:layout_constraintBottom_toBottomOf="@+id/ratioSpace"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:layout_goneMarginLeft="0dp" />
+
+    <android.support.v4.widget.Space
+        android:id="@+id/ratioSpace"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:tag="0,0,1080,810"
+        app:layout_constraintDimensionRatio="4:3"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

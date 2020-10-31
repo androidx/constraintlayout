@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="#ddd"
+    android:tag="0,0,150,210">
+
+    <!-- b/77764955 -->
+
+    <tag
+        android:id="@+id/wrap_horizontal"
+        android:value="0,0,150,1920 0,0,150,60 150,0,0,0 0,60,0,0 0,60,150,150" />
+
+    <tag
+        android:id="@+id/wrap_vertical"
+        android:value="0,0,1080,1080 0,0,150,60 150,0,930,930 0,930,0,0 0,930,1080,150" />
+
+    <View
+        android:id="@+id/start_top_box"
+        android:layout_width="50dp"
+        android:layout_height="20dp"
+        android:background="#d00"
+        android:tag="0,0,150,60"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- The size of this view is not what we expect -->
+    <View
+        android:id="@+id/end_top_box"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#08f"
+        android:tag="150,0,930,930"
+        app:layout_constraintDimensionRatio="H,1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/start_top_box" />
+
+    <android.support.constraint.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="0,930,0,0"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="start_top_box,end_top_box" />
+
+    <View
+        android:id="@+id/bottom_box"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="#a0a"
+        android:tag="0,930,1080,150"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barrier" />
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_body"
+    android:tag="0,0,0,638"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#55aa55">
+
+    <!-- b/132314169 -->
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,0,1920 0,0,0,0 0,641,0,638"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,199 540,0,0,0 540,0,540,199"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/halfScreenGuideline"
+        android:tag="540,0,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <EditText android:layout_width="0dp"
+        android:tag="540,861,540,199"
+        android:layout_height="wrap_content"
+        android:maxLines="10"
+        android:text="Hello World Hello World Bonjour Le monde"
+        android:background="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/halfScreenGuideline"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constrainedHeight="true"
+        app:layout_constrainedWidth="true"
+        />
+
+</android.support.constraint.ConstraintLayout>

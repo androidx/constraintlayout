@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:tag="0,0,483,750"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- b/77549477 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,483,1920 24,693,171,57 312,204,171,57 0,0,0,0 195,0,0,0"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,750 24,693,171,57 312,204,171,57 0,0,0,0 195,0,0,0"/>
+
+    <TextView
+        android:id="@+id/textView27"
+        android:tag="24,693,171,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="231dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView25"
+        android:tag="312,204,171,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="104dp"
+        android:layout_marginTop="68dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView26"
+        android:tag="0,0,0,0"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="46dp"
+        android:text="TextView"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/textView25"
+        app:layout_constraintTop_toBottomOf="@+id/textView25" />
+
+    <android.support.constraint.Barrier
+        android:id="@+id/barrier3"
+        android:tag="195,0,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="right"
+        app:barrierAllowsGoneWidgets="false"
+        app:constraint_referenced_ids="textView27,textView26"
+        tools:layout_editor_absoluteX="411dp" />
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="0,0,285,144">
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,285,1920 48,0,0,0 237,0,0,0 69,0,0,144 132,0,0,144 195,0,0,144"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,144 48,0,0,0 1032,0,0,0 69,0,265,144 397,0,265,144 725,0,265,144"/>
+
+    <android.support.constraint.Guideline
+        android:tag="48,0,0,0"
+        android:id="@+id/guidelineLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guidelineRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:tag="1032,0,0,0"
+        app:layout_constraintGuide_end="16dp" />
+
+    <Button
+        android:id="@+id/buttonA"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="14dp"
+        android:text="A"
+        android:tag="69,0,265,144"
+        android:visibility="visible"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toLeftOf="@+id/guidelineLeft"
+        app:layout_constraintRight_toLeftOf="@+id/buttonB"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <Button
+        android:id="@+id/buttonB"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="14dp"
+        android:text="B"
+        android:tag="397,0,265,144"
+        android:visibility="visible"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@+id/buttonA"
+        app:layout_constraintRight_toLeftOf="@+id/buttonC"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <Button
+        android:id="@+id/buttonC"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="14dp"
+        android:text="C"
+        android:tag="725,0,265,144"
+        android:visibility="visible"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@+id/buttonB"
+        app:layout_constraintRight_toLeftOf="@+id/guidelineRight"
+        tools:layout_editor_absoluteY="0dp" />
+
+</android.support.constraint.ConstraintLayout>

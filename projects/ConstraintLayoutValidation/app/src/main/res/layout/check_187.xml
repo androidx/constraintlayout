@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/remote_global"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:fitsSystemWindows="true"
+    android:tag="0,0,1080,1920"
+    tools:ignore="HardcodedText,KeyboardInaccessibleWidget,UnusedAttribute">
+
+    <!-- b/77991323 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,1080,1920 0,0,1080,120 108,144,864,864 108,1032,864,864 108,144,288,288 396,144,288,288 684,144,288,288 108,432,288,288 396,432,288,288 684,432,288,288 108,720,288,288 396,720,288,288 684,720,288,288 80,0,120,120 280,0,120,120 480,0,120,120 680,0,120,120 880,0,120,120"/>
+
+
+    <tag
+        android:id="@+id/wrap_vertical"
+        android:value="0,0,1080,1920 0,0,1080,120 108,144,864,864 108,1032,864,864 108,144,288,288 396,144,288,288 684,144,288,288 108,432,288,288 396,432,288,288 684,432,288,288 108,720,288,288 396,720,288,288 684,720,288,288 80,0,120,120 280,0,120,120 480,0,120,120 680,0,120,120 880,0,120,120" />
+
+
+    <View
+        android:id="@+id/remote_top_bar"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:background="#999"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:tag="0,0,1080,120"
+        app:layout_constraintBottom_toTopOf="@+id/remote_control_buttons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/remote_control_buttons"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:tag="108,144,864,864"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/remote_control"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/remote_top_bar" />
+
+    <View
+        android:id="@+id/remote_control"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/colorAccent"
+        android:tag="108,1032,864,864"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/remote_control_buttons" />
+
+    <!--<include layout="@layout/include_remote_control" />-->
+
+    <View
+        android:id="@+id/remote_volumedown"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#0F0"
+        android:hapticFeedbackEnabled="false"
+        android:scaleType="centerCrop"
+        android:soundEffectsEnabled="false"
+        android:tag="108,144,288,288"
+        app:layout_constraintBottom_toTopOf="@+id/remote_display"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/remote_volumemute"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="@+id/remote_control_buttons"
+        app:layout_constraintTop_toTopOf="@+id/remote_control_buttons"
+        app:layout_constraintVertical_chainStyle="spread" />
+
+    <View
+        android:id="@+id/remote_volumemute"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#0FF"
+        android:hapticFeedbackEnabled="false"
+        android:scaleType="centerCrop"
+        android:soundEffectsEnabled="false"
+        android:tag="396,144,288,288"
+        app:layout_constraintBottom_toTopOf="@+id/remote_info"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/remote_volumeup"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@+id/remote_volumedown"
+        app:layout_constraintTop_toTopOf="@+id/remote_control_buttons"
+        app:layout_constraintVertical_chainStyle="spread" />
+
+    <View
+        android:id="@+id/remote_volumeup"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#0F0"
+        android:hapticFeedbackEnabled="false"
+        android:scaleType="centerCrop"
+        android:soundEffectsEnabled="false"
+        android:tag="684,144,288,288"
+        app:layout_constraintBottom_toTopOf="@+id/remote_keyboard"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="@+id/remote_control_buttons"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@+id/remote_volumemute"
+        app:layout_constraintTop_toTopOf="@+id/remote_control_buttons"
+        app:layout_constraintVertical_chainStyle="spread" />
+
+    <View
+        android:id="@+id/remote_display"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#0FF"
+        android:hapticFeedbackEnabled="false"
+        android:scaleType="centerCrop"
+        android:soundEffectsEnabled="false"
+        android:tag="108,432,288,288"
+        app:layout_constraintBottom_toTopOf="@+id/remote_return"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/remote_info"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="@+id/remote_control_buttons"
+        app:layout_constraintTop_toBottomOf="@+id/remote_volumedown"
+        app:layout_constraintVertical_chainStyle="spread" />
+
+    <View
+        android:id="@+id/remote_info"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#0F0"
+        android:hapticFeedbackEnabled="false"
+        android:scaleType="centerCrop"
+        android:soundEffectsEnabled="false"
+        android:tag="396,432,288,288"
+        app:layout_constraintBottom_toTopOf="@+id/remote_middle_bottom"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/remote_keyboard"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@id/remote_display"
+        app:layout_constraintTop_toBottomOf="@id/remote_volumemute"
+        app:layout_constraintVertical_chainStyle="spread" />
+
+    <View
+        android:id="@+id/remote_keyboard"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#0FF"
+        android:hapticFeedbackEnabled="false"
+        android:scaleType="centerCrop"
+        android:soundEffectsEnabled="false"
+        android:tag="684,432,288,288"
+        app:layout_constraintBottom_toTopOf="@+id/remote_context"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="@+id/remote_control_buttons"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@id/remote_info"
+        app:layout_constraintTop_toBottomOf="@id/remote_volumedown"
+        app:layout_constraintVertical_chainStyle="spread" />
+
+    <View
+        android:id="@+id/remote_return"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#0F0"
+        android:hapticFeedbackEnabled="false"
+        android:scaleType="centerCrop"
+        android:soundEffectsEnabled="false"
+        android:tag="108,720,288,288"
+        app:layout_constraintBottom_toBottomOf="@+id/remote_control_buttons"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/remote_middle_bottom"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="@+id/remote_control_buttons"
+        app:layout_constraintTop_toBottomOf="@+id/remote_display"
+        app:layout_constraintVertical_chainStyle="spread" />
+
+    <View
+        android:id="@+id/remote_middle_bottom"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:tag="396,720,288,288"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/remote_control_buttons"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/remote_context"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@+id/remote_return"
+        app:layout_constraintTop_toBottomOf="@id/remote_info"
+        app:layout_constraintVertical_chainStyle="spread" />
+
+    <View
+        android:id="@+id/remote_context"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#0F0"
+        android:hapticFeedbackEnabled="false"
+        android:scaleType="centerCrop"
+        android:soundEffectsEnabled="false"
+        android:tag="684,720,288,288"
+        app:layout_constraintBottom_toBottomOf="@+id/remote_control_buttons"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="@+id/remote_control_buttons"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@+id/remote_middle_bottom"
+        app:layout_constraintTop_toBottomOf="@id/remote_keyboard"
+        app:layout_constraintVertical_chainStyle="spread" />
+
+    <View
+        android:id="@+id/remote_home"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#FF0"
+        android:hapticFeedbackEnabled="false"
+        android:scaleType="centerCrop"
+        android:soundEffectsEnabled="false"
+        android:tag="80,0,120,120"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/remote_movies"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="@+id/remote_top_bar"
+        app:layout_constraintTop_toTopOf="@+id/remote_top_bar" />
+
+    <View
+        android:id="@+id/remote_movies"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#F0F"
+        android:hapticFeedbackEnabled="false"
+        android:scaleType="centerCrop"
+        android:soundEffectsEnabled="false"
+        android:tag="280,0,120,120"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/remote_tv"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@+id/remote_home"
+        app:layout_constraintTop_toTopOf="@+id/remote_top_bar" />
+
+    <View
+        android:id="@+id/remote_tv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#FF0"
+        android:hapticFeedbackEnabled="false"
+        android:scaleType="centerCrop"
+        android:soundEffectsEnabled="false"
+        android:tag="480,0,120,120"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/remote_music"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@+id/remote_movies"
+        app:layout_constraintTop_toTopOf="@+id/remote_top_bar" />
+
+    <View
+        android:id="@+id/remote_music"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#F0F"
+        android:hapticFeedbackEnabled="false"
+        android:scaleType="centerCrop"
+        android:soundEffectsEnabled="false"
+        android:tag="680,0,120,120"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/remote_picture"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@+id/remote_tv"
+        app:layout_constraintTop_toTopOf="@+id/remote_top_bar" />
+
+    <View
+        android:id="@+id/remote_picture"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#FF0"
+        android:hapticFeedbackEnabled="false"
+        android:scaleType="centerCrop"
+        android:soundEffectsEnabled="false"
+        android:tag="880,0,120,120"
+        app:layout_constraintBottom_toBottomOf="@+id/remote_top_bar"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="@id/remote_top_bar"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@+id/remote_music"
+        app:layout_constraintTop_toTopOf="@+id/remote_top_bar" />
+
+</android.support.constraint.ConstraintLayout>

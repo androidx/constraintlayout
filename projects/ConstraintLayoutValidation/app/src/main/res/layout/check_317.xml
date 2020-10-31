@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/remote_global"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@null"
+    tools:ignore="HardcodedText,UnusedAttribute">
+
+    <!-- b/151317170 -->
+    
+    <ImageView
+        android:id="@+id/remote_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
+    <View
+        android:id="@+id/remote_action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#111"
+        app:layout_constraintBottom_toTopOf="@+id/remote_control_buttons"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread_inside" />
+
+    <View
+        android:id="@+id/remote_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#111"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/remote_control_buttons" />
+
+    <Space
+        android:id="@+id/remote_control_buttons"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/remote_top_bar"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toEndOf="@+id/remote_control_spacer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/remote_action_bar" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/remote_control_spacer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <Space
+        android:id="@+id/remote_control"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/remote_top_bar"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/remote_control_spacer"
+        app:layout_constraintTop_toBottomOf="@+id/remote_action_bar" />
+
+    <include layout="@layout/include_remote_control" />
+
+    <Button
+        android:id="@+id/remote_volumeup"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#00F"
+        app:layout_constraintBottom_toTopOf="@+id/remote_volumemute"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@+id/remote_display"
+        app:layout_constraintStart_toStartOf="@+id/remote_control_buttons"
+        app:layout_constraintTop_toTopOf="@+id/remote_control_buttons"/>
+
+    <Button
+        android:id="@+id/remote_display"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#00F"
+        app:layout_constraintBottom_toTopOf="@+id/remote_info"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@+id/remote_context"
+        app:layout_constraintStart_toEndOf="@+id/remote_volumeup"
+        app:layout_constraintTop_toTopOf="@+id/remote_control_buttons" />
+
+    <Button
+        android:id="@+id/remote_context"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#00F"
+        app:layout_constraintBottom_toTopOf="@+id/remote_middle_right"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toEndOf="@+id/remote_control_buttons"
+        app:layout_constraintStart_toEndOf="@+id/remote_display"
+        app:layout_constraintTop_toTopOf="@id/remote_control_buttons" />
+
+    <Button
+        android:id="@+id/remote_volumemute"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#00F"
+        app:layout_constraintBottom_toTopOf="@+id/remote_volumedown"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@+id/remote_info"
+        app:layout_constraintStart_toStartOf="@+id/remote_control_buttons"
+        app:layout_constraintTop_toBottomOf="@+id/remote_volumeup" />
+
+    <Button
+        android:id="@+id/remote_info"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#00F"
+        app:layout_constraintBottom_toTopOf="@+id/remote_keyboard"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@+id/remote_middle_right"
+        app:layout_constraintStart_toEndOf="@id/remote_volumemute"
+        app:layout_constraintTop_toBottomOf="@id/remote_display"/>
+
+    <Space
+        android:id="@+id/remote_middle_right"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/remote_return"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toEndOf="@+id/remote_control_buttons"
+        app:layout_constraintStart_toEndOf="@+id/remote_info"
+        app:layout_constraintTop_toBottomOf="@id/remote_context" />
+
+    <Button
+        android:id="@+id/remote_volumedown"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#00F"
+        app:layout_constraintBottom_toBottomOf="@+id/remote_control_buttons"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@+id/remote_keyboard"
+        app:layout_constraintStart_toStartOf="@+id/remote_control_buttons"
+        app:layout_constraintTop_toBottomOf="@+id/remote_volumemute"/>
+
+    <Button
+        android:id="@+id/remote_keyboard"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#00F"
+        app:layout_constraintBottom_toBottomOf="@+id/remote_control_buttons"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@+id/remote_return"
+        app:layout_constraintStart_toEndOf="@id/remote_volumedown"
+        app:layout_constraintTop_toBottomOf="@id/remote_info" />
+
+    <Button
+        android:id="@+id/remote_return"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#00F"
+        app:layout_constraintBottom_toBottomOf="@+id/remote_control_buttons"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toEndOf="@+id/remote_control_buttons"
+        app:layout_constraintStart_toEndOf="@+id/remote_keyboard"
+        app:layout_constraintTop_toBottomOf="@+id/remote_middle_right" />
+
+    <Button
+        android:id="@+id/remote_home"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@null"
+        android:foreground="#F00"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@+id/remote_movies"
+        app:layout_constraintStart_toStartOf="@+id/remote_top_bar"
+        app:layout_constraintTop_toTopOf="@+id/remote_top_bar" />
+
+    <Button
+        android:id="@+id/remote_movies"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@null"
+        android:foreground="#F00"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@+id/remote_tv"
+        app:layout_constraintStart_toEndOf="@+id/remote_home"
+        app:layout_constraintTop_toTopOf="@+id/remote_top_bar" />
+
+    <Button
+        android:id="@+id/remote_tv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@null"
+        android:foreground="#F00"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@+id/remote_music"
+        app:layout_constraintStart_toEndOf="@+id/remote_movies"
+        app:layout_constraintTop_toTopOf="@+id/remote_top_bar" />
+
+    <Button
+        android:id="@+id/remote_music"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@null"
+        android:foreground="#F00"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toStartOf="@+id/remote_picture"
+        app:layout_constraintStart_toEndOf="@+id/remote_tv"
+        app:layout_constraintTop_toTopOf="@+id/remote_top_bar" />
+
+    <Button
+        android:id="@+id/remote_picture"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@null"
+        android:foreground="#F00"
+        app:layout_constraintBottom_toBottomOf="@+id/remote_top_bar"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toEndOf="@id/remote_top_bar"
+        app:layout_constraintStart_toEndOf="@+id/remote_music"
+        app:layout_constraintTop_toTopOf="@+id/remote_top_bar" />
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="0,0,864,264"
+    app:layout_optimizationLevel="none"
+    tools:context=".MainActivity">
+
+    <!-- b/78375926 -->
+
+    <tag
+        android:id="@+id/wrap_horizontal"
+        android:value="0,0,864,1920 24,144,240,0 312,24,240,240 600,48,240,192" />
+
+    <tag
+        android:id="@+id/wrap_vertical"
+        android:value="0,0,1080,336 24,180,312,0 384,24,312,312 744,55,312,250" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:contentDescription="@null"
+        android:tag="24,180,312,0"
+        app:layout_constraintBottom_toBottomOf="@id/imageView2"
+        app:layout_constraintEnd_toStartOf="@+id/imageView2"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/imageView2">
+
+        <aapt:attr name="app:srcCompat">
+
+            <vector
+                android:width="24dp"
+                android:height="24dp"
+                android:viewportWidth="24.0"
+                android:viewportHeight="24.0">
+
+                <path
+                    android:fillColor="@color/colorPrimary"
+                    android:pathData="M21,3H3C2,3 1,4 1,5v14c0,1.1 0.9,2 2,2h18c1,0 2,-1 2,-2V5c0,-1 -1,-2 -2,-2zM5,17l3.5,-4.5 2.5,3.01L14.5,11l4.5,6H5z" />
+            </vector>
+        </aapt:attr>
+    </ImageView>
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:contentDescription="@null"
+        android:tag="384,24,312,312"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintEnd_toStartOf="@id/imageView3"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/imageView1"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <aapt:attr name="app:srcCompat">
+
+            <vector
+                android:width="24dp"
+                android:height="24dp"
+                android:viewportWidth="24.0"
+                android:viewportHeight="24.0">
+
+                <path
+                    android:fillColor="@color/colorPrimary"
+                    android:pathData="M21,15h2v2h-2v-2zM21,11h2v2h-2v-2zM23,19h-2v2c1,0 2,-1 2,-2zM13,3h2v2h-2L13,3zM21,7h2v2h-2L21,7zM21,3v2h2c0,-1 -1,-2 -2,-2zM1,7h2v2L1,9L1,7zM17,3h2v2h-2L17,3zM17,19h2v2h-2v-2zM3,3C2,3 1,4 1,5h2L3,3zM9,3h2v2L9,5L9,3zM5,3h2v2L5,5L5,3zM1,11v8c0,1.1 0.9,2 2,2h12L15,11L1,11zM3,19l2.5,-3.21 1.79,2.15 2.5,-3.22L13,19L3,19z" />
+            </vector>
+        </aapt:attr>
+    </ImageView>
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:contentDescription="@null"
+        android:tag="744,55,312,250"
+        app:layout_constraintBottom_toBottomOf="@id/imageView2"
+        app:layout_constraintDimensionRatio="h,5:4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintTop_toTopOf="@id/imageView2">
+
+        <aapt:attr name="app:srcCompat">
+
+            <vector
+                android:width="50dp"
+                android:height="40dp"
+                android:viewportWidth="50"
+                android:viewportHeight="40">
+
+                <path
+                    android:pathData="M5,20H45M12,12 L4,20 12,28M38,12 L46,20 38,28"
+                    android:strokeWidth="4"
+                    android:strokeColor="@color/colorPrimary"
+                    android:strokeLineCap="round"
+                    android:strokeLineJoin="round" />
+            </vector>
+        </aapt:attr>
+    </ImageView>
+</android.support.constraint.ConstraintLayout>

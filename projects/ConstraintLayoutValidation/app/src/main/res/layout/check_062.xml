@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorAccent"
+    android:tag="0,0,48,947">
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,48,1920 24,-143,0,449 24,0,0,57 24,81,0,57 0,816,48,450"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,612 24,53,516,57 540,0,516,57 540,81,516,57 0,162,1080,450"/>
+
+    <TextView
+        android:id="@+id/toplabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:tag="24,53,516,57"
+        android:text="Top Label"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/top_bottom_label"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/top_right_label"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/top_right_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="0dp"
+        android:ellipsize="end"
+        android:gravity="end"
+        android:maxLines="1"
+        android:tag="540,0,516,57"
+        android:text="Top Right Label"
+        app:layout_constraintBottom_toTopOf="@+id/top_bottom_label"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toRightOf="@+id/toplabel"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/top_bottom_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:gravity="end"
+        android:maxLines="1"
+        android:tag="540,81,516,57"
+        android:text="Top Bottom Label"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toRightOf="@+id/toplabel"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top_right_label" />
+
+    <ImageView
+        android:id="@+id/imageview"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="8dp"
+        android:tag="0,816,1080,450"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top_bottom_label"
+        app:srcCompat="@android:color/darker_gray" />
+</android.support.constraint.ConstraintLayout>

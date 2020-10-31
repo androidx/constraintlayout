@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="60dp"
+    android:layout_marginLeft="60dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginRight="10dp"
+    android:background="#eeeeff"
+    android:id="@+id/activity_main"
+    android:tag="0,0,300,570">
+
+    <!-- Barriers at start of file. -->
+
+    <!-- Note: Wrap content may be incorrect. Won't fix atm. -->
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,300,1920 -89,0,0,0 390,0,0,0 30,30,270,270 0,300,270,270"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,570 690,0,0,0 390,0,0,0 30,30,270,270 780,300,270,270"/>
+
+    <android.support.constraint.Barrier
+        android:id="@+id/barrierStart"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:tag="690,0,0,0"
+        app:barrierDirection="start"
+        app:constraint_referenced_ids="image2"
+        tools:layout_editor_absoluteX="229dp" />
+
+    <android.support.constraint.Barrier
+        android:id="@+id/barrierEnd"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:tag="390,0,0,0"
+        app:barrierDirection="end"
+        app:constraint_referenced_ids="image"
+        tools:layout_editor_absoluteX="232dp" />
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="30dp"
+        android:background="#b2b2b2"
+        android:padding="1dp"
+        android:tag="30,30,270,270"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="@+id/barrierEnd"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/image2"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="10dp"
+        android:background="#b2b2b2"
+        android:padding="1dp"
+        android:tag="780,300,270,270"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/barrierStart"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--app:layout_constraintWidth_default="wrap"-->
+
+</android.support.constraint.ConstraintLayout>

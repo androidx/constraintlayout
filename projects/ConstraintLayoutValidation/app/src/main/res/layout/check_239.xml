@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_body"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="0,0,0,900"
+    android:background="#55aa55">
+
+    <!-- b/132651320 -->
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,0,1920 0,0,0,900 0,900,0,1020"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,144 0,0,1080,144 0,144,1080,0"/>
+
+    <android.support.constraint.ConstraintLayout
+        android:tag="0,0,1080,144"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="#00FFFF"
+        android:id="@+id/header">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView4"
+            android:textAppearance="?attr/textAppearanceListItem"
+            app:layout_constraintTop_toTopOf="parent" android:typeface="monospace"
+            android:text="+61.890657N +006.675782E"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/location_image"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"/>
+        <ImageView
+            android:contentDescription="location_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:id="@+id/location_image"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        <TextView
+            android:text="\@2019-01-13 12:34:56 NO"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView10"
+            android:typeface="monospace"
+            app:layout_constraintTop_toBottomOf="@+id/textView4" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toEndOf="@+id/location_image" android:layout_marginStart="4dp"
+            android:textAppearance="?attr/textAppearanceListItem"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/text_home"
+        android:tag="0,144,1080,1776"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:textSize="24sp"
+        android:text="No stations loaded..."
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header"
+        android:textColor="#FF0000"
+        android:textStyle="bold|italic"
+        android:gravity="center"/>
+
+</android.support.constraint.ConstraintLayout>

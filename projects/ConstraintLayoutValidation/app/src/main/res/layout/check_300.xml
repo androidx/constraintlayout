@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="320dp"
+    android:layout_gravity="center"
+    android:layout_height="wrap_content">
+
+    <!-- b/144298723 -->
+
+
+    <android.support.constraint.helper.Flow
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:background="#FFC107"
+        app:flow_horizontalBias="0"
+        app:flow_horizontalGap="10dp"
+        app:flow_horizontalStyle="packed"
+        app:flow_verticalBias="0"
+        app:flow_verticalGap="10dp"
+        app:flow_wrapMode="chain"
+        app:constraint_referenced_ids="frameLayout1,frameLayout2,frameLayout3,frameLayout4,frameLayout5" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@color/colorAccent"
+        tools:ignore="MissingConstraints" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout2"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@color/colorAccent"
+        tools:ignore="MissingConstraints" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout3"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@color/colorAccent"
+        tools:ignore="MissingConstraints" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout4"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@color/colorAccent"
+        tools:ignore="MissingConstraints" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout5"
+        android:layout_width="210dp"
+        android:layout_height="100dp"
+        android:background="@color/colorAccent"
+        tools:ignore="MissingConstraints" />
+
+</android.support.constraint.ConstraintLayout>

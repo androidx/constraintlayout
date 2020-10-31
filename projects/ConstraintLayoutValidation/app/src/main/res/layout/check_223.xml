@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="0,0,882,882"
+    app:layout_optimizationLevel="none">
+
+    <!-- b/124393570 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,882,1920 300,0,0,0 0,1267,0,0 0,967,600,600 168,1135,264,265 300,0,1,1920 0,1267,882,1 297,1264,6,6"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,882 367,0,0,0 0,582,0,0 67,282,600,600 205,420,324,324 367,0,1,882 0,582,1080,1 364,579,6,6"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guide_x"
+        android:tag="367,0,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.34" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guide_y"
+        android:tag="0,1267,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.66" />
+
+    <TextView
+        android:id="@+id/frame_right"
+        android:tag="67,967,600,600"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="#8080ff"
+        android:text="RIGHT"
+        app:layout_constraintBottom_toBottomOf="@+id/guide_y"
+        app:layout_constraintLeft_toLeftOf="@+id/guide_x"
+        app:layout_constraintRight_toRightOf="@+id/guide_x"
+        app:layout_constraintTop_toTopOf="@+id/guide_y" />
+
+    <TextView
+        android:id="@+id/frame_wrong"
+        android:tag="205,1105,324,324"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#80ff80"
+        android:text="WRONG"
+        app:layout_constraintBottom_toBottomOf="@+id/guide_y"
+        app:layout_constraintDimensionRatio="H,1:1"
+        app:layout_constraintLeft_toLeftOf="@+id/guide_x"
+        app:layout_constraintRight_toRightOf="@+id/guide_x"
+        app:layout_constraintTop_toTopOf="@+id/guide_y"
+        app:layout_constraintWidth_percent="0.30" />
+
+    <View
+        android:id="@+id/vertical_line"
+        android:tag="367,0,1,1920"
+        android:layout_width="0.3dp"
+        android:layout_height="0dp"
+        android:background="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/guide_x"
+        app:layout_constraintRight_toRightOf="@+id/guide_x"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/horizontal_line"
+        android:tag="0,1267,1080,1"
+        android:layout_width="0dp"
+        android:layout_height="0.3dp"
+        android:background="#000000"
+        app:layout_constraintBottom_toBottomOf="@+id/guide_y"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guide_y" />
+
+    <View
+        android:id="@+id/the_center_point"
+        android:tag="364,1264,6,6"
+        android:layout_width="2dp"
+        android:layout_height="2dp"
+        android:background="#ff0000"
+        app:layout_constraintBottom_toBottomOf="@+id/guide_y"
+        app:layout_constraintLeft_toLeftOf="@+id/guide_x"
+        app:layout_constraintRight_toRightOf="@+id/guide_x"
+        app:layout_constraintTop_toTopOf="@+id/guide_y" />
+
+</android.support.constraint.ConstraintLayout>
