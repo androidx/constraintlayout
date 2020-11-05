@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:tag="0,0,647,219"
@@ -8,7 +8,7 @@
 
     <!-- b/144668321 -->
 
-    <android.support.constraint.helper.Flow
+    <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/flow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
         app:constraint_referenced_ids="button2,button3,button4,button5,button6,button7"
         app:flow_maxElementsWrap="3"
         app:flow_wrapMode="chain"
-        tools:ignore="MissingConstraints"></android.support.constraint.helper.Flow>
+        tools:ignore="MissingConstraints"></androidx.constraintlayout.helper.widget.Flow>
 
     <Button
         android:id="@+id/button2"
@@ -77,4 +77,4 @@
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="240dp"
         tools:layout_editor_absoluteY="166dp" />
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

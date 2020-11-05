@@ -1,5 +1,5 @@
 {
-  "duration": "2000",
+  "duration": "210000",
   "layout": {
     "children": [
       {
@@ -26,20 +26,20 @@
           "top": "59",
           "left": "0",
           "bottom": "203",
-          "right": "381"
+          "right": "453"
         },
         "id": "remove_button",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
           "top": "59",
           "left": "0",
           "bottom": "203",
-          "right": "297"
+          "right": "357"
         },
         "id": "add_new_card",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       }
     ],
     "bounds": {

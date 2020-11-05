@@ -1,26 +1,26 @@
 {
-  "duration": "4847",
+  "duration": "184000",
   "layout": {
     "children": [
       {
         "bounds": {
           "top": "0",
-          "left": "906",
+          "left": "886",
           "bottom": "144",
           "right": "1170"
         },
         "id": "button17",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
           "top": "0",
-          "left": "465",
+          "left": "445",
           "bottom": "144",
           "right": "729"
         },
         "id": "button18",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       }
     ],
     "bounds": {

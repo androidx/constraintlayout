@@ -1,5 +1,5 @@
 {
-  "duration": "61356",
+  "duration": "215500",
   "layout": {
     "children": [
       {
@@ -10,7 +10,7 @@
           "right": "413"
         },
         "id": "albumView_albumTitle",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -20,7 +20,7 @@
           "right": "387"
         },
         "id": "albumView_trackDetails",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {

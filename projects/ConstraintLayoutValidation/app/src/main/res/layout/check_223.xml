@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
@@ -13,7 +13,7 @@
     <tag android:id="@+id/wrap_horizontal" android:value="0,0,882,1920 300,0,0,0 0,1267,0,0 0,967,600,600 168,1135,264,265 300,0,1,1920 0,1267,882,1 297,1264,6,6"/>
     <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,882 367,0,0,0 0,582,0,0 67,282,600,600 205,420,324,324 367,0,1,882 0,582,1080,1 364,579,6,6"/>
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guide_x"
         android:tag="367,0,0,0"
         android:layout_width="wrap_content"
@@ -21,7 +21,7 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.34" />
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guide_y"
         android:tag="0,1267,0,0"
         android:layout_width="wrap_content"
@@ -88,4 +88,4 @@
         app:layout_constraintRight_toRightOf="@+id/guide_x"
         app:layout_constraintTop_toTopOf="@+id/guide_y" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

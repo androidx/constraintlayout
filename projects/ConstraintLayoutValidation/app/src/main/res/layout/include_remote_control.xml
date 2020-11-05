@@ -139,7 +139,7 @@
         app:layout_constraintRight_toRightOf="@id/remote_control"
         app:tint="?attr/colorPrimary" />
 
-    <android.support.constraint.Group
+    <androidx.constraintlayout.widget.Group
         android:id="@+id/remote_keys"
         android:layout_width="0dp"
         android:layout_height="0dp"

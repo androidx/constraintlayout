@@ -1,5 +1,5 @@
 {
-  "duration": "694636",
+  "duration": "546500",
   "layout": {
     "children": [
       {
@@ -10,7 +10,7 @@
           "right": "136"
         },
         "id": "dialog_title",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -40,7 +40,7 @@
           "right": "165"
         },
         "id": "app_label",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -50,7 +50,7 @@
           "right": "1056"
         },
         "id": "app_version",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -60,7 +60,7 @@
           "right": "148"
         },
         "id": "device_label",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -70,7 +70,7 @@
           "right": "1056"
         },
         "id": "device_version",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -80,7 +80,7 @@
           "right": "319"
         },
         "id": "android_label",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -90,7 +90,7 @@
           "right": "1056"
         },
         "id": "android_version",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -100,7 +100,7 @@
           "right": "173"
         },
         "id": "support_label",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -110,7 +110,7 @@
           "right": "1056"
         },
         "id": "support_email",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -120,7 +120,7 @@
           "right": "1056"
         },
         "id": "support_phone",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -130,7 +130,7 @@
           "right": "1056"
         },
         "id": "support_terms",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -140,7 +140,7 @@
           "right": "1056"
         },
         "id": "support_privacy",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -150,7 +150,7 @@
           "right": "100"
         },
         "id": "url_label",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -160,7 +160,7 @@
           "right": "1056"
         },
         "id": "support_url",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -170,7 +170,7 @@
           "right": "89"
         },
         "id": "api_label",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -180,7 +180,7 @@
           "right": "1056"
         },
         "id": "support_api",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {

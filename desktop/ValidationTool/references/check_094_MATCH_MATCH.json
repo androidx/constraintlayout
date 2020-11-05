@@ -1,5 +1,5 @@
 {
-  "duration": "20579",
+  "duration": "313500",
   "layout": {
     "children": [
       {
@@ -10,7 +10,7 @@
           "right": "723"
         },
         "id": "item_name",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -20,7 +20,7 @@
           "right": "873"
         },
         "id": "item_description",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -30,7 +30,7 @@
           "right": "873"
         },
         "id": "item_price",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {

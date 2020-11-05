@@ -1,5 +1,5 @@
 {
-  "duration": "3140",
+  "duration": "2270000",
   "layout": {
     "children": [{
       "children": [
@@ -7,39 +7,39 @@
           "children": [
             {
               "bounds": {
-                "top": "48",
+                "top": "53",
                 "left": "48",
-                "bottom": "113",
-                "right": "844"
+                "bottom": "118",
+                "right": "840"
               },
               "id": "title_text_view",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "bounds": {
-                "top": "125",
+                "top": "130",
                 "left": "48",
-                "bottom": "1505",
-                "right": "844"
+                "bottom": "1559",
+                "right": "840"
               },
               "id": "description_text_view",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "bounds": {
-                "top": "125",
+                "top": "130",
                 "left": "48",
-                "bottom": "182",
-                "right": "844"
+                "bottom": "187",
+                "right": "840"
               },
               "id": "switch_spacer",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "bounds": {
-                "top": "75",
-                "left": "892",
-                "bottom": "156",
+                "top": "48",
+                "left": "888",
+                "bottom": "192",
                 "right": "1032"
               },
               "id": "switch_compat",
@@ -49,7 +49,7 @@
           "bounds": {
             "top": "0",
             "left": "0",
-            "bottom": "1553",
+            "bottom": "1612",
             "right": "1080"
           },
           "class": "ConstraintLayout"
@@ -58,39 +58,39 @@
           "children": [
             {
               "bounds": {
-                "top": "48",
+                "top": "53",
                 "left": "48",
-                "bottom": "113",
-                "right": "844"
+                "bottom": "118",
+                "right": "840"
               },
               "id": "title_text_view",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "bounds": {
-                "top": "125",
+                "top": "130",
                 "left": "48",
-                "bottom": "1505",
-                "right": "844"
+                "bottom": "1559",
+                "right": "840"
               },
               "id": "description_text_view",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "bounds": {
-                "top": "125",
+                "top": "130",
                 "left": "48",
-                "bottom": "182",
-                "right": "844"
+                "bottom": "187",
+                "right": "840"
               },
               "id": "switch_spacer",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "bounds": {
-                "top": "75",
-                "left": "892",
-                "bottom": "156",
+                "top": "48",
+                "left": "888",
+                "bottom": "192",
                 "right": "1032"
               },
               "id": "switch_compat",
@@ -98,9 +98,9 @@
             }
           ],
           "bounds": {
-            "top": "1553",
+            "top": "1612",
             "left": "0",
-            "bottom": "3106",
+            "bottom": "3224",
             "right": "1080"
           },
           "class": "ConstraintLayout"
@@ -109,7 +109,7 @@
       "bounds": {
         "top": "0",
         "left": "0",
-        "bottom": "3106",
+        "bottom": "3224",
         "right": "1080"
       },
       "class": "LinearLayout"

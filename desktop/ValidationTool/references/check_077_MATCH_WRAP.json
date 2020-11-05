@@ -1,5 +1,5 @@
 {
-  "duration": "1402",
+  "duration": "527500",
   "layout": {
     "children": [
       {
@@ -7,57 +7,57 @@
           {
             "bounds": {
               "top": "195",
-              "left": "0",
+              "left": "-27",
               "bottom": "339",
-              "right": "264"
+              "right": "256"
             },
             "id": "button",
-            "class": "AppCompatButton"
+            "class": "MaterialButton"
           },
           {
             "bounds": {
               "top": "195",
-              "left": "264",
+              "left": "256",
               "bottom": "339",
-              "right": "528"
+              "right": "540"
             },
             "id": "button2",
-            "class": "AppCompatButton"
+            "class": "MaterialButton"
           },
           {
             "bounds": {
               "top": "195",
-              "left": "528",
+              "left": "540",
               "bottom": "339",
-              "right": "792"
+              "right": "824"
             },
             "id": "button3",
-            "class": "AppCompatButton"
+            "class": "MaterialButton"
           },
           {
             "bounds": {
               "top": "195",
-              "left": "792",
+              "left": "824",
               "bottom": "339",
-              "right": "1056"
+              "right": "1108"
             },
             "id": "button4",
-            "class": "AppCompatButton"
+            "class": "MaterialButton"
           },
           {
             "bounds": {
               "top": "363",
-              "left": "396",
+              "left": "398",
               "bottom": "507",
-              "right": "660"
+              "right": "682"
             },
             "id": "button5",
-            "class": "AppCompatButton"
+            "class": "MaterialButton"
           }
         ],
         "bounds": {
           "top": "0",
-          "left": "24",
+          "left": "0",
           "bottom": "555",
           "right": "1080"
         },

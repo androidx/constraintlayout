@@ -1,5 +1,5 @@
 {
-  "duration": "109027",
+  "duration": "204000",
   "layout": {
     "children": [
       {
@@ -20,7 +20,7 @@
           "right": "0"
         },
         "id": "tv_name",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       }
     ],
     "bounds": {

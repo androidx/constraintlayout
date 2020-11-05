@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="#F99"
@@ -10,7 +10,7 @@
     android:paddingEnd="24dp"
     android:paddingBottom="8dp">
 
-    <android.support.constraint.Barrier
+    <androidx.constraintlayout.widget.Barrier
         android:id="@+id/offer_barrier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -158,7 +158,7 @@
         app:layout_constraintTop_toBottomOf="@id/offer_disclaimer"
         tools:text="89% positive feedback" />
 
-    <android.support.constraint.Barrier
+    <androidx.constraintlayout.widget.Barrier
         android:id="@+id/offer_action_button_barrier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -205,4 +205,4 @@
         app:layout_constraintTop_toBottomOf="@id/offer_action_button_barrier"
         app:layout_constraintVertical_bias="0" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

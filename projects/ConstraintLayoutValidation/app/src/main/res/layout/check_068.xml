@@ -87,7 +87,7 @@
         android:tag="24,300,598,57"
         android:text="ConstraintLayout with short text" />
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:tag="24,357,1032,57"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -116,7 +116,7 @@
             android:background="#ffaa0000"
             app:layout_constraintLeft_toRightOf="@+id/text_1"
             app:layout_constraintTop_toTopOf="parent" />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -125,7 +125,7 @@
         android:tag="24,438,581,57"
         android:text="ConstraintLayout with long text" />
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:tag="24,495,1032,57">
@@ -162,5 +162,5 @@
             app:layout_constraintLeft_toRightOf="@+id/text_2"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

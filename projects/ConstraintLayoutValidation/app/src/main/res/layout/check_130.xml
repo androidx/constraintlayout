@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraint_layout_root"
@@ -8,30 +8,30 @@
     android:background="#171717"
     android:clipChildren="false"
     android:tag="0,0,279,577"
-    tools:parentTag="android.support.constraint.ConstraintLayout">
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
     <!-- b/68949780 -->
 
     <tag android:id="@+id/wrap_horizontal" android:value="0,0,1080,1920 0,168,0,0 0,1620,0,0 0,439,842,842 866,840,214,41 448,1552,184,68"/>
     <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,577 0,168,0,0 0,277,0,0 401,168,41,41 466,168,214,41 448,209,184,68"/>
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/top_guideline"
         android:tag="0,168,0,0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="?android:attr/actionBarSize">
-    </android.support.constraint.Guideline>
+    </androidx.constraintlayout.widget.Guideline>
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/bottom_guideline"
         android:tag="0,1620,0,0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_end="100dp">
-    </android.support.constraint.Guideline>
+    </androidx.constraintlayout.widget.Guideline>
 
     <FrameLayout
         android:id="@+id/meeting_participants_picture"
@@ -74,4 +74,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

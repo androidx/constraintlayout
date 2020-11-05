@@ -1,5 +1,5 @@
 {
-  "duration": "519",
+  "duration": "151500",
   "layout": {
     "children": [{
       "children": [{
@@ -32,7 +32,7 @@
     "bounds": {
       "top": "0",
       "left": "0",
-      "bottom": "1536",
+      "bottom": "866",
       "right": "900"
     },
     "class": "LinearLayout"

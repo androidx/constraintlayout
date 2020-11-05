@@ -1,5 +1,5 @@
 {
-  "duration": "9023",
+  "duration": "105500",
   "layout": {
     "children": [
       {
@@ -7,27 +7,27 @@
           "top": "0",
           "left": "441",
           "bottom": "144",
-          "right": "705"
+          "right": "725"
         },
         "id": "button17",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
           "top": "0",
           "left": "0",
           "bottom": "144",
-          "right": "264"
+          "right": "284"
         },
         "id": "button18",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       }
     ],
     "bounds": {
       "top": "0",
       "left": "0",
       "bottom": "1536",
-      "right": "615"
+      "right": "635"
     },
     "class": "ConstraintLayout"
   }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_body"
@@ -12,7 +12,7 @@
     <tag android:id="@+id/wrap_horizontal" android:value="0,0,0,1920 0,0,0,900 0,900,0,1020"/>
     <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,144 0,0,1080,144 0,144,1080,0"/>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:tag="0,0,1080,144"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
             app:layout_constraintStart_toEndOf="@+id/location_image" android:layout_marginStart="4dp"
             android:textAppearance="?attr/textAppearanceListItem"/>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <TextView
@@ -74,4 +74,4 @@
         android:textStyle="bold|italic"
         android:gravity="center"/>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,5 @@
 {
-  "duration": "2000",
+  "duration": "297500",
   "layout": {
     "children": [
       {
@@ -20,7 +20,7 @@
           "right": "210"
         },
         "id": "text_1",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -40,7 +40,7 @@
           "right": "862"
         },
         "id": "text_left_1",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -50,7 +50,7 @@
           "right": "1056"
         },
         "id": "text_left_2",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -70,7 +70,7 @@
           "right": "204"
         },
         "id": "text_2",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {

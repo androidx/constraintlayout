@@ -1,5 +1,5 @@
 {
-  "duration": "19849",
+  "duration": "199500",
   "layout": {
     "children": [
       {
@@ -12,7 +12,7 @@
               "right": "0"
             },
             "id": "title_bike",
-            "class": "AppCompatTextView"
+            "class": "MaterialTextView"
           },
           {
             "bounds": {
@@ -22,7 +22,7 @@
               "right": "1056"
             },
             "id": "title_scooter",
-            "class": "AppCompatTextView"
+            "class": "MaterialTextView"
           }
         ],
         "bounds": {
@@ -45,7 +45,7 @@
                   "bottom": "57",
                   "right": "207"
                 },
-                "class": "AppCompatTextView"
+                "class": "MaterialTextView"
               },
               {
                 "bounds": {
@@ -55,7 +55,7 @@
                   "right": "106"
                 },
                 "id": "tripTime",
-                "class": "AppCompatTextView"
+                "class": "MaterialTextView"
               }
             ],
             "bounds": {
@@ -77,7 +77,7 @@
                   "right": "81"
                 },
                 "id": "speedUnits",
-                "class": "AppCompatTextView"
+                "class": "MaterialTextView"
               },
               {
                 "bounds": {
@@ -87,7 +87,7 @@
                   "right": "24"
                 },
                 "id": "tripSpeed",
-                "class": "AppCompatTextView"
+                "class": "MaterialTextView"
               }
             ],
             "bounds": {
@@ -139,7 +139,7 @@
               "right": "492"
             },
             "id": "parkingButton",
-            "class": "AppCompatButton"
+            "class": "MaterialButton"
           },
           {
             "bounds": {
@@ -149,7 +149,7 @@
               "right": "1032"
             },
             "id": "helpButton",
-            "class": "AppCompatButton"
+            "class": "MaterialButton"
           }
         ],
         "bounds": {

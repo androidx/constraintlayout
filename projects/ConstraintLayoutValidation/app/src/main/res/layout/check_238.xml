@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_body"
@@ -12,7 +12,7 @@
     <tag android:id="@+id/wrap_horizontal" android:value="0,0,0,1920 0,0,0,0 0,641,0,638"/>
     <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,199 540,0,0,0 540,0,540,199"/>
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/halfScreenGuideline"
         android:tag="540,0,0,0"
         android:layout_width="wrap_content"
@@ -34,4 +34,4 @@
         app:layout_constrainedWidth="true"
         />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -43,7 +43,7 @@
         app:layout_constraintTop_toTopOf="@+id/barrier2"
         tools:layout_editor_absoluteX="30dp" />
 
-    <android.support.constraint.Barrier
+    <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrier2"
         android:tag="0,168,0,0"
         android:layout_width="wrap_content"
@@ -51,4 +51,4 @@
         app:barrierDirection="bottom"
         app:constraint_referenced_ids="button117,button118"
         tools:layout_editor_absoluteY="8dp" />
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

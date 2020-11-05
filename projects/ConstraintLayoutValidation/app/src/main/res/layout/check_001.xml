@@ -13,7 +13,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
@@ -25,7 +25,7 @@
     <tag android:id="@+id/wrap_horizontal" android:value="0,0,200,1920 0,935,200,51"/>
     <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,51 440,0,200,51"/>
 
-    <com.example.android.checkconstraintlayout.TestTextView
+    <android.support.constraintlayout.validation.TestTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:tag="440,935,200,51"
@@ -36,4 +36,4 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

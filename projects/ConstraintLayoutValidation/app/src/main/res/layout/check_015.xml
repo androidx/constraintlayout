@@ -12,7 +12,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:tag="0,0,0,0"
@@ -22,7 +22,7 @@
     <tag android:id="@+id/wrap_horizontal" android:value="0,0,0,1920 0,0,0,900"/>
     <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,0 0,0,900,0"/>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/activity_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -32,7 +32,7 @@
         tools:context="com.example.android.checkconstraintlayout.MainActivity">
 
 
-        <com.example.android.checkconstraintlayout.TestTextView
+        <android.support.constraintlayout.validation.TestTextView
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:maxHeight="300dp"
@@ -43,7 +43,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</android.support.v7.widget.LinearLayoutCompat>
+</LinearLayout>

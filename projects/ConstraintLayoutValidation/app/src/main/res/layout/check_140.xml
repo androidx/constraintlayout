@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:tag="0,0,212,210"
@@ -11,7 +11,7 @@
     <tag android:id="@+id/wrap_horizontal" android:value="0,0,212,1920 85,0,0,0 24,24,37,37 109,24,27,57 161,24,26,57 0,81,0,0 109,105,27,57 160,105,28,57 0,162,0,0 0,162,0,0 24,186,164,1710"/>
     <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,456 432,0,0,0 24,24,384,384 456,24,27,57 768,24,26,57 0,81,0,0 456,105,27,57 767,105,28,57 0,162,0,0 0,408,0,0 24,432,1032,0"/>
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:tag="432,0,0,0"
         android:layout_width="wrap_content"
@@ -52,7 +52,7 @@
         app:layout_constraintStart_toEndOf="@id/t1"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.constraint.Barrier
+    <androidx.constraintlayout.widget.Barrier
         android:id="@+id/t1_barrier"
         android:tag="0,81,0,0"
         android:layout_width="wrap_content"
@@ -81,7 +81,7 @@
         app:layout_constraintStart_toEndOf="@id/t2"
         app:layout_constraintTop_toBottomOf="@id/t1_barrier" />
 
-    <android.support.constraint.Barrier
+    <androidx.constraintlayout.widget.Barrier
         android:id="@+id/t2_barrier"
         android:tag="0,162,0,0"
         android:layout_width="wrap_content"
@@ -89,7 +89,7 @@
         app:barrierDirection="bottom"
         app:constraint_referenced_ids="t2,t2_2" />
 
-    <android.support.constraint.Barrier
+    <androidx.constraintlayout.widget.Barrier
         android:id="@+id/header_barrier"
         android:tag="0,408,0,0"
         android:layout_width="wrap_content"
@@ -108,4 +108,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/header_barrier" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

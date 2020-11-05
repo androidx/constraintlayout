@@ -1,5 +1,5 @@
 {
-  "duration": "1352905",
+  "duration": "1618500",
   "layout": {
     "children": [
       {
@@ -40,7 +40,7 @@
           "right": "546"
         },
         "id": "label_1",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -50,7 +50,7 @@
           "right": "984"
         },
         "id": "field_1",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -80,7 +80,7 @@
           "right": "232"
         },
         "id": "label_2",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -90,7 +90,7 @@
           "right": "984"
         },
         "id": "field_2",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -120,7 +120,7 @@
           "right": "232"
         },
         "id": "label_3",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -130,7 +130,7 @@
           "right": "984"
         },
         "id": "field_3",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {

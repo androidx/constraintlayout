@@ -10,7 +10,7 @@
     <tag android:id="@+id/wrap_horizontal" android:value="0,0,312,1920 0,48,312,1607"/>
     <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,1535 0,48,1080,1487"/>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
@@ -181,7 +181,7 @@
             app:layout_constraintLeft_toLeftOf="@+id/txtViewPhotos"
             app:layout_constraintRight_toRightOf="@+id/btnManagePhotos"/>
 
-        <android.support.v7.widget.ButtonBarLayout
+        <androidx.appcompat.widget.ButtonBarLayout
             android:id="@+id/buttonBar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -202,8 +202,8 @@
                 android:layout_height="wrap_content"
                 android:text="Send"/>
 
-        </android.support.v7.widget.ButtonBarLayout>
+        </androidx.appcompat.widget.ButtonBarLayout>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

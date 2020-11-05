@@ -1,5 +1,5 @@
 {
-  "duration": "216284",
+  "duration": "1754500",
   "layout": {
     "children": [
       {
@@ -36,17 +36,17 @@
         "bounds": {
           "top": "24",
           "left": "24",
-          "bottom": "1512",
+          "bottom": "1752",
           "right": "168"
         },
         "id": "ic_order_changes_item_quantity",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
-          "top": "696",
+          "top": "816",
           "left": "48",
-          "bottom": "840",
+          "bottom": "960",
           "right": "192"
         },
         "id": "ic__order_changes_item_image",
@@ -54,9 +54,9 @@
       },
       {
         "bounds": {
-          "top": "663",
+          "top": "783",
           "left": "159",
-          "bottom": "729",
+          "bottom": "849",
           "right": "225"
         },
         "id": "ic__order_changes_item_image_icon",
@@ -70,47 +70,47 @@
           "right": "0"
         },
         "id": "ic__order_changes_item_status",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
-          "top": "684",
+          "top": "804",
           "left": "261",
-          "bottom": "790",
+          "bottom": "910",
           "right": "840"
         },
         "id": "ic__order_changes_item_name",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
-          "top": "790",
+          "top": "910",
           "left": "261",
-          "bottom": "853",
+          "bottom": "973",
           "right": "840"
         },
         "id": "ic__order_changes_item_qty",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
-          "top": "711",
+          "top": "831",
           "left": "840",
-          "bottom": "768",
+          "bottom": "888",
           "right": "1056"
         },
         "id": "ic_order_changes_item_price",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
-          "top": "768",
+          "top": "888",
           "left": "840",
-          "bottom": "825",
+          "bottom": "945",
           "right": "1056"
         },
         "id": "ic_order_changes_item_price_second",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -126,7 +126,7 @@
     "bounds": {
       "top": "0",
       "left": "0",
-      "bottom": "1536",
+      "bottom": "1776",
       "right": "1080"
     },
     "class": "ConstraintLayout"

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layoutDirection="rtl"
     android:tag="0,0,300,300"
@@ -11,7 +11,7 @@
     <tag android:id="@+id/wrap_horizontal" android:value="0,0,300,1920 0,300,0,0 0,1620,0,0 0,384,0,0 0,0,0,0 300,0,0,0 240,0,0,0"/>
     <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,300 0,300,0,0 0,0,0,0 0,60,0,0 780,0,0,0 300,0,0,0 864,0,0,0"/>
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline1"
         android:tag="0,300,0,0"
         app:layout_constraintGuide_begin="100dp"
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" />
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
         android:tag="0,1620,0,0"
         app:layout_constraintGuide_end="100dp"
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" />
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
         android:tag="0,384,0,0"
         app:layout_constraintGuide_percent="0.2"
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" />
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
         android:tag="780,0,0,0"
         app:layout_constraintGuide_begin="100dp"
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" />
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline5"
         android:tag="300,0,0,0"
         app:layout_constraintGuide_end="100dp"
@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" />
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"
         android:tag="864,0,0,0"
         app:layout_constraintGuide_percent="0.2"
@@ -59,4 +59,4 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

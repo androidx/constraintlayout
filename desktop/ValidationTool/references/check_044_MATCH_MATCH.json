@@ -1,16 +1,16 @@
 {
-  "duration": "87588",
+  "duration": "298000",
   "layout": {
     "children": [
       {
         "bounds": {
           "top": "42",
-          "left": "409",
+          "left": "399",
           "bottom": "186",
-          "right": "673"
+          "right": "683"
         },
         "id": "button72",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -20,17 +20,17 @@
           "right": "1080"
         },
         "id": "button73",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
           "top": "1350",
-          "left": "408",
+          "left": "398",
           "bottom": "1494",
-          "right": "672"
+          "right": "682"
         },
         "id": "button74",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       }
     ],
     "bounds": {

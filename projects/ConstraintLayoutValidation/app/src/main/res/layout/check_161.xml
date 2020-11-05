@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -124,7 +124,7 @@
         app:layout_constraintTop_toTopOf="@+id/entry_3"
         app:layout_constraintBottom_toBottomOf="@+id/entry_3"/>
 
-    <android.support.constraint.Barrier
+    <androidx.constraintlayout.widget.Barrier
         android:id="@+id/guideline"
         android:tag="490,48,0,0"
         android:layout_width="wrap_content"
@@ -133,4 +133,4 @@
         app:barrierDirection="right"
         app:constraint_referenced_ids="label_1,label_2,label_3" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

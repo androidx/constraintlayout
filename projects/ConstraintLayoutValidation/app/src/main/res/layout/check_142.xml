@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -88,7 +88,7 @@
         app:layout_goneMarginLeft="0dp"
         tools:visibility="visible"/>
 
-    <android.support.constraint.Barrier
+    <androidx.constraintlayout.widget.Barrier
         android:id="@+id/flair_barrier"
         android:tag="0,423,0,0"
         android:layout_width="0dp"
@@ -117,7 +117,7 @@
         app:layout_constraintTop_toBottomOf="@+id/subreddits_comments"
         android:text="MmKaz • self.pokemongo • 12 hours ago"/>
 
-    <android.support.constraint.Barrier
+    <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrier"
         android:tag="0,533,0,0"
         android:layout_width="0dp"
@@ -210,4 +210,4 @@
         app:layout_constraintTop_toBottomOf="@+id/upvote"
         app:layout_goneMarginTop="8dp"/>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

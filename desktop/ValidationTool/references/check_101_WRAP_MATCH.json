@@ -1,5 +1,5 @@
 {
-  "duration": "7697",
+  "duration": "108000",
   "layout": {
     "children": [{
       "bounds": {
@@ -9,7 +9,7 @@
         "right": "288"
       },
       "id": "button9",
-      "class": "AppCompatButton"
+      "class": "MaterialButton"
     }],
     "bounds": {
       "top": "0",

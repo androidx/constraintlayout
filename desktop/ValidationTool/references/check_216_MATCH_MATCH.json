@@ -1,5 +1,5 @@
 {
-  "duration": "26230",
+  "duration": "204500",
   "layout": {
     "children": [
       {
@@ -10,7 +10,7 @@
           "right": "219"
         },
         "id": "textView28",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -20,7 +20,7 @@
           "right": "414"
         },
         "id": "textView29",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -30,27 +30,27 @@
           "right": "414"
         },
         "id": "textView10",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
           "top": "1641",
           "left": "462",
           "bottom": "1929",
-          "right": "726"
+          "right": "746"
         },
         "id": "button12",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
           "top": "1347",
-          "left": "774",
+          "left": "794",
           "bottom": "1758",
-          "right": "1038"
+          "right": "1078"
         },
         "id": "button2",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -60,7 +60,7 @@
           "right": "219"
         },
         "id": "textView33",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -70,17 +70,17 @@
           "right": "219"
         },
         "id": "textView30",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
           "top": "86",
           "left": "243",
           "bottom": "230",
-          "right": "507"
+          "right": "527"
         },
         "id": "button104",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -90,7 +90,7 @@
           "right": "219"
         },
         "id": "textView31",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -100,7 +100,7 @@
           "right": "1134"
         },
         "id": "textView32",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       }
     ],
     "bounds": {

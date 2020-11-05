@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:tag="0,0,647,219"
@@ -11,7 +11,7 @@
     <tag android:id="@+id/wrap_horizontal" android:value="0,0,647,1920 0,24,0,0 216,0,0,0 623,0,0,0 216,0,0,0 216,24,407,138 315,24,308,57 216,81,407,81 493,162,106,57"/>
     <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,219 0,24,0,0 216,0,0,0 1056,0,0,0 649,0,0,0 649,24,407,138 748,24,308,57 649,81,407,81 926,162,106,57"/>
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
         android:tag="0,24,0,0"
         android:id="@+id/guideline_message_top"
         android:layout_width="wrap_content"
@@ -19,7 +19,7 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="8dp" />
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
         android:tag="216,0,0,0"
         android:id="@+id/guideline_message_start"
         android:layout_width="wrap_content"
@@ -27,7 +27,7 @@
         android:orientation="vertical"
         app:layout_constraintGuide_begin="72dp" />
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
         android:tag="1056,0,0,0"
         android:id="@+id/guideline_message_end"
         android:layout_width="wrap_content"
@@ -35,7 +35,7 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="8dp" />
 
-    <android.support.constraint.Barrier
+    <androidx.constraintlayout.widget.Barrier
         android:tag="649,0,0,0"
         android:id="@+id/barrier_start_of_bubble"
         android:layout_width="wrap_content"
@@ -95,4 +95,4 @@
         app:layout_constraintTop_toBottomOf="@id/message_content"
         android:text="09:30" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

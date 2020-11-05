@@ -1,5 +1,5 @@
 {
-  "duration": "7108",
+  "duration": "96500",
   "layout": {
     "children": [
       {
@@ -10,7 +10,7 @@
           "right": "1032"
         },
         "id": "recording_name_id",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "children": [
@@ -52,7 +52,7 @@
               "right": "0"
             },
             "id": "record_item_distance_stat",
-            "class": "AppCompatTextView"
+            "class": "MaterialTextView"
           },
           {
             "bounds": {
@@ -72,7 +72,7 @@
               "right": "0"
             },
             "id": "record_item_up_stat",
-            "class": "AppCompatTextView"
+            "class": "MaterialTextView"
           },
           {
             "bounds": {
@@ -92,7 +92,7 @@
               "right": "0"
             },
             "id": "record_item_down_stat",
-            "class": "AppCompatTextView"
+            "class": "MaterialTextView"
           }
         ],
         "bounds": {

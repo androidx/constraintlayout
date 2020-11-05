@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -27,4 +27,4 @@
         app:layout_constraintStart_toEndOf="@+id/textview1"
         android:text="Welcome to Android 11 Developer Preview, a program that gives you everything you need to make your apps compatible and build for the next version of Android. The program is free, and you can get started right away by downloading the Developer Preview SDK and tools." />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

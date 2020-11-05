@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -194,7 +194,7 @@
         app:layout_constraintRight_toRightOf="@+id/btnManagePhotos"
         app:layout_constraintTop_toBottomOf="@+id/btnManagePhotos" />
 
-    <android.support.v7.widget.ButtonBarLayout
+    <androidx.appcompat.widget.ButtonBarLayout
         android:tag="0,1343,1080,144"
         android:id="@+id/buttonBar"
         android:layout_width="0dp"
@@ -218,7 +218,7 @@
             android:layout_height="wrap_content"
             android:text="Send" />
 
-    </android.support.v7.widget.ButtonBarLayout>
+    </androidx.appcompat.widget.ButtonBarLayout>
 
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

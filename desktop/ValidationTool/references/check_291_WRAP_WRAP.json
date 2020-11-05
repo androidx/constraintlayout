@@ -1,5 +1,5 @@
 {
-  "duration": "2000",
+  "duration": "2262587",
   "layout": {
     "children": [{
       "children": [
@@ -11,7 +11,7 @@
             "right": "479"
           },
           "id": "textViewSignInLabel",
-          "class": "AppCompatTextView"
+          "class": "MaterialTextView"
         },
         {
           "bounds": {
@@ -81,7 +81,7 @@
             "right": "677"
           },
           "id": "textViewForgotPassword",
-          "class": "AppCompatTextView"
+          "class": "MaterialTextView"
         },
         {
           "bounds": {
@@ -91,7 +91,7 @@
             "right": "677"
           },
           "id": "buttonSignIn",
-          "class": "AppCompatButton"
+          "class": "MaterialButton"
         },
         {
           "bounds": {
@@ -121,7 +121,7 @@
             "right": "518"
           },
           "id": "textViewOrConnectWith",
-          "class": "AppCompatTextView"
+          "class": "MaterialTextView"
         },
         {
           "bounds": {
@@ -238,7 +238,7 @@
             "right": "729"
           },
           "id": "textViewSignUp",
-          "class": "AppCompatTextView"
+          "class": "MaterialTextView"
         },
         {
           "bounds": {
@@ -248,7 +248,7 @@
             "right": "551"
           },
           "id": "textViewDontHaveAnAccount",
-          "class": "AppCompatTextView"
+          "class": "MaterialTextView"
         }
       ],
       "bounds": {
@@ -263,7 +263,7 @@
     "bounds": {
       "top": "0",
       "left": "0",
-      "bottom": "1536",
+      "bottom": "866",
       "right": "770"
     },
     "class": "ScrollView"

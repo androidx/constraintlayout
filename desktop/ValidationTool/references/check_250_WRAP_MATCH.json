@@ -1,5 +1,5 @@
 {
-  "duration": "62095",
+  "duration": "619000",
   "layout": {
     "children": [
       {
@@ -146,7 +146,7 @@
               "right": "180"
             },
             "id": "fragLogin_btn_auth",
-            "class": "AppCompatButton"
+            "class": "MaterialButton"
           }
         ],
         "bounds": {

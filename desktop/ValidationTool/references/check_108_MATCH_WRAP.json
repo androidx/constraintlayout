@@ -1,5 +1,5 @@
 {
-  "duration": "504484",
+  "duration": "855500",
   "layout": {
     "children": [
       {
@@ -10,7 +10,7 @@
           "right": "999"
         },
         "id": "titleTv",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -30,7 +30,7 @@
           "right": "999"
         },
         "id": "descTv",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -50,7 +50,7 @@
           "right": "999"
         },
         "id": "dateTv",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -70,7 +70,7 @@
           "right": "999"
         },
         "id": "locationTv",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -90,7 +90,7 @@
           "right": "999"
         },
         "id": "hostTv",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_body"
@@ -12,7 +12,7 @@
     <tag android:id="@+id/wrap_horizontal" android:value="0,0,387,1920 0,755,387,411 0,755,109,117 139,755,109,117 278,755,109,117 0,902,109,117 139,902,109,117 278,902,109,117 0,1049,109,117 139,1049,109,117 278,1049,109,117"/>
     <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,411 0,0,1080,411 0,0,109,117 139,0,109,117 278,0,109,117 173,147,109,117 486,147,109,117 798,147,109,117 693,294,109,117 832,294,109,117 971,294,109,117"/>
 
-    <android.support.constraint.helper.Flow
+    <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/flow"
         android:tag="0,755,1080,411"
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" >
 
-    </android.support.constraint.helper.Flow>
+    </androidx.constraintlayout.helper.widget.Flow>
 
 
     <TextView
@@ -143,4 +143,4 @@
         tools:layout_editor_absoluteX="247dp"
         android:text="T3" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

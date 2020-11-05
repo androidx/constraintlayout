@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,7 +9,7 @@
     <tag android:id="@+id/wrap_horizontal" android:value="0,0,270,1920 60,0,0,0 60,0,0,0 0,0,0,0 60,0,0,144 60,0,0,144 60,0,0,144 0,0,0,0 60,0,0,144 60,0,0,144 60,0,0,144 0,0,0,0 0,0,0,0 0,0,0,0 60,0,0,144 60,0,0,144 0,0,0,0 0,0,0,0 0,0,0,0 60,0,0,144 0,0,0,0"/>
     <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,144 60,0,0,0 870,0,0,0 0,0,0,0 60,0,405,144 465,0,405,144 60,0,405,144 0,0,0,0 465,0,405,144 60,0,405,144 465,0,405,144 0,0,0,0 0,0,0,0 0,0,0,0 60,0,810,144 60,0,810,144 0,0,0,0 0,0,0,0 0,0,0,0 60,0,810,144 0,0,0,0"/>
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,7 +17,7 @@
         android:tag="60,0,0,0"
         app:layout_constraintGuide_begin="20dp" />
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineRight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -272,4 +272,4 @@
         app:layout_constraintRight_toLeftOf="@+id/guidelineRight"
         tools:layout_editor_absoluteY="500dp" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

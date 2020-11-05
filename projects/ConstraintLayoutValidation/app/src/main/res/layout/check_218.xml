@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -19,7 +19,7 @@
     <tag android:id="@+id/wrap_horizontal" android:value="0,0,300,1920 -89,0,0,0 390,0,0,0 30,30,270,270 0,300,270,270"/>
     <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,570 690,0,0,0 390,0,0,0 30,30,270,270 780,300,270,270"/>
 
-    <android.support.constraint.Barrier
+    <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrierStart"
         android:layout_width="10dp"
         android:layout_height="10dp"
@@ -28,7 +28,7 @@
         app:constraint_referenced_ids="image2"
         tools:layout_editor_absoluteX="229dp" />
 
-    <android.support.constraint.Barrier
+    <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrierEnd"
         android:layout_width="10dp"
         android:layout_height="10dp"
@@ -69,4 +69,4 @@
 
     <!--app:layout_constraintWidth_default="wrap"-->
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

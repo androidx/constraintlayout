@@ -1,5 +1,5 @@
 {
-  "duration": "308399",
+  "duration": "650000",
   "layout": {
     "children": [
       {
@@ -7,67 +7,67 @@
           "top": "48",
           "left": "48",
           "bottom": "192",
-          "right": "312"
+          "right": "332"
         },
         "id": "button56",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
           "top": "1368",
-          "left": "312",
+          "left": "332",
           "bottom": "1512",
-          "right": "576"
+          "right": "616"
         },
         "id": "button60",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
           "top": "216",
           "left": "24",
           "bottom": "360",
-          "right": "288"
+          "right": "308"
         },
         "id": "button61",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
           "top": "1200",
           "left": "24",
           "bottom": "1344",
-          "right": "288"
+          "right": "308"
         },
         "id": "button63",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
           "top": "601",
           "left": "24",
           "bottom": "745",
-          "right": "288"
+          "right": "308"
         },
         "id": "button62",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
           "top": "947",
           "left": "24",
           "bottom": "1091",
-          "right": "288"
+          "right": "308"
         },
         "id": "button64",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       }
     ],
     "bounds": {
       "top": "0",
       "left": "0",
       "bottom": "1536",
-      "right": "600"
+      "right": "640"
     },
     "class": "ConstraintLayout"
   }

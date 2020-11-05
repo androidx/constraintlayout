@@ -1,5 +1,5 @@
 {
-  "duration": "18548",
+  "duration": "77000",
   "layout": {
     "children": [
       {
@@ -8,59 +8,141 @@
             {
               "children": [
                 {
-                  "children": [{
-                    "bounds": {
-                      "top": "0",
-                      "left": "0",
-                      "bottom": "136",
-                      "right": "300"
+                  "children": [
+                    {
+                      "bounds": {
+                        "top": "0",
+                        "left": "0",
+                        "bottom": "192",
+                        "right": "300"
+                      },
+                      "id": "et_phone_number_1",
+                      "class": "TextInputEditText"
                     },
-                    "id": "et_phone_number_1",
-                    "class": "TextInputEditText"
-                  }],
+                    {
+                      "children": [
+                        {
+                          "bounds": {
+                            "top": "0",
+                            "left": "0",
+                            "bottom": "0",
+                            "right": "0"
+                          },
+                          "id": "text_input_start_icon",
+                          "class": "CheckableImageButton"
+                        },
+                        {
+                          "bounds": {
+                            "top": "0",
+                            "left": "0",
+                            "bottom": "0",
+                            "right": "0"
+                          },
+                          "id": "textinput_prefix_text",
+                          "class": "AppCompatTextView"
+                        }
+                      ],
+                      "bounds": {
+                        "top": "0",
+                        "left": "0",
+                        "bottom": "192",
+                        "right": "0"
+                      },
+                      "class": "LinearLayout"
+                    },
+                    {
+                      "children": [
+                        {
+                          "bounds": {
+                            "top": "0",
+                            "left": "0",
+                            "bottom": "0",
+                            "right": "0"
+                          },
+                          "id": "textinput_suffix_text",
+                          "class": "AppCompatTextView"
+                        },
+                        {
+                          "children": [{
+                            "bounds": {
+                              "top": "0",
+                              "left": "0",
+                              "bottom": "0",
+                              "right": "0"
+                            },
+                            "id": "text_input_end_icon",
+                            "class": "CheckableImageButton"
+                          }],
+                          "bounds": {
+                            "top": "0",
+                            "left": "0",
+                            "bottom": "192",
+                            "right": "0"
+                          },
+                          "class": "FrameLayout"
+                        },
+                        {
+                          "bounds": {
+                            "top": "24",
+                            "left": "12",
+                            "bottom": "168",
+                            "right": "156"
+                          },
+                          "id": "text_input_end_icon",
+                          "class": "CheckableImageButton"
+                        }
+                      ],
+                      "bounds": {
+                        "top": "0",
+                        "left": "144",
+                        "bottom": "192",
+                        "right": "300"
+                      },
+                      "class": "LinearLayout"
+                    },
+                    {
+                      "bounds": {
+                        "top": "0",
+                        "left": "0",
+                        "bottom": "192",
+                        "right": "300"
+                      },
+                      "id": "textinput_placeholder",
+                      "class": "AppCompatTextView"
+                    }
+                  ],
                   "bounds": {
-                    "top": "33",
+                    "top": "0",
                     "left": "0",
-                    "bottom": "169",
+                    "bottom": "192",
                     "right": "300"
                   },
                   "class": "FrameLayout"
                 },
                 {
-                  "children": [
-                    {
-                      "children": [{
-                        "bounds": {
-                          "top": "0",
-                          "left": "0",
-                          "bottom": "49",
-                          "right": "175"
-                        },
-                        "id": "textinput_error",
-                        "class": "AppCompatTextView"
-                      }],
+                  "children": [{
+                    "children": [{
                       "bounds": {
                         "top": "0",
-                        "left": "12",
+                        "left": "0",
                         "bottom": "49",
-                        "right": "187"
+                        "right": "228"
                       },
-                      "class": "FrameLayout"
+                      "id": "textinput_error",
+                      "class": "AppCompatTextView"
+                    }],
+                    "bounds": {
+                      "top": "0",
+                      "left": "36",
+                      "bottom": "49",
+                      "right": "264"
                     },
-                    {
-                      "bounds": {
-                        "top": "0",
-                        "left": "187",
-                        "bottom": "0",
-                        "right": "288"
-                      },
-                      "class": "Space"
-                    }
-                  ],
+                    "class": "FrameLayout"
+                  }],
                   "bounds": {
-                    "top": "169",
+                    "top": "192",
                     "left": "0",
-                    "bottom": "218",
+                    "bottom": "241",
                     "right": "300"
                   },
                   "class": "LinearLayout"
@@ -69,7 +151,7 @@
               "bounds": {
                 "top": "60",
                 "left": "32",
-                "bottom": "278",
+                "bottom": "301",
                 "right": "332"
               },
               "id": "til_phone_number_1",
@@ -77,9 +159,9 @@
             },
             {
               "bounds": {
-                "top": "278",
+                "top": "301",
                 "left": "0",
-                "bottom": "359",
+                "bottom": "382",
                 "right": "365"
               },
               "id": "switch_error",
@@ -89,7 +171,7 @@
           "bounds": {
             "top": "0",
             "left": "0",
-            "bottom": "359",
+            "bottom": "382",
             "right": "365"
           },
           "class": "LinearLayout"
@@ -97,26 +179,26 @@
         "bounds": {
           "top": "0",
           "left": "0",
-          "bottom": "1248",
+          "bottom": "578",
           "right": "365"
         },
         "class": "ScrollView"
       },
       {
         "bounds": {
-          "top": "1248",
+          "top": "578",
           "left": "51",
-          "bottom": "1392",
+          "bottom": "722",
           "right": "315"
         },
         "id": "bt_next",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       }
     ],
     "bounds": {
       "top": "0",
       "left": "0",
-      "bottom": "1536",
+      "bottom": "866",
       "right": "365"
     },
     "class": "ConstraintLayout"

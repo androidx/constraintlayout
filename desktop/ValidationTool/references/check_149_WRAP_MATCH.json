@@ -1,5 +1,5 @@
 {
-  "duration": "102350",
+  "duration": "338500",
   "layout": {
     "children": [
       {
@@ -10,7 +10,7 @@
           "right": "444"
         },
         "id": "header",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -20,7 +20,7 @@
           "right": "0"
         },
         "id": "edit_phone_number",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -37,10 +37,10 @@
           "top": "306",
           "left": "0",
           "bottom": "450",
-          "right": "658"
+          "right": "778"
         },
         "id": "submit_confirmation_code",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -50,7 +50,7 @@
           "right": "677"
         },
         "id": "ticker",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -60,7 +60,7 @@
           "right": "0"
         },
         "id": "resend_code",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -80,7 +80,7 @@
           "right": "783"
         },
         "id": "create_account_tos",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       }
     ],
     "bounds": {

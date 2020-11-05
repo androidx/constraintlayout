@@ -1,12 +1,12 @@
 {
-  "duration": "246026",
+  "duration": "645000",
   "layout": {
     "children": [
       {
         "bounds": {
-          "top": "424",
+          "top": "425",
           "left": "468",
-          "bottom": "568",
+          "bottom": "569",
           "right": "612"
         },
         "id": "image",
@@ -20,7 +20,7 @@
           "right": "564"
         },
         "id": "text1",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -30,7 +30,7 @@
           "right": "702"
         },
         "id": "text2",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -40,7 +40,7 @@
           "right": "812"
         },
         "id": "text3",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -50,7 +50,7 @@
           "right": "852"
         },
         "id": "text4",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -60,7 +60,7 @@
           "right": "812"
         },
         "id": "text5",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -70,7 +70,7 @@
           "right": "702"
         },
         "id": "text6",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -80,7 +80,7 @@
           "right": "552"
         },
         "id": "text7",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -90,7 +90,7 @@
           "right": "402"
         },
         "id": "text8",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -100,7 +100,7 @@
           "right": "292"
         },
         "id": "text9",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -110,7 +110,7 @@
           "right": "252"
         },
         "id": "text10",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -120,7 +120,7 @@
           "right": "304"
         },
         "id": "text11",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -130,27 +130,27 @@
           "right": "414"
         },
         "id": "text12",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
           "top": "809",
           "left": "726",
           "bottom": "953",
-          "right": "990"
+          "right": "1010"
         },
         "id": "button113",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
           "top": "0",
-          "left": "625",
+          "left": "615",
           "bottom": "144",
-          "right": "889"
+          "right": "899"
         },
         "id": "button114",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -160,17 +160,17 @@
           "right": "232"
         },
         "id": "button115",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
           "top": "809",
-          "left": "90",
+          "left": "70",
           "bottom": "953",
           "right": "354"
         },
         "id": "button116",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       }
     ],
     "bounds": {

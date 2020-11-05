@@ -1,5 +1,5 @@
 {
-  "duration": "33641",
+  "duration": "1343000",
   "layout": {
     "children": [
       {
@@ -20,10 +20,10 @@
                 "top": "11",
                 "left": "192",
                 "bottom": "84",
-                "right": "467"
+                "right": "869"
               },
               "id": "title",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "bounds": {
@@ -33,7 +33,7 @@
                 "right": "471"
               },
               "id": "subTitle",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             }
           ],
           "bounds": {
@@ -84,7 +84,7 @@
                     "bottom": "85",
                     "right": "529"
                   },
-                  "class": "AppCompatTextView"
+                  "class": "MaterialTextView"
                 },
                 {
                   "bounds": {
@@ -94,7 +94,7 @@
                     "right": "888"
                   },
                   "id": "textDownloadedGroupCount",
-                  "class": "AppCompatTextView"
+                  "class": "MaterialTextView"
                 },
                 {
                   "bounds": {
@@ -125,7 +125,7 @@
                     "right": "1032"
                   },
                   "id": "textViewDownloadedEmpty",
-                  "class": "AppCompatTextView"
+                  "class": "MaterialTextView"
                 },
                 {
                   "bounds": {
@@ -154,7 +154,7 @@
                     "bottom": "302",
                     "right": "814"
                   },
-                  "class": "AppCompatTextView"
+                  "class": "MaterialTextView"
                 },
                 {
                   "bounds": {
@@ -164,7 +164,7 @@
                     "right": "888"
                   },
                   "id": "textNotDownloadedGroupCount",
-                  "class": "AppCompatTextView"
+                  "class": "MaterialTextView"
                 },
                 {
                   "bounds": {
@@ -195,7 +195,7 @@
                     "right": "1032"
                   },
                   "id": "textView2",
-                  "class": "AppCompatTextView"
+                  "class": "MaterialTextView"
                 }
               ],
               "bounds": {

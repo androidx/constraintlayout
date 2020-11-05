@@ -1,5 +1,5 @@
 {
-  "duration": "580425",
+  "duration": "723000",
   "layout": {
     "children": [
       {
@@ -7,70 +7,70 @@
           "top": "24",
           "left": "24",
           "bottom": "168",
-          "right": "288"
+          "right": "308"
         },
         "id": "button39",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
           "top": "24",
-          "left": "792",
+          "left": "772",
           "bottom": "168",
           "right": "1056"
         },
         "id": "button54",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
-          "top": "96",
-          "left": "312",
-          "bottom": "240",
-          "right": "768"
+          "top": "47",
+          "left": "332",
+          "bottom": "191",
+          "right": "748"
         },
         "id": "button79",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
-          "top": "336",
-          "left": "408",
-          "bottom": "480",
-          "right": "672"
+          "top": "238",
+          "left": "398",
+          "bottom": "382",
+          "right": "682"
         },
         "id": "button80",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
-          "top": "576",
-          "left": "315",
-          "bottom": "720",
-          "right": "765"
+          "top": "429",
+          "left": "332",
+          "bottom": "573",
+          "right": "782"
         },
         "id": "button81",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
-          "top": "816",
-          "left": "312",
-          "bottom": "1080",
-          "right": "768"
+          "top": "620",
+          "left": "332",
+          "bottom": "1031",
+          "right": "748"
         },
         "id": "button82",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
-          "top": "1176",
-          "left": "312",
-          "bottom": "1440",
-          "right": "768"
+          "top": "1078",
+          "left": "332",
+          "bottom": "1489",
+          "right": "748"
         },
         "id": "button83",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       }
     ],
     "bounds": {

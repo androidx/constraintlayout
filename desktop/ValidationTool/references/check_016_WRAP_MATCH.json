@@ -1,5 +1,5 @@
 {
-  "duration": "61125",
+  "duration": "209500",
   "layout": {
     "children": [
       {
@@ -30,7 +30,7 @@
           "right": "219"
         },
         "id": "tvDate",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -40,7 +40,7 @@
           "right": "912"
         },
         "id": "tvVotes",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -50,7 +50,7 @@
           "right": "912"
         },
         "id": "tvContent",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       }
     ],
     "bounds": {

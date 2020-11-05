@@ -1,5 +1,5 @@
 {
-  "duration": "2000",
+  "duration": "2492000",
   "layout": {
     "children": [
       {
@@ -40,7 +40,7 @@
                 "top": "0",
                 "left": "0",
                 "bottom": "96",
-                "right": "324"
+                "right": "364"
               },
               "id": "media_list",
               "class": "RecyclerView"
@@ -49,8 +49,8 @@
               "bounds": {
                 "top": "144",
                 "left": "0",
-                "bottom": "325",
-                "right": "324"
+                "bottom": "317",
+                "right": "364"
               },
               "class": "View"
             },
@@ -58,28 +58,28 @@
               "bounds": {
                 "top": "144",
                 "left": "0",
-                "bottom": "325",
-                "right": "276"
+                "bottom": "317",
+                "right": "316"
               },
               "id": "productName",
               "class": "AppCompatEditText"
             },
             {
               "bounds": {
-                "top": "211",
-                "left": "276",
-                "bottom": "268",
-                "right": "276"
+                "top": "204",
+                "left": "316",
+                "bottom": "261",
+                "right": "316"
               },
               "id": "tv_item_count",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "bounds": {
-                "top": "325",
+                "top": "317",
                 "left": "0",
-                "bottom": "695",
-                "right": "324"
+                "bottom": "661",
+                "right": "364"
               },
               "id": "product_description",
               "class": "AppCompatEditText"
@@ -87,29 +87,29 @@
             {
               "children": [],
               "bounds": {
-                "top": "743",
+                "top": "709",
                 "left": "0",
-                "bottom": "1435",
-                "right": "324"
+                "bottom": "1269",
+                "right": "364"
               },
               "class": "FrameLayout"
             },
             {
               "bounds": {
-                "top": "743",
+                "top": "709",
                 "left": "0",
-                "bottom": "1435",
-                "right": "145"
+                "bottom": "1269",
+                "right": "181"
               },
               "id": "tv_inventory_track",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "bounds": {
-                "top": "1049",
-                "left": "145",
-                "bottom": "1130",
-                "right": "285"
+                "top": "917",
+                "left": "181",
+                "bottom": "1061",
+                "right": "325"
               },
               "id": "switch_inventory_track",
               "class": "SwitchCompat"
@@ -117,29 +117,29 @@
             {
               "children": [],
               "bounds": {
-                "top": "1435",
+                "top": "1269",
                 "left": "0",
-                "bottom": "2127",
-                "right": "324"
+                "bottom": "1886",
+                "right": "364"
               },
               "class": "FrameLayout"
             },
             {
               "bounds": {
-                "top": "1435",
+                "top": "1269",
                 "left": "0",
-                "bottom": "2127",
-                "right": "145"
+                "bottom": "1886",
+                "right": "181"
               },
               "id": "tv_overselling_allowed",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "bounds": {
-                "top": "1741",
-                "left": "145",
-                "bottom": "1822",
-                "right": "285"
+                "top": "1506",
+                "left": "181",
+                "bottom": "1650",
+                "right": "325"
               },
               "id": "switch_overselling_allowed",
               "class": "SwitchCompat"
@@ -147,67 +147,67 @@
             {
               "children": [],
               "bounds": {
-                "top": "2175",
+                "top": "1934",
                 "left": "0",
-                "bottom": "2438",
-                "right": "324"
+                "bottom": "2221",
+                "right": "364"
               },
               "class": "FrameLayout"
             },
             {
               "bounds": {
-                "top": "2175",
+                "top": "1934",
                 "left": "48",
-                "bottom": "2438",
-                "right": "204"
+                "bottom": "2221",
+                "right": "238"
               },
               "id": "tv_price",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "bounds": {
-                "top": "325",
+                "top": "317",
                 "left": "0",
-                "bottom": "328",
-                "right": "324"
+                "bottom": "320",
+                "right": "364"
               },
               "class": "View"
             },
             {
               "bounds": {
-                "top": "1435",
+                "top": "1269",
                 "left": "0",
-                "bottom": "1438",
-                "right": "324"
+                "bottom": "1272",
+                "right": "364"
               },
               "class": "View"
             },
             {
               "bounds": {
-                "top": "695",
+                "top": "661",
                 "left": "0",
-                "bottom": "698",
-                "right": "324"
+                "bottom": "664",
+                "right": "364"
               },
               "class": "View"
             },
             {
               "bounds": {
-                "top": "2278",
-                "left": "228",
-                "bottom": "2335",
-                "right": "276"
+                "top": "2045",
+                "left": "262",
+                "bottom": "2110",
+                "right": "316"
               },
               "id": "textView24",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "children": [],
               "bounds": {
-                "top": "2175",
+                "top": "1934",
                 "left": "0",
-                "bottom": "2438",
-                "right": "324"
+                "bottom": "2221",
+                "right": "364"
               },
               "id": "price_mask",
               "class": "FrameLayout"
@@ -215,40 +215,40 @@
             {
               "children": [],
               "bounds": {
-                "top": "2438",
+                "top": "2221",
                 "left": "0",
-                "bottom": "2603",
-                "right": "324"
+                "bottom": "2394",
+                "right": "364"
               },
               "class": "FrameLayout"
             },
             {
               "bounds": {
-                "top": "2438",
+                "top": "2221",
                 "left": "48",
-                "bottom": "2603",
-                "right": "252"
+                "bottom": "2394",
+                "right": "292"
               },
               "id": "tv_stock",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "bounds": {
-                "top": "2492",
-                "left": "276",
-                "bottom": "2549",
-                "right": "276"
+                "top": "2275",
+                "left": "316",
+                "bottom": "2340",
+                "right": "316"
               },
               "id": "tv_stock_value",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "children": [],
               "bounds": {
-                "top": "2438",
+                "top": "2221",
                 "left": "0",
-                "bottom": "2603",
-                "right": "324"
+                "bottom": "2394",
+                "right": "364"
               },
               "id": "stock_mask",
               "class": "FrameLayout"
@@ -273,20 +273,20 @@
             },
             {
               "bounds": {
-                "top": "2438",
+                "top": "2221",
                 "left": "0",
-                "bottom": "2441",
-                "right": "324"
+                "bottom": "2224",
+                "right": "364"
               },
               "class": "View"
             },
             {
               "children": [],
               "bounds": {
-                "top": "2651",
+                "top": "2442",
                 "left": "0",
-                "bottom": "2804",
-                "right": "324"
+                "bottom": "2603",
+                "right": "364"
               },
               "id": "variant_mask",
               "class": "FrameLayout"
@@ -294,19 +294,19 @@
             {
               "children": [],
               "bounds": {
-                "top": "2651",
+                "top": "2442",
                 "left": "0",
-                "bottom": "2651",
-                "right": "324"
+                "bottom": "2442",
+                "right": "364"
               },
               "id": "list",
               "class": "RecyclerView"
             },
             {
               "bounds": {
-                "top": "2686",
+                "top": "2481",
                 "left": "24",
-                "bottom": "2770",
+                "bottom": "2565",
                 "right": "108"
               },
               "id": "icon_view",
@@ -314,13 +314,13 @@
             },
             {
               "bounds": {
-                "top": "2651",
+                "top": "2442",
                 "left": "144",
-                "bottom": "2804",
-                "right": "324"
+                "bottom": "2603",
+                "right": "364"
               },
               "id": "tv_add",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "bounds": {
@@ -333,54 +333,54 @@
             },
             {
               "bounds": {
-                "top": "2840",
+                "top": "2639",
                 "left": "0",
-                "bottom": "2946",
-                "right": "324"
+                "bottom": "2745",
+                "right": "364"
               },
               "id": "tv_variants_hint",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "children": [],
               "bounds": {
-                "top": "2994",
+                "top": "2793",
                 "left": "0",
-                "bottom": "3392",
-                "right": "324"
+                "bottom": "3182",
+                "right": "364"
               },
               "id": "publish_mask",
               "class": "FrameLayout"
             },
             {
               "bounds": {
-                "top": "2994",
+                "top": "2793",
                 "left": "0",
-                "bottom": "3392",
-                "right": "145"
+                "bottom": "3182",
+                "right": "181"
               },
               "id": "tv_publish",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "bounds": {
-                "top": "3153",
-                "left": "145",
-                "bottom": "3234",
-                "right": "285"
+                "top": "2916",
+                "left": "181",
+                "bottom": "3060",
+                "right": "325"
               },
               "id": "switch_publish",
               "class": "SwitchCompat"
             },
             {
               "bounds": {
-                "top": "3428",
+                "top": "3218",
                 "left": "0",
-                "bottom": "3534",
-                "right": "324"
+                "bottom": "3324",
+                "right": "364"
               },
               "id": "tv_publish_hint",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "bounds": {
@@ -395,8 +395,8 @@
           "bounds": {
             "top": "0",
             "left": "0",
-            "bottom": "3582",
-            "right": "324"
+            "bottom": "3372",
+            "right": "364"
           },
           "class": "ConstraintLayout"
         }],
@@ -404,7 +404,7 @@
           "top": "168",
           "left": "0",
           "bottom": "1776",
-          "right": "324"
+          "right": "364"
         },
         "class": "NestedScrollView"
       }
@@ -413,7 +413,7 @@
       "top": "0",
       "left": "0",
       "bottom": "1776",
-      "right": "324"
+      "right": "364"
     },
     "class": "CoordinatorLayout"
   }

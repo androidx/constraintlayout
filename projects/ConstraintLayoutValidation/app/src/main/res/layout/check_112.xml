@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -31,7 +31,7 @@
         app:layout_constraintVertical_chainStyle="spread_inside"
         app:layout_constraintVertical_weight="2.3" />
 
-    <android.support.v4.widget.Space
+    <android.widget.Space
         android:id="@+id/belowTitleSpace"
         android:tag="81,700,918,8"
         android:layout_width="0dp"
@@ -58,7 +58,7 @@
         app:layout_constraintVertical_weight="1.5" />
 
 
-    <android.support.v4.widget.Space
+    <android.widget.Space
         android:id="@+id/belowDescSpace"
         android:tag="81,1039,918,9"
         android:layout_width="0dp"
@@ -84,7 +84,7 @@
         app:layout_constraintTop_toBottomOf="@+id/belowDescSpace"
         app:layout_constraintVertical_weight="1" />
 
-    <android.support.v4.widget.Space
+    <android.widget.Space
         android:id="@+id/belowDateSpace"
         android:tag="81,1269,918,9"
         android:layout_width="0dp"
@@ -111,7 +111,7 @@
         app:layout_constraintTop_toBottomOf="@+id/belowDateSpace"
         app:layout_constraintVertical_weight="1" />
 
-    <android.support.v4.widget.Space
+    <android.widget.Space
         android:id="@+id/belowLocationSpace"
         android:tag="81,1498,918,9"
         android:layout_width="0dp"
@@ -136,7 +136,7 @@
         app:layout_constraintTop_toBottomOf="@+id/belowLocationSpace"
         app:layout_constraintVertical_weight="1" />
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/textContainerRightGuideline"
         android:tag="999,0,0,0"
         android:layout_width="wrap_content"
@@ -146,7 +146,7 @@
         tools:layout_editor_absoluteX="333dp"
         tools:layout_editor_absoluteY="0dp" />
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/textContainerLeftGuideline"
         android:tag="81,0,0,0"
         android:layout_width="wrap_content"
@@ -156,7 +156,7 @@
         tools:layout_editor_absoluteX="27dp"
         tools:layout_editor_absoluteY="0dp" />
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/textContainerTopGuideline"
         android:tag="0,192,0,0"
         android:layout_width="wrap_content"
@@ -166,7 +166,7 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="59dp" />
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/textContainerBottomGuideline"
         android:tag="0,1728,0,0"
         android:layout_width="wrap_content"
@@ -176,4 +176,4 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="533dp" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

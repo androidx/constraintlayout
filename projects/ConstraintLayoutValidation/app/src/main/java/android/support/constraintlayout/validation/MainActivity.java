@@ -36,7 +36,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.solver.Metrics;
+//import androidx.constraintlayout.core.Metrics;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -271,11 +271,11 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
     private String measureLayout(View view, FrameLayout.LayoutParams layoutParams, int widthMeasureSpec, int heightMeasureSpec) {
         long start = System.nanoTime();
         int iterations = ITERATIONS;
-         Metrics metrics = new Metrics();
-        if (view instanceof ConstraintLayout) {
-            ((ConstraintLayout) view).fillMetrics(metrics);
-            //metrics.measuresLayoutDuration = 0;
-        }
+//         Metrics metrics = new Metrics();
+//        if (view instanceof ConstraintLayout) {
+//            ((ConstraintLayout) view).fillMetrics(metrics);
+//            //metrics.measuresLayoutDuration = 0;
+//        }
         for (int i = 0; i < iterations; i++) {
             view.forceLayout();
             view.measure(widthMeasureSpec, heightMeasureSpec);
@@ -285,12 +285,12 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
         }
         long duration = (System.nanoTime() - start) / iterations;
 
-        long measuresDuration = metrics.measuresWidgetsDuration / iterations;
-        long layoutDuration = metrics.measuresLayoutDuration / iterations;
-        //System.out.println("total duration = " + duration + " layout " + layoutDuration + " measures " + measuresDuration);
-        //duration = layoutDuration;// - measuresDuration;
-        totalMeasuredWidgets += (metrics.measuredWidgets / iterations);
-        totalMeasuredMatchWidgets += (metrics.measuredMatchWidgets / iterations);
+//        long measuresDuration = metrics.measuresWidgetsDuration / iterations;
+//        long layoutDuration = metrics.measuresLayoutDuration / iterations;
+//        //System.out.println("total duration = " + duration + " layout " + layoutDuration + " measures " + measuresDuration);
+//        //duration = layoutDuration;// - measuresDuration;
+//        totalMeasuredWidgets += (metrics.measuredWidgets / iterations);
+//        totalMeasuredMatchWidgets += (metrics.measuredMatchWidgets / iterations);
 //        System.out.println("Total Measures: " + totalMeasuredWidgets
   //              + " matched " + totalMeasuredMatchWidgets);
 
@@ -299,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
         if (duration == 0) {
 //            duration = 2000;
         }
-        System.out.println("total duration = " + duration + " layout " + layoutDuration + " measures " + measuresDuration);
+//        System.out.println("total duration = " + duration + " layout " + layoutDuration + " measures " + measuresDuration);
         return serializeRoot(view, duration);
     }
 
@@ -473,7 +473,7 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
     private void loadLayout(String name) {
         String layoutName = "R.layout." + name;
         int resource = getResources().getIdentifier(name, "layout", getPackageName());
-        if (DEBUG) {
+        if (true || DEBUG) {
             System.out.println("load layout <" + layoutName + "> => " + resource);
         }
         if (resource != 0) {

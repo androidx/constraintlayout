@@ -8,7 +8,7 @@
 
 <!-- b/72050317 -->
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -41,7 +41,7 @@
             android:layout_marginTop="4dp"
             android:background="#eeeeee" />
 
-        <android.support.constraint.Barrier
+        <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrier"
             android:tag="319,24,0,0"
             app:barrierDirection="right"
@@ -242,7 +242,7 @@
             android:textSize="18sp"
             tools:text="{server api here}" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_debug"
             android:tag="24,1053,121,57"
             app:layout_constraintTop_toBottomOf="@id/support_api"
@@ -252,7 +252,7 @@
             android:layout_alignParentStart="true"
             android:text="Debug" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_close"
             android:tag="951,1053,105,57"
             app:layout_constraintTop_toBottomOf="@id/support_api"
@@ -261,5 +261,5 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:text="Close" />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 <!--</ScrollView>-->

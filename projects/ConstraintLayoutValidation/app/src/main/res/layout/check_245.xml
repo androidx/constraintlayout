@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,7 +12,7 @@
     <tag android:id="@+id/wrap_horizontal" android:value="0,0,791,1920 24,924,743,72 24,927,507,67 543,939,44,52 599,924,0,72 611,924,72,72 695,924,72,72"/>
     <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,120 24,24,1032,72 24,27,507,67 543,39,44,52 599,24,289,72 900,24,72,72 984,24,72,72"/>
 
-    <android.support.constraint.helper.Flow
+    <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/flow"
         android:tag="24,924,1032,72"
         android:layout_width="0dp"
@@ -62,4 +62,4 @@
         android:layout_width="24dp"
         android:layout_height="24dp" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

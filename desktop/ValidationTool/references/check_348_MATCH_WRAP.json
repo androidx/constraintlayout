@@ -1,5 +1,5 @@
 {
-  "duration": "2000",
+  "duration": "1095500",
   "layout": {
     "children": [
       {
@@ -50,7 +50,7 @@
           "right": "1032"
         },
         "id": "tv_details",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -80,7 +80,7 @@
           "right": "1032"
         },
         "id": "tv_serial",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -90,7 +90,7 @@
           "right": "1032"
         },
         "id": "tv_desc_serial",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -120,7 +120,7 @@
           "right": "1032"
         },
         "id": "tv_type",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -130,7 +130,7 @@
           "right": "1032"
         },
         "id": "tv_desc_type",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -160,7 +160,7 @@
           "right": "1032"
         },
         "id": "tv_registration",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -170,7 +170,7 @@
           "right": "1032"
         },
         "id": "tv_desc_registration",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -200,7 +200,7 @@
           "right": "1032"
         },
         "id": "tv_content",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -210,7 +210,7 @@
           "right": "1032"
         },
         "id": "tv_desc_content",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -240,7 +240,7 @@
           "right": "1032"
         },
         "id": "tv_content2",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -250,7 +250,7 @@
           "right": "1032"
         },
         "id": "tv_desc_content2",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       }
     ],
     "bounds": {

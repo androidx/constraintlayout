@@ -1,5 +1,5 @@
 {
-  "duration": "677866",
+  "duration": "472000",
   "layout": {
     "children": [
       {
@@ -70,7 +70,7 @@
           "right": "0"
         },
         "id": "camera_error",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -80,7 +80,7 @@
           "right": "0"
         },
         "id": "button_ask_permission",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {

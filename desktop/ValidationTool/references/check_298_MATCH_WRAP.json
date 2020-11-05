@@ -1,12 +1,12 @@
 {
-  "duration": "1307643",
+  "duration": "3360000",
   "layout": {
     "children": [
       {
         "bounds": {
           "top": "0",
           "left": "0",
-          "bottom": "890",
+          "bottom": "1536",
           "right": "1080"
         },
         "id": "flow",
@@ -14,69 +14,69 @@
       },
       {
         "bounds": {
-          "top": "55",
+          "top": "-25",
           "left": "30",
-          "bottom": "259",
+          "bottom": "386",
           "right": "350"
         },
         "id": "button2",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
-          "top": "30",
+          "top": "-98",
           "left": "380",
-          "bottom": "283",
+          "bottom": "459",
           "right": "700"
         },
         "id": "button3",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
-          "top": "85",
+          "top": "108",
           "left": "730",
-          "bottom": "229",
+          "bottom": "252",
           "right": "1050"
         },
         "id": "button4",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
-          "top": "338",
+          "top": "538",
           "left": "30",
-          "bottom": "836",
+          "bottom": "1586",
           "right": "350"
         },
         "id": "button5",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
-          "top": "313",
+          "top": "489",
           "left": "380",
-          "bottom": "860",
+          "bottom": "1635",
           "right": "700"
         },
         "id": "button6",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
-          "top": "313",
+          "top": "489",
           "left": "730",
-          "bottom": "860",
+          "bottom": "1635",
           "right": "1050"
         },
         "id": "button7",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       }
     ],
     "bounds": {
       "top": "0",
       "left": "0",
-      "bottom": "890",
+      "bottom": "1536",
       "right": "1080"
     },
     "class": "ConstraintLayout"
