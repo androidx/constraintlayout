@@ -1,4 +1,4 @@
-rootProject.name = "DeveloperTemplate"
+rootProject.name = "ConstraintLayoutValidation"
 include ':app'
 include ':constraintlayout'
 include ':solver'
