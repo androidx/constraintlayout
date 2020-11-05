@@ -1,0 +1,85 @@
+{
+  "duration": "581000",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "144",
+          "right": "264"
+        },
+        "id": "button1",
+        "class": "MaterialButton"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "264",
+          "bottom": "144",
+          "right": "528"
+        },
+        "id": "button2",
+        "class": "MaterialButton"
+      },
+      {
+        "bounds": {
+          "top": "144",
+          "left": "0",
+          "bottom": "288",
+          "right": "264"
+        },
+        "id": "button3",
+        "class": "MaterialButton"
+      },
+      {
+        "bounds": {
+          "top": "288",
+          "left": "264",
+          "bottom": "432",
+          "right": "528"
+        },
+        "id": "button4",
+        "class": "MaterialButton"
+      },
+      {
+        "bounds": {
+          "top": "288",
+          "left": "0",
+          "bottom": "432",
+          "right": "264"
+        },
+        "id": "button5",
+        "class": "MaterialButton"
+      },
+      {
+        "bounds": {
+          "top": "144",
+          "left": "264",
+          "bottom": "288",
+          "right": "528"
+        },
+        "id": "button6",
+        "class": "MaterialButton"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "432",
+          "right": "528"
+        },
+        "id": "flow",
+        "class": "Flow"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "528"
+    },
+    "id": "root",
+    "class": "ConstraintLayout"
+  }
+}

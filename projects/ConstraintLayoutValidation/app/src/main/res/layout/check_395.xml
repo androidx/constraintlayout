@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false">
+
+    <!-- issue 10 -->
+
+    <View
+        android:id="@+id/btn_layers_sparkles"
+        android:layout_width="600dp"
+        android:layout_height="600dp"
+        android:translationX="150dp"
+        android:translationY="150dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/btn_layers"
+        app:layout_constraintEnd_toEndOf="@id/btn_layers"
+        tools:visibility="visible" />
+    <ImageButton
+        android:id="@+id/btn_layers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="200dp"
+        android:src="@drawable/ic_add_black_24dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+    <ImageView
+        android:id="@+id/iv_legend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/btn_layers"
+        app:layout_constraintStart_toStartOf="@id/btn_layers"
+        app:layout_constraintTop_toBottomOf="@id/btn_layers" />
+    <Button
+        android:id="@+id/header_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingStart="450dp"
+        android:paddingTop="25dp"
+        android:paddingEnd="450dp"
+        android:paddingBottom="150dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/tv_welcome_message"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="150dp"
+        android:gravity="center"
+        android:paddingStart="450dp"
+        android:paddingTop="25dp"
+        android:paddingEnd="450dp"
+        android:paddingBottom="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0" />
+    <View
+        android:id="@+id/btn_footprints_sparkles"
+        android:layout_width="600dp"
+        android:layout_height="600dp"
+        android:translationX="150dp"
+        android:translationY="150dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/btn_footsteps"
+        app:layout_constraintEnd_toEndOf="@id/btn_footsteps"
+        tools:visibility="visible" />
+    <ImageButton
+        android:id="@+id/btn_footsteps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="200dp"
+        android:src="@drawable/ic_add_black_24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    
+</androidx.constraintlayout.widget.ConstraintLayout>

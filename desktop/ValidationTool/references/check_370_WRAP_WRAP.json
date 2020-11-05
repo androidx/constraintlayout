@@ -1,0 +1,85 @@
+{
+  "duration": "356500",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "228",
+          "bottom": "0",
+          "right": "228"
+        },
+        "id": "content_end",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "228",
+          "bottom": "96",
+          "right": "228"
+        },
+        "id": "soft_intervention_forward_pivot",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "firstView",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "120",
+          "left": "228",
+          "bottom": "556",
+          "right": "228"
+        },
+        "id": "tweet_media_tags",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "580",
+          "left": "228",
+          "bottom": "676",
+          "right": "228"
+        },
+        "id": "secondView",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "30",
+          "left": "36",
+          "bottom": "192",
+          "right": "198"
+        },
+        "id": "tweet_profile_image",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "204",
+          "left": "77",
+          "bottom": "261",
+          "right": "157"
+        },
+        "id": "center",
+        "class": "MaterialTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "676",
+      "right": "264"
+    },
+    "id": "constraintLayout",
+    "class": "ConstraintLayout"
+  }
+}

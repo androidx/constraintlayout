@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    app:layout_optimizationLevel="direct"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="MissingPrefix">
+
+    <!-- b/162917675 -->
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorAccent"
+        />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <TextView
+            android:id="@+id/choose_your_location"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:paddingLeft="45dp"
+            android:paddingStart="45dp"
+            android:paddingRight="45dp"
+            android:paddingEnd="45dp"
+            android:ellipsize="end"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="start"
+            android:lineSpacingExtra="2dp"
+            android:maxLines="3"
+            android:text="choose_your_location"
+            android:textColor="#F8FBFF"
+            android:textSize="26sp"
+            app:layout_constraintStart_toStartOf="@id/query"
+            app:layout_constraintEnd_toEndOf="@id/query"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <ImageView
+            android:id="@+id/search_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16.5dp"
+            android:layout_marginStart="16.5dp"
+            android:layout_marginLeft="16.5dp"
+            android:background="@drawable/ic_android_black_24dp"
+            app:layout_constraintStart_toStartOf="@+id/query"
+            app:layout_constraintTop_toTopOf="@id/query"/>
+
+        <!-- focus: https://stackoverflow.com/questions/1555109/stop-edittext-from-gaining-focus-at-activity-startup -->
+        <EditText
+            android:background="#F00"
+            android:id="@+id/query"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginStart="35dp"
+            android:layout_marginRight="35dp"
+            android:layout_marginEnd="35dp"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
+            android:paddingLeft="40dp"
+            android:paddingStart="40dp"
+            android:paddingRight="40dp"
+            android:paddingEnd="40dp"
+            android:cursorVisible="true"
+            android:gravity="start|center_vertical"
+            android:hint="search"
+            android:imeOptions="actionSearch"
+            android:inputType="textNoSuggestions"
+            android:maxLength="40"
+            android:nextFocusLeft="@+id/query"
+            android:nextFocusUp="@+id/query"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:textCursorDrawable="@drawable/ic_android_black_24dp"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/choose_your_location"
+            app:layout_constraintWidth_max="350dp"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height=".5dp"
+            android:layout_below="@+id/query"
+            app:layout_constraintBottom_toBottomOf="@+id/query"
+            app:layout_constraintStart_toStartOf="@+id/query"
+            app:layout_constraintEnd_toEndOf="@+id/query"
+            app:layout_constraintTop_toBottomOf="@+id/query"
+            />
+
+        <ImageButton
+            android:id="@+id/locate_me"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_gravity="end|center_vertical"
+            android:padding="18dp"
+            android:background="@drawable/ic_android_black_24dp"
+            android:contentDescription="locate_me"
+            app:layout_constraintEnd_toEndOf="@+id/query"
+            app:layout_constraintTop_toTopOf="@id/query"/>
+
+        <ProgressBar
+            android:id="@+id/searchProgressBar"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/locate_me"
+            app:layout_constraintStart_toStartOf="@id/locate_me"
+            app:layout_constraintEnd_toEndOf="@id/locate_me"
+            app:layout_constraintTop_toTopOf="@+id/locate_me"/>
+
+        <View
+            android:id="@+id/rv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:clipToPadding="false"
+            android:scrollbars="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/query"
+            app:layout_constraintWidth_max="500dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/closeButton"
+            android:background="@drawable/ic_android_black_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

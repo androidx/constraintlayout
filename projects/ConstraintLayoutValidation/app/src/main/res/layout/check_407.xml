@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+   <!-- b/171632736 -->
+
+   <androidx.constraintlayout.helper.widget.Layer
+       android:id="@+id/layer"
+       android:background="#F0F"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       app:constraint_referenced_tags="cat,fish"
+       tools:ignore="MissingConstraints">
+   </androidx.constraintlayout.helper.widget.Layer>
+
+   <Button
+       android:id="@+id/buttonA"
+       android:layout_width="wrap_content"
+       android:layout_height="100dp"
+       android:backgroundTint="#ff0000"
+       android:text="A"
+       app:layout_constraintTag="cat"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent" />
+
+   <Button
+       android:id="@+id/buttonB"
+       android:layout_width="wrap_content"
+       android:layout_height="200dp"
+       android:text="B"
+       app:layout_constraintTag="cat"
+       app:layout_constraintStart_toEndOf="@id/buttonA"
+       app:layout_constraintTop_toTopOf="@id/buttonA" />
+
+   <Button
+       android:id="@+id/buttonC"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="C"
+       app:layout_constraintTag="fish"
+       app:layout_constraintStart_toEndOf="@id/buttonB"
+       app:layout_constraintTop_toTopOf="@id/barrier" />
+
+   <androidx.constraintlayout.widget.Barrier
+       android:id="@+id/barrier"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       app:constraint_referenced_tags="cat,dog"
+       app:barrierDirection="bottom">
+   </androidx.constraintlayout.widget.Barrier>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

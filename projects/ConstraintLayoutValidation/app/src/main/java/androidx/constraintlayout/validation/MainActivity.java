@@ -36,8 +36,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.core.Metrics;
 import androidx.constraintlayout.widget.ConstraintLayout;
 //import androidx.constraintlayout.core.Metrics;
+import androidx.core.view.ViewCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -146,6 +149,86 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
         return false;
     };
 
+    TestLayout testLayout_376 = (view, mode, widthMeasureSpec, heightMeasureSpec, layoutParams) -> {
+        ConstraintLayout root = findViewById(R.id.root);
+        root.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+        FrameLayout frameLayout = findViewById(R.id.googleapp_incognito_topbar_container);
+        ViewCompat.setOnApplyWindowInsetsListener(
+                frameLayout,
+                (v, insets) -> {
+                    int systemWindowInsetTop = insets.getSystemWindowInsetTop();
+
+                    // Adjust the height of the topBar by extending it from status bar.
+                    int topbarHeight = this.getApplicationContext()
+                            .getResources()
+                            .getDimensionPixelSize(R.dimen.incognito_topbar_height);
+                    ViewGroup.LayoutParams params = frameLayout.getLayoutParams();
+                    params.height = topbarHeight + systemWindowInsetTop;
+                    frameLayout.setLayoutParams(params);
+                    return insets;
+                });
+        ViewCompat.requestApplyInsets(frameLayout);
+//        frameLayout.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+//            @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
+//            @Override
+//            public void onViewAttachedToWindow(View v) {
+//                v.removeOnAttachStateChangeListener(this);
+//                v.requestApplyInsets();
+//            }
+//
+//            @Override
+//            public void onViewDetachedFromWindow(View v) {
+//
+//            }
+//        });
+        return false;
+    };
+
+    TestLayout testLayout_397 = (view, mode, widthMeasureSpec, heightMeasureSpec, layoutParams) -> {
+        Fragment fragment = new CLBugFragment();
+        view.postDelayed(() -> {
+            getSupportFragmentManager().beginTransaction().add(R.id.host, fragment).commit();
+        }, 20);
+        return true;
+    };
+
+    TestLayout testLayout_398 = (view, mode, widthMeasureSpec, heightMeasureSpec, layoutParams) -> {
+        view.forceLayout();
+        view.measure(widthMeasureSpec, heightMeasureSpec);
+        View button = view.findViewById(R.id.button2);
+        ConstraintLayout layout = (ConstraintLayout) view;
+        layout.removeView(button);
+        view.forceLayout();
+        view.measure(widthMeasureSpec, heightMeasureSpec);
+        return true;
+    };
+
+    TestLayout testLayout_406 = (view, mode, widthMeasureSpec, heightMeasureSpec, layoutParams) -> {
+        view.forceLayout();
+        view.measure(widthMeasureSpec, heightMeasureSpec);
+        //Layer layer = view.findViewById(R.id.layer);
+        //layer.setTag("TOTO");
+        view.forceLayout();
+        view.measure(widthMeasureSpec, heightMeasureSpec);
+        //System.out.println("layer.getTag: " + layer.getTag());
+        //if (!layer.getTag().equals("TOTO")) {
+        //    return false;
+        //}
+        return true;
+    };
+
+    TestLayout testLayout_408 = (view, mode, widthMeasureSpec, heightMeasureSpec, layoutParams) -> {
+        view.forceLayout();
+        view.measure(widthMeasureSpec, heightMeasureSpec);
+        View viewToRemove = findViewById(R.id.issue);
+        ViewGroup group = (ViewGroup) viewToRemove.getParent();
+        viewToRemove.postDelayed(() -> {
+            group.removeView(viewToRemove);
+        }, 20);
+        return true;
+    };
+
     Command listCommand = (activity, server, writer, reader, out) -> {
         String[] layouts = getLayouts();
         for (int i = 0; i < layouts.length; i++) {
@@ -172,7 +255,9 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
         int[] measureSpecs = new int[2];
 
         if (layoutName.equals("check_265")
-            || layoutName.equals("check_335")) { // only check 265 need UI driving for now, refactor when more
+                || layoutName.equals("check_335")
+                || layoutName.equals("check_397")) { // only check 265 need UI driving for now, refactor when more
+            int timeout = 1500;
             server.runOnUiAndWait(activity, () -> {
                 View view = setupLayout(activity, layoutName, mode, measureSpecs, optimization);
                 FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) view.getLayoutParams();
@@ -186,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
             });
             if (result[0] == null) {
                 try {
-                    Thread.sleep(1500);
+                    Thread.sleep(timeout);
                     server.runOnUiAndWait(activity, () -> {
                         ViewGroup host = activity.findViewById(android.R.id.content);
                         View view = host.getChildAt(0);
@@ -201,11 +286,22 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
             server.runOnUiAndWait(activity, () -> {
                 View view = setupLayout(activity, layoutName, mode, measureSpecs, optimization);
                 FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) view.getLayoutParams();
+                boolean validTest = true;
                 if (mTests.containsKey(layoutName)) {
                     TestLayout testLayout = mTests.get(layoutName);
-                    testLayout.apply(view, mode, measureSpecs[0], measureSpecs[1], layoutParams);
+                    validTest = testLayout.apply(view, mode, measureSpecs[0], measureSpecs[1], layoutParams);
+                    validTest = true;
                 }
-                result[0] = measureLayout(view, layoutParams, measureSpecs[0], measureSpecs[1]);
+                if (validTest) {
+                    result[0] = measureLayout(view, layoutParams, measureSpecs[0], measureSpecs[1]);
+                } else {
+                    String res = "{";
+                    res += pair("duration", "" + -1) + ", ";
+                    res += "error : \"test\", ";
+                    res += "layout : " + serialize(view);
+                    res += "}";
+                    result[0] = res;
+                }
             });
         }
         writer.println(result[0]);
@@ -224,7 +320,6 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
             }
         }
     }
-
 
     @NonNull
     private View setupLayout(Activity activity, String layoutName, String mode, int[] measureSpecs, int optimization) {
@@ -268,15 +363,19 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
 
     long totalMeasuredWidgets = 0;
     long totalMeasuredMatchWidgets = 0;
+    long totalGrouping = 0;
+    long totalLayouts = 0;
 
     private String measureLayout(View view, FrameLayout.LayoutParams layoutParams, int widthMeasureSpec, int heightMeasureSpec) {
         long start = System.nanoTime();
         int iterations = ITERATIONS;
-//         Metrics metrics = new Metrics();
-//        if (view instanceof ConstraintLayout) {
-//            ((ConstraintLayout) view).fillMetrics(metrics);
-//            //metrics.measuresLayoutDuration = 0;
-//        }
+        androidx.constraintlayout.core.Metrics metrics = new Metrics();
+        if (view instanceof ConstraintLayout) {
+            ((ConstraintLayout) view).fillMetrics(metrics);
+            //metrics.measuresLayoutDuration = 0;
+//            metrics.grouping = 0;
+//            metrics.layouts = 0;
+        }
         for (int i = 0; i < iterations; i++) {
             view.forceLayout();
             view.measure(widthMeasureSpec, heightMeasureSpec);
@@ -286,14 +385,17 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
         }
         long duration = (System.nanoTime() - start) / iterations;
 
-//        long measuresDuration = metrics.measuresWidgetsDuration / iterations;
-//        long layoutDuration = metrics.measuresLayoutDuration / iterations;
-//        //System.out.println("total duration = " + duration + " layout " + layoutDuration + " measures " + measuresDuration);
-//        //duration = layoutDuration;// - measuresDuration;
-//        totalMeasuredWidgets += (metrics.measuredWidgets / iterations);
-//        totalMeasuredMatchWidgets += (metrics.measuredMatchWidgets / iterations);
+//        totalGrouping += metrics.grouping;
+//        totalLayouts += metrics.layouts;
+
+        long measuresDuration = metrics.measuresWidgetsDuration / iterations;
+        long layoutDuration = metrics.measuresLayoutDuration / iterations;
+        //System.out.println("total duration = " + duration + " layout " + layoutDuration + " measures " + measuresDuration);
+        //duration = layoutDuration;// - measuresDuration;
+        totalMeasuredWidgets += (metrics.measuredWidgets / iterations);
+        totalMeasuredMatchWidgets += (metrics.measuredMatchWidgets / iterations);
 //        System.out.println("Total Measures: " + totalMeasuredWidgets
-  //              + " matched " + totalMeasuredMatchWidgets);
+        //              + " matched " + totalMeasuredMatchWidgets);
 
         //        duration = measureDuration / iterations;
         //ArrayLinkedVariables.metrics();
@@ -301,6 +403,7 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
 //            duration = 2000;
         }
 //        System.out.println("total duration = " + duration + " layout " + layoutDuration + " measures " + measuresDuration);
+//        System.out.println("total: " +  totalLayouts + " grouping " + totalGrouping);
         return serializeRoot(view, duration);
     }
 
@@ -438,6 +541,7 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
         result += pair("duration", "" + duration) + ", ";
         result += "layout : " + serialize(view);
         result += "}";
+        //System.out.println("serialize : " + result);
         return result;
     }
 
@@ -474,7 +578,7 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
     private void loadLayout(String name) {
         String layoutName = "R.layout." + name;
         int resource = getResources().getIdentifier(name, "layout", getPackageName());
-        if (true || DEBUG) {
+        if (DEBUG) {
             System.out.println("load layout <" + layoutName + "> => " + resource);
         }
         if (resource != 0) {
@@ -501,13 +605,36 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
         mTests.put("check_265", testLayout_265);
         mTests.put("check_335", testLayout_335);
         mTests.put("check_339", testLayout_339);
+        mTests.put("check_376", testLayout_376);
+        mTests.put("check_397", testLayout_397);
+        mTests.put("check_398", testLayout_398);
+        mTests.put("check_406", testLayout_406);
+        mTests.put("check_408", testLayout_408);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Window window = getWindow();
             window.setSustainedPerformanceMode(true);
         }
 
-        setContentView(R.layout.activity_main);
+//        setContentView(R.layout.activity_main);
+//        setContentView(R.layout.check_339);
+////
+//        RecyclerView list_view = findViewById(R.id.list_view);
+//        ArrayList<String> xVals = new ArrayList<String>();
+//        xVals.add("Test String 1");
+//        xVals.add("Test String 2");
+//        xVals.add("Test String 3");
+//
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+//        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//        list_view.setLayoutManager(linearLayoutManager);
+//        list_view.setAdapter(new Adapter339(getApplicationContext(), xVals));
+
+        setContentView(R.layout.check_405);
+
+        //setContentView(R.layout.check_251);
+//        setContentView(R.layout.check_024);
+//        setContentView(R.layout.check_003);
         mServer.setRequestsHandler(this);
         mServer.start();
     }

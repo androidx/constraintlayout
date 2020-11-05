@@ -1,0 +1,292 @@
+{
+  "duration": "2230500",
+  "layout": {
+    "children": [
+      {
+        "children": [{
+          "children": [
+            {
+              "bounds": {
+                "top": "45",
+                "left": "30",
+                "bottom": "102",
+                "right": "555"
+              },
+              "id": "txt_popular",
+              "class": "MaterialTextView"
+            },
+            {
+              "bounds": {
+                "top": "45",
+                "left": "555",
+                "bottom": "189",
+                "right": "1080"
+              },
+              "id": "txt_show_popular_all",
+              "class": "MaterialButton"
+            },
+            {
+              "bounds": {
+                "top": "189",
+                "left": "0",
+                "bottom": "381",
+                "right": "1080"
+              },
+              "id": "recyclerView_popular_test",
+              "class": "View"
+            },
+            {
+              "bounds": {
+                "top": "441",
+                "left": "0",
+                "bottom": "585",
+                "right": "1080"
+              },
+              "id": "layout_how_it_work",
+              "class": "View"
+            },
+            {
+              "bounds": {
+                "top": "630",
+                "left": "30",
+                "bottom": "687",
+                "right": "555"
+              },
+              "id": "txt_category",
+              "class": "MaterialTextView"
+            },
+            {
+              "bounds": {
+                "top": "630",
+                "left": "555",
+                "bottom": "774",
+                "right": "1080"
+              },
+              "id": "txt_show_all_category",
+              "class": "MaterialButton"
+            },
+            {
+              "bounds": {
+                "top": "774",
+                "left": "0",
+                "bottom": "966",
+                "right": "1080"
+              },
+              "id": "recyclerView_symptom",
+              "class": "View"
+            },
+            {
+              "children": [{
+                "children": [{
+                  "bounds": {
+                    "top": "150",
+                    "left": "0",
+                    "bottom": "222",
+                    "right": "1080"
+                  },
+                  "class": "AppCompatImageView"
+                }],
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "282",
+                  "right": "1080"
+                },
+                "class": "LinearLayout"
+              }],
+              "bounds": {
+                "top": "1026",
+                "left": "0",
+                "bottom": "1308",
+                "right": "1080"
+              },
+              "id": "img_footer",
+              "class": "LinearLayout"
+            },
+            {
+              "bounds": {
+                "top": "1308",
+                "left": "0",
+                "bottom": "1758",
+                "right": "1080"
+              },
+              "class": "Space"
+            },
+            {
+              "bounds": {
+                "top": "0",
+                "left": "60",
+                "bottom": "0",
+                "right": "60"
+              },
+              "id": "guideline86",
+              "class": "Guideline"
+            }
+          ],
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "1758",
+            "right": "1080"
+          },
+          "class": "ConstraintLayout"
+        }],
+        "bounds": {
+          "top": "805",
+          "left": "0",
+          "bottom": "2341",
+          "right": "1080"
+        },
+        "id": "nestedScrollView",
+        "class": "NestedScrollView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "54",
+          "bottom": "92",
+          "right": "432"
+        },
+        "id": "tv_app_title",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "layout_show_all_gradient_bck",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "745",
+          "right": "1080"
+        },
+        "id": "frameLayout",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "595",
+          "left": "0",
+          "bottom": "745",
+          "right": "1080"
+        },
+        "id": "space_negative",
+        "class": "Space"
+      },
+      {
+        "bounds": {
+          "top": "123",
+          "left": "0",
+          "bottom": "595",
+          "right": "1080"
+        },
+        "id": "viewpager_banner",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "670",
+          "left": "390",
+          "bottom": "719",
+          "right": "690"
+        },
+        "id": "test_search",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "1440",
+          "left": "924",
+          "bottom": "1536",
+          "right": "1020"
+        },
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "1332",
+          "left": "60",
+          "bottom": "1476",
+          "right": "324"
+        },
+        "id": "img_menu",
+        "class": "MaterialButton"
+      },
+      {
+        "bounds": {
+          "top": "891",
+          "left": "0",
+          "bottom": "891",
+          "right": "0"
+        },
+        "id": "guideline27",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "92",
+          "left": "0",
+          "bottom": "92",
+          "right": "0"
+        },
+        "id": "guideline29",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "123",
+          "left": "0",
+          "bottom": "123",
+          "right": "0"
+        },
+        "id": "guideline38",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "184",
+          "left": "0",
+          "bottom": "184",
+          "right": "0"
+        },
+        "id": "guideline26",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "432",
+          "bottom": "0",
+          "right": "432"
+        },
+        "id": "guideline30",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "54",
+          "bottom": "0",
+          "right": "54"
+        },
+        "id": "guideline31",
+        "class": "Guideline"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "id": "root",
+    "class": "ConstraintLayout"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "duration": "174500",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "96",
+          "bottom": "0",
+          "right": "96"
+        },
+        "id": "car_ui_list_item_start_guideline",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "642",
+          "left": "144",
+          "bottom": "895",
+          "right": "144"
+        },
+        "id": "title",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "body",
+        "class": "MaterialTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "144"
+    },
+    "id": "root",
+    "class": "ConstraintLayout"
+  }
+}

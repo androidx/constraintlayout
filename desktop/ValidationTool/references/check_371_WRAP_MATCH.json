@@ -1,0 +1,180 @@
+{
+  "duration": "296500",
+  "layout": {
+    "children": [{
+      "children": [{
+        "children": [
+          {
+            "bounds": {
+              "top": "480",
+              "left": "0",
+              "bottom": "577",
+              "right": "823"
+            },
+            "id": "get_kids_mode_title",
+            "class": "MaterialTextView"
+          },
+          {
+            "bounds": {
+              "top": "697",
+              "left": "0",
+              "bottom": "754",
+              "right": "1501"
+            },
+            "id": "get_kids_mode_message",
+            "class": "MaterialTextView"
+          },
+          {
+            "children": [
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "108",
+                  "right": "108"
+                },
+                "id": "feature_item_icon",
+                "class": "AppCompatImageView"
+              },
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "195",
+                  "bottom": "73",
+                  "right": "1074"
+                },
+                "id": "feature_item_title",
+                "class": "MaterialTextView"
+              },
+              {
+                "bounds": {
+                  "top": "88",
+                  "left": "195",
+                  "bottom": "137",
+                  "right": "1248"
+                },
+                "id": "feature_item_subtitle",
+                "class": "MaterialTextView"
+              }
+            ],
+            "bounds": {
+              "top": "850",
+              "left": "0",
+              "bottom": "987",
+              "right": "1248"
+            },
+            "id": "first_feature_item",
+            "class": "ConstraintLayout"
+          },
+          {
+            "children": [
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "108",
+                  "right": "108"
+                },
+                "id": "feature_item_icon",
+                "class": "AppCompatImageView"
+              },
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "195",
+                  "bottom": "73",
+                  "right": "1074"
+                },
+                "id": "feature_item_title",
+                "class": "MaterialTextView"
+              },
+              {
+                "bounds": {
+                  "top": "88",
+                  "left": "195",
+                  "bottom": "137",
+                  "right": "1248"
+                },
+                "id": "feature_item_subtitle",
+                "class": "MaterialTextView"
+              }
+            ],
+            "bounds": {
+              "top": "1083",
+              "left": "0",
+              "bottom": "1220",
+              "right": "1248"
+            },
+            "id": "second_feature_item",
+            "class": "ConstraintLayout"
+          },
+          {
+            "children": [
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "108",
+                  "right": "108"
+                },
+                "id": "feature_item_icon",
+                "class": "AppCompatImageView"
+              },
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "195",
+                  "bottom": "73",
+                  "right": "1074"
+                },
+                "id": "feature_item_title",
+                "class": "MaterialTextView"
+              },
+              {
+                "bounds": {
+                  "top": "88",
+                  "left": "195",
+                  "bottom": "137",
+                  "right": "1248"
+                },
+                "id": "feature_item_subtitle",
+                "class": "MaterialTextView"
+              }
+            ],
+            "bounds": {
+              "top": "1316",
+              "left": "0",
+              "bottom": "1453",
+              "right": "1248"
+            },
+            "id": "third_feature_item",
+            "class": "ConstraintLayout"
+          }
+        ],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "1693",
+          "right": "1590"
+        },
+        "class": "LinearLayout"
+      }],
+      "bounds": {
+        "top": "0",
+        "left": "48",
+        "bottom": "1536",
+        "right": "1638"
+      },
+      "id": "text_container",
+      "class": "ScrollView"
+    }],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "id": "constraintLayout",
+    "class": "ConstraintLayout"
+  }
+}

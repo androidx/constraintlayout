@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <!-- b/166717984 -->
+
+    <View
+        android:id="@+id/avatar"
+        android:layout_height="48dp"
+        android:layout_width="48dp"
+        android:padding="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="19dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="Tester62 QA1"
+        android:textAlignment="viewStart"
+        android:textDirection="locale"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/avatar"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/chat_message"
+        android:text="SP Balasubhahmanyam was admitted to Chennai's MGM Healthcare earlier this month after testing positive for coronavirus. He was later shifter to the IntensiveCare Unit (ICU) after suffering a setback on August 13"
+        tools:text="abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginEnd="19dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="8dp"
+        android:textAlignment="viewStart"
+        android:textDirection="locale"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintStart_toEndOf="@+id/avatar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/name"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

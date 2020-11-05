@@ -1,0 +1,337 @@
+{
+  "duration": "1297000",
+  "layout": {
+    "children": [
+      {
+        "children": [],
+        "bounds": {
+          "top": "12",
+          "left": "36",
+          "bottom": "42",
+          "right": "1080"
+        },
+        "id": "tweet_social_proof",
+        "class": "LinearLayout"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "auto_translation_view_stub",
+        "class": "ViewStub"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "tweet_connector_top",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "tweet_connector_bottom",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "396",
+          "left": "36",
+          "bottom": "396",
+          "right": "36"
+        },
+        "id": "tweet_connector_avatar",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "45",
+          "left": "66",
+          "bottom": "108",
+          "right": "1044"
+        },
+        "id": "tweet_header",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "user_label_view",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "tweet_reply_label",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "tweet_curation_action",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "1044",
+          "bottom": "0",
+          "right": "1044"
+        },
+        "id": "content_end",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "tweet_reply_context",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "tweet_quote",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "tweet_inner_tombstone",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "192",
+          "left": "66",
+          "bottom": "288",
+          "right": "1044"
+        },
+        "id": "possibly_sensitive_warning",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "non_compliant_interstitial",
+        "class": "View"
+      },
+      {
+        "children": [],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "card_media_tweet_container",
+        "class": "LinearLayout"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "soft_intervention_forward_pivot",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "tweet_media_tags",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "114",
+          "left": "66",
+          "bottom": "171",
+          "right": "1044"
+        },
+        "id": "tweet_content_text",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "45",
+          "left": "36",
+          "bottom": "45",
+          "right": "36"
+        },
+        "id": "tweet_profile_image",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "45",
+          "left": "36",
+          "bottom": "45",
+          "right": "36"
+        },
+        "id": "start_anchor",
+        "class": "MaterialButton"
+      },
+      {
+        "bounds": {
+          "top": "45",
+          "left": "36",
+          "bottom": "45",
+          "right": "36"
+        },
+        "id": "top_anchor",
+        "class": "MaterialButton"
+      },
+      {
+        "bounds": {
+          "top": "45",
+          "left": "36",
+          "bottom": "45",
+          "right": "36"
+        },
+        "id": "bottom_anchor",
+        "class": "MaterialButton"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "inline_social_proof",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "conversation_controls",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "288",
+          "left": "0",
+          "bottom": "288",
+          "right": "0"
+        },
+        "id": "card_media_barrier",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "288",
+          "left": "0",
+          "bottom": "288",
+          "right": "0"
+        },
+        "id": "actions_barrier",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "288",
+          "left": "36",
+          "bottom": "408",
+          "right": "1044"
+        },
+        "id": "tweet_inline_actions",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "autotranslation_fatigue_container",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "408",
+          "left": "0",
+          "bottom": "408",
+          "right": "1080"
+        },
+        "id": "inline_action_gone_margin",
+        "class": "Space"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "tweet_promoted_badge",
+        "class": "MaterialButton"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "tweet_additional_context_text",
+        "class": "MaterialTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "408",
+      "right": "1080"
+    },
+    "id": "constraintLayout",
+    "class": "ConstraintLayout"
+  }
+}

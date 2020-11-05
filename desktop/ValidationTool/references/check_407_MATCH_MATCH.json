@@ -1,0 +1,65 @@
+{
+  "duration": "255500",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "744",
+          "right": "792"
+        },
+        "id": "layer",
+        "class": "Layer"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "300",
+          "right": "264"
+        },
+        "id": "buttonA",
+        "class": "MaterialButton"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "264",
+          "bottom": "600",
+          "right": "528"
+        },
+        "id": "buttonB",
+        "class": "MaterialButton"
+      },
+      {
+        "bounds": {
+          "top": "600",
+          "left": "528",
+          "bottom": "744",
+          "right": "792"
+        },
+        "id": "buttonC",
+        "class": "MaterialButton"
+      },
+      {
+        "bounds": {
+          "top": "600",
+          "left": "0",
+          "bottom": "600",
+          "right": "0"
+        },
+        "id": "barrier",
+        "class": "Barrier"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "id": "root",
+    "class": "ConstraintLayout"
+  }
+}

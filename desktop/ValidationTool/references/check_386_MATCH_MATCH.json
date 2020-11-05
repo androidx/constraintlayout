@@ -1,0 +1,55 @@
+{
+  "duration": "370000",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "variant1_small_view_1",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "variant1_small_view_2",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "-461",
+          "bottom": "1536",
+          "right": "-455"
+        },
+        "id": "variant1_small_views_delimiter",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "-455",
+          "bottom": "1536",
+          "right": "1080"
+        },
+        "id": "variant1_big_view",
+        "class": "View"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "id": "root",
+    "class": "ConstraintLayout"
+  }
+}

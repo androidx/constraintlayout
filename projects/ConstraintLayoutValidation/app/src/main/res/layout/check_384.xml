@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent"
+    tools:context=".MainActivity">
+
+    <!-- b/167701934 -->
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_android_black_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:src="@drawable/ic_android_black_24dp"
+        android:layout_width="142dp"
+        android:layout_height="12dp"
+        android:layout_marginTop="16dp"
+        android:alpha="0.25"
+        android:importantForAccessibility="no"
+        app:layout_constraintTop_toTopOf="@id/your"
+        app:layout_constraintEnd_toEndOf="@id/score"
+        app:layout_constraintStart_toStartOf="@id/your"/>
+
+    <TextView
+        android:id="@+id/your"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:includeFontPadding="false"
+        android:textAllCaps="true"
+        android:text="your"
+        android:layout_marginEnd="4dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintEnd_toStartOf="@id/score"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:includeFontPadding="false"
+        android:textAllCaps="true"
+        android:text="score"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toEndOf="@id/your"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/quizReuslt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="72sp"
+        android:includeFontPadding="false"
+        android:textAllCaps="true"
+        tools:text="10/10"
+        app:layout_constraintBottom_toTopOf="@id/viewResultsButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/your" />
+
+    <TextView
+        android:id="@+id/endMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:includeFontPadding="false"
+        android:textAllCaps="true"
+        android:gravity="center"
+        tools:text="SUPERSTAR!!!"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/viewResultsButton" />
+
+    <Button
+        android:id="@+id/viewResultsButton"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="view_results"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

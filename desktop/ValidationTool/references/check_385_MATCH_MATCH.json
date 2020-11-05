@@ -1,0 +1,75 @@
+{
+  "duration": "242000",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "244",
+          "left": "378",
+          "bottom": "568",
+          "right": "702"
+        },
+        "id": "logo",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "812",
+          "left": "162",
+          "bottom": "869",
+          "right": "918"
+        },
+        "id": "title",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "869",
+          "left": "162",
+          "bottom": "926",
+          "right": "918"
+        },
+        "id": "view1",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "938",
+          "left": "162",
+          "bottom": "995",
+          "right": "918"
+        },
+        "id": "view2",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "162",
+          "bottom": "0",
+          "right": "162"
+        },
+        "id": "guidelineStart",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "918",
+          "bottom": "0",
+          "right": "918"
+        },
+        "id": "guidelineEnd",
+        "class": "Guideline"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "id": "root",
+    "class": "ConstraintLayout"
+  }
+}
