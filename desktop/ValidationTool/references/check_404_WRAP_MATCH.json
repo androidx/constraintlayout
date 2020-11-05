@@ -1,0 +1,331 @@
+{
+  "duration": "4196000",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "96",
+          "right": "1080"
+        },
+        "id": "toolbarTop",
+        "class": "View"
+      },
+      {
+        "children": [
+          {
+            "bounds": {
+              "top": "0",
+              "left": "43",
+              "bottom": "0",
+              "right": "43"
+            },
+            "id": "guideLineVerticalStart",
+            "class": "Guideline"
+          },
+          {
+            "bounds": {
+              "top": "0",
+              "left": "1037",
+              "bottom": "0",
+              "right": "1037"
+            },
+            "id": "guideLineVerticalEnd",
+            "class": "Guideline"
+          },
+          {
+            "children": [{
+              "bounds": {
+                "top": "0",
+                "left": "407",
+                "bottom": "114",
+                "right": "674"
+              },
+              "id": "textViewSettings",
+              "class": "MaterialTextView"
+            }],
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "114",
+              "right": "1080"
+            },
+            "id": "constraintLayoutSettings",
+            "class": "ConstraintLayout"
+          },
+          {
+            "children": [{
+              "children": [
+                {
+                  "bounds": {
+                    "top": "9",
+                    "left": "251",
+                    "bottom": "81",
+                    "right": "744"
+                  },
+                  "id": "textViewGetStarted",
+                  "class": "MaterialTextView"
+                },
+                {
+                  "bounds": {
+                    "top": "90",
+                    "left": "6",
+                    "bottom": "147",
+                    "right": "988"
+                  },
+                  "id": "textViewCurrentPassword",
+                  "class": "MaterialTextView"
+                },
+                {
+                  "bounds": {
+                    "top": "162",
+                    "left": "6",
+                    "bottom": "298",
+                    "right": "988"
+                  },
+                  "id": "editTextCurrentPassword",
+                  "class": "AppCompatEditText"
+                },
+                {
+                  "bounds": {
+                    "top": "307",
+                    "left": "6",
+                    "bottom": "364",
+                    "right": "988"
+                  },
+                  "id": "textViewNewPassword",
+                  "class": "MaterialTextView"
+                },
+                {
+                  "bounds": {
+                    "top": "379",
+                    "left": "6",
+                    "bottom": "515",
+                    "right": "988"
+                  },
+                  "id": "editTextNewPassword",
+                  "class": "AppCompatEditText"
+                },
+                {
+                  "bounds": {
+                    "top": "524",
+                    "left": "6",
+                    "bottom": "581",
+                    "right": "988"
+                  },
+                  "id": "textViewConfirmPassword",
+                  "class": "MaterialTextView"
+                },
+                {
+                  "bounds": {
+                    "top": "596",
+                    "left": "6",
+                    "bottom": "732",
+                    "right": "988"
+                  },
+                  "id": "editTextConfirmPassword",
+                  "class": "AppCompatEditText"
+                },
+                {
+                  "bounds": {
+                    "top": "789",
+                    "left": "6",
+                    "bottom": "846",
+                    "right": "988"
+                  },
+                  "id": "textViewEditLanguage",
+                  "class": "MaterialTextView"
+                },
+                {
+                  "children": [
+                    {
+                      "bounds": {
+                        "top": "0",
+                        "left": "0",
+                        "bottom": "133",
+                        "right": "982"
+                      },
+                      "id": "editTextEditLanguage",
+                      "class": "AppCompatEditText"
+                    },
+                    {
+                      "bounds": {
+                        "top": "0",
+                        "left": "0",
+                        "bottom": "0",
+                        "right": "0"
+                      },
+                      "id": "recyclerViewLanguage",
+                      "class": "View"
+                    }
+                  ],
+                  "bounds": {
+                    "top": "861",
+                    "left": "6",
+                    "bottom": "994",
+                    "right": "988"
+                  },
+                  "id": "constraintLayoutLanguage",
+                  "class": "ConstraintLayout"
+                },
+                {
+                  "bounds": {
+                    "top": "1051",
+                    "left": "6",
+                    "bottom": "1108",
+                    "right": "988"
+                  },
+                  "id": "textViewHomePageColor",
+                  "class": "MaterialTextView"
+                },
+                {
+                  "children": [
+                    {
+                      "bounds": {
+                        "top": "0",
+                        "left": "0",
+                        "bottom": "133",
+                        "right": "982"
+                      },
+                      "id": "editTextHomePageColour",
+                      "class": "AppCompatEditText"
+                    },
+                    {
+                      "bounds": {
+                        "top": "0",
+                        "left": "0",
+                        "bottom": "0",
+                        "right": "0"
+                      },
+                      "id": "recyclerViewHomePageColour",
+                      "class": "View"
+                    }
+                  ],
+                  "bounds": {
+                    "top": "1123",
+                    "left": "6",
+                    "bottom": "1256",
+                    "right": "988"
+                  },
+                  "id": "constraintLayoutHomePageColor",
+                  "class": "ConstraintLayout"
+                },
+                {
+                  "bounds": {
+                    "top": "1313",
+                    "left": "6",
+                    "bottom": "1370",
+                    "right": "988"
+                  },
+                  "id": "textViewProfileImage",
+                  "class": "MaterialTextView"
+                },
+                {
+                  "bounds": {
+                    "top": "1385",
+                    "left": "6",
+                    "bottom": "1409",
+                    "right": "51"
+                  },
+                  "id": "imageViewProfile",
+                  "class": "AppCompatImageView"
+                },
+                {
+                  "bounds": {
+                    "top": "1400",
+                    "left": "12",
+                    "bottom": "1409",
+                    "right": "45"
+                  },
+                  "id": "imageViewProfileBackground",
+                  "class": "AppCompatImageView"
+                },
+                {
+                  "bounds": {
+                    "top": "1424",
+                    "left": "0",
+                    "bottom": "1424",
+                    "right": "994"
+                  },
+                  "class": "View"
+                }
+              ],
+              "bounds": {
+                "top": "0",
+                "left": "0",
+                "bottom": "1469",
+                "right": "994"
+              },
+              "class": "ConstraintLayout"
+            }],
+            "bounds": {
+              "top": "114",
+              "left": "43",
+              "bottom": "1143",
+              "right": "1037"
+            },
+            "id": "scrollViewSignup",
+            "class": "NestedScrollView"
+          },
+          {
+            "children": [
+              {
+                "children": [{
+                  "bounds": {
+                    "top": "0",
+                    "left": "107",
+                    "bottom": "162",
+                    "right": "325"
+                  },
+                  "id": "textViewLogout",
+                  "class": "MaterialTextView"
+                }],
+                "bounds": {
+                  "top": "57",
+                  "left": "72",
+                  "bottom": "219",
+                  "right": "504"
+                },
+                "id": "constraintLayoutLogout",
+                "class": "ConstraintLayout"
+              },
+              {
+                "bounds": {
+                  "top": "57",
+                  "left": "576",
+                  "bottom": "240",
+                  "right": "1008"
+                },
+                "id": "buttonApplyChanges",
+                "class": "MaterialButton"
+              }
+            ],
+            "bounds": {
+              "top": "1143",
+              "left": "0",
+              "bottom": "1440",
+              "right": "1080"
+            },
+            "id": "constraintLayoutBottom",
+            "class": "ConstraintLayout"
+          }
+        ],
+        "bounds": {
+          "top": "96",
+          "left": "0",
+          "bottom": "1536",
+          "right": "1080"
+        },
+        "class": "ConstraintLayout"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "duration": "156500",
+  "layout": {
+    "children": [{
+      "children": [
+        {
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "300",
+            "right": "0"
+          },
+          "id": "top",
+          "class": "View"
+        },
+        {
+          "bounds": {
+            "top": "900",
+            "left": "0",
+            "bottom": "1200",
+            "right": "0"
+          },
+          "id": "bottom",
+          "class": "View"
+        },
+        {
+          "children": [{
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "1500",
+              "right": "0"
+            },
+            "id": "contained",
+            "class": "View"
+          }],
+          "bounds": {
+            "top": "300",
+            "left": "0",
+            "bottom": "900",
+            "right": "0"
+          },
+          "id": "issue",
+          "class": "LinearLayout"
+        }
+      ],
+      "bounds": {
+        "top": "0",
+        "left": "0",
+        "bottom": "1200",
+        "right": "0"
+      },
+      "id": "container_cl",
+      "class": "ConstraintLayout"
+    }],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "0"
+    },
+    "id": "root",
+    "class": "LinearLayout"
+  }
+}

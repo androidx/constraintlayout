@@ -1,0 +1,34 @@
+{
+  "duration": "375000",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "75",
+          "left": "15",
+          "bottom": "180",
+          "right": "1065"
+        },
+        "id": "choose_your_location",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "300",
+          "left": "105",
+          "bottom": "432",
+          "right": "975"
+        },
+        "id": "query",
+        "class": "AppCompatEditText"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "432",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

@@ -1,0 +1,257 @@
+{
+  "duration": "3984500",
+  "layout": {
+    "children": [{
+      "children": [{
+        "children": [
+          {
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "2715",
+              "right": "144"
+            },
+            "id": "space",
+            "class": "View"
+          },
+          {
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "0",
+              "right": "0"
+            },
+            "id": "formFieldsFlow",
+            "class": "Flow"
+          },
+          {
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "0",
+              "right": "0"
+            },
+            "id": "myAccountHeader",
+            "class": "MaterialTextView"
+          },
+          {
+            "bounds": {
+              "top": "0",
+              "left": "-23",
+              "bottom": "1709",
+              "right": "0"
+            },
+            "id": "myAccountBackground",
+            "class": "Layer"
+          },
+          {
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "0",
+              "right": "0"
+            },
+            "id": "fullName",
+            "class": "MaterialTextView"
+          },
+          {
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "0",
+              "right": "0"
+            },
+            "id": "userEmailAddress",
+            "class": "MaterialTextView"
+          },
+          {
+            "bounds": {
+              "top": "1481",
+              "left": "-23",
+              "bottom": "1709",
+              "right": "-23"
+            },
+            "id": "myAccountEditButton",
+            "class": "MaterialTextView"
+          },
+          {
+            "bounds": {
+              "top": "1531",
+              "left": "0",
+              "bottom": "1651",
+              "right": "0"
+            },
+            "id": "editOpenIcon",
+            "class": "AppCompatImageView"
+          },
+          {
+            "bounds": {
+              "top": "2252",
+              "left": "0",
+              "bottom": "2252",
+              "right": "0"
+            },
+            "id": "nameBarrier",
+            "class": "Barrier"
+          },
+          {
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "0",
+              "right": "0"
+            },
+            "id": "contactInfoHeader",
+            "class": "MaterialTextView"
+          },
+          {
+            "children": [{
+              "children": [
+                {
+                  "bounds": {
+                    "top": "0",
+                    "left": "0",
+                    "bottom": "161",
+                    "right": "0"
+                  },
+                  "id": "textinput_placeholder",
+                  "class": "AppCompatTextView"
+                },
+                {
+                  "bounds": {
+                    "top": "0",
+                    "left": "0",
+                    "bottom": "161",
+                    "right": "0"
+                  },
+                  "id": "cellPhoneInput",
+                  "class": "TextInputEditText"
+                },
+                {
+                  "children": [
+                    {
+                      "bounds": {
+                        "top": "0",
+                        "left": "0",
+                        "bottom": "0",
+                        "right": "0"
+                      },
+                      "id": "text_input_start_icon",
+                      "class": "CheckableImageButton"
+                    },
+                    {
+                      "bounds": {
+                        "top": "0",
+                        "left": "0",
+                        "bottom": "0",
+                        "right": "0"
+                      },
+                      "id": "textinput_prefix_text",
+                      "class": "AppCompatTextView"
+                    }
+                  ],
+                  "bounds": {
+                    "top": "0",
+                    "left": "0",
+                    "bottom": "161",
+                    "right": "0"
+                  },
+                  "class": "LinearLayout"
+                },
+                {
+                  "children": [
+                    {
+                      "bounds": {
+                        "top": "0",
+                        "left": "0",
+                        "bottom": "0",
+                        "right": "0"
+                      },
+                      "id": "textinput_suffix_text",
+                      "class": "AppCompatTextView"
+                    },
+                    {
+                      "children": [{
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "text_input_end_icon",
+                        "class": "CheckableImageButton"
+                      }],
+                      "bounds": {
+                        "top": "0",
+                        "left": "0",
+                        "bottom": "161",
+                        "right": "0"
+                      },
+                      "class": "FrameLayout"
+                    },
+                    {
+                      "bounds": {
+                        "top": "0",
+                        "left": "0",
+                        "bottom": "0",
+                        "right": "0"
+                      },
+                      "id": "text_input_end_icon",
+                      "class": "CheckableImageButton"
+                    }
+                  ],
+                  "bounds": {
+                    "top": "0",
+                    "left": "0",
+                    "bottom": "161",
+                    "right": "0"
+                  },
+                  "class": "LinearLayout"
+                }
+              ],
+              "bounds": {
+                "top": "0",
+                "left": "24",
+                "bottom": "161",
+                "right": "24"
+              },
+              "class": "FrameLayout"
+            }],
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "0",
+              "right": "0"
+            },
+            "id": "cellPhoneLayout",
+            "class": "TextInputLayout"
+          }
+        ],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "2739",
+          "right": "0"
+        },
+        "id": "editProfileForm",
+        "class": "ConstraintLayout"
+      }],
+      "bounds": {
+        "top": "0",
+        "left": "0",
+        "bottom": "1536",
+        "right": "0"
+      },
+      "id": "scrollView",
+      "class": "ScrollView"
+    }],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "0"
+    },
+    "id": "root",
+    "class": "ConstraintLayout"
+  }
+}

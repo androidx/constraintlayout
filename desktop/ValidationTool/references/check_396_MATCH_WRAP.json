@@ -1,0 +1,134 @@
+{
+  "duration": "747500",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "57",
+          "left": "60",
+          "bottom": "207",
+          "right": "210"
+        },
+        "id": "avatar",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "status_badge",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "210",
+          "bottom": "57",
+          "right": "635"
+        },
+        "id": "title",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "207",
+          "left": "210",
+          "bottom": "264",
+          "right": "635"
+        },
+        "id": "subtitle",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "635",
+          "bottom": "0",
+          "right": "635"
+        },
+        "id": "barrier_title",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "status",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "action_button",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "action_mini_1",
+        "class": "AppCompatImageButton"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "action_mini_2",
+        "class": "AppCompatImageButton"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "dismiss_button",
+        "class": "AppCompatImageButton"
+      },
+      {
+        "bounds": {
+          "top": "132",
+          "left": "828",
+          "bottom": "132",
+          "right": "828"
+        },
+        "id": "dismiss_progress",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "132",
+          "left": "888",
+          "bottom": "132",
+          "right": "888"
+        },
+        "id": "end",
+        "class": "Space"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "264",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

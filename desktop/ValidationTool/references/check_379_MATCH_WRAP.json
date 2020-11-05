@@ -1,0 +1,65 @@
+{
+  "duration": "252500",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "93",
+          "left": "0",
+          "bottom": "93",
+          "right": "0"
+        },
+        "id": "infoboxTopBarrier",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "36",
+          "left": "36",
+          "bottom": "84",
+          "right": "84"
+        },
+        "id": "infoboxIcon",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "129",
+          "left": "36",
+          "bottom": "178",
+          "right": "1044"
+        },
+        "id": "infoboxText",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "36",
+          "left": "108",
+          "bottom": "93",
+          "right": "1044"
+        },
+        "id": "infoboxTitle",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "256",
+          "left": "36",
+          "bottom": "400",
+          "right": "363"
+        },
+        "id": "infoboxTextButton",
+        "class": "MaterialButton"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "214",
+      "right": "1080"
+    },
+    "id": "root",
+    "class": "ConstraintLayout"
+  }
+}

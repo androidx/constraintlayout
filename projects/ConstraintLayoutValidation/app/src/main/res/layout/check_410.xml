@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+   <!-- b/172048754 -->
+
+   <TextView
+       android:id="@+id/textview"
+       android:layout_width="0dp"
+       android:layout_height="wrap_content"
+       app:layout_constraintEnd_toStartOf="@+id/imageview"
+       app:layout_constraintStart_toEndOf="@+id/imageview"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       tools:text="This is a test 1234..." />
+
+   <ImageView
+       android:id="@+id/imageview"
+       android:layout_width="225dp"
+       android:layout_height="0dp"
+       android:adjustViewBounds="false"
+       android:scaleType="centerCrop"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintDimensionRatio="H,16:9"
+       app:layout_constraintStart_toEndOf="@id/textview"
+       app:layout_constraintTop_toTopOf="@+id/textview"
+       tools:ignore="ContentDescription"
+       tools:srcCompat="@tools:sample/backgrounds/scenic" />
+</androidx.constraintlayout.widget.ConstraintLayout>

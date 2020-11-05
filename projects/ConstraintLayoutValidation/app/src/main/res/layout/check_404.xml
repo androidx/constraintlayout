@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF">
+
+    <!-- b/170785131 -->
+    
+    <View
+        android:id="@+id/toolbarTop"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout 
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbarTop">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideLineVerticalStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.04"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideLineVerticalEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="-0.02"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintGuide_percent="0.96" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout 
+            android:id="@+id/constraintLayoutSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFF"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/textViewSettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_android_black_24dp"
+                android:drawablePadding="3dp"
+                android:elevation="4dp"
+                android:letterSpacing="-0.02"
+                android:paddingTop="6dp"
+                android:paddingBottom="8dp"
+                android:text="settings"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout >
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollViewSignup"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toTopOf="@id/constraintLayoutBottom"
+            app:layout_constraintEnd_toEndOf="@id/guideLineVerticalEnd"
+            app:layout_constraintStart_toStartOf="@id/guideLineVerticalStart"
+            app:layout_constraintTop_toBottomOf="@id/constraintLayoutSettings">
+
+            <androidx.constraintlayout.widget.ConstraintLayout 
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="15dp">
+
+                <TextView
+                    android:id="@+id/textViewGetStarted"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:drawableStart="@drawable/ic_android_black_24dp"
+                    android:drawablePadding="5dp"
+                    android:letterSpacing="-0.01"
+                    android:text="change_password"
+                    android:textAlignment="textStart"
+                    android:textAllCaps="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <TextView
+                    android:id="@+id/textViewCurrentPassword"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:letterSpacing="-0.02"
+                    android:text="current_password"
+                    android:textAllCaps="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textViewGetStarted"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="2dp"
+                    />
+
+                <EditText
+                    android:id="@+id/editTextCurrentPassword"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:drawableEnd="@drawable/ic_android_black_24dp"
+                    android:elevation="4dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="2dp"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPassword"
+                    android:letterSpacing="-0.02"
+                    android:paddingStart="2dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="9dp"
+                    android:paddingBottom="11dp"
+                    android:singleLine="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textViewCurrentPassword"
+                    app:layout_constraintVertical_bias="1" />
+
+                <TextView
+                    android:id="@+id/textViewNewPassword"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:letterSpacing="-0.02"
+                    android:text="new_password"
+                    android:textAllCaps="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/editTextCurrentPassword"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="2dp"
+                    />
+
+                <EditText
+                    android:id="@+id/editTextNewPassword"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:drawableEnd="@drawable/ic_android_black_24dp"
+                    android:elevation="4dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="2dp"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPassword"
+                    android:letterSpacing="-0.02"
+                    android:paddingStart="2dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="9dp"
+                    android:paddingBottom="11dp"
+                    android:singleLine="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textViewNewPassword"
+                    app:layout_constraintVertical_bias="1" />
+
+
+                <TextView
+                    android:id="@+id/textViewConfirmPassword"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:letterSpacing="-0.02"
+                    android:text="confirm_password"
+                    android:textAllCaps="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/editTextNewPassword"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="2dp"
+                    />
+
+                <EditText
+                    android:id="@+id/editTextConfirmPassword"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:drawableEnd="@drawable/ic_android_black_24dp"
+                    android:elevation="4dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="2dp"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPassword"
+                    android:letterSpacing="-0.02"
+                    android:paddingStart="2dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="9dp"
+                    android:paddingBottom="11dp"
+                    android:singleLine="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textViewConfirmPassword"
+                    app:layout_constraintVertical_bias="1" />
+
+                <TextView
+                    android:id="@+id/textViewEditLanguage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="19dp"
+                    android:letterSpacing="-0.02"
+                    android:text="edit_language"
+                    android:textAllCaps="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/editTextConfirmPassword"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="2dp"
+                    />
+
+                <androidx.constraintlayout.widget.ConstraintLayout 
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textViewEditLanguage"
+                    android:backgroundTint="#FFF"
+                    android:elevation="2dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/constraintLayoutLanguage"
+                    >
+
+                    <EditText
+                        android:id="@+id/editTextEditLanguage"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/ic_android_black_24dp"
+                        android:drawablePadding="11dp"
+                        android:elevation="4dp"
+                        android:background="@null"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:longClickable="false"
+                        android:cursorVisible="false"
+                        android:focusableInTouchMode="false"
+                        android:textIsSelectable="true"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:letterSpacing="-0.02"
+                        android:paddingStart="2dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="9dp"
+                        android:paddingBottom="10dp"
+                        android:singleLine="true"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintVertical_bias="1" />
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        app:layout_constraintTop_toBottomOf="@id/editTextEditLanguage"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/recyclerViewLanguage"
+                        android:visibility="gone"
+                        android:paddingBottom="7dp"
+                        />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout >
+
+
+                <TextView
+                    android:id="@+id/textViewHomePageColor"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="19dp"
+                    android:letterSpacing="-0.02"
+                    android:text="homepage_colour"
+                    android:textAllCaps="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/constraintLayoutLanguage"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="2dp"
+                    />
+
+                <androidx.constraintlayout.widget.ConstraintLayout 
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textViewHomePageColor"
+                    android:backgroundTint="#FFF"
+                    android:elevation="2dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/constraintLayoutHomePageColor"
+                    >
+
+                    <EditText
+                        android:id="@+id/editTextHomePageColour"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/ic_android_black_24dp"
+                        android:drawablePadding="11dp"
+                        android:elevation="4dp"
+                        android:background="@null"
+                        android:text="dark_purple"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:longClickable="false"
+                        android:cursorVisible="false"
+                        android:focusableInTouchMode="false"
+                        android:textIsSelectable="true"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:letterSpacing="-0.02"
+                        android:paddingStart="2dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="9dp"
+                        android:paddingBottom="10dp"
+                        android:singleLine="true"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintVertical_bias="1" />
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        app:layout_constraintTop_toBottomOf="@id/editTextHomePageColour"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/recyclerViewHomePageColour"
+                        android:visibility="gone"
+                        android:paddingBottom="7dp"
+                        />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout >
+
+
+
+
+                <TextView
+                    android:id="@+id/textViewProfileImage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="19dp"
+                    android:letterSpacing="-0.02"
+                    android:text="edit_profile_image"
+                    android:textAllCaps="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/constraintLayoutHomePageColor"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="2dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/imageViewProfile"
+                    android:layout_width="15dp"
+                    android:layout_height="8dp"
+                    app:layout_constraintVertical_bias="1"
+                    android:layout_marginTop="5dp"
+                    android:letterSpacing="-0.02"
+                    android:elevation="4dp"
+                    android:scaleType="centerInside"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="2dp"
+                    app:layout_constraintTop_toBottomOf="@id/textViewProfileImage"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+
+                <ImageView
+                    android:id="@+id/imageViewProfileBackground"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintVertical_bias="1"
+                    android:layout_marginTop="5dp"
+                    android:letterSpacing="-0.02"
+                    android:elevation="4dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="2dp"
+                    app:srcCompat="@drawable/ic_android_black_24dp"
+                    android:scaleType="centerInside"
+                    app:layout_constraintStart_toStartOf="@id/imageViewProfile"
+                    app:layout_constraintEnd_toEndOf="@id/imageViewProfile"
+                    app:layout_constraintTop_toTopOf="@id/imageViewProfile"
+                    app:layout_constraintBottom_toBottomOf="@id/imageViewProfile"
+                    />
+
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    app:layout_constraintTop_toBottomOf="@id/imageViewProfile" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout >
+
+        </androidx.core.widget.NestedScrollView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout 
+            android:id="@+id/constraintLayoutBottom"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="#FFF"
+            android:elevation="4dp"
+            android:paddingTop="19dp"
+            android:paddingBottom="19dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout 
+                android:id="@+id/constraintLayoutLogout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@id/buttonApplyChanges"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.40">
+
+                <TextView
+                    android:id="@+id/textViewLogout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_android_black_24dp"
+                    android:drawablePadding="9dp"
+                    android:elevation="4dp"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:text="logout"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout >
+
+
+            <Button
+                android:id="@+id/buttonApplyChanges"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:elevation="4dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:text="apply_changes"
+                android:textAllCaps="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/constraintLayoutLogout"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.40" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout >
+
+    </androidx.constraintlayout.widget.ConstraintLayout >
+
+
+</androidx.constraintlayout.widget.ConstraintLayout >

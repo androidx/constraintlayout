@@ -1,0 +1,114 @@
+{
+  "duration": "613500",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "1536",
+          "right": "1080"
+        },
+        "class": "View"
+      },
+      {
+        "children": [
+          {
+            "bounds": {
+              "top": "75",
+              "left": "15",
+              "bottom": "180",
+              "right": "1065"
+            },
+            "id": "choose_your_location",
+            "class": "MaterialTextView"
+          },
+          {
+            "bounds": {
+              "top": "275",
+              "left": "155",
+              "bottom": "347",
+              "right": "227"
+            },
+            "id": "search_icon",
+            "class": "AppCompatImageView"
+          },
+          {
+            "bounds": {
+              "top": "225",
+              "left": "105",
+              "bottom": "357",
+              "right": "975"
+            },
+            "id": "query",
+            "class": "AppCompatEditText"
+          },
+          {
+            "bounds": {
+              "top": "356",
+              "left": "105",
+              "bottom": "358",
+              "right": "975"
+            },
+            "class": "View"
+          },
+          {
+            "bounds": {
+              "top": "240",
+              "left": "867",
+              "bottom": "348",
+              "right": "975"
+            },
+            "id": "locate_me",
+            "class": "AppCompatImageButton"
+          },
+          {
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "0",
+              "right": "0"
+            },
+            "id": "searchProgressBar",
+            "class": "ProgressBar"
+          },
+          {
+            "bounds": {
+              "top": "357",
+              "left": "0",
+              "bottom": "1536",
+              "right": "1080"
+            },
+            "id": "rv",
+            "class": "View"
+          },
+          {
+            "bounds": {
+              "top": "1392",
+              "left": "0",
+              "bottom": "1536",
+              "right": "264"
+            },
+            "id": "closeButton",
+            "class": "MaterialButton"
+          }
+        ],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "1536",
+          "right": "1080"
+        },
+        "class": "ConstraintLayout"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "id": "root",
+    "class": "FrameLayout"
+  }
+}

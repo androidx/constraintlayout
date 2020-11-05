@@ -1,0 +1,89 @@
+{
+  "duration": "168500",
+  "layout": {
+    "children": [
+      {
+        "children": [{
+          "children": [{
+            "bounds": {
+              "top": "1863",
+              "left": "0",
+              "bottom": "1920",
+              "right": "1080"
+            },
+            "id": "googleapp_incognito_topbar_text",
+            "class": "MaterialTextView"
+          }],
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "1920",
+            "right": "1080"
+          },
+          "id": "googleapp_incognito_topbar_wrapper",
+          "class": "RelativeLayout"
+        }],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "1920",
+          "right": "1080"
+        },
+        "id": "googleapp_incognito_topbar_container",
+        "class": "FrameLayout"
+      },
+      {
+        "children": [],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "googleapp_homescreen_container",
+        "class": "FrameLayout"
+      },
+      {
+        "children": [],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "googleapp_non_homescreen_container",
+        "class": "FrameLayout"
+      },
+      {
+        "children": [],
+        "bounds": {
+          "top": "1728",
+          "left": "0",
+          "bottom": "1920",
+          "right": "1080"
+        },
+        "id": "googleapp_bottom_navigation_container",
+        "class": "FrameLayout"
+      },
+      {
+        "children": [],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "1920",
+          "right": "1080"
+        },
+        "id": "googleapp_tabs_radial_menu",
+        "class": "FrameLayout"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1920",
+      "right": "1080"
+    },
+    "id": "root",
+    "class": "ConstraintLayout"
+  }
+}

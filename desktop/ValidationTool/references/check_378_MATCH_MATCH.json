@@ -1,0 +1,35 @@
+{
+  "duration": "298500",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "408",
+          "left": "0",
+          "bottom": "408",
+          "right": "0"
+        },
+        "id": "guideline15",
+        "class": "Guideline"
+      },
+      {
+        "bounds": {
+          "top": "423",
+          "left": "0",
+          "bottom": "896",
+          "right": "1080"
+        },
+        "id": "viewpager_banner",
+        "class": "View"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "id": "root",
+    "class": "ConstraintLayout"
+  }
+}

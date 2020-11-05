@@ -1,0 +1,23 @@
+{
+  "duration": "85000",
+  "layout": {
+    "children": [{
+      "bounds": {
+        "top": "0",
+        "left": "0",
+        "bottom": "144",
+        "right": "284"
+      },
+      "id": "button1",
+      "class": "MaterialButton"
+    }],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "192",
+      "right": "332"
+    },
+    "id": "root",
+    "class": "ConstraintLayout"
+  }
+}

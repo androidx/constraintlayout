@@ -1,0 +1,155 @@
+{
+  "duration": "296500",
+  "layout": {
+    "children": [
+      {
+        "children": [{
+          "bounds": {
+            "top": "0",
+            "left": "62",
+            "bottom": "145",
+            "right": "1019"
+          },
+          "id": "text_top_1",
+          "class": "MaterialTextView"
+        }],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "145",
+          "right": "1080"
+        },
+        "id": "station_constraint_1",
+        "class": "ConstraintLayout"
+      },
+      {
+        "children": [{
+          "bounds": {
+            "top": "0",
+            "left": "136",
+            "bottom": "145",
+            "right": "944"
+          },
+          "id": "text_middle_2",
+          "class": "MaterialTextView"
+        }],
+        "bounds": {
+          "top": "145",
+          "left": "0",
+          "bottom": "290",
+          "right": "1080"
+        },
+        "id": "date_constraint_2",
+        "class": "ConstraintLayout"
+      },
+      {
+        "children": [{
+          "bounds": {
+            "top": "0",
+            "left": "121",
+            "bottom": "145",
+            "right": "959"
+          },
+          "id": "text_middle_3",
+          "class": "MaterialTextView"
+        }],
+        "bounds": {
+          "top": "290",
+          "left": "0",
+          "bottom": "435",
+          "right": "1080"
+        },
+        "id": "price_constraint_3",
+        "class": "ConstraintLayout"
+      },
+      {
+        "children": [{
+          "bounds": {
+            "top": "0",
+            "left": "49",
+            "bottom": "145",
+            "right": "1031"
+          },
+          "id": "text_middle_4",
+          "class": "MaterialTextView"
+        }],
+        "bounds": {
+          "top": "435",
+          "left": "0",
+          "bottom": "580",
+          "right": "1080"
+        },
+        "id": "warning_constraint_4",
+        "class": "ConstraintLayout"
+      },
+      {
+        "children": [{
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "0",
+            "right": "0"
+          },
+          "id": "text_middle_5",
+          "class": "MaterialTextView"
+        }],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "include_constraint_5",
+        "class": "ConstraintLayout"
+      },
+      {
+        "children": [{
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "0",
+            "right": "0"
+          },
+          "id": "text_middle_6",
+          "class": "MaterialTextView"
+        }],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "list_constraint_6",
+        "class": "ConstraintLayout"
+      },
+      {
+        "children": [{
+          "bounds": {
+            "top": "0",
+            "left": "87",
+            "bottom": "145",
+            "right": "994"
+          },
+          "id": "text_middle_7",
+          "class": "MaterialTextView"
+        }],
+        "bounds": {
+          "top": "580",
+          "left": "0",
+          "bottom": "725",
+          "right": "1080"
+        },
+        "id": "button_constraint_7",
+        "class": "ConstraintLayout"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "725",
+      "right": "1080"
+    },
+    "id": "root",
+    "class": "ConstraintLayout"
+  }
+}

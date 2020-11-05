@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- b/170884549 -->
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/editProfileForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp">
+            <View
+                android:background="#F99"
+                android:layout_width="48dp"
+                android:layout_height="0dp"
+                android:id="@+id/space"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+            <androidx.constraintlayout.helper.widget.Flow
+                android:id="@+id/formFieldsFlow"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical"
+                app:constraint_referenced_ids="
+                contactInfoHeader,
+                cellPhoneLayout,
+                workPhoneLayout,
+                homePhoneLayout,
+                countryLayout,
+                streetAddressLayout,
+                cityLayout,
+                stateLayout,
+                postalCodeLayout,
+                emergencyContactInfoHeader,
+                emergencyContactNameLayout,
+                emergencyContactRelationshipLayout,
+                emergencyContactPhoneLayout,
+                emergencyContactEmailLayout,
+                additionalInfoHeader,
+                birthdayLayout,
+                middleNameLayout,
+                emailOptInLayout"
+                app:flow_verticalGap="24dp"
+                app:flow_verticalStyle="packed"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/space"
+                app:layout_constraintTop_toBottomOf="@id/nameBarrier" />
+
+            <TextView
+                android:id="@+id/myAccountHeader"
+                android:padding="8dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Field widths = 0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/space"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.helper.widget.Layer
+                android:id="@+id/myAccountBackground"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackground"
+                app:constraint_referenced_ids="fullName,userEmailAddress,myAccountEditButton,editOpenIcon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/space"
+                app:layout_constraintTop_toBottomOf="@id/myAccountHeader" />
+
+            <TextView
+                android:id="@+id/fullName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="8dp"
+                android:paddingTop="8dp"
+                app:layout_constraintEnd_toStartOf="@id/myAccountEditButton"
+                app:layout_constraintStart_toEndOf="@id/space"
+                app:layout_constraintTop_toTopOf="@id/myAccountBackground"
+                android:text="Full Name" />
+
+            <TextView
+                android:id="@+id/userEmailAddress"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="8dp"
+                app:layout_constraintEnd_toEndOf="@id/fullName"
+                app:layout_constraintStart_toStartOf="@id/fullName"
+                app:layout_constraintTop_toBottomOf="@id/fullName"
+                android:text="myemail@gmail.com" />
+
+            <TextView
+                android:id="@+id/myAccountEditButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:paddingTop="8dp"
+                android:text="Edit"
+                app:layout_constraintBottom_toBottomOf="@id/userEmailAddress"
+                app:layout_constraintEnd_toStartOf="@id/editOpenIcon"
+                app:layout_constraintTop_toTopOf="@id/fullName" />
+
+            <ImageView
+                android:id="@+id/editOpenIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:importantForAccessibility="no"
+                android:paddingTop="8dp"
+                android:paddingEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="@id/userEmailAddress"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/fullName"
+                app:srcCompat="@android:drawable/ic_menu_edit"
+                app:tint="#000"
+                tools:ignore="RtlSymmetry" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/nameBarrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="fullName,userEmailAddress" />
+
+            <TextView
+                android:id="@+id/contactInfoHeader"
+                android:padding="8dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Contact Info"
+                tools:ignore="MissingConstraints" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/cellPhoneLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Cell Phone"
+                android:labelFor="@id/cellPhoneInput"
+                android:paddingHorizontal="8dp"
+                tools:ignore="MissingConstraints">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/cellPhoneInput"
+                    style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="phoneNumberDevice"
+                    android:imeActionLabel="Next"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone"
+                    android:lines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/workPhoneLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Work Phone"
+                android:labelFor="@id/workPhoneInput"
+                android:paddingHorizontal="8dp"
+                tools:ignore="MissingConstraints">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/workPhoneInput"
+                    style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="phoneNational"
+                    android:imeActionLabel="Next"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone"
+                    android:lines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/homePhoneLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Home Phone"
+                android:labelFor="@id/homePhoneInput"
+                android:paddingHorizontal="8dp"
+                tools:ignore="MissingConstraints">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/homePhoneInput"
+                    style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="phoneNational"
+                    android:imeActionLabel="Next"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone"
+                    android:lines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/countryLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Country"
+                android:labelFor="@+id/countryInput"
+                android:paddingHorizontal="8dp"
+                tools:ignore="MissingConstraints">
+
+                <AutoCompleteTextView
+                    android:id="@+id/countryInput"
+                    style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:autofillHints="addressCountry"
+                    android:completionThreshold="0"
+                    android:imeActionLabel="Next"
+                    android:imeOptions="actionNext"
+                    android:inputType="textCapWords|textAutoComplete"
+                    android:lines="1"
+                    android:selectAllOnFocus="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/streetAddressLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Address"
+                android:labelFor="@id/streetAddressLayout"
+                android:paddingHorizontal="8dp"
+                tools:ignore="MissingConstraints">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/streetAddressInput"
+                    style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="postalAddress"
+                    android:imeActionLabel="Next"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPostalAddress"
+                    android:lines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/cityLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="CITY"
+                android:labelFor="@id/cityLayout"
+                android:paddingHorizontal="8dp"
+                tools:ignore="MissingConstraints">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/cityInput"
+                    style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="addressLocality"
+                    android:imeActionLabel="Next"
+                    android:imeOptions="actionNext"
+                    android:inputType="textCapWords"
+                    android:lines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/stateLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="STATE"
+                android:labelFor="@+id/stateInput"
+                android:paddingHorizontal="8dp"
+                tools:ignore="MissingConstraints">
+
+                <AutoCompleteTextView
+                    android:id="@+id/stateInput"
+                    style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:autofillHints="addressRegion"
+                    android:completionThreshold="0"
+                    android:imeActionLabel="Next"
+                    android:imeOptions="actionNext"
+                    android:inputType="textCapWords|textAutoComplete"
+                    android:lines="1"
+                    android:selectAllOnFocus="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/postalCodeLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Postal Code"
+                android:labelFor="@id/postalCodeLayout"
+                android:paddingHorizontal="8dp"
+                tools:ignore="MissingConstraints">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/postalCodeInput"
+                    style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="postalCode"
+                    android:imeActionLabel="Next"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:lines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/emergencyContactInfoHeader"
+                android:padding="8dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Emergency Contact Info"
+                tools:ignore="MissingConstraints" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/emergencyContactNameLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Name"
+                android:labelFor="@id/emergencyContactNameInput"
+                android:paddingHorizontal="8dp"
+                tools:ignore="MissingConstraints">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/emergencyContactNameInput"
+                    style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeActionLabel="Next"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName|textCapWords|textAutoCorrect"
+                    android:lines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/emergencyContactRelationshipLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Relationship"
+                android:labelFor="@id/emergencyContactRelationshipInput"
+                android:paddingHorizontal="8dp"
+                tools:ignore="MissingConstraints">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/emergencyContactRelationshipInput"
+                    style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeActionLabel="Next"
+                    android:imeOptions="actionNext"
+                    android:inputType="textCapSentences|textAutoCorrect"
+                    android:lines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/emergencyContactPhoneLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Phone"
+                android:labelFor="@id/emergencyContactPhoneInput"
+                android:paddingHorizontal="8dp"
+                tools:ignore="MissingConstraints">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/emergencyContactPhoneInput"
+                    style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeActionLabel="Next"
+                    android:imeOptions="actionNext"
+                    android:importantForAutofill="no"
+                    android:inputType="phone"
+                    android:lines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/emergencyContactEmailLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:labelFor="@id/emergencyContactEmailInput"
+                android:paddingHorizontal="8dp"
+                tools:ignore="MissingConstraints">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/emergencyContactEmailInput"
+                    style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeActionLabel="Next"
+                    android:imeOptions="actionNext"
+                    android:importantForAutofill="no"
+                    android:inputType="textEmailAddress"
+                    android:lines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/additionalInfoHeader"
+                android:padding="8dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Additional Info"
+                tools:ignore="MissingConstraints" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/birthdayLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Birthdate"
+                android:labelFor="@id/birthdayInput"
+                android:paddingHorizontal="8dp"
+                tools:ignore="MissingConstraints">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/birthdayInput"
+                    style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="birthDateFull"
+                    android:editable="false"
+                    android:imeActionLabel="Next"
+                    android:imeOptions="actionNext"
+                    android:inputType="date"
+                    android:lines="1"
+                    android:selectAllOnFocus="true"
+                    tools:ignore="Deprecated" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/middleNameLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Middle Name"
+                android:labelFor="@id/middleNameInput"
+                android:paddingHorizontal="8dp"
+                tools:ignore="MissingConstraints">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/middleNameInput"
+                    style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="personName"
+                    android:imeActionLabel="Next"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName|textCapWords|textAutoCorrect"
+                    android:lines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                android:id="@+id/emailOptInLayout"-->
+<!--                style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox.Dense"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:labelFor="@+id/emailOptInCheckbox"-->
+<!--                android:paddingHorizontal="8dp"-->
+<!--                android:paddingVertical="0dp"-->
+<!--                tools:ignore="MissingConstraints">-->
+
+<!--&lt;!&ndash;                <com.google.android.material.checkbox.MaterialCheckBox&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:id="@+id/emailOptInCheckbox"&ndash;&gt;-->
+<!--&lt;!&ndash;                    style="@style/Widget.MaterialComponents.CompoundButton.CheckBox"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:imeOptions="actionNext"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:paddingVertical="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:text="Email Opt-in" />&ndash;&gt;-->
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
+
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/userAccountGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="nameBarrier,editOpenIcon,myAccountEditButton,userEmailAddress,fullName,myAccountBackground,myAccountHeader" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

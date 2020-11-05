@@ -1,0 +1,85 @@
+{
+  "duration": "144500",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "btn_layers_sparkles",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "btn_layers",
+        "class": "AppCompatImageButton"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "iv_legend",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "618",
+          "right": "744"
+        },
+        "id": "header_view",
+        "class": "MaterialButton"
+      },
+      {
+        "bounds": {
+          "top": "75",
+          "left": "0",
+          "bottom": "282",
+          "right": "744"
+        },
+        "id": "tv_welcome_message",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "btn_footprints_sparkles",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "600",
+          "left": "0",
+          "bottom": "732",
+          "right": "144"
+        },
+        "id": "btn_footsteps",
+        "class": "AppCompatImageButton"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "744"
+    },
+    "id": "root",
+    "class": "ConstraintLayout"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "duration": "68500",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "1536",
+          "right": "1080"
+        },
+        "id": "iv_activity_bg",
+        "class": "AppCompatImageView"
+      },
+      {
+        "children": [{
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "126",
+            "right": "1080"
+          },
+          "id": "title_bar",
+          "class": "View"
+        }],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "126",
+          "right": "1080"
+        },
+        "id": "fl_temp",
+        "class": "FrameLayout"
+      },
+      {
+        "children": [],
+        "bounds": {
+          "top": "126",
+          "left": "0",
+          "bottom": "1536",
+          "right": "1080"
+        },
+        "id": "loading_empty_view",
+        "class": "LinearLayout"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "id": "root",
+    "class": "ConstraintLayout"
+  }
+}

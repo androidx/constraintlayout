@@ -1,0 +1,83 @@
+{
+  "duration": "239500",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "464",
+          "left": "0",
+          "bottom": "1072",
+          "right": "1080"
+        },
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "96",
+          "left": "327",
+          "bottom": "132",
+          "right": "753"
+        },
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "48",
+          "left": "347",
+          "bottom": "125",
+          "right": "515"
+        },
+        "id": "your",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "48",
+          "left": "527",
+          "bottom": "125",
+          "right": "733"
+        },
+        "id": "score",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "614",
+          "left": "540",
+          "bottom": "867",
+          "right": "540"
+        },
+        "id": "quizReuslt",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "1261",
+          "left": "48",
+          "bottom": "1332",
+          "right": "1032"
+        },
+        "id": "endMessage",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "1356",
+          "left": "24",
+          "bottom": "1512",
+          "right": "1056"
+        },
+        "id": "viewResultsButton",
+        "class": "MaterialButton"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "id": "root",
+    "class": "ConstraintLayout"
+  }
+}

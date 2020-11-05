@@ -1,0 +1,44 @@
+{
+  "duration": "350500",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "144",
+          "right": "144"
+        },
+        "id": "avatar",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "24",
+          "left": "144",
+          "bottom": "81",
+          "right": "399"
+        },
+        "id": "name",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "673",
+          "left": "144",
+          "bottom": "926",
+          "right": "1023"
+        },
+        "id": "chat_message",
+        "class": "MaterialTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

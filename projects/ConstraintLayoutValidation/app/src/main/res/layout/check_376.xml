@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/root"
+    tools:context=".MainActivity">
+
+    <FrameLayout
+        android:id="@+id/googleapp_incognito_topbar_container"
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/googleapp_incognito_topbar_wrapper"
+            android:focusable="true"
+            android:clickable="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#F00"
+            tools:ignore="Overdraw" >
+
+            <TextView
+                android:id="@+id/googleapp_incognito_topbar_text"
+                android:focusable="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="8dp"
+                android:layout_alignParentBottom="true"
+                android:text="incognito topbarmsg"
+                android:textAlignment="center"
+                android:textColor="#FFF"/>
+
+        </RelativeLayout>
+    </FrameLayout>
+
+    <!--
+    Note that we use a bottom margin instead of allowing the content_container to fill remaining
+    space, since then the content would sit on top of the shadow for the bottom navigation instead of
+    allowing the content to be visible under the shadow.
+    -->
+    <FrameLayout
+        android:id="@+id/googleapp_homescreen_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="64dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/googleapp_incognito_topbar_container"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <!--  This is the content_container for all non-homescreen content fragments. When attaching a
+          content fragment in non_homescreen_container, the viewGroup should be set a tag with the
+          fragment tab type. -->
+    <FrameLayout
+        android:id="@+id/googleapp_non_homescreen_container"
+        android:background="@color/colorPrimary"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="64dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/googleapp_incognito_topbar_container"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <FrameLayout
+        android:id="@+id/googleapp_bottom_navigation_container"
+        android:background="@color/colorAccent"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <FrameLayout
+        android:id="@+id/googleapp_tabs_radial_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

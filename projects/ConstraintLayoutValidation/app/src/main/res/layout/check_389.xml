@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_optimizationLevel="none"
+    android:fitsSystemWindows="true">
+
+    <!-- b/162917675 -->
+
+    <TextView
+        android:id="@+id/choose_your_location"
+        android:background="@color/colorAccent"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:ellipsize="end"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="start"
+        android:lineSpacingExtra="2dp"
+        android:maxLines="3"
+        android:paddingStart="45dp"
+        android:paddingLeft="45dp"
+        android:paddingEnd="45dp"
+        android:paddingRight="45dp"
+        android:text="choose_your_location"
+        android:textColor="#0661DC"
+        android:textSize="26sp"
+        app:layout_constraintEnd_toEndOf="@id/query"
+        app:layout_constraintStart_toStartOf="@id/query"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- focus: https://stackoverflow.com/questions/1555109/stop-edittext-from-gaining-focus-at-activity-startup -->
+    <EditText
+        android:id="@+id/query"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="35dp"
+        android:layout_marginRight="35dp"
+        android:background="#F00"
+        android:cursorVisible="true"
+        android:gravity="start|center_vertical"
+        android:hint="search"
+        android:imeOptions="actionSearch"
+        android:inputType="textNoSuggestions"
+        android:maxLength="40"
+        android:nextFocusLeft="@+id/query"
+        android:nextFocusUp="@+id/query"
+        android:paddingStart="40dp"
+        android:paddingLeft="40dp"
+        android:paddingTop="0dp"
+        android:paddingEnd="40dp"
+        android:paddingRight="40dp"
+        android:paddingBottom="0dp"
+        android:singleLine="true"
+        android:textColor="@android:color/white"
+        android:textCursorDrawable="@drawable/ic_android_black_24dp"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/choose_your_location"
+        app:layout_constraintWidth_max="350dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
