@@ -1,5 +1,5 @@
 {
-  "duration": "135321",
+  "duration": "338500",
   "layout": {
     "children": [
       {
@@ -20,7 +20,7 @@
           "right": "207"
         },
         "id": "product_title",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -30,7 +30,7 @@
           "right": "207"
         },
         "id": "product_description",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -40,7 +40,7 @@
           "right": "207"
         },
         "id": "singleUomView",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -58,37 +58,37 @@
             "bounds": {
               "top": "0",
               "left": "0",
-              "bottom": "96",
-              "right": "96"
+              "bottom": "144",
+              "right": "144"
             },
             "id": "radioButton1",
-            "class": "AppCompatRadioButton"
+            "class": "MaterialRadioButton"
           },
           {
             "bounds": {
-              "top": "96",
-              "left": "0",
-              "bottom": "192",
-              "right": "96"
-            },
-            "id": "radioButton2",
-            "class": "AppCompatRadioButton"
-          },
-          {
-            "bounds": {
-              "top": "192",
+              "top": "144",
               "left": "0",
               "bottom": "288",
-              "right": "96"
+              "right": "144"
+            },
+            "id": "radioButton2",
+            "class": "MaterialRadioButton"
+          },
+          {
+            "bounds": {
+              "top": "288",
+              "left": "0",
+              "bottom": "432",
+              "right": "144"
             },
             "id": "radioButton3",
-            "class": "AppCompatRadioButton"
+            "class": "MaterialRadioButton"
           }
         ],
         "bounds": {
           "top": "231",
           "left": "69",
-          "bottom": "519",
+          "bottom": "663",
           "right": "231"
         },
         "id": "radioGroup",
@@ -144,13 +144,13 @@
               "right": "222"
             },
             "id": "substituted_product_text",
-            "class": "AppCompatTextView"
+            "class": "MaterialTextView"
           }
         ],
         "bounds": {
-          "top": "519",
+          "top": "663",
           "left": "183",
-          "bottom": "576",
+          "bottom": "720",
           "right": "405"
         },
         "id": "icon_area",
@@ -158,13 +158,13 @@
       },
       {
         "bounds": {
-          "top": "600",
+          "top": "744",
           "left": "24",
-          "bottom": "657",
+          "bottom": "801",
           "right": "207"
         },
         "id": "product_eta",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {

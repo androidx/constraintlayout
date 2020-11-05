@@ -1,5 +1,5 @@
 {
-  "duration": "3566",
+  "duration": "124500",
   "layout": {
     "children": [{
       "children": [{
@@ -26,6 +26,6 @@
       "bottom": "0",
       "right": "0"
     },
-    "class": "LinearLayoutCompat"
+    "class": "LinearLayout"
   }
 }

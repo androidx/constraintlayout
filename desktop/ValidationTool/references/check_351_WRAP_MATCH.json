@@ -1,12 +1,12 @@
 {
-  "duration": "1229000",
+  "duration": "844000",
   "layout": {
     "children": [
       {
         "bounds": {
-          "top": "426",
+          "top": "647",
           "left": "0",
-          "bottom": "1182",
+          "bottom": "962",
           "right": "0"
         },
         "class": "Flow"
@@ -19,7 +19,7 @@
           "right": "0"
         },
         "id": "tv_blue",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -29,7 +29,7 @@
           "right": "0"
         },
         "id": "tv_green",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -39,7 +39,7 @@
           "right": "0"
         },
         "id": "tv_red",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       }
     ],
     "bounds": {

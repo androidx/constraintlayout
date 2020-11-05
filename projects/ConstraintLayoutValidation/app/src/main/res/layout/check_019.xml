@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:tag="0,0,360,255"
+    app:layout_optimizationLevel="none">
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,360,1920 96,1665,264,144 0,0,0,0"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,255 876,0,264,144 780,0,0,0"/>
+
+    <Button
+        android:id="@+id/button17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="37dp"
+        android:layout_marginLeft="32dp"
+        android:tag="876,1665,264,144"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline6" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:tag="780,0,0,0"
+        app:layout_constraintGuide_end="100dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

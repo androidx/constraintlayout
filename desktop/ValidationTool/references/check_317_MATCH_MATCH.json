@@ -1,5 +1,5 @@
 {
-  "duration": "28440500",
+  "duration": "7759000",
   "layout": {
     "children": [
       {
@@ -80,7 +80,7 @@
           "right": "900"
         },
         "id": "remote_up",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -100,7 +100,7 @@
           "right": "720"
         },
         "id": "remote_left",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -110,7 +110,7 @@
           "right": "900"
         },
         "id": "remote_select",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -120,7 +120,7 @@
           "right": "1080"
         },
         "id": "remote_right",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -130,7 +130,7 @@
           "right": "720"
         },
         "id": "remote_back",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -140,7 +140,7 @@
           "right": "900"
         },
         "id": "remote_down",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -190,7 +190,7 @@
           "right": "181"
         },
         "id": "remote_volumeup",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -200,7 +200,7 @@
           "right": "359"
         },
         "id": "remote_display",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -210,7 +210,7 @@
           "right": "537"
         },
         "id": "remote_context",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -220,7 +220,7 @@
           "right": "181"
         },
         "id": "remote_volumemute",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -230,7 +230,7 @@
           "right": "359"
         },
         "id": "remote_info",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -250,7 +250,7 @@
           "right": "181"
         },
         "id": "remote_volumedown",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -260,7 +260,7 @@
           "right": "359"
         },
         "id": "remote_keyboard",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -270,7 +270,7 @@
           "right": "537"
         },
         "id": "remote_return",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -280,7 +280,7 @@
           "right": "208"
         },
         "id": "remote_home",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -290,7 +290,7 @@
           "right": "416"
         },
         "id": "remote_movies",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -300,7 +300,7 @@
           "right": "624"
         },
         "id": "remote_tv",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -310,7 +310,7 @@
           "right": "832"
         },
         "id": "remote_music",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -320,7 +320,7 @@
           "right": "1040"
         },
         "id": "remote_picture",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       }
     ],
     "bounds": {

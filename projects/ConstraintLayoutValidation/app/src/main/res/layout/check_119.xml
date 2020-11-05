@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="0,0,0,0"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- b/67408230 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,0,1920 0,0,0,0"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,756 162,0,756,756"/>
+
+    <ImageView
+        android:id="@+id/player_catalog_iv_track_cover"
+        android:tag="162,0,756,756"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorAccent"
+        app:layout_constraintDimensionRatio="H,1:1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent=".7"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

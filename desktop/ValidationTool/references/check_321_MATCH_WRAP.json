@@ -1,42 +1,42 @@
 {
-  "duration": "30500",
+  "duration": "128000",
   "layout": {
     "children": [
       {
         "bounds": {
-          "top": "127",
+          "top": "118",
           "left": "0",
-          "bottom": "204",
+          "bottom": "195",
           "right": "204"
         },
         "id": "ic__checkout_tip_label",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
           "top": "6",
           "left": "216",
           "bottom": "306",
-          "right": "642"
+          "right": "722"
         },
         "id": "ic__checkout_tip_change_button",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
-          "top": "127",
+          "top": "118",
           "left": "932",
-          "bottom": "204",
+          "bottom": "195",
           "right": "1080"
         },
         "id": "ic__checkout_tip_change_value",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       }
     ],
     "bounds": {
       "top": "0",
       "left": "0",
-      "bottom": "331",
+      "bottom": "313",
       "right": "1080"
     },
     "class": "ConstraintLayout"

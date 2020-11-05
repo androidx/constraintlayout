@@ -1,5 +1,5 @@
 {
-  "duration": "2102802",
+  "duration": "196500",
   "layout": {
     "children": [
       {
@@ -20,7 +20,7 @@
           "right": "0"
         },
         "id": "tv_empty_title",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -40,7 +40,7 @@
           "right": "0"
         },
         "id": "tv_title",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -50,7 +50,7 @@
           "right": "0"
         },
         "id": "tv_description",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -70,7 +70,7 @@
           "right": "0"
         },
         "id": "manage_product",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {

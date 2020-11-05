@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/live_status_body"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    android:visibility="visible"
+    app:layout_constraintTop_toBottomOf="@+id/toolbar"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- b/130060979 -->
+
+    <View
+        android:id="@+id/episode_image_iv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginLeft="22dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="H,1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.30" />
+
+    <TextView
+        android:id="@+id/episode_title_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginLeft="17dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:textColor="#FFF"
+        android:textSize="16sp"
+        app:autoSizeMaxTextSize="16sp"
+        app:autoSizeMinTextSize="14sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/episode_image_iv"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Sunrisers Hyderabad vs Chennai Super Kings IPL 2019 Final Live Commentary" />
+
+    <View
+        android:id="@+id/episode_live_icon"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginLeft="17dp"
+        app:layout_constraintBottom_toBottomOf="@+id/episode_live_tv"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/episode_image_iv"
+        app:layout_constraintTop_toTopOf="@+id/episode_live_tv"
+        app:layout_constraintVertical_bias="0" />
+
+    <TextView
+        android:id="@+id/episode_live_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="12dp"
+        android:text="live"
+        android:textAllCaps="false"
+        android:textColor="#FFF"
+        android:textSize="14sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/episode_live_icon"
+        app:layout_constraintTop_toBottomOf="@+id/episode_title_tv"
+        app:layout_constraintWidth_max="80dp" />
+
+    <TextView
+        android:id="@+id/users_count_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="user_icon"
+        android:textAllCaps="true"
+        android:textColor="#0F0"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/episode_live_icon"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/episode_live_icon"
+        app:layout_constraintTop_toTopOf="@+id/users_count"
+        app:layout_constraintVertical_bias="0" />
+
+    <TextView
+        android:id="@+id/users_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="8dp"
+        android:text="1244"
+        android:textAllCaps="true"
+        android:textColor="#FFF"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/users_count_icon"
+        app:layout_constraintTop_toBottomOf="@+id/episode_live_tv"
+        app:layout_constraintVertical_bias="0" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="end"
+        app:constraint_referenced_ids="users_count,episode_live_tv" />
+
+    <TextView
+        android:id="@+id/duration_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginLeft="17dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:text="clock_icon"
+        android:textAllCaps="true"
+        android:textColor="#FF0"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/duration_tv"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/barrier"
+        app:layout_constraintTop_toTopOf="@+id/duration_tv" />
+
+    <TextView
+        android:id="@+id/duration_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:text="--:--"
+        android:textAllCaps="true"
+        android:textColor="#FFF"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@id/duration_icon"
+        app:layout_constraintTop_toTopOf="@+id/episode_live_tv"/>
+
+    <TextView
+        android:id="@+id/heart_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginLeft="17dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:text="heart_solid_icon"
+        android:textAllCaps="true"
+        android:textColor="#F00"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/heart_tv"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/barrier"
+        app:layout_constraintTop_toTopOf="@+id/heart_tv" />
+
+    <TextView
+        android:id="@+id/heart_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="12dp"
+        android:ellipsize="middle"
+        android:singleLine="true"
+        android:text="1234332"
+        android:textAllCaps="true"
+        android:textColor="#FFF"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/heart_icon"
+        app:layout_constraintTop_toTopOf="@+id/users_count"
+        app:layout_constraintVertical_bias="0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

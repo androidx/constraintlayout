@@ -1,5 +1,5 @@
 {
-  "duration": "2650",
+  "duration": "1534000",
   "layout": {
     "children": [
       {
@@ -9,7 +9,7 @@
           "bottom": "81",
           "right": "530"
         },
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "children": [{
@@ -30,7 +30,7 @@
                 "bottom": "57",
                 "right": "239"
               },
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "bounds": {
@@ -65,7 +65,7 @@
           "bottom": "219",
           "right": "513"
         },
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "children": [{
@@ -86,7 +86,7 @@
                 "bottom": "57",
                 "right": "984"
               },
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "bounds": {
@@ -121,7 +121,7 @@
           "bottom": "357",
           "right": "622"
         },
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "children": [
@@ -143,7 +143,7 @@
               "right": "239"
             },
             "id": "text_1",
-            "class": "AppCompatTextView"
+            "class": "MaterialTextView"
           },
           {
             "bounds": {
@@ -171,7 +171,7 @@
           "bottom": "495",
           "right": "605"
         },
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "children": [
@@ -193,7 +193,7 @@
               "right": "984"
             },
             "id": "text_2",
-            "class": "AppCompatTextView"
+            "class": "MaterialTextView"
           },
           {
             "bounds": {

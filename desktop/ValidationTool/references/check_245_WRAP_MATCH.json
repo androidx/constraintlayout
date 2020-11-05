@@ -1,5 +1,5 @@
 {
-  "duration": "360417",
+  "duration": "576000",
   "layout": {
     "children": [
       {
@@ -20,7 +20,7 @@
           "right": "531"
         },
         "id": "episode_title",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -30,7 +30,7 @@
           "right": "587"
         },
         "id": "episode_number",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {

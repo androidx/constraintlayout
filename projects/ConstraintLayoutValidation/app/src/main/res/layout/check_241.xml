@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_body"
+    android:tag="0,0,387,411"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#55aa55">
+
+    <!-- flow check with first/last chain different styles -->
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,387,1920 0,755,387,411 0,755,109,117 139,755,109,117 278,755,109,117 0,902,109,117 139,902,109,117 278,902,109,117 0,1049,109,117 139,1049,109,117 278,1049,109,117"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,411 0,0,1080,411 0,0,109,117 139,0,109,117 278,0,109,117 173,147,109,117 486,147,109,117 798,147,109,117 693,294,109,117 832,294,109,117 971,294,109,117"/>
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow"
+        android:tag="0,755,1080,411"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#FF0"
+        android:padding="0dp"
+        app:constraint_referenced_ids="textView1,textView2,textView3,textView4,textView5,textView6,textView7,textView8,textView9"
+        app:flow_horizontalStyle="spread"
+        app:flow_firstHorizontalStyle="packed"
+        app:flow_lastHorizontalStyle="packed"
+        app:flow_firstHorizontalBias="0"
+        app:flow_lastHorizontalBias="1"
+        app:flow_horizontalGap="10dp"
+        app:flow_verticalGap="10dp"
+        app:flow_wrapMode="chain"
+        app:flow_maxElementsWrap="3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+
+    </androidx.constraintlayout.helper.widget.Flow>
+
+
+    <TextView
+        android:id="@+id/textView1"
+        android:tag="0,755,109,117"
+        android:padding="10dp"
+        android:visibility="visible"
+        android:background="@color/colorAccent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteY="352dp"
+        tools:layout_editor_absoluteX="247dp"
+        android:text="T1" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:tag="139,755,109,117"
+        android:padding="10dp"
+        android:background="#FFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteY="352dp"
+        tools:layout_editor_absoluteX="247dp"
+        android:text="T2" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:tag="278,755,109,117"
+        android:padding="10dp"
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        tools:layout_editor_absoluteY="352dp"
+        tools:layout_editor_absoluteX="247dp"
+        android:text="T3" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:tag="173,902,109,117"
+        android:padding="10dp"
+        android:visibility="visible"
+        android:background="@color/colorAccent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteY="352dp"
+        tools:layout_editor_absoluteX="247dp"
+        android:text="T1" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:tag="486,902,109,117"
+        android:padding="10dp"
+        android:background="#FFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteY="352dp"
+        tools:layout_editor_absoluteX="247dp"
+        android:text="T2" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:tag="798,902,109,117"
+        android:padding="10dp"
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        tools:layout_editor_absoluteY="352dp"
+        tools:layout_editor_absoluteX="247dp"
+        android:text="T3" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:tag="693,1049,109,117"
+        android:padding="10dp"
+        android:visibility="visible"
+        android:background="@color/colorAccent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteY="352dp"
+        tools:layout_editor_absoluteX="247dp"
+        android:text="T1" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:tag="832,1049,109,117"
+        android:padding="10dp"
+        android:background="#FFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteY="352dp"
+        tools:layout_editor_absoluteX="247dp"
+        android:text="T2" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:tag="971,1049,109,117"
+        android:padding="10dp"
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        tools:layout_editor_absoluteY="352dp"
+        tools:layout_editor_absoluteX="247dp"
+        android:text="T3" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

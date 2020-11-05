@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="0,0,1080,226"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- b/74289572 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,1080,1920 864,0,0,0 0,0,864,226"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,226 864,0,0,0 0,0,864,226"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalGuideline"
+        android:tag="864,0,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.80" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:tag="0,0,864,226"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This is an example of my issue"
+        android:textSize="30dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/verticalGuideline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

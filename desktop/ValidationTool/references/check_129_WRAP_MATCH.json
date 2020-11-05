@@ -1,5 +1,5 @@
 {
-  "duration": "42407",
+  "duration": "187000",
   "layout": {
     "children": [
       {
@@ -10,7 +10,7 @@
           "right": "227"
         },
         "id": "share",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -20,7 +20,7 @@
           "right": "413"
         },
         "id": "subscribe",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -30,7 +30,7 @@
           "right": "480"
         },
         "id": "sell",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       }
     ],
     "bounds": {

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_body"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="0,0,198,126"
+    android:background="#55aa55">
+
+    <!-- b/110122115 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,198,1920 0,0,198,57 0,69,80,57 0,0,0,0"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,126 882,0,198,57 882,69,80,57 882,0,0,0"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/first_tv"
+        android:tag="882,0,198,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Some Text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@+id/barrier"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/second_tv"
+        android:tag="882,69,80,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@+id/barrier"
+        app:layout_constraintTop_toBottomOf="@+id/first_tv" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:tag="882,0,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="start"
+        app:constraint_referenced_ids="first_tv,second_tv" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

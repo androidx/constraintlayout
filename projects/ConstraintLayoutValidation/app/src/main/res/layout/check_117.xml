@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:tag="0,0,0,150"
+    >
+
+    <!-- b/38182748 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,0,1920 0,0,0,150 0,0,0,150 0,0,0,150 0,0,0,150"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,150 0,0,180,150 300,0,180,150 600,0,180,150 900,0,180,150"/>
+
+    <Button
+        android:id="@+id/a"
+        android:tag="0,0,180,150"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:text="a"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/b"
+        app:layout_constraintWidth_max="60dp"
+        />
+    <Button
+        android:id="@+id/b"
+        android:tag="300,0,180,150"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:text="b"
+        app:layout_constraintLeft_toRightOf="@+id/a"
+        app:layout_constraintRight_toLeftOf="@+id/c"
+        app:layout_constraintWidth_max="60dp"
+        />
+    <Button
+        android:id="@+id/c"
+        android:tag="600,0,180,150"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:text="c"
+        app:layout_constraintLeft_toRightOf="@+id/b"
+        app:layout_constraintRight_toLeftOf="@+id/d"
+        app:layout_constraintWidth_max="60dp"
+        />
+    <Button
+        android:id="@+id/d"
+        android:tag="900,0,180,150"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:text="d"
+        app:layout_constraintLeft_toRightOf="@+id/c"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintWidth_max="60dp"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

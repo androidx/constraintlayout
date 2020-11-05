@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/moduleContainer"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:tag="0,0,210,72">
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,210,1920 0,0,0,0 0,0,0,0 180,0,0,0 195,15,0,57"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,72 0,0,0,0 0,0,0,0 180,0,0,0 195,15,870,57"/>
+
+    <ImageView
+        android:id="@+id/class5"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:layout_marginTop="48dp"
+        android:tag="0,0,0,0"
+        android:visibility="gone"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/class6"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/class6"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:layout_marginTop="48dp"
+        android:tag="0,0,0,0"
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="@+id/class5"
+        app:layout_constraintRight_toLeftOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:tag="180,0,0,0"
+        app:layout_constraintGuide_begin="60dp"
+        tools:layout_editor_absoluteX="60dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/colorAccent"
+        android:tag="195,15,870,57"
+        app:layout_constraintLeft_toRightOf="@+id/guideline"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

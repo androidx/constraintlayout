@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_optimizationLevel="none">
+    <!--
+      b/117087368
+
+      - constraintDimensionRatio problem. Unrelated to optimization.
+      - repros in beta 1 as well.
+      - Repros Pixel, Pixel XL ( 1080 x 1920 ). Also repros on Nexus 6 of the same ratio (1440 x 2560)
+      - Doesn't repro on other ratios (pixel3, etc)
+
+    -->
+
+    <!-- case 1. B is messed up, making c also messed up
+         BUT C also is not centered.
+
+         For this particular configuration only.
+
+         Changing anything (ratio, bias etc) from b
+         would fix the issue.
+    -->
+    <View
+        android:id="@+id/b"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#FF558855"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="3.5:1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.9" />
+
+
+    <View
+        android:id="@+id/c"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#FF00ff00"
+        app:layout_constraintBottom_toBottomOf="@+id/b"
+        app:layout_constraintDimensionRatio="2:1"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="@+id/b"
+        app:layout_constraintRight_toRightOf="@+id/b"
+        app:layout_constraintTop_toTopOf="@+id/b"
+        app:layout_constraintVertical_bias="0.9" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

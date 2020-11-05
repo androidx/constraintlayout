@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:tag="0,0,873,705"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- b/70754853 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,873,1920 0,24,216,85 633,24,192,192 216,24,369,449 216,497,188,73 428,497,199,73 0,570,0,0 216,582,465,49 216,631,657,49 0,680,0,0 0,0,0,0 0,0,0,0 0,0,0,0 0,0,0,0 0,0,0,0 0,0,0,0 216,704,609,1"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,558 0,24,216,85 840,24,192,192 216,24,576,302 216,350,188,73 428,350,199,73 0,423,0,0 216,435,465,49 216,484,657,49 0,533,0,0 0,0,0,0 0,0,0,0 0,0,0,0 0,0,0,0 0,0,0,0 0,0,0,0 216,557,816,1"/>
+
+    <TextView
+        android:id="@+id/score"
+        android:tag="0,24,216,85"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center_horizontal"
+        android:textSize="21sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="4367"/>
+
+    <View
+        android:id="@+id/preview"
+        android:tag="840,24,192,192"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:elevation="3dp"
+        android:outlineProvider="bounds"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="#000"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:tag="216,24,576,302"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toRightOf="@id/score"
+        app:layout_constraintRight_toLeftOf="@id/preview"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="TIL when the historic Plaza Hotel in NYC opened in 1907 a room cost $2.50 per night, the equivalent of $64.26 today. The Plaza now charges over $1000/night."/>
+
+    <TextView
+        android:id="@+id/flair"
+        android:tag="216,350,188,73"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="#999"
+        android:elevation="2dp"
+        android:paddingBottom="4dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="4dp"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toRightOf="@id/score"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        android:text="Breaking"
+        tools:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/nsfw"
+        android:tag="428,350,199,73"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:background="#999"
+        android:elevation="2dp"
+        android:paddingBottom="4dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="4dp"
+        android:text="link_nsfw"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toRightOf="@id/flair"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_goneMarginLeft="0dp"
+        tools:visibility="visible"/>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/flair_barrier"
+        android:tag="0,423,0,0"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="flair,nsfw"/>
+
+    <TextView
+        android:id="@+id/subreddits_comments"
+        android:tag="216,435,465,49"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toLeftOf="@id/title"
+        app:layout_constraintTop_toBottomOf="@+id/flair_barrier"
+        android:text="pokemongo • 126 comments"/>
+
+    <TextView
+        android:id="@+id/user_domain_time"
+        android:tag="216,484,657,49"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toLeftOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/subreddits_comments"
+        android:text="MmKaz • self.pokemongo • 12 hours ago"/>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:tag="0,533,0,0"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="score,user_domain_time,preview"/>
+
+    <View
+        android:id="@+id/upvote"
+        android:tag="0,0,0,0"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="8dp"
+        android:scaleType="center"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/downvote"
+        app:layout_constraintTop_toBottomOf="@+id/barrier"
+        tools:visibility="gone"/>
+
+    <View
+        android:id="@+id/downvote"
+        android:tag="0,0,0,0"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:scaleType="center"
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="@+id/upvote"
+        app:layout_constraintRight_toLeftOf="@+id/reply"
+        app:layout_constraintTop_toTopOf="@+id/upvote"
+        tools:visibility="gone"/>
+
+    <View
+        android:id="@+id/reply"
+        android:tag="0,0,0,0"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:scaleType="center"
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="@+id/downvote"
+        app:layout_constraintRight_toLeftOf="@+id/save"
+        app:layout_constraintTop_toTopOf="@+id/upvote"
+        tools:visibility="gone"/>
+
+    <View
+        android:id="@+id/save"
+        android:tag="0,0,0,0"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:scaleType="center"
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="@+id/reply"
+        app:layout_constraintRight_toLeftOf="@+id/browser"
+        app:layout_constraintTop_toTopOf="@+id/upvote"
+        tools:visibility="gone"/>
+
+    <View
+        android:id="@+id/browser"
+        android:tag="0,0,0,0"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:scaleType="center"
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="@+id/save"
+        app:layout_constraintRight_toLeftOf="@+id/share"
+        app:layout_constraintTop_toTopOf="@+id/upvote"
+        tools:visibility="gone"/>
+
+    <View
+        android:id="@+id/share"
+        android:tag="0,0,0,0"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:scaleType="center"
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="@id/browser"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/upvote"
+        tools:visibility="gone"/>
+
+    <View
+        android:id="@+id/divider"
+        android:tag="216,557,816,1"
+        android:layout_width="0dp"
+        android:layout_height="1px"
+        android:layout_marginRight="16dp"
+        android:background="#F00"
+        app:layout_constraintLeft_toRightOf="@id/score"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/upvote"
+        app:layout_goneMarginTop="8dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

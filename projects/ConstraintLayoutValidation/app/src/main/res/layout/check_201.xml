@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:tag="0,0,0,0"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- b/79962504 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,800,1920 0,735,800,450"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,0 0,0,0,0"/>
+
+    <View
+        android:tag="0,735,800,450"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#ff00"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="W,16:9"
+        app:layout_constraintHeight_max="150dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

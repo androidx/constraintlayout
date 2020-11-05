@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="0,0,0,90"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- b/80149154 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,0,1920 0,0,0,90 0,0,0,90"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,90 0,0,1079,90 1079,0,1,90"/>
+
+    <View
+        android:id="@+id/progress"
+        android:tag="0,0,1079,90"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/progress_remaining"/>
+
+    <View
+        android:id="@+id/progress_remaining"
+        android:tag="1079,0,1,90"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:background="@color/colorAccent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_weight="0"
+        app:layout_constraintLeft_toRightOf="@+id/progress"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

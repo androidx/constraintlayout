@@ -1,5 +1,5 @@
 {
-  "duration": "119641",
+  "duration": "290500",
   "layout": {
     "children": [
       {
@@ -41,7 +41,7 @@
           "right": "1080"
         },
         "id": "call_on_hold_text",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -51,7 +51,7 @@
           "right": "632"
         },
         "id": "call_unhold_button",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       }
     ],
     "bounds": {

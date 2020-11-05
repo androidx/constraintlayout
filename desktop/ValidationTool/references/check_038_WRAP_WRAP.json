@@ -1,43 +1,43 @@
 {
-  "duration": "142502",
+  "duration": "669500",
   "layout": {
     "children": [
       {
         "bounds": {
           "top": "0",
           "left": "0",
-          "bottom": "459",
-          "right": "459"
+          "bottom": "479",
+          "right": "479"
         },
         "id": "button69",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
-          "top": "459",
+          "top": "479",
           "left": "195",
-          "bottom": "603",
-          "right": "459"
+          "bottom": "623",
+          "right": "479"
         },
         "id": "button70",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
-          "top": "603",
+          "top": "623",
           "left": "195",
-          "bottom": "747",
-          "right": "459"
+          "bottom": "767",
+          "right": "479"
         },
         "id": "button71",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       }
     ],
     "bounds": {
       "top": "0",
       "left": "0",
-      "bottom": "747",
-      "right": "459"
+      "bottom": "767",
+      "right": "479"
     },
     "class": "ConstraintLayout"
   }

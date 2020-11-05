@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- See screenshot at https://goo.gl/photos/kTWbF7UNbKjy8gKX8 -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="208dp"
+    android:tag="0,0,60,144"
+    android:background="@android:color/black">
+
+    <!-- b/37141016 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,60,1920 45,0,0,0 45,48,15,355 45,415,15,355 45,782,15,356 45,1150,15,355 45,1517,15,355"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,144 810,0,0,0 810,48,15,0 810,60,15,0 810,72,15,0 810,84,15,0 810,96,15,0"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:tag="810,0,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.75" />
+
+    <FrameLayout
+        android:id="@+id/hr_5_peak"
+        android:tag="810,48,15,355"
+        android:layout_width="5dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/hr_4_anaerobic"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread_inside" />
+
+    <FrameLayout
+        android:id="@+id/hr_4_anaerobic"
+        android:tag="810,415,15,355"
+        android:layout_width="5dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="2dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/hr_3_aerobic"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/hr_5_peak" />
+
+    <FrameLayout
+        android:id="@+id/hr_3_aerobic"
+        android:tag="810,782,15,356"
+        android:layout_width="5dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="2dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/hr_2_fatburn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/hr_4_anaerobic"
+        tools:layout_editor_absoluteY="247dp" />
+
+    <FrameLayout
+        android:id="@+id/hr_2_fatburn"
+        android:tag="810,1150,15,355"
+        android:layout_width="5dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="2dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/hr_1_warm"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/hr_3_aerobic" />
+
+    <FrameLayout
+        android:id="@+id/hr_1_warm"
+        android:tag="810,1517,15,355"
+        android:layout_width="5dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="2dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/hr_2_fatburn" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

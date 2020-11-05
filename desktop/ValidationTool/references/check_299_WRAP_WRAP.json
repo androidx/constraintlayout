@@ -1,5 +1,5 @@
 {
-  "duration": "597787",
+  "duration": "940000",
   "layout": {
     "children": [
       {
@@ -20,7 +20,7 @@
           "right": "312"
         },
         "id": "ic_rate_step_title",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -30,7 +30,7 @@
           "right": "312"
         },
         "id": "ic_rate_step_sub_title",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -90,7 +90,7 @@
           "right": "312"
         },
         "id": "ic_rate_step_pills_header",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       }
     ],
     "bounds": {

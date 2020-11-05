@@ -1,52 +1,52 @@
 {
-  "duration": "672500",
+  "duration": "295500",
   "layout": {
     "children": [
       {
         "bounds": {
           "top": "566",
-          "left": "0",
+          "left": "108",
           "bottom": "971",
-          "right": "864"
+          "right": "972"
         },
         "class": "Flow"
       },
       {
         "bounds": {
           "top": "566",
-          "left": "58",
+          "left": "108",
           "bottom": "671",
-          "right": "403"
+          "right": "540"
         },
         "id": "tv_blue",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
           "top": "566",
-          "left": "461",
+          "left": "540",
           "bottom": "671",
-          "right": "806"
+          "right": "972"
         },
         "id": "tv_green",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
           "top": "671",
-          "left": "282",
+          "left": "390",
           "bottom": "971",
-          "right": "582"
+          "right": "690"
         },
         "id": "tv_red",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       }
     ],
     "bounds": {
       "top": "0",
       "left": "0",
       "bottom": "1536",
-      "right": "864"
+      "right": "1080"
     },
     "class": "ConstraintLayout"
   }

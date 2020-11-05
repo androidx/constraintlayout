@@ -1,5 +1,5 @@
 {
-  "duration": "2000",
+  "duration": "673500",
   "layout": {
     "children": [
       {
@@ -20,7 +20,7 @@
           "right": "1020"
         },
         "id": "episode_title_tv",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -40,7 +40,7 @@
           "right": "604"
         },
         "id": "episode_live_tv",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -50,7 +50,7 @@
           "right": "572"
         },
         "id": "users_count_icon",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -60,7 +60,7 @@
           "right": "692"
         },
         "id": "users_count",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -80,7 +80,7 @@
           "right": "1061"
         },
         "id": "duration_icon",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -90,7 +90,7 @@
           "right": "1167"
         },
         "id": "duration_tv",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -100,7 +100,7 @@
           "right": "912"
         },
         "id": "heart_icon",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -110,7 +110,7 @@
           "right": "1020"
         },
         "id": "heart_tv",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       }
     ],
     "bounds": {

@@ -1,5 +1,5 @@
 {
-  "duration": "882150",
+  "duration": "334000",
   "layout": {
     "children": [
       {
@@ -20,7 +20,7 @@
           "right": "168"
         },
         "id": "ic__checkout_header_title",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -30,7 +30,7 @@
           "right": "0"
         },
         "id": "ic__checkout_header_subtitle",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -40,7 +40,7 @@
           "right": "0"
         },
         "id": "ic__checkout_highlighted_title",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -50,7 +50,7 @@
           "right": "0"
         },
         "id": "ic__checkout_header_error",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {

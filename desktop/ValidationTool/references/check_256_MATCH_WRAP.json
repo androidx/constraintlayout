@@ -1,5 +1,5 @@
 {
-  "duration": "105671",
+  "duration": "892500",
   "layout": {
     "children": [
       {
@@ -13,7 +13,7 @@
                 "right": "1080"
               },
               "id": "recordTimer",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "bounds": {
@@ -35,7 +35,7 @@
                     "right": "360"
                   },
                   "id": "recordingNameText",
-                  "class": "AppCompatTextView"
+                  "class": "MaterialTextView"
                 },
                 {
                   "bounds": {
@@ -45,7 +45,7 @@
                     "right": "720"
                   },
                   "id": "recordingGainText",
-                  "class": "AppCompatTextView"
+                  "class": "MaterialTextView"
                 },
                 {
                   "bounds": {
@@ -55,7 +55,7 @@
                     "right": "1080"
                   },
                   "id": "recordingAndStorageSize",
-                  "class": "AppCompatTextView"
+                  "class": "MaterialTextView"
                 }
               ],
               "bounds": {
@@ -190,7 +190,7 @@
               "right": "190"
             },
             "id": "advertTitle",
-            "class": "AppCompatTextView"
+            "class": "MaterialTextView"
           },
           {
             "bounds": {
@@ -200,7 +200,7 @@
               "right": "1050"
             },
             "id": "buyMeButtonTitle",
-            "class": "AppCompatTextView"
+            "class": "MaterialTextView"
           },
           {
             "bounds": {
@@ -209,7 +209,7 @@
               "bottom": "144",
               "right": "1050"
             },
-            "class": "AppCompatTextView"
+            "class": "MaterialTextView"
           },
           {
             "bounds": {

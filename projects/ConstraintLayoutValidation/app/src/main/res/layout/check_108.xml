@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="0dp"
+    android:tag="0,0,0,0"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/contentPaddingBlock">
+
+    <!-- b/38301679 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,0,1920 0,192,0,508 0,700,0,8 0,708,0,331 0,1039,0,9 0,1048,0,221 0,1269,0,9 0,1278,0,220 0,1498,0,9 0,1507,0,221 0,0,0,0 0,0,0,0 0,192,0,0 0,1728,0,0"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,0 81,0,918,0 81,0,918,0 81,0,918,0 81,0,918,0 81,0,918,0 81,0,918,0 81,0,918,0 81,0,918,0 81,0,918,0 999,0,0,0 81,0,0,0 0,0,0,0 0,0,0,0"/>
+
+    <TextView
+        android:id="@+id/titleTv"
+        android:tag="81,192,918,508"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/belowTitleSpace"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@+id/textContainerLeftGuideline"
+        app:layout_constraintRight_toLeftOf="@+id/textContainerRightGuideline"
+        app:layout_constraintTop_toTopOf="@+id/textContainerTopGuideline"
+        app:layout_constraintVertical_chainStyle="spread_inside"
+        app:layout_constraintVertical_weight="2.3" />
+
+    <android.widget.Space
+        android:id="@+id/belowTitleSpace"
+        android:tag="81,700,918,8"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/descTv"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@+id/titleTv"
+        app:layout_constraintRight_toRightOf="@+id/titleTv"
+        app:layout_constraintTop_toBottomOf="@+id/titleTv"
+        app:layout_constraintVertical_weight="0.04" />
+
+    <TextView
+        android:id="@+id/descTv"
+        android:tag="81,708,918,331"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/belowDescSpace"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@+id/belowTitleSpace"
+        app:layout_constraintRight_toRightOf="@+id/belowTitleSpace"
+        app:layout_constraintTop_toBottomOf="@+id/belowTitleSpace"
+        app:layout_constraintVertical_weight="1.5" />
+
+
+    <android.widget.Space
+        android:id="@+id/belowDescSpace"
+        android:tag="81,1039,918,9"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/dateTv"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@+id/descTv"
+        app:layout_constraintRight_toRightOf="@+id/descTv"
+        app:layout_constraintTop_toBottomOf="@+id/descTv"
+        app:layout_constraintVertical_weight="0.04" />
+
+    <TextView
+        android:id="@+id/dateTv"
+        android:tag="81,1048,918,221"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/belowDateSpace"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@+id/belowDescSpace"
+        app:layout_constraintRight_toRightOf="@+id/belowDescSpace"
+        app:layout_constraintTop_toBottomOf="@+id/belowDescSpace"
+        app:layout_constraintVertical_weight="1" />
+
+    <android.widget.Space
+        android:id="@+id/belowDateSpace"
+        android:tag="81,1269,918,9"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/locationTv"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@+id/dateTv"
+        app:layout_constraintRight_toRightOf="@+id/dateTv"
+        app:layout_constraintTop_toBottomOf="@+id/dateTv"
+        app:layout_constraintVertical_weight="0.04" />
+
+
+    <TextView
+        android:id="@+id/locationTv"
+        android:tag="81,1278,918,220"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/belowLocationSpace"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@+id/belowDateSpace"
+        app:layout_constraintRight_toRightOf="@+id/belowDateSpace"
+        app:layout_constraintTop_toBottomOf="@+id/belowDateSpace"
+        app:layout_constraintVertical_weight="1" />
+
+    <android.widget.Space
+        android:id="@+id/belowLocationSpace"
+        android:tag="81,1498,918,9"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/hostTv"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@+id/locationTv"
+        app:layout_constraintRight_toRightOf="@+id/locationTv"
+        app:layout_constraintTop_toBottomOf="@+id/locationTv"
+        app:layout_constraintVertical_weight="0.04" />
+
+    <TextView
+        android:id="@+id/hostTv"
+        android:tag="81,1507,918,221"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/textContainerBottomGuideline"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@+id/belowLocationSpace"
+        app:layout_constraintRight_toRightOf="@+id/belowLocationSpace"
+        app:layout_constraintTop_toBottomOf="@+id/belowLocationSpace"
+        app:layout_constraintVertical_weight="1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/textContainerRightGuideline"
+        android:tag="999,0,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.925"
+        tools:layout_editor_absoluteX="333dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/textContainerLeftGuideline"
+        android:tag="81,0,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.075"
+        tools:layout_editor_absoluteX="27dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/textContainerTopGuideline"
+        android:tag="0,192,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="59dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/textContainerBottomGuideline"
+        android:tag="0,1728,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.9"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="533dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

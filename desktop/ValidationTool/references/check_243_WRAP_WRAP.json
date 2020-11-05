@@ -1,5 +1,5 @@
 {
-  "duration": "14866125",
+  "duration": "10514500",
   "layout": {
     "children": [
       {
@@ -10,7 +10,7 @@
           "right": "145"
         },
         "id": "title",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -30,7 +30,7 @@
           "right": "389"
         },
         "id": "todayButton",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -40,7 +40,7 @@
           "right": "307"
         },
         "id": "todaySubtitle",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -60,7 +60,7 @@
           "right": "848"
         },
         "id": "tomorrowButton",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -70,7 +70,7 @@
           "right": "743"
         },
         "id": "tomorrowSubtitle",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -90,7 +90,7 @@
           "right": "1020"
         },
         "id": "weekendButton",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -100,7 +100,7 @@
           "right": "1040"
         },
         "id": "weekendSubtitle",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -130,7 +130,7 @@
           "right": "1020"
         },
         "id": "exactButton",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -140,7 +140,7 @@
           "right": "540"
         },
         "id": "exactDateButton",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -170,7 +170,7 @@
           "right": "1020"
         },
         "id": "exactTimeButton",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -200,7 +200,7 @@
           "right": "1020"
         },
         "id": "save",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {

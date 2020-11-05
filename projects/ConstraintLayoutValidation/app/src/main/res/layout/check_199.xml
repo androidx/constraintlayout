@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/root_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="0,0,30,75"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <!-- b/80058029 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,768,1920 15,591,738,738 0,576,0,0 0,1344,0,0"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,1920 171,591,738,738 0,576,0,0 0,1344,0,0"/>
+
+    <View
+        android:id="@+id/compass_holder"
+        android:tag="171,591,738,738"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/shape_test"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintBottom_toTopOf="@+id/guideline_h70"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_h30"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_h30"
+        android:tag="0,576,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.30"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_h70"
+        android:tag="0,1344,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.70"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

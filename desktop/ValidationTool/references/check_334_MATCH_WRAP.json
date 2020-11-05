@@ -1,5 +1,5 @@
 {
-  "duration": "20865",
+  "duration": "264000",
   "layout": {
     "children": [{
       "children": [
@@ -41,7 +41,7 @@
             "right": "600"
           },
           "id": "tv_link_card_text",
-          "class": "AppCompatTextView"
+          "class": "MaterialTextView"
         },
         {
           "bounds": {
@@ -51,7 +51,7 @@
             "right": "600"
           },
           "id": "tv_link_card_subtext",
-          "class": "AppCompatTextView"
+          "class": "MaterialTextView"
         },
         {
           "bounds": {

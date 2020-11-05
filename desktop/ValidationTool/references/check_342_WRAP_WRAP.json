@@ -1,0 +1,74 @@
+{
+  "duration": "1205000",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "180",
+          "right": "180"
+        },
+        "id": "avatar",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "text1",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "-357",
+          "bottom": "120",
+          "right": "-237"
+        },
+        "id": "icon",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "-237",
+          "bottom": "57",
+          "right": "840"
+        },
+        "id": "text2",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "840",
+          "bottom": "60",
+          "right": "900"
+        },
+        "id": "emoji",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "900",
+          "bottom": "180",
+          "right": "1080"
+        },
+        "id": "team_avatar",
+        "class": "View"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "180",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

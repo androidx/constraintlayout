@@ -1,5 +1,5 @@
 {
-  "duration": "5158",
+  "duration": "999000",
   "layout": {
     "children": [{
       "children": [
@@ -18,27 +18,27 @@
             "top": "12",
             "left": "204",
             "bottom": "265",
-            "right": "264"
+            "right": "272"
           },
           "id": "txtCompanyName",
-          "class": "AppCompatTextView"
+          "class": "MaterialTextView"
         },
         {
           "bounds": {
             "top": "146",
             "left": "204",
             "bottom": "399",
-            "right": "264"
+            "right": "272"
           },
           "id": "txtStreetAddress",
-          "class": "AppCompatTextView"
+          "class": "MaterialTextView"
         },
         {
           "bounds": {
             "top": "168",
             "left": "48",
             "bottom": "171",
-            "right": "264"
+            "right": "272"
           },
           "id": "locationDivider",
           "class": "View"
@@ -58,7 +58,7 @@
             "top": "199",
             "left": "204",
             "bottom": "335",
-            "right": "264"
+            "right": "272"
           },
           "id": "txtPhoneNumber",
           "class": "AppCompatEditText"
@@ -68,7 +68,7 @@
             "top": "371",
             "left": "48",
             "bottom": "374",
-            "right": "264"
+            "right": "272"
           },
           "id": "phoneDivider",
           "class": "View"
@@ -89,7 +89,7 @@
             "top": "418",
             "left": "204",
             "bottom": "523",
-            "right": "264"
+            "right": "272"
           },
           "id": "spnSignType",
           "class": "AppCompatSpinner"
@@ -100,7 +100,7 @@
             "top": "559",
             "left": "204",
             "bottom": "664",
-            "right": "264"
+            "right": "272"
           },
           "id": "spnSignIssue",
           "class": "AppCompatSpinner"
@@ -110,7 +110,7 @@
             "top": "700",
             "left": "48",
             "bottom": "703",
-            "right": "264"
+            "right": "272"
           },
           "id": "signInfoDivider",
           "class": "View"
@@ -120,7 +120,7 @@
             "top": "739",
             "left": "48",
             "bottom": "875",
-            "right": "264"
+            "right": "272"
           },
           "id": "txtNotes",
           "class": "AppCompatEditText"
@@ -130,7 +130,7 @@
             "top": "911",
             "left": "48",
             "bottom": "914",
-            "right": "264"
+            "right": "272"
           },
           "id": "notesDivider",
           "class": "View"
@@ -143,17 +143,17 @@
             "right": "187"
           },
           "id": "txtViewPhotos",
-          "class": "AppCompatTextView"
+          "class": "MaterialTextView"
         },
         {
           "bounds": {
             "top": "947",
             "left": "0",
             "bottom": "1091",
-            "right": "264"
+            "right": "272"
           },
           "id": "btnManagePhotos",
-          "class": "AppCompatButton"
+          "class": "MaterialButton"
         },
         {
           "children": [],
@@ -161,7 +161,7 @@
             "top": "1127",
             "left": "48",
             "bottom": "1307",
-            "right": "264"
+            "right": "272"
           },
           "id": "imageGrid",
           "class": "GridLayout"
@@ -173,25 +173,25 @@
                 "top": "0",
                 "left": "0",
                 "bottom": "144",
-                "right": "192"
+                "right": "264"
               },
-              "class": "AppCompatButton"
+              "class": "MaterialButton"
             },
             {
               "bounds": {
                 "top": "13",
-                "left": "192",
+                "left": "264",
                 "bottom": "277",
-                "right": "312"
+                "right": "320"
               },
-              "class": "AppCompatButton"
+              "class": "MaterialButton"
             }
           ],
           "bounds": {
             "top": "1343",
             "left": "0",
             "bottom": "1607",
-            "right": "312"
+            "right": "320"
           },
           "id": "buttonBar",
           "class": "ButtonBarLayout"
@@ -201,7 +201,7 @@
         "top": "48",
         "left": "0",
         "bottom": "1655",
-        "right": "312"
+        "right": "320"
       },
       "class": "ConstraintLayout"
     }],
@@ -209,7 +209,7 @@
       "top": "0",
       "left": "0",
       "bottom": "1536",
-      "right": "312"
+      "right": "320"
     },
     "class": "ScrollView"
   }

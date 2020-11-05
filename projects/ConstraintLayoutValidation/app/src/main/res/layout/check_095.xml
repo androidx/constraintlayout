@@ -1,0 +1,68 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="6dp"
+    android:tag="0,0,441,294"
+    >
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,441,1920 18,18,345,258 18,196,60,60 393,18,0,65 393,83,0,57"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,294 18,18,345,258 18,196,60,60 393,18,639,65 393,83,639,57"/>
+
+    <ImageView
+        android:tag="18,18,345,258"
+        android:id="@+id/document_image"
+        android:layout_width="115dp"
+        android:layout_height="86dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="115:86"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@color/gray_light"
+        />
+
+    <ImageView
+        android:tag="18,196,60,60"
+        android:id="@+id/document_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:padding="2dp"
+        app:layout_constraintBottom_toBottomOf="@+id/document_image"
+        app:layout_constraintLeft_toLeftOf="@+id/document_image"
+        app:layout_constraintTop_toTopOf="@+id/document_image"
+        app:layout_constraintVertical_bias="0.9"
+        tools:background="#CC0000"
+        tools:src="@android:drawable/arrow_down_float"
+        />
+
+    <TextView
+        android:tag="393,18,639,65"
+        android:id="@+id/document_headline_first"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="#6B6B6B"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toRightOf="@+id/document_image"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/document_image"
+        tools:text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"
+        />
+
+    <TextView
+        android:tag="393,83,639,57"
+        android:id="@+id/document_teaser"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@+id/document_headline_first"
+        app:layout_constraintRight_toRightOf="@+id/document_headline_first"
+        app:layout_constraintTop_toBottomOf="@+id/document_headline_first"
+        tools:text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:tag="0,0,647,219"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- b/69280225 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,647,1920 0,24,0,0 216,0,0,0 623,0,0,0 216,0,0,0 216,24,407,138 315,24,308,57 216,81,407,81 493,162,106,57"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,219 0,24,0,0 216,0,0,0 1056,0,0,0 649,0,0,0 649,24,407,138 748,24,308,57 649,81,407,81 926,162,106,57"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:tag="0,24,0,0"
+        android:id="@+id/guideline_message_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="8dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:tag="216,0,0,0"
+        android:id="@+id/guideline_message_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="72dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:tag="1056,0,0,0"
+        android:id="@+id/guideline_message_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="8dp" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:tag="649,0,0,0"
+        android:id="@+id/barrier_start_of_bubble"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="start"
+        app:constraint_referenced_ids="message_sender,message_content" />
+
+    <View
+        android:id="@+id/message_background"
+        android:tag="649,24,407,138"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorAccent"
+        app:layout_constraintBottom_toTopOf="@+id/message_timestamp"
+        app:layout_constraintEnd_toEndOf="@id/guideline_message_end"
+        app:layout_constraintStart_toStartOf="@id/barrier_start_of_bubble"
+        app:layout_constraintTop_toTopOf="@id/guideline_message_top" />
+
+    <TextView
+        android:id="@+id/message_sender"
+        android:tag="748,24,308,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="@id/guideline_message_end"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toStartOf="@id/guideline_message_start"
+        app:layout_constraintTop_toTopOf="@id/message_background"
+        android:text="Brandon Shah" />
+
+    <TextView
+        android:id="@+id/message_content"
+        android:tag="649,81,407,81"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:paddingBottom="8dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="@id/guideline_message_end"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toStartOf="@id/guideline_message_start"
+        app:layout_constraintTop_toBottomOf="@id/message_sender"
+        android:text="short_lorem_ipsum" />
+
+    <TextView
+        android:id="@+id/message_timestamp"
+        android:tag="926,162,106,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="@id/guideline_message_end"
+        app:layout_constraintTop_toBottomOf="@id/message_content"
+        android:text="09:30" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

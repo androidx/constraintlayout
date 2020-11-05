@@ -1,5 +1,5 @@
 {
-  "duration": "185723",
+  "duration": "352500",
   "layout": {
     "children": [
       {
@@ -60,7 +60,7 @@
           "right": "623"
         },
         "id": "message_sender",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -70,7 +70,7 @@
           "right": "623"
         },
         "id": "message_content",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -80,7 +80,7 @@
           "right": "599"
         },
         "id": "message_timestamp",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       }
     ],
     "bounds": {

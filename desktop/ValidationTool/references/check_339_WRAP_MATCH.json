@@ -1,5 +1,5 @@
 {
-  "duration": "3323500",
+  "duration": "2717000",
   "layout": {
     "children": [
       {
@@ -10,7 +10,7 @@
           "right": "340"
         },
         "id": "top_text",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -20,17 +20,17 @@
           "right": "353"
         },
         "id": "bottom_text",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
           "top": "0",
           "left": "0",
           "bottom": "144",
-          "right": "264"
+          "right": "375"
         },
         "id": "switch_gone",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -40,7 +40,7 @@
           "right": "402"
         },
         "id": "list_top_text",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "children": [
@@ -53,7 +53,7 @@
                 "right": "402"
               },
               "id": "tv_stop_address",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             }],
             "bounds": {
               "top": "0",
@@ -73,7 +73,7 @@
                 "right": "402"
               },
               "id": "tv_stop_address",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             }],
             "bounds": {
               "top": "57",
@@ -93,7 +93,7 @@
                 "right": "402"
               },
               "id": "tv_stop_address",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             }],
             "bounds": {
               "top": "114",

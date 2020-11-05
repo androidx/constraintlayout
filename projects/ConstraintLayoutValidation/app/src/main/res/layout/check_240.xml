@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_body"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="0,0,48,24"
+    android:background="#9E5E93">
+
+    <!-- b/130115829 -->
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,48,1920 24,24,0,0"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,1056 24,24,1032,1032"/>
+
+    <ImageView
+        android:id="@+id/bottom_sheet_album_art"
+        android:tag="24,24,1032,1032"
+        android:background="@color/colorAccent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:adjustViewBounds="true"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter"
+        android:src="@drawable/shape_test"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

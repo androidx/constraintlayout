@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="0,0,868,549"
+    android:padding="16dp">
+
+    <!-- b/74469361 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,868,1920 48,102,136,57 505,63,300,136 48,253,442,57 505,214,300,136 48,404,218,57 505,365,300,136 490,48,0,0"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,549 48,102,136,57 505,63,512,136 48,253,442,57 505,214,450,136 48,404,218,57 505,365,450,136 490,48,0,0"/>
+
+    <TextView
+        android:id="@+id/label_1"
+        android:tag="48,103,136,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Label 1"
+        app:layout_constraintBottom_toBottomOf="@+id/entry_1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/entry_1" />
+
+    <EditText
+        android:id="@+id/entry_1"
+        android:tag="505,63,512,136"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_marginStart="8dp"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_max="200sp"
+        app:layout_constraintWidth_min="100sp" />
+
+    <TextView
+        android:id="@+id/label_2"
+        android:tag="48,254,442,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Label 2 Is very very long"
+        app:layout_constraintBottom_toBottomOf="@+id/entry_2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/entry_2" />
+
+    <EditText
+        android:id="@+id/entry_2"
+        android:tag="505,214,450,136"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_marginStart="8dp"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/entry_1"
+        app:layout_constraintWidth_max="150sp"
+        app:layout_constraintWidth_min="100sp" />
+
+    <TextView
+        android:id="@+id/label_3"
+        android:tag="48,405,218,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Label Three"
+        app:layout_constraintBottom_toBottomOf="@+id/entry_3"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/entry_3" />
+
+    <EditText
+        android:id="@+id/entry_3"
+        android:tag="505,365,450,136"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_marginStart="8dp"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/entry_2"
+        app:layout_constraintWidth_max="150sp"
+        app:layout_constraintWidth_min="100sp" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/guideline"
+        android:tag="490,48,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:barrierDirection="right"
+        app:constraint_referenced_ids="label_1,label_2,label_3" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

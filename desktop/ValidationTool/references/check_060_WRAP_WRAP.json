@@ -1,5 +1,5 @@
 {
-  "duration": "15788",
+  "duration": "100500",
   "layout": {
     "children": [{
       "bounds": {
@@ -8,7 +8,7 @@
         "bottom": "608",
         "right": "1080"
       },
-      "class": "MockView"
+      "class": "View"
     }],
     "bounds": {
       "top": "48",

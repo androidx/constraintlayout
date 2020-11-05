@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- b/160698806 -->
+
+    <View
+        android:id="@+id/text_container"
+        android:layout_width="130dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="10dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/get_started_button"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_max="530dp">
+
+    </View>
+
+    <View
+        android:id="@+id/tablet_experience_preview"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constrainedHeight="true"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@+id/get_started_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@id/text_container"
+        app:layout_constraintTop_toTopOf="@+id/text_container"
+        app:layout_constraintVertical_chainStyle="spread_inside" />
+
+    <android.widget.Button
+        android:id="@+id/get_started_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="80dp"
+        android:drawablePadding="16dp"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="26dp"
+        android:text="get started"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/text_container"
+        app:layout_constraintTop_toBottomOf="@id/tablet_experience_preview" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

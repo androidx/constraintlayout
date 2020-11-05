@@ -1,0 +1,36 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:tag="0,0,1080,505"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- b/78539858 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,1080,1920 0,0,1080,336 24,168,225,337"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,505 0,0,1080,336 24,168,225,337"/>
+
+    <View
+        android:id="@+id/appBar"
+        android:tag="0,0,1080,336"
+        android:layout_width="match_parent"
+        android:layout_height="112dp"
+        android:background="@color/colorPrimary">
+
+    </View>
+
+    <ImageView
+        android:id="@+id/ivPreview"
+        android:tag="24,168,225,337"
+        android:layout_width="75dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorAccent"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/appBar"
+        app:layout_constraintDimensionRatio="H,2:3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBar" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,5 @@
 {
-  "duration": "33072",
+  "duration": "124500",
   "layout": {
     "children": [{
       "bounds": {
@@ -9,7 +9,7 @@
         "right": "94"
       },
       "id": "episode_image_iv",
-      "class": "MockView"
+      "class": "View"
     }],
     "bounds": {
       "top": "0",

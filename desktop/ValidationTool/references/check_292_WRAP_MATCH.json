@@ -1,5 +1,5 @@
 {
-  "duration": "999023",
+  "duration": "894500",
   "layout": {
     "children": [
       {
@@ -40,7 +40,7 @@
           "right": "168"
         },
         "id": "ic_order_changes_item_quantity",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -70,7 +70,7 @@
           "right": "0"
         },
         "id": "ic__order_changes_item_status",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -80,7 +80,7 @@
           "right": "261"
         },
         "id": "ic__order_changes_item_name",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -90,7 +90,7 @@
           "right": "261"
         },
         "id": "ic__order_changes_item_qty",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -100,7 +100,7 @@
           "right": "477"
         },
         "id": "ic_order_changes_item_price",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -110,7 +110,7 @@
           "right": "477"
         },
         "id": "ic_order_changes_item_price_second",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {

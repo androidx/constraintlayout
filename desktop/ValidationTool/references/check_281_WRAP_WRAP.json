@@ -1,5 +1,5 @@
 {
-  "duration": "5080",
+  "duration": "2813500",
   "layout": {
     "children": [{
       "children": [
@@ -13,7 +13,7 @@
                 "right": "48"
               },
               "id": "title_text_view",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "bounds": {
@@ -23,7 +23,7 @@
                 "right": "48"
               },
               "id": "description_text_view",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "bounds": {
@@ -33,14 +33,14 @@
                 "right": "48"
               },
               "id": "switch_spacer",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "bounds": {
-                "top": "1101",
+                "top": "1069",
                 "left": "96",
-                "bottom": "1182",
-                "right": "236"
+                "bottom": "1213",
+                "right": "240"
               },
               "id": "switch_compat",
               "class": "SwitchCompat"
@@ -50,7 +50,7 @@
             "top": "0",
             "left": "0",
             "bottom": "58583",
-            "right": "284"
+            "right": "288"
           },
           "class": "ConstraintLayout"
         },
@@ -64,7 +64,7 @@
                 "right": "48"
               },
               "id": "title_text_view",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "bounds": {
@@ -74,7 +74,7 @@
                 "right": "48"
               },
               "id": "description_text_view",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "bounds": {
@@ -84,14 +84,14 @@
                 "right": "48"
               },
               "id": "switch_spacer",
-              "class": "AppCompatTextView"
+              "class": "MaterialTextView"
             },
             {
               "bounds": {
-                "top": "1101",
+                "top": "1069",
                 "left": "96",
-                "bottom": "1182",
-                "right": "236"
+                "bottom": "1213",
+                "right": "240"
               },
               "id": "switch_compat",
               "class": "SwitchCompat"
@@ -101,7 +101,7 @@
             "top": "58583",
             "left": "0",
             "bottom": "117166",
-            "right": "284"
+            "right": "288"
           },
           "class": "ConstraintLayout"
         }
@@ -110,7 +110,7 @@
         "top": "0",
         "left": "0",
         "bottom": "117166",
-        "right": "284"
+        "right": "288"
       },
       "class": "LinearLayout"
     }],
@@ -118,7 +118,7 @@
       "top": "0",
       "left": "0",
       "bottom": "1536",
-      "right": "284"
+      "right": "288"
     },
     "class": "ScrollView"
   }

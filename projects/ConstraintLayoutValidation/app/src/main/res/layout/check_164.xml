@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:tag="0,0,312,144"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- b/74537416 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,312,1920 144,48,24,96 156,60,0,72 156,60,0,72 156,60,0,72"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,144 144,48,792,96 156,60,256,72 412,60,256,72 668,60,256,72"/>
+
+    <View
+        android:id="@+id/background"
+        android:tag="144,48,792,96"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/button1"
+        android:tag="156,60,256,72"
+        android:layout_width="0dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="4dp"
+        android:background="@drawable/button_background"
+        android:gravity="center"
+        android:text="Button1"
+        app:layout_constraintBottom_toBottomOf="@id/background"
+        app:layout_constraintEnd_toStartOf="@id/button2"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="@id/background"
+        app:layout_constraintTop_toTopOf="@id/background" />
+
+    <TextView
+        android:id="@+id/button2"
+        android:tag="412,60,256,72"
+        android:layout_width="0dp"
+        android:layout_height="24dp"
+        android:background="@drawable/button_background"
+        android:gravity="center"
+        android:text="Button2"
+        app:layout_constraintBottom_toBottomOf="@id/background"
+        app:layout_constraintEnd_toStartOf="@id/button3"
+        app:layout_constraintStart_toEndOf="@id/button1"
+        app:layout_constraintTop_toTopOf="@id/background" />
+
+    <TextView
+        android:id="@+id/button3"
+        android:tag="668,60,256,72"
+        android:layout_width="0dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="4dp"
+        android:background="@drawable/button_background"
+        android:gravity="center"
+        android:text="Button3"
+        app:layout_constraintBottom_toBottomOf="@id/background"
+        app:layout_constraintEnd_toEndOf="@id/background"
+        app:layout_constraintStart_toEndOf="@id/button2"
+        app:layout_constraintTop_toTopOf="@id/background" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

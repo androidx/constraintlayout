@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:tag="0,0,624,657"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,624,1920 312,960,0,0 288,632,48,57 450,672,24,57 560,782,24,57 600,932,24,57 560,1082,24,57 450,1191,24,57 300,1232,24,57 150,1191,24,57 40,1082,24,57 0,931,24,57 28,782,48,57 138,672,48,57"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,657 540,329,0,0 516,0,48,57 678,40,24,57 788,150,24,57 828,300,24,57 788,450,24,57 678,560,24,57 528,600,24,57 378,560,24,57 268,450,24,57 228,300,24,57 256,150,48,57 366,40,48,57"/>
+
+    <ImageView
+        android:id="@+id/image"
+        android:tag="540,960,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/text1"
+        android:tag="516,632,48,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintCircle="@+id/image"
+        app:layout_constraintCircleRadius="100dp"
+        app:layout_constraintCircleAngle="0"
+        android:text="12" />
+
+    <TextView
+        android:id="@+id/text2"
+        android:tag="678,672,24,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintCircle="@+id/image"
+        app:layout_constraintCircleRadius="100dp"
+        app:layout_constraintCircleAngle="30"
+        android:text="1" />
+
+    <TextView
+        android:id="@+id/text3"
+        android:tag="788,782,24,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintCircle="@+id/image"
+        app:layout_constraintCircleRadius="100dp"
+        app:layout_constraintCircleAngle="420"
+        android:text="2" />
+
+    <TextView
+        android:id="@+id/text4"
+        android:tag="828,932,24,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintCircle="@+id/image"
+        app:layout_constraintCircleRadius="100dp"
+        app:layout_constraintCircleAngle="90"
+        android:text="3" />
+
+    <TextView
+        android:id="@+id/text5"
+        android:tag="788,1082,24,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintCircle="@+id/image"
+        app:layout_constraintCircleRadius="100dp"
+        app:layout_constraintCircleAngle="120"
+        android:text="4" />
+
+    <TextView
+        android:id="@+id/text6"
+        android:tag="678,1191,24,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintCircle="@+id/image"
+        app:layout_constraintCircleRadius="100dp"
+        app:layout_constraintCircleAngle="150"
+        android:text="5" />
+
+    <TextView
+        android:id="@+id/text7"
+        android:tag="528,1232,24,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintCircle="@+id/image"
+        app:layout_constraintCircleRadius="100dp"
+        app:layout_constraintCircleAngle="180"
+        android:text="6" />
+
+    <TextView
+        android:id="@+id/text8"
+        android:tag="378,1191,24,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintCircle="@+id/image"
+        app:layout_constraintCircleRadius="100dp"
+        app:layout_constraintCircleAngle="570"
+        android:text="7" />
+
+    <TextView
+        android:id="@+id/text9"
+        android:tag="268,1082,24,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintCircle="@+id/image"
+        app:layout_constraintCircleRadius="100dp"
+        app:layout_constraintCircleAngle="240"
+        android:text="8" />
+
+    <TextView
+        android:id="@+id/text10"
+        android:tag="228,931,24,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintCircle="@+id/image"
+        app:layout_constraintCircleRadius="100dp"
+        app:layout_constraintCircleAngle="270"
+        android:text="9" />
+
+    <TextView
+        android:id="@+id/text11"
+        android:tag="256,782,48,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintCircle="@+id/image"
+        app:layout_constraintCircleRadius="100dp"
+        app:layout_constraintCircleAngle="300"
+        android:text="10" />
+
+
+    <TextView
+        android:id="@+id/text12"
+        android:tag="366,672,48,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintCircle="@+id/image"
+        app:layout_constraintCircleRadius="100dp"
+        app:layout_constraintCircleAngle="330"
+        android:text="11" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

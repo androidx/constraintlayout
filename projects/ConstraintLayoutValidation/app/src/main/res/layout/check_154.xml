@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#FFAABB"
+    android:tag="0,0,528,924"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- b/72874413 -->
+    <!-- b/72880655 ?? -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,528,1920 48,48,216,576 264,102,264,468 0,624,0,0 0,624,264,300"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,924 48,48,216,576 264,102,264,468 0,624,0,0 0,624,264,300"/>
+
+    <Button
+        android:id="@+id/button0"
+        android:tag="48,48,216,576"
+        android:layout_width="72dp"
+        android:layout_height="192dp"
+        android:layout_margin="16dp"
+        android:background="#FFEEAA"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <Button
+        android:id="@+id/button3"
+        android:tag="264,102,264,468"
+        android:layout_width="wrap_content"
+        android:layout_height="156dp"
+        android:background="#FFEECC"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/button0"
+        app:layout_constraintLeft_toRightOf="@id/button0"
+        app:layout_constraintTop_toTopOf="@id/button0"/>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:tag="0,624,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="button0,button3"/>
+
+    <Button
+        android:id="@+id/button4"
+        android:tag="0,624,264,300"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:background="#00EEFF"
+        app:layout_constraintTop_toBottomOf="@id/barrier"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

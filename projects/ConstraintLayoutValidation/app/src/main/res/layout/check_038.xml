@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:tag="0,0,459,747"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="81dp">
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,1080,1920 0,0,1080,1080 195,1356,264,144 195,1776,264,144"/>
+
+    <tag
+        android:id="@+id/wrap_vertical"
+        android:value="0,0,1080,1368 0,0,1080,1080 195,1080,264,144 195,1224,264,144" />
+
+    <Button
+        android:id="@+id/button69"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:tag="0,0,1080,1080"
+        android:text="Button"
+        app:layout_constraintBottom_toTopOf="@+id/button70"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintHorizontal_bias="0.3"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread_inside"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1" />
+
+    <Button
+        android:id="@+id/button70"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="65dp"
+        android:tag="195,1356,264,144"
+        android:text="Button"
+        app:layout_constraintBottom_toTopOf="@+id/button71"
+        app:layout_constraintLeft_toLeftOf="@+id/button69"
+        app:layout_constraintTop_toBottomOf="@+id/button69"
+        tools:layout_constraintLeft_creator="1" />
+
+    <Button
+        android:id="@+id/button71"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="195,1776,264,144"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/button70"
+        app:layout_constraintRight_toRightOf="@+id/button70"
+        app:layout_constraintTop_toBottomOf="@+id/button70"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

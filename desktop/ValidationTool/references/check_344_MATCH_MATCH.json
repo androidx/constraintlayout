@@ -1,13 +1,13 @@
 {
-  "duration": "942000",
+  "duration": "1121500",
   "layout": {
     "children": [
       {
         "bounds": {
           "top": "24",
-          "left": "737",
+          "left": "673",
           "bottom": "24",
-          "right": "737"
+          "right": "673"
         },
         "id": "offer_barrier",
         "class": "Barrier"
@@ -20,7 +20,7 @@
           "right": "203"
         },
         "id": "offer_price",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -30,7 +30,7 @@
           "right": "0"
         },
         "id": "offer_shipping_info",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -40,7 +40,7 @@
           "right": "0"
         },
         "id": "offer_return_policy",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -50,7 +50,7 @@
           "right": "0"
         },
         "id": "offer_local_offer_details",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -70,7 +70,7 @@
           "right": "0"
         },
         "id": "offer_deal_annotation",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -90,7 +90,7 @@
           "right": "295"
         },
         "id": "offer_merchant_name",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -100,7 +100,7 @@
           "right": "0"
         },
         "id": "offer_disclaimer",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -110,7 +110,7 @@
           "right": "0"
         },
         "id": "offer_seller_rating",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -125,12 +125,12 @@
       {
         "bounds": {
           "top": "24",
-          "left": "737",
+          "left": "673",
           "bottom": "168",
           "right": "1008"
         },
         "id": "offer_action_button",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -140,7 +140,7 @@
           "right": "0"
         },
         "id": "offer_add_to_cart_button",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -150,7 +150,7 @@
           "right": "0"
         },
         "id": "offer_crowded_offers_button",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       }
     ],
     "bounds": {

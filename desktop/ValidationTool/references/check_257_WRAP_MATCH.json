@@ -1,5 +1,5 @@
 {
-  "duration": "900147",
+  "duration": "4029500",
   "layout": {
     "children": [
       {
@@ -10,7 +10,7 @@
           "right": "0"
         },
         "id": "recycler_view",
-        "class": "MockView"
+        "class": "View"
       },
       {
         "bounds": {
@@ -20,7 +20,7 @@
           "right": "0"
         },
         "id": "error_bar_view",
-        "class": "MockView"
+        "class": "View"
       },
       {
         "children": [
@@ -53,7 +53,7 @@
                   "right": "156"
                 },
                 "id": "host_name_tv",
-                "class": "AppCompatTextView"
+                "class": "MaterialTextView"
               },
               {
                 "bounds": {
@@ -63,7 +63,7 @@
                   "right": "156"
                 },
                 "id": "host_handle_tv",
-                "class": "AppCompatTextView"
+                "class": "MaterialTextView"
               },
               {
                 "bounds": {
@@ -73,7 +73,7 @@
                   "right": "0"
                 },
                 "id": "mic_btn",
-                "class": "AppCompatTextView"
+                "class": "MaterialTextView"
               },
               {
                 "bounds": {
@@ -83,7 +83,7 @@
                   "right": "0"
                 },
                 "id": "follow_or_end_btn",
-                "class": "AppCompatButton"
+                "class": "MaterialButton"
               },
               {
                 "bounds": {
@@ -93,7 +93,7 @@
                   "right": "438"
                 },
                 "id": "more_btn",
-                "class": "AppCompatTextView"
+                "class": "MaterialTextView"
               }
             ],
             "bounds": {
@@ -124,7 +124,7 @@
               "right": "390"
             },
             "id": "episode_image_iv",
-            "class": "MockView"
+            "class": "View"
           },
           {
             "bounds": {
@@ -134,7 +134,7 @@
               "right": "1020"
             },
             "id": "episode_title_tv",
-            "class": "AppCompatTextView"
+            "class": "MaterialTextView"
           },
           {
             "bounds": {
@@ -144,7 +144,7 @@
               "right": "507"
             },
             "id": "episode_live_icon",
-            "class": "MockView"
+            "class": "View"
           },
           {
             "bounds": {
@@ -154,7 +154,7 @@
               "right": "604"
             },
             "id": "episode_live_tv",
-            "class": "AppCompatTextView"
+            "class": "MaterialTextView"
           },
           {
             "bounds": {
@@ -164,7 +164,7 @@
               "right": "722"
             },
             "id": "users_count_icon",
-            "class": "AppCompatTextView"
+            "class": "MaterialTextView"
           },
           {
             "bounds": {
@@ -174,7 +174,7 @@
               "right": "770"
             },
             "id": "users_count",
-            "class": "AppCompatTextView"
+            "class": "MaterialTextView"
           },
           {
             "bounds": {
@@ -194,7 +194,7 @@
               "right": "1139"
             },
             "id": "duration_icon",
-            "class": "AppCompatTextView"
+            "class": "MaterialTextView"
           },
           {
             "bounds": {
@@ -204,7 +204,7 @@
               "right": "1221"
             },
             "id": "duration_tv",
-            "class": "AppCompatTextView"
+            "class": "MaterialTextView"
           },
           {
             "bounds": {
@@ -214,7 +214,7 @@
               "right": "1312"
             },
             "id": "heart_icon",
-            "class": "AppCompatTextView"
+            "class": "MaterialTextView"
           },
           {
             "bounds": {
@@ -224,7 +224,7 @@
               "right": "0"
             },
             "id": "heart_tv",
-            "class": "AppCompatTextView"
+            "class": "MaterialTextView"
           }
         ],
         "bounds": {
@@ -244,7 +244,7 @@
           "right": "1080"
         },
         "id": "hearts_view",
-        "class": "MockView"
+        "class": "View"
       },
       {
         "bounds": {
@@ -274,7 +274,7 @@
           "right": "177"
         },
         "id": "whatsapp_btn",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -284,7 +284,7 @@
           "right": "537"
         },
         "id": "share_btn",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -294,7 +294,7 @@
           "right": "0"
         },
         "id": "send_message_btn",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -304,7 +304,7 @@
           "right": "1044"
         },
         "id": "send_heart_btn",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       }
     ],
     "bounds": {

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="0,0,900,1392"
+    app:layout_optimizationLevel="standard">
+
+    <!-- b/123216511 -->
+
+    <tag
+        android:id="@+id/wrap_horizontal"
+        android:value="0,0,900,1920 30,30,300,270 390,75,480,150 0,300,0,0 150,396,300,600 750,621,0,150 0,1092,0,0 0,1356,900,300 0,1092,900,30" />
+
+    <tag
+        android:id="@+id/wrap_vertical"
+        android:value="0,0,1080,1392 30,30,300,270 390,75,660,150 0,300,0,0 150,396,300,600 750,621,180,150 0,1092,0,0 0,1092,1080,300 0,1092,1080,30" />
+
+    <TextView
+        android:id="@+id/header1"
+        android:layout_width="100dp"
+        android:layout_height="90dp"
+        android:layout_margin="10dp"
+        android:background="#F00"
+        android:tag="30,30,300,270"
+        app:layout_constraintBottom_toTopOf="@+id/barrier1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/header2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/header2"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:background="#F00"
+        android:tag="390,75,660,150"
+        app:layout_constraintBottom_toTopOf="@+id/barrier1"
+        app:layout_constraintLeft_toRightOf="@+id/header1"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="0,300,0,0"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="header1, header2" />
+
+    <TextView
+        android:id="@+id/body1"
+        android:layout_width="100dp"
+        android:layout_height="200dp"
+        android:layout_margin="50dp"
+        android:background="#0F0"
+        android:tag="150,396,300,600"
+        app:layout_constraintBottom_toTopOf="@+id/barrier2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/body2"
+        app:layout_constraintTop_toBottomOf="@+id/barrier1" />
+
+    <TextView
+        android:id="@+id/body2"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_margin="50dp"
+        android:background="#0F0"
+        android:tag="750,621,180,150"
+        app:layout_constraintBottom_toTopOf="@+id/barrier2"
+        app:layout_constraintLeft_toRightOf="@+id/body1"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barrier1" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="0,1092,0,0"
+        app:barrierDirection="bottom"
+        app:barrierMargin="32dp"
+        app:constraint_referenced_ids="body1, body2" />
+
+    <TextView
+        android:id="@+id/footer"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_margin="0dp"
+        android:background="#00F"
+        android:tag="0,1356,1080,300"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barrier2" />
+
+    <TextView
+        android:id="@+id/footer2"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        android:layout_margin="0dp"
+        android:background="#00F"
+        android:tag="0,1092,1080,30"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barrier2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

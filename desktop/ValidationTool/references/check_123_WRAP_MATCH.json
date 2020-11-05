@@ -1,5 +1,5 @@
 {
-  "duration": "152523",
+  "duration": "533500",
   "layout": {
     "children": [
       {
@@ -20,7 +20,7 @@
           "right": "240"
         },
         "id": "competition_scorer_vh_name",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -30,7 +30,7 @@
           "right": "240"
         },
         "id": "competition_scorer_vh_details",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -40,7 +40,7 @@
           "right": "360"
         },
         "id": "competition_scorer_vh_goals",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       }
     ],
     "bounds": {

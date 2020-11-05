@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteY="81dp"
+    tools:layout_editor_absoluteX="0dp"
+    android:tag="0,0,744,789"
+    android:padding="0dp">
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,744,1920 432,1010,264,144 432,866,264,144 0,132,0,0 0,1743,0,0 99,439,264,144 99,866,264,144 99,1292,264,144 480,156,264,144 480,866,264,144 480,1575,264,144 432,722,264,144"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,789 768,444,264,144 768,300,264,144 0,132,0,0 0,612,0,0 99,156,264,144 99,300,264,144 99,444,264,144 480,156,264,144 480,300,264,144 480,444,264,144 768,156,264,144"/>
+
+    <Button
+        android:id="@+id/button47"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="768,1010,264,144"
+        android:text="C"
+        app:layout_constraintTop_toBottomOf="@+id/button46"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline10"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="@+id/button46"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/button46" />
+
+    <Button
+        android:id="@+id/button46"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="768,866,264,144"
+        android:text="B"
+        app:layout_constraintBottom_toTopOf="@+id/button47"
+        app:layout_constraintTop_toBottomOf="@+id/button45"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="@+id/button45"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/button45" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline9"
+        android:tag="0,132,0,0"
+        app:layout_constraintGuide_begin="44dp"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteY="44dp"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline10"
+        android:tag="0,1743,0,0"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="59dp"
+        tools:layout_editor_absoluteY="544dp"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <Button
+        android:id="@+id/button38"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="99,439,264,144"
+        android:text="A"
+        app:layout_constraintBottom_toTopOf="@+id/button40"
+        app:layout_constraintTop_toTopOf="@+id/guideline9"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="33dp"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <Button
+        android:id="@+id/button40"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="99,866,264,144"
+        android:text="B"
+        app:layout_constraintBottom_toTopOf="@+id/button41"
+        app:layout_constraintTop_toBottomOf="@+id/button38"
+        android:layout_marginStart="33dp"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <Button
+        android:id="@+id/button41"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="99,1292,264,144"
+        android:text="C"
+        app:layout_constraintTop_toBottomOf="@+id/button40"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline10"
+        android:layout_marginStart="33dp"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <Button
+        android:id="@+id/button42"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="480,156,264,144"
+        android:text="A"
+        app:layout_constraintBottom_toTopOf="@+id/button43"
+        app:layout_constraintTop_toTopOf="@+id/guideline9"
+        app:layout_constraintVertical_chainStyle="spread_inside"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="39dp"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toRightOf="@+id/button38" />
+
+    <Button
+        android:id="@+id/button43"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="480,866,264,144"
+        android:text="B"
+        app:layout_constraintBottom_toTopOf="@+id/button44"
+        app:layout_constraintTop_toBottomOf="@+id/button42"
+        android:layout_marginStart="39dp"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toRightOf="@+id/button40" />
+
+    <Button
+        android:id="@+id/button44"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="480,1575,264,144"
+        android:text="C"
+        app:layout_constraintTop_toBottomOf="@+id/button43"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline10"
+        android:layout_marginStart="39dp"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toRightOf="@+id/button41" />
+
+    <Button
+        android:id="@+id/button45"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="768,722,264,144"
+        android:text="A"
+        app:layout_constraintBottom_toTopOf="@+id/button46"
+        app:layout_constraintTop_toTopOf="@+id/guideline9"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_marginTop="8dp"
+        tools:layout_constraintRight_creator="1"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

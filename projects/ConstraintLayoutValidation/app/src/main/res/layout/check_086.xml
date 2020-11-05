@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="0,0,264,285"
+    app:layout_optimizationLevel="none">
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,264,1920 0,48,0,0 0,1872,0,0 0,69,264,545 0,677,264,545 0,1285,264,545"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,285 0,48,0,0 0,237,0,0 0,69,264,0 0,132,264,0 0,195,264,0"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:tag="0,48,0,0"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:tag="0,1872,0,0"
+        app:layout_constraintGuide_end="16dp" />
+
+    <Button
+        android:id="@+id/buttonA"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="14dp"
+        android:layout_marginTop="7dp"
+        android:tag="0,69,264,545"
+        android:text="A"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/buttonB"
+        app:layout_constraintTop_toTopOf="@+id/guidelineTop"
+        app:layout_constraintVertical_chainStyle="spread"
+        app:layout_constraintVertical_weight="1"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <Button
+        android:id="@+id/buttonB"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="14dp"
+        android:layout_marginTop="7dp"
+        android:tag="0,677,264,545"
+        android:text="B"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/buttonC"
+        app:layout_constraintTop_toBottomOf="@+id/buttonA"
+        app:layout_constraintVertical_weight="1"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <Button
+        android:id="@+id/buttonC"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="14dp"
+        android:layout_marginTop="7dp"
+        android:tag="0,1285,264,545"
+        android:text="C"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
+        app:layout_constraintTop_toBottomOf="@+id/buttonB"
+        app:layout_constraintVertical_weight="1"
+        tools:layout_editor_absoluteX="0dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

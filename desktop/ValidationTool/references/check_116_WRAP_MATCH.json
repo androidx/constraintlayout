@@ -1,5 +1,5 @@
 {
-  "duration": "545489",
+  "duration": "1084000",
   "layout": {
     "children": [
       {
@@ -20,7 +20,7 @@
           "right": "336"
         },
         "id": "title",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -30,7 +30,7 @@
           "right": "336"
         },
         "id": "message",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -40,7 +40,7 @@
           "right": "336"
         },
         "id": "devices_streaming",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -50,7 +50,7 @@
           "right": "230"
         },
         "id": "cancel_button",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -60,7 +60,7 @@
           "right": "336"
         },
         "id": "retry_button",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       }
     ],
     "bounds": {

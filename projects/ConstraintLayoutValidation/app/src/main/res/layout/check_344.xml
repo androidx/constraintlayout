@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#F99"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="24dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="24dp"
+    android:paddingBottom="8dp">
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/offer_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="start"
+        app:constraint_referenced_ids="offer_add_to_cart_button, offer_action_button" />
+
+    <TextView
+        android:id="@+id/offer_price"
+        android:text="$49.99"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/offer_shipping_info"
+        app:layout_constraintEnd_toStartOf="@id/offer_barrier"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/offer_shipping_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@+id/offer_return_policy"
+        app:layout_constraintEnd_toStartOf="@id/offer_barrier"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/offer_price"
+        tools:text="Free delivery by Fri, May 1" />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/offer_return_policy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@+id/offer_local_offer_details"
+        app:layout_constraintEnd_toStartOf="@id/offer_barrier"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/offer_shipping_info"
+        tools:text="Free 90-day returns" />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/offer_local_offer_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@+id/offer_space"
+        app:layout_constraintEnd_toStartOf="@id/offer_barrier"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/offer_return_policy"
+        tools:text="1.2 mi · In stock at Redwood City" />
+
+    <Space
+        android:visibility="gone"
+        android:id="@+id/offer_space"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/offer_deal_annotation"
+        app:layout_constraintEnd_toStartOf="@id/offer_barrier"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/offer_local_offer_details" />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/offer_deal_annotation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@+id/offer_merchant_name"
+        app:layout_constraintEnd_toStartOf="@id/offer_barrier"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/offer_space"
+        tools:text="Save 10% extra, up to $150" />
+
+    <ImageView
+        android:id="@+id/offer_merchant_logo"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginEnd="4dp"
+        android:background="#FFF"
+        app:layout_constraintBottom_toBottomOf="@+id/offer_merchant_name"
+        app:layout_constraintEnd_toStartOf="@+id/offer_merchant_name"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/offer_merchant_name"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/offer_merchant_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@+id/offer_disclaimer"
+        app:layout_constraintEnd_toStartOf="@id/offer_barrier"
+        app:layout_constraintStart_toEndOf="@id/offer_merchant_logo"
+        app:layout_constraintTop_toBottomOf="@id/offer_deal_annotation"
+        android:text="Best Buy" />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/offer_disclaimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        app:layout_constraintBottom_toTopOf="@+id/offer_seller_rating"
+        app:layout_constraintEnd_toStartOf="@id/offer_barrier"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/offer_merchant_name" />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/offer_seller_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/offer_barrier"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/offer_disclaimer"
+        tools:text="89% positive feedback" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/offer_action_button_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="offer_action_button, offer_add_to_cart_button" />
+
+    <Button
+        android:id="@+id/offer_action_button"
+        android:text="Visit Site"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/offer_action_button_barrier"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/offer_barrier"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:visibility="gone"
+        android:id="@+id/offer_add_to_cart_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/offer_action_button_barrier"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/offer_barrier"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:visibility="gone"
+        android:id="@+id/offer_crowded_offers_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Offer"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:minWidth="0dp"
+        android:minHeight="36dp"
+        android:padding="0dp"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toStartOf="@id/offer_barrier"
+        app:layout_constraintTop_toBottomOf="@id/offer_action_button_barrier"
+        app:layout_constraintVertical_bias="0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

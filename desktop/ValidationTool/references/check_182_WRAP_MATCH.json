@@ -1,5 +1,5 @@
 {
-  "duration": "31253",
+  "duration": "125500",
   "layout": {
     "children": [
       {
@@ -20,7 +20,7 @@
           "right": "60"
         },
         "id": "uncheckedInboxItemCountText",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       }
     ],
     "bounds": {

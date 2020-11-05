@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:tag="0,0,1080,822"
+    android:clickable="true"
+    android:focusable="true">
+
+    <!-- b/132651309 -->
+
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,822 60,60,85,57 60,177,329,168 60,177,329,84 143,261,164,84 473,177,375,168 473,177,375,84 579,261,164,84 896,177,124,168 896,177,124,84 876,261,164,84 0,345,0,0 60,405,960,417 60,405,960,168 60,573,480,249 60,573,960,3 540,573,3,249 540,573,480,249 0,0,0,0 0,822,0,0 60,505,960,257 504,598,72,72"/>
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,1080,1920 60,60,85,57 60,177,329,168 60,177,329,84 143,261,164,84 473,177,375,168 473,177,375,84 579,261,164,84 896,177,124,168 896,177,124,84 876,261,164,84 0,345,0,0 60,405,960,417 60,405,960,168 60,573,480,249 60,573,960,3 540,573,3,249 540,573,480,249 0,0,0,0 0,822,0,0 60,1603,960,257 504,1696,72,72"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:tag="60,60,85,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="20dp"
+        android:text="Title"
+        android:textStyle="bold" />
+
+    <View
+        android:id="@+id/todayButtonBackground"
+        android:tag="60,177,329,168"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@+id/todayButton"
+        app:layout_constraintStart_toStartOf="@+id/todayButton"
+        app:layout_constraintEnd_toEndOf="@+id/todayButton"
+        app:layout_constraintBottom_toBottomOf="@+id/todaySubtitle"
+        android:background="@drawable/button_background" />
+
+    <TextView
+        android:id="@+id/todayButton"
+        android:tag="60,177,329,84"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tomorrowButton"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:gravity="center_horizontal|bottom"
+        android:text="time_today"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/todaySubtitle"
+        android:tag="143,261,164,84"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        app:layout_constraintTop_toBottomOf="@+id/todayButton"
+        app:layout_constraintStart_toStartOf="@+id/todayButton"
+        app:layout_constraintEnd_toEndOf="@+id/todayButton"
+        android:gravity="center_horizontal|top"
+        android:text="time_tbd" />
+
+    <View
+        android:id="@+id/tomorrowButtonBackground"
+        android:tag="473,177,375,168"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@+id/tomorrowButton"
+        app:layout_constraintStart_toStartOf="@+id/tomorrowButton"
+        app:layout_constraintEnd_toEndOf="@+id/tomorrowButton"
+        app:layout_constraintBottom_toBottomOf="@+id/tomorrowSubtitle"
+        android:background="@drawable/button_background" />
+
+    <TextView
+        android:id="@+id/tomorrowButton"
+        android:tag="473,177,375,84"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintStart_toEndOf="@+id/todayButton"
+        app:layout_constraintEnd_toStartOf="@+id/weekendButton"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:gravity="center_horizontal|bottom"
+        android:text="tomorrow"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tomorrowSubtitle"
+        android:tag="579,261,164,84"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        app:layout_constraintTop_toBottomOf="@+id/tomorrowButton"
+        app:layout_constraintStart_toStartOf="@+id/tomorrowButton"
+        app:layout_constraintEnd_toEndOf="@+id/tomorrowButton"
+        android:gravity="center_horizontal|top"
+        android:text="time_tbd" />
+
+    <View
+        android:id="@+id/weekendButtonBackground"
+        android:tag="896,177,124,168"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@+id/weekendButton"
+        app:layout_constraintStart_toStartOf="@+id/weekendButton"
+        app:layout_constraintEnd_toEndOf="@+id/weekendButton"
+        app:layout_constraintBottom_toBottomOf="@+id/weekendSubtitle"
+        android:background="@drawable/button_background" />
+
+    <TextView
+        android:id="@+id/weekendButton"
+        android:tag="896,177,124,84"
+        android:layout_width="0dp"
+        android:layout_height="28dp"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintStart_toEndOf="@+id/tomorrowButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="20dp"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:gravity="center_horizontal|bottom"
+        android:text="time_weekend"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/weekendSubtitle"
+        android:tag="876,261,164,84"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        app:layout_constraintTop_toBottomOf="@+id/weekendButton"
+        app:layout_constraintStart_toStartOf="@+id/weekendButton"
+        app:layout_constraintEnd_toEndOf="@+id/weekendButton"
+        android:gravity="center_horizontal|top"
+        android:text="time_tbd" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/exactBottom"
+        android:tag="0,345,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="todayButtonBackground,tomorrowButtonBackground,weekendButtonBackground" />
+
+    <View
+        android:id="@+id/exactBackground"
+        android:tag="60,405,960,417"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@+id/exactButton"
+        app:layout_constraintStart_toStartOf="@+id/exactButton"
+        app:layout_constraintEnd_toEndOf="@+id/exactButton"
+        app:layout_constraintBottom_toBottomOf="@+id/exactButtonBottomBarrier"
+        android:background="@drawable/button_background" />
+
+    <TextView
+        android:id="@+id/exactButton"
+        android:tag="60,405,960,168"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        app:layout_constraintTop_toBottomOf="@+id/exactBottom"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="center"
+        android:text="exact_time"
+        tools:ignore="RtlSymmetry" />
+
+    <TextView
+        android:id="@+id/exactDateButton"
+        android:tag="60,573,480,249"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/exactButton"
+        app:layout_constraintStart_toStartOf="@+id/exactButton"
+        app:layout_constraintEnd_toStartOf="@+id/exactTimeButton"
+        android:padding="32dp"
+        android:gravity="center_horizontal"
+        android:textSize="14sp"
+        android:background="#7C999999"
+        android:text="Date" />
+
+    <View
+        android:id="@+id/exact_horizontal_separator"
+        android:tag="60,573,960,3"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        app:layout_constraintTop_toBottomOf="@+id/exactButton"
+        app:layout_constraintStart_toStartOf="@+id/exactButton"
+        app:layout_constraintEnd_toEndOf="@+id/exactButton"
+        android:background="#00F" />
+
+    <View
+        android:id="@+id/exact_vertical_separator"
+        android:tag="540,573,3,249"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@+id/exactDateButton"
+        app:layout_constraintStart_toEndOf="@+id/exactDateButton"
+        app:layout_constraintBottom_toBottomOf="@+id/exactDateButton"
+        android:background="#00F" />
+
+    <TextView
+        android:id="@+id/exactTimeButton"
+        android:tag="540,573,480,249"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/exactButton"
+        app:layout_constraintStart_toEndOf="@+id/exactDateButton"
+        app:layout_constraintEnd_toEndOf="@+id/exactButton"
+        android:padding="32dp"
+        android:gravity="center_horizontal"
+        android:textSize="14sp"
+        android:background="#7C999999"
+        android:text="Time" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/exactButtonGroup"
+        android:tag="0,0,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="exactTimeButton,exactDateButton,exact_horizontal_separator,exact_vertical_separator" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/exactButtonBottomBarrier"
+        android:tag="0,822,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="exactTimeButton,exactDateButton" />
+
+        <TextView
+            android:id="@+id/save"
+            android:tag="60,1603,960,257"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:paddingTop="32dp"
+            android:paddingBottom="32dp"
+            android:textSize="16sp"
+            android:textColor="@android:color/white"
+            android:background="#7C999999"
+            android:elevation="4dp"
+            android:text="save"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:textAllCaps="true" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:tag="504,1696,72,72"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintTop_toTopOf="@+id/save"
+            app:layout_constraintStart_toStartOf="@+id/save"
+            app:layout_constraintEnd_toEndOf="@+id/save"
+            app:layout_constraintBottom_toBottomOf="@+id/save"
+            android:visibility="visible"
+            android:elevation="8dp"
+            android:indeterminateTint="@android:color/white"
+            android:indeterminate="true" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

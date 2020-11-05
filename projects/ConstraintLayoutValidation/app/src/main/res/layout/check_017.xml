@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:tag="0,0,375,477">
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,375,1920 0,0,375,60 0,1860,375,60 150,932,225,57 231,888,144,144"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,477 0,0,1080,60 0,417,1080,60 150,210,225,57 936,167,144,144"/>
+
+    <View
+        android:id="@+id/topLine"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:background="@android:color/holo_red_dark"
+        android:tag="0,0,1080,60"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/bottomLine"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:background="@android:color/holo_red_dark"
+        android:tag="0,1860,1080,60"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="50dp"
+        android:background="@android:color/white"
+        android:tag="150,932,225,57"
+        android:text="Hello World!"
+        app:layout_constraintBottom_toTopOf="@+id/bottomLine"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topLine"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_launcher"
+        android:tag="936,888,144,144"
+        app:layout_constraintBottom_toTopOf="@+id/bottomLine"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topLine" />
+</androidx.constraintlayout.widget.ConstraintLayout>

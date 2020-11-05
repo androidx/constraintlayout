@@ -1,5 +1,5 @@
 {
-  "duration": "99613",
+  "duration": "252000",
   "layout": {
     "children": [
       {
@@ -30,7 +30,7 @@
           "right": "1080"
         },
         "id": "post_text",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -40,7 +40,7 @@
           "right": "1056"
         },
         "id": "hf_post_stats",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       }
     ],
     "bounds": {

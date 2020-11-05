@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:tag="0,0,1080,660"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- b/72325031 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,1080,1920 0,0,444,57 0,57,0,57 0,114,1080,192 0,306,658,144 403,498,274,57 0,0,0,0 0,555,0,0 0,603,783,57"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,660 0,0,1080,57 0,57,1080,57 0,114,1080,192 0,306,1080,144 403,498,274,57 0,0,0,0 0,555,0,0 0,603,1080,57"/>
+
+    <TextView
+        android:id="@+id/header"
+        android:tag="0,0,1080,57"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="enter confirmation code"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/edit_phone_number"
+        android:tag="0,57,1080,57"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        tools:ignore="SelectableText" />
+
+    <EditText
+        android:id="@+id/confirmation_code_layout"
+        android:tag="0,114,1080,192"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginBottom="16dp"
+        android:cursorVisible="false"
+        android:ems="10"
+        android:fontFamily="monospace"
+        android:gravity="center"
+        android:imeOptions="actionDone"
+        android:inputType="number"
+        android:textSize="32sp"
+        android:typeface="monospace"
+        app:layout_constraintTop_toBottomOf="@id/edit_phone_number"
+        />
+
+    <Button
+        android:id="@+id/submit_confirmation_code"
+        android:tag="0,306,1080,144"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:text="fui_continue_phone_login"
+        app:layout_constraintTop_toBottomOf="@id/confirmation_code_layout" />
+
+    <TextView
+        android:id="@+id/ticker"
+        android:tag="403,498,274,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:enabled="false"
+        android:text="Resend in 0:01"
+        android:textIsSelectable="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/submit_confirmation_code" />
+
+    <TextView
+        android:id="@+id/resend_code"
+        android:tag="0,0,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Resend code"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ticker" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/tos_barrier"
+        android:tag="0,555,0,0"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="ticker,resend_code" />
+
+    <TextView
+        android:id="@+id/create_account_tos"
+        android:tag="0,603,1080,57"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="fui_create_account_preamble_tos_and_pp"
+        android:textIsSelectable="false"
+        app:layout_constraintTop_toBottomOf="@id/tos_barrier" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

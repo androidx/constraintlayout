@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/albumView"
+    android:tag="0,0,479,114"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
+
+    <!-- b/71622590 -->
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,479,1920 0,0,413,57 0,1863,387,57 479,0,0,0 413,0,0,0 425,0,54,54"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,114 0,0,413,57 0,57,387,57 1080,0,0,0 413,0,0,0 1026,0,54,54"/>
+
+    <TextView
+        android:id="@+id/albumView_albumTitle"
+        android:tag="0,0,413,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="150dp"
+        android:text="An average album title"
+        app:layout_constraintBottom_toTopOf="@+id/albumView_trackDetails"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread_inside"/>
+
+    <TextView
+        android:id="@+id/albumView_trackDetails"
+        android:tag="0,1863,387,57"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Track details go here"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/albumView_albumTitle"
+        app:layout_constraintVertical_chainStyle="spread_inside"/>
+
+    <ImageView
+        android:id="@+id/albumView_albumImage"
+        android:tag="1080,0,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@+id/albumView_barrier"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/ic_launcher"
+        tools:layout_editor_absoluteX="200dp"/>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/albumView_barrier"
+        android:tag="413,0,0,0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        app:barrierDirection="end"
+        app:constraint_referenced_ids="albumView_trackDetails,albumView_albumTitle"
+        />
+
+    <ImageView
+        android:id="@+id/albumView_playingImage"
+        android:tag="1026,0,54,54"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="4dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toStartOf="@id/albumView_barrier"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_media_play"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

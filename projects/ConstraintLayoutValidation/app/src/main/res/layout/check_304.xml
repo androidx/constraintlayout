@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="contentDescription,hardcodedText,rtlHardcoded"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- b/144987885 -->
+
+   <ImageView
+        android:id="@+id/imgPhoto"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:scaleType="fitCenter"
+        android:src="@android:color/holo_red_light"
+        app:layout_constrainedHeight="true"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/txtEventName" />
+    <ImageButton android:id="@+id/cmdPhoto"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintBottom_toBottomOf="@id/imgPhoto"
+        app:layout_constraintLeft_toRightOf="@id/imgPhoto" />
+    <TextView
+        android:id="@+id/lblEventName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@id/txtEventName" />
+    <TextView
+        android:id="@+id/txtEventName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/rightLabels"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imgPhoto"
+        app:layout_constraintBottom_toTopOf="@id/txtDesc"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        tools:text="Event" />
+    <TextView
+        android:id="@+id/lblDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@id/txtDesc" />
+    <TextView
+        android:id="@+id/txtDesc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/rightLabels"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtEventName"
+        app:layout_constraintBottom_toTopOf="@id/txtTimeRange"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        tools:text="Description" />
+    <TextView
+        android:id="@+id/txtTimeRange"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtDesc"
+        app:layout_constraintBottom_toTopOf="@id/txtAddress"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        tools:text="Time" />
+    <TextView
+        android:id="@+id/txtAddress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/cmdAddress"
+        app:layout_constraintTop_toBottomOf="@id/txtTimeRange"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        tools:text="Address" />
+    <ImageButton
+        android:id="@+id/cmdAddress"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@android:color/holo_red_light"
+        app:layout_constraintLeft_toRightOf="@id/txtAddress"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/txtAddress" />
+    <TextView
+        android:id="@+id/lblEventCategories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Event Categories"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bottomAddress"
+        app:layout_constraintBottom_toTopOf="@id/txtEventCategories"/>
+    <TextView
+        android:id="@+id/txtEventCategories"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/cmdEventCategories"
+        app:layout_constraintTop_toBottomOf="@id/lblEventCategories"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        tools:text="Category 1,Category 2,Category 3" />
+    <ImageButton
+        android:id="@+id/cmdEventCategories"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@android:color/holo_red_light"
+        app:layout_constraintLeft_toRightOf="@id/txtEventCategories"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/txtEventCategories" />
+    <TextView
+        android:id="@+id/lblMusicGenres"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Music Genres"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bottomEventCategories"
+        app:layout_constraintBottom_toTopOf="@id/txtMusicGenres" />
+    <TextView
+        android:id="@+id/txtMusicGenres"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/cmdMusicGenres"
+        app:layout_constraintTop_toBottomOf="@id/lblMusicGenres"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        tools:text="Genre 1,Genre 2, Genre 3" />
+    <ImageButton
+        android:id="@+id/cmdMusicGenres"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@android:color/holo_red_light"
+        app:layout_constraintLeft_toRightOf="@id/txtMusicGenres"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/txtMusicGenres" />
+    <TextView
+        android:id="@+id/lblPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Price"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@id/txtPrice" />
+    <TextView
+        android:id="@+id/txtPrice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/rightLabels"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bottomMusicGenres"
+        app:layout_constraintBottom_toTopOf="@id/txtGuests"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        tools:text="150.00 EUR" />
+
+ <TextView
+     android:id="@+id/lblGuests"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:text="Guests"
+     app:layout_constraintBaseline_toBaselineOf="@id/txtGuests"
+     app:layout_constraintLeft_toLeftOf="parent" />
+    <TextView
+        android:id="@+id/txtGuests"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/rightLabels"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtPrice"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        tools:text="50/80" />
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/bottomAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="txtAddress,cmdAddress" />
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/bottomEventCategories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="txtEventCategories,cmdEventCategories" />
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/bottomMusicGenres"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="txtMusicGenres,cmdMusicGenres" />
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/rightLabels"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="right"
+        app:constraint_referenced_ids="lblEventName,lblDesc,lblPrice,lblGuests" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

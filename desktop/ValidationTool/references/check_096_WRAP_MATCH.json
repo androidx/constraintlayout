@@ -1,13 +1,13 @@
 {
-  "duration": "7729",
+  "duration": "100500",
   "layout": {
     "children": [
       {
         "bounds": {
           "top": "0",
-          "left": "140",
+          "left": "149",
           "bottom": "0",
-          "right": "140"
+          "right": "149"
         },
         "id": "guideline11",
         "class": "Guideline"
@@ -15,19 +15,19 @@
       {
         "bounds": {
           "top": "48",
-          "left": "176",
+          "left": "185",
           "bottom": "192",
-          "right": "440"
+          "right": "469"
         },
         "id": "button103",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       }
     ],
     "bounds": {
       "top": "0",
       "left": "0",
       "bottom": "1536",
-      "right": "440"
+      "right": "469"
     },
     "class": "ConstraintLayout"
   }

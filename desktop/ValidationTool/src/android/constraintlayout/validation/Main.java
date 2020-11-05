@@ -496,6 +496,9 @@ public class Main extends JPanel {
     }
 
     boolean valid(String fileName) {
+        if (fileName.equals("check_291")) {
+            return false;
+        }
         if (!FILTER_V2_LAYOUTS) {
             return true;
         }

@@ -1,5 +1,5 @@
 {
-  "duration": "215201",
+  "duration": "456000",
   "layout": {
     "children": [
       {
@@ -20,7 +20,7 @@
           "right": "1032"
         },
         "id": "txtCompanyName",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -30,7 +30,7 @@
           "right": "1032"
         },
         "id": "txtStreetAddress",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
@@ -142,17 +142,17 @@
           "right": "187"
         },
         "id": "txtViewPhotos",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
           "top": "947",
-          "left": "768",
+          "left": "760",
           "bottom": "1091",
           "right": "1032"
         },
         "id": "btnManagePhotos",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "children": [],
@@ -170,20 +170,20 @@
           {
             "bounds": {
               "top": "0",
-              "left": "348",
+              "left": "276",
               "bottom": "144",
               "right": "540"
             },
-            "class": "AppCompatButton"
+            "class": "MaterialButton"
           },
           {
             "bounds": {
               "top": "0",
               "left": "540",
               "bottom": "144",
-              "right": "732"
+              "right": "804"
             },
-            "class": "AppCompatButton"
+            "class": "MaterialButton"
           }
         ],
         "bounds": {

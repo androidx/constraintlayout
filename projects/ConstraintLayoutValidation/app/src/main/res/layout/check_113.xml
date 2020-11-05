@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="0,0,1080,426">
+
+    <!-- b/62248790 -->
+
+    <tag android:id="@+id/wrap_horizontal" android:value="0,0,1080,1920 0,0,96,420 96,0,888,57 984,0,96,420 0,93,1080,57 96,186,888,57 414,279,253,57 414,369,253,57"/>
+    <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,426 0,0,96,420 96,0,888,57 984,0,96,420 0,93,1080,57 96,186,888,57 414,279,253,57 414,369,253,57"/>
+
+    <View
+        android:id="@+id/v1_2"
+        android:layout_width="32dp"
+        android:layout_height="140dp"
+        android:background="#ffaa0000"
+        android:tag="0,0,96,420"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/text_2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constrainedWidth="true"
+        android:background="#80808080"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:tag="96,0,888,57"
+        android:text="mc: Very long text that doesn't fit on screen should not push the red box off screen"
+        app:layout_constraintLeft_toRightOf="@+id/v1_2"
+        app:layout_constraintRight_toLeftOf="@+id/v2_2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_default="wrap" />
+
+    <View
+        android:id="@+id/v2_2"
+        android:layout_width="32dp"
+        android:layout_height="140dp"
+        android:background="#ffaa0000"
+        android:tag="984,0,96,420"
+        app:layout_constraintLeft_toRightOf="@+id/text_2"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="#80808080"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:tag="0,93,1080,57"
+        android:text="wc: Very long text that doesn't fit on screen should not push the red box off screen"
+        app:layout_constraintLeft_toRightOf="@+id/v1_2"
+        app:layout_constraintRight_toLeftOf="@+id/v2_2"
+        app:layout_constraintTop_toBottomOf="@+id/text_2" />
+
+    <TextView
+        android:id="@+id/text_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constrainedWidth="true"
+        android:layout_marginTop="12dp"
+        android:background="#80808080"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:tag="96,186,888,57"
+        android:text="wc: Very long text that doesn't fit on screen should not push the red box off screen"
+        app:layout_constraintLeft_toRightOf="@+id/v1_2"
+        app:layout_constraintRight_toLeftOf="@+id/v2_2"
+        app:layout_constraintTop_toBottomOf="@+id/text_3"
+        app:layout_constraintWidth_default="wrap" />
+
+    <TextView
+        android:id="@+id/text_5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="#80808080"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:tag="414,279,253,57"
+        android:text="wc: short text"
+        app:layout_constraintLeft_toRightOf="@+id/v1_2"
+        app:layout_constraintRight_toLeftOf="@+id/v2_2"
+        app:layout_constraintTop_toBottomOf="@+id/text_4" />
+
+    <TextView
+        android:id="@+id/text_6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constrainedWidth="true"
+        android:layout_marginTop="11dp"
+        android:background="#80808080"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:tag="414,369,253,57"
+        android:text="wc: short text"
+        app:layout_constraintLeft_toRightOf="@+id/v1_2"
+        app:layout_constraintRight_toLeftOf="@+id/v2_2"
+        app:layout_constraintTop_toBottomOf="@+id/text_5" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

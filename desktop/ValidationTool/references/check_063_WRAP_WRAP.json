@@ -1,5 +1,5 @@
 {
-  "duration": "137452",
+  "duration": "398000",
   "layout": {
     "children": [
       {
@@ -7,60 +7,60 @@
           "top": "24",
           "left": "300",
           "bottom": "168",
-          "right": "564"
+          "right": "584"
         },
         "id": "button4",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
           "top": "0",
           "left": "15",
           "bottom": "144",
-          "right": "279"
+          "right": "299"
         },
         "id": "button5",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
           "top": "456",
           "left": "48",
           "bottom": "600",
-          "right": "312"
+          "right": "332"
         },
         "id": "button6",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
           "top": "96",
           "left": "0",
           "bottom": "217",
-          "right": "570"
+          "right": "590"
         },
         "id": "textView3",
-        "class": "AppCompatTextView"
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
           "top": "600",
           "left": "300",
           "bottom": "744",
-          "right": "564"
+          "right": "584"
         },
         "id": "button7",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
           "top": "619",
           "left": "306",
           "bottom": "763",
-          "right": "570"
+          "right": "590"
         },
         "id": "button8",
-        "class": "AppCompatButton"
+        "class": "MaterialButton"
       },
       {
         "bounds": {
@@ -75,9 +75,9 @@
       {
         "bounds": {
           "top": "0",
-          "left": "327",
+          "left": "347",
           "bottom": "0",
-          "right": "327"
+          "right": "347"
         },
         "id": "guideline2",
         "class": "Guideline"
@@ -85,9 +85,9 @@
       {
         "bounds": {
           "top": "0",
-          "left": "282",
+          "left": "291",
           "bottom": "0",
-          "right": "282"
+          "right": "291"
         },
         "id": "guideline3",
         "class": "Guideline"
@@ -127,7 +127,7 @@
       "top": "0",
       "left": "0",
       "bottom": "844",
-      "right": "570"
+      "right": "590"
     },
     "class": "ConstraintLayout"
   }
