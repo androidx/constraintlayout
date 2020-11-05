@@ -6,7 +6,7 @@
 
     <!-- b/136738279 -->
 
-    <android.support.constraintlayout.validation.RoundBoxInsetLayout
+    <androidx.constraintlayout.validation.RoundBoxInsetLayout
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:background="@color/cardview_shadow_start_color">
@@ -32,6 +32,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </android.support.constraintlayout.validation.RoundBoxInsetLayout>
+    </androidx.constraintlayout.validation.RoundBoxInsetLayout>
 
 </LinearLayout>

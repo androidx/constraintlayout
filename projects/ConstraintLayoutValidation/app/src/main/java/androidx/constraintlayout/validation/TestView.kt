@@ -1,4 +1,4 @@
-package android.support.constraintlayout.validation
+package androidx.constraintlayout.validation
 
 import android.content.Context
 import android.content.res.Resources

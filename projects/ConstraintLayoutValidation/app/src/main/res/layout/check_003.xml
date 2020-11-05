@@ -25,7 +25,7 @@
     <tag android:id="@+id/wrap_horizontal" android:value="0,0,520,1920 81,93,200,51 413,312,107,51 282,405,107,51 139,456,107,51"/>
     <tag android:id="@+id/wrap_vertical" android:value="0,0,1080,507 81,93,200,51 497,312,107,51 366,405,107,51 223,456,107,51"/>
 
-    <android.support.constraintlayout.validation.TestTextView
+    <androidx.constraintlayout.validation.TestTextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintTop_creator="1" />
 
-    <android.support.constraintlayout.validation.TestTextView
+    <androidx.constraintlayout.validation.TestTextView
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
         tools:layout_constraintBottom_creator="1"
         tools:layout_constraintLeft_creator="1" />
 
-    <android.support.constraintlayout.validation.TestTextView
+    <androidx.constraintlayout.validation.TestTextView
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
         tools:layout_constraintBottom_creator="1"
         tools:layout_constraintLeft_creator="1" />
 
-    <android.support.constraintlayout.validation.TestTextView
+    <androidx.constraintlayout.validation.TestTextView
         android:id="@+id/button4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

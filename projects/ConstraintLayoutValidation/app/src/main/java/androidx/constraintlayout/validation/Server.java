@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package android.support.constraintlayout.validation;
+package androidx.constraintlayout.validation;
 
 import android.app.Activity;
 import android.os.Build;

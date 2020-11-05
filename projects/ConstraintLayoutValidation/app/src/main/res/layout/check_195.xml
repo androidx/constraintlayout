@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:tag="0,0,864,264"
     app:layout_optimizationLevel="none"
-    tools:context=".MainActivity">
+    tools:context="androidx.constraintlayout.validation.MainActivity">
 
     <!-- b/78375926 -->
 

@@ -1,6 +1,7 @@
-package android.support.constraintlayout.validation
+package androidx.constraintlayout.validation
 
 import android.content.Context
+import android.support.constraintlayout.validation.R
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

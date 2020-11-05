@@ -1,10 +1,11 @@
-package android.support.constraintlayout.validation;
+package androidx.constraintlayout.validation;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.constraintlayout.validation.R;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
