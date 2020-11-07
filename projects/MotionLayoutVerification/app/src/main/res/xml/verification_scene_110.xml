@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto"
+    motion:defaultDuration="1000">
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@+id/start"      >
+        <OnClick motion:targetId="@+id/button30" />
+        <OnSwipe motion:dragDirection="dragDown"/>
+
+        <KeyFrameSet>
+
+            <KeyTrigger motion:motionTarget="@+id/button"
+                motion:framePosition="30"
+                motion:onNegativeCross=".performHapticFeedback"
+                motion:onPositiveCross=".ImageResource"
+                >
+
+                <CustomMethod motion:methodName="performHapticFeedback"
+                    motion:customIntegerValue="6"/>
+                <CustomAttribute motion:attributeName="imageResource"
+                    motion:customReference="@drawable/ic_flash"/>
+            </KeyTrigger>
+            <KeyTrigger motion:motionTarget="@+id/button"
+                motion:framePosition="70"
+                motion:onNegativeCross="."
+                >
+                <CustomAttribute motion:attributeName="imageResource"
+                    motion:customReference="@drawable/ic_battery"/>
+            </KeyTrigger>
+
+            <KeyTrigger motion:motionTarget="@+id/button"
+                motion:framePosition="70"
+                motion:onNegativeCross="."
+                >
+                <CustomAttribute motion:attributeName="imageResource"
+                    motion:customReference="@drawable/ic_battery"/>
+            </KeyTrigger>
+
+            <KeyTrigger motion:framePosition="10"
+                motion:motionTarget="@+id/button"  motion:onNegativeCross=".">
+                <CustomMethod motion:methodName="performHapticFeedback"   motion:customIntegerValue="1"/>
+            </KeyTrigger>
+
+            <KeyTrigger motion:framePosition="20"
+                motion:motionTarget="@+id/button"  motion:onNegativeCross=".">
+                <CustomMethod motion:methodName="performHapticFeedback"   motion:customIntegerValue="8"/>
+            </KeyTrigger>
+            <KeyTrigger motion:framePosition="40"
+                motion:motionTarget="@+id/button"  motion:onNegativeCross=".">
+                <CustomMethod motion:methodName="performHapticFeedback"   motion:customIntegerValue="9"/>
+            </KeyTrigger>
+            <KeyTrigger motion:framePosition="50"
+                motion:motionTarget="@+id/button"  motion:onNegativeCross=".">
+                <CustomMethod motion:methodName="performHapticFeedback"   motion:customIntegerValue="11"/>
+            </KeyTrigger>
+            <KeyTrigger motion:framePosition="60"
+                motion:motionTarget="@+id/button"  motion:onNegativeCross=".">
+                <CustomMethod motion:methodName="performHapticFeedback"   motion:customIntegerValue="3"/>
+            </KeyTrigger>
+            <KeyTrigger motion:framePosition="80"
+                motion:motionTarget="@+id/button"  motion:onNegativeCross=".">
+                <CustomMethod motion:methodName="performHapticFeedback"   motion:customIntegerValue="12"/>
+            </KeyTrigger>
+            <KeyTrigger motion:framePosition="81"
+                motion:motionTarget="@+id/run"  motion:onNegativeCross=".">
+                <CustomMethod motion:attributeName="text"   motion:customStringValue="12"/>
+            </KeyTrigger>
+
+
+        </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+        <ConstraintOverride
+            android:id="@+id/button"
+            motion:layout_constraintVertical_bias="0"
+            />
+
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <ConstraintOverride
+            android:id="@id/button"
+            android:rotation="360"
+            motion:layout_constraintVertical_bias="1"
+        />
+    </ConstraintSet>
+</MotionScene>

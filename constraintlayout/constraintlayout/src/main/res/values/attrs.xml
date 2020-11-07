@@ -1300,6 +1300,7 @@
 
     <declare-styleable name="CustomAttribute">
         <attr name="attributeName" format="string" />
+        <attr name="methodName" format="string" />
         <attr name="customColorValue" format="color" />
         <attr name="customColorDrawableValue" format="color" />
         <attr name="customIntegerValue" format="integer" />
@@ -1308,6 +1309,7 @@
         <attr name="customDimension" format="dimension" />
         <attr name="customPixelDimension" format="dimension" />
         <attr name="customBoolean" format="boolean" />
+        <attr name="customReference" format="reference" />
     </declare-styleable>
 
     <declare-styleable name="StateSet">

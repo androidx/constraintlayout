@@ -89,6 +89,10 @@ public class KeyFrames {
                             if (key != null && key.mCustomConstraints != null) {
                                 ConstraintAttribute.parse(context, parser, key.mCustomConstraints);
                             }
+                        } else if (tagName.equalsIgnoreCase("CustomMethod")) {
+                            if (key != null && key.mCustomConstraints != null) {
+                                ConstraintAttribute.parse(context, parser, key.mCustomConstraints);
+                            }
                         }
                         break;
                     case XmlResourceParser.END_TAG:
