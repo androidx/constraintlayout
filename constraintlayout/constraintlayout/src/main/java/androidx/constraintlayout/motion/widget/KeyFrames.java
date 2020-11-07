@@ -39,7 +39,8 @@ import java.util.Set;
 
 public class KeyFrames {
     public static final int UNSET = ConstraintLayout.LayoutParams.UNSET;
-
+    private static final String CUSTOM_METHOD = "CustomMethod";
+    private static final String CUSTOM_ATTRIBUTE = "CustomAttribute";
     private HashMap<Integer, ArrayList<Key>> mFramesMap = new HashMap<Integer, ArrayList<Key>>();
     static HashMap<String, Constructor<? extends Key>> sKeyMakers = new HashMap<>();
     private static final String TAG = "KeyFrames";
@@ -85,11 +86,11 @@ public class KeyFrames {
                             } catch (Exception e) {
                                 Log.e(TAG, "unable to create ", e);
                             }
-                        } else if (tagName.equalsIgnoreCase("CustomAttribute")) {
+                        } else if (tagName.equalsIgnoreCase(CUSTOM_ATTRIBUTE)) {
                             if (key != null && key.mCustomConstraints != null) {
                                 ConstraintAttribute.parse(context, parser, key.mCustomConstraints);
                             }
-                        } else if (tagName.equalsIgnoreCase("CustomMethod")) {
+                        } else if (tagName.equalsIgnoreCase(CUSTOM_METHOD)) {
                             if (key != null && key.mCustomConstraints != null) {
                                 ConstraintAttribute.parse(context, parser, key.mCustomConstraints);
                             }
