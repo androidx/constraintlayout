@@ -25,8 +25,6 @@ task('checkJavaVersion') doLast {
 }
 final def checkJavaVersionTask = tasks['checkJavaVersion']
 
-ext.version = '2.0.3'
-
 /*
  * With the build server you are given two env variables.
  * The OUT_DIR is a temporary directory you can use to put things during the build.
@@ -58,11 +56,13 @@ task dist doLast {
 project(':constraintlayout') {
     ext.pomName = 'Android ConstraintLayout'
     ext.pomDesc = 'ConstraintLayout for Android'
+    ext.version = '2.1.0-alpha1'
 }
 
-project(':solver') {
+project(':core') {
     ext.pomName = 'Android ConstraintLayout Core'
     ext.pomDesc = 'ConstraintLayout core'
+    ext.version = '1.0.0-alpha2'
 }
 
 subprojects { Project project ->
@@ -70,7 +70,7 @@ subprojects { Project project ->
     project.buildDir = project.file("$project.parent.buildDir/../$project.name/build")
 
     group = 'androidx.constraintlayout'
-    version = rootProject.ext.version
+    version = project.ext.version
 
     apply plugin: 'maven'
 
@@ -83,7 +83,7 @@ subprojects { Project project ->
         repositories {
             mavenDeployer {
                 repository(url: uri("$rootProject.ext.supportRepoOut"))
-		if (project.getName() == 'constraintlayout' || project.getName() == 'solver') {
+		if (project.getName() == 'constraintlayout' || project.getName() == 'core') {
 		    pom.project {
 		        name project.ext.pomName
 		        description project.ext.pomDesc
@@ -143,7 +143,11 @@ subprojects { Project project ->
         destinationDir project.parent.ext.androidHostDist
         baseName = project.group
         version = rootProject.ext.buildNumber
-	archiveName = archivesBaseName + "-" + project.parent.ext.version + ".zip"
+        if (archivesBaseName == 'core') {
+	    archiveName = "androidx-constraintlayout-" + archivesBaseName + "-" + project.ext.version + ".zip"
+        } else {
+	    archiveName = "androidx-" + archivesBaseName + "-" + project.ext.version + ".zip"
+        }
     }
     project.parent.dist.dependsOn createSeparateZip
     createSeparateZip.dependsOn release

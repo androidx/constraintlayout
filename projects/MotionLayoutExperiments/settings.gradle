@@ -1,4 +1,4 @@
 rootProject.name = "MotionLayoutExperiments"
 include ':app'
 include ':constraintlayout'
-include ':solver'
+include ':core'

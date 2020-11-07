@@ -1,4 +1,4 @@
-include ':solver', ':constraintlayout'
+include ':core', ':constraintlayout'
 
 //File externalRoot = new File(rootDir, '../external')
 //File externalRoot = new File("$System.env.DOCLAVA_PREBUILTS")
