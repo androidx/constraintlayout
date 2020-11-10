@@ -19,7 +19,10 @@ package androidx.constraintlayout.motion.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.RectF;
+
+import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.R;
+
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseIntArray;
@@ -54,16 +57,12 @@ public class KeyTrigger extends Key {
     private boolean mFireNegativeReset = true;
     private boolean mFirePositiveReset = true;
     private float mFireThreshold = Float.NaN;
-
-    private Method mFireCross;
-    private Method mFireNegativeCross;
-    private Method mFirePositiveCross;
     private float mFireLastPos;
     private boolean mPostLayout = false;
 
     RectF mCollisionRect = new RectF();
     RectF mTargetRect = new RectF();
-
+    HashMap<String, Method> mMethodHashMap = new HashMap<>();
     public static final int KEY_TYPE = 5;
 
     {
@@ -197,54 +196,63 @@ public class KeyTrigger extends Key {
         View call = (mTriggerReceiver == UNSET) ? child : ((MotionLayout) child.getParent()).findViewById(mTriggerReceiver);
 
         if (fireNegative && mNegativeCross != null) {
-            if (mFireNegativeCross == null) {
-                try {
-                    mFireNegativeCross = call.getClass().getMethod(mNegativeCross);
-                } catch (NoSuchMethodException e) {
-                    Log.e(TAG, "Could not find method \"" + mNegativeCross + "\"" + "on class "
-                            + call.getClass().getSimpleName() + " " + Debug.getName(call));
-                }
-            }
-            try {
-                mFireNegativeCross.invoke(call);
-            } catch (Exception e) {
-                Log.e(TAG, "Exception in call \"" + mNegativeCross + "\"" + "on class "
-                        + call.getClass().getSimpleName() + " " + Debug.getName(call));
-            }
+            fire(mNegativeCross, call);
         }
         if (firePositive && mPositiveCross != null) {
-            if (mFirePositiveCross == null) {
-                try {
-                    mFirePositiveCross = call.getClass().getMethod(mPositiveCross);
-                } catch (NoSuchMethodException e) {
-                    Log.e(TAG, "Could not find method \"" + mPositiveCross + "\"" + "on class "
-                            + call.getClass().getSimpleName() + " " + Debug.getName(call));
-                }
-            }
-            try {
-                mFirePositiveCross.invoke(call);
-            } catch (Exception e) {
-                Log.e(TAG, "Exception in call \"" + mPositiveCross + "\"" + "on class "
-                        + call.getClass().getSimpleName() + " " + Debug.getName(call));
-            }
+            fire(mPositiveCross, call);
         }
         if (fireCross && mCross != null) {
-            if (mFireCross == null) {
-                try {
-                    mFireCross = call.getClass().getMethod(mCross);
-                } catch (NoSuchMethodException e) {
-                    Log.e(TAG, "Could not find method \"" + mCross + "\"" + "on class "
-                            + call.getClass().getSimpleName() + " " + Debug.getName(call));
-                }
-            }
-            try {
-                mFireCross.invoke(call);
-            } catch (Exception e) {
-                Log.e(TAG, "Exception in call \"" + mCross + "\"" + "on class "
-                        + call.getClass().getSimpleName() + " " + Debug.getName(call));
-            }
+            fire(mCross, call);
         }
 
+    }
+
+    private void fire(String str, View call) {
+        if (str == null) {
+            return;
+        }
+        if (str.startsWith(".")) {
+            fireCustom(str, call);
+            return;
+        }
+        Method method = null;
+        if (mMethodHashMap.containsKey(str)) {
+            method = mMethodHashMap.get(str);
+            if (method == null) { // we looked up and did not find
+                return;
+            }
+        }
+        if (method == null) {
+            try {
+                method = call.getClass().getMethod(str);
+                mMethodHashMap.put(str, method);
+            } catch (NoSuchMethodException e) {
+                mMethodHashMap.put(str, null); // record that we could not get this method
+                Log.e(TAG, "Could not find method \"" + str + "\"" + "on class "
+                        + call.getClass().getSimpleName() + " " + Debug.getName(call));
+                return;
+            }
+        }
+        try {
+            method.invoke(call);
+        } catch (Exception e) {
+            Log.e(TAG, "Exception in call \"" + mCross + "\"" + "on class "
+                    + call.getClass().getSimpleName() + " " + Debug.getName(call));
+        }
+    }
+
+    private void fireCustom(String str, View view) {
+        boolean callAll = str.length() == 1;
+        if (!callAll) {
+            str = str.substring(1).toLowerCase();
+        }
+        for (String name : mCustomConstraints.keySet()) {
+             String lowerCase = name.toLowerCase();
+            if (callAll || lowerCase.matches(str)) {
+                ConstraintAttribute custom = mCustomConstraints.get(name);
+                custom.applyCustom(view);
+            }
+        }
     }
 
     private static class Loader {
@@ -319,7 +327,7 @@ public class KeyTrigger extends Key {
                         c.mPostLayout = a.getBoolean(attr, c.mPostLayout);
                         break;
                     case TRIGGER_RECEIVER:
-                        c.mTriggerReceiver =  a.getResourceId(attr, c.mTriggerReceiver);
+                        c.mTriggerReceiver = a.getResourceId(attr, c.mTriggerReceiver);
                     default:
                         Log.e(NAME, "unused attribute 0x" + Integer.toHexString(attr) + "   " + mAttrMap.get(attr));
                         break;

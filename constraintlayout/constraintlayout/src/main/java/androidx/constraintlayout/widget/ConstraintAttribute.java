@@ -20,7 +20,9 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+
 import androidx.constraintlayout.motion.widget.Debug;
+
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -40,6 +42,7 @@ import java.util.HashMap;
  */
 public class ConstraintAttribute {
     private static final String TAG = "TransitionLayout";
+    private boolean mMethod = false;
     String mName;
     private AttributeType mType;
     private int mIntegerValue;
@@ -55,7 +58,8 @@ public class ConstraintAttribute {
         COLOR_DRAWABLE_TYPE,
         STRING_TYPE,
         BOOLEAN_TYPE,
-        DIMENSION_TYPE
+        DIMENSION_TYPE,
+        REFERENCE_TYPE
     }
 
     public AttributeType getType() {
@@ -153,6 +157,7 @@ public class ConstraintAttribute {
 
     public void setValue(float[] value) {
         switch (mType) {
+            case REFERENCE_TYPE:
             case INT_TYPE:
                 mIntegerValue = (int) value[0];
                 break;
@@ -162,7 +167,7 @@ public class ConstraintAttribute {
             case COLOR_DRAWABLE_TYPE:
             case COLOR_TYPE:
                 mColorValue = Color.HSVToColor(value);
-                mColorValue = (mColorValue & 0xFFFFFF) | (clamp((int)(0xFF * value[3])) << 24);
+                mColorValue = (mColorValue & 0xFFFFFF) | (clamp((int) (0xFF * value[3])) << 24);
                 break;
             case STRING_TYPE:
                 throw new RuntimeException("Color does not have a single color to interpolate");
@@ -187,6 +192,7 @@ public class ConstraintAttribute {
         }
         switch (mType) {
             case INT_TYPE:
+            case REFERENCE_TYPE:
                 return mIntegerValue == constraintAttribute.mIntegerValue;
             case FLOAT_TYPE:
                 return mFloatValue == constraintAttribute.mFloatValue;
@@ -208,9 +214,10 @@ public class ConstraintAttribute {
         mType = attributeType;
     }
 
-    public ConstraintAttribute(String name, AttributeType attributeType, Object value) {
+    public ConstraintAttribute(String name, AttributeType attributeType, Object value, boolean method) {
         mName = name;
         mType = attributeType;
+        mMethod = method;
         setValue(value);
     }
 
@@ -223,6 +230,7 @@ public class ConstraintAttribute {
 
     public void setValue(Object value) {
         switch (mType) {
+            case REFERENCE_TYPE:
             case INT_TYPE:
                 mIntegerValue = (Integer) value;
                 break;
@@ -278,7 +286,10 @@ public class ConstraintAttribute {
         Class<? extends View> viewClass = view.getClass();
         for (String name : map.keySet()) {
             ConstraintAttribute constraintAttribute = map.get(name);
-            String methodName = "set" + name;
+            String methodName = name;
+            if (!constraintAttribute.mMethod) {
+                methodName = "set" + methodName;
+            }
             try {
                 Method method;
                 switch (constraintAttribute.mType) {
@@ -314,17 +325,75 @@ public class ConstraintAttribute {
                         break;
                 }
             } catch (NoSuchMethodException e) {
-                Log.e(TAG,  e.getMessage());
-                Log.e(TAG,  " Custom Attribute \""+name+"\" not found on "+viewClass.getName());
-                Log.e(TAG,  viewClass.getName()+" must have a method "+methodName);
+                Log.e(TAG, e.getMessage());
+                Log.e(TAG, " Custom Attribute \"" + name + "\" not found on " + viewClass.getName());
+                Log.e(TAG, viewClass.getName() + " must have a method " + methodName);
             } catch (IllegalAccessException e) {
-                Log.e(TAG,  " Custom Attribute \""+name+"\" not found on "+viewClass.getName());
+                Log.e(TAG, " Custom Attribute \"" + name + "\" not found on " + viewClass.getName());
                 e.printStackTrace();
             } catch (InvocationTargetException e) {
-                Log.e(TAG,  " Custom Attribute \""+name+"\" not found on "+viewClass.getName());
+                Log.e(TAG, " Custom Attribute \"" + name + "\" not found on " + viewClass.getName());
                 e.printStackTrace();
             }
         }
+    }
+
+    public void applyCustom(View view) {
+        Class<? extends View> viewClass = view.getClass();
+        String name = this.mName;
+        String methodName = name;
+        if (!mMethod) {
+            methodName = "set" + methodName;
+        }
+        try {
+            Method method;
+            switch (this.mType) {
+                case INT_TYPE:
+                case REFERENCE_TYPE:
+                    method = viewClass.getMethod(methodName, Integer.TYPE);
+                    method.invoke(view, this.mIntegerValue);
+                    if (AttributeType.REFERENCE_TYPE == mType)
+                        Log.v(TAG, " call ing " + methodName + "  " + Debug.getName(view.getContext(), this.mIntegerValue));
+                    break;
+                case FLOAT_TYPE:
+                    method = viewClass.getMethod(methodName, Float.TYPE);
+                    method.invoke(view, this.mFloatValue);
+                    break;
+                case COLOR_DRAWABLE_TYPE:
+                    method = viewClass.getMethod(methodName, Drawable.class);
+                    ColorDrawable drawable = new ColorDrawable(); // TODO cache
+                    drawable.setColor(this.mColorValue);
+                    method.invoke(view, drawable);
+                    break;
+                case COLOR_TYPE:
+                    method = viewClass.getMethod(methodName, Integer.TYPE);
+                    method.invoke(view, this.mColorValue);
+                    break;
+                case STRING_TYPE:
+                    method = viewClass.getMethod(methodName, CharSequence.class);
+                    method.invoke(view, this.mStringValue);
+                    break;
+                case BOOLEAN_TYPE:
+                    method = viewClass.getMethod(methodName, Boolean.TYPE);
+                    method.invoke(view, this.mBooleanValue);
+                    break;
+                case DIMENSION_TYPE:
+                    method = viewClass.getMethod(methodName, Float.TYPE);
+                    method.invoke(view, this.mFloatValue);
+                    break;
+            }
+        } catch (NoSuchMethodException e) {
+            Log.e(TAG, e.getMessage());
+            Log.e(TAG, " Custom Attribute \"" + name + "\" not found on " + viewClass.getName());
+            Log.e(TAG, viewClass.getName() + " must have a method " + methodName);
+        } catch (IllegalAccessException e) {
+            Log.e(TAG, " Custom Attribute \"" + name + "\" not found on " + viewClass.getName());
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            Log.e(TAG, " Custom Attribute \"" + name + "\" not found on " + viewClass.getName());
+            e.printStackTrace();
+        }
+
     }
 
     private static int clamp(int c) {
@@ -399,6 +468,7 @@ public class ConstraintAttribute {
         AttributeSet attributeSet = Xml.asAttributeSet(parser);
         TypedArray a = context.obtainStyledAttributes(attributeSet, R.styleable.CustomAttribute);
         String name = null;
+        boolean method = false;
         Object value = null;
         AttributeType type = null;
         final int N = a.getIndexCount();
@@ -409,6 +479,9 @@ public class ConstraintAttribute {
                 if (name != null && name.length() > 0) {
                     name = Character.toUpperCase(name.charAt(0)) + name.substring(1);
                 }
+            } else if (attr == R.styleable.CustomAttribute_methodName) {
+                method = true;
+                name = a.getString(attr);
             } else if (attr == R.styleable.CustomAttribute_customBoolean) {
                 value = a.getBoolean(attr, false);
                 type = AttributeType.BOOLEAN_TYPE;
@@ -421,10 +494,10 @@ public class ConstraintAttribute {
             } else if (attr == R.styleable.CustomAttribute_customPixelDimension) {
                 type = AttributeType.DIMENSION_TYPE;
                 value = TypedValue.applyDimension(
-                       TypedValue.COMPLEX_UNIT_DIP,
-                       a.getDimension(attr,0),
-                       context.getResources().getDisplayMetrics());
-            }  else if (attr == R.styleable.CustomAttribute_customDimension) {
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        a.getDimension(attr, 0),
+                        context.getResources().getDisplayMetrics());
+            } else if (attr == R.styleable.CustomAttribute_customDimension) {
                 type = AttributeType.DIMENSION_TYPE;
                 value = a.getDimension(attr, 0);
             } else if (attr == R.styleable.CustomAttribute_customFloatValue) {
@@ -436,10 +509,17 @@ public class ConstraintAttribute {
             } else if (attr == R.styleable.CustomAttribute_customStringValue) {
                 type = AttributeType.STRING_TYPE;
                 value = a.getString(attr);
+            } else if (attr == R.styleable.CustomAttribute_customReference) {
+                type = AttributeType.REFERENCE_TYPE;
+                int tmp = a.getResourceId(attr, -1);
+                if (tmp == -1) {
+                    tmp = a.getInt(attr, -1);
+                }
+                value = tmp;
             }
         }
         if (name != null && value != null) {
-            custom.put(name, new ConstraintAttribute(name, type, value));
+            custom.put(name, new ConstraintAttribute(name, type, value, method));
         }
         a.recycle();
     }

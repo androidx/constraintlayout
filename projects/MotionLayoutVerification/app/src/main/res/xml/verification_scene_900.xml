@@ -30,6 +30,42 @@
             motion:maxVelocity="50" />
 
         <KeyFrameSet>
+            <KeyTrigger motion:framePosition="10"
+                motion:motionTarget="@+id/dial"  motion:onNegativeCross=".">
+                <CustomMethod motion:methodName="performHapticFeedback"   motion:customIntegerValue="3"/>
+            </KeyTrigger>
+            <KeyTrigger motion:framePosition="20"
+                motion:motionTarget="@+id/dial"  motion:onNegativeCross=".">
+                <CustomMethod motion:methodName="performHapticFeedback"   motion:customIntegerValue="3"/>
+            </KeyTrigger>
+            <KeyTrigger motion:framePosition="30"
+                motion:motionTarget="@+id/dial"  motion:onNegativeCross=".">
+                <CustomMethod motion:methodName="performHapticFeedback"   motion:customIntegerValue="3"/>
+            </KeyTrigger>
+            <KeyTrigger motion:framePosition="40"
+                motion:motionTarget="@+id/dial"  motion:onNegativeCross=".">
+                <CustomMethod motion:methodName="performHapticFeedback"   motion:customIntegerValue="3"/>
+            </KeyTrigger>
+            <KeyTrigger motion:framePosition="50"
+                motion:motionTarget="@+id/dial"  motion:onNegativeCross=".">
+                <CustomMethod motion:methodName="performHapticFeedback"   motion:customIntegerValue="3"/>
+            </KeyTrigger>
+            <KeyTrigger motion:framePosition="60"
+                motion:motionTarget="@+id/dial"  motion:onNegativeCross=".">
+                <CustomMethod motion:methodName="performHapticFeedback"   motion:customIntegerValue="3"/>
+            </KeyTrigger>
+            <KeyTrigger motion:framePosition="70"
+                motion:motionTarget="@+id/dial"  motion:onNegativeCross=".">
+                <CustomMethod motion:methodName="performHapticFeedback"   motion:customIntegerValue="3"/>
+            </KeyTrigger>
+            <KeyTrigger motion:framePosition="80"
+                motion:motionTarget="@+id/dial"  motion:onNegativeCross=".">
+                <CustomMethod motion:methodName="performHapticFeedback"   motion:customIntegerValue="3"/>
+            </KeyTrigger>
+            <KeyTrigger motion:framePosition="90"
+                motion:motionTarget="@+id/dial"  motion:onNegativeCross=".">
+                <CustomMethod motion:methodName="performHapticFeedback"   motion:customIntegerValue="3"/>
+            </KeyTrigger>
 
         </KeyFrameSet>
 
