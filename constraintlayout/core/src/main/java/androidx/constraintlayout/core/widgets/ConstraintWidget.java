@@ -493,6 +493,8 @@ public class ConstraintWidget {
         mIsInBarrier[HORIZONTAL] = false;
         mIsInBarrier[VERTICAL] = false;
         mMeasureRequested = true;
+        mResolvedMatchConstraintDefault[HORIZONTAL] = 0;
+        mResolvedMatchConstraintDefault[VERTICAL] = 0;
     }
 
     public int horizontalGroup = -1;
