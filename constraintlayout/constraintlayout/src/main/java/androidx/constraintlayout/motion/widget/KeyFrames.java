@@ -61,6 +61,7 @@ public class KeyFrames {
         if (!mFramesMap.containsKey(key.mTargetId)) {
             mFramesMap.put(key.mTargetId, new ArrayList<>());
         }
+        Log.v(TAG,Debug.getLoc()+" key " +key.mTargetId +" "+key.getClass().getSimpleName());
         mFramesMap.get(key.mTargetId).add(key);
     }
 

@@ -1047,6 +1047,7 @@
         <enum name="ignoreRequest" value="0"/>
         <enum name="honorRequest" value="1"/>
     </attr>
+    <attr name="transitionDisable" format="boolean"/>
 
     <!-- ==============  Transition ============== -->
 
@@ -1054,7 +1055,7 @@
         <attr name="android:id" />
         <attr name="constraintSetStart" format="reference" />
         <attr name="constraintSetEnd" format="reference" />
-        <attr name="transitionDisable" format="boolean"/>
+        <attr name="transitionDisable"/>
         <attr name="layoutDuringTransition" />
 
         <attr name="pathMotionArc" />
@@ -1528,6 +1529,57 @@
     </declare-styleable>
     <declare-styleable name="Include">
       <attr name="constraintSet"/>
+    </declare-styleable>
+    <!-- ======================================ViewTransitions===================================== -->
+
+    <attr name="autoViewTransition" format="enum">
+        <enum name="none" value="0" />
+        <enum name="jumpToStart" value="1" />
+         <enum name="animateToStart" value="3"/>
+    </attr>
+
+
+    <attr name="onStateTransition" format="enum">
+        <enum name="pressed"       value="1" />
+        <enum name="focused"        value="2" />
+        <enum name="selected"       value="3" />
+        <enum name="checked"        value="4" />
+        <enum name="enabled"        value="5" />
+        <enum name="windowFocused"  value="6" />
+        <enum name="visible"        value="7" />
+        <enum name="gone"           value="8" />
+        <enum name="invisible"      value="9" />
+        <enum name="unfocused"        value="10" />
+        <enum name="unselected"       value="11" />
+        <enum name="unchecked"        value="12" />
+        <enum name="disabled"        value="13" />
+
+    </attr>
+
+
+    <attr name="viewTransitionSet"     format="reference" />
+    <attr name="applyTransitionTo"     format="string" />
+    <attr name="excludeTransitionFor"  format="string" />
+    <attr name="deriveFrom"            format="reference"/>
+
+    <declare-styleable name="ViewTransition">
+        <attr name="android:id" />
+        <attr name="deriveFrom"/>
+        <attr name="applyTransitionTo"   />
+        <attr name="excludeTransitionFor"   />
+        <attr name="onStateTransition" />
+        <attr name="transitionDisable"/>
+        <attr name="pathMotionArc" />
+        <attr name="autoViewTransition"  />
+        <attr name="motionInterpolator"/>
+        <attr name="duration" />
+    </declare-styleable>
+
+    declare-styleable<declare-styleable name="ViewTransitionSet">
+        <attr name="android:id" />
+        <attr name="deriveFrom"/>
+        <attr name="applyTransitionTo"   />
+        <attr name="excludeTransitionFor"   />
     </declare-styleable>
 
 </resources>

@@ -24,6 +24,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.media.DeniedByServerException;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -3219,7 +3220,7 @@ public class MotionLayout extends ConstraintLayout implements
                 if ((dir > 0 && position == 1) || (dir < 0 && position == 0))
                 setState(TransitionState.FINISHED);
             }
-            if (!mKeepAnimating && mInTransition && (dir > 0 && position == 1) || (dir < 0 && position == 0)) {
+            if (!mKeepAnimating && !mInTransition && ((dir > 0 && position == 1) || (dir < 0 && position == 0))) {
                 onNewStateAttachHandlers();
             }
         }
@@ -4123,4 +4124,11 @@ public class MotionLayout extends ConstraintLayout implements
         }
     }
 
+    public void viewTransition(int id, View... view) {
+        if (mScene != null) {
+            mScene.viewTransition(id, view);
+        } else {
+            Log.e(TAG, " no motionScene");
+        }
+    }
 }

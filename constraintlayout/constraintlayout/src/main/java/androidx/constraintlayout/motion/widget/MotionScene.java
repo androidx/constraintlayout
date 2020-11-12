@@ -99,6 +99,8 @@ public class MotionScene {
     private static final String INCLUDE_TAG = "Include";
     private static final String KEYFRAMESET_TAG = "KeyFrameSet";
     private static final String CONSTRAINTSET_TAG = "ConstraintSet";
+    private static final String VIEW_TRANSITION = "ViewTransition";
+    private final ViewTransitionController mViewTransitionController;
 
     /**
      * Set the transition between two constraint set / states.
@@ -437,6 +439,10 @@ public class MotionScene {
         if (mCurrentTransition != null && mCurrentTransition.mTouchResponse != null) {
             mCurrentTransition.mTouchResponse.setRTL(mRtl);
         }
+    }
+
+    public void viewTransition(int id, View ... view) {
+        mViewTransitionController.viewTransition(id, view);
     }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -908,12 +914,14 @@ public class MotionScene {
      */
     public MotionScene(MotionLayout layout) {
         mMotionLayout = layout;
+        mViewTransitionController = new ViewTransitionController(this, layout);
     }
 
     MotionScene(Context context, MotionLayout layout, int resourceID) {
         mMotionLayout = layout;
-        load(context, resourceID);
+        mViewTransitionController = new ViewTransitionController(this, layout);
 
+        load(context, resourceID);
         mConstraintSetMap.put(R.id.motion_base, new ConstraintSet());
         mConstraintSetIdMap.put("motion_base", R.id.motion_base);
     }
@@ -991,6 +999,10 @@ public class MotionScene {
                             case KEYFRAMESET_TAG:
                                 KeyFrames keyFrames = new KeyFrames(context, parser);
                                 transition.mKeyFramesList.add(keyFrames);
+                                break;
+                            case VIEW_TRANSITION:
+                                ViewTransition viewTransition = new ViewTransition(context, parser);
+                                mViewTransitionController.add(viewTransition);
                                 break;
                             default:
                                 Log.v(TAG, getLine(context, resourceId, parser) + "WARNING UNKNOWN ATTRIBUTE " + tagName);
