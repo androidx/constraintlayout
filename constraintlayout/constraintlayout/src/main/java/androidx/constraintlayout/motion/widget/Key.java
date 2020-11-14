@@ -17,16 +17,19 @@
 package androidx.constraintlayout.motion.widget;
 
 import android.content.Context;
+
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.motion.utils.CurveFit;
+
 import android.util.AttributeSet;
 
 import java.util.HashMap;
 import java.util.HashSet;
 
 /**
- *  Base class in an element in a KeyFrame
- *  @hide
+ * Base class in an element in a KeyFrame
+ *
+ * @hide
  */
 
 public abstract class Key {
@@ -35,9 +38,13 @@ public abstract class Key {
     int mTargetId = UNSET;
     String mTargetString = null;
     protected int mType;
+
     abstract void load(Context context, AttributeSet attrs);
+
     HashMap<String, ConstraintAttribute> mCustomConstraints;
+
     abstract void getAttributeNames(HashSet<String> attributes);
+
     static final String ALPHA = "alpha";
     static final String ELEVATION = "elevation";
     static final String ROTATION = "rotation";
@@ -62,27 +69,31 @@ public abstract class Key {
         if (mTargetString == null || constraintTag == null) return false;
         return constraintTag.matches(mTargetString);
     }
+
     /**
      * Defines method to add a a view to splines derived form this key frame.
      * The values are written to the spline
-     * @hide
+     *
      * @param splines splines to write values to
+     * @hide
      */
     public abstract void addValues(HashMap<String, SplineSet> splines);
 
     /**
      * Set the value associated with this tag
-     * @hide
+     *
      * @param tag
      * @param value
+     * @hide
      */
     public abstract void setValue(String tag, Object value);
 
     /**
      * Return the float given a value. If the value is a "Float" object it is casted
-     * @hide
+     *
      * @param value
      * @return
+     * @hide
      */
     float toFloat(Object value) {
         return (value instanceof Float) ? (Float) value : Float.parseFloat(value.toString());
@@ -90,9 +101,10 @@ public abstract class Key {
 
     /**
      * Return the int version of an object if the value is an Integer object it is casted.
-     * @hide
+     *
      * @param value
      * @return
+     * @hide
      */
     int toInt(Object value) {
         return (value instanceof Integer) ? (Integer) value : Integer.parseInt(value.toString());
@@ -100,9 +112,10 @@ public abstract class Key {
 
     /**
      * Return the boolean version this object if the object is a Boolean it is casted.
-     * @hide
+     *
      * @param value
      * @return
+     * @hide
      */
     boolean toBoolean(Object value) {
         return (value instanceof Boolean) ? (Boolean) value : Boolean.parseBoolean(value.toString());
@@ -111,8 +124,25 @@ public abstract class Key {
     /**
      * Key frame can speify the type of interpolation it wants on various attributes
      * For each string it set it to -1, CurveFit.LINEAR or  CurveFit.SPLINE
+     *
      * @param interpolation
      */
     public void setInterpolation(HashMap<String, Integer> interpolation) {
+    }
+
+    public Key copy(Key src) {
+        mFramePosition = src.mFramePosition;
+        mTargetId = src.mTargetId;
+        mTargetString = src.mTargetString;
+        mType = src.mType;
+        mCustomConstraints = src.mCustomConstraints;
+        return this;
+    }
+
+    abstract public Key clone();
+
+    public Key setViewId(int id) {
+        mTargetId = id;
+        return this;
     }
 }

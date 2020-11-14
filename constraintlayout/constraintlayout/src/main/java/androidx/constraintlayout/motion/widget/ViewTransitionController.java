@@ -1,6 +1,8 @@
 package androidx.constraintlayout.motion.widget;
 
+import android.graphics.Rect;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -39,14 +41,11 @@ public class ViewTransitionController {
 
     }
 
-
-
-
     public void viewTransition(int id, View... view) {
         ViewTransition vt = null;
         for (ViewTransition viewTransition : viewTransitions) {
-            Log.v(TAG, Debug.getLoc() + " vt = " + Debug.getName(mMotionLayout.getContext(), viewTransition.mId));
-            if (viewTransition.mId == id) {
+            Log.v(TAG, Debug.getLoc() + " vt = " + Debug.getName(mMotionLayout.getContext(), viewTransition.getId()));
+            if (viewTransition.getId() == id) {
                 vt = viewTransition;
             }
         }
@@ -56,5 +55,27 @@ public class ViewTransitionController {
         }
         viewTransition(vt, view);
 
+    }
+
+    public void touchEvent(MotionEvent event) {
+        int count = mMotionLayout.getChildCount();
+        float x = event.getX();
+        float y = event.getY();
+        Rect rec = new Rect();
+        for (int i = 0; i < count; i++) {
+            View view = mMotionLayout.getChildAt(i);
+            view.getHitRect(rec);
+            if (rec.contains((int) x, (int) y)) {
+                Log.v(TAG, Debug.getLoc() + " hit " + Debug.getName(view));
+            }
+        }
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_MOVE:
+                Log.v(TAG, Debug.getLoc() + " " + event.toString());
+                break;
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_OUTSIDE:
+        }
     }
 }

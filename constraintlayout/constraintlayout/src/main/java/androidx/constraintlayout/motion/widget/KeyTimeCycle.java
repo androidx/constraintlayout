@@ -18,9 +18,10 @@ package androidx.constraintlayout.motion.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.R;
-import androidx.constraintlayout.motion.utils.CurveFit;
+
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseIntArray;
@@ -70,7 +71,6 @@ public class KeyTimeCycle extends Key {
 
     /**
      * Gets the curve fit type this drives the interpolation
-     *
      */
 
     @Override
@@ -428,5 +428,32 @@ public class KeyTimeCycle extends Key {
                 }
             }
         }
+    }
+
+    public Key copy(Key src) {
+        super.copy(src);
+        KeyTimeCycle k = (KeyTimeCycle) src;
+        mTransitionEasing = k.mTransitionEasing;
+        mCurveFit = k.mCurveFit;
+        mWaveShape = k.mWaveShape;
+        mWavePeriod = k.mWavePeriod;
+        mWaveOffset = k.mWaveOffset;
+        mProgress = k.mProgress;
+        mAlpha = k.mAlpha;
+        mElevation = k.mElevation;
+        mRotation = k.mRotation;
+        mTransitionPathRotate = k.mTransitionPathRotate;
+        mRotationX = k.mRotationX;
+        mRotationY = k.mRotationY;
+        mScaleX = k.mScaleX;
+        mScaleY = k.mScaleY;
+        mTranslationX = k.mTranslationX;
+        mTranslationY = k.mTranslationY;
+        mTranslationZ = k.mTranslationZ;
+        return this;
+    }
+
+    public Key clone() {
+        return new KeyTimeCycle().copy(this);
     }
 }

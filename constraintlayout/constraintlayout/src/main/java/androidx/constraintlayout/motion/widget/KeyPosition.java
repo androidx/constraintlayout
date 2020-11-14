@@ -19,8 +19,10 @@ package androidx.constraintlayout.motion.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.RectF;
+
 import androidx.constraintlayout.widget.R;
 import androidx.constraintlayout.motion.utils.Easing;
+
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseIntArray;
@@ -367,5 +369,26 @@ public class KeyPosition extends KeyPositionBase {
                 break;
 
         }
+    }
+
+    public Key copy(Key src) {
+        super.copy(src);
+        KeyPosition k = (KeyPosition) src;
+        mTransitionEasing = k.mTransitionEasing;
+        mPathMotionArc = k.mPathMotionArc;
+        mDrawPath = k.mDrawPath;
+        mPercentWidth = k.mPercentWidth;
+        mPercentHeight = Float.NaN;
+        mPercentX = k.mPercentX;
+        mPercentY = k.mPercentY;
+        mAltPercentX = k.mAltPercentX;
+        mAltPercentY = k.mAltPercentY;
+        mCalculatedPositionX = k.mCalculatedPositionX;
+        mCalculatedPositionY = k.mCalculatedPositionY;
+        return this;
+    }
+
+    public Key clone() {
+        return new KeyPosition().copy(this);
     }
 }

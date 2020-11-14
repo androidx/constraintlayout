@@ -1236,7 +1236,7 @@ public class MotionLayout extends ConstraintLayout implements
 
     protected void setTransition(MotionScene.Transition transition) {
         mScene.setTransition(transition);
-
+        Log.v(TAG, Debug.getLoc()+ " ["+(mScene.mCurrentTransition.hashCode()%1000)+"] "+mScene.mCurrentTransition.debugString(getContext()));
         setState(TransitionState.SETUP);
         if (mCurrentState == mScene.getEndId()) {
             mTransitionLastPosition = 1.0f;
@@ -1257,6 +1257,8 @@ public class MotionLayout extends ConstraintLayout implements
         if (newBeginState == mBeginState && newEndState == mEndState) {
             return;
         }
+        Log.v(TAG, Debug.getLoc()+ " ["+(mScene.mCurrentTransition.hashCode()%1000)+"] "+mScene.mCurrentTransition.debugString(getContext()));
+
         mBeginState = newBeginState;
         mEndState = newEndState;
         mScene.setTransition(mBeginState, mEndState);
@@ -1264,10 +1266,12 @@ public class MotionLayout extends ConstraintLayout implements
         if (DEBUG) {
             Log.v(TAG, Debug.getLocation() + " setTransition now " + Debug.getName(getContext(), mBeginState) + " -> " + Debug.getName(getContext(), mEndState));
         }
+        Log.v(TAG, Debug.getLoc()+ " ["+(mScene.mCurrentTransition.hashCode()%1000)+"] "+mScene.mCurrentTransition.debugString(getContext()));
 
         mModel.initFrom(mLayoutWidget, mScene.getConstraintSet(mBeginState), mScene.getConstraintSet(mEndState));
         mModel.setMeasuredId(mBeginState, mEndState);
         mModel.reEvaluateState();
+        Log.v(TAG, Debug.getLoc()+ " ["+(mScene.mCurrentTransition.hashCode()%1000)+"] "+mScene.mCurrentTransition.debugString(getContext()));
 
         rebuildScene();
     }
@@ -1789,6 +1793,7 @@ public class MotionLayout extends ConstraintLayout implements
         float currentPosition = mTransitionLastPosition;
         mTransitionGoalPosition = position;
         mTransitionDuration = mScene.getDuration() / 1000f;
+        Log.v(TAG, Debug.getLoc() +" mTransitionDuration = "+ mTransitionDuration);
         setProgress(mTransitionGoalPosition);
         mInterpolator = null;
         mProgressInterpolator = mScene.getInterpolator();
@@ -3501,6 +3506,10 @@ public class MotionLayout extends ConstraintLayout implements
     public boolean onInterceptTouchEvent(MotionEvent event) {
         if (mScene == null || mInteractionEnabled == false) {
             return false;
+        }
+
+        if (mScene.mViewTransitionController != null) {
+            mScene.mViewTransitionController.touchEvent(event);
         }
         MotionScene.Transition currentTransition = mScene.mCurrentTransition;
         if (currentTransition != null && currentTransition.isEnabled()) {

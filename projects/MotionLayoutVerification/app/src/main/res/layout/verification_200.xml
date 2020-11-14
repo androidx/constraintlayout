@@ -6,6 +6,7 @@
     android:id="@+id/motionLayout"
     app:layoutDescription="@xml/verification_scene_200"
     android:layout_width="match_parent"
+    app:layout_optimizationLevel="none"
     android:background="#B6D5EA"
     android:layout_height="match_parent">
 <!--<androidx.constraintlayout.motion.widget.MotionLayout
@@ -18,7 +19,7 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:text="A"
-        android:onClick="changeView"
+        android:onClick="hideCurrent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -28,7 +29,7 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:text="B"
-        android:onClick="changeView"
+        android:onClick="hideAll"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         app:layout_constraintBottom_toBottomOf="@id/button1"
@@ -41,7 +42,6 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:text="C"
-        android:onClick="changeView"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         app:layout_constraintBottom_toBottomOf="@id/button1"

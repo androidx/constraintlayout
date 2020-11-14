@@ -57,14 +57,16 @@ public class KeyFrames {
         }
     }
 
-    private void addKey(Key key) {
+    public void addKey(Key key) {
         if (!mFramesMap.containsKey(key.mTargetId)) {
             mFramesMap.put(key.mTargetId, new ArrayList<>());
         }
         Log.v(TAG,Debug.getLoc()+" key " +key.mTargetId +" "+key.getClass().getSimpleName());
         mFramesMap.get(key.mTargetId).add(key);
     }
+    public KeyFrames() {
 
+    }
     public KeyFrames(Context context, XmlPullParser parser) {
         String tagName = null;
         try {

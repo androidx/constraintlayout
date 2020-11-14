@@ -29,6 +29,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -372,6 +373,24 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
             mMotionLayout.rebuildScene();
             log("");
             mMotionLayout.invalidate();
+            Button button = mMotionLayout.findViewById(R.id.button2);
+            button.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                int current = button.getVisibility();
+                @Override
+                public void onGlobalLayout() {
+                    int newVis = button.getVisibility();
+                    if (newVis != current) {
+                        switch (newVis) {
+                            case View.VISIBLE:
+                                break;
+                            case View.INVISIBLE:
+                                break;
+                             case View.GONE:
+                                 mMotionLayout.viewTransition(R.id.spin,button);
+                        }
+                    }
+                }
+            });
         }
         log("");
 
@@ -464,10 +483,14 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         toneGen1.release();
     }
 
-    public void changeView(View view) {
+    public void hideAll(View view) {
         Log.v(TAG, Debug.getLoc() + " --------------------- ");
-        mMotionLayout.viewTransition(R.id.shownow, view);
+        mMotionLayout.viewTransition(R.id.vt_hide_all, view);
+    }
 
+    public void hideCurrent(View view) {
+        Log.v(TAG, Debug.getLoc() + " --------------------- ");
+        mMotionLayout.viewTransition(R.id.vt_hide_current, view);
     }
 
     interface Test {

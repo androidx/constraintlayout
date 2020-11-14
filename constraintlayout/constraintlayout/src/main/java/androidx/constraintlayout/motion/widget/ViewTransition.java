@@ -5,8 +5,11 @@ import android.content.res.TypedArray;
 import android.content.res.XmlResourceParser;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.util.Xml;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.R;
@@ -15,6 +18,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ViewTransition {
     private static String TAG = "ViewTransition";
@@ -23,30 +27,20 @@ public class ViewTransition {
     public static final String KEY_FRAME_SET_TAG = "KeyFrameSet";
     public static final String CONSTRAINT_OVERRIDE = "ConstraintOverride";
     private static final int UNSET = -1;
-    int mId;
-    String mApplyTransitionTo;
-    String mExcludeTransitionFor;
-    int mOnStateTransition = UNSET;
-    boolean mTransitionDisable;
-    boolean mPathMotionArc;
-    int mAutoViewTransition;
+    private int mId;
+
+    private int mOnStateTransition = UNSET;
+    private boolean mTransitionDisable;
+    private boolean mPathMotionArc;
+    private int mViewTransitionMode;
+    private static final int VIEWTRANSITIONMODE_CURRENTSTATE = 0;
+    private static final int VIEWTRANSITIONMODE_ALLSTATES = 1;
     KeyFrames mKeyFrames;
     ConstraintSet.Constraint mConstraintDelta;
     private int mDuration = UNSET;
-    private static final int UNSET = -1;
-    private static final int STATE_PRESSED = 1;
-    private static final int STATE_FOCUSED = 2;
-    private static final int STATE_SELECTED = 3;
-    private static final int STATE_CHECKED = 4;
-    private static final int STATE_ENABLED = 5;
-    private static final int STATE_WINDOWFOCUSED = 6;
-    private static final int STATE_VISIBLE = 7;
-    private static final int STATE_GONE = 8;
-    private static final int STATE_INVISIBLE = 9;
-    private static final int STATE_UNFOCUSED = 10;
-    private static final int STATE_UNSELECTED = 11;
-    private static final int STATE_UNCHECKED = 12;
-    private static final int STATE_DISABLED = 13;
+    private int mTargetId;
+    private String mTargetString;
+
 
     public ViewTransition(Context context, XmlPullParser parser) {
 
@@ -100,14 +94,21 @@ public class ViewTransition {
             int attr = a.getIndex(i);
             if (attr == R.styleable.ViewTransition_android_id) {
                 mId = a.getResourceId(attr, mId);
-                Log.v(TAG, Debug.getLoc() + "mId = " + mId);
-            } else if (attr == R.styleable.ViewTransition_applyTransitionTo) {
-                mApplyTransitionTo = a.getString(attr);
-                Log.v(TAG, Debug.getLoc() + "mApplyTransitionTo = " + mApplyTransitionTo);
-            } else if (attr == R.styleable.ViewTransition_excludeTransitionFor) {
-                mExcludeTransitionFor = a.getString(attr);
-                Log.v(TAG, Debug.getLoc() + "mExcludeTransitionFor = " + mExcludeTransitionFor);
-            } else if (attr == R.styleable.ViewTransition_onStateTransition) {
+                Log.v(TAG, Debug.getLoc() + "mId = " + getId());
+            } else if (attr == R.styleable.ViewTransition_motionTarget) {
+                if (MotionLayout.IS_IN_EDIT_MODE) {
+                     mTargetId = a.getResourceId(attr, mTargetId);
+                    if (mTargetId == -1) {
+                        mTargetString = a.getString(attr);
+                    }
+                } else {
+                    if (a.peekValue(attr).type == TypedValue.TYPE_STRING) {
+                        mTargetString = a.getString(attr);
+                    } else {
+                        mTargetId = a.getResourceId(attr, mTargetId);
+                    }
+                }
+            }  else if (attr == R.styleable.ViewTransition_onStateTransition) {
                 mOnStateTransition = a.getInt(attr, mOnStateTransition);
                 Log.v(TAG, Debug.getLoc() + "mTransition_onState = " + mOnStateTransition);
             } else if (attr == R.styleable.ViewTransition_transitionDisable) {
@@ -116,12 +117,12 @@ public class ViewTransition {
             } else if (attr == R.styleable.ViewTransition_pathMotionArc) {
                 mPathMotionArc = a.getBoolean(attr, mPathMotionArc);
                 Log.v(TAG, Debug.getLoc() + "mPathMotionArc = " + mPathMotionArc);
-            } else if (attr == R.styleable.ViewTransition_autoViewTransition) {
-                mAutoViewTransition = a.getInt(attr, mAutoViewTransition);
-                Log.v(TAG, Debug.getLoc() + "mAutoViewTransition = " + mAutoViewTransition);
-            } else if (attr == R.styleable.ViewTransition_duration) {
+            }   else if (attr == R.styleable.ViewTransition_duration) {
                 mDuration = a.getInt(attr, mDuration);
-                Log.v(TAG, Debug.getLoc() + "mAutoViewTransition = " + mAutoViewTransition);
+                Log.v(TAG, Debug.getLoc() + "mDuration = " + mDuration);
+            } else if (attr == R.styleable.ViewTransition_viewTransitionMode) {
+                mViewTransitionMode = a.getInt(attr, mViewTransitionMode);
+                Log.v(TAG, Debug.getLoc() + "mViewTransitionMode = " + mViewTransitionMode);
             }
 
 
@@ -129,66 +130,70 @@ public class ViewTransition {
         a.recycle();
     }
 
-    private void updateTransition(MotionScene.Transition transition) {
-        if (mDuration != -1) {
-            transition.setDuration(mDuration);
-        }
-    }
-    public void attacheListener(View view) {
-       switch (mOnStateTransition) {
-           case STATE_PRESSED:
-           break;
-           case STATE_UNFOCUSED:
-
-           case STATE_FOCUSED:
-               view.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                   @Override
-                   public void onFocusChange(View view, boolean b) {
-                        event(STATE_FOCUSED,view);
-                   }
-               });
-           break;
-           case  STATE_UNSELECTED:
-           case STATE_SELECTED:
-           break;
-           case STATE_UNCHECKED :
-           case STATE_CHECKED:
-           break;
-           case STATE_DISABLED:
-           case STATE_ENABLED:
-           break;
-           case STATE_WINDOWFOCUSED:
-           break;
-           case STATE_VISIBLE:
-           break;
-           case STATE_GONE:
-           break;
-           case STATE_INVISIBLE:
-           break;
-       }
-    }
     void event(int type, View view) {
 
     }
 
-    public void applyTransition(MotionLayout mMotionLayout, int fromid, ConstraintSet current, View... view) {
-        ConstraintSet transformedState = new ConstraintSet();
-        transformedState.clone(current);
-        for (View view1 : view) {
-            Log.v(TAG, Debug.getLoc() + " view transition " + Debug.getName(view1));
-            ConstraintSet.Constraint constraint = transformedState.getConstraint(view1.getId());
-            mConstraintDelta.applyDelta(constraint);
+    public void applyTransition(MotionLayout mMotionLayout, int fromid, ConstraintSet current, View... views) {
+        if (mViewTransitionMode == VIEWTRANSITIONMODE_ALLSTATES) {
+           int []ids =  mMotionLayout.getConstraintSetIds();
+            for (int i = 0; i < ids.length; i++) {
+                int id = ids[i];
+                if (id == fromid) {
+                    continue;
+                }
+                ConstraintSet cset = mMotionLayout.getConstraintSet(id);
+                for (View view : views) {
+                    ConstraintSet.Constraint constraint = cset.getConstraint(view.getId());
+                    mConstraintDelta.applyDelta(constraint);
+                }
+            }
         }
+            ConstraintSet transformedState = new ConstraintSet();
+            transformedState.clone(current);
+            for (View view : views) {
+                Log.v(TAG, Debug.getLoc() + " view transition " + Debug.getName(view));
+                ConstraintSet.Constraint constraint = transformedState.getConstraint(view.getId());
+                mConstraintDelta.applyDelta(constraint);
+            }
+
         mMotionLayout.updateState(fromid, transformedState);
         mMotionLayout.updateState(R.id.view_transition, current);
         mMotionLayout.setState(R.id.view_transition, -1, -1);
         MotionScene.Transition tmpTransition = new MotionScene.Transition(-1, mMotionLayout.mScene, R.id.view_transition, fromid);
-        updateTransition(tmpTransition);
-
+        for (View view : views) {
+            updateTransition(tmpTransition, view);
+        }
         mMotionLayout.setTransition(tmpTransition);
-//
-
         mMotionLayout.transitionToEnd();
 
+    }
+
+
+    private void updateTransition(MotionScene.Transition transition, View view) {
+        Log.v(TAG, Debug.getLoc());
+
+        if (mDuration != -1) {
+            Log.v(TAG, Debug.getLoc() + " setting duration  " + mDuration);
+            transition.setDuration(mDuration);
+        }
+        int id = view.getId();
+        if (mKeyFrames != null) {
+            ArrayList<Key> keys = mKeyFrames.getKeyFramesForView(KeyFrames.UNSET);
+            KeyFrames keyFrames = new KeyFrames();
+            for (Key key : keys) {
+                keyFrames.addKey(key.clone().setViewId(id));
+            }
+
+            transition.addtKeyFrame(keyFrames);
+        }
+    }
+
+    public int getId() {
+        return mId;
+    }
+
+    public void setId(int id) {
+        this.mId = id;
     }
 }
