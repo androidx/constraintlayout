@@ -485,12 +485,12 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
 
     public void hideAll(View view) {
         Log.v(TAG, Debug.getLoc() + " --------------------- ");
-        mMotionLayout.viewTransition(R.id.vt_hide_all, view);
+      //  mMotionLayout.viewTransition(R.id.vt_hide_all, view);
     }
 
     public void hideCurrent(View view) {
         Log.v(TAG, Debug.getLoc() + " --------------------- ");
-        mMotionLayout.viewTransition(R.id.vt_hide_current, view);
+      //  mMotionLayout.viewTransition(R.id.vt_hide_current, view);
     }
 
     interface Test {

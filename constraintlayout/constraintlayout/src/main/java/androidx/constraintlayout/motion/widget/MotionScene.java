@@ -229,7 +229,6 @@ public class MotionScene {
      *                   (e.g. {@link #addTransition(Transition)})
      */
     public void setTransition(Transition transition) {
-        Log.v(TAG,Debug.getLoc()+ " ["+(transition.hashCode()%1000)+"] "+transition.debugString(mMotionLayout.getContext()));
         mCurrentTransition = transition;
         if (mCurrentTransition != null && mCurrentTransition.mTouchResponse != null) {
             mCurrentTransition.mTouchResponse.setRTL(mRtl);
@@ -547,7 +546,6 @@ public class MotionScene {
          */
         public void setDuration(int duration) {
             this.mDuration = duration;
-            Log.v(TAG, Debug.getLoc() + " "+ (this.hashCode()%1000 )+ " mDuration " +mDuration );
         }
 
         /**
@@ -556,7 +554,6 @@ public class MotionScene {
          * @return duration int milliseconds
          */
         public int getDuration() {
-            Log.v(TAG, Debug.getLoc()+ " mDuration " +mDuration );
             return mDuration;
         }
 
@@ -1517,9 +1514,6 @@ public class MotionScene {
      */
     public int getDuration() {
         if (mCurrentTransition != null) {
-            Log.v(TAG,Debug.getLoc()+" mCurrentTransition "+(mCurrentTransition.hashCode()%1000) + "  = "+mCurrentTransition);
-            Log.v(TAG,Debug.getLoc()+ " ["+(mCurrentTransition.hashCode()%1000)+"] "+mCurrentTransition.debugString(mMotionLayout.getContext()));
-
             return mCurrentTransition.mDuration;
         }
         return mDefaultDuration;

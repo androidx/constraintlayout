@@ -980,6 +980,15 @@ public class MotionController {
 
     }
 
+    void setBothStates(View v) {
+        mStartMotionPath.time = 0;
+        mStartMotionPath.position = 0;
+        mStartMotionPath.setBounds(v.getX(), v.getY(), v.getWidth(), v.getHeight());
+        mEndMotionPath.setBounds(v.getX(), v.getY(), v.getWidth(), v.getHeight());
+        mStartPoint.setState(v);
+        mEndPoint.setState(v);
+    }
+
     /**
      * Calculates the adjusted (and optional velocity)
      * Note if requesting velocity staggering is not considered

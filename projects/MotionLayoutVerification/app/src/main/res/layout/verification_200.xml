@@ -18,8 +18,9 @@
         android:background="#A66"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:text="A"
+        android:text="hideCurrent"
         android:onClick="hideCurrent"
+        app:layout_constraintTag="button1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -28,8 +29,9 @@
         android:background="#A8AA66"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:text="B"
+        android:text="hideAll"
         android:onClick="hideAll"
+        app:layout_constraintTag="button2"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         app:layout_constraintBottom_toBottomOf="@id/button1"
@@ -41,9 +43,10 @@
         android:background="#6DAA66"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:text="C"
+        android:text="button3"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        app:layout_constraintTag="button3"
         app:layout_constraintBottom_toBottomOf="@id/button1"
         app:layout_constraintTop_toTopOf="@id/button1"
         app:layout_constraintStart_toEndOf="@id/button2" />
@@ -52,10 +55,10 @@
         android:background="#667FAA"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:text="D"
-        android:onClick="changeView"
+        android:text="button4"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        app:layout_constraintTag="button4"
         app:layout_constraintBottom_toBottomOf="@id/button1"
         app:layout_constraintTop_toTopOf="@id/button1"
         app:layout_constraintStart_toEndOf="@id/button3" />
@@ -78,6 +81,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         android:text="run"
+
         app:layout_constraintBottom_toTopOf="@+id/textView12"
         app:layout_constraintEnd_toEndOf="parent" />
 

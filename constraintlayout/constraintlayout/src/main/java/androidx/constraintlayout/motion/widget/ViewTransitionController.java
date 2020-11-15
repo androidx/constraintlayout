@@ -12,7 +12,8 @@ import java.util.ArrayList;
 public class ViewTransitionController {
     private final MotionScene mMotionScene;
     private final MotionLayout mMotionLayout;
-    ArrayList<ViewTransition> viewTransitions = new ArrayList<>();
+    private ArrayList<ViewTransition> viewTransitions = new ArrayList<>();
+    private ArrayList<View> mRelatedViews;
     private String TAG = "ViewTransitionController";
 
     public ViewTransitionController(MotionScene motionScene, MotionLayout layout) {
@@ -22,29 +23,40 @@ public class ViewTransitionController {
 
     public void add(ViewTransition viewTransition) {
         viewTransitions.add(viewTransition);
+        mRelatedViews = null;
     }
 
+    public void remove(int id) {
+        ViewTransition del = null;
+        for (ViewTransition viewTransition : viewTransitions) {
+            if (viewTransition.getId() == id) {
+                del = viewTransition;
+                break;
+            }
+        }
+        if (del != null) {
+            mRelatedViews = null;
+            viewTransitions.remove(del);
+        }
+    }
 
     private void viewTransition(ViewTransition vt, View... view) {
         int currentId = mMotionLayout.getCurrentState();
         if (currentId == -1) {
-            Log.v(TAG, "Dont support transition within transition yet");
+            Log.w(TAG, "Dont support transition within transition yet");
             return;
         }
         ConstraintSet current = mMotionLayout.getConstraintSet(currentId);
         if (current == null) {
-            Log.v(TAG, "constraintSet == null");
             return;
         }
-
-        vt.applyTransition(mMotionLayout, currentId, current, view);
+        vt.applyTransition(this, mMotionLayout, currentId, current, view);
 
     }
 
     public void viewTransition(int id, View... view) {
         ViewTransition vt = null;
         for (ViewTransition viewTransition : viewTransitions) {
-            Log.v(TAG, Debug.getLoc() + " vt = " + Debug.getName(mMotionLayout.getContext(), viewTransition.getId()));
             if (viewTransition.getId() == id) {
                 vt = viewTransition;
             }
@@ -58,24 +70,78 @@ public class ViewTransitionController {
     }
 
     public void touchEvent(MotionEvent event) {
-        int count = mMotionLayout.getChildCount();
+        int currentId = mMotionLayout.getCurrentState();
+        if (currentId == -1) {
+            return;
+        }
+        if (mRelatedViews == null) {
+            mRelatedViews = new ArrayList<>();
+            for (ViewTransition viewTransition : viewTransitions) {
+                int count = mMotionLayout.getChildCount();
+                for (int i = 0; i < count; i++) {
+                    View view = mMotionLayout.getChildAt(i);
+                    if (viewTransition.matchesView(view)) {
+                        mRelatedViews.add(view);
+                    }
+                }
+            }
+        }
+
         float x = event.getX();
         float y = event.getY();
         Rect rec = new Rect();
-        for (int i = 0; i < count; i++) {
-            View view = mMotionLayout.getChildAt(i);
-            view.getHitRect(rec);
-            if (rec.contains((int) x, (int) y)) {
-                Log.v(TAG, Debug.getLoc() + " hit " + Debug.getName(view));
-            }
-        }
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_MOVE:
-                Log.v(TAG, Debug.getLoc() + " " + event.toString());
-                break;
-            case MotionEvent.ACTION_DOWN:
+        int action = event.getAction();
+        switch (action) {
             case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_OUTSIDE:
+            case MotionEvent.ACTION_DOWN:
+
+                ConstraintSet current = mMotionLayout.getConstraintSet(currentId);
+                for (ViewTransition viewTransition : viewTransitions) {
+                    if (viewTransition.supports(action)) {
+                        for (View view : mRelatedViews) {
+                            if (!viewTransition.matchesView(view)){
+                                continue;
+                            }
+                            view.getHitRect(rec);
+                            if (rec.contains((int) x, (int) y)) {
+                                viewTransition.applyTransition(this, mMotionLayout, currentId, current, view);
+                            }
+
+                        }
+                    }
+                }
+                break;
         }
+
+
+    }
+    ArrayList<ViewTransition.Animate>animations;
+    ArrayList<ViewTransition.Animate>removeList =new ArrayList<>();
+    void addAnimation(ViewTransition.Animate animation) {
+        if (animations == null) {
+            animations = new ArrayList<>();
+        }
+        animations.add(animation);
+    }
+
+    void removeAnimation(ViewTransition.Animate animation) {
+        removeList.add(animation);
+    }
+    public void animate() {
+        if (animations == null) {
+            return;
+        }
+        for (ViewTransition.Animate animation : animations) {
+            animation.mutate();
+        }
+        animations.removeAll(removeList);
+        removeList.clear();
+        if (animations.isEmpty()) {
+            animations = null;
+        }
+    }
+
+    public void invalidate() {
+        mMotionLayout.invalidate();
     }
 }
