@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.content.res.XmlResourceParser;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.util.Xml;
 import android.view.MotionEvent;
@@ -18,6 +19,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 
 import androidx.constraintlayout.motion.utils.Easing;
+import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.R;
@@ -34,6 +36,9 @@ public class ViewTransition {
     public static final String VIEW_TRANSITION_TAG = "ViewTransition";
     public static final String KEY_FRAME_SET_TAG = "KeyFrameSet";
     public static final String CONSTRAINT_OVERRIDE = "ConstraintOverride";
+    public static final String CUSTOM_ATTRIBUTE = "CustomAttribute";
+    public static final String CUSTOM_METHOD = "CustomMethod";
+
     private static final int UNSET = -1;
     private int mId;
     // Transition can be up or down of manually fired
@@ -65,6 +70,10 @@ public class ViewTransition {
     static final int ANTICIPATE = 4;
     static final int BOUNCE = 5;
     Context mContext;
+    private int mSetsTag = UNSET;
+    private int mClearsTag = UNSET;
+    private int mIfTagSet = UNSET;
+    private int mIfTagNotSet = UNSET;
 
     public String toString() {
         return "ViewTransition(" + Debug.getName(mContext, mId) + ")";
@@ -122,6 +131,13 @@ public class ViewTransition {
                             case CONSTRAINT_OVERRIDE:
                                 mConstraintDelta = ConstraintSet.buildDelta(context, parser);
                                 break;
+                            case CUSTOM_ATTRIBUTE:
+                            case CUSTOM_METHOD:
+                                ConstraintAttribute.parse(context, parser, mConstraintDelta.mCustomConstraints);
+                                break;
+                            default:
+                                Log.e(TAG, Debug.getLoc()+" unknown tag "+tagName);
+                                Log.e(TAG,  ".xml:"+parser.getLineNumber());
                         }
 
                         break;
@@ -190,6 +206,14 @@ public class ViewTransition {
                 } else {
                     mDefaultInterpolator = a.getInteger(attr, mDefaultInterpolator);
                 }
+            } else if (attr == R.styleable.ViewTransition_setsTag) {
+                mSetsTag = a.getResourceId(attr, mSetsTag);
+            } else if (attr == R.styleable.ViewTransition_clearsTag) {
+                mClearsTag = a.getResourceId(attr, mClearsTag);
+            } else if (attr == R.styleable.ViewTransition_ifTagSet) {
+                mIfTagSet = a.getResourceId(attr, mIfTagSet);
+            } else if (attr == R.styleable.ViewTransition_ifTagNotSet) {
+                mIfTagNotSet = a.getResourceId(attr, mIfTagNotSet);
             }
         }
         a.recycle();
@@ -200,10 +224,12 @@ public class ViewTransition {
         motionController.setBothStates(view);
         mKeyFrames.addAllFrames(motionController);
         motionController.setup(motionLayout.getWidth(), motionLayout.getHeight(), mDuration, System.nanoTime());
-        new Animate(controller, motionController, mDuration, getInterpolator(motionLayout.getContext()));
+        new Animate(controller, motionController, mDuration, getInterpolator(motionLayout.getContext()), mSetsTag, mClearsTag);
     }
 
     static class Animate {
+        private final int mSetsTag;
+        private final int mClearsTag;
         long mStart;
         MotionController mMC;
         int mDuration;
@@ -211,13 +237,18 @@ public class ViewTransition {
         ViewTransitionController mVtController;
         Interpolator mInterpolator;
 
-        Animate(ViewTransitionController controller, MotionController motionController, int duration, Interpolator interpolator) {
+        Animate(ViewTransitionController controller,
+                MotionController motionController,
+                int duration,
+                Interpolator interpolator, int setTag, int clearTag) {
             mVtController = controller;
             mMC = motionController;
             mDuration = duration;
             mStart = System.nanoTime();
             mVtController.addAnimation(this);
             mInterpolator = interpolator;
+            mSetsTag = setTag;
+            mClearsTag = clearTag;
             mutate();
         }
 
@@ -228,6 +259,12 @@ public class ViewTransition {
             float ipos = (mInterpolator == null) ? position : mInterpolator.getInterpolation(position);
             boolean repaint = mMC.interpolate(mMC.mView, ipos, current, mCache);
             if (position >= 1) {
+                if (mSetsTag != UNSET) {
+                    mMC.getView().setTag(mSetsTag, System.nanoTime());
+                }
+                if (mClearsTag != UNSET) {
+                    mMC.getView().setTag(mClearsTag, null);
+                }
                 mVtController.removeAnimation(this);
             }
             if (position < 1f || repaint) {
@@ -235,6 +272,7 @@ public class ViewTransition {
             }
         }
     }
+
 
     public void applyTransition(ViewTransitionController controller,
                                 MotionLayout layout,
@@ -260,6 +298,7 @@ public class ViewTransition {
                     ConstraintSet.Constraint constraint = cset.getConstraint(view.getId());
                     if (mConstraintDelta != null) {
                         mConstraintDelta.applyDelta(constraint);
+                        constraint.mCustomConstraints.putAll(mConstraintDelta.mCustomConstraints);
                     }
                 }
             }
@@ -271,6 +310,7 @@ public class ViewTransition {
             ConstraintSet.Constraint constraint = transformedState.getConstraint(view.getId());
             if (mConstraintDelta != null) {
                 mConstraintDelta.applyDelta(constraint);
+                constraint.mCustomConstraints.putAll(mConstraintDelta.mCustomConstraints);
             }
         }
 
@@ -281,9 +321,19 @@ public class ViewTransition {
         for (View view : views) {
             updateTransition(tmpTransition, view);
         }
-
         layout.setTransition(tmpTransition);
-        layout.transitionToEnd();
+        layout.transitionToEnd(() -> {
+            if (mSetsTag != UNSET) {
+                for (View view : views) {
+                    view.setTag(mSetsTag, System.nanoTime());
+                }
+            }
+            if (mClearsTag != UNSET) {
+                for (View view : views) {
+                    view.setTag(mClearsTag, null);
+                }
+            }
+        });
     }
 
     private void updateTransition(MotionScene.Transition transition, View view) {
@@ -319,7 +369,9 @@ public class ViewTransition {
         if (mTargetId == -1 && mTargetString == null) {
             return false;
         }
-
+        if (!checkTags(view)) {
+            return false;
+        }
         if (view.getId() == mTargetId) {
             return true;
         }
@@ -352,5 +404,12 @@ public class ViewTransition {
 
     public void setEnable(boolean enable) {
         this.mDisabled = !enable;
+    }
+
+    boolean checkTags(View view) {
+
+        boolean set = (mIfTagSet == UNSET) ? true : (null != view.getTag(mIfTagSet));
+        boolean notSet = (mIfTagNotSet == UNSET) ? true : null == view.getTag(mIfTagNotSet);
+        return set && notSet;
     }
 }

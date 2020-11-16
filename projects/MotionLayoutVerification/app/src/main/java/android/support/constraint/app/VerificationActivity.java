@@ -80,7 +80,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     String s = AppCompatActivity.class.getName();
 
     private static boolean REVERSE = false;
-    private final String LAYOUTS_MATCHES = "verification_\\d+";
+    private final String LAYOUTS_MATCHES = "verification_2\\d+";
     private static String SHOW_FIRST = "";
     MotionLayout mMotionLayout;
     private Flow mFlow;

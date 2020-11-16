@@ -2,18 +2,21 @@ package androidx.constraintlayout.motion.widget;
 
 import android.graphics.Rect;
 import android.util.Log;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
 import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.constraintlayout.widget.ConstraintSet;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class ViewTransitionController {
     private final MotionScene mMotionScene;
     private final MotionLayout mMotionLayout;
     private ArrayList<ViewTransition> viewTransitions = new ArrayList<>();
-    private ArrayList<View> mRelatedViews;
+    private HashSet<View> mRelatedViews;
     private String TAG = "ViewTransitionController";
 
     public ViewTransitionController(MotionScene motionScene, MotionLayout layout) {
@@ -72,18 +75,27 @@ public class ViewTransitionController {
         return false;
     }
 
-    public void viewTransition(int id, View... view) {
+    public void viewTransition(int id, View... views) {
         ViewTransition vt = null;
+        ArrayList<View> list = new ArrayList<>();
         for (ViewTransition viewTransition : viewTransitions) {
             if (viewTransition.getId() == id) {
                 vt = viewTransition;
+                for (View view : views) {
+                    if (viewTransition.checkTags(view)) {
+                        list.add(view);
+                    }
+                }
+                if (!list.isEmpty()) {
+                    viewTransition(vt, list.toArray(new View[0]));
+                    list.clear();
+                }
             }
         }
         if (vt == null) {
             Log.e(TAG, " Could not find ViewTransition");
             return;
         }
-        viewTransition(vt, view);
     }
 
     public void touchEvent(MotionEvent event) {
@@ -92,16 +104,20 @@ public class ViewTransitionController {
             return;
         }
         if (mRelatedViews == null) {
-            mRelatedViews = new ArrayList<>();
-            for (ViewTransition viewTransition : viewTransitions) {
+            mRelatedViews = new HashSet<>();
+             for (ViewTransition viewTransition : viewTransitions) {
                 int count = mMotionLayout.getChildCount();
                 for (int i = 0; i < count; i++) {
                     View view = mMotionLayout.getChildAt(i);
                     if (viewTransition.matchesView(view)) {
+                        int id = view.getId();
+
                         mRelatedViews.add(view);
                     }
                 }
             }
+
+
         }
 
         float x = event.getX();

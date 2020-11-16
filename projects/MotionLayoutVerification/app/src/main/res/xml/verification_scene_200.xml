@@ -136,9 +136,6 @@
         </KeyFrameSet>
     </ViewTransition>
 
-
-
-
     <ViewTransition
         android:id="@+id/nn"
         motion:onStateTransition="actionDown"
@@ -170,7 +167,7 @@
     <ViewTransition
         android:id="@+id/spin"
         motion:motionTarget="@+id/button3"
-        motion:onStateTransition="actionUP"
+        motion:onStateTransition="actionUp"
         motion:duration="1000">
         <ConstraintOverride
             android:layout_width="64dp"

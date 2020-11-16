@@ -908,6 +908,10 @@ public class MotionController {
         }
     }
 
+    public View getView() {
+        return mView;
+    }
+
     void setStartCurrentState(View v) {
         mStartMotionPath.time = 0;
         mStartMotionPath.position = 0;

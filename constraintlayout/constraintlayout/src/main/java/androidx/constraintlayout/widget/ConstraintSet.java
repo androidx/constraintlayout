@@ -3677,6 +3677,7 @@ public class ConstraintSet {
                                 constraint.motion.fillFromAttributeList(context, Xml.asAttributeSet(parser));
                                 break;
                             case "CustomAttribute":
+                            case "CustomMethod":
                                 if (constraint == null) {
                                     throw new RuntimeException(ERROR_MESSAGE + parser.getLineNumber());
                                 }
