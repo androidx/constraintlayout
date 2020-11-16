@@ -1,0 +1,109 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven'
+apply plugin: 'kotlin-android'
+
+def compose_version = '1.0.0-alpha11'
+
+android {
+    compileSdkVersion 30
+    useLibrary 'android.test.runner'
+    useLibrary 'android.test.base'
+
+    defaultConfig {
+        minSdkVersion 21
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        targetSdkVersion 30
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+
+    buildFeatures {
+        compose true
+        buildConfig false
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        useIR = true
+    }
+
+    composeOptions {
+        kotlinCompilerVersion "1.4.21-2"
+        kotlinCompilerExtensionVersion compose_version
+    }
+
+    packagingOptions {
+      exclude 'META-INF/AL2.0'
+      exclude 'META-INF/LGPL2.1'
+    }
+
+    dependencies {
+        implementation "androidx.compose.ui:ui:$compose_version"
+        implementation "androidx.compose.ui:ui-unit:$compose_version"
+        implementation "androidx.compose.ui:ui-util:$compose_version"
+        implementation "androidx.compose.foundation:foundation-layout:$compose_version"
+        implementation "androidx.compose.foundation:foundation:$compose_version"
+        implementation project(':core')
+        androidTestImplementation 'junit:junit:4.13.1'
+        androidTestImplementation "androidx.compose.ui:ui-test:$compose_version"
+        androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+        androidTestImplementation 'androidx.test:runner:1.3.0'
+        androidTestImplementation 'androidx.test:rules:1.3.0'
+        androidTestImplementation "androidx.activity:activity:1.1.0"
+  }
+}
+
+repositories {
+    jcenter()
+    google()
+    mavenCentral()
+}
+
+configurations.all {
+    resolutionStrategy.dependencySubstitution {
+        substitute module("androidx.constraintlayout:constraintlayout-core") using project(":core") because "we work with the unreleased development version"
+    }
+}
+
+archivesBaseName = 'constraintlayout-compose'
+
+project.ext.pomName = 'ConstraintLayout for Jetpack Compose'
+project.ext.pomDesc = 'ConstraintLayout for Jetpack Compose'
+
+task publishLocal(type: Upload) {
+    configuration = configurations.archives
+    repositories {
+        mavenDeployer {
+            repository(url: uri("$rootProject.ext.localRepo"))
+            pom.project {
+                name project.ext.pomName
+                description project.ext.pomDesc
+
+                url 'http://tools.android.com'
+                inceptionYear '2007'
+
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'repo'
+                    }
+                }
+
+                scm {
+                    url 'https://github.com/androidx/constraintlayout'
+                    connection 'git@github.com:androidx/constraintlayout.git'
+                }
+                developers {
+                    developer {
+                        name 'The Android Open Source Project'
+                    }
+                }
+            }
+        }
+    }
+}

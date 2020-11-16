@@ -73,8 +73,8 @@ task publishLocal(type: Upload) {
                 }
 
                 scm {
-                    url 'https://android.googlesource.com/platform/tools/sherpa'
-                    connection 'git://android.googlesource.com/platform/tools/sherpa.git'
+                    url 'https://github.com/androidx/constraintlayout'
+                    connection 'git@github.com:androidx/constraintlayout.git'
                 }
                 developers {
                     developer {
