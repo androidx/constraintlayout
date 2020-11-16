@@ -4136,4 +4136,17 @@ public class MotionLayout extends ConstraintLayout implements
             Log.e(TAG, " no motionScene");
         }
     }
+
+    public void enableViewTransition(int id, boolean enable) {
+        if (mScene != null) {
+            mScene.enableViewTransition(id, enable);
+        }
+    }
+
+    public boolean isViewTransitionEnabled(int id) {
+        if (mScene != null) {
+            return mScene.isViewTransitionEnabled(id);
+        }
+        return false;
+    }
 }

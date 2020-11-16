@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="1000">
+       <KeyFrameSet>
+           <KeyAttribute motion:framePosition="0">
+               <CustomAttribute motion:attributeName="background"
+                   motion:customColorDrawableValue="#b46e89"/>
+               <CustomAttribute motion:attributeName="roundPercent"
+                   motion:customFloatValue="1"/>
+           </KeyAttribute>
+       </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+    </ConstraintSet>
+
+
+    <ViewTransition
+        android:id="@+id/spin"
+        motion:motionTarget="button.*"
+        motion:viewTransitionMode="noState"
+        motion:onStateTransition="actionDown"
+        motion:duration="2400">
+
+        <KeyFrameSet>
+            <KeyAttribute motion:framePosition="0">
+                <CustomAttribute
+                    motion:attributeName="roundPercent"
+                    motion:customFloatValue="1" />
+                <CustomAttribute
+                    motion:attributeName="background"
+                    motion:customColorDrawableValue="#492f39" />
+            </KeyAttribute>
+
+            <KeyAttribute motion:framePosition="20">
+                <CustomAttribute
+                    motion:attributeName="roundPercent"
+                    motion:customFloatValue=".3" />
+                <CustomAttribute
+                    motion:attributeName="background"
+                    motion:customColorDrawableValue="#b46e89" />
+            </KeyAttribute>
+
+            <KeyAttribute motion:framePosition="80">
+                <CustomAttribute
+                    motion:attributeName="roundPercent"
+                    motion:customFloatValue="1" />
+                <CustomAttribute
+                    motion:attributeName="background"
+                    motion:customColorDrawableValue="#593945" />
+            </KeyAttribute>
+            <KeyAttribute motion:framePosition="90">
+                <CustomAttribute
+                    motion:attributeName="roundPercent"
+                    motion:customFloatValue="1" />
+                <CustomAttribute
+                    motion:attributeName="background"
+                    motion:customColorDrawableValue="#593945" />
+            </KeyAttribute>
+            <KeyAttribute motion:framePosition="100">
+                <CustomAttribute
+                    motion:attributeName="roundPercent"
+                    motion:customFloatValue="1" />
+                <CustomAttribute
+                    motion:attributeName="background"
+                    motion:customColorDrawableValue="#492f39" />
+            </KeyAttribute>
+        </KeyFrameSet>
+    </ViewTransition>
+
+
+</MotionScene>

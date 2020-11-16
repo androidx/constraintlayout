@@ -54,6 +54,24 @@ public class ViewTransitionController {
 
     }
 
+    public void enableViewTransition(int id, boolean enable) {
+        for (ViewTransition viewTransition : viewTransitions) {
+            if (viewTransition.getId() == id) {
+                viewTransition.setEnable(enable);
+                break;
+            }
+        }
+    }
+
+    public boolean isViewTransitionEnabled(int id) {
+        for (ViewTransition viewTransition : viewTransitions) {
+            if (viewTransition.getId() == id) {
+                return viewTransition.isEnabled();
+            }
+        }
+        return false;
+    }
+
     public void viewTransition(int id, View... view) {
         ViewTransition vt = null;
         for (ViewTransition viewTransition : viewTransitions) {
@@ -66,7 +84,6 @@ public class ViewTransitionController {
             return;
         }
         viewTransition(vt, view);
-
     }
 
     public void touchEvent(MotionEvent event) {
@@ -99,7 +116,7 @@ public class ViewTransitionController {
                 for (ViewTransition viewTransition : viewTransitions) {
                     if (viewTransition.supports(action)) {
                         for (View view : mRelatedViews) {
-                            if (!viewTransition.matchesView(view)){
+                            if (!viewTransition.matchesView(view)) {
                                 continue;
                             }
                             view.getHitRect(rec);
@@ -112,11 +129,11 @@ public class ViewTransitionController {
                 }
                 break;
         }
-
-
     }
-    ArrayList<ViewTransition.Animate>animations;
-    ArrayList<ViewTransition.Animate>removeList =new ArrayList<>();
+
+    ArrayList<ViewTransition.Animate> animations;
+    ArrayList<ViewTransition.Animate> removeList = new ArrayList<>();
+
     void addAnimation(ViewTransition.Animate animation) {
         if (animations == null) {
             animations = new ArrayList<>();
@@ -127,6 +144,7 @@ public class ViewTransitionController {
     void removeAnimation(ViewTransition.Animate animation) {
         removeList.add(animation);
     }
+
     public void animate() {
         if (animations == null) {
             return;

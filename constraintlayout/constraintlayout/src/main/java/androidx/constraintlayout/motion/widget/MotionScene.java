@@ -45,15 +45,12 @@ import android.view.animation.Interpolator;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-
-import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
 
 /**
  * The information to transition between multiple ConstraintSets
@@ -449,6 +446,13 @@ public class MotionScene {
         mViewTransitionController.viewTransition(id, view);
     }
 
+    public void enableViewTransition(int id, boolean enable) {
+        mViewTransitionController.enableViewTransition(id, enable);
+    }
+
+    public boolean isViewTransitionEnabled(int id) {
+        return mViewTransitionController.isViewTransitionEnabled(id);
+    }
 ///////////////////////////////////////////////////////////////////////////////
 // ====================== Transition ==========================================
 
@@ -836,6 +840,12 @@ public class MotionScene {
             mLayoutDuringTransition = motionScene.mLayoutDuringTransition;
             mMotionScene = motionScene;
             fillFromAttributeList(motionScene, context, Xml.asAttributeSet(parser));
+        }
+
+        public void setInterpolatorInfo(int interpolator, String interpolatorString, int interpolatorID){
+            mDefaultInterpolator = interpolator;
+            mDefaultInterpolatorString = interpolatorString;
+            mDefaultInterpolatorID = interpolatorID;
         }
 
         private void fillFromAttributeList(MotionScene motionScene, Context context, AttributeSet attrs) {

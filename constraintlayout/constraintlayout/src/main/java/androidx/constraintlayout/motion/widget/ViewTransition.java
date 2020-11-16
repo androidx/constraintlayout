@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.content.res.XmlResourceParser;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.util.Xml;
 import android.view.MotionEvent;
@@ -41,8 +40,8 @@ public class ViewTransition {
     private final int ONSTATETRANSITION_ACTION_DOWN = 1;
     private final int ONSTATETRANSITION_ACTION_UP = 2;
     private int mOnStateTransition = UNSET;
-    private boolean mTransitionDisable;
-    private boolean mPathMotionArc;
+    private boolean mDisabled = false;
+    private int mPathMotionArc = 0;
     private int mViewTransitionMode;
     private static final int VIEWTRANSITIONMODE_CURRENTSTATE = 0;
     private static final int VIEWTRANSITIONMODE_ALLSTATES = 1;
@@ -166,9 +165,9 @@ public class ViewTransition {
             } else if (attr == R.styleable.ViewTransition_onStateTransition) {
                 mOnStateTransition = a.getInt(attr, mOnStateTransition);
             } else if (attr == R.styleable.ViewTransition_transitionDisable) {
-                mTransitionDisable = a.getBoolean(attr, mTransitionDisable);
+                mDisabled = a.getBoolean(attr, mDisabled);
             } else if (attr == R.styleable.ViewTransition_pathMotionArc) {
-                mPathMotionArc = a.getBoolean(attr, mPathMotionArc);
+                mPathMotionArc = a.getInt(attr, mPathMotionArc);
             } else if (attr == R.styleable.ViewTransition_duration) {
                 mDuration = a.getInt(attr, mDuration);
             } else if (attr == R.styleable.ViewTransition_viewTransitionMode) {
@@ -201,7 +200,7 @@ public class ViewTransition {
         motionController.setBothStates(view);
         mKeyFrames.addAllFrames(motionController);
         motionController.setup(motionLayout.getWidth(), motionLayout.getHeight(), mDuration, System.nanoTime());
-        new Animate(controller, motionController, mDuration);
+        new Animate(controller, motionController, mDuration, getInterpolator(motionLayout.getContext()));
     }
 
     static class Animate {
@@ -210,13 +209,15 @@ public class ViewTransition {
         int mDuration;
         KeyCache mCache = new KeyCache();
         ViewTransitionController mVtController;
+        Interpolator mInterpolator;
 
-        Animate(ViewTransitionController controller, MotionController motionController, int duration) {
+        Animate(ViewTransitionController controller, MotionController motionController, int duration, Interpolator interpolator) {
             mVtController = controller;
             mMC = motionController;
             mDuration = duration;
             mStart = System.nanoTime();
             mVtController.addAnimation(this);
+            mInterpolator = interpolator;
             mutate();
         }
 
@@ -224,25 +225,25 @@ public class ViewTransition {
             long current = System.nanoTime();
             long elapse = current - mStart;
             float position = ((float) (elapse * 1E-6)) / mDuration;
-
-            if (position > 1) {
+            float ipos = (mInterpolator == null) ? position : mInterpolator.getInterpolation(position);
+            boolean repaint = mMC.interpolate(mMC.mView, ipos, current, mCache);
+            if (position >= 1) {
                 mVtController.removeAnimation(this);
-                return;
             }
-            boolean repaint = mMC.interpolate(mMC.mView, position, current, mCache);
             if (position < 1f || repaint) {
                 mVtController.invalidate();
             }
-
         }
     }
-
 
     public void applyTransition(ViewTransitionController controller,
                                 MotionLayout layout,
                                 int fromId,
                                 ConstraintSet current,
                                 View... views) {
+        if (mDisabled) {
+            return;
+        }
         if (mViewTransitionMode == VIEWTRANSITIONMODE_NOSTATE) {
             applyIndependentTransition(controller, layout, fromId, current, views[0]);
             return;
@@ -280,6 +281,7 @@ public class ViewTransition {
         for (View view : views) {
             updateTransition(tmpTransition, view);
         }
+
         layout.setTransition(tmpTransition);
         layout.transitionToEnd();
     }
@@ -288,6 +290,8 @@ public class ViewTransition {
         if (mDuration != -1) {
             transition.setDuration(mDuration);
         }
+        transition.setPathMotionArc(mPathMotionArc);
+        transition.setInterpolatorInfo(mDefaultInterpolator, mDefaultInterpolatorString, mDefaultInterpolatorID);
         int id = view.getId();
         if (mKeyFrames != null) {
             ArrayList<Key> keys = mKeyFrames.getKeyFramesForView(KeyFrames.UNSET);
@@ -340,5 +344,13 @@ public class ViewTransition {
             return action == MotionEvent.ACTION_UP;
         }
         return false;
+    }
+
+    public boolean isEnabled() {
+        return !mDisabled;
+    }
+
+    public void setEnable(boolean enable) {
+        this.mDisabled = !enable;
     }
 }
