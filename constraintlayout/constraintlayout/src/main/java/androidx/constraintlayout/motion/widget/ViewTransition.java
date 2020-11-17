@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2020 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package androidx.constraintlayout.motion.widget;
 
 import android.content.Context;
@@ -30,6 +46,13 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Provides a support for <ViewTransition> tag
+ * it Parses tag
+ * it implement the transition
+ * it will update ConstraintSet or sets
+ * For asynchronous it will create and drive a MotionController.
+ */
 public class ViewTransition {
     private static String TAG = "ViewTransition";
     ConstraintSet set;
@@ -79,7 +102,7 @@ public class ViewTransition {
         return "ViewTransition(" + Debug.getName(mContext, mId) + ")";
     }
 
-    public Interpolator getInterpolator(Context context) {
+    Interpolator getInterpolator(Context context) {
         switch (mDefaultInterpolator) {
             case SPLINE_STRING:
                 final Easing easing = Easing.getInterpolator(mDefaultInterpolatorString);
@@ -108,7 +131,7 @@ public class ViewTransition {
         return null;
     }
 
-    public ViewTransition(Context context, XmlPullParser parser) {
+    ViewTransition(Context context, XmlPullParser parser) {
         mContext = context;
         String tagName = null;
         try {
@@ -136,8 +159,8 @@ public class ViewTransition {
                                 ConstraintAttribute.parse(context, parser, mConstraintDelta.mCustomConstraints);
                                 break;
                             default:
-                                Log.e(TAG, Debug.getLoc()+" unknown tag "+tagName);
-                                Log.e(TAG,  ".xml:"+parser.getLineNumber());
+                                Log.e(TAG, Debug.getLoc() + " unknown tag " + tagName);
+                                Log.e(TAG, ".xml:" + parser.getLineNumber());
                         }
 
                         break;
@@ -219,7 +242,7 @@ public class ViewTransition {
         a.recycle();
     }
 
-    public void applyIndependentTransition(ViewTransitionController controller, MotionLayout motionLayout, int fromId, ConstraintSet current, View view) {
+    void applyIndependentTransition(ViewTransitionController controller, MotionLayout motionLayout, int fromId, ConstraintSet current, View view) {
         MotionController motionController = new MotionController(view);
         motionController.setBothStates(view);
         mKeyFrames.addAllFrames(motionController);
@@ -273,12 +296,11 @@ public class ViewTransition {
         }
     }
 
-
-    public void applyTransition(ViewTransitionController controller,
-                                MotionLayout layout,
-                                int fromId,
-                                ConstraintSet current,
-                                View... views) {
+    void applyTransition(ViewTransitionController controller,
+                         MotionLayout layout,
+                         int fromId,
+                         ConstraintSet current,
+                         View... views) {
         if (mDisabled) {
             return;
         }
@@ -354,11 +376,11 @@ public class ViewTransition {
         }
     }
 
-    public int getId() {
+    int getId() {
         return mId;
     }
 
-    public void setId(int id) {
+    void setId(int id) {
         this.mId = id;
     }
 
@@ -388,7 +410,7 @@ public class ViewTransition {
         return false;
     }
 
-    public boolean supports(int action) {
+    boolean supports(int action) {
         if (mOnStateTransition == ONSTATETRANSITION_ACTION_DOWN) {
             return action == MotionEvent.ACTION_DOWN;
         }
@@ -398,11 +420,11 @@ public class ViewTransition {
         return false;
     }
 
-    public boolean isEnabled() {
+    boolean isEnabled() {
         return !mDisabled;
     }
 
-    public void setEnable(boolean enable) {
+    void setEnable(boolean enable) {
         this.mDisabled = !enable;
     }
 

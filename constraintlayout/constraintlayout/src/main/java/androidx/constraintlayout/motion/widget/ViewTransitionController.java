@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2020 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package androidx.constraintlayout.motion.widget;
 
 import android.graphics.Rect;
@@ -12,15 +28,17 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+/**
+ * Container for ViewTransitions. It dispatches the run of a ViewTransition.
+ * It receives animate calls
+ */
 public class ViewTransitionController {
-    private final MotionScene mMotionScene;
     private final MotionLayout mMotionLayout;
     private ArrayList<ViewTransition> viewTransitions = new ArrayList<>();
     private HashSet<View> mRelatedViews;
     private String TAG = "ViewTransitionController";
 
-    public ViewTransitionController(MotionScene motionScene, MotionLayout layout) {
-        mMotionScene = motionScene;
+    public ViewTransitionController(MotionLayout layout) {
         mMotionLayout = layout;
     }
 
@@ -29,7 +47,7 @@ public class ViewTransitionController {
         mRelatedViews = null;
     }
 
-    public void remove(int id) {
+    void remove(int id) {
         ViewTransition del = null;
         for (ViewTransition viewTransition : viewTransitions) {
             if (viewTransition.getId() == id) {
@@ -57,7 +75,7 @@ public class ViewTransitionController {
 
     }
 
-    public void enableViewTransition(int id, boolean enable) {
+    void enableViewTransition(int id, boolean enable) {
         for (ViewTransition viewTransition : viewTransitions) {
             if (viewTransition.getId() == id) {
                 viewTransition.setEnable(enable);
@@ -66,7 +84,7 @@ public class ViewTransitionController {
         }
     }
 
-    public boolean isViewTransitionEnabled(int id) {
+    boolean isViewTransitionEnabled(int id) {
         for (ViewTransition viewTransition : viewTransitions) {
             if (viewTransition.getId() == id) {
                 return viewTransition.isEnabled();
@@ -75,7 +93,13 @@ public class ViewTransitionController {
         return false;
     }
 
-    public void viewTransition(int id, View... views) {
+    /**
+     * Support call from MotionLayout.viewTransition
+     *
+     * @param id    the id of a ViewTransition
+     * @param views the list of views to transition simultaneously
+     */
+    void viewTransition(int id, View... views) {
         ViewTransition vt = null;
         ArrayList<View> list = new ArrayList<>();
         for (ViewTransition viewTransition : viewTransitions) {
@@ -98,14 +122,19 @@ public class ViewTransitionController {
         }
     }
 
-    public void touchEvent(MotionEvent event) {
+    /**
+     * this gets Touch events on the MotionLayout and can fire transitions on down or up
+     *
+     * @param event
+     */
+    void touchEvent(MotionEvent event) {
         int currentId = mMotionLayout.getCurrentState();
         if (currentId == -1) {
             return;
         }
         if (mRelatedViews == null) {
             mRelatedViews = new HashSet<>();
-             for (ViewTransition viewTransition : viewTransitions) {
+            for (ViewTransition viewTransition : viewTransitions) {
                 int count = mMotionLayout.getChildCount();
                 for (int i = 0; i < count; i++) {
                     View view = mMotionLayout.getChildAt(i);
@@ -116,8 +145,6 @@ public class ViewTransitionController {
                     }
                 }
             }
-
-
         }
 
         float x = event.getX();
@@ -161,7 +188,10 @@ public class ViewTransitionController {
         removeList.add(animation);
     }
 
-    public void animate() {
+    /**
+     * Called by motionLayout during draw to allow ViewTransitions to asynchronously animate
+     */
+    void animate() {
         if (animations == null) {
             return;
         }
@@ -175,7 +205,7 @@ public class ViewTransitionController {
         }
     }
 
-    public void invalidate() {
+    void invalidate() {
         mMotionLayout.invalidate();
     }
 }

@@ -22,7 +22,7 @@
         <ConstraintOverride
             android:id="@+id/flow2"
             motion:layout_constraintHorizontal_bias="0.5"
-            motion:layout_constraintVertical_bias="0"
+            motion:layout_constraintVertical_bias="0.3"
 />
         <ConstraintOverride android:id="@+id/textView">
             <CustomAttribute
@@ -48,7 +48,7 @@
     <ViewTransition
         android:id="@+id/rotate"
         motion:motionTarget="button.*"
-        motion:viewTransitionMode="currentState"
+        motion:viewTransitionMode="allStates"
         motion:onStateTransition="actionUp"
         motion:setsTag="@+id/rotated"
         motion:ifTagNotSet="@id/rotated"
@@ -67,7 +67,7 @@
     <ViewTransition
         android:id="@+id/unrotate"
         motion:motionTarget="button.*"
-        motion:viewTransitionMode="currentState"
+        motion:viewTransitionMode="allStates"
         motion:onStateTransition="actionUp"
         motion:clearsTag="@id/rotated"
         motion:ifTagSet="@id/rotated"

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 The Android Open Source Project
+ * Copyright (C) 2020 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package androidx.constraintlayout.utils.widget;
 
 import android.content.Context;
@@ -44,12 +45,12 @@ import androidx.constraintlayout.widget.R;
  * <tr>
  * <td>roundPercent &nbs; </td>
  * <td>Set the corner radius of curvature  as a fraction of the smaller side.
- *    For squares 1 will result in a circle</td>
+ * For squares 1 will result in a circle</td>
  * </tr>
  * <tr>
  * <td>round &nbs; </td>
  * <td>Set the corner radius of curvature  as a fraction of the smaller side.
- *    For squares 1 will result in a circle</td>
+ * For squares 1 will result in a circle</td>
  * </tr>
  *
  * </table>
@@ -60,7 +61,6 @@ public class MotionButton extends androidx.appcompat.widget.AppCompatButton {
     private Path mPath;
     ViewOutlineProvider mViewOutlineProvider;
     RectF mRect;
-
 
     public MotionButton(Context context) {
         super(context);
@@ -85,7 +85,7 @@ public class MotionButton extends androidx.appcompat.widget.AppCompatButton {
             final int N = a.getIndexCount();
             for (int i = 0; i < N; i++) {
                 int attr = a.getIndex(i);
-                 if (attr == R.styleable.ImageFilterView_round) {
+                if (attr == R.styleable.ImageFilterView_round) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         setRound(a.getDimension(attr, 0));
                     }

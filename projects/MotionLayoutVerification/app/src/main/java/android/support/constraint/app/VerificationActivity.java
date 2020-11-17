@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 The Android Open Source Project
+ * Copyright (C) 2020 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -45,6 +46,7 @@ import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.constraintlayout.motion.widget.MotionScene;
 import androidx.constraintlayout.motion.widget.TransitionAdapter;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -491,6 +493,31 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     public void hideCurrent(View view) {
         Log.v(TAG, Debug.getLoc() + " --------------------- ");
       //  mMotionLayout.viewTransition(R.id.vt_hide_current, view);
+    }
+
+    public void addToFlow2(View view) {
+        Flow flow = mMotionLayout.findViewById(R.id.flow2);
+        Button button = new Button(getApplicationContext());
+        button.setText("AA");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            button.setId(View.generateViewId());
+        }
+        mMotionLayout.addView(button);
+        button.setLayoutParams(new MotionLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        flow.addView(button);
+        int[] ids = flow.getReferencedIds();
+        Log.v(TAG, Debug.getLoc() + " ides =" + ids.length);
+        {
+            int[] idss = mMotionLayout.getConstraintSetIds();
+            for (int id : idss) {
+                ConstraintSet cset = mMotionLayout.getConstraintSet(id);
+                cset.constrainWidth(button.getId(), ConstraintSet.WRAP_CONTENT);
+                cset.constrainHeight(button.getId(), ConstraintSet.WRAP_CONTENT);
+                cset.setReferencedIds(R.id.flow2, ids);
+            }
+        }
+
     }
 
     interface Test {

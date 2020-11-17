@@ -935,12 +935,12 @@ public class MotionScene {
      */
     public MotionScene(MotionLayout layout) {
         mMotionLayout = layout;
-        mViewTransitionController = new ViewTransitionController(this, layout);
+        mViewTransitionController = new ViewTransitionController(layout);
     }
 
     MotionScene(Context context, MotionLayout layout, int resourceID) {
         mMotionLayout = layout;
-        mViewTransitionController = new ViewTransitionController(this, layout);
+        mViewTransitionController = new ViewTransitionController(layout);
 
         load(context, resourceID);
         mConstraintSetMap.put(R.id.motion_base, new ConstraintSet());

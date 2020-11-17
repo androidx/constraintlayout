@@ -2026,8 +2026,6 @@ public class MotionLayout extends ConstraintLayout implements
         mScene.setTransition(mBeginState, mEndState);
         SparseArray<MotionController> controllers = new SparseArray<>();
 
-
-
         int startId = mScene.getStartId();
         int targetID = id;
         int n = getChildCount();
@@ -4220,7 +4218,6 @@ public class MotionLayout extends ConstraintLayout implements
     public boolean isInteractionEnabled() {
         return mInteractionEnabled;
     }
-
 
     private void fireTransitionStarted(MotionLayout motionLayout, int mBeginState, int mEndState) {
         if (mTransitionListener != null) {

@@ -460,7 +460,6 @@ class MotionPaths implements Comparable<MotionPaths> {
         point[offset + 1] = v_y + v_height / 2 + translationY;
     }
 
-
     void getBounds(int[] toUse, double[] data, float[] point, int offset) {
         float v_x = x;
         float v_y = y;

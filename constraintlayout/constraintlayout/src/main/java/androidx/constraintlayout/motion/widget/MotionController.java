@@ -1093,8 +1093,6 @@ public class MotionController {
             }
         }
 
-
-
         if (mSpline != null) {
              mSpline[0].getPos(position, mInterpolateData);
             mSpline[0].getSlope(position, mInterpolateVelocity);

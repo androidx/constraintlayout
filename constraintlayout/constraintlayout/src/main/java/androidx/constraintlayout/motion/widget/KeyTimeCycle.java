@@ -165,7 +165,6 @@ public class KeyTimeCycle extends Key {
         }
     }
 
-
     @Override
     public void addValues(HashMap<String, SplineSet> splines) {
         // This should not get called
