@@ -45,15 +45,12 @@ import android.view.animation.Interpolator;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-
-import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
 
 /**
  * The information to transition between multiple ConstraintSets
@@ -99,6 +96,8 @@ public class MotionScene {
     private static final String INCLUDE_TAG = "Include";
     private static final String KEYFRAMESET_TAG = "KeyFrameSet";
     private static final String CONSTRAINTSET_TAG = "ConstraintSet";
+    private static final String VIEW_TRANSITION = "ViewTransition";
+    final ViewTransitionController mViewTransitionController;
 
     /**
      * Set the transition between two constraint set / states.
@@ -125,6 +124,10 @@ public class MotionScene {
             Log.v(TAG, Debug.getLocation() + " setTransition " +
                     Debug.getName(mMotionLayout.getContext(), beginId) + " -> " +
                     Debug.getName(mMotionLayout.getContext(), endId));
+        }
+        if (mCurrentTransition.mConstraintSetEnd == endId &&
+        mCurrentTransition.mConstraintSetStart == beginId){
+            return;
         }
         for (Transition transition : mTransitionList) {
             if ((transition.mConstraintSetEnd == end
@@ -439,6 +442,17 @@ public class MotionScene {
         }
     }
 
+    public void viewTransition(int id, View ... view) {
+        mViewTransitionController.viewTransition(id, view);
+    }
+
+    public void enableViewTransition(int id, boolean enable) {
+        mViewTransitionController.enableViewTransition(id, enable);
+    }
+
+    public boolean isViewTransitionEnabled(int id) {
+        return mViewTransitionController.isViewTransitionEnabled(id);
+    }
 ///////////////////////////////////////////////////////////////////////////////
 // ====================== Transition ==========================================
 
@@ -558,6 +572,13 @@ public class MotionScene {
 
         public List<KeyFrames> getKeyFrameList() {
             return mKeyFramesList;
+        }
+
+        /*
+        *
+         */
+        public void  addtKeyFrame( KeyFrames keyFrames) {
+              mKeyFramesList.add(keyFrames);
         }
 
         /**
@@ -821,6 +842,12 @@ public class MotionScene {
             fillFromAttributeList(motionScene, context, Xml.asAttributeSet(parser));
         }
 
+        public void setInterpolatorInfo(int interpolator, String interpolatorString, int interpolatorID){
+            mDefaultInterpolator = interpolator;
+            mDefaultInterpolatorString = interpolatorString;
+            mDefaultInterpolatorID = interpolatorID;
+        }
+
         private void fillFromAttributeList(MotionScene motionScene, Context context, AttributeSet attrs) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Transition);
             fill(motionScene, context, a);
@@ -908,12 +935,14 @@ public class MotionScene {
      */
     public MotionScene(MotionLayout layout) {
         mMotionLayout = layout;
+        mViewTransitionController = new ViewTransitionController(layout);
     }
 
     MotionScene(Context context, MotionLayout layout, int resourceID) {
         mMotionLayout = layout;
-        load(context, resourceID);
+        mViewTransitionController = new ViewTransitionController(layout);
 
+        load(context, resourceID);
         mConstraintSetMap.put(R.id.motion_base, new ConstraintSet());
         mConstraintSetIdMap.put("motion_base", R.id.motion_base);
     }
@@ -991,6 +1020,10 @@ public class MotionScene {
                             case KEYFRAMESET_TAG:
                                 KeyFrames keyFrames = new KeyFrames(context, parser);
                                 transition.mKeyFramesList.add(keyFrames);
+                                break;
+                            case VIEW_TRANSITION:
+                                ViewTransition viewTransition = new ViewTransition(context, parser);
+                                mViewTransitionController.add(viewTransition);
                                 break;
                             default:
                                 Log.v(TAG, getLine(context, resourceId, parser) + "WARNING UNKNOWN ATTRIBUTE " + tagName);

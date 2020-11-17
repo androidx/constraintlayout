@@ -247,7 +247,7 @@ public class KeyTrigger extends Key {
             str = str.substring(1).toLowerCase();
         }
         for (String name : mCustomConstraints.keySet()) {
-             String lowerCase = name.toLowerCase();
+            String lowerCase = name.toLowerCase();
             if (callAll || lowerCase.matches(str)) {
                 ConstraintAttribute custom = mCustomConstraints.get(name);
                 custom.applyCustom(view);
@@ -334,5 +334,33 @@ public class KeyTrigger extends Key {
                 }
             }
         }
+    }
+
+    public Key copy(Key src) {
+        super.copy(src);
+        KeyTrigger k = (KeyTrigger) src;
+        mCurveFit = k.mCurveFit;
+        mCross = k.mCross;
+        mTriggerReceiver = k.mTriggerReceiver;
+        mNegativeCross = k.mNegativeCross;
+        mPositiveCross = k.mPositiveCross;
+        mTriggerID = k.mTriggerID;
+        mTriggerCollisionId = k.mTriggerCollisionId;
+        mTriggerCollisionView = k.mTriggerCollisionView;
+        mTriggerSlack = k.mTriggerSlack;
+        mFireCrossReset = k.mFireCrossReset;
+        mFireNegativeReset = k.mFireNegativeReset;
+        mFirePositiveReset = k.mFirePositiveReset;
+        mFireThreshold = k.mFireThreshold;
+        mFireLastPos = k.mFireLastPos;
+        mPostLayout = k.mPostLayout;
+        mCollisionRect = k.mCollisionRect;
+        mTargetRect = k.mTargetRect;
+        mMethodHashMap = k.mMethodHashMap;
+        return this;
+    }
+
+    public Key clone() {
+        return new KeyTrigger().copy(this);
     }
 }

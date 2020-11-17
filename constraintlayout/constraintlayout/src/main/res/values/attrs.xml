@@ -203,13 +203,13 @@
 
     <!-- define how Flow deal with wrapping elements -->
     <attr name="flow_wrapMode" format="enum">
-        <enum name="none" value="0"/>
-        <enum name="chain" value="1"/>
+        <enum name="none" value="0" />
+        <enum name="chain" value="1" />
         <enum name="aligned" value="2" />
     </attr>
 
     <!-- if defined, wrap after max elements -->
-    <attr name="flow_maxElementsWrap" format="integer"/>
+    <attr name="flow_maxElementsWrap" format="integer" />
 
     <!-- set the bias used by Flow for its elements -->
     <attr name="flow_verticalBias" format="float" />
@@ -240,17 +240,17 @@
     <attr name="layout_optimizationLevel">
         <flag name="none" value="0" />
         <flag name="standard" value="257" /> <!-- direct, measure caches -->
-        <flag name="direct" value="1"/>
-        <flag name="barrier" value="2"/>
-        <flag name="chains" value="4"/>
-        <flag name="dimensions" value="8"/>
-        <flag name="ratio" value="16"/>
-        <flag name="groups" value="32"/>
-        <flag name="graph" value="64"/>
-        <flag name="graph_wrap" value="128"/>
-        <flag name="cache_measures" value="256"/>
-        <flag name="dependency_ordering" value="512"/>
-        <flag name="grouping" value="1024"/>
+        <flag name="direct" value="1" />
+        <flag name="barrier" value="2" />
+        <flag name="chains" value="4" />
+        <flag name="dimensions" value="8" />
+        <flag name="ratio" value="16" />
+        <flag name="groups" value="32" />
+        <flag name="graph" value="64" />
+        <flag name="graph_wrap" value="128" />
+        <flag name="cache_measures" value="256" />
+        <flag name="dependency_ordering" value="512" />
+        <flag name="grouping" value="1024" />
     </attr>
 
     <!-- Specify the style of match constraint -->
@@ -333,12 +333,12 @@
         <attr name="content" />
     </declare-styleable>
     <attr name="animateRelativeTo" format="reference" />
-    <attr name="animateCircleAngleTo" format="enum" >
-        <enum name="bestChoice" value="0"/>
-        <enum name="closest" value="1"/>
-        <enum name="clockwise" value="2"/>
-        <enum name="antiClockwise" value="3"/>
-        <enum name="constraint" value="4"/>
+    <attr name="animateCircleAngleTo" format="enum">
+        <enum name="bestChoice" value="0" />
+        <enum name="closest" value="1" />
+        <enum name="clockwise" value="2" />
+        <enum name="antiClockwise" value="3" />
+        <enum name="constraint" value="4" />
     </attr>
 
     <declare-styleable name="MotionHelper">
@@ -356,9 +356,9 @@
     </declare-styleable>
 
     <declare-styleable name="MotionTelltales">
-        <attr name="telltales_velocityMode" format="enum" >
-            <enum name="layout" value="0"/>
-            <enum name="postLayout" value="1"/>
+        <attr name="telltales_velocityMode" format="enum">
+            <enum name="layout" value="0" />
+            <enum name="postLayout" value="1" />
             <enum name="staticPostLayout" value="2" />
             <enum name="staticLayout" value="3" />
         </attr>
@@ -404,8 +404,8 @@
         <attr name="flow_horizontalAlign" />
         <attr name="flow_verticalBias" />
         <attr name="flow_horizontalBias" />
-<!--        <attr name="flow_horizontalSeparator" />-->
-<!--        <attr name="flow_verticalSeparator" />-->
+        <!--        <attr name="flow_horizontalSeparator" />-->
+        <!--        <attr name="flow_verticalSeparator" />-->
 
         <attr name="flow_firstHorizontalStyle" />
         <attr name="flow_firstVerticalStyle" />
@@ -509,7 +509,7 @@
     </attr>
 
     <declare-styleable name="ConstraintSet">
-        <attr name="deriveConstraintsFrom" format="reference"/>
+        <attr name="deriveConstraintsFrom" format="reference" />
         <attr name="android:orientation" />
         <attr name="android:id" />
         <attr name="android:visibility" />
@@ -619,8 +619,8 @@
         <attr name="flow_maxElementsWrap" />
         <attr name="flow_horizontalGap" />
         <attr name="flow_verticalGap" />
-<!--        <attr name="flow_horizontalSeparator" />-->
-<!--        <attr name="flow_verticalSeparator" />-->
+        <!--        <attr name="flow_horizontalSeparator" />-->
+        <!--        <attr name="flow_verticalSeparator" />-->
 
         <attr name="flow_firstHorizontalStyle" />
         <attr name="flow_firstVerticalStyle" />
@@ -639,8 +639,8 @@
         <attr name="pathMotionArc" />
         <attr name="polarRelativeTo" />
         <attr name="transitionPathRotate" />
-        <attr name="motionStagger"/>
-        <attr name="quantizeMotionSteps"/>
+        <attr name="motionStagger" />
+        <attr name="quantizeMotionSteps" />
         <attr name="drawPath" />
         <attr name="motionProgress" />
         <attr name="layout_constraintTag" />
@@ -653,7 +653,7 @@
 
         <!-- Controls the initial visibility of the view.  -->
         <attr name="android:visibility" />
-        <attr name="visibilityMode"/>
+        <attr name="visibilityMode" />
 
         <!-- alpha property of the view, as a value between 0 (completely transparent) and 1
              (completely opaque). -->
@@ -798,8 +798,8 @@
         <attr name="flow_maxElementsWrap" />
         <attr name="flow_horizontalGap" />
         <attr name="flow_verticalGap" />
-<!--        <attr name="flow_horizontalSeparator" />-->
-<!--        <attr name="flow_verticalSeparator" />-->
+        <!--        <attr name="flow_horizontalSeparator" />-->
+        <!--        <attr name="flow_verticalSeparator" />-->
 
         <attr name="flow_firstHorizontalStyle" />
         <attr name="flow_firstVerticalStyle" />
@@ -819,22 +819,22 @@
         <attr name="transitionPathRotate" />
         <attr name="drawPath" />
         <attr name="motionProgress" />
-         <attr name="layout_constraintTag" />
+        <attr name="layout_constraintTag" />
         <attr name="motionStagger" />
         <attr name="quantizeMotionSteps" />
         <attr name="quantizeMotionPhase" />
         <attr name="quantizeMotionInterpolator" />
     </declare-styleable>
 
-<!--    This is used in constraintset to allow a more compact expression of changes to the original-->
-<!--    Only changes need be defined. It does not support layout_constraint*_to* attributes  -->
+    <!--    This is used in constraintset to allow a more compact expression of changes to the original-->
+    <!--    Only changes need be defined. It does not support layout_constraint*_to* attributes  -->
     <declare-styleable name="ConstraintOverride">
         <attr name="android:orientation" />
         <attr name="android:id" />
 
         <!-- Controls the initial visibility of the view.  -->
         <attr name="android:visibility" />
-        <attr name="visibilityMode"/>
+        <attr name="visibilityMode" />
 
         <!-- alpha property of the view, as a value between 0 (completely transparent) and 1
              (completely opaque). -->
@@ -991,7 +991,7 @@
     <!-- frame position is an integer from 0 to 100 -->
     <attr name="framePosition" format="integer" />
 
-    <attr name="motionTarget" format="reference|string"/>
+    <attr name="motionTarget" format="reference|string" />
 
     <!--
     Delta time is the offset between when you would would normally get to a point vs when you
@@ -1044,9 +1044,10 @@
     <attr name="defaultDuration" format="integer" />
 
     <attr name="layoutDuringTransition" format="enum">
-        <enum name="ignoreRequest" value="0"/>
-        <enum name="honorRequest" value="1"/>
+        <enum name="ignoreRequest" value="0" />
+        <enum name="honorRequest" value="1" />
     </attr>
+    <attr name="transitionDisable" format="boolean" />
 
     <!-- ==============  Transition ============== -->
 
@@ -1054,16 +1055,16 @@
         <attr name="android:id" />
         <attr name="constraintSetStart" format="reference" />
         <attr name="constraintSetEnd" format="reference" />
-        <attr name="transitionDisable" format="boolean"/>
+        <attr name="transitionDisable" />
         <attr name="layoutDuringTransition" />
 
         <attr name="pathMotionArc" />
         <attr name="autoTransition" format="enum">
             <enum name="none" value="0" />
             <enum name="jumpToStart" value="1" />
-            <enum name="jumpToEnd" value="2"/>
-            <enum name="animateToStart" value="3"/>
-            <enum name="animateToEnd" value="4"/>
+            <enum name="jumpToEnd" value="2" />
+            <enum name="animateToStart" value="3" />
+            <enum name="animateToEnd" value="4" />
         </attr>
         <attr name="motionInterpolator" format="string|reference|enum">
             <enum name="easeInOut" value="0" />
@@ -1147,8 +1148,8 @@
             <flag name="disableScroll" value="2" />
         </attr>
         <attr name="moveWhenScrollAtTop" format="boolean" />
-        <attr name="onTouchUp" format="enum" >
-            <enum name="autoComplete" value="0"/>
+        <attr name="onTouchUp" format="enum">
+            <enum name="autoComplete" value="0" />
             <enum name="autoCompleteToStart" value="1" />
             <enum name="autoCompleteToEnd" value="2" />
             <enum name="stop" value="3" />
@@ -1160,7 +1161,7 @@
 
     <declare-styleable name="OnClick">
         <attr name="targetId" />
-        <attr name="clickAction" >
+        <attr name="clickAction">
             <flag name="toggle" value="0x0011" />
             <flag name="transitionToEnd" value="0x0001" />
             <flag name="transitionToStart" value="0x0010" />
@@ -1243,7 +1244,7 @@
         <attr name="transitionEasing" />
         <attr name="motionProgress" />
         <attr name="waveShape" />
-        <attr name="wavePhase"/>
+        <attr name="wavePhase" />
         <attr name="wavePeriod" />
         <attr name="waveOffset" />
         <attr name="waveVariesBy" />
@@ -1269,7 +1270,7 @@
         <attr name="wavePeriod" />
         <attr name="motionProgress" />
         <attr name="waveOffset" />
-        <attr name="wavePhase"/>
+        <attr name="wavePhase" />
 
         <!--  The time in milliseconds before the wave decays to less than 1/256-->
         <attr name="waveDecay" />
@@ -1330,6 +1331,7 @@
     </declare-styleable>
 
     <declare-styleable name="ImageFilterView">
+        <attr name="blendSrc" format="reference" />
         <attr name="altSrc" format="reference" />
         <attr name="saturation" format="float" />
         <attr name="brightness" format="float" />
@@ -1346,16 +1348,16 @@
     </declare-styleable>
 
     <declare-styleable name="MotionLabel">
-        <attr name="android:text"/>
-        <attr name="android:textSize"/>
-        <attr name="android:fontFamily"/>
-        <attr name="android:typeface"/>
-        <attr name="android:shadowColor"/>
-        <attr name="android:shadowDx"/>
-        <attr name="android:shadowDy"/>
-        <attr name="android:shadowRadius"/>
-        <attr name="android:textStyle"/>
-        <attr name="textFillColor" format="color"/>
+        <attr name="android:text" />
+        <attr name="android:textSize" />
+        <attr name="android:fontFamily" />
+        <attr name="android:typeface" />
+        <attr name="android:shadowColor" />
+        <attr name="android:shadowDx" />
+        <attr name="android:shadowDy" />
+        <attr name="android:shadowRadius" />
+        <attr name="android:textStyle" />
+        <attr name="textFillColor" format="color" />
         <attr name="textOutlineThickness" format="dimension" />
         <attr name="textOutlineColor" format="color" />
         <attr name="borderRound" format="dimension" />
@@ -1372,11 +1374,11 @@
 
         <attr name="android:layout_marginBottom" />
 
-        <attr name="android:layout_marginTop"  />
+        <attr name="android:layout_marginTop" />
 
-        <attr name="android:layout_marginEnd"  />
+        <attr name="android:layout_marginEnd" />
 
-        <attr name="android:layout_marginLeft"  />
+        <attr name="android:layout_marginLeft" />
 
         <attr name="android:layout_marginRight" />
 
@@ -1444,8 +1446,8 @@
 
     <declare-styleable name="PropertySet">
         <!-- Controls the initial visibility of the view.  -->
-        <attr name="android:visibility"/>
-        <attr name="visibilityMode"/>
+        <attr name="android:visibility" />
+        <attr name="visibilityMode" />
 
         <!-- alpha property of the view, as a value between 0 (completely transparent) and 1
              (completely opaque). -->
@@ -1458,32 +1460,32 @@
 
     <declare-styleable name="Transform">
         <!-- base z depth of the view. -->
-        <attr name="android:elevation"   />
+        <attr name="android:elevation" />
 
         <!-- rotation of the view, in degrees. -->
-        <attr name="android:rotation"   />
+        <attr name="android:rotation" />
 
         <!-- rotation of the view around the x axis, in degrees. -->
-        <attr name="android:rotationX"  />
+        <attr name="android:rotationX" />
 
         <!-- rotation of the view around the y axis, in degrees. -->
-        <attr name="android:rotationY"   />
+        <attr name="android:rotationY" />
 
         <!-- scale of the view in the x direction. -->
-        <attr name="android:scaleX"   />
+        <attr name="android:scaleX" />
 
         <!-- scale of the view in the y direction. -->
-        <attr name="android:scaleY"   />
+        <attr name="android:scaleY" />
 
         <!--  x location of the pivot point around which the view will rotate and scale.
      This xml attribute sets the pivotX property of the View. -->
-        <attr name="android:transformPivotX"  />
+        <attr name="android:transformPivotX" />
 
         <!--   y location of the pivot point around which the view will rotate and scale.
              This xml attribute sets the pivotY property of the View. -->
-        <attr name="android:transformPivotY"  />
+        <attr name="android:transformPivotY" />
 
-        <attr name="transformPivotTarget"  />
+        <attr name="transformPivotTarget" />
 
         <!-- translation in x of the view. This value is added post-layout to the left
            property of the view, which is set by its layout. -->
@@ -1522,12 +1524,40 @@
         <attr name="triggerSlack" format="float" />
         <!-- The id of this trigger use when a callback listens for triggers -->
         <attr name="triggerId" format="reference" />
-         <attr name="motion_postLayoutCollision" format="boolean" />
-         <!-- Trigger if the motionTarget collides with the other motionTarget-->
-         <attr name="motion_triggerOnCollision" format="reference" />
+        <attr name="motion_postLayoutCollision" format="boolean" />
+        <!-- Trigger if the motionTarget collides with the other motionTarget-->
+        <attr name="motion_triggerOnCollision" format="reference" />
     </declare-styleable>
     <declare-styleable name="Include">
-      <attr name="constraintSet"/>
+        <attr name="constraintSet" />
+    </declare-styleable>
+    <!-- ======================================ViewTransitions===================================== -->
+
+    <attr name="onStateTransition" format="enum">
+        <enum name="actionDown" value="1" />
+        <enum name="actionUp" value="2" />
+    </attr>
+
+    <attr name="viewTransitionMode" format="enum">
+        <enum name="currentState" value="0" />
+        <enum name="allStates" value="1" />
+<!--        Opperates independently of the rest of motionLayout constraint set system -->
+        <enum name="noState" value="2" />
+    </attr>
+
+    <declare-styleable name="ViewTransition">
+        <attr name="android:id" />
+        <attr name="motionTarget" />
+        <attr name="viewTransitionMode" />
+        <attr name="onStateTransition" />
+        <attr name="duration" />
+        <attr name="transitionDisable" />
+        <attr name="pathMotionArc" />
+        <attr name="motionInterpolator" />
+        <attr name="setsTag" format="reference"/>
+        <attr name="clearsTag" format="reference"/>
+        <attr name="ifTagSet" format="reference"/>
+        <attr name="ifTagNotSet" format="reference"/>
     </declare-styleable>
 
 </resources>

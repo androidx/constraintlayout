@@ -1515,8 +1515,40 @@ public class ConstraintSet {
                     setDeltaValue(c, mTypeBoolean[i], mValueBoolean[i]);
                 }
             }
-        }
+            void printDelta(String tag) {
+                Log.v(tag,"int");
 
+                for (int i = 0; i < mCountInt; i++) {
+                    Log.v(tag, mTypeInt[i] +" = "+ mValueInt[i]);
+                }
+                Log.v(tag,"float");
+
+                for (int i = 0; i < mCountFloat; i++) {
+                    Log.v(tag, mTypeFloat[i]+" = "+  mValueFloat[i]);
+                }
+                Log.v(tag,"strings");
+
+                for (int i = 0; i < mCountString; i++) {
+                    Log.v(tag, mTypeString[i]+" = "+  mValueString[i]);
+                }
+                Log.v(tag,"boolean");
+                for (int i = 0; i < mCountBoolean; i++) {
+                    Log.v(tag, mTypeBoolean[i]+" = "+  mValueBoolean[i]);
+                }
+            }
+        }
+        public void applyDelta (Constraint c ) {
+            if (mDelta != null) {
+                mDelta.applyDelta(c);
+            }
+        }
+       public void printDelta(String tag) {
+            if (mDelta != null) {
+                mDelta.printDelta(tag);
+            } else {
+                Log.v(tag, "DELTA IS NULL");
+            }
+       }
         private ConstraintAttribute get(String attributeName, AttributeType attributeType) {
             ConstraintAttribute ret;
             if (mCustomConstraints.containsKey(attributeName)) {
@@ -3645,6 +3677,7 @@ public class ConstraintSet {
                                 constraint.motion.fillFromAttributeList(context, Xml.asAttributeSet(parser));
                                 break;
                             case "CustomAttribute":
+                            case "CustomMethod":
                                 if (constraint == null) {
                                     throw new RuntimeException(ERROR_MESSAGE + parser.getLineNumber());
                                 }
@@ -3700,7 +3733,22 @@ public class ConstraintSet {
         return c;
     }
 
-    private void populateOverride(Context ctx, Constraint c, TypedArray a) {
+    /**
+     * Used to read a ConstraintDelta
+     * @param context
+     * @param parser
+     * @return
+     */
+    public static Constraint buildDelta(Context context, XmlPullParser parser) {
+        AttributeSet attrs = Xml.asAttributeSet(parser);
+        Constraint c = new Constraint();
+        TypedArray a = context.obtainStyledAttributes(attrs,  R.styleable.ConstraintOverride);
+        populateOverride(context, c, a);
+        a.recycle();
+        return c;
+    }
+
+    private static void populateOverride(Context ctx, Constraint c, TypedArray a) {
 
         final int N = a.getIndexCount();
         TypedValue type;
@@ -3822,8 +3870,7 @@ public class ConstraintSet {
                     delta.add(CONSTRAINED_HEIGHT, a.getBoolean(attr, c.layout.constrainedHeight));
                     break;
                 case LAYOUT_VISIBILITY:
-                    c.propertySet.visibility = a.getInt(attr, c.propertySet.visibility);
-                    delta.add(EDITOR_ABSOLUTE_X, c.propertySet.visibility = VISIBILITY_FLAGS[c.propertySet.visibility]);
+                    delta.add(LAYOUT_VISIBILITY,   VISIBILITY_FLAGS[a.getInt(attr, c.propertySet.visibility)]);
                     break;
                 case VISIBILITY_MODE:
                     delta.add(VISIBILITY_MODE, a.getInt(attr, c.propertySet.mVisibilityMode));

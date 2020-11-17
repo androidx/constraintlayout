@@ -908,6 +908,10 @@ public class MotionController {
         }
     }
 
+    public View getView() {
+        return mView;
+    }
+
     void setStartCurrentState(View v) {
         mStartMotionPath.time = 0;
         mStartMotionPath.position = 0;
@@ -978,6 +982,15 @@ public class MotionController {
 
         mEndPoint.setState(cw, constraintSet, mId);
 
+    }
+
+    void setBothStates(View v) {
+        mStartMotionPath.time = 0;
+        mStartMotionPath.position = 0;
+        mStartMotionPath.setBounds(v.getX(), v.getY(), v.getWidth(), v.getHeight());
+        mEndMotionPath.setBounds(v.getX(), v.getY(), v.getWidth(), v.getHeight());
+        mStartPoint.setState(v);
+        mEndPoint.setState(v);
     }
 
     /**
@@ -1079,8 +1092,6 @@ public class MotionController {
                 timeAnimation |= aSpline.setProperty(child, position, time, keyCache);
             }
         }
-
-
 
         if (mSpline != null) {
              mSpline[0].getPos(position, mInterpolateData);

@@ -19,8 +19,10 @@ package androidx.constraintlayout.motion.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.R;
+
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseIntArray;
@@ -32,6 +34,7 @@ import java.util.HashSet;
 /**
  * Defines container for a key frame of for storing KeyAttributes.
  * KeyAttributes change post layout values of a view.
+ *
  * @hide
  */
 
@@ -231,7 +234,7 @@ public class KeyAttributes extends Key {
                         splineSet.setPoint(mFramePosition, mPivotY);
                     }
                     break;
-                    case Key.TRANSITION_PATH_ROTATE:
+                case Key.TRANSITION_PATH_ROTATE:
                     if (!Float.isNaN(mTransitionPathRotate)) {
                         splineSet.setPoint(mFramePosition, mTransitionPathRotate);
                     }
@@ -450,5 +453,31 @@ public class KeyAttributes extends Key {
                 }
             }
         }
+    }
+
+    public Key copy(Key src) {
+        super.copy(src);
+        KeyAttributes k = (KeyAttributes) src;
+        mCurveFit = k.mCurveFit;
+        mVisibility = k.mVisibility;
+        mAlpha = k.mAlpha;
+        mElevation = k.mElevation;
+        mRotation = k.mRotation;
+        mRotationX = k.mRotationX;
+        mRotationY = k.mRotationY;
+        mPivotX = k.mPivotX;
+        mPivotY = k.mPivotY;
+        mTransitionPathRotate = k.mTransitionPathRotate;
+        mScaleX = k.mScaleX;
+        mScaleY = k.mScaleY;
+        mTranslationX = k.mTranslationX;
+        mTranslationY = k.mTranslationY;
+        mTranslationZ = k.mTranslationZ;
+        mProgress = k.mProgress;
+        return this;
+    }
+
+    public Key clone() {
+        return new KeyAttributes().copy(this);
     }
 }

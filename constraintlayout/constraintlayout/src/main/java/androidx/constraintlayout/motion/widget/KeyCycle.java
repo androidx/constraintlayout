@@ -22,12 +22,12 @@ import android.os.Build;
 import androidx.constraintlayout.motion.utils.Oscillator;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.R;
+
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseIntArray;
 import android.util.TypedValue;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -119,13 +119,13 @@ public class KeyCycle extends Key {
                 String ckey = key.substring(Key.CUSTOM.length() + 1);
                 ConstraintAttribute cvalue = mCustomConstraints.get(ckey);
                 if (cvalue != null && cvalue.getType() == ConstraintAttribute.AttributeType.FLOAT_TYPE) {
-                    oscSet.get(key).setPoint(mFramePosition, mWaveShape,mCustomWaveShpe, mWaveVariesBy, mWavePeriod, mWaveOffset, mWavePhase, cvalue.getValueToInterpolate(), cvalue);
+                    oscSet.get(key).setPoint(mFramePosition, mWaveShape, mCustomWaveShpe, mWaveVariesBy, mWavePeriod, mWaveOffset, mWavePhase, cvalue.getValueToInterpolate(), cvalue);
                 }
                 continue;
             }
             float value = getValue(key);
             if (!Float.isNaN(value)) {
-                oscSet.get(key).setPoint(mFramePosition, mWaveShape,mCustomWaveShpe, mWaveVariesBy, mWavePeriod, mWaveOffset, mWavePhase, value);
+                oscSet.get(key).setPoint(mFramePosition, mWaveShape, mCustomWaveShpe, mWaveVariesBy, mWavePeriod, mWaveOffset, mWavePhase, value);
             }
         }
     }
@@ -361,7 +361,7 @@ public class KeyCycle extends Key {
                         c.mProgress = a.getFloat(attr, c.mProgress);
                         break;
                     case WAVE_PHASE:
-                        c.mWavePhase = a.getFloat(attr, c.mWavePhase)/360;
+                        c.mWavePhase = a.getFloat(attr, c.mWavePhase) / 360;
                         break;
                     default:
                         Log.e(TAG, "unused attribute 0x" + Integer.toHexString(attr) + "   " + mAttrMap.get(attr));
@@ -423,5 +423,35 @@ public class KeyCycle extends Key {
                 mWaveOffset = toFloat(value);
                 break;
         }
+    }
+
+    public Key copy(Key src) {
+        super.copy(src);
+        KeyCycle k = (KeyCycle) src;
+        mTransitionEasing = k.mTransitionEasing;
+        mCurveFit = k.mCurveFit;
+        mWaveShape = k.mWaveShape;
+        mCustomWaveShpe = k.mCustomWaveShpe;
+        mWavePeriod = k.mWavePeriod;
+        mWaveOffset = k.mWaveOffset;
+        mWavePhase = k.mWavePhase;
+        mProgress = k.mProgress;
+        mWaveVariesBy = k.mWaveVariesBy;
+        mAlpha = k.mAlpha;
+        mElevation = k.mElevation;
+        mRotation = k.mRotation;
+        mTransitionPathRotate = k.mTransitionPathRotate;
+        mRotationX = k.mRotationX;
+        mRotationY = k.mRotationY;
+        mScaleX = k.mScaleX;
+        mScaleY = k.mScaleY;
+        mTranslationX = k.mTranslationX;
+        mTranslationY = k.mTranslationY;
+        mTranslationZ = k.mTranslationZ;
+        return this;
+    }
+
+    public Key clone() {
+        return new KeyCycle().copy(this);
     }
 }

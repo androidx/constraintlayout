@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 The Android Open Source Project
+ * Copyright (C) 2020 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,11 +24,13 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,6 +46,7 @@ import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.constraintlayout.motion.widget.MotionScene;
 import androidx.constraintlayout.motion.widget.TransitionAdapter;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -74,11 +77,12 @@ import java.util.Random;
 public class VerificationActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "Verification00";
     private String KEY = "layout";
+    private static final boolean DEBUG = false;
     String layout_name;
     String s = AppCompatActivity.class.getName();
 
     private static boolean REVERSE = false;
-    private final String LAYOUTS_MATCHES = "verification_\\d+";
+    private final String LAYOUTS_MATCHES = "verification_2\\d+";
     private static String SHOW_FIRST = "";
     MotionLayout mMotionLayout;
     private Flow mFlow;
@@ -167,14 +171,13 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
                 public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
                     String str = Debug.getName(getApplicationContext(), startId) +
                             "->" + Debug.getName(getApplicationContext(), endId);
-                    Log.v(TAG, Debug.getLoc() + " ===================  " + str + " ===================  ");
+                    log(" ===================  " + str + " ===================  ");
                     start = System.nanoTime();
                 }
 
                 @Override
                 public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
-                    Log.v(TAG, Debug.getLoc() +
-                            "               " + Debug.getName(getApplicationContext(), startId) +
+                    log("               " + Debug.getName(getApplicationContext(), startId) +
                             "->" + Debug.getName(getApplicationContext(), endId) + " " + df.format(progress) + " --------- " + df.format(motionLayout.getVelocity()));
 
                     @SuppressWarnings("unused")
@@ -188,17 +191,16 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
 
                     float dur = (System.nanoTime() - start) * 1E-6f;
                     String str = Debug.getName(getApplicationContext(), currentId);
-                    Log.v(TAG, Debug.getLoc() +
-                            " =============x======  " + str + " <<<<<<<<<<<<< " + pad(dur) + " " + pad(motionLayout.getProgress()));
+                    log(" =============x======  " + str + " <<<<<<<<<<<<< " + pad(dur) + " " + pad(motionLayout.getProgress()));
 
                 }
             };
             tids = Arrays.copyOf(tids, count);
-            Log.v(TAG, Debug.getLoc() + " Transitions list  " + Arrays.toString(tids) + " " + Debug.getName(getApplicationContext(), tids));
+            log(" Transitions list  " + Arrays.toString(tids) + " " + Debug.getName(getApplicationContext(), tids));
             int[] cids = mMotionLayout.getConstraintSetIds();
-            Log.v(TAG, Debug.getLoc() + " ContraintSets  list  " + Arrays.toString(cids) + " " + Debug.getName(getApplicationContext(), cids));
+            log(" ContraintSets  list  " + Arrays.toString(cids) + " " + Debug.getName(getApplicationContext(), cids));
             mMotionLayout.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
-                Log.v(TAG, Debug.getLocation() + " GlobalLayoutListener");
+                log(" GlobalLayoutListener");
             });
             mMotionLayout.setTransitionListener(new TransitionAdapter() {
                 long start = System.nanoTime();
@@ -208,10 +210,12 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
                 public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
                     String str = Debug.getName(getApplicationContext(), startId) +
                             "->" + Debug.getName(getApplicationContext(), endId);
-                    Log.v(TAG, Debug.getLoc() + " ===================  " + str + " ===================  ");
+                    log(" ===================  " + str + " ===================  ");
                     start = System.nanoTime();
                 }
+
                 final DecimalFormat df = new DecimalFormat("##0.000");
+
                 String pad(String s) {
                     s = "           " + s;
                     return s.substring(s.length() - 7);
@@ -223,7 +227,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
 
                 @Override
                 public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
-//                    Log.v(TAG, Debug.getLoc() +
+//                   log(
 //                            "               " + Debug.getName(getApplicationContext(), startId) +
 //                            "->" + Debug.getName(getApplicationContext(), endId) + " " + df.format(progress) + " --------- " + df.format(motionLayout.getVelocity()));
 
@@ -236,7 +240,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
                 public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
                     float dur = (System.nanoTime() - start) * 1E-6f;
                     String str = Debug.getName(getApplicationContext(), currentId);
-                    Log.v(TAG, Debug.getLoc() +
+                    log(
                             " =============x======  " + str + " <<<<<<<<<<<<< " + pad(dur) + " " + pad(motionLayout.getProgress()));
                     if (mFlow != null) {
                         motionLayout.post(() -> {
@@ -247,9 +251,9 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
 
                 @Override
                 public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
-                    Log.v(TAG, Debug.getLoc() +
+                    log(
                             " ------------------  " + Debug.getName(getApplicationContext(), triggerId) +
-                            " " + positive + " progress " + progress);
+                                    " " + positive + " progress " + progress);
                 }
 
             });
@@ -258,7 +262,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         if (extra.containsKey(SAVE_KEY)) {
             restoreMotion(extra);
         } else {
-            Log.v(TAG, Debug.getLoc() + " no saved key");
+            log(Debug.getLoc() + " no saved key");
         }
     }
 
@@ -266,7 +270,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         view.postDelayed(() -> {
             move(view);
         }, 30);
-        Log.v(TAG, ">>>>>>>>>>>>>>>> move1");
+        log(">>>>>>>>>>>>>>>> move1");
     }
 
     long mTime = System.nanoTime();
@@ -293,7 +297,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         ConstraintSet start = mMotionLayout.getConstraintSet(startState);
         ConstraintSet end = mMotionLayout.getConstraintSet(endState);
         int[] ids = ((startState == currentId) ? start : end).getReferencedIds(mFlow.getId());
-        Log.v(TAG, Debug.getLoc() + " getReferencedIds " + Debug.getName(this.getApplicationContext(), ids));
+        log(" getReferencedIds " + Debug.getName(this.getApplicationContext(), ids));
 
         int len = ids.length;
         if (len > 20) {
@@ -307,14 +311,14 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 id = View.generateViewId();
             }
-            Log.v(TAG, Debug.getLoc() + " new id  = " + id);
+            log(" new id  = " + id);
             textView.setId(id);
             textView.setText("(" + ids.length + ")");
             ids = Arrays.copyOf(ids, ids.length + 1);
             ids[ids.length - 1] = id;
 
-            Log.v(TAG, Debug.getLoc() + " addView = " + id);
-            Log.v(TAG, Debug.getLoc() + " constrainHeight  = " + id);
+            log(" addView = " + id);
+            log(" constrainHeight  = " + id);
             int size = 191;
             MotionLayout.LayoutParams params = new MotionLayout.LayoutParams(size, size);
             textView.setLayoutParams(params);
@@ -322,12 +326,12 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
             textView.setVisibility(View.VISIBLE);
             textView.setBackgroundColor(0xFFAAFFAA);
             textView.setTextColor(0xFF000000);
-            
+
             start.constrainHeight(id, size);
             end.constrainHeight(id, size);
             start.constrainWidth(id, size);
             end.constrainWidth(id, size);
-            Log.v(TAG, Debug.getLoc());
+            log("");
 
             if (currentId == startState) {
                 end.setReferencedIds(mFlow.getId(), ids);
@@ -344,14 +348,14 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
             mMotionLayout.rebuildScene();
             mMotionLayout.invalidate();
         } else {
-            Log.v(TAG, Debug.getLoc());
+            log("");
 
             TextView textView = (TextView) findViewById(ids[ids.length - 1]);
             if (textView == null) {
                 Log.e(TAG, "could not find " + Debug.getName(getApplicationContext(), ids[ids.length - 1]));
                 return;
             }
-            Log.v(TAG, Debug.getLoc());
+            log("");
             if (last_gone != -1) {
                 View view = findViewById(last_gone);
                 mMotionLayout.removeView(view);
@@ -369,21 +373,39 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
             mMotionLayout.updateState(endState, end);
             mMotionLayout.updateState(startState, start);
             mMotionLayout.rebuildScene();
-            Log.v(TAG, Debug.getLoc());
+            log("");
             mMotionLayout.invalidate();
+            Button button = mMotionLayout.findViewById(R.id.button2);
+            button.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                int current = button.getVisibility();
+                @Override
+                public void onGlobalLayout() {
+                    int newVis = button.getVisibility();
+                    if (newVis != current) {
+                        switch (newVis) {
+                            case View.VISIBLE:
+                                break;
+                            case View.INVISIBLE:
+                                break;
+                             case View.GONE:
+                                 mMotionLayout.viewTransition(R.id.spin,button);
+                        }
+                    }
+                }
+            });
         }
-        Log.v(TAG, Debug.getLoc());
+        log("");
 
         int count = mMotionLayout.getChildCount();
-        Log.v(TAG, Debug.getLoc());
+        log("");
         String str = "[";
         for (int i = 0; i < count; i++) {
             View child = mMotionLayout.getChildAt(i);
             if (i > 0) str += ",";
             str += Debug.getName(getApplicationContext(), child.getId()) + "(" + child.getWidth() + " x " + child.getHeight() + ")";
         }
-        Log.v(TAG, Debug.getLoc() + " children =  " + str);
-        Log.v(TAG, Debug.getLoc() + " " + Debug.getName(this.getApplicationContext(), ids));
+        log(" children =  " + str);
+        log(" " + Debug.getName(this.getApplicationContext(), ids));
     }
 
     int[] removeId(int[] ids, int id_to_remove) {
@@ -408,7 +430,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     public void toggleDirection(View view) {
         float v = mMotionLayout.getVelocity();
         float p = mMotionLayout.getProgress();
-        Log.v(TAG, Debug.getLoc() + "vel = " + v + " p= " + p);
+        log("vel = " + v + " p= " + p);
         if (p == 1) {
             mMotionLayout.transitionToStart();
         } else if (p == 0) {
@@ -430,7 +452,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         String[] layouts = getLayouts(new VerificationActivity.Test() {
             @Override
             public boolean test(String s) {
-                return   s.matches(LAYOUTS_MATCHES);
+                return s.matches(LAYOUTS_MATCHES);
             }
         });
         ScrollView sv = new ScrollView(this);
@@ -457,10 +479,45 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     }
 
     public void click(View view) {
-        Log.v(TAG, ">>>>>>>>>>>>>>>>>>. ON CLICK!");
+        log(">>>>>>>>>>>>>>>>>>. ON CLICK!");
         ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
         toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP, 150);
         toneGen1.release();
+    }
+
+    public void hideAll(View view) {
+        Log.v(TAG, Debug.getLoc() + " --------------------- ");
+      //  mMotionLayout.viewTransition(R.id.vt_hide_all, view);
+    }
+
+    public void hideCurrent(View view) {
+        Log.v(TAG, Debug.getLoc() + " --------------------- ");
+      //  mMotionLayout.viewTransition(R.id.vt_hide_current, view);
+    }
+
+    public void addToFlow2(View view) {
+        Flow flow = mMotionLayout.findViewById(R.id.flow2);
+        Button button = new Button(getApplicationContext());
+        button.setText("AA");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            button.setId(View.generateViewId());
+        }
+        mMotionLayout.addView(button);
+        button.setLayoutParams(new MotionLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        flow.addView(button);
+        int[] ids = flow.getReferencedIds();
+        Log.v(TAG, Debug.getLoc() + " ides =" + ids.length);
+        {
+            int[] idss = mMotionLayout.getConstraintSetIds();
+            for (int id : idss) {
+                ConstraintSet cset = mMotionLayout.getConstraintSet(id);
+                cset.constrainWidth(button.getId(), ConstraintSet.WRAP_CONTENT);
+                cset.constrainHeight(button.getId(), ConstraintSet.WRAP_CONTENT);
+                cset.setReferencedIds(R.id.flow2, ids);
+            }
+        }
+
     }
 
     interface Test {
@@ -520,7 +577,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
             text.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (hasFocus) {
-                        Log.v(TAG, (((System.nanoTime() / 1000) % 100000) / 1000f) + " jump to " + Debug.getName(getApplicationContext(), state));
+                        log((((System.nanoTime() / 1000) % 100000) / 1000f) + " jump to " + Debug.getName(getApplicationContext(), state));
                         ml.transitionToState(state);
                     }
                 }
@@ -539,7 +596,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     private static String SAVE_KEY = "saveMotion";
 
     private void restoreMotion(Bundle extra) {
-        Log.v(TAG, Debug.getLoc() + ">>>>>>>>>>>>>> RESTOR");
+        log(">>>>>>>>>>>>>> RESTOR");
 
         mMotionLayout.setTransitionState(extra.getBundle(SAVE_KEY));
     }
@@ -547,7 +604,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Log.v(TAG, Debug.getLoc() + ">>>>>>>>>>>>>> RESTOR");
+        log(">>>>>>>>>>>>>> RESTOR");
         if (savedInstanceState.containsKey(SAVE_KEY)) {
             restoreMotion(savedInstanceState);
         }
@@ -561,7 +618,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         }
         /// get Transition State
         outState.putBundle(SAVE_KEY, mMotionLayout.getTransitionState());
-        Log.v(TAG, Debug.getLoc() + ">>>>>>>>>>>>>> SAVE INSTANCE");
+        log(">>>>>>>>>>>>>> SAVE INSTANCE");
     }
 
     MotionLayout dynamicLayout;
@@ -584,7 +641,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         Random random = new Random();
         for (int i = 0; i < str.length; i++) {
             str[i] = randomString(32, random);
-            Log.v(TAG, " >>> " + str[i]);
+            log(" >>> " + str[i]);
 
         }
         view.setLayoutManager(new LinearLayoutManager(this));
@@ -682,11 +739,19 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
             if (sv.getLayoutManager() == null) {
                 LinearLayoutManager mgr = new LinearLayoutManager(this);
                 sv.setLayoutManager(mgr);
-                Log.v(TAG, Debug.getLoc() + " settin layout manager");
+                log(" settin layout manager");
             }
-            Log.v(TAG, Debug.getLoc() + " scroll");
+            log(" scroll");
             sv.scrollToPosition(0);
         }
+    }
+
+    public static void log(String str) {
+        if (!DEBUG) {
+            return;
+        }
+        StackTraceElement s = new Throwable().getStackTrace()[1];
+        Log.v(TAG, ".(" + s.getFileName() + ":" + s.getLineNumber() + ") " + s.getMethodName() + "()" + str);
     }
 
 }

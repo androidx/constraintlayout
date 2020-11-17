@@ -58,13 +58,15 @@ public class KeyFrames {
         }
     }
 
-    private void addKey(Key key) {
+    public void addKey(Key key) {
         if (!mFramesMap.containsKey(key.mTargetId)) {
             mFramesMap.put(key.mTargetId, new ArrayList<>());
         }
         mFramesMap.get(key.mTargetId).add(key);
     }
+    public KeyFrames() {
 
+    }
     public KeyFrames(Context context, XmlPullParser parser) {
         String tagName = null;
         try {
@@ -109,6 +111,17 @@ public class KeyFrames {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Do not filter the set by matches
+     * @param motionController
+     */
+    public void addAllFrames(MotionController motionController) {
+        ArrayList<Key> list = mFramesMap.get(UNSET);
+        if (list != null) {
+            motionController.addKeys(list);
         }
     }
 

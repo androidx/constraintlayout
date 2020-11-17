@@ -24,6 +24,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.media.DeniedByServerException;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -93,6 +94,10 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * <tr>
  * <td> {@code <Transition> } </td>
  * <td> Describes a transition between two states or ConstraintSets</td>
+ * </tr>
+ * <tr>
+ * <td> {@code <ViewTransition> } </td>
+ * <td> Describes a transition of a View within a states or ConstraintSets</td>
  * </tr>
  * </table>
  * <h2>Transition</h2>
@@ -166,6 +171,92 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * <li>If no transition is specified (or only a default Transition) the MotionLayout tag must contain
  * a app:currentState to define the starting state of the MotionLayout</li>
  * </ul>
+ *
+ * <h2>ViewTransition</h2>
+ * <table summary="Transition attributes & tags">
+ * <tr>
+ * <th> Attributes </th> <th>Description</th>
+ * </tr>
+ * <tr>
+ * <td> android:id </td>
+ * <td> The id of the ViewTransition</td>
+ * </tr>
+ * <tr>
+ * <td> viewTransitionMode &nbsp;</td>
+ * <td> currentState, allStates, noState transition affect the state of the view in the current constraintSet or all ConstraintSets or non
+ *      if noState the ViewTransitions are run asynchronous </td>
+ * </tr>
+ * <tr>
+ * <td> onStateTransition </td>
+ * <td>  actionDown or actionUp run transition if on touch down or up if view matches motionTarget </td>
+ * </tr>
+ * <tr>
+ * <td> motionInterpolator </td>
+ * <td> The ability to set an overall interpolation (easeInOut, linear, etc.)</td>
+ * </tr>
+ * <tr>
+ * <td> duration </td>
+ * <td> Length of time to take to perform the Viewtransition</td>
+ * </tr>
+ * <tr>
+ * <td>pathMotionArc</td>
+ * <td>The path will move in arc (quarter eclipses)
+ * key words {startVertical | startHorizontal | flip | none } </td>
+ * </tr>
+ * <tr>
+ * <td> motionTarget </td>
+ * <td> Apply ViewTransition matching this string or id.</td>
+ * </tr>
+ * </tr>
+ * <tr>
+ * <td> setsTag </td>
+ * <td> set this tag at end of transition </td>
+ * </tr>
+ * </tr>
+ * <tr>
+ * <td> clearsTag </td>
+ * <td> clears this tag at end of transition</td>
+ * </tr>
+ * <tr>
+ * <td> ifTagSet </td>
+ * <td> run transition if this tag is set on view</td>
+ * </tr>
+ * <tr>
+ * <td> ifTagNotSet </td>
+ * <td> run transition if this tag is not set on view/td>
+ * </tr>
+ * <tr>
+ * <td> {@code <OnSwipe> }</td>
+ * <td> Adds support for touch handling (optional)</td>
+ * </tr>
+ * <tr>
+ * <td> {@code <OnClick> }</td>
+ * <td> Adds support for triggering transition (optional)</td>
+ * </tr>
+ * <tr>
+ * <td> {@code <KeyFrameSet> } </td>
+ * <td> Describes a set of Key object which modify the animation between constraint sets.</td>
+ * </tr>
+ * </table>
+ * <ul>
+ * <li>A transition is typically defined by specifying its start and end ConstraintSets.
+ * You also have the possibility to not specify them, in which case such transition will become a Default transition.
+ * That Default transition will be applied between any state change that isn't explicitly covered by a transition.</li>
+ * <li>The starting state of the MotionLayout is defined  to be the constraintSetStart of the first
+ * transition.</li>
+ * <li>If no transition is specified (or only a default Transition) the MotionLayout tag must contain
+ * a app:currentState to define the starting state of the MotionLayout</li>
+ * </ul>
+ *
+
+
+
+
+
+
+
+
+
  *
  * <p>
  * <h2>OnSwipe (optional)</h2>
@@ -951,6 +1042,7 @@ public class MotionLayout extends ConstraintLayout implements
     private KeyCache mKeyCache = new KeyCache();
     private boolean mInLayout = false;
     private StateCache mStateCache;
+    private Runnable mOnComplete = null;
 
     MotionController getMotionController(int mTouchAnchorId) {
         return mFrameArrayList.get(findViewById(mTouchAnchorId));
@@ -1235,7 +1327,6 @@ public class MotionLayout extends ConstraintLayout implements
 
     protected void setTransition(MotionScene.Transition transition) {
         mScene.setTransition(transition);
-
         setState(TransitionState.SETUP);
         if (mCurrentState == mScene.getEndId()) {
             mTransitionLastPosition = 1.0f;
@@ -1830,8 +1921,18 @@ public class MotionLayout extends ConstraintLayout implements
      */
     public void transitionToEnd() {
         animateTo(1.0f);
+        mOnComplete = null;
     }
-
+    /**
+     * Animate to the ending position of the current transition.
+     * This will not work during on create as there is no transition
+     * Transitions are only set up during onAttach
+     * @param onComplete callback when task is don
+     */
+    public void transitionToEnd(Runnable onComplete) {
+        animateTo(1.0f);
+        mOnComplete = onComplete;
+    }
     /**
      * Animate to the state defined by the id.
      * The id is the id of the ConstraintSet or the id of the State.
@@ -1924,8 +2025,6 @@ public class MotionLayout extends ConstraintLayout implements
         mBeginState = UNSET;
         mScene.setTransition(mBeginState, mEndState);
         SparseArray<MotionController> controllers = new SparseArray<>();
-
-
 
         int startId = mScene.getStartId();
         int targetID = id;
@@ -2954,7 +3053,9 @@ public class MotionLayout extends ConstraintLayout implements
             }
         }
         evaluate(false);
-
+        if (mScene != null && mScene.mViewTransitionController != null) {
+            mScene.mViewTransitionController.animate();
+        }
         if (DEBUG) {
             Log.v(TAG, " dispatchDraw" + Debug.getLocation() + " " + Debug.getName(this)
                     + " " + Debug.getName(getContext(), mCurrentState));
@@ -3219,7 +3320,7 @@ public class MotionLayout extends ConstraintLayout implements
                 if ((dir > 0 && position == 1) || (dir < 0 && position == 0))
                 setState(TransitionState.FINISHED);
             }
-            if (!mKeepAnimating && mInTransition && (dir > 0 && position == 1) || (dir < 0 && position == 0)) {
+            if (!mKeepAnimating && !mInTransition && ((dir > 0 && position == 1) || (dir < 0 && position == 0))) {
                 onNewStateAttachHandlers();
             }
         }
@@ -3500,6 +3601,10 @@ public class MotionLayout extends ConstraintLayout implements
     public boolean onInterceptTouchEvent(MotionEvent event) {
         if (mScene == null || mInteractionEnabled == false) {
             return false;
+        }
+
+        if (mScene.mViewTransitionController != null) {
+            mScene.mViewTransitionController.touchEvent(event);
         }
         MotionScene.Transition currentTransition = mScene.mCurrentTransition;
         if (currentTransition != null && currentTransition.isEnabled()) {
@@ -3827,6 +3932,9 @@ public class MotionLayout extends ConstraintLayout implements
             }
         }
         processTransitionCompleted();
+        if (mOnComplete != null) {
+            mOnComplete.run();
+        }
     }
 
     private void processTransitionCompleted() {
@@ -4111,7 +4219,6 @@ public class MotionLayout extends ConstraintLayout implements
         return mInteractionEnabled;
     }
 
-
     private void fireTransitionStarted(MotionLayout motionLayout, int mBeginState, int mEndState) {
         if (mTransitionListener != null) {
             mTransitionListener.onTransitionStarted(this, mBeginState, mEndState);
@@ -4123,4 +4230,24 @@ public class MotionLayout extends ConstraintLayout implements
         }
     }
 
+    public void viewTransition(int id, View... view) {
+        if (mScene != null) {
+            mScene.viewTransition(id, view);
+        } else {
+            Log.e(TAG, " no motionScene");
+        }
+    }
+
+    public void enableViewTransition(int id, boolean enable) {
+        if (mScene != null) {
+            mScene.enableViewTransition(id, enable);
+        }
+    }
+
+    public boolean isViewTransitionEnabled(int id) {
+        if (mScene != null) {
+            return mScene.isViewTransitionEnabled(id);
+        }
+        return false;
+    }
 }
