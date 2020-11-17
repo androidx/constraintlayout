@@ -674,6 +674,13 @@ public class MotionScene {
             return 0 != (mTransitionFlags & flag);
         }
 
+        public void setOnTouchUp(int touchUpMode) {
+            TouchResponse touchResponse = getTouchResponse();
+            if (touchResponse != null) {
+                touchResponse.setTouchUpMode(touchUpMode);
+            }
+        }
+
         static class TransitionOnClick implements View.OnClickListener {
             private final Transition mTransition;
             int mTargetId = UNSET;

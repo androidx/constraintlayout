@@ -715,4 +715,8 @@ class TouchResponse {
     public int getFlags() {
         return mFlags;
     }
+
+    public void setTouchUpMode(int touchUpMode) {
+        mOnTouchUp = touchUpMode;
+    }
 }
