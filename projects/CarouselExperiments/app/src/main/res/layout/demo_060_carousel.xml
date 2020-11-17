@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:motionDebug="SHOW_ALL"
+    app:layoutDescription="@xml/demo_060_carousel_scene">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/add"
+        android:text="Add"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/add"
+        android:id="@+id/remove"
+        android:text="Remove"/>
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/remove"/>
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/imageView0"
+        android:layout_width="60dp"
+        android:layout_height="200dp"
+        android:layout_marginEnd="16dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/goldengate"
+        app:round="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/imageView1"
+        android:layout_width="60dp"
+        android:layout_height="200dp"
+        android:layout_marginEnd="16dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bryce_canyon"
+        app:round="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/imageView2"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:scaleType="centerCrop"
+        app:round="16dp"
+        android:src="@drawable/fitzgerald_marine_reserve"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/imageView3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/imageView3"
+        android:layout_width="60dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="16dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/death_valley"
+        app:round="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/imageView4"
+        android:layout_width="60dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="16dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/goldengate"
+        app:round="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.helper.widget.Carousel
+        android:id="@+id/carousel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:carousel_forwardTransition="@+id/forward"
+        app:carousel_backwardTransition="@+id/backward"
+        app:carousel_previousState="@+id/previous"
+        app:carousel_defaultTransition="@+id/base"
+        app:carousel_nextState="@+id/next"
+        app:carousel_forwardStartTransition="@+id/forward_start"
+        app:carousel_forwardEndTransition="@+id/forward_end"
+        app:carousel_forwardMinEndTransition="@+id/forward_min_end"
+        app:carousel_minEndThreshold="3"
+        app:carousel_firstView="@+id/imageView1"
+        app:carousel_lastView="@+id/imageView3"
+        app:constraint_referenced_ids="imageView0,imageView1,imageView2,imageView3,imageView4" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>
