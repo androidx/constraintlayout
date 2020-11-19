@@ -63,16 +63,19 @@ public class ViewTransitionController {
 
     private void viewTransition(ViewTransition vt, View... view) {
         int currentId = mMotionLayout.getCurrentState();
-        if (currentId == -1) {
-            Log.w(TAG, "Dont support transition within transition yet");
-            return;
+        if (vt.mViewTransitionMode != ViewTransition.VIEWTRANSITIONMODE_NOSTATE) {
+            if (currentId == -1) {
+                Log.w(TAG, "Dont support transition within transition yet");
+                return;
+            }
+            ConstraintSet current = mMotionLayout.getConstraintSet(currentId);
+            if (current == null) {
+                return;
+            }
+            vt.applyTransition(this, mMotionLayout, currentId, current, view);
+        } else {
+            vt.applyTransition(this, mMotionLayout, currentId, null, view);
         }
-        ConstraintSet current = mMotionLayout.getConstraintSet(currentId);
-        if (current == null) {
-            return;
-        }
-        vt.applyTransition(this, mMotionLayout, currentId, current, view);
-
     }
 
     void enableViewTransition(int id, boolean enable) {

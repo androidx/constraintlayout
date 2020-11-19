@@ -110,6 +110,7 @@ public class MotionController {
     private int mQuantizeMotionSteps = UNSET;
     private float mQuantizeMotionPhase = Float.NaN;
     private Interpolator mQuantizeMotionInterpolator = null;
+    private boolean mNoMovement = false;
 
     /**
      * Get the view to pivot around
@@ -987,6 +988,7 @@ public class MotionController {
     void setBothStates(View v) {
         mStartMotionPath.time = 0;
         mStartMotionPath.position = 0;
+        mNoMovement=true;
         mStartMotionPath.setBounds(v.getX(), v.getY(), v.getWidth(), v.getHeight());
         mEndMotionPath.setBounds(v.getX(), v.getY(), v.getWidth(), v.getHeight());
         mStartPoint.setState(v);
@@ -1103,8 +1105,9 @@ public class MotionController {
                 }
             }
 
-            mStartMotionPath.setView(position, child, mInterpolateVariables, mInterpolateData, mInterpolateVelocity, null);
-
+            if (!mNoMovement) {
+                mStartMotionPath.setView(position, child, mInterpolateVariables, mInterpolateData, mInterpolateVelocity, null);
+            }
             if (mTransformPivotTarget != UNSET) {
                 if (mTransformPivotView == null) {
                     View layout = (View) child.getParent();
