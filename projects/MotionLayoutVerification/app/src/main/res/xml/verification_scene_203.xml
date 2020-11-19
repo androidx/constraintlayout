@@ -1,140 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MotionScene 
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
     <Transition
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@id/start"
-        motion:duration="1000">
-        <OnClick/>
-       <KeyFrameSet>
-           <KeyAttribute motion:framePosition="0">
-               <CustomAttribute motion:attributeName="background"
-                   motion:customColorDrawableValue="#b46e89"/>
-               <CustomAttribute motion:attributeName="roundPercent"
-                   motion:customFloatValue="1"/>
-           </KeyAttribute>
-       </KeyFrameSet>
+        motion:duration="6000">
+        <OnClick />
+
+        <KeyFrameSet>
+            <KeyTrigger
+                motion:motionTarget="@id/button1"
+                motion:framePosition="50"
+                motion:viewTransitionOnCross="@id/spin" />
+            <KeyTrigger
+                motion:motionTarget="@id/button2"
+                motion:framePosition="50"
+                motion:viewTransitionOnNegativeCross="@id/spin" />
+            <KeyTrigger
+                motion:motionTarget="@id/button3"
+                motion:framePosition="50"
+                motion:viewTransitionOnPositiveCross="@id/spin" />
+
+            <KeyTrigger
+                motion:motionTarget="button"
+                motion:framePosition="50"
+                motion:motion_postLayoutCollision="false"
+                motion:motion_triggerOnCollision="@+id/rocket"
+                motion:viewTransitionOnPositiveCross="@id/shake"
+             />
+
+            <KeyPosition
+                motion:motionTarget="@id/rocket"
+                motion:keyPositionType="pathRelative"
+                motion:framePosition="20"
+                motion:percentY="0.6"
+                motion:percentX="1" />
+            <KeyPosition
+                motion:motionTarget="@id/rocket"
+                motion:keyPositionType="pathRelative"
+                motion:framePosition="40"
+                motion:percentY="-0.1"
+                motion:percentX="0" />
+            <KeyPosition
+                motion:motionTarget="@id/rocket"
+                motion:keyPositionType="pathRelative"
+                motion:framePosition="60"
+                motion:percentY="0.1"
+                motion:percentX="1" />
+            <KeyPosition
+                motion:motionTarget="@id/rocket"
+                motion:keyPositionType="pathRelative"
+                motion:framePosition="80"
+                motion:percentY="0.3"
+                motion:percentX="0" />
+
+
+        </KeyFrameSet>
     </Transition>
 
     <ConstraintSet android:id="@+id/start">
         <ConstraintOverride
-            android:id="@+id/flow2"
-            motion:layout_constraintHorizontal_bias="0.5"
-            motion:layout_constraintVertical_bias="0.3"
-/>
-        <ConstraintOverride android:id="@+id/textView">
-            <CustomAttribute
-                motion:attributeName="background"
-                motion:customColorDrawableValue="#FF00FF" />
-        </ConstraintOverride>
+            android:id="@+id/button1"
+            motion:layout_constraintVertical_bias="0.9" />
+        <ConstraintOverride
+            android:id="@+id/button2"
+            motion:layout_constraintVertical_bias="0.9" />
+        <ConstraintOverride
+            android:id="@+id/button3"
+            motion:layout_constraintVertical_bias="0.9" />
+        <ConstraintOverride
+            android:id="@+id/button4"
+            motion:layout_constraintVertical_bias="0.9" />
+        <ConstraintOverride
+            android:id="@+id/rocket"
+            motion:transitionPathRotate="45"
+            motion:layout_constraintHorizontal_bias="0.1" />
 
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
+
         <ConstraintOverride
-            android:id="@id/flow2"
-            motion:layout_constraintHorizontal_bias="0.5"
-            motion:layout_constraintVertical_bias="0.5"
-            />
-        <ConstraintOverride android:id="@id/textView">
-            <CustomAttribute
-                motion:attributeName="background"
-                motion:customColorDrawableValue="#492f39" />
-        </ConstraintOverride>
+            android:id="@id/rocket"
+            motion:transitionPathRotate="45"
+          />
     </ConstraintSet>
 
     <ViewTransition
-        android:id="@+id/rotate"
-        motion:motionTarget="button.*"
-        motion:viewTransitionMode="allStates"
-        motion:onStateTransition="actionUp"
-        motion:setsTag="@+id/rotated"
-        motion:ifTagNotSet="@id/rotated"
-        motion:duration="3000">
-        <ConstraintOverride
-            android:rotation="45"
-            android:translationZ="10dp"
-            >
-            <CustomAttribute
-                motion:attributeName="background"
-                motion:customColorDrawableValue="#A2EC6C" />
-        </ConstraintOverride>
-
-    </ViewTransition>
-
-    <ViewTransition
-        android:id="@+id/unrotate"
-        motion:motionTarget="button.*"
-        motion:viewTransitionMode="allStates"
-        motion:onStateTransition="actionUp"
-        motion:clearsTag="@id/rotated"
-        motion:ifTagSet="@id/rotated"
-        motion:duration="3000">
-        <ConstraintOverride
-            android:rotation="0"
-            android:translationZ="0dp"
-            >
-            <CustomAttribute
-                motion:attributeName="background"
-                motion:customColorDrawableValue="#492f39" />
-        </ConstraintOverride>
-
-    </ViewTransition>
-
-    <ViewTransition
         android:id="@+id/spin"
-
-        motion:transitionDisable="true"
-        motion:motionTarget="button.*"
         motion:viewTransitionMode="noState"
-        motion:onStateTransition="actionDown"
-        motion:duration="2400">
+        motion:duration="4000">
 
         <KeyFrameSet>
-            <KeyAttribute motion:framePosition="0">
-                <CustomAttribute
-                    motion:attributeName="roundPercent"
-                    motion:customFloatValue="1" />
-                <CustomAttribute
-                    motion:attributeName="background"
-                    motion:customColorDrawableValue="#492f39" />
-            </KeyAttribute>
+            <KeyAttribute
+                motion:framePosition="0"
+                android:rotation="0" />
+            <KeyAttribute
+                motion:framePosition="50"
+                android:rotation="90" />
+            <KeyAttribute
+                motion:framePosition="100"
+                android:rotation="0" />
+        </KeyFrameSet>
+    </ViewTransition>
 
-            <KeyAttribute motion:framePosition="20">
-                <CustomAttribute
-                    motion:attributeName="roundPercent"
-                    motion:customFloatValue=".3" />
-                <CustomAttribute
-                    motion:attributeName="background"
-                    motion:customColorDrawableValue="#b46e89" />
-            </KeyAttribute>
+    <ViewTransition
+        android:id="@+id/shake"
+        motion:viewTransitionMode="noState"
+        motion:duration="250">
 
-            <KeyAttribute motion:framePosition="80">
-                <CustomAttribute
-                    motion:attributeName="roundPercent"
-                    motion:customFloatValue="1" />
-                <CustomAttribute
-                    motion:attributeName="background"
-                    motion:customColorDrawableValue="#593945" />
-            </KeyAttribute>
-            <KeyAttribute motion:framePosition="90">
-                <CustomAttribute
-                    motion:attributeName="roundPercent"
-                    motion:customFloatValue="1" />
-                <CustomAttribute
-                    motion:attributeName="background"
-                    motion:customColorDrawableValue="#593945" />
-            </KeyAttribute>
-            <KeyAttribute motion:framePosition="100">
-                <CustomAttribute
-                    motion:attributeName="roundPercent"
-                    motion:customFloatValue="1" />
-                <CustomAttribute
-                    motion:attributeName="background"
-                    motion:customColorDrawableValue="#492f39" />
-            </KeyAttribute>
+        <KeyFrameSet>
+            <KeyAttribute
+                motion:framePosition="0"
+                android:alpha="1"
+          />
+            <KeyAttribute
+                motion:framePosition="50"
+                android:alpha="0"
+                 />
+            <KeyAttribute
+                motion:framePosition="100"
+                android:alpha="1"
+               />
         </KeyFrameSet>
     </ViewTransition>
 

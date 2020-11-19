@@ -479,6 +479,9 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
 
                 mLayer = new LayerDrawable(mLayers);
                 mLayer.getDrawable(1).setAlpha((int) (255 * (mCrossfade)));
+                if (!mOverlay) {
+                    mLayer.getDrawable(0).setAlpha((int) (255 * (1 - mCrossfade)));
+                }
                 super.setImageDrawable(mLayer);
             }
         }

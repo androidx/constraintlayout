@@ -70,10 +70,10 @@ public class ViewTransition {
     private int mOnStateTransition = UNSET;
     private boolean mDisabled = false;
     private int mPathMotionArc = 0;
-    private int mViewTransitionMode;
-    private static final int VIEWTRANSITIONMODE_CURRENTSTATE = 0;
-    private static final int VIEWTRANSITIONMODE_ALLSTATES = 1;
-    private static final int VIEWTRANSITIONMODE_NOSTATE = 2;
+    int mViewTransitionMode;
+    static final int VIEWTRANSITIONMODE_CURRENTSTATE = 0;
+    static final int VIEWTRANSITIONMODE_ALLSTATES = 1;
+    static final int VIEWTRANSITIONMODE_NOSTATE = 2;
     KeyFrames mKeyFrames;
     ConstraintSet.Constraint mConstraintDelta;
     private int mDuration = UNSET;
@@ -242,7 +242,7 @@ public class ViewTransition {
         a.recycle();
     }
 
-    void applyIndependentTransition(ViewTransitionController controller, MotionLayout motionLayout, int fromId, ConstraintSet current, View view) {
+    void applyIndependentTransition(ViewTransitionController controller, MotionLayout motionLayout,View view) {
         MotionController motionController = new MotionController(view);
         motionController.setBothStates(view);
         mKeyFrames.addAllFrames(motionController);
@@ -305,7 +305,7 @@ public class ViewTransition {
             return;
         }
         if (mViewTransitionMode == VIEWTRANSITIONMODE_NOSTATE) {
-            applyIndependentTransition(controller, layout, fromId, current, views[0]);
+            applyIndependentTransition(controller, layout, views[0]);
             return;
         }
         if (mViewTransitionMode == VIEWTRANSITIONMODE_ALLSTATES) {
