@@ -59,6 +59,9 @@ public class KeyTrigger extends Key {
     private float mFireThreshold = Float.NaN;
     private float mFireLastPos;
     private boolean mPostLayout = false;
+    int mViewTransitionOnNegativeCross = UNSET;
+    int mViewTransitionOnPositiveCross = UNSET;
+    int mViewTransitionOnCross = UNSET;
 
     RectF mCollisionRect = new RectF();
     RectF mTargetRect = new RectF();
@@ -195,14 +198,29 @@ public class KeyTrigger extends Key {
         }
         View call = (mTriggerReceiver == UNSET) ? child : ((MotionLayout) child.getParent()).findViewById(mTriggerReceiver);
 
-        if (fireNegative && mNegativeCross != null) {
-            fire(mNegativeCross, call);
+        if (fireNegative) {
+            if (mNegativeCross != null) {
+                fire(mNegativeCross, call);
+            }
+            if (mViewTransitionOnNegativeCross != UNSET) {
+                ((MotionLayout) child.getParent()).viewTransition(mViewTransitionOnNegativeCross, call);
+            }
         }
-        if (firePositive && mPositiveCross != null) {
-            fire(mPositiveCross, call);
+        if (firePositive) {
+            if (mPositiveCross != null) {
+                fire(mPositiveCross, call);
+            }
+            if (mViewTransitionOnPositiveCross != UNSET) {
+                ((MotionLayout) child.getParent()).viewTransition(mViewTransitionOnPositiveCross, call);
+            }
         }
-        if (fireCross && mCross != null) {
-            fire(mCross, call);
+        if (fireCross) {
+            if (mCross != null) {
+                fire(mCross, call);
+            }
+            if (mViewTransitionOnCross != UNSET) {
+                ((MotionLayout) child.getParent()).viewTransition(mViewTransitionOnCross, call);
+            }
         }
 
     }
@@ -266,6 +284,9 @@ public class KeyTrigger extends Key {
         private static final int COLLISION = 9;
         private static final int POST_LAYOUT = 10;
         private static final int TRIGGER_RECEIVER = 11;
+        private static final int VT_CROSS = 12;
+        private static final int VT_NEGATIVE_CROSS = 13;
+        private static final int VT_POSITIVE_CROSS = 14;
 
         private static SparseIntArray mAttrMap = new SparseIntArray();
 
@@ -280,6 +301,9 @@ public class KeyTrigger extends Key {
             mAttrMap.append(R.styleable.KeyTrigger_motion_triggerOnCollision, COLLISION);
             mAttrMap.append(R.styleable.KeyTrigger_motion_postLayoutCollision, POST_LAYOUT);
             mAttrMap.append(R.styleable.KeyTrigger_triggerReceiver, TRIGGER_RECEIVER);
+            mAttrMap.append(R.styleable.KeyTrigger_viewTransitionOnCross, VT_CROSS);
+            mAttrMap.append(R.styleable.KeyTrigger_viewTransitionOnNegativeCross, VT_NEGATIVE_CROSS);
+            mAttrMap.append(R.styleable.KeyTrigger_viewTransitionOnPositiveCross, VT_POSITIVE_CROSS);
         }
 
         public static void read(KeyTrigger c, TypedArray a, Context context) {
@@ -328,6 +352,16 @@ public class KeyTrigger extends Key {
                         break;
                     case TRIGGER_RECEIVER:
                         c.mTriggerReceiver = a.getResourceId(attr, c.mTriggerReceiver);
+                        break;
+                    case VT_NEGATIVE_CROSS:
+                        c.mViewTransitionOnNegativeCross = a.getResourceId(attr, c.mViewTransitionOnNegativeCross);
+                        break;
+                    case VT_POSITIVE_CROSS:
+                        c.mViewTransitionOnPositiveCross = a.getResourceId(attr, c.mViewTransitionOnPositiveCross);
+                        break;
+                    case VT_CROSS:
+                        c.mViewTransitionOnCross = a.getResourceId(attr, c.mViewTransitionOnCross);
+                        break;
                     default:
                         Log.e(NAME, "unused attribute 0x" + Integer.toHexString(attr) + "   " + mAttrMap.get(attr));
                         break;
