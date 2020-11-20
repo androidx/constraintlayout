@@ -186,11 +186,7 @@ public class Carousel extends MotionHelper {
         @Override
         public void run() {
             mMotionLayout.setProgress(0);
-            if ((mPreviousIndex == 1 && mIndex == 0)) {
-                updateItems();
-            } else {
-                updateItems();
-            }
+            updateItems();
             mAdapter.onNewItem(mIndex);
             float velocity = mMotionLayout.getVelocity();
             if (touchUpMode == TOUCH_UP_CARRY_ON && velocity > velocityThreshold && mIndex < mAdapter.count() - 1) {
