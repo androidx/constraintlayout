@@ -9,190 +9,77 @@
     app:layout_optimizationLevel="none"
     tools:context=".VerificationActivity">
 
-    <androidx.constraintlayout.utils.widget.MotionButton
+    <Button
         android:id="@+id/button1"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintWidth_percent="0.2"
-        app:layout_constraintDimensionRatio="1:1"
-        android:background="#492f39"
-        android:text="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="50"
         android:textColor="#FFFFFF"
-        android:rotation="0"
-        android:stateListAnimator="@null"
-        app:layout_constraintTag="button3"
-        app:roundPercent="1"
-        tools:layout_editor_absoluteX="32dp"
-        tools:layout_editor_absoluteY="294dp" />
 
-    <androidx.constraintlayout.utils.widget.MotionButton
+        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintTag="button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
         android:id="@+id/button2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintWidth_percent="0.2"
-        app:layout_constraintDimensionRatio="1:1"
-        android:background="#492f39"
-        android:text="2"
-        android:rotation="0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="50 neg"
         android:textColor="#FFFFFF"
-        android:stateListAnimator="@null"
-        app:layout_constraintTag="button3"
-        app:roundPercent="1"
-        tools:layout_editor_absoluteX="118dp"
-        tools:layout_editor_absoluteY="294dp" />
+        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintTag="button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
 
-    <androidx.constraintlayout.utils.widget.MotionButton
+        app:layout_constraintStart_toEndOf="@id/button1" />
+
+    <Button
         android:id="@+id/button3"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintWidth_percent="0.2"
-        app:layout_constraintDimensionRatio="1:1"
-        android:background="#492f39"
-        android:text="3"
-        android:rotation="0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="50 pos"
         android:textColor="#FFFFFF"
-        android:stateListAnimator="@null"
-        app:layout_constraintTag="button3"
-        app:roundPercent="1"
-        tools:layout_editor_absoluteX="206dp"
-        tools:layout_editor_absoluteY="294dp" />
+        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintTag="button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/button2" />
 
-    <androidx.constraintlayout.utils.widget.MotionButton
+    <Button
         android:id="@+id/button4"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintWidth_percent="0.2"
-        app:layout_constraintDimensionRatio="1:1"
-        android:background="#492f39"
-        android:text="4"
-        android:rotation="0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="none"
         android:textColor="#FFFFFF"
-        android:stateListAnimator="@null"
-        app:layout_constraintTag="button3"
-        app:roundPercent="1"
-        tools:layout_editor_absoluteX="294dp"
-        tools:layout_editor_absoluteY="294dp" />
-
-    <androidx.constraintlayout.utils.widget.MotionButton
-        android:id="@+id/button5"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintWidth_percent="0.2"
-        app:layout_constraintDimensionRatio="1:1"
-        android:background="#492f39"
-        android:text="5"
-        android:rotation="0"
-        android:textColor="#FFFFFF"
-        android:stateListAnimator="@null"
-        app:layout_constraintTag="button3"
-        app:roundPercent="1"
-        tools:layout_editor_absoluteX="30dp"
-        tools:layout_editor_absoluteY="342dp" />
-
-    <androidx.constraintlayout.utils.widget.MotionButton
-        android:id="@+id/button6"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintWidth_percent="0.2"
-        app:layout_constraintDimensionRatio="1:1"
-        android:background="#492f39"
-        android:text="6"
-        android:textColor="#FFFFFF"
-        android:stateListAnimator="@null"
-        android:rotation="0"
-        app:layout_constraintTag="button3"
-        app:roundPercent="1"
-        tools:layout_editor_absoluteX="118dp"
-        tools:layout_editor_absoluteY="342dp" />
-
-    <androidx.constraintlayout.utils.widget.MotionButton
-        android:id="@+id/button7"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintWidth_percent="0.2"
-        app:layout_constraintDimensionRatio="1:1"
-        android:background="#492f39"
-        android:text="7"
-        android:textColor="#FFFFFF"
-        android:rotation="0"
-        android:stateListAnimator="@null"
-        app:layout_constraintTag="button3"
-        app:roundPercent="1"
-        tools:layout_editor_absoluteX="206dp"
-        tools:layout_editor_absoluteY="342dp" />
-
-    <androidx.constraintlayout.utils.widget.MotionButton
-        android:id="@+id/button8"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintWidth_percent="0.2"
-        app:layout_constraintDimensionRatio="1:1"
-        android:background="#492f39"
-        android:text="8"
-        android:textColor="#FFFFFF"
-        android:stateListAnimator="@null"
-        android:rotation="0"
-        app:layout_constraintTag="button3"
-        app:roundPercent="1"
-        tools:layout_editor_absoluteX="294dp"
-        tools:layout_editor_absoluteY="342dp" />
-
-    <androidx.constraintlayout.utils.widget.MotionButton
-        android:id="@+id/button9"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintWidth_percent="0.2"
-        app:layout_constraintDimensionRatio="1:1"
-        android:background="#492f39"
-        android:text="9"
-        android:textColor="#FFFFFF"
-        android:stateListAnimator="@null"
-        android:rotation="0"
-        app:layout_constraintTag="button3"
-        app:roundPercent="1"
-        tools:layout_editor_absoluteX="30dp"
-        tools:layout_editor_absoluteY="390dp" />
-
-    <androidx.constraintlayout.utils.widget.MotionButton
-        android:id="@+id/button0"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintWidth_percent="0.4"
-        app:layout_constraintDimensionRatio="2:1"
-        android:background="#492f39"
-        android:text="0"
-        android:onClick="addToFlow2"
-        android:textColor="#FFFFFF"
-        android:stateListAnimator="@null"
-        app:layout_constraintTag="button3"
-        app:roundPercent="1"
-        tools:layout_editor_absoluteX="118dp"
-        tools:layout_editor_absoluteY="390dp" />
-
-
+        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintTag="button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/button3" />
 
     <TextView
-        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:id="@+id/rocket"
+        android:text="🚀"
+        android:textSize="33sp"
+        android:textColor="#000"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <androidx.constraintlayout.helper.widget.Flow
-        android:id="@+id/flow2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:constraint_referenced_ids="button1,button2,button3,button4,button5,button6,button7,button8,button9,button0"
-        app:flow_horizontalGap="8dp"
-        app:flow_maxElementsWrap="3"
-        app:flow_verticalGap="8dp"
-        app:flow_wrapMode="chain"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.9" />
 
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:text="Test KeyTrigger ViewTransitions rocket makes buttons blink"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.motion.widget.MotionLayout>

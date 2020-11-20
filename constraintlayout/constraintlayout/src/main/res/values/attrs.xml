@@ -21,7 +21,6 @@
         <enum name="start" value="5" />
         <enum name="end" value="6" />
     </attr>
-
     <!-- Tell ConstraintSet and MotionLayout to ignore the visibility of a view   -->
     <attr name="visibilityMode" format="enum">
         <enum name="normal" value="0" />
@@ -1069,6 +1068,7 @@
         <enum name="ignoreRequest" value="0" />
         <enum name="honorRequest" value="1" />
     </attr>
+
     <attr name="transitionDisable" format="boolean" />
 
     <!-- ==============  Transition ============== -->
@@ -1543,6 +1543,9 @@
         <attr name="onNegativeCross" format="string" />
         <attr name="onPositiveCross" format="string" />
         <attr name="onCross" format="string" />
+        <attr name="viewTransitionOnNegativeCross" format="reference" />
+        <attr name="viewTransitionOnPositiveCross" format="reference" />
+        <attr name="viewTransitionOnCross" format="reference" />
         <attr name="triggerSlack" format="float" />
         <!-- The id of this trigger use when a callback listens for triggers -->
         <attr name="triggerId" format="reference" />

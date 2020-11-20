@@ -880,6 +880,19 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * <td>(method name) backward crossing of the framePosition call this methods on the target</td>
  * </tr>
  * <tr>
+ * <td>viewTransitionOnCross&nbsp;</td>
+ * <td>(ViewTransition Id) start a NoState view transition on crossing or hitting target
+ * </td>
+ * </tr>
+ * <tr>
+ * <td>viewTransitionOnPositiveCross</td>
+ * <td>(ViewTransition Id) start a NoState view transition forward crossing of the framePosition or entering target</td>
+ * </tr>
+ * <tr>
+ * <td>viewTransitionOnNegativeCross/td>
+ * <td>(ViewTransition Id) start a NoState view transition backward crossing of the framePosition or leaving target</td>
+ * </tr>
+ * <tr>
  * <td>triggerSlack</td>
  * <td>(float) do not call trigger again if the framePosition has not moved this fraction away from the trigger point </td>
  * </tr>
@@ -4102,6 +4115,10 @@ public class MotionLayout extends ConstraintLayout implements
         }
     }
 
+    /**
+     * Not sure we want this
+     * @hide
+     */
     public void updateState() {
         mModel.initFrom(mLayoutWidget, mScene.getConstraintSet(mBeginState), mScene.getConstraintSet(mEndState));
         rebuildScene();
@@ -4148,6 +4165,11 @@ public class MotionLayout extends ConstraintLayout implements
         return mTransitionGoalPosition;
     }
 
+    /**
+     * Change the current Transition duration.
+     *
+     * @param milliseconds duration for transition to complete
+     */
     public void setTransitionDuration(int milliseconds) {
         if (mScene == null) {
             Log.e(TAG, "MotionScene not defined");
@@ -4239,23 +4261,41 @@ public class MotionLayout extends ConstraintLayout implements
         }
     }
 
-    public void viewTransition(int id, View... view) {
+    /**
+     * Execute a ViewTransition.
+     * Transition will execute if its conditions are met and it is enabled
+     *
+     * @param viewTransitionId
+     * @param view The views to apply to
+     */
+    public void viewTransition(int viewTransitionId, View... view) {
         if (mScene != null) {
-            mScene.viewTransition(id, view);
+            mScene.viewTransition(viewTransitionId, view);
         } else {
             Log.e(TAG, " no motionScene");
         }
     }
 
-    public void enableViewTransition(int id, boolean enable) {
+    /**
+     * Enable a ViewTransition ID.
+     *
+     * @param viewTransitionId id of ViewTransition
+     * @param enable If false view transition cannot be executed.
+     */
+    public void enableViewTransition(int viewTransitionId, boolean enable) {
         if (mScene != null) {
-            mScene.enableViewTransition(id, enable);
+            mScene.enableViewTransition(viewTransitionId, enable);
         }
     }
 
-    public boolean isViewTransitionEnabled(int id) {
+    /**
+     * Is transition id enabled or disabled
+     * @param viewTransitionId the ide of the transition
+     * @return true if enabled
+     */
+    public boolean isViewTransitionEnabled(int viewTransitionId) {
         if (mScene != null) {
-            return mScene.isViewTransitionEnabled(id);
+            return mScene.isViewTransitionEnabled(viewTransitionId);
         }
         return false;
     }
