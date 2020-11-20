@@ -234,22 +234,20 @@
 
     <declare-styleable name="Carousel">
         <attr name="carousel_firstView" format="reference" />
-        <attr name="carousel_lastView" format="reference" />
         <attr name="carousel_previousState" format="reference" />
         <attr name="carousel_nextState" format="reference" />
-        <attr name="carousel_defaultTransition" format="reference" />
         <attr name="carousel_forwardTransition" format="reference" />
         <attr name="carousel_backwardTransition" format="reference" />
-        <attr name="carousel_forwardStartTransition" format="reference" />
-        <attr name="carousel_forwardEndTransition" format="reference" />
-        <attr name="carousel_forwardMinEndTransition" format="reference" />
-        <attr name="carousel_minEndThreshold" format="integer" />
         <attr name="carousel_touchUp_dampeningFactor" format="float" />
         <attr name="carousel_touchUpMode" format="enum">
             <enum name="immediateStop" value="1"/>
             <enum name="carryVelocity" value="2"/>
         </attr>
         <attr name="carousel_touchUp_velocityThreshold" format="float"/>
+        <attr name="carousel_emptyViewsBehavior" format="enum">
+            <enum name="invisible" value="4"/>
+            <enum name="gone" value="8" />
+        </attr>
     </declare-styleable>
 
     <!-- =============================== End Carousel =============================== -->

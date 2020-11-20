@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.RequiresApi;
@@ -33,26 +34,21 @@ import java.util.ArrayList;
 
 public class Carousel extends MotionHelper {
     private static final boolean DEBUG = false;
+    private static final String TAG = "Carousel";
     private Adapter mAdapter = null;
     private ArrayList<View> mList = new ArrayList<>();
     private int mPreviousIndex = 0;
     private int mIndex = 0;
     private MotionLayout mMotionLayout;
     private int firstViewReference = -1;
-    private int lastViewReference = -1;
 
     private int backwardTransition = -1;
     private int forwardTransition = -1;
-    private int forwardStartTransition = -1; // optional
-    private int forwardEndTransition = -1; // optional
-    private int forwardMinEndTransition = -1; // optional
-    private int defaultTransition = -1; // optional
-    private int minEndThreshold = -1;
     private int previousState = -1;
     private int nextState = -1;
     private float dampening = 0.9f;
     private int startIndex = 0;
-    private int endIndex = 0;
+    private int emptyViewBehavior = INVISIBLE;
 
     public static final int TOUCH_UP_IMMEDIATE_STOP = 1;
     public static final int TOUCH_UP_CARRY_ON = 2;
@@ -63,8 +59,7 @@ public class Carousel extends MotionHelper {
     public interface Adapter {
         int count();
         void populate(View view, int index);
-
-        void newItem(int mIndex);
+        void onNewItem(int mIndex);
     }
 
     public Carousel(Context context) {
@@ -89,22 +84,12 @@ public class Carousel extends MotionHelper {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.Carousel_carousel_firstView) {
                     firstViewReference = a.getResourceId(attr, firstViewReference);
-                } else if (attr == R.styleable.Carousel_carousel_lastView) {
-                    lastViewReference = a.getResourceId(attr, lastViewReference);
                 } else if (attr == R.styleable.Carousel_carousel_backwardTransition) {
                     backwardTransition = a.getResourceId(attr, backwardTransition);
                 } else if (attr == R.styleable.Carousel_carousel_forwardTransition) {
                     forwardTransition = a.getResourceId(attr, forwardTransition);
-                } else if (attr == R.styleable.Carousel_carousel_forwardStartTransition) {
-                    forwardStartTransition = a.getResourceId(attr, forwardStartTransition);
-                } else if (attr == R.styleable.Carousel_carousel_forwardEndTransition) {
-                    forwardEndTransition = a.getResourceId(attr, forwardEndTransition);
-                } else if (attr == R.styleable.Carousel_carousel_forwardMinEndTransition) {
-                    forwardMinEndTransition = a.getResourceId(attr, forwardMinEndTransition);
-                } else if (attr == R.styleable.Carousel_carousel_defaultTransition) {
-                    defaultTransition = a.getResourceId(attr, defaultTransition);
-                } else if (attr == R.styleable.Carousel_carousel_minEndThreshold) {
-                    minEndThreshold = a.getInteger(attr, minEndThreshold);
+                } else if (attr == R.styleable.Carousel_carousel_emptyViewsBehavior) {
+                    emptyViewBehavior = a.getInt(attr, emptyViewBehavior);
                 } else if (attr == R.styleable.Carousel_carousel_previousState) {
                     previousState = a.getResourceId(attr, previousState);
                 } else if (attr == R.styleable.Carousel_carousel_nextState) {
@@ -128,7 +113,7 @@ public class Carousel extends MotionHelper {
         for (int i = 0; i < count; i++) {
             View view = mList.get(i);
             if (mAdapter.count() == 0) {
-                updateViewVisibility(view, INVISIBLE);
+                updateViewVisibility(view, emptyViewBehavior);
             } else {
                 updateViewVisibility(view, VISIBLE);
             }
@@ -142,25 +127,40 @@ public class Carousel extends MotionHelper {
         if (DEBUG) {
             System.out.println("onTransitionChange from " + startId + " to " + endId + " progress " + progress);
         }
+        mLastStartId = startId;
     }
+
+    int mLastStartId = -1;
 
     @Override
     public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
+        System.out.println("on transition completed");
         mPreviousIndex = mIndex;
         if (currentId == nextState) {
             mIndex++;
+            System.out.println("increment index...");
         } else if (currentId == previousState) {
             mIndex--;
+            System.out.println("decrement index...");
         }
         if (mIndex >= mAdapter.count()) {
             mIndex = mAdapter.count() - 1;
+            System.out.println("index capped... " + mIndex);
         }
         if (mIndex < 0) {
             mIndex = 0;
+            System.out.println("index zeroed... ");
         }
 
         if (mPreviousIndex != mIndex) {
             mMotionLayout.post(mUpdateRunnable);
+        }
+    }
+
+    private void enableAllTransitions(boolean enable) {
+        ArrayList<MotionScene.Transition> transitions = mMotionLayout.getDefinedTransitions();
+        for (MotionScene.Transition transition : transitions) {
+            transition.setEnable(enable);
         }
     }
 
@@ -187,7 +187,7 @@ public class Carousel extends MotionHelper {
         public void run() {
             mMotionLayout.setProgress(0);
             updateItems();
-            mAdapter.newItem(mIndex);
+            mAdapter.onNewItem(mIndex);
             float velocity = mMotionLayout.getVelocity();
             if (touchUpMode == TOUCH_UP_CARRY_ON && velocity > velocityThreshold && mIndex < mAdapter.count() - 1) {
                 final float v = velocity * dampening;
@@ -224,9 +224,6 @@ public class Carousel extends MotionHelper {
             View view = container.getViewById(id);
             if (firstViewReference == id) {
                 startIndex = i;
-            }
-            if (lastViewReference == id) {
-                endIndex = i;
             }
             mList.add(view);
         }
@@ -272,34 +269,13 @@ public class Carousel extends MotionHelper {
         if (constraint == null) {
             return false;
         }
-        if (constraint.propertySet.visibility == visibility) {
-            return false;
-        }
-        constraint.propertySet.visibility = visibility;
+        constraint.propertySet.mVisibilityMode = ConstraintSet.VISIBILITY_MODE_IGNORE;
+//        if (constraint.propertySet.visibility == visibility) {
+//            return false;
+//        }
+//        constraint.propertySet.visibility = visibility;
         view.setVisibility(visibility);
         return true;
-    }
-
-    private void updateItemsVisibility() {
-        if (mAdapter == null) {
-            return;
-        }
-        if (mMotionLayout == null) {
-            return;
-        }
-        final int count = mList.size();
-        for (int i = 0; i < count; i++) {
-            // mIndex should map to i == startIndex
-            View view = mList.get(i);
-            int index = mIndex + i - startIndex;
-            if (index < 0) {
-                updateViewVisibility(view, INVISIBLE);
-            } else if (index >= mAdapter.count()) {
-                updateViewVisibility(view, INVISIBLE);
-            } else {
-                updateViewVisibility(view, VISIBLE);
-            }
-        }
     }
 
     private void updateItems() {
@@ -312,96 +288,38 @@ public class Carousel extends MotionHelper {
         if (DEBUG) {
             System.out.println("Update items, index: " + mIndex);
         }
-        final int count = mList.size();
-        boolean needsToRebuild = false;
-        for (int i = 0; i < count; i++) {
+        final int viewCount = mList.size();
+        for (int i = 0; i < viewCount; i++) {
             // mIndex should map to i == startIndex
             View view = mList.get(i);
             int index = mIndex + i - startIndex;
             if (index < 0) {
-                if (forwardEndTransition == -1) {
-                    // no custom start transition, so let's make those views invisible
-                    needsToRebuild |= updateViewVisibility(view, INVISIBLE);
-                }
+                updateViewVisibility(view, emptyViewBehavior);
             } else if (index >= mAdapter.count()) {
-                if (forwardEndTransition == -1) {
-                    // no custom end transition, so let's make those views invisible
-                    needsToRebuild |= updateViewVisibility(view, INVISIBLE);
-                }
+                updateViewVisibility(view, emptyViewBehavior);
             } else {
-                if (forwardStartTransition == -1 || forwardEndTransition == -1) {
-                    // if we don't have a start/end transitions, we might have modified the
-                    // visibility of the views, so let's make sure they are visible
-                    needsToRebuild |= updateViewVisibility(view, VISIBLE);
-                }
+                updateViewVisibility(view, VISIBLE);
                 mAdapter.populate(view, index);
             }
         }
 
-        if (backwardTransition != -1 && forwardTransition != -1) {
-            if (mAdapter.count() > 1) {
-                if (mIndex == 0) {
-                    needsToRebuild |= enableTransition(backwardTransition, false);
-                    if (forwardStartTransition != -1) {
-                        needsToRebuild |= enableTransition(forwardTransition, false);
-                        needsToRebuild |= enableTransition(forwardStartTransition, true);
-                        mMotionLayout.setTransition(forwardStartTransition);
-                    } else {
-                        mMotionLayout.setTransition(forwardTransition);
-                    }
-                } else {
-                    needsToRebuild |= enableTransition(backwardTransition, true);
-                }
-            }
-
-            if (mAdapter.count() == 0) {
-                for (int i = 0; i < count; i++) {
-                    // mIndex should map to i == startIndex
-                    View view = mList.get(i);
-//                    needsToRebuild |= updateViewVisibility(view, INVISIBLE);
-                }
-            } else if (mAdapter.count() == 1 && defaultTransition != -1) {
-                enableTransition(defaultTransition, true);
-                mMotionLayout.setTransition(defaultTransition);
-                mMotionLayout.setProgress(0);
-            } else if (mAdapter.count() > 1) {
-                if (mIndex == mAdapter.count() - 1) {
-                    needsToRebuild |= enableTransition(forwardTransition, false);
-                    if (forwardEndTransition != -1) {
-                        needsToRebuild |= enableTransition(forwardEndTransition, false);
-                    }
-                    mMotionLayout.setTransition(backwardTransition);
-                } else {
-                    int lastVisibleIndex = Math.max(0, mAdapter.count() - (mList.size() - endIndex) - 1);
-                    if (DEBUG) {
-                        System.out.println("### index " + mIndex + " endIndex: " + endIndex + " last index is " + lastVisibleIndex + " count " + mAdapter.count());
-                    }
-                    if (mIndex == lastVisibleIndex && forwardEndTransition != -1) {
-                        if (mIndex == 0) {
-                            if (forwardMinEndTransition != -1 && mAdapter.count() < minEndThreshold) {
-                                needsToRebuild |= enableTransition(forwardTransition, false);
-                                needsToRebuild |= enableTransition(forwardStartTransition, false);
-                                needsToRebuild |= enableTransition(forwardMinEndTransition, true);
-                                mMotionLayout.setTransition(forwardMinEndTransition);
-                            } else {
-                                needsToRebuild |= enableTransition(forwardTransition, false);
-                                needsToRebuild |= enableTransition(forwardStartTransition, true);
-                                mMotionLayout.setTransition(forwardStartTransition);
-                            }
-                        } else {
-                            needsToRebuild |= enableTransition(forwardTransition, false);
-                            needsToRebuild |= enableTransition(forwardEndTransition, true);
-                            mMotionLayout.setTransition(forwardEndTransition);
-                        }
-                    } else {
-                        needsToRebuild |= enableTransition(forwardTransition, true);
-                    }
-                }
-            }
+        if (backwardTransition == -1 || forwardTransition == -1) {
+            Log.w(TAG, "No backward or forward transitions defined for Carousel!");
+            return;
         }
 
-        if (needsToRebuild) {
-            mMotionLayout.rebuildScene();
+        final int count = mAdapter.count();
+        if (mIndex == 0) {
+            enableTransition(backwardTransition, false);
+        } else {
+            enableTransition(backwardTransition, true);
+            mMotionLayout.setTransition(backwardTransition);
+        }
+        if  (mIndex == count - 1) {
+            enableTransition(forwardTransition, false);
+        } else {
+            enableTransition(forwardTransition, true);
+            mMotionLayout.setTransition(forwardTransition);
         }
     }
 
