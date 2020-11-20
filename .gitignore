@@ -5,3 +5,8 @@ projects/CarouselExperiments/.idea/jarRepositories.xml
 projects/CarouselExperiments/.idea/gradle.xml
 projects/CarouselExperiments/.idea/compiler.xml
 .DS_Store
+projects/FoldableExperiments/.idea/compiler.xml
+projects/FoldableExperiments/.idea/gradle.xml
+projects/FoldableExperiments/.idea/jarRepositories.xml
+projects/FoldableExperiments/.idea/misc.xml
+projects/FoldableExperiments/.idea/vcs.xml
