@@ -4,315 +4,313 @@
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
     <Transition
-        motion:constraintSetStart="@+id/start"
-        motion:constraintSetEnd="@+id/middle"
-        android:id="@+id/forward_start">
-
-        <OnSwipe
-            motion:dragDirection="dragLeft"
-            motion:touchAnchorSide="left" />
-
-    </Transition>
-
-    <Transition
-        motion:constraintSetStart="@id/middle"
         motion:constraintSetEnd="@+id/next"
-        motion:duration="1000"
-        android:id="@+id/forward">
-
-        <OnSwipe
-            motion:dragDirection="dragLeft"
-            motion:touchAnchorSide="left" />
-
+        motion:constraintSetStart="@id/start"
+        android:id="@+id/forward"
+        motion:duration="1000">
+        <OnSwipe motion:dragDirection="dragDown" />
+        <KeyFrameSet>
+           <KeyPosition
+               motion:motionTarget="@+id/textView5"
+               motion:framePosition="40"
+               motion:keyPositionType="deltaRelative"
+               motion:percentX="0.032"
+               motion:percentY="-34.107" />
+       </KeyFrameSet>
     </Transition>
 
     <Transition
-        motion:constraintSetStart="@+id/middle"
         motion:constraintSetEnd="@+id/previous"
-        android:id="@+id/backward">
-
-        <OnSwipe
-            motion:dragDirection="dragRight"
-            motion:touchAnchorSide="right" />
-
+        motion:constraintSetStart="@id/start"
+        android:id="@+id/backward"
+        motion:duration="1000">
+        <OnSwipe motion:dragDirection="dragUp" />
+        <KeyFrameSet>
+            <KeyPosition
+                motion:motionTarget="@+id/textView4"
+                motion:framePosition="40"
+                motion:keyPositionType="deltaRelative"
+                motion:percentX="0.032"
+                motion:percentY="-34.107" />
+        </KeyFrameSet>
     </Transition>
 
-
-    <Transition
-        motion:constraintSetStart="@+id/middle"
-        motion:constraintSetEnd="@+id/end"
-        android:id="@+id/forward_end">
-
-        <OnSwipe
-            motion:dragDirection="dragLeft"
-            motion:touchAnchorSide="left" />
-
-    </Transition>
-
-    <Transition
-        motion:constraintSetStart="@+id/start"
-        motion:constraintSetEnd="@+id/minEnd"
-        android:id="@+id/forward_min_end">
-
-        <OnSwipe
-            motion:dragDirection="dragLeft"
-            motion:touchAnchorSide="left" />
-
-    </Transition>
-
-    <Transition
-        motion:constraintSetStart="@+id/one"
-        motion:constraintSetEnd="@+id/start"
-        android:id="@+id/base">
-    </Transition>
-
-    <ConstraintSet android:id="@+id/one" >
+    <ConstraintSet android:id="@+id/previous">
         <Constraint
-            android:id="@+id/imageView2"
-            android:layout_width="80dp"
-            android:layout_height="200dp"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="16dp"
-            motion:layout_constraintTop_toTopOf="parent"
-            android:layout_marginRight="16dp"
-            motion:layout_constraintStart_toEndOf="parent" />
+            android:id="@+id/textView0"
+            android:elevation="2dp"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:rotation="-45"
+            android:alpha="1"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircleAngle="315" />
         <Constraint
-            android:id="@+id/imageView1"
-            android:layout_width="0dp"
-            android:layout_height="200dp"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintEnd_toEndOf="parent"
-            motion:layout_constraintStart_toStartOf="parent"
-            android:layout_marginRight="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp" />
+            android:id="@+id/textView1"
+            android:elevation="4dp"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:rotation="-30"
+            android:alpha="1"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircleAngle="330" />
         <Constraint
-            android:id="@+id/imageView3"
-            android:layout_width="60dp"
-            android:layout_height="200dp"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="16dp"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintStart_toEndOf="parent" />
+            android:id="@+id/textView2"
+            android:elevation="6dp"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:rotation="-15"
+            android:alpha="1"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircleAngle="345" />
+        <Constraint
+            android:id="@+id/textView3"
+            android:elevation="10dp"
+            android:layout_width="140dp"
+            android:layout_height="180dp"
+            android:rotation="0"
+            android:alpha="1"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircleAngle="0" />
+        <Constraint
+            android:id="@+id/textView4"
+            android:elevation="6dp"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:rotation="15"
+            android:alpha="1"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircleAngle="15" />
+        <Constraint
+            android:id="@+id/textView5"
+            android:elevation="4dp"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:rotation="30"
+            android:alpha="1"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircleAngle="30" />
+        <Constraint
+            android:id="@+id/textView6"
+            android:elevation="2dp"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:rotation="45"
+            motion:layout_constraintCircle="@+id/center"
+            android:alpha="1"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircleAngle="45" />
+        <Constraint
+            android:id="@+id/textView7"
+            android:elevation="0dp"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:rotation="60"
+            motion:layout_constraintCircle="@+id/center"
+            android:alpha="0"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircleAngle="60" />
+        <Constraint
+            android:id="@+id/textView8"
+            android:elevation="0dp"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:rotation="60"
+            motion:layout_constraintCircle="@+id/center"
+            android:alpha="0"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircleAngle="60" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/start">
         <Constraint
-            android:id="@+id/imageView1"
-            android:layout_width="0dp"
-            android:layout_height="200dp"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintEnd_toStartOf="@+id/imageView2"
-            motion:layout_constraintStart_toStartOf="parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginEnd="16dp" />
+            android:id="@+id/textView0"
+            android:elevation="0dp"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:rotation="-60"
+            motion:layout_constraintCircle="@+id/center"
+            android:alpha="0"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircleAngle="300" />
         <Constraint
-            android:layout_height="200dp"
-            motion:layout_editor_absoluteX="351dp"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            android:layout_width="60dp"
-            android:id="@+id/imageView3"
-            motion:layout_constraintStart_toEndOf="parent" />
+            android:id="@+id/textView1"
+            android:elevation="2dp"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:rotation="-45"
+            motion:layout_constraintCircle="@+id/center"
+            android:alpha="1"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircleAngle="315" />
         <Constraint
-            android:layout_marginEnd="16dp"
-            android:layout_height="200dp"
-            android:layout_marginRight="16dp"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            android:layout_width="60dp"
-            motion:layout_constraintEnd_toStartOf="@id/imageView3"
-            android:id="@+id/imageView2" />
-    </ConstraintSet>
-
-    <ConstraintSet
-        android:id="@+id/minEnd"
-        motion:deriveConstraintsFrom="@+id/start" >
+            android:id="@+id/textView2"
+            android:elevation="4dp"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:rotation="-30"
+            android:alpha="1"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircleAngle="330" />
         <Constraint
-            android:id="@+id/imageView1"
-            android:layout_width="60dp"
-            android:layout_height="200dp"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="16dp"
-            motion:layout_constraintTop_toTopOf="parent"
-            android:layout_marginLeft="16dp"
-            motion:layout_constraintStart_toStartOf="parent" />
+            android:id="@+id/textView3"
+            android:elevation="6dp"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:rotation="-15"
+            android:alpha="1"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircleAngle="345" />
         <Constraint
-            android:id="@+id/imageView1"
-            android:layout_width="60dp"
-            android:layout_height="200dp"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="16dp"
-            motion:layout_constraintTop_toTopOf="parent"
-            android:layout_marginLeft="16dp"
-            motion:layout_constraintStart_toStartOf="parent" />
+            android:id="@+id/textView4"
+            android:elevation="10dp"
+            android:layout_width="140dp"
+            android:layout_height="180dp"
+            android:rotation="0"
+            android:alpha="1"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircleAngle="0" />
         <Constraint
-            android:layout_marginEnd="16dp"
-            android:layout_height="200dp"
-            android:layout_marginRight="16dp"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            android:layout_width="0dp"
-            motion:layout_constraintEnd_toStartOf="@id/imageView3"
-            motion:layout_constraintStart_toEndOf="@+id/imageView1"
-            android:id="@+id/imageView2"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp" />
-    </ConstraintSet>
-
-    <ConstraintSet android:id="@+id/previous">
+            android:id="@+id/textView5"
+            android:elevation="6dp"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:rotation="15"
+            android:alpha="1"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircleAngle="15" />
         <Constraint
-            android:id="@+id/imageView1"
-            android:layout_width="0dp"
-            android:layout_height="200dp"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintEnd_toStartOf="@+id/imageView2"
-            motion:layout_constraintStart_toEndOf="@+id/imageView0"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginEnd="16dp" />
+            android:id="@+id/textView6"
+            android:elevation="4dp"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:rotation="30"
+            android:alpha="1"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircleAngle="30" />
         <Constraint
-            android:layout_marginEnd="16dp"
-            android:layout_height="200dp"
-            android:layout_marginRight="16dp"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            android:layout_width="60dp"
-            android:id="@+id/imageView2"
-            motion:layout_constraintEnd_toEndOf="parent" />
+            android:id="@+id/textView7"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:rotation="45"
+            android:elevation="2dp"
+            motion:layout_constraintCircle="@+id/center"
+            android:alpha="1"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircleAngle="45" />
         <Constraint
-            android:layout_height="200dp"
-            motion:layout_editor_absoluteX="351dp"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            android:layout_width="60dp"
-            android:id="@+id/imageView3"
-            motion:layout_constraintStart_toEndOf="parent" />
-        <Constraint
-            android:layout_height="200dp"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            android:layout_width="60dp"
-            android:id="@+id/imageView0"
-            motion:layout_constraintStart_toStartOf="parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp" />
-    </ConstraintSet>
-
-    <ConstraintSet android:id="@+id/middle">
-        <Constraint
-            android:id="@+id/imageView1"
-            android:layout_width="60dp"
-            android:layout_height="200dp"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintStart_toStartOf="parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp" />
-        <Constraint
-            android:layout_marginEnd="16dp"
-            android:layout_height="200dp"
-            android:layout_marginRight="16dp"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            android:layout_width="0dp"
-            motion:layout_constraintEnd_toStartOf="@id/imageView3"
-            motion:layout_constraintStart_toEndOf="@+id/imageView1"
-            android:id="@+id/imageView2"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp" />
-        <Constraint
-            motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="60dp"
-            android:layout_height="200dp"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="16dp"
-            motion:layout_constraintTop_toTopOf="parent"
-            android:id="@+id/imageView3"
-            android:layout_marginRight="16dp"
-            android:layout_marginEnd="16dp" />
+            android:id="@+id/textView8"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:rotation="60"
+            android:elevation="0dp"
+            motion:layout_constraintCircle="@+id/center"
+            android:alpha="0"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircleAngle="60" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/next">
         <Constraint
-            android:id="@+id/imageView1"
-            android:layout_width="60dp"
-            android:layout_height="200dp"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_editor_absoluteX="16dp"
-            motion:layout_constraintEnd_toStartOf="parent" />
+            android:id="@+id/textView0"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:rotation="-60"
+            android:elevation="0dp"
+            android:alpha="0"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircleAngle="300" />
         <Constraint
-            android:layout_height="200dp"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            android:layout_width="60dp"
-            android:id="@+id/imageView2"
-            motion:layout_constraintStart_toStartOf="parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp" />
+            android:id="@+id/textView1"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:rotation="-60"
+            android:elevation="0dp"
+            android:alpha="0"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircleAngle="300" />
         <Constraint
-            android:layout_height="200dp"
-            motion:layout_constraintStart_toEndOf="@+id/imageView2"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            android:layout_width="0dp"
-            android:id="@+id/imageView3"
-            motion:layout_constraintEnd_toStartOf="@+id/imageView4"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginEnd="16dp" />
+            android:id="@+id/textView2"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:rotation="-45"
+            android:elevation="2dp"
+            android:alpha="1"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleAngle="315" />
         <Constraint
-            android:layout_height="200dp"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="60dp"
-            android:id="@+id/imageView4"
-            android:layout_marginRight="16dp"
-            android:layout_marginEnd="16dp" />
+            android:id="@+id/textView3"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:rotation="-30"
+            android:elevation="4dp"
+            android:alpha="1"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleAngle="330" />
+        <Constraint
+            android:id="@+id/textView4"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:rotation="-15"
+            android:elevation="6dp"
+            android:alpha="1"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleAngle="345" />
+        <Constraint
+            android:id="@+id/textView5"
+            android:layout_width="140dp"
+            android:layout_height="180dp"
+            android:rotation="0"
+            android:elevation="10dp"
+            android:alpha="1"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleAngle="0" />
+        <Constraint
+            android:id="@+id/textView6"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:rotation="15"
+            android:elevation="6dp"
+            android:alpha="1"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleAngle="15" />
+        <Constraint
+            android:id="@+id/textView7"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:rotation="30"
+            android:elevation="4dp"
+            android:alpha="1"
+            motion:layout_constraintCircle="@+id/center"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircleAngle="30" />
+        <Constraint
+            android:id="@+id/textView8"
+            android:layout_width="100dp"
+            android:layout_height="130dp"
+            android:rotation="45"
+            android:elevation="2dp"
+            motion:layout_constraintCircle="@+id/center"
+            android:alpha="1"
+            motion:layout_constraintCircleRadius="160dp"
+            motion:layout_constraintCircleAngle="45" />
     </ConstraintSet>
-
-    <ConstraintSet android:id="@+id/end">
-        <Constraint
-            android:layout_width="60dp"
-            android:layout_height="200dp"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintStart_toStartOf="parent"
-            android:id="@+id/imageView2"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp" />
-        <Constraint
-            android:layout_height="200dp"
-            motion:layout_constraintStart_toEndOf="@+id/imageView2"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="0dp"
-            android:id="@+id/imageView3"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginEnd="16dp" />
-        <Constraint
-            motion:layout_constraintEnd_toStartOf="parent"
-            android:layout_width="60dp"
-            android:layout_height="200dp"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="0dp"
-            motion:layout_constraintTop_toTopOf="parent"
-            android:id="@+id/imageView1"
-            android:layout_marginRight="0dp" />
-    </ConstraintSet>
-
-
 </MotionScene>

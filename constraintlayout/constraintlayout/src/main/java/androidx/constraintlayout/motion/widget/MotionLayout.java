@@ -1314,6 +1314,16 @@ public class MotionLayout extends ConstraintLayout implements
             mModel.initFrom(mLayoutWidget, mScene.getConstraintSet(mBeginState), mScene.getConstraintSet(mEndState));
             rebuildScene();
 
+            if (mTransitionLastPosition != pos) {
+                // If the last drawn position isn't the same, we might have to make sure we apply the
+                // corresponding constraintset.
+                if (pos == 0) {
+                    mScene.getConstraintSet(mBeginState).applyTo(this);
+                } else if (pos == 1) {
+                    mScene.getConstraintSet(mEndState).applyTo(this);
+                }
+            }
+
             mTransitionLastPosition = Float.isNaN(pos) ? 0 : pos;
 
             if (Float.isNaN(pos)) {
@@ -1592,7 +1602,6 @@ public class MotionLayout extends ConstraintLayout implements
         } else {
             mCurrentState = UNSET;
             setState(TransitionState.MOVING);
-
         }
 
         if (mScene == null) {

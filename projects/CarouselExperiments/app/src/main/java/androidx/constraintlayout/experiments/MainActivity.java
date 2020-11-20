@@ -159,7 +159,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             });
 
             Carousel carousel = findViewById(R.id.carousel);
-            TextView label = findViewById(R.id.text);
+            TextView label = findViewById(R.id.label);
+            TextView text = findViewById(R.id.text);
             if (carousel != null) {
                 int images[] = {
                         R.drawable.bryce_canyon,
@@ -174,11 +175,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         R.drawable.horseshoe_bend,
                         R.drawable.muir_beach,
                         R.drawable.rainbow_falls,
-                        R.drawable.rockaway_beach,
-                        R.drawable.sf_coast,
+                        //R.drawable.rockaway_beach,
+                        //R.drawable.sf_coast,
+                };
+                int colors[] = {
+                        Color.parseColor("#9C4B8F"),
+                        Color.parseColor("#945693"),
+                        Color.parseColor("#8C6096"),
+                        Color.parseColor("#846B9A"),
+                        Color.parseColor("#7C769E"),
+                        Color.parseColor("#7480A2"),
+                        Color.parseColor("#6D8BA5"),
+                        Color.parseColor("#6595A9"),
+                        Color.parseColor("#5DA0AD"),
+                        Color.parseColor("#55ABB1"),
+                        Color.parseColor("#4DB5B4"),
+                        Color.parseColor("#45C0B8"),
                 };
                 mNumImages = images.length;
-                if (layout_name.equals("demo_060_carousel")) {
+                if (layout_name.equals("demo_050_carousel")) {
                     mNumImages = 1;
                 }
                 carousel.setAdapter(new Carousel.Adapter() {
@@ -189,13 +204,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     @Override
                     public void populate(View view, int index) {
-                        ImageView imageView = (ImageView) view;
-                        imageView.setImageResource(images[index]);
+                        if (view instanceof ImageView) {
+                            ImageView imageView = (ImageView) view;
+                            imageView.setImageResource(images[index]);
+                        } else if (view instanceof TextView) {
+                            TextView textView = (TextView) view;
+                            textView.setText("#" + (index + 1));
+                            textView.setBackgroundColor(colors[index]);
+                        }
                     }
 
                     @Override
-                    public void newItem(int mIndex) {
-                        // nothing for now
+                    public void onNewItem(int index) {
+                        if (label != null) {
+                            label.setText("#" + (index + 1));
+                        }
                     }
                 });
                 Button buttonAdd = findViewById(R.id.add);
@@ -204,8 +227,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         @Override
                         public void onClick(View view) {
                             mNumImages++;
-                            if (label != null) {
-                                label.setText("" + mNumImages + " images");
+                            if (text != null) {
+                                text.setText("" + mNumImages + " images");
                             }
                             carousel.refresh();
                         }
@@ -217,8 +240,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         @Override
                         public void onClick(View view) {
                             mNumImages = 0;
-                            if (label != null) {
-                                label.setText("" + mNumImages + " images");
+                            if (text != null) {
+                                text.setText("" + mNumImages + " images");
                             }
                             carousel.refresh();
                         }
