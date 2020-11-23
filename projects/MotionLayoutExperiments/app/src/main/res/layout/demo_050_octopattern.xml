@@ -9,7 +9,6 @@
     app:layoutDescription="@xml/demo_050_octopattern_scene"
     app:motionDebug="SHOW_ALL">
 
-
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
@@ -98,7 +97,6 @@
         app:layout_constraintCircleAngle="315"
         app:layout_constraintCircleRadius="@dimen/radius" />
 
-
     <ImageView
         android:id="@+id/center"
         android:layout_width="135dp"
@@ -110,7 +108,6 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <ImageView
         android:id="@+id/center2"

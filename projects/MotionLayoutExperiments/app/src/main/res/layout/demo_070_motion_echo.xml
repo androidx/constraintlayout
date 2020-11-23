@@ -6,40 +6,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layoutDescription="@xml/demo_070_motion_echo_scene"
-    app:motionDebug="SHOW_PATH"
-    android:background="#cfc">
+    android:background="#012437">
 
     <TextView
         android:id="@+id/textView12"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:text="Custom cycle type test"
+        android:textColor="#FFF"
+        android:text="Custom helper"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-  
     <Button
         android:id="@+id/view"
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:text="echo"
-
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
-<android.support.motionlayout.experiments.MotionBlur
-    android:id="@+id/help"
-    android:layout_width="90dp"
-    android:layout_height="90dp"
-    app:constraint_referenced_ids="view"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    />
+    <android.support.motionlayout.experiments.MotionBlur
+        android:id="@+id/help"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        app:constraint_referenced_ids="view"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.motion.widget.MotionLayout>

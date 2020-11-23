@@ -7,23 +7,19 @@
     android:layout_height="match_parent"
     app:layoutDescription="@xml/demo_030_orbit_scene"
     app:motionDebug="SHOW_PATH"
-
     android:background="#FF003b60">
-
-
 
     <ImageView
         android:id="@+id/sun"
         android:layout_width="210dp"
         android:layout_height="210dp"
         android:src="@drawable/sun"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTag="center"
-        />
+        app:layout_constraintTag="center" />
+
     <TextView
         android:id="@+id/rocket"
         android:layout_width="wrap_content"
@@ -32,8 +28,7 @@
         android:textSize="28sp"
         app:layout_constraintCircleRadius="60dp"
         app:layout_constraintCircleAngle="0"
-        app:layout_constraintCircle="@id/earth"
-        />
+        app:layout_constraintCircle="@id/earth" />
 
     <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/moon"
@@ -43,8 +38,8 @@
         android:rotation="-240"
         app:layout_constraintCircleRadius="180dp"
         app:layout_constraintCircleAngle="0"
-        app:layout_constraintCircle="@id/earth"
-        />
+        app:layout_constraintCircle="@id/earth" />
+
     <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/earth"
         android:layout_width="196dp"
@@ -53,11 +48,6 @@
         android:rotation="15"
         app:layout_constraintCircleRadius="300dp"
         app:layout_constraintCircleAngle="315"
-        app:layout_constraintCircle="@id/sun"
-        />
-
-
-
-
+        app:layout_constraintCircle="@id/sun" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

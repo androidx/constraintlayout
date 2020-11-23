@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="1000">
+        <OnSwipe />
+        <KeyFrameSet>
+        </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@+id/imageView9"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            motion:layout_constraintHorizontal_bias="0.5"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent" />
+        <Constraint
+            motion:layout_constraintEnd_toEndOf="@+id/imageView9"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            motion:layout_constraintBottom_toBottomOf="@+id/imageView9"
+            motion:layout_constraintHorizontal_bias="0"
+            motion:layout_constraintStart_toStartOf="@+id/imageView9"
+            android:id="@+id/face" />
+    </ConstraintSet>
+
+    <ViewTransition
+        android:id="@+id/connect"
+        motion:viewTransitionMode="allStates"
+        motion:duration="500"
+        motion:setsTag="@+id/connected_state"
+        motion:ifTagNotSet="@+id/connected_state">
+
+        <ConstraintOverride android:alpha="1" />
+    </ViewTransition>
+
+    <ViewTransition
+        android:id="@+id/disconnect"
+        motion:viewTransitionMode="allStates"
+        motion:duration="500"
+        motion:clearsTag="@+id/connected_state"
+        motion:ifTagSet="@+id/connected_state">
+        <ConstraintOverride android:alpha="0.5" />
+    </ViewTransition>
+
+</MotionScene>

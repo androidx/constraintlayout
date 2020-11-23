@@ -1,52 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MotionScene 
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
     <Transition
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@id/start"
         motion:staggered="0.1"
-        motion:duration="1000">
+        motion:duration="2000">
 
         <OnSwipe
             motion:touchAnchorId="@id/t0"
             motion:dragDirection="dragDown"
-            motion:maxVelocity="20"
-            motion:maxAcceleration="20"/>
-       <KeyFrameSet>
-           <KeyTimeCycle motion:motionTarget="text"
-               motion:framePosition="0"
-               motion:wavePeriod="0"
-               motion:waveShape="sin"
-               motion:waveOffset="0">
-               <CustomAttribute motion:attributeName="outlineWidth"
-                   motion:customFloatValue="0"
-                   />
-           </KeyTimeCycle>
-           <KeyTimeCycle motion:motionTarget="text"
-               motion:framePosition="50"
-               motion:wavePeriod="0.5"
-               motion:waveShape="sin"
-               motion:waveOffset="10">
-               <CustomAttribute motion:attributeName="outlineWidth"
-                   motion:customFloatValue="9"
-                   />
-           </KeyTimeCycle>
-           <KeyTimeCycle motion:motionTarget="text"
-               motion:framePosition="100"
-               motion:wavePeriod="0"
-               motion:waveShape="sin"
-               motion:waveOffset="0">
-               <CustomAttribute motion:attributeName="outlineWidth"
-                   motion:customFloatValue="0"
-                   />
-           </KeyTimeCycle>
-           <KeyAttribute motion:framePosition="50"
-               motion:motionTarget="text"
-               android:rotation="360"
-               />
-       </KeyFrameSet>
+            motion:maxVelocity="0.5"
+            motion:maxAcceleration=".1" />
+
+        <KeyFrameSet>
+            <KeyPosition
+                motion:framePosition="50"
+                motion:motionTarget="text"
+                motion:percentX="1" />
+
+            <KeyTimeCycle
+                motion:motionTarget="text"
+                motion:framePosition="0"
+                motion:wavePeriod="0"
+                motion:waveShape="sin"
+                motion:waveOffset="0">
+                <CustomAttribute
+                    motion:attributeName="textOutlineThickness"
+                    motion:customFloatValue="0" />
+            </KeyTimeCycle>
+            <KeyTimeCycle
+                motion:motionTarget="text"
+                motion:framePosition="50"
+                motion:wavePeriod="2"
+                motion:waveShape="sin"
+                motion:waveOffset="10">
+                <CustomAttribute
+                    motion:attributeName="textOutlineThickness"
+                    motion:customFloatValue="9" />
+            </KeyTimeCycle>
+            <KeyTimeCycle
+                motion:motionTarget="text"
+                motion:framePosition="100"
+                motion:wavePeriod="0"
+                motion:waveShape="sin"
+                motion:waveOffset="0">
+                <CustomAttribute
+                    motion:attributeName="textOutlineThickness"
+                    motion:customFloatValue="0" />
+            </KeyTimeCycle>
+            <KeyAttribute
+                motion:framePosition="50"
+                motion:motionTarget="text"
+                android:rotation="360" />
+        </KeyFrameSet>
     </Transition>
 
     <ConstraintSet android:id="@+id/start">

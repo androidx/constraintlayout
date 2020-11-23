@@ -3,10 +3,7 @@
     xmlns:motion="http://schemas.android.com/apk/res-auto"
     motion:defaultDuration="2000">
 
-
     <ConstraintSet android:id="@+id/end">
-
-
         <Constraint
             android:id="@+id/view"
             android:layout_width="90dp"
@@ -21,8 +18,6 @@
             android:id="@+id/view"
             android:layout_width="90dp"
             android:layout_height="90dp"
-            motion:transitionPathRotate="0"
-
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintStart_toStartOf="parent" />
     </ConstraintSet>
@@ -30,7 +25,7 @@
     <Transition
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@+id/start"
-        motion:duration="3000"
+        motion:duration="4000"
         motion:autoTransition="animateToStart"
         motion:motionInterpolator="linear">
 
@@ -44,27 +39,29 @@
                 motion:percentX="0.5"
                 motion:pathMotionArc="flip"
                 motion:percentY="0.3" />
-            <KeyCycle
+
+            <KeyTimeCycle
                 motion:motionTarget="@+id/view"
                 motion:framePosition="0"
-                motion:wavePeriod="1"
-                android:rotation="90"
-                motion:waveOffset="0dp" />
-            <KeyCycle
+                motion:wavePeriod="0"
+                android:rotation="0"
+                android:translationX="0dp"
+                motion:waveOffset="0" />
+            <KeyTimeCycle
                 motion:motionTarget="@+id/view"
                 motion:framePosition="50"
                 motion:wavePeriod="1"
                 android:rotation="90"
-                motion:waveOffset="0dp" />
-            <KeyCycle
+                android:translationX="90dp"
+                motion:waveOffset="0" />
+            <KeyTimeCycle
                 motion:motionTarget="@+id/view"
                 motion:framePosition="100"
-                motion:wavePeriod="1"
-                android:rotation="90"
-                motion:waveOffset="0dp" />
+                motion:wavePeriod="0"
+                android:rotation="0"
+                android:translationX="0dp"
+                motion:waveOffset="0" />
         </KeyFrameSet>
-
     </Transition>
-
 
 </MotionScene>

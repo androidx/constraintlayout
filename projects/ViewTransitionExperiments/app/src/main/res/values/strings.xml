@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">ViewTransition Expriements</string>
+    <string name="large_text">
+        MotionLayout is a new class available in the ConstraintLayout 2.0 library to help Android developers manage motion and widget animation in their application.
+The second half (29 min in) of our presentation at Google I/O 2018 on What’s New with ConstraintLayout and Android Studio Design Tools gives a good overview of the capabilities of the library.
+
+In this series of articles we will cover how you can add the library to your application and start experimenting with the concepts and features of MotionLayout.
+This part I will cover the basics of MotionLayout :
+Why MotionLayout?
+Adding ConstraintLayout 2.0 and MotionLayout to your project
+Using MotionLayout
+ConstraintSets
+
+MotionLayout attributes
+Conclusion
+You can also find the source code for those examples in the ConstraintLayout examples github repository.
+Image for post
+Feedback
+This library is an early release (alpha 2), and may change before the final stable release. During the alpha release cycle specifically, changes in API / naming are more likely, in reaction to user feedback. Please report any bugs or feature requests on the issue tracker, under the ConstraintLayout component.
+Feedback on the APIs is very welcome — do not hesitate to reach out to us!
+Why MotionLayout ?
+The Android framework already provides several ways of adding animation in your application:
+Animated Vector Drawable
+Property Animation framework
+LayoutTransition animations
+Layout transitions with TransitionManager
+CoordinatorLayout
+This section will cover how MotionLayout differs from those existing solutions.
+MotionLayout, as its name hints at, is first of all a layout, letting you position your elements. It’s actually a subclass of ConstraintLayout, and builds upon its rich layout capabilities.
+MotionLayout was created to bridge the gap between layout transitions and complex motion handling. You can think of it in terms of capabilities as a mix between the property animation framework, TransitionManager, and CoordinatorLayout.
+A mix between the property animation framework, layout transitions with TransitionManager, and CoordinatorLayout
+It lets you describe the transition between two layouts (like TransitionManager), but can animate any properties as well (not just layout attributes). Moreover, it inherently supports seekable transitions, like CoordinatorLayout (the transition can be driven purely by touch and transition to any point of it instantly). It supports touch handling and keyframes, allowing developers to easily customize transitions to their own needs.
+MotionLayout is fully declarative
+Beyond this scope, the other key difference is that MotionLayout is fully declarative — you can fully describe in XML a complex transition — no code is expected (if you need to express motion by code, the existing property animation framework already provides a great way of doing it).
+MotionLayout tooling
+We do believe that this focus on declarative motion specification will simplify creating such animations, as well as open the way to provide great graphical tooling in Android Studio.</string>
+</resources>

@@ -133,7 +133,6 @@ public class TextMorph extends View {
         mPaint.setStrokeWidth(mTextOutlineThickness);
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mPaint.setAntiAlias(true);
-        Log.v(TAG,Debug.getLoc()+" ====  #"+Integer.toHexString(mTextOutlineColor)+" , #"+Integer.toHexString(mTextFillColor)+" , "+mTextOutlineThickness);
         mLayout =new StaticLayout(mText,mPaint,getWidth(), Layout.Alignment.ALIGN_CENTER, 1, 0,   true);
     }
 
@@ -143,7 +142,6 @@ public class TextMorph extends View {
         int strlen = str.length();
         mPaint.setTextSize(getHeight());
         mPaint.getTextBounds(str, 0, strlen, mTextBounds);
-        Log.v(TAG, Debug.getLoc()+" "+mTextBounds);
         mPaint.getTextPath(str, 0, strlen, 0, 0, mPath);
         Matrix matrix = new Matrix();
         mTextBounds.right--;
