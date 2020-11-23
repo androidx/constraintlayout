@@ -23,7 +23,6 @@
         android:id="@+id/number1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:text="1"
         android:textSize="24sp"
         app:layout_constraintCircle="@id/dial"
@@ -37,7 +36,6 @@
         android:id="@+id/number2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:text="2"
         android:textSize="24sp"
         app:layout_constraintCircle="@id/dial"
@@ -47,12 +45,10 @@
         tools:layout_editor_absoluteX="178dp"
         tools:layout_editor_absoluteY="335dp" />
 
-
     <TextView
         android:id="@+id/number3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:text="3"
         android:textSize="24sp"
         app:layout_constraintCircle="@id/dial"
@@ -61,7 +57,6 @@
         app:layout_constraintTag="hop"
         tools:layout_editor_absoluteX="178dp"
         tools:layout_editor_absoluteY="335dp" />
-
 
     <TextView
         android:id="@+id/number4"
@@ -102,7 +97,6 @@
         tools:layout_editor_absoluteX="178dp"
         tools:layout_editor_absoluteY="335dp" />
 
-
     <TextView
         android:id="@+id/number7"
         android:layout_width="wrap_content"
@@ -115,7 +109,6 @@
         app:layout_constraintTag="hop"
         tools:layout_editor_absoluteX="178dp"
         tools:layout_editor_absoluteY="335dp" />
-
 
     <TextView
         android:id="@+id/number8"
@@ -130,7 +123,6 @@
         tools:layout_editor_absoluteX="178dp"
         tools:layout_editor_absoluteY="335dp" />
 
-
     <TextView
         android:id="@+id/number9"
         android:layout_width="wrap_content"
@@ -143,7 +135,6 @@
         app:layout_constraintTag="hop"
         tools:layout_editor_absoluteX="178dp"
         tools:layout_editor_absoluteY="335dp" />
-
 
     <TextView
         android:id="@+id/number0"
@@ -158,7 +149,6 @@
         tools:layout_editor_absoluteX="178dp"
         tools:layout_editor_absoluteY="335dp" />
 
-
     <ImageView
         android:id="@+id/dial"
         android:layout_width="300dp"
@@ -170,10 +160,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTag="center"
-        />
-
-
+        app:layout_constraintTag="center" />
 
     <ImageView
         android:id="@+id/dialhook"
@@ -183,8 +170,6 @@
         app:layout_constraintCircle="@id/dial"
         app:layout_constraintCircleAngle="122"
         app:layout_constraintCircleRadius="112dp"
-        app:layout_constraintTag="hop"
-        />
-
+        app:layout_constraintTag="hop" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

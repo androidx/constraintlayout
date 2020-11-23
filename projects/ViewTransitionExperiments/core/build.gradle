@@ -1,0 +1,15 @@
+apply plugin: 'java-library'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_7
+    targetCompatibility = JavaVersion.VERSION_1_7
+}
+
+sourceSets{
+    main.java.srcDirs = ['../../../constraintlayout/core/src/main/java']
+    test.java.srcDirs = ['../../../constraintlayout/core/src/test/java']
+}
+
+dependencies {
+    testImplementation 'org.testng:testng:6.9.6'
+}

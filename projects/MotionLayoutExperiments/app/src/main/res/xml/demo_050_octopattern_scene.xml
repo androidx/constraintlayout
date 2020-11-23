@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MotionScene
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:motion="http://schemas.android.com/apk/res-auto"
-    motion:defaultDuration="1000"
-    >
+    motion:defaultDuration="1000">
 
-    <ConstraintSet android:id="@+id/start"/>
+    <ConstraintSet android:id="@+id/start" />
     <ConstraintSet android:id="@+id/end">
         <Constraint
             android:id="@+id/imageView1"
@@ -42,7 +40,7 @@
             motion:layout_constraintTag="Image1"
             motion:layout_constraintCircleRadius="@dimen/radius"
             motion:layout_constraintCircle="@+id/center"
-            motion:layout_constraintCircleAngle="180"/>
+            motion:layout_constraintCircleAngle="180" />
         <Constraint
             android:id="@+id/imageView5"
             android:layout_width="wrap_content"
@@ -69,7 +67,7 @@
             motion:layout_constraintTag="Image1"
             motion:layout_constraintCircleRadius="@dimen/radius"
             motion:layout_constraintCircle="@+id/center"
-            motion:layout_constraintCircleAngle="315"/>
+            motion:layout_constraintCircleAngle="315" />
         <Constraint
             android:id="@+id/imageView8"
             android:layout_width="wrap_content"
@@ -82,7 +80,7 @@
     </ConstraintSet>
     <ConstraintSet
         android:id="@+id/overlayStart"
-        motion:deriveConstraintsFrom="@+id/start" >
+        motion:deriveConstraintsFrom="@+id/start">
         <Constraint
             android:id="@+id/overlay1"
             android:layout_width="wrap_content"
@@ -133,7 +131,7 @@
     </ConstraintSet>
     <ConstraintSet
         android:id="@+id/overlayEnd"
-        motion:deriveConstraintsFrom="@+id/overlayStart" >
+        motion:deriveConstraintsFrom="@+id/overlayStart">
         <Constraint
             android:id="@+id/overlay1"
             android:layout_width="wrap_content"
@@ -189,12 +187,6 @@
         motion:autoTransition="animateToEnd">
 
         <KeyFrameSet>
-<!--                        <KeyPosition-->
-<!--                            motion:motionTarget="Imag.*"-->
-<!--                            motion:framePosition="50"-->
-<!--                            motion:keyPositionType="pathRelative"-->
-<!--                            motion:percentY="@dimen/extension"-->
-<!--                            motion:percentX="0.5" />-->
             <KeyPosition
                 motion:motionTarget="@+id/imageView1"
                 motion:framePosition="50"
@@ -257,7 +249,6 @@
         motion:constraintSetEnd="@+id/overlayStart"
         motion:autoTransition="jumpToEnd">
     </Transition>
-
 
     <Transition
         motion:constraintSetStart="@+id/overlayStart"
