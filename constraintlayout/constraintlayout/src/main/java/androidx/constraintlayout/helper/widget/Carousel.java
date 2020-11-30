@@ -149,21 +149,24 @@ public class Carousel extends MotionHelper {
             mIndex--;
             System.out.println("decrement index...");
         }
-        if (mIndex >= mAdapter.count()) {
-            if (infiniteCarousel) {
+        if (infiniteCarousel) {
+            if (mIndex >= mAdapter.count()) {
                 mIndex = 0;
-            } else {
-                mIndex = mAdapter.count() - 1;
+                System.out.println("index capped... " + mIndex);
             }
-            System.out.println("index capped... " + mIndex);
-        }
-        if (mIndex < 0) {
-            if (infiniteCarousel) {
+            if (mIndex < 0) {
                 mIndex = mAdapter.count() - 1;
-            } else {
+                System.out.println("index zeroed... ");
+            }
+        } else {
+            if (mIndex >= mAdapter.count()) {
+                mIndex = mAdapter.count() - 1;
+                System.out.println("index capped... " + mIndex);
+            }
+            if (mIndex < 0) {
                 mIndex = 0;
+                System.out.println("index zeroed... ");
             }
-            System.out.println("index zeroed... ");
         }
 
         if (mPreviousIndex != mIndex) {
@@ -300,7 +303,7 @@ public class Carousel extends MotionHelper {
         if (mMotionLayout == null) {
             return;
         }
-        if (mAdapter.count() == 0){
+        if (mAdapter.count() == 0) {
             return;
         }
         if (DEBUG) {
@@ -311,8 +314,8 @@ public class Carousel extends MotionHelper {
             // mIndex should map to i == startIndex
             View view = mList.get(i);
             int index = mIndex + i - startIndex;
-            if (index < 0) {
-                if (infiniteCarousel) {
+            if (infiniteCarousel) {
+                if (index < 0) {
                     if (emptyViewBehavior != View.INVISIBLE) {
                         updateViewVisibility(view, emptyViewBehavior);
                     } else {
@@ -323,11 +326,7 @@ public class Carousel extends MotionHelper {
                     } else {
                         mAdapter.populate(view, mAdapter.count() + (index % mAdapter.count()));
                     }
-                } else {
-                    updateViewVisibility(view, emptyViewBehavior);
-                }
-            } else if (index >= mAdapter.count()) {
-                if (infiniteCarousel) {
+                } else if (index >= mAdapter.count()) {
                     if (index == mAdapter.count()) {
                         index = 0;
                     } else if (index > mAdapter.count()) {
@@ -340,11 +339,18 @@ public class Carousel extends MotionHelper {
                     }
                     mAdapter.populate(view, index);
                 } else {
-                    updateViewVisibility(view, emptyViewBehavior);
+                    updateViewVisibility(view, VISIBLE);
+                    mAdapter.populate(view, index);
                 }
             } else {
-                updateViewVisibility(view, VISIBLE);
-                mAdapter.populate(view, index);
+                if (index < 0) {
+                    updateViewVisibility(view, emptyViewBehavior);
+                } else if (index >= mAdapter.count()) {
+                    updateViewVisibility(view, emptyViewBehavior);
+                } else {
+                    updateViewVisibility(view, VISIBLE);
+                    mAdapter.populate(view, index);
+                }
             }
         }
 

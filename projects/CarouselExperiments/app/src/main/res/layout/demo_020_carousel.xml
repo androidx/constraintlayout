@@ -87,7 +87,6 @@
         app:carousel_firstView="@+id/imageView2"
         app:carousel_touchUpMode="carryVelocity"
         app:carousel_touchUp_dampeningFactor="0.8"
-        app:carousel_infinite="true"
         app:constraint_referenced_ids="imageView0,imageView1,imageView2,imageView3,imageView4" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>
