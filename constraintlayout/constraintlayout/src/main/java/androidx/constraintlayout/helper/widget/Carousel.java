@@ -36,13 +36,12 @@ public class Carousel extends MotionHelper {
     private static final boolean DEBUG = false;
     private static final String TAG = "Carousel";
     private Adapter mAdapter = null;
-    private ArrayList<View> mList = new ArrayList<>();
+    private final ArrayList<View> mList = new ArrayList<>();
     private int mPreviousIndex = 0;
     private int mIndex = 0;
     private MotionLayout mMotionLayout;
     private int firstViewReference = -1;
     private boolean infiniteCarousel = false;
-    private boolean firstShow = true;
     private int backwardTransition = -1;
     private int forwardTransition = -1;
     private int previousState = -1;
@@ -59,7 +58,9 @@ public class Carousel extends MotionHelper {
 
     public interface Adapter {
         int count();
+
         void populate(View view, int index);
+
         void onNewItem(int mIndex);
     }
 
@@ -109,7 +110,9 @@ public class Carousel extends MotionHelper {
         }
     }
 
-    public void setAdapter(Adapter adapter) { mAdapter = adapter; }
+    public void setAdapter(Adapter adapter) {
+        mAdapter = adapter;
+    }
 
     public void refresh() {
         final int count = mList.size();
@@ -139,7 +142,6 @@ public class Carousel extends MotionHelper {
     public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
         System.out.println("on transition completed");
         mPreviousIndex = mIndex;
-        firstShow = false;
         if (currentId == nextState) {
             mIndex++;
             System.out.println("increment index...");
@@ -308,8 +310,16 @@ public class Carousel extends MotionHelper {
             int index = mIndex + i - startIndex;
             if (index < 0) {
                 if (infiniteCarousel) {
-                    updateViewVisibility(view, VISIBLE);
-                    mAdapter.populate(view, mAdapter.count() + index);
+                    if (emptyViewBehavior != View.INVISIBLE) {
+                        updateViewVisibility(view, emptyViewBehavior);
+                    } else {
+                        updateViewVisibility(view, VISIBLE);
+                    }
+                    if (index % mAdapter.count() == 0) {
+                        mAdapter.populate(view, 0);
+                    } else {
+                        mAdapter.populate(view, mAdapter.count() + (index % mAdapter.count()));
+                    }
                 } else {
                     updateViewVisibility(view, emptyViewBehavior);
                 }
@@ -318,9 +328,13 @@ public class Carousel extends MotionHelper {
                     if (index == mAdapter.count()) {
                         index = 0;
                     } else if (index > mAdapter.count()) {
-                        index = index % mAdapter.count() ;
+                        index = index % mAdapter.count();
                     }
-                    updateViewVisibility(view, VISIBLE);
+                    if (emptyViewBehavior != View.INVISIBLE) {
+                        updateViewVisibility(view, emptyViewBehavior);
+                    } else {
+                        updateViewVisibility(view, VISIBLE);
+                    }
                     mAdapter.populate(view, index);
                 } else {
                     updateViewVisibility(view, emptyViewBehavior);
@@ -337,20 +351,7 @@ public class Carousel extends MotionHelper {
         }
 
         final int count = mAdapter.count();
-        if (infiniteCarousel) {
-            if (firstShow) {
-                if (mIndex == 0) {
-                    enableTransition(backwardTransition, false);
-                } else {
-                    enableTransition(backwardTransition, true);
-                    mMotionLayout.setTransition(backwardTransition);
-                }
-            } else {
-                enableTransition(backwardTransition, true);
-                mMotionLayout.setTransition(backwardTransition);
-            }
-
-        } else {
+        if (!infiniteCarousel) {
             if (mIndex == 0) {
                 enableTransition(backwardTransition, false);
             } else {
@@ -364,7 +365,6 @@ public class Carousel extends MotionHelper {
                 mMotionLayout.setTransition(forwardTransition);
             }
         }
-
     }
 
 }
