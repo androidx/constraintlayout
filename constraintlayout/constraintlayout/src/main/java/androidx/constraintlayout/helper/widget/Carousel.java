@@ -300,6 +300,9 @@ public class Carousel extends MotionHelper {
         if (mMotionLayout == null) {
             return;
         }
+        if (mAdapter.count() == 0){
+            return;
+        }
         if (DEBUG) {
             System.out.println("Update items, index: " + mIndex);
         }
