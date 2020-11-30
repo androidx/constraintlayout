@@ -140,32 +140,25 @@ public class Carousel extends MotionHelper {
 
     @Override
     public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
-        System.out.println("on transition completed");
         mPreviousIndex = mIndex;
         if (currentId == nextState) {
             mIndex++;
-            System.out.println("increment index...");
         } else if (currentId == previousState) {
             mIndex--;
-            System.out.println("decrement index...");
         }
         if (infiniteCarousel) {
             if (mIndex >= mAdapter.count()) {
                 mIndex = 0;
-                System.out.println("index capped... " + mIndex);
             }
             if (mIndex < 0) {
                 mIndex = mAdapter.count() - 1;
-                System.out.println("index zeroed... ");
             }
         } else {
             if (mIndex >= mAdapter.count()) {
                 mIndex = mAdapter.count() - 1;
-                System.out.println("index capped... " + mIndex);
             }
             if (mIndex < 0) {
                 mIndex = 0;
-                System.out.println("index zeroed... ");
             }
         }
 
@@ -359,20 +352,22 @@ public class Carousel extends MotionHelper {
             return;
         }
 
+        if (infiniteCarousel) {
+            return;
+        }
+
         final int count = mAdapter.count();
-        if (!infiniteCarousel) {
-            if (mIndex == 0) {
-                enableTransition(backwardTransition, false);
-            } else {
-                enableTransition(backwardTransition, true);
-                mMotionLayout.setTransition(backwardTransition);
-            }
-            if (mIndex == count - 1) {
-                enableTransition(forwardTransition, false);
-            } else {
-                enableTransition(forwardTransition, true);
-                mMotionLayout.setTransition(forwardTransition);
-            }
+        if (mIndex == 0) {
+            enableTransition(backwardTransition, false);
+        } else {
+            enableTransition(backwardTransition, true);
+            mMotionLayout.setTransition(backwardTransition);
+        }
+        if (mIndex == count - 1) {
+            enableTransition(forwardTransition, false);
+        } else {
+            enableTransition(forwardTransition, true);
+            mMotionLayout.setTransition(forwardTransition);
         }
     }
 
