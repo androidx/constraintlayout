@@ -176,7 +176,7 @@
         app:carousel_forwardTransition="@+id/forward"
         app:carousel_backwardTransition="@+id/backward"
         app:carousel_previousState="@+id/previous"
-        app:carousel_infinite="false"
+        app:carousel_infinite="true"
         app:carousel_nextState="@+id/next"
         app:carousel_firstView="@+id/textView4"
         app:constraint_referenced_ids="textView0,textView1,textView2,textView3,textView4,textView5,textView6,textView7,textView8" />

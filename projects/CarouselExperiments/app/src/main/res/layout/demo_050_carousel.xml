@@ -105,7 +105,7 @@
         app:carousel_nextState="@+id/next"
         app:carousel_firstView="@+id/imageView2"
         app:carousel_emptyViewsBehavior="gone"
-        app:carousel_infinite="false"
+        app:carousel_infinite="true"
         app:constraint_referenced_ids="imageView0,imageView1,imageView2,imageView3,imageView4" />
 
 <!--    <androidx.constraintlayout.helper.widget.Carousel-->
