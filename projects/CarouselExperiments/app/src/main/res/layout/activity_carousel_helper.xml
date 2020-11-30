@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    app:layoutDescription="@xml/activity_carousel_helper_scene">
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/surface4"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:layout_marginBottom="120dp"
+        android:rotation="75"
+        android:alpha="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/surface3"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:layout_marginBottom="80dp"
+        android:rotation="65"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/surface2"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:layout_marginBottom="40dp"
+        android:rotation="55"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/surface1"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:rotation="45"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/surface0"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.constraintlayout.helper.widget.Carousel
+        android:id="@+id/carousel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:carousel_backwardTransition="@+id/backward"
+        app:carousel_firstView="@id/surface1"
+        app:carousel_forwardTransition="@+id/forward"
+        app:carousel_nextState="@+id/next"
+        app:carousel_infinite="true"
+        app:carousel_previousState="@+id/previous"
+        app:constraint_referenced_ids="surface0, surface1, surface2, surface3, surface4" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

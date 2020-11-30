@@ -69,6 +69,13 @@ public class Loader {
             linearLayout.addView(button);
             button.setOnClickListener(view -> launch(mainActivity, (String) view.getTag()));
         }
+        Button button = new Button(mainActivity);
+        button.setText("Carousel color demo");
+        linearLayout.addView(button);
+        button.setOnClickListener(v -> {
+            Intent intent = new Intent(mainActivity, CarouselHelperActivity.class);
+            mainActivity.startActivity(intent);
+        });
         sv.addView(linearLayout);
         mainActivity.setContentView(sv);
     }
