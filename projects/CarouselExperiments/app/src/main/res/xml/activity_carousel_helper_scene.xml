@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        android:id="@+id/forward"
+        motion:constraintSetEnd="@+id/next"
+        motion:constraintSetStart="@id/start"
+        motion:duration="1000">
+
+        <OnSwipe
+            motion:dragDirection="dragDown"
+            motion:touchAnchorSide="bottom" />
+    </Transition>
+
+    <Transition
+        android:id="@+id/backward"
+        motion:constraintSetEnd="@+id/previous"
+        motion:constraintSetStart="@id/start"
+        motion:duration="1000">
+        <OnSwipe
+            motion:dragDirection="dragUp"
+            motion:touchAnchorSide="bottom" />
+    </Transition>
+
+    <ConstraintSet android:id="@+id/previous">
+        <Constraint android:id="@+id/surface0">
+            <Layout
+                android:layout_width="400dp"
+                android:layout_height="400dp"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toEndOf="parent"
+                motion:layout_constraintTop_toTopOf="parent" />
+            <Transform android:rotation="45" />
+        </Constraint>
+
+        <Constraint android:id="@+id/surface1">
+            <Layout
+                android:layout_width="400dp"
+                android:layout_height="400dp"
+                android:layout_marginBottom="40dp"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toEndOf="parent"
+                motion:layout_constraintTop_toTopOf="parent" />
+            <Transform android:rotation="55" />
+        </Constraint>
+
+        <Constraint android:id="@+id/surface2">
+            <Layout
+                android:layout_width="400dp"
+                android:layout_height="400dp"
+                android:layout_marginBottom="80dp"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toEndOf="parent"
+                motion:layout_constraintTop_toTopOf="parent" />
+            <Transform android:rotation="65" />
+        </Constraint>
+
+        <Constraint android:id="@+id/surface3">
+            <Layout
+                android:layout_width="400dp"
+                android:layout_height="400dp"
+                android:layout_marginBottom="120dp"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toEndOf="parent"
+                motion:layout_constraintTop_toTopOf="parent" />
+            <Transform android:rotation="75" />
+            <PropertySet android:alpha="0" />
+        </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/start"></ConstraintSet>
+
+    <ConstraintSet android:id="@+id/next">
+        <Constraint android:id="@+id/surface1">
+            <Layout
+                android:layout_width="400dp"
+                android:layout_height="400dp"
+                android:layout_marginTop="40dp"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintStart_toEndOf="parent"
+                motion:layout_constraintTop_toTopOf="parent" />
+            <Transform android:rotation="0" />
+        </Constraint>
+
+        <Constraint android:id="@+id/surface2">
+            <Layout
+                android:layout_width="400dp"
+                android:layout_height="400dp"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toEndOf="parent"
+                motion:layout_constraintTop_toTopOf="parent" />
+            <Transform android:rotation="45" />
+        </Constraint>
+
+        <Constraint android:id="@+id/surface3">
+            <Layout
+                android:layout_width="400dp"
+                android:layout_height="400dp"
+                android:layout_marginBottom="40dp"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toEndOf="parent"
+                motion:layout_constraintTop_toTopOf="parent" />
+            <Transform android:rotation="55" />
+        </Constraint>
+
+        <Constraint android:id="@+id/surface4">
+            <Layout
+                android:layout_width="400dp"
+                android:layout_height="400dp"
+                android:layout_marginBottom="80dp"
+                motion:layout_constraintBottom_toBottomOf="parent"
+                motion:layout_constraintEnd_toEndOf="parent"
+                motion:layout_constraintStart_toEndOf="parent"
+                motion:layout_constraintTop_toTopOf="parent" />
+            <Transform android:rotation="65" />
+            <PropertySet android:alpha="1" />
+        </Constraint>
+    </ConstraintSet>
+</MotionScene>

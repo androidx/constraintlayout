@@ -236,6 +236,7 @@
         <attr name="carousel_firstView" format="reference" />
         <attr name="carousel_previousState" format="reference" />
         <attr name="carousel_nextState" format="reference" />
+        <attr name="carousel_infinite" format="boolean"/>
         <attr name="carousel_forwardTransition" format="reference" />
         <attr name="carousel_backwardTransition" format="reference" />
         <attr name="carousel_touchUp_dampeningFactor" format="float" />

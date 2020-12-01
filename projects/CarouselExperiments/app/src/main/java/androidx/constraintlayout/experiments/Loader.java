@@ -57,7 +57,7 @@ public class Loader {
         return null;
     }
 
-    static void normalMenuStartUp(MainActivity mainActivity) {
+    static void normalMenuStartUp(MainActivity mainActivity, Class[] activitiesDemo) {
         String[] layouts = getLayouts(s -> s.matches(LAYOUTS_MATCHES));
         ScrollView sv = new ScrollView(mainActivity);
         LinearLayout linearLayout = new LinearLayout(mainActivity);
@@ -69,6 +69,16 @@ public class Loader {
             linearLayout.addView(button);
             button.setOnClickListener(view -> launch(mainActivity, (String) view.getTag()));
         }
+        for (Class aClass : activitiesDemo) {
+            Button button = new Button(mainActivity);
+            button.setText("Demo from " + aClass.getSimpleName());
+            linearLayout.addView(button);
+            button.setOnClickListener(v -> {
+                Intent intent = new Intent(mainActivity, aClass);
+                mainActivity.startActivity(intent);
+            });
+        }
+
         sv.addView(linearLayout);
         mainActivity.setContentView(sv);
     }

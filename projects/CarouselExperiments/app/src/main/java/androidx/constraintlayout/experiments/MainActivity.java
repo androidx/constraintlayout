@@ -73,6 +73,11 @@ public class MainActivity extends AppCompatActivity {
             Color.parseColor("#45C0B8"),
     };
 
+    // Array from Activities with more examples
+    Class activitiesDemo[] = {
+            CarouselHelperActivity.class
+    };
+
     ////////////////////////////////////////////////////////////////
 
     @Override
@@ -80,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Bundle extra = getIntent().getExtras();
         if (extra == null) {
-            Loader.normalMenuStartUp(this);
+            Loader.normalMenuStartUp(this, activitiesDemo);
             return;
         }
         setupActivity(extra);
