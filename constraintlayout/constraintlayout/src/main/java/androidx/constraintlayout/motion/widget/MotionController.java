@@ -137,19 +137,19 @@ public class MotionController {
         setView(view);
     }
 
-    float getStartX() {
+    public float getStartX() {
         return mStartMotionPath.x;
     }
 
-    float getStartY() {
+    public float getStartY() {
         return mStartMotionPath.y;
     }
 
-    float getFinalX() {
+    public float getFinalX() {
         return mEndMotionPath.x;
     }
 
-    float getFinalY() {
+    public float getFinalY() {
         return mEndMotionPath.y;
     }
 
@@ -178,7 +178,6 @@ public class MotionController {
         double [] position = new double[4];
         double [] velocity = new double[4];
         int [] temp = new int[4];
-
         mSpline[0].getPos(p, position);
         mSpline[0].getSlope(p, velocity);
         Arrays.fill(vel,0);
@@ -530,7 +529,7 @@ public class MotionController {
         }
     }
 
-    void addKey(Key key) {
+    public void addKey(Key key) {
         mKeyList.add(key);
         if (DEBUG) {
             Log.v(TAG, " ################ addKey = " + key.getClass().getSimpleName());

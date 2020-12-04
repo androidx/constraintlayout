@@ -145,4 +145,21 @@ public abstract class Key {
         mTargetId = id;
         return this;
     }
+
+    /**
+     * sets the frame position
+     * @param pos
+     */
+    public void setFramePosition(int pos) {
+        mFramePosition = pos;
+    }
+
+    /**
+     * Gets the current frame position
+     * @return
+     */
+    public int getFramePosition() {
+       return  mFramePosition;
+    }
+
 }
