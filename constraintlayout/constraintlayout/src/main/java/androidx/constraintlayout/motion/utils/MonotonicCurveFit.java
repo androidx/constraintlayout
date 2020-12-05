@@ -28,10 +28,13 @@ public class MonotonicCurveFit extends CurveFit {
     private double[] mT;
     private double[][] mY;
     private double[][] mTangent;
+    private boolean mExterpolate = true;
+    double[] mSlopeTemp;
 
     public MonotonicCurveFit(double[] time, double[][] y) {
         final int N = time.length;
         final int dim = y[0].length;
+        mSlopeTemp = new double[dim];
         double[][] slope = new double[N - 1][dim]; // could optimize this out
         double[][] tangent = new double[N][dim];
         for (int j = 0; j < dim; j++) {
@@ -73,17 +76,34 @@ public class MonotonicCurveFit extends CurveFit {
     public void getPos(double t, double[] v) {
         final int n = mT.length;
         final int dim = mY[0].length;
-        if (t <= mT[0]) {
-            for (int j = 0; j < dim; j++) {
-                v[j] = mY[0][j];
+        if (mExterpolate) {
+            if (t <= mT[0]) {
+                getSlope(mT[0], mSlopeTemp);
+                for (int j = 0; j < dim; j++) {
+                    v[j] = mY[0][j] + (t - mT[0]) * mSlopeTemp[j];
+                }
+                return;
             }
-            return;
-        }
-        if (t >= mT[n - 1]) {
-            for (int j = 0; j < dim; j++) {
-                v[j] = mY[n - 1][j];
+            if (t >= mT[n - 1]) {
+                getSlope(mT[n - 1], mSlopeTemp);
+                for (int j = 0; j < dim; j++) {
+                    v[j] = mY[n - 1][j] + (t - mT[n - 1]) * mSlopeTemp[j];
+                }
+                return;
             }
-            return;
+        } else {
+            if (t <= mT[0]) {
+                for (int j = 0; j < dim; j++) {
+                    v[j] = mY[0][j];
+                }
+                return;
+            }
+            if (t >= mT[n - 1]) {
+                for (int j = 0; j < dim; j++) {
+                    v[j] = mY[n - 1][j];
+                }
+                return;
+            }
         }
 
         for (int i = 0; i < n - 1; i++) {
@@ -111,17 +131,34 @@ public class MonotonicCurveFit extends CurveFit {
     public void getPos(double t, float[] v) {
         final int n = mT.length;
         final int dim = mY[0].length;
-        if (t <= mT[0]) {
-            for (int j = 0; j < dim; j++) {
-                v[j] = (float) mY[0][j];
+        if (mExterpolate) {
+            if (t <= mT[0]) {
+                getSlope(mT[0], mSlopeTemp);
+                for (int j = 0; j < dim; j++) {
+                    v[j] = (float) (mY[0][j] + (t - mT[0]) * mSlopeTemp[j]);
+                }
+                return;
             }
-            return;
-        }
-        if (t >= mT[n - 1]) {
-            for (int j = 0; j < dim; j++) {
-                v[j] = (float) mY[n - 1][j];
+            if (t >= mT[n - 1]) {
+                getSlope(mT[n - 1], mSlopeTemp);
+                for (int j = 0; j < dim; j++) {
+                    v[j] = (float) (mY[n - 1][j] + (t - mT[n - 1]) * mSlopeTemp[j]);
+                }
+                return;
             }
-            return;
+        } else {
+            if (t <= mT[0]) {
+                for (int j = 0; j < dim; j++) {
+                    v[j] = (float) mY[0][j];
+                }
+                return;
+            }
+            if (t >= mT[n - 1]) {
+                for (int j = 0; j < dim; j++) {
+                    v[j] = (float) mY[n - 1][j];
+                }
+                return;
+            }
         }
 
         for (int i = 0; i < n - 1; i++) {
@@ -148,11 +185,20 @@ public class MonotonicCurveFit extends CurveFit {
     @Override
     public double getPos(double t, int j) {
         final int n = mT.length;
-        if (t <= mT[0]) {
-            return mY[0][j];
-        }
-        if (t >= mT[n - 1]) {
-            return mY[n - 1][j];
+        if (mExterpolate) {
+            if (t <= mT[0]) {
+                return mY[0][j]  + (t - mT[0]) * getSlope(mT[0],j);
+            }
+            if (t >= mT[n - 1]) {
+                return mY[n - 1][j] + (t - mT[n - 1]) * getSlope(mT[n - 1],j);
+            }
+        } else {
+            if (t <= mT[0]) {
+                return mY[0][j];
+            }
+            if (t >= mT[n - 1]) {
+                return mY[n - 1][j];
+            }
         }
 
         for (int i = 0; i < n - 1; i++) {

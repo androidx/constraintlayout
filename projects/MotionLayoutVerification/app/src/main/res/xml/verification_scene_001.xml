@@ -42,9 +42,6 @@
             motion:layout_constraintTop_toTopOf="parent" />
     </ConstraintSet>
 
-
-
-
     <ConstraintSet android:id="@+id/end">
         <Constraint
             android:id="@+id/button"

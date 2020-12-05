@@ -26,10 +26,13 @@ public class LinearCurveFit extends CurveFit {
     private double[] mT;
     private double[][] mY;
     private double mTotalLength = Double.NaN;
+    private boolean mExterpolate = true;
+    double[] mSlopeTemp;
 
     public LinearCurveFit(double[] time, double[][] y) {
         final int N = time.length;
         final int dim = y[0].length;
+        mSlopeTemp = new double[dim];
         mT = time;
         mY = y;
         if (dim > 2) {
@@ -100,18 +103,36 @@ public class LinearCurveFit extends CurveFit {
     public void getPos(double t, double[] v) {
         final int n = mT.length;
         final int dim = mY[0].length;
-        if (t <= mT[0]) {
-            for (int j = 0; j < dim; j++) {
-                v[j] = mY[0][j];
+        if (mExterpolate) {
+            if (t <= mT[0]) {
+                getSlope(mT[0], mSlopeTemp);
+                for (int j = 0; j < dim; j++) {
+                    v[j] = mY[0][j] + (t - mT[0]) * mSlopeTemp[j];
+                }
+                return;
             }
-            return;
-        }
-        if (t >= mT[n - 1]) {
-            for (int j = 0; j < dim; j++) {
-                v[j] = mY[n - 1][j];
+            if (t >= mT[n - 1]) {
+                getSlope(mT[n - 1], mSlopeTemp);
+                for (int j = 0; j < dim; j++) {
+                    v[j] = mY[n - 1][j] + (t - mT[n - 1]) * mSlopeTemp[j];
+                }
+                return;
             }
-            return;
+        } else {
+            if (t <= mT[0]) {
+                for (int j = 0; j < dim; j++) {
+                    v[j] = mY[0][j];
+                }
+                return;
+            }
+            if (t >= mT[n - 1]) {
+                for (int j = 0; j < dim; j++) {
+                    v[j] = mY[n - 1][j];
+                }
+                return;
+            }
         }
+
 
         for (int i = 0; i < n - 1; i++) {
             if (t == mT[i]) {
@@ -136,17 +157,34 @@ public class LinearCurveFit extends CurveFit {
     public void getPos(double t, float[] v) {
         final int n = mT.length;
         final int dim = mY[0].length;
-        if (t <= mT[0]) {
-            for (int j = 0; j < dim; j++) {
-                v[j] = (float) mY[0][j];
+        if (mExterpolate) {
+            if (t <= mT[0]) {
+                getSlope(mT[0], mSlopeTemp);
+                for (int j = 0; j < dim; j++) {
+                    v[j] = (float) (mY[0][j] + (t - mT[0]) * mSlopeTemp[j]);
+                }
+                return;
             }
-            return;
-        }
-        if (t >= mT[n - 1]) {
-            for (int j = 0; j < dim; j++) {
-                v[j] = (float) mY[n - 1][j];
+            if (t >= mT[n - 1]) {
+                getSlope(mT[n - 1], mSlopeTemp);
+                for (int j = 0; j < dim; j++) {
+                    v[j] = (float) (mY[n - 1][j] + (t - mT[n - 1]) * mSlopeTemp[j]);
+                }
+                return;
             }
-            return;
+        } else {
+            if (t <= mT[0]) {
+                for (int j = 0; j < dim; j++) {
+                    v[j] = (float) mY[0][j];
+                }
+                return;
+            }
+            if (t >= mT[n - 1]) {
+                for (int j = 0; j < dim; j++) {
+                    v[j] = (float) mY[n - 1][j];
+                }
+                return;
+            }
         }
 
         for (int i = 0; i < n - 1; i++) {
@@ -171,11 +209,20 @@ public class LinearCurveFit extends CurveFit {
 
     public double getPos(double t, int j) {
         final int n = mT.length;
-        if (t <= mT[0]) {
-            return mY[0][j];
-        }
-        if (t >= mT[n - 1]) {
-            return mY[n - 1][j];
+        if (mExterpolate) {
+            if (t <= mT[0]) {
+                return mY[0][j]  + (t - mT[0]) * getSlope(mT[0],j);
+            }
+            if (t >= mT[n - 1]) {
+                return mY[n - 1][j] + (t - mT[n - 1]) * getSlope(mT[n - 1],j);
+            }
+        } else {
+            if (t <= mT[0]) {
+                return mY[0][j];
+            }
+            if (t >= mT[n - 1]) {
+                return mY[n - 1][j];
+            }
         }
 
         for (int i = 0; i < n - 1; i++) {

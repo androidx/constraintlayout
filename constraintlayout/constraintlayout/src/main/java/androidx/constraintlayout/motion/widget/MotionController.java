@@ -36,6 +36,7 @@ import android.view.animation.AnticipateInterpolator;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.view.animation.OvershootInterpolator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -209,6 +210,7 @@ public class MotionController {
                 if (position > mStaggerOffset && position < 1.0) {
                     position -= mStaggerOffset;
                     position *= mStaggerScale;
+                    position = Math.min(position, 1.0f);
                 }
             }
             double p = position;
@@ -295,6 +297,7 @@ public class MotionController {
                 if (position > mStaggerOffset && position < 1.0) {
                     position -= mStaggerOffset;
                     position *= mStaggerScale;
+                    position = Math.min(position, 1.0f);
                 }
             }
             double p = position;
@@ -942,7 +945,8 @@ public class MotionController {
     static final int EASE_IN = 1;
     static final int EASE_OUT = 2;
     static final int LINEAR = 3;
-    static final int BOUNCE = 5;
+    static final int BOUNCE = 4;
+    static final int OVERSHOOT = 5;
     private static final int SPLINE_STRING = -1;
     private static final int INTERPOLATOR_REFRENCE_ID = -2;
     private static final int INTERPOLATOR_UNDEFINED = -3;
@@ -969,6 +973,8 @@ public class MotionController {
                 return null;
             case BOUNCE:
                 return new BounceInterpolator();
+            case OVERSHOOT:
+                return new OvershootInterpolator();
         }
         return null;
     }
@@ -1012,6 +1018,7 @@ public class MotionController {
             if (position > mStaggerOffset && position < 1.0) {
                 position -= mStaggerOffset;
                 position *= mStaggerScale;
+                position = Math.min(position, 1.0f);
             }
         }
 

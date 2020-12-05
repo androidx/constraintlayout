@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/motionLayout"
+    app:layoutDescription="@xml/verification_scene_000"
+    android:layout_width="match_parent"
+    android:background="#CFC"
+    app:motionDebug="SHOW_ALL"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/pos_start"
+        android:background="#409C00"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        app:layout_constraintHorizontal_bias=".2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/pos_end"
+        android:background="#A60022"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        app:layout_constraintHorizontal_bias=".8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+    <View
+        android:id="@+id/pos_end1"
+        android:background="#A60022"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        app:layout_constraintHorizontal_bias=".8"
+        app:layout_constraintVertical_bias=".35"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+    <View
+        android:id="@+id/pos_end2"
+        android:background="#A60022"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        app:layout_constraintHorizontal_bias=".8"
+        app:layout_constraintVertical_bias=".2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <View
+        android:id="@+id/button"
+        android:background="#B59700"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:text="Button"
+        tools:layout_editor_absoluteX="147dp"
+        tools:layout_editor_absoluteY="230dp" />
+
+    <View
+        android:id="@+id/button1"
+        android:background="#B59700"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:text="Button"
+        tools:layout_editor_absoluteX="147dp"
+        tools:layout_editor_absoluteY="230dp" />
+
+    <View
+        android:id="@+id/button2"
+        android:background="#B59700"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:text="Button"
+        tools:layout_editor_absoluteX="147dp"
+        tools:layout_editor_absoluteY="230dp" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="test with overshoot"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <Button
+        android:id="@+id/easeInOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="easeInOut"
+        app:layout_constraintBottom_toTopOf="@+id/easeIn"
+        app:layout_constraintEnd_toEndOf="@+id/easeIn"/>
+
+    <Button
+        android:id="@+id/easeIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="easeIn"
+        app:layout_constraintBottom_toTopOf="@+id/easeOut"
+        app:layout_constraintEnd_toEndOf="@+id/easeOut"/>
+
+    <Button
+        android:id="@+id/easeOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="easeOut"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/overshoot"
+        app:layout_constraintEnd_toStartOf="@+id/overshoot"
+        android:layout_marginRight="4dp" />
+
+    <Button
+        android:id="@+id/linear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="linear"
+        app:layout_constraintBottom_toTopOf="@+id/bounce"
+        app:layout_constraintEnd_toEndOf="@+id/bounce" />
+
+    <Button
+        android:id="@+id/bounce"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="bounce"
+        app:layout_constraintBottom_toTopOf="@+id/anticipate"
+        app:layout_constraintEnd_toEndOf="@+id/anticipate" />
+    <Button
+        android:id="@+id/anticipate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="anticipate"
+        app:layout_constraintBottom_toTopOf="@+id/overshoot"
+        app:layout_constraintEnd_toEndOf="@+id/overshoot" />
+
+    <Button
+        android:id="@+id/overshoot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="overshoot"
+        app:layout_constraintBottom_toTopOf="@+id/textView12"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.motion.widget.MotionLayout>
