@@ -74,6 +74,10 @@ public class KeyPosition extends KeyPositionBase {
     public void addValues(HashMap<String, SplineSet> splines) {
     }
 
+    public void setType(int type) {
+        mPositionType = type;
+    }
+
     @Override
     void calcPosition(int layoutWidth, int layoutHeight, float start_x, float start_y, float end_x, float end_y) {
         switch (mPositionType) {

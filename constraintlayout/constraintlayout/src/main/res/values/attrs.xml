@@ -253,6 +253,23 @@
 
     <!-- =============================== End Carousel =============================== -->
 
+    <!-- =============================== Start FadeMove =============================== -->
+
+    <declare-styleable name="FadeMove">
+        <attr name="fadeMove_start" format="integer"/>
+        <attr name="fadeMove_end" format="integer"/>
+        <attr name="fadeMove_translationX" format="dimension"/>
+        <attr name="fadeMove_translationY" format="dimension"/>
+        <attr name="fadeMove_alpha" format="float"/>
+        <attr name="fadeMove_move" format="enum">
+            <enum name="north" value = "1"/>
+            <enum name="south" value = "2"/>
+            <enum name="east" value = "3"/>
+            <enum name="west" value = "4"/>
+        </attr>
+        <attr name="fadeMove_strict" format="boolean" />
+    </declare-styleable>    <!-- =============================== End FadeMove =============================== -->
+
     <!-- Used at design time to define to position the view -->
     <attr name="layout_editor_absoluteX" format="dimension" />
     <!-- Used at design time to define to position the view -->

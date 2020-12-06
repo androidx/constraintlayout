@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:id="@+id/flow"
+            android:layout_margin="12dp"
+            android:layout_marginEnd="12dp"
+            motion:constraint_referenced_ids="t1,tf1,t2,tf2,t3,tf3,t4,tf4,t5,tf5"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@+id/flow"
+            android:layout_margin="12dp"
+            android:layout_marginEnd="12dp"
+            motion:constraint_referenced_ids="t3,tf3,t1,tf1,t4,tf4,t5,tf5,t2,tf2"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent" />
+    </ConstraintSet>
+    <Transition
+        motion:constraintSetStart="@+id/start"
+        motion:constraintSetEnd="@+id/end" >
+<!--        <KeyFrameSet >-->
+<!--            <KeyAttribute-->
+<!--                motion:motionTarget="@+id/t2"-->
+<!--                motion:framePosition="50"-->
+<!--                android:alpha="0.5" />-->
+<!--        </KeyFrameSet>-->
+        <OnSwipe />
+    </Transition>
+    <Transition
+        motion:constraintSetStart="@+id/end"
+        motion:constraintSetEnd="@+id/start" >
+<!--        <KeyFrameSet >-->
+<!--            <KeyAttribute-->
+<!--                motion:motionTarget="@+id/t1"-->
+<!--                motion:framePosition="50"-->
+<!--                android:alpha="0.5" />-->
+<!--        </KeyFrameSet>-->
+        <OnSwipe />
+    </Transition>
+</MotionScene>

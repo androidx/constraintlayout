@@ -1,0 +1,200 @@
+/*
+ * Copyright (C) 2020 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package androidx.constraintlayout.helper.widget;
+
+import android.content.Context;
+import android.content.res.TypedArray;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewParent;
+
+import androidx.constraintlayout.motion.widget.Debug;
+import androidx.constraintlayout.motion.widget.KeyAttributes;
+import androidx.constraintlayout.motion.widget.KeyPosition;
+import androidx.constraintlayout.motion.widget.MotionController;
+import androidx.constraintlayout.motion.widget.MotionHelper;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.R;
+
+import java.util.HashMap;
+
+public class FadeMove extends MotionHelper {
+    public static final String TAG = "Fademove";
+
+    public static final int NORTH = 1;
+    public static final int SOUTH = 2;
+    public static final int EAST = 3;
+    public static final int WEST = 4;
+
+    private float fadeAlpha = 0.1f;
+    private int fadeStart = 49;
+    private int fadeEnd = 50;
+    private int fadeTranslationX = 0;
+    private int fadeTranslationY = 0;
+    private boolean fadeMoveStrict = true;
+
+    private int fadeMove = NORTH;
+
+    public FadeMove(Context context) {
+        super(context);
+    }
+
+    public FadeMove(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(context, attrs);
+    }
+
+    public FadeMove(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(context, attrs);
+    }
+
+    private void init(Context context, AttributeSet attrs) {
+        if (attrs != null) {
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FadeMove);
+            final int N = a.getIndexCount();
+            for (int i = 0; i < N; i++) {
+                int attr = a.getIndex(i);
+                if (attr == R.styleable.FadeMove_fadeMove_start) {
+                    fadeStart = a.getInt(attr, fadeStart);
+                    fadeStart = Math.max(Math.min(fadeStart, 99), 0);
+                } else if (attr == R.styleable.FadeMove_fadeMove_end) {
+                    fadeEnd = a.getInt(attr, fadeEnd);
+                    fadeEnd = Math.max(Math.min(fadeEnd, 99), 0);
+                } else if (attr == R.styleable.FadeMove_fadeMove_translationX) {
+                    fadeTranslationX = a.getDimensionPixelOffset(attr, fadeTranslationX);
+                } else if (attr == R.styleable.FadeMove_fadeMove_translationY) {
+                    fadeTranslationY = a.getDimensionPixelOffset(attr, fadeTranslationY);
+                } else if (attr == R.styleable.FadeMove_fadeMove_alpha) {
+                    fadeAlpha = a.getFloat(attr, fadeAlpha);
+                } else if (attr == R.styleable.FadeMove_fadeMove_move) {
+                    fadeMove = a.getInt(attr, fadeMove);
+                } else if (attr == R.styleable.FadeMove_fadeMove_strict) {
+                    fadeMoveStrict = a.getBoolean(attr, fadeMoveStrict);
+                }
+            }
+            if (fadeStart == fadeEnd) {
+                if (fadeStart > 0) {
+                    fadeStart --;
+                } else {
+                    fadeEnd ++;
+                }
+            }
+            a.recycle();
+        }
+    }
+
+    @Override
+    public boolean isDecorator() {
+        return true;
+    }
+
+    public float convertDpToPx(Context context, float dp) {
+        return dp * context.getResources().getDisplayMetrics().density;
+    }
+
+    @Override
+    public void preSetup(HashMap<View, MotionController> mFrameArrayList) {
+        Log.v(TAG, Debug.getLoc());
+        View[] views = getViews((ConstraintLayout) this.getParent());
+
+        if (views == null) {
+            Log.v(TAG, Debug.getLoc() + " views = null");
+            return;
+        }
+        ViewParent parent = getParent();
+        KeyAttributes alpha1 = new KeyAttributes();
+        KeyAttributes alpha2 = new KeyAttributes();
+        alpha1.setValue("alpha", fadeAlpha);
+        alpha2.setValue("alpha", fadeAlpha);
+        alpha1.setFramePosition(fadeStart);
+        alpha2.setFramePosition(fadeEnd);
+        KeyPosition stick1 = new KeyPosition();
+        stick1.setFramePosition(fadeStart);
+        stick1.setType(KeyPosition.TYPE_CARTESIAN);
+        stick1.setValue("percentX", 0);
+        stick1.setValue("percentY", 0);
+        KeyPosition stick2 = new KeyPosition();
+        stick2.setFramePosition(fadeEnd);
+        stick2.setType(KeyPosition.TYPE_CARTESIAN);
+        stick2.setValue("percentX", 1);
+        stick2.setValue("percentY", 1);
+
+        KeyAttributes translationX1 = null;
+        KeyAttributes translationX2 = null;
+        if (fadeTranslationX > 0) {
+            translationX1 = new KeyAttributes();
+            translationX2 = new KeyAttributes();
+            translationX1.setValue("translationX", fadeTranslationX);
+            translationX1.setFramePosition(fadeEnd);
+            translationX2.setValue("translationX", 0);
+            translationX2.setFramePosition(fadeEnd - 1);
+        }
+
+        KeyAttributes translationY1 = null;
+        KeyAttributes translationY2 = null;
+        if (fadeTranslationY > 0) {
+            translationY1 = new KeyAttributes();
+            translationY2 = new KeyAttributes();
+            translationY1.setValue("translationY", fadeTranslationY);
+            translationY1.setFramePosition(fadeEnd);
+            translationY2.setValue("translationY", 0);
+            translationY2.setFramePosition(fadeEnd - 1);
+        }
+
+        for (int i = 0; i < views.length; i++) {
+            MotionController mc = mFrameArrayList.get(views[i]);
+            float x = mc.getFinalX()-mc.getStartX();
+            float y =  mc.getFinalY()-mc.getStartY();
+            boolean apply = true;
+
+            if (fadeMove == NORTH) {
+                if (y > 0 && (!fadeMoveStrict || x == 0)) {
+                    apply = false;
+                }
+            } else if (fadeMove == SOUTH) {
+                if (y < 0 && (!fadeMoveStrict || x == 0)) {
+                    apply = false;
+                }
+            } else if (fadeMove == EAST) {
+                if (x < 0 && (!fadeMoveStrict || y == 0)) {
+                    apply = false;
+                }
+            } else if (fadeMove == WEST) {
+                if (x > 0 && (!fadeMoveStrict || y == 0)) {
+                    apply = false;
+                }
+            }
+
+            if (apply) {
+                mc.addKey(alpha1);
+                mc.addKey(alpha2);
+                mc.addKey(stick1);
+                mc.addKey(stick2);
+                if (fadeTranslationX > 0) {
+                    mc.addKey(translationX1);
+                    mc.addKey(translationX2);
+                }
+                if (fadeTranslationY > 0) {
+                    mc.addKey(translationY1);
+                    mc.addKey(translationY2);
+                }
+            }
+        }
+    }
+}
