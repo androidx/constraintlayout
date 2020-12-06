@@ -35,6 +35,20 @@ import androidx.constraintlayout.widget.R;
 
 import java.util.HashMap;
 
+/**
+ * MotionHelper that automatically inserts keyframes for views moving in a given
+ * direction, out of:
+ * <ul>
+ *     <li>NORTH</li>
+ *     <li>SOUTH</li>
+ *     <li>EAST</li>
+ *     <li>WEST</li>
+ * </ul>
+ *
+ * By default, will pick the opposite of the dominant direction (e.g. elements /not/ moving
+ * in the dominant direction will have the keyframes inserted).
+ * 
+ */
 public class FadeMove extends MotionHelper {
     public static final String TAG = "FadeMove";
 
@@ -116,7 +130,9 @@ public class FadeMove extends MotionHelper {
             Log.v(TAG, Debug.getLoc() + " views = null");
             return;
         }
-        ViewParent parent = getParent();
+
+        // Prepare a set of keyframes to be inserted
+
         KeyAttributes alpha1 = new KeyAttributes();
         KeyAttributes alpha2 = new KeyAttributes();
         alpha1.setValue(Key.ALPHA, fadeAlpha);
@@ -159,7 +175,7 @@ public class FadeMove extends MotionHelper {
         int moveDirection = fadeMove;
         if (fadeMove == AUTO) {
             int[] direction = new int[4];
-            // let's find out the general movement direction for all the refenced views
+            // let's find out the general movement direction for all the referenced views
             for (int i = 0; i < views.length; i++) {
                 MotionController mc = mFrameArrayList.get(views[i]);
                 float x = mc.getFinalX() - mc.getStartX();
