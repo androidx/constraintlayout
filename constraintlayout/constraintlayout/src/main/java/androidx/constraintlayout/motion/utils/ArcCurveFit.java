@@ -34,14 +34,47 @@ class ArcCurveFit extends CurveFit {
     private static final int START_LINEAR = 3;
     private final double[] mTime;
     Arc[] mArcs;
+    private boolean mExterpolate = true;
+
 
     @Override
     public void getPos(double t, double[] v) {
-        if (t < mArcs[0].mTime1) {
-            t = mArcs[0].mTime1;
-        }
-        if (t > mArcs[mArcs.length - 1].mTime2) {
-            t = mArcs[mArcs.length - 1].mTime2;
+        if (mExterpolate) {
+            if (t < mArcs[0].mTime1) {
+                double t0 = mArcs[0].mTime1;
+                double dt = t - mArcs[0].mTime1;
+                int p = 0;
+                if (mArcs[p].linear) {
+                    v[0] = (mArcs[p].getLinearX(t0) + dt * mArcs[p].getLinearDX(t0));
+                    v[1] = (mArcs[p].getLinearY(t0) + dt * mArcs[p].getLinearDY(t0));
+                } else {
+                    mArcs[p].setPoint(t0);
+                    v[0] = mArcs[p].getX() + dt * mArcs[p].getDX();
+                    v[1] = mArcs[p].getY() + dt * mArcs[p].getDY();
+                }
+                return;
+            }
+            if (t > mArcs[mArcs.length - 1].mTime2) {
+                double t0 = mArcs[mArcs.length - 1].mTime2;
+                double dt = t - t0;
+                int p = mArcs.length - 1;
+                if (mArcs[p].linear) {
+                    v[0] = (mArcs[p].getLinearX(t0) + dt * mArcs[p].getLinearDX(t0));
+                    v[1] = (mArcs[p].getLinearY(t0) + dt * mArcs[p].getLinearDY(t0));
+                } else {
+                    mArcs[p].setPoint(t);
+                    v[0] = mArcs[p].getX() + dt * mArcs[p].getDX();
+                    v[1] = mArcs[p].getY() + dt * mArcs[p].getDY();
+                }
+                return;
+            }
+        } else {
+            if (t < mArcs[0].mTime1) {
+                t = mArcs[0].mTime1;
+            }
+            if (t > mArcs[mArcs.length - 1].mTime2) {
+                t = mArcs[mArcs.length - 1].mTime2;
+            }
         }
 
         for (int i = 0; i < mArcs.length; i++) {
@@ -61,12 +94,42 @@ class ArcCurveFit extends CurveFit {
 
     @Override
     public void getPos(double t, float[] v) {
-        if (t < mArcs[0].mTime1) {
-            t = mArcs[0].mTime1;
-        } else if (t > mArcs[mArcs.length - 1].mTime2) {
-            t = mArcs[mArcs.length - 1].mTime2;
+        if (mExterpolate) {
+            if (t < mArcs[0].mTime1) {
+                double t0 = mArcs[0].mTime1;
+                double dt = t - mArcs[0].mTime1;
+                int p = 0;
+                if (mArcs[p].linear) {
+                    v[0] = (float) (mArcs[p].getLinearX(t0) + dt * mArcs[p].getLinearDX(t0));
+                    v[1] = (float) (mArcs[p].getLinearY(t0) + dt * mArcs[p].getLinearDY(t0));
+                } else {
+                    mArcs[p].setPoint(t0);
+                    v[0] = (float) (mArcs[p].getX() + dt * mArcs[p].getDX());
+                    v[1] = (float) (mArcs[p].getY() + dt * mArcs[p].getDY());
+                }
+                return;
+            }
+            if (t > mArcs[mArcs.length - 1].mTime2) {
+                double t0 = mArcs[mArcs.length - 1].mTime2;
+                double dt = t - t0;
+                int p = mArcs.length - 1;
+                if (mArcs[p].linear) {
+                    v[0] = (float) (mArcs[p].getLinearX(t0) + dt * mArcs[p].getLinearDX(t0));
+                    v[1] = (float) (mArcs[p].getLinearY(t0) + dt * mArcs[p].getLinearDY(t0));
+                } else {
+                    mArcs[p].setPoint(t);
+                    v[0] = (float) mArcs[p].getX();
+                    v[1] = (float) mArcs[p].getY();
+                }
+                return;
+            }
+        } else {
+            if (t < mArcs[0].mTime1) {
+                t = mArcs[0].mTime1;
+            } else if (t > mArcs[mArcs.length - 1].mTime2) {
+                t = mArcs[mArcs.length - 1].mTime2;
+            }
         }
-
         for (int i = 0; i < mArcs.length; i++) {
             if (t <= mArcs[i].mTime2) {
                 if (mArcs[i].linear) {
@@ -107,10 +170,39 @@ class ArcCurveFit extends CurveFit {
 
     @Override
     public double getPos(double t, int j) {
-        if (t < mArcs[0].mTime1) {
-            t = mArcs[0].mTime1;
-        } else if (t > mArcs[mArcs.length - 1].mTime2) {
-            t = mArcs[mArcs.length - 1].mTime2;
+        if (mExterpolate) {
+            if (t < mArcs[0].mTime1) {
+                double t0 = mArcs[0].mTime1;
+                double dt = t - mArcs[0].mTime1;
+                int p = 0;
+                if (mArcs[p].linear) {
+                    if (j == 0) {
+                        return mArcs[p].getLinearX(t0) + dt * mArcs[p].getLinearDX(t0);
+                    }
+                    return mArcs[p].getLinearY(t0) + dt * mArcs[p].getLinearDY(t0);
+                } else {
+                    mArcs[p].setPoint(t0);
+                    if (j == 0) {
+                        return mArcs[p].getX() + dt * mArcs[p].getDX();
+                    }
+                    return mArcs[p].getY() + dt * mArcs[p].getDY();
+                }
+            }
+            if (t > mArcs[mArcs.length - 1].mTime2) {
+                double t0 = mArcs[mArcs.length - 1].mTime2;
+                double dt = t - t0;
+                int p = mArcs.length - 1;
+                if (j == 0) {
+                    return mArcs[p].getLinearX(t0) + dt * mArcs[p].getLinearDX(t0);
+                }
+                return mArcs[p].getLinearY(t0) + dt * mArcs[p].getLinearDY(t0);
+            }
+        } else {
+            if (t < mArcs[0].mTime1) {
+                t = mArcs[0].mTime1;
+            } else if (t > mArcs[mArcs.length - 1].mTime2) {
+                t = mArcs[mArcs.length - 1].mTime2;
+            }
         }
 
         for (int i = 0; i < mArcs.length; i++) {

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetStart="@+id/start"
+        motion:constraintSetEnd="@+id/end"
+        motion:motionInterpolator="overshoot"
+        motion:staggered=".4"
+        motion:duration="4000">
+        <OnSwipe
+            motion:dragDirection="dragRight"
+            motion:touchAnchorSide="right"
+            motion:dragThreshold="1"
+            motion:touchAnchorId="@+id/button" />
+        <OnClick motion:targetId="@+id/overshoot" />
+        <KeyFrameSet>
+            <KeyPosition motion:motionTarget="@+id/button"
+                motion:framePosition="50"
+                motion:keyPositionType="pathRelative"
+                motion:percentY="-1"
+                />
+            <KeyPosition motion:motionTarget="@+id/button1"
+                motion:framePosition="50"
+                motion:curveFit="linear"
+                motion:percentY="1"
+                />
+        </KeyFrameSet>
+    </Transition>
+    <Transition
+        motion:constraintSetStart="@+id/start"
+        motion:constraintSetEnd="@+id/end"
+        motion:motionInterpolator="anticipate"
+        motion:staggered=".4"
+        motion:duration="4000">
+
+        <OnClick motion:targetId="@+id/anticipate" />
+        <KeyFrameSet>
+            <KeyPosition motion:motionTarget="@+id/button"
+                motion:framePosition="50"
+                motion:keyPositionType="pathRelative"
+                motion:percentY="-1"
+                />
+            <KeyPosition motion:motionTarget="@+id/button1"
+                motion:framePosition="50"
+                motion:curveFit="linear"
+                motion:percentY="1"
+                />
+        </KeyFrameSet>
+    </Transition>
+    <Transition
+        motion:constraintSetStart="@+id/start"
+        motion:constraintSetEnd="@+id/end"
+        motion:motionInterpolator="bounce"
+        motion:staggered=".4"
+        motion:duration="4000">
+
+        <OnClick motion:targetId="@+id/bounce" />
+        <KeyFrameSet>
+            <KeyPosition motion:motionTarget="@+id/button"
+                motion:framePosition="50"
+                motion:keyPositionType="pathRelative"
+                motion:percentY="-1"
+                />
+            <KeyPosition motion:motionTarget="@+id/button1"
+                motion:framePosition="50"
+                motion:curveFit="linear"
+                motion:percentY="1"
+                />
+        </KeyFrameSet>
+    </Transition>
+    <Transition
+        motion:constraintSetStart="@+id/start"
+        motion:constraintSetEnd="@+id/end"
+        motion:motionInterpolator="easeIn"
+        motion:staggered=".4"
+        motion:duration="4000">
+
+        <OnClick motion:targetId="@+id/easeIn" />
+        <KeyFrameSet>
+            <KeyPosition motion:motionTarget="@+id/button"
+                motion:framePosition="50"
+                motion:keyPositionType="pathRelative"
+                motion:percentY="-1"
+                />
+            <KeyPosition motion:motionTarget="@+id/button1"
+                motion:framePosition="50"
+                motion:curveFit="linear"
+                motion:percentY="1"
+                />
+        </KeyFrameSet>
+    </Transition>
+    <Transition
+        motion:constraintSetStart="@+id/start"
+        motion:constraintSetEnd="@+id/end"
+        motion:motionInterpolator="easeInOut"
+        motion:staggered=".4"
+        motion:duration="4000">
+
+        <OnClick motion:targetId="@+id/easeInOut" />
+        <KeyFrameSet>
+            <KeyPosition motion:motionTarget="@+id/button"
+                motion:framePosition="50"
+                motion:keyPositionType="pathRelative"
+                motion:percentY="-1"
+                />
+            <KeyPosition motion:motionTarget="@+id/button1"
+                motion:framePosition="50"
+                motion:curveFit="linear"
+                motion:percentY="1"
+                />
+        </KeyFrameSet>
+    </Transition>
+    <Transition
+        motion:constraintSetStart="@+id/start"
+        motion:constraintSetEnd="@+id/end"
+        motion:motionInterpolator="easeOut"
+        motion:staggered=".4"
+        motion:duration="4000">
+
+        <OnClick motion:targetId="@+id/easeOut" />
+        <KeyFrameSet>
+            <KeyPosition motion:motionTarget="@+id/button"
+                motion:framePosition="50"
+                motion:keyPositionType="pathRelative"
+                motion:percentY="-1"
+                />
+            <KeyPosition motion:motionTarget="@+id/button1"
+                motion:framePosition="50"
+                motion:curveFit="linear"
+                motion:percentY="1"
+                />
+        </KeyFrameSet>
+    </Transition>
+    <Transition
+        motion:constraintSetStart="@+id/start"
+        motion:constraintSetEnd="@+id/end"
+        motion:motionInterpolator="linear"
+        motion:staggered=".4"
+        motion:duration="4000">
+
+        <OnClick motion:targetId="@+id/linear" />
+        <KeyFrameSet>
+            <KeyPosition motion:motionTarget="@+id/button"
+                motion:framePosition="50"
+                motion:keyPositionType="pathRelative"
+                motion:percentY="-1"
+                />
+            <KeyPosition motion:motionTarget="@+id/button1"
+                motion:framePosition="50"
+                motion:curveFit="linear"
+                motion:percentY="1"
+                />
+        </KeyFrameSet>
+    </Transition>
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:id="@+id/button"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            motion:layout_constraintHorizontal_bias=".2"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:motionStagger="1"
+            />
+
+        <Constraint
+            android:id="@+id/button1"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            motion:layout_constraintHorizontal_bias=".2"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:motionStagger="2"
+            />
+    <Constraint
+        android:id="@+id/button2"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        motion:layout_constraintHorizontal_bias=".2"
+        motion:layout_constraintBottom_toBottomOf="parent"
+        motion:layout_constraintEnd_toEndOf="parent"
+        motion:layout_constraintStart_toStartOf="parent"
+        motion:pathMotionArc="startVertical"
+        motion:layout_constraintTop_toTopOf="parent"
+        motion:motionStagger="3"
+        />
+
+</ConstraintSet>
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@+id/button"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            motion:layout_constraintHorizontal_bias=".8"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            />
+        <Constraint
+            android:id="@+id/button1"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            motion:layout_constraintHorizontal_bias=".8"
+            motion:layout_constraintVertical_bias=".35"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            />
+        <Constraint
+            android:id="@+id/button2"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            motion:layout_constraintHorizontal_bias=".8"
+            motion:layout_constraintVertical_bias=".2"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            />
+    </ConstraintSet>
+
+</MotionScene>
