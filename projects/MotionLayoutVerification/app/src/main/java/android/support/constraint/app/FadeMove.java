@@ -10,6 +10,7 @@ import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.KeyAttributes;
 import androidx.constraintlayout.motion.widget.MotionController;
 import androidx.constraintlayout.motion.widget.MotionHelper;
+import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.util.HashMap;
@@ -35,7 +36,7 @@ public class FadeMove extends MotionHelper {
     }
 
     @Override
-    public void preSetup(HashMap<View, MotionController> mFrameArrayList) {
+    public void onPreSetup(MotionLayout motionLayout, HashMap<View, MotionController> mFrameArrayList) {
         Log.v(TAG, Debug.getLoc());
         View[] views = getViews((ConstraintLayout) this.getParent());
 

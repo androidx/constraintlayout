@@ -8,7 +8,6 @@ import androidx.constraintlayout.widget.R;
 
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -142,14 +141,18 @@ public class MotionHelper extends ConstraintHelper implements MotionHelperInterf
     public void onPreDraw(Canvas canvas) {
 
     }
-    
+    @Override
+    public void onFinishedMotionScene(MotionLayout motionLayout) {
+
+    }
+
     @Override
     public void onPostDraw(Canvas canvas) {
 
     }
 
     @Override
-    public void preSetup(HashMap<View, MotionController> mFrameArrayList) {
+    public void onPreSetup(MotionLayout motionLayout, HashMap<View, MotionController> controllerMap) {
 
     }
 

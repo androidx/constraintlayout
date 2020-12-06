@@ -278,55 +278,55 @@ public class KeyAttributes extends Key {
     @Override
     public void setValue(String tag, Object value) {
         switch (tag) {
-            case "alpha":
+            case ALPHA:
                 mAlpha = toFloat(value);
                 break;
-            case "curveFit":
+            case CURVEFIT:
                 mCurveFit = toInt(value);
                 break;
-            case "elevation":
+            case ELEVATION:
                 mElevation = toFloat(value);
                 break;
-            case "motionProgress":
+            case MOTIONPROGRESS:
                 mProgress = toFloat(value);
                 break;
-            case "rotation":
+            case ROTATION:
                 mRotation = toFloat(value);
                 break;
-            case "rotationX":
+            case ROTATION_X:
                 mRotationX = toFloat(value);
                 break;
-            case "rotationY":
+            case ROTATION_Y:
                 mRotationY = toFloat(value);
                 break;
-            case "pivotX":
+            case PIVOT_X:
                 mPivotX = toFloat(value);
                 break;
-            case "pivotY":
+            case PIVOT_Y:
                 mPivotY = toFloat(value);
                 break;
-            case "scaleX":
+            case SCALE_X:
                 mScaleX = toFloat(value);
                 break;
-            case "scaleY":
+            case SCALE_Y:
                 mScaleY = toFloat(value);
                 break;
-            case "transitionEasing":
+            case TRANSITIONEASING:
                 mTransitionEasing = value.toString();
                 break;
-            case "visibility":
+            case VISIBILITY:
                 mVisibility = toBoolean(value);
                 break;
-            case "transitionPathRotate":
+            case TRANSITION_PATH_ROTATE:
                 mTransitionPathRotate = toFloat(value);
                 break;
-            case "translationX":
+            case TRANSLATION_X:
                 mTranslationX = toFloat(value);
                 break;
-            case "translationY":
+            case TRANSLATION_Y:
                 mTranslationY = toFloat(value);
                 break;
-            case "mTranslationZ":
+            case TRANSLATION_Z:
                 mTranslationZ = toFloat(value);
                 break;
         }

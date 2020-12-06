@@ -138,27 +138,88 @@ public class MotionController {
         setView(view);
     }
 
+    /**
+     * get the left most position of the widget at the start of the movement.
+     *
+     * @return the left most position
+     */
     public float getStartX() {
         return mStartMotionPath.x;
     }
 
+    /**
+     * get the top most position of the widget at the start of the movement.
+     * Positive is down.
+     *
+     * @return the top most position
+     */
     public float getStartY() {
         return mStartMotionPath.y;
     }
 
+    /**
+     * get the left most position of the widget at the end of the movement.
+     *
+     * @return the left most position
+     */
     public float getFinalX() {
         return mEndMotionPath.x;
     }
 
+    /**
+     * get the top most position of the widget at the end of the movement.
+     * Positive is down.
+     *
+     * @return the top most position
+     */
     public float getFinalY() {
         return mEndMotionPath.y;
     }
 
     /**
-     * Will return the id of the view to move relative to
-     * @return
+     * get the width of the widget at the start of the movement.
+     *
+     * @return the width at the start
      */
-    int getAnimateRelativeTo() {
+    public float getStartWidth() {
+        return mStartMotionPath.width;
+    }
+
+    /**
+     * get the width of the widget at the start of the movement.
+     *
+     * @return the height at the start
+     */
+    public float getStartHeight() {
+        return mStartMotionPath.height;
+    }
+
+    /**
+     * get the width of the widget at the end of the movement.
+     *
+     * @return the width at the end
+     */
+    public float getFinalWidth() {
+        return mEndMotionPath.width;
+    }
+
+    /**
+     * get the width of the widget at the end of the movement.
+     *
+     * @return the height at the end
+     */
+    public float getFinalHeight() {
+        return mEndMotionPath.height;
+    }
+
+    /**
+     * Will return the id of the view to move relative to
+     * The position at the start and then end will be viewed relative to this view
+     * -1 is the return value if NOT in polar mode
+     *
+     * @return the view id of the view this is in polar mode to or -1 if not in polar
+     */
+    public int getAnimateRelativeTo() {
        return mStartMotionPath.mAnimateRelativeTo;
     }
 
