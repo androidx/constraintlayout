@@ -34,12 +34,12 @@ class ArcCurveFit extends CurveFit {
     private static final int START_LINEAR = 3;
     private final double[] mTime;
     Arc[] mArcs;
-    private boolean mExterpolate = true;
+    private boolean mExtrapolate = true;
 
 
     @Override
     public void getPos(double t, double[] v) {
-        if (mExterpolate) {
+        if (mExtrapolate) {
             if (t < mArcs[0].mTime1) {
                 double t0 = mArcs[0].mTime1;
                 double dt = t - mArcs[0].mTime1;
@@ -94,7 +94,7 @@ class ArcCurveFit extends CurveFit {
 
     @Override
     public void getPos(double t, float[] v) {
-        if (mExterpolate) {
+        if (mExtrapolate) {
             if (t < mArcs[0].mTime1) {
                 double t0 = mArcs[0].mTime1;
                 double dt = t - mArcs[0].mTime1;
@@ -170,7 +170,7 @@ class ArcCurveFit extends CurveFit {
 
     @Override
     public double getPos(double t, int j) {
-        if (mExterpolate) {
+        if (mExtrapolate) {
             if (t < mArcs[0].mTime1) {
                 double t0 = mArcs[0].mTime1;
                 double dt = t - mArcs[0].mTime1;

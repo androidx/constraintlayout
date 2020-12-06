@@ -28,7 +28,7 @@ public class MonotonicCurveFit extends CurveFit {
     private double[] mT;
     private double[][] mY;
     private double[][] mTangent;
-    private boolean mExterpolate = true;
+    private boolean mExtrapolate = true;
     double[] mSlopeTemp;
 
     public MonotonicCurveFit(double[] time, double[][] y) {
@@ -76,7 +76,7 @@ public class MonotonicCurveFit extends CurveFit {
     public void getPos(double t, double[] v) {
         final int n = mT.length;
         final int dim = mY[0].length;
-        if (mExterpolate) {
+        if (mExtrapolate) {
             if (t <= mT[0]) {
                 getSlope(mT[0], mSlopeTemp);
                 for (int j = 0; j < dim; j++) {
@@ -131,7 +131,7 @@ public class MonotonicCurveFit extends CurveFit {
     public void getPos(double t, float[] v) {
         final int n = mT.length;
         final int dim = mY[0].length;
-        if (mExterpolate) {
+        if (mExtrapolate) {
             if (t <= mT[0]) {
                 getSlope(mT[0], mSlopeTemp);
                 for (int j = 0; j < dim; j++) {
@@ -185,7 +185,7 @@ public class MonotonicCurveFit extends CurveFit {
     @Override
     public double getPos(double t, int j) {
         final int n = mT.length;
-        if (mExterpolate) {
+        if (mExtrapolate) {
             if (t <= mT[0]) {
                 return mY[0][j]  + (t - mT[0]) * getSlope(mT[0],j);
             }

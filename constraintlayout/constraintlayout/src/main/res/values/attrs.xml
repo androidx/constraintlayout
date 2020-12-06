@@ -262,10 +262,11 @@
         <attr name="fadeMove_translationY" format="dimension"/>
         <attr name="fadeMove_alpha" format="float"/>
         <attr name="fadeMove_move" format="enum">
-            <enum name="north" value = "1"/>
-            <enum name="south" value = "2"/>
-            <enum name="east" value = "3"/>
-            <enum name="west" value = "4"/>
+            <enum name="auto" value = "-1" />
+            <enum name="north" value = "0" />
+            <enum name="south" value = "1" />
+            <enum name="east" value = "2" />
+            <enum name="west" value = "3" />
         </attr>
         <attr name="fadeMove_strict" format="boolean" />
     </declare-styleable>    <!-- =============================== End FadeMove =============================== -->

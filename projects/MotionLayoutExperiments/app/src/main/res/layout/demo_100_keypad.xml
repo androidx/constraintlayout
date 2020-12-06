@@ -104,11 +104,9 @@
 
     <androidx.constraintlayout.helper.widget.FadeMove
         android:id="@+id/fade"
-        app:fadeMove_move="west"
         app:fadeMove_start="40"
         app:fadeMove_alpha="0"
         app:fadeMove_end="60"
-        app:fadeMove_strict="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:constraint_referenced_ids="t1,t2,t3,t4,t5,t6,t7,t8,t9"

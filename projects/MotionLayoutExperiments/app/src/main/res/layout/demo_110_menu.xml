@@ -100,7 +100,6 @@
 
     <androidx.constraintlayout.helper.widget.FadeMove
         android:id="@+id/fade"
-        app:fadeMove_move="south"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:fadeMove_translationY="-40dp"

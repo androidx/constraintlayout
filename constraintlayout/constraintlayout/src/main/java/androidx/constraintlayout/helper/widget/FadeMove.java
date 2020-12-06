@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewParent;
 
 import androidx.constraintlayout.motion.widget.Debug;
+import androidx.constraintlayout.motion.widget.Key;
 import androidx.constraintlayout.motion.widget.KeyAttributes;
 import androidx.constraintlayout.motion.widget.KeyPosition;
 import androidx.constraintlayout.motion.widget.MotionController;
@@ -35,12 +36,13 @@ import androidx.constraintlayout.widget.R;
 import java.util.HashMap;
 
 public class FadeMove extends MotionHelper {
-    public static final String TAG = "Fademove";
+    public static final String TAG = "FadeMove";
 
-    public static final int NORTH = 1;
-    public static final int SOUTH = 2;
-    public static final int EAST = 3;
-    public static final int WEST = 4;
+    public static final int AUTO = -1;
+    public static final int NORTH = 0;
+    public static final int SOUTH = 1;
+    public static final int EAST = 2;
+    public static final int WEST = 3;
 
     private float fadeAlpha = 0.1f;
     private int fadeStart = 49;
@@ -49,7 +51,7 @@ public class FadeMove extends MotionHelper {
     private int fadeTranslationY = 0;
     private boolean fadeMoveStrict = true;
 
-    private int fadeMove = NORTH;
+    private int fadeMove = AUTO;
 
     public FadeMove(Context context) {
         super(context);
@@ -105,10 +107,6 @@ public class FadeMove extends MotionHelper {
         return true;
     }
 
-    public float convertDpToPx(Context context, float dp) {
-        return dp * context.getResources().getDisplayMetrics().density;
-    }
-
     @Override
     public void onPreSetup(MotionLayout motionLayout, HashMap<View, MotionController> mFrameArrayList) {
         Log.v(TAG, Debug.getLoc());
@@ -121,29 +119,29 @@ public class FadeMove extends MotionHelper {
         ViewParent parent = getParent();
         KeyAttributes alpha1 = new KeyAttributes();
         KeyAttributes alpha2 = new KeyAttributes();
-        alpha1.setValue("alpha", fadeAlpha);
-        alpha2.setValue("alpha", fadeAlpha);
+        alpha1.setValue(Key.ALPHA, fadeAlpha);
+        alpha2.setValue(Key.ALPHA, fadeAlpha);
         alpha1.setFramePosition(fadeStart);
         alpha2.setFramePosition(fadeEnd);
         KeyPosition stick1 = new KeyPosition();
         stick1.setFramePosition(fadeStart);
         stick1.setType(KeyPosition.TYPE_CARTESIAN);
-        stick1.setValue("percentX", 0);
-        stick1.setValue("percentY", 0);
+        stick1.setValue(KeyPosition.PERCENT_X, 0);
+        stick1.setValue(KeyPosition.PERCENT_Y, 0);
         KeyPosition stick2 = new KeyPosition();
         stick2.setFramePosition(fadeEnd);
         stick2.setType(KeyPosition.TYPE_CARTESIAN);
-        stick2.setValue("percentX", 1);
-        stick2.setValue("percentY", 1);
+        stick2.setValue(KeyPosition.PERCENT_X, 1);
+        stick2.setValue(KeyPosition.PERCENT_Y, 1);
 
         KeyAttributes translationX1 = null;
         KeyAttributes translationX2 = null;
         if (fadeTranslationX > 0) {
             translationX1 = new KeyAttributes();
             translationX2 = new KeyAttributes();
-            translationX1.setValue("translationX", fadeTranslationX);
+            translationX1.setValue(Key.TRANSLATION_X, fadeTranslationX);
             translationX1.setFramePosition(fadeEnd);
-            translationX2.setValue("translationX", 0);
+            translationX2.setValue(Key.TRANSLATION_X, 0);
             translationX2.setFramePosition(fadeEnd - 1);
         }
 
@@ -152,10 +150,35 @@ public class FadeMove extends MotionHelper {
         if (fadeTranslationY > 0) {
             translationY1 = new KeyAttributes();
             translationY2 = new KeyAttributes();
-            translationY1.setValue("translationY", fadeTranslationY);
+            translationY1.setValue(Key.TRANSLATION_Y, fadeTranslationY);
             translationY1.setFramePosition(fadeEnd);
-            translationY2.setValue("translationY", 0);
+            translationY2.setValue(Key.TRANSLATION_Y, 0);
             translationY2.setFramePosition(fadeEnd - 1);
+        }
+
+        int moveDirection = fadeMove;
+        if (fadeMove == AUTO) {
+            int[] direction = new int[4];
+            // let's find out the general movement direction for all the refenced views
+            for (int i = 0; i < views.length; i++) {
+                MotionController mc = mFrameArrayList.get(views[i]);
+                float x = mc.getFinalX() - mc.getStartX();
+                float y = mc.getFinalY() - mc.getStartY();
+                // look at the direction for this view, and increment the opposite direction
+                // (as that's the one we will use to apply the fade)
+                if (y < 0) { direction[SOUTH]++; }
+                if (y > 0) { direction[NORTH]++; }
+                if (x > 0) { direction[WEST]++; }
+                if (x < 0) { direction[EAST]++; }
+            }
+            int max = direction[0];
+            moveDirection = 0;
+            for (int i = 1; i < 4; i++) {
+                if (max < direction[i]) {
+                    max = direction[i];
+                    moveDirection = i;
+                }
+            }
         }
 
         for (int i = 0; i < views.length; i++) {
@@ -164,19 +187,22 @@ public class FadeMove extends MotionHelper {
             float y =  mc.getFinalY()-mc.getStartY();
             boolean apply = true;
 
-            if (fadeMove == NORTH) {
+            // Any view that is moving in the given direction will have the fade applied
+            // if move strict is true, also include views that are moving in diagonal, even
+            // if they aren't moving in the opposite direction.
+            if (moveDirection == NORTH) {
                 if (y > 0 && (!fadeMoveStrict || x == 0)) {
                     apply = false;
                 }
-            } else if (fadeMove == SOUTH) {
+            } else if (moveDirection == SOUTH) {
                 if (y < 0 && (!fadeMoveStrict || x == 0)) {
                     apply = false;
                 }
-            } else if (fadeMove == EAST) {
+            } else if (moveDirection == EAST) {
                 if (x < 0 && (!fadeMoveStrict || y == 0)) {
                     apply = false;
                 }
-            } else if (fadeMove == WEST) {
+            } else if (moveDirection == WEST) {
                 if (x > 0 && (!fadeMoveStrict || y == 0)) {
                     apply = false;
                 }
