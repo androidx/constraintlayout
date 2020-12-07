@@ -318,6 +318,8 @@ public class ConstraintSet {
     private static final int QUANTIZE_MOTION_INTERPOLATOR_TYPE = 88;
     private static final int QUANTIZE_MOTION_INTERPOLATOR_ID = 89;
     private static final int QUANTIZE_MOTION_INTERPOLATOR_STR = 90;
+    private static final int BASELINE_TO_TOP = 91;
+    private static final int BASELINE_TO_BOTTOM = 92;
 
     static {
         mapToConstant.append(R.styleable.Constraint_layout_constraintLeft_toLeftOf, LEFT_TO_LEFT);
@@ -329,6 +331,8 @@ public class ConstraintSet {
         mapToConstant.append(R.styleable.Constraint_layout_constraintBottom_toTopOf, BOTTOM_TO_TOP);
         mapToConstant.append(R.styleable.Constraint_layout_constraintBottom_toBottomOf, BOTTOM_TO_BOTTOM);
         mapToConstant.append(R.styleable.Constraint_layout_constraintBaseline_toBaselineOf, BASELINE_TO_BASELINE);
+        mapToConstant.append(R.styleable.Constraint_layout_constraintBaseline_toTopOf, BASELINE_TO_TOP);
+        mapToConstant.append(R.styleable.Constraint_layout_constraintBaseline_toBottomOf, BASELINE_TO_BOTTOM);
 
         mapToConstant.append(R.styleable.Constraint_layout_editor_absoluteX, EDITOR_ABSOLUTE_X);
         mapToConstant.append(R.styleable.Constraint_layout_editor_absoluteY, EDITOR_ABSOLUTE_Y);
@@ -655,6 +659,8 @@ public class ConstraintSet {
         public int bottomToTop = UNSET;
         public int bottomToBottom = UNSET;
         public int baselineToBaseline = UNSET;
+        public int baselineToTop = UNSET;
+        public int baselineToBottom = UNSET;
         public int startToEnd = UNSET;
         public int startToStart = UNSET;
         public int endToStart = UNSET;
@@ -720,6 +726,8 @@ public class ConstraintSet {
             bottomToTop = src.bottomToTop;
             bottomToBottom = src.bottomToBottom;
             baselineToBaseline = src.baselineToBaseline;
+            baselineToTop = src.baselineToTop;
+            baselineToBottom = src.baselineToBottom;
             startToEnd = src.startToEnd;
             startToStart = src.startToStart;
             endToStart = src.endToStart;
@@ -924,6 +932,12 @@ public class ConstraintSet {
                         break;
                     case BASELINE_TO_BASELINE:
                         baselineToBaseline = lookupID(a, attr, baselineToBaseline);
+                        break;
+                    case BASELINE_TO_TOP:
+                        baselineToTop = lookupID(a, attr, baselineToTop);
+                        break;
+                    case BASELINE_TO_BOTTOM:
+                        baselineToBottom = lookupID(a, attr, baselineToBottom);
                         break;
                     case EDITOR_ABSOLUTE_X:
                         editorAbsoluteX = a.getDimensionPixelOffset(attr, editorAbsoluteX);
@@ -1630,6 +1644,8 @@ public class ConstraintSet {
             layout.bottomToTop = param.bottomToTop;
             layout.bottomToBottom = param.bottomToBottom;
             layout.baselineToBaseline = param.baselineToBaseline;
+            layout.baselineToTop = param.baselineToTop;
+            layout.baselineToBottom = param.baselineToBottom;
             layout.startToEnd = param.startToEnd;
             layout.startToStart = param.startToStart;
             layout.endToStart = param.endToStart;
@@ -1696,6 +1712,8 @@ public class ConstraintSet {
             param.bottomToBottom = layout.bottomToBottom;
 
             param.baselineToBaseline = layout.baselineToBaseline;
+            param.baselineToTop = layout.baselineToTop;
+            param.baselineToBottom = layout.baselineToBottom;
 
             param.startToEnd = layout.startToEnd;
             param.startToStart = layout.startToStart;
@@ -2345,11 +2363,14 @@ public class ConstraintSet {
                     constraint.layout.topToTop = endID;
                     constraint.layout.topToBottom = Layout.UNSET;
                     constraint.layout.baselineToBaseline = Layout.UNSET;
+                    constraint.layout.baselineToTop = Layout.UNSET;
+                    constraint.layout.baselineToBottom = Layout.UNSET;
                 } else if (endSide == BOTTOM) {
                     constraint.layout.topToBottom = endID;
                     constraint.layout.topToTop = Layout.UNSET;
                     constraint.layout.baselineToBaseline = Layout.UNSET;
-
+                    constraint.layout.baselineToTop = Layout.UNSET;
+                    constraint.layout.baselineToBottom = Layout.UNSET;
                 } else {
                     throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
                 }
@@ -2360,12 +2381,14 @@ public class ConstraintSet {
                     constraint.layout.bottomToBottom = endID;
                     constraint.layout.bottomToTop = Layout.UNSET;
                     constraint.layout.baselineToBaseline = Layout.UNSET;
-
+                    constraint.layout.baselineToTop = Layout.UNSET;
+                    constraint.layout.baselineToBottom = Layout.UNSET;
                 } else if (endSide == TOP) {
                     constraint.layout.bottomToTop = endID;
                     constraint.layout.bottomToBottom = Layout.UNSET;
                     constraint.layout.baselineToBaseline = Layout.UNSET;
-
+                    constraint.layout.baselineToTop = Layout.UNSET;
+                    constraint.layout.baselineToBottom = Layout.UNSET;
                 } else {
                     throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
                 }
@@ -2374,6 +2397,18 @@ public class ConstraintSet {
             case BASELINE:
                 if (endSide == BASELINE) {
                     constraint.layout.baselineToBaseline = endID;
+                    constraint.layout.bottomToBottom = Layout.UNSET;
+                    constraint.layout.bottomToTop = Layout.UNSET;
+                    constraint.layout.topToTop = Layout.UNSET;
+                    constraint.layout.topToBottom = Layout.UNSET;
+                } else if (endSide == TOP) {
+                    constraint.layout.baselineToTop = endID;
+                    constraint.layout.bottomToBottom = Layout.UNSET;
+                    constraint.layout.bottomToTop = Layout.UNSET;
+                    constraint.layout.topToTop = Layout.UNSET;
+                    constraint.layout.topToBottom = Layout.UNSET;
+                } else if (endSide == BOTTOM) {
+                    constraint.layout.baselineToBottom = endID;
                     constraint.layout.bottomToBottom = Layout.UNSET;
                     constraint.layout.bottomToTop = Layout.UNSET;
                     constraint.layout.topToTop = Layout.UNSET;
@@ -2455,10 +2490,14 @@ public class ConstraintSet {
                     constraint.layout.topToTop = endID;
                     constraint.layout.topToBottom = Layout.UNSET;
                     constraint.layout.baselineToBaseline = Layout.UNSET;
+                    constraint.layout.baselineToTop = Layout.UNSET;
+                    constraint.layout.baselineToBottom = Layout.UNSET;
                 } else if (endSide == BOTTOM) {
                     constraint.layout.topToBottom = endID;
                     constraint.layout.topToTop = Layout.UNSET;
                     constraint.layout.baselineToBaseline = Layout.UNSET;
+                    constraint.layout.baselineToTop = Layout.UNSET;
+                    constraint.layout.baselineToBottom = Layout.UNSET;
                 } else {
                     throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
                 }
@@ -2468,10 +2507,14 @@ public class ConstraintSet {
                     constraint.layout.bottomToBottom = endID;
                     constraint.layout.bottomToTop = Layout.UNSET;
                     constraint.layout.baselineToBaseline = Layout.UNSET;
+                    constraint.layout.baselineToTop = Layout.UNSET;
+                    constraint.layout.baselineToBottom = Layout.UNSET;
                 } else if (endSide == TOP) {
                     constraint.layout.bottomToTop = endID;
                     constraint.layout.bottomToBottom = Layout.UNSET;
                     constraint.layout.baselineToBaseline = Layout.UNSET;
+                    constraint.layout.baselineToTop = Layout.UNSET;
+                    constraint.layout.baselineToBottom = Layout.UNSET;
                 } else {
                     throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
                 }
@@ -2479,6 +2522,18 @@ public class ConstraintSet {
             case BASELINE:
                 if (endSide == BASELINE) {
                     constraint.layout.baselineToBaseline = endID;
+                    constraint.layout.bottomToBottom = Layout.UNSET;
+                    constraint.layout.bottomToTop = Layout.UNSET;
+                    constraint.layout.topToTop = Layout.UNSET;
+                    constraint.layout.topToBottom = Layout.UNSET;
+                } else if (endSide == TOP) {
+                    constraint.layout.baselineToTop = endID;
+                    constraint.layout.bottomToBottom = Layout.UNSET;
+                    constraint.layout.bottomToTop = Layout.UNSET;
+                    constraint.layout.topToTop = Layout.UNSET;
+                    constraint.layout.topToBottom = Layout.UNSET;
+                } else if (endSide == BOTTOM) {
+                    constraint.layout.baselineToBottom = endID;
                     constraint.layout.bottomToBottom = Layout.UNSET;
                     constraint.layout.bottomToTop = Layout.UNSET;
                     constraint.layout.topToTop = Layout.UNSET;
@@ -2601,8 +2656,9 @@ public class ConstraintSet {
                     constraint.layout.goneBottomMargin = Layout.UNSET;
                     break;
                 case BASELINE:
-
                     constraint.layout.baselineToBaseline = Layout.UNSET;
+                    constraint.layout.baselineToTop = Layout.UNSET;
+                    constraint.layout.baselineToBottom = Layout.UNSET;
                     break;
                 case START:
                     constraint.layout.startToEnd = Layout.UNSET;
@@ -4397,6 +4453,12 @@ public class ConstraintSet {
                     break;
                 case BASELINE_TO_BASELINE:
                     c.layout.baselineToBaseline = lookupID(a, attr, c.layout.baselineToBaseline);
+                    break;
+                case BASELINE_TO_TOP:
+                    c.layout.baselineToTop = lookupID(a, attr, c.layout.baselineToTop);
+                    break;
+                case BASELINE_TO_BOTTOM:
+                    c.layout.baselineToBottom = lookupID(a, attr, c.layout.baselineToBottom);
                     break;
                 case EDITOR_ABSOLUTE_X:
                     c.layout.editorAbsoluteX = a.getDimensionPixelOffset(attr, c.layout.editorAbsoluteX);

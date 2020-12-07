@@ -936,11 +936,14 @@ public class ConstraintProperties {
                     mParams.topToTop = endID;
                     mParams.topToBottom = mParams.UNSET;
                     mParams.baselineToBaseline = mParams.UNSET;
+                    mParams.baselineToTop = mParams.UNSET;
+                    mParams.baselineToBottom = mParams.UNSET;
                 } else if (endSide == BOTTOM) {
                     mParams.topToBottom = endID;
                     mParams.topToTop = mParams.UNSET;
                     mParams.baselineToBaseline = mParams.UNSET;
-
+                    mParams.baselineToTop = mParams.UNSET;
+                    mParams.baselineToBottom = mParams.UNSET;
                 } else {
                     throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
                 }
@@ -951,12 +954,14 @@ public class ConstraintProperties {
                     mParams.bottomToBottom = endID;
                     mParams.bottomToTop = mParams.UNSET;
                     mParams.baselineToBaseline = mParams.UNSET;
-
+                    mParams.baselineToTop = mParams.UNSET;
+                    mParams.baselineToBottom = mParams.UNSET;
                 } else if (endSide == TOP) {
                     mParams.bottomToTop = endID;
                     mParams.bottomToBottom = mParams.UNSET;
                     mParams.baselineToBaseline = mParams.UNSET;
-
+                    mParams.baselineToTop = mParams.UNSET;
+                    mParams.baselineToBottom = mParams.UNSET;
                 } else {
                     throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
                 }
@@ -965,6 +970,18 @@ public class ConstraintProperties {
             case BASELINE:
                 if (endSide == BASELINE) {
                     mParams.baselineToBaseline = endID;
+                    mParams.bottomToBottom = mParams.UNSET;
+                    mParams.bottomToTop = mParams.UNSET;
+                    mParams.topToTop = mParams.UNSET;
+                    mParams.topToBottom = mParams.UNSET;
+                } if (endSide == TOP) {
+                    mParams.baselineToTop = endID;
+                    mParams.bottomToBottom = mParams.UNSET;
+                    mParams.bottomToTop = mParams.UNSET;
+                    mParams.topToTop = mParams.UNSET;
+                    mParams.topToBottom = mParams.UNSET;
+                } else if (endSide == BOTTOM) {
+                    mParams.baselineToBottom = endID;
                     mParams.bottomToBottom = mParams.UNSET;
                     mParams.bottomToTop = mParams.UNSET;
                     mParams.topToTop = mParams.UNSET;

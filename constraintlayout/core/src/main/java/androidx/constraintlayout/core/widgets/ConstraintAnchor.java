@@ -293,7 +293,12 @@ public class ConstraintAnchor {
                 }
                 return isCompatible;
             }
-            case BASELINE:
+            case BASELINE: {
+                if (target == Type.LEFT || target == Type.RIGHT) {
+                    return false;
+                }
+                return true;
+            }
             case CENTER_X:
             case CENTER_Y:
             case NONE:

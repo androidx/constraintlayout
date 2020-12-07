@@ -74,6 +74,14 @@
     <attr name="layout_constraintBaseline_toBaselineOf" format="reference|enum">
         <enum name="parent" value="0" />
     </attr>
+    <!-- Constrains the baseline of this view to the top of the given view ID. -->
+    <attr name="layout_constraintBaseline_toTopOf" format="reference|enum">
+        <enum name="parent" value="0" />
+    </attr>
+    <!-- Constrains the baseline of this view to the bottom of the given view ID. -->
+    <attr name="layout_constraintBaseline_toBottomOf" format="reference|enum">
+        <enum name="parent" value="0" />
+    </attr>
     <!-- Constrains the start edge of this view to the end edge of the given view ID. -->
     <attr name="layout_constraintStart_toEndOf" format="reference|enum">
         <enum name="parent" value="0" />
@@ -475,6 +483,8 @@
         <attr name="layout_constraintBottom_toTopOf" />
         <attr name="layout_constraintBottom_toBottomOf" />
         <attr name="layout_constraintBaseline_toBaselineOf" />
+        <attr name="layout_constraintBaseline_toTopOf" />
+        <attr name="layout_constraintBaseline_toBottomOf" />
         <attr name="layout_constraintStart_toEndOf" />
         <attr name="layout_constraintStart_toStartOf" />
         <attr name="layout_constraintEnd_toStartOf" />
@@ -605,6 +615,8 @@
         <attr name="layout_constraintBottom_toTopOf" />
         <attr name="layout_constraintBottom_toBottomOf" />
         <attr name="layout_constraintBaseline_toBaselineOf" />
+        <attr name="layout_constraintBaseline_toTopOf" />
+        <attr name="layout_constraintBaseline_toBottomOf" />
         <attr name="layout_constraintStart_toEndOf" />
         <attr name="layout_constraintStart_toStartOf" />
         <attr name="layout_constraintEnd_toStartOf" />
@@ -783,6 +795,8 @@
         <attr name="layout_constraintBottom_toTopOf" />
         <attr name="layout_constraintBottom_toBottomOf" />
         <attr name="layout_constraintBaseline_toBaselineOf" />
+        <attr name="layout_constraintBaseline_toTopOf" />
+        <attr name="layout_constraintBaseline_toBottomOf" />
         <attr name="layout_constraintStart_toEndOf" />
         <attr name="layout_constraintStart_toStartOf" />
         <attr name="layout_constraintEnd_toStartOf" />
@@ -1442,6 +1456,8 @@
         <attr name="layout_constraintBottom_toTopOf" />
         <attr name="layout_constraintBottom_toBottomOf" />
         <attr name="layout_constraintBaseline_toBaselineOf" />
+        <attr name="layout_constraintBaseline_toTopOf" />
+        <attr name="layout_constraintBaseline_toBottomOf" />
         <attr name="layout_constraintStart_toEndOf" />
         <attr name="layout_constraintStart_toStartOf" />
         <attr name="layout_constraintEnd_toStartOf" />
