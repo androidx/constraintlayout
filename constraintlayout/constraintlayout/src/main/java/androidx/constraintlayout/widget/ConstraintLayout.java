@@ -2096,7 +2096,7 @@ public class ConstraintLayout extends ViewGroup {
      * This class contains the different attributes specifying how a view want to be laid out inside
      * a {@link ConstraintLayout}. For building up constraints at run time, using {@link ConstraintSet} is recommended.
      */
-    public static class LayoutParams extends ViewGroup.MarginLayoutParams {
+    public static class LayoutParams extends ViewGroup.LayoutParams {
         /**
          * Dimension will be controlled by constraints.
          */
@@ -2252,7 +2252,14 @@ public class ConstraintLayout extends ViewGroup {
          */
         public int baselineToBaseline = UNSET;
 
+        /**
+         * Constrains the baseline of a child to the top of a target child (contains the target child id).
+         */
         public int baselineToTop = UNSET;
+
+        /**
+         * Constrains the baseline of a child to the bottom of a target child (contains the target child id).
+         */
         public int baselineToBottom = UNSET;
 
         /**
@@ -2329,6 +2336,39 @@ public class ConstraintLayout extends ViewGroup {
          * The baseline margin.
          */
         public int baselineMargin = 0;
+
+        /**
+         * The left margin.
+         */
+        public int leftMargin = 0;
+
+        /**
+         * The right margin.
+         */
+        public int rightMargin = 0;
+
+        int originalLeftMargin = 0;
+        int originalRightMargin = 0;
+
+        /**
+         * The top margin.
+         */
+        public int topMargin = 0;
+
+        /**
+         * The bottom margin.
+         */
+        public int bottomMargin = 0;
+
+        /**
+         * The start margin.
+         */
+        public int startMargin = UNSET;
+
+        /**
+         * The end margin.
+         */
+        public int endMargin = UNSET;
 
         /**
          * The ratio between two connections when the left and right (or start and end) sides are constrained.
@@ -2510,6 +2550,9 @@ public class ConstraintLayout extends ViewGroup {
         int resolvedGuideEnd;
         float resolvedGuidePercent;
 
+        boolean isRtl = false;
+        int layoutDirection = View.LAYOUT_DIRECTION_LTR;
+
         ConstraintWidget widget = new ConstraintWidget();
 
         /**
@@ -2542,6 +2585,9 @@ public class ConstraintLayout extends ViewGroup {
          */
         public LayoutParams(LayoutParams source) {
             super(source);
+            this.layoutDirection = source.layoutDirection;
+            this.isRtl = source.isRtl;
+            this.endMargin = source.endMargin;
             this.guideBegin = source.guideBegin;
             this.guideEnd = source.guideEnd;
             this.guidePercent = source.guidePercent;
@@ -2570,6 +2616,13 @@ public class ConstraintLayout extends ViewGroup {
             this.goneStartMargin = source.goneStartMargin;
             this.goneEndMargin = source.goneEndMargin;
             this.goneBaselineMargin = source.goneBaselineMargin;
+            this.originalLeftMargin = source.originalLeftMargin;
+            this.originalRightMargin = source.originalRightMargin;
+            this.leftMargin = source.leftMargin;
+            this.rightMargin = source.rightMargin;
+            this.topMargin = source.topMargin;
+            this.bottomMargin = source.bottomMargin;
+            this.startMargin = source.startMargin;
             this.baselineMargin = source.baselineMargin;
             this.horizontalBias = source.horizontalBias;
             this.verticalBias = source.verticalBias;
@@ -2665,10 +2718,20 @@ public class ConstraintLayout extends ViewGroup {
             public static final int LAYOUT_CONSTRAINT_BASELINE_TO_BOTTOM_OF = 53;
             public static final int LAYOUT_MARGIN_BASELINE = 54;
             public static final int LAYOUT_GONE_MARGIN_BASELINE = 55;
+            public static final int LAYOUT_MARGIN_LEFT = 56;
+            public static final int LAYOUT_MARGIN_RIGHT = 57;
+            public static final int LAYOUT_MARGIN_TOP = 58;
+            public static final int LAYOUT_MARGIN_BOTTOM = 59;
+            public static final int LAYOUT_MARGIN_START = 60;
+            public static final int LAYOUT_MARGIN_END = 61;
+            public static final int LAYOUT_WIDTH = 62;
+            public static final int LAYOUT_HEIGHT = 63;
 
             public final static SparseIntArray map = new SparseIntArray();
 
             static {
+                map.append(R.styleable.ConstraintLayout_Layout_android_layout_width, LAYOUT_WIDTH);
+                map.append(R.styleable.ConstraintLayout_Layout_android_layout_height, LAYOUT_HEIGHT);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintLeft_toLeftOf, LAYOUT_CONSTRAINT_LEFT_TO_LEFT_OF);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintLeft_toRightOf, LAYOUT_CONSTRAINT_LEFT_TO_RIGHT_OF);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintRight_toLeftOf, LAYOUT_CONSTRAINT_RIGHT_TO_LEFT_OF);
@@ -2701,6 +2764,12 @@ public class ConstraintLayout extends ViewGroup {
                 map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginEnd, LAYOUT_GONE_MARGIN_END);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginBaseline, LAYOUT_GONE_MARGIN_BASELINE);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_marginBaseline, LAYOUT_MARGIN_BASELINE);
+                map.append(R.styleable.ConstraintLayout_Layout_android_layout_marginLeft, LAYOUT_MARGIN_LEFT);
+                map.append(R.styleable.ConstraintLayout_Layout_android_layout_marginRight, LAYOUT_MARGIN_RIGHT);
+                map.append(R.styleable.ConstraintLayout_Layout_android_layout_marginTop, LAYOUT_MARGIN_TOP);
+                map.append(R.styleable.ConstraintLayout_Layout_android_layout_marginBottom, LAYOUT_MARGIN_BOTTOM);
+                map.append(R.styleable.ConstraintLayout_Layout_android_layout_marginStart, LAYOUT_MARGIN_START);
+                map.append(R.styleable.ConstraintLayout_Layout_android_layout_marginEnd, LAYOUT_MARGIN_END);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHorizontal_bias, LAYOUT_CONSTRAINT_HORIZONTAL_BIAS);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintVertical_bias, LAYOUT_CONSTRAINT_VERTICAL_BIAS);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintDimensionRatio, LAYOUT_CONSTRAINT_DIMENSION_RATIO);
@@ -2727,16 +2796,63 @@ public class ConstraintLayout extends ViewGroup {
             }
         }
 
+        public void setMarginStart(int start) {
+            startMargin = start;
+        }
+
+        public void setMarginEnd(int end) {
+            endMargin = end;
+        }
+
+        public int getMarginStart() {
+            return startMargin;
+        }
+
+        public int getMarginEnd() {
+            return endMargin;
+        }
+
         public LayoutParams(Context c, AttributeSet attrs) {
-            super(c, attrs);
+            super(WRAP_CONTENT, WRAP_CONTENT);
             TypedArray a = c.obtainStyledAttributes(attrs, R.styleable.ConstraintLayout_Layout);
             final int N = a.getIndexCount();
+
+            // let's first apply full margins if they are present.
+            int margin = a.getDimensionPixelSize(R.styleable.ConstraintLayout_Layout_android_layout_margin, -1);
+            int horizontalMargin = -1;
+            int verticalMargin = -1;
+            if (margin >= 0) {
+                originalLeftMargin = margin;
+                originalRightMargin = margin;
+                topMargin = margin;
+                bottomMargin = margin;
+            } else {
+                horizontalMargin = a.getDimensionPixelSize(R.styleable.ConstraintLayout_Layout_android_layout_marginHorizontal, -1);
+                verticalMargin = a.getDimensionPixelSize(R.styleable.ConstraintLayout_Layout_android_layout_marginVertical, -1);
+                if (horizontalMargin >= 0) {
+                    originalLeftMargin = horizontalMargin;
+                    originalRightMargin = horizontalMargin;
+                }
+                if (verticalMargin >= 0) {
+                    topMargin = verticalMargin;
+                    bottomMargin = verticalMargin;
+                }
+            }
+
             for (int i = 0; i < N; i++) {
                 int attr = a.getIndex(i);
                 int look = Table.map.get(attr);
                 switch (look) {
                     case Table.UNUSED: {
                         // Skip
+                        break;
+                    }
+                    case Table.LAYOUT_WIDTH: {
+                        width = a.getLayoutDimension(R.styleable.ConstraintLayout_Layout_android_layout_width, "layout_width");
+                        break;
+                    }
+                    case Table.LAYOUT_HEIGHT: {
+                        height = a.getLayoutDimension(R.styleable.ConstraintLayout_Layout_android_layout_height, "layout_height");
                         break;
                     }
                     case Table.LAYOUT_CONSTRAINT_LEFT_TO_LEFT_OF: {
@@ -2915,11 +3031,47 @@ public class ConstraintLayout extends ViewGroup {
                         break;
                     }
                     case Table.LAYOUT_GONE_MARGIN_BASELINE: {
-                        goneBaselineMargin = a.getDimensionPixelOffset(attr, goneBaselineMargin);
+                        goneBaselineMargin = a.getDimensionPixelSize(attr, goneBaselineMargin);
                         break;
                     }
                     case Table.LAYOUT_MARGIN_BASELINE: {
-                        baselineMargin = a.getDimensionPixelOffset(attr, baselineMargin);
+                        baselineMargin = a.getDimensionPixelSize(attr, baselineMargin);
+                        break;
+                    }
+                    case Table.LAYOUT_MARGIN_LEFT: {
+                        if (margin == -1 && horizontalMargin == -1) {
+                            originalLeftMargin = a.getDimensionPixelSize(attr, originalLeftMargin);
+                        }
+                        break;
+                    }
+                    case Table.LAYOUT_MARGIN_RIGHT: {
+                        if (margin == -1 && horizontalMargin == -1) {
+                            originalRightMargin = a.getDimensionPixelSize(attr, originalRightMargin);
+                        }
+                        break;
+                    }
+                    case Table.LAYOUT_MARGIN_TOP: {
+                        if (margin == -1 && verticalMargin == -1) {
+                            topMargin = a.getDimensionPixelSize(attr, topMargin);
+                        }
+                        break;
+                    }
+                    case Table.LAYOUT_MARGIN_BOTTOM: {
+                        if (margin == -1 && verticalMargin == -1) {
+                            bottomMargin = a.getDimensionPixelSize(attr, bottomMargin);
+                        }
+                        break;
+                    }
+                    case Table.LAYOUT_MARGIN_START: {
+                        if (margin == -1 && horizontalMargin == -1) {
+                            startMargin = a.getDimensionPixelSize(attr, startMargin);
+                        }
+                        break;
+                    }
+                    case Table.LAYOUT_MARGIN_END: {
+                        if (margin == -1 && horizontalMargin == -1) {
+                            endMargin = a.getDimensionPixelSize(attr, endMargin);
+                        }
                         break;
                     }
                     case Table.LAYOUT_CONSTRAINT_HORIZONTAL_BIAS: {
@@ -3158,20 +3310,42 @@ public class ConstraintLayout extends ViewGroup {
             super(source);
         }
 
+        public int getLayoutDirection() {
+            return layoutDirection;
+        }
+
         /**
          * {@inheritDoc}
          */
         @Override
         @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
         public void resolveLayoutDirection(int layoutDirection) {
-            int preLeftMargin = leftMargin;
-            int preRightMargin = rightMargin;
-
-            boolean isRtl = false;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                super.resolveLayoutDirection(layoutDirection);
-                isRtl = (View.LAYOUT_DIRECTION_RTL == getLayoutDirection());
+                this.layoutDirection = layoutDirection;
+                isRtl = (View.LAYOUT_DIRECTION_RTL == layoutDirection);
+            }
+
+            // First apply margins.
+            leftMargin = originalLeftMargin;
+            rightMargin = originalRightMargin;
+
+            if (isRtl) {
+                leftMargin = originalRightMargin;
+                rightMargin = originalLeftMargin;
+                if (startMargin != UNSET) {
+                    rightMargin = startMargin;
+                }
+                if (endMargin != UNSET) {
+                    leftMargin = endMargin;
+                }
+            } else {
+                if (startMargin != UNSET) {
+                    leftMargin = startMargin;
+                }
+                if (endMargin != UNSET) {
+                    rightMargin = endMargin;
+                }
             }
 
             resolvedRightToLeft = UNSET;
@@ -3258,24 +3432,24 @@ public class ConstraintLayout extends ViewGroup {
                     && startToStart == UNSET && startToEnd == UNSET) {
                 if (rightToLeft != UNSET) {
                     resolvedRightToLeft = rightToLeft;
-                    if (rightMargin <= 0 && preRightMargin > 0) {
-                        rightMargin = preRightMargin;
+                    if (rightMargin <= 0 && originalRightMargin > 0) {
+                        rightMargin = originalRightMargin;
                     }
                 } else if (rightToRight != UNSET) {
                     resolvedRightToRight = rightToRight;
-                    if (rightMargin <= 0 && preRightMargin > 0) {
-                        rightMargin = preRightMargin;
+                    if (rightMargin <= 0 && originalRightMargin > 0) {
+                        rightMargin = originalRightMargin;
                     }
                 }
                 if (leftToLeft != UNSET) {
                     resolvedLeftToLeft = leftToLeft;
-                    if (leftMargin <= 0 && preLeftMargin > 0) {
-                        leftMargin = preLeftMargin;
+                    if (leftMargin <= 0 && originalLeftMargin > 0) {
+                        leftMargin = originalLeftMargin;
                     }
                 } else if (leftToRight != UNSET) {
                     resolvedLeftToRight = leftToRight;
-                    if (leftMargin <= 0 && preLeftMargin > 0) {
-                        leftMargin = preLeftMargin;
+                    if (leftMargin <= 0 && originalLeftMargin > 0) {
+                        leftMargin = originalLeftMargin;
                     }
                 }
             }
