@@ -122,7 +122,7 @@ public class FadeMove extends MotionHelper {
     }
 
     @Override
-    public void onPreSetup(MotionLayout motionLayout, HashMap<View, MotionController> mFrameArrayList) {
+    public void onPreSetup(MotionLayout motionLayout, HashMap<View, MotionController> controllerMap) {
         Log.v(TAG, Debug.getLoc());
         View[] views = getViews((ConstraintLayout) this.getParent());
 
@@ -177,7 +177,7 @@ public class FadeMove extends MotionHelper {
             int[] direction = new int[4];
             // let's find out the general movement direction for all the referenced views
             for (int i = 0; i < views.length; i++) {
-                MotionController mc = mFrameArrayList.get(views[i]);
+                MotionController mc = controllerMap.get(views[i]);
                 float x = mc.getFinalX() - mc.getStartX();
                 float y = mc.getFinalY() - mc.getStartY();
                 // look at the direction for this view, and increment the opposite direction
@@ -198,7 +198,7 @@ public class FadeMove extends MotionHelper {
         }
 
         for (int i = 0; i < views.length; i++) {
-            MotionController mc = mFrameArrayList.get(views[i]);
+            MotionController mc = controllerMap.get(views[i]);
             float x = mc.getFinalX()-mc.getStartX();
             float y =  mc.getFinalY()-mc.getStartY();
             boolean apply = true;
