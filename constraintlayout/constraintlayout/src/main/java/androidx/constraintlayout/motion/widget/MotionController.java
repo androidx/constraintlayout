@@ -36,6 +36,7 @@ import android.view.animation.AnticipateInterpolator;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.view.animation.OvershootInterpolator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -137,27 +138,88 @@ public class MotionController {
         setView(view);
     }
 
-    float getStartX() {
+    /**
+     * get the left most position of the widget at the start of the movement.
+     *
+     * @return the left most position
+     */
+    public float getStartX() {
         return mStartMotionPath.x;
     }
 
-    float getStartY() {
+    /**
+     * get the top most position of the widget at the start of the movement.
+     * Positive is down.
+     *
+     * @return the top most position
+     */
+    public float getStartY() {
         return mStartMotionPath.y;
     }
 
-    float getFinalX() {
+    /**
+     * get the left most position of the widget at the end of the movement.
+     *
+     * @return the left most position
+     */
+    public float getFinalX() {
         return mEndMotionPath.x;
     }
 
-    float getFinalY() {
+    /**
+     * get the top most position of the widget at the end of the movement.
+     * Positive is down.
+     *
+     * @return the top most position
+     */
+    public float getFinalY() {
         return mEndMotionPath.y;
     }
 
     /**
-     * Will return the id of the view to move relative to
-     * @return
+     * get the width of the widget at the start of the movement.
+     *
+     * @return the width at the start
      */
-    int getAnimateRelativeTo() {
+    public float getStartWidth() {
+        return mStartMotionPath.width;
+    }
+
+    /**
+     * get the width of the widget at the start of the movement.
+     *
+     * @return the height at the start
+     */
+    public float getStartHeight() {
+        return mStartMotionPath.height;
+    }
+
+    /**
+     * get the width of the widget at the end of the movement.
+     *
+     * @return the width at the end
+     */
+    public float getFinalWidth() {
+        return mEndMotionPath.width;
+    }
+
+    /**
+     * get the width of the widget at the end of the movement.
+     *
+     * @return the height at the end
+     */
+    public float getFinalHeight() {
+        return mEndMotionPath.height;
+    }
+
+    /**
+     * Will return the id of the view to move relative to
+     * The position at the start and then end will be viewed relative to this view
+     * -1 is the return value if NOT in polar mode
+     *
+     * @return the view id of the view this is in polar mode to or -1 if not in polar
+     */
+    public int getAnimateRelativeTo() {
        return mStartMotionPath.mAnimateRelativeTo;
     }
 
@@ -178,7 +240,6 @@ public class MotionController {
         double [] position = new double[4];
         double [] velocity = new double[4];
         int [] temp = new int[4];
-
         mSpline[0].getPos(p, position);
         mSpline[0].getSlope(p, velocity);
         Arrays.fill(vel,0);
@@ -210,6 +271,7 @@ public class MotionController {
                 if (position > mStaggerOffset && position < 1.0) {
                     position -= mStaggerOffset;
                     position *= mStaggerScale;
+                    position = Math.min(position, 1.0f);
                 }
             }
             double p = position;
@@ -296,6 +358,7 @@ public class MotionController {
                 if (position > mStaggerOffset && position < 1.0) {
                     position -= mStaggerOffset;
                     position *= mStaggerScale;
+                    position = Math.min(position, 1.0f);
                 }
             }
             double p = position;
@@ -530,7 +593,7 @@ public class MotionController {
         }
     }
 
-    void addKey(Key key) {
+    public void addKey(Key key) {
         mKeyList.add(key);
         if (DEBUG) {
             Log.v(TAG, " ################ addKey = " + key.getClass().getSimpleName());
@@ -943,7 +1006,8 @@ public class MotionController {
     static final int EASE_IN = 1;
     static final int EASE_OUT = 2;
     static final int LINEAR = 3;
-    static final int BOUNCE = 5;
+    static final int BOUNCE = 4;
+    static final int OVERSHOOT = 5;
     private static final int SPLINE_STRING = -1;
     private static final int INTERPOLATOR_REFRENCE_ID = -2;
     private static final int INTERPOLATOR_UNDEFINED = -3;
@@ -970,6 +1034,8 @@ public class MotionController {
                 return null;
             case BOUNCE:
                 return new BounceInterpolator();
+            case OVERSHOOT:
+                return new OvershootInterpolator();
         }
         return null;
     }
@@ -1013,6 +1079,7 @@ public class MotionController {
             if (position > mStaggerOffset && position < 1.0) {
                 position -= mStaggerOffset;
                 position *= mStaggerScale;
+                position = Math.min(position, 1.0f);
             }
         }
 

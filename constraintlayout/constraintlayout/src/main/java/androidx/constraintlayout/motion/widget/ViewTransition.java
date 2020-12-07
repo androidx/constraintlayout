@@ -33,6 +33,7 @@ import android.view.animation.AnticipateInterpolator;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.view.animation.OvershootInterpolator;
 
 import androidx.constraintlayout.motion.utils.Easing;
 import androidx.constraintlayout.widget.ConstraintAttribute;
@@ -90,8 +91,10 @@ public class ViewTransition {
     static final int EASE_IN = 1;
     static final int EASE_OUT = 2;
     static final int LINEAR = 3;
-    static final int ANTICIPATE = 4;
-    static final int BOUNCE = 5;
+    static final int BOUNCE = 4;
+    static final int OVERSHOOT = 5;
+    static final int ANTICIPATE = 6;
+
     Context mContext;
     private int mSetsTag = UNSET;
     private int mClearsTag = UNSET;
@@ -125,6 +128,8 @@ public class ViewTransition {
                 return null;
             case ANTICIPATE:
                 return new AnticipateInterpolator();
+            case OVERSHOOT:
+                return new OvershootInterpolator();
             case BOUNCE:
                 return new BounceInterpolator();
         }

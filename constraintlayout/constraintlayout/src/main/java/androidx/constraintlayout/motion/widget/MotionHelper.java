@@ -8,14 +8,15 @@ import androidx.constraintlayout.widget.R;
 
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.HashMap;
 
 /**
  * @hide
  */
-public class MotionHelper extends ConstraintHelper implements Animatable, MotionLayout.TransitionListener {
+public class MotionHelper extends ConstraintHelper implements MotionHelperInterface {
 
     private boolean mUseOnShow = false;
     private boolean mUseOnHide = false;
@@ -35,7 +36,6 @@ public class MotionHelper extends ConstraintHelper implements Animatable, Motion
         super(context, attrs, defStyleAttr);
         init(attrs);
     }
-
     /**
      * @hide
      */
@@ -61,6 +61,7 @@ public class MotionHelper extends ConstraintHelper implements Animatable, Motion
      * @return
      * @hide
      */
+    @Override
     public boolean isUsedOnShow() {
         return mUseOnShow;
     }
@@ -70,6 +71,7 @@ public class MotionHelper extends ConstraintHelper implements Animatable, Motion
      * @return
      * @hide
      */
+    @Override
     public boolean isUseOnHide() {
         return mUseOnHide;
     }
@@ -130,15 +132,29 @@ public class MotionHelper extends ConstraintHelper implements Animatable, Motion
 
     }
 
+    @Override
     public boolean isDecorator() {
         return false;
     }
 
+    @Override
     public void onPreDraw(Canvas canvas) {
 
     }
-    
+    @Override
+    public void onFinishedMotionScene(MotionLayout motionLayout) {
+
+    }
+
+    @Override
     public void onPostDraw(Canvas canvas) {
 
     }
+
+    @Override
+    public void onPreSetup(MotionLayout motionLayout, HashMap<View, MotionController> controllerMap) {
+
+    }
+
+
 }

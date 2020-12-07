@@ -44,6 +44,20 @@ import java.util.HashSet;
 public class KeyTrigger extends Key {
     static final String NAME = "KeyTrigger";
     private static final String TAG = "KeyTrigger";
+    public static final String VIEW_TRANSITION_ON_CROSS = "viewTransitionOnCross";
+    public static final String VIEW_TRANSITION_ON_POSITIVE_CROSS = "viewTransitionOnPositiveCross";
+    public static final String VIEW_TRANSITION_ON_NEGATIVE_CROSS = "viewTransitionOnNegativeCross";
+    public static final String POST_LAYOUT = "postLayout";
+    public static final String TRIGGER_SLACK = "triggerSlack";
+    public static final String TRIGGER_COLLISION_VIEW = "triggerCollisionView";
+    public static final String TRIGGER_COLLISION_ID = "triggerCollisionId";
+    public static final String TRIGGER_ID = "triggerID";
+    public static final String POSITIVE_CROSS = "positiveCross";
+    public static final String NEGATIVE_CROSS = "negativeCross";
+    public static final String TRIGGER_RECEIVER = "triggerReceiver";
+    public static final String CROSS = "CROSS";
+
+
     private int mCurveFit = -1;
     private String mCross = null;
     private int mTriggerReceiver = UNSET;
@@ -98,6 +112,45 @@ public class KeyTrigger extends Key {
 
     @Override
     public void setValue(String tag, Object value) {
+        switch (tag) {
+            case CROSS:
+                mCross = value.toString();
+                break;
+            case TRIGGER_RECEIVER:
+                mTriggerReceiver = toInt(value);
+                break;
+            case NEGATIVE_CROSS:
+                mNegativeCross = value.toString();
+                break;
+            case POSITIVE_CROSS:
+                mPositiveCross = value.toString();
+                break;
+            case TRIGGER_ID:
+                mTriggerID = toInt(value);
+                break;
+            case TRIGGER_COLLISION_ID:
+                mTriggerCollisionId = toInt(value);
+                break;
+            case TRIGGER_COLLISION_VIEW:
+                mTriggerCollisionView = (View) value;
+                break;
+            case TRIGGER_SLACK:
+                mTriggerSlack = toFloat(value);
+                break;
+            case POST_LAYOUT:
+                mPostLayout = toBoolean(value);
+                break;
+            case VIEW_TRANSITION_ON_NEGATIVE_CROSS:
+                mViewTransitionOnNegativeCross = toInt(value);
+                break;
+            case VIEW_TRANSITION_ON_POSITIVE_CROSS:
+                mViewTransitionOnPositiveCross = toInt(value);
+                break;
+            case VIEW_TRANSITION_ON_CROSS:
+                mViewTransitionOnCross = toInt(value);
+                break;
+
+        }
     }
 
     private void setUpRect(RectF rect, View child, boolean postLayout) {

@@ -55,7 +55,13 @@ public class KeyPosition extends KeyPositionBase {
     public static final int TYPE_PATH = 1;
     public static final int TYPE_CARTESIAN = 0;
     int mPositionType = TYPE_CARTESIAN;
-
+    public static final String TRANSITION_EASING = "transitionEasing";
+    public static final String DRAWPATH = "drawPath";
+    public static final String PERCENT_WIDTH = "percentWidth";
+    public static final String PERCENT_HEIGHT = "percentHeight";
+    public static final String SIZE_PERCENT = "sizePercent";
+    public static final String PERCENT_X = "percentX";
+    public static final String PERCENT_Y = "percentY";
     private float mCalculatedPositionX = Float.NaN;
     private float mCalculatedPositionY = Float.NaN;
     static final int KEY_TYPE = 2;
@@ -72,6 +78,10 @@ public class KeyPosition extends KeyPositionBase {
 
     @Override
     public void addValues(HashMap<String, SplineSet> splines) {
+    }
+
+    public void setType(int type) {
+        mPositionType = type;
     }
 
     @Override
@@ -130,9 +140,6 @@ public class KeyPosition extends KeyPositionBase {
     float getPositionY() {
         return mCalculatedPositionY;
     }
-
-    private static final String PERCENT_Y = "percentY";
-    private static final String PERCENT_X = "percentX";
 
     @Override
     public void positionAttributes(View view, RectF start, RectF end, float x, float y, String[] attribute, float[] value) {
@@ -346,28 +353,27 @@ public class KeyPosition extends KeyPositionBase {
     @Override
     public void setValue(String tag, Object value) {
         switch (tag) {
-            case "transitionEasing":
+            case TRANSITION_EASING:
                 mTransitionEasing = value.toString();
                 break;
-            case "drawPath":
+            case DRAWPATH:
                 mDrawPath = toInt(value);
                 break;
-            case "percentWidth":
+            case PERCENT_WIDTH:
                 mPercentWidth = toFloat(value);
                 break;
-            case "percentHeight":
+            case PERCENT_HEIGHT:
                 mPercentHeight = toFloat(value);
                 break;
-            case "sizePercent":
+            case SIZE_PERCENT:
                 mPercentHeight = mPercentWidth = toFloat(value);
                 break;
-            case "percentX":
+            case PERCENT_X:
                 mPercentX = toFloat(value);
                 break;
-            case "percentY":
+            case PERCENT_Y:
                 mPercentY = toFloat(value);
                 break;
-
         }
     }
 

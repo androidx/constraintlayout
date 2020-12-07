@@ -261,6 +261,24 @@
 
     <!-- =============================== End Carousel =============================== -->
 
+    <!-- =============================== Start FadeMove =============================== -->
+
+    <declare-styleable name="FadeMove">
+        <attr name="fadeMove_start" format="integer"/>
+        <attr name="fadeMove_end" format="integer"/>
+        <attr name="fadeMove_translationX" format="dimension"/>
+        <attr name="fadeMove_translationY" format="dimension"/>
+        <attr name="fadeMove_alpha" format="float"/>
+        <attr name="fadeMove_move" format="enum">
+            <enum name="auto" value = "-1" />
+            <enum name="north" value = "0" />
+            <enum name="south" value = "1" />
+            <enum name="east" value = "2" />
+            <enum name="west" value = "3" />
+        </attr>
+        <attr name="fadeMove_strict" format="boolean" />
+    </declare-styleable>    <!-- =============================== End FadeMove =============================== -->
+
     <!-- Used at design time to define to position the view -->
     <attr name="layout_editor_absoluteX" format="dimension" />
     <!-- Used at design time to define to position the view -->
@@ -324,7 +342,9 @@
         <enum name="easeIn" value="1" />
         <enum name="easeOut" value="2" />
         <enum name="linear" value="3" />
-        <enum name="bounce" value="5" />
+        <enum name="bounce" value="4" />
+        <enum name="overshoot" value="5" />
+
     </attr>
 
     <!-- Specify the visibility of a placeholder -->
@@ -1109,6 +1129,8 @@
             <enum name="easeOut" value="2" />
             <enum name="linear" value="3" />
             <enum name="bounce" value="4" />
+            <enum name="overshoot" value="5" />
+            <enum name="anticipate" value="6" />
         </attr>
 
         <attr name="duration" />

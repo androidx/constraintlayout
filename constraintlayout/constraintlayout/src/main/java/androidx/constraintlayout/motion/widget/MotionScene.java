@@ -42,6 +42,7 @@ import android.view.animation.AnticipateInterpolator;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.view.animation.OvershootInterpolator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -1492,8 +1493,9 @@ public class MotionScene {
     static final int EASE_IN = 1;
     static final int EASE_OUT = 2;
     static final int LINEAR = 3;
-    static final int ANTICIPATE = 4;
-    static final int BOUNCE = 5;
+    static final int BOUNCE = 4;
+    static final int OVERSHOOT = 5;
+    static final int ANTICIPATE = 6;
 
     public Interpolator getInterpolator() {
         switch (mCurrentTransition.mDefaultInterpolator) {
@@ -1518,6 +1520,8 @@ public class MotionScene {
                 return null;
             case ANTICIPATE:
                 return new AnticipateInterpolator();
+            case OVERSHOOT:
+                return new OvershootInterpolator();
             case BOUNCE:
                 return new BounceInterpolator();
         }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:id="@+id/flow"
+            motion:constraint_referenced_ids="t1,t2,t3,t4,t5,t6,t7,t8,t9"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@+id/flow"
+            motion:constraint_referenced_ids="t2,t3,t5,t6,t4,t7,t1,t9,t8"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent" />
+    </ConstraintSet>
+    <Transition
+        motion:constraintSetStart="@+id/start"
+        motion:constraintSetEnd="@+id/end" >
+<!--        <KeyFrameSet >-->
+<!--            <KeyAttribute-->
+<!--                motion:motionTarget="@+id/t2"-->
+<!--                motion:framePosition="50"-->
+<!--                android:alpha="0.5" />-->
+<!--        </KeyFrameSet>-->
+        <OnSwipe />
+    </Transition>
+    <Transition
+        motion:constraintSetStart="@+id/end"
+        motion:constraintSetEnd="@+id/start" >
+<!--        <KeyFrameSet >-->
+<!--            <KeyAttribute-->
+<!--                motion:motionTarget="@+id/t1"-->
+<!--                motion:framePosition="50"-->
+<!--                android:alpha="0.5" />-->
+<!--        </KeyFrameSet>-->
+        <OnSwipe />
+    </Transition>
+</MotionScene>
