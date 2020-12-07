@@ -1,0 +1,75 @@
+{
+  "duration": "326000",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "129",
+          "right": "452"
+        },
+        "id": "textview1",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "419",
+          "left": "0",
+          "bottom": "548",
+          "right": "452"
+        },
+        "id": "textview2",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "191",
+          "left": "0",
+          "bottom": "320",
+          "right": "452"
+        },
+        "id": "textview3",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "161",
+          "left": "839",
+          "bottom": "461",
+          "right": "1139"
+        },
+        "id": "view",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "537",
+          "left": "-58",
+          "bottom": "681",
+          "right": "225"
+        },
+        "id": "button129",
+        "class": "MaterialButton"
+      },
+      {
+        "bounds": {
+          "top": "-58",
+          "left": "-58",
+          "bottom": "85",
+          "right": "225"
+        },
+        "id": "button130",
+        "class": "MaterialButton"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "622",
+      "right": "1080"
+    },
+    "id": "root",
+    "class": "ConstraintLayout"
+  }
+}
