@@ -282,7 +282,6 @@ public abstract class SplineSet {
             mCurveFit = CurveFit.get(curveType, time, values);
         }
 
-
         public void setPoint(int position, float value) {
             throw new RuntimeException("don't call for custom attribute call setPoint(pos, ConstraintAttribute)");
         }

@@ -415,7 +415,6 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
         setScaleType(ScaleType.MATRIX);
     }
 
-
     public ImageFilterView(Context context) {
         super(context);
         init(context, null);

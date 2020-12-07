@@ -608,7 +608,6 @@ class MotionPaths implements Comparable<MotionPaths> {
             }
         }
 
-
         int l = (int) (0.5f + v_x);
         int t = (int) (0.5f + v_y);
         int r = (int) (0.5f + v_x + v_width);
