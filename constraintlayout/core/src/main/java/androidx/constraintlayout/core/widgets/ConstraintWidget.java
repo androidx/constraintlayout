@@ -1140,7 +1140,10 @@ public class ConstraintWidget {
                 mBottom.mGoneMargin = goneMargin;
             }
             break;
-            case BASELINE:
+            case BASELINE: {
+                mBaseline.mGoneMargin = goneMargin;
+            }
+            break;
             case CENTER:
             case CENTER_X:
             case CENTER_Y:
@@ -1778,7 +1781,6 @@ public class ConstraintWidget {
                     if (bottom != null) {
                         bottom.reset();
                     }
-                    margin = 0;
                 } else if ((constraintFrom == ConstraintAnchor.Type.TOP)
                         || (constraintFrom == ConstraintAnchor.Type.BOTTOM)) {
                     ConstraintAnchor baseline = getAnchor(ConstraintAnchor.Type.BASELINE);
@@ -2465,7 +2467,7 @@ public class ConstraintWidget {
                 if (mBaseline.mTarget != null) {
                     system.addEquality(baseline, top, getBaselineDistance(), SolverVariable.STRENGTH_FIXED);
                     SolverVariable baselineTarget = system.createObjectVariable(mBaseline.mTarget);
-                    int baselineMargin = 0; // for now at least, baseline don't have margins
+                    int baselineMargin = mBaseline.getMargin();
                     system.addEquality(baseline, baselineTarget, baselineMargin, SolverVariable.STRENGTH_FIXED);
                     applyPosition = false;
                     if (verticalParentWrapContent) {
@@ -2478,7 +2480,7 @@ public class ConstraintWidget {
                     }
                 } else if (mVisibility == GONE) {
                     // TODO: use the constraints graph here to help
-                    system.addEquality(baseline, top, 0, SolverVariable.STRENGTH_FIXED);
+                    system.addEquality(baseline, top, mBaseline.getMargin(), SolverVariable.STRENGTH_FIXED);
                 } else {
                     system.addEquality(baseline, top, getBaselineDistance(), SolverVariable.STRENGTH_FIXED);
                 }

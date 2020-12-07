@@ -113,6 +113,9 @@
     <!-- the end margin value to be used when connected to an object that is GONE -->
     <attr name="layout_goneMarginEnd" format="dimension" />
 
+    <attr name="layout_marginBaseline" format="dimension" />
+    <attr name="layout_goneMarginBaseline" format="dimension" />
+
     <!-- Fraction of excess space to distribute on the left when constrained on left & right edges (e.g. .5 = middle)-->
     <attr name="layout_constraintHorizontal_bias" format="float" />
     <!-- Fraction of excess space to distribute on the top when constrained on top & bottom edges (e.g. .5 = middle)-->
@@ -495,6 +498,8 @@
         <attr name="layout_goneMarginBottom" />
         <attr name="layout_goneMarginStart" />
         <attr name="layout_goneMarginEnd" />
+        <attr name="layout_goneMarginBaseline" />
+        <attr name="layout_marginBaseline" />
         <attr name="layout_constrainedWidth" />
         <attr name="layout_constrainedHeight" />
         <attr name="layout_constraintHorizontal_bias" />
@@ -627,6 +632,8 @@
         <attr name="layout_goneMarginBottom" />
         <attr name="layout_goneMarginStart" />
         <attr name="layout_goneMarginEnd" />
+        <attr name="layout_goneMarginBaseline" />
+        <attr name="layout_marginBaseline" />
         <attr name="layout_constrainedWidth" />
         <attr name="layout_constrainedHeight" />
         <attr name="layout_constraintHorizontal_bias" />
@@ -807,6 +814,8 @@
         <attr name="layout_goneMarginBottom" />
         <attr name="layout_goneMarginStart" />
         <attr name="layout_goneMarginEnd" />
+        <attr name="layout_goneMarginBaseline" />
+        <attr name="layout_marginBaseline" />
         <attr name="layout_constrainedWidth" />
         <attr name="layout_constrainedHeight" />
         <attr name="layout_constraintHorizontal_bias" />
@@ -971,6 +980,8 @@
         <attr name="layout_goneMarginBottom" />
         <attr name="layout_goneMarginStart" />
         <attr name="layout_goneMarginEnd" />
+        <attr name="layout_goneMarginBaseline" />
+        <attr name="layout_marginBaseline" />
         <attr name="layout_constrainedWidth" />
         <attr name="layout_constrainedHeight" />
         <attr name="layout_constraintHorizontal_bias" />
@@ -1468,6 +1479,8 @@
         <attr name="layout_goneMarginBottom" />
         <attr name="layout_goneMarginStart" />
         <attr name="layout_goneMarginEnd" />
+        <attr name="layout_goneMarginBaseline" />
+        <attr name="layout_marginBaseline" />
         <attr name="layout_constrainedWidth" />
         <attr name="layout_constrainedHeight" />
         <attr name="layout_constraintHorizontal_bias" />

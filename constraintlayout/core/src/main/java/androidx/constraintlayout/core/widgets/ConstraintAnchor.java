@@ -226,11 +226,7 @@ public class ConstraintAnchor {
         if (mTarget.mDependents != null) {
             mTarget.mDependents.add(this);
         }
-        if (margin > 0) {
-            mMargin = margin;
-        } else {
-            mMargin = 0;
-        }
+        mMargin = margin;
         mGoneMargin = goneMargin;
         return true;
     }
