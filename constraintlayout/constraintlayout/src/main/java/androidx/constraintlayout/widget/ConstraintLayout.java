@@ -178,6 +178,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * <li>{@code android:layout_marginTop}</li>
  * <li>{@code android:layout_marginRight}</li>
  * <li>{@code android:layout_marginBottom}</li>
+ * <li>{@code layout_marginBaseline}</li>
  * </ul>
  * <p>Note that a margin can only be positive or equal to zero, and takes a {@code Dimension}.</p>
  * <h4 id="GoneMargin"> Margins when connected to a GONE widget</h4>
@@ -190,6 +191,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * <li>{@code layout_goneMarginTop}</li>
  * <li>{@code layout_goneMarginRight}</li>
  * <li>{@code layout_goneMarginBottom}</li>
+ * <li>{@code layout_goneMarginBaseline}</li>
  * </ul>
  * </p>
  *
@@ -1405,47 +1407,14 @@ public class ConstraintLayout extends ViewGroup {
 
                 // Baseline constraint
                 if (layoutParams.baselineToBaseline != UNSET) {
-                    View view = mChildrenByIds.get(layoutParams.baselineToBaseline);
-                    ConstraintWidget target = idToWidget.get(layoutParams.baselineToBaseline);
-                    if (target != null && view != null && view.getLayoutParams() instanceof LayoutParams) {
-                        LayoutParams targetParams = (LayoutParams) view.getLayoutParams();
-                        layoutParams.needsBaseline = true;
-                        targetParams.needsBaseline = true;
-                        ConstraintAnchor baseline = widget.getAnchor(ConstraintAnchor.Type.BASELINE);
-                        ConstraintAnchor targetBaseline =
-                                target.getAnchor(ConstraintAnchor.Type.BASELINE);
-                        baseline.connect(targetBaseline, 0, -1, true);
-                        widget.setHasBaseline(true);
-                        targetParams.widget.setHasBaseline(true);
-                        widget.getAnchor(ConstraintAnchor.Type.TOP).reset();
-                        widget.getAnchor(ConstraintAnchor.Type.BOTTOM).reset();
-                    }
+                    setWidgetBaseline(widget, layoutParams, idToWidget,
+                            layoutParams.baselineToBaseline, ConstraintAnchor.Type.BASELINE);
                 } else if (layoutParams.baselineToTop != UNSET) {
-                    View view = mChildrenByIds.get(layoutParams.baselineToTop);
-                    ConstraintWidget target = idToWidget.get(layoutParams.baselineToTop);
-                    if (target != null && view != null && view.getLayoutParams() instanceof LayoutParams) {
-                        layoutParams.needsBaseline = true;
-                        ConstraintAnchor baseline = widget.getAnchor(ConstraintAnchor.Type.BASELINE);
-                        ConstraintAnchor targetBaseline =
-                                target.getAnchor(ConstraintAnchor.Type.TOP);
-                        baseline.connect(targetBaseline, 0, -1, true);
-                        widget.setHasBaseline(true);
-                        widget.getAnchor(ConstraintAnchor.Type.TOP).reset();
-                        widget.getAnchor(ConstraintAnchor.Type.BOTTOM).reset();
-                    }
+                    setWidgetBaseline(widget, layoutParams, idToWidget,
+                            layoutParams.baselineToTop, ConstraintAnchor.Type.TOP);
                 } else if (layoutParams.baselineToBottom != UNSET) {
-                    View view = mChildrenByIds.get(layoutParams.baselineToBottom);
-                    ConstraintWidget target = idToWidget.get(layoutParams.baselineToBottom);
-                    if (target != null && view != null && view.getLayoutParams() instanceof LayoutParams) {
-                        layoutParams.needsBaseline = true;
-                        ConstraintAnchor baseline = widget.getAnchor(ConstraintAnchor.Type.BASELINE);
-                        ConstraintAnchor targetBaseline =
-                                target.getAnchor(ConstraintAnchor.Type.BOTTOM);
-                        baseline.connect(targetBaseline, 0, -1, true);
-                        widget.setHasBaseline(true);
-                        widget.getAnchor(ConstraintAnchor.Type.TOP).reset();
-                        widget.getAnchor(ConstraintAnchor.Type.BOTTOM).reset();
-                    }
+                    setWidgetBaseline(widget, layoutParams, idToWidget,
+                            layoutParams.baselineToBottom, ConstraintAnchor.Type.BOTTOM);
                 }
 
                 if (resolvedHorizontalBias >= 0) {
@@ -1514,6 +1483,25 @@ public class ConstraintLayout extends ViewGroup {
             widget.setVerticalMatchStyle(layoutParams.matchConstraintDefaultHeight,
                     layoutParams.matchConstraintMinHeight, layoutParams.matchConstraintMaxHeight,
                     layoutParams.matchConstraintPercentHeight);
+        }
+    }
+
+    private void setWidgetBaseline(ConstraintWidget widget, LayoutParams layoutParams, SparseArray<ConstraintWidget> idToWidget, int baselineTarget, ConstraintAnchor.Type type) {
+        View view = mChildrenByIds.get(baselineTarget);
+        ConstraintWidget target = idToWidget.get(baselineTarget);
+        if (target != null && view != null && view.getLayoutParams() instanceof LayoutParams) {
+            layoutParams.needsBaseline = true;
+            if (type == ConstraintAnchor.Type.BASELINE) { // baseline to baseline
+                LayoutParams targetParams = (LayoutParams) view.getLayoutParams();
+                targetParams.needsBaseline = true;
+                targetParams.widget.setHasBaseline(true);
+            }
+            ConstraintAnchor baseline = widget.getAnchor(ConstraintAnchor.Type.BASELINE);
+            ConstraintAnchor targetAnchor = target.getAnchor(type);
+            baseline.connect(targetAnchor, layoutParams.baselineMargin, layoutParams.goneBaselineMargin, true);
+            widget.setHasBaseline(true);
+            widget.getAnchor(ConstraintAnchor.Type.TOP).reset();
+            widget.getAnchor(ConstraintAnchor.Type.BOTTOM).reset();
         }
     }
 
@@ -2333,6 +2321,16 @@ public class ConstraintLayout extends ViewGroup {
         public int goneEndMargin = UNSET;
 
         /**
+         * The baseline margin to use when the target is gone.
+         */
+        public int goneBaselineMargin = UNSET;
+
+        /**
+         * The baseline margin.
+         */
+        public int baselineMargin = 0;
+
+        /**
          * The ratio between two connections when the left and right (or start and end) sides are constrained.
          */
         public float horizontalBias = 0.5f;
@@ -2571,6 +2569,8 @@ public class ConstraintLayout extends ViewGroup {
             this.goneBottomMargin = source.goneBottomMargin;
             this.goneStartMargin = source.goneStartMargin;
             this.goneEndMargin = source.goneEndMargin;
+            this.goneBaselineMargin = source.goneBaselineMargin;
+            this.baselineMargin = source.baselineMargin;
             this.horizontalBias = source.horizontalBias;
             this.verticalBias = source.verticalBias;
             this.dimensionRatio = source.dimensionRatio;
@@ -2663,6 +2663,9 @@ public class ConstraintLayout extends ViewGroup {
             public static final int LAYOUT_CONSTRAINT_TAG = 51;
             public static final int LAYOUT_CONSTRAINT_BASELINE_TO_TOP_OF = 52;
             public static final int LAYOUT_CONSTRAINT_BASELINE_TO_BOTTOM_OF = 53;
+            public static final int LAYOUT_MARGIN_BASELINE = 54;
+            public static final int LAYOUT_GONE_MARGIN_BASELINE = 55;
+
             public final static SparseIntArray map = new SparseIntArray();
 
             static {
@@ -2696,6 +2699,8 @@ public class ConstraintLayout extends ViewGroup {
                 map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginBottom, LAYOUT_GONE_MARGIN_BOTTOM);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginStart, LAYOUT_GONE_MARGIN_START);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginEnd, LAYOUT_GONE_MARGIN_END);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginBaseline, LAYOUT_GONE_MARGIN_BASELINE);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_marginBaseline, LAYOUT_MARGIN_BASELINE);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHorizontal_bias, LAYOUT_CONSTRAINT_HORIZONTAL_BIAS);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintVertical_bias, LAYOUT_CONSTRAINT_VERTICAL_BIAS);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintDimensionRatio, LAYOUT_CONSTRAINT_DIMENSION_RATIO);
@@ -2907,6 +2912,14 @@ public class ConstraintLayout extends ViewGroup {
                     }
                     case Table.LAYOUT_GONE_MARGIN_END: {
                         goneEndMargin = a.getDimensionPixelSize(attr, goneEndMargin);
+                        break;
+                    }
+                    case Table.LAYOUT_GONE_MARGIN_BASELINE: {
+                        goneBaselineMargin = a.getDimensionPixelOffset(attr, goneBaselineMargin);
+                        break;
+                    }
+                    case Table.LAYOUT_MARGIN_BASELINE: {
+                        baselineMargin = a.getDimensionPixelOffset(attr, baselineMargin);
                         break;
                     }
                     case Table.LAYOUT_CONSTRAINT_HORIZONTAL_BIAS: {

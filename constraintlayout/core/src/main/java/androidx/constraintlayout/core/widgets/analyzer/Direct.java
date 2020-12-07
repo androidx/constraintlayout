@@ -478,7 +478,7 @@ public class Direct {
                         continue;
                     }
                     if (first == widget.mBaseline) {
-                        widget.setFinalBaseline(baselineValue);
+                        widget.setFinalBaseline(baselineValue + first.getMargin());
                         verticalSolvingPass(widget, measurer);
                     }
                 }

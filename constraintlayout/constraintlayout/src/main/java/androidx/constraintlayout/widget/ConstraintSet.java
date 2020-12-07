@@ -320,6 +320,8 @@ public class ConstraintSet {
     private static final int QUANTIZE_MOTION_INTERPOLATOR_STR = 90;
     private static final int BASELINE_TO_TOP = 91;
     private static final int BASELINE_TO_BOTTOM = 92;
+    private static final int BASELINE_MARGIN = 93;
+    private static final int GONE_BASELINE_MARGIN = 94;
 
     static {
         mapToConstant.append(R.styleable.Constraint_layout_constraintLeft_toLeftOf, LEFT_TO_LEFT);
@@ -680,12 +682,14 @@ public class ConstraintSet {
         public int bottomMargin = UNSET;
         public int endMargin = UNSET;
         public int startMargin = UNSET;
+        public int baselineMargin = UNSET;
         public int goneLeftMargin = UNSET;
         public int goneTopMargin = UNSET;
         public int goneRightMargin = UNSET;
         public int goneBottomMargin = UNSET;
         public int goneEndMargin = UNSET;
         public int goneStartMargin = UNSET;
+        public int goneBaselineMargin = UNSET;
         public float verticalWeight = UNSET;
         public float horizontalWeight = UNSET;
         public int horizontalChainStyle = CHAIN_SPREAD;
@@ -747,12 +751,14 @@ public class ConstraintSet {
             bottomMargin = src.bottomMargin;
             endMargin = src.endMargin;
             startMargin = src.startMargin;
+            baselineMargin = src.baselineMargin;
             goneLeftMargin = src.goneLeftMargin;
             goneTopMargin = src.goneTopMargin;
             goneRightMargin = src.goneRightMargin;
             goneBottomMargin = src.goneBottomMargin;
             goneEndMargin = src.goneEndMargin;
             goneStartMargin = src.goneStartMargin;
+            goneBaselineMargin = src.goneBaselineMargin;
             verticalWeight = src.verticalWeight;
             horizontalWeight = src.horizontalWeight;
             horizontalChainStyle = src.horizontalChainStyle;
@@ -996,6 +1002,9 @@ public class ConstraintSet {
                     case GONE_END_MARGIN:
                         goneEndMargin = a.getDimensionPixelSize(attr, goneEndMargin);
                         break;
+                    case GONE_BASELINE_MARGIN:
+                        goneBaselineMargin = a.getDimensionPixelSize(attr, goneBaselineMargin);
+                        break;
                     case HORIZONTAL_BIAS:
                         horizontalBias = a.getFloat(attr, horizontalBias);
                         break;
@@ -1023,6 +1032,9 @@ public class ConstraintSet {
                         break;
                     case BOTTOM_MARGIN:
                         bottomMargin = a.getDimensionPixelSize(attr, bottomMargin);
+                        break;
+                    case BASELINE_MARGIN:
+                        baselineMargin = a.getDimensionPixelSize(attr, baselineMargin);
                         break;
                     case LAYOUT_WIDTH:
                         mWidth = a.getLayoutDimension(attr, mWidth);
@@ -1671,6 +1683,7 @@ public class ConstraintSet {
             layout.rightMargin = param.rightMargin;
             layout.topMargin = param.topMargin;
             layout.bottomMargin = param.bottomMargin;
+            layout.baselineMargin = param.baselineMargin;
             layout.verticalWeight = param.verticalWeight;
             layout.horizontalWeight = param.horizontalWeight;
             layout.verticalChainStyle = param.verticalChainStyle;
@@ -1692,6 +1705,7 @@ public class ConstraintSet {
             layout.goneRightMargin = param.goneRightMargin;
             layout.goneStartMargin = param.goneStartMargin;
             layout.goneEndMargin = param.goneEndMargin;
+            layout.goneBaselineMargin = param.goneBaselineMargin;
 
             int currentapiVersion = android.os.Build.VERSION.SDK_INT;
             if (currentapiVersion >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -2659,6 +2673,8 @@ public class ConstraintSet {
                     constraint.layout.baselineToBaseline = Layout.UNSET;
                     constraint.layout.baselineToTop = Layout.UNSET;
                     constraint.layout.baselineToBottom = Layout.UNSET;
+                    constraint.layout.baselineMargin = Layout.UNSET;
+                    constraint.layout.goneBaselineMargin = Layout.UNSET;
                     break;
                 case START:
                     constraint.layout.startToEnd = Layout.UNSET;
@@ -2701,7 +2717,8 @@ public class ConstraintSet {
                 constraint.layout.bottomMargin = value;
                 break;
             case BASELINE:
-                throw new IllegalArgumentException("baseline does not support margins");
+                constraint.layout.baselineMargin = value;
+                break;
             case START:
                 constraint.layout.startMargin = value;
                 break;
@@ -2736,7 +2753,8 @@ public class ConstraintSet {
                 constraint.layout.goneBottomMargin = value;
                 break;
             case BASELINE:
-                throw new IllegalArgumentException("baseline does not support margins");
+                constraint.layout.goneBaselineMargin = value;
+                break;
             case START:
                 constraint.layout.goneStartMargin = value;
                 break;
@@ -3867,6 +3885,9 @@ public class ConstraintSet {
                 case GONE_END_MARGIN:
                     delta.add(GONE_END_MARGIN, a.getDimensionPixelSize(attr, c.layout.goneEndMargin));
                     break;
+                case GONE_BASELINE_MARGIN:
+                    delta.add(GONE_BASELINE_MARGIN, a.getDimensionPixelSize(attr, c.layout.goneBaselineMargin));
+                    break;
                 case HORIZONTAL_BIAS:
                     delta.add(HORIZONTAL_BIAS, a.getFloat(attr, c.layout.horizontalBias));
                     break;
@@ -3894,6 +3915,9 @@ public class ConstraintSet {
                     break;
                 case BOTTOM_MARGIN:
                     delta.add(BOTTOM_MARGIN, a.getDimensionPixelSize(attr, c.layout.bottomMargin));
+                    break;
+                case BASELINE_MARGIN:
+                    delta.add(BASELINE_MARGIN, a.getDimensionPixelSize(attr, c.layout.baselineMargin));
                     break;
                 case LAYOUT_WIDTH:
                     delta.add(LAYOUT_WIDTH, a.getLayoutDimension(attr, c.layout.mWidth));
@@ -4218,6 +4242,9 @@ public class ConstraintSet {
             case GONE_END_MARGIN:
                 c.layout.goneEndMargin = value;
                 break;
+            case GONE_BASELINE_MARGIN:
+                c.layout.goneBaselineMargin = value;
+                break;
             case LEFT_MARGIN:
                 c.layout.leftMargin = value;
                 break;
@@ -4235,6 +4262,9 @@ public class ConstraintSet {
                 break;
             case BOTTOM_MARGIN:
                 c.layout.bottomMargin = value;
+                break;
+            case BASELINE_MARGIN:
+                c.layout.baselineMargin = value;
                 break;
             case LAYOUT_WIDTH:
                 c.layout.mWidth = value;
@@ -4517,6 +4547,9 @@ public class ConstraintSet {
                 case GONE_END_MARGIN:
                     c.layout.goneEndMargin = a.getDimensionPixelSize(attr, c.layout.goneEndMargin);
                     break;
+                case GONE_BASELINE_MARGIN:
+                    c.layout.goneBaselineMargin = a.getDimensionPixelSize(attr, c.layout.goneBaselineMargin);
+                    break;
                 case HORIZONTAL_BIAS:
                     c.layout.horizontalBias = a.getFloat(attr, c.layout.horizontalBias);
                     break;
@@ -4544,6 +4577,9 @@ public class ConstraintSet {
                     break;
                 case BOTTOM_MARGIN:
                     c.layout.bottomMargin = a.getDimensionPixelSize(attr, c.layout.bottomMargin);
+                    break;
+                case BASELINE_MARGIN:
+                    c.layout.baselineMargin = a.getDimensionPixelSize(attr, c.layout.baselineMargin);
                     break;
                 case LAYOUT_WIDTH:
                     c.layout.mWidth = a.getLayoutDimension(attr, c.layout.mWidth);

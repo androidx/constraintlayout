@@ -989,6 +989,7 @@ public class ConstraintProperties {
                 } else {
                     throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
                 }
+                mParams.baselineMargin = margin;
                 break;
             case START:
                 if (endSide == START) {
