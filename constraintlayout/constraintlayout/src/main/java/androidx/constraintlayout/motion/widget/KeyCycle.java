@@ -39,6 +39,18 @@ import java.util.HashSet;
 public class KeyCycle extends Key {
     private static final String TAG = "KeyCycle";
     static final String NAME = "KeyCycle";
+    public static final String WAVE_PERIOD = "wavePeriod";
+    public static final String WAVE_OFFSET = "waveOffset";
+    public static final String WAVE_PHASE = "wavePhase";
+    public static final String WAVE_SHAPE = "waveShape";
+    public static final int SHAPE_SIN_WAVE = Oscillator.SIN_WAVE;
+    public static final int SHAPE_SQUARE_WAVE = Oscillator.SQUARE_WAVE;
+    public static final int SHAPE_TRIANGLE_WAVE = Oscillator.TRIANGLE_WAVE;
+    public static final int SHAPE_SAW_WAVE = Oscillator.SAW_WAVE;
+    public static final int SHAPE_REVERSE_SAW_WAVE = Oscillator.REVERSE_SAW_WAVE;
+    public static final int SHAPE_COS_WAVE = Oscillator.COS_WAVE;
+    public static final int SHAPE_BOUNCE = Oscillator.BOUNCE;
+
     private String mTransitionEasing = null;
     private int mCurveFit = 0;
     private int mWaveShape = -1;
@@ -374,53 +386,64 @@ public class KeyCycle extends Key {
     @Override
     public void setValue(String tag, Object value) {
         switch (tag) {
-            case "alpha":
+            case Key.ALPHA:
                 mAlpha = toFloat(value);
                 break;
-            case "curveFit":
+            case CURVEFIT:
                 mCurveFit = toInt(value);
                 break;
-            case "elevation":
+            case ELEVATION:
                 mElevation = toFloat(value);
                 break;
-            case "progress":
+            case MOTIONPROGRESS:
                 mProgress = toFloat(value);
                 break;
-            case "rotation":
+            case ROTATION:
                 mRotation = toFloat(value);
                 break;
-            case "rotationX":
+            case ROTATION_X:
                 mRotationX = toFloat(value);
                 break;
-            case "rotationY":
+            case ROTATION_Y:
                 mRotationY = toFloat(value);
                 break;
-            case "scaleX":
+            case SCALE_X:
                 mScaleX = toFloat(value);
                 break;
-            case "scaleY":
+            case SCALE_Y:
                 mScaleY = toFloat(value);
                 break;
-            case "transitionEasing":
+            case TRANSITIONEASING:
                 mTransitionEasing = value.toString();
                 break;
-            case "transitionPathRotate":
+            case TRANSITION_PATH_ROTATE:
                 mTransitionPathRotate = toFloat(value);
                 break;
-            case "translationX":
+            case TRANSLATION_X:
                 mTranslationX = toFloat(value);
                 break;
-            case "translationY":
+            case TRANSLATION_Y:
                 mTranslationY = toFloat(value);
                 break;
-            case "mTranslationZ":
+            case TRANSLATION_Z:
                 mTranslationZ = toFloat(value);
                 break;
-            case "wavePeriod":
+            case WAVE_PERIOD:
                 mWavePeriod = toFloat(value);
                 break;
-            case "waveOffset":
+            case WAVE_OFFSET:
                 mWaveOffset = toFloat(value);
+                break;
+            case WAVE_PHASE:
+                mWavePhase = toFloat(value);
+                break;
+            case WAVE_SHAPE:
+                if (value instanceof Integer) {
+                    mWaveShape = toInt(value);
+                } else {
+                    mWaveShape = Oscillator.CUSTOM;
+                    mCustomWaveShpe = value.toString();
+                }
                 break;
         }
     }

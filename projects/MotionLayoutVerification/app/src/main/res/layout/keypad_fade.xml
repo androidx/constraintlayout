@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layoutDescription="@xml/keypad_scene"
+    android:layout_width="match_parent"
+    android:background="#000"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/t1"
+        android:text="1"
+        android:gravity="center"
+        android:background="#333"
+        android:textColor="#FFF"
+        />
+
+    <TextView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/t2"
+        android:text="2"
+        android:gravity="center"
+        android:background="#333"
+        android:textColor="#FFF"
+        />
+
+    <TextView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/t3"
+        android:text="3"
+        android:gravity="center"
+        android:background="#333"
+        android:textColor="#FFF"
+        />
+
+    <TextView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/t4"
+        android:text="4"
+        android:gravity="center"
+        android:background="#333"
+        android:textColor="#FFF"
+        />
+
+    <TextView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/t5"
+        android:text="5"
+        android:gravity="center"
+        android:background="#333"
+        android:textColor="#FFF"
+        />
+
+    <TextView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/t6"
+        android:text="6"
+        android:gravity="center"
+        android:background="#333"
+        android:textColor="#FFF"
+        />
+
+    <TextView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/t7"
+        android:text="7"
+        android:gravity="center"
+        android:background="#333"
+        android:textColor="#FFF"
+        />
+
+    <TextView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/t8"
+        android:text="8"
+        android:gravity="center"
+        android:background="#333"
+        android:textColor="#FFF"
+        />
+
+    <TextView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/t9"
+        android:text="9"
+        android:gravity="center"
+        android:background="#333"
+        android:textColor="#FFF"
+        />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:constraint_referenced_ids="t1,t2,t3,t4,t5,t6,t7,t8,t9"
+        />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.motion.widget.MotionLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/motionLayout"
@@ -18,6 +17,12 @@
         tools:layout_editor_absoluteX="147dp"
         tools:layout_editor_absoluteY="230dp" />
 
+    <android.support.constraint.app.FadeMove
+        android:id="@+id/foo"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        app:constraint_referenced_ids="button" />
+
     <TextView
         android:id="@+id/textView12"
         android:layout_width="0dp"
@@ -26,7 +31,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 
     <Button
         android:id="@+id/button30"

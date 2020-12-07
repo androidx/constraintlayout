@@ -24,7 +24,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.media.DeniedByServerException;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -1668,13 +1667,37 @@ public class MotionLayout extends ConstraintLayout implements
                 depends[count++]=motionController.getAnimateRelativeTo();
             }
         }
-        for (int i = 0; i < count; i++) {
-            MotionController motionController = mFrameArrayList.get(findViewById(depends[i]));
-            if (motionController != null) {
-                mScene.getKeyFrames(motionController);
-                motionController.setup(layoutWidth, layoutHeight, mTransitionDuration, getNanoTime());
-            }
-        }
+         if (mDecoratorsHelpers != null) {
+             for (int i = 0; i < count; i++) {
+                 MotionController motionController = mFrameArrayList.get(findViewById(depends[i]));
+                 if (motionController == null) {
+                     continue;
+                 }
+                 mScene.getKeyFrames(motionController);
+             }
+             // Allow helpers to access all the motionControllers after
+             for (MotionHelper mDecoratorsHelper : mDecoratorsHelpers) {
+                 mDecoratorsHelper.onPreSetup(this, mFrameArrayList);
+             }
+             for (int i = 0; i < count; i++) {
+                 MotionController motionController = mFrameArrayList.get(findViewById(depends[i]));
+                 if (motionController == null) {
+                     continue;
+                 }
+                 motionController.setup(layoutWidth, layoutHeight, mTransitionDuration, getNanoTime());
+
+             }
+         } else {
+             for (int i = 0; i < count; i++) {
+                 MotionController motionController = mFrameArrayList.get(findViewById(depends[i]));
+                 if (motionController == null) {
+                     continue;
+                 }
+                 mScene.getKeyFrames(motionController);
+                 motionController.setup(layoutWidth, layoutHeight, mTransitionDuration, getNanoTime());
+
+             }
+         }
             // getMap the KeyFrames for each view
         for (int i = 0; i < n; i++) {
             View v = getChildAt(i);
@@ -2068,10 +2091,35 @@ public class MotionLayout extends ConstraintLayout implements
         int layoutWidth = getWidth();
         int layoutHeight = getHeight();
         // getMap the KeyFrames for each view
-        for (int i = 0; i < n; i++) {
-            MotionController motionController = mFrameArrayList.get(getChildAt(i));
-            mScene.getKeyFrames(motionController);
-            motionController.setup(layoutWidth, layoutHeight, mTransitionDuration, getNanoTime());
+
+        if (mDecoratorsHelpers != null) {
+            for (int i = 0; i < n; i++) {
+                MotionController motionController = mFrameArrayList.get(getChildAt(i));
+                if (motionController == null) {
+                    continue;
+                }
+                mScene.getKeyFrames(motionController);
+            }
+            // Allow helpers to access all the motionControllers after
+            for (MotionHelper mDecoratorsHelper : mDecoratorsHelpers) {
+                mDecoratorsHelper.onPreSetup(this, mFrameArrayList);
+            }
+            for (int i = 0; i < n; i++) {
+                MotionController motionController = mFrameArrayList.get(getChildAt(i));
+                if (motionController == null) {
+                    continue;
+                }
+                motionController.setup(layoutWidth, layoutHeight, mTransitionDuration, getNanoTime());
+            }
+        } else {
+            for (int i = 0; i < n; i++) {
+                MotionController motionController = mFrameArrayList.get(getChildAt(i));
+                if (motionController == null) {
+                    continue;
+                }
+                mScene.getKeyFrames(motionController);
+                motionController.setup(layoutWidth, layoutHeight, mTransitionDuration, getNanoTime());
+            }
         }
 
         float stagger = mScene.getStaggered();
@@ -3686,6 +3734,9 @@ public class MotionLayout extends ConstraintLayout implements
         if (mScene != null && mCurrentState != UNSET) {
             ConstraintSet cSet = mScene.getConstraintSet(mCurrentState);
             mScene.readFallback(this);
+            for (MotionHelper mh : mDecoratorsHelpers) {
+                mh.onFinishedMotionScene(this);
+            }
             if (cSet != null) {
                 cSet.applyTo(this);
             }
