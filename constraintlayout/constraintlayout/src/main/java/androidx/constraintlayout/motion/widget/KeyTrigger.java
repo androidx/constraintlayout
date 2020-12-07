@@ -57,7 +57,6 @@ public class KeyTrigger extends Key {
     public static final String TRIGGER_RECEIVER = "triggerReceiver";
     public static final String CROSS = "CROSS";
 
-
     private int mCurveFit = -1;
     private String mCross = null;
     private int mTriggerReceiver = UNSET;

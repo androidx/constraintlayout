@@ -97,7 +97,6 @@ class TouchResponse {
     private static final int SIDE_START = 5;
     private static final int SIDE_END = 6;
 
-
     private float mMaxVelocity = 4;
     private float mMaxAcceleration = 1.2f;
     private boolean mMoveWhenScrollAtTop = true;
@@ -190,7 +189,6 @@ class TouchResponse {
         mDragStarted = false;
     }
 
-
     /**
      * @param event
      * @param velocityTracker
@@ -259,8 +257,6 @@ class TouchResponse {
 
                     if (pos != mMotionLayout.getProgress()) {
                         mMotionLayout.setProgress(pos);
-
-
                         velocityTracker.computeCurrentVelocity(SEC_TO_MILLISECONDS);
                         float tvx = velocityTracker.getXVelocity();
                         float tvy = velocityTracker.getYVelocity();

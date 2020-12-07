@@ -133,7 +133,6 @@ public class LinearCurveFit extends CurveFit {
             }
         }
 
-
         for (int i = 0; i < n - 1; i++) {
             if (t == mT[i]) {
                 for (int j = 0; j < dim; j++) {

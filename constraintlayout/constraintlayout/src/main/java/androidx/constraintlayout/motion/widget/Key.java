@@ -69,7 +69,6 @@ public abstract class Key {
     public static final String TRANSITIONEASING = "transitionEasing";
     public static final String VISIBILITY = "visibility";
 
-
     boolean matches(String constraintTag) {
         if (mTargetString == null || constraintTag == null) return false;
         return constraintTag.matches(mTargetString);

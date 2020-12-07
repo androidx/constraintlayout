@@ -36,7 +36,6 @@ class ArcCurveFit extends CurveFit {
     Arc[] mArcs;
     private boolean mExtrapolate = true;
 
-
     @Override
     public void getPos(double t, double[] v) {
         if (mExtrapolate) {

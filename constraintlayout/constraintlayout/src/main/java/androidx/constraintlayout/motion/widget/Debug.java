@@ -166,7 +166,6 @@ public class Debug {
 
                    str += tmp;
 
-
             }
             return str+"]";
         } catch (Exception ex) {
@@ -282,11 +281,8 @@ public class Debug {
 
             }
 
-
         }
     }
-
-
 
     public static void dumpLayoutParams(ViewGroup.LayoutParams param, String str) {
         StackTraceElement s = new Throwable().getStackTrace()[1];

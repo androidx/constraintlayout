@@ -6,7 +6,7 @@
         motion:constraintSetStart="@+id/start"
         motion:constraintSetEnd="@+id/end"
         motion:motionInterpolator="overshoot"
-        motion:staggered=".4"
+
         motion:duration="4000">
         <OnSwipe
             motion:dragDirection="dragRight"

@@ -126,9 +126,11 @@ public class MotionScene {
                     Debug.getName(mMotionLayout.getContext(), beginId) + " -> " +
                     Debug.getName(mMotionLayout.getContext(), endId));
         }
-        if (mCurrentTransition.mConstraintSetEnd == endId &&
-        mCurrentTransition.mConstraintSetStart == beginId){
-            return;
+        if (mCurrentTransition != null) {
+            if (mCurrentTransition.mConstraintSetEnd == endId &&
+                    mCurrentTransition.mConstraintSetStart == beginId) {
+                return;
+            }
         }
         for (Transition transition : mTransitionList) {
             if ((transition.mConstraintSetEnd == end
@@ -1659,7 +1661,6 @@ public class MotionScene {
             mDeriveMap.put(key, -1);
         }
     }
-
 
     public static String stripID(String id) {
         if (id == null) {
