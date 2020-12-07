@@ -1420,6 +1420,32 @@ public class ConstraintLayout extends ViewGroup {
                         widget.getAnchor(ConstraintAnchor.Type.TOP).reset();
                         widget.getAnchor(ConstraintAnchor.Type.BOTTOM).reset();
                     }
+                } else if (layoutParams.baselineToTop != UNSET) {
+                    View view = mChildrenByIds.get(layoutParams.baselineToTop);
+                    ConstraintWidget target = idToWidget.get(layoutParams.baselineToTop);
+                    if (target != null && view != null && view.getLayoutParams() instanceof LayoutParams) {
+                        layoutParams.needsBaseline = true;
+                        ConstraintAnchor baseline = widget.getAnchor(ConstraintAnchor.Type.BASELINE);
+                        ConstraintAnchor targetBaseline =
+                                target.getAnchor(ConstraintAnchor.Type.TOP);
+                        baseline.connect(targetBaseline, 0, -1, true);
+                        widget.setHasBaseline(true);
+                        widget.getAnchor(ConstraintAnchor.Type.TOP).reset();
+                        widget.getAnchor(ConstraintAnchor.Type.BOTTOM).reset();
+                    }
+                } else if (layoutParams.baselineToBottom != UNSET) {
+                    View view = mChildrenByIds.get(layoutParams.baselineToBottom);
+                    ConstraintWidget target = idToWidget.get(layoutParams.baselineToBottom);
+                    if (target != null && view != null && view.getLayoutParams() instanceof LayoutParams) {
+                        layoutParams.needsBaseline = true;
+                        ConstraintAnchor baseline = widget.getAnchor(ConstraintAnchor.Type.BASELINE);
+                        ConstraintAnchor targetBaseline =
+                                target.getAnchor(ConstraintAnchor.Type.BOTTOM);
+                        baseline.connect(targetBaseline, 0, -1, true);
+                        widget.setHasBaseline(true);
+                        widget.getAnchor(ConstraintAnchor.Type.TOP).reset();
+                        widget.getAnchor(ConstraintAnchor.Type.BOTTOM).reset();
+                    }
                 }
 
                 if (resolvedHorizontalBias >= 0) {
@@ -2238,6 +2264,9 @@ public class ConstraintLayout extends ViewGroup {
          */
         public int baselineToBaseline = UNSET;
 
+        public int baselineToTop = UNSET;
+        public int baselineToBottom = UNSET;
+
         /**
          * Constrains the center of a child to the center of a target child (contains the target child id).
          */
@@ -2527,6 +2556,8 @@ public class ConstraintLayout extends ViewGroup {
             this.bottomToTop = source.bottomToTop;
             this.bottomToBottom = source.bottomToBottom;
             this.baselineToBaseline = source.baselineToBaseline;
+            this.baselineToTop = source.baselineToTop;
+            this.baselineToBottom = source.baselineToBottom;
             this.circleConstraint = source.circleConstraint;
             this.circleRadius = source.circleRadius;
             this.circleAngle = source.circleAngle;
@@ -2630,6 +2661,8 @@ public class ConstraintLayout extends ViewGroup {
             public static final int LAYOUT_EDITOR_ABSOLUTEX = 49;
             public static final int LAYOUT_EDITOR_ABSOLUTEY = 50;
             public static final int LAYOUT_CONSTRAINT_TAG = 51;
+            public static final int LAYOUT_CONSTRAINT_BASELINE_TO_TOP_OF = 52;
+            public static final int LAYOUT_CONSTRAINT_BASELINE_TO_BOTTOM_OF = 53;
             public final static SparseIntArray map = new SparseIntArray();
 
             static {
@@ -2642,6 +2675,8 @@ public class ConstraintLayout extends ViewGroup {
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBottom_toTopOf, LAYOUT_CONSTRAINT_BOTTOM_TO_TOP_OF);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBottom_toBottomOf, LAYOUT_CONSTRAINT_BOTTOM_TO_BOTTOM_OF);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBaseline_toBaselineOf, LAYOUT_CONSTRAINT_BASELINE_TO_BASELINE_OF);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBaseline_toTopOf, LAYOUT_CONSTRAINT_BASELINE_TO_TOP_OF);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBaseline_toBottomOf, LAYOUT_CONSTRAINT_BASELINE_TO_BOTTOM_OF);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintCircle, LAYOUT_CONSTRAINT_CIRCLE);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintCircleRadius, LAYOUT_CONSTRAINT_CIRCLE_RADIUS);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintCircleAngle, LAYOUT_CONSTRAINT_CIRCLE_ANGLE);
@@ -2759,6 +2794,20 @@ public class ConstraintLayout extends ViewGroup {
                         baselineToBaseline = a.getResourceId(attr, baselineToBaseline);
                         if (baselineToBaseline == UNSET) {
                             baselineToBaseline = a.getInt(attr, UNSET);
+                        }
+                        break;
+                    }
+                    case Table.LAYOUT_CONSTRAINT_BASELINE_TO_TOP_OF: {
+                        baselineToTop = a.getResourceId(attr, baselineToTop);
+                        if (baselineToTop == UNSET) {
+                            baselineToTop = a.getInt(attr, UNSET);
+                        }
+                        break;
+                    }
+                    case Table.LAYOUT_CONSTRAINT_BASELINE_TO_BOTTOM_OF: {
+                        baselineToBottom = a.getResourceId(attr, baselineToBottom);
+                        if (baselineToBottom == UNSET) {
+                            baselineToBottom = a.getInt(attr, UNSET);
                         }
                         break;
                     }
