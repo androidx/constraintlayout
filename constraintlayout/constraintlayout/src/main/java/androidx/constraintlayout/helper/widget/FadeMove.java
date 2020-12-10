@@ -64,6 +64,8 @@ public class FadeMove extends MotionHelper {
     private int fadeTranslationX = 0;
     private int fadeTranslationY = 0;
     private boolean fadeMoveStrict = true;
+    private static final int UNSET = -1;
+    private int viewTRansitionId = UNSET;
 
     private int fadeMove = AUTO;
 
@@ -103,6 +105,8 @@ public class FadeMove extends MotionHelper {
                     fadeMove = a.getInt(attr, fadeMove);
                 } else if (attr == R.styleable.FadeMove_fadeMove_strict) {
                     fadeMoveStrict = a.getBoolean(attr, fadeMoveStrict);
+                } else if (attr == R.styleable.FadeMove_fadeMove_viewTransition) {
+                    viewTRansitionId = a.getResourceId(attr, viewTRansitionId);
                 }
             }
             if (fadeStart == fadeEnd) {
@@ -123,7 +127,6 @@ public class FadeMove extends MotionHelper {
 
     @Override
     public void onPreSetup(MotionLayout motionLayout, HashMap<View, MotionController> controllerMap) {
-        Log.v(TAG, Debug.getLoc());
         View[] views = getViews((ConstraintLayout) this.getParent());
 
         if (views == null) {
@@ -225,17 +228,21 @@ public class FadeMove extends MotionHelper {
             }
 
             if (apply) {
-                mc.addKey(alpha1);
-                mc.addKey(alpha2);
-                mc.addKey(stick1);
-                mc.addKey(stick2);
-                if (fadeTranslationX > 0) {
-                    mc.addKey(translationX1);
-                    mc.addKey(translationX2);
-                }
-                if (fadeTranslationY > 0) {
-                    mc.addKey(translationY1);
-                    mc.addKey(translationY2);
+                if (viewTRansitionId == UNSET) {
+                    mc.addKey(alpha1);
+                    mc.addKey(alpha2);
+                    mc.addKey(stick1);
+                    mc.addKey(stick2);
+                    if (fadeTranslationX > 0) {
+                        mc.addKey(translationX1);
+                        mc.addKey(translationX2);
+                    }
+                    if (fadeTranslationY > 0) {
+                        mc.addKey(translationY1);
+                        mc.addKey(translationY2);
+                    }
+                } else {
+                  motionLayout.applyViewTransition(viewTRansitionId, mc);
                 }
             }
         }

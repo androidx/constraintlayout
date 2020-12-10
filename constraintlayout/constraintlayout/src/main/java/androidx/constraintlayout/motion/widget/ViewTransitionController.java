@@ -211,4 +211,14 @@ public class ViewTransitionController {
     void invalidate() {
         mMotionLayout.invalidate();
     }
+
+    boolean applyViewTransition(int viewTransitionId, MotionController motionController) {
+        for (ViewTransition viewTransition : viewTransitions) {
+            if (viewTransition.getId() == viewTransitionId) {
+                viewTransition.mKeyFrames.addAllFrames(motionController);
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -4342,4 +4342,19 @@ public class MotionLayout extends ConstraintLayout implements
         }
         return false;
     }
+
+    /**
+     * Applys the view transitions keyFrames to the MotionController.
+     * Note ConstraintOverride is not used
+     *
+     * @param viewTransitionId the id of the view transition
+     * @param motionController the MotionController to apply the keyframes to
+     * @return true if it found and applied the viewTransition false otherwise
+     */
+    public boolean applyViewTransition(int viewTransitionId, MotionController motionController) {
+        if (mScene != null) {
+            return mScene.applyViewTransition(viewTransitionId, motionController);
+        }
+        return false;
+    }
 }

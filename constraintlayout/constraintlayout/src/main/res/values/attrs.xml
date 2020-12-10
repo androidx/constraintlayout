@@ -272,6 +272,7 @@
         <attr name="fadeMove_translationX" format="dimension"/>
         <attr name="fadeMove_translationY" format="dimension"/>
         <attr name="fadeMove_alpha" format="float"/>
+        <attr name="fadeMove_viewTransition" format="reference"/>
         <attr name="fadeMove_move" format="enum">
             <enum name="auto" value = "-1" />
             <enum name="north" value = "0" />
