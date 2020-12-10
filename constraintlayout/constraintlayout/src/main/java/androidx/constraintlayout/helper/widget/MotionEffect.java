@@ -21,7 +21,6 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewParent;
 
 import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.Key;
@@ -49,7 +48,7 @@ import java.util.HashMap;
  * in the dominant direction will have the keyframes inserted).
  * 
  */
-public class FadeMove extends MotionHelper {
+public class MotionEffect extends MotionHelper {
     public static final String TAG = "FadeMove";
 
     public static final int AUTO = -1;
@@ -64,19 +63,21 @@ public class FadeMove extends MotionHelper {
     private int fadeTranslationX = 0;
     private int fadeTranslationY = 0;
     private boolean fadeMoveStrict = true;
+    private static final int UNSET = -1;
+    private int viewTransitionId = UNSET;
 
     private int fadeMove = AUTO;
 
-    public FadeMove(Context context) {
+    public MotionEffect(Context context) {
         super(context);
     }
 
-    public FadeMove(Context context, AttributeSet attrs) {
+    public MotionEffect(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public FadeMove(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MotionEffect(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
@@ -103,6 +104,8 @@ public class FadeMove extends MotionHelper {
                     fadeMove = a.getInt(attr, fadeMove);
                 } else if (attr == R.styleable.FadeMove_fadeMove_strict) {
                     fadeMoveStrict = a.getBoolean(attr, fadeMoveStrict);
+                } else if (attr == R.styleable.FadeMove_fadeMove_viewTransition) {
+                    viewTransitionId = a.getResourceId(attr, viewTransitionId);
                 }
             }
             if (fadeStart == fadeEnd) {
@@ -123,7 +126,6 @@ public class FadeMove extends MotionHelper {
 
     @Override
     public void onPreSetup(MotionLayout motionLayout, HashMap<View, MotionController> controllerMap) {
-        Log.v(TAG, Debug.getLoc());
         View[] views = getViews((ConstraintLayout) this.getParent());
 
         if (views == null) {
@@ -225,17 +227,21 @@ public class FadeMove extends MotionHelper {
             }
 
             if (apply) {
-                mc.addKey(alpha1);
-                mc.addKey(alpha2);
-                mc.addKey(stick1);
-                mc.addKey(stick2);
-                if (fadeTranslationX > 0) {
-                    mc.addKey(translationX1);
-                    mc.addKey(translationX2);
-                }
-                if (fadeTranslationY > 0) {
-                    mc.addKey(translationY1);
-                    mc.addKey(translationY2);
+                if (viewTransitionId == UNSET) {
+                    mc.addKey(alpha1);
+                    mc.addKey(alpha2);
+                    mc.addKey(stick1);
+                    mc.addKey(stick2);
+                    if (fadeTranslationX > 0) {
+                        mc.addKey(translationX1);
+                        mc.addKey(translationX2);
+                    }
+                    if (fadeTranslationY > 0) {
+                        mc.addKey(translationY1);
+                        mc.addKey(translationY2);
+                    }
+                } else {
+                  motionLayout.applyViewTransition(viewTransitionId, mc);
                 }
             }
         }

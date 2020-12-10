@@ -456,6 +456,10 @@ public class MotionScene {
     public boolean isViewTransitionEnabled(int id) {
         return mViewTransitionController.isViewTransitionEnabled(id);
     }
+
+    public boolean applyViewTransition(int viewTransitionId, MotionController motionController) {
+        return mViewTransitionController.applyViewTransition(viewTransitionId, motionController);
+    }
 ///////////////////////////////////////////////////////////////////////////////
 // ====================== Transition ==========================================
 
