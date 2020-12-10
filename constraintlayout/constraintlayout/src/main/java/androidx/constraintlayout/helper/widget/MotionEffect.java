@@ -21,7 +21,6 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewParent;
 
 import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.Key;
@@ -49,7 +48,7 @@ import java.util.HashMap;
  * in the dominant direction will have the keyframes inserted).
  * 
  */
-public class FadeMove extends MotionHelper {
+public class MotionEffect extends MotionHelper {
     public static final String TAG = "FadeMove";
 
     public static final int AUTO = -1;
@@ -65,20 +64,20 @@ public class FadeMove extends MotionHelper {
     private int fadeTranslationY = 0;
     private boolean fadeMoveStrict = true;
     private static final int UNSET = -1;
-    private int viewTRansitionId = UNSET;
+    private int viewTransitionId = UNSET;
 
     private int fadeMove = AUTO;
 
-    public FadeMove(Context context) {
+    public MotionEffect(Context context) {
         super(context);
     }
 
-    public FadeMove(Context context, AttributeSet attrs) {
+    public MotionEffect(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public FadeMove(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MotionEffect(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
@@ -106,7 +105,7 @@ public class FadeMove extends MotionHelper {
                 } else if (attr == R.styleable.FadeMove_fadeMove_strict) {
                     fadeMoveStrict = a.getBoolean(attr, fadeMoveStrict);
                 } else if (attr == R.styleable.FadeMove_fadeMove_viewTransition) {
-                    viewTRansitionId = a.getResourceId(attr, viewTRansitionId);
+                    viewTransitionId = a.getResourceId(attr, viewTransitionId);
                 }
             }
             if (fadeStart == fadeEnd) {
@@ -228,7 +227,7 @@ public class FadeMove extends MotionHelper {
             }
 
             if (apply) {
-                if (viewTRansitionId == UNSET) {
+                if (viewTransitionId == UNSET) {
                     mc.addKey(alpha1);
                     mc.addKey(alpha2);
                     mc.addKey(stick1);
@@ -242,7 +241,7 @@ public class FadeMove extends MotionHelper {
                         mc.addKey(translationY2);
                     }
                 } else {
-                  motionLayout.applyViewTransition(viewTRansitionId, mc);
+                  motionLayout.applyViewTransition(viewTransitionId, mc);
                 }
             }
         }

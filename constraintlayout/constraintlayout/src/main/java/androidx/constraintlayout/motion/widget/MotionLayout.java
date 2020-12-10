@@ -4344,7 +4344,7 @@ public class MotionLayout extends ConstraintLayout implements
     }
 
     /**
-     * Applys the view transitions keyFrames to the MotionController.
+     * Apply the view transitions keyFrames to the MotionController.
      * Note ConstraintOverride is not used
      *
      * @param viewTransitionId the id of the view transition
