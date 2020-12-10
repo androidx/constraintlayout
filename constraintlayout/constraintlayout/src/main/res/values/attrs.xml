@@ -1434,6 +1434,17 @@
         <attr name="android:textSize" />
         <attr name="android:fontFamily" />
         <attr name="android:typeface" />
+        <attr name="android:shadowRadius" />
+        <attr name="android:textStyle" />
+        <attr name="borderRound" format="dimension" />
+        <attr name="borderRoundPercent" format="float" />
+    </declare-styleable>
+
+    <declare-styleable name="TextEffects">
+        <attr name="android:text" />
+        <attr name="android:textSize" />
+        <attr name="android:fontFamily" />
+        <attr name="android:typeface" />
         <attr name="android:shadowColor" />
         <attr name="android:shadowDx" />
         <attr name="android:shadowDy" />
@@ -1625,6 +1636,7 @@
     <attr name="onStateTransition" format="enum">
         <enum name="actionDown" value="1" />
         <enum name="actionUp" value="2" />
+
     </attr>
 
     <attr name="viewTransitionMode" format="enum">

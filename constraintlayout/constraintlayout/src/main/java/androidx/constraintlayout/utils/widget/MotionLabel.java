@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 The Android Open Source Project
+ * Copyright (C) 2018 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package android.support.motionlayout.experiments;
+package androidx.constraintlayout.utils.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -38,8 +38,12 @@ import androidx.constraintlayout.motion.widget.Debug;
 
 import java.util.Arrays;
 
-public class TextMorph extends View {
-    static String TAG = "TextMorph";
+/**
+ * This class is designed to support resizing in MotionLayout more efficiently
+ * It also support rounding the border
+ */
+public class MotionLabel extends View {
+    static String TAG = "MotionLabel";
     PathMeasure mMeasure = new PathMeasure();
     float[] mDrawPoints = new float[10000];
     TextPaint mPaint = new TextPaint();
@@ -62,23 +66,23 @@ public class TextMorph extends View {
     private int mPaddingTop = 1;
     private int mPaddingBottom = 1;
     private String mFontFamily;
-//    private StaticLayout mStaticLayout;
+    //    private StaticLayout mStaticLayout;
     private Layout mLayout;
     private static final int SANS = 1;
     private static final int SERIF = 2;
     private static final int MONOSPACE = 3;
 
-    public TextMorph(Context context) {
+    public MotionLabel(Context context) {
         super(context);
         init(context, null);
     }
 
-    public TextMorph(Context context, @Nullable AttributeSet attrs) {
+    public MotionLabel(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public TextMorph(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public MotionLabel(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
@@ -90,29 +94,22 @@ public class TextMorph extends View {
 
         if (attrs != null) {
             TypedArray a = getContext()
-                    .obtainStyledAttributes(attrs, androidx.constraintlayout.widget.R.styleable.TextEffects);
+                    .obtainStyledAttributes(attrs, androidx.constraintlayout.widget.R.styleable.MotionLabel);
             final int N = a.getIndexCount();
 
             int k = 0;
             for (int i = 0; i < N; i++) {
                 int attr = a.getIndex(i);
-                if (attr == androidx.constraintlayout.widget.R.styleable.TextEffects_android_text) {
+                if (attr == androidx.constraintlayout.widget.R.styleable.MotionLabel_android_text) {
                     setText(a.getText(attr));
-                } else  if (attr == androidx.constraintlayout.widget.R.styleable.TextEffects_textFillColor) {
-                    mTextFillColor = a.getColor(attr, mTextFillColor);
-                }  else  if (attr == androidx.constraintlayout.widget.R.styleable.TextEffects_android_fontFamily) {
+                }  else  if (attr == androidx.constraintlayout.widget.R.styleable.MotionLabel_android_fontFamily) {
                     mFontFamily = a.getString(attr);
-                }   else  if (attr == androidx.constraintlayout.widget.R.styleable.TextEffects_android_textSize) {
+                }   else  if (attr == androidx.constraintlayout.widget.R.styleable.MotionLabel_android_textSize) {
                     mTextSize = a.getDimensionPixelSize(attr, mTextSize);
-                }  else  if (attr == androidx.constraintlayout.widget.R.styleable.TextEffects_android_textStyle) {
+                }  else  if (attr == androidx.constraintlayout.widget.R.styleable.MotionLabel_android_textStyle) {
                     mStyleIndex = a.getInt(attr, mStyleIndex);
-                }  else  if (attr == androidx.constraintlayout.widget.R.styleable.TextEffects_android_typeface) {
+                }  else  if (attr == androidx.constraintlayout.widget.R.styleable.MotionLabel_android_typeface) {
                     mTypefaceIndex = a.getInt(attr, mTypefaceIndex);
-                }  else  if (attr == androidx.constraintlayout.widget.R.styleable.TextEffects_textOutlineColor) {
-                    mTextOutlineColor = a.getColor(attr,mTextOutlineColor);
-                    mUseOutline = true;
-                }  else  if (attr == androidx.constraintlayout.widget.R.styleable.TextEffects_textOutlineThickness) {
-                    mTextOutlineThickness = a.getDimension(attr, mTextOutlineThickness);
                 }
             }
             a.recycle();
@@ -181,10 +178,10 @@ public class TextMorph extends View {
         }
     }
 
-   public void setTextOutlineThickness(float width) {
-       mTextOutlineThickness = width;
-       invalidate();
-   }
+    public void setTextOutlineThickness(float width) {
+        mTextOutlineThickness = width;
+        invalidate();
+    }
 
     public void setTextFillColor(int color){
         mTextFillColor = color;
@@ -303,16 +300,16 @@ public class TextMorph extends View {
 
     //   @Override
     protected void onMeasure2(int widthMeasureSpec, int heightMeasureSpec) {
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+        int widthMode = View.MeasureSpec.getMode(widthMeasureSpec);
+        int heightMode = View.MeasureSpec.getMode(heightMeasureSpec);
+        int widthSize = View.MeasureSpec.getSize(widthMeasureSpec);
+        int heightSize = View.MeasureSpec.getSize(heightMeasureSpec);
         int width=1;
         int height=heightSize;
 
         int des = -1;
         boolean fromexisting = false;
-        if (widthMode == MeasureSpec.EXACTLY) {
+        if (widthMode == View.MeasureSpec.EXACTLY) {
             // Parent has told us how big to be. So be it.
             width = widthSize;
         } else {
@@ -326,7 +323,7 @@ public class TextMorph extends View {
 
         width += mPaddingLeft  + mPaddingRight;
 
-        if (heightMode == MeasureSpec.EXACTLY) {
+        if (heightMode == View.MeasureSpec.EXACTLY) {
             // Parent has told us how big to be. So be it.
             height = heightSize;
 
@@ -334,9 +331,7 @@ public class TextMorph extends View {
             int pad =mPaddingTop + mPaddingBottom;
             int desired = 2;//Layout.getLineTop(1);
 
-//            desired += pad;
-
-            if (heightMode == MeasureSpec.AT_MOST) {
+            if (heightMode == View.MeasureSpec.AT_MOST) {
                 height = Math.min(desired, heightSize);
             }
         }
