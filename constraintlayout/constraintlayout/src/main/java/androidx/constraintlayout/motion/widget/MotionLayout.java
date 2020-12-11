@@ -4001,6 +4001,7 @@ public class MotionLayout extends ConstraintLayout implements
         if (mOnComplete != null) {
             mOnComplete.run();
         }
+
     }
 
     private void processTransitionCompleted() {
@@ -4113,7 +4114,11 @@ public class MotionLayout extends ConstraintLayout implements
 
     /**
      * Get the ConstraintSet associated with an id
+     * This returns a link to the constraintset
+     * But in most cases can be used.
+     * createConstraintSet makes a copy which is more expensive.
      *
+     * @see #cloneConstraintSet(int)
      * @param id
      * @return
      */
@@ -4122,6 +4127,24 @@ public class MotionLayout extends ConstraintLayout implements
             return null;
         }
         return mScene.getConstraintSet(id);
+    }
+
+    /**
+     * Creates a ConstraintSet based on an existing
+     * constraintSet.
+     * This makes a copy of the ConstraintSet.
+     *
+     * @param id The ide of the ConstraintSet
+     * @return the ConstraintSet
+     */
+    public ConstraintSet cloneConstraintSet(int id) {
+        if (mScene == null) {
+            return null;
+        }
+        ConstraintSet orig = mScene.getConstraintSet(id);
+        ConstraintSet ret = new ConstraintSet();
+        ret.clone(orig);
+        return ret;
     }
 
     /**
@@ -4156,6 +4179,29 @@ public class MotionLayout extends ConstraintLayout implements
         updateState();
         if (mCurrentState == stateId) {
             set.applyTo(this);
+        }
+    }
+
+    /**
+     * Update a ConstraintSet but animate the change.
+     *
+     * @param stateId id of the ConstraintSet
+     * @param set     The constraintSet
+     * @param duration The length of time to perform the animation
+     */
+    public void updateStateAnimate(int stateId, ConstraintSet set, int duration) {
+        if (mScene == null) {
+            return;
+        }
+
+        if (mCurrentState == stateId) {
+            updateState(R.id.view_transition, getConstraintSet(stateId));
+            setState(R.id.view_transition, -1, -1);
+            updateState(stateId, set);
+            MotionScene.Transition tmpTransition = new MotionScene.Transition(-1, mScene, R.id.view_transition, stateId);
+            tmpTransition.setDuration(duration);
+            setTransition(tmpTransition);
+            transitionToEnd();
         }
     }
 
