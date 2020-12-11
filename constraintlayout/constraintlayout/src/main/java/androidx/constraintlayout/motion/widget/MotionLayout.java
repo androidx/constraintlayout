@@ -4118,7 +4118,7 @@ public class MotionLayout extends ConstraintLayout implements
      * But in most cases can be used.
      * createConstraintSet makes a copy which is more expensive.
      *
-     * @see #createConstraintSet(int)
+     * @see #cloneConstraintSet(int)
      * @param id
      * @return
      */
@@ -4130,14 +4130,14 @@ public class MotionLayout extends ConstraintLayout implements
     }
 
     /**
-     * Create a ConstraintSet based on an existing
+     * Creates a ConstraintSet based on an existing
      * constraintSet.
      * This makes a copy of the ConstraintSet.
      *
      * @param id The ide of the ConstraintSet
-     * @return
+     * @return the ConstraintSet
      */
-    public ConstraintSet createConstraintSet(int id) {
+    public ConstraintSet cloneConstraintSet(int id) {
         if (mScene == null) {
             return null;
         }

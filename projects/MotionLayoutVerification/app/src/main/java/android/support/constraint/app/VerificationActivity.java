@@ -517,7 +517,6 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
                 cset.setReferencedIds(R.id.flow2, ids);
             }
         }
-
     }
 
     int rotate = 0;
@@ -530,7 +529,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     public void twistViews(View view) {
         rotate ++;
         int current = mMotionLayout.getCurrentState();
-        ConstraintSet cset = mMotionLayout.createConstraintSet(current);
+        ConstraintSet cset = mMotionLayout.cloneConstraintSet(current);
         int[] id = {R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5, R.id.button6};
         for (int i : id) {
             cset.setRotation(i, ((rotate &1)==0) ? 90 : 0);
