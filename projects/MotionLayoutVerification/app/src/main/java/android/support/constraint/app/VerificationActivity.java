@@ -536,7 +536,6 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
             cset.setRotation(i, ((rotate &1)==0) ? 90 : 0);
         }
         mMotionLayout.updateStateAnimate(current, cset, 200);
-        mMotionLayout.nextTransitionTo( ((rotate &2)==0)?R.id.start:R.id.end);
     }
 
     interface Test {

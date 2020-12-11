@@ -1046,7 +1046,6 @@ public class MotionLayout extends ConstraintLayout implements
     private boolean mInLayout = false;
     private StateCache mStateCache;
     private Runnable mOnComplete = null;
-    private int mNextTransition = UNSET;
 
     MotionController getMotionController(int mTouchAnchorId) {
         return mFrameArrayList.get(findViewById(mTouchAnchorId));
@@ -4002,10 +4001,7 @@ public class MotionLayout extends ConstraintLayout implements
         if (mOnComplete != null) {
             mOnComplete.run();
         }
-        if (mNextTransition != UNSET) {
-            transitionToState(mNextTransition);
-            mNextTransition = UNSET;
-        }
+
     }
 
     private void processTransitionCompleted() {
@@ -4119,7 +4115,10 @@ public class MotionLayout extends ConstraintLayout implements
     /**
      * Get the ConstraintSet associated with an id
      * This returns a link to the constraintset
-     * But in most cases can be use
+     * But in most cases can be used.
+     * createConstraintSet makes a copy which is more expensive.
+     *
+     * @see #createConstraintSet(int)
      * @param id
      * @return
      */
@@ -4131,9 +4130,9 @@ public class MotionLayout extends ConstraintLayout implements
     }
 
     /**
-     * Create a ConstraintSet Based on an existing
-     * Constraint set.
-     * This makes a copy of the ConstraintSet as
+     * Create a ConstraintSet based on an existing
+     * constraintSet.
+     * This makes a copy of the ConstraintSet.
      *
      * @param id The ide of the ConstraintSet
      * @return
@@ -4184,10 +4183,11 @@ public class MotionLayout extends ConstraintLayout implements
     }
 
     /**
-     * update a ConstraintSet under the id.
+     * Update a ConstraintSet but animate the change.
      *
      * @param stateId id of the ConstraintSet
      * @param set     The constraintSet
+     * @param duration The length of time to perform the animation
      */
     public void updateStateAnimate(int stateId, ConstraintSet set, int duration) {
         if (mScene == null) {
@@ -4205,17 +4205,6 @@ public class MotionLayout extends ConstraintLayout implements
         }
     }
 
-    /**
-     * on compleating the current transition transition to this state.
-     * @param id
-     */
-    public void nextTransitionTo(int id) {
-        if (getCurrentState() == -1) {
-            transitionToState(id);
-        } else {
-            mNextTransition = id;
-        }
-    }
     /**
      * Not sure we want this
      * @hide
