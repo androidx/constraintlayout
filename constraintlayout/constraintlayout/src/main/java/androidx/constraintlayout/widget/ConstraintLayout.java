@@ -530,6 +530,20 @@ public class ConstraintLayout extends ViewGroup {
     private ConstraintsChangedListener mConstraintsChangedListener;
     private Metrics mMetrics;
 
+    private static SharedValues sSharedValues = null;
+
+    /**
+     * Returns the SharedValues instance, creating it if it doesn't exist.
+     *
+     * @return the SharedValues instance
+     */
+    public static SharedValues getSharedValues() {
+        if (sSharedValues == null) {
+            sSharedValues = new SharedValues();
+        }
+        return sSharedValues;
+    }
+
     /**
      * @hide
      */
@@ -1532,7 +1546,16 @@ public class ConstraintLayout extends ViewGroup {
         if (view == this) {
             return mLayoutWidget;
         }
-        return view == null ? null : ((LayoutParams) view.getLayoutParams()).widget;
+        if (view != null) {
+            if (view.getLayoutParams() instanceof LayoutParams) {
+                return ((LayoutParams) view.getLayoutParams()).widget;
+            }
+            view.setLayoutParams(generateLayoutParams(view.getLayoutParams()));
+            if (view.getLayoutParams() instanceof LayoutParams) {
+                return ((LayoutParams) view.getLayoutParams()).widget;
+            }
+        }
+        return null;
     }
 
     /**

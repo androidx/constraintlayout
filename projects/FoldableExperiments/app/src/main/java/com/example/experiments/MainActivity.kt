@@ -21,8 +21,10 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.transition.TransitionManager
 import android.view.View
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Guideline
 import androidx.core.util.Consumer
 import androidx.window.DeviceState
@@ -58,6 +60,7 @@ class MainActivity : Activity() {
                 DeviceState.POSTURE_OPENED -> {
                     // The foldable device is completely open, the screen space that is presented to the user is flat.
                     motionLayout?.transitionToStart()
+//                    ConstraintLayout.getSharedValues().fireNewValue("fold", 0);
                 }
                 DeviceState.POSTURE_FLIPPED -> {
                     // The foldable device is flipped with the flexible screen parts or physical screens facing opposite directions.
@@ -78,9 +81,9 @@ class MainActivity : Activity() {
         // the position of the fold.
         // TODO: move this to a helper object
 
-        setContentView(R.layout.activity_main2)
+        setContentView(R.layout.test)
         motionLayout = findViewById<MotionLayout>(R.id.root)
-        guideline = findViewById<Guideline>(R.id.guideline)
+        guideline = findViewById<Guideline>(R.id.fold)
     }
 
     fun halfOpened(displayFeatures: List<DisplayFeature>) {
@@ -89,13 +92,17 @@ class MainActivity : Activity() {
                 continue
             }
             val splitRect = motionLayout?.let { getFeatureBoundsInWindow(feature, it) } ?: continue
-            var constraintSet = motionLayout?.getConstraintSet(R.id.open)
+            var constraintSet = motionLayout?.getConstraintSet(R.id.start)
             constraintSet?.setGuidelineEnd(guideline?.id!!, 0)
-            var constraintSetEnd = motionLayout?.getConstraintSet(R.id.fold)
-            constraintSetEnd?.setGuidelineBegin(guideline?.id!!, splitRect.top)
-            motionLayout?.updateState(R.id.open, constraintSet)
-            motionLayout?.updateState(R.id.fold, constraintSetEnd)
+            var constraintSetEnd = motionLayout?.getConstraintSet(R.id.end)
+            constraintSetEnd?.setGuidelineBegin(guideline?.id!!, splitRect.left)
+            motionLayout?.updateState(R.id.start, constraintSet)
+            motionLayout?.updateState(R.id.end, constraintSetEnd)
             motionLayout?.transitionToEnd()
+            var h : Int? = motionLayout?.height?.minus(splitRect.top)
+            h?.let {
+                ConstraintLayout.getSharedValues().fireNewValue(R.id.fold, h)
+            }
         }
     }
 

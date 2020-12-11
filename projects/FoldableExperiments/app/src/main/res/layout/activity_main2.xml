@@ -26,6 +26,13 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_end="488dp" />
 
+
+    <androidx.constraintlayout.widget.ReactiveGuide
+        android:id="@+id/guideline2"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="0dp" />
+
+
     <View
         android:id="@+id/background"
         android:layout_width="0dp"
@@ -47,5 +54,12 @@
         app:layout_constraintEnd_toEndOf="@+id/background"
         app:layout_constraintStart_toStartOf="@+id/background"
         app:layout_constraintTop_toTopOf="@+id/background" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="#F00"
+        app:layout_constraintTop_toTopOf="@id/guideline2"/>
 
 </androidx.constraintlayout.motion.widget.MotionLayout>
