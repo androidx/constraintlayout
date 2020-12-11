@@ -1046,6 +1046,7 @@ public class MotionLayout extends ConstraintLayout implements
     private boolean mInLayout = false;
     private StateCache mStateCache;
     private Runnable mOnComplete = null;
+    private int mNextTransition = UNSET;
 
     MotionController getMotionController(int mTouchAnchorId) {
         return mFrameArrayList.get(findViewById(mTouchAnchorId));
@@ -4001,6 +4002,10 @@ public class MotionLayout extends ConstraintLayout implements
         if (mOnComplete != null) {
             mOnComplete.run();
         }
+        if (mNextTransition != UNSET) {
+            transitionToState(mNextTransition);
+            mNextTransition = UNSET;
+        }
     }
 
     private void processTransitionCompleted() {
@@ -4113,7 +4118,8 @@ public class MotionLayout extends ConstraintLayout implements
 
     /**
      * Get the ConstraintSet associated with an id
-     *
+     * This returns a link to the constraintset
+     * But in most cases can be use
      * @param id
      * @return
      */
@@ -4122,6 +4128,24 @@ public class MotionLayout extends ConstraintLayout implements
             return null;
         }
         return mScene.getConstraintSet(id);
+    }
+
+    /**
+     * Create a ConstraintSet Based on an existing
+     * Constraint set.
+     * This makes a copy of the ConstraintSet as
+     *
+     * @param id The ide of the ConstraintSet
+     * @return
+     */
+    public ConstraintSet createConstraintSet(int id) {
+        if (mScene == null) {
+            return null;
+        }
+        ConstraintSet orig = mScene.getConstraintSet(id);
+        ConstraintSet ret = new ConstraintSet();
+        ret.clone(orig);
+        return ret;
     }
 
     /**
@@ -4159,6 +4183,39 @@ public class MotionLayout extends ConstraintLayout implements
         }
     }
 
+    /**
+     * update a ConstraintSet under the id.
+     *
+     * @param stateId id of the ConstraintSet
+     * @param set     The constraintSet
+     */
+    public void updateStateAnimate(int stateId, ConstraintSet set, int duration) {
+        if (mScene == null) {
+            return;
+        }
+
+        if (mCurrentState == stateId) {
+            updateState(R.id.view_transition, getConstraintSet(stateId));
+            setState(R.id.view_transition, -1, -1);
+            updateState(stateId, set);
+            MotionScene.Transition tmpTransition = new MotionScene.Transition(-1, mScene, R.id.view_transition, stateId);
+            tmpTransition.setDuration(duration);
+            setTransition(tmpTransition);
+            transitionToEnd();
+        }
+    }
+
+    /**
+     * on compleating the current transition transition to this state.
+     * @param id
+     */
+    public void nextTransitionTo(int id) {
+        if (getCurrentState() == -1) {
+            transitionToState(id);
+        } else {
+            mNextTransition = id;
+        }
+    }
     /**
      * Not sure we want this
      * @hide

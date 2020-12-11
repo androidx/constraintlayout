@@ -520,6 +520,25 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
 
     }
 
+    int rotate = 0;
+
+    /**
+     * Use to test the animated change api
+     *
+     * @param view
+     */
+    public void twistViews(View view) {
+        rotate ++;
+        int current = mMotionLayout.getCurrentState();
+        ConstraintSet cset = mMotionLayout.createConstraintSet(current);
+        int[] id = {R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5, R.id.button6};
+        for (int i : id) {
+            cset.setRotation(i, ((rotate &1)==0) ? 90 : 0);
+        }
+        mMotionLayout.updateStateAnimate(current, cset, 200);
+        mMotionLayout.nextTransitionTo( ((rotate &2)==0)?R.id.start:R.id.end);
+    }
+
     interface Test {
         boolean test(String s);
     }
