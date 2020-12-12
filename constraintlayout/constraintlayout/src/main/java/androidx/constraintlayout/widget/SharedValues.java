@@ -27,34 +27,43 @@ import java.util.List;
  * Shared values
  */
 public class SharedValues {
+    public static final int UNSET = -1;
+
     private HashSet<WeakReference<SharedValuesListener>> mListeners = new HashSet<>();
     private SparseIntArray mValues = new SparseIntArray();
 
     public interface SharedValuesListener {
-        void onNewValue(int key, int value);
+        void onNewValue(int key, int newValue, int oldValue);
     }
 
     public void addListener(SharedValuesListener listener) {
         mListeners.add(new WeakReference<>(listener));
-        final int count = mValues.size();
-        for (int i = 0; i < count; i++) {
-            int key = mValues.keyAt(i);
-            int value = mValues.valueAt(i);
-            listener.onNewValue(key, value);
-        }
+    }
+
+    public void removeListener(SharedValuesListener listener) {
+        mListeners.remove(listener);
+    }
+
+    public void clearListeners() {
+        mListeners.clear();
     }
 
     public int getValue(int key) {
-        return mValues.get(key, -1);
+        return mValues.get(key, UNSET);
     }
 
     public void fireNewValue(int key, int value) {
         boolean needsCleanup = false;
+        int previousValue = mValues.get(key, UNSET);
+        if (previousValue != UNSET && previousValue == value) {
+            // don't send the value to listeners if it's the same one.
+            return;
+        }
         mValues.put(key, value);
         for (WeakReference<SharedValuesListener> listenerWeakReference : mListeners) {
             SharedValuesListener listener = listenerWeakReference.get();
             if (listener != null) {
-                listener.onNewValue(key, value);
+                listener.onNewValue(key, value, previousValue);
             } else {
                 needsCleanup = true;
             }

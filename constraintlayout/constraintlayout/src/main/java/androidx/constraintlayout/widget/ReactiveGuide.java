@@ -141,9 +141,9 @@ public class ReactiveGuide extends View implements SharedValues.SharedValuesList
     }
 
     @Override
-    public void onNewValue(int key, int value) {
-        System.out.println("onNewValue " + key + " => " + value);
-        setGuidelineBegin(value);
+    public void onNewValue(int key, int newValue, int oldValue) {
+        System.out.println("onNewValue " + key + " => " + newValue);
+        setGuidelineBegin(newValue);
         int id = getId();
         if (id <= 0) {
             return;
@@ -152,7 +152,7 @@ public class ReactiveGuide extends View implements SharedValues.SharedValuesList
             MotionLayout motionLayout = (MotionLayout) getParent();
             int currentState = motionLayout.getCurrentState();
             ConstraintSet constraintSet = motionLayout.cloneConstraintSet(currentState);
-            constraintSet.setGuidelineEnd(id, value);
+            constraintSet.setGuidelineEnd(id, newValue);
             motionLayout.updateStateAnimate(currentState, constraintSet, 1000);
         }
     }
