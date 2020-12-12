@@ -16,6 +16,8 @@
 
 package androidx.constraintlayout.widget;
 
+import android.util.SparseIntArray;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,6 +28,7 @@ import java.util.List;
  */
 public class SharedValues {
     private HashSet<WeakReference<SharedValuesListener>> mListeners = new HashSet<>();
+    private SparseIntArray mValues = new SparseIntArray();
 
     public interface SharedValuesListener {
         void onNewValue(int key, int value);
@@ -33,10 +36,21 @@ public class SharedValues {
 
     public void addListener(SharedValuesListener listener) {
         mListeners.add(new WeakReference<>(listener));
+        final int count = mValues.size();
+        for (int i = 0; i < count; i++) {
+            int key = mValues.keyAt(i);
+            int value = mValues.valueAt(i);
+            listener.onNewValue(key, value);
+        }
+    }
+
+    public int getValue(int key) {
+        return mValues.get(key, -1);
     }
 
     public void fireNewValue(int key, int value) {
         boolean needsCleanup = false;
+        mValues.put(key, value);
         for (WeakReference<SharedValuesListener> listenerWeakReference : mListeners) {
             SharedValuesListener listener = listenerWeakReference.get();
             if (listener != null) {
