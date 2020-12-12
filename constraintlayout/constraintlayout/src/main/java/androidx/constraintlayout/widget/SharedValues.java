@@ -27,7 +27,7 @@ import java.util.List;
 public class SharedValues {
     private HashSet<WeakReference<SharedValuesListener>> mListeners = new HashSet<>();
 
-    interface SharedValuesListener {
+    public interface SharedValuesListener {
         void onNewValue(int key, int value);
     }
 

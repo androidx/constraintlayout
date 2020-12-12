@@ -1625,6 +1625,8 @@
     <attr name="onStateTransition" format="enum">
         <enum name="actionDown" value="1" />
         <enum name="actionUp" value="2" />
+        <enum name="sharedValueSet" value="3" />
+        <enum name="sharedValueUnset" value="4" />
     </attr>
 
     <attr name="viewTransitionMode" format="enum">
@@ -1643,6 +1645,8 @@
         <attr name="transitionDisable" />
         <attr name="pathMotionArc" />
         <attr name="motionInterpolator" />
+        <attr name="SharedValueId" format="reference"/>
+        <attr name="SharedValue" format="integer"/>
         <attr name="setsTag" format="reference"/>
         <attr name="clearsTag" format="reference"/>
         <attr name="ifTagSet" format="reference"/>
