@@ -18,12 +18,12 @@ package androidx.constraintlayout.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.constraintlayout.motion.widget.MotionLayout;
-import androidx.constraintlayout.motion.widget.ViewTransition;
 
 /**
  * Utility class representing a Guideline helper object for {@link ConstraintLayout}.
@@ -55,34 +55,84 @@ import androidx.constraintlayout.motion.widget.ViewTransition;
  *          Guideline}
  */
 public class ReactiveGuide extends View implements SharedValues.SharedValuesListener {
+    private int mAttributeId = -1;
+    private boolean mAnimateChange = false;
+    private int mApplyToConstraintSetId = 0;
+    private boolean mApplyToAllConstraintSets = true;
 
     public ReactiveGuide(Context context) {
         super(context);
         super.setVisibility(View.GONE);
-        init();
+        init(null);
     }
 
     public ReactiveGuide(Context context, AttributeSet attrs) {
         super(context, attrs);
         super.setVisibility(View.GONE);
-        init();
+        init(attrs);
     }
 
     public ReactiveGuide(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         super.setVisibility(View.GONE);
-        init();
+        init(attrs);
     }
 
     public ReactiveGuide(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr);
         super.setVisibility(View.GONE);
-        init();
+        init(attrs);
     }
 
-    private void init() {
+    private void init(AttributeSet attrs) {
+        if (attrs != null) {
+            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ConstraintLayout_ReactiveGuide);
+            final int N = a.getIndexCount();
+            for (int i = 0; i < N; i++) {
+                int attr = a.getIndex(i);
+                if (attr == R.styleable.ConstraintLayout_ReactiveGuide_reactiveGuide_valueId) {
+                    mAttributeId = a.getResourceId(attr, mAttributeId);
+                } else if (attr == R.styleable.ConstraintLayout_ReactiveGuide_reactiveGuide_animateChange) {
+                    mAnimateChange = a.getBoolean(attr, mAnimateChange);
+                } else if (attr == R.styleable.ConstraintLayout_ReactiveGuide_reactiveGuide_applyToConstraintSet) {
+                    mApplyToConstraintSetId = a.getResourceId(attr, mApplyToConstraintSetId);
+                } else if (attr == R.styleable.ConstraintLayout_ReactiveGuide_reactiveGuide_applyToAllConstraintSets) {
+                    mApplyToAllConstraintSets = a.getBoolean(attr, mApplyToAllConstraintSets);
+                }
+            }
+            a.recycle();
+        }
+        if (mAttributeId != -1) {
+            SharedValues sharedValues = ConstraintLayout.getSharedValues();
+            sharedValues.addListener(this, mAttributeId);
+        }
+    }
+
+    public int getAttributeId() { return mAttributeId; }
+
+    public void setAttributeId(int id) {
         SharedValues sharedValues = ConstraintLayout.getSharedValues();
-        sharedValues.addListener(this);
+        if (mAttributeId != -1) {
+            sharedValues.removeListener(this, mAttributeId);
+        }
+        mAttributeId = id;
+        if (mAttributeId != -1) {
+            sharedValues.addListener(this, mAttributeId);
+        }
+    }
+
+    public int getApplyToConstraintSetId() {
+        return mApplyToConstraintSetId;
+    }
+
+    public void setApplyToConstraintSetId(int id) {
+        mApplyToConstraintSetId = id;
+    }
+
+    public boolean isAnimatingChange() { return mAnimateChange; }
+
+    public void setAnimateChange(boolean animate) {
+        mAnimateChange = animate;
     }
 
     /**
@@ -142,7 +192,6 @@ public class ReactiveGuide extends View implements SharedValues.SharedValuesList
 
     @Override
     public void onNewValue(int key, int newValue, int oldValue) {
-        System.out.println("onNewValue " + key + " => " + newValue);
         setGuidelineBegin(newValue);
         int id = getId();
         if (id <= 0) {
@@ -151,9 +200,39 @@ public class ReactiveGuide extends View implements SharedValues.SharedValuesList
         if (getParent() instanceof MotionLayout) {
             MotionLayout motionLayout = (MotionLayout) getParent();
             int currentState = motionLayout.getCurrentState();
-            ConstraintSet constraintSet = motionLayout.cloneConstraintSet(currentState);
-            constraintSet.setGuidelineEnd(id, newValue);
-            motionLayout.updateStateAnimate(currentState, constraintSet, 1000);
+            if (mApplyToConstraintSetId != 0) {
+                currentState = mApplyToConstraintSetId;
+            }
+            if (mAnimateChange) {
+                if (mApplyToAllConstraintSets) {
+                    int ids[] = motionLayout.getConstraintSetIds();
+                    for (int i = 0; i < ids.length; i++) {
+                        int cs = ids[i];
+                        if (cs != currentState) {
+                            changeValue(newValue, id, motionLayout, cs);
+                        }
+                    }
+                }
+                ConstraintSet constraintSet = motionLayout.cloneConstraintSet(currentState);
+                constraintSet.setGuidelineEnd(id, newValue);
+                motionLayout.updateStateAnimate(currentState, constraintSet, 1000);
+            } else {
+                if (mApplyToAllConstraintSets) {
+                    int ids[] = motionLayout.getConstraintSetIds();
+                    for (int i = 0; i < ids.length; i++) {
+                        int cs = ids[i];
+                        changeValue(newValue, id, motionLayout, cs);
+                    }
+                } else {
+                    changeValue(newValue, id, motionLayout, currentState);
+                }
+            }
         }
+    }
+
+    private void changeValue(int newValue, int id, MotionLayout motionLayout, int currentState) {
+        ConstraintSet constraintSet = motionLayout.getConstraintSet(currentState);
+        constraintSet.setGuidelineEnd(id, newValue);
+        motionLayout.updateState(currentState, constraintSet);
     }
 }

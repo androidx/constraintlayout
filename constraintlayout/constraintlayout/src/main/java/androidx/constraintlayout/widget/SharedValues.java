@@ -16,10 +16,12 @@
 
 package androidx.constraintlayout.widget;
 
+import android.util.SparseArray;
 import android.util.SparseIntArray;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -29,23 +31,51 @@ import java.util.List;
 public class SharedValues {
     public static final int UNSET = -1;
 
-    private HashSet<WeakReference<SharedValuesListener>> mListeners = new HashSet<>();
     private SparseIntArray mValues = new SparseIntArray();
+    private HashMap<Integer, HashSet<WeakReference<SharedValuesListener>>> mValuesListeners = new HashMap<>();
 
     public interface SharedValuesListener {
         void onNewValue(int key, int newValue, int oldValue);
     }
 
     public void addListener(SharedValuesListener listener) {
-        mListeners.add(new WeakReference<>(listener));
+        for (Integer key : mValuesListeners.keySet()) {
+            addListener(listener, key);
+        }
+    }
+
+    public void addListener(SharedValuesListener listener, int key) {
+        HashSet<WeakReference<SharedValuesListener>> listeners = mValuesListeners.get(key);
+        if (listeners == null) {
+            listeners = new HashSet<>();
+            mValuesListeners.put(key, listeners);
+        }
+        listeners.add(new WeakReference<>(listener));
+    }
+
+    public void removeListener(SharedValuesListener listener, int key) {
+        HashSet<WeakReference<SharedValuesListener>> listeners = mValuesListeners.get(key);
+        if (listeners == null) {
+            return;
+        }
+        List<WeakReference<SharedValuesListener>> toRemove = new ArrayList<>();
+        for (WeakReference<SharedValuesListener> listenerWeakReference : listeners) {
+            SharedValuesListener l = listenerWeakReference.get();
+            if (l == null || l == listener) {
+                toRemove.add(listenerWeakReference);
+            }
+        }
+        listeners.removeAll(toRemove);
     }
 
     public void removeListener(SharedValuesListener listener) {
-        mListeners.remove(listener);
+        for (Integer key : mValuesListeners.keySet()) {
+            removeListener(listener, key);
+        }
     }
 
     public void clearListeners() {
-        mListeners.clear();
+        mValuesListeners.clear();
     }
 
     public int getValue(int key) {
@@ -53,6 +83,7 @@ public class SharedValues {
     }
 
     public void fireNewValue(int key, int value) {
+        System.out.println("fire new value!");
         boolean needsCleanup = false;
         int previousValue = mValues.get(key, UNSET);
         if (previousValue != UNSET && previousValue == value) {
@@ -60,23 +91,29 @@ public class SharedValues {
             return;
         }
         mValues.put(key, value);
-        for (WeakReference<SharedValuesListener> listenerWeakReference : mListeners) {
-            SharedValuesListener listener = listenerWeakReference.get();
-            if (listener != null) {
-                listener.onNewValue(key, value, previousValue);
+        HashSet<WeakReference<SharedValuesListener>> listeners = mValuesListeners.get(key);
+        if (listeners == null) {
+            return;
+        }
+
+        for (WeakReference<SharedValuesListener> listenerWeakReference : listeners) {
+            SharedValuesListener l = listenerWeakReference.get();
+            if (l != null) {
+                l.onNewValue(key, value, previousValue);
             } else {
                 needsCleanup = true;
             }
         }
+
         if (needsCleanup) {
             List<WeakReference<SharedValuesListener>> toRemove = new ArrayList<>();
-            for (WeakReference<SharedValuesListener> listenerWeakReference : mListeners) {
+            for (WeakReference<SharedValuesListener> listenerWeakReference : listeners) {
                 SharedValuesListener listener = listenerWeakReference.get();
                 if (listener == null) {
                     toRemove.add(listenerWeakReference);
                 }
             }
-            mListeners.removeAll(toRemove);
+            listeners.removeAll(toRemove);
         }
     }
 }

@@ -395,6 +395,13 @@
         <enum name="constraint" value="4" />
     </attr>
 
+    <declare-styleable name="ConstraintLayout_ReactiveGuide">
+        <attr name="reactiveGuide_valueId" format="reference" />
+        <attr name="reactiveGuide_animateChange" format="boolean" />
+        <attr name="reactiveGuide_applyToAllConstraintSets" format="boolean" />
+        <attr name="reactiveGuide_applyToConstraintSet" format="reference" />
+    </declare-styleable>
+
     <declare-styleable name="MotionHelper">
         <attr name="onShow" format="boolean" />
         <attr name="onHide" format="boolean" />
