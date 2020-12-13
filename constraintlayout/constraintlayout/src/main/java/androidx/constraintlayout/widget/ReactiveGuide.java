@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The Android Open Source Project
+ * Copyright (C) 2020 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,33 +26,7 @@ import android.view.View;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 
 /**
- * Utility class representing a Guideline helper object for {@link ConstraintLayout}.
- * Helper objects are not displayed on device (they are marked as {@code View.GONE}) and are only used
- * for layout purposes. They only work within a {@link ConstraintLayout}.
- *<p>
- * A Guideline can be either horizontal or vertical:
- * <ul>
- *     <li>Vertical Guidelines have a width of zero and the height of their {@link ConstraintLayout} parent</li>
- *     <li>Horizontal Guidelines have a height of zero and the width of their {@link ConstraintLayout} parent</li>
- * </ul>
- *<p>
- * Positioning a Guideline is possible in three different ways:
- * <ul>
- *     <li>specifying a fixed distance from the left or the top of a layout ({@code layout_constraintGuide_begin})</li>
- *     <li>specifying a fixed distance from the right or the bottom of a layout ({@code layout_constraintGuide_end})</li>
- *     <li>specifying a percentage of the width or the height of a layout ({@code layout_constraintGuide_percent})</li>
- * </ul>
- * <p>
- * Widgets can then be constrained to a Guideline, allowing multiple widgets to be positioned easily from
- * one Guideline, or allowing reactive layout behavior by using percent positioning.
- * <p>
- * See the list of attributes in {@link ConstraintLayout.LayoutParams} to set a Guideline
- * in XML, as well as the corresponding {@link ConstraintSet#setGuidelineBegin}, {@link ConstraintSet#setGuidelineEnd}
- * and {@link ConstraintSet#setGuidelinePercent} functions in {@link ConstraintSet}.
- * <p>
- * Example of a {@code Button} constrained to a vertical {@code Guideline}:<br>
- * {@sample resources/examples/Guideline.xml
- *          Guideline}
+ * Utility class representing a reactive Guideline helper object for {@link ConstraintLayout}.
  */
 public class ReactiveGuide extends View implements SharedValues.SharedValuesListener {
     private int mAttributeId = -1;
