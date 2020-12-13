@@ -115,6 +115,20 @@
 
     <attr name="layout_marginBaseline" format="dimension" />
     <attr name="layout_goneMarginBaseline" format="dimension" />
+    <attr name="layout_constraintWidth" format="dimension|enum|string">
+        <enum name="match_parent" value="-1" />
+        <enum name="wrap_content" value="-2" />
+        <enum name="constrained" value="-3" />
+        <enum name="spread" value="-4" />
+        <enum name="percent" value="-5" />
+    </attr>
+    <attr name="layout_constraintHeight" format="dimension|enum|string">
+        <enum name="match_parent" value="-1" />
+        <enum name="wrap_content" value="-2" />
+        <enum name="constrained" value="-3" />
+        <enum name="spread" value="-4" />
+        <enum name="percent" value="-5" />
+    </attr>
 
     <!-- Fraction of excess space to distribute on the left when constrained on left & right edges (e.g. .5 = middle)-->
     <attr name="layout_constraintHorizontal_bias" format="float" />
@@ -501,6 +515,8 @@
         <attr name="layout_goneMarginEnd" />
         <attr name="layout_goneMarginBaseline" />
         <attr name="layout_marginBaseline" />
+        <attr name="layout_constraintWidth" />
+        <attr name="layout_constraintHeight" />
         <attr name="android:layout_width" />
         <attr name="android:layout_height" />
         <attr name="android:layout_margin" />

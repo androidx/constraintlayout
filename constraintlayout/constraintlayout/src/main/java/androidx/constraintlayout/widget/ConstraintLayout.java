@@ -40,6 +40,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -2726,12 +2727,16 @@ public class ConstraintLayout extends ViewGroup {
             public static final int LAYOUT_MARGIN_END = 61;
             public static final int LAYOUT_WIDTH = 62;
             public static final int LAYOUT_HEIGHT = 63;
+            public static final int LAYOUT_CONSTRAINT_WIDTH = 64;
+            public static final int LAYOUT_CONSTRAINT_HEIGHT = 65;
 
             public final static SparseIntArray map = new SparseIntArray();
 
             static {
                 map.append(R.styleable.ConstraintLayout_Layout_android_layout_width, LAYOUT_WIDTH);
                 map.append(R.styleable.ConstraintLayout_Layout_android_layout_height, LAYOUT_HEIGHT);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintWidth, LAYOUT_CONSTRAINT_WIDTH);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHeight, LAYOUT_CONSTRAINT_HEIGHT);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintLeft_toLeftOf, LAYOUT_CONSTRAINT_LEFT_TO_LEFT_OF);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintLeft_toRightOf, LAYOUT_CONSTRAINT_LEFT_TO_RIGHT_OF);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintRight_toLeftOf, LAYOUT_CONSTRAINT_RIGHT_TO_LEFT_OF);
@@ -2845,6 +2850,45 @@ public class ConstraintLayout extends ViewGroup {
                 switch (look) {
                     case Table.UNUSED: {
                         // Skip
+                        break;
+                    }
+                    case Table.LAYOUT_CONSTRAINT_WIDTH: {
+                        System.out.println("constraint width!");
+                        TypedValue v = a.peekValue(attr);
+                            int type = v.type;
+                            System.out.println("constraint width type:" + type);
+                            switch (type) {
+                                case TypedValue.TYPE_NULL: {
+                                    // nothing.
+                                } break;
+                                case TypedValue.TYPE_DIMENSION: {
+                                    int value = a.getDimensionPixelSize(attr, 0);
+                                    System.out.println("read dimension <" + value + ">");
+                                } break;
+                                case TypedValue.TYPE_REFERENCE: {
+                                    int reference = a.getResourceId(attr, 0);
+                                    System.out.println("read reference <" + reference + ">");
+                                } break;
+                                case TypedValue.TYPE_FLOAT: {
+                                    float value = a.getFloat(attr, 0);
+                                    System.out.println("read float value <" + value + ">");
+                                } break;
+                                case TypedValue.TYPE_STRING: {
+                                    String value = a.getString(attr);
+                                    System.out.println("read string <" + value + ">");
+                                } break;
+                                case 18: {
+                                    int value = a.getResourceId(attr, -1);
+                                    if (value != -1) {
+                                        System.out.println("read reference value <" + value + ">");
+                                    }
+                                } break;
+                                default: {
+                                    int value = a.getInt(attr, 0);
+                                    System.out.println("read int value <" + value + ">");
+                                }
+                            }
+
                         break;
                     }
                     case Table.LAYOUT_WIDTH: {
