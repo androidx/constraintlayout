@@ -26,7 +26,6 @@ import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Build;
 import android.os.Bundle;
-
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,10 +45,16 @@ import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.constraintlayout.motion.widget.MotionScene;
 import androidx.constraintlayout.motion.widget.TransitionAdapter;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.lang.reflect.Field;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Random;
 
 /*
  * Copyright (C) 2020 The Android Open Source Project
@@ -67,22 +72,20 @@ import androidx.recyclerview.widget.RecyclerView;
  * limitations under the License.
  */
 
-import java.lang.reflect.Field;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
-
 /* This test the visibility*/
 public class VerificationActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "Verification00";
     private String KEY = "layout";
     private static final boolean DEBUG = false;
     String layout_name;
+    HashMap<String,Class>activity_map = new HashMap<>();
+    {
+        activity_map.put("verification_400",CheckSharedValues.class);
+    }
     String s = AppCompatActivity.class.getName();
 
     private static boolean REVERSE = false;
-    private final String LAYOUTS_MATCHES = "verification_\\d+";
+    private final String LAYOUTS_MATCHES = "verification_4\\d+";
     private static String SHOW_FIRST = "";
     MotionLayout mMotionLayout;
     private Flow mFlow;
@@ -603,7 +606,12 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     }
 
     public void launch(String id) {
-        Intent intent = new Intent(this, VerificationActivity.class);
+        Intent intent;
+        if (activity_map.containsKey(id)) {
+            intent = new Intent(this, activity_map.get(id));
+        } else {
+            intent = new Intent(this, VerificationActivity.class);
+        }
         intent.putExtra(KEY, id);
         startActivity(intent);
     }
