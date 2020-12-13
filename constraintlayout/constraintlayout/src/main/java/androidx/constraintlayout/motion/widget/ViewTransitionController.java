@@ -47,12 +47,8 @@ public class ViewTransitionController {
 
         if (viewTransition.getStateTransition() == ViewTransition.ONSTATE_SHARED_VALUE_SET) {
             listenForSharedVariable(viewTransition, true);
-            Log.v(TAG, Debug.getLoc() + "  listenForSharedVariable true");
-
         } else if (viewTransition.getStateTransition() == ViewTransition.ONSTATE_SHARED_VALUE_UNSET) {
             listenForSharedVariable(viewTransition, false);
-            Log.v(TAG, Debug.getLoc() + "  listenForSharedVariable false");
-
         }
     }
 
@@ -237,42 +233,38 @@ public class ViewTransitionController {
 
 
         ConstraintLayout.getSharedValues().addListener((id, value, oldValue) -> {
-            Log.v(TAG, Debug.getLoc() + "  getSharedValues change");
-            int current_value = viewTransition.getSharedValueCurrent();
-            viewTransition.setSharedValueCurrent(value);
-            if (listen_for_id == id && current_value != value) {
-                if (isSet) {
-                    if (listen_for_value == value) {
-                        int count = mMotionLayout.getChildCount();
+                    int current_value = viewTransition.getSharedValueCurrent();
+                    viewTransition.setSharedValueCurrent(value);
+                    if (listen_for_id == id && current_value != value) {
+                        if (isSet) {
+                            if (listen_for_value == value) {
+                                int count = mMotionLayout.getChildCount();
 
-                        for (int i = 0; i < count; i++) {
-                            View view = mMotionLayout.getChildAt(i);
-                            if (viewTransition.matchesView(view)) {
-                                int currentId = mMotionLayout.getCurrentState();
-                                ConstraintSet current = mMotionLayout.getConstraintSet(currentId);
-                                viewTransition.applyTransition(this, mMotionLayout, currentId, current, view);
+                                for (int i = 0; i < count; i++) {
+                                    View view = mMotionLayout.getChildAt(i);
+                                    if (viewTransition.matchesView(view)) {
+                                        int currentId = mMotionLayout.getCurrentState();
+                                        ConstraintSet current = mMotionLayout.getConstraintSet(currentId);
+                                        viewTransition.applyTransition(this, mMotionLayout, currentId, current, view);
+                                    }
+                                }
+                            }
+                        } else { // not set
+                            if (listen_for_value != value) {
+                                int count = mMotionLayout.getChildCount();
+                                for (int i = 0; i < count; i++) {
+                                    View view = mMotionLayout.getChildAt(i);
+                                    if (viewTransition.matchesView(view)) {
+                                        int currentId = mMotionLayout.getCurrentState();
+                                        ConstraintSet current = mMotionLayout.getConstraintSet(currentId);
+                                        viewTransition.applyTransition(this, mMotionLayout, currentId, current, view);
+                                    }
+                                }
                             }
                         }
                     }
-                } else { // not set
-                    Log.v(TAG, Debug.getLoc() + "  not set");
-
-                    if (listen_for_value != value) {
-                        Log.v(TAG, Debug.getLoc() + "  not 2");
-
-                        int count = mMotionLayout.getChildCount();
-                        for (int i = 0; i < count; i++) {
-                            View view = mMotionLayout.getChildAt(i);
-                            if (viewTransition.matchesView(view)) {
-                                int currentId = mMotionLayout.getCurrentState();
-                                ConstraintSet current = mMotionLayout.getConstraintSet(currentId);
-                                viewTransition.applyTransition(this, mMotionLayout, currentId, current, view);
-                            }
-                        }
-                    }
-                }
-            }
-        });
+                }, viewTransition.getSharedValueID()
+        );
     }
 
 }

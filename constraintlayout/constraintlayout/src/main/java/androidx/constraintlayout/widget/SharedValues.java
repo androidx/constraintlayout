@@ -16,7 +16,6 @@
 
 package androidx.constraintlayout.widget;
 
-import android.util.SparseArray;
 import android.util.SparseIntArray;
 
 import java.lang.ref.WeakReference;
@@ -36,12 +35,6 @@ public class SharedValues {
 
     public interface SharedValuesListener {
         void onNewValue(int key, int newValue, int oldValue);
-    }
-
-    public void addListener(SharedValuesListener listener) {
-        for (Integer key : mValuesListeners.keySet()) {
-            addListener(listener, key);
-        }
     }
 
     public void addListener(SharedValuesListener listener, int key) {
@@ -83,10 +76,9 @@ public class SharedValues {
     }
 
     public void fireNewValue(int key, int value) {
-        System.out.println("fire new value!");
         boolean needsCleanup = false;
         int previousValue = mValues.get(key, UNSET);
-        if (previousValue != UNSET && previousValue == value) {
+        if (previousValue == value) {
             // don't send the value to listeners if it's the same one.
             return;
         }

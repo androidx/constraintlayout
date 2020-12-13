@@ -41,24 +41,28 @@ public class CheckSharedValues extends AppCompatActivity {
         setContentView(id);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        Sensor sensor2 = sensorManager.getDefaultSensor(Sensor.TYPE_HINGE_ANGLE);
+
         Log.v(TAG, Debug.getLoc());
         MotionLayout ml = Utils.findMotionLayout(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            sensorManager.registerListener(listener, sensor, 100000);
+            sensorManager.registerListener(gravity_listener, sensor, 100000);
+            sensorManager.registerListener(angle_listener, sensor2, 100000);
         }
     }
 
-    SensorEventListener listener = new SensorEventListener() {
+    SensorEventListener gravity_listener = new SensorEventListener() {
         boolean lastState = false;
+
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
-            boolean state = sensorEvent.values[2]>8;
+            boolean state = sensorEvent.values[2] > 8;
             if (state == lastState) {
                 return;
             }
             lastState = state;
-            Log.v(TAG, Debug.getLoc() + " " + Arrays.toString(sensorEvent.values));
-            ConstraintLayout.getSharedValues().fireNewValue(R.id.layFlat, state?1:0);
+            Log.v(TAG, Debug.getLoc() + " Acceleration = " + Arrays.toString(sensorEvent.values));
+            ConstraintLayout.getSharedValues().fireNewValue(R.id.layFlat, state ? 1 : 0);
         }
 
         @Override
@@ -68,9 +72,21 @@ public class CheckSharedValues extends AppCompatActivity {
 
     };
 
+    SensorEventListener angle_listener = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent sensorEvent) {
+            Log.v(TAG, Debug.getLoc() + " Angle = " + Arrays.toString(sensorEvent.values));
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int i) {
+        }
+
+    };
+
     @Override
     protected void onPause() {
         super.onPause();
-        sensorManager.unregisterListener( listener);
+        sensorManager.unregisterListener(gravity_listener);
     }
 }
