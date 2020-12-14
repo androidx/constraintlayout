@@ -1429,15 +1429,21 @@
         <attr name="imageRotate" format="float" />
     </declare-styleable>
 
+    <attr name="borderRound" format="dimension" />
+    <attr name="borderRoundPercent" format="float" />
+
     <declare-styleable name="MotionLabel">
         <attr name="android:text" />
+        <attr name="android:textColor"/>
         <attr name="android:textSize" />
         <attr name="android:fontFamily" />
+        <attr name="android:gravity"/>
         <attr name="android:typeface" />
         <attr name="android:shadowRadius" />
         <attr name="android:textStyle" />
-        <attr name="borderRound" format="dimension" />
-        <attr name="borderRoundPercent" format="float" />
+        <attr name="borderRound"  />
+        <attr name="borderRoundPercent"  />
+        <attr name="android:autoSizeTextType"/>
     </declare-styleable>
 
     <declare-styleable name="TextEffects">
@@ -1453,8 +1459,8 @@
         <attr name="textFillColor" format="color" />
         <attr name="textOutlineThickness" format="dimension" />
         <attr name="textOutlineColor" format="color" />
-        <attr name="borderRound" format="dimension" />
-        <attr name="borderRoundPercent" format="float" />
+        <attr name="borderRound"  />
+        <attr name="borderRoundPercent"  />
     </declare-styleable>
 
     <declare-styleable name="Layout">

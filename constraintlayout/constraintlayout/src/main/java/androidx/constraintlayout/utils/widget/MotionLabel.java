@@ -17,26 +17,33 @@
 package androidx.constraintlayout.utils.widget;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.text.Layout;
-import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewOutlineProvider;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.motion.widget.Debug;
+import androidx.constraintlayout.widget.R;
 
-import java.util.Arrays;
+import static android.widget.TextView.AUTO_SIZE_TEXT_TYPE_NONE;
 
 /**
  * This class is designed to support resizing in MotionLayout more efficiently
@@ -52,16 +59,20 @@ public class MotionLabel extends View {
     private int mTextFillColor = 0xFFFF;
     private int mTextOutlineColor = 0xFFFF;
     private boolean mUseOutline = false;
+    private float mRoundPercent = 0; // rounds the corners as a percent
+    private float mRound = Float.NaN; // rounds the corners in dp if NaN RoundPercent is in effect
+    ViewOutlineProvider mViewOutlineProvider;
+    RectF mRect;
 
-    private int mTextSize;
+    private int mTextSize = 48;
     private int mStyleIndex;
     private int mTypefaceIndex;
     private float mTextOutlineThickness = 0;
-    private CharSequence  mText = "Hello World";
+    private String mText = "Hello World";
     boolean mNotBuilt = true;
     private Rect mTextBounds = new Rect();
     private CharSequence mTransformed;
-    private int mPaddingLeft =1;
+    private int mPaddingLeft = 1;
     private int mPaddingRight = 1;
     private int mPaddingTop = 1;
     private int mPaddingBottom = 1;
@@ -71,6 +82,9 @@ public class MotionLabel extends View {
     private static final int SANS = 1;
     private static final int SERIF = 2;
     private static final int MONOSPACE = 3;
+    private int mGravity = Gravity.TOP | Gravity.START;
+    private int mAutoSizeTextType = AUTO_SIZE_TEXT_TYPE_NONE;
+    private boolean mAutoSize = false; // decided during measure
 
     public MotionLabel(Context context) {
         super(context);
@@ -88,28 +102,43 @@ public class MotionLabel extends View {
     }
 
 
-
     private void init(Context context, AttributeSet attrs) {
-
+        setUpTheme(context, attrs);
 
         if (attrs != null) {
             TypedArray a = getContext()
-                    .obtainStyledAttributes(attrs, androidx.constraintlayout.widget.R.styleable.MotionLabel);
+                    .obtainStyledAttributes(attrs, R.styleable.MotionLabel);
             final int N = a.getIndexCount();
 
             int k = 0;
             for (int i = 0; i < N; i++) {
                 int attr = a.getIndex(i);
-                if (attr == androidx.constraintlayout.widget.R.styleable.MotionLabel_android_text) {
+                if (attr == R.styleable.MotionLabel_android_text) {
                     setText(a.getText(attr));
-                }  else  if (attr == androidx.constraintlayout.widget.R.styleable.MotionLabel_android_fontFamily) {
+                } else if (attr == R.styleable.MotionLabel_android_fontFamily) {
                     mFontFamily = a.getString(attr);
-                }   else  if (attr == androidx.constraintlayout.widget.R.styleable.MotionLabel_android_textSize) {
+                } else if (attr == R.styleable.MotionLabel_android_textSize) {
                     mTextSize = a.getDimensionPixelSize(attr, mTextSize);
-                }  else  if (attr == androidx.constraintlayout.widget.R.styleable.MotionLabel_android_textStyle) {
+                } else if (attr == R.styleable.MotionLabel_android_textStyle) {
                     mStyleIndex = a.getInt(attr, mStyleIndex);
-                }  else  if (attr == androidx.constraintlayout.widget.R.styleable.MotionLabel_android_typeface) {
+                } else if (attr == R.styleable.MotionLabel_android_typeface) {
                     mTypefaceIndex = a.getInt(attr, mTypefaceIndex);
+                } else if (attr == R.styleable.MotionLabel_android_textColor) {
+                    mTextFillColor = a.getColor(attr, mTextFillColor);
+                } else if (attr == R.styleable.MotionLabel_borderRound) {
+                    mRound = a.getDimension(attr, mRound);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        setRound(mRound);
+                    }
+                } else if (attr == R.styleable.MotionLabel_borderRoundPercent) {
+                    mRoundPercent = a.getFloat(attr, mRoundPercent);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        setRoundPercent(mRoundPercent);
+                    }
+                } else if (attr == R.styleable.MotionLabel_android_gravity) {
+                    setGravity(a.getInt(attr, -1));
+                } else if (attr == R.styleable.MotionLabel_android_autoSizeTextType ) {
+                    mAutoSizeTextType = a.getInt(attr, AUTO_SIZE_TEXT_TYPE_NONE);
                 }
             }
             a.recycle();
@@ -118,22 +147,107 @@ public class MotionLabel extends View {
         setupPath();
     }
 
+    /**
+     * Sets the horizontal alignment of the text and the
+     * vertical gravity that will be used when there is extra space
+     * in the TextView beyond what is required for the text itself.
+     *
+     * @attr ref android.R.styleable#TextView_gravity
+     * @see android.view.Gravity
+     */
+    public void setGravity(int gravity) {
+        if ((gravity & Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK) == 0) {
+            gravity |= Gravity.START;
+        }
+        if ((gravity & Gravity.VERTICAL_GRAVITY_MASK) == 0) {
+            gravity |= Gravity.TOP;
+        }
+        boolean newLayout = false;
+        if ((gravity & Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK) !=
+                (mGravity & Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)) {
+            newLayout = true;
+        }
+        if (gravity != mGravity) {
+            invalidate();
+
+        }
+        mGravity = gravity;
+
+    }
+
+    int getHorizontalOffset() {
+        Paint.FontMetrics fm = mPaint.getFontMetrics();
+        int hoffset = 0;
+        final int gravity = mGravity & Gravity.HORIZONTAL_GRAVITY_MASK;
+        mPaint.getTextBounds(mText, 0, mText.length(), mTextBounds);
+
+        if (gravity != Gravity.LEFT) {
+            int boxWidth = getMeasuredWidth() - getPaddingLeft() -
+                    getPaddingRight();
+
+            int textWidth = mTextBounds.width();
+            if (textWidth < boxWidth) {
+                if (gravity == Gravity.RIGHT)
+                    hoffset = boxWidth - textWidth;
+                else // (gravity == Gravity.CENTER_VERTICAL)
+                    hoffset = (boxWidth - textWidth) >> 1;
+            }
+        }
+        return hoffset;
+    }
+
+    int getVerticalOffset() {
+        Paint.FontMetrics fm = mPaint.getFontMetrics();
+        int voffset = 0;
+        final int gravity = mGravity & Gravity.VERTICAL_GRAVITY_MASK;
+
+        if (gravity != Gravity.TOP) {
+            int boxht = getMeasuredHeight() - getPaddingTop() -
+                    getPaddingBottom();
+
+            int textht = (int) (fm.bottom - fm.ascent);
+            if (textht < boxht) {
+                if (gravity == Gravity.BOTTOM)
+                    voffset = boxht - textht;
+                else // (gravity == Gravity.CENTER_VERTICAL)
+                    voffset = (boxht - textht) >> 1;
+            }
+        }
+        return voffset - (int) fm.ascent;
+    }
+
+    private void setUpTheme(Context context, @Nullable AttributeSet attrs) {
+        TypedValue typedValue = new TypedValue();
+        final Resources.Theme theme = context.getTheme();
+        theme.resolveAttribute(R.attr.colorPrimary, typedValue, true);
+        mPaint.setColor(mTextFillColor = typedValue.data);
+
+    }
 
 
     private void setText(CharSequence text) {
-        mText = text;
+        mText = text.toString();
     }
 
     void setupPath() {
-        setTypefaceFromAttrs(mFontFamily,mTypefaceIndex,mStyleIndex);
+        mPaddingLeft = getPaddingLeft();
+        mPaddingRight = getPaddingRight();
+        mPaddingTop = getPaddingTop();
+        mPaddingBottom = getPaddingBottom();
+        setTypefaceFromAttrs(mFontFamily, mTypefaceIndex, mStyleIndex);
         mPaint.setColor(mTextFillColor);
         mPaint.setStrokeWidth(mTextOutlineThickness);
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        setRawTextSize(mTextSize);
+
         mPaint.setAntiAlias(true);
-        mLayout =new StaticLayout(mText,mPaint,getWidth(), Layout.Alignment.ALIGN_CENTER, 1, 0,   true);
+        //   mLayout = new StaticLayout(mText, mPaint, getWidth(), Layout.Alignment.ALIGN_CENTER, 1, 0, true);
     }
 
     void buildShape() {
+        if (!mUseOutline) {
+            return;
+        }
         mPath.reset();
         String str = mText.toString();
         int strlen = str.length();
@@ -149,14 +263,52 @@ public class MotionLabel extends View {
         RectF rect = new RectF();
         rect.bottom = getHeight();
         rect.right = getWidth();
-        matrix.setRectToRect(src,rect, Matrix.ScaleToFit.CENTER);
+        matrix.setRectToRect(src, rect, Matrix.ScaleToFit.CENTER);
         mPath.transform(matrix);
         mNotBuilt = false;
+    }
+
+    Rect mTempRect;
+    @Override
+    public void layout(int l, int t, int r, int b) {
+        super.layout(l, t, r, b);
+        if (mAutoSize) {
+
+            if (mTempRect == null) {
+
+                mTempRect = new Rect();
+            }
+
+            Rect mTempRect = new Rect();
+            mPaint.getTextBounds(mText,0,mText.length(),mTempRect);
+            int tw = mTempRect.width();
+            int th =  (int) (1.3f*mTempRect.height());
+            int vw = r-l - mPaddingRight-mPaddingLeft;
+            int vh = b-t - mPaddingBottom-mPaddingTop;
+            Log.v(TAG, Debug.getLoc()+" vh = "+vh+" ="+b+" ="+t+" mPaddingBottom ="+mPaddingBottom+" mPaddingTop ="+mPaddingTop);
+            if (tw*vh > th*vw) { // width limited tw/vw > th/vh
+                Log.v(TAG, Debug.getLoc()+"(tw*vh > th*vw) tw,th vw,vh = "+tw+" ,"+th+"  "+vw+" , "+vh);
+                mPaint.setTextSize ( (mPaint.getTextSize() * vw)/(tw));
+            } else { // height limited
+                Log.v(TAG, Debug.getLoc()+"(=======else============) tw,th vw,vh = "+tw+" ,"+th+"  "+vw+" , "+vh);
+                Log.v(TAG, Debug.getLoc()+"(=======else============) tmPaint.getTextSize() = "+mPaint.getTextSize());
+                mPaint.setTextSize ( (mPaint.getTextSize() * vh)/( th));
+            }
+
+        }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        if (!mUseOutline) {
+            int x = mPaddingLeft + getHorizontalOffset();
+            int y = mPaddingTop + getVerticalOffset();
+            Log.v(TAG, Debug.getLoc() + " " + x + " , " + y);
+            //mPaint.setColor(Color.BLACK);
+            canvas.drawText(mText, x, y, mPaint);
+            return;
+        }
         if (mNotBuilt) {
             buildShape();
         }
@@ -183,12 +335,12 @@ public class MotionLabel extends View {
         invalidate();
     }
 
-    public void setTextFillColor(int color){
+    public void setTextFillColor(int color) {
         mTextFillColor = color;
         invalidate();
     }
 
-    public void setTextOutlineColor(int color){
+    public void setTextOutlineColor(int color) {
         mTextOutlineColor = color;
         invalidate();
     }
@@ -244,99 +396,229 @@ public class MotionLabel extends View {
             }
         }
     }
+
     /**
      * @return the current typeface and style in which the text is being
      * displayed.
-     *
-     * @see #setTypeface(Typeface)
-     *
      * @attr ref android.R.styleable#TextView_fontFamily
      * @attr ref android.R.styleable#TextView_typeface
      * @attr ref android.R.styleable#TextView_textStyle
+     * @see #setTypeface(Typeface)
      */
     public Typeface getTypeface() {
         return mPaint.getTypeface();
     }
 
 
-    void buildHack () {
-        float w2 = getWidth() / 2.0f;
-        float h2 = getHeight() / 2.0f;
-        Path path = new Path();
-        mMeasure.setPath(mPath, false);
-
-        float[] pos = new float[2];
-        mCount = 0;
-        mDrawPoints = new float[0];
-
-        float step = 0.1f;
-        int xsum = 0;
-        int ysum = 0;
-        mPath.reset();
-        do {
-            float len = mMeasure.getLength();
-            mDrawPoints = Arrays.copyOf(mDrawPoints, mDrawPoints.length + 4 + 2 * (int) (len / step));
-
-            for (float i = 0; i < len; i += step) {
-                mMeasure.getPosTan(i, pos, null);
-                mDrawPoints[mCount] = w2 / 3 + pos[0] * 5;
-                mDrawPoints[mCount + 1] = h2 + pos[1] * 5;
-                if (i == 0) {
-                    mPath.moveTo(mDrawPoints[mCount], mDrawPoints[mCount + 1]);
-                } else {
-                    mPath.lineTo(mDrawPoints[mCount], mDrawPoints[mCount + 1]);
-
-                }
-                xsum += pos[0];
-                ysum += pos[1];
-                Log.v(TAG, Debug.getLoc() + " [" + mCount + "]= " + pos[0] + ", " + pos[1]);
-            }
-            mPath.close();
-        }
-        while (mMeasure.nextContour());
-        Log.v(TAG, Debug.getLoc() + " count =" + mCount + "  " + (xsum / (float) mCount) + ", " + (ysum / (float) mCount));
-    }
-
-
     //   @Override
-    protected void onMeasure2(int widthMeasureSpec, int heightMeasureSpec) {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int widthMode = View.MeasureSpec.getMode(widthMeasureSpec);
         int heightMode = View.MeasureSpec.getMode(heightMeasureSpec);
         int widthSize = View.MeasureSpec.getSize(widthMeasureSpec);
         int heightSize = View.MeasureSpec.getSize(heightMeasureSpec);
-        int width=1;
-        int height=heightSize;
+        int width = widthSize;
+        int height = heightSize;
 
-        int des = -1;
-        boolean fromexisting = false;
-        if (widthMode == View.MeasureSpec.EXACTLY) {
-            // Parent has told us how big to be. So be it.
-            width = widthSize;
-        } else {
+            mAutoSize = false;
 
-
-            if (des < 0) {
-                des = (int)  (Layout.getDesiredWidth(mTransformed, mPaint)+0.99999f);
+        mPaddingLeft = getPaddingLeft();
+        mPaddingRight = getPaddingRight();
+        mPaddingTop = getPaddingTop();
+        mPaddingBottom = getPaddingBottom();
+        if (widthMode != View.MeasureSpec.EXACTLY || heightMode != View.MeasureSpec.EXACTLY) {
+            mPaint.getTextBounds(mText, 0, mText.length(), mTextBounds);
+            // WIDTH
+            if (widthMode != View.MeasureSpec.EXACTLY) {
+                width = (int) (mTextBounds.width() + 0.99999f);
             }
-            width = des;
-        }
+            width += mPaddingLeft + mPaddingRight;
 
-        width += mPaddingLeft  + mPaddingRight;
+            if (heightMode != View.MeasureSpec.EXACTLY) {
+                int desired = (int) (mPaint.getFontMetricsInt(null) + 0.99999f);
+                if (heightMode == View.MeasureSpec.AT_MOST) {
+                    Log.v(TAG, Debug.getLoc() + "# View.MeasureSpec.AT_MOST");
 
-        if (heightMode == View.MeasureSpec.EXACTLY) {
-            // Parent has told us how big to be. So be it.
-            height = heightSize;
-
-        } else {
-            int pad =mPaddingTop + mPaddingBottom;
-            int desired = 2;//Layout.getLineTop(1);
-
-            if (heightMode == View.MeasureSpec.AT_MOST) {
-                height = Math.min(desired, heightSize);
+                    height = Math.min(height, desired);
+                } else {
+                    height = desired;
+                }
+                height += mPaddingTop + mPaddingBottom;
             }
+        }  else {
+            if (mAutoSizeTextType != AUTO_SIZE_TEXT_TYPE_NONE) {
+                mAutoSize = true;
+            }
+
         }
 
         setMeasuredDimension(width, height);
     }
 
+    //============================= rounding ==============================================
+
+    /**
+     * Set the corner radius of curvature  as a fraction of the smaller side.
+     * For squares 1 will result in a circle
+     *
+     * @param round the radius of curvature as a fraction of the smaller width
+     */
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    public void setRoundPercent(float round) {
+        boolean change = (mRoundPercent != round);
+        mRoundPercent = round;
+        if (mRoundPercent != 0.0f) {
+            if (mPath == null) {
+                mPath = new Path();
+            }
+            if (mRect == null) {
+                mRect = new RectF();
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (mViewOutlineProvider == null) {
+                    mViewOutlineProvider = new ViewOutlineProvider() {
+                        @Override
+                        public void getOutline(View view, Outline outline) {
+                            int w = getWidth();
+                            int h = getHeight();
+                            float r = Math.min(w, h) * mRoundPercent / 2;
+                            outline.setRoundRect(0, 0, w, h, r);
+                        }
+                    };
+                    setOutlineProvider(mViewOutlineProvider);
+                }
+                setClipToOutline(true);
+            }
+            int w = getWidth();
+            int h = getHeight();
+            float r = Math.min(w, h) * mRoundPercent / 2;
+            mRect.set(0, 0, w, h);
+            mPath.reset();
+            mPath.addRoundRect(mRect, r, r, Path.Direction.CW);
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                setClipToOutline(false);
+            }
+        }
+        if (change) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                invalidateOutline();
+            }
+        }
+
+    }
+
+    /**
+     * Set the corner radius of curvature
+     *
+     * @param round the radius of curvature  NaN = default meaning roundPercent in effect
+     */
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    public void setRound(float round) {
+        if (Float.isNaN(round)) {
+            mRound = round;
+            float tmp = mRoundPercent;
+            mRoundPercent = -1;
+            setRoundPercent(tmp); // force eval of roundPercent
+            return;
+        }
+        boolean change = (mRound != round);
+        mRound = round;
+
+        if (mRound != 0.0f) {
+            if (mPath == null) {
+                mPath = new Path();
+            }
+            if (mRect == null) {
+                mRect = new RectF();
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (mViewOutlineProvider == null) {
+                    mViewOutlineProvider = new ViewOutlineProvider() {
+                        @Override
+                        public void getOutline(View view, Outline outline) {
+                            int w = getWidth();
+                            int h = getHeight();
+                            outline.setRoundRect(0, 0, w, h, mRound);
+                        }
+                    };
+                    setOutlineProvider(mViewOutlineProvider);
+                }
+                setClipToOutline(true);
+
+            }
+            int w = getWidth();
+            int h = getHeight();
+            mRect.set(0, 0, w, h);
+            mPath.reset();
+            mPath.addRoundRect(mRect, mRound, mRound, Path.Direction.CW);
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                setClipToOutline(false);
+            }
+        }
+        if (change) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                invalidateOutline();
+            }
+        }
+
+    }
+
+    /**
+     * Get the fractional corner radius of curvature.
+     *
+     * @return Fractional radius of curvature with respect to smallest size
+     */
+    public float getRoundPercent() {
+        return mRoundPercent;
+    }
+
+    /**
+     * Get the corner radius of curvature NaN = RoundPercent in effect.
+     *
+     * @return Radius of curvature
+     */
+    public float getRound() {
+        return mRound;
+    }
+    //===========================================================================================
+
+    /**
+     * set text size
+     *
+     * @param size
+     */
+    public void setTextSize(float size) {
+        setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+    }
+
+    /**
+     * Set the default text size to a given unit and value.  See {@link
+     * TypedValue} for the possible dimension units.
+     *
+     * @param unit The desired dimension unit.
+     * @param size The desired size in the given units.
+     * @attr ref android.R.styleable#TextView_textSize
+     */
+    public void setTextSize(int unit, float size) {
+        Context c = getContext();
+        Resources r;
+        if (c == null)
+            r = Resources.getSystem();
+        else
+            r = c.getResources();
+        setRawTextSize(TypedValue.applyDimension(
+                unit, size, r.getDisplayMetrics()));
+    }
+
+    private void setRawTextSize(float size) {
+        Log.v(TAG, Debug.getLoc() + " size = " + size);
+        if (size != mPaint.getTextSize()) {
+            mPaint.setTextSize(size);
+            if (mLayout != null) {
+                requestLayout();
+                invalidate();
+            }
+        }
+    }
 }

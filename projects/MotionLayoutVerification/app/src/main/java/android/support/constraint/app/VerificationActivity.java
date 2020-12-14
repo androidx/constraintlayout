@@ -26,7 +26,6 @@ import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Build;
 import android.os.Bundle;
-
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,10 +45,15 @@ import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.constraintlayout.motion.widget.MotionScene;
 import androidx.constraintlayout.motion.widget.TransitionAdapter;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.lang.reflect.Field;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 
 /*
  * Copyright (C) 2020 The Android Open Source Project
@@ -67,12 +71,6 @@ import androidx.recyclerview.widget.RecyclerView;
  * limitations under the License.
  */
 
-import java.lang.reflect.Field;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
-
 /* This test the visibility*/
 public class VerificationActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "Verification00";
@@ -82,7 +80,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     String s = AppCompatActivity.class.getName();
 
     private static boolean REVERSE = false;
-    private final String LAYOUTS_MATCHES = "verification_\\d+";
+    private final String LAYOUTS_MATCHES = "verification_3\\d+";
     private static String SHOW_FIRST = "";
     MotionLayout mMotionLayout;
     private Flow mFlow;
@@ -458,8 +456,9 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         ScrollView sv = new ScrollView(this);
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
+        Button button = null;
         for (int i = 0; i < layouts.length; i++) {
-            Button button = new Button(this);
+            button = new Button(this);
             button.setText(layouts[i]);
             button.setTag(layouts[i]);
             linearLayout.addView(button);
@@ -467,6 +466,9 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         }
         sv.addView(linearLayout);
         setContentView(sv);
+        if (layouts.length == 1) {
+            button.callOnClick();
+        }
     }
 
     public void jumpToMe(View v) {

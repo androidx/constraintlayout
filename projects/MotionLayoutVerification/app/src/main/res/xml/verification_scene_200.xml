@@ -16,9 +16,9 @@
         motion:constraintSetStart="@+id/top"
         motion:duration="4321">
         <OnClick motion:targetId="@+id/run2" />
-<KeyFrameSet>
+        <KeyFrameSet>
 
-</KeyFrameSet>
+        </KeyFrameSet>
     </Transition>
 
     <ConstraintSet android:id="@+id/start">
@@ -41,71 +41,71 @@
             />
 
     </ConstraintSet>
-<!--    <ViewTransitionSet-->
-<!--        android:id="@+id/number"-->
-<!--        motion:applyTransitionTo="ALL"-->
-<!--        motion:excludeTransitionFor="bob"-->
-<!--        >-->
+    <!--    <ViewTransitionSet-->
+    <!--        android:id="@+id/number"-->
+    <!--        motion:applyTransitionTo="ALL"-->
+    <!--        motion:excludeTransitionFor="bob"-->
+    <!--        >-->
 
 
 
-<!--     <ViewTransition-->
-<!--         android:id="@+id/vt_hide_all"-->
-<!--         motion:viewTransitionMode="allStates"-->
-<!--         motion:motionTarget="@button1"-->
-<!--         motion:duration="1000">-->
-<!--         <ConstraintOverride-->
-<!--             android:rotation="360"-->
-<!--             android:visibility="gone"-->
-<!--             />-->
+    <!--     <ViewTransition-->
+    <!--         android:id="@+id/vt_hide_all"-->
+    <!--         motion:viewTransitionMode="allStates"-->
+    <!--         motion:motionTarget="@button1"-->
+    <!--         motion:duration="1000">-->
+    <!--         <ConstraintOverride-->
+    <!--             android:rotation="360"-->
+    <!--             android:visibility="gone"-->
+    <!--             />-->
 
-<!--         <KeyFrameSet>-->
-<!--             <KeyCycle-->
-<!--                 motion:framePosition="0"-->
-<!--                 motion:wavePeriod="1"-->
-<!--                 android:translationY="0dp"-->
-<!--                 />-->
-<!--             <KeyCycle-->
-<!--                 motion:framePosition="50"-->
-<!--                 motion:wavePeriod="1"-->
-<!--                 android:translationY="20dp"-->
-<!--                 />-->
-<!--             <KeyCycle-->
-<!--                 motion:framePosition="100"-->
-<!--                 motion:wavePeriod="1"-->
-<!--                 android:translationY="0dp"-->
-<!--                 />-->
-<!--         </KeyFrameSet>-->
-<!--     </ViewTransition>-->
+    <!--         <KeyFrameSet>-->
+    <!--             <KeyCycle-->
+    <!--                 motion:framePosition="0"-->
+    <!--                 motion:wavePeriod="1"-->
+    <!--                 android:translationY="0dp"-->
+    <!--                 />-->
+    <!--             <KeyCycle-->
+    <!--                 motion:framePosition="50"-->
+    <!--                 motion:wavePeriod="1"-->
+    <!--                 android:translationY="20dp"-->
+    <!--                 />-->
+    <!--             <KeyCycle-->
+    <!--                 motion:framePosition="100"-->
+    <!--                 motion:wavePeriod="1"-->
+    <!--                 android:translationY="0dp"-->
+    <!--                 />-->
+    <!--         </KeyFrameSet>-->
+    <!--     </ViewTransition>-->
 
 
 
-<!--    <ViewTransition-->
-<!--        android:id="@+id/vt_hide_current"-->
-<!--        motion:duration="1000">-->
-<!--        <ConstraintOverride-->
-<!--            android:rotation="360"-->
-<!--            android:visibility="gone"-->
-<!--            />-->
+    <!--    <ViewTransition-->
+    <!--        android:id="@+id/vt_hide_current"-->
+    <!--        motion:duration="1000">-->
+    <!--        <ConstraintOverride-->
+    <!--            android:rotation="360"-->
+    <!--            android:visibility="gone"-->
+    <!--            />-->
 
-<!--        <KeyFrameSet>-->
-<!--            <KeyCycle-->
-<!--                motion:framePosition="0"-->
-<!--                motion:wavePeriod="1"-->
-<!--                android:translationY="0dp"-->
-<!--                />-->
-<!--            <KeyCycle-->
-<!--                motion:framePosition="50"-->
-<!--                motion:wavePeriod="1"-->
-<!--                android:translationY="20dp"-->
-<!--                />-->
-<!--            <KeyCycle-->
-<!--                motion:framePosition="100"-->
-<!--                motion:wavePeriod="1"-->
-<!--                android:translationY="0dp"-->
-<!--                />-->
-<!--        </KeyFrameSet>-->
-<!--    </ViewTransition>-->
+    <!--        <KeyFrameSet>-->
+    <!--            <KeyCycle-->
+    <!--                motion:framePosition="0"-->
+    <!--                motion:wavePeriod="1"-->
+    <!--                android:translationY="0dp"-->
+    <!--                />-->
+    <!--            <KeyCycle-->
+    <!--                motion:framePosition="50"-->
+    <!--                motion:wavePeriod="1"-->
+    <!--                android:translationY="20dp"-->
+    <!--                />-->
+    <!--            <KeyCycle-->
+    <!--                motion:framePosition="100"-->
+    <!--                motion:wavePeriod="1"-->
+    <!--                android:translationY="0dp"-->
+    <!--                />-->
+    <!--        </KeyFrameSet>-->
+    <!--    </ViewTransition>-->
 
 
     <ViewTransition
@@ -194,5 +194,6 @@
                 />
         </KeyFrameSet>
     </ViewTransition>
-<!--    </ViewTransitionSet>-->
+    <!--    </ViewTransitionSet>-->
 </MotionScene>
+

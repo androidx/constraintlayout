@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/motionLayout"
-    app:layoutDescription="@xml/verification_scene_300"
+    app:layoutDescription="@xml/verification_scene_301"
     android:layout_width="match_parent"
     app:layout_optimizationLevel="none"
     android:background="#B6D5EA"
@@ -43,7 +43,6 @@
         android:layout_height="40dp"
         android:text="wrap fixed"
         android:layout_marginTop="2dp"
-        android:textColor="#00F"
 
         app:layout_constraintTag="text"
         app:layout_constraintTop_toBottomOf="@id/text1"
@@ -63,7 +62,6 @@
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:text="fixed wrap"
-        android:textColor="#00F"
         android:layout_marginTop="2dp"
 
         app:layout_constraintTag="text"
@@ -84,7 +82,6 @@
         android:layout_width="130dp"
         android:layout_height="40dp"
         android:text="fixed fixed"
-        android:textColor="#00F"
         android:layout_marginTop="2dp"
         android:gravity="center"
 
@@ -99,22 +96,10 @@
         android:background="#FFF"
         app:layout_constraintTop_toBottomOf="@id/text4"
         app:layout_constraintStart_toStartOf="@id/text4" />
-    <TextView
-        android:id="@+id/text5"
-        android:background="#FFEB3B"
-        android:layout_width="130dp"
-        android:layout_height="40dp"
-        android:text="fixed fixed"
-        android:layout_marginTop="2dp"
-        android:gravity="center"
-        android:textColor="#00F"
-        android:autoSizeTextType="uniform"
-        app:layout_constraintTag="text"
-        app:layout_constraintTop_toBottomOf="@id/text4"
-        app:layout_constraintStart_toStartOf="@id/text4" />
+
     <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/mtext1"
-        android:background="#FFD9CD"
+        android:background="#FF5722"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="wrap wrap"
@@ -138,7 +123,7 @@
         app:layout_constraintStart_toStartOf="@id/text2" />
     <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/mtext2"
-        android:background="#FFF3CF"
+        android:background="#FFC107"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:text="wrap fixed"
@@ -149,7 +134,7 @@
 
     <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/mtext3"
-        android:background="#F7FADB"
+        android:background="#CDDC39"
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:text="fixed wrap"
@@ -162,28 +147,16 @@
 
     <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/mtext4"
-        android:background="#F6EFAB"
+        android:background="#FFEB3B"
         android:layout_width="130dp"
         android:layout_height="40dp"
         android:text="fixed fixed"
         android:layout_marginTop="2dp"
         android:gravity="center"
+
         app:layout_constraintTag="text"
         app:layout_constraintTop_toBottomOf="@id/mtext3"
         app:layout_constraintStart_toStartOf="@id/mtext3" />
-
-    <androidx.constraintlayout.utils.widget.MotionLabel
-        android:id="@+id/mtext5"
-        android:background="#F3EFD3"
-        android:layout_width="130dp"
-        android:layout_height="40dp"
-        android:text="fixed fixed"
-        android:layout_marginTop="2dp"
-        android:gravity="center"
-        android:autoSizeTextType="uniform"
-        app:layout_constraintTag="text"
-        app:layout_constraintTop_toBottomOf="@id/text5"
-        app:layout_constraintStart_toStartOf="@id/text5" />
 
 
     <TextView
