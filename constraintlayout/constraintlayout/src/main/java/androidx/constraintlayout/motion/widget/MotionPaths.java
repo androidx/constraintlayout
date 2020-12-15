@@ -16,14 +16,13 @@
 
 package androidx.constraintlayout.motion.widget;
 
+import android.util.Log;
+import android.view.View;
+
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.motion.utils.Easing;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.constraintlayout.motion.utils.Easing;
-
-import android.util.Log;
-import android.util.SparseArray;
-import android.view.View;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -608,6 +607,14 @@ class MotionPaths implements Comparable<MotionPaths> {
             }
         }
 
+        if (view instanceof FloatLayout) {
+            float l = v_x;
+            float t = v_y;
+            float r = v_x + v_width;
+            float b = v_y + v_height;
+            ((FloatLayout) view).layout(l, t, r, b);
+            return;
+        }
         int l = (int) (0.5f + v_x);
         int t = (int) (0.5f + v_y);
         int r = (int) (0.5f + v_x + v_width);

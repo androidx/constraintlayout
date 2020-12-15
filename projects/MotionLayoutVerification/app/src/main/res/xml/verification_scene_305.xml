@@ -25,12 +25,7 @@
         motion:autoTransition="animateToEnd" />
 
     <ConstraintSet android:id="@+id/start">
-        <ConstraintOverride
-            android:id="@+id/mtext1"
-            android:layout_marginTop="32dp"
-            >
-        <CustomAttribute motion:attributeName="textBackgroundRotate" motion:customFloatValue="0"/>
-        </ConstraintOverride>
+
     </ConstraintSet>
 
 
@@ -38,10 +33,7 @@
 
         <ConstraintOverride
             android:id="@+id/mtext1"
-            android:layout_marginTop="165dp">
-            <CustomAttribute motion:attributeName="textBackgroundRotate" motion:customFloatValue="720"/>
-
-        </ConstraintOverride>
+            android:layout_marginTop="165dp" />
         <ConstraintOverride
             android:id="@+id/mtext5"
             android:layout_width="200dp"
@@ -59,10 +51,7 @@
             android:id="@+id/mtext1"
             motion:layout_constraintHorizontal_bias="0.0"
             android:layout_width="160dp"
-            android:layout_height="wrap_content" >
-            <CustomAttribute motion:attributeName="textBackgroundRotate" motion:customFloatValue="-360"/>
-
-        </ConstraintOverride>
+            android:layout_height="wrap_content" />
         <ConstraintOverride
             android:id="@+id/mtext2"
             android:layout_width="60dp"

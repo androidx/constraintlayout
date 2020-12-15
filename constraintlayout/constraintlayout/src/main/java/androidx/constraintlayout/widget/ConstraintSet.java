@@ -23,16 +23,6 @@ import android.content.res.XmlResourceParser;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
-
-import androidx.constraintlayout.widget.ConstraintAttribute.AttributeType;
-import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams;
-import androidx.constraintlayout.motion.widget.Debug;
-import androidx.constraintlayout.motion.widget.MotionScene;
-import androidx.constraintlayout.motion.utils.Easing;
-
-import androidx.constraintlayout.core.widgets.ConstraintWidget;
-import androidx.constraintlayout.core.widgets.HelperWidget;
-
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
@@ -42,6 +32,14 @@ import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
+import androidx.constraintlayout.core.widgets.HelperWidget;
+import androidx.constraintlayout.motion.utils.Easing;
+import androidx.constraintlayout.motion.widget.Debug;
+import androidx.constraintlayout.motion.widget.MotionScene;
+import androidx.constraintlayout.widget.ConstraintAttribute.AttributeType;
+import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -50,7 +48,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -3902,12 +3899,12 @@ public class ConstraintSet {
                     break;
                 case START_MARGIN:
                     if (Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
-                        delta.add(EDITOR_ABSOLUTE_X, a.getDimensionPixelSize(attr, c.layout.startMargin));
+                        delta.add(START_MARGIN, a.getDimensionPixelSize(attr, c.layout.startMargin));
                     }
                     break;
                 case END_MARGIN:
                     if (Build.VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
-                        delta.add(EDITOR_ABSOLUTE_X, a.getDimensionPixelSize(attr, c.layout.endMargin));
+                        delta.add(END_MARGIN, a.getDimensionPixelSize(attr, c.layout.endMargin));
                     }
                     break;
                 case TOP_MARGIN:

@@ -264,7 +264,7 @@ public class ImageFilterButton extends androidx.appcompat.widget.AppCompatImageB
         }
         float panX = (Float.isNaN(mPanX)) ? 0 : mPanX;
         float panY = (Float.isNaN(mPanY)) ? 0 : mPanY;
-        float zoom = (Float.isNaN(mZoom)) ? 0 : mZoom;
+        float zoom = (Float.isNaN(mZoom)) ? 1 : mZoom;
         float rota = (Float.isNaN(mRotate)) ? 0 : mRotate;
         Matrix imageMatrix = new Matrix();
         imageMatrix.reset();

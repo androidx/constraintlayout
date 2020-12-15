@@ -19,6 +19,8 @@ package androidx.constraintlayout.utils.widget;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Outline;
@@ -27,7 +29,9 @@ import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Shader;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Layout;
 import android.text.TextPaint;
@@ -41,6 +45,7 @@ import android.view.ViewOutlineProvider;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.motion.widget.Debug;
+import androidx.constraintlayout.motion.widget.FloatLayout;
 import androidx.constraintlayout.widget.R;
 
 import static android.widget.TextView.AUTO_SIZE_TEXT_TYPE_NONE;
@@ -49,7 +54,7 @@ import static android.widget.TextView.AUTO_SIZE_TEXT_TYPE_NONE;
  * This class is designed to support resizing in MotionLayout more efficiently
  * It also support rounding the border
  */
-public class MotionLabel extends View {
+public class MotionLabel extends View implements FloatLayout {
     static String TAG = "MotionLabel";
     PathMeasure mMeasure = new PathMeasure();
     float[] mDrawPoints = new float[10000];
@@ -85,6 +90,13 @@ public class MotionLabel extends View {
     private int mGravity = Gravity.TOP | Gravity.START;
     private int mAutoSizeTextType = AUTO_SIZE_TEXT_TYPE_NONE;
     private boolean mAutoSize = false; // decided during measure
+    private float mDeltaLeft, mDeltaTop, mDeltaRight, mDeltatBottom;
+    private float mFloatWidth, mFloatHeight;
+    private Drawable mTextBackground;
+    Matrix mOutlinePositionMatrix;
+    private Bitmap mTextBackgroundBitmap;
+    private BitmapShader mTextShader;
+    private Matrix mTextShaderMatrix;
 
     public MotionLabel(Context context) {
         super(context);
@@ -137,14 +149,72 @@ public class MotionLabel extends View {
                     }
                 } else if (attr == R.styleable.MotionLabel_android_gravity) {
                     setGravity(a.getInt(attr, -1));
-                } else if (attr == R.styleable.MotionLabel_android_autoSizeTextType ) {
+                } else if (attr == R.styleable.MotionLabel_android_autoSizeTextType) {
                     mAutoSizeTextType = a.getInt(attr, AUTO_SIZE_TEXT_TYPE_NONE);
+                } else if (attr == R.styleable.MotionLabel_textOutlineColor) {
+                    mTextOutlineColor = a.getInt(attr, mTextOutlineColor);
+                    mUseOutline = true;
+                } else if (attr == R.styleable.MotionLabel_textOutlineThickness) {
+                    mTextOutlineThickness = a.getDimension(attr, mTextOutlineThickness);
+                    mUseOutline = true;
+                } else if (attr == R.styleable.MotionLabel_textBackground) {
+                    mTextBackground = a.getDrawable(attr);
+                    mUseOutline = true;
+                } else if (attr == R.styleable.MotionLabel_textBackgroundPanX) {
+                    mPanX = a.getFloat(attr, mPanX);
+                } else if (attr == R.styleable.MotionLabel_textBackgroundPanY) {
+                    mPanY = a.getFloat(attr, mPanY);
+                } else if (attr == R.styleable.MotionLabel_textBackgroundRotate) {
+                    mRotate = a.getFloat(attr, mRotate);
+                } else if (attr == R.styleable.MotionLabel_textBackgroundZoom) {
+                    mZoom = a.getFloat(attr, mZoom);
                 }
+
             }
             a.recycle();
         }
 
+        setupTexture();
         setupPath();
+    }
+
+    private void setupTexture() {
+        if (mTextBackground != null) {
+            mTextShaderMatrix = new Matrix();
+            int iw = mTextBackground.getIntrinsicWidth();
+            int ih = mTextBackground.getIntrinsicHeight();
+            Log.v(TAG, Debug.getLoc() + " iw,ih = " + iw + "," + ih);
+            if (iw <= 0) {
+                int w = getWidth();
+                if (w == 0) {
+                    w = 128;
+                }
+                iw = w;
+            }
+            if (ih <= 0) {
+                int h = getWidth();
+                if (h == 0) {
+                    h = 128;
+                }
+                ih = h;
+            }
+
+            Log.v(TAG, Debug.getLoc() + " iw,ih = " + iw + "," + ih);
+            mTextBackgroundBitmap = Bitmap.createBitmap(iw, ih, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(mTextBackgroundBitmap);
+            mTextBackground.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            mTextBackground.draw(canvas);
+            mTextShader = new BitmapShader(mTextBackgroundBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+        }
+    }
+
+    private void adjustTexture(float l, float t, float r, float b) {
+        if (mTextShaderMatrix == null) {
+            return;
+        }
+        mFloatWidth = r - l;
+        mFloatHeight = t - b;
+        updateViewMatrix();
     }
 
     /**
@@ -171,34 +241,39 @@ public class MotionLabel extends View {
             invalidate();
 
         }
+
         mGravity = gravity;
 
     }
 
-    int getHorizontalOffset() {
+    float getHorizontalOffset() {
         Paint.FontMetrics fm = mPaint.getFontMetrics();
-        int hoffset = 0;
+        float hoffset = 0;
         final int gravity = mGravity & Gravity.HORIZONTAL_GRAVITY_MASK;
-        mPaint.getTextBounds(mText, 0, mText.length(), mTextBounds);
+        float textWidth = mPaint.measureText(mText, 0, mText.length());
 
         if (gravity != Gravity.LEFT) {
-            int boxWidth = getMeasuredWidth() - getPaddingLeft() -
+            float boxWidth = getMeasuredWidth() - getPaddingLeft() -
                     getPaddingRight();
+            if (!Float.isNaN(mFloatWidth)) {
+                boxWidth = mFloatWidth - getPaddingLeft() -
+                        getPaddingRight();
+            }
 
-            int textWidth = mTextBounds.width();
+
             if (textWidth < boxWidth) {
                 if (gravity == Gravity.RIGHT)
                     hoffset = boxWidth - textWidth;
                 else // (gravity == Gravity.CENTER_VERTICAL)
-                    hoffset = (boxWidth - textWidth) >> 1;
+                    hoffset = (boxWidth - textWidth) / 2.0f;
             }
         }
         return hoffset;
     }
 
-    int getVerticalOffset() {
+    float getVerticalOffset() {
         Paint.FontMetrics fm = mPaint.getFontMetrics();
-        int voffset = 0;
+        float voffset = 0;
         final int gravity = mGravity & Gravity.VERTICAL_GRAVITY_MASK;
 
         if (gravity != Gravity.TOP) {
@@ -210,7 +285,7 @@ public class MotionLabel extends View {
                 if (gravity == Gravity.BOTTOM)
                     voffset = boxht - textht;
                 else // (gravity == Gravity.CENTER_VERTICAL)
-                    voffset = (boxht - textht) >> 1;
+                    voffset = (boxht - textht) / 2.0f;
             }
         }
         return voffset - (int) fm.ascent;
@@ -221,9 +296,7 @@ public class MotionLabel extends View {
         final Resources.Theme theme = context.getTheme();
         theme.resolveAttribute(R.attr.colorPrimary, typedValue, true);
         mPaint.setColor(mTextFillColor = typedValue.data);
-
     }
-
 
     private void setText(CharSequence text) {
         mText = text.toString();
@@ -238,8 +311,8 @@ public class MotionLabel extends View {
         mPaint.setColor(mTextFillColor);
         mPaint.setStrokeWidth(mTextOutlineThickness);
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        mPaint.setFlags(Paint.SUBPIXEL_TEXT_FLAG);
         setRawTextSize(mTextSize);
-
         mPaint.setAntiAlias(true);
         //   mLayout = new StaticLayout(mText, mPaint, getWidth(), Layout.Alignment.ALIGN_CENTER, 1, 0, true);
     }
@@ -251,10 +324,9 @@ public class MotionLabel extends View {
         mPath.reset();
         String str = mText.toString();
         int strlen = str.length();
-        mPaint.setTextSize(getHeight());
         mPaint.getTextBounds(str, 0, strlen, mTextBounds);
         mPaint.getTextPath(str, 0, strlen, 0, 0, mPath);
-        Matrix matrix = new Matrix();
+
         mTextBounds.right--;
         mTextBounds.left++;
         mTextBounds.bottom++;
@@ -263,38 +335,88 @@ public class MotionLabel extends View {
         RectF rect = new RectF();
         rect.bottom = getHeight();
         rect.right = getWidth();
-        matrix.setRectToRect(src, rect, Matrix.ScaleToFit.CENTER);
-        mPath.transform(matrix);
+
+
+        //  matrix.setRectToRect(src, rect, Matrix.ScaleToFit.CENTER);
+
         mNotBuilt = false;
     }
 
     Rect mTempRect;
+    Paint mTempPaint;
+    float paintTextSize;
+
     @Override
     public void layout(int l, int t, int r, int b) {
         super.layout(l, t, r, b);
         if (mAutoSize) {
 
             if (mTempRect == null) {
-
+                mTempPaint = new Paint();
                 mTempRect = new Rect();
+                mTempPaint.set(mPaint);
+                paintTextSize = mTempPaint.getTextSize();
             }
 
-            Rect mTempRect = new Rect();
-            mPaint.getTextBounds(mText,0,mText.length(),mTempRect);
+            mTempPaint.getTextBounds(mText, 0, mText.length(), mTempRect);
             int tw = mTempRect.width();
-            int th =  (int) (1.3f*mTempRect.height());
-            int vw = r-l - mPaddingRight-mPaddingLeft;
-            int vh = b-t - mPaddingBottom-mPaddingTop;
-            Log.v(TAG, Debug.getLoc()+" vh = "+vh+" ="+b+" ="+t+" mPaddingBottom ="+mPaddingBottom+" mPaddingTop ="+mPaddingTop);
-            if (tw*vh > th*vw) { // width limited tw/vw > th/vh
-                Log.v(TAG, Debug.getLoc()+"(tw*vh > th*vw) tw,th vw,vh = "+tw+" ,"+th+"  "+vw+" , "+vh);
-                mPaint.setTextSize ( (mPaint.getTextSize() * vw)/(tw));
+            int th = (int) (1.3f * mTempRect.height());
+            float vw = r - l - mPaddingRight - mPaddingLeft;
+            float vh = b - t - mPaddingBottom - mPaddingTop;
+            if (!Float.isNaN(mFloatWidth)) {
+                vw = mFloatWidth - mPaddingRight - mPaddingLeft;
+                vh = mFloatHeight - mPaddingBottom - mPaddingTop;
+            }
+            if (tw * vh > th * vw) { // width limited tw/vw > th/vh
+                mPaint.setTextSize((paintTextSize * vw) / (tw));
             } else { // height limited
-                Log.v(TAG, Debug.getLoc()+"(=======else============) tw,th vw,vh = "+tw+" ,"+th+"  "+vw+" , "+vh);
-                Log.v(TAG, Debug.getLoc()+"(=======else============) tmPaint.getTextSize() = "+mPaint.getTextSize());
-                mPaint.setTextSize ( (mPaint.getTextSize() * vh)/( th));
+                mPaint.setTextSize((paintTextSize * vh) / (th));
             }
 
+        }
+
+    }
+
+    @Override
+    public void layout(float l, float t, float r, float b) {
+        mDeltaLeft = l - (int) (0.5f + l);
+        mDeltaTop = t - (int) (0.5f + t);
+        mDeltaRight = r - (int) (0.5f + r);
+        mDeltatBottom = b - (int) (0.5f + b);
+        int w = (int) (0.5f + r) - (int) (0.5f + l);
+        int h = (int) (0.5f + b) - (int) (0.5f + t);
+        adjustTexture(l, t, r, b);
+        if (getMeasuredHeight() != h || getMeasuredWidth() != w) {
+            int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(w, View.MeasureSpec.EXACTLY);
+            int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(h, View.MeasureSpec.EXACTLY);
+            measure(widthMeasureSpec, heightMeasureSpec);
+            super.layout((int) (0.5f + l), (int) (0.5f + t), (int) (0.5f + r), (int) (0.5f + b));
+        } else {
+            super.layout((int) (0.5f + l), (int) (0.5f + t), (int) (0.5f + r), (int) (0.5f + b));
+        }
+        if (mAutoSize) {
+            if (mTempRect == null) {
+                mTempPaint = new Paint();
+                mTempRect = new Rect();
+                mTempPaint.set(mPaint);
+                paintTextSize = mTempPaint.getTextSize();
+            }
+            mFloatWidth = r - l;
+            mFloatHeight = t - b;
+
+            mTempPaint.getTextBounds(mText, 0, mText.length(), mTempRect);
+            int tw = mTempRect.width();
+            float th = 1.3f * mTempRect.height();
+            float vw = r - l - mPaddingRight - mPaddingLeft;
+            float vh = b - t - mPaddingBottom - mPaddingTop;
+            if (tw * vh > th * vw) { // width limited tw/vw > th/vh
+                mPaint.setTextSize((paintTextSize * vw) / (tw));
+            } else { // height limited
+                mPaint.setTextSize((paintTextSize * vh) / (th));
+            }
+            if (mUseOutline) {
+                buildShape();
+            }
         }
     }
 
@@ -302,26 +424,46 @@ public class MotionLabel extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (!mUseOutline) {
-            int x = mPaddingLeft + getHorizontalOffset();
-            int y = mPaddingTop + getVerticalOffset();
-            Log.v(TAG, Debug.getLoc() + " " + x + " , " + y);
-            //mPaint.setColor(Color.BLACK);
-            canvas.drawText(mText, x, y, mPaint);
+            float x = mPaddingLeft + getHorizontalOffset();
+            float y = mPaddingTop + getVerticalOffset();
+            canvas.drawText(mText, mDeltaLeft + x, y, mPaint);
             return;
         }
         if (mNotBuilt) {
             buildShape();
         }
         if (mUseOutline) {
-            mPaint.setColor(mTextFillColor);
+            if (mOutlinePositionMatrix == null) {
+                mOutlinePositionMatrix = new Matrix();
+            }
+
+            mOutlinePositionMatrix.reset();
+            float x = mPaddingLeft + getHorizontalOffset();
+            float y = mPaddingTop + getVerticalOffset();
+            mOutlinePositionMatrix.preTranslate(x, y);
+            mPath.transform(mOutlinePositionMatrix);
+
+            if (mTextShader != null) {
+                mPaint.setShader(mTextShader);
+            } else {
+                mPaint.setColor(mTextFillColor);
+            }
             mPaint.setStyle(Paint.Style.FILL);
             mPaint.setStrokeWidth(mTextOutlineThickness);
             canvas.drawPath(mPath, mPaint);
-
+            if (mTextShader != null) {
+                mPaint.setShader(null);
+            }
             mPaint.setColor(mTextOutlineColor);
             mPaint.setStyle(Paint.Style.STROKE);
             mPaint.setStrokeWidth(mTextOutlineThickness);
             canvas.drawPath(mPath, mPaint);
+
+            mOutlinePositionMatrix.reset();
+            x = mPaddingLeft + getHorizontalOffset();
+            y = mPaddingTop + getVerticalOffset();
+            mOutlinePositionMatrix.preTranslate(-x, -y);
+            mPath.transform(mOutlinePositionMatrix);
         } else {
             mPaint.setColor(mTextFillColor);
             mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -332,6 +474,11 @@ public class MotionLabel extends View {
 
     public void setTextOutlineThickness(float width) {
         mTextOutlineThickness = width;
+        mUseOutline = true;
+        if (Float.isNaN(mTextOutlineThickness)) {
+            mTextOutlineThickness = 1;
+            mUseOutline = false;
+        }
         invalidate();
     }
 
@@ -342,6 +489,7 @@ public class MotionLabel extends View {
 
     public void setTextOutlineColor(int color) {
         mTextOutlineColor = color;
+        mUseOutline = true;
         invalidate();
     }
 
@@ -419,7 +567,7 @@ public class MotionLabel extends View {
         int width = widthSize;
         int height = heightSize;
 
-            mAutoSize = false;
+        mAutoSize = false;
 
         mPaddingLeft = getPaddingLeft();
         mPaddingRight = getPaddingRight();
@@ -436,15 +584,13 @@ public class MotionLabel extends View {
             if (heightMode != View.MeasureSpec.EXACTLY) {
                 int desired = (int) (mPaint.getFontMetricsInt(null) + 0.99999f);
                 if (heightMode == View.MeasureSpec.AT_MOST) {
-                    Log.v(TAG, Debug.getLoc() + "# View.MeasureSpec.AT_MOST");
-
                     height = Math.min(height, desired);
                 } else {
                     height = desired;
                 }
                 height += mPaddingTop + mPaddingBottom;
             }
-        }  else {
+        } else {
             if (mAutoSizeTextType != AUTO_SIZE_TEXT_TYPE_NONE) {
                 mAutoSize = true;
             }
@@ -612,7 +758,6 @@ public class MotionLabel extends View {
     }
 
     private void setRawTextSize(float size) {
-        Log.v(TAG, Debug.getLoc() + " size = " + size);
         if (size != mPaint.getTextSize()) {
             mPaint.setTextSize(size);
             if (mLayout != null) {
@@ -621,4 +766,133 @@ public class MotionLabel extends View {
             }
         }
     }
+
+    public int getmTextOutlineColor() {
+        return mTextOutlineColor;
+    }
+
+    public void setmTextOutlineColor(int mTextOutlineColor) {
+        this.mTextOutlineColor = mTextOutlineColor;
+    }
+
+    // ============================ TextureTransformLogic ===============================//
+    float mPanX = Float.NaN;
+    float mPanY = Float.NaN;
+    float mZoom = Float.NaN;
+    float mRotate = Float.NaN;
+
+    /**
+     * Gets the pan from the center
+     * pan of 1 the image is "all the way to the right"
+     * if the images width is greater than the screen width, pan = 1 results in the left edge lining up
+     * if the images width is less than the screen width, pan = 1 results in the right edges lining up
+     * if image width == screen width it does nothing
+     *
+     * @return the pan in X. Where 0 is centered = Float. NaN if not set
+     */
+    public float getTextBackgroundPanX() {
+        return mPanX;
+    }
+
+    /**
+     * gets the pan from the center
+     * pan of 1 the image is "all the way to the bottom"
+     * if the images width is greater than the screen height, pan = 1 results in the bottom edge lining up
+     * if the images width is less than the screen height, pan = 1 results in the top edges lining up
+     * if image height == screen height it does nothing
+     *
+     * @return pan in y. Where 0 is centered NaN if not set
+     */
+    public float getTextBackgroundPanY() {
+        return mPanY;
+    }
+
+    /**
+     * gets the zoom where 1 scales the image just enough to fill the view
+     *
+     * @return the zoom factor
+     */
+    public float getTextBackgroundZoom() {
+        return mZoom;
+    }
+
+    /**
+     * gets the rotation
+     *
+     * @return the rotation in degrees
+     */
+    public float getTextBackgroundRotate() {
+        return mRotate;
+    }
+
+    /**
+     * sets the pan from the center
+     * pan of 1 the image is "all the way to the right"
+     * if the images width is greater than the screen width, pan = 1 results in the left edge lining up
+     * if the images width is less than the screen width, pan = 1 results in the right edges lining up
+     * if image width == screen width it does nothing
+     *
+     * @param pan sets the pan in X. Where 0 is centered
+     */
+    public void setTextBackgroundPanX(float pan) {
+        mPanX = pan;
+        updateViewMatrix();
+    }
+
+    /**
+     * sets the pan from the center
+     * pan of 1 the image is "all the way to the bottom"
+     * if the images width is greater than the screen height, pan = 1 results in the bottom edge lining up
+     * if the images width is less than the screen height, pan = 1 results in the top edges lining up
+     * if image height == screen height it does nothing
+     *
+     * @param pan sets the pan in X. Where 0 is centered
+     */ 
+    public void setTextBackgroundPanY(float pan) {
+        mPanY = pan;
+        updateViewMatrix();
+    }
+
+    /**
+     * sets the zoom where 1 scales the image just enough to fill the view
+     *
+     * @param zoom the zoom factor
+     */
+    public void setTextBackgroundZoom(float zoom) {
+        mZoom = zoom;
+        updateViewMatrix();
+    }
+
+    /**
+     * sets the rotation angle of the image in degrees
+     *
+     * @rotation the rotation in degrees
+     */
+    public void setTextBackgroundRotate(float rotation) {
+        mRotate = rotation;
+        updateViewMatrix();
+    }
+
+    private void updateViewMatrix() {
+        float panX = (Float.isNaN(mPanX)) ? 0 : mPanX;
+        float panY = (Float.isNaN(mPanY)) ? 0 : mPanY;
+        float zoom = (Float.isNaN(mZoom)) ? 1 : mZoom;
+        float rota = (Float.isNaN(mRotate)) ? 0 : mRotate;
+
+        mTextShaderMatrix.reset();
+        float iw = mTextBackgroundBitmap.getWidth();
+        float ih = mTextBackgroundBitmap.getHeight();
+        float sw = mFloatWidth;
+        float sh = mFloatHeight;
+        float scale = zoom * ((iw * sh < ih * sw) ? sw / iw : sh / ih);
+        mTextShaderMatrix.postScale(scale, scale);
+        float tx = 0.5f * (panX * (sw - scale * iw) + sw - (scale * iw));
+        float ty = 0.5f * (panY * (sh - scale * ih) + sh - (scale * ih));
+        mTextShaderMatrix.postTranslate(tx, ty);
+        mTextShaderMatrix.postRotate(rota, sw / 2, sh / 2);
+        mTextShader.setLocalMatrix(mTextShaderMatrix);
+
+    }
+
+
 }

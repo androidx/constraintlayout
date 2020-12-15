@@ -12,138 +12,38 @@
         app:motionDebug="SHOW_ALL"
 
     -->
-    <TextView
-        android:id="@+id/text1"
-        android:background="#FF5722"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="wrap wrap"
-        android:layout_marginTop="32dp"
-        android:layout_marginStart="32dp"
-        android:textColor="#00F"
-        android:textSize="32sp"
-        android:padding="10dp"
-        android:layout_marginLeft="32dp"
-        app:layout_constraintTag="text"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
-    <View
-        android:id="@+id/line1"
-        android:layout_width="430dp"
-        android:layout_height="1dp"
-        android:background="#FFF"
-        app:layout_constraintTop_toBottomOf="@id/text1"
-        app:layout_constraintStart_toStartOf="@id/text1" />
-
-    <TextView
-        android:id="@+id/text2"
-        android:background="#FFC107"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:text="wrap fixed"
-        android:layout_marginTop="2dp"
-        android:textColor="#00F"
-
-        app:layout_constraintTag="text"
-        app:layout_constraintTop_toBottomOf="@id/text1"
-        app:layout_constraintStart_toStartOf="@id/text1" />
-
-    <View
-        android:id="@+id/line2"
-        android:layout_width="430dp"
-        android:layout_height="1dp"
-        android:background="#FFF"
-        app:layout_constraintTop_toBottomOf="@id/text2"
-        app:layout_constraintStart_toStartOf="@id/text2" />
-
-    <TextView
-        android:id="@+id/text3"
-        android:background="#CDDC39"
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
-        android:text="fixed wrap"
-        android:textColor="#00F"
-        android:layout_marginTop="2dp"
-
-        app:layout_constraintTag="text"
-        app:layout_constraintTop_toBottomOf="@id/text2"
-        app:layout_constraintStart_toStartOf="@id/text2" />
-
-    <View
-        android:id="@+id/line3"
-        android:layout_width="430dp"
-        android:layout_height="1dp"
-        android:background="#FFF"
-        app:layout_constraintTop_toBottomOf="@id/text3"
-        app:layout_constraintStart_toStartOf="@id/text3" />
-
-    <TextView
-        android:id="@+id/text4"
-        android:background="#FFEB3B"
-        android:layout_width="130dp"
-        android:layout_height="40dp"
-        android:text="fixed fixed"
-        android:textColor="#00F"
-        android:layout_marginTop="2dp"
-        android:gravity="center"
-
-        app:layout_constraintTag="text"
-        app:layout_constraintTop_toBottomOf="@id/text3"
-        app:layout_constraintStart_toStartOf="@id/text3" />
-
-    <View
-        android:id="@+id/view"
-        android:layout_width="430dp"
-        android:layout_height="1dp"
-        android:background="#FFF"
-        app:layout_constraintTop_toBottomOf="@id/text4"
-        app:layout_constraintStart_toStartOf="@id/text4" />
-    <TextView
-        android:id="@+id/text5"
-        android:background="#FFEB3B"
-        android:layout_width="130dp"
-        android:layout_height="40dp"
-        android:text="fixed fixed"
-        android:layout_marginTop="2dp"
-        android:gravity="center"
-        android:textColor="#00F"
-        android:autoSizeTextType="uniform"
-        app:layout_constraintTag="text"
-        app:layout_constraintTop_toBottomOf="@id/text4"
-        app:layout_constraintStart_toStartOf="@id/text4" />
     <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/mtext1"
         android:background="#FFD9CD"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="wrap wrap"
+        android:text="WW"
         android:textColor="#00F"
-        android:textSize="32sp"
+        android:textSize="128sp"
         android:padding="10dp"
         app:borderRound="5dp"
+        app:textBackground="@drawable/rainbow"
+        app:textOutlineColor = "#0F0"
         android:layout_marginTop="32dp"
-        android:layout_marginStart="232dp"
-        android:layout_marginLeft="232dp"
         app:layout_constraintTag="text"
+        app:textBackgroundRotate="0"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <View
-        android:id="@+id/dot"
-        android:layout_width="3dp"
-        android:layout_height="3dp"
-        android:background="#FFF"
-        app:layout_constraintTop_toBottomOf="@id/text2"
-        app:layout_constraintStart_toStartOf="@id/text2" />
+
     <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/mtext2"
         android:background="#FFF3CF"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:text="wrap fixed"
+        android:text="DD"
         android:layout_marginTop="2dp"
+        app:textOutlineColor = "#0F0"
+        app:textBackground="@drawable/rainbow"
         app:layout_constraintTag="text"
+        android:textSize="32sp"
         app:layout_constraintTop_toBottomOf="@id/mtext1"
         app:layout_constraintStart_toStartOf="@id/mtext1" />
 
@@ -152,10 +52,11 @@
         android:background="#F7FADB"
         android:layout_width="130dp"
         android:layout_height="wrap_content"
-        android:text="fixed wrap"
+        android:text="CC"
         android:layout_marginTop="2dp"
         android:gravity="right"
-
+        app:textOutlineColor = "#0F0"
+        app:textBackground="@drawable/rainbow"
         app:layout_constraintTag="text"
         app:layout_constraintTop_toBottomOf="@id/mtext2"
         app:layout_constraintStart_toStartOf="@id/mtext2" />
@@ -165,9 +66,11 @@
         android:background="#F6EFAB"
         android:layout_width="130dp"
         android:layout_height="40dp"
-        android:text="fixed fixed"
+        android:text="BB"
         android:layout_marginTop="2dp"
         android:gravity="center"
+        app:textOutlineColor = "#0F0"
+        app:textBackground="@drawable/rainbow"
         app:layout_constraintTag="text"
         app:layout_constraintTop_toBottomOf="@id/mtext3"
         app:layout_constraintStart_toStartOf="@id/mtext3" />
@@ -177,26 +80,46 @@
         android:background="#F3EFD3"
         android:layout_width="130dp"
         android:layout_height="40dp"
-        android:text="fixed fixed"
+        android:text="AA"
         android:layout_marginTop="2dp"
         android:gravity="center"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
         android:autoSizeTextType="uniform"
+        android:fontFamily="serif"
+        app:textOutlineColor = "#0F0"
         app:layout_constraintTag="text"
-        app:layout_constraintTop_toBottomOf="@id/text5"
-        app:layout_constraintStart_toStartOf="@id/text5" />
+        app:textBackground="@drawable/img3"
+        app:layout_constraintTop_toBottomOf="@id/mtext4"
+        app:layout_constraintStart_toStartOf="@id/mtext4" />
 
+    <androidx.constraintlayout.utils.widget.MotionLabel
+        android:id="@+id/mtext6"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:text="X"
+        android:layout_marginTop="2dp"
+        android:gravity="center"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
+        android:autoSizeTextType="uniform"
+        android:fontFamily="serif"
+        app:textOutlineColor = "#0F0"
+        app:layout_constraintTag="text"
+        app:textBackground="@drawable/img3"
+        app:layout_constraintTop_toBottomOf="@id/mtext5"
+        app:layout_constraintStart_toStartOf="@id/mtext5" />
 
+    <!-- ========================================================    -->
     <TextView
         android:id="@+id/textView12"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Test of text"
         android:layout_marginTop="2dp"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 
     <Button
         android:id="@+id/run"
