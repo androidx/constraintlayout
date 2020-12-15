@@ -3246,7 +3246,6 @@ public class ConstraintLayout extends ViewGroup {
          * @param value
          */
         private void parseDimensionRatioString(String value) {
-            System.out.println("parse dimention ratio <" + value + ">");
             dimensionRatio = value;
             dimensionRatioValue = Float.NaN;
             dimensionRatioSide = UNSET;
@@ -3305,14 +3304,11 @@ public class ConstraintLayout extends ViewGroup {
          * @param orientation
          */
         private void parseDimensionConstraints(TypedArray a, int attr, int orientation) {
-            System.out.println("constraint dimension " + orientation);
             TypedValue v = a.peekValue(attr);
             int type = v.type;
-            System.out.println("constraint width type:" + type);
             switch (type) {
                 case TypedValue.TYPE_DIMENSION: {
                     int value = a.getDimensionPixelSize(attr, 0);
-                    System.out.println("read dimension <" + value + ">");
                     if (orientation == HORIZONTAL) {
                         width = value;
                     } else {
@@ -3321,7 +3317,6 @@ public class ConstraintLayout extends ViewGroup {
                 } break;
                 case TypedValue.TYPE_STRING: {
                     String value = a.getString(attr);
-                    System.out.println("read string <" + value + ">");
                     parseDimensionConstraintsString(value, orientation);
                 } break;
                 default: {
@@ -3377,7 +3372,6 @@ public class ConstraintLayout extends ViewGroup {
             if (equalIndex > 0 && equalIndex < len - 1) {
                 String key = value.substring(0, equalIndex);
                 String val = value.substring(equalIndex + 1);
-                System.out.println("KEY <" + key + "> VAL <" + val + ">");
                 if (val.length() > 0) {
                     key = key.trim();
                     val = val.trim();
