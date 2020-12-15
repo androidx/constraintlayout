@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/motionLayout"
-    app:layoutDescription="@xml/verification_scene_300"
+    app:layoutDescription="@xml/verification_scene_306"
     android:layout_width="match_parent"
     app:layout_optimizationLevel="none"
     android:background="#B6D5EA"

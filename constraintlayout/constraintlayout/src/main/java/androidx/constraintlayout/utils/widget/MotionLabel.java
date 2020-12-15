@@ -97,6 +97,8 @@ public class MotionLabel extends View implements FloatLayout {
     private Bitmap mTextBackgroundBitmap;
     private BitmapShader mTextShader;
     private Matrix mTextShaderMatrix;
+    private float mFloatLeft;
+    private float mFloatTop;
 
     public MotionLabel(Context context) {
         super(context);
@@ -212,6 +214,8 @@ public class MotionLabel extends View implements FloatLayout {
         if (mTextShaderMatrix == null) {
             return;
         }
+        mFloatLeft = l;
+        mFloatTop = t;
         mFloatWidth = r - l;
         mFloatHeight = t - b;
         updateViewMatrix();
@@ -374,7 +378,12 @@ public class MotionLabel extends View implements FloatLayout {
             }
 
         }
-
+        if (mUseOutline) {
+ 
+            adjustTexture(l, t, r, b);
+ 
+            buildShape();
+        }
     }
 
     @Override
@@ -401,6 +410,8 @@ public class MotionLabel extends View implements FloatLayout {
                 mTempPaint.set(mPaint);
                 paintTextSize = mTempPaint.getTextSize();
             }
+            mFloatLeft = l;
+            mFloatTop = t;
             mFloatWidth = r - l;
             mFloatHeight = t - b;
 
