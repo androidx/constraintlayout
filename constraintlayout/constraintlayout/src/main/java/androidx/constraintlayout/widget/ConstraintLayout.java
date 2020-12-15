@@ -2533,6 +2533,11 @@ public class ConstraintLayout extends ViewGroup {
         boolean horizontalDimensionFixed = true;
         boolean verticalDimensionFixed = true;
 
+        private static final int INTERNAL_MATCH_PARENT = -1;
+        private static final int INTERNAL_WRAP_CONTENT = -2;
+        private static final int INTERNAL_MATCH_CONSTRAINT = -3;
+        private static final int INTERNAL_WRAP_CONTENT_CONSTRAINED = -4;
+
         boolean needsBaseline = false;
         boolean isGuideline = false;
         boolean isHelper = false;
@@ -2555,6 +2560,13 @@ public class ConstraintLayout extends ViewGroup {
         int layoutDirection = View.LAYOUT_DIRECTION_LTR;
 
         ConstraintWidget widget = new ConstraintWidget();
+
+        boolean widthSet = false;
+        boolean heightSet = false;
+
+        final private String KEY_WEIGHT = "weight";
+        final private String KEY_RATIO = "ratio";
+        final private String KEY_PERCENT_PARENT = "parent";
 
         /**
          * @hide
@@ -2660,6 +2672,8 @@ public class ConstraintLayout extends ViewGroup {
             this.resolvedHorizontalBias = source.resolvedHorizontalBias;
             this.constraintTag = source.constraintTag;
             this.widget = source.widget;
+            this.widthSet = source.widthSet;
+            this.heightSet = source.heightSet;
         }
 
         private static class Table {
@@ -2853,50 +2867,23 @@ public class ConstraintLayout extends ViewGroup {
                         break;
                     }
                     case Table.LAYOUT_CONSTRAINT_WIDTH: {
-                        System.out.println("constraint width!");
-                        TypedValue v = a.peekValue(attr);
-                            int type = v.type;
-                            System.out.println("constraint width type:" + type);
-                            switch (type) {
-                                case TypedValue.TYPE_NULL: {
-                                    // nothing.
-                                } break;
-                                case TypedValue.TYPE_DIMENSION: {
-                                    int value = a.getDimensionPixelSize(attr, 0);
-                                    System.out.println("read dimension <" + value + ">");
-                                } break;
-                                case TypedValue.TYPE_REFERENCE: {
-                                    int reference = a.getResourceId(attr, 0);
-                                    System.out.println("read reference <" + reference + ">");
-                                } break;
-                                case TypedValue.TYPE_FLOAT: {
-                                    float value = a.getFloat(attr, 0);
-                                    System.out.println("read float value <" + value + ">");
-                                } break;
-                                case TypedValue.TYPE_STRING: {
-                                    String value = a.getString(attr);
-                                    System.out.println("read string <" + value + ">");
-                                } break;
-                                case 18: {
-                                    int value = a.getResourceId(attr, -1);
-                                    if (value != -1) {
-                                        System.out.println("read reference value <" + value + ">");
-                                    }
-                                } break;
-                                default: {
-                                    int value = a.getInt(attr, 0);
-                                    System.out.println("read int value <" + value + ">");
-                                }
-                            }
-
+                        parseDimensionConstraints(a, attr, HORIZONTAL);
+                        widthSet = true;
+                        break;
+                    }
+                    case Table.LAYOUT_CONSTRAINT_HEIGHT: {
+                        parseDimensionConstraints(a, attr, VERTICAL);
+                        heightSet = true;
                         break;
                     }
                     case Table.LAYOUT_WIDTH: {
                         width = a.getLayoutDimension(R.styleable.ConstraintLayout_Layout_android_layout_width, "layout_width");
+                        widthSet = true;
                         break;
                     }
                     case Table.LAYOUT_HEIGHT: {
                         height = a.getLayoutDimension(R.styleable.ConstraintLayout_Layout_android_layout_height, "layout_height");
+                        heightSet = true;
                         break;
                     }
                     case Table.LAYOUT_CONSTRAINT_LEFT_TO_LEFT_OF: {
@@ -3127,53 +3114,7 @@ public class ConstraintLayout extends ViewGroup {
                         break;
                     }
                     case Table.LAYOUT_CONSTRAINT_DIMENSION_RATIO: {
-                        dimensionRatio = a.getString(attr);
-                        dimensionRatioValue = Float.NaN;
-                        dimensionRatioSide = UNSET;
-                        if (dimensionRatio != null) {
-                            int len = dimensionRatio.length();
-                            int commaIndex = dimensionRatio.indexOf(',');
-                            if (commaIndex > 0 && commaIndex < len - 1) {
-                                String dimension = dimensionRatio.substring(0, commaIndex);
-                                if (dimension.equalsIgnoreCase("W")) {
-                                    dimensionRatioSide = HORIZONTAL;
-                                } else if (dimension.equalsIgnoreCase("H")) {
-                                    dimensionRatioSide = VERTICAL;
-                                }
-                                commaIndex++;
-                            } else {
-                                commaIndex = 0;
-                            }
-                            int colonIndex = dimensionRatio.indexOf(':');
-                            if (colonIndex >= 0 && colonIndex < len - 1) {
-                                String nominator = dimensionRatio.substring(commaIndex, colonIndex);
-                                String denominator = dimensionRatio.substring(colonIndex + 1);
-                                if (nominator.length() > 0 && denominator.length() > 0) {
-                                    try {
-                                        float nominatorValue = Float.parseFloat(nominator);
-                                        float denominatorValue = Float.parseFloat(denominator);
-                                        if (nominatorValue > 0 && denominatorValue > 0) {
-                                            if (dimensionRatioSide == VERTICAL) {
-                                                dimensionRatioValue = Math.abs(denominatorValue / nominatorValue);
-                                            } else {
-                                                dimensionRatioValue = Math.abs(nominatorValue / denominatorValue);
-                                            }
-                                        }
-                                    } catch (NumberFormatException e) {
-                                        // Ignore
-                                    }
-                                }
-                            } else {
-                                String r = dimensionRatio.substring(commaIndex);
-                                if (r.length() > 0) {
-                                    try {
-                                        dimensionRatioValue = Float.parseFloat(r);
-                                    } catch (NumberFormatException e) {
-                                        // Ignore
-                                    }
-                                }
-                            }
-                        }
+                        parseDimensionRatioString(a.getString(attr));
                         break;
                     }
                     case Table.LAYOUT_CONSTRAINT_HORIZONTAL_WEIGHT: {
@@ -3299,10 +3240,196 @@ public class ConstraintLayout extends ViewGroup {
             validate();
         }
 
+        /**
+         * Parse the dimension ratio string
+         *
+         * @param value
+         */
+        private void parseDimensionRatioString(String value) {
+            System.out.println("parse dimention ratio <" + value + ">");
+            dimensionRatio = value;
+            dimensionRatioValue = Float.NaN;
+            dimensionRatioSide = UNSET;
+            if (dimensionRatio != null) {
+                int len = dimensionRatio.length();
+                int commaIndex = dimensionRatio.indexOf(',');
+                if (commaIndex > 0 && commaIndex < len - 1) {
+                    String dimension = dimensionRatio.substring(0, commaIndex);
+                    if (dimension.equalsIgnoreCase("W")) {
+                        dimensionRatioSide = HORIZONTAL;
+                    } else if (dimension.equalsIgnoreCase("H")) {
+                        dimensionRatioSide = VERTICAL;
+                    }
+                    commaIndex++;
+                } else {
+                    commaIndex = 0;
+                }
+                int colonIndex = dimensionRatio.indexOf(':');
+                if (colonIndex >= 0 && colonIndex < len - 1) {
+                    String nominator = dimensionRatio.substring(commaIndex, colonIndex);
+                    String denominator = dimensionRatio.substring(colonIndex + 1);
+                    if (nominator.length() > 0 && denominator.length() > 0) {
+                        try {
+                            float nominatorValue = Float.parseFloat(nominator);
+                            float denominatorValue = Float.parseFloat(denominator);
+                            if (nominatorValue > 0 && denominatorValue > 0) {
+                                if (dimensionRatioSide == VERTICAL) {
+                                    dimensionRatioValue = Math.abs(denominatorValue / nominatorValue);
+                                } else {
+                                    dimensionRatioValue = Math.abs(nominatorValue / denominatorValue);
+                                }
+                            }
+                        } catch (NumberFormatException e) {
+                            // Ignore
+                        }
+                    }
+                } else {
+                    String r = dimensionRatio.substring(commaIndex);
+                    if (r.length() > 0) {
+                        try {
+                            dimensionRatioValue = Float.parseFloat(r);
+                        } catch (NumberFormatException e) {
+                            // Ignore
+                        }
+                    }
+                }
+            }
+            System.out.println("ratio found: " + dimensionRatioValue);
+        }
+
+        /**
+         * Parse the constraint dimension attribute
+         *
+         * @param a
+         * @param attr
+         * @param orientation
+         */
+        private void parseDimensionConstraints(TypedArray a, int attr, int orientation) {
+            System.out.println("constraint dimension " + orientation);
+            TypedValue v = a.peekValue(attr);
+            int type = v.type;
+            System.out.println("constraint width type:" + type);
+            switch (type) {
+                case TypedValue.TYPE_DIMENSION: {
+                    int value = a.getDimensionPixelSize(attr, 0);
+                    System.out.println("read dimension <" + value + ">");
+                    if (orientation == HORIZONTAL) {
+                        width = value;
+                    } else {
+                        height = value;
+                    }
+                } break;
+                case TypedValue.TYPE_STRING: {
+                    String value = a.getString(attr);
+                    System.out.println("read string <" + value + ">");
+                    parseDimensionConstraintsString(value, orientation);
+                } break;
+                default: {
+                    int value = a.getInt(attr, 0);
+                    switch (value) {
+                        case INTERNAL_WRAP_CONTENT:
+                        case INTERNAL_MATCH_PARENT: {
+                            if (orientation == HORIZONTAL) {
+                                width = value;
+                            } else {
+                                height = value;
+                            }
+                        } break;
+                        case INTERNAL_MATCH_CONSTRAINT: {
+                            if (orientation == HORIZONTAL) {
+                                width = MATCH_CONSTRAINT;
+                            } else {
+                                height = MATCH_CONSTRAINT;
+                            }
+                        } break;
+                        case INTERNAL_WRAP_CONTENT_CONSTRAINED: {
+                            if (orientation == HORIZONTAL) {
+                                width = WRAP_CONTENT;
+                                constrainedWidth = true;
+                            } else {
+                                height = WRAP_CONTENT;
+                                constrainedHeight = true;
+                            }
+                        } break;
+                    }
+                }
+            }
+        }
+
+        /**
+         * Parse the constraints string dimension
+         *
+         * @param value
+         * @param orientation
+         */
+        private void parseDimensionConstraintsString(String value, int orientation) {
+            // String should be of the form
+            // "<Key>=<Value>"
+            // supported Keys are:
+            // "weight=<value>"
+            // "ratio=<value>"
+            // "parent=<value>"
+            if (value == null) {
+                return;
+            }
+            int equalIndex = value.indexOf('=');
+            int len = value.length();
+            if (equalIndex > 0 && equalIndex < len - 1) {
+                String key = value.substring(0, equalIndex);
+                String val = value.substring(equalIndex + 1);
+                System.out.println("KEY <" + key + "> VAL <" + val + ">");
+                if (val.length() > 0) {
+                    key = key.trim();
+                    val = val.trim();
+                    if (KEY_RATIO.equalsIgnoreCase(key)) {
+                        if (orientation == HORIZONTAL) {
+                            width = MATCH_CONSTRAINT;
+                        } else {
+                            height = MATCH_CONSTRAINT;
+                        }
+                        parseDimensionRatioString(val);
+                    } else if (KEY_WEIGHT.equalsIgnoreCase(key)) {
+                        try {
+                            float weight = Float.parseFloat(val);
+                            if (orientation == HORIZONTAL) {
+                                width = MATCH_CONSTRAINT;
+                                horizontalWeight = weight;
+                            } else {
+                                height = MATCH_CONSTRAINT;
+                                verticalWeight = weight;
+                            }
+                        } catch (NumberFormatException e) {
+                            // nothing
+                        }
+                    } else if (KEY_PERCENT_PARENT.equalsIgnoreCase(key)) {
+                        try {
+                            float percent = Math.min(1, Float.parseFloat(val));
+                            percent = Math.max(0, percent);
+                            if (orientation == HORIZONTAL) {
+                                width = MATCH_CONSTRAINT;
+                                matchConstraintPercentWidth = percent;
+                                matchConstraintDefaultWidth = MATCH_CONSTRAINT_PERCENT;
+                            } else {
+                                height = MATCH_CONSTRAINT;
+                                matchConstraintPercentHeight = percent;
+                                matchConstraintDefaultHeight = MATCH_CONSTRAINT_PERCENT;
+                            }
+                        } catch (NumberFormatException e) {
+                            // nothing
+                        }
+                    }
+                }
+            }
+        }
+
         public void validate() {
             isGuideline = false;
             horizontalDimensionFixed = true;
             verticalDimensionFixed = true;
+            if (dimensionRatio != null && !widthSet && !heightSet) {
+                width = MATCH_CONSTRAINT;
+                height = MATCH_CONSTRAINT;
+            }
             if (width == WRAP_CONTENT && constrainedWidth) {
                 horizontalDimensionFixed = false;
                 if (matchConstraintDefaultWidth == MATCH_CONSTRAINT_SPREAD) {

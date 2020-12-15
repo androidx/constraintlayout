@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
@@ -10,11 +9,15 @@
 
    <TextView
        android:id="@+id/textview1"
-       app:layout_constraintWidth="@id/fold"
        android:background="#FF0"
+       android:gravity="center"
+       android:text="This ABC..."
        android:textSize="32sp"
-       app:layout_marginBaseline="-20dp"
        app:layout_constraintStart_toStartOf="parent"
-       android:text="This Ppq..." />
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintWidth="parent=0.8"
+       app:layout_constraintHeight="ratio=1:1"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
