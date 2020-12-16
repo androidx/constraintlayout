@@ -188,12 +188,10 @@ class MotionPaths implements Comparable<MotionPaths> {
         mRelativeToController = mc;
 
         x = (float) Math.hypot(dy, dx);
-        Log.v(TAG, Debug.getLoc()+" atan2 = "+ Math.toDegrees((float) (Math.atan2(dy, dx)+Math.PI/2)));
         if (Float.isNaN(mRelativeAngle)) {
-            y = (float) (Math.atan2(dy, dx)+Math.PI/2);
-       } else {
+            y = (float) (Math.atan2(dy, dx) + Math.PI / 2);
+        } else {
             y = (float) Math.toRadians(mRelativeAngle);
-            Log.v(TAG, Debug.getLoc()+" mRelativeAngle = "+mRelativeAngle);
 
         }
     }

@@ -1441,7 +1441,7 @@
         <attr name="android:fontFamily" />
         <attr name="android:gravity" />
         <attr name="textPanX" format="float" />
-        <attr name="textBacX" format="float"/>
+        <attr name="textPanY" format="float"/>
         <attr name="android:typeface" />
         <attr name="android:shadowRadius" />
         <attr name="android:textStyle" />

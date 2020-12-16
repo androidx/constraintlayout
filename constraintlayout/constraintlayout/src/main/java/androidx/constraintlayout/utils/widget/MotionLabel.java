@@ -26,7 +26,6 @@ import android.graphics.Matrix;
 import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PathMeasure;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
@@ -56,10 +55,7 @@ import static android.widget.TextView.AUTO_SIZE_TEXT_TYPE_NONE;
  */
 public class MotionLabel extends View implements FloatLayout {
     static String TAG = "MotionLabel";
-    PathMeasure mMeasure = new PathMeasure();
-    float[] mDrawPoints = new float[10000];
     TextPaint mPaint = new TextPaint();
-    int mCount = 0;
     Path mPath = new Path();
     private int mTextFillColor = 0xFFFF;
     private int mTextOutlineColor = 0xFFFF;
@@ -69,7 +65,7 @@ public class MotionLabel extends View implements FloatLayout {
     ViewOutlineProvider mViewOutlineProvider;
     RectF mRect;
 
-    private int mTextSize = 48;
+    private float mTextSize = 48;
     private int mStyleIndex;
     private int mTypefaceIndex;
     private float mTextOutlineThickness = 0;
@@ -102,6 +98,7 @@ public class MotionLabel extends View implements FloatLayout {
     private int mTxtBackgroundMode = 0;
     private float mTextPanX = 0;
     private float mTextPanY = 0;
+
     public MotionLabel(Context context) {
         super(context);
         init(context, null);
@@ -134,7 +131,7 @@ public class MotionLabel extends View implements FloatLayout {
                 } else if (attr == R.styleable.MotionLabel_android_fontFamily) {
                     mFontFamily = a.getString(attr);
                 } else if (attr == R.styleable.MotionLabel_android_textSize) {
-                    mTextSize = a.getDimensionPixelSize(attr, mTextSize);
+                    mTextSize = a.getDimensionPixelSize(attr, (int) mTextSize);
                 } else if (attr == R.styleable.MotionLabel_android_textStyle) {
                     mStyleIndex = a.getInt(attr, mStyleIndex);
                 } else if (attr == R.styleable.MotionLabel_android_typeface) {
@@ -165,9 +162,13 @@ public class MotionLabel extends View implements FloatLayout {
                     mTextBackground = a.getDrawable(attr);
                     mUseOutline = true;
                 } else if (attr == R.styleable.MotionLabel_textBackgroundPanX) {
-                    mPanX = a.getFloat(attr, mPanX);
+                    mBackgroundPanX = a.getFloat(attr, mBackgroundPanX);
                 } else if (attr == R.styleable.MotionLabel_textBackgroundPanY) {
-                    mPanY = a.getFloat(attr, mPanY);
+                    mBackgroundPanY = a.getFloat(attr, mBackgroundPanY);
+                } else if (attr == R.styleable.MotionLabel_textPanX) {
+                    mTextPanX = a.getFloat(attr, mTextPanX);
+                } else if (attr == R.styleable.MotionLabel_textPanY) {
+                    mTextPanY = a.getFloat(attr, mTextPanY);
                 } else if (attr == R.styleable.MotionLabel_textBackgroundRotate) {
                     mRotate = a.getFloat(attr, mRotate);
                 } else if (attr == R.styleable.MotionLabel_textBackgroundZoom) {
@@ -198,12 +199,13 @@ public class MotionLabel extends View implements FloatLayout {
                 iw = w;
             }
             if (ih <= 0) {
-                int h = getWidth();
+                int h = getHeight();
                 if (h == 0) {
                     h = 128;
                 }
                 ih = h;
             }
+            Log.v(TAG, Debug.getLoc() + " " + Debug.getName(this) + " " + iw + "  " + ih);
 
             mTextBackgroundBitmap = Bitmap.createBitmap(iw, ih, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(mTextBackgroundBitmap);
@@ -271,49 +273,24 @@ public class MotionLabel extends View implements FloatLayout {
         }
     }
 
-    float getHorizontalOffset() {
-        Paint.FontMetrics fm = mPaint.getFontMetrics();
-        float hoffset = 0;
-        final int gravity = mGravity & Gravity.HORIZONTAL_GRAVITY_MASK;
+    private float getHorizontalOffset() {
         float textWidth = mPaint.measureText(mText, 0, mText.length());
-
-        if (gravity != Gravity.LEFT) {
-            float boxWidth = getMeasuredWidth() - getPaddingLeft() -
-                    getPaddingRight();
-            if (!Float.isNaN(mFloatWidth)) {
-                boxWidth = mFloatWidth - getPaddingLeft() -
-                        getPaddingRight();
-            }
-
-
-            if (textWidth < boxWidth) {
-                if (gravity == Gravity.RIGHT)
-                    hoffset = boxWidth - textWidth;
-                else // (gravity == Gravity.CENTER_VERTICAL)
-                    hoffset = (boxWidth - textWidth) / 2.0f;
-            }
-        }
-        return hoffset;
+        float boxWidth = ((Float.isNaN(mFloatWidth)) ? getMeasuredWidth() : mFloatWidth)
+                - getPaddingLeft()
+                - getPaddingRight();
+        float off = (boxWidth - textWidth) * (1 + mTextPanX) / 2.f;
+        return off;
     }
 
-    float getVerticalOffset() {
+    private float getVerticalOffset() {
         Paint.FontMetrics fm = mPaint.getFontMetrics();
-        float voffset = 0;
-        final int gravity = mGravity & Gravity.VERTICAL_GRAVITY_MASK;
 
-        if (gravity != Gravity.TOP) {
-            int boxht = getMeasuredHeight() - getPaddingTop() -
-                    getPaddingBottom();
+        float boxHeight = ((Float.isNaN(mFloatHeight)) ? getMeasuredHeight() : mFloatHeight)
+                - getPaddingTop()
+                - getPaddingBottom();
 
-            int textht = (int) (fm.bottom - fm.ascent);
-            if (textht < boxht) {
-                if (gravity == Gravity.BOTTOM)
-                    voffset = boxht - textht;
-                else // (gravity == Gravity.CENTER_VERTICAL)
-                    voffset = (boxht - textht) / 2.0f;
-            }
-        }
-        return voffset - (int) fm.ascent;
+        float textHeight =  (fm.descent - fm.ascent);
+        return (boxHeight - textHeight) * (1 - mTextPanY) / 2 - (int) fm.ascent;
     }
 
     private void setUpTheme(Context context, @Nullable AttributeSet attrs) {
@@ -337,7 +314,7 @@ public class MotionLabel extends View implements FloatLayout {
         mPaint.setStrokeWidth(mTextOutlineThickness);
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mPaint.setFlags(Paint.SUBPIXEL_TEXT_FLAG);
-        setRawTextSize(mTextSize);
+        setTextSize(mTextSize);
         mPaint.setAntiAlias(true);
         //   mLayout = new StaticLayout(mText, mPaint, getWidth(), Layout.Alignment.ALIGN_CENTER, 1, 0, true);
     }
@@ -360,10 +337,6 @@ public class MotionLabel extends View implements FloatLayout {
         RectF rect = new RectF();
         rect.bottom = getHeight();
         rect.right = getWidth();
-
-
-        //  matrix.setRectToRect(src, rect, Matrix.ScaleToFit.CENTER);
-
         mNotBuilt = false;
     }
 
@@ -374,6 +347,9 @@ public class MotionLabel extends View implements FloatLayout {
     @Override
     public void layout(int l, int t, int r, int b) {
         super.layout(l, t, r, b);
+
+        mFloatWidth = r - l;
+        mFloatHeight = b - t;
         if (mAutoSize) {
 
             if (mTempRect == null) {
@@ -386,23 +362,18 @@ public class MotionLabel extends View implements FloatLayout {
             mTempPaint.getTextBounds(mText, 0, mText.length(), mTempRect);
             int tw = mTempRect.width();
             int th = (int) (1.3f * mTempRect.height());
-            float vw = r - l - mPaddingRight - mPaddingLeft;
-            float vh = b - t - mPaddingBottom - mPaddingTop;
-            if (!Float.isNaN(mFloatWidth)) {
-                vw = mFloatWidth - mPaddingRight - mPaddingLeft;
-                vh = mFloatHeight - mPaddingBottom - mPaddingTop;
-            }
+
+            float vw = mFloatWidth - mPaddingRight - mPaddingLeft;
+            float vh = mFloatHeight - mPaddingBottom - mPaddingTop;
+
             if (tw * vh > th * vw) { // width limited tw/vw > th/vh
                 mPaint.setTextSize((paintTextSize * vw) / (tw));
             } else { // height limited
                 mPaint.setTextSize((paintTextSize * vh) / (th));
             }
-
         }
         if (mUseOutline) {
- 
             adjustTexture(l, t, r, b);
- 
             buildShape();
         }
     }
@@ -415,6 +386,8 @@ public class MotionLabel extends View implements FloatLayout {
         mDeltatBottom = b - (int) (0.5f + b);
         int w = (int) (0.5f + r) - (int) (0.5f + l);
         int h = (int) (0.5f + b) - (int) (0.5f + t);
+        mFloatWidth = r - l;
+        mFloatHeight = b - t;
         adjustTexture(l, t, r, b);
         if (getMeasuredHeight() != h || getMeasuredWidth() != w) {
             int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(w, View.MeasureSpec.EXACTLY);
@@ -468,11 +441,11 @@ public class MotionLabel extends View implements FloatLayout {
             if (mOutlinePositionMatrix == null) {
                 mOutlinePositionMatrix = new Matrix();
             }
-
+            Paint tmp = new Paint(mPaint);
             mOutlinePositionMatrix.reset();
             float x = mPaddingLeft + getHorizontalOffset();
             float y = mPaddingTop + getVerticalOffset();
-            mOutlinePositionMatrix.preTranslate(x, y);
+            mOutlinePositionMatrix.postTranslate(x, y);
             mPath.transform(mOutlinePositionMatrix);
 
             if (mTextShader != null) {
@@ -492,15 +465,22 @@ public class MotionLabel extends View implements FloatLayout {
             canvas.drawPath(mPath, mPaint);
 
             mOutlinePositionMatrix.reset();
-            x = mPaddingLeft + getHorizontalOffset();
-            y = mPaddingTop + getVerticalOffset();
-            mOutlinePositionMatrix.preTranslate(-x, -y);
+            mOutlinePositionMatrix.postTranslate(-x, -y);
             mPath.transform(mOutlinePositionMatrix);
+            mPaint.set(tmp);
         } else {
+            float x = mPaddingLeft + getHorizontalOffset();
+            float y = mPaddingTop + getVerticalOffset();
+            mOutlinePositionMatrix.reset();
+            mOutlinePositionMatrix.preTranslate(x, y);
+            mPath.transform(mOutlinePositionMatrix);
             mPaint.setColor(mTextFillColor);
             mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
             mPaint.setStrokeWidth(mTextOutlineThickness);
             canvas.drawPath(mPath, mPaint);
+            mOutlinePositionMatrix.reset();
+            mOutlinePositionMatrix.preTranslate(-x, -y);
+            mPath.transform(mOutlinePositionMatrix);
         }
     }
 
@@ -767,36 +747,11 @@ public class MotionLabel extends View implements FloatLayout {
      * @param size
      */
     public void setTextSize(float size) {
-        setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
-    }
-
-    /**
-     * Set the default text size to a given unit and value.  See {@link
-     * TypedValue} for the possible dimension units.
-     *
-     * @param unit The desired dimension unit.
-     * @param size The desired size in the given units.
-     * @attr ref android.R.styleable#TextView_textSize
-     */
-    public void setTextSize(int unit, float size) {
-        Context c = getContext();
-        Resources r;
-        if (c == null)
-            r = Resources.getSystem();
-        else
-            r = c.getResources();
-        setRawTextSize(TypedValue.applyDimension(
-                unit, size, r.getDisplayMetrics()));
-    }
-
-    private void setRawTextSize(float size) {
-        if (size != mPaint.getTextSize()) {
-            mPaint.setTextSize(size);
-            if (mLayout != null) {
-                requestLayout();
-                invalidate();
-            }
-        }
+        mTextSize = size;
+        mPaint.setTextSize(size);
+        buildShape();
+        requestLayout();
+        invalidate();
     }
 
     public int getmTextOutlineColor() {
@@ -805,11 +760,12 @@ public class MotionLabel extends View implements FloatLayout {
 
     public void setmTextOutlineColor(int mTextOutlineColor) {
         this.mTextOutlineColor = mTextOutlineColor;
+        invalidate();
     }
 
     // ============================ TextureTransformLogic ===============================//
-    float mPanX = Float.NaN;
-    float mPanY = Float.NaN;
+    float mBackgroundPanX = Float.NaN;
+    float mBackgroundPanY = Float.NaN;
     float mZoom = Float.NaN;
     float mRotate = Float.NaN;
 
@@ -823,7 +779,7 @@ public class MotionLabel extends View implements FloatLayout {
      * @return the pan in X. Where 0 is centered = Float. NaN if not set
      */
     public float getTextBackgroundPanX() {
-        return mPanX;
+        return mBackgroundPanX;
     }
 
     /**
@@ -836,7 +792,7 @@ public class MotionLabel extends View implements FloatLayout {
      * @return pan in y. Where 0 is centered NaN if not set
      */
     public float getTextBackgroundPanY() {
-        return mPanY;
+        return mBackgroundPanY;
     }
 
     /**
@@ -867,8 +823,9 @@ public class MotionLabel extends View implements FloatLayout {
      * @param pan sets the pan in X. Where 0 is centered
      */
     public void setTextBackgroundPanX(float pan) {
-        mPanX = pan;
+        mBackgroundPanX = pan;
         updateViewMatrix();
+        invalidate();
     }
 
     /**
@@ -879,10 +836,11 @@ public class MotionLabel extends View implements FloatLayout {
      * if image height == screen height it does nothing
      *
      * @param pan sets the pan in X. Where 0 is centered
-     */ 
+     */
     public void setTextBackgroundPanY(float pan) {
-        mPanY = pan;
+        mBackgroundPanY = pan;
         updateViewMatrix();
+        invalidate();
     }
 
     /**
@@ -893,6 +851,7 @@ public class MotionLabel extends View implements FloatLayout {
     public void setTextBackgroundZoom(float zoom) {
         mZoom = zoom;
         updateViewMatrix();
+        invalidate();
     }
 
     /**
@@ -903,11 +862,12 @@ public class MotionLabel extends View implements FloatLayout {
     public void setTextBackgroundRotate(float rotation) {
         mRotate = rotation;
         updateViewMatrix();
+        invalidate();
     }
 
     private void updateViewMatrix() {
-        float panX = (Float.isNaN(mPanX)) ? 0 : mPanX;
-        float panY = (Float.isNaN(mPanY)) ? 0 : mPanY;
+        float panX = (Float.isNaN(mBackgroundPanX)) ? 0 : mBackgroundPanX;
+        float panY = (Float.isNaN(mBackgroundPanY)) ? 0 : mBackgroundPanY;
         float zoom = (Float.isNaN(mZoom)) ? 1 : mZoom;
         float rota = (Float.isNaN(mRotate)) ? 0 : mRotate;
 
@@ -923,23 +883,24 @@ public class MotionLabel extends View implements FloatLayout {
         mTextShaderMatrix.postTranslate(tx, ty);
         mTextShaderMatrix.postRotate(rota, sw / 2, sh / 2);
         mTextShader.setLocalMatrix(mTextShaderMatrix);
-
     }
 
     public float getTextPanX() {
         return mTextPanX;
     }
 
-    public void setTextPanX(float mTextPanX) {
-        this.mTextPanX = mTextPanX;
+    public void setTextPanX(float textPanX) {
+        mTextPanX = textPanX;
+        invalidate();
     }
 
     public float getTextPanY() {
         return mTextPanY;
     }
 
-    public void setTextPanY(float mTextPanY) {
-        this.mTextPanY = mTextPanY;
+    public void setTextPanY(float textPanY) {
+        mTextPanY = textPanY;
+        invalidate();
     }
 
 

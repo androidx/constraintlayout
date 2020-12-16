@@ -17,7 +17,7 @@
         tools:layout_editor_absoluteX="147dp"
         tools:layout_editor_absoluteY="230dp" />
 
-    <android.support.constraint.app.FadeMove
+    <androidx.constraintlayout.helper.widget.MotionEffect
         android:id="@+id/foo"
         android:layout_width="64dp"
         android:layout_height="64dp"
