@@ -35,7 +35,6 @@ import android.os.Build;
 import android.text.Layout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -43,7 +42,6 @@ import android.view.ViewOutlineProvider;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.FloatLayout;
 import androidx.constraintlayout.widget.R;
 
@@ -190,7 +188,6 @@ public class MotionLabel extends View implements FloatLayout {
             mTextShaderMatrix = new Matrix();
             int iw = mTextBackground.getIntrinsicWidth();
             int ih = mTextBackground.getIntrinsicHeight();
-            Log.v(TAG, Debug.getLoc() + " iw,ih = " + iw + "," + ih);
             if (iw <= 0) {
                 int w = getWidth();
                 if (w == 0) {
@@ -205,7 +202,6 @@ public class MotionLabel extends View implements FloatLayout {
                 }
                 ih = h;
             }
-            Log.v(TAG, Debug.getLoc() + " " + Debug.getName(this) + " " + iw + "  " + ih);
 
             mTextBackgroundBitmap = Bitmap.createBitmap(iw, ih, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(mTextBackgroundBitmap);
@@ -289,7 +285,7 @@ public class MotionLabel extends View implements FloatLayout {
                 - getPaddingTop()
                 - getPaddingBottom();
 
-        float textHeight =  (fm.descent - fm.ascent);
+        float textHeight = (fm.descent - fm.ascent);
         return (boxHeight - textHeight) * (1 - mTextPanY) / 2 - (int) fm.ascent;
     }
 
