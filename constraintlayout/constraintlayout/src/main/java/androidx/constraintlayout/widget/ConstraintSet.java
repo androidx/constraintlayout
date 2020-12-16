@@ -50,7 +50,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -78,6 +77,12 @@ import java.util.Set;
 public class ConstraintSet {
     private static final String TAG = "ConstraintSet";
     private static final String ERROR_MESSAGE = "XML parser error must be within a Constraint ";
+
+    private static final int INTERNAL_MATCH_PARENT = -1;
+    private static final int INTERNAL_WRAP_CONTENT = -2;
+    private static final int INTERNAL_MATCH_CONSTRAINT = -3;
+    private static final int INTERNAL_WRAP_CONTENT_CONSTRAINED = -4;
+
     private boolean mValidate;
     public String mIdString;
     private HashMap<String, ConstraintAttribute> mSavedAttributes = new HashMap<>();
@@ -110,6 +115,8 @@ public class ConstraintSet {
      * Calculate the size of a view in 0 dp by reducing the constrains gaps as much as possible
      */
     public static final int MATCH_CONSTRAINT_SPREAD = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_SPREAD;
+
+    public static final int MATCH_CONSTRAINT_PERCENT = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_PERCENT;
 
     /**
      * References the id of the parent.
@@ -322,6 +329,13 @@ public class ConstraintSet {
     private static final int BASELINE_TO_BOTTOM = 92;
     private static final int BASELINE_MARGIN = 93;
     private static final int GONE_BASELINE_MARGIN = 94;
+    private static final int LAYOUT_CONSTRAINT_WIDTH = 95;
+    private static final int LAYOUT_CONSTRAINT_HEIGHT = 96;
+
+    private static final String KEY_WEIGHT = "weight";
+    private static final String KEY_RATIO = "ratio";
+    private static final String KEY_PERCENT_PARENT = "parent";
+
 
     static {
         mapToConstant.append(R.styleable.Constraint_layout_constraintLeft_toLeftOf, LEFT_TO_LEFT);
@@ -373,6 +387,8 @@ public class ConstraintSet {
         mapToConstant.append(R.styleable.Constraint_android_layout_marginBottom, BOTTOM_MARGIN);
         mapToConstant.append(R.styleable.Constraint_android_layout_width, LAYOUT_WIDTH);
         mapToConstant.append(R.styleable.Constraint_android_layout_height, LAYOUT_HEIGHT);
+        mapToConstant.append(R.styleable.Constraint_layout_constraintWidth, LAYOUT_CONSTRAINT_WIDTH);
+        mapToConstant.append(R.styleable.Constraint_layout_constraintHeight, LAYOUT_CONSTRAINT_HEIGHT);
         mapToConstant.append(R.styleable.Constraint_android_visibility, LAYOUT_VISIBILITY);
         mapToConstant.append(R.styleable.Constraint_android_alpha, ALPHA);
         mapToConstant.append(R.styleable.Constraint_android_elevation, ELEVATION);
@@ -472,6 +488,8 @@ public class ConstraintSet {
         overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_marginBottom, BOTTOM_MARGIN);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_width, LAYOUT_WIDTH);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_height, LAYOUT_HEIGHT);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintWidth, LAYOUT_CONSTRAINT_WIDTH);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintHeight, LAYOUT_CONSTRAINT_HEIGHT);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_android_visibility, LAYOUT_VISIBILITY);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_android_alpha, ALPHA);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_android_elevation, ELEVATION);
@@ -635,6 +653,269 @@ public class ConstraintSet {
         for (Constraint constraint : mConstraints.values()) {
             if (constraint.mDelta != null) {
                 constraint.mDelta.applyDelta(constraint);
+            }
+        }
+    }
+
+
+    /**
+     * Parse the constraint dimension attribute
+     *
+     * @param a
+     * @param attr
+     * @param orientation
+     */
+    static void parseDimensionConstraints(Object data, TypedArray a, int attr, int orientation) {
+        if (data == null) {
+            return;
+        }
+        // data can be of:
+        //
+        // ConstraintLayout.LayoutParams
+        // ConstraintSet.Layout
+        // Constraint.Delta
+
+        TypedValue v = a.peekValue(attr);
+        int type = v.type;
+        int finalValue = 0;
+        boolean finalConstrained = false;
+        switch (type) {
+            case TypedValue.TYPE_DIMENSION: {
+                finalValue = a.getDimensionPixelSize(attr, 0);
+            } break;
+            case TypedValue.TYPE_STRING: {
+                String value = a.getString(attr);
+                parseDimensionConstraintsString(data, value, orientation);
+                return;
+            }
+            default: {
+                int value = a.getInt(attr, 0);
+                switch (value) {
+                    case INTERNAL_WRAP_CONTENT:
+                    case INTERNAL_MATCH_PARENT: {
+                        finalValue = value;
+                    } break;
+                    case INTERNAL_MATCH_CONSTRAINT: {
+                        finalValue = MATCH_CONSTRAINT;
+                    } break;
+                    case INTERNAL_WRAP_CONTENT_CONSTRAINED: {
+                        finalValue = WRAP_CONTENT;
+                        finalConstrained = true;
+                    } break;
+                }
+            }
+        }
+
+        if (data instanceof ConstraintLayout.LayoutParams) {
+            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) data;
+            if (orientation == HORIZONTAL) {
+                params.width = finalValue;
+                params.constrainedWidth = finalConstrained;
+            } else {
+                params.height = finalValue;
+                params.constrainedHeight = finalConstrained;
+            }
+        } else if (data instanceof Layout) {
+            Layout params = (Layout) data;
+            if (orientation == HORIZONTAL) {
+                params.mWidth = finalValue;
+                params.constrainedWidth = finalConstrained;
+            } else {
+                params.mHeight = finalValue;
+                params.constrainedHeight = finalConstrained;
+            }
+        } else if (data instanceof Constraint.Delta) {
+            Constraint.Delta params = (Constraint.Delta) data;
+            if (orientation == HORIZONTAL) {
+                params.add(LAYOUT_WIDTH, finalValue);
+                params.add(CONSTRAINED_WIDTH, finalConstrained);
+            } else {
+                params.add(LAYOUT_HEIGHT, finalValue);
+                params.add(CONSTRAINED_HEIGHT, finalConstrained);
+            }
+        }
+    }
+
+    /**
+     * Parse the dimension ratio string
+     *
+     * @param value
+     */
+    static void parseDimensionRatioString(ConstraintLayout.LayoutParams params, String value) {
+        String dimensionRatio = value;
+        float dimensionRatioValue = Float.NaN;
+        int dimensionRatioSide = UNSET;
+        if (dimensionRatio != null) {
+            int len = dimensionRatio.length();
+            int commaIndex = dimensionRatio.indexOf(',');
+            if (commaIndex > 0 && commaIndex < len - 1) {
+                String dimension = dimensionRatio.substring(0, commaIndex);
+                if (dimension.equalsIgnoreCase("W")) {
+                    dimensionRatioSide = HORIZONTAL;
+                } else if (dimension.equalsIgnoreCase("H")) {
+                    dimensionRatioSide = VERTICAL;
+                }
+                commaIndex++;
+            } else {
+                commaIndex = 0;
+            }
+            int colonIndex = dimensionRatio.indexOf(':');
+            if (colonIndex >= 0 && colonIndex < len - 1) {
+                String nominator = dimensionRatio.substring(commaIndex, colonIndex);
+                String denominator = dimensionRatio.substring(colonIndex + 1);
+                if (nominator.length() > 0 && denominator.length() > 0) {
+                    try {
+                        float nominatorValue = Float.parseFloat(nominator);
+                        float denominatorValue = Float.parseFloat(denominator);
+                        if (nominatorValue > 0 && denominatorValue > 0) {
+                            if (dimensionRatioSide == VERTICAL) {
+                                dimensionRatioValue = Math.abs(denominatorValue / nominatorValue);
+                            } else {
+                                dimensionRatioValue = Math.abs(nominatorValue / denominatorValue);
+                            }
+                        }
+                    } catch (NumberFormatException e) {
+                        // Ignore
+                    }
+                }
+            } else {
+                String r = dimensionRatio.substring(commaIndex);
+                if (r.length() > 0) {
+                    try {
+                        dimensionRatioValue = Float.parseFloat(r);
+                    } catch (NumberFormatException e) {
+                        // Ignore
+                    }
+                }
+            }
+        }
+        params.dimensionRatio = dimensionRatio;
+        params.dimensionRatioValue = dimensionRatioValue;
+        params.dimensionRatioSide = dimensionRatioSide;
+    }
+
+    /**
+     * Parse the constraints string dimension
+     *
+     * @param value
+     * @param orientation
+     */
+    static void parseDimensionConstraintsString(Object data, String value, int orientation) {
+        // data can be of:
+        //
+        // ConstraintLayout.LayoutParams
+        // ConstraintSet.Layout
+        // Constraint.Delta
+
+        // String should be of the form
+        //
+        // "<Key>=<Value>"
+        // supported Keys are:
+        // "weight=<value>"
+        // "ratio=<value>"
+        // "parent=<value>"
+        if (value == null) {
+            return;
+        }
+
+        int equalIndex = value.indexOf('=');
+        int len = value.length();
+        if (equalIndex > 0 && equalIndex < len - 1) {
+            String key = value.substring(0, equalIndex);
+            String val = value.substring(equalIndex + 1);
+            if (val.length() > 0) {
+                key = key.trim();
+                val = val.trim();
+                if (KEY_RATIO.equalsIgnoreCase(key)) {
+                    if (data instanceof ConstraintLayout.LayoutParams) {
+                        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) data;
+                        if (orientation == HORIZONTAL) {
+                            params.width = MATCH_CONSTRAINT;
+                        } else {
+                            params.height = MATCH_CONSTRAINT;
+                        }
+                        parseDimensionRatioString(params, val);
+                    } else if (data instanceof Layout) {
+                        Layout params = (Layout) data;
+                        params.dimensionRatio = val;
+                    } else if (data instanceof Constraint.Delta) {
+                        Constraint.Delta params = (Constraint.Delta) data;
+                        params.add(DIMENSION_RATIO, val);
+                    }
+                } else if (KEY_WEIGHT.equalsIgnoreCase(key)) {
+                    try {
+                        float weight = Float.parseFloat(val);
+                        if (data instanceof ConstraintLayout.LayoutParams) {
+                            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) data;
+                            if (orientation == HORIZONTAL) {
+                                params.width = MATCH_CONSTRAINT;
+                                params.horizontalWeight = weight;
+                            } else {
+                                params.height = MATCH_CONSTRAINT;
+                                params.verticalWeight = weight;
+                            }
+                        } else if (data instanceof Layout) {
+                            Layout params = (Layout) data;
+                            if (orientation == HORIZONTAL) {
+                                params.mWidth = MATCH_CONSTRAINT;
+                                params.horizontalWeight = weight;
+                            } else {
+                                params.mHeight = MATCH_CONSTRAINT;
+                                params.verticalWeight = weight;
+                            }
+                        } else if (data instanceof Constraint.Delta) {
+                            Constraint.Delta params = (Constraint.Delta) data;
+                            if (orientation == HORIZONTAL) {
+                                params.add(LAYOUT_WIDTH, MATCH_CONSTRAINT);
+                                params.add(HORIZONTAL_WEIGHT, weight);
+                            } else {
+                                params.add(LAYOUT_HEIGHT, MATCH_CONSTRAINT);
+                                params.add(VERTICAL_WEIGHT, weight);
+                            }
+                        }
+                    } catch (NumberFormatException e) {
+                        // nothing
+                    }
+                } else if (KEY_PERCENT_PARENT.equalsIgnoreCase(key)) {
+                    try {
+                        float percent = Math.min(1, Float.parseFloat(val));
+                        percent = Math.max(0, percent);
+                        if (data instanceof ConstraintLayout.LayoutParams) {
+                            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) data;
+                            if (orientation == HORIZONTAL) {
+                                params.width = MATCH_CONSTRAINT;
+                                params.matchConstraintPercentWidth = percent;
+                                params.matchConstraintDefaultWidth = MATCH_CONSTRAINT_PERCENT;
+                            } else {
+                                params.height = MATCH_CONSTRAINT;
+                                params.matchConstraintPercentHeight = percent;
+                                params.matchConstraintDefaultHeight = MATCH_CONSTRAINT_PERCENT;
+                            }
+                        } else if (data instanceof Layout) {
+                            Layout params = (Layout) data;
+                            if (orientation == HORIZONTAL) {
+                                params.mWidth = MATCH_CONSTRAINT;
+                                params.widthPercent = percent;
+                                params.widthDefault = MATCH_CONSTRAINT_PERCENT;
+                            } else {
+                                params.mHeight = MATCH_CONSTRAINT;
+                                params.heightPercent = percent;
+                                params.heightDefault = MATCH_CONSTRAINT_PERCENT;
+                            }
+                        } else if (data instanceof Constraint.Delta) {
+                            Constraint.Delta params = (Constraint.Delta) data;
+                            if (orientation == HORIZONTAL) {
+                                params.add(LAYOUT_WIDTH, MATCH_CONSTRAINT);
+                                params.add(WIDTH_DEFAULT, MATCH_CONSTRAINT_PERCENT);
+                            } else {
+                                params.add(LAYOUT_HEIGHT, MATCH_CONSTRAINT);
+                                params.add(HEIGHT_DEFAULT, MATCH_CONSTRAINT_PERCENT);
+                            }
+                        }
+                    } catch (NumberFormatException e) {
+                        // nothing
+                    }
+                }
             }
         }
     }
@@ -829,6 +1110,8 @@ public class ConstraintSet {
         private static final int VERTICAL_WEIGHT = 38;
         private static final int HORIZONTAL_STYLE = 39;
         private static final int VERTICAL_STYLE = 40;
+        private static final int LAYOUT_CONSTRAINT_WIDTH = 41;
+        private static final int LAYOUT_CONSTRAINT_HEIGHT = 42;
 
         private static final int CIRCLE = 61;
         private static final int CIRCLE_RADIUS = 62;
@@ -890,6 +1173,8 @@ public class ConstraintSet {
             mapToConstant.append(R.styleable.Layout_android_layout_marginBottom, BOTTOM_MARGIN);
             mapToConstant.append(R.styleable.Layout_android_layout_width, LAYOUT_WIDTH);
             mapToConstant.append(R.styleable.Layout_android_layout_height, LAYOUT_HEIGHT);
+            mapToConstant.append(R.styleable.Layout_layout_constraintWidth, LAYOUT_CONSTRAINT_WIDTH);
+            mapToConstant.append(R.styleable.Layout_layout_constraintHeight, LAYOUT_CONSTRAINT_HEIGHT);
 
             mapToConstant.append(R.styleable.Layout_layout_constraintCircle, CIRCLE);
             mapToConstant.append(R.styleable.Layout_layout_constraintCircleRadius, CIRCLE_RADIUS);
@@ -1042,6 +1327,12 @@ public class ConstraintSet {
                     case LAYOUT_HEIGHT:
                         mHeight = a.getLayoutDimension(attr, mHeight);
                         break;
+                    case LAYOUT_CONSTRAINT_WIDTH:
+                        ConstraintSet.parseDimensionConstraints(this, a, attr, HORIZONTAL);
+                        break;
+                    case LAYOUT_CONSTRAINT_HEIGHT:
+                        ConstraintSet.parseDimensionConstraints(this, a, attr, VERTICAL);
+                        break;
                     case WIDTH_DEFAULT:
                         widthDefault = a.getInt(attr, widthDefault);
                         break;
@@ -1118,7 +1409,6 @@ public class ConstraintSet {
             }
             a.recycle();
         }
-
 
         public void dump(MotionScene scene, StringBuilder stringBuilder) {
             Field[] fields = this.getClass().getDeclaredFields();
@@ -3925,6 +4215,12 @@ public class ConstraintSet {
                 case LAYOUT_HEIGHT:
                     delta.add(LAYOUT_HEIGHT, a.getLayoutDimension(attr, c.layout.mHeight));
                     break;
+                case LAYOUT_CONSTRAINT_WIDTH:
+                    ConstraintSet.parseDimensionConstraints(delta, a, attr, HORIZONTAL);
+                    break;
+                case LAYOUT_CONSTRAINT_HEIGHT:
+                    ConstraintSet.parseDimensionConstraints(delta, a, attr, VERTICAL);
+                    break;
                 case WIDTH_DEFAULT:
                     delta.add(WIDTH_DEFAULT, a.getInt(attr, c.layout.widthDefault));
                     break;
@@ -4586,6 +4882,12 @@ public class ConstraintSet {
                     break;
                 case LAYOUT_HEIGHT:
                     c.layout.mHeight = a.getLayoutDimension(attr, c.layout.mHeight);
+                    break;
+                case LAYOUT_CONSTRAINT_WIDTH:
+                    ConstraintSet.parseDimensionConstraints(c.layout, a, attr, HORIZONTAL);
+                    break;
+                case LAYOUT_CONSTRAINT_HEIGHT:
+                    ConstraintSet.parseDimensionConstraints(c.layout, a, attr, VERTICAL);
                     break;
                 case WIDTH_DEFAULT:
                     c.layout.widthDefault = a.getInt(attr, c.layout.widthDefault);
