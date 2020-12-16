@@ -797,6 +797,8 @@
         <!--  Specifies extra space on the start side of this view.
               This space is outside this view's bounds.
               Margin values should be positive.-->
+        <attr name="layout_constraintWidth" />
+        <attr name="layout_constraintHeight" />
         <attr name="android:layout_marginStart" />
         <!--  Specifies extra space on the bottom side of this view.
               This space is outside this view's bounds.
@@ -982,6 +984,8 @@
         <!--  Specifies extra space on the start side of this view.
               This space is outside this view's bounds.
               Margin values should be positive.-->
+        <attr name="layout_constraintWidth" />
+        <attr name="layout_constraintHeight" />
         <attr name="android:layout_marginStart" />
         <!--  Specifies extra space on the bottom side of this view.
               This space is outside this view's bounds.
@@ -1470,8 +1474,9 @@
     <declare-styleable name="Layout">
 
         <attr name="android:layout_width" />
-
         <attr name="android:layout_height" />
+        <attr name="layout_constraintWidth" />
+        <attr name="layout_constraintHeight" />
 
         <attr name="android:layout_marginStart" />
 
