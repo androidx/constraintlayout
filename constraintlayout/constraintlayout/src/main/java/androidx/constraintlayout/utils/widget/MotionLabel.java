@@ -99,7 +99,9 @@ public class MotionLabel extends View implements FloatLayout {
     private Matrix mTextShaderMatrix;
     private float mFloatLeft;
     private float mFloatTop;
-
+    private int mTxtBackgroundMode = 0;
+    private float mTextPanX = 0;
+    private float mTextPanY = 0;
     public MotionLabel(Context context) {
         super(context);
         init(context, null);
@@ -170,6 +172,8 @@ public class MotionLabel extends View implements FloatLayout {
                     mRotate = a.getFloat(attr, mRotate);
                 } else if (attr == R.styleable.MotionLabel_textBackgroundZoom) {
                     mZoom = a.getFloat(attr, mZoom);
+                } else if (attr == R.styleable.MotionLabel_textBackgroundMode) {
+                    mTxtBackgroundMode = a.getInt(attr, 0);
                 }
 
             }
@@ -201,7 +205,6 @@ public class MotionLabel extends View implements FloatLayout {
                 ih = h;
             }
 
-            Log.v(TAG, Debug.getLoc() + " iw,ih = " + iw + "," + ih);
             mTextBackgroundBitmap = Bitmap.createBitmap(iw, ih, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(mTextBackgroundBitmap);
             mTextBackground.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -217,7 +220,7 @@ public class MotionLabel extends View implements FloatLayout {
         mFloatLeft = l;
         mFloatTop = t;
         mFloatWidth = r - l;
-        mFloatHeight = t - b;
+        mFloatHeight = b - t;
         updateViewMatrix();
     }
 
@@ -243,11 +246,29 @@ public class MotionLabel extends View implements FloatLayout {
         }
         if (gravity != mGravity) {
             invalidate();
-
         }
 
         mGravity = gravity;
-
+        switch (mGravity & Gravity.VERTICAL_GRAVITY_MASK) {
+            case Gravity.TOP:
+                mTextPanY = -1;
+                break;
+            case Gravity.BOTTOM:
+                mTextPanY = 1;
+                break;
+            default:
+                mTextPanY = 0;
+        }
+        switch (mGravity & Gravity.HORIZONTAL_GRAVITY_MASK) {
+            case Gravity.LEFT:
+                mTextPanX = -1;
+                break;
+            case Gravity.RIGHT:
+                mTextPanX = 1;
+                break;
+            default:
+                mTextPanX = 0;
+        }
     }
 
     float getHorizontalOffset() {
@@ -413,7 +434,7 @@ public class MotionLabel extends View implements FloatLayout {
             mFloatLeft = l;
             mFloatTop = t;
             mFloatWidth = r - l;
-            mFloatHeight = t - b;
+            mFloatHeight = b - t;
 
             mTempPaint.getTextBounds(mText, 0, mText.length(), mTempRect);
             int tw = mTempRect.width();
@@ -903,6 +924,22 @@ public class MotionLabel extends View implements FloatLayout {
         mTextShaderMatrix.postRotate(rota, sw / 2, sh / 2);
         mTextShader.setLocalMatrix(mTextShaderMatrix);
 
+    }
+
+    public float getTextPanX() {
+        return mTextPanX;
+    }
+
+    public void setTextPanX(float mTextPanX) {
+        this.mTextPanX = mTextPanX;
+    }
+
+    public float getTextPanY() {
+        return mTextPanY;
+    }
+
+    public void setTextPanY(float mTextPanY) {
+        this.mTextPanY = mTextPanY;
     }
 
 
