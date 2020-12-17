@@ -40,6 +40,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -529,6 +530,20 @@ public class ConstraintLayout extends ViewGroup {
     public final static int DESIGN_INFO_ID = 0;
     private ConstraintsChangedListener mConstraintsChangedListener;
     private Metrics mMetrics;
+
+    private static SharedValues sSharedValues = null;
+
+    /**
+     * Returns the SharedValues instance, creating it if it doesn't exist.
+     *
+     * @return the SharedValues instance
+     */
+    public static SharedValues getSharedValues() {
+        if (sSharedValues == null) {
+            sSharedValues = new SharedValues();
+        }
+        return sSharedValues;
+    }
 
     /**
      * @hide
@@ -1477,6 +1492,7 @@ public class ConstraintLayout extends ViewGroup {
             widget.setVerticalWeight(layoutParams.verticalWeight);
             widget.setHorizontalChainStyle(layoutParams.horizontalChainStyle);
             widget.setVerticalChainStyle(layoutParams.verticalChainStyle);
+            widget.setWrapBehaviorInParent(layoutParams.wrapBehaviorInParent);
             widget.setHorizontalMatchStyle(layoutParams.matchConstraintDefaultWidth,
                     layoutParams.matchConstraintMinWidth, layoutParams.matchConstraintMaxWidth,
                     layoutParams.matchConstraintPercentWidth);
@@ -1532,7 +1548,16 @@ public class ConstraintLayout extends ViewGroup {
         if (view == this) {
             return mLayoutWidget;
         }
-        return view == null ? null : ((LayoutParams) view.getLayoutParams()).widget;
+        if (view != null) {
+            if (view.getLayoutParams() instanceof LayoutParams) {
+                return ((LayoutParams) view.getLayoutParams()).widget;
+            }
+            view.setLayoutParams(generateLayoutParams(view.getLayoutParams()));
+            if (view.getLayoutParams() instanceof LayoutParams) {
+                return ((LayoutParams) view.getLayoutParams()).widget;
+            }
+        }
+        return null;
     }
 
     /**
@@ -1986,13 +2011,15 @@ public class ConstraintLayout extends ViewGroup {
                 }
             }
         }
+
         super.dispatchDraw(canvas);
+
         if (DEBUG || isInEditMode()) {
-            final int count = getChildCount();
             float cw = getWidth();
             float ch = getHeight();
             float ow = 1080;
             float oh = 1920;
+            final int count = getChildCount();
             for (int i = 0; i < count; i++) {
                 View child = getChildAt(i);
                 if (child.getVisibility() == GONE) {
@@ -2528,6 +2555,22 @@ public class ConstraintLayout extends ViewGroup {
          */
         public String constraintTag = null;
 
+        public static final int WRAP_BEHAVIOR_INCLUDED = ConstraintWidget.WRAP_BEHAVIOR_INCLUDED;
+        public static final int WRAP_BEHAVIOR_HORIZONTAL_ONLY = ConstraintWidget.WRAP_BEHAVIOR_HORIZONTAL_ONLY;
+        public static final int WRAP_BEHAVIOR_VERTICAL_ONLY = ConstraintWidget.WRAP_BEHAVIOR_VERTICAL_ONLY;
+        public static final int WRAP_BEHAVIOR_SKIPPED = ConstraintWidget.WRAP_BEHAVIOR_SKIPPED;
+
+        /**
+         * Specify how this view is taken in account during the parent's wrap computation
+         *
+         * Can be either of:
+         * WRAP_BEHAVIOR_INCLUDED the widget is taken in account for the wrap (default)
+         * WRAP_BEHAVIOR_HORIZONTAL_ONLY the widget will be included in the wrap only horizontally
+         * WRAP_BEHAVIOR_VERTICAL_ONLY the widget will be included in the wrap only vertically
+         * WRAP_BEHAVIOR_SKIPPED the widget is not part of the wrap computation
+         */
+        public int wrapBehaviorInParent = WRAP_BEHAVIOR_INCLUDED;
+
         // Internal use only
         boolean horizontalDimensionFixed = true;
         boolean verticalDimensionFixed = true;
@@ -2554,6 +2597,9 @@ public class ConstraintLayout extends ViewGroup {
         int layoutDirection = View.LAYOUT_DIRECTION_LTR;
 
         ConstraintWidget widget = new ConstraintWidget();
+
+        boolean widthSet = false;
+        boolean heightSet = false;
 
         /**
          * @hide
@@ -2658,7 +2704,10 @@ public class ConstraintLayout extends ViewGroup {
             this.resolveGoneRightMargin = source.resolveGoneRightMargin;
             this.resolvedHorizontalBias = source.resolvedHorizontalBias;
             this.constraintTag = source.constraintTag;
+            this.wrapBehaviorInParent = source.wrapBehaviorInParent;
             this.widget = source.widget;
+            this.widthSet = source.widthSet;
+            this.heightSet = source.heightSet;
         }
 
         private static class Table {
@@ -2726,12 +2775,17 @@ public class ConstraintLayout extends ViewGroup {
             public static final int LAYOUT_MARGIN_END = 61;
             public static final int LAYOUT_WIDTH = 62;
             public static final int LAYOUT_HEIGHT = 63;
+            public static final int LAYOUT_CONSTRAINT_WIDTH = 64;
+            public static final int LAYOUT_CONSTRAINT_HEIGHT = 65;
+            public static final int LAYOUT_WRAP_BEHAVIOR_IN_PARENT = 66;
 
             public final static SparseIntArray map = new SparseIntArray();
 
             static {
                 map.append(R.styleable.ConstraintLayout_Layout_android_layout_width, LAYOUT_WIDTH);
                 map.append(R.styleable.ConstraintLayout_Layout_android_layout_height, LAYOUT_HEIGHT);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintWidth, LAYOUT_CONSTRAINT_WIDTH);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHeight, LAYOUT_CONSTRAINT_HEIGHT);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintLeft_toLeftOf, LAYOUT_CONSTRAINT_LEFT_TO_LEFT_OF);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintLeft_toRightOf, LAYOUT_CONSTRAINT_LEFT_TO_RIGHT_OF);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintRight_toLeftOf, LAYOUT_CONSTRAINT_RIGHT_TO_LEFT_OF);
@@ -2793,6 +2847,7 @@ public class ConstraintLayout extends ViewGroup {
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBottom_creator, LAYOUT_CONSTRAINT_BOTTOM_CREATOR);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBaseline_creator, LAYOUT_CONSTRAINT_BASELINE_CREATOR);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintTag, LAYOUT_CONSTRAINT_TAG);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_wrapBehaviorInParent, LAYOUT_WRAP_BEHAVIOR_IN_PARENT);
             }
         }
 
@@ -2847,12 +2902,28 @@ public class ConstraintLayout extends ViewGroup {
                         // Skip
                         break;
                     }
+                    case Table.LAYOUT_CONSTRAINT_WIDTH: {
+                        ConstraintSet.parseDimensionConstraints(this, a, attr, HORIZONTAL);
+                        widthSet = true;
+                        break;
+                    }
+                    case Table.LAYOUT_CONSTRAINT_HEIGHT: {
+                        ConstraintSet.parseDimensionConstraints(this, a, attr, VERTICAL);
+                        heightSet = true;
+                        break;
+                    }
                     case Table.LAYOUT_WIDTH: {
                         width = a.getLayoutDimension(R.styleable.ConstraintLayout_Layout_android_layout_width, "layout_width");
+                        widthSet = true;
                         break;
                     }
                     case Table.LAYOUT_HEIGHT: {
                         height = a.getLayoutDimension(R.styleable.ConstraintLayout_Layout_android_layout_height, "layout_height");
+                        heightSet = true;
+                        break;
+                    }
+                    case Table.LAYOUT_WRAP_BEHAVIOR_IN_PARENT: {
+                        wrapBehaviorInParent = a.getInt(attr, wrapBehaviorInParent);
                         break;
                     }
                     case Table.LAYOUT_CONSTRAINT_LEFT_TO_LEFT_OF: {
@@ -3083,53 +3154,7 @@ public class ConstraintLayout extends ViewGroup {
                         break;
                     }
                     case Table.LAYOUT_CONSTRAINT_DIMENSION_RATIO: {
-                        dimensionRatio = a.getString(attr);
-                        dimensionRatioValue = Float.NaN;
-                        dimensionRatioSide = UNSET;
-                        if (dimensionRatio != null) {
-                            int len = dimensionRatio.length();
-                            int commaIndex = dimensionRatio.indexOf(',');
-                            if (commaIndex > 0 && commaIndex < len - 1) {
-                                String dimension = dimensionRatio.substring(0, commaIndex);
-                                if (dimension.equalsIgnoreCase("W")) {
-                                    dimensionRatioSide = HORIZONTAL;
-                                } else if (dimension.equalsIgnoreCase("H")) {
-                                    dimensionRatioSide = VERTICAL;
-                                }
-                                commaIndex++;
-                            } else {
-                                commaIndex = 0;
-                            }
-                            int colonIndex = dimensionRatio.indexOf(':');
-                            if (colonIndex >= 0 && colonIndex < len - 1) {
-                                String nominator = dimensionRatio.substring(commaIndex, colonIndex);
-                                String denominator = dimensionRatio.substring(colonIndex + 1);
-                                if (nominator.length() > 0 && denominator.length() > 0) {
-                                    try {
-                                        float nominatorValue = Float.parseFloat(nominator);
-                                        float denominatorValue = Float.parseFloat(denominator);
-                                        if (nominatorValue > 0 && denominatorValue > 0) {
-                                            if (dimensionRatioSide == VERTICAL) {
-                                                dimensionRatioValue = Math.abs(denominatorValue / nominatorValue);
-                                            } else {
-                                                dimensionRatioValue = Math.abs(nominatorValue / denominatorValue);
-                                            }
-                                        }
-                                    } catch (NumberFormatException e) {
-                                        // Ignore
-                                    }
-                                }
-                            } else {
-                                String r = dimensionRatio.substring(commaIndex);
-                                if (r.length() > 0) {
-                                    try {
-                                        dimensionRatioValue = Float.parseFloat(r);
-                                    } catch (NumberFormatException e) {
-                                        // Ignore
-                                    }
-                                }
-                            }
-                        }
+                        ConstraintSet.parseDimensionRatioString(this, a.getString(attr));
                         break;
                     }
                     case Table.LAYOUT_CONSTRAINT_HORIZONTAL_WEIGHT: {
@@ -3259,6 +3284,10 @@ public class ConstraintLayout extends ViewGroup {
             isGuideline = false;
             horizontalDimensionFixed = true;
             verticalDimensionFixed = true;
+            if (dimensionRatio != null && !widthSet && !heightSet) {
+                width = MATCH_CONSTRAINT;
+                height = MATCH_CONSTRAINT;
+            }
             if (width == WRAP_CONTENT && constrainedWidth) {
                 horizontalDimensionFixed = false;
                 if (matchConstraintDefaultWidth == MATCH_CONSTRAINT_SPREAD) {

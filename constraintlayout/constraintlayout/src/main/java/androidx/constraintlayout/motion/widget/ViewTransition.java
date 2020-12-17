@@ -66,8 +66,11 @@ public class ViewTransition {
     private static final int UNSET = -1;
     private int mId;
     // Transition can be up or down of manually fired
-    private final int ONSTATETRANSITION_ACTION_DOWN = 1;
-    private final int ONSTATETRANSITION_ACTION_UP = 2;
+    public static final int ONSTATE_ACTION_DOWN = 1;
+    public static final int ONSTATE_ACTION_UP = 2;
+    public static final int ONSTATE_SHARED_VALUE_SET = 3;
+    public static final int ONSTATE_SHARED_VALUE_UNSET = 4;
+
     private int mOnStateTransition = UNSET;
     private boolean mDisabled = false;
     private int mPathMotionArc = 0;
@@ -100,6 +103,69 @@ public class ViewTransition {
     private int mClearsTag = UNSET;
     private int mIfTagSet = UNSET;
     private int mIfTagNotSet = UNSET;
+
+    // shared value management. mSharedValueId is the key we are watching,
+    // mSharedValueCurrent the current value for that key, and mSharedValueTarget
+    // is the target we are waiting for to trigger.
+    private int mSharedValueTarget = UNSET;
+    private int mSharedValueID = UNSET;
+    private int mSharedValueCurrent = UNSET;
+
+    public int getSharedValueCurrent() {
+        return mSharedValueCurrent;
+    }
+
+    public void setSharedValueCurrent(int sharedValueCurrent) {
+        this.mSharedValueCurrent = sharedValueCurrent;
+    }
+
+    /**
+     * Gets the type of transition to listen to.
+     *
+     * @return ONSTATE_TRANSITION_*
+     */
+    public int getStateTransition() {
+        return mOnStateTransition;
+    }
+
+    /**
+     * Sets the type of transition to listen to.
+     *
+     * @param stateTransition
+     */
+    public void setStateTransition(int stateTransition) {
+        this.mOnStateTransition = stateTransition;
+    }
+
+    /**
+     * Gets the SharedValue it will be listening for.
+     * @return
+     */
+    public int getSharedValue() {
+        return mSharedValueTarget;
+    }
+
+    /**
+     * sets the SharedValue it will be listening for.
+     */
+    public void setSharedValue(int sharedValue) {
+        this.mSharedValueTarget = sharedValue;
+    }
+
+    /**
+     * Gets the ID of the SharedValue it will be listening for.
+     * @return the id of the shared value
+     */
+    public int getSharedValueID() {
+        return mSharedValueID;
+    }
+
+    /**
+     * sets the ID of the SharedValue it will be listening for.
+     */
+    public void setSharedValueID(int sharedValueID) {
+        this.mSharedValueID = sharedValueID;
+    }
 
     public String toString() {
         return "ViewTransition(" + Debug.getName(mContext, mId) + ")";
@@ -242,6 +308,10 @@ public class ViewTransition {
                 mIfTagSet = a.getResourceId(attr, mIfTagSet);
             } else if (attr == R.styleable.ViewTransition_ifTagNotSet) {
                 mIfTagNotSet = a.getResourceId(attr, mIfTagNotSet);
+            }else if (attr == R.styleable.ViewTransition_SharedValueId) {
+                mSharedValueID = a.getResourceId(attr, mSharedValueID);
+            }else if (attr == R.styleable.ViewTransition_SharedValue) {
+                mSharedValueTarget = a.getInteger(attr, mSharedValueTarget);
             }
         }
         a.recycle();
@@ -306,6 +376,7 @@ public class ViewTransition {
                          int fromId,
                          ConstraintSet current,
                          View... views) {
+
         if (mDisabled) {
             return;
         }
@@ -416,10 +487,10 @@ public class ViewTransition {
     }
 
     boolean supports(int action) {
-        if (mOnStateTransition == ONSTATETRANSITION_ACTION_DOWN) {
+        if (mOnStateTransition == ONSTATE_ACTION_DOWN) {
             return action == MotionEvent.ACTION_DOWN;
         }
-        if (mOnStateTransition == ONSTATETRANSITION_ACTION_UP) {
+        if (mOnStateTransition == ONSTATE_ACTION_UP) {
             return action == MotionEvent.ACTION_UP;
         }
         return false;

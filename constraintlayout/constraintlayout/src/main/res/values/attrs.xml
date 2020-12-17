@@ -113,8 +113,36 @@
     <!-- the end margin value to be used when connected to an object that is GONE -->
     <attr name="layout_goneMarginEnd" format="dimension" />
 
+    <!-- the baseline margin to a target -->
     <attr name="layout_marginBaseline" format="dimension" />
+
+    <!-- the gone baseline margin to a target -->
     <attr name="layout_goneMarginBaseline" format="dimension" />
+
+    <!-- allows to specify horizontal dimension constraints in a more expressive way -->
+    <attr name="layout_constraintWidth" format="dimension|enum|string">
+        <enum name="match_parent" value="-1" />
+        <enum name="wrap_content" value="-2" />
+        <enum name="match_constraint" value="-3" />
+        <enum name="wrap_content_constrained" value="-4" />
+    </attr>
+
+    <!-- allows to specify vertical dimension constraints in a more expressive way -->
+    <attr name="layout_constraintHeight" format="dimension|enum|string">
+        <enum name="match_parent" value="-1" />
+        <enum name="wrap_content" value="-2" />
+        <enum name="match_constraint" value="-3" />
+        <enum name="wrap_content_constrained" value="-4" />
+    </attr>
+
+    <!-- controls how a widget is taken in account for the wrap computation of the layout -->
+    <!-- default is included -->
+    <attr name="layout_wrapBehaviorInParent" format="enum">
+        <enum name="included" value="0" />
+        <enum name="horizontal_only" value="1" />
+        <enum name="vertical_only" value="2" />
+        <enum name="skipped" value="3" />
+    </attr>
 
     <!-- Fraction of excess space to distribute on the left when constrained on left & right edges (e.g. .5 = middle)-->
     <attr name="layout_constraintHorizontal_bias" format="float" />
@@ -348,7 +376,6 @@
         <enum name="linear" value="3" />
         <enum name="bounce" value="4" />
         <enum name="overshoot" value="5" />
-
     </attr>
 
     <!-- Specify the visibility of a placeholder -->
@@ -395,6 +422,13 @@
         <enum name="constraint" value="4" />
     </attr>
 
+    <declare-styleable name="ConstraintLayout_ReactiveGuide">
+        <attr name="reactiveGuide_valueId" format="reference" />
+        <attr name="reactiveGuide_animateChange" format="boolean" />
+        <attr name="reactiveGuide_applyToAllConstraintSets" format="boolean" />
+        <attr name="reactiveGuide_applyToConstraintSet" format="reference" />
+    </declare-styleable>
+
     <declare-styleable name="MotionHelper">
         <attr name="onShow" format="boolean" />
         <attr name="onHide" format="boolean" />
@@ -420,6 +454,7 @@
         <attr name="telltales_tailScale" format="float" />
     </declare-styleable>
 
+    <!-- =============================== Layout =============================== -->
 
     <declare-styleable name="ConstraintLayout_Layout">
         <attr name="android:orientation" />
@@ -501,6 +536,8 @@
         <attr name="layout_goneMarginEnd" />
         <attr name="layout_goneMarginBaseline" />
         <attr name="layout_marginBaseline" />
+        <attr name="layout_constraintWidth" />
+        <attr name="layout_constraintHeight" />
         <attr name="android:layout_width" />
         <attr name="android:layout_height" />
         <attr name="android:layout_margin" />
@@ -537,6 +574,7 @@
         <attr name="layout_editor_absoluteX" />
         <attr name="layout_editor_absoluteY" />
         <attr name="layout_constraintTag" />
+        <attr name="layout_wrapBehaviorInParent" />
     </declare-styleable>
 
     <!--Frame Interpolation provide a per key view  time interpolation capability
@@ -670,6 +708,7 @@
         <attr name="layout_constraintVertical_chainStyle" />
         <attr name="layout_editor_absoluteX" />
         <attr name="layout_editor_absoluteY" />
+        <attr name="layout_wrapBehaviorInParent" />
 
         <attr name="barrierDirection" />
         <attr name="constraint_referenced_ids" />
@@ -776,6 +815,8 @@
         <!--  Specifies extra space on the start side of this view.
               This space is outside this view's bounds.
               Margin values should be positive.-->
+        <attr name="layout_constraintWidth" />
+        <attr name="layout_constraintHeight" />
         <attr name="android:layout_marginStart" />
         <!--  Specifies extra space on the bottom side of this view.
               This space is outside this view's bounds.
@@ -852,6 +893,7 @@
         <attr name="layout_constraintVertical_chainStyle" />
         <attr name="layout_editor_absoluteX" />
         <attr name="layout_editor_absoluteY" />
+        <attr name="layout_wrapBehaviorInParent" />
 
         <attr name="barrierDirection" />
         <attr name="barrierMargin" />
@@ -961,6 +1003,8 @@
         <!--  Specifies extra space on the start side of this view.
               This space is outside this view's bounds.
               Margin values should be positive.-->
+        <attr name="layout_constraintWidth" />
+        <attr name="layout_constraintHeight" />
         <attr name="android:layout_marginStart" />
         <!--  Specifies extra space on the bottom side of this view.
               This space is outside this view's bounds.
@@ -1018,6 +1062,7 @@
         <attr name="layout_constraintVertical_chainStyle" />
         <attr name="layout_editor_absoluteX" />
         <attr name="layout_editor_absoluteY" />
+        <attr name="layout_wrapBehaviorInParent" />
 
         <attr name="barrierDirection" />
         <attr name="barrierMargin" />
@@ -1482,8 +1527,9 @@
     <declare-styleable name="Layout">
 
         <attr name="android:layout_width" />
-
         <attr name="android:layout_height" />
+        <attr name="layout_constraintWidth" />
+        <attr name="layout_constraintHeight" />
 
         <attr name="android:layout_marginStart" />
 
@@ -1551,6 +1597,7 @@
         <attr name="layout_constraintVertical_chainStyle" />
         <attr name="layout_editor_absoluteX" />
         <attr name="layout_editor_absoluteY" />
+        <attr name="layout_wrapBehaviorInParent" />
         <attr name="barrierDirection" />
         <attr name="barrierMargin" />
         <attr name="constraint_referenced_ids" />
@@ -1658,7 +1705,8 @@
     <attr name="onStateTransition" format="enum">
         <enum name="actionDown" value="1" />
         <enum name="actionUp" value="2" />
-
+        <enum name="sharedValueSet" value="3" />
+        <enum name="sharedValueUnset" value="4" />
     </attr>
 
     <attr name="viewTransitionMode" format="enum">
@@ -1677,10 +1725,12 @@
         <attr name="transitionDisable" />
         <attr name="pathMotionArc" />
         <attr name="motionInterpolator" />
-        <attr name="setsTag" format="reference" />
-        <attr name="clearsTag" format="reference" />
-        <attr name="ifTagSet" format="reference" />
-        <attr name="ifTagNotSet" format="reference" />
+        <attr name="SharedValueId" format="reference"/>
+        <attr name="SharedValue" format="integer"/>
+        <attr name="setsTag" format="reference"/>
+        <attr name="clearsTag" format="reference"/>
+        <attr name="ifTagSet" format="reference"/>
+        <attr name="ifTagNotSet" format="reference"/>
     </declare-styleable>
 
 </resources>

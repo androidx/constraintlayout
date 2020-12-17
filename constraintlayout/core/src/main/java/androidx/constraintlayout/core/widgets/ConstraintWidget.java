@@ -215,11 +215,19 @@ public class ConstraintWidget {
     public static final int CHAIN_SPREAD_INSIDE = 1;
     public static final int CHAIN_PACKED = 2;
 
+    // Values of the wrap behavior in parent
+    public static final int WRAP_BEHAVIOR_INCLUDED = 0; // default
+    public static final int WRAP_BEHAVIOR_HORIZONTAL_ONLY = 1;
+    public static final int WRAP_BEHAVIOR_VERTICAL_ONLY = 2;
+    public static final int WRAP_BEHAVIOR_SKIPPED = 3;
+
     // Support for direct resolution
     public int mHorizontalResolution = UNKNOWN;
     public int mVerticalResolution = UNKNOWN;
 
     private static final int WRAP = -2;
+
+    private int mWrapBehaviorInParent = WRAP_BEHAVIOR_INCLUDED;
 
     public int mMatchConstraintDefaultWidth = MATCH_CONSTRAINT_SPREAD;
     public int mMatchConstraintDefaultHeight = MATCH_CONSTRAINT_SPREAD;
@@ -310,6 +318,16 @@ public class ConstraintWidget {
 
     public boolean isMeasureRequested() {
         return mMeasureRequested && mVisibility != GONE;
+    }
+
+    public void setWrapBehaviorInParent(int behavior) {
+        if (behavior >= 0 && behavior <= WRAP_BEHAVIOR_SKIPPED) {
+            mWrapBehaviorInParent = behavior;
+        }
+    }
+
+    public int getWrapBehaviorInParent() {
+        return mWrapBehaviorInParent;
     }
 
     /**
@@ -2179,6 +2197,19 @@ public class ConstraintWidget {
         if (mParent != null) {
             horizontalParentWrapContent = mParent != null ? mParent.mListDimensionBehaviors[DIMENSION_HORIZONTAL] == WRAP_CONTENT : false;
             verticalParentWrapContent = mParent != null ? mParent.mListDimensionBehaviors[DIMENSION_VERTICAL] == WRAP_CONTENT : false;
+
+            switch (mWrapBehaviorInParent) {
+                case WRAP_BEHAVIOR_SKIPPED: {
+                    horizontalParentWrapContent = false;
+                    verticalParentWrapContent = false;
+                } break;
+                case WRAP_BEHAVIOR_HORIZONTAL_ONLY: {
+                    verticalParentWrapContent = false;
+                } break;
+                case WRAP_BEHAVIOR_VERTICAL_ONLY: {
+                    horizontalParentWrapContent = false;
+                } break;
+            }
         }
 
         if (mVisibility == GONE && !hasDependencies()

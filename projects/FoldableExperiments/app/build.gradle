@@ -39,8 +39,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.1'
 
     //can directly point to the constraintlayout local project
-    //implementation project(path: ':constraintlayout')
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation project(path: ':constraintlayout')
+    //implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
     implementation "androidx.window:window:1.0.0-alpha01"
     testImplementation 'junit:junit:4.13'

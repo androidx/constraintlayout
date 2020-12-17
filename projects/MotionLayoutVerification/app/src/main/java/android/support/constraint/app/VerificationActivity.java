@@ -53,6 +53,7 @@ import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Random;
 
 /*
@@ -77,11 +78,17 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     private String KEY = "layout";
     private static final boolean DEBUG = false;
     String layout_name;
+    HashMap<String,Class>activity_map = new HashMap<>();
+    {
+        activity_map.put("verification_400",CheckSharedValues.class);
+    }
     String s = AppCompatActivity.class.getName();
 
     private static boolean REVERSE = false;
+
     private final String RUN_FIRST = "verification_309";
-    private final String LAYOUTS_MATCHES = "verification_3\\d+";
+    private final String LAYOUTS_MATCHES = "verification_\\d+";
+
     private static String SHOW_FIRST = "";
     MotionLayout mMotionLayout;
     private Flow mFlow;
@@ -524,7 +531,24 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
                 cset.setReferencedIds(R.id.flow2, ids);
             }
         }
+    }
 
+    int rotate = 0;
+
+    /**
+     * Use to test the animated change api
+     *
+     * @param view
+     */
+    public void twistViews(View view) {
+        rotate ++;
+        int current = mMotionLayout.getCurrentState();
+        ConstraintSet cset = mMotionLayout.cloneConstraintSet(current);
+        int[] id = {R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5, R.id.button6};
+        for (int i : id) {
+            cset.setRotation(i, ((rotate &1)==0) ? 90 : 0);
+        }
+        mMotionLayout.updateStateAnimate(current, cset, 200);
     }
 
     interface Test {
@@ -593,7 +617,12 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     }
 
     public void launch(String id) {
-        Intent intent = new Intent(this, VerificationActivity.class);
+        Intent intent;
+        if (activity_map.containsKey(id)) {
+            intent = new Intent(this, activity_map.get(id));
+        } else {
+            intent = new Intent(this, VerificationActivity.class);
+        }
         intent.putExtra(KEY, id);
         startActivity(intent);
     }
