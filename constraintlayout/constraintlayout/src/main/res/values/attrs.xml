@@ -266,7 +266,7 @@
 
     <!-- =============================== Start FadeMove =============================== -->
 
-    <declare-styleable name="FadeMove">
+    <declare-styleable name="MotionEffect">
         <attr name="fadeMove_start" format="integer" />
         <attr name="fadeMove_end" format="integer" />
         <attr name="fadeMove_translationX" format="dimension" />
