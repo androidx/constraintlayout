@@ -72,6 +72,9 @@ public class ConstraintWidget {
     private boolean OPTIMIZE_WRAP = false;
     private boolean OPTIMIZE_WRAP_ON_RESOLVED = true;
 
+    private int mWidthOverride = -1;
+    private int mHeightOverride = -1;
+
     public WidgetRun getRun(int orientation) {
         if (orientation == HORIZONTAL) {
             return horizontalRun;
@@ -513,6 +516,8 @@ public class ConstraintWidget {
         mMeasureRequested = true;
         mResolvedMatchConstraintDefault[HORIZONTAL] = 0;
         mResolvedMatchConstraintDefault[VERTICAL] = 0;
+        mWidthOverride = -1;
+        mHeightOverride = -1;
     }
 
     public int horizontalGroup = -1;
@@ -531,6 +536,10 @@ public class ConstraintWidget {
         return /* isInHorizontalChain() || isInVerticalChain() || */
                 (mListDimensionBehaviors[HORIZONTAL] == MATCH_CONSTRAINT
                 && mListDimensionBehaviors[VERTICAL] == MATCH_CONSTRAINT);
+    }
+
+    public boolean hasDimensionOverride() {
+        return mWidthOverride != -1 || mHeightOverride != -1;
     }
 
     /*-----------------------------------------------------------------------*/
@@ -1434,6 +1443,18 @@ public class ConstraintWidget {
         }
         if (mWidth < mMinWidth) {
             mWidth = mMinWidth;
+        }
+        if (mMatchConstraintMaxWidth > 0 && mListDimensionBehaviors[HORIZONTAL] == MATCH_CONSTRAINT) {
+            mWidth = Math.min(mWidth, mMatchConstraintMaxWidth);
+        }
+        if (mMatchConstraintMaxHeight > 0 && mListDimensionBehaviors[VERTICAL] == MATCH_CONSTRAINT) {
+            mHeight = Math.min(mHeight, mMatchConstraintMaxHeight);
+        }
+        if (w != mWidth) {
+            mWidthOverride = mWidth;
+        }
+        if (h != mHeight) {
+            mHeightOverride = mHeight;
         }
 
         if (LinearSystem.FULL_DEBUG) {
@@ -2694,6 +2715,24 @@ public class ConstraintWidget {
             break;
         }
 
+
+        if (mWidthOverride != -1 && isHorizontal) {
+            if (FULL_DEBUG) {
+                System.out.println("OVERRIDE WIDTH to " + mWidthOverride);
+            }
+            variableSize = false;
+            dimension = mWidthOverride;
+            mWidthOverride = -1;
+        }
+        if (mHeightOverride != -1 && !isHorizontal) {
+            if (FULL_DEBUG) {
+                System.out.println("OVERRIDE HEIGHT to " + mHeightOverride);
+            }
+            variableSize = false;
+            dimension = mHeightOverride;
+            mHeightOverride = -1;
+        }
+
         if (mVisibility == ConstraintWidget.GONE) {
             dimension = 0;
             variableSize = false;
@@ -2783,7 +2822,9 @@ public class ConstraintWidget {
                         percentEnd = system.createObjectVariable(mParent.getAnchor(ConstraintAnchor.Type.RIGHT));
                     }
                     system.addConstraint(system.createRow().createRowDimensionRatio(end, begin, percentEnd, percentBegin, matchPercentDimension));
-                    variableSize = false;
+                    if (parentWrapContent) {
+                        variableSize = false;
+                    }
                 } else {
                     isTerminal = true;
                 }
@@ -2884,6 +2925,15 @@ public class ConstraintWidget {
                     if (beginWidget instanceof Barrier || endWidget instanceof Barrier) {
                         boundsCheckStrength = SolverVariable.STRENGTH_HIGHEST;
                     }
+                } else if (matchConstraintDefault == MATCH_CONSTRAINT_PERCENT) {
+                    applyCentering = true;
+                    rangeCheckStrength = SolverVariable.STRENGTH_EQUALITY;
+                    boundsCheckStrength = SolverVariable.STRENGTH_EQUALITY;
+                    applyBoundsCheck = true;
+                    applyRangeCheck = true;
+                    if (beginWidget instanceof Barrier || endWidget instanceof Barrier) {
+                        boundsCheckStrength = SolverVariable.STRENGTH_HIGHEST;
+                    }
                 } else if (matchConstraintDefault == MATCH_CONSTRAINT_WRAP) {
                     applyCentering = true;
                     applyRangeCheck = true;
@@ -2975,6 +3025,7 @@ public class ConstraintWidget {
                     applyBoundsCheck = false;
                     parentWrapContent = false;
                 }
+
                 system.addCentering(begin, beginTarget, beginAnchor.getMargin(),
                         bias, endTarget, end, endAnchor.getMargin(), centeringStrength);
             }

@@ -419,15 +419,20 @@ public class ConstraintWidgetContainer extends WidgetContainer {
      *
      * @param system the solver we get the values from.
      */
-    public void updateChildrenFromSolver(LinearSystem system, boolean flags[]) {
+    public boolean updateChildrenFromSolver(LinearSystem system, boolean flags[]) {
         flags[Optimizer.FLAG_RECOMPUTE_BOUNDS] = false;
         boolean optimize = optimizeFor(Optimizer.OPTIMIZATION_GRAPH);
         updateFromSolver(system, optimize);
         final int count = mChildren.size();
+        boolean hasOverride = false;
         for (int i = 0; i < count; i++) {
             ConstraintWidget widget = mChildren.get(i);
             widget.updateFromSolver(system, optimize);
+            if (widget.hasDimensionOverride()) {
+                hasOverride = true;
+            }
         }
+        return hasOverride;
     }
 
     @Override
@@ -802,15 +807,15 @@ public class ConstraintWidgetContainer extends WidgetContainer {
                 System.out.println("EXCEPTION : " + e);
             }
             if (needsSolving) {
-                updateChildrenFromSolver(mSystem, Optimizer.flags);
+                needsSolving = updateChildrenFromSolver(mSystem, Optimizer.flags);
             } else {
                 updateFromSolver(mSystem, optimize);
                 for (int i = 0; i < count; i++) {
                     ConstraintWidget widget = mChildren.get(i);
                     widget.updateFromSolver(mSystem, optimize);
                 }
+                needsSolving = false;
             }
-            needsSolving = false;
 
             if (hasWrapContent && countSolve < MAX_ITERATIONS
                     && Optimizer.flags[Optimizer.FLAG_RECOMPUTE_BOUNDS]) {

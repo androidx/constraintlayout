@@ -7,6 +7,8 @@
     android:layout_height="match_parent"
     tools:ignore="MissingConstraints">
 
+   <!-- issue #40 -->
+
    <androidx.gridlayout.widget.GridLayout
        android:paddingBottom="16dp"
        android:id="@+id/keyboardGrid"

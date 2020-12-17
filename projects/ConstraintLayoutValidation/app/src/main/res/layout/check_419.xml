@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="MissingConstraints">
+
+   <!-- issue #52 -->
+
+
+   <TextView
+       android:id="@+id/text"
+       android:background="#FF0"
+       android:gravity="center"
+       android:text="This ABC DEF"
+       android:textSize="32sp"
+       android:layout_width="0dp"
+       android:layout_height="wrap_content"
+       app:layout_constraintWidth_max="150dp"
+       app:layout_constraintWidth_percent="0.5"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.5"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent" />
+
+   <TextView
+       android:id="@+id/title"
+       android:background="#4020f020"
+       android:text="Title"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       app:layout_constraintBottom_toTopOf="@+id/text"
+       app:layout_constraintLeft_toLeftOf="@+id/text"
+       app:layout_constraintRight_toRightOf="@+id/text"/>
+
+   <TextView
+       android:id="@+id/text2"
+       android:layout_width="0dp"
+       android:layout_height="wrap_content"
+       android:background="#FF0"
+       android:gravity="center"
+       android:text="This ABC DEF"
+       android:textSize="32sp"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintHorizontal_bias="0.5"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintVertical_bias="0.65999997"
+       app:layout_constraintWidth_max="150dp"
+       app:layout_constraintWidth_percent="0.5" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

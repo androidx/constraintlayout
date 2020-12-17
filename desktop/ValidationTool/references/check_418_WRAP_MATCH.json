@@ -1,0 +1,35 @@
+{
+  "duration": "603000",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "199",
+          "left": "41",
+          "bottom": "256",
+          "right": "122"
+        },
+        "id": "title",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "256",
+          "left": "41",
+          "bottom": "1281",
+          "right": "122"
+        },
+        "id": "text",
+        "class": "MaterialTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "162"
+    },
+    "id": "root",
+    "class": "ConstraintLayout"
+  }
+}
