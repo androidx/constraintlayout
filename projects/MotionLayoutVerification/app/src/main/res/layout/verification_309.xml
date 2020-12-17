@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layoutDescription="@xml/verification_scene_309"
+    app:layout_optimizationLevel="none"
+    tools:context=".VerificationActivity">
+
+    <androidx.constraintlayout.utils.widget.MotionLabel
+        android:id="@+id/label1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:gravity="center"
+        app:textureHeight="20dp"
+        app:textureWidth="20dp"
+        app:textBackgroundPanX="1"
+        android:text="T"
+        android:textSize="80sp"
+        app:textBackground="@drawable/texture2"
+        app:textOutlineColor="#FAA"
+        app:textOutlineThickness="1dp"
+ />
+
+    <androidx.constraintlayout.utils.widget.MotionLabel
+        android:id="@+id/label2"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:gravity="center"
+        app:textureHeight="8dp"
+        app:textureWidth="8dp"
+        app:textBackgroundPanX="-1"
+        android:text="T"
+        android:textSize="80sp"
+        app:textBackground="@drawable/texture4"
+
+   />
+
+    <androidx.constraintlayout.utils.widget.MotionLabel
+        android:id="@+id/label3"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/cat"
+        android:gravity="center"
+        android:text="X"
+        app:textureHeight="8dp"
+        app:textureWidth="8dp"
+        android:textSize="80sp"
+        app:borderRound="32dp"
+        app:textBackground="@drawable/texture2"
+
+        tools:layout_editor_absoluteX="166dp"
+        tools:layout_editor_absoluteY="366dp" />
+
+    <androidx.constraintlayout.utils.widget.MotionLabel
+        android:id="@+id/label4"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/cat"
+        android:gravity="center"
+        android:text="T"
+        android:textSize="80sp"
+        app:textureHeight="8dp"
+        app:textureWidth="8dp"
+        app:textBackground="@drawable/cat"
+        app:textOutlineColor="#FAA"
+        app:textOutlineThickness="1dp"
+
+        tools:layout_editor_absoluteX="43dp"
+        tools:layout_editor_absoluteY="536dp" />
+    <!-- ========================2=================================== -->
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/imageFilterView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/cat"
+        app:brightness="1"
+        app:contrast="0.4"
+        app:imageRotate="45"
+        app:layout_constraintBottom_toBottomOf="@id/label5"
+        app:layout_constraintEnd_toEndOf="@id/label5"
+        app:layout_constraintLeft_toLeftOf="@id/label5"
+        app:layout_constraintRight_toRightOf="@id/label5"
+        app:layout_constraintStart_toStartOf="@id/label5"
+        app:layout_constraintTop_toTopOf="@id/label5" />
+
+    <androidx.constraintlayout.utils.widget.MotionLabel
+        android:id="@+id/label5"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:textPanX="-1.3"
+        android:text="A world of Animated Text"
+        android:textSize="40sp"
+        app:textBackground="@drawable/cat"
+        app:textBackgroundRotate="45"
+       />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/imageFilterView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/cat"
+        app:brightness="0.6"
+        app:imageZoom="1.5"
+        app:imagePanX="-1"
+        app:layout_constraintBottom_toBottomOf="@id/label6"
+        app:layout_constraintEnd_toEndOf="@id/label6"
+        app:layout_constraintLeft_toLeftOf="@id/label6"
+        app:layout_constraintRight_toRightOf="@id/label6"
+        app:layout_constraintStart_toStartOf="@id/label6"
+        app:layout_constraintTop_toTopOf="@id/label6"
+        app:saturation="1.4"
+        app:warmth="0.4" />
+
+    <androidx.constraintlayout.utils.widget.MotionLabel
+        android:id="@+id/label6"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:textPanX="-1"
+        android:text="S"
+        android:textSize="80sp"
+        app:textBackgroundPanX="-1"
+        app:textBackground="@drawable/cat"
+        app:textBackgroundZoom="1.5"
+        tools:layout_editor_absoluteX="166dp"
+        tools:layout_editor_absoluteY="195dp" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/imageFilterView3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/cat"
+        app:brightness="0.9"
+        app:imagePanX="0.9"
+        app:imageZoom="1.5"
+        app:layout_constraintBottom_toBottomOf="@id/label7"
+        app:layout_constraintEnd_toEndOf="@id/label7"
+        app:layout_constraintLeft_toLeftOf="@id/label7"
+        app:layout_constraintRight_toRightOf="@id/label7"
+        app:layout_constraintStart_toStartOf="@id/label7"
+        app:layout_constraintTop_toTopOf="@id/label7"
+        app:saturation="0.4" />
+
+    <androidx.constraintlayout.utils.widget.MotionLabel
+        android:id="@+id/label7"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:gravity="center"
+        android:text="X"
+        android:textSize="80sp"
+        app:textBackground="@drawable/cat"
+        app:textBackgroundPanX="0.9"
+        app:textBackgroundZoom="1.5"
+        app:textOutlineColor="#000"
+        tools:layout_editor_absoluteX="43dp"
+        tools:layout_editor_absoluteY="366dp" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/imageFilterView4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:rotation="30"
+        android:src="@drawable/cat"
+        app:imageZoom="1.5"
+        app:layout_constraintBottom_toBottomOf="@id/label8"
+        app:layout_constraintEnd_toEndOf="@id/label8"
+        app:layout_constraintLeft_toLeftOf="@id/label8"
+        app:layout_constraintRight_toRightOf="@id/label8"
+        app:layout_constraintStart_toStartOf="@id/label8"
+        app:layout_constraintTop_toTopOf="@id/label8"
+        app:round="32dp"
+        app:saturation="0.0" />
+
+    <androidx.constraintlayout.utils.widget.MotionLabel
+        android:id="@+id/label8"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:gravity="center"
+        android:text="Z"
+        android:textSize="80sp"
+        app:textBackground="@drawable/cat"
+        app:textBackgroundRotate="30"
+        app:textBackgroundZoom="1.5"
+        app:textOutlineColor="#372B2B"
+        app:textOutlineThickness="1dp"
+        tools:layout_editor_absoluteX="43dp"
+        tools:layout_editor_absoluteY="195dp" />
+    <!-- =========================================================== -->
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/imageFilterView5"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/rainbow"
+        app:brightness="0.9"
+        app:imageZoom="1.5"
+        app:layout_constraintBottom_toBottomOf="@id/label9"
+        app:layout_constraintEnd_toEndOf="@id/label9"
+        app:layout_constraintLeft_toLeftOf="@id/label9"
+        app:layout_constraintRight_toRightOf="@id/label9"
+        app:layout_constraintStart_toStartOf="@id/label9"
+        app:layout_constraintTop_toTopOf="@id/label9" />
+
+    <androidx.constraintlayout.utils.widget.MotionLabel
+        android:id="@+id/label9"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:gravity="center"
+        android:text="Graphic"
+        android:textSize="20sp"
+        app:textBackground="@drawable/rainbow"
+
+        tools:layout_editor_absoluteX="166dp"
+        tools:layout_editor_absoluteY="396dp" />
+
+    <androidx.constraintlayout.utils.widget.MotionLabel
+        android:id="@+id/label10"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/rainbow"
+        android:gravity="center"
+        app:textureHeight="3dp"
+        app:textureWidth="3dp"
+        android:text="Cool"
+        android:textSize="30sp"
+        app:textBackground="@drawable/moon"
+        app:textBackgroundPanY="0.2"
+        app:textBackgroundZoom="1.2"
+        tools:layout_editor_absoluteX="288dp"
+        tools:layout_editor_absoluteY="195dp" />
+
+    <androidx.constraintlayout.utils.widget.MotionLabel
+        android:id="@+id/label11"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="#AC4343"
+        app:textureHeight="3dp"
+        app:textureWidth="3dp"
+        android:gravity="center"
+        android:text="DO"
+        android:textSize="70sp"
+        app:textBackground="@drawable/rainbow2" />
+
+    <androidx.constraintlayout.utils.widget.MotionLabel
+        android:id="@+id/label12"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/blue_grad"
+        app:textureHeight="3dp"
+        android:gravity="center"
+        android:text="No"
+        android:textSize="70sp"
+        app:textBackground="@drawable/rainbow"
+
+        />
+    <!-- =========================================================== -->
+
+    <androidx.constraintlayout.utils.widget.MotionLabel
+        android:id="@+id/label13"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="#CFCF3F"
+        android:gravity="center"
+        android:text="X"
+        android:textColor="#32443322"
+        android:textSize="80sp"
+        app:textOutlineColor="#000" />
+
+    <androidx.constraintlayout.utils.widget.MotionLabel
+        android:id="@+id/label14"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/rainbow"
+        android:gravity="center"
+        android:text="X"
+        android:textSize="80sp"
+        app:textBackground="@drawable/rainbow_t"
+        />
+
+    <androidx.constraintlayout.utils.widget.MotionLabel
+        android:id="@+id/label15"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/cat"
+        android:gravity="center"
+        android:text="X"
+        android:textSize="80sp"
+        app:textBackground="@drawable/rainbow_t"
+        tools:layout_editor_absoluteX="43dp"
+        tools:layout_editor_absoluteY="25dp" />
+
+    <androidx.constraintlayout.utils.widget.MotionLabel
+        android:id="@+id/label16"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="#0aa"
+        android:gravity="center"
+        android:text="X"
+        android:textColor="#4FFF"
+        android:textSize="80sp"
+        app:textOutlineColor="#FAA"
+        app:textOutlineThickness="3dp"
+        tools:layout_editor_absoluteX="288dp"
+        tools:layout_editor_absoluteY="366dp" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:constraint_referenced_ids="label1,label2,label3,label4,label5,label6,label7,label8,label9,label10,label11,label12,label13,label14,label15,label16"
+        app:flow_maxElementsWrap="4"
+        app:flow_wrapMode="chain"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

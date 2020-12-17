@@ -90,28 +90,28 @@ public class TextMorph extends View {
 
         if (attrs != null) {
             TypedArray a = getContext()
-                    .obtainStyledAttributes(attrs, androidx.constraintlayout.widget.R.styleable.MotionLabel);
+                    .obtainStyledAttributes(attrs, androidx.constraintlayout.widget.R.styleable.TextEffects);
             final int N = a.getIndexCount();
 
             int k = 0;
             for (int i = 0; i < N; i++) {
                 int attr = a.getIndex(i);
-                if (attr == androidx.constraintlayout.widget.R.styleable.MotionLabel_android_text) {
+                if (attr == androidx.constraintlayout.widget.R.styleable.TextEffects_android_text) {
                     setText(a.getText(attr));
-                } else  if (attr == androidx.constraintlayout.widget.R.styleable.MotionLabel_textFillColor) {
+                } else  if (attr == androidx.constraintlayout.widget.R.styleable.TextEffects_textFillColor) {
                     mTextFillColor = a.getColor(attr, mTextFillColor);
-                }  else  if (attr == androidx.constraintlayout.widget.R.styleable.MotionLabel_android_fontFamily) {
+                }  else  if (attr == androidx.constraintlayout.widget.R.styleable.TextEffects_android_fontFamily) {
                     mFontFamily = a.getString(attr);
-                }   else  if (attr == androidx.constraintlayout.widget.R.styleable.MotionLabel_android_textSize) {
+                }   else  if (attr == androidx.constraintlayout.widget.R.styleable.TextEffects_android_textSize) {
                     mTextSize = a.getDimensionPixelSize(attr, mTextSize);
-                }  else  if (attr == androidx.constraintlayout.widget.R.styleable.MotionLabel_android_textStyle) {
+                }  else  if (attr == androidx.constraintlayout.widget.R.styleable.TextEffects_android_textStyle) {
                     mStyleIndex = a.getInt(attr, mStyleIndex);
-                }  else  if (attr == androidx.constraintlayout.widget.R.styleable.MotionLabel_android_typeface) {
+                }  else  if (attr == androidx.constraintlayout.widget.R.styleable.TextEffects_android_typeface) {
                     mTypefaceIndex = a.getInt(attr, mTypefaceIndex);
-                }  else  if (attr == androidx.constraintlayout.widget.R.styleable.MotionLabel_textOutlineColor) {
+                }  else  if (attr == androidx.constraintlayout.widget.R.styleable.TextEffects_textOutlineColor) {
                     mTextOutlineColor = a.getColor(attr,mTextOutlineColor);
                     mUseOutline = true;
-                }  else  if (attr == androidx.constraintlayout.widget.R.styleable.MotionLabel_textOutlineThickness) {
+                }  else  if (attr == androidx.constraintlayout.widget.R.styleable.TextEffects_textOutlineThickness) {
                     mTextOutlineThickness = a.getDimension(attr, mTextOutlineThickness);
                 }
             }

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto"
+    motion:defaultDuration="1000">
+
+    <Transition
+        motion:constraintSetEnd="@+id/a"
+        motion:constraintSetStart="@+id/start"
+        motion:duration="4000">
+        <OnClick motion:targetId="@+id/run" />
+        <KeyFrameSet>
+
+        </KeyFrameSet>
+    </Transition>
+    <Transition
+        motion:constraintSetEnd="@+id/b"
+        motion:constraintSetStart="@+id/a"
+        motion:duration="4000"
+        motion:autoTransition="animateToEnd" />
+
+    <Transition
+        motion:constraintSetEnd="@+id/start"
+        motion:constraintSetStart="@+id/b"
+        motion:duration="4000"
+        motion:autoTransition="animateToEnd" />
+
+    <ConstraintSet android:id="@+id/start">
+
+    </ConstraintSet>
+
+
+    <ConstraintSet android:id="@+id/a">
+
+        <ConstraintOverride
+            android:id="@+id/mtext1"
+            android:layout_marginTop="165dp" />
+        <ConstraintOverride
+            android:id="@+id/mtext5"
+            android:layout_width="200dp"
+            android:layout_height="160dp" />
+        <ConstraintOverride
+            android:id="@+id/mtext6"
+            android:layout_width="300dp"
+            android:layout_height="300dp" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/b">
+
+
+        <ConstraintOverride
+            android:id="@+id/mtext1"
+            motion:layout_constraintHorizontal_bias="0.0"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content" />
+        <ConstraintOverride
+            android:id="@+id/mtext2"
+            android:layout_width="60dp"
+            android:layout_height="20dp"/>
+        <ConstraintOverride
+            android:id="@+id/mtext3"
+            android:layout_width="260dp"
+            android:layout_height="20dp" />
+        <ConstraintOverride
+            android:id="@+id/mtext4"
+            android:layout_width="260dp"
+            android:layout_height="20dp" />
+        <ConstraintOverride
+            android:id="@+id/mtext5"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            />
+
+    </ConstraintSet>
+
+
+</MotionScene>

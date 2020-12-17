@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="5000">
+        <OnClick/>
+       <KeyFrameSet>
+
+
+       </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+        <ConstraintOverride android:id="@+id/imageFilterView4" >
+            <CustomAttribute motion:attributeName="rotation"
+                motion:customFloatValue="380"
+                />
+        </ConstraintOverride>
+        <ConstraintOverride android:id="@+id/label8" >
+            <CustomAttribute motion:attributeName="textBackgroundRotate"
+                motion:customFloatValue="380"
+                />
+        </ConstraintOverride>
+
+
+        <ConstraintOverride android:id="@+id/imageFilterView2" >
+            <CustomAttribute
+                motion:attributeName="imagePanX"
+                motion:customFloatValue="-1"
+                />
+        </ConstraintOverride>
+        <ConstraintOverride android:id="@+id/label6" >
+            <CustomAttribute motion:attributeName="textPanX"
+                motion:customFloatValue="-1"
+                />
+            <CustomAttribute
+                motion:attributeName="textBackgroundPanX"
+                motion:customFloatValue="-1"
+                />
+        </ConstraintOverride>
+
+
+
+
+        <Constraint android:id="@id/label7" >
+            <CustomAttribute
+                motion:attributeName="textSize"
+                motion:customDimension="30sp"
+                />
+        </Constraint>
+        <Constraint android:id="@id/label5" >
+            <CustomAttribute
+                motion:attributeName="textPanX"
+                motion:customFloatValue="-1.3"
+                />
+        </Constraint>
+        <Constraint android:id="@id/label1" >
+            <CustomAttribute
+                motion:attributeName="textBackgroundPanY"
+                motion:customFloatValue="0"
+                />
+        </Constraint>
+                <Constraint android:id="@id/label2" >
+                    <CustomAttribute
+                        motion:attributeName="textBackgroundPanX"
+                        motion:customFloatValue="0"
+                        />
+                </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint android:id="@+id/label8" >
+            <CustomAttribute motion:attributeName="textBackgroundRotate"
+               motion:customFloatValue="30"
+                />
+        </Constraint>
+        <ConstraintOverride android:id="@+id/imageFilterView4" >
+            <CustomAttribute motion:attributeName="rotation"
+                motion:customFloatValue="30"
+                />
+        </ConstraintOverride>
+
+        <ConstraintOverride android:id="@id/imageFilterView2" >
+            <CustomAttribute
+                motion:attributeName="imagePanX"
+                motion:customFloatValue="1"
+                />
+        </ConstraintOverride>
+        <ConstraintOverride android:id="@id/label6" >
+            <CustomAttribute
+                motion:attributeName="textPanX"
+                motion:customFloatValue="1"
+                />
+            <CustomAttribute
+                motion:attributeName="textBackgroundPanX"
+                motion:customFloatValue="1"
+                />
+        </ConstraintOverride>
+        <Constraint android:id="@id/label7" >
+            <CustomAttribute
+                motion:attributeName="textSize"
+                motion:customDimension="980sp"
+                />
+        </Constraint>
+        <Constraint android:id="@id/label5" >
+            <CustomAttribute
+                motion:attributeName="textPanX"
+                motion:customFloatValue="1.3"
+                />
+        </Constraint>
+
+        <Constraint android:id="@id/label1" >
+            <CustomAttribute
+                motion:attributeName="textBackgroundPanY"
+                motion:customFloatValue="20"
+                />
+        </Constraint>
+        <Constraint android:id="@id/label2" >
+            <CustomAttribute
+                motion:attributeName="textBackgroundPanX"
+                motion:customFloatValue="10"
+                />
+        </Constraint>
+    </ConstraintSet>
+</MotionScene>
