@@ -1,0 +1,45 @@
+{
+  "duration": "907000",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "57",
+          "left": "41",
+          "bottom": "1082",
+          "right": "122"
+        },
+        "id": "text",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "41",
+          "bottom": "57",
+          "right": "122"
+        },
+        "id": "title",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "75",
+          "left": "41",
+          "bottom": "1100",
+          "right": "122"
+        },
+        "id": "text2",
+        "class": "MaterialTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1139",
+      "right": "162"
+    },
+    "id": "root",
+    "class": "ConstraintLayout"
+  }
+}
