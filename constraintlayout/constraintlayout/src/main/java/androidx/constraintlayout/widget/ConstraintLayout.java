@@ -1492,6 +1492,7 @@ public class ConstraintLayout extends ViewGroup {
             widget.setVerticalWeight(layoutParams.verticalWeight);
             widget.setHorizontalChainStyle(layoutParams.horizontalChainStyle);
             widget.setVerticalChainStyle(layoutParams.verticalChainStyle);
+            widget.setWrapBehaviorInParent(layoutParams.wrapBehaviorInParent);
             widget.setHorizontalMatchStyle(layoutParams.matchConstraintDefaultWidth,
                     layoutParams.matchConstraintMinWidth, layoutParams.matchConstraintMaxWidth,
                     layoutParams.matchConstraintPercentWidth);
@@ -2010,13 +2011,15 @@ public class ConstraintLayout extends ViewGroup {
                 }
             }
         }
+
         super.dispatchDraw(canvas);
+
         if (DEBUG || isInEditMode()) {
-            final int count = getChildCount();
             float cw = getWidth();
             float ch = getHeight();
             float ow = 1080;
             float oh = 1920;
+            final int count = getChildCount();
             for (int i = 0; i < count; i++) {
                 View child = getChildAt(i);
                 if (child.getVisibility() == GONE) {
@@ -2552,6 +2555,22 @@ public class ConstraintLayout extends ViewGroup {
          */
         public String constraintTag = null;
 
+        public static final int WRAP_BEHAVIOR_INCLUDED = ConstraintWidget.WRAP_BEHAVIOR_INCLUDED;
+        public static final int WRAP_BEHAVIOR_HORIZONTAL_ONLY = ConstraintWidget.WRAP_BEHAVIOR_HORIZONTAL_ONLY;
+        public static final int WRAP_BEHAVIOR_VERTICAL_ONLY = ConstraintWidget.WRAP_BEHAVIOR_VERTICAL_ONLY;
+        public static final int WRAP_BEHAVIOR_SKIPPED = ConstraintWidget.WRAP_BEHAVIOR_SKIPPED;
+
+        /**
+         * Specify how this view is taken in account during the parent's wrap computation
+         *
+         * Can be either of:
+         * WRAP_BEHAVIOR_INCLUDED the widget is taken in account for the wrap (default)
+         * WRAP_BEHAVIOR_HORIZONTAL_ONLY the widget will be included in the wrap only horizontally
+         * WRAP_BEHAVIOR_VERTICAL_ONLY the widget will be included in the wrap only vertically
+         * WRAP_BEHAVIOR_SKIPPED the widget is not part of the wrap computation
+         */
+        public int wrapBehaviorInParent = WRAP_BEHAVIOR_INCLUDED;
+
         // Internal use only
         boolean horizontalDimensionFixed = true;
         boolean verticalDimensionFixed = true;
@@ -2685,6 +2704,7 @@ public class ConstraintLayout extends ViewGroup {
             this.resolveGoneRightMargin = source.resolveGoneRightMargin;
             this.resolvedHorizontalBias = source.resolvedHorizontalBias;
             this.constraintTag = source.constraintTag;
+            this.wrapBehaviorInParent = source.wrapBehaviorInParent;
             this.widget = source.widget;
             this.widthSet = source.widthSet;
             this.heightSet = source.heightSet;
@@ -2757,6 +2777,7 @@ public class ConstraintLayout extends ViewGroup {
             public static final int LAYOUT_HEIGHT = 63;
             public static final int LAYOUT_CONSTRAINT_WIDTH = 64;
             public static final int LAYOUT_CONSTRAINT_HEIGHT = 65;
+            public static final int LAYOUT_WRAP_BEHAVIOR_IN_PARENT = 66;
 
             public final static SparseIntArray map = new SparseIntArray();
 
@@ -2826,6 +2847,7 @@ public class ConstraintLayout extends ViewGroup {
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBottom_creator, LAYOUT_CONSTRAINT_BOTTOM_CREATOR);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBaseline_creator, LAYOUT_CONSTRAINT_BASELINE_CREATOR);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintTag, LAYOUT_CONSTRAINT_TAG);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_wrapBehaviorInParent, LAYOUT_WRAP_BEHAVIOR_IN_PARENT);
             }
         }
 
@@ -2898,6 +2920,10 @@ public class ConstraintLayout extends ViewGroup {
                     case Table.LAYOUT_HEIGHT: {
                         height = a.getLayoutDimension(R.styleable.ConstraintLayout_Layout_android_layout_height, "layout_height");
                         heightSet = true;
+                        break;
+                    }
+                    case Table.LAYOUT_WRAP_BEHAVIOR_IN_PARENT: {
+                        wrapBehaviorInParent = a.getInt(attr, wrapBehaviorInParent);
                         break;
                     }
                     case Table.LAYOUT_CONSTRAINT_LEFT_TO_LEFT_OF: {

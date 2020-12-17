@@ -113,19 +113,35 @@
     <!-- the end margin value to be used when connected to an object that is GONE -->
     <attr name="layout_goneMarginEnd" format="dimension" />
 
+    <!-- the baseline margin to a target -->
     <attr name="layout_marginBaseline" format="dimension" />
+
+    <!-- the gone baseline margin to a target -->
     <attr name="layout_goneMarginBaseline" format="dimension" />
+
+    <!-- allows to specify horizontal dimension constraints in a more expressive way -->
     <attr name="layout_constraintWidth" format="dimension|enum|string">
         <enum name="match_parent" value="-1" />
         <enum name="wrap_content" value="-2" />
         <enum name="match_constraint" value="-3" />
         <enum name="wrap_content_constrained" value="-4" />
     </attr>
+
+    <!-- allows to specify vertical dimension constraints in a more expressive way -->
     <attr name="layout_constraintHeight" format="dimension|enum|string">
         <enum name="match_parent" value="-1" />
         <enum name="wrap_content" value="-2" />
         <enum name="match_constraint" value="-3" />
         <enum name="wrap_content_constrained" value="-4" />
+    </attr>
+
+    <!-- controls how a widget is taken in account for the wrap computation of the layout -->
+    <!-- default is included -->
+    <attr name="layout_wrapBehaviorInParent" format="enum">
+        <enum name="included" value="0" />
+        <enum name="horizontal_only" value="1" />
+        <enum name="vertical_only" value="2" />
+        <enum name="skipped" value="3" />
     </attr>
 
     <!-- Fraction of excess space to distribute on the left when constrained on left & right edges (e.g. .5 = middle)-->
@@ -360,7 +376,6 @@
         <enum name="linear" value="3" />
         <enum name="bounce" value="4" />
         <enum name="overshoot" value="5" />
-
     </attr>
 
     <!-- Specify the visibility of a placeholder -->
@@ -439,6 +454,7 @@
         <attr name="telltales_tailScale" format="float" />
     </declare-styleable>
 
+    <!-- =============================== Layout =============================== -->
 
     <declare-styleable name="ConstraintLayout_Layout">
         <attr name="android:orientation" />
@@ -558,6 +574,7 @@
         <attr name="layout_editor_absoluteX" />
         <attr name="layout_editor_absoluteY" />
         <attr name="layout_constraintTag" />
+        <attr name="layout_wrapBehaviorInParent" />
     </declare-styleable>
 
     <!--Frame Interpolation provide a per key view  time interpolation capability
@@ -691,6 +708,7 @@
         <attr name="layout_constraintVertical_chainStyle" />
         <attr name="layout_editor_absoluteX" />
         <attr name="layout_editor_absoluteY" />
+        <attr name="layout_wrapBehaviorInParent" />
 
         <attr name="barrierDirection" />
         <attr name="constraint_referenced_ids" />
@@ -875,6 +893,7 @@
         <attr name="layout_constraintVertical_chainStyle" />
         <attr name="layout_editor_absoluteX" />
         <attr name="layout_editor_absoluteY" />
+        <attr name="layout_wrapBehaviorInParent" />
 
         <attr name="barrierDirection" />
         <attr name="barrierMargin" />
@@ -1043,6 +1062,7 @@
         <attr name="layout_constraintVertical_chainStyle" />
         <attr name="layout_editor_absoluteX" />
         <attr name="layout_editor_absoluteY" />
+        <attr name="layout_wrapBehaviorInParent" />
 
         <attr name="barrierDirection" />
         <attr name="barrierMargin" />
@@ -1544,6 +1564,7 @@
         <attr name="layout_constraintVertical_chainStyle" />
         <attr name="layout_editor_absoluteX" />
         <attr name="layout_editor_absoluteY" />
+        <attr name="layout_wrapBehaviorInParent" />
         <attr name="barrierDirection" />
         <attr name="barrierMargin" />
         <attr name="constraint_referenced_ids" />
