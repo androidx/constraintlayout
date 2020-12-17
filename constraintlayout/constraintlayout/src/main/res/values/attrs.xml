@@ -1451,11 +1451,8 @@
         <attr name="textOutlineColor" />
         <attr name="textBackground" format="reference"/>
         <attr name="android:autoSizeTextType"/>
-        <attr name="textBackgroundMode" format="enum" >
-            <enum name="Normal" value="0"/>
-            <enum name="TileX" value="1"/>
-            <enum name="TileY" value="2"/>
-        </attr>
+        <attr name="textureWidth" format="dimension" />
+        <attr name="textureHeight" format="dimension" />
 
 
         <attr name="textBackgroundPanX" format="float" />

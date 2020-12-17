@@ -13,26 +13,29 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:gravity="center"
+        app:textureHeight="20dp"
+        app:textureWidth="20dp"
+        app:textBackgroundPanX="1"
         android:text="T"
         android:textSize="80sp"
-        app:textBackground="@drawable/rainbow"
+        app:textBackground="@drawable/texture2"
         app:textOutlineColor="#FAA"
-        app:textOutlineThickness="3dp"
-        tools:layout_editor_absoluteX="288dp"
-        tools:layout_editor_absoluteY="536dp" />
+        app:textOutlineThickness="1dp"
+ />
 
     <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/label2"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:background="@drawable/cat"
         android:gravity="center"
-        android:text="E"
+        app:textureHeight="8dp"
+        app:textureWidth="8dp"
+        app:textBackgroundPanX="-1"
+        android:text="T"
         android:textSize="80sp"
-        app:textBackground="@drawable/rainbow"
+        app:textBackground="@drawable/texture4"
 
-        tools:layout_editor_absoluteX="288dp"
-        tools:layout_editor_absoluteY="25dp" />
+   />
 
     <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/label3"
@@ -41,9 +44,11 @@
         android:background="@drawable/cat"
         android:gravity="center"
         android:text="X"
+        app:textureHeight="8dp"
+        app:textureWidth="8dp"
         android:textSize="80sp"
         app:borderRound="32dp"
-        app:textBackground="@drawable/rainbow2"
+        app:textBackground="@drawable/texture2"
 
         tools:layout_editor_absoluteX="166dp"
         tools:layout_editor_absoluteY="366dp" />
@@ -56,13 +61,15 @@
         android:gravity="center"
         android:text="T"
         android:textSize="80sp"
+        app:textureHeight="8dp"
+        app:textureWidth="8dp"
         app:textBackground="@drawable/cat"
         app:textOutlineColor="#FAA"
         app:textOutlineThickness="1dp"
 
         tools:layout_editor_absoluteX="43dp"
         tools:layout_editor_absoluteY="536dp" />
-    <!-- =========================================================== -->
+    <!-- ========================2=================================== -->
     <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/imageFilterView"
         android:layout_width="0dp"
@@ -96,6 +103,7 @@
         android:src="@drawable/cat"
         app:brightness="0.6"
         app:imageZoom="1.5"
+        app:imagePanX="-1"
         app:layout_constraintBottom_toBottomOf="@id/label6"
         app:layout_constraintEnd_toEndOf="@id/label6"
         app:layout_constraintLeft_toLeftOf="@id/label6"
@@ -112,6 +120,7 @@
         app:textPanX="-1"
         android:text="S"
         android:textSize="80sp"
+        app:textBackgroundPanX="-1"
         app:textBackground="@drawable/cat"
         app:textBackgroundZoom="1.5"
         tools:layout_editor_absoluteX="166dp"
@@ -211,9 +220,11 @@
         android:layout_height="100dp"
         android:background="@drawable/rainbow"
         android:gravity="center"
+        app:textureHeight="3dp"
+        app:textureWidth="3dp"
         android:text="Cool"
         android:textSize="30sp"
-        app:textBackground="@drawable/rainbow"
+        app:textBackground="@drawable/moon"
         app:textBackgroundPanY="0.2"
         app:textBackgroundZoom="1.2"
         tools:layout_editor_absoluteX="288dp"
@@ -224,16 +235,19 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:background="#AC4343"
+        app:textureHeight="3dp"
+        app:textureWidth="3dp"
         android:gravity="center"
         android:text="DO"
         android:textSize="70sp"
-        app:textBackground="@drawable/rainbow" />
+        app:textBackground="@drawable/rainbow2" />
 
     <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/label12"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:background="@drawable/blue_grad"
+        app:textureHeight="3dp"
         android:gravity="center"
         android:text="No"
         android:textSize="70sp"
@@ -262,8 +276,6 @@
         android:text="X"
         android:textSize="80sp"
         app:textBackground="@drawable/rainbow_t"
-
-
         />
 
     <androidx.constraintlayout.utils.widget.MotionLabel

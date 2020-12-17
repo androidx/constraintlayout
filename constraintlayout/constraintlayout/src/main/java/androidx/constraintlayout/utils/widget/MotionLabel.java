@@ -35,6 +35,7 @@ import android.os.Build;
 import android.text.Layout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -42,14 +43,17 @@ import android.view.ViewOutlineProvider;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.FloatLayout;
 import androidx.constraintlayout.widget.R;
 
 import static android.widget.TextView.AUTO_SIZE_TEXT_TYPE_NONE;
 
 /**
- * This class is designed to support resizing in MotionLayout more efficiently
- * It also support rounding the border
+ * This class is designed to created Complex Animated Single Line Text in MotionLayout
+ * <ul>color outlines</ul>
+ * <ul>Textured text</ul>
+ * <ul>PanX, PanY instead of Gravity</ul>
  */
 public class MotionLabel extends View implements FloatLayout {
     static String TAG = "MotionLabel";
@@ -84,18 +88,18 @@ public class MotionLabel extends View implements FloatLayout {
     private int mGravity = Gravity.TOP | Gravity.START;
     private int mAutoSizeTextType = AUTO_SIZE_TEXT_TYPE_NONE;
     private boolean mAutoSize = false; // decided during measure
-    private float mDeltaLeft, mDeltaTop, mDeltaRight, mDeltatBottom;
+    private float mDeltaLeft;
     private float mFloatWidth, mFloatHeight;
     private Drawable mTextBackground;
     Matrix mOutlinePositionMatrix;
     private Bitmap mTextBackgroundBitmap;
     private BitmapShader mTextShader;
     private Matrix mTextShaderMatrix;
-    private float mFloatLeft;
-    private float mFloatTop;
-    private int mTxtBackgroundMode = 0;
+    private float mTextureHeight = Float.NaN;
+    private float mTextureWidth = Float.NaN;
     private float mTextPanX = 0;
     private float mTextPanY = 0;
+    Paint paintCache = new Paint();
 
     public MotionLabel(Context context) {
         super(context);
@@ -111,7 +115,6 @@ public class MotionLabel extends View implements FloatLayout {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
-
 
     private void init(Context context, AttributeSet attrs) {
         setUpTheme(context, attrs);
@@ -171,10 +174,11 @@ public class MotionLabel extends View implements FloatLayout {
                     mRotate = a.getFloat(attr, mRotate);
                 } else if (attr == R.styleable.MotionLabel_textBackgroundZoom) {
                     mZoom = a.getFloat(attr, mZoom);
-                } else if (attr == R.styleable.MotionLabel_textBackgroundMode) {
-                    mTxtBackgroundMode = a.getInt(attr, 0);
+                } else if (attr == R.styleable.MotionLabel_textureHeight) {
+                    mTextureHeight = a.getDimension(attr, mTextureHeight);
+                } else if (attr == R.styleable.MotionLabel_textureWidth) {
+                    mTextureWidth = a.getDimension(attr, mTextureWidth);
                 }
-
             }
             a.recycle();
         }
@@ -191,14 +195,15 @@ public class MotionLabel extends View implements FloatLayout {
             if (iw <= 0) {
                 int w = getWidth();
                 if (w == 0) {
-                    w = 128;
+                    w = ((Float.isNaN(mTextureWidth)) ? 128 : (int) mTextureWidth);
                 }
                 iw = w;
             }
             if (ih <= 0) {
                 int h = getHeight();
                 if (h == 0) {
-                    h = 128;
+                    h = ((Float.isNaN(mTextureHeight)) ? 128 : (int) mTextureHeight);
+                    ;
                 }
                 ih = h;
             }
@@ -215,11 +220,10 @@ public class MotionLabel extends View implements FloatLayout {
         if (mTextShaderMatrix == null) {
             return;
         }
-        mFloatLeft = l;
-        mFloatTop = t;
+
         mFloatWidth = r - l;
         mFloatHeight = b - t;
-        updateViewMatrix();
+        updateShaderMatrix();
     }
 
     /**
@@ -320,7 +324,7 @@ public class MotionLabel extends View implements FloatLayout {
             return;
         }
         mPath.reset();
-        String str = mText.toString();
+        String str = mText;
         int strlen = str.length();
         mPaint.getTextBounds(str, 0, strlen, mTextBounds);
         mPaint.getTextPath(str, 0, strlen, 0, 0, mPath);
@@ -329,7 +333,7 @@ public class MotionLabel extends View implements FloatLayout {
         mTextBounds.left++;
         mTextBounds.bottom++;
         mTextBounds.top--;
-        RectF src = new RectF(mTextBounds);
+
         RectF rect = new RectF();
         rect.bottom = getHeight();
         rect.right = getWidth();
@@ -377,9 +381,6 @@ public class MotionLabel extends View implements FloatLayout {
     @Override
     public void layout(float l, float t, float r, float b) {
         mDeltaLeft = l - (int) (0.5f + l);
-        mDeltaTop = t - (int) (0.5f + t);
-        mDeltaRight = r - (int) (0.5f + r);
-        mDeltatBottom = b - (int) (0.5f + b);
         int w = (int) (0.5f + r) - (int) (0.5f + l);
         int h = (int) (0.5f + b) - (int) (0.5f + t);
         mFloatWidth = r - l;
@@ -400,8 +401,6 @@ public class MotionLabel extends View implements FloatLayout {
                 mTempPaint.set(mPaint);
                 paintTextSize = mTempPaint.getTextSize();
             }
-            mFloatLeft = l;
-            mFloatTop = t;
             mFloatWidth = r - l;
             mFloatHeight = b - t;
 
@@ -437,7 +436,7 @@ public class MotionLabel extends View implements FloatLayout {
             if (mOutlinePositionMatrix == null) {
                 mOutlinePositionMatrix = new Matrix();
             }
-            Paint tmp = new Paint(mPaint);
+            paintCache.set(mPaint);
             mOutlinePositionMatrix.reset();
             float x = mPaddingLeft + getHorizontalOffset();
             float y = mPaddingTop + getVerticalOffset();
@@ -463,7 +462,7 @@ public class MotionLabel extends View implements FloatLayout {
             mOutlinePositionMatrix.reset();
             mOutlinePositionMatrix.postTranslate(-x, -y);
             mPath.transform(mOutlinePositionMatrix);
-            mPaint.set(tmp);
+            mPaint.set(paintCache);
         } else {
             float x = mPaddingLeft + getHorizontalOffset();
             float y = mPaddingTop + getVerticalOffset();
@@ -490,11 +489,19 @@ public class MotionLabel extends View implements FloatLayout {
         invalidate();
     }
 
+    /**
+     * Set the color of the text.
+     * @param color the color of the text
+     */
     public void setTextFillColor(int color) {
         mTextFillColor = color;
         invalidate();
     }
 
+    /**
+     * Sets the color of the text outline.
+     * @param color the color of the outline of the text
+     */
     public void setTextOutlineColor(int color) {
         mTextOutlineColor = color;
         mUseOutline = true;
@@ -541,7 +548,6 @@ public class MotionLabel extends View implements FloatLayout {
         }
     }
 
-
     private void setTypeface(Typeface tf) {
         if (mPaint.getTypeface() != tf) {
             mPaint.setTypeface(tf);
@@ -556,15 +562,11 @@ public class MotionLabel extends View implements FloatLayout {
     /**
      * @return the current typeface and style in which the text is being
      * displayed.
-     * @attr ref android.R.styleable#TextView_fontFamily
-     * @attr ref android.R.styleable#TextView_typeface
-     * @attr ref android.R.styleable#TextView_textStyle
      * @see #setTypeface(Typeface)
      */
     public Typeface getTypeface() {
         return mPaint.getTypeface();
     }
-
 
     //   @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -739,8 +741,8 @@ public class MotionLabel extends View implements FloatLayout {
 
     /**
      * set text size
-     *
-     * @param size
+     * @see Paint#setTextSize(float)
+     * @param size the size of the text
      */
     public void setTextSize(float size) {
         mTextSize = size;
@@ -750,14 +752,10 @@ public class MotionLabel extends View implements FloatLayout {
         invalidate();
     }
 
-    public int getmTextOutlineColor() {
+    public int getTextOutlineColor() {
         return mTextOutlineColor;
     }
 
-    public void setmTextOutlineColor(int mTextOutlineColor) {
-        this.mTextOutlineColor = mTextOutlineColor;
-        invalidate();
-    }
 
     // ============================ TextureTransformLogic ===============================//
     float mBackgroundPanX = Float.NaN;
@@ -820,7 +818,8 @@ public class MotionLabel extends View implements FloatLayout {
      */
     public void setTextBackgroundPanX(float pan) {
         mBackgroundPanX = pan;
-        updateViewMatrix();
+        Log.v(TAG, Debug.getLoc() + " " + Debug.getName(this) + " " + pan);
+        updateShaderMatrix();
         invalidate();
     }
 
@@ -835,7 +834,7 @@ public class MotionLabel extends View implements FloatLayout {
      */
     public void setTextBackgroundPanY(float pan) {
         mBackgroundPanY = pan;
-        updateViewMatrix();
+        updateShaderMatrix();
         invalidate();
     }
 
@@ -846,22 +845,21 @@ public class MotionLabel extends View implements FloatLayout {
      */
     public void setTextBackgroundZoom(float zoom) {
         mZoom = zoom;
-        updateViewMatrix();
+        updateShaderMatrix();
         invalidate();
     }
 
     /**
      * sets the rotation angle of the image in degrees
-     *
-     * @rotation the rotation in degrees
+     * @param rotation angle in degrees
      */
     public void setTextBackgroundRotate(float rotation) {
         mRotate = rotation;
-        updateViewMatrix();
+        updateShaderMatrix();
         invalidate();
     }
 
-    private void updateViewMatrix() {
+    private void updateShaderMatrix() {
         float panX = (Float.isNaN(mBackgroundPanX)) ? 0 : mBackgroundPanX;
         float panY = (Float.isNaN(mBackgroundPanY)) ? 0 : mBackgroundPanY;
         float zoom = (Float.isNaN(mZoom)) ? 1 : mZoom;
@@ -870,34 +868,104 @@ public class MotionLabel extends View implements FloatLayout {
         mTextShaderMatrix.reset();
         float iw = mTextBackgroundBitmap.getWidth();
         float ih = mTextBackgroundBitmap.getHeight();
-        float sw = mFloatWidth;
-        float sh = mFloatHeight;
+        float sw = (Float.isNaN(mTextureWidth)) ? mFloatWidth : mTextureWidth;
+        float sh = (Float.isNaN(mTextureHeight)) ? mFloatHeight : mTextureHeight;
+
         float scale = zoom * ((iw * sh < ih * sw) ? sw / iw : sh / ih);
         mTextShaderMatrix.postScale(scale, scale);
-        float tx = 0.5f * (panX * (sw - scale * iw) + sw - (scale * iw));
-        float ty = 0.5f * (panY * (sh - scale * ih) + sh - (scale * ih));
+        float gapx = sw - scale * iw;
+        float gapy = sh - scale * ih;
+        if (!Float.isNaN(mTextureHeight)) {
+            gapy = mTextureHeight / 2;
+        }
+        if (!Float.isNaN(mTextureWidth)) {
+            gapx = mTextureWidth / 2;
+        }
+        float tx = 0.5f * (panX * (gapx) + sw - (scale * iw));
+        float ty = 0.5f * (panY * (gapy) + sh - (scale * ih));
+        Log.v(TAG, Debug.getLoc() + " " + Debug.getName(this) + "( " + panX + " * (" + (sw - scale * iw) + ") ");
+        Log.v(TAG, Debug.getLoc() + " " + Debug.getName(this) + " tx = " + tx);
+
         mTextShaderMatrix.postTranslate(tx, ty);
         mTextShaderMatrix.postRotate(rota, sw / 2, sh / 2);
         mTextShader.setLocalMatrix(mTextShaderMatrix);
     }
 
+    /**
+     * Pan the Texture in the text in the x axis.
+     *
+     * @return pan of the Text -1 = left 0 = center +1 = right
+     */
     public float getTextPanX() {
         return mTextPanX;
     }
 
+    /**
+     * Pan the Texture in the text in the x axis.
+     *
+     * @param textPanX pan of the Text -1 = left 0 = center +1 = right
+     */
     public void setTextPanX(float textPanX) {
         mTextPanX = textPanX;
         invalidate();
     }
 
+    /**
+     * Pan the Texture in the text in the y axis.
+     *
+     * @return the pan value 0 being centered in the center of screen.
+     */
     public float getTextPanY() {
         return mTextPanY;
     }
 
+    /**
+     * Pan the Texture in the text in the y axis.
+     *
+     * @param textPanY pan of the Text -1 = top 0 = center +1 = bottom
+     */
     public void setTextPanY(float textPanY) {
         mTextPanY = textPanY;
         invalidate();
     }
 
+    /**
+     * Pan the Texture in the text in the y axis.
+     * @return  pan of the Text -1 = top 0 = center +1 = bottom
+     */
+    public float getTextureHeight() {
+        return mTextureHeight;
+    }
+
+    /**
+     * set the height of the texture. Setting Float.NaN is the default Use the view size.
+     *
+     * @param mTextureHeight the height of the texture
+     */
+    public void setTextureHeight(float mTextureHeight) {
+        this.mTextureHeight = mTextureHeight;
+        updateShaderMatrix();
+        invalidate();
+    }
+
+    /**
+     * get the width of the texture. Setting Float.NaN is the default Use the view size.
+     *
+     * @return the width of the texture
+     */
+    public float getTextureWidth() {
+        return mTextureWidth;
+    }
+
+    /**
+     * set the width of the texture. Setting Float.NaN is the default Use the view size
+     *
+     * @param mTextureWidth set the width of the texture Float.NaN clears setting
+     */
+    public void setTextureWidth(float mTextureWidth) {
+        this.mTextureWidth = mTextureWidth;
+        updateShaderMatrix();
+        invalidate();
+    }
 
 }
