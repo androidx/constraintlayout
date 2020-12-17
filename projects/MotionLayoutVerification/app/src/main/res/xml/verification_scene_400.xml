@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="1000">
+        <OnClick/>
+       <KeyFrameSet>
+       </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <ConstraintOverride android:id="@+id/textView2" motion:layout_constraintVertical_bias="0"
+            />
+    </ConstraintSet>
+
+    <ViewTransition
+        android:id="@+id/spin"
+        motion:motionTarget="@+id/textView2"
+        motion:viewTransitionMode="currentState"
+        motion:onStateTransition="sharedValueSet"
+        motion:SharedValueId="@+id/layFlat"
+        motion:SharedValue="1"
+        motion:duration="1000">
+
+        <ConstraintOverride android:scaleX="2"/>
+    </ViewTransition>
+
+    <ViewTransition
+        android:id="@+id/spin"
+        motion:motionTarget="@+id/textView2"
+        motion:viewTransitionMode="currentState"
+        motion:onStateTransition="sharedValueUnset"
+        motion:SharedValueId="@+id/layFlat"
+        motion:SharedValue="1"
+        motion:duration="1000">
+
+        <ConstraintOverride android:scaleX="1"/>
+    </ViewTransition>
+
+</MotionScene>

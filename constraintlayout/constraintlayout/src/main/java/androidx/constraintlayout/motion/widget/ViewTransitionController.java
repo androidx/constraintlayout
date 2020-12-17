@@ -18,11 +18,10 @@ package androidx.constraintlayout.motion.widget;
 
 import android.graphics.Rect;
 import android.util.Log;
-import android.util.SparseArray;
-import android.util.SparseIntArray;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
 import java.util.ArrayList;
@@ -45,6 +44,12 @@ public class ViewTransitionController {
     public void add(ViewTransition viewTransition) {
         viewTransitions.add(viewTransition);
         mRelatedViews = null;
+
+        if (viewTransition.getStateTransition() == ViewTransition.ONSTATE_SHARED_VALUE_SET) {
+            listenForSharedVariable(viewTransition, true);
+        } else if (viewTransition.getStateTransition() == ViewTransition.ONSTATE_SHARED_VALUE_UNSET) {
+            listenForSharedVariable(viewTransition, false);
+        }
     }
 
     void remove(int id) {
@@ -221,4 +226,45 @@ public class ViewTransitionController {
         }
         return false;
     }
+
+    private void listenForSharedVariable(ViewTransition viewTransition, boolean isSet) {
+        int listen_for_id = viewTransition.getSharedValueID();
+        int listen_for_value = viewTransition.getSharedValue();
+
+
+        ConstraintLayout.getSharedValues().addListener((id, value, oldValue) -> {
+                    int current_value = viewTransition.getSharedValueCurrent();
+                    viewTransition.setSharedValueCurrent(value);
+                    if (listen_for_id == id && current_value != value) {
+                        if (isSet) {
+                            if (listen_for_value == value) {
+                                int count = mMotionLayout.getChildCount();
+
+                                for (int i = 0; i < count; i++) {
+                                    View view = mMotionLayout.getChildAt(i);
+                                    if (viewTransition.matchesView(view)) {
+                                        int currentId = mMotionLayout.getCurrentState();
+                                        ConstraintSet current = mMotionLayout.getConstraintSet(currentId);
+                                        viewTransition.applyTransition(this, mMotionLayout, currentId, current, view);
+                                    }
+                                }
+                            }
+                        } else { // not set
+                            if (listen_for_value != value) {
+                                int count = mMotionLayout.getChildCount();
+                                for (int i = 0; i < count; i++) {
+                                    View view = mMotionLayout.getChildAt(i);
+                                    if (viewTransition.matchesView(view)) {
+                                        int currentId = mMotionLayout.getCurrentState();
+                                        ConstraintSet current = mMotionLayout.getConstraintSet(currentId);
+                                        viewTransition.applyTransition(this, mMotionLayout, currentId, current, view);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }, viewTransition.getSharedValueID()
+        );
+    }
+
 }
