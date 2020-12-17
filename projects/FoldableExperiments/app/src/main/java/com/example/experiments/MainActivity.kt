@@ -34,8 +34,7 @@ import androidx.window.WindowManager
 import java.util.concurrent.Executor
 
 class MainActivity : Activity() {
-    private var guideline: Guideline? = null
-    private var motionLayout: MotionLayout? = null
+    private lateinit var motionLayout: MotionLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,12 +53,11 @@ class MainActivity : Activity() {
                 }
                 DeviceState.POSTURE_HALF_OPENED -> {
                     // The foldable device's hinge is in an intermediate position between opened and closed state.
-                    val displayFeatures = windowManager.windowLayoutInfo.displayFeatures
-                    halfOpened(displayFeatures)
+                    var fold = foldPosition(motionLayout, windowManager.windowLayoutInfo.displayFeatures)
+                    ConstraintLayout.getSharedValues().fireNewValue(R.id.fold, fold)
                 }
                 DeviceState.POSTURE_OPENED -> {
                     // The foldable device is completely open, the screen space that is presented to the user is flat.
-//                    motionLayout?.transitionToStart()
                     ConstraintLayout.getSharedValues().fireNewValue(R.id.fold, 0);
                 }
                 DeviceState.POSTURE_FLIPPED -> {
@@ -75,35 +73,24 @@ class MainActivity : Activity() {
             callback
         )
 
-        // the idea here is to have two states in motionlayout, open and fold.
-        // when the foldable device is open, we transition to the state open, and we do the opposite on fold.
-        // when going to fold, we also get the position of the fold, and set the guideline we use in this example at
-        // the position of the fold.
-        // TODO: move this to a helper object
-
         setContentView(R.layout.activity_main2)
         motionLayout = findViewById<MotionLayout>(R.id.root)
-//        guideline = findViewById<Guideline>(R.id.fold)
     }
 
-    fun halfOpened(displayFeatures: List<DisplayFeature>) {
+    /**
+     * Returns the position of the fold relative to the view
+     */
+    fun foldPosition(view: View, displayFeatures: List<DisplayFeature>) : Int {
         for (feature in displayFeatures) {
             if (feature.type != TYPE_FOLD) {
                 continue
             }
-            val splitRect = motionLayout?.let { getFeatureBoundsInWindow(feature, it) } ?: continue
-//            var constraintSet = motionLayout?.getConstraintSet(R.id.start)
-////            constraintSet?.setGuidelineEnd(guideline?.id!!, 0)
-//            var constraintSetEnd = motionLayout?.getConstraintSet(R.id.end)
-////            constraintSetEnd?.setGuidelineBegin(guideline?.id!!, splitRect.left)
-//            motionLayout?.updateState(R.id.start, constraintSet)
-//            motionLayout?.updateState(R.id.end, constraintSetEnd)
-//            motionLayout?.transitionToEnd()
-            var h : Int? = motionLayout?.height?.minus(splitRect.top)
-            h?.let {
-                ConstraintLayout.getSharedValues().fireNewValue(R.id.fold, h)
+            val splitRect = getFeatureBoundsInWindow(feature, view)
+            splitRect?.let {
+                return view.height.minus(splitRect.top)
             }
         }
+        return 0
     }
 
     /**
