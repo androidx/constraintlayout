@@ -85,7 +85,10 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     String s = AppCompatActivity.class.getName();
 
     private static boolean REVERSE = false;
-    private final String LAYOUTS_MATCHES = "verification_4\\d+";
+
+    private final String RUN_FIRST = "verification_309";
+    private final String LAYOUTS_MATCHES = "verification_\\d+";
+
     private static String SHOW_FIRST = "";
     MotionLayout mMotionLayout;
     private Flow mFlow;
@@ -461,15 +464,23 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         ScrollView sv = new ScrollView(this);
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
+        Button runFirst  = null;
+        Button button = null;
         for (int i = 0; i < layouts.length; i++) {
-            Button button = new Button(this);
+            button = new Button(this);
             button.setText(layouts[i]);
             button.setTag(layouts[i]);
+            if (layouts[i].equals(RUN_FIRST)) {
+                runFirst = button;
+            }
             linearLayout.addView(button);
             button.setOnClickListener(this);
         }
         sv.addView(linearLayout);
         setContentView(sv);
+        if (runFirst != null) {
+            runFirst.callOnClick();
+        }
     }
 
     public void jumpToMe(View v) {

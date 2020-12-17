@@ -275,17 +275,17 @@
         <attr name="carousel_firstView" format="reference" />
         <attr name="carousel_previousState" format="reference" />
         <attr name="carousel_nextState" format="reference" />
-        <attr name="carousel_infinite" format="boolean"/>
+        <attr name="carousel_infinite" format="boolean" />
         <attr name="carousel_forwardTransition" format="reference" />
         <attr name="carousel_backwardTransition" format="reference" />
         <attr name="carousel_touchUp_dampeningFactor" format="float" />
         <attr name="carousel_touchUpMode" format="enum">
-            <enum name="immediateStop" value="1"/>
-            <enum name="carryVelocity" value="2"/>
+            <enum name="immediateStop" value="1" />
+            <enum name="carryVelocity" value="2" />
         </attr>
-        <attr name="carousel_touchUp_velocityThreshold" format="float"/>
+        <attr name="carousel_touchUp_velocityThreshold" format="float" />
         <attr name="carousel_emptyViewsBehavior" format="enum">
-            <enum name="invisible" value="4"/>
+            <enum name="invisible" value="4" />
             <enum name="gone" value="8" />
         </attr>
     </declare-styleable>
@@ -294,19 +294,19 @@
 
     <!-- =============================== Start FadeMove =============================== -->
 
-    <declare-styleable name="FadeMove">
-        <attr name="fadeMove_start" format="integer"/>
-        <attr name="fadeMove_end" format="integer"/>
-        <attr name="fadeMove_translationX" format="dimension"/>
-        <attr name="fadeMove_translationY" format="dimension"/>
-        <attr name="fadeMove_alpha" format="float"/>
-        <attr name="fadeMove_viewTransition" format="reference"/>
+    <declare-styleable name="MotionEffect">
+        <attr name="fadeMove_start" format="integer" />
+        <attr name="fadeMove_end" format="integer" />
+        <attr name="fadeMove_translationX" format="dimension" />
+        <attr name="fadeMove_translationY" format="dimension" />
+        <attr name="fadeMove_alpha" format="float" />
+        <attr name="fadeMove_viewTransition" format="reference" />
         <attr name="fadeMove_move" format="enum">
-            <enum name="auto" value = "-1" />
-            <enum name="north" value = "0" />
-            <enum name="south" value = "1" />
-            <enum name="east" value = "2" />
-            <enum name="west" value = "3" />
+            <enum name="auto" value="-1" />
+            <enum name="north" value="0" />
+            <enum name="south" value="1" />
+            <enum name="east" value="2" />
+            <enum name="west" value="3" />
         </attr>
         <attr name="fadeMove_strict" format="boolean" />
     </declare-styleable>    <!-- =============================== End FadeMove =============================== -->
@@ -1474,7 +1474,40 @@
         <attr name="imageRotate" format="float" />
     </declare-styleable>
 
+    <attr name="borderRound" format="dimension" />
+    <attr name="borderRoundPercent" format="float" />
+    <attr name="textOutlineThickness" format="dimension" />
+    <attr name="textOutlineColor" format="color" />
+
     <declare-styleable name="MotionLabel">
+        <attr name="android:text" />
+        <attr name="android:textColor" />
+        <attr name="android:textSize" />
+        <attr name="android:fontFamily" />
+        <attr name="android:gravity" />
+        <attr name="textPanX" format="float" />
+        <attr name="textPanY" format="float"/>
+        <attr name="android:typeface" />
+        <attr name="android:shadowRadius" />
+        <attr name="android:textStyle" />
+        <attr name="borderRound" />
+        <attr name="borderRoundPercent" />
+        <attr name="textOutlineThickness" />
+        <attr name="textOutlineColor" />
+        <attr name="textBackground" format="reference"/>
+        <attr name="android:autoSizeTextType"/>
+        <attr name="textureWidth" format="dimension" />
+        <attr name="textureHeight" format="dimension" />
+
+
+        <attr name="textBackgroundPanX" format="float" />
+        <attr name="textBackgroundPanY" format="float" />
+        <attr name="textBackgroundZoom" format="float" />
+        <attr name="textBackgroundRotate" format="float" />
+
+    </declare-styleable>
+
+    <declare-styleable name="TextEffects">
         <attr name="android:text" />
         <attr name="android:textSize" />
         <attr name="android:fontFamily" />
@@ -1485,10 +1518,10 @@
         <attr name="android:shadowRadius" />
         <attr name="android:textStyle" />
         <attr name="textFillColor" format="color" />
-        <attr name="textOutlineThickness" format="dimension" />
-        <attr name="textOutlineColor" format="color" />
-        <attr name="borderRound" format="dimension" />
-        <attr name="borderRoundPercent" format="float" />
+        <attr name="textOutlineThickness" />
+        <attr name="textOutlineColor" />
+        <attr name="borderRound" />
+        <attr name="borderRoundPercent" />
     </declare-styleable>
 
     <declare-styleable name="Layout">
@@ -1679,7 +1712,7 @@
     <attr name="viewTransitionMode" format="enum">
         <enum name="currentState" value="0" />
         <enum name="allStates" value="1" />
-<!--        Opperates independently of the rest of motionLayout constraint set system -->
+        <!--        Opperates independently of the rest of motionLayout constraint set system -->
         <enum name="noState" value="2" />
     </attr>
 

@@ -27,12 +27,13 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
-import androidx.annotation.RequiresApi;
-import androidx.constraintlayout.widget.R;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.widget.ImageView;
+
+import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.R;
 
 /**
  * An ImageView that can display, combine  and filter images. <b>Added in 2.0</b>
@@ -305,42 +306,48 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
     float mPanY = Float.NaN;
     float mZoom = Float.NaN;
     float mRotate = Float.NaN;
+
     /**
      * Gets the pan from the center
      * pan of 1 the image is "all the way to the right"
      * if the images width is greater than the screen width, pan = 1 results in the left edge lining up
      * if the images width is less than the screen width, pan = 1 results in the right edges lining up
      * if image width == screen width it does nothing
+     *
      * @return the pan in X. Where 0 is centered = Float. NaN if not set
      */
-    public float getImagePanX( ) {
-        return  mPanX;
+    public float getImagePanX() {
+        return mPanX;
     }
+
     /**
      * gets the pan from the center
      * pan of 1 the image is "all the way to the bottom"
      * if the images width is greater than the screen height, pan = 1 results in the bottom edge lining up
      * if the images width is less than the screen height, pan = 1 results in the top edges lining up
      * if image height == screen height it does nothing
+     *
      * @return pan in y. Where 0 is centered NaN if not set
      */
-    public  float getImagePanY( ) {
+    public float getImagePanY() {
         return mPanY;
     }
 
     /**
      * gets the zoom where 1 scales the image just enough to fill the view
+     *
      * @return the zoom factor
      */
-    public  float getImageZoom( ) {
+    public float getImageZoom() {
         return mZoom;
     }
 
     /**
      * gets the rotation
+     *
      * @return the rotation in degrees
      */
-    public  float getImageRotate( ) {
+    public float getImageRotate() {
         return mRotate;
     }
 
@@ -350,43 +357,49 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
      * if the images width is greater than the screen width, pan = 1 results in the left edge lining up
      * if the images width is less than the screen width, pan = 1 results in the right edges lining up
      * if image width == screen width it does nothing
-     * @param pan  sets the pan in X. Where 0 is centered
+     *
+     * @param pan sets the pan in X. Where 0 is centered
      */
     public void setImagePanX(float pan) {
         mPanX = pan;
         updateViewMatrix();
     }
+
     /**
      * sets the pan from the center
      * pan of 1 the image is "all the way to the bottom"
      * if the images width is greater than the screen height, pan = 1 results in the bottom edge lining up
      * if the images width is less than the screen height, pan = 1 results in the top edges lining up
      * if image height == screen height it does nothing
-     * @param pan  sets the pan in X. Where 0 is centered
+     *
+     * @param pan sets the pan in X. Where 0 is centered
      */
-    public  void setImagePanY(float pan) {
+    public void setImagePanY(float pan) {
         mPanY = pan;
         updateViewMatrix();
     }
+
     /**
      * sets the zoom where 1 scales the image just enough to fill the view
+     *
      * @param zoom the zoom factor
      */
-    public  void setImageZoom(float zoom) {
+    public void setImageZoom(float zoom) {
         mZoom = zoom;
         updateViewMatrix();
     }
 
     /**
      * sets the rotation angle of the image in degrees
+     *
      * @rotation the rotation in degrees
      */
-    public  void setImageRotate(float rotation) {
+    public void setImageRotate(float rotation) {
         mRotate = rotation;
         updateViewMatrix();
     }
 
-    private void  updateViewMatrix() {
+    private void updateViewMatrix() {
         if (Float.isNaN(mPanX) &&
                 Float.isNaN(mPanY) &&
                 Float.isNaN(mZoom) &&
@@ -395,9 +408,20 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
             setScaleType(ScaleType.FIT_CENTER);
             return;
         }
+        setMatrix();
+    }
+
+    private void setMatrix() {
+        if (Float.isNaN(mPanX) &&
+                Float.isNaN(mPanY) &&
+                Float.isNaN(mZoom) &&
+                Float.isNaN(mRotate)
+        ) {
+            return;
+        }
         float panX = (Float.isNaN(mPanX)) ? 0 : mPanX;
         float panY = (Float.isNaN(mPanY)) ? 0 : mPanY;
-        float zoom = (Float.isNaN(mZoom)) ? 0 : mZoom;
+        float zoom = (Float.isNaN(mZoom)) ? 1 : mZoom;
         float rota = (Float.isNaN(mRotate)) ? 0 : mRotate;
         Matrix imageMatrix = new Matrix();
         imageMatrix.reset();
@@ -407,8 +431,8 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
         float sh = getHeight();
         float scale = zoom * ((iw * sh < ih * sw) ? sw / iw : sh / ih);
         imageMatrix.postScale(scale, scale);
-        float tx = 0.5f * (panX * (sw-scale*iw) + sw - (scale * iw));
-        float ty = 0.5f * (panY * (sh-scale*ih) + sh - (scale * ih));
+        float tx = 0.5f * (panX * (sw - scale * iw) + sw - (scale * iw));
+        float ty = 0.5f * (panY * (sh - scale * ih) + sh - (scale * ih));
         imageMatrix.postTranslate(tx, ty);
         imageMatrix.postRotate(rota, sw / 2, sh / 2);
         setImageMatrix(imageMatrix);
@@ -447,7 +471,7 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
                     setSaturation(a.getFloat(attr, 0));
                 } else if (attr == R.styleable.ImageFilterView_contrast) {
                     setContrast(a.getFloat(attr, 0));
-                }  else if (attr == R.styleable.ImageFilterView_brightness) {
+                } else if (attr == R.styleable.ImageFilterView_brightness) {
                     setBrightness(a.getFloat(attr, 0));
                 } else if (attr == R.styleable.ImageFilterView_round) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -741,5 +765,11 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
         if (clip) {
             canvas.restore();
         }
+    }
+
+    @Override
+    public void layout(int l, int t, int r, int b) {
+        super.layout(l, t, r, b);
+        setMatrix();
     }
 }

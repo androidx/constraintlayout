@@ -84,27 +84,27 @@ public class MotionEffect extends MotionHelper {
 
     private void init(Context context, AttributeSet attrs) {
         if (attrs != null) {
-            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FadeMove);
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MotionEffect);
             final int N = a.getIndexCount();
             for (int i = 0; i < N; i++) {
                 int attr = a.getIndex(i);
-                if (attr == R.styleable.FadeMove_fadeMove_start) {
+                if (attr == R.styleable.MotionEffect_fadeMove_start) {
                     fadeStart = a.getInt(attr, fadeStart);
                     fadeStart = Math.max(Math.min(fadeStart, 99), 0);
-                } else if (attr == R.styleable.FadeMove_fadeMove_end) {
+                } else if (attr == R.styleable.MotionEffect_fadeMove_end) {
                     fadeEnd = a.getInt(attr, fadeEnd);
                     fadeEnd = Math.max(Math.min(fadeEnd, 99), 0);
-                } else if (attr == R.styleable.FadeMove_fadeMove_translationX) {
+                } else if (attr == R.styleable.MotionEffect_fadeMove_translationX) {
                     fadeTranslationX = a.getDimensionPixelOffset(attr, fadeTranslationX);
-                } else if (attr == R.styleable.FadeMove_fadeMove_translationY) {
+                } else if (attr == R.styleable.MotionEffect_fadeMove_translationY) {
                     fadeTranslationY = a.getDimensionPixelOffset(attr, fadeTranslationY);
-                } else if (attr == R.styleable.FadeMove_fadeMove_alpha) {
+                } else if (attr == R.styleable.MotionEffect_fadeMove_alpha) {
                     fadeAlpha = a.getFloat(attr, fadeAlpha);
-                } else if (attr == R.styleable.FadeMove_fadeMove_move) {
+                } else if (attr == R.styleable.MotionEffect_fadeMove_move) {
                     fadeMove = a.getInt(attr, fadeMove);
-                } else if (attr == R.styleable.FadeMove_fadeMove_strict) {
+                } else if (attr == R.styleable.MotionEffect_fadeMove_strict) {
                     fadeMoveStrict = a.getBoolean(attr, fadeMoveStrict);
-                } else if (attr == R.styleable.FadeMove_fadeMove_viewTransition) {
+                } else if (attr == R.styleable.MotionEffect_fadeMove_viewTransition) {
                     viewTransitionId = a.getResourceId(attr, viewTransitionId);
                 }
             }
