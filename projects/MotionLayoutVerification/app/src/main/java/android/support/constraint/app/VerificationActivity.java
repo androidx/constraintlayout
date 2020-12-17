@@ -85,7 +85,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     String s = AppCompatActivity.class.getName();
 
     private static boolean REVERSE = false;
-    private final String LAYOUTS_MATCHES = "verification_4\\d+";
+    private final String LAYOUTS_MATCHES = "verification_\\d+";
     private static String SHOW_FIRST = "";
     MotionLayout mMotionLayout;
     private Flow mFlow;
@@ -530,14 +530,19 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
      * @param view
      */
     public void twistViews(View view) {
-        rotate ++;
+        rotate++;
         int current = mMotionLayout.getCurrentState();
         ConstraintSet cset = mMotionLayout.cloneConstraintSet(current);
         int[] id = {R.id.button1, R.id.button2, R.id.button3, R.id.button4, R.id.button5, R.id.button6};
         for (int i : id) {
-            cset.setRotation(i, ((rotate &1)==0) ? 90 : 0);
+            cset.setRotation(i, ((rotate & 1) == 0) ? 90 : 0);
         }
+        int r = (rotate + 1);
+        String str = (((r & 1) == 0) ? "rot 90 " : "rot 0 ") +
+                (((r & 2) == 0) ? "then start" : "then end");
+        ((Button) view).setText(str);
         mMotionLayout.updateStateAnimate(current, cset, 200);
+        mMotionLayout.scheduleTransitionTo(((rotate & 2) == 0) ? R.id.start : R.id.end);
     }
 
     interface Test {
