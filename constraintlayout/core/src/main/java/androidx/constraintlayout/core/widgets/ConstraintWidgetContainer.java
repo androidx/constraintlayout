@@ -545,11 +545,9 @@ public class ConstraintWidgetContainer extends WidgetContainer {
                     measuredHeight = measure.measuredHeight;
                 }
                 measure.horizontalBehavior = FIXED;
-                if (widget.mDimensionRatioSide == HORIZONTAL || widget.mDimensionRatioSide == UNKNOWN) {
-                    measure.horizontalDimension = (int) (widget.getDimensionRatio() * measuredHeight);
-                } else {
-                    measure.horizontalDimension = (int) (widget.getDimensionRatio() / measuredHeight);
-                }
+                // regardless of which side we are using for the ratio, getDimensionRatio() already
+                // made sure that it's expressed in WxH format, so we can simply go and multiply
+                measure.horizontalDimension = (int) (widget.getDimensionRatio() * measuredHeight);
                 if (DEBUG) {
                     System.out.println("(M) Measured once for ratio on horizontal side...");
                 }
@@ -569,11 +567,9 @@ public class ConstraintWidgetContainer extends WidgetContainer {
                     measuredWidth = measure.measuredWidth;
                 }
                 measure.verticalBehavior = FIXED;
-                if (widget.mDimensionRatioSide == HORIZONTAL || widget.mDimensionRatioSide == UNKNOWN) {
-                    measure.verticalDimension = (int) (measuredWidth / widget.getDimensionRatio());
-                } else {
-                    measure.verticalDimension = (int) (measuredWidth * widget.getDimensionRatio());
-                }
+                // regardless of which side we are using for the ratio, getDimensionRatio() already
+                // made sure that it's expressed in WxH format, so we can simply go and divide
+                measure.verticalDimension = (int) (measuredWidth / widget.getDimensionRatio());
                 if (DEBUG) {
                     System.out.println("(M) Measured once for ratio on vertical side...");
                 }

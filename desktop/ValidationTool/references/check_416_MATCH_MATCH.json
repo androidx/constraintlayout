@@ -1,0 +1,146 @@
+{
+  "duration": "674500",
+  "layout": {
+    "children": [{
+      "children": [
+        {
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "57",
+            "right": "123"
+          },
+          "id": "n1",
+          "class": "MaterialTextView"
+        },
+        {
+          "bounds": {
+            "top": "0",
+            "left": "123",
+            "bottom": "57",
+            "right": "246"
+          },
+          "id": "n2",
+          "class": "MaterialTextView"
+        },
+        {
+          "bounds": {
+            "top": "0",
+            "left": "246",
+            "bottom": "57",
+            "right": "440"
+          },
+          "id": "n3",
+          "class": "MaterialTextView"
+        },
+        {
+          "bounds": {
+            "top": "57",
+            "left": "0",
+            "bottom": "114",
+            "right": "123"
+          },
+          "id": "n4",
+          "class": "MaterialTextView"
+        },
+        {
+          "bounds": {
+            "top": "57",
+            "left": "123",
+            "bottom": "114",
+            "right": "246"
+          },
+          "id": "n5",
+          "class": "MaterialTextView"
+        },
+        {
+          "bounds": {
+            "top": "57",
+            "left": "246",
+            "bottom": "114",
+            "right": "440"
+          },
+          "id": "n6",
+          "class": "MaterialTextView"
+        },
+        {
+          "bounds": {
+            "top": "114",
+            "left": "0",
+            "bottom": "171",
+            "right": "123"
+          },
+          "id": "n7",
+          "class": "MaterialTextView"
+        },
+        {
+          "bounds": {
+            "top": "114",
+            "left": "123",
+            "bottom": "171",
+            "right": "246"
+          },
+          "id": "n8",
+          "class": "MaterialTextView"
+        },
+        {
+          "bounds": {
+            "top": "114",
+            "left": "246",
+            "bottom": "171",
+            "right": "440"
+          },
+          "id": "n9",
+          "class": "MaterialTextView"
+        },
+        {
+          "children": [],
+          "bounds": {
+            "top": "171",
+            "left": "0",
+            "bottom": "267",
+            "right": "123"
+          },
+          "id": "custom_key",
+          "class": "FrameLayout"
+        },
+        {
+          "bounds": {
+            "top": "171",
+            "left": "123",
+            "bottom": "267",
+            "right": "246"
+          },
+          "id": "n0",
+          "class": "MaterialTextView"
+        },
+        {
+          "bounds": {
+            "top": "171",
+            "left": "246",
+            "bottom": "267",
+            "right": "440"
+          },
+          "id": "backspace",
+          "class": "AppCompatImageView"
+        }
+      ],
+      "bounds": {
+        "top": "599",
+        "left": "320",
+        "bottom": "938",
+        "right": "760"
+      },
+      "id": "keyboardGrid",
+      "class": "GridLayout"
+    }],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "id": "root",
+    "class": "ConstraintLayout"
+  }
+}
