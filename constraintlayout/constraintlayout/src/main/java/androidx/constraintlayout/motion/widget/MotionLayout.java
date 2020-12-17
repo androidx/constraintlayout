@@ -1046,6 +1046,8 @@ public class MotionLayout extends ConstraintLayout implements
     private boolean mInLayout = false;
     private StateCache mStateCache;
     private Runnable mOnComplete = null;
+    private int[]mScheduledTransitionTo = null;
+    int mScheduledTransitions = 0;
 
     MotionController getMotionController(int mTouchAnchorId) {
         return mFrameArrayList.get(findViewById(mTouchAnchorId));
@@ -4002,6 +4004,11 @@ public class MotionLayout extends ConstraintLayout implements
             mOnComplete.run();
         }
 
+        if (mScheduledTransitionTo != null && mScheduledTransitions > 0) {
+            transitionToState(mScheduledTransitionTo[0]);
+            System.arraycopy(mScheduledTransitionTo,1,mScheduledTransitionTo,0,mScheduledTransitionTo.length-1);
+            mScheduledTransitions--;
+        }
     }
 
     private void processTransitionCompleted() {
@@ -4202,6 +4209,25 @@ public class MotionLayout extends ConstraintLayout implements
             tmpTransition.setDuration(duration);
             setTransition(tmpTransition);
             transitionToEnd();
+        }
+    }
+
+    /**
+     * on completing the current transition, transition to this state.
+     *
+     * @param id
+     */
+    public void scheduleTransitionTo(int id) {
+        if (getCurrentState() == -1) {
+            transitionToState(id);
+        } else {
+            if (mScheduledTransitionTo == null) {
+                mScheduledTransitionTo = new int[4];
+            } else if (mScheduledTransitionTo.length <= mScheduledTransitions) {
+                mScheduledTransitionTo =
+                        Arrays.copyOf(mScheduledTransitionTo, mScheduledTransitionTo.length * 2);
+            }
+            mScheduledTransitionTo[mScheduledTransitions++] = id;
         }
     }
 

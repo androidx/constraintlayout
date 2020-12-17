@@ -23,6 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="2"
+        android:layout_marginTop="50dp"
         app:layout_constraintStart_toStartOf="@id/button1"
         app:layout_constraintTop_toBottomOf="@id/button1"  />
 
@@ -31,6 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="3"
+        android:layout_marginTop="50dp"
         app:layout_constraintStart_toStartOf="@id/button2"
         app:layout_constraintTop_toBottomOf="@id/button2"   />
 
@@ -39,6 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="4"
+        android:layout_marginTop="50dp"
         app:layout_constraintStart_toStartOf="@id/button3"
         app:layout_constraintTop_toBottomOf="@id/button3"  />
 
@@ -47,7 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="5"
-        app:layout_constraintStart_toStartOf="@id/button4"
+        app:layout_constraintStart_toEndOf="@id/button4"
         app:layout_constraintTop_toBottomOf="@id/button4"   />
 
     <Button
@@ -55,14 +58,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="6"
-        app:layout_constraintStart_toStartOf="@id/button5"
+        app:layout_constraintStart_toEndOf="@id/button5"
         app:layout_constraintTop_toBottomOf="@id/button5"   />
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="animatedChange"
+        android:text="test updateStateAnimate and scheduleTransitionTo"
         android:onClick="twistViews"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
