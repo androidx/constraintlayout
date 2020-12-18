@@ -883,8 +883,6 @@ public class MotionLabel extends View implements FloatLayout {
         }
         float tx = 0.5f * (panX * (gapx) + sw - (scale * iw));
         float ty = 0.5f * (panY * (gapy) + sh - (scale * ih));
-        Log.v(TAG, Debug.getLoc() + " " + Debug.getName(this) + "( " + panX + " * (" + (sw - scale * iw) + ") ");
-        Log.v(TAG, Debug.getLoc() + " " + Debug.getName(this) + " tx = " + tx);
 
         mTextShaderMatrix.postTranslate(tx, ty);
         mTextShaderMatrix.postRotate(rota, sw / 2, sh / 2);
