@@ -1,0 +1,87 @@
+package android.support.constraint.app.g3d;
+
+public class VectorUtil {
+    public static void sub(double[] a, double[] b, double[] out) {
+        out[0] = a[0] - b[0];
+        out[1] = a[1] - b[1];
+        out[2] = a[2] - b[2];
+    }
+
+    public static void mult(double[] a, double b, double[] out) {
+        out[0] = a[0] * b;
+        out[1] = a[1] * b;
+        out[2] = a[2] * b;
+    }
+
+    public static double dot(double[] a, double[] b) {
+        return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+    }
+
+    public static double norm(double[] a) {
+        return Math.sqrt(a[0] * a[0] + a[1] * a[1] + a[2] * a[2]);
+    }
+
+    public static double norm(float[] a) {
+        return Math.sqrt(a[0] * a[0] + a[1] * a[1] + a[2] * a[2]);
+    }
+
+    public static void cross(double[] a, double[] b, double[] out) {
+        double out0 = a[1] * b[2] - b[1] * a[2];
+        double out1 = a[2] * b[0] - b[2] * a[0];
+        double out2 = a[0] * b[1] - b[0] * a[1];
+        out[0] = out0;
+        out[1] = out1;
+        out[2] = out2;
+    }
+
+    public static void normalize(double[] a) {
+        double norm = norm(a);
+        a[0] /= norm;
+        a[1] /= norm;
+        a[2] /= norm;
+    }
+    public static void normalize(float[] a) {
+        float norm = (float) norm(a);
+        a[0] /= norm;
+        a[1] /= norm;
+        a[2] /= norm;
+    }
+    public static void add(double[] a, double[] b,
+                           double[] out) {
+        out[0] = a[0] + b[0];
+        out[1] = a[1] + b[1];
+        out[2] = a[2] + b[2];
+    }
+    public static void madd(double[] a, double x, double[] b,
+                           double[] out) {
+        out[0] = x * a[0] + b[0];
+        out[1] = x * a[1] + b[1];
+        out[2] = x * a[2] + b[2];
+    }
+    public static void triangleNormal(float[] vert, int p1, int p2, int p3, float[] norm) {
+        float x1 = vert[p2] - vert[p1];
+        float y1 = vert[p2 + 1] - vert[p1 + 1];
+        float z1 = vert[p2 + 2] - vert[p1 + 2];
+        float x2 = vert[p3] - vert[p1];
+        float y2 = vert[p3 + 1] - vert[p1 + 1];
+        float z2 = vert[p3 + 2] - vert[p1 + 2];
+
+        cross(x1, y1, z1, x2, y2, z2, norm);
+        float n = (float) norm(norm);
+        norm[0] /= n;
+        norm[1] /= n;
+        norm[2] /= n;
+    }
+    public static float dot(float[] a, float[] b) {
+        return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+    }
+
+    public static void cross(float a0, float a1, float a2, float b0, float b1, float b2, float[] out) {
+        float out0 = a1 * b2 - b1 * a2;
+        float out1 = a2 * b0 - b2 * a0;
+        float out2 = a0 * b1 - b0 * a1;
+        out[0] = out0;
+        out[1] = out1;
+        out[2] = out2;
+    }
+}

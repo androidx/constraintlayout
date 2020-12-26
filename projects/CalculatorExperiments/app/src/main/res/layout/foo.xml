@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+   app:layoutDescription="@xml/foo_scene">
+
+   <Button
+       android:id="@+id/button"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="expand"
+       android:onClick="exp"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintHorizontal_bias="0.5"
+       app:layout_constraintVertical_bias="0.5"
+       app:layout_constraintBottom_toBottomOf="parent"/>
+   <LinearLayout
+       android:id="@+id/fabwrap"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginBottom="20dp"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintBottom_toBottomOf="parent"
+       >
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="hello"
+        android:textColor="@color/white"
+        app:backgroundTint="#F00"
+        app:icon="@drawable/ic_battery"
+
+       />
+   </LinearLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>
