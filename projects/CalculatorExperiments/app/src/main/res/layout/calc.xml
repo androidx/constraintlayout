@@ -162,7 +162,7 @@
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:constraint_referenced_ids="adv_inv,adv_sq,adv_sqrt,adv_pow,adv_sin,adv_cos,adv_tan,adv_ln,adv_log,adv_pi,adv_e,adv_factorial,adv_x,adv_y,adv_plot,adv_polar,adv_dup,adv_swap,adv_drop"
+        app:constraint_referenced_ids="adv_inv,adv_sq,adv_sqrt,adv_pow,adv_sin,adv_cos,adv_tan,adv_ln,adv_log,adv_pi,adv_e,adv_factorial,adv_x,adv_y,adv_plot,adv_save,adv_dup,adv_swap,adv_drop"
         app:flow_horizontalGap="8dp"
         app:flow_maxElementsWrap="4"
         app:flow_verticalGap="8dp"

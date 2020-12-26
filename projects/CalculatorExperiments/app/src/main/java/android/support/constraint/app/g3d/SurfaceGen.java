@@ -64,16 +64,19 @@ public class SurfaceGen {
             m.mult3(vert, i, tvert, i);
         }
     }
-
-    public void zoom(double deltaZoom) {
-        m_matrix.zoom(deltaZoom);
+    public double getScreenWidth() {
+        return m_matrix.getScreenWidth();
+    }
+    public void setScreenWidth(double sw) {
+        m_matrix.setScreenWidth(sw);
+        m_matrix.calcMatrix();
         m_matrix.invers(m_inv);
         transform(m_inv);
     }
 
     public void trackBallDown(float x, float y) {
         m_matrix.trackBallDown(x, y);
-         m_matrix.invers(m_inv);
+        m_matrix.invers(m_inv);
     }
 
     public void trackBallMove(float x, float y) {
@@ -89,12 +92,12 @@ public class SurfaceGen {
 
     public void panDown(float x, float y) {
         m_matrix.panDown(x, y);
-          m_matrix.invers(m_inv);
+        m_matrix.invers(m_inv);
     }
 
     public void panMove(float x, float y) {
         m_matrix.panMove(x, y);
-           m_matrix.invers(m_inv);
+        m_matrix.invers(m_inv);
         transform(m_inv);
     }
 
@@ -112,7 +115,7 @@ public class SurfaceGen {
                 (mMinX + mMaxX) / 2, (mMinY + mMaxY) / 2, (mMinZ + mMaxZ) / 2
         };
 
-        double diagonal = Math.hypot((mMaxX - mMinX), Math.hypot((mMaxY - mMinY), (mMaxZ - mMinZ)))/2;
+        double diagonal = Math.hypot((mMaxX - mMinX), Math.hypot((mMaxY - mMinY), (mMaxZ - mMinZ))) / 2;
 
         m_matrix.setLookPoint(look_point);
         double[] eye_point = {look_point[0], look_point[1] - diagonal, look_point[2]};
@@ -165,11 +168,11 @@ public class SurfaceGen {
                 float z = func.eval(x, y);
                 vert[count++] = z;
                 if (Float.isNaN(z)) {
-                    Log.v(TAG , Debug.getLoc()+ " z "+z);
+                    Log.v(TAG, Debug.getLoc() + " z " + z);
                     continue;
                 }
-                if (Float.isInfinite(z)){
-                    Log.v(TAG , Debug.getLoc()+ " z "+z);
+                if (Float.isInfinite(z)) {
+                    Log.v(TAG, Debug.getLoc() + " z " + z);
                     continue;
                 }
                 mMinZ = Math.min(z, mMinZ);
@@ -177,7 +180,7 @@ public class SurfaceGen {
             }
         }
         // normalize range in z
-        float xrange = mMaxX-mMinX;
+        float xrange = mMaxX - mMinX;
         float yrange = mMaxY - mMinY;
         float zrange = mMaxZ - mMinZ;
         if (zrange != 0) {
@@ -185,21 +188,21 @@ public class SurfaceGen {
             float scalez = xyrange / zrange;
 
 
-            for (int i = 0; i < vert.length; i+=3) {
-                float z = vert[i+2];
+            for (int i = 0; i < vert.length; i += 3) {
+                float z = vert[i + 2];
                 if (Float.isNaN(z) || Float.isInfinite(z)) {
                     if (i > 3) {
-                        z = vert[i-1];
-                        Log.v(TAG , Debug.getLoc()+ " z "+z);
-                    } else  {
-                        z = vert[i+5];
-                        Log.v(TAG , Debug.getLoc()+ " z "+z);
+                        z = vert[i - 1];
+                        Log.v(TAG, Debug.getLoc() + " z " + z);
+                    } else {
+                        z = vert[i + 5];
+                        Log.v(TAG, Debug.getLoc() + " z " + z);
                     }
                 }
-                vert[i+2] = z*scalez;
+                vert[i + 2] = z * scalez;
             }
-            mMinZ *=scalez;
-            mMaxZ *=scalez;
+            mMinZ *= scalez;
+            mMaxZ *= scalez;
         }
         count = 0;
         for (int iy = 0; iy < SIZE; iy++) {
@@ -263,8 +266,8 @@ public class SurfaceGen {
             int p2 = index[i + 1];
             int p3 = index[i + 2];
             float height = (vert[p1 + 2] + vert[p3 + 2] + vert[p2 + 2]) / 3;
-            height = (height -mMinZ)/(mMaxZ-mMinZ);
-            int col = hsvToRgb(height, Math.abs(2*(height-0.5f)),(float)Math.sqrt( height));
+            height = (height - mMinZ) / (mMaxZ - mMinZ);
+            int col = hsvToRgb(height, Math.abs(2 * (height - 0.5f)), (float) Math.sqrt(height));
             triangle(zbuff, img, col, w, h, tvert[p1], tvert[p1 + 1],
                     tvert[p1 + 2], tvert[p2], tvert[p2 + 1],
                     tvert[p2 + 2], tvert[p3], tvert[p3 + 1],
@@ -326,7 +329,7 @@ public class SurfaceGen {
             VectorUtil.triangleNormal(tvert, p1, p2, p3, tmpVec);
             float defuse = VectorUtil.dot(tmpVec, light);
             float height = (vert[p1 + 2] + vert[p3 + 2] + vert[p2 + 2]) / 3;
-            height = (height -mMinZ)/(mMaxZ-mMinZ);
+            height = (height - mMinZ) / (mMaxZ - mMinZ);
             float bright = Math.max(0, defuse);
             float hue = (float) Math.sqrt(height);
             float sat = Math.max(0.5f, height);

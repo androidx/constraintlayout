@@ -215,12 +215,12 @@
 
     <androidx.constraintlayout.utils.widget.MotionButton
         android:onClick="key"
-        android:id="@+id/adv_polar"
+        android:id="@+id/adv_save"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background= "@color/adv_background"
         android:stateListAnimator="@null"
-        android:text="polar"
+        android:text="save"
         android:textColor="@color/cal_adv_text"
         android:textSize="10pt"
         app:layout_constraintTag="button4"

@@ -250,6 +250,9 @@ public class ViewMatrix extends Matrix {
     }
 
     public void trackBallMove(float x, float y) {
+        if (mStartx == x && mStarty == y){
+            return;
+        }
         ballToVec(x,y,mMoveToV);
 
         double angle = Quaternion.calcAngle(mStartV, mMoveToV);
@@ -313,10 +316,6 @@ public class ViewMatrix extends Matrix {
         VectorUtil.normalize(v);
     }
 
-    public void zoom(double deltaZoom) {
-        mScreenWidth *=1+deltaZoom;
 
-        calcMatrix();
-    }
 
 }

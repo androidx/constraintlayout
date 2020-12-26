@@ -17,16 +17,18 @@ import androidx.core.view.GestureDetectorCompat;
 public class Graph3D extends View {
     static String TAG = "CubeView";
     SurfaceGen surfaceGen = new SurfaceGen();
-    private Bitmap image;
-    private int[] imgbuff;
-    Paint paint;
+    private Bitmap Image;
+    private int[] mImageBuff;
+    Paint mPaint;
     int mGraphType = 1;
     private float mLastTouchX0 = Float.NaN;
     private float mLastTouchY0;
     private float mLastTouchX1 = Float.NaN;
     private float mLastTouchY1;
-    private double mLastScale = 1;
-
+    private float mLastTrackBasllX;
+    private float mLastTrackBasllY;
+    double mDownScreeenWidth;
+    
     public Graph3D(Context context) {
         super(context);
         init();
@@ -43,107 +45,96 @@ public class Graph3D extends View {
     }
 
     private void init() {
-        Log.v(TAG, Debug.getLoc() + " calcSurface ");
 
         surfaceGen.calcSurface(-20, 20, -20, 20, (x, y) -> {
-             double d =  Math.sqrt(x * x + y * y);
-            return 10*((d == 0)?1f :(float) (Math.sin(d) / d));
+            double d = Math.sqrt(x * x + y * y);
+            return 10 * ((d == 0) ? 1f : (float) (Math.sin(d) / d));
         });
     }
-
 
     public void plot(CalcEngine.Symbolic s) {
         CalcEngine.Stack mTmpStack = new CalcEngine.Stack();
         long time = System.nanoTime();
         surfaceGen.calcSurface(-6, 6, -6, 6, (x, y) -> {
-            float v =  (float) s.eval(x, y, mTmpStack);
-             return v;
+            float v = (float) s.eval(x, y, mTmpStack);
+            return v;
         });
         setUpMatrix();
-        Log.v(TAG, Debug.getLoc() + " " +(System.nanoTime()-time)*1E-6f);
         invalidate();
     }
 
     @Override
     protected void onSizeChanged(int xNew, int yNew, int xOld, int yOld) {
         super.onSizeChanged(xNew, yNew, xOld, yOld);
-        image = Bitmap.createBitmap(xNew,yNew, Bitmap.Config.ARGB_8888);
-        imgbuff = new int[xNew*yNew];
-        surfaceGen.setScreenDim(xNew, yNew, imgbuff, 0x00000099);
+        Image = Bitmap.createBitmap(xNew, yNew, Bitmap.Config.ARGB_8888);
+        mImageBuff = new int[xNew * yNew];
+        surfaceGen.setScreenDim(xNew, yNew, mImageBuff, 0x00000099);
     }
 
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//        float x = event.getX();
-//        float y = event.getY();
-//        int action = event.getAction();
-//        if (action == MotionEvent.ACTION_DOWN) {
-//            surfaceGen.trackBallDown(x, y);
-//
-//
-//        } else if (action == MotionEvent.ACTION_MOVE) {
-//            surfaceGen.trackBallMove(x, y);
-//            invalidate();
-//
-//        } else if (action == MotionEvent.ACTION_UP) {
-//            surfaceGen.trackBallUP(x, y);
-//        }
-//        return true;
-//    }
     GestureDetectorCompat mGesture = new GestureDetectorCompat(this.getContext(), new GestureDetector.SimpleOnGestureListener() {
 
-    @Override
-    public boolean onDoubleTap(MotionEvent e) {
-        mGraphType = (mGraphType+1)%3;
-        invalidate();
-        return super.onDoubleTap(e);
-    }
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            mGraphType = (mGraphType + 1) % 3;
+            invalidate();
+            return super.onDoubleTap(e);
+        }
 
-    @Override
-    public void onShowPress(MotionEvent motionEvent) {
+        @Override
+        public void onShowPress(MotionEvent motionEvent) {
 
-    }
+        }
 
+        @Override
+        public void onLongPress(MotionEvent motionEvent) {
+            setUpMatrix();
+            invalidate();
+        }
 
-    @Override
-    public void onLongPress(MotionEvent motionEvent) {
-        Log.v(TAG,Debug.getLoc());
-    }
+        @Override
+        public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+            return false;
+        }
+    });
 
-    @Override
-    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        return false;
-    }
-});
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         mGesture.onTouchEvent(ev);
         final int action = ev.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN: {
-                mLastScale = 1;
+
+                mDownScreeenWidth = surfaceGen.getScreenWidth();
+
                 if (!Float.isNaN(mLastTouchX0)) {
                     mLastTouchX1 = ev.getX(0);
                     mLastTouchY1 = ev.getY(0);
-                    surfaceGen.panDown((mLastTouchX1+mLastTouchX0)/2,(mLastTouchY1+mLastTouchY0)/2);
+
+                    surfaceGen.panDown((mLastTouchX1 + mLastTouchX0) / 2, (mLastTouchY1 + mLastTouchY0) / 2);
                     break;
                 }
                 if (ev.getPointerCount() == 2) {
                     mLastTouchX1 = ev.getX(1);
                     mLastTouchY1 = ev.getY(1);
+                    mDownScreeenWidth = surfaceGen.getScreenWidth();
 
                     break;
                 }
+
                 mLastTouchX0 = ev.getX(0);
                 mLastTouchY0 = ev.getY(0);
                 surfaceGen.trackBallDown(mLastTouchX0, mLastTouchY0);
-                 break;
+                mLastTrackBasllX = mLastTouchX0;
+                mLastTrackBasllY = mLastTouchY0;
+                break;
             }
 
             case MotionEvent.ACTION_MOVE: {
                 if (Float.isNaN(mLastTouchX1) && Float.isNaN(mLastTouchX0)) {
+
                     break;
                 }
+
                 float x1 = 0, y1 = 0;
                 if (ev.getPointerCount() == 2) {
                     if (Float.isNaN(mLastTouchX1)) {
@@ -154,7 +145,17 @@ public class Graph3D extends View {
                     y1 = ev.getY(1);
                 }
                 if (ev.getPointerCount() == 1 && !Float.isNaN(mLastTouchX0)) {
-                    surfaceGen.trackBallMove(ev.getX(0), ev.getY(0));
+                    float tx = ev.getX(0);
+                    float ty = ev.getY(0);
+                    float moveX = (mLastTrackBasllX - tx);
+                    float moveY = (mLastTrackBasllY - ty);
+                    if (moveX * moveX + moveY * moveY < 4000f) {
+                        surfaceGen.trackBallMove(tx, ty);
+                    } else {
+                        Log.v(TAG, Debug.getLoc()+ " reject move "+moveX+" , "+moveY);
+                    }
+                    mLastTrackBasllX = tx;
+                    mLastTrackBasllY = ty;
                     invalidate();
 
                     return true;
@@ -170,15 +171,14 @@ public class Graph3D extends View {
                     float cy = mLastTouchY0 + mLastTouchY1;
                     dx = (x0 + x1 - cx) / 2;
                     dy = (y0 + y1 - cy) / 2;
-                    tscalex = Math.abs((x1 - x0)/(mLastTouchX1 - mLastTouchX0)  );
-                    tscaley = Math.abs( (y1 - y0)/(mLastTouchY1 - mLastTouchY0));
 
-                    surfaceGen.panMove(dx,dy);
-                    double scale = 1/Math.hypot(tscalex,tscaley);
-                    surfaceGen.zoom(scale/mLastScale-1);
-                    mLastScale = scale;
+                    double scale = Math.hypot(mLastTouchX1 - mLastTouchX0, mLastTouchY1 - mLastTouchY0) / Math.hypot((x1 - x0), (y1 - y0));
+
+                    surfaceGen.panMove(dx, dy);
+
+                    surfaceGen.setScreenWidth(scale * mDownScreeenWidth);
+
                 }
-
 
                 invalidate();
                 break;
@@ -186,17 +186,14 @@ public class Graph3D extends View {
             case MotionEvent.ACTION_UP: {
                 mLastTouchX0 = Float.NaN;
                 mLastTouchX1 = Float.NaN;
+
             }
         }
 
         return true;
     }
 
-
-
-
     void setUpMatrix() {
-        Log.v(TAG, Debug.getLoc() + " w,h "+getWidth()+" , "+ getHeight());
         surfaceGen.setUpMatrix(getWidth(), getHeight());
     }
 
@@ -204,8 +201,9 @@ public class Graph3D extends View {
     protected void onDraw(Canvas canvas) {
 
         super.onDraw(canvas);
-        if (paint == null) {
-            paint = new Paint();
+
+        if (mPaint == null) {
+            mPaint = new Paint();
         }
         if (surfaceGen.notSetUp()) {
             surfaceGen.setUpMatrix(getWidth(), getHeight());
@@ -213,13 +211,12 @@ public class Graph3D extends View {
 
         int w = getWidth();
         int h = getHeight();
-        long time = System.nanoTime();
 
         surfaceGen.render(mGraphType);
 
-        image.setPixels(imgbuff,0,w,0,0,w,h);
-        canvas.drawBitmap(image,0,0,paint);
-        time = System.nanoTime()-time;
-     }
+        Image.setPixels(mImageBuff, 0, w, 0, 0, w, h);
+        canvas.drawBitmap(Image, 0, 0, mPaint);
+
+    }
 
 }
