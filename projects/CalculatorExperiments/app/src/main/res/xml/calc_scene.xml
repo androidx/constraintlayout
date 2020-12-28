@@ -23,18 +23,18 @@
             motion:layout_constraintHeight_percent="0.3"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintStart_toStartOf="parent" />
-        <ConstraintOverride
+        <Constraint
             android:id="@+id/button10">
             <CustomAttribute motion:attributeName="roundPercent" motion:customFloatValue=".2"/>
-        </ConstraintOverride>
+        </Constraint>
 
-        <ConstraintOverride
-            android:id="@+id/line0"
-            android:layout_height="wrap_content"
-            >
-            <CustomAttribute motion:attributeName="textSize"
-                motion:customDimension="32sp"/>
-        </ConstraintOverride>
+<!--        <ConstraintOverride-->
+<!--            android:id="@+id/line0"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            >-->
+<!--            <CustomAttribute motion:attributeName="textSize"-->
+<!--                motion:customDimension="32sp"/>-->
+<!--        </ConstraintOverride>-->
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
@@ -55,19 +55,100 @@
             android:background="#888"
             motion:layout_constraintBottom_toBottomOf="@id/card"
             />
-        <ConstraintOverride
+        <Constraint
             android:id="@+id/button10"
             >
             <CustomAttribute motion:attributeName="roundPercent" motion:customFloatValue="0.3"/>
-        </ConstraintOverride>
-        <ConstraintOverride
-            android:id="@+id/line0"
-            android:layout_height="0dp"
-            >
+        </Constraint>
+<!--        <ConstraintOverride-->
+<!--            android:id="@+id/line0"-->
+<!--            android:layout_height="0dp"-->
+<!--            >-->
 
-        </ConstraintOverride>
+<!--        </ConstraintOverride>-->
     </ConstraintSet>
-<!-- =====================  View Transitions =====================-->
+    <ConstraintSet android:id="@+id/mode2d" >
+        <Constraint
+            android:id="@+id/graph"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="1"
+            android:visibility="visible"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            motion:layout_constraintBottom_toBottomOf="@id/card"
+            motion:layout_constraintTop_toTopOf="@id/card"
+            motion:layout_constraintStart_toStartOf="@id/card"
+            motion:layout_constraintLeft_toLeftOf="@id/card"
+            motion:layout_constraintEnd_toEndOf="@id/card"
+            motion:layout_constraintRight_toRightOf="@id/card"
+            />
+
+        <Constraint
+            android:id="@+id/graph3d"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:alpha="0"
+            android:visibility="gone"
+            android:background="#0000"
+            motion:layout_constraintBottom_toBottomOf="@id/card"
+            motion:layout_constraintEnd_toEndOf="@id/card"
+            motion:layout_constraintLeft_toLeftOf="@id/card"
+            motion:layout_constraintRight_toRightOf="@id/card"
+            motion:layout_constraintStart_toStartOf="@id/card"
+            motion:layout_constraintTop_toTopOf="@id/card"
+            />
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/mode3d">
+        <Constraint
+            android:id="@+id/graph"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="0"
+            android:visibility="gone"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            motion:layout_constraintBottom_toBottomOf="@id/card"
+            motion:layout_constraintTop_toTopOf="@id/card"
+            motion:layout_constraintStart_toStartOf="@id/card"
+            motion:layout_constraintLeft_toLeftOf="@id/card"
+            motion:layout_constraintEnd_toEndOf="@id/card"
+            motion:layout_constraintRight_toRightOf="@id/card"
+            />
+        <Constraint
+            android:id="@+id/graph3d"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:alpha="1"
+            android:visibility="visible"
+            android:background="#0000"
+            motion:layout_constraintBottom_toBottomOf="@id/card"
+            motion:layout_constraintEnd_toEndOf="@id/card"
+            motion:layout_constraintLeft_toLeftOf="@id/card"
+            motion:layout_constraintRight_toRightOf="@id/card"
+            motion:layout_constraintStart_toStartOf="@id/card"
+            motion:layout_constraintTop_toTopOf="@id/card"
+            />
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/range3d">
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/big2d" >
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/big3d">
+    </ConstraintSet>
+    <!-- =====================  View Transitions =====================-->
     <ViewTransition
         android:id="@+id/click3"
         motion:motionTarget="button3"

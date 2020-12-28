@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2020 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package android.support.constraint.app.g3d;
 
 import android.util.Log;
@@ -21,6 +37,10 @@ public class SurfaceGen {
     float[] tmpVec = new float[3];
     int lineColor = 0xFF000000;
     float mMinX, mMaxX, mMinY, mMaxY, mMinZ, mMaxZ;
+    private final float epslonX = 0.000005232f;
+    private final float epslonY = 0.00000898f;
+    private Function mFunction;
+    private float mZoomZ = 1;
 
     class Box {
         float[][] m_box = {{1, 1, 1}, {2, 3, 2}};
@@ -52,7 +72,6 @@ public class SurfaceGen {
         }
     }
 
-
     private int background;
 
     {
@@ -64,9 +83,11 @@ public class SurfaceGen {
             m.mult3(vert, i, tvert, i);
         }
     }
+
     public double getScreenWidth() {
         return m_matrix.getScreenWidth();
     }
+
     public void setScreenWidth(double sw) {
         m_matrix.setScreenWidth(sw);
         m_matrix.calcMatrix();
@@ -105,26 +126,31 @@ public class SurfaceGen {
         m_matrix.setScreenDim(width, height);
         setupBuffers(width, height, img, background);
         setUpMatrix(width, height);
-        m_matrix.invers(m_inv);
         transform(m_inv);
     }
 
-
     public void setUpMatrix(int width, int height) {
+        setUpMatrix(width, height, true);
+    }
+
+    public void setUpMatrix(int width, int height, boolean resetOrientation) {
         double[] look_point = {
                 (mMinX + mMaxX) / 2, (mMinY + mMaxY) / 2, (mMinZ + mMaxZ) / 2
         };
 
         double diagonal = Math.hypot((mMaxX - mMinX), Math.hypot((mMaxY - mMinY), (mMaxZ - mMinZ))) / 2;
-
         m_matrix.setLookPoint(look_point);
-        double[] eye_point = {look_point[0], look_point[1] - diagonal, look_point[2]};
-        m_matrix.setEyePoint(eye_point);
+        if (resetOrientation) {
+            double[] eye_point = {look_point[0], look_point[1] - diagonal, look_point[2]};
+            m_matrix.setEyePoint(eye_point);
+            double[] up_vector = {0, 0, 1};
+            m_matrix.setUpVector(up_vector);
+        } else {
+            m_matrix.fixUpPoint();
+        }
         double screenWidth = diagonal * 2;
         m_matrix.setScreenWidth(screenWidth);
         m_matrix.setScreenDim(width, height);
-        double[] up_vector = {0, 0, 1};
-        m_matrix.setUpVector(up_vector);
         m_matrix.calcMatrix();
         m_matrix.invers(m_inv);
     }
@@ -138,14 +164,35 @@ public class SurfaceGen {
     }
 
     public void drawBox(LineRender g) {
-
     }
 
     public interface Function {
         float eval(float x, float y);
     }
 
-    public void calcSurface(float min_x, float max_x, float min_y, float max_y, Function func) {
+    public void setZoomZ(float zoom) {
+        mZoomZ = zoom;
+        calcSurface(mMinX, mMaxX, mMinY, mMaxY, false, mFunction);
+    }
+
+    public float getZoomZ() {
+        return mZoomZ;
+    }
+
+    public void rescaleRnge() {
+        float centerX = (mMaxX + mMinX) / 2;
+        float centerY = (mMaxY + mMinY) / 2;
+        float rangeX = (mMaxX - mMinX) / 2;
+        float rangeY = (mMaxY - mMinY) / 2;
+
+        double orig_ScreenWidth = 2 * Math.hypot((mMaxX - mMinX), Math.hypot((mMaxY - mMinY), (mMaxZ - mMinZ))) / 2;
+        double factor = getScreenWidth() / orig_ScreenWidth;
+        rangeX *= factor;
+        rangeY *= factor;
+        calcSurface(centerX - rangeX, centerX + rangeX, centerY - rangeY, centerY + rangeY, false, mFunction);
+    }
+
+    public void calcSurface(float min_x, float max_x, float min_y, float max_y, boolean resetOrientation, Function func) {
         int n = (SIZE + 1) * (SIZE + 1);
         vert = new float[n * 3];
         tvert = new float[n * 3];
@@ -156,8 +203,7 @@ public class SurfaceGen {
         mMaxY = max_y;
         mMinZ = Float.MAX_VALUE;
         mMaxZ = -Float.MAX_VALUE;
-
-
+        mFunction = func;
         int count = 0;
         for (int iy = 0; iy <= SIZE; iy++) {
             float y = min_y + iy * (max_y - min_y) / (SIZE);
@@ -166,13 +212,16 @@ public class SurfaceGen {
                 vert[count++] = x;
                 vert[count++] = y;
                 float z = func.eval(x, y);
+
+                if (Float.isNaN(z) || Float.isInfinite(z)) {
+                    z = func.eval(x + epslonX, y + epslonY);
+                }
                 vert[count++] = z;
                 if (Float.isNaN(z)) {
-                    Log.v(TAG, Debug.getLoc() + " z " + z);
                     continue;
                 }
+
                 if (Float.isInfinite(z)) {
-                    Log.v(TAG, Debug.getLoc() + " z " + z);
                     continue;
                 }
                 mMinZ = Math.min(z, mMinZ);
@@ -187,19 +236,16 @@ public class SurfaceGen {
             float xyrange = (xrange + yrange) / 2;
             float scalez = xyrange / zrange;
 
-
             for (int i = 0; i < vert.length; i += 3) {
                 float z = vert[i + 2];
                 if (Float.isNaN(z) || Float.isInfinite(z)) {
                     if (i > 3) {
                         z = vert[i - 1];
-                        Log.v(TAG, Debug.getLoc() + " z " + z);
                     } else {
                         z = vert[i + 5];
-                        Log.v(TAG, Debug.getLoc() + " z " + z);
                     }
                 }
-                vert[i + 2] = z * scalez;
+                vert[i + 2] = z * scalez * mZoomZ;
             }
             mMinZ *= scalez;
             mMaxZ *= scalez;
@@ -220,7 +266,8 @@ public class SurfaceGen {
                 index[count++] = p2;
             }
         }
-
+        setUpMatrix(width, height, resetOrientation);
+        transform(m_inv);
     }
 
     private final static int min(int x1, int x2, int x3) {

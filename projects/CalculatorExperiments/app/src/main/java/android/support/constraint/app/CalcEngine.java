@@ -1,9 +1,29 @@
+/*
+ * Copyright (C) 2020 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package android.support.constraint.app;
 
 import android.util.Log;
 
 import androidx.constraintlayout.motion.widget.Debug;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -29,18 +49,23 @@ public class CalcEngine {
         Op operator;
         Symbolic lhs, rhs;
 
+        private Symbolic() {
+
+        }
+
         int dimensions() {
             if ("x".equals(var)) {
                 return 1;
             }
-            if ("y".equals( var)) {
+            if ("y".equals(var)) {
                 return 2;
             }
             if (!Double.isNaN(value)) {
                 return 0;
             }
-            return lhs.dimensions() | ((rhs==null)?0: rhs.dimensions());
+            return lhs.dimensions() | ((rhs == null) ? 0 : rhs.dimensions());
         }
+
         public Symbolic(String val) {
             var = val;
         }
@@ -50,6 +75,7 @@ public class CalcEngine {
             this.lhs = lhs;
             this.rhs = rhs;
         }
+
 
         public Symbolic(double value) {
             this.value = value;
@@ -62,7 +88,7 @@ public class CalcEngine {
                     if (rhs == null) {
                         return "(" + operator.key + " error)";
                     }
-                    if (lhs != null && rhs !=null) {
+                    if (lhs != null && rhs != null) {
                         String left = (lhs.operator instanceof Op2) ? "(" + lhs + ")" : lhs.toString();
                         String right = (rhs.operator instanceof Op2) ? "(" + rhs + ")" : rhs.toString();
                         return left + " " + operator + " " + right;
@@ -91,12 +117,97 @@ public class CalcEngine {
             }
             return value;
         }
+
+        public void serialize(ObjectOutputStream stream) throws IOException {
+            boolean present;
+            stream.writeDouble(value); // 1
+            stream.writeObject(var);  // 2
+
+            present  = operator != null;
+            stream.writeBoolean(present);
+            if (present) {
+                operator.serialize(stream);
+            }
+
+            present  = lhs != null;
+            stream.writeBoolean(present); // 3
+            if (present) {
+                lhs.serialize(stream);
+            }
+
+            present  = rhs != null;
+            stream.writeBoolean(present);
+            if (present) {
+                rhs.serialize(stream);
+            }
+        }
+    }
+
+    Symbolic deserializeSymbolic(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        boolean present;
+        Symbolic symbolic = new Symbolic();
+
+        symbolic.value = stream.readDouble(); // 1
+        symbolic.var = (String) stream.readObject();// 2
+
+        if (present = stream.readBoolean()) {
+            symbolic.operator = deserializeOp(stream);
+        }
+
+        if (present = stream.readBoolean()) {
+            symbolic.lhs = deserializeSymbolic(stream);
+        }
+
+        if (present = stream.readBoolean()) {
+            symbolic.rhs = deserializeSymbolic(stream);
+        }
+        return symbolic;
+    }
+
+    /**
+     * Done this way to simplify translation to other formats
+     *
+     * @param stream
+     * @return
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    Stack deserializeStack(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        int top = stream.readInt();
+
+        Stack stack = new Stack();
+        stack.top = top;
+        stack.values = new double[Math.max(5, top * 2)];
+        stack.sval = new Symbolic[Math.max(5, top * 2)];
+        for (int i = 0; i < top; i++) {
+            stack.values[i] = stream.readDouble();
+        }
+        for (int i = 0; i < top; i++) {
+            if (stream.readBoolean()) {
+                stack.sval[i] = deserializeSymbolic(stream);
+            }
+        }
+        return stack;
     }
 
     public static class Stack {
         double[] values = new double[5];
         Symbolic[] sval = new Symbolic[5];
         int top = 0;
+
+        public void serialize(ObjectOutputStream stream) throws IOException {
+            stream.writeInt(top);
+            for (int i = 0; i < top; i++) {
+                stream.writeDouble(values[i]);
+            }
+            for (int i = 0; i < top; i++) {
+                 boolean present = sval[i] != null;
+                 stream.writeBoolean(present);
+                 if (present) {
+                     sval[i].serialize(stream);
+                 }
+            }
+        }
 
         void dump() {
             Log.v(TAG, Debug.getLoc() + " ================= ");
@@ -117,6 +228,7 @@ public class CalcEngine {
                 sval = Arrays.copyOf(sval, values.length * 2);
             }
         }
+
         void push(double val) {
             resize();
             values[top] = val;
@@ -220,6 +332,17 @@ public class CalcEngine {
         }
 
         abstract void op(Stack s);
+
+        public void serialize(ObjectOutputStream stream) throws IOException {
+            stream.writeObject(key);
+        }
+
+    }
+
+    private Op deserializeOp(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        String key = (String) stream.readObject();
+        Op op = mOperators.get(key);
+        return op;
     }
 
     abstract class Op2 extends Op {
@@ -365,10 +488,10 @@ public class CalcEngine {
                 numberSet = true;
         }
 
-       if (DEBUG) {
-           stack.dump();
-           Log.v(TAG, " entryString = \"" + entryString + "\"");
-       }
+        if (DEBUG) {
+            stack.dump();
+            Log.v(TAG, " entryString = \"" + entryString + "\"");
+        }
         return entryString;
     }
 
@@ -396,7 +519,7 @@ public class CalcEngine {
             }
         }
         if (o == null) {
-            Log.v(TAG, "NO operator for \"" + op + "\"");
+            Log.w(TAG, "NO operator for \"" + op + "\"");
             return;
         }
         o.op(stack);

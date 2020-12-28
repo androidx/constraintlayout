@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2020 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package android.support.constraint.app;
 
 import android.content.Context;
@@ -7,15 +22,12 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.motion.widget.Debug;
 
 import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.Vector;
 
 public class Graph2D extends View {
@@ -31,7 +43,7 @@ public class Graph2D extends View {
     float max_y = 1;
     float min_x = DEF_MIN_X;
     float max_x = DEF_MAX_X;
-    CalcEngine.Symbolic mEqu;
+    CalcEngine.Symbolic mEquation;
     CalcEngine.Stack mTmpStack = new CalcEngine.Stack();
     private float mLastTouchX0 = Float.NaN;
     private float mLastTouchY0;
@@ -147,11 +159,15 @@ public class Graph2D extends View {
 
     public void plot(CalcEngine.Symbolic equ) {
         resetPlot();
-        mEqu = equ;
+        mEquation = equ;
         getYRange();
 
         mTicks.calcRangeTicks(getWidth(), getHeight());
         calPlot();
+    }
+
+    public CalcEngine.Symbolic getPlot() {
+        return mEquation;
     }
 
     private boolean isFinite(double x) {
@@ -171,7 +187,7 @@ public class Graph2D extends View {
     }
 
     private double getY(double x) {
-        return mEqu.eval(x, 0, mTmpStack);
+        return mEquation.eval(x, 0, mTmpStack);
     }
 
     void getYRange() {
@@ -502,5 +518,11 @@ public class Graph2D extends View {
             return false;
         }
 
+    }
+    public String getEquation() {
+        if (mEquation == null) {
+            return "sin(x)/x";
+        }
+        return mEquation.toString();
     }
 }

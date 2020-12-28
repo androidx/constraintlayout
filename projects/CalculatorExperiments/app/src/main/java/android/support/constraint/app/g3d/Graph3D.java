@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2020 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package android.support.constraint.app.g3d;
 
 import android.content.Context;
@@ -20,6 +35,7 @@ public class Graph3D extends View {
     private Bitmap Image;
     private int[] mImageBuff;
     Paint mPaint;
+    Paint mPaintSidebar;
     int mGraphType = 1;
     private float mLastTouchX0 = Float.NaN;
     private float mLastTouchY0;
@@ -28,7 +44,8 @@ public class Graph3D extends View {
     private float mLastTrackBasllX;
     private float mLastTrackBasllY;
     double mDownScreeenWidth;
-    
+    private CalcEngine.Symbolic mEquation;
+
     public Graph3D(Context context) {
         super(context);
         init();
@@ -46,7 +63,7 @@ public class Graph3D extends View {
 
     private void init() {
 
-        surfaceGen.calcSurface(-20, 20, -20, 20, (x, y) -> {
+        surfaceGen.calcSurface(-20, 20, -20, 20, true, (x, y) -> {
             double d = Math.sqrt(x * x + y * y);
             return 10 * ((d == 0) ? 1f : (float) (Math.sin(d) / d));
         });
@@ -55,7 +72,9 @@ public class Graph3D extends View {
     public void plot(CalcEngine.Symbolic s) {
         CalcEngine.Stack mTmpStack = new CalcEngine.Stack();
         long time = System.nanoTime();
-        surfaceGen.calcSurface(-6, 6, -6, 6, (x, y) -> {
+        mEquation = s;
+        surfaceGen.setZoomZ(1);
+        surfaceGen.calcSurface(-6, 6, -6, 6, true, (x, y) -> {
             float v = (float) s.eval(x, y, mTmpStack);
             return v;
         });
@@ -66,6 +85,9 @@ public class Graph3D extends View {
     @Override
     protected void onSizeChanged(int xNew, int yNew, int xOld, int yOld) {
         super.onSizeChanged(xNew, yNew, xOld, yOld);
+        if (xNew == 0 || yNew == 0 ){
+            return;
+        }
         Image = Bitmap.createBitmap(xNew, yNew, Bitmap.Config.ARGB_8888);
         mImageBuff = new int[xNew * yNew];
         surfaceGen.setScreenDim(xNew, yNew, mImageBuff, 0x00000099);
@@ -87,6 +109,7 @@ public class Graph3D extends View {
 
         @Override
         public void onLongPress(MotionEvent motionEvent) {
+            surfaceGen.rescaleRnge();
             setUpMatrix();
             invalidate();
         }
@@ -96,14 +119,25 @@ public class Graph3D extends View {
             return false;
         }
     });
-
+    static final int TOUCH_MODE_NONE = 0;
+    static final int TOUCH_MODE_ONE = 0;
+    static final int TOUCH_MODE_TWO= 0;
+    int touch_mode  = TOUCH_MODE_NONE;
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         mGesture.onTouchEvent(ev);
+        int touchCount = ev.getPointerCount();
         final int action = ev.getAction();
         switch (action) {
             case MotionEvent.ACTION_DOWN: {
-
+                if (touchCount == 1) {
+                    touch_mode = 1;
+                } else if (touchCount == 2) {
+                    touch_mode = 2;
+                }
+                if (ev.getX() < getWidth() / 10) {
+                    zscaleDown(ev);
+                }
                 mDownScreeenWidth = surfaceGen.getScreenWidth();
 
                 if (!Float.isNaN(mLastTouchX0)) {
@@ -113,7 +147,7 @@ public class Graph3D extends View {
                     surfaceGen.panDown((mLastTouchX1 + mLastTouchX0) / 2, (mLastTouchY1 + mLastTouchY0) / 2);
                     break;
                 }
-                if (ev.getPointerCount() == 2) {
+                if (touchCount == 2) {
                     mLastTouchX1 = ev.getX(1);
                     mLastTouchY1 = ev.getY(1);
                     mDownScreeenWidth = surfaceGen.getScreenWidth();
@@ -130,6 +164,14 @@ public class Graph3D extends View {
             }
 
             case MotionEvent.ACTION_MOVE: {
+                dprintev("MOVE", ev);
+                if (touch_mode == 2 && ev.getPointerCount() == 1){
+                    return true;
+                }
+                if (mZscaleMode) {
+                    zscaleMove(ev);
+                    return true;
+                }
                 if (Float.isNaN(mLastTouchX1) && Float.isNaN(mLastTouchX0)) {
 
                     break;
@@ -151,8 +193,9 @@ public class Graph3D extends View {
                     float moveY = (mLastTrackBasllY - ty);
                     if (moveX * moveX + moveY * moveY < 4000f) {
                         surfaceGen.trackBallMove(tx, ty);
+
                     } else {
-                        Log.v(TAG, Debug.getLoc()+ " reject move "+moveX+" , "+moveY);
+                        Log.v(TAG, Debug.getLoc() + " reject move " + moveX + " , " + moveY);
                     }
                     mLastTrackBasllX = tx;
                     mLastTrackBasllY = ty;
@@ -184,6 +227,10 @@ public class Graph3D extends View {
                 break;
             }
             case MotionEvent.ACTION_UP: {
+                if (mZscaleMode) {
+                    zscaleUp(ev);
+                    return true;
+                }
                 mLastTouchX0 = Float.NaN;
                 mLastTouchX1 = Float.NaN;
 
@@ -191,6 +238,37 @@ public class Graph3D extends View {
         }
 
         return true;
+    }
+
+    private void dprintev(String type, MotionEvent ev) {
+        int c = ev.getPointerCount();
+        String str = type;
+        for (int i = 0; i < c; i++) {
+            str += "(" + (int)ev.getX(i) + "," + (int) ev.getY(i) + ")";
+
+        }
+    }
+
+    float mDownZoomZ;
+    float mDownY;
+    boolean mZscaleMode = false;
+
+    private void zscaleDown(MotionEvent ev) {
+        mZscaleMode = true;
+        mDownZoomZ = surfaceGen.getZoomZ();
+        mDownY = ev.getY();
+        invalidate();
+    }
+
+    private void zscaleMove(MotionEvent ev) {
+        float dz = ev.getY() - mDownY;
+        surfaceGen.setZoomZ(mDownZoomZ - dz / getHeight());
+        invalidate();
+    }
+
+    private void zscaleUp(MotionEvent ev) {
+        mZscaleMode = false;
+        invalidate();
     }
 
     void setUpMatrix() {
@@ -204,6 +282,8 @@ public class Graph3D extends View {
 
         if (mPaint == null) {
             mPaint = new Paint();
+            mPaintSidebar = new Paint();
+            mPaintSidebar.setColor(0x556633FF);
         }
         if (surfaceGen.notSetUp()) {
             surfaceGen.setUpMatrix(getWidth(), getHeight());
@@ -216,7 +296,18 @@ public class Graph3D extends View {
 
         Image.setPixels(mImageBuff, 0, w, 0, 0, w, h);
         canvas.drawBitmap(Image, 0, 0, mPaint);
+        if (mZscaleMode) {
+            canvas.drawRect(0, 0, getWidth() / 10, getHeight(), mPaintSidebar);
+        }
 
     }
-
+    public CalcEngine.Symbolic getPlot() {
+        return mEquation;
+    }
+    public String getEquation() {
+        if (mEquation == null) {
+            return "default sync function";
+        }
+        return mEquation.toString();
+    }
 }

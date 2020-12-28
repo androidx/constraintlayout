@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2020 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package android.support.constraint.app.g3d;
 
 import java.text.DecimalFormat;
@@ -84,7 +100,21 @@ public class ViewMatrix extends Matrix {
     public void makeUnit(){
 
     }
+    public void fixUpPoint() {
+        double []zv ={
+                mEyePoint[0]-mLookPoint[0],
+                mEyePoint[1]-mLookPoint[1],
+                mEyePoint[2]-mLookPoint[2]
+        };
+        VectorUtil.normalize(zv);
+        double []rv = new double[3];
+        VectorUtil.cross(zv, mUpVector, rv);
 
+        VectorUtil.cross(zv, rv, mUpVector);
+        VectorUtil.normalize(mUpVector);
+        VectorUtil.mult(mUpVector,-1,mUpVector);
+
+    }
     public void calcMatrix(){
         if (mScreenDim==null) {
             return;

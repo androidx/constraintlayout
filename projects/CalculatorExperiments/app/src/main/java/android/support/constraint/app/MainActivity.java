@@ -16,8 +16,14 @@
 
 package android.support.constraint.app;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.net.Uri;
 import android.os.Bundle;
 
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.constraint.app.g3d.Graph3D;
 import android.text.Html;
 import android.util.Log;
@@ -25,6 +31,7 @@ import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,13 +42,29 @@ import androidx.constraintlayout.utils.widget.MotionLabel;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /* This test the visibility*/
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    private static final String STACK_STATE_KEY = "STACK_STATE_KEY";
     MotionLayout mMotionLayout;
+    Graph2D graph2D;
+    Graph3D graph3D;
+    boolean show3d = false;
+    boolean show2d = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
         Bundle extra = getIntent().getExtras();
         setContentView(R.layout.calc);
         mMotionLayout = findView(MotionLayout.class);
+        graph2D = findViewById(R.id.graph);
+        graph3D = findViewById(R.id.graph3d);
         getStack();
     }
 
@@ -72,8 +97,68 @@ public class MainActivity extends AppCompatActivity {
         }
         return (T) null;
     }
+    // =================================================================================
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+       byte[]stackBytes =  savedInstanceState.getByteArray(STACK_STATE_KEY);
+       Log.v(TAG , "stack data "+stackBytes.length);
+        ByteArrayInputStream bais = new  ByteArrayInputStream(stackBytes);
+        try {
+            ObjectInputStream os = new ObjectInputStream(bais);
+            calcEngine.stack = calcEngine.deserializeStack(os);
+           if (show2d = os.readBoolean()) {
+               graph2D.setVisibility(View.VISIBLE);
+               graph2D.setAlpha(1);
+               graph2D.plot(calcEngine.deserializeSymbolic(os));
+            }else {
+               graph2D.setVisibility(View.GONE);
+               graph2D.setAlpha(0);
+           }
+            if (show3d = os.readBoolean()) {
+                graph3D.setVisibility(View.VISIBLE);
+                graph2D.setAlpha(1);
+                graph3D.plot(calcEngine.deserializeSymbolic(os));
+            } else {
+                graph3D.setVisibility(View.GONE);
+                graph2D.setAlpha(0);
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        int fill = Math.min(stack.length,calcEngine.stack.top);
+        for (int i = 0; i < fill; i++) {
+            stack[i].setText(calcEngine.getStack(calcEngine.stack.top -i - 1));
+        }
+    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        byte[] objectBytes = null;
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream os = new ObjectOutputStream(baos);
+            calcEngine.stack.serialize(os);
 
+            os.writeBoolean(show2d);
+           if (show2d) {
+                graph2D.getPlot().serialize(os);
+            }
 
+            os.writeBoolean(show3d);
+            if (show3d) {
+                graph3D.getPlot().serialize(os);
+            }
+            os.flush();
+              objectBytes = baos.toByteArray();
+            Log.v(TAG , "stack data "+objectBytes.length);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        outState.putByteArray(STACK_STATE_KEY, objectBytes);
+
+        // call superclass to save any view hierarchy
+        super.onSaveInstanceState(outState);
+    }
     // =================================================================================
 
 
@@ -92,23 +177,28 @@ public class MainActivity extends AppCompatActivity {
 
     public void key(View view) {
         String key = ((Button) view).getText().toString();
-        if ("inv".equals(key)) {
-            isInInverser = !isInInverser;
-            invertStrings(isInInverser);
-            int run = isInInverser ? R.id.inverse : R.id.un_inverse;
-              mMotionLayout.viewTransition(run,findViewById(R.id.adv_inv));
-            return;
+
+        switch (key) {
+            case "inv":
+                isInInverser = !isInInverser;
+                invertStrings(isInInverser);
+                int run = isInInverser ? R.id.inverse : R.id.un_inverse;
+                mMotionLayout.viewTransition(run, findViewById(R.id.adv_inv));
+                return;
+            case "plot":
+                plot();
+                return;
+            case "save":
+                save_plot();
+                return;
         }
-        if ("plot".equals(key)) {
-            plot();
-            return;
-        }
+
         String str = key;
         if (isInInverser && view.getTag() != null) {
             str = (String) view.getTag();
         }
         if (str == null) {
-            Log.v(TAG, Debug.getLoc() + " null! ");
+            Log.w(TAG, Debug.getLoc() + " null! ");
             return;
         }
         String s = calcEngine.key(str);
@@ -155,45 +245,57 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void save_plot() {
+        String str = "d";
+        if (graph2D.getVisibility() == View.VISIBLE) {
+            save(graph2D, "calc2d" + (System.nanoTime() % 10000), graph2D.getEquation());
+            str = "2D Graph saved";
+        } else if (graph3D.getVisibility() == View.VISIBLE) {
+            save(graph3D, "calc3d" + (System.nanoTime() % 10000), graph3D.getEquation());
+            str = "3D Graph saved";
+        } else {
+            save(mMotionLayout, "calcScreen" + (System.nanoTime() % 10000), "" + calcEngine.stack.getVar(0));
+            str = "screen saved";
+        }
+        Toast toast = Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    private void save(View view, String title, String description) {
+        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(bitmap);
+
+        view.setBackgroundColor(0xFFFFFFFF);
+        view.draw(canvas);
+        view.setBackgroundColor(0x0);
+        MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, title , description);
+    }
+
     private void plot() {
         CalcEngine.Symbolic s = calcEngine.stack.getVar(0);
-        Graph2D graph2D = findViewById(R.id.graph);
-        Graph3D graph3D = findViewById(R.id.graph3d);
-            if (s == null) {
-                graph2D.setAlpha(0);
-                graph2D.setVisibility(View.GONE);
-                graph3D.setAlpha(0);
-                graph3D.setVisibility(View.GONE);
-                return;
-            }
+        if (s == null) {
+              show3d = false;
+              show2d = false;
+            mMotionLayout.transitionToState(R.id.start);
+            return;
+        }
+
         int dim = s.dimensions();
 
         if (dim == 1) {
-            graph2D.setVisibility(View.VISIBLE);
-            graph2D.setAlpha(1);
-            graph3D.setAlpha(0);
-            graph3D.setVisibility(View.GONE);
+            show3d = false;
+            show2d = true;
+            mMotionLayout.transitionToState(R.id.mode2d);
             graph2D.plot(s);
         } else if (dim == 3) {
-            graph3D.setVisibility(View.VISIBLE);
-            graph3D.setAlpha(1);
-            graph2D.setAlpha(0);
-            graph2D.setVisibility(View.GONE);
+            show3d = true;
+            show2d = false;
+            mMotionLayout.transitionToState(R.id.mode3d);
             graph3D.plot(s);
         }
 
     }
 
-    public void exp(View view) {
-        ExtendedFloatingActionButton fab =  findViewById(R.id.fab);
-        ViewGroup.LayoutParams p = fab.getLayoutParams();
-        Log.v(TAG,Debug.getLoc()+" "+p.width+" , "+p.height+ "  "+fab.isExtended());
 
-        if (fab.isExtended()) {
-            fab.shrink();
-        } else {
-            fab.extend();
-        }
-
-    }
 }

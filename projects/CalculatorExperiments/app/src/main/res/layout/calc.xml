@@ -18,6 +18,8 @@
         android:background="#888"
         app:layout_constraintTop_toBottomOf="@id/card" />
 
+
+
     <include layout="@layout/advance_buttons" />
     <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/card"
@@ -95,6 +97,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:alpha="0"
+        android:visibility="invisible"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -110,18 +113,27 @@
         android:id="@+id/graph3d"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:alpha="1"
-        android:background="#0000"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:alpha="1"
+        android:background="#0000"
         app:layout_constraintBottom_toBottomOf="@id/card"
-        app:layout_constraintTop_toTopOf="@id/card"
-        app:layout_constraintStart_toStartOf="@id/card"
-        app:layout_constraintLeft_toLeftOf="@id/card"
         app:layout_constraintEnd_toEndOf="@id/card"
-        app:layout_constraintRight_toRightOf="@id/card" />
+        app:layout_constraintLeft_toLeftOf="@id/card"
+        app:layout_constraintRight_toRightOf="@id/card"
+        app:layout_constraintStart_toStartOf="@id/card"
+        app:layout_constraintTop_toTopOf="@id/card" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterButton
+        android:id="@+id/scale"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginBottom="187dp"
+        android:src="@drawable/adjust_range"
+        app:layout_constraintBottom_toBottomOf="@+id/graph3d"
+        app:layout_constraintStart_toStartOf="@+id/graph3d" />
 
     <androidx.constraintlayout.helper.widget.Flow
 
