@@ -124,7 +124,8 @@ public class MainActivity extends AppCompatActivity {
             if (show2d = os.readBoolean()) {
                 graph2D.setVisibility(View.VISIBLE);
                 graph2D.setAlpha(1);
-                graph2D.plot(calcEngine.deserializeSymbolic(os));
+                CalcEngine.Symbolic sym = calcEngine.deserializeSymbolic(os);
+                graph2D.deserializeSymbolic(sym, os);
             } else {
                 graph2D.setVisibility(View.GONE);
                 graph2D.setAlpha(0);
@@ -132,7 +133,8 @@ public class MainActivity extends AppCompatActivity {
             if (show3d = os.readBoolean()) {
                 graph3D.setVisibility(View.VISIBLE);
                 graph2D.setAlpha(1);
-                graph3D.plot(calcEngine.deserializeSymbolic(os));
+                CalcEngine.Symbolic sym = calcEngine.deserializeSymbolic(os);
+                graph3D.deserializeSymbolic(sym, os);
             } else {
                 graph3D.setVisibility(View.GONE);
                 graph2D.setAlpha(0);
@@ -142,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         }
         int fill = Math.min(stack.length, calcEngine.stack.top);
         for (int i = 0; i < fill; i++) {
-            stack[i].setText(calcEngine.getStack(calcEngine.stack.top - i - 1));
+            stack[i].setText(calcEngine.getStack(i));
         }
     }
 
@@ -155,12 +157,12 @@ public class MainActivity extends AppCompatActivity {
 
             os.writeBoolean(show2d);
             if (show2d) {
-                graph2D.getPlot().serialize(os);
+                graph2D.serialize(os);
             }
 
             os.writeBoolean(show3d);
             if (show3d) {
-                graph3D.getPlot().serialize(os);
+                graph3D.serialize(os);
             }
             os.flush();
             objectBytes = baos.toByteArray();

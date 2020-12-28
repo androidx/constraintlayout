@@ -187,21 +187,18 @@
     <androidx.constraintlayout.helper.widget.Flow
 
         android:id="@+id/basic"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:constraint_referenced_ids="button16,button17,button18,button19,button1,button2,button3,button15,button4,button5,button6,button13,button7,button8,button9,button14,button0,button12,button10"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:constraint_referenced_ids="button16,button17,button18,button19,button7,button8,button9,button15,button4,button5,button6,button13,button1,button2,button3,button14,button0,button12,button10"
         app:flow_horizontalGap="8dp"
         app:flow_maxElementsWrap="4"
         app:flow_verticalGap="8dp"
         app:flow_wrapMode="chain"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/adv_base" />
+        app:layout_constraintTop_toBottomOf="@id/adv_base"
+        tools:layout_editor_absoluteX="8dp" />
 
     <include layout="@layout/basic_buttons" />
 

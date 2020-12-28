@@ -27,6 +27,9 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.DecimalFormat;
 import java.util.Vector;
 
@@ -524,5 +527,22 @@ public class Graph2D extends View {
             return "sin(x)/x";
         }
         return mEquation.toString();
+    }
+
+    public void serialize(ObjectOutputStream stream) throws IOException {
+        getPlot().serialize(stream);
+        stream.writeFloat(min_x);
+        stream.writeFloat(max_x);
+        stream.writeFloat(min_y);
+        stream.writeFloat(max_y);
+    }
+    public void deserializeSymbolic(CalcEngine.Symbolic sym, ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        plot(sym);
+        min_x = stream.readFloat();
+        max_x = stream.readFloat();
+        min_y = stream.readFloat();
+        max_y = stream.readFloat();
+        mTicks.calcRangeTicks(getWidth(), getHeight());
+        calPlot();
     }
 }

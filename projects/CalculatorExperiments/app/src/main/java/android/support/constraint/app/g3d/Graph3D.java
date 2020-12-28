@@ -29,6 +29,10 @@ import android.view.View;
 import androidx.constraintlayout.motion.widget.Debug;
 import androidx.core.view.GestureDetectorCompat;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 public class Graph3D extends View {
     static String TAG = "CubeView";
     SurfaceGen mSurfaceGen = new SurfaceGen();
@@ -85,7 +89,7 @@ public class Graph3D extends View {
     @Override
     protected void onSizeChanged(int xNew, int yNew, int xOld, int yOld) {
         super.onSizeChanged(xNew, yNew, xOld, yOld);
-        if (xNew == 0 || yNew == 0 ){
+        if (xNew == 0 || yNew == 0) {
             return;
         }
         mImage = Bitmap.createBitmap(xNew, yNew, Bitmap.Config.ARGB_8888);
@@ -121,8 +125,9 @@ public class Graph3D extends View {
     });
     static final int TOUCH_MODE_NONE = 0;
     static final int TOUCH_MODE_ONE = 0;
-    static final int TOUCH_MODE_TWO= 0;
-    int touch_mode  = TOUCH_MODE_NONE;
+    static final int TOUCH_MODE_TWO = 0;
+    int touch_mode = TOUCH_MODE_NONE;
+
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         mGesture.onTouchEvent(ev);
@@ -165,7 +170,7 @@ public class Graph3D extends View {
 
             case MotionEvent.ACTION_MOVE: {
                 dprintev("MOVE", ev);
-                if (touch_mode == 2 && ev.getPointerCount() == 1){
+                if (touch_mode == 2 && ev.getPointerCount() == 1) {
                     return true;
                 }
                 if (mZscaleMode) {
@@ -241,7 +246,7 @@ public class Graph3D extends View {
         int c = ev.getPointerCount();
         String str = type;
         for (int i = 0; i < c; i++) {
-            str += "(" + (int)ev.getX(i) + "," + (int) ev.getY(i) + ")";
+            str += "(" + (int) ev.getX(i) + "," + (int) ev.getY(i) + ")";
 
         }
     }
@@ -290,7 +295,7 @@ public class Graph3D extends View {
         int h = getHeight();
 
         mSurfaceGen.render(mGraphType);
-        if (mImage == null)  {
+        if (mImage == null) {
             return;
         }
         mImage.setPixels(mImageBuff, 0, w, 0, 0, w, h);
@@ -300,13 +305,23 @@ public class Graph3D extends View {
         }
 
     }
+
     public CalcEngine.Symbolic getPlot() {
         return mEquation;
     }
+
     public String getEquation() {
         if (mEquation == null) {
             return "default sync function";
         }
         return mEquation.toString();
+    }
+
+    public void serialize(ObjectOutputStream stream) throws IOException {
+        getPlot().serialize(stream);
+    }
+
+    public void deserializeSymbolic(CalcEngine.Symbolic sym, ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        plot(sym);
     }
 }
