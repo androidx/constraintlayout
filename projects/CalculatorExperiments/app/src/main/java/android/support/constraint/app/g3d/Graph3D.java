@@ -31,8 +31,8 @@ import androidx.core.view.GestureDetectorCompat;
 
 public class Graph3D extends View {
     static String TAG = "CubeView";
-    SurfaceGen surfaceGen = new SurfaceGen();
-    private Bitmap Image;
+    SurfaceGen mSurfaceGen = new SurfaceGen();
+    private Bitmap mImage;
     private int[] mImageBuff;
     Paint mPaint;
     Paint mPaintSidebar;
@@ -63,7 +63,7 @@ public class Graph3D extends View {
 
     private void init() {
 
-        surfaceGen.calcSurface(-20, 20, -20, 20, true, (x, y) -> {
+        mSurfaceGen.calcSurface(-20, 20, -20, 20, true, (x, y) -> {
             double d = Math.sqrt(x * x + y * y);
             return 10 * ((d == 0) ? 1f : (float) (Math.sin(d) / d));
         });
@@ -73,8 +73,8 @@ public class Graph3D extends View {
         CalcEngine.Stack mTmpStack = new CalcEngine.Stack();
         long time = System.nanoTime();
         mEquation = s;
-        surfaceGen.setZoomZ(1);
-        surfaceGen.calcSurface(-6, 6, -6, 6, true, (x, y) -> {
+        mSurfaceGen.setZoomZ(1);
+        mSurfaceGen.calcSurface(-6, 6, -6, 6, true, (x, y) -> {
             float v = (float) s.eval(x, y, mTmpStack);
             return v;
         });
@@ -88,9 +88,9 @@ public class Graph3D extends View {
         if (xNew == 0 || yNew == 0 ){
             return;
         }
-        Image = Bitmap.createBitmap(xNew, yNew, Bitmap.Config.ARGB_8888);
+        mImage = Bitmap.createBitmap(xNew, yNew, Bitmap.Config.ARGB_8888);
         mImageBuff = new int[xNew * yNew];
-        surfaceGen.setScreenDim(xNew, yNew, mImageBuff, 0x00000099);
+        mSurfaceGen.setScreenDim(xNew, yNew, mImageBuff, 0x00000099);
     }
 
     GestureDetectorCompat mGesture = new GestureDetectorCompat(this.getContext(), new GestureDetector.SimpleOnGestureListener() {
@@ -109,7 +109,7 @@ public class Graph3D extends View {
 
         @Override
         public void onLongPress(MotionEvent motionEvent) {
-            surfaceGen.rescaleRnge();
+            mSurfaceGen.rescaleRnge();
             setUpMatrix();
             invalidate();
         }
@@ -138,26 +138,26 @@ public class Graph3D extends View {
                 if (ev.getX() < getWidth() / 10) {
                     zscaleDown(ev);
                 }
-                mDownScreeenWidth = surfaceGen.getScreenWidth();
+                mDownScreeenWidth = mSurfaceGen.getScreenWidth();
 
                 if (!Float.isNaN(mLastTouchX0)) {
                     mLastTouchX1 = ev.getX(0);
                     mLastTouchY1 = ev.getY(0);
 
-                    surfaceGen.panDown((mLastTouchX1 + mLastTouchX0) / 2, (mLastTouchY1 + mLastTouchY0) / 2);
+                    mSurfaceGen.panDown((mLastTouchX1 + mLastTouchX0) / 2, (mLastTouchY1 + mLastTouchY0) / 2);
                     break;
                 }
                 if (touchCount == 2) {
                     mLastTouchX1 = ev.getX(1);
                     mLastTouchY1 = ev.getY(1);
-                    mDownScreeenWidth = surfaceGen.getScreenWidth();
+                    mDownScreeenWidth = mSurfaceGen.getScreenWidth();
 
                     break;
                 }
 
                 mLastTouchX0 = ev.getX(0);
                 mLastTouchY0 = ev.getY(0);
-                surfaceGen.trackBallDown(mLastTouchX0, mLastTouchY0);
+                mSurfaceGen.trackBallDown(mLastTouchX0, mLastTouchY0);
                 mLastTrackBasllX = mLastTouchX0;
                 mLastTrackBasllY = mLastTouchY0;
                 break;
@@ -192,10 +192,7 @@ public class Graph3D extends View {
                     float moveX = (mLastTrackBasllX - tx);
                     float moveY = (mLastTrackBasllY - ty);
                     if (moveX * moveX + moveY * moveY < 4000f) {
-                        surfaceGen.trackBallMove(tx, ty);
-
-                    } else {
-                        Log.v(TAG, Debug.getLoc() + " reject move " + moveX + " , " + moveY);
+                        mSurfaceGen.trackBallMove(tx, ty);
                     }
                     mLastTrackBasllX = tx;
                     mLastTrackBasllY = ty;
@@ -217,9 +214,9 @@ public class Graph3D extends View {
 
                     double scale = Math.hypot(mLastTouchX1 - mLastTouchX0, mLastTouchY1 - mLastTouchY0) / Math.hypot((x1 - x0), (y1 - y0));
 
-                    surfaceGen.panMove(dx, dy);
+                    mSurfaceGen.panMove(dx, dy);
 
-                    surfaceGen.setScreenWidth(scale * mDownScreeenWidth);
+                    mSurfaceGen.setScreenWidth(scale * mDownScreeenWidth);
 
                 }
 
@@ -255,14 +252,14 @@ public class Graph3D extends View {
 
     private void zscaleDown(MotionEvent ev) {
         mZscaleMode = true;
-        mDownZoomZ = surfaceGen.getZoomZ();
+        mDownZoomZ = mSurfaceGen.getZoomZ();
         mDownY = ev.getY();
         invalidate();
     }
 
     private void zscaleMove(MotionEvent ev) {
         float dz = ev.getY() - mDownY;
-        surfaceGen.setZoomZ(mDownZoomZ - dz / getHeight());
+        mSurfaceGen.setZoomZ(mDownZoomZ - dz / getHeight());
         invalidate();
     }
 
@@ -272,7 +269,7 @@ public class Graph3D extends View {
     }
 
     void setUpMatrix() {
-        surfaceGen.setUpMatrix(getWidth(), getHeight());
+        mSurfaceGen.setUpMatrix(getWidth(), getHeight());
     }
 
     @Override
@@ -285,17 +282,19 @@ public class Graph3D extends View {
             mPaintSidebar = new Paint();
             mPaintSidebar.setColor(0x556633FF);
         }
-        if (surfaceGen.notSetUp()) {
-            surfaceGen.setUpMatrix(getWidth(), getHeight());
+        if (mSurfaceGen.notSetUp()) {
+            mSurfaceGen.setUpMatrix(getWidth(), getHeight());
         }
 
         int w = getWidth();
         int h = getHeight();
 
-        surfaceGen.render(mGraphType);
-
-        Image.setPixels(mImageBuff, 0, w, 0, 0, w, h);
-        canvas.drawBitmap(Image, 0, 0, mPaint);
+        mSurfaceGen.render(mGraphType);
+        if (mImage == null)  {
+            return;
+        }
+        mImage.setPixels(mImageBuff, 0, w, 0, 0, w, h);
+        canvas.drawBitmap(mImage, 0, 0, mPaint);
         if (mZscaleMode) {
             canvas.drawRect(0, 0, getWidth() / 10, getHeight(), mPaintSidebar);
         }

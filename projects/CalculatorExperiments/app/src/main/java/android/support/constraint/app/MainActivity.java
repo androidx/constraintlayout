@@ -16,7 +16,9 @@
 
 package android.support.constraint.app;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.net.Uri;
@@ -45,6 +47,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -60,6 +63,7 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final String STACK_STATE_KEY = "STACK_STATE_KEY";
+    private static final String SAVE_STATE = "SAVE_STATE";
     MotionLayout mMotionLayout;
     Graph2D graph2D;
     Graph3D graph3D;
@@ -75,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         graph2D = findViewById(R.id.graph);
         graph3D = findViewById(R.id.graph3d);
         getStack();
+        restoreState();
     }
 
     // ================================= Recycler support ====================================
@@ -97,23 +102,33 @@ public class MainActivity extends AppCompatActivity {
         }
         return (T) null;
     }
-    // =================================================================================
+
+    // ====================================STATE Management ========================================
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
-       byte[]stackBytes =  savedInstanceState.getByteArray(STACK_STATE_KEY);
-       Log.v(TAG , "stack data "+stackBytes.length);
-        ByteArrayInputStream bais = new  ByteArrayInputStream(stackBytes);
+        byte[] stateBytes = savedInstanceState.getByteArray(STACK_STATE_KEY);
+        setState(stateBytes);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putByteArray(STACK_STATE_KEY, getState());
+        super.onSaveInstanceState(outState);
+    }
+
+    void setState(byte[] data) {
+        ByteArrayInputStream bais = new ByteArrayInputStream(data);
         try {
             ObjectInputStream os = new ObjectInputStream(bais);
             calcEngine.stack = calcEngine.deserializeStack(os);
-           if (show2d = os.readBoolean()) {
-               graph2D.setVisibility(View.VISIBLE);
-               graph2D.setAlpha(1);
-               graph2D.plot(calcEngine.deserializeSymbolic(os));
-            }else {
-               graph2D.setVisibility(View.GONE);
-               graph2D.setAlpha(0);
-           }
+            if (show2d = os.readBoolean()) {
+                graph2D.setVisibility(View.VISIBLE);
+                graph2D.setAlpha(1);
+                graph2D.plot(calcEngine.deserializeSymbolic(os));
+            } else {
+                graph2D.setVisibility(View.GONE);
+                graph2D.setAlpha(0);
+            }
             if (show3d = os.readBoolean()) {
                 graph3D.setVisibility(View.VISIBLE);
                 graph2D.setAlpha(1);
@@ -125,13 +140,13 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        int fill = Math.min(stack.length,calcEngine.stack.top);
+        int fill = Math.min(stack.length, calcEngine.stack.top);
         for (int i = 0; i < fill; i++) {
-            stack[i].setText(calcEngine.getStack(calcEngine.stack.top -i - 1));
+            stack[i].setText(calcEngine.getStack(calcEngine.stack.top - i - 1));
         }
     }
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
+
+    byte[] getState() {
         byte[] objectBytes = null;
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -139,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
             calcEngine.stack.serialize(os);
 
             os.writeBoolean(show2d);
-           if (show2d) {
+            if (show2d) {
                 graph2D.getPlot().serialize(os);
             }
 
@@ -148,19 +163,44 @@ public class MainActivity extends AppCompatActivity {
                 graph3D.getPlot().serialize(os);
             }
             os.flush();
-              objectBytes = baos.toByteArray();
-            Log.v(TAG , "stack data "+objectBytes.length);
+            objectBytes = baos.toByteArray();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        outState.putByteArray(STACK_STATE_KEY, objectBytes);
+        return objectBytes;
+    }
 
-        // call superclass to save any view hierarchy
-        super.onSaveInstanceState(outState);
+    protected void onPause() {
+        super.onPause();
+        try {
+            FileOutputStream outputStream = getApplicationContext().openFileOutput( SAVE_STATE, Context.MODE_PRIVATE);
+            outputStream.write(getState());
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    protected void  restoreState(){
+        try {
+            FileInputStream inputStream = getApplicationContext().openFileInput( SAVE_STATE);
+            byte[] data = new byte[inputStream.available()];
+            int total = 0;
+            while(total < data.length) {
+              int n =  inputStream.read(data,total,data.length-total);
+              if (n == -1) {
+                 return;
+              }
+               total+=n;
+            }
+            setState(data);
+        } catch (FileNotFoundException e) {
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     // =================================================================================
-
 
     CalcEngine calcEngine = new CalcEngine();
 
@@ -269,15 +309,15 @@ public class MainActivity extends AppCompatActivity {
         view.setBackgroundColor(0xFFFFFFFF);
         view.draw(canvas);
         view.setBackgroundColor(0x0);
-        MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, title , description);
+        MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, title, description);
     }
 
     private void plot() {
         CalcEngine.Symbolic s = calcEngine.stack.getVar(0);
         if (s == null) {
-              show3d = false;
-              show2d = false;
-            mMotionLayout.transitionToState(R.id.start);
+            show3d = false;
+            show2d = false;
+            mMotionLayout.transitionToState(R.id.mode_no_graph);
             return;
         }
 
@@ -296,6 +336,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
 
 }
