@@ -62,7 +62,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 public class MotionScene {
     public static final String TAG = "MotionScene";
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     final static int TRANSITION_BACKWARD = 0;
     final static int TRANSITION_FORWARD = 1;
     private static final int SPLINE_STRING = -1;
