@@ -309,7 +309,7 @@ public class MotionScene {
                     }
 
                     float val = transition.mTouchResponse.dot(dx, dy);
-                    if (transition.mTouchResponse.mIsRotateMode) {
+                    if (transition.mTouchResponse.mIsRotateMode && mLastTouchDown != null) {
                         float startX = mLastTouchDown.getX() - transition.mTouchResponse.mRotateCenterX;
                         float startY = mLastTouchDown.getY() - transition.mTouchResponse.mRotateCenterY;
                         float endX = dx + startX;
