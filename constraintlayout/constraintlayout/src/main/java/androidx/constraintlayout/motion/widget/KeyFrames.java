@@ -62,7 +62,10 @@ public class KeyFrames {
         if (!mFramesMap.containsKey(key.mTargetId)) {
             mFramesMap.put(key.mTargetId, new ArrayList<>());
         }
-        mFramesMap.get(key.mTargetId).add(key);
+        ArrayList<Key> frames = mFramesMap.get(key.mTargetId);
+        if (frames != null) {
+            frames.add(key);
+        }
     }
     public KeyFrames() {
 
@@ -82,9 +85,14 @@ public class KeyFrames {
 
                         if (sKeyMakers.containsKey(tagName)) {
                             try {
-                                key = sKeyMakers.get(tagName).newInstance();
-                                key.load(context, Xml.asAttributeSet(parser));
-                                addKey(key);
+                                Constructor<? extends Key> keyMaker = sKeyMakers.get(tagName);
+                                if (keyMaker != null) {
+                                    key = keyMaker.newInstance();
+                                    key.load(context, Xml.asAttributeSet(parser));
+                                    addKey(key);
+                                } else {
+                                    throw new NullPointerException("Keymaker for " + tagName + " not found");
+                                }
                             } catch (Exception e) {
                                 Log.e(TAG, "unable to create ", e);
                             }

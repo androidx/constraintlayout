@@ -190,6 +190,9 @@ public class KeyAttributes extends Key {
     public void addValues(HashMap<String, SplineSet> splines) {
         for (String s : splines.keySet()) {
             SplineSet splineSet = splines.get(s);
+            if (splineSet == null) {
+                continue;
+            }
             if (s.startsWith(Key.CUSTOM)) {
                 String ckey = s.substring(Key.CUSTOM.length() + 1);
                 ConstraintAttribute cvalue = mCustomConstraints.get(ckey);

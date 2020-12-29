@@ -874,12 +874,18 @@ class MotionPaths implements Comparable<MotionPaths> {
     }
 
     int getCustomDataCount(String name) {
-        return attributes.get(name).noOfInterpValues();
+        ConstraintAttribute a = attributes.get(name);
+        if (a == null) {
+            return 0;
+        }
+        return a.noOfInterpValues();
     }
 
     int getCustomData(String name, double[] value, int offset) {
         ConstraintAttribute a = attributes.get(name);
-        if (a.noOfInterpValues() == 1) {
+        if (a == null) {
+            return 0;
+        } else if (a.noOfInterpValues() == 1) {
             value[offset] = a.getValueToInterpolate();
             return 1;
         } else {
@@ -918,7 +924,7 @@ class MotionPaths implements Comparable<MotionPaths> {
         Set<String> at = c.mCustomConstraints.keySet();
         for (String s : at) {
             ConstraintAttribute attr = c.mCustomConstraints.get(s);
-            if (attr.getType() != ConstraintAttribute.AttributeType.STRING_TYPE) {
+            if (attr != null && attr.getType() != ConstraintAttribute.AttributeType.STRING_TYPE) {
                 this.attributes.put(s, attr);
             }
         }

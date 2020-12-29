@@ -291,7 +291,7 @@ public class ViewTransition {
                     }
                 } else if (type.type == TypedValue.TYPE_STRING) {
                     mDefaultInterpolatorString = a.getString(attr);
-                    if (mDefaultInterpolatorString.indexOf("/") > 0) {
+                    if (mDefaultInterpolatorString != null && mDefaultInterpolatorString.indexOf("/") > 0) {
                         mDefaultInterpolatorID = a.getResourceId(attr, UNSET);
                         mDefaultInterpolator = INTERPOLATOR_REFRENCE_ID;
                     } else {

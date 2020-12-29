@@ -320,7 +320,9 @@ public class KeyTrigger extends Key {
             String lowerCase = name.toLowerCase();
             if (callAll || lowerCase.matches(str)) {
                 ConstraintAttribute custom = mCustomConstraints.get(name);
-                custom.applyCustom(view);
+                if (custom != null) {
+                    custom.applyCustom(view);
+                }
             }
         }
     }
