@@ -7,7 +7,7 @@ compileJava {
 }
 
 dependencies {
-    testCompile 'org.testng:testng:6.9.10'
+    testCompile 'org.testng:testng:7.3.0'
 }
 
 test {

@@ -11,5 +11,5 @@ sourceSets{
 }
 
 dependencies {
-    testImplementation 'org.testng:testng:6.9.6'
+    testImplementation 'org.testng:testng:7.3.0'
 }
