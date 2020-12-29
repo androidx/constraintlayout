@@ -73,7 +73,7 @@ public abstract class VirtualLayout extends ConstraintHelper {
         super.onAttachedToWindow();
         if (mApplyVisibilityOnAttach || mApplyElevationOnAttach) {
             ViewParent parent = getParent();
-            if (parent != null && parent instanceof ConstraintLayout) {
+            if (parent instanceof ConstraintLayout) {
                 ConstraintLayout container = (ConstraintLayout) parent;
                 int visibility = getVisibility();
                 float elevation = 0;

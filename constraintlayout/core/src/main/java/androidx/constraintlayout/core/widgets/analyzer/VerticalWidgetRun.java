@@ -350,8 +350,12 @@ public class VerticalWidgetRun extends WidgetRun {
                             addTarget(end, endTarget, -widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].getMargin());
                         }
                     } else {
-                        startTarget.addDependency(this);
-                        endTarget.addDependency(this);
+                        if (startTarget != null) {
+                            startTarget.addDependency(this);
+                        }
+                        if (endTarget != null) {
+                            endTarget.addDependency(this);
+                        }
                     }
                     mRunType = CENTER;
                 }

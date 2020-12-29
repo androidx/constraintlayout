@@ -2620,7 +2620,7 @@ public class MotionLayout extends ConstraintLayout implements
     }
 
     @Override
-    public boolean onStartNestedScroll(View child, View target, int axes, int type) {
+    public boolean onStartNestedScroll(@NonNull View child, @NonNull View target, int axes, int type) {
         if (DEBUG) {
             Log.v(TAG, "********** onStartNestedScroll( child:" + Debug.getName(child) + ", target:" + Debug.getName(target) + ", axis:" + axes + ", type:" + type);
         }
@@ -2634,14 +2634,14 @@ public class MotionLayout extends ConstraintLayout implements
     }
 
     @Override
-    public void onNestedScrollAccepted(View child, View target, int axes, int type) {
+    public void onNestedScrollAccepted(@NonNull View child, @NonNull View target, int axes, int type) {
         if (DEBUG) {
             Log.v(TAG, "********** onNestedScrollAccepted( child:" + Debug.getName(child) + ", target:" + Debug.getName(target) + ", axis:" + axes + ", type:" + type);
         }
     }
 
     @Override
-    public void onStopNestedScroll(View target, int type) {
+    public void onStopNestedScroll(@NonNull View target, int type) {
         if (DEBUG) {
             Log.v(TAG, "********** onStopNestedScroll(   target:" + Debug.getName(target) + " , type:" + type + " " + mScrollTargetDX + ", " + mScrollTargetDY);
             Debug.logStack(TAG, "onStopNestedScroll ", 8);
@@ -2654,7 +2654,7 @@ public class MotionLayout extends ConstraintLayout implements
     }
 
    @Override
-   public void onNestedScroll(View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed, int type, int[] consumed) {
+   public void onNestedScroll(@NonNull View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed, int type, int[] consumed) {
      if (mUndergoingMotion || dxConsumed != 0 || dyConsumed != 0) {
          consumed[0] += dxUnconsumed;
          consumed[1] += dyUnconsumed;
@@ -2663,25 +2663,26 @@ public class MotionLayout extends ConstraintLayout implements
    }
 
     @Override
-    public void onNestedScroll(View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed, int type) {
+    public void onNestedScroll(@NonNull View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed, int type) {
         if (DEBUG) {
             Log.v(TAG, "********** onNestedScroll( target:" + Debug.getName(target) + ", dxConsumed:" + dxConsumed + ", dyConsumed:" + dyConsumed + ", dyConsumed:" + dxUnconsumed + ", dyConsumed:" + dyUnconsumed + ", type:" + type);
         }
     }
 
     @Override
-    public void onNestedPreScroll(View target, int dx, int dy, int[] consumed, int type) {
+    public void onNestedPreScroll(@NonNull View target, int dx, int dy, @NonNull int[] consumed, int type) {
 
-        if (mScene == null || mScene.mCurrentTransition == null) {
+        MotionScene scene = mScene;
+        if (scene == null) {
             return;
         }
 
-        if (!mScene.mCurrentTransition.isEnabled()) {
+        MotionScene.Transition currentTransition = scene.mCurrentTransition;
+        if (currentTransition == null || !currentTransition.isEnabled()) {
             return;
         }
 
-        MotionScene.Transition currentTransition = mScene.mCurrentTransition;
-        if (currentTransition != null && currentTransition.isEnabled()) {
+        if (currentTransition.isEnabled()) {
             TouchResponse touchResponse = currentTransition.getTouchResponse();
             if (touchResponse != null) {
                 int regionId = touchResponse.getTouchRegionId();
@@ -2691,7 +2692,7 @@ public class MotionLayout extends ConstraintLayout implements
             }
         }
 
-        if (mScene != null && mScene.getMoveWhenScrollAtTop()) {
+        if (scene.getMoveWhenScrollAtTop()) {
             // This blocks transition during scrolling
             if ((mTransitionPosition == 1 || mTransitionPosition == 0) && target.canScrollVertically(-1)) {
                 return;
@@ -2699,8 +2700,8 @@ public class MotionLayout extends ConstraintLayout implements
         }
 
         // This should be disabled in androidx
-        if (currentTransition.getTouchResponse() != null && (mScene.mCurrentTransition.getTouchResponse().getFlags() & TouchResponse.FLAG_DISABLE_POST_SCROLL) != 0) {
-            float dir = mScene.getProgressDirection(dx, dy);
+        if (currentTransition.getTouchResponse() != null && (currentTransition.getTouchResponse().getFlags() & TouchResponse.FLAG_DISABLE_POST_SCROLL) != 0) {
+            float dir = scene.getProgressDirection(dx, dy);
             if ((mTransitionLastPosition <= 0.0f && (dir < 0)) ||
                     (mTransitionLastPosition >= 1.0f && (dir > 0))) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -2729,7 +2730,7 @@ public class MotionLayout extends ConstraintLayout implements
         if (DEBUG) {
             Log.v(TAG, "********** dy = " + dx + " dy = " + dy + " dt = " + mScrollTargetDT);
         }
-        mScene.processScrollMove(dx, dy);
+        scene.processScrollMove(dx, dy);
         if (progress != mTransitionPosition) {
             consumed[0] = dx;
             consumed[1] = dy;
@@ -2742,12 +2743,12 @@ public class MotionLayout extends ConstraintLayout implements
     }
 
     @Override
-    public boolean onNestedPreFling(View target, float velocityX, float velocityY) {
+    public boolean onNestedPreFling(@NonNull View target, float velocityX, float velocityY) {
         return false;
     }
 
     @Override
-    public boolean onNestedFling(View target, float velocityX, float velocityY, boolean consumed) {
+    public boolean onNestedFling(@NonNull View target, float velocityX, float velocityY, boolean consumed) {
         return false;
     }
 
@@ -3662,7 +3663,7 @@ public class MotionLayout extends ConstraintLayout implements
      */
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        if (mScene == null || mInteractionEnabled == false) {
+        if (mScene == null || !mInteractionEnabled) {
             return false;
         }
 

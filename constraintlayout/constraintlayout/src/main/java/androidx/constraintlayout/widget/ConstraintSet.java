@@ -563,6 +563,9 @@ public class ConstraintSet {
                 mConstraints.put(id, new Constraint());
             }
             Constraint constraint = mConstraints.get(id);
+            if (constraint == null) {
+                continue;
+            }
             constraint.mDelta = parent.mDelta;
             if (!constraint.layout.mApply) {
                 constraint.layout.copyFrom(parent.layout);
@@ -603,6 +606,9 @@ public class ConstraintSet {
                 mConstraints.put(id, new Constraint());
             }
             Constraint constraint = mConstraints.get(id);
+            if (constraint == null) {
+                continue;
+            }
             if (!constraint.layout.mApply) {
                 constraint.fillFrom(id, param);
                 if (view instanceof ConstraintHelper) {
@@ -2104,7 +2110,11 @@ public class ConstraintSet {
     public void clone(ConstraintSet set) {
         mConstraints.clear();
         for (Integer key : set.mConstraints.keySet()) {
-            mConstraints.put(key, set.mConstraints.get(key).clone());
+            Constraint constraint = set.mConstraints.get(key);
+            if (constraint == null) {
+                continue;
+            }
+            mConstraints.put(key, constraint.clone());
         }
     }
 
@@ -2128,6 +2138,9 @@ public class ConstraintSet {
                 mConstraints.put(id, new Constraint());
             }
             Constraint constraint = mConstraints.get(id);
+            if (constraint == null) {
+                continue;
+            }
             constraint.mCustomConstraints = ConstraintAttribute.extractAttributes(mSavedAttributes, view);
             constraint.fillFrom(id, param);
             constraint.propertySet.visibility = view.getVisibility();
@@ -2186,6 +2199,9 @@ public class ConstraintSet {
                 mConstraints.put(id, new Constraint());
             }
             Constraint constraint = mConstraints.get(id);
+            if (constraint == null) {
+                continue;
+            }
             if (view instanceof ConstraintHelper) {
                 ConstraintHelper helper = (ConstraintHelper) view;
                 constraint.fillFromConstraints(helper, id, param);
@@ -2236,6 +2252,9 @@ public class ConstraintSet {
 
             if (mConstraints.containsKey(id)) {
                 Constraint constraint = mConstraints.get(id);
+                if (constraint == null) {
+                    continue;
+                }
                 ConstraintAttribute.setAttributes(view, constraint.mCustomConstraints);
             }
         }
@@ -2253,7 +2272,7 @@ public class ConstraintSet {
         int id = helper.getId();
         if (mConstraints.containsKey(id)) {
             Constraint constraint = mConstraints.get(id);
-            if (child instanceof HelperWidget) {
+            if (constraint != null && child instanceof HelperWidget) {
                 HelperWidget helperWidget = (HelperWidget) child;
                 helper.loadParameters(constraint, helperWidget, layoutParams, mapIdToWidget);
             }
@@ -2269,7 +2288,9 @@ public class ConstraintSet {
     public void applyToLayoutParams(int id, ConstraintLayout.LayoutParams layoutParams) {
         if (mConstraints.containsKey(id)) {
             Constraint constraint = mConstraints.get(id);
-            constraint.applyTo(layoutParams);
+            if (constraint != null) {
+                constraint.applyTo(layoutParams);
+            }
         }
     }
 
@@ -2298,26 +2319,23 @@ public class ConstraintSet {
             if (mConstraints.containsKey(id)) {
                 used.remove(id);
                 Constraint constraint = mConstraints.get(id);
+                if (constraint == null) {
+                    continue;
+                }
                 if (view instanceof Barrier) {
                     constraint.layout.mHelperType = BARRIER_TYPE;
-                }
-                if (constraint.layout.mHelperType != UNSET) {
-                    switch (constraint.layout.mHelperType) {
-                        case BARRIER_TYPE:
-                            Barrier barrier = (Barrier) view;
-                            barrier.setId(id);
-                            barrier.setType(constraint.layout.mBarrierDirection);
-                            barrier.setMargin(constraint.layout.mBarrierMargin);
+                    Barrier barrier = (Barrier) view;
+                    barrier.setId(id);
+                    barrier.setType(constraint.layout.mBarrierDirection);
+                    barrier.setMargin(constraint.layout.mBarrierMargin);
 
-                            barrier.setAllowsGoneWidget(constraint.layout.mBarrierAllowsGoneWidgets);
-                            if (constraint.layout.mReferenceIds != null) {
-                                barrier.setReferencedIds(constraint.layout.mReferenceIds);
-                            } else if (constraint.layout.mReferenceIdString != null) {
-                                constraint.layout.mReferenceIds = convertReferenceString(barrier,
-                                        constraint.layout.mReferenceIdString);
-                                barrier.setReferencedIds(constraint.layout.mReferenceIds);
-                            }
-                            break;
+                    barrier.setAllowsGoneWidget(constraint.layout.mBarrierAllowsGoneWidgets);
+                    if (constraint.layout.mReferenceIds != null) {
+                        barrier.setReferencedIds(constraint.layout.mReferenceIds);
+                    } else if (constraint.layout.mReferenceIdString != null) {
+                        constraint.layout.mReferenceIds = convertReferenceString(barrier,
+                                constraint.layout.mReferenceIdString);
+                        barrier.setReferencedIds(constraint.layout.mReferenceIds);
                     }
                 }
                 ConstraintLayout.LayoutParams param = (ConstraintLayout.LayoutParams) view
@@ -2375,27 +2393,26 @@ public class ConstraintSet {
         }
         for (Integer id : used) {
             Constraint constraint = mConstraints.get(id);
-            if (constraint.layout.mHelperType != UNSET) {
-                switch (constraint.layout.mHelperType) {
-                    case BARRIER_TYPE:
-                        Barrier barrier = new Barrier(constraintLayout.getContext());
-                        barrier.setId(id);
-                        if (constraint.layout.mReferenceIds != null) {
-                            barrier.setReferencedIds(constraint.layout.mReferenceIds);
-                        } else if (constraint.layout.mReferenceIdString != null) {
-                            constraint.layout.mReferenceIds = convertReferenceString(barrier,
-                                    constraint.layout.mReferenceIdString);
-                            barrier.setReferencedIds(constraint.layout.mReferenceIds);
-                        }
-                        barrier.setType(constraint.layout.mBarrierDirection);
-                        barrier.setMargin(constraint.layout.mBarrierMargin);
-                        ConstraintLayout.LayoutParams param = constraintLayout
-                                .generateDefaultLayoutParams();
-                        barrier.validateParams();
-                        constraint.applyTo(param);
-                        constraintLayout.addView(barrier, param);
-                        break;
+            if (constraint == null) {
+                continue;
+            }
+            if (constraint.layout.mHelperType == BARRIER_TYPE) {
+                Barrier barrier = new Barrier(constraintLayout.getContext());
+                barrier.setId(id);
+                if (constraint.layout.mReferenceIds != null) {
+                    barrier.setReferencedIds(constraint.layout.mReferenceIds);
+                } else if (constraint.layout.mReferenceIdString != null) {
+                    constraint.layout.mReferenceIds = convertReferenceString(barrier,
+                            constraint.layout.mReferenceIdString);
+                    barrier.setReferencedIds(constraint.layout.mReferenceIds);
                 }
+                barrier.setType(constraint.layout.mBarrierDirection);
+                barrier.setMargin(constraint.layout.mBarrierMargin);
+                LayoutParams param = constraintLayout
+                        .generateDefaultLayoutParams();
+                barrier.validateParams();
+                constraint.applyTo(param);
+                constraintLayout.addView(barrier, param);
             }
             if (constraint.layout.mIsGuideline) {
                 Guideline g = new Guideline(constraintLayout.getContext());
@@ -2441,17 +2458,23 @@ public class ConstraintSet {
             connect(centerID, LEFT, firstID, firstSide, firstMargin);
             connect(centerID, RIGHT, secondId, secondSide, secondMargin);
             Constraint constraint = mConstraints.get(centerID);
-            constraint.layout.horizontalBias = bias;
+            if (constraint != null) {
+                constraint.layout.horizontalBias = bias;
+            }
         } else if (firstSide == START || firstSide == END) {
             connect(centerID, START, firstID, firstSide, firstMargin);
             connect(centerID, END, secondId, secondSide, secondMargin);
             Constraint constraint = mConstraints.get(centerID);
-            constraint.layout.horizontalBias = bias;
+            if (constraint != null) {
+                constraint.layout.horizontalBias = bias;
+            }
         } else {
             connect(centerID, TOP, firstID, firstSide, firstMargin);
             connect(centerID, BOTTOM, secondId, secondSide, secondMargin);
             Constraint constraint = mConstraints.get(centerID);
-            constraint.layout.verticalBias = bias;
+            if (constraint != null) {
+                constraint.layout.verticalBias = bias;
+            }
         }
     }
 
@@ -2473,7 +2496,9 @@ public class ConstraintSet {
         connect(centerID, LEFT, leftId, leftSide, leftMargin);
         connect(centerID, RIGHT, rightId, rightSide, rightMargin);
         Constraint constraint = mConstraints.get(centerID);
-        constraint.layout.horizontalBias = bias;
+        if (constraint != null) {
+            constraint.layout.horizontalBias = bias;
+        }
     }
 
     /**
@@ -2495,7 +2520,9 @@ public class ConstraintSet {
         connect(centerID, START, startId, startSide, startMargin);
         connect(centerID, END, endId, endSide, endMargin);
         Constraint constraint = mConstraints.get(centerID);
-        constraint.layout.horizontalBias = bias;
+        if (constraint != null) {
+            constraint.layout.horizontalBias = bias;
+        }
     }
 
     /**
@@ -2516,7 +2543,9 @@ public class ConstraintSet {
         connect(centerID, TOP, topId, topSide, topMargin);
         connect(centerID, BOTTOM, bottomId, bottomSide, bottomMargin);
         Constraint constraint = mConstraints.get(centerID);
-        constraint.layout.verticalBias = bias;
+        if (constraint != null) {
+            constraint.layout.verticalBias = bias;
+        }
     }
 
     /**
@@ -2643,6 +2672,9 @@ public class ConstraintSet {
             mConstraints.put(startID, new Constraint());
         }
         Constraint constraint = mConstraints.get(startID);
+        if (constraint == null) {
+            return;
+        }
         switch (startSide) {
             case LEFT:
                 if (endSide == LEFT) {
@@ -2774,6 +2806,9 @@ public class ConstraintSet {
             mConstraints.put(startID, new Constraint());
         }
         Constraint constraint = mConstraints.get(startID);
+        if (constraint == null) {
+            return;
+        }
         switch (startSide) {
             case LEFT:
                 if (endSide == LEFT) {
@@ -2943,6 +2978,9 @@ public class ConstraintSet {
     public void clear(int viewId, int anchor) {
         if (mConstraints.containsKey(viewId)) {
             Constraint constraint = mConstraints.get(viewId);
+            if (constraint == null) {
+                return;
+            }
             switch (anchor) {
                 case LEFT:
                     constraint.layout.leftToRight = Layout.UNSET;
@@ -3635,6 +3673,9 @@ public class ConstraintSet {
     public void removeFromVerticalChain(int viewId) {
         if (mConstraints.containsKey(viewId)) {
             Constraint constraint = mConstraints.get(viewId);
+            if (constraint == null) {
+                return;
+            }
             int topId = constraint.layout.topToBottom;
             int bottomId = constraint.layout.bottomToTop;
             if (topId != Layout.UNSET || bottomId != Layout.UNSET) {
@@ -3642,14 +3683,12 @@ public class ConstraintSet {
                     // top and bottom connected to views
                     connect(topId, BOTTOM, bottomId, TOP, 0);
                     connect(bottomId, TOP, topId, BOTTOM, 0);
-                } else if (topId != Layout.UNSET || bottomId != Layout.UNSET) {
-                    if (constraint.layout.bottomToBottom != Layout.UNSET) {
-                        // top connected to view. Bottom connected to parent
-                        connect(topId, BOTTOM, constraint.layout.bottomToBottom, BOTTOM, 0);
-                    } else if (constraint.layout.topToTop != Layout.UNSET) {
-                        // bottom connected to view. Top connected to parent
-                        connect(bottomId, TOP, constraint.layout.topToTop, TOP, 0);
-                    }
+                } else if (constraint.layout.bottomToBottom != Layout.UNSET) {
+                    // top connected to view. Bottom connected to parent
+                    connect(topId, BOTTOM, constraint.layout.bottomToBottom, BOTTOM, 0);
+                } else if (constraint.layout.topToTop != Layout.UNSET) {
+                    // bottom connected to view. Top connected to parent
+                    connect(bottomId, TOP, constraint.layout.topToTop, TOP, 0);
                 }
             }
         }
@@ -3667,6 +3706,9 @@ public class ConstraintSet {
     public void removeFromHorizontalChain(int viewId) {
         if (mConstraints.containsKey(viewId)) {
             Constraint constraint = mConstraints.get(viewId);
+            if (constraint == null) {
+                return;
+            }
             int leftId = constraint.layout.leftToRight;
             int rightId = constraint.layout.rightToLeft;
             if (leftId != Layout.UNSET || rightId != Layout.UNSET) {
@@ -3674,14 +3716,12 @@ public class ConstraintSet {
                     // left and right connected to views
                     connect(leftId, RIGHT, rightId, LEFT, 0);
                     connect(rightId, LEFT, leftId, RIGHT, 0);
-                } else if (leftId != Layout.UNSET || rightId != Layout.UNSET) {
-                    if (constraint.layout.rightToRight != Layout.UNSET) {
+                } else if (constraint.layout.rightToRight != Layout.UNSET) {
                         // left connected to view. right connected to parent
                         connect(leftId, RIGHT, constraint.layout.rightToRight, RIGHT, 0);
-                    } else if (constraint.layout.leftToLeft != Layout.UNSET) {
-                        // right connected to view. left connected to parent
-                        connect(rightId, LEFT, constraint.layout.leftToLeft, LEFT, 0);
-                    }
+                } else if (constraint.layout.leftToLeft != Layout.UNSET) {
+                    // right connected to view. left connected to parent
+                    connect(rightId, LEFT, constraint.layout.leftToLeft, LEFT, 0);
                 }
                 clear(viewId, LEFT);
                 clear(viewId, RIGHT);
@@ -3694,7 +3734,7 @@ public class ConstraintSet {
                         // start and end connected to views
                         connect(startId, END, endId, START, 0);
                         connect(endId, START, leftId, END, 0);
-                    } else if (leftId != Layout.UNSET || endId != Layout.UNSET) {
+                    } else if (endId != Layout.UNSET) {
                         if (constraint.layout.rightToRight != Layout.UNSET) {
                             // left connected to view. right connected to parent
                             connect(leftId, END, constraint.layout.rightToRight, END, 0);
@@ -3832,6 +3872,9 @@ public class ConstraintSet {
         for (int i = 0; i < attributeName.length; i++) {
             if (mSavedAttributes.containsKey(attributeName[i])) {
                 constraintAttribute = mSavedAttributes.get(attributeName[i]);
+                if (constraintAttribute == null) {
+                    continue;
+                }
                 if (constraintAttribute.getType() != attributeType) {
                     throw new IllegalArgumentException(
                             "ConstraintAttribute is already a " + constraintAttribute.getType().name());
@@ -5206,6 +5249,9 @@ public class ConstraintSet {
 
         for (Integer id : set.toArray(new Integer[0])) {
             Constraint constraint = mConstraints.get(id);
+            if (constraint == null) {
+                continue;
+            }
 
             stringBuilder.append("<Constraint id=");
             stringBuilder.append(id);
