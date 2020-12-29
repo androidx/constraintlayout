@@ -62,7 +62,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 public class MotionScene {
     public static final String TAG = "MotionScene";
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     final static int TRANSITION_BACKWARD = 0;
     final static int TRANSITION_FORWARD = 1;
     private static final int SPLINE_STRING = -1;
@@ -304,10 +304,6 @@ public class MotionScene {
                 if (transition.mTouchResponse != null) {
                     transition.mTouchResponse.setRTL(mRtl);
                     RectF region = transition.mTouchResponse.getTouchRegion(mMotionLayout, cache);
-                    if (region != null && mLastTouchDown != null && (!region.contains(mLastTouchDown.getX(), mLastTouchDown.getY()))) {
-                        continue;
-                    }
-                    region = transition.mTouchResponse.getTouchRegion(mMotionLayout, cache);
                     if (region != null && mLastTouchDown != null && (!region.contains(mLastTouchDown.getX(), mLastTouchDown.getY()))) {
                         continue;
                     }
