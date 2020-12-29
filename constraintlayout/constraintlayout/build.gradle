@@ -1,11 +1,11 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
 
-def latestSdkVersion = 28
+def latestSdkVersion = 30
 
 android {
     compileSdkVersion latestSdkVersion
-    buildToolsVersion "28"
+    buildToolsVersion "30.0.2"
 
     defaultConfig {
         minSdkVersion 14
@@ -21,9 +21,8 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    // TODO replace with https://issuetracker.google.com/issues/72050365 once released.
-    libraryVariants.all {
-        it.generateBuildConfig.enabled = false
+    buildFeatures {
+        buildConfig = false
     }
 }
 
