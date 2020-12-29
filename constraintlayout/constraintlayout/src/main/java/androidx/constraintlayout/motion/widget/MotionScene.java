@@ -907,11 +907,13 @@ public class MotionScene {
                         }
                     } else if (type.type == TypedValue.TYPE_STRING) {
                         mDefaultInterpolatorString = a.getString(attr);
-                        if (mDefaultInterpolatorString.indexOf("/") > 0) {
-                            mDefaultInterpolatorID = a.getResourceId(attr, -1);
-                            mDefaultInterpolator = INTERPOLATOR_REFRENCE_ID;
-                        } else {
-                            mDefaultInterpolator = SPLINE_STRING;
+                        if (mDefaultInterpolatorString != null) {
+                            if (mDefaultInterpolatorString.indexOf("/") > 0) {
+                                mDefaultInterpolatorID = a.getResourceId(attr, -1);
+                                mDefaultInterpolator = INTERPOLATOR_REFRENCE_ID;
+                            } else {
+                                mDefaultInterpolator = SPLINE_STRING;
+                            }
                         }
                     } else {
                         mDefaultInterpolator = a.getInteger(attr, mDefaultInterpolator);
@@ -1017,10 +1019,14 @@ public class MotionScene {
                                     int line = parser.getLineNumber();
                                     Log.v(TAG, " OnSwipe (" + name + ".xml:" + line + ")");
                                 }
-                                transition.mTouchResponse = new TouchResponse(context, mMotionLayout, parser);
+                                if (transition != null) {
+                                    transition.mTouchResponse = new TouchResponse(context, mMotionLayout, parser);
+                                }
                                 break;
                             case ONCLICK_TAG:
-                                transition.addOnClick(context, parser);
+                                if (transition != null) {
+                                    transition.addOnClick(context, parser);
+                                }
                                 break;
                             case STATESET_TAG:
                                 mStateSet = new StateSet(context, parser);
@@ -1033,7 +1039,9 @@ public class MotionScene {
                                 break;
                             case KEYFRAMESET_TAG:
                                 KeyFrames keyFrames = new KeyFrames(context, parser);
-                                transition.mKeyFramesList.add(keyFrames);
+                                if (transition != null) {
+                                    transition.mKeyFramesList.add(keyFrames);
+                                }
                                 break;
                             case VIEW_TRANSITION:
                                 ViewTransition viewTransition = new ViewTransition(context, parser);
@@ -1684,7 +1692,12 @@ public class MotionScene {
      * @return
      */
     public int lookUpConstraintId(String id) {
-        return mConstraintSetIdMap.get(id);
+        Integer boxed = mConstraintSetIdMap.get(id);
+        if (boxed == null) {
+            return 0;
+        } else {
+            return boxed;
+        }
     }
 
     /**
@@ -1694,7 +1707,12 @@ public class MotionScene {
      */
     public String lookUpConstraintName(int id) {
         for (Map.Entry<String, Integer> entry : mConstraintSetIdMap.entrySet()) {
-            if (entry.getValue().intValue() == id) {
+            Integer boxed = entry.getValue();
+            if (boxed == null) {
+                continue;
+            }
+
+            if (boxed == id) {
                 return entry.getKey();
             }
         }

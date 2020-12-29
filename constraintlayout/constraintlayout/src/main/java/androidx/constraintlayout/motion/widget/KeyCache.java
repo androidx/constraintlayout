@@ -29,13 +29,17 @@ public class KeyCache {
 
     void setFloatValue(Object view, String type, int element, float value) {
         if (!map.containsKey(view)) {
-            HashMap<String, float[]> array = new HashMap();
+            HashMap<String, float[]> array = new HashMap<>();
             float[] vArray = new float[element + 1];
             vArray[element] = value;
             array.put(type, vArray);
             map.put(view, array);
         } else {
             HashMap<String, float[]> array = map.get(view);
+            if (array == null) {
+                array = new HashMap<>();
+            }
+
             if (!array.containsKey(type)) {
                 float[] vArray = new float[element + 1];
                 vArray[element] = value;
@@ -43,6 +47,9 @@ public class KeyCache {
                 map.put(view, array);
             } else {
                 float[] vArray = array.get(type);
+                if (vArray == null) {
+                    vArray = new float[0];
+                }
                 if (vArray.length <= element) {
                     vArray = Arrays.copyOf(vArray, element + 1);
                 }
@@ -57,10 +64,13 @@ public class KeyCache {
             return Float.NaN;
         } else {
             HashMap<String, float[]> array = map.get(view);
-            if (!array.containsKey(type)) {
+            if (array == null || !array.containsKey(type)) {
                 return Float.NaN;
             }
             float[] vArray = array.get(type);
+            if (vArray == null) {
+                return Float.NaN;
+            }
             if (vArray.length > element) {
                 return vArray[element];
             }

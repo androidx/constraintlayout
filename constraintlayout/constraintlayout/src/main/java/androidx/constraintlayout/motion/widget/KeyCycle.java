@@ -130,15 +130,29 @@ public class KeyCycle extends Key {
             if (key.startsWith(Key.CUSTOM)) {
                 String ckey = key.substring(Key.CUSTOM.length() + 1);
                 ConstraintAttribute cvalue = mCustomConstraints.get(ckey);
-                if (cvalue != null && cvalue.getType() == ConstraintAttribute.AttributeType.FLOAT_TYPE) {
-                    oscSet.get(key).setPoint(mFramePosition, mWaveShape, mCustomWaveShpe, mWaveVariesBy, mWavePeriod, mWaveOffset, mWavePhase, cvalue.getValueToInterpolate(), cvalue);
+                if (cvalue == null || cvalue.getType() != ConstraintAttribute.AttributeType.FLOAT_TYPE) {
+                    continue;
                 }
+
+                KeyCycleOscillator osc = oscSet.get(key);
+                if (osc == null) {
+                    continue;
+                }
+
+                osc.setPoint(mFramePosition, mWaveShape, mCustomWaveShpe, mWaveVariesBy, mWavePeriod, mWaveOffset, mWavePhase, cvalue.getValueToInterpolate(), cvalue);
                 continue;
             }
             float value = getValue(key);
-            if (!Float.isNaN(value)) {
-                oscSet.get(key).setPoint(mFramePosition, mWaveShape, mCustomWaveShpe, mWaveVariesBy, mWavePeriod, mWaveOffset, mWavePhase, value);
+            if (Float.isNaN(value)) {
+                continue;
             }
+
+            KeyCycleOscillator osc = oscSet.get(key);
+            if (osc == null) {
+                continue;
+            }
+
+            osc.setPoint(mFramePosition, mWaveShape, mCustomWaveShpe, mWaveVariesBy, mWavePeriod, mWaveOffset, mWavePhase, value);
         }
     }
 
@@ -185,6 +199,9 @@ public class KeyCycle extends Key {
         Debug.logStack(TAG, "add " + splines.size() + " values", 2);
         for (String s : splines.keySet()) {
             SplineSet splineSet = splines.get(s);
+            if (splineSet == null) {
+                continue;
+            }
             switch (s) {
                 case Key.ALPHA:
                     splineSet.setPoint(mFramePosition, mAlpha);

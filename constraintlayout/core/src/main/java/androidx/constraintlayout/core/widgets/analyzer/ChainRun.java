@@ -125,7 +125,7 @@ public class ChainRun extends WidgetRun {
 
         ConstraintWidget parent = widget.getParent();
         boolean isInRtl = false;
-        if (parent != null && parent instanceof ConstraintWidgetContainer) {
+        if (parent instanceof ConstraintWidgetContainer) {
             isInRtl = ((ConstraintWidgetContainer) parent).isRtl();
         }
         int distance = end.value - start.value;
