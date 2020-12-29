@@ -273,154 +273,221 @@ public class XmlBasedTest {
                                      Attributes attributes)
                     throws SAXException {
 
-
                 if (qName != null) {
-                    if (qName.endsWith("ConstraintLayout")) {
-                        int n = attributes.getLength();
-                        for (int i = 0; i < n; i++) {
 
-                            String attrName = attributes.getLocalName(i);
-                            String attrValue = attributes.getValue(i);
-                            if (attrName == "android:id") {
-                                container.setDebugName(attrValue);
+                    Map<String, String> androidAttrs = new HashMap<String, String>();
+                    Map<String, String> appAttrs = new HashMap<String, String>();
+                    Map<String, String> widgetConstraints = new HashMap<String, String>();
+                    Map<String, String> widgetGoneMargins = new HashMap<String, String>();
+                    Map<String, String> widgetMargins = new HashMap<String, String>();
+
+                    for (int i = 0; i < attributes.getLength(); i++) {
+                        String attrName = attributes.getLocalName(i);
+                        String attrValue = attributes.getValue(i);
+                        if (!attrName.contains(":")) {
+                            continue;
+                        }
+                        if (attrValue.trim().isEmpty()) {
+                            continue;
+                        }
+                        String[] parts = attrName.split(":");
+                        String scheme = parts[0];
+                        String attr = parts[1];
+                        if (scheme.equals("android")) {
+                            androidAttrs.put(attr, attrValue);
+
+                            if (attr.startsWith("layout_margin")) {
+                                widgetMargins.put(attr, attrValue);
                             }
+                        } else if (scheme.equals("app")) {
+                            appAttrs.put(attr, attrValue);
+
+                            if (attr.equals("layout_constraintDimensionRatio")) {
+                            } else if (attr.equals("layout_constraintGuide_begin")) {
+                            } else if (attr.equals("layout_constraintGuide_percent")) {
+                            } else if (attr.equals("layout_constraintGuide_end")) {
+                            } else if (attr.equals("layout_constraintHorizontal_bias")) {
+                            } else if (attr.equals("layout_constraintVertical_bias")) {
+                            } else if (attr.startsWith("layout_constraint")) {
+                                widgetConstraints.put(attr, attrValue);
+                            }
+
+                            if (attr.startsWith("layout_goneMargin")) {
+                                widgetGoneMargins.put(attr, attrValue);
+                            }
+                        }
+                    }
+
+                    String id = androidAttrs.get("id");
+                    String tag = androidAttrs.get("tag");
+                    int layoutWidth = parseDim(androidAttrs.get("layout_width"));
+                    int layoutHeight = parseDim(androidAttrs.get("layout_height"));
+                    String text = androidAttrs.get("text");
+                    String visibility = androidAttrs.get("visibility");
+                    String orientation = androidAttrs.get("orientation");
+
+                    if (qName.endsWith("ConstraintLayout")) {
+                        if (id != null) {
+                            container.setDebugName(id);
                         }
                         widgetMap.put(container.getDebugName(), container);
                         widgetMap.put("parent", container);
                     } else if (qName.endsWith("Guideline")) {
                         Guideline guideline = new Guideline();
-
-                        String id = attributes.getValue("android:id");
-                        guideline.setDebugName(id);
-                        widgetMap.put(id, guideline);
-                        boundsMap.put(guideline, attributes.getValue("android:tag"));
-                        boolean horizontal = "horizontal".equals(attributes.getValue("android:orientation"));
+                        if (id != null) {
+                            guideline.setDebugName(id);
+                        }
+                        widgetMap.put(guideline.getDebugName(), guideline);
+                        boundsMap.put(guideline, tag);
+                        boolean horizontal = "horizontal".equals(orientation);
                         System.out.println("Guideline " + id + " " + (horizontal ? "HORIZONTAL" : "VERTICAL"));
                         guideline.setOrientation(horizontal ? Guideline.HORIZONTAL : Guideline.VERTICAL);
-                        if (attributes.getValue("app:layout_constraintGuide_begin") != null) {
-                            guideline.setGuideBegin(parseDim(attributes.getValue("app:layout_constraintGuide_begin")));
-                            System.out.println("Guideline " + id + " setGuideBegin " + parseDim(attributes.getValue("app:layout_constraintGuide_begin")));
 
-                        } else if (attributes.getValue("app:layout_constraintGuide_percent") != null) {
-                            guideline.setGuidePercent(Float.parseFloat(attributes.getValue("app:layout_constraintGuide_percent")));
-                            System.out.println("Guideline " + id + " setGuidePercent " + Float.parseFloat(attributes.getValue("app:layout_constraintGuide_percent")));
+                        String constraintGuideBegin = appAttrs.get("layout_constraintGuide_begin");
+                        String constraintGuidePercent = appAttrs.get("layout_constraintGuide_percent");
+                        String constraintGuideEnd = appAttrs.get("layout_constraintGuide_end");
 
-                        } else if (attributes.getValue("app:layout_constraintGuide_end") != null) {
-                            guideline.setGuideEnd(parseDim(attributes.getValue("app:layout_constraintGuide_end")));
-                            System.out.println("Guideline " + id + " setGuideBegin " + parseDim(attributes.getValue("app:layout_constraintGuide_end")));
+                        if (constraintGuideBegin != null) {
+                            guideline.setGuideBegin(parseDim(constraintGuideBegin));
+                            System.out.println("Guideline " + id + " setGuideBegin " + parseDim(constraintGuideBegin));
+
+                        } else if (constraintGuidePercent != null) {
+                            guideline.setGuidePercent(Float.parseFloat(constraintGuidePercent));
+                            System.out.println("Guideline " + id + " setGuidePercent " + Float.parseFloat(constraintGuidePercent));
+
+                        } else if (constraintGuideEnd != null) {
+                            guideline.setGuideEnd(parseDim(constraintGuideEnd));
+                            System.out.println("Guideline " + id + " setGuideBegin " + parseDim(constraintGuideEnd));
                         }
                         System.out.println(">>>>>>>>>>>>  " + guideline);
 
                     } else {
                         ConstraintWidget widget = new ConstraintWidget(200, 51);
-
                         widget.setBaselineDistance(28);
 
                         Connection[] connect = new Connection[5];
-                        widget.setDebugName("widget" + (widgetMap.size() + 1));
-                        int n = attributes.getLength();
-                        for (int i = 0; i < n; i++) {
-                            String attrName = attributes.getLocalName(i);
-                            String attrValue = attributes.getValue(i);
-                            if (attrName.equals("")) {
 
-                            } else if (attrName.equals("android:tag")) {
-                                boundsMap.put(widget, attrValue);
-                            } else if (attrName.equals("android:layout_width")) {
-                                int v = parseDim(attrValue);
-                                ConstraintWidget.DimensionBehaviour behaviour = ConstraintWidget.DimensionBehaviour.FIXED;
-                                if (v == 0) {
-                                    behaviour = ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT;
-                                    widget.setDimension(parseDim(attrValue), widget.getHeight());
-                                } else if (v == -1) {
-                                    behaviour = ConstraintWidget.DimensionBehaviour.WRAP_CONTENT;
-                                } else {
-                                    widget.setDimension(parseDim(attrValue), widget.getHeight());
-                                }
-                                widget.setHorizontalDimensionBehaviour(behaviour);
-                            } else if (attrName.equals("android:layout_height")) {
-                                int v = parseDim(attrValue);
-                                ConstraintWidget.DimensionBehaviour behaviour = ConstraintWidget.DimensionBehaviour.FIXED;
-                                if (v == 0) {
-                                    behaviour = ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT;
-                                    widget.setDimension(widget.getWidth(), v);
-                                } else if (v == -1) {
-                                    behaviour = ConstraintWidget.DimensionBehaviour.WRAP_CONTENT;
-                                } else {
-                                    widget.setDimension(widget.getWidth(), v);
-                                }
-                                widget.setVerticalDimensionBehaviour(behaviour);
-                            } else if (attrName.equals("android:text")) {
-                                System.out.print("text = \"" + attrValue + "\"");
-                                Map<String, Integer> wmap = (qName.equals("Button")) ? buttonWidthMap : stringWidthMap;
-                                Map<String, Integer> hmap = (qName.equals("Button")) ? buttonHeightMap : stringHeightMap;
-                                if (wmap.containsKey(attrValue)) {
-//                                    widget.setWrapWidth(wmap.get(attrValue));
-                                    widget.setWidth(wmap.get(attrValue));
+                        String widgetLayoutConstraintDimensionRatio = appAttrs.get("layout_constraintDimensionRatio");
+                        String widgetLayoutConstraintHorizontalBias = appAttrs.get("layout_constraintHorizontal_bias");
+                        String widgetLayoutConstraintVerticalBias = appAttrs.get("layout_constraintVertical_bias");
 
-                                    System.out.print(" W ");
+                        if (id != null) {
+                            widget.setDebugName(id);
+                        } else {
+                            widget.setDebugName("widget" + (widgetMap.size() + 1));
+                        }
 
-                                }
-                                if (hmap.containsKey(attrValue)) {
-//                                    widget.setWrapHeight(hmap.get(attrValue));
-                                    widget.setHeight(hmap.get(attrValue));
-                                    System.out.print(" H ");
-                                }
-                                System.out.println();
+                        if (tag != null) {
+                            boundsMap.put(widget, tag);
+                        }
 
-                            } else if (attrName.startsWith("android:visibility")) {
+                        ConstraintWidget.DimensionBehaviour hBehaviour = ConstraintWidget.DimensionBehaviour.FIXED;
+                        if (layoutWidth == 0) {
+                            hBehaviour = ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT;
+                            widget.setDimension(layoutWidth, widget.getHeight());
+                        } else if (layoutWidth == -1) {
+                            hBehaviour = ConstraintWidget.DimensionBehaviour.WRAP_CONTENT;
+                        } else {
+                            widget.setDimension(layoutWidth, widget.getHeight());
+                        }
+                        widget.setHorizontalDimensionBehaviour(hBehaviour);
 
-                                widget.setVisibility(visibilityMap.get(attrValue));
+                        ConstraintWidget.DimensionBehaviour vBehaviour = ConstraintWidget.DimensionBehaviour.FIXED;
+                        if (layoutHeight == 0) {
+                            vBehaviour = ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT;
+                            widget.setDimension(widget.getWidth(), layoutHeight);
+                        } else if (layoutHeight == -1) {
+                            vBehaviour = ConstraintWidget.DimensionBehaviour.WRAP_CONTENT;
+                        } else {
+                            widget.setDimension(widget.getWidth(), layoutHeight);
+                        }
+                        widget.setVerticalDimensionBehaviour(vBehaviour);
 
-                            } else if (attrName.startsWith("app:layout_constraintDimensionRatio")) {
-                                widget.setDimensionRatio(attrValue);
-                            } else if (attrName.startsWith("app:layout_constraintHorizontal_bias")) {
-                                widget.setHorizontalBiasPercent(Float.parseFloat(attrValue));
-                            } else if (attrName.startsWith("app:layout_constraintVertical_bias")) {
-                                widget.setVerticalBiasPercent(Float.parseFloat(attrValue));
-                            } else if (attrName.startsWith("app:layout_constraint")) {
-
-                                String[] sp = attrName.substring("app:layout_constraint".length()).split("_to");
-                                String fromString = rtl(sp[0].toUpperCase());
-                                ConstraintAnchor.Type from = ConstraintAnchor.Type.valueOf(fromString);
-                                String toString = rtl(sp[1].substring(0, sp[1].length() - 2).toUpperCase());
-                                ConstraintAnchor.Type to = ConstraintAnchor.Type.valueOf(toString);
-                                int side = from.ordinal() - 1;
-                                if (connect[side] == null) {
-                                    connect[side] = new Connection();
-                                }
-                                connect[side].fromWidget = widget;
-                                connect[side].fromType = from;
-                                connect[side].toType = to;
-                                connect[side].toName = attrValue;
-                            } else if (attrName.startsWith("app:layout_goneMargin")) {
-                                String marginSide = rtl(attrName.substring("app:layout_goneMargin".length()).toUpperCase());
-                                ConstraintAnchor.Type marginType = ConstraintAnchor.Type.valueOf(marginSide);
-                                int side = marginType.ordinal() - 1;
-                                if (connect[side] == null) {
-                                    connect[side] = new Connection();
-                                }
-                                connect[side].gonMargin = 3 * Integer.parseInt(attrValue.substring(0, attrValue.length() - 2));
-
-                            } else if (attrName.startsWith("android:layout_margin")) {
-                                String marginSide = rtl(attrName.substring("android:layout_margin".length()).toUpperCase());
-                                ConstraintAnchor.Type marginType = ConstraintAnchor.Type.valueOf(marginSide);
-                                int side = marginType.ordinal() - 1;
-                                if (connect[side] == null) {
-                                    connect[side] = new Connection();
-                                }
-                                connect[side].margin = 3 * Integer.parseInt(attrValue.substring(0, attrValue.length() - 2));
-                            } else if (attrName.equals("android:id")) {
-                                widget.setDebugName(attrValue);
+                        if (text != null) {
+                            System.out.print("text = \"" + text + "\"");
+                            Map<String, Integer> wmap = (qName.equals("Button")) ? buttonWidthMap : stringWidthMap;
+                            Map<String, Integer> hmap = (qName.equals("Button")) ? buttonHeightMap : stringHeightMap;
+                            if (wmap.containsKey(text) && widget.getHorizontalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
+                                widget.setWidth(wmap.get(text));
+                            }
+                            if (hmap.containsKey(text) && widget.getVerticalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
+                                widget.setHeight(hmap.get(text));
                             }
                         }
+
+                        if (visibility != null) {
+                            widget.setVisibility(visibilityMap.get(visibility));
+                        }
+
+                        if (widgetLayoutConstraintDimensionRatio != null) {
+                            widget.setDimensionRatio(widgetLayoutConstraintDimensionRatio);
+                        }
+
+                        if (widgetLayoutConstraintHorizontalBias != null) {
+                            System.out.println("widgetLayoutConstraintHorizontalBias " + widgetLayoutConstraintHorizontalBias);
+                            widget.setHorizontalBiasPercent(Float.parseFloat(widgetLayoutConstraintHorizontalBias));
+                        }
+
+                        if (widgetLayoutConstraintVerticalBias != null) {
+                            System.out.println("widgetLayoutConstraintVerticalBias " + widgetLayoutConstraintVerticalBias);
+                            widget.setVerticalBiasPercent(Float.parseFloat(widgetLayoutConstraintVerticalBias));
+                        }
+
+                        Set<String> constraintKeySet = widgetConstraints.keySet();
+                        String[] constraintKeys = constraintKeySet.toArray(new String[constraintKeySet.size()]);
+                        for (int i = 0; i < constraintKeys.length; i++) {
+                            String attrName = constraintKeys[i];
+                            String attrValue = widgetConstraints.get(attrName);
+                            String[] sp = attrName.substring("layout_constraint".length()).split("_to");
+                            String fromString = rtl(sp[0].toUpperCase());
+                            ConstraintAnchor.Type from = ConstraintAnchor.Type.valueOf(fromString);
+                            String toString = rtl(sp[1].substring(0, sp[1].length() - 2).toUpperCase());
+                            ConstraintAnchor.Type to = ConstraintAnchor.Type.valueOf(toString);
+                            int side = from.ordinal() - 1;
+                            if (connect[side] == null) {
+                                connect[side] = new Connection();
+                            }
+                            connect[side].fromWidget = widget;
+                            connect[side].fromType = from;
+                            connect[side].toType = to;
+                            connect[side].toName = attrValue;
+                        }
+
+                        Set<String> goneMarginSet = widgetGoneMargins.keySet();
+                        String[] goneMargins = goneMarginSet.toArray(new String[goneMarginSet.size()]);
+                        for (int i = 0; i < goneMargins.length; i++) {
+                            String attrName = goneMargins[i];
+                            String attrValue = widgetGoneMargins.get(attrName);
+                            String marginSide = rtl(attrName.substring("layout_goneMargin".length()).toUpperCase());
+                            ConstraintAnchor.Type marginType = ConstraintAnchor.Type.valueOf(marginSide);
+                            int side = marginType.ordinal() - 1;
+                            if (connect[side] == null) {
+                                connect[side] = new Connection();
+                            }
+                            connect[side].gonMargin = 3 * Integer.parseInt(attrValue.substring(0, attrValue.length() - 2));
+                        }
+
+                        Set<String> marginSet = widgetMargins.keySet();
+                        String[] margins = marginSet.toArray(new String[marginSet.size()]);
+                        for (int i = 0; i < margins.length; i++) {
+                            String attrName = margins[i];
+                            String attrValue = widgetMargins.get(attrName);
+                            // System.out.println("margin [" + attrName + "] by [" + attrValue +"]");
+                            String marginSide = rtl(attrName.substring("layout_margin".length()).toUpperCase());
+                            ConstraintAnchor.Type marginType = ConstraintAnchor.Type.valueOf(marginSide);
+                            int side = marginType.ordinal() - 1;
+                            if (connect[side] == null) {
+                                connect[side] = new Connection();
+                            }
+                            connect[side].margin = 3 * Integer.parseInt(attrValue.substring(0, attrValue.length() - 2));
+                        }
+
                         widgetMap.put(widget.getDebugName(), widget);
 
                         for (int i = 0; i < connect.length; i++) {
                             if (connect[i] != null) {
                                 connectionList.add(connect[i]);
                             }
-
                         }
 
                     }
@@ -449,9 +516,27 @@ public class XmlBasedTest {
         System.out.println(Arrays.toString(order));
         ConstraintWidget[] widgetSet = boundsMap.keySet().toArray(new ConstraintWidget[0]);
         for (int i = 0; i < widgetSet.length; i++) {
-            ConstraintWidget constraintWidget = widgetSet[order[i]];
-            container.remove(constraintWidget);
-            container.add(constraintWidget);
+            ConstraintWidget widget = widgetSet[order[i]];
+            if (widget.getDebugName().equals("parent")) {
+                continue;
+            }
+            ConstraintWidget.DimensionBehaviour hBehaviour = widget.getHorizontalDimensionBehaviour();
+            ConstraintWidget.DimensionBehaviour vBehaviour = widget.getVerticalDimensionBehaviour();
+
+            if (widget instanceof Guideline) {
+                Guideline copy = new Guideline();
+                copy.copy(widget, new HashMap<>());
+                container.remove(widget);
+                widget.copy(copy, new HashMap<>());
+            } else {
+                ConstraintWidget copy = new ConstraintWidget();
+                copy.copy(widget, new HashMap<>());
+                container.remove(widget);
+                widget.copy(copy, new HashMap<>());
+            }
+            widget.setHorizontalDimensionBehaviour(hBehaviour);
+            widget.setVerticalDimensionBehaviour(vBehaviour);
+            container.add(widget);
         }
     }
 
@@ -478,20 +563,23 @@ public class XmlBasedTest {
 
     private void validate() {
         ConstraintWidgetContainer root = (ConstraintWidgetContainer) widgetMap.remove("parent");
+
         String[] keys = widgetMap.keySet().toArray(new String[0]);
         boolean ok = true;
-        String layout = "\n";
-        for (int i = 0; i < keys.length; i++) {
-            String key = keys[i];
+        StringBuilder layout = new StringBuilder("\n");
+        for (String key : keys) {
             if (key.contains("activity_main")) {
                 continue;
             }
             ConstraintWidget widget = widgetMap.get(key);
             String bounds = boundsMap.get(widget);
-            ok &= isSame(dim(widget), bounds);
-            layout += rightPad(key.toString(), 17) + rightPad(dim(widget), 15) + "   " + bounds + "\n";
+            String dim = dim(widget);
+            boolean same = isSame(dim, bounds);
+            String compare = rightPad(key, 17) + rightPad(dim, 15) + "   " + bounds;
+            ok &= same;
+            layout.append(compare).append("\n");
         }
-        assertTrue(ok, layout);
+        assertTrue(ok, layout.toString());
     }
 
     private static String rightPad(String s, int n) {
@@ -543,8 +631,6 @@ public class XmlBasedTest {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 1080, 1920);
 
         final ConstraintWidget A = new ConstraintWidget(0, 0, 200, 51);
-//        A.setWrapWidth(200);
-//        A.setWrapHeight(51);
         A.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
         A.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
         A.setDebugName("A");
@@ -568,8 +654,6 @@ public class XmlBasedTest {
         guideline.setOrientation(Guideline.VERTICAL);
         guideline.setDebugName("guideline");
 
-//        A.setWrapWidth(200);
-//        A.setWrapHeight(51);
         A.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
         A.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
         A.setDebugName("A");
