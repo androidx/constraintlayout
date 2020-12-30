@@ -16,6 +16,7 @@
 
 package androidx.constraintlayout.utils.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -84,7 +85,7 @@ public class MotionLabel extends View implements FloatLayout {
     private static final int SERIF = 2;
     private static final int MONOSPACE = 3;
     private int mGravity = Gravity.TOP | Gravity.START;
-    private int mAutoSizeTextType = AUTO_SIZE_TEXT_TYPE_NONE;
+    private int mAutoSizeTextType = 0;
     private boolean mAutoSize = false; // decided during measure
     private float mDeltaLeft;
     private float mFloatWidth, mFloatHeight;
@@ -151,7 +152,9 @@ public class MotionLabel extends View implements FloatLayout {
                 } else if (attr == R.styleable.MotionLabel_android_gravity) {
                     setGravity(a.getInt(attr, -1));
                 } else if (attr == R.styleable.MotionLabel_android_autoSizeTextType) {
-                    mAutoSizeTextType = a.getInt(attr, AUTO_SIZE_TEXT_TYPE_NONE);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        mAutoSizeTextType = a.getInt(attr, AUTO_SIZE_TEXT_TYPE_NONE);
+                    }
                 } else if (attr == R.styleable.MotionLabel_textOutlineColor) {
                     mTextOutlineColor = a.getInt(attr, mTextOutlineColor);
                     mUseOutline = true;
@@ -262,6 +265,7 @@ public class MotionLabel extends View implements FloatLayout {
      * @attr ref android.R.styleable#TextView_gravity
      * @see android.view.Gravity
      */
+    @SuppressLint("RtlHardcoded")
     public void setGravity(int gravity) {
         if ((gravity & Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK) == 0) {
             gravity |= Gravity.START;
@@ -289,10 +293,13 @@ public class MotionLabel extends View implements FloatLayout {
             default:
                 mTextPanY = 0;
         }
-        switch (mGravity & Gravity.HORIZONTAL_GRAVITY_MASK) {
+
+        switch (mGravity & Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK) {
+            case Gravity.START:
             case Gravity.LEFT:
                 mTextPanX = -1;
                 break;
+            case Gravity.END:
             case Gravity.RIGHT:
                 mTextPanX = 1;
                 break;
@@ -306,8 +313,7 @@ public class MotionLabel extends View implements FloatLayout {
         float boxWidth = ((Float.isNaN(mFloatWidth)) ? getMeasuredWidth() : mFloatWidth)
                 - getPaddingLeft()
                 - getPaddingRight();
-        float off = (boxWidth - textWidth) * (1 + mTextPanX) / 2.f;
-        return off;
+        return (boxWidth - textWidth) * (1 + mTextPanX) / 2.f;
     }
 
     private float getVerticalOffset() {

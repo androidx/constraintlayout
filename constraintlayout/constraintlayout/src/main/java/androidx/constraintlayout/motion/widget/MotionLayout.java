@@ -2323,7 +2323,7 @@ public class MotionLayout extends ConstraintLayout implements
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     layoutParams.resolveLayoutDirection(getLayoutDirection());
                 } else {
-                    layoutParams.resolveLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                    layoutParams.resolveLayoutDirection(0);
                 }
                 applyConstraintsFromLayoutParams(false, view, child, layoutParams, mapIdToWidget);
                 if (cset.getVisibilityMode(view.getId()) == ConstraintSet.VISIBILITY_MODE_IGNORE) {
