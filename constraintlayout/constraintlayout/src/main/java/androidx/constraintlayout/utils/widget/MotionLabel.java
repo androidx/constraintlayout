@@ -47,8 +47,7 @@ import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.FloatLayout;
 import androidx.constraintlayout.widget.R;
-
-import static android.widget.TextView.AUTO_SIZE_TEXT_TYPE_NONE;
+import androidx.core.widget.TextViewCompat;
 
 /**
  * This class is designed to created Complex Animated Single Line Text in MotionLayout
@@ -87,7 +86,7 @@ public class MotionLabel extends View implements FloatLayout {
     private static final int SERIF = 2;
     private static final int MONOSPACE = 3;
     private int mGravity = Gravity.TOP | Gravity.START;
-    private int mAutoSizeTextType = 0;
+    private int mAutoSizeTextType = TextViewCompat.AUTO_SIZE_TEXT_TYPE_NONE;
     private boolean mAutoSize = false; // decided during measure
     private float mDeltaLeft;
     private float mFloatWidth, mFloatHeight;
@@ -153,9 +152,7 @@ public class MotionLabel extends View implements FloatLayout {
                 } else if (attr == R.styleable.MotionLabel_android_gravity) {
                     setGravity(a.getInt(attr, -1));
                 } else if (attr == R.styleable.MotionLabel_android_autoSizeTextType) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        mAutoSizeTextType = a.getInt(attr, AUTO_SIZE_TEXT_TYPE_NONE);
-                    }
+                    mAutoSizeTextType = a.getInt(attr, TextViewCompat.AUTO_SIZE_TEXT_TYPE_NONE);
                 } else if (attr == R.styleable.MotionLabel_textOutlineColor) {
                     mTextOutlineColor = a.getInt(attr, mTextOutlineColor);
                     mUseOutline = true;
@@ -607,7 +604,7 @@ public class MotionLabel extends View implements FloatLayout {
                 height += mPaddingTop + mPaddingBottom;
             }
         } else {
-            if (mAutoSizeTextType != AUTO_SIZE_TEXT_TYPE_NONE) {
+            if (mAutoSizeTextType != TextViewCompat.AUTO_SIZE_TEXT_TYPE_NONE) {
                 mAutoSize = true;
             }
 
