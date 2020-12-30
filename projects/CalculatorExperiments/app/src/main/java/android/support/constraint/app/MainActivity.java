@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
                 graph2D.setAlpha(1);
                 CalcEngine.Symbolic sym = calcEngine.deserializeSymbolic(os);
                 graph2D.deserializeSymbolic(sym, os);
+                mMotionLayout.transitionToState(R.id.mode2d);
             } else {
                 graph2D.setVisibility(View.GONE);
                 graph2D.setAlpha(0);
@@ -133,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
             if (show3d = os.readBoolean()) {
                 graph3D.setVisibility(View.VISIBLE);
                 graph2D.setAlpha(1);
+                mMotionLayout.transitionToState(R.id.mode3d);
                 CalcEngine.Symbolic sym = calcEngine.deserializeSymbolic(os);
                 graph3D.deserializeSymbolic(sym, os);
             } else {

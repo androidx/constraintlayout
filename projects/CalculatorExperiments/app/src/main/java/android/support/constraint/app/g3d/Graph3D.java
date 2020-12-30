@@ -319,9 +319,13 @@ public class Graph3D extends View {
 
     public void serialize(ObjectOutputStream stream) throws IOException {
         getPlot().serialize(stream);
+        mSurfaceGen.serializeView(stream);
+        stream.writeInt(mGraphType);
     }
 
     public void deserializeSymbolic(CalcEngine.Symbolic sym, ObjectInputStream stream) throws IOException, ClassNotFoundException {
         plot(sym);
+        mSurfaceGen.deserializeView(stream);
+        mGraphType = stream.readInt();
     }
 }

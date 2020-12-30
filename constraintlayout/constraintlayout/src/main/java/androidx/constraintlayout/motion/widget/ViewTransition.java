@@ -376,7 +376,6 @@ public class ViewTransition {
                          int fromId,
                          ConstraintSet current,
                          View... views) {
-
         if (mDisabled) {
             return;
         }

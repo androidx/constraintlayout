@@ -16,23 +16,22 @@
 
 package android.support.constraint.app.g3d;
 
-import android.util.Log;
-
-import androidx.constraintlayout.motion.widget.Debug;
-
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Arrays;
 
 public class SurfaceGen {
     private static final String TAG = "SurfaceGen";
-    ViewMatrix m_matrix = new ViewMatrix();
-    Matrix m_inv = new Matrix();
-    final int SIZE = 100;
+    ViewMatrix mMatrix = new ViewMatrix();
+    Matrix mInverse = new Matrix();
+    final int SIZE = 100; // the number of point on the side total points = SIZE*SIZE
     protected float[] vert;
     protected int[] index;
     protected float[] tvert;
     float[] zbuff;
     int[] img;
-    float[] light = {0, -1, -1};
+    float[] light = {0, -1, -1}; // The direction of the light source
     int width, height;
     float[] tmpVec = new float[3];
     int lineColor = 0xFF000000;
@@ -41,6 +40,37 @@ public class SurfaceGen {
     private final float epslonY = 0.00000898f;
     private Function mFunction;
     private float mZoomZ = 1;
+
+    public void serializeView(ObjectOutputStream stream) throws IOException {
+        stream.writeFloat(mMinX);
+        stream.writeFloat(mMaxX);
+        stream.writeFloat(mMinY);
+        stream.writeFloat(mMaxY);
+        stream.writeFloat(mMinZ);
+        stream.writeFloat(mMaxZ);
+        stream.writeObject(mMatrix.getLookPoint());
+        stream.writeObject(mMatrix.getEyePoint());
+        stream.writeObject(mMatrix.getUpVector());
+        stream.writeDouble(mMatrix.getScreenWidth());
+    }
+
+    public void deserializeView(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        mMinX = stream.readFloat();
+        mMaxX = stream.readFloat();
+        mMinY = stream.readFloat();
+        mMaxY = stream.readFloat();
+
+        calcSurface(mMinX, mMaxX, mMinX, mMaxX, false, mFunction);
+        mMinZ = stream.readFloat();
+        mMaxZ = stream.readFloat();
+        mMatrix.setLookPoint((double[]) stream.readObject());
+        mMatrix.setEyePoint((double[]) stream.readObject());
+        mMatrix.setUpVector((double[]) stream.readObject());
+        mMatrix.setScreenWidth(stream.readDouble());
+        mMatrix.calcMatrix();
+        mMatrix.invers(mInverse);
+        transform(mInverse);
+    }
 
     class Box {
         float[][] m_box = {{1, 1, 1}, {2, 3, 2}};
@@ -64,8 +94,8 @@ public class SurfaceGen {
                 m_point2[1] = m_box[m_y2[i]][1];
                 m_point2[2] = m_box[m_z2[i]][2];
 
-                m_inv.mult3(m_point1, m_draw1);
-                m_inv.mult3(m_point2, m_draw2);
+                mInverse.mult3(m_point1, m_draw1);
+                mInverse.mult3(m_point2, m_draw2);
 
                 r.draw((int) m_draw1[0], (int) m_draw1[1], (int) m_draw2[0], (int) m_draw2[1]);
             }
@@ -85,52 +115,52 @@ public class SurfaceGen {
     }
 
     public double getScreenWidth() {
-        return m_matrix.getScreenWidth();
+        return mMatrix.getScreenWidth();
     }
 
     public void setScreenWidth(double sw) {
-        m_matrix.setScreenWidth(sw);
-        m_matrix.calcMatrix();
-        m_matrix.invers(m_inv);
-        transform(m_inv);
+        mMatrix.setScreenWidth(sw);
+        mMatrix.calcMatrix();
+        mMatrix.invers(mInverse);
+        transform(mInverse);
     }
 
     public void trackBallDown(float x, float y) {
-        m_matrix.trackBallDown(x, y);
-        m_matrix.invers(m_inv);
+        mMatrix.trackBallDown(x, y);
+        mMatrix.invers(mInverse);
     }
 
     public void trackBallMove(float x, float y) {
-        m_matrix.trackBallMove(x, y);
-        m_matrix.invers(m_inv);
-        transform(m_inv);
+        mMatrix.trackBallMove(x, y);
+        mMatrix.invers(mInverse);
+        transform(mInverse);
     }
 
     public void trackBallUP(float x, float y) {
-        m_matrix.trackBallUP(x, y);
-        m_matrix.invers(m_inv);
+        mMatrix.trackBallUP(x, y);
+        mMatrix.invers(mInverse);
     }
 
     public void panDown(float x, float y) {
-        m_matrix.panDown(x, y);
-        m_matrix.invers(m_inv);
+        mMatrix.panDown(x, y);
+        mMatrix.invers(mInverse);
     }
 
     public void panMove(float x, float y) {
-        m_matrix.panMove(x, y);
-        m_matrix.invers(m_inv);
-        transform(m_inv);
+        mMatrix.panMove(x, y);
+        mMatrix.invers(mInverse);
+        transform(mInverse);
     }
 
     public void setScreenDim(int width, int height, int[] img, int background) {
-        m_matrix.setScreenDim(width, height);
+        mMatrix.setScreenDim(width, height);
         setupBuffers(width, height, img, background);
         setUpMatrix(width, height);
-        transform(m_inv);
+        transform(mInverse);
     }
 
     public void setUpMatrix(int width, int height) {
-        setUpMatrix(width, height, true);
+        setUpMatrix(width, height, false);
     }
 
     public void setUpMatrix(int width, int height, boolean resetOrientation) {
@@ -139,24 +169,24 @@ public class SurfaceGen {
         };
 
         double diagonal = Math.hypot((mMaxX - mMinX), Math.hypot((mMaxY - mMinY), (mMaxZ - mMinZ))) / 2;
-        m_matrix.setLookPoint(look_point);
+        mMatrix.setLookPoint(look_point);
         if (resetOrientation) {
             double[] eye_point = {look_point[0], look_point[1] - diagonal, look_point[2]};
-            m_matrix.setEyePoint(eye_point);
+            mMatrix.setEyePoint(eye_point);
             double[] up_vector = {0, 0, 1};
-            m_matrix.setUpVector(up_vector);
+            mMatrix.setUpVector(up_vector);
         } else {
-            m_matrix.fixUpPoint();
+            mMatrix.fixUpPoint();
         }
         double screenWidth = diagonal * 2;
-        m_matrix.setScreenWidth(screenWidth);
-        m_matrix.setScreenDim(width, height);
-        m_matrix.calcMatrix();
-        m_matrix.invers(m_inv);
+        mMatrix.setScreenWidth(screenWidth);
+        mMatrix.setScreenDim(width, height);
+        mMatrix.calcMatrix();
+        mMatrix.invers(mInverse);
     }
 
     public boolean notSetUp() {
-        return m_inv == null;
+        return mInverse == null;
     }
 
     interface LineRender {
@@ -267,7 +297,7 @@ public class SurfaceGen {
             }
         }
         setUpMatrix(width, height, resetOrientation);
-        transform(m_inv);
+        transform(mInverse);
     }
 
     private final static int min(int x1, int x2, int x3) {

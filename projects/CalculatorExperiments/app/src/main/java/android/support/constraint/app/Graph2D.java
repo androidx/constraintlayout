@@ -15,17 +15,23 @@
  */
 package android.support.constraint.app;
 
+import android.accessibilityservice.GestureDescription;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
+import android.graphics.RectF;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.motion.widget.Debug;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -38,7 +44,7 @@ public class Graph2D extends View {
     Margins mMargins = new Margins();
     Vector<DrawItem> myDrawItems = new Vector<DrawItem>();
     private static final int NPOINTS = 500;
-    Plot plot = new Plot();
+    Plot mPlot = new Plot();
     Ticks mTicks = new Ticks();
     final float DEF_MIN_X = -10;
     final float DEF_MAX_X = 10;
@@ -53,6 +59,22 @@ public class Graph2D extends View {
     private float mLastTouchX1 = Float.NaN;
     private float mLastTouchY1;
     float down_min_y, down_max_y, down_min_x, down_max_x;
+    static final long TRIGGER_DELAY = 1000;
+    long mLastMove;
+    Handler handler;
+
+    private Runnable mCallback = new Runnable() {
+        @Override
+        public void run() {
+            long delay = System.currentTimeMillis() - mLastMove;
+            if (delay > TRIGGER_DELAY) {
+                Log.v(TAG, Debug.getLoc() + " " + delay);
+                mPlot.highlightInterestingPoints(mEquation);
+                invalidate();
+            }
+
+        }
+    };
 
     static class Margins {
         int myInsTop = 30;
@@ -78,7 +100,7 @@ public class Graph2D extends View {
 
     private void init() {
         myDrawItems.add(mAxis);
-        myDrawItems.add(plot);
+        myDrawItems.add(mPlot);
     }
 
     @Override
@@ -147,8 +169,12 @@ public class Graph2D extends View {
                 min_x = xcenter - xoff;
                 max_x = xcenter + xoff;
                 calPlot();
-
                 invalidate();
+                if (handler == null) {
+                    handler = new Handler(Looper.getMainLooper());
+                }
+                handler.removeCallbacks(mCallback);
+                handler.postDelayed(mCallback, 1000);
                 break;
             }
             case MotionEvent.ACTION_UP: {
@@ -156,7 +182,6 @@ public class Graph2D extends View {
                 mLastTouchX1 = Float.NaN;
             }
         }
-
         return true;
     }
 
@@ -178,13 +203,13 @@ public class Graph2D extends View {
     }
 
     private void calPlot() {
-        plot.reset();
+        mPlot.reset();
         float step = (float) ((max_x - min_x) / NPOINTS);
         for (int i = 0; i < NPOINTS; i++) {
             float x = step * i + min_x;
             double y = getY(x);
             if (isFinite(y)) {
-                plot.addPoint(x, (float) y);
+                mPlot.addPoint(x, (float) y);
             }
         }
     }
@@ -250,7 +275,7 @@ public class Graph2D extends View {
     }
 
     public void resetPlot() {
-        plot.reset();
+        mPlot.reset();
         min_y = -1;
         max_y = 1;
         min_x = DEF_MIN_X;
@@ -279,13 +304,17 @@ public class Graph2D extends View {
     class Plot implements DrawItem {
         Path path = new Path();
         Paint paint = new Paint();
-        Paint vpaint = new Paint();
+        Paint txtPaint = new Paint();
         float[] mValueY = new float[1000];
         float[] mValueX = new float[mValueY.length];
         int number_of_points = 0;
+        float keyPointX = Float.NaN;
+        float keyPointY = Float.NaN;
+
 
         public void reset() {
             number_of_points = 0;
+            keyPointX = Float.NaN;
         }
 
         {
@@ -302,12 +331,9 @@ public class Graph2D extends View {
             paint.setStrokeCap(Paint.Cap.ROUND);
             paint.setStyle(Paint.Style.STROKE);
 
-            vpaint.setStrokeWidth(4);
-            vpaint.setColor(0xFF0000FF);
-            vpaint.setStrokeJoin(Paint.Join.ROUND);
-            vpaint.setStrokeCap(Paint.Cap.ROUND);
-            vpaint.setStyle(Paint.Style.STROKE);
-            vpaint.setPathEffect(new DashPathEffect(new float[]{20f, 20f}, 0f));
+            txtPaint.setColor(0xFF0000FF);
+            txtPaint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
+                    24, getResources().getDisplayMetrics()));
 
         }
 
@@ -317,9 +343,122 @@ public class Graph2D extends View {
             number_of_points++;
         }
 
+        public void highlightInterestingPoints(CalcEngine.Symbolic mEquation) {
+            int crossings = 0;
+            int cross = 0;
+            float lastP = mValueY[0];
+            for (int i = 1; i < number_of_points; i++) {
+
+                if (lastP * mValueY[i] < 0) {
+                    cross = i; //if crossing > 1 we wont use anyway
+                    crossings++;
+                }
+                if (mValueY[i] != 0f) {
+                    lastP = mValueY[i];
+                }
+            }
+            if (crossings == 1) {
+                keyPointX = getCrossingPoint(mEquation, mValueX[cross], mValueX[1] - mValueX[0]);
+                keyPointY = Float.NaN;
+                return;
+            }
+            float min = mValueY[0];
+            int minI = 0;
+            int maxI = 0;
+            float max = mValueY[0];
+            for (int i = 1; i < number_of_points; i++) {
+
+                if (mValueY[i] > max) {
+                    maxI = i;
+                    max = mValueY[i];
+                } else if (mValueY[i] < min) {
+                    minI = i;
+                    min = mValueY[i];
+                }
+            }
+            boolean minima = (minI > 10 && minI < number_of_points - 10);
+            boolean maxima = (maxI > 10 && maxI < number_of_points - 10);
+            if (maxima && minima) {
+                return;
+            }
+
+            if (maxima) {
+                double x = findMax(mEquation, mValueX[maxI], mValueX[1] - mValueX[0]);
+                keyPointY = (float) mEquation.eval(x, 0, mTmpStack);
+                keyPointX = (float) x;
+                return;
+            }
+            if (minima) {
+                double x = findMin(mEquation, mValueX[minI], mValueX[1] - mValueX[0]);
+                keyPointY = (float) mEquation.eval(x, 0, mTmpStack);
+                keyPointX = (float) x;
+                return;
+            }
+        }
+
+        private double findMax(CalcEngine.Symbolic eq, float mValueX, float dx) {
+            mTmpStack.clear();
+            dx /= 10;
+            double x = mValueX;
+            double y1 = eq.eval(mValueX, 0, mTmpStack);
+
+            double dy;
+            do {
+                double y2 = eq.eval(x + dx, 0, mTmpStack);
+                dy = y2 - y1;
+                x = x + dy / dx;
+                dx *= 0.9;
+                y1 = y2;
+            } while (dy > 0.00001);
+            return x;
+        }
+
+        private double findMin(CalcEngine.Symbolic eq, float mValueX, float dx) {
+            mTmpStack.clear();
+
+            dx /= 10;
+            double x = mValueX;
+            double y1 = eq.eval(mValueX, 0, mTmpStack);
+
+            double dy;
+            do {
+                double y2 = eq.eval(x + dx, 0, mTmpStack);
+                dy = y2 - y1;
+                x = x + dy / dx;
+                dx *= 0.9;
+                y1 = y2;
+            } while (dy > 0.00001);
+            return x;
+        }
+
+        private float getCrossingPoint(CalcEngine.Symbolic eq, float x, double dx) {
+            mTmpStack.clear();
+            double x1 = x - dx;
+            double x2 = x;
+            double error = 0.00001;
+            while (true) {
+                double y1 = eq.eval(x1, 0, mTmpStack);
+                double y2 = eq.eval(x2, 0, mTmpStack);
+                if (Math.abs(y1) < error) {
+                    return (float) x1;
+                }
+                if (Math.abs(y2) < error) {
+                    return (float) x2;
+                }
+                if (Double.isNaN(y2) || Double.isNaN(y1)) {
+                    return Float.NaN;
+                }
+                Log.v(TAG, Debug.getLoc() + "zerro   " + x1 + "," + y1 + " - " + x2 + "," + y2);
+
+                double shift = -0.5 * y1 * (x2 - x1) / (y2 - y1);
+                x1 = x1 + shift;
+                x2 = x1 + Math.abs(x2 - x1) / 2 + 0.000001;
+            }
+        }
+
         @Override
         public boolean paint(Canvas c, Margins m, int w, int h) {
-             if (number_of_points == 0) {
+            if (number_of_points == 0) {
                 return false;
             }
 
@@ -348,13 +487,37 @@ public class Graph2D extends View {
                     path.moveTo(x, y);
                 } else {
                     path.lineTo(x, y);
-
                 }
             }
             paint.setStyle(Paint.Style.STROKE);
             c.drawPath(path, paint);
             paint.setStyle(Paint.Style.FILL);
             int s = 10;
+
+            if (!Float.isNaN(keyPointX)) {
+                Rect tmpr = new Rect();
+                DecimalFormat df = new DecimalFormat("#.###");
+                String zpoint = df.format(keyPointX);
+                if (!Float.isNaN(keyPointY)) {
+                    zpoint += " , " + df.format(keyPointY);
+                }
+                float ky = Float.isNaN(keyPointY) ? 0 : keyPointY;
+                y = (ky - min_y) * scaley + offy;
+                x = keyPointX * scalex + offx;
+                Paint.FontMetrics metrics = txtPaint.getFontMetrics();
+                txtPaint.getTextBounds(zpoint, 0, zpoint.length(), tmpr);
+                if (!Float.isNaN(keyPointY)) {
+                    RectF rectF = new RectF();
+                    float size = 5;
+                    rectF.set(x - size, y - size, x + size, y + size);
+                    c.drawRoundRect(rectF, size * 2, size * 2, txtPaint);
+
+                    x -= tmpr.width() / 2;
+                }
+                float ty = (y > h / 2) ? y - metrics.descent - 2 : y - metrics.ascent + 2;
+                c.drawText(zpoint, x, ty, txtPaint);
+            }
+
             return windowed;
         }
     }
@@ -522,6 +685,7 @@ public class Graph2D extends View {
         }
 
     }
+
     public String getEquation() {
         if (mEquation == null) {
             return "sin(x)/x";
@@ -536,6 +700,7 @@ public class Graph2D extends View {
         stream.writeFloat(min_y);
         stream.writeFloat(max_y);
     }
+
     public void deserializeSymbolic(CalcEngine.Symbolic sym, ObjectInputStream stream) throws IOException, ClassNotFoundException {
         plot(sym);
         min_x = stream.readFloat();
