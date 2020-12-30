@@ -40,13 +40,13 @@ public class ChainRun extends WidgetRun {
 
     @Override
     public String toString() {
-        String log = "ChainRun " + (orientation == HORIZONTAL ? "horizontal : " : "vertical : ");
+        StringBuilder log = new StringBuilder("ChainRun " + (orientation == HORIZONTAL ? "horizontal : " : "vertical : "));
         for (WidgetRun run : widgets) {
-            log += "<";
-            log += run;
-            log += "> ";
+            log.append("<");
+            log.append(run);
+            log.append("> ");
         }
-        return log;
+        return log.toString();
     }
 
     @Override
@@ -230,37 +230,26 @@ public class ChainRun extends WidgetRun {
                         float weight = run.widget.mWeight[orientation];
                         dimension = (int) (0.5f + weight * (distance - size) / weights);
                     }
+                    int max;
+                    int min;
+                    int value = dimension;
                     if (orientation == HORIZONTAL) {
-                        int max = run.widget.mMatchConstraintMaxWidth;
-                        int min = run.widget.mMatchConstraintMinWidth;
-                        int value = dimension;
-                        if (run.matchConstraintsType == MATCH_CONSTRAINT_WRAP) {
-                            value = Math.min(value, run.dimension.wrapValue);
-                        }
-                        value = Math.max(min, value);
-                        if (max > 0) {
-                            value = Math.min(max, value);
-                        }
-                        if (value != dimension) {
-                            appliedLimits++;
-                            dimension = value;
-                        }
+                        max = run.widget.mMatchConstraintMaxWidth;
+                        min = run.widget.mMatchConstraintMinWidth;
                     } else {
-                        int max = run.widget.mMatchConstraintMaxHeight;
-                        int min = run.widget.mMatchConstraintMinHeight;
-                        int value = dimension;
-                        if (run.matchConstraintsType == MATCH_CONSTRAINT_WRAP) {
-                            value = Math.min(value, run.dimension.wrapValue);
-                        }
-                        value = Math.max(min, value);
-                        if (max > 0) {
-                            value = Math.min(max, value);
-                        }
-
-                        if (value != dimension) {
-                            appliedLimits++;
-                            dimension = value;
-                        }
+                        max = run.widget.mMatchConstraintMaxHeight;
+                        min = run.widget.mMatchConstraintMinHeight;
+                    }
+                    if (run.matchConstraintsType == MATCH_CONSTRAINT_WRAP) {
+                        value = Math.min(value, run.dimension.wrapValue);
+                    }
+                    value = Math.max(min, value);
+                    if (max > 0) {
+                        value = Math.min(max, value);
+                    }
+                    if (value != dimension) {
+                        appliedLimits++;
+                        dimension = value;
                     }
                     run.dimension.resolve(dimension);
                 }

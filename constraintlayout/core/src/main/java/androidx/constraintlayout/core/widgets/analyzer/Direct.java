@@ -203,7 +203,7 @@ public class Direct {
 
     /**
      * Ask the barrier if it's resolved, and if so do a solving pass
-     *  @param barrier
+     * @param barrier
      * @param measurer
      * @param isRtl
      */
@@ -489,7 +489,8 @@ public class Direct {
 
     /**
      * Solve horizontal centering constraints
-     *  @param measurer
+     *
+     * @param measurer
      * @param widget
      * @param isRtl
      */
@@ -559,7 +560,8 @@ public class Direct {
 
     /**
      * Solve horizontal match constraints
-     *  @param measurer
+     *
+     * @param measurer
      * @param widget
      * @param isRtl
      */
@@ -668,7 +670,7 @@ public class Direct {
         if (layout.mDimensionRatio > 0 && (isHorizontalFixed || isVerticalFixed)) {
             return true;
         }
-        if (false) {
+        if (DEBUG) {
             System.out.println("can measure " + layout.getDebugName() + " ? "
                     + isHorizontalFixed + " (" + horizontalBehaviour + ") x "
                     + isVerticalFixed + " (" + verticalBehaviour + ")");
@@ -718,7 +720,7 @@ public class Direct {
         ConstraintWidget head = chainHead.getHead();
 
         ConstraintWidget widget = first;
-        ConstraintWidget next = null;
+        ConstraintWidget next;
         boolean done = false;
 
         ConstraintAnchor begin = first.mListAnchors[offset];
@@ -748,7 +750,6 @@ public class Direct {
         int numVisibleWidgets = 0;
 
         while (!done) {
-            begin = widget.mListAnchors[offset];
             boolean canMeasure = canMeasure(widget);
             if (!canMeasure) {
                 return false;
@@ -815,7 +816,7 @@ public class Direct {
         }
 
         if (numVisibleWidgets == 1) {
-            float bias = 0.5f;
+            float bias;
             if (orientation == ConstraintWidget.HORIZONTAL) {
                 bias = head.getHorizontalBiasPercent();
             } else {
@@ -837,7 +838,6 @@ public class Direct {
             int current = startPoint + gap;
             widget = first;
             while (!done) {
-                begin = widget.mListAnchors[offset];
                 if (widget.getVisibility() == GONE) {
                     if (orientation == HORIZONTAL) {
                         widget.setFinalHorizontal(current, current);

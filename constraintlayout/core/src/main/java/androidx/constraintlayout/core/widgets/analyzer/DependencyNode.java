@@ -37,8 +37,8 @@ public class DependencyNode implements Dependency {
     public DependencyNode(WidgetRun run) {
         this.run = run;
     }
-    List<Dependency> dependencies = new ArrayList<Dependency>();
-    List<DependencyNode> targets = new ArrayList<DependencyNode>();
+    List<Dependency> dependencies = new ArrayList<>();
+    List<DependencyNode> targets = new ArrayList<>();
 
     @Override
     public String toString() {

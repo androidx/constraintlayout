@@ -118,7 +118,7 @@ public class ConstraintReference implements Reference {
                 getHeight().getValue());
     }
 
-    class IncorrectConstraintException extends Exception {
+    static class IncorrectConstraintException extends Exception {
 
         private final ArrayList<String> mErrors;
 
