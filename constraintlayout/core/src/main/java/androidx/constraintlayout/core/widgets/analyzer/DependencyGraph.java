@@ -46,6 +46,7 @@ public class DependencyGraph {
     private ConstraintWidgetContainer mContainer;
     private ArrayList<WidgetRun> mRuns = new ArrayList<>();
 
+    // TODO: Unused, should we delete?
     private ArrayList<RunGroup> runGroups = new ArrayList<>();
 
     public DependencyGraph(ConstraintWidgetContainer container) {
@@ -542,13 +543,10 @@ public class DependencyGraph {
                     measure(widget, WRAP_CONTENT, 0, WRAP_CONTENT, 0);
                     widget.horizontalRun.dimension.wrapValue = widget.getWidth();
                     widget.verticalRun.dimension.wrapValue = widget.getHeight();
-                    continue;
                 } else if (widget.mMatchConstraintDefaultHeight == ConstraintWidget.MATCH_CONSTRAINT_PERCENT
                         && widget.mMatchConstraintDefaultWidth == ConstraintWidget.MATCH_CONSTRAINT_PERCENT
-                        && (constraintWidgetContainer.mListDimensionBehaviors[HORIZONTAL] == FIXED
-                            || constraintWidgetContainer.mListDimensionBehaviors[HORIZONTAL] == FIXED)
-                        && (constraintWidgetContainer.mListDimensionBehaviors[VERTICAL] == FIXED
-                            || constraintWidgetContainer.mListDimensionBehaviors[VERTICAL] == FIXED)) {
+                        && constraintWidgetContainer.mListDimensionBehaviors[HORIZONTAL] == FIXED
+                        && constraintWidgetContainer.mListDimensionBehaviors[VERTICAL] == FIXED) {
                     float horizPercent = widget.mMatchConstraintPercentWidth;
                     float vertPercent = widget.mMatchConstraintPercentHeight;
                     int width = (int) (0.5f + horizPercent * constraintWidgetContainer.getWidth());
@@ -557,7 +555,6 @@ public class DependencyGraph {
                     widget.horizontalRun.dimension.resolve(widget.getWidth());
                     widget.verticalRun.dimension.resolve(widget.getHeight());
                     widget.measured = true;
-                    continue;
                 }
             }
         }
@@ -657,8 +654,7 @@ public class DependencyGraph {
             if (widget.isInHorizontalChain()) {
                 if (widget.horizontalChainRun == null) {
                     // build the horizontal chain
-                    ChainRun chainRun = new ChainRun(widget, HORIZONTAL);
-                    widget.horizontalChainRun = chainRun;
+                    widget.horizontalChainRun = new ChainRun(widget, HORIZONTAL);
                 }
                 if (chainRuns == null) {
                     chainRuns = new HashSet<>();
@@ -670,8 +666,7 @@ public class DependencyGraph {
             if (widget.isInVerticalChain()) {
                 if (widget.verticalChainRun == null) {
                     // build the vertical chain
-                    ChainRun chainRun = new ChainRun(widget, VERTICAL);
-                    widget.verticalChainRun = chainRun;
+                    widget.verticalChainRun = new ChainRun(widget, VERTICAL);
                 }
                 if (chainRuns == null) {
                     chainRuns = new HashSet<>();
@@ -791,6 +786,7 @@ public class DependencyGraph {
 
 
     private String generateDisplayNode(DependencyNode node, boolean centeredConnection, String content) {
+        StringBuilder contentBuilder = new StringBuilder(content);
         for (DependencyNode target : node.targets) {
             String constraint = "\n" + node.name();
             constraint += " -> " + target.name();
@@ -811,8 +807,9 @@ public class DependencyGraph {
                 constraint += "]";
             }
             constraint += "\n";
-            content += constraint;
+            contentBuilder.append(constraint);
         }
+        content = contentBuilder.toString();
 //        for (DependencyNode dependency : node.dependencies) {
 //            content = generateDisplayNode(dependency, content);
 //        }
@@ -854,9 +851,9 @@ public class DependencyGraph {
 //        } else
         if (run.dimension.resolved && !run.widget.measured) {
             definition += " BGCOLOR=\"green\" ";
-        } else if (run.dimension.resolved && run.widget.measured) {
+        } else if (run.dimension.resolved) {
             definition += " BGCOLOR=\"lightgray\" ";
-        } else if (!run.dimension.resolved && run.widget.measured) {
+        } else if (run.widget.measured) {
             definition += " BGCOLOR=\"yellow\" ";
         }
         if (behaviour == MATCH_CONSTRAINT) {
@@ -875,10 +872,8 @@ public class DependencyGraph {
             definition += " PORT=\"RIGHT\" BORDER=\"1\">R</TD>";
         } else {
             definition += "    <TD ";
-            if (run instanceof VerticalWidgetRun) {
-                if (((VerticalWidgetRun) run).baseline.resolved) {
-                    definition += " BGCOLOR=\"green\"";
-                }
+            if (((VerticalWidgetRun) run).baseline.resolved) {
+                definition += " BGCOLOR=\"green\"";
             }
             definition += " PORT=\"BASELINE\" BORDER=\"1\">b</TD>";
             definition += "    <TD ";
@@ -900,7 +895,7 @@ public class DependencyGraph {
         } else {
             name += "_v";
         }
-        String subgroup = "subgraph " + name + " {\n";
+        StringBuilder subgroup = new StringBuilder("subgraph " + name + " {\n");
         String definitions = "";
         for (WidgetRun run : chain.widgets) {
             String runName = run.widget.getDebugName();
@@ -909,10 +904,10 @@ public class DependencyGraph {
             } else {
                 runName += "_VERTICAL";
             }
-            subgroup += runName + ";\n";
+            subgroup.append(runName).append(";\n");
             definitions = generateDisplayGraph(run, definitions);
         }
-        subgroup += "}\n";
+        subgroup.append("}\n");
         return content + definitions + subgroup;
     }
 
@@ -935,11 +930,12 @@ public class DependencyGraph {
     private String generateDisplayGraph(WidgetRun root, String content) {
         DependencyNode start = root.start;
         DependencyNode end = root.end;
+        StringBuilder sb = new StringBuilder(content);
 
         if (!(root instanceof HelperReferences) && start.dependencies.isEmpty() && end.dependencies.isEmpty() & start.targets.isEmpty() && end.targets.isEmpty()) {
             return content;
         }
-        content += nodeDefinition(root);
+        sb.append(nodeDefinition(root));
 
         boolean centeredConnection = isCenteredConnection(start, end);
         content = generateDisplayNode(start, centeredConnection, content);
@@ -956,16 +952,16 @@ public class DependencyGraph {
                     || behaviour == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
                 if (!start.targets.isEmpty() && end.targets.isEmpty()) {
                     String constraint = "\n" + end.name() + " -> " + start.name() + "\n";
-                    content += constraint;
+                    sb.append(constraint);
                 } else if (start.targets.isEmpty() && !end.targets.isEmpty()) {
                     String constraint = "\n" + start.name() + " -> " + end.name() + "\n";
-                    content += constraint;
+                    sb.append(constraint);
                 }
             } else {
                 if (behaviour == MATCH_CONSTRAINT && root.widget.getDimensionRatio() > 0) {
                     String name = root.widget.getDebugName();
                     String constraint = "\n" + name + "_HORIZONTAL -> " + name + "_VERTICAL;\n";
-//                    content += constraint;
+                    sb.append(constraint);
                 }
             }
         } else if (root instanceof VerticalWidgetRun
@@ -975,23 +971,23 @@ public class DependencyGraph {
                     || behaviour == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
                 if (!start.targets.isEmpty() && end.targets.isEmpty()) {
                     String constraint = "\n" + end.name() + " -> " + start.name() + "\n";
-                    content += constraint;
+                    sb.append(constraint);
                 } else if (start.targets.isEmpty() && !end.targets.isEmpty()) {
                     String constraint = "\n" + start.name() + " -> " + end.name() + "\n";
-                    content += constraint;
+                    sb.append(constraint);
                 }
             } else {
                 if (behaviour == MATCH_CONSTRAINT && root.widget.getDimensionRatio() > 0) {
                     String name = root.widget.getDebugName();
                     String constraint = "\n" + name + "_VERTICAL -> " + name + "_HORIZONTAL;\n";
-//                    content += constraint;
+                    sb.append(constraint);
                 }
             }
         }
         if (root instanceof ChainRun) {
             return generateChainDisplayGraph((ChainRun) root, content);
         }
-        return content;
+        return sb.toString();
     }
 
 }
