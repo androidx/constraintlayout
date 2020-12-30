@@ -28,6 +28,7 @@ import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.ViewCompat;
 import androidx.constraintlayout.widget.Barrier;
 import androidx.constraintlayout.widget.ConstraintHelper;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -2323,7 +2324,7 @@ public class MotionLayout extends ConstraintLayout implements
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     layoutParams.resolveLayoutDirection(getLayoutDirection());
                 } else {
-                    layoutParams.resolveLayoutDirection(0);
+                    layoutParams.resolveLayoutDirection(ViewCompat.LAYOUT_DIRECTION_LTR);
                 }
                 applyConstraintsFromLayoutParams(false, view, child, layoutParams, mapIdToWidget);
                 if (cset.getVisibilityMode(view.getId()) == ConstraintSet.VISIBILITY_MODE_IGNORE) {

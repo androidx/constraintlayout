@@ -36,6 +36,8 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 import androidx.constraintlayout.core.widgets.Guideline;
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure;
+import androidx.core.view.ViewCompat;
+
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
@@ -966,7 +968,7 @@ public class ConstraintLayout extends ViewGroup {
                             mConstraintLayoutSpec = null;
                         }
                     }
-                } else if (attr == R.styleable.ConstraintLayout_constraintSet) {
+                } else if (attr == R.styleable.ConstraintLayout_Layout_constraintSet) {
                     int id = a.getResourceId(attr, 0);
                     try {
                         mConstraintSet = new ConstraintSet();
@@ -989,22 +991,6 @@ public class ConstraintLayout extends ViewGroup {
      */
     protected void parseLayoutDescription(int id) {
         mConstraintLayoutSpec = new ConstraintLayoutStates(getContext(), this, id);
-    }
-
-    /**
-     * {@hide}
-     */
-    @Override
-    public void addView(View child, int index, ViewGroup.LayoutParams params) {
-        super.addView(child, index, params);
-    }
-
-    /**
-     * {@hide}
-     */
-    @Override
-    public void removeView(View view) {
-        super.removeView(view);
     }
 
     /**
@@ -2578,7 +2564,7 @@ public class ConstraintLayout extends ViewGroup {
         float resolvedGuidePercent;
 
         boolean isRtl = false;
-        int layoutDirection = 0;
+        int layoutDirection = ViewCompat.LAYOUT_DIRECTION_LTR;
 
         ConstraintWidget widget = new ConstraintWidget();
 
