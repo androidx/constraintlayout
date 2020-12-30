@@ -50,6 +50,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -4077,7 +4078,7 @@ public class ConstraintSet {
                         break;
                     case XmlResourceParser.END_TAG:
                         tagName = parser.getName();
-                        switch (tagName.toLowerCase()) {
+                        switch (tagName.toLowerCase(Locale.ROOT)) {
                             case "constraintset":
                                 return;
                             case "constraint":
