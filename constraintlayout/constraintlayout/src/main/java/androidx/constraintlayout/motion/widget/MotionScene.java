@@ -1105,6 +1105,7 @@ public class MotionScene {
                 parseInclude(context, resourceId);
             }
         }
+        a.recycle();
     }
 
     private int parseInclude(Context context, int resourceId) {
