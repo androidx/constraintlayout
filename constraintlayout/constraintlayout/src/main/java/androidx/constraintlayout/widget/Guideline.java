@@ -83,6 +83,7 @@ public class Guideline extends View {
      */
     @Override
     public void draw(Canvas canvas) {
+        super.draw(canvas);
     }
 
     /**
