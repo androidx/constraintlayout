@@ -1425,6 +1425,10 @@
 
     </declare-styleable>
     <!--the new pattern contained in a key frames -->
+    <attr name="borderRound" format="dimension" />
+    <attr name="borderRoundPercent" format="float" />
+    <attr name="textOutlineThickness" format="dimension" />
+    <attr name="textOutlineColor" format="color" />
 
     <declare-styleable name="CustomAttribute">
         <attr name="attributeName" format="string" />
@@ -1474,10 +1478,7 @@
         <attr name="imageRotate" format="float" />
     </declare-styleable>
 
-    <attr name="borderRound" format="dimension" />
-    <attr name="borderRoundPercent" format="float" />
-    <attr name="textOutlineThickness" format="dimension" />
-    <attr name="textOutlineColor" format="color" />
+
 
     <declare-styleable name="MotionLabel">
         <attr name="android:text" />
@@ -1697,7 +1698,7 @@
         <!-- Trigger if the motionTarget collides with the other motionTarget-->
         <attr name="motion_triggerOnCollision" format="reference" />
     </declare-styleable>
-    <declare-styleable name="Include">
+    <declare-styleable name="include">
         <attr name="constraintSet" />
     </declare-styleable>
     <!-- ======================================ViewTransitions===================================== -->

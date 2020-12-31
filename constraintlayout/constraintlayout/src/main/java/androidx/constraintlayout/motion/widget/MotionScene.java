@@ -94,7 +94,7 @@ public class MotionScene {
     private static final String ONSWIPE_TAG = "OnSwipe";
     private static final String ONCLICK_TAG = "OnClick";
     private static final String STATESET_TAG = "StateSet";
-    private static final String INCLUDE_TAG = "Include";
+    private static final String INCLUDE_TAG = "include";
     private static final String KEYFRAMESET_TAG = "KeyFrameSet";
     private static final String CONSTRAINTSET_TAG = "ConstraintSet";
     private static final String VIEW_TRANSITION = "ViewTransition";
@@ -1096,11 +1096,11 @@ public class MotionScene {
     }
 
     private void parseInclude(Context context, XmlPullParser mainParser) {
-        TypedArray a = context.obtainStyledAttributes(Xml.asAttributeSet(mainParser), R.styleable.Include);
+        TypedArray a = context.obtainStyledAttributes(Xml.asAttributeSet(mainParser), R.styleable.include);
         final int N = a.getIndexCount();
         for (int i = 0; i < N; i++) {
             int attr = a.getIndex(i);
-            if (attr == R.styleable.Include_constraintSet) {
+            if (attr == R.styleable.include_constraintSet) {
                 int resourceId = a.getResourceId(attr, UNSET);
                 parseInclude(context, resourceId);
             }
