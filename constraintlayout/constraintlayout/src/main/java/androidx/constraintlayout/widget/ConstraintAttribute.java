@@ -103,7 +103,7 @@ public class ConstraintAttribute {
      *
      * @return Typically 1 but 3 for colors.
      */
-    public int noOfInterpValues() {
+    public int numberOfInterpolationValues() {
         switch (mType) {
             case COLOR_TYPE:
             case COLOR_DRAWABLE_TYPE:

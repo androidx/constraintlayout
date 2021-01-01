@@ -253,7 +253,7 @@ public class Carousel extends MotionHelper {
     }
 
     /**
-     * Update the view visibility on the different constraintsets
+     * Update the view visibility on the different ConstraintSets
      *
      * @param view
      * @param visibility
@@ -264,9 +264,9 @@ public class Carousel extends MotionHelper {
             return false;
         }
         boolean needsMotionSceneRebuild = false;
-        int[] constraintsets = mMotionLayout.getConstraintSetIds();
-        for (int i = 0; i < constraintsets.length; i++) {
-            needsMotionSceneRebuild |= updateViewVisibility(constraintsets[i], view, visibility);
+        int[] constraintSets = mMotionLayout.getConstraintSetIds();
+        for (int i = 0; i < constraintSets.length; i++) {
+            needsMotionSceneRebuild |= updateViewVisibility(constraintSets[i], view, visibility);
         }
         return needsMotionSceneRebuild;
     }

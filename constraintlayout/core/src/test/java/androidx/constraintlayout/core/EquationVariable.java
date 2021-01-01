@@ -16,6 +16,9 @@
 
 package androidx.constraintlayout.core;
 
+import androidx.constraintlayout.core.LinearSystem;
+import androidx.constraintlayout.core.SolverVariable;
+
 /**
  * EquationVariable is used to represent a variable in a {@link LinearEquation LinearEquation}
  */
@@ -87,7 +90,7 @@ class EquationVariable {
     }
 
     /**
-     * Copy construtor
+     * Copy constructor
      * @param v variable to copy
      */
     public EquationVariable(EquationVariable v) {
@@ -183,12 +186,12 @@ class EquationVariable {
     }
 
     /**
-     * Substract an amount from another variable to this variable
+     * Subtract an amount from another variable to this variable
      * @param variable variable added
      */
-    public void substract(EquationVariable variable) {
+    public void subtract(EquationVariable variable) {
         if (variable.isCompatible(this)) {
-            mAmount.substract(variable.mAmount);
+            mAmount.subtract(variable.mAmount);
         }
     }
 

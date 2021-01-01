@@ -30,13 +30,11 @@ import android.util.SparseArray;
 
 /**
  *
- * Flow virtual layout.
- *
- * <b>Added in 2.0</b>
+ * Flow VirtualLayout. <b>Added in 2.0</b>
  *
  * Allows positioning of referenced widgets horizontally or vertically, similar to a Chain.
  *
- * The elements referenced are indicated via constraint_referenced_ids, as with other ContraintHelper implementations.
+ * The elements referenced are indicated via constraint_referenced_ids, as with other ConstraintHelper implementations.
  *
  * Those referenced widgets are then laid out by the Flow virtual layout in three possible ways:
  * <ul>
@@ -45,13 +43,13 @@ import android.util.SparseArray;
  *     <li><a href="#wrap_aligned">wrap aligned</a> : similar to wrap chain, but will align the elements by creating rows and columns</li>
  * </ul>
  *
- * As VirtualLayout are ConstraintHelper, they are normal views; you can thus treat them as such, and setting up
+ * As VirtualLayouts are ConstraintHelpers, they are normal views; you can thus treat them as such, and setting up
  * constraints on them (position, dimension) or some view attributes (background, padding) will work. The main difference between VirtualLayouts and ViewGroups is
  * that:
  * <ul>
  *     <li>VirtualLayout keep the hierarchy flat</li>
  *     <li>Other views can thus reference / constrain to not only the VirtualLayout, but also the views laid out by the VirtualLayout</li>
- *     <li>VirtualLayout allow on the fly behavior modifications (e.g. for Flow, chaing the orientation)</li>
+ *     <li>VirtualLayout allow on the fly behavior modifications (e.g. for Flow, changing the orientation)</li>
  * </ul>
  *
  * <h4 id="wrap_none">flow_wrapMode = "none"</h4>

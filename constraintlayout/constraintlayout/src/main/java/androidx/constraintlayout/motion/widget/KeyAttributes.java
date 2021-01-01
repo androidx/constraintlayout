@@ -197,10 +197,10 @@ public class KeyAttributes extends Key {
                 continue;
             }
             if (s.startsWith(Key.CUSTOM)) {
-                String ckey = s.substring(Key.CUSTOM.length() + 1);
-                ConstraintAttribute cvalue = mCustomConstraints.get(ckey);
-                if (cvalue != null) {
-                    ((ViewSpline.CustomSet) splineSet).setPoint(mFramePosition, cvalue);
+                String cKey = s.substring(Key.CUSTOM.length() + 1);
+                ConstraintAttribute cValue = mCustomConstraints.get(cKey);
+                if (cValue != null) {
+                    ((ViewSpline.CustomSet) splineSet).setPoint(mFramePosition, cValue);
                 }
                 continue;
             }

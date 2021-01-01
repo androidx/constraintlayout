@@ -256,14 +256,14 @@ public class ConstraintWidgetContainer extends WidgetContainer {
     }
 
     /**
-     * Return true if the width given is too small for the content layed out
+     * Return true if the width given is too small for the content laid out
      */
     public boolean isWidthMeasuredTooSmall() {
         return mWidthMeasuredTooSmall;
     }
 
     /**
-     * Return true if the height given is too small for the content layed out
+     * Return true if the height given is too small for the content laid out
      */
     public boolean isHeightMeasuredTooSmall() {
         return mHeightMeasuredTooSmall;
@@ -595,7 +595,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
         return measure.measuredNeedsSolverPass;
     }
 
-    static int mycounter = 0;
+    static int myCounter = 0;
 
     /**
      * Layout the tree of widgets
@@ -616,14 +616,14 @@ public class ConstraintWidgetContainer extends WidgetContainer {
         mHeightMeasuredTooSmall = false;
         final int count = mChildren.size();
 
-        int prew = Math.max(0, getWidth());
-        int preh = Math.max(0, getHeight());
+        int preW = Math.max(0, getWidth());
+        int preH = Math.max(0, getHeight());
         DimensionBehaviour originalVerticalDimensionBehaviour = mListDimensionBehaviors[DIMENSION_VERTICAL];
         DimensionBehaviour originalHorizontalDimensionBehaviour = mListDimensionBehaviors[DIMENSION_HORIZONTAL];
 
         if (DEBUG_LAYOUT) {
-            System.out.println("layout with prew: " + prew + " (" + mListDimensionBehaviors[DIMENSION_HORIZONTAL]
-                    + ") preh: " + preh + " (" + mListDimensionBehaviors[DIMENSION_VERTICAL] + ")");
+            System.out.println("layout with preW: " + preW + " (" + mListDimensionBehaviors[DIMENSION_HORIZONTAL]
+                    + ") preH: " + preH + " (" + mListDimensionBehaviors[DIMENSION_VERTICAL] + ")");
         }
 
         if (mMetrics != null) {
@@ -638,7 +638,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
         }
         if (Optimizer.enabled(mOptimizationLevel, Optimizer.OPTIMIZATION_DIRECT)) {
             if (FULL_DEBUG) {
-                System.out.println("Direct pass " + mycounter++);
+                System.out.println("Direct pass " + myCounter++);
             }
             Direct.solvingPass(this, getMeasurer());
             if (FULL_DEBUG) {
@@ -699,31 +699,31 @@ public class ConstraintWidgetContainer extends WidgetContainer {
             && (Optimizer.enabled(mOptimizationLevel, Optimizer.OPTIMIZATION_GROUPING))) {
             if (Grouping.simpleSolvingPass(this, getMeasurer())) {
                 if (originalHorizontalDimensionBehaviour == WRAP_CONTENT) {
-                    if (prew < getWidth() && prew > 0) {
+                    if (preW < getWidth() && preW > 0) {
                         if (DEBUG_LAYOUT) {
-                            System.out.println("Override width " + getWidth() + " to " + preh);
+                            System.out.println("Override width " + getWidth() + " to " + preH);
                         }
-                        setWidth(prew);
+                        setWidth(preW);
                         mWidthMeasuredTooSmall = true;
                     } else {
-                        prew = getWidth();
+                        preW = getWidth();
                     }
                 }
                 if (originalVerticalDimensionBehaviour == WRAP_CONTENT) {
-                    if (preh < getHeight() && preh > 0) {
+                    if (preH < getHeight() && preH > 0) {
                         if (DEBUG_LAYOUT) {
-                            System.out.println("Override height " + getHeight() + " to " + preh);
+                            System.out.println("Override height " + getHeight() + " to " + preH);
                         }
-                        setHeight(preh);
+                        setHeight(preH);
                         mHeightMeasuredTooSmall = true;
                     } else {
-                        preh = getHeight();
+                        preH = getHeight();
                     }
                 }
                 wrap_override = true;
                 if (DEBUG_LAYOUT) {
-                    System.out.println("layout post opt, prew: " + prew + " (" + mListDimensionBehaviors[DIMENSION_HORIZONTAL]
-                            + ") preh: " + preh + " (" + mListDimensionBehaviors[DIMENSION_VERTICAL] + "), new size "
+                    System.out.println("layout post opt, preW: " + preW + " (" + mListDimensionBehaviors[DIMENSION_HORIZONTAL]
+                            + ") preH: " + preH + " (" + mListDimensionBehaviors[DIMENSION_VERTICAL] + "), new size "
                             + getWidth() + " x " + getHeight());
                 }
             }
@@ -880,32 +880,32 @@ public class ConstraintWidgetContainer extends WidgetContainer {
 
                 if (!wrap_override) {
                     if (mListDimensionBehaviors[DIMENSION_HORIZONTAL] == WRAP_CONTENT
-                            && prew > 0) {
-                        if (getWidth() > prew) {
+                            && preW > 0) {
+                        if (getWidth() > preW) {
                             if (DEBUG_LAYOUT) {
                                 System.out.println(
                                         "layout override 3, width from " + getWidth() + " vs "
-                                                + prew);
+                                                + preW);
                             }
                             mWidthMeasuredTooSmall = true;
                             wrap_override = true;
                             mListDimensionBehaviors[DIMENSION_HORIZONTAL] = DimensionBehaviour.FIXED;
-                            setWidth(prew);
+                            setWidth(preW);
                             needsSolving = true;
                         }
                     }
                     if (mListDimensionBehaviors[DIMENSION_VERTICAL] == WRAP_CONTENT
-                            && preh > 0) {
-                        if (getHeight() > preh) {
+                            && preH > 0) {
+                        if (getHeight() > preH) {
                             if (DEBUG_LAYOUT) {
                                 System.out.println(
                                         "layout override 3, height from " + getHeight() + " vs "
-                                                + preh);
+                                                + preH);
                             }
                             mHeightMeasuredTooSmall = true;
                             wrap_override = true;
                             mListDimensionBehaviors[DIMENSION_VERTICAL] = DimensionBehaviour.FIXED;
-                            setHeight(preh);
+                            setHeight(preH);
                             needsSolving = true;
                         }
                     }

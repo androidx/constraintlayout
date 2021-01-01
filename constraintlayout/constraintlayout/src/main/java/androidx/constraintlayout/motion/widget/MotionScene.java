@@ -65,7 +65,7 @@ public class MotionScene {
     final static int TRANSITION_BACKWARD = 0;
     final static int TRANSITION_FORWARD = 1;
     private static final int SPLINE_STRING = -1;
-    private static final int INTERPOLATOR_REFRENCE_ID = -2;
+    private static final int INTERPOLATOR_REFERENCE_ID = -2;
     public static final int UNSET = -1;
     private final MotionLayout mMotionLayout;
     StateSet mStateSet = null;
@@ -137,7 +137,7 @@ public class MotionScene {
                     || (transition.mConstraintSetEnd == endId
                     && transition.mConstraintSetStart == beginId)) {
                 if (DEBUG) {
-                    Log.v(TAG, Debug.getLocation() + " forund transition  " +
+                    Log.v(TAG, Debug.getLocation() + " found transition  " +
                             Debug.getName(mMotionLayout.getContext(), beginId) + " -> " +
                             Debug.getName(mMotionLayout.getContext(), endId));
                 }
@@ -149,14 +149,14 @@ public class MotionScene {
             }
         }
         // No transition defined for this so we will create one?
-        Transition matchTransiton = mDefaultTransition;
+        Transition matchTransition = mDefaultTransition;
         for (Transition transition : mAbstractTransitionList) {
             if (transition.mConstraintSetEnd == endId) {
-                matchTransiton = transition;
+                matchTransition = transition;
             }
 
         }
-        Transition t = new Transition(this, matchTransiton);
+        Transition t = new Transition(this, matchTransition);
 
         t.mConstraintSetStart = start;
         t.mConstraintSetEnd = end;
@@ -234,21 +234,21 @@ public class MotionScene {
         }
     }
 
-    private int getRealID(int stateid) {
+    private int getRealID(int stateId) {
         if (mStateSet != null) {
-            int tmp = mStateSet.stateGetConstraintID(stateid, -1, -1);
+            int tmp = mStateSet.stateGetConstraintID(stateId, -1, -1);
             if (tmp != -1) {
                 return tmp;
             }
         }
-        return stateid;
+        return stateId;
     }
 
-    public List<Transition> getTransitionsWithState(int stateid) {
-        stateid = getRealID(stateid);
+    public List<Transition> getTransitionsWithState(int stateId) {
+        stateId = getRealID(stateId);
         ArrayList<Transition> ret = new ArrayList<>();
         for (Transition transition : mTransitionList) {
-            if (transition.mConstraintSetStart == stateid || transition.mConstraintSetEnd == stateid) {
+            if (transition.mConstraintSetStart == stateId || transition.mConstraintSetEnd == stateId) {
                 ret.add(transition);
             }
 
@@ -581,7 +581,7 @@ public class MotionScene {
         /*
         *
          */
-        public void  addtKeyFrame( KeyFrames keyFrames) {
+        public void addKeyFrame(KeyFrames keyFrames) {
               mKeyFramesList.add(keyFrames);
         }
 
@@ -900,14 +900,14 @@ public class MotionScene {
                     if (type.type == TypedValue.TYPE_REFERENCE) {
                         mDefaultInterpolatorID = a.getResourceId(attr, -1);
                         if (mDefaultInterpolatorID != -1) {
-                            mDefaultInterpolator = INTERPOLATOR_REFRENCE_ID;
+                            mDefaultInterpolator = INTERPOLATOR_REFERENCE_ID;
                         }
                     } else if (type.type == TypedValue.TYPE_STRING) {
                         mDefaultInterpolatorString = a.getString(attr);
                         if (mDefaultInterpolatorString != null) {
                             if (mDefaultInterpolatorString.indexOf("/") > 0) {
                                 mDefaultInterpolatorID = a.getResourceId(attr, -1);
-                                mDefaultInterpolator = INTERPOLATOR_REFRENCE_ID;
+                                mDefaultInterpolator = INTERPOLATOR_REFERENCE_ID;
                             } else {
                                 mDefaultInterpolator = SPLINE_STRING;
                             }
@@ -1529,7 +1529,7 @@ public class MotionScene {
                         return (float) easing.get(v);
                     }
                 };
-            case INTERPOLATOR_REFRENCE_ID:
+            case INTERPOLATOR_REFERENCE_ID:
                 return AnimationUtils.loadInterpolator(mMotionLayout.getContext(),
                         mCurrentTransition.mDefaultInterpolatorID);
             case EASE_IN_OUT:
@@ -1581,7 +1581,7 @@ public class MotionScene {
 
     /**
      * Get the staggered value of the current transition.
-     * 0 staggerd
+     * Will default to 0 staggered if there is no current transition.
      *
      * @return
      */
@@ -1621,8 +1621,8 @@ public class MotionScene {
 
     /**
      * read the constraints from the inflation of the ConstraintLayout
-     * If the constraintset does not contain infomation about a view this information is used
-     * as a "fallback" postion.
+     * If the constraintset does not contain information about a view this information is used
+     * as a "fallback" position.
      *
      * @param motionLayout
      */
@@ -1643,7 +1643,7 @@ public class MotionScene {
     }
 
     /**
-     * This is brute force but the number of ConstraintSets is typicall very small (< 5)
+     * This is brute force but the number of ConstraintSets is typically very small (< 5)
      *
      * @param key
      * @return

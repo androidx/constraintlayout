@@ -99,7 +99,7 @@ public class MotionController {
     private double[] mInterpolateVelocity; // scratch data created during setup
 
     private String[] mAttributeNames;  // the names of the custom attributes
-    private int[] mAttributeInterpCount; // how many interpolators for each custom attribute
+    private int[] mAttributeInterpolatorCount; // how many interpolators for each custom attribute
     private int MAX_DIMENSION = 4;
     private float mValuesBuff[] = new float[MAX_DIMENSION];
     private ArrayList<MotionPaths> mMotionPaths = new ArrayList<>();
@@ -551,8 +551,8 @@ public class MotionController {
         float dy = mEndMotionPath.y - mStartMotionPath.y;
         float startCenterX = mStartMotionPath.x + mStartMotionPath.width / 2;
         float startCenterY = mStartMotionPath.y + mStartMotionPath.height / 2;
-        float hypot = (float) Math.hypot(dx, dy);
-        if (hypot < 0.0000001) {
+        float hypotenuse = (float) Math.hypot(dx, dy);
+        if (hypotenuse < 0.0000001) {
             return Float.NaN;
         }
 
@@ -566,9 +566,9 @@ public class MotionController {
 
         switch (type) {
             case PATH_PERCENT:
-                return pathDistance / hypot;
+                return pathDistance / hypotenuse;
             case PATH_PERPENDICULAR:
-                return (float) Math.sqrt(hypot * hypot - pathDistance * pathDistance);
+                return (float) Math.sqrt(hypotenuse * hypotenuse - pathDistance * pathDistance);
             case HORIZONTAL_PATH_X:
                 return vx / dx;
             case HORIZONTAL_PATH_Y:
@@ -584,7 +584,7 @@ public class MotionController {
     private void insertKey(MotionPaths point) {
         int pos = Collections.binarySearch(mMotionPaths, point);
         if (pos == 0) {
-            Log.e(TAG, " KeyPath positon \"" + point.position + "\" outside of range");
+            Log.e(TAG, " KeyPath position \"" + point.position + "\" outside of range");
         }
         mMotionPaths.add(-pos - 1, point);
     }
@@ -824,15 +824,15 @@ public class MotionController {
         if (DEBUG) {
             Log.v(TAG, Debug.getLocation()+" >> ConstraintSet to ConstraintSet animation" + Arrays.toString(mAttributeNames));
         }
-        mAttributeInterpCount = new int[mAttributeNames.length];
+        mAttributeInterpolatorCount = new int[mAttributeNames.length];
         for (int i = 0; i < mAttributeNames.length; i++) {
             String attributeName = mAttributeNames[i];
-            mAttributeInterpCount[i] = 0;
+            mAttributeInterpolatorCount[i] = 0;
             for (int j = 0; j < points.length; j++) {
                 if (points[j].attributes.containsKey(attributeName)) {
                     ConstraintAttribute attribute = points[j].attributes.get(attributeName);
                     if (attribute != null) {
-                        mAttributeInterpCount[i] += attribute.noOfInterpValues();
+                        mAttributeInterpolatorCount[i] += attribute.numberOfInterpolationValues();
                         break;
                     }
                 }
@@ -1023,7 +1023,7 @@ public class MotionController {
     static final int BOUNCE = 4;
     static final int OVERSHOOT = 5;
     private static final int SPLINE_STRING = -1;
-    private static final int INTERPOLATOR_REFRENCE_ID = -2;
+    private static final int INTERPOLATOR_REFERENCE_ID = -2;
     private static final int INTERPOLATOR_UNDEFINED = -3;
 
     private static Interpolator getInterpolator(Context context, int type,String interpolatorString, int id ) {
@@ -1036,7 +1036,7 @@ public class MotionController {
                         return (float) easing.get(v);
                     }
                 };
-            case INTERPOLATOR_REFRENCE_ID:
+            case INTERPOLATOR_REFERENCE_ID:
                 return AnimationUtils.loadInterpolator(context, id);
             case EASE_IN_OUT:
                 return new AccelerateDecelerateInterpolator();
@@ -1447,7 +1447,7 @@ public class MotionController {
      * @param pos the x&y position of the keyFrame along the path
      * @return Number of keyFrames found
      */
-    public int getkeyFramePositions(int[] type, float[] pos) {
+    public int getKeyFramePositions(int[] type, float[] pos) {
         int  i = 0;
         int count = 0;
         for (Key key : mKeyList) {

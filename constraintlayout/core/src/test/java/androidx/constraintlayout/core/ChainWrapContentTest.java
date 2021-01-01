@@ -26,12 +26,12 @@ import static org.junit.Assert.assertEquals;
 public class ChainWrapContentTest {
 
     @Test
-    public void testVertWrapContentChain() {
-        testVertWrapContentChain(Optimizer.OPTIMIZATION_NONE);
-        testVertWrapContentChain(Optimizer.OPTIMIZATION_STANDARD);
+    public void testVerticalWrapContentChain() {
+        testVerticalWrapContentChain(Optimizer.OPTIMIZATION_NONE);
+        testVerticalWrapContentChain(Optimizer.OPTIMIZATION_STANDARD);
     }
 
-    public void testVertWrapContentChain(int directResolution) {
+    public void testVerticalWrapContentChain(int directResolution) {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 600);
         root.setOptimizationLevel(directResolution);
         ConstraintWidget A = new ConstraintWidget(100, 20);
@@ -62,12 +62,12 @@ public class ChainWrapContentTest {
     }
 
     @Test
-    public void testHorizWrapContentChain() {
-        testHorizWrapContentChain(Optimizer.OPTIMIZATION_NONE);
-        testHorizWrapContentChain(Optimizer.OPTIMIZATION_STANDARD);
+    public void testHorizontalWrapContentChain() {
+        testHorizontalWrapContentChain(Optimizer.OPTIMIZATION_NONE);
+        testHorizontalWrapContentChain(Optimizer.OPTIMIZATION_STANDARD);
     }
 
-    public void testHorizWrapContentChain(int directResolution) {
+    public void testHorizontalWrapContentChain(int directResolution) {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 600);
         root.setOptimizationLevel(directResolution);
         ConstraintWidget A = new ConstraintWidget(100, 20);
@@ -109,12 +109,12 @@ public class ChainWrapContentTest {
     }
 
     @Test
-    public void testVertWrapContentChain3Elts() {
-        testVertWrapContentChain3Elts(Optimizer.OPTIMIZATION_NONE);
-        testVertWrapContentChain3Elts(Optimizer.OPTIMIZATION_STANDARD);
+    public void testVerticalWrapContentChain3Elts() {
+        testVerticalWrapContentChain3Elts(Optimizer.OPTIMIZATION_NONE);
+        testVerticalWrapContentChain3Elts(Optimizer.OPTIMIZATION_STANDARD);
     }
 
-    public void testVertWrapContentChain3Elts(int directResolution) {
+    public void testVerticalWrapContentChain3Elts(int directResolution) {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 600);
         root.setOptimizationLevel(directResolution);
         ConstraintWidget A = new ConstraintWidget(100, 20);
@@ -171,12 +171,12 @@ public class ChainWrapContentTest {
     }
 
     @Test
-    public void testHorizWrapContentChain3Elts() {
-        testHorizWrapContentChain3Elts(Optimizer.OPTIMIZATION_NONE);
-        testHorizWrapContentChain3Elts(Optimizer.OPTIMIZATION_STANDARD);
+    public void testHorizontalWrapContentChain3Elts() {
+        testHorizontalWrapContentChain3Elts(Optimizer.OPTIMIZATION_NONE);
+        testHorizontalWrapContentChain3Elts(Optimizer.OPTIMIZATION_STANDARD);
     }
 
-    public void testHorizWrapContentChain3Elts(int directResolution) {
+    public void testHorizontalWrapContentChain3Elts(int directResolution) {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 600);
         root.setOptimizationLevel(directResolution);
         ConstraintWidget A = new ConstraintWidget(100, 20);

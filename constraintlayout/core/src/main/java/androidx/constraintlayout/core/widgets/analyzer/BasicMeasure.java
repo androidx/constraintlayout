@@ -304,7 +304,7 @@ public class BasicMeasure {
                 int minHeight = Math.max(layout.getHeight(), constraintWidgetContainer.getMinHeight());
 
                 ////////////////////////////////////////////////////////////////////////////////////
-                // Let's first apply sizes for VirtuaLayouts if any
+                // Let's first apply sizes for VirtualLayouts if any
                 ////////////////////////////////////////////////////////////////////////////////////
                 for (int i = 0; i < sizeDependentWidgetsCount; i++) {
                     ConstraintWidget widget = mVariableDimensionsWidgets.get(i);

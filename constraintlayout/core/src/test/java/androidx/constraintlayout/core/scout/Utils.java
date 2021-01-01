@@ -98,7 +98,7 @@ public class Utils {
      *
      * @param str String to trim
      * @param len length to trim to
-     * @return the trimed string
+     * @return the trimmed string
      */
     static String leftTrim(String str, int len) {
         return str.substring(str.length() - len);

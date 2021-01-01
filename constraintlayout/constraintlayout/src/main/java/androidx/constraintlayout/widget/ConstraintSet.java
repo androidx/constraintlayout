@@ -67,7 +67,7 @@ import java.util.Set;
  * from a R.layout.* object <br> {@code c.clone(context, R.layout.layout1);}
  * </li>
  * <li>
- * from a ConstraintLayout <br> {@code c.clone(clayout);}
+ * from a ConstraintLayout <br> {@code c.clone(constraintLayout);}
  * </li>
  * </ul><p>
  * Example code:<br>
@@ -1445,11 +1445,11 @@ public class ConstraintSet {
                     if (type == Integer.TYPE) {
                         Integer iValue = (Integer) value;
                         if (iValue != UNSET) {
-                            String stringid = scene.lookUpConstraintName(iValue);
+                            String stringId = scene.lookUpConstraintName(iValue);
                             stringBuilder.append("    ");
                             stringBuilder.append(name);
                             stringBuilder.append(" = \"");
-                            stringBuilder.append((stringid == null) ? iValue : stringid);
+                            stringBuilder.append((stringId == null) ? iValue : stringId);
                             stringBuilder.append("\"\n");
                         }
                     } else if (type == Float.TYPE) {
@@ -1653,7 +1653,7 @@ public class ConstraintSet {
         public String mQuantizeInterpolatorString = null;
         public int mQuantizeInterpolatorType = INTERPOLATOR_UNDEFINED; // undefined
         public int mQuantizeInterpolatorID = -1;
-        private static final int INTERPOLATOR_REFRENCE_ID = -2;
+        private static final int INTERPOLATOR_REFERENCE_ID = -2;
         private static final int SPLINE_STRING = -1;
         private static final int INTERPOLATOR_UNDEFINED = -3;
 
@@ -1741,13 +1741,13 @@ public class ConstraintSet {
                         if (type.type == TypedValue.TYPE_REFERENCE) {
                             mQuantizeInterpolatorID = a.getResourceId(attr, -1);
                             if (mQuantizeInterpolatorID != -1) {
-                                mQuantizeInterpolatorType = INTERPOLATOR_REFRENCE_ID;
+                                mQuantizeInterpolatorType = INTERPOLATOR_REFERENCE_ID;
                             }
                         } else if (type.type == TypedValue.TYPE_STRING) {
                             mQuantizeInterpolatorString = a.getString(attr);
                             if (mQuantizeInterpolatorString.indexOf("/") > 0) {
                                 mQuantizeInterpolatorID = a.getResourceId(attr, -1);
-                                mQuantizeInterpolatorType = INTERPOLATOR_REFRENCE_ID;
+                                mQuantizeInterpolatorType = INTERPOLATOR_REFERENCE_ID;
                             } else {
                                 mQuantizeInterpolatorType = SPLINE_STRING;
                             }
@@ -1775,12 +1775,12 @@ public class ConstraintSet {
         Delta mDelta;
 
         static class Delta {
-            private static final int INITAL_BOOLEAN = 4;
-            private static final int INITAL_INT = 10;
-            private static final int INITAL_FLOAT = 10;
-            private static final int INITAL_STRING = 5;
-            int[] mTypeInt = new int[INITAL_INT];
-            int[] mValueInt = new int[INITAL_INT];
+            private static final int INITIAL_BOOLEAN = 4;
+            private static final int INITIAL_INT = 10;
+            private static final int INITIAL_FLOAT = 10;
+            private static final int INITIAL_STRING = 5;
+            int[] mTypeInt = new int[INITIAL_INT];
+            int[] mValueInt = new int[INITIAL_INT];
             int mCountInt = 0;
 
             void add(int type, int value) {
@@ -1792,8 +1792,8 @@ public class ConstraintSet {
                 mValueInt[mCountInt++] = value;
             }
 
-            int[] mTypeFloat = new int[INITAL_FLOAT];
-            float[] mValueFloat = new float[INITAL_FLOAT];
+            int[] mTypeFloat = new int[INITIAL_FLOAT];
+            float[] mValueFloat = new float[INITIAL_FLOAT];
             int mCountFloat = 0;
 
             void add(int type, float value) {
@@ -1805,8 +1805,8 @@ public class ConstraintSet {
                 mValueFloat[mCountFloat++] = value;
             }
 
-            int[] mTypeString = new int[INITAL_STRING];
-            String[] mValueString = new String[INITAL_STRING];
+            int[] mTypeString = new int[INITIAL_STRING];
+            String[] mValueString = new String[INITIAL_STRING];
             int mCountString = 0;
 
             void add(int type, String value) {
@@ -1818,8 +1818,8 @@ public class ConstraintSet {
                 mValueString[mCountString++] = value;
             }
 
-            int[] mTypeBoolean = new int[INITAL_BOOLEAN];
-            boolean[] mValueBoolean = new boolean[INITAL_BOOLEAN];
+            int[] mTypeBoolean = new int[INITIAL_BOOLEAN];
+            boolean[] mValueBoolean = new boolean[INITIAL_BOOLEAN];
             int mCountBoolean = 0;
 
             void add(int type, boolean value) {
@@ -2014,8 +2014,8 @@ public class ConstraintSet {
             layout.goneBaselineMargin = param.goneBaselineMargin;
             layout.mWrapBehavior = param.wrapBehaviorInParent;
 
-            int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-            if (currentapiVersion >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            int currentApiVersion = android.os.Build.VERSION.SDK_INT;
+            if (currentApiVersion >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 layout.endMargin = param.getMarginEnd();
                 layout.startMargin = param.getMarginStart();
             }
@@ -3820,7 +3820,7 @@ public class ConstraintSet {
     }
 
     /**
-     * get the refrence id's of a helper.
+     * get the reference id's of a helper.
      *
      * @param id
      * @return array of id's
@@ -3834,7 +3834,7 @@ public class ConstraintSet {
     }
 
     /**
-     * sets the refrence id's of a barrier.
+     * sets the reference id's of a barrier.
      *
      * @param id
      * @param referenced
@@ -3937,14 +3937,14 @@ public class ConstraintSet {
     private static String[] splitString(String str) {
         char[] chars = str.toCharArray();
         ArrayList<String> list = new ArrayList<>();
-        boolean indouble = false;
+        boolean inDouble = false;
         int start = 0;
         for (int i = 0; i < chars.length; i++) {
-            if (chars[i] == ',' && !indouble) {
+            if (chars[i] == ',' && !inDouble) {
                 list.add(new String(chars, start, i - start));
                 start = i + 1;
             } else if (chars[i] == '"') {
-                indouble = !indouble;
+                inDouble = !inDouble;
             }
         }
         list.add(new String(chars, start, chars.length - start));
@@ -4426,7 +4426,7 @@ public class ConstraintSet {
                         c.motion.mQuantizeInterpolatorID = a.getResourceId(attr, -1);
                         delta.add(QUANTIZE_MOTION_INTERPOLATOR_ID, c.motion.mQuantizeInterpolatorID);
                         if (c.motion.mQuantizeInterpolatorID != -1) {
-                            c.motion.mQuantizeInterpolatorType = Motion.INTERPOLATOR_REFRENCE_ID;
+                            c.motion.mQuantizeInterpolatorType = Motion.INTERPOLATOR_REFERENCE_ID;
                             delta.add(QUANTIZE_MOTION_INTERPOLATOR_TYPE, c.motion.mQuantizeInterpolatorType);
                         }
                     } else if (type.type == TypedValue.TYPE_STRING) {
@@ -4437,7 +4437,7 @@ public class ConstraintSet {
                             c.motion.mQuantizeInterpolatorID = a.getResourceId(attr, -1);
                             delta.add(QUANTIZE_MOTION_INTERPOLATOR_ID, c.motion.mQuantizeInterpolatorID);
 
-                            c.motion.mQuantizeInterpolatorType = Motion.INTERPOLATOR_REFRENCE_ID;
+                            c.motion.mQuantizeInterpolatorType = Motion.INTERPOLATOR_REFERENCE_ID;
                             delta.add(QUANTIZE_MOTION_INTERPOLATOR_TYPE, c.motion.mQuantizeInterpolatorType);
 
                         } else {
@@ -5094,13 +5094,13 @@ public class ConstraintSet {
                     if (type.type == TypedValue.TYPE_REFERENCE) {
                         c.motion.mQuantizeInterpolatorID = a.getResourceId(attr, -1);
                         if (c.motion.mQuantizeInterpolatorID != -1) {
-                            c.motion.mQuantizeInterpolatorType = Motion.INTERPOLATOR_REFRENCE_ID;
+                            c.motion.mQuantizeInterpolatorType = Motion.INTERPOLATOR_REFERENCE_ID;
                         }
                     } else if (type.type == TypedValue.TYPE_STRING) {
                         c.motion.mQuantizeInterpolatorString = a.getString(attr);
                         if (c.motion.mQuantizeInterpolatorString.indexOf("/") > 0) {
                             c.motion.mQuantizeInterpolatorID = a.getResourceId(attr, -1);
-                            c.motion.mQuantizeInterpolatorType = Motion.INTERPOLATOR_REFRENCE_ID;
+                            c.motion.mQuantizeInterpolatorType = Motion.INTERPOLATOR_REFERENCE_ID;
                         } else {
                             c.motion.mQuantizeInterpolatorType = Motion.SPLINE_STRING;
                         }

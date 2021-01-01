@@ -359,9 +359,9 @@ public class MotionLabel extends View implements FloatLayout {
         }
         mPath.reset();
         String str = mText;
-        int strlen = str.length();
-        mPaint.getTextBounds(str, 0, strlen, mTextBounds);
-        mPaint.getTextPath(str, 0, strlen, 0, 0, mPath);
+        int len = str.length();
+        mPaint.getTextBounds(str, 0, len, mTextBounds);
+        mPaint.getTextPath(str, 0, len, 0, 0, mPath);
 
         mTextBounds.right--;
         mTextBounds.left++;

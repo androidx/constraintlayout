@@ -43,12 +43,12 @@ import androidx.constraintlayout.widget.R;
  * <td>(id) call the TransitionListener with this trigger id</td>
  * </tr>
  * <tr>
- * <td>roundPercent &nbs; </td>
+ * <td>roundPercent</td>
  * <td>Set the corner radius of curvature  as a fraction of the smaller side.
  * For squares 1 will result in a circle</td>
  * </tr>
  * <tr>
- * <td>round &nbs; </td>
+ * <td>round</td>
  * <td>Set the corner radius of curvature  as a fraction of the smaller side.
  * For squares 1 will result in a circle</td>
  * </tr>

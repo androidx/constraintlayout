@@ -68,7 +68,7 @@ public class KeyTimeCycle extends Key {
     private float mTranslationZ = Float.NaN;
     private float mProgress = Float.NaN;
     private int mWaveShape = 0;
-    private String mCustomWaveShpe = null; // TODO add support of custom wave shapes in KeyTimeCycle
+    private String mCustomWaveShape = null; // TODO add support of custom wave shapes in KeyTimeCycle
     private float mWavePeriod = Float.NaN;
     private float mWaveOffset = 0;
     public static final int KEY_TYPE = 3;
@@ -193,10 +193,10 @@ public class KeyTimeCycle extends Key {
                 continue;
             }
             if (s.startsWith(Key.CUSTOM)) {
-                String ckey = s.substring(Key.CUSTOM.length() + 1);
-                ConstraintAttribute cvalue = mCustomConstraints.get(ckey);
-                if (cvalue != null) {
-                    ((ViewTimeCycle.CustomSet) splineSet).setPoint(mFramePosition, cvalue, mWavePeriod, mWaveShape, mWaveOffset);
+                String cKey = s.substring(Key.CUSTOM.length() + 1);
+                ConstraintAttribute cValue = mCustomConstraints.get(cKey);
+                if (cValue != null) {
+                    ((ViewTimeCycle.CustomSet) splineSet).setPoint(mFramePosition, cValue, mWavePeriod, mWaveShape, mWaveOffset);
                 }
                 continue;
             }
@@ -323,7 +323,7 @@ public class KeyTimeCycle extends Key {
                     mWaveShape = toInt(value);
                 } else {
                     mWaveShape = Oscillator.CUSTOM;
-                    mCustomWaveShpe = value.toString();
+                    mCustomWaveShape = value.toString();
                 }
                 break;
         }
@@ -410,7 +410,7 @@ public class KeyTimeCycle extends Key {
                         break;
                     case WAVE_SHAPE:
                         if (a.peekValue(attr).type == TypedValue.TYPE_STRING) {
-                            c.mCustomWaveShpe = a.getString(attr);
+                            c.mCustomWaveShape = a.getString(attr);
                             c.mWaveShape = Oscillator.CUSTOM;
                         } else {
                             c.mWaveShape = a.getInt(attr, c.mWaveShape);

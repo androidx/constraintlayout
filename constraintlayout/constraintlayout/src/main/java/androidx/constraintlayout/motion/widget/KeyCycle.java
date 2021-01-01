@@ -57,7 +57,7 @@ public class KeyCycle extends Key {
     private String mTransitionEasing = null;
     private int mCurveFit = 0;
     private int mWaveShape = -1;
-    private String mCustomWaveShpe = null;
+    private String mCustomWaveShape = null;
     private float mWavePeriod = Float.NaN;
     private float mWaveOffset = 0;
     private float mWavePhase = 0;
@@ -131,9 +131,9 @@ public class KeyCycle extends Key {
     public void addCycleValues(HashMap<String, ViewOscillator> oscSet) {
         for (String key : oscSet.keySet()) {
             if (key.startsWith(Key.CUSTOM)) {
-                String ckey = key.substring(Key.CUSTOM.length() + 1);
-                ConstraintAttribute cvalue = mCustomConstraints.get(ckey);
-                if (cvalue == null || cvalue.getType() != ConstraintAttribute.AttributeType.FLOAT_TYPE) {
+                String customKey = key.substring(Key.CUSTOM.length() + 1);
+                ConstraintAttribute cValue = mCustomConstraints.get(customKey);
+                if (cValue == null || cValue.getType() != ConstraintAttribute.AttributeType.FLOAT_TYPE) {
                     continue;
                 }
 
@@ -142,7 +142,7 @@ public class KeyCycle extends Key {
                     continue;
                 }
 
-                osc.setPoint(mFramePosition, mWaveShape, mCustomWaveShpe, mWaveVariesBy, mWavePeriod, mWaveOffset, mWavePhase, cvalue.getValueToInterpolate(), cvalue);
+                osc.setPoint(mFramePosition, mWaveShape, mCustomWaveShape, mWaveVariesBy, mWavePeriod, mWaveOffset, mWavePhase, cValue.getValueToInterpolate(), cValue);
                 continue;
             }
             float value = getValue(key);
@@ -155,7 +155,7 @@ public class KeyCycle extends Key {
                 continue;
             }
 
-            osc.setPoint(mFramePosition, mWaveShape, mCustomWaveShpe, mWaveVariesBy, mWavePeriod, mWaveOffset, mWavePhase, value);
+            osc.setPoint(mFramePosition, mWaveShape, mCustomWaveShape, mWaveVariesBy, mWavePeriod, mWaveOffset, mWavePhase, value);
         }
     }
 
@@ -334,7 +334,7 @@ public class KeyCycle extends Key {
                         break;
                     case WAVE_SHAPE:
                         if (a.peekValue(attr).type == TypedValue.TYPE_STRING) {
-                            c.mCustomWaveShpe = a.getString(attr);
+                            c.mCustomWaveShape = a.getString(attr);
                             c.mWaveShape = Oscillator.CUSTOM;
                         } else {
                             c.mWaveShape = a.getInt(attr, c.mWaveShape);
@@ -462,7 +462,7 @@ public class KeyCycle extends Key {
                     mWaveShape = toInt(value);
                 } else {
                     mWaveShape = Oscillator.CUSTOM;
-                    mCustomWaveShpe = value.toString();
+                    mCustomWaveShape = value.toString();
                 }
                 break;
         }
@@ -474,7 +474,7 @@ public class KeyCycle extends Key {
         mTransitionEasing = k.mTransitionEasing;
         mCurveFit = k.mCurveFit;
         mWaveShape = k.mWaveShape;
-        mCustomWaveShpe = k.mCustomWaveShpe;
+        mCustomWaveShape = k.mCustomWaveShape;
         mWavePeriod = k.mWavePeriod;
         mWaveOffset = k.mWaveOffset;
         mWavePhase = k.mWavePhase;

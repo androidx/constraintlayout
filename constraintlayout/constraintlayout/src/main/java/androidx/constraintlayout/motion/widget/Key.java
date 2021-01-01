@@ -126,7 +126,7 @@ public abstract class Key {
     }
 
     /**
-     * Key frame can speify the type of interpolation it wants on various attributes
+     * Key frame can specify the type of interpolation it wants on various attributes
      * For each string it set it to -1, CurveFit.LINEAR or  CurveFit.SPLINE
      *
      * @param interpolation

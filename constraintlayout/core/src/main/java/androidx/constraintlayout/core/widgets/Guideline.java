@@ -32,7 +32,7 @@ public class Guideline extends ConstraintWidget {
     public static final int RELATIVE_PERCENT = 0;
     public static final int RELATIVE_BEGIN = 1;
     public static final int RELATIVE_END = 2;
-    public static final int RELATIVE_UNKNWON = -1;
+    public static final int RELATIVE_UNKNOWN = -1;
 
     protected float mRelativePercent = -1;
     protected int mRelativeBegin = -1;
@@ -77,7 +77,7 @@ public class Guideline extends ConstraintWidget {
         if (mRelativeEnd != -1) {
             return RELATIVE_END;
         }
-        return RELATIVE_UNKNWON;
+        return RELATIVE_UNKNOWN;
     }
 
     public void setOrientation(int orientation) {

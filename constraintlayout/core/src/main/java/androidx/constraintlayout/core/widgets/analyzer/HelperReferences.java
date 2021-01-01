@@ -56,11 +56,11 @@ class HelperReferences extends WidgetRun {
                 case Barrier.LEFT: {
                     start.type = DependencyNode.Type.LEFT;
                     for (int i = 0; i < barrier.mWidgetsCount; i++) {
-                        ConstraintWidget refwidget = barrier.mWidgets[i];
-                        if (!allowsGoneWidget && refwidget.getVisibility() == ConstraintWidget.GONE) {
+                        ConstraintWidget refWidget = barrier.mWidgets[i];
+                        if (!allowsGoneWidget && refWidget.getVisibility() == ConstraintWidget.GONE) {
                             continue;
                         }
-                        DependencyNode target = refwidget.horizontalRun.start;
+                        DependencyNode target = refWidget.horizontalRun.start;
                         target.dependencies.add(start);
                         start.targets.add(target);
                         // FIXME -- if we move the DependencyNode directly in the ConstraintAnchor we'll be good.
@@ -71,11 +71,11 @@ class HelperReferences extends WidgetRun {
                 case Barrier.RIGHT: {
                     start.type = DependencyNode.Type.RIGHT;
                     for (int i = 0; i < barrier.mWidgetsCount; i++) {
-                        ConstraintWidget refwidget = barrier.mWidgets[i];
-                        if (!allowsGoneWidget && refwidget.getVisibility() == ConstraintWidget.GONE) {
+                        ConstraintWidget refWidget = barrier.mWidgets[i];
+                        if (!allowsGoneWidget && refWidget.getVisibility() == ConstraintWidget.GONE) {
                             continue;
                         }
-                        DependencyNode target = refwidget.horizontalRun.end;
+                        DependencyNode target = refWidget.horizontalRun.end;
                         target.dependencies.add(start);
                         start.targets.add(target);
                         // FIXME -- if we move the DependencyNode directly in the ConstraintAnchor we'll be good.

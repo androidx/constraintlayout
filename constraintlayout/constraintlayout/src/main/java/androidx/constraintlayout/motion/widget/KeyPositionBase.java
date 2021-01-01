@@ -31,7 +31,7 @@ abstract class KeyPositionBase extends Key {
     int mCurveFit = UNSET;
 
     /**
-     * Get the psotion ofthe view
+     * Get the position of the view
      *
      *
      * @param layoutWidth

@@ -16,7 +16,7 @@
 package androidx.constraintlayout.core.widgets;
 
 /**
- * interface to vertual objects
+ * interface to virtual objects
  */
 
 public interface Helper {

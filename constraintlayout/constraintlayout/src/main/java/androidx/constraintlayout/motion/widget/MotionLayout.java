@@ -66,105 +66,116 @@ import static androidx.constraintlayout.motion.widget.MotionScene.Transition.TRA
 import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID;
 import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
 
+
 /**
- * <b>A subclass of ConstraintLayout for building animations. Added in 2.0</b>
+ * A subclass of ConstraintLayout that supports animating between various states <b>Added in 2.0</b>
  * <p>
- * This Layout supports transitions between constraint sets defined in MotionScenes
- * </p>
- * <p>
- * A {@code MotionLayout} is a {@link androidx.constraintlayout.widget.ConstraintLayout} which allows you
- * to animate layouts between various states.
+ * A {@code MotionLayout} is a subclass of {@link ConstraintLayout}
+ * which supports transitions between between various states ({@link ConstraintSet})
+ * defined in {@link MotionScene}s.
  * <p>
  * <b>Note:</b> {@code MotionLayout} is available as a support library that you can use
  * on Android systems starting with API level 14 (ICS).
  * </p>
  * <p>
- * MotionLayout links to and requires a MotionScene file.
+ * {@code MotionLayout} links to and requires a {@link MotionScene} file.
  * The file contains one top level tag "MotionScene"
  * <h2>LayoutDescription</h2>
  * <table summary="LayoutDescription">
  * <tr>
- * <th> Tags </th> <th> Description</th>
+ * <th>Tags</th><th>Description</th>
  * </tr>
  * <tr>
- * <td> {@code <StateSet> } </td>
- * <td> Describes states supported by the system (optional)</td>
+ * <td>{@code <StateSet> }</td>
+ * <td>Describes states supported by the system (optional)</td>
  * </tr>
  * <tr>
- * <td> {@code <ConstraintSet> } </td>
- * <td> Describes a constraint set</td>
+ * <td>{@code <ConstraintSet> }</td>
+ * <td>Describes a constraint set</td>
  * </tr>
  * <tr>
- * <td> {@code <Transition> } </td>
- * <td> Describes a transition between two states or ConstraintSets</td>
+ * <td>{@code <Transition> }</td>
+ * <td>Describes a transition between two states or ConstraintSets</td>
  * </tr>
  * <tr>
- * <td> {@code <ViewTransition> } </td>
- * <td> Describes a transition of a View within a states or ConstraintSets</td>
+ * <td>{@code <ViewTransition> }</td>
+ * <td>Describes a transition of a View within a states or ConstraintSets</td>
  * </tr>
  * </table>
+ *
  * <h2>Transition</h2>
  * <table summary="Transition attributes & tags">
  * <tr>
- * <th> Attributes </th> <th>Description</th>
+ * <th>Attributes</th><th>Description</th>
  * </tr>
  * <tr>
- * <td> android:id </td>
- * <td> The id of the Transition</td>
+ * <td>android:id</td>
+ * <td>The id of the Transition</td>
  * </tr>
  * <tr>
- * <td> constraintSetStart &nbsp;</td>
- * <td> ConstraintSet to be used as the start constraints or a layout file to get the constraint from</td>
+ * <td>constraintSetStart</td>
+ * <td>ConstraintSet to be used as the start constraints or a layout file to get the constraint from</td>
  * </tr>
  * <tr>
- * <td> constraintSetEnd </td>
- * <td> ConstraintSet to be used as the end constraints or a layout file to get the constraint from</td>
+ * <td>constraintSetEnd</td>
+ * <td>ConstraintSet to be used as the end constraints or a layout file to get the constraint from</td>
  * </tr>
  * <tr>
- * <td> motionInterpolator </td>
- * <td> The ability to set an overall interpolation (easeInOut, linear, etc.)</td>
+ * <td>motionInterpolator</td>
+ * <td>The ability to set an overall interpolation (easeInOut, linear, etc.)</td>
  * </tr>
  * <tr>
- * <td> duration </td>
- * <td> Length of time to take to perform the transition</td>
+ * <td>duration</td>
+ * <td>Length of time to take to perform the transition</td>
  * </tr>
  * <tr>
- * <td> staggered </td>
- * <td> float: a quick way to stagger the objects moving</td>
+ * <td>staggered</td>
+ * <td>Overrides the Manhattan distance from the top most view in the list of views.
+ * <ul>
+ *     <li>For any view of stagger value {@code S(Vi)}</li>
+ *     <li>With the transition stagger value of {@code TS} (from 0.0 - 1.0)</li>
+ *     <li>The duration of the animation is {@code duration}</li>
+ *     <li>The views animation duration {@code DS = duration * (1 -TS)}</li>
+ *     <li>Call the stagger fraction {@code SFi = (S(Vi) - S(V0)) / (S(Vn) - S(V0))}</li>
+ *     <li>The view starts animating at: {@code (duration-DS) * SFi}</li>
+ * </ul>
+ * </td>
  * </tr>
  * <tr>
  * <td>pathMotionArc</td>
- * <td>The path will move in arc (quarter eclipses)
- * key words {startVertical | startHorizontal | flip | none } </td>
+ * <td>The path will move in arc (quarter ellipses)
+ * key words {startVertical | startHorizontal | flip | none }</td>
  * </tr>
  * <tr>
- * <td> autoTransition </td>
- * <td> automatically transition from one state to another. supports keywords {none, jumpToStart, jumpToEnd, animateToStart, animateToEnd} </td>
- * </tr>
- * </tr>
- * <tr>
- * <td> transitionFlags </td>
- * <td> flags that adjust the behaviour of Transitions. supports {none, beginOnFirstDraw}
- *      begin on first draw forces the transition's clock to start when it is first displayed not when the begin is called  </td>
+ * <td>autoTransition</td>
+ * <td>automatically transition from one state to another.
+ * key words {none, jumpToStart, jumpToEnd, animateToStart, animateToEnd}</td>
  * </tr>
  * </tr>
  * <tr>
- * <td> layoutDuringTransition </td>
- * <td> Configures MotionLayout on how to react to requestLayout calls during transitions. Allowed values are {ignoreRequest, honorRequest}</td>
+ * <td>transitionFlags</td>
+ * <td>flags that adjust the behaviour of Transitions. supports {none, beginOnFirstDraw}
+ *      begin on first draw forces the transition's clock to start when it is first displayed not when the begin is called</td>
+ * </tr>
  * </tr>
  * <tr>
- * <td> {@code <OnSwipe> }</td>
- * <td> Adds support for touch handling (optional)</td>
+ * <td>layoutDuringTransition</td>
+ * <td>Configures MotionLayout on how to react to requestLayout calls during transitions. Allowed values are {ignoreRequest, honorRequest}</td>
  * </tr>
  * <tr>
- * <td> {@code <OnClick> }</td>
- * <td> Adds support for triggering transition (optional)</td>
+ * <td>{@code <OnSwipe> }</td>
+ * <td>Adds support for touch handling (optional)</td>
  * </tr>
  * <tr>
- * <td> {@code <KeyFrameSet> } </td>
- * <td> Describes a set of Key object which modify the animation between constraint sets.</td>
+ * <td>{@code <OnClick> }</td>
+ * <td>Adds support for triggering transition (optional)</td>
+ * </tr>
+ * <tr>
+ * <td>{@code <KeyFrameSet> }</td>
+ * <td>Describes a set of Key object which modify the animation between constraint sets.</td>
  * </tr>
  * </table>
+ *
  * <ul>
  * <li>A transition is typically defined by specifying its start and end ConstraintSets.
  * You also have the possibility to not specify them, in which case such transition will become a Default transition.
@@ -178,74 +189,76 @@ import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
  * <h2>ViewTransition</h2>
  * <table summary="Transition attributes & tags">
  * <tr>
- * <th> Attributes </th> <th>Description</th>
+ * <th>Attributes</th><th>Description</th>
  * </tr>
  * <tr>
- * <td> android:id </td>
- * <td> The id of the ViewTransition</td>
+ * <td>android:id</td>
+ * <td>The id of the ViewTransition</td>
  * </tr>
  * <tr>
- * <td> viewTransitionMode &nbsp;</td>
- * <td> currentState, allStates, noState transition affect the state of the view in the current constraintSet or all ConstraintSets or non
- *      if noState the ViewTransitions are run asynchronous </td>
+ * <td>viewTransitionMode</td>
+ * <td>currentState, allStates, noState transition affect the state of the view in the current constraintSet or all ConstraintSets or non
+ *      if noState the ViewTransitions are run asynchronous</td>
  * </tr>
  * <tr>
- * <td> onStateTransition </td>
- * <td>  actionDown or actionUp run transition if on touch down or up if view matches motionTarget </td>
+ * <td>onStateTransition</td>
+ * <td>actionDown or actionUp run transition if on touch down or up if view matches motionTarget</td>
  * </tr>
  * <tr>
- * <td> motionInterpolator </td>
- * <td> The ability to set an overall interpolation (easeInOut, linear, etc.)</td>
+ * <td>motionInterpolator</td>
+ * <td>The ability to set an overall interpolation
+ * key words {easeInOut, linear, etc.}</td>
  * </tr>
  * <tr>
- * <td> duration </td>
- * <td> Length of time to take to perform the Viewtransition</td>
+ * <td>duration</td>
+ * <td>Length of time to take to perform the {@code ViewTransition}</td>
  * </tr>
  * <tr>
  * <td>pathMotionArc</td>
- * <td>The path will move in arc (quarter eclipses)
- * key words {startVertical | startHorizontal | flip | none } </td>
+ * <td>The path will move in arc (quarter ellipses)
+ * key words {startVertical | startHorizontal | flip | none }</td>
  * </tr>
  * <tr>
- * <td> motionTarget </td>
- * <td> Apply ViewTransition matching this string or id.</td>
- * </tr>
- * </tr>
- * <tr>
- * <td> setsTag </td>
- * <td> set this tag at end of transition </td>
+ * <td>motionTarget</td>
+ * <td>Apply ViewTransition matching this string or id.</td>
  * </tr>
  * </tr>
  * <tr>
- * <td> clearsTag </td>
- * <td> clears this tag at end of transition</td>
+ * <td>setsTag</td>
+ * <td>set this tag at end of transition</td>
+ * </tr>
  * </tr>
  * <tr>
- * <td> ifTagSet </td>
- * <td> run transition if this tag is set on view</td>
+ * <td>clearsTag</td>
+ * <td>clears this tag at end of transition</td>
  * </tr>
  * <tr>
- * <td> ifTagNotSet </td>
- * <td> run transition if this tag is not set on view/td>
+ * <td>ifTagSet</td>
+ * <td>run transition if this tag is set on view</td>
  * </tr>
  * <tr>
- * <td> {@code <OnSwipe> }</td>
- * <td> Adds support for touch handling (optional)</td>
+ * <td>ifTagNotSet</td>
+ * <td>run transition if this tag is not set on view/td>
  * </tr>
  * <tr>
- * <td> {@code <OnClick> }</td>
- * <td> Adds support for triggering transition (optional)</td>
+ * <td>{@code <OnSwipe> }</td>
+ * <td>Adds support for touch handling (optional)</td>
  * </tr>
  * <tr>
- * <td> {@code <KeyFrameSet> } </td>
- * <td> Describes a set of Key object which modify the animation between constraint sets.</td>
+ * <td>{@code <OnClick> }</td>
+ * <td>Adds support for triggering transition (optional)</td>
+ * </tr>
+ * <tr>
+ * <td>{@code <KeyFrameSet> }</td>
+ * <td>Describes a set of Key object which modify the animation between constraint sets.</td>
  * </tr>
  * </table>
+ *
  * <ul>
- * <li>A transition is typically defined by specifying its start and end ConstraintSets.
+ * <li>A Transition is typically defined by specifying its start and end ConstraintSets.
  * You also have the possibility to not specify them, in which case such transition will become a Default transition.
  * That Default transition will be applied between any state change that isn't explicitly covered by a transition.</li>
- * <li>The starting state of the MotionLayout is defined  to be the constraintSetStart of the first
+ * <li>The starting state of the MotionLayout is defined to be the constraintSetStart of the first
  * transition.</li>
  * <li>If no transition is specified (or only a default Transition) the MotionLayout tag must contain
  * a app:currentState to define the starting state of the MotionLayout</li>
@@ -256,133 +269,139 @@ import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
  * <h2>OnSwipe (optional)</h2>
  * <table summary="OnSwipe attributes">
  * <tr>
- * <th> Attributes </th> <th> Description</th>
+ * <th>Attributes</th><th>Description</th>
  * </tr>
  * <tr>
- * <td> touchAnchorId</td>
- * <td> Have the drag act as if it is moving the "touchAnchorSide" of this object </td>
+ * <td>touchAnchorId</td>
+ * <td>Have the drag act as if it is moving the "touchAnchorSide" of this object</td>
  * </tr>
  * <tr>
- * <td> touchRegionId</td>
- * <td> Limits the region that the touch can be start in to the bounds of this view (even if the view is invisible)</td>
+ * <td>touchRegionId</td>
+ * <td>Limits the region that the touch can be start in to the bounds of this view (even if the view is invisible)</td>
  * </tr>
  * <tr>
- * <td> touchAnchorSide </td>
- * <td> The side of the object to move with {top|left|right|bottom}</td>
+ * <td>touchAnchorSide</td>
+ * <td>The side of the object to move with {top|left|right|bottom}</td>
  * </tr>
  * <tr>
- * <td> maxVelocity </td>
- * <td> limit the maximum velocity (in progress/sec) of the animation will on touch up. Default 4 </td>
+ * <td>maxVelocity</td>
+ * <td>limit the maximum velocity (in progress/sec) of the animation will on touch up. Default 4</td>
  * </tr>
  * <tr>
- * <td> dragDirection </td>
- * <td> which side to swipe from {dragUp|dragDown|dragLeft|dragRight} </td>
+ * <td>dragDirection</td>
+ * <td>which side to swipe from {dragUp|dragDown|dragLeft|dragRight}</td>
  * </tr>
  * <tr>
- * <td> maxAcceleration </td>
- * <td> how quickly the animation will accelerate (progress/sec/sec) and decelerate on touch up. Default 1.2 </td>
+ * <td>maxAcceleration</td>
+ * <td>how quickly the animation will accelerate (progress/sec/sec) and decelerate on touch up. Default 1.2</td>
  * </tr>
  * <tr>
- * <td> dragScale </td>
- * <td> scale factor to adjust the swipe by. (e.g. 0.5 would require you to move 2x as much)</td>
+ * <td>dragScale</td>
+ * <td>scale factor to adjust the swipe by. (e.g. 0.5 would require you to move 2x as much)</td>
  * </tr>
- * <td> dragThreshold </td>
- * <td> How much to drag before swipe gesture runs. Important for mult-direction swipe. Default is 10. 1 is very sensitive.</td>
- * </tr>
- * <tr>
- * <td> moveWhenScrollAtTop &nbsp;</td>
- * <td> If the swipe is scrolling and View (such as RecyclerView or NestedScrollView)
- * do scroll and transition happen at the same time </td>
+ * <td>dragThreshold</td>
+ * <td>How much to drag before swipe gesture runs. Important for mult-direction swipe. Default is 10. 1 is very sensitive.</td>
  * </tr>
  * <tr>
- * <td> onTouchUp &nbsp;</td>
- * <td> Support for various swipe modes autoComplete,autoCompleteToStart,autoCompleteToEnd,stop,decelerate,decelerateAndComplete</td>
+ * <td>moveWhenScrollAtTop</td>
+ * <td>If the swipe is scrolling and View (such as RecyclerView or NestedScrollView)
+ * do scroll and transition happen at the same time</td>
+ * </tr>
+ * <tr>
+ * <td>onTouchUp</td>
+ * <td>Support for various swipe modes autoComplete,autoCompleteToStart,autoCompleteToEnd,stop,decelerate,decelerateAndComplete</td>
  * </tr>
  * </table>
+ *
  * <p>
  * <h2>OnClick (optional)</h2>
  * <table summary="OnClick attributes">
  * <tr>
- * <th> Attributes </th> <th> Description</th>
+ * <th>Attributes</th><th>Description</th>
  * </tr>
  * <tr>
- * <td> motionTarget</td>
- * <td> What view triggers Transition.</td>
+ * <td>motionTarget</td>
+ * <td>What view triggers Transition.</td>
  * </tr>
  * <tr>
- * <td> clickAction </td>
- * <td> Direction for buttons to move the animation.
- * Or (|) combination of:  toggle, transitionToEnd, transitionToStart, jumpToEnd, jumpToStart </td>
+ * <td>clickAction</td>
+ * <td>Direction for buttons to move the animation.
+ * Or (|) combination of:  toggle, transitionToEnd, transitionToStart, jumpToEnd, jumpToStart</td>
  * </tr>
  * </table>
+ *
  * <p>
- * <h2>StateSet </h2>
+ * <h2>StateSet</h2>
  * <table summary="StateSet tags & attributes">
  * <tr>
- * <td> defaultState&nbsp;</td>
- * <td> the constraint set or layout to use </td>
+ * <td>defaultState</td>
+ * <td>The constraint set or layout to use</td>
  * </tr>
  * <tr>
- * <td> {@code <State> }</td>
- * <td> The side of the object to move</td>
+ * <td>{@code <State> }</td>
+ * <td>The side of the object to move</td>
  * </tr>
  * </table>
+ *
  * <p>
  * <h2>State</h2>
  * <table summary="State attributes">
  * <tr>
- * <td> android:id </td>
- * <td> Id of the State </td>
+ * <td>android:id</td>
+ * <td>Id of the State</td>
  * </tr>
  * <tr>
  * <td>constraints</td>
- * <td> Id of the ConstraintSet or the Layout file </td>
+ * <td>Id of the ConstraintSet or the Layout file</td>
  * </tr>
  * <tr>
- * <td> {@code <Variant> }</td>
- * <td> a different constraintSet/layout to choose if the with or height matches</td>
+ * <td>{@code <Variant> }</td>
+ * <td>a different constraintSet/layout to choose if the with or height matches</td>
  * </tr>
  * </table>
+ *
  * <h2>Variant</h2>
  * <table summary="Variant attributes" >
  * <tr>
- * <td> region_widthLessThan </td>
- * <td> match if width less than </td>
+ * <td>region_widthLessThan</td>
+ * <td>Match if width less than</td>
  * </tr>
  * <tr>
- * <td> region_widthMoreThan </td>
- * <td> match if width more than </td>
+ * <td>region_widthMoreThan</td>
+ * <td>Match if width more than</td>
  * </tr>
  * <tr>
- * <td> region_heightLessThan </td>
- * <td> match if height less than </td>
+ * <td>region_heightLessThan</td>
+ * <td>Match if height less than</td>
  * </tr>
  * <tr>
- * <td> region_heightMoreThan &nbsp;</td>
- * <td> match if height more than </td>
+ * <td>region_heightMoreThan</td>
+ * <td>Match if height more than</td>
  * </tr>
  * <tr>
  * <td>constraints</td>
- * <td> Id of the ConstraintSet or layout </td>
+ * <td>Id of the ConstraintSet or layout</td>
  * </tr>
  * </table>
+ *
  * <p>
- * <h2>ConstraintSet </h2>
+ * <h2>ConstraintSet</h2>
  * <table summary="StateSet tags & attributes">
  * <tr>
  * <td>android:id</td>
- * <td> The id of the ConstraintSet </td>
+ * <td>The id of the ConstraintSet</td>
  * </tr>
  * <tr>
- * <td>deriveConstraintsFrom&nbsp;</td>
- * <td> The id of another constraintSet which defines the constraints not define in this set.
- * If not specified the layout defines the undefined constraints. </td>
+ * <td>deriveConstraintsFrom</td>
+ * <td>The id of another constraintSet which defines the constraints not define in this set.
+ * If not specified the layout defines the undefined constraints.</td>
  * </tr>
  * <tr>
- * <td> {@code <Constraint> }</td>
- * <td> A ConstraintLayout Constraints + other attributes associated with a view </td>
+ * <td>{@code <Constraint> }</td>
+ * <td>A ConstraintLayout Constraints + other attributes associated with a view</td>
  * </tr>
  * </table>
+ *
  * <p>
  * <h2>Constraint</h2>
  * <p> Constraint supports two forms: <p>1: All of ConstraintLayout + the ones listed below +
@@ -395,26 +414,26 @@ import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
  * </p>
  * <table summary="Constraint attributes">
  * <tr>
- * <td> android:id </td>
- * <td> Id of the View</td>
+ * <td>android:id</td>
+ * <td>Id of the View</td>
  * </tr>
  * <tr>
- * <td>[ConstraintLayout attributes] &nbsp;</td>
- * <td> Any attribute that is part of ContraintLayout layout is allowed </td>
+ * <td>[ConstraintLayout attributes]</td>
+ * <td>Any attribute that is part of ConstraintLayout layout is allowed</td>
  * </tr>
  * <tr>
  * <td>[Standard View attributes]</td>
- * <td> A collection of view attributes supported by the system (see below) </td>
+ * <td>A collection of view attributes supported by the system (see below)</td>
  * </tr>
  * <tr>
  * <td>transitionEasing</td>
- * <td>define an easing curve to be used when animating from this point (e.g. curve(1.0,0,0,1.0))
- * or key words {standard | accelerate | decelerate | linear }</td>
+ * <td>define an easing curve to be used when animating from this point (e.g. {@code curve(1.0,0,0,1.0)})
+ * or key words {standard | accelerate | decelerate | linear}</td>
  * </tr>
  * <tr>
  * <td>pathMotionArc</td>
- * <td>the path will move in arc (quarter eclipses)
- * or key words {startVertical | startHorizontal | none } </td>
+ * <td>the path will move in arc (quarter ellipses)
+ * or key words {startVertical | startHorizontal | none }</td>
  * </tr>
  * <tr>
  * <td>transitionPathRotate</td>
@@ -426,101 +445,101 @@ import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
  * </tr>
  * <tr>
  * <td>progress</td>
- * <td>call method setProgress(float) on this view
+ * <td>call method setProgress(float) on this  view
  * (used to talk to nested ConstraintLayouts etc.)</td>
  * </tr>
  * <tr>
- * <td> {@code <CustomAttribute> }</td>
- * <td> call a set"name" method via reflection</td>
+ * <td>{@code <CustomAttribute> }</td>
+ * <td>call a set"name" method via reflection</td>
  * </tr>
  * <tr>
- * <td> {@code <Layout> }</td>
- * <td> Attributes for the ConstraintLayout e.g. layout_constraintTop_toTopOf</td>
+ * <td>{@code <Layout> }</td>
+ * <td>Attributes for the ConstraintLayout e.g. layout_constraintTop_toTopOf</td>
  * </tr>
  * <tr>
- * <td> {@code <PropertySet> }</td>
- * <td> currently only visibility, alpha, motionProgress,layout_constraintTag. </td>
+ * <td>{@code <PropertySet> }</td>
+ * <td>currently only visibility, alpha, motionProgress,layout_constraintTag.</td>
  * </tr>
  * <tr>
- * <td> {@code <Transform> }</td>
- * <td> All the view transform API such as android:rotation.</td>
+ * <td>{@code <Transform> }</td>
+ * <td>All the view transform API such as android:rotation.</td>
  * </tr>
  * <tr>
- * <td> {@code <Motion> }</td>
- * <td> Motion Layout control commands such as transitionEasing and pathMotionArc</td>
+ * <td>{@code <Motion> }</td>
+ * <td>Motion Layout control commands such as transitionEasing and pathMotionArc</td>
  * </tr>
  * </table>
+ *
  * <p>
  * <p>
  * <h2>Layout</h2>
  * <table summary="Variant attributes" >
  * <tr>
  * <td>[ConstraintLayout attributes]</td>
- * <td> see {@see androidx.constraintlayout.widget.ConstraintLayout ConstraintLayout} for attributes</td>
+ * <td>see {@see androidx.constraintlayout.widget.ConstraintLayout ConstraintLayout} for attributes</td>
  * </tr>
  * </table>
  *
  * <h2>PropertySet</h2>
  * <table summary="Variant attributes" >
  * <tr>
- * <td> visibility</td>
- * <td> set the Visibility of the view. One of Visible, invisible or gone </td>
+ * <td>visibility</td>
+ * <td>set the Visibility of the view. One of Visible, invisible or gone</td>
  * </tr>
  * <tr>
- * <td> alpha </td>
- * <td> setAlpha value </td>
+ * <td>alpha</td>
+ * <td>setAlpha value</td>
  * </tr>
  * <tr>
- * <td> motionProgress  &nbsp;</td>
- * <td> using reflection call setProgress </td>
+ * <td>motionProgress</td>
+ * <td>using reflection call setProgress</td>
  * </tr>
  * <tr>
- * <td> layout_constraintTag </td>
- * <td> a tagging string to identify the type of object </td>
+ * <td>layout_constraintTag</td>
+ * <td>a tagging string to identify the type of object</td>
  * </tr>
- *
  * </table>
  *
  *
  * <h2>Transform</h2>
  * <table summary="Variant attributes" >
  * <tr>
- * <td> android:elevation</td>
- * <td> base z depth of the view.</td>
+ * <td>android:elevation</td>
+ * <td>base z depth of the view.</td>
  * </tr>
  * <tr>
- * <td> android:rotation </td>
- * <td> rotation of the view, in degrees. </td>
+ * <td>android:rotation</td>
+ * <td>rotation of the view, in degrees.</td>
  * </tr>
  * <tr>
- * <td> android:rotationX</td>
- * <td> rotation of the view around the x axis, in degrees.</td>
+ * <td>android:rotationX</td>
+ * <td>rotation of the view around the x axis, in degrees.</td>
  * </tr>
  * <tr>
- * <td> android:rotationY </td>
- * <td> rotation of the view around the y axis, in degrees. </td>
+ * <td>android:rotationY</td>
+ * <td>rotation of the view around the y axis, in degrees.</td>
  * </tr>
  * <tr>
  * <td>android:scaleX</td>
- * <td> scale of the view in the x direction </td>
+ * <td>scale of the view in the x direction</td>
  * </tr>
  * <tr>
  * <td>android:scaleY</td>
- * <td> scale of the view in the y direction. </td>
+ * <td>scale of the view in the y direction.</td>
  * </tr>
  * <tr>
  * <td>android:translationX</td>
- * <td> translation in x of the view. This value is added post-layout to the left
+ * <td>translation in x of the view. This value is added post-layout to the  left
  * property of the view, which is set by its layout.</td>
  * </tr>
  * <tr>
  * <td>android:translationY</td>
- * <td> translation in y of the view. This value is added post-layout to the top
- * property of the view, which is set by its layout  </td>
+ * <td>translation in y of the view. This value is added post-layout to th e top
+ * property of the view, which is set by its layout</td>
  * </tr>
  * <tr>
  * <td>android:translationZ</td>
- * <td> translation in z of the view. This value is added to its elevation. </td>
+ * <td>translation in z of the view. This value is added to its elevation.</td>
  * </tr>
  * </table>
  *
@@ -528,20 +547,20 @@ import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
  * <h2>Motion</h2>
  * <table summary="Variant attributes" >
  * <tr>
- * <td> transitionEasing</td>
- * <td> Defines an acceleration curve.</td>
+ * <td>transitionEasing</td>
+ * <td>Defines an acceleration curve.</td>
  * </tr>
  * <tr>
- * <td> pathMotionArc </td>
- * <td> Says the object should move in a quarter ellipse unless the motion is vertical or horizontal</td>
+ * <td>pathMotionArc</td>
+ * <td>Says the object should move in a quarter ellipse unless the motion is vertical or horizontal</td>
  * </tr>
  * <tr>
- * <td> motionPathRotate  </td>
- * <td> set the rotation to the path of the object + this angle.</td>
+ * <td>motionPathRotate</td>
+ * <td>set the rotation to the path of the object + this angle.</td>
  * </tr>
  * <tr>
- * <td> drawPath </td>
- * <td> Debugging utility to draw the motion of the path</td>
+ * <td>drawPath</td>
+ * <td>Debugging utility to draw the motion of the path</td>
  * </tr>
  * </table>
  *
@@ -549,87 +568,88 @@ import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
  * <h2>CustomAttribute</h2>
  * <table summary="Variant attributes" >
  * <tr>
- * <td> attributeName</td>
- * <td> The name of the attribute. Case sensitive. ( MyAttr will look for method setMyAttr(...) </td>
+ * <td>attributeName</td>
+ * <td>The name of the attribute. Case sensitive. ( MyAttr will look for method setMyAttr(...)</td>
  * </tr>
  * <tr>
- * <td> customColorValue </td>
- * <td> The value is a color looking setMyAttr(int )  </td>
+ * <td>customColorValue</td>
+ * <td>The value is a color looking setMyAttr(int )</td>
  * </tr>
  * <tr>
- * <td> customIntegerValue  &nbsp;</td>
- * <td> The value is an integer looking setMyAttr(int ) </td>
+ * <td>customIntegerValue</td>
+ * <td>The value is an integer looking setMyAttr(int )</td>
  * </tr>
  * <tr>
- * <td> customFloatValue </td>
- * <td> The value is a float looking setMyAttr(float )  </td>
+ * <td>customFloatValue</td>
+ * <td>The value is a float looking setMyAttr(float )</td>
  * </tr>
  * <tr>
  * <td>customStringValue</td>
- * <td> The value is a String looking setMyAttr(String )  </td>
+ * <td>The value is a String looking setMyAttr(String )</td>
  * </tr>
  * <tr>
  * <td>customDimension</td>
- * <td> The value is a dimension looking setMyAttr(float )  </td>
+ * <td>The value is a dimension looking setMyAttr(float )</td>
  * </tr>
  * <tr>
  * <td>customBoolean</td>
- * <td> The value is true or false looking setMyAttr(boolean )  </td>
+ * <td>The value is true or false looking setMyAttr(boolean )</td>
  * </tr>
  * </table>
  *
  * <p>
  * <p>
- * <h2>KeyFrameSet  </h2>
+ * <h2>KeyFrameSet</h2>
  * <p> This is the container for a collection of Key objects (such as KeyPosition) which provide
  * information about how the views should move </p>
  * <table summary="StateSet tags & attributes">
  * <tr>
- * <td> {@code <KeyPosition>}</td>
- * <td> Controls the layout position during animation </td>
+ * <td>{@code <KeyPosition>}</td>
+ * <td>Controls the layout position during animation</td>
  * </tr>
  * <tr>
- * <td> {@code <KeyAttribute>}</td>
- * <td> Controls the post layout properties during animation</td>
+ * <td>{@code <KeyAttribute>}</td>
+ * <td>Controls the post layout properties during animation</td>
  * </tr>
  * <tr>
- * <td> {@code <KeyCycle>}</td>
- * <td> Controls oscillations with respect to position of post layout properties during animation</td>
+ * <td>{@code <KeyCycle>}</td>
+ * <td>Controls oscillations with respect to position of post layout properties during animation</td>
  * </tr>
  * <tr>
- * <td> {@code <KeyTimeCycle>}</td>
- * <td> Controls oscillations with respect to time of post layout properties during animation</td>
+ * <td>{@code <KeyTimeCycle>}</td>
+ * <td>Controls oscillations with respect to time of post layout properties during animation</td>
  * </tr>
  * <tr>
- * <td> {@code <KeyTrigger>}</td>
- * <td> trigger callbacks into code at fixed point during the animation</td>
+ * <td>{@code <KeyTrigger>}</td>
+ * <td>trigger callbacks into code at fixed point during the animation</td>
  * </tr>
  * </table>
+ *
  * <p>
  * <h2>KeyPosition</h2>
  * <table summary="KeyPosition attributes">
  * <tr>
  * <td>motionTarget</td>
- * <td> Id of the View or a regular expression to match layout_ConstraintTag</td>
+ * <td>Id of the View or a regular expression to match layout_ConstraintTag</td>
  * </tr>
  * <tr>
- * <td>framePosition&nbsp;</td>
- * <td> The point along the interpolation 0 = start 100 = end</td>
+ * <td>framePosition</td>
+ * <td>The point along the interpolation 0 = start 100 = end</td>
  * </tr
  * <tr>
- * <td>transitionEasing&nbsp;</td>
- * <td>define an easing curve to be used when animating from this point (e.g. curve(1.0,0,0,1.0))
+ * <td>transitionEasing</td>
+ * <td>define an easing curve to be used when animating from this point (e.g. curve(1.0,0,0, 1.0))
  * or key words {standard | accelerate | decelerate | linear }
  * </td>
  * </tr>
  * <tr>
  * <td>pathMotionArc</td>
- * <td>The path will move in arc (quarter eclipses)
- * key words {startVertical | startHorizontal | flip | none } </td>
+ * <td>The path will move in arc (quarter ellipses)
+ * key words {startVertical | startHorizontal | flip | none }</td>
  * </tr>
  * <tr>
- * <td>keyPositionType/td>
- * <td> how this keyframe's deviation for linear path is calculated {deltaRelative | pathRelative|parentRelative} </td>
+ * <td>keyPositionType</td>
+ * <td>how this keyframe's deviation for linear path is calculated {deltaRelative | pathRelative|parentRelative}</td>
  * </tr>
  * <tr>
  * <td>percentX</td>
@@ -649,41 +669,42 @@ import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
  * </tr>
  * <tr>
  * <td>curveFit</td>
- * <td>path is traced </td>
+ * <td>path is traced</td>
  * </tr>
  * <tr>
  * <td>drawPath</td>
- * <td> Draw the path of the objects layout takes useful for debugging </td>
+ * <td>Draw the path of the objects layout takes useful for debugging</td>
  * </tr>
  * <tr>
  * <td>sizePercent</td>
- * <td>If the view changes size this controls how growth of the size.
+ * <td>If the view changes size this controls how growth of the  size.
  * (for fixed size objects use KeyAttributes scaleX/X)</td>
  * </tr>
  * <tr>
  * <td>curveFit</td>
- * <td>selects a path based on straight lines or a path based on a monotonic spline {linear|spline} </td>
+ * <td>selects a path based on straight lines or a path based on a monotonic spline {linear|spline}</td>
  * </tr>
  * </table>
+ *
  * <p>
  * <p>
  * <h2>KeyAttribute</h2>
  * <table summary="KeyAttribute attributes">
  * <tr>
- * <td> motionTarget</td>
- * <td> Id of the View or a regular expression to match layout_ConstraintTag </td>
+ * <td>motionTarget</td>
+ * <td>Id of the View or a regular expression to match layout_ConstraintTag</td>
  * </tr>
  * <tr>
- * <td>framePosition&nbsp;</td>
- * <td> The point along the interpolation 0 = start 100 = end </td>
+ * <td>framePosition</td>
+ * <td>The point along the interpolation 0 = start 100 = end</td>
  * </tr>
  * <tr>
  * <td>curveFit</td>
- * <td>selects a path based on straight lines or a path based on a monotonic spline {linear|spline} </td>
+ * <td>selects a path based on straight lines or a path based on a monotonic spline {linear|spline}</td>
  * </tr>
  * <tr>
  * <td>transitionEasing</td>
- * <td>Define an easing curve to be used when animating from this point (e.g. curve(1.0,0,0,1.0))
+ * <td>Define an easing curve to be used when animating from this point (e.g. curve(1.0,0,0, 1.0))
  * or key words {standard | accelerate | decelerate | linear }
  * </td>
  * </tr>
@@ -697,7 +718,7 @@ import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
  * </tr>
  * <tr>
  * <td>motionProgress</td>
- * <td>call method setProgress(float) on this view
+ * <td>call method setProgress(float) on this  view
  * (used to talk to nested ConstraintLayouts etc.)</td>
  * </tr>
  * <tr>
@@ -707,56 +728,58 @@ import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
  * <tr>
  * <p>
  * <tr>
- * <td> {@code <CustomAttribute> }</td>
- * <td> call a set"name" method via reflection</td>
+ * <td>{@code <CustomAttribute> }</td>
+ * <td>call a set"name" method via reflection</td>
  * </tr>
  * </table>
+ *
  * <h2>CustomAttribute</h2>
  * <table summary="Variant attributes" >
  * <tr>
- * <td> attributeName</td>
- * <td> The name of the attribute. Case sensitive. ( MyAttr will look for method setMyAttr(...) </td>
+ * <td>attributeName</td>
+ * <td>The name of the attribute. Case sensitive. ( MyAttr will look for method setMyAttr(...)</td>
  * </tr>
  * <tr>
- * <td> customColorValue </td>
- * <td> The value is a color looking setMyAttr(int )  </td>
+ * <td>customColorValue</td>
+ * <td>The value is a color looking setMyAttr(int )</td>
  * </tr>
  * <tr>
- * <td> customIntegerValue  &nbsp;</td>
- * <td> The value is an integer looking setMyAttr(int ) </td>
+ * <td>customIntegerValue</td>
+ * <td>The value is an integer looking setMyAttr(int )</td>
  * </tr>
  * <tr>
- * <td> customFloatValue </td>
- * <td> The value is a float looking setMyAttr(float )  </td>
+ * <td>customFloatValue</td>
+ * <td>The value is a float looking setMyAttr(float )</td>
  * </tr>
  * <tr>
  * <td>customStringValue</td>
- * <td> The value is a String looking setMyAttr(String )  </td>
+ * <td>The value is a String looking setMyAttr(String )</td>
  * </tr>
  * <tr>
  * <td>customDimension</td>
- * <td> The value is a dimension looking setMyAttr(float )  </td>
+ * <td>The value is a dimension looking setMyAttr(float )</td>
  * </tr>
  * <tr>
  * <td>customBoolean</td>
- * <td> The value is true or false looking setMyAttr(boolean )  </td>
+ * <td>The value is true or false looking setMyAttr(boolean )</td>
  * </tr>
  * </table>
+ *
  * </p>
  * <p>
  * <h2>KeyCycle</h2>
  * <table summary="Constraint attributes">
  * <tr>
  * <td>motionTarget</td>
- * <td> Id of the View or a regular expression to match layout_ConstraintTag</td>
+ * <td>Id of the View or a regular expression to match layout_ConstraintTag</td>
  * </tr>
  * <tr>
- * <td>framePosition &nbsp;</td>
- * <td> The point along the interpolation 0 = start 100 = end</td>
+ * <td>framePosition</td>
+ * <td>The point along the interpolation 0 = start 100 = end</td>
  * </tr>
  * <tr>
  * <td>[Standard View attributes]</td>
- * <td> A collection of view attributes supported by the system (see below) </td>
+ * <td>A collection of view attributes supported by the system (see below)</td>
  * </tr>
  * <tr>
  * <td>waveShape</td>
@@ -764,52 +787,54 @@ import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
  * </tr>
  * <tr>
  * <td>wavePeriod</td>
- * <td> The number of cycles to loop near this region</td>
+ * <td>The number of cycles to loop near this region</td>
  * </tr>
  * <tr>
  * <td>waveOffset</td>
- * <td> offset value added to the attribute </td>
+ * <td>offset value added to the attribute</td>
  * </tr>
  * <tr>
  * <td>transitionPathRotate</td>
- * <td> Cycles applied to rotation relative to the path the view is travelling </td>
+ * <td>Cycles applied to rotation relative to the path the view is travelling</td>
  * </tr>
  * <tr>
  * <td>progress</td>
- * <td>call method setProgress(float) on this view
+ * <td>call method setProgress(float) on this  view
  * (used to talk to nested ConstraintLayouts etc.)</td>
  * </tr>
  * <tr>
- * <td> {@code <CustomAttribute> }</td>
- * <td> call a set"name" method via reflection (limited to floats)</td>
+ * <td>{@code <CustomAttribute> }</td>
+ * <td>call a set"name" method via reflection (limited to floats)</td>
  * </tr>
  * </table>
+ *
  * <h2>CustomAttribute</h2>
  * <table summary="Variant attributes" >
  * <tr>
- * <td> attributeName</td>
- * <td> The name of the attribute. Case sensitive. ( MyAttr will look for method setMyAttr(...) </td>
+ * <td>attributeName</td>
+ * <td>The name of the attribute. Case sensitive. ( MyAttr will look for method setMyAttr(...)</td>
  * </tr>
  * <tr>
  * <tr>
- * <td> customFloatValue </td>
- * <td> The value is a float looking setMyAttr(float )  </td>
+ * <td>customFloatValue</td>
+ * <td>The value is a float looking setMyAttr(float )</td>
  * </tr>
  * <tr>
  * </table>
+ *
  * <h2>KeyTimeCycle</h2>
  * <table summary="Constraint attributes">
  * <tr>
- * <td> motionTarget</td>
- * <td> Id of the View or a regular expression to match layout_ConstraintTag</td>
+ * <td>motionTarget</td>
+ * <td>Id of the View or a regular expression to match layout_ConstraintTag</td>
  * </tr>
  * <tr>
- * <td>framePosition &nbsp;</td>
- * <td> The point along the interpolation 0 = start 100 = end</td>
+ * <td>framePosition</td>
+ * <td>The point along the interpolation 0 = start 100 = end</td>
  * </tr>
  * <tr>
  * <td>[Standard View attributes]</td>
- * <td> A collection of view attributes supported by the system (see below) </td>
+ * <td>A collection of view attributes supported by the system (see below)</td>
  * </tr>
  * <tr>
  * <td>waveShape</td>
@@ -817,39 +842,41 @@ import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
  * </tr>
  * <tr>
  * <td>wavePeriod</td>
- * <td> The number of cycles per second</td>
+ * <td>The number of cycles per second</td>
  * </tr>
  * <tr>
  * <td>waveOffset</td>
- * <td> offset value added to the attribute </td>
+ * <td>offset value added to the attribute</td>
  * </tr>
  * <tr>
  * <td>transitionPathRotate</td>
- * <td> Cycles applied to rotation relative to the path the view is travelling </td>
+ * <td>Cycles applied to rotation relative to the path the view is travelling</td>
  * </tr>
  * <tr>
  * <td>progress</td>
- * <td>call method setProgress(float) on this view
+ * <td>call method setProgress(float) on this  view
  * (used to talk to nested ConstraintLayouts etc.)</td>
  * </tr>
  * <tr>
- * <td> {@code <CustomAttribute> }</td>
- * <td> call a set"name" method via reflection (limited to floats)</td>
+ * <td>{@code <CustomAttribute> }</td>
+ * <td>call a set"name" method via reflection (limited to floats)</td>
  * </tr>
  * </table>
+ *
  * <h2>CustomAttribute</h2>
  * <table summary="Variant attributes" >
  * <tr>
- * <td> attributeName</td>
- * <td> The name of the attribute. Case sensitive. ( MyAttr will look for method setMyAttr(...) </td>
+ * <td>attributeName</td>
+ * <td>The name of the attribute. Case sensitive. ( MyAttr will look for method setMyAttr(...)</td>
  * </tr>
  * <tr>
  * <tr>
- * <td> customFloatValue </td>
- * <td> The value is a float looking setMyAttr(float )  </td>
+ * <td>customFloatValue</td>
+ * <td>The value is a float looking setMyAttr(float )</td>
  * </tr>
  * <tr>
  * </table>
+ *
  * <h2>KeyTrigger</h2>
  * <table summary="KeyTrigger attributes">
  * <tr>
@@ -857,12 +884,12 @@ import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
  * <td>Id of the View or a regular expression to match layout_ConstraintTag</td>
  * </tr>
  * <tr>
- * <td>framePosition&nbsp;</td>
- * <td> The point along the interpolation 0 = start 100 = end</td>
+ * <td>framePosition</td>
+ * <td>The point along the interpolation 0 = start 100 = end</td>
  * </tr
  * <tr>
- * <td>onCross&nbsp;</td>
- * <td>(method name) on crossing this position call this methods on the target
+ * <td>onCross</td>
+ * <td>(method name) on crossing this position call this methods on the t arget
  * </td>
  * </tr>
  * <tr>
@@ -874,8 +901,8 @@ import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
  * <td>(method name) backward crossing of the framePosition call this methods on the target</td>
  * </tr>
  * <tr>
- * <td>viewTransitionOnCross&nbsp;</td>
- * <td>(ViewTransition Id) start a NoState view transition on crossing or hitting target
+ * <td>viewTransitionOnCross</td>
+ * <td>(ViewTransition Id) start a NoState view transition on crossing or hitting t arget
  * </td>
  * </tr>
  * <tr>
@@ -888,7 +915,7 @@ import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
  * </tr>
  * <tr>
  * <td>triggerSlack</td>
- * <td>(float) do not call trigger again if the framePosition has not moved this fraction away from the trigger point </td>
+ * <td>(float) do not call trigger again if the framePosition has not moved this fraction away from the trigger point</td>
  * </tr>
  * <tr>
  * <td>triggerId</td>
@@ -900,36 +927,37 @@ import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
  * </tr>
  * <tr>
  * <td>motion_triggerOnCollision</td>
- * <td>(id) Trigger if the motionTarget collides with the other motionTarget </td>
+ * <td>(id) Trigger if the motionTarget collides with the other motionTarget</td>
  * </tr>
  * </table>
+ *
  * </p>
  * <p>
  * <h2>Standard attributes</h2>
  * <table summary="Constraint attributes">
  * <tr>
  * <td>android:visibility</td>
- * <td>Android view attribute that </td>
+ * <td>Android view attribute that</td>
  * </tr>
  * <tr>
  * <td>android:alpha</td>
- * <td>Android view attribute that </td>
+ * <td>Android view attribute that</td>
  * </tr>
  * <tr>
  * <td>android:elevation</td>
- * <td>base z depth of the view. </td>
+ * <td>base z depth of the view.</td>
  * </tr>
  * <tr>
  * <td>android:rotation</td>
- * <td>rotation of the view, in degrees. </td>
+ * <td>rotation of the view, in degrees.</td>
  * </tr>
  * <tr>
  * <td>android:rotationX</td>
- * <td>rotation of the view around the x axis, in degrees. </td>
+ * <td>rotation of the view around the x axis, in degrees.</td>
  * </tr>
  * <tr>
  * <td>android:rotationY</td>
- * <td>rotation of the view around the y axis, in degrees. </td>
+ * <td>rotation of the view around the y axis, in degrees.</td>
  * </tr>
  * <tr>
  * <td>android:scaleX</td>
@@ -937,22 +965,23 @@ import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
  * </tr>
  * <tr>
  * <td>android:scaleY</td>
- * <td>	scale of the view in the y direction.</td>
+ * <td>scale of the view in the y direction.</td>
  * </tr>
  * <tr>
- * <td>android:translationX&nbsp;</td>
- * <td>translation in x of the view. </td>
+ * <td>android:translationX</td>
+ * <td>translation in x of the view.</td>
  * </tr>
  * <tr>
- * <td>android:translationY&nbsp;</td>
- * <td>translation in y of the view. </td>
+ * <td>android:translationY</td>
+ * <td>translation in y of the view.</td>
  * </tr>
  * <tr>
- * <td>android:translationZ&nbsp;</td>
- * <td>translation in z of the view. </td>
+ * <td>android:translationZ</td>
+ * <td>translation in z of the view.</td>
  * </tr>
  * <p>
  * </table>
+ *
  * </p>
  */
 public class MotionLayout extends ConstraintLayout implements
@@ -2005,7 +2034,7 @@ public class MotionLayout extends ConstraintLayout implements
         // if id is not part of end/start, need to setup
 
         // if id == end state, just animate
-        // ... but check if currentstate is unknown. if unknown, call computeCurrentPosition
+        // ... but check if currentState is unknown. if unknown, call computeCurrentPosition
         // if id != end state
         if (DEBUG && mScene.mStateSet == null) {
             Log.v(TAG, Debug.getLocation() + " mStateSet = null");
@@ -2050,7 +2079,7 @@ public class MotionLayout extends ConstraintLayout implements
             return;
         }
         if (DEBUG) {
-            Log.v(TAG, "setTranstion  unknown -> " +
+            Log.v(TAG, "setTransition  unknown -> " +
                     Debug.getName(getContext(), id));
         }
 
@@ -2170,11 +2199,11 @@ public class MotionLayout extends ConstraintLayout implements
         if (mInterpolator != null) {
             float deltaT = EPSILON;
             float dir = Math.signum(mTransitionGoalPosition - mTransitionLastPosition);
-            float interpos = mInterpolator.getInterpolation(mTransitionLastPosition + deltaT);
+            float interpolation = mInterpolator.getInterpolation(mTransitionLastPosition + deltaT);
             position = mInterpolator.getInterpolation(mTransitionLastPosition);
-            interpos -= position;
-            interpos /= deltaT;
-            v = dir * interpos / mTransitionDuration;
+            interpolation -= position;
+            interpolation /= deltaT;
+            v = dir * interpolation / mTransitionDuration;
         }
 
         if (mInterpolator instanceof MotionInterpolator) {
@@ -2291,7 +2320,7 @@ public class MotionLayout extends ConstraintLayout implements
             }
         }
 
-        private void setupConstraintWidget(ConstraintWidgetContainer base, ConstraintSet cset) {
+        private void setupConstraintWidget(ConstraintWidgetContainer base, ConstraintSet cSet) {
             SparseArray<ConstraintWidget> mapIdToWidget = new SparseArray<>();
             Constraints.LayoutParams layoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
@@ -2307,12 +2336,12 @@ public class MotionLayout extends ConstraintLayout implements
 
             for (ConstraintWidget child : base.getChildren()) {
                 View view = (View) child.getCompanionWidget();
-                cset.applyToLayoutParams(view.getId(), layoutParams);
+                cSet.applyToLayoutParams(view.getId(), layoutParams);
 
-                child.setWidth(cset.getWidth(view.getId()));
-                child.setHeight(cset.getHeight(view.getId()));
+                child.setWidth(cSet.getWidth(view.getId()));
+                child.setHeight(cSet.getHeight(view.getId()));
                 if (view instanceof ConstraintHelper) {
-                    cset.applyToHelper((ConstraintHelper) view, child, layoutParams, mapIdToWidget);
+                    cSet.applyToHelper((ConstraintHelper) view, child, layoutParams, mapIdToWidget);
                     if (view instanceof Barrier) {
                         ((Barrier) view).validateParams();
                         if (DEBUG) {
@@ -2330,10 +2359,10 @@ public class MotionLayout extends ConstraintLayout implements
                     layoutParams.resolveLayoutDirection(ViewCompat.LAYOUT_DIRECTION_LTR);
                 }
                 applyConstraintsFromLayoutParams(false, view, child, layoutParams, mapIdToWidget);
-                if (cset.getVisibilityMode(view.getId()) == ConstraintSet.VISIBILITY_MODE_IGNORE) {
+                if (cSet.getVisibilityMode(view.getId()) == ConstraintSet.VISIBILITY_MODE_IGNORE) {
                     child.setVisibility(view.getVisibility());
                 } else {
-                    child.setVisibility(cset.getVisibility(view.getId()));
+                    child.setVisibility(cSet.getVisibility(view.getId()));
                 }
             }
             for (ConstraintWidget child : base.getChildren()) {
@@ -3899,10 +3928,7 @@ public class MotionLayout extends ConstraintLayout implements
     }
 
     /**
-     * <b>Added in 2.0</b>
-     * <p>
-     * Listener for monitoring events about TransitionLayout.
-     * </p>
+     * Listener for monitoring events about TransitionLayout. <b>Added in 2.0</b>
      */
     public interface TransitionListener {
         /**

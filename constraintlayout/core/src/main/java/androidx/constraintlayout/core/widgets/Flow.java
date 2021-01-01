@@ -696,7 +696,7 @@ public class Flow extends VirtualLayout {
                 return;
             }
             final int count = mCount;
-            int widgetSize = availableSpace / mNbMatchConstraintsWidgets; // that's completly incorrect and only works for spread with no weigths?
+            int widgetSize = availableSpace / mNbMatchConstraintsWidgets; // that's completely incorrect and only works for spread with no weights?
             for (int i = 0; i < count; i++) {
                 if (mStartIndex + i >= mDisplayedWidgetsCount) {
                     break;
