@@ -75,6 +75,7 @@ subprojects { Project project ->
     apply plugin: 'maven'
 
     repositories {
+        mavenCentral()
         maven { url "$rootProject.projectDir/../../prebuilts/tools/common/m2/repository" }
     }
 
