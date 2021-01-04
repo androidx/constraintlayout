@@ -389,9 +389,7 @@ public class MotionScene {
             if (transition.mAutoTransition == Transition.AUTO_NONE) {
                 continue;
             }
-            if (mCurrentTransition == transition) {
-                continue;
-            }
+     
             if (currentState == transition.mConstraintSetStart && (
                     transition.mAutoTransition == Transition.AUTO_ANIMATE_TO_END ||
                             transition.mAutoTransition == Transition.AUTO_JUMP_TO_END)) {
