@@ -35,7 +35,6 @@ import android.os.Build;
 import android.text.Layout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -43,7 +42,6 @@ import android.view.ViewOutlineProvider;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.FloatLayout;
 import androidx.constraintlayout.widget.R;
 
@@ -190,14 +188,10 @@ public class MotionLabel extends View implements FloatLayout {
         setupPath();
     }
 
-
     Bitmap blur(Bitmap bitmapOriginal, int factor) {
         Long t = System.nanoTime();
-        float dur;
         int w = bitmapOriginal.getWidth();
         int h = bitmapOriginal.getHeight();
-        dur = (System.nanoTime() - t) * 1E-6f;
-        Log.v(TAG, Debug.getLoc() + " " + dur + " blur  = " + w + " , " + h + "   rad e" + factor);
         w /= 2;
         h /= 2;
 
@@ -211,12 +205,6 @@ public class MotionLabel extends View implements FloatLayout {
             h /= 2;
             ret = Bitmap.createScaledBitmap(ret, w, h, true);
         }
-        dur = (System.nanoTime() - t) * 1E-6f;
-
-        Log.v(TAG, Debug.getLoc() + " " + dur + " blur  = " + w + " , " + h + "   rad e" + factor);
-
-        dur = (System.nanoTime() - t) * 1E-6f;
-        Log.v(TAG, Debug.getLoc() + " " + dur + " blur done");
         return ret;
     }
 
@@ -704,7 +692,6 @@ public class MotionLabel extends View implements FloatLayout {
                 invalidateOutline();
             }
         }
-
     }
 
     /**
@@ -801,7 +788,6 @@ public class MotionLabel extends View implements FloatLayout {
         return mTextOutlineColor;
     }
 
-
     // ============================ TextureTransformLogic ===============================//
     float mBackgroundPanX = Float.NaN;
     float mBackgroundPanY = Float.NaN;
@@ -863,7 +849,6 @@ public class MotionLabel extends View implements FloatLayout {
      */
     public void setTextBackgroundPanX(float pan) {
         mBackgroundPanX = pan;
-        Log.v(TAG, Debug.getLoc() + " " + Debug.getName(this) + " " + pan);
         updateShaderMatrix();
         invalidate();
     }
