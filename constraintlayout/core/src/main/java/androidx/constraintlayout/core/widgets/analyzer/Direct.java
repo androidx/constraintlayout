@@ -195,8 +195,16 @@ public class Direct {
             ConstraintWidget child = children.get(i);
             if (child.isMeasureRequested() && canMeasure(child)) {
                 ConstraintWidgetContainer.measure(child, measurer, measure, BasicMeasure.Measure.SELF_DIMENSIONS);
-                horizontalSolvingPass(child, measurer, isRtl);
-                verticalSolvingPass(child, measurer);
+                if (child instanceof Guideline) {
+                    if (((Guideline) child).getOrientation() == Guideline.HORIZONTAL) {
+                        verticalSolvingPass(child, measurer);
+                    } else {
+                        horizontalSolvingPass(child, measurer, isRtl);
+                    }
+                } else {
+                    horizontalSolvingPass(child, measurer, isRtl);
+                    verticalSolvingPass(child, measurer);
+                }
             }
         }
     }
