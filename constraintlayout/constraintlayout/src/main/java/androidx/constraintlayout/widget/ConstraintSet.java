@@ -1185,6 +1185,8 @@ public class ConstraintSet {
             mapToConstant.append(R.styleable.Layout_android_layout_height, LAYOUT_HEIGHT);
             mapToConstant.append(R.styleable.Layout_layout_constraintWidth, LAYOUT_CONSTRAINT_WIDTH);
             mapToConstant.append(R.styleable.Layout_layout_constraintHeight, LAYOUT_CONSTRAINT_HEIGHT);
+            mapToConstant.append(R.styleable.Layout_layout_constrainedWidth, LAYOUT_CONSTRAINT_WIDTH);
+            mapToConstant.append(R.styleable.Layout_layout_constrainedHeight, LAYOUT_CONSTRAINT_HEIGHT);
             mapToConstant.append(R.styleable.Layout_layout_wrapBehaviorInParent, LAYOUT_WRAP_BEHAVIOR);
 
             mapToConstant.append(R.styleable.Layout_layout_constraintCircle, CIRCLE);
