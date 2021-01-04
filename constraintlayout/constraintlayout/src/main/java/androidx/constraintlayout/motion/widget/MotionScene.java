@@ -290,7 +290,7 @@ public class MotionScene {
         }
     }
 
-    public Transition bestTransitionFor(int currentState, float dx, float dy, MotionEvent mLastTouchDown) {
+    public Transition bestTransitionFor(int currentState, float dx, float dy, MotionEvent lastTouchDown) {
         List<Transition> candidates = null;
         if (currentState != -1) {
             candidates = getTransitionsWithState(currentState);
@@ -304,18 +304,14 @@ public class MotionScene {
                 if (transition.mTouchResponse != null) {
                     transition.mTouchResponse.setRTL(mRtl);
                     RectF region = transition.mTouchResponse.getTouchRegion(mMotionLayout, cache);
-                    if (region != null && mLastTouchDown != null && (!region.contains(mLastTouchDown.getX(), mLastTouchDown.getY()))) {
-                        continue;
-                    }
-                    region = transition.mTouchResponse.getTouchRegion(mMotionLayout, cache);
-                    if (region != null && mLastTouchDown != null && (!region.contains(mLastTouchDown.getX(), mLastTouchDown.getY()))) {
+                    if (region != null && lastTouchDown != null && (!region.contains(lastTouchDown.getX(), lastTouchDown.getY()))) {
                         continue;
                     }
 
                     float val = transition.mTouchResponse.dot(dx, dy);
-                    if (transition.mTouchResponse.mIsRotateMode) {
-                        float startX = mLastTouchDown.getX() - transition.mTouchResponse.mRotateCenterX;
-                        float startY = mLastTouchDown.getY() - transition.mTouchResponse.mRotateCenterY;
+                    if (transition.mTouchResponse.mIsRotateMode && lastTouchDown != null) {
+                        float startX = lastTouchDown.getX() - transition.mTouchResponse.mRotateCenterX;
+                        float startY = lastTouchDown.getY() - transition.mTouchResponse.mRotateCenterY;
                         float endX = dx + startX;
                         float endY = dy + startY;
                         double endAngle = Math.atan2(endY, endX);
