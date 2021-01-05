@@ -21,12 +21,6 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.content.res.XmlResourceParser;
 import android.graphics.RectF;
-
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.constraintlayout.widget.R;
-import androidx.constraintlayout.widget.StateSet;
-import androidx.constraintlayout.motion.utils.Easing;
-
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
@@ -44,14 +38,19 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 
+import androidx.constraintlayout.motion.utils.Easing;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.constraintlayout.widget.R;
+import androidx.constraintlayout.widget.StateSet;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
 
 /**
  * The information to transition between multiple ConstraintSets
@@ -385,7 +384,9 @@ public class MotionScene {
             if (transition.mAutoTransition == Transition.AUTO_NONE) {
                 continue;
             }
-     
+            if (mCurrentTransition == transition && mCurrentTransition.isTransitionFlag(Transition.TRANSITION_FLAG_INTRA_AUTO)) {
+                continue;
+            }
             if (currentState == transition.mConstraintSetStart && (
                     transition.mAutoTransition == Transition.AUTO_ANIMATE_TO_END ||
                             transition.mAutoTransition == Transition.AUTO_JUMP_TO_END)) {
@@ -487,6 +488,7 @@ public class MotionScene {
         private int mLayoutDuringTransition = 0;
         private int mTransitionFlags = 0;
         final static int TRANSITION_FLAG_FIRST_DRAW = 1;
+        final static int TRANSITION_FLAG_INTRA_AUTO= 2;
 
         public int getLayoutDuringTransition() {
             return mLayoutDuringTransition;
