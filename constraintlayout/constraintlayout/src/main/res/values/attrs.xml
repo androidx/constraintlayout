@@ -1207,6 +1207,7 @@
         <attr name="transitionFlags">
             <flag name="none" value="0" />
             <flag name="beginOnFirstDraw" value="1" />
+            <flag name="disableIntraAutoTransition" value="2" />
             />
         </attr>
     </declare-styleable>
