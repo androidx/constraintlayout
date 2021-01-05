@@ -384,7 +384,8 @@ public class MotionScene {
             if (transition.mAutoTransition == Transition.AUTO_NONE) {
                 continue;
             }
-            if (mCurrentTransition == transition && mCurrentTransition.isTransitionFlag(Transition.TRANSITION_FLAG_INTRA_AUTO)) {
+            if (mCurrentTransition == transition
+                    && mCurrentTransition.isTransitionFlag(Transition.TRANSITION_FLAG_INTRA_AUTO)) {
                 continue;
             }
             if (currentState == transition.mConstraintSetStart && (
@@ -488,7 +489,7 @@ public class MotionScene {
         private int mLayoutDuringTransition = 0;
         private int mTransitionFlags = 0;
         final static int TRANSITION_FLAG_FIRST_DRAW = 1;
-        final static int TRANSITION_FLAG_INTRA_AUTO= 2;
+        final static int TRANSITION_FLAG_INTRA_AUTO = 2;
 
         public int getLayoutDuringTransition() {
             return mLayoutDuringTransition;
