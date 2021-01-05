@@ -1499,13 +1499,14 @@
         <attr name="android:autoSizeTextType"/>
         <attr name="textureWidth" format="dimension" />
         <attr name="textureHeight" format="dimension" />
-
-
         <attr name="textBackgroundPanX" format="float" />
         <attr name="textBackgroundPanY" format="float" />
         <attr name="textBackgroundZoom" format="float" />
         <attr name="textBackgroundRotate" format="float" />
-
+        <attr name="textureEffect" format="enum" >
+            <enum name="none" value="0" />
+            <enum name="frost" value="1" />
+        </attr>
     </declare-styleable>
 
     <declare-styleable name="TextEffects">
