@@ -1664,6 +1664,7 @@ public class ConstraintLayout extends ViewGroup {
                 if (newSize >= mLayoutWidget.getHeight()) {
                     mOnMeasureWidthMeasureSpec = widthMeasureSpec;
                     mOnMeasureHeightMeasureSpec = heightMeasureSpec;
+                    resolveSystem(mLayoutWidget, mOptimizationLevel, widthMeasureSpec, heightMeasureSpec);
                     resolveMeasuredDimension(widthMeasureSpec, heightMeasureSpec, mLayoutWidget.getWidth(), mLayoutWidget.getHeight(),
                             mLayoutWidget.isWidthMeasuredTooSmall(), mLayoutWidget.isHeightMeasuredTooSmall());
                     return;
