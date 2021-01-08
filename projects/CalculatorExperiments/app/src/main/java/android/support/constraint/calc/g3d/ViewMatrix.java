@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package android.support.constraint.app.g3d;
-
-import androidx.constraintlayout.motion.widget.Debug;
+package android.support.constraint.calc.g3d;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;

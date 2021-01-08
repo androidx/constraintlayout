@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package android.support.constraint.app;
+package android.support.constraint.calc;
 
 import android.util.Log;
 
 import androidx.constraintlayout.motion.widget.Debug;
 
 import java.io.IOException;
-import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;

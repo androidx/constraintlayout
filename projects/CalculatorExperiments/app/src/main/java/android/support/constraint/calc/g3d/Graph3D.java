@@ -13,20 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package android.support.constraint.app.g3d;
+package android.support.constraint.calc.g3d;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.support.constraint.app.CalcEngine;
+import android.support.constraint.calc.CalcEngine;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-import androidx.constraintlayout.motion.widget.Debug;
 import androidx.core.view.GestureDetectorCompat;
 
 import java.io.IOException;
@@ -140,7 +138,7 @@ public class Graph3D extends View {
                 } else if (touchCount == 2) {
                     touch_mode = 2;
                 }
-                if (ev.getX() < getWidth() / 10) {
+                if (ev.getX() > (getWidth()*9)/10) {
                     zscaleDown(ev);
                 }
                 mDownScreeenWidth = mSurfaceGen.getScreenWidth();
@@ -301,7 +299,8 @@ public class Graph3D extends View {
         mImage.setPixels(mImageBuff, 0, w, 0, 0, w, h);
         canvas.drawBitmap(mImage, 0, 0, mPaint);
         if (mZscaleMode) {
-            canvas.drawRect(0, 0, getWidth() / 10, getHeight(), mPaintSidebar);
+
+            canvas.drawRect((w * 9)/ 10, 0, w, h, mPaintSidebar);
         }
 
     }

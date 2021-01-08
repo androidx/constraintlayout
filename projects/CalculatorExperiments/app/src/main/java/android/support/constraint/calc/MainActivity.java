@@ -14,25 +14,24 @@
  * limitations under the License.
  */
 
-package android.support.constraint.app;
+package android.support.constraint.calc;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.net.Uri;
 import android.os.Bundle;
 
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.constraint.app.g3d.Graph3D;
+import android.support.constraint.calc.g3d.Graph3D;
 import android.text.Html;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -46,17 +45,13 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 /* This test the visibility*/
@@ -340,5 +335,35 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+    public void showMenu(View view) {
+        PopupMenu popup = new PopupMenu(this, view);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.skin_menu, popup.getMenu());
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch(item.getTitle().toString()) {
+                   case  "design2":
+                       reloadLayout(R.layout.design2);
+                       break;
+                    default:
+                        reloadLayout(R.layout.calc);
+                }
+                return true;
+            }
+        });
+        popup.show();
+    }
+
+    private void reloadLayout(int calc) {
+        byte[]data = getState();
+        mMotionLayout.setVisibility(View.GONE);
+        setContentView(calc);
+        mMotionLayout = findView(MotionLayout.class);
+        graph2D = findViewById(R.id.graph);
+        graph3D = findViewById(R.id.graph3d);
+        getStack();
+        setState(data);
+    }
+
 
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package android.support.constraint.app.g3d;
+package android.support.constraint.calc.g3d;
 
 
 import java.text.DecimalFormat;

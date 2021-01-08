@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package android.support.constraint.app.g3d;
+package android.support.constraint.calc.g3d;
 
 public class Quaternion {
 	private final double []x=new double[4]; // w,x,y,z,

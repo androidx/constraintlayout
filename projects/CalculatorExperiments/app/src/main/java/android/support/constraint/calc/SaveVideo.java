@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package android.support.constraint.app;
+package android.support.constraint.calc;
 
 import android.graphics.Bitmap;
 import android.media.MediaCodec;
@@ -24,7 +24,6 @@ import android.media.MediaFormat;
 import android.media.MediaMuxer;
 import android.os.Build;
 import android.util.Log;
-import android.view.inspector.StaticInspectionCompanionProvider;
 
 import androidx.annotation.RequiresApi;
 

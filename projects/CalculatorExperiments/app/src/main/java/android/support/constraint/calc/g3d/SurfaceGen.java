@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package android.support.constraint.app.g3d;
+package android.support.constraint.calc.g3d;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -46,8 +46,11 @@ public class SurfaceGen {
         stream.writeFloat(mMaxX);
         stream.writeFloat(mMinY);
         stream.writeFloat(mMaxY);
+        stream.writeFloat(mZoomZ);
+
         stream.writeFloat(mMinZ);
         stream.writeFloat(mMaxZ);
+
         stream.writeObject(mMatrix.getLookPoint());
         stream.writeObject(mMatrix.getEyePoint());
         stream.writeObject(mMatrix.getUpVector());
@@ -59,6 +62,7 @@ public class SurfaceGen {
         mMaxX = stream.readFloat();
         mMinY = stream.readFloat();
         mMaxY = stream.readFloat();
+        mZoomZ= stream.readFloat();
 
         calcSurface(mMinX, mMaxX, mMinX, mMaxX, false, mFunction);
         mMinZ = stream.readFloat();
