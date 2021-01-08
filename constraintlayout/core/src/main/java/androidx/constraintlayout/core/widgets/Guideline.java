@@ -144,7 +144,7 @@ public class Guideline extends ConstraintWidget {
             case NONE:
                 return null;
         }
-        return mAnchor;
+        throw new AssertionError(anchorType.name());
     }
 
     public void setGuidePercent(int value) {
