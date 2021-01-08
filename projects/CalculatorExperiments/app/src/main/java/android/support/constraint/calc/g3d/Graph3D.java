@@ -16,10 +16,14 @@
 package android.support.constraint.calc.g3d;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.constraint.calc.CalcEngine;
+import android.support.constraint.calc.R;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -47,24 +51,38 @@ public class Graph3D extends View {
     private float mLastTrackBasllY;
     double mDownScreeenWidth;
     private CalcEngine.Symbolic mEquation;
+    private int mForgroundColor;
 
     public Graph3D(Context context) {
         super(context);
-        init();
+        init(context, null);
     }
 
     public Graph3D(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(context, attrs);
     }
 
     public Graph3D(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context, attrs);
     }
 
-    private void init() {
+    private void init(Context context, AttributeSet attrs) {
+        if (attrs != null) {
+            TypedArray a = getContext()
+                    .obtainStyledAttributes(attrs,  R.styleable.Graph3D);
+            final int N = a.getIndexCount();
 
+            int k = 0;
+            for (int i = 0; i < N; i++) {
+                int attr = a.getIndex(i);
+                if (attr == R.styleable.Graph3D_lineColor) {
+                    mForgroundColor = a.getColor(attr, mForgroundColor);
+                    mSurfaceGen.setLineColor(mForgroundColor);
+                }
+            }
+        }
         mSurfaceGen.calcSurface(-20, 20, -20, 20, true, (x, y) -> {
             double d = Math.sqrt(x * x + y * y);
             return 10 * ((d == 0) ? 1f : (float) (Math.sin(d) / d));

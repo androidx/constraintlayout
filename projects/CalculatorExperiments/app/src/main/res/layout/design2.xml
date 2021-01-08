@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layoutDescription="@xml/design2_scene"
-    android:background="#C8E9D8"
+    android:background="#12271C"
     android:id="@+id/motionLayout"
     app:layout_optimizationLevel="none"
     tools:context=".MainActivity">
@@ -15,7 +15,7 @@
         android:layout_height="0dp"
         app:round="4dp"
         app:layout_constraintHeight_percent=".3"
-        android:background="#888"
+        android:background="#2B1919"
         app:layout_constraintTop_toBottomOf="@id/card" />
 
 
@@ -25,7 +25,7 @@
         android:id="@+id/card"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#ffeddf"
+        android:background="#201710"
         app:round="16dp"
         app:layout_constraintHeight_percent="0.3"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,8 +41,8 @@
         android:text=""
         android:textSize="25sp"
         app:textPanX="1"
-        android:background="#FBFBFB"
-        android:textColor="#2d1815"
+        android:background="#3C2D2D"
+        android:textColor="#EAD6D3"
         app:layout_constraintBottom_toBottomOf="@+id/card"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -54,10 +54,10 @@
         android:layout_marginRight="32dp"
         android:layout_marginBottom="32dp"
         android:text=""
-        android:background="#FBFBFB"
+        android:background="#3C2D2D"
+        android:textColor="#EAD6D3"
         android:textSize="25sp"
         app:textPanX="1"
-        android:textColor="#2d1815"
         app:layout_constraintBottom_toBottomOf="@+id/card"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -69,10 +69,10 @@
         android:layout_marginRight="32dp"
         android:layout_marginBottom="32dp"
         android:text=""
-        android:background="#FBFBFB"
+        android:background="#3C2D2D"
+        android:textColor="#EAD6D3"
         android:textSize="25sp"
         app:textPanX="1"
-        android:textColor="#2d1815"
         app:layout_constraintBottom_toBottomOf="@+id/card"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -86,8 +86,8 @@
         android:text=""
         android:textSize="25sp"
         app:textPanX="1"
-        android:background="#FBFBFB"
-        android:textColor="#2d1815"
+        android:background="#3C2D2D"
+        android:textColor="#EAD6D3"
         app:layout_constraintBottom_toBottomOf="@+id/card"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -119,6 +119,7 @@
         android:layout_marginRight="8dp"
         android:alpha="1"
         android:background="#0000"
+        app:lineColor="#FFFF"
         app:layout_constraintBottom_toBottomOf="@id/card"
         app:layout_constraintEnd_toEndOf="@id/card"
         app:layout_constraintLeft_toLeftOf="@id/card"

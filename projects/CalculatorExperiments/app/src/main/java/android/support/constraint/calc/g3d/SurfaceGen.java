@@ -41,6 +41,14 @@ public class SurfaceGen {
     private Function mFunction;
     private float mZoomZ = 1;
 
+    public int getLineColor() {
+        return lineColor;
+    }
+
+    public void setLineColor(int lineColor) {
+        this.lineColor = lineColor;
+    }
+
     public void serializeView(ObjectOutputStream stream) throws IOException {
         stream.writeFloat(mMinX);
         stream.writeFloat(mMaxX);
