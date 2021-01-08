@@ -35,7 +35,6 @@ import android.os.Build;
 import android.text.Layout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -43,7 +42,6 @@ import android.view.ViewOutlineProvider;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.FloatLayout;
 import androidx.constraintlayout.widget.R;
 
@@ -100,7 +98,7 @@ public class MotionLabel extends View implements FloatLayout {
     private float mTextPanX = 0;
     private float mTextPanY = 0;
     Paint paintCache = new Paint();
-    private int mTextureBlurFactor = 0;
+    private int mTextureEffect = 0;
 
     public MotionLabel(Context context) {
         super(context);
@@ -179,8 +177,8 @@ public class MotionLabel extends View implements FloatLayout {
                     mTextureHeight = a.getDimension(attr, mTextureHeight);
                 } else if (attr == R.styleable.MotionLabel_textureWidth) {
                     mTextureWidth = a.getDimension(attr, mTextureWidth);
-                } else if (attr == R.styleable.MotionLabel_textureBlurFactor) {
-                    mTextureBlurFactor = a.getInt(attr, mTextureBlurFactor);
+                } else if (attr == R.styleable.MotionLabel_textureEffect) {
+                    mTextureEffect = a.getInt(attr, mTextureEffect);
                 }
             }
             a.recycle();
@@ -193,11 +191,9 @@ public class MotionLabel extends View implements FloatLayout {
 
     Bitmap blur(Bitmap bitmapOriginal, int factor) {
         Long t = System.nanoTime();
-        float dur;
         int w = bitmapOriginal.getWidth();
         int h = bitmapOriginal.getHeight();
-        dur = (System.nanoTime() - t) * 1E-6f;
-        Log.v(TAG, Debug.getLoc() + " " + dur + " blur  = " + w + " , " + h + "   rad e" + factor);
+
         w /= 2;
         h /= 2;
 
@@ -211,12 +207,6 @@ public class MotionLabel extends View implements FloatLayout {
             h /= 2;
             ret = Bitmap.createScaledBitmap(ret, w, h, true);
         }
-        dur = (System.nanoTime() - t) * 1E-6f;
-
-        Log.v(TAG, Debug.getLoc() + " " + dur + " blur  = " + w + " , " + h + "   rad e" + factor);
-
-        dur = (System.nanoTime() - t) * 1E-6f;
-        Log.v(TAG, Debug.getLoc() + " " + dur + " blur done");
         return ret;
     }
 
@@ -239,7 +229,8 @@ public class MotionLabel extends View implements FloatLayout {
                 }
                 ih = h;
             }
-            if (mTextureBlurFactor != 0) {
+
+            if (mTextureEffect != 0) {
                 iw /= 2;
                 ih /= 2;
             }
@@ -249,8 +240,8 @@ public class MotionLabel extends View implements FloatLayout {
             mTextBackground.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
             mTextBackground.setFilterBitmap(true);
             mTextBackground.draw(canvas);
-            if (mTextureBlurFactor != 0) {
-                mTextBackgroundBitmap = blur(mTextBackgroundBitmap, mTextureBlurFactor);
+            if (mTextureEffect != 0) {
+                mTextBackgroundBitmap = blur(mTextBackgroundBitmap, 4);
             }
             mTextShader = new BitmapShader(mTextBackgroundBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
         }
@@ -704,7 +695,6 @@ public class MotionLabel extends View implements FloatLayout {
                 invalidateOutline();
             }
         }
-
     }
 
     /**
@@ -801,7 +791,6 @@ public class MotionLabel extends View implements FloatLayout {
         return mTextOutlineColor;
     }
 
-
     // ============================ TextureTransformLogic ===============================//
     float mBackgroundPanX = Float.NaN;
     float mBackgroundPanY = Float.NaN;
@@ -863,7 +852,6 @@ public class MotionLabel extends View implements FloatLayout {
      */
     public void setTextBackgroundPanX(float pan) {
         mBackgroundPanX = pan;
-        Log.v(TAG, Debug.getLoc() + " " + Debug.getName(this) + " " + pan);
         updateShaderMatrix();
         invalidate();
     }

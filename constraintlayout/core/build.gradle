@@ -2,12 +2,12 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 compileJava {
-    targetCompatibility = 1.7
-    sourceCompatibility = 1.7
+    targetCompatibility = 1.8
+    sourceCompatibility = 1.8
 }
 
 dependencies {
-    testCompile 'org.testng:testng:6.9.10'
+    testImplementation 'org.testng:testng:7.3.0'
 }
 
 test {
