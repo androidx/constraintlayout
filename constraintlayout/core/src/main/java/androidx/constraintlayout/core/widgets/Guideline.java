@@ -20,6 +20,8 @@ import androidx.constraintlayout.core.SolverVariable;
 
 import java.util.HashMap;
 
+import sun.jvm.hotspot.utilities.Assert;
+
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.WRAP_CONTENT;
 
 /**
@@ -144,7 +146,7 @@ public class Guideline extends ConstraintWidget {
             case NONE:
                 return null;
         }
-        return mAnchor;
+        throw new AssertionError(anchorType.name());
     }
 
     public void setGuidePercent(int value) {
