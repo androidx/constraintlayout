@@ -20,8 +20,6 @@ import androidx.constraintlayout.core.SolverVariable;
 
 import java.util.HashMap;
 
-import sun.jvm.hotspot.utilities.Assert;
-
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.WRAP_CONTENT;
 
 /**
