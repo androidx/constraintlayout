@@ -216,8 +216,27 @@ public class Barrier extends ConstraintHelper {
         mBarrier.setAllowsGoneWidget(supportGone);
     }
 
+    /**
+     * Find if this barrier supports gone widgets.
+     *
+     * @return true if this barrier supports gone widgets, otherwise false
+     *
+     * @deprecated This method should be called {@code getAllowsGoneWidget} such that {@code allowsGoneWidget}
+     * can be accessed as a property from Kotlin; {@see https://android.github.io/kotlin-guides/interop.html#property-prefixes}.
+     * Use {@link #getAllowsGoneWidget()} instead.
+     */
+    @Deprecated
     public boolean allowsGoneWidget() {
-        return mBarrier.allowsGoneWidget();
+        return mBarrier.getAllowsGoneWidget();
+    }
+
+    /**
+     * Find if this barrier supports gone widgets.
+     *
+     * @return true if this barrier supports gone widgets, otherwise false
+     */
+    public boolean getAllowsGoneWidget() {
+        return mBarrier.getAllowsGoneWidget();
     }
 
     /**

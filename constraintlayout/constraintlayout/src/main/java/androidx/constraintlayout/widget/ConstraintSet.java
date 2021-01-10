@@ -609,7 +609,7 @@ public class ConstraintSet {
                     constraint.layout.mReferenceIds = ((ConstraintHelper) view).getReferencedIds();
                     if (view instanceof Barrier) {
                         Barrier barrier = (Barrier) view;
-                        constraint.layout.mBarrierAllowsGoneWidgets = barrier.allowsGoneWidget();
+                        constraint.layout.mBarrierAllowsGoneWidgets = barrier.getAllowsGoneWidget();
                         constraint.layout.mBarrierDirection = barrier.getType();
                         constraint.layout.mBarrierMargin = barrier.getMargin();
                     }
@@ -2158,7 +2158,7 @@ public class ConstraintSet {
             }
             if (view instanceof Barrier) {
                 Barrier barrier = ((Barrier) view);
-                constraint.layout.mBarrierAllowsGoneWidgets = barrier.allowsGoneWidget();
+                constraint.layout.mBarrierAllowsGoneWidgets = barrier.getAllowsGoneWidget();
                 constraint.layout.mReferenceIds = barrier.getReferencedIds();
                 constraint.layout.mBarrierDirection = barrier.getType();
                 constraint.layout.mBarrierMargin = barrier.getMargin();
