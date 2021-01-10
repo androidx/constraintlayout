@@ -2638,6 +2638,10 @@ public class MotionLayout extends ConstraintLayout implements
         if (DEBUG) {
             Log.v(TAG, "********** onNestedScrollAccepted( child:" + Debug.getName(child) + ", target:" + Debug.getName(target) + ", axis:" + axes + ", type:" + type);
         }
+        mScrollTargetTime = getNanoTime();
+        mScrollTargetDT = 0;
+        mScrollTargetDX = 0;
+        mScrollTargetDY = 0;
     }
 
     @Override
@@ -2647,7 +2651,7 @@ public class MotionLayout extends ConstraintLayout implements
             Debug.logStack(TAG, "onStopNestedScroll ", 8);
 
         }
-        if (mScene == null) {
+        if (mScene == null || mScrollTargetDT == 0) {
             return;
         }
         mScene.processScrollUp(mScrollTargetDX / mScrollTargetDT, mScrollTargetDY / mScrollTargetDT);
