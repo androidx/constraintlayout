@@ -16,16 +16,16 @@
 
 package androidx.constraintlayout.core;
 
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.Before;
+import org.junit.Test;
 
-import static org.testng.Assert.*;
+import static org.junit.Assert.*;
 
 public class AmountTest {
     Amount a1 = new Amount(2, 3);
     Amount a2 = new Amount(3, 5);
 
-    @BeforeMethod
+    @Before
     public void setUp() {
         a1.set(2, 3);
         a2.set(3, 5);

@@ -16,20 +16,21 @@
 package androidx.constraintlayout.core;
 
 import androidx.constraintlayout.core.widgets.*;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class WidgetsPositioningTest {
 
     LinearSystem s = new LinearSystem();
     boolean optimize = false;
 
-    @BeforeMethod
+    @Before
     public void setUp() {
         s = new LinearSystem();
         LinearEquation.resetNaming();

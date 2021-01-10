@@ -8,11 +8,11 @@ import androidx.constraintlayout.core.widgets.Optimizer;
 import androidx.constraintlayout.core.widgets.VirtualLayout;
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import static androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.EXACTLY;
 import static androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.UNSPECIFIED;
-import static org.testng.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 public class FlowTest {
     static BasicMeasure.Measurer sMeasurer = new BasicMeasure.Measurer() {

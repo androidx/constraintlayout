@@ -17,11 +17,11 @@
 package androidx.constraintlayout.core.widgets;
 
 import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 public class ChainHeadTest {
 
@@ -168,7 +168,7 @@ public class ChainHeadTest {
 
         assertEquals(chainHead.getFirstMatchConstraintWidget(), A);
         assertEquals(chainHead.getLastMatchConstraintWidget(), C);
-        assertEquals(chainHead.getTotalWeight(), 6f);
+        assertEquals(chainHead.getTotalWeight(), 6f, 0f);
 
         C.setVisibility(ConstraintWidget.GONE);
 
@@ -177,7 +177,7 @@ public class ChainHeadTest {
 
         assertEquals(chainHead.getFirstMatchConstraintWidget(), A);
         assertEquals(chainHead.getLastMatchConstraintWidget(), B);
-        assertEquals(chainHead.getTotalWeight(), 3f);
+        assertEquals(chainHead.getTotalWeight(), 3f, 0f);
     }
 
     @Test

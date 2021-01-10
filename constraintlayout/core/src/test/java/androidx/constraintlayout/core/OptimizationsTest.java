@@ -20,9 +20,9 @@ import androidx.constraintlayout.core.widgets.ConstraintAnchor.Type;
 import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour;
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 public class OptimizationsTest {
     @Test

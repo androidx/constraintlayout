@@ -1,8 +1,8 @@
 package androidx.constraintlayout.core;
 
+import org.junit.Test;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -17,25 +17,25 @@ public class ArrayLinkedVariablesTest {
         ArrayLinkedVariables variables = new ArrayLinkedVariables(row, cache );
         SolverVariable []v = new SolverVariable[9];
         for (int i = 0; i < v.length; i++) {
-            int p = i^3;
-            v[i] = new SolverVariable("dog"+p+"("+i+")"+p, SolverVariable.Type.UNRESTRICTED);
+            int p = i ^ 3;
+            v[i] = new SolverVariable("dog" + p + "(" + i + ")" + p, SolverVariable.Type.UNRESTRICTED);
             cache.mIndexedVariables[i] = v[i];
             v[i].id = i;
             variables.add(v[i],20f, true);
-            if (i%2==1) {
-                variables.remove(v[i/2], true);
+            if (i % 2 == 1) {
+                variables.remove(v[i / 2], true);
 
             }
              variables.display();
             System.out.println();
         }
         for (int i = 0; i < v.length; i++) {
-            if (i%2==1) {
+            if (i % 2 == 1) {
                 variables.display();
                 variables.add(v[i / 2], 24f, true);
             }
         }
-        Assert.assertTrue(true);
+        assertTrue(true);
     }
 
 }

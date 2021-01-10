@@ -15,13 +15,13 @@
  */
 package androidx.constraintlayout.core;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 public class SolverVariableValuesTest {
 
@@ -103,9 +103,9 @@ public class SolverVariableValuesTest {
         float v1 = values.get(variable1);
         float v2 = values.get(variable2);
         float v3 = values.get(variable3);
-        assertEquals(v1, 1f);
-        assertEquals(v2, 2f);
-        assertEquals(v3, 3f);
+        assertEquals(v1, 1f, 0f);
+        assertEquals(v2, 2f, 0f);
+        assertEquals(v3, 3f, 0f);
     }
 
     @Test
@@ -127,9 +127,9 @@ public class SolverVariableValuesTest {
         float v1 = values.get(variable1);
         float v2 = values.get(variable2);
         float v3 = values.get(variable3);
-        assertEquals(v1, 1f);
-        assertEquals(v2, 2f);
-        assertEquals(v3, 3f);
+        assertEquals(v1, 1f, 0f);
+        assertEquals(v2, 2f, 0f);
+        assertEquals(v3, 3f, 0f);
     }
 
     @Test
@@ -146,7 +146,7 @@ public class SolverVariableValuesTest {
         int i = 0;
         for (SolverVariable variable : variables) {
             float value = i;
-            assertEquals(value, values.get(variable));
+            assertEquals(value, values.get(variable), 0f);
             i++;
         }
 //        System.out.println("array size: count: " + values.count + " keys: " + values.keys.length + " values: " + values.values.length);
@@ -167,7 +167,7 @@ public class SolverVariableValuesTest {
         int i = 0;
         for (SolverVariable variable : variables) {
             float value = i;
-            assertEquals(value, values.get(variable));
+            assertEquals(value, values.get(variable), 0f);
             i++;
         }
 //        System.out.println("array size: count: " + values.count + " keys: " + values.keys.length + " values: " + values.values.length);
@@ -196,7 +196,7 @@ public class SolverVariableValuesTest {
         for (SolverVariable variable : variables) {
             float value = i;
             if (i % 2 != 0) {
-                assertEquals(value, values.get(variable));
+                assertEquals(value, values.get(variable), 0f);
             }
             i++;
         }
@@ -234,7 +234,7 @@ public class SolverVariableValuesTest {
         }
         for (SolverVariable variable : variables) {
             float value = results.get(variable);
-            assertEquals(value, values.get(variable));
+            assertEquals(value, values.get(variable), 0f);
         }
 //        System.out.println("array size: count: " + values.count + " keys: " + values.keys.length + " values: " + values.values.length);
 //        values.maxDepth();
