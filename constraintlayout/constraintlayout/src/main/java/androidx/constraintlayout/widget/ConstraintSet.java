@@ -32,6 +32,8 @@ import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.HelperWidget;
 import androidx.constraintlayout.motion.utils.Easing;
@@ -1199,7 +1201,7 @@ public class ConstraintSet {
             mapToConstant.append(R.styleable.Layout_barrierAllowsGoneWidgets, BARRIER_ALLOWS_GONE_WIDGETS);
         }
 
-        void fillFromAttributeList(Context context, AttributeSet attrs) {
+        void fillFromAttributeList(@NonNull Context context, @Nullable AttributeSet attrs) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Layout);
             mApply = true;
             final int N = a.getIndexCount();
@@ -1539,7 +1541,7 @@ public class ConstraintSet {
 
         }
 
-        void fillFromAttributeList(Context context, AttributeSet attrs) {
+        void fillFromAttributeList(@NonNull Context context, @Nullable AttributeSet attrs) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Transform);
             mApply = true;
             final int N = a.getIndexCount();
@@ -1612,7 +1614,7 @@ public class ConstraintSet {
             mVisibilityMode = src.mVisibilityMode;
         }
 
-        void fillFromAttributeList(Context context, AttributeSet attrs) {
+        void fillFromAttributeList(@NonNull Context context, @Nullable AttributeSet attrs) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PropertySet);
             mApply = true;
             final int N = a.getIndexCount();
@@ -1694,7 +1696,7 @@ public class ConstraintSet {
             mapToConstant.append(R.styleable.Motion_quantizeMotionInterpolator, QUANTIZE_MOTION_INTERPOLATOR);
         }
 
-        void fillFromAttributeList(Context context, AttributeSet attrs) {
+        void fillFromAttributeList(@NonNull Context context, @Nullable AttributeSet attrs) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Motion);
             mApply = true;
             final int N = a.getIndexCount();
@@ -2098,7 +2100,7 @@ public class ConstraintSet {
      * @param context            the context for the layout inflation
      * @param constraintLayoutId the id of the layout file
      */
-    public void clone(Context context, int constraintLayoutId) {
+    public void clone(@NonNull Context context, int constraintLayoutId) {
         clone((ConstraintLayout) LayoutInflater.from(context).inflate(constraintLayoutId, null));
     }
 
@@ -2268,7 +2270,7 @@ public class ConstraintSet {
      * @param layoutParams
      * @param mapIdToWidget
      */
-    public void applyToHelper(ConstraintHelper helper, ConstraintWidget child, LayoutParams layoutParams, SparseArray<ConstraintWidget> mapIdToWidget) {
+    public void applyToHelper(@NonNull ConstraintHelper helper, @NonNull ConstraintWidget child, @NonNull LayoutParams layoutParams, @NonNull SparseArray<ConstraintWidget> mapIdToWidget) {
         int id = helper.getId();
         if (mConstraints.containsKey(id)) {
             Constraint constraint = mConstraints.get(id);
@@ -3999,7 +4001,7 @@ public class ConstraintSet {
      * @param context    the context for the inflation
      * @param resourceId id of xml file in res/xml/
      */
-    public void load(Context context, int resourceId) {
+    public void load(@NonNull Context context, int resourceId) {
         Resources res = context.getResources();
         XmlPullParser parser = res.getXml(resourceId);
         String document = null;
@@ -4044,7 +4046,7 @@ public class ConstraintSet {
      * @param context the context for the inflation
      * @param parser  id of xml file in res/xml/
      */
-    public void load(Context context, XmlPullParser parser) {
+    public void load(@NonNull Context context, @NonNull XmlPullParser parser) {
         String tagName = null;
         try {
             Constraint constraint = null;
@@ -4142,7 +4144,7 @@ public class ConstraintSet {
         }
     }
 
-    private static int lookupID(TypedArray a, int index, int def) {
+    private static int lookupID(@NonNull TypedArray a, int index, int def) {
         int ret = a.getResourceId(index, def);
         if (ret == Layout.UNSET) {
             ret = a.getInt(index, Layout.UNSET);
@@ -4150,7 +4152,7 @@ public class ConstraintSet {
         return ret;
     }
 
-    private Constraint fillFromAttributeList(Context context, AttributeSet attrs, boolean override) {
+    private Constraint fillFromAttributeList(@NonNull Context context, @Nullable AttributeSet attrs, boolean override) {
         Constraint c = new Constraint();
         TypedArray a = context.obtainStyledAttributes(attrs, override ? R.styleable.ConstraintOverride : R.styleable.Constraint);
         populateConstraint(context, c, a, override);
@@ -4164,7 +4166,7 @@ public class ConstraintSet {
      * @param parser
      * @return
      */
-    public static Constraint buildDelta(Context context, XmlPullParser parser) {
+    public static Constraint buildDelta(@NonNull Context context, @NonNull XmlPullParser parser) {
         AttributeSet attrs = Xml.asAttributeSet(parser);
         Constraint c = new Constraint();
         TypedArray a = context.obtainStyledAttributes(attrs,  R.styleable.ConstraintOverride);
@@ -4173,7 +4175,7 @@ public class ConstraintSet {
         return c;
     }
 
-    private static void populateOverride(Context ctx, Constraint c, TypedArray a) {
+    private static void populateOverride(@NonNull Context ctx, @NonNull Constraint c, @NonNull TypedArray a) {
 
         final int N = a.getIndexCount();
         TypedValue type;
@@ -5271,7 +5273,7 @@ public class ConstraintSet {
      * @param pullParser the XML parser
      * @return
      */
-    static String getLine(Context context, int resourceId, XmlPullParser pullParser) {
+    static String getLine(@NonNull Context context, int resourceId, @NonNull XmlPullParser pullParser) {
         return ".(" + Debug.getName(context, resourceId) + ".xml:" + pullParser.getLineNumber() +
                 ") \"" + pullParser.getName() + "\"";
     }

@@ -20,6 +20,8 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.RectF;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.R;
 
@@ -87,7 +89,7 @@ public class KeyTrigger extends Key {
     }
 
     @Override
-    public void load(Context context, AttributeSet attrs) {
+    public void load(@NonNull Context context, @Nullable AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.KeyTrigger);
         Loader.read(this, a, context);
     }
@@ -277,7 +279,7 @@ public class KeyTrigger extends Key {
 
     }
 
-    private void fire(String str, View call) {
+    private void fire(@Nullable String str, @NonNull View call) {
         if (str == null) {
             return;
         }
@@ -311,7 +313,7 @@ public class KeyTrigger extends Key {
         }
     }
 
-    private void fireCustom(String str, View view) {
+    private void fireCustom(@NonNull String str, @NonNull View view) {
         boolean callAll = str.length() == 1;
         if (!callAll) {
             str = str.substring(1).toLowerCase();

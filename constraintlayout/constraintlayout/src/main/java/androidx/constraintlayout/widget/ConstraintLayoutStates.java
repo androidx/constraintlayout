@@ -25,6 +25,8 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.util.Xml;
 
+import androidx.annotation.NonNull;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -45,7 +47,7 @@ public class ConstraintLayoutStates {
     private SparseArray<ConstraintSet> mConstraintSetMap = new SparseArray<>();
     private ConstraintsChangedListener mConstraintsChangedListener = null;
 
-    ConstraintLayoutStates(Context context, ConstraintLayout layout, int resourceID) {
+    ConstraintLayoutStates(@NonNull Context context, @NonNull ConstraintLayout layout, int resourceID) {
         mConstraintLayout = layout;
         load(context, resourceID);
     }
@@ -142,7 +144,7 @@ public class ConstraintLayoutStates {
         int mConstraintID = -1;
         ConstraintSet mConstraintSet;
 
-        public State(Context context, XmlPullParser parser) {
+        public State(@NonNull Context context, @NonNull XmlPullParser parser) {
             AttributeSet attrs = Xml.asAttributeSet(parser);
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.State);
             final int N = a.getIndexCount();
@@ -190,7 +192,7 @@ public class ConstraintLayoutStates {
         int mConstraintID = -1;
         ConstraintSet mConstraintSet;
 
-        public Variant(Context context, XmlPullParser parser) {
+        public Variant(@NonNull Context context, @NonNull XmlPullParser parser) {
             AttributeSet attrs = Xml.asAttributeSet(parser);
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Variant);
             final int N = a.getIndexCount();
@@ -278,7 +280,7 @@ public class ConstraintLayoutStates {
      * @param context    the context for the inflation
      * @param resourceId mId of xml file in res/xml/
      */
-    private void load(Context context, int resourceId) {
+    private void load(@NonNull Context context, int resourceId) {
         if (DEBUG) {
             Log.v(TAG, "############### ");
         }
@@ -343,7 +345,7 @@ public class ConstraintLayoutStates {
         }
     }
 
-    private void parseConstraintSet(Context context, XmlPullParser parser) {
+    private void parseConstraintSet(@NonNull Context context, @NonNull XmlPullParser parser) {
         ConstraintSet set = new ConstraintSet();
         int count = parser.getAttributeCount();
         for (int i = 0; i < count; i++) {

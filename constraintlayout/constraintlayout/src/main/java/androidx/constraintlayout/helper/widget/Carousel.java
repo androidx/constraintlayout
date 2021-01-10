@@ -23,6 +23,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.motion.widget.MotionHelper;
 import androidx.constraintlayout.motion.widget.MotionLayout;
@@ -59,26 +61,26 @@ public class Carousel extends MotionHelper {
     public interface Adapter {
         int count();
 
-        void populate(View view, int index);
+        void populate(@NonNull View view, int index);
 
         void onNewItem(int mIndex);
     }
 
-    public Carousel(Context context) {
+    public Carousel(@NonNull Context context) {
         super(context);
     }
 
-    public Carousel(Context context, AttributeSet attrs) {
+    public Carousel(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public Carousel(Context context, AttributeSet attrs, int defStyleAttr) {
+    public Carousel(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
-    private void init(Context context, AttributeSet attrs) {
+    private void init(@NonNull Context context, @Nullable AttributeSet attrs) {
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Carousel);
             final int N = a.getIndexCount();
@@ -110,7 +112,7 @@ public class Carousel extends MotionHelper {
         }
     }
 
-    public void setAdapter(Adapter adapter) {
+    public void setAdapter(@Nullable Adapter adapter) {
         mAdapter = adapter;
     }
 
@@ -129,7 +131,7 @@ public class Carousel extends MotionHelper {
     }
 
     @Override
-    public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
+    public void onTransitionChange(@NonNull MotionLayout motionLayout, int startId, int endId, float progress) {
         if (DEBUG) {
             System.out.println("onTransitionChange from " + startId + " to " + endId + " progress " + progress);
         }
@@ -139,7 +141,7 @@ public class Carousel extends MotionHelper {
     int mLastStartId = -1;
 
     @Override
-    public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
+    public void onTransitionCompleted(@NonNull MotionLayout motionLayout, int currentId) {
         mPreviousIndex = mIndex;
         if (currentId == nextState) {
             mIndex++;
@@ -259,7 +261,7 @@ public class Carousel extends MotionHelper {
      * @param visibility
      * @return
      */
-    private boolean updateViewVisibility(View view, int visibility) {
+    private boolean updateViewVisibility(@NonNull View view, int visibility) {
         if (mMotionLayout == null) {
             return false;
         }

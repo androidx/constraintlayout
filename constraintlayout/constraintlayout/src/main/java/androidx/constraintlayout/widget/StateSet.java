@@ -25,6 +25,8 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.util.Xml;
 
+import androidx.annotation.NonNull;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -52,7 +54,7 @@ public class StateSet {
      * @param context
      * @param parser
      */
-    public StateSet(Context context, XmlPullParser parser ) {
+    public StateSet(@NonNull Context context, @NonNull XmlPullParser parser ) {
         load(context, parser);
     }
 
@@ -62,7 +64,7 @@ public class StateSet {
      * @param context    the context for the inflation
      * @param parser  mId of xml file in res/xml/
      */
-    private void load(Context context,XmlPullParser parser) {
+    private void load(@NonNull Context context, @NonNull XmlPullParser parser) {
         if (DEBUG) {
             Log.v(TAG, "#########load stateSet###### ");
         }
@@ -249,7 +251,7 @@ public class StateSet {
         ArrayList<Variant> mVariants = new ArrayList<>();
         int mConstraintID = -1;
         boolean mIsLayout = false;
-        public State(Context context, XmlPullParser parser) {
+        public State(@NonNull Context context, @NonNull XmlPullParser parser) {
             AttributeSet attrs = Xml.asAttributeSet(parser);
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.State);
             final int N = a.getIndexCount();
@@ -293,7 +295,7 @@ public class StateSet {
         int mConstraintID = -1;
         boolean mIsLayout = false;
 
-        public Variant(Context context, XmlPullParser parser) {
+        public Variant(@NonNull Context context, @NonNull XmlPullParser parser) {
             AttributeSet attrs = Xml.asAttributeSet(parser);
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Variant);
             final int N = a.getIndexCount();

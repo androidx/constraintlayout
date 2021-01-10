@@ -2230,7 +2230,7 @@ public class MotionLayout extends ConstraintLayout implements
             }
         }
 
-        void initFrom(ConstraintWidgetContainer baseLayout, ConstraintSet start, ConstraintSet end) {
+        void initFrom(@NonNull ConstraintWidgetContainer baseLayout, @Nullable ConstraintSet start, @NonNull ConstraintSet end) {
             mStart = start;
             mEnd = end;
             mLayoutStart =  new ConstraintWidgetContainer();
@@ -2287,7 +2287,7 @@ public class MotionLayout extends ConstraintLayout implements
             }
         }
 
-        private void setupConstraintWidget(ConstraintWidgetContainer base, ConstraintSet cset) {
+        private void setupConstraintWidget(@NonNull ConstraintWidgetContainer base, @NonNull ConstraintSet cset) {
             SparseArray<ConstraintWidget> mapIdToWidget = new SparseArray<>();
             Constraints.LayoutParams layoutParams = new Constraints.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
@@ -4033,6 +4033,7 @@ public class MotionLayout extends ConstraintLayout implements
     /**
      * @hide
      */
+    @NonNull
     public DesignTool getDesignTool() {
         if (mDesignTool == null) {
             mDesignTool = new DesignTool(this);
@@ -4044,7 +4045,7 @@ public class MotionLayout extends ConstraintLayout implements
      * {@hide}
      */
     @Override
-    public void onViewAdded(View view) {
+    public void onViewAdded(@NonNull View view) {
         super.onViewAdded(view);
         if (view instanceof MotionHelper) {
             MotionHelper helper = (MotionHelper) view;
@@ -4078,7 +4079,7 @@ public class MotionLayout extends ConstraintLayout implements
      * {@hide}
      */
     @Override
-    public void onViewRemoved(View view) {
+    public void onViewRemoved(@NonNull View view) {
         super.onViewRemoved(view);
         if (mOnShowHelpers != null) {
             mOnShowHelpers.remove(view);

@@ -35,6 +35,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.motion.utils.Easing;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -167,11 +168,13 @@ public class ViewTransition {
         this.mSharedValueID = sharedValueID;
     }
 
+    @NonNull
+    @Override
     public String toString() {
         return "ViewTransition(" + Debug.getName(mContext, mId) + ")";
     }
 
-    Interpolator getInterpolator(Context context) {
+    Interpolator getInterpolator(@NonNull Context context) {
         switch (mDefaultInterpolator) {
             case SPLINE_STRING:
                 final Easing easing = Easing.getInterpolator(mDefaultInterpolatorString);
@@ -202,7 +205,7 @@ public class ViewTransition {
         return null;
     }
 
-    ViewTransition(Context context, XmlPullParser parser) {
+    ViewTransition(@NonNull Context context, @NonNull XmlPullParser parser) {
         mContext = context;
         String tagName = null;
         try {
@@ -251,7 +254,7 @@ public class ViewTransition {
         }
     }
 
-    private void parseViewTransitionTags(Context context, XmlPullParser parser) {
+    private void parseViewTransitionTags(@NonNull Context context, @NonNull XmlPullParser parser) {
         AttributeSet attrs = Xml.asAttributeSet(parser);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ViewTransition);
         final int count = a.getIndexCount();

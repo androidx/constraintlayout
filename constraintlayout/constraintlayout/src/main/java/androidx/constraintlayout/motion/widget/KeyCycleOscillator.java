@@ -18,6 +18,7 @@ package androidx.constraintlayout.motion.widget;
 import android.annotation.TargetApi;
 import android.os.Build;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.motion.utils.CurveFit;
@@ -253,35 +254,35 @@ public abstract class KeyCycleOscillator {
 
     static class ScaleXset extends KeyCycleOscillator {
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             view.setScaleX(get(t));
         }
     }
 
     static class ScaleYset extends KeyCycleOscillator {
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             view.setScaleY(get(t));
         }
     }
 
     static class TranslationXset extends KeyCycleOscillator {
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             view.setTranslationX(get(t));
         }
     }
 
     static class TranslationYset extends KeyCycleOscillator {
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             view.setTranslationY(get(t));
         }
     }
 
     static class TranslationZset extends KeyCycleOscillator {
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 view.setTranslationZ(get(t));
             }
@@ -292,7 +293,7 @@ public abstract class KeyCycleOscillator {
         float[] value = new float[1];
 
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             value[0] = get(t);
             mCustom.setInterpolatedValue(view, value);
         }
@@ -302,7 +303,7 @@ public abstract class KeyCycleOscillator {
         boolean mNoMethod = false;
 
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             if (view instanceof MotionLayout) {
                 ((MotionLayout) view).setProgress(get(t));
             } else {

@@ -22,6 +22,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.Key;
 import androidx.constraintlayout.motion.widget.KeyAttributes;
@@ -68,21 +70,21 @@ public class MotionEffect extends MotionHelper {
 
     private int fadeMove = AUTO;
 
-    public MotionEffect(Context context) {
+    public MotionEffect(@NonNull Context context) {
         super(context);
     }
 
-    public MotionEffect(Context context, AttributeSet attrs) {
+    public MotionEffect(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public MotionEffect(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MotionEffect(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
-    private void init(Context context, AttributeSet attrs) {
+    private void init(@NonNull Context context, @Nullable AttributeSet attrs) {
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MotionEffect);
             final int N = a.getIndexCount();

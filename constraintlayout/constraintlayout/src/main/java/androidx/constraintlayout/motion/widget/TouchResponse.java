@@ -20,6 +20,8 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.RectF;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.R;
 import androidx.core.widget.NestedScrollView;
 
@@ -106,7 +108,7 @@ class TouchResponse {
     static final int FLAG_DISABLE_SCROLL = 2;
     private float mDragThreshold = 10;
 
-    TouchResponse(Context context, MotionLayout layout, XmlPullParser parser) {
+    TouchResponse(@NonNull Context context, @NonNull MotionLayout layout, @NonNull XmlPullParser parser) {
         mMotionLayout = layout;
         fillFromAttributeList(context, Xml.asAttributeSet(parser));
     }
@@ -133,7 +135,7 @@ class TouchResponse {
         mTouchDirectionY = TOUCH_DIRECTION[mTouchSide][1];
     }
 
-    private void fillFromAttributeList(Context context, AttributeSet attrs) {
+    private void fillFromAttributeList(@NonNull Context context, @Nullable AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.OnSwipe);
         fill(a);
         a.recycle();

@@ -22,6 +22,9 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.R;
 import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.MotionLayout;
@@ -51,22 +54,22 @@ public class MotionTelltales extends MockView {
     int mVelocityMode = MotionLayout.VELOCITY_POST_LAYOUT;
     int mTailColor = Color.MAGENTA;
     float mTailScale = 0.25f;
-    public MotionTelltales(Context context) {
+    public MotionTelltales(@NonNull Context context) {
         super(context);
         init( context, null);
     }
 
-    public MotionTelltales(Context context, AttributeSet attrs) {
+    public MotionTelltales(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init( context, attrs);
      }
 
-    public MotionTelltales(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MotionTelltales(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init( context, attrs);
 
     }
-    private void init(Context context, AttributeSet attrs) {
+    private void init(@NonNull Context context, @Nullable AttributeSet attrs) {
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MotionTelltales);
             final int N = a.getIndexCount();
@@ -103,7 +106,7 @@ public class MotionTelltales extends MockView {
     }
 
     @Override
-    public void onDraw(Canvas canvas) {
+    public void onDraw(@NonNull Canvas canvas) {
        super.onDraw(canvas);
         Matrix matrix = getMatrix();
         matrix.invert(mInvertMatrix);

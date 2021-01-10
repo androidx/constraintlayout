@@ -20,6 +20,8 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.RectF;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.R;
 import androidx.constraintlayout.motion.utils.Easing;
 
@@ -71,7 +73,7 @@ public class KeyPosition extends KeyPositionBase {
     }
 
     @Override
-    public void load(Context context, AttributeSet attrs) {
+    public void load(@NonNull Context context, @Nullable AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.KeyPosition);
         Loader.read(this, a);
     }

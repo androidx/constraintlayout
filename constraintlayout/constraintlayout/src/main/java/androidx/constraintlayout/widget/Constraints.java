@@ -18,6 +18,9 @@ package androidx.constraintlayout.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -37,18 +40,18 @@ public class Constraints extends ViewGroup {
   public static final String TAG = "Constraints";
   ConstraintSet myConstraintSet;
 
-  public Constraints(Context context) {
+  public Constraints(@NonNull Context context) {
     super(context);
     super.setVisibility(View.GONE);
   }
 
-  public Constraints(Context context, AttributeSet attrs) {
+  public Constraints(@NonNull Context context, @Nullable AttributeSet attrs) {
     super(context, attrs);
     init(attrs);
     super.setVisibility(View.GONE);
   }
 
-  public Constraints(Context context, AttributeSet attrs, int defStyleAttr) {
+  public Constraints(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
     init(attrs);
     super.setVisibility(View.GONE);
@@ -58,7 +61,7 @@ public class Constraints extends ViewGroup {
    * {@inheritDoc}
    */
   @Override
-  public LayoutParams generateLayoutParams(AttributeSet attrs) {
+  public LayoutParams generateLayoutParams(@Nullable AttributeSet attrs) {
     return new LayoutParams(getContext(), attrs);
   }
 
@@ -82,11 +85,11 @@ public class Constraints extends ViewGroup {
       super(width, height);
     }
 
-    public LayoutParams(LayoutParams source) {
+    public LayoutParams(@NonNull LayoutParams source) {
       super(source);
     }
 
-    public LayoutParams(Context c, AttributeSet attrs) {
+    public LayoutParams(@NonNull Context c, @Nullable AttributeSet attrs) {
       super(c, attrs);
       TypedArray a = c.obtainStyledAttributes(attrs, R.styleable.ConstraintSet);
       final int N = a.getIndexCount();

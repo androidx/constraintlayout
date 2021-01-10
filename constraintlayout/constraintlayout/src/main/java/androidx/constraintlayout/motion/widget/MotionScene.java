@@ -22,6 +22,8 @@ import android.content.res.TypedArray;
 import android.content.res.XmlResourceParser;
 import android.graphics.RectF;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.R;
 import androidx.constraintlayout.widget.StateSet;
@@ -492,7 +494,7 @@ public class MotionScene {
             return mLayoutDuringTransition;
         }
 
-        public void addOnClick(Context context, XmlPullParser parser) {
+        public void addOnClick(@NonNull Context context, @NonNull XmlPullParser parser) {
             mOnClicks.add(new TransitionOnClick(context, this, parser));
         }
 
@@ -655,7 +657,7 @@ public class MotionScene {
          * @param context
          * @return
          */
-        public String debugString(Context context) {
+        public String debugString(@NonNull Context context) {
 
             String ret;
             if (mConstraintSetStart == UNSET) {
@@ -692,7 +694,7 @@ public class MotionScene {
             public static final int JUMP_TO_END = 0x100;
             public static final int JUMP_TO_START = 0x1000;
 
-            public TransitionOnClick(Context context, Transition transition, XmlPullParser parser) {
+            public TransitionOnClick(@NonNull Context context, @NonNull Transition transition, @NonNull XmlPullParser parser) {
                 mTransition = transition;
                 TypedArray a = context.obtainStyledAttributes(Xml.asAttributeSet(parser), R.styleable.OnClick);
                 final int N = a.getIndexCount();
@@ -707,7 +709,7 @@ public class MotionScene {
                 a.recycle();
             }
 
-            public void addOnClickListeners(MotionLayout motionLayout, int currentState, Transition transition) {
+            public void addOnClickListeners(@NonNull MotionLayout motionLayout, int currentState, @NonNull Transition transition) {
                 View v = mTargetId == UNSET ? motionLayout : motionLayout.findViewById(mTargetId);
                 if (v == null) {
                     Log.e(TAG, "OnClick could not find id " + mTargetId);
@@ -731,7 +733,7 @@ public class MotionScene {
                 }
             }
 
-            public void removeOnClickListeners(MotionLayout motionLayout) {
+            public void removeOnClickListeners(@NonNull MotionLayout motionLayout) {
                 if (mTargetId == UNSET) {
                     return;
                 }
@@ -743,7 +745,7 @@ public class MotionScene {
                 v.setOnClickListener(null);
             }
 
-            boolean isTransitionViable(Transition current, MotionLayout tl) {
+            boolean isTransitionViable(@NonNull Transition current, @NonNull MotionLayout tl) {
                 if (mTransition == current) {
                     return true;
                 }
@@ -757,7 +759,7 @@ public class MotionScene {
             }
 
             @Override
-            public void onClick(View view) {
+            public void onClick(@NonNull View view) {
                 MotionLayout tl = mTransition.mMotionScene.mMotionLayout;
                 if (!tl.isInteractionEnabled()) {
                     return;
@@ -807,7 +809,7 @@ public class MotionScene {
             }
         }
 
-        Transition(MotionScene motionScene, Transition global) {
+        Transition(@NonNull MotionScene motionScene, @Nullable Transition global) {
             mMotionScene = motionScene;
             if (global != null) {
                 mPathMotionArc = global.mPathMotionArc;
@@ -832,7 +834,7 @@ public class MotionScene {
          */
         public Transition(
                 int id,
-                MotionScene motionScene,
+                @NonNull MotionScene motionScene,
                 int constraintSetStartId,
                 int constraintSetEndId) {
             mId = id;
@@ -843,7 +845,7 @@ public class MotionScene {
             mLayoutDuringTransition = motionScene.mLayoutDuringTransition;
         }
 
-        Transition(MotionScene motionScene, Context context, XmlPullParser parser) {
+        Transition(@NonNull MotionScene motionScene, @NonNull Context context, @NonNull XmlPullParser parser) {
             mDuration = motionScene.mDefaultDuration;
             mLayoutDuringTransition = motionScene.mLayoutDuringTransition;
             mMotionScene = motionScene;
@@ -856,13 +858,13 @@ public class MotionScene {
             mDefaultInterpolatorID = interpolatorID;
         }
 
-        private void fillFromAttributeList(MotionScene motionScene, Context context, AttributeSet attrs) {
+        private void fillFromAttributeList(@NonNull MotionScene motionScene, @NonNull Context context, @Nullable AttributeSet attrs) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Transition);
             fill(motionScene, context, a);
             a.recycle();
         }
 
-        private void fill(MotionScene motionScene, Context context, TypedArray a) {
+        private void fill(@NonNull MotionScene motionScene, @NonNull Context context, @NonNull TypedArray a) {
             final int N = a.getIndexCount();
             for (int i = 0; i < N; i++) {
                 int attr = a.getIndex(i);
@@ -943,12 +945,12 @@ public class MotionScene {
      *
      * @param layout Motion layout to which the scene will be set.
      */
-    public MotionScene(MotionLayout layout) {
+    public MotionScene(@NonNull MotionLayout layout) {
         mMotionLayout = layout;
         mViewTransitionController = new ViewTransitionController(layout);
     }
 
-    MotionScene(Context context, MotionLayout layout, int resourceID) {
+    MotionScene(@NonNull Context context, @NonNull MotionLayout layout, int resourceID) {
         mMotionLayout = layout;
         mViewTransitionController = new ViewTransitionController(layout);
 
@@ -963,7 +965,7 @@ public class MotionScene {
      * @param context    the context for the inflation
      * @param resourceId id of xml file in res/xml/
      */
-    private void load(Context context, int resourceId) {
+    private void load(@NonNull Context context, int resourceId) {
 
         Resources res = context.getResources();
         XmlPullParser parser = res.getXml(resourceId);
@@ -1063,7 +1065,7 @@ public class MotionScene {
         }
     }
 
-    private void parseMotionSceneTags(Context context, XmlPullParser parser) {
+    private void parseMotionSceneTags(@NonNull Context context, @NonNull XmlPullParser parser) {
         AttributeSet attrs = Xml.asAttributeSet(parser);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MotionScene);
         final int count = a.getIndexCount();
@@ -1078,9 +1080,9 @@ public class MotionScene {
         a.recycle();
     }
 
-    private int getId(Context context, String idString) {
+    private int getId(@NonNull Context context, @Nullable String idString) {
         int id = UNSET;
-        if (idString.contains("/")) {
+        if (idString != null && idString.contains("/")) {
             String tmp = idString.substring(idString.indexOf('/') + 1);
             id = context.getResources().getIdentifier(tmp, "id", context.getPackageName());
             if (DEBUG_DESKTOP) {
@@ -1097,7 +1099,7 @@ public class MotionScene {
         return id;
     }
 
-    private void parseInclude(Context context, XmlPullParser mainParser) {
+    private void parseInclude(@NonNull Context context, @NonNull XmlPullParser mainParser) {
         TypedArray a = context.obtainStyledAttributes(Xml.asAttributeSet(mainParser), R.styleable.Include);
         final int N = a.getIndexCount();
         for (int i = 0; i < N; i++) {
@@ -1110,7 +1112,7 @@ public class MotionScene {
         a.recycle();
     }
 
-    private int parseInclude(Context context, int resourceId) {
+    private int parseInclude(@NonNull Context context, int resourceId) {
         Resources res = context.getResources();
         XmlPullParser includeParser = res.getXml(resourceId);
         try {
@@ -1133,7 +1135,7 @@ public class MotionScene {
         return UNSET;
     }
 
-    private int parseConstraintSet(Context context, XmlPullParser parser) {
+    private int parseConstraintSet(@NonNull Context context, @NonNull XmlPullParser parser) {
         ConstraintSet set = new ConstraintSet();
         set.setForceId(false);
         int count = parser.getAttributeCount();
@@ -1172,7 +1174,7 @@ public class MotionScene {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
     }
 
-    public ConstraintSet getConstraintSet(Context context, String id) {
+    public ConstraintSet getConstraintSet(@NonNull Context context, @NonNull String id) {
         if (DEBUG_DESKTOP) {
             System.out.println("id " + id);
             System.out.println("size " + mConstraintSetMap.size());
@@ -1190,10 +1192,12 @@ public class MotionScene {
         return null;
     }
 
+    @NonNull
     ConstraintSet getConstraintSet(int id) {
         return getConstraintSet(id, -1, -1);
     }
 
+    @NonNull
     ConstraintSet getConstraintSet(int id, int width, int height) {
         if (DEBUG_DESKTOP) {
             System.out.println("id " + id);
@@ -1218,7 +1222,7 @@ public class MotionScene {
      * @param id  - unique id to represent the ConstraintSet
      * @param set - ConstraintSet to be represented with the id.
      */
-    public void setConstraintSet(int id, ConstraintSet set) {
+    public void setConstraintSet(int id, @NonNull ConstraintSet set) {
         mConstraintSetMap.put(id, set);
     }
 
@@ -1227,7 +1231,7 @@ public class MotionScene {
      *
      * @param motionController
      */
-    public void getKeyFrames(MotionController motionController) {
+    public void getKeyFrames(@NonNull MotionController motionController) {
         if (mCurrentTransition == null) {
             if (mDefaultTransition != null) {
                 for (KeyFrames keyFrames : mDefaultTransition.mKeyFramesList) {
@@ -1250,7 +1254,7 @@ public class MotionScene {
      * @param position
      * @return Key Object
      */
-    Key getKeyFrame(Context context, int type, int target, int position) {
+    Key getKeyFrame(@NonNull Context context, int type, int target, int position) {
         if (mCurrentTransition == null) {
             return null;
         }
@@ -1731,7 +1735,7 @@ public class MotionScene {
      * @param pullParser the XML parser
      * @return
      */
-    static String getLine(Context context, int resourceId, XmlPullParser pullParser) {
+    static String getLine(@NonNull Context context, int resourceId, XmlPullParser pullParser) {
         return ".(" + Debug.getName(context, resourceId) + ".xml:" + pullParser.getLineNumber() +
                 ") \"" + pullParser.getName() + "\"";
     }

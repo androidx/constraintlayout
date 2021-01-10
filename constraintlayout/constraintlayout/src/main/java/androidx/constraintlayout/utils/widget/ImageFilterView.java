@@ -32,6 +32,8 @@ import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.R;
 
@@ -439,22 +441,22 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
         setScaleType(ScaleType.MATRIX);
     }
 
-    public ImageFilterView(Context context) {
+    public ImageFilterView(@NonNull Context context) {
         super(context);
         init(context, null);
     }
 
-    public ImageFilterView(Context context, AttributeSet attrs) {
+    public ImageFilterView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public ImageFilterView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ImageFilterView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
-    private void init(Context context, AttributeSet attrs) {
+    private void init(@NonNull Context context, @Nullable AttributeSet attrs) {
         if (attrs != null) {
             TypedArray a = getContext()
                     .obtainStyledAttributes(attrs, R.styleable.ImageFilterView);

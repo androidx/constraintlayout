@@ -21,6 +21,8 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.motion.widget.Debug;
 
 import android.util.AttributeSet;
@@ -62,6 +64,7 @@ public class ConstraintAttribute {
         REFERENCE_TYPE
     }
 
+    @NonNull
     public AttributeType getType() {
         return mType;
     }
@@ -78,7 +81,7 @@ public class ConstraintAttribute {
         mIntegerValue = value;
     }
 
-    public void setStringValue(String value) {
+    public void setStringValue(@NonNull String value) {
         mStringValue = value;
     }
 
@@ -122,7 +125,7 @@ public class ConstraintAttribute {
         return Float.NaN;
     }
 
-    public void getValuesToInterpolate(float[] ret) {
+    public void getValuesToInterpolate(@NonNull float[] ret) {
         switch (mType) {
             case INT_TYPE:
                 ret[0] = mIntegerValue;
@@ -155,7 +158,7 @@ public class ConstraintAttribute {
         }
     }
 
-    public void setValue(float[] value) {
+    public void setValue(@NonNull float[] value) {
         switch (mType) {
             case REFERENCE_TYPE:
             case INT_TYPE:
@@ -181,12 +184,12 @@ public class ConstraintAttribute {
     }
 
     /**
-     * test if the two attributes are different
+     * Test if the two attributes are different
      *
-     * @param constraintAttribute
-     * @return
+     * @param constraintAttribute The attribute to compare against
+     * @return true if the attributes are the same, otherwise false
      */
-    public boolean diff(ConstraintAttribute constraintAttribute) {
+    public boolean diff(@Nullable ConstraintAttribute constraintAttribute) {
         if (constraintAttribute == null || mType != constraintAttribute.mType) {
             return false;
         }
@@ -209,26 +212,26 @@ public class ConstraintAttribute {
         return false;
     }
 
-    public ConstraintAttribute(String name, AttributeType attributeType) {
+    public ConstraintAttribute(@NonNull String name, @NonNull AttributeType attributeType) {
         mName = name;
         mType = attributeType;
     }
 
-    public ConstraintAttribute(String name, AttributeType attributeType, Object value, boolean method) {
+    public ConstraintAttribute(@NonNull String name, @NonNull AttributeType attributeType, @NonNull Object value, boolean method) {
         mName = name;
         mType = attributeType;
         mMethod = method;
         setValue(value);
     }
 
-    public ConstraintAttribute(ConstraintAttribute source, Object value) {
+    public ConstraintAttribute(@NonNull ConstraintAttribute source, @NonNull Object value) {
         mName = source.mName;
         mType = source.mType;
         setValue(value);
 
     }
 
-    public void setValue(Object value) {
+    public void setValue(@NonNull Object value) {
         switch (mType) {
             case REFERENCE_TYPE:
             case INT_TYPE:
@@ -253,12 +256,15 @@ public class ConstraintAttribute {
         }
     }
 
+    @NonNull
     public static HashMap<String, ConstraintAttribute> extractAttributes(
-            HashMap<String, ConstraintAttribute> base, View view) {
+            @NonNull HashMap<String, ConstraintAttribute> base,
+            @NonNull View view) {
         HashMap<String, ConstraintAttribute> ret = new HashMap<>();
         Class<? extends View> viewClass = view.getClass();
         for (String name : base.keySet()) {
             ConstraintAttribute constraintAttribute = base.get(name);
+            if (constraintAttribute == null) continue;
 
             try {
                 if (name.equals("BackgroundColor")) { // hack for getMap set background color
@@ -268,7 +274,9 @@ public class ConstraintAttribute {
                 } else {
                     Method method = viewClass.getMethod("getMap" + name);
                     Object val = method.invoke(view);
-                    ret.put(name, new ConstraintAttribute(constraintAttribute, val));
+                    if (val != null) {
+                        ret.put(name, new ConstraintAttribute(constraintAttribute, val));
+                    }
                 }
 
             } catch (NoSuchMethodException e) {
@@ -282,10 +290,11 @@ public class ConstraintAttribute {
         return ret;
     }
 
-    public static void setAttributes(View view, HashMap<String, ConstraintAttribute> map) {
+    public static void setAttributes(@NonNull View view, @NonNull HashMap<String, ConstraintAttribute> map) {
         Class<? extends View> viewClass = view.getClass();
         for (String name : map.keySet()) {
             ConstraintAttribute constraintAttribute = map.get(name);
+            if (constraintAttribute == null) continue;
             String methodName = name;
             if (!constraintAttribute.mMethod) {
                 methodName = "set" + methodName;
@@ -338,7 +347,7 @@ public class ConstraintAttribute {
         }
     }
 
-    public void applyCustom(View view) {
+    public void applyCustom(@NonNull View view) {
         Class<? extends View> viewClass = view.getClass();
         String name = this.mName;
         String methodName = name;
@@ -405,7 +414,7 @@ public class ConstraintAttribute {
         return c;
     }
 
-    public void setInterpolatedValue(View view, float[] value) {
+    public void setInterpolatedValue(@NonNull View view, @NonNull float[] value) {
         Class<? extends View> viewClass = view.getClass();
 
         String methodName = "set" + mName;
@@ -464,7 +473,7 @@ public class ConstraintAttribute {
         }
     }
 
-    public static void parse(Context context, XmlPullParser parser, HashMap<String, ConstraintAttribute> custom) {
+    public static void parse(@NonNull Context context, @NonNull XmlPullParser parser, @NonNull HashMap<String, ConstraintAttribute> custom) {
         AttributeSet attributeSet = Xml.asAttributeSet(parser);
         TypedArray a = context.obtainStyledAttributes(attributeSet, R.styleable.CustomAttribute);
         String name = null;

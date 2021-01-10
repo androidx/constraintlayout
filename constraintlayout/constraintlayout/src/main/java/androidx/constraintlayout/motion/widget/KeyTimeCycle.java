@@ -19,6 +19,8 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.motion.utils.Oscillator;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.R;
@@ -77,7 +79,7 @@ public class KeyTimeCycle extends Key {
     }
 
     @Override
-    public void load(Context context, AttributeSet attrs) {
+    public void load(@NonNull Context context, @Nullable AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.KeyTimeCycle);
         Loader.read(this, a);
     }

@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 import androidx.constraintlayout.core.widgets.Helper;
@@ -45,6 +48,7 @@ public abstract class ConstraintHelper extends View {
     /**
      * @hide
      */
+    @NonNull
     protected int[] mIds = new int[32];
     /**
      * @hide
@@ -54,10 +58,12 @@ public abstract class ConstraintHelper extends View {
     /**
      * @hide
      */
+    @Nullable
     protected Context myContext;
     /**
      * @hide
      */
+    @Nullable
     protected Helper mHelperWidget;
     /**
      * @hide
@@ -66,32 +72,35 @@ public abstract class ConstraintHelper extends View {
     /**
      * @hide
      */
+    @Nullable
     protected String mReferenceIds;
     /**
      * @hide
      */
+    @Nullable
     protected String mReferenceTags;
 
     /**
      * @hide
      */
+    @Nullable
     private View[] mViews = null;
 
     private HashMap<Integer, String> mMap = new HashMap<>();
 
-    public ConstraintHelper(Context context) {
+    public ConstraintHelper(@NonNull Context context) {
         super(context);
         myContext = context;
         init(null);
     }
 
-    public ConstraintHelper(Context context, AttributeSet attrs) {
+    public ConstraintHelper(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         myContext = context;
         init(attrs);
     }
 
-    public ConstraintHelper(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ConstraintHelper(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         myContext = context;
         init(attrs);
@@ -100,7 +109,7 @@ public abstract class ConstraintHelper extends View {
     /**
      * @hide
      */
-    protected void init(AttributeSet attrs) {
+    protected void init(@Nullable AttributeSet attrs) {
         if (attrs != null) {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ConstraintLayout_Layout);
             final int N = a.getIndexCount();
@@ -135,7 +144,7 @@ public abstract class ConstraintHelper extends View {
      *
      * @param view
      */
-    public void addView(View view) {
+    public void addView(@NonNull View view) {
         if (view == this) {
             return;
         }
@@ -157,7 +166,7 @@ public abstract class ConstraintHelper extends View {
      *
      * @param view
      */
-    public void removeView(View view) {
+    public void removeView(@NonNull View view) {
         int id = view.getId();
         if (id == -1) {
             return;
@@ -180,15 +189,15 @@ public abstract class ConstraintHelper extends View {
      * Helpers typically reference a collection of ids
      * @return ids referenced
      */
+    @NonNull
     public int[] getReferencedIds() {
         return Arrays.copyOf(mIds, mCount);
     }
 
     /**
      * Helpers typically reference a collection of ids
-     * @return ids referenced
      */
-    public void setReferencedIds(int[] ids) {
+    public void setReferencedIds(@NonNull int[] ids) {
         mReferenceIds = null;
         mCount = 0;
         for (int i = 0; i < ids.length; i++) {
@@ -214,7 +223,7 @@ public abstract class ConstraintHelper extends View {
      * @hide
      */
     @Override
-    public void onDraw(Canvas canvas) {
+    public void onDraw(@NonNull Canvas canvas) {
         // Nothing
     }
 
@@ -393,7 +402,7 @@ public abstract class ConstraintHelper extends View {
     /**
      * @hide
      */
-    protected void setIds(String idList) {
+    protected void setIds(@Nullable String idList) {
         mReferenceIds = idList;
         if (idList == null) {
             return;
@@ -413,7 +422,7 @@ public abstract class ConstraintHelper extends View {
     /**
      * @hide
      */
-    protected void setReferenceTags(String tagList) {
+    protected void setReferenceTags(@Nullable String tagList) {
         mReferenceTags = tagList;
         if (tagList == null) {
             return;
@@ -435,7 +444,7 @@ public abstract class ConstraintHelper extends View {
      * @hide
      * @param container
      */
-    protected void applyLayoutFeatures(ConstraintLayout container) {
+    protected void applyLayoutFeatures(@NonNull ConstraintLayout container) {
         int visibility = getVisibility();
         float elevation = 0;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
@@ -469,7 +478,7 @@ public abstract class ConstraintHelper extends View {
      *
      * @param container
      */
-    public void updatePreLayout(ConstraintLayout container) {
+    public void updatePreLayout(@NonNull ConstraintLayout container) {
         if (isInEditMode()) {
             setIds(mReferenceIds);
         }
@@ -498,9 +507,10 @@ public abstract class ConstraintHelper extends View {
         mHelperWidget.updateConstraints(container.mLayoutWidget);
     }
 
-    public void updatePreLayout(ConstraintWidgetContainer container,
-                                Helper helper,
-                                SparseArray<ConstraintWidget> map) {
+    public void updatePreLayout(
+            @NonNull ConstraintWidgetContainer container,
+            @NonNull Helper helper,
+            @NonNull SparseArray<ConstraintWidget> map) {
         helper.removeAllIds();
         for (int i = 0; i < mCount; i++) {
             int id = mIds[i];
@@ -508,7 +518,8 @@ public abstract class ConstraintHelper extends View {
         }
     }
 
-    protected View [] getViews(ConstraintLayout layout) {
+    @NonNull
+    protected View [] getViews(@NonNull ConstraintLayout layout) {
 
         if (mViews == null || mViews.length != mCount) {
             mViews = new View[mCount];
@@ -527,7 +538,7 @@ public abstract class ConstraintHelper extends View {
      *
      * @param container
      */
-    public void updatePostLayout(ConstraintLayout container) {
+    public void updatePostLayout(@NonNull ConstraintLayout container) {
         // Do nothing
     }
 
@@ -535,19 +546,23 @@ public abstract class ConstraintHelper extends View {
      * @hide
      * @param container
      */
-    public void updatePostMeasure(ConstraintLayout container) {
+    public void updatePostMeasure(@NonNull ConstraintLayout container) {
         // Do nothing
     }
 
-    public void updatePostConstraints(ConstraintLayout constainer) {
+    public void updatePostConstraints(@NonNull ConstraintLayout constainer) {
         // Do nothing
     }
 
-    public void updatePreDraw(ConstraintLayout container) {
+    public void updatePreDraw(@NonNull ConstraintLayout container) {
         // Do nothing
     }
 
-    public void loadParameters(ConstraintSet.Constraint constraint, HelperWidget child, ConstraintLayout.LayoutParams layoutParams, SparseArray<ConstraintWidget> mapIdToWidget) {
+    public void loadParameters(
+            @NonNull ConstraintSet.Constraint constraint,
+            @NonNull HelperWidget child,
+            @NonNull ConstraintLayout.LayoutParams layoutParams,
+            @NonNull SparseArray<ConstraintWidget> mapIdToWidget) {
         // TODO: we need to rethink this -- the list of referenced views shouldn't be resolved at updatePreLayout stage,
         // as this makes changing referenced views tricky at runtime
         if (constraint.layout.mReferenceIds != null) {
@@ -588,12 +603,12 @@ public abstract class ConstraintHelper extends View {
         return rscIds;
     }
 
-    public void resolveRtl(ConstraintWidget widget, boolean isRtl) {
+    public void resolveRtl(@NonNull ConstraintWidget widget, boolean isRtl) {
         // nothing here
     }
 
     @Override
-    public void setTag(int key, Object tag) {
+    public void setTag(int key, @Nullable Object tag) {
         super.setTag(key, tag);
         if (tag == null && mReferenceIds == null) {
             addRscID(key);

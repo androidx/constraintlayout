@@ -19,6 +19,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.R;
@@ -121,15 +124,15 @@ public class Flow extends VirtualLayout {
     public static final int VERTICAL_ALIGN_CENTER = androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_CENTER;
     public static final int VERTICAL_ALIGN_BASELINE = androidx.constraintlayout.core.widgets.Flow.VERTICAL_ALIGN_BASELINE;
 
-    public Flow(Context context) {
+    public Flow(@NonNull Context context) {
         super(context);
     }
 
-    public Flow(Context context, AttributeSet attrs) {
+    public Flow(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public Flow(Context context, AttributeSet attrs, int defStyleAttr) {
+    public Flow(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -140,7 +143,7 @@ public class Flow extends VirtualLayout {
      * @param isRtl
      */
     @Override
-    public void resolveRtl(ConstraintWidget widget, boolean isRtl) {
+    public void resolveRtl(@NonNull ConstraintWidget widget, boolean isRtl) {
         mFlow.applyRtl(isRtl);
     }
 
@@ -180,8 +183,12 @@ public class Flow extends VirtualLayout {
      * @param mapIdToWidget
      */
     @Override
-    public void loadParameters(ConstraintSet.Constraint constraint, HelperWidget child, ConstraintLayout.LayoutParams layoutParams, SparseArray<ConstraintWidget> mapIdToWidget) {
-        super.loadParameters(constraint,child,layoutParams, mapIdToWidget);
+    public void loadParameters(
+            @NonNull ConstraintSet.Constraint constraint,
+            @NonNull HelperWidget child,
+            @NonNull ConstraintLayout.LayoutParams layoutParams,
+            @NonNull SparseArray<ConstraintWidget> mapIdToWidget) {
+        super.loadParameters(constraint, child, layoutParams, mapIdToWidget);
         if (child instanceof androidx.constraintlayout.core.widgets.Flow) {
             androidx.constraintlayout.core.widgets.Flow flow = (androidx.constraintlayout.core.widgets.Flow) child;
             if (layoutParams.orientation != -1) {
@@ -196,7 +203,7 @@ public class Flow extends VirtualLayout {
      * @param attrs
      */
     @Override
-    protected void init(AttributeSet attrs) {
+    protected void init(@Nullable AttributeSet attrs) {
         super.init(attrs);
         mFlow = new androidx.constraintlayout.core.widgets.Flow();
         if (attrs != null) {

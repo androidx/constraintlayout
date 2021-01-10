@@ -23,6 +23,8 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 
 /**
@@ -34,31 +36,31 @@ public class ReactiveGuide extends View implements SharedValues.SharedValuesList
     private int mApplyToConstraintSetId = 0;
     private boolean mApplyToAllConstraintSets = true;
 
-    public ReactiveGuide(Context context) {
+    public ReactiveGuide(@NonNull Context context) {
         super(context);
         super.setVisibility(View.GONE);
         init(null);
     }
 
-    public ReactiveGuide(Context context, AttributeSet attrs) {
+    public ReactiveGuide(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         super.setVisibility(View.GONE);
         init(attrs);
     }
 
-    public ReactiveGuide(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ReactiveGuide(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         super.setVisibility(View.GONE);
         init(attrs);
     }
 
-    public ReactiveGuide(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public ReactiveGuide(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr);
         super.setVisibility(View.GONE);
         init(attrs);
     }
 
-    private void init(AttributeSet attrs) {
+    private void init(@Nullable AttributeSet attrs) {
         if (attrs != null) {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ConstraintLayout_ReactiveGuide);
             final int N = a.getIndexCount();

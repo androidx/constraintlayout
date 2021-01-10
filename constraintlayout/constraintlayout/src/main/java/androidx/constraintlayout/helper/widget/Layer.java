@@ -5,6 +5,9 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.*;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import android.view.ViewParent;
@@ -39,15 +42,15 @@ public class Layer extends ConstraintHelper {
     private boolean mApplyVisibilityOnAttach;
     private boolean mApplyElevationOnAttach;
 
-    public Layer(Context context) {
+    public Layer(@NonNull Context context) {
         super(context);
     }
 
-    public Layer(Context context, AttributeSet attrs) {
+    public Layer(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public Layer(Context context, AttributeSet attrs, int defStyleAttr) {
+    public Layer(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -55,7 +58,7 @@ public class Layer extends ConstraintHelper {
      * @param attrs
      * @hide
      */
-    protected void init(AttributeSet attrs) {
+    protected void init(@Nullable AttributeSet attrs) {
         super.init(attrs);
         mUseViewMeasure = false;
         if (attrs != null) {
@@ -106,7 +109,7 @@ public class Layer extends ConstraintHelper {
      * @hide
      */
     @Override
-    public void updatePreDraw(ConstraintLayout container) {
+    public void updatePreDraw(@NonNull ConstraintLayout container) {
         mContainer = container;
         float rotate = getRotation();
         if (rotate == 0) {
@@ -215,7 +218,7 @@ public class Layer extends ConstraintHelper {
      * @hide
      */
     @Override
-    public void updatePostLayout(ConstraintLayout container) {
+    public void updatePostLayout(@NonNull ConstraintLayout container) {
         reCacheViews();
 
         mComputedCenterX = Float.NaN;

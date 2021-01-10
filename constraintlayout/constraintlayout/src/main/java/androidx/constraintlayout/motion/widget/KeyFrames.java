@@ -18,6 +18,8 @@ package androidx.constraintlayout.motion.widget;
 
 import android.content.Context;
 import android.content.res.XmlResourceParser;
+
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import android.util.Log;
@@ -70,7 +72,7 @@ public class KeyFrames {
     public KeyFrames() {
 
     }
-    public KeyFrames(Context context, XmlPullParser parser) {
+    public KeyFrames(@NonNull Context context, @NonNull XmlPullParser parser) {
         String tagName = null;
         try {
             Key key = null;

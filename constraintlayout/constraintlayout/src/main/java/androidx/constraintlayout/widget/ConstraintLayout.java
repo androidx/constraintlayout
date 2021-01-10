@@ -499,6 +499,7 @@ public class ConstraintLayout extends ViewGroup {
     // This array keep a list of helper objects if they are present
     private ArrayList<ConstraintHelper> mConstraintHelpers = new ArrayList<>(4);
 
+    @NonNull
     protected ConstraintWidgetContainer mLayoutWidget = new ConstraintWidgetContainer();
 
     private int mMinWidth = 0;
@@ -509,6 +510,8 @@ public class ConstraintLayout extends ViewGroup {
     protected boolean mDirtyHierarchy = true;
     private int mOptimizationLevel = Optimizer.OPTIMIZATION_STANDARD;
     private ConstraintSet mConstraintSet = null;
+
+    @Nullable
     protected ConstraintLayoutStates mConstraintLayoutSpec = null;
 
     private int mConstraintSetId = -1;
@@ -529,6 +532,8 @@ public class ConstraintLayout extends ViewGroup {
      */
     public final static int DESIGN_INFO_ID = 0;
     private ConstraintsChangedListener mConstraintsChangedListener;
+
+    @Nullable
     private Metrics mMetrics;
 
     private static SharedValues sSharedValues = null;
@@ -538,6 +543,7 @@ public class ConstraintLayout extends ViewGroup {
      *
      * @return the SharedValues instance
      */
+    @NonNull
     public static SharedValues getSharedValues() {
         if (sSharedValues == null) {
             sSharedValues = new SharedValues();
@@ -548,7 +554,7 @@ public class ConstraintLayout extends ViewGroup {
     /**
      * @hide
      */
-    public void setDesignInformation(int type, Object value1, Object value2) {
+    public void setDesignInformation(int type, @Nullable Object value1, @Nullable Object value2) {
         if (type == DESIGN_INFO_ID && value1 instanceof String && value2 instanceof Integer) {
             if (mDesignIds == null) {
                 mDesignIds = new HashMap<>();
@@ -566,7 +572,8 @@ public class ConstraintLayout extends ViewGroup {
     /**
      * @hide
      */
-    public Object getDesignInformation(int type, Object value) {
+    @Nullable
+    public Object getDesignInformation(int type, @Nullable Object value) {
         if (type == DESIGN_INFO_ID && value instanceof String) {
             String name = (String) value;
             if (mDesignIds != null && mDesignIds.containsKey(name)) {
@@ -995,7 +1002,7 @@ public class ConstraintLayout extends ViewGroup {
      * {@hide}
      */
     @Override
-    public void addView(View child, int index, ViewGroup.LayoutParams params) {
+    public void addView(@NonNull View child, int index, @NonNull ViewGroup.LayoutParams params) {
         super.addView(child, index, params);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             onViewAdded(child);
@@ -1006,7 +1013,7 @@ public class ConstraintLayout extends ViewGroup {
      * {@hide}
      */
     @Override
-    public void removeView(View view) {
+    public void removeView(@NonNull View view) {
         super.removeView(view);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             onViewRemoved(view);
@@ -1017,7 +1024,7 @@ public class ConstraintLayout extends ViewGroup {
      * {@hide}
      */
     @Override
-    public void onViewAdded(View view) {
+    public void onViewAdded(@NonNull View view) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             super.onViewAdded(view);
         }
@@ -1047,7 +1054,7 @@ public class ConstraintLayout extends ViewGroup {
      * {@hide}
      */
     @Override
-    public void onViewRemoved(View view) {
+    public void onViewRemoved(@NonNull View view) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             super.onViewRemoved(view);
         }
@@ -1176,6 +1183,9 @@ public class ConstraintLayout extends ViewGroup {
         // Make sure everything is fully reset before anything else
         for (int i = 0; i < count; i++) {
             View child = getChildAt(i);
+            if (child == null) {
+                continue;
+            }
             ConstraintWidget widget = getViewWidget(child);
             if (widget == null) {
                 continue;
@@ -1255,12 +1265,18 @@ public class ConstraintLayout extends ViewGroup {
         mTempMapIdToWidget.put(getId(), mLayoutWidget);
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
+            if (child == null) {
+                continue;
+            }
             ConstraintWidget widget = getViewWidget(child);
             mTempMapIdToWidget.put(child.getId(), widget);
         }
 
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
+            if (child == null) {
+                continue;
+            }
             ConstraintWidget widget = getViewWidget(child);
             if (widget == null) {
                 continue;
@@ -1271,11 +1287,12 @@ public class ConstraintLayout extends ViewGroup {
         }
     }
 
-
-    protected void applyConstraintsFromLayoutParams(boolean isInEditMode,
-                                                    View child,
-                                                    ConstraintWidget widget, LayoutParams layoutParams,
-                                                    SparseArray<ConstraintWidget> idToWidget) {
+    protected void applyConstraintsFromLayoutParams(
+            boolean isInEditMode,
+            @NonNull View child,
+            @NonNull ConstraintWidget widget,
+            @NonNull LayoutParams layoutParams,
+            @NonNull SparseArray<ConstraintWidget> idToWidget) {
 
         layoutParams.validate();
         layoutParams.helped = false;
@@ -1544,18 +1561,17 @@ public class ConstraintLayout extends ViewGroup {
      * @return
      * @hide
      */
-    public final ConstraintWidget getViewWidget(View view) {
+    @Nullable
+    public final ConstraintWidget getViewWidget(@NonNull View view) {
         if (view == this) {
             return mLayoutWidget;
         }
-        if (view != null) {
-            if (view.getLayoutParams() instanceof LayoutParams) {
-                return ((LayoutParams) view.getLayoutParams()).widget;
-            }
-            view.setLayoutParams(generateLayoutParams(view.getLayoutParams()));
-            if (view.getLayoutParams() instanceof LayoutParams) {
-                return ((LayoutParams) view.getLayoutParams()).widget;
-            }
+        if (view.getLayoutParams() instanceof LayoutParams) {
+            return ((LayoutParams) view.getLayoutParams()).widget;
+        }
+        view.setLayoutParams(generateLayoutParams(view.getLayoutParams()));
+        if (view.getLayoutParams() instanceof LayoutParams) {
+            return ((LayoutParams) view.getLayoutParams()).widget;
         }
         return null;
     }
@@ -1564,7 +1580,7 @@ public class ConstraintLayout extends ViewGroup {
      * @param metrics
      * @hide Fills metrics object
      */
-    public void fillMetrics(Metrics metrics) {
+    public void fillMetrics(@Nullable Metrics metrics) {
         mMetrics = metrics;
         mLayoutWidget.fillMetrics(metrics);
     }
@@ -1580,7 +1596,7 @@ public class ConstraintLayout extends ViewGroup {
      * @param widthMeasureSpec
      * @param heightMeasureSpec
      */
-    protected void resolveSystem(ConstraintWidgetContainer layout,
+    protected void resolveSystem(@NonNull ConstraintWidgetContainer layout,
                                  int optimizationLevel, int widthMeasureSpec, int heightMeasureSpec) {
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
@@ -2055,6 +2071,7 @@ public class ConstraintLayout extends ViewGroup {
             final int count = getChildCount();
             for (int i = 0; i < count; i++) {
                 View child = getChildAt(i);
+                if (child == null) continue;
                 if (child.getVisibility() == GONE) {
                     continue;
                 }
@@ -2629,7 +2646,7 @@ public class ConstraintLayout extends ViewGroup {
          *
          * @param source the Layout Params to be copied
          */
-        public LayoutParams(LayoutParams source) {
+        public LayoutParams(@NonNull LayoutParams source) {
             super(source);
             this.layoutDirection = source.layoutDirection;
             this.isRtl = source.isRtl;
@@ -2867,7 +2884,7 @@ public class ConstraintLayout extends ViewGroup {
             return endMargin;
         }
 
-        public LayoutParams(Context c, AttributeSet attrs) {
+        public LayoutParams(@NonNull Context c, @Nullable AttributeSet attrs) {
             super(WRAP_CONTENT, WRAP_CONTENT);
             TypedArray a = c.obtainStyledAttributes(attrs, R.styleable.ConstraintLayout_Layout);
             final int N = a.getIndexCount();

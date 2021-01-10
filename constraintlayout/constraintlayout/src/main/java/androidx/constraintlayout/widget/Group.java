@@ -5,6 +5,9 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewParent;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 /**
  * Control the visibility and elevation of the referenced views
  */
@@ -36,15 +39,15 @@ import android.view.ViewParent;
  */
 public class Group extends ConstraintHelper {
 
-    public Group(Context context) {
+    public Group(@NonNull Context context) {
         super(context);
     }
 
-    public Group(Context context, AttributeSet attrs) {
+    public Group(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public Group(Context context, AttributeSet attrs, int defStyleAttr) {
+    public Group(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -52,7 +55,7 @@ public class Group extends ConstraintHelper {
      * @hide
      * @param attrs
      */
-    protected void init(AttributeSet attrs) {
+    protected void init(@Nullable AttributeSet attrs) {
         super.init(attrs);
         mUseViewMeasure = false;
     }
@@ -80,7 +83,7 @@ public class Group extends ConstraintHelper {
      * @param container
      */
     @Override
-    public void updatePostLayout(ConstraintLayout container) {
+    public void updatePostLayout(@NonNull ConstraintLayout container) {
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) getLayoutParams();
         params.widget.setWidth(0);
         params.widget.setHeight(0);

@@ -23,6 +23,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+
 import java.lang.reflect.Field;
 
 import static android.view.MotionEvent.ACTION_DOWN;
@@ -132,7 +134,7 @@ public class Debug {
      * @return name of view
      * @hide
      */
-    public static String getName(Context context, int id) {
+    public static String getName(@NonNull Context context, int id) {
         try {
             if (id != -1) {
                 return context.getResources().getResourceEntryName(id);
@@ -152,7 +154,7 @@ public class Debug {
      * @return name of view
      * @hide
      */
-    public static String getName(Context context, int []id) {
+    public static String getName(@NonNull Context context, int []id) {
         try {
             String str = id.length+"[";
             for (int i = 0; i < id.length; i++) {

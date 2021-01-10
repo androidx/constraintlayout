@@ -2,6 +2,9 @@ package androidx.constraintlayout.motion.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintHelper;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.R;
@@ -23,23 +26,23 @@ public class MotionHelper extends ConstraintHelper implements MotionHelperInterf
     private float mProgress;
     protected View[] views;
 
-    public MotionHelper(Context context) {
+    public MotionHelper(@NonNull Context context) {
         super(context);
     }
 
-    public MotionHelper(Context context, AttributeSet attrs) {
+    public MotionHelper(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(attrs);
     }
 
-    public MotionHelper(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MotionHelper(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(attrs);
     }
     /**
      * @hide
      */
-    protected void init(AttributeSet attrs) {
+    protected void init(@Nullable AttributeSet attrs) {
         super.init(attrs);
         if (attrs != null) {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.MotionHelper);
@@ -116,19 +119,19 @@ public class MotionHelper extends ConstraintHelper implements MotionHelperInterf
     }
 
     @Override
-    public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
+    public void onTransitionStarted(@NonNull MotionLayout motionLayout, int startId, int endId) {
     }
 
     @Override
-    public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
+    public void onTransitionChange(@NonNull MotionLayout motionLayout, int startId, int endId, float progress) {
      }
 
     @Override
-    public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
+    public void onTransitionCompleted(@NonNull MotionLayout motionLayout, int currentId) {
     }
 
     @Override
-    public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
+    public void onTransitionTrigger(@NonNull MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
 
     }
 

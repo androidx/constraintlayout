@@ -18,6 +18,8 @@ package androidx.constraintlayout.motion.widget;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.motion.utils.CurveFit;
 
@@ -39,7 +41,7 @@ public abstract class Key {
     String mTargetString = null;
     protected int mType;
 
-    abstract void load(Context context, AttributeSet attrs);
+    abstract void load(@NonNull Context context, @Nullable AttributeSet attrs);
 
     HashMap<String, ConstraintAttribute> mCustomConstraints;
 

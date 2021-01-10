@@ -20,6 +20,8 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.R;
 
@@ -66,7 +68,7 @@ public class KeyAttributes extends Key {
     }
 
     @Override
-    public void load(Context context, AttributeSet attrs) {
+    public void load(@NonNull Context context, @Nullable AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.KeyAttribute);
         Loader.read(this, a);
     }

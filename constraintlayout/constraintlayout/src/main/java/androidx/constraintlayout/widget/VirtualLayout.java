@@ -21,6 +21,9 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewParent;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 /**
  *  <b>Added in 2.0</b>
  *  <p>
@@ -31,20 +34,20 @@ public abstract class VirtualLayout extends ConstraintHelper {
     private boolean mApplyVisibilityOnAttach;
     private boolean mApplyElevationOnAttach;
 
-    public VirtualLayout(Context context) {
+    public VirtualLayout(@NonNull Context context) {
         super(context);
     }
 
-    public VirtualLayout(Context context, AttributeSet attrs) {
+    public VirtualLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public VirtualLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public VirtualLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     @Override
-    protected void init(AttributeSet attrs) {
+    protected void init(@Nullable AttributeSet attrs) {
         super.init(attrs);
         if (attrs != null) {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ConstraintLayout_Layout);

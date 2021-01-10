@@ -40,6 +40,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.motion.widget.FloatLayout;
@@ -100,22 +101,22 @@ public class MotionLabel extends View implements FloatLayout {
     Paint paintCache = new Paint();
     private int mTextureEffect = 0;
 
-    public MotionLabel(Context context) {
+    public MotionLabel(@NonNull Context context) {
         super(context);
         init(context, null);
     }
 
-    public MotionLabel(Context context, @Nullable AttributeSet attrs) {
+    public MotionLabel(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public MotionLabel(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public MotionLabel(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
-    private void init(Context context, AttributeSet attrs) {
+    private void init(@NonNull Context context, @Nullable AttributeSet attrs) {
         setUpTheme(context, attrs);
 
         if (attrs != null) {
@@ -321,7 +322,7 @@ public class MotionLabel extends View implements FloatLayout {
         return (boxHeight - textHeight) * (1 - mTextPanY) / 2 - (int) fm.ascent;
     }
 
-    private void setUpTheme(Context context, @Nullable AttributeSet attrs) {
+    private void setUpTheme(@NonNull Context context, @Nullable AttributeSet attrs) {
         TypedValue typedValue = new TypedValue();
         final Resources.Theme theme = context.getTheme();
         theme.resolveAttribute(R.attr.colorPrimary, typedValue, true);

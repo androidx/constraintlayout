@@ -22,6 +22,9 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import android.util.AttributeSet;
 import android.view.View;
@@ -46,27 +49,27 @@ public class Placeholder extends View {
   private View mContent = null;
   private int mEmptyVisibility = View.INVISIBLE;
 
-  public Placeholder(Context context) {
+  public Placeholder(@NonNull Context context) {
     super(context);
     init(null);
   }
 
-  public Placeholder(Context context, AttributeSet attrs) {
+  public Placeholder(@NonNull Context context, @Nullable AttributeSet attrs) {
     super(context, attrs);
     init(attrs);
   }
 
-  public Placeholder(Context context, AttributeSet attrs, int defStyleAttr) {
+  public Placeholder(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
     init(attrs);
   }
 
-  public Placeholder(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+  public Placeholder(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
     super(context, attrs, defStyleAttr);
     init(attrs);
   }
 
-  private void init(AttributeSet attrs) {
+  private void init(@Nullable AttributeSet attrs) {
     super.setVisibility(mEmptyVisibility);
     mContentId = -1;
     if (attrs != null) {
@@ -117,7 +120,7 @@ public class Placeholder extends View {
    * @hide
    * @param canvas
    */
-  public void onDraw(Canvas canvas) {
+  public void onDraw(@NonNull Canvas canvas) {
     if (isInEditMode()) {
       canvas.drawRGB(223, 223, 223);
       Paint paint = new Paint();

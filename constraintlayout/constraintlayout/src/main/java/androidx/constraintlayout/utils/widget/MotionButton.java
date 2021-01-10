@@ -30,6 +30,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.R;
 
@@ -62,22 +64,22 @@ public class MotionButton extends androidx.appcompat.widget.AppCompatButton {
     ViewOutlineProvider mViewOutlineProvider;
     RectF mRect;
 
-    public MotionButton(Context context) {
+    public MotionButton(@NonNull Context context) {
         super(context);
         init(context, null);
     }
 
-    public MotionButton(Context context, AttributeSet attrs) {
+    public MotionButton(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public MotionButton(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MotionButton(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
-    private void init(Context context, AttributeSet attrs) {
+    private void init(@NonNull Context context, @Nullable AttributeSet attrs) {
         setPadding(0, 0, 0, 0);
         if (attrs != null) {
             TypedArray a = getContext()

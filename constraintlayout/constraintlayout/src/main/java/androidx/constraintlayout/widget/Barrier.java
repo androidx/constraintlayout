@@ -19,6 +19,9 @@ package androidx.constraintlayout.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 import androidx.constraintlayout.core.widgets.HelperWidget;
@@ -114,17 +117,17 @@ public class Barrier extends ConstraintHelper {
     private int mResolvedType;
     private androidx.constraintlayout.core.widgets.Barrier mBarrier;
 
-    public Barrier(Context context) {
+    public Barrier(@NonNull Context context) {
         super(context);
         super.setVisibility(View.GONE);
     }
 
-    public Barrier(Context context, AttributeSet attrs) {
+    public Barrier(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         super.setVisibility(View.GONE);
     }
 
-    public Barrier(Context context, AttributeSet attrs, int defStyleAttr) {
+    public Barrier(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         super.setVisibility(View.GONE);
     }
@@ -147,7 +150,7 @@ public class Barrier extends ConstraintHelper {
         mIndicatedType = type;
     }
 
-    private void updateType(ConstraintWidget widget, int type, boolean isRtl) {
+    private void updateType(@Nullable ConstraintWidget widget, int type, boolean isRtl) {
         mResolvedType = type;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
             // Pre JB MR1, left/right should take precedence, unless they are
@@ -180,7 +183,7 @@ public class Barrier extends ConstraintHelper {
     }
 
     @Override
-    public void resolveRtl(ConstraintWidget widget, boolean isRtl) {
+    public void resolveRtl(@NonNull ConstraintWidget widget, boolean isRtl) {
         updateType(widget, mIndicatedType, isRtl);
     }
 
@@ -189,7 +192,7 @@ public class Barrier extends ConstraintHelper {
      * @hide
      */
     @Override
-    protected void init(AttributeSet attrs) {
+    protected void init(@Nullable AttributeSet attrs) {
         super.init(attrs);
         mBarrier = new androidx.constraintlayout.core.widgets.Barrier();
         if (attrs != null) {
@@ -250,7 +253,11 @@ public class Barrier extends ConstraintHelper {
     }
 
     @Override
-    public void loadParameters(ConstraintSet.Constraint constraint, HelperWidget child, ConstraintLayout.LayoutParams layoutParams, SparseArray<ConstraintWidget> mapIdToWidget) {
+    public void loadParameters(
+            @NonNull ConstraintSet.Constraint constraint,
+            @NonNull HelperWidget child,
+            @NonNull ConstraintLayout.LayoutParams layoutParams,
+            @NonNull SparseArray<ConstraintWidget> mapIdToWidget) {
         super.loadParameters(constraint, child, layoutParams, mapIdToWidget);
         if (child instanceof androidx.constraintlayout.core.widgets.Barrier) {
             androidx.constraintlayout.core.widgets.Barrier barrier = (androidx.constraintlayout.core.widgets.Barrier) child;

@@ -6,6 +6,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.R;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -32,22 +35,22 @@ public class MockView extends View {
     private int mTextBackgroundColor = Color.argb(255, 50, 50, 50);
     private int mMargin = 4;
 
-    public MockView(Context context) {
+    public MockView(@NonNull Context context) {
         super(context);
         init(context, null);
     }
 
-    public MockView(Context context, AttributeSet attrs) {
+    public MockView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public MockView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MockView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
-    private void init(Context context, AttributeSet attrs) {
+    private void init(@NonNull Context context, @Nullable AttributeSet attrs) {
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MockView);
             final int N = a.getIndexCount();
@@ -84,7 +87,7 @@ public class MockView extends View {
     }
 
     @Override
-    public void onDraw(Canvas canvas) {
+    public void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
         int w = getWidth();
         int h = getHeight();

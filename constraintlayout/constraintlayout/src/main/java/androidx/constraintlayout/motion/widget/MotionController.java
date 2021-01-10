@@ -18,6 +18,8 @@ package androidx.constraintlayout.motion.widget;
 
 import android.content.Context;
 import android.graphics.RectF;
+
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -1021,7 +1023,7 @@ public class MotionController {
     private static final int INTERPOLATOR_REFRENCE_ID = -2;
     private static final int INTERPOLATOR_UNDEFINED = -3;
 
-    private static Interpolator getInterpolator(Context context, int type,String interpolatorString, int id ) {
+    private static Interpolator getInterpolator(@NonNull Context context, int type, @NonNull String interpolatorString, int id ) {
         switch (type) {
             case SPLINE_STRING:
                 final Easing easing = Easing.getInterpolator(interpolatorString);

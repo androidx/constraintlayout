@@ -21,6 +21,9 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 /**
  * Utility class representing a Guideline helper object for {@link ConstraintLayout}.
  * Helper objects are not displayed on device (they are marked as {@code View.GONE}) and are only used
@@ -51,22 +54,22 @@ import android.view.View;
  *          Guideline}
  */
 public class Guideline extends View {
-    public Guideline(Context context) {
+    public Guideline(@NonNull Context context) {
         super(context);
         super.setVisibility(View.GONE);
     }
 
-    public Guideline(Context context, AttributeSet attrs) {
+    public Guideline(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         super.setVisibility(View.GONE);
     }
 
-    public Guideline(Context context, AttributeSet attrs, int defStyleAttr) {
+    public Guideline(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         super.setVisibility(View.GONE);
     }
 
-    public Guideline(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public Guideline(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr);
         super.setVisibility(View.GONE);
     }
