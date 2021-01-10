@@ -270,10 +270,12 @@ public class MainActivity extends AppCompatActivity {
         normal.put("cos-1", "cos");
         normal.put("sin-1", "sin");
         normal.put("tan-1", "tan");
+        normal.put("t", "y");
 
         inverse.put("cos-1", "cos<sup><small>-1</small></sup>");
         inverse.put("sin-1", "sin<sup><small>-1</small></sup>");
         inverse.put("tan-1", "tan<sup><small>-1</small></sup>");
+        inverse.put("t", "t");
     }
 
     private void swtchString(String tag, MotionButton v, boolean invert) {
@@ -322,12 +324,12 @@ public class MainActivity extends AppCompatActivity {
 
         int dim = s.dimensions();
 
-        if (dim == 1) {
+        if ((dim&3) == 1) {
             show3d = false;
             show2d = true;
             mMotionLayout.transitionToState(R.id.mode2d);
             graph2D.plot(s);
-        } else if (dim == 3) {
+        } else if ((dim&3) == 3) {
             show3d = true;
             show2d = false;
             mMotionLayout.transitionToState(R.id.mode3d);

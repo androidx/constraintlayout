@@ -51,12 +51,16 @@ public class CalcEngine {
 
         }
 
-        int dimensions() {
-            if ("x".equals(var)) {
-                return 1;
-            }
-            if ("y".equals(var)) {
-                return 2;
+        public int dimensions() {
+            if (var != null) {
+                switch (var) {
+                    case "x":
+                        return 1;
+                    case "y":
+                        return 2;
+                    case "t":
+                        return 4;
+                }
             }
             if (!Double.isNaN(value)) {
                 return 0;
@@ -97,18 +101,21 @@ public class CalcEngine {
             return (var != null) ? var : Double.toString(value);
         }
 
-        public double eval(double x, double y, Stack stack) {
+        public double eval(Stack stack, double y, double x, double t) {
             if (var != null) {  // a variable x or y
-                if ("x".equals(var)) {
-                    return x;
-                } else if ("y".equals(var)) {
-                    return y;
+                switch (var) {
+                    case "x":
+                        return x;
+                    case "y":
+                        return y;
+                    case "t":
+                        return t;
                 }
             }
             if (Double.isNaN(value)) { // it is not a hard value
-                stack.push(lhs.eval(x, y, stack));
+                stack.push(lhs.eval(stack, y, x, t));
                 if (operator instanceof Op2) {
-                    stack.push(rhs.eval(x, y, stack));
+                    stack.push(rhs.eval(stack, y, x, t));
                 }
                 operator.op(stack);
                 return stack.pop();
@@ -252,7 +259,7 @@ public class CalcEngine {
             return values[top - 1];
         }
 
-        void clear() {
+        public void clear() {
             top = 0;
         }
 
@@ -426,7 +433,13 @@ public class CalcEngine {
             screen = 0;
             period = 0;
         } else if (flushKeys.contains(str)) {
-            stack.push(Double.parseDouble(entryString));
+            try {
+                double value = Double.parseDouble(entryString);
+                stack.push(value);
+            } catch (Exception ex) {
+
+            }
+
             entryString = "";
             numberSet = true;
         }
@@ -435,6 +448,7 @@ public class CalcEngine {
         switch (str) {
             case "x":
             case "y":
+            case "t":
                 stack.push(str);
                 break;
             case "Π":

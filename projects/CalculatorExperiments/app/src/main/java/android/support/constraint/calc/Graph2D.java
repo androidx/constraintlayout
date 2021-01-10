@@ -36,6 +36,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.DecimalFormat;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 
 public class Graph2D extends View {
@@ -61,6 +63,8 @@ public class Graph2D extends View {
     static final long TRIGGER_DELAY = 1000;
     long mLastMove;
     Handler handler;
+    private boolean mAnimated = false;
+    double mStartTime = 0;
 
     private Runnable mCallback = new Runnable() {
         @Override
@@ -188,10 +192,15 @@ public class Graph2D extends View {
         resetPlot();
         mEquation = equ;
         getYRange();
-
+        mAnimated =  4 == (equ.dimensions()&4);
         mTicks.calcRangeTicks(getWidth(), getHeight());
         calPlot();
+        mStartTime = getTime(0);
     }
+
+     private double getTime(double last) {
+        return  System.nanoTime()*1E-9 -last;
+     }
 
     public CalcEngine.Symbolic getPlot() {
         return mEquation;
@@ -203,18 +212,19 @@ public class Graph2D extends View {
 
     private void calPlot() {
         mPlot.reset();
+        double time = getTime(mStartTime);
         float step = (float) ((max_x - min_x) / NPOINTS);
         for (int i = 0; i < NPOINTS; i++) {
             float x = step * i + min_x;
-            double y = getY(x);
+            double y = getY(x,time);
             if (isFinite(y)) {
                 mPlot.addPoint(x, (float) y);
             }
         }
     }
 
-    private double getY(double x) {
-        return mEquation.eval(x, 0, mTmpStack);
+    private double getY(double x, double time) {
+        return mEquation.eval(mTmpStack, 0, x, time);
     }
 
     void getYRange() {
@@ -224,9 +234,10 @@ public class Graph2D extends View {
         double miny = Double.MAX_VALUE, maxy = -Double.MAX_VALUE;
         mTmpStack.clear();
         int count = 0;
+        double time = getTime(mStartTime);
         for (int i = 0; i < NPOINTS; i++) {
             double x = step * i + min_x;
-            double y = getY(x);
+            double y = getY(x, time);
             if (isFinite(y)) {
                 v[count++] = y;
                 miny = Math.min(miny, y);
@@ -292,6 +303,10 @@ public class Graph2D extends View {
 
         for (DrawItem drawItem : myDrawItems) {
             drawItem.paint(canvas, mMargins, w, h);
+        }
+        if (mAnimated) {
+            calPlot();
+            invalidate();
         }
     }
 
@@ -383,13 +398,13 @@ public class Graph2D extends View {
 
             if (maxima) {
                 double x = findMax(mEquation, mValueX[maxI], mValueX[1] - mValueX[0]);
-                keyPointY = (float) mEquation.eval(x, 0, mTmpStack);
+                keyPointY = (float) mEquation.eval(mTmpStack, 0, x, 0 );
                 keyPointX = (float) x;
                 return;
             }
             if (minima) {
                 double x = findMin(mEquation, mValueX[minI], mValueX[1] - mValueX[0]);
-                keyPointY = (float) mEquation.eval(x, 0, mTmpStack);
+                keyPointY = (float) mEquation.eval(mTmpStack, 0, x, 0);
                 keyPointX = (float) x;
                 return;
             }
@@ -399,11 +414,11 @@ public class Graph2D extends View {
             mTmpStack.clear();
             dx /= 10;
             double x = mValueX;
-            double y1 = eq.eval(mValueX, 0, mTmpStack);
+            double y1 = eq.eval(mTmpStack, 0, mValueX, 0);
 
             double dy;
             do {
-                double y2 = eq.eval(x + dx, 0, mTmpStack);
+                double y2 = eq.eval(mTmpStack, 0, x + dx, 0);
                 dy = y2 - y1;
                 x = x + dy / dx;
                 dx *= 0.9;
@@ -417,11 +432,11 @@ public class Graph2D extends View {
 
             dx /= 10;
             double x = mValueX;
-            double y1 = eq.eval(mValueX, 0, mTmpStack);
+            double y1 = eq.eval(mTmpStack, 0, mValueX, 0);
 
             double dy;
             do {
-                double y2 = eq.eval(x + dx, 0, mTmpStack);
+                double y2 = eq.eval(mTmpStack, 0, x + dx, 0);
                 dy = y2 - y1;
                 x = x + dy / dx;
                 dx *= 0.9;
@@ -436,8 +451,8 @@ public class Graph2D extends View {
             double x2 = x;
             double error = 0.00001;
             while (true) {
-                double y1 = eq.eval(x1, 0, mTmpStack);
-                double y2 = eq.eval(x2, 0, mTmpStack);
+                double y1 = eq.eval(mTmpStack, 0, x1, 0);
+                double y2 = eq.eval(mTmpStack, 0, x2, 0);
                 if (Math.abs(y1) < error) {
                     return (float) x1;
                 }

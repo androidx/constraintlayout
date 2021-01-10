@@ -16,6 +16,10 @@
 
 package android.support.constraint.calc.g3d;
 
+import android.util.Log;
+
+import androidx.constraintlayout.motion.widget.Debug;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -70,7 +74,8 @@ public class SurfaceGen {
         mMaxX = stream.readFloat();
         mMinY = stream.readFloat();
         mMaxY = stream.readFloat();
-        mZoomZ= stream.readFloat();
+        mZoomZ = stream.readFloat();
+        Log.v(TAG, Debug.getLoc() + " zoom " + mZoomZ);
 
         calcSurface(mMinX, mMaxX, mMinX, mMaxX, false, mFunction);
         mMinZ = stream.readFloat();
@@ -120,6 +125,10 @@ public class SurfaceGen {
         VectorUtil.normalize(light);
     }
 
+    public void transformTriangles() {
+        transform(mInverse);
+    }
+
     public void transform(Matrix m) {
         for (int i = 0; i < vert.length; i += 3) {
             m.mult3(vert, i, tvert, i);
@@ -162,6 +171,14 @@ public class SurfaceGen {
         mMatrix.panMove(x, y);
         mMatrix.invers(mInverse);
         transform(mInverse);
+    }
+
+    public void panUP() {
+        mMatrix.panUP();
+    }
+
+    public String getLookPoint() {
+        return Arrays.toString(mMatrix.getLookPoint());
     }
 
     public void setScreenDim(int width, int height, int[] img, int background) {
@@ -214,6 +231,7 @@ public class SurfaceGen {
 
     public void setZoomZ(float zoom) {
         mZoomZ = zoom;
+
         calcSurface(mMinX, mMaxX, mMinY, mMaxY, false, mFunction);
     }
 
@@ -234,17 +252,18 @@ public class SurfaceGen {
         calcSurface(centerX - rangeX, centerX + rangeX, centerY - rangeY, centerY + rangeY, false, mFunction);
     }
 
-    public void calcSurface(float min_x, float max_x, float min_y, float max_y, boolean resetOrientation, Function func) {
+    public void computeSurface(boolean resetZ, Function func) {
         int n = (SIZE + 1) * (SIZE + 1);
         vert = new float[n * 3];
         tvert = new float[n * 3];
         index = new int[SIZE * SIZE * 6];
-        mMinX = min_x;
-        mMaxX = max_x;
-        mMinY = min_y;
-        mMaxY = max_y;
-        mMinZ = Float.MAX_VALUE;
-        mMaxZ = -Float.MAX_VALUE;
+        float min_x = mMinX;
+        float max_x = mMaxX;
+        float min_y = mMinY;
+        float max_y = mMaxY;
+        float min_z = Float.MAX_VALUE;
+        float max_z = -Float.MAX_VALUE;
+
         mFunction = func;
         int count = 0;
         for (int iy = 0; iy <= SIZE; iy++) {
@@ -266,14 +285,18 @@ public class SurfaceGen {
                 if (Float.isInfinite(z)) {
                     continue;
                 }
-                mMinZ = Math.min(z, mMinZ);
-                mMaxZ = Math.max(z, mMaxZ);
+                min_z = Math.min(z, min_z);
+                max_z = Math.max(z, max_z);
+            }
+            if (resetZ) {
+                mMinZ = min_z;
+                mMaxZ = max_z;
             }
         }
         // normalize range in z
         float xrange = mMaxX - mMinX;
         float yrange = mMaxY - mMinY;
-        float zrange = mMaxZ - mMinZ;
+        float zrange = max_z - min_z;
         if (zrange != 0) {
             float xyrange = (xrange + yrange) / 2;
             float scalez = xyrange / zrange;
@@ -289,8 +312,10 @@ public class SurfaceGen {
                 }
                 vert[i + 2] = z * scalez * mZoomZ;
             }
-            mMinZ *= scalez;
-            mMaxZ *= scalez;
+            if (resetZ) {
+                mMinZ *= scalez;
+                mMaxZ *= scalez;
+            }
         }
         count = 0;
         for (int iy = 0; iy < SIZE; iy++) {
@@ -308,6 +333,14 @@ public class SurfaceGen {
                 index[count++] = p2;
             }
         }
+    }
+
+    public void calcSurface(float min_x, float max_x, float min_y, float max_y, boolean resetOrientation, Function func) {
+        mMinX = min_x;
+        mMaxX = max_x;
+        mMinY = min_y;
+        mMaxY = max_y;
+        computeSurface(true, func);
         setUpMatrix(width, height, resetOrientation);
         transform(mInverse);
     }

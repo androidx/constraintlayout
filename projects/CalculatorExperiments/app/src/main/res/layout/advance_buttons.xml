@@ -194,6 +194,7 @@
         android:background= "@color/adv_background"
         android:stateListAnimator="@null"
         android:text="y"
+        android:tag="t"
         android:textColor="@color/cal_adv_text"
         android:textSize="10pt"
         app:layout_constraintStart_toStartOf="parent"

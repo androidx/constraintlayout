@@ -16,6 +16,10 @@
 
 package android.support.constraint.calc.g3d;
 
+import android.util.Log;
+
+import androidx.constraintlayout.motion.widget.Debug;
+
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
@@ -262,7 +266,7 @@ public class ViewMatrix extends Matrix {
     }
 
     float mStartx, mStarty;
-    float mPanStartX, mPanStartY;
+    float mPanStartX = Float.NaN, mPanStartY = Float.NaN;
     Matrix mStartMatrix;
     double[] mStartV = new double[3];
     double[] mMoveToV = new double[3];
@@ -314,6 +318,10 @@ public class ViewMatrix extends Matrix {
 
     public void panMove(float x, float y) {
         double scale = mScreenWidth / mScreenDim[0];
+        if (Float.isNaN(mPanStartX)) {
+            mPanStartX = x;
+            mPanStartY = y;
+        }
         double dx = scale * (x - mPanStartX);
         double dy = scale * (y - mPanStartY);
         VectorUtil.sub(mEyePoint, mLookPoint, mTmp1);
@@ -328,6 +336,10 @@ public class ViewMatrix extends Matrix {
         calcMatrix();
     }
 
+    public void panUP() {
+        mPanStartX = Float.NaN;
+        mPanStartY = Float.NaN;
+    }
 
     void ballToVec(float x, float y, double[] v) {
         float ballRadius = Math.min(mScreenDim[0], mScreenDim[1]) * .4f;
