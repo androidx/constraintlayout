@@ -37,7 +37,7 @@ public class SharedValues {
         void onNewValue(int key, int newValue, int oldValue);
     }
 
-    public void addListener(SharedValuesListener listener, int key) {
+    public void addListener(int key, SharedValuesListener listener) {
         HashSet<WeakReference<SharedValuesListener>> listeners = mValuesListeners.get(key);
         if (listeners == null) {
             listeners = new HashSet<>();
@@ -46,7 +46,7 @@ public class SharedValues {
         listeners.add(new WeakReference<>(listener));
     }
 
-    public void removeListener(SharedValuesListener listener, int key) {
+    public void removeListener(int key, SharedValuesListener listener) {
         HashSet<WeakReference<SharedValuesListener>> listeners = mValuesListeners.get(key);
         if (listeners == null) {
             return;
@@ -63,7 +63,7 @@ public class SharedValues {
 
     public void removeListener(SharedValuesListener listener) {
         for (Integer key : mValuesListeners.keySet()) {
-            removeListener(listener, key);
+            removeListener(key, listener);
         }
     }
 
