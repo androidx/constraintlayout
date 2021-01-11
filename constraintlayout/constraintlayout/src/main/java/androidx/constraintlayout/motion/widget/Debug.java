@@ -44,7 +44,7 @@ public class Debug {
      * @param n
      * @hide
      */
-    public static void logStack(String tag, String msg, int n) {
+    public static void logStack(@NonNull String tag, @NonNull String msg, int n) {
         StackTraceElement[] st = new Throwable().getStackTrace();
         String s = " ";
         n = Math.min(n,st.length-1);
@@ -63,7 +63,7 @@ public class Debug {
      * @param n
      * @hide
      */
-    public static void printStack(String msg, int n) {
+    public static void printStack(@NonNull String msg, int n) {
         StackTraceElement[] st = new Throwable().getStackTrace();
         String s = " ";
         n = Math.min(n,st.length-1);
@@ -82,7 +82,8 @@ public class Debug {
      * @return name of view
      * @hide
      */
-    public static String getName(View view) {
+    @NonNull
+    public static String getName(@NonNull View view) {
         try {
             Context context = view.getContext();
             return context.getResources().getResourceEntryName(view.getId());
@@ -91,7 +92,7 @@ public class Debug {
         }
     }
 
-    public static   void dumpPoc(Object obj) {
+    public static void dumpPoc(@NonNull Object obj) {
         StackTraceElement s = new Throwable().getStackTrace()[1];
         String loc =  ".("+s.getFileName()+":"+s.getLineNumber()+")";
         Class c = obj.getClass();
@@ -134,6 +135,7 @@ public class Debug {
      * @return name of view
      * @hide
      */
+    @NonNull
     public static String getName(@NonNull Context context, int id) {
         try {
             if (id != -1) {
@@ -154,6 +156,7 @@ public class Debug {
      * @return name of view
      * @hide
      */
+    @NonNull
     public static String getName(@NonNull Context context, int []id) {
         try {
             String str = id.length+"[";
@@ -183,7 +186,8 @@ public class Debug {
      * @param stateId
      * @return
      */
-    public static String getState(MotionLayout layout, int stateId) {
+    @NonNull
+    public static String getState(@NonNull MotionLayout layout, int stateId) {
         if (stateId == -1) {
             return "UNDEFINED";
         }
@@ -197,7 +201,8 @@ public class Debug {
      * @param event
      * @return
      */
-    public static String getActionType(MotionEvent event) {
+    @NonNull
+    public static String getActionType(@NonNull MotionEvent event) {
         int type = event.getAction();
         Field[] fields = MotionEvent.class.getFields();
         for (int i = 0; i < fields.length; i++) {
@@ -219,6 +224,7 @@ public class Debug {
      * Formatting it such that it is clickable by Intellij
      * @return (filename:line_no)
      */
+    @NonNull
     public static String getLocation() {
         StackTraceElement s = new Throwable().getStackTrace()[1];
         return ".("+s.getFileName()+":"+s.getLineNumber()+")";
@@ -228,6 +234,7 @@ public class Debug {
      * Formatting it such that it is clickable by Intellij
      * @return (filename:line_no)
      */
+    @NonNull
     public static String getLoc() {
         StackTraceElement s = new Throwable().getStackTrace()[1];
         return ".("+s.getFileName()+":"+s.getLineNumber()+") "+s.getMethodName()+"()";
@@ -238,6 +245,7 @@ public class Debug {
      * Formatting it such that it is clickable by Intellij
      * @return (filename:line_no)
      */
+    @NonNull
     public static String getLocation2() {
         StackTraceElement s = new Throwable().getStackTrace()[2];
         return ".("+s.getFileName()+":"+s.getLineNumber()+")";
@@ -248,12 +256,13 @@ public class Debug {
      * Formatting it such that it is clickable by Intellij
      * @return (filename:line_no)
      */
+    @NonNull
     public static String getCallFrom(int n) {
         StackTraceElement s = new Throwable().getStackTrace()[2 + n];
         return ".("+s.getFileName()+":"+s.getLineNumber()+")";
     }
 
-    public static void dumpLayoutParams(ViewGroup layout, String str) {
+    public static void dumpLayoutParams(@NonNull ViewGroup layout, @NonNull String str) {
         StackTraceElement s = new Throwable().getStackTrace()[1];
         String loc =  ".("+s.getFileName()+":"+s.getLineNumber()+") " + str + "  ";
         int n = layout.getChildCount();
@@ -286,7 +295,7 @@ public class Debug {
         }
     }
 
-    public static void dumpLayoutParams(ViewGroup.LayoutParams param, String str) {
+    public static void dumpLayoutParams(@NonNull ViewGroup.LayoutParams param, @NonNull String str) {
         StackTraceElement s = new Throwable().getStackTrace()[1];
         String loc =  ".("+s.getFileName()+":"+s.getLineNumber()+") " + str + "  ";
         System.out.println(" >>>>>>>>>>>>>>>>>>. dump "+loc+"  "+param.getClass().getName());
@@ -301,7 +310,7 @@ public class Debug {
                     if (!name.contains("To")){
                         continue;
                     }
-                    if (value.toString().equals("-1")) {
+                    if (value == null || value.toString().equals("-1")) {
                         continue;
                     }
 //                    if (value instanceof  Integer && value.toString().equals("-1")) {

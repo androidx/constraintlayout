@@ -2071,6 +2071,9 @@ public class MotionLayout extends ConstraintLayout implements
         mFrameArrayList.clear();
         for (int i = 0; i < n; i++) {
             View v = getChildAt(i);
+            if (v == null) {
+                continue;
+            }
             MotionController f = new MotionController(v);
             mFrameArrayList.put(v, f);
             controllers.put(v.getId(),mFrameArrayList.get(v));
@@ -2495,6 +2498,9 @@ public class MotionLayout extends ConstraintLayout implements
             int []ids = new int[n];
             for (int i = 0; i < n; i++) {
                 View v = getChildAt(i);
+                if (v == null) {
+                    continue;
+                }
                 MotionController motionController = new MotionController(v);
                 controllers.put(ids[i] = v.getId(),motionController);
                 mFrameArrayList.put(v, motionController);
@@ -3107,7 +3113,7 @@ public class MotionLayout extends ConstraintLayout implements
      * @param canvas
      */
     @Override
-    protected void dispatchDraw(Canvas canvas) {
+    protected void dispatchDraw(@NonNull Canvas canvas) {
         if (DEBUG) {
             Log.v(TAG, " dispatchDraw " + getProgress() + Debug.getLocation());
         }
@@ -4131,6 +4137,7 @@ public class MotionLayout extends ConstraintLayout implements
      * @param id
      * @return
      */
+    @Nullable
     public ConstraintSet getConstraintSet(int id) {
         if (mScene == null) {
             return null;
@@ -4313,7 +4320,7 @@ public class MotionLayout extends ConstraintLayout implements
      * @return the integer id of the string
      * @hide
      */
-    int lookUpConstraintId(String id) {
+    int lookUpConstraintId(@NonNull String id) {
         if (mScene == null) {
             return 0;
         }
@@ -4385,7 +4392,7 @@ public class MotionLayout extends ConstraintLayout implements
      * @param viewTransitionId
      * @param view The views to apply to
      */
-    public void viewTransition(int viewTransitionId, View... view) {
+    public void viewTransition(int viewTransitionId, @NonNull View... view) {
         if (mScene != null) {
             mScene.viewTransition(viewTransitionId, view);
         } else {

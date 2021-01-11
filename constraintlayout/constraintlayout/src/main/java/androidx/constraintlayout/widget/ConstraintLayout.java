@@ -531,6 +531,7 @@ public class ConstraintLayout extends ViewGroup {
      * @hide
      */
     public final static int DESIGN_INFO_ID = 0;
+    @Nullable
     private ConstraintsChangedListener mConstraintsChangedListener;
 
     @Nullable
@@ -1519,7 +1520,12 @@ public class ConstraintLayout extends ViewGroup {
         }
     }
 
-    private void setWidgetBaseline(ConstraintWidget widget, LayoutParams layoutParams, SparseArray<ConstraintWidget> idToWidget, int baselineTarget, ConstraintAnchor.Type type) {
+    private void setWidgetBaseline(
+            @NonNull ConstraintWidget widget,
+            @NonNull LayoutParams layoutParams,
+            @NonNull SparseArray<ConstraintWidget> idToWidget,
+            int baselineTarget,
+            @NonNull ConstraintAnchor.Type type) {
         View view = mChildrenByIds.get(baselineTarget);
         ConstraintWidget target = idToWidget.get(baselineTarget);
         if (target != null && view != null && view.getLayoutParams() instanceof LayoutParams) {
@@ -1538,6 +1544,7 @@ public class ConstraintLayout extends ViewGroup {
         }
     }
 
+    @Nullable
     private final ConstraintWidget getTargetWidget(int id) {
         if (id == LayoutParams.PARENT_ID) {
             return mLayoutWidget;
@@ -1780,7 +1787,7 @@ public class ConstraintLayout extends ViewGroup {
         return widthPadding;
     }
 
-    protected void setSelfDimensionBehaviour(ConstraintWidgetContainer layout, int widthMode, int widthSize, int heightMode, int heightSize) {
+    protected void setSelfDimensionBehaviour(@NonNull ConstraintWidgetContainer layout, int widthMode, int widthSize, int heightMode, int heightSize) {
 
         int heightPadding = mMeasurer.paddingHeight;
         int widthPadding = mMeasurer.paddingWidth;
@@ -1966,14 +1973,16 @@ public class ConstraintLayout extends ViewGroup {
     /**
      * {@hide}
      */
+    @NonNull
     @Override
-    public LayoutParams generateLayoutParams(AttributeSet attrs) {
+    public LayoutParams generateLayoutParams(@Nullable AttributeSet attrs) {
         return new LayoutParams(getContext(), attrs);
     }
 
     /**
      * {@inheritDoc}
      */
+    @NonNull
     @Override
     protected LayoutParams generateDefaultLayoutParams() {
         return new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -1982,8 +1991,9 @@ public class ConstraintLayout extends ViewGroup {
     /**
      * {@inheritDoc}
      */
+    @NonNull
     @Override
-    protected ViewGroup.LayoutParams generateLayoutParams(ViewGroup.LayoutParams p) {
+    protected ViewGroup.LayoutParams generateLayoutParams(@NonNull ViewGroup.LayoutParams p) {
         return new LayoutParams(p);
     }
 
@@ -1991,7 +2001,7 @@ public class ConstraintLayout extends ViewGroup {
      * {@inheritDoc}
      */
     @Override
-    protected boolean checkLayoutParams(ViewGroup.LayoutParams p) {
+    protected boolean checkLayoutParams(@NonNull ViewGroup.LayoutParams p) {
         return p instanceof LayoutParams;
     }
 
@@ -2000,7 +2010,7 @@ public class ConstraintLayout extends ViewGroup {
      *
      * @param set Layout children using ConstraintSet
      */
-    public void setConstraintSet(ConstraintSet set) {
+    public void setConstraintSet(@Nullable ConstraintSet set) {
         mConstraintSet = set;
     }
 
@@ -2009,6 +2019,7 @@ public class ConstraintLayout extends ViewGroup {
      * @return the child view, can return null
      * @hide Return a direct child view by its id if it exists
      */
+    @Nullable
     public View getViewById(int id) {
         return mChildrenByIds.get(id);
     }
@@ -2017,7 +2028,7 @@ public class ConstraintLayout extends ViewGroup {
      * @hide
      */
     @Override
-    protected void dispatchDraw(Canvas canvas) {
+    protected void dispatchDraw(@NonNull Canvas canvas) {
         if (mConstraintHelpers != null) {
             final int helperCount = mConstraintHelpers.size();
             if (helperCount > 0) {
@@ -2112,7 +2123,7 @@ public class ConstraintLayout extends ViewGroup {
         }
     }
 
-    public void setOnConstraintsChanged(ConstraintsChangedListener constraintsChangedListener) {
+    public void setOnConstraintsChanged(@Nullable ConstraintsChangedListener constraintsChangedListener) {
         this.mConstraintsChangedListener = constraintsChangedListener;
         if (mConstraintLayoutSpec != null) {
             mConstraintLayoutSpec.setOnConstraintsChanged(constraintsChangedListener);
@@ -2427,6 +2438,7 @@ public class ConstraintLayout extends ViewGroup {
         /**
          * The ratio information.
          */
+        @Nullable
         public String dimensionRatio = null;
 
         /**
@@ -2570,6 +2582,7 @@ public class ConstraintLayout extends ViewGroup {
         /**
          * Define a category of view to be used by helpers and motionLayout
          */
+        @Nullable
         public String constraintTag = null;
 
         public static final int WRAP_BEHAVIOR_INCLUDED = ConstraintWidget.WRAP_BEHAVIOR_INCLUDED;
@@ -2613,6 +2626,7 @@ public class ConstraintLayout extends ViewGroup {
         boolean isRtl = false;
         int layoutDirection = View.LAYOUT_DIRECTION_LTR;
 
+        @NonNull
         ConstraintWidget widget = new ConstraintWidget();
 
         boolean widthSet = false;
@@ -2621,6 +2635,7 @@ public class ConstraintLayout extends ViewGroup {
         /**
          * @hide
          */
+        @Nullable
         public ConstraintWidget getConstraintWidget() {
             return widget;
         }
@@ -2629,14 +2644,13 @@ public class ConstraintLayout extends ViewGroup {
          * @param text
          * @hide
          */
-        public void setWidgetDebugName(String text) {
+        public void setWidgetDebugName(@Nullable String text) {
             widget.setDebugName(text);
         }
 
         public void reset() {
-            if (widget != null) {
-                widget.reset();
-            }
+            // TODO: there used to be a null check on widget, but I cannot find a reason why this was needed
+            widget.reset();
         }
 
         public boolean helped = false;
@@ -3352,7 +3366,7 @@ public class ConstraintLayout extends ViewGroup {
             super(width, height);
         }
 
-        public LayoutParams(ViewGroup.LayoutParams source) {
+        public LayoutParams(@NonNull ViewGroup.LayoutParams source) {
             super(source);
         }
 
@@ -3507,6 +3521,7 @@ public class ConstraintLayout extends ViewGroup {
          *
          * @return tag string or null if not defined
          */
+        @Nullable
         public String getConstraintTag() {
             return constraintTag;
         }

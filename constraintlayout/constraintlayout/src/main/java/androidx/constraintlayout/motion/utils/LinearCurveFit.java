@@ -16,20 +16,26 @@
 
 package androidx.constraintlayout.motion.utils;
 
+import androidx.annotation.NonNull;
+
 /**
  * This performs a simple linear interpolation in multiple dimensions
  *
  * @hide
  */
 public class LinearCurveFit extends CurveFit {
+    @NonNull
     private static final String TAG = "LinearCurveFit";
+    @NonNull
     private double[] mT;
+    @NonNull
     private double[][] mY;
     private double mTotalLength = Double.NaN;
     private boolean mExtrapolate = true;
+    @NonNull
     double[] mSlopeTemp;
 
-    public LinearCurveFit(double[] time, double[][] y) {
+    public LinearCurveFit(@NonNull double[] time, @NonNull double[][] y) {
         final int N = time.length;
         final int dim = y[0].length;
         mSlopeTemp = new double[dim];
@@ -100,7 +106,7 @@ public class LinearCurveFit extends CurveFit {
         return 0;
     }
 
-    public void getPos(double t, double[] v) {
+    public void getPos(double t, @NonNull double[] v) {
         final int n = mT.length;
         final int dim = mY[0].length;
         if (mExtrapolate) {
@@ -153,7 +159,7 @@ public class LinearCurveFit extends CurveFit {
         }
     }
 
-    public void getPos(double t, float[] v) {
+    public void getPos(double t, @NonNull float[] v) {
         final int n = mT.length;
         final int dim = mY[0].length;
         if (mExtrapolate) {
@@ -240,7 +246,7 @@ public class LinearCurveFit extends CurveFit {
         return 0; // should never reach here
     }
 
-    public void getSlope(double t, double[] v) {
+    public void getSlope(double t, @NonNull double[] v) {
         final int n = mT.length;
         int dim = mY[0].length;
         if (t <= mT[0]) {
@@ -285,6 +291,7 @@ public class LinearCurveFit extends CurveFit {
         return 0; // should never reach here
     }
 
+    @NonNull
     @Override
     public double[] getTimePoints() {
         return mT;

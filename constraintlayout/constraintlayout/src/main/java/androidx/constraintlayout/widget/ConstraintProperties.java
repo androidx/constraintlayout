@@ -20,6 +20,9 @@ import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 /**
  *  <b>Added in 2.0</b>
  *  <p>
@@ -108,7 +111,7 @@ public class ConstraintProperties {
      * @param bias         the ratio between two connections
      * @return this
      */
-
+    @NonNull
     public ConstraintProperties center(int firstID, int firstSide, int firstMargin, int secondId, int secondSide, int secondMargin, float bias) {
         // Error checking
 
@@ -153,6 +156,7 @@ public class ConstraintProperties {
      * @param bias        The ratio of the space on the left vs. right sides 0.5 is centered (default)
      * @return this
      */
+    @NonNull
     public ConstraintProperties centerHorizontally(int leftId, int leftSide, int leftMargin, int rightId, int rightSide, int rightMargin, float bias) {
         connect(LEFT, leftId, leftSide, leftMargin);
         connect(RIGHT, rightId, rightSide, rightMargin);
@@ -172,6 +176,7 @@ public class ConstraintProperties {
      * @param bias        The ratio of the space on the start vs end side 0.5 is centered (default)
      * @return this
      */
+    @NonNull
     public ConstraintProperties centerHorizontallyRtl(int startId, int startSide, int startMargin, int endId, int endSide, int endMargin, float bias) {
         connect(START, startId, startSide, startMargin);
         connect(END, endId, endSide, endMargin);
@@ -191,6 +196,7 @@ public class ConstraintProperties {
      * @param bias         The ratio of the space on the top vs. bottom sides 0.5 is centered (default)
      * @return this
      */
+    @NonNull
     public ConstraintProperties centerVertically(int topId, int topSide, int topMargin, int bottomId, int bottomSide, int bottomMargin, float bias) {
         connect(TOP, topId, topSide, topMargin);
         connect(BOTTOM, bottomId, bottomSide, bottomMargin);
@@ -204,6 +210,7 @@ public class ConstraintProperties {
      * @param toView ID of view to center on (or in)
      * @return this
      */
+    @NonNull
     public ConstraintProperties centerHorizontally(int toView) {
         if (toView == PARENT_ID) {
             center(PARENT_ID, ConstraintSet.LEFT, 0, PARENT_ID, ConstraintSet.RIGHT, 0, 0.5f);
@@ -219,6 +226,7 @@ public class ConstraintProperties {
      * @param toView ID of view to center on (or in)
      * @return this
      */
+    @NonNull
     public ConstraintProperties centerHorizontallyRtl(int toView) {
         if (toView == PARENT_ID) {
             center(PARENT_ID, ConstraintSet.START, 0, PARENT_ID, ConstraintSet.END, 0, 0.5f);
@@ -234,6 +242,7 @@ public class ConstraintProperties {
      * @param toView ID of view to center on (or in)
      * @return this
      */
+    @NonNull
     public ConstraintProperties centerVertically(int toView) {
         if (toView == PARENT_ID) {
             center(PARENT_ID, ConstraintSet.TOP, 0, PARENT_ID, ConstraintSet.BOTTOM, 0, 0.5f);
@@ -249,6 +258,7 @@ public class ConstraintProperties {
      * @param anchor the Anchor to remove constraint from
      * @return this
      */
+    @NonNull
     public ConstraintProperties removeConstraints(int anchor) {
         switch (anchor) {
             case LEFT:
@@ -303,6 +313,7 @@ public class ConstraintProperties {
      * @param value  The new value for the margin
      * @return this
      */
+    @NonNull
     public ConstraintProperties margin(int anchor, int value) {
         switch (anchor) {
             case LEFT:
@@ -338,6 +349,7 @@ public class ConstraintProperties {
      * @param value  The new value for the margin
      * @return this
      */
+    @NonNull
     public ConstraintProperties goneMargin(int anchor, int value) {
         switch (anchor) {
             case LEFT:
@@ -372,6 +384,7 @@ public class ConstraintProperties {
      * @param bias the new bias 0.5 is in the middle
      * @return this
      */
+    @NonNull
     public ConstraintProperties horizontalBias(float bias) {
         mParams.horizontalBias = bias;
         return this;
@@ -383,6 +396,7 @@ public class ConstraintProperties {
      * @param bias the new bias 0.5 is in the middle
      * @return this
      */
+    @NonNull
     public ConstraintProperties verticalBias(float bias) {
         mParams.verticalBias = bias;
         return this;
@@ -395,7 +409,8 @@ public class ConstraintProperties {
      * @param ratio The ratio of the width to height (width / height)
      * @return this
      */
-    public ConstraintProperties dimensionRatio(String ratio) {
+    @NonNull
+    public ConstraintProperties dimensionRatio(@Nullable String ratio) {
         mParams.dimensionRatio = ratio;
         return this;
     }
@@ -406,6 +421,7 @@ public class ConstraintProperties {
      * @param visibility the visibility (View.VISIBLE, View.INVISIBLE, View.GONE)
      * @return this
      */
+    @NonNull
     public ConstraintProperties visibility(int visibility) {
         mView.setVisibility(visibility);
         return this;
@@ -417,6 +433,7 @@ public class ConstraintProperties {
      * @param alpha the alpha
      * @return this
      */
+    @NonNull
     public ConstraintProperties alpha(float alpha) {
         mView.setAlpha(alpha);
         return this;
@@ -428,6 +445,7 @@ public class ConstraintProperties {
      * @param elevation the elevation
      * @return this
      */
+    @NonNull
     public ConstraintProperties elevation(float elevation) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mView.setElevation(elevation);
@@ -441,6 +459,7 @@ public class ConstraintProperties {
      * @param rotation the rotation about the Z axis
      * @return this
      */
+    @NonNull
     public ConstraintProperties rotation(float rotation) {
         mView.setRotation(rotation);
         return this;
@@ -452,6 +471,7 @@ public class ConstraintProperties {
      * @param rotationX the rotation about the X axis
      * @return this
      */
+    @NonNull
     public ConstraintProperties rotationX(float rotationX) {
         mView.setRotationX(rotationX);
         return this;
@@ -463,6 +483,7 @@ public class ConstraintProperties {
      * @param rotationY the rotation about the Y axis
      * @return this
      */
+    @NonNull
     public ConstraintProperties rotationY(float rotationY) {
         mView.setRotationY(rotationY);
         return this;
@@ -474,6 +495,7 @@ public class ConstraintProperties {
      * @param scaleX the scale in X
      * @return this
      */
+    @NonNull
     public ConstraintProperties scaleX(float scaleX) {
         mView.setScaleY(scaleX);
         return this;
@@ -485,6 +507,7 @@ public class ConstraintProperties {
      * @param scaleY the scale in Y
      * @return this
      */
+    @NonNull
     public ConstraintProperties scaleY(float scaleY) {
         return this;
     }
@@ -495,6 +518,7 @@ public class ConstraintProperties {
      * @param transformPivotX X location of the pivot point.
      * @return this
      */
+    @NonNull
     public ConstraintProperties transformPivotX(float transformPivotX) {
         mView.setPivotX(transformPivotX);
         return this;
@@ -506,6 +530,7 @@ public class ConstraintProperties {
      * @param transformPivotY Y location of the pivot point.
      * @return this
      */
+    @NonNull
     public ConstraintProperties transformPivotY(float transformPivotY) {
         mView.setPivotY(transformPivotY);
         return this;
@@ -518,6 +543,7 @@ public class ConstraintProperties {
      * @param transformPivotY Y location of the pivot point.
      * @return this
      */
+    @NonNull
     public ConstraintProperties transformPivot(float transformPivotX, float transformPivotY) {
         mView.setPivotX(transformPivotX);
         mView.setPivotY(transformPivotY);
@@ -530,6 +556,7 @@ public class ConstraintProperties {
      * @param translationX the translation in X
      * @return this
      */
+    @NonNull
     public ConstraintProperties translationX(float translationX) {
         mView.setTranslationX(translationX);
         return this;
@@ -541,6 +568,7 @@ public class ConstraintProperties {
      * @param translationY the translation in Y
      * @return this
      */
+    @NonNull
     public ConstraintProperties translationY(float translationY) {
         mView.setTranslationY(translationY);
         return this;
@@ -553,6 +581,7 @@ public class ConstraintProperties {
      * @param translationY the translation in Y
      * @return this
      */
+    @NonNull
     public ConstraintProperties translation(float translationX, float translationY) {
         mView.setTranslationX(translationX);
         mView.setTranslationY(translationY);
@@ -565,6 +594,7 @@ public class ConstraintProperties {
      * @param translationZ the translationZ
      * @return this
      */
+    @NonNull
     public ConstraintProperties translationZ(float translationZ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mView.setTranslationZ(translationZ);
@@ -578,6 +608,7 @@ public class ConstraintProperties {
      * @param height the height of the view
      * @return this
      */
+    @NonNull
     public ConstraintProperties constrainHeight(int height) {
         mParams.height = height;
         return this;
@@ -589,6 +620,7 @@ public class ConstraintProperties {
      * @param width the width of the view
      * @return this
      */
+    @NonNull
     public ConstraintProperties constrainWidth(int width) {
         mParams.width = width;
         return this;
@@ -601,6 +633,7 @@ public class ConstraintProperties {
      * @param height the maximum height of the view
      * @return this
      */
+    @NonNull
     public ConstraintProperties constrainMaxHeight(int height) {
         mParams.matchConstraintMaxHeight = height;
         return this;
@@ -613,6 +646,7 @@ public class ConstraintProperties {
      * @param width the maximum width of the view
      * @return this
      */
+    @NonNull
     public ConstraintProperties constrainMaxWidth(int width) {
         mParams.matchConstraintMaxWidth = width;
         return this;
@@ -625,6 +659,7 @@ public class ConstraintProperties {
      * @param height the minimum height of the view
      * @return this
      */
+    @NonNull
     public ConstraintProperties constrainMinHeight(int height) {
         mParams.matchConstraintMinHeight = height;
         return this;
@@ -637,6 +672,7 @@ public class ConstraintProperties {
      * @param width the minimum width of the view
      * @return this
      */
+    @NonNull
     public ConstraintProperties constrainMinWidth(int width) {
         mParams.matchConstraintMinWidth = width;
         return this;
@@ -649,6 +685,7 @@ public class ConstraintProperties {
      * @param height MATCH_CONSTRAINT_WRAP or MATCH_CONSTRAINT_SPREAD
      * @return this
      */
+    @NonNull
     public ConstraintProperties constrainDefaultHeight(int height) {
         mParams.matchConstraintDefaultHeight = height;
         return this;
@@ -661,6 +698,7 @@ public class ConstraintProperties {
      * @param width MATCH_CONSTRAINT_WRAP or MATCH_CONSTRAINT_SPREAD
      * @return this
      */
+    @NonNull
     public ConstraintProperties constrainDefaultWidth(int width) {
         mParams.matchConstraintDefaultWidth = width;
         return this;
@@ -673,6 +711,7 @@ public class ConstraintProperties {
      * @param weight the weight that we can use to distribute the horizontal space
      * @return this
      */
+    @NonNull
     public ConstraintProperties horizontalWeight(float weight) {
         mParams.horizontalWeight = weight;
         return this;
@@ -685,6 +724,7 @@ public class ConstraintProperties {
      * @param weight the weight that we can use to distribute the vertical space
      * @return this
      */
+    @NonNull
     public ConstraintProperties verticalWeight(float weight) {
         mParams.verticalWeight = weight;
         return this;
@@ -704,6 +744,7 @@ public class ConstraintProperties {
      * @param chainStyle the weight that we can use to distribute the horizontal space
      * @return this
      */
+    @NonNull
     public ConstraintProperties horizontalChainStyle(int chainStyle) {
         mParams.horizontalChainStyle = chainStyle;
         return this;
@@ -723,6 +764,7 @@ public class ConstraintProperties {
      * @param chainStyle the weight that we can use to distribute the horizontal space
      * @return this
      */
+    @NonNull
     public ConstraintProperties verticalChainStyle(int chainStyle) {
         mParams.verticalChainStyle = chainStyle;
         return this;
@@ -735,6 +777,7 @@ public class ConstraintProperties {
      * @param rightId id of the view in chain to the right
      * @return this
      */
+    @NonNull
     public ConstraintProperties addToHorizontalChain(int leftId, int rightId) {
         connect(LEFT, leftId, (leftId == PARENT_ID) ? LEFT : RIGHT, 0);
         connect(RIGHT, rightId, (rightId == PARENT_ID) ? RIGHT : LEFT, 0);
@@ -758,6 +801,7 @@ public class ConstraintProperties {
      * @param rightId id of the view in chain to the right
      * @return this
      */
+    @NonNull
     public ConstraintProperties addToHorizontalChainRTL(int leftId, int rightId) {
         connect(START, leftId, (leftId == PARENT_ID) ? START : END, 0);
         connect(END, rightId, (rightId == PARENT_ID) ? END : START, 0);
@@ -781,6 +825,7 @@ public class ConstraintProperties {
      * @param bottomId view below
      * @return this
      */
+    @NonNull
     public ConstraintProperties addToVerticalChain(int topId, int bottomId) {
         connect(TOP, topId, (topId == PARENT_ID) ? TOP : BOTTOM, 0);
         connect(BOTTOM, bottomId, (bottomId == PARENT_ID) ? BOTTOM : TOP, 0);
@@ -804,6 +849,7 @@ public class ConstraintProperties {
      *
      * @return this
      */
+    @NonNull
     public ConstraintProperties removeFromVerticalChain() {
         int topId = mParams.topToBottom;
         int bottomId = mParams.bottomToTop;
@@ -839,6 +885,7 @@ public class ConstraintProperties {
      *
      * @return this
      */
+    @NonNull
     public ConstraintProperties removeFromHorizontalChain() {
         int leftId = mParams.leftToRight;
         int rightId = mParams.rightToLeft;
@@ -901,6 +948,7 @@ public class ConstraintProperties {
      * @param endSide   the side of widget to constrain to
      * @param margin    the margin to constrain (margin must be positive)
      */
+    @NonNull
     public ConstraintProperties connect(int startSide, int endID, int endSide, int margin) {
 
         switch (startSide) {
@@ -1048,7 +1096,7 @@ public class ConstraintProperties {
         return "undefined";
     }
 
-    public ConstraintProperties(View view) {
+    public ConstraintProperties(@NonNull View view) {
         ViewGroup.LayoutParams params = view.getLayoutParams();
         if (params instanceof ConstraintLayout.LayoutParams) {
             mParams = (ConstraintLayout.LayoutParams) params;

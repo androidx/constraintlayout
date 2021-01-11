@@ -26,6 +26,7 @@ import android.util.SparseArray;
 import android.util.Xml;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -43,8 +44,11 @@ public class ConstraintLayoutStates {
     ConstraintSet mDefaultConstraintSet;
     int mCurrentStateId = -1; // default
     int mCurrentConstraintNumber = -1; // default
+    @NonNull
     private SparseArray<State> mStateList = new SparseArray<>();
+    @NonNull
     private SparseArray<ConstraintSet> mConstraintSetMap = new SparseArray<>();
+    @Nullable
     private ConstraintsChangedListener mConstraintsChangedListener = null;
 
     ConstraintLayoutStates(@NonNull Context context, @NonNull ConstraintLayout layout, int resourceID) {
@@ -131,7 +135,7 @@ public class ConstraintLayoutStates {
 
     }
 
-    public void setOnConstraintsChanged(ConstraintsChangedListener constraintsChangedListener) {
+    public void setOnConstraintsChanged(@Nullable ConstraintsChangedListener constraintsChangedListener) {
         this.mConstraintsChangedListener = constraintsChangedListener;
     }
 

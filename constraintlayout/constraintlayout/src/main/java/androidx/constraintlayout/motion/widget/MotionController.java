@@ -20,6 +20,7 @@ import android.content.Context;
 import android.graphics.RectF;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -75,43 +76,63 @@ public class MotionController {
     private static final String TAG = "MotionController";
     private static final boolean DEBUG = false;
     private static final boolean FAVOR_FIXED_SIZE_VIEWS = false;
+    @NonNull
     View mView;
     int mId;
+    @Nullable
     String mConstraintTag;
     private int mCurveFitType = KeyFrames.UNSET;
+    @NonNull
     private MotionPaths mStartMotionPath = new MotionPaths();
+    @NonNull
     private MotionPaths mEndMotionPath = new MotionPaths();
 
+    @NonNull
     private MotionConstrainedPoint mStartPoint = new MotionConstrainedPoint();
+    @NonNull
     private MotionConstrainedPoint mEndPoint = new MotionConstrainedPoint();
 
+    @NonNull
     private CurveFit[] mSpline; // spline 0 is the generic one that process all the standard attributes
     private CurveFit mArcSpline;
     float mMotionStagger = Float.NaN;
     float mStaggerOffset = 0;
     float mStaggerScale = 1.0f;
     float mCurrentCenterX, mCurrentCenterY;
-    private int[] mInterpolateVariables;
+    @NonNull
+    private int[] mInterpolateVariables = new int[0];
+    @Nullable
     private double[] mInterpolateData; // scratch data created during setup
+    @Nullable
     private double[] mInterpolateVelocity; // scratch data created during setup
 
+    @Nullable
     private String[] mAttributeNames;  // the names of the custom attributes
-    private int[] mAttributeInterpCount; // how many interpolators for each custom attribute
+    @NonNull
+    private int[] mAttributeInterpCount = new int[0]; // how many interpolators for each custom attribute
     private int MAX_DIMENSION = 4;
+    @NonNull
     private float mValuesBuff[] = new float[MAX_DIMENSION];
     private ArrayList<MotionPaths> mMotionPaths = new ArrayList<>();
+    @NonNull
     private float[] mVelocity = new float[1]; // used as a temp buffer to return values
-
+    @Nullable
     private ArrayList<Key> mKeyList = new ArrayList<>(); // List of key frame items
+    @Nullable
     private HashMap<String, TimeCycleSplineSet> mTimeCycleAttributesMap; // splines to calculate for use TimeCycles
+    @Nullable
     private HashMap<String, SplineSet> mAttributesMap; // splines to calculate values of attributes
+    @Nullable
     private HashMap<String, KeyCycleOscillator> mCycleMap; // splines to calculate values of attributes
+    @Nullable
     private KeyTrigger[] mKeyTriggers; // splines to calculate values of attributes
     private int mPathMotionArc = UNSET;
     private int mTransformPivotTarget = UNSET; // if set, pivot point is maintained as the other object
+    @Nullable
     private View mTransformPivotView = null; // if set, pivot point is maintained as the other object
     private int mQuantizeMotionSteps = UNSET;
     private float mQuantizeMotionPhase = Float.NaN;
+    @Nullable
     private Interpolator mQuantizeMotionInterpolator = null;
     private boolean mNoMovement = false;
 
@@ -136,7 +157,8 @@ public class MotionController {
         return mMotionPaths.get(i);
     }
 
-    MotionController(View view) {
+    MotionController(@NonNull View view) {
+        mView = view;
         setView(view);
     }
 
@@ -225,7 +247,7 @@ public class MotionController {
        return mStartMotionPath.mAnimateRelativeTo;
     }
 
-    public void setupRelative(MotionController motionController) {
+    public void setupRelative(@NonNull MotionController motionController) {
         mStartMotionPath.setupRelative(motionController, motionController.mStartMotionPath);
         mEndMotionPath.setupRelative(motionController, motionController.mEndMotionPath);
     }
@@ -257,7 +279,7 @@ public class MotionController {
      * @param pointCount
      * @return number of key frames
      */
-    void buildPath(float[] points, int pointCount) {
+    void buildPath(@NonNull float[] points, int pointCount) {
         float mils = 1.0f / (pointCount - 1);
         SplineSet trans_x = (mAttributesMap == null) ? null : mAttributesMap.get(Key.TRANSLATION_X);
         SplineSet trans_y = (mAttributesMap == null) ? null : mAttributesMap.get(Key.TRANSLATION_Y);
@@ -344,7 +366,7 @@ public class MotionController {
      * @param pointCount
      * @return number of key frames
      */
-    void buildBounds(float[] bounds, int pointCount) {
+    void buildBounds(@NonNull float[] bounds, int pointCount) {
         float mils = 1.0f / (pointCount - 1);
         SplineSet trans_x = (mAttributesMap == null) ? null : mAttributesMap.get(Key.TRANSLATION_X);
         SplineSet trans_y = (mAttributesMap == null) ? null : mAttributesMap.get(Key.TRANSLATION_Y);
@@ -974,7 +996,7 @@ public class MotionController {
         motionPaths.setBounds((int) mView.getX(), (int) mView.getY(), mView.getWidth(), mView.getHeight());
     }
 
-    public void setView(View view) {
+    public void setView(@NonNull View view) {
         mView = view;
         mId = view.getId();
         ViewGroup.LayoutParams lp = view.getLayoutParams();
@@ -983,6 +1005,7 @@ public class MotionController {
         }
     }
 
+    @NonNull
     public View getView() {
         return mView;
     }
@@ -1023,7 +1046,7 @@ public class MotionController {
     private static final int INTERPOLATOR_REFRENCE_ID = -2;
     private static final int INTERPOLATOR_UNDEFINED = -3;
 
-    private static Interpolator getInterpolator(@NonNull Context context, int type, @NonNull String interpolatorString, int id ) {
+    private static Interpolator getInterpolator(@NonNull Context context, int type, @Nullable String interpolatorString, int id ) {
         switch (type) {
             case SPLINE_STRING:
                 final Easing easing = Easing.getInterpolator(interpolatorString);
@@ -1051,7 +1074,7 @@ public class MotionController {
         return null;
     }
 
-    void setEndState(ConstraintWidget cw, ConstraintSet constraintSet) {
+    void setEndState(@NonNull ConstraintWidget cw, @NonNull ConstraintSet constraintSet) {
         mEndMotionPath.time = 1;
         mEndMotionPath.position = 1;
         readView(mEndMotionPath);
@@ -1062,7 +1085,7 @@ public class MotionController {
 
     }
 
-    void setBothStates(View v) {
+    void setBothStates(@NonNull View v) {
         mStartMotionPath.time = 0;
         mStartMotionPath.position = 0;
         mNoMovement=true;
@@ -1080,7 +1103,7 @@ public class MotionController {
      * @param velocity return velocity
      * @return actual position accounting for easing and staggering
      */
-    private float getAdjustedPosition(float position, float[] velocity) {
+    private float getAdjustedPosition(float position, @Nullable float[] velocity) {
         if (velocity != null) {
             velocity[0] = 1;
         } else if (mStaggerScale != 1.0) {
@@ -1136,7 +1159,7 @@ public class MotionController {
      * @param keyCache
      * @return do you need to keep animating
      */
-    boolean interpolate(View child, float global_position, long time, KeyCache keyCache) {
+    boolean interpolate(@NonNull View child, float global_position, long time, KeyCache keyCache) {
         boolean timeAnimation = false;
         float position = getAdjustedPosition(global_position, null);
         // This quantize the position into steps e.g 4 steps = 0-0.25,0.25-0.50 etc
@@ -1290,7 +1313,7 @@ public class MotionController {
      * @param locationY   the y location on the view (0 = top, 1 = bottom)
      * @param mAnchorDpDt returns the differential of the motion with respect to the position
      */
-    void getDpDt(float position, float locationX, float locationY, float[] mAnchorDpDt) {
+    void getDpDt(float position, float locationX, float locationY, @NonNull float[] mAnchorDpDt) {
         if (DEBUG) {
             Log.v(TAG, Debug.getLoc()+ " "+ Debug.getName(mView)+" position= " + position + " location= " + locationX + " , " + locationY);
         }
@@ -1337,7 +1360,7 @@ public class MotionController {
      * @param locationY   the y location on the view (0 = top, 1 = bottom)
      * @param mAnchorDpDt returns the differential of the motion with respect to the position
      */
-    void getPostLayoutDvDp(float position, int width ,int height, float locationX, float locationY, float[] mAnchorDpDt) {
+    void getPostLayoutDvDp(float position, int width ,int height, float locationX, float locationY, @NonNull float[] mAnchorDpDt) {
         if (DEBUG) {
             Log.v(TAG, " position= " + position + " location= " + locationX + " , " + locationY);
         }
@@ -1418,12 +1441,13 @@ public class MotionController {
         mStartMotionPath.mDrawPath = debugMode;
     }
 
+    @NonNull
     String name() {
         Context context = mView.getContext();
         return context.getResources().getResourceEntryName(mView.getId());
     }
 
-    void positionKeyframe(View view, KeyPositionBase key, float x, float y, String[] attribute, float[] value) {
+    void positionKeyframe(@NonNull View view, @NonNull KeyPositionBase key, float x, float y, @NonNull String[] attribute, @NonNull float[] value) {
         RectF start = new RectF();
         start.left = mStartMotionPath.x;
         start.top = mStartMotionPath.y;
@@ -1444,7 +1468,7 @@ public class MotionController {
      * @param pos the x&y position of the keyFrame along the path
      * @return Number of keyFrames found
      */
-    public int getkeyFramePositions(int[] type, float[] pos) {
+    public int getkeyFramePositions(@NonNull int[] type, @NonNull float[] pos) {
         int  i = 0;
         int count = 0;
         for (Key key : mKeyList) {
@@ -1473,7 +1497,7 @@ public class MotionController {
      * @param info is a data structure array of int that holds info on each keyframe
      * @return Number of keyFrames found
      */
-    public int getKeyFrameInfo(int type, int[] info) {
+    public int getKeyFrameInfo(int type, @NonNull int[] info) {
         int count = 0;
         int cursor = 0;
         float[] pos = new float[2];

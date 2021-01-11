@@ -657,6 +657,7 @@ public class MotionScene {
          * @param context
          * @return
          */
+        @NonNull
         public String debugString(@NonNull Context context) {
 
             String ret;
@@ -1174,6 +1175,7 @@ public class MotionScene {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
     }
 
+    @Nullable
     public ConstraintSet getConstraintSet(@NonNull Context context, @NonNull String id) {
         if (DEBUG_DESKTOP) {
             System.out.println("id " + id);
@@ -1690,7 +1692,7 @@ public class MotionScene {
      * @param id
      * @return
      */
-    public int lookUpConstraintId(String id) {
+    public int lookUpConstraintId(@NonNull String id) {
         Integer boxed = mConstraintSetIdMap.get(id);
         if (boxed == null) {
             return 0;

@@ -46,6 +46,7 @@ import android.view.View;
 public class Placeholder extends View {
 
   private int mContentId = -1;
+  @Nullable
   private View mContent = null;
   private int mEmptyVisibility = View.INVISIBLE;
 
@@ -112,6 +113,7 @@ public class Placeholder extends View {
    * Returns the content view
    * @return {@code null} if no content is set, otherwise the content view
    */
+  @Nullable
   public View getContent() {
     return mContent;
   }

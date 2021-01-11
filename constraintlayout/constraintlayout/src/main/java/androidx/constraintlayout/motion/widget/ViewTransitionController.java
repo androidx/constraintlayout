@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
@@ -66,7 +67,7 @@ public class ViewTransitionController {
         }
     }
 
-    private void viewTransition(ViewTransition vt, View... view) {
+    private void viewTransition(ViewTransition vt, @NonNull View... view) {
         int currentId = mMotionLayout.getCurrentState();
         if (vt.mViewTransitionMode != ViewTransition.VIEWTRANSITIONMODE_NOSTATE) {
             if (currentId == -1) {
@@ -107,7 +108,7 @@ public class ViewTransitionController {
      * @param id    the id of a ViewTransition
      * @param views the list of views to transition simultaneously
      */
-    void viewTransition(int id, View... views) {
+    void viewTransition(int id, @NonNull View... views) {
         ViewTransition vt = null;
         ArrayList<View> list = new ArrayList<>();
         for (ViewTransition viewTransition : viewTransitions) {

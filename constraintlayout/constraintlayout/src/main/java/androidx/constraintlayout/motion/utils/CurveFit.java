@@ -16,6 +16,8 @@
 
 package androidx.constraintlayout.motion.utils;
 
+import androidx.annotation.NonNull;
+
 /**
  * Base class for interpolator
  *
@@ -27,7 +29,8 @@ public abstract class CurveFit {
     public static final int LINEAR = 1;
     public static final int CONSTANT = 2;
 
-    public static CurveFit get(int type, double[] time, double[][] y) {
+    @NonNull
+    public static CurveFit get(int type, @NonNull double[] time, @NonNull double[][] y) {
         if (time.length == 1) {
             type = CONSTANT;
         }
@@ -41,38 +44,41 @@ public abstract class CurveFit {
         }
     }
 
-    public static CurveFit getArc(int[] arcModes, double[] time, double[][] y) {
+    @NonNull
+    public static CurveFit getArc(@NonNull int[] arcModes, @NonNull double[] time, @NonNull double[][] y) {
         return new ArcCurveFit(arcModes, time, y);
     }
 
-    public abstract void getPos(double t, double[] v);
+    public abstract void getPos(double t, @NonNull double[] v);
 
-    public abstract void getPos(double t, float[] v);
+    public abstract void getPos(double t, @NonNull float[] v);
 
     public abstract double getPos(double t, int j);
 
-    public abstract void getSlope(double t, double[] v);
+    public abstract void getSlope(double t, @NonNull double[] v);
 
     public abstract double getSlope(double t, int j);
 
+    @NonNull
     public abstract double[] getTimePoints();
 
     static class Constant extends CurveFit {
         double mTime;
+        @NonNull
         double[] mValue;
 
-        Constant(double time, double[] value) {
+        Constant(double time, @NonNull double[] value) {
             mTime = time;
             mValue = value;
         }
 
         @Override
-        public void getPos(double t, double[] v) {
+        public void getPos(double t, @NonNull double[] v) {
             System.arraycopy(mValue, 0, v, 0, mValue.length);
         }
 
         @Override
-        public void getPos(double t, float[] v) {
+        public void getPos(double t, @NonNull float[] v) {
             for (int i = 0; i < mValue.length; i++) {
                 v[i] = (float) mValue[i];
             }
@@ -84,7 +90,7 @@ public abstract class CurveFit {
         }
 
         @Override
-        public void getSlope(double t, double[] v) {
+        public void getSlope(double t, @NonNull double[] v) {
             for (int i = 0; i < mValue.length; i++) {
                 v[i] = 0;
             }
@@ -95,6 +101,7 @@ public abstract class CurveFit {
             return 0;
         }
 
+        @NonNull
         @Override
         public double[] getTimePoints() {
             return new double[]{mTime};

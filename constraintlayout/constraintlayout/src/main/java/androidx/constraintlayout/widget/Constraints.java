@@ -60,6 +60,7 @@ public class Constraints extends ViewGroup {
   /**
    * {@inheritDoc}
    */
+  @NonNull
   @Override
   public LayoutParams generateLayoutParams(@Nullable AttributeSet attrs) {
     return new LayoutParams(getContext(), attrs);
@@ -134,6 +135,7 @@ public class Constraints extends ViewGroup {
    * @hide
    * {@inheritDoc}
    */
+  @NonNull
   @Override
   protected LayoutParams generateDefaultLayoutParams() {
     return new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -146,11 +148,13 @@ public class Constraints extends ViewGroup {
   /**
    * {@inheritDoc}
    */
+  @NonNull
   @Override
-  protected ViewGroup.LayoutParams generateLayoutParams(ViewGroup.LayoutParams p) {
+  protected ViewGroup.LayoutParams generateLayoutParams(@NonNull ViewGroup.LayoutParams p) {
     return new ConstraintLayout.LayoutParams(p);
   }
 
+  @NonNull
   public ConstraintSet getConstraintSet() {
     if (myConstraintSet == null) {
       myConstraintSet = new ConstraintSet();

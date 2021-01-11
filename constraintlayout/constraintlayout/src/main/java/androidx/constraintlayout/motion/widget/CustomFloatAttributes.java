@@ -15,11 +15,14 @@
  */
 package androidx.constraintlayout.motion.widget;
 
+import androidx.annotation.NonNull;
+
 /**
  * @hide
  */
 public interface CustomFloatAttributes {
-    String[]getListOfAttributes();
-    void set(String attribute, float value);
-    float get(String attribute);
+    @NonNull
+    String[] getListOfAttributes();
+    void set(@NonNull String attribute, float value);
+    float get(@NonNull String attribute);
 }

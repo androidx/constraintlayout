@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -84,7 +85,9 @@ public class ConstraintSet {
     private static final int INTERNAL_WRAP_CONTENT_CONSTRAINED = -4;
 
     private boolean mValidate;
+    @Nullable
     public String mIdString;
+    @NonNull
     private HashMap<String, ConstraintAttribute> mSavedAttributes = new HashMap<>();
 
     /**
@@ -542,10 +545,12 @@ public class ConstraintSet {
 
     }
 
+    @NonNull
     public HashMap<String, ConstraintAttribute> getCustomAttributeSet() {
         return mSavedAttributes;
     }
 
+    @NonNull
     public Constraint getParameters(int mId) {
         return get(mId);
     }
@@ -555,11 +560,14 @@ public class ConstraintSet {
      *
      * @param set
      */
-    public void readFallback(ConstraintSet set) {
+    public void readFallback(@NonNull ConstraintSet set) {
 
         for (Integer key : set.mConstraints.keySet()) {
             int id = key;
             Constraint parent = set.mConstraints.get(key);
+            if (parent == null) {
+                continue;
+            }
 
             if (!mConstraints.containsKey(id)) {
                 mConstraints.put(id, new Constraint());
@@ -594,7 +602,7 @@ public class ConstraintSet {
      *
      * @param constraintLayout
      */
-    public void readFallback(ConstraintLayout constraintLayout) {
+    public void readFallback(@NonNull ConstraintLayout constraintLayout) {
         int count = constraintLayout.getChildCount();
         for (int i = 0; i < count; i++) {
             View view = constraintLayout.getChildAt(i);
@@ -959,6 +967,7 @@ public class ConstraintSet {
         public int endToEnd = UNSET;
         public float horizontalBias = 0.5f;
         public float verticalBias = 0.5f;
+        @Nullable
         public String dimensionRatio = null;
         public int circleConstraint = UNSET;
         public int circleRadius = 0;
@@ -995,8 +1004,11 @@ public class ConstraintSet {
         public int mBarrierDirection = UNSET;
         public int mBarrierMargin = 0;
         public int mHelperType = UNSET;
+        @Nullable
         public int[] mReferenceIds;
+        @Nullable
         public String mReferenceIdString;
+        @Nullable
         public String mConstraintTag;
         public boolean constrainedWidth = false;
         public boolean constrainedHeight = false;
@@ -1004,7 +1016,7 @@ public class ConstraintSet {
         public boolean mBarrierAllowsGoneWidgets = true;
         public int mWrapBehavior = ConstraintWidget.WRAP_BEHAVIOR_INCLUDED;
 
-        public void copyFrom(Layout src) {
+        public void copyFrom(@NonNull Layout src) {
             mIsGuideline = src.mIsGuideline;
             mWidth = src.mWidth;
             mApply = src.mApply;
@@ -1425,7 +1437,7 @@ public class ConstraintSet {
             a.recycle();
         }
 
-        public void dump(MotionScene scene, StringBuilder stringBuilder) {
+        public void dump(@NonNull MotionScene scene, @NonNull StringBuilder stringBuilder) {
             Field[] fields = this.getClass().getDeclaredFields();
             stringBuilder.append("\n");
             for (int i = 0; i < fields.length; i++) {
@@ -1493,7 +1505,7 @@ public class ConstraintSet {
         public boolean applyElevation = false;
         public float elevation = 0;
 
-        public void copyFrom(Transform src) {
+        public void copyFrom(@NonNull Transform src) {
             mApply = src.mApply;
             rotation = src.rotation;
             rotationX = src.rotationX;
@@ -1510,6 +1522,7 @@ public class ConstraintSet {
             elevation = src.elevation;
         }
 
+        @NonNull
         private static SparseIntArray mapToConstant = new SparseIntArray();
         private static final int ROTATION = 1;
         private static final int ROTATION_X = 2;
@@ -1606,7 +1619,7 @@ public class ConstraintSet {
         public float alpha = 1;
         public float mProgress = Float.NaN;
 
-        public void copyFrom(PropertySet src) {
+        public void copyFrom(@NonNull PropertySet src) {
             mApply = src.mApply;
             visibility = src.visibility;
             alpha = src.alpha;
@@ -1643,6 +1656,7 @@ public class ConstraintSet {
         public boolean mApply = false;
         public int mAnimateRelativeTo = Layout.UNSET;
         public int mAnimateCircleAngleTo = 0;
+        @Nullable
         public String mTransitionEasing = null;
         public int mPathMotionArc = Layout.UNSET;
         public int mDrawPath = 0;
@@ -1651,6 +1665,7 @@ public class ConstraintSet {
         public float mPathRotate = Float.NaN;
         public float mQuantizeMotionPhase = Float.NaN;
         public int mQuantizeMotionSteps = Layout.UNSET;
+        @Nullable
         public String mQuantizeInterpolatorString = null;
         public int mQuantizeInterpolatorType = INTERPOLATOR_UNDEFINED; // undefined
         public int mQuantizeInterpolatorID = -1;
@@ -1659,7 +1674,7 @@ public class ConstraintSet {
         private static final int INTERPOLATOR_UNDEFINED = -3;
 
 
-        public void copyFrom(Motion src) {
+        public void copyFrom(@NonNull Motion src) {
             mApply = src.mApply;
             mAnimateRelativeTo = src.mAnimateRelativeTo;
             mTransitionEasing = src.mTransitionEasing;
@@ -1670,6 +1685,7 @@ public class ConstraintSet {
             mPolarRelativeTo = src.mPolarRelativeTo;
         }
 
+        @NonNull
         private static SparseIntArray mapToConstant = new SparseIntArray();
         private static final int TRANSITION_PATH_ROTATE = 1;
         private static final int PATH_MOTION_ARC = 2;
@@ -1772,7 +1788,9 @@ public class ConstraintSet {
         public final Motion motion = new Motion();
         public final Layout layout = new Layout();
         public final Transform transform = new Transform();
+        @NonNull
         public HashMap<String, ConstraintAttribute> mCustomConstraints = new HashMap<>();
+        @Nullable
         Delta mDelta;
 
         static class Delta {
@@ -1832,7 +1850,7 @@ public class ConstraintSet {
                 mValueBoolean[mCountBoolean++] = value;
             }
 
-            void applyDelta(Constraint c) {
+            void applyDelta(@NonNull Constraint c) {
                 for (int i = 0; i < mCountInt; i++) {
                     setDeltaValue(c, mTypeInt[i], mValueInt[i]);
                 }
@@ -1846,7 +1864,7 @@ public class ConstraintSet {
                     setDeltaValue(c, mTypeBoolean[i], mValueBoolean[i]);
                 }
             }
-            void printDelta(String tag) {
+            void printDelta(@NonNull String tag) {
                 Log.v(tag,"int");
 
                 for (int i = 0; i < mCountInt; i++) {
@@ -1868,12 +1886,12 @@ public class ConstraintSet {
                 }
             }
         }
-        public void applyDelta (Constraint c ) {
+        public void applyDelta(@NonNull Constraint c ) {
             if (mDelta != null) {
                 mDelta.applyDelta(c);
             }
         }
-       public void printDelta(String tag) {
+       public void printDelta(@NonNull String tag) {
             if (mDelta != null) {
                 mDelta.printDelta(tag);
             } else {
@@ -1895,22 +1913,23 @@ public class ConstraintSet {
             return ret;
         }
 
-        private void setStringValue(String attributeName, String value) {
+        private void setStringValue(@NonNull String attributeName, @NonNull String value) {
             get(attributeName, AttributeType.STRING_TYPE).setStringValue(value);
         }
 
-        private void setFloatValue(String attributeName, float value) {
+        private void setFloatValue(@NonNull String attributeName, float value) {
             get(attributeName, AttributeType.FLOAT_TYPE).setFloatValue(value);
         }
 
-        private void setIntValue(String attributeName, int value) {
+        private void setIntValue(@NonNull String attributeName, int value) {
             get(attributeName, AttributeType.INT_TYPE).setIntValue(value);
         }
 
-        private void setColorValue(String attributeName, int value) {
+        private void setColorValue(@NonNull String attributeName, int value) {
             get(attributeName, AttributeType.COLOR_TYPE).setColorValue(value);
         }
 
+        @NonNull
         public Constraint clone() {
             Constraint clone = new Constraint();
             clone.layout.copyFrom(layout);
@@ -1922,7 +1941,7 @@ public class ConstraintSet {
             return clone;
         }
 
-        private void fillFromConstraints(ConstraintHelper helper, int viewId, Constraints.LayoutParams param) {
+        private void fillFromConstraints(@NonNull ConstraintHelper helper, int viewId, @NonNull Constraints.LayoutParams param) {
             fillFromConstraints(viewId, param);
             if (helper instanceof Barrier) {
                 layout.mHelperType = BARRIER_TYPE;
@@ -1933,7 +1952,7 @@ public class ConstraintSet {
             }
         }
 
-        private void fillFromConstraints(int viewId, Constraints.LayoutParams param) {
+        private void fillFromConstraints(int viewId, @NonNull Constraints.LayoutParams param) {
             fillFrom(viewId, param);
             propertySet.alpha = param.alpha;
             transform.rotation = param.rotation;
@@ -1950,7 +1969,7 @@ public class ConstraintSet {
             transform.applyElevation = param.applyElevation;
         }
 
-        private void fillFrom(int viewId, ConstraintLayout.LayoutParams param) {
+        private void fillFrom(int viewId, @NonNull ConstraintLayout.LayoutParams param) {
             mViewId = viewId;
             layout.leftToLeft = param.leftToLeft;
             layout.leftToRight = param.leftToRight;
@@ -2020,7 +2039,7 @@ public class ConstraintSet {
             }
         }
 
-        public void applyTo(ConstraintLayout.LayoutParams param) {
+        public void applyTo(@NonNull ConstraintLayout.LayoutParams param) {
             param.leftToLeft = layout.leftToLeft;
             param.leftToRight = layout.leftToRight;
             param.rightToLeft = layout.rightToLeft;
@@ -2109,7 +2128,7 @@ public class ConstraintSet {
      *
      * @param set constraint set to copy
      */
-    public void clone(ConstraintSet set) {
+    public void clone(@NonNull ConstraintSet set) {
         mConstraints.clear();
         for (Integer key : set.mConstraints.keySet()) {
             Constraint constraint = set.mConstraints.get(key);
@@ -2125,7 +2144,7 @@ public class ConstraintSet {
      *
      * @param constraintLayout The ConstraintLayout to be copied
      */
-    public void clone(ConstraintLayout constraintLayout) {
+    public void clone(@NonNull ConstraintLayout constraintLayout) {
         int count = constraintLayout.getChildCount();
         mConstraints.clear();
         for (int i = 0; i < count; i++) {
@@ -2186,7 +2205,7 @@ public class ConstraintSet {
      *
      * @param constraints The ConstraintLayout to be copied
      */
-    public void clone(Constraints constraints) {
+    public void clone(@NonNull Constraints constraints) {
         int count = constraints.getChildCount();
         mConstraints.clear();
         for (int i = 0; i < count; i++) {
@@ -2217,7 +2236,7 @@ public class ConstraintSet {
      *
      * @param constraintLayout to be modified
      */
-    public void applyTo(ConstraintLayout constraintLayout) {
+    public void applyTo(@NonNull ConstraintLayout constraintLayout) {
         applyToInternal(constraintLayout, true);
         constraintLayout.setConstraintSet(null);
         constraintLayout.requestLayout();
@@ -2229,7 +2248,7 @@ public class ConstraintSet {
      *
      * @param constraintLayout to be modified
      */
-    public void applyToWithoutCustom(ConstraintLayout constraintLayout) {
+    public void applyToWithoutCustom(@NonNull ConstraintLayout constraintLayout) {
         applyToInternal(constraintLayout, false);
         constraintLayout.setConstraintSet(null);
     }
@@ -2239,7 +2258,7 @@ public class ConstraintSet {
      *
      * @param constraintLayout
      */
-    public void applyCustomAttributes(ConstraintLayout constraintLayout) {
+    public void applyCustomAttributes(@NonNull ConstraintLayout constraintLayout) {
         int count = constraintLayout.getChildCount();
         for (int i = 0; i < count; i++) {
             View view = constraintLayout.getChildAt(i);
@@ -2287,7 +2306,7 @@ public class ConstraintSet {
      * @param id           Id of the view
      * @param layoutParams LayoutParams to be filled
      */
-    public void applyToLayoutParams(int id, ConstraintLayout.LayoutParams layoutParams) {
+    public void applyToLayoutParams(int id, @NonNull ConstraintLayout.LayoutParams layoutParams) {
         if (mConstraints.containsKey(id)) {
             Constraint constraint = mConstraints.get(id);
             if (constraint != null) {
@@ -2299,7 +2318,7 @@ public class ConstraintSet {
     /**
      * Used to set constraints when used by constraint layout
      */
-    void applyToInternal(ConstraintLayout constraintLayout, boolean applyPostLayout) {
+    void applyToInternal(@NonNull ConstraintLayout constraintLayout, boolean applyPostLayout) {
         int count = constraintLayout.getChildCount();
         HashSet<Integer> used = new HashSet<Integer>(mConstraints.keySet());
         for (int i = 0; i < count; i++) {
@@ -2565,7 +2584,7 @@ public class ConstraintSet {
      * @param weights    can be null
      * @param style      set the style of the chain
      */
-    public void createVerticalChain(int topId, int topSide, int bottomId, int bottomSide, int[] chainIds, float[] weights,
+    public void createVerticalChain(int topId, int topSide, int bottomId, int bottomSide, @NonNull int[] chainIds, @NonNull float[] weights,
                                     int style) {
         if (chainIds.length < 2) {
             throw new IllegalArgumentException("must have 2 or more widgets in a chain");
@@ -2606,7 +2625,7 @@ public class ConstraintSet {
      * @param weights   The weight to assign to each element in the chain or null
      * @param style     The type of chain
      */
-    public void createHorizontalChain(int leftId, int leftSide, int rightId, int rightSide, int[] chainIds, float[] weights,
+    public void createHorizontalChain(int leftId, int leftSide, int rightId, int rightSide, @NonNull int[] chainIds, @NonNull float[] weights,
                                       int style) {
         createHorizontalChain(leftId, leftSide, rightId, rightSide, chainIds, weights, style, LEFT, RIGHT);
     }
@@ -2625,12 +2644,12 @@ public class ConstraintSet {
      * @param weights   The weight to assign to each element in the chain or null
      * @param style     The type of chain
      */
-    public void createHorizontalChainRtl(int startId, int startSide, int endId, int endSide, int[] chainIds, float[] weights,
+    public void createHorizontalChainRtl(int startId, int startSide, int endId, int endSide, @NonNull int[] chainIds, @NonNull float[] weights,
                                          int style) {
         createHorizontalChain(startId, startSide, endId, endSide, chainIds, weights, style, START, END);
     }
 
-    private void createHorizontalChain(int leftId, int leftSide, int rightId, int rightSide, int[] chainIds, float[] weights,
+    private void createHorizontalChain(int leftId, int leftSide, int rightId, int rightSide, @NonNull int[] chainIds, @NonNull float[] weights,
                                        int style, int left, int right) {
 
         if (chainIds.length < 2) {
@@ -2645,7 +2664,6 @@ public class ConstraintSet {
         get(chainIds[0]).layout.horizontalChainStyle = style;
         connect(chainIds[0], left, leftId, leftSide, UNSET);
         for (int i = 1; i < chainIds.length; i++) {
-            int chainId = chainIds[i];
             connect(chainIds[i], left, chainIds[i - 1], right, UNSET);
             connect(chainIds[i - 1], right, chainIds[i], left, UNSET);
             if (weights != null) {
@@ -3132,7 +3150,7 @@ public class ConstraintSet {
      * @param viewId ID of view to constrain
      * @param ratio  The ratio of the width to height (width / height)
      */
-    public void setDimensionRatio(int viewId, String ratio) {
+    public void setDimensionRatio(int viewId, @Nullable String ratio) {
         get(viewId).layout.dimensionRatio = ratio;
     }
 
@@ -3772,7 +3790,7 @@ public class ConstraintSet {
      * @param referenced
      * @since 1.1
      */
-    public void createBarrier(int id, int direction, int margin, int... referenced) {
+    public void createBarrier(int id, int direction, int margin, @NonNull int... referenced) {
         Constraint constraint = get(id);
         constraint.layout.mHelperType = BARRIER_TYPE;
         constraint.layout.mBarrierDirection = direction;
@@ -3824,6 +3842,7 @@ public class ConstraintSet {
      * @param id
      * @return array of id's
      */
+    @NonNull
     public int[] getReferencedIds(int id) {
         Constraint constraint = get(id);
         if (constraint.layout.mReferenceIds == null) {
@@ -3839,7 +3858,7 @@ public class ConstraintSet {
      * @param referenced
      * @since 2.0
      */
-    public void setReferencedIds(int id, int... referenced) {
+    public void setReferencedIds(int id, @NonNull int... referenced) {
         Constraint constraint = get(id);
         constraint.layout.mReferenceIds = referenced;
     }
@@ -3849,27 +3868,27 @@ public class ConstraintSet {
         constraint.layout.mHelperType = type;
     }
 
-    public void removeAttribute(String attributeName) {
+    public void removeAttribute(@NonNull String attributeName) {
         mSavedAttributes.remove(attributeName);
     }
 
-    public void setIntValue(int viewId, String attributeName, int value) {
+    public void setIntValue(int viewId, @NonNull String attributeName, int value) {
         get(viewId).setIntValue(attributeName, value);
     }
 
-    public void setColorValue(int viewId, String attributeName, int value) {
+    public void setColorValue(int viewId, @NonNull String attributeName, int value) {
         get(viewId).setColorValue(attributeName, value);
     }
 
-    public void setFloatValue(int viewId, String attributeName, float value) {
+    public void setFloatValue(int viewId, @NonNull String attributeName, float value) {
         get(viewId).setFloatValue(attributeName, value);
     }
 
-    public void setStringValue(int viewId, String attributeName, String value) {
+    public void setStringValue(int viewId, @NonNull String attributeName, @NonNull String value) {
         get(viewId).setStringValue(attributeName, value);
     }
 
-    private void addAttributes(AttributeType attributeType, String... attributeName) {
+    private void addAttributes(@NonNull AttributeType attributeType, @NonNull String... attributeName) {
         ConstraintAttribute constraintAttribute = null;
         for (int i = 0; i < attributeName.length; i++) {
             if (mSavedAttributes.containsKey(attributeName[i])) {
@@ -3888,7 +3907,7 @@ public class ConstraintSet {
         }
     }
 
-    public void parseIntAttributes(Constraint set, String attributes) {
+    public void parseIntAttributes(@NonNull Constraint set, @NonNull String attributes) {
         String[] sp = attributes.split(",");
         for (int i = 0; i < sp.length; i++) {
             String[] attr = sp[i].split("=");
@@ -3900,7 +3919,7 @@ public class ConstraintSet {
         }
     }
 
-    public void parseColorAttributes(Constraint set, String attributes) {
+    public void parseColorAttributes(@NonNull Constraint set, @NonNull String attributes) {
         String[] sp = attributes.split(",");
         for (int i = 0; i < sp.length; i++) {
             String[] attr = sp[i].split("=");
@@ -3912,7 +3931,7 @@ public class ConstraintSet {
         }
     }
 
-    public void parseFloatAttributes(Constraint set, String attributes) {
+    public void parseFloatAttributes(@NonNull Constraint set, @NonNull String attributes) {
         String[] sp = attributes.split(",");
         for (int i = 0; i < sp.length; i++) {
             String[] attr = sp[i].split("=");
@@ -3924,7 +3943,7 @@ public class ConstraintSet {
         }
     }
 
-    public void parseStringAttributes(Constraint set, String attributes) {
+    public void parseStringAttributes(@NonNull Constraint set, @NonNull String attributes) {
         String[] sp = splitString(attributes);
         for (int i = 0; i < sp.length; i++) {
             String[] attr = sp[i].split("=");
@@ -3933,7 +3952,7 @@ public class ConstraintSet {
         }
     }
 
-    private static String[] splitString(String str) {
+    private static String[] splitString(@NonNull String str) {
         char[] chars = str.toCharArray();
         ArrayList<String> list = new ArrayList<>();
         boolean indouble = false;
@@ -3950,29 +3969,31 @@ public class ConstraintSet {
         return list.toArray(new String[list.size()]);
     }
 
-    public void addIntAttributes(String... attributeName) {
+    public void addIntAttributes(@NonNull String... attributeName) {
         addAttributes(AttributeType.INT_TYPE, attributeName);
     }
 
-    public void addColorAttributes(String... attributeName) {
+    public void addColorAttributes(@NonNull String... attributeName) {
         addAttributes(AttributeType.COLOR_TYPE, attributeName);
     }
 
-    public void addFloatAttributes(String... attributeName) {
+    public void addFloatAttributes(@NonNull String... attributeName) {
         addAttributes(AttributeType.FLOAT_TYPE, attributeName);
     }
 
-    public void addStringAttributes(String... attributeName) {
+    public void addStringAttributes(@NonNull String... attributeName) {
         addAttributes(AttributeType.STRING_TYPE, attributeName);
     }
 
+    @NonNull
     private Constraint get(int id) {
         if (!mConstraints.containsKey(id)) {
             mConstraints.put(id, new Constraint());
         }
-        return mConstraints.get(id);
+        return Objects.requireNonNull(mConstraints.get(id));
     }
 
+    @NonNull
     private String sideToString(int side) {
         switch (side) {
             case LEFT:
@@ -4166,6 +4187,7 @@ public class ConstraintSet {
      * @param parser
      * @return
      */
+    @NonNull
     public static Constraint buildDelta(@NonNull Context context, @NonNull XmlPullParser parser) {
         AttributeSet attrs = Xml.asAttributeSet(parser);
         Constraint c = new Constraint();
@@ -4563,7 +4585,7 @@ public class ConstraintSet {
         }
     }
 
-    private static void setDeltaValue(Constraint c, int type, int value) {
+    private static void setDeltaValue(@NonNull Constraint c, int type, int value) {
         switch (type) {
             case EDITOR_ABSOLUTE_X:
                 c.layout.editorAbsoluteX = value;
@@ -5143,6 +5165,7 @@ public class ConstraintSet {
         }
     }
 
+    @NonNull
     private int[] convertReferenceString(View view, String referenceIdString) {
         String[] split = referenceIdString.split(",");
         Context context = view.getContext();
@@ -5182,6 +5205,7 @@ public class ConstraintSet {
     /**
      * @hide
      */
+    @Nullable
     public Constraint getConstraint(int id) {
         if (mConstraints.containsKey(id)) {
             return mConstraints.get(id);
@@ -5192,6 +5216,7 @@ public class ConstraintSet {
     /**
      * @hide
      */
+    @NonNull
     public int[] getKnownIds() {
         Integer[] arr = mConstraints.keySet().toArray(new Integer[0]);
         int[] array = new int[arr.length];
@@ -5235,7 +5260,7 @@ public class ConstraintSet {
      * @param scene
      * @param ids
      */
-    public void dump(MotionScene scene, int... ids) {
+    public void dump(@NonNull MotionScene scene, @NonNull int... ids) {
         Set<Integer> keys = mConstraints.keySet();
         HashSet<Integer> set;
         if (ids.length != 0) {
