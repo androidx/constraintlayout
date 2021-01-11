@@ -85,7 +85,7 @@ public class Guideline extends View {
      * {@hide
      */
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(@NonNull Canvas canvas) {
     }
 
     /**

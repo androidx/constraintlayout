@@ -18,6 +18,7 @@ package androidx.constraintlayout.motion.utils;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.Arrays;
@@ -39,8 +40,10 @@ public class Easing {
     private final static String ACCELERATE_NAME = "accelerate";
     private final static String STANDARD_NAME = "standard";
     private final static String LINEAR_NAME = "linear";
+    @NonNull
     public static String[] NAMED_EASING = {STANDARD_NAME, ACCELERATE_NAME, DECELERATE_NAME, LINEAR_NAME};
 
+    @Nullable
     public static Easing getInterpolator(@Nullable String configString) {
         if (configString == null) {
             return null;
@@ -75,6 +78,7 @@ public class Easing {
         return x;
     }
 
+    @NonNull
     public String toString() {
         return str;
     }

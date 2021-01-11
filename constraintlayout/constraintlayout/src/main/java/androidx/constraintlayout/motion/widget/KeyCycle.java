@@ -53,9 +53,11 @@ public class KeyCycle extends Key {
     public static final int SHAPE_COS_WAVE = Oscillator.COS_WAVE;
     public static final int SHAPE_BOUNCE = Oscillator.BOUNCE;
 
+    @Nullable
     private String mTransitionEasing = null;
     private int mCurveFit = 0;
     private int mWaveShape = -1;
+    @Nullable
     private String mCustomWaveShpe = null;
     private float mWavePeriod = Float.NaN;
     private float mWaveOffset = 0;
@@ -86,7 +88,7 @@ public class KeyCycle extends Key {
     }
 
     @Override
-    public void getAttributeNames(HashSet<String> attributes) {
+    public void getAttributeNames(@NonNull HashSet<String> attributes) {
         if (!Float.isNaN(mAlpha)) {
             attributes.add(Key.ALPHA);
         }
@@ -127,7 +129,7 @@ public class KeyCycle extends Key {
         }
     }
 
-    public void addCycleValues(HashMap<String, KeyCycleOscillator> oscSet) {
+    public void addCycleValues(@NonNull HashMap<String, KeyCycleOscillator> oscSet) {
         for (String key : oscSet.keySet()) {
             if (key.startsWith(Key.CUSTOM)) {
                 String ckey = key.substring(Key.CUSTOM.length() + 1);
@@ -158,7 +160,7 @@ public class KeyCycle extends Key {
         }
     }
 
-    public float getValue(String key) {
+    public float getValue(@NonNull String key) {
         switch (key) {
             case Key.ALPHA:
                 return mAlpha;
@@ -197,7 +199,7 @@ public class KeyCycle extends Key {
     }
 
     @Override
-    public void addValues(HashMap<String, SplineSet> splines) {
+    public void addValues(@NonNull HashMap<String, SplineSet> splines) {
         Debug.logStack(TAG, "add " + splines.size() + " values", 2);
         for (String s : splines.keySet()) {
             SplineSet splineSet = splines.get(s);
@@ -277,6 +279,7 @@ public class KeyCycle extends Key {
         private static final int ANDROID_TRANSLATION_Z = 19;
         private static final int PROGRESS = 20;
         private static final int WAVE_PHASE = 21;
+        @NonNull
         private static SparseIntArray mAttrMap = new SparseIntArray();
 
         static {
@@ -303,7 +306,7 @@ public class KeyCycle extends Key {
             mAttrMap.append(R.styleable.KeyCycle_wavePhase, WAVE_PHASE);
         }
 
-        private static void read(KeyCycle c, TypedArray a) {
+        private static void read(@NonNull KeyCycle c, @NonNull TypedArray a) {
             final int N = a.getIndexCount();
             for (int i = 0; i < N; i++) {
                 int attr = a.getIndex(i);
@@ -403,7 +406,7 @@ public class KeyCycle extends Key {
     }
 
     @Override
-    public void setValue(String tag, Object value) {
+    public void setValue(@NonNull String tag, @NonNull Object value) {
         switch (tag) {
             case Key.ALPHA:
                 mAlpha = toFloat(value);
@@ -467,7 +470,8 @@ public class KeyCycle extends Key {
         }
     }
 
-    public Key copy(Key src) {
+    @NonNull
+    public Key copy(@NonNull Key src) {
         super.copy(src);
         KeyCycle k = (KeyCycle) src;
         mTransitionEasing = k.mTransitionEasing;
@@ -493,6 +497,7 @@ public class KeyCycle extends Key {
         return this;
     }
 
+    @NonNull
     public Key clone() {
         return new KeyCycle().copy(this);
     }

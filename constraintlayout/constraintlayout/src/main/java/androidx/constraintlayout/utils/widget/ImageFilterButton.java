@@ -542,7 +542,7 @@ public class ImageFilterButton extends androidx.appcompat.widget.AppCompatImageB
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(@NonNull Canvas canvas) {
         boolean clip = false;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             if (mRound != 0.0f && mPath != null) {

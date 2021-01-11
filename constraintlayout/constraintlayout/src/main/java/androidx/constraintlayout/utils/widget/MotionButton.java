@@ -228,7 +228,7 @@ public class MotionButton extends androidx.appcompat.widget.AppCompatButton {
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(@NonNull Canvas canvas) {
         boolean clip = false;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             if (mRound != 0.0f && mPath != null) {

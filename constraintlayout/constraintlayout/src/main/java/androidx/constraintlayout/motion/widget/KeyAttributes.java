@@ -83,7 +83,7 @@ public class KeyAttributes extends Key {
     }
 
     @Override
-    public void getAttributeNames(HashSet<String> attributes) {
+    public void getAttributeNames(@NonNull HashSet<String> attributes) {
 
         if (!Float.isNaN(mAlpha)) {
             attributes.add(Key.ALPHA);
@@ -134,7 +134,7 @@ public class KeyAttributes extends Key {
         }
     }
 
-    public void setInterpolation(HashMap<String, Integer> interpolation) {
+    public void setInterpolation(@NonNull HashMap<String, Integer> interpolation) {
         if (mCurveFit == -1) {
             return;
         }
@@ -189,7 +189,7 @@ public class KeyAttributes extends Key {
     }
 
     @Override
-    public void addValues(HashMap<String, SplineSet> splines) {
+    public void addValues(@NonNull HashMap<String, SplineSet> splines) {
         for (String s : splines.keySet()) {
             SplineSet splineSet = splines.get(s);
             if (splineSet == null) {
@@ -281,7 +281,7 @@ public class KeyAttributes extends Key {
     }
 
     @Override
-    public void setValue(String tag, Object value) {
+    public void setValue(@NonNull String tag, @NonNull Object value) {
         switch (tag) {
             case ALPHA:
                 mAlpha = toFloat(value);
@@ -357,6 +357,7 @@ public class KeyAttributes extends Key {
         private static final int ANDROID_PIVOT_X = 19;
         private static final int ANDROID_PIVOT_Y = 20;
 
+        @NonNull
         private static SparseIntArray mAttrMap = new SparseIntArray();
 
         static {
@@ -380,7 +381,7 @@ public class KeyAttributes extends Key {
             mAttrMap.append(R.styleable.KeyAttribute_motionProgress, PROGRESS);
         }
 
-        public static void read(KeyAttributes c, TypedArray a) {
+        public static void read(@NonNull KeyAttributes c, @NonNull TypedArray a) {
             final int N = a.getIndexCount();
             for (int i = 0; i < N; i++) {
                 int attr = a.getIndex(i);
@@ -460,7 +461,8 @@ public class KeyAttributes extends Key {
         }
     }
 
-    public Key copy(Key src) {
+    @NonNull
+    public Key copy(@NonNull Key src) {
         super.copy(src);
         KeyAttributes k = (KeyAttributes) src;
         mCurveFit = k.mCurveFit;
@@ -482,6 +484,7 @@ public class KeyAttributes extends Key {
         return this;
     }
 
+    @NonNull
     public Key clone() {
         return new KeyAttributes().copy(this);
     }

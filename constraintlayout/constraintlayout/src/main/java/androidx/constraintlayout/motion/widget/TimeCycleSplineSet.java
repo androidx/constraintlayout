@@ -17,6 +17,8 @@ package androidx.constraintlayout.motion.widget;
 
 import android.os.Build;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.motion.utils.CurveFit;
 
@@ -37,12 +39,16 @@ import androidx.constraintlayout.motion.utils.Oscillator;
  */
 public abstract class TimeCycleSplineSet {
     private static final String TAG = "SplineSet";
+    @NonNull
     protected CurveFit mCurveFit;
     protected int mWaveShape = 0;
+    @NonNull
     protected int[] mTimePoints = new int[10];
+    @NonNull
     protected float[][] mValues = new float[10][3];
     private int count;
     private String mType;
+    @NonNull
     private float[] mCache = new float[3];
     private static final int CURVE_VALUE = 0;
     private static final int CURVE_PERIOD = 1;
@@ -52,6 +58,7 @@ public abstract class TimeCycleSplineSet {
     long last_time;
     float last_cycle = Float.NaN;
 
+    @NonNull
     @Override
     public String toString() {
         String str = mType;
@@ -62,13 +69,13 @@ public abstract class TimeCycleSplineSet {
         return str;
     }
 
-    public void setType(String type) {
+    public void setType(@NonNull String type) {
         mType = type;
     }
 
-    public abstract boolean setProperty(View view, float t, long time, KeyCache cache);
+    public abstract boolean setProperty(@NonNull View view, float t, long time, @NonNull KeyCache cache);
 
-    public float get(float pos, long time, View view, KeyCache cache) {
+    public float get(float pos, long time, @NonNull View view, @NonNull KeyCache cache) {
         mCurveFit.getPos(pos, mCache);
         float period = mCache[CURVE_PERIOD];
         if (period == 0) {
@@ -119,14 +126,17 @@ public abstract class TimeCycleSplineSet {
         }
     }
 
+    @NonNull
     public CurveFit getCurveFit() {
         return mCurveFit;
     }
 
+    @NonNull
     static TimeCycleSplineSet makeCustomSpline(String str, SparseArray<ConstraintAttribute> attrList) {
         return new CustomSet(str, attrList);
     }
 
+    @Nullable
     static TimeCycleSplineSet makeSpline(String str, long currentTime) {
         TimeCycleSplineSet timeCycle;
         switch (str) {
@@ -220,7 +230,7 @@ public abstract class TimeCycleSplineSet {
 
     static class ElevationSet extends TimeCycleSplineSet {
         @Override
-        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+        public boolean setProperty(@NonNull View view, float t, long time, @NonNull KeyCache cache) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 view.setElevation(get(t, time, view, cache));
             }
@@ -230,7 +240,7 @@ public abstract class TimeCycleSplineSet {
 
     static class AlphaSet extends TimeCycleSplineSet {
         @Override
-        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+        public boolean setProperty(@NonNull View view, float t, long time, @NonNull KeyCache cache) {
             view.setAlpha(get(t, time, view, cache));
             return mContinue;
         }
@@ -238,7 +248,7 @@ public abstract class TimeCycleSplineSet {
 
     static class RotationSet extends TimeCycleSplineSet {
         @Override
-        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+        public boolean setProperty(@NonNull View view, float t, long time, @NonNull KeyCache cache) {
             view.setRotation(get(t, time, view, cache));
             return mContinue;
         }
@@ -246,7 +256,7 @@ public abstract class TimeCycleSplineSet {
 
     static class RotationXset extends TimeCycleSplineSet {
         @Override
-        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+        public boolean setProperty(@NonNull View view, float t, long time, @NonNull KeyCache cache) {
             view.setRotationX(get(t, time, view, cache));
             return mContinue;
         }
@@ -254,7 +264,7 @@ public abstract class TimeCycleSplineSet {
 
     static class RotationYset extends TimeCycleSplineSet {
         @Override
-        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+        public boolean setProperty(@NonNull View view, float t, long time, @NonNull KeyCache cache) {
             view.setRotationY(get(t, time, view, cache));
             return mContinue;
         }
@@ -262,7 +272,7 @@ public abstract class TimeCycleSplineSet {
 
     static class PathRotate extends TimeCycleSplineSet {
         @Override
-        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+        public boolean setProperty(@NonNull View view, float t, long time, @NonNull KeyCache cache) {
             return mContinue;
         }
 
@@ -274,7 +284,7 @@ public abstract class TimeCycleSplineSet {
 
     static class ScaleXset extends TimeCycleSplineSet {
         @Override
-        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+        public boolean setProperty(@NonNull View view, float t, long time, @NonNull KeyCache cache) {
             view.setScaleX(get(t, time, view, cache));
             return mContinue;
         }
@@ -282,7 +292,7 @@ public abstract class TimeCycleSplineSet {
 
     static class ScaleYset extends TimeCycleSplineSet {
         @Override
-        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+        public boolean setProperty(@NonNull View view, float t, long time, @NonNull KeyCache cache) {
             view.setScaleY(get(t, time, view, cache));
             return mContinue;
         }
@@ -290,7 +300,7 @@ public abstract class TimeCycleSplineSet {
 
     static class TranslationXset extends TimeCycleSplineSet {
         @Override
-        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+        public boolean setProperty(@NonNull View view, float t, long time, @NonNull KeyCache cache) {
             view.setTranslationX(get(t, time, view, cache));
             return mContinue;
         }
@@ -298,7 +308,7 @@ public abstract class TimeCycleSplineSet {
 
     static class TranslationYset extends TimeCycleSplineSet {
         @Override
-        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+        public boolean setProperty(@NonNull View view, float t, long time, @NonNull KeyCache cache) {
             view.setTranslationY(get(t, time, view, cache));
             return mContinue;
         }
@@ -306,7 +316,7 @@ public abstract class TimeCycleSplineSet {
 
     static class TranslationZset extends TimeCycleSplineSet {
         @Override
-        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+        public boolean setProperty(@NonNull View view, float t, long time, @NonNull KeyCache cache) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 view.setTranslationZ(get(t, time, view, cache));
             }
@@ -315,13 +325,16 @@ public abstract class TimeCycleSplineSet {
     }
 
     static class CustomSet extends TimeCycleSplineSet {
+        @NonNull
         String mAttributeName;
+        @NonNull
         SparseArray<ConstraintAttribute> mConstraintAttributeList;
+        @NonNull
         SparseArray<float[]> mWaveProperties = new SparseArray<>();
         float[] mTempValues;
         float[] mCache;
 
-        public CustomSet(String attribute, SparseArray<ConstraintAttribute> attrList) {
+        public CustomSet(@NonNull String attribute, @NonNull SparseArray<ConstraintAttribute> attrList) {
             mAttributeName = attribute.split(",")[1];
             mConstraintAttributeList = attrList;
         }
@@ -352,14 +365,14 @@ public abstract class TimeCycleSplineSet {
             throw new RuntimeException("don't call for custom attribute call setPoint(pos, ConstraintAttribute,...)");
         }
 
-        public void setPoint(int position, ConstraintAttribute value, float period, int shape, float offset) {
+        public void setPoint(int position, @NonNull ConstraintAttribute value, float period, int shape, float offset) {
             mConstraintAttributeList.append(position, value);
             mWaveProperties.append(position, new float[]{period, offset});
             mWaveShape = Math.max(mWaveShape, shape); // the highest value shape is chosen
         }
 
         @Override
-        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+        public boolean setProperty(@NonNull View view, float t, long time, @NonNull KeyCache cache) {
             mCurveFit.getPos(t, mTempValues);
             float period = mTempValues[mTempValues.length - 2];
             float offset = mTempValues[mTempValues.length - 1];
@@ -392,7 +405,7 @@ public abstract class TimeCycleSplineSet {
         boolean mNoMethod = false;
 
         @Override
-        public boolean setProperty(View view, float t, long time, KeyCache cache) {
+        public boolean setProperty(@Nullable View view, float t, long time, @Nullable KeyCache cache) {
             if (view instanceof MotionLayout) {
                 ((MotionLayout) view).setProgress(get(t, time, view, cache));
             } else {
@@ -420,7 +433,7 @@ public abstract class TimeCycleSplineSet {
     }
 
     private static class Sort {
-        static void doubleQuickSort(int[] key, float[][] value, int low, int hi) {
+        static void doubleQuickSort(@NonNull int[] key, @NonNull float[][] value, int low, int hi) {
             int[] stack = new int[key.length + 10];
             int count = 0;
             stack[count++] = hi;
@@ -438,7 +451,7 @@ public abstract class TimeCycleSplineSet {
             }
         }
 
-        private static int partition(int[] array, float[][] value, int low, int hi) {
+        private static int partition(@NonNull int[] array, @NonNull float[][] value, int low, int hi) {
             int pivot = array[hi];
             int i = low;
             for (int j = low; j < hi; j++) {
@@ -451,7 +464,7 @@ public abstract class TimeCycleSplineSet {
             return i;
         }
 
-        private static void swap(int[] array, float[][] value, int a, int b) {
+        private static void swap(@NonNull int[] array, @NonNull float[][] value, int a, int b) {
             int tmp = array[a];
             array[a] = array[b];
             array[b] = tmp;

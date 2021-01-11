@@ -16,6 +16,8 @@
 
 package androidx.constraintlayout.motion.utils;
 
+import androidx.annotation.NonNull;
+
 /**
  * Provides spline interpolation code.
  * Currently not used but it is anticipated that we will be using it in the
@@ -25,10 +27,13 @@ package androidx.constraintlayout.motion.utils;
 
 public class HyperSpline {
     int mPoints;
+    @NonNull
     Cubic[][] mCurve;
     int mDimensionality;
+    @NonNull
     double[] mCurveLength;
     double mTotalLength;
+    @NonNull
     double[][] mCtl;
 
     /**
@@ -36,14 +41,15 @@ public class HyperSpline {
      *
      * @param points [mPoints][dimensionality]
      */
-    public HyperSpline(double[][] points) {
+    public HyperSpline(@NonNull double[][] points) {
         setup(points);
     }
 
     public HyperSpline() {
+        // TODO: Shouldn't this also call setup with an empty set of points?
     }
 
-    public void setup(double[][] points) {
+    public void setup(@NonNull double[][] points) {
         mDimensionality = points[0].length;
         mPoints = points.length;
         mCtl = new double[mDimensionality][mPoints];
@@ -71,7 +77,7 @@ public class HyperSpline {
         }
     }
 
-    public void getVelocity(double p, double[] v) {
+    public void getVelocity(double p, @NonNull double[] v) {
         double pos = p * mTotalLength;
         double sum = 0;
         int k = 0;
@@ -83,7 +89,7 @@ public class HyperSpline {
         }
     }
 
-    public void getPos(double p, double[] x) {
+    public void getPos(double p, @NonNull double[] x) {
         double pos = p * mTotalLength;
         double sum = 0;
         int k = 0;
@@ -95,7 +101,7 @@ public class HyperSpline {
         }
     }
 
-    public void getPos(double p, float[] x) {
+    public void getPos(double p, @NonNull float[] x) {
         double pos = p * mTotalLength;
         double sum = 0;
         int k = 0;
@@ -117,7 +123,7 @@ public class HyperSpline {
         return mCurve[splineNumber][k].eval(pos / mCurveLength[k]);
     }
 
-    public double approxLength(Cubic[] curve) {
+    public double approxLength(@NonNull Cubic[] curve) {
         double sum = 0;
 
         int N = curve.length;
@@ -144,7 +150,8 @@ public class HyperSpline {
         return sum;
     }
 
-    static Cubic[] calcNaturalCubic(int n, double[] x) {
+    @NonNull
+    static Cubic[] calcNaturalCubic(int n, @NonNull double[] x) {
         double[] gamma = new double[n];
         double[] delta = new double[n];
         double[] D = new double[n];

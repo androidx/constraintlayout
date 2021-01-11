@@ -19,6 +19,7 @@ import android.annotation.TargetApi;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.motion.utils.CurveFit;
@@ -42,14 +43,22 @@ import java.util.HashMap;
  */
 public abstract class KeyCycleOscillator {
     private static final String TAG = "KeyCycleOscillator";
+    // TODO: Need to write setup into constructor for this to make sense
+    @NonNull
     private CurveFit mCurveFit;
+    // TODO: Need to write setup into constructor for this to make sense
+    @NonNull
     private CycleOscillator mCycleOscillator;
+    @Nullable
     protected ConstraintAttribute mCustom; // used if it manipulates a custom attribute
+    @Nullable
     private String mType;
     private int mWaveShape = 0;
+    @Nullable
     private String mWaveString = null;
 
     public int mVariesBy = 0; // 0 = position, 2=path
+    @NonNull
     ArrayList<WavePoint> mWavePoints = new ArrayList<>();
 
     public boolean variesByPath() {
@@ -82,11 +91,11 @@ public abstract class KeyCycleOscillator {
         return str;
     }
 
-    public void setType(String type) {
+    public void setType(@NonNull String type) {
         mType = type;
     }
 
-    public abstract void setProperty(View view, float t);
+    public abstract void setProperty(@NonNull View view, float t);
 
     public float get(float t) {
         return (float) mCycleOscillator.getValues(t);
@@ -96,6 +105,7 @@ public abstract class KeyCycleOscillator {
         return (float) mCycleOscillator.getSlope(position);
     }
 
+    @Nullable
     public CurveFit getCurveFit() {
         return mCurveFit;
     }
@@ -148,8 +158,8 @@ public abstract class KeyCycleOscillator {
      * @param value         the adder
      * @param custom        The ConstraintAttribute used to set the value
      */
-    public void setPoint(int framePosition, int shape, String waveString, int variesBy, float period, float offset, float phase,
-                         float value, ConstraintAttribute custom) {
+    public void setPoint(int framePosition, int shape, @Nullable String waveString, int variesBy, float period, float offset, float phase,
+                         float value, @NonNull ConstraintAttribute custom) {
         mWavePoints.add(new WavePoint(framePosition, period, offset, phase, value));
         if (variesBy != -1) {
             mVariesBy = variesBy;
@@ -168,7 +178,7 @@ public abstract class KeyCycleOscillator {
      * @param offset        the offset value
      * @param value         the adder
      */
-    public void setPoint(int framePosition, int shape, String waveString, int variesBy, float period, float offset, float phase, float value) {
+    public void setPoint(int framePosition, int shape, @Nullable String waveString, int variesBy, float period, float offset, float phase, float value) {
         mWavePoints.add(new WavePoint(framePosition, period, offset, phase, value));
         if (variesBy != -1) {
             mVariesBy = variesBy;
@@ -207,7 +217,7 @@ public abstract class KeyCycleOscillator {
 
     static class ElevationSet extends KeyCycleOscillator {
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 view.setElevation(get(t));
             }
@@ -216,38 +226,38 @@ public abstract class KeyCycleOscillator {
 
     static class AlphaSet extends KeyCycleOscillator {
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             view.setAlpha(get(t));
         }
     }
 
     static class RotationSet extends KeyCycleOscillator {
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             view.setRotation(get(t));
         }
     }
 
     static class RotationXset extends KeyCycleOscillator {
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             view.setRotationX(get(t));
         }
     }
 
     static class RotationYset extends KeyCycleOscillator {
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             view.setRotationY(get(t));
         }
     }
 
     static class PathRotateSet extends KeyCycleOscillator {
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
         }
 
-        public void setPathRotate(View view, float t, double dx, double dy) {
+        public void setPathRotate(@NonNull View view, float t, double dx, double dy) {
             view.setRotation(get(t) + (float) Math.toDegrees(Math.atan2(dy, dx)));
         }
     }
@@ -330,7 +340,7 @@ public abstract class KeyCycleOscillator {
     }
 
     private static class IntDoubleSort {
-        static void sort(int[] key, float[] value, int low, int hi) {
+        static void sort(@NonNull int[] key, @NonNull float[] value, int low, int hi) {
             int[] stack = new int[key.length + 10];
             int count = 0;
             stack[count++] = hi;
@@ -348,7 +358,7 @@ public abstract class KeyCycleOscillator {
             }
         }
 
-        private static int partition(int[] array, float[] value, int low, int hi) {
+        private static int partition(@NonNull int[] array, @NonNull float[] value, int low, int hi) {
             int pivot = array[hi];
             int i = low;
             for (int j = low; j < hi; j++) {
@@ -361,7 +371,7 @@ public abstract class KeyCycleOscillator {
             return i;
         }
 
-        private static void swap(int[] array, float[] value, int a, int b) {
+        private static void swap(@NonNull int[] array, @NonNull float[] value, int a, int b) {
             int tmp = array[a];
             array[a] = array[b];
             array[b] = tmp;
@@ -372,7 +382,7 @@ public abstract class KeyCycleOscillator {
     }
 
     private static class IntFloatFloatSort {
-        static void sort(int[] key, float[] value1, float[] value2, int low, int hi) {
+        static void sort(@NonNull int[] key, @NonNull float[] value1, @NonNull float[] value2, int low, int hi) {
             int[] stack = new int[key.length + 10];
             int count = 0;
             stack[count++] = hi;
@@ -390,7 +400,7 @@ public abstract class KeyCycleOscillator {
             }
         }
 
-        private static int partition(int[] array, float[] value1, float[] value2, int low, int hi) {
+        private static int partition(@NonNull int[] array, @NonNull float[] value1, @NonNull float[] value2, int low, int hi) {
             int pivot = array[hi];
             int i = low;
             for (int j = low; j < hi; j++) {
@@ -403,7 +413,7 @@ public abstract class KeyCycleOscillator {
             return i;
         }
 
-        private static void swap(int[] array, float[] value1, float[] value2, int a, int b) {
+        private static void swap(@NonNull int[] array, @NonNull float[] value1, @NonNull float[] value2, int a, int b) {
             int tmp = array[a];
             array[a] = array[b];
             array[b] = tmp;
@@ -420,6 +430,7 @@ public abstract class KeyCycleOscillator {
         static final int UNSET = ConstraintLayout.LayoutParams.UNSET;
         private static final String TAG = "CycleOscillator";
         private final int mVariesBy;
+        @NonNull
         Oscillator mOscillator = new Oscillator();
         private final int OFFST = 0;
         private final int PHASE = 1;
@@ -432,6 +443,7 @@ public abstract class KeyCycleOscillator {
         float[] mPhase; // phase will be spline interpolated
         float[] mScale; // scales will be spline interpolated
         int mWaveShape;
+        @Nullable
         CurveFit mCurveFit;
         double[] mSplineValueCache; // for the return value of the curve fit
         double[] mSplineSlopeCache; // for the return value of the curve fit
@@ -484,7 +496,8 @@ public abstract class KeyCycleOscillator {
 
         public HashMap<String, ConstraintAttribute> mCustomConstraints = new HashMap<>();
 
-        private ConstraintAttribute get(String attributeName, ConstraintAttribute.AttributeType attributeType) {
+        @NonNull
+        private ConstraintAttribute get(@NonNull String attributeName, @NonNull ConstraintAttribute.AttributeType attributeType) {
             ConstraintAttribute ret;
             if (mCustomConstraints.containsKey(attributeName)) {
                 ret = mCustomConstraints.get(attributeName);

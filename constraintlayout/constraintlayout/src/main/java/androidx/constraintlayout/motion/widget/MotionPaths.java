@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.motion.utils.Easing;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -301,7 +302,7 @@ class MotionPaths implements Comparable<MotionPaths> {
         return Math.abs(a - b) > 0.000001f;
     }
 
-    void different(MotionPaths points, boolean[] mask, String[] custom, boolean arcMode) {
+    void different(MotionPaths points, @NonNull boolean[] mask, @NonNull String[] custom, boolean arcMode) {
         int c = 0;
         boolean diffx = diff(x, points.x);
         boolean diffy = diff(y, points.y);
@@ -313,7 +314,7 @@ class MotionPaths implements Comparable<MotionPaths> {
 
     }
 
-    void getCenter(double p, int[] toUse, double[] data, float[] point, int offset) {
+    void getCenter(double p, @NonNull int[] toUse, @NonNull double[] data, @NonNull float[] point, int offset) {
         float v_x = x;
         float v_y = y;
         float v_width = width;
@@ -355,7 +356,7 @@ class MotionPaths implements Comparable<MotionPaths> {
         point[offset + 1] = v_y + v_height / 2 + translationY;
     }
 
-    void getCenter(double p, int[] toUse, double[] data, float[] point, double[] vdata, float []velocity) {
+    void getCenter(double p, @NonNull int[] toUse, @NonNull double[] data, @NonNull float[] point, @NonNull double[] vdata, @NonNull float[] velocity) {
         float v_x = x;
         float v_y = y;
         float v_width = width;
@@ -416,7 +417,7 @@ class MotionPaths implements Comparable<MotionPaths> {
         velocity[0] = dpos_x;
         velocity[1] = dpos_y;
     }
-    void getCenterVelocity(double p, int[] toUse, double[] data, float[] point, int offset) {
+    void getCenterVelocity(double p, @NonNull int[] toUse, @NonNull double[] data, @NonNull float[] point, int offset) {
         float v_x = x;
         float v_y = y;
         float v_width = width;
@@ -457,7 +458,7 @@ class MotionPaths implements Comparable<MotionPaths> {
         point[offset + 1] = v_y + v_height / 2 + translationY;
     }
 
-    void getBounds(int[] toUse, double[] data, float[] point, int offset) {
+    void getBounds(@NonNull int[] toUse, @NonNull double[] data, @NonNull float[] point, int offset) {
         float v_x = x;
         float v_y = y;
         float v_width = width;
@@ -489,7 +490,7 @@ class MotionPaths implements Comparable<MotionPaths> {
     double[] mTempDelta = new double[18];
 
     // Called on the start Time Point
-    void setView(float position, View view, int[] toUse, double[] data, double[] slope, double[] cycle) {
+    void setView(float position, View view, @NonNull int[] toUse, @NonNull double[] data, @NonNull double[] slope, @Nullable double[] cycle) {
         float v_x = x;
         float v_y = y;
         float v_width = width;
@@ -645,7 +646,7 @@ class MotionPaths implements Comparable<MotionPaths> {
         }
     }
 
-    void getRect(int[] toUse, double[] data, float[] path, int offset) {
+    void getRect(@NonNull int[] toUse, @NonNull double[] data, @NonNull float[] path, int offset) {
         float v_x = x;
         float v_y = y;
         float v_width = width;
@@ -782,7 +783,7 @@ class MotionPaths implements Comparable<MotionPaths> {
      * @param deltaData
      * @param data
      */
-    void setDpDt(float locationX, float locationY, float[] mAnchorDpDt, int[] toUse, double[] deltaData, double[] data) {
+    void setDpDt(float locationX, float locationY, @NonNull float[] mAnchorDpDt, @NonNull int[] toUse, @NonNull double[] deltaData, @NonNull double[] data) {
 
         float d_x = 0;
         float d_y = 0;
@@ -859,7 +860,7 @@ class MotionPaths implements Comparable<MotionPaths> {
         mAnchorDpDt[1] = deltaY * (1 - locationY) + deltaBottom * (locationY) + deltaTranslationY;
     }
 
-    void fillStandard(double[] data, int[] toUse) {
+    void fillStandard(@NonNull double[] data, @NonNull int[] toUse) {
         float[] set = {position, x, y, width, height, mPathRotate};
         int c = 0;
         for (int i = 0; i < toUse.length; i++) {
@@ -881,7 +882,7 @@ class MotionPaths implements Comparable<MotionPaths> {
         return a.noOfInterpValues();
     }
 
-    int getCustomData(String name, double[] value, int offset) {
+    int getCustomData(@NonNull String name, @NonNull double[] value, int offset) {
         ConstraintAttribute a = attributes.get(name);
         if (a == null) {
             return 0;

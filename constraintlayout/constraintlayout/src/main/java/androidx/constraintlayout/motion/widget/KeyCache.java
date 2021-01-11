@@ -16,6 +16,9 @@
 
 package androidx.constraintlayout.motion.widget;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -25,9 +28,10 @@ import java.util.HashMap;
  */
 public class KeyCache {
 
+    @NonNull
     HashMap<Object, HashMap<String, float[]>> map = new HashMap<>();
 
-    void setFloatValue(Object view, String type, int element, float value) {
+    void setFloatValue(@NonNull Object view, @NonNull String type, int element, float value) {
         if (!map.containsKey(view)) {
             HashMap<String, float[]> array = new HashMap<>();
             float[] vArray = new float[element + 1];
@@ -59,7 +63,7 @@ public class KeyCache {
         }
     }
 
-    float getFloatValue(Object view, String type, int element) {
+    float getFloatValue(@NonNull Object view, @NonNull String type, int element) {
         if (!map.containsKey(view)) {
             return Float.NaN;
         } else {

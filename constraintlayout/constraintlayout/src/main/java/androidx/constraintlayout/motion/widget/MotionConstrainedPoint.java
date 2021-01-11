@@ -17,6 +17,8 @@
 package androidx.constraintlayout.motion.widget;
 
 import android.os.Build;
+
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.motion.utils.Easing;
@@ -138,7 +140,7 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
         }
     }
 
-    void different(MotionConstrainedPoint points, boolean[] mask, String[] custom) {
+    void different(@NonNull MotionConstrainedPoint points, @NonNull boolean[] mask, @NonNull String[] custom) {
         int c = 0;
         mask[c++] |= diff(position, points.position);
         mask[c++] |= diff(x, points.x);
@@ -151,7 +153,7 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
     double[] mTempValue = new double[18];
     double[] mTempDelta = new double[18];
 
-    void fillStandard(double[] data, int[] toUse) {
+    void fillStandard(@NonNull double[] data, @NonNull int[] toUse) {
         float[] set = {position, x, y, width, height, alpha, elevation, rotation, rotationX, rotationY,
                 scaleX, scaleY, mPivotX, mPivotY, translationX, translationY, translationZ, mPathRotate};
         int c = 0;
@@ -162,15 +164,15 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
         }
     }
 
-    boolean hasCustomData(String name) {
+    boolean hasCustomData(@NonNull String name) {
         return attributes.containsKey(name);
     }
 
-    int getCustomDataCount(String name) {
+    int getCustomDataCount(@NonNull String name) {
         return attributes.get(name).noOfInterpValues();
     }
 
-    int getCustomData(String name, double[] value, int offset) {
+    int getCustomData(@NonNull String name, @NonNull double[] value, int offset) {
         ConstraintAttribute a = attributes.get(name);
         if (a.noOfInterpValues() == 1) {
             value[offset] = a.getValueToInterpolate();

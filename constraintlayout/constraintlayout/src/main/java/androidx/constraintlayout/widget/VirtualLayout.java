@@ -64,7 +64,7 @@ public abstract class VirtualLayout extends ConstraintHelper {
         }
     }
 
-    public void onMeasure(androidx.constraintlayout.core.widgets.VirtualLayout layout, int widthMeasureSpec, int heightMeasureSpec) {
+    public void onMeasure(@Nullable androidx.constraintlayout.core.widgets.VirtualLayout layout, int widthMeasureSpec, int heightMeasureSpec) {
         // nothing
     }
 

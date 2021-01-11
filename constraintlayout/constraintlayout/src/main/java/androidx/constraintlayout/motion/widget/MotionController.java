@@ -92,7 +92,7 @@ public class MotionController {
     @NonNull
     private MotionConstrainedPoint mEndPoint = new MotionConstrainedPoint();
 
-    @NonNull
+    @Nullable
     private CurveFit[] mSpline; // spline 0 is the generic one that process all the standard attributes
     private CurveFit mArcSpline;
     float mMotionStagger = Float.NaN;
@@ -101,9 +101,11 @@ public class MotionController {
     float mCurrentCenterX, mCurrentCenterY;
     @NonNull
     private int[] mInterpolateVariables = new int[0];
-    @Nullable
+    // TODO: Need to write setup into constructor for this to make sense
+    @NonNull
     private double[] mInterpolateData; // scratch data created during setup
-    @Nullable
+    // TODO: Need to write setup into constructor for this to make sense
+    @NonNull
     private double[] mInterpolateVelocity; // scratch data created during setup
 
     @Nullable
@@ -116,7 +118,7 @@ public class MotionController {
     private ArrayList<MotionPaths> mMotionPaths = new ArrayList<>();
     @NonNull
     private float[] mVelocity = new float[1]; // used as a temp buffer to return values
-    @Nullable
+    @NonNull
     private ArrayList<Key> mKeyList = new ArrayList<>(); // List of key frame items
     @Nullable
     private HashMap<String, TimeCycleSplineSet> mTimeCycleAttributesMap; // splines to calculate for use TimeCycles
@@ -260,14 +262,14 @@ public class MotionController {
         return mCurrentCenterY;
     }
 
-    public void getCenter(double p, float[] pos, float[]vel) {
+    public void getCenter(double p, @NonNull float[] pos, @NonNull float[] vel) {
         double [] position = new double[4];
         double [] velocity = new double[4];
         int [] temp = new int[4];
         mSpline[0].getPos(p, position);
         mSpline[0].getSlope(p, velocity);
         Arrays.fill(vel,0);
-       mStartMotionPath.getCenter(p, mInterpolateVariables, position, pos, velocity, vel);
+        mStartMotionPath.getCenter(p, mInterpolateVariables, position, pos, velocity, vel);
     }
 
     /**
@@ -492,7 +494,7 @@ public class MotionController {
         return null;
     }
 
-    int buildKeyFrames(float[] keyFrames, int[] mode) {
+    int buildKeyFrames(@Nullable float[] keyFrames, @Nullable int[] mode) {
         if (keyFrames != null) {
             int count = 0;
             double[] time = mSpline[0].getTimePoints();
@@ -513,7 +515,7 @@ public class MotionController {
         return 0;
     }
 
-    int buildKeyBounds(float[] keyBounds, int[] mode) {
+    int buildKeyBounds(@NonNull float[] keyBounds, @NonNull int[] mode) {
         if (keyBounds != null) {
             int count = 0;
             double[] time = mSpline[0].getTimePoints();
@@ -536,7 +538,7 @@ public class MotionController {
 
     String[] attributeTable;
 
-    int getAttributeValues(String attributeType, float[] points, int pointCount) {
+    int getAttributeValues(@NonNull String attributeType, @NonNull float[] points, int pointCount) {
         float mils = 1.0f / (pointCount - 1);
         SplineSet spline = mAttributesMap.get(attributeType);
         if (spline == null) {
@@ -548,13 +550,13 @@ public class MotionController {
         return points.length;
     }
 
-    void buildRect(float p, float[] path, int offset) {
+    void buildRect(float p, @NonNull float[] path, int offset) {
         p = getAdjustedPosition(p, null);
         mSpline[0].getPos(p, mInterpolateData);
         mStartMotionPath.getRect(mInterpolateVariables, mInterpolateData, path, offset);
     }
 
-    void buildRectangles(float[] path, int pointCount) {
+    void buildRectangles(@NonNull float[] path, int pointCount) {
         float mils = 1.0f / (pointCount - 1);
         for (int i = 0; i < pointCount; i++) {
             float position = (i) * mils;
@@ -600,7 +602,7 @@ public class MotionController {
         return 0;
     }
 
-    private void insertKey(MotionPaths point) {
+    private void insertKey(@NonNull MotionPaths point) {
         int pos = Collections.binarySearch(mMotionPaths, point);
         if (pos == 0) {
             Log.e(TAG, " KeyPath positon \"" + point.position + "\" outside of range");
@@ -608,7 +610,7 @@ public class MotionController {
         mMotionPaths.add(-pos - 1, point);
     }
 
-    void addKeys(ArrayList<Key> list) {
+    void addKeys(@NonNull ArrayList<Key> list) {
         mKeyList.addAll(list);
         if (DEBUG) {
             for (Key key : mKeyList) {
@@ -617,7 +619,7 @@ public class MotionController {
         }
     }
 
-    public void addKey(Key key) {
+    public void addKey(@NonNull Key key) {
         mKeyList.add(key);
         if (DEBUG) {
             Log.v(TAG, " ################ addKey = " + key.getClass().getSimpleName());
@@ -639,13 +641,7 @@ public class MotionController {
         HashMap<String, Integer> interpolation = new HashMap<>();
         ArrayList<KeyTrigger> triggerList = null;
         if (DEBUG) {
-            if (mKeyList == null) {
-                Log.v(TAG, ">>>>>>>>>>>>>>> mKeyList==null");
-
-            } else {
-                Log.v(TAG, ">>>>>>>>>>>>>>> mKeyList for " + Debug.getName(mView));
-
-            }
+            Log.v(TAG, ">>>>>>>>>>>>>>> mKeyList for " + Debug.getName(mView));
         }
 
         if (mPathMotionArc != UNSET) {
@@ -658,27 +654,25 @@ public class MotionController {
             mStartPoint.different(mEndPoint, attr);
             Log.v(TAG, ">>>>>>>>>>>>>>> MotionConstrainedPoint found " + Arrays.toString(attr.toArray()));
         }
-        if (mKeyList != null) {
-            for (Key key : mKeyList) {
-                if (key instanceof KeyPosition) {
-                    KeyPosition keyPath = (KeyPosition) key;
-                    insertKey(new MotionPaths(parentWidth, parentHeight, keyPath, mStartMotionPath, mEndMotionPath));
-                    if (keyPath.mCurveFit != UNSET) {
-                        mCurveFitType = keyPath.mCurveFit;
-                    }
-                } else if (key instanceof KeyCycle) {
-                    key.getAttributeNames(cycleAttributes);
-                } else if (key instanceof KeyTimeCycle) {
-                    key.getAttributeNames(timeCycleAttributes);
-                } else if (key instanceof KeyTrigger) {
-                    if (triggerList == null) {
-                        triggerList = new ArrayList<>();
-                    }
-                    triggerList.add((KeyTrigger) key);
-                } else {
-                    key.setInterpolation(interpolation);
-                    key.getAttributeNames(splineAttributes);
+        for (Key key : mKeyList) {
+            if (key instanceof KeyPosition) {
+                KeyPosition keyPath = (KeyPosition) key;
+                insertKey(new MotionPaths(parentWidth, parentHeight, keyPath, mStartMotionPath, mEndMotionPath));
+                if (keyPath.mCurveFit != UNSET) {
+                    mCurveFitType = keyPath.mCurveFit;
                 }
+            } else if (key instanceof KeyCycle) {
+                key.getAttributeNames(cycleAttributes);
+            } else if (key instanceof KeyTimeCycle) {
+                key.getAttributeNames(timeCycleAttributes);
+            } else if (key instanceof KeyTrigger) {
+                if (triggerList == null) {
+                    triggerList = new ArrayList<>();
+                }
+                triggerList.add((KeyTrigger) key);
+            } else {
+                key.setInterpolation(interpolation);
+                key.getAttributeNames(splineAttributes);
             }
         }
 
@@ -739,11 +733,9 @@ public class MotionController {
                 splineSets.setType(attribute);
                 mAttributesMap.put(attribute, splineSets);
             }
-            if (mKeyList != null) {
-                for (Key key : mKeyList) {
-                    if ((key instanceof KeyAttributes)) {
-                        key.addValues(mAttributesMap);
-                    }
+            for (Key key : mKeyList) {
+                if ((key instanceof KeyAttributes)) {
+                    key.addValues(mAttributesMap);
                 }
             }
             mStartPoint.addValues(mAttributesMap, 0);
@@ -799,11 +791,9 @@ public class MotionController {
                 mTimeCycleAttributesMap.put(attribute, splineSets);
             }
 
-            if (mKeyList != null) {
-                for (Key key : mKeyList) {
-                    if (key instanceof KeyTimeCycle) {
-                        ((KeyTimeCycle) key).addTimeValues(mTimeCycleAttributesMap);
-                    }
+            for (Key key : mKeyList) {
+                if (key instanceof KeyTimeCycle) {
+                    ((KeyTimeCycle) key).addTimeValues(mTimeCycleAttributesMap);
                 }
             }
 
@@ -942,29 +932,27 @@ public class MotionController {
         //--------------------------- Cycle support --------------------
         float distance = Float.NaN;
         mCycleMap = new HashMap<>();
-        if (mKeyList != null) {
-            for (String attribute : cycleAttributes) {
-                KeyCycleOscillator cycle = KeyCycleOscillator.makeSpline(attribute);
-                if (cycle == null) {
-                    continue;
-                }
+        for (String attribute : cycleAttributes) {
+            KeyCycleOscillator cycle = KeyCycleOscillator.makeSpline(attribute);
+            if (cycle == null) {
+                continue;
+            }
 
-                if (cycle.variesByPath()) {
-                    if (Float.isNaN(distance)) {
-                        distance = getPreCycleDistance();
-                    }
-                }
-                cycle.setType(attribute);
-                mCycleMap.put(attribute, cycle);
-            }
-            for (Key key : mKeyList) {
-                if (key instanceof KeyCycle) {
-                    ((KeyCycle) key).addCycleValues(mCycleMap);
+            if (cycle.variesByPath()) {
+                if (Float.isNaN(distance)) {
+                    distance = getPreCycleDistance();
                 }
             }
-            for (KeyCycleOscillator cycle : mCycleMap.values()) {
-                cycle.setup(distance);
+            cycle.setType(attribute);
+            mCycleMap.put(attribute, cycle);
+        }
+        for (Key key : mKeyList) {
+            if (key instanceof KeyCycle) {
+                ((KeyCycle) key).addCycleValues(mCycleMap);
             }
+        }
+        for (KeyCycleOscillator cycle : mCycleMap.values()) {
+            cycle.setup(distance);
         }
 
         if (DEBUG) {

@@ -16,6 +16,8 @@
 
 package androidx.constraintlayout.motion.utils;
 
+import androidx.annotation.NonNull;
+
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
@@ -26,9 +28,10 @@ import java.util.Arrays;
  */
 public class StepCurve extends Easing {
     private final static boolean DEBUG = false;
+    @NonNull
     MonotonicCurveFit mCurveFit;
 
-    StepCurve(String configString) {
+    StepCurve(@NonNull String configString) {
         // done this way for efficiency
         str = configString;
         double[] values = new double[str.length() / 2];
@@ -47,7 +50,7 @@ public class StepCurve extends Easing {
         mCurveFit = genSpline(Arrays.copyOf(values, count));
     }
 
-    private static MonotonicCurveFit genSpline(String str) {
+    private static MonotonicCurveFit genSpline(@NonNull String str) {
         String wave = str;
         String[] sp = wave.split("\\s+");
         double[] values = new double[sp.length];
@@ -57,7 +60,7 @@ public class StepCurve extends Easing {
         return genSpline(values);
     }
 
-    private static MonotonicCurveFit genSpline(double[] values) {
+    private static MonotonicCurveFit genSpline(@NonNull double[] values) {
         int length = values.length * 3 - 2;
         int len = values.length - 1;
         double gap = 1.0 / len;

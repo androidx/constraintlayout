@@ -519,7 +519,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     @NonNull
-    protected View [] getViews(@NonNull ConstraintLayout layout) {
+    protected View[] getViews(@NonNull ConstraintLayout layout) {
 
         if (mViews == null || mViews.length != mCount) {
             mViews = new View[mCount];

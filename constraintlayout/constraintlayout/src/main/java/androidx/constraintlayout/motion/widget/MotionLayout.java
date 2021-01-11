@@ -961,13 +961,17 @@ public class MotionLayout extends ConstraintLayout implements
     public static final int TOUCH_UP_DECELERATE = 4;
     public static final int TOUCH_UP_DECELERATE_AND_COMPLETE = 5;
 
+    @NonNull
     static final String TAG = "MotionLayout";
     private final static boolean DEBUG = false;
 
     public static boolean IS_IN_EDIT_MODE;
 
+    @Nullable
     MotionScene mScene;
+    @Nullable
     Interpolator mInterpolator;
+    @Nullable
     Interpolator mProgressInterpolator = null;
     float mLastVelocity = 0;
     private int mBeginState = UNSET;
@@ -977,6 +981,7 @@ public class MotionLayout extends ConstraintLayout implements
     private int mLastHeightMeasureSpec = 0;
     private boolean mInteractionEnabled = true;
 
+    @NonNull
     HashMap<View, MotionController> mFrameArrayList = new HashMap<>();
 
     private long mAnimationStartTime = 0;
@@ -988,6 +993,7 @@ public class MotionLayout extends ConstraintLayout implements
     private boolean mTransitionInstantly;
     boolean mInTransition = false;
     boolean mIndirectTransition = false;
+    @Nullable
     private TransitionListener mTransitionListener;
     private float lastPos;
     private float lastY;
@@ -997,11 +1003,15 @@ public class MotionLayout extends ConstraintLayout implements
     int mDebugPath = 0;
     // variable used in painting the debug
     static final int MAX_KEY_FRAMES = 50;
+    @Nullable
     DevModeDraw mDevModeDraw;
     private boolean mTemporalInterpolator = false;
+    @NonNull
     private StopLogic mStopLogic = new StopLogic();
+    @NonNull
     private DecelerateInterpolator mDecelerateLogic = new DecelerateInterpolator();
 
+    @Nullable
     private DesignTool mDesignTool;
 
     boolean firstDown = true;
@@ -1018,9 +1028,13 @@ public class MotionLayout extends ConstraintLayout implements
     float mScrollTargetDT;
     private boolean mKeepAnimating = false;
 
+    @Nullable
     private ArrayList<MotionHelper> mOnShowHelpers = null;
+    @Nullable
     private ArrayList<MotionHelper> mOnHideHelpers = null;
+    @Nullable
     private ArrayList<MotionHelper> mDecoratorsHelpers = null;
+    @Nullable
     private ArrayList<TransitionListener> mTransitionListeners = null;
     private int mFrames = 0;
     private long mLastDrawTime = -1;
@@ -1042,10 +1056,14 @@ public class MotionLayout extends ConstraintLayout implements
     int mWidthMeasureMode;
     int mHeightMeasureMode;
     float mPostInterpolationPosition;
+    @NonNull
     private KeyCache mKeyCache = new KeyCache();
     private boolean mInLayout = false;
+    @Nullable
     private StateCache mStateCache;
+    @Nullable
     private Runnable mOnComplete = null;
+    @Nullable
     private int[]mScheduledTransitionTo = null;
     int mScheduledTransitions = 0;
 
@@ -2163,7 +2181,7 @@ public class MotionLayout extends ConstraintLayout implements
      * @param returnVelocity The velocity
      * @param type           The type of velocity you want 0 = post layout, 1 = layout, 2 = static postlayout
      */
-    public void getViewVelocity(View view, float posOnViewX, float posOnViewY, float[] returnVelocity, int type) {
+    public void getViewVelocity(@NonNull View view, float posOnViewX, float posOnViewY, @NonNull float[] returnVelocity, int type) {
         float v = mLastVelocity;
         float position = mTransitionLastPosition;
         if (mInterpolator != null) {
@@ -2660,7 +2678,7 @@ public class MotionLayout extends ConstraintLayout implements
     }
 
    @Override
-   public void onNestedScroll(@NonNull View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed, int type, int[] consumed) {
+   public void onNestedScroll(@NonNull View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed, int type, @NonNull int[] consumed) {
      if (mUndergoingMotion || dxConsumed != 0 || dyConsumed != 0) {
          consumed[0] += dxUnconsumed;
          consumed[1] += dyUnconsumed;

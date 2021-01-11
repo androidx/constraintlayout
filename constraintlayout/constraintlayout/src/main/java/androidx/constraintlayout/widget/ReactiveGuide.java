@@ -123,7 +123,7 @@ public class ReactiveGuide extends View implements SharedValues.SharedValuesList
      */
     @SuppressLint("MissingSuperCall")
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(@NonNull Canvas canvas) {
     }
 
     /**

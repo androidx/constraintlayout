@@ -127,9 +127,10 @@ public class MotionEffect extends MotionHelper {
     }
 
     @Override
-    public void onPreSetup(MotionLayout motionLayout, HashMap<View, MotionController> controllerMap) {
+    public void onPreSetup(@NonNull MotionLayout motionLayout, @NonNull HashMap<View, MotionController> controllerMap) {
         View[] views = getViews((ConstraintLayout) this.getParent());
 
+        // TODO: Looks like views can never be null here
         if (views == null) {
             Log.v(TAG, Debug.getLoc() + " views = null");
             return;

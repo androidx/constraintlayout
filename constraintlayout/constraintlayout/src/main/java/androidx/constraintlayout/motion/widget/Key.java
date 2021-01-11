@@ -38,14 +38,16 @@ public abstract class Key {
     public static int UNSET = -1;
     int mFramePosition = UNSET;
     int mTargetId = UNSET;
+    @Nullable
     String mTargetString = null;
     protected int mType;
 
     abstract void load(@NonNull Context context, @Nullable AttributeSet attrs);
 
+    @NonNull
     HashMap<String, ConstraintAttribute> mCustomConstraints;
 
-    abstract void getAttributeNames(HashSet<String> attributes);
+    abstract void getAttributeNames(@NonNull HashSet<String> attributes);
 
     public static final String ALPHA = "alpha";
     public static final String ELEVATION = "elevation";
@@ -71,7 +73,7 @@ public abstract class Key {
     public static final String TRANSITIONEASING = "transitionEasing";
     public static final String VISIBILITY = "visibility";
 
-    boolean matches(String constraintTag) {
+    boolean matches(@Nullable String constraintTag) {
         if (mTargetString == null || constraintTag == null) return false;
         return constraintTag.matches(mTargetString);
     }
@@ -83,7 +85,7 @@ public abstract class Key {
      * @param splines splines to write values to
      * @hide
      */
-    public abstract void addValues(HashMap<String, SplineSet> splines);
+    public abstract void addValues(@NonNull HashMap<String, SplineSet> splines);
 
     /**
      * Set the value associated with this tag
@@ -92,7 +94,7 @@ public abstract class Key {
      * @param value
      * @hide
      */
-    public abstract void setValue(String tag, Object value);
+    public abstract void setValue(@NonNull String tag, @NonNull Object value);
 
     /**
      * Return the float given a value. If the value is a "Float" object it is casted
@@ -101,7 +103,7 @@ public abstract class Key {
      * @return
      * @hide
      */
-    float toFloat(Object value) {
+    float toFloat(@NonNull Object value) {
         return (value instanceof Float) ? (Float) value : Float.parseFloat(value.toString());
     }
 
@@ -112,7 +114,7 @@ public abstract class Key {
      * @return
      * @hide
      */
-    int toInt(Object value) {
+    int toInt(@NonNull Object value) {
         return (value instanceof Integer) ? (Integer) value : Integer.parseInt(value.toString());
     }
 
@@ -123,7 +125,7 @@ public abstract class Key {
      * @return
      * @hide
      */
-    boolean toBoolean(Object value) {
+    boolean toBoolean(@NonNull Object value) {
         return (value instanceof Boolean) ? (Boolean) value : Boolean.parseBoolean(value.toString());
     }
 
@@ -133,10 +135,11 @@ public abstract class Key {
      *
      * @param interpolation
      */
-    public void setInterpolation(HashMap<String, Integer> interpolation) {
+    public void setInterpolation(@NonNull HashMap<String, Integer> interpolation) {
     }
 
-    public Key copy(Key src) {
+    @NonNull
+    public Key copy(@NonNull Key src) {
         mFramePosition = src.mFramePosition;
         mTargetId = src.mTargetId;
         mTargetString = src.mTargetString;
@@ -145,8 +148,10 @@ public abstract class Key {
         return this;
     }
 
+    @NonNull
     abstract public Key clone();
 
+    @NonNull
     public Key setViewId(int id) {
         mTargetId = id;
         return this;

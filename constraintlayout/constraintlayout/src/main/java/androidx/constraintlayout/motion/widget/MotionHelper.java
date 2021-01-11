@@ -24,6 +24,7 @@ public class MotionHelper extends ConstraintHelper implements MotionHelperInterf
     private boolean mUseOnShow = false;
     private boolean mUseOnHide = false;
     private float mProgress;
+    @Nullable
     protected View[] views;
 
     public MotionHelper(@NonNull Context context) {
@@ -114,7 +115,7 @@ public class MotionHelper extends ConstraintHelper implements MotionHelperInterf
      * @param progress
      * @hide
      */
-    public void setProgress(View view, float progress) {
+    public void setProgress(@NonNull View view, float progress) {
 
     }
 
@@ -141,21 +142,21 @@ public class MotionHelper extends ConstraintHelper implements MotionHelperInterf
     }
 
     @Override
-    public void onPreDraw(Canvas canvas) {
+    public void onPreDraw(@NonNull Canvas canvas) {
 
     }
     @Override
-    public void onFinishedMotionScene(MotionLayout motionLayout) {
-
-    }
-
-    @Override
-    public void onPostDraw(Canvas canvas) {
+    public void onFinishedMotionScene(@NonNull MotionLayout motionLayout) {
 
     }
 
     @Override
-    public void onPreSetup(MotionLayout motionLayout, HashMap<View, MotionController> controllerMap) {
+    public void onPostDraw(@NonNull Canvas canvas) {
+
+    }
+
+    @Override
+    public void onPreSetup(@NonNull MotionLayout motionLayout, @NonNull HashMap<View, MotionController> controllerMap) {
 
     }
 

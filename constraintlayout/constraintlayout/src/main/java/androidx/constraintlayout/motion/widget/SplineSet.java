@@ -17,6 +17,9 @@
 package androidx.constraintlayout.motion.widget;
 
 import android.os.Build;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.motion.utils.CurveFit;
 import android.util.Log;
@@ -36,12 +39,19 @@ import java.util.Arrays;
 
 public abstract class SplineSet {
     private static final String TAG = "SplineSet";
+    // TODO: Need to write setup into constructor for this to make sense
+    @NonNull
     protected CurveFit mCurveFit;
+    @NonNull
     protected int[] mTimePoints = new int[10];
+    @NonNull
     protected float[] mValues = new float[10];
     private int count;
+    // TODO: Need to write setup into constructor for this to make sense
+    @NonNull
     private String mType;
 
+    @NonNull
     @Override
     public String toString() {
         String str = mType;
@@ -53,11 +63,11 @@ public abstract class SplineSet {
         return str;
     }
 
-    public void setType(String type) {
+    public void setType(@NonNull String type) {
         mType = type;
     }
 
-    public abstract void setProperty(View view, float t);
+    public abstract void setProperty(@NonNull View view, float t);
 
     public float get(float t) {
         return (float) mCurveFit.getPos(t, 0);
@@ -158,7 +168,7 @@ public abstract class SplineSet {
 
     static class ElevationSet extends SplineSet {
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 view.setElevation(get(t));
             }
@@ -167,46 +177,46 @@ public abstract class SplineSet {
 
     static class AlphaSet extends SplineSet {
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             view.setAlpha(get(t));
         }
     }
 
     static class RotationSet extends SplineSet {
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             view.setRotation(get(t));
         }
     }
 
     static class RotationXset extends SplineSet {
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             view.setRotationX(get(t));
         }
     }
 
     static class RotationYset extends SplineSet {
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             view.setRotationY(get(t));
         }
     }
     static class PivotXset extends SplineSet {
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             view.setPivotX(get(t));
         }
     }
     static class PivotYset extends SplineSet {
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             view.setPivotY(get(t));
         }
     }
     static class PathRotate extends SplineSet {
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
         }
 
         public void setPathRotate(View view, float t, double dx, double dy) {
@@ -216,35 +226,35 @@ public abstract class SplineSet {
 
     static class ScaleXset extends SplineSet {
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             view.setScaleX(get(t));
         }
     }
 
     static class ScaleYset extends SplineSet {
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             view.setScaleY(get(t));
         }
     }
 
     static class TranslationXset extends SplineSet {
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             view.setTranslationX(get(t));
         }
     }
 
     static class TranslationYset extends SplineSet {
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             view.setTranslationY(get(t));
         }
     }
 
     static class TranslationZset extends SplineSet {
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 view.setTranslationZ(get(t));
             }
@@ -291,7 +301,7 @@ public abstract class SplineSet {
         }
 
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             mCurveFit.getPos(t, mTempValues);
             mConstraintAttributeList.valueAt(0).setInterpolatedValue(view, mTempValues);
         }
@@ -301,7 +311,7 @@ public abstract class SplineSet {
         boolean mNoMethod = false;
 
         @Override
-        public void setProperty(View view, float t) {
+        public void setProperty(@NonNull View view, float t) {
             if (view instanceof MotionLayout) {
                 ((MotionLayout) view).setProgress(get(t));
             } else {
@@ -330,7 +340,7 @@ public abstract class SplineSet {
 
     private static class Sort {
 
-        static void doubleQuickSort(int[] key, float[] value, int low, int hi) {
+        static void doubleQuickSort(@NonNull int[] key, @NonNull float[] value, int low, int hi) {
             int[] stack = new int[key.length + 10];
             int count = 0;
             stack[count++] = hi;
@@ -348,7 +358,7 @@ public abstract class SplineSet {
             }
         }
 
-        private static int partition(int[] array, float[] value, int low, int hi) {
+        private static int partition(@NonNull int[] array, @NonNull float[] value, int low, int hi) {
             int pivot = array[hi];
             int i = low;
             for (int j = low; j < hi; j++) {
@@ -361,7 +371,7 @@ public abstract class SplineSet {
             return i;
         }
 
-        private static void swap(int[] array, float[] value, int a, int b) {
+        private static void swap(@NonNull int[] array, @NonNull float[] value, int a, int b) {
             int tmp = array[a];
             array[a] = array[b];
             array[b] = tmp;

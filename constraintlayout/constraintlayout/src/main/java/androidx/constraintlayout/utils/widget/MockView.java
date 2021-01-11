@@ -23,12 +23,17 @@ import android.view.View;
  */
 public class MockView extends View {
 
+    @NonNull
     private Paint mPaintDiagonals = new Paint();
+    @NonNull
     private Paint mPaintText = new Paint();
+    @NonNull
     private Paint mPaintTextBackground = new Paint();
     private boolean mDrawDiagonals = true;
     private boolean mDrawLabel = true;
+    @Nullable
     protected String mText = null;
+    @NonNull
     private Rect mTextBounds = new Rect();
     private int mDiagonalsColor = Color.argb(255, 0, 0, 0);
     private int mTextColor = Color.argb(255, 200, 200, 200);

@@ -16,6 +16,8 @@
 
 package androidx.constraintlayout.motion.utils;
 
+import androidx.annotation.NonNull;
+
 import java.util.Arrays;
 
 /**
@@ -32,12 +34,14 @@ class ArcCurveFit extends CurveFit {
     private static final int START_VERTICAL = 1;
     private static final int START_HORIZONTAL = 2;
     private static final int START_LINEAR = 3;
+    @NonNull
     private final double[] mTime;
+    @NonNull
     Arc[] mArcs;
     private boolean mExtrapolate = true;
 
     @Override
-    public void getPos(double t, double[] v) {
+    public void getPos(double t, @NonNull double[] v) {
         if (mExtrapolate) {
             if (t < mArcs[0].mTime1) {
                 double t0 = mArcs[0].mTime1;
@@ -92,7 +96,7 @@ class ArcCurveFit extends CurveFit {
     }
 
     @Override
-    public void getPos(double t, float[] v) {
+    public void getPos(double t, @NonNull float[] v) {
         if (mExtrapolate) {
             if (t < mArcs[0].mTime1) {
                 double t0 = mArcs[0].mTime1;
@@ -145,7 +149,7 @@ class ArcCurveFit extends CurveFit {
     }
 
     @Override
-    public void getSlope(double t, double[] v) {
+    public void getSlope(double t, @NonNull double[] v) {
         if (t < mArcs[0].mTime1) {
             t = mArcs[0].mTime1;
         } else if (t > mArcs[mArcs.length - 1].mTime2) {
@@ -256,7 +260,7 @@ class ArcCurveFit extends CurveFit {
         return mTime;
     }
 
-    public ArcCurveFit(int[] arcModes, double[] time, double[][] y) {
+    public ArcCurveFit(@NonNull int[] arcModes, @NonNull double[] time, @NonNull double[][] y) {
         mTime = time;
         mArcs = new Arc[time.length - 1];
         int mode = START_VERTICAL;

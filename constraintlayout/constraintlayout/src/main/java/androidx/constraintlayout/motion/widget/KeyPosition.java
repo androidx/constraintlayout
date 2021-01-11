@@ -44,6 +44,7 @@ public class KeyPosition extends KeyPositionBase {
     private static final String TAG = "KeyPosition";
     static final String NAME = "KeyPosition";
 
+    @Nullable
     String mTransitionEasing = null;
     int mPathMotionArc = UNSET; // -1 means not set
     int mDrawPath = 0;
@@ -79,7 +80,7 @@ public class KeyPosition extends KeyPositionBase {
     }
 
     @Override
-    public void addValues(HashMap<String, SplineSet> splines) {
+    public void addValues(@NonNull HashMap<String, SplineSet> splines) {
     }
 
     public void setType(int type) {
@@ -144,7 +145,7 @@ public class KeyPosition extends KeyPositionBase {
     }
 
     @Override
-    public void positionAttributes(View view, RectF start, RectF end, float x, float y, String[] attribute, float[] value) {
+    public void positionAttributes(@NonNull View view, @NonNull RectF start, @NonNull RectF end, float x, float y, @NonNull String[] attribute, @NonNull float[] value) {
         switch (mPositionType) {
 
             case TYPE_PATH:
@@ -161,7 +162,7 @@ public class KeyPosition extends KeyPositionBase {
         }
     }
 
-    void positionPathAttributes(RectF start, RectF end, float x, float y, String[] attribute, float[] value) {
+    void positionPathAttributes(@NonNull RectF start, @NonNull RectF end, float x, float y, @NonNull String[] attribute, @NonNull float[] value) {
         float startCenterX = start.centerX();
         float startCenterY = start.centerY();
         float endCenterX = end.centerX();
@@ -193,7 +194,7 @@ public class KeyPosition extends KeyPositionBase {
         }
     }
 
-    void positionScreenAttributes(View view, RectF start, RectF end, float x, float y, String[] attribute, float[] value) {
+    void positionScreenAttributes(@NonNull View view, @NonNull RectF start, @NonNull RectF end, float x, float y, @NonNull String[] attribute, @NonNull float[] value) {
         float startCenterX = start.centerX();
         float startCenterY = start.centerY();
         float endCenterX = end.centerX();
@@ -220,7 +221,7 @@ public class KeyPosition extends KeyPositionBase {
         }
     }
 
-    void positionCartAttributes(RectF start, RectF end, float x, float y, String[] attribute, float[] value) {
+    void positionCartAttributes(@NonNull RectF start, @NonNull RectF end, float x, float y, @NonNull String[] attribute, @NonNull float[] value) {
         float startCenterX = start.centerX();
         float startCenterY = start.centerY();
         float endCenterX = end.centerX();
@@ -244,7 +245,7 @@ public class KeyPosition extends KeyPositionBase {
     }
 
     @Override
-    public boolean intersects(int layoutWidth, int layoutHeight, RectF start, RectF end, float x, float y) {
+    public boolean intersects(int layoutWidth, int layoutHeight, @NonNull RectF start, @NonNull RectF end, float x, float y) {
         calcPosition(layoutWidth, layoutHeight, start.centerX(), start.centerY(), end.centerX(), end.centerY());
         if ((Math.abs(x - mCalculatedPositionX) < SELECTION_SLOPE)
                 && (Math.abs(y - mCalculatedPositionY) < SELECTION_SLOPE)) {
@@ -267,6 +268,7 @@ public class KeyPosition extends KeyPositionBase {
         private static final int PERCENT_WIDTH = 11;
         private static final int PERCENT_HEIGHT = 12;
 
+        @NonNull
         private static SparseIntArray mAttrMap = new SparseIntArray();
 
         static {
@@ -284,7 +286,7 @@ public class KeyPosition extends KeyPositionBase {
             mAttrMap.append(R.styleable.KeyPosition_pathMotionArc, PATH_MOTION_ARC);
         }
 
-        private static void read(KeyPosition c, TypedArray a) {
+        private static void read(@NonNull KeyPosition c, @NonNull TypedArray a) {
             final int N = a.getIndexCount();
             for (int i = 0; i < N; i++) {
                 int attr = a.getIndex(i);
@@ -353,7 +355,7 @@ public class KeyPosition extends KeyPositionBase {
     }
 
     @Override
-    public void setValue(String tag, Object value) {
+    public void setValue(@NonNull String tag, @NonNull Object value) {
         switch (tag) {
             case TRANSITION_EASING:
                 mTransitionEasing = value.toString();
@@ -379,7 +381,8 @@ public class KeyPosition extends KeyPositionBase {
         }
     }
 
-    public Key copy(Key src) {
+    @NonNull
+    public Key copy(@NonNull Key src) {
         super.copy(src);
         KeyPosition k = (KeyPosition) src;
         mTransitionEasing = k.mTransitionEasing;
@@ -396,6 +399,7 @@ public class KeyPosition extends KeyPositionBase {
         return this;
     }
 
+    @NonNull
     public Key clone() {
         return new KeyPosition().copy(this);
     }

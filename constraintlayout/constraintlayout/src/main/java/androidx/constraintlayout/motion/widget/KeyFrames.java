@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.XmlResourceParser;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import android.util.Log;
@@ -43,7 +44,9 @@ public class KeyFrames {
     public static final int UNSET = ConstraintLayout.LayoutParams.UNSET;
     private static final String CUSTOM_METHOD = "CustomMethod";
     private static final String CUSTOM_ATTRIBUTE = "CustomAttribute";
+    @NonNull
     private HashMap<Integer, ArrayList<Key>> mFramesMap = new HashMap<Integer, ArrayList<Key>>();
+    @NonNull
     static HashMap<String, Constructor<? extends Key>> sKeyMakers = new HashMap<>();
     private static final String TAG = "KeyFrames";
 
@@ -60,7 +63,7 @@ public class KeyFrames {
         }
     }
 
-    public void addKey(Key key) {
+    public void addKey(@NonNull Key key) {
         if (!mFramesMap.containsKey(key.mTargetId)) {
             mFramesMap.put(key.mTargetId, new ArrayList<>());
         }
@@ -128,14 +131,14 @@ public class KeyFrames {
      * Do not filter the set by matches
      * @param motionController
      */
-    public void addAllFrames(MotionController motionController) {
+    public void addAllFrames(@NonNull MotionController motionController) {
         ArrayList<Key> list = mFramesMap.get(UNSET);
         if (list != null) {
             motionController.addKeys(list);
         }
     }
 
-    public void addFrames(MotionController motionController) {
+    public void addFrames(@NonNull MotionController motionController) {
         ArrayList<Key> list = mFramesMap.get(motionController.mId);
         if (list != null) {
             motionController.addKeys(list);
@@ -154,14 +157,17 @@ public class KeyFrames {
 
     }
 
-    static String name(int viewId, Context context) {
+    @NonNull
+    static String name(int viewId, @NonNull Context context) {
         return context.getResources().getResourceEntryName(viewId);
     }
 
+    @NonNull
     public Set<Integer> getKeys() {
         return mFramesMap.keySet();
     }
 
+    @Nullable
     public ArrayList<Key> getKeyFramesForView(int id) {
         return mFramesMap.get(id);
     }

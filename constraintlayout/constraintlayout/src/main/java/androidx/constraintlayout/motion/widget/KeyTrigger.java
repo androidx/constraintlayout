@@ -60,12 +60,16 @@ public class KeyTrigger extends Key {
     public static final String CROSS = "CROSS";
 
     private int mCurveFit = -1;
+    @Nullable
     private String mCross = null;
     private int mTriggerReceiver = UNSET;
+    @Nullable
     private String mNegativeCross = null;
+    @Nullable
     private String mPositiveCross = null;
     private int mTriggerID = UNSET;
     private int mTriggerCollisionId = UNSET;
+    @Nullable
     private View mTriggerCollisionView = null;
     float mTriggerSlack = .1f;
     private boolean mFireCrossReset = true;
@@ -78,8 +82,11 @@ public class KeyTrigger extends Key {
     int mViewTransitionOnPositiveCross = UNSET;
     int mViewTransitionOnCross = UNSET;
 
+    @NonNull
     RectF mCollisionRect = new RectF();
+    @NonNull
     RectF mTargetRect = new RectF();
+    @NonNull
     HashMap<String, Method> mMethodHashMap = new HashMap<>();
     public static final int KEY_TYPE = 5;
 
@@ -104,15 +111,15 @@ public class KeyTrigger extends Key {
     }
 
     @Override
-    public void getAttributeNames(HashSet<String> attributes) {
+    public void getAttributeNames(@NonNull HashSet<String> attributes) {
     }
 
     @Override
-    public void addValues(HashMap<String, SplineSet> splines) {
+    public void addValues(@NonNull HashMap<String, SplineSet> splines) {
     }
 
     @Override
-    public void setValue(String tag, Object value) {
+    public void setValue(@NonNull String tag, @NonNull Object value) {
         switch (tag) {
             case CROSS:
                 mCross = value.toString();
@@ -154,7 +161,7 @@ public class KeyTrigger extends Key {
         }
     }
 
-    private void setUpRect(RectF rect, View child, boolean postLayout) {
+    private void setUpRect(@NonNull RectF rect, @NonNull View child, boolean postLayout) {
         rect.top = child.getTop();
         rect.bottom = child.getBottom();
         rect.left = child.getLeft();
@@ -164,7 +171,7 @@ public class KeyTrigger extends Key {
         }
     }
 
-    public void conditionallyFire(float pos, View child) {
+    public void conditionallyFire(float pos, @NonNull View child) {
         boolean fireCross = false;
         boolean fireNegative = false;
         boolean firePositive = false;
@@ -344,6 +351,7 @@ public class KeyTrigger extends Key {
         private static final int VT_NEGATIVE_CROSS = 13;
         private static final int VT_POSITIVE_CROSS = 14;
 
+        @NonNull
         private static SparseIntArray mAttrMap = new SparseIntArray();
 
         static {
@@ -362,7 +370,7 @@ public class KeyTrigger extends Key {
             mAttrMap.append(R.styleable.KeyTrigger_viewTransitionOnPositiveCross, VT_POSITIVE_CROSS);
         }
 
-        public static void read(KeyTrigger c, TypedArray a, Context context) {
+        public static void read(@NonNull KeyTrigger c, @NonNull TypedArray a, @NonNull Context context) {
             final int N = a.getIndexCount();
             for (int i = 0; i < N; i++) {
                 int attr = a.getIndex(i);
@@ -426,7 +434,8 @@ public class KeyTrigger extends Key {
         }
     }
 
-    public Key copy(Key src) {
+    @NonNull
+    public Key copy(@NonNull Key src) {
         super.copy(src);
         KeyTrigger k = (KeyTrigger) src;
         mCurveFit = k.mCurveFit;
@@ -450,6 +459,7 @@ public class KeyTrigger extends Key {
         return this;
     }
 
+    @NonNull
     public Key clone() {
         return new KeyTrigger().copy(this);
     }

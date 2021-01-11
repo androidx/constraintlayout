@@ -19,6 +19,8 @@ package androidx.constraintlayout.motion.widget;
 import android.graphics.Canvas;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
 import java.util.HashMap;
 
 public interface MotionHelperInterface extends  Animatable, MotionLayout.TransitionListener {
@@ -28,9 +30,9 @@ public interface MotionHelperInterface extends  Animatable, MotionLayout.Transit
 
     boolean isDecorator();
 
-    void onPreDraw(Canvas canvas);
+    void onPreDraw(@NonNull Canvas canvas);
 
-    void onPostDraw(Canvas canvas);
+    void onPostDraw(@NonNull Canvas canvas);
 
     /**
      * Called after motionController is populated with start and end and keyframes.
@@ -38,11 +40,11 @@ public interface MotionHelperInterface extends  Animatable, MotionLayout.Transit
      * @param motionLayout
      * @param controllerMap
      */
-    void onPreSetup(MotionLayout motionLayout, HashMap<View, MotionController> controllerMap);
+    void onPreSetup(@NonNull MotionLayout motionLayout, @NonNull HashMap<View, MotionController> controllerMap);
 
     /**
      * This is called after motionLayout read motionScene and assembles all constraintSets
      * @param motionLayout
      */
-    void onFinishedMotionScene(MotionLayout motionLayout);
+    void onFinishedMotionScene(@NonNull MotionLayout motionLayout);
 }

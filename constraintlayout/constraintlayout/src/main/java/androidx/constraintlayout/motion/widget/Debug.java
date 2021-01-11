@@ -157,7 +157,7 @@ public class Debug {
      * @hide
      */
     @NonNull
-    public static String getName(@NonNull Context context, int []id) {
+    public static String getName(@NonNull Context context, @NonNull int []id) {
         try {
             String str = id.length+"[";
             for (int i = 0; i < id.length; i++) {

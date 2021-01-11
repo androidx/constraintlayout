@@ -1256,6 +1256,7 @@ public class MotionScene {
      * @param position
      * @return Key Object
      */
+    @Nullable
     Key getKeyFrame(@NonNull Context context, int type, int target, int position) {
         if (mCurrentTransition == null) {
             return null;
@@ -1294,7 +1295,7 @@ public class MotionScene {
      * @param position
      * @return true if a keyframe exists, false otherwise
      */
-    boolean hasKeyFramePosition(View view, int position) {
+    boolean hasKeyFramePosition(@NonNull View view, int position) {
         if (mCurrentTransition == null) {
             return false;
         }
@@ -1309,7 +1310,7 @@ public class MotionScene {
         return false;
     }
 
-    public void setKeyframe(View view, int position, String name, Object value) {
+    public void setKeyframe(@NonNull View view, int position, @NonNull String name, @Nullable Object value) {
         if (DEBUG) {
             System.out.println("setKeyframe for pos " + position + " name <" + name + "> value: " + value);
         }
@@ -1344,6 +1345,7 @@ public class MotionScene {
                         v = 0.01f;
                     }
                     if (name.equalsIgnoreCase("app:PerpendicularPath_percent")) {
+                        // TODO: What is the plan for this?
                     }
                 }
             }

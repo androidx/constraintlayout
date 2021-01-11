@@ -94,7 +94,7 @@ public class MotionTelltales extends MockView {
         super.onAttachedToWindow();
 
     }
-    public void setText(CharSequence text) {
+    public void setText(@NonNull CharSequence text) {
         mText = text.toString();
         requestLayout();
     }

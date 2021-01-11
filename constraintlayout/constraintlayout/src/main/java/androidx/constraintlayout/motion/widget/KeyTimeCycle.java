@@ -53,6 +53,7 @@ public class KeyTimeCycle extends Key {
     public static final int SHAPE_COS_WAVE = Oscillator.COS_WAVE;
     public static final int SHAPE_BOUNCE = Oscillator.BOUNCE;
 
+    @Nullable
     private String mTransitionEasing;
     private int mCurveFit = -1;
     private float mAlpha = Float.NaN;
@@ -68,6 +69,7 @@ public class KeyTimeCycle extends Key {
     private float mTranslationZ = Float.NaN;
     private float mProgress = Float.NaN;
     private int mWaveShape = 0;
+    @Nullable
     private String mCustomWaveShpe = null; // TODO add support of custom wave shapes in KeyTimeCycle
     private float mWavePeriod = Float.NaN;
     private float mWaveOffset = 0;
@@ -89,7 +91,7 @@ public class KeyTimeCycle extends Key {
      */
 
     @Override
-    public void getAttributeNames(HashSet<String> attributes) {
+    public void getAttributeNames(@NonNull HashSet<String> attributes) {
         if (!Float.isNaN(mAlpha)) {
             attributes.add(Key.ALPHA);
         }
@@ -133,7 +135,7 @@ public class KeyTimeCycle extends Key {
         }
     }
 
-    public void setInterpolation(HashMap<String, Integer> interpolation) {
+    public void setInterpolation(@NonNull HashMap<String, Integer> interpolation) {
         if (mCurveFit == -1) {
             return;
         }
@@ -181,12 +183,12 @@ public class KeyTimeCycle extends Key {
     }
 
     @Override
-    public void addValues(HashMap<String, SplineSet> splines) {
+    public void addValues(@NonNull HashMap<String, SplineSet> splines) {
         // This should not get called
         throw new IllegalArgumentException(" KeyTimeCycles do not support SplineSet");
     }
 
-    public void addTimeValues(HashMap<String, TimeCycleSplineSet> splines) {
+    public void addTimeValues(@NonNull HashMap<String, TimeCycleSplineSet> splines) {
         for (String s : splines.keySet()) {
             TimeCycleSplineSet splineSet = splines.get(s);
             if (splineSet == null) {
@@ -268,7 +270,7 @@ public class KeyTimeCycle extends Key {
     }
 
     @Override
-    public void setValue(String tag, Object value) {
+    public void setValue(@NonNull String tag, @NonNull Object value) {
         switch (tag) {
             case Key.ALPHA:
                 mAlpha = toFloat(value);
@@ -350,6 +352,7 @@ public class KeyTimeCycle extends Key {
         private static final int WAVE_SHAPE = 19;
         private static final int WAVE_PERIOD = 20;
         private static final int WAVE_OFFSET = 21;
+        @NonNull
         private static SparseIntArray mAttrMap = new SparseIntArray();
 
         static {
@@ -374,7 +377,7 @@ public class KeyTimeCycle extends Key {
             mAttrMap.append(R.styleable.KeyTimeCycle_waveShape, WAVE_SHAPE);
         }
 
-        public static void read(KeyTimeCycle c, TypedArray a) {
+        public static void read(@NonNull KeyTimeCycle c, @NonNull TypedArray a) {
             final int N = a.getIndexCount();
             for (int i = 0; i < N; i++) {
                 int attr = a.getIndex(i);
@@ -467,7 +470,8 @@ public class KeyTimeCycle extends Key {
         }
     }
 
-    public Key copy(Key src) {
+    @NonNull
+    public Key copy(@NonNull Key src) {
         super.copy(src);
         KeyTimeCycle k = (KeyTimeCycle) src;
         mTransitionEasing = k.mTransitionEasing;
@@ -490,6 +494,7 @@ public class KeyTimeCycle extends Key {
         return this;
     }
 
+    @NonNull
     public Key clone() {
         return new KeyTimeCycle().copy(this);
     }

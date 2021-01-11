@@ -263,7 +263,7 @@ public class Layer extends ConstraintHelper {
             }
         }
         if (Float.isNaN(mRotationCenterX) || Float.isNaN(mRotationCenterY)) {
-           View[]views = getViews(mContainer);
+            View[] views = getViews(mContainer);
 
             int minx = views[0].getLeft();
             int miny = views[0].getTop();

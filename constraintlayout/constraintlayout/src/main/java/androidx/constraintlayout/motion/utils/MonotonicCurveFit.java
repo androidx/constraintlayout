@@ -16,6 +16,8 @@
 
 package androidx.constraintlayout.motion.utils;
 
+import androidx.annotation.NonNull;
+
 import java.util.Arrays;
 
 /**
@@ -25,13 +27,16 @@ import java.util.Arrays;
  */
 public class MonotonicCurveFit extends CurveFit {
     private static final String TAG = "MonotonicCurveFit";
+    @NonNull
     private double[] mT;
+    @NonNull
     private double[][] mY;
+    @NonNull
     private double[][] mTangent;
     private boolean mExtrapolate = true;
     double[] mSlopeTemp;
 
-    public MonotonicCurveFit(double[] time, double[][] y) {
+    public MonotonicCurveFit(@NonNull double[] time, @NonNull double[][] y) {
         final int N = time.length;
         final int dim = y[0].length;
         mSlopeTemp = new double[dim];
@@ -73,7 +78,7 @@ public class MonotonicCurveFit extends CurveFit {
     }
 
     @Override
-    public void getPos(double t, double[] v) {
+    public void getPos(double t, @NonNull double[] v) {
         final int n = mT.length;
         final int dim = mY[0].length;
         if (mExtrapolate) {
@@ -128,7 +133,7 @@ public class MonotonicCurveFit extends CurveFit {
     }
 
     @Override
-    public void getPos(double t, float[] v) {
+    public void getPos(double t, @NonNull float[] v) {
         final int n = mT.length;
         final int dim = mY[0].length;
         if (mExtrapolate) {
@@ -220,7 +225,7 @@ public class MonotonicCurveFit extends CurveFit {
     }
 
     @Override
-    public void getSlope(double t, double[] v) {
+    public void getSlope(double t, @NonNull double[] v) {
         final int n = mT.length;
         int dim = mY[0].length;
         if (t <= mT[0]) {
@@ -269,6 +274,7 @@ public class MonotonicCurveFit extends CurveFit {
         return 0; // should never reach here
     }
 
+    @NonNull
     @Override
     public double[] getTimePoints() {
         return mT;
@@ -304,7 +310,8 @@ public class MonotonicCurveFit extends CurveFit {
      * @param configString
      * @return
      */
-    public static MonotonicCurveFit buildWave(String configString) {
+    @NonNull
+    public static MonotonicCurveFit buildWave(@NonNull String configString) {
         // done this way for efficiency
         String str = configString;
         double[] values = new double[str.length() / 2];
@@ -323,7 +330,8 @@ public class MonotonicCurveFit extends CurveFit {
         return buildWave(Arrays.copyOf(values, count));
     }
 
-    private static MonotonicCurveFit buildWave(double[] values) {
+    @NonNull
+    private static MonotonicCurveFit buildWave(@NonNull double[] values) {
         int length = values.length * 3 - 2;
         int len = values.length - 1;
         double gap = 1.0 / len;

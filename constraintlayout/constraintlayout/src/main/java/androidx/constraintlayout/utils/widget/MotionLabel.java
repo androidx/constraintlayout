@@ -56,14 +56,18 @@ import static android.widget.TextView.AUTO_SIZE_TEXT_TYPE_NONE;
  */
 public class MotionLabel extends View implements FloatLayout {
     static String TAG = "MotionLabel";
+    @NonNull
     TextPaint mPaint = new TextPaint();
+    @NonNull
     Path mPath = new Path();
     private int mTextFillColor = 0xFFFF;
     private int mTextOutlineColor = 0xFFFF;
     private boolean mUseOutline = false;
     private float mRoundPercent = 0; // rounds the corners as a percent
     private float mRound = Float.NaN; // rounds the corners in dp if NaN RoundPercent is in effect
+    @Nullable
     ViewOutlineProvider mViewOutlineProvider;
+    @Nullable
     RectF mRect;
 
     private float mTextSize = 48;
@@ -329,7 +333,7 @@ public class MotionLabel extends View implements FloatLayout {
         mPaint.setColor(mTextFillColor = typedValue.data);
     }
 
-    public void setText(CharSequence text) {
+    public void setText(@NonNull CharSequence text) {
         mText = text.toString();
         invalidate();
     }
@@ -451,7 +455,7 @@ public class MotionLabel extends View implements FloatLayout {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
         if (!mUseOutline) {
             float x = mPaddingLeft + getHorizontalOffset();
@@ -597,6 +601,7 @@ public class MotionLabel extends View implements FloatLayout {
      * displayed.
      * @see #setTypeface(Typeface)
      */
+    @Nullable
     public Typeface getTypeface() {
         return mPaint.getTypeface();
     }
@@ -656,6 +661,7 @@ public class MotionLabel extends View implements FloatLayout {
         boolean change = (mRoundPercent != round);
         mRoundPercent = round;
         if (mRoundPercent != 0.0f) {
+            // TODO: If mPath is never null we can delete this
             if (mPath == null) {
                 mPath = new Path();
             }

@@ -19,6 +19,8 @@ package androidx.constraintlayout.motion.widget;
 import android.graphics.RectF;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
 import java.util.HashSet;
 
 /**
@@ -57,7 +59,7 @@ abstract class KeyPositionBase extends Key {
     abstract float getPositionY();
 
     @Override
-    void getAttributeNames(HashSet<String> attributes) {
+    void getAttributeNames(@NonNull HashSet<String> attributes) {
     }
 
     /**
@@ -71,7 +73,7 @@ abstract class KeyPositionBase extends Key {
      * @param value
      * @hide
      */
-    abstract void positionAttributes(View view, RectF start, RectF end, float x, float y, String[] attribute, float[] value);
+    abstract void positionAttributes(@NonNull View view, @NonNull RectF start, @NonNull RectF end, float x, float y, @NonNull String[] attribute, @NonNull float[] value);
 
     /**
      *
@@ -84,5 +86,5 @@ abstract class KeyPositionBase extends Key {
      * @return
      * @hide
      */
-    public abstract boolean intersects(int layoutWidth, int layoutHeight, RectF start, RectF end, float x, float y);
+    public abstract boolean intersects(int layoutWidth, int layoutHeight, @NonNull RectF start, @NonNull RectF end, float x, float y);
 }
