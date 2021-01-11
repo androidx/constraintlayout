@@ -373,7 +373,7 @@ public abstract class ConstraintHelper extends View {
      * @param idString
      * @return
      */
-    private int findId(ConstraintLayout container, String idString) {
+    private int findId(@Nullable ConstraintLayout container, String idString) {
         if (idString == null || container == null) {
             return 0;
         }

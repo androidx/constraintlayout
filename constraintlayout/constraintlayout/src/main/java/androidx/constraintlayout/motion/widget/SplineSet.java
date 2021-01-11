@@ -77,6 +77,7 @@ public abstract class SplineSet {
         return (float) mCurveFit.getSlope(t, 0);
     }
 
+    @NonNull
     public CurveFit getCurveFit() {
         return mCurveFit;
     }

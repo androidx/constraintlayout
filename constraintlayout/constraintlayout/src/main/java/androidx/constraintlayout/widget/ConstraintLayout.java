@@ -623,7 +623,7 @@ public class ConstraintLayout extends ViewGroup {
     // -------------------------------------------------------------------------------------------
 
     class Measurer implements BasicMeasure.Measurer {
-        ConstraintLayout layout;
+        @NonNull ConstraintLayout layout;
         int paddingTop;
         int paddingBottom;
         int paddingWidth;
@@ -640,7 +640,7 @@ public class ConstraintLayout extends ViewGroup {
             layoutHeightSpec = heightSpec;
         }
 
-        public Measurer(ConstraintLayout l) {
+        public Measurer(@NonNull ConstraintLayout l) {
             layout = l;
         }
 

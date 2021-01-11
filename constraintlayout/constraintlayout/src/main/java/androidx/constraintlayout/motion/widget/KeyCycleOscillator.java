@@ -449,7 +449,7 @@ public abstract class KeyCycleOscillator {
         double[] mSplineSlopeCache; // for the return value of the curve fit
         float mPathLength;
 
-        CycleOscillator(int waveShape, String customShape, int variesBy, int steps) {
+        CycleOscillator(int waveShape, @Nullable String customShape, int variesBy, int steps) {
             mWaveShape = waveShape;
             mVariesBy = variesBy;
             mOscillator.setType(waveShape, customShape);

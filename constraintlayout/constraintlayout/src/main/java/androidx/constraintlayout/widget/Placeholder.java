@@ -148,7 +148,7 @@ public class Placeholder extends View {
    * @hide
    * @param container
    */
-  public void updatePreLayout(ConstraintLayout container) {
+  public void updatePreLayout(@NonNull ConstraintLayout container) {
     if (mContentId == -1) {
       if (!isInEditMode()) {
         setVisibility(mEmptyVisibility);
@@ -195,7 +195,7 @@ public class Placeholder extends View {
    * @hide
    * @param container
    */
-  public void updatePostMeasure(ConstraintLayout container) {
+  public void updatePostMeasure(@NonNull ConstraintLayout container) {
     if (mContent == null) {
       return;
     }

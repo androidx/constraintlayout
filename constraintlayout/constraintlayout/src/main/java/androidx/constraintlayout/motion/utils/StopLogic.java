@@ -16,6 +16,8 @@
 
 package androidx.constraintlayout.motion.utils;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.motion.widget.MotionInterpolator;
 
 import android.util.Log;
@@ -34,6 +36,8 @@ public class StopLogic extends MotionInterpolator {
     private float mStage1Duration, mStage2Duration, mStage3Duration; // the time for each period
     private float mStage1EndPosition, mStage2EndPosition, mStage3EndPosition; // ending position
     private int mNumberOfStages;
+    // TODO: Need to write setup into constructor for this to make sense
+    @NonNull
     private String mType;
     private boolean mBackwards = false;
     private float mStartPosition;
@@ -46,7 +50,7 @@ public class StopLogic extends MotionInterpolator {
      * @param desc Description to pre append
      * @param time Time during animation
      */
-    public void debug(String tag, String desc, float time) {
+    public void debug(@NonNull String tag, @NonNull String desc, float time) {
         Log.v(tag, desc + " ===== " + mType);
         Log.v(tag, desc + (mBackwards ? "backwards" : "forward ") + " time = " + time + "  stages " + mNumberOfStages);
         Log.v(tag, desc + " dur " + mStage1Duration + " vel " + mStage1Velocity + " pos " + mStage1EndPosition);

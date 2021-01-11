@@ -15,6 +15,9 @@
  */
 package androidx.constraintlayout.motion.utils;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.Arrays;
 
 /**
@@ -23,9 +26,14 @@ import java.util.Arrays;
  * @hide
  */
 public class Oscillator {
+    @NonNull
     public static String TAG = "Oscillator";
+    @NonNull
     float[] mPeriod = {};
+    @NonNull
     double[] mPosition = {};
+    // TODO: Need to write setup into constructor for this to make sense
+    @Nullable
     double[] mArea;
     public static final int SIN_WAVE = 0; // theses must line up with attributes
     public static final int SQUARE_WAVE = 1;
@@ -35,7 +43,9 @@ public class Oscillator {
     public static final int COS_WAVE = 5;
     public static final int BOUNCE = 6;
     public static final int CUSTOM = 7;
+    @Nullable
     String mCustomType;
+    @Nullable
     MonotonicCurveFit mCustomCurve;
     int mType;
     double PI2 = Math.PI * 2;
@@ -49,7 +59,7 @@ public class Oscillator {
         return "pos =" + Arrays.toString(mPosition) + " period=" + Arrays.toString(mPeriod);
     }
 
-    public void setType(int type, String customType) {
+    public void setType(int type, @Nullable String customType) {
         mType = type;
         mCustomType = customType;
         if (mCustomType != null) {

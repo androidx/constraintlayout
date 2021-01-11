@@ -221,12 +221,16 @@ class TouchResponse {
                     rcy = (v.getTop() + v.getBottom()) / 2.0f;
                 } else if (mTouchAnchorId != MotionScene.UNSET) {
                     MotionController mc = mMotionLayout.getMotionController(mTouchAnchorId);
-                    View v = mMotionLayout.findViewById(mc.getAnimateRelativeTo());
-                    if (v == null) {
-                        Log.e(TAG, "could not find view to animate to");
+                    if (mc == null) {
+                        Log.e(TAG, "could not find motion controller by the given anchor");
                     } else {
-                        rcx = (v.getLeft() + v.getRight()) / 2.0f;
-                        rcy = (v.getTop() + v.getBottom()) / 2.0f;
+                        View v = mMotionLayout.findViewById(mc.getAnimateRelativeTo());
+                        if (v == null) {
+                            Log.e(TAG, "could not find view to animate to");
+                        } else {
+                            rcx = (v.getLeft() + v.getRight()) / 2.0f;
+                            rcy = (v.getTop() + v.getBottom()) / 2.0f;
+                        }
                     }
                 }
                 float relativePosX = event.getRawX() - rcx;
@@ -288,9 +292,13 @@ class TouchResponse {
                     rcy = (v.getTop() + v.getBottom()) / 2.0f;
                 } else if (mTouchAnchorId != MotionScene.UNSET) {
                     MotionController mc = mMotionLayout.getMotionController(mTouchAnchorId);
-                    View v = mMotionLayout.findViewById(mc.getAnimateRelativeTo());
-                    rcx = (v.getLeft() + v.getRight()) / 2.0f;
-                    rcy = (v.getTop() + v.getBottom()) / 2.0f;
+                    if (mc == null) {
+                        Log.e(TAG, "could not find motion controller by the given anchor");
+                    } else {
+                        View v = mMotionLayout.findViewById(mc.getAnimateRelativeTo());
+                        rcx = (v.getLeft() + v.getRight()) / 2.0f;
+                        rcy = (v.getTop() + v.getBottom()) / 2.0f;
+                    }
                 }
                 relativePosX = event.getRawX() - rcx;
                 relativePosY = event.getRawY() - rcy;

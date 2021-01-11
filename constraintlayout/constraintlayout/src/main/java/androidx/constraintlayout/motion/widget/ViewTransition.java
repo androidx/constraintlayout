@@ -36,6 +36,7 @@ import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.motion.utils.Easing;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -57,7 +58,6 @@ import java.util.ArrayList;
  */
 public class ViewTransition {
     private static String TAG = "ViewTransition";
-    ConstraintSet set;
     public static final String VIEW_TRANSITION_TAG = "ViewTransition";
     public static final String KEY_FRAME_SET_TAG = "KeyFrameSet";
     public static final String CONSTRAINT_OVERRIDE = "ConstraintOverride";
@@ -79,7 +79,9 @@ public class ViewTransition {
     static final int VIEWTRANSITIONMODE_CURRENTSTATE = 0;
     static final int VIEWTRANSITIONMODE_ALLSTATES = 1;
     static final int VIEWTRANSITIONMODE_NOSTATE = 2;
+    @Nullable
     KeyFrames mKeyFrames;
+    @Nullable
     ConstraintSet.Constraint mConstraintDelta;
     private int mDuration = UNSET;
     private int mTargetId;
@@ -89,6 +91,7 @@ public class ViewTransition {
     private static final int SPLINE_STRING = -1;
     private static final int INTERPOLATOR_REFRENCE_ID = -2;
     private int mDefaultInterpolator = 0;
+    @Nullable
     private String mDefaultInterpolatorString = null;
     private int mDefaultInterpolatorID = -1;
     static final int EASE_IN_OUT = 0;
@@ -99,6 +102,7 @@ public class ViewTransition {
     static final int OVERSHOOT = 5;
     static final int ANTICIPATE = 6;
 
+    @NonNull
     Context mContext;
     private int mSetsTag = UNSET;
     private int mClearsTag = UNSET;

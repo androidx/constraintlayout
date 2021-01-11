@@ -70,15 +70,23 @@ public class MotionScene {
     private static final int SPLINE_STRING = -1;
     private static final int INTERPOLATOR_REFRENCE_ID = -2;
     public static final int UNSET = -1;
+    @NonNull
     private final MotionLayout mMotionLayout;
+    @Nullable
     StateSet mStateSet = null;
+    @Nullable
     Transition mCurrentTransition = null;
     private boolean mDisableAutoTransition = false;
+    @NonNull
     private ArrayList<Transition> mTransitionList = new ArrayList<>();
+    @Nullable
     private Transition mDefaultTransition = null;
+    @NonNull
     private ArrayList<Transition> mAbstractTransitionList = new ArrayList<>();
 
+    @NonNull
     private SparseArray<ConstraintSet> mConstraintSetMap = new SparseArray<>();
+    @NonNull
     private HashMap<String, Integer> mConstraintSetIdMap = new HashMap<>();
     private SparseIntArray mDeriveMap = new SparseIntArray();
     private boolean DEBUG_DESKTOP = false;
@@ -86,9 +94,11 @@ public class MotionScene {
     private int mLayoutDuringTransition = 0;
     public static final int LAYOUT_IGNORE_REQUEST = 0;
     public static final int LAYOUT_HONOR_REQUEST = 1;
+    @Nullable
     private MotionEvent mLastTouchDown;
     private boolean mIgnoreTouch = false;
     private boolean mMotionOutsideRegion = false;
+    @Nullable
     private MotionLayout.MotionTracker mVelocityTracker; // used to support fling
     private boolean mRtl;
     private static final String MOTIONSCENE_TAG = "MotionScene";
@@ -100,6 +110,7 @@ public class MotionScene {
     private static final String KEYFRAMESET_TAG = "KeyFrameSet";
     private static final String CONSTRAINTSET_TAG = "ConstraintSet";
     private static final String VIEW_TRANSITION = "ViewTransition";
+    @Nullable
     final ViewTransitionController mViewTransitionController;
 
     /**
@@ -175,7 +186,7 @@ public class MotionScene {
      *
      * @throws IllegalArgumentException if the transition does not have an id.
      */
-    public void addTransition(Transition transition) {
+    public void addTransition(@NonNull Transition transition) {
         int index = getIndex(transition);
         if (index == -1) {
             mTransitionList.add(transition);
@@ -190,7 +201,7 @@ public class MotionScene {
      *
      * @throws IllegalArgumentException if the transition does not have an id.
      */
-    public void removeTransition(Transition transition) {
+    public void removeTransition(@NonNull Transition transition) {
         int index = getIndex(transition);
         if (index != -1) {
             mTransitionList.remove(index);
@@ -200,7 +211,7 @@ public class MotionScene {
     /**
      * @return the index in the transition list. -1 if transition wasn't found.
      */
-    private int getIndex(Transition transition) {
+    private int getIndex(@NonNull Transition transition) {
         int id = transition.mId;
         if (id == UNSET) {
             throw new IllegalArgumentException("The transition must have an id");
@@ -220,7 +231,7 @@ public class MotionScene {
      * @return true if the layout is valid for the scene. False otherwise. Use it for the debugging
      * purposes.
      */
-    public boolean validateLayout(MotionLayout layout) {
+    public boolean validateLayout(@NonNull MotionLayout layout) {
         return (layout == mMotionLayout && layout.mScene == this);
     }
 
@@ -230,7 +241,7 @@ public class MotionScene {
      * @param transition a transition to be set. The transition must exist within the motion scene.
      *                   (e.g. {@link #addTransition(Transition)})
      */
-    public void setTransition(Transition transition) {
+    public void setTransition(@Nullable Transition transition) {
         mCurrentTransition = transition;
         if (mCurrentTransition != null && mCurrentTransition.mTouchResponse != null) {
             mCurrentTransition.mTouchResponse.setRTL(mRtl);
@@ -247,6 +258,7 @@ public class MotionScene {
         return stateid;
     }
 
+    @NonNull
     public List<Transition> getTransitionsWithState(int stateid) {
         stateid = getRealID(stateid);
         ArrayList<Transition> ret = new ArrayList<>();
@@ -259,7 +271,7 @@ public class MotionScene {
         return ret;
     }
 
-    public void addOnClickListeners(MotionLayout motionLayout, int currentState) {
+    public void addOnClickListeners(@NonNull MotionLayout motionLayout, int currentState) {
         // remove all on clicks listeners
         for (Transition transition : mTransitionList) {
             if (transition.mOnClicks.size() > 0) {
@@ -292,7 +304,8 @@ public class MotionScene {
         }
     }
 
-    public Transition bestTransitionFor(int currentState, float dx, float dy, MotionEvent lastTouchDown) {
+    @Nullable
+    public Transition bestTransitionFor(int currentState, float dx, float dy, @Nullable MotionEvent lastTouchDown) {
         List<Transition> candidates = null;
         if (currentState != -1) {
             candidates = getTransitionsWithState(currentState);
@@ -345,10 +358,12 @@ public class MotionScene {
         return mCurrentTransition;
     }
 
+    @NonNull
     public ArrayList<Transition> getDefinedTransitions() {
         return mTransitionList;
     }
 
+    @Nullable
     public Transition getTransitionById(int id) {
         for (Transition transition : mTransitionList) {
             if (transition.mId == id) {
@@ -358,6 +373,7 @@ public class MotionScene {
         return null;
     }
 
+    @NonNull
     public int[] getConstraintSetIds() {
         int[] ids = new int[mConstraintSetMap.size()];
         for (int i = 0; i < ids.length; i++) {
@@ -375,7 +391,7 @@ public class MotionScene {
      * @return
      * @hide
      */
-    boolean autoTransition(MotionLayout motionLayout, int currentState) {
+    boolean autoTransition(@NonNull MotionLayout motionLayout, int currentState) {
         if (isProcessingTouch()) {
             return false;
         }
@@ -441,20 +457,32 @@ public class MotionScene {
         }
     }
 
-    public void viewTransition(int id, View ... view) {
-        mViewTransitionController.viewTransition(id, view);
+    public void viewTransition(int id, @NonNull View ... view) {
+        if (mViewTransitionController != null) {
+            mViewTransitionController.viewTransition(id, view);
+        }
     }
 
     public void enableViewTransition(int id, boolean enable) {
-        mViewTransitionController.enableViewTransition(id, enable);
+        if (mViewTransitionController != null) {
+            mViewTransitionController.enableViewTransition(id, enable);
+        }
     }
 
     public boolean isViewTransitionEnabled(int id) {
-        return mViewTransitionController.isViewTransitionEnabled(id);
+        if (mViewTransitionController != null) {
+            return mViewTransitionController.isViewTransitionEnabled(id);
+        } else {
+            return false;
+        }
     }
 
-    public boolean applyViewTransition(int viewTransitionId, MotionController motionController) {
-        return mViewTransitionController.applyViewTransition(viewTransitionId, motionController);
+    public boolean applyViewTransition(int viewTransitionId, @NonNull MotionController motionController) {
+        if (mViewTransitionController != null) {
+            return mViewTransitionController.applyViewTransition(viewTransitionId, motionController);
+        } else {
+            return false;
+        }
     }
 ///////////////////////////////////////////////////////////////////////////////
 // ====================== Transition ==========================================
@@ -470,13 +498,18 @@ public class MotionScene {
         private int mConstraintSetEnd = -1;
         private int mConstraintSetStart = -1;
         private int mDefaultInterpolator = 0;
+        @Nullable
         private String mDefaultInterpolatorString = null;
         private int mDefaultInterpolatorID = -1;
         private int mDuration = 400;
         private float mStagger = 0.0f;
+        @NonNull
         private final MotionScene mMotionScene;
+        @NonNull
         private ArrayList<KeyFrames> mKeyFramesList = new ArrayList<>();
+        @Nullable
         private TouchResponse mTouchResponse = null;
+        @NonNull
         private ArrayList<TransitionOnClick> mOnClicks = new ArrayList<>();
         private int mAutoTransition = 0;
         public static final int AUTO_NONE = 0;
@@ -573,6 +606,7 @@ public class MotionScene {
             return mStagger;
         }
 
+        @NonNull
         public List<KeyFrames> getKeyFrameList() {
             return mKeyFramesList;
         }
@@ -580,7 +614,7 @@ public class MotionScene {
         /*
         *
          */
-        public void  addtKeyFrame( KeyFrames keyFrames) {
+        public void addtKeyFrame(@NonNull KeyFrames keyFrames) {
               mKeyFramesList.add(keyFrames);
         }
 
@@ -589,6 +623,7 @@ public class MotionScene {
          *
          * @return list of on click handler
          */
+        @NonNull
         public List<TransitionOnClick> getOnClickList() {
             return mOnClicks;
         }
@@ -598,6 +633,7 @@ public class MotionScene {
          *
          * @return
          */
+        @Nullable
         public TouchResponse getTouchResponse() {
             return mTouchResponse;
         }
@@ -686,6 +722,7 @@ public class MotionScene {
         }
 
         static class TransitionOnClick implements View.OnClickListener {
+            @NonNull
             private final Transition mTransition;
             int mTargetId = UNSET;
             int mMode = 0x11;
@@ -746,7 +783,7 @@ public class MotionScene {
                 v.setOnClickListener(null);
             }
 
-            boolean isTransitionViable(@NonNull Transition current, @NonNull MotionLayout tl) {
+            boolean isTransitionViable(@Nullable Transition current, @NonNull MotionLayout tl) {
                 if (mTransition == current) {
                     return true;
                 }
@@ -853,7 +890,7 @@ public class MotionScene {
             fillFromAttributeList(motionScene, context, Xml.asAttributeSet(parser));
         }
 
-        public void setInterpolatorInfo(int interpolator, String interpolatorString, int interpolatorID){
+        public void setInterpolatorInfo(int interpolator, @Nullable String interpolatorString, int interpolatorID){
             mDefaultInterpolator = interpolator;
             mDefaultInterpolatorString = interpolatorString;
             mDefaultInterpolatorID = interpolatorID;
@@ -1352,7 +1389,8 @@ public class MotionScene {
         }
     }
 
-    public float getPathPercent(View view, int position) {
+    public float getPathPercent(@NonNull View view, int position) {
+        // TODO: What is the plan for this?
         return 0;
     }
 
@@ -1514,6 +1552,7 @@ public class MotionScene {
     static final int OVERSHOOT = 5;
     static final int ANTICIPATE = 6;
 
+    @Nullable
     public Interpolator getInterpolator() {
         switch (mCurrentTransition.mDefaultInterpolator) {
             case SPLINE_STRING:
@@ -1621,7 +1660,7 @@ public class MotionScene {
      *
      * @param motionLayout
      */
-    void readFallback(MotionLayout motionLayout) {
+    void readFallback(@NonNull MotionLayout motionLayout) {
 
         for (int i = 0; i < mConstraintSetMap.size(); i++) {
             int key = mConstraintSetMap.keyAt(i);
@@ -1677,7 +1716,8 @@ public class MotionScene {
         }
     }
 
-    public static String stripID(String id) {
+    @NonNull
+    public static String stripID(@Nullable String id) {
         if (id == null) {
             return "";
         }
@@ -1708,6 +1748,7 @@ public class MotionScene {
      *
      * @return
      */
+    @Nullable
     public String lookUpConstraintName(int id) {
         for (Map.Entry<String, Integer> entry : mConstraintSetIdMap.entrySet()) {
             Integer boxed = entry.getValue();
@@ -1739,7 +1780,7 @@ public class MotionScene {
      * @param pullParser the XML parser
      * @return
      */
-    static String getLine(@NonNull Context context, int resourceId, XmlPullParser pullParser) {
+    static String getLine(@NonNull Context context, int resourceId, @NonNull XmlPullParser pullParser) {
         return ".(" + Debug.getName(context, resourceId) + ".xml:" + pullParser.getLineNumber() +
                 ") \"" + pullParser.getName() + "\"";
     }

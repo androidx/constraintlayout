@@ -22,6 +22,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
@@ -33,16 +34,19 @@ import java.util.HashSet;
  * It receives animate calls
  */
 public class ViewTransitionController {
+    @NonNull
     private final MotionLayout mMotionLayout;
+    @NonNull
     private ArrayList<ViewTransition> viewTransitions = new ArrayList<>();
+    @Nullable
     private HashSet<View> mRelatedViews;
     private String TAG = "ViewTransitionController";
 
-    public ViewTransitionController(MotionLayout layout) {
+    public ViewTransitionController(@NonNull MotionLayout layout) {
         mMotionLayout = layout;
     }
 
-    public void add(ViewTransition viewTransition) {
+    public void add(@NonNull ViewTransition viewTransition) {
         viewTransitions.add(viewTransition);
         mRelatedViews = null;
 
@@ -67,7 +71,7 @@ public class ViewTransitionController {
         }
     }
 
-    private void viewTransition(ViewTransition vt, @NonNull View... view) {
+    private void viewTransition(@NonNull ViewTransition vt, @NonNull View... view) {
         int currentId = mMotionLayout.getCurrentState();
         if (vt.mViewTransitionMode != ViewTransition.VIEWTRANSITIONMODE_NOSTATE) {
             if (currentId == -1) {
@@ -136,7 +140,7 @@ public class ViewTransitionController {
      *
      * @param event
      */
-    void touchEvent(MotionEvent event) {
+    void touchEvent(@NonNull MotionEvent event) {
         int currentId = mMotionLayout.getCurrentState();
         if (currentId == -1) {
             return;
@@ -218,7 +222,7 @@ public class ViewTransitionController {
         mMotionLayout.invalidate();
     }
 
-    boolean applyViewTransition(int viewTransitionId, MotionController motionController) {
+    boolean applyViewTransition(int viewTransitionId, @NonNull MotionController motionController) {
         for (ViewTransition viewTransition : viewTransitions) {
             if (viewTransition.getId() == viewTransitionId) {
                 viewTransition.mKeyFrames.addAllFrames(motionController);
@@ -228,7 +232,7 @@ public class ViewTransitionController {
         return false;
     }
 
-    private void listenForSharedVariable(ViewTransition viewTransition, boolean isSet) {
+    private void listenForSharedVariable(@NonNull ViewTransition viewTransition, boolean isSet) {
         int listen_for_id = viewTransition.getSharedValueID();
         int listen_for_value = viewTransition.getSharedValue();
 

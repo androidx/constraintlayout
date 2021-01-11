@@ -18,6 +18,8 @@ package androidx.constraintlayout.widget;
 
 import android.util.SparseIntArray;
 
+import androidx.annotation.NonNull;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,14 +32,16 @@ import java.util.List;
 public class SharedValues {
     public static final int UNSET = -1;
 
+    @NonNull
     private SparseIntArray mValues = new SparseIntArray();
+    @NonNull
     private HashMap<Integer, HashSet<WeakReference<SharedValuesListener>>> mValuesListeners = new HashMap<>();
 
     public interface SharedValuesListener {
         void onNewValue(int key, int newValue, int oldValue);
     }
 
-    public void addListener(SharedValuesListener listener, int key) {
+    public void addListener(@NonNull SharedValuesListener listener, int key) {
         HashSet<WeakReference<SharedValuesListener>> listeners = mValuesListeners.get(key);
         if (listeners == null) {
             listeners = new HashSet<>();
@@ -46,7 +50,7 @@ public class SharedValues {
         listeners.add(new WeakReference<>(listener));
     }
 
-    public void removeListener(SharedValuesListener listener, int key) {
+    public void removeListener(@NonNull SharedValuesListener listener, int key) {
         HashSet<WeakReference<SharedValuesListener>> listeners = mValuesListeners.get(key);
         if (listeners == null) {
             return;
@@ -61,7 +65,7 @@ public class SharedValues {
         listeners.removeAll(toRemove);
     }
 
-    public void removeListener(SharedValuesListener listener) {
+    public void removeListener(@NonNull SharedValuesListener listener) {
         for (Integer key : mValuesListeners.keySet()) {
             removeListener(listener, key);
         }

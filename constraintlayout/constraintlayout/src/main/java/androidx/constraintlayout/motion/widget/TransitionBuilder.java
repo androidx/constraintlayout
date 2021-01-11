@@ -16,6 +16,7 @@
 
 package androidx.constraintlayout.motion.widget;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.motion.widget.MotionScene.Transition;
 import android.util.Log;
@@ -31,7 +32,7 @@ public class TransitionBuilder {
      *
      * @return true if layout has valid scene and transition.
      */
-    public static void validate(MotionLayout layout) {
+    public static void validate(@NonNull MotionLayout layout) {
         if (layout.mScene == null) {
             throw new RuntimeException("Invalid motion layout. Layout missing Motion Scene.");
         }
@@ -52,13 +53,14 @@ public class TransitionBuilder {
      *
      * @param transitionId a unique id to represent the created transition
      */
+    @NonNull
     public static Transition buildTransition(
-            MotionScene scene,
+            @NonNull MotionScene scene,
             int transitionId,
             int startConstraintSetId,
-            ConstraintSet startConstraintSet,
+            @NonNull ConstraintSet startConstraintSet,
             int endConstraintSetId,
-            ConstraintSet endConstraintSet) {
+            @NonNull ConstraintSet endConstraintSet) {
         Transition transition = new Transition(
                 transitionId,
                 scene,
@@ -73,10 +75,10 @@ public class TransitionBuilder {
      * Ensure that motion scene understands the constraint set and its respective ids.
      */
     private static void updateConstraintSetInMotionScene(
-            MotionScene scene,
-            Transition transition,
-            ConstraintSet startConstraintSet,
-            ConstraintSet endConstraintSet) {
+            @NonNull MotionScene scene,
+            @NonNull Transition transition,
+            @NonNull ConstraintSet startConstraintSet,
+            @NonNull ConstraintSet endConstraintSet) {
         int startId = transition.getStartConstraintSetId();
         int endId = transition.getEndConstraintSetId();
 

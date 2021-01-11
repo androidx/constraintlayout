@@ -1067,6 +1067,7 @@ public class MotionLayout extends ConstraintLayout implements
     private int[]mScheduledTransitionTo = null;
     int mScheduledTransitions = 0;
 
+    @Nullable
     MotionController getMotionController(int mTouchAnchorId) {
         return mFrameArrayList.get(findViewById(mTouchAnchorId));
     }
@@ -1078,6 +1079,7 @@ public class MotionLayout extends ConstraintLayout implements
         FINISHED;
     };
 
+    @NonNull
     TransitionState mTransitionState = TransitionState.UNDEFINED;
     private static final float EPSILON = 0.00001f;
 
@@ -1110,13 +1112,16 @@ public class MotionLayout extends ConstraintLayout implements
      *
      * @return
      */
+    @NonNull
     protected MotionTracker obtainVelocityTracker() {
         return MyTracker.obtain();
     }
 
     public void enableTransition(int transitionID, boolean enable) {
         MotionScene.Transition t = getTransition(transitionID);
-        if (enable) {
+        if (t == null) {
+            return;
+        } else if (enable) {
             t.setEnable(true);
             return;
         } else {
@@ -1189,9 +1194,12 @@ public class MotionLayout extends ConstraintLayout implements
     }
 
     private static class MyTracker implements MotionTracker {
+        @Nullable
         VelocityTracker tracker;
+        @NonNull
         private static MyTracker me = new MyTracker();
 
+        @NonNull
         public static MyTracker obtain() {
             me.tracker = VelocityTracker.obtain();
             return me;
@@ -1307,6 +1315,9 @@ public class MotionLayout extends ConstraintLayout implements
     public void setTransition(int transitionId) {
         if (mScene != null) {
             MotionScene.Transition transition = getTransition(transitionId);
+            if (transition == null) {
+                return;
+            }
             int current = mCurrentState;
             mBeginState = transition.getStartConstraintSetId();
             mEndState = transition.getEndConstraintSetId();
@@ -1358,7 +1369,7 @@ public class MotionLayout extends ConstraintLayout implements
         }
     }
 
-    protected void setTransition(MotionScene.Transition transition) {
+    protected void setTransition(@NonNull MotionScene.Transition transition) {
         mScene.setTransition(transition);
         setState(TransitionState.SETUP);
         if (mCurrentState == mScene.getEndId()) {
@@ -1525,6 +1536,7 @@ public class MotionLayout extends ConstraintLayout implements
             this.endState = UNSET;
         }
 
+        @NonNull
         public Bundle getTransitionState() {
             Bundle bundle = new Bundle();
             bundle.putFloat(KeyProgress, this.mProgress);
@@ -1534,7 +1546,7 @@ public class MotionLayout extends ConstraintLayout implements
             return bundle;
         }
 
-        public void setTransitionState(Bundle bundle) {
+        public void setTransitionState(@NonNull Bundle bundle) {
             this.mProgress = bundle.getFloat(KeyProgress);
             this.mVelocity = bundle.getFloat(KeyVelocity);
             this.startState = bundle.getInt(KeyStartState);
@@ -1568,7 +1580,7 @@ public class MotionLayout extends ConstraintLayout implements
     /**
      * @return bundle containing start and end state
      */
-    public void setTransitionState(Bundle bundle) {
+    public void setTransitionState(@NonNull Bundle bundle) {
         if (mStateCache == null) {
             mStateCache = new StateCache();
         }
@@ -1581,6 +1593,7 @@ public class MotionLayout extends ConstraintLayout implements
     /**
      * @return bundle containing start and end state
      */
+    @NonNull
     public Bundle getTransitionState() {
         if (mStateCache == null) {
             mStateCache = new StateCache();
@@ -1985,7 +1998,7 @@ public class MotionLayout extends ConstraintLayout implements
      * Transitions are only set up during onAttach
      * @param onComplete callback when task is don
      */
-    public void transitionToEnd(Runnable onComplete) {
+    public void transitionToEnd(@NonNull Runnable onComplete) {
         animateTo(1.0f);
         mOnComplete = onComplete;
     }
@@ -3530,7 +3543,7 @@ public class MotionLayout extends ConstraintLayout implements
     /**
      * Sets a motion scene to the layout. Subsequent calls to it will override the previous scene.
      */
-    public void setScene(MotionScene scene) {
+    public void setScene(@NonNull MotionScene scene) {
         mScene = scene;
         mScene.setRtl(isRtl());
         rebuildScene();
@@ -3686,7 +3699,7 @@ public class MotionLayout extends ConstraintLayout implements
      * @return
      */
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent event) {
+    public boolean onInterceptTouchEvent(@NonNull MotionEvent event) {
         if (mScene == null || !mInteractionEnabled) {
             return false;
         }
@@ -3728,7 +3741,7 @@ public class MotionLayout extends ConstraintLayout implements
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
         if (DEBUG) {
             Log.v(TAG, Debug.getLocation() + " onTouchEvent = " + mTransitionLastPosition);
         }
@@ -3831,10 +3844,12 @@ public class MotionLayout extends ConstraintLayout implements
      * @param locationY      the y location within the view (0.0 = left , 1.0 = right)
      * @param mAnchorDpDt    returns the dx/dp and dy/dp
      */
-    void getAnchorDpDt(int mTouchAnchorId,
-                       float pos,
-                       float locationX, float locationY,
-                       float[] mAnchorDpDt) {
+    void getAnchorDpDt(
+            int mTouchAnchorId,
+            float pos,
+            float locationX,
+            float locationY,
+            @NonNull float[] mAnchorDpDt) {
         View v;
         MotionController f = mFrameArrayList.get(v = getViewById(mTouchAnchorId));
         if (DEBUG) {
@@ -3877,7 +3892,7 @@ public class MotionLayout extends ConstraintLayout implements
      * @param listener Listener to notify when drawer events occur
      * @see TransitionListener
      */
-    public void setTransitionListener(TransitionListener listener) {
+    public void setTransitionListener(@NonNull TransitionListener listener) {
         mTransitionListener = listener;
     }
 
@@ -3887,7 +3902,7 @@ public class MotionLayout extends ConstraintLayout implements
      * @param listener Listener to notify when drawer events occur
      * @see TransitionListener
      */
-    public void addTransitionListener(TransitionListener listener) {
+    public void addTransitionListener(@NonNull TransitionListener listener) {
         if (mTransitionListeners == null) {
             mTransitionListeners = new ArrayList<>();
         }
@@ -3901,7 +3916,7 @@ public class MotionLayout extends ConstraintLayout implements
      * @return <tt>true</tt> if it contained the specified listener
      * @see TransitionListener
      */
-    public boolean removeTransitionListener(TransitionListener listener) {
+    public boolean removeTransitionListener(@NonNull TransitionListener listener) {
         if (mTransitionListeners == null) {
             return false;
         }
@@ -3923,7 +3938,7 @@ public class MotionLayout extends ConstraintLayout implements
          * @param startId      the id of the start state (or ConstraintSet). Will be -1 if unknown.
          * @param endId        the id of the end state (or ConstraintSet).
          */
-        public void onTransitionStarted(MotionLayout motionLayout,
+        public void onTransitionStarted(@NonNull MotionLayout motionLayout,
                                         int startId, int endId);
 
         /**
@@ -3934,7 +3949,7 @@ public class MotionLayout extends ConstraintLayout implements
          * @param endId        the id of the end state (or ConstraintSet).
          * @param progress     The progress on this transition, from 0 to 1.
          */
-        void onTransitionChange(MotionLayout motionLayout,
+        void onTransitionChange(@NonNull MotionLayout motionLayout,
                                 int startId, int endId,
                                 float progress);
 
@@ -3945,7 +3960,7 @@ public class MotionLayout extends ConstraintLayout implements
          * @param motionLayout Drawer view that is now open
          * @param currentId    the id it has reached
          */
-        void onTransitionCompleted(MotionLayout motionLayout, int currentId);
+        void onTransitionCompleted(@NonNull MotionLayout motionLayout, int currentId);
 
         /**
          * Call when a trigger is fired
@@ -3955,7 +3970,7 @@ public class MotionLayout extends ConstraintLayout implements
          * @param positive     for positive transition edge
          * @param progress
          */
-        void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive,
+        void onTransitionTrigger(@NonNull MotionLayout motionLayout, int triggerId, boolean positive,
                                  float progress);
     }
 
@@ -4138,6 +4153,7 @@ public class MotionLayout extends ConstraintLayout implements
      *
      * @return
      */
+    @Nullable
     public int[] getConstraintSetIds() {
         if (mScene == null) {
             return null;
@@ -4171,6 +4187,7 @@ public class MotionLayout extends ConstraintLayout implements
      * @param id The ide of the ConstraintSet
      * @return the ConstraintSet
      */
+    @Nullable
     public ConstraintSet cloneConstraintSet(int id) {
         if (mScene == null) {
             return null;
@@ -4206,7 +4223,7 @@ public class MotionLayout extends ConstraintLayout implements
      * @param stateId id of the ConstraintSet
      * @param set     The constraintSet
      */
-    public void updateState(int stateId, ConstraintSet set) {
+    public void updateState(int stateId, @NonNull ConstraintSet set) {
         if (mScene != null) {
             mScene.setConstraintSet(stateId, set);
         }
@@ -4223,19 +4240,26 @@ public class MotionLayout extends ConstraintLayout implements
      * @param set     The constraintSet
      * @param duration The length of time to perform the animation
      */
-    public void updateStateAnimate(int stateId, ConstraintSet set, int duration) {
+    public void updateStateAnimate(int stateId, @NonNull ConstraintSet set, int duration) {
         if (mScene == null) {
             return;
         }
 
         if (mCurrentState == stateId) {
-            updateState(R.id.view_transition, getConstraintSet(stateId));
-            setState(R.id.view_transition, -1, -1);
-            updateState(stateId, set);
-            MotionScene.Transition tmpTransition = new MotionScene.Transition(-1, mScene, R.id.view_transition, stateId);
-            tmpTransition.setDuration(duration);
-            setTransition(tmpTransition);
-            transitionToEnd();
+            ConstraintSet original = getConstraintSet(stateId);
+            if (original != null) {
+                updateState(R.id.view_transition, original);
+                setState(R.id.view_transition, -1, -1);
+                updateState(stateId, set);
+                MotionScene.Transition tmpTransition = new MotionScene.Transition(-1, mScene, R.id.view_transition, stateId);
+                tmpTransition.setDuration(duration);
+                setTransition(tmpTransition);
+                transitionToEnd();
+            } else {
+                // TODO: Is this actually possible?
+                // Fallback to not animating if we were unable to find the existing ConstraintSet
+                updateState(stateId, set);
+            }
         }
     }
 
@@ -4272,6 +4296,7 @@ public class MotionLayout extends ConstraintLayout implements
      *
      * @return
      */
+    @Nullable
     public ArrayList<MotionScene.Transition> getDefinedTransitions() {
         if (mScene == null) {
             return null;
@@ -4327,7 +4352,12 @@ public class MotionLayout extends ConstraintLayout implements
      * @param id
      * @return
      */
+    @Nullable
     public MotionScene.Transition getTransition(int id) {
+        if (mScene == null) {
+            Log.e(TAG, "MotionScene not defined");
+            return null;
+        }
         return mScene.getTransitionById(id);
     }
 
@@ -4351,6 +4381,7 @@ public class MotionLayout extends ConstraintLayout implements
      * @param id the integer id of the constraintSet
      * @return
      */
+    @Nullable
     String getConstraintSetNames(int id) {
         if (mScene == null) {
             return null;
@@ -4392,7 +4423,7 @@ public class MotionLayout extends ConstraintLayout implements
         return mInteractionEnabled;
     }
 
-    private void fireTransitionStarted(MotionLayout motionLayout, int mBeginState, int mEndState) {
+    private void fireTransitionStarted(@NonNull MotionLayout motionLayout, int mBeginState, int mEndState) {
         if (mTransitionListener != null) {
             mTransitionListener.onTransitionStarted(this, mBeginState, mEndState);
         }
@@ -4450,7 +4481,7 @@ public class MotionLayout extends ConstraintLayout implements
      * @param motionController the MotionController to apply the keyframes to
      * @return true if it found and applied the viewTransition false otherwise
      */
-    public boolean applyViewTransition(int viewTransitionId, MotionController motionController) {
+    public boolean applyViewTransition(int viewTransitionId, @NonNull MotionController motionController) {
         if (mScene != null) {
             return mScene.applyViewTransition(viewTransitionId, motionController);
         }
