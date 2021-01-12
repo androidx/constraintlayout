@@ -354,6 +354,9 @@ public class ViewTransition {
             long current = System.nanoTime();
             long elapse = current - mStart;
             float position = ((float) (elapse * 1E-6)) / mDuration;
+            if (position >= 1.0f) {
+                position = 1.0f;
+            }
             float ipos = (mInterpolator == null) ? position : mInterpolator.getInterpolation(position);
             boolean repaint = mMC.interpolate(mMC.mView, ipos, current, mCache);
             if (position >= 1) {
