@@ -269,5 +269,18 @@
         app:layout_constraintTag="button4"
         app:roundPercent="@dimen/calc_round" />
 
+    <androidx.constraintlayout.utils.widget.MotionButton
+        android:onClick="key"
+        android:id="@+id/adv_copy"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background= "@color/adv_background"
+        android:stateListAnimator="@null"
+        android:text="copy"
+        android:textColor="@color/cal_adv_text"
+        android:textSize="10pt"
+
+        app:layout_constraintTag="button4"
+        app:roundPercent="@dimen/calc_round" />
 
 </merge>

@@ -5,4 +5,8 @@
             android:title="default" />
         <item android:id="@+id/share"
             android:title="design2" />
+        <item android:id="@+id/full"
+            android:title="full" />
+        <item android:id="@+id/normal"
+            android:title="normal" />
 </menu>

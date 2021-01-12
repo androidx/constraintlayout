@@ -128,24 +128,110 @@ public class CalcEngine {
             stream.writeDouble(value); // 1
             stream.writeObject(var);  // 2
 
-            present  = operator != null;
+            present = operator != null;
             stream.writeBoolean(present);
             if (present) {
                 operator.serialize(stream);
             }
 
-            present  = lhs != null;
+            present = lhs != null;
             stream.writeBoolean(present); // 3
             if (present) {
                 lhs.serialize(stream);
             }
 
-            present  = rhs != null;
+            present = rhs != null;
             stream.writeBoolean(present);
             if (present) {
                 rhs.serialize(stream);
             }
         }
+
+        public void toSerialString(StringBuffer buffer) {
+            boolean present;
+
+            buffer.append(value + ",");
+            buffer.append(var + ",");
+            present = operator != null;
+            buffer.append(present + ",");
+            if (present) {
+                operator.toSerialString(buffer);
+            }
+
+            present = lhs != null;
+            buffer.append(present + ",");
+            if (present) {
+                lhs.toSerialString(buffer);
+            }
+
+            present = rhs != null;
+            buffer.append(present + ",");
+            if (present) {
+                rhs.toSerialString(buffer);
+            }
+
+        }
+    }
+
+    public Symbolic deserializeString(String str) {
+        Symbolic symbolic = new Symbolic();
+        deserializeString(symbolic, str, 0);
+        return symbolic;
+    }
+
+    private int deserializeString(Symbolic symbolic, String str, int start) {
+
+        int end = str.indexOf(',', start);
+        String sub = str.substring(start, end);
+        symbolic.value = Double.valueOf(sub);
+
+        start = end + 1;
+        end = str.indexOf(',', start);
+        symbolic.var = str.substring(start, end);
+        if (symbolic.var.equals("null")) {
+            symbolic.var = null;
+        }
+        start = end + 1;
+        end = str.indexOf(',', start);
+        if (Boolean.parseBoolean(str.substring(start, end))) {
+            start = end + 1;
+            end = deserializeStringOp(str, symbolic, start);
+        }
+
+        start = end + 1;
+        end = str.indexOf(',', start);
+        if (Boolean.parseBoolean(str.substring(start, end))) {
+            start = end + 1;
+            end = deserializeStringSymbolic(str, symbolic, start, true);
+        }
+
+
+        start = end + 1;
+        end = str.indexOf(',', start);
+        if (Boolean.parseBoolean(str.substring(start, end))) {
+            start = end + 1;
+            end = deserializeStringSymbolic(str, symbolic, start, false);
+
+        }
+        return end;
+    }
+
+    private int deserializeStringSymbolic(String str, Symbolic symbolic, int start, boolean lhs) {
+        Symbolic s = new Symbolic();
+        int end = deserializeString(s, str, start);
+        if (lhs) {
+            symbolic.lhs = s;
+        } else {
+            symbolic.rhs = s;
+        }
+        return end;
+    }
+
+    private int deserializeStringOp(String str, Symbolic symbolic, int start) {
+        int end = str.indexOf(',', start);
+        Op op = mOperators.get(str.substring(start, end));
+        symbolic.operator = op;
+        return end;
     }
 
     Symbolic deserializeSymbolic(ObjectInputStream stream) throws IOException, ClassNotFoundException {
@@ -206,11 +292,11 @@ public class CalcEngine {
                 stream.writeDouble(values[i]);
             }
             for (int i = 0; i < top; i++) {
-                 boolean present = sval[i] != null;
-                 stream.writeBoolean(present);
-                 if (present) {
-                     sval[i].serialize(stream);
-                 }
+                boolean present = sval[i] != null;
+                stream.writeBoolean(present);
+                if (present) {
+                    sval[i].serialize(stream);
+                }
             }
         }
 
@@ -342,6 +428,9 @@ public class CalcEngine {
             stream.writeObject(key);
         }
 
+        public void toSerialString(StringBuffer buffer) {
+            buffer.append(key + ",");
+        }
     }
 
     private Op deserializeOp(ObjectInputStream stream) throws IOException, ClassNotFoundException {

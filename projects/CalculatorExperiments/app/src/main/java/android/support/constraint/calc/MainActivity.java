@@ -16,6 +16,8 @@
 
 package android.support.constraint.calc;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -28,6 +30,7 @@ import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -36,6 +39,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.helper.widget.Carousel;
 import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.constraintlayout.utils.widget.MotionButton;
@@ -75,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         graph3D = findViewById(R.id.graph3d);
         getStack();
         restoreState();
+        regester_for_clipboard();
     }
 
     // ================================= Recycler support ====================================
@@ -96,6 +101,15 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return (T) null;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mMotionLayout.setFocusable(true);
+        mMotionLayout.requestFocus();
+        readClipboard();
     }
 
     // ====================================STATE Management ========================================
@@ -230,6 +244,9 @@ public class MainActivity extends AppCompatActivity {
             case "save":
                 save_plot();
                 return;
+            case "copy":
+                serializeToCopyBuffer();
+                return;
         }
 
         String str = key;
@@ -250,6 +267,56 @@ public class MainActivity extends AppCompatActivity {
         }
 
         view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+    }
+
+    public void readClipboard() {
+        ClipboardManager clipBoard = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+        {
+            ClipData clipData = clipBoard.getPrimaryClip();
+            if (clipData != null && clipData.getItemCount() > 0) {
+                ClipData.Item item = clipData.getItemAt(0);
+                String text = item.getText().toString();
+                CalcEngine.Symbolic op = calcEngine.deserializeString(text);
+                Log.v(TAG, Debug.getLoc() + " \"" + op.toString() + "\"");
+                Log.v(TAG, Debug.getLoc() + " \"" + text + "\"");
+            } else {
+                Log.v(TAG, Debug.getLoc()+" empty copy buffer");
+            }
+        }
+    }
+
+    public void regester_for_clipboard () {
+
+        ClipboardManager clipBoard = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+        {
+            ClipData clipData = clipBoard.getPrimaryClip();
+            if (clipData != null && clipData.getItemCount() > 0) {
+                ClipData.Item item = clipData.getItemAt(0);
+                String text = item.getText().toString();
+                CalcEngine.Symbolic op = calcEngine.deserializeString(text);
+                Log.v(TAG, Debug.getLoc() + " \"" + op.toString() + "\"");
+                Log.v(TAG, Debug.getLoc() + " \"" + text + "\"");
+            } else {
+                Log.v(TAG, Debug.getLoc()+" empty copy buffer");
+            }
+        }
+        clipBoard.addPrimaryClipChangedListener(() -> {
+            ClipData clipData = clipBoard.getPrimaryClip();
+            ClipData.Item item = clipData.getItemAt(0);
+            String text = item.getText().toString();
+            CalcEngine.Symbolic op = calcEngine.deserializeString(text);
+            Log.v(TAG, Debug.getLoc() + " \"" + op.toString() + "\"");
+            Log.v(TAG,Debug.getLoc()+" \""+text+"\"");
+        });
+    }
+
+    private void serializeToCopyBuffer() {
+        CalcEngine.Symbolic s = calcEngine.stack.getVar(0);
+        StringBuffer buffer = new StringBuffer();
+          s.toSerialString(buffer);
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("calc", buffer);
+        clipboard.setPrimaryClip(clip);
     }
 
     void invertStrings(boolean invert) {
@@ -347,6 +414,24 @@ public class MainActivity extends AppCompatActivity {
                    case  "design2":
                        reloadLayout(R.layout.design2);
                        break;
+                    case  "full":
+                        if (show2d) {
+                            mMotionLayout.transitionToState(R.id.mode2d_full);
+                        } else if  (show3d) {
+                            mMotionLayout.transitionToState(R.id.mode3d_full);
+                        } else {
+                            mMotionLayout.transitionToState(R.id.mode_no_graph);
+                        }
+                        break;
+                    case  "normal":
+                        if (show2d) {
+                            mMotionLayout.transitionToState(R.id.mode2d);
+                        } else if  (show3d) {
+                            mMotionLayout.transitionToState(R.id.mode3d);
+                        } else {
+                            mMotionLayout.transitionToState(R.id.mode_no_graph);
+                        }
+                        break;
                     default:
                         reloadLayout(R.layout.calc);
                 }
