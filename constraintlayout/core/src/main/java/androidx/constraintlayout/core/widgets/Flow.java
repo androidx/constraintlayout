@@ -1150,7 +1150,7 @@ public class Flow extends VirtualLayout {
             if (i == cols - 1) {
                 widget.connect(widget.mRight, mRight, getPaddingRight());
             }
-            if (i > 0) {
+            if (i > 0 && previous != null) {
                 widget.connect(widget.mLeft, previous.mRight, mHorizontalGap);
                 previous.connect(previous.mRight, widget.mLeft, 0);
             }
@@ -1169,7 +1169,7 @@ public class Flow extends VirtualLayout {
             if (j == rows - 1) {
                 widget.connect(widget.mBottom, mBottom, getPaddingBottom());
             }
-            if (j > 0) {
+            if (j > 0 && previous != null) {
                 widget.connect(widget.mTop, previous.mBottom, mVerticalGap);
                 previous.connect(previous.mBottom, widget.mTop, 0);
             }
@@ -1217,7 +1217,7 @@ public class Flow extends VirtualLayout {
     public void addToSolver(LinearSystem system, boolean optimize) {
         super.addToSolver(system, optimize);
 
-        boolean isInRtl = getParent() != null ? ((ConstraintWidgetContainer) getParent()).isRtl() : false;
+        boolean isInRtl = getParent() != null && ((ConstraintWidgetContainer) getParent()).isRtl();
         switch (mWrapMode) {
             case WRAP_CHAIN: {
                 final int count = mChainList.size();

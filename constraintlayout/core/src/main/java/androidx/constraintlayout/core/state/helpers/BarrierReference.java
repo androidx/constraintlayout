@@ -53,12 +53,11 @@ public class BarrierReference extends HelperReference {
 
     public void apply() {
         getHelperWidget();
-        int direction = 0;
+        int direction = Barrier.LEFT;
         switch (mDirection) {
             case LEFT:
             case START: {
                 // TODO: handle RTL
-                direction = Barrier.LEFT;
             } break;
             case RIGHT:
             case END: {

@@ -2252,7 +2252,7 @@ public class ConstraintWidget {
                 if (horizontalParentWrapContent && mParent != null) {
                     if (OPTIMIZE_WRAP_ON_RESOLVED) {
                         ConstraintWidgetContainer container = (ConstraintWidgetContainer) mParent;
-                        container.addVerticalWrapMinVariable(mLeft);
+                        container.addHorizontalWrapMinVariable(mLeft);
                         container.addHorizontalWrapMaxVariable(mRight);
                     } else {
                         int wrapStrength = SolverVariable.STRENGTH_EQUALITY;

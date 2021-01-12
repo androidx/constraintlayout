@@ -274,7 +274,9 @@ public class Chain {
             SolverVariable beginTarget = begin.mTarget != null ? begin.mTarget.mSolverVariable : null;
             SolverVariable endTarget = end.mTarget != null ? end.mTarget.mSolverVariable : null;
             begin = firstVisibleWidget.mListAnchors[offset];
-            end = lastVisibleWidget.mListAnchors[offset + 1];
+            if (lastVisibleWidget != null) {
+                end = lastVisibleWidget.mListAnchors[offset + 1];
+            }
             if (beginTarget != null && endTarget != null) {
                 float bias = 0.5f;
                 if (orientation == ConstraintWidget.HORIZONTAL) {
@@ -303,7 +305,7 @@ public class Chain {
                     SolverVariable beginTarget = beginAnchor.mTarget != null ? beginAnchor.mTarget.mSolverVariable : null;
                     if (previousVisibleWidget != widget) {
                         beginTarget = previousVisibleWidget.mListAnchors[offset + 1].mSolverVariable;
-                    } else if (widget == firstVisibleWidget && previousVisibleWidget == widget) {
+                    } else if (widget == firstVisibleWidget) {
                         beginTarget = first.mListAnchors[offset].mTarget != null ? first.mListAnchors[offset].mTarget.mSolverVariable : null;
                     }
 
@@ -316,21 +318,18 @@ public class Chain {
                     if (next != null) {
                         beginNextAnchor = next.mListAnchors[offset];
                         beginNext = beginNextAnchor.mSolverVariable;
-                        beginNextTarget = widget.mListAnchors[offset + 1].mSolverVariable;
                     } else {
                         beginNextAnchor = last.mListAnchors[offset + 1].mTarget;
                         if (beginNextAnchor != null) {
                             beginNext = beginNextAnchor.mSolverVariable;
                         }
-                        beginNextTarget = widget.mListAnchors[offset + 1].mSolverVariable;
                     }
+                    beginNextTarget = widget.mListAnchors[offset + 1].mSolverVariable;
 
                     if (beginNextAnchor != null) {
                         nextMargin += beginNextAnchor.getMargin();
                     }
-                    if (previousVisibleWidget != null) {
-                        beginMargin += previousVisibleWidget.mListAnchors[offset + 1].getMargin();
-                    }
+                    beginMargin += previousVisibleWidget.mListAnchors[offset + 1].getMargin();
                     if (begin != null && beginTarget != null && beginNext != null && beginNextTarget != null) {
                         int margin1 = beginMargin;
                         if (widget == firstVisibleWidget) {
@@ -393,9 +392,7 @@ public class Chain {
                     if (beginNextAnchor != null) {
                         nextMargin += beginNextAnchor.getMargin();
                     }
-                    if (previousVisibleWidget != null) {
-                        beginMargin += previousVisibleWidget.mListAnchors[offset + 1].getMargin();
-                    }
+                    beginMargin += previousVisibleWidget.mListAnchors[offset + 1].getMargin();
                     int strength = SolverVariable.STRENGTH_HIGHEST;
                     if (applyFixedEquality) {
                         strength = SolverVariable.STRENGTH_FIXED;
@@ -433,6 +430,9 @@ public class Chain {
         // final centering, necessary if the chain is larger than the available space...
         if ((isChainSpread || isChainSpreadInside) && firstVisibleWidget != null && firstVisibleWidget != lastVisibleWidget) {
             ConstraintAnchor begin = firstVisibleWidget.mListAnchors[offset];
+            if (lastVisibleWidget == null) {
+                lastVisibleWidget = firstVisibleWidget;
+            }
             ConstraintAnchor end = lastVisibleWidget.mListAnchors[offset + 1];
             SolverVariable beginTarget = begin.mTarget != null ? begin.mTarget.mSolverVariable : null;
             SolverVariable endTarget = end.mTarget != null ? end.mTarget.mSolverVariable : null;
@@ -447,10 +447,6 @@ public class Chain {
             if (beginTarget != null && endTarget != null) {
                 float bias = 0.5f;
                 int beginMargin = begin.getMargin();
-                if (lastVisibleWidget == null) {
-                    // everything is hidden
-                    lastVisibleWidget = last;
-                }
                 int endMargin = lastVisibleWidget.mListAnchors[offset + 1].getMargin();
                 system.addCentering(begin.mSolverVariable, beginTarget, beginMargin, bias,
                         endTarget, end.mSolverVariable, endMargin, SolverVariable.STRENGTH_EQUALITY);

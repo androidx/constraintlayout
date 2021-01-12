@@ -572,7 +572,7 @@ public class ArrayRow implements LinearSystem.Row {
     }
 
     public void updateFromFinalVariable(LinearSystem system, SolverVariable variable, boolean removeFromDefinition) {
-        if (!variable.isFinalValue) {
+        if (variable == null || !variable.isFinalValue) {
             return;
         }
         float value = variables.get(variable);
@@ -582,14 +582,14 @@ public class ArrayRow implements LinearSystem.Row {
             variable.removeFromRow(this);
         }
         if (LinearSystem.SIMPLIFY_SYNONYMS
-                && variable != null && variables.getCurrentSize() == 0) {
+                && variables.getCurrentSize() == 0) {
             isSimpleDefinition = true;
             system.hasSimpleDefinition = true;
         }
     }
 
     public void updateFromSynonymVariable(LinearSystem system, SolverVariable variable, boolean removeFromDefinition) {
-        if (!variable.isSynonym) {
+        if (variable == null || !variable.isSynonym) {
             return;
         }
         float value = variables.get(variable);
@@ -600,7 +600,7 @@ public class ArrayRow implements LinearSystem.Row {
         }
         variables.add(system.mCache.mIndexedVariables[variable.synonym], value, removeFromDefinition);
         if (LinearSystem.SIMPLIFY_SYNONYMS
-                && variable != null && variables.getCurrentSize() == 0) {
+                && variables.getCurrentSize() == 0) {
             isSimpleDefinition = true;
             system.hasSimpleDefinition = true;
         }

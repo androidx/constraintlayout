@@ -19,6 +19,7 @@ package androidx.constraintlayout.core.state;
 import androidx.constraintlayout.core.widgets.HelperWidget;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class HelperReference {
     protected final State mState;
@@ -34,9 +35,7 @@ public class HelperReference {
     public State.Helper getType() { return mType; }
 
     public HelperReference add(Object... objects) {
-        for (Object object : objects) {
-            mReferences.add(object);
-        }
+        Collections.addAll(mReferences, objects);
         return this;
     }
 

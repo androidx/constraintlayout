@@ -76,14 +76,10 @@ public class VelocityMatrix {
     }
 
     public void setScaleVelocity(KeyCycleOscillator osc_sx, KeyCycleOscillator osc_sy, float position) {
-
-        if (osc_sx == null && osc_sy == null) {
-            return;
-        }
-        if (osc_sx == null) {
+        if (osc_sx != null) {
             mDScaleX = osc_sx.getSlope(position);
         }
-        if (osc_sy == null) {
+        if (osc_sy != null) {
             mDScaleY = osc_sy.getSlope(position);
         }
     }

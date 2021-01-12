@@ -467,8 +467,8 @@ public class OptimizationsTest {
         time = System.nanoTime() - time;
         System.out.println("A) execution time: " + time);
         System.out.println("root: " + root + " A: " + A);
-        assertEquals(A.getLeft(), 257, 1);
-        assertEquals(A.getTop(), 297, 1);
+        assertEquals(A.getLeft(), 270, 1);
+        assertEquals(A.getTop(), 303, 1);
     }
 
     @Test
