@@ -41,7 +41,7 @@ public class ChainRun extends WidgetRun {
     @Override
     public String toString() {
         StringBuilder log = new StringBuilder("ChainRun ");
-        log.append((orientation == HORIZONTAL ? "horizontal : " : "vertical : ");
+        log.append((orientation == HORIZONTAL ? "horizontal : " : "vertical : "));
         for (WidgetRun run : widgets) {
             log.append("<");
             log.append(run);
