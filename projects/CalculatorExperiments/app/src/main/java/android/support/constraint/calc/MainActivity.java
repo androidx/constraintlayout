@@ -278,9 +278,6 @@ public class MainActivity extends AppCompatActivity {
                 String text = item.getText().toString();
                 CalcEngine.Symbolic op = calcEngine.deserializeString(text);
                 Log.v(TAG, Debug.getLoc() + " \"" + op.toString() + "\"");
-                Log.v(TAG, Debug.getLoc() + " \"" + text + "\"");
-            } else {
-                Log.v(TAG, Debug.getLoc()+" empty copy buffer");
             }
         }
     }
@@ -295,9 +292,6 @@ public class MainActivity extends AppCompatActivity {
                 String text = item.getText().toString();
                 CalcEngine.Symbolic op = calcEngine.deserializeString(text);
                 Log.v(TAG, Debug.getLoc() + " \"" + op.toString() + "\"");
-                Log.v(TAG, Debug.getLoc() + " \"" + text + "\"");
-            } else {
-                Log.v(TAG, Debug.getLoc()+" empty copy buffer");
             }
         }
         clipBoard.addPrimaryClipChangedListener(() -> {
@@ -401,6 +395,8 @@ public class MainActivity extends AppCompatActivity {
             show2d = false;
             mMotionLayout.transitionToState(R.id.mode3d);
             graph3D.plot(s);
+        } else {
+            mMotionLayout.transitionToState(R.id.mode_no_graph);
         }
 
     }

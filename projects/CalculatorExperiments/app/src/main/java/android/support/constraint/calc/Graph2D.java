@@ -71,7 +71,6 @@ public class Graph2D extends View {
         public void run() {
             long delay = System.currentTimeMillis() - mLastMove;
             if (delay > TRIGGER_DELAY) {
-                Log.v(TAG, Debug.getLoc() + " " + delay);
                 mPlot.highlightInterestingPoints(mEquation);
                 invalidate();
             }
