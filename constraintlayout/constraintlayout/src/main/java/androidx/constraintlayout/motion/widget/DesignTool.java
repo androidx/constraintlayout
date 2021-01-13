@@ -301,7 +301,7 @@ public class DesignTool implements ProxyInterface {
             mMotionLayout.mScene = mSceneCache;
         }
 
-        int rscId = (id != null) ? mMotionLayout.lookUpConstraintId(id): R.id.motion_base;
+        int rscId = mMotionLayout.lookUpConstraintId(id);
         mLastStartStateId = rscId;
 
         if (rscId != 0) {
@@ -459,7 +459,16 @@ public class DesignTool implements ProxyInterface {
      * @hide
      */
     public float getKeyFramePosition(Object view, int type, float x, float y) {
-        return mMotionLayout.mFrameArrayList.get((View) view).getKeyFrameParameter(type, x, y);
+        if (!(view instanceof View)) {
+            return 0f;
+        }
+
+        MotionController mc = mMotionLayout.mFrameArrayList.get((View) view);
+        if (mc == null) {
+            return 0f;
+        }
+
+        return mc.getKeyFrameParameter(type, x, y);
     }
 
     /**
@@ -494,6 +503,10 @@ public class DesignTool implements ProxyInterface {
      * @hide
      */
     public boolean setKeyFramePosition(Object view, int position, int type, float x, float y) {
+        if (!(view instanceof View)) {
+            return false;
+        }
+
         if (mMotionLayout.mScene != null) {
             MotionController motionController = mMotionLayout.mFrameArrayList.get(view);
             position = (int) (mMotionLayout.mTransitionPosition * 100);
@@ -518,6 +531,10 @@ public class DesignTool implements ProxyInterface {
      * @hide
      */
     public void setViewDebug(Object view, int debugMode) {
+        if (!(view instanceof View)) {
+            return;
+        }
+
         MotionController motionController = mMotionLayout.mFrameArrayList.get(view);
         if (motionController != null) {
             motionController.setDrawPath(debugMode);

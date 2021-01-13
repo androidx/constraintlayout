@@ -89,8 +89,8 @@ public class HorizontalWidgetRun extends WidgetRun {
                 if (dimensionBehavior == MATCH_PARENT) {
                     ConstraintWidget parent = widget.getParent();
                     if (parent != null
-                            && parent.getHorizontalDimensionBehaviour() == FIXED
-                            || parent.getHorizontalDimensionBehaviour() == MATCH_PARENT) {
+                            && (parent.getHorizontalDimensionBehaviour() == FIXED
+                            || parent.getHorizontalDimensionBehaviour() == MATCH_PARENT)) {
                         int resolvedDimension = parent.getWidth() - widget.mLeft.getMargin() - widget.mRight.getMargin();
                         addTarget(start, parent.horizontalRun.start, widget.mLeft.getMargin());
                         addTarget(end, parent.horizontalRun.end, -widget.mRight.getMargin());
@@ -106,8 +106,8 @@ public class HorizontalWidgetRun extends WidgetRun {
             if (dimensionBehavior == MATCH_PARENT) {
                 ConstraintWidget parent = widget.getParent();
                 if (parent != null
-                        && parent.getHorizontalDimensionBehaviour() == FIXED
-                        || parent.getHorizontalDimensionBehaviour() == MATCH_PARENT) {
+                        && (parent.getHorizontalDimensionBehaviour() == FIXED
+                        || parent.getHorizontalDimensionBehaviour() == MATCH_PARENT)) {
                     addTarget(start, parent.horizontalRun.start, widget.mLeft.getMargin());
                     addTarget(end, parent.horizontalRun.end, -widget.mRight.getMargin());
                     return;
@@ -239,8 +239,12 @@ public class HorizontalWidgetRun extends WidgetRun {
                             addTarget(end, endTarget, -widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT].getMargin());
                         }
                     } else {
-                        startTarget.addDependency(this);
-                        endTarget.addDependency(this);
+                        if (startTarget != null) {
+                            startTarget.addDependency(this);
+                        }
+                        if (endTarget != null) {
+                            endTarget.addDependency(this);
+                        }
                     }
                     mRunType = CENTER;
                 }

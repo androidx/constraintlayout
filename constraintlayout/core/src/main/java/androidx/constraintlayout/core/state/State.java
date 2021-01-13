@@ -16,12 +16,8 @@
 
 package androidx.constraintlayout.core.state;
 
-import androidx.constraintlayout.core.state.Reference;
-
-import androidx.constraintlayout.core.widgets.Barrier;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
-import androidx.constraintlayout.core.widgets.Flow;
 import androidx.constraintlayout.core.widgets.HelperWidget;
 import androidx.constraintlayout.core.state.helpers.AlignHorizontallyReference;
 import androidx.constraintlayout.core.state.helpers.AlignVerticallyReference;
@@ -113,7 +109,7 @@ public class State {
             return ((Float) value).intValue();
         }
         if (value instanceof Integer) {
-            return ((Integer) value).intValue();
+            return (Integer) value;
         }
         return 0;
     }

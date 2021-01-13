@@ -187,6 +187,9 @@ public class KeyTimeCycle extends Key {
     public void addTimeValues(HashMap<String, TimeCycleSplineSet> splines) {
         for (String s : splines.keySet()) {
             TimeCycleSplineSet splineSet = splines.get(s);
+            if (splineSet == null) {
+                continue;
+            }
             if (s.startsWith(Key.CUSTOM)) {
                 String ckey = s.substring(Key.CUSTOM.length() + 1);
                 ConstraintAttribute cvalue = mCustomConstraints.get(ckey);

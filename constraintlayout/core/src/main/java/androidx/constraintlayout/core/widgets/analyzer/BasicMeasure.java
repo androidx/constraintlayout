@@ -421,6 +421,8 @@ public class BasicMeasure {
                         break;
                     }
                 }
+
+                // TODO: Apparently this is always false - should we delete it?
                 if (needSolverPass) {
                     solveLinearSystem(layout, "2nd pass", startingWidth, startingHeight);
                     needSolverPass = false;

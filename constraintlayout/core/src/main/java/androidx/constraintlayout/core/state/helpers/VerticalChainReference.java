@@ -68,7 +68,11 @@ public class VerticalChainReference extends ChainReference {
             }
         }
 
-        if (first != null && mBias != 0.5f) {
+        if (first == null) {
+            return;
+        }
+
+        if (mBias != 0.5f) {
             first.verticalBias(mBias);
         }
 

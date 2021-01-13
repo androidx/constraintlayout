@@ -36,6 +36,8 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 import androidx.constraintlayout.core.widgets.Guideline;
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure;
+import androidx.core.view.ViewCompat;
+
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
@@ -995,32 +997,8 @@ public class ConstraintLayout extends ViewGroup {
      * {@hide}
      */
     @Override
-    public void addView(View child, int index, ViewGroup.LayoutParams params) {
-        super.addView(child, index, params);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            onViewAdded(child);
-        }
-    }
-
-    /**
-     * {@hide}
-     */
-    @Override
-    public void removeView(View view) {
-        super.removeView(view);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            onViewRemoved(view);
-        }
-    }
-
-    /**
-     * {@hide}
-     */
-    @Override
     public void onViewAdded(View view) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            super.onViewAdded(view);
-        }
+        super.onViewAdded(view);
         ConstraintWidget widget = getViewWidget(view);
         if (view instanceof androidx.constraintlayout.widget.Guideline) {
             if (!(widget instanceof Guideline)) {
@@ -1048,9 +1026,7 @@ public class ConstraintLayout extends ViewGroup {
      */
     @Override
     public void onViewRemoved(View view) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            super.onViewRemoved(view);
-        }
+        super.onViewRemoved(view);
         mChildrenByIds.remove(view.getId());
         ConstraintWidget widget = getViewWidget(view);
         mLayoutWidget.remove(widget);
@@ -1638,28 +1614,22 @@ public class ConstraintLayout extends ViewGroup {
         int androidLayoutWidth = measuredWidth + widthPadding;
         int androidLayoutHeight = measuredHeight + heightPadding;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            int resolvedWidthSize = resolveSizeAndState(androidLayoutWidth, widthMeasureSpec, childState);
-            int resolvedHeightSize = resolveSizeAndState(androidLayoutHeight, heightMeasureSpec,
-                    childState << MEASURED_HEIGHT_STATE_SHIFT);
-            resolvedWidthSize &= MEASURED_SIZE_MASK;
-            resolvedHeightSize &= MEASURED_SIZE_MASK;
-            resolvedWidthSize = Math.min(mMaxWidth, resolvedWidthSize);
-            resolvedHeightSize = Math.min(mMaxHeight, resolvedHeightSize);
-            if (isWidthMeasuredTooSmall) {
-                resolvedWidthSize |= MEASURED_STATE_TOO_SMALL;
-            }
-            if (isHeightMeasuredTooSmall) {
-                resolvedHeightSize |= MEASURED_STATE_TOO_SMALL;
-            }
-            setMeasuredDimension(resolvedWidthSize, resolvedHeightSize);
-            mLastMeasureWidth = resolvedWidthSize;
-            mLastMeasureHeight = resolvedHeightSize;
-        } else {
-            setMeasuredDimension(androidLayoutWidth, androidLayoutHeight);
-            mLastMeasureWidth = androidLayoutWidth;
-            mLastMeasureHeight = androidLayoutHeight;
+        int resolvedWidthSize = resolveSizeAndState(androidLayoutWidth, widthMeasureSpec, childState);
+        int resolvedHeightSize = resolveSizeAndState(androidLayoutHeight, heightMeasureSpec,
+                childState << MEASURED_HEIGHT_STATE_SHIFT);
+        resolvedWidthSize &= MEASURED_SIZE_MASK;
+        resolvedHeightSize &= MEASURED_SIZE_MASK;
+        resolvedWidthSize = Math.min(mMaxWidth, resolvedWidthSize);
+        resolvedHeightSize = Math.min(mMaxHeight, resolvedHeightSize);
+        if (isWidthMeasuredTooSmall) {
+            resolvedWidthSize |= MEASURED_STATE_TOO_SMALL;
         }
+        if (isHeightMeasuredTooSmall) {
+            resolvedHeightSize |= MEASURED_STATE_TOO_SMALL;
+        }
+        setMeasuredDimension(resolvedWidthSize, resolvedHeightSize);
+        mLastMeasureWidth = resolvedWidthSize;
+        mLastMeasureHeight = resolvedHeightSize;
     }
 
     /**
@@ -2594,7 +2564,7 @@ public class ConstraintLayout extends ViewGroup {
         float resolvedGuidePercent;
 
         boolean isRtl = false;
-        int layoutDirection = View.LAYOUT_DIRECTION_LTR;
+        int layoutDirection = ViewCompat.LAYOUT_DIRECTION_LTR;
 
         ConstraintWidget widget = new ConstraintWidget();
 

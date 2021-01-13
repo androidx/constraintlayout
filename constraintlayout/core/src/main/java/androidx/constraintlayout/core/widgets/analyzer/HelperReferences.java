@@ -51,7 +51,7 @@ class HelperReferences extends WidgetRun {
             start.delegateToWidgetRun = true;
             Barrier barrier = (Barrier) widget;
             int type = barrier.getBarrierType();
-            boolean allowsGoneWidget = barrier.allowsGoneWidget();
+            boolean allowsGoneWidget = barrier.getAllowsGoneWidget();
             switch (type) {
                 case Barrier.LEFT: {
                     start.type = DependencyNode.Type.LEFT;

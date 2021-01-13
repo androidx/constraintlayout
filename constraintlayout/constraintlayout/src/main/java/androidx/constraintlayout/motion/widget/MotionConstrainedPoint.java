@@ -24,6 +24,7 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import android.util.Log;
 import android.view.View;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -315,8 +316,6 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
 
                             }
 
-                        } else {
-                            Log.e(TAG, "UNKNOWN customName " + customName);
                         }
                     } else {
                         Log.e(TAG, "UNKNOWN spline " + s);

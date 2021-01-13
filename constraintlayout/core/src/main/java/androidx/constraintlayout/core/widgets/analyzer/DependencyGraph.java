@@ -46,6 +46,7 @@ public class DependencyGraph {
     private ConstraintWidgetContainer mContainer;
     private ArrayList<WidgetRun> mRuns = new ArrayList<>();
 
+    // TODO: Unused, should we delete?
     private ArrayList<RunGroup> runGroups = new ArrayList<>();
 
     public DependencyGraph(ConstraintWidgetContainer container) {
@@ -542,13 +543,10 @@ public class DependencyGraph {
                     measure(widget, WRAP_CONTENT, 0, WRAP_CONTENT, 0);
                     widget.horizontalRun.dimension.wrapValue = widget.getWidth();
                     widget.verticalRun.dimension.wrapValue = widget.getHeight();
-                    continue;
                 } else if (widget.mMatchConstraintDefaultHeight == ConstraintWidget.MATCH_CONSTRAINT_PERCENT
                         && widget.mMatchConstraintDefaultWidth == ConstraintWidget.MATCH_CONSTRAINT_PERCENT
-                        && (constraintWidgetContainer.mListDimensionBehaviors[HORIZONTAL] == FIXED
-                            || constraintWidgetContainer.mListDimensionBehaviors[HORIZONTAL] == FIXED)
-                        && (constraintWidgetContainer.mListDimensionBehaviors[VERTICAL] == FIXED
-                            || constraintWidgetContainer.mListDimensionBehaviors[VERTICAL] == FIXED)) {
+                        && constraintWidgetContainer.mListDimensionBehaviors[HORIZONTAL] == FIXED
+                        && constraintWidgetContainer.mListDimensionBehaviors[VERTICAL] == FIXED) {
                     float horizPercent = widget.mMatchConstraintPercentWidth;
                     float vertPercent = widget.mMatchConstraintPercentHeight;
                     int width = (int) (0.5f + horizPercent * constraintWidgetContainer.getWidth());
@@ -557,7 +555,6 @@ public class DependencyGraph {
                     widget.horizontalRun.dimension.resolve(widget.getWidth());
                     widget.verticalRun.dimension.resolve(widget.getHeight());
                     widget.measured = true;
-                    continue;
                 }
             }
         }
@@ -657,8 +654,7 @@ public class DependencyGraph {
             if (widget.isInHorizontalChain()) {
                 if (widget.horizontalChainRun == null) {
                     // build the horizontal chain
-                    ChainRun chainRun = new ChainRun(widget, HORIZONTAL);
-                    widget.horizontalChainRun = chainRun;
+                    widget.horizontalChainRun = new ChainRun(widget, HORIZONTAL);
                 }
                 if (chainRuns == null) {
                     chainRuns = new HashSet<>();
@@ -670,8 +666,7 @@ public class DependencyGraph {
             if (widget.isInVerticalChain()) {
                 if (widget.verticalChainRun == null) {
                     // build the vertical chain
-                    ChainRun chainRun = new ChainRun(widget, VERTICAL);
-                    widget.verticalChainRun = chainRun;
+                    widget.verticalChainRun = new ChainRun(widget, VERTICAL);
                 }
                 if (chainRuns == null) {
                     chainRuns = new HashSet<>();
@@ -791,6 +786,7 @@ public class DependencyGraph {
 
 
     private String generateDisplayNode(DependencyNode node, boolean centeredConnection, String content) {
+        StringBuilder contentBuilder = new StringBuilder(content);
         for (DependencyNode target : node.targets) {
             String constraint = "\n" + node.name();
             constraint += " -> " + target.name();
@@ -811,8 +807,9 @@ public class DependencyGraph {
                 constraint += "]";
             }
             constraint += "\n";
-            content += constraint;
+            contentBuilder.append(constraint);
         }
+        content = contentBuilder.toString();
 //        for (DependencyNode dependency : node.dependencies) {
 //            content = generateDisplayNode(dependency, content);
 //        }
@@ -822,97 +819,99 @@ public class DependencyGraph {
     private String nodeDefinition(WidgetRun run) {
         int orientation = run instanceof VerticalWidgetRun ? VERTICAL : HORIZONTAL;
         String name = run.widget.getDebugName();
-        String definition = name;
+        StringBuilder definition = new StringBuilder(name);
         ConstraintWidget.DimensionBehaviour behaviour = orientation == HORIZONTAL ? run.widget.getHorizontalDimensionBehaviour()
                 : run.widget.getVerticalDimensionBehaviour();
         RunGroup runGroup = run.runGroup;
 
         if (orientation == HORIZONTAL) {
-            definition += "_HORIZONTAL";
+            definition.append("_HORIZONTAL");
         } else {
-            definition += "_VERTICAL";
+            definition.append("_VERTICAL");
         }
-        definition += " [shape=none, label=<";
-        definition += "<TABLE BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\">";
-        definition += "  <TR>";
+        definition.append(" [shape=none, label=<");
+        definition.append("<TABLE BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\">");
+        definition.append("  <TR>");
         if (orientation == HORIZONTAL) {
-            definition += "    <TD ";
+            definition.append("    <TD ");
             if (run.start.resolved) {
-                definition += " BGCOLOR=\"green\"";
+                definition.append(" BGCOLOR=\"green\"");
             }
-            definition += " PORT=\"LEFT\" BORDER=\"1\">L</TD>";
+            definition.append(" PORT=\"LEFT\" BORDER=\"1\">L</TD>");
         } else {
-            definition += "    <TD ";
+            definition.append("    <TD ");
             if (run.start.resolved) {
-                definition += " BGCOLOR=\"green\"";
+                definition.append(" BGCOLOR=\"green\"");
             }
-            definition += " PORT=\"TOP\" BORDER=\"1\">T</TD>";
+            definition.append(" PORT=\"TOP\" BORDER=\"1\">T</TD>");
         }
-        definition += "    <TD BORDER=\"1\" ";
-//        if (run.widget.measured) {
-//            definition += " BGCOLOR=\"gray\" ";
-//        } else
+        definition.append("    <TD BORDER=\"1\" ");
         if (run.dimension.resolved && !run.widget.measured) {
-            definition += " BGCOLOR=\"green\" ";
-        } else if (run.dimension.resolved && run.widget.measured) {
-            definition += " BGCOLOR=\"lightgray\" ";
-        } else if (!run.dimension.resolved && run.widget.measured) {
-            definition += " BGCOLOR=\"yellow\" ";
+            definition.append(" BGCOLOR=\"green\" ");
+        } else if (run.dimension.resolved) {
+            definition.append(" BGCOLOR=\"lightgray\" ");
+        } else if (run.widget.measured) {
+            definition.append(" BGCOLOR=\"yellow\" ");
         }
         if (behaviour == MATCH_CONSTRAINT) {
-            definition += "style=\"dashed\"";
+            definition.append("style=\"dashed\"");
         }
-        String group = "";
+        definition.append(">");
+        definition.append(name);
         if (runGroup != null) {
-            group = " [" + (runGroup.groupIndex + 1) + "/" + RunGroup.index + "]";
+            definition.append(" [");
+            definition.append(runGroup.groupIndex + 1);
+            definition.append("/");
+            definition.append(RunGroup.index);
+            definition.append("]");
         }
-        definition +=        ">" + name + group + " </TD>";
+        definition.append(" </TD>");
         if (orientation == HORIZONTAL) {
-            definition += "    <TD ";
+            definition.append("    <TD ");
             if (run.end.resolved) {
-                definition += " BGCOLOR=\"green\"";
+                definition.append(" BGCOLOR=\"green\"");
             }
-            definition += " PORT=\"RIGHT\" BORDER=\"1\">R</TD>";
+            definition.append(" PORT=\"RIGHT\" BORDER=\"1\">R</TD>");
         } else {
-            definition += "    <TD ";
-            if (run instanceof VerticalWidgetRun) {
-                if (((VerticalWidgetRun) run).baseline.resolved) {
-                    definition += " BGCOLOR=\"green\"";
-                }
+            definition.append("    <TD ");
+            if (((VerticalWidgetRun) run).baseline.resolved) {
+                definition.append(" BGCOLOR=\"green\"");
             }
-            definition += " PORT=\"BASELINE\" BORDER=\"1\">b</TD>";
-            definition += "    <TD ";
+            definition.append(" PORT=\"BASELINE\" BORDER=\"1\">b</TD>");
+            definition.append("    <TD ");
             if (run.end.resolved) {
-                definition += " BGCOLOR=\"green\"";
+                definition.append(" BGCOLOR=\"green\"");
             }
-            definition += " PORT=\"BOTTOM\" BORDER=\"1\">B</TD>";
+            definition.append(" PORT=\"BOTTOM\" BORDER=\"1\">B</TD>");
         }
-        definition += "  </TR></TABLE>";
-        definition += ">];\n";
-        return definition;
+        definition.append("  </TR></TABLE>");
+        definition.append(">];\n");
+        return definition.toString();
     }
 
     private String generateChainDisplayGraph(ChainRun chain, String content) {
         int orientation = chain.orientation;
-        String name = "cluster_" + chain.widget.getDebugName();
+        StringBuilder subgroup = new StringBuilder("subgraph ");
+        subgroup.append("cluster_");
+        subgroup.append(chain.widget.getDebugName());
         if (orientation == HORIZONTAL) {
-            name += "_h";
+            subgroup.append("_h");
         } else {
-            name += "_v";
+            subgroup.append("_v");
         }
-        String subgroup = "subgraph " + name + " {\n";
+        subgroup.append(" {\n");
         String definitions = "";
         for (WidgetRun run : chain.widgets) {
-            String runName = run.widget.getDebugName();
+            subgroup.append(run.widget.getDebugName());
             if (orientation == HORIZONTAL) {
-                runName += "_HORIZONTAL";
+                subgroup.append("_HORIZONTAL");
             } else {
-                runName += "_VERTICAL";
+                subgroup.append("_VERTICAL");
             }
-            subgroup += runName + ";\n";
+            subgroup.append(";\n");
             definitions = generateDisplayGraph(run, definitions);
         }
-        subgroup += "}\n";
+        subgroup.append("}\n");
         return content + definitions + subgroup;
     }
 
@@ -935,11 +934,12 @@ public class DependencyGraph {
     private String generateDisplayGraph(WidgetRun root, String content) {
         DependencyNode start = root.start;
         DependencyNode end = root.end;
+        StringBuilder sb = new StringBuilder(content);
 
         if (!(root instanceof HelperReferences) && start.dependencies.isEmpty() && end.dependencies.isEmpty() & start.targets.isEmpty() && end.targets.isEmpty()) {
             return content;
         }
-        content += nodeDefinition(root);
+        sb.append(nodeDefinition(root));
 
         boolean centeredConnection = isCenteredConnection(start, end);
         content = generateDisplayNode(start, centeredConnection, content);
@@ -955,17 +955,25 @@ public class DependencyGraph {
             if (behaviour == ConstraintWidget.DimensionBehaviour.FIXED
                     || behaviour == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
                 if (!start.targets.isEmpty() && end.targets.isEmpty()) {
-                    String constraint = "\n" + end.name() + " -> " + start.name() + "\n";
-                    content += constraint;
+                    sb.append("\n");
+                    sb.append(end.name());
+                    sb.append(" -> ");
+                    sb.append(start.name());
+                    sb.append("\n");
                 } else if (start.targets.isEmpty() && !end.targets.isEmpty()) {
-                    String constraint = "\n" + start.name() + " -> " + end.name() + "\n";
-                    content += constraint;
+                    sb.append("\n");
+                    sb.append(start.name());
+                    sb.append(" -> ");
+                    sb.append(end.name());
+                    sb.append("\n");
                 }
             } else {
                 if (behaviour == MATCH_CONSTRAINT && root.widget.getDimensionRatio() > 0) {
-                    String name = root.widget.getDebugName();
-                    String constraint = "\n" + name + "_HORIZONTAL -> " + name + "_VERTICAL;\n";
-//                    content += constraint;
+                    sb.append("\n");
+                    sb.append(root.widget.getDebugName());
+                    sb.append("_HORIZONTAL -> ");
+                    sb.append(root.widget.getDebugName());
+                    sb.append("_VERTICAL;\n");
                 }
             }
         } else if (root instanceof VerticalWidgetRun
@@ -974,24 +982,32 @@ public class DependencyGraph {
             if (behaviour == ConstraintWidget.DimensionBehaviour.FIXED
                     || behaviour == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
                 if (!start.targets.isEmpty() && end.targets.isEmpty()) {
-                    String constraint = "\n" + end.name() + " -> " + start.name() + "\n";
-                    content += constraint;
+                    sb.append("\n");
+                    sb.append(end.name());
+                    sb.append(" -> ");
+                    sb.append(start.name());
+                    sb.append("\n");
                 } else if (start.targets.isEmpty() && !end.targets.isEmpty()) {
-                    String constraint = "\n" + start.name() + " -> " + end.name() + "\n";
-                    content += constraint;
+                    sb.append("\n");
+                    sb.append(start.name());
+                    sb.append(" -> ");
+                    sb.append(end.name());
+                    sb.append("\n");
                 }
             } else {
                 if (behaviour == MATCH_CONSTRAINT && root.widget.getDimensionRatio() > 0) {
-                    String name = root.widget.getDebugName();
-                    String constraint = "\n" + name + "_VERTICAL -> " + name + "_HORIZONTAL;\n";
-//                    content += constraint;
+                    sb.append("\n");
+                    sb.append(root.widget.getDebugName());
+                    sb.append("_VERTICAL -> ");
+                    sb.append(root.widget.getDebugName());
+                    sb.append("_HORIZONTAL;\n");
                 }
             }
         }
         if (root instanceof ChainRun) {
             return generateChainDisplayGraph((ChainRun) root, content);
         }
-        return content;
+        return sb.toString();
     }
 
 }

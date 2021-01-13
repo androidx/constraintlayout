@@ -3,7 +3,7 @@
     xmlns:motion="http://schemas.android.com/apk/res-auto"
     motion:defaultDuration="2000">
 
-    <Include motion:constraintSet="@xml/verification_scene_95a" />
+    <include motion:constraintSet="@xml/verification_scene_95a" />
 
     <ConstraintSet android:id="@+id/start">
 

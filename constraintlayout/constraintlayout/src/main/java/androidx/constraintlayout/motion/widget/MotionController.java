@@ -728,9 +728,15 @@ public class MotionController {
             for (String spline : mAttributesMap.keySet()) {
                 int curve = CurveFit.SPLINE; // default is SPLINE
                 if (interpolation.containsKey(spline)) {
-                    curve = interpolation.get(spline);
+                    Integer boxedCurve = interpolation.get(spline);
+                    if (boxedCurve != null) {
+                        curve = boxedCurve;
+                    }
                 }
-                mAttributesMap.get(spline).setup(curve);
+                SplineSet splineSet = mAttributesMap.get(spline);
+                if (splineSet != null) {
+                    splineSet.setup(curve);
+                }
             }
         }
 
@@ -819,8 +825,11 @@ public class MotionController {
             mAttributeInterpCount[i] = 0;
             for (int j = 0; j < points.length; j++) {
                 if (points[j].attributes.containsKey(attributeName)) {
-                    mAttributeInterpCount[i] += points[j].attributes.get(attributeName).noOfInterpValues();
-                    break;
+                    ConstraintAttribute attribute = points[j].attributes.get(attributeName);
+                    if (attribute != null) {
+                        mAttributeInterpCount[i] += attribute.noOfInterpValues();
+                        break;
+                    }
                 }
             }
         }
@@ -937,7 +946,7 @@ public class MotionController {
         if (DEBUG) {
             Log.v(TAG, "Animation of splineAttributes " + Arrays.toString(splineAttributes.toArray()));
             Log.v(TAG, "Animation of cycle " + Arrays.toString(mCycleMap.keySet().toArray()));
-            if (mAttributesMap != null && mAttributesMap.keySet() != null) {
+            if (mAttributesMap != null) {
                 Log.v(TAG, " splines = " + Arrays.toString(mAttributesMap.keySet().toArray()));
                 for (String s : mAttributesMap.keySet()) {
                     Log.v(TAG, s + " = " + mAttributesMap.get(s));

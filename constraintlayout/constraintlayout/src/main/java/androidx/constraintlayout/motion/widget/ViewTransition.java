@@ -291,7 +291,7 @@ public class ViewTransition {
                     }
                 } else if (type.type == TypedValue.TYPE_STRING) {
                     mDefaultInterpolatorString = a.getString(attr);
-                    if (mDefaultInterpolatorString.indexOf("/") > 0) {
+                    if (mDefaultInterpolatorString != null && mDefaultInterpolatorString.indexOf("/") > 0) {
                         mDefaultInterpolatorID = a.getResourceId(attr, UNSET);
                         mDefaultInterpolator = INTERPOLATOR_REFRENCE_ID;
                     } else {
@@ -354,6 +354,9 @@ public class ViewTransition {
             long current = System.nanoTime();
             long elapse = current - mStart;
             float position = ((float) (elapse * 1E-6)) / mDuration;
+            if (position >= 1.0f) {
+                position = 1.0f;
+            }
             float ipos = (mInterpolator == null) ? position : mInterpolator.getInterpolation(position);
             boolean repaint = mMC.interpolate(mMC.mView, ipos, current, mCache);
             if (position >= 1) {
@@ -376,7 +379,6 @@ public class ViewTransition {
                          int fromId,
                          ConstraintSet current,
                          View... views) {
-
         if (mDisabled) {
             return;
         }

@@ -84,33 +84,33 @@ subprojects { Project project ->
         repositories {
             mavenDeployer {
                 repository(url: uri("$rootProject.ext.supportRepoOut"))
-		if (project.getName() == 'constraintlayout' || project.getName() == 'core') {
-		    pom.project {
-		        name project.ext.pomName
-		        description project.ext.pomDesc
+                if (project.getName() == 'constraintlayout' || project.getName() == 'core') {
+                    pom.project {
+                        name project.ext.pomName
+                        description project.ext.pomDesc
 
-		        url 'http://tools.android.com'
-			inceptionYear '2007'
+                        url 'http://tools.android.com'
+                        inceptionYear '2007'
 
-			licenses {
-			    license {
-			        name 'The Apache Software License, Version 2.0'
-				url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-				distribution 'repo'
-		            }
-		        }
+                        licenses {
+                            license {
+                                name 'The Apache Software License, Version 2.0'
+                                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                                distribution 'repo'
+                            }
+                        }
 
-			scm {
-			    url 'https://android.googlesource.com/platform/tools/sherpa'
-			    connection 'git://android.googlesource.com/platform/tools/sherpa.git'
-		        }
-			developers {
-		   	    developer {
-				name 'The Android Open Source Project'
-			    }
-			}
-		    }
-		}
+                        scm {
+                            url 'https://android.googlesource.com/platform/tools/sherpa'
+                            connection 'git://android.googlesource.com/platform/tools/sherpa.git'
+                        }
+                        developers {
+                            developer {
+                                name 'The Android Open Source Project'
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -124,18 +124,18 @@ subprojects { Project project ->
     def deployer = release.repositories.mavenDeployer
     task generateSourceProps(dependsOn: release) doLast {
         def content = "Maven.GroupId=$deployer.pom.groupId\n" +
-            "Maven.ArtifactId=$deployer.pom.artifactId\n" +
-            "Maven.Version=$deployer.pom.version\n" +
-            "Pkg.Desc=$project.ext.pomDesc $deployer.pom.version\n" +
-            "Pkg.Revision=1\n" +
-            "Extra.VendorId=android\n" +
-            "Extra.VendorDisplay=Android\n" +
-            "Maven.Dependencies=" +
-            String.join(",", project.configurations.implementation.allDependencies.collect {
+                "Maven.ArtifactId=$deployer.pom.artifactId\n" +
+                "Maven.Version=$deployer.pom.version\n" +
+                "Pkg.Desc=$project.ext.pomDesc $deployer.pom.version\n" +
+                "Pkg.Revision=1\n" +
+                "Extra.VendorId=android\n" +
+                "Extra.VendorDisplay=Android\n" +
+                "Maven.Dependencies=" +
+                String.join(",", project.configurations.implementation.allDependencies.collect {
                     def p = parent.findProject(it.name)
                     return p ? "$p.group:$p.archivesBaseName:$p.version" : null
                 }.grep()) +
-            "\n"
+                "\n"
         Files.write(content, new File(versionDir(), 'source.properties'), Charsets.UTF_8)
     }
 
@@ -145,9 +145,9 @@ subprojects { Project project ->
         baseName = project.group
         version = rootProject.ext.buildNumber
         if (archivesBaseName == 'core') {
-	    archiveName = "androidx-constraintlayout-" + archivesBaseName + "-" + project.ext.version + ".zip"
+            archiveName = "androidx-constraintlayout-" + archivesBaseName + "-" + project.ext.version + ".zip"
         } else {
-	    archiveName = "androidx-" + archivesBaseName + "-" + project.ext.version + ".zip"
+            archiveName = "androidx-" + archivesBaseName + "-" + project.ext.version + ".zip"
         }
     }
     project.parent.dist.dependsOn createSeparateZip

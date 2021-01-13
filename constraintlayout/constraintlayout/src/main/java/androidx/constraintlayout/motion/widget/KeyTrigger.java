@@ -33,6 +33,7 @@ import android.view.ViewGroup;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 
 /**
  * Defines container for a key frame of for storing KeyAttributes.
@@ -314,13 +315,15 @@ public class KeyTrigger extends Key {
     private void fireCustom(String str, View view) {
         boolean callAll = str.length() == 1;
         if (!callAll) {
-            str = str.substring(1).toLowerCase();
+            str = str.substring(1).toLowerCase(Locale.ROOT);
         }
         for (String name : mCustomConstraints.keySet()) {
-            String lowerCase = name.toLowerCase();
+            String lowerCase = name.toLowerCase(Locale.ROOT);
             if (callAll || lowerCase.matches(str)) {
                 ConstraintAttribute custom = mCustomConstraints.get(name);
-                custom.applyCustom(view);
+                if (custom != null) {
+                    custom.applyCustom(view);
+                }
             }
         }
     }

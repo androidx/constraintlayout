@@ -16,6 +16,7 @@
 
 package androidx.constraintlayout.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
@@ -79,10 +80,14 @@ public class Guideline extends View {
     }
 
     /**
+     * We are overriding draw and not calling super.draw() here because Helper objects are not displayed on device.
+     *
      * {@hide
      */
+    @SuppressLint("MissingSuperCall")
     @Override
     public void draw(Canvas canvas) {
+
     }
 
     /**
