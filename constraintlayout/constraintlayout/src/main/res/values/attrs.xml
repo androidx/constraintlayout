@@ -1500,6 +1500,7 @@
         <attr name="android:autoSizeTextType"/>
         <attr name="textureWidth" format="dimension" />
         <attr name="textureHeight" format="dimension" />
+        <attr name="textureBlurFactor" format="integer" />
         <attr name="textBackgroundPanX" format="float" />
         <attr name="textBackgroundPanY" format="float" />
         <attr name="textBackgroundZoom" format="float" />

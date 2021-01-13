@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layoutDescription="@xml/calc_scene"
+    android:background="#e9d6c8"
+    android:id="@+id/motionLayout"
+    app:layout_optimizationLevel="none"
+    tools:context=".MainActivity">
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/adv_base"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:round="4dp"
+        app:layout_constraintWidth_percent=".3"
+        android:background="#888"
+        app:layout_constraintStart_toEndOf="@id/card" />
+
+    <include layout="@layout/advance_buttons" />
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/card"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#ffeddf"
+        app:round="16dp"
+        app:layout_constraintWidth_percent="0.3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.utils.widget.MotionLabel
+        android:id="@+id/line0"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        android:text=""
+        android:textSize="25sp"
+        app:textPanX="1"
+        android:background="#EAEAB8"
+        android:textColor="#2d1815"
+        app:layout_constraintBottom_toBottomOf="@+id/card"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.utils.widget.MotionLabel
+        android:id="@+id/line1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        android:text=""
+        android:background="#EAEAB8"
+        android:textSize="25sp"
+        app:textPanX="1"
+        android:textColor="#2d1815"
+        app:layout_constraintBottom_toBottomOf="@+id/card"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.utils.widget.MotionLabel
+        android:id="@+id/line2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        android:text=""
+        android:background="#EAEAB8"
+        android:textSize="25sp"
+        app:textPanX="1"
+        android:textColor="#2d1815"
+        app:layout_constraintBottom_toBottomOf="@+id/card"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.utils.widget.MotionLabel
+        android:id="@+id/line3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        android:text=""
+        android:textSize="25sp"
+        app:textPanX="1"
+        android:background="#EAEAB8"
+        android:textColor="#2d1815"
+        app:layout_constraintBottom_toBottomOf="@+id/card"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+
+    <androidx.constraintlayout.utils.widget.ImageFilterButton
+        android:id="@+id/scale"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginBottom="187dp"
+        android:src="@drawable/adjust_range"
+        app:layout_constraintBottom_toBottomOf="@+id/graph3d"
+        app:layout_constraintEnd_toEndOf="@+id/graph3d" />
+
+
+    <androidx.constraintlayout.helper.widget.Flow
+
+        android:id="@+id/stack"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:constraint_referenced_ids="line3,line2,line1,line0"
+
+        app:flow_maxElementsWrap="1"
+        app:flow_verticalGap="2dp"
+        app:flow_wrapMode="chain"
+        app:flow_verticalStyle="spread"
+        app:layout_constraintBottom_toBottomOf="@id/card"
+        app:layout_constraintTop_toTopOf="@id/card"
+        app:layout_constraintStart_toStartOf="@id/card"
+        app:layout_constraintLeft_toLeftOf="@id/card"
+        app:layout_constraintEnd_toEndOf="@id/card"
+        app:layout_constraintRight_toRightOf="@id/card" />
+    <!--    <View android:background="#F00"
+    -->
+
+
+    <androidx.constraintlayout.helper.widget.Flow
+
+        android:id="@+id/adv"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:constraint_referenced_ids="adv_inv,adv_sq,adv_sqrt,adv_pow,adv_sin,adv_cos,adv_tan,adv_ln,adv_log,adv_pi,adv_e,adv_factorial,adv_x,adv_y,adv_plot,adv_save,adv_dup,adv_swap,adv_drop,adv_copy"
+        app:flow_horizontalGap="8dp"
+        app:flow_maxElementsWrap="3"
+        app:flow_verticalGap="8dp"
+        app:flow_wrapMode="chain"
+        app:layout_constraintBottom_toBottomOf="@id/adv_base"
+        app:layout_constraintLeft_toLeftOf="@id/adv_base"
+        app:layout_constraintRight_toRightOf="@id/adv_base"
+        app:layout_constraintTop_toTopOf="@id/adv_base" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+
+        android:id="@+id/basic"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        app:constraint_referenced_ids="button16,button17,button18,button19,button7,button8,button9,button15,button4,button5,button6,button13,button1,button2,button3,button14,button0,button12"
+        app:flow_horizontalGap="8dp"
+        app:flow_maxElementsWrap="4"
+        app:flow_verticalGap="8dp"
+        app:flow_wrapMode="aligned"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/adv_base"
+         />
+
+    <include layout="@layout/basic_buttons" />
+
+    <androidx.constraintlayout.utils.widget.MotionButton
+        android:onClick="key"
+        android:id="@+id/button10"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="#906e68"
+        android:stateListAnimator="@null"
+        android:text="enter"
+        android:textColor="#fcfcf5"
+        android:textSize="10pt"
+        app:layout_constraintStart_toEndOf="@+id/button12"
+        app:layout_constraintTop_toTopOf="@+id/button12"
+         app:layout_constraintEnd_toEndOf="@id/basic"
+        app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintTag="button3"
+        app:roundPercent="0.1" />
+
+    <android.support.constraint.calc.Graph2D
+        android:id="@+id/graph"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0"
+        android:visibility="invisible"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@id/card"
+        app:layout_constraintTop_toTopOf="@id/card"
+        app:layout_constraintStart_toStartOf="@id/card"
+        app:layout_constraintLeft_toLeftOf="@id/card"
+        app:layout_constraintEnd_toEndOf="@id/card"
+        app:layout_constraintRight_toRightOf="@id/card" />
+
+    <android.support.constraint.calc.g3d.Graph3D
+        android:id="@+id/graph3d"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:alpha="1"
+        android:background="#0000"
+        app:layout_constraintBottom_toBottomOf="@id/card"
+        app:layout_constraintEnd_toEndOf="@id/card"
+        app:layout_constraintLeft_toLeftOf="@id/card"
+        app:layout_constraintRight_toRightOf="@id/card"
+        app:layout_constraintStart_toStartOf="@id/card"
+        app:layout_constraintTop_toTopOf="@id/card" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterButton
+        android:id="@+id/menu"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_menu"
+        android:onClick="showMenu"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>
