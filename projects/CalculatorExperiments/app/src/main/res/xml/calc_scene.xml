@@ -57,7 +57,7 @@
 
             motion:layout_constraintHeight_percent=".3"
             android:background="#888"
-            motion:layout_constraintBottom_toBottomOf="@id/card" />
+            motion:layout_constraintBottom_toTopOf="@id/graph_bottom" />
         <Constraint android:id="@+id/button10">
             <CustomAttribute
                 motion:attributeName="roundPercent"
@@ -83,7 +83,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginEnd="8dp"
-            motion:layout_constraintBottom_toBottomOf="@id/card"
+            motion:layout_constraintBottom_toTopOf="@id/graph_bottom"
             motion:layout_constraintTop_toTopOf="@id/card"
             motion:layout_constraintStart_toStartOf="@id/card"
             motion:layout_constraintLeft_toLeftOf="@id/card"
@@ -101,12 +101,24 @@
             android:alpha="0"
             android:visibility="gone"
             android:background="#0000"
-            motion:layout_constraintBottom_toBottomOf="@id/card"
+            motion:layout_constraintBottom_toTopOf="@id/graph_bottom"
             motion:layout_constraintEnd_toEndOf="@id/card"
             motion:layout_constraintLeft_toLeftOf="@id/card"
             motion:layout_constraintRight_toRightOf="@id/card"
             motion:layout_constraintStart_toStartOf="@id/card"
             motion:layout_constraintTop_toTopOf="@id/card" />
+
+        <androidx.constraintlayout.utils.widget.ImageFilterButton
+            android:id="@+id/scale"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="8dp"
+            android:background="#0000"
+            android:visibility="gone"
+            android:src="@drawable/adjust_range"
+            motion:layout_constraintTop_toTopOf="@+id/graph3d"
+            motion:layout_constraintEnd_toEndOf="@+id/graph3d" />
+
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/mode2d">
@@ -120,13 +132,15 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginEnd="8dp"
-            motion:layout_constraintBottom_toBottomOf="@id/card"
+            motion:layout_constraintBottom_toTopOf="@id/graph_bottom"
             motion:layout_constraintTop_toTopOf="@id/card"
             motion:layout_constraintStart_toStartOf="@id/card"
             motion:layout_constraintLeft_toLeftOf="@id/card"
             motion:layout_constraintEnd_toEndOf="@id/card"
-            motion:layout_constraintRight_toRightOf="@id/card" >
-            <CustomAttribute motion:attributeName="background" motion:customColorDrawableValue="#0000"/>
+            motion:layout_constraintRight_toRightOf="@id/card">
+            <CustomAttribute
+                motion:attributeName="background"
+                motion:customColorDrawableValue="#0000" />
         </Constraint>
 
         <Constraint
@@ -140,12 +154,13 @@
             android:alpha="0"
             android:visibility="gone"
             android:background="#0000"
-            motion:layout_constraintBottom_toBottomOf="@id/card"
+            motion:layout_constraintBottom_toTopOf="@id/graph_bottom"
             motion:layout_constraintEnd_toEndOf="@id/card"
             motion:layout_constraintLeft_toLeftOf="@id/card"
             motion:layout_constraintRight_toRightOf="@id/card"
             motion:layout_constraintStart_toStartOf="@id/card"
             motion:layout_constraintTop_toTopOf="@id/card" />
+
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/mode2d_full">
@@ -160,8 +175,10 @@
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintLeft_toLeftOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
-            motion:layout_constraintRight_toRightOf="parent" >
-            <CustomAttribute motion:attributeName="background" motion:customColorDrawableValue="#FDD6FD"/>
+            motion:layout_constraintRight_toRightOf="parent">
+            <CustomAttribute
+                motion:attributeName="background"
+                motion:customColorDrawableValue="#FDD6FD" />
         </Constraint>
 
         <Constraint
@@ -175,13 +192,14 @@
             android:alpha="0"
             android:visibility="gone"
             android:background="#0000"
-            motion:layout_constraintBottom_toBottomOf="@id/card"
+            motion:layout_constraintBottom_toTopOf="@id/graph_bottom"
             motion:layout_constraintEnd_toEndOf="@id/card"
             motion:layout_constraintLeft_toLeftOf="@id/card"
             motion:layout_constraintRight_toRightOf="@id/card"
             motion:layout_constraintStart_toStartOf="@id/card"
             motion:layout_constraintTop_toTopOf="@id/card" />
     </ConstraintSet>
+
     <ConstraintSet android:id="@+id/mode3d">
         <Constraint
             android:id="@+id/graph"
@@ -193,7 +211,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginEnd="8dp"
-            motion:layout_constraintBottom_toBottomOf="@id/card"
+            motion:layout_constraintBottom_toTopOf="@id/graph_bottom"
             motion:layout_constraintTop_toTopOf="@id/card"
             motion:layout_constraintStart_toStartOf="@id/card"
             motion:layout_constraintLeft_toLeftOf="@id/card"
@@ -209,14 +227,27 @@
             android:layout_marginRight="8dp"
             android:alpha="1"
             android:visibility="visible"
-            motion:layout_constraintBottom_toBottomOf="@id/card"
+            motion:layout_constraintBottom_toTopOf="@id/graph_bottom"
             motion:layout_constraintEnd_toEndOf="@id/card"
             motion:layout_constraintLeft_toLeftOf="@id/card"
             motion:layout_constraintRight_toRightOf="@id/card"
             motion:layout_constraintStart_toStartOf="@id/card"
-            motion:layout_constraintTop_toTopOf="@id/card" >
-            <CustomAttribute motion:attributeName="background" motion:customColorDrawableValue="#0000"/>
+            motion:layout_constraintTop_toTopOf="@id/card">
+            <CustomAttribute
+                motion:attributeName="background"
+                motion:customColorDrawableValue="#0000" />
         </Constraint>
+
+        <androidx.constraintlayout.utils.widget.ImageFilterButton
+            android:id="@id/scale"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="8dp"
+            android:background="#0000"
+            android:visibility="visible"
+            android:src="@drawable/adjust_range"
+            motion:layout_constraintTop_toTopOf="@+id/graph3d"
+            motion:layout_constraintEnd_toEndOf="@+id/graph3d" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/mode3d_full">
@@ -230,13 +261,15 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginEnd="8dp"
-            motion:layout_constraintBottom_toBottomOf="@id/card"
+            motion:layout_constraintBottom_toTopOf="@id/graph_bottom"
             motion:layout_constraintTop_toTopOf="@id/card"
             motion:layout_constraintStart_toStartOf="@id/card"
             motion:layout_constraintLeft_toLeftOf="@id/card"
             motion:layout_constraintEnd_toEndOf="@id/card"
-            motion:layout_constraintRight_toRightOf="@id/card" >
-            <CustomAttribute motion:attributeName="background" motion:customColorDrawableValue="#0000"/>
+            motion:layout_constraintRight_toRightOf="@id/card">
+            <CustomAttribute
+                motion:attributeName="background"
+                motion:customColorDrawableValue="#0000" />
         </Constraint>
         <Constraint
             android:id="@+id/graph3d"
@@ -249,13 +282,23 @@
             motion:layout_constraintLeft_toLeftOf="parent"
             motion:layout_constraintRight_toRightOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
-            motion:layout_constraintTop_toTopOf="parent" >
-        <CustomAttribute motion:attributeName="background" motion:customColorDrawableValue="#FDD6FD"/>
-
+            motion:layout_constraintTop_toTopOf="parent">
+            <CustomAttribute
+                motion:attributeName="background"
+                motion:customColorDrawableValue="#FDD6FD" />
         </Constraint>
+
+        <androidx.constraintlayout.utils.widget.ImageFilterButton
+            android:id="@id/scale"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="8dp"
+            android:background="#0000"
+            android:visibility="visible"
+            android:src="@drawable/adjust_range"
+            motion:layout_constraintTop_toTopOf="@+id/graph3d"
+            motion:layout_constraintEnd_toEndOf="@+id/graph3d" />
     </ConstraintSet>
-
-
 
     <ConstraintSet android:id="@+id/range3d"></ConstraintSet>
     <ConstraintSet android:id="@+id/big2d"></ConstraintSet>
@@ -388,7 +431,7 @@
 
                 <CustomAttribute
                     motion:attributeName="background"
-                    motion:customColorDrawableValue="#fed694" />
+                    motion:customColorDrawableValue="@color/clear_background" />
             </KeyAttribute>
 
             <KeyAttribute
@@ -408,7 +451,7 @@
 
                 <CustomAttribute
                     motion:attributeName="background"
-                    motion:customColorDrawableValue="#fed694" />
+                    motion:customColorDrawableValue="@color/clear_background" />
             </KeyAttribute>
         </KeyFrameSet>
     </ViewTransition>

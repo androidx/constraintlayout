@@ -9,6 +9,7 @@
     android:id="@+id/motionLayout"
     app:layout_optimizationLevel="none"
     tools:context=".MainActivity">
+
     <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/adv_base"
         android:layout_width="match_parent"
@@ -18,9 +19,8 @@
         android:background="#2B1919"
         app:layout_constraintTop_toBottomOf="@id/card" />
 
-
-
     <include layout="@layout/advance_buttons" />
+
     <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/card"
         android:layout_width="0dp"
@@ -92,18 +92,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <androidx.constraintlayout.utils.widget.ImageFilterButton
-        android:id="@+id/scale"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginBottom="187dp"
-        android:src="@drawable/adjust_range"
-        app:layout_constraintBottom_toBottomOf="@+id/graph3d"
-        app:layout_constraintEnd_toEndOf="@+id/graph3d" />
-
-
     <androidx.constraintlayout.helper.widget.Flow
-
         android:id="@+id/stack"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
@@ -141,7 +130,7 @@
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:constraint_referenced_ids="adv_inv,adv_sq,adv_sqrt,adv_pow,adv_sin,adv_cos,adv_tan,adv_ln,adv_log,adv_pi,adv_e,adv_factorial,adv_x,adv_y,adv_plot,adv_save,adv_dup,adv_swap,adv_drop"
+        app:constraint_referenced_ids="adv_inv,adv_sq,adv_sqrt,adv_pow,adv_sin,adv_cos,adv_tan,adv_ln,adv_log,adv_pi,adv_e,adv_factorial,adv_x,adv_y,adv_t,adv_plot,adv_dup,adv_swap,adv_drop"
         app:flow_horizontalGap="8dp"
         app:flow_maxElementsWrap="4"
         app:flow_verticalGap="8dp"
@@ -152,7 +141,6 @@
         app:layout_constraintTop_toTopOf="@id/adv_base" />
 
     <androidx.constraintlayout.helper.widget.Flow
-
         android:id="@+id/basic"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -177,10 +165,10 @@
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
-        android:background="#906e68"
+        android:background="@color/enter_background"
         android:stateListAnimator="@null"
         android:text="enter"
-        android:textColor="#fcfcf5"
+        android:textColor="@color/enter_text_color"
         android:textSize="10pt"
         app:layout_constraintHorizontal_weight="2.1"
         app:layout_constraintStart_toEndOf="@+id/button12"
@@ -224,6 +212,24 @@
         app:layout_constraintRight_toRightOf="@id/card"
         app:layout_constraintStart_toStartOf="@id/card"
         app:layout_constraintTop_toTopOf="@id/card" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/graph_bottom"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_percent="0.3"
+        android:orientation="horizontal" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterButton
+        android:id="@+id/scale"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="8dp"
+        android:background="#0000"
+        android:visibility="invisible"
+        android:src="@drawable/adjust_range"
+        app:layout_constraintTop_toTopOf="@+id/graph3d"
+        app:layout_constraintEnd_toEndOf="@+id/graph3d" />
 
     <androidx.constraintlayout.utils.widget.ImageFilterButton
         android:id="@+id/menu"

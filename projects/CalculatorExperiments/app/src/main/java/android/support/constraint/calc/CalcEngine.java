@@ -481,7 +481,7 @@ public class CalcEngine {
     s.push(s.pop() + s.pop());
 } };
     Op sub = new Op2("-") { void op(Stack s) { s.push(s.pop() - s.pop()); } };
-    Op mul = new Op2("✕") { void op(Stack s) { s.push(s.pop() * s.pop()); }    };
+    Op mul = new Op2("*") { void op(Stack s) { s.push(s.pop() * s.pop()); }    };
     Op div = new Op2("÷") { void op(Stack s) { s.push(s.pop1() / s.pop()); } };
     Op pow = new Op2("^") { void op(Stack s) { s.push(Math.pow(s.pop1() , s.pop())); } };
 

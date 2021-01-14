@@ -10,8 +10,15 @@
 
     <color name="cal_adv_text">#FFCCCCCC</color>
 
+    <color name="overall_background">#9a9994</color>
+    <color name="adv_card_base">#7E7D79</color>
     <color name="cal_def_text">#FF000000</color>
     <color name="cal_alt_text">#FFFFFFFF</color>
-    <color name="adv_background">#4b4336</color>
-    <color name="basic_button_background">#a49d8a</color>
+    <color name="adv_background">#484033</color>
+    <color name="basic_button_background">#c8c1b1</color>
+    <color name="clear_background">#D8A489</color>
+    <color name="enter_background">#753125</color>
+    <color name="enter_text_color">#FFCCCCCC</color>
+    <color name="display_card">#EDDECE</color>
+    <color name="stack_background">#acb6ab</color>
 </resources>
