@@ -16,6 +16,7 @@
 package android.support.constraint.calc;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -42,6 +43,7 @@ import java.util.Vector;
 
 public class Graph2D extends View {
     private static final String TAG = "Graph2D";
+    private int mAxisColor = 0xFF000000;
     Margins mMargins = new Margins();
     Vector<DrawItem> myDrawItems = new Vector<DrawItem>();
     private static final int NPOINTS = 500;
@@ -87,22 +89,37 @@ public class Graph2D extends View {
 
     public Graph2D(Context context) {
         super(context);
-        init();
+        init(context, null);
     }
 
     public Graph2D(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context, attrs);
     }
 
     public Graph2D(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(context, attrs);
     }
 
-    private void init() {
+    private void init(Context context, @Nullable AttributeSet attrs) {
         myDrawItems.add(mAxis);
         myDrawItems.add(mPlot);
+        if (attrs != null) {
+            TypedArray a = getContext()
+                    .obtainStyledAttributes(attrs, R.styleable.Graph2D);
+            final int N = a.getIndexCount();
+
+            int k = 0;
+            for (int i = 0; i < N; i++) {
+
+
+                int attr = a.getIndex(i);
+                if (attr == R.styleable.Graph2D_axisColor) {
+                    mAxisColor = a.getColor(attr, mAxisColor);
+                }
+            }
+        }
     }
 
     @Override
@@ -191,15 +208,15 @@ public class Graph2D extends View {
         resetPlot();
         mEquation = equ;
         getYRange();
-        mAnimated =  4 == (equ.dimensions()&4);
+        mAnimated = 4 == (equ.dimensions() & 4);
         mTicks.calcRangeTicks(getWidth(), getHeight());
         calPlot();
         mStartTime = getTime(0);
     }
 
-     private double getTime(double last) {
-        return  System.nanoTime()*1E-9 -last;
-     }
+    private double getTime(double last) {
+        return System.nanoTime() * 1E-9 - last;
+    }
 
     public CalcEngine.Symbolic getPlot() {
         return mEquation;
@@ -215,7 +232,7 @@ public class Graph2D extends View {
         float step = (float) ((max_x - min_x) / NPOINTS);
         for (int i = 0; i < NPOINTS; i++) {
             float x = step * i + min_x;
-            double y = getY(x,time);
+            double y = getY(x, time);
             if (isFinite(y)) {
                 mPlot.addPoint(x, (float) y);
             }
@@ -397,7 +414,7 @@ public class Graph2D extends View {
 
             if (maxima) {
                 double x = findMax(mEquation, mValueX[maxI], mValueX[1] - mValueX[0]);
-                keyPointY = (float) mEquation.eval(mTmpStack, 0, x, 0 );
+                keyPointY = (float) mEquation.eval(mTmpStack, 0, x, 0);
                 keyPointX = (float) x;
                 return;
             }
@@ -537,6 +554,7 @@ public class Graph2D extends View {
 
     // ============================ axis =================================
     DrawItem mAxis = new DrawItem() {
+        private Paint.FontMetrics metrics = new Paint.FontMetrics();
         DecimalFormat df = new DecimalFormat("##.0");
         Paint mAxisPaint = new Paint();
 
@@ -547,6 +565,7 @@ public class Graph2D extends View {
 
         @Override
         public boolean paint(Canvas c, Margins m, int w, int h) {
+            mAxisPaint.setColor(mAxisColor);
 
             int xpos = (int) (m.myInsLeft + (w - m.myInsLeft - m.myInsRight) * (0 - min_x) / (max_x - min_x));
             c.drawLine(xpos, m.myInsTop, xpos, h - m.myInsBottom, mAxisPaint);
@@ -560,12 +579,12 @@ public class Graph2D extends View {
             c.drawLine(m.myInsLeft, ypos, w - m.myInsRight, ypos, mAxisPaint);
             s = df.format(max_y);
             mt = 8 + mAxisPaint.measureText(s);
-
-            c.drawText(s, m.myInsLeft - mt, m.myInsTop + 10, mAxisPaint);
+            mAxisPaint.getFontMetrics(metrics);
+            c.drawText(s, m.myInsLeft - mt, m.myInsTop - metrics.ascent, mAxisPaint);
             s = df.format(min_y);
             mt = 8 + mAxisPaint.measureText(s);
 
-            c.drawText(s, m.myInsLeft - mt, h - m.myInsBottom, mAxisPaint);
+            c.drawText(s, m.myInsLeft - mt, h - m.myInsBottom - metrics.descent, mAxisPaint);
             String label = "y";
             mt = 8 + mAxisPaint.measureText(label);
             c.drawText(label, m.myInsLeft - mt, (h - m.myInsBottom - m.myInsTop) / 2 + m.myInsTop, mAxisPaint);
