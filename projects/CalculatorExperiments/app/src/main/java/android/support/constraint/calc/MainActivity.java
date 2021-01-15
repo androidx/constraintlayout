@@ -30,7 +30,6 @@ import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -39,13 +38,10 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.helper.widget.Carousel;
 import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.constraintlayout.utils.widget.MotionButton;
 import androidx.constraintlayout.utils.widget.MotionLabel;
-
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -64,10 +60,30 @@ public class MainActivity extends AppCompatActivity {
     private static final String STACK_STATE_KEY = "STACK_STATE_KEY";
     private static final String SAVE_STATE = "SAVE_STATE";
     MotionLayout mMotionLayout;
-    Graph2D graph2D;
-    Graph3D graph3D;
-    boolean show3d = false;
-    boolean show2d = false;
+    CalcEngine mCalcEngine = new CalcEngine();
+    MotionLabel[] mStack = new MotionLabel[4];
+    boolean mIsInInverseMode = false;
+    Graph2D mGraph2D;
+    Graph3D mGraph3D;
+    boolean mShow3d = false;
+    boolean mShow2d = false;
+    HashMap<String, String> mInverseMap = new HashMap<>();
+    HashMap<String, String> mNormalMap = new HashMap<>();
+    HashMap<String, String> mUiToString = new HashMap<>();
+
+    {
+        mNormalMap.put("cos-1", "cos");
+        mNormalMap.put("sin-1", "sin");
+        mNormalMap.put("tan-1", "tan");
+        mNormalMap.put("save", "plot");
+        mUiToString.put("✕", "*");
+
+        mInverseMap.put("cos-1", "cos<sup><small>-1</small></sup>");
+        mInverseMap.put("sin-1", "sin<sup><small>-1</small></sup>");
+        mInverseMap.put("tan-1", "tan<sup><small>-1</small></sup>");
+        mInverseMap.put("save", "save");
+
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,8 +91,8 @@ public class MainActivity extends AppCompatActivity {
         Bundle extra = getIntent().getExtras();
         setContentView(R.layout.calc);
         mMotionLayout = findView(MotionLayout.class);
-        graph2D = findViewById(R.id.graph);
-        graph3D = findViewById(R.id.graph3d);
+        mGraph2D = findViewById(R.id.graph);
+        mGraph3D = findViewById(R.id.graph3d);
         getStack();
         restoreState();
         regester_for_clipboard();
@@ -126,36 +142,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void setState(byte[] data) {
+        mMotionLayout.transitionToState(R.id.mode_no_graph);
         ByteArrayInputStream bais = new ByteArrayInputStream(data);
         try {
             ObjectInputStream os = new ObjectInputStream(bais);
-            calcEngine.stack = calcEngine.deserializeStack(os);
-            if (show2d = os.readBoolean()) {
-                graph2D.setVisibility(View.VISIBLE);
-                graph2D.setAlpha(1);
-                CalcEngine.Symbolic sym = calcEngine.deserializeSymbolic(os);
-                graph2D.deserializeSymbolic(sym, os);
+            mCalcEngine.stack = mCalcEngine.deserializeStack(os);
+            if (mShow2d = os.readBoolean()) {
+                mGraph2D.setVisibility(View.VISIBLE);
+                mGraph2D.setAlpha(1);
+                CalcEngine.Symbolic sym = mCalcEngine.deserializeSymbolic(os);
+                mGraph2D.deserializeSymbolic(sym, os);
                 mMotionLayout.transitionToState(R.id.mode2d);
             } else {
-                graph2D.setVisibility(View.GONE);
-                graph2D.setAlpha(0);
+                mGraph2D.setVisibility(View.GONE);
+                mGraph2D.setAlpha(0);
             }
-            if (show3d = os.readBoolean()) {
-                graph3D.setVisibility(View.VISIBLE);
-                graph2D.setAlpha(1);
+            if (mShow3d = os.readBoolean()) {
+                mGraph3D.setVisibility(View.VISIBLE);
+                mGraph2D.setAlpha(1);
                 mMotionLayout.transitionToState(R.id.mode3d);
-                CalcEngine.Symbolic sym = calcEngine.deserializeSymbolic(os);
-                graph3D.deserializeSymbolic(sym, os);
+                CalcEngine.Symbolic sym = mCalcEngine.deserializeSymbolic(os);
+                mGraph3D.deserializeSymbolic(sym, os);
             } else {
-                graph3D.setVisibility(View.GONE);
-                graph2D.setAlpha(0);
+                mGraph3D.setVisibility(View.GONE);
+                mGraph2D.setAlpha(0);
             }
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            getApplicationContext().deleteFile(SAVE_STATE);
+
         }
-        int fill = Math.min(stack.length, calcEngine.stack.top);
+        int fill = Math.min(mStack.length, mCalcEngine.stack.top);
         for (int i = 0; i < fill; i++) {
-            stack[i].setText(calcEngine.getStack(i));
+            mStack[i].setText(mCalcEngine.getStack(i));
         }
     }
 
@@ -164,16 +183,16 @@ public class MainActivity extends AppCompatActivity {
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ObjectOutputStream os = new ObjectOutputStream(baos);
-            calcEngine.stack.serialize(os);
+            mCalcEngine.stack.serialize(os);
 
-            os.writeBoolean(show2d);
-            if (show2d) {
-                graph2D.serialize(os);
+            os.writeBoolean(mShow2d);
+            if (mShow2d) {
+                mGraph2D.serialize(os);
             }
 
-            os.writeBoolean(show3d);
-            if (show3d) {
-                graph3D.serialize(os);
+            os.writeBoolean(mShow3d);
+            if (mShow3d) {
+                mGraph3D.serialize(os);
             }
             os.flush();
             objectBytes = baos.toByteArray();
@@ -187,24 +206,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         try {
-            FileOutputStream outputStream = getApplicationContext().openFileOutput( SAVE_STATE, Context.MODE_PRIVATE);
+            FileOutputStream outputStream = getApplicationContext().openFileOutput(SAVE_STATE, Context.MODE_PRIVATE);
             outputStream.write(getState());
             outputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    protected void  restoreState(){
+
+    protected void restoreState() {
         try {
-            FileInputStream inputStream = getApplicationContext().openFileInput( SAVE_STATE);
+            FileInputStream inputStream = getApplicationContext().openFileInput(SAVE_STATE);
             byte[] data = new byte[inputStream.available()];
             int total = 0;
-            while(total < data.length) {
-              int n =  inputStream.read(data,total,data.length-total);
-              if (n == -1) {
-                 return;
-              }
-               total+=n;
+            while (total < data.length) {
+                int n = inputStream.read(data, total, data.length - total);
+                if (n == -1) {
+                    return;
+                }
+                total += n;
             }
             setState(data);
         } catch (FileNotFoundException e) {
@@ -215,27 +235,24 @@ public class MainActivity extends AppCompatActivity {
     }
     // =================================================================================
 
-    CalcEngine calcEngine = new CalcEngine();
-
-    MotionLabel[] stack = new MotionLabel[4];
 
     private void getStack() {
-        stack[0] = findViewById(R.id.line0);
-        stack[1] = findViewById(R.id.line1);
-        stack[2] = findViewById(R.id.line2);
-        stack[3] = findViewById(R.id.line3);
+        mStack[0] = findViewById(R.id.line0);
+        mStack[1] = findViewById(R.id.line1);
+        mStack[2] = findViewById(R.id.line2);
+        mStack[3] = findViewById(R.id.line3);
     }
-
-    boolean isInInverser = false;
 
     public void key(View view) {
         String key = ((Button) view).getText().toString();
-
+        if (mUiToString.containsKey(key)) {
+            key = mUiToString.get(key);
+        }
         switch (key) {
             case "inv":
-                isInInverser = !isInInverser;
-                invertStrings(isInInverser);
-                int run = isInInverser ? R.id.inverse : R.id.un_inverse;
+                mIsInInverseMode = !mIsInInverseMode;
+                invertStrings(mIsInInverseMode);
+                int run = mIsInInverseMode ? R.id.inverse : R.id.un_inverse;
                 mMotionLayout.viewTransition(run, findViewById(R.id.adv_inv));
                 return;
             case "plot":
@@ -250,47 +267,47 @@ public class MainActivity extends AppCompatActivity {
         }
 
         String str = key;
-        if (isInInverser && view.getTag() != null) {
+        if (mIsInInverseMode && view.getTag() != null) {
             str = (String) view.getTag();
         }
         if (str == null) {
             Log.w(TAG, Debug.getLoc() + " null! ");
             return;
         }
-        String s = calcEngine.key(str);
+        String s = mCalcEngine.key(str);
         int k = 0;
         if (s.length() != 0) {
-            stack[k++].setText(s);
+            mStack[k++].setText(s);
         }
-        for (int i = k; i < stack.length; i++) {
-            stack[i].setText(calcEngine.getStack(i - k));
+        for (int i = k; i < mStack.length; i++) {
+            mStack[i].setText(mCalcEngine.getStack(i - k));
         }
 
         view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
     }
 
     public void readClipboard() {
-        ClipboardManager clipBoard = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+        ClipboardManager clipBoard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         {
             ClipData clipData = clipBoard.getPrimaryClip();
             if (clipData != null && clipData.getItemCount() > 0) {
                 ClipData.Item item = clipData.getItemAt(0);
                 String text = item.getText().toString();
-                CalcEngine.Symbolic op = calcEngine.deserializeString(text);
+                CalcEngine.Symbolic op = mCalcEngine.deserializeString(text);
                 Log.v(TAG, Debug.getLoc() + " \"" + op.toString() + "\"");
             }
         }
     }
 
-    public void regester_for_clipboard () {
+    public void regester_for_clipboard() {
 
-        ClipboardManager clipBoard = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+        ClipboardManager clipBoard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         {
             ClipData clipData = clipBoard.getPrimaryClip();
             if (clipData != null && clipData.getItemCount() > 0) {
                 ClipData.Item item = clipData.getItemAt(0);
                 String text = item.getText().toString();
-                CalcEngine.Symbolic op = calcEngine.deserializeString(text);
+                CalcEngine.Symbolic op = mCalcEngine.deserializeString(text);
                 Log.v(TAG, Debug.getLoc() + " \"" + op.toString() + "\"");
             }
         }
@@ -298,16 +315,16 @@ public class MainActivity extends AppCompatActivity {
             ClipData clipData = clipBoard.getPrimaryClip();
             ClipData.Item item = clipData.getItemAt(0);
             String text = item.getText().toString();
-            CalcEngine.Symbolic op = calcEngine.deserializeString(text);
+            CalcEngine.Symbolic op = mCalcEngine.deserializeString(text);
             Log.v(TAG, Debug.getLoc() + " \"" + op.toString() + "\"");
-            Log.v(TAG,Debug.getLoc()+" \""+text+"\"");
+            Log.v(TAG, Debug.getLoc() + " \"" + text + "\"");
         });
     }
 
     private void serializeToCopyBuffer() {
-        CalcEngine.Symbolic s = calcEngine.stack.getVar(0);
+        CalcEngine.Symbolic s = mCalcEngine.stack.getVar(0);
         StringBuffer buffer = new StringBuffer();
-          s.toSerialString(buffer);
+        s.toSerialString(buffer);
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("calc", buffer);
         clipboard.setPrimaryClip(clip);
@@ -324,39 +341,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    HashMap<String, String> inverse = new HashMap<>();
-    HashMap<String, String> normal = new HashMap<>();
-
-    {
-        normal.put("cos-1", "cos");
-        normal.put("sin-1", "sin");
-        normal.put("tan-1", "tan");
-        normal.put("t", "y");
-
-        inverse.put("cos-1", "cos<sup><small>-1</small></sup>");
-        inverse.put("sin-1", "sin<sup><small>-1</small></sup>");
-        inverse.put("tan-1", "tan<sup><small>-1</small></sup>");
-        inverse.put("t", "t");
-    }
-
     private void swtchString(String tag, MotionButton v, boolean invert) {
         if (invert) {
-            v.setText(Html.fromHtml(inverse.get(tag)));
+            Log.v(TAG, Debug.getLoc() + " \"" + tag + "\"");
+            v.setText(Html.fromHtml(mInverseMap.get(tag)));
         } else {
-            v.setText(normal.get(tag));
+            v.setText(mNormalMap.get(tag));
         }
     }
 
     private void save_plot() {
         String str = "d";
-        if (graph2D.getVisibility() == View.VISIBLE) {
-            save(graph2D, "calc2d" + (System.nanoTime() % 10000), graph2D.getEquation());
+        if (mGraph2D.getVisibility() == View.VISIBLE) {
+            save(mGraph2D, "calc2d" + (System.nanoTime() % 10000), mGraph2D.getEquation());
             str = "2D Graph saved";
-        } else if (graph3D.getVisibility() == View.VISIBLE) {
-            save(graph3D, "calc3d" + (System.nanoTime() % 10000), graph3D.getEquation());
+        } else if (mGraph3D.getVisibility() == View.VISIBLE) {
+            save(mGraph3D, "calc3d" + (System.nanoTime() % 10000), mGraph3D.getEquation());
             str = "3D Graph saved";
         } else {
-            save(mMotionLayout, "calcScreen" + (System.nanoTime() % 10000), "" + calcEngine.stack.getVar(0));
+            save(mMotionLayout, "calcScreen" + (System.nanoTime() % 10000), "" + mCalcEngine.stack.getVar(0));
             str = "screen saved";
         }
         Toast toast = Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT);
@@ -375,54 +378,55 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void plot() {
-        CalcEngine.Symbolic s = calcEngine.stack.getVar(0);
+        CalcEngine.Symbolic s = mCalcEngine.stack.getVar(0);
         if (s == null) {
-            show3d = false;
-            show2d = false;
+            mShow3d = false;
+            mShow2d = false;
             mMotionLayout.transitionToState(R.id.mode_no_graph);
             return;
         }
 
         int dim = s.dimensions();
 
-        if ((dim&3) == 1) {
-            show3d = false;
-            show2d = true;
+        if ((dim & 3) == 1) {
+            mShow3d = false;
+            mShow2d = true;
             mMotionLayout.transitionToState(R.id.mode2d);
-            graph2D.plot(s);
-        } else if ((dim&3) == 3) {
-            show3d = true;
-            show2d = false;
+            mGraph2D.plot(s);
+        } else if ((dim & 3) == 3) {
+            mShow3d = true;
+            mShow2d = false;
             mMotionLayout.transitionToState(R.id.mode3d);
-            graph3D.plot(s);
+            mGraph3D.plot(s);
         } else {
             mMotionLayout.transitionToState(R.id.mode_no_graph);
         }
 
     }
+
     public void showMenu(View view) {
         PopupMenu popup = new PopupMenu(this, view);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.skin_menu, popup.getMenu());
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
-                switch(item.getTitle().toString()) {
-                   case  "design2":
-                       reloadLayout(R.layout.design2);
-                       break;
-                    case  "full":
-                        if (show2d) {
+                switch (item.getTitle().toString()) {
+                    case "design2":
+                        reloadLayout(R.layout.design2);
+                        break;
+                    case "full":
+                        if (mShow2d) {
                             mMotionLayout.transitionToState(R.id.mode2d_full);
-                        } else if  (show3d) {
+                        } else if (mShow3d) {
                             mMotionLayout.transitionToState(R.id.mode3d_full);
                         } else {
                             mMotionLayout.transitionToState(R.id.mode_no_graph);
                         }
                         break;
-                    case  "normal":
-                        if (show2d) {
+                    case "normal":
+                        if (mShow2d) {
                             mMotionLayout.transitionToState(R.id.mode2d);
-                        } else if  (show3d) {
+                        } else if (mShow3d) {
                             mMotionLayout.transitionToState(R.id.mode3d);
                         } else {
                             mMotionLayout.transitionToState(R.id.mode_no_graph);
@@ -438,12 +442,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void reloadLayout(int calc) {
-        byte[]data = getState();
+        byte[] data = getState();
         mMotionLayout.setVisibility(View.GONE);
         setContentView(calc);
         mMotionLayout = findView(MotionLayout.class);
-        graph2D = findViewById(R.id.graph);
-        graph3D = findViewById(R.id.graph3d);
+        mGraph2D = findViewById(R.id.graph);
+        mGraph3D = findViewById(R.id.graph3d);
         getStack();
         setState(data);
     }

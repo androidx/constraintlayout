@@ -192,7 +192,7 @@
         android:id="@+id/button16"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#fed694"
+        android:background="@color/clear_background"
         android:stateListAnimator="@null"
         android:text="ac"
         android:textColor="@color/cal_def_text"

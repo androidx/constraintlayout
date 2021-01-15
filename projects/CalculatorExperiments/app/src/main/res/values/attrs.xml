@@ -4,5 +4,7 @@
     <declare-styleable name="Graph3D">
         <attr name="lineColor" format="color" />
     </declare-styleable>
-
+    <declare-styleable name="Graph2D">
+        <attr name="axisColor" format="color" />
+    </declare-styleable>
 </resources>
