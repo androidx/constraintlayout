@@ -1,72 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:motion="http://schemas.android.com/apk/res-auto">
-    <Transition
-        motion:constraintSetEnd="@+id/start"
-        motion:constraintSetStart="@+id/prestart"
-        motion:autoTransition="animateToEnd"
-        motion:duration="1000"
-        />
 
     <Transition
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@+id/start"
-        motion:autoTransition="jumpToStart"
-        motion:duration="4000">
+
+        motion:duration="1000">
         <OnSwipe
             motion:dragDirection="dragDown"
             motion:touchAnchorSide="top"
-            motion:dragThreshold="1"
             motion:touchAnchorId="@+id/button"
         />
         <OnClick motion:targetId="@+id/button30" />
 
         <KeyFrameSet>
-            <KeyTimeCycle motion:framePosition="0"
-                motion:motionTarget="@+id/button"
-                motion:wavePeriod="0" >
-            <CustomAttribute motion:attributeName="ImageRotate" motion:customFloatValue="0"/>
 
-            </KeyTimeCycle>
-            <KeyTimeCycle motion:framePosition="50"
-                motion:motionTarget="@+id/button"
-                motion:wavePeriod="2" >
-                <CustomAttribute motion:attributeName="ImageRotate" motion:customFloatValue="40"/>
-
-            </KeyTimeCycle>
-            <KeyTimeCycle motion:framePosition="100"
-                motion:motionTarget="@+id/button"
-                motion:wavePeriod="0" >
-                <CustomAttribute motion:attributeName="ImageRotate" motion:customFloatValue="0"/>
-
-            </KeyTimeCycle>
         </KeyFrameSet>
 
     </Transition>
 
-    <ConstraintSet android:id="@+id/prestart">
-        <Constraint
-            android:id="@+id/button"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            motion:layout_constraintStart_toStartOf="parent"
-            motion:layout_constraintTop_toTopOf="parent">
-            <CustomAttribute motion:attributeName="ImageZoom" motion:customFloatValue="1"/>
-            <CustomAttribute motion:attributeName="ImagePanX" motion:customFloatValue="0"/>
-        </Constraint>
-    </ConstraintSet>
 
     <ConstraintSet android:id="@+id/start">
         <Constraint
             android:id="@+id/button"
-            android:layout_width="128dp"
-            android:layout_height="128dp"
+            android:layout_width="256dp"
+            android:layout_height="256dp"
             android:layout_marginStart="8dp"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintTop_toTopOf="parent" >
-            <CustomAttribute motion:attributeName="ImageZoom" motion:customFloatValue="0.5"/>
-            <CustomAttribute motion:attributeName="ImagePanX" motion:customFloatValue="1"/>
+            <CustomAttribute motion:attributeName="DummyBool" motion:customBoolean="false"/>
+            <CustomAttribute motion:attributeName="dummyString" motion:customStringValue="start"/>
+            <CustomAttribute motion:attributeName="dummyRef" motion:customReference="@drawable/cat"/>
+
         </Constraint>
     </ConstraintSet>
 
@@ -76,13 +42,14 @@
     <ConstraintSet android:id="@+id/end">
         <Constraint
             android:id="@+id/button"
-            android:layout_width="64dp"
-            android:layout_height="128dp"
+            android:layout_width="256dp"
+            android:layout_height="256dp"
             android:layout_marginEnd="8dp"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"  >
-            <CustomAttribute motion:attributeName="ImageZoom" motion:customFloatValue="3"/>
-            <CustomAttribute motion:attributeName="ImagePanX" motion:customFloatValue="-1"/>
+            <CustomAttribute motion:attributeName="dummyBool" motion:customBoolean="true"/>
+            <CustomAttribute motion:attributeName="dummyString" motion:customStringValue="end"/>
+            <CustomAttribute motion:attributeName="dummyRef" motion:customReference="@drawable/ic_battery"/>
 
         </Constraint>
     </ConstraintSet>
