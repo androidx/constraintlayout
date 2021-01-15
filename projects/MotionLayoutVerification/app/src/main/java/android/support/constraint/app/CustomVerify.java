@@ -18,53 +18,74 @@ package android.support.constraint.app;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Region;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.utils.widget.MotionTelltales;
 
 
-public class CustomVerify extends MotionTelltales {
+public class CustomVerify extends View {
     private static final String TAG = "CustomVerify";
-
-
+    String []lines = new String[12];
+    int lcount = 0;
+    Context mContext;
+    Rect bounds = new Rect();
+    Paint mPaint = new Paint();
     {
-        Log.v(TAG, "<<<<<<<<<<<<<<<<< Created");
+        mPaint.setTextSize(64);
     }
     public CustomVerify(Context context) {
         super(context);
+        mContext = context;
     }
 
     public CustomVerify(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        mContext = context;
+
     }
 
     public CustomVerify(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        mContext = context;
     }
     boolean mTail;
     public boolean getLongTail() {
         return mTail ;
     }
 
-    public void setLongTail(boolean tail) {
-        Debug.logStack(TAG, " "+tail, 8);
-        Log.v(TAG,Debug.getLoc()+ "---------  set "+tail);
-        mTail = tail;
+    public void setDummyBool(boolean bool) {
+       lines[(lcount++)%lines.length] = ((int)(System.nanoTime()%1000000000)/1000000)+" ["+lcount+"] "+bool;
+         invalidate();
+    }
+    public void setDummyRef(int ref) {
+        lines[(lcount++)%lines.length] = ((int)(System.nanoTime()%1000000000)/1000000)+" ["+lcount+"] "+Debug.getName(mContext, ref);
+         invalidate();
+    }
+    public void setDummyString(CharSequence ref) {
+        lines[(lcount++)%lines.length] = ((int)(System.nanoTime()%1000000000)/1000000)+" ["+lcount+"] "+ref;
+
+        invalidate();
     }
     Rect newRect = new Rect();
 
     @Override
     public void onDraw(Canvas canvas) {
-        if (mTail) {
-         canvas.getClipBounds(newRect);
-        newRect.inset(0, -20);  //make the rect larger
-        canvas.clipRect(newRect, Region.Op.REPLACE);
-         }
-        super.onDraw(canvas);
+        int y = 0;
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+            if (line!=null) {
+                mPaint.getTextBounds(line, 0, line.length(),bounds);
+                y+=bounds.height();
+                canvas.drawText(line, 0,y,mPaint);
+            }
+        }
     }
 }

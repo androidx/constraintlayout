@@ -247,7 +247,7 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
         Set<String> at = c.mCustomConstraints.keySet();
         for (String s : at) {
             ConstraintAttribute attr = c.mCustomConstraints.get(s);
-            if (attr.getType() != ConstraintAttribute.AttributeType.STRING_TYPE) {
+            if (attr.isContinuous()) {
                 this.attributes.put(s,attr);
             }
         }

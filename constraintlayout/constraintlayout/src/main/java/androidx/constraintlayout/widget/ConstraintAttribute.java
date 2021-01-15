@@ -66,6 +66,21 @@ public class ConstraintAttribute {
         return mType;
     }
 
+    /**
+     * Continuous types are interpolated they are fired only at
+     * @return
+     */
+    public boolean isContinuous() {
+       switch (mType) {
+           case REFERENCE_TYPE:
+           case BOOLEAN_TYPE:
+           case STRING_TYPE:
+               return false;
+           default:
+               return true;
+       }
+    }
+
     public void setFloatValue(float value) {
         mFloatValue = value;
     }
@@ -323,6 +338,9 @@ public class ConstraintAttribute {
                         method = viewClass.getMethod(methodName, Float.TYPE);
                         method.invoke(view, constraintAttribute.mFloatValue);
                         break;
+                    case REFERENCE_TYPE:
+                        method = viewClass.getMethod(methodName, Integer.TYPE);
+                        method.invoke(view, constraintAttribute.mIntegerValue);
                 }
             } catch (NoSuchMethodException e) {
                 Log.e(TAG, e.getMessage());
