@@ -8,7 +8,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "android.support.constraint.app"
+        applicationId "androidx.constraintlayout.experiments.motionlayout"
         minSdkVersion 16
         targetSdkVersion 30
         versionCode 1

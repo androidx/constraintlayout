@@ -14,11 +14,12 @@ import org.junit.Assert.*
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @RunWith(AndroidJUnit4::class)
-class ExampleInstrumentedTest {
+class SampleTest {
+
     @Test
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("androidx.constraintlayout.validation.widget.test", appContext.packageName)
+        assertEquals("androidx.constraintlayout.validation.motionlayout.widget.test", appContext.packageName)
     }
 }
