@@ -1045,7 +1045,9 @@ public class MotionScene {
                                 mViewTransitionController.add(viewTransition);
                                 break;
                             default:
-                                Log.v(TAG, getLine(context, resourceId, parser) + "WARNING UNKNOWN ATTRIBUTE " + tagName);
+                                if (DEBUG) {
+                                    Log.v(TAG, getLine(context, resourceId, parser) + "WARNING UNKNOWN ATTRIBUTE " + tagName);
+                                }
                                 break;
                         }
 
@@ -1058,10 +1060,14 @@ public class MotionScene {
                 }
             }
         } catch (XmlPullParserException e) {
-            Log.v(TAG, getLine(context, resourceId, parser) + " " + e.getMessage());
+            if (DEBUG) {
+                Log.v(TAG, getLine(context, resourceId, parser) + " " + e.getMessage());
+            }
             e.printStackTrace();
         } catch (IOException e) {
-            Log.v(TAG, getLine(context, resourceId, parser) + " " + e.getMessage());
+            if (DEBUG) {
+                Log.v(TAG, getLine(context, resourceId, parser) + " " + e.getMessage());
+            }
             e.printStackTrace();
         }
     }
@@ -1127,10 +1133,14 @@ public class MotionScene {
                 }
             }
         } catch (XmlPullParserException e) {
-            Log.v(TAG, getLine(context, resourceId, includeParser) + " " + e.getMessage());
+            if (DEBUG) {
+                Log.v(TAG, getLine(context, resourceId, includeParser) + " " + e.getMessage());
+            }
             e.printStackTrace();
         } catch (IOException e) {
-            Log.v(TAG, getLine(context, resourceId, includeParser) + " " + e.getMessage());
+            if (DEBUG) {
+                Log.v(TAG, getLine(context, resourceId, includeParser) + " " + e.getMessage());
+            }
             e.printStackTrace();
         }
         return UNSET;

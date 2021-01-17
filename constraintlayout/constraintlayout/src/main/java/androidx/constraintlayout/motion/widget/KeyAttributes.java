@@ -40,7 +40,8 @@ import java.util.HashSet;
 
 public class KeyAttributes extends Key {
     static final String NAME = "KeyAttribute";
-    private static final String TAG = "KeyAttribute";
+    private static final String TAG = "KeyAttributes";
+    private static final boolean DEBUG = false;
     private String mTransitionEasing;
     private int mCurveFit = -1;
     private boolean mVisibility = false;
@@ -273,7 +274,9 @@ public class KeyAttributes extends Key {
                     }
                     break;
                 default:
-                    Log.v("KeyAttributes", "UNKNOWN addValues \"" + s + "\"");
+                    if (DEBUG) {
+                        Log.v(TAG, "UNKNOWN addValues \"" + s + "\"");
+                    }
             }
         }
     }

@@ -16,6 +16,7 @@
 
 package androidx.constraintlayout.motion.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
@@ -31,7 +32,7 @@ import static android.view.MotionEvent.ACTION_DOWN;
  * Utilities useful for debugging
  * @hide
  */
-
+@SuppressLint("LogConditional")
 public class Debug {
 
     /**
@@ -169,7 +170,7 @@ public class Debug {
             }
             return str+"]";
         } catch (Exception ex) {
-            Log.v("DEBUG",ex.toString());
+            Log.v("DEBUG" ,ex.toString());
             return "UNKNOWN";
         }
     }
