@@ -8,7 +8,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "androidx.constraintlayout.validation"
+        applicationId "androidx.constraintlayout.validation.constraintlayout"
         minSdkVersion 16
         targetSdkVersion 30
         versionCode 1
