@@ -95,7 +95,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run check style
-        uses: nikitasavinov/checkstyle-action@v0.3.1
+        uses: nikitasavinov/checkstyle-action@0.3.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: 'github-pr-check'
