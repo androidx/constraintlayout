@@ -7,7 +7,7 @@ on:
 
 defaults:
   run:
-    working-directory: ./projects/CarouselExperiments
+    working-directory: ./projects/MotionLayoutVerification
 env:
   OUT_DIR: "/tmp/out"
   DIST_DIR: "/tmp/out/dist"
