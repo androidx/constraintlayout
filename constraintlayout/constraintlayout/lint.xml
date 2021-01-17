@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="MinSdkTooLow" severity="warning" />
+
+    <!-- The following must be at the bottom of your file!
+         All lint issues (not listed above) will be treated as errors. -->
+    <issue id="all" severity="error" />
+</lint>
