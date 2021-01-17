@@ -18,6 +18,7 @@ package androidx.constraintlayout.motion.utils;
 
 import androidx.constraintlayout.motion.widget.MotionInterpolator;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 import android.view.animation.Interpolator;
 
@@ -46,6 +47,7 @@ public class StopLogic extends MotionInterpolator {
      * @param desc Description to pre append
      * @param time Time during animation
      */
+    @SuppressLint("LogConditional")
     public void debug(String tag, String desc, float time) {
         Log.v(tag, desc + " ===== " + mType);
         Log.v(tag, desc + (mBackwards ? "backwards" : "forward ") + " time = " + time + "  stages " + mNumberOfStages);
