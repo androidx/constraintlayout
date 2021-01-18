@@ -27,11 +27,9 @@ Next add a dependency in the `build.gradle` file of your Gradle module.
 
 ```gradle
 dependencies {
-    ...
 
     implementation("androidx.constraintlayout:constraintlayout:2.1.0-alpha2")
 
-    ...
 }
 ```
 
