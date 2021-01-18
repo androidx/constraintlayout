@@ -6,14 +6,14 @@ When submitting code, please make every effort to follow existing conventions an
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-### Getting Started Checklist
+### ✅✅✅ Getting Started Checklist
 
 Following this file from beginning to end can be intimidating, so here's a simple check list to follow as you go:
 
 * [Sign Google's CLA](https://cla.developers.google.com/) if you haven't already
 * Download the latest stable versions of [Android Studio](https://developer.android.com/studio) and [IntelliJ](https://www.jetbrains.com/idea/download/)
 * Build the project and run the tests to make sure you're in a good place.
-* Find an outstanding issue on [Google's issue tracker](https://issuetracker.google.com/issues?q=componentid:323867%20status:open) or the [Github Issues](https://github.com/androidx/constraintlayout/issues) in this repository.
+* Find an outstanding issue on [Google's issue tracker](https://issuetracker.google.com/issues/new?component=323867&template=1023345) or the [Github Issues](https://github.com/androidx/constraintlayout/issues) in this repository.
 * If you want to make a feature request, feel free to make a PR - or if its something you're not sure will be accepted, write about it in an issue.
 * Submit your first Pull Request. Make sure all commit status check are pass to be sure it will get reviewed.
 
@@ -37,7 +37,7 @@ The projects under the `desktop` directory are all meant to be run by IntelliJ w
 
 * [Download the latest IntelliJ Community Edition](https://www.jetbrains.com/idea/download/)
 
-## 🔨 Building Project
+## 🛠️⚙️ Building Project
 
 See [the ConstraintLayout README](constraintlayout/README.md) for how to build the library.
 
@@ -55,9 +55,9 @@ See the [Validation Tool README](desktop/ValidationTool/README.md)
 
 TBD
 
-## Looking for something to do?
+## 🤔 Looking for something to do?
 
-This project has a list of issues on [Google's issue tracker](https://issuetracker.google.com/issues?q=componentid:323867%20status:open) as well in the [Github Issues](https://github.com/androidx/constraintlayout/issues) in this repository.
+This project has a list of issues on [Google's issue tracker](https://issuetracker.google.com/issues/new?component=323867&template=1023345) as well in the [Github Issues](https://github.com/androidx/constraintlayout/issues) in this repository.
 
 ## 🚀 Deployment
 
