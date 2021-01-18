@@ -78,7 +78,7 @@ public class ReactiveGuide extends View implements SharedValues.SharedValuesList
         }
         if (mAttributeId != -1) {
             SharedValues sharedValues = ConstraintLayout.getSharedValues();
-            sharedValues.addListener(this, mAttributeId);
+            sharedValues.addListener(mAttributeId, this);
         }
     }
 
@@ -87,11 +87,11 @@ public class ReactiveGuide extends View implements SharedValues.SharedValuesList
     public void setAttributeId(int id) {
         SharedValues sharedValues = ConstraintLayout.getSharedValues();
         if (mAttributeId != -1) {
-            sharedValues.removeListener(this, mAttributeId);
+            sharedValues.removeListener(mAttributeId, this);
         }
         mAttributeId = id;
         if (mAttributeId != -1) {
-            sharedValues.addListener(this, mAttributeId);
+            sharedValues.addListener(mAttributeId, this);
         }
     }
 

@@ -924,7 +924,7 @@ class MotionPaths implements Comparable<MotionPaths> {
         Set<String> at = c.mCustomConstraints.keySet();
         for (String s : at) {
             ConstraintAttribute attr = c.mCustomConstraints.get(s);
-            if (attr != null && attr.getType() != ConstraintAttribute.AttributeType.STRING_TYPE) {
+            if (attr != null && attr.isContinuous()) {
                 this.attributes.put(s, attr);
             }
         }
