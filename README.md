@@ -1,6 +1,9 @@
 # ConstraintLayout 🗜️📏
 
 ![core](https://github.com/androidx/constraintlayout/workflows/core/badge.svg)
+<img src="https://img.shields.io/github/v/release/androidx/constraintlayout.svg?label=latest"/> #
+
+[![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 
 ConstraintLayout is an Android layout component which allows you to position and size widgets in a flexible way. This repository contains the core Java engine, Android library, validation tools, and experiments.
 
@@ -10,13 +13,131 @@ Have a question that isn't answered here? Try StackOverflow for [ConstraintLayou
 
 ## ✨🤩 Key Features
 
-📐 [Aspect Ratio](https://developer.android.com/reference/androidx/constraintlayout/widget/ConstraintLayout#ratio) defines one dimension of a widget as a ratio of the other one. If both `width` and `height` are set to `0dp` the system sets the largest dimensions that satisfy all constraints while maintaining the aspect ratio.
-⛓️ [Chains](https://developer.android.com/reference/androidx/constraintlayout/widget/ConstraintLayout#Chains) provide group-like behavior in a single axis (horizontally or vertically). The other axis can be constrained independently.
-🦮 [Guidelines](https://developer.android.com/reference/androidx/constraintlayout/widget/Guideline) allow reactive layout behavior with fixed or percentage based positioning for multiple widgets.
-🚧 [Barrier](https://developer.android.com/reference/androidx/constraintlayout/widget/Barrier) references multiple widgets to create a virtual guideline based on the most extreme widget on the specified side.
-☂️ [Group](https://developer.android.com/reference/androidx/constraintlayout/widget/Group) constrols the visibility of a set of referenced widgets.
-💫 [MotionLayout](https://developer.android.com/reference/androidx/constraintlayout/motion/widget/MotionLayout) a subclass of ConstraintLayout that supports transitions between constraint sets defined in MotionScenes.
-🌊 [Flow](https://developer.android.com/reference/androidx/constraintlayout/helper/widget/Flow) is a VirtualLayout that allows positioning of referenced widgets horizontally or vertically similar to a Chain. If the referenced elements do not fit within the given bounds it has the ability to wrap them and create multiple chains.
+#### Hello World
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+
+#### 📐 [Aspect Ratio](https://developer.android.com/reference/androidx/constraintlayout/widget/ConstraintLayout#ratio)
+defines one dimension of a widget as a ratio of the other one. If both `width` and `height` are set to `0dp` the system sets the largest dimensions that satisfy all constraints while maintaining the aspect ratio.
+
+```xml
+<ImageView
+    android:id="@+id/image_1"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    app:layout_constraintDimensionRatio="1:1"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    tools:src="@tools:sample/avatars" />
+```
+
+#### ⛓️ [Chains](https://developer.android.com/reference/androidx/constraintlayout/widget/ConstraintLayout#Chains)
+provide group-like behavior in a single axis (horizontally or vertically). The other axis can be constrained independently.
+
+#### 🦮 [Guidelines](https://developer.android.com/reference/androidx/constraintlayout/widget/Guideline)
+allow reactive layout behavior with fixed or percentage based positioning for multiple widgets.
+
+```xml
+<androidx.constraintlayout.widget.Guideline
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/guideline"
+    app:layout_constraintGuide_begin="100dp"
+    android:orientation="vertical"/>
+```
+
+#### 🚧 [Barrier](https://developer.android.com/reference/androidx/constraintlayout/widget/Barrier)
+references multiple widgets to create a virtual guideline based on the most extreme widget on the specified side.
+
+```xml
+<androidx.constraintlayout.widget.Barrier
+    android:id="@+id/barrier"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:barrierDirection="start"
+    app:constraint_referenced_ids="button1,button2" />
+```
+
+#### ☂️ [Group](https://developer.android.com/reference/androidx/constraintlayout/widget/Group)
+constrols the visibility of a set of referenced widgets.
+
+```xml
+<androidx.constraintlayout.widget.Group
+    android:id="@+id/group"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:visibility="visible"
+    app:constraint_referenced_ids="button4,button9" />
+```
+
+#### 💫 [MotionLayout](https://developer.android.com/reference/androidx/constraintlayout/motion/widget/MotionLayout)
+a subclass of ConstraintLayout that supports transitions between constraint sets defined in MotionScenes.
+
+See [projects/MotionLayoutExperiments](projects/MotionLayoutExperiments) for examples.
+
+#### 🌊 [Flow](https://developer.android.com/reference/androidx/constraintlayout/helper/widget/Flow)
+is a VirtualLayout that allows positioning of referenced widgets horizontally or vertically similar to a Chain. If the referenced elements do not fit within the given bounds it has the ability to wrap them and create multiple chains.
+
+See [projects/CalculatorExperiment](projects/CalculatorExperiment) for examples.
+
+## Using ConstraintLayout
+
+Add the Gradle dependency:
+
+You need to make sure you have the Google and JCenter repositories included in the `build.gradle` file in the root of your project:
+
+```gradle
+repositories {
+    google()
+    jcenter()
+}
+```
+
+```gradle
+implementation("androidx.constraintlayout:constraintlayout:2.0.4")
+```
+
+or depend via Maven:
+
+```
+<dependency>
+  <groupId>androidx.constraintlayout</groupId>
+  <artifactId>constraintlayout</artifactId>
+  <version>2.0.4</version>
+</dependency>
+```
+
+or download [the latest JAR]()
+
+## Requirements
+
+* AndroidX
+* Min SDK 14+
+* Java 8+
+
+
 
 ## 📚👩‍🏫 Learning Materials
 
