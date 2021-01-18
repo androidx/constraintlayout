@@ -10,7 +10,7 @@ Have a question that isn't answered here? Try StackOverflow for [ConstraintLayou
 
 ## ✨🤩 Key Features
 
-* 📸 [Aspect Ratio](https://developer.android.com/reference/androidx/constraintlayout/widget/ConstraintLayout#ratio)
+* 📐 [Aspect Ratio](https://developer.android.com/reference/androidx/constraintlayout/widget/ConstraintLayout#ratio)
 * ⛓️ [Chains](https://developer.android.com/reference/androidx/constraintlayout/widget/ConstraintLayout#Chains)
 * [Guideline](https://developer.android.com/reference/androidx/constraintlayout/widget/Guideline)
 * [Barrier](https://developer.android.com/reference/androidx/constraintlayout/widget/Barrier)
