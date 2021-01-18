@@ -12,13 +12,13 @@ Have a question that isn't answered here? Try StackOverflow for [ConstraintLayou
 
 * 📐 [Aspect Ratio](https://developer.android.com/reference/androidx/constraintlayout/widget/ConstraintLayout#ratio)
 * ⛓️ [Chains](https://developer.android.com/reference/androidx/constraintlayout/widget/ConstraintLayout#Chains)
-* [Guideline](https://developer.android.com/reference/androidx/constraintlayout/widget/Guideline)
-* [Barrier](https://developer.android.com/reference/androidx/constraintlayout/widget/Barrier)
-* [Group](https://developer.android.com/reference/androidx/constraintlayout/widget/Group)
-* [MotionLayout](https://developer.android.com/reference/androidx/constraintlayout/motion/widget/MotionLayout)
-* [Flow](https://developer.android.com/reference/androidx/constraintlayout/helper/widget/Flow)
+* 🦮 [Guideline](https://developer.android.com/reference/androidx/constraintlayout/widget/Guideline)
+* 🚧 [Barrier](https://developer.android.com/reference/androidx/constraintlayout/widget/Barrier)
+* ☂️ [Group](https://developer.android.com/reference/androidx/constraintlayout/widget/Group)
+* 💫 [MotionLayout](https://developer.android.com/reference/androidx/constraintlayout/motion/widget/MotionLayout)
+* 🌊 [Flow](https://developer.android.com/reference/androidx/constraintlayout/helper/widget/Flow)
 
-## 📚👩‍🏫 Learning Materials
+## 📚👩‍🏫 <LI></LI>earning Materials
 
 - [Build a Responsive UI with ConstraintLayout](https://developer.android.com/training/constraint-layout)
 - [Codelab](https://codelabs.developers.google.com/codelabs/constraint-layout/index.html#0)
@@ -28,7 +28,7 @@ Have a question that isn't answered here? Try StackOverflow for [ConstraintLayou
 
 If you'd like to get involved and contribute please read [CONTRIBUTING](constraintlayout/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
-## 👩‍💻👨‍💻 Authors
+## 💻 Authors
 
 * **John Hoford** - [jafu888](https://github.com/jafu888)
 * **Nicolas Roard** - [camaelon](https://github.com/camaelon)
