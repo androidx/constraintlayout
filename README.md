@@ -115,13 +115,9 @@ Hello World
     app:constraint_referenced_ids="button4,button9" />
 ```
 
-💫 [MotionLayout](https://developer.android.com/reference/androidx/constraintlayout/motion/widget/MotionLayout) a subclass of ConstraintLayout that supports transitions between constraint sets defined in MotionScenes.
+💫 [MotionLayout](https://developer.android.com/reference/androidx/constraintlayout/motion/widget/MotionLayout) a subclass of ConstraintLayout that supports transitions between constraint sets defined in MotionScenes. See [projects/MotionLayoutExperiments](projects/MotionLayoutExperiments) for examples.
 
-See [projects/MotionLayoutExperiments](projects/MotionLayoutExperiments) for examples.
-
-🌊 [Flow](https://developer.android.com/reference/androidx/constraintlayout/helper/widget/Flow) is a VirtualLayout that allows positioning of referenced widgets horizontally or vertically similar to a Chain. If the referenced elements do not fit within the given bounds it has the ability to wrap them and create multiple chains.
-
-See [projects/CalculatorExperiments](projects/CalculatorExperiments) for examples.
+🌊 [Flow](https://developer.android.com/reference/androidx/constraintlayout/helper/widget/Flow) is a VirtualLayout that allows positioning of referenced widgets horizontally or vertically similar to a Chain. If the referenced elements do not fit within the given bounds it has the ability to wrap them and create multiple chains. See [projects/CalculatorExperiments](projects/CalculatorExperiments) for examples.
 
 ## 📚👩‍🏫 Learning Materials
 
