@@ -14,7 +14,7 @@ Following this file from beginning to end can be intimidating, so here's a simpl
 * Download the latest stable versions of [Android Studio](https://developer.android.com/studio) and [IntelliJ](https://www.jetbrains.com/idea/download/)
 * Build the project and run the tests to make sure you're in a good place.
 * Find an outstanding issue on [Google's issue tracker](https://issuetracker.google.com/issues/new?component=323867&template=1023345) or the [Github Issues](https://github.com/androidx/constraintlayout/issues) in this repository.
-* Submit your first Pull Request. Make sure all commit status check are passing to be sure it will get reviewed.
+* Submit your first Pull Request. Make sure all commit status checks are passing to be sure it will get reviewed.
 
 ## ⚠️ Prerequisites
 
@@ -64,4 +64,4 @@ See [the ConstraintLayout README](constraintlayout/README.md) for how to deploy 
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/androidx/constraintlayout/tags). 
