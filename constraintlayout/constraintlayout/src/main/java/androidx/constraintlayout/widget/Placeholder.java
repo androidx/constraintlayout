@@ -115,6 +115,9 @@ public class Placeholder extends View {
   }
 
   /**
+   * Placeholder does not draw anything itself - therefore Paint and Rect allocations
+   * are fine to suppress and ignore.
+   *
    * @hide
    * @param canvas
    */
