@@ -23,7 +23,7 @@ Following this file from beginning to end can be intimidating, so here's a simpl
 
 Before we can look at your pull request, you'll need to sign a (Contributor License Agreement (CLA))[https://cla.developers.google.com/].
 
-#### 🦾🤖 Android Studio
+#### Android Studio
 
 * [Download the latest version of Android Studio](https://developer.android.com/studio)
 * Download resources in Android SDK Manger: Android Build Tools to 30.0.2 and Android SDKs 25 & 30
@@ -31,7 +31,7 @@ Before we can look at your pull request, you'll need to sign a (Contributor Lice
 * Add the latest Kotlin plugin V1.4.21 within Android Studio
 * If you intend to work with the Compose bindings of ConstraintLayout you'll also need to download [Android Studio Arctic Fox](https://developer.android.com/studio/preview)
 
-#### ✈️🧠 IntelliJ
+#### IntelliJ
 
 The projects under the `desktop` directory are all meant to be run by IntelliJ where the resulting application runs on Mac/Linux/Windows.
 

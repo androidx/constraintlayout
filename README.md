@@ -10,13 +10,13 @@ Have a question that isn't answered here? Try StackOverflow for [ConstraintLayou
 
 ## ✨🤩 Key Features
 
-* 📐  [Aspect Ratio](https://developer.android.com/reference/androidx/constraintlayout/widget/ConstraintLayout#ratio)
-* ⛓️  [Chains](https://developer.android.com/reference/androidx/constraintlayout/widget/ConstraintLayout#Chains)
-* 🦮  [Guideline](https://developer.android.com/reference/androidx/constraintlayout/widget/Guideline)
-* 🚧  [Barrier](https://developer.android.com/reference/androidx/constraintlayout/widget/Barrier)
-* ☂️  [Group](https://developer.android.com/reference/androidx/constraintlayout/widget/Group)
-* 💫  [MotionLayout](https://developer.android.com/reference/androidx/constraintlayout/motion/widget/MotionLayout)
-* 🌊  [Flow](https://developer.android.com/reference/androidx/constraintlayout/helper/widget/Flow)
+* 📐 [Aspect Ratio](https://developer.android.com/reference/androidx/constraintlayout/widget/ConstraintLayout#ratio) defines one dimension of a widget as a ratio of the other one. If both `width` and `height` are set to `0dp` the system sets the largest dimensions that satisfy all constraints while maintaining the aspect ratio.
+* ⛓️ [Chains](https://developer.android.com/reference/androidx/constraintlayout/widget/ConstraintLayout#Chains) provide group-like behavior in a single axis (horizontally or vertically). The other axis can be constrained independently.
+* 🦮 [Guidelines](https://developer.android.com/reference/androidx/constraintlayout/widget/Guideline) allow reactive layout behavior with fixed or percentage based positioning for multiple widgets.
+* 🚧 [Barrier](https://developer.android.com/reference/androidx/constraintlayout/widget/Barrier) references multiple widgets to create a virtual guideline based on the most extreme widget on the specified side.
+* ☂️ [Group](https://developer.android.com/reference/androidx/constraintlayout/widget/Group) constrols the visibility of a set of referenced widgets.
+* 💫 [MotionLayout](https://developer.android.com/reference/androidx/constraintlayout/motion/widget/MotionLayout) a subclass of ConstraintLayout that supports transitions between constraint sets defined in MotionScenes.
+* 🌊 [Flow](https://developer.android.com/reference/androidx/constraintlayout/helper/widget/Flow) is a VirtualLayout that allows positioning of referenced widgets horizontally or vertically similar to a Chain. If the referenced elements do not fit within the given bounds it has the ability to wrap them and create multiple chains.
 
 ## 📚👩‍🏫 Learning Materials
 
