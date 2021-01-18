@@ -16,6 +16,7 @@
 
 package androidx.constraintlayout.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -120,11 +121,14 @@ public class Placeholder extends View {
   public void onDraw(Canvas canvas) {
     if (isInEditMode()) {
       canvas.drawRGB(223, 223, 223);
+
+      @SuppressLint("DrawAllocation")
       Paint paint = new Paint();
       paint.setARGB(255, 210, 210, 210);
       paint.setTextAlign(Paint.Align.CENTER);
       paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 
+      @SuppressLint("DrawAllocation")
       Rect r = new Rect();
       canvas.getClipBounds(r);
       paint.setTextSize(r.height());
