@@ -10,19 +10,19 @@ Have a question that isn't answered here? Try StackOverflow for [ConstraintLayou
 
 ## ✨🤩 Key Features
 
-* 📐 [Aspect Ratio](https://developer.android.com/reference/androidx/constraintlayout/widget/ConstraintLayout#ratio)
-* ⛓️ [Chains](https://developer.android.com/reference/androidx/constraintlayout/widget/ConstraintLayout#Chains)
-* 🦮 [Guideline](https://developer.android.com/reference/androidx/constraintlayout/widget/Guideline)
-* 🚧 [Barrier](https://developer.android.com/reference/androidx/constraintlayout/widget/Barrier)
-* ☂️ [Group](https://developer.android.com/reference/androidx/constraintlayout/widget/Group)
-* 💫 [MotionLayout](https://developer.android.com/reference/androidx/constraintlayout/motion/widget/MotionLayout)
-* 🌊 [Flow](https://developer.android.com/reference/androidx/constraintlayout/helper/widget/Flow)
+* 📐  [Aspect Ratio](https://developer.android.com/reference/androidx/constraintlayout/widget/ConstraintLayout#ratio)
+* ⛓️  [Chains](https://developer.android.com/reference/androidx/constraintlayout/widget/ConstraintLayout#Chains)
+* 🦮  [Guideline](https://developer.android.com/reference/androidx/constraintlayout/widget/Guideline)
+* 🚧  [Barrier](https://developer.android.com/reference/androidx/constraintlayout/widget/Barrier)
+* ☂️  [Group](https://developer.android.com/reference/androidx/constraintlayout/widget/Group)
+* 💫  [MotionLayout](https://developer.android.com/reference/androidx/constraintlayout/motion/widget/MotionLayout)
+* 🌊  [Flow](https://developer.android.com/reference/androidx/constraintlayout/helper/widget/Flow)
 
 ## 📚👩‍🏫 Learning Materials
 
 - [Build a Responsive UI with ConstraintLayout](https://developer.android.com/training/constraint-layout)
 - [Codelab](https://codelabs.developers.google.com/codelabs/constraint-layout/index.html#0)
-- Introduction to MotionLayout [Part I](https://medium.com/google-developers/introduction-to-motionlayout-part-i-29208674b10d) [Part II](https://medium.com/google-developers/introduction-to-motionlayout-part-ii-a31acc084f59) [Part III](https://medium.com/google-developers/introduction-to-motionlayout-part-iii-47cd64d51a5) [Part IV](https://medium.com/google-developers/defining-motion-paths-in-motionlayout-6095b874d37)
+- Introduction to MotionLayout [Part I](https://medium.com/google-developers/introduction-to-motionlayout-part-i-29208674b10d) | [Part II](https://medium.com/google-developers/introduction-to-motionlayout-part-ii-a31acc084f59) | [Part III](https://medium.com/google-developers/introduction-to-motionlayout-part-iii-47cd64d51a5) | [Part IV](https://medium.com/google-developers/defining-motion-paths-in-motionlayout-6095b874d37)
 
 ## 🤝 Contributing
 
