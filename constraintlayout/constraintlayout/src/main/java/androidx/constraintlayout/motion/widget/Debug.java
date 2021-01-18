@@ -170,7 +170,7 @@ public class Debug {
             }
             return str+"]";
         } catch (Exception ex) {
-            Log.v("DEBUG" ,ex.toString());
+            Log.v("DEBUG", ex.toString());
             return "UNKNOWN";
         }
     }
