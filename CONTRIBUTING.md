@@ -10,11 +10,11 @@ These instructions will get you a copy of the project up and running on your loc
 
 Following this file from beginning to end can be intimidating, so here's a simple check list to follow as you go:
 
-* 📝 [Sign Google's CLA](https://cla.developers.google.com/) if you haven't already
-* ⬇️💻 Download the latest stable versions of [Android Studio](https://developer.android.com/studio) and [IntelliJ](https://www.jetbrains.com/idea/download/)
-* 🛠️🧪 Build the project and run the tests to make sure you're in a good place.
-* 👀 Find an outstanding issue on [Google's issue tracker](https://issuetracker.google.com/issues/new?component=323867&template=1023345) or the [Github Issues](https://github.com/androidx/constraintlayout/issues) in this repository.
-* 📥 Submit your first Pull Request. Make sure all commit status check are passing to be sure it will get reviewed.
+* [Sign Google's CLA](https://cla.developers.google.com/) if you haven't already
+* Download the latest stable versions of [Android Studio](https://developer.android.com/studio) and [IntelliJ](https://www.jetbrains.com/idea/download/)
+* Build the project and run the tests to make sure you're in a good place.
+* Find an outstanding issue on [Google's issue tracker](https://issuetracker.google.com/issues/new?component=323867&template=1023345) or the [Github Issues](https://github.com/androidx/constraintlayout/issues) in this repository.
+* Submit your first Pull Request. Make sure all commit status check are passing to be sure it will get reviewed.
 
 ## ⚠️ Prerequisites
 
