@@ -38,7 +38,7 @@ The projects under the `desktop` directory are all meant to be run by IntelliJ w
 
 ## 🛠️⚙️ Building Project
 
-See [the ConstraintLayout README](constraintlayout/README.md) for how to build the library.
+See [the ConstraintLayout README](constraintlayout) for how to build the library.
 
 ## 🧪 Running Tests
 
@@ -48,7 +48,7 @@ The core library has a set of tests that use the TestNG runner. You should be ab
 
 #### 📱🔬 ConstraintLayout Integration Tests
 
-See the [Validation Tool README](desktop/ValidationTool/README.md)
+See the [Validation Tool README](desktop/ValidationTool)
 
 #### 💫🔬 MotionLayout Integration Tests
 
@@ -60,7 +60,7 @@ This project has a list of issues on [Google's issue tracker](https://issuetrack
 
 ## 🚀 Deployment
 
-See [the ConstraintLayout README](constraintlayout/README.md) for how to deploy the library.
+See [the ConstraintLayout README](constraintlayout) for how to deploy the library.
 
 ## Versioning
 
