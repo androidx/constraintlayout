@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto"
+    motion:defaultDuration="400">
+
+    <Transition
+        motion:constraintSetEnd="@+id/mode3d"
+        motion:constraintSetStart="@id/mode_no_graph"
+        motion:autoTransition="animateToEnd"
+        motion:duration="300">
+
+        <OnSwipe
+            motion:onTouchUp="stop"
+            motion:dragDirection="dragDown"
+            motion:touchAnchorId="@id/card"
+            motion:touchAnchorSide="bottom" />
+        <KeyFrameSet>
+
+        </KeyFrameSet>
+    </Transition>
+
+
+
+    <ConstraintSet android:id="@+id/mode_no_graph">
+        <Constraint
+            android:id="@+id/graph"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="0"
+            android:visibility="gone"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            motion:layout_constraintBottom_toTopOf="@id/graph_bottom"
+            motion:layout_constraintTop_toTopOf="@id/card"
+            motion:layout_constraintStart_toStartOf="@id/card"
+            motion:layout_constraintLeft_toLeftOf="@id/card"
+            motion:layout_constraintEnd_toEndOf="@id/card"
+            motion:layout_constraintRight_toRightOf="@id/card" />
+
+        <Constraint
+            android:id="@+id/graph3d"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:alpha="0"
+            android:visibility="gone"
+            android:background="#0000"
+            motion:layout_constraintBottom_toTopOf="@id/graph_bottom"
+            motion:layout_constraintEnd_toEndOf="@id/card"
+            motion:layout_constraintLeft_toLeftOf="@id/card"
+            motion:layout_constraintRight_toRightOf="@id/card"
+            motion:layout_constraintStart_toStartOf="@id/card"
+            motion:layout_constraintTop_toTopOf="@id/card" />
+    </ConstraintSet>
+
+
+    <ConstraintSet android:id="@+id/mode2d" >
+        <Constraint
+            android:id="@+id/graph"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="1"
+            android:visibility="visible"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            motion:layout_constraintBottom_toTopOf="@id/graph_bottom"
+            motion:layout_constraintTop_toTopOf="@id/card"
+            motion:layout_constraintStart_toStartOf="@id/card"
+            motion:layout_constraintLeft_toLeftOf="@id/card"
+            motion:layout_constraintEnd_toEndOf="@id/graph_right"
+            motion:layout_constraintRight_toRightOf="@id/graph_right">
+            <CustomAttribute
+                motion:attributeName="background"
+                motion:customColorDrawableValue="#0000" />
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/graph3d"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:alpha="0"
+            android:visibility="gone"
+            android:background="#0000"
+            motion:layout_constraintBottom_toTopOf="@id/graph_bottom"
+            motion:layout_constraintEnd_toEndOf="@id/card"
+            motion:layout_constraintLeft_toLeftOf="@id/card"
+            motion:layout_constraintRight_toRightOf="@id/card"
+            motion:layout_constraintStart_toStartOf="@id/card"
+            motion:layout_constraintTop_toTopOf="@id/card" />
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/mode2d_fold" motion:deriveConstraintsFrom="@+id/mode2d">
+        <Constraint
+            android:id="@+id/graph_right"
+            motion:layout_constraintGuide_percent="0.2"
+            android:orientation="vertical"
+            />
+
+        <Constraint
+            android:id="@+id/fold_pos"
+            motion:layout_constraintGuide_percent="0.5"
+            android:orientation="horizontal" />
+
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/mode2d_full">
+        <Constraint
+            android:id="@+id/graph"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="1"
+            android:visibility="visible"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintLeft_toLeftOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintRight_toRightOf="parent">
+            <CustomAttribute
+                motion:attributeName="background"
+                motion:customColorDrawableValue="#0F1E1B" />
+        </Constraint>
+
+        <Constraint
+            android:id="@+id/graph3d"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:alpha="0"
+            android:visibility="gone"
+            motion:layout_constraintBottom_toTopOf="@id/graph_bottom"
+            motion:layout_constraintEnd_toEndOf="@id/card"
+            motion:layout_constraintLeft_toLeftOf="@id/card"
+            motion:layout_constraintRight_toRightOf="@id/card"
+            motion:layout_constraintStart_toStartOf="@id/card"
+            motion:layout_constraintTop_toTopOf="@id/card" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/mode3d" >
+        <Constraint
+            android:id="@+id/graph"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="0"
+            android:visibility="gone"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            motion:layout_constraintBottom_toTopOf="@id/graph_bottom"
+            motion:layout_constraintTop_toTopOf="@id/card"
+            motion:layout_constraintStart_toStartOf="@id/card"
+            motion:layout_constraintLeft_toLeftOf="@id/card"
+            motion:layout_constraintEnd_toEndOf="@id/card"
+            motion:layout_constraintRight_toRightOf="@id/card" />
+        <Constraint
+            android:id="@+id/graph3d"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:alpha="1"
+            android:visibility="visible"
+            android:background="#0000"
+            motion:layout_constraintBottom_toTopOf="@id/graph_bottom"
+            motion:layout_constraintEnd_toEndOf="@id/graph_right"
+            motion:layout_constraintLeft_toLeftOf="@id/card"
+            motion:layout_constraintRight_toRightOf="@id/graph_right"
+            motion:layout_constraintStart_toStartOf="@id/card"
+            motion:layout_constraintTop_toTopOf="@id/card">
+            <CustomAttribute
+                motion:attributeName="background"
+                motion:customColorDrawableValue="#0000" />
+        </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/mode3d_fold" motion:deriveConstraintsFrom="@+id/mode3d">
+        <Constraint
+            android:id="@+id/graph_right"
+            motion:layout_constraintGuide_percent="0.5"
+            android:orientation="vertical"
+            />
+        <ConstraintOverride
+            android:id="@+id/card"
+            motion:layout_constraintWidth_percent="1.0"
+            />
+        <Constraint
+            android:id="@+id/fold_pos"
+            motion:layout_constraintGuide_percent="0.55"
+            android:orientation="horizontal"
+            />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/mode3d_full">
+        <Constraint
+            android:id="@+id/graph"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="0"
+            android:visibility="gone"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            motion:layout_constraintBottom_toTopOf="@id/graph_bottom"
+            motion:layout_constraintTop_toTopOf="@id/card"
+            motion:layout_constraintStart_toStartOf="@id/card"
+            motion:layout_constraintLeft_toLeftOf="@id/card"
+            motion:layout_constraintEnd_toEndOf="@id/card"
+            motion:layout_constraintRight_toRightOf="@id/card">
+            <CustomAttribute
+                motion:attributeName="background"
+                motion:customColorDrawableValue="#0000" />
+        </Constraint>
+        <Constraint
+            android:id="@+id/graph3d"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="1"
+            android:visibility="visible"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintLeft_toLeftOf="parent"
+            motion:layout_constraintRight_toRightOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent">
+            <CustomAttribute
+                motion:attributeName="background"
+                motion:customColorDrawableValue="#1E0F1E" />
+
+        </Constraint>
+    </ConstraintSet>
+
+
+    <ConstraintSet android:id="@+id/range3d"></ConstraintSet>
+    <ConstraintSet android:id="@+id/big2d"></ConstraintSet>
+    <ConstraintSet android:id="@+id/big3d"></ConstraintSet>
+    <!-- =====================  View Transitions =====================-->
+    <ViewTransition
+        android:id="@+id/click3"
+        motion:motionTarget="button3"
+        motion:viewTransitionMode="noState"
+        motion:onStateTransition="actionDown"
+        motion:duration="200">
+
+        <KeyFrameSet>
+            <KeyAttribute
+                motion:framePosition="0"
+                android:scaleY="1"
+                android:scaleX="1">
+                <CustomAttribute
+                    motion:attributeName="background"
+                    motion:customColorDrawableValue="@color/basic_button_background" />
+            </KeyAttribute>
+            <KeyAttribute
+                motion:framePosition="20"
+                android:scaleY="0.5"
+                android:scaleX="0.5">
+                <CustomAttribute
+                    motion:attributeName="background"
+                    motion:customColorDrawableValue="#C38C64" />
+            </KeyAttribute>
+            <KeyAttribute
+                motion:framePosition="100"
+                android:scaleY="1"
+                android:scaleX="1">
+                <CustomAttribute
+                    motion:attributeName="background"
+                    motion:customColorDrawableValue="@color/basic_button_background" />
+            </KeyAttribute>
+        </KeyFrameSet>
+    </ViewTransition>
+
+    <ViewTransition
+        android:id="@+id/click4"
+        motion:motionTarget="button4"
+        motion:viewTransitionMode="noState"
+        motion:onStateTransition="actionDown"
+        motion:duration="200">
+
+        <KeyFrameSet>
+            <KeyAttribute
+                motion:framePosition="0"
+                android:scaleY="1"
+                android:scaleX="1">
+                <CustomAttribute
+                    motion:attributeName="roundPercent"
+                    motion:customFloatValue="1" />
+                <CustomAttribute
+                    motion:attributeName="background"
+                    motion:customColorDrawableValue="@color/adv_background" />
+            </KeyAttribute>
+
+            <KeyAttribute
+                motion:framePosition="20"
+                android:scaleY="0.5"
+                android:scaleX="0.5">
+                <CustomAttribute
+                    motion:attributeName="roundPercent"
+                    motion:customFloatValue=".3" />
+                <CustomAttribute
+                    motion:attributeName="background"
+                    motion:customColorDrawableValue="#C38C64" />
+            </KeyAttribute>
+
+            <KeyAttribute
+                motion:framePosition="100"
+                android:scaleY="1"
+                android:scaleX="1">
+                <CustomAttribute
+                    motion:attributeName="roundPercent"
+                    motion:customFloatValue="@dimen/calc_round" />
+                <CustomAttribute
+                    motion:attributeName="background"
+                    motion:customColorDrawableValue="@color/adv_background" />
+            </KeyAttribute>
+        </KeyFrameSet>
+    </ViewTransition>
+
+    <!-- =====================  View Transitions =====================-->
+    <ViewTransition
+        android:id="@+id/inverse"
+        motion:viewTransitionMode="allStates"
+        motion:duration="30">
+        <ConstraintOverride>
+            <CustomAttribute
+                motion:attributeName="background"
+                motion:customColorDrawableValue="@color/basic_button_background" />
+            <CustomAttribute
+                motion:attributeName="textColor"
+                motion:customColorValue="@color/cal_def_text" />
+        </ConstraintOverride>
+
+    </ViewTransition>
+
+    <ViewTransition
+        android:id="@+id/un_inverse"
+        motion:viewTransitionMode="allStates"
+        motion:duration="30">
+        <ConstraintOverride>
+            <CustomAttribute
+                motion:attributeName="background"
+                motion:customColorDrawableValue="@color/adv_background" />
+            <CustomAttribute
+                motion:attributeName="textColor"
+                motion:customColorValue="@color/cal_adv_text" />
+        </ConstraintOverride>
+
+    </ViewTransition>
+
+    <ViewTransition
+        android:id="@+id/spinAC"
+        motion:motionTarget="@+id/button16"
+        motion:viewTransitionMode="noState"
+        motion:onStateTransition="actionDown"
+        motion:duration="200">
+
+        <KeyFrameSet>
+            <KeyAttribute
+                motion:framePosition="0"
+                android:scaleY="1"
+                android:scaleX="1">
+
+                <CustomAttribute
+                    motion:attributeName="background"
+                    motion:customColorDrawableValue="@color/clear_background" />
+            </KeyAttribute>
+
+            <KeyAttribute
+                motion:framePosition="20"
+                android:scaleY="0.5"
+                android:scaleX="0.5">
+
+                <CustomAttribute
+                    motion:attributeName="background"
+                    motion:customColorDrawableValue="#C38C64" />
+            </KeyAttribute>
+
+            <KeyAttribute
+                motion:framePosition="100"
+                android:scaleY="1"
+                android:scaleX="1">
+
+                <CustomAttribute
+                    motion:attributeName="background"
+                    motion:customColorDrawableValue="@color/clear_background" />
+            </KeyAttribute>
+        </KeyFrameSet>
+    </ViewTransition>
+
+    <ViewTransition
+        android:id="@+id/spin_equ"
+        motion:motionTarget="@+id/button10"
+        motion:viewTransitionMode="noState"
+        motion:onStateTransition="actionDown"
+        motion:duration="200">
+
+        <KeyFrameSet>
+            <KeyAttribute
+                motion:framePosition="0"
+                android:scaleY="1"
+                android:scaleX="1">
+                <CustomAttribute
+                    motion:attributeName="background"
+                    motion:customColorDrawableValue="#906e68" />
+            </KeyAttribute>
+
+            <KeyAttribute
+                motion:framePosition="20"
+                android:scaleY="0.5"
+                android:scaleX="0.5">
+
+                <CustomAttribute
+                    motion:attributeName="background"
+                    motion:customColorDrawableValue="#FFF" />
+            </KeyAttribute>
+
+            <KeyAttribute
+                motion:framePosition="100"
+                android:scaleY="1"
+                android:scaleX="1">
+
+                <CustomAttribute
+                    motion:attributeName="background"
+                    motion:customColorDrawableValue="#906e68" />
+            </KeyAttribute>
+        </KeyFrameSet>
+    </ViewTransition>
+
+
+
+</MotionScene>

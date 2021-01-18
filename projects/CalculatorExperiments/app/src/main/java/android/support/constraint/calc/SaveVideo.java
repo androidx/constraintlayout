@@ -34,6 +34,10 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * NOT FUNCTIONAL !
+ * TODO make this work
+ */
 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class SaveVideo {
     private static final String TAG = SaveVideo.class.getSimpleName();

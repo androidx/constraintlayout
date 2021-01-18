@@ -42,6 +42,8 @@ import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.constraintlayout.utils.widget.MotionButton;
 import androidx.constraintlayout.utils.widget.MotionLabel;
+import androidx.window.DisplayFeature;
+import androidx.window.WindowManager;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -53,13 +55,18 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import static androidx.window.DisplayFeature.TYPE_FOLD;
 
 /* This test the visibility*/
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private static final String STACK_STATE_KEY = "STACK_STATE_KEY";
     private static final String SAVE_STATE = "SAVE_STATE";
+    int mGraphMode = 0;
     MotionLayout mMotionLayout;
+    Fold mFold;
     CalcEngine mCalcEngine = new CalcEngine();
     MotionLabel[] mStack = new MotionLabel[4];
     boolean mIsInInverseMode = false;
@@ -88,14 +95,31 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        boolean isfold = Fold.isFoldable(this);
         Bundle extra = getIntent().getExtras();
-        setContentView(R.layout.calc);
+        setContentView((isfold) ? R.layout.fold : R.layout.calc);
         mMotionLayout = findView(MotionLayout.class);
         mGraph2D = findViewById(R.id.graph);
         mGraph3D = findViewById(R.id.graph3d);
         getStack();
+        mFold = new Fold(mMotionLayout);
         restoreState();
         regester_for_clipboard();
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (mFold.isPostureHalfOpen()) {
+
+            Log.v(TAG, Debug.getLoc() + " State = " + Debug.getName(getApplicationContext(), mGraphMode));
+            Log.v(TAG, Debug.getLoc() + " mMotionLayout = " + mMotionLayout);
+            if (mGraphMode == R.id.mode2d) {
+                mMotionLayout.post(() -> mMotionLayout.transitionToState(R.id.mode2d_fold));
+            } else if (mGraphMode == R.id.mode3d) {
+                mMotionLayout.post(() -> mMotionLayout.transitionToState(R.id.mode3d_fold));
+            }
+        }
     }
 
     // ================================= Recycler support ====================================
@@ -142,7 +166,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void setState(byte[] data) {
-        mMotionLayout.transitionToState(R.id.mode_no_graph);
+
+        mMotionLayout.transitionToState(mGraphMode = R.id.mode_no_graph);
         ByteArrayInputStream bais = new ByteArrayInputStream(data);
         try {
             ObjectInputStream os = new ObjectInputStream(bais);
@@ -152,7 +177,9 @@ public class MainActivity extends AppCompatActivity {
                 mGraph2D.setAlpha(1);
                 CalcEngine.Symbolic sym = mCalcEngine.deserializeSymbolic(os);
                 mGraph2D.deserializeSymbolic(sym, os);
-                mMotionLayout.transitionToState(R.id.mode2d);
+                mMotionLayout.transitionToState(mGraphMode = R.id.mode2d);
+                Log.v(TAG, Debug.getLoc() + " State =  mode2d");
+
             } else {
                 mGraph2D.setVisibility(View.GONE);
                 mGraph2D.setAlpha(0);
@@ -160,7 +187,9 @@ public class MainActivity extends AppCompatActivity {
             if (mShow3d = os.readBoolean()) {
                 mGraph3D.setVisibility(View.VISIBLE);
                 mGraph2D.setAlpha(1);
-                mMotionLayout.transitionToState(R.id.mode3d);
+                mMotionLayout.transitionToState(mGraphMode = R.id.mode3d);
+                Log.v(TAG, Debug.getLoc() + " State = mode3d");
+
                 CalcEngine.Symbolic sym = mCalcEngine.deserializeSymbolic(os);
                 mGraph3D.deserializeSymbolic(sym, os);
             } else {
@@ -382,7 +411,7 @@ public class MainActivity extends AppCompatActivity {
         if (s == null) {
             mShow3d = false;
             mShow2d = false;
-            mMotionLayout.transitionToState(R.id.mode_no_graph);
+            mMotionLayout.transitionToState(mGraphMode = R.id.mode_no_graph);
             return;
         }
 
@@ -391,15 +420,15 @@ public class MainActivity extends AppCompatActivity {
         if ((dim & 3) == 1) {
             mShow3d = false;
             mShow2d = true;
-            mMotionLayout.transitionToState(R.id.mode2d);
+            mMotionLayout.transitionToState(mGraphMode = R.id.mode2d);
             mGraph2D.plot(s);
         } else if ((dim & 3) == 3) {
             mShow3d = true;
             mShow2d = false;
-            mMotionLayout.transitionToState(R.id.mode3d);
+            mMotionLayout.transitionToState(mGraphMode = R.id.mode3d);
             mGraph3D.plot(s);
         } else {
-            mMotionLayout.transitionToState(R.id.mode_no_graph);
+            mMotionLayout.transitionToState(mGraphMode = R.id.mode_no_graph);
         }
 
     }
@@ -451,6 +480,5 @@ public class MainActivity extends AppCompatActivity {
         getStack();
         setState(data);
     }
-
 
 }

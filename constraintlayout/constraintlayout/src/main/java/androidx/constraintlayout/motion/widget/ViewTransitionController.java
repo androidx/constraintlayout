@@ -70,7 +70,8 @@ public class ViewTransitionController {
         int currentId = mMotionLayout.getCurrentState();
         if (vt.mViewTransitionMode != ViewTransition.VIEWTRANSITIONMODE_NOSTATE) {
             if (currentId == -1) {
-                Log.w(TAG, "Dont support transition within transition yet");
+                Log.w(TAG, "No support for ViewTransition within transition yet. Currently: "+
+                        mMotionLayout.toString());
                 return;
             }
             ConstraintSet current = mMotionLayout.getConstraintSet(currentId);
