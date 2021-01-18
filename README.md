@@ -23,18 +23,16 @@ repositories {
 }
 ```
 
+Next add a dependency in the `build.gradle` file of your Gradle module.
+
 ```gradle
-implementation("androidx.constraintlayout:constraintlayout:2.1.0-alpha2")
-```
+dependencies {
+    ...
 
-or depend via Maven:
+    implementation("androidx.constraintlayout:constraintlayout:2.1.0-alpha2")
 
-```
-<dependency>
-  <groupId>androidx.constraintlayout</groupId>
-  <artifactId>constraintlayout</artifactId>
-  <version>2.1.0-alpha2</version>
-</dependency>
+    ...
+}
 ```
 
 ### 🎒🥾 Requirements
@@ -125,7 +123,7 @@ See [projects/MotionLayoutExperiments](projects/MotionLayoutExperiments) for exa
 
 🌊 [Flow](https://developer.android.com/reference/androidx/constraintlayout/helper/widget/Flow) is a VirtualLayout that allows positioning of referenced widgets horizontally or vertically similar to a Chain. If the referenced elements do not fit within the given bounds it has the ability to wrap them and create multiple chains.
 
-See [projects/CalculatorExperiment](projects/CalculatorExperiment) for examples.
+See [projects/CalculatorExperiments](projects/CalculatorExperiments) for examples.
 
 ## 📚👩‍🏫 Learning Materials
 
