@@ -1,6 +1,6 @@
 # Validation Tool
 
-This is an IntelliJ Gradle-based Java project. It is meant to run tests against `projects/ConstraintLayoutValidation`.
+This is an IntelliJ Gradle-based Java project. It is meant to run tests against [projects/ConstraintLayoutValidation](projects/ConstraintLayoutValidation).
 
 ## ⚠️ Prerequisite
 
@@ -10,7 +10,7 @@ You should create an emulator with Android Studio AVD Manager that is specifical
 
 Currently these tests require building and running two applications and enabling adb port forwarding.
 
-The first thing to run is the Android app in `projects/ConstraintLayoutValidation` in Android Studio on an `API 25 Nexus 5` emulator.
+The first thing to run is the Android app in [projects/ConstraintLayoutValidation](projects/ConstraintLayoutValidation) in Android Studio on an `API 25 Nexus 5` emulator.
 
 You'll then want to run this Validation Tool by right clicking `android.constraintlayout.validation.Main.java` in IntelliJ and selecting `Run Main.main()` - this should render a Java Swing application on your local machine.
 
