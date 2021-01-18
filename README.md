@@ -18,7 +18,7 @@ Have a question that isn't answered here? Try StackOverflow for [ConstraintLayou
 * 💫 [MotionLayout](https://developer.android.com/reference/androidx/constraintlayout/motion/widget/MotionLayout)
 * 🌊 [Flow](https://developer.android.com/reference/androidx/constraintlayout/helper/widget/Flow)
 
-## 📚👩‍🏫 <LI></LI>earning Materials
+## 📚👩‍🏫 Learning Materials
 
 - [Build a Responsive UI with ConstraintLayout](https://developer.android.com/training/constraint-layout)
 - [Codelab](https://codelabs.developers.google.com/codelabs/constraint-layout/index.html#0)
