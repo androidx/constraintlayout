@@ -4,11 +4,17 @@ on:
   push:
     branches: [main]
     paths:
+      - 'constraintlayout/**.kt'
+      - 'constraintlayout/**.xml'
+      - 'constraintlayout/**.gradle'
       - 'projects/ViewTransitionExperiments/**.kt'
       - 'projects/ViewTransitionExperiments/**.xml'
       - 'projects/ViewTransitionExperiments/**.gradle'
   pull_request:
     paths:
+      - 'constraintlayout/**.kt'
+      - 'constraintlayout/**.xml'
+      - 'constraintlayout/**.gradle'
       - 'projects/ViewTransitionExperiments/**.kt'
       - 'projects/ViewTransitionExperiments/**.xml'
       - 'projects/ViewTransitionExperiments/**.gradle'

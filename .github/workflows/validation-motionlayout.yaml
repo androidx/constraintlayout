@@ -4,14 +4,20 @@ on:
   push:
     branches: [main]
     paths:
-      - 'desktop/MotionLayoutVerification/**.kt'
-      - 'desktop/MotionLayoutVerification/**.xml'
-      - 'desktop/MotionLayoutVerification/**.gradle'
+      - 'constraintlayout/**.kt'
+      - 'constraintlayout/**.xml'
+      - 'constraintlayout/**.gradle'
+      - 'projects/MotionLayoutVerification/**.kt'
+      - 'projects/MotionLayoutVerification/**.xml'
+      - 'projects/MotionLayoutVerification/**.gradle'
   pull_request:
     paths:
-      - 'desktop/MotionLayoutVerification/**.kt'
-      - 'desktop/MotionLayoutVerification/**.xml'
-      - 'desktop/MotionLayoutVerification/**.gradle'
+      - 'constraintlayout/**.kt'
+      - 'constraintlayout/**.xml'
+      - 'constraintlayout/**.gradle'
+      - 'projects/MotionLayoutVerification/**.kt'
+      - 'projects/MotionLayoutVerification/**.xml'
+      - 'projects/MotionLayoutVerification/**.gradle'
 
 defaults:
   run:
