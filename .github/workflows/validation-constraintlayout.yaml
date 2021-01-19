@@ -4,10 +4,14 @@ on:
   push:
     branches: [main]
     paths:
-      - 'projects/ConstraintLayoutValidation/**'
+      - 'projects/ConstraintLayoutValidation/**.kt'
+      - 'projects/ConstraintLayoutValidation/**.xml'
+      - 'projects/ConstraintLayoutValidation/**.gradle'
   pull_request:
     paths:
-      - 'projects/ConstraintLayoutValidation/**'
+      - 'projects/ConstraintLayoutValidation/**.kt'
+      - 'projects/ConstraintLayoutValidation/**.xml'
+      - 'projects/ConstraintLayoutValidation/**.gradle'
 
 defaults:
   run:
