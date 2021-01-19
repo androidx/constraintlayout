@@ -3,7 +3,11 @@ name: validation-constraintlayout
 on:
   push:
     branches: [main]
+    paths:
+      - 'projects/ConstraintLayoutValidation/**'
   pull_request:
+    paths:
+      - 'projects/ConstraintLayoutValidation/**'
 
 defaults:
   run:

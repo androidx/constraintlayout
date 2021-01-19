@@ -3,7 +3,11 @@ name: desktop-cycle-editor
 on:
   push:
     branches: [main]
+    paths:
+      - 'desktop/CycleEditor/**'
   pull_request:
+    paths:
+      - 'desktop/CycleEditor/**'
 
 defaults:
   run:

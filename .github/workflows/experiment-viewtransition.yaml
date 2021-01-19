@@ -3,7 +3,11 @@ name: experiment-viewtransition
 on:
   push:
     branches: [main]
+    paths:
+      - 'projects/ViewTransitionExperiments/**'
   pull_request:
+    paths:
+      - 'projects/ViewTransitionExperiments/**'
 
 defaults:
   run:
