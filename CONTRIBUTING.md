@@ -20,7 +20,7 @@ Following this file from beginning to end can be intimidating, so here's a simpl
 
 #### 📝 Signed CLA
 
-Before we can look at your pull request, you'll need to sign a (Contributor License Agreement (CLA))[https://cla.developers.google.com/].
+Before we can look at your pull request, you'll need to sign a [Contributor License Agreement (CLA)](https://cla.developers.google.com/).
 
 #### Android Studio
 
