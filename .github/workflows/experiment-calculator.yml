@@ -3,7 +3,11 @@ name: experiment-calculator
 on:
   push:
     branches: [main]
+    paths:
+      - 'projects/CalculatorExperiments/**'
   pull_request:
+    paths:
+      - 'projects/CalculatorExperiments/**'
 
 defaults:
   run:

@@ -3,7 +3,11 @@ name: core
 on:
   push:
     branches: [main]
+    paths:
+      - 'constraintlayout/**'
   pull_request:
+    paths:
+      - 'constraintlayout/**'
 
 defaults:
   run:

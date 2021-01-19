@@ -3,7 +3,11 @@ name: desktop-validation-tool
 on:
   push:
     branches: [main]
+    paths:
+      - 'desktop/ValidationTool/**'
   pull_request:
+    paths:
+      - 'desktop/ValidationTool/**'
 
 defaults:
   run:

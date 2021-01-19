@@ -3,7 +3,11 @@ name: validation-motionlayout
 on:
   push:
     branches: [main]
+    paths:
+      - 'projects/MotionLayoutVerification/**'
   pull_request:
+    paths:
+      - 'projects/MotionLayoutVerification/**'
 
 defaults:
   run:
