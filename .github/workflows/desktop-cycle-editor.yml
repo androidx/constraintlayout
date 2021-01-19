@@ -4,10 +4,14 @@ on:
   push:
     branches: [main]
     paths:
-      - 'desktop/CycleEditor/**'
+      - 'desktop/CycleEditor/**.kt'
+      - 'desktop/CycleEditor/**.xml'
+      - 'desktop/CycleEditor/**.gradle'
   pull_request:
     paths:
-      - 'desktop/CycleEditor/**'
+      - 'desktop/CycleEditor/**.kt'
+      - 'desktop/CycleEditor/**.xml'
+      - 'desktop/CycleEditor/**.gradle'
 
 defaults:
   run:

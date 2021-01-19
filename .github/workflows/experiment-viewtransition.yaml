@@ -4,10 +4,14 @@ on:
   push:
     branches: [main]
     paths:
-      - 'projects/ViewTransitionExperiments/**'
+      - 'projects/ViewTransitionExperiments/**.kt'
+      - 'projects/ViewTransitionExperiments/**.xml'
+      - 'projects/ViewTransitionExperiments/**.gradle'
   pull_request:
     paths:
-      - 'projects/ViewTransitionExperiments/**'
+      - 'projects/ViewTransitionExperiments/**.kt'
+      - 'projects/ViewTransitionExperiments/**.xml'
+      - 'projects/ViewTransitionExperiments/**.gradle'
 
 defaults:
   run:
