@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package androidx.constraintlayout.motion.utils;
+package androidx.constraintlayout.core.motion.utils;
 
-import android.util.Log;
 
 import java.util.Arrays;
 
@@ -60,7 +59,7 @@ public class Easing {
                 case LINEAR_NAME:
                     return new CubicEasing(LINEAR);
                 default:
-                    Log.e("ConstraintSet", "transitionEasing syntax error syntax:" +
+                    System.err.println("transitionEasing syntax error syntax:" +
                             "transitionEasing=\"cubic(1.0,0.5,0.0,0.6)\" or " +
                             Arrays.toString(NAMED_EASING));
             }

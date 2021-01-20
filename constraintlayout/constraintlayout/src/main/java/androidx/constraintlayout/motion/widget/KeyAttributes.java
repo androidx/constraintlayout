@@ -20,6 +20,8 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
 
+import androidx.constraintlayout.core.motion.utils.SplineSet;
+import androidx.constraintlayout.motion.utils.ViewSpline;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.R;
 
@@ -187,7 +189,7 @@ public class KeyAttributes extends Key {
     }
 
     @Override
-    public void addValues(HashMap<String, SplineSet> splines) {
+    public void addValues(HashMap<String, ViewSpline> splines) {
         for (String s : splines.keySet()) {
             SplineSet splineSet = splines.get(s);
             if (splineSet == null) {
@@ -197,7 +199,7 @@ public class KeyAttributes extends Key {
                 String ckey = s.substring(Key.CUSTOM.length() + 1);
                 ConstraintAttribute cvalue = mCustomConstraints.get(ckey);
                 if (cvalue != null) {
-                    ((SplineSet.CustomSet) splineSet).setPoint(mFramePosition, cvalue);
+                    ((ViewSpline.CustomSet) splineSet).setPoint(mFramePosition, cvalue);
                 }
                 continue;
             }

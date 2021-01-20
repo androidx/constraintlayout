@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package androidx.constraintlayout.motion.utils;
+package androidx.constraintlayout.core.motion.utils;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;

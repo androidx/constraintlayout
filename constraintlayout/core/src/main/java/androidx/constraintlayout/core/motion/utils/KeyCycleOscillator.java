@@ -13,37 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package androidx.constraintlayout.motion.widget;
+package androidx.constraintlayout.core.motion.utils;
 
-import android.annotation.TargetApi;
-import android.os.Build;
-
-import androidx.constraintlayout.widget.ConstraintAttribute;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.motion.utils.CurveFit;
-import androidx.constraintlayout.motion.utils.Oscillator;
-
-import android.util.Log;
-import android.view.View;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 
 /**
  * Provide the engine for executing cycles.
- *
+ * KeyCycleOscillator
  * @hide
  */
 public abstract class KeyCycleOscillator {
     private static final String TAG = "KeyCycleOscillator";
     private CurveFit mCurveFit;
     private CycleOscillator mCycleOscillator;
-    protected ConstraintAttribute mCustom; // used if it manipulates a custom attribute
+    //
     private String mType;
     private int mWaveShape = 0;
     private String mWaveString = null;
@@ -85,7 +71,7 @@ public abstract class KeyCycleOscillator {
         mType = type;
     }
 
-    public abstract void setProperty(View view, float t);
+
 
     public float get(float t) {
         return (float) mCycleOscillator.getValues(t);
@@ -99,42 +85,8 @@ public abstract class KeyCycleOscillator {
         return mCurveFit;
     }
 
-    static KeyCycleOscillator makeSpline(String str) {
-        if (str.startsWith(Key.CUSTOM)) {
-            return new CustomSet();
-        }
-        switch (str) {
-            case Key.ALPHA:
-                return new AlphaSet();
-            case Key.ELEVATION:
-                return new ElevationSet();
-            case Key.ROTATION:
-                return new RotationSet();
-            case Key.ROTATION_X:
-                return new RotationXset();
-            case Key.ROTATION_Y:
-                return new RotationYset();
-            case Key.TRANSITION_PATH_ROTATE:
-                return new PathRotateSet();
-            case Key.SCALE_X:
-                return new ScaleXset();
-            case Key.SCALE_Y:
-                return new ScaleYset();
-            case Key.WAVE_OFFSET:
-                return new AlphaSet();
-            case Key.WAVE_VARIES_BY:
-                return new AlphaSet();
-            case Key.TRANSLATION_X:
-                return new TranslationXset();
-            case Key.TRANSLATION_Y:
-                return new TranslationYset();
-            case Key.TRANSLATION_Z:
-                return new TranslationZset();
-            case Key.PROGRESS:
-                return new ProgressSet();
-            default:
-                return null;
-        }
+    protected void setCustom(Object custom){
+
     }
 
     /**
@@ -148,13 +100,13 @@ public abstract class KeyCycleOscillator {
      * @param custom        The ConstraintAttribute used to set the value
      */
     public void setPoint(int framePosition, int shape, String waveString, int variesBy, float period, float offset, float phase,
-                         float value, ConstraintAttribute custom) {
+                         float value, Object custom) {
         mWavePoints.add(new WavePoint(framePosition, period, offset, phase, value));
         if (variesBy != -1) {
             mVariesBy = variesBy;
         }
         mWaveShape = shape;
-        mCustom = custom;
+        setCustom(custom);
         mWaveString = waveString;
     }
 
@@ -176,7 +128,6 @@ public abstract class KeyCycleOscillator {
         mWaveString = waveString;
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     public void setup(float pathLength) {
         int count = mWavePoints.size();
         if (count == 0) {
@@ -202,130 +153,6 @@ public abstract class KeyCycleOscillator {
         }
         mCycleOscillator.setup(pathLength);
         mCurveFit = CurveFit.get(CurveFit.SPLINE, time, values);
-    }
-
-    static class ElevationSet extends KeyCycleOscillator {
-        @Override
-        public void setProperty(View view, float t) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                view.setElevation(get(t));
-            }
-        }
-    }
-
-    static class AlphaSet extends KeyCycleOscillator {
-        @Override
-        public void setProperty(View view, float t) {
-            view.setAlpha(get(t));
-        }
-    }
-
-    static class RotationSet extends KeyCycleOscillator {
-        @Override
-        public void setProperty(View view, float t) {
-            view.setRotation(get(t));
-        }
-    }
-
-    static class RotationXset extends KeyCycleOscillator {
-        @Override
-        public void setProperty(View view, float t) {
-            view.setRotationX(get(t));
-        }
-    }
-
-    static class RotationYset extends KeyCycleOscillator {
-        @Override
-        public void setProperty(View view, float t) {
-            view.setRotationY(get(t));
-        }
-    }
-
-    static class PathRotateSet extends KeyCycleOscillator {
-        @Override
-        public void setProperty(View view, float t) {
-        }
-
-        public void setPathRotate(View view, float t, double dx, double dy) {
-            view.setRotation(get(t) + (float) Math.toDegrees(Math.atan2(dy, dx)));
-        }
-    }
-
-    static class ScaleXset extends KeyCycleOscillator {
-        @Override
-        public void setProperty(View view, float t) {
-            view.setScaleX(get(t));
-        }
-    }
-
-    static class ScaleYset extends KeyCycleOscillator {
-        @Override
-        public void setProperty(View view, float t) {
-            view.setScaleY(get(t));
-        }
-    }
-
-    static class TranslationXset extends KeyCycleOscillator {
-        @Override
-        public void setProperty(View view, float t) {
-            view.setTranslationX(get(t));
-        }
-    }
-
-    static class TranslationYset extends KeyCycleOscillator {
-        @Override
-        public void setProperty(View view, float t) {
-            view.setTranslationY(get(t));
-        }
-    }
-
-    static class TranslationZset extends KeyCycleOscillator {
-        @Override
-        public void setProperty(View view, float t) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                view.setTranslationZ(get(t));
-            }
-        }
-    }
-
-    static class CustomSet extends KeyCycleOscillator {
-        float[] value = new float[1];
-
-        @Override
-        public void setProperty(View view, float t) {
-            value[0] = get(t);
-            mCustom.setInterpolatedValue(view, value);
-        }
-    }
-
-    static class ProgressSet extends KeyCycleOscillator {
-        boolean mNoMethod = false;
-
-        @Override
-        public void setProperty(View view, float t) {
-            if (view instanceof MotionLayout) {
-                ((MotionLayout) view).setProgress(get(t));
-            } else {
-                if (mNoMethod) {
-                    return;
-                }
-                Method method = null;
-                try {
-                    method = view.getClass().getMethod("setProgress", Float.TYPE);
-                } catch (NoSuchMethodException e) {
-                    mNoMethod = true;
-                }
-                if (method != null) {
-                    try {
-                        method.invoke(view, get(t));
-                    } catch (IllegalAccessException e) {
-                        Log.e(TAG, "unable to setProgress", e);
-                    } catch (InvocationTargetException e) {
-                        Log.e(TAG, "unable to setProgress", e);
-                    }
-                }
-            }
-        }
     }
 
     private static class IntDoubleSort {
@@ -416,7 +243,7 @@ public abstract class KeyCycleOscillator {
     }
 
     static class CycleOscillator {
-        static final int UNSET = ConstraintLayout.LayoutParams.UNSET;
+        static final int UNSET = -1;
         private static final String TAG = "CycleOscillator";
         private final int mVariesBy;
         Oscillator mOscillator = new Oscillator();
@@ -481,22 +308,22 @@ public abstract class KeyCycleOscillator {
             return mSplineSlopeCache[OFFST] + waveValue * mSplineSlopeCache[VALUE] + waveSlope * mSplineValueCache[VALUE];
         }
 
-        public HashMap<String, ConstraintAttribute> mCustomConstraints = new HashMap<>();
-
-        private ConstraintAttribute get(String attributeName, ConstraintAttribute.AttributeType attributeType) {
-            ConstraintAttribute ret;
-            if (mCustomConstraints.containsKey(attributeName)) {
-                ret = mCustomConstraints.get(attributeName);
-                if (ret.getType() != attributeType) {
-                    throw new IllegalArgumentException(
-                            "ConstraintAttribute is already a " + ret.getType().name());
-                }
-            } else {
-                ret = new ConstraintAttribute(attributeName, attributeType);
-                mCustomConstraints.put(attributeName, ret);
-            }
-            return ret;
-        }
+//        public HashMap<String, ConstraintAttribute> mCustomConstraints = new HashMap<>();
+//
+//        private ConstraintAttribute get(String attributeName, ConstraintAttribute.AttributeType attributeType) {
+//            ConstraintAttribute ret;
+//            if (mCustomConstraints.containsKey(attributeName)) {
+//                ret = mCustomConstraints.get(attributeName);
+//                if (ret.getType() != attributeType) {
+//                    throw new IllegalArgumentException(
+//                            "ConstraintAttribute is already a " + ret.getType().name());
+//                }
+//            } else {
+//                ret = new ConstraintAttribute(attributeName, attributeType);
+//                mCustomConstraints.put(attributeName, ret);
+//            }
+//            return ret;
+//        }
 
         /**
          * @param index

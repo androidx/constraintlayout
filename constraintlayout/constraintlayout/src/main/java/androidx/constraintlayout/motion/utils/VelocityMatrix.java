@@ -16,8 +16,7 @@
 
 package androidx.constraintlayout.motion.utils;
 
-import androidx.constraintlayout.motion.widget.KeyCycleOscillator;
-import androidx.constraintlayout.motion.widget.SplineSet;
+import androidx.constraintlayout.core.motion.utils.SplineSet;
 
 /**
  * This is used to calculate the related velocity matrix for a post layout matrix
@@ -58,13 +57,13 @@ public class VelocityMatrix {
         }
     }
 
-    public void setRotationVelocity(KeyCycleOscillator osc_r, float position) {
+    public void setRotationVelocity(ViewOscillator osc_r, float position) {
         if (osc_r != null) {
             mDRotate = osc_r.getSlope(position);
         }
     }
 
-    public void setTranslationVelocity(KeyCycleOscillator osc_x, KeyCycleOscillator osc_y, float position) {
+    public void setTranslationVelocity(ViewOscillator osc_x, ViewOscillator osc_y, float position) {
 
         if (osc_x != null) {
             mDTranslateX = osc_x.getSlope(position);
@@ -75,7 +74,7 @@ public class VelocityMatrix {
         }
     }
 
-    public void setScaleVelocity(KeyCycleOscillator osc_sx, KeyCycleOscillator osc_sy, float position) {
+    public void setScaleVelocity(ViewOscillator osc_sx, ViewOscillator osc_sy, float position) {
         if (osc_sx != null) {
             mDScaleX = osc_sx.getSlope(position);
         }

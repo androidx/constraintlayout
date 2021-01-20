@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package androidx.constraintlayout.motion.widget;
+package androidx.constraintlayout.core.motion.utils;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -27,7 +27,7 @@ public class KeyCache {
 
     HashMap<Object, HashMap<String, float[]>> map = new HashMap<>();
 
-    void setFloatValue(Object view, String type, int element, float value) {
+    public void setFloatValue(Object view, String type, int element, float value) {
         if (!map.containsKey(view)) {
             HashMap<String, float[]> array = new HashMap<>();
             float[] vArray = new float[element + 1];
@@ -59,7 +59,7 @@ public class KeyCache {
         }
     }
 
-    float getFloatValue(Object view, String type, int element) {
+    public float getFloatValue(Object view, String type, int element) {
         if (!map.containsKey(view)) {
             return Float.NaN;
         } else {

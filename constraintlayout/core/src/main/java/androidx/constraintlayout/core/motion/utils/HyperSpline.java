@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package androidx.constraintlayout.motion.utils;
+package androidx.constraintlayout.core.motion.utils;
 
 /**
  * Provides spline interpolation code.

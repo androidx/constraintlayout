@@ -14,65 +14,92 @@
  * limitations under the License.
  */
 
-package androidx.constraintlayout.motion.utils;
-
-import java.util.Arrays;
+package androidx.constraintlayout.core.motion.utils;
 
 /**
- * This performs a spline interpolation in multiple dimensions
+ * This performs a simple linear interpolation in multiple dimensions
  *
  * @hide
  */
-public class MonotonicCurveFit extends CurveFit {
-    private static final String TAG = "MonotonicCurveFit";
+public class LinearCurveFit extends CurveFit {
+    private static final String TAG = "LinearCurveFit";
     private double[] mT;
     private double[][] mY;
-    private double[][] mTangent;
+    private double mTotalLength = Double.NaN;
     private boolean mExtrapolate = true;
     double[] mSlopeTemp;
 
-    public MonotonicCurveFit(double[] time, double[][] y) {
+    public LinearCurveFit(double[] time, double[][] y) {
         final int N = time.length;
         final int dim = y[0].length;
         mSlopeTemp = new double[dim];
-        double[][] slope = new double[N - 1][dim]; // could optimize this out
-        double[][] tangent = new double[N][dim];
-        for (int j = 0; j < dim; j++) {
-            for (int i = 0; i < N - 1; i++) {
-                double dt = time[i + 1] - time[i];
-                slope[i][j] = (y[i + 1][j] - y[i][j]) / dt;
-                if (i == 0) {
-                    tangent[i][j] = slope[i][j];
-                } else {
-                    tangent[i][j] = (slope[i - 1][j] + slope[i][j]) * 0.5f;
-                }
-            }
-            tangent[N - 1][j] = slope[N - 2][j];
-        }
-
-        for (int i = 0; i < N - 1; i++) {
-            for (int j = 0; j < dim; j++) {
-                if (slope[i][j] == 0.) {
-                    tangent[i][j] = 0.;
-                    tangent[i + 1][j] = 0.;
-                } else {
-                    double a = tangent[i][j] / slope[i][j];
-                    double b = tangent[i + 1][j] / slope[i][j];
-                    double h = Math.hypot(a, b);
-                    if (h > 9.0) {
-                        double t = 3. / h;
-                        tangent[i][j] = t * a * slope[i][j];
-                        tangent[i + 1][j] = t * b * slope[i][j];
-                    }
-                }
-            }
-        }
         mT = time;
         mY = y;
-        mTangent = tangent;
+        if (dim > 2) {
+            double sum = 0;
+            double lastx = 0, lasty = 0;
+            for (int i = 0; i < time.length; i++) {
+                double px = y[i][0];
+                double py = y[i][0];
+                if (i > 0) {
+                    sum += Math.hypot(px - lastx, py - lasty);
+                }
+                lastx = px;
+                lasty = py;
+            }
+            mTotalLength = 0;
+        }
     }
 
-    @Override
+    /**
+     * Calculate the length traveled by the first two parameters assuming they are x and y.
+     * (Added for future work)
+     * @param t the point to calculate the length to
+     * @return
+     */
+    private double getLength2D(double t) {
+        if (Double.isNaN(mTotalLength)) {
+            return 0;
+        }
+        final int n = mT.length;
+        if (t <= mT[0]) {
+            return 0;
+        }
+        if (t >= mT[n - 1]) {
+            return mTotalLength;
+        }
+        double sum = 0;
+        double last_x = 0, last_y = 0;
+
+        for (int i = 0; i < n - 1; i++) {
+            double px = mY[i][0];
+            double py = mY[i][1];
+            if (i > 0) {
+                sum += Math.hypot(px - last_x, py - last_y);
+            }
+            last_x = px;
+            last_y = py;
+            if (t == mT[i]) {
+                return sum;
+            }
+            if (t < mT[i + 1]) {
+                double h = mT[i + 1] - mT[i];
+                double x = (t - mT[i]) / h;
+                double x1 = mY[i][0];
+                double x2 = mY[i + 1][0];
+                double y1 = mY[i][1];
+                double y2 = mY[i + 1][1];
+
+                py -= y1 * (1 - x) + y2 * x;
+                px -= x1 * (1 - x) + x2 * x;
+                sum += Math.hypot(py, px);
+
+                return sum;
+            }
+        }
+        return 0;
+    }
+
     public void getPos(double t, double[] v) {
         final int n = mT.length;
         final int dim = mY[0].length;
@@ -118,16 +145,14 @@ public class MonotonicCurveFit extends CurveFit {
                 for (int j = 0; j < dim; j++) {
                     double y1 = mY[i][j];
                     double y2 = mY[i + 1][j];
-                    double t1 = mTangent[i][j];
-                    double t2 = mTangent[i + 1][j];
-                    v[j] = interpolate(h, x, y1, y2, t1, t2);
+
+                    v[j] = y1 * (1 - x) + y2 * x;
                 }
                 return;
             }
         }
     }
 
-    @Override
     public void getPos(double t, float[] v) {
         final int n = mT.length;
         final int dim = mY[0].length;
@@ -173,16 +198,14 @@ public class MonotonicCurveFit extends CurveFit {
                 for (int j = 0; j < dim; j++) {
                     double y1 = mY[i][j];
                     double y2 = mY[i + 1][j];
-                    double t1 = mTangent[i][j];
-                    double t2 = mTangent[i + 1][j];
-                    v[j] = (float) interpolate(h, x, y1, y2, t1, t2);
+
+                    v[j] = (float) (y1 * (1 - x) + y2 * x);
                 }
                 return;
             }
         }
     }
 
-    @Override
     public double getPos(double t, int j) {
         final int n = mT.length;
         if (mExtrapolate) {
@@ -210,16 +233,13 @@ public class MonotonicCurveFit extends CurveFit {
                 double x = (t - mT[i]) / h;
                 double y1 = mY[i][j];
                 double y2 = mY[i + 1][j];
-                double t1 = mTangent[i][j];
-                double t2 = mTangent[i + 1][j];
-                return interpolate(h, x, y1, y2, t1, t2);
+                return (y1 * (1 - x) + y2 * x);
 
             }
         }
         return 0; // should never reach here
     }
 
-    @Override
     public void getSlope(double t, double[] v) {
         final int n = mT.length;
         int dim = mY[0].length;
@@ -236,9 +256,8 @@ public class MonotonicCurveFit extends CurveFit {
                 for (int j = 0; j < dim; j++) {
                     double y1 = mY[i][j];
                     double y2 = mY[i + 1][j];
-                    double t1 = mTangent[i][j];
-                    double t2 = mTangent[i + 1][j];
-                    v[j] = diff(h, x, y1, y2, t1, t2) / h;
+
+                    v[j] = (y2 - y1) / h;
                 }
                 break;
             }
@@ -246,7 +265,6 @@ public class MonotonicCurveFit extends CurveFit {
         return;
     }
 
-    @Override
     public double getSlope(double t, int j) {
         final int n = mT.length;
 
@@ -261,9 +279,7 @@ public class MonotonicCurveFit extends CurveFit {
                 double x = (t - mT[i]) / h;
                 double y1 = mY[i][j];
                 double y2 = mY[i + 1][j];
-                double t1 = mTangent[i][j];
-                double t2 = mTangent[i + 1][j];
-                return diff(h, x, y1, y2, t1, t2) / h;
+                return (y2 - y1) / h;
             }
         }
         return 0; // should never reach here
@@ -272,76 +288,5 @@ public class MonotonicCurveFit extends CurveFit {
     @Override
     public double[] getTimePoints() {
         return mT;
-    }
-
-    /**
-     * Cubic Hermite spline
-     *
-     * @return
-     */
-    private static double interpolate(double h, double x, double y1, double y2, double t1, double t2) {
-        double x2 = x * x;
-        double x3 = x2 * x;
-        return -2 * x3 * y2 + 3 * x2 * y2 + 2 * x3 * y1 - 3 * x2 * y1 + y1
-                + h * t2 * x3 + h * t1 * x3 - h * t2 * x2 - 2 * h * t1 * x2
-                + h * t1 * x;
-    }
-
-    /**
-     * Cubic Hermite spline slope differentiated
-     *
-     * @return
-     */
-    private static double diff(double h, double x, double y1, double y2, double t1, double t2) {
-        double x2 = x * x;
-        return -6 * x2 * y2 + 6 * x * y2 + 6 * x2 * y1 - 6 * x * y1 + 3 * h * t2 * x2 +
-                3 * h * t1 * x2 - 2 * h * t2 * x - 4 * h * t1 * x + h * t1;
-    }
-
-    /**
-     * This builds a monotonic spline to be used as a wave function
-     *
-     * @param configString
-     * @return
-     */
-    public static MonotonicCurveFit buildWave(String configString) {
-        // done this way for efficiency
-        String str = configString;
-        double[] values = new double[str.length() / 2];
-        int start = configString.indexOf('(') + 1;
-        int off1 = configString.indexOf(',', start);
-        int count = 0;
-        while (off1 != -1) {
-            String tmp = configString.substring(start, off1).trim();
-            values[count++] = Double.parseDouble(tmp);
-            off1 = configString.indexOf(',', start = off1 + 1);
-        }
-        off1 = configString.indexOf(')', start);
-        String tmp = configString.substring(start, off1).trim();
-        values[count++] = Double.parseDouble(tmp);
-
-        return buildWave(Arrays.copyOf(values, count));
-    }
-
-    private static MonotonicCurveFit buildWave(double[] values) {
-        int length = values.length * 3 - 2;
-        int len = values.length - 1;
-        double gap = 1.0 / len;
-        double[][] points = new double[length][1];
-        double[] time = new double[length];
-        for (int i = 0; i < values.length; i++) {
-            double v = values[i];
-            points[i + len][0] = v;
-            time[i + len] = i * gap;
-            if (i > 0) {
-                points[i + len * 2][0] = v + 1;
-                time[i + len * 2] = i * gap + 1;
-
-                points[i - 1][0] = v - 1 - gap;
-                time[i - 1] = i * gap + -1 - gap;
-            }
-        }
-
-        return new MonotonicCurveFit(time, points);
     }
 }

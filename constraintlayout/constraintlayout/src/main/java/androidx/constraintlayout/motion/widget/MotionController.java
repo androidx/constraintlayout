@@ -18,11 +18,17 @@ package androidx.constraintlayout.motion.widget;
 
 import android.content.Context;
 import android.graphics.RectF;
+
+import androidx.constraintlayout.core.motion.utils.KeyCache;
+import androidx.constraintlayout.core.motion.utils.SplineSet;
+import androidx.constraintlayout.motion.utils.ViewTimeCycle;
+import androidx.constraintlayout.motion.utils.ViewOscillator;
+import androidx.constraintlayout.motion.utils.ViewSpline;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.constraintlayout.motion.utils.CurveFit;
-import androidx.constraintlayout.motion.utils.Easing;
+import androidx.constraintlayout.core.motion.utils.CurveFit;
+import androidx.constraintlayout.core.motion.utils.Easing;
 import androidx.constraintlayout.motion.utils.VelocityMatrix;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import android.util.Log;
@@ -32,7 +38,6 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AnimationUtils;
-import android.view.animation.AnticipateInterpolator;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
@@ -101,9 +106,9 @@ public class MotionController {
     private float[] mVelocity = new float[1]; // used as a temp buffer to return values
 
     private ArrayList<Key> mKeyList = new ArrayList<>(); // List of key frame items
-    private HashMap<String, TimeCycleSplineSet> mTimeCycleAttributesMap; // splines to calculate for use TimeCycles
-    private HashMap<String, SplineSet> mAttributesMap; // splines to calculate values of attributes
-    private HashMap<String, KeyCycleOscillator> mCycleMap; // splines to calculate values of attributes
+    private HashMap<String, ViewTimeCycle> mTimeCycleAttributesMap; // splines to calculate for use TimeCycles
+    private HashMap<String, ViewSpline> mAttributesMap; // splines to calculate values of attributes
+    private HashMap<String, ViewOscillator> mCycleMap; // splines to calculate values of attributes
     private KeyTrigger[] mKeyTriggers; // splines to calculate values of attributes
     private int mPathMotionArc = UNSET;
     private int mTransformPivotTarget = UNSET; // if set, pivot point is maintained as the other object
@@ -259,8 +264,8 @@ public class MotionController {
         float mils = 1.0f / (pointCount - 1);
         SplineSet trans_x = (mAttributesMap == null) ? null : mAttributesMap.get(Key.TRANSLATION_X);
         SplineSet trans_y = (mAttributesMap == null) ? null : mAttributesMap.get(Key.TRANSLATION_Y);
-        KeyCycleOscillator osc_x = (mCycleMap == null) ? null : mCycleMap.get(Key.TRANSLATION_X);
-        KeyCycleOscillator osc_y = (mCycleMap == null) ? null : mCycleMap.get(Key.TRANSLATION_Y);
+        ViewOscillator osc_x = (mCycleMap == null) ? null : mCycleMap.get(Key.TRANSLATION_X);
+        ViewOscillator osc_y = (mCycleMap == null) ? null : mCycleMap.get(Key.TRANSLATION_Y);
 
         for (int i = 0; i < pointCount; i++) {
             float position = (i) * mils;
@@ -346,8 +351,8 @@ public class MotionController {
         float mils = 1.0f / (pointCount - 1);
         SplineSet trans_x = (mAttributesMap == null) ? null : mAttributesMap.get(Key.TRANSLATION_X);
         SplineSet trans_y = (mAttributesMap == null) ? null : mAttributesMap.get(Key.TRANSLATION_Y);
-        KeyCycleOscillator osc_x = (mCycleMap == null) ? null : mCycleMap.get(Key.TRANSLATION_X);
-        KeyCycleOscillator osc_y = (mCycleMap == null) ? null : mCycleMap.get(Key.TRANSLATION_Y);
+        ViewOscillator osc_x = (mCycleMap == null) ? null : mCycleMap.get(Key.TRANSLATION_X);
+        ViewOscillator osc_y = (mCycleMap == null) ? null : mCycleMap.get(Key.TRANSLATION_Y);
 
         for (int i = 0; i < pointCount; i++) {
             float position = (i) * mils;
@@ -692,7 +697,7 @@ public class MotionController {
         if (!splineAttributes.isEmpty()) {
             mAttributesMap = new HashMap<>();
             for (String attribute : splineAttributes) {
-                SplineSet splineSets;
+                ViewSpline splineSets;
                 if (attribute.startsWith("CUSTOM,")) {
                     SparseArray<ConstraintAttribute> attrList = new SparseArray<>();
                     String customAttributeName = attribute.split(",")[1];
@@ -705,9 +710,9 @@ public class MotionController {
                             attrList.append(key.mFramePosition, customAttribute);
                         }
                     }
-                    splineSets = SplineSet.makeCustomSpline(attribute, attrList);
+                    splineSets = ViewSpline.makeCustomSpline(attribute, attrList);
                 } else {
-                    splineSets = SplineSet.makeSpline(attribute);
+                    splineSets = ViewSpline.makeSpline(attribute);
                 }
                 if (splineSets == null) {
                     continue;
@@ -750,7 +755,7 @@ public class MotionController {
                     continue;
                 }
 
-                TimeCycleSplineSet splineSets = null;
+                ViewTimeCycle splineSets = null;
                 if (attribute.startsWith("CUSTOM,")) {
                     SparseArray<ConstraintAttribute> attrList = new SparseArray<>();
                     String customAttributeName = attribute.split(",")[1];
@@ -763,9 +768,9 @@ public class MotionController {
                             attrList.append(key.mFramePosition, customAttribute);
                         }
                     }
-                    splineSets = TimeCycleSplineSet.makeCustomSpline(attribute, attrList);
+                    splineSets = ViewTimeCycle.makeCustomSpline(attribute, attrList);
                 } else {
-                    splineSets = TimeCycleSplineSet.makeSpline(attribute, currentTime);
+                    splineSets = ViewTimeCycle.makeSpline(attribute, currentTime);
 
                 }
                 if (splineSets == null) {
@@ -920,7 +925,7 @@ public class MotionController {
         mCycleMap = new HashMap<>();
         if (mKeyList != null) {
             for (String attribute : cycleAttributes) {
-                KeyCycleOscillator cycle = KeyCycleOscillator.makeSpline(attribute);
+                ViewOscillator cycle = ViewOscillator.makeSpline(attribute);
                 if (cycle == null) {
                     continue;
                 }
@@ -938,7 +943,7 @@ public class MotionController {
                     ((KeyCycle) key).addCycleValues(mCycleMap);
                 }
             }
-            for (KeyCycleOscillator cycle : mCycleMap.values()) {
+            for (ViewOscillator cycle : mCycleMap.values()) {
                 cycle.setup(distance);
             }
         }
@@ -1154,17 +1159,17 @@ public class MotionController {
             }
             position = section * steps + jump;
         }
-        TimeCycleSplineSet.PathRotate timePathRotate = null;
+        ViewTimeCycle.PathRotate timePathRotate = null;
         if (mAttributesMap != null) {
-            for (SplineSet aSpline : mAttributesMap.values()) {
+            for (ViewSpline aSpline : mAttributesMap.values()) {
                 aSpline.setProperty(child, position);
             }
         }
 
         if (mTimeCycleAttributesMap != null) {
-            for (TimeCycleSplineSet aSpline : mTimeCycleAttributesMap.values()) {
-                if (aSpline instanceof TimeCycleSplineSet.PathRotate) {
-                    timePathRotate = (TimeCycleSplineSet.PathRotate) aSpline;
+            for (ViewTimeCycle aSpline : mTimeCycleAttributesMap.values()) {
+                if (aSpline instanceof ViewTimeCycle.PathRotate) {
+                    timePathRotate = (ViewTimeCycle.PathRotate) aSpline;
                     continue;
                 }
                 timeAnimation |= aSpline.setProperty(child, position, time, keyCache);
@@ -1203,8 +1208,8 @@ public class MotionController {
 
             if (mAttributesMap != null) {
                 for (SplineSet aSpline : mAttributesMap.values()) {
-                    if (aSpline instanceof SplineSet.PathRotate && mInterpolateVelocity.length > 1 )
-                        ((SplineSet.PathRotate) aSpline).setPathRotate(child, position,
+                    if (aSpline instanceof ViewSpline.PathRotate && mInterpolateVelocity.length > 1 )
+                        ((ViewSpline.PathRotate) aSpline).setPathRotate(child, position,
                                 mInterpolateVelocity[0], mInterpolateVelocity[1]);
                 }
 
@@ -1267,9 +1272,9 @@ public class MotionController {
         }
 
         if (mCycleMap != null) {
-            for (KeyCycleOscillator osc : mCycleMap.values()) {
-                if (osc instanceof KeyCycleOscillator.PathRotateSet) {
-                    ((KeyCycleOscillator.PathRotateSet) osc).setPathRotate(child, position,
+            for (ViewOscillator osc : mCycleMap.values()) {
+                if (osc instanceof ViewOscillator.PathRotateSet) {
+                    ((ViewOscillator.PathRotateSet) osc).setPathRotate(child, position,
                             mInterpolateVelocity[0], mInterpolateVelocity[1]);
                 } else {
                     osc.setProperty(child, position);
@@ -1347,11 +1352,11 @@ public class MotionController {
         SplineSet scale_x = (mAttributesMap == null) ? null : mAttributesMap.get(Key.SCALE_X);
         SplineSet scale_y = (mAttributesMap == null) ? null : mAttributesMap.get(Key.SCALE_Y);
 
-        KeyCycleOscillator osc_x = (mCycleMap == null) ? null : mCycleMap.get(Key.TRANSLATION_X);
-        KeyCycleOscillator osc_y = (mCycleMap == null) ? null : mCycleMap.get(Key.TRANSLATION_Y);
-        KeyCycleOscillator osc_r = (mCycleMap == null) ? null : mCycleMap.get(Key.ROTATION);
-        KeyCycleOscillator osc_sx = (mCycleMap == null) ? null : mCycleMap.get(Key.SCALE_X);
-        KeyCycleOscillator osc_sy = (mCycleMap == null) ? null : mCycleMap.get(Key.SCALE_Y);
+        ViewOscillator osc_x = (mCycleMap == null) ? null : mCycleMap.get(Key.TRANSLATION_X);
+        ViewOscillator osc_y = (mCycleMap == null) ? null : mCycleMap.get(Key.TRANSLATION_Y);
+        ViewOscillator osc_r = (mCycleMap == null) ? null : mCycleMap.get(Key.ROTATION);
+        ViewOscillator osc_sx = (mCycleMap == null) ? null : mCycleMap.get(Key.SCALE_X);
+        ViewOscillator osc_sy = (mCycleMap == null) ? null : mCycleMap.get(Key.SCALE_Y);
 
         VelocityMatrix vmat = new VelocityMatrix();
         vmat.clear();

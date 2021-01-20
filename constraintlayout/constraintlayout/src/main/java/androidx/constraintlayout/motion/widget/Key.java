@@ -18,8 +18,8 @@ package androidx.constraintlayout.motion.widget;
 
 import android.content.Context;
 
+import androidx.constraintlayout.motion.utils.ViewSpline;
 import androidx.constraintlayout.widget.ConstraintAttribute;
-import androidx.constraintlayout.motion.utils.CurveFit;
 
 import android.util.AttributeSet;
 
@@ -81,7 +81,7 @@ public abstract class Key {
      * @param splines splines to write values to
      * @hide
      */
-    public abstract void addValues(HashMap<String, SplineSet> splines);
+    public abstract void addValues(HashMap<String, ViewSpline> splines);
 
     /**
      * Set the value associated with this tag

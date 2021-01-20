@@ -14,10 +14,7 @@
  * limitations under the License.
  */
 
-package androidx.constraintlayout.motion.utils;
-
-import java.text.DecimalFormat;
-import java.util.Arrays;
+package androidx.constraintlayout.core.motion.utils;
 
 /**
  * This class translates the a series of floating point values into a continuous

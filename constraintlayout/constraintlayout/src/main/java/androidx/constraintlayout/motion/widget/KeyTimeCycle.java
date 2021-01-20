@@ -19,7 +19,9 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
 
-import androidx.constraintlayout.motion.utils.Oscillator;
+import androidx.constraintlayout.core.motion.utils.Oscillator;
+import androidx.constraintlayout.motion.utils.ViewTimeCycle;
+import androidx.constraintlayout.motion.utils.ViewSpline;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.R;
 
@@ -179,14 +181,14 @@ public class KeyTimeCycle extends Key {
     }
 
     @Override
-    public void addValues(HashMap<String, SplineSet> splines) {
+    public void addValues(HashMap<String, ViewSpline> splines) {
         // This should not get called
         throw new IllegalArgumentException(" KeyTimeCycles do not support SplineSet");
     }
 
-    public void addTimeValues(HashMap<String, TimeCycleSplineSet> splines) {
+    public void addTimeValues(HashMap<String, ViewTimeCycle> splines) {
         for (String s : splines.keySet()) {
-            TimeCycleSplineSet splineSet = splines.get(s);
+            ViewTimeCycle splineSet = splines.get(s);
             if (splineSet == null) {
                 continue;
             }
@@ -194,7 +196,7 @@ public class KeyTimeCycle extends Key {
                 String ckey = s.substring(Key.CUSTOM.length() + 1);
                 ConstraintAttribute cvalue = mCustomConstraints.get(ckey);
                 if (cvalue != null) {
-                    ((TimeCycleSplineSet.CustomSet) splineSet).setPoint(mFramePosition, cvalue, mWavePeriod, mWaveShape, mWaveOffset);
+                    ((ViewTimeCycle.CustomSet) splineSet).setPoint(mFramePosition, cvalue, mWavePeriod, mWaveShape, mWaveOffset);
                 }
                 continue;
             }

@@ -17,14 +17,15 @@
 package androidx.constraintlayout.motion.widget;
 
 import android.os.Build;
+
+import androidx.constraintlayout.motion.utils.ViewSpline;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.constraintlayout.motion.utils.Easing;
+import androidx.constraintlayout.core.motion.utils.Easing;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import android.util.Log;
 import android.view.View;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -253,66 +254,66 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
         }
     }
 
-    public void addValues(HashMap<String, SplineSet> splines, int mFramePosition) {
+    public void addValues(HashMap<String, ViewSpline> splines, int mFramePosition) {
         for (String s : splines.keySet()) {
-            SplineSet splineSet = splines.get(s);
+            ViewSpline ViewSpline = splines.get(s);
             if (DEBUG) {
                 Log.v(TAG, "setPoint" + mFramePosition + "  spline set = " + s);
             }
             switch (s) {
                 case Key.ALPHA:
-                    splineSet.setPoint(mFramePosition, Float.isNaN(alpha) ? 1 : alpha);
+                    ViewSpline.setPoint(mFramePosition, Float.isNaN(alpha) ? 1 : alpha);
                     break;
                 case Key.ELEVATION:
-                    splineSet.setPoint(mFramePosition, Float.isNaN(elevation) ? 0 : elevation);
+                    ViewSpline.setPoint(mFramePosition, Float.isNaN(elevation) ? 0 : elevation);
                     break;
                 case Key.ROTATION:
-                    splineSet.setPoint(mFramePosition, Float.isNaN(rotation) ? 0 : rotation);
+                    ViewSpline.setPoint(mFramePosition, Float.isNaN(rotation) ? 0 : rotation);
                     break;
                 case Key.ROTATION_X:
-                    splineSet.setPoint(mFramePosition, Float.isNaN(rotationX) ? 0 : rotationX);
+                    ViewSpline.setPoint(mFramePosition, Float.isNaN(rotationX) ? 0 : rotationX);
                     break;
                 case Key.ROTATION_Y:
-                    splineSet.setPoint(mFramePosition, Float.isNaN(rotationY) ? 0 : rotationY);
+                    ViewSpline.setPoint(mFramePosition, Float.isNaN(rotationY) ? 0 : rotationY);
                     break;
                 case Key.PIVOT_X:
-                    splineSet.setPoint(mFramePosition, Float.isNaN(mPivotX) ? 0 : mPivotX);
+                    ViewSpline.setPoint(mFramePosition, Float.isNaN(mPivotX) ? 0 : mPivotX);
                     break;
                 case Key.PIVOT_Y:
-                    splineSet.setPoint(mFramePosition, Float.isNaN(mPivotY) ? 0 : mPivotY);
+                    ViewSpline.setPoint(mFramePosition, Float.isNaN(mPivotY) ? 0 : mPivotY);
                     break;
                 case Key.TRANSITION_PATH_ROTATE:
-                    splineSet.setPoint(mFramePosition, Float.isNaN(mPathRotate) ? 0 : mPathRotate);
+                    ViewSpline.setPoint(mFramePosition, Float.isNaN(mPathRotate) ? 0 : mPathRotate);
                     break;
                 case Key.PROGRESS:
-                    splineSet.setPoint(mFramePosition, Float.isNaN(mProgress) ? 0 : mProgress);
+                    ViewSpline.setPoint(mFramePosition, Float.isNaN(mProgress) ? 0 : mProgress);
                     break;
                 case Key.SCALE_X:
-                    splineSet.setPoint(mFramePosition, Float.isNaN(scaleX) ? 1 : scaleX);
+                    ViewSpline.setPoint(mFramePosition, Float.isNaN(scaleX) ? 1 : scaleX);
                     break;
                 case Key.SCALE_Y:
-                    splineSet.setPoint(mFramePosition, Float.isNaN(scaleY) ? 1 : scaleY);
+                    ViewSpline.setPoint(mFramePosition, Float.isNaN(scaleY) ? 1 : scaleY);
                     break;
                 case Key.TRANSLATION_X:
-                    splineSet.setPoint(mFramePosition, Float.isNaN(translationX) ? 0 : translationX);
+                    ViewSpline.setPoint(mFramePosition, Float.isNaN(translationX) ? 0 : translationX);
                     break;
                 case Key.TRANSLATION_Y:
-                    splineSet.setPoint(mFramePosition, Float.isNaN(translationY) ? 0 : translationY);
+                    ViewSpline.setPoint(mFramePosition, Float.isNaN(translationY) ? 0 : translationY);
                     break;
                 case Key.TRANSLATION_Z:
-                    splineSet.setPoint(mFramePosition, Float.isNaN(translationZ) ? 0 : translationZ);
+                    ViewSpline.setPoint(mFramePosition, Float.isNaN(translationZ) ? 0 : translationZ);
                     break;
                 default:
                     if (s.startsWith("CUSTOM")) {
                         String customName = s.split(",")[1];
                         if (attributes.containsKey(customName)) {
                             ConstraintAttribute custom = attributes.get(customName);
-                            if (splineSet instanceof SplineSet.CustomSet) {
-                                ((SplineSet.CustomSet) splineSet).setPoint(mFramePosition, custom);
+                            if (ViewSpline instanceof ViewSpline.CustomSet) {
+                                ((ViewSpline.CustomSet) ViewSpline).setPoint(mFramePosition, custom);
                             } else {
-                                Log.e(TAG, s + " splineSet not a CustomSet frame = " +
+                                Log.e(TAG, s + " ViewSpline not a CustomSet frame = " +
                                         mFramePosition + ", value" + custom.getValueToInterpolate() +
-                                        splineSet);
+                                        ViewSpline);
 
                             }
 
