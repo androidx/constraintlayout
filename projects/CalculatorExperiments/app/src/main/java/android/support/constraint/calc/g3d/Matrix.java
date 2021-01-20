@@ -19,6 +19,9 @@ package android.support.constraint.calc.g3d;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
+/**
+ * Matrix math class.  (For the purposes of this application it is more efficient as has no JNI)
+ */
 public class Matrix {
 
     public double []m;

@@ -5,251 +5,280 @@
 
 <androidx.constraintlayout.utils.widget.MotionButton
         android:onClick="key"
-        android:id="@+id/button12"
+        android:id="@+id/adv_inv"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/basic_button_background"
+        android:background= "@color/adv_background"
         android:stateListAnimator="@null"
-        android:text="."
-        android:textColor="@color/cal_def_text"
+        android:text="inv"
+        android:textColor="@color/cal_adv_text"
         app:layout_constraintBottom_toBottomOf="parent"
         android:textSize="10pt"
-
-app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintTag="button3"
+        app:layout_constraintTag="invert"
         app:roundPercent="@dimen/calc_round" />
 
     <androidx.constraintlayout.utils.widget.MotionButton
         android:onClick="key"
-        android:id="@+id/button1"
+        android:id="@+id/adv_dup"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/basic_button_background"
+        android:background= "@color/adv_background"
         android:stateListAnimator="@null"
-        android:text="1"
-        android:textColor="@color/cal_def_text"
+        android:text="dup"
+        android:textColor="@color/cal_adv_text"
         android:textSize="10pt"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTag="button3"
+        app:layout_constraintTag="button4"
         app:roundPercent="@dimen/calc_round" />
 
     <androidx.constraintlayout.utils.widget.MotionButton
         android:onClick="key"
-        android:id="@+id/button2"
+        android:id="@+id/adv_sin"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/basic_button_background"
+        android:background= "@color/adv_background"
         android:stateListAnimator="@null"
-        android:text="2"
+        android:text="sin"
+        android:tag="sin-1"
         android:textSize="10pt"
-        android:textColor="@color/cal_def_text"
-        app:layout_constraintTag="button3"
+        android:textColor="@color/cal_adv_text"
+        app:layout_constraintTag="button4"
 
         app:roundPercent="@dimen/calc_round" />
 
     <androidx.constraintlayout.utils.widget.MotionButton
         android:onClick="key"
-        android:id="@+id/button3"
+        android:id="@+id/adv_cos"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/basic_button_background"
+        android:background= "@color/adv_background"
         android:stateListAnimator="@null"
-        android:text="3"
-        android:textColor="@color/cal_def_text"
+        android:text="cos"
+        android:tag="cos-1"
+        android:textColor="@color/cal_adv_text"
         android:textSize="10pt"
-        app:layout_constraintTag="button3"
+        app:layout_constraintTag="button4"
         app:roundPercent="@dimen/calc_round" />
 
     <androidx.constraintlayout.utils.widget.MotionButton
         android:onClick="key"
-        android:id="@+id/button4"
+        android:id="@+id/adv_tan"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/basic_button_background"
+        android:background= "@color/adv_background"
         android:stateListAnimator="@null"
-        android:text="4"
-        android:textColor="@color/cal_def_text"
-        android:textSize="10pt"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTag="button3"
-        app:roundPercent="@dimen/calc_round" />
-
-    <androidx.constraintlayout.utils.widget.MotionButton
-        android:onClick="key"
-        android:id="@+id/button5"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/basic_button_background"
-        android:stateListAnimator="@null"
-        android:text="5"
-        android:textColor="@color/cal_def_text"
-        android:textSize="10pt"
-        app:layout_constraintTag="button3"
-        app:roundPercent="@dimen/calc_round" />
-
-    <androidx.constraintlayout.utils.widget.MotionButton
-        android:onClick="key"
-        android:id="@+id/button6"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/basic_button_background"
-        android:stateListAnimator="@null"
-        android:text="6"
-        android:textColor="@color/cal_def_text"
-        android:textSize="10pt"
-        app:layout_constraintTag="button3"
-        app:roundPercent="@dimen/calc_round" />
-
-    <androidx.constraintlayout.utils.widget.MotionButton
-        android:onClick="key"
-        android:id="@+id/button7"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/basic_button_background"
-        android:stateListAnimator="@null"
-        android:text="7"
-        android:textColor="@color/cal_def_text"
+        android:text="tan"
+        android:tag="tan-1"
+        android:textColor="@color/cal_adv_text"
         android:textSize="10pt"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTag="button3"
+        app:layout_constraintTag="button4"
         app:roundPercent="@dimen/calc_round" />
 
     <androidx.constraintlayout.utils.widget.MotionButton
         android:onClick="key"
-        android:id="@+id/button8"
+        android:id="@+id/adv_ln"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/basic_button_background"
+        android:background= "@color/adv_background"
         android:stateListAnimator="@null"
-        android:text="8"
-        android:textColor="@color/cal_def_text"
+        android:text="ln"
+        android:textColor="@color/cal_adv_text"
         android:textSize="10pt"
-        app:layout_constraintTag="button3"
+        app:layout_constraintTag="button4"
         app:roundPercent="@dimen/calc_round" />
 
     <androidx.constraintlayout.utils.widget.MotionButton
         android:onClick="key"
-        android:id="@+id/button9"
+        android:id="@+id/adv_log"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/basic_button_background"
+        android:background= "@color/adv_background"
         android:stateListAnimator="@null"
-        android:text="9"
-        android:textColor="@color/cal_def_text"
+        android:text="log"
+        android:textColor="@color/cal_adv_text"
         android:textSize="10pt"
-        app:layout_constraintTag="button3"
+        app:layout_constraintTag="button4"
         app:roundPercent="@dimen/calc_round" />
 
     <androidx.constraintlayout.utils.widget.MotionButton
         android:onClick="key"
-        android:id="@+id/button0"
+        android:id="@+id/adv_sqrt"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/basic_button_background"
+        android:background= "@color/adv_background"
         android:stateListAnimator="@null"
-        android:text="0"
-        app:layout_constraintHorizontal_weight="1"
-        android:textColor="@color/cal_def_text"
+        android:text="√"
+        android:textColor="@color/cal_adv_text"
+        android:textSize="10pt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="button4"
+        app:roundPercent="@dimen/calc_round" />
+
+    <androidx.constraintlayout.utils.widget.MotionButton
+        android:onClick="key"
+        android:id="@+id/adv_pi"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background= "@color/adv_background"
+        android:stateListAnimator="@null"
+        android:text="Π"
+        android:textColor="@color/cal_adv_text"
+        android:textSize="10pt"
+        app:layout_constraintTag="button4"
+        app:roundPercent="@dimen/calc_round" />
+
+    <androidx.constraintlayout.utils.widget.MotionButton
+        android:onClick="key"
+        android:id="@+id/adv_e"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background= "@color/adv_background"
+        android:stateListAnimator="@null"
+        android:text="exp"
+        android:textColor="@color/cal_adv_text"
+        android:textSize="10pt"
+        app:layout_constraintTag="button4"
+        app:roundPercent="@dimen/calc_round" />
+
+    <androidx.constraintlayout.utils.widget.MotionButton
+        android:onClick="key"
+        android:id="@+id/adv_pow"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background= "@color/adv_background"
+        android:stateListAnimator="@null"
+        android:text="^"
+        android:textColor="@color/cal_adv_text"
         android:textSize="10pt"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTag="button3"
+        app:layout_constraintTag="button4"
         app:roundPercent="@dimen/calc_round" />
 
 <androidx.constraintlayout.utils.widget.MotionButton
         android:onClick="key"
-        android:id="@+id/button13"
+        android:id="@+id/adv_factorial"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/basic_button_background"
+        android:background= "@color/adv_background"
         android:stateListAnimator="@null"
-        android:text="-"
+        android:text="!"
         android:textSize="10pt"
-        android:textColor="@color/cal_def_text"
+        android:textColor="@color/cal_adv_text"
 
-        app:layout_constraintTag="button3"
+        app:layout_constraintTag="button4"
         app:roundPercent="@dimen/calc_round" />
 
     <androidx.constraintlayout.utils.widget.MotionButton
         android:onClick="key"
-        android:id="@+id/button15"
+        android:id="@+id/adv_x"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/basic_button_background"
+        android:background="@color/adv_background"
         android:stateListAnimator="@null"
-        android:text="✕"
-        android:textColor="@color/cal_def_text"
+        android:text="x"
+        android:textColor="@color/cal_adv_text"
         android:textSize="10pt"
 
-        app:layout_constraintTag="button3"
+        app:layout_constraintTag="button4"
         app:roundPercent="@dimen/calc_round" />
 
     <androidx.constraintlayout.utils.widget.MotionButton
         android:onClick="key"
-        android:id="@+id/button16"
+        android:id="@+id/adv_y"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/clear_background"
+        android:background= "@color/adv_background"
         android:stateListAnimator="@null"
-        android:text="ac"
-        android:textColor="@color/cal_def_text"
+        android:text="y"
+        android:textColor="@color/cal_adv_text"
         android:textSize="10pt"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTag="ac"
+        app:layout_constraintTag="button4"
         app:roundPercent="@dimen/calc_round" />
 
     <androidx.constraintlayout.utils.widget.MotionButton
         android:onClick="key"
-        android:id="@+id/button17"
+        android:id="@+id/adv_plot"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/basic_button_background"
+        android:background= "@color/adv_background"
         android:stateListAnimator="@null"
-        android:text="+/-"
-        android:textColor="@color/cal_def_text"
+        android:text="plot"
+        android:tag="save"
+        android:textColor="@color/cal_adv_text"
         android:textSize="10pt"
-        app:layout_constraintTag="button3"
+        app:layout_constraintTag="button4"
         app:roundPercent="@dimen/calc_round" />
 
     <androidx.constraintlayout.utils.widget.MotionButton
         android:onClick="key"
-        android:id="@+id/button18"
+        android:id="@+id/adv_t"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/basic_button_background"
+        android:background= "@color/adv_background"
         android:stateListAnimator="@null"
-        android:text="eex"
-        android:textColor="@color/cal_def_text"
+        android:text="t"
+        android:textColor="@color/cal_adv_text"
         android:textSize="10pt"
-        app:layout_constraintTag="button3"
+        app:layout_constraintTag="button4"
         app:roundPercent="@dimen/calc_round" />
 
     <androidx.constraintlayout.utils.widget.MotionButton
         android:onClick="key"
-        android:id="@+id/button19"
+        android:id="@+id/adv_sq"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/basic_button_background"
+        android:background= "@color/adv_background"
         android:stateListAnimator="@null"
-        android:text="÷"
-        android:textColor="@color/cal_def_text"
+        android:text="sq"
+        android:textColor="@color/cal_adv_text"
         android:textSize="10pt"
 
-        app:layout_constraintTag="button3"
+        app:layout_constraintTag="button4"
         app:roundPercent="@dimen/calc_round" />
 
     <androidx.constraintlayout.utils.widget.MotionButton
         android:onClick="key"
-        android:id="@+id/button14"
+        android:id="@+id/adv_swap"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/basic_button_background"
+        android:background= "@color/adv_background"
         android:stateListAnimator="@null"
-        android:text="+"
-        android:textColor="@color/cal_def_text"
+        android:text="swap"
+        android:textColor="@color/cal_adv_text"
         android:textSize="10pt"
 
-        app:layout_constraintTag="button3"
+        app:layout_constraintTag="button4"
+        app:roundPercent="@dimen/calc_round" />
+
+    <androidx.constraintlayout.utils.widget.MotionButton
+        android:onClick="key"
+        android:id="@+id/adv_drop"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background= "@color/adv_background"
+        android:stateListAnimator="@null"
+        android:text="drop"
+        android:textColor="@color/cal_adv_text"
+        android:textSize="10pt"
+
+        app:layout_constraintTag="button4"
+        app:roundPercent="@dimen/calc_round" />
+
+    <androidx.constraintlayout.utils.widget.MotionButton
+        android:onClick="key"
+        android:id="@+id/adv_copy"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background= "@color/adv_background"
+        android:stateListAnimator="@null"
+        android:text="copy"
+        android:textColor="@color/cal_adv_text"
+        android:textSize="10pt"
+
+        app:layout_constraintTag="button4"
         app:roundPercent="@dimen/calc_round" />
 
 </merge>

@@ -37,13 +37,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.DecimalFormat;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.Vector;
 
 public class Graph2D extends View {
     private static final String TAG = "Graph2D";
     private int mAxisColor = 0xFF000000;
+    private int mCoordinatesColor = 0XFF387F38;
+    private int mGraphColor = 0xFFF88800;
     Margins mMargins = new Margins();
     Vector<DrawItem> myDrawItems = new Vector<DrawItem>();
     private static final int NPOINTS = 500;
@@ -117,6 +117,9 @@ public class Graph2D extends View {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.Graph2D_axisColor) {
                     mAxisColor = a.getColor(attr, mAxisColor);
+                } else
+                if (attr == R.styleable.Graph2D_coordinatesColor) {
+                    mCoordinatesColor = a.getColor(attr, mCoordinatesColor);
                 }
             }
         }
@@ -136,7 +139,6 @@ public class Graph2D extends View {
                 if (ev.getPointerCount() == 2) {
                     mLastTouchX1 = ev.getX(1);
                     mLastTouchY1 = ev.getY(1);
-
                     break;
                 }
                 mLastTouchX0 = ev.getX(0);
@@ -334,7 +336,8 @@ public class Graph2D extends View {
     class Plot implements DrawItem {
         Path path = new Path();
         Paint paint = new Paint();
-        Paint txtPaint = new Paint();
+        Paint axisPaint = new Paint();
+        Paint maximaPaint = new Paint();
         float[] mValueY = new float[1000];
         float[] mValueX = new float[mValueY.length];
         int number_of_points = 0;
@@ -356,15 +359,18 @@ public class Graph2D extends View {
             }
 
             paint.setStrokeWidth(4);
-            paint.setColor(0xFF0000FF);
+            paint.setColor(mAxisColor);
             paint.setStrokeJoin(Paint.Join.ROUND);
             paint.setStrokeCap(Paint.Cap.ROUND);
             paint.setStyle(Paint.Style.STROKE);
 
-            txtPaint.setColor(0xFF0000FF);
-            txtPaint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
+            axisPaint.setColor(mAxisColor);
+            axisPaint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
                     24, getResources().getDisplayMetrics()));
 
+            maximaPaint.setColor(mCoordinatesColor);
+            maximaPaint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
+                    24, getResources().getDisplayMetrics()));
         }
 
         public void addPoint(float x, float y) {
@@ -513,7 +519,7 @@ public class Graph2D extends View {
                 y = (mValueY[i] - min_y) * scaley + offy;
                 x = mValueX[i] * scalex + offx;
                 if (i == 0) {
-                    paint.setColor(0xFFF88800);
+                    paint.setColor(mGraphColor);
                     path.moveTo(x, y);
                 } else {
                     path.lineTo(x, y);
@@ -525,7 +531,7 @@ public class Graph2D extends View {
             int s = 10;
 
             if (!Float.isNaN(keyPointX)) {
-                Rect tmpr = new Rect();
+                 Rect tmpr = new Rect();
                 DecimalFormat df = new DecimalFormat("#.###");
                 String zpoint = df.format(keyPointX);
                 if (!Float.isNaN(keyPointY)) {
@@ -534,18 +540,18 @@ public class Graph2D extends View {
                 float ky = Float.isNaN(keyPointY) ? 0 : keyPointY;
                 y = (ky - min_y) * scaley + offy;
                 x = keyPointX * scalex + offx;
-                Paint.FontMetrics metrics = txtPaint.getFontMetrics();
-                txtPaint.getTextBounds(zpoint, 0, zpoint.length(), tmpr);
+                Paint.FontMetrics metrics = maximaPaint.getFontMetrics();
+                maximaPaint.getTextBounds(zpoint, 0, zpoint.length(), tmpr);
                 if (!Float.isNaN(keyPointY)) {
                     RectF rectF = new RectF();
                     float size = 5;
                     rectF.set(x - size, y - size, x + size, y + size);
-                    c.drawRoundRect(rectF, size * 2, size * 2, txtPaint);
+                    c.drawRoundRect(rectF, size * 2, size * 2, maximaPaint);
 
                     x -= tmpr.width() / 2;
                 }
                 float ty = (y > h / 2) ? y - metrics.descent - 2 : y - metrics.ascent + 2;
-                c.drawText(zpoint, x, ty, txtPaint);
+                c.drawText(zpoint, x, ty, maximaPaint);
             }
 
             return windowed;
@@ -636,12 +642,6 @@ public class Graph2D extends View {
                 myLastMiny = myActualMiny;
                 myLastMaxy = myActualMaxy;
             }
-
-            // TODO: cleanup
-//            myMinx = 0;
-//            myMiny = 0;
-//            myMaxx = 1;
-//            myMaxy = 1;
         }
 
         public void rangeReset() {

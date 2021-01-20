@@ -50,7 +50,6 @@
         android:id="@+id/line1"
         android:layout_width="0dp"
         android:layout_height="0dp"
-
         android:text=""
         android:background="@color/stack_background"
         android:textSize="25sp"
@@ -64,7 +63,6 @@
         android:id="@+id/line2"
         android:layout_width="0dp"
         android:layout_height="0dp"
-
         android:text=""
         android:background="@color/stack_background"
         android:textSize="25sp"
@@ -78,7 +76,6 @@
         android:id="@+id/line3"
         android:layout_width="0dp"
         android:layout_height="0dp"
-
         android:text=""
         android:textSize="25sp"
         app:textPanX="1"
@@ -88,7 +85,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-
     <androidx.constraintlayout.helper.widget.Flow
 
         android:id="@+id/stack"
@@ -96,7 +92,6 @@
         android:layout_marginLeft="8dp"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
-
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:layout_width="0dp"
@@ -113,9 +108,6 @@
         app:layout_constraintLeft_toLeftOf="@id/card"
         app:layout_constraintEnd_toEndOf="@id/card"
         app:layout_constraintRight_toRightOf="@id/card" />
-    <!--    <View android:background="#F00"
-    -->
-
 
     <androidx.constraintlayout.helper.widget.Flow
 

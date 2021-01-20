@@ -265,8 +265,7 @@
         </Constraint>
     </ConstraintSet>
 
-
-    <ConstraintSet android:id="@+id/range3d"></ConstraintSet>
+<ConstraintSet android:id="@+id/range3d"></ConstraintSet>
     <ConstraintSet android:id="@+id/big2d"></ConstraintSet>
     <ConstraintSet android:id="@+id/big3d"></ConstraintSet>
     <!-- =====================  View Transitions =====================-->

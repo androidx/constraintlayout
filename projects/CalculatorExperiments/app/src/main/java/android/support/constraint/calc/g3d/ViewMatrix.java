@@ -16,13 +16,12 @@
 
 package android.support.constraint.calc.g3d;
 
-import android.util.Log;
-
-import androidx.constraintlayout.motion.widget.Debug;
-
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
+/**
+ * This calculates the matrix that transforms triangles from world space to screen space.
+ */
 public class ViewMatrix extends Matrix {
     double[] mLookPoint;
     double[] mEyePoint;

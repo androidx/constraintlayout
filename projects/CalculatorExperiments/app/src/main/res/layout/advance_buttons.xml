@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
-    <androidx.constraintlayout.utils.widget.MotionButton
+<androidx.constraintlayout.utils.widget.MotionButton
         android:onClick="key"
         android:id="@+id/adv_inv"
         android:layout_width="0dp"
@@ -157,8 +156,7 @@
         app:layout_constraintTag="button4"
         app:roundPercent="@dimen/calc_round" />
 
-
-    <androidx.constraintlayout.utils.widget.MotionButton
+<androidx.constraintlayout.utils.widget.MotionButton
         android:onClick="key"
         android:id="@+id/adv_factorial"
         android:layout_width="0dp"
@@ -168,7 +166,6 @@
         android:text="!"
         android:textSize="10pt"
         android:textColor="@color/cal_adv_text"
-
         app:layout_constraintTag="button4"
         app:roundPercent="@dimen/calc_round" />
 
@@ -182,7 +179,6 @@
         android:text="x"
         android:textColor="@color/cal_adv_text"
         android:textSize="10pt"
-
         app:layout_constraintTag="button4"
         app:roundPercent="@dimen/calc_round" />
 
@@ -237,7 +233,6 @@
         android:text="sq"
         android:textColor="@color/cal_adv_text"
         android:textSize="10pt"
-
         app:layout_constraintTag="button4"
         app:roundPercent="@dimen/calc_round" />
 
@@ -251,7 +246,6 @@
         android:text="swap"
         android:textColor="@color/cal_adv_text"
         android:textSize="10pt"
-
         app:layout_constraintTag="button4"
         app:roundPercent="@dimen/calc_round" />
 
@@ -265,7 +259,6 @@
         android:text="drop"
         android:textColor="@color/cal_adv_text"
         android:textSize="10pt"
-
         app:layout_constraintTag="button4"
         app:roundPercent="@dimen/calc_round" />
 
@@ -279,7 +272,6 @@
         android:text="copy"
         android:textColor="@color/cal_adv_text"
         android:textSize="10pt"
-
         app:layout_constraintTag="button4"
         app:roundPercent="@dimen/calc_round" />
 

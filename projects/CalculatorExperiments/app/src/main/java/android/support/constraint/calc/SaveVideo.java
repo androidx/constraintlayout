@@ -35,7 +35,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * NOT FUNCTIONAL !
+ * NOT FUNCTIONAL Keep here because it is a work in progress
+ * The goal is to be able to save animated graphs as videos.
+ *
  * TODO make this work
  */
 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)

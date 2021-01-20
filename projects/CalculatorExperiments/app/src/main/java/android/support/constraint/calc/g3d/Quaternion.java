@@ -16,6 +16,11 @@
 
 package android.support.constraint.calc.g3d;
 
+/**
+ * This is a class that represents a Quaternion
+ * Used to implement a virtual trackball with no "gimbal lock"
+ * see https://en.wikipedia.org/wiki/Quaternion
+ */
 public class Quaternion {
 	private final double []x=new double[4]; // w,x,y,z,
 
