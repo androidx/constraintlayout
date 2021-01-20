@@ -4,58 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layoutDescription="@xml/fold_scene"
+    app:layoutDescription="@xml/design2_scene"
     android:background="#12271C"
     android:id="@+id/motionLayout"
     app:layout_optimizationLevel="none"
     tools:context=".MainActivity">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/graph_bottom"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintGuide_percent="0.5"
-        android:orientation="horizontal" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/hinge"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintGuide_percent="0.5"
-        android:orientation="vertical" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/graph_right"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintGuide_percent="1"
-        android:orientation="vertical" />
-
     <androidx.constraintlayout.utils.widget.ImageFilterView
         android:id="@+id/adv_base"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         app:round="4dp"
+        app:layout_constraintHeight_percent=".3"
         android:background="#2B1919"
-        app:layout_constraintEnd_toEndOf="@id/hinge"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintRight_toRightOf="@id/hinge"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/graph_bottom"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
-    <View
-        android:id="@+id/basic_base"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/card" />
 
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/hinge"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/hinge"
-        app:layout_constraintTop_toBottomOf="@id/graph_bottom"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
     <include layout="@layout/advance_buttons" />
 
     <androidx.constraintlayout.utils.widget.ImageFilterView
@@ -64,7 +27,7 @@
         android:layout_height="0dp"
         android:background="#201710"
         app:round="16dp"
-        app:layout_constraintBottom_toBottomOf="@id/graph_bottom"
+        app:layout_constraintHeight_percent="0.3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -80,7 +43,9 @@
         app:textPanX="1"
         android:background="#3C2D2D"
         android:textColor="#EAD6D3"
-       />
+        app:layout_constraintBottom_toBottomOf="@+id/card"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/line1"
@@ -93,7 +58,9 @@
         android:textColor="#EAD6D3"
         android:textSize="25sp"
         app:textPanX="1"
-       />
+        app:layout_constraintBottom_toBottomOf="@+id/card"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/line2"
@@ -106,7 +73,9 @@
         android:textColor="#EAD6D3"
         android:textSize="25sp"
         app:textPanX="1"
-    />
+        app:layout_constraintBottom_toBottomOf="@+id/card"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/line3"
@@ -119,7 +88,9 @@
         app:textPanX="1"
         android:background="#3C2D2D"
         android:textColor="#EAD6D3"
-       />
+        app:layout_constraintBottom_toBottomOf="@+id/card"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/stack"
@@ -147,8 +118,7 @@
     <!--    <View android:background="#F00"
     -->
 
-
-    <androidx.constraintlayout.helper.widget.Flow
+<androidx.constraintlayout.helper.widget.Flow
 
         android:id="@+id/adv"
         android:layout_marginEnd="8dp"
@@ -157,7 +127,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         app:constraint_referenced_ids="adv_inv,adv_sq,adv_sqrt,adv_pow,adv_sin,adv_cos,adv_tan,adv_ln,adv_log,adv_pi,adv_e,adv_factorial,adv_x,adv_y,adv_t,adv_plot,adv_dup,adv_swap,adv_drop"
         app:flow_horizontalGap="8dp"
@@ -171,7 +141,7 @@
 
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/basic"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
@@ -180,11 +150,9 @@
         app:flow_maxElementsWrap="4"
         app:flow_verticalGap="8dp"
         app:flow_wrapMode="chain"
-        app:layout_constraintLeft_toLeftOf="@id/basic_base"
-        app:layout_constraintRight_toRightOf="@id/basic_base"
-        app:layout_constraintBottom_toBottomOf="@id/basic_base"
-        app:layout_constraintTop_toTopOf="@id/basic_base"
-       />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/adv_base"
+        tools:layout_editor_absoluteX="8dp" />
 
     <include layout="@layout/basic_buttons" />
 
@@ -219,12 +187,14 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginEnd="8dp"
+        app:axisColor="#8E8E8E"
+        app:coordinatesColor="#FF68AF68"
         app:layout_constraintBottom_toBottomOf="@id/card"
         app:layout_constraintTop_toTopOf="@id/card"
         app:layout_constraintStart_toStartOf="@id/card"
         app:layout_constraintLeft_toLeftOf="@id/card"
-        app:layout_constraintEnd_toEndOf="@id/graph_right"
-        app:layout_constraintRight_toRightOf="@id/graph_right" />
+        app:layout_constraintEnd_toEndOf="@id/card"
+        app:layout_constraintRight_toRightOf="@id/card" />
 
     <android.support.constraint.calc.g3d.Graph3D
         android:id="@+id/graph3d"
@@ -238,13 +208,18 @@
         android:background="#0000"
         app:lineColor="#FFFF"
         app:layout_constraintBottom_toBottomOf="@id/card"
-        app:layout_constraintEnd_toEndOf="@id/graph_right"
+        app:layout_constraintEnd_toEndOf="@id/card"
         app:layout_constraintLeft_toLeftOf="@id/card"
-        app:layout_constraintRight_toRightOf="@id/graph_right"
+        app:layout_constraintRight_toRightOf="@id/card"
         app:layout_constraintStart_toStartOf="@id/card"
         app:layout_constraintTop_toTopOf="@id/card" />
 
-
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/graph_bottom"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_percent="0.3"
+        android:orientation="horizontal" />
 
     <androidx.constraintlayout.utils.widget.ImageFilterButton
         android:id="@+id/scale"

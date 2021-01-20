@@ -16,15 +16,14 @@
 
 package android.support.constraint.calc.g3d;
 
-import android.util.Log;
-
-import androidx.constraintlayout.motion.widget.Debug;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Arrays;
 
+/**
+ * This renders a 3 Dimentional surface of a function.
+ */
 public class SurfaceGen {
     private static final String TAG = "SurfaceGen";
     ViewMatrix mMatrix = new ViewMatrix();
@@ -75,7 +74,6 @@ public class SurfaceGen {
         mMinY = stream.readFloat();
         mMaxY = stream.readFloat();
         mZoomZ = stream.readFloat();
-        Log.v(TAG, Debug.getLoc() + " zoom " + mZoomZ);
 
         calcSurface(mMinX, mMaxX, mMinX, mMaxX, false, mFunction);
         mMinZ = stream.readFloat();

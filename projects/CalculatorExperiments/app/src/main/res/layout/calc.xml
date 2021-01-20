@@ -119,8 +119,7 @@
     <!--    <View android:background="#F00"
     -->
 
-
-    <androidx.constraintlayout.helper.widget.Flow
+<androidx.constraintlayout.helper.widget.Flow
 
         android:id="@+id/adv"
         android:layout_marginEnd="8dp"
@@ -183,8 +182,7 @@
 
     <include layout="@layout/basic_buttons" />
 
-
-    <android.support.constraint.calc.Graph2D
+<android.support.constraint.calc.Graph2D
         android:id="@+id/graph"
         android:layout_width="0dp"
         android:layout_height="0dp"
