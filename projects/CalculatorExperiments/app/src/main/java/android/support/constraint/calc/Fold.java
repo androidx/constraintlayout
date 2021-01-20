@@ -84,6 +84,8 @@ public class Fold {
                             motionLayout.transitionToState(R.id.mode2d_fold);
                         } else if (motionLayout.getCurrentState() == R.id.mode3d) {
                             motionLayout.transitionToState(R.id.mode3d_fold);
+                        } else if (motionLayout.getCurrentState() == R.id.mode_no_graph) {
+                            motionLayout.transitionToState(R.id.mode_no_graph_fold);
                         }
 
                         ConstraintLayout.getSharedValues().fireNewValue(R.id.fold, fold);
@@ -101,7 +103,6 @@ public class Fold {
                     case DeviceState.POSTURE_FLIPPED:
                         Log.v(TAG, Debug.getLoc() + " POSTURE_FLIPPED");
                         break;
-
                 }
             }
         };
@@ -171,15 +172,12 @@ public class Fold {
 
         //Checks to see if the display feature overlaps with our view at all
         if ((featureRectInView.width() == 0 && featureRectInView.height() == 0) ||
-                !intersects
-        ) {
+                !intersects) {
             return null;
         }
 
         // Offset the feature coordinates to view coordinate space start point
         featureRectInView.offset(-viewLocationInWindow[0], -viewLocationInWindow[1]);
-
         return featureRectInView;
     }
-
 }

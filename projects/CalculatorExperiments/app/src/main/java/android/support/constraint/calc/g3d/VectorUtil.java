@@ -15,6 +15,9 @@
  */
 package android.support.constraint.calc.g3d;
 
+/**
+ * A few utilities for vector calculations.
+ */
 public class VectorUtil {
     public static void sub(double[] a, double[] b, double[] out) {
         out[0] = a[0] - b[0];

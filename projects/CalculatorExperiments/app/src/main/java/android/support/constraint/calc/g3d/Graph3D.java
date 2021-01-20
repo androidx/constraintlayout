@@ -20,23 +20,22 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.media.DeniedByServerException;
 import android.support.constraint.calc.CalcEngine;
 import android.support.constraint.calc.R;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-import androidx.constraintlayout.motion.widget.Debug;
 import androidx.core.view.GestureDetectorCompat;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.text.DecimalFormat;
 
+/**
+ * This is the CustomView that renders a 3D surface
+ */
 public class Graph3D extends View {
     static String TAG = "CubeView";
     SurfaceGen mSurfaceGen = new SurfaceGen();

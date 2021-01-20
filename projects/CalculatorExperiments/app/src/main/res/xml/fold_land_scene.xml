@@ -6,7 +6,6 @@
     <Transition
         motion:constraintSetEnd="@+id/mode3d"
         motion:constraintSetStart="@id/mode_no_graph"
-        motion:autoTransition="animateToEnd"
         motion:duration="300">
 
         <OnSwipe
@@ -18,8 +17,6 @@
 
         </KeyFrameSet>
     </Transition>
-
-
 
     <ConstraintSet android:id="@+id/mode_no_graph">
         <Constraint
@@ -58,8 +55,7 @@
             motion:layout_constraintTop_toTopOf="@id/card" />
     </ConstraintSet>
 
-
-    <ConstraintSet android:id="@+id/mode2d" >
+<ConstraintSet android:id="@+id/mode2d" >
         <Constraint
             android:id="@+id/graph"
             android:layout_width="0dp"
@@ -99,19 +95,7 @@
             motion:layout_constraintStart_toStartOf="@id/card"
             motion:layout_constraintTop_toTopOf="@id/card" />
     </ConstraintSet>
-    <ConstraintSet android:id="@+id/mode2d_fold" motion:deriveConstraintsFrom="@+id/mode2d">
-        <Constraint
-            android:id="@+id/graph_right"
-            motion:layout_constraintGuide_percent="0.2"
-            android:orientation="vertical"
-            />
 
-        <Constraint
-            android:id="@+id/fold_pos"
-            motion:layout_constraintGuide_percent="0.5"
-            android:orientation="horizontal" />
-
-    </ConstraintSet>
     <ConstraintSet android:id="@+id/mode2d_full">
         <Constraint
             android:id="@+id/graph"
@@ -188,6 +172,22 @@
         </Constraint>
     </ConstraintSet>
 
+    <ConstraintSet android:id="@+id/mode2d_fold" motion:deriveConstraintsFrom="@+id/mode2d">
+        <Constraint
+            android:id="@+id/graph_right"
+            motion:layout_constraintGuide_percent="0.5"
+            android:orientation="vertical"
+            />
+        <ConstraintOverride
+            android:id="@id/card"
+            motion:layout_constraintWidth_percent="1.0"
+            />
+        <Constraint
+            android:id="@+id/fold_pos"
+            motion:layout_constraintGuide_percent="0.55"
+            android:orientation="horizontal" />
+
+    </ConstraintSet>
     <ConstraintSet android:id="@+id/mode3d_fold" motion:deriveConstraintsFrom="@+id/mode3d">
         <Constraint
             android:id="@+id/graph_right"
@@ -203,6 +203,22 @@
             motion:layout_constraintGuide_percent="0.55"
             android:orientation="horizontal"
             />
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/mode_no_graph_fold" motion:deriveConstraintsFrom="@+id/mode_no_graph">
+        <Constraint
+            android:id="@+id/graph_right"
+            motion:layout_constraintGuide_percent="0.5"
+            android:orientation="vertical"
+            />
+        <ConstraintOverride
+            android:id="@id/card"
+            motion:layout_constraintWidth_percent="1.0"
+            />
+        <Constraint
+            android:id="@+id/fold_pos"
+            motion:layout_constraintGuide_percent="0.55"
+            android:orientation="horizontal" />
+
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/mode3d_full">
@@ -245,8 +261,7 @@
         </Constraint>
     </ConstraintSet>
 
-
-    <ConstraintSet android:id="@+id/range3d"></ConstraintSet>
+<ConstraintSet android:id="@+id/range3d"></ConstraintSet>
     <ConstraintSet android:id="@+id/big2d"></ConstraintSet>
     <ConstraintSet android:id="@+id/big3d"></ConstraintSet>
     <!-- =====================  View Transitions =====================-->
@@ -440,7 +455,5 @@
             </KeyAttribute>
         </KeyFrameSet>
     </ViewTransition>
-
-
 
 </MotionScene>

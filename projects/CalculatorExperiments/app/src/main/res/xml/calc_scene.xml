@@ -71,8 +71,7 @@
         <!--        </ConstraintOverride>-->
     </ConstraintSet>
 
-
-    <ConstraintSet android:id="@+id/mode_no_graph">
+<ConstraintSet android:id="@+id/mode_no_graph">
         <Constraint
             android:id="@+id/graph"
             android:layout_width="0dp"

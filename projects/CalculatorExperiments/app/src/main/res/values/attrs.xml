@@ -6,5 +6,6 @@
     </declare-styleable>
     <declare-styleable name="Graph2D">
         <attr name="axisColor" format="color" />
+        <attr name="coordinatesColor" format="color" />
     </declare-styleable>
 </resources>

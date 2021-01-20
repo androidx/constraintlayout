@@ -89,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
         mInverseMap.put("sin-1", "sin<sup><small>-1</small></sup>");
         mInverseMap.put("tan-1", "tan<sup><small>-1</small></sup>");
         mInverseMap.put("save", "save");
-
     }
 
     @Override
@@ -195,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 mGraph3D.setVisibility(View.GONE);
                 mGraph2D.setAlpha(0);
+                mMotionLayout.transitionToState(mGraphMode = R.id.mode_no_graph);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -264,7 +264,6 @@ public class MainActivity extends AppCompatActivity {
     }
     // =================================================================================
 
-
     private void getStack() {
         mStack[0] = findViewById(R.id.line0);
         mStack[1] = findViewById(R.id.line1);
@@ -331,7 +330,7 @@ public class MainActivity extends AppCompatActivity {
     public void regester_for_clipboard() {
 
         ClipboardManager clipBoard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        {
+        try {
             ClipData clipData = clipBoard.getPrimaryClip();
             if (clipData != null && clipData.getItemCount() > 0) {
                 ClipData.Item item = clipData.getItemAt(0);
@@ -339,14 +338,21 @@ public class MainActivity extends AppCompatActivity {
                 CalcEngine.Symbolic op = mCalcEngine.deserializeString(text);
                 Log.v(TAG, Debug.getLoc() + " \"" + op.toString() + "\"");
             }
+        } catch (Exception ex) {
+
         }
+
         clipBoard.addPrimaryClipChangedListener(() -> {
-            ClipData clipData = clipBoard.getPrimaryClip();
-            ClipData.Item item = clipData.getItemAt(0);
-            String text = item.getText().toString();
-            CalcEngine.Symbolic op = mCalcEngine.deserializeString(text);
-            Log.v(TAG, Debug.getLoc() + " \"" + op.toString() + "\"");
-            Log.v(TAG, Debug.getLoc() + " \"" + text + "\"");
+            try {
+                ClipData clipData = clipBoard.getPrimaryClip();
+                ClipData.Item item = clipData.getItemAt(0);
+                String text = item.getText().toString();
+                CalcEngine.Symbolic op = mCalcEngine.deserializeString(text);
+                Log.v(TAG, Debug.getLoc() + " \"" + op.toString() + "\"");
+                Log.v(TAG, Debug.getLoc() + " \"" + text + "\"");
+            } catch (Exception ex) {
+
+            }
         });
     }
 
@@ -407,11 +413,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void plot() {
+        boolean fold = mFold.isPostureHalfOpen();
         CalcEngine.Symbolic s = mCalcEngine.stack.getVar(0);
         if (s == null) {
             mShow3d = false;
             mShow2d = false;
-            mMotionLayout.transitionToState(mGraphMode = R.id.mode_no_graph);
+            mGraphMode = R.id.mode_no_graph;
+            mMotionLayout.transitionToState(mGraphMode);
             return;
         }
 
@@ -420,17 +428,18 @@ public class MainActivity extends AppCompatActivity {
         if ((dim & 3) == 1) {
             mShow3d = false;
             mShow2d = true;
-            mMotionLayout.transitionToState(mGraphMode = R.id.mode2d);
+            mGraphMode = (fold) ? R.id.mode2d_fold : R.id.mode2d;
             mGraph2D.plot(s);
         } else if ((dim & 3) == 3) {
             mShow3d = true;
             mShow2d = false;
-            mMotionLayout.transitionToState(mGraphMode = R.id.mode3d);
+            mGraphMode = (fold) ? R.id.mode3d_fold : R.id.mode3d;
+
             mGraph3D.plot(s);
         } else {
-            mMotionLayout.transitionToState(mGraphMode = R.id.mode_no_graph);
+            mGraphMode = (fold) ? R.id.mode_no_graph_fold : R.id.mode_no_graph;
         }
-
+        mMotionLayout.transitionToState(mGraphMode);
     }
 
     public void showMenu(View view) {
@@ -480,5 +489,4 @@ public class MainActivity extends AppCompatActivity {
         getStack();
         setState(data);
     }
-
 }
