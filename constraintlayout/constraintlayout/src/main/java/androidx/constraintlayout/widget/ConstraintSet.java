@@ -16,6 +16,7 @@
 
 package androidx.constraintlayout.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -1847,6 +1848,8 @@ public class ConstraintSet {
                     setDeltaValue(c, mTypeBoolean[i], mValueBoolean[i]);
                 }
             }
+
+            @SuppressLint("LogConditional")
             void printDelta(String tag) {
                 Log.v(tag,"int");
 

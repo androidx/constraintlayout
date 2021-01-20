@@ -16,6 +16,7 @@
 
 package androidx.constraintlayout.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -114,17 +115,23 @@ public class Placeholder extends View {
   }
 
   /**
+   * Placeholder does not draw anything itself - therefore Paint and Rect allocations
+   * are fine to suppress and ignore.
+   *
    * @hide
    * @param canvas
    */
   public void onDraw(Canvas canvas) {
     if (isInEditMode()) {
       canvas.drawRGB(223, 223, 223);
+
+      @SuppressLint("DrawAllocation")
       Paint paint = new Paint();
       paint.setARGB(255, 210, 210, 210);
       paint.setTextAlign(Paint.Align.CENTER);
       paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 
+      @SuppressLint("DrawAllocation")
       Rect r = new Rect();
       canvas.getClipBounds(r);
       paint.setTextSize(r.height());

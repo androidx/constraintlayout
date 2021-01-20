@@ -16,6 +16,7 @@
 
 package androidx.constraintlayout.motion.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -2362,6 +2363,7 @@ public class MotionLayout extends ConstraintLayout implements
             return null;
         }
 
+        @SuppressLint("LogConditional")
         private void debugLayoutParam(String str, LayoutParams params) {
             String a = " ";
             a += params.startToStart != UNSET ? "SS" : "__";
@@ -2379,6 +2381,7 @@ public class MotionLayout extends ConstraintLayout implements
             Log.v(TAG, str + a);
         }
 
+        @SuppressLint("LogConditional")
         private void debugWidget(String str, ConstraintWidget child) {
             String a = " ";
             a += child.mTop.mTarget != null ? ("T" + (child.mTop.mTarget.mType == ConstraintAnchor.Type.TOP ? "T" : "B")) : "__";
@@ -2388,6 +2391,7 @@ public class MotionLayout extends ConstraintLayout implements
             Log.v(TAG, str + a + " ---  " + child);
         }
 
+        @SuppressLint("LogConditional")
         private void debugLayout(String title, ConstraintWidgetContainer c) {
             View v = (View) c.getCompanionWidget();
             String cName = title + " " + Debug.getName(v);
@@ -3098,6 +3102,7 @@ public class MotionLayout extends ConstraintLayout implements
 
     }
 
+    @SuppressLint("LogConditional")
     private void debugPos() {
         for (int i = 0; i < getChildCount(); i++) {
             final View child = getChildAt(i);
@@ -3591,8 +3596,10 @@ public class MotionLayout extends ConstraintLayout implements
     }
 
     private void checkStructure(MotionScene.Transition transition) {
-        Log.v(TAG, "CHECK: transition = " + transition.debugString(getContext()));
-        Log.v(TAG, "CHECK: transition.setDuration = " + transition.getDuration());
+        if (DEBUG) {
+            Log.v(TAG, "CHECK: transition = " + transition.debugString(getContext()));
+            Log.v(TAG, "CHECK: transition.setDuration = " + transition.getDuration());
+        }
         if (transition.getStartConstraintSetId() == transition.getEndConstraintSetId()) {
             Log.e(TAG, "CHECK: start and end constraint set should not be the same!");
         }

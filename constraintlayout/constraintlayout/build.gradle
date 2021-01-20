@@ -10,9 +10,11 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion latestSdkVersion
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     lintOptions {
+        lintConfig file("lint.xml")
         abortOnError false
     }
 
@@ -40,6 +42,9 @@ dependencies {
     implementation 'androidx.core:core:1.3.2'
     implementation project(':core')
     // doclava project(':doclava')
+
+    // Unit Testing
+    testImplementation "junit:junit:4.13.1"
 }
 
 archivesBaseName = 'constraintlayout'

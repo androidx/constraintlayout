@@ -317,7 +317,9 @@ public class ConstraintLayoutStates {
                                 parseConstraintSet(context, parser);
                                 break;
                             default:
-                                Log.v(TAG, "unknown tag " + tagName);
+                                if (DEBUG) {
+                                    Log.v(TAG, "unknown tag " + tagName);
+                                }
                         }
 
                         break;
