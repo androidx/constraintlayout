@@ -3,7 +3,21 @@ name: experiment-motionlayout
 on:
   push:
     branches: [main]
+    paths:
+      - 'constraintlayout/**.kt'
+      - 'constraintlayout/**.xml'
+      - 'constraintlayout/**.gradle'
+      - 'projects/MotionLayoutExperiments/**.kt'
+      - 'projects/MotionLayoutExperiments/**.xml'
+      - 'projects/MotionLayoutExperiments/**.gradle'
   pull_request:
+    paths:
+      - 'constraintlayout/**.kt'
+      - 'constraintlayout/**.xml'
+      - 'constraintlayout/**.gradle'
+      - 'projects/MotionLayoutExperiments/**.kt'
+      - 'projects/MotionLayoutExperiments/**.xml'
+      - 'projects/MotionLayoutExperiments/**.gradle'
 
 defaults:
   run:

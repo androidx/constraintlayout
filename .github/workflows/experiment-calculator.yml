@@ -3,7 +3,21 @@ name: experiment-calculator
 on:
   push:
     branches: [main]
+    paths:
+      - 'constraintlayout/**.kt'
+      - 'constraintlayout/**.xml'
+      - 'constraintlayout/**.gradle'
+      - 'projects/CalculatorExperiments/**.kt'
+      - 'projects/CalculatorExperiments/**.xml'
+      - 'projects/CalculatorExperiments/**.gradle'
   pull_request:
+    paths:
+      - 'constraintlayout/**.kt'
+      - 'constraintlayout/**.xml'
+      - 'constraintlayout/**.gradle'
+      - 'projects/CalculatorExperiments/**.kt'
+      - 'projects/CalculatorExperiments/**.xml'
+      - 'projects/CalculatorExperiments/**.gradle'
 
 defaults:
   run:

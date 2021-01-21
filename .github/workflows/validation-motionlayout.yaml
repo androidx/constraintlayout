@@ -3,7 +3,21 @@ name: validation-motionlayout
 on:
   push:
     branches: [main]
+    paths:
+      - 'constraintlayout/**.kt'
+      - 'constraintlayout/**.xml'
+      - 'constraintlayout/**.gradle'
+      - 'projects/MotionLayoutVerification/**.kt'
+      - 'projects/MotionLayoutVerification/**.xml'
+      - 'projects/MotionLayoutVerification/**.gradle'
   pull_request:
+    paths:
+      - 'constraintlayout/**.kt'
+      - 'constraintlayout/**.xml'
+      - 'constraintlayout/**.gradle'
+      - 'projects/MotionLayoutVerification/**.kt'
+      - 'projects/MotionLayoutVerification/**.xml'
+      - 'projects/MotionLayoutVerification/**.gradle'
 
 defaults:
   run:

@@ -3,7 +3,21 @@ name: experiment-carousel
 on:
   push:
     branches: [main]
+    paths:
+      - 'constraintlayout/**.kt'
+      - 'constraintlayout/**.xml'
+      - 'constraintlayout/**.gradle'
+      - 'projects/CarouselExperiments/**.kt'
+      - 'projects/CarouselExperiments/**.xml'
+      - 'projects/CarouselExperiments/**.gradle'
   pull_request:
+    paths:
+      - 'constraintlayout/**.kt'
+      - 'constraintlayout/**.xml'
+      - 'constraintlayout/**.gradle'
+      - 'projects/CarouselExperiments/**.kt'
+      - 'projects/CarouselExperiments/**.xml'
+      - 'projects/CarouselExperiments/**.gradle'
 
 defaults:
   run:

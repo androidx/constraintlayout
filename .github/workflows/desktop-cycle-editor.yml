@@ -3,7 +3,15 @@ name: desktop-cycle-editor
 on:
   push:
     branches: [main]
+    paths:
+      - 'desktop/CycleEditor/**.kt'
+      - 'desktop/CycleEditor/**.xml'
+      - 'desktop/CycleEditor/**.gradle'
   pull_request:
+    paths:
+      - 'desktop/CycleEditor/**.kt'
+      - 'desktop/CycleEditor/**.xml'
+      - 'desktop/CycleEditor/**.gradle'
 
 defaults:
   run:
