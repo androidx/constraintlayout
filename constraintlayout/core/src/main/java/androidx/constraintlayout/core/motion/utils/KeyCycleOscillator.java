@@ -23,6 +23,7 @@ import java.util.Comparator;
 /**
  * Provide the engine for executing cycles.
  * KeyCycleOscillator
+ *
  * @hide
  */
 public abstract class KeyCycleOscillator {
@@ -71,8 +72,6 @@ public abstract class KeyCycleOscillator {
         mType = type;
     }
 
-
-
     public float get(float t) {
         return (float) mCycleOscillator.getValues(t);
     }
@@ -85,7 +84,7 @@ public abstract class KeyCycleOscillator {
         return mCurveFit;
     }
 
-    protected void setCustom(Object custom){
+    protected void setCustom(Object custom) {
 
     }
 
@@ -99,8 +98,15 @@ public abstract class KeyCycleOscillator {
      * @param value         the adder
      * @param custom        The ConstraintAttribute used to set the value
      */
-    public void setPoint(int framePosition, int shape, String waveString, int variesBy, float period, float offset, float phase,
-                         float value, Object custom) {
+    public void setPoint(int framePosition,
+                         int shape,
+                         String waveString,
+                         int variesBy,
+                         float period,
+                         float offset,
+                         float phase,
+                         float value,
+                         Object custom) {
         mWavePoints.add(new WavePoint(framePosition, period, offset, phase, value));
         if (variesBy != -1) {
             mVariesBy = variesBy;
@@ -119,7 +125,14 @@ public abstract class KeyCycleOscillator {
      * @param offset        the offset value
      * @param value         the adder
      */
-    public void setPoint(int framePosition, int shape, String waveString, int variesBy, float period, float offset, float phase, float value) {
+    public void setPoint(int framePosition,
+                         int shape,
+                         String waveString,
+                         int variesBy,
+                         float period,
+                         float offset,
+                         float phase,
+                         float value) {
         mWavePoints.add(new WavePoint(framePosition, period, offset, phase, value));
         if (variesBy != -1) {
             mVariesBy = variesBy;
@@ -307,23 +320,6 @@ public abstract class KeyCycleOscillator {
             double waveSlope = mOscillator.getSlope(time, mSplineValueCache[PHASE], mSplineSlopeCache[PHASE]);
             return mSplineSlopeCache[OFFST] + waveValue * mSplineSlopeCache[VALUE] + waveSlope * mSplineValueCache[VALUE];
         }
-
-//        public HashMap<String, ConstraintAttribute> mCustomConstraints = new HashMap<>();
-//
-//        private ConstraintAttribute get(String attributeName, ConstraintAttribute.AttributeType attributeType) {
-//            ConstraintAttribute ret;
-//            if (mCustomConstraints.containsKey(attributeName)) {
-//                ret = mCustomConstraints.get(attributeName);
-//                if (ret.getType() != attributeType) {
-//                    throw new IllegalArgumentException(
-//                            "ConstraintAttribute is already a " + ret.getType().name());
-//                }
-//            } else {
-//                ret = new ConstraintAttribute(attributeName, attributeType);
-//                mCustomConstraints.put(attributeName, ret);
-//            }
-//            return ret;
-//        }
 
         /**
          * @param index

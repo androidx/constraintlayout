@@ -64,7 +64,6 @@ public abstract class ViewSpline extends SplineSet {
         }
     }
 
-
     static class ElevationSet extends ViewSpline {
         @Override
         public void setProperty(View view, float t) {
@@ -101,18 +100,21 @@ public abstract class ViewSpline extends SplineSet {
             view.setRotationY(get(t));
         }
     }
+
     static class PivotXset extends ViewSpline {
         @Override
         public void setProperty(View view, float t) {
             view.setPivotX(get(t));
         }
     }
+
     static class PivotYset extends ViewSpline {
         @Override
         public void setProperty(View view, float t) {
             view.setPivotY(get(t));
         }
     }
+
     public static class PathRotate extends ViewSpline {
         @Override
         public void setProperty(View view, float t) {
@@ -236,6 +238,5 @@ public abstract class ViewSpline extends SplineSet {
 
         }
     }
-
 
 }

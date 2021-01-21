@@ -188,8 +188,7 @@ public class MotionLabel extends View implements FloatLayout {
         setupPath();
     }
 
-
-    Bitmap blur(Bitmap bitmapOriginal, int factor) {
+Bitmap blur(Bitmap bitmapOriginal, int factor) {
         Long t = System.nanoTime();
         int w = bitmapOriginal.getWidth();
         int h = bitmapOriginal.getHeight();

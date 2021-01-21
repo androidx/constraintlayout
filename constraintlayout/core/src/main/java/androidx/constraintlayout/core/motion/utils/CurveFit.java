@@ -17,7 +17,8 @@
 package androidx.constraintlayout.core.motion.utils;
 
 /**
- * Base class for interpolator
+ * Base class for curve fitting / interpolation
+ * Curve fits must be capable of being differentiable and extend beyond the points (extrapolate)
  *
  * @hide
  */

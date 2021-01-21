@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package androidx.constraintlayout.motion.utils;
-
-import androidx.constraintlayout.core.motion.utils.SplineSet;
+package androidx.constraintlayout.core.motion.utils;
 
 /**
  * This is used to calculate the related velocity matrix for a post layout matrix
+ *
  * @hide
  */
 public class VelocityMatrix {
     float mDScaleX, mDScaleY, mDTranslateX, mDTranslateY, mDRotate;
     float mRotate;
     private static String TAG = "VelocityMatrix";
+
     public void clear() {
         mDScaleX = mDScaleY = mDTranslateX = mDTranslateY = mDRotate = 0;
     }
@@ -57,13 +57,13 @@ public class VelocityMatrix {
         }
     }
 
-    public void setRotationVelocity(ViewOscillator osc_r, float position) {
+    public void setRotationVelocity(KeyCycleOscillator osc_r, float position) {
         if (osc_r != null) {
             mDRotate = osc_r.getSlope(position);
         }
     }
 
-    public void setTranslationVelocity(ViewOscillator osc_x, ViewOscillator osc_y, float position) {
+    public void setTranslationVelocity(KeyCycleOscillator osc_x, KeyCycleOscillator osc_y, float position) {
 
         if (osc_x != null) {
             mDTranslateX = osc_x.getSlope(position);
@@ -74,7 +74,7 @@ public class VelocityMatrix {
         }
     }
 
-    public void setScaleVelocity(ViewOscillator osc_sx, ViewOscillator osc_sy, float position) {
+    public void setScaleVelocity(KeyCycleOscillator osc_sx, KeyCycleOscillator osc_sy, float position) {
         if (osc_sx != null) {
             mDScaleX = osc_sx.getSlope(position);
         }
@@ -103,9 +103,9 @@ public class VelocityMatrix {
         dx += offx * mDScaleX;
         dy += offy * mDScaleY;
         float r = (float) Math.toRadians(mRotate);
-        float dr = (float)Math.toRadians(mDRotate);
-        dx +=  dr*(float) (-width*offx*Math.sin(r)-height*offy*Math.cos(r));
-        dy +=   dr*(float) (width*offx*Math.cos(r)-height*offy*Math.sin(r));
+        float dr = (float) Math.toRadians(mDRotate);
+        dx += dr * (float) (-width * offx * Math.sin(r) - height * offy * Math.cos(r));
+        dy += dr * (float) (width * offx * Math.cos(r) - height * offy * Math.sin(r));
         mAnchorDpDt[0] = dx;
         mAnchorDpDt[1] = dy;
     }

@@ -16,17 +16,16 @@
 package androidx.constraintlayout.motion.utils;
 
 import android.os.Build;
-
-import androidx.constraintlayout.core.motion.utils.TimeCycleSplineSet;
-import androidx.constraintlayout.motion.widget.Key;
-import androidx.constraintlayout.core.motion.utils.KeyCache;
-import androidx.constraintlayout.motion.widget.MotionLayout;
-import androidx.constraintlayout.widget.ConstraintAttribute;
-import androidx.constraintlayout.core.motion.utils.CurveFit;
-
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
+
+import androidx.constraintlayout.core.motion.utils.CurveFit;
+import androidx.constraintlayout.core.motion.utils.KeyCache;
+import androidx.constraintlayout.core.motion.utils.TimeCycleSplineSet;
+import androidx.constraintlayout.motion.widget.Key;
+import androidx.constraintlayout.motion.widget.MotionLayout;
+import androidx.constraintlayout.widget.ConstraintAttribute;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -36,9 +35,8 @@ import java.lang.reflect.Method;
  *
  * @hide
  */
-public abstract class ViewTimeCycle  extends TimeCycleSplineSet {
+public abstract class ViewTimeCycle extends TimeCycleSplineSet {
     private static final String TAG = "ViewTimeCycle";
-
 
     public abstract boolean setProperty(View view, float t, long time, KeyCache cache);
 
@@ -66,7 +64,6 @@ public abstract class ViewTimeCycle  extends TimeCycleSplineSet {
         mContinue = v != 0.0f || period != 0.0f;
         return value;
     }
-
 
     public static ViewTimeCycle makeCustomSpline(String str, SparseArray<ConstraintAttribute> attrList) {
         return new CustomSet(str, attrList);
@@ -117,8 +114,6 @@ public abstract class ViewTimeCycle  extends TimeCycleSplineSet {
         timeCycle.setStartTime(currentTime);
         return timeCycle;
     }
-
-
 
     static class ElevationSet extends ViewTimeCycle {
         @Override

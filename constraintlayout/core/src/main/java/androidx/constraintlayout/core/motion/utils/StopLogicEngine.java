@@ -16,7 +16,6 @@
 
 package androidx.constraintlayout.core.motion.utils;
 
-
 /**
  * This contains the class to provide the logic for an animation to come to a stop.
  * The setup defines a series of velocity gradients that gets to the desired position
@@ -43,43 +42,43 @@ public class StopLogicEngine {
      * @return string useful for debugging the state of the StopLogic
      */
     public String debug(String desc, float time) {
-        String ret =  desc + " ===== " + mType+"\n";
-        ret += desc + (mBackwards ? "backwards" : "forward ") + " time = " + time + "  stages " + mNumberOfStages+"\n";
-        ret += desc + " dur " + mStage1Duration + " vel " + mStage1Velocity + " pos " + mStage1EndPosition+"\n";
+        String ret = desc + " ===== " + mType + "\n";
+        ret += desc + (mBackwards ? "backwards" : "forward ") + " time = " + time + "  stages " + mNumberOfStages + "\n";
+        ret += desc + " dur " + mStage1Duration + " vel " + mStage1Velocity + " pos " + mStage1EndPosition + "\n";
 
         if (mNumberOfStages > 1) {
-            ret += desc + " dur " + mStage2Duration + " vel " + mStage2Velocity + " pos " + mStage2EndPosition+"\n";
+            ret += desc + " dur " + mStage2Duration + " vel " + mStage2Velocity + " pos " + mStage2EndPosition + "\n";
 
         }
         if (mNumberOfStages > 2) {
-            ret += desc + " dur " + mStage3Duration + " vel " + mStage3Velocity + " pos " + mStage3EndPosition+"\n";
+            ret += desc + " dur " + mStage3Duration + " vel " + mStage3Velocity + " pos " + mStage3EndPosition + "\n";
         }
 
         if (time <= mStage1Duration) {
-            ret += desc + "stage 0"+"\n";
+            ret += desc + "stage 0" + "\n";
             return ret;
         }
         if (mNumberOfStages == 1) {
-            ret += desc + "end stage 0"+"\n";
+            ret += desc + "end stage 0" + "\n";
             return ret;
         }
         time -= mStage1Duration;
         if (time < mStage2Duration) {
 
-            ret += desc + " stage 1"+"\n";
+            ret += desc + " stage 1" + "\n";
             return ret;
         }
         if (mNumberOfStages == 2) {
-            ret += desc + "end stage 1"+"\n";
+            ret += desc + "end stage 1" + "\n";
             return ret;
         }
         time -= mStage2Duration;
         if (time < mStage3Duration) {
 
-            ret += desc + " stage 2"+"\n";
+            ret += desc + " stage 2" + "\n";
             return ret;
         }
-        ret += desc + " end stage 2"+"\n";
+        ret += desc + " end stage 2" + "\n";
         return ret;
     }
 
@@ -140,7 +139,6 @@ public class StopLogicEngine {
             setup(currentVelocity, destination - currentPos, maxAcceleration, maxVelocity, maxTime);
         }
     }
-
 
     public float getInterpolation(float v) {
         float y = calcY(v);

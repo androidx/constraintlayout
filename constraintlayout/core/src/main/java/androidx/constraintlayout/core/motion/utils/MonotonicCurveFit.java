@@ -187,10 +187,10 @@ public class MonotonicCurveFit extends CurveFit {
         final int n = mT.length;
         if (mExtrapolate) {
             if (t <= mT[0]) {
-                return mY[0][j]  + (t - mT[0]) * getSlope(mT[0],j);
+                return mY[0][j] + (t - mT[0]) * getSlope(mT[0], j);
             }
             if (t >= mT[n - 1]) {
-                return mY[n - 1][j] + (t - mT[n - 1]) * getSlope(mT[n - 1],j);
+                return mY[n - 1][j] + (t - mT[n - 1]) * getSlope(mT[n - 1], j);
             }
         } else {
             if (t <= mT[0]) {

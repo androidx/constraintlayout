@@ -62,6 +62,4 @@ public class StopLogic extends MotionInterpolator {
     public float getVelocity() {
         return engine.getVelocity();
     }
-
-
 }

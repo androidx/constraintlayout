@@ -613,8 +613,7 @@ public class ConstraintLayout extends ViewGroup {
     // Measure widgets callbacks
     // -------------------------------------------------------------------------------------------
 
-
-    // -------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------
 
     class Measurer implements BasicMeasure.Measurer {
         ConstraintLayout layout;
@@ -1247,8 +1246,7 @@ public class ConstraintLayout extends ViewGroup {
         }
     }
 
-
-    protected void applyConstraintsFromLayoutParams(boolean isInEditMode,
+protected void applyConstraintsFromLayoutParams(boolean isInEditMode,
                                                     View child,
                                                     ConstraintWidget widget, LayoutParams layoutParams,
                                                     SparseArray<ConstraintWidget> idToWidget) {

@@ -29,7 +29,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.core.motion.utils.CurveFit;
 import androidx.constraintlayout.core.motion.utils.Easing;
-import androidx.constraintlayout.motion.utils.VelocityMatrix;
+import androidx.constraintlayout.core.motion.utils.VelocityMatrix;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import android.util.Log;
 import android.util.SparseArray;

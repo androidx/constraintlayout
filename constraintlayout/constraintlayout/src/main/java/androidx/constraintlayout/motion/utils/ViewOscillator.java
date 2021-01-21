@@ -30,12 +30,13 @@ import java.lang.reflect.Method;
 /**
  * Provide the engine for executing cycles.
  * KeyCycleOscillator
+ *
  * @hide
  */
 public abstract class ViewOscillator extends KeyCycleOscillator {
     private static final String TAG = "ViewOscillator";
-    public abstract void setProperty(View view, float t);
 
+    public abstract void setProperty(View view, float t);
 
     public static ViewOscillator makeSpline(String str) {
         if (str.startsWith(Key.CUSTOM)) {
@@ -162,9 +163,11 @@ public abstract class ViewOscillator extends KeyCycleOscillator {
     static class CustomSet extends ViewOscillator {
         float[] value = new float[1];
         protected ConstraintAttribute mCustom;
-        protected void setCustom(Object custom){
+
+        protected void setCustom(Object custom) {
             mCustom = (ConstraintAttribute) custom;
         }
+
         @Override
         public void setProperty(View view, float t) {
             value[0] = get(t);

@@ -16,9 +16,6 @@
 
 package androidx.constraintlayout.core.motion.utils;
 
-
-import androidx.constraintlayout.core.motion.utils.CurveFit;
-
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
@@ -50,7 +47,6 @@ public abstract class SplineSet {
     public void setType(String type) {
         mType = type;
     }
-
 
     public float get(float t) {
         return (float) mCurveFit.getPos(t, 0);

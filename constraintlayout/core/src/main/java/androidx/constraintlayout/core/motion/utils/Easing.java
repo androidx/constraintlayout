@@ -16,7 +16,6 @@
 
 package androidx.constraintlayout.core.motion.utils;
 
-
 import java.util.Arrays;
 
 /**
