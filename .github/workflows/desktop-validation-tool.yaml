@@ -4,11 +4,13 @@ on:
   push:
     branches: [main]
     paths:
+      - 'desktop/ValidationTool/**.java'
       - 'desktop/ValidationTool/**.kt'
       - 'desktop/ValidationTool/**.xml'
       - 'desktop/ValidationTool/**.gradle'
   pull_request:
     paths:
+      - 'desktop/ValidationTool/**.java'
       - 'desktop/ValidationTool/**.kt'
       - 'desktop/ValidationTool/**.xml'
       - 'desktop/ValidationTool/**.gradle'
