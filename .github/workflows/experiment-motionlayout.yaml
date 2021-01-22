@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths:
+      - 'constraintlayout/**.java'
       - 'constraintlayout/**.kt'
       - 'constraintlayout/**.xml'
       - 'constraintlayout/**.gradle'
@@ -12,6 +13,7 @@ on:
       - 'projects/MotionLayoutExperiments/**.gradle'
   pull_request:
     paths:
+      - 'constraintlayout/**.java'
       - 'constraintlayout/**.kt'
       - 'constraintlayout/**.xml'
       - 'constraintlayout/**.gradle'
