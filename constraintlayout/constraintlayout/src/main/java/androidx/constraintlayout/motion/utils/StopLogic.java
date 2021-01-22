@@ -16,8 +16,6 @@
 
 package androidx.constraintlayout.motion.utils;
 
-import android.annotation.SuppressLint;
-
 import androidx.constraintlayout.core.motion.utils.StopLogicEngine;
 import androidx.constraintlayout.motion.widget.MotionInterpolator;
 
@@ -40,7 +38,6 @@ public class StopLogic extends MotionInterpolator {
      * @return string useful for debugging the state of the StopLogic
      */
 
-    @SuppressLint("LogConditional")
     public String debug(String desc, float time) {
         return engine.debug(desc, time);
     }
