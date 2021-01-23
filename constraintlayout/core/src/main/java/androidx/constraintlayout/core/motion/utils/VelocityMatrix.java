@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 The Android Open Source Project
+ * Copyright (C) 2020 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package androidx.constraintlayout.motion.utils;
-
-import androidx.constraintlayout.motion.widget.KeyCycleOscillator;
-import androidx.constraintlayout.motion.widget.SplineSet;
+package androidx.constraintlayout.core.motion.utils;
 
 /**
  * This is used to calculate the related velocity matrix for a post layout matrix
+ *
  * @hide
  */
 public class VelocityMatrix {
     float mDScaleX, mDScaleY, mDTranslateX, mDTranslateY, mDRotate;
     float mRotate;
     private static String TAG = "VelocityMatrix";
+
     public void clear() {
         mDScaleX = mDScaleY = mDTranslateX = mDTranslateY = mDRotate = 0;
     }
@@ -104,9 +103,9 @@ public class VelocityMatrix {
         dx += offx * mDScaleX;
         dy += offy * mDScaleY;
         float r = (float) Math.toRadians(mRotate);
-        float dr = (float)Math.toRadians(mDRotate);
-        dx +=  dr*(float) (-width*offx*Math.sin(r)-height*offy*Math.cos(r));
-        dy +=   dr*(float) (width*offx*Math.cos(r)-height*offy*Math.sin(r));
+        float dr = (float) Math.toRadians(mDRotate);
+        dx += dr * (float) (-width * offx * Math.sin(r) - height * offy * Math.cos(r));
+        dy += dr * (float) (width * offx * Math.cos(r) - height * offy * Math.sin(r));
         mAnchorDpDt[0] = dx;
         mAnchorDpDt[1] = dy;
     }

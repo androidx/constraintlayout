@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 The Android Open Source Project
+ * Copyright (C) 2020 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package androidx.constraintlayout.motion.utils;
+package androidx.constraintlayout.core.motion.utils;
 
 /**
  * Provides spline interpolation code.
  * Currently not used but it is anticipated that we will be using it in the
  * KeyMotion
+ *
  * @hide
  */
 
@@ -196,7 +197,7 @@ public class HyperSpline {
             //  (((mD * u) + mC) * u + mB) * u + mA
             //  =  "mA + u*mB + u*u*mC+u*u*u*mD" a cubic expression
             // diff with respect to u = mB + u*mC/2+ u*u*mD/3
-            // made efficent  (mD*u/3+mC/2)*u+mB;
+            // made efficient (mD*u/3+mC/2)*u+mB;
 
             return (mD * THIRD * v + mC * HALF) * v + mB;
         }

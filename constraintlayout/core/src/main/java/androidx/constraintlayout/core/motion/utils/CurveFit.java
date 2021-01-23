@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 The Android Open Source Project
+ * Copyright (C) 2020 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package androidx.constraintlayout.motion.utils;
+package androidx.constraintlayout.core.motion.utils;
 
 /**
- * Base class for interpolator
+ * Base class for curve fitting / interpolation
+ * Curve fits must be capable of being differentiable and extend beyond the points (extrapolate)
  *
  * @hide
  */

@@ -27,21 +27,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.view.ViewCompat;
-import androidx.constraintlayout.widget.Barrier;
-import androidx.constraintlayout.widget.ConstraintHelper;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.constraintlayout.widget.Constraints;
-import androidx.constraintlayout.widget.R;
-import androidx.constraintlayout.motion.utils.StopLogic;
-import androidx.constraintlayout.core.widgets.ConstraintAnchor;
-import androidx.constraintlayout.core.widgets.ConstraintWidget;
-import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
-import androidx.constraintlayout.core.widgets.Flow;
-import androidx.constraintlayout.core.widgets.Helper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
@@ -54,15 +39,32 @@ import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.core.motion.utils.KeyCache;
+import androidx.constraintlayout.core.widgets.ConstraintAnchor;
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
+import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
+import androidx.constraintlayout.core.widgets.Flow;
+import androidx.constraintlayout.core.widgets.Helper;
+import androidx.constraintlayout.motion.utils.StopLogic;
+import androidx.constraintlayout.widget.Barrier;
+import androidx.constraintlayout.widget.ConstraintHelper;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.constraintlayout.widget.Constraints;
+import androidx.constraintlayout.widget.R;
+import androidx.core.view.ViewCompat;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static androidx.constraintlayout.motion.widget.MotionScene.Transition.TRANSITION_FLAG_FIRST_DRAW;
 import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID;
 import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
-import static androidx.constraintlayout.motion.widget.MotionScene.Transition.TRANSITION_FLAG_FIRST_DRAW;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * <b>A subclass of ConstraintLayout for building animations. Added in 2.0</b>

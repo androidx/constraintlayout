@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package androidx.constraintlayout.motion.utils;
-
-import java.text.DecimalFormat;
-import java.util.Arrays;
+package androidx.constraintlayout.core.motion.utils;
 
 /**
- * This class translates the a series of floating point values into a continuous
+ * Schlick’s bias and gain functions
  * curve for use in an easing function including quantize functions
- * it is used with the "spline(0,0.3,0.3,0.5,...0.9,1)" it should start at 0 and end at one 1
+ *
  */
 public class Schlick extends Easing {
     private final static boolean DEBUG = false;

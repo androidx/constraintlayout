@@ -50,8 +50,7 @@ public class ConstraintProperties {
      */
     public static final int BOTTOM = ConstraintLayout.LayoutParams.BOTTOM;
 
-
-    /**
+/**
      * The baseline of the text in a view.
      */
     public static final int BASELINE = ConstraintLayout.LayoutParams.BASELINE;

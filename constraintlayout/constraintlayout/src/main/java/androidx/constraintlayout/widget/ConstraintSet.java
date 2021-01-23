@@ -35,7 +35,7 @@ import android.view.View;
 
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.HelperWidget;
-import androidx.constraintlayout.motion.utils.Easing;
+import androidx.constraintlayout.core.motion.utils.Easing;
 import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.MotionScene;
 import androidx.constraintlayout.widget.ConstraintAttribute.AttributeType;
@@ -185,18 +185,15 @@ public class ConstraintSet {
      */
     public static final int TOP = ConstraintLayout.LayoutParams.TOP;
 
-
     /**
      * The bottom side of a view.
      */
     public static final int BOTTOM = ConstraintLayout.LayoutParams.BOTTOM;
 
-
     /**
      * The baseline of the text in a view.
      */
     public static final int BASELINE = ConstraintLayout.LayoutParams.BASELINE;
-
 
     /**
      * The left side of a view in left to right languages.

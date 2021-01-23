@@ -19,7 +19,10 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
 
-import androidx.constraintlayout.motion.utils.Oscillator;
+import androidx.constraintlayout.core.motion.utils.Oscillator;
+import androidx.constraintlayout.core.motion.utils.SplineSet;
+import androidx.constraintlayout.motion.utils.ViewOscillator;
+import androidx.constraintlayout.motion.utils.ViewSpline;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.R;
 
@@ -125,7 +128,7 @@ public class KeyCycle extends Key {
         }
     }
 
-    public void addCycleValues(HashMap<String, KeyCycleOscillator> oscSet) {
+    public void addCycleValues(HashMap<String, ViewOscillator> oscSet) {
         for (String key : oscSet.keySet()) {
             if (key.startsWith(Key.CUSTOM)) {
                 String ckey = key.substring(Key.CUSTOM.length() + 1);
@@ -134,7 +137,7 @@ public class KeyCycle extends Key {
                     continue;
                 }
 
-                KeyCycleOscillator osc = oscSet.get(key);
+                ViewOscillator osc = oscSet.get(key);
                 if (osc == null) {
                     continue;
                 }
@@ -147,7 +150,7 @@ public class KeyCycle extends Key {
                 continue;
             }
 
-            KeyCycleOscillator osc = oscSet.get(key);
+            ViewOscillator osc = oscSet.get(key);
             if (osc == null) {
                 continue;
             }
@@ -195,7 +198,7 @@ public class KeyCycle extends Key {
     }
 
     @Override
-    public void addValues(HashMap<String, SplineSet> splines) {
+    public void addValues(HashMap<String, ViewSpline> splines) {
         Debug.logStack(TAG, "add " + splines.size() + " values", 2);
         for (String s : splines.keySet()) {
             SplineSet splineSet = splines.get(s);

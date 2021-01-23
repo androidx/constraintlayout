@@ -20,8 +20,9 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.RectF;
 
+import androidx.constraintlayout.motion.utils.ViewSpline;
 import androidx.constraintlayout.widget.R;
-import androidx.constraintlayout.motion.utils.Easing;
+import androidx.constraintlayout.core.motion.utils.Easing;
 
 import android.util.AttributeSet;
 import android.util.Log;
@@ -77,7 +78,7 @@ public class KeyPosition extends KeyPositionBase {
     }
 
     @Override
-    public void addValues(HashMap<String, SplineSet> splines) {
+    public void addValues(HashMap<String, ViewSpline> splines) {
     }
 
     public void setType(int type) {

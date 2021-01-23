@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 The Android Open Source Project
+ * Copyright (C) 2020 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package androidx.constraintlayout.motion.utils;
-
-import android.util.Log;
+package androidx.constraintlayout.core.motion.utils;
 
 import java.util.Arrays;
 
@@ -60,7 +58,7 @@ public class Easing {
                 case LINEAR_NAME:
                     return new CubicEasing(LINEAR);
                 default:
-                    Log.e("ConstraintSet", "transitionEasing syntax error syntax:" +
+                    System.err.println("transitionEasing syntax error syntax:" +
                             "transitionEasing=\"cubic(1.0,0.5,0.0,0.6)\" or " +
                             Arrays.toString(NAMED_EASING));
             }

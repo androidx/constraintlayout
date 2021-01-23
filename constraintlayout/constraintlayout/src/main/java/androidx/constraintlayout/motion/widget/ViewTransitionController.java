@@ -232,8 +232,7 @@ public class ViewTransitionController {
         int listen_for_id = viewTransition.getSharedValueID();
         int listen_for_value = viewTransition.getSharedValue();
 
-
-        ConstraintLayout.getSharedValues().addListener(viewTransition.getSharedValueID(), (id, value, oldValue) -> {
+ConstraintLayout.getSharedValues().addListener(viewTransition.getSharedValueID(), (id, value, oldValue) -> {
             int current_value = viewTransition.getSharedValueCurrent();
             viewTransition.setSharedValueCurrent(value);
             if (listen_for_id == id && current_value != value) {

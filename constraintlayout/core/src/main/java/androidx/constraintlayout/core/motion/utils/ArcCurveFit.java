@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 The Android Open Source Project
+ * Copyright (C) 2020 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package androidx.constraintlayout.motion.utils;
+package androidx.constraintlayout.core.motion.utils;
 
 import java.util.Arrays;
 
@@ -388,7 +388,6 @@ class ArcCurveFit extends CurveFit {
             }
             double pos = v * (mLut.length - 1);
             int iv = (int) (pos);
-
             double off = pos - (int) (pos);
 
             return mLut[iv] + (off * (mLut[iv + 1] - mLut[iv]));
@@ -429,8 +428,8 @@ class ArcCurveFit extends CurveFit {
                     int p1 = -index - 2;
                     int p2 = -index - 1;
 
-                    double ans =
-                            (p1 + (pos - ourPercent[p1]) / (ourPercent[p2] - ourPercent[p1])) / (ourPercent.length - 1);
+                    double ans = (p1 + (pos - ourPercent[p1]) / (ourPercent[p2] - ourPercent[p1]))
+                            / (ourPercent.length - 1);
                     mLut[i] = ans;
                 }
             }

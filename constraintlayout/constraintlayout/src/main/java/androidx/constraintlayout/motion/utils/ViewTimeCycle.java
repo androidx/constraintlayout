@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 The Android Open Source Project
+ * Copyright (C) 2020 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,58 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package androidx.constraintlayout.motion.widget;
+package androidx.constraintlayout.motion.utils;
 
 import android.os.Build;
-
-import androidx.constraintlayout.widget.ConstraintAttribute;
-import androidx.constraintlayout.motion.utils.CurveFit;
-
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 
+import androidx.constraintlayout.core.motion.utils.CurveFit;
+import androidx.constraintlayout.core.motion.utils.KeyCache;
+import androidx.constraintlayout.core.motion.utils.TimeCycleSplineSet;
+import androidx.constraintlayout.motion.widget.Key;
+import androidx.constraintlayout.motion.widget.MotionLayout;
+import androidx.constraintlayout.widget.ConstraintAttribute;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.DecimalFormat;
-
-import androidx.constraintlayout.motion.utils.Oscillator;
 
 /**
  * This engine allows manipulation of attributes by wave shapes oscillating in time
  *
  * @hide
  */
-public abstract class TimeCycleSplineSet {
-    private static final String TAG = "SplineSet";
-    protected CurveFit mCurveFit;
-    protected int mWaveShape = 0;
-    protected int[] mTimePoints = new int[10];
-    protected float[][] mValues = new float[10][3];
-    private int count;
-    private String mType;
-    private float[] mCache = new float[3];
-    private static final int CURVE_VALUE = 0;
-    private static final int CURVE_PERIOD = 1;
-    private static final int CURVE_OFFSET = 2;
-    private static float VAL_2PI = (float) (2 * Math.PI);
-    protected boolean mContinue = false;
-    long last_time;
-    float last_cycle = Float.NaN;
-
-    @Override
-    public String toString() {
-        String str = mType;
-        DecimalFormat df = new DecimalFormat("##.##");
-        for (int i = 0; i < count; i++) {
-            str += "[" + mTimePoints[i] + " , " + df.format(mValues[i]) + "] ";
-        }
-        return str;
-    }
-
-    public void setType(String type) {
-        mType = type;
-    }
+public abstract class ViewTimeCycle extends TimeCycleSplineSet {
+    private static final String TAG = "ViewTimeCycle";
 
     public abstract boolean setProperty(View view, float t, long time, KeyCache cache);
 
@@ -93,42 +65,12 @@ public abstract class TimeCycleSplineSet {
         return value;
     }
 
-    /**
-     * @param period cycles per second
-     * @return
-     */
-    protected float calcWave(float period) {
-        float p = period;
-        switch (mWaveShape) {
-            default:
-            case Oscillator.SIN_WAVE:
-                return (float) Math.sin(p * VAL_2PI);
-            case Oscillator.SQUARE_WAVE:
-                return (float) Math.signum(p * VAL_2PI);
-            case Oscillator.TRIANGLE_WAVE:
-                return 1 - Math.abs(p);
-            case Oscillator.SAW_WAVE:
-                return ((p * 2 + 1) % 2) - 1;
-            case Oscillator.REVERSE_SAW_WAVE:
-                return (1 - ((p * 2 + 1) % 2));
-            case Oscillator.COS_WAVE:
-                return (float) Math.cos(p * VAL_2PI);
-            case Oscillator.BOUNCE:
-                float x = 1 - Math.abs((p * 4) % 4 - 2);
-                return 1 - x * x;
-        }
-    }
-
-    public CurveFit getCurveFit() {
-        return mCurveFit;
-    }
-
-    static TimeCycleSplineSet makeCustomSpline(String str, SparseArray<ConstraintAttribute> attrList) {
+    public static ViewTimeCycle makeCustomSpline(String str, SparseArray<ConstraintAttribute> attrList) {
         return new CustomSet(str, attrList);
     }
 
-    static TimeCycleSplineSet makeSpline(String str, long currentTime) {
-        TimeCycleSplineSet timeCycle;
+    public static ViewTimeCycle makeSpline(String str, long currentTime) {
+        ViewTimeCycle timeCycle;
         switch (str) {
             case Key.ALPHA:
                 timeCycle = new AlphaSet();
@@ -173,52 +115,7 @@ public abstract class TimeCycleSplineSet {
         return timeCycle;
     }
 
-    protected void setStartTime(long currentTime) {
-        last_time = currentTime;
-    }
-
-    public void setPoint(int position, float value, float period, int shape, float offset) {
-        mTimePoints[count] = position;
-        mValues[count][CURVE_VALUE] = value;
-        mValues[count][CURVE_PERIOD] = period;
-        mValues[count][CURVE_OFFSET] = offset;
-        mWaveShape = Math.max(mWaveShape, shape); // the highest value shape is chosen
-        count++;
-    }
-
-    public void setup(int curveType) {
-        if (count == 0) {
-            Log.e(TAG, "Error no points added to " + mType);
-            return;
-        }
-        Sort.doubleQuickSort(mTimePoints, mValues, 0, count - 1);
-        int unique = 0;
-        for (int i = 1; i < mTimePoints.length; i++) {
-            if (mTimePoints[i] != mTimePoints[i - 1]) {
-                unique++;
-            }
-        }
-        if (unique == 0) {
-            unique = 1;
-        }
-        double[] time = new double[unique];
-        double[][] values = new double[unique][3];
-        int k = 0;
-
-        for (int i = 0; i < count; i++) {
-            if (i > 0 && mTimePoints[i] == mTimePoints[i - 1]) {
-                continue;
-            }
-            time[k] = mTimePoints[i] * 1E-2;
-            values[k][0] = mValues[i][0];
-            values[k][1] = mValues[i][1];
-            values[k][2] = mValues[i][2];
-            k++;
-        }
-        mCurveFit = CurveFit.get(curveType, time, values);
-    }
-
-    static class ElevationSet extends TimeCycleSplineSet {
+    static class ElevationSet extends ViewTimeCycle {
         @Override
         public boolean setProperty(View view, float t, long time, KeyCache cache) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -228,7 +125,7 @@ public abstract class TimeCycleSplineSet {
         }
     }
 
-    static class AlphaSet extends TimeCycleSplineSet {
+    static class AlphaSet extends ViewTimeCycle {
         @Override
         public boolean setProperty(View view, float t, long time, KeyCache cache) {
             view.setAlpha(get(t, time, view, cache));
@@ -236,7 +133,7 @@ public abstract class TimeCycleSplineSet {
         }
     }
 
-    static class RotationSet extends TimeCycleSplineSet {
+    static class RotationSet extends ViewTimeCycle {
         @Override
         public boolean setProperty(View view, float t, long time, KeyCache cache) {
             view.setRotation(get(t, time, view, cache));
@@ -244,7 +141,7 @@ public abstract class TimeCycleSplineSet {
         }
     }
 
-    static class RotationXset extends TimeCycleSplineSet {
+    static class RotationXset extends ViewTimeCycle {
         @Override
         public boolean setProperty(View view, float t, long time, KeyCache cache) {
             view.setRotationX(get(t, time, view, cache));
@@ -252,7 +149,7 @@ public abstract class TimeCycleSplineSet {
         }
     }
 
-    static class RotationYset extends TimeCycleSplineSet {
+    static class RotationYset extends ViewTimeCycle {
         @Override
         public boolean setProperty(View view, float t, long time, KeyCache cache) {
             view.setRotationY(get(t, time, view, cache));
@@ -260,7 +157,7 @@ public abstract class TimeCycleSplineSet {
         }
     }
 
-    static class PathRotate extends TimeCycleSplineSet {
+    public static class PathRotate extends ViewTimeCycle {
         @Override
         public boolean setProperty(View view, float t, long time, KeyCache cache) {
             return mContinue;
@@ -272,7 +169,7 @@ public abstract class TimeCycleSplineSet {
         }
     }
 
-    static class ScaleXset extends TimeCycleSplineSet {
+    static class ScaleXset extends ViewTimeCycle {
         @Override
         public boolean setProperty(View view, float t, long time, KeyCache cache) {
             view.setScaleX(get(t, time, view, cache));
@@ -280,7 +177,7 @@ public abstract class TimeCycleSplineSet {
         }
     }
 
-    static class ScaleYset extends TimeCycleSplineSet {
+    static class ScaleYset extends ViewTimeCycle {
         @Override
         public boolean setProperty(View view, float t, long time, KeyCache cache) {
             view.setScaleY(get(t, time, view, cache));
@@ -288,7 +185,7 @@ public abstract class TimeCycleSplineSet {
         }
     }
 
-    static class TranslationXset extends TimeCycleSplineSet {
+    static class TranslationXset extends ViewTimeCycle {
         @Override
         public boolean setProperty(View view, float t, long time, KeyCache cache) {
             view.setTranslationX(get(t, time, view, cache));
@@ -296,7 +193,7 @@ public abstract class TimeCycleSplineSet {
         }
     }
 
-    static class TranslationYset extends TimeCycleSplineSet {
+    static class TranslationYset extends ViewTimeCycle {
         @Override
         public boolean setProperty(View view, float t, long time, KeyCache cache) {
             view.setTranslationY(get(t, time, view, cache));
@@ -304,7 +201,7 @@ public abstract class TimeCycleSplineSet {
         }
     }
 
-    static class TranslationZset extends TimeCycleSplineSet {
+    static class TranslationZset extends ViewTimeCycle {
         @Override
         public boolean setProperty(View view, float t, long time, KeyCache cache) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -314,7 +211,7 @@ public abstract class TimeCycleSplineSet {
         }
     }
 
-    static class CustomSet extends TimeCycleSplineSet {
+    public static class CustomSet extends ViewTimeCycle {
         String mAttributeName;
         SparseArray<ConstraintAttribute> mConstraintAttributeList;
         SparseArray<float[]> mWaveProperties = new SparseArray<>();
@@ -388,7 +285,7 @@ public abstract class TimeCycleSplineSet {
         }
     }
 
-    static class ProgressSet extends TimeCycleSplineSet {
+    static class ProgressSet extends ViewTimeCycle {
         boolean mNoMethod = false;
 
         @Override
@@ -419,45 +316,4 @@ public abstract class TimeCycleSplineSet {
         }
     }
 
-    private static class Sort {
-        static void doubleQuickSort(int[] key, float[][] value, int low, int hi) {
-            int[] stack = new int[key.length + 10];
-            int count = 0;
-            stack[count++] = hi;
-            stack[count++] = low;
-            while (count > 0) {
-                low = stack[--count];
-                hi = stack[--count];
-                if (low < hi) {
-                    int p = partition(key, value, low, hi);
-                    stack[count++] = p - 1;
-                    stack[count++] = low;
-                    stack[count++] = hi;
-                    stack[count++] = p + 1;
-                }
-            }
-        }
-
-        private static int partition(int[] array, float[][] value, int low, int hi) {
-            int pivot = array[hi];
-            int i = low;
-            for (int j = low; j < hi; j++) {
-                if (array[j] <= pivot) {
-                    swap(array, value, i, j);
-                    i++;
-                }
-            }
-            swap(array, value, i, hi);
-            return i;
-        }
-
-        private static void swap(int[] array, float[][] value, int a, int b) {
-            int tmp = array[a];
-            array[a] = array[b];
-            array[b] = tmp;
-            float[] tmpv = value[a];
-            value[a] = value[b];
-            value[b] = tmpv;
-        }
-    }
 }
