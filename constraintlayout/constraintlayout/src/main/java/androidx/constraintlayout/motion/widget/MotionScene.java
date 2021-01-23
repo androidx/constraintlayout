@@ -648,7 +648,7 @@ public class MotionScene {
          *
          * @param enable
          */
-        public void setEnable(boolean enable) {
+        public void setEnabled(boolean enable) {
             mDisable = !enable;
         }
 
