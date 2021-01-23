@@ -139,7 +139,7 @@ public class LayoutTest {
                     }
             long time2 = System.nanoTime() - time;
             System.out.println("Time spent: " + time2 / 1E6 + " ms");
-                    root.getSystem().displaySystemInformations();
+                    root.getSystem().displaySystemInformation();
                     return;
             }
     }
