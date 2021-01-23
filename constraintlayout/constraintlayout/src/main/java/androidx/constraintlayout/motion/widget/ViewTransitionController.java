@@ -86,7 +86,7 @@ public class ViewTransitionController {
     void enableViewTransition(int id, boolean enable) {
         for (ViewTransition viewTransition : viewTransitions) {
             if (viewTransition.getId() == id) {
-                viewTransition.setEnable(enable);
+                viewTransition.setEnabled(enable);
                 break;
             }
         }
