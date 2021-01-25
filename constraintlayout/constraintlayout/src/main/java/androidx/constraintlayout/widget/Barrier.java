@@ -193,7 +193,7 @@ public class Barrier extends ConstraintHelper {
         super.init(attrs);
         mBarrier = new androidx.constraintlayout.core.widgets.Barrier();
         if (attrs != null) {
-            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ConstraintLayout_Layout);
+            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.Barrier);
             final int N = a.getIndexCount();
             for (int i = 0; i < N; i++) {
                 int attr = a.getIndex(i);

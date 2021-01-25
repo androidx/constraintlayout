@@ -71,14 +71,14 @@ public class Placeholder extends View {
     super.setVisibility(mEmptyVisibility);
     mContentId = -1;
     if (attrs != null) {
-      TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ConstraintLayout_placeholder);
+      TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.Placeholder);
       final int N = a.getIndexCount();
       for (int i = 0; i < N; i++) {
         int attr = a.getIndex(i);
-        if (attr == R.styleable.ConstraintLayout_placeholder_content) {
+        if (attr == R.styleable.Placeholder_content) {
           mContentId = a.getResourceId(attr, mContentId);
         } else {
-          if (attr == R.styleable.ConstraintLayout_placeholder_placeholder_emptyVisibility) {
+          if (attr == R.styleable.Placeholder_placeholder_emptyVisibility) {
             mEmptyVisibility = a.getInt(attr, mEmptyVisibility);
           }
         }

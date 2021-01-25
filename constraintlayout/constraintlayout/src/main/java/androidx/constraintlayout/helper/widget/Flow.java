@@ -200,7 +200,7 @@ public class Flow extends VirtualLayout {
         super.init(attrs);
         mFlow = new androidx.constraintlayout.core.widgets.Flow();
         if (attrs != null) {
-            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ConstraintLayout_Layout);
+            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.Flow);
             final int N = a.getIndexCount();
             for (int i = 0; i < N; i++) {
                 int attr = a.getIndex(i);
