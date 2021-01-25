@@ -832,7 +832,7 @@ public class MotionController {
                 if (points[j].attributes.containsKey(attributeName)) {
                     ConstraintAttribute attribute = points[j].attributes.get(attributeName);
                     if (attribute != null) {
-                        mAttributeInterpolatorCount[i] += attribute.numberOfInterpolationValues();
+                        mAttributeInterpolatorCount[i] += attribute.numberOfInterpolatedValues();
                         break;
                     }
                 }

@@ -2199,11 +2199,11 @@ public class MotionLayout extends ConstraintLayout implements
         if (mInterpolator != null) {
             float deltaT = EPSILON;
             float dir = Math.signum(mTransitionGoalPosition - mTransitionLastPosition);
-            float interpolation = mInterpolator.getInterpolation(mTransitionLastPosition + deltaT);
+            float interpolatedPosition = mInterpolator.getInterpolation(mTransitionLastPosition + deltaT);
             position = mInterpolator.getInterpolation(mTransitionLastPosition);
-            interpolation -= position;
-            interpolation /= deltaT;
-            v = dir * interpolation / mTransitionDuration;
+            interpolatedPosition -= position;
+            interpolatedPosition /= deltaT;
+            v = dir * interpolatedPosition / mTransitionDuration;
         }
 
         if (mInterpolator instanceof MotionInterpolator) {

@@ -169,16 +169,16 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
     }
 
     int getCustomDataCount(String name) {
-        return attributes.get(name).numberOfInterpolationValues();
+        return attributes.get(name).numberOfInterpolatedValues();
     }
 
     int getCustomData(String name, double[] value, int offset) {
         ConstraintAttribute a = attributes.get(name);
-        if (a.numberOfInterpolationValues() == 1) {
+        if (a.numberOfInterpolatedValues() == 1) {
             value[offset] = a.getValueToInterpolate();
             return 1;
         } else {
-            int N = a.numberOfInterpolationValues();
+            int N = a.numberOfInterpolatedValues();
             float[] f = new float[N];
             a.getValuesToInterpolate(f);
             for (int i = 0; i < N; i++) {

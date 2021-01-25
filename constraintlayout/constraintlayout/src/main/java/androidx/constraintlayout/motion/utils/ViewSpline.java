@@ -189,7 +189,7 @@ public abstract class ViewSpline extends SplineSet {
 
         public void setup(int curveType) {
             int size = mConstraintAttributeList.size();
-            int dimensionality = mConstraintAttributeList.valueAt(0).numberOfInterpolationValues();
+            int dimensionality = mConstraintAttributeList.valueAt(0).numberOfInterpolatedValues();
             double[] time = new double[size];
             mTempValues = new float[dimensionality];
             double[][] values = new double[size][dimensionality];

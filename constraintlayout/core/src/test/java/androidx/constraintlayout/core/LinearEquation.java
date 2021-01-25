@@ -26,7 +26,7 @@ import java.util.HashMap;
 
 /**
  * LinearEquation is used to represent the linear equations fed into the solver.<br>
- * A linear equation can be an equality or an inequality (left term &le; or &ge; to the right term).<br>
+ * A linear equation can be an equality or an inequation (left term &le; or &ge; to the right term).<br>
  * The general form will be similar to {@code a0x0 + a1x1 + ... = C + a2x2 + a3x3 + ... ,} where {@code a0x0} is a term representing
  * a variable x0 of an amount {@code a0}, and {@code C} represent a constant term. The amount of terms on the left side or the right
  * side of the equation is arbitrary.
