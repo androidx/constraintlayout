@@ -1,15 +1,15 @@
 package androidx.constraintlayout.core;
 
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.Before;
+import org.junit.Test;
 
-import static org.testng.Assert.*;
+import static org.junit.Assert.*;
 
 public class LinearEquationTest {
     LinearSystem s;
     LinearEquation e;
 
-    @BeforeMethod
+    @Before
     public void setUp() {
         s = new LinearSystem();
         e = new LinearEquation();

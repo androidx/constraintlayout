@@ -8,13 +8,13 @@ import androidx.constraintlayout.core.widgets.Guideline;
 import androidx.constraintlayout.core.widgets.Optimizer;
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import java.util.ArrayList;
 
 import static androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.EXACTLY;
 import static androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.WRAP_CONTENT;
-import static org.testng.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 public class BasicTest {
 

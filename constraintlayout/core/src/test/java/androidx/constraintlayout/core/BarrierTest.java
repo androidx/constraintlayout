@@ -1,9 +1,9 @@
 package androidx.constraintlayout.core;
 
 import androidx.constraintlayout.core.widgets.*;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for Barriers
@@ -481,8 +481,8 @@ public class BarrierTest {
 
         System.out.println("A: " + A + " B: " + B + " barrier: " + barrier);
         assertEquals(barrier.getTop(), A.getBottom());
-        assertEquals((float) B.getTop(), barrier.getBottom()
-                + (root.getBottom() - barrier.getBottom() - B.getHeight()) / 2f);
+        float actual = barrier.getBottom() + (root.getBottom() - barrier.getBottom() - B.getHeight()) / 2f;
+        assertEquals((float) B.getTop(), actual, 1f);
     }
 
     @Test

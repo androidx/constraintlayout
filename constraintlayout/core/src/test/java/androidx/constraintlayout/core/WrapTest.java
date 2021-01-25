@@ -6,9 +6,9 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 import androidx.constraintlayout.core.widgets.Guideline;
 import androidx.constraintlayout.core.widgets.Optimizer;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Basic wrap test
@@ -509,7 +509,7 @@ public class WrapTest {
 
         assertEquals(root.getWidth(), A.getWidth() * 2);
         assertEquals(root.getHeight(), A.getHeight() + 8);
-        assertEquals((float) guideline.getLeft(), root.getWidth() / 2f);
+        assertEquals((float) guideline.getLeft(), root.getWidth() / 2f, 0f);
         assertEquals(A.getWidth(), 100);
         assertEquals(A.getHeight(), 20);
     }
@@ -556,7 +556,7 @@ public class WrapTest {
 
         assertEquals(root.getWidth(), A.getWidth() * 2);
         assertEquals(root.getHeight(), A.getHeight());
-        assertEquals((float) guideline.getLeft(), root.getWidth() / 2f);
+        assertEquals((float) guideline.getLeft(), root.getWidth() / 2f, 0f);
         assertEquals(A.getWidth(), 100);
         assertEquals(A.getHeight(), 20);
     }

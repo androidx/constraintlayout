@@ -20,10 +20,10 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 import androidx.constraintlayout.core.widgets.Guideline;
 import androidx.constraintlayout.core.widgets.Optimizer;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class RatioTest {
 
@@ -745,7 +745,7 @@ public class RatioTest {
         root.layout();
 
         System.out.println("c) root: " + root + " A: " + A + " B: " + B + " C: " + C + " D: " + D);
-        assertEquals(root.getWidth() > 0, true, "root width should be bigger than zero");
+        assertTrue("root width should be bigger than zero", root.getWidth() > 0);
         assertEquals(A.getWidth(), root.getWidth());
         assertEquals(A.getHeight(), root.getWidth());
         assertEquals(B.getWidth(), A.getWidth());
@@ -765,7 +765,7 @@ public class RatioTest {
         root.layout();
 
         System.out.println("d) root: " + root + " A: " + A + " B: " + B + " C: " + C + " D: " + D);
-        assertEquals(root.getHeight() > 0, true, "root width should be bigger than zero");
+        assertTrue("root width should be bigger than zero", root.getHeight() > 0);
         assertEquals(A.getWidth(), root.getWidth());
         assertEquals(A.getHeight(), root.getWidth());
         assertEquals(B.getWidth(), A.getWidth());
@@ -954,7 +954,7 @@ public class RatioTest {
         assertEquals(A.getLeft(), 0);
         assertEquals((float) A.getWidth() / A.getHeight(), 16f / 9f, .1f);
         assertEquals(A.getHeight(), 150);
-        assertEquals((float) A.getTop(), (root.getHeight() - A.getHeight()) / 2f);
+        assertEquals((float) A.getTop(), (root.getHeight() - A.getHeight()) / 2f, 0f);
     }
 
     @Test
@@ -1044,18 +1044,18 @@ public class RatioTest {
         root.layout();
         System.out.println("a) root: " + root + " A: " + A);
         assertEquals((float) A.getWidth() / A.getHeight(), 3.f / 2.f, .1f);
-        assertEquals(A.getTop() >= 0, true, "A.top > 0");
-        assertEquals(A.getLeft() >= 0, true, "A.left > 0");
-        assertEquals(A.getTop(), root.getHeight() - A.getBottom(), "A vertically centered");
-        assertEquals(A.getLeft(), root.getRight() - A.getRight(), "A horizontally centered");
+        assertTrue("A.top > 0", A.getTop() >= 0);
+        assertTrue("A.left > 0", A.getLeft() >= 0);
+        assertEquals("A vertically centered", A.getTop(), root.getHeight() - A.getBottom());
+        assertEquals("A horizontally centered", A.getLeft(), root.getRight() - A.getRight());
         A.setDimensionRatio("1:2");
         root.layout();
         System.out.println("b) root: " + root + " A: " + A);
         assertEquals((float) A.getWidth() / A.getHeight(), 1.f / 2.f, .1f);
-        assertEquals(A.getTop() >= 0, true, "A.top > 0");
-        assertEquals(A.getLeft() >= 0, true, "A.left > 0");
-        assertEquals(A.getTop(), root.getHeight() - A.getBottom(), "A vertically centered");
-        assertEquals(A.getLeft(), root.getRight() - A.getRight(), "A horizontally centered");
+        assertTrue("A.top > 0", A.getTop() >= 0);
+        assertTrue("A.left > 0", A.getLeft() >= 0);
+        assertEquals("A vertically centered", A.getTop(), root.getHeight() - A.getBottom());
+        assertEquals("A horizontally centered", A.getLeft(), root.getRight() - A.getRight());
     }
 
     @Test
@@ -1079,18 +1079,18 @@ public class RatioTest {
         root.layout();
         System.out.println("a) root: " + root + " guideline: " + guideline + " A: " + A);
         assertEquals(A.getWidth() / A.getHeight(), 3 / 2);
-        assertEquals(A.getTop() >= 0, true, "A.top > 0");
-        assertEquals(A.getLeft() >= 0, true, "A.left > 0");
-        assertEquals(A.getTop(), root.getHeight() - A.getBottom(), "A vertically centered");
-        assertEquals(A.getLeft(), guideline.getLeft() - A.getRight(), "A horizontally centered");
+        assertTrue("A.top > 0", A.getTop() >= 0);
+        assertTrue("A.left > 0", A.getLeft() >= 0);
+        assertEquals("A vertically centered", A.getTop(), root.getHeight() - A.getBottom());
+        assertEquals("A horizontally centered", A.getLeft(), guideline.getLeft() - A.getRight());
         A.setDimensionRatio("1:2");
         root.layout();
         System.out.println("b) root: " + root + " guideline: " + guideline + " A: " + A);
         assertEquals(A.getWidth() / A.getHeight(), 1 / 2);
-        assertEquals(A.getTop() >= 0, true, "A.top > 0");
-        assertEquals(A.getLeft() >= 0, true, "A.left > 0");
-        assertEquals(A.getTop(), root.getHeight() - A.getBottom(), "A vertically centered");
-        assertEquals(A.getLeft(), guideline.getLeft() - A.getRight(), "A horizontally centered");
+        assertTrue("A.top > 0", A.getTop() >= 0);
+        assertTrue("A.left > 0", A.getLeft() >= 0);
+        assertEquals("A vertically centered", A.getTop(), root.getHeight() - A.getBottom());
+        assertEquals("A horizontally centered", A.getLeft(), guideline.getLeft() - A.getRight());
     }
 
     @Test

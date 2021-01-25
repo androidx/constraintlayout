@@ -16,8 +16,7 @@
 package androidx.constraintlayout.core;
 
 import androidx.constraintlayout.core.widgets.*;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+import org.junit.Test;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -29,20 +28,29 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.*;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertEqualsNoOrder;
-import static org.testng.Assert.assertTrue;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+import org.junit.runner.RunWith;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * This test the the ConstraintWidget system buy loading XML that contain tags with there positions.
  * the xml files can be designed in android studio.
  */
+@RunWith(Parameterized.class)
 public class XmlBasedTest {
     private static final int ALLOWED_POSITION_ERROR = 1;
     HashMap<String, ConstraintWidget> widgetMap;
     HashMap<ConstraintWidget, String> boundsMap;
     ConstraintWidgetContainer container;
     ArrayList<Connection> connectionList;
+    String file;
+
+    public XmlBasedTest(String file) {
+        this.file = file;
+    }
 
     static class Connection {
         ConstraintWidget fromWidget;
@@ -80,36 +88,23 @@ public class XmlBasedTest {
         if (v.equals("END")) return "RIGHT";
         return v;
     }
-    //@Test
+
+    @Test
     public void testAccessToResources() {
         String dirName  = System.getProperty("user.dir") + "/src/test/resources/";
-        assertTrue(new File(dirName).exists(), " could not find dir "+dirName);
+        assertTrue(" could not find dir " + dirName, new File(dirName).exists());
         Object[][]  names =  genListOfName();
-        assertTrue(names.length>1," Could not get Path "+dirName);
+        assertTrue(" Could not get Path " + dirName, names.length > 1);
     }
 
-    @DataProvider(name = "test1")
+    @Parameterized.Parameters
     public static Object[][] genListOfName() {
         String dirName = System.getProperty("user.dir") + "/src/test/resources/";
 
-        File[] f = new File(dirName).listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                return pathname.getName().startsWith("check");
-            }
-        });
-        Arrays.sort(f, new Comparator<File>() {
-            @Override
-            public int compare(File o1, File o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
+        File[] f = new File(dirName).listFiles(pathname -> pathname.getName().startsWith("check"));
+        assertNotNull(f);
+        Arrays.sort(f, (o1, o2) -> o1.getName().compareTo(o2.getName()));
 
-        if (false) {
-            Object[][] ret = new Object[1][1];
-            ret[0][0] = f[4].getAbsolutePath();
-            return ret;
-        }
         Object[][] ret = new Object[f.length][1];
         for (int i = 0; i < ret.length; i++) {
             ret[i][0] = f[i].getAbsolutePath();
@@ -127,8 +122,8 @@ public class XmlBasedTest {
         return w.getLeft() + "," + w.getTop() + "," + w.getWidth() + "," + w.getHeight();
     }
 
-    @Test(dataProvider = "test1")
-    public void testSolverXML(String file) {
+    @Test
+    public void testSolverXML() {
         parseXML(file);
         container.setOptimizationLevel(Optimizer.OPTIMIZATION_NONE);
         int[] perm = new int[boundsMap.size()];
@@ -154,8 +149,8 @@ public class XmlBasedTest {
         }
     }
 
-    @Test(dataProvider = "test1")
-    public void testDirectResolutionXML(String file) {
+    @Test
+    public void testDirectResolutionXML() {
 
         parseXML(file);
         container.setOptimizationLevel(Optimizer.OPTIMIZATION_STANDARD);
@@ -579,7 +574,7 @@ public class XmlBasedTest {
             ok &= same;
             layout.append(compare).append("\n");
         }
-        assertTrue(ok, layout.toString());
+        assertTrue(layout.toString(), ok);
     }
 
     private static String rightPad(String s, int n) {
@@ -627,7 +622,7 @@ public class XmlBasedTest {
     }
 
     @Test
-    void SimpleTest() {
+    public void SimpleTest() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 1080, 1920);
 
         final ConstraintWidget A = new ConstraintWidget(0, 0, 200, 51);
@@ -644,7 +639,7 @@ public class XmlBasedTest {
     }
 
     @Test
-    void GuideLineTest() {
+    public void GuideLineTest() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 1080, 1920);
         final ConstraintWidget A = new ConstraintWidget(0, 0, 200, 51);
         final Guideline guideline = new Guideline();

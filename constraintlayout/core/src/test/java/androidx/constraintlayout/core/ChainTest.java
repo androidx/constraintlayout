@@ -16,11 +16,11 @@
 package androidx.constraintlayout.core;
 
 import androidx.constraintlayout.core.widgets.*;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 public class ChainTest {
 

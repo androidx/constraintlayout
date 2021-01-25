@@ -15,16 +15,16 @@
  */
 package androidx.constraintlayout.core;
 
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.Before;
+import org.junit.Test;
 
-import static org.testng.Assert.*;
+import static org.junit.Assert.*;
 
 public class LinearSystemTest {
 
     LinearSystem s;
 
-    @BeforeMethod
+    @Before
     public void setUp() {
         s = new LinearSystem();
         LinearEquation.resetNaming();
@@ -75,11 +75,11 @@ public class LinearSystemTest {
         }
         System.out.println("Result: ");
         s.displayReadableRows();
-        assertEquals(s.getValueFor("Al"), 50.0f);
-        assertEquals(s.getValueFor("Ar"), 250.0f);
-        assertEquals(s.getValueFor("Bl"), 0.0f);
-        assertEquals(s.getValueFor("Br"), 300.0f);
-        assertEquals(s.getValueFor("Rr"), 300.0f);
+        assertEquals(s.getValueFor("Al"), 50.0f, 0f);
+        assertEquals(s.getValueFor("Ar"), 250.0f, 0f);
+        assertEquals(s.getValueFor("Bl"), 0.0f, 0f);
+        assertEquals(s.getValueFor("Br"), 300.0f, 0f);
+        assertEquals(s.getValueFor("Rr"), 300.0f, 0f);
     }
 
     @Test
@@ -98,9 +98,9 @@ public class LinearSystemTest {
         }
         System.out.println("Result: ");
         s.displayReadableRows();
-        assertEquals(s.getValueFor("Xm"), 50.0f); // 50
-        assertEquals(s.getValueFor("Xl"), 40.0f); // 30
-        assertEquals(s.getValueFor("Xr"), 60.0f); // 70
+        assertEquals(s.getValueFor("Xm"), 50.0f, 0f); // 50
+        assertEquals(s.getValueFor("Xl"), 40.0f, 0f); // 30
+        assertEquals(s.getValueFor("Xr"), 60.0f, 0f); // 70
     }
 
     @Test
@@ -126,10 +126,10 @@ public class LinearSystemTest {
         }
         System.out.println("Result: ");
         s.displayReadableRows();
-        assertEquals(s.getValueFor("zero"), 0.0f);
-        assertEquals(s.getValueFor("a"), 45.0f);
-        assertEquals(s.getValueFor("b"), 100.0f);
-        assertEquals(s.getValueFor("c"), 90.0f);
+        assertEquals(s.getValueFor("zero"), 0.0f, 0f);
+        assertEquals(s.getValueFor("a"), 45.0f, 0f);
+        assertEquals(s.getValueFor("b"), 100.0f, 0f);
+        assertEquals(s.getValueFor("c"), 90.0f, 0f);
     }
 
     @Test
@@ -233,11 +233,11 @@ public class LinearSystemTest {
             System.out.println("Check at iteration " + i);
             s.displayReadableRows();
             if (i == 0) {
-                assertEquals(s.getValueFor("A"), 1000.0f);
+                assertEquals(s.getValueFor("A"), 1000.0f, 0f);
             } else if (i == 1) {
-                assertEquals(s.getValueFor("A"), 100.0f);
+                assertEquals(s.getValueFor("A"), 100.0f, 0f);
             } else if (i == 2) {
-                assertEquals(s.getValueFor("A"), 10.0f);
+                assertEquals(s.getValueFor("A"), 10.0f, 0f);
             }
         }
     }
@@ -250,7 +250,7 @@ public class LinearSystemTest {
         //s.rebuildGoalFromErrors();
         String result = s.getGoal().toString();
         assertTrue((result.equals("0 = 0.0") || result.equals(" goal -> (0.0) : ")));
-        assertEquals(s.getValueFor("W3.left"), 0.0f);
+        assertEquals(s.getValueFor("W3.left"), 0.0f, 0f);
     }
 
     @Test
@@ -264,8 +264,8 @@ public class LinearSystemTest {
         //s.rebuildGoalFromErrors();
         String result = s.getGoal().toString();
         assertTrue((result.equals("0 = 0.0") || result.equals(" goal -> (0.0) : ")));
-        assertEquals(s.getValueFor("W3.left"), 0.0f);
-        assertEquals(s.getValueFor("W3.right"), 600.0f);
+        assertEquals(s.getValueFor("W3.left"), 0.0f, 0f);
+        assertEquals(s.getValueFor("W3.right"), 600.0f, 0f);
     }
 
     @Test
@@ -280,9 +280,9 @@ public class LinearSystemTest {
         s.addConstraint(LinearEquation.createRowFromEquation(s, e2));
         s.addConstraint(LinearEquation.createRowFromEquation(s, left_constraint)); // left
         //s.rebuildGoalFromErrors();
-        assertEquals(s.getValueFor("W3.left"), 0.0f);
-        assertEquals(s.getValueFor("W3.right"), 600.0f);
-        assertEquals(s.getValueFor("W4.left"), 0.0f);
+        assertEquals(s.getValueFor("W3.left"), 0.0f, 0f);
+        assertEquals(s.getValueFor("W3.right"), 600.0f, 0f);
+        assertEquals(s.getValueFor("W4.left"), 0.0f, 0f);
     }
 
     @Test
@@ -296,25 +296,25 @@ public class LinearSystemTest {
         s.addConstraint(LinearEquation.createRowFromEquation(s, e1)); // 2 Xm = Xl + Xr
         goalRow.addError(s.getVariable("Xm", SolverVariable.Type.ERROR));
         goalRow.addError(s.getVariable("Xl", SolverVariable.Type.ERROR));
-//        assertEquals(s.getRow(0).toReadableString(), "Xm = 0.5 Xl + 0.5 Xr");
+//        assertEquals(s.getRow(0).toReadableString(), "Xm = 0.5 Xl + 0.5 Xr", 0f);
         e2.var("Xl").plus(10).lowerThan().var("Xr");
         s.addConstraint(LinearEquation.createRowFromEquation(s, e2)); // Xl + 10 <= Xr
 
-//        assertEquals(s.getRow(0).toReadableString(), "Xm = 5.0 + Xl + 0.5 s1");
-//        assertEquals(s.getRow(1).toReadableString(), "Xr = 10.0 + Xl + s1");
+//        assertEquals(s.getRow(0).toReadableString(), "Xm = 5.0 + Xl + 0.5 s1", 0f);
+//        assertEquals(s.getRow(1).toReadableString(), "Xr = 10.0 + Xl + s1", 0f);
         e3.var("Xl").greaterThan().var(-10);
         s.addConstraint(LinearEquation.createRowFromEquation(s, e3)); // Xl >= -10
-//        assertEquals(s.getRow(0).toReadableString(), "Xm = -5.0 + 0.5 s1 + s2");
-//        assertEquals(s.getRow(1).toReadableString(), "Xr = s1 + s2");
-//        assertEquals(s.getRow(2).toReadableString(), "Xl = -10.0 + s2");
+//        assertEquals(s.getRow(0).toReadableString(), "Xm = -5.0 + 0.5 s1 + s2", 0f);
+//        assertEquals(s.getRow(1).toReadableString(), "Xr = s1 + s2", 0f);
+//        assertEquals(s.getRow(2).toReadableString(), "Xl = -10.0 + s2", 0f);
         e4.var("Xr").lowerThan().var(100);
         s.addConstraint(LinearEquation.createRowFromEquation(s, e4)); // Xr <= 100
-//        assertEquals(s.getRow(0).toReadableString(), "Xm = 45.0 + 0.5 s2 - 0.5 s3");
-//        assertEquals(s.getRow(1).toReadableString(), "Xr = 100.0 - s3");
-//        assertEquals(s.getRow(2).toReadableString(), "Xl = -10.0 + s2");
-//        assertEquals(s.getRow(3).toReadableString(), "s1 = 100.0 - s2 - s3");
+//        assertEquals(s.getRow(0).toReadableString(), "Xm = 45.0 + 0.5 s2 - 0.5 s3", 0f);
+//        assertEquals(s.getRow(1).toReadableString(), "Xr = 100.0 - s3", 0f);
+//        assertEquals(s.getRow(2).toReadableString(), "Xl = -10.0 + s2", 0f);
+//        assertEquals(s.getRow(3).toReadableString(), "s1 = 100.0 - s2 - s3", 0f);
         //s.rebuildGoalFromErrors();
-//        assertEquals(s.getGoal().toString(), "Goal: ");
+//        assertEquals(s.getGoal().toString(), "Goal: ", 0f);
         LinearEquation goal = new LinearEquation(s);
         goal.var("Xm").minus("Xl");
         try {
@@ -325,9 +325,9 @@ public class LinearSystemTest {
         int xl = (int) s.getValueFor("Xl");
         int xm = (int) s.getValueFor("Xm");
         int xr = (int) s.getValueFor("Xr");
-//        assertEquals(xl, -10);
-//        assertEquals(xm, 45);
-//        assertEquals(xr, 100);
+//        assertEquals(xl, -10, 0f);
+//        assertEquals(xm, 45, 0f);
+//        assertEquals(xr, 100, 0f);
         LinearEquation e5 = new LinearEquation(s);
         e5.var("Xm").equalsTo().var(50);
         s.addConstraint(LinearEquation.createRowFromEquation(s, e5));

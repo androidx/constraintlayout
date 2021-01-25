@@ -19,13 +19,13 @@ import androidx.constraintlayout.core.scout.Scout;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 import androidx.constraintlayout.core.widgets.Guideline;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static org.testng.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 /**
  * This test creates a random set of non overlapping rectangles uses the scout
@@ -109,10 +109,10 @@ public class RandomLayoutTest {
     }
 
     @Test
-    void run() {
+    public void testRandomLayouts() {
         Random r = new Random(4567890);
         for (int test = 0; test < LOOP_FOR; test++) {
-            Long seed = r.nextLong();
+            long seed = r.nextLong();
             System.out.println("seed = " + seed);
             ArrayList<Rectangle> list = random(seed, MAX_WIDGETS, PERCENT_BIG_WIDGETS, LAYOUT_WIDTH, LAYOUT_HEIGHT);
 
@@ -170,7 +170,7 @@ public class RandomLayoutTest {
                 allOk &= ok = isSame(dim(widget), dim(rect));
                 layout += rightPad(dim(widget), 15) + ((ok) ? " == " : " != ") + dim(rect) + "\n";
             }
-            assertTrue(allOk, layout);
+            assertTrue(layout, allOk);
         }
     }
 
