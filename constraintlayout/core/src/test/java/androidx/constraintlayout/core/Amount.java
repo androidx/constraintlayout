@@ -62,7 +62,7 @@ class Amount {
 
     /**
      * Add an amount to the current one.
-     * @param amount amount added
+     * @param amount amount to add
      * @return this
      */
     public Amount add(Amount amount) {
@@ -78,7 +78,7 @@ class Amount {
 
     /**
      * Add an integer amount
-     * @param amount
+     * @param amount amount to add
      * @return this
      */
     public Amount add(int amount) {
@@ -87,11 +87,11 @@ class Amount {
     }
 
     /**
-     * Substract an amount to the current one.
-     * @param amount amount substracted
+     * Subtract an amount to the current one.
+     * @param amount amount to subtract
      * @return this
      */
-    public Amount substract(Amount amount) {
+    public Amount subtract(Amount amount) {
         if (mDenominator == amount.mDenominator) {
             mNumerator -= amount.mNumerator;
         } else {
@@ -104,7 +104,7 @@ class Amount {
 
     /**
      * Multiply an amount with the current one.
-     * @param amount amount multiplied
+     * @param amount amount to multiply by
      * @return this
      */
     public Amount multiply(Amount amount) {
@@ -116,7 +116,7 @@ class Amount {
 
     /**
      * Divide the current amount by the given amount.
-     * @param amount amount divided
+     * @param amount amount to divide by
      * @return this
      */
     public Amount divide(Amount amount) {

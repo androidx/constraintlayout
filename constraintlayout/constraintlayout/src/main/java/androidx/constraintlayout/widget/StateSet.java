@@ -48,7 +48,7 @@ public class StateSet {
     private ConstraintsChangedListener mConstraintsChangedListener = null;
 
     /**
-     * Parse a Stateset
+     * Parse a StateSet
      * @param context
      * @param parser
      */
@@ -208,8 +208,8 @@ public class StateSet {
         }
     }
 
-    public int updateConstraints(int currentid, int id, float width, float height) {
-        if (currentid == id) {
+    public int updateConstraints(int currentId, int id, float width, float height) {
+        if (currentId == id) {
             State state;
             if (id == -1) {
                 state = mStateList.valueAt(0); // id not being used take the first
@@ -221,13 +221,13 @@ public class StateSet {
                 return -1;
             }
             if (mCurrentConstraintNumber != -1) {
-                if (state.mVariants.get(currentid).match(width, height)) {
-                    return currentid;
+                if (state.mVariants.get(currentId).match(width, height)) {
+                    return currentId;
                 }
             }
             int match = state.findMatch(width, height);
-            if (currentid == match) {
-                return currentid;
+            if (currentId == match) {
+                return currentId;
             }
 
             return (match == -1) ? state.mConstraintID : state.mVariants.get(match).mConstraintID;

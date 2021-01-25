@@ -878,18 +878,18 @@ class MotionPaths implements Comparable<MotionPaths> {
         if (a == null) {
             return 0;
         }
-        return a.noOfInterpValues();
+        return a.numberOfInterpolatedValues();
     }
 
     int getCustomData(String name, double[] value, int offset) {
         ConstraintAttribute a = attributes.get(name);
         if (a == null) {
             return 0;
-        } else if (a.noOfInterpValues() == 1) {
+        } else if (a.numberOfInterpolatedValues() == 1) {
             value[offset] = a.getValueToInterpolate();
             return 1;
         } else {
-            int N = a.noOfInterpValues();
+            int N = a.numberOfInterpolatedValues();
             float[] f = new float[N];
             a.getValuesToInterpolate(f);
             for (int i = 0; i < N; i++) {

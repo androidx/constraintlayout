@@ -7,8 +7,7 @@ import android.view.ViewParent;
 
 /**
  * Control the visibility and elevation of the referenced views
- */
-/**
+ *
  * <b>Added in 1.1</b>
  * <p>
  *     This class controls the visibility of a set of referenced widgets.

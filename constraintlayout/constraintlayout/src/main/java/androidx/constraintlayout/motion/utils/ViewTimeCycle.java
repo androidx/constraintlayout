@@ -225,7 +225,7 @@ public abstract class ViewTimeCycle extends TimeCycleSplineSet {
 
         public void setup(int curveType) {
             int size = mConstraintAttributeList.size();
-            int dimensionality = mConstraintAttributeList.valueAt(0).noOfInterpValues();
+            int dimensionality = mConstraintAttributeList.valueAt(0).numberOfInterpolatedValues();
             double[] time = new double[size];
             mTempValues = new float[dimensionality + 2];
             mCache = new float[dimensionality];
@@ -315,5 +315,4 @@ public abstract class ViewTimeCycle extends TimeCycleSplineSet {
             return mContinue;
         }
     }
-
 }

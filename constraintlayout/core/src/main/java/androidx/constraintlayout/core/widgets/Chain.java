@@ -75,7 +75,7 @@ public class Chain {
      * @param container the root container
      * @param system the linear system we add the equations to
      * @param orientation HORIZONTAL or VERTICAL
-     * @param offset 0 or 2 to accomodate for HORIZONTAL / VERTICAL
+     * @param offset 0 or 2 to accommodate for HORIZONTAL / VERTICAL
      * @param chainHead a chain represented by its main elements
      */
     static void applyChainConstraints(ConstraintWidgetContainer container, LinearSystem system,

@@ -386,8 +386,8 @@ public class DependencyGraph {
 
     private boolean basicMeasureWidgets(ConstraintWidgetContainer constraintWidgetContainer) {
         for (ConstraintWidget widget : constraintWidgetContainer.mChildren) {
-            ConstraintWidget.DimensionBehaviour horiz = widget.mListDimensionBehaviors[HORIZONTAL];
-            ConstraintWidget.DimensionBehaviour vert = widget.mListDimensionBehaviors[VERTICAL];
+            ConstraintWidget.DimensionBehaviour horizontal = widget.mListDimensionBehaviors[HORIZONTAL];
+            ConstraintWidget.DimensionBehaviour vertical = widget.mListDimensionBehaviors[VERTICAL];
 
             if (widget.getVisibility() == GONE) {
                 widget.measured = true;
@@ -396,18 +396,18 @@ public class DependencyGraph {
 
             // Basic validation
             // TODO: might move this earlier in the process
-            if (widget.mMatchConstraintPercentWidth < 1 && horiz == MATCH_CONSTRAINT) {
+            if (widget.mMatchConstraintPercentWidth < 1 && horizontal == MATCH_CONSTRAINT) {
                 widget.mMatchConstraintDefaultWidth = MATCH_CONSTRAINT_PERCENT;
             }
-            if (widget.mMatchConstraintPercentHeight < 1 && vert == MATCH_CONSTRAINT) {
+            if (widget.mMatchConstraintPercentHeight < 1 && vertical == MATCH_CONSTRAINT) {
                 widget.mMatchConstraintDefaultHeight = MATCH_CONSTRAINT_PERCENT;
             }
             if (widget.getDimensionRatio() > 0) {
-                if (horiz == MATCH_CONSTRAINT && (vert == WRAP_CONTENT || vert == FIXED)) {
+                if (horizontal == MATCH_CONSTRAINT && (vertical == WRAP_CONTENT || vertical == FIXED)) {
                     widget.mMatchConstraintDefaultWidth = MATCH_CONSTRAINT_RATIO;
-                } else if (vert == MATCH_CONSTRAINT && (horiz == WRAP_CONTENT || horiz == FIXED)) {
+                } else if (vertical == MATCH_CONSTRAINT && (horizontal == WRAP_CONTENT || horizontal == FIXED)) {
                     widget.mMatchConstraintDefaultHeight = MATCH_CONSTRAINT_RATIO;
-                } else if (horiz == MATCH_CONSTRAINT && vert == MATCH_CONSTRAINT) {
+                } else if (horizontal == MATCH_CONSTRAINT && vertical == MATCH_CONSTRAINT) {
                     if (widget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_SPREAD) {
                         widget.mMatchConstraintDefaultWidth = MATCH_CONSTRAINT_RATIO;
                     }
@@ -417,44 +417,44 @@ public class DependencyGraph {
                 }
             }
 
-            if (horiz == MATCH_CONSTRAINT && widget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_WRAP) {
+            if (horizontal == MATCH_CONSTRAINT && widget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_WRAP) {
                 if (widget.mLeft.mTarget == null || widget.mRight.mTarget == null) {
-                    horiz = WRAP_CONTENT;
+                    horizontal = WRAP_CONTENT;
                 }
             }
-            if (vert == MATCH_CONSTRAINT && widget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_WRAP) {
+            if (vertical == MATCH_CONSTRAINT && widget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_WRAP) {
                 if (widget.mTop.mTarget == null || widget.mBottom.mTarget == null) {
-                    vert = WRAP_CONTENT;
+                    vertical = WRAP_CONTENT;
                 }
             }
 
-            widget.horizontalRun.dimensionBehavior = horiz;
+            widget.horizontalRun.dimensionBehavior = horizontal;
             widget.horizontalRun.matchConstraintsType = widget.mMatchConstraintDefaultWidth;
-            widget.verticalRun.dimensionBehavior = vert;
+            widget.verticalRun.dimensionBehavior = vertical;
             widget.verticalRun.matchConstraintsType = widget.mMatchConstraintDefaultHeight;
 
-            if ((horiz == MATCH_PARENT || horiz == FIXED || horiz == WRAP_CONTENT)
-                    && (vert == MATCH_PARENT || vert == FIXED || vert == WRAP_CONTENT)) {
+            if ((horizontal == MATCH_PARENT || horizontal == FIXED || horizontal == WRAP_CONTENT)
+                    && (vertical == MATCH_PARENT || vertical == FIXED || vertical == WRAP_CONTENT)) {
                 int width = widget.getWidth();
-                if (horiz == MATCH_PARENT) {
+                if (horizontal == MATCH_PARENT) {
                     width = constraintWidgetContainer.getWidth() - widget.mLeft.mMargin - widget.mRight.mMargin;
-                    horiz = FIXED;
+                    horizontal = FIXED;
                 }
                 int height = widget.getHeight();
-                if (vert == MATCH_PARENT) {
+                if (vertical == MATCH_PARENT) {
                     height = constraintWidgetContainer.getHeight() - widget.mTop.mMargin - widget.mBottom.mMargin;
-                    vert = FIXED;
+                    vertical = FIXED;
                 }
-                measure(widget, horiz, width, vert, height);
+                measure(widget, horizontal, width, vertical, height);
                 widget.horizontalRun.dimension.resolve(widget.getWidth());
                 widget.verticalRun.dimension.resolve(widget.getHeight());
                 widget.measured = true;
                 continue;
             }
 
-            if (horiz == MATCH_CONSTRAINT && (vert == WRAP_CONTENT || vert == FIXED)) {
+            if (horizontal == MATCH_CONSTRAINT && (vertical == WRAP_CONTENT || vertical == FIXED)) {
                 if (widget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_RATIO) {
-                    if (vert == WRAP_CONTENT) {
+                    if (vertical == WRAP_CONTENT) {
                         measure(widget, WRAP_CONTENT, 0, WRAP_CONTENT, 0);
                     }
                     int height = widget.getHeight();
@@ -465,7 +465,7 @@ public class DependencyGraph {
                     widget.measured = true;
                     continue;
                 } else if (widget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_WRAP) {
-                    measure(widget, WRAP_CONTENT, 0, vert, 0);
+                    measure(widget, WRAP_CONTENT, 0, vertical, 0);
                     widget.horizontalRun.dimension.wrapValue = widget.getWidth();
                     continue;
                 } else if (widget.mMatchConstraintDefaultWidth == ConstraintWidget.MATCH_CONSTRAINT_PERCENT) {
@@ -474,7 +474,7 @@ public class DependencyGraph {
                         float percent = widget.mMatchConstraintPercentWidth;
                         int width = (int) (0.5f + percent * constraintWidgetContainer.getWidth());
                         int height = widget.getHeight();
-                        measure(widget, FIXED, width, vert, height);
+                        measure(widget, FIXED, width, vertical, height);
                         widget.horizontalRun.dimension.resolve(widget.getWidth());
                         widget.verticalRun.dimension.resolve(widget.getHeight());
                         widget.measured = true;
@@ -484,7 +484,7 @@ public class DependencyGraph {
                     // let's verify we have both constraints
                     if (widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT].mTarget == null
                             || widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT].mTarget == null) {
-                        measure(widget, WRAP_CONTENT, 0, vert, 0);
+                        measure(widget, WRAP_CONTENT, 0, vertical, 0);
                         widget.horizontalRun.dimension.resolve(widget.getWidth());
                         widget.verticalRun.dimension.resolve(widget.getHeight());
                         widget.measured = true;
@@ -492,9 +492,9 @@ public class DependencyGraph {
                     }
                 }
             }
-            if (vert == MATCH_CONSTRAINT && (horiz == WRAP_CONTENT || horiz == FIXED)) {
+            if (vertical == MATCH_CONSTRAINT && (horizontal == WRAP_CONTENT || horizontal == FIXED)) {
                 if (widget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_RATIO) {
-                    if (horiz == WRAP_CONTENT) {
+                    if (horizontal == WRAP_CONTENT) {
                         measure(widget, WRAP_CONTENT, 0, WRAP_CONTENT, 0);
                     }
                     int width = widget.getWidth();
@@ -510,7 +510,7 @@ public class DependencyGraph {
                     widget.measured = true;
                     continue;
                 } else if (widget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_WRAP) {
-                    measure(widget, horiz, 0, WRAP_CONTENT, 0);
+                    measure(widget, horizontal, 0, WRAP_CONTENT, 0);
                     widget.verticalRun.dimension.wrapValue = widget.getHeight();
                     continue;
                 } else if (widget.mMatchConstraintDefaultHeight == ConstraintWidget.MATCH_CONSTRAINT_PERCENT) {
@@ -519,7 +519,7 @@ public class DependencyGraph {
                         float percent = widget.mMatchConstraintPercentHeight;
                         int width = widget.getWidth();
                         int height = (int) (0.5f + percent * constraintWidgetContainer.getHeight());
-                        measure(widget, horiz, width, FIXED, height);
+                        measure(widget, horizontal, width, FIXED, height);
                         widget.horizontalRun.dimension.resolve(widget.getWidth());
                         widget.verticalRun.dimension.resolve(widget.getHeight());
                         widget.measured = true;
@@ -529,7 +529,7 @@ public class DependencyGraph {
                     // let's verify we have both constraints
                     if (widget.mListAnchors[ConstraintWidget.ANCHOR_TOP].mTarget == null
                             || widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].mTarget == null) {
-                        measure(widget, WRAP_CONTENT, 0, vert, 0);
+                        measure(widget, WRAP_CONTENT, 0, vertical, 0);
                         widget.horizontalRun.dimension.resolve(widget.getWidth());
                         widget.verticalRun.dimension.resolve(widget.getHeight());
                         widget.measured = true;
@@ -537,7 +537,7 @@ public class DependencyGraph {
                     }
                 }
             }
-            if (horiz == MATCH_CONSTRAINT && vert == MATCH_CONSTRAINT) {
+            if (horizontal == MATCH_CONSTRAINT && vertical == MATCH_CONSTRAINT) {
                 if (widget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_WRAP
                         || widget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_WRAP) {
                     measure(widget, WRAP_CONTENT, 0, WRAP_CONTENT, 0);

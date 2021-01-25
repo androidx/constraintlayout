@@ -16,6 +16,10 @@
 
 package androidx.constraintlayout.core;
 
+import androidx.constraintlayout.core.ArrayRow;
+import androidx.constraintlayout.core.LinearSystem;
+import androidx.constraintlayout.core.SolverVariable;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,8 +27,8 @@ import java.util.HashMap;
 /**
  * LinearEquation is used to represent the linear equations fed into the solver.<br>
  * A linear equation can be an equality or an inequation (left term &le; or &ge; to the right term).<br>
- * The general form will be similar to a0x0 + a1x1 + ... = C + a2x2 + a3x3 + ... , where a0x0 is a term representing
- * a variable x0 of an amount a0, and C represent a constant term. The amount of terms on the left side or the right
+ * The general form will be similar to {@code a0x0 + a1x1 + ... = C + a2x2 + a3x3 + ... ,} where {@code a0x0} is a term representing
+ * a variable x0 of an amount {@code a0}, and {@code C} represent a constant term. The amount of terms on the left side or the right
  * side of the equation is arbitrary.
  */
 class LinearEquation {

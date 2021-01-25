@@ -253,14 +253,14 @@ public class ConstraintWidget {
     private boolean hasBaseline = false;
     private boolean inPlaceholder;
 
-    private boolean mInVirtuaLayout = false;
+    private boolean mInVirtualLayout = false;
 
     public boolean isInVirtualLayout() {
-        return mInVirtuaLayout;
+        return mInVirtualLayout;
     }
 
     public void setInVirtualLayout(boolean inVirtualLayout) {
-        mInVirtuaLayout = inVirtualLayout;
+        mInVirtualLayout = inVirtualLayout;
     }
 
     public int getMaxHeight() {
@@ -510,7 +510,7 @@ public class ConstraintWidget {
         mGroupsToSolver = false;
         isTerminalWidget[HORIZONTAL] = true;
         isTerminalWidget[VERTICAL] = true;
-        mInVirtuaLayout = false;
+        mInVirtualLayout = false;
         mIsInBarrier[HORIZONTAL] = false;
         mIsInBarrier[VERTICAL] = false;
         mMeasureRequested = true;
@@ -1031,7 +1031,7 @@ public class ConstraintWidget {
 
     /**
      * Return the horizontal percentage bias that is used when two opposite connections
-     * exist of the same strengh.
+     * exist of the same strength.
      *
      * @return horizontal percentage bias
      */
@@ -1041,7 +1041,7 @@ public class ConstraintWidget {
 
     /**
      * Return the vertical percentage bias that is used when two opposite connections
-     * exist of the same strengh.
+     * exist of the same strength.
      *
      * @return vertical percentage bias
      */
@@ -1207,7 +1207,7 @@ public class ConstraintWidget {
      * Set the dimension of a widget in a particular orientation.
      *
      * @param length      Size of the dimension.
-     * @param orientation
+     * @param orientation HORIZONTAL or VERTICAL
      */
     public void setLength(int length, int orientation) {
         if (orientation == HORIZONTAL) {
@@ -1223,7 +1223,7 @@ public class ConstraintWidget {
      * @param horizontalMatchStyle MATCH_CONSTRAINT_SPREAD or MATCH_CONSTRAINT_WRAP
      * @param min                  minimum value
      * @param max                  maximum value
-     * @param percent
+     * @param percent              Percent width
      */
     public void setHorizontalMatchStyle(int horizontalMatchStyle, int min, int max, float percent) {
         mMatchConstraintDefaultWidth = horizontalMatchStyle;
@@ -1241,7 +1241,7 @@ public class ConstraintWidget {
      * @param verticalMatchStyle MATCH_CONSTRAINT_SPREAD or MATCH_CONSTRAINT_WRAP
      * @param min                minimum value
      * @param max                maximum value
-     * @param percent
+     * @param percent            Percent height
      */
     public void setVerticalMatchStyle(int verticalMatchStyle, int min, int max, float percent) {
         mMatchConstraintDefaultHeight = verticalMatchStyle;
@@ -1254,9 +1254,9 @@ public class ConstraintWidget {
     }
 
     /**
-     * Set the ratio of the widget from a given string of format [H|V],[float|x:y] or [float|x:y]
+     * Set the ratio of the widget
      *
-     * @param ratio
+     * @param ratio given string of format [H|V],[float|x:y] or [float|x:y]
      */
     public void setDimensionRatio(String ratio) {
         if (ratio == null || ratio.length() == 0) {
@@ -1319,6 +1319,9 @@ public class ConstraintWidget {
      * Set the ratio of the widget
      * The ratio will be applied if at least one of the dimension (width or height) is set to a behaviour
      * of DimensionBehaviour.MATCH_CONSTRAINT -- the dimension's value will be set to the other dimension * ratio.
+     *
+     * @param ratio A float value that describes W/H or H/W depending on the provided dimensionRatioSide
+     * @param dimensionRatioSide The side the ratio should be calculated on, HORIZONTAL, VERTICAL, or UNKNOWN
      */
     public void setDimensionRatio(float ratio, int dimensionRatioSide) {
         mDimensionRatio = ratio;
@@ -1328,7 +1331,7 @@ public class ConstraintWidget {
     /**
      * Return the current ratio of this widget
      *
-     * @return the dimension ratio
+     * @return the dimension ratio (HORIZONTAL, VERTICAL, or UNKNOWN)
      */
     public float getDimensionRatio() {
         return mDimensionRatio;
@@ -1480,8 +1483,8 @@ public class ConstraintWidget {
     /**
      * Set the positions for the horizontal dimension only
      *
-     * @param left
-     * @param right
+     * @param left   left side position of the widget
+     * @param right  right side position of the widget
      */
     public void setHorizontalDimension(int left, int right) {
         mX = left;
@@ -1494,8 +1497,8 @@ public class ConstraintWidget {
     /**
      * Set the positions for the vertical dimension only
      *
-     * @param top
-     * @param bottom
+     * @param top    top side position of the widget
+     * @param bottom bottom side position of the widget
      */
     public void setVerticalDimension(int top, int bottom) {
         mY = top;
@@ -1508,7 +1511,7 @@ public class ConstraintWidget {
     /**
      * Get the left/top position of the widget relative to the outer side of the container (right/bottom).
      *
-     * @param orientation
+     * @param orientation Orientation by which to find the relative positioning of the widget.
      * @return The relative position of the widget.
      */
     int getRelativePositioning(int orientation) {
@@ -1583,7 +1586,7 @@ public class ConstraintWidget {
     /**
      * Set the horizontal weight (only used in chains)
      *
-     * @param horizontalWeight
+     * @param horizontalWeight Floating point value weight
      */
     public void setHorizontalWeight(float horizontalWeight) {
         mWeight[DIMENSION_HORIZONTAL] = horizontalWeight;
@@ -1592,7 +1595,7 @@ public class ConstraintWidget {
     /**
      * Set the vertical weight (only used in chains)
      *
-     * @param verticalWeight
+     * @param verticalWeight Floating point value weight
      */
     public void setVerticalWeight(float verticalWeight) {
         mWeight[DIMENSION_VERTICAL] = verticalWeight;
@@ -1602,7 +1605,7 @@ public class ConstraintWidget {
      * Set the chain starting from this widget to be packed.
      * The horizontal bias will control how elements of the chain are positioned.
      *
-     * @param horizontalChainStyle
+     * @param horizontalChainStyle (CHAIN_SPREAD, CHAIN_SPREAD_INSIDE, CHAIN_PACKED)
      */
     public void setHorizontalChainStyle(int horizontalChainStyle) {
         mHorizontalChainStyle = horizontalChainStyle;
@@ -1622,7 +1625,7 @@ public class ConstraintWidget {
      * Set the chain starting from this widget to be packed.
      * The vertical bias will control how elements of the chain are positioned.
      *
-     * @param verticalChainStyle
+     * @param verticalChainStyle (CHAIN_SPREAD, CHAIN_SPREAD_INSIDE, CHAIN_PACKED)
      */
     public void setVerticalChainStyle(int verticalChainStyle) {
         mVerticalChainStyle = verticalChainStyle;
@@ -1652,11 +1655,11 @@ public class ConstraintWidget {
     /**
      * Immediate connection to an anchor without any checks.
      *
-     * @param startType
-     * @param target
-     * @param endType
-     * @param margin
-     * @param goneMargin
+     * @param startType  The type of anchor on this widget
+     * @param target     The target widget
+     * @param endType    The type of anchor on the target widget
+     * @param margin     How much margin we want to keep as a minimum distance between the two anchors
+     * @param goneMargin How much margin we want to keep if the target is set to {@code View.GONE}
      */
     public void immediateConnect(ConstraintAnchor.Type startType, ConstraintWidget target,
                                  ConstraintAnchor.Type endType, int margin, int goneMargin) {
@@ -1684,7 +1687,6 @@ public class ConstraintWidget {
      * @param constraintFrom which anchor of this widget to connect from
      * @param target         the target widget
      * @param constraintTo   the target anchor on the target widget
-     * @return the undo operation
      */
     public void connect(ConstraintAnchor.Type constraintFrom,
                         ConstraintWidget target,
@@ -1887,7 +1889,6 @@ public class ConstraintWidget {
      * Reset the given anchor
      *
      * @param anchor the anchor we want to reset
-     * @return the undo operation
      */
     public void resetAnchor(ConstraintAnchor anchor) {
         if (getParent() != null) {
@@ -2053,9 +2054,9 @@ public class ConstraintWidget {
     }
 
     /**
-     * test if you are in a Horizontal chain
+     * Test if you are in a Horizontal chain
      *
-     * @return
+     * @return true if in a horizontal chain
      */
     public boolean isInHorizontalChain() {
         if ((mLeft.mTarget != null && mLeft.mTarget.mTarget == mLeft)
@@ -2134,9 +2135,9 @@ public class ConstraintWidget {
 
 
     /**
-     * test if you are in a vertical chain
+     * Test if you are in a vertical chain
      *
-     * @return
+     * @return true if in a vertical chain
      */
     public boolean isInVerticalChain() {
         if ((mTop.mTarget != null && mTop.mTarget.mTarget == mTop)
@@ -2147,9 +2148,9 @@ public class ConstraintWidget {
     }
 
     /**
-     * return the top most widget in the control chain
+     * if in a vertical chain return the top most widget in the chain.
      *
-     * @return
+     * @return top most widget in chain or null
      */
     public ConstraintWidget getVerticalChainControlWidget() {
         ConstraintWidget found = null;
@@ -2578,12 +2579,12 @@ public class ConstraintWidget {
      * Resolves the dimension ratio parameters
      * (mResolvedDimensionRatioSide & mDimensionRatio)
      *
-     * @param hparentWrapContent       true if parent is in wrap content horizontally
-     * @param vparentWrapContent       true if parent is in wrap content vertically
+     * @param hParentWrapContent       true if parent is in wrap content horizontally
+     * @param vParentWrapContent       true if parent is in wrap content vertically
      * @param horizontalDimensionFixed true if this widget horizontal dimension is fixed
      * @param verticalDimensionFixed   true if this widget vertical dimension is fixed
      */
-    public void setupDimensionRatio(boolean hparentWrapContent, boolean vparentWrapContent, boolean horizontalDimensionFixed, boolean verticalDimensionFixed) {
+    public void setupDimensionRatio(boolean hParentWrapContent, boolean vParentWrapContent, boolean horizontalDimensionFixed, boolean verticalDimensionFixed) {
         if (mResolvedDimensionRatioSide == UNKNOWN) {
             if (horizontalDimensionFixed && !verticalDimensionFixed) {
                 mResolvedDimensionRatioSide = HORIZONTAL;
@@ -2617,9 +2618,9 @@ public class ConstraintWidget {
         }
 
         if (false && mResolvedDimensionRatioSide == UNKNOWN) {
-            if (hparentWrapContent && !vparentWrapContent) {
+            if (hParentWrapContent && !vParentWrapContent) {
                 mResolvedDimensionRatioSide = HORIZONTAL;
-            } else if (!hparentWrapContent && vparentWrapContent) {
+            } else if (!hParentWrapContent && vParentWrapContent) {
                 mResolvedDimensionRatio = 1 / mResolvedDimensionRatio;
                 mResolvedDimensionRatioSide = VERTICAL;
             }
@@ -2634,7 +2635,7 @@ public class ConstraintWidget {
             }
         }
 
-        if (false && mResolvedDimensionRatioSide == UNKNOWN && hparentWrapContent && vparentWrapContent) {
+        if (false && mResolvedDimensionRatioSide == UNKNOWN && hParentWrapContent && vParentWrapContent) {
             mResolvedDimensionRatio = 1 / mResolvedDimensionRatio;
             mResolvedDimensionRatioSide = VERTICAL;
         }
@@ -2893,7 +2894,7 @@ public class ConstraintWidget {
             boolean applyStrongChecks = false;
             boolean applyRangeCheck = false;
             int rangeCheckStrength = SolverVariable.STRENGTH_EQUALITY;
-            int boundsCheckStrength = SolverVariable.STRENGTH_HIGHEST; // TODO: might not need it here (it's overriden)
+            int boundsCheckStrength = SolverVariable.STRENGTH_HIGHEST; // TODO: might not need it here (it's overridden)
             int centeringStrength = SolverVariable.STRENGTH_BARRIER;
 
             if (parentWrapContent) {

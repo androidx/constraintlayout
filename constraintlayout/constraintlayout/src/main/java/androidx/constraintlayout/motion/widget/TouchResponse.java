@@ -651,7 +651,7 @@ class TouchResponse {
      * This calculates the bounds of the mTouchRegionId view.
      * This reuses rect for efficiency as this class will be called many times.
      *
-     * @param layout The layout containing the view (findviewid)
+     * @param layout The layout containing the view (findViewId)
      * @param rect   the rectangle to fill provided so this function does not have to create memory
      * @return the rect or null
      */
@@ -675,7 +675,7 @@ class TouchResponse {
      * This calculates the bounds of the mTouchRegionId view.
      * This reuses rect for efficiency as this class will be called many times.
      *
-     * @param layout The layout containing the view (findviewid)
+     * @param layout The layout containing the view (findViewId)
      * @param rect   the rectangle to fill provided so this function does not have to create memory
      * @return the rect or null
      */

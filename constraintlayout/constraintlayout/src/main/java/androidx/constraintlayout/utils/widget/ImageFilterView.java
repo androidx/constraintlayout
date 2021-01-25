@@ -36,20 +36,20 @@ import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.R;
 
 /**
- * An ImageView that can display, combine  and filter images. <b>Added in 2.0</b>
+ * An ImageView that can display, combine and filter images. <b>Added in 2.0</b>
  * <p>
  * Subclass of ImageView to handle various common filtering operations
  * </p>
  *
- * <h2>ImageFilterViewattributes</h2>
+ * <h2>ImageFilterView attributes</h2>
  * <table summary="KeyTrigger attributes">
  * <tr>
  * <td>altSrc</td>
- * <td>Provide and alternative image to the src image to allow cross fading </td>
+ * <td>Provide and alternative image to the src image to allow cross fading</td>
  * </tr>
  * <tr>
  * <td>saturation</td>
- * <td>Sets the saturation of the image.<br>  0 = grayscale, 1 = original, 2 = hyper saturated </td>
+ * <td>Sets the saturation of the image.<br>  0 = grayscale, 1 = original, 2 = hyper saturated</td>
  * </tr
  * <tr>
  * <td>brightness</td>
@@ -58,7 +58,7 @@ import androidx.constraintlayout.widget.R;
  * </tr>
  * <tr>
  * <td>warmth</td>
- * <td>This adjust the apparent color temperature of the image.<br> 1=neutral, 2=warm, .5=cold </td>
+ * <td>This adjust the apparent color temperature of the image.<br> 1=neutral, 2=warm, .5=cold</td>
  * </tr>
  * <tr>
  * <td>contrast</td>
@@ -66,21 +66,21 @@ import androidx.constraintlayout.widget.R;
  * </tr>
  * <tr>
  * <td>crossfade</td>
- * <td>Set the current mix between the two images. <br>  0=src 1= altSrc image </td>
+ * <td>Set the current mix between the two images. <br>  0=src 1= altSrc image</td>
  * </tr>
  * <tr>
  * <td>round</td>
  * <td>(id) call the TransitionListener with this trigger id</td>
  * </tr>
  * <tr>
- * <td>roundPercent &nbs; </td>
+ * <td>roundPercent</td>
  * <td>Set the corner radius of curvature  as a fraction of the smaller side.
- *    For squares 1 will result in a circle</td>
+ *     For squares 1 will result in a circle</td>
  * </tr>
  * <tr>
  * <td>overlay</td>
  * <td>Defines whether the alt image will be faded in on top of the original image or if it will be
- * crossfaded with it. Default is true. Set to false for semitransparent objects</td>
+ *     crossfaded with it. Default is true. Set to false for semitransparent objects</td>
  * </tr>
  * </table>
  */
@@ -131,13 +131,13 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
         }
 
         private void warmth(float warmth) {
-            float baseTemprature = 5000;
+            float baseTemperature = 5000;
             if (warmth <= 0) warmth = .01f;
             float tmpColor_r;
             float tmpColor_g;
             float tmpColor_b;
 
-            float kelvin = baseTemprature / warmth;
+            float kelvin = baseTemperature / warmth;
             { // simulate a black body radiation
                 float centiKelvin = kelvin / 100;
                 float colorR, colorG, colorB;
@@ -167,7 +167,7 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
             float color_r = tmpColor_r;
             float color_g = tmpColor_g;
             float color_b = tmpColor_b;
-            kelvin = baseTemprature;
+            kelvin = baseTemperature;
             { // simulate a black body radiation
                 float centiKelvin = kelvin / 100;
                 float colorR, colorG, colorB;

@@ -87,7 +87,7 @@ public class ViewTransition {
 
     // interpolator code
     private static final int SPLINE_STRING = -1;
-    private static final int INTERPOLATOR_REFRENCE_ID = -2;
+    private static final int INTERPOLATOR_REFERENCE_ID = -2;
     private int mDefaultInterpolator = 0;
     private String mDefaultInterpolatorString = null;
     private int mDefaultInterpolatorID = -1;
@@ -182,7 +182,7 @@ public class ViewTransition {
                         return (float) easing.get(v);
                     }
                 };
-            case INTERPOLATOR_REFRENCE_ID:
+            case INTERPOLATOR_REFERENCE_ID:
                 return AnimationUtils.loadInterpolator(context,
                         mDefaultInterpolatorID);
             case EASE_IN_OUT:
@@ -288,13 +288,13 @@ public class ViewTransition {
                 if (type.type == TypedValue.TYPE_REFERENCE) {
                     mDefaultInterpolatorID = a.getResourceId(attr, -1);
                     if (mDefaultInterpolatorID != UNSET) {
-                        mDefaultInterpolator = INTERPOLATOR_REFRENCE_ID;
+                        mDefaultInterpolator = INTERPOLATOR_REFERENCE_ID;
                     }
                 } else if (type.type == TypedValue.TYPE_STRING) {
                     mDefaultInterpolatorString = a.getString(attr);
                     if (mDefaultInterpolatorString != null && mDefaultInterpolatorString.indexOf("/") > 0) {
                         mDefaultInterpolatorID = a.getResourceId(attr, UNSET);
-                        mDefaultInterpolator = INTERPOLATOR_REFRENCE_ID;
+                        mDefaultInterpolator = INTERPOLATOR_REFERENCE_ID;
                     } else {
                         mDefaultInterpolator = SPLINE_STRING;
                     }
@@ -394,9 +394,9 @@ public class ViewTransition {
                 if (id == fromId) {
                     continue;
                 }
-                ConstraintSet cset = layout.getConstraintSet(id);
+                ConstraintSet cSet = layout.getConstraintSet(id);
                 for (View view : views) {
-                    ConstraintSet.Constraint constraint = cset.getConstraint(view.getId());
+                    ConstraintSet.Constraint constraint = cSet.getConstraint(view.getId());
                     if (mConstraintDelta != null) {
                         mConstraintDelta.applyDelta(constraint);
                         constraint.mCustomConstraints.putAll(mConstraintDelta.mCustomConstraints);
@@ -451,7 +451,7 @@ public class ViewTransition {
                 keyFrames.addKey(key.clone().setViewId(id));
             }
 
-            transition.addtKeyFrame(keyFrames);
+            transition.addKeyFrame(keyFrames);
         }
     }
 

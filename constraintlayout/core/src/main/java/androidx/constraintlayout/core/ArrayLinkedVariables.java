@@ -81,7 +81,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
     private boolean mDidFillOnce = false;
     private static float epsilon = 0.001f;
 
-    // Exemple of a basic loop
+    // Example of a basic loop
     // current or previous point to mArrayIndices
     //
     // int current = mHead;
@@ -494,7 +494,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
      * Divide the values of all the variables in the list
      * by the given amount
      *
-     * @param amount aount to divide by
+     * @param amount amount to divide by
      */
     public void divideByAmount(float amount) {
         int current = mHead;

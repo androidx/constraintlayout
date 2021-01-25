@@ -318,17 +318,17 @@ public class DesignTool implements ProxyInterface {
     }
 
     public String getStartState() {
-       int startid =  mMotionLayout.getStartState();
-       if (mLastStartStateId == startid) {
+       int startId =  mMotionLayout.getStartState();
+       if (mLastStartStateId == startId) {
            return mLastStartState;
        }
-        String last =  mMotionLayout.getConstraintSetNames(startid);
+        String last =  mMotionLayout.getConstraintSetNames(startId);
 
         if (last != null) {
             mLastStartState = last;
-            mLastStartStateId = startid;
+            mLastStartStateId = startId;
         }
-        return mMotionLayout.getConstraintSetNames(startid);
+        return mMotionLayout.getConstraintSetNames(startId);
     }
 
     public String getEndState() {
@@ -433,7 +433,7 @@ public class DesignTool implements ProxyInterface {
         if (controller == null) {
             return  0;
         }
-        return controller.getkeyFramePositions(type, pos);
+        return controller.getKeyFramePositions(type, pos);
     }
     /**
      * Get the keyFrames for the view controlled by this MotionController.
@@ -555,7 +555,7 @@ public class DesignTool implements ProxyInterface {
      *
      * @param cmd        this provide the command needed
      * @param type       support argument for command
-     * @param viewObject if this command refrences a view this provides access
+     * @param viewObject if this command references a view this provides access
      * @param in         this allows for an array of float to be the input to the system
      * @param inLength   this provides the length of the input
      * @param out        this provide the output array

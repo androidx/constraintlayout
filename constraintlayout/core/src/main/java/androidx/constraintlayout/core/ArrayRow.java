@@ -359,8 +359,8 @@ public class ArrayRow implements LinearSystem.Row {
     }
 
     /**
-     * Create a constraint to express A = B + (C - D) * ratio
-     * We use this for ratio, where for exemple Right = Left + (Bottom - Top) * percent
+     * Create a constraint to express {@code A = B + (C - D)} * ratio
+     * We use this for ratio, where for example {@code Right = Left + (Bottom - Top) * percent}
      *
      * @param variableA variable A
      * @param variableB variable B

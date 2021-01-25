@@ -113,7 +113,7 @@ public class ChainHead {
                     if (widget.mResolvedMatchConstraintDefault[mOrientation] == MATCH_CONSTRAINT_SPREAD
                             || widget.mResolvedMatchConstraintDefault[mOrientation] == MATCH_CONSTRAINT_RATIO
                             || widget.mResolvedMatchConstraintDefault[mOrientation] == MATCH_CONSTRAINT_PERCENT) {
-                        mWidgetsMatchCount++; // Note: Might cause an issue if we support MATCH_CONTRAINT_RATIO_RESOLVED in chain optim. (we currently dont)
+                        mWidgetsMatchCount++; // Note: Might cause an issue if we support MATCH_CONSTRAINT_RATIO_RESOLVED in chain optimization. (we currently don't)
                         float weight = widget.mWeight[mOrientation];
                         if (weight > 0) {
                             mTotalWeight += widget.mWeight[mOrientation];

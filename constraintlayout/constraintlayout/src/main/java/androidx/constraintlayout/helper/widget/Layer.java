@@ -10,11 +10,7 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import android.view.ViewParent;
 
 /**
- * Control the visibility and elevation of the referenced views
- */
-
-/**
- * <b>Added in 2.0</b>
+ * Control the visibility and elevation of the referenced views <b>Added in 2.0</b>
  */
 public class Layer extends ConstraintHelper {
     private static final String TAG = "Layer";

@@ -146,7 +146,7 @@ class RunGroup {
             long maxPosition = traverseStart(firstRun.start, 0);
             long minPosition = traverseEnd(firstRun.end, 0);
 
-            // to compute the gaps, we substract the margins
+            // to compute the gaps, we subtract the margins
             long endGap = maxPosition - dimension;
             if (endGap >= -firstRun.end.margin) {
                 endGap += firstRun.end.margin;

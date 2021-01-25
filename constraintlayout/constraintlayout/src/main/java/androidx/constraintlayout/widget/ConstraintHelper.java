@@ -539,7 +539,7 @@ public abstract class ConstraintHelper extends View {
         // Do nothing
     }
 
-    public void updatePostConstraints(ConstraintLayout constainer) {
+    public void updatePostConstraints(ConstraintLayout container) {
         // Do nothing
     }
 

@@ -341,7 +341,7 @@
     </attr>
 
     <!-- Defines the category or group this belongs to.
-     It can be used be helpers or motionlayout to associate behaviour to views -->
+     It can be used be helpers or MotionLayout to associate behaviour to views -->
     <attr name="layout_constraintTag" format="string" />
 
     <!-- handles circular constraints -->
@@ -950,7 +950,7 @@
         <attr name="quantizeMotionInterpolator" />
     </declare-styleable>
 
-    <!--    This is used in constraintset to allow a more compact expression of changes to the original-->
+    <!--    This is used in ConstraintSet to allow a more compact expression of changes to the original-->
     <!--    Only changes need be defined. It does not support layout_constraint*_to* attributes  -->
     <declare-styleable name="ConstraintOverride">
         <attr name="android:orientation" />
@@ -1721,7 +1721,7 @@
     <attr name="viewTransitionMode" format="enum">
         <enum name="currentState" value="0" />
         <enum name="allStates" value="1" />
-        <!--        Opperates independently of the rest of motionLayout constraint set system -->
+        <!--        Operates independently of the rest of MotionLayout constraint set system -->
         <enum name="noState" value="2" />
     </attr>
 

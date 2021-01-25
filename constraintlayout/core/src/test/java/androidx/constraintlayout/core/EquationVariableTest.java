@@ -45,8 +45,8 @@ public class EquationVariableTest {
     }
 
     @Test
-    public void testSubstraction() {
-        e1.substract(e2);
+    public void testSubtraction() {
+        e1.subtract(e2);
         assertEquals(e1.getAmount().getNumerator(), 0);
     }
 

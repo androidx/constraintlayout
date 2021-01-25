@@ -39,8 +39,8 @@ public class AmountTest {
     }
 
     @Test
-    public void testSubstract() {
-        a1.substract(a2);
+    public void testSubtract() {
+        a1.subtract(a2);
         assertEquals(a1.getNumerator(), 1);
         assertEquals(a1.getDenominator(), 15);
     }

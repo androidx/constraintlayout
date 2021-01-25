@@ -41,11 +41,11 @@ import androidx.constraintlayout.widget.R;
  * <table summary="KeyTrigger attributes">
  * <tr>
  * <td>altSrc</td>
- * <td>Provide and alternative image to the src image to allow cross fading </td>
+ * <td>Provide and alternative image to the src image to allow cross fading</td>
  * </tr>
  * <tr>
  * <td>saturation</td>
- * <td>Sets the saturation of the image.<br>  0 = grayscale, 1 = original, 2 = hyper saturated </td>
+ * <td>Sets the saturation of the image.<br>  0 = grayscale, 1 = original, 2 = hyper saturated</td>
  * </tr
  * <tr>
  * <td>brightness</td>
@@ -54,7 +54,7 @@ import androidx.constraintlayout.widget.R;
  * </tr>
  * <tr>
  * <td>warmth</td>
- * <td>This adjust the apparent color temperature of the image.<br> 1=neutral, 2=warm, .5=cold </td>
+ * <td>This adjust the apparent color temperature of the image.<br> 1=neutral, 2=warm, .5=cold</td>
  * </tr>
  * <tr>
  * <td>contrast</td>
@@ -62,14 +62,14 @@ import androidx.constraintlayout.widget.R;
  * </tr>
  * <tr>
  * <td>crossfade</td>
- * <td>Set the current mix between the two images. <br>  0=src 1= altSrc image </td>
+ * <td>Set the current mix between the two images. <br>  0=src 1= altSrc image</td>
  * </tr>
  * <tr>
  * <td>round</td>
  * <td>(id) call the TransitionListener with this trigger id</td>
  * </tr>
  * <tr>
- * <td>roundPercent &nbs; </td>
+ * <td>roundPercent</td>
  * <td>Set the corner radius of curvature  as a fraction of the smaller side.
  *    For squares 1 will result in a circle</td>
  * </tr>

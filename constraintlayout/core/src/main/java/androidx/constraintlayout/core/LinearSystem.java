@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 /**
- * Represents and solve a system of linear equations.
+ * Represents and solves a system of linear equations.
  */
 public class LinearSystem {
 
@@ -995,7 +995,7 @@ public class LinearSystem {
                     done = true;
                 }
                 if (tries > mNumColumns / 2) {
-                    // failsafe -- tried too many times
+                    // fail safe -- tried too many times
                     done = true;
                 }
             }
@@ -1114,9 +1114,9 @@ public class LinearSystem {
     public int getNumVariables() { return mVariablesID; }
 
     /**
-     * Display current system informations
+     * Display current system information
      */
-    void displaySystemInformations() {
+    void displaySystemInformation() {
         int count = 0;
         int rowSize = 0;
         for (int i = 0; i < TABLE_SIZE; i++) {

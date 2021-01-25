@@ -154,7 +154,7 @@ subprojects { Project project ->
     createSeparateZip.dependsOn release
 
     project.afterEvaluate {
-        // The archivesBaseName isn't available intially, so set it now
+        // The archivesBaseName isn't available initially, so set it now
         def createZipTask = project.tasks.getByName("createSeparateZip")
         createZipTask.appendix = archivesBaseName
         createZipTask.from versionDir()

@@ -169,16 +169,16 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
     }
 
     int getCustomDataCount(String name) {
-        return attributes.get(name).noOfInterpValues();
+        return attributes.get(name).numberOfInterpolatedValues();
     }
 
     int getCustomData(String name, double[] value, int offset) {
         ConstraintAttribute a = attributes.get(name);
-        if (a.noOfInterpValues() == 1) {
+        if (a.numberOfInterpolatedValues() == 1) {
             value[offset] = a.getValueToInterpolate();
             return 1;
         } else {
-            int N = a.noOfInterpValues();
+            int N = a.numberOfInterpolatedValues();
             float[] f = new float[N];
             a.getValuesToInterpolate(f);
             for (int i = 0; i < N; i++) {
@@ -204,7 +204,7 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
 
         this.visibility = view.getVisibility();
         this.alpha = (view.getVisibility() != View.VISIBLE) ? 0.0f : view.getAlpha();
-        this.applyElevation = false; // TODO figure a way to cache paramenters
+        this.applyElevation = false; // TODO figure a way to cache parameters
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             this.elevation = view.getElevation();
         }

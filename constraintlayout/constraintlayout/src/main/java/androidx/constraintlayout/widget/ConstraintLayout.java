@@ -30,11 +30,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.core.LinearSystem;
 import androidx.constraintlayout.core.Metrics;
-import androidx.constraintlayout.core.widgets.*;
 import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 import androidx.constraintlayout.core.widgets.Guideline;
+import androidx.constraintlayout.core.widgets.Optimizer;
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure;
 import androidx.core.view.ViewCompat;
 
@@ -42,7 +42,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -625,7 +624,7 @@ public class ConstraintLayout extends ViewGroup {
         int layoutWidthSpec;
         int layoutHeightSpec;
 
-        public void captureLayoutInfos(int widthSpec, int heightSpec, int top, int bottom, int width, int height) {
+        public void captureLayoutInfo(int widthSpec, int heightSpec, int top, int bottom, int width, int height) {
             paddingTop = top;
             paddingBottom = bottom;
             paddingWidth = width;
@@ -1568,7 +1567,7 @@ public class ConstraintLayout extends ViewGroup {
         int paddingHeight = paddingY + paddingBottom;
         int paddingWidth = getPaddingWidth();
         int paddingX;
-        mMeasurer.captureLayoutInfos(widthMeasureSpec, heightMeasureSpec, paddingY, paddingBottom, paddingWidth, paddingHeight);
+        mMeasurer.captureLayoutInfo(widthMeasureSpec, heightMeasureSpec, paddingY, paddingBottom, paddingWidth, paddingHeight);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             int paddingStart = Math.max(0, getPaddingStart());
