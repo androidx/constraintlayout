@@ -409,12 +409,7 @@
     </attr>
     <attr name="layout_constraintHeight_percent" format="float" />
 
-    <declare-styleable name="Layer" parent="ConstraintLayout_Layout" />
-    <declare-styleable name="Flow" parent="ConstraintLayout_Layout" />
-    <declare-styleable name="Barrier" parent="ConstraintLayout_Layout" />
-    <declare-styleable name="VirtualLayout" parent="ConstraintLayout_Layout" />
-    <declare-styleable name="ConstraintHelper" parent="ConstraintLayout_Layout" />
-    <declare-styleable name="Placeholder" parent="ConstraintLayout_Layout">
+    <declare-styleable name="ConstraintLayout_placeholder">
         <attr name="placeholder_emptyVisibility" />
         <attr name="content" />
     </declare-styleable>
@@ -427,7 +422,7 @@
         <enum name="constraint" value="4" />
     </attr>
 
-    <declare-styleable name="ReactiveGuide" parent="ConstraintLayout_Layout">
+    <declare-styleable name="ConstraintLayout_ReactiveGuide">
         <attr name="reactiveGuide_valueId" format="reference" />
         <attr name="reactiveGuide_animateChange" format="boolean" />
         <attr name="reactiveGuide_applyToAllConstraintSets" format="boolean" />

@@ -47,7 +47,7 @@ public abstract class VirtualLayout extends ConstraintHelper {
     protected void init(AttributeSet attrs) {
         super.init(attrs);
         if (attrs != null) {
-            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.VirtualLayout);
+            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ConstraintLayout_Layout);
             final int N = a.getIndexCount();
             for (int i = 0; i < N; i++) {
                 int attr = a.getIndex(i);
