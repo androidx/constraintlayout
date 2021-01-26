@@ -4501,6 +4501,7 @@ public class ConstraintSet {
                 break;
             case ELEVATION:
                 c.transform.elevation = value;
+                c.transform.applyElevation = true;
                 break;
             case ROTATION:
                 c.transform.rotation = value;
