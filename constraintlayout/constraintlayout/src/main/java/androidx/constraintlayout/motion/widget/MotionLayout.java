@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
@@ -3660,6 +3661,35 @@ public class MotionLayout extends ConstraintLayout implements
 
     private RectF mBoundsCheck = new RectF();
     private View mRegionView = null;
+    private Matrix mInverseMatrix = null;
+
+    private boolean callTransformedTouchEvent(View view, MotionEvent event, float offsetX, float offsetY) {
+        Matrix viewMatrix = view.getMatrix();
+
+        if(viewMatrix.isIdentity()) {
+            event.offsetLocation(offsetX, offsetY);
+            boolean handled = view.onTouchEvent(event);
+            event.offsetLocation(-offsetX, -offsetY);
+
+            return handled;
+        }
+
+        MotionEvent transformedEvent = MotionEvent.obtain(event);
+
+        transformedEvent.offsetLocation(offsetX, offsetY);
+
+        if(mInverseMatrix == null)
+            mInverseMatrix = new Matrix();
+
+        viewMatrix.invert(mInverseMatrix);
+        transformedEvent.transform(mInverseMatrix);
+
+        boolean handled = view.onTouchEvent(transformedEvent);
+
+        transformedEvent.recycle();
+
+        return handled;
+    }
 
     /**
      * Walk the view tree to see if a child view handles a touch event.
@@ -3671,31 +3701,30 @@ public class MotionLayout extends ConstraintLayout implements
      * @return
      */
     private boolean handlesTouchEvent(float x, float y, View view, MotionEvent event) {
+        boolean handled = false;
         if (view instanceof ViewGroup) {
             ViewGroup group = (ViewGroup) view;
-            final int count = group.getChildCount();
-            for (int i = 0; i < count; i++) {
+            final int childCount = group.getChildCount();
+            for (int i = childCount - 1; i >= 0; i--) {
                 View child = group.getChildAt(i);
-                if (handlesTouchEvent(x + view.getLeft(), y + view.getTop(), child, event)) {
-                    return true;
+                if (handlesTouchEvent(x + child.getLeft() - view.getScrollX(), y + child.getTop() - view.getScrollY(), child, event)) {
+                    handled = true;
+                    break;
                 }
             }
         }
-        mBoundsCheck.set(x + view.getLeft(), y + view.getTop(), x + view.getRight(), y + view.getBottom());
 
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            if (mBoundsCheck.contains(event.getX(), event.getY())) {
-                if (view.onTouchEvent(event)) {
-                    return true;
+        if (!handled) {
+            mBoundsCheck.set(x, y, x + view.getRight() - view.getLeft(), y + view.getBottom() - view.getTop());
+
+            if (event.getAction() != MotionEvent.ACTION_DOWN || mBoundsCheck.contains(event.getX(), event.getY())) {
+                if (callTransformedTouchEvent(view, event, -x, -y)) {
+                    handled = true;
                 }
-            }
-        } else {
-            if (view.onTouchEvent(event)) {
-                return true;
             }
         }
 
-        return false;
+        return handled;
     }
 
     /**
@@ -3734,7 +3763,7 @@ public class MotionLayout extends ConstraintLayout implements
                         if (mBoundsCheck.contains(event.getX(), event.getY())) {
                             // In case of region id, if the view or a child of the view
                             // handles an event we don't need to do anything;
-                            if (!handlesTouchEvent(0, 0, mRegionView, event)) {
+                            if (!handlesTouchEvent(mRegionView.getLeft(), mRegionView.getTop(), mRegionView, event)) {
                                 // but if not, then *we* need to handle the event.
                                 return onTouchEvent(event);
                             }
