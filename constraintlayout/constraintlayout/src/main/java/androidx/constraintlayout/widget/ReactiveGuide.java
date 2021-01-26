@@ -60,17 +60,17 @@ public class ReactiveGuide extends View implements SharedValues.SharedValuesList
 
     private void init(AttributeSet attrs) {
         if (attrs != null) {
-            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ReactiveGuide);
+            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ConstraintLayout_ReactiveGuide);
             final int N = a.getIndexCount();
             for (int i = 0; i < N; i++) {
                 int attr = a.getIndex(i);
-                if (attr == R.styleable.ReactiveGuide_reactiveGuide_valueId) {
+                if (attr == R.styleable.ConstraintLayout_ReactiveGuide_reactiveGuide_valueId) {
                     mAttributeId = a.getResourceId(attr, mAttributeId);
-                } else if (attr == R.styleable.ReactiveGuide_reactiveGuide_animateChange) {
+                } else if (attr == R.styleable.ConstraintLayout_ReactiveGuide_reactiveGuide_animateChange) {
                     mAnimateChange = a.getBoolean(attr, mAnimateChange);
-                } else if (attr == R.styleable.ReactiveGuide_reactiveGuide_applyToConstraintSet) {
+                } else if (attr == R.styleable.ConstraintLayout_ReactiveGuide_reactiveGuide_applyToConstraintSet) {
                     mApplyToConstraintSetId = a.getResourceId(attr, mApplyToConstraintSetId);
-                } else if (attr == R.styleable.ReactiveGuide_reactiveGuide_applyToAllConstraintSets) {
+                } else if (attr == R.styleable.ConstraintLayout_ReactiveGuide_reactiveGuide_applyToAllConstraintSets) {
                     mApplyToAllConstraintSets = a.getBoolean(attr, mApplyToAllConstraintSets);
                 }
             }
