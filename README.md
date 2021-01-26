@@ -132,8 +132,8 @@ If you'd like to get involved and contribute please read [CONTRIBUTING](CONTRIBU
 
 ## 💻 Authors
 
-- **John Hoford** ([jafu888](https://github.com/jafu888))
-- **Nicolas Roard** ([camaelon](https://github.com/camaelon))
+- **John Hoford** : MotionLayout ([jafu888](https://github.com/jafu888))
+- **Nicolas Roard** : ConstraintLayout ([camaelon](https://github.com/camaelon))
 
 See also the list of [contributors](contributors) who participated in this project.
 
