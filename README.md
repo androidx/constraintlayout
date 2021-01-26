@@ -135,7 +135,7 @@ If you'd like to get involved and contribute please read [CONTRIBUTING](CONTRIBU
 - **John Hoford** : MotionLayout ([jafu888](https://github.com/jafu888))
 - **Nicolas Roard** : ConstraintLayout ([camaelon](https://github.com/camaelon))
 
-See also the list of [contributors](contributors) who participated in this project.
+See also the list of [contributors](https://github.com/androidx/constraintlayout/graphs/contributors) who participated in this project.
 
 ## 🔖 License
 
