@@ -5,8 +5,10 @@ buildscript {
         google()
         jcenter()
     }
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.1'
+        classpath 'com.android.tools.build:gradle:4.2.0-beta02'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.21'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -65,6 +67,12 @@ project(':core') {
     ext.version = '1.0.0-alpha3'
 }
 
+project(':compose') {
+    ext.pomName = 'ConstraintLayout for Jetpack Compose'
+    ext.pomDesc = 'ConstraintLayout for Jetpack Compose'
+    ext.version = '2.1.0-alpha2'
+}
+
 subprojects { Project project ->
     // Change buildDir first so that all plugins pick up the new value.
     project.buildDir = project.file("$project.parent.buildDir/../$project.name/build")
@@ -84,7 +92,9 @@ subprojects { Project project ->
         repositories {
             mavenDeployer {
                 repository(url: uri("$rootProject.ext.supportRepoOut"))
-                if (project.getName() == 'constraintlayout' || project.getName() == 'core') {
+                if (project.getName() == 'constraintlayout' ||
+                        project.getName() == 'core' ||
+                        project.getName() == 'compose') {
                     pom.project {
                         name project.ext.pomName
                         description project.ext.pomDesc
@@ -101,8 +111,8 @@ subprojects { Project project ->
                         }
 
                         scm {
-                            url 'https://android.googlesource.com/platform/tools/sherpa'
-                            connection 'git://android.googlesource.com/platform/tools/sherpa.git'
+                            url 'https://github.com/androidx/constraintlayout'
+                            connection 'git@github.com:androidx/constraintlayout.git'
                         }
                         developers {
                             developer {
@@ -144,7 +154,7 @@ subprojects { Project project ->
         destinationDir project.parent.ext.androidHostDist
         baseName = project.group
         version = rootProject.ext.buildNumber
-        if (archivesBaseName == 'core') {
+        if (archivesBaseName == 'core' || archivesBaseName == 'compose') {
             archiveName = "androidx-constraintlayout-" + archivesBaseName + "-" + project.ext.version + ".zip"
         } else {
             archiveName = "androidx-" + archivesBaseName + "-" + project.ext.version + ".zip"
