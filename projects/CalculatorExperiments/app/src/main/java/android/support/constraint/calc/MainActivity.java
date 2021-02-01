@@ -62,6 +62,7 @@ import static androidx.window.DisplayFeature.TYPE_FOLD;
 /* This test the visibility*/
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    private static final boolean EXPERIMENTAL = false;
     private static final String STACK_STATE_KEY = "STACK_STATE_KEY";
     private static final String SAVE_STATE = "SAVE_STATE";
     int mGraphMode = 0;
@@ -315,45 +316,48 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void readClipboard() {
-        ClipboardManager clipBoard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        {
-            ClipData clipData = clipBoard.getPrimaryClip();
-            if (clipData != null && clipData.getItemCount() > 0) {
-                ClipData.Item item = clipData.getItemAt(0);
-                String text = item.getText().toString();
-                CalcEngine.Symbolic op = mCalcEngine.deserializeString(text);
-                Log.v(TAG, Debug.getLoc() + " \"" + op.toString() + "\"");
+        if (EXPERIMENTAL) {
+            ClipboardManager clipBoard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+            {
+                ClipData clipData = clipBoard.getPrimaryClip();
+                if (clipData != null && clipData.getItemCount() > 0) {
+                    ClipData.Item item = clipData.getItemAt(0);
+                    String text = item.getText().toString();
+                    CalcEngine.Symbolic op = mCalcEngine.deserializeString(text);
+                    Log.v(TAG, Debug.getLoc() + " \"" + op.toString() + "\"");
+                }
             }
         }
     }
 
     public void regester_for_clipboard() {
+      if (EXPERIMENTAL) {
+          ClipboardManager clipBoard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+          try {
+              ClipData clipData = clipBoard.getPrimaryClip();
+              if (clipData != null && clipData.getItemCount() > 0) {
+                  ClipData.Item item = clipData.getItemAt(0);
+                  String text = item.getText().toString();
+                  CalcEngine.Symbolic op = mCalcEngine.deserializeString(text);
+                  Log.v(TAG, Debug.getLoc() + " \"" + op.toString() + "\"");
+              }
+          } catch (Exception ex) {
 
-        ClipboardManager clipBoard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        try {
-            ClipData clipData = clipBoard.getPrimaryClip();
-            if (clipData != null && clipData.getItemCount() > 0) {
-                ClipData.Item item = clipData.getItemAt(0);
-                String text = item.getText().toString();
-                CalcEngine.Symbolic op = mCalcEngine.deserializeString(text);
-                Log.v(TAG, Debug.getLoc() + " \"" + op.toString() + "\"");
-            }
-        } catch (Exception ex) {
+          }
 
-        }
+          clipBoard.addPrimaryClipChangedListener(() -> {
+              try {
+                  ClipData clipData = clipBoard.getPrimaryClip();
+                  ClipData.Item item = clipData.getItemAt(0);
+                  String text = item.getText().toString();
+                  CalcEngine.Symbolic op = mCalcEngine.deserializeString(text);
+                  Log.v(TAG, Debug.getLoc() + " \"" + op.toString() + "\"");
+                  Log.v(TAG, Debug.getLoc() + " \"" + text + "\"");
+              } catch (Exception ex) {
 
-        clipBoard.addPrimaryClipChangedListener(() -> {
-            try {
-                ClipData clipData = clipBoard.getPrimaryClip();
-                ClipData.Item item = clipData.getItemAt(0);
-                String text = item.getText().toString();
-                CalcEngine.Symbolic op = mCalcEngine.deserializeString(text);
-                Log.v(TAG, Debug.getLoc() + " \"" + op.toString() + "\"");
-                Log.v(TAG, Debug.getLoc() + " \"" + text + "\"");
-            } catch (Exception ex) {
-
-            }
-        });
+              }
+          });
+      }
     }
 
     private void serializeToCopyBuffer() {
