@@ -1133,7 +1133,7 @@ public class MotionLayout extends ConstraintLayout implements
     public void enableTransition(int transitionID, boolean enable) {
         MotionScene.Transition t = getTransition(transitionID);
         if (enable) {
-            t.setEnable(true);
+            t.setEnabled(true);
             return;
         } else {
             if (t == mScene.mCurrentTransition) { // disabling current transition
@@ -1145,7 +1145,7 @@ public class MotionLayout extends ConstraintLayout implements
                     }
                 }
             }
-            t.setEnable(false);
+            t.setEnabled(false);
         }
     }
 

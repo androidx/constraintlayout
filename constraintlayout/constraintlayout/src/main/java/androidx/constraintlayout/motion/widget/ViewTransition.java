@@ -503,7 +503,7 @@ public class ViewTransition {
         return !mDisabled;
     }
 
-    void setEnable(boolean enable) {
+    void setEnabled(boolean enable) {
         this.mDisabled = !enable;
     }
 

@@ -170,7 +170,7 @@ public class Carousel extends MotionHelper {
     private void enableAllTransitions(boolean enable) {
         ArrayList<MotionScene.Transition> transitions = mMotionLayout.getDefinedTransitions();
         for (MotionScene.Transition transition : transitions) {
-            transition.setEnable(enable);
+            transition.setEnabled(enable);
         }
     }
 
@@ -188,7 +188,7 @@ public class Carousel extends MotionHelper {
         if (enable == transition.isEnabled()) {
             return false;
         }
-        transition.setEnable(enable);
+        transition.setEnabled(enable);
         return true;
     }
 
