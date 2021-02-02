@@ -1629,11 +1629,19 @@ public class MotionLayout extends ConstraintLayout implements
         }
 
         if (pos <= 0f) {
+            if (mTransitionLastPosition == 1.0f && mCurrentState == mEndState) {
+                setState(TransitionState.MOVING); // fire a transient moving as jumping start to end
+            }
+
             mCurrentState = mBeginState;
             if (mTransitionLastPosition == 0.0f) {
                 setState(TransitionState.FINISHED);
             }
         } else if (pos >= 1.0f) {
+            if (mTransitionLastPosition == 0.0f && mCurrentState == mBeginState) {
+                setState(TransitionState.MOVING); // fire a transient moving as jumping end to start
+            }
+
             mCurrentState = mEndState;
             if (mTransitionLastPosition == 1.0f) {
                 setState(TransitionState.FINISHED);
@@ -3409,12 +3417,12 @@ public class MotionLayout extends ConstraintLayout implements
 
             if (position >= 1.0) {
                 if (DEBUG) {
-                    Log.v(TAG, Debug.getLoc() + " ============= setting  to end " + Debug.getName(getContext(), mEndState)+ "  "+ position);
+                    Log.v(TAG, Debug.getLoc() + " ============= setting  to end " + Debug.getName(getContext(), mEndState) + "  " + position);
                 }
                 if (mCurrentState != mEndState) {
                     newState = true;
                     mCurrentState = mEndState;
-                     ConstraintSet set = mScene.getConstraintSet(mEndState);
+                    ConstraintSet set = mScene.getConstraintSet(mEndState);
                     set.applyCustomAttributes(this);
                     setState(TransitionState.FINISHED);
                 }
@@ -3533,6 +3541,7 @@ public class MotionLayout extends ConstraintLayout implements
             checkStructure();
         }
         if (mCurrentState == UNSET && mScene != null) {
+
             mCurrentState = mScene.getStartId();
             mBeginState = mScene.getStartId();
             if (DEBUG) {
