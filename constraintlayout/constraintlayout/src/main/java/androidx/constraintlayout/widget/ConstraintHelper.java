@@ -20,14 +20,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 /**
- * @hide <b>Added in 1.1</b>
+ * @hide
+ * <b>Added in 1.1</b>
  * <p>
- * This class manages a set of referenced widgets. HelperWidget objects can be created to act upon the set
- * of referenced widgets. The difference between {@code ConstraintHelper} and {@code ViewGroup} is that
- * multiple {@code ConstraintHelper} can reference the same widgets.
+ *     This class manages a set of referenced widgets. HelperWidget objects can be created to act upon the set
+ *     of referenced widgets. The difference between {@code ConstraintHelper} and {@code ViewGroup} is that
+ *     multiple {@code ConstraintHelper} can reference the same widgets.
  * <p>
- * Widgets are referenced by being added to a comma separated list of ids, e.g:
- * <pre>
+ *     Widgets are referenced by being added to a comma separated list of ids, e.g:
+ *     <pre>
  *     {@code
  *         <androidx.constraintlayout.widget.Barrier
  *              android:id="@+id/barrier"
@@ -655,16 +656,18 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
+     * @hide
+     * Allows a helper a chance to update its internal object post layout or set up connections for the pointed elements
+     *
      * @param container
-     * @hide Allows a helper a chance to update its internal object post layout or set up connections for the pointed elements
      */
     public void updatePostLayout(ConstraintLayout container) {
         // Do nothing
     }
 
     /**
-     * @param container
      * @hide
+     * @param container
      */
     public void updatePostMeasure(ConstraintLayout container) {
         // Do nothing
@@ -684,7 +687,7 @@ public abstract class ConstraintHelper extends View {
         if (constraint.layout.mReferenceIds != null) {
             setReferencedIds(constraint.layout.mReferenceIds);
         } else if (constraint.layout.mReferenceIdString != null
-                && constraint.layout.mReferenceIdString.length() > 0) {
+            && constraint.layout.mReferenceIdString.length() > 0) {
             constraint.layout.mReferenceIds = convertReferenceString(this,
                     constraint.layout.mReferenceIdString);
         }
