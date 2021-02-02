@@ -300,13 +300,11 @@ class ConstraintLayoutTest {
 
         rule.runOnIdle {
             // The aspect ratio could not wrap and it is wrap suggested, so it respects constraints.
-            assertEquals(
-                    (displaySize.width / 2),
+            assertEquals((displaySize.width / 2),
                     aspectRatioBoxSize.value!!.width
             )
             // Aspect ratio is preserved.
-            assertEquals(
-                    (displaySize.width / 2 / 2),
+            assertEquals((displaySize.width / 2 / 2),
                     aspectRatioBoxSize.value!!.height
             )
             // Divider has fixed width 1.dp in constraint set.
@@ -314,9 +312,13 @@ class ConstraintLayoutTest {
             // Divider has percent height so it should spread to fill 0.8 of the height of the CL,
             // which in turns is given by the size of the aspect ratio box.
             // TODO(popam; b/150277566): uncomment
-            assertEquals(
+            assertEquals("broken, display size ${displaySize.width}x${displaySize.height} aspect height ${aspectRatioBoxSize.value!!.width}x${aspectRatioBoxSize.value!!.height}, divider: ${dividerSize.value!!.height}",
                     (aspectRatioBoxSize.value!!.height * 0.8f).roundToInt(),
                     dividerSize.value!!.height
+            )
+            assertEquals("broken, aspect height ${aspectRatioBoxSize.value!!.width}x${aspectRatioBoxSize.value!!.height}, divider: ${dividerSize.value!!.height}",
+                    aspectRatioBoxSize.value!!.width,
+                    540
             )
         }
     }
