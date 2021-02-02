@@ -20,15 +20,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 /**
- * @hide
- * <b>Added in 1.1</b>
+ * @hide <b>Added in 1.1</b>
  * <p>
- *     This class manages a set of referenced widgets. HelperWidget objects can be created to act upon the set
- *     of referenced widgets. The difference between {@code ConstraintHelper} and {@code ViewGroup} is that
- *     multiple {@code ConstraintHelper} can reference the same widgets.
+ * This class manages a set of referenced widgets. HelperWidget objects can be created to act upon the set
+ * of referenced widgets. The difference between {@code ConstraintHelper} and {@code ViewGroup} is that
+ * multiple {@code ConstraintHelper} can reference the same widgets.
  * <p>
- *     Widgets are referenced by being added to a comma separated list of ids, e.g:
- *     <pre>
+ * Widgets are referenced by being added to a comma separated list of ids, e.g:
+ * <pre>
  *     {@code
  *         <androidx.constraintlayout.widget.Barrier
  *              android:id="@+id/barrier"
@@ -49,7 +48,24 @@ public abstract class ConstraintHelper extends View {
     /**
      * @hide
      */
+    protected float[] mAngles = new float[32];
+
+    /**
+     * @hide
+     */
+    protected int[] mRadius = new int[32];
+    /**
+     * @hide
+     */
     protected int mCount;
+    /**
+     * @hide
+     */
+    protected int mCountRadius;
+    /**
+     * @hide
+     */
+    protected int mCountAngle;
 
     /**
      * @hide
@@ -71,13 +87,22 @@ public abstract class ConstraintHelper extends View {
      * @hide
      */
     protected String mReferenceTags;
+    /**
+     * @hide
+     */
+    protected String mReferenceAngles;
+
+    /**
+     * @hide
+     */
+    protected String mReferenceRadius;
 
     /**
      * @hide
      */
     private View[] mViews = null;
 
-    private HashMap<Integer, String> mMap = new HashMap<>();
+    protected HashMap<Integer, String> mMap = new HashMap<>();
 
     public ConstraintHelper(Context context) {
         super(context);
@@ -112,6 +137,12 @@ public abstract class ConstraintHelper extends View {
                 } else if (attr == R.styleable.ConstraintLayout_Layout_constraint_referenced_tags) {
                     mReferenceTags = a.getString(attr);
                     setReferenceTags(mReferenceTags);
+                } else if (attr == R.styleable.ConstraintLayout_Layout_circularflow_angles) {
+                    mReferenceAngles = a.getString(attr);
+                    setAngles(mReferenceAngles);
+                } else if (attr == R.styleable.ConstraintLayout_Layout_circularflow_radiusInDP) {
+                    mReferenceRadius = a.getString(attr);
+                    setRadius(mReferenceRadius);
                 }
             }
             a.recycle();
@@ -126,6 +157,12 @@ public abstract class ConstraintHelper extends View {
         }
         if (mReferenceTags != null) {
             setReferenceTags(mReferenceTags);
+        }
+        if (mReferenceAngles != null) {
+            setAngles(mReferenceAngles);
+        }
+        if (mReferenceRadius != null) {
+            setRadius(mReferenceRadius);
         }
     }
 
@@ -165,7 +202,7 @@ public abstract class ConstraintHelper extends View {
         mReferenceIds = null;
         for (int i = 0; i < mCount; i++) {
             if (mIds[i] == id) {
-                for (int j = i; j < mCount -1; j++) {
+                for (int j = i; j < mCount - 1; j++) {
                     mIds[j] = mIds[j + 1];
                 }
                 mIds[mCount - 1] = 0;
@@ -178,6 +215,7 @@ public abstract class ConstraintHelper extends View {
 
     /**
      * Helpers typically reference a collection of ids
+     *
      * @return ids referenced
      */
     public int[] getReferencedIds() {
@@ -186,6 +224,25 @@ public abstract class ConstraintHelper extends View {
 
     /**
      * Helpers typically reference a collection of ids
+     *
+     * @return ids referenced
+     */
+    public int[] getRadius() {
+        return Arrays.copyOf(mRadius, mCountRadius);
+    }
+
+    /**
+     * Helpers typically reference a collection of ids
+     *
+     * @return ids referenced
+     */
+    public float[] getAngles() {
+        return Arrays.copyOf(mAngles, mCountAngle);
+    }
+
+    /**
+     * Helpers typically reference a collection of ids
+     *
      * @return ids referenced
      */
     public void setReferencedIds(int[] ids) {
@@ -231,8 +288,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
-     * Allows a helper to replace the default ConstraintWidget in LayoutParams by its own subclass
+     * @hide Allows a helper to replace the default ConstraintWidget in LayoutParams by its own subclass
      */
     public void validateParams() {
         if (mHelperWidget == null) {
@@ -267,8 +323,45 @@ public abstract class ConstraintHelper extends View {
             mMap.put(rscId, idString); // let's remember the idString used, as we may need it for dynamic modules
             addRscID(rscId);
         } else {
-            Log.w("ConstraintHelper", "Could not find id of \""+idString+"\"");
+            Log.w("ConstraintHelper", "Could not find id of \"" + idString + "\"");
         }
+    }
+
+    /**
+     * @hide
+     */
+    private void addAngle(String angleString) {
+        if (angleString == null || angleString.length() == 0) {
+            return;
+        }
+        if (myContext == null) {
+            return;
+        }
+
+        if (mCountAngle + 1 > mAngles.length) {
+            mAngles = Arrays.copyOf(mAngles, mAngles.length * 2);
+        }
+        mAngles[mCountAngle] = Integer.parseInt(angleString);
+        mCountAngle++;
+    }
+
+    /**
+     * @hide
+     */
+    private void addRadius(String radiusString) {
+        if (radiusString == null || radiusString.length() == 0) {
+            return;
+        }
+        if (myContext == null) {
+            return;
+        }
+
+        if (mCountRadius + 1 > mRadius.length) {
+            mRadius = Arrays.copyOf(mRadius, mRadius.length * 2);
+        }
+
+        mRadius[mCountRadius] = (int) (Integer.parseInt(radiusString) * myContext.getResources().getDisplayMetrics().density);
+        mCountRadius++;
     }
 
     /**
@@ -300,7 +393,7 @@ public abstract class ConstraintHelper extends View {
                 ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) params;
                 if (tagString.equals(lp.constraintTag)) {
                     if (v.getId() == View.NO_ID) {
-                        Log.w("ConstraintHelper", "to use ConstraintTag view "+v.getClass().getSimpleName()+" must have an ID");
+                        Log.w("ConstraintHelper", "to use ConstraintTag view " + v.getClass().getSimpleName() + " must have an ID");
                     } else {
                         addRscID(v.getId());
                     }
@@ -312,6 +405,7 @@ public abstract class ConstraintHelper extends View {
 
     /**
      * Attempt to find the id given a reference string
+     *
      * @param referenceId
      * @return
      */
@@ -410,6 +504,47 @@ public abstract class ConstraintHelper extends View {
             begin = end + 1;
         }
     }
+
+    /**
+     * @hide
+     */
+    protected void setAngles(String idList) {
+        if (idList == null) {
+            return;
+        }
+        int begin = 0;
+        mCountAngle = 0;
+        while (true) {
+            int end = idList.indexOf(',', begin);
+            if (end == -1) {
+                addAngle(idList.substring(begin).trim());
+                break;
+            }
+            addAngle(idList.substring(begin, end).trim());
+            begin = end + 1;
+        }
+    }
+
+    /**
+     * @hide
+     */
+    protected void setRadius(String idList) {
+        if (idList == null) {
+            return;
+        }
+        int begin = 0;
+        mCountRadius = 0;
+        while (true) {
+            int end = idList.indexOf(',', begin);
+            if (end == -1) {
+                addRadius(idList.substring(begin).trim());
+                break;
+            }
+            addRadius(idList.substring(begin, end).trim());
+            begin = end + 1;
+        }
+    }
+
     /**
      * @hide
      */
@@ -432,8 +567,8 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
      * @param container
+     * @hide
      */
     protected void applyLayoutFeatures(ConstraintLayout container) {
         int visibility = getVisibility();
@@ -464,10 +599,8 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
-     * Allows a helper a chance to update its internal object pre layout or set up connections for the pointed elements
-     *
      * @param container
+     * @hide Allows a helper a chance to update its internal object pre layout or set up connections for the pointed elements
      */
     public void updatePreLayout(ConstraintLayout container) {
         if (isInEditMode()) {
@@ -508,7 +641,7 @@ public abstract class ConstraintHelper extends View {
         }
     }
 
-    protected View [] getViews(ConstraintLayout layout) {
+    protected View[] getViews(ConstraintLayout layout) {
 
         if (mViews == null || mViews.length != mCount) {
             mViews = new View[mCount];
@@ -522,18 +655,16 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
-     * Allows a helper a chance to update its internal object post layout or set up connections for the pointed elements
-     *
      * @param container
+     * @hide Allows a helper a chance to update its internal object post layout or set up connections for the pointed elements
      */
     public void updatePostLayout(ConstraintLayout container) {
         // Do nothing
     }
 
     /**
-     * @hide
      * @param container
+     * @hide
      */
     public void updatePostMeasure(ConstraintLayout container) {
         // Do nothing
@@ -553,7 +684,7 @@ public abstract class ConstraintHelper extends View {
         if (constraint.layout.mReferenceIds != null) {
             setReferencedIds(constraint.layout.mReferenceIds);
         } else if (constraint.layout.mReferenceIdString != null
-            && constraint.layout.mReferenceIdString.length() > 0) {
+                && constraint.layout.mReferenceIdString.length() > 0) {
             constraint.layout.mReferenceIds = convertReferenceString(this,
                     constraint.layout.mReferenceIdString);
         }
