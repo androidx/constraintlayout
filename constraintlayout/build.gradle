@@ -70,7 +70,7 @@ project(':core') {
 project(':compose') {
     ext.pomName = 'ConstraintLayout for Jetpack Compose'
     ext.pomDesc = 'ConstraintLayout for Jetpack Compose'
-    ext.version = '2.1.0-alpha2'
+    ext.version = '1.0.0-alpha01'
 }
 
 subprojects { Project project ->
