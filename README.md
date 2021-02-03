@@ -25,10 +25,22 @@ repositories {
 
 Next add a dependency in the `build.gradle` file of your Gradle module.
 
+If using ConstraintLayout with the Android View system, add:
+
 ```gradle
 dependencies {
 
     implementation("androidx.constraintlayout:constraintlayout:2.1.0-alpha2")
+
+}
+```
+
+If using ConstraintLayout with Jetpack Compose, add:
+
+```gradle
+dependencies {
+
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha01")
 
 }
 ```
