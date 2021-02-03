@@ -2,7 +2,9 @@
 
 ![core](https://github.com/androidx/constraintlayout/workflows/core/badge.svg) <img src="https://img.shields.io/github/v/release/androidx/constraintlayout.svg?label=latest"/> [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 
-ConstraintLayout is an Android layout component which allows you to position and size widgets in a flexible way. This repository contains the core Java engine, Android library, validation tools, and experiments.
+ConstraintLayout is a layout manager for Android which allows you to position and size widgets in a flexible way. It's available for both the Android view system and Jetpack Compose.
+
+This repository contains the core Java engine, Android library, validation tools, and experiments.
 
 [Android Reference Docs](https://developer.android.com/reference/androidx/constraintlayout/widget/ConstraintLayout)
 
