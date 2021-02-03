@@ -104,7 +104,7 @@ Hello World
     app:constraint_referenced_ids="button1,button2" />
 ```
 
-☂️ [Group](https://developer.android.com/reference/androidx/constraintlayout/widget/Group) constrols the visibility of a set of referenced widgets.
+☂️ [Group](https://developer.android.com/reference/androidx/constraintlayout/widget/Group) controls the visibility of a set of referenced widgets.
 
 ```xml
 <androidx.constraintlayout.widget.Group
