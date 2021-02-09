@@ -46,14 +46,41 @@
         android:id="@+id/view6"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@android:color/holo_orange_dark" />
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@android:color/holo_orange_dark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <View
+        android:id="@+id/view7"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/holo_purple"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view8"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@android:color/holo_green_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.helper.widget.CircularFlow
         android:id="@+id/circularFlow"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:circularflow_angles="45,90,135,190,235"
-        app:circularflow_radiusInDP="90,100,110,120,130"
+        app:circularflow_angles="0,40,80,120"
+        app:circularflow_radiusInDP="90,100,110,120"
         app:circularflow_viewCenter="@+id/view1"
-        app:constraint_referenced_ids="view2, view3, view4,view5,view6" />
+        app:constraint_referenced_ids="view2,view3,view4,view5"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

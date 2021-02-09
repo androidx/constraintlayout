@@ -116,7 +116,10 @@ public class CircularFlow extends VirtualLayout {
         if (mReferenceRadius != null) {
             setRadius(mReferenceRadius);
         }
+        anchorReferences();
+    }
 
+    private void anchorReferences() {
         mContainer = (ConstraintLayout) getParent();
         ConstraintSet c = new ConstraintSet();
         c.clone(mContainer);
@@ -139,12 +142,29 @@ public class CircularFlow extends VirtualLayout {
                 } else {
                     Log.e("CircularFlow", "Added angle to view with id: " + mMap.get(view.getId()));
                 }
-
                 c.constrainCircle(view.getId(), mViewCenter, radius, angle);
             }
         }
         c.applyTo(mContainer);
         applyLayoutFeatures();
+    }
+
+    /**
+     * Add a view to the CircularFlow. The referenced view need to be a child of the container parent.
+     * The view also need to have its id set in order to be added.
+     * The views previous need to have its radius and angle set in order to be added correctly a new view.
+     * @param view
+     * @param radius
+     * @param angle
+     * @return
+     */
+    public void addViewToCircularFlow(View view, int radius, float angle) {
+        addView(view);
+        mAngles[mCountAngle] = angle;
+        mCountAngle++;
+        mRadius[mCountRadius] = (int) (radius * myContext.getResources().getDisplayMetrics().density);
+        mCountRadius++;
+        anchorReferences();
     }
 
     /**
