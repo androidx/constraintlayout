@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <ConstraintSet android:id="@+id/container_scene_set1" />
+
+    <ConstraintSet android:id="@+id/container_scene_set2">
+        <Constraint
+            android:id="@+id/shortcut1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="17dp"
+            android:translationY="-52dp"
+            android:visibility="invisible"
+            motion:layout_constraintStart_toStartOf="@id/query"
+            motion:layout_constraintTop_toBottomOf="@id/query" />
+        <Constraint
+            android:id="@+id/shortcut2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:translationY="-52dp"
+            android:visibility="invisible"
+            motion:layout_constraintStart_toEndOf="@id/shortcut1"
+            motion:layout_constraintTop_toTopOf="@id/shortcut1" />
+        <Constraint
+            android:id="@+id/shortcut3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="1dp"
+            android:translationY="-52dp"
+            android:visibility="invisible"
+            motion:layout_constraintEnd_toEndOf="@id/query"
+            motion:layout_constraintHorizontal_bias="1"
+            motion:layout_constraintStart_toEndOf="@id/shortcut2"
+            motion:layout_constraintTop_toTopOf="@id/shortcut1" />
+        <Constraint
+            android:id="@+id/compactView"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="4dp"
+            android:translationY="-5dp"
+            android:visibility="invisible"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toTopOf="parent" />
+    </ConstraintSet>
+
+    <ConstraintSet
+        android:id="@+id/container_scene_set3"
+        motion:deriveConstraintsFrom="@+id/container_scene_set2">
+
+        <Constraint
+            android:id="@+id/shortcut1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="17dp"
+            android:translationY="-52dp"
+            android:visibility="gone"
+            motion:layout_constraintStart_toStartOf="@id/query"
+            motion:layout_constraintTop_toBottomOf="@id/query" />
+        <Constraint
+            android:id="@+id/shortcut2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:translationY="-52dp"
+            android:visibility="gone"
+            motion:layout_constraintStart_toEndOf="@id/shortcut1"
+            motion:layout_constraintTop_toTopOf="@id/shortcut1" />
+        <Constraint
+            android:id="@+id/shortcut3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="1dp"
+            android:translationY="-52dp"
+            android:visibility="gone"
+            motion:layout_constraintEnd_toEndOf="@id/query"
+            motion:layout_constraintHorizontal_bias="1"
+            motion:layout_constraintStart_toEndOf="@id/shortcut2"
+            motion:layout_constraintTop_toTopOf="@id/shortcut1" />
+        <Constraint
+            android:id="@+id/compactView"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="4dp"
+            android:translationY="-5dp"
+            android:visibility="visible"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toTopOf="parent" />
+        <Constraint
+            android:id="@+id/query"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="5dp"
+            android:visibility="invisible"
+            motion:layout_constraintBottom_toBottomOf="@id/compactView"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toTopOf="@id/compactView"
+            motion:transitionEasing="accelerate" />
+    </ConstraintSet>
+
+    <Transition
+        android:id="@+id/transition_container_set1_2"
+        motion:constraintSetEnd="@id/container_scene_set2"
+        motion:constraintSetStart="@id/container_scene_set1"
+        motion:duration="300" />
+
+    <Transition
+        android:id="@+id/transition_container_set2_1"
+        motion:constraintSetEnd="@id/container_scene_set1"
+        motion:constraintSetStart="@id/container_scene_set2"
+        motion:duration="300" />
+
+    <Transition
+        android:id="@+id/transition_container_set2_3"
+        motion:constraintSetEnd="@id/container_scene_set3"
+        motion:constraintSetStart="@id/container_scene_set2"
+        motion:duration="300" />
+
+    <Transition
+        android:id="@+id/transition_container_set3_2"
+        motion:constraintSetEnd="@id/container_scene_set2"
+        motion:constraintSetStart="@id/container_scene_set3"
+        motion:duration="300" />
+</MotionScene>

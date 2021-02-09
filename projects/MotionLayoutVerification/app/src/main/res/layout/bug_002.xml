@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layoutDescription="@xml/bug_002_scene"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Collapsed view -->
+        <ImageView
+            android:id="@+id/compactView"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="4dp"
+            android:background="#99ff99"
+            android:padding="15dp"
+            android:translationY="-5dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_android_black_24dp"
+            app:tint="#5555ff" />
+
+        <!-- Full view -->
+        <TextView
+            android:id="@+id/query"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:background="#ffff55"
+            android:text="Query hint"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/shortcut1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="17dp"
+            android:background="#ff99ff"
+            android:text="Shortcut 1"
+            android:translationY="-5dp"
+            app:drawableStartCompat="@drawable/ic_baseline_adb_24"
+            app:layout_constraintStart_toStartOf="@id/query"
+            app:layout_constraintTop_toBottomOf="@id/query" />
+
+        <TextView
+            android:id="@+id/shortcut2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:background="#ff99ff"
+            android:text="Shortcut 2"
+            android:translationY="-5dp"
+            app:drawableStartCompat="@drawable/ic_baseline_ac_unit_24"
+            app:layout_constraintStart_toEndOf="@id/shortcut1"
+            app:layout_constraintTop_toTopOf="@id/shortcut1" />
+
+        <TextView
+            android:id="@+id/shortcut3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="1dp"
+            android:background="#99ff99"
+            android:gravity="center"
+            android:text="Shortcut 3"
+            android:translationY="-5dp"
+            app:drawableStartCompat="@drawable/ic_baseline_6_ft_apart_24"
+            app:layout_constraintEnd_toEndOf="@id/query"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toEndOf="@id/shortcut2"
+            app:layout_constraintTop_toTopOf="@id/shortcut1" />
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
+
+    <Button
+        android:id="@+id/collapse"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Collapse"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/expand"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Expand"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

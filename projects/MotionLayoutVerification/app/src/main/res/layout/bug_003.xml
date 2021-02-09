@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:background="#87F"
+        app:layoutDescription="@xml/bug_003_scene"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/collapse"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Collapsed view -->
+        <ImageView
+            android:id="@+id/compactView"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="10dp"
+
+            android:background="#99ff99"
+
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_android_black_24dp"
+            app:tint="#5555ff"
+          />
+
+        <View
+            android:id="@+id/v"
+            android:background="#FFF"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="99dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
+
+    <Button
+        android:id="@+id/collapse"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Collapse"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/expand"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Expand"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

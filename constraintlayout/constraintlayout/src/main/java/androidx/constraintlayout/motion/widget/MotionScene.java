@@ -826,6 +826,7 @@ public class MotionScene {
 
         Transition(MotionScene motionScene, Transition global) {
             mMotionScene = motionScene;
+            mDuration = motionScene.mDefaultDuration;
             if (global != null) {
                 mPathMotionArc = global.mPathMotionArc;
                 mDefaultInterpolator = global.mDefaultInterpolator;

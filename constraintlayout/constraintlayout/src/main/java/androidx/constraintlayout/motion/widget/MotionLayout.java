@@ -2003,16 +2003,19 @@ public class MotionLayout extends ConstraintLayout implements
         animateTo(1.0f);
         mOnComplete = null;
     }
+
     /**
      * Animate to the ending position of the current transition.
      * This will not work during on create as there is no transition
      * Transitions are only set up during onAttach
+     *
      * @param onComplete callback when task is don
      */
     public void transitionToEnd(Runnable onComplete) {
         animateTo(1.0f);
         mOnComplete = onComplete;
     }
+
     /**
      * Animate to the state defined by the id.
      * The id is the id of the ConstraintSet or the id of the State.
@@ -2032,6 +2035,25 @@ public class MotionLayout extends ConstraintLayout implements
 
     /**
      * Animate to the state defined by the id.
+     * The id is the id of the ConstraintSet or the id of the State.
+     *
+     * @param id       the state to transition to
+     * @param duration time in ms. if 0 set by default or transition -1 by current
+     */
+
+    public void transitionToState(int id, int duration) {
+        if (!isAttachedToWindow()) {
+            if (mStateCache == null) {
+                mStateCache = new StateCache();
+            }
+            mStateCache.setEndState(id);
+            return;
+        }
+        transitionToState(id, -1, -1, duration);
+    }
+
+    /**
+     * Animate to the state defined by the id.
      * Width and height may be used in the picking of the id using this StateSet.
      *
      * @param id           the state to transition
@@ -2039,6 +2061,20 @@ public class MotionLayout extends ConstraintLayout implements
      * @param screenHeight the height of the motionLayout used to select the variant
      */
     public void transitionToState(int id, int screenWidth, int screenHeight) {
+        transitionToState(id, screenWidth, screenHeight, -1);
+    }
+
+    /**
+     * Animate to the state defined by the id.
+     * Width and height may be used in the picking of the id using this StateSet.
+     *
+     * @param id           the state to transition
+     * @param screenWidth  the with of the motionLayout used to select the variant
+     * @param screenHeight the height of the motionLayout used to select the variant
+     * @param duration     time in ms. if 0 set by default or transition -1 by current
+     */
+
+    public void transitionToState(int id, int screenWidth, int screenHeight, int duration) {
         // if id is either end or start state, transition using current setup.
         // if id is not part of end/start, need to setup
 
@@ -2081,10 +2117,14 @@ public class MotionLayout extends ConstraintLayout implements
                 Log.v(TAG, "-------------------------------------------");
             }
             setTransition(mCurrentState, id);
+
             animateTo(1.0f);
 
             mTransitionLastPosition = 0;
             transitionToEnd();
+            if (duration > 0) {
+                mTransitionDuration = duration / 1000f;
+            }
             return;
         }
         if (DEBUG) {
@@ -2101,13 +2141,24 @@ public class MotionLayout extends ConstraintLayout implements
         mAnimationStartTime = getNanoTime();
         mTransitionInstantly = false;
         mInterpolator = null;
-        mTransitionDuration = mScene.getDuration() / 1000f;
+        if (duration == -1) {
+            Log.v(TAG, Debug.getLoc()+" ...duration == -1  mScene.getDuration()  " +  mScene.getDuration());
+            mTransitionDuration = mScene.getDuration() / 1000f;
+
+        }
         mBeginState = UNSET;
         mScene.setTransition(mBeginState, mEndState);
         SparseArray<MotionController> controllers = new SparseArray<>();
+        if (duration == 0) {
+            Log.v(TAG, Debug.getLoc()+" ...duration == 0  mScene.getDuration()  " +  mScene.getDuration());
 
-        int startId = mScene.getStartId();
-        int targetID = id;
+            mTransitionDuration = mScene.getDuration() / 1000f;
+        } else if (duration > 0) {
+            Log.v(TAG, Debug.getLoc()+" ...duration > 0  duration  " +  duration);
+
+            mTransitionDuration = duration / 1000f;
+        }
+        Log.v(TAG, Debug.getLoc()+" ... duration " + mTransitionDuration*1000);
         int n = getChildCount();
 
         mFrameArrayList.clear();
@@ -2115,7 +2166,7 @@ public class MotionLayout extends ConstraintLayout implements
             View v = getChildAt(i);
             MotionController f = new MotionController(v);
             mFrameArrayList.put(v, f);
-            controllers.put(v.getId(),mFrameArrayList.get(v));
+            controllers.put(v.getId(), mFrameArrayList.get(v));
         }
         mInTransition = true;
 
