@@ -21,7 +21,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
-import androidx.constraintlayout.helper.widget.utils.Utils;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.R;
@@ -240,7 +239,7 @@ public class CircularFlow extends VirtualLayout {
             return angles;
         }
 
-        return Utils.removeElementFromArray(angles, index);
+        return removeElementFromArray(angles, index);
     }
 
     /**
@@ -253,7 +252,7 @@ public class CircularFlow extends VirtualLayout {
             return radius;
         }
 
-        return Utils.removeElementFromArray(radius, index);
+        return removeElementFromArray(radius, index);
     }
 
     /**
@@ -337,5 +336,29 @@ public class CircularFlow extends VirtualLayout {
 
         mRadius[mCountRadius] = (int) (Integer.parseInt(radiusString) * myContext.getResources().getDisplayMetrics().density);
         mCountRadius++;
+    }
+
+    public static int[] removeElementFromArray(int[] array, int index) {
+        int[] newArray = new int[array.length - 1];
+
+        for (int i = 0, k = 0; i < array.length; i++) {
+            if (i == index) {
+                continue;
+            }
+            newArray[k++] = array[i];
+        }
+        return newArray;
+    }
+
+    public static float[] removeElementFromArray(float[] array, int index) {
+        float[] newArray = new float[array.length - 1];
+
+        for (int i = 0, k = 0; i < array.length; i++) {
+            if (i == index) {
+                continue;
+            }
+            newArray[k++] = array[i];
+        }
+        return newArray;
     }
 }
