@@ -20,6 +20,8 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+
+import androidx.constraintlayout.helper.widget.utils.Utils;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.R;
@@ -205,15 +207,11 @@ public class CircularFlow extends VirtualLayout {
         anchorReferences();
     }
 
-    /**
-     * Remove a given view from the CircularFlow.
-     *
-     * @param view
-     */
-    public void removeViewFromCircularFlow(View view){
-        int index = removeView(view);
+    @Override
+    public int removeView(View view) {
+        int index = super.removeView(view);
         if (index == -1) {
-            return;
+            return index;
         }
         ConstraintSet c = new ConstraintSet();
         c.clone(mContainer);
@@ -229,8 +227,8 @@ public class CircularFlow extends VirtualLayout {
             mCountRadius--;
         }
         anchorReferences();
+        return index;
     }
-
 
     /**
      * @hide
@@ -241,16 +239,8 @@ public class CircularFlow extends VirtualLayout {
                 || index >= mCountAngle) {
             return angles;
         }
-        float[] anotherArray = new float[mCountAngle - 1];
 
-        for (int i = 0, k = 0; i < mCountAngle; i++) {
-            if (i == index) {
-                continue;
-            }
-            anotherArray[k++] = angles[i];
-        }
-
-        return anotherArray;
+        return Utils.removeElementFromArray(angles, index);
     }
 
     /**
@@ -262,16 +252,8 @@ public class CircularFlow extends VirtualLayout {
                 || index >= mCountRadius) {
             return radius;
         }
-        int[] anotherArray = new int[mCountRadius - 1];
 
-        for (int i = 0, k = 0; i < mCountRadius; i++) {
-            if (i == index) {
-                continue;
-            }
-            anotherArray[k++] = radius[i];
-        }
-
-        return anotherArray;
+        return Utils.removeElementFromArray(radius, index);
     }
 
     /**

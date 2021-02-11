@@ -29,7 +29,19 @@ class CircularFlowDemoActivity : AppCompatActivity() {
         }
 
         findViewById<View>(R.id.view2).setOnClickListener {
-            findViewById<CircularFlow>(R.id.circularFlow).removeViewFromCircularFlow(
+            findViewById<CircularFlow>(R.id.circularFlow).removeView(
+                it
+            )
+        }
+
+        findViewById<View>(R.id.view3).setOnClickListener {
+            findViewById<CircularFlow>(R.id.circularFlow).removeView(
+                it
+            )
+        }
+
+        findViewById<View>(R.id.view4).setOnClickListener {
+            findViewById<CircularFlow>(R.id.circularFlow).removeView(
                 it
             )
         }
