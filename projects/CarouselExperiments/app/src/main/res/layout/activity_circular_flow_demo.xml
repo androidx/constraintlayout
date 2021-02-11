@@ -80,7 +80,5 @@
         app:circularflow_angles="0,40,80,120"
         app:circularflow_radiusInDP="90,100,110,120"
         app:circularflow_viewCenter="@+id/view1"
-        app:constraint_referenced_ids="view2,view3,view4,view5"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
+        app:constraint_referenced_ids="view2,view3,view4,view5" />
 </androidx.constraintlayout.widget.ConstraintLayout>

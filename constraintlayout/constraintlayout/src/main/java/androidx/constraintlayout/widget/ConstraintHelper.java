@@ -156,15 +156,18 @@ public abstract class ConstraintHelper extends View {
      * Remove a given view from the helper.
      *
      * @param view
+     * @return index of view removed
      */
-    public void removeView(View view) {
+    public int removeView(View view) {
+        int index = -1;
         int id = view.getId();
         if (id == -1) {
-            return;
+            return index;
         }
         mReferenceIds = null;
         for (int i = 0; i < mCount; i++) {
             if (mIds[i] == id) {
+                index = i;
                 for (int j = i; j < mCount -1; j++) {
                     mIds[j] = mIds[j + 1];
                 }
@@ -174,6 +177,7 @@ public abstract class ConstraintHelper extends View {
             }
         }
         requestLayout();
+        return index;
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 The Android Open Source Project
+ * Copyright (C) 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,39 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.R;
 import androidx.constraintlayout.widget.VirtualLayout;
 import java.util.Arrays;
+
+/**
+ *
+ * CircularFlow virtual layout.
+ *
+ * Allows positioning of referenced widgets circular.
+ *
+ * The elements referenced are indicated via constraint_referenced_ids, as with other ContraintHelper implementations.
+ *
+ * XML attributes that are needed:
+ * <ul>
+ *     <li>constraint_referenced_ids = "view2, view3, view4,view5,view6"</li>. It receives id's of the views that will add the references.
+ *     <li>circularflow_viewCenter = "view1"</li>. It receives the id of the view of the center where the views received in constraint_referenced_ids will be referenced.
+ *     <li>circularflow_angles = "45,90,135,180,225"</li>. Receive the angles that you will assign to each view.
+ *     <li>circularflow_radiusInDP = "90,100,110,120,130"</li>. Receive the radios in DP that you will assign to each view.
+ * </ul>
+ *
+ * Example in XML:
+ * <androidx.constraintlayout.helper.widget.CircularFlow
+ *         android:id="@+id/circularFlow"
+ *         android:layout_width="match_parent"
+ *         android:layout_height="match_parent"
+ *         app:circularflow_angles="0,40,80,120"
+ *         app:circularflow_radiusInDP="90,100,110,120"
+ *         app:circularflow_viewCenter="@+id/view1"
+ *         app:constraint_referenced_ids="view2,view3,view4,view5" />
+ *
+ * DEFAULT radius - If you add a view and don't set its radius, the default value will be 0.
+ * DEFAULT angles - If you add a view and don't set its angle, the default value will be 0.
+ *
+ * Recommendation - always set radius and angle for all views in <i>constraint_referenced_ids</i>
+ *
+ * */
 
 public class CircularFlow extends VirtualLayout {
     private static final String TAG = "CircularFlow";
@@ -165,6 +198,75 @@ public class CircularFlow extends VirtualLayout {
         mRadius[mCountRadius] = (int) (radius * myContext.getResources().getDisplayMetrics().density);
         mCountRadius++;
         anchorReferences();
+    }
+
+    /**
+     * Remove a given view from the CircularFlow.
+     *
+     * @param view
+     */
+    public void removeViewFromCircularFlow(View view){
+        int index = removeView(view);
+        if (index == -1) {
+            return;
+        }
+        ConstraintSet c = new ConstraintSet();
+        c.clone(mContainer);
+        c.clear(view.getId(), ConstraintSet.CIRCLE_REFERENCE);
+        c.applyTo(mContainer);
+
+        if (index < mAngles.length) {
+            mAngles = removeAngle(mAngles, index);
+            mCountAngle--;
+        }
+        if (index < mRadius.length) {
+            mRadius = removeRadius(mRadius, index);
+            mCountRadius--;
+        }
+        anchorReferences();
+    }
+
+
+    /**
+     * @hide
+     */
+    private float[] removeAngle(float[] angles, int index) {
+        if (angles == null
+                || index < 0
+                || index >= angles.length) {
+            return angles;
+        }
+        float[] anotherArray = new float[32];
+
+        for (int i = 0, k = 0; i < angles.length; i++) {
+            if (i == index) {
+                continue;
+            }
+            anotherArray[k++] = angles[i];
+        }
+
+        return anotherArray;
+    }
+
+    /**
+     * @hide
+     */
+    private int[] removeRadius(int[] radius, int index) {
+        if (radius == null
+                || index < 0
+                || index >= radius.length) {
+            return radius;
+        }
+        int[] anotherArray = new int[32];
+
+        for (int i = 0, k = 0; i < radius.length; i++) {
+            if (i == index) {
+                continue;
+            }
+            anotherArray[k++] = radius[i];
+        }
+
+        return anotherArray;
     }
 
     /**

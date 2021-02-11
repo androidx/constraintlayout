@@ -28,5 +28,10 @@ class CircularFlowDemoActivity : AppCompatActivity() {
             )
         }
 
+        findViewById<View>(R.id.view2).setOnClickListener {
+            findViewById<CircularFlow>(R.id.circularFlow).removeViewFromCircularFlow(
+                it
+            )
+        }
     }
 }

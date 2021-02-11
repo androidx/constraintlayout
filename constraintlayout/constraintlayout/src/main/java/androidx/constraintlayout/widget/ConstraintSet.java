@@ -211,6 +211,11 @@ public class ConstraintSet {
     public static final int END = ConstraintLayout.LayoutParams.END;
 
     /**
+     * Circle reference from a view.
+     */
+    public static final int CIRCLE_REFERENCE = ConstraintLayout.LayoutParams.CIRCLE;
+
+    /**
      * Chain spread style
      */
     public static final int CHAIN_SPREAD = ConstraintLayout.LayoutParams.CHAIN_SPREAD;
@@ -3030,6 +3035,11 @@ public class ConstraintSet {
                     constraint.layout.endToEnd = Layout.UNSET;
                     constraint.layout.endMargin = Layout.UNSET;
                     constraint.layout.goneEndMargin = Layout.UNSET;
+                    break;
+                case CIRCLE_REFERENCE:
+                    constraint.layout.circleAngle = Layout.UNSET;
+                    constraint.layout.circleRadius = Layout.UNSET;
+                    constraint.layout.circleConstraint = Layout.UNSET;
                     break;
                 default:
                     throw new IllegalArgumentException("unknown constraint");
