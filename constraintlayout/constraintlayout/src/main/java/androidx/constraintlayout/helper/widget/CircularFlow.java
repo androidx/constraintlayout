@@ -192,11 +192,16 @@ public class CircularFlow extends VirtualLayout {
      * @return
      */
     public void addViewToCircularFlow(View view, int radius, float angle) {
+        if (containsId(view.getId())){
+            return;
+        }
         addView(view);
-        mAngles[mCountAngle] = angle;
         mCountAngle++;
-        mRadius[mCountRadius] = (int) (radius * myContext.getResources().getDisplayMetrics().density);
+        mAngles = getAngles();
+        mAngles[mCountAngle - 1] = angle;
         mCountRadius++;
+        mRadius = getRadius();
+        mRadius[mCountRadius - 1] = (int) (radius * myContext.getResources().getDisplayMetrics().density);
         anchorReferences();
     }
 
@@ -233,12 +238,12 @@ public class CircularFlow extends VirtualLayout {
     private float[] removeAngle(float[] angles, int index) {
         if (angles == null
                 || index < 0
-                || index >= angles.length) {
+                || index >= mCountAngle) {
             return angles;
         }
-        float[] anotherArray = new float[32];
+        float[] anotherArray = new float[mCountAngle - 1];
 
-        for (int i = 0, k = 0; i < angles.length; i++) {
+        for (int i = 0, k = 0; i < mCountAngle; i++) {
             if (i == index) {
                 continue;
             }
@@ -254,12 +259,12 @@ public class CircularFlow extends VirtualLayout {
     private int[] removeRadius(int[] radius, int index) {
         if (radius == null
                 || index < 0
-                || index >= radius.length) {
+                || index >= mCountRadius) {
             return radius;
         }
-        int[] anotherArray = new int[32];
+        int[] anotherArray = new int[mCountRadius - 1];
 
-        for (int i = 0, k = 0; i < radius.length; i++) {
+        for (int i = 0, k = 0; i < mCountRadius; i++) {
             if (i == index) {
                 continue;
             }

@@ -604,4 +604,15 @@ public abstract class ConstraintHelper extends View {
             addRscID(key);
         }
     }
+
+    public boolean containsId(final int id) {
+        boolean result = false;
+        for(int i : mIds){
+            if(i == id){
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
 }
