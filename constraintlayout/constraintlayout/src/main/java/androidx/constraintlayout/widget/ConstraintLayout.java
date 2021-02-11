@@ -2156,6 +2156,11 @@ public class ConstraintLayout extends ViewGroup {
         public static final int END = 7;
 
         /**
+         * Circle reference from a view.
+         */
+        public static final int CIRCLE = 8;
+
+        /**
          * Set matchConstraintDefault* default to the wrap content size.
          * Use to set the matchConstraintDefaultWidth and matchConstraintDefaultHeight
          */
