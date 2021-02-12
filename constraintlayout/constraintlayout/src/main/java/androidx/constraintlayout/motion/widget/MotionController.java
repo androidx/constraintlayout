@@ -17,20 +17,8 @@
 package androidx.constraintlayout.motion.widget;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.graphics.RectF;
-
-import androidx.constraintlayout.core.motion.utils.KeyCache;
-import androidx.constraintlayout.core.motion.utils.SplineSet;
-import androidx.constraintlayout.motion.utils.ViewTimeCycle;
-import androidx.constraintlayout.motion.utils.ViewOscillator;
-import androidx.constraintlayout.motion.utils.ViewSpline;
-import androidx.constraintlayout.widget.ConstraintAttribute;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.constraintlayout.core.motion.utils.CurveFit;
-import androidx.constraintlayout.core.motion.utils.Easing;
-import androidx.constraintlayout.core.motion.utils.VelocityMatrix;
-import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
@@ -42,6 +30,19 @@ import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
+
+import androidx.constraintlayout.core.motion.utils.CurveFit;
+import androidx.constraintlayout.core.motion.utils.Easing;
+import androidx.constraintlayout.core.motion.utils.KeyCache;
+import androidx.constraintlayout.core.motion.utils.SplineSet;
+import androidx.constraintlayout.core.motion.utils.VelocityMatrix;
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
+import androidx.constraintlayout.motion.utils.ViewOscillator;
+import androidx.constraintlayout.motion.utils.ViewSpline;
+import androidx.constraintlayout.motion.utils.ViewTimeCycle;
+import androidx.constraintlayout.widget.ConstraintAttribute;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -74,6 +75,11 @@ public class MotionController {
     public final static int DRAW_PATH_AS_CONFIGURED = 4;
     public final static int DRAW_PATH_RECTANGLE = 5;
     public final static int DRAW_PATH_SCREEN = 6;
+
+
+    public static final int ROTATION_180 = 2;
+    public static final int ROTATION_270 = 3;
+    public static final int ROTATION_90 = 1;
 
     private static final String TAG = "MotionController";
     private static final boolean DEBUG = false;
@@ -997,6 +1003,39 @@ public class MotionController {
         mStartPoint.setState(v);
     }
 
+    public void setStartState(Rect rect, View v, int rotation, int preWidth, int preHeight) {
+        mStartMotionPath.time = 0;
+        mStartMotionPath.position = 0;
+        int cx, cy;
+        Rect r = new Rect();
+        switch (rotation) {
+            case ROTATION_180:
+                r.left = rect.left;
+                r.top = preHeight - rect.top;
+                r.right = rect.right;
+                r.bottom = preHeight - rect.bottom;
+                break;
+            case ROTATION_270:
+                cx = rect.left + rect.right;
+                cy = rect.top + rect.bottom;
+                r.left = preHeight - (cy + rect.width()) / 2;
+                r.top = (cx - rect.height()) / 2;
+                r.right = r.left + rect.width();
+                r.bottom = r.top + rect.height();
+                break;
+            case ROTATION_90:
+                cx = rect.left + rect.right;
+                cy = rect.top + rect.bottom;
+                r.left = (cy - rect.width()) / 2;
+                r.top = preWidth - (cx + rect.height()) / 2;
+                r.right = r.left + rect.width();
+                r.bottom = r.top + rect.height();
+                break;
+        }
+        mStartMotionPath.setBounds(r.left, r.top, r.width(), r.height());
+        mStartPoint.setState(r, v, rotation);
+    }
+
     void setStartState(ConstraintWidget cw, ConstraintSet constraintSet) {
         mStartMotionPath.time = 0;
         mStartMotionPath.position = 0;
@@ -1510,4 +1549,6 @@ public class MotionController {
 
         return count;
     }
+
+ 
 }

@@ -154,7 +154,6 @@ public class MotionScene {
             if (transition.mConstraintSetEnd == endId) {
                 matchTransition = transition;
             }
-
         }
         Transition t = new Transition(this, matchTransition);
 
@@ -495,6 +494,10 @@ public class MotionScene {
             return mLayoutDuringTransition;
         }
 
+        public void setLayoutDuringTransition(int mode) {
+              mLayoutDuringTransition = mode;
+        }
+
         public void addOnClick(Context context, XmlPullParser parser) {
             mOnClicks.add(new TransitionOnClick(context, this, parser));
         }
@@ -690,6 +693,10 @@ public class MotionScene {
 
         public boolean isTransitionFlag(int flag) {
             return 0 != (mTransitionFlags & flag);
+        }
+
+        public void  setTransitionFlag(int flag) {
+             mTransitionFlags = flag;
         }
 
         public void setOnTouchUp(int touchUpMode) {

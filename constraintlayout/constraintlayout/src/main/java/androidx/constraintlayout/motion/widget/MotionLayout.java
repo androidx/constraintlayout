@@ -18,6 +18,7 @@ package androidx.constraintlayout.motion.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
@@ -1082,6 +1083,11 @@ public class MotionLayout extends ConstraintLayout implements
     private Runnable mOnComplete = null;
     private int[]mScheduledTransitionTo = null;
     int mScheduledTransitions = 0;
+    private boolean mInRotation = false;
+    int mRotatMode = 0;
+    HashMap<View, Rect> mPreRotate = new HashMap<>();
+    private int mPreRotateWidth;
+    private int mPreRotateHeight;
 
     MotionController getMotionController(int mTouchAnchorId) {
         return mFrameArrayList.get(findViewById(mTouchAnchorId));
@@ -2064,15 +2070,41 @@ public class MotionLayout extends ConstraintLayout implements
         transitionToState(id, screenWidth, screenHeight, -1);
     }
 
-    /**
-     * Animate to the state defined by the id.
-     * Width and height may be used in the picking of the id using this StateSet.
-     *
-     * @param id           the state to transition
-     * @param screenWidth  the with of the motionLayout used to select the variant
-     * @param screenHeight the height of the motionLayout used to select the variant
-     * @param duration     time in ms. if 0 set by default or transition -1 by current
-     */
+    public void rotateTo(int id, int duration,int rotation) {
+          mInRotation  =true;
+          mRotatMode = rotation;
+          mPreRotateWidth = getWidth();
+          mPreRotateHeight = getHeight();
+       
+        final int n = getChildCount();
+        for (int i = 0; i < n; i++) {
+            View v = getChildAt(i);
+            Rect bounds = mPreRotate.get(v);
+            if (bounds == null) {
+                bounds = new Rect();
+                mPreRotate.put(v,bounds);
+             }
+            bounds.set(v.getLeft(),v.getTop(),v.getRight(),v.getBottom());
+        }
+
+        mBeginState = -1;
+        mEndState = id;
+        super.requestLayout();
+
+        mBeginState = -1;//mCurrentState;
+        mEndState = id;
+
+        mScene.setTransition(-1, mEndState);
+        mModel.initFrom(mLayoutWidget, null, mScene.getConstraintSet(mEndState));
+        rebuildScene();
+
+        mTransitionLastPosition = 0;
+        invalidate();
+        transitionToEnd();
+        if (duration > 0) {
+            mTransitionDuration = duration / 1000f;
+        }
+    }
 
     public void transitionToState(int id, int screenWidth, int screenHeight, int duration) {
         // if id is either end or start state, transition using current setup.
@@ -2150,12 +2182,8 @@ public class MotionLayout extends ConstraintLayout implements
         mScene.setTransition(mBeginState, mEndState);
         SparseArray<MotionController> controllers = new SparseArray<>();
         if (duration == 0) {
-            Log.v(TAG, Debug.getLoc()+" ...duration == 0  mScene.getDuration()  " +  mScene.getDuration());
-
             mTransitionDuration = mScene.getDuration() / 1000f;
         } else if (duration > 0) {
-            Log.v(TAG, Debug.getLoc()+" ...duration > 0  duration  " +  duration);
-
             mTransitionDuration = duration / 1000f;
         }
         Log.v(TAG, Debug.getLoc()+" ... duration " + mTransitionDuration*1000);
@@ -2610,6 +2638,11 @@ public class MotionLayout extends ConstraintLayout implements
                             Log.e(TAG, Debug.getLocation() + "no widget for  " + Debug.getName(v) + " (" + v.getClass().getName() + ")");
                         }
                     }
+                } else {
+                    if (mInRotation) {
+                        motionController.setStartState(mPreRotate.get(v), v, mRotatMode,
+                                mPreRotateWidth, mPreRotateHeight);
+                    }
                 }
                 if (mEnd != null) {
                     ConstraintWidget endWidget = getWidget(mLayoutEnd, v);
@@ -2695,6 +2728,8 @@ public class MotionLayout extends ConstraintLayout implements
             mModel.reEvaluateState();
             mModel.setMeasuredId(startId, endId);
             setMeasure = false;
+         } else if (recalc){
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
 
         if (mMeasureDuringTransition || setMeasure) {
@@ -4168,7 +4203,6 @@ public class MotionLayout extends ConstraintLayout implements
         }
         return mDesignTool;
     }
-
     /**
      * {@hide}
      */

@@ -16,15 +16,16 @@
 
 package androidx.constraintlayout.motion.widget;
 
+import android.graphics.Rect;
 import android.os.Build;
+import android.util.Log;
+import android.view.View;
 
+import androidx.constraintlayout.core.motion.utils.Easing;
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.motion.utils.ViewSpline;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.constraintlayout.core.motion.utils.Easing;
-import androidx.constraintlayout.core.widgets.ConstraintWidget;
-import android.util.Log;
-import android.view.View;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -326,9 +327,31 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
 
     }
 
+
     public void setState(View view) {
         setBounds(view.getX(), view.getY(), view.getWidth(), view.getHeight());
         applyParameters(view);
+    }
+
+    /**
+     *
+     * @param rect assumes pre rotated
+     * @param view
+     * @param rotation mode Surface.ROTATION_0,Surface.ROTATION_90...
+     */
+    public void setState(Rect rect, View view, int rotation) {
+        setBounds(rect.left, rect.top, rect.width(), rect.height());
+        applyParameters(view);
+        mPivotX = Float.NaN;
+        mPivotY = Float.NaN;
+        switch (rotation) {
+            case MotionController.ROTATION_270:
+                this.rotation = view.getRotation() + 90;
+                break;
+            case MotionController.ROTATION_90:
+                this.rotation = view.getRotation() - 90;
+                break;
+        }
     }
 
     public void setState(ConstraintWidget cw, ConstraintSet constraintSet, int viewId) {

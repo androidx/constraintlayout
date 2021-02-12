@@ -5,62 +5,95 @@
     android:id="@+id/motionLayout"
     app:layoutDescription="@xml/verification_scene_036"
     android:layout_width="match_parent"
-    android:background="#CFC"
+    android:background="#22C"
     android:layout_height="match_parent">
 
-    <View
+    <androidx.constraintlayout.utils.widget.ImageFilterButton
         android:id="@+id/button1"
-        android:background="#A66"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        app:layout_constraintCircle="@id/center"
-        app:layout_constraintCircleAngle="270"
-        app:layout_constraintCircleRadius="300dp"/>
-    <View
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/avatar_1_raster"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    <androidx.constraintlayout.utils.widget.ImageFilterButton
         android:id="@+id/button2"
-        android:background="#AA8F66"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        app:layout_constraintCircle="@id/center"
-        app:layout_constraintCircleAngle="270"
-        app:layout_constraintCircleRadius="300dp"/>
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/avatar_2_raster"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <View
+    <androidx.constraintlayout.utils.widget.ImageFilterButton
         android:id="@+id/button3"
-        android:background="#A3AA66"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        app:layout_constraintCircle="@id/center"
-        app:layout_constraintCircleAngle="270"
-        app:layout_constraintCircleRadius="300dp"/>
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/avatar_3_raster"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <View
+    <androidx.constraintlayout.utils.widget.ImageFilterButton
         android:id="@+id/button4"
-        android:background="#66AA75"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        app:layout_constraintCircle="@id/center"
-        app:layout_constraintCircleAngle="270"
-        app:layout_constraintCircleRadius="300dp"/>
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/avatar_4_raster"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <View
+    <androidx.constraintlayout.utils.widget.ImageFilterButton
         android:id="@+id/button5"
-        android:background="#6692AA"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        app:layout_constraintCircle="@id/center"
-        app:layout_constraintCircleAngle="270"
-        app:layout_constraintCircleRadius="300dp"/>
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/avatar_5_raster"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <View
-        android:id="@+id/center"
-        android:background="#FF0606"
-        android:layout_width="3dp"
-        android:layout_height="3dp"
+    <androidx.constraintlayout.utils.widget.ImageFilterButton
+        android:id="@+id/button6"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/avatar_6_raster"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <androidx.constraintlayout.utils.widget.ImageFilterButton
+        android:id="@+id/button7"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/avatar_7_raster"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        />
+
 
 
     <TextView
@@ -76,24 +109,14 @@
         android:id="@+id/button30"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="run"
-        app:layout_constraintBottom_toTopOf="@+id/textView12"
-        app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:id="@+id/redirect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        android:tag="right"
-        android:onClick="redirect"
-        android:text="redirect"
-        app:layout_constraintBottom_toTopOf="@+id/button30"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_marginBottom="48dp"
+        android:text="run"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+ 
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

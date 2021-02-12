@@ -5,37 +5,59 @@
 
 
     <Transition
-        motion:constraintSetEnd="@+id/landscape"
+        motion:constraintSetEnd="@+id/pre"
         motion:constraintSetStart="@+id/portrait"
-        motion:duration="4000">
-        <OnClick motion:targetId="@+id/button30" />
+        motion:duration="400">
+        <OnClick motion:targetId="@+id/run" />
+    </Transition>
+
+    <Transition
+        motion:constraintSetEnd="@+id/pre"
+        motion:constraintSetStart="@+id/landscape"
+        motion:duration="400">
+        <OnClick motion:targetId="@+id/run" />
     </Transition>
 
 
 
-    <ConstraintSet android:id="@+id/portrait_in_landscape">
+
+    <Transition
+
+        motion:duration="400">
+        <KeyFrameSet>
+
+            <KeyAttribute motion:framePosition="50" motion:motionTarget="@+id/image" android:rotation="0"/>
+            <KeyPosition motion:framePosition="50" motion:motionTarget="@+id/image" motion:sizePercent="0"/>
+        </KeyFrameSet>
+    </Transition>
+    <ConstraintSet android:id="@+id/a" motion:deriveConstraintsFrom="@id/portrait"></ConstraintSet>
+    <ConstraintSet android:id="@+id/b" motion:deriveConstraintsFrom="@id/landscape"></ConstraintSet>
+
+    <!--     ############################################################### -->
+
+    <ConstraintSet android:id="@+id/portrait">
         <Constraint
-            android:id="@+id/button"
+            android:id="@+id/image"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:rotation="-90"
-            motion:layout_constraintWidth_percent="0.5"
+            android:layout_marginRight="100dp"
+            android:layout_marginEnd="100dp"
+            motion:layout_constraintHeight_percent="0.5"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
+            android:rotation="0"
             motion:layout_constraintStart_toStartOf="parent" />
-
         <Constraint
-            android:id="@+id/button30"
+            android:id="@+id/run"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
-            android:rotation="-90"
-            motion:layout_constraintRight_toRightOf="parent"
+            android:rotation="0"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintTop_toTopOf="parent" />
         <Constraint
             android:id="@+id/redirect"
@@ -44,61 +66,54 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
-            android:rotation="-90"
-            motion:layout_constraintRight_toLeftOf="@+id/button30"
-
-            motion:layout_constraintTop_toTopOf="parent" />
-    </ConstraintSet>
-
-    <ConstraintSet android:id="@+id/portrait">
-        <Constraint
-            android:id="@+id/button"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            motion:layout_constraintHeight_percent="0.5"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintBottom_toBottomOf="parent"
+            android:rotation="0"
             motion:layout_constraintEnd_toEndOf="parent"
-            motion:layout_constraintStart_toStartOf="parent" />
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toBottomOf="@id/run" />
     </ConstraintSet>
+    <!--     ############################################################### -->
+
     <ConstraintSet android:id="@+id/landscape">
         <Constraint
-            android:id="@+id/button"
+            android:id="@+id/image"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            motion:layout_constraintWidth_percent="0.5"
+            motion:layout_constraintWidth_percent="0.3"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
+            android:rotation="0"
             motion:layout_constraintStart_toStartOf="parent" />
-    </ConstraintSet>
-    <ConstraintSet android:id="@+id/landscape_in_portrait">
         <Constraint
-            android:id="@+id/button"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            motion:layout_constraintWidth_percent="0.5"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintEnd_toEndOf="parent"
-            motion:layout_constraintStart_toStartOf="parent" />
+            android:id="@+id/run"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:rotation="0"
+            motion:layout_constraintLeft_toLeftOf="parent"
+            motion:layout_constraintTop_toTopOf="parent" />
+        <Constraint
+            android:id="@+id/redirect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:rotation="0"
+            motion:layout_constraintLeft_toLeftOf="parent"
+
+            motion:layout_constraintTop_toBottomOf="@id/run" />
     </ConstraintSet>
 
-    <ConstraintSet android:id="@+id/right">
-        <Constraint
-            android:id="@+id/button"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_marginEnd="8dp"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintEnd_toEndOf="parent" />
+<!--     ############################################################### -->
+
+
+    <ConstraintSet android:id="@+id/pre">
+
     </ConstraintSet>
 
 </MotionScene>

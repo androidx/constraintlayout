@@ -5,89 +5,290 @@
     <Transition
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@+id/start"
-        motion:staggered="0.3"
+        motion:staggered="0.4"
         motion:duration="4000">
 
         <OnClick motion:targetId="@+id/button30" />
+        <OnSwipe
+            motion:dragDirection="dragRight"
+            motion:onTouchUp="decelerate" />
         <KeyFrameSet>
-            <KeyPosition motion:motionTarget="icon"
+            <KeyPosition
+                motion:motionTarget="icon"
                 motion:framePosition="50"
+                motion:keyPositionType="parentRelative"
+                motion:pathMotionArc="startHorizontal"
+                motion:percentY="0.1" />
+            />
+            <KeyPosition
+                motion:motionTarget="icon"
+                motion:framePosition="10"
+                motion:keyPositionType="parentRelative"
+                motion:pathMotionArc="startVertical"
+                motion:percentX="0.1" />
+            />
+            <KeyPosition
+                motion:motionTarget="icon"
+                motion:framePosition="90"
                 motion:keyPositionType="pathRelative"
                 motion:pathMotionArc="startHorizontal"
-                 motion:percentY="-0.3"/>
-                />
+                motion:percentX="0.9" />
+            />
+            <KeyAttribute
+                motion:framePosition="0"
+                motion:motionTarget="icon"
+                android:scaleX="1"
+                android:scaleY="1"
+                >
+                <CustomAttribute
+                    motion:attributeName="saturation"
+                    motion:customFloatValue="0" />
+            </KeyAttribute>
+            <KeyAttribute
+                motion:framePosition="45"
+                motion:motionTarget="icon"
+                android:scaleX="1"
+                android:scaleY="1"
+                >
+                <CustomAttribute
+                    motion:attributeName="saturation"
+                    motion:customFloatValue="0" />
+            </KeyAttribute>
+            <KeyAttribute
+                motion:framePosition="50"
+                motion:motionTarget="icon"
+                android:scaleX="1.3"
+                android:scaleY="1.3"
+                >
+                <CustomAttribute
+                    motion:attributeName="saturation"
+                    motion:customFloatValue="1" />
+            </KeyAttribute>
+
+
+            <KeyAttribute
+                motion:framePosition="55"
+                motion:motionTarget="icon"
+                android:scaleX="1"
+                android:scaleY="1"
+                >
+                <CustomAttribute
+                    motion:attributeName="saturation"
+                    motion:customFloatValue="0" />
+            </KeyAttribute>
+            <KeyAttribute
+                motion:framePosition="100"
+                motion:motionTarget="icon"
+                android:scaleX="1"
+                android:scaleY="1"
+                >
+                <CustomAttribute
+                    motion:attributeName="saturation"
+                    motion:customFloatValue="0" />
+            </KeyAttribute>
+            <KeyAttribute
+                motion:framePosition="0"
+                motion:motionTarget="icon" android:alpha="0"/>
+            <KeyAttribute
+                motion:framePosition="1"
+                motion:motionTarget="icon" android:alpha="1"/>
+            <KeyAttribute
+                motion:framePosition="99"
+                motion:motionTarget="icon" android:alpha="1"/>
+            <KeyAttribute
+                motion:framePosition="100"
+                motion:motionTarget="icon" android:alpha="0"/>
         </KeyFrameSet>
+
     </Transition>
 
-
-
     <ConstraintSet android:id="@+id/start">
-        <ConstraintOverride
+        <Constraint
             android:id="@+id/button1"
-             motion:motionStagger="1"
-            motion:pathMotionArc="startVertical"
             motion:layout_constraintTag="icon"
-              />
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            motion:motionStagger="1"
+            motion:pathMotionArc="startVertical"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            android:alpha="0"
+            />
 
-
-        <ConstraintOverride
+        <Constraint
             android:id="@+id/button2"
-             motion:motionStagger="2"
-            motion:pathMotionArc="startVertical"
             motion:layout_constraintTag="icon"
-
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            motion:motionStagger="2"
+            motion:pathMotionArc="startVertical"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            android:alpha="0"
             />
-        <ConstraintOverride
+
+        <Constraint
             android:id="@+id/button3"
-             motion:motionStagger="3"
-            motion:pathMotionArc="startVertical"
             motion:layout_constraintTag="icon"
-
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            motion:motionStagger="3"
+            motion:pathMotionArc="startVertical"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            android:alpha="0"
             />
-        <ConstraintOverride
+        <Constraint
             android:id="@+id/button4"
-             motion:motionStagger="4"
-            motion:pathMotionArc="startVertical"
             motion:layout_constraintTag="icon"
-
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            motion:motionStagger="4"
+            motion:pathMotionArc="startVertical"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            android:alpha="0"
             />
-        <ConstraintOverride
+
+        <Constraint
             android:id="@+id/button5"
+            motion:layout_constraintTag="icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             motion:motionStagger="5"
             motion:pathMotionArc="startVertical"
-            motion:layout_constraintTag="icon"
-
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            android:alpha="0"
             />
+
+        <Constraint
+            android:id="@+id/button6"
+            motion:layout_constraintTag="icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            motion:motionStagger="6"
+            motion:pathMotionArc="startVertical"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            android:alpha="0"
+            />
+
+        <Constraint
+            android:id="@+id/button7"
+            motion:layout_constraintTag="icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            motion:motionStagger="7"
+            motion:pathMotionArc="startVertical"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            android:alpha="0"
+            />
+
 
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
-        <ConstraintOverride
+        <Constraint
             android:id="@+id/button1"
-            motion:layout_constraintCircleAngle="450"
+             android:layout_width="48dp"
+            android:layout_height="48dp"
 
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            android:alpha="0"
             />
-        <ConstraintOverride
+        <Constraint
             android:id="@+id/button2"
-            motion:layout_constraintCircleAngle="450"
-
+             android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            android:alpha="0"
             />
-        <ConstraintOverride
+        <Constraint
             android:id="@+id/button3"
-            motion:layout_constraintCircleAngle="450"
-
+             android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            android:alpha="0"
             />
-        <ConstraintOverride
+        <Constraint
             android:id="@+id/button4"
-            motion:layout_constraintCircleAngle="450"
-
+             android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            android:alpha="0"
             />
-        <ConstraintOverride
+        <Constraint
             android:id="@+id/button5"
-            motion:layout_constraintCircleAngle="450"
-
+             android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            android:alpha="0"
             />
-
+        <Constraint
+            android:id="@+id/button6"
+             android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            android:alpha="0"
+            />
+        <Constraint
+            android:id="@+id/button7"
+             android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            android:alpha="0"
+            />
     </ConstraintSet>
 
 </MotionScene>

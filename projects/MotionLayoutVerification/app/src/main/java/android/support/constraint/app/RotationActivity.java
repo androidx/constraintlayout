@@ -2,11 +2,14 @@ package android.support.constraint.app;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.motion.widget.MotionLayout;
@@ -33,28 +36,47 @@ public class RotationActivity extends AppCompatActivity {
         }
         setContentView(id);
         mMotionLayout = Utils.findMotionLayout(this);
+        boolean landscape = (getWindowManager().getDefaultDisplay().getRotation()&1)==1;
+
+        mMotionLayout.setState(landscape ? R.id.landscape : R.id.portrait,-1,-1);
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        int rotationAnimation = WindowManager.LayoutParams.ROTATION_ANIMATION_JUMPCUT;
+        Window win = getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        winParams.rotationAnimation = rotationAnimation;
+        win.setAttributes(winParams);
+        boolean landscape = (getWindowManager().getDefaultDisplay().getRotation()&1)==1;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    @Override
+    public void setRequestedOrientation(int requestedOrientation) {
+        super.setRequestedOrientation(requestedOrientation);
+        int rotationAnimation = WindowManager.LayoutParams.ROTATION_ANIMATION_JUMPCUT;
+        Window win = getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        winParams.rotationAnimation = rotationAnimation;
+        win.setAttributes(winParams);
+    }
+    int previous_rotation;
     @Override
     public void onConfigurationChanged(@NonNull @NotNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        int newOrientation = newConfig.orientation;
+        boolean landscape = Configuration.ORIENTATION_LANDSCAPE == newConfig.orientation;
+        int rotation = getWindowManager().getDefaultDisplay().getRotation();
+        // 0 -> 1   (4+ 1-0)%4 = 1;
+        // 0 -> 3   (4+ 3-0)%4 = 3;
+        // 1 -> 0  (4+ 0-1)%4 = 3;
+        // 3 -> 0  (4+ 0-3)%4 = 1;
 
-        switch(newOrientation) {
-
-            case Configuration.ORIENTATION_LANDSCAPE:
-                mMotionLayout.setState(R.id.portrait_in_landscape,-1,-1);
-                mMotionLayout.transitionToState(R.id.landscape,1000);
-                break;
-
-            case Configuration.ORIENTATION_PORTRAIT:
-                mMotionLayout.setState(R.id.landscape_in_portrait,-1,-1);
-                mMotionLayout.transitionToState(R.id.portrait,1000);
-
-                break;
-
-        }
+        mMotionLayout.rotateTo(landscape ? R.id.landscape : R.id.portrait, 3000, (4+rotation -previous_rotation)%4 );
+        previous_rotation = rotation;
     }
 
 }
