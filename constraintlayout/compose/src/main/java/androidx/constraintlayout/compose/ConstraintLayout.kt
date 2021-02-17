@@ -72,7 +72,7 @@ fun ConstraintLayout(
     @Suppress("Deprecation")
     MultiMeasureLayout(
             modifier = modifier,
-            children = {
+            content = {
                 scope.reset()
                 scope.content()
             }
@@ -1114,7 +1114,7 @@ class State(val density: Density) : SolverState() {
 
     override fun convertDimension(value: Any?): Int {
         return if (value is Dp) {
-            with(density) { value.toIntPx() }
+            with(density) { value.roundToPx() }
         } else {
             super.convertDimension(value)
         }
