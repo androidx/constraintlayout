@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motionLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layoutDescription="@xml/verification_scene_922">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item1"
+        android:layout_width="10dp"
+        app:layout_constraintTag="dart"
+        android:layout_height="30dp" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item2"
+        android:layout_width="10dp"
+        android:layout_height="30dp"
+        app:layout_constraintTag="dart"
+        android:rotation="15" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item3"
+        android:layout_width="10dp"
+        android:layout_height="30dp"
+        app:layout_constraintTag="dart"
+        android:rotation="30" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item4"
+        android:layout_width="10dp"
+        android:layout_height="30dp"
+        app:layout_constraintTag="dart"
+        android:rotation="45" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item5"
+        android:layout_width="10dp"
+        android:layout_height="30dp"
+        app:layout_constraintTag="dart"
+        android:rotation="60" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item6"
+        android:layout_width="10dp"
+        android:layout_height="30dp"
+        app:layout_constraintTag="dart"
+        android:rotation="75" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item7"
+        android:layout_width="10dp"
+        app:layout_constraintTag="dart"
+        android:layout_height="30dp"
+        android:rotation="90" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item8"
+        android:layout_width="10dp"
+        app:layout_constraintTag="dart"
+        android:layout_height="30dp"
+        android:rotation="105" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item9"
+        android:layout_width="10dp"
+        app:layout_constraintTag="dart"
+        android:layout_height="30dp"
+        android:rotation="120" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item10"
+        android:layout_width="10dp"
+        app:layout_constraintTag="dart"
+        android:layout_height="30dp"
+        android:rotation="135" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item11"
+        app:layout_constraintTag="dart"
+        android:layout_width="10dp"
+        android:layout_height="30dp"
+        android:rotation="150" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item12"
+        android:layout_width="10dp"
+        android:layout_height="30dp"
+        app:layout_constraintTag="dart"
+        android:rotation="165" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item13"
+        android:layout_width="10dp"
+        android:layout_height="30dp"
+        app:layout_constraintTag="dart"
+        android:rotation="180" />
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item14"
+        android:layout_width="10dp"
+        android:layout_height="30dp"
+        app:layout_constraintTag="dart"
+        android:rotation="195" />
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item15"
+        android:layout_width="10dp"
+        app:layout_constraintTag="dart"
+        android:layout_height="30dp"
+        android:rotation="210" />
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item16"
+        android:layout_width="10dp"
+        app:layout_constraintTag="dart"
+        android:layout_height="30dp"
+        android:rotation="225" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item17"
+        android:layout_width="10dp"
+        app:layout_constraintTag="dart"
+        android:layout_height="30dp"
+        android:rotation="240" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item18"
+        android:layout_width="10dp"
+        android:layout_height="30dp"
+        app:layout_constraintTag="dart"
+        android:rotation="255" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item19"
+        android:layout_width="10dp"
+        app:layout_constraintTag="dart"
+        android:layout_height="30dp"
+        android:rotation="270" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item20"
+        android:layout_width="10dp"
+        app:layout_constraintTag="dart"
+        android:layout_height="30dp"
+        android:rotation="285" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item21"
+        android:layout_width="10dp"
+        app:layout_constraintTag="dart"
+        android:layout_height="30dp"
+        android:rotation="300" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item22"
+        app:layout_constraintTag="dart"
+        android:layout_width="10dp"
+        android:layout_height="30dp"
+        android:rotation="315" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item23"
+        app:layout_constraintTag="dart"
+        android:layout_width="10dp"
+        android:layout_height="30dp"
+        android:rotation="330" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item24"
+        app:layout_constraintTag="dart"
+        android:layout_width="10dp"
+        android:layout_height="30dp"
+        android:rotation="345" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/dial"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/arrow"
+        android:tint="#FF32" />
+
+    <View
+        android:id="@+id/background"
+        android:layout_width="216dp"
+        android:layout_height="216dp"
+        android:background="@drawable/shape_white_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="center"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/earth"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="@drawable/shape_white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTag="center"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:textSize="86sp"
+        android:layout_marginEnd="64dp"
+        android:textColor="@color/black"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/earth"
+        app:layout_constraintBottom_toBottomOf="@id/earth"
+        app:layout_constraintEnd_toEndOf="@id/earth"
+        app:layout_constraintStart_toStartOf="@id/earth"
+        android:text="22" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:textSize="46sp"
+        android:textColor="@color/black"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/textView3"
+        app:layout_constraintStart_toEndOf="@id/textView3"
+        android:text="º" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:textSize="66sp"
+        android:textColor="@color/black"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/textView4"
+        app:layout_constraintStart_toEndOf="@id/textView4"
+        android:text="C" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:textSize="16sp"
+        android:textColor="#333333"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/textView3"
+        app:layout_constraintEnd_toEndOf="@id/earth"
+        app:layout_constraintStart_toStartOf="@id/earth"
+        android:text="Sleeping.." />
+
+    <androidx.constraintlayout.helper.widget.CircularFlow
+        android:id="@+id/circularFlow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:circularflow_angles="0,0,15,30,45,60,75,90,105,120,135,150,165,180,195,210,225,240,255,270,285,300,315,330,345,360"
+        app:circularflow_radiusInDP="116,140,140,140,140,140,140,140,140,140,140,140,
+        140,140,140,140,140,140,140,140,140,140,140,140,140"
+        app:circularflow_viewCenter="@id/earth"
+        app:constraint_referenced_ids="dial,item1,item2,item3,item4,item5,item6,item7,item8,item9,item10,item11,item12,item13,
+         item14,item15,item16,item17,item18,item19,item20,item21, item22, item23,item24" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>
