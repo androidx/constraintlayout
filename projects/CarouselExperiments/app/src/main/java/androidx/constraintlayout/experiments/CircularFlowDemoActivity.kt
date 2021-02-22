@@ -69,5 +69,11 @@ class CircularFlowDemoActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             ).show()
         }
+
+        findViewById<View>(R.id.view5).setOnClickListener {
+            findViewById<CircularFlow>(R.id.circularFlow).removeView(
+                it
+            )
+        }
     }
 }
