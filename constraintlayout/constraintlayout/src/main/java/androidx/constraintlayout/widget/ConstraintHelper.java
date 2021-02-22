@@ -615,4 +615,15 @@ public abstract class ConstraintHelper extends View {
         }
         return result;
     }
+
+    public int indexFromId(final int id) {
+        int index = -1;
+        for(int i : mIds) {
+            index++;
+            if(i == id){
+                return index;
+            }
+        }
+        return index;
+    }
 }
