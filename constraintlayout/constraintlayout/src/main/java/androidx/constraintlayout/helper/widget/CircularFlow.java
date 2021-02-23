@@ -206,6 +206,73 @@ public class CircularFlow extends VirtualLayout {
         anchorReferences();
     }
 
+    /**
+     * Update radius from a view in CircularFlow. The referenced view need to be a child of the container parent.
+     * The view also need to have its id set in order to be added.
+     * @param view
+     * @param radius
+     * @return
+     */
+    public void updateRadius(View view, int radius) {
+        if (!isUpdatable(view)) {
+            Log.e("CircularFlow", "It was not possible to update radius to view with id: " + view.getId());
+            return;
+        }
+        int indexView = indexFromId(view.getId());
+        if (indexView > mRadius.length) {
+            return;
+        }
+        mRadius = getRadius();
+        mRadius[indexView] = (int) (radius * myContext.getResources().getDisplayMetrics().density);
+        anchorReferences();
+    }
+
+    /**
+     * Update angle from a view in CircularFlow. The referenced view need to be a child of the container parent.
+     * The view also need to have its id set in order to be added.
+     * @param view
+     * @param angle
+     * @return
+     */
+    public void updateAngle(View view, float angle) {
+        if (!isUpdatable(view)) {
+            Log.e("CircularFlow", "It was not possible to update angle to view with id: " + view.getId());
+            return;
+        }
+        int indexView = indexFromId(view.getId());
+        if (indexView > mAngles.length) {
+            return;
+        }
+        mAngles = getAngles();
+        mAngles[indexView] = angle;
+        anchorReferences();
+    }
+
+    /**
+     * Update angle and radius from a view in CircularFlow. The referenced view need to be a child of the container parent.
+     * The view also need to have its id set in order to be added.
+     * @param view
+     * @param radius
+     * @param angle
+     * @return
+     */
+    public void updateReference(View view, int radius, float angle) {
+        if (!isUpdatable(view)) {
+            Log.e("CircularFlow", "It was not possible to update radius and angle to view with id: " + view.getId());
+            return;
+        }
+        int indexView = indexFromId(view.getId());
+        if (getAngles().length  > indexView) {
+            mAngles = getAngles();
+            mAngles[indexView] = angle;
+        }
+        if (getRadius().length  > indexView) {
+            mRadius = getRadius();
+            mRadius[indexView] = (int) (radius * myContext.getResources().getDisplayMetrics().density);
+        }
+        anchorReferences();
+    }
+
     @Override
     public int removeView(View view) {
         int index = super.removeView(view);
@@ -360,5 +427,13 @@ public class CircularFlow extends VirtualLayout {
             newArray[k++] = array[i];
         }
         return newArray;
+    }
+
+    public boolean isUpdatable(View view) {
+        if (!containsId(view.getId())){
+            return false;
+        }
+        int indexView = indexFromId(view.getId());
+        return indexView != -1;
     }
 }
