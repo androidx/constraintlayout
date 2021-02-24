@@ -1358,8 +1358,8 @@ private class Measurer : BasicMeasure.Measurer {
         }
 
         // No need to set sizes and size modes as we passed them to the state above.
-        root.optimizationLevel = Optimizer.OPTIMIZATION_NONE
-        root.measure(Optimizer.OPTIMIZATION_NONE, 0, 0, 0, 0, 0, 0, 0, 0)
+        root.optimizationLevel = Optimizer.OPTIMIZATION_STANDARD
+        root.measure(root.optimizationLevel, 0, 0, 0, 0, 0, 0, 0, 0)
 
         for (child in root.children) {
             val measurable = child.companionWidget
