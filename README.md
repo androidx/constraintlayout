@@ -16,12 +16,11 @@ Have a question that isn't answered here? Try StackOverflow for [ConstraintLayou
 
 Add the Gradle dependency:
 
-You need to make sure you have the Google and JCenter repositories included in the `build.gradle` file in the root of your project:
+You need to make sure you have the Google repository included in the `build.gradle` file in the root of your project:
 
 ```gradle
 repositories {
     google()
-    jcenter()
 }
 ```
 
