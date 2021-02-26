@@ -81,13 +81,14 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     HashMap<String,Class>activity_map = new HashMap<>();
     {
         activity_map.put("verification_400",CheckSharedValues.class);
+        activity_map.put("verification_035",RotationActivity.class);
     }
     String s = AppCompatActivity.class.getName();
 
     private static boolean REVERSE = false;
  
 
-    private final String RUN_FIRST = "verification_040";
+    private final String RUN_FIRST = "verification_036";
     private final String LAYOUTS_MATCHES = "verification_\\d+";
     private static String SHOW_FIRST = "";
     MotionLayout mMotionLayout;
@@ -554,6 +555,20 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         ((Button) view).setText(str);
         mMotionLayout.updateStateAnimate(current, cset, 200);
         mMotionLayout.scheduleTransitionTo(((rotate & 2) == 0) ? R.id.start : R.id.end);
+    }
+
+    public void redirect(View view) {
+        String str = (String) view.getTag();
+        int id = getResources().getIdentifier(str, "id", getApplicationContext().getPackageName());
+        if (id == mMotionLayout.getCurrentState()) {
+            Log.v(TAG, Debug.getLoc()+" return to start");
+            MotionScene.Transition t=  mMotionLayout.getDefinedTransitions().get(0);
+            mMotionLayout.transitionToState(t.getStartConstraintSetId(),10000);
+        } else {
+            Log.v(TAG, Debug.getLoc()+" jump to "+str);
+
+            mMotionLayout.transitionToState(id,0);
+        }
     }
 
     interface Test {

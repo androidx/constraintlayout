@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@+id/start"
+        motion:staggered="0.3"
+        motion:duration="4000">
+
+        <OnClick motion:targetId="@+id/button30" />
+        <KeyFrameSet>
+            <KeyPosition motion:motionTarget="icon"
+                motion:framePosition="50"
+                motion:keyPositionType="pathRelative"
+                motion:pathMotionArc="startHorizontal"
+                 motion:percentY="-0.3"/>
+                />
+        </KeyFrameSet>
+    </Transition>
+
+
+
+    <ConstraintSet android:id="@+id/start">
+        <ConstraintOverride
+            android:id="@+id/button1"
+             motion:motionStagger="1"
+            motion:pathMotionArc="startVertical"
+            motion:layout_constraintTag="icon"
+              />
+
+
+        <ConstraintOverride
+            android:id="@+id/button2"
+             motion:motionStagger="2"
+            motion:pathMotionArc="startVertical"
+            motion:layout_constraintTag="icon"
+
+            />
+        <ConstraintOverride
+            android:id="@+id/button3"
+             motion:motionStagger="3"
+            motion:pathMotionArc="startVertical"
+            motion:layout_constraintTag="icon"
+
+            />
+        <ConstraintOverride
+            android:id="@+id/button4"
+             motion:motionStagger="4"
+            motion:pathMotionArc="startVertical"
+            motion:layout_constraintTag="icon"
+
+            />
+        <ConstraintOverride
+            android:id="@+id/button5"
+            motion:motionStagger="5"
+            motion:pathMotionArc="startVertical"
+            motion:layout_constraintTag="icon"
+
+            />
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <ConstraintOverride
+            android:id="@+id/button1"
+            motion:layout_constraintCircleAngle="450"
+
+            />
+        <ConstraintOverride
+            android:id="@+id/button2"
+            motion:layout_constraintCircleAngle="450"
+
+            />
+        <ConstraintOverride
+            android:id="@+id/button3"
+            motion:layout_constraintCircleAngle="450"
+
+            />
+        <ConstraintOverride
+            android:id="@+id/button4"
+            motion:layout_constraintCircleAngle="450"
+
+            />
+        <ConstraintOverride
+            android:id="@+id/button5"
+            motion:layout_constraintCircleAngle="450"
+
+            />
+
+    </ConstraintSet>
+
+</MotionScene>
