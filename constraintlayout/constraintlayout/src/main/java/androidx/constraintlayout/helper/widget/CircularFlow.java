@@ -64,8 +64,8 @@ public class CircularFlow extends VirtualLayout {
     private static final String TAG = "CircularFlow";
     ConstraintLayout mContainer;
     int mViewCenter;
-    private static final int DEFAULT_RADIUS = 0;
-    private static final float DEFAULT_ANGLE = 0F;
+    private static int DEFAULT_RADIUS = 0;
+    private static float DEFAULT_ANGLE = 0F;
     /**
      * @hide
      */
@@ -95,6 +95,17 @@ public class CircularFlow extends VirtualLayout {
      * @hide
      */
     private String mReferenceRadius;
+
+    /**
+     * @hide
+     */
+    private Float mReferenceDefaultAngle;
+
+    /**
+     * @hide
+     */
+    private Integer mReferenceDefaultRadius;
+
 
     public CircularFlow(Context context) {
         super(context);
@@ -135,6 +146,12 @@ public class CircularFlow extends VirtualLayout {
                 } else if (attr == R.styleable.ConstraintLayout_Layout_circularflow_radiusInDP) {
                     mReferenceRadius = a.getString(attr);
                     setRadius(mReferenceRadius);
+                } else if (attr == R.styleable.ConstraintLayout_Layout_circularflow_defaultAngle) {
+                    mReferenceDefaultAngle = a.getFloat(attr, DEFAULT_ANGLE);
+                    setDefaultAngle(mReferenceDefaultAngle);
+                } else if (attr == R.styleable.ConstraintLayout_Layout_circularflow_defaultRadius) {
+                    mReferenceDefaultRadius = a.getInt(attr, DEFAULT_RADIUS);
+                    setDefaultRadius(mReferenceDefaultRadius);
                 }
             }
             a.recycle();
@@ -149,6 +166,12 @@ public class CircularFlow extends VirtualLayout {
         }
         if (mReferenceRadius != null) {
             setRadius(mReferenceRadius);
+        }
+        if (mReferenceDefaultAngle != null) {
+            setDefaultAngle(mReferenceDefaultAngle);
+        }
+        if (mReferenceDefaultRadius != null) {
+            setDefaultRadius(mReferenceDefaultRadius);
         }
         anchorReferences();
     }
@@ -165,13 +188,23 @@ public class CircularFlow extends VirtualLayout {
                 int radius = DEFAULT_RADIUS;
                 float angle = DEFAULT_ANGLE;
 
-                if (i < getRadius().length){
+                if (i < getRadius().length) {
+                    radius = getRadius()[i];
+                } else if (mReferenceDefaultRadius != -1) {
+                    mCountRadius++;
+                    mRadius = getRadius();
+                    mRadius[mCountRadius - 1] = (int) (radius * myContext.getResources().getDisplayMetrics().density);
                     radius = getRadius()[i];
                 } else {
                     Log.e("CircularFlow", "Added radius to view with id: " + mMap.get(view.getId()));
                 }
 
-                if (i < getAngles().length){
+                if (i < getAngles().length) {
+                    angle = getAngles()[i];
+                } else if (mReferenceDefaultAngle != -1) {
+                    mCountAngle++;
+                    mAngles = getAngles();
+                    mAngles[mCountAngle - 1] = angle;
                     angle = getAngles()[i];
                 } else {
                     Log.e("CircularFlow", "Added angle to view with id: " + mMap.get(view.getId()));
@@ -271,6 +304,26 @@ public class CircularFlow extends VirtualLayout {
             mRadius[indexView] = (int) (radius * myContext.getResources().getDisplayMetrics().density);
         }
         anchorReferences();
+    }
+
+    /**
+     * Set default Angle for CircularFlow.
+     *
+     * @param angle
+     * @return
+     */
+    public void setDefaultAngle(float angle) {
+        DEFAULT_ANGLE = angle;
+    }
+
+    /**
+     * Set default Radius for CircularFlow.
+     *
+     * @param radius
+     * @return
+     */
+    public void setDefaultRadius(int radius) {
+        DEFAULT_RADIUS = radius;
     }
 
     @Override

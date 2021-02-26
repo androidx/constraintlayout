@@ -254,9 +254,9 @@
         android:id="@+id/circularFlow"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:circularflow_angles="0,0,15,30,45,60,75,90,105,120,135,150,165,180,195,210,225,240,255,270,285,300,315,330,345,360"
-        app:circularflow_radiusInDP="116,140,140,140,140,140,140,140,140,140,140,140,
-        140,140,140,140,140,140,140,140,140,140,140,140,140"
+        app:circularflow_defaultRadius="140"
+        app:circularflow_angles="0,0,15,30,45,60,75,90,105,120,135,150,165,180,195,210,225,240,255,270,285,300,315,330,345"
+        app:circularflow_radiusInDP="116"
         app:circularflow_viewCenter="@id/earth"
         app:constraint_referenced_ids="dial,item1,item2,item3,item4,item5,item6,item7,item8,item9,item10,item11,item12,item13,
          item14,item15,item16,item17,item18,item19,item20,item21, item22, item23,item24" />
