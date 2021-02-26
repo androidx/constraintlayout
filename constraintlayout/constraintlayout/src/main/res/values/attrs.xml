@@ -261,10 +261,12 @@
     <attr name="flow_lastVerticalBias" format="float" />
     <attr name="flow_lastHorizontalBias" format="float" />
 
-    <!-- set the radius used by CircularFlow with your child views -->
+    <!-- set the radius and angles used by CircularFlow with your child views -->
     <attr name="circularflow_radiusInDP" format="string"/>
     <attr name="circularflow_angles" format="string"/>
     <attr name="circularflow_viewCenter" format="reference"/>
+    <attr name="circularflow_defaultAngle" format="float"/>
+    <attr name="circularflow_defaultRadius" format="integer"/>
 
 
     <!-- TODO allows to use a drawable as horizontal separator between elements -->
@@ -515,6 +517,9 @@
         <attr name="circularflow_radiusInDP"/>
         <attr name="circularflow_angles"/>
         <attr name="circularflow_viewCenter"/>
+        <attr name="circularflow_defaultRadius"/>
+        <attr name="circularflow_defaultAngle"/>
+
 
         <attr name="layout_constraintCircle" />
         <attr name="layout_constraintCircleRadius" />
