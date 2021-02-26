@@ -2072,7 +2072,7 @@ public class MotionLayout extends ConstraintLayout implements
     public void transitionToState(int id, int screenWidth, int screenHeight) {
         transitionToState(id, screenWidth, screenHeight, -1);
     }
-    
+
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public void rotateTo(int id, int duration) {
         mInRotation = true;
@@ -2114,7 +2114,7 @@ public class MotionLayout extends ConstraintLayout implements
     public boolean isInRotation() {
         return mInRotation;
     }
- 
+
     /**
      * Animate to the state defined by the id.
      * Width and height may be used in the picking of the id using this StateSet.
@@ -2124,7 +2124,7 @@ public class MotionLayout extends ConstraintLayout implements
      * @param screenHeight the height of the motionLayout used to select the variant
      * @param duration     time in ms. if 0 set by default or transition -1 by current
      */
-    
+
     public void transitionToState(int id, int screenWidth, int screenHeight, int duration) {
         // if id is either end or start state, transition using current setup.
         // if id is not part of end/start, need to setup
@@ -2203,7 +2203,7 @@ public class MotionLayout extends ConstraintLayout implements
         } else if (duration > 0) {
             mTransitionDuration = duration / 1000f;
         }
- 
+
         int n = getChildCount();
 
         mFrameArrayList.clear();

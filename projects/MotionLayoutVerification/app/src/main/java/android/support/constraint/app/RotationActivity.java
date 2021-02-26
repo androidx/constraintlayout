@@ -25,9 +25,7 @@ import org.jetbrains.annotations.NotNull;
 public class RotationActivity extends AppCompatActivity {
     private static final String TAG = "CheckSharedValues";
     String layout_name;
-
     MotionLayout mMotionLayout;
-
 
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {

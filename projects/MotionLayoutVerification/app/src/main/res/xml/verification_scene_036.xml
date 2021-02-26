@@ -37,6 +37,7 @@
             motion:layout_constraintTop_toTopOf="parent" />
 
 </ConstraintSet>
+
     <ConstraintSet android:id="@+id/landscape">
         <Constraint
             android:id="@+id/imageView"

@@ -24,7 +24,6 @@
             android:configChanges="orientation|screenSize"/>
         <activity android:name=".RotationAngular"
             android:configChanges="orientation|screenSize"/>
-
     </application>
 
 </manifest>
