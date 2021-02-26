@@ -1,0 +1,94 @@
+{
+  "duration": "998500",
+  "layout": {
+    "children": [{
+      "children": [
+        {
+          "bounds": {
+            "top": "48",
+            "left": "48",
+            "bottom": "373",
+            "right": "96"
+          },
+          "id": "tvTitle",
+          "class": "MaterialTextView"
+        },
+        {
+          "bounds": {
+            "top": "48",
+            "left": "96",
+            "bottom": "138",
+            "right": "246"
+          },
+          "id": "ivIcon",
+          "class": "AppCompatImageView"
+        },
+        {
+          "bounds": {
+            "top": "373",
+            "left": "48",
+            "bottom": "376",
+            "right": "48"
+          },
+          "id": "viewSeparator",
+          "class": "View"
+        },
+        {
+          "bounds": {
+            "top": "424",
+            "left": "48",
+            "bottom": "726",
+            "right": "96"
+          },
+          "id": "tvSubtitle",
+          "class": "MaterialTextView"
+        },
+        {
+          "bounds": {
+            "top": "577",
+            "left": "96",
+            "bottom": "637",
+            "right": "246"
+          },
+          "id": "ivOptions",
+          "class": "AppCompatImageView"
+        },
+        {
+          "bounds": {
+            "top": "726",
+            "left": "48",
+            "bottom": "726",
+            "right": "48"
+          },
+          "id": "barrier",
+          "class": "Barrier"
+        },
+        {
+          "bounds": {
+            "top": "774",
+            "left": "48",
+            "bottom": "1076",
+            "right": "48"
+          },
+          "id": "tvFooter",
+          "class": "MaterialTextView"
+        }
+      ],
+      "bounds": {
+        "top": "11",
+        "left": "8",
+        "bottom": "1135",
+        "right": "302"
+      },
+      "id": "clContent",
+      "class": "ConstraintLayout"
+    }],
+    "bounds": {
+      "top": "18",
+      "left": "18",
+      "bottom": "1536",
+      "right": "310"
+    },
+    "class": "CardView"
+  }
+}
