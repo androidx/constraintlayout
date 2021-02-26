@@ -2871,6 +2871,12 @@ public class ConstraintWidget {
             // note we already applied the start position before, no need to redo it...
         } else if (isBeginConnected && !isEndConnected) {
             // note we already applied the start position before, no need to redo it...
+
+            // If we are constrained to a barrier, make sure that we are not bypassed in the wrap
+            ConstraintWidget beginWidget = beginAnchor.mTarget.mOwner;
+            if (parentWrapContent && beginWidget instanceof Barrier) {
+                wrapStrength = SolverVariable.STRENGTH_FIXED;
+            }
         } else if (!isBeginConnected && isEndConnected) {
             system.addEquality(end, endTarget, -endAnchor.getMargin(), SolverVariable.STRENGTH_FIXED);
             if (parentWrapContent) {
