@@ -1,0 +1,41 @@
+{
+  "duration": "192000",
+  "layout": {
+    "children": [{
+      "children": [{
+        "children": [{
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "169",
+            "right": "649"
+          },
+          "class": "MaterialTextView"
+        }],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "169",
+          "right": "649"
+        },
+        "class": "ConstraintLayout"
+      }],
+      "bounds": {
+        "top": "0",
+        "left": "0",
+        "bottom": "400",
+        "right": "649"
+      },
+      "id": "issue",
+      "class": "FrameLayout"
+    }],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "400",
+      "right": "649"
+    },
+    "id": "root",
+    "class": "ConstraintLayout"
+  }
+}

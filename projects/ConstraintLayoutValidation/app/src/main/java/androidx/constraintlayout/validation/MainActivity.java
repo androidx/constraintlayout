@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
     Server mServer = new Server(4242);
     HashMap<String, Command> mCommands = new HashMap<>();
     HashMap<String, TestLayout> mTests = new HashMap<>();
+    HashMap<String, Integer> mTestsDelay = new HashMap<>();
 
     TestLayout testLayout_252 = (view, mode, widthMeasureSpec, heightMeasureSpec, layoutParams) -> {
         view.forceLayout();
@@ -229,6 +230,18 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
         return true;
     };
 
+    TestLayout testLayout_420 = (view, mode, widthMeasureSpec, heightMeasureSpec, layoutParams) -> {
+        view.forceLayout();
+        view.measure(widthMeasureSpec, heightMeasureSpec);
+        View viewToResize = findViewById(R.id.issue);
+        viewToResize.postDelayed(() -> {
+            FrameLayout.LayoutParams layoutParamsView = (FrameLayout.LayoutParams) viewToResize.getLayoutParams();
+            layoutParamsView.height = 400;
+            viewToResize.setLayoutParams(layoutParamsView);
+        }, 20);
+        return true;
+    };
+
     Command listCommand = (activity, server, writer, reader, out) -> {
         String[] layouts = getLayouts();
         for (int i = 0; i < layouts.length; i++) {
@@ -254,10 +267,12 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
         String[] result = new String[1];
         int[] measureSpecs = new int[2];
 
-        if (layoutName.equals("check_265")
-                || layoutName.equals("check_335")
-                || layoutName.equals("check_397")) { // only check 265 need UI driving for now, refactor when more
-            int timeout = 1500;
+        int delay = 0;
+        if (mTestsDelay.containsKey(layoutName)) {
+            delay = mTestsDelay.get(layoutName);
+        }
+        if (delay > 0) {
+            int timeout = delay;
             server.runOnUiAndWait(activity, () -> {
                 View view = setupLayout(activity, layoutName, mode, measureSpecs, optimization);
                 FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) view.getLayoutParams();
@@ -610,6 +625,12 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
         mTests.put("check_398", testLayout_398);
         mTests.put("check_406", testLayout_406);
         mTests.put("check_408", testLayout_408);
+        mTests.put("check_420", testLayout_420);
+
+        mTestsDelay.put("check_265", 1500);
+        mTestsDelay.put("check_335", 1500);
+        mTestsDelay.put("check_397", 1500);
+        mTestsDelay.put("check_420", 500);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Window window = getWindow();

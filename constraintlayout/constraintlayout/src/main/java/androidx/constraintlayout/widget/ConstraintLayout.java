@@ -494,6 +494,7 @@ public class ConstraintLayout extends ViewGroup {
     private static final boolean DEBUG = LinearSystem.FULL_DEBUG;
     private static final boolean DEBUG_DRAW_CONSTRAINTS = false;
     private static final boolean MEASURE = false;
+    private static final boolean OPTIMIZE_HEIGHT_CHANGE = false;
 
     SparseArray<View> mChildrenByIds = new SparseArray<>();
 
@@ -1661,7 +1662,8 @@ public class ConstraintLayout extends ViewGroup {
                         mLayoutWidget.isWidthMeasuredTooSmall(), mLayoutWidget.isHeightMeasuredTooSmall());
                 return;
             }
-            if (mOnMeasureWidthMeasureSpec == widthMeasureSpec
+            if (OPTIMIZE_HEIGHT_CHANGE
+                    && mOnMeasureWidthMeasureSpec == widthMeasureSpec
                     && MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.EXACTLY
                     && MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.AT_MOST
                     && MeasureSpec.getMode(mOnMeasureHeightMeasureSpec) == MeasureSpec.AT_MOST) {
@@ -1669,7 +1671,7 @@ public class ConstraintLayout extends ViewGroup {
                 if (DEBUG) {
                     System.out.println("### COMPATIBLE REQ " + newSize + " >= ? " + mLayoutWidget.getHeight());
                 }
-                if (newSize >= mLayoutWidget.getHeight()) {
+                if (newSize >= mLayoutWidget.getHeight() && !mLayoutWidget.isHeightMeasuredTooSmall()) {
                     mOnMeasureWidthMeasureSpec = widthMeasureSpec;
                     mOnMeasureHeightMeasureSpec = heightMeasureSpec;
                     resolveMeasuredDimension(widthMeasureSpec, heightMeasureSpec, mLayoutWidget.getWidth(), mLayoutWidget.getHeight(),
