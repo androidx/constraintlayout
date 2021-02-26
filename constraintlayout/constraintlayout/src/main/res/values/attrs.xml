@@ -1635,7 +1635,7 @@
 
         <!-- alpha property of the view, as a value between 0 (completely transparent) and 1
              (completely opaque). -->
-        <attr name="android:alpha" format="float" />
+        <attr name="android:alpha" />
 
         <!-- calls setProgress(float) on the view if the method exist -->
         <attr name="motionProgress" />
