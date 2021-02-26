@@ -10,7 +10,6 @@
     <attr name="layout_constraintGuide_end" format="dimension" />
     <!-- The percent of total space from the beginning of the parent to this guideline. (e.g. 0.50 = middle)-->
     <attr name="layout_constraintGuide_percent" format="float" />
-    <!-- Constrains the left edge of this view to the left edge of the given view ID. -->
 
     <!-- Indicate the type of barrier -->
     <attr name="barrierDirection" format="enum">
