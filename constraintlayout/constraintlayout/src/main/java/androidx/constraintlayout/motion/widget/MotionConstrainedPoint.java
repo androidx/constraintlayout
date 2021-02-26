@@ -16,15 +16,15 @@
 
 package androidx.constraintlayout.motion.widget;
 
+import android.graphics.Rect;
 import android.os.Build;
+import android.util.Log;
+import android.view.View;
 
+import androidx.constraintlayout.core.motion.utils.Easing;
 import androidx.constraintlayout.motion.utils.ViewSpline;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.constraintlayout.core.motion.utils.Easing;
-import androidx.constraintlayout.core.widgets.ConstraintWidget;
-import android.util.Log;
-import android.view.View;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,6 +33,7 @@ import java.util.Set;
 
 /**
  * All the parameter it extracts from a ConstraintSet/View
+ *
  * @hide
  */
 class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
@@ -249,7 +250,7 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
         for (String s : at) {
             ConstraintAttribute attr = c.mCustomConstraints.get(s);
             if (attr.isContinuous()) {
-                this.attributes.put(s,attr);
+                this.attributes.put(s, attr);
             }
         }
     }
@@ -326,13 +327,53 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
 
     }
 
+
     public void setState(View view) {
         setBounds(view.getX(), view.getY(), view.getWidth(), view.getHeight());
         applyParameters(view);
     }
 
-    public void setState(ConstraintWidget cw, ConstraintSet constraintSet, int viewId) {
-        setBounds(cw.getX(), cw.getY(), cw.getWidth(), cw.getHeight());
+    /**
+     * @param rect     assumes pre rotated
+     * @param view
+     * @param rotation mode Surface.ROTATION_0,Surface.ROTATION_90...
+     */
+    public void setState(Rect rect, View view, int rotation, float prevous) {
+        setBounds(rect.left, rect.top, rect.width(), rect.height());
+        applyParameters(view);
+        mPivotX = Float.NaN;
+        mPivotY = Float.NaN;
+
+        switch (rotation) {
+            case ConstraintSet.ROTATE_PORTRATE_OF_LEFT:
+                this.rotation = prevous + 90;
+                break;
+            case ConstraintSet.ROTATE_PORTRATE_OF_RIGHT:
+                this.rotation = prevous - 90;
+                break;
+        }
+    }
+
+    /**
+     * Sets the state of the position given a rect, constraintset, rotation and viewid
+     * @param cw
+     * @param constraintSet
+     * @param rotation
+     * @param viewId
+     */
+    public void setState(Rect cw, ConstraintSet constraintSet, int rotation, int viewId) {
+        setBounds(cw.left, cw.top, cw.width(), cw.height());
         applyParameters(constraintSet.getParameters(viewId));
+        switch (rotation) {
+            case ConstraintSet.ROTATE_PORTRATE_OF_RIGHT:
+            case ConstraintSet.ROTATE_RIGHT_OF_PORTRATE:
+                this.rotation -= 90;
+                break;
+            case ConstraintSet.ROTATE_PORTRATE_OF_LEFT:
+            case ConstraintSet.ROTATE_LEFT_OF_PORTRATE:
+                this.rotation += 90;
+                if (this.rotation > 180) this.rotation -= 360;
+                break;
+        }
     }
 }

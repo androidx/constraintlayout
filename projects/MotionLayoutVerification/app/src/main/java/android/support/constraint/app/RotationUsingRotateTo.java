@@ -18,30 +18,32 @@ package android.support.constraint.app;
 
 import android.content.Context;
 import android.content.res.Configuration;
-
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Surface;
+import android.view.View;
 import android.view.Window;
-
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.motion.widget.Debug;
-
 import androidx.constraintlayout.motion.widget.MotionLayout;
 
 import org.jetbrains.annotations.NotNull;
 
-public class RotationActivity extends AppCompatActivity {
+/**
+ * This demonstrates using the api motionLayout.rotateTo
+ * It allows you to control the transition between landscape and portrait
+ * rotateTo performs an animation between the current state and the
+ */
+public class RotationUsingRotateTo extends AppCompatActivity {
     private static final String TAG = "CheckSharedValues";
     String layout_name;
     MotionLayout mMotionLayout;
+    private int mDuration = 4000;
 
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -58,8 +60,8 @@ public class RotationActivity extends AppCompatActivity {
         }
         setContentView(id);
         mMotionLayout = Utils.findMotionLayout(this);
-        boolean landscape = (getWindowManager().getDefaultDisplay().getRotation() & 1) == 1;
-        mMotionLayout.setState(landscape ? R.id.landscape : R.id.portrait, -1, -1);
+
+        int rotation = getWindowManager().getDefaultDisplay().getRotation();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -71,15 +73,14 @@ public class RotationActivity extends AppCompatActivity {
         WindowManager.LayoutParams winParams = win.getAttributes();
         winParams.rotationAnimation = rotationAnimation;
         win.setAttributes(winParams);
-        boolean landscape = (getWindowManager().getDefaultDisplay().getRotation() & 1) == 1;
-        mMotionLayout.setState(getLayoutForOrientation(), -1, -1);
+        mMotionLayout.transitionToState(getLayoutForOrientation());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void setRequestedOrientation(int requestedOrientation) {
         super.setRequestedOrientation(requestedOrientation);
-        int rotationAnimation = WindowManager.LayoutParams.ROTATION_ANIMATION_JUMPCUT;
+        int rotationAnimation = WindowManager.LayoutParams.ROTATION_ANIMATION_SEAMLESS;
         Window win = getWindow();
         WindowManager.LayoutParams winParams = win.getAttributes();
         winParams.rotationAnimation = rotationAnimation;
@@ -93,23 +94,34 @@ public class RotationActivity extends AppCompatActivity {
     public void onConfigurationChanged(@NonNull @NotNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         int layout = getLayoutForOrientation();
-        Log.v(TAG, Debug.getLoc() + " (@) " + Debug.getName(getApplicationContext(), layout));
         int rotation = getWindowManager().getDefaultDisplay().getRotation();
-        mMotionLayout.rotateTo(layout, 400);
+        mMotionLayout.rotateTo(layout, mDuration);  // special api to rotate
         previous_rotation = rotation;
     }
 
+    /**
+     * Compute the constraint set to transition to.
+     *
+     * @return
+     */
     private int getLayoutForOrientation() {
-        int rotation = getWindowManager().getDefaultDisplay().getRotation();
-        Log.v(TAG, Debug.getLoc() + " " + rotation);
-        boolean has_right = null != mMotionLayout.getConstraintSet(R.id.landscape_right);
-        if (has_right) {
-            int[] id = {R.id.portrait, R.id.landscape, R.id.portrait, R.id.landscape_right};
-            return id[rotation];
-        } else {
-            int[] id = {R.id.portrait, R.id.landscape, R.id.portrait, R.id.landscape};
-            return id[rotation];
+        switch (getWindowManager().getDefaultDisplay().getRotation()) {
+            default:
+            case Surface.ROTATION_0:
+                return R.id.portrait;
+            case Surface.ROTATION_90:
+                return R.id.landscape;
+            case Surface.ROTATION_180:
+                return R.id.portrait;
+            case Surface.ROTATION_270:
+                if (null != mMotionLayout.getConstraintSet(R.id.landscape_right)) {
+                    return R.id.landscape_right;
+                }
+                return R.id.landscape;
         }
+    }
 
+    public void duration(View view) {
+        mDuration = Integer.parseInt((String) view.getTag());
     }
 }

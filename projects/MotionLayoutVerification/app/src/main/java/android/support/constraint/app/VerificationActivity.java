@@ -78,18 +78,23 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     private String KEY = "layout";
     private static final boolean DEBUG = false;
     String layout_name;
-    HashMap<String,Class>activity_map = new HashMap<>();
+    HashMap<String, Class> activity_map = new HashMap<>();
+
     {
-        activity_map.put("verification_400",CheckSharedValues.class);
-        activity_map.put("verification_035",RotationActivity.class);
+        activity_map.put("verification_400", CheckSharedValues.class);
+        activity_map.put("verification_035", RotationActivity.class);
+        activity_map.put("verification_036", RotationActivity.class);
+        activity_map.put("verification_038", RotationUsingRotateTo.class);
+        activity_map.put("verification_039", RotationAngular.class);
     }
+
     String s = AppCompatActivity.class.getName();
 
     private static boolean REVERSE = false;
- 
 
-    private final String RUN_FIRST = "verification_036";
-    private final String LAYOUTS_MATCHES = "verification_\\d+";
+    private final String RUN_FIRST = "verification_039";
+    private final String LAYOUTS_MATCHES = "verification_03\\d+";
+
     private static String SHOW_FIRST = "";
     MotionLayout mMotionLayout;
     private Flow mFlow;
@@ -385,6 +390,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
             Button button = mMotionLayout.findViewById(R.id.button2);
             button.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 int current = button.getVisibility();
+
                 @Override
                 public void onGlobalLayout() {
                     int newVis = button.getVisibility();
@@ -394,8 +400,8 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
                                 break;
                             case View.INVISIBLE:
                                 break;
-                             case View.GONE:
-                                 mMotionLayout.viewTransition(R.id.spin,button);
+                            case View.GONE:
+                                mMotionLayout.viewTransition(R.id.spin, button);
                         }
                     }
                 }
@@ -465,7 +471,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         ScrollView sv = new ScrollView(this);
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
-        Button runFirst  = null;
+        Button runFirst = null;
         Button button = null;
         for (int i = 0; i < layouts.length; i++) {
             button = new Button(this);
@@ -473,11 +479,13 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
             button.setTag(layouts[i]);
             if (layouts[i].equals(RUN_FIRST)) {
                 runFirst = button;
+                Log.d(TAG, Debug.getLoc() + " auto run " + layouts[i]);
             }
             linearLayout.addView(button);
             button.setOnClickListener(this);
         }
         sv.addView(linearLayout);
+
         setContentView(sv);
         if (runFirst != null) {
             runFirst.callOnClick();
@@ -502,12 +510,12 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
 
     public void hideAll(View view) {
         Log.v(TAG, Debug.getLoc() + " --------------------- ");
-      //  mMotionLayout.viewTransition(R.id.vt_hide_all, view);
+        //  mMotionLayout.viewTransition(R.id.vt_hide_all, view);
     }
 
     public void hideCurrent(View view) {
         Log.v(TAG, Debug.getLoc() + " --------------------- ");
-      //  mMotionLayout.viewTransition(R.id.vt_hide_current, view);
+        //  mMotionLayout.viewTransition(R.id.vt_hide_current, view);
     }
 
     public void addToFlow2(View view) {
@@ -561,13 +569,13 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         String str = (String) view.getTag();
         int id = getResources().getIdentifier(str, "id", getApplicationContext().getPackageName());
         if (id == mMotionLayout.getCurrentState()) {
-            Log.v(TAG, Debug.getLoc()+" return to start");
-            MotionScene.Transition t=  mMotionLayout.getDefinedTransitions().get(0);
-            mMotionLayout.transitionToState(t.getStartConstraintSetId(),10000);
+            Log.v(TAG, Debug.getLoc() + " return to start");
+            MotionScene.Transition t = mMotionLayout.getDefinedTransitions().get(0);
+            mMotionLayout.transitionToState(t.getStartConstraintSetId(), 10000);
         } else {
-            Log.v(TAG, Debug.getLoc()+" jump to "+str);
+            Log.v(TAG, Debug.getLoc() + " jump to " + str);
 
-            mMotionLayout.transitionToState(id,0);
+            mMotionLayout.transitionToState(id, 0);
         }
     }
 
@@ -639,6 +647,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     public void launch(String id) {
         Intent intent;
         if (activity_map.containsKey(id)) {
+            Log.v(TAG, Debug.getLoc() + " launch in activity " + activity_map.get(id).getSimpleName());
             intent = new Intent(this, activity_map.get(id));
         } else {
             intent = new Intent(this, VerificationActivity.class);

@@ -17,20 +17,8 @@
 package androidx.constraintlayout.motion.widget;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.graphics.RectF;
-
-import androidx.constraintlayout.core.motion.utils.KeyCache;
-import androidx.constraintlayout.core.motion.utils.SplineSet;
-import androidx.constraintlayout.motion.utils.ViewTimeCycle;
-import androidx.constraintlayout.motion.utils.ViewOscillator;
-import androidx.constraintlayout.motion.utils.ViewSpline;
-import androidx.constraintlayout.widget.ConstraintAttribute;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.constraintlayout.core.motion.utils.CurveFit;
-import androidx.constraintlayout.core.motion.utils.Easing;
-import androidx.constraintlayout.core.motion.utils.VelocityMatrix;
-import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
@@ -42,6 +30,19 @@ import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
+
+import androidx.constraintlayout.core.motion.utils.CurveFit;
+import androidx.constraintlayout.core.motion.utils.Easing;
+import androidx.constraintlayout.core.motion.utils.KeyCache;
+import androidx.constraintlayout.core.motion.utils.SplineSet;
+import androidx.constraintlayout.core.motion.utils.VelocityMatrix;
+import androidx.constraintlayout.motion.utils.ViewOscillator;
+import androidx.constraintlayout.motion.utils.ViewSpline;
+import androidx.constraintlayout.motion.utils.ViewState;
+import androidx.constraintlayout.motion.utils.ViewTimeCycle;
+import androidx.constraintlayout.widget.ConstraintAttribute;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -74,6 +75,11 @@ public class MotionController {
     public final static int DRAW_PATH_AS_CONFIGURED = 4;
     public final static int DRAW_PATH_RECTANGLE = 5;
     public final static int DRAW_PATH_SCREEN = 6;
+
+
+    public static final int ROTATION_RIGHT = 1;
+    public static final int ROTATION_LEFT = 2;
+    Rect mTempRect = new Rect(); // for efficiency
 
     private static final String TAG = "MotionController";
     private static final boolean DEBUG = false;
@@ -120,6 +126,7 @@ public class MotionController {
 
     /**
      * Get the view to pivot around
+     *
      * @return id of view or UNSET if not set
      */
     public int getTransformPivotTarget() {
@@ -128,6 +135,7 @@ public class MotionController {
 
     /**
      * Set a view to pivot around
+     *
      * @param transformPivotTarget id of view
      */
     public void setTransformPivotTarget(int transformPivotTarget) {
@@ -225,7 +233,7 @@ public class MotionController {
      * @return the view id of the view this is in polar mode to or -1 if not in polar
      */
     public int getAnimateRelativeTo() {
-       return mStartMotionPath.mAnimateRelativeTo;
+        return mStartMotionPath.mAnimateRelativeTo;
     }
 
     public void setupRelative(MotionController motionController) {
@@ -241,14 +249,14 @@ public class MotionController {
         return mCurrentCenterY;
     }
 
-    public void getCenter(double p, float[] pos, float[]vel) {
-        double [] position = new double[4];
-        double [] velocity = new double[4];
-        int [] temp = new int[4];
+    public void getCenter(double p, float[] pos, float[] vel) {
+        double[] position = new double[4];
+        double[] velocity = new double[4];
+        int[] temp = new int[4];
         mSpline[0].getPos(p, position);
         mSpline[0].getSlope(p, velocity);
-        Arrays.fill(vel,0);
-       mStartMotionPath.getCenter(p, mInterpolateVariables, position, pos, velocity, vel);
+        Arrays.fill(vel, 0);
+        mStartMotionPath.getCenter(p, mInterpolateVariables, position, pos, velocity, vel);
     }
 
     /**
@@ -608,11 +616,12 @@ public class MotionController {
     public void setPathMotionArc(int arc) {
         mPathMotionArc = arc;
     }
+
     /**
      * Called after all TimePoints & Cycles have been added;
      * Spines are evaluated
      */
-    public void setup(int parentWidth, int parentHeight, float transitionDuration,long currentTime) {
+    public void setup(int parentWidth, int parentHeight, float transitionDuration, long currentTime) {
         HashSet<String> springAttributes = new HashSet<>(); // attributes we need to interpolate
         HashSet<String> timeCycleAttributes = new HashSet<>(); // attributes we need to interpolate
         HashSet<String> splineAttributes = new HashSet<>(); // attributes we need to interpolate
@@ -821,9 +830,6 @@ public class MotionController {
         }
 
         mAttributeNames = attributeNameSet.toArray(new String[0]);
-        if (DEBUG) {
-            Log.v(TAG, Debug.getLocation()+" >> ConstraintSet to ConstraintSet animation" + Arrays.toString(mAttributeNames));
-        }
         mAttributeInterpolatorCount = new int[mAttributeNames.length];
         for (int i = 0; i < mAttributeNames.length; i++) {
             String attributeName = mAttributeNames[i];
@@ -997,23 +1003,93 @@ public class MotionController {
         mStartPoint.setState(v);
     }
 
-    void setStartState(ConstraintWidget cw, ConstraintSet constraintSet) {
+    public void setStartState(ViewState rect, View v, int rotation, int preWidth, int preHeight) {
+        mStartMotionPath.time = 0;
+        mStartMotionPath.position = 0;
+        int cx, cy;
+        Rect r = new Rect();
+        switch (rotation) {
+            case 2:
+                cx = rect.left + rect.right;
+                cy = rect.top + rect.bottom;
+                r.left = preHeight - (cy + rect.width()) / 2;
+                r.top = (cx - rect.height()) / 2;
+                r.right = r.left + rect.width();
+                r.bottom = r.top + rect.height();
+                break;
+            case 1:
+                cx = rect.left + rect.right;
+                cy = rect.top + rect.bottom;
+                r.left = (cy - rect.width()) / 2;
+                r.top = preWidth - (cx + rect.height()) / 2;
+                r.right = r.left + rect.width();
+                r.bottom = r.top + rect.height();
+                break;
+        }
+        mStartMotionPath.setBounds(r.left, r.top, r.width(), r.height());
+        mStartPoint.setState(r, v, rotation, rect.rotation);
+    }
+
+    void rotate(Rect rect, Rect out, int rotation, int preHeight, int preWidth) {
+        int cx, cy;
+        switch (rotation) {
+
+            case ConstraintSet.ROTATE_PORTRATE_OF_LEFT:
+                cx = rect.left + rect.right;
+                cy = rect.top + rect.bottom;
+                out.left = preHeight - (cy + rect.width()) / 2;
+                out.top = (cx - rect.height()) / 2;
+                out.right = out.left + rect.width();
+                out.bottom = out.top + rect.height();
+                break;
+            case ConstraintSet.ROTATE_PORTRATE_OF_RIGHT:
+                cx = rect.left + rect.right;
+                cy = rect.top + rect.bottom;
+                out.left = (cy - rect.width()) / 2;
+                out.top = preWidth - (cx + rect.height()) / 2;
+                out.right = out.left + rect.width();
+                out.bottom = out.top + rect.height();
+                break;
+            case ConstraintSet.ROTATE_LEFT_OF_PORTRATE:
+                cx = rect.left + rect.right;
+                cy = rect.bottom + rect.top;
+                out.left = preHeight - (cy + rect.width()) / 2;
+                out.top = (cx - rect.height()) / 2;
+                out.right = out.left + rect.width();
+                out.bottom = out.top + rect.height();
+                break;
+            case ConstraintSet.ROTATE_RIGHT_OF_PORTRATE:
+                cx = rect.left + rect.right;
+                cy = rect.top + rect.bottom;
+                out.left = rect.height() / 2 + rect.top - cx / 2;
+                out.top = preWidth - (cx + rect.height()) / 2;
+                out.right = out.left + rect.width();
+                out.bottom = out.top + rect.height();
+                break;
+        }
+    }
+
+    void setStartState(Rect cw, ConstraintSet constraintSet, int parentWidth, int parentHeight) {
+        int rotate = constraintSet.mRotate; // for rotated frames
+        if (rotate != 0) {
+            rotate(cw, mTempRect, rotate, parentWidth, parentHeight);
+        }
         mStartMotionPath.time = 0;
         mStartMotionPath.position = 0;
         readView(mStartMotionPath);
-        mStartMotionPath.setBounds(cw.getX(), cw.getY(), cw.getWidth(), cw.getHeight());
+        mStartMotionPath.setBounds(cw.left, cw.top, cw.width(), cw.height());
         ConstraintSet.Constraint constraint = constraintSet.getParameters(mId);
         mStartMotionPath.applyParameters(constraint);
         mMotionStagger = constraint.motion.mMotionStagger;
-        mStartPoint.setState(cw, constraintSet, mId);
+        mStartPoint.setState(cw, constraintSet, rotate, mId);
         mTransformPivotTarget = constraint.transform.transformPivotTarget;
         mQuantizeMotionSteps = constraint.motion.mQuantizeMotionSteps;
         mQuantizeMotionPhase = constraint.motion.mQuantizeMotionPhase;
-        mQuantizeMotionInterpolator =  getInterpolator(mView.getContext(),
+        mQuantizeMotionInterpolator = getInterpolator(mView.getContext(),
                 constraint.motion.mQuantizeInterpolatorType,
                 constraint.motion.mQuantizeInterpolatorString,
                 constraint.motion.mQuantizeInterpolatorID
-                );
+        );
     }
 
     static final int EASE_IN_OUT = 0;
@@ -1026,7 +1102,7 @@ public class MotionController {
     private static final int INTERPOLATOR_REFERENCE_ID = -2;
     private static final int INTERPOLATOR_UNDEFINED = -3;
 
-    private static Interpolator getInterpolator(Context context, int type,String interpolatorString, int id ) {
+    private static Interpolator getInterpolator(Context context, int type, String interpolatorString, int id) {
         switch (type) {
             case SPLINE_STRING:
                 final Easing easing = Easing.getInterpolator(interpolatorString);
@@ -1054,21 +1130,24 @@ public class MotionController {
         return null;
     }
 
-    void setEndState(ConstraintWidget cw, ConstraintSet constraintSet) {
+    void setEndState(Rect cw, ConstraintSet constraintSet, int parentWidth, int parentHeight) {
+        int rotate = constraintSet.mRotate; // for rotated frames
+        if (rotate != 0) {
+            rotate(cw, mTempRect, rotate, parentWidth, parentHeight);
+            cw = mTempRect;
+        }
         mEndMotionPath.time = 1;
         mEndMotionPath.position = 1;
         readView(mEndMotionPath);
-        mEndMotionPath.setBounds(cw.getX(), cw.getY(), cw.getWidth(), cw.getHeight());
+        mEndMotionPath.setBounds(cw.left, cw.top, cw.width(), cw.height());
         mEndMotionPath.applyParameters(constraintSet.getParameters(mId));
-
-        mEndPoint.setState(cw, constraintSet, mId);
-
+        mEndPoint.setState(cw, constraintSet, rotate, mId);
     }
 
     void setBothStates(View v) {
         mStartMotionPath.time = 0;
         mStartMotionPath.position = 0;
-        mNoMovement=true;
+        mNoMovement = true;
         mStartMotionPath.setBounds(v.getX(), v.getY(), v.getWidth(), v.getHeight());
         mEndMotionPath.setBounds(v.getX(), v.getY(), v.getWidth(), v.getHeight());
         mStartPoint.setState(v);
@@ -1145,9 +1224,9 @@ public class MotionController {
         // This quantize the position into steps e.g 4 steps = 0-0.25,0.25-0.50 etc
         if (mQuantizeMotionSteps != UNSET) {
             float pin = position;
-            float steps = 1.0f/mQuantizeMotionSteps; // the length of a step
-            float jump =  (float) Math.floor(position/steps)*steps; // step jumps
-            float section = (position%steps)/steps; // float from 0 to 1 in a step
+            float steps = 1.0f / mQuantizeMotionSteps; // the length of a step
+            float jump = (float) Math.floor(position / steps) * steps; // step jumps
+            float section = (position % steps) / steps; // float from 0 to 1 in a step
 
             if (!Float.isNaN(mQuantizeMotionPhase)) {
                 section = (section + mQuantizeMotionPhase) % 1;
@@ -1155,7 +1234,7 @@ public class MotionController {
             if (mQuantizeMotionInterpolator != null) {
                 section = mQuantizeMotionInterpolator.getInterpolation(section);
             } else {
-                section = section>0.5?1:0;
+                section = section > 0.5 ? 1 : 0;
             }
             position = section * steps + jump;
         }
@@ -1177,7 +1256,7 @@ public class MotionController {
         }
 
         if (mSpline != null) {
-             mSpline[0].getPos(position, mInterpolateData);
+            mSpline[0].getPos(position, mInterpolateData);
             mSpline[0].getSlope(position, mInterpolateVelocity);
             if (mArcSpline != null) {
                 if (mInterpolateData.length > 0) {
@@ -1199,7 +1278,7 @@ public class MotionController {
                     float cx = (mTransformPivotView.getLeft() + mTransformPivotView.getRight()) / 2.0f;
                     if (child.getRight() - child.getLeft() > 0 && child.getBottom() - child.getTop() > 0) {
                         float px = (cx - child.getLeft());
-                        float py = (cy - child.getTop()) ;
+                        float py = (cy - child.getTop());
                         child.setPivotX(px);
                         child.setPivotY(py);
                     }
@@ -1208,7 +1287,7 @@ public class MotionController {
 
             if (mAttributesMap != null) {
                 for (SplineSet aSpline : mAttributesMap.values()) {
-                    if (aSpline instanceof ViewSpline.PathRotate && mInterpolateVelocity.length > 1 )
+                    if (aSpline instanceof ViewSpline.PathRotate && mInterpolateVelocity.length > 1)
                         ((ViewSpline.PathRotate) aSpline).setPathRotate(child, position,
                                 mInterpolateVelocity[0], mInterpolateVelocity[1]);
                 }
@@ -1294,9 +1373,6 @@ public class MotionController {
      * @param mAnchorDpDt returns the differential of the motion with respect to the position
      */
     void getDpDt(float position, float locationX, float locationY, float[] mAnchorDpDt) {
-        if (DEBUG) {
-            Log.v(TAG, Debug.getLoc()+ " "+ Debug.getName(mView)+" position= " + position + " location= " + locationX + " , " + locationY);
-        }
         position = getAdjustedPosition(position, mVelocity);
 
         if (mSpline != null) {
@@ -1340,7 +1416,7 @@ public class MotionController {
      * @param locationY   the y location on the view (0 = top, 1 = bottom)
      * @param mAnchorDpDt returns the differential of the motion with respect to the position
      */
-    void getPostLayoutDvDp(float position, int width ,int height, float locationX, float locationY, float[] mAnchorDpDt) {
+    void getPostLayoutDvDp(float position, int width, int height, float locationX, float locationY, float[] mAnchorDpDt) {
         if (DEBUG) {
             Log.v(TAG, " position= " + position + " location= " + locationX + " , " + locationY);
         }
@@ -1405,9 +1481,10 @@ public class MotionController {
         vmat.setRotationVelocity(osc_r, position);
         vmat.setTranslationVelocity(osc_x, osc_y, position);
         vmat.setScaleVelocity(osc_sx, osc_sy, position);
-        vmat.applyTransform(locationX, locationY,width,height, mAnchorDpDt);
+        vmat.applyTransform(locationX, locationY, width, height, mAnchorDpDt);
         return;
     }
+
     public int getDrawPath() {
         int mode = mStartMotionPath.mDrawPath;
         for (MotionPaths keyFrame : mMotionPaths) {
@@ -1444,18 +1521,18 @@ public class MotionController {
      * Get the keyFrames for the view controlled by this MotionController
      *
      * @param type is position(0-100) + 1000*mType(1=Attributes, 2=Position, 3=TimeCycle 4=Cycle 5=Trigger
-     * @param pos the x&y position of the keyFrame along the path
+     * @param pos  the x&y position of the keyFrame along the path
      * @return Number of keyFrames found
      */
     public int getKeyFramePositions(int[] type, float[] pos) {
-        int  i = 0;
+        int i = 0;
         int count = 0;
         for (Key key : mKeyList) {
-            type[i++] = key.mFramePosition + 1000*key.mType;
+            type[i++] = key.mFramePosition + 1000 * key.mType;
             float time = key.mFramePosition / 100.0f;
-            mSpline[0].getPos(time , mInterpolateData);
+            mSpline[0].getPos(time, mInterpolateData);
             mStartMotionPath.getCenter(time, mInterpolateVariables, mInterpolateData, pos, count);
-            count +=2;
+            count += 2;
         }
 
         return i;

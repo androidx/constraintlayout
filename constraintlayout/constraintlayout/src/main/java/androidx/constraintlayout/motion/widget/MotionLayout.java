@@ -42,6 +42,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.core.motion.utils.KeyCache;
 import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
@@ -49,6 +50,7 @@ import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 import androidx.constraintlayout.core.widgets.Flow;
 import androidx.constraintlayout.core.widgets.Helper;
 import androidx.constraintlayout.motion.utils.StopLogic;
+import androidx.constraintlayout.motion.utils.ViewState;
 import androidx.constraintlayout.widget.Barrier;
 import androidx.constraintlayout.widget.ConstraintHelper;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -1080,8 +1082,15 @@ public class MotionLayout extends ConstraintLayout implements
     private boolean mInLayout = false;
     private StateCache mStateCache;
     private Runnable mOnComplete = null;
-    private int[]mScheduledTransitionTo = null;
+    private int[] mScheduledTransitionTo = null;
     int mScheduledTransitions = 0;
+    private boolean mInRotation = false;
+    int mRotatMode = 0;
+    HashMap<View, ViewState> mPreRotate = new HashMap<>();
+    private int mPreRotateWidth;
+    private int mPreRotateHeight;
+    private int mPreviouseRotation;
+    Rect mTempRect = new Rect();
 
     MotionController getMotionController(int mTouchAnchorId) {
         return mFrameArrayList.get(findViewById(mTouchAnchorId));
@@ -1677,7 +1686,7 @@ public class MotionLayout extends ConstraintLayout implements
         SparseArray<MotionController> controllers = new SparseArray<>();
         for (int i = 0; i < n; i++) {
             View child = getChildAt(i);
-            controllers.put(child.getId(),mFrameArrayList.get(child));
+            controllers.put(child.getId(), mFrameArrayList.get(child));
         }
         int layoutWidth = getWidth();
         int layoutHeight = getHeight();
@@ -2064,6 +2073,48 @@ public class MotionLayout extends ConstraintLayout implements
         transitionToState(id, screenWidth, screenHeight, -1);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public void rotateTo(int id, int duration) {
+        mInRotation = true;
+        mPreRotateWidth = getWidth();
+        mPreRotateHeight = getHeight();
+
+        int currentRotation = getDisplay().getRotation();
+        mRotatMode = (((currentRotation + 1) % 4) > ((mPreviouseRotation + 1) % 4)) ? 1 : 2;
+
+        mPreviouseRotation = currentRotation;
+        final int n = getChildCount();
+        for (int i = 0; i < n; i++) {
+            View v = getChildAt(i);
+            ViewState bounds = mPreRotate.get(v);
+            if (bounds == null) {
+                bounds = new ViewState();
+                mPreRotate.put(v, bounds);
+            }
+            bounds.getState(v);
+        }
+
+        mBeginState = -1;
+        mEndState = id;
+        mScene.setTransition(-1, mEndState);
+        mModel.initFrom(mLayoutWidget, null, mScene.getConstraintSet(mEndState));
+        mTransitionPosition = 0;
+
+        mTransitionLastPosition = 0;
+        invalidate();
+        transitionToEnd(() -> {
+            mInRotation = false;
+        });
+        if (duration > 0) {
+            mTransitionDuration = duration / 1000f;
+        }
+
+    }
+
+    public boolean isInRotation() {
+        return mInRotation;
+    }
+
     /**
      * Animate to the state defined by the id.
      * Width and height may be used in the picking of the id using this StateSet.
@@ -2142,23 +2193,17 @@ public class MotionLayout extends ConstraintLayout implements
         mTransitionInstantly = false;
         mInterpolator = null;
         if (duration == -1) {
-            Log.v(TAG, Debug.getLoc()+" ...duration == -1  mScene.getDuration()  " +  mScene.getDuration());
             mTransitionDuration = mScene.getDuration() / 1000f;
-
         }
         mBeginState = UNSET;
         mScene.setTransition(mBeginState, mEndState);
         SparseArray<MotionController> controllers = new SparseArray<>();
         if (duration == 0) {
-            Log.v(TAG, Debug.getLoc()+" ...duration == 0  mScene.getDuration()  " +  mScene.getDuration());
-
             mTransitionDuration = mScene.getDuration() / 1000f;
         } else if (duration > 0) {
-            Log.v(TAG, Debug.getLoc()+" ...duration > 0  duration  " +  duration);
-
             mTransitionDuration = duration / 1000f;
         }
-        Log.v(TAG, Debug.getLoc()+" ... duration " + mTransitionDuration*1000);
+
         int n = getChildCount();
 
         mFrameArrayList.clear();
@@ -2339,7 +2384,7 @@ public class MotionLayout extends ConstraintLayout implements
                     setupConstraintWidget(mLayoutStart, start);
                 }
                 setupConstraintWidget(mLayoutEnd, end);
-            }  else {
+            } else {
                 setupConstraintWidget(mLayoutEnd, end);
                 if (start != null) {
                     setupConstraintWidget(mLayoutStart, start);
@@ -2351,6 +2396,7 @@ public class MotionLayout extends ConstraintLayout implements
             }
             mLayoutStart.setRtl(isRtl());
             mLayoutStart.updateHierarchy();
+
             if (DEBUG) {
                 for (ConstraintWidget child : mLayoutStart.getChildren()) {
                     View view = (View) child.getCompanionWidget();
@@ -2361,6 +2407,7 @@ public class MotionLayout extends ConstraintLayout implements
             }
             mLayoutEnd.setRtl(isRtl());
             mLayoutEnd.updateHierarchy();
+
             if (DEBUG) {
                 for (ConstraintWidget child : mLayoutEnd.getChildren()) {
                     View view = (View) child.getCompanionWidget();
@@ -2387,7 +2434,11 @@ public class MotionLayout extends ConstraintLayout implements
             mapIdToWidget.clear();
             mapIdToWidget.put(PARENT_ID, base);
             mapIdToWidget.put(getId(), base);
-
+            if (cSet.mRotate != 0) {
+                resolveSystem(mLayoutEnd, getOptimizationLevel(),
+                        MeasureSpec.makeMeasureSpec(  getHeight(),MeasureSpec.EXACTLY),
+                        MeasureSpec.makeMeasureSpec(  getWidth(), MeasureSpec.EXACTLY));
+            }
             //  build id widget map
             for (ConstraintWidget child : base.getChildren()) {
                 View view = (View) child.getCompanionWidget();
@@ -2518,15 +2569,23 @@ public class MotionLayout extends ConstraintLayout implements
             int optimisationLevel = getOptimizationLevel();
 
             if (mCurrentState == getStartState()) {
-                resolveSystem(mLayoutEnd, optimisationLevel, widthMeasureSpec, heightMeasureSpec);
+                resolveSystem(mLayoutEnd, optimisationLevel,
+                        (mEnd.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
+                        (mEnd.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
                 if (mStart != null) {
-                    resolveSystem(mLayoutStart, optimisationLevel, widthMeasureSpec, heightMeasureSpec);
+                    resolveSystem(mLayoutStart, optimisationLevel,
+                            (mStart.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
+                            (mStart.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
                 }
             } else {
                 if (mStart != null) {
-                    resolveSystem(mLayoutStart, optimisationLevel, widthMeasureSpec, heightMeasureSpec);
+                    resolveSystem(mLayoutStart, optimisationLevel,
+                            (mStart.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
+                            (mStart.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
                 }
-                resolveSystem(mLayoutEnd, optimisationLevel, widthMeasureSpec, heightMeasureSpec);
+                resolveSystem(mLayoutEnd, optimisationLevel,
+                        (mEnd.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
+                        (mEnd.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
             }
 
             // This works around the problem that MotionLayout calls its children Wrap content children
@@ -2541,16 +2600,25 @@ public class MotionLayout extends ConstraintLayout implements
             if (recompute_start_end_size) {
                 mWidthMeasureMode = widthMode;
                 mHeightMeasureMode = heightMode;
+
                 if (mCurrentState == getStartState()) {
-                    resolveSystem(mLayoutEnd, optimisationLevel, widthMeasureSpec, heightMeasureSpec);
+                    resolveSystem(mLayoutEnd, optimisationLevel,
+                            (mEnd.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
+                            (mEnd.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
                     if (mStart != null) {
-                        resolveSystem(mLayoutStart, optimisationLevel, widthMeasureSpec, heightMeasureSpec);
+                        resolveSystem(mLayoutStart, optimisationLevel,
+                                (mStart.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
+                                (mStart.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
                     }
                 } else {
                     if (mStart != null) {
-                        resolveSystem(mLayoutStart, optimisationLevel, widthMeasureSpec, heightMeasureSpec);
+                        resolveSystem(mLayoutStart, optimisationLevel,
+                                (mStart.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
+                                (mStart.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
                     }
-                    resolveSystem(mLayoutEnd, optimisationLevel, widthMeasureSpec, heightMeasureSpec);
+                    resolveSystem(mLayoutEnd, optimisationLevel,
+                            (mEnd.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
+                            (mEnd.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
                 }
 
                 mStartWrapWidth = mLayoutStart.getWidth();
@@ -2588,11 +2656,11 @@ public class MotionLayout extends ConstraintLayout implements
             final int n = getChildCount();
             mFrameArrayList.clear();
             SparseArray<MotionController> controllers = new SparseArray<>();
-            int []ids = new int[n];
+            int[] ids = new int[n];
             for (int i = 0; i < n; i++) {
                 View v = getChildAt(i);
                 MotionController motionController = new MotionController(v);
-                controllers.put(ids[i] = v.getId(),motionController);
+                controllers.put(ids[i] = v.getId(), motionController);
                 mFrameArrayList.put(v, motionController);
             }
             for (int i = 0; i < n; i++) {
@@ -2604,17 +2672,22 @@ public class MotionLayout extends ConstraintLayout implements
                 if (mStart != null) {
                     ConstraintWidget startWidget = getWidget(mLayoutStart, v);
                     if (startWidget != null) {
-                        motionController.setStartState(startWidget, mStart);
+                        motionController.setStartState(toRect(startWidget), mStart, getWidth(),getHeight());
                     } else {
                         if (mDebugPath != 0) {
                             Log.e(TAG, Debug.getLocation() + "no widget for  " + Debug.getName(v) + " (" + v.getClass().getName() + ")");
                         }
                     }
+                } else {
+                    if (mInRotation) {
+                        motionController.setStartState(mPreRotate.get(v), v, mRotatMode,
+                                mPreRotateWidth, mPreRotateHeight);
+                    }
                 }
                 if (mEnd != null) {
                     ConstraintWidget endWidget = getWidget(mLayoutEnd, v);
                     if (endWidget != null) {
-                        motionController.setEndState(endWidget, mEnd);
+                        motionController.setEndState(toRect(endWidget), mEnd, getWidth(),getHeight());
                     } else {
                         if (mDebugPath != 0) {
                             Log.e(TAG, Debug.getLocation() + "no widget for  " + Debug.getName(v) + " (" + v.getClass().getName() + ")");
@@ -2622,6 +2695,7 @@ public class MotionLayout extends ConstraintLayout implements
                     }
                 }
             }
+
             for (int i = 0; i < n; i++) {
                 MotionController controller = controllers.get(ids[i]);
                 int relativeToId = controller.getAnimateRelativeTo();
@@ -2641,6 +2715,14 @@ public class MotionLayout extends ConstraintLayout implements
         }
     }
 
+    private Rect toRect(ConstraintWidget cw) {
+        mTempRect.top = cw.getY();
+        mTempRect.left = cw.getX();
+        mTempRect.right = cw.getWidth() + mTempRect.left;
+        mTempRect.bottom = cw.getHeight()+mTempRect.top;
+        return mTempRect;
+    }
+
     Model mModel = new Model();
 
     @Override
@@ -2657,9 +2739,9 @@ public class MotionLayout extends ConstraintLayout implements
 
     @Override
     public String toString() {
-        Context context =  getContext();
-        return Debug.getName(context,mBeginState)+"->"+
-                Debug.getName(context,mEndState)+" (pos:"+mTransitionLastPosition+" Dpos/Dt:"+mLastVelocity;
+        Context context = getContext();
+        return Debug.getName(context, mBeginState) + "->" +
+                Debug.getName(context, mEndState) + " (pos:" + mTransitionLastPosition + " Dpos/Dt:" + mLastVelocity;
     }
 
     @Override
@@ -2695,6 +2777,8 @@ public class MotionLayout extends ConstraintLayout implements
             mModel.reEvaluateState();
             mModel.setMeasuredId(startId, endId);
             setMeasure = false;
+        } else if (recalc) {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
 
         if (mMeasureDuringTransition || setMeasure) {
@@ -3426,7 +3510,7 @@ public class MotionLayout extends ConstraintLayout implements
             mPostInterpolationPosition = position;
             float interPos = mProgressInterpolator == null ? position : mProgressInterpolator.getInterpolation(position);
             if (mProgressInterpolator != null) {
-                mLastVelocity = mProgressInterpolator.getInterpolation(position+dir/mTransitionDuration) ;
+                mLastVelocity = mProgressInterpolator.getInterpolation(position + dir / mTransitionDuration);
                 mLastVelocity -= mProgressInterpolator.getInterpolation(position);
             }
             for (int i = 0; i < n; i++) {
@@ -3454,9 +3538,6 @@ public class MotionLayout extends ConstraintLayout implements
 
             // If we have hit the begin state begin state could be unset
             if (position <= 0 && mBeginState != UNSET ) {
-                if (DEBUG) {
-                    Log.v(TAG, Debug.getLoc() + " ============= setting  to begin " + Debug.getName(getContext(), mBeginState) + "  "+ position);
-                }
                 if (mCurrentState != mBeginState) {
                     newState = true;
                     mCurrentState = mBeginState;
@@ -3482,8 +3563,9 @@ public class MotionLayout extends ConstraintLayout implements
             if (mKeepAnimating || mInTransition) {
                 invalidate();
             } else {
-                if ((dir > 0 && position == 1) || (dir < 0 && position == 0))
-                setState(TransitionState.FINISHED);
+                if ((dir > 0 && position == 1) || (dir < 0 && position == 0)) {
+                    setState(TransitionState.FINISHED);
+                }
             }
             if (!mKeepAnimating && !mInTransition && ((dir > 0 && position == 1) || (dir < 0 && position == 0))) {
                 onNewStateAttachHandlers();
@@ -3857,6 +3939,9 @@ public class MotionLayout extends ConstraintLayout implements
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            mPreviouseRotation = getDisplay().getRotation();
+        }
         if (mScene != null && mCurrentState != UNSET) {
             ConstraintSet cSet = mScene.getConstraintSet(mCurrentState);
             mScene.readFallback(this);
@@ -3877,8 +3962,8 @@ public class MotionLayout extends ConstraintLayout implements
             if (mScene != null && mScene.mCurrentTransition != null) {
                 if (mScene.mCurrentTransition.getAutoTransition() == MotionScene.Transition.AUTO_ANIMATE_TO_END) {
                     transitionToEnd();
-                    setState(MotionLayout.TransitionState.SETUP);
-                    setState(MotionLayout.TransitionState.MOVING);
+                    setState(TransitionState.SETUP);
+                    setState(TransitionState.MOVING);
                 }
             }
         }
@@ -4255,9 +4340,9 @@ public class MotionLayout extends ConstraintLayout implements
      * But in most cases can be used.
      * createConstraintSet makes a copy which is more expensive.
      *
-     * @see #cloneConstraintSet(int)
      * @param id
      * @return
+     * @see #cloneConstraintSet(int)
      */
     public ConstraintSet getConstraintSet(int id) {
         if (mScene == null) {
@@ -4322,8 +4407,8 @@ public class MotionLayout extends ConstraintLayout implements
     /**
      * Update a ConstraintSet but animate the change.
      *
-     * @param stateId id of the ConstraintSet
-     * @param set     The constraintSet
+     * @param stateId  id of the ConstraintSet
+     * @param set      The constraintSet
      * @param duration The length of time to perform the animation
      */
     public void updateStateAnimate(int stateId, ConstraintSet set, int duration) {
@@ -4363,6 +4448,7 @@ public class MotionLayout extends ConstraintLayout implements
 
     /**
      * Not sure we want this
+     *
      * @hide
      */
     public void updateState() {
@@ -4511,7 +4597,7 @@ public class MotionLayout extends ConstraintLayout implements
      * Transition will execute if its conditions are met and it is enabled
      *
      * @param viewTransitionId
-     * @param view The views to apply to
+     * @param view             The views to apply to
      */
     public void viewTransition(int viewTransitionId, View... view) {
         if (mScene != null) {
@@ -4525,7 +4611,7 @@ public class MotionLayout extends ConstraintLayout implements
      * Enable a ViewTransition ID.
      *
      * @param viewTransitionId id of ViewTransition
-     * @param enable If false view transition cannot be executed.
+     * @param enable           If false view transition cannot be executed.
      */
     public void enableViewTransition(int viewTransitionId, boolean enable) {
         if (mScene != null) {
@@ -4535,6 +4621,7 @@ public class MotionLayout extends ConstraintLayout implements
 
     /**
      * Is transition id enabled or disabled
+     *
      * @param viewTransitionId the ide of the transition
      * @return true if enabled
      */

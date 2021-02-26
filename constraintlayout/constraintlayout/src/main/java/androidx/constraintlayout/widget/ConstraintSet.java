@@ -85,6 +85,12 @@ public class ConstraintSet {
 
     private boolean mValidate;
     public String mIdString;
+    public static final int ROTATE_NONE = 0;
+    public static final int ROTATE_PORTRATE_OF_RIGHT = 1;
+    public static final int ROTATE_PORTRATE_OF_LEFT = 2;
+    public static final int ROTATE_RIGHT_OF_PORTRATE = 3;
+    public static final int ROTATE_LEFT_OF_PORTRATE = 4;
+    public int mRotate = 0;
     private HashMap<String, ConstraintAttribute> mSavedAttributes = new HashMap<>();
 
     /**

@@ -631,6 +631,13 @@
 
     <declare-styleable name="ConstraintSet">
         <attr name="deriveConstraintsFrom" format="reference" />
+        <attr name="ConstraintRotate" format="enum" >
+            <enum name="none" value="0"/>
+            <enum name="right" value="1"/>
+            <enum name="left" value="2"/>
+            <enum name="x_right" value="3"/>
+            <enum name="x_left" value="4"/>
+        </attr>
         <attr name="android:orientation" />
         <attr name="android:id" />
         <attr name="android:visibility" />
