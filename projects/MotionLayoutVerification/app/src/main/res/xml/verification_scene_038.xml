@@ -6,12 +6,48 @@
         motion:constraintSetEnd="@+id/landscape"
         motion:constraintSetStart="@+id/portrait"
         motion:staggered="0.4"
-        motion:duration="4000">
+        motion:duration="400">
     </Transition>
 
     <ConstraintSet android:id="@+id/portrait">
+
+        <Constraint
+            android:id="@+id/imageView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            motion:layout_constraintDimensionRatio="w,9:16"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintHorizontal_bias="0.5"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            />
+
+        <Constraint
+            android:id="@+id/textView3"
+            android:layout_width="410dp"
+            android:layout_height="105dp"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+        <Constraint
+            android:id="@+id/linearLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintHorizontal_bias="0.5"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toBottomOf="@+id/textView3"/>
+        
     </ConstraintSet>
-    <ConstraintSet android:id="@+id/landscape_right" motion:deriveConstraintsFrom="@id/landscape">
+
+    
+    <ConstraintSet android:id="@+id/landscape_right" >
         <Constraint
             android:id="@+id/imageView"
             motion:layout_constraintWidth_percent="0.5"

@@ -2,21 +2,51 @@
 <MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
-    <Transition
-        motion:constraintSetEnd="@+id/landscape"
-        motion:constraintSetStart="@+id/portrait"
-        motion:staggered="0.4"
-        motion:duration="4000">
-    </Transition>
+<!--    <Transition-->
+<!--motion:pathMotionArc="startHorizontal"-->
+<!--        motion:staggered="0.4"-->
+<!--        motion:duration="4000">-->
+
+<!--    </Transition>-->
 
     <ConstraintSet android:id="@+id/portrait">
     </ConstraintSet>
+
+    <Transition
+        motion:constraintSetEnd="@+id/portrait_90"
+        motion:constraintSetStart="@+id/portrait"
+        motion:motionInterpolator="linear"
+        >
+    </Transition>
+
+    <ConstraintSet android:id="@+id/landscape_R90"
+        motion:deriveConstraintsFrom="@id/landscape"
+        motion:ConstraintRotate="left" />
+
+    <ConstraintSet android:id="@+id/landscape_right_RN90"
+        motion:deriveConstraintsFrom="@id/landscape_right"
+        motion:ConstraintRotate="right"/>
+
+    <ConstraintSet android:id="@+id/portrait_R90"
+        motion:deriveConstraintsFrom="@id/portrait"
+        motion:ConstraintRotate="x_right">
+    </ConstraintSet>
+
+    <!--???????????????????????????????????????????-->
+
+    <ConstraintSet android:id="@+id/portrait_RN90"
+        motion:deriveConstraintsFrom="@id/portrait"
+        motion:ConstraintRotate="x_left">
+    </ConstraintSet>
+
+
     <ConstraintSet android:id="@+id/landscape_right" motion:deriveConstraintsFrom="@id/landscape">
         <Constraint
             android:id="@+id/imageView"
             motion:layout_constraintWidth_percent="0.5"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginEnd="2dp"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintDimensionRatio="16:9"
             motion:layout_constraintEnd_toEndOf="parent" />
@@ -25,12 +55,17 @@
             motion:layout_constraintEnd_toEndOf="@+id/imageView"
             android:layout_width="0dp"
             android:layout_height="105dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintTop_toBottomOf="@+id/imageView"
             motion:layout_constraintStart_toStartOf="@+id/imageView" />
         <Constraint
             android:id="@+id/linearLayout"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintEnd_toStartOf="@+id/imageView"
+            android:layout_marginRight="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
             android:layout_width="0dp"
             android:layout_height="0dp"
             motion:layout_constraintBottom_toBottomOf="parent"
@@ -44,23 +79,31 @@
             motion:layout_constraintWidth_percent="0.5"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginStart="2dp"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintDimensionRatio="16:9"
-            motion:layout_constraintStart_toStartOf="parent" />
+            motion:layout_constraintStart_toStartOf="parent" >
+
+   </Constraint>
         <Constraint
             android:id="@+id/textView3"
-            motion:layout_constraintEnd_toEndOf="@+id/imageView"
             android:layout_width="0dp"
-            android:layout_height="105dp"
-            motion:layout_constraintTop_toBottomOf="@+id/imageView"
-            motion:layout_constraintStart_toStartOf="@+id/imageView"/>
+
+            android:layout_height="wrap_content"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"/>
         <Constraint
             android:id="@+id/linearLayout"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintStart_toEndOf="@+id/imageView"
+            android:layout_marginRight="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintBottom_toTopOf="@+id/textView3"
             motion:layout_constraintTop_toTopOf="parent" />
     </ConstraintSet>
 

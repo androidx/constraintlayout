@@ -20,6 +20,10 @@
         </activity>
         <activity android:name=".RotationActivity"
             android:configChanges="orientation|screenSize"/>
+        <activity android:name=".RotationUsingRotateTo"
+            android:configChanges="orientation|screenSize"/>
+        <activity android:name=".RotationAngular"
+            android:configChanges="orientation|screenSize"/>
     </application>
 
 </manifest>

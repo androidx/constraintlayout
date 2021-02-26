@@ -1189,6 +1189,10 @@ public class MotionScene {
                 case "deriveConstraintsFrom":
                     derivedId = getId(context, value);
                     break;
+                case "ConstraintRotate":
+                    set.mRotate = Integer.parseInt(value);
+                    Log.v(TAG, Debug.getLoc()+"(@) rotate = "+ set.mRotate);
+                    break;
             }
         }
         if (id != UNSET) {
