@@ -81,20 +81,22 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     HashMap<String, Class> activity_map = new HashMap<>();
 
     {
+
         activity_map.put("verification_400", CheckSharedValues.class);
         activity_map.put("verification_035", RotationActivity.class);
         activity_map.put("verification_036", RotationActivity.class);
         activity_map.put("verification_038", RotationUsingRotateTo.class);
         activity_map.put("verification_039", RotationAngular.class);
+
     }
 
     String s = AppCompatActivity.class.getName();
 
     private static boolean REVERSE = false;
 
-
     private final String RUN_FIRST = "verification_039";
     private final String LAYOUTS_MATCHES = "verification_03\\d+";
+
     private static String SHOW_FIRST = "";
     MotionLayout mMotionLayout;
     private Flow mFlow;
@@ -576,6 +578,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
             Log.v(TAG, Debug.getLoc() + " jump to " + str);
 
             mMotionLayout.transitionToState(id, 0);
+
         }
     }
 

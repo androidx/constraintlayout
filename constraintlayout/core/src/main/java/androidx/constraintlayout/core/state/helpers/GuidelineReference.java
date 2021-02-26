@@ -16,6 +16,7 @@
 
 package androidx.constraintlayout.core.state.helpers;
 
+import androidx.constraintlayout.core.state.ConstraintReference;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.Guideline;
 import androidx.constraintlayout.core.state.Reference;
@@ -43,22 +44,25 @@ public class GuidelineReference implements Reference {
         mState = state;
     }
 
-    public void start(Object margin) {
+    public GuidelineReference start(Object margin) {
         mStart = mState.convertDimension(margin);
         mEnd = -1;
         mPercent = 0;
+        return this;
     }
 
-    public void end(Object margin) {
+    public GuidelineReference end(Object margin) {
         mStart = -1;
         mEnd = mState.convertDimension(margin);
         mPercent = 0;
+        return this;
     }
 
-    public void percent(float percent) {
+    public GuidelineReference percent(float percent) {
         mStart = -1;
         mEnd = -1;
         mPercent = percent;
+        return this;
     }
 
     public void setOrientation(int orientation) {

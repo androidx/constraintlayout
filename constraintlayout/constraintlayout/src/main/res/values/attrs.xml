@@ -10,7 +10,6 @@
     <attr name="layout_constraintGuide_end" format="dimension" />
     <!-- The percent of total space from the beginning of the parent to this guideline. (e.g. 0.50 = middle)-->
     <attr name="layout_constraintGuide_percent" format="float" />
-    <!-- Constrains the left edge of this view to the left edge of the given view ID. -->
 
     <!-- Indicate the type of barrier -->
     <attr name="barrierDirection" format="enum">
@@ -261,6 +260,14 @@
     <attr name="flow_lastVerticalBias" format="float" />
     <attr name="flow_lastHorizontalBias" format="float" />
 
+    <!-- set the radius and angles used by CircularFlow with your child views -->
+    <attr name="circularflow_radiusInDP" format="string"/>
+    <attr name="circularflow_angles" format="string"/>
+    <attr name="circularflow_viewCenter" format="reference"/>
+    <attr name="circularflow_defaultAngle" format="float"/>
+    <attr name="circularflow_defaultRadius" format="integer"/>
+
+
     <!-- TODO allows to use a drawable as horizontal separator between elements -->
     <!--    <attr name="flow_horizontalSeparator" format="reference" />-->
 
@@ -505,6 +512,13 @@
         <attr name="flow_lastVerticalStyle" />
         <attr name="flow_lastHorizontalBias" />
         <attr name="flow_lastVerticalBias" />
+
+        <attr name="circularflow_radiusInDP"/>
+        <attr name="circularflow_angles"/>
+        <attr name="circularflow_viewCenter"/>
+        <attr name="circularflow_defaultRadius"/>
+        <attr name="circularflow_defaultAngle"/>
+
 
         <attr name="layout_constraintCircle" />
         <attr name="layout_constraintCircleRadius" />

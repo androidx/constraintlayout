@@ -2,18 +2,22 @@ package android.support.constraint.app;
 
 import android.content.Context;
 import android.content.res.Configuration;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
+
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.motion.widget.Debug;
+
 import androidx.constraintlayout.motion.widget.MotionLayout;
 
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +25,9 @@ import org.jetbrains.annotations.NotNull;
 public class RotationActivity extends AppCompatActivity {
     private static final String TAG = "CheckSharedValues";
     String layout_name;
+
     MotionLayout mMotionLayout;
+
 
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {

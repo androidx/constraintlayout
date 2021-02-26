@@ -75,7 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
     // Array from Activities with more examples
     Class activitiesDemo[] = {
-            CarouselHelperActivity.class
+            CarouselHelperActivity.class,
+            CircularFlowDemoActivity.class
     };
 
     ////////////////////////////////////////////////////////////////

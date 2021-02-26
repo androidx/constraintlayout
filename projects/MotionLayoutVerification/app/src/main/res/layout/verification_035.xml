@@ -16,6 +16,7 @@
         android:layout_height="0dp"
         android:layout_marginRight="100dp"
         android:layout_marginEnd="100dp"
+
         android:src="@drawable/cat"
         app:layout_constraintHeight_percent="0.5"
         app:layout_constraintTop_toTopOf="parent"
@@ -25,17 +26,9 @@
         />
 
 
-<!--    <TextView-->
-<!--        android:id="@+id/caption"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="rotate the phone"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent" />-->
-
     <Button
         android:id="@+id/run"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
