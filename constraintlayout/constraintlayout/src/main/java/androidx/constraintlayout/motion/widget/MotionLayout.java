@@ -2114,7 +2114,15 @@ public class MotionLayout extends ConstraintLayout implements
     public boolean isInRotation() {
         return mInRotation;
     }
-
+    /**
+     * Animate to the state defined by the id.
+     * Width and height may be used in the picking of the id using this StateSet.
+     *
+     * @param id           the state to transition
+     * @param screenWidth  the with of the motionLayout used to select the variant
+     * @param screenHeight the height of the motionLayout used to select the variant
+     * @param duration     time in ms. if 0 set by default or transition -1 by current
+     */
     public void transitionToState(int id, int screenWidth, int screenHeight, int duration) {
         // if id is either end or start state, transition using current setup.
         // if id is not part of end/start, need to setup
@@ -2183,9 +2191,7 @@ public class MotionLayout extends ConstraintLayout implements
         mTransitionInstantly = false;
         mInterpolator = null;
         if (duration == -1) {
-            Log.v(TAG, Debug.getLoc() + " ...duration == -1  mScene.getDuration()  " + mScene.getDuration());
             mTransitionDuration = mScene.getDuration() / 1000f;
-
         }
         mBeginState = UNSET;
         mScene.setTransition(mBeginState, mEndState);
@@ -2195,6 +2201,7 @@ public class MotionLayout extends ConstraintLayout implements
         } else if (duration > 0) {
             mTransitionDuration = duration / 1000f;
         }
+
         int n = getChildCount();
 
         mFrameArrayList.clear();

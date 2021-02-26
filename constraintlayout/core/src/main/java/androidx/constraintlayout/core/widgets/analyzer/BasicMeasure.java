@@ -139,7 +139,7 @@ public class BasicMeasure {
         measurer.didMeasures();
     }
 
-    private void solveLinearSystem(ConstraintWidgetContainer layout, String reason, int w, int h) {
+    private void solveLinearSystem(ConstraintWidgetContainer layout, String reason, int pass, int w, int h) {
         long startLayout;
         if (LinearSystem.MEASURE) {
             startLayout = System.nanoTime();
@@ -156,6 +156,7 @@ public class BasicMeasure {
         if (DEBUG) {
             System.out.println("### Solve <" + reason + "> ###");
         }
+        constraintWidgetContainer.setPass(pass);
         constraintWidgetContainer.layout();
         if (LinearSystem.MEASURE && layout.mMetrics != null) {
                 long endLayout = System.nanoTime();
@@ -287,7 +288,7 @@ public class BasicMeasure {
 
             // let's solve the linear system.
             if (childCount > 0) {
-                solveLinearSystem(layout, "First pass", startingWidth, startingHeight);
+                solveLinearSystem(layout, "First pass", 0, startingWidth, startingHeight);
             }
 
             if (DEBUG) {
@@ -415,27 +416,10 @@ public class BasicMeasure {
                         }
                     }
                     if (needSolverPass) {
-                        solveLinearSystem(layout, "intermediate pass", startingWidth, startingHeight);
+                        solveLinearSystem(layout, "intermediate pass", 1 + j, startingWidth, startingHeight);
                         needSolverPass = false;
                     } else {
                         break;
-                    }
-                }
-
-                // TODO: Apparently this is always false - should we delete it?
-                if (needSolverPass) {
-                    solveLinearSystem(layout, "2nd pass", startingWidth, startingHeight);
-                    needSolverPass = false;
-                    if (layout.getWidth() < minWidth) {
-                        layout.setWidth(minWidth);
-                        needSolverPass = true;
-                    }
-                    if (layout.getHeight() < minHeight) {
-                        layout.setHeight(minHeight);
-                        needSolverPass = true;
-                    }
-                    if (needSolverPass) {
-                        solveLinearSystem(layout, "3rd pass", startingWidth, startingHeight);
                     }
                 }
             }

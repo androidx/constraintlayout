@@ -5,6 +5,7 @@
 
 
     <Transition
+ 
         motion:constraintSetEnd="@+id/pre"
         motion:constraintSetStart="@+id/portrait"
         motion:duration="400">
@@ -50,6 +51,7 @@
             motion:layout_constraintStart_toStartOf="parent" />
         <Constraint
             android:id="@+id/run"
+ 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -76,6 +78,7 @@
     <ConstraintSet android:id="@+id/landscape">
         <Constraint
             android:id="@+id/image"
+
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
@@ -105,7 +108,6 @@
             android:layout_marginTop="16dp"
             android:rotation="0"
             motion:layout_constraintLeft_toLeftOf="parent"
-
             motion:layout_constraintTop_toBottomOf="@id/run" />
     </ConstraintSet>
 
@@ -113,6 +115,7 @@
 
 
     <ConstraintSet android:id="@+id/pre">
+
 
     </ConstraintSet>
 

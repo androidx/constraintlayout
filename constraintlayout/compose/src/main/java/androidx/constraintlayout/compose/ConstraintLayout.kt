@@ -39,8 +39,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.hasFixedHeight
-import androidx.compose.ui.unit.hasFixedWidth
 import androidx.compose.ui.util.fastForEach
 import androidx.constraintlayout.core.state.ConstraintReference
 import androidx.constraintlayout.core.state.Dimension.SPREAD_DIMENSION
@@ -74,7 +72,7 @@ fun ConstraintLayout(
     @Suppress("Deprecation")
     MultiMeasureLayout(
             modifier = modifier,
-            children = {
+            content = {
                 scope.reset()
                 scope.content()
             }
@@ -1116,7 +1114,7 @@ class State(val density: Density) : SolverState() {
 
     override fun convertDimension(value: Any?): Int {
         return if (value is Dp) {
-            with(density) { value.toIntPx() }
+            with(density) { value.roundToPx() }
         } else {
             super.convertDimension(value)
         }
@@ -1360,8 +1358,8 @@ private class Measurer : BasicMeasure.Measurer {
         }
 
         // No need to set sizes and size modes as we passed them to the state above.
-        root.optimizationLevel = Optimizer.OPTIMIZATION_NONE
-        root.measure(Optimizer.OPTIMIZATION_NONE, 0, 0, 0, 0, 0, 0, 0, 0)
+        root.optimizationLevel = Optimizer.OPTIMIZATION_STANDARD
+        root.measure(root.optimizationLevel, 0, 0, 0, 0, 0, 0, 0, 0)
 
         for (child in root.children) {
             val measurable = child.companionWidget

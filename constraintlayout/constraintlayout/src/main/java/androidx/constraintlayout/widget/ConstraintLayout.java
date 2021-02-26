@@ -487,13 +487,14 @@ public class ConstraintLayout extends ViewGroup {
     /**
      * @hide
      */
-    public static final String VERSION = "ConstraintLayout-2.1.0-alpha1";
+    public static final String VERSION = "ConstraintLayout-2.1.0-alpha2";
     private static final String TAG = "ConstraintLayout";
 
     private static final boolean USE_CONSTRAINTS_HELPER = true;
     private static final boolean DEBUG = LinearSystem.FULL_DEBUG;
     private static final boolean DEBUG_DRAW_CONSTRAINTS = false;
     private static final boolean MEASURE = false;
+    private static final boolean OPTIMIZE_HEIGHT_CHANGE = false;
 
     SparseArray<View> mChildrenByIds = new SparseArray<>();
 
@@ -1661,7 +1662,8 @@ public class ConstraintLayout extends ViewGroup {
                         mLayoutWidget.isWidthMeasuredTooSmall(), mLayoutWidget.isHeightMeasuredTooSmall());
                 return;
             }
-            if (mOnMeasureWidthMeasureSpec == widthMeasureSpec
+            if (OPTIMIZE_HEIGHT_CHANGE
+                    && mOnMeasureWidthMeasureSpec == widthMeasureSpec
                     && MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.EXACTLY
                     && MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.AT_MOST
                     && MeasureSpec.getMode(mOnMeasureHeightMeasureSpec) == MeasureSpec.AT_MOST) {
@@ -1669,7 +1671,7 @@ public class ConstraintLayout extends ViewGroup {
                 if (DEBUG) {
                     System.out.println("### COMPATIBLE REQ " + newSize + " >= ? " + mLayoutWidget.getHeight());
                 }
-                if (newSize >= mLayoutWidget.getHeight()) {
+                if (newSize >= mLayoutWidget.getHeight() && !mLayoutWidget.isHeightMeasuredTooSmall()) {
                     mOnMeasureWidthMeasureSpec = widthMeasureSpec;
                     mOnMeasureHeightMeasureSpec = heightMeasureSpec;
                     resolveMeasuredDimension(widthMeasureSpec, heightMeasureSpec, mLayoutWidget.getWidth(), mLayoutWidget.getHeight(),
@@ -2154,6 +2156,11 @@ public class ConstraintLayout extends ViewGroup {
          * In right to left languages it corresponds to the left side of the view
          */
         public static final int END = 7;
+
+        /**
+         * Circle reference from a view.
+         */
+        public static final int CIRCLE = 8;
 
         /**
          * Set matchConstraintDefault* default to the wrap content size.

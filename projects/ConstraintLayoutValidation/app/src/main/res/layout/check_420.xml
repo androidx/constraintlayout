@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0F0"
+    tools:ignore="MissingConstraints">
+
+   <!-- issue #143 -->
+
+   <FrameLayout
+       android:background="#00F"
+       android:id="@+id/issue"
+       android:layout_width="match_parent"
+       android:layout_height="20dp">
+      <androidx.constraintlayout.widget.ConstraintLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+         <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             android:textSize="42sp"
+            android:text="Hello World"
+            android:background="#F00"/>
+      </androidx.constraintlayout.widget.ConstraintLayout>
+   </FrameLayout>
+
+</FrameLayout>

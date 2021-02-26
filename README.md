@@ -16,12 +16,11 @@ Have a question that isn't answered here? Try StackOverflow for [ConstraintLayou
 
 Add the Gradle dependency:
 
-You need to make sure you have the Google and JCenter repositories included in the `build.gradle` file in the root of your project:
+You need to make sure you have the Google repository included in the `build.gradle` file in the root of your project:
 
 ```gradle
 repositories {
     google()
-    jcenter()
 }
 ```
 
@@ -42,7 +41,7 @@ If using ConstraintLayout with Jetpack Compose, add:
 ```gradle
 dependencies {
 
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha01")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha03")
 
 }
 ```

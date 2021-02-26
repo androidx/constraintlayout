@@ -92,9 +92,9 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
 
     private static boolean REVERSE = false;
 
-
     private final String RUN_FIRST = "verification_039";
     private final String LAYOUTS_MATCHES = "verification_03\\d+";
+
     private static String SHOW_FIRST = "";
     MotionLayout mMotionLayout;
     private Flow mFlow;

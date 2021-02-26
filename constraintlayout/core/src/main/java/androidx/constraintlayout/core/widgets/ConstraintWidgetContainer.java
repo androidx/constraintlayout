@@ -52,6 +52,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     public DependencyGraph mDependencyGraph = new DependencyGraph(this);
+    private int pass; // number of layout passes
 
     /**
      * Invalidate the graph of constraints
@@ -384,10 +385,10 @@ public class ConstraintWidgetContainer extends WidgetContainer {
                     DimensionBehaviour horizontalBehaviour = widget.mListDimensionBehaviors[DIMENSION_HORIZONTAL];
                     DimensionBehaviour verticalBehaviour = widget.mListDimensionBehaviors[DIMENSION_VERTICAL];
                     if (horizontalBehaviour == WRAP_CONTENT) {
-                        widget.setHorizontalDimensionBehaviour(DimensionBehaviour.FIXED);
+                        widget.setHorizontalDimensionBehaviour(FIXED);
                     }
                     if (verticalBehaviour == WRAP_CONTENT) {
-                        widget.setVerticalDimensionBehaviour(DimensionBehaviour.FIXED);
+                        widget.setVerticalDimensionBehaviour(FIXED);
                     }
                     widget.addToSolver(system, optimize);
                     if (horizontalBehaviour == WRAP_CONTENT) {
@@ -484,11 +485,21 @@ public class ConstraintWidgetContainer extends WidgetContainer {
 
     public BasicMeasure.Measure mMeasure = new BasicMeasure.Measure();
 
-    public static boolean measure(ConstraintWidget widget, BasicMeasure.Measurer measurer, BasicMeasure.Measure measure, int measureStrategy) {
+    public static boolean measure(int level, ConstraintWidget widget, BasicMeasure.Measurer measurer, BasicMeasure.Measure measure, int measureStrategy) {
         if (DEBUG) {
-            System.out.println("(M) call to measure " + widget.getDebugName());
+            System.out.println(Direct.ls(level) + "(M) call to measure " + widget.getDebugName());
         }
         if (measurer == null) {
+            return false;
+        }
+        if (widget.getVisibility() == GONE
+                || widget instanceof Guideline
+                || widget instanceof Barrier) {
+            if (DEBUG) {
+                System.out.println(Direct.ls(level) + "(M) no measure needed for " + widget.getDebugName());
+            }
+            measure.measuredWidth = 0;
+            measure.measuredHeight = 0;
             return false;
         }
 
@@ -499,8 +510,8 @@ public class ConstraintWidgetContainer extends WidgetContainer {
         measure.measuredNeedsSolverPass = false;
         measure.measureStrategy = measureStrategy;
 
-        boolean horizontalMatchConstraints = (measure.horizontalBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
-        boolean verticalMatchConstraints = (measure.verticalBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
+        boolean horizontalMatchConstraints = (measure.horizontalBehavior == DimensionBehaviour.MATCH_CONSTRAINT);
+        boolean verticalMatchConstraints = (measure.verticalBehavior == DimensionBehaviour.MATCH_CONSTRAINT);
 
         boolean horizontalUseRatio = horizontalMatchConstraints && widget.mDimensionRatio > 0;
         boolean verticalUseRatio = verticalMatchConstraints && widget.mDimensionRatio > 0;
@@ -538,7 +549,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
 
         if (horizontalUseRatio) {
             if (widget.mResolvedMatchConstraintDefault[HORIZONTAL] == ConstraintWidget.MATCH_CONSTRAINT_RATIO_RESOLVED) {
-                measure.horizontalBehavior = ConstraintWidget.DimensionBehaviour.FIXED;
+                measure.horizontalBehavior = FIXED;
             } else if (!verticalMatchConstraints) {
                 // let's measure here
                 int measuredHeight;
@@ -560,7 +571,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
         }
         if (verticalUseRatio) {
             if (widget.mResolvedMatchConstraintDefault[VERTICAL] == ConstraintWidget.MATCH_CONSTRAINT_RATIO_RESOLVED) {
-                measure.verticalBehavior = ConstraintWidget.DimensionBehaviour.FIXED;
+                measure.verticalBehavior = FIXED;
             } else if (!horizontalMatchConstraints) {
                 // let's measure here
                 int measuredWidth;
@@ -636,7 +647,9 @@ public class ConstraintWidgetContainer extends WidgetContainer {
         if (FULL_DEBUG) {
             System.out.println("OPTIMIZATION LEVEL " + mOptimizationLevel);
         }
-        if (Optimizer.enabled(mOptimizationLevel, Optimizer.OPTIMIZATION_DIRECT)) {
+
+        // Only try the direct optimization in the first layout pass
+        if (pass == 0 && Optimizer.enabled(mOptimizationLevel, Optimizer.OPTIMIZATION_DIRECT)) {
             if (FULL_DEBUG) {
                 System.out.println("Direct pass " + myCounter++);
             }
@@ -671,16 +684,16 @@ public class ConstraintWidgetContainer extends WidgetContainer {
                         && !(child instanceof Barrier)
                         && !(child instanceof VirtualLayout)
                         && !(child.isInVirtualLayout())) {
-                    ConstraintWidget.DimensionBehaviour widthBehavior = child.getDimensionBehaviour(HORIZONTAL);
-                    ConstraintWidget.DimensionBehaviour heightBehavior = child.getDimensionBehaviour(VERTICAL);
+                    DimensionBehaviour widthBehavior = child.getDimensionBehaviour(HORIZONTAL);
+                    DimensionBehaviour heightBehavior = child.getDimensionBehaviour(VERTICAL);
 
-                    boolean skip = widthBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+                    boolean skip = widthBehavior == DimensionBehaviour.MATCH_CONSTRAINT
                             && child.mMatchConstraintDefaultWidth != MATCH_CONSTRAINT_WRAP
-                            && heightBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+                            && heightBehavior == DimensionBehaviour.MATCH_CONSTRAINT
                             && child.mMatchConstraintDefaultHeight != MATCH_CONSTRAINT_WRAP;
                     if (!skip) {
                         BasicMeasure.Measure measure = new BasicMeasure.Measure();
-                        ConstraintWidgetContainer.measure(child, mMeasurer, measure, BasicMeasure.Measure.SELF_DIMENSIONS);
+                        ConstraintWidgetContainer.measure(0, child, mMeasurer, measure, BasicMeasure.Measure.SELF_DIMENSIONS);
                     }
                 }
             }
@@ -862,7 +875,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
                                 "layout override 2, width from " + getWidth() + " vs " + width);
                     }
                     setWidth(width);
-                    mListDimensionBehaviors[DIMENSION_HORIZONTAL] = DimensionBehaviour.FIXED;
+                    mListDimensionBehaviors[DIMENSION_HORIZONTAL] = FIXED;
                     wrap_override = true;
                     needsSolving = true;
                 }
@@ -873,7 +886,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
                                 "layout override 2, height from " + getHeight() + " vs " + height);
                     }
                     setHeight(height);
-                    mListDimensionBehaviors[DIMENSION_VERTICAL] = DimensionBehaviour.FIXED;
+                    mListDimensionBehaviors[DIMENSION_VERTICAL] = FIXED;
                     wrap_override = true;
                     needsSolving = true;
                 }
@@ -889,7 +902,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
                             }
                             mWidthMeasuredTooSmall = true;
                             wrap_override = true;
-                            mListDimensionBehaviors[DIMENSION_HORIZONTAL] = DimensionBehaviour.FIXED;
+                            mListDimensionBehaviors[DIMENSION_HORIZONTAL] = FIXED;
                             setWidth(preW);
                             needsSolving = true;
                         }
@@ -904,7 +917,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
                             }
                             mHeightMeasuredTooSmall = true;
                             wrap_override = true;
-                            mListDimensionBehaviors[DIMENSION_VERTICAL] = DimensionBehaviour.FIXED;
+                            mListDimensionBehaviors[DIMENSION_VERTICAL] = FIXED;
                             setHeight(preH);
                             needsSolving = true;
                         }
@@ -1040,4 +1053,11 @@ public class ConstraintWidgetContainer extends WidgetContainer {
         mVerticalChainsSize++;
     }
 
+    /**
+     * Keep track of the # of passes
+     * @param pass
+     */
+    public void setPass(int pass) {
+        this.pass = pass;
+    }
 }
