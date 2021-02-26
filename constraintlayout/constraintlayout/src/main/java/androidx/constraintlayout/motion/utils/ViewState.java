@@ -18,7 +18,7 @@ package androidx.constraintlayout.motion.utils;
 import android.view.View;
 
 /**
- * stores the bounds and rotation of a widget
+ * Stores the bounds and rotation of a widget
  */
 public class ViewState {
     public float rotation;
