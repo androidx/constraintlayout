@@ -117,7 +117,7 @@ public class ImageFilterButton extends androidx.appcompat.widget.AppCompatImageB
             TypedArray a = getContext()
                     .obtainStyledAttributes(attrs, R.styleable.ImageFilterView);
             final int N = a.getIndexCount();
-             mAltDrawable = a.getDrawable(R.styleable.ImageFilterView_altSrc);
+            mAltDrawable = a.getDrawable(R.styleable.ImageFilterView_altSrc);
 
             for (int i = 0; i < N; i++) {
                 int attr = a.getIndex(i);
