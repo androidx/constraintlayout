@@ -33,6 +33,7 @@ import android.view.ViewOutlineProvider;
 import android.widget.ImageView;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.R;
 
 /**
@@ -285,6 +286,8 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
 
     private ImageMatrix mImageMatrix = new ImageMatrix();
     private boolean mOverlay = true;
+    private Drawable mAltDrawable = null;
+    private Drawable mDrawable = null;
     private float mCrossfade = 0;
     private float mRoundPercent = 0; // rounds the corners as a percent
     private float mRound = Float.NaN; // rounds the corners in dp if NaN RoundPercent is in effect
@@ -292,7 +295,7 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
     ViewOutlineProvider mViewOutlineProvider;
     RectF mRect;
 
-    Drawable[] mLayers;
+    Drawable[] mLayers = new Drawable[2];
     LayerDrawable mLayer;
 
     // ======================== support for pan/zoom/rotate =================
@@ -399,6 +402,43 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
         updateViewMatrix();
     }
 
+    @Override
+    public void setImageDrawable(Drawable drawable) {
+        if (mAltDrawable != null) {
+            mDrawable = drawable.mutate();
+            mLayers[0] = mDrawable;
+            mLayers[1] = mAltDrawable;
+            mLayer = new LayerDrawable(mLayers);
+            super.setImageDrawable(mLayer);
+            setCrossfade(mCrossfade);
+        } else {
+            super.setImageDrawable(drawable);
+        }
+    }
+
+    @Override
+    public void setImageResource(int resId) {
+        if (mAltDrawable != null) {
+            mDrawable = AppCompatResources.getDrawable(getContext(), resId).mutate();
+            mLayers[0] = mDrawable;
+            mLayers[1] = mAltDrawable;
+            mLayer = new LayerDrawable(mLayers);
+            super.setImageDrawable(mLayer);
+            setCrossfade(mCrossfade);
+        } else {
+            super.setImageResource(resId);
+        }
+    }
+
+    public void setAltImageResource(int resId) {
+        mAltDrawable = AppCompatResources.getDrawable(getContext(), resId).mutate();
+        mLayers[0] = mDrawable;
+        mLayers[1] = mAltDrawable;
+        mLayer = new LayerDrawable(mLayers);
+        super.setImageDrawable(mLayer);
+        setCrossfade(mCrossfade);
+    }
+
     private void updateViewMatrix() {
         if (Float.isNaN(mPanX) &&
                 Float.isNaN(mPanY) &&
@@ -459,7 +499,7 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
             TypedArray a = getContext()
                     .obtainStyledAttributes(attrs, R.styleable.ImageFilterView);
             final int N = a.getIndexCount();
-            Drawable drawable = a.getDrawable(R.styleable.ImageFilterView_altSrc);
+            mAltDrawable = a.getDrawable(R.styleable.ImageFilterView_altSrc);
 
             for (int i = 0; i < N; i++) {
                 int attr = a.getIndex(i);
@@ -495,10 +535,9 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
             }
             a.recycle();
 
-            if (drawable != null) {
-                mLayers = new Drawable[2];
-                mLayers[0] = getDrawable().mutate();
-                mLayers[1] = drawable.mutate();
+            if (mAltDrawable != null) {
+                mLayers[0] = mDrawable = getDrawable().mutate();
+                mLayers[1] = mAltDrawable.mutate();
 
                 mLayer = new LayerDrawable(mLayers);
                 mLayer.getDrawable(1).setAlpha((int) (255 * (mCrossfade)));
@@ -506,6 +545,8 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
                     mLayer.getDrawable(0).setAlpha((int) (255 * (1 - mCrossfade)));
                 }
                 super.setImageDrawable(mLayer);
+            } else {
+                mLayers[0] = mDrawable = getDrawable().mutate();
             }
         }
     }

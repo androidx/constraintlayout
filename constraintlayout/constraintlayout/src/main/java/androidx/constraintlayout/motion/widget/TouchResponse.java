@@ -254,8 +254,12 @@ class TouchResponse {
                     float change = drag * mDragScale / mAnchorDpDt[1];
 
                     pos = Math.max(Math.min(pos + change, 1), 0);
+                    float current = mMotionLayout.getProgress();
 
-                    if (pos != mMotionLayout.getProgress()) {
+                    if (pos != current) {
+                            if (current == 0.0f || current == 1.0f) {
+                                mMotionLayout.endTrigger(current == 0.0f);
+                            }
                         mMotionLayout.setProgress(pos);
                         velocityTracker.computeCurrentVelocity(SEC_TO_MILLISECONDS);
                         float tvx = velocityTracker.getXVelocity();
@@ -404,7 +408,11 @@ class TouchResponse {
                     }
                     pos = Math.max(Math.min(pos + change, 1), 0);
 
-                    if (pos != mMotionLayout.getProgress()) {
+                    float current = mMotionLayout.getProgress();
+                    if (pos != current) {
+                        if (current == 0.0f || current == 1.0f) {
+                            mMotionLayout.endTrigger(current == 0.0f);
+                        }
                         mMotionLayout.setProgress(pos);
                         if (DEBUG) {
                             Log.v(TAG, "# ACTION_MOVE progress <- " + pos);

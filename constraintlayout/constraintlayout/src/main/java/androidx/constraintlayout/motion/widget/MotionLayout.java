@@ -1366,8 +1366,10 @@ public class MotionLayout extends ConstraintLayout implements
                 // If the last drawn position isn't the same, we might have to make sure we apply the
                 // corresponding constraintset.
                 if (pos == 0) {
+                    endTrigger(true);
                     mScene.getConstraintSet(mBeginState).applyTo(this);
                 } else if (pos == 1) {
+                    endTrigger(true);
                     mScene.getConstraintSet(mEndState).applyTo(this);
                 }
             }
@@ -3406,6 +3408,17 @@ public class MotionLayout extends ConstraintLayout implements
         }
         if (mMeasureDuringTransition) {
             requestLayout();
+        }
+    }
+
+    void endTrigger(boolean start) {
+        int n = getChildCount();
+        for (int i = 0; i < n; i++) {
+            final View child = getChildAt(i);
+            final MotionController frame = mFrameArrayList.get(child);
+            if (frame != null) {
+                frame.endTrigger(start);
+            }
         }
     }
 

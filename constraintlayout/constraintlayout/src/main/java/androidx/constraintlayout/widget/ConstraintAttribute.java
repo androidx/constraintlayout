@@ -20,14 +20,13 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-
-import androidx.constraintlayout.motion.widget.Debug;
-
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.util.Xml;
 import android.view.View;
+
+import androidx.constraintlayout.motion.widget.Debug;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -370,8 +369,6 @@ public class ConstraintAttribute {
                 case REFERENCE_TYPE:
                     method = viewClass.getMethod(methodName, Integer.TYPE);
                     method.invoke(view, this.mIntegerValue);
-                    if (AttributeType.REFERENCE_TYPE == mType)
-                        Log.v(TAG, " call ing " + methodName + "  " + Debug.getName(view.getContext(), this.mIntegerValue));
                     break;
                 case FLOAT_TYPE:
                     method = viewClass.getMethod(methodName, Float.TYPE);

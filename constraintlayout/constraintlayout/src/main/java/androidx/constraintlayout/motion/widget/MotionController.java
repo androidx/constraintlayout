@@ -1206,7 +1206,15 @@ public class MotionController {
             }
         }
         return adjusted;
+    }
 
+    void endTrigger(boolean start) {
+        if ("button".equals(Debug.getName(mView)))
+            if (mKeyTriggers != null) {
+                for (int i = 0; i < mKeyTriggers.length; i++) {
+                    mKeyTriggers[i].conditionallyFire(start ? -100 : 100, mView);
+                }
+            }
     }
 
     /**
