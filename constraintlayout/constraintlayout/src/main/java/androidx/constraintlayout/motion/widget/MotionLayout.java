@@ -1369,7 +1369,7 @@ public class MotionLayout extends ConstraintLayout implements
                     endTrigger(true);
                     mScene.getConstraintSet(mBeginState).applyTo(this);
                 } else if (pos == 1) {
-                    endTrigger(true);
+                    endTrigger(false);
                     mScene.getConstraintSet(mEndState).applyTo(this);
                 }
             }

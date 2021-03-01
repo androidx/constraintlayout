@@ -19,17 +19,15 @@ package androidx.constraintlayout.motion.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.RectF;
-
-import androidx.constraintlayout.widget.R;
-import androidx.core.widget.NestedScrollView;
-
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Xml;
 import android.view.MotionEvent;
-import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.constraintlayout.widget.R;
+import androidx.core.widget.NestedScrollView;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -63,7 +61,7 @@ class TouchResponse {
     private float mLastTouchX, mLastTouchY;
     private final MotionLayout mMotionLayout;
     private final static int SEC_TO_MILLISECONDS = 1000;
-    private final static float EPSILON =  0.0000001f;
+    private final static float EPSILON = 0.0000001f;
 
     private static final float[][] TOUCH_SIDES = {
             {0.5f, 0.0f}, // top
@@ -213,7 +211,7 @@ class TouchResponse {
 
                 float rcx = mMotionLayout.getWidth() / 2.0f;
                 float rcy = mMotionLayout.getHeight() / 2.0f;
-                if (mRotationCenterId !=   MotionScene.UNSET) {
+                if (mRotationCenterId != MotionScene.UNSET) {
                     View v = mMotionLayout.findViewById(mRotationCenterId);
                     rcx = (v.getLeft() + v.getRight()) / 2.0f;
                     rcy = (v.getTop() + v.getBottom()) / 2.0f;
@@ -257,9 +255,9 @@ class TouchResponse {
                     float current = mMotionLayout.getProgress();
 
                     if (pos != current) {
-                            if (current == 0.0f || current == 1.0f) {
-                                mMotionLayout.endTrigger(current == 0.0f);
-                            }
+                        if (current == 0.0f || current == 1.0f) {
+                            mMotionLayout.endTrigger(current == 0.0f);
+                        }
                         mMotionLayout.setProgress(pos);
                         velocityTracker.computeCurrentVelocity(SEC_TO_MILLISECONDS);
                         float tvx = velocityTracker.getXVelocity();
@@ -284,7 +282,7 @@ class TouchResponse {
                 float pos = currentPos;
                 rcx = mMotionLayout.getWidth() / 2.0f;
                 rcy = mMotionLayout.getHeight() / 2.0f;
-                if (mRotationCenterId !=   MotionScene.UNSET) {
+                if (mRotationCenterId != MotionScene.UNSET) {
                     View v = mMotionLayout.findViewById(mRotationCenterId);
                     rcx = (v.getLeft() + v.getRight()) / 2.0f;
                     rcy = (v.getTop() + v.getBottom()) / 2.0f;
@@ -304,16 +302,16 @@ class TouchResponse {
                 } else {
                     mAnchorDpDt[1] = 360;
                 }
-                  angle2 = Math.toDegrees(Math.atan2(tvy+relativePosY, tvx+relativePosX));
-                drag = (float) ((angle2 -angle1));
-                float velocity_tweek = SEC_TO_MILLISECONDS/16f;
+                angle2 = Math.toDegrees(Math.atan2(tvy + relativePosY, tvx + relativePosX));
+                drag = (float) ((angle2 - angle1));
+                float velocity_tweek = SEC_TO_MILLISECONDS / 16f;
                 float angularVelocity = drag * velocity_tweek;
                 if (!Float.isNaN(angularVelocity)) {
-                    pos +=    3* angularVelocity  * mDragScale / mAnchorDpDt[1]; // TODO calibration & animation speed based on velocity
+                    pos += 3 * angularVelocity * mDragScale / mAnchorDpDt[1]; // TODO calibration & animation speed based on velocity
                 }
                 if (pos != 0.0f && pos != 1.0f && mOnTouchUp != MotionLayout.TOUCH_UP_STOP) {
-                    angularVelocity = (float) angularVelocity  * mDragScale / mAnchorDpDt[1];
-                    mMotionLayout.touchAnimateTo(mOnTouchUp, (pos < 0.5) ? 0.0f : 1.0f,  3*angularVelocity);
+                    angularVelocity = (float) angularVelocity * mDragScale / mAnchorDpDt[1];
+                    mMotionLayout.touchAnimateTo(mOnTouchUp, (pos < 0.5) ? 0.0f : 1.0f, 3 * angularVelocity);
                     if (0.0f >= currentPos || 1.0f <= currentPos) {
                         mMotionLayout.setState(MotionLayout.TransitionState.FINISHED);
                     }
