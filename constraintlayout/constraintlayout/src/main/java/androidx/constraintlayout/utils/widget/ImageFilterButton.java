@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.ViewOutlineProvider;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.R;
 
 /**
@@ -89,9 +90,11 @@ public class ImageFilterButton extends androidx.appcompat.widget.AppCompatImageB
     ViewOutlineProvider mViewOutlineProvider;
     RectF mRect;
 
-    Drawable[] mLayers;
+    Drawable[] mLayers = new Drawable[2];
     LayerDrawable mLayer;
     private boolean mOverlay = true;
+    private Drawable mAltDrawable = null;
+    private Drawable mDrawable = null;
 
     public ImageFilterButton(Context context) {
         super(context);
@@ -114,7 +117,7 @@ public class ImageFilterButton extends androidx.appcompat.widget.AppCompatImageB
             TypedArray a = getContext()
                     .obtainStyledAttributes(attrs, R.styleable.ImageFilterView);
             final int N = a.getIndexCount();
-            Drawable drawable = a.getDrawable(R.styleable.ImageFilterView_altSrc);
+            mAltDrawable = a.getDrawable(R.styleable.ImageFilterView_altSrc);
 
             for (int i = 0; i < N; i++) {
                 int attr = a.getIndex(i);
@@ -148,10 +151,10 @@ public class ImageFilterButton extends androidx.appcompat.widget.AppCompatImageB
             }
             a.recycle();
 
-            if (drawable != null) {
-                mLayers = new Drawable[2];
-                mLayers[0] = getDrawable();
-                mLayers[1] = drawable;
+            if (mAltDrawable != null) {
+
+                mLayers[0] = mDrawable = getDrawable().mutate();
+                mLayers[1] = mAltDrawable.mutate();
 
                 mLayer = new LayerDrawable(mLayers);
                 mLayer.getDrawable(1).setAlpha((int) (255 * (mCrossfade)));
@@ -159,6 +162,8 @@ public class ImageFilterButton extends androidx.appcompat.widget.AppCompatImageB
                     mLayer.getDrawable(0).setAlpha((int) (255 * (1 - mCrossfade)));
                 }
                 super.setImageDrawable(mLayer);
+            } else {
+                mLayers[0] = mDrawable = getDrawable().mutate();
             }
         }
     }
@@ -264,6 +269,48 @@ public class ImageFilterButton extends androidx.appcompat.widget.AppCompatImageB
     public void setImageRotate(float rotation) {
         mRotate = rotation;
         updateViewMatrix();
+    }
+
+    @Override
+    public void setImageDrawable(Drawable drawable) {
+        if (mAltDrawable != null) {
+            mDrawable = drawable.mutate();
+            mLayers[0] = mDrawable;
+            mLayers[1] = mAltDrawable;
+            mLayer = new LayerDrawable(mLayers);
+            super.setImageDrawable(mLayer);
+            setCrossfade(mCrossfade);
+        } else {
+            super.setImageDrawable(drawable);
+        }
+    }
+
+    @Override
+    public void setImageResource(int resId) {
+        if (mAltDrawable != null) {
+            mDrawable = AppCompatResources.getDrawable(getContext(), resId).mutate();
+            mLayers[0] = mDrawable;
+            mLayers[1] = mAltDrawable;
+            mLayer = new LayerDrawable(mLayers);
+            super.setImageDrawable(mLayer);
+            setCrossfade(mCrossfade);
+        } else {
+            super.setImageResource(resId);
+        }
+    }
+
+    /**
+     * Set the alternative image used to cross fade to.
+     *
+     * @param resId
+     */
+    public void setAltImageResource(int resId) {
+        mAltDrawable = AppCompatResources.getDrawable(getContext(), resId).mutate();
+        mLayers[0] = mDrawable;
+        mLayers[1] = mAltDrawable;
+        mLayer = new LayerDrawable(mLayers);
+        super.setImageDrawable(mLayer);
+        setCrossfade(mCrossfade);
     }
 
     private void updateViewMatrix() {
@@ -382,6 +429,7 @@ public class ImageFilterButton extends androidx.appcompat.widget.AppCompatImageB
      * @param crossfade a number from 0 to 1
      */
     public void setCrossfade(float crossfade) {
+
         mCrossfade = crossfade;
         if (mLayers != null) {
             if (!mOverlay) {
