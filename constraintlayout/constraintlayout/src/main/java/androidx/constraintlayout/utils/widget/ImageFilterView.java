@@ -404,7 +404,7 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
 
     @Override
     public void setImageDrawable(Drawable drawable) {
-        if (mAltDrawable != null) {
+        if (mAltDrawable != null && drawable !=null) {
             mDrawable = drawable.mutate();
             mLayers[0] = mDrawable;
             mLayers[1] = mAltDrawable;
@@ -535,7 +535,8 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
             }
             a.recycle();
 
-            if (mAltDrawable != null) {
+            if (mAltDrawable != null && mDrawable != null) {
+
                 mLayers[0] = mDrawable = getDrawable().mutate();
                 mLayers[1] = mAltDrawable.mutate();
 
@@ -546,7 +547,10 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
                 }
                 super.setImageDrawable(mLayer);
             } else {
-                mLayers[0] = mDrawable = getDrawable().mutate();
+                mDrawable = getDrawable();
+                if (mDrawable != null) {
+                    mLayers[0] = mDrawable = mDrawable.mutate();
+                }
             }
         }
     }
