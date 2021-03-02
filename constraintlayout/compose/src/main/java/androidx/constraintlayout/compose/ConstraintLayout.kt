@@ -1122,6 +1122,9 @@ class State(val density: Density) : SolverState() {
 
     override fun reset() {
         // TODO(b/158197001): this should likely be done by the solver
+        mReferences.forEach { ref ->
+            ref.value?.constraintWidget?.reset()
+        }
         mReferences.clear()
         mReferences[PARENT] = mParent
         super.reset()
