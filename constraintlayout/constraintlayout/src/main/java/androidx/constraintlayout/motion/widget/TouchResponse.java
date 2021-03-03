@@ -58,6 +58,7 @@ class TouchResponse {
     private float mTouchDirectionY = 1;
     private boolean mDragStarted = false;
     private float[] mAnchorDpDt = new float[2];
+    private int[] mTempLoc = new int[2];
     private float mLastTouchX, mLastTouchY;
     private final MotionLayout mMotionLayout;
     private final static int SEC_TO_MILLISECONDS = 1000;
@@ -200,10 +201,10 @@ class TouchResponse {
 
                 mLastTouchX = event.getRawX();
                 mLastTouchY = event.getRawY();
+
                 mDragStarted = false;
                 break;
             case MotionEvent.ACTION_MOVE:
-
                 float dy = event.getRawY() - mLastTouchY;
                 float dx = event.getRawX() - mLastTouchX;
 
@@ -213,16 +214,18 @@ class TouchResponse {
                 float rcy = mMotionLayout.getHeight() / 2.0f;
                 if (mRotationCenterId != MotionScene.UNSET) {
                     View v = mMotionLayout.findViewById(mRotationCenterId);
-                    rcx = (v.getLeft() + v.getRight()) / 2.0f;
-                    rcy = (v.getTop() + v.getBottom()) / 2.0f;
+                    mMotionLayout.getLocationOnScreen(mTempLoc);
+                    rcx = mTempLoc[0] + (v.getLeft() + v.getRight()) / 2.0f;
+                    rcy = mTempLoc[1] + (v.getTop() + v.getBottom()) / 2.0f;
                 } else if (mTouchAnchorId != MotionScene.UNSET) {
                     MotionController mc = mMotionLayout.getMotionController(mTouchAnchorId);
                     View v = mMotionLayout.findViewById(mc.getAnimateRelativeTo());
                     if (v == null) {
                         Log.e(TAG, "could not find view to animate to");
                     } else {
-                        rcx = (v.getLeft() + v.getRight()) / 2.0f;
-                        rcy = (v.getTop() + v.getBottom()) / 2.0f;
+                        mMotionLayout.getLocationOnScreen(mTempLoc);
+                        rcx = mTempLoc[0] + (v.getLeft() + v.getRight()) / 2.0f;
+                        rcy = mTempLoc[1] + (v.getTop() + v.getBottom()) / 2.0f;
                     }
                 }
                 float relativePosX = event.getRawX() - rcx;
@@ -284,13 +287,15 @@ class TouchResponse {
                 rcy = mMotionLayout.getHeight() / 2.0f;
                 if (mRotationCenterId != MotionScene.UNSET) {
                     View v = mMotionLayout.findViewById(mRotationCenterId);
-                    rcx = (v.getLeft() + v.getRight()) / 2.0f;
-                    rcy = (v.getTop() + v.getBottom()) / 2.0f;
+                    mMotionLayout.getLocationOnScreen(mTempLoc);
+                    rcx = mTempLoc[0] + (v.getLeft() + v.getRight()) / 2.0f;
+                    rcy = mTempLoc[1] + (v.getTop() + v.getBottom()) / 2.0f;
                 } else if (mTouchAnchorId != MotionScene.UNSET) {
                     MotionController mc = mMotionLayout.getMotionController(mTouchAnchorId);
                     View v = mMotionLayout.findViewById(mc.getAnimateRelativeTo());
-                    rcx = (v.getLeft() + v.getRight()) / 2.0f;
-                    rcy = (v.getTop() + v.getBottom()) / 2.0f;
+                    mMotionLayout.getLocationOnScreen(mTempLoc);
+                    rcx = mTempLoc[0] + (v.getLeft() + v.getRight()) / 2.0f;
+                    rcy = mTempLoc[1] + (v.getTop() + v.getBottom()) / 2.0f;
                 }
                 relativePosX = event.getRawX() - rcx;
                 relativePosY = event.getRawY() - rcy;
