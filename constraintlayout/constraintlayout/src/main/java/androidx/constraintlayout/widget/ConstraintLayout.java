@@ -2847,6 +2847,10 @@ public class ConstraintLayout extends ViewGroup {
             super(WRAP_CONTENT, WRAP_CONTENT);
             TypedArray a = c.obtainStyledAttributes(attrs, R.styleable.ConstraintLayout_Layout);
             final int N = a.getIndexCount();
+            if (N == 0) {
+                // check if it's an include
+                throw new IllegalArgumentException("Invalid LayoutParams supplied to " + this);
+            }
 
             // let's first apply full margins if they are present.
             int margin = a.getDimensionPixelSize(R.styleable.ConstraintLayout_Layout_android_layout_margin, -1);
