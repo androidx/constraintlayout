@@ -86,13 +86,14 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         activity_map.put("verification_036", RotationActivity.class);
         activity_map.put("verification_038", RotationUsingRotateTo.class);
         activity_map.put("verification_039", RotationAngular.class);
+        activity_map.put("verification_350", CustomSwipeClick.class);
     }
 
     String s = AppCompatActivity.class.getName();
 
     private static boolean REVERSE = false;
 
-    private final String RUN_FIRST = "verification_041";
+    private final String RUN_FIRST = "verification_350";
     private final String LAYOUTS_MATCHES = "verification_\\d+";
 
     private static String SHOW_FIRST = "";
@@ -194,6 +195,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
 
                     @SuppressWarnings("unused")
                     float dur = (System.nanoTime() - start) * 1E-6f;
+
                     mSid = startId;
                     mEid = endId;
                 }
