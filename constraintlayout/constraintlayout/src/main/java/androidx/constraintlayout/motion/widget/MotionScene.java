@@ -511,7 +511,7 @@ public class MotionScene {
             for (TransitionOnClick onClick : mOnClicks) {
                 if (onClick.mTargetId == id) {
                     toRemove = onClick;
-                    return;
+                    break;
                 }
             }
             if (toRemove != null) {
