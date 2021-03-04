@@ -440,7 +440,7 @@ public class MotionScene {
         }
     }
 
-    public void viewTransition(int id, View ... view) {
+    public void viewTransition(int id, View... view) {
         mViewTransitionController.viewTransition(id, view);
     }
 
@@ -490,12 +490,41 @@ public class MotionScene {
         final static int TRANSITION_FLAG_FIRST_DRAW = 1;
         final static int TRANSITION_FLAG_INTRA_AUTO = 2;
 
+
+        public void setOnSwipe(OnSwipe onSwipe) {
+            mTouchResponse = (onSwipe == null) ? null : new TouchResponse(mMotionScene.mMotionLayout, onSwipe);
+        }
+
+        public void addOnClick(int id, int action) {
+            for (TransitionOnClick onClick : mOnClicks) {
+                if (onClick.mTargetId == id) {
+                    onClick.mMode = action;
+                    return;
+                }
+            }
+            TransitionOnClick click = new TransitionOnClick(this, id, action);
+            mOnClicks.add(click);
+        }
+
+        public void removeOnClick(int id) {
+            TransitionOnClick toRemove = null;
+            for (TransitionOnClick onClick : mOnClicks) {
+                if (onClick.mTargetId == id) {
+                    toRemove = onClick;
+                    break;
+                }
+            }
+            if (toRemove != null) {
+                mOnClicks.remove(toRemove);
+            }
+        }
+
         public int getLayoutDuringTransition() {
             return mLayoutDuringTransition;
         }
 
         public void setLayoutDuringTransition(int mode) {
-              mLayoutDuringTransition = mode;
+            mLayoutDuringTransition = mode;
         }
 
         public void addOnClick(Context context, XmlPullParser parser) {
@@ -582,10 +611,10 @@ public class MotionScene {
         }
 
         /*
-        *
+         *
          */
         public void addKeyFrame(KeyFrames keyFrames) {
-              mKeyFramesList.add(keyFrames);
+            mKeyFramesList.add(keyFrames);
         }
 
         /**
@@ -650,7 +679,6 @@ public class MotionScene {
          * for automatically switching to.
          *
          * @param enable
-         *
          * @deprecated This method should be called {@code setEnabled}, so that {@code isEnabled}
          * can be accessed as a <a href="https://developer.android.com/kotlin/interop#property_prefixes">property from Kotlin</a>.
          * Use {@link #setEnabled(boolean)} instead.
@@ -695,8 +723,8 @@ public class MotionScene {
             return 0 != (mTransitionFlags & flag);
         }
 
-        public void  setTransitionFlag(int flag) {
-             mTransitionFlags = flag;
+        public void setTransitionFlag(int flag) {
+            mTransitionFlags = flag;
         }
 
         public void setOnTouchUp(int touchUpMode) {
@@ -729,6 +757,11 @@ public class MotionScene {
                     }
                 }
                 a.recycle();
+            }
+            public TransitionOnClick( Transition transition, int id, int action) {
+                mTransition = transition;
+                mTargetId = id;
+                mMode = action;
             }
 
             public void addOnClickListeners(MotionLayout motionLayout, int currentState, Transition transition) {
@@ -875,7 +908,7 @@ public class MotionScene {
             fillFromAttributeList(motionScene, context, Xml.asAttributeSet(parser));
         }
 
-        public void setInterpolatorInfo(int interpolator, String interpolatorString, int interpolatorID){
+        public void setInterpolatorInfo(int interpolator, String interpolatorString, int interpolatorID) {
             mDefaultInterpolator = interpolator;
             mDefaultInterpolatorString = interpolatorString;
             mDefaultInterpolatorID = interpolatorID;
@@ -1191,7 +1224,6 @@ public class MotionScene {
                     break;
                 case "ConstraintRotate":
                     set.mRotate = Integer.parseInt(value);
-                    Log.v(TAG, Debug.getLoc()+"(@) rotate = "+ set.mRotate);
                     break;
             }
         }

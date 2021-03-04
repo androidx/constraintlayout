@@ -110,6 +110,34 @@ class TouchResponse {
         fillFromAttributeList(context, Xml.asAttributeSet(parser));
     }
 
+    public TouchResponse(MotionLayout layout, OnSwipe onSwipe) {
+        mMotionLayout = layout;
+        mTouchAnchorId = onSwipe.getTouchAnchorId();
+        mTouchAnchorSide = onSwipe.getTouchAnchorSide();
+        if (mTouchAnchorSide != -1) {
+            mTouchAnchorX = TOUCH_SIDES[mTouchAnchorSide][0];
+            mTouchAnchorY = TOUCH_SIDES[mTouchAnchorSide][1];
+        }
+        mTouchSide = onSwipe.getDragDirection();
+        if (mTouchSide < TOUCH_DIRECTION.length) {
+            mTouchDirectionX = TOUCH_DIRECTION[mTouchSide][0];
+            mTouchDirectionY = TOUCH_DIRECTION[mTouchSide][1];
+        } else {
+            mTouchDirectionX = mTouchDirectionY = Float.NaN;
+            mIsRotateMode = true;
+        }
+        mMaxVelocity = onSwipe.getMaxVelocity();
+        mMaxAcceleration = onSwipe.getMaxAcceleration();
+        mMoveWhenScrollAtTop = onSwipe.getMoveWhenScrollAtTop();
+        mDragScale = onSwipe.getDragScale();
+        mDragThreshold = onSwipe.getDragThreshold();
+        mTouchRegionId = onSwipe.getTouchRegionId();
+        mOnTouchUp = onSwipe.getOnTouchUp();
+        mFlags = onSwipe.getNestedScrollFlags();
+        mLimitBoundsTo = onSwipe.getLimitBoundsTo();
+        mRotationCenterId = onSwipe.getRotationCenterId();
+    }
+
     public void setRTL(boolean rtl) {
         if (rtl) {
             TOUCH_DIRECTION[TOUCH_START] = TOUCH_DIRECTION[TOUCH_RIGHT];
