@@ -4,46 +4,55 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layoutDescription="@xml/verification_scene_310"
-    app:layout_optimizationLevel="none"
     android:background="#777"
-    tools:context=".VerificationActivity">
+    app:layoutDescription="@xml/verification_scene_350"
+    app:layout_optimizationLevel="none"
+    tools:context=".CustomSwipeClick">
 
+    <Button
+        android:id="@+id/button11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="addSwipeUp"
+        android:text="swipe up"
+        app:layout_constraintEnd_toStartOf="@+id/button12"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/button12" />
 
-    <androidx.constraintlayout.utils.widget.ImageFilterView
-        android:id="@+id/imageFilterView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:src="@drawable/img3"
-        app:brightness=".9"
+    <Button
+        android:id="@+id/button12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="addSwipeRight"
+        android:text="Swipe right"
+        app:layout_constraintEnd_toStartOf="@+id/button13"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/button11"
+        app:layout_constraintTop_toTopOf="@+id/button13" />
 
-        app:saturation="0.7"
-
-        app:imageZoom="1.5"
-        app:layout_constraintBottom_toBottomOf="@id/label5"
-        app:layout_constraintEnd_toEndOf="@id/label5"
-        app:layout_constraintLeft_toLeftOf="@id/label5"
-        app:layout_constraintRight_toRightOf="@id/label5"
-        app:layout_constraintStart_toStartOf="@id/label5"
-        app:layout_constraintTop_toTopOf="@id/label5" />
-
-    <androidx.constraintlayout.utils.widget.MotionLabel
-        android:id="@+id/label5"
-        android:layout_width="0dp"
-        android:layout_height="300dp"
-        app:textPanX="-1.3"
-        app:textBackgroundZoom="1.5"
-        android:text="A world of Animated Text"
-        android:textSize="240sp"
-        app:textBackground="@drawable/img3"
-        app:textureEffect="frost"
+    <Button
+        android:id="@+id/button13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:onClick="addSwipeCircle"
+        android:text="swipe circle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/button12" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/imageView9"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.332"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        />
-
-
+        app:layout_constraintVertical_bias="0.842"
+        android:src="@drawable/avatar_1_raster"
+        app:altSrc="@drawable/avatar_6_raster" />
 </androidx.constraintlayout.motion.widget.MotionLayout>
