@@ -2205,6 +2205,9 @@ public class ConstraintWidget {
         if (LinearSystem.FULL_DEBUG) {
             System.out.println("\n----------------------------------------------");
             System.out.println("-- adding " + getDebugName() + " to the solver");
+            if (isInVirtualLayout()) {
+                System.out.println("-- note: is in virtual layout");
+            }
             System.out.println("----------------------------------------------\n");
         }
 

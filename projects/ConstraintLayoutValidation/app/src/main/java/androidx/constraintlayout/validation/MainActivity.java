@@ -660,7 +660,7 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
 //        list_view.setLayoutManager(linearLayoutManager);
 //        list_view.setAdapter(new Adapter339(getApplicationContext(), xVals));
 
-        setContentView(R.layout.check_423);
+        setContentView(R.layout.check_426);
 
         //setContentView(R.layout.check_251);
 //        setContentView(R.layout.check_024);

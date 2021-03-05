@@ -1,0 +1,43 @@
+{
+  "duration": "3018488",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "693",
+          "left": "0",
+          "bottom": "843",
+          "right": "150"
+        },
+        "id": "view32",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "693",
+          "left": "0",
+          "bottom": "843",
+          "right": "150"
+        },
+        "id": "flow3",
+        "class": "Flow"
+      },
+      {
+        "bounds": {
+          "top": "693",
+          "left": "0",
+          "bottom": "843",
+          "right": "150"
+        },
+        "class": "Flow"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "150"
+    },
+    "class": "ConstraintLayout"
+  }
+}
