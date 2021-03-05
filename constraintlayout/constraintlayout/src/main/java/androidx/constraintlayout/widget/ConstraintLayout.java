@@ -3114,14 +3114,18 @@ public class ConstraintLayout extends ViewGroup {
                         break;
                     }
                     case Table.LAYOUT_MARGIN_START: {
-                        if (margin == -1 && horizontalMargin == -1) {
-                            startMargin = a.getDimensionPixelSize(attr, startMargin);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                            if (margin == -1 && horizontalMargin == -1) {
+                                startMargin = a.getDimensionPixelSize(attr, startMargin);
+                            }
                         }
                         break;
                     }
                     case Table.LAYOUT_MARGIN_END: {
-                        if (margin == -1 && horizontalMargin == -1) {
-                            endMargin = a.getDimensionPixelSize(attr, endMargin);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                            if (margin == -1 && horizontalMargin == -1) {
+                                endMargin = a.getDimensionPixelSize(attr, endMargin);
+                            }
                         }
                         break;
                     }
@@ -3255,6 +3259,11 @@ public class ConstraintLayout extends ViewGroup {
                         break;
                     }
                 }
+            }
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                leftMargin = originalLeftMargin;
+                rightMargin = originalRightMargin;
             }
             a.recycle();
             validate();

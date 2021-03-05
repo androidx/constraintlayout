@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+   <!-- b/179692880 -->
+
+   <View
+       android:id="@+id/player_view"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       tools:layout_editor_absoluteX="0dp"
+       tools:layout_editor_absoluteY="0dp" />
+
+   <androidx.recyclerview.widget.RecyclerView
+       android:id="@+id/channels_recyclerview"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:visibility="gone"
+       android:layout_marginBottom="64dp"
+       app:layout_constraintLeft_toLeftOf="parent"
+       app:layout_constraintRight_toRightOf="parent"
+       app:layout_constraintTop_toBottomOf="@id/time"
+       app:layout_constraintBottom_toBottomOf="parent" />
+
+   <TextView
+       android:id="@+id/time"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginStart="84dp"
+       android:layout_marginLeft="84dp"
+       android:layout_marginTop="36dp"
+       android:background="#000000"
+       android:paddingHorizontal="26dp"
+       android:paddingVertical="8dp"
+       android:shadowColor="#FFFFFF"
+       android:textColor="#FFFFFF"
+       android:textSize="18sp"
+       android:textStyle="bold"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent" />
+
+   <Button
+       android:id="@+id/button_channel"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="36dp"
+       android:layout_marginEnd="64dp"
+       android:layout_marginRight="64dp"
+       android:paddingHorizontal="26dp"
+       android:paddingVertical="2dp"
+       app:layout_constraintRight_toRightOf="parent"
+       app:layout_constraintTop_toTopOf="parent" />
+
+   <TextView
+       android:id="@+id/date"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginStart="8dp"
+       android:layout_marginLeft="8dp"
+       android:layout_marginBottom="108dp"
+       android:background="#000000"
+       android:paddingHorizontal="16dp"
+       android:paddingVertical="8dp"
+       android:shadowColor="#FFFFFF"
+       android:textColor="#FFFFFF"
+       android:textSize="18sp"
+       android:textStyle="bold"
+       app:layout_constraintStart_toEndOf="@+id/time"
+       app:layout_constraintTop_toTopOf="@+id/time" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
