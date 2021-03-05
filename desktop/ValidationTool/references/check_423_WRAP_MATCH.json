@@ -1,0 +1,66 @@
+{
+  "duration": "1410075",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "1536",
+          "right": "1080"
+        },
+        "id": "player_view",
+        "class": "View"
+      },
+      {
+        "children": [],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "channels_recyclerview",
+        "class": "RecyclerView"
+      },
+      {
+        "bounds": {
+          "top": "108",
+          "left": "252",
+          "bottom": "229",
+          "right": "408"
+        },
+        "id": "time",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "108",
+          "left": "624",
+          "bottom": "252",
+          "right": "888"
+        },
+        "id": "button_channel",
+        "class": "MaterialButton"
+      },
+      {
+        "bounds": {
+          "top": "108",
+          "left": "432",
+          "bottom": "229",
+          "right": "528"
+        },
+        "id": "date",
+        "class": "MaterialTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "id": "container",
+    "class": "ConstraintLayout"
+  }
+}
