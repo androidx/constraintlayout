@@ -17,6 +17,8 @@ package androidx.constraintlayout.core.widgets;
 
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure;
 
+import java.util.HashSet;
+
 /**
  * @hide
  *
@@ -217,5 +219,15 @@ public class VirtualLayout extends HelperWidget {
         widget.setHeight(mMeasure.measuredHeight);
         widget.setHasBaseline(mMeasure.measuredHasBaseline);
         widget.setBaselineDistance(mMeasure.measuredBaseline);
+    }
+
+    public boolean contains(HashSet<ConstraintWidget> widgets) {
+        for (int i = 0; i < mWidgetsCount; i++) {
+            ConstraintWidget widget = mWidgets[i];
+            if (widgets.contains(widget)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

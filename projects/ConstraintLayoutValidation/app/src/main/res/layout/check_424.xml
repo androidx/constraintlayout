@@ -1,0 +1,76 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="20dp"
+    android:paddingTop="16dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="16dp">
+
+   <!-- issue #90 -->
+
+   <ImageView
+       android:id="@+id/icon"
+       android:layout_width="24dp"
+       android:layout_height="24dp"
+       android:importantForAccessibility="no"
+       android:scaleType="centerInside"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent" />
+
+   <TextView
+       android:id="@+id/title"
+       android:layout_width="0dp"
+       android:layout_height="wrap_content"
+       android:layout_marginStart="20dp"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toEndOf="@id/icon"
+       app:layout_constraintTop_toTopOf="@id/icon" />
+
+   <TextView
+       android:id="@+id/summary"
+       android:layout_width="0dp"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="4dp"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="@id/title"
+       app:layout_constraintTop_toBottomOf="@id/title" />
+
+   <androidx.constraintlayout.helper.widget.Flow
+       android:layout_width="0dp"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="4dp"
+       app:constraint_referenced_ids="button1,button2,button3"
+       app:flow_horizontalBias="0"
+       app:flow_horizontalGap="4dp"
+       app:flow_horizontalStyle="packed"
+       app:flow_wrapMode="chain"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="@id/title"
+       app:layout_constraintTop_toBottomOf="@id/summary" />
+
+   <Button
+       android:id="@+id/button1"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="123123123123123123"
+       tools:ignore="MissingConstraints" />
+
+   <Button
+       android:id="@+id/button2"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="123123"
+       tools:ignore="MissingConstraints" />
+
+   <Button
+       android:id="@+id/button3"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="123"
+       tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,83 @@
+{
+  "duration": "3833413",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "48",
+          "left": "60",
+          "bottom": "120",
+          "right": "132"
+        },
+        "id": "icon",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "48",
+          "left": "192",
+          "bottom": "105",
+          "right": "792"
+        },
+        "id": "title",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "117",
+          "left": "192",
+          "bottom": "174",
+          "right": "792"
+        },
+        "id": "summary",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "186",
+          "left": "192",
+          "bottom": "474",
+          "right": "792"
+        },
+        "class": "Flow"
+      },
+      {
+        "bounds": {
+          "top": "186",
+          "left": "192",
+          "bottom": "330",
+          "right": "792"
+        },
+        "id": "button1",
+        "class": "MaterialButton"
+      },
+      {
+        "bounds": {
+          "top": "330",
+          "left": "192",
+          "bottom": "474",
+          "right": "456"
+        },
+        "id": "button2",
+        "class": "MaterialButton"
+      },
+      {
+        "bounds": {
+          "top": "330",
+          "left": "468",
+          "bottom": "474",
+          "right": "732"
+        },
+        "id": "button3",
+        "class": "MaterialButton"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "522",
+      "right": "840"
+    },
+    "class": "ConstraintLayout"
+  }
+}

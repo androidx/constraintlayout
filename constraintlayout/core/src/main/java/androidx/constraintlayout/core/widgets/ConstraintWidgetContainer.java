@@ -317,6 +317,8 @@ public class ConstraintWidgetContainer extends WidgetContainer {
         mSystem.addGreaterThan(parentMax, variable, 0, wrapStrength);
     }
 
+    HashSet<ConstraintWidget> widgetsToAdd = new HashSet<>();
+
     /**
      * Add this widget to the solver
      *
@@ -353,10 +355,40 @@ public class ConstraintWidgetContainer extends WidgetContainer {
             }
         }
 
+        widgetsToAdd.clear();
         for (int i = 0; i < count; i++) {
             ConstraintWidget widget = mChildren.get(i);
             if (widget.addFirst()) {
-                widget.addToSolver(system, optimize);
+                if (widget instanceof VirtualLayout) {
+                    widgetsToAdd.add(widget);
+                } else {
+                    widget.addToSolver(system, optimize);
+                }
+            }
+        }
+
+        // If we have virtual layouts, we need to add them to the solver in the correct
+        // order (in case they reference one another)
+        while (widgetsToAdd.size() > 0) {
+            int numLayouts = widgetsToAdd.size();
+            VirtualLayout layout = null;
+            for (ConstraintWidget widget : widgetsToAdd) {
+                layout = (VirtualLayout) widget;
+
+                // we'll go through the virtual layouts that references others first, to give
+                // them a shot at setting their constraints.
+                if (layout.contains(widgetsToAdd)) {
+                    layout.addToSolver(system, optimize);
+                    widgetsToAdd.remove(layout);
+                    break;
+                }
+            }
+            if (numLayouts == widgetsToAdd.size()) {
+                // looks we didn't find anymore dependency, let's add everything.
+                for (ConstraintWidget widget : widgetsToAdd) {
+                    widget.addToSolver(system, optimize);
+                }
+                widgetsToAdd.clear();
             }
         }
 
