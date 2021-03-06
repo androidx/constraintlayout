@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+   <!-- b/177928784 -->
+
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:id="@+id/t1"
+       android:text="😅 1"
+       />
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:id="@+id/t2"
+       android:text="😅 2"
+       />
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:id="@+id/t3"
+       android:text="😅 3"
+       />
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:id="@+id/t4"
+       android:text="😅 4"
+       />
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:id="@+id/t5"
+       android:text="😅 5"
+       />
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:id="@+id/t6"
+       android:text="😅 6"
+       />
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:id="@+id/t7"
+       android:text="😅 7"
+       />
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:id="@+id/t8"
+       android:text="😅 8"
+       />
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:id="@+id/t9"
+       android:text="😅 9"
+       />
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:id="@+id/t10"
+       android:text="😅 10"
+       />
+
+   <androidx.constraintlayout.helper.widget.Flow
+       android:id="@+id/flow"
+       android:layout_width="0dp"
+       android:layout_height="wrap_content"
+       android:layout_marginStart="80dp"
+       android:layout_marginTop="4dp"
+       app:constraint_referenced_ids="t1,t2,t3,t4,t5,t6,t7,t8,t9,t10"
+       app:flow_horizontalBias="1"
+       app:flow_horizontalGap="8dp"
+       app:flow_horizontalStyle="packed"
+       app:flow_verticalBias="0"
+       app:flow_verticalGap="4dp"
+       app:flow_wrapMode="chain"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
