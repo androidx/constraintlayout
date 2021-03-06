@@ -1,0 +1,33 @@
+{
+  "duration": "97136",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "view",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "768",
+          "left": "0",
+          "bottom": "768",
+          "right": "1080"
+        },
+        "class": "Flow"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}
