@@ -35,6 +35,7 @@ public class BasicTest {
             if (verticalBehavior == ConstraintWidget.DimensionBehaviour.FIXED) {
                 measure.measuredHeight = verticalDimension;
             }
+            widget.setMeasureRequested(false);
         }
 
         @Override
@@ -1134,4 +1135,51 @@ public class BasicTest {
 //        assertEquals(barrier2.getTop(), B.getTop());
 
     }
+
+
+    @Test
+    public void testDirectCentering() {
+        ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 192, 168);
+        root.setMeasurer(sMeasurer);
+        ConstraintWidget A = new ConstraintWidget(43, 43);
+        ConstraintWidget B = new ConstraintWidget(59, 59);
+        root.setDebugName("root");
+        A.setDebugName("A");
+        B.setDebugName("B");
+        root.add(B);
+        root.add(A);
+
+        B.connect(ConstraintAnchor.Type.TOP, A, ConstraintAnchor.Type.TOP);
+        B.connect(ConstraintAnchor.Type.LEFT, A, ConstraintAnchor.Type.LEFT);
+        B.connect(ConstraintAnchor.Type.RIGHT, A, ConstraintAnchor.Type.RIGHT);
+        B.connect(ConstraintAnchor.Type.BOTTOM, A, ConstraintAnchor.Type.BOTTOM);
+
+        A.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        A.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
+        A.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT);
+        A.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM);
+
+        root.setOptimizationLevel(Optimizer.OPTIMIZATION_NONE);
+        root.measure(Optimizer.OPTIMIZATION_NONE, EXACTLY, 100, EXACTLY, 100, 0, 0, 0, 0);
+
+        System.out.println("0) root: " + root);
+        System.out.println("1) A: " + A);
+        System.out.println("2) B: " + B);
+        assertEquals(A.getTop(), 63);
+        assertEquals(A.getLeft(), 75);
+        assertEquals(B.getTop(), 55);
+        assertEquals(B.getLeft(), 67);
+
+        root.setOptimizationLevel(Optimizer.OPTIMIZATION_STANDARD);
+        root.measure(Optimizer.OPTIMIZATION_STANDARD, EXACTLY, 100, EXACTLY, 100, 0, 0, 0, 0);
+
+        System.out.println("0) root: " + root);
+        System.out.println("1) A: " + A);
+        System.out.println("2) B: " + B);
+        assertEquals(63, A.getTop());
+        assertEquals(75, A.getLeft());
+        assertEquals(55, B.getTop());
+        assertEquals(67, B.getLeft());
+    }
+
 }
