@@ -1,24 +1,115 @@
 {
-  "duration": "97136",
+  "duration": "19447000",
   "layout": {
     "children": [
       {
         "bounds": {
-          "top": "0",
-          "left": "0",
-          "bottom": "0",
-          "right": "0"
+          "top": "12",
+          "left": "334",
+          "bottom": "69",
+          "right": "420"
         },
-        "id": "view",
-        "class": "View"
+        "id": "t1",
+        "class": "MaterialTextView"
       },
       {
         "bounds": {
-          "top": "768",
-          "left": "0",
-          "bottom": "768",
+          "top": "12",
+          "left": "444",
+          "bottom": "69",
+          "right": "530"
+        },
+        "id": "t2",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "12",
+          "left": "554",
+          "bottom": "69",
+          "right": "640"
+        },
+        "id": "t3",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "12",
+          "left": "664",
+          "bottom": "69",
+          "right": "750"
+        },
+        "id": "t4",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "12",
+          "left": "774",
+          "bottom": "69",
+          "right": "860"
+        },
+        "id": "t5",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "12",
+          "left": "884",
+          "bottom": "69",
+          "right": "970"
+        },
+        "id": "t6",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "12",
+          "left": "994",
+          "bottom": "69",
           "right": "1080"
         },
+        "id": "t7",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "81",
+          "left": "750",
+          "bottom": "138",
+          "right": "836"
+        },
+        "id": "t8",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "81",
+          "left": "860",
+          "bottom": "138",
+          "right": "946"
+        },
+        "id": "t9",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "81",
+          "left": "970",
+          "bottom": "138",
+          "right": "1080"
+        },
+        "id": "t10",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "12",
+          "left": "240",
+          "bottom": "138",
+          "right": "1080"
+        },
+        "id": "flow",
         "class": "Flow"
       }
     ],
@@ -28,6 +119,7 @@
       "bottom": "1536",
       "right": "1080"
     },
+    "id": "container",
     "class": "ConstraintLayout"
   }
 }

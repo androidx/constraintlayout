@@ -110,6 +110,9 @@ public class Barrier extends HelperWidget {
     protected void markWidgets() {
         for (int i = 0; i < mWidgetsCount; i++) {
             ConstraintWidget widget = mWidgets[i];
+            if (!mAllowsGoneWidget && !widget.allowedInBarrier()) {
+                continue;
+            }
             if (mBarrierType == LEFT || mBarrierType == RIGHT) {
                 widget.setInBarrier(HORIZONTAL, true);
             } else if (mBarrierType == TOP || mBarrierType == BOTTOM) {
