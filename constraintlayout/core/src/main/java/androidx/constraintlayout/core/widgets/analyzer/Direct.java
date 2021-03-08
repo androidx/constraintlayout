@@ -582,7 +582,12 @@ public class Direct {
         if (s1 > s2) {
             distance = s1 - s2 - width;
         }
-        int d1 = (int) (0.5f + bias * distance);
+        int d1;
+        if (distance > 0) {
+            d1 = (int) (0.5f + bias * distance);
+        } else {
+            d1 = (int) (bias * distance);
+        }
         x1 = s1 + d1;
         x2 = x1 + width;
         if (s1 > s2) {
@@ -618,7 +623,12 @@ public class Direct {
         if (s1 > s2) {
             distance = s1 - s2 - height;
         }
-        int d1 = (int) (0.5f + bias * distance);
+        int d1;
+        if (distance > 0) {
+            d1 = (int) (0.5f + bias * distance);
+        } else {
+            d1 = (int) (bias * distance);
+        }
         y1 = s1 + d1;
         y2 = y1 + height;
         if (s1 > s2) {
