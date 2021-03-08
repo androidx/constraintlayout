@@ -1,5 +1,5 @@
 {
-  "duration": "347500",
+  "duration": "321628",
   "layout": {
     "children": [
       {
@@ -15,7 +15,7 @@
       {
         "bounds": {
           "top": "0",
-          "left": "810",
+          "left": "751",
           "bottom": "417",
           "right": "1080"
         },
@@ -25,9 +25,9 @@
       {
         "bounds": {
           "top": "30",
-          "left": "810",
+          "left": "781",
           "bottom": "300",
-          "right": "1080"
+          "right": "1051"
         },
         "id": "image",
         "class": "AppCompatImageView"
@@ -35,7 +35,7 @@
       {
         "bounds": {
           "top": "300",
-          "left": "1020",
+          "left": "751",
           "bottom": "417",
           "right": "1080"
         },
@@ -45,19 +45,19 @@
       {
         "bounds": {
           "top": "0",
-          "left": "810",
+          "left": "751",
           "bottom": "0",
-          "right": "810"
+          "right": "751"
         },
         "id": "barrierStart",
         "class": "Barrier"
       },
       {
         "bounds": {
-          "top": "0",
-          "left": "0",
-          "bottom": "0",
-          "right": "0"
+          "top": "375",
+          "left": "709",
+          "bottom": "411",
+          "right": "745"
         },
         "id": "message_progressbar",
         "class": "ProgressBar"
@@ -65,7 +65,7 @@
       {
         "bounds": {
           "top": "426",
-          "left": "1080",
+          "left": "800",
           "bottom": "467",
           "right": "1080"
         },

@@ -1,0 +1,104 @@
+{
+  "duration": "349362",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "60",
+          "left": "45",
+          "bottom": "180",
+          "right": "165"
+        },
+        "id": "portraitImage",
+        "class": "View"
+      },
+      {
+        "bounds": {
+          "top": "60",
+          "left": "195",
+          "bottom": "117",
+          "right": "286"
+        },
+        "id": "authorText",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "127",
+          "left": "195",
+          "bottom": "180",
+          "right": "359"
+        },
+        "id": "createTimeText",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "210",
+          "left": "195",
+          "bottom": "267",
+          "right": "339"
+        },
+        "id": "ratingView",
+        "class": "MaterialTextView"
+      },
+      {
+        "children": [{
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "195",
+            "right": "195"
+          },
+          "id": "productImage",
+          "class": "AppCompatImageView"
+        }],
+        "bounds": {
+          "top": "210",
+          "left": "240",
+          "bottom": "405",
+          "right": "435"
+        },
+        "id": "productImageContainer",
+        "class": "CardView"
+      },
+      {
+        "bounds": {
+          "top": "291",
+          "left": "195",
+          "bottom": "1827",
+          "right": "195"
+        },
+        "id": "titleText",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "1536",
+          "left": "0",
+          "bottom": "1536",
+          "right": "0"
+        },
+        "id": "titleBarrier",
+        "class": "Barrier"
+      },
+      {
+        "bounds": {
+          "top": "1857",
+          "left": "195",
+          "bottom": "2183",
+          "right": "420"
+        },
+        "id": "commentText",
+        "class": "MaterialTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "465"
+    },
+    "class": "ConstraintLayout"
+  }
+}
