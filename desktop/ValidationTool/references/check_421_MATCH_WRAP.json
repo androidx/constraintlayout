@@ -1,5 +1,5 @@
 {
-  "duration": "781000",
+  "duration": "292276",
   "layout": {
     "children": [{
       "children": [
@@ -45,9 +45,9 @@
         },
         {
           "bounds": {
-            "top": "169",
+            "top": "243",
             "left": "866",
-            "bottom": "229",
+            "bottom": "303",
             "right": "1016"
           },
           "id": "ivOptions",
@@ -55,9 +55,9 @@
         },
         {
           "bounds": {
-            "top": "229",
+            "top": "303",
             "left": "48",
-            "bottom": "229",
+            "bottom": "303",
             "right": "48"
           },
           "id": "barrier",
@@ -65,9 +65,9 @@
         },
         {
           "bounds": {
-            "top": "277",
+            "top": "351",
             "left": "48",
-            "bottom": "334",
+            "bottom": "408",
             "right": "818"
           },
           "id": "tvFooter",
@@ -77,7 +77,7 @@
       "bounds": {
         "top": "11",
         "left": "8",
-        "bottom": "393",
+        "bottom": "467",
         "right": "1072"
       },
       "id": "clContent",
@@ -86,7 +86,7 @@
     "bounds": {
       "top": "18",
       "left": "18",
-      "bottom": "404",
+      "bottom": "478",
       "right": "1080"
     },
     "class": "CardView"

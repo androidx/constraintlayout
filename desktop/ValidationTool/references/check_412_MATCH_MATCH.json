@@ -1,12 +1,12 @@
 {
-  "duration": "2062000",
+  "duration": "157910",
   "layout": {
     "children": [
       {
         "bounds": {
-          "top": "456",
+          "top": "457",
           "left": "0",
-          "bottom": "585",
+          "bottom": "586",
           "right": "452"
         },
         "id": "textview1",

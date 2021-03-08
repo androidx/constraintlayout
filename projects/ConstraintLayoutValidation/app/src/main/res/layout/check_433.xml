@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#FF0"
+    app:layout_optimizationLevel="none"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+   <!-- b/174070152 -->
+
+   <View
+       android:id="@+id/portraitImage"
+       android:layout_width="40dp"
+       android:layout_height="40dp"
+       android:layout_marginStart="15dp"
+       android:layout_marginTop="20dp"
+       android:background="@color/colorAccent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent" />
+
+   <TextView
+       android:id="@+id/authorText"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginStart="10dp"
+       android:text="Alice"
+       android:textSize="14sp"
+       app:layout_constraintStart_toEndOf="@+id/portraitImage"
+       app:layout_constraintTop_toTopOf="@+id/portraitImage" />
+
+   <TextView
+       android:id="@+id/createTimeText"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="date time"
+       android:textSize="13sp"
+       app:layout_constraintBottom_toBottomOf="@+id/portraitImage"
+       app:layout_constraintStart_toStartOf="@+id/authorText" />
+
+   <TextView
+       android:id="@+id/ratingView"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="10dp"
+       android:text="123123"
+       app:layout_constraintStart_toStartOf="@+id/createTimeText"
+       app:layout_constraintTop_toBottomOf="@+id/createTimeText" />
+
+   <androidx.cardview.widget.CardView
+       android:id="@+id/productImageContainer"
+       android:layout_width="65dp"
+       android:layout_height="65dp"
+       android:layout_marginEnd="10dp"
+       android:layout_marginBottom="20dp"
+       app:cardCornerRadius="5dp"
+       app:cardElevation="0dp"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintTop_toTopOf="@+id/ratingView"
+       app:layout_constraintVertical_bias="0">
+
+      <ImageView
+          android:id="@+id/productImage"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="@color/colorAccent"
+          android:scaleType="centerCrop" />
+   </androidx.cardview.widget.CardView>
+
+   <TextView
+       android:id="@+id/titleText"
+       android:layout_width="0dp"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="8dp"
+       android:layout_marginEnd="15dp"
+       android:layout_marginBottom="20dp"
+       android:lineSpacingExtra="7sp"
+       android:text="multi lines description\nmulti lines description\nmulti lines description"
+       android:textSize="13sp"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toStartOf="@+id/productImageContainer"
+       app:layout_constraintStart_toStartOf="@+id/ratingView"
+       app:layout_constraintTop_toBottomOf="@+id/ratingView"
+       app:layout_constraintVertical_bias="0" />
+
+   <androidx.constraintlayout.widget.Barrier
+       android:id="@+id/titleBarrier"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       app:barrierDirection="bottom"
+       app:constraint_referenced_ids="titleText,productImageContainer" />
+
+   <TextView
+       android:id="@+id/commentText"
+       android:layout_width="0dp"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="10dp"
+       android:layout_marginEnd="15dp"
+       android:layout_marginBottom="20dp"
+       android:text="multi lines comment\nmulti lines comment\nmulti lines comment"
+       android:textColor="#4a4a4a"
+       android:textSize="15sp"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="@+id/titleText"
+       app:layout_constraintTop_toBottomOf="@+id/titleText"
+       app:layout_constraintVertical_bias="0" />
+
+<!--   <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--       android:id="@+id/customerServiceContainer"-->
+<!--       android:layout_width="0dp"-->
+<!--       android:layout_height="wrap_content"-->
+<!--       android:layout_marginTop="10dp"-->
+<!--       android:layout_marginEnd="15dp"-->
+<!--       android:layout_marginBottom="10dp"-->
+<!--       android:background="@color/colorAccent"-->
+<!--       android:paddingHorizontal="10dp"-->
+<!--       android:paddingTop="13dp"-->
+<!--       android:paddingBottom="10dp"-->
+<!--       app:layout_constraintBottom_toBottomOf="parent"-->
+<!--       app:layout_constraintEnd_toEndOf="parent"-->
+<!--       app:layout_constraintStart_toStartOf="@+id/authorText"-->
+<!--       app:layout_constraintTop_toBottomOf="@+id/commentText"-->
+<!--       app:layout_constraintVertical_bias="0">-->
+
+<!--      <ImageView-->
+<!--          android:id="@+id/customerServiceImage"-->
+<!--          android:layout_width="40dp"-->
+<!--          android:layout_height="40dp"-->
+<!--          android:layout_marginTop="15dp"-->
+<!--          android:background="@color/colorPrimary"-->
+<!--          app:layout_constraintStart_toStartOf="parent"-->
+<!--          app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--      <TextView-->
+<!--          android:id="@+id/customerServiceText"-->
+<!--          android:layout_width="wrap_content"-->
+<!--          android:layout_height="wrap_content"-->
+<!--          android:layout_marginStart="10dp"-->
+<!--          android:lineSpacingExtra="6sp"-->
+<!--          android:text="123123"-->
+<!--          android:textSize="14sp"-->
+<!--          app:layout_constraintStart_toEndOf="@+id/customerServiceImage"-->
+<!--          app:layout_constraintTop_toTopOf="@+id/customerServiceImage" />-->
+
+<!--      <TextView-->
+<!--          android:id="@+id/replyTimeText"-->
+<!--          android:layout_width="wrap_content"-->
+<!--          android:layout_height="wrap_content"-->
+<!--          android:text="date time"-->
+<!--          android:textSize="13sp"-->
+<!--          app:layout_constraintBottom_toBottomOf="@+id/customerServiceImage"-->
+<!--          app:layout_constraintStart_toStartOf="@+id/customerServiceText" />-->
+
+<!--      <TextView-->
+<!--          android:id="@+id/replyText"-->
+<!--          android:layout_width="match_parent"-->
+<!--          android:layout_height="wrap_content"-->
+<!--          android:layout_marginTop="9dp"-->
+<!--          android:text="multi line reply content \nmulti line reply content \nmulti line reply content"-->
+<!--          android:textSize="14sp"-->
+<!--          app:layout_constraintBottom_toBottomOf="parent"-->
+<!--          app:layout_constraintEnd_toEndOf="parent"-->
+<!--          app:layout_constraintStart_toStartOf="@+id/customerServiceImage"-->
+<!--          app:layout_constraintTop_toBottomOf="@+id/customerServiceImage" />-->
+
+<!--   </androidx.constraintlayout.widget.ConstraintLayout>-->
+</androidx.constraintlayout.widget.ConstraintLayout>

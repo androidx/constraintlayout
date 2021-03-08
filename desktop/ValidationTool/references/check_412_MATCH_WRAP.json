@@ -1,5 +1,5 @@
 {
-  "duration": "5393000",
+  "duration": "199947",
   "layout": {
     "children": [
       {
@@ -14,9 +14,9 @@
       },
       {
         "bounds": {
-          "top": "420",
+          "top": "419",
           "left": "0",
-          "bottom": "549",
+          "bottom": "548",
           "right": "452"
         },
         "id": "textview2",
@@ -24,9 +24,9 @@
       },
       {
         "bounds": {
-          "top": "192",
+          "top": "191",
           "left": "0",
-          "bottom": "321",
+          "bottom": "320",
           "right": "452"
         },
         "id": "textview3",
@@ -34,9 +34,9 @@
       },
       {
         "bounds": {
-          "top": "162",
+          "top": "161",
           "left": "839",
-          "bottom": "462",
+          "bottom": "461",
           "right": "1139"
         },
         "id": "view",
@@ -44,9 +44,9 @@
       },
       {
         "bounds": {
-          "top": "539",
+          "top": "537",
           "left": "-58",
-          "bottom": "683",
+          "bottom": "681",
           "right": "225"
         },
         "id": "button129",
@@ -66,7 +66,7 @@
     "bounds": {
       "top": "0",
       "left": "0",
-      "bottom": "624",
+      "bottom": "622",
       "right": "1080"
     },
     "id": "root",

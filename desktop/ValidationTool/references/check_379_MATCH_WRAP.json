@@ -1,5 +1,5 @@
 {
-  "duration": "252500",
+  "duration": "644513",
   "layout": {
     "children": [
       {
@@ -44,9 +44,9 @@
       },
       {
         "bounds": {
-          "top": "256",
+          "top": "478",
           "left": "36",
-          "bottom": "400",
+          "bottom": "622",
           "right": "363"
         },
         "id": "infoboxTextButton",
@@ -56,7 +56,7 @@
     "bounds": {
       "top": "0",
       "left": "0",
-      "bottom": "214",
+      "bottom": "658",
       "right": "1080"
     },
     "id": "root",

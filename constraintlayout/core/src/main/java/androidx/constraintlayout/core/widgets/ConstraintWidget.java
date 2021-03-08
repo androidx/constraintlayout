@@ -3056,7 +3056,8 @@ public class ConstraintWidget {
             }
 
             if (parentWrapContent && inBarrier // if we are referenced by a barrier
-                    && !(beginWidget instanceof Barrier || endWidget instanceof Barrier)) {
+                    && !(beginWidget instanceof Barrier || endWidget instanceof Barrier)
+                    && !(endWidget == parent)) {
                 // ... but not directly constrained by it
                 // ... then make sure we can hold our own
                 boundsCheckStrength = SolverVariable.STRENGTH_BARRIER;
