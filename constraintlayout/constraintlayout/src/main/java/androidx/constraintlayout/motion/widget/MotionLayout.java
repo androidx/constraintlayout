@@ -1439,51 +1439,46 @@ public class MotionLayout extends ConstraintLayout implements
                     mEndState = mScene.getEndId();
                 }
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT || isAttachedToWindow()) {
-                    Log.v(TAG, Debug.getLoc()+" 1");
-                        try {
+                    Log.v(TAG, Debug.getLoc() + " 1");
+                    try {
 
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                                Display display = getDisplay();
-                                mPreviouseRotation = (display==null) ? 0:display.getRotation();
-                            }
-                            Log.v(TAG, Debug.getLoc()+" 2");
-
-                            if (mScene != null) {
-                                Log.v(TAG, Debug.getLoc()+" 3");
-
-                                ConstraintSet cSet = mScene.getConstraintSet(mCurrentState);
-                                Log.v(TAG, Debug.getLoc()+" cSet="+Debug.getName(getContext(),mCurrentState));
-
-                                mScene.readFallback(this);
-                                if (mDecoratorsHelpers != null) {
-                                    for (MotionHelper mh : mDecoratorsHelpers) {
-                                        mh.onFinishedMotionScene(this);
-                                    }
-                                }
-                                if (cSet != null) {
-                                    cSet.applyTo(this);
-                                }
-                                mBeginState = mCurrentState;
-                            }
-                            onNewStateAttachHandlers();
-                            if (mStateCache != null) {
-                                mStateCache.apply();
-                            } else {
-                                if (mScene != null && mScene.mCurrentTransition != null) {
-                                    if (mScene.mCurrentTransition.getAutoTransition() == MotionScene.Transition.AUTO_ANIMATE_TO_END) {
-                                        transitionToEnd();
-                                        setState(TransitionState.SETUP);
-                                        setState(TransitionState.MOVING);
-                                    }
-                                }
-
-                            }
-                        } catch (Exception ex) {
-                            throw new IllegalArgumentException("unable to parse MotionScene file", ex);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                            Display display = getDisplay();
+                            mPreviouseRotation = (display == null) ? 0 : display.getRotation();
                         }
-                    } else {
-                        mScene = null;
+
+                        if (mScene != null) {
+                            ConstraintSet cSet = mScene.getConstraintSet(mCurrentState);
+                            mScene.readFallback(this);
+                            if (mDecoratorsHelpers != null) {
+                                for (MotionHelper mh : mDecoratorsHelpers) {
+                                    mh.onFinishedMotionScene(this);
+                                }
+                            }
+                            if (cSet != null) {
+                                cSet.applyTo(this);
+                            }
+                            mBeginState = mCurrentState;
+                        }
+                        onNewStateAttachHandlers();
+                        if (mStateCache != null) {
+                            mStateCache.apply();
+                        } else {
+                            if (mScene != null && mScene.mCurrentTransition != null) {
+                                if (mScene.mCurrentTransition.getAutoTransition() == MotionScene.Transition.AUTO_ANIMATE_TO_END) {
+                                    transitionToEnd();
+                                    setState(TransitionState.SETUP);
+                                    setState(TransitionState.MOVING);
+                                }
+                            }
+
+                        }
+                    } catch (Exception ex) {
+                        throw new IllegalArgumentException("unable to parse MotionScene file", ex);
                     }
+                } else {
+                    mScene = null;
+                }
 
             } catch (Exception ex) {
                 throw new IllegalArgumentException("unable to parse MotionScene file", ex);

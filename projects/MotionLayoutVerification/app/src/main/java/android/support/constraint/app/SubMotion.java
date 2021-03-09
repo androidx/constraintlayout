@@ -23,21 +23,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * This test the a subclass of MotionLayout loading its own layout description
  */
 public class SubMotion extends MotionLayout {
-    public SubMotion(@NonNull @NotNull Context context) {
+    public SubMotion(@NonNull Context context) {
         super(context);
     }
 
-    public SubMotion(@NonNull @NotNull Context context, @Nullable @org.jetbrains.annotations.Nullable AttributeSet attrs) {
+    public SubMotion(@NonNull Context context, @Nullable @org.jetbrains.annotations.Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public SubMotion(@NonNull @NotNull Context context, @Nullable @org.jetbrains.annotations.Nullable AttributeSet attrs, int defStyleAttr) {
+    public SubMotion(@NonNull Context context, @Nullable @org.jetbrains.annotations.Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
