@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:layoutDirection="rtl"
+    tools:context=".MainActivity">
+
+   <!-- b/172349347 -->
+
+   <TextView
+       android:id="@+id/text_01"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="AA" />
+
+   <TextView
+       android:id="@+id/text_02"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="BB" />
+
+   <androidx.constraintlayout.helper.widget.Flow
+       android:id="@+id/row_01_flow"
+       android:layout_width="0dp"
+       android:layout_height="wrap_content"
+       app:constraint_referenced_ids="text_01,text_02"
+       app:flow_horizontalBias="0.0"
+       app:flow_horizontalGap="16dp"
+       app:flow_horizontalStyle="packed"
+       app:flow_wrapMode="chain" />
+
+   <TextView
+       android:id="@+id/text_03"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="10" />
+
+   <TextView
+       android:id="@+id/text_04"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="11" />
+
+   <androidx.constraintlayout.helper.widget.Flow
+       android:id="@+id/table_flow"
+       android:layout_width="0dp"
+       android:layout_height="wrap_content"
+       android:orientation="vertical"
+       app:constraint_referenced_ids="row_01_flow"
+       app:flow_verticalGap="8dp"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent" />
+
+   <androidx.constraintlayout.helper.widget.Flow
+       android:id="@+id/row_02_flow"
+       android:layout_width="0dp"
+       android:layout_height="wrap_content"
+       android:orientation="horizontal"
+       app:constraint_referenced_ids="text_03,text_04"
+       app:flow_horizontalBias="0.0"
+       app:flow_horizontalGap="16dp"
+       app:flow_horizontalStyle="packed"
+       app:flow_wrapMode="chain"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toBottomOf="@id/table_flow" />
+
+   <TextView
+       android:id="@+id/text_05"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       app:layout_constraintTop_toBottomOf="@id/row_02_flow"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintEnd_toStartOf="@id/text_06"
+       app:layout_constraintHorizontal_chainStyle="packed"
+       app:layout_constraintHorizontal_bias="0.0"
+       android:text="I" />
+
+   <TextView
+       android:id="@+id/text_06"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       app:layout_constraintTop_toBottomOf="@id/row_02_flow"
+       app:layout_constraintStart_toEndOf="@id/text_05"
+       android:layout_marginStart="16dp"
+       app:layout_constraintEnd_toEndOf="parent"
+       android:text="II" />
+</androidx.constraintlayout.widget.ConstraintLayout>

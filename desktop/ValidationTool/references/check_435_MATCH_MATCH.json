@@ -1,0 +1,104 @@
+{
+  "duration": "377015",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "48",
+          "left": "978",
+          "bottom": "105",
+          "right": "1032"
+        },
+        "id": "text_01",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "48",
+          "left": "878",
+          "bottom": "105",
+          "right": "930"
+        },
+        "id": "text_02",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "48",
+          "left": "48",
+          "bottom": "105",
+          "right": "1032"
+        },
+        "id": "row_01_flow",
+        "class": "Flow"
+      },
+      {
+        "bounds": {
+          "top": "105",
+          "left": "984",
+          "bottom": "162",
+          "right": "1032"
+        },
+        "id": "text_03",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "105",
+          "left": "888",
+          "bottom": "162",
+          "right": "936"
+        },
+        "id": "text_04",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "48",
+          "left": "48",
+          "bottom": "105",
+          "right": "1032"
+        },
+        "id": "table_flow",
+        "class": "Flow"
+      },
+      {
+        "bounds": {
+          "top": "105",
+          "left": "48",
+          "bottom": "162",
+          "right": "1032"
+        },
+        "id": "row_02_flow",
+        "class": "Flow"
+      },
+      {
+        "bounds": {
+          "top": "162",
+          "left": "1021",
+          "bottom": "219",
+          "right": "1032"
+        },
+        "id": "text_05",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "162",
+          "left": "951",
+          "bottom": "219",
+          "right": "973"
+        },
+        "id": "text_06",
+        "class": "MaterialTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

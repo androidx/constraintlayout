@@ -1,5 +1,5 @@
 {
-  "duration": "926000",
+  "duration": "1030249",
   "layout": {
     "children": [
       {
@@ -65,9 +65,9 @@
       {
         "bounds": {
           "top": "600",
-          "left": "150",
+          "left": "480",
           "bottom": "900",
-          "right": "450"
+          "right": "780"
         },
         "id": "v6",
         "class": "View"

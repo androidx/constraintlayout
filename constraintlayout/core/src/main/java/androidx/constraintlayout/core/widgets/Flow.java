@@ -533,13 +533,13 @@ public class Flow extends VirtualLayout {
                     // E.g. RTL would have head at the right most widget.
                     if (index == 0) {
                         int style = mHorizontalStyle;
-                        float bias = mHorizontalBias;
+                        float bias = isInRtl ? (1 - mHorizontalBias) : mHorizontalBias;
                         if (mStartIndex == 0 && mFirstHorizontalStyle != UNKNOWN) {
                             style = mFirstHorizontalStyle;
-                            bias = mFirstHorizontalBias;
+                            bias = isInRtl ? (1 - mFirstHorizontalBias) : mFirstHorizontalBias;
                         } else if (isLastChain && mLastHorizontalStyle != UNKNOWN) {
                             style = mLastHorizontalStyle;
-                            bias = mLastHorizontalBias;
+                            bias = isInRtl ? (1 - mLastHorizontalBias) : mLastHorizontalBias;
                         }
                         widget.setHorizontalChainStyle(style);
                         widget.setHorizontalBiasPercent(bias);
@@ -1133,10 +1133,12 @@ public class Flow extends VirtualLayout {
         int rows = mAlignedDimensions[VERTICAL];
 
         ConstraintWidget previous = null;
+        float horizontalBias = mHorizontalBias;
         for (int i = 0; i < cols; i++) {
             int index = i;
             if (isInRtl) {
                 index = cols - i - 1;
+                horizontalBias = 1 - mHorizontalBias;
             }
             ConstraintWidget widget = mAlignedBiggestElementsInCols[index];
             if (widget == null || widget.getVisibility() == GONE) {
@@ -1145,7 +1147,7 @@ public class Flow extends VirtualLayout {
             if (i == 0) {
                 widget.connect(widget.mLeft, mLeft, getPaddingLeft());
                 widget.setHorizontalChainStyle(mHorizontalStyle);
-                widget.setHorizontalBiasPercent(mHorizontalBias);
+                widget.setHorizontalBiasPercent(horizontalBias);
             }
             if (i == cols - 1) {
                 widget.connect(widget.mRight, mRight, getPaddingRight());
