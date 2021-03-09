@@ -55,13 +55,32 @@ public class Carousel extends MotionHelper {
 
     private int touchUpMode = TOUCH_UP_IMMEDIATE_STOP;
     private float velocityThreshold = 2f;
+    private int mTargetIndex = -1;
+    private int mAnimateTargetDelay = 200;
 
+    /**
+     * Adapter for a Carousel
+     */
     public interface Adapter {
+        /**
+         * Number of items you want to display in the Carousel
+         * @return number of items
+         */
         int count();
 
+        /**
+         * Callback to populate the view for the given index
+         *
+         * @param view
+         * @param index
+         */
         void populate(View view, int index);
 
-        void onNewItem(int mIndex);
+        /**
+         * Callback when we reach a new index
+         * @param index
+         */
+        void onNewItem(int index);
     }
 
     public Carousel(Context context) {
@@ -112,6 +131,54 @@ public class Carousel extends MotionHelper {
 
     public void setAdapter(Adapter adapter) {
         mAdapter = adapter;
+    }
+
+    /**
+     * Returns the number of elements in the Carousel
+     *
+     * @return number of elements
+     */
+    public int getCount() {
+        if (mAdapter != null) {
+            return mAdapter.count();
+        }
+        return 0;
+    }
+
+    /**
+     * Returns the current index
+     *
+     * @return current index
+     */
+    public int getCurrentIndex() {
+        return mIndex;
+    }
+
+    /**
+     * Transition the carousel to the given index, animating until we reach it.
+     *
+     * @param index index of the element we want to reach
+     * @param delay animation duration for each individual transition to the next item, in ms
+     */
+    public void transitionToIndex(int index, int delay) {
+        mTargetIndex = Math.max(0, Math.min(getCount() - 1, index));
+        mAnimateTargetDelay = Math.max(0, delay);
+        mMotionLayout.setTransitionDuration(mAnimateTargetDelay);
+        if (index < mIndex) {
+            mMotionLayout.transitionToState(previousState, mAnimateTargetDelay);
+        } else {
+            mMotionLayout.transitionToState(nextState, mAnimateTargetDelay);
+        }
+    }
+
+    /**
+     * Jump to the given index without any animation
+     *
+     * @param index index of the element we want to reach
+     */
+    public void jumpToIndex(int index) {
+        mIndex = Math.max(0, Math.min(getCount() - 1, index));
+        refresh();
     }
 
     public void refresh() {
@@ -209,12 +276,7 @@ public class Carousel extends MotionHelper {
                     // don't touch animate when reaching the last item
                     return;
                 }
-                mMotionLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mMotionLayout.touchAnimateTo(MotionLayout.TOUCH_UP_DECELERATE_AND_COMPLETE, 1, v);
-                    }
-                });
+                mMotionLayout.post(() -> mMotionLayout.touchAnimateTo(MotionLayout.TOUCH_UP_DECELERATE_AND_COMPLETE, 1, v));
             }
         }
     };
@@ -345,6 +407,19 @@ public class Carousel extends MotionHelper {
                     mAdapter.populate(view, index);
                 }
             }
+        }
+
+        if (mTargetIndex != -1 && mTargetIndex != mIndex) {
+            mMotionLayout.post(() -> {
+                mMotionLayout.setTransitionDuration(mAnimateTargetDelay);
+                if (mTargetIndex < mIndex) {
+                    mMotionLayout.transitionToState(previousState, mAnimateTargetDelay);
+                } else {
+                    mMotionLayout.transitionToState(nextState, mAnimateTargetDelay);
+                }
+            });
+        } else if (mTargetIndex == mIndex) {
+            mTargetIndex = -1;
         }
 
         if (backwardTransition == -1 || forwardTransition == -1) {

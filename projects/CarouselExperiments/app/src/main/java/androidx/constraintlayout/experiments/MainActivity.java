@@ -129,6 +129,30 @@ public class MainActivity extends AppCompatActivity {
             setupCarouselDemo50(carousel);
         }
 
+        Button button = findViewById(R.id.button);
+        if (layout_name.equals("demo_010_carousel")) {
+            button.setOnClickListener(v -> {
+                int numItems = carousel.getCount();
+                int lastItem = numItems - 1;
+                if (carousel.getCurrentIndex() == 0) {
+                    carousel.jumpToIndex(lastItem);
+                } else {
+                    carousel.jumpToIndex(0);
+                }
+            });
+        }
+        if (layout_name.equals("demo_060_carousel")) {
+            button.setOnClickListener(v -> {
+                int numItems = carousel.getCount();
+                int lastItem = numItems - 1;
+                if (carousel.getCurrentIndex() == 0) {
+                    carousel.transitionToIndex(lastItem, 200);
+                } else {
+                    carousel.transitionToIndex(0, 200);
+                }
+            });
+        }
+
         carousel.setAdapter(new Carousel.Adapter() {
             @Override
             public int count() {
@@ -151,6 +175,14 @@ public class MainActivity extends AppCompatActivity {
             public void onNewItem(int index) {
                 if (label != null) {
                     label.setText("#" + (index + 1));
+                }
+                if (button != null) {
+                    if (index == carousel.getCount() - 1) {
+                        button.setText("Go to first item");
+                    }
+                    if (index == 0) {
+                        button.setText("Go to last item");
+                    }
                 }
             }
         });
