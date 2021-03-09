@@ -1439,9 +1439,7 @@ public class MotionLayout extends ConstraintLayout implements
                     mEndState = mScene.getEndId();
                 }
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT || isAttachedToWindow()) {
-                    Log.v(TAG, Debug.getLoc() + " 1");
                     try {
-
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                             Display display = getDisplay();
                             mPreviouseRotation = (display == null) ? 0 : display.getRotation();
