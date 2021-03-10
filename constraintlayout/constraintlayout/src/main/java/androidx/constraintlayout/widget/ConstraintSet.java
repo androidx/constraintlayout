@@ -2315,7 +2315,6 @@ public class ConstraintSet {
         int count = constraintLayout.getChildCount();
         HashSet<Integer> used = new HashSet<Integer>(mConstraints.keySet());
         for (int i = 0; i < count; i++) {
-
             View view = constraintLayout.getChildAt(i);
             int id = view.getId();
             if (!mConstraints.containsKey(id)) {
@@ -2434,6 +2433,13 @@ public class ConstraintSet {
                 ConstraintLayout.LayoutParams param = constraintLayout.generateDefaultLayoutParams();
                 constraint.applyTo(param);
                 constraintLayout.addView(g, param);
+            }
+        }
+        for (int i = 0; i < count; i++) {
+            View view = constraintLayout.getChildAt(i);
+            if (view instanceof ConstraintHelper) {
+                ConstraintHelper constraintHelper = (ConstraintHelper) view;
+                constraintHelper.applyLayoutFeaturesInConstraintSet(constraintLayout);
             }
         }
     }

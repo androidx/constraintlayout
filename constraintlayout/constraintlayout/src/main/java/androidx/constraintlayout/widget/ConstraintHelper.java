@@ -470,6 +470,11 @@ public abstract class ConstraintHelper extends View {
 
     /**
      * @hide
+     */
+    protected void applyLayoutFeaturesInConstraintSet(ConstraintLayout container) {}
+
+    /**
+     * @hide
      * Allows a helper a chance to update its internal object pre layout or set up connections for the pointed elements
      *
      * @param container
