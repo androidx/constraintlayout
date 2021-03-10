@@ -26,7 +26,7 @@
        android:adjustViewBounds="false"
        android:scaleType="centerCrop"
        app:layout_constraintEnd_toEndOf="parent"
-       app:layout_constraintDimensionRatio="H,16:9"
+       app:layout_constraintDimensionRatio="16:9"
        app:layout_constraintStart_toEndOf="@id/textview"
        app:layout_constraintTop_toTopOf="@+id/textview"
        tools:ignore="ContentDescription"
