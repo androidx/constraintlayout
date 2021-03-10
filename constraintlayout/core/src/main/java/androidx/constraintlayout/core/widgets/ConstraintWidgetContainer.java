@@ -615,9 +615,14 @@ public class ConstraintWidgetContainer extends WidgetContainer {
                     measuredWidth = measure.measuredWidth;
                 }
                 measure.verticalBehavior = FIXED;
-                // regardless of which side we are using for the ratio, getDimensionRatio() already
-                // made sure that it's expressed in WxH format, so we can simply go and divide
-                measure.verticalDimension = (int) (measuredWidth / widget.getDimensionRatio());
+                if (widget.getDimensionRatioSide() == -1) {
+                    // regardless of which side we are using for the ratio, getDimensionRatio() already
+                    // made sure that it's expressed in WxH format, so we can simply go and divide
+                    measure.verticalDimension = (int) (measuredWidth / widget.getDimensionRatio());
+                } else {
+                    // getDimensionRatio() already got reverted, so we can simply multiply
+                    measure.verticalDimension = (int) (widget.getDimensionRatio() * measuredWidth);
+                }
                 if (DEBUG) {
                     System.out.println("(M) Measured once for ratio on vertical side...");
                 }
