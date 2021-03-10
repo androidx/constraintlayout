@@ -36,6 +36,7 @@ public class MotionHelper extends ConstraintHelper implements MotionHelperInterf
         super(context, attrs, defStyleAttr);
         init(attrs);
     }
+
     /**
      * @hide
      */
