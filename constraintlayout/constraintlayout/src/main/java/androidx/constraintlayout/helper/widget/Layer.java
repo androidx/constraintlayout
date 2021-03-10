@@ -330,4 +330,13 @@ public class Layer extends ConstraintHelper {
             }
         }
     }
+
+    /**
+     * @hide
+     * @param container
+     */
+    @Override
+    protected void applyLayoutFeaturesInConstraintSet(ConstraintLayout container) {
+        applyLayoutFeatures(container);
+    }
 }

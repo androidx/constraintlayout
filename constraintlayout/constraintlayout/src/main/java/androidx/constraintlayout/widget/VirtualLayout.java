@@ -116,4 +116,12 @@ public abstract class VirtualLayout extends ConstraintHelper {
         applyLayoutFeatures();
     }
 
+    /**
+     * @hide
+     * @param container
+     */
+    @Override
+    protected void applyLayoutFeaturesInConstraintSet(ConstraintLayout container) {
+        applyLayoutFeatures(container);
+    }
 }
