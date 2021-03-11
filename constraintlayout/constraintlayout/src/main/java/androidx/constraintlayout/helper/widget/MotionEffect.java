@@ -57,12 +57,12 @@ public class MotionEffect extends MotionHelper {
     public static final int EAST = 2;
     public static final int WEST = 3;
 
-    private float fadeAlpha = 0.1f;
-    private int fadeStart = 49;
-    private int fadeEnd = 50;
-    private int fadeTranslationX = 0;
-    private int fadeTranslationY = 0;
-    private boolean fadeMoveStrict = true;
+    private float motionEffectAlpha = 0.1f;
+    private int motionEffectStart = 49;
+    private int motionEffectEnd = 50;
+    private int motionEffectTranslationX = 0;
+    private int motionEffectTranslationY = 0;
+    private boolean motionEffectStrictMove = true;
     private static final int UNSET = -1;
     private int viewTransitionId = UNSET;
 
@@ -88,31 +88,31 @@ public class MotionEffect extends MotionHelper {
             final int N = a.getIndexCount();
             for (int i = 0; i < N; i++) {
                 int attr = a.getIndex(i);
-                if (attr == R.styleable.MotionEffect_fadeMove_start) {
-                    fadeStart = a.getInt(attr, fadeStart);
-                    fadeStart = Math.max(Math.min(fadeStart, 99), 0);
-                } else if (attr == R.styleable.MotionEffect_fadeMove_end) {
-                    fadeEnd = a.getInt(attr, fadeEnd);
-                    fadeEnd = Math.max(Math.min(fadeEnd, 99), 0);
-                } else if (attr == R.styleable.MotionEffect_fadeMove_translationX) {
-                    fadeTranslationX = a.getDimensionPixelOffset(attr, fadeTranslationX);
-                } else if (attr == R.styleable.MotionEffect_fadeMove_translationY) {
-                    fadeTranslationY = a.getDimensionPixelOffset(attr, fadeTranslationY);
-                } else if (attr == R.styleable.MotionEffect_fadeMove_alpha) {
-                    fadeAlpha = a.getFloat(attr, fadeAlpha);
-                } else if (attr == R.styleable.MotionEffect_fadeMove_move) {
+                if (attr == R.styleable.MotionEffect_motionEffect_start) {
+                    motionEffectStart = a.getInt(attr, motionEffectStart);
+                    motionEffectStart = Math.max(Math.min(motionEffectStart, 99), 0);
+                } else if (attr == R.styleable.MotionEffect_motionEffect_end) {
+                    motionEffectEnd = a.getInt(attr, motionEffectEnd);
+                    motionEffectEnd = Math.max(Math.min(motionEffectEnd, 99), 0);
+                } else if (attr == R.styleable.MotionEffect_motionEffect_translationX) {
+                    motionEffectTranslationX = a.getDimensionPixelOffset(attr, motionEffectTranslationX);
+                } else if (attr == R.styleable.MotionEffect_motionEffect_translationY) {
+                    motionEffectTranslationY = a.getDimensionPixelOffset(attr, motionEffectTranslationY);
+                } else if (attr == R.styleable.MotionEffect_motionEffect_alpha) {
+                    motionEffectAlpha = a.getFloat(attr, motionEffectAlpha);
+                } else if (attr == R.styleable.MotionEffect_motionEffect_move) {
                     fadeMove = a.getInt(attr, fadeMove);
-                } else if (attr == R.styleable.MotionEffect_fadeMove_strict) {
-                    fadeMoveStrict = a.getBoolean(attr, fadeMoveStrict);
-                } else if (attr == R.styleable.MotionEffect_fadeMove_viewTransition) {
+                } else if (attr == R.styleable.MotionEffect_motionEffect_strict) {
+                    motionEffectStrictMove = a.getBoolean(attr, motionEffectStrictMove);
+                } else if (attr == R.styleable.MotionEffect_motionEffect_viewTransition) {
                     viewTransitionId = a.getResourceId(attr, viewTransitionId);
                 }
             }
-            if (fadeStart == fadeEnd) {
-                if (fadeStart > 0) {
-                    fadeStart --;
+            if (motionEffectStart == motionEffectEnd) {
+                if (motionEffectStart > 0) {
+                    motionEffectStart--;
                 } else {
-                    fadeEnd ++;
+                    motionEffectEnd++;
                 }
             }
             a.recycle();
@@ -137,41 +137,41 @@ public class MotionEffect extends MotionHelper {
 
         KeyAttributes alpha1 = new KeyAttributes();
         KeyAttributes alpha2 = new KeyAttributes();
-        alpha1.setValue(Key.ALPHA, fadeAlpha);
-        alpha2.setValue(Key.ALPHA, fadeAlpha);
-        alpha1.setFramePosition(fadeStart);
-        alpha2.setFramePosition(fadeEnd);
+        alpha1.setValue(Key.ALPHA, motionEffectAlpha);
+        alpha2.setValue(Key.ALPHA, motionEffectAlpha);
+        alpha1.setFramePosition(motionEffectStart);
+        alpha2.setFramePosition(motionEffectEnd);
         KeyPosition stick1 = new KeyPosition();
-        stick1.setFramePosition(fadeStart);
+        stick1.setFramePosition(motionEffectStart);
         stick1.setType(KeyPosition.TYPE_CARTESIAN);
         stick1.setValue(KeyPosition.PERCENT_X, 0);
         stick1.setValue(KeyPosition.PERCENT_Y, 0);
         KeyPosition stick2 = new KeyPosition();
-        stick2.setFramePosition(fadeEnd);
+        stick2.setFramePosition(motionEffectEnd);
         stick2.setType(KeyPosition.TYPE_CARTESIAN);
         stick2.setValue(KeyPosition.PERCENT_X, 1);
         stick2.setValue(KeyPosition.PERCENT_Y, 1);
 
         KeyAttributes translationX1 = null;
         KeyAttributes translationX2 = null;
-        if (fadeTranslationX > 0) {
+        if (motionEffectTranslationX > 0) {
             translationX1 = new KeyAttributes();
             translationX2 = new KeyAttributes();
-            translationX1.setValue(Key.TRANSLATION_X, fadeTranslationX);
-            translationX1.setFramePosition(fadeEnd);
+            translationX1.setValue(Key.TRANSLATION_X, motionEffectTranslationX);
+            translationX1.setFramePosition(motionEffectEnd);
             translationX2.setValue(Key.TRANSLATION_X, 0);
-            translationX2.setFramePosition(fadeEnd - 1);
+            translationX2.setFramePosition(motionEffectEnd - 1);
         }
 
         KeyAttributes translationY1 = null;
         KeyAttributes translationY2 = null;
-        if (fadeTranslationY > 0) {
+        if (motionEffectTranslationY > 0) {
             translationY1 = new KeyAttributes();
             translationY2 = new KeyAttributes();
-            translationY1.setValue(Key.TRANSLATION_Y, fadeTranslationY);
-            translationY1.setFramePosition(fadeEnd);
+            translationY1.setValue(Key.TRANSLATION_Y, motionEffectTranslationY);
+            translationY1.setFramePosition(motionEffectEnd);
             translationY2.setValue(Key.TRANSLATION_Y, 0);
-            translationY2.setFramePosition(fadeEnd - 1);
+            translationY2.setFramePosition(motionEffectEnd - 1);
         }
 
         int moveDirection = fadeMove;
@@ -215,19 +215,19 @@ public class MotionEffect extends MotionHelper {
             // if move strict is true, also include views that are moving in diagonal, even
             // if they aren't moving in the opposite direction.
             if (moveDirection == NORTH) {
-                if (y > 0 && (!fadeMoveStrict || x == 0)) {
+                if (y > 0 && (!motionEffectStrictMove || x == 0)) {
                     apply = false;
                 }
             } else if (moveDirection == SOUTH) {
-                if (y < 0 && (!fadeMoveStrict || x == 0)) {
+                if (y < 0 && (!motionEffectStrictMove || x == 0)) {
                     apply = false;
                 }
             } else if (moveDirection == EAST) {
-                if (x < 0 && (!fadeMoveStrict || y == 0)) {
+                if (x < 0 && (!motionEffectStrictMove || y == 0)) {
                     apply = false;
                 }
             } else if (moveDirection == WEST) {
-                if (x > 0 && (!fadeMoveStrict || y == 0)) {
+                if (x > 0 && (!motionEffectStrictMove || y == 0)) {
                     apply = false;
                 }
             }
@@ -238,11 +238,11 @@ public class MotionEffect extends MotionHelper {
                     mc.addKey(alpha2);
                     mc.addKey(stick1);
                     mc.addKey(stick2);
-                    if (fadeTranslationX > 0) {
+                    if (motionEffectTranslationX > 0) {
                         mc.addKey(translationX1);
                         mc.addKey(translationX2);
                     }
-                    if (fadeTranslationY > 0) {
+                    if (motionEffectTranslationY > 0) {
                         mc.addKey(translationY1);
                         mc.addKey(translationY2);
                     }
