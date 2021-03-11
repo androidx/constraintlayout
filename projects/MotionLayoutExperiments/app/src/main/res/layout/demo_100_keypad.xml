@@ -104,9 +104,11 @@
 
     <androidx.constraintlayout.helper.widget.MotionEffect
         android:id="@+id/fade"
-        app:fadeMove_start="40"
-        app:fadeMove_alpha="0"
-        app:fadeMove_end="60"
+        app:motionEffect_start="40"
+        app:motionEffect_alpha="0"
+        app:motionEffect_end="60"
+        app:motionEffect_move="west"
+        app:motionEffect_strict="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:constraint_referenced_ids="t1,t2,t3,t4,t5,t6,t7,t8,t9"
