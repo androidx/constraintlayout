@@ -30,6 +30,7 @@ import androidx.compose.ui.layout.MultiMeasureLayout
 import androidx.compose.ui.layout.ParentDataModifier
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.layout.LayoutIdParentData
 import androidx.compose.ui.platform.InspectorValueInfo
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.Constraints
@@ -50,6 +51,7 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviou
 import androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_SPREAD
 import androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_WRAP
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer
+import androidx.constraintlayout.core.widgets.HelperWidget
 import androidx.constraintlayout.core.widgets.Optimizer
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.TRY_GIVEN_DIMENSIONS
@@ -609,7 +611,9 @@ class ChainStyle internal constructor(
 private class ConstraintLayoutParentData(
         val ref: ConstrainedLayoutReference,
         val constrain: ConstrainScope.() -> Unit
-)
+): LayoutIdParentData {
+    override val layoutId: Any = ref.id
+}
 
 /**
  * Scope used by `Modifier.constrainAs`.
@@ -1129,9 +1133,13 @@ class State(val density: Density) : SolverState() {
         mReferences[PARENT] = mParent
         super.reset()
     }
+
+    internal fun getKeyId(helperWidget: HelperWidget): Any? {
+        return mHelperReferences.entries.firstOrNull { it.value == helperWidget }?.key
+    }
 }
 
-private class Measurer : BasicMeasure.Measurer {
+internal class Measurer : BasicMeasure.Measurer {
     private val root = ConstraintWidgetContainer(0, 0).also { it.measurer = this }
     private val placeables = mutableMapOf<Measurable, Placeable>()
     private val lastMeasures = mutableMapOf<Measurable, Array<Int>>()
@@ -1144,12 +1152,19 @@ private class Measurer : BasicMeasure.Measurer {
     private val widthConstraintsHolder = IntArray(2)
     private val heightConstraintsHolder = IntArray(2)
 
-    fun reset() {
+    private fun reset() {
         placeables.clear()
         lastMeasures.clear()
         positionsCache.clear()
         state.reset()
     }
+
+    /**
+     * Method called by Compose tooling. Returns a JSON string that represents the Constraints
+     * defined for this ConstraintLayout Composable.
+     */
+    fun getDesignInfo(startX: Int, startY: Int, args: String) =
+        parseConstraintsToJson(root, state, startX, startY)
 
     override fun measure(constraintWidget: ConstraintWidget, measure: BasicMeasure.Measure) {
         val measurable = constraintWidget.companionWidget
@@ -1307,7 +1322,7 @@ private class Measurer : BasicMeasure.Measurer {
         }
     }
 
-    fun Array<Int>.copyFrom(measure: BasicMeasure.Measure) {
+    private fun Array<Int>.copyFrom(measure: BasicMeasure.Measure) {
         this[0] = measure.measuredWidth
         this[1] = measure.measuredHeight
         this[2] = measure.measuredBaseline
