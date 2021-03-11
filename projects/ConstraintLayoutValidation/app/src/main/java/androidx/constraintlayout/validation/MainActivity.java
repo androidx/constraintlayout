@@ -39,6 +39,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.core.Metrics;
 import androidx.constraintlayout.widget.ConstraintLayout;
 //import androidx.constraintlayout.core.Metrics;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -240,6 +241,19 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
             FrameLayout.LayoutParams layoutParamsView = (FrameLayout.LayoutParams) viewToResize.getLayoutParams();
             layoutParamsView.height = 400;
             viewToResize.setLayoutParams(layoutParamsView);
+        }, 20);
+        return true;
+    };
+
+    TestLayout testLayout_438 = (view, mode, widthMeasureSpec, heightMeasureSpec, layoutParams) -> {
+        view.forceLayout();
+        view.measure(widthMeasureSpec, heightMeasureSpec);
+        view.postDelayed(() -> {
+            ConstraintSet constraintSet = new ConstraintSet();
+            constraintSet.clone((ConstraintLayout) view);
+            constraintSet.setVisibility(R.id.group1, View.VISIBLE);
+            constraintSet.setVisibility(R.id.group2, View.GONE);
+            constraintSet.applyTo((ConstraintLayout) view);
         }, 20);
         return true;
     };
@@ -628,11 +642,13 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
         mTests.put("check_406", testLayout_406);
         mTests.put("check_408", testLayout_408);
         mTests.put("check_420", testLayout_420);
+        mTests.put("check_438", testLayout_438);
 
         mTestsDelay.put("check_265", 1500);
         mTestsDelay.put("check_335", 1500);
         mTestsDelay.put("check_397", 1500);
         mTestsDelay.put("check_420", 500);
+        mTestsDelay.put("check_438", 500);
 
         // We skip those for now
         // (depends on moving to LayoutParams instead of MarginLayoutParams)
@@ -660,7 +676,7 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
 //        list_view.setLayoutManager(linearLayoutManager);
 //        list_view.setAdapter(new Adapter339(getApplicationContext(), xVals));
 
-        setContentView(R.layout.check_410);
+        setContentView(R.layout.check_438);
 
         //setContentView(R.layout.check_251);
 //        setContentView(R.layout.check_024);
