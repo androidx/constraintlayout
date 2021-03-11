@@ -58,6 +58,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.Constraints;
 import androidx.constraintlayout.widget.R;
+import androidx.core.view.NestedScrollingParent3;
 import androidx.core.view.ViewCompat;
 
 import java.util.ArrayList;
@@ -726,8 +727,8 @@ import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
  * (used to talk to nested ConstraintLayouts etc.)</td>
  * </tr>
  * <tr>
- * <td>[standard view attributes]</td>
- * <td>A collection of post layout view attributes see below</td>
+ * <td>[standard view attributes](except visibility)</td>
+ * <td>A collection of post layout view attributes see below </td>
  * </tr>
  * <tr>
  * <p>
@@ -989,7 +990,7 @@ import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
  * </p>
  */
 public class MotionLayout extends ConstraintLayout implements
-        androidx.core.view.NestedScrollingParent3 {
+        NestedScrollingParent3 {
 
     public static final int TOUCH_UP_COMPLETE = 0;
     public static final int TOUCH_UP_COMPLETE_TO_START = 1;
