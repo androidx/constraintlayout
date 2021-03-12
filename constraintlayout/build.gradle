@@ -25,7 +25,6 @@ task('checkJavaVersion') doLast {
         throw new RuntimeException("Tools need to be compiled with Java $requiredVersion, you are using Java $jvmVersion.")
     }
 }
-final def checkJavaVersionTask = tasks['checkJavaVersion']
 
 /*
  * With the build server you are given two env variables.
