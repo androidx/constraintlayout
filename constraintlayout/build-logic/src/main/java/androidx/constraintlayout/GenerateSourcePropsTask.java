@@ -36,6 +36,7 @@ import org.gradle.api.tasks.TaskAction;
 import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -106,7 +107,7 @@ public abstract class GenerateSourcePropsTask extends DefaultTask {
         File propertiesFile = getOutputFile().getAsFile().get();
         File parentFile = propertiesFile.getParentFile();
         if (parentFile.isDirectory() || parentFile.mkdirs()) {
-            Files.writeString(getOutputFile().getAsFile().get().toPath(), content);
+            Files.write(getOutputFile().getAsFile().get().toPath(), content.getBytes(StandardCharsets.UTF_8));
         }
     }
 
@@ -116,6 +117,6 @@ public abstract class GenerateSourcePropsTask extends DefaultTask {
                 .filter(MavenPublication.class::isInstance)
                 .map(MavenPublication.class::cast)
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(() -> new RuntimeException("No Maven publication found. Did you apply the `androidx.build.publishing` plugin?"));
     }
 }
