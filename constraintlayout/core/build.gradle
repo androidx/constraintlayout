@@ -1,50 +1,14 @@
-apply plugin: 'java'
-apply plugin: 'maven'
+plugins {
+    id 'androidx.build.java-library'
+    id 'androidx.build.publishing'
+}
 
-compileJava {
-    targetCompatibility = 1.8
-    sourceCompatibility = 1.8
+globalConfig {
+    pomName = 'Android ConstraintLayout Solver'
+    pomDescription = 'Solver for ConstraintLayout'
 }
 
 dependencies {
     testImplementation "junit:junit:4.13.1"
 }
 
-archivesBaseName = 'constraintlayout-core'
-
-project.ext.pomName = 'Android ConstraintLayout Solver'
-project.ext.pomDesc = 'Solver for ConstraintLayout'
-
-task publishLocal(type: Upload) {
-    configuration = configurations.archives
-    repositories {
-        mavenDeployer {
-            repository(url: uri("$rootProject.ext.localRepo"))
-            pom.project {
-                name project.ext.pomName
-                description project.ext.pomDesc
-
-                url 'http://tools.android.com'
-                inceptionYear '2007'
-
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        distribution 'repo'
-                    }
-                }
-
-                scm {
-                    url 'https://github.com/androidx/constraintlayout'
-                    connection 'git@github.com:androidx/constraintlayout.git'
-                }
-                developers {
-                    developer {
-                        name 'The Android Open Source Project'
-                    }
-                }
-            }
-        }
-    }
-}

@@ -1,0 +1,7 @@
+import androidx.constraintlayout.GlobalConfig
+
+extensions.create("globalConfig", GlobalConfig, rootProject.layout)
+
+version = providers.gradleProperty("${project.name}.version").forUseAtConfigurationTime().get()
+
+tasks.register("dist")

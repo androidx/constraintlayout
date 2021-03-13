@@ -23,7 +23,7 @@ To compile and publish to your local offline M2 repository, you need to run:
 ./localBuild.sh
 ```
 
-To generate the maven artifact, you then need to run:
+To generate the maven artifacts, you then need to run:
 
 ```bash
 ./gradlew dist

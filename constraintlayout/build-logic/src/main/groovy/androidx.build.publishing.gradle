@@ -1,0 +1,81 @@
+import androidx.constraintlayout.GenerateSourcePropsTask
+
+plugins {
+    id 'androidx.build.base'
+    id 'maven-publish'
+}
+
+group = 'androidx.constraintlayout'
+def aid = project.name != 'constraintlayout' ? "constraintlayout-${project.name}" : project.name
+
+def repoLocation = providers.gradleProperty("localRepo").forUseAtConfigurationTime()
+        .orElse(globalConfig.androidHostOut.map { "${it}/repo" })
+        .get()
+
+publishing {
+    repositories {
+        maven {
+            name = "local"
+            url = repoLocation
+        }
+    }
+}
+
+components.configureEach {component ->
+    if (component.name in ['release', 'java']) {
+        publishing.publications {
+            maven(MavenPublication) {
+                from component
+                artifactId aid
+            }
+        }
+    }
+}
+
+publishing.publications.configureEach {
+    pom {
+        name = globalConfig.pomName
+        description = globalConfig.pomDescription
+        url = 'http://tools.android.com'
+        inceptionYear = '2007'
+
+        licenses {
+            license {
+                name = 'The Apache Software License, Version 2.0'
+                url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution = 'repo'
+            }
+        }
+
+        scm {
+            url = 'https://github.com/androidx/constraintlayout'
+            connection = 'git@github.com:androidx/constraintlayout.git'
+        }
+        developers {
+            developer {
+                name = 'The Android Open Source Project'
+            }
+        }
+    }
+}
+
+def generateSourceProps = tasks.register("generateSourceProps", GenerateSourcePropsTask) {
+    outputDirectory.set(layout.buildDirectory.dir("source-props"))
+}
+
+def createSeparateZip = tasks.register("createSeparateZip", Zip) {
+    dependsOn "publishMavenPublicationToLocalRepository"
+
+    String path = "${project.group.replace('.', '/')}/${aid}/${project.version}"
+    destinationDirectory = globalConfig.androidHostDist
+    archiveBaseName = "androidx-${aid}"
+    archiveVersion = globalConfig.buildNumber.orElse(project.version)
+    from generateSourceProps
+    into(path) {
+        from file("${repoLocation}/${path}")
+    }
+}
+
+tasks.named("dist") {
+    dependsOn createSeparateZip
+}

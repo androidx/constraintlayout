@@ -1,6 +1,27 @@
-include ':core', ':constraintlayout', ':compose'
+import org.gradle.api.initialization.resolve.RepositoriesMode
 
-//File externalRoot = new File(rootDir, '../external')
-//File externalRoot = new File("$System.env.DOCLAVA_PREBUILTS")
-//include ':doclava'
-//project(':doclava').projectDir = new File(externalRoot, 'doclava')
+rootProject.name = 'constraintlayout'
+
+include ':core',
+        ':constraintlayout',
+        ':compose'
+
+includeBuild 'build-logic'
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        google()
+        maven { url "../../prebuilts/tools/common/m2/repository" }
+        maven { url "https://androidx.dev/snapshots/builds/7141639/artifacts/repository/" }
+        exclusiveContent {
+            forRepository {
+                jcenter()
+            }
+            filter {
+                includeGroup('org.jetbrains.trove4j')
+            }
+        }
+    }
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+}
