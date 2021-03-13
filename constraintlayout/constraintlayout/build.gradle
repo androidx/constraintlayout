@@ -1,7 +1,7 @@
 plugins {
     id 'androidx.build.publishing'
+    id 'com.android.library'
 }
-apply plugin: 'com.android.library'
 
 def latestSdkVersion = 30
 

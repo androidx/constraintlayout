@@ -1,9 +1,8 @@
 plugins {
     id 'androidx.build.publishing'
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
 }
-
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
 
 def compose_version = '1.0.0-beta02'
 
