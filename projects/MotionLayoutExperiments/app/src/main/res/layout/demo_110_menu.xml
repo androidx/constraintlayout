@@ -103,7 +103,7 @@
         android:id="@+id/fade"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:fadeMove_translationY="-40dp"
+        app:motionEffect_translationY="-40dp"
         app:constraint_referenced_ids="t1,tf1,t2,tf2,t3,tf3,t4,tf4,t5,tf5"
         />
 

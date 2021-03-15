@@ -8,7 +8,7 @@ buildscript {
 
     dependencies {
         classpath 'com.android.tools.build:gradle:4.2.0-beta02'
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.30'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.31'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -58,19 +58,19 @@ task dist doLast {
 project(':constraintlayout') {
     ext.pomName = 'Android ConstraintLayout'
     ext.pomDesc = 'ConstraintLayout for Android'
-    ext.version = '2.1.0-alpha2'
+    ext.version = '2.1.0-beta01'
 }
 
 project(':core') {
     ext.pomName = 'Android ConstraintLayout Core'
     ext.pomDesc = 'ConstraintLayout core'
-    ext.version = '1.0.0-alpha3'
+    ext.version = '1.0.0-beta01'
 }
 
 project(':compose') {
     ext.pomName = 'ConstraintLayout for Jetpack Compose'
     ext.pomDesc = 'ConstraintLayout for Jetpack Compose'
-    ext.version = '1.0.0-alpha03'
+    ext.version = '1.0.0-alpha04'
 }
 
 subprojects { Project project ->
