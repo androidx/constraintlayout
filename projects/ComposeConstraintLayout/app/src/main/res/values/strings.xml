@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">DeveloperTemplate</string>
+    <string name="welcome_header">welcome header</string>
+    <string name="welcome_tagline1">tag 1</string>
+    <string name="welcome_tagline2">tag 2</string>
+    <string name="welcome_tagline3">tag 3</string>
+    <string name="sign_up">sign up</string>
+    <string name="log_in">log in</string>
+    <string name="trial_disclaimer">disclaimer</string>
+
+</resources>
