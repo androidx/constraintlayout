@@ -64,6 +64,7 @@ import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.USE_
 @Composable
 fun ConstraintLayout(
         modifier: Modifier = Modifier,
+        optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
         content: @Composable ConstraintLayoutScope.() -> Unit
 ) {
     val measurer = remember { Measurer() }
@@ -100,6 +101,7 @@ fun ConstraintLayout(
                 layoutDirection,
                 constraintSet,
                 measurables,
+                optimizationLevel,
                 this
         )
         layout(layoutSize.width, layoutSize.height) {
@@ -118,6 +120,7 @@ fun ConstraintLayout(
 fun ConstraintLayout(
         constraintSet: ConstraintSet,
         modifier: Modifier = Modifier,
+        optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
         content: @Composable () -> Unit
 ) {
     val measurer = remember { Measurer() }
@@ -131,6 +134,7 @@ fun ConstraintLayout(
                 layoutDirection,
                 constraintSet,
                 measurables,
+                optimizationLevel,
                 this
         )
         layout(layoutSize.width, layoutSize.height) {
@@ -1291,12 +1295,12 @@ private class Measurer : BasicMeasure.Measurer {
             Log.d("CCL2", "DW ${matchConstraintDefaultDimension}")
             Log.d("CCL2", "ODR ${otherDimensionResolved}")
             Log.d("CCL2", "IRH ${currentDimensionResolved}")
-            val useDimension = (measureStrategy == TRY_GIVEN_DIMENSIONS ||
+            val useDimension = currentDimensionResolved ||
+                    (measureStrategy == TRY_GIVEN_DIMENSIONS ||
                     measureStrategy == USE_GIVEN_DIMENSIONS) &&
                     (measureStrategy == USE_GIVEN_DIMENSIONS ||
                             matchConstraintDefaultDimension != MATCH_CONSTRAINT_WRAP ||
-                            otherDimensionResolved ||
-                            currentDimensionResolved)
+                            otherDimensionResolved)
             Log.d("CCL", "UD $useDimension")
             outConstraints[0] = if (useDimension) dimension else 0
             outConstraints[1] = if (useDimension) dimension else rootMaxConstraint
@@ -1318,6 +1322,7 @@ private class Measurer : BasicMeasure.Measurer {
             layoutDirection: LayoutDirection,
             constraintSet: ConstraintSet,
             measurables: List<Measurable>,
+            optimizationLevel: Int,
             measureScope: MeasureScope
     ): IntSize {
         this.density = measureScope
@@ -1361,7 +1366,7 @@ private class Measurer : BasicMeasure.Measurer {
         }
 
         // No need to set sizes and size modes as we passed them to the state above.
-        root.optimizationLevel = Optimizer.OPTIMIZATION_STANDARD
+        root.optimizationLevel = optimizationLevel //Optimizer.OPTIMIZATION_STANDARD
         root.measure(root.optimizationLevel, 0, 0, 0, 0, 0, 0, 0, 0)
 
         for (child in root.children) {
