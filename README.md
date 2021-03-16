@@ -1,9 +1,7 @@
 # ConstraintLayout 🗜️📏
 
-![core](https://github.com/androidx/constraintlayout/workflows/core/badge.svg)
-[![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
+![core](https://github.com/androidx/constraintlayout/workflows/core/badge.svg) <img src="https://img.shields.io/github/v/release/androidx/constraintlayout.svg?label=lastest"/> [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 
-[//]: <> (<img src="https://img.shields.io/github/v/release/androidx/constraintlayout.svg?label=lastest"/>)
 <img src="https://img.shields.io/badge/stable-2.0.4-blue"/> <img src="https://img.shields.io/badge/dev-2.1.0--beta01-blue"/> <img src="https://img.shields.io/badge/compose-1.0.0--alpha05-blue"/> 
 
 
