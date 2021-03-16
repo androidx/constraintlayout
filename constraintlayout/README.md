@@ -40,3 +40,11 @@ or even an external repository:
 ```bash
 ./gradlew -Drepo=https://com.mycompany/repo publish
 ```
+
+To create the distribution before uploading to the Google repository, run:
+
+```bash
+./gradlew dist
+```
+
+the resulting files will be found in `build/dist`.
