@@ -17,14 +17,34 @@ export DOCLAVA_PREBUILTS=$STUDIO_MASTER/external/
 export DOCLAVA_ROOTDIR=$STUDIO_MASTER/tools/sherpa/
 ```
 
+To build the library, run:
+
+```bash
+./gradlew build
+```
+
 To compile and publish to your local offline M2 repository, you need to run:
 
 ```bash
 ./localBuild.sh
 ```
 
-To generate the maven artifact, you then need to run:
+Alternatively you can set the URI of the repository you want to publish to:
+
+```bash
+./gradlew -Drepo=/path/to/repo publish
+```
+
+or even an external repository:
+
+```bash
+./gradlew -Drepo=https://com.mycompany/repo publish
+```
+
+To create the distribution before uploading to the Google repository, run:
 
 ```bash
 ./gradlew dist
 ```
+
+the resulting files will be found in `build/dist`.

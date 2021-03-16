@@ -1,6 +1,8 @@
-apply plugin: 'com.android.library'
-apply plugin: 'maven'
-apply plugin: 'kotlin-android'
+plugins {
+    id 'androidx.build.publishing'
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
 
 def compose_version = '1.0.0-beta02'
 
@@ -57,13 +59,6 @@ android {
   }
 }
 
-repositories {
-    maven { url "https://androidx.dev/snapshots/builds/7141639/artifacts/repository/" }
-    jcenter()
-    google()
-    mavenCentral()
-}
-
 configurations.all {
     resolutionStrategy.dependencySubstitution {
         substitute module("androidx.constraintlayout:constraintlayout-core") using project(":core") because "we work with the unreleased development version"
@@ -81,41 +76,7 @@ configurations.all {
          }
  }
 
-archivesBaseName = 'constraintlayout-compose'
-
-project.ext.pomName = 'ConstraintLayout for Jetpack Compose'
-project.ext.pomDesc = 'ConstraintLayout for Jetpack Compose'
-
-task publishLocal(type: Upload) {
-    configuration = configurations.archives
-    repositories {
-        mavenDeployer {
-            repository(url: uri("$rootProject.ext.localRepo"))
-            pom.project {
-                name project.ext.pomName
-                description project.ext.pomDesc
-
-                url 'http://tools.android.com'
-                inceptionYear '2007'
-
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        distribution 'repo'
-                    }
-                }
-
-                scm {
-                    url 'https://github.com/androidx/constraintlayout'
-                    connection 'git@github.com:androidx/constraintlayout.git'
-                }
-                developers {
-                    developer {
-                        name 'The Android Open Source Project'
-                    }
-                }
-            }
-        }
-    }
+globalConfig {
+    pomName = 'ConstraintLayout for Jetpack Compose'
+    pomDescription = 'ConstraintLayout for Jetpack Compose'
 }

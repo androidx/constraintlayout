@@ -1,0 +1,15 @@
+plugins {
+    id 'java-library'
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+tasks.withType(Javadoc).configureEach {
+    options {
+        // There are *many* javadoc errors which need to be fixed
+        addStringOption('Xdoclint:none', '-quiet')
+    }
+}
