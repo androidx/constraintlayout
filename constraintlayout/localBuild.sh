@@ -1,2 +1,2 @@
 #!/bin/bash
-./gradlew -PlocalRepo=$ANDROID_M2REPOSITORY publishMavenPublicationToLocalRepo --info
+./gradlew -Prepo=$ANDROID_M2REPOSITORY publishMavenPublicationToLocalRepo --info

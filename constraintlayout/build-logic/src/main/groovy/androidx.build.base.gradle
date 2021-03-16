@@ -4,4 +4,11 @@ extensions.create("globalConfig", GlobalConfig, rootProject.layout)
 
 version = providers.gradleProperty("${project.name}.version").forUseAtConfigurationTime().get()
 
-tasks.register("dist")
+// Configure the project to use the Java 8 compiler
+pluginManager.withPlugin("java-base") {
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(8))
+        }
+    }
+}

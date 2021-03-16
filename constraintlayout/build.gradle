@@ -9,10 +9,3 @@ tasks.register('checkJavaVersion') {
         throw new RuntimeException("Tools need to be compiled with Java $requiredVersion, you are using Java $jvmVersion.")
     }
 }
-
-layout.buildDirectory.set(globalConfig.androidHostOut.dir("build"))
-
-subprojects { Project project ->
-    // Change buildDir first so that all plugins pick up the new value.
-    project.layout.buildDirectory.set(rootProject.layout.buildDirectory.dir("${project.name}/build"))
-}

@@ -13,7 +13,7 @@ pluginManagement {
     resolutionStrategy {
         eachPlugin {
             if (it.requested.id.namespace == "com.android") {
-                it.useModule("com.android.tools.build:gradle:4.2.0-beta02")
+                it.useModule("com.android.tools.build:gradle:4.2.0-beta06")
             }
         }
     }
@@ -33,14 +33,7 @@ dependencyResolutionManagement {
         google()
         maven { url "../../prebuilts/tools/common/m2/repository" }
         maven { url "https://androidx.dev/snapshots/builds/7141639/artifacts/repository/" }
-        exclusiveContent {
-            forRepository {
-                jcenter()
-            }
-            filter {
-                includeGroup('org.jetbrains.trove4j')
-            }
-        }
+        jcenter()
     }
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
 }

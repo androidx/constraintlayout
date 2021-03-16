@@ -15,29 +15,20 @@
  */
 package androidx.constraintlayout;
 
-import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.ProjectLayout;
-import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.Property;
 import org.gradle.api.provider.Provider;
 import org.gradle.api.provider.ProviderFactory;
 
 import javax.inject.Inject;
 
-/**
- * With the build server you are given two env variables.
- * The OUT_DIR is a temporary directory you can use to put things during the build.
- * The DIST_DIR is where you want to save things from the build.
- *
- * The build server will copy the contents of DIST_DIR to somewhere and make it available.
- *
- * WARNING:
- * The build directory is set OUTSIDE of the checked out directory by default!
- */
 public abstract class GlobalConfig {
-    abstract DirectoryProperty getAndroidHostOut();
-
-    abstract DirectoryProperty getAndroidHostDist();
+    /**
+     * We use a String to represent the repository URI instead of a DirectoryProperty
+     * because we want to support both publishing to a local file repository and a
+     * remote repository
+     */
+    abstract Property<String> getRepoLocation();
 
     abstract Property<String> getBuildNumber();
 
@@ -46,18 +37,12 @@ public abstract class GlobalConfig {
     abstract Property<String> getPomDescription();
 
     @Inject
-    public GlobalConfig(ProviderFactory providers, ObjectFactory objects, ProjectLayout layout) {
-        getAndroidHostOut().convention(
-                getEnv(providers, "OUT_DIR")
-                        .flatMap(s -> objects.directoryProperty().dir(s))
-                        .orElse(layout.getProjectDirectory().dir("../../out"))
-        );
-        getAndroidHostDist().convention(
-                getEnv(providers, "DIST_DIR")
-                        .flatMap(s -> objects.directoryProperty().dir(s))
-                        .orElse(getAndroidHostOut().dir("dist"))
-        );
+    public GlobalConfig(ProviderFactory providers, ProjectLayout rootProjectLayout) {
         getBuildNumber().convention(getEnv(providers, "BUILD"));
+        getRepoLocation().convention(
+                providers.gradleProperty("repo").forUseAtConfigurationTime()
+                .orElse(rootProjectLayout.getBuildDirectory().dir("repo").map(d -> d.getAsFile().getAbsolutePath()))
+        );
     }
 
     private static Provider<String> getEnv(ProviderFactory providers, String name) {
