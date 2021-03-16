@@ -4,8 +4,8 @@ plugins {
 }
 
 globalConfig {
-    pomName = 'Android ConstraintLayout Solver'
-    pomDescription = 'Solver for ConstraintLayout'
+    pomName = 'Android ConstraintLayout Core'
+    pomDescription = 'ConstraintLayout core'
 }
 
 dependencies {
