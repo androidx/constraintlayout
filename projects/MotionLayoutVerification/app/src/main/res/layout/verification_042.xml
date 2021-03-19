@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motionLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layoutDescription="@xml/verification_scene_042"
+    tools:context=".VerificationActivity">
+<!-- This demo of the fast swipe bug when used with Nested Scroll behaviour  -->
+
+    <View
+        android:id="@+id/firstSpace"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="#6666FF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/secondSpace"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="#2222FF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/firstSpace" />
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="0dp"
+        android:gravity="center"
+        android:textColor="#FFF"
+        android:layout_height="wrap_content"
+        android:text="cb down" />
+    <TextView
+        android:id="@+id/text2"
+        android:layout_width="0dp"
+        android:gravity="center"
+        android:textColor="#FFF"
+        android:layout_height="wrap_content"
+        android:text="down!" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>
