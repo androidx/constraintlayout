@@ -16,6 +16,9 @@ buildscript {
 
 allprojects {
     repositories {
+        maven {
+            url 'http://localhost:1480'
+        }
         google()
         jcenter()
     }
