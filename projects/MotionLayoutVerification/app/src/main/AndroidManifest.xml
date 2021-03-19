@@ -24,7 +24,18 @@
             android:configChanges="orientation|screenSize"/>
         <activity android:name=".RotationAngular"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".CustomSwipeClick" />
+         <activity android:name=".CustomSwipeClick" />
+         <activity android:name=".RotationToolbar"
+            android:label="To Run Disable Animation"
+        android:configChanges="orientation|screenSize"/>
+        <activity android:name=".RotationRotateToToolbar"
+            android:label="To Run Disable Animation"
+            android:configChanges="orientation|screenSize"/>
+        <activity android:name=".ConstraintSetVerify"
+            android:label="Test ConstraintSet on ConstraintLayout"
+            />
+        <activity android:name=".CheckCallbackActivity" />
+
     </application>
 
 </manifest>

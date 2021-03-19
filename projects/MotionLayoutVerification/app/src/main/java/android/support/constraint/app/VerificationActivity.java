@@ -76,7 +76,7 @@ import java.util.Random;
 public class VerificationActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "Verification00";
     private String KEY = "layout";
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     String layout_name;
     HashMap<String, Class> activity_map = new HashMap<>();
 
@@ -87,14 +87,18 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         activity_map.put("verification_038", RotationUsingRotateTo.class);
         activity_map.put("verification_039", RotationAngular.class);
         activity_map.put("verification_350", CustomSwipeClick.class);
+        activity_map.put("constraint_set_01", ConstraintSetVerify.class);
+        activity_map.put("verification_042", CheckCallbackActivity.class);
+        //  activity_map.put("verification_037", RotationToolbar.class);
+        //  activity_map.put("verification_038", RotationRotateToToolbar.class);
     }
 
     String s = AppCompatActivity.class.getName();
 
     private static boolean REVERSE = false;
 
-    private final String RUN_FIRST = "verification_350";
-    private final String LAYOUTS_MATCHES = "verification_\\d+";
+    private final String RUN_FIRST = "verification_042";
+    private final String LAYOUTS_MATCHES = ".*_\\d+";
 
     private static String SHOW_FIRST = "";
     MotionLayout mMotionLayout;
@@ -157,12 +161,15 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         }
         if (mMotionLayout != null) {
             ArrayList<MotionScene.Transition> transition = mMotionLayout.getDefinedTransitions();
-            int[] tids = new int[transition.size()];
+            int[] tids = new int[0];
             int count = 0;
-            for (MotionScene.Transition t : transition) {
-                int tid = t.getId();
-                if (tid != -1) {
-                    tids[count++] = tid;
+            if (transition != null) {
+                tids = new int[transition.size()];
+                for (MotionScene.Transition t : transition) {
+                    int tid = t.getId();
+                    if (tid != -1) {
+                        tids[count++] = tid;
+                    }
                 }
             }
 

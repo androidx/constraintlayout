@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.motion.widget.MotionLayout;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -48,7 +49,45 @@ public class Utils {
         }
         return null;
     }
+    static  <T extends View> T findView(AppCompatActivity activity, Class c) {
+        ViewGroup group = ((ViewGroup) activity.findViewById(android.R.id.content).getRootView());
+        ArrayList<ViewGroup> groups = new ArrayList<>();
+        groups.add(group);
+        while (!groups.isEmpty()) {
+            ViewGroup vg = groups.remove(0);
+            int n = vg.getChildCount();
+            for (int i = 0; i < n; i++) {
+                View view = vg.getChildAt(i);
+                if (c.isAssignableFrom(view.getClass())) {
+                    return (T) view;
+                }
+                if (view instanceof ViewGroup) {
+                    groups.add((ViewGroup) view);
+                }
+            }
+        }
+        return (T) null;
+    }
 
+    static ConstraintLayout findConstraintLayout(AppCompatActivity activity) {
+        ViewGroup group = ((ViewGroup) activity.findViewById(android.R.id.content).getRootView());
+        ArrayList<ViewGroup> groups = new ArrayList<>();
+        groups.add(group);
+        while (!groups.isEmpty()) {
+            ViewGroup vg = groups.remove(0);
+            int n = vg.getChildCount();
+            for (int i = 0; i < n; i++) {
+                View view = vg.getChildAt(i);
+                if (view instanceof ConstraintLayout) {
+                    return (ConstraintLayout) view;
+                }
+                if (view instanceof ViewGroup) {
+                    groups.add((ViewGroup) view);
+                }
+            }
+        }
+        return null;
+    }
    static String[] getLayouts(String  match) {
         ArrayList<String> list = new ArrayList<>();
         Field[] f = R.layout.class.getDeclaredFields();
