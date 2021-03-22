@@ -331,7 +331,9 @@ public class ViewTransition {
         motionController.setBothStates(view);
         mKeyFrames.addAllFrames(motionController);
         motionController.setup(motionLayout.getWidth(), motionLayout.getHeight(), mDuration, System.nanoTime());
-        Animate animate = new Animate(controller, motionController, mDuration, mUpDuration, mOnStateTransition, getInterpolator(motionLayout.getContext()), mSetsTag, mClearsTag);
+        new Animate(controller, motionController,
+                mDuration, mUpDuration, mOnStateTransition,
+                getInterpolator(motionLayout.getContext()), mSetsTag, mClearsTag);
     }
 
     static class Animate {
