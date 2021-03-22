@@ -19,6 +19,7 @@ package androidx.constraintlayout.motion.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.content.res.XmlResourceParser;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -69,8 +70,9 @@ public class ViewTransition {
     // Transition can be up or down of manually fired
     public static final int ONSTATE_ACTION_DOWN = 1;
     public static final int ONSTATE_ACTION_UP = 2;
-    public static final int ONSTATE_SHARED_VALUE_SET = 3;
-    public static final int ONSTATE_SHARED_VALUE_UNSET = 4;
+    public static final int ONSTATE_ACTION_DOWN_UP = 3;
+    public static final int ONSTATE_SHARED_VALUE_SET = 4;
+    public static final int ONSTATE_SHARED_VALUE_UNSET = 5;
 
     private int mOnStateTransition = UNSET;
     private boolean mDisabled = false;
@@ -82,6 +84,8 @@ public class ViewTransition {
     KeyFrames mKeyFrames;
     ConstraintSet.Constraint mConstraintDelta;
     private int mDuration = UNSET;
+    private int mUpDuration = UNSET;
+
     private int mTargetId;
     private String mTargetString;
 
@@ -140,6 +144,7 @@ public class ViewTransition {
 
     /**
      * Gets the SharedValue it will be listening for.
+     *
      * @return
      */
     public int getSharedValue() {
@@ -155,6 +160,7 @@ public class ViewTransition {
 
     /**
      * Gets the ID of the SharedValue it will be listening for.
+     *
      * @return the id of the shared value
      */
     public int getSharedValueID() {
@@ -281,6 +287,8 @@ public class ViewTransition {
                 mPathMotionArc = a.getInt(attr, mPathMotionArc);
             } else if (attr == R.styleable.ViewTransition_duration) {
                 mDuration = a.getInt(attr, mDuration);
+            } else if (attr == R.styleable.ViewTransition_upDuration) {
+                mUpDuration = a.getInt(attr, mUpDuration);
             } else if (attr == R.styleable.ViewTransition_viewTransitionMode) {
                 mViewTransitionMode = a.getInt(attr, mViewTransitionMode);
             } else if (attr == R.styleable.ViewTransition_motionInterpolator) {
@@ -309,21 +317,21 @@ public class ViewTransition {
                 mIfTagSet = a.getResourceId(attr, mIfTagSet);
             } else if (attr == R.styleable.ViewTransition_ifTagNotSet) {
                 mIfTagNotSet = a.getResourceId(attr, mIfTagNotSet);
-            }else if (attr == R.styleable.ViewTransition_SharedValueId) {
+            } else if (attr == R.styleable.ViewTransition_SharedValueId) {
                 mSharedValueID = a.getResourceId(attr, mSharedValueID);
-            }else if (attr == R.styleable.ViewTransition_SharedValue) {
+            } else if (attr == R.styleable.ViewTransition_SharedValue) {
                 mSharedValueTarget = a.getInteger(attr, mSharedValueTarget);
             }
         }
         a.recycle();
     }
 
-    void applyIndependentTransition(ViewTransitionController controller, MotionLayout motionLayout,View view) {
+    void applyIndependentTransition(ViewTransitionController controller, MotionLayout motionLayout, View view) {
         MotionController motionController = new MotionController(view);
         motionController.setBothStates(view);
         mKeyFrames.addAllFrames(motionController);
         motionController.setup(motionLayout.getWidth(), motionLayout.getHeight(), mDuration, System.nanoTime());
-        new Animate(controller, motionController, mDuration, getInterpolator(motionLayout.getContext()), mSetsTag, mClearsTag);
+        Animate animate = new Animate(controller, motionController, mDuration, mUpDuration, mOnStateTransition, getInterpolator(motionLayout.getContext()), mSetsTag, mClearsTag);
     }
 
     static class Animate {
@@ -332,35 +340,69 @@ public class ViewTransition {
         long mStart;
         MotionController mMC;
         int mDuration;
+        int mUpDuration;
         KeyCache mCache = new KeyCache();
         ViewTransitionController mVtController;
         Interpolator mInterpolator;
+        boolean reverse = false;
+        float mPosition;
+        float mDpositionDt;
+        long mLastRender;
+        Rect mTempRec = new Rect();
+        boolean hold_at_100 = false;
 
         Animate(ViewTransitionController controller,
                 MotionController motionController,
-                int duration,
+                int duration, int upDuration, int mode,
                 Interpolator interpolator, int setTag, int clearTag) {
             mVtController = controller;
             mMC = motionController;
             mDuration = duration;
+            mUpDuration = upDuration;
             mStart = System.nanoTime();
+            mLastRender = mStart;
             mVtController.addAnimation(this);
             mInterpolator = interpolator;
             mSetsTag = setTag;
             mClearsTag = clearTag;
+            if (mode == ONSTATE_ACTION_DOWN_UP) {
+                hold_at_100 = true;
+            }
+            mDpositionDt = (duration == 0) ? Float.MAX_VALUE : 1f / duration;
             mutate();
         }
 
-        void mutate() {
-            long current = System.nanoTime();
-            long elapse = current - mStart;
-            float position = ((float) (elapse * 1E-6)) / mDuration;
-            if (position >= 1.0f) {
-                position = 1.0f;
+        void reverse(boolean dir) {
+            reverse = dir;
+            if (reverse && mUpDuration != UNSET) {
+                mDpositionDt = (mUpDuration == 0) ? Float.MAX_VALUE : 1f / mUpDuration;
             }
-            float ipos = (mInterpolator == null) ? position : mInterpolator.getInterpolation(position);
+            mVtController.invalidate();
+            mLastRender = System.nanoTime();
+        }
+
+        void mutate() {
+            if (reverse) {
+                mutateReverse();
+            } else {
+                mutateForward();
+            }
+        }
+
+        void mutateReverse() {
+            long current = System.nanoTime();
+            long elapse = current - mLastRender;
+            mLastRender = current;
+
+            mPosition -= ((float) (elapse * 1E-6)) * mDpositionDt;
+            if (mPosition < 0.0f) {
+                mPosition = 0.0f;
+            }
+
+            float ipos = (mInterpolator == null) ? mPosition : mInterpolator.getInterpolation(mPosition);
             boolean repaint = mMC.interpolate(mMC.mView, ipos, current, mCache);
-            if (position >= 1) {
+
+            if (mPosition <= 0) {
                 if (mSetsTag != UNSET) {
                     mMC.getView().setTag(mSetsTag, System.nanoTime());
                 }
@@ -369,8 +411,56 @@ public class ViewTransition {
                 }
                 mVtController.removeAnimation(this);
             }
-            if (position < 1f || repaint) {
+            if (mPosition > 0f || repaint) {
                 mVtController.invalidate();
+            }
+        }
+
+        void mutateForward() {
+
+            long current = System.nanoTime();
+            long elapse = current - mLastRender;
+            mLastRender = current;
+
+            mPosition += ((float) (elapse * 1E-6)) * mDpositionDt;
+            if (mPosition >= 1.0f) {
+                mPosition = 1.0f;
+            }
+
+            float ipos = (mInterpolator == null) ? mPosition : mInterpolator.getInterpolation(mPosition);
+            boolean repaint = mMC.interpolate(mMC.mView, ipos, current, mCache);
+
+
+            if (mPosition >= 1) {
+                if (mSetsTag != UNSET) {
+                    mMC.getView().setTag(mSetsTag, System.nanoTime());
+                }
+                if (mClearsTag != UNSET) {
+                    mMC.getView().setTag(mClearsTag, null);
+                }
+                if (!hold_at_100) {
+                    mVtController.removeAnimation(this);
+                }
+            }
+            if (mPosition < 1f || repaint) {
+                mVtController.invalidate();
+            }
+        }
+
+        public void reactTo(int action, float x, float y) {
+            switch (action) {
+                case MotionEvent.ACTION_UP:
+                    if (!reverse) {
+                        reverse(true);
+                    }
+                    return;
+                case MotionEvent.ACTION_MOVE:
+                    View view = mMC.getView();
+                    view.getHitRect(mTempRec);
+                    if (!mTempRec.contains((int) x, (int) y)) {
+                        if (!reverse)
+                            reverse(true);
+                    }
             }
         }
     }
@@ -495,6 +585,9 @@ public class ViewTransition {
         }
         if (mOnStateTransition == ONSTATE_ACTION_UP) {
             return action == MotionEvent.ACTION_UP;
+        }
+        if (mOnStateTransition == ONSTATE_ACTION_DOWN_UP) {
+            return action == MotionEvent.ACTION_DOWN;
         }
         return false;
     }

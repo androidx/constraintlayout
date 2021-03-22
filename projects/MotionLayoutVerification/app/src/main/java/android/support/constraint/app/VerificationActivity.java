@@ -21,7 +21,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Build;
@@ -30,7 +29,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -76,7 +74,7 @@ import java.util.Random;
 public class VerificationActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "Verification00";
     private String KEY = "layout";
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     String layout_name;
     HashMap<String, Class> activity_map = new HashMap<>();
 
@@ -89,6 +87,8 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         activity_map.put("verification_350", CustomSwipeClick.class);
         activity_map.put("constraint_set_01", ConstraintSetVerify.class);
         activity_map.put("verification_042", CheckCallbackActivity.class);
+        activity_map.put("verification_057", CheckSetStates.class);
+
         //  activity_map.put("verification_037", RotationToolbar.class);
         //  activity_map.put("verification_038", RotationRotateToToolbar.class);
     }
@@ -97,8 +97,8 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
 
     private static boolean REVERSE = false;
 
-    private final String RUN_FIRST = "verification_042";
-    private final String LAYOUTS_MATCHES = ".*_\\d+";
+    private final String RUN_FIRST = "verification_450";
+    private final String LAYOUTS_MATCHES = "verification_\\d+";
 
     private static String SHOW_FIRST = "";
     MotionLayout mMotionLayout;
@@ -135,15 +135,13 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         layout_name = prelayout;
         Context ctx = getApplicationContext();
         int id = ctx.getResources().getIdentifier(prelayout, "layout", ctx.getPackageName());
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        ActionBar bar = getSupportActionBar();
-        if (bar != null) {
-            bar.hide();
-        }
+       // this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        setTitle("layout:"+layout_name);
+
         setContentView(id);
         focusJump();
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(0xFFfd401d));
         RecyclerView rv = findView(RecyclerView.class);
         populateRecyclerView(rv);
 

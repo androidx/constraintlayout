@@ -160,6 +160,11 @@ public class ViewTransitionController {
         float y = event.getY();
         Rect rec = new Rect();
         int action = event.getAction();
+        if (animations != null && !animations.isEmpty()) {
+            for (ViewTransition.Animate animation : animations) {
+                animation.reactTo(action,x,y);
+            }
+        }
         switch (action) {
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_DOWN:

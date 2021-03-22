@@ -35,6 +35,7 @@
             android:label="Test ConstraintSet on ConstraintLayout"
             />
         <activity android:name=".CheckCallbackActivity" />
+        <activity android:name=".CheckSetStates" />
 
     </application>
 
