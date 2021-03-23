@@ -32,8 +32,9 @@
         android:id="@+id/spin"
         motion:motionTarget="button.*"
         motion:viewTransitionMode="noState"
-        motion:onStateTransition="actionDown"
-        motion:duration="2400">
+        motion:onStateTransition="actionDownUp"
+        motion:upDuration = "700"
+        motion:duration="200">
 
         <KeyFrameSet>
             <KeyAttribute motion:framePosition="0">
@@ -45,39 +46,24 @@
                     motion:customColorDrawableValue="#492f39" />
             </KeyAttribute>
 
-            <KeyAttribute motion:framePosition="20">
+            <KeyAttribute motion:framePosition="30">
                 <CustomAttribute
                     motion:attributeName="roundPercent"
                     motion:customFloatValue=".3" />
                 <CustomAttribute
                     motion:attributeName="background"
-                    motion:customColorDrawableValue="#b46e89" />
+                    motion:customColorDrawableValue="#AE7088" />
             </KeyAttribute>
 
-            <KeyAttribute motion:framePosition="80">
-                <CustomAttribute
-                    motion:attributeName="roundPercent"
-                    motion:customFloatValue="1" />
-                <CustomAttribute
-                    motion:attributeName="background"
-                    motion:customColorDrawableValue="#593945" />
-            </KeyAttribute>
-            <KeyAttribute motion:framePosition="90">
-                <CustomAttribute
-                    motion:attributeName="roundPercent"
-                    motion:customFloatValue="1" />
-                <CustomAttribute
-                    motion:attributeName="background"
-                    motion:customColorDrawableValue="#593945" />
-            </KeyAttribute>
             <KeyAttribute motion:framePosition="100">
                 <CustomAttribute
                     motion:attributeName="roundPercent"
-                    motion:customFloatValue="1" />
+                    motion:customFloatValue="0.3" />
                 <CustomAttribute
                     motion:attributeName="background"
-                    motion:customColorDrawableValue="#492f39" />
+                    motion:customColorDrawableValue="#D62769" />
             </KeyAttribute>
+
         </KeyFrameSet>
     </ViewTransition>
 
