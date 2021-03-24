@@ -31,6 +31,7 @@ import androidx.compose.ui.layout.ParentDataModifier
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.layout.LayoutIdParentData
+import androidx.compose.ui.layout.MeasurePolicy
 import androidx.compose.ui.platform.InspectorValueInfo
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.Constraints
@@ -64,53 +65,64 @@ import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.USE_
  * @sample androidx.compose.foundation.layout.samples.DemoInlineDSL
  */
 @Composable
-fun ConstraintLayout(
+inline fun ConstraintLayout(
         modifier: Modifier = Modifier,
         optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
-        content: @Composable ConstraintLayoutScope.() -> Unit
+        crossinline content: @Composable ConstraintLayoutScope.() -> Unit
 ) {
-    val measurer = remember { Measurer() }
     val scope = remember { ConstraintLayoutScope() }
-
+    val measurePolicy = rememberConstraintLayoutMeasurePolicy(optimizationLevel, scope)
     @Suppress("Deprecation")
     MultiMeasureLayout(
             modifier = modifier,
+            measurePolicy = measurePolicy,
             content = {
                 scope.reset()
                 scope.content()
             }
-    ) { measurables, constraints ->
-        val constraintSet = object : ConstraintSet {
-            override fun applyTo(state: State, measurables: List<Measurable>) {
-                scope.applyTo(state)
-                measurables.fastForEach { measurable ->
-                    val parentData = measurable.parentData as? ConstraintLayoutParentData
-                    // Map the id and the measurable, to be retrieved later during measurement.
-                    val givenTag = parentData?.ref?.id
-                    state.map(givenTag ?: createId(), measurable)
-                    // Run the constrainAs block of the child, to obtain its constraints.
-                    if (parentData != null) {
-                        val constrainScope = ConstrainScope(parentData.ref.id)
-                        parentData.constrain(constrainScope)
-                        constrainScope.applyTo(state)
+    )
+}
+
+@Composable
+@PublishedApi
+internal fun rememberConstraintLayoutMeasurePolicy(
+        optimizationLevel: Int,
+        scope: ConstraintLayoutScope
+): MeasurePolicy =
+        remember(optimizationLevel) {
+            val measurer = Measurer()
+            MeasurePolicy { measurables, constraints ->
+                val constraintSet = object : ConstraintSet {
+                    override fun applyTo(state: State, measurables: List<Measurable>) {
+                        scope.applyTo(state)
+                        measurables.fastForEach { measurable ->
+                            val parentData = measurable.parentData as? ConstraintLayoutParentData
+                            // Map the id and the measurable, to be retrieved later during measurement.
+                            val givenTag = parentData?.ref?.id
+                            state.map(givenTag ?: createId(), measurable)
+                            // Run the constrainAs block of the child, to obtain its constraints.
+                            if (parentData != null) {
+                                val constrainScope = ConstrainScope(parentData.ref.id)
+                                parentData.constrain(constrainScope)
+                                constrainScope.applyTo(state)
+                            }
+                        }
                     }
+                }
+
+                val layoutSize = measurer.performMeasure(
+                        constraints,
+                        layoutDirection,
+                        constraintSet,
+                        measurables,
+                        optimizationLevel,
+                        this
+                )
+                layout(layoutSize.width, layoutSize.height) {
+                    with(measurer) { performLayout(measurables) }
                 }
             }
         }
-
-        val layoutSize = measurer.performMeasure(
-                constraints,
-                layoutDirection,
-                constraintSet,
-                measurables,
-                optimizationLevel,
-                this
-        )
-        layout(layoutSize.width, layoutSize.height) {
-            with(measurer) { performLayout(measurables) }
-        }
-    }
-}
 
 /**
  * Layout that positions its children according to the constraints between them.
@@ -119,18 +131,25 @@ fun ConstraintLayout(
  * @sample androidx.compose.foundation.layout.samples.DemoConstraintSet
  */
 @Composable
-fun ConstraintLayout(
+inline fun ConstraintLayout(
         constraintSet: ConstraintSet,
         modifier: Modifier = Modifier,
         optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
-        content: @Composable () -> Unit
+        noinline content: @Composable () -> Unit
 ) {
-    val measurer = remember { Measurer() }
+    val measurePolicy = rememberConstraintLayoutMeasurePolicy(optimizationLevel, constraintSet)
     @Suppress("Deprecation")
-    MultiMeasureLayout(
-            modifier,
-            content
-    ) { measurables, constraints ->
+    MultiMeasureLayout(modifier, content, measurePolicy)
+}
+
+@Composable
+@PublishedApi
+internal fun rememberConstraintLayoutMeasurePolicy(
+        optimizationLevel: Int,
+        constraintSet: ConstraintSet
+) = remember {
+    val measurer = Measurer()
+    MeasurePolicy { measurables, constraints ->
         val layoutSize = measurer.performMeasure(
                 constraints,
                 layoutDirection,
@@ -493,7 +512,7 @@ abstract class ConstraintLayoutBaseScope {
  * Scope used by the inline DSL of [ConstraintLayout].
  */
 @LayoutScopeMarker
-class ConstraintLayoutScope internal constructor() : ConstraintLayoutBaseScope() {
+class ConstraintLayoutScope @PublishedApi internal constructor() : ConstraintLayoutBaseScope() {
     /**
      * Creates one [ConstrainedLayoutReference], which needs to be assigned to a layout within the
      * [ConstraintLayout] as part of [Modifier.constrainAs]. To create more references at the
