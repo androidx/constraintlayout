@@ -1139,7 +1139,7 @@ class State(val density: Density) : SolverState() {
     }
 
     internal fun getKeyId(helperWidget: HelperWidget): Any? {
-        return mHelperReferences.entries.firstOrNull { it.value == helperWidget }?.key
+        return mHelperReferences.entries.firstOrNull { it.value.helperWidget == helperWidget }?.key
     }
 }
 
