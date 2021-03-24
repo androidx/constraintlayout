@@ -19,7 +19,9 @@ package androidx.constraintlayout.compose
 import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.boundsInParent
@@ -1118,6 +1120,25 @@ class ConstraintLayoutTest {
         }
         rule.runOnIdle {
             first.value = false
+        }
+        rule.waitForIdle()
+    }
+
+    @Test
+    fun testConstraintLayout_doesNotCrashWhenOnlyContentIsRecomposed() {
+        var smallSize by mutableStateOf(true)
+        rule.setContent {
+            Box {
+                ConstraintLayout {
+                    val (box1, box2) = createRefs()
+                    val barrier = createBottomBarrier(box1)
+                    Box(Modifier.height(if (smallSize) 30.dp else 40.dp).constrainAs(box1) {})
+                    Box(Modifier)
+                }
+            }
+        }
+        rule.runOnIdle {
+            smallSize = false
         }
         rule.waitForIdle()
     }
