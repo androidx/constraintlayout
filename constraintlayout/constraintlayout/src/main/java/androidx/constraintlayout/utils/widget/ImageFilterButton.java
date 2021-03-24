@@ -151,6 +151,7 @@ public class ImageFilterButton extends androidx.appcompat.widget.AppCompatImageB
             }
             a.recycle();
 
+            mDrawable = getDrawable();
             if (mAltDrawable != null && mDrawable != null) {
 
                 mLayers[0] = mDrawable = getDrawable().mutate();
