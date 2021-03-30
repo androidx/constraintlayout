@@ -535,6 +535,7 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
             }
             a.recycle();
 
+            mDrawable = getDrawable();
             if (mAltDrawable != null && mDrawable != null) {
 
                 mLayers[0] = mDrawable = getDrawable().mutate();

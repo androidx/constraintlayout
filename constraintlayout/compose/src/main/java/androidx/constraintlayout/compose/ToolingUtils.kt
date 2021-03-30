@@ -61,7 +61,8 @@ internal fun parseConstraintsToJson(
                     targetIsHelper -> targetWidget.getHelperId(state)
                     else -> targetWidget.getRefId()
                 }
-                constraintsInfoArray.put(JSONObject()
+                constraintsInfoArray.put(
+                    JSONObject()
                         .put("originAnchor", anchor.type)
                         .put("targetAnchor", anchor.target!!.type)
                         .put("target", targetId)
@@ -71,29 +72,31 @@ internal fun parseConstraintsToJson(
         }
 
         idToConstraintsJson.putViewIdToBoundsAndConstraints(
-                viewId = widgetId,
-                boxJson = constraintWidget.boundsToJson(startX, startY),
-                isHelper = constraintWidget is HelperWidget,
-                isRoot = false,
-                helperReferences = helperReferences,
-                constraintsInfoArray = constraintsInfoArray
+            viewId = widgetId,
+            boxJson = constraintWidget.boundsToJson(startX, startY),
+            isHelper = constraintWidget is HelperWidget,
+            isRoot = false,
+            helperReferences = helperReferences,
+            constraintsInfoArray = constraintsInfoArray
         )
     }
     idToConstraintsJson.putViewIdToBoundsAndConstraints(
-            viewId = rootId,
-            boxJson = root.boundsToJson(startX, startY),
-            isHelper = false,
-            isRoot = true,
-            helperReferences = emptyList(),
-            constraintsInfoArray = JSONArray()
+        viewId = rootId,
+        boxJson = root.boundsToJson(startX, startY),
+        isHelper = false,
+        isRoot = true,
+        helperReferences = emptyList(),
+        constraintsInfoArray = JSONArray()
     )
     return createDesignInfoJson(idToConstraintsJson)
 }
 
-private fun addReferencesIds(helperWidget: HelperWidget,
-                             helperReferences: MutableList<String>,
-                             root: ConstraintWidgetContainer,
-                             rootId: String) {
+private fun addReferencesIds(
+    helperWidget: HelperWidget,
+    helperReferences: MutableList<String>,
+    root: ConstraintWidgetContainer,
+    rootId: String
+) {
     helperWidget.mWidgets.forEach { referencedWidget ->
         val referenceId = if (referencedWidget == root) rootId else referencedWidget.getRefId()
         helperReferences.add(referenceId)
@@ -104,32 +107,32 @@ private fun addReferencesIds(helperWidget: HelperWidget,
  * Returns the Id used for HelperWidgets like barriers or guidelines. Blank if there's no Id.
  */
 private fun ConstraintWidget.getHelperId(state: State): String =
-        state.getKeyId(this as HelperWidget).toString()
+    state.getKeyId(this as HelperWidget).toString()
 
 /**
  * Returns the Id used for Composables within the layout. Blank if there's no Id.
  */
 private fun ConstraintWidget?.getRefId(): String =
-        (this?.companionWidget as? Measurable)?.layoutId.toString()
+    (this?.companionWidget as? Measurable)?.layoutId.toString()
 
 private fun createDesignInfoJson(content: JSONObject) = JSONObject()
-        .put("type", "CONSTRAINTS")
-        .put("version", CONSTRAINTS_JSON_VERSION)
-        .put("content", content).toString()
+    .put("type", "CONSTRAINTS")
+    .put("version", CONSTRAINTS_JSON_VERSION)
+    .put("content", content).toString()
 
 private fun ConstraintWidget.boundsToJson(startX: Int, startY: Int) = JSONObject()
-        .put("left", left + startX)
-        .put("top", top + startY)
-        .put("right", right + startX)
-        .put("bottom", bottom + startY)
+    .put("left", left + startX)
+    .put("top", top + startY)
+    .put("right", right + startX)
+    .put("bottom", bottom + startY)
 
 private fun JSONObject.putViewIdToBoundsAndConstraints(
-        viewId: String,
-        boxJson: JSONObject,
-        isHelper: Boolean,
-        isRoot: Boolean,
-        helperReferences: List<String>,
-        constraintsInfoArray: JSONArray
+    viewId: String,
+    boxJson: JSONObject,
+    isHelper: Boolean,
+    isRoot: Boolean,
+    helperReferences: List<String>,
+    constraintsInfoArray: JSONArray
 ) {
     val viewWithBoundsAndConstraints = JSONObject()
     viewWithBoundsAndConstraints.put("viewId", viewId)
