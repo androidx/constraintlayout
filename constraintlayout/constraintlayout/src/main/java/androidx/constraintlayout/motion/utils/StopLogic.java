@@ -16,6 +16,8 @@
 
 package androidx.constraintlayout.motion.utils;
 
+import androidx.constraintlayout.core.motion.utils.SpringStopEngine;
+import androidx.constraintlayout.core.motion.utils.StopEngine;
 import androidx.constraintlayout.core.motion.utils.StopLogicEngine;
 import androidx.constraintlayout.motion.widget.MotionInterpolator;
 
@@ -28,7 +30,9 @@ import androidx.constraintlayout.motion.widget.MotionInterpolator;
  * @hide
  */
 public class StopLogic extends MotionInterpolator {
-    private StopLogicEngine engine = new StopLogicEngine();
+    private StopLogicEngine mStopLogicEngine = new StopLogicEngine();
+    private SpringStopEngine mSpringStopEngine;
+    private StopEngine engine = mStopLogicEngine;
 
     /**
      * Debugging logic to log the state.
@@ -47,7 +51,18 @@ public class StopLogic extends MotionInterpolator {
     }
 
     public void config(float currentPos, float destination, float currentVelocity, float maxTime, float maxAcceleration, float maxVelocity) {
-        engine.config(currentPos, destination, currentVelocity, maxTime, maxAcceleration, maxVelocity);
+        engine = mStopLogicEngine;
+        mStopLogicEngine.config(currentPos, destination, currentVelocity, maxTime, maxAcceleration, maxVelocity);
+    }
+
+    public void springConfig(float currentPos, float destination, float currentVelocity,
+                             float mass, float stiffness, float damping, float stopThreshold,
+                             int boundaryMode) {
+        if (mSpringStopEngine == null) {
+            mSpringStopEngine = new SpringStopEngine();
+        }
+        engine = mSpringStopEngine;
+        mSpringStopEngine.springConfig(currentPos, destination, currentVelocity, mass, stiffness, damping, stopThreshold, boundaryMode);
     }
 
     @Override
@@ -58,5 +73,9 @@ public class StopLogic extends MotionInterpolator {
     @Override
     public float getVelocity() {
         return engine.getVelocity();
+    }
+
+    public boolean isStopped() {
+        return engine.isStopped();
     }
 }

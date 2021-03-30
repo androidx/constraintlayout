@@ -1285,6 +1285,16 @@
         <attr name="dragThreshold" format="float" />
         <attr name="maxVelocity" format="float" />
         <attr name="maxAcceleration" format="float" />
+        <attr name="springMass" format="float"/>
+        <attr name="springStiffness" format="float" />
+        <attr name="springDamping" format="float" />
+        <attr name="springStopThreshold" format="float" />
+        <attr name="springBoundary" format="flags">
+            <flag name="overshoot" value="0" />
+            <flag name="bounceStart" value="1" />
+            <flag name="bounceEnd" value="2" />
+            <flag name="bounceBoth" value="3" />
+        </attr>
         <attr name="dragDirection" />
         <attr name="touchAnchorId" />
         <attr name="touchAnchorSide" />
@@ -1304,6 +1314,8 @@
             <enum name="stop" value="3" />
             <enum name="decelerate" value="4" />
             <enum name="decelerateAndComplete" value="5" />
+            <enum name="neverCompleteToStart" value="6" />
+            <enum name="neverCompleteToEnd" value="7" />
         </attr>
 
     </declare-styleable>

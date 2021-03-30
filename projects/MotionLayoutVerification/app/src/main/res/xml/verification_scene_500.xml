@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/end_bottom"
+        motion:constraintSetStart="@id/start_bottom"
+        motion:duration="1000">
+        <OnSwipe
+            motion:touchAnchorId="@id/ball"
+            motion:dragDirection="dragRight"
+            motion:springDamping="40"
+            motion:springMass="1"
+            motion:springBoundary ="bounceBoth"
+            motion:springStiffness="500"/>
+       <KeyFrameSet>
+
+       </KeyFrameSet>
+    </Transition>
+
+    <Transition
+        motion:constraintSetEnd="@+id/start_bottom"
+        motion:constraintSetStart="@id/start_top"
+        motion:duration="1000">
+        <OnSwipe
+            motion:touchAnchorId="@id/ball"
+            motion:dragDirection="dragDown"
+            motion:springDamping="50"
+            motion:springMass="1"
+            motion:springBoundary ="bounceBoth"
+            motion:springStiffness="1500"/>
+        <KeyFrameSet>
+
+        </KeyFrameSet>
+    </Transition>
+
+
+    <Transition
+        motion:constraintSetEnd="@+id/end_top"
+        motion:constraintSetStart="@id/start_top"
+        motion:duration="1000">
+        <OnSwipe
+            motion:touchAnchorId="@id/ball"
+            motion:dragDirection="dragRight"
+            motion:springDamping="4"
+            motion:springMass="1"
+            motion:springBoundary ="bounceEnd"
+            motion:springStiffness="200"/>
+        <KeyFrameSet>
+
+        </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start_top">
+        <ConstraintOverride android:id="@+id/ball" motion:layout_constraintHorizontal_bias="0"
+            motion:layout_constraintVertical_bias="0.2"
+            android:layout_marginStart="32dp"/>
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end_top">
+        <ConstraintOverride android:id="@+id/ball" android:rotation="720" motion:layout_constraintHorizontal_bias="1"
+            motion:layout_constraintVertical_bias="0.2"
+
+            android:layout_marginEnd="32dp"/>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/start_bottom">
+        <ConstraintOverride android:id="@+id/ball" motion:layout_constraintHorizontal_bias="0"
+            motion:layout_constraintVertical_bias="0.8"
+
+            android:layout_marginStart="32dp"/>
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end_bottom">
+        <ConstraintOverride android:id="@+id/ball" android:rotation="720" motion:layout_constraintHorizontal_bias="1"
+            motion:layout_constraintVertical_bias="0.8"
+            android:layout_marginEnd="32dp"/>
+    </ConstraintSet>
+</MotionScene>

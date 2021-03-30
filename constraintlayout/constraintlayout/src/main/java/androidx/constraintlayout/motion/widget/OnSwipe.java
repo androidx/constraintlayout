@@ -33,7 +33,15 @@ public class OnSwipe {
     private float mDragScale = 1f;
     private int mFlags = 0;
     private float mDragThreshold = 10;
-
+    private float mSpringDamping = Float.NaN;
+    private float mSpringMass = 1;
+    private float mSpringStiffness = Float.NaN;
+    private float mSpringStopThreshold = Float.NaN;
+    private int mSpringBoundary = 0;
+    public static final int SPRING_BOUNDARY_OVERSHOOT = 0;
+    public static final int SPRING_BOUNDARY_BOUNCESTART = 1;
+    public static final int SPRING_BOUNDARY_BOUNCEEND = 2;
+    public static final int SPRING_BOUNDARY_BOUNCEBOTH = 3;
     public static final int DRAG_UP = 0;
     public static final int DRAG_DOWN = 1;
     public static final int DRAG_LEFT = 2;
@@ -60,6 +68,8 @@ public class OnSwipe {
     public static final int ON_UP_STOP = 3;
     public static final int ON_UP_DECELERATE = 4;
     public static final int ON_UP_DECELERATE_AND_COMPLETE = 5;
+    public static final int ON_UP_NEVER_TO_START = 6;
+    public static final int ON_UP_NEVER_TO_END = 7;
 
     /**
      * The id of the view who's movement is matched to your drag
@@ -255,7 +265,7 @@ public class OnSwipe {
      * The view to center the rotation about
      *
      * @param rotationCenterId
-     * @return
+     * @return this
      */
     public OnSwipe setRotateCenter(int rotationCenterId) {
         mRotationCenterId = rotationCenterId;
@@ -264,5 +274,113 @@ public class OnSwipe {
 
     public int getRotationCenterId() {
         return mRotationCenterId;
+    }
+
+
+    public float getSpringDamping() {
+        return mSpringDamping;
+    }
+
+    /**
+     * Set the damping of the spring if using spring.
+     * c in "a = (-k*x-c*v)/m" equation for the acceleration of a spring
+     *
+     * @param mSpringDamping
+     * @return this
+     */
+    public OnSwipe setSpringDamping(float mSpringDamping) {
+        this.mSpringDamping = mSpringDamping;
+        return this;
+    }
+
+    /**
+     * Get the mass of the spring.
+     * the m in "a = (-k*x-c*v)/m" equation for the acceleration of a spring
+     *
+     * @return
+     */
+    public float getSpringMass() {
+        return mSpringMass;
+    }
+
+    /**
+     * Set the Mass of the spring if using spring.
+     * m in "a = (-k*x-c*v)/m" equation for the acceleration of a spring
+     *
+     * @param mSpringMass
+     * @return this
+     */
+    public OnSwipe setSpringMass(float mSpringMass) {
+        this.mSpringMass = mSpringMass;
+        return this;
+    }
+
+    /**
+     * get the stiffness of the spring
+     *
+     * @return NaN if not set
+     */
+    public float getSpringStiffness() {
+        return mSpringStiffness;
+    }
+
+    /**
+     * set the stiffness of the spring if using spring.
+     * If this is set the swipe will use a spring return system.
+     * If set to NaN it will revert to the norm system.
+     * K in "a = (-k*x-c*v)/m" equation for the acceleration of a spring
+     *
+     * @param springStiffness
+     * @return
+     */
+    public OnSwipe setSpringStiffness(float springStiffness) {
+        this.mSpringStiffness = springStiffness;
+        return this;
+    }
+
+    /**
+     * The threshold for spring motion to stop.
+     *
+     * @return
+     */
+    public float getSpringStopThreshold() {
+        return mSpringStopThreshold;
+    }
+
+    /**
+     * set the threshold for spring motion to stop.
+     * This is in change in progress / second
+     * If the spring will never go above that threshold again it will stop.
+     *
+     * @param mSpringStopThreshold
+     * @return
+     */
+    public OnSwipe setSpringStopThreshold(float mSpringStopThreshold) {
+        this.mSpringStopThreshold = mSpringStopThreshold;
+        return this;
+    }
+
+    /**
+     * The behaviour at the boundaries 0 and 1
+     *
+     * @return
+     */
+    public int getSpringBoundary() {
+        return mSpringBoundary;
+    }
+
+    /**
+     * The behaviour at the boundaries 0 and 1.
+     * SPRING_BOUNDARY_OVERSHOOT = 0;
+     * SPRING_BOUNDARY_BOUNCE_START = 1;
+     * SPRING_BOUNDARY_BOUNCE_END = 2;
+     * SPRING_BOUNDARY_BOUNCE_BOTH = 3;
+     *
+     * @param mSpringBoundary
+     * @return
+     */
+    public OnSwipe setSpringBoundary(int mSpringBoundary) {
+        this.mSpringBoundary = mSpringBoundary;
+        return this;
     }
 }

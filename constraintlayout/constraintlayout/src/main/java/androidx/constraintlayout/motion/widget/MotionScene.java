@@ -455,6 +455,7 @@ public class MotionScene {
     public boolean applyViewTransition(int viewTransitionId, MotionController motionController) {
         return mViewTransitionController.applyViewTransition(viewTransitionId, motionController);
     }
+
 ///////////////////////////////////////////////////////////////////////////////
 // ====================== Transition ==========================================
 
@@ -758,7 +759,8 @@ public class MotionScene {
                 }
                 a.recycle();
             }
-            public TransitionOnClick( Transition transition, int id, int action) {
+
+            public TransitionOnClick(Transition transition, int id, int action) {
                 mTransition = transition;
                 mTargetId = id;
                 mMode = action;
@@ -1660,6 +1662,40 @@ public class MotionScene {
     float getMaxVelocity() {
         if (mCurrentTransition != null && mCurrentTransition.mTouchResponse != null) {
             return mCurrentTransition.mTouchResponse.getMaxVelocity();
+        }
+        return 0;
+    }
+
+    float getSpringStiffiness() {
+        if (mCurrentTransition != null && mCurrentTransition.mTouchResponse != null) {
+            return mCurrentTransition.mTouchResponse.getSpringStiffness();
+        }
+        return 0;
+    }
+
+    float getSpringMass() {
+        if (mCurrentTransition != null && mCurrentTransition.mTouchResponse != null) {
+            return mCurrentTransition.mTouchResponse.getSpringMass();
+        }
+        return 0;
+    }
+
+    float getSpringDamping() {
+        if (mCurrentTransition != null && mCurrentTransition.mTouchResponse != null) {
+            return mCurrentTransition.mTouchResponse.getSpringDamping();
+        }
+        return 0;
+    }
+
+    float getSpringStopThreshold() {
+        if (mCurrentTransition != null && mCurrentTransition.mTouchResponse != null) {
+            return mCurrentTransition.mTouchResponse.getSpringStopThreshold();
+        }
+        return 0;
+    }
+    int getSpringBoundary() {
+        if (mCurrentTransition != null && mCurrentTransition.mTouchResponse != null) {
+            return mCurrentTransition.mTouchResponse.getSpringBoundary();
         }
         return 0;
     }

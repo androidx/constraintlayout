@@ -26,11 +26,13 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.widget.R;
 
 /**
@@ -150,11 +152,16 @@ public class ImageFilterButton extends androidx.appcompat.widget.AppCompatImageB
                 }
             }
             a.recycle();
-
+            Log.v("ImageFilterButton", Debug.getLoc()+"  mOverlay =  "+mOverlay);
+            Log.v("ImageFilterButton", Debug.getLoc()+"  mCrossfade =  "+mCrossfade);
+            Log.v("ImageFilterButton", Debug.getLoc()+"  getDrawable() =  "+getDrawable());
+            mDrawable = getDrawable();
             if (mAltDrawable != null && mDrawable != null) {
 
                 mLayers[0] = mDrawable = getDrawable().mutate();
                 mLayers[1] = mAltDrawable.mutate();
+                Log.v("ImageFilterButton", Debug.getLoc()+"  mDrawable =  "+mDrawable);
+                Log.v("ImageFilterButton", Debug.getLoc()+"  mAltDrawable =  "+mAltDrawable);
 
                 mLayer = new LayerDrawable(mLayers);
                 mLayer.getDrawable(1).setAlpha((int) (255 * (mCrossfade)));

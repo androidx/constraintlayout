@@ -104,6 +104,11 @@ class TouchResponse {
     static final int FLAG_DISABLE_POST_SCROLL = 1;
     static final int FLAG_DISABLE_SCROLL = 2;
     private float mDragThreshold = 10;
+    private float mSpringDamping = Float.NaN;
+    private float mSpringMass = 1;
+    private float mSpringStiffness = Float.NaN;
+    private float mSpringStopThreshold = Float.NaN;
+    private int mSpringBoundary = 0;
 
     TouchResponse(Context context, MotionLayout layout, XmlPullParser parser) {
         mMotionLayout = layout;
@@ -136,6 +141,11 @@ class TouchResponse {
         mFlags = onSwipe.getNestedScrollFlags();
         mLimitBoundsTo = onSwipe.getLimitBoundsTo();
         mRotationCenterId = onSwipe.getRotationCenterId();
+        mSpringBoundary= onSwipe.getSpringBoundary();
+        mSpringDamping= onSwipe.getSpringDamping();
+        mSpringMass= onSwipe.getSpringMass();
+        mSpringStiffness= onSwipe.getSpringStiffness();
+        mSpringStopThreshold= onSwipe.getSpringStopThreshold();
     }
 
     public void setRTL(boolean rtl) {
@@ -205,6 +215,17 @@ class TouchResponse {
                 mLimitBoundsTo = a.getResourceId(attr, 0);
             } else if (attr == R.styleable.OnSwipe_rotationCenterId) {
                 mRotationCenterId = a.getResourceId(attr, mRotationCenterId);
+            } else if (attr == R.styleable.OnSwipe_springDamping) {
+                mSpringDamping = a.getFloat(attr, mSpringDamping);
+            } else if (attr == R.styleable.OnSwipe_springMass) {
+                mSpringMass = a.getFloat(attr, mSpringMass);
+            } else if (attr == R.styleable.OnSwipe_springStiffness) {
+                mSpringStiffness = a.getFloat(attr, mSpringStiffness);
+            } else if (attr == R.styleable.OnSwipe_springStopThreshold) {
+                mSpringStopThreshold = a.getFloat(attr, mSpringStopThreshold);
+            } else if (attr == R.styleable.OnSwipe_springBoundary) {
+                mSpringBoundary = a.getInt(attr, mSpringBoundary);
+
             }
 
         }
@@ -437,7 +458,15 @@ class TouchResponse {
                     if (DEBUG) {
                         Log.v(TAG, "# ACTION_MOVE      CHANGE  = " + change);
                     }
+
                     pos = Math.max(Math.min(pos + change, 1), 0);
+
+                    if (mOnTouchUp == MotionLayout.TOUCH_UP_NEVER_TO_START) {
+                       pos = Math.max( pos , 0.01f);
+                    }
+                    if (mOnTouchUp == MotionLayout.TOUCH_UP_NEVER_TO_END) {
+                       pos =  Math.min(pos , 0.99f);
+                    }
 
                     float current = mMotionLayout.getProgress();
                     if (pos != current) {
@@ -754,4 +783,53 @@ class TouchResponse {
     public void setTouchUpMode(int touchUpMode) {
         mOnTouchUp = touchUpMode;
     }
+
+    /**
+     * the stiffness of the spring if using spring
+     *  K in "a = (-k*x-c*v)/m" equation for the acceleration of a spring
+     * @return NaN if not set
+     */
+    public float getSpringStiffness() {
+        return mSpringStiffness;
+    }
+
+    /**
+     * the Mass of the spring if using spring
+     *  m in "a = (-k*x-c*v)/m" equation for the acceleration of a spring
+     * @return default is 1
+     */
+    public float getSpringMass() {
+        return mSpringMass;
+    }
+
+    /**
+     * the damping of the spring if using spring
+     * c in "a = (-k*x-c*v)/m" equation for the acceleration of a spring
+     * @return NaN if not set
+     */
+    public float getSpringDamping() {
+        return mSpringDamping;
+    }
+
+    /**
+     * The threshold below
+     * @return NaN if not set
+     */
+    public float getSpringStopThreshold() {
+        return mSpringStopThreshold;
+    }
+
+    /**
+     * The spring's behaviour when it hits 0 or 1. It can be made ot overshoot or bounce
+     * overshoot = 0
+     * bounceStart = 1
+     * bounceEnd = 2
+     * bounceBoth = 3
+     * @return Bounce mode 
+     */
+    public int getSpringBoundary() {
+        return mSpringBoundary;
+    }
+
+
 }

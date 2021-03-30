@@ -998,6 +998,8 @@ public class MotionLayout extends ConstraintLayout implements
     public static final int TOUCH_UP_STOP = 3;
     public static final int TOUCH_UP_DECELERATE = 4;
     public static final int TOUCH_UP_DECELERATE_AND_COMPLETE = 5;
+    public static final int TOUCH_UP_NEVER_TO_START = 6;
+    public static final int TOUCH_UP_NEVER_TO_END = 7;
 
     static final String TAG = "MotionLayout";
     private final static boolean DEBUG = false;
@@ -1888,15 +1890,24 @@ public class MotionLayout extends ConstraintLayout implements
 
         switch (touchUpMode) {
             case TOUCH_UP_COMPLETE:
+            case TOUCH_UP_NEVER_TO_START:
+            case TOUCH_UP_NEVER_TO_END:
             case TOUCH_UP_COMPLETE_TO_START:
             case TOUCH_UP_COMPLETE_TO_END: {
-                if (touchUpMode == TOUCH_UP_COMPLETE_TO_START) {
+                if (touchUpMode == TOUCH_UP_COMPLETE_TO_START || touchUpMode == TOUCH_UP_NEVER_TO_END) {
                     position = 0;
-                } else if (touchUpMode == TOUCH_UP_COMPLETE_TO_END) {
+                } else if (touchUpMode == TOUCH_UP_COMPLETE_TO_END || touchUpMode == TOUCH_UP_NEVER_TO_START) {
                     position = 1;
                 }
-                mStopLogic.config(mTransitionLastPosition, position, currentVelocity,
-                        mTransitionDuration, mScene.getMaxAcceleration(), mScene.getMaxVelocity());
+                float stiff = mScene.getSpringStiffiness();
+                if(Float.isNaN(stiff)) {
+                    mStopLogic.config(mTransitionLastPosition, position, currentVelocity,
+                            mTransitionDuration, mScene.getMaxAcceleration(), mScene.getMaxVelocity());
+                } else {
+                    mStopLogic.springConfig(mTransitionLastPosition, position, currentVelocity,
+                            mScene.getSpringMass(), mScene.getSpringStiffiness(), mScene.getSpringDamping(),
+                            mScene.getSpringStopThreshold(), mScene.getSpringBoundary());
+                }
 
                 int currentState = mCurrentState; // TODO: we really should remove setProgress(), this is a temporary fix
                 mTransitionGoalPosition = position;
@@ -1929,6 +1940,38 @@ public class MotionLayout extends ConstraintLayout implements
             }
             break;
         }
+
+        mTransitionInstantly = false;
+        mAnimationStartTime = getNanoTime();
+        invalidate();
+    }
+    public void touchSpringTo(float position, float currentVelocity) {
+        if (DEBUG) {
+            Log.v(TAG, " " + Debug.getLocation() + " touchAnimateTo " + position + "   " + currentVelocity);
+        }
+        if (mScene == null) {
+            return;
+        }
+        if (mTransitionLastPosition == position) {
+            return;
+        }
+
+        mTemporalInterpolator = true;
+        mAnimationStartTime = getNanoTime();
+        mTransitionDuration = mScene.getDuration() / 1000f;
+
+        mTransitionGoalPosition = position;
+        mInTransition = true;
+
+        mStopLogic.springConfig(mTransitionLastPosition, position, currentVelocity,
+                mScene.getSpringMass(), mScene.getSpringStiffiness(), mScene.getSpringDamping(),
+                mScene.getSpringStopThreshold(), mScene.getSpringBoundary());
+
+        int currentState = mCurrentState; // TODO: we really should remove setProgress(), this is a temporary fix
+        mTransitionGoalPosition = position;
+        mCurrentState = currentState;
+        mInterpolator = mStopLogic;
+
 
         mTransitionInstantly = false;
         mAnimationStartTime = getNanoTime();
@@ -2159,6 +2202,25 @@ public class MotionLayout extends ConstraintLayout implements
     }
 
     /**
+     * This jumps to a state
+     * It will be at that state after one repaint cycle
+     * If the current transition contains that state.
+     * It setsProgress 0 or 1 to that state.
+     * If not in the current transition itsl
+     *
+     * @param id state to set
+     */
+    public void jumpToState(int id) {
+        if (mBeginState == id) {
+            setProgress(0);
+        } else if (mEndState == id) {
+            setProgress(1);
+        } else {
+            setTransition(id, id);
+        }
+    }
+
+    /**
      * Animate to the state defined by the id.
      * Width and height may be used in the picking of the id using this StateSet.
      *
@@ -2195,10 +2257,16 @@ public class MotionLayout extends ConstraintLayout implements
         }
         if (mBeginState == id) {
             animateTo(0.0f);
+            if (duration > 0) {
+                mTransitionDuration = duration / 1000f;
+            }
             return;
         }
         if (mEndState == id) {
             animateTo(1.0f);
+            if (duration > 0) {
+                mTransitionDuration = duration / 1000f;
+            }
             return;
         }
         mEndState = id;
@@ -3500,11 +3568,19 @@ public class MotionLayout extends ConstraintLayout implements
             mTransitionLastPosition = position;
             mTransitionPosition = position;
             mTransitionLastTime = currentTime;
-
+            int NOT_STOP_LOGIC = 0;
+            int STOP_LOGIC_CONTINUE = 1;
+            int STOP_LOGIC_STOP = 2;
+            int stopLogicDone = NOT_STOP_LOGIC;
             if (mInterpolator != null && !done) {
                 if (mTemporalInterpolator) {
                     float time = (currentTime - mAnimationStartTime) * 1E-9f;
                     position = mInterpolator.getInterpolation(time);
+                    if (mInterpolator == mStopLogic) {
+                        boolean dp =  mStopLogic.isStopped();
+                        stopLogicDone = (dp)?STOP_LOGIC_STOP:STOP_LOGIC_CONTINUE;
+                    }
+
                     if (DEBUG) {
                         Log.v(TAG, Debug.getLocation() + " mTransitionLastPosition = " + mTransitionLastPosition + " position = " + position);
                     }
@@ -3514,7 +3590,7 @@ public class MotionLayout extends ConstraintLayout implements
                     if (mInterpolator instanceof MotionInterpolator) {
                         float lastVelocity = ((MotionInterpolator) mInterpolator).getVelocity();
                         mLastVelocity = lastVelocity;
-                        if (Math.abs(lastVelocity) * mTransitionDuration <= EPSILON) {
+                        if (Math.abs(lastVelocity) * mTransitionDuration <= EPSILON && stopLogicDone==STOP_LOGIC_STOP) {
                             mInTransition = false;
                         }
                         if (lastVelocity > 0 && position >= 1.0f) {
@@ -3544,15 +3620,17 @@ public class MotionLayout extends ConstraintLayout implements
                     setState(TransitionState.MOVING);
             }
 
-            if ((dir > 0 && position >= mTransitionGoalPosition)
-                    || (dir <= 0 && position <= mTransitionGoalPosition)) {
-                position = mTransitionGoalPosition;
-                mInTransition = false;
-            }
+            if ( stopLogicDone != STOP_LOGIC_CONTINUE) {
+                if ((dir > 0 && position >= mTransitionGoalPosition)
+                        || (dir <= 0 && position <= mTransitionGoalPosition)) {
+                    position = mTransitionGoalPosition;
+                    mInTransition = false;
+                }
 
-            if (position >= 1.0f || position <= 0.0f) {
-                mInTransition = false;
-                setState(TransitionState.FINISHED);
+                if (position >= 1.0f || position <= 0.0f) {
+                    mInTransition = false;
+                    setState(TransitionState.FINISHED);
+                }
             }
 
             int n = getChildCount();
@@ -3989,12 +4067,19 @@ public class MotionLayout extends ConstraintLayout implements
         }
         return super.onTouchEvent(event);
     }
+    boolean mTesting = true;
+    public void setupForTest(){
+        onAttachedToWindow();
+    }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            mPreviouseRotation = getDisplay().getRotation();
+            Display display = getDisplay();
+            if (display != null) {
+                mPreviouseRotation = display.getRotation();
+            }
         }
         if (mScene != null && mCurrentState != UNSET) {
             ConstraintSet cSet = mScene.getConstraintSet(mCurrentState);
