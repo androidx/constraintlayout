@@ -66,63 +66,63 @@ import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.USE_
  */
 @Composable
 inline fun ConstraintLayout(
-        modifier: Modifier = Modifier,
-        optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
-        crossinline content: @Composable ConstraintLayoutScope.() -> Unit
+    modifier: Modifier = Modifier,
+    optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
+    crossinline content: @Composable ConstraintLayoutScope.() -> Unit
 ) {
     val scope = remember { ConstraintLayoutScope() }
     val measurePolicy = rememberConstraintLayoutMeasurePolicy(optimizationLevel, scope)
     @Suppress("Deprecation")
     MultiMeasureLayout(
-            modifier = modifier,
-            measurePolicy = measurePolicy,
-            content = {
-                scope.reset()
-                scope.content()
-            }
+        modifier = modifier,
+        measurePolicy = measurePolicy,
+        content = {
+            scope.reset()
+            scope.content()
+        }
     )
 }
 
 @Composable
 @PublishedApi
 internal fun rememberConstraintLayoutMeasurePolicy(
-        optimizationLevel: Int,
-        scope: ConstraintLayoutScope
+    optimizationLevel: Int,
+    scope: ConstraintLayoutScope
 ): MeasurePolicy =
-        remember(optimizationLevel) {
-            val measurer = Measurer()
-            MeasurePolicy { measurables, constraints ->
-                val constraintSet = object : ConstraintSet {
-                    override fun applyTo(state: State, measurables: List<Measurable>) {
-                        scope.applyTo(state)
-                        measurables.fastForEach { measurable ->
-                            val parentData = measurable.parentData as? ConstraintLayoutParentData
-                            // Map the id and the measurable, to be retrieved later during measurement.
-                            val givenTag = parentData?.ref?.id
-                            state.map(givenTag ?: createId(), measurable)
-                            // Run the constrainAs block of the child, to obtain its constraints.
-                            if (parentData != null) {
-                                val constrainScope = ConstrainScope(parentData.ref.id)
-                                parentData.constrain(constrainScope)
-                                constrainScope.applyTo(state)
-                            }
+    remember(optimizationLevel) {
+        val measurer = Measurer()
+        MeasurePolicy { measurables, constraints ->
+            val constraintSet = object : ConstraintSet {
+                override fun applyTo(state: State, measurables: List<Measurable>) {
+                    scope.applyTo(state)
+                    measurables.fastForEach { measurable ->
+                        val parentData = measurable.parentData as? ConstraintLayoutParentData
+                        // Map the id and the measurable, to be retrieved later during measurement.
+                        val givenTag = parentData?.ref?.id
+                        state.map(givenTag ?: createId(), measurable)
+                        // Run the constrainAs block of the child, to obtain its constraints.
+                        if (parentData != null) {
+                            val constrainScope = ConstrainScope(parentData.ref.id)
+                            parentData.constrain(constrainScope)
+                            constrainScope.applyTo(state)
                         }
                     }
                 }
+            }
 
-                val layoutSize = measurer.performMeasure(
-                        constraints,
-                        layoutDirection,
-                        constraintSet,
-                        measurables,
-                        optimizationLevel,
-                        this
-                )
-                layout(layoutSize.width, layoutSize.height) {
-                    with(measurer) { performLayout(measurables) }
-                }
+            val layoutSize = measurer.performMeasure(
+                constraints,
+                layoutDirection,
+                constraintSet,
+                measurables,
+                optimizationLevel,
+                this
+            )
+            layout(layoutSize.width, layoutSize.height) {
+                with(measurer) { performLayout(measurables) }
             }
         }
+    }
 
 /**
  * Layout that positions its children according to the constraints between them.
@@ -132,10 +132,10 @@ internal fun rememberConstraintLayoutMeasurePolicy(
  */
 @Composable
 inline fun ConstraintLayout(
-        constraintSet: ConstraintSet,
-        modifier: Modifier = Modifier,
-        optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
-        noinline content: @Composable () -> Unit
+    constraintSet: ConstraintSet,
+    modifier: Modifier = Modifier,
+    optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
+    noinline content: @Composable () -> Unit
 ) {
     val measurePolicy = rememberConstraintLayoutMeasurePolicy(optimizationLevel, constraintSet)
     @Suppress("Deprecation")
@@ -145,18 +145,18 @@ inline fun ConstraintLayout(
 @Composable
 @PublishedApi
 internal fun rememberConstraintLayoutMeasurePolicy(
-        optimizationLevel: Int,
-        constraintSet: ConstraintSet
+    optimizationLevel: Int,
+    constraintSet: ConstraintSet
 ) = remember {
     val measurer = Measurer()
     MeasurePolicy { measurables, constraints ->
         val layoutSize = measurer.performMeasure(
-                constraints,
-                layoutDirection,
-                constraintSet,
-                measurables,
-                optimizationLevel,
-                this
+            constraints,
+            layoutDirection,
+            constraintSet,
+            measurables,
+            optimizationLevel,
+            this
         )
         layout(layoutSize.width, layoutSize.height) {
             with(measurer) { performLayout(measurables) }
@@ -369,8 +369,8 @@ abstract class ConstraintLayoutBaseScope {
      * Creates and returns a start barrier, containing the specified elements.
      */
     fun createStartBarrier(
-            vararg elements: ConstrainedLayoutReference,
-            margin: Dp = 0.dp
+        vararg elements: ConstrainedLayoutReference,
+        margin: Dp = 0.dp
     ): VerticalAnchor {
         val id = createId()
         tasks.add { state ->
@@ -390,8 +390,8 @@ abstract class ConstraintLayoutBaseScope {
      * Creates and returns a left barrier, containing the specified elements.
      */
     fun createAbsoluteLeftBarrier(
-            vararg elements: ConstrainedLayoutReference,
-            margin: Dp = 0.dp
+        vararg elements: ConstrainedLayoutReference,
+        margin: Dp = 0.dp
     ): VerticalAnchor {
         val id = createId()
         tasks.add { state ->
@@ -406,8 +406,8 @@ abstract class ConstraintLayoutBaseScope {
      * Creates and returns a top barrier, containing the specified elements.
      */
     fun createTopBarrier(
-            vararg elements: ConstrainedLayoutReference,
-            margin: Dp = 0.dp
+        vararg elements: ConstrainedLayoutReference,
+        margin: Dp = 0.dp
     ): HorizontalAnchor {
         val id = createId()
         tasks.add { state ->
@@ -422,8 +422,8 @@ abstract class ConstraintLayoutBaseScope {
      * Creates and returns an end barrier, containing the specified elements.
      */
     fun createEndBarrier(
-            vararg elements: ConstrainedLayoutReference,
-            margin: Dp = 0.dp
+        vararg elements: ConstrainedLayoutReference,
+        margin: Dp = 0.dp
     ): VerticalAnchor {
         val id = createId()
         tasks.add { state ->
@@ -443,8 +443,8 @@ abstract class ConstraintLayoutBaseScope {
      * Creates and returns a right barrier, containing the specified elements.
      */
     fun createAbsoluteRightBarrier(
-            vararg elements: ConstrainedLayoutReference,
-            margin: Dp = 0.dp
+        vararg elements: ConstrainedLayoutReference,
+        margin: Dp = 0.dp
     ): VerticalAnchor {
         val id = createId()
         tasks.add { state ->
@@ -459,8 +459,8 @@ abstract class ConstraintLayoutBaseScope {
      * Creates and returns a bottom barrier, containing the specified elements.
      */
     fun createBottomBarrier(
-            vararg elements: ConstrainedLayoutReference,
-            margin: Dp = 0.dp
+        vararg elements: ConstrainedLayoutReference,
+        margin: Dp = 0.dp
     ): HorizontalAnchor {
         val id = createId()
         tasks.add { state ->
@@ -476,13 +476,13 @@ abstract class ConstraintLayoutBaseScope {
      */
     // TODO(popam, b/157783937): this API should be improved
     fun createHorizontalChain(
-            vararg elements: ConstrainedLayoutReference,
-            chainStyle: ChainStyle = ChainStyle.Spread
+        vararg elements: ConstrainedLayoutReference,
+        chainStyle: ChainStyle = ChainStyle.Spread
     ) {
         tasks.add { state ->
             state.horizontalChain(*(elements.map { it.id }.toTypedArray()))
-                    .also { it.style(chainStyle.style) }
-                    .apply()
+                .also { it.style(chainStyle.style) }
+                .apply()
             if (chainStyle.bias != null) {
                 state.constraints(elements[0].id).horizontalBias(chainStyle.bias)
             }
@@ -494,13 +494,13 @@ abstract class ConstraintLayoutBaseScope {
      */
     // TODO(popam, b/157783937): this API should be improved
     fun createVerticalChain(
-            vararg elements: ConstrainedLayoutReference,
-            chainStyle: ChainStyle = ChainStyle.Spread
+        vararg elements: ConstrainedLayoutReference,
+        chainStyle: ChainStyle = ChainStyle.Spread
     ) {
         tasks.add { state ->
             state.verticalChain(*(elements.map { it.id }.toTypedArray()))
-                    .also { it.style(chainStyle.style) }
-                    .apply()
+                .also { it.style(chainStyle.style) }
+                .apply()
             if (chainStyle.bias != null) {
                 state.constraints(elements[0].id).verticalBias(chainStyle.bias)
             }
@@ -554,21 +554,21 @@ class ConstraintLayoutScope @PublishedApi internal constructor() : ConstraintLay
      * element.
      */
     fun Modifier.constrainAs(
-            ref: ConstrainedLayoutReference,
-            constrainBlock: ConstrainScope.() -> Unit
+        ref: ConstrainedLayoutReference,
+        constrainBlock: ConstrainScope.() -> Unit
     ): Modifier {
         // TODO(popam, b/157782492): make equals comparable modifiers here.
         return this.then(
-                object : ParentDataModifier, InspectorValueInfo(
-                        debugInspectorInfo {
-                            name = "constrainAs"
-                            properties["ref"] = ref
-                            properties["constrainBlock"] = constrainBlock
-                        }
-                ) {
-                    override fun Density.modifyParentData(parentData: Any?) =
-                            ConstraintLayoutParentData(ref, constrainBlock)
-                })
+            object : ParentDataModifier, InspectorValueInfo(
+                debugInspectorInfo {
+                    name = "constrainAs"
+                    properties["ref"] = ref
+                    properties["constrainBlock"] = constrainBlock
+                }
+            ) {
+                override fun Density.modifyParentData(parentData: Any?) =
+                    ConstraintLayoutParentData(ref, constrainBlock)
+            })
     }
 }
 
@@ -587,8 +587,8 @@ class ConstraintSetScope internal constructor() : ConstraintLayoutBaseScope() {
      * Specifies the constraints associated to the layout identified with [ref].
      */
     fun constrain(
-            ref: ConstrainedLayoutReference,
-            constrainBlock: ConstrainScope.() -> Unit
+        ref: ConstrainedLayoutReference,
+        constrainBlock: ConstrainScope.() -> Unit
     ) = ConstrainScope(ref.id).apply {
         constrainBlock()
         this@ConstraintSetScope.tasks.addAll(this.tasks)
@@ -599,8 +599,8 @@ class ConstraintSetScope internal constructor() : ConstraintLayoutBaseScope() {
  * The style of a horizontal or vertical chain.
  */
 class ChainStyle internal constructor(
-        internal val style: SolverChain,
-        internal val bias: Float? = null
+    internal val style: SolverChain,
+    internal val bias: Float? = null
 ) {
     companion object {
         /**
@@ -632,9 +632,9 @@ class ChainStyle internal constructor(
  * Parent data provided by `Modifier.constrainAs`.
  */
 private class ConstraintLayoutParentData(
-        val ref: ConstrainedLayoutReference,
-        val constrain: ConstrainScope.() -> Unit
-): LayoutIdParentData {
+    val ref: ConstrainedLayoutReference,
+    val constrain: ConstrainScope.() -> Unit
+) : LayoutIdParentData {
     override val layoutId: Any = ref.id
 }
 
@@ -695,7 +695,7 @@ class ConstrainScope internal constructor(internal val id: Any) {
             field = value
             tasks.add { state ->
                 state.constraints(id).width(
-                        (value as DimensionDescription).toSolverDimension(state)
+                    (value as DimensionDescription).toSolverDimension(state)
                 )
             }
         }
@@ -708,7 +708,7 @@ class ConstrainScope internal constructor(internal val id: Any) {
             field = value
             tasks.add { state ->
                 state.constraints(id).height(
-                        (value as DimensionDescription).toSolverDimension(state)
+                    (value as DimensionDescription).toSolverDimension(state)
                 )
             }
         }
@@ -718,8 +718,8 @@ class ConstrainScope internal constructor(internal val id: Any) {
      * [linkTo] in their `Modifier.constrainAs` blocks.
      */
     inner class VerticalAnchorable internal constructor(
-            internal val id: Any,
-            internal val index: Int
+        internal val id: Any,
+        internal val index: Int
     ) {
         /**
          * Adds a link towards a [ConstraintLayoutBaseScope.VerticalAnchor].
@@ -732,8 +732,8 @@ class ConstrainScope internal constructor(internal val id: Any) {
                     val index1 = verticalAnchorIndexToFunctionIndex(index, layoutDirection)
                     val index2 = verticalAnchorIndexToFunctionIndex(anchor.index, layoutDirection)
                     verticalAnchorFunctions[index1][index2]
-                            .invoke(this, anchor.id, state.layoutDirection)
-                            .margin(margin)
+                        .invoke(this, anchor.id, state.layoutDirection)
+                        .margin(margin)
                 }
             }
         }
@@ -744,8 +744,8 @@ class ConstrainScope internal constructor(internal val id: Any) {
      * [linkTo] in their `Modifier.constrainAs` blocks.
      */
     inner class HorizontalAnchorable internal constructor(
-            internal val tag: Any,
-            internal val index: Int
+        internal val tag: Any,
+        internal val index: Int
     ) {
         /**
          * Adds a link towards a [ConstraintLayoutBaseScope.HorizontalAnchor].
@@ -755,8 +755,8 @@ class ConstrainScope internal constructor(internal val id: Any) {
             tasks.add { state ->
                 with(state.constraints(id)) {
                     horizontalAnchorFunctions[index][anchor.index]
-                            .invoke(this, anchor.id)
-                            .margin(margin)
+                        .invoke(this, anchor.id)
+                        .margin(margin)
                 }
             }
         }
@@ -785,11 +785,11 @@ class ConstrainScope internal constructor(internal val id: Any) {
      */
     // TODO(popam, b/158069248): add parameter for gone margin
     fun linkTo(
-            start: ConstraintLayoutBaseScope.VerticalAnchor,
-            end: ConstraintLayoutBaseScope.VerticalAnchor,
-            startMargin: Dp = 0.dp,
-            endMargin: Dp = 0.dp,
-            @FloatRange(from = 0.0, to = 1.0) bias: Float = 0.5f
+        start: ConstraintLayoutBaseScope.VerticalAnchor,
+        end: ConstraintLayoutBaseScope.VerticalAnchor,
+        startMargin: Dp = 0.dp,
+        endMargin: Dp = 0.dp,
+        @FloatRange(from = 0.0, to = 1.0) bias: Float = 0.5f
     ) {
         this@ConstrainScope.start.linkTo(start, startMargin)
         this@ConstrainScope.end.linkTo(end, endMargin)
@@ -803,11 +803,11 @@ class ConstrainScope internal constructor(internal val id: Any) {
      */
     // TODO(popam, b/158069248): add parameter for gone margin
     fun linkTo(
-            top: ConstraintLayoutBaseScope.HorizontalAnchor,
-            bottom: ConstraintLayoutBaseScope.HorizontalAnchor,
-            topMargin: Dp = 0.dp,
-            bottomMargin: Dp = 0.dp,
-            @FloatRange(from = 0.0, to = 1.0) bias: Float = 0.5f
+        top: ConstraintLayoutBaseScope.HorizontalAnchor,
+        bottom: ConstraintLayoutBaseScope.HorizontalAnchor,
+        topMargin: Dp = 0.dp,
+        bottomMargin: Dp = 0.dp,
+        @FloatRange(from = 0.0, to = 1.0) bias: Float = 0.5f
     ) {
         this@ConstrainScope.top.linkTo(top, topMargin)
         this@ConstrainScope.bottom.linkTo(bottom, bottomMargin)
@@ -822,16 +822,16 @@ class ConstrainScope internal constructor(internal val id: Any) {
      */
     // TODO(popam, b/158069248): add parameter for gone margin
     fun linkTo(
-            start: ConstraintLayoutBaseScope.VerticalAnchor,
-            top: ConstraintLayoutBaseScope.HorizontalAnchor,
-            end: ConstraintLayoutBaseScope.VerticalAnchor,
-            bottom: ConstraintLayoutBaseScope.HorizontalAnchor,
-            startMargin: Dp = 0.dp,
-            topMargin: Dp = 0.dp,
-            endMargin: Dp = 0.dp,
-            bottomMargin: Dp = 0.dp,
-            @FloatRange(from = 0.0, to = 1.0) horizontalBias: Float = 0.5f,
-            @FloatRange(from = 0.0, to = 1.0) verticalBias: Float = 0.5f
+        start: ConstraintLayoutBaseScope.VerticalAnchor,
+        top: ConstraintLayoutBaseScope.HorizontalAnchor,
+        end: ConstraintLayoutBaseScope.VerticalAnchor,
+        bottom: ConstraintLayoutBaseScope.HorizontalAnchor,
+        startMargin: Dp = 0.dp,
+        topMargin: Dp = 0.dp,
+        endMargin: Dp = 0.dp,
+        bottomMargin: Dp = 0.dp,
+        @FloatRange(from = 0.0, to = 1.0) horizontalBias: Float = 0.5f,
+        @FloatRange(from = 0.0, to = 1.0) verticalBias: Float = 0.5f
     ) {
         linkTo(start, end, startMargin, endMargin, horizontalBias)
         linkTo(top, bottom, topMargin, bottomMargin, verticalBias)
@@ -881,32 +881,36 @@ class ConstrainScope internal constructor(internal val id: Any) {
 
     internal companion object {
         val verticalAnchorFunctions:
-                Array<Array<ConstraintReference.(Any, LayoutDirection) -> ConstraintReference>> =
+            Array<Array<ConstraintReference.(Any, LayoutDirection) -> ConstraintReference>> =
+            arrayOf(
                 arrayOf(
-                        arrayOf(
-                                { other, layoutDirection ->
-                                    clearLeft(layoutDirection); leftToLeft(other)
-                                },
-                                { other, layoutDirection ->
-                                    clearLeft(layoutDirection); leftToRight(other)
-                                }
-                        ),
-                        arrayOf(
-                                { other, layoutDirection ->
-                                    clearRight(layoutDirection); rightToLeft(other)
-                                },
-                                { other, layoutDirection ->
-                                    clearRight(layoutDirection); rightToRight(other)
-                                }
-                        )
+                    { other, layoutDirection ->
+                        clearLeft(layoutDirection); leftToLeft(other)
+                    },
+                    { other, layoutDirection ->
+                        clearLeft(layoutDirection); leftToRight(other)
+                    }
+                ),
+                arrayOf(
+                    { other, layoutDirection ->
+                        clearRight(layoutDirection); rightToLeft(other)
+                    },
+                    { other, layoutDirection ->
+                        clearRight(layoutDirection); rightToRight(other)
+                    }
                 )
+            )
 
         private fun ConstraintReference.clearLeft(layoutDirection: LayoutDirection) {
             leftToLeft(null)
             leftToRight(null)
             when (layoutDirection) {
-                LayoutDirection.Ltr -> { startToStart(null); startToEnd(null) }
-                LayoutDirection.Rtl -> { endToStart(null); endToEnd(null) }
+                LayoutDirection.Ltr -> {
+                    startToStart(null); startToEnd(null)
+                }
+                LayoutDirection.Rtl -> {
+                    endToStart(null); endToEnd(null)
+                }
             }
         }
 
@@ -914,8 +918,12 @@ class ConstrainScope internal constructor(internal val id: Any) {
             rightToLeft(null)
             rightToRight(null)
             when (layoutDirection) {
-                LayoutDirection.Ltr -> { endToStart(null); endToEnd(null) }
-                LayoutDirection.Rtl -> { startToStart(null); startToEnd(null) }
+                LayoutDirection.Ltr -> {
+                    endToStart(null); endToEnd(null)
+                }
+                LayoutDirection.Rtl -> {
+                    startToStart(null); startToEnd(null)
+                }
             }
         }
 
@@ -925,31 +933,31 @@ class ConstrainScope internal constructor(internal val id: Any) {
          */
         // TODO(popam, b/157886946): this is temporary until we can use CL's own RTL handling
         fun verticalAnchorIndexToFunctionIndex(index: Int, layoutDirection: LayoutDirection) =
-                when {
-                    index >= 0 -> index // already left or right
-                    layoutDirection == LayoutDirection.Ltr -> 2 + index // start -> left, end -> right
-                    else -> -index - 1 // start -> right, end -> left
-                }
+            when {
+                index >= 0 -> index // already left or right
+                layoutDirection == LayoutDirection.Ltr -> 2 + index // start -> left, end -> right
+                else -> -index - 1 // start -> right, end -> left
+            }
 
         val horizontalAnchorFunctions:
-                Array<Array<ConstraintReference.(Any) -> ConstraintReference>> = arrayOf(
-                arrayOf(
-                        { other -> topToBottom(null); baselineToBaseline(null); topToTop(other) },
-                        { other -> topToTop(null); baselineToBaseline(null); topToBottom(other) }
-                ),
-                arrayOf(
-                        { other -> bottomToBottom(null); baselineToBaseline(null); bottomToTop(other) },
-                        { other -> bottomToTop(null); baselineToBaseline(null); bottomToBottom(other) }
-                )
+            Array<Array<ConstraintReference.(Any) -> ConstraintReference>> = arrayOf(
+            arrayOf(
+                { other -> topToBottom(null); baselineToBaseline(null); topToTop(other) },
+                { other -> topToTop(null); baselineToBaseline(null); topToBottom(other) }
+            ),
+            arrayOf(
+                { other -> bottomToBottom(null); baselineToBaseline(null); bottomToTop(other) },
+                { other -> bottomToTop(null); baselineToBaseline(null); bottomToBottom(other) }
+            )
         )
         val baselineAnchorFunction: ConstraintReference.(Any) -> ConstraintReference =
-                { other ->
-                    topToTop(null)
-                    topToBottom(null)
-                    bottomToTop(null)
-                    bottomToBottom(null)
-                    baselineToBaseline(other)
-                }
+            { other ->
+                topToTop(null)
+                topToBottom(null)
+                bottomToTop(null)
+                bottomToBottom(null)
+                baselineToBaseline(other)
+            }
     }
 }
 
@@ -992,14 +1000,14 @@ interface Dimension {
          * be used instead.
          */
         fun preferredValue(dp: Dp): Dimension.Coercible =
-                DimensionDescription { state -> SolverDimension.Suggested(state.convertDimension(dp)) }
+            DimensionDescription { state -> SolverDimension.Suggested(state.convertDimension(dp)) }
 
         /**
          * Creates a [Dimension] representing a fixed dp size. The size will not change
          * according to the constraints in the [ConstraintSet].
          */
         fun value(dp: Dp): Dimension =
-                DimensionDescription { state -> SolverDimension.Fixed(state.convertDimension(dp)) }
+            DimensionDescription { state -> SolverDimension.Fixed(state.convertDimension(dp)) }
 
         /**
          * A [Dimension] with suggested wrap content behavior. The wrap content size
@@ -1028,8 +1036,8 @@ interface Dimension {
          * A [Dimension] that is a percent of the parent in the corresponding direction.
          */
         fun percent(percent: Float): Dimension =
-                // TODO(popam, b/157880732): make this nicer when possible in future solver releases
-                DimensionDescription { SolverDimension.Percent(0, percent).suggested(0) }
+            // TODO(popam, b/157880732): make this nicer when possible in future solver releases
+            DimensionDescription { SolverDimension.Percent(0, percent).suggested(0) }
     }
 }
 
@@ -1043,13 +1051,13 @@ val Dimension.Coercible.atLeastWrapContent: Dimension.MaxCoercible
  * Sets the lower bound of the current [Dimension] to a fixed [dp] value.
  */
 fun Dimension.Coercible.atLeast(dp: Dp): Dimension.MaxCoercible =
-        (this as DimensionDescription).also { it.min = dp }
+    (this as DimensionDescription).also { it.min = dp }
 
 /**
  * Sets the upper bound of the current [Dimension] to a fixed [dp] value.
  */
 fun Dimension.Coercible.atMost(dp: Dp): Dimension.MinCoercible =
-        (this as DimensionDescription).also { it.max = dp }
+    (this as DimensionDescription).also { it.max = dp }
 
 /**
  * Sets the upper bound of the current [Dimension] to be the wrap content size of the child.
@@ -1061,7 +1069,7 @@ val Dimension.Coercible.atMostWrapContent: Dimension.MinCoercible
  * Sets the lower bound of the current [Dimension] to a fixed [dp] value.
  */
 fun Dimension.MinCoercible.atLeastWrapContent(dp: Dp): Dimension =
-        (this as DimensionDescription).also { it.min = dp }
+    (this as DimensionDescription).also { it.min = dp }
 
 /**
  * Sets the lower bound of the current [Dimension] to be the wrap content size of the child.
@@ -1073,7 +1081,7 @@ val Dimension.MinCoercible.atLeastWrapContent: Dimension
  * Sets the upper bound of the current [Dimension] to a fixed [dp] value.
  */
 fun Dimension.MaxCoercible.atMost(dp: Dp): Dimension =
-        (this as DimensionDescription).also { it.max = dp }
+    (this as DimensionDescription).also { it.max = dp }
 
 /**
  * Sets the upper bound of the current [Dimension] to be the [Wrap] size of the child.
@@ -1087,7 +1095,7 @@ val Dimension.MaxCoercible.atMostWrapContent: Dimension
  * directly; helpers available in the [Dimension]'s companion object should be used.
  */
 internal class DimensionDescription internal constructor(
-        private val baseDimension: (State) -> SolverDimension
+    private val baseDimension: (State) -> SolverDimension
 ) : Dimension.Coercible, Dimension.MinCoercible, Dimension.MaxCoercible, Dimension {
     var min: Dp? = null
     var minSymbol: Any? = null
@@ -1195,9 +1203,9 @@ internal class Measurer : BasicMeasure.Measurer {
 
         if (DEBUG) {
             Log.d(
-                    "CCL",
-                    "Measuring ${measurable.layoutId} with: " +
-                            constraintWidget.toDebugString() + "\n" + measure.toDebugString()
+                "CCL",
+                "Measuring ${measurable.layoutId} with: " +
+                    constraintWidget.toDebugString() + "\n" + measure.toDebugString()
             )
         }
 
@@ -1205,40 +1213,40 @@ internal class Measurer : BasicMeasure.Measurer {
         run {
             val measurableLastMeasures = lastMeasures[measurable]
             obtainConstraints(
-                    constraintWidget.horizontalDimensionBehaviour,
-                    constraintWidget.width,
-                    constraintWidget.mMatchConstraintDefaultWidth,
-                    measure.measureStrategy,
-                    (measurableLastMeasures?.get(1) ?: 0) == constraintWidget.height,
-                    constraintWidget.isResolvedHorizontally,
-                    state.rootIncomingConstraints.maxWidth,
-                    widthConstraintsHolder
+                constraintWidget.horizontalDimensionBehaviour,
+                constraintWidget.width,
+                constraintWidget.mMatchConstraintDefaultWidth,
+                measure.measureStrategy,
+                (measurableLastMeasures?.get(1) ?: 0) == constraintWidget.height,
+                constraintWidget.isResolvedHorizontally,
+                state.rootIncomingConstraints.maxWidth,
+                widthConstraintsHolder
             )
             obtainConstraints(
-                    constraintWidget.verticalDimensionBehaviour,
-                    constraintWidget.height,
-                    constraintWidget.mMatchConstraintDefaultHeight,
-                    measure.measureStrategy,
-                    (measurableLastMeasures?.get(0) ?: 0) == constraintWidget.width,
-                    constraintWidget.isResolvedVertically,
-                    state.rootIncomingConstraints.maxHeight,
-                    heightConstraintsHolder
+                constraintWidget.verticalDimensionBehaviour,
+                constraintWidget.height,
+                constraintWidget.mMatchConstraintDefaultHeight,
+                measure.measureStrategy,
+                (measurableLastMeasures?.get(0) ?: 0) == constraintWidget.width,
+                constraintWidget.isResolvedVertically,
+                state.rootIncomingConstraints.maxHeight,
+                heightConstraintsHolder
             )
 
             constraints = Constraints(
-                    widthConstraintsHolder[0],
-                    widthConstraintsHolder[1],
-                    heightConstraintsHolder[0],
-                    heightConstraintsHolder[1]
+                widthConstraintsHolder[0],
+                widthConstraintsHolder[1],
+                heightConstraintsHolder[0],
+                heightConstraintsHolder[1]
             )
         }
 
         if ((measure.measureStrategy == TRY_GIVEN_DIMENSIONS ||
-                        measure.measureStrategy == USE_GIVEN_DIMENSIONS) ||
-                constraintWidget.horizontalDimensionBehaviour != MATCH_CONSTRAINT ||
-                constraintWidget.mMatchConstraintDefaultWidth != MATCH_CONSTRAINT_SPREAD ||
-                constraintWidget.verticalDimensionBehaviour != MATCH_CONSTRAINT ||
-                constraintWidget.mMatchConstraintDefaultHeight != MATCH_CONSTRAINT_SPREAD
+                measure.measureStrategy == USE_GIVEN_DIMENSIONS) ||
+            constraintWidget.horizontalDimensionBehaviour != MATCH_CONSTRAINT ||
+            constraintWidget.mMatchConstraintDefaultWidth != MATCH_CONSTRAINT_SPREAD ||
+            constraintWidget.verticalDimensionBehaviour != MATCH_CONSTRAINT ||
+            constraintWidget.mMatchConstraintDefaultHeight != MATCH_CONSTRAINT_SPREAD
         ) {
             if (DEBUG) {
                 Log.d("CCL", "Measuring ${measurable.layoutId} with $constraints")
@@ -1246,36 +1254,36 @@ internal class Measurer : BasicMeasure.Measurer {
             val placeable = measurable.measure(constraints).also { placeables[measurable] = it }
             if (DEBUG) {
                 Log.d(
-                        "CCL",
-                        "${measurable.layoutId} is size ${placeable.width} ${placeable.height}"
+                    "CCL",
+                    "${measurable.layoutId} is size ${placeable.width} ${placeable.height}"
                 )
             }
 
             val coercedWidth = placeable.width.coerceIn(
-                    constraintWidget.minWidth.takeIf { it > 0 },
-                    constraintWidget.maxWidth.takeIf { it > 0 }
+                constraintWidget.minWidth.takeIf { it > 0 },
+                constraintWidget.maxWidth.takeIf { it > 0 }
             )
             val coercedHeight = placeable.height.coerceIn(
-                    constraintWidget.minHeight.takeIf { it > 0 },
-                    constraintWidget.maxHeight.takeIf { it > 0 }
+                constraintWidget.minHeight.takeIf { it > 0 },
+                constraintWidget.maxHeight.takeIf { it > 0 }
             )
 
             var remeasure = false
             if (coercedWidth != placeable.width) {
                 constraints = Constraints(
-                        minWidth = coercedWidth,
-                        minHeight = constraints.minHeight,
-                        maxWidth = coercedWidth,
-                        maxHeight = constraints.maxHeight
+                    minWidth = coercedWidth,
+                    minHeight = constraints.minHeight,
+                    maxWidth = coercedWidth,
+                    maxHeight = constraints.maxHeight
                 )
                 remeasure = true
             }
             if (coercedHeight != placeable.height) {
                 constraints = Constraints(
-                        minWidth = constraints.minWidth,
-                        minHeight = coercedHeight,
-                        maxWidth = constraints.maxWidth,
-                        maxHeight = coercedHeight
+                    minWidth = constraints.minWidth,
+                    minHeight = coercedHeight,
+                    maxWidth = constraints.maxWidth,
+                    maxHeight = coercedHeight
                 )
                 remeasure = true
             }
@@ -1296,7 +1304,7 @@ internal class Measurer : BasicMeasure.Measurer {
         lastMeasures.getOrPut(measurable, { arrayOf(0, 0, 0) }).copyFrom(measure)
 
         measure.measuredNeedsSolverPass = measure.measuredWidth != measure.horizontalDimension ||
-                measure.measuredHeight != measure.verticalDimension
+            measure.measuredHeight != measure.verticalDimension
     }
 
     /**
@@ -1305,14 +1313,14 @@ internal class Measurer : BasicMeasure.Measurer {
      * wrap content measurement.
      */
     private fun obtainConstraints(
-            dimensionBehaviour: ConstraintWidget.DimensionBehaviour,
-            dimension: Int,
-            matchConstraintDefaultDimension: Int,
-            measureStrategy: Int,
-            otherDimensionResolved: Boolean,
-            currentDimensionResolved: Boolean,
-            rootMaxConstraint: Int,
-            outConstraints: IntArray
+        dimensionBehaviour: ConstraintWidget.DimensionBehaviour,
+        dimension: Int,
+        matchConstraintDefaultDimension: Int,
+        measureStrategy: Int,
+        otherDimensionResolved: Boolean,
+        currentDimensionResolved: Boolean,
+        rootMaxConstraint: Int,
+        outConstraints: IntArray
     ): Boolean = when (dimensionBehaviour) {
         FIXED -> {
             outConstraints[0] = dimension
@@ -1330,11 +1338,11 @@ internal class Measurer : BasicMeasure.Measurer {
             Log.d("CCL2", "ODR ${otherDimensionResolved}")
             Log.d("CCL2", "IRH ${currentDimensionResolved}")
             val useDimension = currentDimensionResolved ||
-                    (measureStrategy == TRY_GIVEN_DIMENSIONS ||
+                (measureStrategy == TRY_GIVEN_DIMENSIONS ||
                     measureStrategy == USE_GIVEN_DIMENSIONS) &&
-                    (measureStrategy == USE_GIVEN_DIMENSIONS ||
-                            matchConstraintDefaultDimension != MATCH_CONSTRAINT_WRAP ||
-                            otherDimensionResolved)
+                (measureStrategy == USE_GIVEN_DIMENSIONS ||
+                    matchConstraintDefaultDimension != MATCH_CONSTRAINT_WRAP ||
+                    otherDimensionResolved)
             Log.d("CCL", "UD $useDimension")
             outConstraints[0] = if (useDimension) dimension else 0
             outConstraints[1] = if (useDimension) dimension else rootMaxConstraint
@@ -1352,30 +1360,30 @@ internal class Measurer : BasicMeasure.Measurer {
     }
 
     fun performMeasure(
-            constraints: Constraints,
-            layoutDirection: LayoutDirection,
-            constraintSet: ConstraintSet,
-            measurables: List<Measurable>,
-            optimizationLevel: Int,
-            measureScope: MeasureScope
+        constraints: Constraints,
+        layoutDirection: LayoutDirection,
+        constraintSet: ConstraintSet,
+        measurables: List<Measurable>,
+        optimizationLevel: Int,
+        measureScope: MeasureScope
     ): IntSize {
         this.density = measureScope
         this.measureScope = measureScope
         reset()
         // Define the size of the ConstraintLayout.
         state.width(
-                if (constraints.hasFixedWidth) {
-                    SolverDimension.Fixed(constraints.maxWidth)
-                } else {
-                    SolverDimension.Wrap().min(constraints.minWidth)
-                }
+            if (constraints.hasFixedWidth) {
+                SolverDimension.Fixed(constraints.maxWidth)
+            } else {
+                SolverDimension.Wrap().min(constraints.minWidth)
+            }
         )
         state.height(
-                if (constraints.hasFixedHeight) {
-                    SolverDimension.Fixed(constraints.maxHeight)
-                } else {
-                    SolverDimension.Wrap().min(constraints.minHeight)
-                }
+            if (constraints.hasFixedHeight) {
+                SolverDimension.Fixed(constraints.maxHeight)
+            } else {
+                SolverDimension.Wrap().min(constraints.minHeight)
+            }
         )
         // Build constraint set and apply it to the state.
         state.rootIncomingConstraints = constraints
@@ -1390,7 +1398,7 @@ internal class Measurer : BasicMeasure.Measurer {
             root.debugName = "ConstraintLayout"
             root.children.forEach { child ->
                 child.debugName =
-                        (child.companionWidget as? Measurable)?.layoutId?.toString() ?: "NOTAG"
+                    (child.companionWidget as? Measurable)?.layoutId?.toString() ?: "NOTAG"
             }
             Log.d("CCL", "ConstraintLayout is asked to measure with $constraints")
             Log.d("CCL", root.toDebugString())
@@ -1412,13 +1420,13 @@ internal class Measurer : BasicMeasure.Measurer {
             if (child.width != currentWidth || child.height != currentHeight) {
                 if (DEBUG) {
                     Log.d(
-                            "CCL",
-                            "Final measurement for ${measurable.layoutId} " +
-                                    "to confirm size ${child.width} ${child.height}"
+                        "CCL",
+                        "Final measurement for ${measurable.layoutId} " +
+                            "to confirm size ${child.width} ${child.height}"
                     )
                 }
                 measurable.measure(Constraints.fixed(child.width, child.height))
-                        .also { placeables[measurable] = it }
+                    .also { placeables[measurable] = it }
             }
         }
         if (DEBUG) {
@@ -1441,20 +1449,22 @@ internal class Measurer : BasicMeasure.Measurer {
         }
     }
 
-    override fun didMeasures() { }
+    override fun didMeasures() {}
 }
 
 private typealias SolverDimension = androidx.constraintlayout.core.state.Dimension
 private typealias SolverState = androidx.constraintlayout.core.state.State
 private typealias SolverDirection = androidx.constraintlayout.core.state.State.Direction
 private typealias SolverChain = androidx.constraintlayout.core.state.State.Chain
+
 private val DEBUG = false
 private fun ConstraintWidget.toDebugString() =
-        "$debugName " +
-                "width $width minWidth $minWidth maxWidth $maxWidth " +
-                "height $height minHeight $minHeight maxHeight $maxHeight " +
-                "HDB $horizontalDimensionBehaviour VDB $verticalDimensionBehaviour " +
-                "MCW $mMatchConstraintDefaultWidth MCH $mMatchConstraintDefaultHeight " +
-                "percentW $mMatchConstraintPercentWidth percentH $mMatchConstraintPercentHeight"
+    "$debugName " +
+        "width $width minWidth $minWidth maxWidth $maxWidth " +
+        "height $height minHeight $minHeight maxHeight $maxHeight " +
+        "HDB $horizontalDimensionBehaviour VDB $verticalDimensionBehaviour " +
+        "MCW $mMatchConstraintDefaultWidth MCH $mMatchConstraintDefaultHeight " +
+        "percentW $mMatchConstraintPercentWidth percentH $mMatchConstraintPercentHeight"
+
 private fun BasicMeasure.Measure.toDebugString() =
-        "measure strategy is "
+    "measure strategy is "
