@@ -152,9 +152,7 @@ public class ImageFilterButton extends androidx.appcompat.widget.AppCompatImageB
                 }
             }
             a.recycle();
-            Log.v("ImageFilterButton", Debug.getLoc()+"  mOverlay =  "+mOverlay);
-            Log.v("ImageFilterButton", Debug.getLoc()+"  mCrossfade =  "+mCrossfade);
-            Log.v("ImageFilterButton", Debug.getLoc()+"  getDrawable() =  "+getDrawable());
+
             mDrawable = getDrawable();
             if (mAltDrawable != null && mDrawable != null) {
 

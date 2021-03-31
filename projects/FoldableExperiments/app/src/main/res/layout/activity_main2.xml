@@ -25,7 +25,9 @@
         app:reactiveGuide_animateChange="true"
         app:reactiveGuide_applyToAllConstraintSets="true"
         android:orientation="horizontal"
-        app:layout_constraintGuide_end="0dp" />
+        app:layout_constraintGuide_end="0dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content" />
 
     <View
         android:id="@+id/background"
