@@ -40,15 +40,22 @@
 <!--        </KeyFrameSet>-->
         <OnSwipe />
     </Transition>
-    <Transition
-        motion:constraintSetStart="@+id/end"
-        motion:constraintSetEnd="@+id/start" >
-<!--        <KeyFrameSet >-->
-<!--            <KeyAttribute-->
-<!--                motion:motionTarget="@+id/t1"-->
-<!--                motion:framePosition="50"-->
-<!--                android:alpha="0.5" />-->
-<!--        </KeyFrameSet>-->
-        <OnSwipe />
-    </Transition>
+<!--    <Transition-->
+<!--        motion:constraintSetStart="@+id/end"-->
+<!--        motion:constraintSetEnd="@+id/start" >-->
+<!--&lt;!&ndash;        <KeyFrameSet >&ndash;&gt;-->
+<!--&lt;!&ndash;            <KeyAttribute&ndash;&gt;-->
+<!--&lt;!&ndash;                motion:motionTarget="@+id/t1"&ndash;&gt;-->
+<!--&lt;!&ndash;                motion:framePosition="50"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:alpha="0.5" />&ndash;&gt;-->
+<!--&lt;!&ndash;        </KeyFrameSet>&ndash;&gt;-->
+<!--        <OnSwipe />-->
+<!--    </Transition>-->
+    <ViewTransition android:id="@+id/foo">
+        <KeyFrameSet>
+            <KeyAttribute motion:framePosition="20" android:alpha="0.5" android:rotationX="80" android:scaleY="0.5" android:scaleX="0.5"/>
+            <KeyAttribute motion:framePosition="50" android:alpha="0" android:rotationX="80"  android:scaleY="0.5" android:scaleX="0.5"/>
+            <KeyAttribute motion:framePosition="80" android:alpha="0.5" android:rotationX="80" android:scaleY="0.5" android:scaleX="0.5"/>
+        </KeyFrameSet>
+    </ViewTransition>
 </MotionScene>
