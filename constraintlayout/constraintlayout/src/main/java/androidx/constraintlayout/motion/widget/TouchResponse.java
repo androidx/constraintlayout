@@ -365,7 +365,21 @@ class TouchResponse {
                 }
                 if (pos != 0.0f && pos != 1.0f && mOnTouchUp != MotionLayout.TOUCH_UP_STOP) {
                     angularVelocity = (float) angularVelocity * mDragScale / mAnchorDpDt[1];
-                    mMotionLayout.touchAnimateTo(mOnTouchUp, (pos < 0.5) ? 0.0f : 1.0f, 3 * angularVelocity);
+                    float target = (pos < 0.5) ? 0.0f : 1.0f;
+
+                    if (mOnTouchUp == MotionLayout.TOUCH_UP_NEVER_TO_START) {
+                        if (currentPos + angularVelocity < 0) {
+                            angularVelocity = Math.abs(angularVelocity);
+                        }
+                        target = 1;
+                    }
+                    if (mOnTouchUp == MotionLayout.TOUCH_UP_NEVER_TO_END) {
+                        if (currentPos + angularVelocity > 1) {
+                            angularVelocity = -Math.abs(angularVelocity);
+                        }
+                        target = 0;
+                    }
+                    mMotionLayout.touchAnimateTo(mOnTouchUp, target , 3 * angularVelocity);
                     if (0.0f >= currentPos || 1.0f <= currentPos) {
                         mMotionLayout.setState(MotionLayout.TransitionState.FINISHED);
                     }
@@ -524,7 +538,22 @@ class TouchResponse {
                     pos += velocity / 3; // TODO calibration & animation speed based on velocity
                 }
                 if (pos != 0.0f && pos != 1.0f && mOnTouchUp != MotionLayout.TOUCH_UP_STOP) {
-                    mMotionLayout.touchAnimateTo(mOnTouchUp, (pos < 0.5) ? 0.0f : 1.0f, velocity);
+                    float target = (pos < 0.5) ? 0.0f : 1.0f;
+
+                    if (mOnTouchUp == MotionLayout.TOUCH_UP_NEVER_TO_START) {
+                        if (currentPos + velocity < 0) {
+                            velocity = Math.abs(velocity);
+                        }
+                        target = 1;
+                    }
+                    if (mOnTouchUp == MotionLayout.TOUCH_UP_NEVER_TO_END) {
+                        if (currentPos + velocity > 1) {
+                            velocity = -Math.abs(velocity);
+                        }
+                        target = 0;
+                    }
+
+                    mMotionLayout.touchAnimateTo(mOnTouchUp, target, velocity);
                     if (0.0f >= currentPos || 1.0f <= currentPos) {
                         mMotionLayout.setState(MotionLayout.TransitionState.FINISHED);
                     }

@@ -41,11 +41,6 @@ public class SpringStopEngine implements StopEngine {
         return null;
     }
 
-    public static String getLoc() {
-        StackTraceElement s = new Throwable().getStackTrace()[1];
-        return ".(" + s.getFileName() + ":" + s.getLineNumber() + ") " + s.getMethodName() + "()";
-    }
-
     void log(String str) {
         StackTraceElement s = new Throwable().getStackTrace()[1];
         String line = ".(" + s.getFileName() + ":" + s.getLineNumber() + ") " + s.getMethodName() + "() ";
@@ -109,7 +104,6 @@ public class SpringStopEngine implements StopEngine {
         mV += dv / 2;
         mPos += avgV * dt;
         if (mBoundaryMode > 0) {
-            log(" bounce");
             if (mPos < 0 && ((mBoundaryMode & 1) == 1)) {
                 mPos = -mPos;
                 mV = -mV;
