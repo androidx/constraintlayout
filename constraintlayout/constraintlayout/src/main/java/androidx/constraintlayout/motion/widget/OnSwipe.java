@@ -285,11 +285,11 @@ public class OnSwipe {
      * Set the damping of the spring if using spring.
      * c in "a = (-k*x-c*v)/m" equation for the acceleration of a spring
      *
-     * @param mSpringDamping
+     * @param springDamping
      * @return this
      */
-    public OnSwipe setSpringDamping(float mSpringDamping) {
-        this.mSpringDamping = mSpringDamping;
+    public OnSwipe setSpringDamping(float springDamping) {
+        mSpringDamping = springDamping;
         return this;
     }
 
@@ -307,11 +307,11 @@ public class OnSwipe {
      * Set the Mass of the spring if using spring.
      * m in "a = (-k*x-c*v)/m" equation for the acceleration of a spring
      *
-     * @param mSpringMass
+     * @param springMass
      * @return this
      */
-    public OnSwipe setSpringMass(float mSpringMass) {
-        this.mSpringMass = mSpringMass;
+    public OnSwipe setSpringMass(float springMass) {
+        mSpringMass = springMass;
         return this;
     }
 
@@ -334,7 +334,7 @@ public class OnSwipe {
      * @return
      */
     public OnSwipe setSpringStiffness(float springStiffness) {
-        this.mSpringStiffness = springStiffness;
+        mSpringStiffness = springStiffness;
         return this;
     }
 
@@ -352,11 +352,11 @@ public class OnSwipe {
      * This is in change in progress / second
      * If the spring will never go above that threshold again it will stop.
      *
-     * @param mSpringStopThreshold
+     * @param springStopThreshold
      * @return
      */
-    public OnSwipe setSpringStopThreshold(float mSpringStopThreshold) {
-        this.mSpringStopThreshold = mSpringStopThreshold;
+    public OnSwipe setSpringStopThreshold(float springStopThreshold) {
+        mSpringStopThreshold = springStopThreshold;
         return this;
     }
 
@@ -376,11 +376,11 @@ public class OnSwipe {
      * SPRING_BOUNDARY_BOUNCE_END = 2;
      * SPRING_BOUNDARY_BOUNCE_BOTH = 3;
      *
-     * @param mSpringBoundary
+     * @param springBoundary
      * @return
      */
-    public OnSwipe setSpringBoundary(int mSpringBoundary) {
-        this.mSpringBoundary = mSpringBoundary;
+    public OnSwipe setSpringBoundary(int springBoundary) {
+        mSpringBoundary = springBoundary;
         return this;
     }
 }

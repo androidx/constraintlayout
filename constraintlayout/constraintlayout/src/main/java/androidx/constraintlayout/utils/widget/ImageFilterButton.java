@@ -158,8 +158,6 @@ public class ImageFilterButton extends androidx.appcompat.widget.AppCompatImageB
 
                 mLayers[0] = mDrawable = getDrawable().mutate();
                 mLayers[1] = mAltDrawable.mutate();
-                Log.v("ImageFilterButton", Debug.getLoc()+"  mDrawable =  "+mDrawable);
-                Log.v("ImageFilterButton", Debug.getLoc()+"  mAltDrawable =  "+mAltDrawable);
 
                 mLayer = new LayerDrawable(mLayers);
                 mLayer.getDrawable(1).setAlpha((int) (255 * (mCrossfade)));

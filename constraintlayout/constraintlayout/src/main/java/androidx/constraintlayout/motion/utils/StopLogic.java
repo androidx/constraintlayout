@@ -32,7 +32,7 @@ import androidx.constraintlayout.motion.widget.MotionInterpolator;
 public class StopLogic extends MotionInterpolator {
     private StopLogicEngine mStopLogicEngine = new StopLogicEngine();
     private SpringStopEngine mSpringStopEngine;
-    private StopEngine engine = mStopLogicEngine;
+    private StopEngine mEngine = mStopLogicEngine;
 
     /**
      * Debugging logic to log the state.
@@ -43,39 +43,56 @@ public class StopLogic extends MotionInterpolator {
      */
 
     public String debug(String desc, float time) {
-        return engine.debug(desc, time);
+        return mEngine.debug(desc, time);
     }
 
     public float getVelocity(float x) {
-        return engine.getVelocity(x);
+        return mEngine.getVelocity(x);
     }
 
     public void config(float currentPos, float destination, float currentVelocity, float maxTime, float maxAcceleration, float maxVelocity) {
-        engine = mStopLogicEngine;
+        mEngine = mStopLogicEngine;
         mStopLogicEngine.config(currentPos, destination, currentVelocity, maxTime, maxAcceleration, maxVelocity);
     }
 
+    /**
+     * This configure the stop logic to be a spring.
+     * Moving from currentPosition(P0) to destination with an initial velocity of currentVelocity (V0)
+     * moving as if it has a mass (m) with spring constant stiffness(k), and friction(c)
+     * It moves with the equation acceleration a = (-k.x-c.v)/m.
+     * x = current position - destination
+     * v is velocity
+     *
+     * @param currentPos The current position
+     * @param destination The destination position
+     * @param currentVelocity the initial velocity
+     * @param mass the mass
+     * @param stiffness the stiffness or spring constant (the force by which the spring pulls)
+     * @param damping the stiffness or spring constant. (the resistance to the motion)
+     * @param stopThreshold (When the max velocity of the movement is below this it stops)
+     * @param boundaryMode This will allow you to control if it overshoots or bounces when it hits 0 and 1
+     */
     public void springConfig(float currentPos, float destination, float currentVelocity,
                              float mass, float stiffness, float damping, float stopThreshold,
                              int boundaryMode) {
         if (mSpringStopEngine == null) {
             mSpringStopEngine = new SpringStopEngine();
         }
-        engine = mSpringStopEngine;
+        mEngine = mSpringStopEngine;
         mSpringStopEngine.springConfig(currentPos, destination, currentVelocity, mass, stiffness, damping, stopThreshold, boundaryMode);
     }
 
     @Override
     public float getInterpolation(float v) {
-        return engine.getInterpolation(v);
+        return mEngine.getInterpolation(v);
     }
 
     @Override
     public float getVelocity() {
-        return engine.getVelocity();
+        return mEngine.getVelocity();
     }
 
     public boolean isStopped() {
-        return engine.isStopped();
+        return mEngine.isStopped();
     }
 }

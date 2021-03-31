@@ -32,10 +32,10 @@ public class CheckSetStates extends AppCompatActivity {
     private static final String TAG = "CustomSwipeClick";
     String layout_name;
     MotionLayout mMotionLayout;
-    int []states = {R.id.s1,R.id.s2,R.id.s3,R.id.s4,R.id.s5,R.id.s6,R.id.s7,R.id.s8,R.id.s9};
+    int[] states = {R.id.s1, R.id.s2, R.id.s3, R.id.s4, R.id.s5, R.id.s6, R.id.s7, R.id.s8, R.id.s9};
 
     @Override
-    protected void onCreate(@Nullable  Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle extra = getIntent().getExtras();
         String prelayout = extra.getString(Utils.KEY);
@@ -47,39 +47,41 @@ public class CheckSetStates extends AppCompatActivity {
 
         TextView text = findViewById(R.id.text);
     }
-  int getNextState() {
-      int state = 0;
-      int cstate = mMotionLayout.getCurrentState();
-      Log.v(TAG, Debug.getLoc() + " current " + Debug.getName(getApplicationContext(),cstate));
-      for (int i = 0; i < states.length; i++) {
-          if (cstate == states[i]) {
-              state = i + 1;
-              return state % states.length;
 
-          }
-      }
-      return state;
-  }
+    int getNextState() {
+        int state = 0;
+        int cstate = mMotionLayout.getCurrentState();
+        Log.v(TAG, Debug.getLoc() + " current " + Debug.getName(getApplicationContext(), cstate));
+        for (int i = 0; i < states.length; i++) {
+            if (cstate == states[i]) {
+                state = i + 1;
+                return state % states.length;
+
+            }
+        }
+        return state;
+    }
 
     public void jump1(View view) {
         int state = getNextState();
         mMotionLayout.transitionToState(states[state]);
-        Log.v(TAG, Debug.getLoc()+" "+state );
+        Log.v(TAG, Debug.getLoc() + " " + state);
 
     }
+
     public void jump2(View view) {
         int state = getNextState();
         int cstate = mMotionLayout.getCurrentState();
         int end = mMotionLayout.getEndState();
         int start = mMotionLayout.getStartState();
-        Log.v(TAG, Debug.getLoc() + "set " + Debug.getName(getApplicationContext(),start)   +
-                " -> " + Debug.getName(getApplicationContext(),end)  +
-        " now " + Debug.getName(getApplicationContext(),cstate) );
+        Log.v(TAG, Debug.getLoc() + "set " + Debug.getName(getApplicationContext(), start) +
+                " -> " + Debug.getName(getApplicationContext(), end) +
+                " now " + Debug.getName(getApplicationContext(), cstate));
         //mMotionLayout.transitionToState(states[state], 1);
         mMotionLayout.jumpToState(states[state]);
-          cstate = mMotionLayout.getCurrentState();
-        Log.v(TAG, Debug.getLoc() + "set " + Debug.getName(getApplicationContext(),states[state])   +
-                " = " + Debug.getName(getApplicationContext(),cstate));
+        cstate = mMotionLayout.getCurrentState();
+        Log.v(TAG, Debug.getLoc() + "set " + Debug.getName(getApplicationContext(), states[state]) +
+                " = " + Debug.getName(getApplicationContext(), cstate));
 
     }
 }

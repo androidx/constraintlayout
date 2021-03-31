@@ -1945,6 +1945,14 @@ public class MotionLayout extends ConstraintLayout implements
         mAnimationStartTime = getNanoTime();
         invalidate();
     }
+
+    /**
+     * Allows you to use trigger spring motion touch behaviour.
+     * You must have configured all the spring parameters in the Transition's OnSwipe
+     *
+     * @param position the position 0 - 1
+     * @param currentVelocity the current velocity rate of change in position per second
+     */
     public void touchSpringTo(float position, float currentVelocity) {
         if (DEBUG) {
             Log.v(TAG, " " + Debug.getLocation() + " touchAnimateTo " + position + "   " + currentVelocity);
@@ -4066,10 +4074,6 @@ public class MotionLayout extends ConstraintLayout implements
             Log.v(TAG, Debug.getLocation() + " mTransitionLastPosition = " + mTransitionLastPosition);
         }
         return super.onTouchEvent(event);
-    }
-    boolean mTesting = true;
-    public void setupForTest(){
-        onAttachedToWindow();
     }
 
     @Override
