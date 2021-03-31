@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/left"
+        motion:constraintSetStart="@id/start"
+        motion:motionInterpolator="linear"
+        motion:duration="500">
+        <OnSwipe
+            motion:touchAnchorId="@+id/clock"
+            motion:dragDirection="dragLeft"
+            motion:springDamping="10"
+            motion:onTouchUp="neverCompleteToEnd"
+            motion:springMass="1"
+            motion:springBoundary="overshoot"
+            motion:springStiffness="500" />
+        <KeyFrameSet></KeyFrameSet>
+    </Transition>
+
+    <Transition
+        motion:constraintSetEnd="@+id/right"
+        motion:constraintSetStart="@id/start"
+        motion:motionInterpolator="linear"
+
+        motion:duration="500">
+        <OnSwipe
+            motion:touchAnchorId="@+id/clock"
+            motion:dragDirection="dragRight"
+            motion:springDamping="10"
+            motion:springMass="1"
+            motion:springBoundary="overshoot"
+            motion:onTouchUp="neverCompleteToEnd"
+            motion:springStiffness="500" />
+        <KeyFrameSet></KeyFrameSet>
+    </Transition>
+
+
+    <ConstraintSet android:id="@+id/start">
+        <ConstraintOverride
+            android:id="@id/hour"
+            motion:transformPivotTarget="@id/clock"
+            android:rotation="120" />
+        <ConstraintOverride
+            android:id="@id/min"
+            motion:transformPivotTarget="@id/clock"
+            android:rotation="0" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/left">
+        <ConstraintOverride
+            android:id="@id/hour"
+            motion:transformPivotTarget="@id/clock"
+            android:rotation="90" />
+        <ConstraintOverride
+            android:id="@id/min"
+            motion:transformPivotTarget="@id/clock"
+            android:rotation="-360" />
+        <ConstraintOverride
+            android:id="@+id/clock"
+            motion:layout_constraintHorizontal_bias="0" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/right">
+        <ConstraintOverride
+            android:id="@id/hour"
+            motion:transformPivotTarget="@id/clock"
+            android:rotation="210" />
+        <ConstraintOverride
+            android:id="@id/min"
+            motion:transformPivotTarget="@id/clock"
+            android:rotation="360" />
+        <ConstraintOverride
+            android:id="@id/clock"
+            motion:layout_constraintHorizontal_bias="1" />
+    </ConstraintSet>
+</MotionScene>

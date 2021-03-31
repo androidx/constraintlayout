@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 The Android Open Source Project
+ * Copyright (C) 2020 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,12 @@
 
 package android.support.constraint.core.test;
 
-import androidx.constraintlayout.motion.utils.CurveFit;
-import androidx.constraintlayout.motion.utils.Easing;
-import androidx.constraintlayout.motion.utils.HyperSpline;
-import androidx.constraintlayout.motion.utils.LinearCurveFit;
-import androidx.constraintlayout.motion.utils.Oscillator;
+
+import androidx.constraintlayout.core.motion.utils.CurveFit;
+import androidx.constraintlayout.core.motion.utils.Easing;
+import androidx.constraintlayout.core.motion.utils.HyperSpline;
+import androidx.constraintlayout.core.motion.utils.LinearCurveFit;
+import androidx.constraintlayout.core.motion.utils.Oscillator;
 import androidx.constraintlayout.motion.utils.StopLogic;
 
 import org.junit.Test;
@@ -140,7 +141,7 @@ public class MotionLayoutUtilsUnitTest {
     @Test
     public void testOscillator01() throws Exception {
         Oscillator o = new Oscillator();
-        o.setType(Oscillator.SQUARE_WAVE);
+        o.setType(Oscillator.SQUARE_WAVE, null);
         o.addPoint(0, 0);
         o.addPoint(0.5, 10);
         o.addPoint(1, 0);
@@ -179,7 +180,7 @@ public class MotionLayoutUtilsUnitTest {
         int n = 1000;
         double last = o.getValue(0,0);
         int count = 0;
-        o.setType(type);
+        o.setType(type, null);
         for (int i = 0; i < n; i++) {
 
             double v = o.getValue(0.0001 + i / (double) n,0);

@@ -40,6 +40,7 @@ dependencies {
     implementation project(path: ':constraintlayout')
     implementation 'org.jetbrains:annotations:15.0'
     testImplementation 'junit:junit:4.13'
+    testImplementation project(path: ':core')
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
