@@ -10,9 +10,7 @@
         <OnSwipe
             motion:touchAnchorId="@+id/clock"
             motion:dragDirection="dragLeft"
-            motion:springDamping="10"
             motion:onTouchUp="neverCompleteToEnd"
-            motion:springMass="1"
             motion:springBoundary="overshoot"
             motion:springStiffness="500" />
         <KeyFrameSet></KeyFrameSet>
@@ -27,7 +25,7 @@
         <OnSwipe
             motion:touchAnchorId="@+id/clock"
             motion:dragDirection="dragRight"
-            motion:springDamping="10"
+            motion:springDamping="0.2"
             motion:springMass="1"
             motion:springBoundary="overshoot"
             motion:onTouchUp="neverCompleteToEnd"

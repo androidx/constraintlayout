@@ -98,10 +98,17 @@ public class SpringStopEngine implements StopEngine {
 
     private void compute(double dt) {
         double x = (mPos - mTargetPos);
-        double a = getAcceleration();
-        double dv = a * dt;
-        double avgV = mV + dv / 2;
-        mV += dv / 2;
+        double k = mStiffness;
+        double c = mDamping;
+        double a = (-k * x - c * mV) / mMass;
+        // This refinement of a simple coding of the acceleration increases accuracy
+        double avgV = mV + a * dt / 2; // pass 1 calculate the average velocity
+        double avgX = x + dt * (avgV) / 2 - mTargetPos;// pass 1 calculate the average pos
+        a = (-avgX * k - avgV * c) / mMass; //  calculate acceleration over that average pos
+
+        double dv = a * dt; //  calculate change in velocity
+        avgV = mV + dv / 2; //  average  velocity is current + half change
+        mV += dv;
         mPos += avgV * dt;
         if (mBoundaryMode > 0) {
             if (mPos < 0 && ((mBoundaryMode & 1) == 1)) {
@@ -114,4 +121,5 @@ public class SpringStopEngine implements StopEngine {
             }
         }
     }
+    
 }
