@@ -104,7 +104,7 @@ class TouchResponse {
     static final int FLAG_DISABLE_POST_SCROLL = 1;
     static final int FLAG_DISABLE_SCROLL = 2;
     private float mDragThreshold = 10;
-    private float mSpringDamping = Float.NaN;
+    private float mSpringDamping = 10;
     private float mSpringMass = 1;
     private float mSpringStiffness = Float.NaN;
     private float mSpringStopThreshold = Float.NaN;
