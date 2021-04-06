@@ -2196,8 +2196,11 @@ public class MotionLayout extends ConstraintLayout implements
 
         mTransitionLastPosition = 0;
         invalidate();
-        transitionToEnd(() -> {
-            mInRotation = false;
+        transitionToEnd(new Runnable() {
+            @Override
+            public void run() {
+                mInRotation = false;
+            }
         });
         if (duration > 0) {
             mTransitionDuration = duration / 1000f;
