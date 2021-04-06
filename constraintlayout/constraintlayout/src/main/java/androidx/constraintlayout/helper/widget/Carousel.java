@@ -276,7 +276,12 @@ public class Carousel extends MotionHelper {
                     // don't touch animate when reaching the last item
                     return;
                 }
-                mMotionLayout.post(() -> mMotionLayout.touchAnimateTo(MotionLayout.TOUCH_UP_DECELERATE_AND_COMPLETE, 1, v));
+                mMotionLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mMotionLayout.touchAnimateTo(MotionLayout.TOUCH_UP_DECELERATE_AND_COMPLETE, 1, v);
+                    }
+                });
             }
         }
     };
