@@ -265,7 +265,7 @@
     <attr name="circularflow_angles" format="string"/>
     <attr name="circularflow_viewCenter" format="reference"/>
     <attr name="circularflow_defaultAngle" format="float"/>
-    <attr name="circularflow_defaultRadius" format="integer"/>
+    <attr name="circularflow_defaultRadius" format="dimension"/>
 
 
     <!-- TODO allows to use a drawable as horizontal separator between elements -->
