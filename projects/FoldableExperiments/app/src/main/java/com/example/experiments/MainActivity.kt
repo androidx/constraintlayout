@@ -122,14 +122,13 @@ class MainActivity : Activity() {
             for (displayFeature in newLayoutInfo.displayFeatures) {
                 val foldFeature = displayFeature as? FoldingFeature
                 if (foldFeature != null) {
-                    if (foldFeature.isSeparating) {
-                        // The foldable device's hinge is in an intermediate position
-                        // between opened and closed state.
+                    if (foldFeature.isSeparating &&
+                        foldFeature.orientation == FoldingFeature.ORIENTATION_HORIZONTAL
+                    ) {
+                        // The foldable device is in tabletop mode
                         val fold = foldPosition(motionLayout, foldFeature)
                         ConstraintLayout.getSharedValues().fireNewValue(R.id.fold, fold)
                     } else {
-                        // The foldable device is completely open,
-                        // the screen space that is presented to the user is flat.
                         ConstraintLayout.getSharedValues().fireNewValue(R.id.fold, 0);
                     }
                 }
