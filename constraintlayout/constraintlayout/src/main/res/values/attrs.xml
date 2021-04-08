@@ -326,6 +326,7 @@
     <!-- Used to set the type of optimization we apply. This is a mask. -->
     <attr name="layout_optimizationLevel">
         <flag name="none" value="0" />
+        <flag name="legacy" value="0" />
         <flag name="standard" value="257" /> <!-- direct, measure caches -->
         <flag name="direct" value="1" />
         <flag name="barrier" value="2" />
