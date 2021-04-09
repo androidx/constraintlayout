@@ -5338,13 +5338,13 @@ public class ConstraintSet {
         Context context;
         int flags;
         int unknownCount = 0;
-        final String LEFT = "left";
-        final String RIGHT = "right";
-        final String BASELINE = "baseline";
-        final String BOTTOM = "bottom";
-        final String TOP = "top";
-        final String START = "start";
-        final String END = "end";
+        final String LEFT = "'left'";
+        final String RIGHT = "'right'";
+        final String BASELINE = "'baseline'";
+        final String BOTTOM = "'bottom'";
+        final String TOP = "'top'";
+        final String START = "'start'";
+        final String END = "'end'";
 
 
         WriteEngine(Writer writer, ConstraintLayout layout, int flags) throws IOException {
@@ -5355,10 +5355,10 @@ public class ConstraintSet {
         }
 
         void writeLayout() throws IOException {
-            writer.write("\nConstraintSet:{\n");
+            writer.write("\n\'ConstraintSet\':{\n");
             for (Integer id : mConstraints.keySet()) {
                 Constraint c = mConstraints.get(id);
-                String idName = Debug.getName(layout.getContext(), id);
+                String idName = getName(id);
                 writer.write(idName + ":{\n");
                 Layout l = c.layout;
                 writeConstraint(LEFT, l.leftToLeft, LEFT, l.leftMargin, l.goneLeftMargin);
@@ -5380,15 +5380,15 @@ public class ConstraintSet {
                 writeCircle(l.circleConstraint, l.circleAngle, l.circleRadius);
 
                 writeGuideline(l.orientation, l.guideBegin, l.guideEnd, l.guidePercent);
-                writeDimension("height", l.mHeight, l.heightDefault, l.heightPercent, l.heightMin, l.heightMax, l.constrainedHeight);
-                writeDimension("width", l.mWidth, l.widthDefault, l.widthPercent, l.widthMin, l.widthMax, l.constrainedWidth);
-                writeVariable("verticalWeight", l.verticalWeight);
-                writeVariable("horizontalWeight", l.horizontalWeight);
-                writeVariable("horizontalChainStyle", l.horizontalChainStyle);
-                writeVariable("verticalChainStyle", l.verticalChainStyle);
-                writeVariable("barrierDirection", l.mBarrierDirection);
+                writeDimension("'height'", l.mHeight, l.heightDefault, l.heightPercent, l.heightMin, l.heightMax, l.constrainedHeight);
+                writeDimension("'width'", l.mWidth, l.widthDefault, l.widthPercent, l.widthMin, l.widthMax, l.constrainedWidth);
+                writeVariable("'verticalWeight'", l.verticalWeight);
+                writeVariable("'horizontalWeight'", l.horizontalWeight);
+                writeVariable("'horizontalChainStyle'", l.horizontalChainStyle);
+                writeVariable("'verticalChainStyle'", l.verticalChainStyle);
+                writeVariable("'barrierDirection'", l.mBarrierDirection);
                 if (l.mReferenceIds != null) {
-                    writeVariable("ReferenceIds", l.mReferenceIds);
+                    writeVariable("'ReferenceIds'", l.mReferenceIds);
                 }
                 writer.write( "}\n");
             }
@@ -5405,11 +5405,11 @@ public class ConstraintSet {
 
         String getName(int id) {
             if (idMap.containsKey(id)) {
-                return idMap.get(id);
+                return  "\'"+idMap.get(id)+"\'";
             }
             String name = lookup(id);
             idMap.put(id, name);
-            return name;
+            return "\'"+name+"\'";
         }
 
         String lookup(int id) {
@@ -5429,14 +5429,14 @@ public class ConstraintSet {
                 return;
             }
             writer.write("       "+my);
-            writer.write(":{");
+            writer.write(":[");
             writer.write(getName(leftToLeft));
             writer.write(" , ");
             writer.write(other);
             if (margin != 0) {
                 writer.write(" , "+margin);
             }
-            writer.write("}\n");
+            writer.write("],\n");
 
         }
 
@@ -5445,10 +5445,10 @@ public class ConstraintSet {
                 return;
             }
             writer.write("circle");
-            writer.write(":{");
+            writer.write(":[");
             writer.write(getName(circleConstraint));
             writer.write(", " + circleAngle);
-            writer.write(circleRadius + "}");
+            writer.write(circleRadius + "]");
         }
 
         void writeVariable(String name, int value) throws IOException {
@@ -5484,7 +5484,7 @@ public class ConstraintSet {
             for (int i = 0; i < value.length; i++) {
                 writer.write(((i == 0) ? "[" : ", ") + getName(value[i]));
             }
-            writer.write("]\n");
+            writer.write("],\n");
         }
 
         void writeVariable(String name, String value) throws IOException {
