@@ -97,27 +97,34 @@ public class SpringStopEngine implements StopEngine {
     }
 
     private void compute(double dt) {
-        double x = (mPos - mTargetPos);
+
         double k = mStiffness;
         double c = mDamping;
-        double a = (-k * x - c * mV) / mMass;
-        // This refinement of a simple coding of the acceleration increases accuracy
-        double avgV = mV + a * dt / 2; // pass 1 calculate the average velocity
-        double avgX = x + dt * (avgV) / 2 - mTargetPos;// pass 1 calculate the average pos
-        a = (-avgX * k - avgV * c) / mMass; //  calculate acceleration over that average pos
+        // Estimate how many time we should over sample based on the frequency and current sampling
+        int overSample = (int) (1 + 9 / (Math.sqrt(mStiffness / mMass) * dt * 4));
+        dt /= overSample;
 
-        double dv = a * dt; //  calculate change in velocity
-        avgV = mV + dv / 2; //  average  velocity is current + half change
-        mV += dv;
-        mPos += avgV * dt;
-        if (mBoundaryMode > 0) {
-            if (mPos < 0 && ((mBoundaryMode & 1) == 1)) {
-                mPos = -mPos;
-                mV = -mV;
-            }
-            if (mPos > 1 && ((mBoundaryMode & 2) == 2)) {
-                mPos = 2 - mPos;
-                mV = -mV;
+        for (int i = 0; i < overSample; i++) {
+            double x = (mPos - mTargetPos);
+            double a = (-k * x - c * mV) / mMass;
+            // This refinement of a simple coding of the acceleration increases accuracy
+            double avgV = mV + a * dt / 2; // pass 1 calculate the average velocity
+            double avgX = x + dt * (avgV) / 2 - mTargetPos;// pass 1 calculate the average pos
+            a = (-avgX * k - avgV * c) / mMass; //  calculate acceleration over that average pos
+
+            double dv = a * dt; //  calculate change in velocity
+            avgV = mV + dv / 2; //  average  velocity is current + half change
+            mV += dv;
+            mPos += avgV * dt;
+            if (mBoundaryMode > 0) {
+                if (mPos < 0 && ((mBoundaryMode & 1) == 1)) {
+                    mPos = -mPos;
+                    mV = -mV;
+                }
+                if (mPos > 1 && ((mBoundaryMode & 2) == 2)) {
+                    mPos = 2 - mPos;
+                    mV = -mV;
+                }
             }
         }
     }
