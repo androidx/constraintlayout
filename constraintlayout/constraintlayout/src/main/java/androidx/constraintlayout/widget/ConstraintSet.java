@@ -460,14 +460,15 @@ public class ConstraintSet {
         overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintBottom_toTopOf, BOTTOM_TO_TOP);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintBottom_toBottomOf, BOTTOM_TO_BOTTOM);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintBaseline_toBaselineOf, BASELINE_TO_BASELINE);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintGuide_begin, GUIDE_BEGIN);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintGuide_end, GUIDE_END);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintGuide_percent, GUIDE_PERCENT);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintStart_toEndOf, START_TO_END);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintStart_toStartOf, START_TO_START);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintEnd_toStartOf, END_TO_START);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintEnd_toEndOf, END_TO_END);
         */
+
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintGuide_begin, GUIDE_BEGIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintGuide_end, GUIDE_END);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintGuide_percent, GUIDE_PERCENT);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_editor_absoluteY, EDITOR_ABSOLUTE_X);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_editor_absoluteY, EDITOR_ABSOLUTE_Y);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_android_orientation, ORIENTATION);
@@ -4508,6 +4509,8 @@ public class ConstraintSet {
         switch (type) {
             case GUIDE_PERCENT:
                 c.layout.guidePercent = value;
+                c.layout.guideBegin = UNSET;
+                c.layout.guideEnd = UNSET;
                 break;
             case CIRCLE_ANGLE:
                 c.layout.circleAngle = value;
@@ -4600,9 +4603,13 @@ public class ConstraintSet {
                 break;
             case GUIDE_BEGIN:
                 c.layout.guideBegin = value;
+                c.layout.guidePercent = UNSET;
+                c.layout.guideEnd = UNSET;
                 break;
             case GUIDE_END:
                 c.layout.guideEnd = value;
+                c.layout.guidePercent = UNSET;
+                c.layout.guideBegin = UNSET;
                 break;
             case ORIENTATION:
                 c.layout.orientation = value;
