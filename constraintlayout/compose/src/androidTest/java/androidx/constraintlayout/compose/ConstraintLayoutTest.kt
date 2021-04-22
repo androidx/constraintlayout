@@ -18,10 +18,7 @@ package androidx.constraintlayout.compose
 
 import android.content.Context
 import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.boundsInParent
@@ -522,10 +519,6 @@ class ConstraintLayoutTest {
                 ),
                 position[0].value
             )
-            System.out.println("ok so what have we? displayWidth: $displayWidth")
-            System.out.println("ok so what have we? displayHeight: $displayHeight")
-            System.out.println("ok so what have we? offset: $offset")
-            System.out.println("ok so what have we? boxSize: $boxSize")
             assertEquals(
                 Offset(
                     (displayWidth / 2f + offset).toFloat(),
@@ -1163,6 +1156,117 @@ class ConstraintLayoutTest {
                 assertEquals(ValueElement("ref", ref), inspectableElements[0])
                 assertEquals(ValueElement("constrainBlock", block), inspectableElements[1])
             }
+        }
+    }
+
+    @Test
+    fun testConstraintLayout_doesNotRemeasureUnnecessarily() {
+        var first by mutableStateOf(true)
+        var dslExecutions = 0
+        rule.setContent {
+            val dslExecuted = remember { { ++dslExecutions } }
+            ConstraintLayout {
+                val (box1) = createRefs()
+                val box2 = createRef()
+                val guideline = createGuidelineFromStart(0.5f)
+                val barrier = createAbsoluteLeftBarrier(box1)
+
+                // Make sure the content is reexecuted when first changes.
+                first
+
+                // If the reference changed, we would remeasure and reexecute the DSL.
+                Box(Modifier.constrainAs(box1) {})
+                // If the guideline, barrier or anchor changed or were inferred as un@Stable, we
+                // would remeasure and reexecute the DSL.
+                Box(
+                    Modifier.constrainAs(box2) {
+                        start.linkTo(box1.end)
+                        end.linkTo(guideline)
+                        start.linkTo(barrier)
+                        dslExecuted()
+                    }
+                )
+            }
+        }
+        rule.runOnIdle {
+            assertEquals(1, dslExecutions)
+            first = false
+        }
+        rule.runOnIdle { assertEquals(1, dslExecutions) }
+    }
+
+    @Test
+    fun testConstraintLayout_doesRemeasure_whenHelpersChange_butConstraintsDont() {
+        val size = 100
+        val sizeDp = with(rule.density) { size.toDp() }
+        var first by mutableStateOf(true)
+        var box1Position = Offset(-1f, -1f)
+        var box2Position = Offset(-1f, -1f)
+        val box1PositionUpdater =
+            Modifier.onGloballyPositioned { box1Position = it.positionInRoot() }
+        val box2PositionUpdater =
+            Modifier.onGloballyPositioned { box2Position = it.positionInRoot() }
+        rule.setContent {
+            ConstraintLayout {
+                val (box1, box2) = createRefs()
+
+                if (!first) {
+                    createVerticalChain(box1, box2)
+                }
+
+                Box(Modifier.size(sizeDp).then(box1PositionUpdater).constrainAs(box1) {})
+                Box(Modifier.size(sizeDp).then(box2PositionUpdater).constrainAs(box2) {})
+            }
+        }
+        rule.runOnIdle {
+            assertEquals(Offset.Zero, box1Position)
+            assertEquals(Offset.Zero, box2Position)
+            first = false
+        }
+        rule.runOnIdle {
+            assertEquals(Offset.Zero, box1Position)
+            assertEquals(Offset(0f, size.toFloat()), box2Position)
+        }
+    }
+
+    @Test
+    fun testConstraintLayout_doesRemeasure_whenHelpersDontChange_butConstraintsDo() {
+        val size = 100
+        val sizeDp = with(rule.density) { size.toDp() }
+        var first by mutableStateOf(true)
+        var box1Position = Offset(-1f, -1f)
+        var box2Position = Offset(-1f, -1f)
+        val box1PositionUpdater =
+                Modifier.onGloballyPositioned { box1Position = it.positionInRoot() }
+        val box2PositionUpdater =
+                Modifier.onGloballyPositioned { box2Position = it.positionInRoot() }
+        rule.setContent {
+            ConstraintLayout {
+                val (box1, box2) = createRefs()
+
+                val topBarrier = createTopBarrier(box1)
+                val bottomBarrier = createBottomBarrier(box1)
+
+                Box(Modifier.size(sizeDp).then(box1PositionUpdater).constrainAs(box1) {})
+                Box(
+                    Modifier.size(sizeDp).then(box2PositionUpdater).constrainAs(box2) {
+                        if (first) {
+                            top.linkTo(topBarrier)
+                        } else {
+                            top.linkTo(bottomBarrier)
+                        }
+                    }
+                )
+            }
+        }
+        rule.runOnIdle {
+            assertEquals(Offset.Zero, box1Position)
+            assertEquals(Offset.Zero, box2Position)
+            first = false
+        }
+        rule.runOnIdle {
+            assertEquals(Offset.Zero, box1Position)
+            assertEquals(Offset(0f, size.toFloat()), box2Position)
         }
     }
 }
