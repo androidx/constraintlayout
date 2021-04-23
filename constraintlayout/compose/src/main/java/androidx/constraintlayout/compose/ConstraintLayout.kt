@@ -80,10 +80,10 @@ inline fun ConstraintLayout(
         modifier = modifier,
         measurePolicy = measurePolicy,
         content = {
-            val previousHelpersHashCode = scope.hashCode()
+            val previousHelpersHashCode = scope.helpersHashCode
             scope.reset()
             scope.content()
-            if (scope.hashCode() != previousHelpersHashCode) {
+            if (scope.helpersHashCode != previousHelpersHashCode) {
                 // If the helpers have changed, we need to request remeasurement. To achieve this,
                 // we are changing this boolean state that is read during measurement.
                 remeasureRequesterState.value = !remeasureRequesterState.value
