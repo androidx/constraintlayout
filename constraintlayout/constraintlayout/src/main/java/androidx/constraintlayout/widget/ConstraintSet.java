@@ -577,7 +577,6 @@ public class ConstraintSet {
             if (constraint == null) {
                 continue;
             }
-            constraint.mDelta = parent.mDelta;
             if (!constraint.layout.mApply) {
                 constraint.layout.copyFrom(parent.layout);
             }
@@ -668,13 +667,16 @@ public class ConstraintSet {
             }
         }
 
-        for (Constraint constraint : mConstraints.values()) {
-            if (constraint.mDelta != null) {
-                constraint.mDelta.applyDelta(constraint);
+    }
+
+    public void applyDeltaFrom(ConstraintSet cs) {
+        for (Constraint from : cs.mConstraints.values()) {
+            if (from.mDelta != null) {
+                Constraint constraint = getConstraint(from.mViewId);
+                from.mDelta.applyDelta(constraint);
             }
         }
     }
-
 
     /**
      * Parse the constraint dimension attribute

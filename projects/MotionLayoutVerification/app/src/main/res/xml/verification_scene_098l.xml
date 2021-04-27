@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ConstraintSet android:id="@+id/left"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+<!--    <Constraint  android:id="@+id/button"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        motion:layout_constraintHorizontal_bias="0.2"-->
+<!--        motion:layout_constraintBottom_toBottomOf="parent"-->
+<!--        motion:layout_constraintEnd_toEndOf="parent"-->
+
+<!--        motion:layout_constraintStart_toStartOf="parent"-->
+<!--        motion:layout_constraintTop_toTopOf="parent" />-->
+    <ConstraintOverride android:id="@+id/button" motion:layout_constraintHorizontal_bias="0.1" />
+
+
+</ConstraintSet>

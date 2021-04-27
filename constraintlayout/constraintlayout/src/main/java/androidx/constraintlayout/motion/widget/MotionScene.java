@@ -93,6 +93,7 @@ public class MotionScene {
     private static final String ONSWIPE_TAG = "OnSwipe";
     private static final String ONCLICK_TAG = "OnClick";
     private static final String STATESET_TAG = "StateSet";
+    private static final String INCLUDE_TAG_UC = "Include";
     private static final String INCLUDE_TAG = "include";
     private static final String KEYFRAMESET_TAG = "KeyFrameSet";
     private static final String CONSTRAINTSET_TAG = "ConstraintSet";
@@ -1089,6 +1090,7 @@ public class MotionScene {
                                 parseConstraintSet(context, parser);
                                 break;
                             case INCLUDE_TAG:
+                            case INCLUDE_TAG_UC:
                                 parseInclude(context, parser);
                                 break;
                             case KEYFRAMESET_TAG:
@@ -1733,7 +1735,21 @@ public class MotionScene {
         for (int i = 0; i < mConstraintSetMap.size(); i++) {
             ConstraintSet cs = mConstraintSetMap.valueAt(i);
             cs.readFallback(motionLayout);
+            applyDeltas(cs, mConstraintSetMap.keyAt(i));
         }
+    }
+
+    private void applyDeltas(ConstraintSet cs, int id) {
+        int[] derive = new int[mDeriveMap.size()];
+        int count = 0;
+        for (int did = mDeriveMap.get(id); did > 0; did = mDeriveMap.get(did)) {
+            derive[count++] = did;
+        }
+        while (count > 0) {
+            count--;
+            cs.applyDeltaFrom(mConstraintSetMap.get(derive[count]));
+        }
+        cs.applyDeltaFrom(cs);
     }
 
     /**
@@ -1772,7 +1788,6 @@ public class MotionScene {
                 return;
             }
             cs.readFallback(derivedFrom);
-            mDeriveMap.put(key, -1);
         }
     }
 
