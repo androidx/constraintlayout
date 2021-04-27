@@ -1719,7 +1719,6 @@ public class MotionScene {
      * read the constraints from the inflation of the ConstraintLayout
      * If the constraintset does not contain information about a view this information is used
      * as a "fallback" position.
-     *
      * @param motionLayout
      */
     void readFallback(MotionLayout motionLayout) {
@@ -1730,26 +1729,8 @@ public class MotionScene {
                 Log.e(TAG, "Cannot be derived from yourself");
                 return;
             }
-            readConstraintChain(key);
+            readConstraintChain(key,motionLayout);
         }
-        for (int i = 0; i < mConstraintSetMap.size(); i++) {
-            ConstraintSet cs = mConstraintSetMap.valueAt(i);
-            cs.readFallback(motionLayout);
-            applyDeltas(cs, mConstraintSetMap.keyAt(i));
-        }
-    }
-
-    private void applyDeltas(ConstraintSet cs, int id) {
-        int[] derive = new int[mDeriveMap.size()];
-        int count = 0;
-        for (int did = mDeriveMap.get(id); did > 0; did = mDeriveMap.get(did)) {
-            derive[count++] = did;
-        }
-        while (count > 0) {
-            count--;
-            cs.applyDeltaFrom(mConstraintSetMap.get(derive[count]));
-        }
-        cs.applyDeltaFrom(cs);
     }
 
     /**
@@ -1774,13 +1755,16 @@ public class MotionScene {
     }
 
     /**
+     * Recursive decent of the deriveConstraintsFrom tree reading the motionLayout if
+     * needed. 
+     *
      * @param key
      */
-    private void readConstraintChain(int key) {
+    private void readConstraintChain(int key, MotionLayout motionLayout) {
+        ConstraintSet cs = mConstraintSetMap.get(key);
         int derivedFromId = mDeriveMap.get(key);
         if (derivedFromId > 0) {
-            readConstraintChain(mDeriveMap.get(key));
-            ConstraintSet cs = mConstraintSetMap.get(key);
+            readConstraintChain(derivedFromId, motionLayout);
             ConstraintSet derivedFrom = mConstraintSetMap.get(derivedFromId);
             if (derivedFrom == null) {
                 Log.e(TAG, "ERROR! invalid deriveConstraintsFrom: @id/" +
@@ -1788,7 +1772,10 @@ public class MotionScene {
                 return;
             }
             cs.readFallback(derivedFrom);
+        } else {
+            cs.readFallback(motionLayout);
         }
+        cs.applyDeltaFrom(cs);
     }
 
     public static String stripID(String id) {
