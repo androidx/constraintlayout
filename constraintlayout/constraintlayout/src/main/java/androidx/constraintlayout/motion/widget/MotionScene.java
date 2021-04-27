@@ -93,6 +93,7 @@ public class MotionScene {
     private static final String ONSWIPE_TAG = "OnSwipe";
     private static final String ONCLICK_TAG = "OnClick";
     private static final String STATESET_TAG = "StateSet";
+    private static final String INCLUDE_TAG_UC = "Include";
     private static final String INCLUDE_TAG = "include";
     private static final String KEYFRAMESET_TAG = "KeyFrameSet";
     private static final String CONSTRAINTSET_TAG = "ConstraintSet";
@@ -1089,6 +1090,7 @@ public class MotionScene {
                                 parseConstraintSet(context, parser);
                                 break;
                             case INCLUDE_TAG:
+                            case INCLUDE_TAG_UC:
                                 parseInclude(context, parser);
                                 break;
                             case KEYFRAMESET_TAG:
@@ -1717,7 +1719,6 @@ public class MotionScene {
      * read the constraints from the inflation of the ConstraintLayout
      * If the constraintset does not contain information about a view this information is used
      * as a "fallback" position.
-     *
      * @param motionLayout
      */
     void readFallback(MotionLayout motionLayout) {
@@ -1728,11 +1729,7 @@ public class MotionScene {
                 Log.e(TAG, "Cannot be derived from yourself");
                 return;
             }
-            readConstraintChain(key);
-        }
-        for (int i = 0; i < mConstraintSetMap.size(); i++) {
-            ConstraintSet cs = mConstraintSetMap.valueAt(i);
-            cs.readFallback(motionLayout);
+            readConstraintChain(key,motionLayout);
         }
     }
 
@@ -1758,13 +1755,16 @@ public class MotionScene {
     }
 
     /**
+     * Recursive decent of the deriveConstraintsFrom tree reading the motionLayout if
+     * needed. 
+     *
      * @param key
      */
-    private void readConstraintChain(int key) {
+    private void readConstraintChain(int key, MotionLayout motionLayout) {
+        ConstraintSet cs = mConstraintSetMap.get(key);
         int derivedFromId = mDeriveMap.get(key);
         if (derivedFromId > 0) {
-            readConstraintChain(mDeriveMap.get(key));
-            ConstraintSet cs = mConstraintSetMap.get(key);
+            readConstraintChain(derivedFromId, motionLayout);
             ConstraintSet derivedFrom = mConstraintSetMap.get(derivedFromId);
             if (derivedFrom == null) {
                 Log.e(TAG, "ERROR! invalid deriveConstraintsFrom: @id/" +
@@ -1772,8 +1772,10 @@ public class MotionScene {
                 return;
             }
             cs.readFallback(derivedFrom);
-            mDeriveMap.put(key, -1);
+        } else {
+            cs.readFallback(motionLayout);
         }
+        cs.applyDeltaFrom(cs);
     }
 
     public static String stripID(String id) {
