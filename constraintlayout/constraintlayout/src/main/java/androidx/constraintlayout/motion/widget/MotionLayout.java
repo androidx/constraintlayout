@@ -3626,6 +3626,8 @@ public class MotionLayout extends ConstraintLayout implements
                     }
 
                 }
+            } else {
+                mLastVelocity = deltaPos;
             }
             if (Math.abs(mLastVelocity)> EPSILON) {
                     setState(TransitionState.MOVING);
