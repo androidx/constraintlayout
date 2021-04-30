@@ -750,7 +750,7 @@ class TouchResponse {
     }
 
     /**
-     * Gt how the drag progress will return to the start or end state on touch up.
+     * Get how the drag progress will return to the start or end state on touch up.
      * Can ba using an algrothem
      *
      * @return
