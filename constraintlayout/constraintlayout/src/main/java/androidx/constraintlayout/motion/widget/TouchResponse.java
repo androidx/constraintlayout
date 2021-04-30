@@ -109,6 +109,9 @@ class TouchResponse {
     private float mSpringStiffness = Float.NaN;
     private float mSpringStopThreshold = Float.NaN;
     private int mSpringBoundary = 0;
+    private int mAutoCompleteMode = COMPLETE_MODE_CONTINUOUS_VELOCITY;
+    public static final int COMPLETE_MODE_CONTINUOUS_VELOCITY = 0;
+    public static final int COMPLETE_MODE_SPRING = 1;
 
     TouchResponse(Context context, MotionLayout layout, XmlPullParser parser) {
         mMotionLayout = layout;
@@ -146,6 +149,7 @@ class TouchResponse {
         mSpringMass= onSwipe.getSpringMass();
         mSpringStiffness= onSwipe.getSpringStiffness();
         mSpringStopThreshold= onSwipe.getSpringStopThreshold();
+        mAutoCompleteMode = onSwipe.getAutoCompleteMode();
     }
 
     public void setRTL(boolean rtl) {
@@ -225,7 +229,8 @@ class TouchResponse {
                 mSpringStopThreshold = a.getFloat(attr, mSpringStopThreshold);
             } else if (attr == R.styleable.OnSwipe_springBoundary) {
                 mSpringBoundary = a.getInt(attr, mSpringBoundary);
-
+            } else if (attr == R.styleable.OnSwipe_autoCompleteMode) {
+                mAutoCompleteMode = a.getInt(attr, mAutoCompleteMode);
             }
 
         }
@@ -742,6 +747,25 @@ class TouchResponse {
 
     boolean getMoveWhenScrollAtTop() {
         return mMoveWhenScrollAtTop;
+    }
+
+    /**
+     * Gt how the drag progress will return to the start or end state on touch up.
+     * Can ba using an algrothem
+     *
+     * @return
+     */
+    public int getAutoCompleteMode() {
+        return mAutoCompleteMode;
+    }
+    /**
+     * set how the drag progress will return to the start or end state on touch up.
+     *
+     *
+     * @return
+     */
+    void setAutoCompleteMode(int autoCompleteMode) {
+        mAutoCompleteMode = autoCompleteMode;
     }
 
     /**

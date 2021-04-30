@@ -1288,6 +1288,10 @@
     <declare-styleable name="OnSwipe">
         <attr name="dragScale" format="float" />
         <attr name="dragThreshold" format="float" />
+        <attr name="autoCompleteMode" format="enum" >
+            <enum name="continuousVelocity"  value="0" />
+            <enum name="Spring"  value="1" />
+        </attr>
         <attr name="maxVelocity" format="float" />
         <attr name="maxAcceleration" format="float" />
         <attr name="springMass" format="float"/>

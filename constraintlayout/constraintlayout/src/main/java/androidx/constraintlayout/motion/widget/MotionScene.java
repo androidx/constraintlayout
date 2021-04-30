@@ -1701,7 +1701,12 @@ public class MotionScene {
         }
         return 0;
     }
-
+    int getAutoCompleteMode() {
+        if (mCurrentTransition != null && mCurrentTransition.mTouchResponse != null) {
+            return mCurrentTransition.mTouchResponse.getAutoCompleteMode();
+        }
+        return 0;
+    }
     void setupTouch() {
         if (mCurrentTransition != null && mCurrentTransition.mTouchResponse != null) {
             mCurrentTransition.mTouchResponse.setupTouch();
@@ -1755,7 +1760,7 @@ public class MotionScene {
     }
 
     /**
-     * Recursive decent of the deriveConstraintsFrom tree reading the motionLayout if
+     * Recursive descent of the deriveConstraintsFrom tree reading the motionLayout if
      * needed. 
      *
      * @param key

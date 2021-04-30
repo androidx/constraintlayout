@@ -1899,8 +1899,8 @@ public class MotionLayout extends ConstraintLayout implements
                 } else if (touchUpMode == TOUCH_UP_COMPLETE_TO_END || touchUpMode == TOUCH_UP_NEVER_TO_START) {
                     position = 1;
                 }
-                float stiff = mScene.getSpringStiffiness();
-                if(Float.isNaN(stiff)) {
+
+                if (mScene.getAutoCompleteMode() == TouchResponse.COMPLETE_MODE_CONTINUOUS_VELOCITY) {
                     mStopLogic.config(mTransitionLastPosition, position, currentVelocity,
                             mTransitionDuration, mScene.getMaxAcceleration(), mScene.getMaxVelocity());
                 } else {

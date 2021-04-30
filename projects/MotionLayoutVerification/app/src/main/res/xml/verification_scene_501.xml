@@ -10,6 +10,7 @@
         <OnSwipe
             motion:touchAnchorId="@+id/clock"
             motion:dragDirection="dragLeft"
+            motion:autoCompleteMode="Spring"
             motion:onTouchUp="neverCompleteToEnd"
             motion:springBoundary="overshoot"
             motion:springStiffness="500" />
@@ -27,6 +28,7 @@
             motion:dragDirection="dragRight"
             motion:springDamping="0.2"
             motion:springMass="1"
+            motion:autoCompleteMode="Spring"
             motion:springBoundary="overshoot"
             motion:onTouchUp="neverCompleteToEnd"
             motion:springStiffness="500" />
