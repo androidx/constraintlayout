@@ -6,7 +6,7 @@
         motion:constraintSetEnd="@+id/left"
         motion:constraintSetStart="@id/start"
         motion:motionInterpolator="linear"
-        motion:duration="500">
+        motion:duration="200">
         <OnSwipe
             motion:touchAnchorId="@+id/clock"
             motion:dragDirection="dragLeft"
@@ -22,7 +22,7 @@
         motion:constraintSetStart="@id/start"
         motion:motionInterpolator="linear"
 
-        motion:duration="500">
+        motion:duration="200">
         <OnSwipe
             motion:touchAnchorId="@+id/clock"
             motion:dragDirection="dragRight"

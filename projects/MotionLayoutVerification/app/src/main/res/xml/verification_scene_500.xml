@@ -10,6 +10,7 @@
         <OnSwipe
             motion:touchAnchorId="@id/ball"
             motion:dragDirection="dragRight"
+            motion:autoCompleteMode="spring"
             motion:springDamping="40"
             motion:springMass="1"
             motion:springBoundary ="bounceBoth"
@@ -27,6 +28,7 @@
             motion:touchAnchorId="@id/ball"
             motion:dragDirection="dragDown"
             motion:springDamping="50"
+            motion:autoCompleteMode="spring"
             motion:springMass="1"
             motion:springBoundary ="bounceBoth"
             motion:springStiffness="1500"/>
@@ -44,7 +46,8 @@
             motion:touchAnchorId="@id/ball"
             motion:dragDirection="dragRight"
             motion:springDamping="4"
-            motion:springMass="1"
+            motion:autoCompleteMode="spring"
+            motion:springMass="2"
             motion:springBoundary ="bounceEnd"
             motion:springStiffness="200"/>
         <KeyFrameSet>
