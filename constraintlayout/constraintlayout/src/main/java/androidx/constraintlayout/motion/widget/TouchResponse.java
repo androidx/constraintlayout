@@ -751,8 +751,7 @@ class TouchResponse {
 
     /**
      * Get how the drag progress will return to the start or end state on touch up.
-     * Can ba using an algrothem
-     *
+     * Can be ether COMPLETE_MODE_CONTINUOUS_VELOCITY (default) or COMPLETE_MODE_SPRING
      * @return
      */
     public int getAutoCompleteMode() {
