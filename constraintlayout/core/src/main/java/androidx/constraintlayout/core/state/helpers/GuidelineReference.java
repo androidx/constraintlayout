@@ -22,7 +22,7 @@ import androidx.constraintlayout.core.widgets.Guideline;
 import androidx.constraintlayout.core.state.Reference;
 import androidx.constraintlayout.core.state.State;
 
-public class GuidelineReference implements Reference {
+public class GuidelineReference implements Facade, Reference {
 
     final State mState;
     private int mOrientation;
@@ -82,6 +82,11 @@ public class GuidelineReference implements Reference {
         } else {
             mGuidelineWidget.setGuidePercent(mPercent);
         }
+    }
+
+    @Override
+    public Facade getFacade() {
+        return null;
     }
 
     @Override

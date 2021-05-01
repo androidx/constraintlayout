@@ -43,8 +43,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import androidx.constraintlayout.core.state.ConstraintReference
-import androidx.constraintlayout.core.state.Dimension.SPREAD_DIMENSION
-import androidx.constraintlayout.core.state.Dimension.WRAP_DIMENSION
+import androidx.constraintlayout.core.state.Dimension.*
 import androidx.constraintlayout.core.widgets.ConstraintWidget
 import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.FIXED
 import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
@@ -57,6 +56,7 @@ import androidx.constraintlayout.core.widgets.Optimizer
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.TRY_GIVEN_DIMENSIONS
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.USE_GIVEN_DIMENSIONS
+import org.intellij.lang.annotations.Language
 
 /**
  * Layout that positions its children according to the constraints between them.
@@ -1118,6 +1118,15 @@ interface ConstraintSet {
     fun applyTo(state: State, measurables: List<Measurable>)
 }
 
+fun ConstraintSet(@Language("json5") content : String) = object : ConstraintSet {
+    override fun applyTo(state: State, measurables: List<Measurable>) {
+        measurables.forEach { measurable ->
+            state.map((measurable.layoutId ?: createId()), measurable)
+        }
+        parseJSON(content, state)
+    }
+}
+
 /**
  * Creates a [ConstraintSet].
  */
@@ -1445,7 +1454,7 @@ internal class Measurer : BasicMeasure.Measurer {
 }
 
 private typealias SolverDimension = androidx.constraintlayout.core.state.Dimension
-private typealias SolverState = androidx.constraintlayout.core.state.State
+internal typealias SolverState = androidx.constraintlayout.core.state.State
 private typealias SolverDirection = androidx.constraintlayout.core.state.State.Direction
 private typealias SolverChain = androidx.constraintlayout.core.state.State.Chain
 private val DEBUG = false

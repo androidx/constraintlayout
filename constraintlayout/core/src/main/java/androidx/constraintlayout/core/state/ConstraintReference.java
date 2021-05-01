@@ -16,6 +16,7 @@
 
 package androidx.constraintlayout.core.state;
 
+import androidx.constraintlayout.core.state.helpers.Facade;
 import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
@@ -41,6 +42,8 @@ public class ConstraintReference implements Reference {
     }
 
     final State mState;
+
+    Facade mFacade = null;
 
     int mHorizontalChainStyle = ConstraintWidget.CHAIN_SPREAD;
     int mVerticalChainStyle = ConstraintWidget.CHAIN_SPREAD;
@@ -94,6 +97,15 @@ public class ConstraintReference implements Reference {
     public Object getView() {
         return mView;
     }
+
+    public void setFacade(Facade facade) {
+        mFacade = facade;
+        if (facade != null) {
+            setConstraintWidget(facade.getConstraintWidget());
+        }
+    }
+
+    public Facade getFacade() { return mFacade; }
 
     public void setConstraintWidget(ConstraintWidget widget) {
         if (widget == null) {
@@ -682,6 +694,9 @@ public class ConstraintReference implements Reference {
     public void apply() {
         if (mConstraintWidget == null) {
             return;
+        }
+        if (mFacade != null) {
+            mFacade.apply();
         }
         mHorizontalDimension.apply(mState, mConstraintWidget, HORIZONTAL);
         mVerticalDimension.apply(mState, mConstraintWidget, VERTICAL);

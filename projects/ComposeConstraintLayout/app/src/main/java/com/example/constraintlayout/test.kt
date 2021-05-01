@@ -350,3 +350,121 @@ public fun Screen5() {
         )
     }
 }
+
+
+@Preview
+@Composable
+public fun ScreenExample() {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        val (button, title) = createRefs()
+        val g1 = createGuidelineFromStart(80.dp)
+        Button(
+            modifier = Modifier.constrainAs(button) {
+                top.linkTo(title.bottom, 16.dp)
+                start.linkTo(g1)
+            },
+            onClick = {},
+        ) {
+            Text(text = stringResource(id = R.string.log_in))
+        }
+        Text(modifier = Modifier.constrainAs(title) {
+            centerVerticallyTo(parent)
+            start.linkTo(g1)
+        },
+            text = stringResource(id = R.string.welcome_header),
+            style = MaterialTheme.typography.h2,
+        )
+    }
+}
+
+@Preview
+@Composable
+public fun ScreenExample2() {
+    ConstraintLayout(
+        ConstraintSet {
+            val button = createRefFor("button")
+            val title = createRefFor("title")
+            val g1 = createGuidelineFromStart(80.dp)
+            constrain(button) {
+                top.linkTo(title.bottom, 16.dp)
+                start.linkTo(g1)
+            }
+            constrain(title) {
+                centerVerticallyTo(parent)
+                start.linkTo(g1)
+            }
+        },
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Button(
+            modifier = Modifier.layoutId("button"),
+            onClick = {},
+        ) {
+            Text(text = stringResource(id = R.string.log_in))
+        }
+        Text(modifier = Modifier.layoutId("title"),
+            text = stringResource(id = R.string.welcome_header),
+            style = MaterialTheme.typography.h2,
+        )
+    }
+}
+
+@Preview(group = "new")
+@Composable
+public fun ScreenExample3() {
+    ConstraintLayout(
+        ConstraintSet("""
+            {
+                g1: { type: 'guideline', start: 80 },
+                button: {
+                  top: ['title', 'bottom', 16],
+                  start: ['g1', 'start']
+                },
+                title: {
+                  centerVertically: 'parent',
+                  start: ['g1', 'start']
+                }
+            }
+        """),
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Button(
+            modifier = Modifier.layoutId("button"),
+            onClick = {},
+        ) {
+            Text(text = stringResource(id = R.string.log_in))
+        }
+        Text(modifier = Modifier.layoutId("title"),
+            text = stringResource(id = R.string.welcome_header),
+            style = MaterialTheme.typography.h2,
+        )
+    }
+}
+
+@Preview(group = "new2")
+@Composable
+public fun ScreenExample4() {
+    ConstraintLayout(
+        ConstraintSet("""
+            {
+                g1: { type: 'guideline', percent: 0.5 },
+                button: {
+                  start: ['g1', 'start']
+                }
+            }
+        """),
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Button(
+            modifier = Modifier.layoutId("button"),
+            onClick = {},
+        ) {
+            Text(text = stringResource(id = R.string.log_in))
+        }
+    }
+}

@@ -204,15 +204,14 @@ public class State {
     }
 
     public GuidelineReference guideline(Object key, int orientation) {
-        Reference reference = mReferences.get(key);
-        if (reference == null) {
+        ConstraintReference reference = constraints(key);
+        if (reference.getFacade() == null || !(reference.getFacade() instanceof GuidelineReference)) {
             GuidelineReference guidelineReference = new GuidelineReference(this);
             guidelineReference.setOrientation(orientation);
             guidelineReference.setKey(key);
-            mReferences.put(key, guidelineReference);
-            reference = guidelineReference;
+            reference.setFacade(guidelineReference);
         }
-        return (GuidelineReference) reference;
+        return (GuidelineReference) reference.getFacade();
     }
 
     public BarrierReference barrier(Object key, Direction direction) {
@@ -247,14 +246,21 @@ public class State {
 
     public void directMapping() {
         for (Object key : mReferences.keySet()) {
-            ConstraintReference reference = constraints(key);
+            Reference ref = constraints(key);
+            if (!(ref instanceof ConstraintReference)) {
+                continue;
+            }
+            ConstraintReference reference = (ConstraintReference) ref;
             reference.setView(key);
         }
     }
 
     public void map(Object key, Object view) {
-        ConstraintReference reference = constraints(key);
-        reference.setView(view);
+        Reference ref = constraints(key);
+        if (ref instanceof ConstraintReference) {
+            ConstraintReference reference = (ConstraintReference) ref;
+            reference.setView(view);
+        }
     }
 
     public void apply(ConstraintWidgetContainer container) {
@@ -276,8 +282,9 @@ public class State {
             Reference reference = mReferences.get(key);
             if (reference != mParent) {
                 ConstraintWidget widget = reference.getConstraintWidget();
+                widget.setDebugName(reference.getKey().toString());
                 widget.setParent(null);
-                if (reference instanceof GuidelineReference) {
+                if (reference.getFacade() instanceof GuidelineReference) {
                     // we apply Guidelines first to correctly setup their ConstraintWidget.
                     reference.apply();
                 }
