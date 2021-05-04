@@ -468,3 +468,37 @@ public fun ScreenExample4() {
         }
     }
 }
+
+@Preview(group = "new3")
+@Composable
+public fun ScreenExample5() {
+    ConstraintLayout(
+        ConstraintSet("""
+            {
+              b1: { type: 'barrier', contains: ['b1','b2'],
+              }
+            }
+        """),
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Button(
+            modifier = Modifier.layoutId("b1"),
+            onClick = {},
+        ) {
+            Text(text = "A")
+        }
+        Button(
+            modifier = Modifier.layoutId("b2"),
+            onClick = {},
+        ) {
+            Text(text = "B")
+        }
+        Button(
+            modifier = Modifier.layoutId("b3"),
+            onClick = {},
+        ) {
+            Text(text = "C")
+        }
+    }
+}

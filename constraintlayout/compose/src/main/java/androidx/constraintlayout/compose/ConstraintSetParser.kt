@@ -20,7 +20,7 @@ import androidx.constraintlayout.core.state.Dimension
 import androidx.constraintlayout.core.state.helpers.GuidelineReference
 import org.json.JSONObject
 
-internal val DEBUG = false
+internal val PARSER_DEBUG = false
 
 internal fun parseJSON(content: String, state: State) {
     val margins = HashMap<String, Int>()
@@ -29,15 +29,18 @@ internal fun parseJSON(content: String, state: State) {
     (0 until elements.length()).forEach { i ->
         val elementName = elements[i].toString()
         val element = json[elementName]
-        if (DEBUG) {
+        if (PARSER_DEBUG) {
             System.out.println("element <$elementName = $element> " + element.javaClass)
         }
         if (element is Int) {
             margins[elementName] = element
         } else if (element is JSONObject) {
             var type = lookForType(element)
-            if (type != null && type.equals("guideline")) {
-                parseGuideline(state, elementName, element)
+            if (type != null) {
+                when (type) {
+                    "guideline" -> parseGuideline(state, elementName, element)
+                    "chain" -> parseFlow(state, margins, elementName, element)
+                }
             } else if (type == null) {
                 parseWidget(state, margins, elementName, element)
             }
@@ -60,6 +63,36 @@ fun parseGuideline(state: State, elementName: String, element: JSONObject) {
                     )
                 )
                 guidelineReference.start(margin)
+            }
+            "end" -> {
+                var margin = state.convertDimension(
+                    Dp(
+                        element.getInt(constraintName).toFloat()
+                    )
+                )
+                guidelineReference.end(margin)
+            }
+            "percent" -> {
+                guidelineReference.percent(
+                    element.getDouble(
+                        constraintName
+                    ).toFloat()
+                )
+            }
+        }
+    }
+}
+
+fun parseChain(state: State, margins: HashMap<String, Int>,
+              elementName: String, element: JSONObject) {
+    val reference = state.constraints(elementName)
+    val constraints = element.names() ?: return
+    state.verticalGuideline(elementName)
+    var guidelineReference = reference.facade as GuidelineReference
+    (0 until constraints.length()).forEach { i ->
+        val constraintName = constraints[i].toString()
+        when (constraintName) {
+            "contains" -> {
             }
             "end" -> {
                 var margin = state.convertDimension(
