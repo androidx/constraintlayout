@@ -34,7 +34,7 @@ If using ConstraintLayout with the Android View system, add:
 ```gradle
 dependencies {
 
-    implementation("androidx.constraintlayout:constraintlayout:2.1.0-beta01")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.0-beta02")
 
 }
 ```
@@ -44,7 +44,7 @@ If using ConstraintLayout with Jetpack Compose, add:
 ```gradle
 dependencies {
 
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha05")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha06")
 
 }
 ```
