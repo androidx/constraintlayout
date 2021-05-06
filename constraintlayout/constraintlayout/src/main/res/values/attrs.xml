@@ -1306,6 +1306,7 @@
             <flag name="none" value="0" />
             <flag name="disablePostScroll" value="1" />
             <flag name="disableScroll" value="2" />
+            <flag name="supportScrollUp" value="4" />
         </attr>
         <attr name="moveWhenScrollAtTop" format="boolean" />
         <attr name="onTouchUp" format="enum">

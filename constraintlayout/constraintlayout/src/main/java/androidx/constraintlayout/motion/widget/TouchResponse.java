@@ -103,6 +103,8 @@ class TouchResponse {
     private int mFlags = 0;
     static final int FLAG_DISABLE_POST_SCROLL = 1;
     static final int FLAG_DISABLE_SCROLL = 2;
+    static final int FLAG_SUPPORT_SCROLL_UP = 4;
+
     private float mDragThreshold = 10;
     private float mSpringDamping = 10;
     private float mSpringMass = 1;

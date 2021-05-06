@@ -3000,7 +3000,14 @@ public class MotionLayout extends ConstraintLayout implements
 
         if (scene.getMoveWhenScrollAtTop()) {
             // This blocks transition during scrolling
-            if ((mTransitionPosition == 1 || mTransitionPosition == 0) && target.canScrollVertically(dy)) {
+             TouchResponse touchResponse = currentTransition.getTouchResponse();
+             int vert = -1;
+             if (touchResponse != null) {
+               if   ((touchResponse.getFlags() & TouchResponse.FLAG_SUPPORT_SCROLL_UP) != 0) {
+                   vert = dy;
+               }
+             }
+            if ((mTransitionPosition == 1 || mTransitionPosition == 0) && target.canScrollVertically(vert)) {
                 return;
             }
         }
