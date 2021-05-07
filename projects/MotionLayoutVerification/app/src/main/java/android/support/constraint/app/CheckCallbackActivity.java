@@ -51,14 +51,30 @@ public class CheckCallbackActivity extends AppCompatActivity {
 
         TextView text = findViewById(R.id.text);
         if (text != null) {
+
             mMotionLayout.setTransitionListener(new TransitionAdapter() {
+                @Override
+                public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
+                    Log.v(TAG, Debug.getLoc() + " "+Debug.getName(getApplicationContext(),startId));
+
+                }
+
+                @Override
+                public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
+                    Log.v(TAG, Debug.getLoc() + " progress "+progress);
+
+                }
+
+
                 @Override
                 public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
                     text.setText((currentId == R.id.expanded) ? "cb down" : "cb up");
                     Log.v(TAG, Debug.getLoc() + " "+Debug.getName(getApplicationContext(),currentId));
+                    Log.v(TAG," --------------------------------------------------------------------");
                 }
 
             });
+
         }
     }
     // ================================= Recycler support ====================================

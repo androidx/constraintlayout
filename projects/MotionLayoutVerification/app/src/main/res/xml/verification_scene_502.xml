@@ -20,7 +20,7 @@
     <Transition
         motion:constraintSetEnd="@+id/right"
         motion:constraintSetStart="@id/start"
-        motion:motionInterpolator="linear"
+        motion:motionInterpolator="easeInOut"
 
         motion:duration="200">
         <OnSwipe
@@ -32,7 +32,10 @@
             motion:springBoundary="overshoot"
             motion:onTouchUp="neverCompleteToEnd"
             motion:springStiffness="500" />
-        <KeyFrameSet></KeyFrameSet>
+        <KeyFrameSet>
+            <KeyAttribute motion:motionTarget="@id/clock" motion:framePosition="55" motion:alpha="0"/>
+            <KeyTrigger motion:triggerId="@+id/foobar" motion:framePosition="50"  motion:motionTarget="@id/clock"  />
+        </KeyFrameSet>
     </Transition>
 
 
