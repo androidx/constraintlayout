@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    app:layoutDescription="@xml/margin_002_scene"
+    tools:context=".VerificationActivity">
+
+    <View
+        android:id="@+id/bad"
+
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="-50dp"
+        android:layout_marginTop="-50dp"
+        android:background="#F00"
+        app:layoutDescription="@xml/main_scene"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <View
+        android:id="@+id/good"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="#0F0"
+
+        app:layoutDescription="@xml/main_scene"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>
