@@ -6,6 +6,7 @@
         motion:constraintSetStart="@+id/expanded"
         motion:constraintSetEnd="@+id/collapsed">
         <OnSwipe
+            motion:moveWhenScrollAtTop="false"
             motion:touchAnchorId="@id/recyclerView"
             motion:dragDirection="dragUp" />
     </Transition>
@@ -28,10 +29,11 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             motion:layout_constraintBottom_toBottomOf="@id/firstSpace"
+            motion:layout_constraintTop_toTopOf="@id/firstSpace"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintHorizontal_bias="0.9"
             motion:layout_constraintEnd_toEndOf="parent"
-            motion:layout_constraintTop_toTopOf="@id/firstSpace">
+            >
                         <CustomAttribute
                             motion:attributeName="text"
                             motion:customStringValue="up" />/

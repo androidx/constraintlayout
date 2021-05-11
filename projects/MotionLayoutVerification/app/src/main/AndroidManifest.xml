@@ -18,6 +18,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ButtonDriveAnimate" />
+        <activity android:name=".OnCreateTransiton" />
+
         <activity android:name=".RotationActivity"
             android:configChanges="orientation|screenSize"/>
         <activity android:name=".RotationUsingRotateTo"
@@ -36,6 +39,7 @@
             />
         <activity android:name=".CheckCallbackActivity" />
         <activity android:name=".CheckSetStates" />
+        <activity android:name=".FullScreenActivity" />
 
     </application>
 
