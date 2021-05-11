@@ -3003,7 +3003,7 @@ public class MotionLayout extends ConstraintLayout implements
              TouchResponse touchResponse = currentTransition.getTouchResponse();
              int vert = -1;
              if (touchResponse != null) {
-               if   ((touchResponse.getFlags() & TouchResponse.FLAG_SUPPORT_SCROLL_UP) != 0) {
+               if ((touchResponse.getFlags() & TouchResponse.FLAG_SUPPORT_SCROLL_UP) != 0) {
                    vert = dy;
                }
              }
