@@ -98,7 +98,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
 
     private static boolean REVERSE = false;
 
-    private final String RUN_FIRST = "verification_502";
+    private final String RUN_FIRST = "md_002";
     private final String LAYOUTS_MATCHES = "v.*_.*";
 
     private static String SHOW_FIRST = "";
@@ -496,6 +496,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
 
         setContentView(sv);
         if (runFirst != null) {
+
             runFirst.callOnClick();
         }
     }

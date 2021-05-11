@@ -950,6 +950,7 @@ public class ConstraintSet {
         public int mWidth;
         public int mHeight;
         public static final int UNSET = ConstraintSet.UNSET;
+        public static final int MARGIN_UNSET = 0;
         public int guideBegin = UNSET;
         public int guideEnd = UNSET;
         public float guidePercent = UNSET;
@@ -977,20 +978,20 @@ public class ConstraintSet {
         public int editorAbsoluteX = UNSET;
         public int editorAbsoluteY = UNSET;
         public int orientation = UNSET;
-        public int leftMargin = UNSET;
-        public int rightMargin = UNSET;
-        public int topMargin = UNSET;
-        public int bottomMargin = UNSET;
-        public int endMargin = UNSET;
-        public int startMargin = UNSET;
-        public int baselineMargin = UNSET;
-        public int goneLeftMargin = UNSET;
-        public int goneTopMargin = UNSET;
-        public int goneRightMargin = UNSET;
-        public int goneBottomMargin = UNSET;
-        public int goneEndMargin = UNSET;
-        public int goneStartMargin = UNSET;
-        public int goneBaselineMargin = UNSET;
+        public int leftMargin = MARGIN_UNSET;
+        public int rightMargin = MARGIN_UNSET;
+        public int topMargin = MARGIN_UNSET;
+        public int bottomMargin = MARGIN_UNSET;
+        public int endMargin = MARGIN_UNSET;
+        public int startMargin = MARGIN_UNSET;
+        public int baselineMargin = MARGIN_UNSET;
+        public int goneLeftMargin = MARGIN_UNSET;
+        public int goneTopMargin = MARGIN_UNSET;
+        public int goneRightMargin = MARGIN_UNSET;
+        public int goneBottomMargin = MARGIN_UNSET;
+        public int goneEndMargin = MARGIN_UNSET;
+        public int goneStartMargin = MARGIN_UNSET;
+        public int goneBaselineMargin = MARGIN_UNSET;
         public float verticalWeight = UNSET;
         public float horizontalWeight = UNSET;
         public int horizontalChainStyle = CHAIN_SPREAD;
@@ -2688,7 +2689,7 @@ public class ConstraintSet {
      * @param startSide the side of the widget to constrain
      * @param endID     the id of the widget to constrain to
      * @param endSide   the side of widget to constrain to
-     * @param margin    the margin to constrain (margin must be positive)
+     * @param margin    the margin to constrain
      */
     public void connect(int startID, int startSide, int endID, int endSide, int margin) {
         if (!mConstraints.containsKey(startID)) {
@@ -3008,45 +3009,45 @@ public class ConstraintSet {
                 case LEFT:
                     constraint.layout.leftToRight = Layout.UNSET;
                     constraint.layout.leftToLeft = Layout.UNSET;
-                    constraint.layout.leftMargin = Layout.UNSET;
-                    constraint.layout.goneLeftMargin = Layout.UNSET;
+                    constraint.layout.leftMargin = Layout.MARGIN_UNSET;
+                    constraint.layout.goneLeftMargin = Layout.MARGIN_UNSET;
                     break;
                 case RIGHT:
                     constraint.layout.rightToRight = Layout.UNSET;
                     constraint.layout.rightToLeft = Layout.UNSET;
-                    constraint.layout.rightMargin = Layout.UNSET;
-                    constraint.layout.goneRightMargin = Layout.UNSET;
+                    constraint.layout.rightMargin = Layout.MARGIN_UNSET;
+                    constraint.layout.goneRightMargin = Layout.MARGIN_UNSET;
                     break;
                 case TOP:
                     constraint.layout.topToBottom = Layout.UNSET;
                     constraint.layout.topToTop = Layout.UNSET;
-                    constraint.layout.topMargin = Layout.UNSET;
-                    constraint.layout.goneTopMargin = Layout.UNSET;
+                    constraint.layout.topMargin = Layout.MARGIN_UNSET;
+                    constraint.layout.goneTopMargin = Layout.MARGIN_UNSET;
                     break;
                 case BOTTOM:
                     constraint.layout.bottomToTop = Layout.UNSET;
                     constraint.layout.bottomToBottom = Layout.UNSET;
-                    constraint.layout.bottomMargin = Layout.UNSET;
-                    constraint.layout.goneBottomMargin = Layout.UNSET;
+                    constraint.layout.bottomMargin = Layout.MARGIN_UNSET;
+                    constraint.layout.goneBottomMargin = Layout.MARGIN_UNSET;
                     break;
                 case BASELINE:
                     constraint.layout.baselineToBaseline = Layout.UNSET;
                     constraint.layout.baselineToTop = Layout.UNSET;
                     constraint.layout.baselineToBottom = Layout.UNSET;
-                    constraint.layout.baselineMargin = Layout.UNSET;
-                    constraint.layout.goneBaselineMargin = Layout.UNSET;
+                    constraint.layout.baselineMargin = Layout.MARGIN_UNSET;
+                    constraint.layout.goneBaselineMargin = Layout.MARGIN_UNSET;
                     break;
                 case START:
                     constraint.layout.startToEnd = Layout.UNSET;
                     constraint.layout.startToStart = Layout.UNSET;
-                    constraint.layout.startMargin = Layout.UNSET;
-                    constraint.layout.goneStartMargin = Layout.UNSET;
+                    constraint.layout.startMargin = Layout.MARGIN_UNSET;
+                    constraint.layout.goneStartMargin = Layout.MARGIN_UNSET;
                     break;
                 case END:
                     constraint.layout.endToStart = Layout.UNSET;
                     constraint.layout.endToEnd = Layout.UNSET;
-                    constraint.layout.endMargin = Layout.UNSET;
-                    constraint.layout.goneEndMargin = Layout.UNSET;
+                    constraint.layout.endMargin = Layout.MARGIN_UNSET;
+                    constraint.layout.goneEndMargin = Layout.MARGIN_UNSET;
                     break;
                 case CIRCLE_REFERENCE:
                     constraint.layout.circleAngle = Layout.UNSET;
