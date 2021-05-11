@@ -20,17 +20,17 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.MotionLayout;
-import androidx.constraintlayout.motion.widget.TransitionAdapter;
 
 /**
  * Test transitionToState bug
  */
-public class ButtonDriveAnimate extends AppCompatActivity {
+public class FullScreenActivity extends AppCompatActivity {
     private static final String TAG = "CustomSwipeClick";
     String layout_name;
     MotionLayout mMotionLayout;
@@ -44,20 +44,12 @@ public class ButtonDriveAnimate extends AppCompatActivity {
         Context ctx = getApplicationContext();
         int id = ctx.getResources().getIdentifier(prelayout, "layout", ctx.getPackageName());
         setContentView(id);
-        setTitle(layout_name);
-        mMotionLayout = Utils.findMotionLayout(this);
-        mMotionLayout.setTransitionListener(new TransitionAdapter() {
-            @Override
-            public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
-                Log.v(TAG, Debug.getLoc()+" "+Debug.getName(getApplicationContext(),currentId));
-            }
+        getSupportActionBar().hide();
+        // setTitle(layout_name);
+        WindowManager.LayoutParams attrs = getWindow().getAttributes();
+        attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+        getWindow().setAttributes(attrs);
 
-            @Override
-            public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
-                Log.v(TAG, Debug.getLoc()+" "+progress+" "+Debug.getName(getApplicationContext(),triggerId));
-
-            }
-        });
     }
 
     public void goLeft(View v) {

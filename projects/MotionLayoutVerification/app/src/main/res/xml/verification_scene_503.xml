@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/right"
+        motion:constraintSetStart="@id/center"
+        motion:duration="1000">
+        <OnSwipe
+            motion:dragDirection="dragRight"
+            motion:springStiffness="3300"
+            motion:springDamping="50"
+            motion:springMass="2"
+            motion:autoCompleteMode="spring"
+            motion:onTouchUp="neverCompleteToEnd"
+            />
+       <KeyFrameSet>
+       </KeyFrameSet>
+    </Transition>
+<!--                motion:touchAnchorId="@+id/knob"
+-->
+    <Transition
+        motion:constraintSetEnd="@+id/left"
+        motion:constraintSetStart="@id/center"
+        motion:duration="1000">
+        <OnSwipe
+            motion:dragDirection="dragLeft"
+            motion:springStiffness="3300"
+            motion:springDamping="50"
+            motion:springMass="2"
+            motion:autoCompleteMode="spring"
+            motion:onTouchUp="neverCompleteToEnd"
+            />
+        <KeyFrameSet>
+        </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/center">
+        <Constraint
+            android:id="@+id/base"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintLeft_toLeftOf="parent"
+            motion:layout_constraintRight_toRightOf="parent"
+            motion:layout_constraintTop_toTopOf="parent" />
+        <Constraint
+            android:id="@+id/undo"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:rotation="150"
+            motion:layout_constraintCircleRadius="75dp"
+            motion:layout_constraintCircle="@+id/base"
+            motion:layout_constraintCircleAngle="315"
+            motion:animateRelativeTo="@+id/base"
+       />
+        <Constraint
+            android:id="@+id/redo"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:rotation="45"
+            motion:layout_constraintCircleRadius="75dp"
+            motion:layout_constraintCircle="@+id/base"
+            motion:layout_constraintCircleAngle="45"
+            motion:layout_editor_absoluteY="368dp"
+            motion:animateRelativeTo="@+id/base"
+            motion:layout_editor_absoluteX="225dp" />
+        <Constraint
+            android:id="@+id/knob"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:rotation="135"
+            motion:layout_constraintCircleRadius="63dp"
+            motion:layout_constraintCircle="@+id/base"
+            motion:animateRelativeTo="@+id/base"
+            motion:layout_editor_absoluteY="346dp"
+            motion:layout_editor_absoluteX="181dp" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/right">
+        <Constraint
+            android:id="@+id/base"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintLeft_toLeftOf="parent"
+            motion:layout_constraintRight_toRightOf="parent"
+            motion:layout_constraintTop_toTopOf="parent" />
+        <Constraint
+            android:id="@+id/undo"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:rotation="240"
+            motion:layout_constraintCircleRadius="75dp"
+            motion:layout_constraintCircle="@+id/base"
+            motion:layout_constraintCircleAngle="405"
+            motion:animateRelativeTo="@+id/base"
+            motion:layout_editor_absoluteY="368dp"
+            motion:layout_editor_absoluteX="225dp" />
+        <Constraint
+            android:id="@+id/redo"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:rotation="135"
+            motion:layout_constraintCircleRadius="75dp"
+            motion:layout_constraintCircle="@+id/base"
+            motion:layout_constraintCircleAngle="135"
+
+            motion:animateRelativeTo="@+id/base"
+             />
+        <Constraint
+            android:id="@+id/knob"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:rotation="135"
+            motion:layout_constraintCircleRadius="63dp"
+            motion:layout_constraintCircle="@+id/base"
+            motion:animateRelativeTo="@+id/base"
+            motion:layout_constraintCircleAngle="90"
+     />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/left">
+        <Constraint
+            android:id="@+id/base"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintLeft_toLeftOf="parent"
+            motion:layout_constraintRight_toRightOf="parent"
+            motion:layout_constraintTop_toTopOf="parent" />
+        <Constraint
+            android:id="@+id/undo"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:rotation="60"
+            motion:layout_constraintCircleRadius="75dp"
+            motion:layout_constraintCircle="@+id/base"
+            motion:layout_constraintCircleAngle="225"
+            motion:animateRelativeTo="@+id/base"
+            motion:layout_editor_absoluteY="368dp"
+            motion:layout_editor_absoluteX="225dp" />
+        <Constraint
+            android:id="@+id/redo"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:rotation="-45"
+            motion:layout_constraintCircleRadius="75dp"
+            motion:layout_constraintCircle="@+id/base"
+            motion:layout_constraintCircleAngle="-45"
+            motion:animateRelativeTo="@+id/base"
+         />
+        <Constraint
+            android:id="@+id/knob"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:rotation="135"
+            motion:layout_constraintCircleRadius="63dp"
+            motion:layout_constraintCircle="@+id/base"
+            motion:animateRelativeTo="@+id/base"
+            motion:layout_constraintCircleAngle="-90"
+
+            />
+    </ConstraintSet>
+
+</MotionScene>

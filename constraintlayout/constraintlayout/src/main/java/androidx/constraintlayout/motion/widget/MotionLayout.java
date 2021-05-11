@@ -1188,6 +1188,10 @@ public class MotionLayout extends ConstraintLayout implements
     }
 
     void setState(TransitionState newState) {
+        if (DEBUG) {
+            Debug.logStack(TAG, mTransitionState + " -> " + newState + " " +
+                    Debug.getName(getContext(), mCurrentState), 2);
+        }
         if (newState == TransitionState.FINISHED && mCurrentState == UNSET) {
             return;
         }
@@ -1293,6 +1297,23 @@ public class MotionLayout extends ConstraintLayout implements
             }
             return 0;
         }
+    }
+
+    /**
+     * sets the state to start in. To be used during OnCreate
+     *
+     * @param beginId the id of the start constraint set
+     */
+   void setStartState(int beginId) {
+       if (!isAttachedToWindow()) {
+           if (mStateCache == null) {
+               mStateCache = new StateCache();
+           }
+           mStateCache.setStartState(beginId);
+           mStateCache.setEndState(beginId);
+           return;
+       }
+       mCurrentState = beginId;
     }
 
     /**
@@ -2222,6 +2243,9 @@ public class MotionLayout extends ConstraintLayout implements
      * @param id state to set
      */
     public void jumpToState(int id) {
+        if (!isAttachedToWindow()) {
+              mCurrentState = id;
+        }
         if (mBeginState == id) {
             setProgress(0);
         } else if (mEndState == id) {
@@ -3000,7 +3024,14 @@ public class MotionLayout extends ConstraintLayout implements
 
         if (scene.getMoveWhenScrollAtTop()) {
             // This blocks transition during scrolling
-            if ((mTransitionPosition == 1 || mTransitionPosition == 0) && target.canScrollVertically(dy)) {
+             TouchResponse touchResponse = currentTransition.getTouchResponse();
+             int vert = -1;
+             if (touchResponse != null) {
+               if ((touchResponse.getFlags() & TouchResponse.FLAG_SUPPORT_SCROLL_UP) != 0) {
+                   vert = dy;
+               }
+             }
+            if ((mTransitionPosition == 1 || mTransitionPosition == 0) && target.canScrollVertically(vert)) {
                 return;
             }
         }
