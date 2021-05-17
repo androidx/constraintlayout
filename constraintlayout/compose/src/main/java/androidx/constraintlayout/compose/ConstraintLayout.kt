@@ -32,6 +32,7 @@ import androidx.compose.ui.layout.LayoutIdParentData
 import androidx.compose.ui.layout.MeasurePolicy
 import androidx.compose.ui.platform.InspectorValueInfo
 import androidx.compose.ui.platform.debugInspectorInfo
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
@@ -68,16 +69,18 @@ inline fun ConstraintLayout(
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
     crossinline content: @Composable ConstraintLayoutScope.() -> Unit
 ) {
+    val measurer = remember { Measurer() }
     val scope = remember { ConstraintLayoutScope() }
     val remeasureRequesterState = remember { mutableStateOf(false) }
     val measurePolicy = rememberConstraintLayoutMeasurePolicy(
         optimizationLevel,
         scope,
-        remeasureRequesterState
+        remeasureRequesterState,
+        measurer
     )
     @Suppress("Deprecation")
     MultiMeasureLayout(
-        modifier = modifier,
+        modifier = modifier.semantics { designInfoProvider = measurer },
         measurePolicy = measurePolicy,
         content = {
             val previousHelpersHashCode = scope.helpersHashCode
@@ -97,10 +100,10 @@ inline fun ConstraintLayout(
 internal fun rememberConstraintLayoutMeasurePolicy(
     optimizationLevel: Int,
     scope: ConstraintLayoutScope,
-    remeasureRequesterState: MutableState<Boolean>
+    remeasureRequesterState: MutableState<Boolean>,
+    measurer: Measurer
 ): MeasurePolicy =
     remember(optimizationLevel) {
-        val measurer = Measurer()
         MeasurePolicy { measurables, constraints ->
             val constraintSet = object : ConstraintSet {
                 override fun applyTo(state: State, measurables: List<Measurable>) {
@@ -143,6 +146,7 @@ internal fun rememberConstraintLayoutMeasurePolicy(
  * Example usage:
  * @sample androidx.compose.foundation.layout.samples.DemoConstraintSet
  */
+@Suppress("NOTHING_TO_INLINE")
 @Composable
 inline fun ConstraintLayout(
     constraintSet: ConstraintSet,
@@ -150,18 +154,23 @@ inline fun ConstraintLayout(
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
     noinline content: @Composable () -> Unit
 ) {
-    val measurePolicy = rememberConstraintLayoutMeasurePolicy(optimizationLevel, constraintSet)
-    @Suppress("Deprecation")
-    MultiMeasureLayout(modifier, content, measurePolicy)
+    val measurer = remember { Measurer() }
+    val measurePolicy = rememberConstraintLayoutMeasurePolicy(optimizationLevel, constraintSet, measurer)
+    @Suppress("DEPRECATION")
+    MultiMeasureLayout(
+        modifier = modifier.semantics { designInfoProvider = measurer },
+        measurePolicy = measurePolicy,
+        content = content
+    )
 }
 
 @Composable
 @PublishedApi
 internal fun rememberConstraintLayoutMeasurePolicy(
     optimizationLevel: Int,
-    constraintSet: ConstraintSet
+    constraintSet: ConstraintSet,
+    measurer: Measurer
 ) = remember {
-    val measurer = Measurer()
     MeasurePolicy { measurables, constraints ->
         val layoutSize = measurer.performMeasure(
             constraints,
@@ -1272,7 +1281,8 @@ class State(val density: Density) : SolverState() {
     }
 }
 
-internal class Measurer : BasicMeasure.Measurer {
+@PublishedApi
+internal class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
     private val root = ConstraintWidgetContainer(0, 0).also { it.measurer = this }
     private val placeables = mutableMapOf<Measurable, Placeable>()
     private val lastMeasures = mutableMapOf<Measurable, Array<Int>>()
@@ -1296,7 +1306,7 @@ internal class Measurer : BasicMeasure.Measurer {
      * Method called by Compose tooling. Returns a JSON string that represents the Constraints
      * defined for this ConstraintLayout Composable.
      */
-    fun getDesignInfo(startX: Int, startY: Int, args: String) =
+    override fun getDesignInfo(startX: Int, startY: Int, args: String) =
         parseConstraintsToJson(root, state, startX, startY)
 
     override fun measure(constraintWidget: ConstraintWidget, measure: BasicMeasure.Measure) {
