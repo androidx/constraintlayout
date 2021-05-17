@@ -18,11 +18,31 @@ package androidx.constraintlayout.compose
 
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.semantics.SemanticsPropertyKey
+import androidx.compose.ui.semantics.SemanticsPropertyReceiver
 import androidx.constraintlayout.core.widgets.ConstraintWidget
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer
 import androidx.constraintlayout.core.widgets.HelperWidget
 import org.json.JSONArray
 import org.json.JSONObject
+
+/**
+ * [SemanticsPropertyKey] to test [DesignInfoProvider]
+ */
+internal val DesignInfoDataKey = SemanticsPropertyKey<DesignInfoProvider>("DesignInfoProvider")
+
+/**
+ * [SemanticsPropertyReceiver] to test [DesignInfoProvider]
+ */
+@PublishedApi
+internal var SemanticsPropertyReceiver.designInfoProvider by DesignInfoDataKey
+
+/**
+ * Interface used for Studio tooling.
+ */
+internal fun interface DesignInfoProvider {
+    fun getDesignInfo(startX: Int, startY: Int, args: String): String
+}
 
 private const val CONSTRAINTS_JSON_VERSION = 1
 
@@ -97,7 +117,8 @@ private fun addReferencesIds(
     root: ConstraintWidgetContainer,
     rootId: String
 ) {
-    helperWidget.mWidgets.forEach { referencedWidget ->
+    for (i in 0 until helperWidget.mWidgetsCount) {
+        val referencedWidget = helperWidget.mWidgets[i]
         val referenceId = if (referencedWidget == root) rootId else referencedWidget.getRefId()
         helperReferences.add(referenceId)
     }
