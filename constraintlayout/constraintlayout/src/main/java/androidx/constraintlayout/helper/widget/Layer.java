@@ -10,7 +10,11 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import android.view.ViewParent;
 
 /**
- * Control the visibility and elevation of the referenced views <b>Added in 2.0</b>
+ * Layer adds the ability to move and rotate a group of views as if they were contained in a viewGroup
+ * <b>Added in 2.0</b>
+ * Methods such as setRotation(float) rotate all views about a common center.
+ * For simple visibility manipulation use Group
+ *
  */
 public class Layer extends ConstraintHelper {
     private static final String TAG = "Layer";

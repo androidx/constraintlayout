@@ -736,7 +736,7 @@ public class MotionScene {
             }
         }
 
-        static class TransitionOnClick implements View.OnClickListener {
+       public static class TransitionOnClick implements View.OnClickListener {
             private final Transition mTransition;
             int mTargetId = UNSET;
             int mMode = 0x11;

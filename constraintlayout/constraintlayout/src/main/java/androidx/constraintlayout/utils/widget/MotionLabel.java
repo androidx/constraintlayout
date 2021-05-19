@@ -48,9 +48,15 @@ import androidx.constraintlayout.widget.R;
 import androidx.core.widget.TextViewCompat;
 
 /**
- * This class is designed to created Complex Animated Single Line Text in MotionLayout
+ * This class is designed to create complex animated single line text in MotionLayout.
+ * Its API are designed with animation in mine.
+ * for example it uses setTextPanX(float x) where 0 is centered -1 is left +1 is right
+ *
+ * It supports the following features:
  * <ul>color outlines</ul>
  * <ul>Textured text</ul>
+ * <ul>Blured Textured Text</ul>
+ * <ul>Scrolling of Texture in text</ul>
  * <ul>PanX, PanY instead of Gravity</ul>
  */
 public class MotionLabel extends View implements FloatLayout {
