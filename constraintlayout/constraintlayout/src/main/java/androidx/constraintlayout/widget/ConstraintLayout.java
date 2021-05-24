@@ -2110,6 +2110,13 @@ public class ConstraintLayout extends ViewGroup {
          */
         public static final int UNSET = -1;
 
+
+        /**
+         * Defines an id that is not set.
+         */
+        public static final int GONE_UNSET = Integer.MIN_VALUE;
+
+
         /**
          * The horizontal orientation.
          */
@@ -2303,37 +2310,37 @@ public class ConstraintLayout extends ViewGroup {
         /**
          * The left margin to use when the target is gone.
          */
-        public int goneLeftMargin = UNSET;
+        public int goneLeftMargin = GONE_UNSET;
 
         /**
          * The top margin to use when the target is gone.
          */
-        public int goneTopMargin = UNSET;
+        public int goneTopMargin = GONE_UNSET;
 
         /**
          * The right margin to use when the target is gone
          */
-        public int goneRightMargin = UNSET;
+        public int goneRightMargin = GONE_UNSET;
 
         /**
          * The bottom margin to use when the target is gone.
          */
-        public int goneBottomMargin = UNSET;
+        public int goneBottomMargin = GONE_UNSET;
 
         /**
          * The start margin to use when the target is gone.
          */
-        public int goneStartMargin = UNSET;
+        public int goneStartMargin = GONE_UNSET;
 
         /**
          * The end margin to use when the target is gone.
          */
-        public int goneEndMargin = UNSET;
+        public int goneEndMargin = GONE_UNSET;
 
         /**
          * The baseline margin to use when the target is gone.
          */
-        public int goneBaselineMargin = UNSET;
+        public int goneBaselineMargin = GONE_UNSET;
 
         /**
          * The baseline margin.
@@ -2573,8 +2580,8 @@ public class ConstraintLayout extends ViewGroup {
         int resolvedLeftToRight = UNSET;
         int resolvedRightToLeft = UNSET;
         int resolvedRightToRight = UNSET;
-        int resolveGoneLeftMargin = UNSET;
-        int resolveGoneRightMargin = UNSET;
+        int resolveGoneLeftMargin = GONE_UNSET;
+        int resolveGoneRightMargin = GONE_UNSET;
         float resolvedHorizontalBias = 0.5f;
 
         int resolvedGuideBegin;
@@ -3474,10 +3481,10 @@ public class ConstraintLayout extends ViewGroup {
                     resolvedLeftToLeft = endToEnd;
                     startEndDefined = true;
                 }
-                if (goneStartMargin != UNSET) {
+                if (goneStartMargin != GONE_UNSET) {
                     resolveGoneRightMargin = goneStartMargin;
                 }
-                if (goneEndMargin != UNSET) {
+                if (goneEndMargin != GONE_UNSET) {
                     resolveGoneLeftMargin = goneEndMargin;
                 }
                 if (startEndDefined) {
@@ -3513,10 +3520,10 @@ public class ConstraintLayout extends ViewGroup {
                 if (endToEnd != UNSET) {
                     resolvedRightToRight = endToEnd;
                 }
-                if (goneStartMargin != UNSET) {
+                if (goneStartMargin != GONE_UNSET) {
                     resolveGoneLeftMargin = goneStartMargin;
                 }
-                if (goneEndMargin != UNSET) {
+                if (goneEndMargin != GONE_UNSET) {
                     resolveGoneRightMargin = goneEndMargin;
                 }
             }
