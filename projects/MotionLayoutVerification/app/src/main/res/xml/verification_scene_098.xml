@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+   <Include motion:constraintSet="@xml/verification_scene_098l"/>
+<!--    <ConstraintSet android:id="@+id/left" >-->
+
+
+<!--    </ConstraintSet>-->
+    <Include motion:constraintSet="@xml/verification_scene_098r"/>
+
+    <Transition
+        motion:constraintSetEnd="@+id/b"
+        motion:constraintSetStart="@id/a"
+        motion:duration="1000">
+        <OnClick motion:clickAction="transitionToEnd"/>
+    </Transition>
+    <Transition
+        motion:constraintSetEnd="@+id/c"
+        motion:constraintSetStart="@id/b"
+        motion:duration="1000">
+        <OnClick motion:clickAction="transitionToEnd"/>
+    </Transition>
+
+    <Transition
+        motion:constraintSetEnd="@+id/d"
+        motion:constraintSetStart="@id/c"
+        motion:duration="1000">
+        <OnClick motion:clickAction="transitionToEnd"/>
+    </Transition>
+
+    <Transition
+        motion:constraintSetEnd="@+id/a"
+        motion:constraintSetStart="@id/d"
+        motion:duration="1000">
+        <OnClick motion:clickAction="transitionToEnd"/>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start"></ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/a" motion:deriveConstraintsFrom="@+id/left">
+        <ConstraintOverride android:id="@+id/button"  motion:layout_constraintVertical_bias="0.1"   />
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/b" motion:deriveConstraintsFrom="@+id/right">
+    <ConstraintOverride android:id="@+id/button" motion:layout_constraintHorizontal_bias="0.8"  motion:layout_constraintVertical_bias="0.0" />
+</ConstraintSet>
+
+    <ConstraintSet android:id="@+id/c" motion:deriveConstraintsFrom="@+id/left">
+<ConstraintOverride android:id="@+id/button"   motion:layout_constraintVertical_bias="0.9" />
+
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/d" motion:deriveConstraintsFrom="@+id/right">
+<ConstraintOverride android:id="@+id/button"    motion:layout_constraintVertical_bias="0.8" />
+
+    </ConstraintSet>
+</MotionScene>

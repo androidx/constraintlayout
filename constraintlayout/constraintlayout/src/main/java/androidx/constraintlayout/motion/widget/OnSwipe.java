@@ -38,6 +38,11 @@ public class OnSwipe {
     private float mSpringStiffness = Float.NaN;
     private float mSpringStopThreshold = Float.NaN;
     private int mSpringBoundary = 0;
+    private int mAutoCompleteMode = 0;
+
+    public static final int COMPLETE_MODE_CONTINUOUS_VELOCITY = 0;
+    public static final int COMPLETE_MODE_SPRING = 1;
+
     public static final int SPRING_BOUNDARY_OVERSHOOT = 0;
     public static final int SPRING_BOUNDARY_BOUNCESTART = 1;
     public static final int SPRING_BOUNDARY_BOUNCEEND = 2;
@@ -383,4 +388,20 @@ public class OnSwipe {
         mSpringBoundary = springBoundary;
         return this;
     }
+
+    public int getAutoCompleteMode() {
+        return mAutoCompleteMode;
+    }
+
+
+    /**
+     * sets the behaviour at the boundaries 0 and 1
+     *     COMPLETE_MODE_CONTINUOUS_VELOCITY = 0;
+     *      COMPLETE_MODE_SPRING = 1;
+     *
+     */
+    public void setAutoCompleteMode(int autoCompleteMode) {
+        mAutoCompleteMode =  autoCompleteMode;
+    }
+
 }

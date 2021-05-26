@@ -487,7 +487,7 @@ public class ConstraintLayout extends ViewGroup {
     /**
      * @hide
      */
-    public static final String VERSION = "ConstraintLayout-2.1.0-alpha2";
+    public static final String VERSION = "ConstraintLayout-2.1.0-beta02";
     private static final String TAG = "ConstraintLayout";
 
     private static final boolean USE_CONSTRAINTS_HELPER = true;
@@ -2208,7 +2208,7 @@ public class ConstraintLayout extends ViewGroup {
         public int guideBegin = UNSET;
 
         /**
-         * The distance of child (guideline) to the top or left edge of its parent.
+         * The distance of child (guideline) to the bottom or right edge of its parent.
          */
         public int guideEnd = UNSET;
 
