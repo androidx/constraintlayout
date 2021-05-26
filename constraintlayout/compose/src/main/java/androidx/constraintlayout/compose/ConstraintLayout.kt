@@ -170,7 +170,7 @@ internal fun rememberConstraintLayoutMeasurePolicy(
     optimizationLevel: Int,
     constraintSet: ConstraintSet,
     measurer: Measurer
-) = remember {
+) = remember(optimizationLevel, constraintSet) {
     MeasurePolicy { measurables, constraints ->
         val layoutSize = measurer.performMeasure(
             constraints,
