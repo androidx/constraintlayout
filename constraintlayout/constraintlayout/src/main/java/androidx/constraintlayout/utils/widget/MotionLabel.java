@@ -74,6 +74,7 @@ public class MotionLabel extends View implements FloatLayout {
     RectF mRect;
 
     private float mTextSize = 48;
+
     private float mBaseTextSize = Float.NaN;
     private int mStyleIndex;
     private int mTypefaceIndex;
@@ -139,7 +140,7 @@ public class MotionLabel extends View implements FloatLayout {
                     setText(a.getText(attr));
                 } else if (attr == R.styleable.MotionLabel_android_fontFamily) {
                     mFontFamily = a.getString(attr);
-                } else if (attr == R.styleable.MotionLabel_baseTextSize) {
+                } else if (attr == R.styleable.MotionLabel_scaleFromTextSize) {
                     mBaseTextSize = a.getDimensionPixelSize(attr, (int) mBaseTextSize);
                 } else if (attr == R.styleable.MotionLabel_android_textSize) {
                     mTextSize = a.getDimensionPixelSize(attr, (int) mTextSize);
@@ -1028,6 +1029,27 @@ public class MotionLabel extends View implements FloatLayout {
         this.mTextureWidth = mTextureWidth;
         updateShaderMatrix();
         invalidate();
+    }
+
+    /**
+     * if set the font is rendered to polygons at this size and then scaled to the size set by
+     * textSize.
+     *
+     * @return size to pre render font or NaN if not used.
+     */
+    public float getScaleFromTextSize() {
+        return mBaseTextSize;
+    }
+
+    /**
+     * if set the font is rendered to polygons at this size and then scaled to the size set by
+     * textSize.
+     * This allows smooth efficient animation of fonts size.
+     *
+     * @param size the size to pre render the font or NaN if not used.
+     */
+    public void setScaleFromTextSize(float size) {
+        this.mBaseTextSize = size;
     }
 
 }

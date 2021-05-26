@@ -4845,10 +4845,10 @@ public class MotionLayout extends ConstraintLayout implements
 
     /**
      * Initial state changes are applied during onAttachedToWindow unless this is set to true.
-     * @param mDelayedApply
+     * @param delayedApply
      */
-    public void setDelayedApplicationOfInitalState(boolean mDelayedApply) {
-        this.mDelayedApply = mDelayedApply;
+    public void setDelayedApplicationOfInitalState(boolean delayedApply) {
+        this.mDelayedApply = delayedApply;
     }
 
 }

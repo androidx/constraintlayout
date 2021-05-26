@@ -1536,7 +1536,7 @@
         <attr name="android:shadowRadius" />
         <attr name="android:textStyle" />
         <attr name="borderRound" />
-        <attr name="baseTextSize" format="dimension" />
+        <attr name="scaleFromTextSize" format="dimension" />
         <attr name="borderRoundPercent" />
         <attr name="textOutlineThickness" />
         <attr name="textOutlineColor" />

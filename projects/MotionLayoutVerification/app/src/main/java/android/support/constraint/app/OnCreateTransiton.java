@@ -45,7 +45,6 @@ public class OnCreateTransiton extends AppCompatActivity {
         setContentView(id);
         mMotionLayout = Utils.findMotionLayout(this);
         mMotionLayout.transitionToState(R.id.end);
-//     mMotionLayout.postDelayed(()-> mMotionLayout.transitionToState(R.id.end),10);
         mMotionLayout.setTransitionListener(new TransitionAdapter() {
             @Override
             public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
