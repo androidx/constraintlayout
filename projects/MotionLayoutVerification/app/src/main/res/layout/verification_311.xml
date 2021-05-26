@@ -16,7 +16,7 @@
         android:layout_margin="32dp"
         app:textPanX="0"
         android:textColor="#FF760D"
-        app:baseTextSize="40sp"
+        app:scaleFromTextSize="40sp"
         app:layout_constraintDimensionRatio="16:9"
         android:text="MotionLabel"
         android:textSize="90sp"
