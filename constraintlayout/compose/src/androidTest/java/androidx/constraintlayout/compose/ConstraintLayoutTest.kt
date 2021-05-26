@@ -32,9 +32,7 @@ import androidx.compose.ui.platform.InspectableValue
 import androidx.compose.ui.platform.ValueElement
 import androidx.compose.ui.platform.isDebugInspectorInfoEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.*
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
@@ -1267,6 +1265,89 @@ class ConstraintLayoutTest {
         rule.runOnIdle {
             assertEquals(Offset.Zero, box1Position)
             assertEquals(Offset(0f, size.toFloat()), box2Position)
+        }
+    }
+
+    @Test
+    fun testConstraintLayout_updates_whenConstraintSetChanges() = with(rule.density) {
+        val box1Size = 20
+        var first by mutableStateOf(true)
+        val constraintSet1 = ConstraintSet {
+            val box1 = createRefFor("box1")
+            val box2 = createRefFor("box2")
+            constrain(box2) {
+                start.linkTo(box1.end)
+            }
+        }
+        val constraintSet2 = ConstraintSet {
+            val box1 = createRefFor("box1")
+            val box2 = createRefFor("box2")
+            constrain(box2) {
+                top.linkTo(box1.bottom)
+            }
+        }
+
+        var box2Position = IntOffset.Zero
+        rule.setContent {
+            ConstraintLayout(if (first) constraintSet1 else constraintSet2) {
+                Box(Modifier.size(box1Size.toDp()).layoutId("box1"))
+                Box(
+                    Modifier
+                        .layoutId("box2")
+                        .onGloballyPositioned {
+                            box2Position = it
+                                .positionInRoot()
+                                .round()
+                        }
+                )
+            }
+        }
+
+        rule.runOnIdle {
+            assertEquals(IntOffset(box1Size, 0), box2Position)
+            first = false
+        }
+
+        rule.runOnIdle {
+            assertEquals(IntOffset(0, box1Size), box2Position)
+        }
+    }
+
+    @Test
+    fun testConstraintLayout_updates_whenConstraintSetChangesConstraints() = with(rule.density) {
+        val box1Size = 20
+        var first by mutableStateOf(true)
+        val constraintSet = ConstraintSet {
+            val box1 = createRefFor("box1")
+            val box2 = createRefFor("box2")
+            constrain(box2) {
+                if (first) start.linkTo(box1.end) else top.linkTo(box1.bottom)
+            }
+        }
+
+        var box2Position = IntOffset.Zero
+        rule.setContent {
+            ConstraintLayout(constraintSet) {
+                Box(Modifier.size(box1Size.toDp()).layoutId("box1"))
+                Box(
+                    Modifier
+                        .layoutId("box2")
+                        .onGloballyPositioned {
+                            box2Position = it
+                                .positionInRoot()
+                                .round()
+                        }
+                )
+            }
+        }
+
+        rule.runOnIdle {
+            assertEquals(IntOffset(box1Size, 0), box2Position)
+            first = false
+        }
+
+        rule.runOnIdle {
+            assertEquals(IntOffset(0, box1Size), box2Position)
         }
     }
 }
