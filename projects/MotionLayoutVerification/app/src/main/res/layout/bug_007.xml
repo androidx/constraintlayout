@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:text="(Click on the Android-Icon to show the handle)"
+        android:textAppearance="?textAppearanceBody1" />
+
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_gravity="center"
+        android:background="@drawable/ic_launcher_background"
+        app:layoutDescription="@xml/bug_007_scene">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/clickable"
+            android:layout_width="100dp"
+            android:layout_height="0dp"
+            android:background="@color/purple_500"
+            android:padding="6dp"
+            android:alpha=".1"
+            app:srcCompat="@drawable/ic_android"
+            app:tint="@color/white" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/dragHandle"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/clickable"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@color/purple_700"
+            app:srcCompat="@drawable/ic_double_arrow"
+            app:tint="@color/white" />
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
+</FrameLayout>

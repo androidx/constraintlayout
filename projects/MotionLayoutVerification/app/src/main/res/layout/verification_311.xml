@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layoutDescription="@xml/verification_scene_311"
+    app:layout_optimizationLevel="none"
+    android:background="#392424"
+    tools:context=".VerificationActivity">
+
+    <androidx.constraintlayout.utils.widget.MotionLabel
+        android:id="@+id/label"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="32dp"
+        app:textPanX="0"
+        android:textColor="#FF760D"
+        app:baseTextSize="40sp"
+        app:layout_constraintDimensionRatio="16:9"
+        android:text="MotionLabel"
+        android:textSize="90sp"
+        android:background="@drawable/blue_grad"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

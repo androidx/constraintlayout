@@ -1095,6 +1095,7 @@ public class MotionLayout extends ConstraintLayout implements
     private int mPreRotateHeight;
     private int mPreviouseRotation;
     Rect mTempRect = new Rect();
+    private boolean mDelayedApply =false;
 
     MotionController getMotionController(int mTouchAnchorId) {
         return mFrameArrayList.get(findViewById(mTouchAnchorId));
@@ -1484,7 +1485,11 @@ public class MotionLayout extends ConstraintLayout implements
                         }
                         onNewStateAttachHandlers();
                         if (mStateCache != null) {
-                            mStateCache.apply();
+                            if (mDelayedApply) {
+                                post(() -> mStateCache.apply());
+                            } else {
+                                mStateCache.apply();
+                            }
                         } else {
                             if (mScene != null && mScene.mCurrentTransition != null) {
                                 if (mScene.mCurrentTransition.getAutoTransition() == MotionScene.Transition.AUTO_ANIMATE_TO_END) {
@@ -4136,7 +4141,11 @@ public class MotionLayout extends ConstraintLayout implements
         }
         onNewStateAttachHandlers();
         if (mStateCache != null) {
-            mStateCache.apply();
+            if (mDelayedApply) {
+                post(() -> mStateCache.apply());
+            } else {
+                mStateCache.apply();
+            }
         } else {
             if (mScene != null && mScene.mCurrentTransition != null) {
                 if (mScene.mCurrentTransition.getAutoTransition() == MotionScene.Transition.AUTO_ANIMATE_TO_END) {
@@ -4825,4 +4834,21 @@ public class MotionLayout extends ConstraintLayout implements
         }
         return false;
     }
+
+    /**
+     * Is initial state changes are applied during onAttachedToWindow or after.
+     * @return
+     */
+    public boolean isDelayedApplicationOfInitalState() {
+        return mDelayedApply;
+    }
+
+    /**
+     * Initial state changes are applied during onAttachedToWindow unless this is set to true.
+     * @param mDelayedApply
+     */
+    public void setDelayedApplicationOfInitalState(boolean mDelayedApply) {
+        this.mDelayedApply = mDelayedApply;
+    }
+
 }
