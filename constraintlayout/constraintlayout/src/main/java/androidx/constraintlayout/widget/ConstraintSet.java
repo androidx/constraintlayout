@@ -45,6 +45,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -576,7 +577,6 @@ public class ConstraintSet {
             if (constraint == null) {
                 continue;
             }
-            constraint.mDelta = parent.mDelta;
             if (!constraint.layout.mApply) {
                 constraint.layout.copyFrom(parent.layout);
             }
@@ -667,13 +667,16 @@ public class ConstraintSet {
             }
         }
 
-        for (Constraint constraint : mConstraints.values()) {
-            if (constraint.mDelta != null) {
-                constraint.mDelta.applyDelta(constraint);
+    }
+
+    public void applyDeltaFrom(ConstraintSet cs) {
+        for (Constraint from : cs.mConstraints.values()) {
+            if (from.mDelta != null) {
+                Constraint constraint = getConstraint(from.mViewId);
+                from.mDelta.applyDelta(constraint);
             }
         }
     }
-
 
     /**
      * Parse the constraint dimension attribute
@@ -699,7 +702,8 @@ public class ConstraintSet {
         switch (type) {
             case TypedValue.TYPE_DIMENSION: {
                 finalValue = a.getDimensionPixelSize(attr, 0);
-            } break;
+            }
+            break;
             case TypedValue.TYPE_STRING: {
                 String value = a.getString(attr);
                 parseDimensionConstraintsString(data, value, orientation);
@@ -711,14 +715,17 @@ public class ConstraintSet {
                     case INTERNAL_WRAP_CONTENT:
                     case INTERNAL_MATCH_PARENT: {
                         finalValue = value;
-                    } break;
+                    }
+                    break;
                     case INTERNAL_MATCH_CONSTRAINT: {
                         finalValue = MATCH_CONSTRAINT;
-                    } break;
+                    }
+                    break;
                     case INTERNAL_WRAP_CONTENT_CONSTRAINED: {
                         finalValue = WRAP_CONTENT;
                         finalConstrained = true;
-                    } break;
+                    }
+                    break;
                 }
             }
         }
@@ -947,6 +954,7 @@ public class ConstraintSet {
         public int mWidth;
         public int mHeight;
         public static final int UNSET = ConstraintSet.UNSET;
+        public static final int UNSET_GONE_MARGIN = Integer.MIN_VALUE;
         public int guideBegin = UNSET;
         public int guideEnd = UNSET;
         public float guidePercent = UNSET;
@@ -974,20 +982,20 @@ public class ConstraintSet {
         public int editorAbsoluteX = UNSET;
         public int editorAbsoluteY = UNSET;
         public int orientation = UNSET;
-        public int leftMargin = UNSET;
-        public int rightMargin = UNSET;
-        public int topMargin = UNSET;
-        public int bottomMargin = UNSET;
-        public int endMargin = UNSET;
-        public int startMargin = UNSET;
-        public int baselineMargin = UNSET;
-        public int goneLeftMargin = UNSET;
-        public int goneTopMargin = UNSET;
-        public int goneRightMargin = UNSET;
-        public int goneBottomMargin = UNSET;
-        public int goneEndMargin = UNSET;
-        public int goneStartMargin = UNSET;
-        public int goneBaselineMargin = UNSET;
+        public int leftMargin = 0;
+        public int rightMargin = 0;
+        public int topMargin = 0;
+        public int bottomMargin = 0;
+        public int endMargin = 0;
+        public int startMargin = 0;
+        public int baselineMargin = 0;
+        public int goneLeftMargin = UNSET_GONE_MARGIN;
+        public int goneTopMargin = UNSET_GONE_MARGIN;
+        public int goneRightMargin = UNSET_GONE_MARGIN;
+        public int goneBottomMargin = UNSET_GONE_MARGIN;
+        public int goneEndMargin = UNSET_GONE_MARGIN;
+        public int goneStartMargin = UNSET_GONE_MARGIN;
+        public int goneBaselineMargin = UNSET_GONE_MARGIN;
         public float verticalWeight = UNSET;
         public float horizontalWeight = UNSET;
         public int horizontalChainStyle = CHAIN_SPREAD;
@@ -1859,39 +1867,42 @@ public class ConstraintSet {
 
             @SuppressLint("LogConditional")
             void printDelta(String tag) {
-                Log.v(tag,"int");
+                Log.v(tag, "int");
 
                 for (int i = 0; i < mCountInt; i++) {
-                    Log.v(tag, mTypeInt[i] +" = "+ mValueInt[i]);
+                    Log.v(tag, mTypeInt[i] + " = " + mValueInt[i]);
                 }
-                Log.v(tag,"float");
+                Log.v(tag, "float");
 
                 for (int i = 0; i < mCountFloat; i++) {
-                    Log.v(tag, mTypeFloat[i]+" = "+  mValueFloat[i]);
+                    Log.v(tag, mTypeFloat[i] + " = " + mValueFloat[i]);
                 }
-                Log.v(tag,"strings");
+                Log.v(tag, "strings");
 
                 for (int i = 0; i < mCountString; i++) {
-                    Log.v(tag, mTypeString[i]+" = "+  mValueString[i]);
+                    Log.v(tag, mTypeString[i] + " = " + mValueString[i]);
                 }
-                Log.v(tag,"boolean");
+                Log.v(tag, "boolean");
                 for (int i = 0; i < mCountBoolean; i++) {
-                    Log.v(tag, mTypeBoolean[i]+" = "+  mValueBoolean[i]);
+                    Log.v(tag, mTypeBoolean[i] + " = " + mValueBoolean[i]);
                 }
             }
         }
-        public void applyDelta (Constraint c ) {
+
+        public void applyDelta(Constraint c) {
             if (mDelta != null) {
                 mDelta.applyDelta(c);
             }
         }
-       public void printDelta(String tag) {
+
+        public void printDelta(String tag) {
             if (mDelta != null) {
                 mDelta.printDelta(tag);
             } else {
                 Log.v(tag, "DELTA IS NULL");
             }
-       }
+        }
+
         private ConstraintAttribute get(String attributeName, AttributeType attributeType) {
             ConstraintAttribute ret;
             if (mCustomConstraints.containsKey(attributeName)) {
@@ -3006,44 +3017,44 @@ public class ConstraintSet {
                     constraint.layout.leftToRight = Layout.UNSET;
                     constraint.layout.leftToLeft = Layout.UNSET;
                     constraint.layout.leftMargin = Layout.UNSET;
-                    constraint.layout.goneLeftMargin = Layout.UNSET;
+                    constraint.layout.goneLeftMargin = Layout.UNSET_GONE_MARGIN;
                     break;
                 case RIGHT:
                     constraint.layout.rightToRight = Layout.UNSET;
                     constraint.layout.rightToLeft = Layout.UNSET;
                     constraint.layout.rightMargin = Layout.UNSET;
-                    constraint.layout.goneRightMargin = Layout.UNSET;
+                    constraint.layout.goneRightMargin = Layout.UNSET_GONE_MARGIN;
                     break;
                 case TOP:
                     constraint.layout.topToBottom = Layout.UNSET;
                     constraint.layout.topToTop = Layout.UNSET;
-                    constraint.layout.topMargin = Layout.UNSET;
-                    constraint.layout.goneTopMargin = Layout.UNSET;
+                    constraint.layout.topMargin = 0;
+                    constraint.layout.goneTopMargin = Layout.UNSET_GONE_MARGIN;
                     break;
                 case BOTTOM:
                     constraint.layout.bottomToTop = Layout.UNSET;
                     constraint.layout.bottomToBottom = Layout.UNSET;
-                    constraint.layout.bottomMargin = Layout.UNSET;
-                    constraint.layout.goneBottomMargin = Layout.UNSET;
+                    constraint.layout.bottomMargin = 0;
+                    constraint.layout.goneBottomMargin = Layout.UNSET_GONE_MARGIN;
                     break;
                 case BASELINE:
                     constraint.layout.baselineToBaseline = Layout.UNSET;
                     constraint.layout.baselineToTop = Layout.UNSET;
                     constraint.layout.baselineToBottom = Layout.UNSET;
-                    constraint.layout.baselineMargin = Layout.UNSET;
-                    constraint.layout.goneBaselineMargin = Layout.UNSET;
+                    constraint.layout.baselineMargin = 0;
+                    constraint.layout.goneBaselineMargin = Layout.UNSET_GONE_MARGIN;
                     break;
                 case START:
                     constraint.layout.startToEnd = Layout.UNSET;
                     constraint.layout.startToStart = Layout.UNSET;
-                    constraint.layout.startMargin = Layout.UNSET;
-                    constraint.layout.goneStartMargin = Layout.UNSET;
+                    constraint.layout.startMargin = 0;
+                    constraint.layout.goneStartMargin = Layout.UNSET_GONE_MARGIN;
                     break;
                 case END:
                     constraint.layout.endToStart = Layout.UNSET;
                     constraint.layout.endToEnd = Layout.UNSET;
-                    constraint.layout.endMargin = Layout.UNSET;
-                    constraint.layout.goneEndMargin = Layout.UNSET;
+                    constraint.layout.endMargin = 0;
+                    constraint.layout.goneEndMargin = Layout.UNSET_GONE_MARGIN;
                     break;
                 case CIRCLE_REFERENCE:
                     constraint.layout.circleAngle = Layout.UNSET;
@@ -3742,8 +3753,8 @@ public class ConstraintSet {
                     connect(leftId, RIGHT, rightId, LEFT, 0);
                     connect(rightId, LEFT, leftId, RIGHT, 0);
                 } else if (constraint.layout.rightToRight != Layout.UNSET) {
-                        // left connected to view. right connected to parent
-                        connect(leftId, RIGHT, constraint.layout.rightToRight, RIGHT, 0);
+                    // left connected to view. right connected to parent
+                    connect(leftId, RIGHT, constraint.layout.rightToRight, RIGHT, 0);
                 } else if (constraint.layout.leftToLeft != Layout.UNSET) {
                     // right connected to view. left connected to parent
                     connect(rightId, LEFT, constraint.layout.leftToLeft, LEFT, 0);
@@ -4045,8 +4056,8 @@ public class ConstraintSet {
                             constraint.layout.mIsGuideline = true;
                         }
                         if (DEBUG) {
-                            Log.v(TAG,Debug.getLoc()+ " cache "+ Debug.getName(context,constraint.mViewId)+ " "+constraint.mViewId);
-                        }    
+                            Log.v(TAG, Debug.getLoc() + " cache " + Debug.getName(context, constraint.mViewId) + " " + constraint.mViewId);
+                        }
                         mConstraints.put(constraint.mViewId, constraint);
                         break;
                     case XmlResourceParser.END_TAG:
@@ -4151,8 +4162,8 @@ public class ConstraintSet {
                             case "constraint":
                             case "constraintoverride":
                             case "guideline":
-                            mConstraints.put(constraint.mViewId, constraint);
-                            constraint = null;
+                                mConstraints.put(constraint.mViewId, constraint);
+                                constraint = null;
                         }
                         tagName = null;
                         break;
@@ -4185,6 +4196,7 @@ public class ConstraintSet {
 
     /**
      * Used to read a ConstraintDelta
+     *
      * @param context
      * @param parser
      * @return
@@ -4192,7 +4204,7 @@ public class ConstraintSet {
     public static Constraint buildDelta(Context context, XmlPullParser parser) {
         AttributeSet attrs = Xml.asAttributeSet(parser);
         Constraint c = new Constraint();
-        TypedArray a = context.obtainStyledAttributes(attrs,  R.styleable.ConstraintOverride);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ConstraintOverride);
         populateOverride(context, c, a);
         a.recycle();
         return c;
@@ -4335,7 +4347,7 @@ public class ConstraintSet {
                     delta.add(CONSTRAINED_HEIGHT, a.getBoolean(attr, c.layout.constrainedHeight));
                     break;
                 case LAYOUT_VISIBILITY:
-                    delta.add(LAYOUT_VISIBILITY,   VISIBILITY_FLAGS[a.getInt(attr, c.propertySet.visibility)]);
+                    delta.add(LAYOUT_VISIBILITY, VISIBILITY_FLAGS[a.getInt(attr, c.propertySet.visibility)]);
                     break;
                 case VISIBILITY_MODE:
                     delta.add(VISIBILITY_MODE, a.getInt(attr, c.propertySet.mVisibilityMode));
@@ -4398,7 +4410,7 @@ public class ConstraintSet {
                     break;
                 case VIEW_ID:
                     c.mViewId = a.getResourceId(attr, c.mViewId);
-                    delta.add(VIEW_ID,  c.mViewId);
+                    delta.add(VIEW_ID, c.mViewId);
                     break;
                 case DIMENSION_RATIO:
                     delta.add(DIMENSION_RATIO, a.getString(attr));
@@ -5322,4 +5334,492 @@ public class ConstraintSet {
         }
         return "UNKNOWN";
     }
+
+    public void writeState(Writer writer, ConstraintLayout layout, int flags) throws IOException {
+        writer.write("\n---------------------------------------------\n");
+        if ((flags & 1) == 1) {
+            new WriteXmlEngine(writer, layout, flags).writeLayout();
+        } else {
+            new WriteJsonEngine(writer, layout, flags).writeLayout();
+        }
+        writer.write("\n---------------------------------------------\n");
+
+    }
+
+    class WriteXmlEngine {
+        Writer writer;
+        ConstraintLayout layout;
+        Context context;
+        int flags;
+        int unknownCount = 0;
+        final String LEFT = "'left'";
+        final String RIGHT = "'right'";
+        final String BASELINE = "'baseline'";
+        final String BOTTOM = "'bottom'";
+        final String TOP = "'top'";
+        final String START = "'start'";
+        final String END = "'end'";
+
+        WriteXmlEngine(Writer writer, ConstraintLayout layout, int flags) throws IOException {
+            this.writer = writer;
+            this.layout = layout;
+            this.context = layout.getContext();
+            this.flags = flags;
+        }
+
+        void writeLayout() throws IOException {
+            writer.write("\n<ConstraintSet>\n");
+            for (Integer id : mConstraints.keySet()) {
+                Constraint c = mConstraints.get(id);
+                String idName = getName(id);
+                writer.write("  <Constraint");
+                writer.write(SPACE + "android:id" + "=\"" + idName + "\"");
+                Layout l = c.layout;
+                writeBaseDimension("android:layout_width", l.mWidth, -5); // nodefault
+                writeBaseDimension("android:layout_height", l.mHeight, -5);// nodefault
+
+                writeVariable("app:layout_constraintGuide_begin", l.guideBegin, UNSET);
+                writeVariable("app:layout_constraintGuide_end", l.guideEnd, UNSET);
+                writeVariable("app:layout_constraintGuide_percent", l.guidePercent, UNSET);
+
+                writeVariable("app:layout_constraintHorizontal_bias", l.horizontalBias, 0.5f);
+                writeVariable("app:layout_constraintVertical_bias", l.verticalBias, 0.5f);
+                writeVariable("app:layout_constraintDimensionRatio", l.dimensionRatio, null);
+                writeXmlConstraint("app:layout_constraintCircle", l.circleConstraint);
+                writeVariable("app:layout_constraintCircleRadius", l.circleRadius, 0);
+                writeVariable("app:layout_constraintCircleAngle", l.circleAngle, 0);
+
+                writeVariable("android:orientation", l.orientation, UNSET);
+
+                writeVariable("app:layout_constraintVertical_weight", l.verticalWeight, UNSET);
+                writeVariable("app:layout_constraintHorizontal_weight", l.horizontalWeight, UNSET);
+                writeVariable("app:layout_constraintHorizontal_chainStyle", l.horizontalChainStyle, CHAIN_SPREAD);
+                writeVariable("app:layout_constraintVertical_chainStyle", l.verticalChainStyle, CHAIN_SPREAD);
+
+                writeVariable("app:barrierDirection", l.mBarrierDirection, UNSET);
+                writeVariable("app:barrierMargin", l.mBarrierMargin, 0);
+
+                writeDimension("app:layout_marginLeft", l.leftMargin, 0);
+                writeDimension("app:layout_goneMarginLeft", l.goneLeftMargin, Layout.UNSET_GONE_MARGIN);
+                writeDimension("app:layout_marginRight", l.rightMargin, 0);
+                writeDimension("app:layout_goneMarginRight", l.goneRightMargin, Layout.UNSET_GONE_MARGIN);
+                writeDimension("app:layout_marginStart", l.startMargin, 0);
+                writeDimension("app:layout_goneMarginStart", l.goneStartMargin, Layout.UNSET_GONE_MARGIN);
+                writeDimension("app:layout_marginEnd", l.endMargin, 0);
+                writeDimension("app:layout_goneMarginEnd", l.goneEndMargin, Layout.UNSET_GONE_MARGIN);
+                writeDimension("app:layout_marginTop", l.topMargin, 0);
+                writeDimension("app:layout_goneMarginTop", l.goneTopMargin, Layout.UNSET_GONE_MARGIN);
+                writeDimension("app:layout_marginBottom", l.bottomMargin, 0);
+                writeDimension("app:layout_goneMarginBottom", l.goneBottomMargin, Layout.UNSET_GONE_MARGIN);
+                writeDimension("app:goneBaselineMargin", l.goneBaselineMargin, Layout.UNSET_GONE_MARGIN);
+                writeDimension("app:baselineMargin", l.baselineMargin, 0);
+
+                writeBoolen("app:layout_constrainedWidth", l.constrainedWidth, false);
+                writeBoolen("app:layout_constrainedHeight", l.constrainedHeight, false);
+                writeBoolen("app:barrierAllowsGoneWidgets", l.mBarrierAllowsGoneWidgets, true);
+                writeVariable("app:layout_wrapBehaviorInParent", l.mWrapBehavior, ConstraintWidget.WRAP_BEHAVIOR_INCLUDED);
+
+                writeXmlConstraint("app:baselineToBaseline", l.baselineToBaseline);
+                writeXmlConstraint("app:baselineToBottom", l.baselineToBottom);
+                writeXmlConstraint("app:baselineToTop", l.baselineToTop);
+                writeXmlConstraint("app:layout_constraintBottom_toBottomOf", l.bottomToBottom);
+                writeXmlConstraint("app:layout_constraintBottom_toTopOf", l.bottomToTop);
+                writeXmlConstraint("app:layout_constraintEnd_toEndOf", l.endToEnd);
+                writeXmlConstraint("app:layout_constraintEnd_toStartOf", l.endToStart);
+                writeXmlConstraint("app:layout_constraintLeft_toLeftOf", l.leftToLeft);
+                writeXmlConstraint("app:layout_constraintLeft_toRightOf", l.leftToRight);
+                writeXmlConstraint("app:layout_constraintRight_toLeftOf", l.rightToLeft);
+                writeXmlConstraint("app:layout_constraintRight_toRightOf", l.rightToRight);
+                writeXmlConstraint("app:layout_constraintStart_toEndOf", l.startToEnd);
+                writeXmlConstraint("app:layout_constraintStart_toStartOf", l.startToStart);
+                writeXmlConstraint("app:layout_constraintTop_toBottomOf", l.topToBottom);
+                writeXmlConstraint("app:layout_constraintTop_toTopOf", l.topToTop);
+
+                String[] typesConstraintDefault = {"spread", "wrap", "percent"};
+                writeEnum("app:layout_constraintHeight_default", l.heightDefault, typesConstraintDefault, ConstraintWidget.MATCH_CONSTRAINT_SPREAD);
+                writeVariable("app:layout_constraintHeight_percent", l.heightPercent, 1);
+                writeDimension("app:layout_constraintHeight_min", l.heightMin, 0);
+                writeDimension("app:layout_constraintHeight_max", l.heightMax, 0);
+                writeBoolen("android:layout_constrainedHeight", l.constrainedHeight, false);
+
+                writeEnum("app:layout_constraintWidth_default", l.widthDefault, typesConstraintDefault, ConstraintWidget.MATCH_CONSTRAINT_SPREAD);
+                writeVariable("app:layout_constraintWidth_percent", l.widthPercent, 1);
+                writeDimension("app:layout_constraintWidth_min", l.widthMin, 0);
+                writeDimension("app:layout_constraintWidth_max", l.widthMax, 0);
+                writeBoolen("android:layout_constrainedWidth", l.constrainedWidth, false);
+
+                writeVariable("app:layout_constraintVertical_weight", l.verticalWeight, UNSET);
+                writeVariable("app:layout_constraintHorizontal_weight", l.horizontalWeight, UNSET);
+                writeVariable("app:layout_constraintHorizontal_chainStyle", l.horizontalChainStyle);
+                writeVariable("app:layout_constraintVertical_chainStyle", l.verticalChainStyle);
+                String[] barrierDir = {"left", "right", "top", "bottom", "start", "end"};
+                writeEnum("app:barrierDirection", l.mBarrierDirection, barrierDir, UNSET);
+                writeVariable("app:layout_constraintTag", l.mConstraintTag, null);
+
+                if (l.mReferenceIds != null) {
+                    writeVariable("'ReferenceIds'", l.mReferenceIds);
+                }
+                writer.write(" />\n");
+            }
+            writer.write("</ConstraintSet>\n");
+        }
+
+        private static final String SPACE = "\n       ";
+
+        private void writeBoolen(String dimString, boolean val, boolean def) throws IOException {
+            if (val != def)
+                writer.write(SPACE + dimString + "=\"" + val + "dp\"");
+        }
+
+        private void writeEnum(String dimString, int val, String[] types, int def) throws IOException {
+            if (val != def)
+                writer.write(SPACE + dimString + "=\"" + types[val] + "\"");
+        }
+
+        private void writeDimension(String dimString, int dim, int def) throws IOException {
+            if (dim != def)
+                writer.write(SPACE + dimString + "=\"" + dim + "dp\"");
+        }
+
+        private void writeBaseDimension(String dimString, int dim, int def) throws IOException {
+            if (dim != def) {
+                if (dim == -2) {
+                    writer.write(SPACE + dimString + "=\"wrap_content\"");
+
+                } else if (dim == -1) {
+                    writer.write(SPACE + dimString + "=\"match_parent\"");
+
+                } else {
+                    writer.write(SPACE + dimString + "=\"" + dim + "dp\"");
+                }
+            }
+        }
+
+        HashMap<Integer, String> idMap = new HashMap<>();
+
+        String getName(int id) {
+            if (idMap.containsKey(id)) {
+                return "@+id/" + idMap.get(id) + "";
+            }
+            if (id == 0) {
+                return "parent";
+            }
+            String name = lookup(id);
+            idMap.put(id, name);
+            return "@+id/" + name + "";
+        }
+
+        String lookup(int id) {
+            try {
+                if (id != -1) {
+                    return context.getResources().getResourceEntryName(id);
+                } else {
+                    return "unknown" + (++unknownCount);
+                }
+            } catch (Exception ex) {
+                return "unknown" + (++unknownCount);
+            }
+        }
+
+        void writeXmlConstraint(String str, int leftToLeft) throws IOException {
+            if (leftToLeft == UNSET) {
+                return;
+            }
+            writer.write(SPACE + str);
+            writer.write("=\"" + getName(leftToLeft) + "\"");
+
+        }
+
+        void writeConstraint(String my, int leftToLeft, String other, int margin, int goneMargin) throws IOException {
+            if (leftToLeft == UNSET) {
+                return;
+            }
+            writer.write(SPACE + my);
+            writer.write(":[");
+            writer.write(getName(leftToLeft));
+            writer.write(" , ");
+            writer.write(other);
+            if (margin != 0) {
+                writer.write(" , " + margin);
+            }
+            writer.write("],\n");
+
+        }
+
+        void writeCircle(int circleConstraint, float circleAngle, int circleRadius) throws IOException {
+            if (circleConstraint == UNSET) {
+                return;
+            }
+            writer.write("circle");
+            writer.write(":[");
+            writer.write(getName(circleConstraint));
+            writer.write(", " + circleAngle);
+            writer.write(circleRadius + "]");
+        }
+
+        void writeVariable(String name, int value) throws IOException {
+            if (value == 0 || value == -1) {
+                return;
+            }
+            writer.write(SPACE + name + "=\"" + value + "\"\n");
+        }
+
+        void writeVariable(String name, float value, float def) throws IOException {
+            if (value == def) {
+                return;
+            }
+            writer.write(SPACE + name);
+            writer.write("=\"" + value + "\"");
+
+        }
+
+        void writeVariable(String name, String value, String def) throws IOException {
+            if (value == null || value.equals(def)) {
+                return;
+            }
+            writer.write(SPACE + name);
+            writer.write("=\"" + value + "\"");
+
+        }
+
+        void writeVariable(String name, int[] value) throws IOException {
+            if (value == null) {
+                return;
+            }
+            writer.write(SPACE + name);
+            writer.write(":");
+            for (int i = 0; i < value.length; i++) {
+                writer.write(((i == 0) ? "[" : ", ") + getName(value[i]));
+            }
+            writer.write("],\n");
+        }
+
+        void writeVariable(String name, String value) throws IOException {
+            if (value == null) {
+                return;
+            }
+            writer.write(name);
+            writer.write(":");
+            writer.write(", " + value);
+            writer.write("\n");
+
+        }
+    }
+
+    // ================================== JSON ===============================================
+    class WriteJsonEngine {
+        Writer writer;
+        ConstraintLayout layout;
+        Context context;
+        int flags;
+        int unknownCount = 0;
+        final String LEFT = "'left'";
+        final String RIGHT = "'right'";
+        final String BASELINE = "'baseline'";
+        final String BOTTOM = "'bottom'";
+        final String TOP = "'top'";
+        final String START = "'start'";
+        final String END = "'end'";
+        private static final String SPACE = "       ";
+
+        WriteJsonEngine(Writer writer, ConstraintLayout layout, int flags) throws IOException {
+            this.writer = writer;
+            this.layout = layout;
+            this.context = layout.getContext();
+            this.flags = flags;
+        }
+
+        void writeLayout() throws IOException {
+            writer.write("\n\'ConstraintSet\':{\n");
+            for (Integer id : mConstraints.keySet()) {
+                Constraint c = mConstraints.get(id);
+                String idName = getName(id);
+                writer.write(idName + ":{\n");
+                Layout l = c.layout;
+                writeDimension("'height'", l.mHeight, l.heightDefault, l.heightPercent, l.heightMin, l.heightMax, l.constrainedHeight);
+                writeDimension("'width'", l.mWidth, l.widthDefault, l.widthPercent, l.widthMin, l.widthMax, l.constrainedWidth);
+
+                writeConstraint(LEFT, l.leftToLeft, LEFT, l.leftMargin, l.goneLeftMargin);
+                writeConstraint(LEFT, l.leftToRight, RIGHT, l.leftMargin, l.goneLeftMargin);
+                writeConstraint(RIGHT, l.rightToLeft, LEFT, l.rightMargin, l.goneRightMargin);
+                writeConstraint(RIGHT, l.rightToRight, RIGHT, l.rightMargin, l.goneRightMargin);
+                writeConstraint(BASELINE, l.baselineToBaseline, BASELINE, UNSET, l.goneBaselineMargin);
+                writeConstraint(BASELINE, l.baselineToTop, TOP, UNSET, l.goneBaselineMargin);
+                writeConstraint(BASELINE, l.baselineToBottom, BOTTOM, UNSET, l.goneBaselineMargin);
+
+                writeConstraint(TOP, l.topToBottom, BOTTOM, l.topMargin, l.goneTopMargin);
+                writeConstraint(TOP, l.topToTop, TOP, l.topMargin, l.goneTopMargin);
+                writeConstraint(BOTTOM, l.bottomToBottom, BOTTOM, l.bottomMargin, l.goneBottomMargin);
+                writeConstraint(BOTTOM, l.bottomToTop, TOP, l.bottomMargin, l.goneBottomMargin);
+                writeConstraint(START, l.startToStart, START, l.startMargin, l.goneStartMargin);
+                writeConstraint(START, l.startToEnd, END, l.startMargin, l.goneStartMargin);
+                writeConstraint(END, l.endToStart, START, l.endMargin, l.goneEndMargin);
+                writeConstraint(END, l.endToEnd, END, l.endMargin, l.goneEndMargin);
+                writeVariable("'horizontalBias'", l.horizontalBias, 0.5f);
+                writeVariable("'verticalBias'", l.verticalBias, 0.5f);
+
+                writeCircle(l.circleConstraint, l.circleAngle, l.circleRadius);
+
+                writeGuideline(l.orientation, l.guideBegin, l.guideEnd, l.guidePercent);
+                writeVariable("'dimensionRatio'", l.dimensionRatio);
+                writeVariable("'barrierMargin'", l.mBarrierMargin);
+                writeVariable("'mHelperType'", l.mHelperType);
+                writeVariable("'mReferenceIdString'", l.mReferenceIdString);
+                writeVariable("'mBarrierAllowsGoneWidgets'", l.mBarrierAllowsGoneWidgets);
+                writeVariable("'mWrapBehavior'", l.mWrapBehavior);
+
+                writeVariable("'verticalWeight'", l.verticalWeight);
+                writeVariable("'horizontalWeight'", l.horizontalWeight);
+                writeVariable("'horizontalChainStyle'", l.horizontalChainStyle);
+                writeVariable("'verticalChainStyle'", l.verticalChainStyle);
+                writeVariable("'barrierDirection'", l.mBarrierDirection);
+                if (l.mReferenceIds != null) {
+                    writeVariable("'ReferenceIds'", l.mReferenceIds);
+                }
+                writer.write("}\n");
+            }
+            writer.write("}\n");
+        }
+
+        private void writeGuideline(int orientation, int guideBegin, int guideEnd, float guidePercent) {
+        }
+
+        private void writeDimension(String dimString, int dim, int dimDefault, float dimtPercent, int dimMin, int dimMax, boolean constrainedDim) throws IOException {
+            writer.write(dimString);
+
+            if (dim == -2) {
+                writer.write(SPACE + dimString + ": {\"wrap_content\"");
+
+            } else if (dim == -1) {
+                writer.write(SPACE + dimString + ": {\"match_parent\"");
+
+            } else {
+                writer.write(SPACE + dimString + ": {\"" + dim + "\"");
+            }
+            writer.write("," + (dimDefault == UNSET ? "" : Integer.toString(dimDefault)));
+            writer.write("," + (dimtPercent == UNSET ? "" : Float.toString(dimtPercent)));
+            writer.write("," + (dimMin == UNSET ? "" : Integer.toString(dimMin)));
+            writer.write("," + (dimMax == UNSET ? "" : Integer.toString(dimMax)));
+            writer.write("},\n");
+        }
+
+        HashMap<Integer, String> idMap = new HashMap<>();
+
+        String getName(int id) {
+            if (idMap.containsKey(id)) {
+                return "\'" + idMap.get(id) + "\'";
+            }
+            String name = lookup(id);
+            idMap.put(id, name);
+            return "\'" + name + "\'";
+        }
+
+        String lookup(int id) {
+            try {
+                if (id != -1) {
+                    return context.getResources().getResourceEntryName(id);
+                } else {
+                    return "unknown" + (++unknownCount);
+                }
+            } catch (Exception ex) {
+                return "unknown" + (++unknownCount);
+            }
+        }
+
+        void writeConstraint(String my, int leftToLeft, String other, int margin, int goneMargin) throws IOException {
+            if (leftToLeft == UNSET) {
+                return;
+            }
+            writer.write(SPACE + my);
+            writer.write(":[");
+            writer.write(getName(leftToLeft));
+            writer.write(" , ");
+            writer.write(other);
+            if (margin != 0) {
+                writer.write(" , " + margin);
+            }
+            writer.write("],\n");
+
+        }
+
+        void writeCircle(int circleConstraint, float circleAngle, int circleRadius) throws IOException {
+            if (circleConstraint == UNSET) {
+                return;
+            }
+            writer.write("circle");
+            writer.write(":[");
+            writer.write(getName(circleConstraint));
+            writer.write(", " + circleAngle);
+            writer.write(circleRadius + "]");
+        }
+
+        void writeVariable(String name, int value) throws IOException {
+            if (value == 0 || value == -1) {
+                return;
+            }
+            writer.write(SPACE + name);
+            writer.write(":");
+
+            writer.write(", " + value);
+            writer.write("\n");
+
+        }
+
+        void writeVariable(String name, float value) throws IOException {
+            if (value == UNSET) {
+                return;
+            }
+            writer.write(name);
+
+            writer.write(": " + value);
+            writer.write(",\n");
+
+        }
+
+        void writeVariable(String name, float value, float def) throws IOException {
+            if (value == def) {
+                return;
+            }
+            writer.write(name);
+
+            writer.write(": " + value);
+            writer.write(",\n");
+
+        }
+
+        void writeVariable(String name, boolean value) throws IOException {
+            if (value == false) {
+                return;
+            }
+            writer.write(name);
+
+            writer.write(": " + value);
+            writer.write(",\n");
+
+        }
+
+        void writeVariable(String name, int[] value) throws IOException {
+            if (value == null) {
+                return;
+            }
+            writer.write(name);
+            writer.write(": ");
+            for (int i = 0; i < value.length; i++) {
+                writer.write(((i == 0) ? "[" : ", ") + getName(value[i]));
+            }
+            writer.write("],\n");
+        }
+
+        void writeVariable(String name, String value) throws IOException {
+            if (value == null) {
+                return;
+            }
+            writer.write(name);
+            writer.write(":");
+            writer.write(", " + value);
+            writer.write("\n");
+
+        }
+    }
+
 }

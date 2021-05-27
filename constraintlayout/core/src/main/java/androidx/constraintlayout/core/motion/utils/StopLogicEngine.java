@@ -24,7 +24,7 @@ package androidx.constraintlayout.core.motion.utils;
  *
  * @hide
  */
-public class StopLogicEngine {
+public class StopLogicEngine implements StopEngine {
     private float mStage1Velocity, mStage2Velocity, mStage3Velocity; // the velocity at the start of each period
     private float mStage1Duration, mStage2Duration, mStage3Duration; // the time for each period
     private float mStage1EndPosition, mStage2EndPosition, mStage3EndPosition; // ending position
@@ -33,6 +33,8 @@ public class StopLogicEngine {
     private boolean mBackwards = false;
     private float mStartPosition;
     private float mLastPosition;
+    private boolean mDone = false;
+    private static final float EPSILON = 0.00001f;
 
     /**
      * Debugging logic to log the state.
@@ -106,6 +108,7 @@ public class StopLogicEngine {
     }
 
     private float calcY(float time) {
+        mDone = false;
         if (time <= mStage1Duration) {
             return mStage1Velocity * time + (mStage2Velocity - mStage1Velocity) * time * time / (2 * mStage1Duration);
         }
@@ -121,16 +124,17 @@ public class StopLogicEngine {
             return mStage2EndPosition;
         }
         time -= mStage2Duration;
-        if (time < mStage3Duration) {
+        if (time <= mStage3Duration) {
 
             return mStage2EndPosition + mStage3Velocity * time - mStage3Velocity * time * time / (2 * mStage3Duration);
         }
+        mDone = true;
         return mStage3EndPosition;
     }
 
     public void config(float currentPos, float destination, float currentVelocity,
                        float maxTime, float maxAcceleration, float maxVelocity) {
-
+        mDone = false;
         mStartPosition = currentPos;
         mBackwards = (currentPos > destination);
         if (mBackwards) {
@@ -150,8 +154,14 @@ public class StopLogicEngine {
         return (mBackwards) ? -getVelocity(mLastPosition) : getVelocity(mLastPosition);
     }
 
+    @Override
+    public boolean isStopped() {
+        return getVelocity() < EPSILON && Math.abs(mStage3EndPosition-mLastPosition) < EPSILON;
+    }
+
     private void setup(float velocity, float distance, float maxAcceleration, float maxVelocity,
                        float maxTime) {
+        mDone = false;
         if (velocity == 0) {
             velocity = 0.0001f;
         }

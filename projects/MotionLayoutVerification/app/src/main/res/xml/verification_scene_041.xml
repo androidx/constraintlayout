@@ -157,7 +157,7 @@
                 motion:motionTarget="@+id/button">
                 <CustomAttribute
                     motion:attributeName="altImageResource"
-                    motion:customReference="@drawable/avatar_4_raster" />
+                    motion:customReference="@drawable/ic_airplane" />
             </KeyTrigger>
         </KeyFrameSet>
     </Transition>
@@ -265,8 +265,8 @@
     <ConstraintSet android:id="@+id/south">
         <Constraint
             android:id="@+id/button"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="164dp"
+            android:layout_height="164dp"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
             android:layout_marginTop="32dp"

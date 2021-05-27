@@ -36,7 +36,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.core.Metrics;
+//import androidx.constraintlayout.core.Metrics;
 import androidx.constraintlayout.widget.ConstraintLayout;
 //import androidx.constraintlayout.core.Metrics;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -400,9 +400,9 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
     private String measureLayout(View view, FrameLayout.LayoutParams layoutParams, int widthMeasureSpec, int heightMeasureSpec) {
         long start = System.nanoTime();
         int iterations = ITERATIONS;
-        androidx.constraintlayout.core.Metrics metrics = new Metrics();
+//        androidx.constraintlayout.core.Metrics metrics = new Metrics();
         if (view instanceof ConstraintLayout) {
-            ((ConstraintLayout) view).fillMetrics(metrics);
+//            ((ConstraintLayout) view).fillMetrics(metrics);
             //metrics.measuresLayoutDuration = 0;
 //            metrics.grouping = 0;
 //            metrics.layouts = 0;
@@ -419,12 +419,12 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
 //        totalGrouping += metrics.grouping;
 //        totalLayouts += metrics.layouts;
 
-        long measuresDuration = metrics.measuresWidgetsDuration / iterations;
-        long layoutDuration = metrics.measuresLayoutDuration / iterations;
+//        long measuresDuration = metrics.measuresWidgetsDuration / iterations;
+//        long layoutDuration = metrics.measuresLayoutDuration / iterations;
         //System.out.println("total duration = " + duration + " layout " + layoutDuration + " measures " + measuresDuration);
         //duration = layoutDuration;// - measuresDuration;
-        totalMeasuredWidgets += (metrics.measuredWidgets / iterations);
-        totalMeasuredMatchWidgets += (metrics.measuredMatchWidgets / iterations);
+//        totalMeasuredWidgets += (metrics.measuredWidgets / iterations);
+//        totalMeasuredMatchWidgets += (metrics.measuredMatchWidgets / iterations);
 //        System.out.println("Total Measures: " + totalMeasuredWidgets
         //              + " matched " + totalMeasuredMatchWidgets);
 

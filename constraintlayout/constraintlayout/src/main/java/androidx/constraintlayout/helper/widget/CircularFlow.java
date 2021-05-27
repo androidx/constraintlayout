@@ -69,12 +69,12 @@ public class CircularFlow extends VirtualLayout {
     /**
      * @hide
      */
-    private float[] mAngles = new float[32];
+    private float[] mAngles;
 
     /**
      * @hide
      */
-    private int[] mRadius = new int[32];
+    private int[] mRadius;
 
     /**
      * @hide
@@ -150,7 +150,7 @@ public class CircularFlow extends VirtualLayout {
                     mReferenceDefaultAngle = a.getFloat(attr, DEFAULT_ANGLE);
                     setDefaultAngle(mReferenceDefaultAngle);
                 } else if (attr == R.styleable.ConstraintLayout_Layout_circularflow_defaultRadius) {
-                    mReferenceDefaultRadius = a.getInt(attr, DEFAULT_RADIUS);
+                    mReferenceDefaultRadius = a.getDimensionPixelSize(attr, DEFAULT_RADIUS);
                     setDefaultRadius(mReferenceDefaultRadius);
                 }
             }
@@ -162,9 +162,11 @@ public class CircularFlow extends VirtualLayout {
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (mReferenceAngles != null) {
+            mAngles = new float[1];
             setAngles(mReferenceAngles);
         }
         if (mReferenceRadius != null) {
+            mRadius = new int[1];
             setRadius(mReferenceRadius);
         }
         if (mReferenceDefaultAngle != null) {
@@ -178,41 +180,45 @@ public class CircularFlow extends VirtualLayout {
 
     private void anchorReferences() {
         mContainer = (ConstraintLayout) getParent();
-        ConstraintSet c = new ConstraintSet();
-        c.clone(mContainer);
-        for (int i = 0; i <= mCount; i++) {
-            int id = mIds[i];
-            View view = mContainer.getViewById(id);
-
-            if (view != null) {
-                int radius = DEFAULT_RADIUS;
-                float angle = DEFAULT_ANGLE;
-
-                if (i < getRadius().length) {
-                    radius = getRadius()[i];
-                } else if (mReferenceDefaultRadius != -1) {
-                    mCountRadius++;
-                    mRadius = getRadius();
-                    mRadius[mCountRadius - 1] = (int) (radius * myContext.getResources().getDisplayMetrics().density);
-                    radius = getRadius()[i];
-                } else {
-                    Log.e("CircularFlow", "Added radius to view with id: " + mMap.get(view.getId()));
-                }
-
-                if (i < getAngles().length) {
-                    angle = getAngles()[i];
-                } else if (mReferenceDefaultAngle != -1) {
-                    mCountAngle++;
-                    mAngles = getAngles();
-                    mAngles[mCountAngle - 1] = angle;
-                    angle = getAngles()[i];
-                } else {
-                    Log.e("CircularFlow", "Added angle to view with id: " + mMap.get(view.getId()));
-                }
-                c.constrainCircle(view.getId(), mViewCenter, radius, angle);
+        for (int i = 0; i < mCount; i++) {
+            View view = mContainer.getViewById(mIds[i]);
+            if (view == null) {
+                continue;
             }
+            int radius = DEFAULT_RADIUS;
+            float angle = DEFAULT_ANGLE;
+
+            if (mRadius != null && i < mRadius.length) {
+                radius = mRadius[i];
+            } else if (mReferenceDefaultRadius != null && mReferenceDefaultRadius != -1) {
+                mCountRadius++;
+                if (mRadius == null) {
+                    mRadius = new int[1];
+                }
+                mRadius = getRadius();
+                mRadius[mCountRadius - 1] = radius;
+            } else {
+                Log.e("CircularFlow", "Added radius to view with id: " + mMap.get(view.getId()));
+            }
+
+            if (mAngles != null && i < mAngles.length) {
+                angle = mAngles[i];
+            } else if (mReferenceDefaultAngle != null && mReferenceDefaultAngle != -1) {
+                mCountAngle++;
+                if (mAngles == null) {
+                    mAngles = new float[1];
+                }
+                mAngles = getAngles();
+                mAngles[mCountAngle - 1] = angle;
+            } else {
+                Log.e("CircularFlow", "Added angle to view with id: " + mMap.get(view.getId()));
+            }
+            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) view.getLayoutParams();
+            params.circleAngle = angle;
+            params.circleConstraint = mViewCenter;
+            params.circleRadius = radius;
+            view.setLayoutParams(params);
         }
-        c.applyTo(mContainer);
         applyLayoutFeatures();
     }
 
@@ -430,7 +436,7 @@ public class CircularFlow extends VirtualLayout {
         }
 
         if (mCountAngle + 1 > mAngles.length) {
-            mAngles = Arrays.copyOf(mAngles, mAngles.length * 2);
+            mAngles = Arrays.copyOf(mAngles, mAngles.length + 1);
         }
         mAngles[mCountAngle] = Integer.parseInt(angleString);
         mCountAngle++;
@@ -451,7 +457,7 @@ public class CircularFlow extends VirtualLayout {
         }
 
         if (mCountRadius + 1 > mRadius.length) {
-            mRadius = Arrays.copyOf(mRadius, mRadius.length * 2);
+            mRadius = Arrays.copyOf(mRadius, mRadius.length + 1);
         }
 
         mRadius[mCountRadius] = (int) (Integer.parseInt(radiusString) * myContext.getResources().getDisplayMetrics().density);

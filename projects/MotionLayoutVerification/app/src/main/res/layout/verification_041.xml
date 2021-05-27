@@ -61,6 +61,7 @@
         android:layout_marginTop="64dp"
         android:background="#A66"
         android:onClick="click"
+        app:overlay="false"
         android:src="@drawable/hoford"
         app:altSrc="@drawable/avatar_5_raster"
         app:layout_constraintEnd_toEndOf="parent"

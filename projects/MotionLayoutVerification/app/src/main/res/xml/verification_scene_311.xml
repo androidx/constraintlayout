@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto"
+    motion:defaultDuration="5000">
+
+    <Transition
+        motion:constraintSetEnd="@+id/b"
+        motion:constraintSetStart="@id/a"
+       >
+
+        <OnClick />
+
+    </Transition>
+
+    <Transition
+        motion:constraintSetEnd="@+id/c"
+        motion:constraintSetStart="@id/b"
+        motion:autoTransition="animateToEnd"
+         >
+        <KeyFrameSet>
+            <KeyAttribute motion:motionTarget="@id/label" motion:framePosition="33">
+                <CustomAttribute
+                    motion:attributeName="textSize"
+                    motion:customPixelDimension="16sp" />
+            </KeyAttribute>
+            <KeyAttribute motion:motionTarget="@id/label" motion:framePosition="66">
+                <CustomAttribute motion:attributeName="textPanX"
+                    motion:customFloatValue="-1"/>
+            </KeyAttribute>
+        </KeyFrameSet>
+    </Transition>
+
+    <Transition
+        motion:constraintSetEnd="@+id/d"
+        motion:constraintSetStart="@id/c"
+        motion:autoTransition="animateToEnd"
+         />
+    <Transition
+        motion:constraintSetEnd="@+id/a"
+        motion:constraintSetStart="@id/d"
+        motion:autoTransition="animateToEnd"
+        />
+
+
+    <ConstraintSet android:id="@+id/a">
+        <Constraint android:id="@id/label">
+            <CustomAttribute
+                motion:attributeName="textSize"
+                motion:customPixelDimension="10sp" />
+            <CustomAttribute
+                motion:attributeName="textPanX"
+                motion:customFloatValue="0" />
+        </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/b">
+        <Constraint android:id="@id/label">
+            <CustomAttribute
+                motion:attributeName="textSize"
+                motion:customPixelDimension="16sp" />
+            <CustomAttribute
+                motion:attributeName="textPanX"
+                motion:customFloatValue="-1" />
+        </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/c">
+        <Constraint android:id="@id/label">
+            <CustomAttribute
+                motion:attributeName="textSize"
+                motion:customPixelDimension="16sp" />
+            <CustomAttribute
+                motion:attributeName="textPanX"
+                motion:customFloatValue="1" />
+        </Constraint>
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/d">
+        <Constraint android:id="@id/label">
+            <CustomAttribute
+                motion:attributeName="textPanX"
+                motion:customFloatValue="0" />
+            <CustomAttribute
+                motion:attributeName="textSize"
+                motion:customPixelDimension="1sp" />
+        </Constraint>
+    </ConstraintSet>
+</MotionScene>

@@ -34,9 +34,9 @@ import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.R;
 
 /**
- * An ImageButton that can display, combine  and filter images. <b>Added in 2.0</b>
+ * A MotionButton is an AppCompatButton that can round its edges. <b>Added in 2.0</b>
  * <p>
- * Subclass of AppCompatImageButton to handle rounding edges dynamically.
+ * Subclass of AppCompatButton to handle rounding edges dynamically.
  * </p>
  * <h2>MotionButton attributes</h2>
  * <td>round</td>

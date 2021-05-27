@@ -22,12 +22,22 @@ publishing {
     }
 }
 
+task androidSourceJar(type: Jar) {
+    if (project.hasProperty('android')) {
+        from android.sourceSets.main.java.srcDirs
+        archiveClassifier.set('sources')
+    }
+}
+
 components.configureEach {component ->
     if (component.name in ['release', 'java']) {
         publishing.publications {
             maven(MavenPublication) {
                 from component
                 artifactId aid
+                if (project.hasProperty('android')) {
+		    artifact androidSourceJar
+		}
             }
         }
     }

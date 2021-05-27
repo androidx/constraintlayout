@@ -32,6 +32,10 @@ import androidx.constraintlayout.widget.R;
 
 import java.util.ArrayList;
 
+/**
+ * Carousel works within a MotionLayout to provide a simple recycler like pattern.
+ * Based on a series of Transitions and callback to give you the ability to swap views.
+ */
 public class Carousel extends MotionHelper {
     private static final boolean DEBUG = false;
     private static final String TAG = "Carousel";
@@ -276,7 +280,12 @@ public class Carousel extends MotionHelper {
                     // don't touch animate when reaching the last item
                     return;
                 }
-                mMotionLayout.post(() -> mMotionLayout.touchAnimateTo(MotionLayout.TOUCH_UP_DECELERATE_AND_COMPLETE, 1, v));
+                mMotionLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mMotionLayout.touchAnimateTo(MotionLayout.TOUCH_UP_DECELERATE_AND_COMPLETE, 1, v);
+                    }
+                });
             }
         }
     };

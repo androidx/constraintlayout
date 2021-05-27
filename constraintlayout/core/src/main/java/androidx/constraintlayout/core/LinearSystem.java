@@ -28,7 +28,7 @@ import java.util.HashMap;
  */
 public class LinearSystem {
 
-    public static final boolean FULL_DEBUG = false;
+    public static final boolean FULL_DEBUG = true;
     public static final boolean DEBUG = false;
     public static final boolean MEASURE = false;
 

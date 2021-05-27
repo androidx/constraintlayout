@@ -23,6 +23,7 @@ import android.view.View;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.constraintlayout.widget.SharedValues;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -237,32 +238,35 @@ public class ViewTransitionController {
         int listen_for_id = viewTransition.getSharedValueID();
         int listen_for_value = viewTransition.getSharedValue();
 
-ConstraintLayout.getSharedValues().addListener(viewTransition.getSharedValueID(), (id, value, oldValue) -> {
-            int current_value = viewTransition.getSharedValueCurrent();
-            viewTransition.setSharedValueCurrent(value);
-            if (listen_for_id == id && current_value != value) {
-                if (isSet) {
-                    if (listen_for_value == value) {
-                        int count = mMotionLayout.getChildCount();
+        ConstraintLayout.getSharedValues().addListener(viewTransition.getSharedValueID(), new SharedValues.SharedValuesListener() {
+            @Override
+            public void onNewValue(int id, int value, int oldValue) {
+                int current_value = viewTransition.getSharedValueCurrent();
+                viewTransition.setSharedValueCurrent(value);
+                if (listen_for_id == id && current_value != value) {
+                    if (isSet) {
+                        if (listen_for_value == value) {
+                            int count = mMotionLayout.getChildCount();
 
-                        for (int i = 0; i < count; i++) {
-                            View view = mMotionLayout.getChildAt(i);
-                            if (viewTransition.matchesView(view)) {
-                                int currentId = mMotionLayout.getCurrentState();
-                                ConstraintSet current = mMotionLayout.getConstraintSet(currentId);
-                                viewTransition.applyTransition(this, mMotionLayout, currentId, current, view);
+                            for (int i = 0; i < count; i++) {
+                                View view = mMotionLayout.getChildAt(i);
+                                if (viewTransition.matchesView(view)) {
+                                    int currentId = mMotionLayout.getCurrentState();
+                                    ConstraintSet current = mMotionLayout.getConstraintSet(currentId);
+                                    viewTransition.applyTransition(ViewTransitionController.this, mMotionLayout, currentId, current, view);
+                                }
                             }
                         }
-                    }
-                } else { // not set
-                    if (listen_for_value != value) {
-                        int count = mMotionLayout.getChildCount();
-                        for (int i = 0; i < count; i++) {
-                            View view = mMotionLayout.getChildAt(i);
-                            if (viewTransition.matchesView(view)) {
-                                int currentId = mMotionLayout.getCurrentState();
-                                ConstraintSet current = mMotionLayout.getConstraintSet(currentId);
-                                viewTransition.applyTransition(this, mMotionLayout, currentId, current, view);
+                    } else { // not set
+                        if (listen_for_value != value) {
+                            int count = mMotionLayout.getChildCount();
+                            for (int i = 0; i < count; i++) {
+                                View view = mMotionLayout.getChildAt(i);
+                                if (viewTransition.matchesView(view)) {
+                                    int currentId = mMotionLayout.getCurrentState();
+                                    ConstraintSet current = mMotionLayout.getConstraintSet(currentId);
+                                    viewTransition.applyTransition(ViewTransitionController.this, mMotionLayout, currentId, current, view);
+                                }
                             }
                         }
                     }
