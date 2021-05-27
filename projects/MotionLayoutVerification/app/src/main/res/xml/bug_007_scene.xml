@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <Transition
+        android:id="@+id/transitionStartToDragging"
+        app:constraintSetEnd="@id/stateDragStart_a"
+        app:constraintSetStart="@id/stateStart"
+        app:duration="300"
+        app:motionInterpolator="easeOut">
+        <OnClick
+            app:clickAction="transitionToEnd"
+            app:targetId="@+id/clickable" />
+        <KeyFrameSet>
+            <KeyAttribute   app:motionTarget="@+id/dragHandle"
+                app:framePosition="50"
+                android:rotation="90"/>
+        </KeyFrameSet>
+    </Transition>
+    <Transition
+        android:id="@+id/transitionDrag"
+        app:constraintSetEnd="@id/stateDragEnd"
+        app:constraintSetStart="@id/stateDragStart">`
+        <!--            app:limitBoundsTo="@+id/dragHandle"
+        -->
+        <OnSwipe
+            app:dragDirection="dragEnd"
+            app:maxAcceleration="600"
+            app:onTouchUp="autoCompleteToStart"
+            app:touchAnchorId="@+id/dragHandle"
+            app:touchAnchorSide="middle"
+            app:limitBoundsTo="@+id/dragHandle"
+            />
+    </Transition>
+
+    <Transition
+        android:id="@+id/transitionDrag"
+        app:constraintSetEnd="@id/stateDragStart"
+        app:constraintSetStart="@id/stateDragStart_a"
+        app:autoTransition="animateToEnd"/>
+
+    <ConstraintSet android:id="@+id/stateDragStart_a"
+        app:deriveConstraintsFrom="@id/stateDragStart">
+    </ConstraintSet>
+<!--  =========================================================== -->
+<!--                android:visibility="invisible"
+-->
+    <ConstraintSet android:id="@+id/stateStart">
+<!--        <Constraint-->
+<!--            android:id="@+id/dragHandle"-->
+<!--            android:layout_width="44dp"-->
+<!--            android:layout_height="44dp"-->
+<!--            android:alpha=".5"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintStart_toEndOf="@id/clickable"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+        <ConstraintOverride
+            android:id="@+id/dragHandle"
+
+            android:alpha="0.3"
+            />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/stateDragStart">
+        <ConstraintOverride
+            android:id="@+id/dragHandle"
+
+            android:alpha="1"
+ />
+
+    </ConstraintSet>
+
+    <ConstraintSet
+        android:id="@+id/stateDragEnd"
+        app:deriveConstraintsFrom="@id/stateDragStart">
+        <Constraint
+            android:id="@+id/dragHandle"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </ConstraintSet>
+
+</MotionScene>
