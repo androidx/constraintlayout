@@ -1095,6 +1095,7 @@ public class MotionLayout extends ConstraintLayout implements
     private int mPreRotateHeight;
     private int mPreviouseRotation;
     Rect mTempRect = new Rect();
+    private boolean mDelayedApply =false;
 
     MotionController getMotionController(int mTouchAnchorId) {
         return mFrameArrayList.get(findViewById(mTouchAnchorId));
@@ -1188,6 +1189,10 @@ public class MotionLayout extends ConstraintLayout implements
     }
 
     void setState(TransitionState newState) {
+        if (DEBUG) {
+            Debug.logStack(TAG, mTransitionState + " -> " + newState + " " +
+                    Debug.getName(getContext(), mCurrentState), 2);
+        }
         if (newState == TransitionState.FINISHED && mCurrentState == UNSET) {
             return;
         }
@@ -1293,6 +1298,23 @@ public class MotionLayout extends ConstraintLayout implements
             }
             return 0;
         }
+    }
+
+    /**
+     * sets the state to start in. To be used during OnCreate
+     *
+     * @param beginId the id of the start constraint set
+     */
+   void setStartState(int beginId) {
+       if (!isAttachedToWindow()) {
+           if (mStateCache == null) {
+               mStateCache = new StateCache();
+           }
+           mStateCache.setStartState(beginId);
+           mStateCache.setEndState(beginId);
+           return;
+       }
+       mCurrentState = beginId;
     }
 
     /**
@@ -1463,7 +1485,11 @@ public class MotionLayout extends ConstraintLayout implements
                         }
                         onNewStateAttachHandlers();
                         if (mStateCache != null) {
-                            mStateCache.apply();
+                            if (mDelayedApply) {
+                                post(() -> mStateCache.apply());
+                            } else {
+                                mStateCache.apply();
+                            }
                         } else {
                             if (mScene != null && mScene.mCurrentTransition != null) {
                                 if (mScene.mCurrentTransition.getAutoTransition() == MotionScene.Transition.AUTO_ANIMATE_TO_END) {
@@ -2222,6 +2248,9 @@ public class MotionLayout extends ConstraintLayout implements
      * @param id state to set
      */
     public void jumpToState(int id) {
+        if (!isAttachedToWindow()) {
+              mCurrentState = id;
+        }
         if (mBeginState == id) {
             setProgress(0);
         } else if (mEndState == id) {
@@ -2556,7 +2585,7 @@ public class MotionLayout extends ConstraintLayout implements
             mapIdToWidget.clear();
             mapIdToWidget.put(PARENT_ID, base);
             mapIdToWidget.put(getId(), base);
-            if (cSet.mRotate != 0) {
+            if (cSet != null && cSet.mRotate != 0) {
                 resolveSystem(mLayoutEnd, getOptimizationLevel(),
                         MeasureSpec.makeMeasureSpec(  getHeight(),MeasureSpec.EXACTLY),
                         MeasureSpec.makeMeasureSpec(  getWidth(), MeasureSpec.EXACTLY));
@@ -2692,8 +2721,8 @@ public class MotionLayout extends ConstraintLayout implements
 
             if (mCurrentState == getStartState()) {
                 resolveSystem(mLayoutEnd, optimisationLevel,
-                        (mEnd.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
-                        (mEnd.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
+                        (mEnd == null || mEnd.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
+                        (mEnd == null || mEnd.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
                 if (mStart != null) {
                     resolveSystem(mLayoutStart, optimisationLevel,
                             (mStart.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
@@ -2706,8 +2735,8 @@ public class MotionLayout extends ConstraintLayout implements
                             (mStart.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
                 }
                 resolveSystem(mLayoutEnd, optimisationLevel,
-                        (mEnd.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
-                        (mEnd.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
+                        (mEnd == null || mEnd.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
+                        (mEnd == null || mEnd.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
             }
 
             // This works around the problem that MotionLayout calls its children Wrap content children
@@ -3000,7 +3029,14 @@ public class MotionLayout extends ConstraintLayout implements
 
         if (scene.getMoveWhenScrollAtTop()) {
             // This blocks transition during scrolling
-            if ((mTransitionPosition == 1 || mTransitionPosition == 0) && target.canScrollVertically(dy)) {
+             TouchResponse touchResponse = currentTransition.getTouchResponse();
+             int vert = -1;
+             if (touchResponse != null) {
+               if ((touchResponse.getFlags() & TouchResponse.FLAG_SUPPORT_SCROLL_UP) != 0) {
+                   vert = dy;
+               }
+             }
+            if ((mTransitionPosition == 1 || mTransitionPosition == 0) && target.canScrollVertically(vert)) {
                 return;
             }
         }
@@ -4105,7 +4141,11 @@ public class MotionLayout extends ConstraintLayout implements
         }
         onNewStateAttachHandlers();
         if (mStateCache != null) {
-            mStateCache.apply();
+            if (mDelayedApply) {
+                post(() -> mStateCache.apply());
+            } else {
+                mStateCache.apply();
+            }
         } else {
             if (mScene != null && mScene.mCurrentTransition != null) {
                 if (mScene.mCurrentTransition.getAutoTransition() == MotionScene.Transition.AUTO_ANIMATE_TO_END) {
@@ -4794,4 +4834,21 @@ public class MotionLayout extends ConstraintLayout implements
         }
         return false;
     }
+
+    /**
+     * Is initial state changes are applied during onAttachedToWindow or after.
+     * @return
+     */
+    public boolean isDelayedApplicationOfInitalState() {
+        return mDelayedApply;
+    }
+
+    /**
+     * Initial state changes are applied during onAttachedToWindow unless this is set to true.
+     * @param delayedApply
+     */
+    public void setDelayedApplicationOfInitalState(boolean delayedApply) {
+        this.mDelayedApply = delayedApply;
+    }
+
 }

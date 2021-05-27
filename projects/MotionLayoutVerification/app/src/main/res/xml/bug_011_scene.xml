@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto"
+    motion:defaultDuration="20">
+
+
+    <ConstraintSet android:id="@+id/start">
+        <ConstraintOverride
+            android:id="@+id/view01"
+            android:visibility="invisible"
+            />
+
+        <ConstraintOverride
+            android:id="@+id/view02"
+            android:visibility="invisible"
+            />
+
+        <ConstraintOverride
+            android:id="@+id/view03"
+            android:visibility="invisible"
+            />
+
+        <ConstraintOverride
+            android:id="@+id/view04"
+            android:visibility="invisible"
+            />
+
+        <ConstraintOverride
+            android:id="@+id/view05"
+            android:visibility="invisible"
+            />
+
+        <ConstraintOverride
+            android:id="@+id/view06"
+            android:visibility="invisible"
+            />
+
+        <ConstraintOverride
+            android:id="@+id/view07"
+            android:visibility="invisible"
+            />
+
+        <ConstraintOverride
+            android:id="@+id/view08"
+            android:visibility="invisible"
+            />
+
+        <ConstraintOverride
+            android:id="@+id/view09"
+            android:visibility="invisible"
+            />
+
+        <ConstraintOverride
+            android:id="@+id/view10"
+            android:visibility="invisible"  />
+
+        <ConstraintOverride
+            android:id="@+id/view11"
+            android:visibility="invisible"  />
+
+        <ConstraintOverride
+            android:id="@+id/view12"
+            android:visibility="invisible" />
+
+        <ConstraintOverride
+            android:id="@+id/view13"
+            android:visibility="invisible" />
+
+        <ConstraintOverride
+            android:id="@+id/view14"
+            android:visibility="invisible" />
+
+
+        <ConstraintOverride
+            android:id="@+id/view15"
+            android:visibility="invisible" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/a">
+        <ConstraintOverride
+            android:id="@+id/view01"
+            android:visibility="visible"
+
+      />
+
+        <ConstraintOverride
+            android:id="@+id/view02"
+            android:visibility="visible"
+       />
+
+        <ConstraintOverride
+            android:id="@+id/view03"
+            android:visibility="visible"
+        />
+
+        <ConstraintOverride
+            android:id="@+id/view04"
+            android:visibility="visible"
+       />
+
+        <ConstraintOverride
+            android:id="@+id/view05"
+            android:visibility="visible"
+  />
+
+        <ConstraintOverride
+            android:id="@+id/view06"
+            android:visibility="visible"
+   />
+
+        <ConstraintOverride
+            android:id="@+id/view07"
+            android:visibility="visible"
+     />
+
+        <ConstraintOverride
+            android:id="@+id/view08"
+            android:visibility="visible"
+    />
+
+        <ConstraintOverride
+            android:id="@+id/view09"
+            android:visibility="visible"
+            />
+
+        <ConstraintOverride
+            android:id="@+id/view10"
+            android:visibility="visible"  />
+
+        <ConstraintOverride
+            android:id="@+id/view11"
+            android:visibility="visible"  />
+
+        <ConstraintOverride
+            android:id="@+id/view12"
+            android:visibility="visible" />
+
+        <ConstraintOverride
+            android:id="@+id/view13"
+            android:visibility="visible" />
+
+        <ConstraintOverride
+            android:id="@+id/view14"
+            android:visibility="visible" />
+
+
+        <ConstraintOverride
+            android:id="@+id/view15"
+            android:visibility="visible" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/b">
+        <ConstraintOverride
+            android:id="@+id/view01"
+            android:visibility="visible"
+            motion:layout_constraintHorizontal_bias="0"
+            motion:layout_constraintVertical_bias="0" />
+
+        <ConstraintOverride
+            android:id="@+id/view02"
+            android:visibility="visible"
+            motion:layout_constraintHorizontal_bias="0.25"
+            motion:layout_constraintVertical_bias="0" />
+
+        <ConstraintOverride
+            android:id="@+id/view03"
+            android:visibility="visible"
+            motion:layout_constraintHorizontal_bias="0.5"
+            motion:layout_constraintVertical_bias="0" />
+
+        <ConstraintOverride
+            android:id="@+id/view04"
+            android:visibility="visible"
+            motion:layout_constraintHorizontal_bias="0.75"
+            motion:layout_constraintVertical_bias="0" />
+
+        <ConstraintOverride
+            android:id="@+id/view05"
+            android:visibility="visible"
+            motion:layout_constraintHorizontal_bias="1"
+            motion:layout_constraintVertical_bias="0" />
+
+        <ConstraintOverride
+            android:id="@+id/view06"
+            android:visibility="visible"
+            motion:layout_constraintHorizontal_bias="0"
+            motion:layout_constraintVertical_bias="0.5" />
+
+        <ConstraintOverride
+            android:id="@+id/view07"
+            android:visibility="visible"
+            motion:layout_constraintHorizontal_bias="0.25"
+            motion:layout_constraintVertical_bias="0.5" />
+
+        <ConstraintOverride
+            android:id="@+id/view08"
+            android:visibility="visible"
+            motion:layout_constraintHorizontal_bias="0.5"
+            motion:layout_constraintVertical_bias="0.5" />
+
+        <ConstraintOverride
+            android:id="@+id/view09"
+            android:visibility="visible"
+            motion:layout_constraintHorizontal_bias="0.75"
+            motion:layout_constraintVertical_bias="0.5" />
+
+        <ConstraintOverride
+            android:id="@+id/view10"
+            android:visibility="visible"
+            motion:layout_constraintHorizontal_bias="1"
+            motion:layout_constraintVertical_bias="0.5" />
+
+        <ConstraintOverride
+            android:id="@+id/view11"
+            android:visibility="visible"
+            motion:layout_constraintHorizontal_bias="0"
+            motion:layout_constraintVertical_bias="1" />
+
+        <ConstraintOverride
+            android:id="@+id/view12"
+            android:visibility="visible"
+            motion:layout_constraintHorizontal_bias="0.25"
+            motion:layout_constraintVertical_bias="1" />
+
+        <ConstraintOverride
+            android:id="@+id/view13"
+            android:visibility="visible"
+            motion:layout_constraintHorizontal_bias="0.5"
+            motion:layout_constraintVertical_bias="1" />
+
+        <ConstraintOverride
+            android:id="@+id/view14"
+            android:visibility="visible"
+            motion:layout_constraintHorizontal_bias="0.75"
+            motion:layout_constraintVertical_bias="1" />
+
+
+        <ConstraintOverride
+            android:id="@+id/view15"
+            android:visibility="visible"
+            motion:layout_constraintHorizontal_bias="1"
+            motion:layout_constraintVertical_bias="1" />
+    </ConstraintSet>
+
+
+    <Transition
+
+        motion:constraintSetEnd="@id/b"
+        motion:constraintSetStart="@id/start"
+        motion:pathMotionArc="startVertical"
+
+        motion:duration="100">
+
+
+    </Transition>
+
+</MotionScene>

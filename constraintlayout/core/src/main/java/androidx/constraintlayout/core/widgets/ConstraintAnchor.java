@@ -90,7 +90,7 @@ public class ConstraintAnchor {
      */
     public enum Type { NONE, LEFT, TOP, RIGHT, BOTTOM, BASELINE, CENTER, CENTER_X, CENTER_Y }
 
-    private static final int UNSET_GONE_MARGIN = -1;
+    private static final int UNSET_GONE_MARGIN = Integer.MIN_VALUE;
 
     public final ConstraintWidget mOwner;
     public final Type mType;
@@ -170,7 +170,7 @@ public class ConstraintAnchor {
         if (mOwner.getVisibility() == ConstraintWidget.GONE) {
             return 0;
         }
-        if (mGoneMargin > UNSET_GONE_MARGIN && mTarget != null
+        if (mGoneMargin != UNSET_GONE_MARGIN && mTarget != null
                 && mTarget.mOwner.getVisibility() == ConstraintWidget.GONE) {
             return mGoneMargin;
         }

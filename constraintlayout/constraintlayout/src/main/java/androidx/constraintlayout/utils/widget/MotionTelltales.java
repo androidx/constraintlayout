@@ -32,9 +32,9 @@ import android.view.View;
 import android.view.ViewParent;
 
 /**
- * A view that is useful for prototyping layouts. <b>Added in 2.0</b>
+ * A view that is useful for prototyping Views that will move in MotionLayout. <b>Added in 2.0</b>
  * <p>
- *  This view works with MotionLayout to demonstrate the motion of 25 points on the view.
+ * This view works with MotionLayout to demonstrate the motion of 25 points on the view.
  * It is based on MockView which draws a label (by default the view id),
  * along with diagonals.
  *

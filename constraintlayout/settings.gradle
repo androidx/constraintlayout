@@ -8,7 +8,7 @@ pluginManagement {
     }
 
     plugins {
-        id 'org.jetbrains.kotlin.android' version '1.4.31'
+        id 'org.jetbrains.kotlin.android' version '1.4.32'
     }
     resolutionStrategy {
         eachPlugin {
@@ -32,7 +32,7 @@ dependencyResolutionManagement {
         mavenCentral()
         google()
         maven { url "../../prebuilts/tools/common/m2/repository" }
-        maven { url "https://androidx.dev/snapshots/builds/7141639/artifacts/repository/" }
+        maven { url "https://androidx.dev/snapshots/builds/7352378/artifacts/repository/" }
         jcenter()
     }
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)

@@ -19,7 +19,6 @@ package android.support.constraint.app;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +29,7 @@ import androidx.constraintlayout.motion.widget.TransitionAdapter;
 /**
  * Test transitionToState bug
  */
-public class ButtonDriveAnimate extends AppCompatActivity {
+public class OnCreateTransiton extends AppCompatActivity {
     private static final String TAG = "CustomSwipeClick";
     String layout_name;
     MotionLayout mMotionLayout;
@@ -44,31 +43,22 @@ public class ButtonDriveAnimate extends AppCompatActivity {
         Context ctx = getApplicationContext();
         int id = ctx.getResources().getIdentifier(prelayout, "layout", ctx.getPackageName());
         setContentView(id);
-        setTitle(layout_name);
         mMotionLayout = Utils.findMotionLayout(this);
+        mMotionLayout.transitionToState(R.id.end);
         mMotionLayout.setTransitionListener(new TransitionAdapter() {
             @Override
             public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
-                Log.v(TAG, Debug.getLoc()+" "+Debug.getName(getApplicationContext(),currentId));
+                Log.v(TAG, Debug.getLoc()+" ");
             }
 
             @Override
             public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
-                Log.v(TAG, Debug.getLoc()+" "+progress+" "+Debug.getName(getApplicationContext(),triggerId));
-
+                Log.v(TAG, Debug.getLoc()+" "+progress);
+                if (progress <= 0.001 || progress >= 0.999) {
+                    Debug.logStack(TAG, "",19);
+                }
             }
         });
     }
 
-    public void goLeft(View v) {
-        Log.v(TAG, Debug.getLoc()+" ");
-        mMotionLayout.transitionToState(R.id.left);
-
-    }
-    public void goRight(View v) {
-        Log.v(TAG, Debug.getLoc()+" ");
-        mMotionLayout.transitionToState(R.id.right);
-
-
-    }
 }

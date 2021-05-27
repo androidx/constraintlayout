@@ -2,7 +2,7 @@
 
 ![core](https://github.com/androidx/constraintlayout/workflows/core/badge.svg) <img src="https://img.shields.io/github/v/release/androidx/constraintlayout.svg?label=lastest"/> [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 
-<img src="https://img.shields.io/badge/stable-2.0.4-blue"/> <img src="https://img.shields.io/badge/dev-2.1.0--beta01-blue"/> <img src="https://img.shields.io/badge/compose-1.0.0--alpha05-blue"/> 
+<img src="https://img.shields.io/badge/stable-2.0.4-blue"/> <img src="https://img.shields.io/badge/dev-2.1.0--beta02-blue"/> <img src="https://img.shields.io/badge/compose-1.0.0--alpha06-blue"/> 
 
 
 ConstraintLayout is a layout manager for Android which allows you to position and size widgets in a flexible way. It's available for both the Android view system and Jetpack Compose.
@@ -34,7 +34,7 @@ If using ConstraintLayout with the Android View system, add:
 ```gradle
 dependencies {
 
-    implementation("androidx.constraintlayout:constraintlayout:2.1.0-beta01")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.0-beta02")
 
 }
 ```
@@ -44,7 +44,7 @@ If using ConstraintLayout with Jetpack Compose, add:
 ```gradle
 dependencies {
 
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha05")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha06")
 
 }
 ```

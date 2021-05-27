@@ -20,55 +20,36 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.MotionLayout;
-import androidx.constraintlayout.motion.widget.TransitionAdapter;
 
-/**
- * Test transitionToState bug
- */
-public class ButtonDriveAnimate extends AppCompatActivity {
-    private static final String TAG = "CustomSwipeClick";
+// used with verification_057.xml
+public class Bug010 extends AppCompatActivity {
+    private static final String TAG = "Bug010";
     String layout_name;
     MotionLayout mMotionLayout;
 
     @Override
-    protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle extra = getIntent().getExtras();
         String prelayout = extra.getString(Utils.KEY);
-        layout_name = prelayout;
+        setTitle(layout_name = prelayout);
         Context ctx = getApplicationContext();
         int id = ctx.getResources().getIdentifier(prelayout, "layout", ctx.getPackageName());
         setContentView(id);
-        setTitle(layout_name);
         mMotionLayout = Utils.findMotionLayout(this);
-        mMotionLayout.setTransitionListener(new TransitionAdapter() {
-            @Override
-            public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
-                Log.v(TAG, Debug.getLoc()+" "+Debug.getName(getApplicationContext(),currentId));
-            }
 
-            @Override
-            public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
-                Log.v(TAG, Debug.getLoc()+" "+progress+" "+Debug.getName(getApplicationContext(),triggerId));
 
-            }
-        });
     }
 
-    public void goLeft(View v) {
-        Log.v(TAG, Debug.getLoc()+" ");
-        mMotionLayout.transitionToState(R.id.left);
-
-    }
-    public void goRight(View v) {
-        Log.v(TAG, Debug.getLoc()+" ");
-        mMotionLayout.transitionToState(R.id.right);
-
-
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        mMotionLayout.transitionToState(R.id.a,0);
     }
 }

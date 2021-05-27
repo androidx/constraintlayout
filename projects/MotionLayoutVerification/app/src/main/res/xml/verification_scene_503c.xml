@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/show"
+        motion:constraintSetStart="@id/base"
+        motion:duration="1000">
+        <OnSwipe
+            motion:dragDirection="dragUp"
+
+            motion:springStiffness="3300"
+            motion:springDamping="30"
+            motion:springMass="2"
+            motion:autoCompleteMode="spring"
+            motion:springBoundary="bounceStart"
+
+            />
+       <KeyFrameSet>
+       </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/base">
+        <Constraint  android:id="@+id/cover" >
+            <CustomAttribute motion:attributeName="backgroundColor" motion:customColorValue="#5E400C"/>
+        </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/show">
+        <ConstraintOverride  android:id="@+id/cover" android:rotationX="85" android:translationY="-90dp" >
+            <CustomAttribute motion:attributeName="backgroundColor" motion:customColorValue="#734E0C"/>
+        </ConstraintOverride>
+
+    </ConstraintSet>
+
+
+</MotionScene>
