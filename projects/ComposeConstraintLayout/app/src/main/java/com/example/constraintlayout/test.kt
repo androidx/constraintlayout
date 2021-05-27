@@ -475,7 +475,7 @@ public fun ScreenExample5() {
     ConstraintLayout(
         ConstraintSet("""
             {
-              b1: { type: 'barrier', contains: ['b1','b2'],
+              ba1: { type: 'barrier', contains: ['b1','b2'],
               }
             }
         """),

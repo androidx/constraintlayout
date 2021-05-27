@@ -39,7 +39,7 @@ internal fun parseJSON(content: String, state: State) {
             if (type != null) {
                 when (type) {
                     "guideline" -> parseGuideline(state, elementName, element)
-                    "chain" -> parseFlow(state, margins, elementName, element)
+                    //"chain" -> parseFlow(state, margins, elementName, element)
                 }
             } else if (type == null) {
                 parseWidget(state, margins, elementName, element)
