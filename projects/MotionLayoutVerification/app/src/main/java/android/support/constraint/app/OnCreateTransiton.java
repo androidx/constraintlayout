@@ -50,6 +50,14 @@ public class OnCreateTransiton extends AppCompatActivity {
             public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
                 Log.v(TAG, Debug.getLoc()+" ");
             }
+
+            @Override
+            public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
+                Log.v(TAG, Debug.getLoc()+" "+progress);
+                if (progress <= 0.001 || progress >= 0.999) {
+                    Debug.logStack(TAG, "",19);
+                }
+            }
         });
     }
 
