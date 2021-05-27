@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="30dp"
+        android:background="#87F"
+        app:layoutDescription="@xml/bug_010_scene"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- Collapsed view -->
+        <androidx.constraintlayout.utils.widget.MotionButton
+            android:text="a"
+            app:roundPercent="0.5"
+            android:id="@+id/view01"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="#99ff99"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"
+
+          />
+
+        <androidx.constraintlayout.utils.widget.MotionButton
+            android:text="a"
+            app:roundPercent="0.5"
+            android:id="@+id/view02"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="#99ff99"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"
+
+            />
+        <androidx.constraintlayout.utils.widget.MotionButton
+            android:text="a"
+            app:roundPercent="0.5"
+            android:id="@+id/view03"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="#99ff99"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"
+
+            />
+        <androidx.constraintlayout.utils.widget.MotionButton
+            android:text="a"
+            app:roundPercent="0.5"
+            android:id="@+id/view04"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="#99ff99"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"
+
+            />
+        <androidx.constraintlayout.utils.widget.MotionButton
+            android:text="a"
+            app:roundPercent="0.5"
+            android:id="@+id/view05"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="#99ff99"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"
+
+            />
+        <androidx.constraintlayout.utils.widget.MotionButton
+            android:text="a"
+            app:roundPercent="0.5"
+            android:id="@+id/view06"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="#99ff99"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"
+
+            />
+        <androidx.constraintlayout.utils.widget.MotionButton
+            android:text="a"
+            app:roundPercent="0.5"
+            android:id="@+id/view07"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="#99ff99"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"
+
+            />
+        <androidx.constraintlayout.utils.widget.MotionButton
+            android:text="a"
+            app:roundPercent="0.5"
+            android:id="@+id/view08"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="#99ff99"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"
+
+            />
+        <androidx.constraintlayout.utils.widget.MotionButton
+            android:text="a"
+            app:roundPercent="0.5"
+            android:id="@+id/view09"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="#99ff99"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"
+
+            />
+        <androidx.constraintlayout.utils.widget.MotionButton
+            android:text="a"
+            app:roundPercent="0.5"
+            android:id="@+id/view10"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="#99ff99"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"
+
+            />
+        <androidx.constraintlayout.utils.widget.MotionButton
+            android:text="a"
+            app:roundPercent="0.5"
+            android:id="@+id/view11"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="#99ff99"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"
+
+            />
+        <androidx.constraintlayout.utils.widget.MotionButton
+            android:text="a"
+            app:roundPercent="0.5"
+            android:id="@+id/view12"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="#99ff99"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"
+
+            />
+        <androidx.constraintlayout.utils.widget.MotionButton
+            android:text="a"
+            app:roundPercent="0.5"
+            android:id="@+id/view13"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="#99ff99"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"
+
+            />
+        <androidx.constraintlayout.utils.widget.MotionButton
+            android:text="a"
+            app:roundPercent="0.5"
+            android:id="@+id/view14"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="#99ff99"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"
+
+            />
+        <androidx.constraintlayout.utils.widget.MotionButton
+            android:text="a"
+            app:roundPercent="0.5"
+            android:id="@+id/view15"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="#99ff99"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"
+
+            />
+
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

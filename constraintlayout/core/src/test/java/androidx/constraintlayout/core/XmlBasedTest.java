@@ -57,7 +57,7 @@ public class XmlBasedTest {
         ConstraintAnchor.Type fromType, toType;
         String toName;
         int margin;
-        int gonMargin = -1;
+        int gonMargin = Integer.MIN_VALUE;
     }
 
     private static HashMap<String, Integer> visibilityMap = new HashMap<>();
@@ -91,16 +91,24 @@ public class XmlBasedTest {
 
     @Test
     public void testAccessToResources() {
-        String dirName  = System.getProperty("user.dir") + "/src/test/resources/";
+        String dirName = getDir();
         assertTrue(" could not find dir " + dirName, new File(dirName).exists());
         Object[][]  names =  genListOfName();
         assertTrue(" Could not get Path " + dirName, names.length > 1);
     }
 
+    static private String getDir() {
+//        String dirName = System.getProperty("user.dir") + File.separator+".."+File.separator+".."+File.separator+".."
+//                +File.separator+"constraintLayout"+File.separator+"core"+File.separator+"src"+File.separator+"test"+File.separator+"resources"+File.separator;
+
+        return System.getProperty("user.dir") + "/src/test/resources/";
+    }
     @Parameterized.Parameters
     public static Object[][] genListOfName() {
-        String dirName = System.getProperty("user.dir") + "/src/test/resources/";
 
+        String dirName = getDir();
+
+        assertTrue(new File(dirName).exists());
         File[] f = new File(dirName).listFiles(pathname -> pathname.getName().startsWith("check"));
         assertNotNull(f);
         Arrays.sort(f, (o1, o2) -> o1.getName().compareTo(o2.getName()));
@@ -246,6 +254,7 @@ public class XmlBasedTest {
      * @param fileName
      */
     private void parseXML(String fileName) {
+        System.err.println(fileName);
         container = new ConstraintWidgetContainer(0, 0, 1080, 1920);
         container.setDebugName("parent");
         widgetMap = new HashMap<String, ConstraintWidget>();

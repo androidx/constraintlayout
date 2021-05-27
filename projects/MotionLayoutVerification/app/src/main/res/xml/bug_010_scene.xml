@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <ConstraintSet android:id="@+id/container_scene_set1" />
+
+    <ConstraintSet android:id="@+id/a">
+        <ConstraintOverride
+            android:id="@+id/compactView"
+            android:layout_marginTop="100dp" />
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/b">
+  <Constraint >
+      <CustomAttribute motion:methodName="setImageDrawable" motion:customReference="@drawable/ic_android_black_24dp" />
+
+  </Constraint>
+        <ConstraintOverride
+            android:id="@id/compactView"
+            android:layout_marginTop="50dp" />
+
+    </ConstraintSet>
+
+    <Transition
+        android:id="@+id/ab"
+        motion:constraintSetEnd="@id/b"
+        motion:constraintSetStart="@id/a"
+        motion:duration="300" >
+        <OnSwipe motion:touchAnchorId="@id/compactView"/>
+        <KeyFrameSet>
+            <KeyTrigger motion:framePosition="51"
+                motion:triggerId="@+id/middle" motion:motionTarget="@id/compactView"
+                motion:onPositiveCross=".">
+                <CustomAttribute motion:methodName="setImageResource"  motion:customReference="@drawable/ic_android_black_24dp" />
+            </KeyTrigger>
+            <KeyTrigger motion:framePosition="50"
+                motion:triggerId="@+id/middle" motion:motionTarget="@id/compactView"
+                motion:onNegativeCross=".">
+                <CustomAttribute motion:methodName="setImageResource"  motion:customReference="@drawable/ic_cell" />
+            </KeyTrigger>
+        </KeyFrameSet>
+    </Transition>
+
+</MotionScene>

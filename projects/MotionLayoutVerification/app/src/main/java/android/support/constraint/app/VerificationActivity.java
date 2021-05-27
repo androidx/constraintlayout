@@ -47,6 +47,8 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -153,7 +155,28 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         ViewGroup root = ((ViewGroup) findViewById(android.R.id.content).getRootView());
         View mlView = findViewById(R.id.motionLayout);
         mMotionLayout = (mlView != null) ? (MotionLayout) mlView : findMotionLayout(root);
+        if (mMotionLayout != null) {
+            ConstraintSet set = new ConstraintSet();
+            set.clone(mMotionLayout);
+            StringWriter writer = new StringWriter();
+            try {
+                log("-----------------------------------------------------------------------");
 
+                set.writeState(writer, mMotionLayout, 1);
+
+                logBigString( writer.toString());
+
+                log("-----------------------------------------------------------------------");
+                log("-----------------------------------------------------------------------");
+                set.writeState(writer, mMotionLayout, 0);
+                logBigString( writer.toString());
+
+                log("-----------------------------------------------------------------------");
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         View view = findViewById(R.id.flow);
         if (view != null) {
             setupFlow((Flow) view);
@@ -831,4 +854,16 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         Log.v(TAG, ".(" + s.getFileName() + ":" + s.getLineNumber() + ") " + s.getMethodName() + "()" + str);
     }
 
+    private void logBigString(String str) {
+        int len = str.length();
+        for (int i = 0; i < len; i++) {
+            int k = str.indexOf("\n", i);
+            if (k == -1) {
+                Log.v(TAG, str.substring(i));
+                break;
+            }
+            Log.v(TAG, str.substring(i, k));
+            i = k;
+        }
+    }
 }

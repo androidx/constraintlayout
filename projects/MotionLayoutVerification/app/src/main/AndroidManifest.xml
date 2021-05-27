@@ -39,8 +39,8 @@
             />
         <activity android:name=".CheckCallbackActivity" />
         <activity android:name=".CheckSetStates" />
+        <activity android:name=".Bug010" />
         <activity android:name=".FullScreenActivity" />
-
     </application>
 
 </manifest>
