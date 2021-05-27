@@ -2580,7 +2580,7 @@ public class MotionLayout extends ConstraintLayout implements
             mapIdToWidget.clear();
             mapIdToWidget.put(PARENT_ID, base);
             mapIdToWidget.put(getId(), base);
-            if (cSet.mRotate != 0) {
+            if (cSet != null && cSet.mRotate != 0) {
                 resolveSystem(mLayoutEnd, getOptimizationLevel(),
                         MeasureSpec.makeMeasureSpec(  getHeight(),MeasureSpec.EXACTLY),
                         MeasureSpec.makeMeasureSpec(  getWidth(), MeasureSpec.EXACTLY));
@@ -2716,8 +2716,8 @@ public class MotionLayout extends ConstraintLayout implements
 
             if (mCurrentState == getStartState()) {
                 resolveSystem(mLayoutEnd, optimisationLevel,
-                        (mEnd.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
-                        (mEnd.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
+                        (mEnd == null || mEnd.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
+                        (mEnd == null || mEnd.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
                 if (mStart != null) {
                     resolveSystem(mLayoutStart, optimisationLevel,
                             (mStart.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
@@ -2730,8 +2730,8 @@ public class MotionLayout extends ConstraintLayout implements
                             (mStart.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
                 }
                 resolveSystem(mLayoutEnd, optimisationLevel,
-                        (mEnd.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
-                        (mEnd.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
+                        (mEnd == null || mEnd.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
+                        (mEnd == null || mEnd.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
             }
 
             // This works around the problem that MotionLayout calls its children Wrap content children
