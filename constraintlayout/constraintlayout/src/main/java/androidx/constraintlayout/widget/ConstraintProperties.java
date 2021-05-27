@@ -254,25 +254,25 @@ public class ConstraintProperties {
                 mParams.leftToRight = mParams.UNSET;
                 mParams.leftToLeft = mParams.UNSET;
                 mParams.leftMargin = mParams.UNSET;
-                mParams.goneLeftMargin = mParams.UNSET;
+                mParams.goneLeftMargin = mParams.GONE_UNSET;
                 break;
             case RIGHT:
                 mParams.rightToRight = mParams.UNSET;
                 mParams.rightToLeft = mParams.UNSET;
                 mParams.rightMargin = mParams.UNSET;
-                mParams.goneRightMargin = mParams.UNSET;
+                mParams.goneRightMargin = mParams.GONE_UNSET;
                 break;
             case TOP:
                 mParams.topToBottom = mParams.UNSET;
                 mParams.topToTop = mParams.UNSET;
                 mParams.topMargin = mParams.UNSET;
-                mParams.goneTopMargin = mParams.UNSET;
+                mParams.goneTopMargin = mParams.GONE_UNSET;
                 break;
             case BOTTOM:
                 mParams.bottomToTop = mParams.UNSET;
                 mParams.bottomToBottom = mParams.UNSET;
                 mParams.bottomMargin = mParams.UNSET;
-                mParams.goneBottomMargin = mParams.UNSET;
+                mParams.goneBottomMargin = mParams.GONE_UNSET;
                 break;
             case BASELINE:
                 mParams.baselineToBaseline = mParams.UNSET;
@@ -281,13 +281,13 @@ public class ConstraintProperties {
                 mParams.startToEnd = mParams.UNSET;
                 mParams.startToStart = mParams.UNSET;
                 mParams.setMarginStart(mParams.UNSET);
-                mParams.goneStartMargin = mParams.UNSET;
+                mParams.goneStartMargin = mParams.GONE_UNSET;
                 break;
             case END:
                 mParams.endToStart = mParams.UNSET;
                 mParams.endToEnd = mParams.UNSET;
                 mParams.setMarginEnd(mParams.UNSET);
-                mParams.goneEndMargin = mParams.UNSET;
+                mParams.goneEndMargin = mParams.GONE_UNSET;
                 break;
             default:
                 throw new IllegalArgumentException("unknown constraint");
