@@ -166,4 +166,48 @@ public class FlowTest {
         assertEquals(flow.getHeight(), Math.max(A.getHeight(), B.getHeight()) + C.getHeight());
         assertEquals(flow.getTop(), 748);
     }
+
+    @Test
+    public void testFlowText() {
+        ConstraintWidgetContainer root = new ConstraintWidgetContainer(20, 5);
+        ConstraintWidget A = new ConstraintWidget(7, 1);
+        ConstraintWidget B = new ConstraintWidget(6, 1);
+        A.setDebugName("A");
+        B.setDebugName("B");
+        Flow flow = new Flow();
+        flow.setDebugName("flow");
+        flow.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.FIXED);
+        flow.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
+        flow.setWidth(20);
+        flow.setHeight(2);
+        flow.connect(ConstraintAnchor.Type.LEFT,root, ConstraintAnchor.Type.LEFT);
+        flow.connect(ConstraintAnchor.Type.RIGHT,root, ConstraintAnchor.Type.RIGHT);
+        flow.connect(ConstraintAnchor.Type.TOP,root, ConstraintAnchor.Type.TOP);
+        flow.connect(ConstraintAnchor.Type.BOTTOM,root, ConstraintAnchor.Type.BOTTOM);
+        flow.add(A);
+        flow.add(B);
+        root.add(flow);
+        root.add(A);
+        root.add(B);
+        root.setMeasurer(new BasicMeasure.Measurer() {
+            @Override
+            public void measure(ConstraintWidget widget, BasicMeasure.Measure measure) {
+                measure.measuredWidth = widget.getWidth();
+                measure.measuredHeight = widget.getHeight();
+            }
+
+            @Override
+            public void didMeasures() {
+
+            }
+        });
+        root.setMeasurer(sMeasurer);
+        root.measure(Optimizer.OPTIMIZATION_NONE
+                , 0, 0, 0, 0, 0, 0, 0, 0);
+        //root.layout();
+        System.out.println("root: " + root);
+        System.out.println("flow: " + flow);
+        System.out.println("A: " + A);
+        System.out.println("B: " + B);
+    }
 }

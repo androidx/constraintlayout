@@ -42,9 +42,9 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.0-alpha06'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
-//    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation project(path: ':constraintlayout')
-    implementation project(path: ':core')
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0-beta02'
+//    implementation project(path: ':constraintlayout')
+ //   implementation project(path: ':core')
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation "androidx.cardview:cardview:1.0.0"
