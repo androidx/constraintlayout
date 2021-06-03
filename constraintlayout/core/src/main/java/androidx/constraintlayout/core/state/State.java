@@ -279,7 +279,6 @@ public class State {
         container.removeAllChildren();
         mParent.getWidth().apply(this, container, ConstraintWidget.HORIZONTAL);
         mParent.getHeight().apply(this, container, ConstraintWidget.VERTICAL);
-        System.out.println("helper references: " + mHelperReferences.size());
         for (Object key : mHelperReferences.keySet()) {
             HelperReference reference = mHelperReferences.get(key);
             HelperWidget helperWidget = reference.getHelperWidget();
@@ -294,10 +293,8 @@ public class State {
         for (Object key : mReferences.keySet()) {
             Reference reference = mReferences.get(key);
             if (reference != mParent && reference.getFacade() instanceof HelperReference) {
-                System.out.println("We have one helper reference facade!");
                 HelperWidget helperWidget = ((HelperReference) reference.getFacade()).getHelperWidget();
                 if (helperWidget != null) {
-                    System.out.println("We have one helper WIDGET reference facade!");
                     Reference constraintReference = mReferences.get(key);
                     if (constraintReference == null) {
                         constraintReference = constraints(key);
