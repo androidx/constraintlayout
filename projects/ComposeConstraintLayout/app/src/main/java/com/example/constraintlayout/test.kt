@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material.Text
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.constraintlayout.core.widgets.Optimizer
 import com.example.constraintlayout.R
 
 @Preview
@@ -419,7 +420,7 @@ public fun ScreenExample3() {
     ConstraintLayout(
         ConstraintSet("""
             {
-                g1: { type: 'guideline', start: 80 },
+                g1: { type: 'vGuideline', start: 80 },
                 button: {
                   top: ['title', 'bottom', 16],
                   start: ['g1', 'start']
@@ -451,7 +452,7 @@ public fun ScreenExample4() {
     ConstraintLayout(
         ConstraintSet("""
             {
-                g1: { type: 'guideline', percent: 0.5 },
+                g1: { type: 'vGuideline', percent: 0.5 },
                 button: {
                   start: ['g1', 'start']
                 }
@@ -475,7 +476,21 @@ public fun ScreenExample5() {
     ConstraintLayout(
         ConstraintSet("""
             {
-              ba1: { type: 'barrier', contains: ['b1','b2'],
+              m1 : 100,
+              barrier: { type: 'barrier', direction: 'end', contains: ['a','b'] },
+              a: {
+                width: 'wrap',
+                height: 100,
+                center: 'parent',
+                top : ['parent', 'top', 'm1' ]
+              },
+              b: {
+                start: ['parent', 'start', 'm1' ],
+                top : ['a', 'bottom', 'm1' ]
+              },
+              c: {
+                start:  ['barrier', 'start'],
+                top : ['b', 'bottom', 'm1' ]
               }
             }
         """),
@@ -483,22 +498,108 @@ public fun ScreenExample5() {
             .fillMaxSize()
     ) {
         Button(
-            modifier = Modifier.layoutId("b1"),
+            modifier = Modifier.layoutId("a"),
             onClick = {},
         ) {
             Text(text = "A")
         }
         Button(
-            modifier = Modifier.layoutId("b2"),
+            modifier = Modifier.layoutId("b"),
             onClick = {},
         ) {
             Text(text = "B")
         }
         Button(
-            modifier = Modifier.layoutId("b3"),
+            modifier = Modifier.layoutId("c"),
             onClick = {},
         ) {
             Text(text = "C")
+        }
+    }
+}
+
+@Preview(group = "new4")
+@Composable
+public fun ScreenExample6() {
+    // VARIABLE : VALUE
+    // HORIZONTALCHAIN : ARRAY OR OBJECT
+    // VERTICALCHAIN : ARRAY OR OBJECT
+    // ID : OBJECT
+
+    ConstraintLayout(
+        ConstraintSet("""
+            {
+              Variables: {
+                bottom: 20
+              },
+              Helpers: [
+                ['hChain', ['a','b','c'], {
+                  start: ['leftGuideline1', 'start'],
+                  style: 'packed'
+                }],
+                ['hChain', ['d','e','f']],
+                ['vChain', ['d','e','f'], {
+                  bottom: ['topGuideline1', 'top']
+                }],
+                ['vGuideline', {
+                  id: 'leftGuideline1', start: 100
+                }],
+                ['hGuideline', {
+                  id: 'topGuideline1', percent: 0.5
+                }]
+              ],
+              a: {
+                bottom: ['b', 'top', 'bottom']
+              },
+              b: {
+                width: '30%',
+                height: '1:1',
+                centerVertically: 'parent'
+              },
+              c: {
+                top: ['b', 'bottom']
+              }
+            }
+        """),
+        //optimizationLevel=Optimizer.OPTIMIZATION_NONE,
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Button(
+            modifier = Modifier.layoutId("a"),
+            onClick = {},
+        ) {
+            Text(text = "A")
+        }
+        Button(
+            modifier = Modifier.layoutId("b"),
+            onClick = {},
+        ) {
+            Text(text = "B")
+        }
+        Button(
+            modifier = Modifier.layoutId("c"),
+            onClick = {},
+        ) {
+            Text(text = "C")
+        }
+        Button(
+            modifier = Modifier.layoutId("d"),
+            onClick = {},
+        ) {
+            Text(text = "D")
+        }
+        Button(
+            modifier = Modifier.layoutId("e"),
+            onClick = {},
+        ) {
+            Text(text = "E")
+        }
+        Button(
+            modifier = Modifier.layoutId("f"),
+            onClick = {},
+        ) {
+            Text(text = "F")
         }
     }
 }

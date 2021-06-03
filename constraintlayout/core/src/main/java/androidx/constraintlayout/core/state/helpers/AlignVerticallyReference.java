@@ -24,11 +24,6 @@ public class AlignVerticallyReference extends HelperReference {
 
     private float mBias = 0.5f;
 
-    private Object mTopToTop;
-    private Object mTopToBottom;
-    private Object mBottomToTop;
-    private Object mBottomToBottom;
-
     public AlignVerticallyReference(State state) {
         super(state, State.Helper.ALIGN_VERTICALLY);
     }
@@ -57,10 +52,4 @@ public class AlignVerticallyReference extends HelperReference {
         }
     }
 
-    public void topToTop(Object target) { mTopToTop = target; }
-    public void topToBottom(Object target) { mTopToBottom = target; }
-    public void bottomToTop(Object target) { mBottomToTop = target; }
-    public void bottomToBottom(Object target) { mBottomToBottom = target; }
-
-    public void bias(float bias) { mBias = bias; }
 }

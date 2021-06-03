@@ -16,6 +16,7 @@
 
 package androidx.constraintlayout.core.state.helpers;
 
+import androidx.constraintlayout.core.state.ConstraintReference;
 import androidx.constraintlayout.core.state.HelperReference;
 import androidx.constraintlayout.core.state.State;
 
@@ -29,10 +30,13 @@ public class ChainReference extends HelperReference {
     }
 
     public State.Chain getStyle() { return State.Chain.SPREAD; }
-    public void style(State.Chain style) {
+    public ChainReference style(State.Chain style) {
         mStyle = style;
+        return this;
     }
     public float getBias() { return mBias; }
-    public void bias(float bias) { mBias = bias; }
+    public ChainReference bias(float bias) { mBias = bias;
+        return this;
+    }
 
 }

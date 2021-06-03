@@ -16,18 +16,21 @@
 
 package androidx.constraintlayout.core.state;
 
+import androidx.constraintlayout.core.state.helpers.Facade;
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.HelperWidget;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class HelperReference {
+public class HelperReference extends ConstraintReference implements Facade {
     protected final State mState;
     final State.Helper mType;
     protected ArrayList<Object> mReferences = new ArrayList<>();
     private HelperWidget mHelperWidget;
 
     public HelperReference(State state, State.Helper type) {
+        super(state);
         mState = state;
         mType = type;
     }
@@ -44,6 +47,11 @@ public class HelperReference {
     }
 
     public HelperWidget getHelperWidget() { return mHelperWidget; }
+
+    @Override
+    public ConstraintWidget getConstraintWidget() {
+        return getHelperWidget();
+    }
 
     public void apply() {
         // nothing

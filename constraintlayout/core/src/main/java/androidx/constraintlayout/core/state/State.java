@@ -215,15 +215,27 @@ public class State {
     }
 
     public BarrierReference barrier(Object key, Direction direction) {
-        BarrierReference reference = (BarrierReference) helper(key, Helper.BARRIER);
-        reference.setBarrierDirection(direction);
-        return reference;
+        ConstraintReference reference = constraints(key);
+        if (reference.getFacade() == null || !(reference.getFacade() instanceof BarrierReference)) {
+            BarrierReference barrierReference = new BarrierReference(this);
+            barrierReference.setBarrierDirection(direction);
+            reference.setFacade(barrierReference);
+        }
+        return (BarrierReference) reference.getFacade();
+    }
+
+    public VerticalChainReference verticalChain() {
+        return (VerticalChainReference) helper(null, Helper.VERTICAL_CHAIN);
     }
 
     public VerticalChainReference verticalChain(Object... references) {
         VerticalChainReference reference = (VerticalChainReference) helper(null, State.Helper.VERTICAL_CHAIN);
         reference.add(references);
         return reference;
+    }
+
+    public HorizontalChainReference horizontalChain() {
+        return (HorizontalChainReference) helper(null, Helper.HORIZONTAL_CHAIN);
     }
 
     public HorizontalChainReference horizontalChain(Object... references) {
@@ -267,6 +279,7 @@ public class State {
         container.removeAllChildren();
         mParent.getWidth().apply(this, container, ConstraintWidget.HORIZONTAL);
         mParent.getHeight().apply(this, container, ConstraintWidget.VERTICAL);
+        System.out.println("helper references: " + mHelperReferences.size());
         for (Object key : mHelperReferences.keySet()) {
             HelperReference reference = mHelperReferences.get(key);
             HelperWidget helperWidget = reference.getHelperWidget();
@@ -276,6 +289,21 @@ public class State {
                     constraintReference = constraints(key);
                 }
                 constraintReference.setConstraintWidget(helperWidget);
+            }
+        }
+        for (Object key : mReferences.keySet()) {
+            Reference reference = mReferences.get(key);
+            if (reference != mParent && reference.getFacade() instanceof HelperReference) {
+                System.out.println("We have one helper reference facade!");
+                HelperWidget helperWidget = ((HelperReference) reference.getFacade()).getHelperWidget();
+                if (helperWidget != null) {
+                    System.out.println("We have one helper WIDGET reference facade!");
+                    Reference constraintReference = mReferences.get(key);
+                    if (constraintReference == null) {
+                        constraintReference = constraints(key);
+                    }
+                    constraintReference.setConstraintWidget(helperWidget);
+                }
             }
         }
         for (Object key : mReferences.keySet()) {
@@ -302,6 +330,28 @@ public class State {
                     reference.getHelperWidget().add(constraintReference.getConstraintWidget());
                 }
                 reference.apply();
+            } else {
+                reference.apply();
+            }
+        }
+        for (Object key : mReferences.keySet()) {
+            Reference reference = mReferences.get(key);
+            if (reference != mParent && reference.getFacade() instanceof HelperReference) {
+                HelperReference helperReference = (HelperReference) reference.getFacade();
+                HelperWidget helperWidget = helperReference.getHelperWidget();
+                if (helperWidget != null) {
+                    for (Object keyRef : helperReference.mReferences) {
+                        Reference constraintReference = mReferences.get(keyRef);
+                        if (constraintReference != null) {
+                            helperWidget.add(constraintReference.getConstraintWidget());
+                        } else if (keyRef instanceof Reference) {
+                            helperWidget.add(((Reference) keyRef).getConstraintWidget());
+                        } else {
+                            System.out.println("couldn't find reference for " + keyRef);
+                        }
+                    }
+                    reference.apply();
+                }
             }
         }
         for (Object key : mReferences.keySet()) {

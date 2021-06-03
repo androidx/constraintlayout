@@ -24,11 +24,6 @@ public class AlignHorizontallyReference extends HelperReference {
 
     private float mBias = 0.5f;
 
-    private Object mStartToStart;
-    private Object mStartToEnd;
-    private Object mEndToStart;
-    private Object mEndToEnd;
-
     public AlignHorizontallyReference(State state) {
         super(state, State.Helper.ALIGN_VERTICALLY);
     }
@@ -57,12 +52,4 @@ public class AlignHorizontallyReference extends HelperReference {
         }
     }
 
-    public void startToStart(Object target) { mStartToStart = target; }
-    public void startToEnd(Object target) { mStartToEnd = target; }
-    public void endToStart(Object target) { mEndToStart = target; }
-    public void endToEnd(Object target) { mEndToEnd = target; }
-
-    public void bias(float bias) {
-        mBias = bias;
-    }
 }

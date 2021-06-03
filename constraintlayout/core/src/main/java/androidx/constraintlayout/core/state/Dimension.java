@@ -30,6 +30,7 @@ public class Dimension {
     public static final Object SPREAD_DIMENSION = new Object();
     public static final Object PARENT_DIMENSION = new Object();
     public static final Object PERCENT_DIMENSION = new Object();
+    public static final Object RATIO_DIMENSION = new Object();
 
     private final int WRAP_CONTENT = -2;
 
@@ -37,7 +38,7 @@ public class Dimension {
     int mMax = Integer.MAX_VALUE;
     float mPercent = 1f;
     int mValue = 0;
-    float mRatio = 1;
+    String mRatioString = null;
     Object mInitialValue = WRAP_DIMENSION;
     boolean mIsSuggested = false;
 
@@ -91,6 +92,12 @@ public class Dimension {
 
     public static Dimension Spread() {
         return new Dimension(SPREAD_DIMENSION);
+    }
+
+    public static Dimension Ratio(String ratio) {
+        Dimension dimension = new Dimension(RATIO_DIMENSION);
+        dimension.ratio(ratio);
+        return dimension;
     }
 
     public Dimension percent(Object key, float value) {
@@ -153,7 +160,8 @@ public class Dimension {
         return this;
     }
 
-    public Dimension ratio(float ratio) {
+    public Dimension ratio(String ratio) { // WxH ratio
+        mRatioString = ratio;
         return this;
     }
 
@@ -165,18 +173,15 @@ public class Dimension {
 
     int getValue() { return mValue; }
 
-    void setRatio(float value) {
-        mRatio = value;
-    }
-
-    float getRatio() { return mRatio; }
-
     /**
      * Apply the dimension to the given constraint widget
      * @param constraintWidget
      * @param orientation
      */
     public void apply(State state, ConstraintWidget constraintWidget, int orientation) {
+        if (mRatioString != null) {
+            constraintWidget.setDimensionRatio(mRatioString);
+        }
         if (orientation == ConstraintWidget.HORIZONTAL) {
             if (mIsSuggested) {
                 constraintWidget.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
