@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motionLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layoutDescription="@xml/verification_scene_111"
+    android:background="#000">
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="start"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="32dp" />
+    
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/main_circle"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:background="#F00"
+        app:roundPercent="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/ball0"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="#FFFF"
+        app:roundPercent="1"
+        app:layout_constraintCircle="@id/main_circle"
+        app:layout_constraintCircleAngle="0"
+        app:layout_constraintCircleRadius="0dp"
+        app:layout_constraintTag="ball" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/ball1"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="#FFFF"
+        app:roundPercent="1"
+        app:layout_constraintCircle="@id/main_circle"
+        app:layout_constraintCircleAngle="22"
+        app:layout_constraintCircleRadius="0dp"
+        app:layout_constraintTag="ball" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/ball2"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="#FFFF"
+        app:roundPercent="1"
+        app:layout_constraintCircle="@id/main_circle"
+        app:layout_constraintCircleAngle="45"
+        app:layout_constraintCircleRadius="0dp"
+        app:layout_constraintTag="ball" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/ball3"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="#FFFF"
+        app:roundPercent="1"
+        app:layout_constraintCircle="@id/main_circle"
+        app:layout_constraintCircleAngle="67"
+        app:layout_constraintCircleRadius="0dp"
+        app:layout_constraintTag="ball" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/ball4"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="#FFFF"
+        app:roundPercent="1"
+        app:layout_constraintCircle="@id/main_circle"
+        app:layout_constraintCircleAngle="90"
+        app:layout_constraintCircleRadius="0dp"
+        app:layout_constraintTag="ball" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/ball5"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="#FFFF"
+        app:roundPercent="1"
+        app:layout_constraintCircle="@id/main_circle"
+        app:layout_constraintCircleAngle="112"
+        app:layout_constraintCircleRadius="0dp"
+        app:layout_constraintTag="ball" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/ball6"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="#FFFF"
+        app:roundPercent="1"
+        app:layout_constraintCircle="@id/main_circle"
+        app:layout_constraintCircleAngle="135"
+        app:layout_constraintCircleRadius="0dp"
+        app:layout_constraintTag="ball" />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/ball7"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="#FFFF"
+        app:roundPercent="1"
+        app:layout_constraintCircle="@id/main_circle"
+        app:layout_constraintCircleAngle="157"
+        app:layout_constraintCircleRadius="0dp"
+        app:layout_constraintTag="ball" />
+
+    <View
+        android:id="@+id/line0"
+        android:layout_width="400dp"
+        android:layout_height="1dp"
+        android:background="#000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:rotation="90"
+        app:layout_constraintTag="lines" />
+
+    <View
+        android:id="@+id/line1"
+        android:layout_width="400dp"
+        android:layout_height="1dp"
+        android:background="#f000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:rotation="67.5"
+        app:layout_constraintTag="lines" />
+
+    <View
+        android:id="@+id/line2"
+        android:layout_width="400dp"
+        android:layout_height="1dp"
+        android:background="#000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:rotation="45"
+        app:layout_constraintTag="lines" />
+
+    <View
+        android:id="@+id/line3"
+        android:layout_width="400dp"
+        android:layout_height="1dp"
+        android:background="#000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:rotation="22.5"
+        app:layout_constraintTag="lines" />
+
+    <View
+        android:id="@+id/line4"
+        android:layout_width="400dp"
+        android:layout_height="1dp"
+        android:background="#000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:rotation="0"
+        app:layout_constraintTag="lines" />
+
+    <View
+        android:id="@+id/line5"
+        android:layout_width="400dp"
+        android:layout_height="1dp"
+        android:background="#000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:rotation="157.5"
+        app:layout_constraintTag="lines" />
+
+    <View
+        android:id="@+id/line6"
+        android:layout_width="400dp"
+        android:layout_height="1dp"
+        android:background="#000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:rotation="135"
+        app:layout_constraintTag="lines" />
+
+    <View
+        android:id="@+id/line7"
+        android:layout_width="400dp"
+        android:layout_height="1dp"
+        android:background="#000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:rotation="112.5"
+        app:layout_constraintTag="lines" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

@@ -360,7 +360,7 @@
     <attr name="layout_constraintCircleRadius" format="dimension" />
 
     <!-- For a circular constraint the angle to the related view (center to center).  -->
-    <attr name="layout_constraintCircleAngle" format="integer" />
+    <attr name="layout_constraintCircleAngle" format="float" />
 
     <!-- explicitly enforces constraints in case of WRAP for width. -->
     <attr name="layout_constrainedWidth" format="boolean" />
