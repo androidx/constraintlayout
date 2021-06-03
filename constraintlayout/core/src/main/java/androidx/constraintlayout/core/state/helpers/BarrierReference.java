@@ -16,6 +16,7 @@
 
 package androidx.constraintlayout.core.state.helpers;
 
+import androidx.constraintlayout.core.state.ConstraintReference;
 import androidx.constraintlayout.core.widgets.Barrier;
 import androidx.constraintlayout.core.widgets.HelperWidget;
 import androidx.constraintlayout.core.state.HelperReference;
@@ -35,12 +36,15 @@ public class BarrierReference extends HelperReference {
         mDirection = barrierDirection;
     }
 
-    public void margin(Object value) {
+    @Override
+    public ConstraintReference margin(Object value) {
         margin(mState.convertDimension(value));
+        return this;
     }
 
-    public void margin(int value) {
+    public ConstraintReference margin(int value) {
         mMargin = value;
+        return this;
     }
 
     @Override

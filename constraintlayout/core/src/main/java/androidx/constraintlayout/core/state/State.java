@@ -204,27 +204,38 @@ public class State {
     }
 
     public GuidelineReference guideline(Object key, int orientation) {
-        Reference reference = mReferences.get(key);
-        if (reference == null) {
+        ConstraintReference reference = constraints(key);
+        if (reference.getFacade() == null || !(reference.getFacade() instanceof GuidelineReference)) {
             GuidelineReference guidelineReference = new GuidelineReference(this);
             guidelineReference.setOrientation(orientation);
             guidelineReference.setKey(key);
-            mReferences.put(key, guidelineReference);
-            reference = guidelineReference;
+            reference.setFacade(guidelineReference);
         }
-        return (GuidelineReference) reference;
+        return (GuidelineReference) reference.getFacade();
     }
 
     public BarrierReference barrier(Object key, Direction direction) {
-        BarrierReference reference = (BarrierReference) helper(key, Helper.BARRIER);
-        reference.setBarrierDirection(direction);
-        return reference;
+        ConstraintReference reference = constraints(key);
+        if (reference.getFacade() == null || !(reference.getFacade() instanceof BarrierReference)) {
+            BarrierReference barrierReference = new BarrierReference(this);
+            barrierReference.setBarrierDirection(direction);
+            reference.setFacade(barrierReference);
+        }
+        return (BarrierReference) reference.getFacade();
+    }
+
+    public VerticalChainReference verticalChain() {
+        return (VerticalChainReference) helper(null, Helper.VERTICAL_CHAIN);
     }
 
     public VerticalChainReference verticalChain(Object... references) {
         VerticalChainReference reference = (VerticalChainReference) helper(null, State.Helper.VERTICAL_CHAIN);
         reference.add(references);
         return reference;
+    }
+
+    public HorizontalChainReference horizontalChain() {
+        return (HorizontalChainReference) helper(null, Helper.HORIZONTAL_CHAIN);
     }
 
     public HorizontalChainReference horizontalChain(Object... references) {
@@ -247,14 +258,21 @@ public class State {
 
     public void directMapping() {
         for (Object key : mReferences.keySet()) {
-            ConstraintReference reference = constraints(key);
+            Reference ref = constraints(key);
+            if (!(ref instanceof ConstraintReference)) {
+                continue;
+            }
+            ConstraintReference reference = (ConstraintReference) ref;
             reference.setView(key);
         }
     }
 
     public void map(Object key, Object view) {
-        ConstraintReference reference = constraints(key);
-        reference.setView(view);
+        Reference ref = constraints(key);
+        if (ref instanceof ConstraintReference) {
+            ConstraintReference reference = (ConstraintReference) ref;
+            reference.setView(view);
+        }
     }
 
     public void apply(ConstraintWidgetContainer container) {
@@ -274,10 +292,24 @@ public class State {
         }
         for (Object key : mReferences.keySet()) {
             Reference reference = mReferences.get(key);
+            if (reference != mParent && reference.getFacade() instanceof HelperReference) {
+                HelperWidget helperWidget = ((HelperReference) reference.getFacade()).getHelperWidget();
+                if (helperWidget != null) {
+                    Reference constraintReference = mReferences.get(key);
+                    if (constraintReference == null) {
+                        constraintReference = constraints(key);
+                    }
+                    constraintReference.setConstraintWidget(helperWidget);
+                }
+            }
+        }
+        for (Object key : mReferences.keySet()) {
+            Reference reference = mReferences.get(key);
             if (reference != mParent) {
                 ConstraintWidget widget = reference.getConstraintWidget();
+                widget.setDebugName(reference.getKey().toString());
                 widget.setParent(null);
-                if (reference instanceof GuidelineReference) {
+                if (reference.getFacade() instanceof GuidelineReference) {
                     // we apply Guidelines first to correctly setup their ConstraintWidget.
                     reference.apply();
                 }
@@ -295,6 +327,28 @@ public class State {
                     reference.getHelperWidget().add(constraintReference.getConstraintWidget());
                 }
                 reference.apply();
+            } else {
+                reference.apply();
+            }
+        }
+        for (Object key : mReferences.keySet()) {
+            Reference reference = mReferences.get(key);
+            if (reference != mParent && reference.getFacade() instanceof HelperReference) {
+                HelperReference helperReference = (HelperReference) reference.getFacade();
+                HelperWidget helperWidget = helperReference.getHelperWidget();
+                if (helperWidget != null) {
+                    for (Object keyRef : helperReference.mReferences) {
+                        Reference constraintReference = mReferences.get(keyRef);
+                        if (constraintReference != null) {
+                            helperWidget.add(constraintReference.getConstraintWidget());
+                        } else if (keyRef instanceof Reference) {
+                            helperWidget.add(((Reference) keyRef).getConstraintWidget());
+                        } else {
+                            System.out.println("couldn't find reference for " + keyRef);
+                        }
+                    }
+                    reference.apply();
+                }
             }
         }
         for (Object key : mReferences.keySet()) {

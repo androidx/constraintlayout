@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material.Text
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.constraintlayout.core.widgets.Optimizer
 import com.example.constraintlayout.R
 
 @Preview
@@ -348,5 +349,257 @@ public fun Screen5() {
             text = stringResource(id = R.string.trial_disclaimer),
             style = MaterialTheme.typography.caption,
         )
+    }
+}
+
+
+@Preview
+@Composable
+public fun ScreenExample() {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        val (button, title) = createRefs()
+        val g1 = createGuidelineFromStart(80.dp)
+        Button(
+            modifier = Modifier.constrainAs(button) {
+                top.linkTo(title.bottom, 16.dp)
+                start.linkTo(g1)
+            },
+            onClick = {},
+        ) {
+            Text(text = stringResource(id = R.string.log_in))
+        }
+        Text(modifier = Modifier.constrainAs(title) {
+            centerVerticallyTo(parent)
+            start.linkTo(g1)
+        },
+            text = stringResource(id = R.string.welcome_header),
+            style = MaterialTheme.typography.h2,
+        )
+    }
+}
+
+@Preview
+@Composable
+public fun ScreenExample2() {
+    ConstraintLayout(
+        ConstraintSet {
+            val button = createRefFor("button")
+            val title = createRefFor("title")
+            val g1 = createGuidelineFromStart(80.dp)
+            constrain(button) {
+                top.linkTo(title.bottom, 16.dp)
+                start.linkTo(g1)
+            }
+            constrain(title) {
+                centerVerticallyTo(parent)
+                start.linkTo(g1)
+            }
+        },
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Button(
+            modifier = Modifier.layoutId("button"),
+            onClick = {},
+        ) {
+            Text(text = stringResource(id = R.string.log_in))
+        }
+        Text(modifier = Modifier.layoutId("title"),
+            text = stringResource(id = R.string.welcome_header),
+            style = MaterialTheme.typography.h2,
+        )
+    }
+}
+
+@Preview(group = "new")
+@Composable
+public fun ScreenExample3() {
+    ConstraintLayout(
+        ConstraintSet("""
+            {
+                g1: { type: 'vGuideline', start: 80 },
+                button: {
+                  top: ['title', 'bottom', 16],
+                  start: ['g1', 'start']
+                },
+                title: {
+                  centerVertically: 'parent',
+                  start: ['g1', 'start']
+                }
+            }
+        """),
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Button(
+            modifier = Modifier.layoutId("button"),
+            onClick = {},
+        ) {
+            Text(text = stringResource(id = R.string.log_in))
+        }
+        Text(modifier = Modifier.layoutId("title"),
+            text = stringResource(id = R.string.welcome_header),
+            style = MaterialTheme.typography.h2,
+        )
+    }
+}
+
+@Preview(group = "new2")
+@Composable
+public fun ScreenExample4() {
+    ConstraintLayout(
+        ConstraintSet("""
+            {
+                g1: { type: 'vGuideline', percent: 0.5 },
+                button: {
+                  start: ['g1', 'start']
+                }
+            }
+        """),
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Button(
+            modifier = Modifier.layoutId("button"),
+            onClick = {},
+        ) {
+            Text(text = stringResource(id = R.string.log_in))
+        }
+    }
+}
+
+@Preview(group = "new3")
+@Composable
+public fun ScreenExample5() {
+    ConstraintLayout(
+        ConstraintSet("""
+            {
+              m1 : 100,
+              barrier: { type: 'barrier', direction: 'end', contains: ['a','b'] },
+              a: {
+                width: 'wrap',
+                height: 100,
+                center: 'parent',
+                top : ['parent', 'top', 'm1' ]
+              },
+              b: {
+                start: ['parent', 'start', 'm1' ],
+                top : ['a', 'bottom', 'm1' ]
+              },
+              c: {
+                start:  ['barrier', 'start'],
+                top : ['b', 'bottom', 'm1' ]
+              }
+            }
+        """),
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Button(
+            modifier = Modifier.layoutId("a"),
+            onClick = {},
+        ) {
+            Text(text = "A")
+        }
+        Button(
+            modifier = Modifier.layoutId("b"),
+            onClick = {},
+        ) {
+            Text(text = "B")
+        }
+        Button(
+            modifier = Modifier.layoutId("c"),
+            onClick = {},
+        ) {
+            Text(text = "C")
+        }
+    }
+}
+
+@Preview(group = "new4")
+@Composable
+public fun ScreenExample6() {
+    // VARIABLE : VALUE
+    // HORIZONTALCHAIN : ARRAY OR OBJECT
+    // VERTICALCHAIN : ARRAY OR OBJECT
+    // ID : OBJECT
+
+    ConstraintLayout(
+        ConstraintSet("""
+            {
+              Variables: {
+                bottom: 20
+              },
+              Helpers: [
+                ['hChain', ['a','b','c'], {
+                  start: ['leftGuideline1', 'start'],
+                  style: 'packed'
+                }],
+                ['hChain', ['d','e','f']],
+                ['vChain', ['d','e','f'], {
+                  bottom: ['topGuideline1', 'top']
+                }],
+                ['vGuideline', {
+                  id: 'leftGuideline1', start: 100
+                }],
+                ['hGuideline', {
+                  id: 'topGuideline1', percent: 0.5
+                }]
+              ],
+              a: {
+                bottom: ['b', 'top', 'bottom']
+              },
+              b: {
+                width: '30%',
+                height: '1:1',
+                centerVertically: 'parent'
+              },
+              c: {
+                top: ['b', 'bottom']
+              }
+            }
+        """),
+        //optimizationLevel=Optimizer.OPTIMIZATION_NONE,
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Button(
+            modifier = Modifier.layoutId("a"),
+            onClick = {},
+        ) {
+            Text(text = "A")
+        }
+        Button(
+            modifier = Modifier.layoutId("b"),
+            onClick = {},
+        ) {
+            Text(text = "B")
+        }
+        Button(
+            modifier = Modifier.layoutId("c"),
+            onClick = {},
+        ) {
+            Text(text = "C")
+        }
+        Button(
+            modifier = Modifier.layoutId("d"),
+            onClick = {},
+        ) {
+            Text(text = "D")
+        }
+        Button(
+            modifier = Modifier.layoutId("e"),
+            onClick = {},
+        ) {
+            Text(text = "E")
+        }
+        Button(
+            modifier = Modifier.layoutId("f"),
+            onClick = {},
+        ) {
+            Text(text = "F")
+        }
     }
 }

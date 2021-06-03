@@ -22,11 +22,6 @@ import androidx.constraintlayout.core.state.State;
 
 public class VerticalChainReference extends ChainReference {
 
-    private Object mTopToTop;
-    private Object mTopToBottom;
-    private Object mBottomToTop;
-    private Object mBottomToBottom;
-
     public VerticalChainReference(State state) {
         super(state, State.Helper.VERTICAL_CHAIN);
     }
@@ -89,8 +84,4 @@ public class VerticalChainReference extends ChainReference {
         }
     }
 
-    public void topToTop(Object target) { mTopToTop = target; }
-    public void topToBottom(Object target) { mTopToBottom = target; }
-    public void bottomToTop(Object target) { mBottomToTop = target; }
-    public void bottomToBottom(Object target) { mBottomToBottom = target; }
 }

@@ -22,11 +22,6 @@ import androidx.constraintlayout.core.state.State;
 
 public class HorizontalChainReference extends ChainReference {
 
-    private Object mStartToStart;
-    private Object mStartToEnd;
-    private Object mEndToStart;
-    private Object mEndToEnd;
-
     public HorizontalChainReference(State state) {
         super(state, State.Helper.HORIZONTAL_CHAIN);
     }
@@ -44,9 +39,9 @@ public class HorizontalChainReference extends ChainReference {
             if (first == null) {
                 first = reference;
                 if (mStartToStart != null) {
-                    first.startToStart(mStartToStart);
+                    first.startToStart(mStartToStart).margin(mMarginStart);
                 } else if (mStartToEnd != null) {
-                    first.startToEnd(mStartToEnd);
+                    first.startToEnd(mStartToEnd).margin(mMarginStart);
                 } else {
                     first.startToStart(State.PARENT);
                 }
@@ -60,9 +55,9 @@ public class HorizontalChainReference extends ChainReference {
 
         if (previous != null) {
             if (mEndToStart != null) {
-                previous.endToStart(mEndToStart);
+                previous.endToStart(mEndToStart).margin(mMarginEnd);
             } else if (mEndToEnd != null) {
-                previous.endToEnd(mEndToEnd);
+                previous.endToEnd(mEndToEnd).margin(mMarginEnd);
             } else {
                 previous.endToEnd(State.PARENT);
             }
@@ -89,8 +84,4 @@ public class HorizontalChainReference extends ChainReference {
         }
     }
 
-    public void startToStart(Object target) { mStartToStart = target; }
-    public void startToEnd(Object target) { mStartToEnd = target; }
-    public void endToStart(Object target) { mEndToStart = target; }
-    public void endToEnd(Object target) { mEndToEnd = target; }
 }

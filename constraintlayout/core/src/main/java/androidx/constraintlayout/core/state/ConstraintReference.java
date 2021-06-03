@@ -16,6 +16,7 @@
 
 package androidx.constraintlayout.core.state;
 
+import androidx.constraintlayout.core.state.helpers.Facade;
 import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
@@ -42,6 +43,8 @@ public class ConstraintReference implements Reference {
 
     final State mState;
 
+    Facade mFacade = null;
+
     int mHorizontalChainStyle = ConstraintWidget.CHAIN_SPREAD;
     int mVerticalChainStyle = ConstraintWidget.CHAIN_SPREAD;
 
@@ -50,8 +53,8 @@ public class ConstraintReference implements Reference {
 
     int mMarginLeft = 0;
     int mMarginRight = 0;
-    int mMarginStart = 0;
-    int mMarginEnd = 0;
+    protected int mMarginStart = 0;
+    protected int mMarginEnd = 0;
     int mMarginTop = 0;
     int mMarginBottom = 0;
 
@@ -66,14 +69,14 @@ public class ConstraintReference implements Reference {
     Object mLeftToRight = null;
     Object mRightToLeft = null;
     Object mRightToRight = null;
-    Object mStartToStart = null;
-    Object mStartToEnd = null;
-    Object mEndToStart = null;
-    Object mEndToEnd = null;
-    Object mTopToTop = null;
-    Object mTopToBottom = null;
-    Object mBottomToTop = null;
-    Object mBottomToBottom = null;
+    protected Object mStartToStart = null;
+    protected Object mStartToEnd = null;
+    protected Object mEndToStart = null;
+    protected Object mEndToEnd = null;
+    protected Object mTopToTop = null;
+    protected Object mTopToBottom = null;
+    protected Object mBottomToTop = null;
+    protected Object mBottomToBottom = null;
     Object mBaselineToBaseline = null;
 
     State.Constraint mLast = null;
@@ -94,6 +97,15 @@ public class ConstraintReference implements Reference {
     public Object getView() {
         return mView;
     }
+
+    public void setFacade(Facade facade) {
+        mFacade = facade;
+        if (facade != null) {
+            setConstraintWidget(facade.getConstraintWidget());
+        }
+    }
+
+    public Facade getFacade() { return mFacade; }
 
     public void setConstraintWidget(ConstraintWidget widget) {
         if (widget == null) {
@@ -682,6 +694,9 @@ public class ConstraintReference implements Reference {
     public void apply() {
         if (mConstraintWidget == null) {
             return;
+        }
+        if (mFacade != null) {
+            mFacade.apply();
         }
         mHorizontalDimension.apply(mState, mConstraintWidget, HORIZONTAL);
         mVerticalDimension.apply(mState, mConstraintWidget, VERTICAL);
