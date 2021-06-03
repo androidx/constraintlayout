@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto"
+    motion:defaultDuration="2000">
+
+    <ConstraintSet
+        android:id="@+id/end" >
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/start">
+        <ConstraintOverride android:id="@+id/ball0" android:alpha="0" />
+        <ConstraintOverride android:id="@+id/ball4" android:alpha="0" />
+        <ConstraintOverride android:id="@+id/ball2" android:alpha="0" />
+        <ConstraintOverride android:id="@+id/ball6" android:alpha="0" />
+        <ConstraintOverride android:id="@+id/ball3" android:alpha="0" />
+        <ConstraintOverride android:id="@+id/ball1" android:alpha="0" />
+        <ConstraintOverride android:id="@+id/ball7" android:alpha="0" />
+        <ConstraintOverride android:id="@+id/ball5" android:alpha="0" />
+
+        <ConstraintOverride android:id="@+id/line0" android:alpha="0" />
+        <ConstraintOverride android:id="@+id/line4" android:alpha="0" />
+        <ConstraintOverride android:id="@+id/line2" android:alpha="0" />
+        <ConstraintOverride android:id="@+id/line6" android:alpha="0" />
+        <ConstraintOverride android:id="@+id/line3" android:alpha="0" />
+        <ConstraintOverride android:id="@+id/line1" android:alpha="0" />
+        <ConstraintOverride android:id="@+id/line7" android:alpha="0" />
+        <ConstraintOverride android:id="@+id/line5" android:alpha="0" />
+
+    </ConstraintSet>
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@+id/start"
+        motion:duration="100000"
+        motion:autoTransition="animateToStart" >
+    <OnClick  motion:targetId="@+id/button" motion:clickAction="transitionToEnd"/>
+
+        <KeyFrameSet>
+             <!-- show the circles in sequence -->
+            <KeyAttribute motion:motionTarget="@+id/ball0" android:alpha="0"    motion:framePosition="0"/>
+            <KeyAttribute motion:motionTarget="@+id/ball0" android:alpha="1"    motion:framePosition="1"/>
+            <KeyAttribute motion:motionTarget="@+id/ball4" android:alpha="0"    motion:framePosition="2"/>
+            <KeyAttribute motion:motionTarget="@+id/ball4" android:alpha="1"    motion:framePosition="3"/>
+            <KeyAttribute motion:motionTarget="@+id/ball2" android:alpha="0"    motion:framePosition="3"/>
+            <KeyAttribute motion:motionTarget="@+id/ball2" android:alpha="1"    motion:framePosition="4"/>
+            <KeyAttribute motion:motionTarget="@+id/ball6" android:alpha="0"    motion:framePosition="4"/>
+            <KeyAttribute motion:motionTarget="@+id/ball6" android:alpha="1"    motion:framePosition="5"/>
+            <KeyAttribute motion:motionTarget="@+id/ball3" android:alpha="0"    motion:framePosition="5"/>
+            <KeyAttribute motion:motionTarget="@+id/ball3" android:alpha="1"    motion:framePosition="6"/>
+            <KeyAttribute motion:motionTarget="@+id/ball1" android:alpha="0"    motion:framePosition="6"/>
+            <KeyAttribute motion:motionTarget="@+id/ball1" android:alpha="1"    motion:framePosition="7"/>
+            <KeyAttribute motion:motionTarget="@+id/ball7" android:alpha="0"    motion:framePosition="7"/>
+            <KeyAttribute motion:motionTarget="@+id/ball7" android:alpha="1"    motion:framePosition="8"/>
+            <KeyAttribute motion:motionTarget="@+id/ball5" android:alpha="0"    motion:framePosition="8"/>
+            <KeyAttribute motion:motionTarget="@+id/ball5" android:alpha="1"    motion:framePosition="9"/>
+            <!-- show the lines in sequence -->
+            <KeyAttribute motion:motionTarget="@+id/line0" android:alpha="0"    motion:framePosition="0"/>
+            <KeyAttribute motion:motionTarget="@+id/line0" android:alpha="1"    motion:framePosition="1"/>
+            <KeyAttribute motion:motionTarget="@+id/line4" android:alpha="0"    motion:framePosition="2"/>
+            <KeyAttribute motion:motionTarget="@+id/line4" android:alpha="1"    motion:framePosition="3"/>
+            <KeyAttribute motion:motionTarget="@+id/line2" android:alpha="0"    motion:framePosition="3"/>
+            <KeyAttribute motion:motionTarget="@+id/line2" android:alpha="1"    motion:framePosition="4"/>
+            <KeyAttribute motion:motionTarget="@+id/line6" android:alpha="0"    motion:framePosition="4"/>
+            <KeyAttribute motion:motionTarget="@+id/line6" android:alpha="1"    motion:framePosition="5"/>
+            <KeyAttribute motion:motionTarget="@+id/line3" android:alpha="0"    motion:framePosition="5"/>
+            <KeyAttribute motion:motionTarget="@+id/line3" android:alpha="1"    motion:framePosition="6"/>
+            <KeyAttribute motion:motionTarget="@+id/line1" android:alpha="0"    motion:framePosition="6"/>
+            <KeyAttribute motion:motionTarget="@+id/line1" android:alpha="1"    motion:framePosition="7"/>
+            <KeyAttribute motion:motionTarget="@+id/line7" android:alpha="0"    motion:framePosition="7"/>
+            <KeyAttribute motion:motionTarget="@+id/line7" android:alpha="1"    motion:framePosition="8"/>
+            <KeyAttribute motion:motionTarget="@+id/line5" android:alpha="0"    motion:framePosition="8"/>
+            <KeyAttribute motion:motionTarget="@+id/line5" android:alpha="1"    motion:framePosition="9"/>
+
+             <!--    Spin the circles -->
+            <KeyCycle motion:motionTarget="@+id/ball0" android:translationY="180dp"                                motion:wavePeriod="5" motion:wavePhase="0"     motion:framePosition="50"/>
+            <KeyCycle motion:motionTarget="@+id/ball1" android:translationY="166dp"  android:translationX="69dp"   motion:wavePeriod="5" motion:wavePhase="22.5"  motion:framePosition="50"/>
+            <KeyCycle motion:motionTarget="@+id/ball2" android:translationY="127dp"  android:translationX="127dp"  motion:wavePeriod="5" motion:wavePhase="45"    motion:framePosition="50"/>
+            <KeyCycle motion:motionTarget="@+id/ball3" android:translationY="69dp"   android:translationX="166dp"  motion:wavePeriod="5" motion:wavePhase="67.5"  motion:framePosition="50"/>
+            <KeyCycle motion:motionTarget="@+id/ball4" android:translationX="180dp"                                motion:wavePeriod="5" motion:wavePhase="90"    motion:framePosition="50"/>
+            <KeyCycle motion:motionTarget="@+id/ball5" android:translationY="-69dp"  android:translationX="166dp"  motion:wavePeriod="5" motion:wavePhase="112.5" motion:framePosition="50"/>
+            <KeyCycle motion:motionTarget="@+id/ball6" android:translationY="-127dp" android:translationX="127dp"  motion:wavePeriod="5" motion:wavePhase="135"   motion:framePosition="50"/>
+            <KeyCycle motion:motionTarget="@+id/ball7" android:translationY="-166dp" android:translationX="69dp"   motion:wavePeriod="5" motion:wavePhase="157.5" motion:framePosition="50"/>
+
+        </KeyFrameSet>
+
+    </Transition>
+
+
+</MotionScene>
