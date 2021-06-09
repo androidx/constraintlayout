@@ -21,6 +21,7 @@ import android.util.Log
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.LayoutScopeMarker
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
@@ -174,7 +175,6 @@ inline fun ConstraintLayout(
 enum class MotionLayoutDebugFlags {
     NONE,
     SHOW_ALL
-
 }
 
 /**
@@ -202,7 +202,9 @@ inline fun MotionLayout(
                 measurePolicy = measurePolicy,
                 content = content
             )
-            measurer.drawDebug()
+            with(measurer) {
+                drawDebug()
+            }
         }
     } else {
         @Suppress("DEPRECATION")
@@ -1831,13 +1833,13 @@ internal class MotionMeasurer : Measurer() {
     }
 
     @Composable
-    fun drawDebug() {
-        Canvas(modifier = Modifier.fillMaxSize()) {
+    fun BoxScope.drawDebug() {
+        Canvas(modifier = Modifier.matchParentSize()) {
             var index = 0
-            var pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+            val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
             for (child in root.children) {
-                var startFrame = framesStart[index]
-                var endFrame = framesEnd[index]
+                val startFrame = framesStart[index]
+                val endFrame = framesEnd[index]
                 translate(2f, 2f) {
                     drawFrame(startFrame, pathEffect, Color.White)
                     drawFrame(endFrame, pathEffect, Color.White)
@@ -1858,7 +1860,6 @@ internal class MotionMeasurer : Measurer() {
                     strokeWidth = 3f,
                     pathEffect = pathEffect
                 )
-
                 index++
             }
         }

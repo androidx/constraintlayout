@@ -4,6 +4,8 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.Modifier
@@ -617,13 +619,8 @@ public fun ScreenExample7() {
         animationSpec = tween(2000)
     )
     Column {
-        Button(onClick = { animateToEnd = !animateToEnd }) {
-            Text(text = "Run")
-        }
-
-        MotionLayout(
-            modifier = Modifier
-                .fillMaxSize(),
+     MotionLayout(
+            modifier = Modifier.fillMaxWidth().height(400.dp),
             start = ConstraintSet(
                 """
             {
@@ -674,6 +671,10 @@ public fun ScreenExample7() {
                 modifier = Modifier.layoutId("b"),
                 text = "B"
             )
+        }
+
+        Button(onClick = { animateToEnd = !animateToEnd }) {
+            Text(text = "Run")
         }
     }
 }
