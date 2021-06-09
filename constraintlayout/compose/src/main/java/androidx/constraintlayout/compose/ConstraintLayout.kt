@@ -16,20 +16,24 @@
 
 package androidx.constraintlayout.compose
 
+import android.graphics.Matrix
 import android.util.Log
 import androidx.annotation.FloatRange
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.LayoutScopeMarker
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.FirstBaseline
-import androidx.compose.ui.layout.Measurable
-import androidx.compose.ui.layout.MeasureScope
-import androidx.compose.ui.layout.MultiMeasureLayout
-import androidx.compose.ui.layout.ParentDataModifier
-import androidx.compose.ui.layout.Placeable
-import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.layout.LayoutIdParentData
-import androidx.compose.ui.layout.MeasurePolicy
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.GraphicsLayerScope
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.layout.*
 import androidx.compose.ui.platform.InspectorValueInfo
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.semantics.semantics
@@ -43,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import androidx.constraintlayout.core.state.ConstraintReference
 import androidx.constraintlayout.core.state.Dimension.*
+import androidx.constraintlayout.core.state.WidgetFrame
 import androidx.constraintlayout.core.widgets.ConstraintWidget
 import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.FIXED
 import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
@@ -56,6 +61,8 @@ import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.TRY_GIVEN_DIMENSIONS
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.USE_GIVEN_DIMENSIONS
 import org.intellij.lang.annotations.Language
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Layout that positions its children according to the constraints between them.
@@ -164,6 +171,49 @@ inline fun ConstraintLayout(
     )
 }
 
+enum class MotionLayoutDebugFlags {
+    NONE,
+    SHOW_ALL
+
+}
+
+/**
+ * Layout that interpolate its children layout given two sets of constraint and
+ * a progress (from 0 to 1)
+ */
+@Suppress("NOTHING_TO_INLINE")
+@Composable
+inline fun MotionLayout(
+    start: ConstraintSet,
+    end: ConstraintSet,
+    progress: Float,
+    debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
+    modifier: Modifier = Modifier,
+    optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
+    noinline content: @Composable () -> Unit
+) {
+    val measurer = remember { MotionMeasurer() }
+    val measurePolicy = rememberMotionLayoutMeasurePolicy(optimizationLevel, start, end, progress, measurer)
+    if (!debug.contains(MotionLayoutDebugFlags.NONE)) {
+        Box {
+            @Suppress("DEPRECATION")
+            MultiMeasureLayout(
+                modifier = modifier.semantics { designInfoProvider = measurer },
+                measurePolicy = measurePolicy,
+                content = content
+            )
+            measurer.drawDebug()
+        }
+    } else {
+        @Suppress("DEPRECATION")
+        MultiMeasureLayout(
+            modifier = modifier.semantics { designInfoProvider = measurer },
+            measurePolicy = measurePolicy,
+            content = content
+        )
+    }
+}
+
 @Composable
 @PublishedApi
 internal fun rememberConstraintLayoutMeasurePolicy(
@@ -182,6 +232,35 @@ internal fun rememberConstraintLayoutMeasurePolicy(
         )
         layout(layoutSize.width, layoutSize.height) {
             with(measurer) { performLayout(measurables) }
+        }
+    }
+}
+
+@Composable
+@PublishedApi
+internal fun rememberMotionLayoutMeasurePolicy(
+    optimizationLevel: Int,
+    constraintSetStart: ConstraintSet,
+    constraintSetEnd: ConstraintSet,
+    progress: Float,
+    measurer: MotionMeasurer
+) = remember(optimizationLevel, constraintSetStart, constraintSetEnd, progress) {
+    measurer.clear()
+    MeasurePolicy { measurables, constraints ->
+        val layoutSize = measurer.performInterpolationMeasure(
+            constraints,
+            layoutDirection,
+            constraintSetStart,
+            constraintSetEnd,
+            measurables,
+            optimizationLevel,
+            progress,
+            this
+        )
+        layout(layoutSize.width, layoutSize.height) {
+            with(measurer) {
+                performLayout(measurables, framesStart, framesEnd, progress)
+            }
         }
     }
 }
@@ -1291,20 +1370,22 @@ class State(val density: Density) : SolverState() {
 }
 
 @PublishedApi
-internal class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
-    private val root = ConstraintWidgetContainer(0, 0).also { it.measurer = this }
-    private val placeables = mutableMapOf<Measurable, Placeable>()
+internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
+    protected val root = ConstraintWidgetContainer(0, 0).also { it.measurer = this }
+    protected val placeables = mutableMapOf<Measurable, Placeable>()
     private val lastMeasures = mutableMapOf<Measurable, Array<Int>>()
     private val lastMeasureDefaultsHolder = arrayOf(0, 0, 0)
-    private val positionsCache = mutableMapOf<Measurable, IntOffset>()
-    private lateinit var density: Density
-    private lateinit var measureScope: MeasureScope
-    private val state by lazy(LazyThreadSafetyMode.NONE) { State(density) }
+    protected val positionsCache = mutableMapOf<Measurable, IntOffset>()
+    protected val motionCache = mutableMapOf<Measurable, WidgetFrame>()
+
+    protected lateinit var density: Density
+    protected lateinit var measureScope: MeasureScope
+    protected val state by lazy(LazyThreadSafetyMode.NONE) { State(density) }
 
     private val widthConstraintsHolder = IntArray(2)
     private val heightConstraintsHolder = IntArray(2)
 
-    private fun reset() {
+    protected fun reset() {
         placeables.clear()
         lastMeasures.clear()
         positionsCache.clear()
@@ -1454,17 +1535,21 @@ internal class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             true
         }
         MATCH_CONSTRAINT -> {
-            Log.d("CCL2", "Measure strategy ${measureStrategy}")
-            Log.d("CCL2", "DW ${matchConstraintDefaultDimension}")
-            Log.d("CCL2", "ODR ${otherDimensionResolved}")
-            Log.d("CCL2", "IRH ${currentDimensionResolved}")
+            if (DEBUG) {
+                Log.d("CCL2", "Measure strategy ${measureStrategy}")
+                Log.d("CCL2", "DW ${matchConstraintDefaultDimension}")
+                Log.d("CCL2", "ODR ${otherDimensionResolved}")
+                Log.d("CCL2", "IRH ${currentDimensionResolved}")
+            }
             val useDimension = currentDimensionResolved ||
                 (measureStrategy == TRY_GIVEN_DIMENSIONS ||
                     measureStrategy == USE_GIVEN_DIMENSIONS) &&
                 (measureStrategy == USE_GIVEN_DIMENSIONS ||
                     matchConstraintDefaultDimension != MATCH_CONSTRAINT_WRAP ||
                     otherDimensionResolved)
-            Log.d("CCL", "UD $useDimension")
+            if (DEBUG) {
+                Log.d("CCL", "UD $useDimension")
+            }
             outConstraints[0] = if (useDimension) dimension else 0
             outConstraints[1] = if (useDimension) dimension else rootMaxConstraint
             !useDimension
@@ -1529,7 +1614,7 @@ internal class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         }
 
         // No need to set sizes and size modes as we passed them to the state above.
-        root.optimizationLevel = optimizationLevel //Optimizer.OPTIMIZATION_STANDARD
+        root.optimizationLevel = optimizationLevel
         root.measure(root.optimizationLevel, 0, 0, 0, 0, 0, 0, 0, 0)
 
         for (child in root.children) {
@@ -1566,11 +1651,278 @@ internal class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             }
         }
         measurables.fastForEach { measurable ->
-            placeables[measurable]?.place(positionsCache[measurable]!!)
+            var frame = motionCache[measurable]!!
+            if (frame.isDefaultTransform()) {
+                placeables[measurable]?.place(positionsCache[measurable]!!)
+            } else {
+                val layerBlock: GraphicsLayerScope.() -> Unit = {
+                    rotationX = frame.rotationX
+                    rotationY = frame.rotationY
+                    rotationZ = frame.rotationZ
+                    translationX = frame.translationX
+                    translationY = frame.translationY
+                    scaleX = frame.scaleX
+                    scaleY = frame.scaleY
+                    alpha = frame.alpha
+                }
+                placeables[measurable]?.placeWithLayer(positionsCache[measurable]!!.x,
+                    positionsCache[measurable]!!.y, layerBlock = layerBlock)
+            }
         }
     }
 
     override fun didMeasures() {}
+}
+
+@PublishedApi
+internal class MotionMeasurer : Measurer() {
+    private var motionProgress = -1f
+    var framesStart = ArrayList<WidgetFrame>()
+    var framesEnd = ArrayList<WidgetFrame>()
+
+    fun Placeable.PlacementScope.performLayout(measurables: List<Measurable>, start: ArrayList<WidgetFrame>, end: ArrayList<WidgetFrame>, progress: Float) {
+        measurables.fastForEach { measurable ->
+            var placeable = placeables[measurable]
+            var frame = motionCache[measurable]!!
+            if (frame.isDefaultTransform) {
+                var x = motionCache[measurable]!!.left
+                var y = motionCache[measurable]!!.top
+                placeables[measurable]?.place(IntOffset(x, y))
+            } else {
+                val layerBlock: GraphicsLayerScope.() -> Unit = {
+                    rotationX = frame.rotationX
+                    rotationY = frame.rotationY
+                    rotationZ = frame.rotationZ
+                    translationX = frame.translationX
+                    translationY = frame.translationY
+                    scaleX = frame.scaleX
+                    scaleY = frame.scaleY
+                    alpha = frame.alpha
+                }
+                var x = motionCache[measurable]!!.left
+                var y = motionCache[measurable]!!.top
+                placeable?.placeWithLayer(x, y, layerBlock = layerBlock)
+            }
+        }
+    }
+
+    private fun measureConstraintSet(optimizationLevel: Int, constraintSetStart: ConstraintSet,
+                                     measurables: List<Measurable>, constraints: Constraints) {
+        state.reset()
+        constraintSetStart.applyTo(state, measurables)
+        state.apply(root)
+        root.width = constraints.maxWidth
+        root.height = constraints.maxHeight
+        root.updateHierarchy()
+
+        if (DEBUG) {
+            root.debugName = "ConstraintLayout"
+            root.children.forEach { child ->
+                child.debugName =
+                    (child.companionWidget as? Measurable)?.layoutId?.toString() ?: "NOTAG"
+            }
+        }
+
+        root.optimizationLevel = optimizationLevel
+        // No need to set sizes and size modes as we passed them to the state above.
+        root.measure(Optimizer.OPTIMIZATION_NONE, 0, 0, 0, 0, 0, 0, 0, 0)
+    }
+
+    private fun fillFrames(
+        optimizationLevel: Int,
+        frames: ArrayList<WidgetFrame>,
+        constraintSet: ConstraintSet,
+        measurables: List<Measurable>,
+        constraints: Constraints
+    ) {
+        measureConstraintSet(optimizationLevel, constraintSet, measurables, constraints)
+        var i = 0
+        frames.clear()
+        for (child in root.children) {
+            var frame = WidgetFrame()
+            frame.widget = child
+            frame.left = child.left
+            frame.right = child.right
+            frame.top = child.top
+            frame.bottom = child.bottom
+            frame.alpha = child.alpha
+            frame.rotationX = child.rotationX
+            frame.rotationY = child.rotationY
+            frame.rotationZ = child.rotationZ
+            frame.scaleX = child.scaleX
+            frame.scaleY = child.scaleY
+            frame.translationX = child.translationX
+            frame.translationY = child.translationY
+            frames.add(frame)
+            i++
+        }
+    }
+
+    fun performInterpolationMeasure(
+        constraints: Constraints,
+        layoutDirection: LayoutDirection,
+        constraintSetStart: ConstraintSet,
+        constraintSetEnd: ConstraintSet,
+        measurables: List<Measurable>,
+        optimizationLevel: Int,
+        progress: Float,
+        measureScope: MeasureScope
+    ): IntSize {
+        this.density = measureScope
+        this.measureScope = measureScope
+        if (motionProgress != progress || motionCache.isEmpty()) {
+            motionProgress = progress
+            if (motionCache.isEmpty()) {
+                reset()
+                // Define the size of the ConstraintLayout.
+                state.width(
+                    if (constraints.hasFixedWidth) {
+                        SolverDimension.Fixed(constraints.maxWidth)
+                    } else {
+                        SolverDimension.Wrap().min(constraints.minWidth)
+                    }
+                )
+                state.height(
+                    if (constraints.hasFixedHeight) {
+                        SolverDimension.Fixed(constraints.maxHeight)
+                    } else {
+                        SolverDimension.Wrap().min(constraints.minHeight)
+                    }
+                )
+                // Build constraint set and apply it to the state.
+                state.rootIncomingConstraints = constraints
+                state.layoutDirection = layoutDirection
+
+                fillFrames(
+                    optimizationLevel,
+                    framesStart,
+                    constraintSetStart,
+                    measurables,
+                    constraints
+                )
+                fillFrames(optimizationLevel, framesEnd, constraintSetEnd, measurables, constraints)
+            }
+            var index = 0
+            for (child in root.children) {
+                val measurable = child.companionWidget
+                if (measurable !is Measurable) continue
+                var startFrame = framesStart[index]
+                var endFrame = framesEnd[index]
+                var interpolatedFrame = WidgetFrame.interpolate(startFrame, endFrame, progress)
+                val placeable = placeables[measurable]
+                val currentWidth = placeable?.width
+                val currentHeight = placeable?.height
+                if (placeable == null
+                    || currentWidth != interpolatedFrame.width()
+                    || currentHeight != interpolatedFrame.height()
+                ) {
+                    measurable.measure(
+                        Constraints.fixed(interpolatedFrame.width(), interpolatedFrame.height())
+                    )
+                        .also {
+                            placeables[measurable] = it
+                        }
+                }
+                motionCache[measurable] = interpolatedFrame
+                index++
+            }
+        }
+        return IntSize(root.width, root.height)
+    }
+
+    @Composable
+    fun drawDebug() {
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            var index = 0
+            var pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+            for (child in root.children) {
+                var startFrame = framesStart[index]
+                var endFrame = framesEnd[index]
+                translate(2f, 2f) {
+                    drawFrame(startFrame, pathEffect, Color.White)
+                    drawFrame(endFrame, pathEffect, Color.White)
+                    drawLine(
+                        start = Offset(startFrame.centerX(), startFrame.centerY()),
+                        end = Offset(endFrame.centerX(), endFrame.centerY()),
+                        color = Color.White,
+                        strokeWidth = 3f,
+                        pathEffect = pathEffect
+                    )
+                }
+                drawFrame(startFrame, pathEffect, Color.Blue)
+                drawFrame(endFrame, pathEffect, Color.Blue)
+                drawLine(
+                    start = Offset(startFrame.centerX(), startFrame.centerY()),
+                    end = Offset(endFrame.centerX(), endFrame.centerY()),
+                    color = Color.Blue,
+                    strokeWidth = 3f,
+                    pathEffect = pathEffect
+                )
+
+                index++
+            }
+        }
+    }
+
+    private fun DrawScope.drawFrame(
+        frame: WidgetFrame,
+        pathEffect: PathEffect,
+        color: Color
+    ) {
+        if (frame.isDefaultTransform) {
+            var drawStyle = Stroke(width = 3f, pathEffect = pathEffect)
+            drawRect(color, Offset(frame.left.toFloat(), frame.top.toFloat()),
+                Size(frame.width().toFloat(), frame.height().toFloat()), style = drawStyle)
+        } else {
+            var matrix = Matrix()
+            matrix.preRotate(frame.rotationZ, frame.centerX(), frame.centerY())
+            matrix.preScale(
+                frame.scaleX,
+                frame.scaleY,
+                frame.centerX(),
+                frame.centerY()
+            )
+            var points = floatArrayOf(
+                frame.left.toFloat(), frame.top.toFloat(),
+                frame.right.toFloat(), frame.top.toFloat(),
+                frame.right.toFloat(), frame.bottom.toFloat(),
+                frame.left.toFloat(), frame.bottom.toFloat()
+            )
+            matrix.mapPoints(points)
+            drawLine(
+                start = Offset(points[0], points[1]),
+                end = Offset(points[2], points[3]),
+                color = color,
+                strokeWidth = 3f,
+                pathEffect = pathEffect
+            )
+            drawLine(
+                start = Offset(points[2], points[3]),
+                end = Offset(points[4], points[5]),
+                color = color,
+                strokeWidth = 3f,
+                pathEffect = pathEffect
+            )
+            drawLine(
+                start = Offset(points[4], points[5]),
+                end = Offset(points[6], points[7]),
+                color = color,
+                strokeWidth = 3f,
+                pathEffect = pathEffect
+            )
+            drawLine(
+                start = Offset(points[6], points[7]),
+                end = Offset(points[0], points[1]),
+                color = color,
+                strokeWidth = 3f,
+                pathEffect = pathEffect
+            )
+        }
+    }
+
+    fun clear() {
+        motionCache.clear()
+    }
 }
 
 private typealias SolverDimension = androidx.constraintlayout.core.state.Dimension

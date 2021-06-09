@@ -75,6 +75,18 @@ public class ConstraintWidget {
     private int mWidthOverride = -1;
     private int mHeightOverride = -1;
 
+    public float rotationX = 0;
+    public float rotationY = 0;
+    public float rotationZ = 0;
+
+    public float translationX = 0;
+    public float translationY = 0;
+
+    public float scaleX = 1f;
+    public float scaleY = 1f;
+
+    public float alpha = 1f;
+
     public WidgetRun getRun(int orientation) {
         if (orientation == HORIZONTAL) {
             return horizontalRun;

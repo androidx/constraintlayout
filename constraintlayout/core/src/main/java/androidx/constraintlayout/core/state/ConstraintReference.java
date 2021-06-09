@@ -65,6 +65,19 @@ public class ConstraintReference implements Reference {
     int mMarginTopGone = 0;
     int mMarginBottomGone = 0;
 
+    float mRotationX = 0;
+    float mRotationY = 0;
+    float mRotationZ = 0;
+
+    float mTranslationX = 0;
+    float mTranslationY = 0;
+    float mTranslationZ = 0;
+
+    float mAlpha = 1f;
+
+    float mScaleX = 1f;
+    float mScaleY = 1f;
+
     Object mLeftToLeft = null;
     Object mLeftToRight = null;
     Object mRightToLeft = null;
@@ -212,6 +225,61 @@ public class ConstraintReference implements Reference {
         end().clear();
         left().clear();
         right().clear();
+        return this;
+    }
+
+    public float getTranslationX() { return mTranslationX; }
+    public float getTranslationY() { return mTranslationY; }
+    public float getTranslationZ() { return mTranslationZ; }
+    public float getScaleX() { return mScaleX; }
+    public float getScaleY() { return mScaleY; }
+    public float getAlpha() { return mAlpha; }
+    public float getRotationX() { return mRotationX; }
+    public float getRotationY() { return mRotationY; }
+    public float getRotationZ() { return mRotationZ; }
+
+    public ConstraintReference rotationX(float x) {
+        mRotationX = x;
+        return this;
+    }
+
+    public ConstraintReference rotationY(float y) {
+        mRotationY = y;
+        return this;
+    }
+
+    public ConstraintReference rotationZ(float z) {
+        mRotationZ = z;
+        return this;
+    }
+
+    public ConstraintReference translationX(float x) {
+        mTranslationX = x;
+        return this;
+    }
+
+    public ConstraintReference translationY(float y) {
+        mTranslationY = y;
+        return this;
+    }
+
+    public ConstraintReference translationZ(float z) {
+        mTranslationZ = z;
+        return this;
+    }
+
+    public ConstraintReference scaleX(float x) {
+        mScaleX = x;
+        return this;
+    }
+
+    public ConstraintReference scaleY(float y) {
+        mScaleY = y;
+        return this;
+    }
+
+    public ConstraintReference alpha(float alpha) {
+        mAlpha = alpha;
         return this;
     }
 
@@ -725,5 +793,14 @@ public class ConstraintReference implements Reference {
 
         mConstraintWidget.setHorizontalBiasPercent(mHorizontalBias);
         mConstraintWidget.setVerticalBiasPercent(mVerticalBias);
+
+        mConstraintWidget.rotationX = mRotationX;
+        mConstraintWidget.rotationY = mRotationY;
+        mConstraintWidget.rotationZ = mRotationZ;
+        mConstraintWidget.translationX = mTranslationX;
+        mConstraintWidget.translationY = mTranslationY;
+        mConstraintWidget.scaleX = mScaleX;
+        mConstraintWidget.scaleY = mScaleY;
+        mConstraintWidget.alpha = mAlpha;
     }
 }

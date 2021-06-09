@@ -1,19 +1,23 @@
 package androidx.constraintlayout.compose
 
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.material.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.constraintlayout.core.widgets.Optimizer
 import com.example.constraintlayout.R
+import java.util.*
 
 @Preview
 @Composable
@@ -600,6 +604,193 @@ public fun ScreenExample6() {
             onClick = {},
         ) {
             Text(text = "F")
+        }
+    }
+}
+
+@Preview(group = "motion1")
+@Composable
+public fun ScreenExample7() {
+    var animateToEnd by remember { mutableStateOf(false) }
+    val progress by animateFloatAsState(
+        targetValue = if (animateToEnd) 1f else 0f,
+        animationSpec = tween(2000)
+    )
+    Column {
+        Button(onClick = { animateToEnd = !animateToEnd }) {
+            Text(text = "Run")
+        }
+
+        MotionLayout(
+            modifier = Modifier
+                .fillMaxSize(),
+            start = ConstraintSet(
+                """
+            {
+              a: {
+                rotationY: 180,
+                width: 'spread',
+                start: ['parent', 'start', 16],
+                end: ['parent', 'end', 16],
+                bottom: ['parent', 'bottom', 16]
+              },
+              b: {
+                alpha: 0.2,
+                scaleX: 5,
+                scaleY: 5,
+                rotationZ: -30,
+                end: ['parent', 'end', 64],
+                bottom: ['a', 'top', 64]
+              }
+            }
+        """
+            ),
+            end = ConstraintSet(
+                """
+            {
+              a: {
+                rotationZ: -30,
+                end: ['parent', 'end', 16],
+                top: ['parent', 'top', 16]
+              },
+              b: {
+                scaleX: 10,
+                centerHorizontally: 'parent',
+                top: ['a', 'bottom', 16]
+              }
+            }
+        """
+            ),
+            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
+            progress = progress
+        ) {
+            Button(
+                modifier = Modifier.layoutId("a"),
+                onClick = {},
+            ) {
+                Text(text = "Hello")
+            }
+            Text(
+                modifier = Modifier.layoutId("b"),
+                text = "B"
+            )
+        }
+    }
+}
+
+@Preview(group = "motion2")
+@Composable
+public fun ScreenExample8() {
+
+    var cs1 = ConstraintSet("""
+            {
+              a: {
+                rotationZ: -30,
+                scaleX: 5,
+                start: ['parent', 'start', 16],
+                top: ['parent', 'top', 16]
+              }
+            }
+    """)
+    var cs2 = ConstraintSet("""
+            {
+              a: {
+                rotationZ: 30,
+                end: ['parent', 'end', 16],
+                top: ['parent', 'top', 16]
+              }
+            }
+    """)
+    var cs3 = ConstraintSet("""
+            {
+              a: {
+                end: ['parent', 'end', 16],
+                bottom: ['parent', 'bottom', 16]
+              }
+            }
+    """)
+    var cs4 = ConstraintSet("""
+            {
+              a: {
+                start: ['parent', 'start', 16],
+                bottom: ['parent', 'bottom', 16]
+              } 
+            }
+    """)
+
+    var start by remember { mutableStateOf(cs1) }
+    var end by remember { mutableStateOf(cs2) }
+    var inTransition by remember { mutableStateOf(false) }
+    var progress = remember { Animatable(0f) }
+    var config by remember { mutableStateOf(0) }
+    var started by remember { mutableStateOf(false) }
+
+    if (started) {
+        LaunchedEffect(config) {
+            if (!inTransition) {
+                inTransition = true
+                progress.animateTo(
+                    1f,
+                    animationSpec = tween(2000)
+                )
+                inTransition = false
+                progress.snapTo(0f)
+                when (config) {
+                    0 -> {
+                        start = cs1
+                        end = cs2
+                    }
+                    1 -> {
+                        start = cs2
+                        end = cs3
+                    }
+                    2 -> {
+                        start = cs3
+                        end = cs4
+                    }
+                    3 -> {
+                        start = cs4
+                        end = cs1
+                    }
+                }
+            } else {
+                inTransition = false
+                progress.animateTo(
+                    0f,
+                    animationSpec = tween(2000)
+                )
+            }
+        }
+    }
+
+    Column {
+        Button(onClick = {
+            started = true;
+            if (!inTransition) {
+                config = (config + 1) % 4
+            } else if (config > 0) {
+                config = (config - 1) % 4
+            }
+        }) {
+            Text(text = "Run")
+        }
+
+        MotionLayout(
+            modifier = Modifier
+                .fillMaxSize(),
+            start = start,
+            end = end,
+            debug = EnumSet.of(
+                MotionLayoutDebugFlags.SHOW_ALL
+            ),
+            progress = progress.value
+        ) {
+            Button(
+                modifier = Modifier.layoutId("a"),
+                onClick = {},
+            ) {
+                Text(text = "Hello")
+            }
         }
     }
 }
