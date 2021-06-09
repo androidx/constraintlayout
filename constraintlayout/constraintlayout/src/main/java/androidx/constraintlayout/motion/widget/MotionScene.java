@@ -583,11 +583,12 @@ public class MotionScene {
 
         /**
          * sets the duration of the transition
+         * if set to < 16 it will be set to 16
          *
-         * @param duration in milliseconds
+         * @param duration in milliseconds (min is 16)
          */
         public void setDuration(int duration) {
-            this.mDuration = duration;
+            this.mDuration = Math.max(duration, 16);
         }
 
         /**
@@ -976,6 +977,9 @@ public class MotionScene {
 
                 } else if (attr == R.styleable.Transition_duration) {
                     mDuration = a.getInt(attr, mDuration);
+                    if (mDuration == 0) {
+                        mDuration = 16;
+                    }
                 } else if (attr == R.styleable.Transition_staggered) {
                     mStagger = a.getFloat(attr, mStagger);
                 } else if (attr == R.styleable.Transition_autoTransition) {
@@ -1139,6 +1143,9 @@ public class MotionScene {
             int attr = a.getIndex(i);
             if (attr == R.styleable.MotionScene_defaultDuration) {
                 mDefaultDuration = a.getInt(attr, mDefaultDuration);
+                if (mDefaultDuration == 0) {
+                    mDefaultDuration = 16;
+                }
             } else if (attr == R.styleable.MotionScene_layoutDuringTransition) {
                 mLayoutDuringTransition = a.getInteger(attr, LAYOUT_IGNORE_REQUEST);
             }
