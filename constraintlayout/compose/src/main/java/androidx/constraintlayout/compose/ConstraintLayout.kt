@@ -23,7 +23,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.LayoutScopeMarker
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -193,7 +192,9 @@ inline fun MotionLayout(
     noinline content: @Composable () -> Unit
 ) {
     val measurer = remember { MotionMeasurer() }
-    val measurePolicy = rememberMotionLayoutMeasurePolicy(optimizationLevel, start, end, progress, measurer)
+    val progressState = remember { mutableStateOf(0f) }
+    SideEffect { progressState.value = progress }
+    val measurePolicy = rememberMotionLayoutMeasurePolicy(optimizationLevel, start, end, progressState, measurer)
     if (!debug.contains(MotionLayoutDebugFlags.NONE)) {
         Box {
             @Suppress("DEPRECATION")
@@ -244,7 +245,7 @@ internal fun rememberMotionLayoutMeasurePolicy(
     optimizationLevel: Int,
     constraintSetStart: ConstraintSet,
     constraintSetEnd: ConstraintSet,
-    progress: Float,
+    progress: MutableState<Float>,
     measurer: MotionMeasurer
 ) = remember(optimizationLevel, constraintSetStart, constraintSetEnd, progress) {
     measurer.clear()
@@ -256,12 +257,12 @@ internal fun rememberMotionLayoutMeasurePolicy(
             constraintSetEnd,
             measurables,
             optimizationLevel,
-            progress,
+            progress.value,
             this
         )
         layout(layoutSize.width, layoutSize.height) {
             with(measurer) {
-                performLayout(measurables, framesStart, framesEnd, progress)
+                performLayout(measurables)
             }
         }
     }
@@ -1377,8 +1378,7 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
     protected val placeables = mutableMapOf<Measurable, Placeable>()
     private val lastMeasures = mutableMapOf<Measurable, Array<Int>>()
     private val lastMeasureDefaultsHolder = arrayOf(0, 0, 0)
-    protected val positionsCache = mutableMapOf<Measurable, IntOffset>()
-    protected val motionCache = mutableMapOf<Measurable, WidgetFrame>()
+    protected val frameCache = mutableMapOf<Measurable, WidgetFrame>()
 
     protected lateinit var density: Density
     protected lateinit var measureScope: MeasureScope
@@ -1390,7 +1390,7 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
     protected fun reset() {
         placeables.clear()
         lastMeasures.clear()
-        positionsCache.clear()
+        frameCache.clear()
         state.reset()
     }
 
@@ -1645,50 +1645,19 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
     }
 
     fun Placeable.PlacementScope.performLayout(measurables: List<Measurable>) {
-        if (positionsCache.isEmpty()) {
+        if (frameCache.isEmpty()) {
             for (child in root.children) {
                 val measurable = child.companionWidget
                 if (measurable !is Measurable) continue
-                positionsCache[measurable] = IntOffset(child.x, child.y)
+                var frame = WidgetFrame(child.frame.update())
+                frameCache[measurable] = frame
             }
         }
         measurables.fastForEach { measurable ->
-            var frame = motionCache[measurable]!!
+            var frame = frameCache[measurable]!!
             if (frame.isDefaultTransform()) {
-                placeables[measurable]?.place(positionsCache[measurable]!!)
-            } else {
-                val layerBlock: GraphicsLayerScope.() -> Unit = {
-                    rotationX = frame.rotationX
-                    rotationY = frame.rotationY
-                    rotationZ = frame.rotationZ
-                    translationX = frame.translationX
-                    translationY = frame.translationY
-                    scaleX = frame.scaleX
-                    scaleY = frame.scaleY
-                    alpha = frame.alpha
-                }
-                placeables[measurable]?.placeWithLayer(positionsCache[measurable]!!.x,
-                    positionsCache[measurable]!!.y, layerBlock = layerBlock)
-            }
-        }
-    }
-
-    override fun didMeasures() {}
-}
-
-@PublishedApi
-internal class MotionMeasurer : Measurer() {
-    private var motionProgress = -1f
-    var framesStart = ArrayList<WidgetFrame>()
-    var framesEnd = ArrayList<WidgetFrame>()
-
-    fun Placeable.PlacementScope.performLayout(measurables: List<Measurable>, start: ArrayList<WidgetFrame>, end: ArrayList<WidgetFrame>, progress: Float) {
-        measurables.fastForEach { measurable ->
-            var placeable = placeables[measurable]
-            var frame = motionCache[measurable]!!
-            if (frame.isDefaultTransform) {
-                var x = motionCache[measurable]!!.left
-                var y = motionCache[measurable]!!.top
+                var x = frameCache[measurable]!!.left
+                var y = frameCache[measurable]!!.top
                 placeables[measurable]?.place(IntOffset(x, y))
             } else {
                 val layerBlock: GraphicsLayerScope.() -> Unit = {
@@ -1701,12 +1670,21 @@ internal class MotionMeasurer : Measurer() {
                     scaleY = frame.scaleY
                     alpha = frame.alpha
                 }
-                var x = motionCache[measurable]!!.left
-                var y = motionCache[measurable]!!.top
-                placeable?.placeWithLayer(x, y, layerBlock = layerBlock)
+                var x = frameCache[measurable]!!.left
+                var y = frameCache[measurable]!!.top
+                placeables[measurable]?.placeWithLayer(x, y, layerBlock = layerBlock)
             }
         }
     }
+
+    override fun didMeasures() {}
+}
+
+@PublishedApi
+internal class MotionMeasurer : Measurer() {
+    private var motionProgress = -1f
+    var framesStart = ArrayList<WidgetFrame>()
+    var framesEnd = ArrayList<WidgetFrame>()
 
     private fun measureConstraintSet(optimizationLevel: Int, constraintSetStart: ConstraintSet,
                                      measurables: List<Measurable>, constraints: Constraints) {
@@ -1741,20 +1719,8 @@ internal class MotionMeasurer : Measurer() {
         var i = 0
         frames.clear()
         for (child in root.children) {
-            var frame = WidgetFrame()
-            frame.widget = child
-            frame.left = child.left
-            frame.right = child.right
-            frame.top = child.top
-            frame.bottom = child.bottom
-            frame.alpha = child.alpha
-            frame.rotationX = child.rotationX
-            frame.rotationY = child.rotationY
-            frame.rotationZ = child.rotationZ
-            frame.scaleX = child.scaleX
-            frame.scaleY = child.scaleY
-            frame.translationX = child.translationX
-            frame.translationY = child.translationY
+            child.frame.update();
+            var frame = WidgetFrame(child.frame)
             frames.add(frame)
             i++
         }
@@ -1772,9 +1738,9 @@ internal class MotionMeasurer : Measurer() {
     ): IntSize {
         this.density = measureScope
         this.measureScope = measureScope
-        if (motionProgress != progress || motionCache.isEmpty()) {
+        if (motionProgress != progress || frameCache.isEmpty()) {
             motionProgress = progress
-            if (motionCache.isEmpty()) {
+            if (frameCache.isEmpty()) {
                 reset()
                 // Define the size of the ConstraintLayout.
                 state.width(
@@ -1795,13 +1761,7 @@ internal class MotionMeasurer : Measurer() {
                 state.rootIncomingConstraints = constraints
                 state.layoutDirection = layoutDirection
 
-                fillFrames(
-                    optimizationLevel,
-                    framesStart,
-                    constraintSetStart,
-                    measurables,
-                    constraints
-                )
+                fillFrames(optimizationLevel, framesStart, constraintSetStart, measurables, constraints)
                 fillFrames(optimizationLevel, framesEnd, constraintSetEnd, measurables, constraints)
             }
             var index = 0
@@ -1810,22 +1770,26 @@ internal class MotionMeasurer : Measurer() {
                 if (measurable !is Measurable) continue
                 var startFrame = framesStart[index]
                 var endFrame = framesEnd[index]
-                var interpolatedFrame = WidgetFrame.interpolate(startFrame, endFrame, progress)
+                var interpolatedFrame = frameCache[measurable]
+                if (interpolatedFrame == null) {
+                    interpolatedFrame = WidgetFrame(child).update()
+                    frameCache[measurable] = interpolatedFrame
+                }
+                WidgetFrame.interpolate(interpolatedFrame, startFrame, endFrame, progress)
                 val placeable = placeables[measurable]
                 val currentWidth = placeable?.width
                 val currentHeight = placeable?.height
                 if (placeable == null
-                    || currentWidth != interpolatedFrame.width()
+                    || currentWidth != interpolatedFrame!!.width()
                     || currentHeight != interpolatedFrame.height()
                 ) {
                     measurable.measure(
-                        Constraints.fixed(interpolatedFrame.width(), interpolatedFrame.height())
+                        Constraints.fixed(interpolatedFrame!!.width(), interpolatedFrame.height())
                     )
                         .also {
                             placeables[measurable] = it
                         }
                 }
-                motionCache[measurable] = interpolatedFrame
                 index++
             }
         }
@@ -1922,7 +1886,7 @@ internal class MotionMeasurer : Measurer() {
     }
 
     fun clear() {
-        motionCache.clear()
+        frameCache.clear()
     }
 }
 

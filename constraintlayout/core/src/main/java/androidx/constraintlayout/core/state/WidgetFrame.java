@@ -30,47 +30,85 @@ public class WidgetFrame {
 
     // transforms
 
-    public float rotationX = 0f;
-    public float rotationY = 0f;
-    public float rotationZ = 0f;
+    public float rotationX = Float.NaN;
+    public float rotationY = Float.NaN;
+    public float rotationZ = Float.NaN;
 
-    public float translationX = 0f;
-    public float translationY = 0f;
+    public float translationX = Float.NaN;
+    public float translationY = Float.NaN;
 
-    public float scaleX = 1f;
-    public float scaleY = 1f;
+    public float scaleX = Float.NaN;
+    public float scaleY = Float.NaN;
 
-    public float alpha = 1f;
+    public float alpha = Float.NaN;
 
     public int width() { return right - left; }
     public int height() { return bottom - top; }
 
-    public boolean isDefaultTransform() {
-        return rotationX == 0f
-                && rotationY == 0f
-                && rotationZ == 0f
-                && translationX == 0f
-                && translationY == 0f
-                && scaleX == 1f
-                && scaleY == 1f
-                && alpha == 1f;
+    public WidgetFrame(ConstraintWidget widget) {
+        this.widget = widget;
     }
 
-    public static WidgetFrame interpolate(WidgetFrame start, WidgetFrame end, float progress) {
-        WidgetFrame frame = new WidgetFrame();
+    public WidgetFrame(WidgetFrame frame) {
+        widget = frame.widget;
+        left = frame.left;
+        top = frame.top;
+        right = frame.right;
+        bottom = frame.bottom;
+        rotationX = frame.rotationX;
+        rotationY = frame.rotationY;
+        rotationZ = frame.rotationZ;
+        translationX = frame.translationX;
+        translationY = frame.translationY;
+        scaleX = frame.scaleX;
+        scaleY = frame.scaleY;
+        alpha = frame.alpha;
+    }
+
+    public boolean isDefaultTransform() {
+        return rotationX == Float.NaN
+                && rotationY == Float.NaN
+                && rotationZ == Float.NaN
+                && translationX == Float.NaN
+                && translationY == Float.NaN
+                && scaleX == Float.NaN
+                && scaleY == Float.NaN
+                && alpha == Float.NaN;
+    }
+
+    public static void interpolate(WidgetFrame frame, WidgetFrame start, WidgetFrame end, float progress) {
+        frame.widget = start.widget;
         frame.left = (int) (start.left + progress*(end.left - start.left));
         frame.top = (int) (start.top + progress*(end.top - start.top));
         frame.right = (int) (start.right + progress*(end.right - start.right));
         frame.bottom = (int) (start.bottom + progress*(end.bottom - start.bottom));
-        frame.rotationX = (start.rotationX + progress*(end.rotationX - start.rotationX));
-        frame.rotationY = (start.rotationY + progress*(end.rotationY - start.rotationY));
-        frame.rotationZ = (start.rotationZ + progress*(end.rotationZ - start.rotationZ));
-        frame.scaleX = (start.scaleX + progress*(end.scaleX - start.scaleX));
-        frame.scaleY = (start.scaleY + progress*(end.scaleY - start.scaleY));
-        frame.translationX = (start.translationX + progress*(end.translationX - start.translationX));
-        frame.translationY = (start.translationY + progress*(end.translationY - start.translationY));
-        frame.alpha = (start.alpha + progress*(end.alpha - start.alpha));
-        return frame;
+
+        frame.rotationX = interpolate(start.rotationX, end.rotationX, 0f, progress);
+        frame.rotationY = interpolate(start.rotationY, end.rotationY, 0f, progress);
+        frame.rotationZ = interpolate(start.rotationZ, end.rotationZ, 0f, progress);
+
+        frame.scaleX = interpolate(start.scaleX, end.scaleX, 0f, progress);
+        frame.scaleY = interpolate(start.scaleY, end.scaleY, 0f, progress);
+
+        frame.translationX = interpolate(start.translationX, end.translationX, 0f, progress);
+        frame.translationY = interpolate(start.translationY, end.translationY, 0f, progress);
+
+        frame.alpha = interpolate(start.alpha, end.alpha, 0f, progress);
+    }
+
+    private static float interpolate(float start, float end, float defaultValue, float progress) {
+        boolean isStartUnset = Float.isNaN(start);
+        boolean isEndUnset = Float.isNaN(end);
+        if (isStartUnset && isEndUnset) {
+            return Float.NaN;
+        }
+        if (isStartUnset) {
+            start = defaultValue;
+        }
+        if (isEndUnset) {
+            end = defaultValue;
+        }
+        return (start + progress * (end - start));
     }
 
     public float centerX() {
@@ -79,5 +117,15 @@ public class WidgetFrame {
 
     public float centerY() {
         return top + (bottom - top)/2f;
+    }
+
+    public WidgetFrame update() {
+        if (widget != null) {
+            left = widget.getLeft();
+            top = widget.getTop();
+            right = widget.getRight();
+            bottom = widget.getBottom();
+        }
+        return this;
     }
 }

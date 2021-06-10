@@ -794,13 +794,13 @@ public class ConstraintReference implements Reference {
         mConstraintWidget.setHorizontalBiasPercent(mHorizontalBias);
         mConstraintWidget.setVerticalBiasPercent(mVerticalBias);
 
-        mConstraintWidget.rotationX = mRotationX;
-        mConstraintWidget.rotationY = mRotationY;
-        mConstraintWidget.rotationZ = mRotationZ;
-        mConstraintWidget.translationX = mTranslationX;
-        mConstraintWidget.translationY = mTranslationY;
-        mConstraintWidget.scaleX = mScaleX;
-        mConstraintWidget.scaleY = mScaleY;
-        mConstraintWidget.alpha = mAlpha;
+        mConstraintWidget.frame.rotationX = mRotationX;
+        mConstraintWidget.frame.rotationY = mRotationY;
+        mConstraintWidget.frame.rotationZ = mRotationZ;
+        mConstraintWidget.frame.translationX = mTranslationX;
+        mConstraintWidget.frame.translationY = mTranslationY;
+        mConstraintWidget.frame.scaleX = mScaleX;
+        mConstraintWidget.frame.scaleY = mScaleY;
+        mConstraintWidget.frame.alpha = mAlpha;
     }
 }

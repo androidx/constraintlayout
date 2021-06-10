@@ -311,7 +311,7 @@ private fun parseConstraint(
     constraintName: String
 ) {
     val constraint = element.optJSONArray(constraintName)
-    if (constraint != null) {
+    if (constraint != null && constraint.length() > 1) {
         val target = constraint[0]
         val anchor = constraint[1]
         var margin: Int = 0
@@ -369,7 +369,20 @@ private fun parseConstraint(
         }
         reference.margin(margin)
     } else {
-        // direct value?
+        var target = element.optString(constraintName)
+        if (target != null) {
+            val targetReference = if (target.toString().equals("parent")) {
+                state.constraints(SolverState.PARENT)
+            } else {
+                state.constraints(target)
+            }
+            when (constraintName) {
+                "start" -> reference.startToStart(targetReference)
+                "end" -> reference.endToEnd(targetReference)
+                "top" -> reference.topToTop(targetReference)
+                "bottom" -> reference.bottomToBottom(targetReference)
+            }
+        }
     }
 }
 

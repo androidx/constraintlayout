@@ -275,52 +275,52 @@ public fun Screen4() {
 public fun Screen5() {
     val cs = """
         {
-          g1 : { type: 'guideline', at: ['start', 44] },
-          g2 : { type: 'guideline', at: ['end', 44] },
+          g1 : { type: 'vGuideline', start: 44 },
+          g2 : { type: 'vGuideline', end: 44 },
           image: {
             width: 201, height: 179,
             top: ['parent','top', 32],
-            start: ['g1'] 
+            start: 'g1' 
           },
           header: {
-            width: 'match_constraints',
-            start: ['g1'], end: ['g2'],
+            width: 'spread',
+            start: ['g1', 'start'], end: ['g2', 'start'],
             top: ['image','bottom', 32]
           },
           tag1: {
-            width: 'match_constraints',
-            start: ['g1'], end: ['g2'],
+            width: 'spread',
+            start: 'g1', end: 'g2',
             top: ['header','bottom', 16]
           },
           tag2: {
-            width: 'match_constraints',
-            start: ['g1'], end: ['g2'],
+            width: 'spread',
+            start: 'g1', end: 'g2',
             top: ['tag1','bottom', 8]
           },
           tag3: {
-            width: 'match_constraints',
-            start: ['g1'], end: ['g2'],
+            width: 'spread',
+            start: 'g1', end: 'g2',
             top: ['tag2','bottom', 8]
           },
           bSignup: {
-            width: 'match_constraints',
-            start: ['g1'], end: ['g2'],
+            width: 'spread',
+            start: 'g1', end: 'g2',
             bottom: ['bLogin','top', 16]
           },
           bLogin: {
-            width: 'match_constraints',
-            start: ['g1'], end: ['g2'],
+            width: 'spread',
+            start: 'g1', end: 'g2',
             bottom: ['disclaimer','top', 16]
           },
           disclaimer: {
-            width: 'match_constraints',
-            start: ['g1'], end: ['g2'],
+            width: 'spread',
+            start: 'g1', end: 'g2',
             bottom: ['parent','bottom', 8]
-          },
+          }
         }
     """
     ConstraintLayout(
-        ConstraintSet {},
+        ConstraintSet(cs),
         modifier = Modifier
             .fillMaxSize()
     ) {
@@ -527,11 +527,6 @@ public fun ScreenExample5() {
 @Preview(group = "new4")
 @Composable
 public fun ScreenExample6() {
-    // VARIABLE : VALUE
-    // HORIZONTALCHAIN : ARRAY OR OBJECT
-    // VERTICALCHAIN : ARRAY OR OBJECT
-    // ID : OBJECT
-
     ConstraintLayout(
         ConstraintSet("""
             {
@@ -567,7 +562,6 @@ public fun ScreenExample6() {
               }
             }
         """),
-        //optimizationLevel=Optimizer.OPTIMIZATION_NONE,
         modifier = Modifier
             .fillMaxSize()
     ) {
