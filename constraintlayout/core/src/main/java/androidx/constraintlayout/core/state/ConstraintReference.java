@@ -91,6 +91,9 @@ public class ConstraintReference implements Reference {
     protected Object mBottomToTop = null;
     protected Object mBottomToBottom = null;
     Object mBaselineToBaseline = null;
+    Object mCircularConstraint = null;
+    private float mCircularAngle;
+    private float mCircularDistance;
 
     State.Constraint mLast = null;
 
@@ -454,6 +457,15 @@ public class ConstraintReference implements Reference {
         return this;
     }
 
+    public ConstraintReference circularConstraint(Object reference, float angle, float distance) {
+        Object ref = get(reference);
+        mCircularConstraint = ref;
+        mCircularAngle = angle;
+        mCircularDistance = distance;
+        mLast = State.Constraint.CIRCULAR_CONSTRAINT;
+        return this;
+    }
+
     public ConstraintReference width(Dimension dimension) {
         return setWidth(dimension);
     }
@@ -509,6 +521,9 @@ public class ConstraintReference implements Reference {
                 case BASELINE_TO_BASELINE: {
                     // nothing
                 } break;
+                case CIRCULAR_CONSTRAINT: {
+                    mCircularDistance = value;
+                }
             }
         } else {
             mMarginLeft = value;
@@ -655,6 +670,9 @@ public class ConstraintReference implements Reference {
                     mBaselineToBaseline = null;
                 }
                 break;
+                case CIRCULAR_CONSTRAINT: {
+                    mCircularConstraint = null;
+                }
             }
         } else {
             mLeftToLeft = null;
@@ -676,6 +694,7 @@ public class ConstraintReference implements Reference {
             mBottomToBottom = null;
             mMarginBottom = 0;
             mBaselineToBaseline = null;
+            mCircularConstraint = null;
             mHorizontalBias = 0.5f;
             mVerticalBias = 0.5f;
             mMarginLeftGone = 0;
@@ -756,6 +775,9 @@ public class ConstraintReference implements Reference {
             case BASELINE_TO_BASELINE: {
                 widget.immediateConnect(ConstraintAnchor.Type.BASELINE, target, ConstraintAnchor.Type.BASELINE, 0, 0);
             } break;
+            case CIRCULAR_CONSTRAINT: {
+                widget.connectCircularConstraint(target, mCircularAngle, (int) mCircularDistance);
+            } break;
         }
     }
 
@@ -783,6 +805,7 @@ public class ConstraintReference implements Reference {
         applyConnection(mConstraintWidget, mBottomToTop, State.Constraint.BOTTOM_TO_TOP);
         applyConnection(mConstraintWidget, mBottomToBottom, State.Constraint.BOTTOM_TO_BOTTOM);
         applyConnection(mConstraintWidget, mBaselineToBaseline, State.Constraint.BASELINE_TO_BASELINE);
+        applyConnection(mConstraintWidget, mCircularConstraint, State.Constraint.CIRCULAR_CONSTRAINT);
 
         if (mHorizontalChainStyle != ConstraintWidget.CHAIN_SPREAD) {
             mConstraintWidget.setHorizontalChainStyle(mHorizontalChainStyle);

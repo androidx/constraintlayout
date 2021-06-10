@@ -2,10 +2,8 @@ package androidx.constraintlayout.compose
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.ui.Modifier
@@ -15,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.constraintlayout.core.widgets.Optimizer
@@ -789,3 +788,166 @@ public fun ScreenExample8() {
         }
     }
 }
+
+@Preview(group = "new5")
+@Composable
+public fun ScreenExample9() {
+    ConstraintLayout(
+        ConstraintSet("""
+            {
+                center: {
+                  center: 'parent'
+                },
+                h1: { circular: ['center', 30, 100] },
+                h2: { circular: ['center', 60, 100] },
+                h3: { circular: ['center', 90, 100] },
+                h4: { circular: ['center', 120, 100] },
+                h5: { circular: ['center', 150, 100] },
+                h6: { circular: ['center', 180, 100] },
+                h7: { circular: ['center', 210, 100] },
+                h8: { circular: ['center', 240, 100] },
+                h9: { circular: ['center', 270, 100] },
+                h10: { circular: ['center', 300, 100] },
+                h11: { circular: ['center', 330, 100] },
+                h12: { circular: ['center', 0, 100] }
+            }
+        """),
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Text(modifier = Modifier.layoutId("center"), text = "C")
+        Text(modifier = Modifier.layoutId("h1"), text = "1")
+        Text(modifier = Modifier.layoutId("h2"), text = "2")
+        Text(modifier = Modifier.layoutId("h3"), text = "3")
+        Text(modifier = Modifier.layoutId("h4"), text = "4")
+        Text(modifier = Modifier.layoutId("h5"), text = "5")
+        Text(modifier = Modifier.layoutId("h6"), text = "6")
+        Text(modifier = Modifier.layoutId("h7"), text = "7")
+        Text(modifier = Modifier.layoutId("h8"), text = "8")
+        Text(modifier = Modifier.layoutId("h9"), text = "9")
+        Text(modifier = Modifier.layoutId("h10"), text = "10")
+        Text(modifier = Modifier.layoutId("h11"), text = "11")
+        Text(modifier = Modifier.layoutId("h12"), text = "12")
+    }
+}
+
+@Preview(group = "new6")
+@Composable
+public fun ScreenExample10() {
+    ConstraintLayout(
+        ConstraintSet("""
+            {
+                h1: { circular: ['parent', 0, 100] },
+                h2: { circular: ['parent', 40, 100], rotationZ: 40 },
+                h3: { circular: ['parent', 80, 100], rotationZ: 80 },
+                h4: { circular: ['parent', 120, 100], rotationZ: 120  },
+                h5: { circular: ['parent', 160, 100], rotationZ: 160  },
+                h6: { circular: ['parent', 200, 100], rotationZ: 200  },
+                h7: { circular: ['parent', 240, 100], rotationZ: 240  },
+                h8: { circular: ['parent', 280, 100], rotationZ: 280  },
+                h9: { circular: ['parent', 320, 100], rotationZ: 320  }
+            }
+        """),
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Box(modifier = Modifier.layoutId("h1").width(100.dp).height(60.dp).background(Color.Red))
+        Box(modifier = Modifier.layoutId("h2").width(100.dp).height(60.dp).background(Color.Green))
+        Box(modifier = Modifier.layoutId("h3").width(100.dp).height(60.dp).background(Color.Blue))
+        Box(modifier = Modifier.layoutId("h4").width(100.dp).height(60.dp).background(Color.Gray))
+        Box(modifier = Modifier.layoutId("h5").width(100.dp).height(60.dp).background(Color.Yellow))
+        Box(modifier = Modifier.layoutId("h6").width(100.dp).height(60.dp).background(Color.Cyan))
+        Box(modifier = Modifier.layoutId("h7").width(100.dp).height(60.dp).background(Color.Magenta))
+        Box(modifier = Modifier.layoutId("h8").width(100.dp).height(60.dp).background(Color.Red))
+        Box(modifier = Modifier.layoutId("h9").width(100.dp).height(60.dp).background(Color.DarkGray))
+    }
+}
+
+@Preview(group = "motion3")
+@Composable
+public fun ScreenExample11() {
+    var animateToEnd by remember { mutableStateOf(false) }
+    val progress by animateFloatAsState(
+        targetValue = if (animateToEnd) 1f else 0f,
+        animationSpec = tween(4000)
+    )
+    Column {
+        Button(onClick = { animateToEnd = !animateToEnd }) {
+            Text(text = "Run")
+        }
+        MotionLayout(
+            ConstraintSet("""
+            {
+                h1: { circular: ['parent', 0, 100] },
+                h2: { circular: ['parent', 40, 100], rotationZ: 40 },
+                h3: { circular: ['parent', 80, 100], rotationZ: 80 },
+                h4: { circular: ['parent', 120, 100], rotationZ: 120  },
+                h5: { circular: ['parent', 160, 100], rotationZ: 160  },
+                h6: { circular: ['parent', 200, 100], rotationZ: 200  },
+                h7: { circular: ['parent', 240, 100], rotationZ: 240  },
+                h8: { circular: ['parent', 280, 100], rotationZ: 280  },
+                h9: { circular: ['parent', 320, 100], rotationZ: 320  }
+            }
+        """),
+            ConstraintSet("""
+            {
+                h1: { circular: ['parent', 0, 100], rotationZ: 360 },
+                h2: { circular: ['parent', 40, 100], rotationZ: 400 },
+                h3: { circular: ['parent', 80, 100], rotationZ: 440 },
+                h4: { circular: ['parent', 120, 100], rotationZ: 480  },
+                h5: { circular: ['parent', 160, 100], rotationZ: 520  },
+                h6: { circular: ['parent', 200, 100], rotationZ: 560  },
+                h7: { circular: ['parent', 240, 100], rotationZ: 600  },
+                h8: { circular: ['parent', 280, 100], rotationZ: 640  },
+                h9: { circular: ['parent', 320, 100], rotationZ: 680  }
+            }
+        """),
+            progress = progress,
+            modifier = Modifier
+                .fillMaxSize().background(Color.White)
+        ) {
+            Box(modifier = Modifier.layoutId("h1").width(100.dp).height(60.dp).background(Color.Red))
+            Box(modifier = Modifier.layoutId("h2").width(100.dp).height(60.dp).background(Color.Green))
+            Box(modifier = Modifier.layoutId("h3").width(100.dp).height(60.dp).background(Color.Blue))
+            Box(modifier = Modifier.layoutId("h4").width(100.dp).height(60.dp).background(Color.Gray))
+            Box(modifier = Modifier.layoutId("h5").width(100.dp).height(60.dp).background(Color.Yellow))
+            Box(modifier = Modifier.layoutId("h6").width(100.dp).height(60.dp).background(Color.Cyan))
+            Box(modifier = Modifier.layoutId("h7").width(100.dp).height(60.dp).background(Color.Magenta))
+            Box(modifier = Modifier.layoutId("h8").width(100.dp).height(60.dp).background(Color.Red))
+            Box(modifier = Modifier.layoutId("h9").width(100.dp).height(60.dp).background(Color.DarkGray))
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
