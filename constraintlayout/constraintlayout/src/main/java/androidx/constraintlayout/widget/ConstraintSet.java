@@ -5636,8 +5636,9 @@ public class ConstraintSet {
                 String idName = getName(id);
                 writer.write(idName + ":{\n");
                 Layout l = c.layout;
-                writeDimension("'height'", l.mHeight, l.heightDefault, l.heightPercent, l.heightMin, l.heightMax, l.constrainedHeight);
-                writeDimension("'width'", l.mWidth, l.widthDefault, l.widthPercent, l.widthMin, l.widthMax, l.constrainedWidth);
+
+                writeDimension("height", l.mHeight, l.heightDefault, l.heightPercent, l.heightMin, l.heightMax, l.constrainedHeight);
+                writeDimension("width", l.mWidth, l.widthDefault, l.widthPercent, l.widthMin, l.widthMax, l.constrainedWidth);
 
                 writeConstraint(LEFT, l.leftToLeft, LEFT, l.leftMargin, l.goneLeftMargin);
                 writeConstraint(LEFT, l.leftToRight, RIGHT, l.leftMargin, l.goneLeftMargin);
@@ -5663,10 +5664,10 @@ public class ConstraintSet {
                 writeGuideline(l.orientation, l.guideBegin, l.guideEnd, l.guidePercent);
                 writeVariable("'dimensionRatio'", l.dimensionRatio);
                 writeVariable("'barrierMargin'", l.mBarrierMargin);
-                writeVariable("'mHelperType'", l.mHelperType);
-                writeVariable("'mReferenceIdString'", l.mReferenceIdString);
-                writeVariable("'mBarrierAllowsGoneWidgets'", l.mBarrierAllowsGoneWidgets);
-                writeVariable("'mWrapBehavior'", l.mWrapBehavior);
+                writeVariable("'type'", l.mHelperType);
+                writeVariable("'ReferenceId'", l.mReferenceIdString);
+                writeVariable("'mBarrierAllowsGoneWidgets'", l.mBarrierAllowsGoneWidgets ,true );
+                writeVariable("'WrapBehavior'", l.mWrapBehavior);
 
                 writeVariable("'verticalWeight'", l.verticalWeight);
                 writeVariable("'horizontalWeight'", l.horizontalWeight);
@@ -5684,23 +5685,51 @@ public class ConstraintSet {
         private void writeGuideline(int orientation, int guideBegin, int guideEnd, float guidePercent) {
         }
 
-        private void writeDimension(String dimString, int dim, int dimDefault, float dimtPercent, int dimMin, int dimMax, boolean constrainedDim) throws IOException {
-            writer.write(dimString);
 
-            if (dim == -2) {
-                writer.write(SPACE + dimString + ": {\"wrap_content\"");
 
-            } else if (dim == -1) {
-                writer.write(SPACE + dimString + ": {\"match_parent\"");
+        private void writeDimension(String dimString, int dim, int dimDefault, float dimPercent, int dimMin, int dimMax, boolean constrainedDim) throws IOException {
 
-            } else {
-                writer.write(SPACE + dimString + ": {\"" + dim + "\"");
-            }
-            writer.write("," + (dimDefault == UNSET ? "" : Integer.toString(dimDefault)));
-            writer.write("," + (dimtPercent == UNSET ? "" : Float.toString(dimtPercent)));
-            writer.write("," + (dimMin == UNSET ? "" : Integer.toString(dimMin)));
-            writer.write("," + (dimMax == UNSET ? "" : Integer.toString(dimMax)));
-            writer.write("},\n");
+
+
+
+                if ( dim  == 0 ) {
+                    if (dimMax != UNSET || dimMin != UNSET) {
+                        switch (dimDefault) {
+                            case  0: // spread
+                                writer.write(SPACE + dimString + ": {'spread' ," +dimMin +", "+dimMax+"}\n");
+                                break;
+                            case  1: //  wrap
+                                writer.write(SPACE + dimString + ": {'wrap' ," +dimMin +", "+dimMax+"}\n");
+                                return;
+                            case  2: // percent
+                                writer.write(SPACE + dimString + ": {'"+dimPercent+"'% ," +dimMin +", "+dimMax+"}\n");
+                                return;
+                        }
+                        return;
+                    }
+
+                    switch (dimDefault) {
+                        case  0: // spread is the default
+                            break;
+                        case  1: //  wrap
+                            writer.write(SPACE + dimString + ": '???????????',\n");
+                            return;
+                        case  2: // percent
+                            writer.write(SPACE + dimString + ": '"+dimPercent+"%',\n");
+                            return;
+                    }
+
+
+
+                } else   if ( dim  == -2 ) {
+                    writer.write(SPACE + dimString + ": 'wrap'\n");
+                }  else   if ( dim  == -1 ) {
+                    writer.write(SPACE + dimString + ": 'parent'\n");
+
+                }  else {
+                    writer.write(SPACE + dimString + ": "+dim+",\n");
+                }
+
         }
 
         HashMap<Integer, String> idMap = new HashMap<>();
@@ -5708,6 +5737,9 @@ public class ConstraintSet {
         String getName(int id) {
             if (idMap.containsKey(id)) {
                 return "\'" + idMap.get(id) + "\'";
+            }
+            if (id == 0) {
+                return "'parent'";
             }
             String name = lookup(id);
             idMap.put(id, name);
@@ -5746,7 +5778,7 @@ public class ConstraintSet {
             if (circleConstraint == UNSET) {
                 return;
             }
-            writer.write("circle");
+            writer.write(SPACE + "circle");
             writer.write(":[");
             writer.write(getName(circleConstraint));
             writer.write(", " + circleAngle);
@@ -5769,7 +5801,7 @@ public class ConstraintSet {
             if (value == UNSET) {
                 return;
             }
-            writer.write(name);
+            writer.write(SPACE + name);
 
             writer.write(": " + value);
             writer.write(",\n");
@@ -5780,7 +5812,7 @@ public class ConstraintSet {
             if (value == def) {
                 return;
             }
-            writer.write(name);
+            writer.write(SPACE + name);
 
             writer.write(": " + value);
             writer.write(",\n");
@@ -5791,7 +5823,17 @@ public class ConstraintSet {
             if (value == false) {
                 return;
             }
-            writer.write(name);
+            writer.write(SPACE + name);
+
+            writer.write(": " + value);
+            writer.write(",\n");
+
+        }
+        void writeVariable(String name, boolean value , boolean def) throws IOException {
+            if (value == def) {
+                return;
+            }
+            writer.write(SPACE + name);
 
             writer.write(": " + value);
             writer.write(",\n");
@@ -5802,7 +5844,7 @@ public class ConstraintSet {
             if (value == null) {
                 return;
             }
-            writer.write(name);
+            writer.write(SPACE + name);
             writer.write(": ");
             for (int i = 0; i < value.length; i++) {
                 writer.write(((i == 0) ? "[" : ", ") + getName(value[i]));
@@ -5814,7 +5856,7 @@ public class ConstraintSet {
             if (value == null) {
                 return;
             }
-            writer.write(name);
+            writer.write(SPACE + name);
             writer.write(":");
             writer.write(", " + value);
             writer.write("\n");
