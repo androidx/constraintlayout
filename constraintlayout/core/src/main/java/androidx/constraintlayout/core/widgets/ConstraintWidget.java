@@ -16,6 +16,7 @@
 package androidx.constraintlayout.core.widgets;
 
 import androidx.constraintlayout.core.*;
+import androidx.constraintlayout.core.state.WidgetFrame;
 import androidx.constraintlayout.core.widgets.analyzer.*;
 
 import java.util.ArrayList;
@@ -74,6 +75,8 @@ public class ConstraintWidget {
 
     private int mWidthOverride = -1;
     private int mHeightOverride = -1;
+
+    public WidgetFrame frame = new WidgetFrame(this);
 
     public WidgetRun getRun(int orientation) {
         if (orientation == HORIZONTAL) {

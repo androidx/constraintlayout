@@ -189,11 +189,8 @@ private fun parseGuidelineParams(
 
 fun parseBarrier(state: State, margins: HashMap<String, Int>,
                elementName: String, element: JSONObject) {
-//    val reference = state.constraints(elementName)
     val reference = state.barrier(elementName, androidx.constraintlayout.core.state.State.Direction.END)
     val constraints = element.names() ?: return
-    //state.barrier(elementName, androidx.constraintlayout.core.state.State.Direction.END)
-    //var barrierReference = reference.facade as BarrierReference
     var barrierReference = reference
     (0 until constraints.length()).forEach { i ->
         val constraintName = constraints[i].toString()
@@ -275,6 +272,30 @@ fun parseWidget(
                 reference.topToTop(targetReference)
                 reference.bottomToBottom(targetReference)
             }
+            "alpha" -> {
+                reference.alpha(element.getDouble(constraintName).toFloat())
+            }
+            "scaleX" -> {
+                reference.scaleX(element.getDouble(constraintName).toFloat())
+            }
+            "scaleY" -> {
+                reference.scaleY(element.getDouble(constraintName).toFloat())
+            }
+            "translationX" -> {
+                reference.translationX(element.getDouble(constraintName).toFloat())
+            }
+            "translationY" -> {
+                reference.translationY(element.getDouble(constraintName).toFloat())
+            }
+            "rotationX" -> {
+                reference.rotationX(element.getDouble(constraintName).toFloat())
+            }
+            "rotationY" -> {
+                reference.rotationY(element.getDouble(constraintName).toFloat())
+            }
+            "rotationZ" -> {
+                reference.rotationZ(element.getDouble(constraintName).toFloat())
+            }
             else -> {
                 parseConstraint(state, margins, element, reference, constraintName)
             }
@@ -290,7 +311,7 @@ private fun parseConstraint(
     constraintName: String
 ) {
     val constraint = element.optJSONArray(constraintName)
-    if (constraint != null) {
+    if (constraint != null && constraint.length() > 1) {
         val target = constraint[0]
         val anchor = constraint[1]
         var margin: Int = 0
@@ -305,7 +326,6 @@ private fun parseConstraint(
             }
         }
         margin = state.convertDimension(Dp(margin.toFloat()))
-        System.out.println("margin used $margin")
 
         val targetReference = if (target.toString().equals("parent")) {
             state.constraints(SolverState.PARENT)
@@ -349,7 +369,20 @@ private fun parseConstraint(
         }
         reference.margin(margin)
     } else {
-        // direct value?
+        var target = element.optString(constraintName)
+        if (target != null) {
+            val targetReference = if (target.toString().equals("parent")) {
+                state.constraints(SolverState.PARENT)
+            } else {
+                state.constraints(target)
+            }
+            when (constraintName) {
+                "start" -> reference.startToStart(targetReference)
+                "end" -> reference.endToEnd(targetReference)
+                "top" -> reference.topToTop(targetReference)
+                "bottom" -> reference.bottomToBottom(targetReference)
+            }
+        }
     }
 }
 
