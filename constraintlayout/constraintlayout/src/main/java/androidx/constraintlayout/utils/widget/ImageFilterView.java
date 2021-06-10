@@ -395,7 +395,7 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
     /**
      * sets the rotation angle of the image in degrees
      *
-     * @rotation the rotation in degrees
+     * @param rotation the rotation in degrees
      */
     public void setImageRotate(float rotation) {
         mRotate = rotation;

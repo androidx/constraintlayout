@@ -48,8 +48,7 @@ import android.view.View;
  * and {@link ConstraintSet#setGuidelinePercent} functions in {@link ConstraintSet}.
  * <p>
  * Example of a {@code Button} constrained to a vertical {@code Guideline}:<br>
- * {@sample resources/examples/Guideline.xml
- *          Guideline}
+ * {@sample resources/examples/Guideline.xml Guideline}
  */
 public class Guideline extends View {
     public Guideline(Context context) {
