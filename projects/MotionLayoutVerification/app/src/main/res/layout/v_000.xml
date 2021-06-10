@@ -5,59 +5,51 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_optimizationLevel="none"
-    tools:context=".VerificationActivity">
+    android:background="#D9A"
+    tools:context=".ParseLayouts">
 
-    <androidx.constraintlayout.motion.widget.MotionLayout
-        android:layout_width="match_parent"
+    <FrameLayout
+        android:id="@+id/frame"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView4"
+        android:layout_margin="32dp"
+        android:background="#0F0"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layoutDescription="@xml/main_scene"
-        tools:motionProgress="0.3"
-
-        app:layout_optimizationLevel="none"
-        tools:context=".VerificationActivity">
-
-        <View
-            android:id="@+id/button"
-            android:background="#A66"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:text="Button"
-            tools:layout_editor_absoluteX="147dp"
-            tools:layout_editor_absoluteY="230dp" />
-
-        <androidx.constraintlayout.helper.widget.MotionEffect
-            android:id="@+id/foo"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            app:constraint_referenced_ids="button" />
-
-        <Button
-            android:id="@+id/button30"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="OnClick"
-            app:layout_constraintBottom_toTopOf="@+id/textView12"
-            app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent">
 
 
-    </androidx.constraintlayout.motion.widget.MotionLayout>
+    </FrameLayout>
 
-    <TextView
-        android:id="@+id/textView4"
+    <Button
+        android:id="@+id/prev"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:text="prev"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:onClick="prev" />
+
+    <Button
+        android:id="@+id/next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="next"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:onClick="next" />
+
+    <TextView
+        android:id="@+id/layoutName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/prev"
+        app:layout_constraintStart_toEndOf="@+id/prev"
+        app:layout_constraintEnd_toStartOf="@+id/next"
+        app:layout_constraintTop_toTopOf="@+id/prev" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

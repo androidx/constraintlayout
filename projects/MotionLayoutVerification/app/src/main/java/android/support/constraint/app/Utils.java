@@ -88,7 +88,7 @@ public class Utils {
         }
         return null;
     }
-   static String[] getLayouts(String  match) {
+    public  static String[] getLayouts(String  match) {
         ArrayList<String> list = new ArrayList<>();
         Field[] f = R.layout.class.getDeclaredFields();
         boolean REVERSE = false;
@@ -114,4 +114,43 @@ public class Utils {
         }
         return list.toArray(new String[0]);
     }
+
+    public interface Test {
+        boolean test(String s);
+    }
+    public static String[] getLayouts(String regex, boolean REVERSE, String SHOW_FIRST) {
+       return getLayouts(new Test() {
+            @Override
+            public boolean test(String s) {
+                return s.matches(regex);
+            }
+        }, REVERSE,SHOW_FIRST);
+    }
+
+    public static String[] getLayouts(Test filter, boolean REVERSE, String SHOW_FIRST) {
+        ArrayList<String> list = new ArrayList<>();
+        Field[] f = R.layout.class.getDeclaredFields();
+
+        Arrays.sort(f, (f1, f2) -> {
+            int v = (REVERSE ? -1 : 1) * f1.getName().compareTo(f2.getName());
+            if (SHOW_FIRST == null) {
+                return v;
+            }
+            if (f1.getName().matches(SHOW_FIRST)) {
+                return -1;
+            }
+            if (f2.getName().matches(SHOW_FIRST)) {
+                return +1;
+            }
+            return v;
+        });
+        for (int i = 0; i < f.length; i++) {
+            String name = f[i].getName();
+            if (filter == null || filter.test(name)) {
+                list.add(name);
+            }
+        }
+        return list.toArray(new String[0]);
+    }
+
 }

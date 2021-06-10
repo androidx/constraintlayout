@@ -20,6 +20,7 @@
         </activity>
         <activity android:name=".ButtonDriveAnimate" />
         <activity android:name=".OnCreateTransiton" />
+        <activity android:name=".ParseLayouts" />
 
         <activity android:name=".RotationActivity"
             android:configChanges="orientation|screenSize"/>
