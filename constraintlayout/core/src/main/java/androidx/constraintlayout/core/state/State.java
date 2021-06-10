@@ -60,7 +60,8 @@ public class State {
         BOTTOM_TO_BOTTOM,
         BASELINE_TO_BASELINE,
         CENTER_HORIZONTALLY,
-        CENTER_VERTICALLY
+        CENTER_VERTICALLY,
+        CIRCULAR_CONSTRAINT
     }
 
     public enum Direction {

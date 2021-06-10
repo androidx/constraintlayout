@@ -333,8 +333,15 @@ private fun parseConstraint(
             state.constraints(target)
         }
         when (constraintName) {
-            "centerHorizontally" -> {
-
+            "circular" -> {
+                var angle = 0f
+                if (constraint[1] is Float) {
+                    angle = constraint[1] as Float
+                }
+                if (constraint[1] is Int) {
+                    angle = (constraint[1] as Int).toFloat()
+                }
+                reference.circularConstraint(targetReference, angle, 0f)
             }
             "start" -> {
                 when (anchor) {
