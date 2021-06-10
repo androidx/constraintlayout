@@ -62,6 +62,7 @@ import java.util.Map;
 public class MotionScene {
     public static final String TAG = "MotionScene";
     private static final boolean DEBUG = false;
+    private static final int MIN_DURATION = 8;
     final static int TRANSITION_BACKWARD = 0;
     final static int TRANSITION_FORWARD = 1;
     private static final int SPLINE_STRING = -1;
@@ -583,12 +584,12 @@ public class MotionScene {
 
         /**
          * sets the duration of the transition
-         * if set to < 16 it will be set to 16
+         * if set to < 8 it will be set to 8
          *
-         * @param duration in milliseconds (min is 16)
+         * @param duration in milliseconds (min is 8)
          */
         public void setDuration(int duration) {
-            this.mDuration = Math.max(duration, 16);
+            this.mDuration = Math.max(duration, MIN_DURATION);
         }
 
         /**
@@ -977,8 +978,8 @@ public class MotionScene {
 
                 } else if (attr == R.styleable.Transition_duration) {
                     mDuration = a.getInt(attr, mDuration);
-                    if (mDuration == 0) {
-                        mDuration = 16;
+                    if (mDuration < MIN_DURATION) {
+                        mDuration = MIN_DURATION;
                     }
                 } else if (attr == R.styleable.Transition_staggered) {
                     mStagger = a.getFloat(attr, mStagger);
@@ -1143,8 +1144,8 @@ public class MotionScene {
             int attr = a.getIndex(i);
             if (attr == R.styleable.MotionScene_defaultDuration) {
                 mDefaultDuration = a.getInt(attr, mDefaultDuration);
-                if (mDefaultDuration == 0) {
-                    mDefaultDuration = 16;
+                if (mDefaultDuration < MIN_DURATION) {
+                    mDefaultDuration = MIN_DURATION;
                 }
             } else if (attr == R.styleable.MotionScene_layoutDuringTransition) {
                 mLayoutDuringTransition = a.getInteger(attr, LAYOUT_IGNORE_REQUEST);
