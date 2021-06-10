@@ -2433,10 +2433,12 @@ public class ConstraintLayout extends ViewGroup {
          * If the child is the start of a horizontal chain, this attribute will drive how
          * the elements of the chain will be positioned. The possible values are:
          * <ul>
-         * <li>{@see CHAIN_SPREAD} -- the elements will be spread out</li>
-         * <li>{@see CHAIN_SPREAD_INSIDE} -- similar, but the endpoints of the chain will not be spread out</li>
-         * <li>{@see CHAIN_PACKED} -- the elements of the chain will be packed together. The horizontal
-         * bias attribute of the child will then affect the positioning of the packed elements</li>
+         * <li>{@link #CHAIN_SPREAD} -- the elements will be spread out</li>
+         * <li>{@link #CHAIN_SPREAD_INSIDE} -- similar, but the endpoints of the chain will not
+         * be spread out</li>
+         * <li>{@link #CHAIN_PACKED} -- the elements of the chain will be packed together. The
+         * horizontal bias attribute of the child will then affect the positioning of the packed
+         * elements</li>
          * </ul>
          */
         public int horizontalChainStyle = CHAIN_SPREAD;
@@ -2445,10 +2447,12 @@ public class ConstraintLayout extends ViewGroup {
          * If the child is the start of a vertical chain, this attribute will drive how
          * the elements of the chain will be positioned. The possible values are:
          * <ul>
-         * <li>{@see CHAIN_SPREAD} -- the elements will be spread out</li>
-         * <li>{@see CHAIN_SPREAD_INSIDE} -- similar, but the endpoints of the chain will not be spread out</li>
-         * <li>{@see CHAIN_PACKED} -- the elements of the chain will be packed together. The vertical
-         * bias attribute of the child will then affect the positioning of the packed elements</li>
+         * <li>{@link #CHAIN_SPREAD} -- the elements will be spread out</li>
+         * <li>{@link #CHAIN_SPREAD_INSIDE} -- similar, but the endpoints of the chain will not
+         * be spread out</li>
+         * <li>{@link #CHAIN_PACKED} -- the elements of the chain will be packed together. The
+         * vertical bias attribute of the child will then affect the positioning of the packed
+         * elements</li>
          * </ul>
          */
         public int verticalChainStyle = CHAIN_SPREAD;
@@ -2456,12 +2460,15 @@ public class ConstraintLayout extends ViewGroup {
         /**
          * Define how the widget horizontal dimension is handled when set to MATCH_CONSTRAINT
          * <ul>
-         * <li>{@see MATCH_CONSTRAINT_SPREAD} -- the default. The dimension will expand up to the constraints, minus margins</li>
-         * <li>{@see MATCH_CONSTRAINT_WRAP} -- DEPRECATED -- use instead WRAP_CONTENT and constrainedWidth=true<br>
+         * <li>{@link #MATCH_CONSTRAINT_SPREAD} -- the default. The dimension will expand up to
+         * the constraints, minus margins</li>
+         * <li>{@link #MATCH_CONSTRAINT_WRAP} -- DEPRECATED -- use instead WRAP_CONTENT and
+         * constrainedWidth=true<br>
          * The dimension will be the same as WRAP_CONTENT, unless the size ends
          * up too large for the constraints; in that case the dimension will expand up to the constraints, minus margins</li>
          * This attribute may not be applied if the widget is part of a chain in that dimension.
-         * <li>{@see MATCH_CONSTRAINT_PERCENT} -- The dimension will be a percent of another widget (by default, the parent)</li>
+         * <li>{@link #MATCH_CONSTRAINT_PERCENT} -- The dimension will be a percent of another
+         * widget (by default, the parent)</li>
          * </ul>
          */
         public int matchConstraintDefaultWidth = MATCH_CONSTRAINT_SPREAD;
@@ -2469,12 +2476,15 @@ public class ConstraintLayout extends ViewGroup {
         /**
          * Define how the widget vertical dimension is handled when set to MATCH_CONSTRAINT
          * <ul>
-         * <li>{@see MATCH_CONSTRAINT_SPREAD} -- the default. The dimension will expand up to the constraints, minus margins</li>
-         * <li>{@see MATCH_CONSTRAINT_WRAP} -- DEPRECATED -- use instead WRAP_CONTENT and constrainedHeight=true<br>
+         * <li>{@link #MATCH_CONSTRAINT_SPREAD} -- the default. The dimension will expand up to
+         * the constraints, minus margins</li>
+         * <li>{@link #MATCH_CONSTRAINT_WRAP} -- DEPRECATED -- use instead WRAP_CONTENT and
+         * constrainedWidth=true<br>
          * The dimension will be the same as WRAP_CONTENT, unless the size ends
          * up too large for the constraints; in that case the dimension will expand up to the constraints, minus margins</li>
          * This attribute may not be applied if the widget is part of a chain in that dimension.
-         * <li>{@see MATCH_CONSTRAINT_PERCENT} -- The dimension will be a percent of another widget (by default, the parent)</li>
+         * <li>{@link #MATCH_CONSTRAINT_PERCENT} -- The dimension will be a percent of another
+         * widget (by default, the parent)</li>
          * </ul>
          */
         public int matchConstraintDefaultHeight = MATCH_CONSTRAINT_SPREAD;

@@ -56,11 +56,9 @@ import java.util.Map;
  * The information to transition between multiple ConstraintSets
  * This Class is meant to be used from XML
  *
- * @hide
  */
-
 public class MotionScene {
-    public static final String TAG = "MotionScene";
+    private static final String TAG = "MotionScene";
     private static final boolean DEBUG = false;
     private static final int MIN_DURATION = 8;
     final static int TRANSITION_BACKWARD = 0;

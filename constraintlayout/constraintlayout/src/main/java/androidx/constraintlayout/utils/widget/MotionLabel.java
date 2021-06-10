@@ -345,7 +345,7 @@ public class MotionLabel extends View implements FloatLayout {
     private void setUpTheme(Context context, @Nullable AttributeSet attrs) {
         TypedValue typedValue = new TypedValue();
         final Resources.Theme theme = context.getTheme();
-        theme.resolveAttribute(R.attr.colorPrimary, typedValue, true);
+        theme.resolveAttribute(androidx.appcompat.R.attr.colorPrimary, typedValue, true);
         mPaint.setColor(mTextFillColor = typedValue.data);
     }
 
@@ -612,7 +612,7 @@ public class MotionLabel extends View implements FloatLayout {
         }
     }
 
-    private void setTypeface(Typeface tf) {
+    public void setTypeface(Typeface tf) {
         if (mPaint.getTypeface() != tf) {
             mPaint.setTypeface(tf);
             if (mLayout != null) {

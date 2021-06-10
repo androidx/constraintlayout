@@ -72,8 +72,7 @@ import java.util.Set;
  * </li>
  * </ul><p>
  * Example code:<br>
- * {@sample resources/examples/ExampleConstraintSet.java
- * Example}
+ * {@sample resources/examples/ExampleConstraintSet.java Example}
  */
 public class ConstraintSet {
     private static final String TAG = "ConstraintSet";
@@ -3617,10 +3616,14 @@ public class ConstraintSet {
      * How the elements of the horizontal chain will be positioned. if the dimension
      * behaviour is set to MATCH_CONSTRAINT. The possible values are:
      *
-     * <ul> <li>{@see CHAIN_SPREAD} -- the elements will be spread out</li> <li>{@see
-     * CHAIN_SPREAD_INSIDE} -- similar, but the endpoints of the chain will not be spread out</li>
-     * <li>{@see CHAIN_PACKED} -- the elements of the chain will be packed together. The horizontal
-     * bias attribute of the child will then affect the positioning of the packed elements</li> </ul>
+     * <ul>
+     * <li>{@link #CHAIN_SPREAD} -- the elements will be spread out</li>
+     * <li>{@link #CHAIN_SPREAD_INSIDE} -- similar, but the endpoints of the chain will not
+     * be spread out</li>
+     * <li>{@link #CHAIN_PACKED} -- the elements of the chain will be packed together. The
+     * horizontal bias attribute of the child will then affect the positioning of the packed
+     * elements</li>
+     * </ul>
      *
      * @param viewId     ID of view to adjust its HorizontalChainStyle
      * @param chainStyle the weight that we can use to distribute the horizontal space
@@ -3633,10 +3636,14 @@ public class ConstraintSet {
      * How the elements of the vertical chain will be positioned. in a chain, if the dimension
      * behaviour is set to MATCH_CONSTRAINT
      *
-     * <ul> <li>{@see CHAIN_SPREAD} -- the elements will be spread out</li> <li>{@see
-     * CHAIN_SPREAD_INSIDE} -- similar, but the endpoints of the chain will not be spread out</li>
-     * <li>{@see CHAIN_PACKED} -- the elements of the chain will be packed together. The horizontal
-     * bias attribute of the child will then affect the positioning of the packed elements</li> </ul>
+     * <ul>
+     * <li>{@link #CHAIN_SPREAD} -- the elements will be spread out</li>
+     * <li>{@link #CHAIN_SPREAD_INSIDE} -- similar, but the endpoints of the chain will not
+     * be spread out</li>
+     * <li>{@link #CHAIN_PACKED} -- the elements of the chain will be packed together. The
+     * vertical bias attribute of the child will then affect the positioning of the packed
+     * elements</li>
+     * </ul>
      *
      * @param viewId     ID of view to adjust its VerticalChainStyle
      * @param chainStyle the weight that we can use to distribute the horizontal space
