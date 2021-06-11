@@ -27,8 +27,85 @@ import org.json.JSONObject
 
 internal val PARSER_DEBUG = false
 
-internal fun parseJSON(content: String, state: State) {
+class LayoutVariables {
     val margins = HashMap<String, Int>()
+    val generators = HashMap<String, GeneratedValue>()
+    val arrayIds = HashMap<String, ArrayList<String>>()
+
+    fun put(elementName: String, element: Int) {
+        margins[elementName] = element
+    }
+
+    fun put(elementName: String, start: Float, incrementBy: Float) {
+        if (generators.containsKey(elementName)) {
+            if (generators[elementName] is OverrideValue) {
+                return
+            }
+        }
+        var generator = Generator(start, incrementBy)
+        generators[elementName] = generator
+    }
+
+    fun putOverride(elementName: String, value: Float) {
+        var generator = OverrideValue(value)
+        generators[elementName] = generator
+    }
+
+    fun get(elementName: Any): Float {
+        if (elementName is String) {
+            if (generators.containsKey(elementName)) {
+                val value = generators[elementName]!!.value()
+                return value
+            }
+            if (margins.containsKey(elementName)) {
+                return margins[elementName]!!.toFloat()
+            }
+        } else if (elementName is Int) {
+            return elementName.toFloat()
+        } else if (elementName is Float) {
+            return elementName
+        }
+        return 0f
+    }
+
+    fun getList(elementName: String) : ArrayList<String>? {
+        if (arrayIds.containsKey(elementName)) {
+            return arrayIds[elementName]
+        }
+        return null
+    }
+
+    fun put(elementName: String, elements: ArrayList<String>) {
+        arrayIds[elementName] = elements
+    }
+
+}
+interface GeneratedValue {
+    fun value() : Float
+}
+
+class Generator(start: Float, incrementBy: Float) : GeneratedValue {
+    var start : Float = start
+    var incrementBy: Float = incrementBy
+    var current : Float = start
+    var stop = false
+
+    override fun value() : Float {
+        if (!stop) {
+            current += incrementBy
+        }
+        return current
+    }
+}
+
+class OverrideValue(value: Float) : GeneratedValue {
+    var value : Float = value
+    override fun value() : Float {
+        return value
+    }
+}
+
+internal fun parseJSON(content: String, state: State, layoutVariables: LayoutVariables) {
     val json = JSONObject(content)
     val elements = json.names() ?: return
     (0 until elements.length()).forEach { i ->
@@ -38,8 +115,9 @@ internal fun parseJSON(content: String, state: State) {
             System.out.println("element <$elementName = $element> " + element.javaClass)
         }
         when (elementName) {
-            "Variables" -> parseVariables(margins, element)
-            "Helpers" -> parseHelpers(state, margins, element)
+            "Variables" -> parseVariables(state, layoutVariables, element)
+            "Helpers" -> parseHelpers(state, layoutVariables, element)
+            "Generate" -> parseGenerate(state, layoutVariables, element)
             else -> {
                 if (element is JSONObject) {
                     var type = lookForType(element)
@@ -47,10 +125,10 @@ internal fun parseJSON(content: String, state: State) {
                         when (type) {
                             "hGuideline" -> parseGuidelineParams(ConstraintWidget.HORIZONTAL, state, elementName, element)
                             "vGuideline" -> parseGuidelineParams(ConstraintWidget.VERTICAL, state, elementName, element)
-                            "barrier" -> parseBarrier(state, margins, elementName, element)
+                            "barrier" -> parseBarrier(state, elementName, element)
                         }
                     } else if (type == null) {
-                        parseWidget(state, margins, elementName, element)
+                        parseWidget(state, layoutVariables, elementName, element)
                     }
                 }
             }
@@ -58,7 +136,7 @@ internal fun parseJSON(content: String, state: State) {
     }
 }
 
-fun parseVariables(margins: HashMap<String, Int>, json: Any) {
+fun parseVariables(state: State, layoutVariables: LayoutVariables, json: Any) {
     if (!(json is JSONObject)) {
         return
     }
@@ -67,12 +145,28 @@ fun parseVariables(margins: HashMap<String, Int>, json: Any) {
         val elementName = elements[i].toString()
         val element = json[elementName]
         if (element is Int) {
-            margins[elementName] = element
+            layoutVariables.put(elementName, element)
+        } else if (element is JSONObject) {
+            if (element.has("start") && element.has("increment")) {
+                var start = layoutVariables.get(element["start"])
+                var increment = layoutVariables.get(element["increment"])
+                layoutVariables.put(elementName, start, increment)
+            } else if (element.has("ids")) {
+                var ids = element.getJSONArray("ids");
+                var arrayIds = arrayListOf<String>()
+                for (i in 0..ids.length()-1) {
+                    arrayIds.add(ids.getString(i))
+                }
+                layoutVariables.put(elementName, arrayIds)
+            } else if (element.has("tag")) {
+                var arrayIds = state.getIdsForTag(element.getString("tag"))
+                layoutVariables.put(elementName, arrayIds)
+            }
         }
     }
 }
 
-fun parseHelpers(state: State, margins: HashMap<String, Int>, element: Any) {
+fun parseHelpers(state: State, layoutVariables: LayoutVariables, element: Any) {
     if (!(element is JSONArray)) {
         return
     }
@@ -80,16 +174,33 @@ fun parseHelpers(state: State, margins: HashMap<String, Int>, element: Any) {
         val helper = element[i]
         if (helper is JSONArray && helper.length() > 1) {
             when (helper[0]) {
-                "hChain" -> parseChain(ConstraintWidget.HORIZONTAL, state, margins, helper)
-                "vChain" -> parseChain(ConstraintWidget.VERTICAL, state, margins, helper)
-                "hGuideline" -> parseGuideline(ConstraintWidget.HORIZONTAL, state, margins, helper)
-                "vGuideline" -> parseGuideline(ConstraintWidget.VERTICAL, state, margins, helper)
+                "hChain" -> parseChain(ConstraintWidget.HORIZONTAL, state, layoutVariables, helper)
+                "vChain" -> parseChain(ConstraintWidget.VERTICAL, state, layoutVariables, helper)
+                "hGuideline" -> parseGuideline(ConstraintWidget.HORIZONTAL, state, layoutVariables, helper)
+                "vGuideline" -> parseGuideline(ConstraintWidget.VERTICAL, state, layoutVariables, helper)
             }
         }
     }
 }
 
-fun parseChain(orientation: Int, state: State, margins: java.util.HashMap<String, Int>, helper: JSONArray) {
+fun parseGenerate(state: State, layoutVariables: LayoutVariables, json: Any) {
+    if (!(json is JSONObject)) {
+        return
+    }
+    val elements = json.names() ?: return
+    (0 until elements.length()).forEach { i ->
+        val elementName = elements[i].toString()
+        val element = json[elementName]
+        var arrayIds = layoutVariables.getList(elementName)
+        if (arrayIds != null && element is JSONObject) {
+            for (id in arrayIds) {
+                parseWidget(state, layoutVariables, id, element)
+            }
+        }
+    }
+}
+
+fun parseChain(orientation: Int, state: State, margins: LayoutVariables, helper: JSONArray) {
     var chain = if (orientation == ConstraintWidget.HORIZONTAL) state.horizontalChain() else state.verticalChain()
     var refs = helper[1]
     if (!(refs is JSONArray) || refs.length() < 1) {
@@ -131,7 +242,7 @@ fun parseChain(orientation: Int, state: State, margins: java.util.HashMap<String
     }
 }
 
-fun parseGuideline(orientation: Int, state: State, margins: java.util.HashMap<String, Int>, helper: JSONArray) {
+fun parseGuideline(orientation: Int, state: State, margins: LayoutVariables, helper: JSONArray) {
     var params = helper[1]
     if (!(params is JSONObject)) {
         return
@@ -187,8 +298,9 @@ private fun parseGuidelineParams(
     }
 }
 
-fun parseBarrier(state: State, margins: HashMap<String, Int>,
-               elementName: String, element: JSONObject) {
+fun parseBarrier(
+    state: State,
+    elementName: String, element: JSONObject) {
     val reference = state.barrier(elementName, androidx.constraintlayout.core.state.State.Direction.END)
     val constraints = element.names() ?: return
     var barrierReference = reference
@@ -223,7 +335,7 @@ fun parseBarrier(state: State, margins: HashMap<String, Int>,
 
 fun parseWidget(
     state: State,
-    margins: HashMap<String, Int>,
+    layoutVariables: LayoutVariables,
     elementName: String,
     element: JSONObject
 ) {
@@ -273,31 +385,40 @@ fun parseWidget(
                 reference.bottomToBottom(targetReference)
             }
             "alpha" -> {
-                reference.alpha(element.getDouble(constraintName).toFloat())
+                var value = layoutVariables.get(element[constraintName])
+                reference.alpha(value)
+//                reference.alpha(element.getDouble(constraintName).toFloat())
             }
             "scaleX" -> {
-                reference.scaleX(element.getDouble(constraintName).toFloat())
+                var value = layoutVariables.get(element[constraintName])
+                reference.scaleX(value) //element.getDouble(constraintName).toFloat())
             }
             "scaleY" -> {
-                reference.scaleY(element.getDouble(constraintName).toFloat())
+                var value = layoutVariables.get(element[constraintName])
+                reference.scaleY(value) //element.getDouble(constraintName).toFloat())
             }
             "translationX" -> {
-                reference.translationX(element.getDouble(constraintName).toFloat())
+                var value = layoutVariables.get(element[constraintName])
+                reference.translationX(value)  //element.getDouble(constraintName).toFloat())
             }
             "translationY" -> {
-                reference.translationY(element.getDouble(constraintName).toFloat())
+                var value = layoutVariables.get(element[constraintName])
+                reference.translationY(value) //element.getDouble(constraintName).toFloat())
             }
             "rotationX" -> {
-                reference.rotationX(element.getDouble(constraintName).toFloat())
+                var value = layoutVariables.get(element[constraintName])
+                reference.rotationX(value) //element.getDouble(constraintName).toFloat())
             }
             "rotationY" -> {
-                reference.rotationY(element.getDouble(constraintName).toFloat())
+                var value = layoutVariables.get(element[constraintName])
+                reference.rotationY(value) //element.getDouble(constraintName).toFloat())
             }
             "rotationZ" -> {
-                reference.rotationZ(element.getDouble(constraintName).toFloat())
+                var value = layoutVariables.get(element[constraintName])
+                reference.rotationZ(value) // element.getDouble(constraintName).toFloat())
             }
             else -> {
-                parseConstraint(state, margins, element, reference, constraintName)
+                parseConstraint(state, layoutVariables, element, reference, constraintName)
             }
         }
     }
@@ -305,7 +426,7 @@ fun parseWidget(
 
 private fun parseConstraint(
     state: State,
-    margins: HashMap<String, Int>,
+    layoutVariables: LayoutVariables,
     element: JSONObject,
     reference: ConstraintReference,
     constraintName: String
@@ -316,14 +437,7 @@ private fun parseConstraint(
         val anchor = constraint[1]
         var margin: Int = 0
         if (constraint.length() > 2) {
-            if (constraint[2] is String) {
-                val resolvedMargin = margins[constraint[2]]
-                if (resolvedMargin != null) {
-                    margin = resolvedMargin
-                }
-            } else if (constraint[2] is Int) {
-                margin = constraint[2] as Int
-            }
+            margin = layoutVariables.get(constraint[2]).toInt()
         }
         margin = state.convertDimension(Dp(margin.toFloat()))
 
@@ -334,13 +448,7 @@ private fun parseConstraint(
         }
         when (constraintName) {
             "circular" -> {
-                var angle = 0f
-                if (constraint[1] is Float) {
-                    angle = constraint[1] as Float
-                }
-                if (constraint[1] is Int) {
-                    angle = (constraint[1] as Int).toFloat()
-                }
+                var angle = layoutVariables.get(constraint[1])
                 reference.circularConstraint(targetReference, angle, 0f)
             }
             "start" -> {

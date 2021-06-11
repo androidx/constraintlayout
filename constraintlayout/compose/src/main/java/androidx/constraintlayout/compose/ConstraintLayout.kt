@@ -117,6 +117,11 @@ internal fun rememberConstraintLayoutMeasurePolicy(
                         }
                     }
                 }
+
+                override fun override(name: String, value: Float) : ConstraintSet {
+                    // nothing here yet
+                    return this
+                }
             }
             val layoutSize = measurer.performMeasure(
                 constraints,
@@ -1231,14 +1236,32 @@ interface ConstraintSet {
      * Applies the [ConstraintSet] to a state.
      */
     fun applyTo(state: State, measurables: List<Measurable>)
+
+    fun override(name: String, value: Float) : ConstraintSet
 }
 
 fun ConstraintSet(@Language("json5") content : String) = object : ConstraintSet {
+    private val overridedVariables = HashMap<String, Float>()
+
     override fun applyTo(state: State, measurables: List<Measurable>) {
         measurables.forEach { measurable ->
-            state.map((measurable.layoutId ?: createId()), measurable)
+            var layoutId = measurable.layoutId ?: measurable.constraintLayoutId ?: createId()
+            state.map(layoutId, measurable)
+            var tag = measurable.constraintLayoutTag
+            if (tag != null && tag is String && layoutId is String) {
+                state.setTag(layoutId, tag)
+            }
         }
-        parseJSON(content, state)
+        val layoutVariables = LayoutVariables()
+        for (name in overridedVariables.keys) {
+            layoutVariables.putOverride(name, overridedVariables[name]!!)
+        }
+        parseJSON(content, state, layoutVariables)
+    }
+
+    override fun override(name: String, value: Float) : ConstraintSet {
+        overridedVariables[name] = value
+        return this
     }
 }
 
@@ -1253,6 +1276,11 @@ fun ConstraintSet(description: ConstraintSetScope.() -> Unit) = object : Constra
         val scope = ConstraintSetScope()
         scope.description()
         scope.applyTo(state)
+    }
+
+    override fun override(name: String, value: Float) : ConstraintSet {
+        // nothing yet
+        return this
     }
 }
 

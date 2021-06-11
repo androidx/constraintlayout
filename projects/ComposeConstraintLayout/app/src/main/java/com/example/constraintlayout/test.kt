@@ -12,11 +12,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ParentDataModifier
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.InspectorInfo
+import androidx.compose.ui.platform.InspectorValueInfo
+import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.constraintlayout.core.widgets.Optimizer
+import androidx.compose.ui.unit.Density
 import com.example.constraintlayout.R
 import java.util.*
 
@@ -919,11 +922,53 @@ public fun ScreenExample11() {
     }
 }
 
+@Preview(group = "motion4")
+@Composable
+public fun ScreenExample12() {
+    var animateToEnd by remember { mutableStateOf(false) }
+    val progress by animateFloatAsState(
+        targetValue = if (animateToEnd) 1f else 0f,
+        animationSpec = tween(2000)
+    )
+    var baseConstraintSet = """
+            {
+                Variables: {
+                  angle: { start: 0, increment: 10 },
+                  rotation: { start: 'startRotation', increment: 10 },
+                  distance: 100,
+                  mylist: { tag: 'box' }
+                },
+                Generate: {
+                  mylist: {
+                    width: 200,
+                    height: 40,
+                    circular: ['parent', 'angle', 'distance'],
+                    rotationZ: 'rotation'
+                  }
+                }
+            }
+        """
 
+    var cs1 = ConstraintSet(baseConstraintSet).override("startRotation", 0f)
+    var cs2 = ConstraintSet(baseConstraintSet).override("startRotation", 90f)
 
+    Column {
+        Button(onClick = { animateToEnd = !animateToEnd }) {
+            Text(text = "Run")
+        }
+        MotionLayout(cs1, cs2,
+            progress = progress,
+            modifier = Modifier
+                .fillMaxSize().background(Color.White)
+        ) {
+            var colors = arrayListOf<Color>(Color.Red, Color.Green, Color.Blue, Color.Cyan, Color.Yellow)
 
-
-
+            for (i in 1..36) {
+                Box(modifier = Modifier.layoutId("h$i", "box").background(colors[i%colors.size]))
+            }
+        }
+    }
+}
 
 
 

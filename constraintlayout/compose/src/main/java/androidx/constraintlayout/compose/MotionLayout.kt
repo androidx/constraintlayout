@@ -99,7 +99,7 @@ internal fun rememberMotionLayoutMeasurePolicy(
     constraintSetEnd: ConstraintSet,
     progress: MutableState<Float>,
     measurer: MotionMeasurer
-) = remember(optimizationLevel, constraintSetStart, constraintSetEnd, progress) {
+) = remember(optimizationLevel, constraintSetStart, constraintSetEnd) {
     measurer.clear()
     MeasurePolicy { measurables, constraints ->
         val layoutSize = measurer.performInterpolationMeasure(
