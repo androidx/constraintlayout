@@ -21,6 +21,7 @@ import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.HORIZONTAL;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
@@ -112,6 +113,9 @@ public class ConstraintReference implements Reference {
 
     private Object mView;
     private ConstraintWidget mConstraintWidget;
+
+    private HashMap<String, WidgetFrame.Color> mCustomColors = null;
+    private HashMap<String, Float> mCustomFloats = null;
 
     public void setView(Object view) {
         mView = view;
@@ -353,6 +357,21 @@ public class ConstraintReference implements Reference {
     public ConstraintReference baseline() {
         mLast = State.Constraint.BASELINE_TO_BASELINE;
         return this;
+    }
+
+    public void addCustomColor(String name, float r, float g, float b, float a) {
+        WidgetFrame.Color color = new WidgetFrame.Color(r, g, b, a);
+        if (mCustomColors == null) {
+            mCustomColors = new HashMap<>();
+        }
+        mCustomColors.put(name, color);
+    }
+
+    public void addCustomFloat(String name, float value) {
+        if (mCustomFloats == null) {
+            mCustomFloats = new HashMap<>();
+        }
+        mCustomFloats.put(name, value);
     }
 
     private void dereference() {
@@ -835,5 +854,8 @@ public class ConstraintReference implements Reference {
         mConstraintWidget.frame.scaleX = mScaleX;
         mConstraintWidget.frame.scaleY = mScaleY;
         mConstraintWidget.frame.alpha = mAlpha;
+
+        mConstraintWidget.frame.mCustomFloats = mCustomFloats;
+        mConstraintWidget.frame.mCustomColors = mCustomColors;
     }
 }

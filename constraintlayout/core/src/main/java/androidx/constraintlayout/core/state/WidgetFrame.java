@@ -16,7 +16,11 @@
 
 package androidx.constraintlayout.core.state;
 
+import androidx.constraintlayout.core.ArrayRow;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Utility class to encapsulate layout of a widget
@@ -42,6 +46,24 @@ public class WidgetFrame {
 
     public float alpha = Float.NaN;
 
+    public HashMap<String, Color> mCustomColors = null;
+    public HashMap<String, Float> mCustomFloats = null;
+
+    public static class Color {
+        public float r;
+        public float g;
+        public float b;
+        public float a;
+
+        public Color(float r, float g, float b, float a) {
+            this.r = r;
+            this.g = g;
+            this.b = b;
+            this.a = a;
+        }
+    }
+
+
     public int width() { return right - left; }
     public int height() { return bottom - top; }
 
@@ -63,17 +85,25 @@ public class WidgetFrame {
         scaleX = frame.scaleX;
         scaleY = frame.scaleY;
         alpha = frame.alpha;
+        if (frame.mCustomColors != null) {
+            mCustomColors = new HashMap<>();
+            mCustomColors.putAll(frame.mCustomColors);
+        }
+        if (frame.mCustomFloats != null) {
+            mCustomFloats = new HashMap<>();
+            mCustomFloats.putAll(frame.mCustomFloats);
+        }
     }
 
     public boolean isDefaultTransform() {
-        return rotationX == Float.NaN
-                && rotationY == Float.NaN
-                && rotationZ == Float.NaN
-                && translationX == Float.NaN
-                && translationY == Float.NaN
-                && scaleX == Float.NaN
-                && scaleY == Float.NaN
-                && alpha == Float.NaN;
+        return Float.isNaN(rotationX)
+                && Float.isNaN(rotationY)
+                && Float.isNaN(rotationZ)
+                && Float.isNaN(translationX)
+                && Float.isNaN(translationY)
+                && Float.isNaN(scaleX)
+                && Float.isNaN(scaleY)
+                && Float.isNaN(alpha);
     }
 
     public static void interpolate(WidgetFrame frame, WidgetFrame start, WidgetFrame end, float progress) {
@@ -127,5 +157,34 @@ public class WidgetFrame {
             bottom = widget.getBottom();
         }
         return this;
+    }
+
+    public void addCustomColor(String name, float r, float g, float b, float a) {
+        Color color = new Color(r, g, b, a);
+        if (mCustomColors == null) {
+            mCustomColors = new HashMap<>();
+        }
+        mCustomColors.put(name, color);
+    }
+
+    public Color getCustomColor(String name) {
+        if (mCustomColors == null) {
+            return null;
+        }
+        return mCustomColors.get(name);
+    }
+
+    public void addCustomFloat(String name, float value) {
+        if (mCustomFloats == null) {
+            mCustomFloats = new HashMap<>();
+        }
+        mCustomFloats.put(name, value);
+    }
+
+    public float getCustomFloat(String name) {
+        if (mCustomFloats == null) {
+            return 0f;
+        }
+        return mCustomFloats.get(name);
     }
 }
