@@ -37,11 +37,21 @@ public class ConstraintReference implements Reference {
         return key;
     }
 
+    public void setTag(String tag) {
+        mTag = tag;
+    }
+
+    public String getTag() {
+        return mTag;
+    }
+
     public interface ConstraintReferenceFactory {
         ConstraintReference create(State state);
     }
 
     final State mState;
+
+    String mTag = null;
 
     Facade mFacade = null;
 

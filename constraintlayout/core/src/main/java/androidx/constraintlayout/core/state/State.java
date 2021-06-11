@@ -26,6 +26,7 @@ import androidx.constraintlayout.core.state.helpers.GuidelineReference;
 import androidx.constraintlayout.core.state.helpers.VerticalChainReference;
 import androidx.constraintlayout.core.state.helpers.HorizontalChainReference;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -35,6 +36,7 @@ public class State {
 
     protected HashMap<Object, Reference> mReferences = new HashMap<>();
     protected HashMap<Object, HelperReference> mHelperReferences = new HashMap<>();
+    HashMap<String, ArrayList<String>> mTags = new HashMap();
 
     final static int UNKNOWN = -1;
     final static int CONSTRAINT_SPREAD = 0;
@@ -95,6 +97,7 @@ public class State {
 
     public void reset() {
         mHelperReferences.clear();
+        mTags.clear();
     }
 
     /**
@@ -274,6 +277,29 @@ public class State {
             ConstraintReference reference = (ConstraintReference) ref;
             reference.setView(view);
         }
+    }
+
+    public void setTag(String key, String tag) {
+        Reference ref = constraints(key);
+        if (ref instanceof ConstraintReference) {
+            ConstraintReference reference = (ConstraintReference) ref;
+            reference.setTag(tag);
+            ArrayList list = null;
+            if (!mTags.containsKey(tag)) {
+                list = new ArrayList();
+                mTags.put(tag, list);
+            } else {
+                list = mTags.get(tag);
+            }
+            list.add(key);
+        }
+    }
+
+    public ArrayList<String> getIdsForTag(String tag) {
+        if (mTags.containsKey(tag)) {
+            return mTags.get(tag);
+        }
+        return null;
     }
 
     public void apply(ConstraintWidgetContainer container) {
