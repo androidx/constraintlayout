@@ -417,8 +417,54 @@ fun parseWidget(
                 var value = layoutVariables.get(element[constraintName])
                 reference.rotationZ(value) // element.getDouble(constraintName).toFloat())
             }
+            "custom" -> {
+                parseCustomProperties(state, layoutVariables, element, reference, constraintName)
+            }
             else -> {
                 parseConstraint(state, layoutVariables, element, reference, constraintName)
+            }
+        }
+    }
+}
+
+private fun parseCustomProperties(
+    state: State,
+    layoutVariables: LayoutVariables,
+    element: JSONObject,
+    reference: ConstraintReference,
+    constraintName: String
+) {
+    var json = element.optJSONObject(constraintName)
+    if (json == null) {
+        return
+    }
+    val properties = json.names() ?: return
+    (0 until properties.length()).forEach { i ->
+        val property = properties[i].toString()
+        val value = json[property]
+        if (value is Int) {
+            reference.addCustomFloat(property, value.toFloat())
+        } else if (value is Float) {
+            reference.addCustomFloat(property, value)
+        } else if (value is String) {
+            if (value.startsWith('#')) {
+                var r = 0f
+                var g = 0f
+                var b = 0f
+                var a = 1f
+                if (value.length == 7 || value.length == 9) {
+                    var hr = Integer.valueOf(value.substring(1, 3), 16)
+                    var hg = Integer.valueOf(value.substring(3, 5), 16)
+                    var hb = Integer.valueOf(value.substring(5, 7), 16)
+                    r = hr.toFloat() / 255f
+                    g = hg.toFloat() / 255f
+                    b = hb.toFloat() / 255f
+                }
+                if (value.length == 9) {
+                    var ha = Integer.valueOf(value.substring(5, 7), 16)
+                    a = ha.toFloat() / 255f
+                }
+                reference.addCustomColor(property, r, g, b, a)
             }
         }
     }

@@ -13,13 +13,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ParentDataModifier
 import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.platform.InspectorInfo
-import androidx.compose.ui.platform.InspectorValueInfo
-import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Density
 import com.example.constraintlayout.R
 import java.util.*
 
@@ -966,6 +961,64 @@ public fun ScreenExample12() {
             for (i in 1..36) {
                 Box(modifier = Modifier.layoutId("h$i", "box").background(colors[i%colors.size]))
             }
+        }
+    }
+}
+
+@Preview(group = "motion5")
+@Composable
+public fun ScreenExample13() {
+    var animateToEnd by remember { mutableStateOf(false) }
+    val progress by animateFloatAsState(
+        targetValue = if (animateToEnd) 1f else 0f,
+        animationSpec = tween(2000)
+    )
+    Column {
+        MotionLayout(
+            modifier = Modifier.fillMaxWidth().height(400.dp),
+            start = ConstraintSet("""
+            {
+              a: {
+                start: ['parent', 'start', 16],
+                bottom: ['parent', 'bottom', 16],
+                custom: {
+                  background: '#FFFF00',
+                  textColor: '#000000',
+                  textSize: 12
+                }
+              }
+            }
+            """
+            ),
+            end = ConstraintSet(
+                """
+            {
+              a: {
+                end: ['parent', 'end', 16],
+                top: ['parent', 'top', 16],
+                rotationZ: 360,
+                custom: {
+                  background: '#0000FF',
+                  textColor: '#FFFFFF',
+                  textSize: 36
+                }
+              }
+            }
+            """
+            ),
+            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
+            progress = progress
+        ) {
+            var properties = motionProperties("a")
+            Text(text = "Hello", modifier = Modifier
+                .layoutId(properties.id())
+                .background(properties.color("background")),
+                color = properties.color("textColor"),
+                fontSize = properties.fontSize("textSize"))
+        }
+
+        Button(onClick = { animateToEnd = !animateToEnd }) {
+            Text(text = "Run")
         }
     }
 }

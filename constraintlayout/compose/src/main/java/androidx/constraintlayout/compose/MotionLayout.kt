@@ -20,6 +20,7 @@ import android.graphics.Matrix
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.LayoutScopeMarker
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -35,9 +36,7 @@ import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.layout.MultiMeasureLayout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.*
 import androidx.constraintlayout.core.state.Dimension
 import androidx.constraintlayout.core.state.WidgetFrame
 import androidx.constraintlayout.core.widgets.Optimizer
@@ -57,9 +56,10 @@ inline fun MotionLayout(
     debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     modifier: Modifier = Modifier,
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
-    noinline content: @Composable () -> Unit
+    crossinline content: @Composable MotionLayoutScope.() -> Unit
 ) {
     val measurer = remember { MotionMeasurer() }
+    val scope = remember { MotionLayoutScope(measurer) }
     val progressState = remember { mutableStateOf(0f) }
     SideEffect { progressState.value = progress }
     val measurePolicy =
@@ -70,7 +70,7 @@ inline fun MotionLayout(
             (MultiMeasureLayout(
                 modifier = modifier.semantics { designInfoProvider = measurer },
                 measurePolicy = measurePolicy,
-                content = content
+                content = { scope.content() }
             ))
             with(measurer) {
                 drawDebug()
@@ -81,8 +81,75 @@ inline fun MotionLayout(
         (MultiMeasureLayout(
             modifier = modifier.semantics { designInfoProvider = measurer },
             measurePolicy = measurePolicy,
-            content = content
+            content = { scope.content() }
         ))
+    }
+}
+
+@LayoutScopeMarker
+class MotionLayoutScope @PublishedApi internal constructor(measurer: MotionMeasurer) {
+    private var myMeasurer = measurer
+
+    class MotionProperties internal constructor(id: String, tag: String?, measurer: MotionMeasurer) {
+        private var myId = id
+        private var myTag = null
+        private var myMeasurer = measurer
+
+        fun id() : String {
+            return myId
+        }
+
+        fun tag() : String? {
+            return myTag
+        }
+
+        fun color(name: String) : Color {
+            return myMeasurer.getCustomColor(myId, name)
+        }
+
+        fun float(name: String) : Float {
+            return myMeasurer.getCustomFloat(myId, name)
+        }
+
+        fun int(name: String): Int {
+            return myMeasurer.getCustomFloat(myId, name).toInt()
+        }
+
+        fun distance(name: String): Dp {
+            return myMeasurer.getCustomFloat(myId, name).dp
+        }
+
+        fun fontSize(name: String) : TextUnit {
+            return myMeasurer.getCustomFloat(myId, name).sp
+        }
+    }
+
+    fun motionProperties(id: String): MotionProperties {
+        return MotionProperties(id, null, myMeasurer)
+    }
+
+    fun motionProperties(id: String, tag: String): MotionProperties{
+        return MotionProperties(id, tag, myMeasurer)
+    }
+
+    fun motionColor(id: String, name: String): Color {
+        return myMeasurer.getCustomColor(id, name)
+    }
+
+    fun motionFloat(id: String, name: String): Float {
+        return myMeasurer.getCustomFloat(id, name)
+    }
+
+    fun motionInt(id: String, name: String): Int {
+        return myMeasurer.getCustomFloat(id, name).toInt()
+    }
+
+    fun motionDistance(id: String, name: String): Dp {
+        return myMeasurer.getCustomFloat(id, name).dp
+    }
+
+    fun motionFontSize(id: String, name: String): TextUnit {
+        return myMeasurer.getCustomFloat(id, name).sp
     }
 }
 
@@ -125,6 +192,8 @@ internal class MotionMeasurer : Measurer() {
     private var motionProgress = -1f
     var framesStart = ArrayList<WidgetFrame>()
     var framesEnd = ArrayList<WidgetFrame>()
+
+    fun getProgress() : Float { return motionProgress }
 
     private fun measureConstraintSet(optimizationLevel: Int, constraintSetStart: ConstraintSet,
                                      measurables: List<Measurable>, constraints: Constraints
@@ -328,6 +397,62 @@ internal class MotionMeasurer : Measurer() {
 
     fun clear() {
         frameCache.clear()
+    }
+
+    private fun interpolateColor(start: WidgetFrame.Color, end: WidgetFrame.Color, progress: Float) : Color {
+        if (progress < 0) {
+            return Color(start.r, start.g, start.b, start.a)
+        }
+        if (progress > 1) {
+            return Color(end.r, end.g, end.b, end.a)
+        }
+        val r = (1f - progress) * start.r + progress * (end.r)
+        val g = (1f - progress) * start.g + progress * (end.g)
+        val b = (1f - progress) * start.b + progress * (end.b)
+        return Color(r, g, b)
+    }
+
+    fun findChild(id: String) : Int {
+        if (root.children.size == 0) {
+            return -1
+        }
+        val ref = state.constraints(id)
+        val cw = ref.constraintWidget
+        var index = 0;
+        for (child in root.children) {
+            if (cw == child) {
+                return index
+            }
+            index++
+        }
+        return -1
+    }
+
+    fun getCustomColor(id: String, name: String): Color {
+        val index = findChild(id)
+        if (index == -1) {
+            return Color.Black
+        }
+        val startFrame = framesStart[index]
+        val endFrame = framesEnd[index]
+        val startColor = startFrame.getCustomColor(name)
+        val endColor = endFrame.getCustomColor(name)
+        if (startColor != null && endColor != null) {
+            return interpolateColor(startColor, endColor, motionProgress)
+        }
+        return Color.Black
+    }
+
+    fun getCustomFloat(id: String, name: String): Float {
+        val index = findChild(id)
+        if (index == -1) {
+            return 0f;
+        }
+        val startFrame = framesStart[index]
+        val endFrame = framesEnd[index]
+        val startFloat = startFrame.getCustomFloat(name)
+        val endFloat = endFrame.getCustomFloat(name)
+        return (1f - motionProgress) * startFloat + motionProgress * endFloat
     }
 }
 
