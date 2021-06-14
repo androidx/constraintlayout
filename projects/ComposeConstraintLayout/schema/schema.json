@@ -1,0 +1,166 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "value": {
+      "description": "number or reference",
+      "$id": "#value",
+      "type": ["number", "string"]
+    },
+    "color": {
+      "$id": "#color",
+      "type": "string",
+      "pattern": "(^#[0-9a-fA-f]{3,4}$)|(^#[0-9a-fA-f]{6}$)|(^#[0-9a-fA-f]{8}$)"
+    },
+    "reference": {
+      "$id": "#reference",
+      "type": "string"
+    },
+    "dimension-constraint": {
+      "$id": "#dimension-constraint",
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "horizontal-constraint": {
+      "$id": "#horizontal-constraint",
+      "type": "array",
+      "additionalItems": false,
+      "minItems": 2,
+      "maxItems": 3,
+      "items": [
+        {
+          "description": "target reference",
+          "$ref": "#reference"
+        },
+        {
+          "title": "target reference",
+          "enum": [
+            "start",
+            "end"
+          ]
+        },
+        {
+          "description": "margin",
+          "$ref": "#value"
+        }
+      ]
+    },
+    "vertical-constraint": {
+        "$id": "#vertical-constraint",
+        "type": "array",
+        "additionalItems": false,
+        "minItems": 2,
+        "maxItems": 3,
+        "items": [
+          {
+            "description": "target reference",
+            "$ref": "#reference"
+          },
+          {
+            "description": "target reference",
+            "enum": [ "top", "bottom", "baseline" ]
+          },
+          {
+            "description": "margin",
+            "$ref": "#value"
+          }
+        ]
+    },
+    "circular-constraint": {
+      "$id": "#circular-constraint",
+      "type": "array",
+      "additionalItems": false,
+      "minItems": 3,
+      "maxItems": 3,
+      "items": [
+        {
+          "description": "target reference",
+          "$ref": "#reference"
+        },
+        {
+          "description": "angle",
+          "$ref": "#value"
+        },
+        {
+          "description": "distance",
+          "$ref": "#value"
+        }
+      ]
+    }
+  },
+  "title": "ConstraintSet",
+  "description": "A set of rules to apply to ConstraintLayout elements",
+  "type": "object",
+  "properties": {
+    "Variables": {
+      "description": "Define variables that can be used in the rest of the file",
+      "type": "object",
+      "patternProperties": {
+        "^[a-z_][a-z0-9_]*$": {
+          "description": "Variable",
+          "anyOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "start": {
+                  "description": "Generator starting value",
+                  "$ref": "#value"
+                },
+                "increment": {
+                  "description": "Generator increment value",
+                  "$ref": "#value"
+                }
+              },
+              "required": [
+                "start",
+                "increment"
+              ]
+            },
+            {
+              "type": "number"
+            }
+          ]
+        }
+      }
+    },
+    "Generate": {
+      "type": "object"
+    },
+    "Helpers": {
+      "type": "object"
+    }
+  },
+  "patternProperties": {
+    "^[a-z_][a-z0-9_]*$": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "width": { "$ref": "#dimension-constraint", "description": "horizontal dimension constraint"  },
+        "height": { "$ref": "#dimension-constraint", "description": "vertical dimension constraint" },
+        "start": { "$ref": "#horizontal-constraint", "description": "start constraint to a target" },
+        "end": { "$ref": "#horizontal-constraint", "description": "end constraint to a target" },
+        "top": { "$ref": "#vertical-constraint", "description": "top constraint to a target" },
+        "bottom": { "$ref": "#vertical-constraint", "description": "bottom constraint to a target" },
+        "baseline": { "$ref": "#vertical-constraint", "description": "baseline constraint to a target" },
+        "circular": { "$ref": "#circular-constraint", "description": "circular constraint to a target" },
+        "center": { "$ref": "#reference", "description": "center the widget relative to the target"  },
+        "centerHorizontally": { "$ref": "#reference", "description": "center the widget horizontally relative to the target"  },
+        "centerVertically": { "$ref": "#reference", "description": "center the widget vertically relative to the target" },
+        "alpha": { "$ref": "#value", "description": "alpha value (transparency) from 0-1" },
+        "translationX": { "$ref": "#value", "description": "translation in X" },
+        "translationY": { "$ref": "#value", "description": "translation in Y" },
+        "scaleX": { "$ref": "#value", "description": "scale in X" },
+        "scaleY": { "$ref": "#value", "description": "scale in Y" },
+        "rotationX": { "$ref": "#value", "description": "rotation in X "},
+        "rotationY": { "$ref": "#value", "description": "rotation in Y" },
+        "rotationZ": { "$ref": "#value", "description": "rotation in Z" }
+      }
+    }
+  }
+}
