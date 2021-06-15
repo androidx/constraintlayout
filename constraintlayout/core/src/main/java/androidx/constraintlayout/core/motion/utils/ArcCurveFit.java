@@ -23,7 +23,7 @@ import java.util.Arrays;
  * quarter ellipses
  */
 
-class ArcCurveFit extends CurveFit {
+public class ArcCurveFit extends CurveFit {
     public static final int ARC_START_VERTICAL = 1;
     public static final int ARC_START_HORIZONTAL = 2;
     public static final int ARC_START_FLIP = 3;

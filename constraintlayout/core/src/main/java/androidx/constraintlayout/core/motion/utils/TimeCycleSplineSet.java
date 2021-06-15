@@ -15,6 +15,9 @@
  */
 package androidx.constraintlayout.core.motion.utils;
 
+import androidx.constraintlayout.core.motion.CustomAttribute;
+import androidx.constraintlayout.core.motion.MotionWidget;
+
 import java.text.DecimalFormat;
 
 /**
@@ -94,6 +97,80 @@ public abstract class TimeCycleSplineSet {
         mValues[count][CURVE_OFFSET] = offset;
         mWaveShape = Math.max(mWaveShape, shape); // the highest value shape is chosen
         count++;
+    }
+
+    public static class CustomSet extends TimeCycleSplineSet {
+        String mAttributeName;
+        KeyFrameArray<CustomAttribute> mConstraintAttributeList;
+        KeyFrameArray<float[]> mWaveProperties = new KeyFrameArray<>();
+        float[] mTempValues;
+        float[] mCache;
+
+        public CustomSet(String attribute, KeyFrameArray<CustomAttribute> attrList) {
+            mAttributeName = attribute.split(",")[1];
+            mConstraintAttributeList = attrList;
+        }
+
+        public void setup(int curveType) {
+            int size = mConstraintAttributeList.size();
+            int dimensionality = mConstraintAttributeList.valueAt(0).numberOfInterpolatedValues();
+            double[] time = new double[size];
+            mTempValues = new float[dimensionality + 2];
+            mCache = new float[dimensionality];
+            double[][] values = new double[size][dimensionality + 2];
+            for (int i = 0; i < size; i++) {
+                int key = mConstraintAttributeList.keyAt(i);
+                CustomAttribute ca = mConstraintAttributeList.valueAt(i);
+                float[] waveProp = mWaveProperties.valueAt(i);
+                time[i] = key * 1E-2;
+                ca.getValuesToInterpolate(mTempValues);
+                for (int k = 0; k < mTempValues.length; k++) {
+                    values[i][k] = mTempValues[k];
+                }
+                values[i][dimensionality] = waveProp[0];
+                values[i][dimensionality + 1] = waveProp[1];
+            }
+            mCurveFit = CurveFit.get(curveType, time, values);
+        }
+
+        public void setPoint(int position, float value, float period, int shape, float offset) {
+            throw new RuntimeException("don't call for custom attribute call setPoint(pos, ConstraintAttribute,...)");
+        }
+
+        public void setPoint(int position, CustomAttribute value, float period, int shape, float offset) {
+            mConstraintAttributeList.append(position, value);
+            mWaveProperties.append(position, new float[]{period, offset});
+            mWaveShape = Math.max(mWaveShape, shape); // the highest value shape is chosen
+        }
+
+
+        public boolean setProperty(MotionWidget view, float t, long time, KeyCache cache) {
+            mCurveFit.getPos(t, mTempValues);
+            float period = mTempValues[mTempValues.length - 2];
+            float offset = mTempValues[mTempValues.length - 1];
+            long delta_time = time - last_time;
+
+            if (Float.isNaN(last_cycle)) { // it has not been set
+                last_cycle = cache.getFloatValue(view, mAttributeName, 0); // check the cache
+                if (Float.isNaN(last_cycle)) {  // not in cache so set to 0 (start)
+                    last_cycle = 0;
+                }
+            }
+
+            last_cycle = (float) ((last_cycle + delta_time * 1E-9 * period) % 1.0);
+            last_time = time;
+            float wave = calcWave(last_cycle);
+            mContinue = false;
+            for (int i = 0; i < mCache.length; i++) {
+                mContinue |= mTempValues[i] != 0.0;
+                mCache[i] = mTempValues[i] * wave + offset;
+            }
+            mConstraintAttributeList.valueAt(0).setInterpolatedValue(view, mCache);
+            if (period != 0.0f) {
+                mContinue = true;
+            }
+            return mContinue;
+        }
     }
 
     public void setup(int curveType) {

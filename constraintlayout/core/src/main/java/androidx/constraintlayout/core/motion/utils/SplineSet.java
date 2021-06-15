@@ -16,6 +16,9 @@
 
 package androidx.constraintlayout.core.motion.utils;
 
+import androidx.constraintlayout.core.motion.CustomAttribute;
+import androidx.constraintlayout.core.state.WidgetFrame;
+
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
@@ -99,7 +102,14 @@ public abstract class SplineSet {
         }
         mCurveFit = CurveFit.get(curveType, time, values);
     }
+    public static SplineSet makeCustomSpline(String str, KeyFrameArray<CustomAttribute> attrList) {
+        return new CustomSet(str, attrList);
+    }
 
+    public static SplineSet makeSpline(String str, long currentTime) {
+
+        return null;
+    }
     private static class Sort {
 
         static void doubleQuickSort(int[] key, float[] value, int low, int hi) {
@@ -142,4 +152,51 @@ public abstract class SplineSet {
             value[b] = tmpv;
         }
     }
+
+
+    public static class CustomSet extends SplineSet {
+        String mAttributeName;
+        KeyFrameArray<CustomAttribute> mConstraintAttributeList;
+        float[] mTempValues;
+
+        public CustomSet(String attribute, KeyFrameArray<CustomAttribute> attrList) {
+            mAttributeName = attribute.split(",")[1];
+            mConstraintAttributeList = attrList;
+        }
+
+        public void setup(int curveType) {
+            int size = mConstraintAttributeList.size();
+            int dimensionality = mConstraintAttributeList.valueAt(0).numberOfInterpolatedValues();
+            double[] time = new double[size];
+            mTempValues = new float[dimensionality];
+            double[][] values = new double[size][dimensionality];
+            for (int i = 0; i < size; i++) {
+
+                int key = mConstraintAttributeList.keyAt(i);
+                CustomAttribute ca = mConstraintAttributeList.valueAt(i);
+
+                time[i] = key * 1E-2;
+                ca.getValuesToInterpolate(mTempValues);
+                for (int k = 0; k < mTempValues.length; k++) {
+                    values[i][k] = mTempValues[k];
+                }
+
+            }
+            mCurveFit = CurveFit.get(curveType, time, values);
+        }
+
+        public void setPoint(int position, float value) {
+            throw new RuntimeException("don't call for custom attribute call setPoint(pos, ConstraintAttribute)");
+        }
+
+        public void setPoint(int position, CustomAttribute value) {
+            mConstraintAttributeList.append(position, value);
+        }
+
+        public void setProperty(WidgetFrame view, float t) {
+            mCurveFit.getPos(t, mTempValues);
+            mConstraintAttributeList.valueAt(0).setInterpolatedValue(view, mTempValues);
+        }
+    }
+
 }
