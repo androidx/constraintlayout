@@ -885,6 +885,10 @@ class ConstrainScope internal constructor(internal val id: Any) {
         // TODO(popam, b/158069248): add parameter for gone margin
         fun linkTo(anchor: ConstraintLayoutBaseScope.BaselineAnchor, margin: Dp = 0.dp) {
             tasks.add { state ->
+                (state as? State)?.let {
+                    it.baselineNeededFor(id)
+                    it.baselineNeededFor(anchor.id)
+                }
                 with(state.constraints(id)) {
                     baselineAnchorFunction.invoke(this, anchor.id).margin(margin)
                 }
@@ -1290,6 +1294,9 @@ fun ConstraintSet(description: ConstraintSetScope.() -> Unit) = object : Constra
 class State(val density: Density) : SolverState() {
     var rootIncomingConstraints: Constraints = Constraints()
     lateinit var layoutDirection: LayoutDirection
+    internal val baselineNeeded = mutableListOf<Any>()
+    private var dirtyBaselineNeededWidgets = true
+    private val baselineNeededWidgets = mutableSetOf<ConstraintWidget>()
 
     override fun convertDimension(value: Any?): Int {
         return if (value is Dp) {
@@ -1306,7 +1313,26 @@ class State(val density: Density) : SolverState() {
         }
         mReferences.clear()
         mReferences[PARENT] = mParent
+        baselineNeeded.clear()
+        dirtyBaselineNeededWidgets = true
         super.reset()
+    }
+
+    internal fun baselineNeededFor(id: Any) {
+        baselineNeeded.add(id)
+        dirtyBaselineNeededWidgets = true
+    }
+
+    internal fun isBaselineNeeded(constraintWidget: ConstraintWidget): Boolean {
+        if (dirtyBaselineNeededWidgets) {
+            baselineNeededWidgets.clear()
+            baselineNeeded.forEach { id ->
+                val widget = mReferences[id]?.constraintWidget
+                if (widget != null) baselineNeededWidgets.add(widget)
+            }
+            dirtyBaselineNeededWidgets = false
+        }
+        return constraintWidget in baselineNeededWidgets
     }
 
     internal fun getKeyId(helperWidget: HelperWidget): Any? {
@@ -1444,10 +1470,16 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         val currentPlaceable = placeables[measurable]
         measure.measuredWidth = currentPlaceable?.width ?: constraintWidget.width
         measure.measuredHeight = currentPlaceable?.height ?: constraintWidget.height
-        val baseline = currentPlaceable?.get(FirstBaseline)
-        measure.measuredHasBaseline = baseline != null
-        if (baseline != null) measure.measuredBaseline = baseline
-        lastMeasures.getOrPut(measurable, { arrayOf(0, 0, 0) }).copyFrom(measure)
+        val baseline =
+            if (currentPlaceable != null && state.isBaselineNeeded(constraintWidget)) {
+                currentPlaceable[FirstBaseline]
+            } else {
+                AlignmentLine.Unspecified
+            }
+        measure.measuredHasBaseline = baseline != AlignmentLine.Unspecified
+        measure.measuredBaseline = baseline
+        lastMeasures.getOrPut(measurable, { arrayOf(0, 0, AlignmentLine.Unspecified) })
+            .copyFrom(measure)
 
         measure.measuredNeedsSolverPass = measure.measuredWidth != measure.horizontalDimension ||
             measure.measuredHeight != measure.verticalDimension
@@ -1480,10 +1512,10 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         }
         MATCH_CONSTRAINT -> {
             if (DEBUG) {
-                Log.d("CCL2", "Measure strategy ${measureStrategy}")
-                Log.d("CCL2", "DW ${matchConstraintDefaultDimension}")
-                Log.d("CCL2", "ODR ${otherDimensionResolved}")
-                Log.d("CCL2", "IRH ${currentDimensionResolved}")
+                Log.d("CCL", "Measure strategy ${measureStrategy}")
+                Log.d("CCL", "DW ${matchConstraintDefaultDimension}")
+                Log.d("CCL", "ODR ${otherDimensionResolved}")
+                Log.d("CCL", "IRH ${currentDimensionResolved}")
             }
             val useDimension = currentDimensionResolved ||
                 (measureStrategy == TRY_GIVEN_DIMENSIONS ||
