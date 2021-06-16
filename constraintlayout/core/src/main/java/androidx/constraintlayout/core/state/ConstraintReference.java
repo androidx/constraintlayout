@@ -76,6 +76,9 @@ public class ConstraintReference implements Reference {
     int mMarginTopGone = 0;
     int mMarginBottomGone = 0;
 
+    float mPivotX = 0.5f;
+    float mPivotY = 0.5f;
+
     float mRotationX = 0;
     float mRotationY = 0;
     float mRotationZ = 0;
@@ -251,9 +254,21 @@ public class ConstraintReference implements Reference {
     public float getScaleX() { return mScaleX; }
     public float getScaleY() { return mScaleY; }
     public float getAlpha() { return mAlpha; }
+    public float getPivotX() { return mPivotX; }
+    public float getPivotY() { return mPivotY; }
     public float getRotationX() { return mRotationX; }
     public float getRotationY() { return mRotationY; }
     public float getRotationZ() { return mRotationZ; }
+
+    public ConstraintReference pivotX(float x) {
+        mPivotX = x;
+        return this;
+    }
+
+    public ConstraintReference pivotY(float y) {
+        mPivotY = y;
+        return this;
+    }
 
     public ConstraintReference rotationX(float x) {
         mRotationX = x;
@@ -846,6 +861,8 @@ public class ConstraintReference implements Reference {
         mConstraintWidget.setHorizontalBiasPercent(mHorizontalBias);
         mConstraintWidget.setVerticalBiasPercent(mVerticalBias);
 
+        mConstraintWidget.frame.pivotX = mPivotX;
+        mConstraintWidget.frame.pivotY = mPivotY;
         mConstraintWidget.frame.rotationX = mRotationX;
         mConstraintWidget.frame.rotationY = mRotationY;
         mConstraintWidget.frame.rotationZ = mRotationZ;

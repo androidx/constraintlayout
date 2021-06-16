@@ -938,6 +938,9 @@ public fun ScreenExample12() {
                     width: 200,
                     height: 40,
                     circular: ['parent', 'angle', 'distance'],
+                    pivotX: 0.1,
+                    pivotY: 0.1,
+                    translationX: 225,
                     rotationZ: 'rotation'
                   }
                 }

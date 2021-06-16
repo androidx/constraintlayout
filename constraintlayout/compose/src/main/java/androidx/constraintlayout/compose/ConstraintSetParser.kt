@@ -63,6 +63,8 @@ class LayoutVariables {
             }
         } else if (elementName is Int) {
             return elementName.toFloat()
+        } else if (elementName is Double) {
+            return elementName.toFloat()
         } else if (elementName is Float) {
             return elementName
         }
@@ -431,37 +433,44 @@ fun parseWidget(
                 reference.bottomToBottom(targetReference)
             }
             "alpha" -> {
-                var value = layoutVariables.get(element[constraintName])
+                val value = layoutVariables.get(element[constraintName])
                 reference.alpha(value)
-//                reference.alpha(element.getDouble(constraintName).toFloat())
             }
             "scaleX" -> {
-                var value = layoutVariables.get(element[constraintName])
-                reference.scaleX(value) //element.getDouble(constraintName).toFloat())
+                val value = layoutVariables.get(element[constraintName])
+                reference.scaleX(value)
             }
             "scaleY" -> {
-                var value = layoutVariables.get(element[constraintName])
-                reference.scaleY(value) //element.getDouble(constraintName).toFloat())
+                val value = layoutVariables.get(element[constraintName])
+                reference.scaleY(value)
             }
             "translationX" -> {
-                var value = layoutVariables.get(element[constraintName])
-                reference.translationX(value)  //element.getDouble(constraintName).toFloat())
+                val value = layoutVariables.get(element[constraintName])
+                reference.translationX(value)
             }
             "translationY" -> {
-                var value = layoutVariables.get(element[constraintName])
-                reference.translationY(value) //element.getDouble(constraintName).toFloat())
+                val value = layoutVariables.get(element[constraintName])
+                reference.translationY(value)
+            }
+            "pivotX" -> {
+                val value = layoutVariables.get(element[constraintName])
+                reference.pivotX(value)
+            }
+            "pivotY" -> {
+                val value = layoutVariables.get(element[constraintName])
+                reference.pivotY(value)
             }
             "rotationX" -> {
-                var value = layoutVariables.get(element[constraintName])
-                reference.rotationX(value) //element.getDouble(constraintName).toFloat())
+                val value = layoutVariables.get(element[constraintName])
+                reference.rotationX(value)
             }
             "rotationY" -> {
-                var value = layoutVariables.get(element[constraintName])
-                reference.rotationY(value) //element.getDouble(constraintName).toFloat())
+                val value = layoutVariables.get(element[constraintName])
+                reference.rotationY(value)
             }
             "rotationZ" -> {
-                var value = layoutVariables.get(element[constraintName])
-                reference.rotationZ(value) // element.getDouble(constraintName).toFloat())
+                val value = layoutVariables.get(element[constraintName])
+                reference.rotationZ(value)
             }
             "custom" -> {
                 parseCustomProperties(element, reference, constraintName)
