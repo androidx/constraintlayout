@@ -16,11 +16,9 @@
 
 package androidx.constraintlayout.core.state;
 
-import androidx.constraintlayout.core.ArrayRow;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Utility class to encapsulate layout of a widget
@@ -61,11 +59,20 @@ public class WidgetFrame {
             this.b = b;
             this.a = a;
         }
+
+        public void copy(Color start) {
+            this.r = start.r;
+            this.g = start.g;
+            this.b = start.b;
+            this.a = start.a;
+        }
     }
 
 
     public int width() { return right - left; }
     public int height() { return bottom - top; }
+
+    public WidgetFrame() {}
 
     public WidgetFrame(ConstraintWidget widget) {
         this.widget = widget;
@@ -141,6 +148,19 @@ public class WidgetFrame {
         return (start + progress * (end - start));
     }
 
+    public static void interpolateColor(Color result, Color start, Color end, float progress) {
+        if (progress < 0) {
+            result.copy(start);
+        } else if (progress > 1) {
+            result.copy(end);
+        } else {
+            result.r = (1f - progress) * start.r + progress * (end.r);
+            result.g = (1f - progress) * start.g + progress * (end.g);
+            result.b = (1f - progress) * start.b + progress * (end.b);
+            result.a = (1f - progress) * start.a + progress * (end.a);
+        }
+    }
+
     public float centerX() {
         return left + (right - left)/2f;
     }
@@ -155,7 +175,33 @@ public class WidgetFrame {
             top = widget.getTop();
             right = widget.getRight();
             bottom = widget.getBottom();
+            WidgetFrame frame = widget.frame;
+            rotationX = frame.rotationX;
+            rotationY = frame.rotationY;
+            rotationZ = frame.rotationZ;
+            translationX = frame.translationX;
+            translationY = frame.translationY;
+            scaleX = frame.scaleX;
+            scaleY = frame.scaleY;
+            alpha = frame.alpha;
+            if (frame.mCustomColors != null) {
+                mCustomColors = new HashMap<>();
+                mCustomColors.putAll(frame.mCustomColors);
+            }
+            if (frame.mCustomFloats != null) {
+                mCustomFloats = new HashMap<>();
+                mCustomFloats.putAll(frame.mCustomFloats);
+            }
         }
+        return this;
+    }
+
+    public WidgetFrame update(ConstraintWidget widget) {
+        if (widget == null) {
+            return this;
+        }
+        this.widget = widget;
+        update();
         return this;
     }
 

@@ -16,6 +16,7 @@
 
 package androidx.constraintlayout.compose
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.layout.LayoutScopeMarker
@@ -36,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import androidx.constraintlayout.core.state.ConstraintReference
 import androidx.constraintlayout.core.state.Dimension.*
+import androidx.constraintlayout.core.state.Transition
 import androidx.constraintlayout.core.state.WidgetFrame
 import androidx.constraintlayout.core.widgets.ConstraintWidget
 import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.FIXED
@@ -1242,31 +1244,51 @@ interface ConstraintSet {
     fun applyTo(state: State, measurables: List<Measurable>)
 
     fun override(name: String, value: Float) : ConstraintSet
+    fun applyTo(transition: Transition, type: Int) {
+        // nothing here, used in MotionLayout
+    }
 }
 
-fun ConstraintSet(@Language("json5") content : String) = object : ConstraintSet {
-    private val overridedVariables = HashMap<String, Float>()
+@SuppressLint("ComposableNaming")
+@Composable
+fun ConstraintSet(@Language("json5") content : String) : ConstraintSet {
+    val constraintset = remember {
+        mutableStateOf(object : ConstraintSet {
+            private val overridedVariables = HashMap<String, Float>()
 
-    override fun applyTo(state: State, measurables: List<Measurable>) {
-        measurables.forEach { measurable ->
-            var layoutId = measurable.layoutId ?: measurable.constraintLayoutId ?: createId()
-            state.map(layoutId, measurable)
-            var tag = measurable.constraintLayoutTag
-            if (tag != null && tag is String && layoutId is String) {
-                state.setTag(layoutId, tag)
+            override fun applyTo(transition: Transition, type: Int) {
+                val layoutVariables = LayoutVariables()
+                for (name in overridedVariables.keys) {
+                    layoutVariables.putOverride(name, overridedVariables[name]!!)
+                }
+                parseJSON(content, transition, type, layoutVariables)
             }
-        }
-        val layoutVariables = LayoutVariables()
-        for (name in overridedVariables.keys) {
-            layoutVariables.putOverride(name, overridedVariables[name]!!)
-        }
-        parseJSON(content, state, layoutVariables)
+
+            override fun applyTo(state: State, measurables: List<Measurable>) {
+                measurables.forEach { measurable ->
+                    val layoutId =
+                        measurable.layoutId ?: measurable.constraintLayoutId ?: createId()
+                    state.map(layoutId, measurable)
+                    val tag = measurable.constraintLayoutTag
+                    if (tag != null && tag is String && layoutId is String) {
+                        state.setTag(layoutId, tag)
+                    }
+                }
+                val layoutVariables = LayoutVariables()
+                for (name in overridedVariables.keys) {
+                    layoutVariables.putOverride(name, overridedVariables[name]!!)
+                }
+                parseJSON(content, state, layoutVariables)
+            }
+
+            override fun override(name: String, value: Float): ConstraintSet {
+                overridedVariables[name] = value
+                return this
+            }
+        })
     }
 
-    override fun override(name: String, value: Float) : ConstraintSet {
-        overridedVariables[name] = value
-        return this
-    }
+    return constraintset.value
 }
 
 /**

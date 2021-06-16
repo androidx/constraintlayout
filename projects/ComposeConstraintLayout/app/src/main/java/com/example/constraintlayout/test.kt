@@ -969,13 +969,16 @@ public fun ScreenExample12() {
 @Composable
 public fun ScreenExample13() {
     var animateToEnd by remember { mutableStateOf(false) }
-    val progress by animateFloatAsState(
+
+    val cprogress by animateFloatAsState(
         targetValue = if (animateToEnd) 1f else 0f,
         animationSpec = tween(2000)
     )
     Column {
         MotionLayout(
-            modifier = Modifier.fillMaxWidth().height(400.dp),
+            modifier = Modifier.fillMaxWidth()
+                .height(400.dp)
+                .background(Color.White) ,
             start = ConstraintSet("""
             {
               a: {
@@ -983,8 +986,7 @@ public fun ScreenExample13() {
                 bottom: ['parent', 'bottom', 16],
                 custom: {
                   background: '#FFFF00',
-                  textColor: '#000000',
-                  textSize: 12
+                  textColor: '#000000'
                 }
               }
             }
@@ -999,22 +1001,20 @@ public fun ScreenExample13() {
                 rotationZ: 360,
                 custom: {
                   background: '#0000FF',
-                  textColor: '#FFFFFF',
-                  textSize: 36
+                  textColor: '#FFFFFF'
                 }
               }
             }
             """
             ),
             debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
-            progress = progress
-        ) {
+            progress = cprogress) {
             var properties = motionProperties("a")
             Text(text = "Hello", modifier = Modifier
-                .layoutId(properties.id())
-                .background(properties.color("background")),
-                color = properties.color("textColor"),
-                fontSize = properties.fontSize("textSize"))
+                .layoutId(properties.value.id())
+                .background(properties.value.color("background"))
+                ,color = properties.value.color("textColor")
+            )
         }
 
         Button(onClick = { animateToEnd = !animateToEnd }) {
