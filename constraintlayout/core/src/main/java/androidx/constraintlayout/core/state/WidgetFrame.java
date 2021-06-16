@@ -32,6 +32,9 @@ public class WidgetFrame {
 
     // transforms
 
+    public float pivotX = Float.NaN;
+    public float pivotY = Float.NaN;
+
     public float rotationX = Float.NaN;
     public float rotationY = Float.NaN;
     public float rotationZ = Float.NaN;
@@ -84,6 +87,8 @@ public class WidgetFrame {
         top = frame.top;
         right = frame.right;
         bottom = frame.bottom;
+        pivotX = frame.pivotX;
+        pivotY = frame.pivotY;
         rotationX = frame.rotationX;
         rotationY = frame.rotationY;
         rotationZ = frame.rotationZ;
@@ -119,6 +124,9 @@ public class WidgetFrame {
         frame.top = (int) (start.top + progress*(end.top - start.top));
         frame.right = (int) (start.right + progress*(end.right - start.right));
         frame.bottom = (int) (start.bottom + progress*(end.bottom - start.bottom));
+
+        frame.pivotX = interpolate(start.pivotX, end.pivotX, 0f, progress);
+        frame.pivotY = interpolate(start.pivotY, end.pivotY, 0f, progress);
 
         frame.rotationX = interpolate(start.rotationX, end.rotationX, 0f, progress);
         frame.rotationY = interpolate(start.rotationY, end.rotationY, 0f, progress);
@@ -176,6 +184,8 @@ public class WidgetFrame {
             right = widget.getRight();
             bottom = widget.getBottom();
             WidgetFrame frame = widget.frame;
+            pivotX = frame.pivotX;
+            pivotY = frame.pivotY;
             rotationX = frame.rotationX;
             rotationY = frame.rotationY;
             rotationZ = frame.rotationZ;

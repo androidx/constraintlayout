@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.LayoutScopeMarker
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.GraphicsLayerScope
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.platform.InspectorValueInfo
 import androidx.compose.ui.platform.debugInspectorInfo
@@ -1645,18 +1646,23 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             for (child in root.children) {
                 val measurable = child.companionWidget
                 if (measurable !is Measurable) continue
-                var frame = WidgetFrame(child.frame.update())
+                val frame = WidgetFrame(child.frame.update())
                 frameCache[measurable] = frame
             }
         }
         measurables.fastForEach { measurable ->
             var frame = frameCache[measurable]!!
             if (frame.isDefaultTransform()) {
-                var x = frameCache[measurable]!!.left
-                var y = frameCache[measurable]!!.top
+                val x = frameCache[measurable]!!.left
+                val y = frameCache[measurable]!!.top
                 placeables[measurable]?.place(IntOffset(x, y))
             } else {
                 val layerBlock: GraphicsLayerScope.() -> Unit = {
+                    if (!frame.pivotX.isNaN() || !frame.pivotY.isNaN()) {
+                        val pivotX = if (frame.pivotX.isNaN()) 0.5f else frame.pivotX
+                        val pivotY = if (frame.pivotY.isNaN()) 0.5f else frame.pivotY
+                        transformOrigin = TransformOrigin(pivotX, pivotY)
+                    }
                     rotationX = frame.rotationX
                     rotationY = frame.rotationY
                     rotationZ = frame.rotationZ
@@ -1666,8 +1672,8 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                     scaleY = frame.scaleY
                     alpha = frame.alpha
                 }
-                var x = frameCache[measurable]!!.left
-                var y = frameCache[measurable]!!.top
+                val x = frameCache[measurable]!!.left
+                val y = frameCache[measurable]!!.top
                 placeables[measurable]?.placeWithLayer(x, y, layerBlock = layerBlock)
             }
         }
