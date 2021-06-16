@@ -989,7 +989,8 @@ public fun ScreenExample13() {
                 bottom: ['parent', 'bottom', 16],
                 custom: {
                   background: '#FFFF00',
-                  textColor: '#000000'
+                  textColor: '#000000',
+                  textSize: 64
                 }
               }
             }
@@ -1001,10 +1002,11 @@ public fun ScreenExample13() {
               a: {
                 end: ['parent', 'end', 16],
                 top: ['parent', 'top', 16],
-                rotationZ: 360,
+                rotationZ: 0,
                 custom: {
                   background: '#0000FF',
-                  textColor: '#FFFFFF'
+                  textColor: '#FFFFFF',
+                  textSize: 12
                 }
               }
             }
@@ -1017,6 +1019,7 @@ public fun ScreenExample13() {
                 .layoutId(properties.value.id())
                 .background(properties.value.color("background"))
                 ,color = properties.value.color("textColor")
+                ,fontSize = properties.value.fontSize("textSize")
             )
         }
 
