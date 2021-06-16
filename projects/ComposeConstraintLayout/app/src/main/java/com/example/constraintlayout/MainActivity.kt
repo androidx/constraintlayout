@@ -10,8 +10,8 @@ import androidx.constraintlayout.compose.*
 
 class MainActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
-    private var composeNum = 6
-    private var MAX = 12
+    private var composeNum = 13
+    private var MAX = 13
 
     private fun show(com: ComposeView) {
         com.setContent() {
@@ -28,6 +28,8 @@ class MainActivity : AppCompatActivity() {
                 9 -> ScreenExample9()
                 10 -> ScreenExample10()
                 11 -> ScreenExample11()
+                12 -> ScreenExample12()
+                13 -> ScreenExample13()
             }
         }
     }

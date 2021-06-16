@@ -20,6 +20,7 @@ import androidx.constraintlayout.core.state.ConstraintReference
 import androidx.constraintlayout.core.state.Dimension
 import androidx.constraintlayout.core.state.Dimension.SPREAD_DIMENSION
 import androidx.constraintlayout.core.state.State.Chain.*
+import androidx.constraintlayout.core.state.Transition
 import androidx.constraintlayout.core.state.helpers.GuidelineReference
 import androidx.constraintlayout.core.widgets.ConstraintWidget
 import org.json.JSONArray
@@ -102,6 +103,51 @@ class OverrideValue(value: Float) : GeneratedValue {
     var value : Float = value
     override fun value() : Float {
         return value
+    }
+}
+
+internal fun parseJSON(content: String, transition: Transition,
+                       state: Int, layoutVariables: LayoutVariables) {
+    val json = JSONObject(content)
+    val elements = json.names() ?: return
+    (0 until elements.length()).forEach { i ->
+        val elementName = elements[i].toString()
+        val element = json[elementName]
+        if (element is JSONObject) {
+            val customProperties = element.optJSONObject("custom")
+            if (customProperties != null) {
+                val properties = customProperties.names() ?: return
+                (0 until properties.length()).forEach { i ->
+                    val property = properties[i].toString()
+                    val value = customProperties[property]
+                    if (value is Int) {
+                        transition.addCustomFloat(state, elementName, property, value.toFloat())
+                    } else if (value is Float) {
+                        transition.addCustomFloat(state, elementName, property, value)
+                    } else if (value is String) {
+                        if (value.startsWith('#')) {
+                            var r = 0f
+                            var g = 0f
+                            var b = 0f
+                            var a = 1f
+                            if (value.length == 7 || value.length == 9) {
+                                var hr = Integer.valueOf(value.substring(1, 3), 16)
+                                var hg = Integer.valueOf(value.substring(3, 5), 16)
+                                var hb = Integer.valueOf(value.substring(5, 7), 16)
+                                r = hr.toFloat() / 255f
+                                g = hg.toFloat() / 255f
+                                b = hb.toFloat() / 255f
+                            }
+                            if (value.length == 9) {
+                                var ha = Integer.valueOf(value.substring(5, 7), 16)
+                                a = ha.toFloat() / 255f
+                            }
+                            transition.addCustomColor(state, elementName, property, r, g, b, a)
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -418,7 +464,7 @@ fun parseWidget(
                 reference.rotationZ(value) // element.getDouble(constraintName).toFloat())
             }
             "custom" -> {
-                parseCustomProperties(state, layoutVariables, element, reference, constraintName)
+                parseCustomProperties(element, reference, constraintName)
             }
             else -> {
                 parseConstraint(state, layoutVariables, element, reference, constraintName)
@@ -428,8 +474,6 @@ fun parseWidget(
 }
 
 private fun parseCustomProperties(
-    state: State,
-    layoutVariables: LayoutVariables,
     element: JSONObject,
     reference: ConstraintReference,
     constraintName: String
