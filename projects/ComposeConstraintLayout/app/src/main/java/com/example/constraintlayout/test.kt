@@ -611,7 +611,9 @@ public fun ScreenExample7() {
     )
     Column {
      MotionLayout(
-            modifier = Modifier.fillMaxWidth().height(400.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(400.dp),
             start = ConstraintSet(
                 """
             {
@@ -849,15 +851,51 @@ public fun ScreenExample10() {
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Box(modifier = Modifier.layoutId("h1").width(100.dp).height(60.dp).background(Color.Red))
-        Box(modifier = Modifier.layoutId("h2").width(100.dp).height(60.dp).background(Color.Green))
-        Box(modifier = Modifier.layoutId("h3").width(100.dp).height(60.dp).background(Color.Blue))
-        Box(modifier = Modifier.layoutId("h4").width(100.dp).height(60.dp).background(Color.Gray))
-        Box(modifier = Modifier.layoutId("h5").width(100.dp).height(60.dp).background(Color.Yellow))
-        Box(modifier = Modifier.layoutId("h6").width(100.dp).height(60.dp).background(Color.Cyan))
-        Box(modifier = Modifier.layoutId("h7").width(100.dp).height(60.dp).background(Color.Magenta))
-        Box(modifier = Modifier.layoutId("h8").width(100.dp).height(60.dp).background(Color.Red))
-        Box(modifier = Modifier.layoutId("h9").width(100.dp).height(60.dp).background(Color.DarkGray))
+        Box(modifier = Modifier
+            .layoutId("h1")
+            .width(100.dp)
+            .height(60.dp)
+            .background(Color.Red))
+        Box(modifier = Modifier
+            .layoutId("h2")
+            .width(100.dp)
+            .height(60.dp)
+            .background(Color.Green))
+        Box(modifier = Modifier
+            .layoutId("h3")
+            .width(100.dp)
+            .height(60.dp)
+            .background(Color.Blue))
+        Box(modifier = Modifier
+            .layoutId("h4")
+            .width(100.dp)
+            .height(60.dp)
+            .background(Color.Gray))
+        Box(modifier = Modifier
+            .layoutId("h5")
+            .width(100.dp)
+            .height(60.dp)
+            .background(Color.Yellow))
+        Box(modifier = Modifier
+            .layoutId("h6")
+            .width(100.dp)
+            .height(60.dp)
+            .background(Color.Cyan))
+        Box(modifier = Modifier
+            .layoutId("h7")
+            .width(100.dp)
+            .height(60.dp)
+            .background(Color.Magenta))
+        Box(modifier = Modifier
+            .layoutId("h8")
+            .width(100.dp)
+            .height(60.dp)
+            .background(Color.Red))
+        Box(modifier = Modifier
+            .layoutId("h9")
+            .width(100.dp)
+            .height(60.dp)
+            .background(Color.DarkGray))
     }
 }
 
@@ -902,17 +940,54 @@ public fun ScreenExample11() {
         """),
             progress = progress,
             modifier = Modifier
-                .fillMaxSize().background(Color.White)
+                .fillMaxSize()
+                .background(Color.White)
         ) {
-            Box(modifier = Modifier.layoutId("h1").width(100.dp).height(60.dp).background(Color.Red))
-            Box(modifier = Modifier.layoutId("h2").width(100.dp).height(60.dp).background(Color.Green))
-            Box(modifier = Modifier.layoutId("h3").width(100.dp).height(60.dp).background(Color.Blue))
-            Box(modifier = Modifier.layoutId("h4").width(100.dp).height(60.dp).background(Color.Gray))
-            Box(modifier = Modifier.layoutId("h5").width(100.dp).height(60.dp).background(Color.Yellow))
-            Box(modifier = Modifier.layoutId("h6").width(100.dp).height(60.dp).background(Color.Cyan))
-            Box(modifier = Modifier.layoutId("h7").width(100.dp).height(60.dp).background(Color.Magenta))
-            Box(modifier = Modifier.layoutId("h8").width(100.dp).height(60.dp).background(Color.Red))
-            Box(modifier = Modifier.layoutId("h9").width(100.dp).height(60.dp).background(Color.DarkGray))
+            Box(modifier = Modifier
+                .layoutId("h1")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.Red))
+            Box(modifier = Modifier
+                .layoutId("h2")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.Green))
+            Box(modifier = Modifier
+                .layoutId("h3")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.Blue))
+            Box(modifier = Modifier
+                .layoutId("h4")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.Gray))
+            Box(modifier = Modifier
+                .layoutId("h5")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.Yellow))
+            Box(modifier = Modifier
+                .layoutId("h6")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.Cyan))
+            Box(modifier = Modifier
+                .layoutId("h7")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.Magenta))
+            Box(modifier = Modifier
+                .layoutId("h8")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.Red))
+            Box(modifier = Modifier
+                .layoutId("h9")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.DarkGray))
         }
     }
 }
@@ -957,12 +1032,15 @@ public fun ScreenExample12() {
         MotionLayout(cs1, cs2,
             progress = progress,
             modifier = Modifier
-                .fillMaxSize().background(Color.White)
+                .fillMaxSize()
+                .background(Color.White)
         ) {
             var colors = arrayListOf<Color>(Color.Red, Color.Green, Color.Blue, Color.Cyan, Color.Yellow)
 
             for (i in 1..36) {
-                Box(modifier = Modifier.layoutId("h$i", "box").background(colors[i%colors.size]))
+                Box(modifier = Modifier
+                    .layoutId("h$i", "box")
+                    .background(colors[i % colors.size]))
             }
         }
     }
@@ -979,7 +1057,8 @@ public fun ScreenExample13() {
     )
     Column {
         MotionLayout(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .height(400.dp)
                 .background(Color.White) ,
             start = ConstraintSet("""
@@ -1002,7 +1081,7 @@ public fun ScreenExample13() {
               a: {
                 end: ['parent', 'end', 16],
                 top: ['parent', 'top', 16],
-                rotationZ: 0,
+                rotationZ: 360,
                 custom: {
                   background: '#0000FF',
                   textColor: '#FFFFFF',
@@ -1019,7 +1098,7 @@ public fun ScreenExample13() {
                 .layoutId(properties.value.id())
                 .background(properties.value.color("background"))
                 ,color = properties.value.color("textColor")
-                ,fontSize = properties.value.fontSize("textSize")
+                //,fontSize = properties.value.fontSize("textSize")
             )
         }
 
@@ -1029,10 +1108,137 @@ public fun ScreenExample13() {
     }
 }
 
+@Preview(group = "motion6")
+@Composable
+public fun ScreenExample14() {
+    var animateToEnd by remember { mutableStateOf(false) }
+
+    val progress by animateFloatAsState(
+        targetValue = if (animateToEnd) 1f else 0f,
+        animationSpec = tween(20000)
+    )
+    Column {
+        MotionLayout(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(400.dp)
+                .background(Color.White) ,
+            start = ConstraintSet("""
+            {
+              a: {
+                width: 40,
+                height: 40,
+                start: ['parent', 'start', 16],
+                bottom: ['parent', 'bottom', 16]
+              }
+            }
+            """
+            ),
+            end = ConstraintSet(
+                """
+            {
+              a: {
+                width: 100,
+                height: 100,
+                end: ['parent', 'end', 16],
+                top: ['parent', 'top', 16]
+              }
+            }
+            """
+            ),
+            keyframes = Keyframes("""
+            {
+              KeyFrames: {
+                KeyPositions: [
+                {
+                   target: ['a'],
+                   frames: [50],
+                   percentX: [0.8],
+                   percentY: [0.8]
+                }
+                ]               
+              }
+            }
+            """),
+            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
+            progress = progress) {
+            Box(modifier = Modifier
+                .layoutId("a")
+                .background(Color.Red))
+        }
+
+        Button(onClick = { animateToEnd = !animateToEnd }) {
+            Text(text = "Run")
+        }
+    }
+}
 
 
+@Preview(group = "motion7")
+@Composable
+public fun ScreenExample15() {
+    var animateToEnd by remember { mutableStateOf(false) }
 
+    val progress by animateFloatAsState(
+        targetValue = if (animateToEnd) 1f else 0f,
+        animationSpec = tween(6000)
+    )
+    Column {
+        MotionLayout(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(400.dp)
+                .background(Color.White) ,
+            start = ConstraintSet("""
+            {
+              a: {
+                width: 40,
+                height: 40,
+                start: ['parent', 'start', 16],
+                bottom: ['parent', 'bottom', 16]
+              }
+            }
+            """
+            ),
+            end = ConstraintSet(
+                """
+            {
+              a: {
+                width: 150,
+                height: 100,
+                rotationZ: 390,
+                end: ['parent', 'end', 16],
+                top: ['parent', 'top', 16]
+              }
+            }
+            """
+            ),
+            keyframes = Keyframes("""
+            {
+              KeyFrames: {
+                KeyPositions: [
+                {
+                   target: ['a'],
+                   frames: [25,50,75],
+                   percentX: [0.1, 0.8, 0.1],
+                   percentY: [0.4, 0.8, 0.0]
+                }
+                ]
+              }
+            }
+            """),
+            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
+            progress = progress) {
+            Box(modifier = Modifier
+                .layoutId("a")
+                .background(Color.Red))
+        }
 
+        Button(onClick = { animateToEnd = !animateToEnd }) {
+            Text(text = "Run")
+        }
+    }
+}
 
 
 

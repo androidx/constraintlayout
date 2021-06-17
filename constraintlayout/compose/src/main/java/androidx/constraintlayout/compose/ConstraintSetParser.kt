@@ -108,6 +108,43 @@ class OverrideValue(value: Float) : GeneratedValue {
     }
 }
 
+internal fun parseKeyframesJSON(content: String, transition: Transition) {
+    val json = JSONObject(content)
+    val keyframes = json.optJSONObject("KeyFrames")
+    if (keyframes == null) {
+        return
+    }
+    val keypositions = keyframes.optJSONArray("KeyPositions")
+    if (keypositions == null) {
+        return
+    }
+    (0 until keypositions.length()).forEach { i ->
+        val keyposition = keypositions[i]
+        if (keyposition is JSONObject) {
+            parseKeyPosition(keyposition, transition)
+        }
+    }
+}
+
+fun parseKeyPosition(keyposition: JSONObject, transition: Transition) {
+    val targets = keyposition.getJSONArray("target")
+    val frames = keyposition.getJSONArray("frames")
+    val percentX = keyposition.getJSONArray("percentX")
+    val percentY = keyposition.getJSONArray("percentY")
+    if (frames.length() != percentX.length() || frames.length() != percentY.length()) {
+        return
+    }
+    (0 until targets.length()).forEach { i ->
+        val target = targets.getString(i)
+        (0 until frames.length()).forEach { j ->
+            val frame = frames.getInt(j)
+            val x = percentX.getDouble(j).toFloat()
+            val y = percentY.getDouble(j).toFloat()
+            transition.addKeyPosition(target, frame, 0, x, y)
+        }
+    }
+}
+
 internal fun parseJSON(content: String, transition: Transition,
                        state: Int, layoutVariables: LayoutVariables) {
     val json = JSONObject(content)
