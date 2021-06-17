@@ -1120,7 +1120,7 @@ public fun ScreenExample14() {
                    percentX: [0.8],
                    percentY: [0.8]
                 }
-                ]               
+                ]
               }
             }
             """),
