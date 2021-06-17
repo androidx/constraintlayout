@@ -62,7 +62,7 @@ inline fun MotionLayout(
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
     crossinline content: @Composable MotionLayoutScope.() -> Unit
 ) {
-    val measurer = remember { MotionMeasurer(start, end, keyframes, progress) }
+    val measurer = remember { MotionMeasurer() }
     val scope = remember { MotionLayoutScope(measurer) }
     val progressState = remember { mutableStateOf(0f) }
     SideEffect { progressState.value = progress }
@@ -191,7 +191,7 @@ internal fun rememberMotionLayoutMeasurePolicy(
     progress: MutableState<Float>,
     measurer: MotionMeasurer
 ) = remember(optimizationLevel, constraintSetStart, constraintSetEnd, keyframes) {
-    measurer.clearConstraintSets()
+    measurer.initWith(constraintSetStart, constraintSetEnd, keyframes, progress.value)
     MeasurePolicy { measurables, constraints ->
         val layoutSize = measurer.performInterpolationMeasure(
             constraints,
@@ -213,23 +213,9 @@ internal fun rememberMotionLayoutMeasurePolicy(
 }
 
 @PublishedApi
-internal class MotionMeasurer(
-    start: ConstraintSet,
-    end: ConstraintSet,
-    keyframes: Keyframes?,
-    progress: Float
-) : Measurer() {
+internal class MotionMeasurer : Measurer() {
     private var motionProgress = 0f
     val transition = Transition()
-
-    init {
-        start.applyTo(transition, Transition.START)
-        end.applyTo(transition, Transition.END)
-        transition.interpolate(0, 0, progress)
-        if (keyframes != null) {
-            keyframes.applyTo(transition, 0)
-        }
-    }
 
     fun getProgress() : Float { return motionProgress }
 
@@ -504,6 +490,21 @@ internal class MotionMeasurer(
     fun clearConstraintSets() {
         transition.clear()
         frameCache.clear()
+    }
+
+    fun initWith(
+        start: ConstraintSet,
+        end: ConstraintSet,
+        keyframes: Keyframes?,
+        progress: Float
+    ) {
+        clearConstraintSets()
+        start.applyTo(transition, Transition.START)
+        end.applyTo(transition, Transition.END)
+        transition.interpolate(0, 0, progress)
+        if (keyframes != null) {
+            keyframes.applyTo(transition, 0)
+        }
     }
 }
 
