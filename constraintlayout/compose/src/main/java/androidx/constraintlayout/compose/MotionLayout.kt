@@ -168,6 +168,7 @@ internal fun rememberMotionLayoutMeasurePolicy(
     progress: MutableState<Float>,
     measurer: MotionMeasurer
 ) = remember(optimizationLevel, constraintSetStart, constraintSetEnd) {
+    measurer.clearConstraintSets()
     MeasurePolicy { measurables, constraints ->
         val layoutSize = measurer.performInterpolationMeasure(
             constraints,
@@ -420,6 +421,11 @@ internal class MotionMeasurer(
         val startFloat = startFrame.getCustomFloat(name)
         val endFloat = endFrame.getCustomFloat(name)
         return (1f - motionProgress) * startFloat + motionProgress * endFloat
+    }
+
+    fun clearConstraintSets() {
+        transition.clear()
+        frameCache.clear()
     }
 }
 
