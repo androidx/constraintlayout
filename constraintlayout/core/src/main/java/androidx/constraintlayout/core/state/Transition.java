@@ -28,7 +28,7 @@ public class Transition {
 
     public final static int START = 0;
     public final static int END = 1;
-    public final static int CURRENT = 2;
+    public final static int INTERPOLATED = 2;
 
     public KeyPosition findPreviousPosition(String target, int frameNumber) {
         while (frameNumber >= 0) {
@@ -107,14 +107,25 @@ public class Transition {
             interpolated = new WidgetFrame();
         }
 
-        public WidgetState(ConstraintWidget child) {
-            start = new WidgetFrame(child);
-            end = new WidgetFrame(child);
-            interpolated = new WidgetFrame(child);
-        }
-
         public void interpolate(int parentWidth, int parentHeight, float progress, Transition transition) {
             WidgetFrame.interpolate(parentWidth, parentHeight, interpolated, start, end, transition, progress);
+        }
+
+        public void update(ConstraintWidget child, int state) {
+            if (state == START) {
+                start.update(child);
+            } else if (state == END) {
+                end.update(child);
+            }
+        }
+
+        public WidgetFrame getFrame(int type) {
+            if (type == START) {
+                return start;
+            } else if (type == END) {
+                return end;
+            }
+            return interpolated;
         }
     }
 
@@ -157,49 +168,16 @@ public class Transition {
     }
 
     public void addCustomFloat(int state, String widgetId, String property, float value) {
-        WidgetState widgetState = this.state.get(widgetId);
-        if (widgetState == null) {
-            widgetState = new WidgetState();
-            this.state.put(widgetId, widgetState);
-        }
-        if (state == START) {
-            widgetState.start.addCustomFloat(property, value);
-        } else if (state == END) {
-            widgetState.end.addCustomFloat(property, value);
-        } else {
-            widgetState.interpolated.addCustomFloat(property, value);
-        }
+        WidgetState widgetState = getWidgetState(widgetId, null, state);
+        WidgetFrame frame = widgetState.getFrame(state);
+        frame.addCustomFloat(property, value);
     }
 
     public void addCustomColor(int state, String widgetId, String property,
                                float r, float g, float b, float a) {
-        WidgetState widgetState = this.state.get(widgetId);
-        if (widgetState == null) {
-            widgetState = new WidgetState();
-            this.state.put(widgetId, widgetState);
-        }
-        if (state == START) {
-            widgetState.start.addCustomColor(property, r, g, b, a);
-        } else if (state == END) {
-            widgetState.end.addCustomColor(property, r, g, b, a);
-        } else {
-            widgetState.interpolated.addCustomColor(property, r, g, b, a);
-        }
-    }
-
-    public void updateFrom(WidgetFrame frame, int state, String id) {
-        WidgetState widgetState = this.state.get(id);
-        if (widgetState == null) {
-            widgetState = new WidgetState(null);
-        }
-        if (state == START) {
-            widgetState.start = frame;
-        } else if (state == END) {
-            widgetState.end = frame;
-        } else {
-            widgetState.interpolated = frame;
-        }
-        this.state.put(id, widgetState);
+        WidgetState widgetState = getWidgetState(widgetId, null, state);
+        WidgetFrame frame = widgetState.getFrame(state);
+        frame.addCustomColor(property, r, g, b, a);
     }
 
     public void updateFrom(ConstraintWidgetContainer container, int state) {
@@ -207,18 +185,8 @@ public class Transition {
         final int count = children.size();
         for (int i = 0; i < count; i++) {
             ConstraintWidget child = children.get(i);
-            WidgetState widgetState = this.state.get(child.stringId);
-            if (widgetState == null) {
-                widgetState = new WidgetState(child);
-                this.state.put(child.stringId, widgetState);
-            }
-            if (state == START) {
-                widgetState.start.update(child);
-            } else if (state == END) {
-                widgetState.end.update(child);
-            } else {
-                widgetState.interpolated.update(child);
-            }
+            WidgetState widgetState = getWidgetState(child.stringId, null, state);
+            widgetState.update(child, state);
         }
     }
 
@@ -245,39 +213,42 @@ public class Transition {
         return widgetState.end;
     }
 
-    public WidgetFrame getInterpolated(String id) {
-        WidgetState widgetState = state.get(id);
+    private WidgetState getWidgetState(String widgetId, ConstraintWidget child, int transitionState) {
+        WidgetState widgetState = this.state.get(widgetId);
         if (widgetState == null) {
-            return null;
+            widgetState = new WidgetState();
+            state.put(widgetId, widgetState);
+            if (child != null) {
+                widgetState.update(child, transitionState);
+            }
         }
-        return widgetState.interpolated;
+        return widgetState;
     }
 
+    /**
+     * Used in debug draw
+     * @param child
+     * @return
+     */
     public WidgetFrame getStart(ConstraintWidget child) {
-        WidgetState widgetState = this.state.get(child.stringId);
-        if (widgetState == null) {
-            widgetState = new WidgetState(child);
-            state.put(child.stringId, widgetState);
-        }
-        return widgetState.start;
+        return getWidgetState(child.stringId, null, Transition.START).start;
     }
 
+    /**
+     * Used in debug draw
+     * @param child
+     * @return
+     */
     public WidgetFrame getEnd(ConstraintWidget child) {
-        WidgetState widgetState = this.state.get(child.stringId);
-        if (widgetState == null) {
-            widgetState = new WidgetState(child);
-            state.put(child.stringId, widgetState);
-        }
-        return widgetState.end;
+        return getWidgetState(child.stringId, null, Transition.END).end;
     }
 
+    /**
+     * Used after the interpolation
+     * @param child
+     * @return
+     */
     public WidgetFrame getInterpolated(ConstraintWidget child) {
-        WidgetState widgetState = this.state.get(child.stringId);
-        if (widgetState == null) {
-            widgetState = new WidgetState(child);
-            state.put(child.stringId, widgetState);
-        }
-        return widgetState.interpolated;
+        return getWidgetState(child.stringId, null, Transition.INTERPOLATED).interpolated;
     }
-
 }
