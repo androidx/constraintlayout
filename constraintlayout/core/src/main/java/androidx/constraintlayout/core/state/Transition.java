@@ -24,10 +24,73 @@ import java.util.HashMap;
 
 public class Transition {
     HashMap<String, WidgetState> state = new HashMap<>();
+    HashMap<Integer, HashMap<String, KeyPosition>> keyPositions = new HashMap<>();
 
     public final static int START = 0;
     public final static int END = 1;
     public final static int CURRENT = 2;
+
+    public KeyPosition findPreviousPosition(String target, int frameNumber) {
+        while (frameNumber >= 0) {
+            HashMap<String, KeyPosition> map = keyPositions.get(frameNumber);
+            if (map != null) {
+                KeyPosition keyPosition = map.get(target);
+                if (keyPosition != null) {
+                    return keyPosition;
+                }
+            }
+            frameNumber--;
+        }
+        return null;
+    }
+
+    public KeyPosition findNextPosition(String target, int frameNumber) {
+        while (frameNumber <= 100) {
+            HashMap<String, KeyPosition> map = keyPositions.get(frameNumber);
+            if (map != null) {
+                KeyPosition keyPosition = map.get(target);
+                if (keyPosition != null) {
+                    return keyPosition;
+                }
+            }
+            frameNumber++;
+        }
+        return null;
+    }
+
+    public int getNumberKeyPositions(WidgetFrame frame) {
+        int numKeyPositions = 0;
+        int frameNumber = 0;
+        while (frameNumber <= 100) {
+            HashMap<String, KeyPosition> map = keyPositions.get(frameNumber);
+            if (map != null) {
+                KeyPosition keyPosition = map.get(frame.widget.stringId);
+                if (keyPosition != null) {
+                    numKeyPositions++;
+                }
+            }
+            frameNumber++;
+        }
+        return numKeyPositions;
+    }
+
+    public void fillKeyPositions(WidgetFrame frame, float[] x, float[] y, float[] pos) {
+        int numKeyPositions = 0;
+        int frameNumber = 0;
+        while (frameNumber <= 100) {
+            HashMap<String, KeyPosition> map = keyPositions.get(frameNumber);
+            if (map != null) {
+                KeyPosition keyPosition = map.get(frame.widget.stringId);
+                if (keyPosition != null) {
+                    x[numKeyPositions] = keyPosition.x;
+                    y[numKeyPositions] = keyPosition.y;
+                    pos[numKeyPositions] = keyPosition.frame;
+                    numKeyPositions++;
+                }
+            }
+            frameNumber++;
+        }
+    }
 
     static class WidgetState {
         WidgetFrame start;
@@ -46,8 +109,24 @@ public class Transition {
             interpolated = new WidgetFrame(child);
         }
 
-        public void interpolate(float progress) {
-            WidgetFrame.interpolate(interpolated, start, end, progress);
+        public void interpolate(int parentWidth, int parentHeight, float progress, Transition transition) {
+            WidgetFrame.interpolate(parentWidth, parentHeight, interpolated, start, end, transition, progress);
+        }
+    }
+
+    static class KeyPosition {
+        int frame;
+        String target;
+        int type;
+        float x;
+        float y;
+
+        public KeyPosition(String target, int frame, int type, float x, float y) {
+            this.target = target;
+            this.frame = frame;
+            this.type = type;
+            this.x = x;
+            this.y = y;
         }
     }
 
@@ -61,6 +140,16 @@ public class Transition {
 
     public boolean contains(String key) {
         return state.containsKey(key);
+    }
+
+    public void addKeyPosition(String target, int frame, int type, float x, float y) {
+        KeyPosition keyPosition = new KeyPosition(target, frame, type, x, y);
+        HashMap<String, KeyPosition> map = keyPositions.get(frame);
+        if (map == null) {
+            map = new HashMap<>();
+            keyPositions.put(frame, map);
+        }
+        map.put(target, keyPosition);
     }
 
     public void addCustomFloat(int state, String widgetId, String property, float value) {
@@ -129,10 +218,10 @@ public class Transition {
         }
     }
 
-    public void interpolate(float progress) {
+    public void interpolate(int parentWidth, int parentHeight, float progress) {
         for (String key : state.keySet()) {
             WidgetState widget = state.get(key);
-            widget.interpolate(progress);
+            widget.interpolate(parentWidth, parentHeight, progress, this);
         }
     }
 

@@ -118,12 +118,48 @@ public class WidgetFrame {
                 && Float.isNaN(alpha);
     }
 
-    public static void interpolate(WidgetFrame frame, WidgetFrame start, WidgetFrame end, float progress) {
+    public static void interpolate(int parentWidth, int parentHeight, WidgetFrame frame, WidgetFrame start, WidgetFrame end, Transition transition, float progress) {
+        int frameNumber = (int) (progress * 100);
+        Transition.KeyPosition firstPosition = transition.findPreviousPosition(frame.widget.stringId, frameNumber);
+        Transition.KeyPosition lastPosition = transition.findNextPosition(frame.widget.stringId, frameNumber);
+
+        if (firstPosition == lastPosition) {
+            lastPosition = null;
+        }
+        int startX = start.left;
+        int startY = start.top;
+        int endX = end.left;
+        int endY = end.top;
+        int startWidth = start.right - start.left;
+        int startHeight = start.bottom - start.top;
+        int endWidth = end.right - end.left;
+        int endHeight = end.bottom - end.top;
+
+        float progressPosition = progress;
+        int interpolateStartFrame = 0;
+        int interpolateEndFrame = 100;
+
+        if (firstPosition != null) {
+            startX = (int) (firstPosition.x * parentWidth);
+            startY = (int) (firstPosition.y * parentHeight);
+            interpolateStartFrame = firstPosition.frame;
+        }
+        if (lastPosition != null) {
+            endX = (int) (lastPosition.x * parentWidth);
+            endY = (int) (lastPosition.y * parentHeight);
+            interpolateEndFrame = lastPosition.frame;
+        }
+
+        progressPosition = (progress * 100f - interpolateStartFrame) / (float) (interpolateEndFrame - interpolateStartFrame);
+
         frame.widget = start.widget;
-        frame.left = (int) (start.left + progress*(end.left - start.left));
-        frame.top = (int) (start.top + progress*(end.top - start.top));
-        frame.right = (int) (start.right + progress*(end.right - start.right));
-        frame.bottom = (int) (start.bottom + progress*(end.bottom - start.bottom));
+
+        frame.left = (int) (startX + progressPosition*(endX - startX));
+        frame.top = (int) (startY + progressPosition*(endY - startY));
+        int width = (int) ((1 - progress) * startWidth + (progress * endWidth));
+        int height = (int) ((1 - progress) * startHeight + (progress * endHeight));
+        frame.right = frame.left + width;
+        frame.bottom = frame.top + height;
 
         frame.pivotX = interpolate(start.pivotX, end.pivotX, 0f, progress);
         frame.pivotY = interpolate(start.pivotY, end.pivotY, 0f, progress);
