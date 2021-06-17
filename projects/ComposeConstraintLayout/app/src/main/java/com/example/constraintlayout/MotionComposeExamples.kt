@@ -181,6 +181,7 @@ public fun ScreenExample15() {
                 },
                 title: { 
                 width: "spread",
+                height: 28,
                 start: ['parent', 'start', 16],
                 top: ['v1', 'bottom', 16],
                 end: ['parent', 'end', 16],
