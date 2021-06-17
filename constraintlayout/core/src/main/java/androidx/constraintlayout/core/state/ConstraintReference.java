@@ -21,6 +21,7 @@ import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.HORIZONTAL;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
@@ -37,11 +38,21 @@ public class ConstraintReference implements Reference {
         return key;
     }
 
+    public void setTag(String tag) {
+        mTag = tag;
+    }
+
+    public String getTag() {
+        return mTag;
+    }
+
     public interface ConstraintReferenceFactory {
         ConstraintReference create(State state);
     }
 
     final State mState;
+
+    String mTag = null;
 
     Facade mFacade = null;
 
@@ -64,6 +75,9 @@ public class ConstraintReference implements Reference {
     int mMarginEndGone = 0;
     int mMarginTopGone = 0;
     int mMarginBottomGone = 0;
+
+    float mPivotX = 0.5f;
+    float mPivotY = 0.5f;
 
     float mRotationX = 0;
     float mRotationY = 0;
@@ -102,6 +116,9 @@ public class ConstraintReference implements Reference {
 
     private Object mView;
     private ConstraintWidget mConstraintWidget;
+
+    private HashMap<String, WidgetFrame.Color> mCustomColors = null;
+    private HashMap<String, Float> mCustomFloats = null;
 
     public void setView(Object view) {
         mView = view;
@@ -237,9 +254,21 @@ public class ConstraintReference implements Reference {
     public float getScaleX() { return mScaleX; }
     public float getScaleY() { return mScaleY; }
     public float getAlpha() { return mAlpha; }
+    public float getPivotX() { return mPivotX; }
+    public float getPivotY() { return mPivotY; }
     public float getRotationX() { return mRotationX; }
     public float getRotationY() { return mRotationY; }
     public float getRotationZ() { return mRotationZ; }
+
+    public ConstraintReference pivotX(float x) {
+        mPivotX = x;
+        return this;
+    }
+
+    public ConstraintReference pivotY(float y) {
+        mPivotY = y;
+        return this;
+    }
 
     public ConstraintReference rotationX(float x) {
         mRotationX = x;
@@ -343,6 +372,21 @@ public class ConstraintReference implements Reference {
     public ConstraintReference baseline() {
         mLast = State.Constraint.BASELINE_TO_BASELINE;
         return this;
+    }
+
+    public void addCustomColor(String name, float r, float g, float b, float a) {
+        WidgetFrame.Color color = new WidgetFrame.Color(r, g, b, a);
+        if (mCustomColors == null) {
+            mCustomColors = new HashMap<>();
+        }
+        mCustomColors.put(name, color);
+    }
+
+    public void addCustomFloat(String name, float value) {
+        if (mCustomFloats == null) {
+            mCustomFloats = new HashMap<>();
+        }
+        mCustomFloats.put(name, value);
     }
 
     private void dereference() {
@@ -817,6 +861,8 @@ public class ConstraintReference implements Reference {
         mConstraintWidget.setHorizontalBiasPercent(mHorizontalBias);
         mConstraintWidget.setVerticalBiasPercent(mVerticalBias);
 
+        mConstraintWidget.frame.pivotX = mPivotX;
+        mConstraintWidget.frame.pivotY = mPivotY;
         mConstraintWidget.frame.rotationX = mRotationX;
         mConstraintWidget.frame.rotationY = mRotationY;
         mConstraintWidget.frame.rotationZ = mRotationZ;
@@ -825,5 +871,8 @@ public class ConstraintReference implements Reference {
         mConstraintWidget.frame.scaleX = mScaleX;
         mConstraintWidget.frame.scaleY = mScaleY;
         mConstraintWidget.frame.alpha = mAlpha;
+
+        mConstraintWidget.frame.mCustomFloats = mCustomFloats;
+        mConstraintWidget.frame.mCustomColors = mCustomColors;
     }
 }

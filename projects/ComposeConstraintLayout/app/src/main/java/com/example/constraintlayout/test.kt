@@ -12,11 +12,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.constraintlayout.core.widgets.Optimizer
 import com.example.constraintlayout.R
 import java.util.*
 
@@ -919,11 +917,117 @@ public fun ScreenExample11() {
     }
 }
 
+@Preview(group = "motion4")
+@Composable
+public fun ScreenExample12() {
+    var animateToEnd by remember { mutableStateOf(false) }
+    val progress by animateFloatAsState(
+        targetValue = if (animateToEnd) 1f else 0f,
+        animationSpec = tween(2000)
+    )
+    var baseConstraintSet = """
+            {
+                Variables: {
+                  angle: { start: 0, increment: 10 },
+                  rotation: { start: 'startRotation', increment: 10 },
+                  distance: 100,
+                  mylist: { tag: 'box' }
+                },
+                Generate: {
+                  mylist: {
+                    width: 200,
+                    height: 40,
+                    circular: ['parent', 'angle', 'distance'],
+                    pivotX: 0.1,
+                    pivotY: 0.1,
+                    translationX: 225,
+                    rotationZ: 'rotation'
+                  }
+                }
+            }
+        """
 
+    var cs1 = ConstraintSet(baseConstraintSet).override("startRotation", 0f)
+    var cs2 = ConstraintSet(baseConstraintSet).override("startRotation", 90f)
 
+    Column {
+        Button(onClick = { animateToEnd = !animateToEnd }) {
+            Text(text = "Run")
+        }
+        MotionLayout(cs1, cs2,
+            progress = progress,
+            modifier = Modifier
+                .fillMaxSize().background(Color.White)
+        ) {
+            var colors = arrayListOf<Color>(Color.Red, Color.Green, Color.Blue, Color.Cyan, Color.Yellow)
 
+            for (i in 1..36) {
+                Box(modifier = Modifier.layoutId("h$i", "box").background(colors[i%colors.size]))
+            }
+        }
+    }
+}
 
+@Preview(group = "motion5")
+@Composable
+public fun ScreenExample13() {
+    var animateToEnd by remember { mutableStateOf(false) }
 
+    val cprogress by animateFloatAsState(
+        targetValue = if (animateToEnd) 1f else 0f,
+        animationSpec = tween(2000)
+    )
+    Column {
+        MotionLayout(
+            modifier = Modifier.fillMaxWidth()
+                .height(400.dp)
+                .background(Color.White) ,
+            start = ConstraintSet("""
+            {
+              a: {
+                start: ['parent', 'start', 16],
+                bottom: ['parent', 'bottom', 16],
+                custom: {
+                  background: '#FFFF00',
+                  textColor: '#000000',
+                  textSize: 64
+                }
+              }
+            }
+            """
+            ),
+            end = ConstraintSet(
+                """
+            {
+              a: {
+                end: ['parent', 'end', 16],
+                top: ['parent', 'top', 16],
+                rotationZ: 0,
+                custom: {
+                  background: '#0000FF',
+                  textColor: '#FFFFFF',
+                  textSize: 12
+                }
+              }
+            }
+            """
+            ),
+            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
+            progress = cprogress) {
+            var properties = motionProperties("a")
+            Text(text = "Hello", modifier = Modifier
+                .layoutId(properties.value.id())
+                .background(properties.value.color("background"))
+                ,color = properties.value.color("textColor")
+                ,fontSize = properties.value.fontSize("textSize")
+            )
+        }
+
+        Button(onClick = { animateToEnd = !animateToEnd }) {
+            Text(text = "Run")
+        }
+    }
+}
 
 
 

@@ -16,12 +16,14 @@
 
 package androidx.constraintlayout.compose
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.layout.LayoutScopeMarker
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.GraphicsLayerScope
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.platform.InspectorValueInfo
 import androidx.compose.ui.platform.debugInspectorInfo
@@ -36,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import androidx.constraintlayout.core.state.ConstraintReference
 import androidx.constraintlayout.core.state.Dimension.*
+import androidx.constraintlayout.core.state.Transition
 import androidx.constraintlayout.core.state.WidgetFrame
 import androidx.constraintlayout.core.widgets.ConstraintWidget
 import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.FIXED
@@ -116,6 +119,11 @@ internal fun rememberConstraintLayoutMeasurePolicy(
                             constrainScope.applyTo(state)
                         }
                     }
+                }
+
+                override fun override(name: String, value: Float) : ConstraintSet {
+                    // nothing here yet
+                    return this
                 }
             }
             val layoutSize = measurer.performMeasure(
@@ -880,6 +888,10 @@ class ConstrainScope internal constructor(internal val id: Any) {
         // TODO(popam, b/158069248): add parameter for gone margin
         fun linkTo(anchor: ConstraintLayoutBaseScope.BaselineAnchor, margin: Dp = 0.dp) {
             tasks.add { state ->
+                (state as? State)?.let {
+                    it.baselineNeededFor(id)
+                    it.baselineNeededFor(anchor.id)
+                }
                 with(state.constraints(id)) {
                     baselineAnchorFunction.invoke(this, anchor.id).margin(margin)
                 }
@@ -1231,15 +1243,53 @@ interface ConstraintSet {
      * Applies the [ConstraintSet] to a state.
      */
     fun applyTo(state: State, measurables: List<Measurable>)
+
+    fun override(name: String, value: Float) : ConstraintSet
+    fun applyTo(transition: Transition, type: Int) {
+        // nothing here, used in MotionLayout
+    }
 }
 
-fun ConstraintSet(@Language("json5") content : String) = object : ConstraintSet {
-    override fun applyTo(state: State, measurables: List<Measurable>) {
-        measurables.forEach { measurable ->
-            state.map((measurable.layoutId ?: createId()), measurable)
-        }
-        parseJSON(content, state)
+@SuppressLint("ComposableNaming")
+@Composable
+fun ConstraintSet(@Language("json5") content : String) : ConstraintSet {
+    val constraintset = remember {
+        mutableStateOf(object : ConstraintSet {
+            private val overridedVariables = HashMap<String, Float>()
+
+            override fun applyTo(transition: Transition, type: Int) {
+                val layoutVariables = LayoutVariables()
+                for (name in overridedVariables.keys) {
+                    layoutVariables.putOverride(name, overridedVariables[name]!!)
+                }
+                parseJSON(content, transition, type, layoutVariables)
+            }
+
+            override fun applyTo(state: State, measurables: List<Measurable>) {
+                measurables.forEach { measurable ->
+                    val layoutId =
+                        measurable.layoutId ?: measurable.constraintLayoutId ?: createId()
+                    state.map(layoutId, measurable)
+                    val tag = measurable.constraintLayoutTag
+                    if (tag != null && tag is String && layoutId is String) {
+                        state.setTag(layoutId, tag)
+                    }
+                }
+                val layoutVariables = LayoutVariables()
+                for (name in overridedVariables.keys) {
+                    layoutVariables.putOverride(name, overridedVariables[name]!!)
+                }
+                parseJSON(content, state, layoutVariables)
+            }
+
+            override fun override(name: String, value: Float): ConstraintSet {
+                overridedVariables[name] = value
+                return this
+            }
+        })
     }
+
+    return constraintset.value
 }
 
 /**
@@ -1254,6 +1304,11 @@ fun ConstraintSet(description: ConstraintSetScope.() -> Unit) = object : Constra
         scope.description()
         scope.applyTo(state)
     }
+
+    override fun override(name: String, value: Float) : ConstraintSet {
+        // nothing yet
+        return this
+    }
 }
 
 /**
@@ -1262,6 +1317,9 @@ fun ConstraintSet(description: ConstraintSetScope.() -> Unit) = object : Constra
 class State(val density: Density) : SolverState() {
     var rootIncomingConstraints: Constraints = Constraints()
     lateinit var layoutDirection: LayoutDirection
+    internal val baselineNeeded = mutableListOf<Any>()
+    private var dirtyBaselineNeededWidgets = true
+    private val baselineNeededWidgets = mutableSetOf<ConstraintWidget>()
 
     override fun convertDimension(value: Any?): Int {
         return if (value is Dp) {
@@ -1278,7 +1336,26 @@ class State(val density: Density) : SolverState() {
         }
         mReferences.clear()
         mReferences[PARENT] = mParent
+        baselineNeeded.clear()
+        dirtyBaselineNeededWidgets = true
         super.reset()
+    }
+
+    internal fun baselineNeededFor(id: Any) {
+        baselineNeeded.add(id)
+        dirtyBaselineNeededWidgets = true
+    }
+
+    internal fun isBaselineNeeded(constraintWidget: ConstraintWidget): Boolean {
+        if (dirtyBaselineNeededWidgets) {
+            baselineNeededWidgets.clear()
+            baselineNeeded.forEach { id ->
+                val widget = mReferences[id]?.constraintWidget
+                if (widget != null) baselineNeededWidgets.add(widget)
+            }
+            dirtyBaselineNeededWidgets = false
+        }
+        return constraintWidget in baselineNeededWidgets
     }
 
     internal fun getKeyId(helperWidget: HelperWidget): Any? {
@@ -1416,10 +1493,16 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         val currentPlaceable = placeables[measurable]
         measure.measuredWidth = currentPlaceable?.width ?: constraintWidget.width
         measure.measuredHeight = currentPlaceable?.height ?: constraintWidget.height
-        val baseline = currentPlaceable?.get(FirstBaseline)
-        measure.measuredHasBaseline = baseline != null
-        if (baseline != null) measure.measuredBaseline = baseline
-        lastMeasures.getOrPut(measurable, { arrayOf(0, 0, 0) }).copyFrom(measure)
+        val baseline =
+            if (currentPlaceable != null && state.isBaselineNeeded(constraintWidget)) {
+                currentPlaceable[FirstBaseline]
+            } else {
+                AlignmentLine.Unspecified
+            }
+        measure.measuredHasBaseline = baseline != AlignmentLine.Unspecified
+        measure.measuredBaseline = baseline
+        lastMeasures.getOrPut(measurable, { arrayOf(0, 0, AlignmentLine.Unspecified) })
+            .copyFrom(measure)
 
         measure.measuredNeedsSolverPass = measure.measuredWidth != measure.horizontalDimension ||
             measure.measuredHeight != measure.verticalDimension
@@ -1452,10 +1535,10 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         }
         MATCH_CONSTRAINT -> {
             if (DEBUG) {
-                Log.d("CCL2", "Measure strategy ${measureStrategy}")
-                Log.d("CCL2", "DW ${matchConstraintDefaultDimension}")
-                Log.d("CCL2", "ODR ${otherDimensionResolved}")
-                Log.d("CCL2", "IRH ${currentDimensionResolved}")
+                Log.d("CCL", "Measure strategy ${measureStrategy}")
+                Log.d("CCL", "DW ${matchConstraintDefaultDimension}")
+                Log.d("CCL", "ODR ${otherDimensionResolved}")
+                Log.d("CCL", "IRH ${currentDimensionResolved}")
             }
             val useDimension = currentDimensionResolved ||
                 (measureStrategy == TRY_GIVEN_DIMENSIONS ||
@@ -1563,18 +1646,23 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             for (child in root.children) {
                 val measurable = child.companionWidget
                 if (measurable !is Measurable) continue
-                var frame = WidgetFrame(child.frame.update())
+                val frame = WidgetFrame(child.frame.update())
                 frameCache[measurable] = frame
             }
         }
         measurables.fastForEach { measurable ->
             var frame = frameCache[measurable]!!
             if (frame.isDefaultTransform()) {
-                var x = frameCache[measurable]!!.left
-                var y = frameCache[measurable]!!.top
+                val x = frameCache[measurable]!!.left
+                val y = frameCache[measurable]!!.top
                 placeables[measurable]?.place(IntOffset(x, y))
             } else {
                 val layerBlock: GraphicsLayerScope.() -> Unit = {
+                    if (!frame.pivotX.isNaN() || !frame.pivotY.isNaN()) {
+                        val pivotX = if (frame.pivotX.isNaN()) 0.5f else frame.pivotX
+                        val pivotY = if (frame.pivotY.isNaN()) 0.5f else frame.pivotY
+                        transformOrigin = TransformOrigin(pivotX, pivotY)
+                    }
                     rotationX = frame.rotationX
                     rotationY = frame.rotationY
                     rotationZ = frame.rotationZ
@@ -1584,8 +1672,8 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                     scaleY = frame.scaleY
                     alpha = frame.alpha
                 }
-                var x = frameCache[measurable]!!.left
-                var y = frameCache[measurable]!!.top
+                val x = frameCache[measurable]!!.left
+                val y = frameCache[measurable]!!.top
                 placeables[measurable]?.placeWithLayer(x, y, layerBlock = layerBlock)
             }
         }

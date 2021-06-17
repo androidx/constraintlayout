@@ -78,6 +78,8 @@ public class ConstraintWidget {
 
     public WidgetFrame frame = new WidgetFrame(this);
 
+    public String stringId;
+
     public WidgetRun getRun(int orientation) {
         if (orientation == HORIZONTAL) {
             return horizontalRun;

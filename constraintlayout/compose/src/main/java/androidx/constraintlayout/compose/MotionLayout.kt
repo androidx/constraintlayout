@@ -20,6 +20,7 @@ import android.graphics.Matrix
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.LayoutScopeMarker
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -35,14 +36,12 @@ import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.layout.MultiMeasureLayout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.*
 import androidx.constraintlayout.core.state.Dimension
+import androidx.constraintlayout.core.state.Transition
 import androidx.constraintlayout.core.state.WidgetFrame
 import androidx.constraintlayout.core.widgets.Optimizer
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Layout that interpolate its children layout given two sets of constraint and
@@ -57,9 +56,10 @@ inline fun MotionLayout(
     debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     modifier: Modifier = Modifier,
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
-    noinline content: @Composable () -> Unit
+    crossinline content: @Composable MotionLayoutScope.() -> Unit
 ) {
-    val measurer = remember { MotionMeasurer() }
+    val measurer = remember { MotionMeasurer(start, end, progress) }
+    val scope = remember { MotionLayoutScope(measurer) }
     val progressState = remember { mutableStateOf(0f) }
     SideEffect { progressState.value = progress }
     val measurePolicy =
@@ -70,7 +70,7 @@ inline fun MotionLayout(
             (MultiMeasureLayout(
                 modifier = modifier.semantics { designInfoProvider = measurer },
                 measurePolicy = measurePolicy,
-                content = content
+                content = { scope.content() }
             ))
             with(measurer) {
                 drawDebug()
@@ -81,8 +81,76 @@ inline fun MotionLayout(
         (MultiMeasureLayout(
             modifier = modifier.semantics { designInfoProvider = measurer },
             measurePolicy = measurePolicy,
-            content = content
+            content = { scope.content() }
         ))
+    }
+}
+
+@LayoutScopeMarker
+class MotionLayoutScope @PublishedApi internal constructor(measurer: MotionMeasurer) {
+    private var myMeasurer = measurer
+
+    class MotionProperties internal constructor(id: String, tag: String?, measurer: MotionMeasurer) {
+        private var myId = id
+        private var myTag = null
+        private var myMeasurer = measurer
+
+        fun id() : String {
+            return myId
+        }
+
+        fun tag() : String? {
+            return myTag
+        }
+
+        fun color(name: String) : Color {
+            return myMeasurer.getCustomColor(myId, name)
+        }
+
+        fun float(name: String) : Float {
+            return myMeasurer.getCustomFloat(myId, name)
+        }
+
+        fun int(name: String): Int {
+            return myMeasurer.getCustomFloat(myId, name).toInt()
+        }
+
+        fun distance(name: String): Dp {
+            return myMeasurer.getCustomFloat(myId, name).dp
+        }
+
+        fun fontSize(name: String) : TextUnit {
+            return myMeasurer.getCustomFloat(myId, name).sp
+        }
+    }
+
+    @Composable
+    fun motionProperties(id: String): MutableState<MotionProperties> = remember {
+        mutableStateOf(MotionProperties(id, null, myMeasurer))
+    }
+
+    fun motionProperties(id: String, tag: String): MotionProperties{
+        return MotionProperties(id, tag, myMeasurer)
+    }
+
+    fun motionColor(id: String, name: String): Color {
+        return myMeasurer.getCustomColor(id, name)
+    }
+
+    fun motionFloat(id: String, name: String): Float {
+        return myMeasurer.getCustomFloat(id, name)
+    }
+
+    fun motionInt(id: String, name: String): Int {
+        return myMeasurer.getCustomFloat(id, name).toInt()
+    }
+
+    fun motionDistance(id: String, name: String): Dp {
+        return myMeasurer.getCustomFloat(id, name).dp
+    }
+
+    fun motionFontSize(id: String, name: String): TextUnit {
+        return myMeasurer.getCustomFloat(id, name).sp
     }
 }
 
@@ -99,8 +167,7 @@ internal fun rememberMotionLayoutMeasurePolicy(
     constraintSetEnd: ConstraintSet,
     progress: MutableState<Float>,
     measurer: MotionMeasurer
-) = remember(optimizationLevel, constraintSetStart, constraintSetEnd, progress) {
-    measurer.clear()
+) = remember(optimizationLevel, constraintSetStart, constraintSetEnd) {
     MeasurePolicy { measurables, constraints ->
         val layoutSize = measurer.performInterpolationMeasure(
             constraints,
@@ -121,10 +188,21 @@ internal fun rememberMotionLayoutMeasurePolicy(
 }
 
 @PublishedApi
-internal class MotionMeasurer : Measurer() {
-    private var motionProgress = -1f
-    var framesStart = ArrayList<WidgetFrame>()
-    var framesEnd = ArrayList<WidgetFrame>()
+internal class MotionMeasurer(
+    start: ConstraintSet,
+    end: ConstraintSet,
+    progress: Float
+) : Measurer() {
+    private var motionProgress = 0f
+    val transition = Transition()
+
+    init {
+        start.applyTo(transition, Transition.START)
+        end.applyTo(transition, Transition.END)
+        transition.interpolate(progress)
+    }
+
+    fun getProgress() : Float { return motionProgress }
 
     private fun measureConstraintSet(optimizationLevel: Int, constraintSetStart: ConstraintSet,
                                      measurables: List<Measurable>, constraints: Constraints
@@ -144,27 +222,15 @@ internal class MotionMeasurer : Measurer() {
             }
         }
 
+        root.children.forEach { child ->
+            var measurable = (child.companionWidget as? Measurable)
+            var id = measurable?.layoutId ?: measurable?.constraintLayoutId
+            child.stringId = id?.toString()
+        }
+
         root.optimizationLevel = optimizationLevel
         // No need to set sizes and size modes as we passed them to the state above.
         root.measure(Optimizer.OPTIMIZATION_NONE, 0, 0, 0, 0, 0, 0, 0, 0)
-    }
-
-    private fun fillFrames(
-        optimizationLevel: Int,
-        frames: ArrayList<WidgetFrame>,
-        constraintSet: ConstraintSet,
-        measurables: List<Measurable>,
-        constraints: Constraints
-    ) {
-        measureConstraintSet(optimizationLevel, constraintSet, measurables, constraints)
-        var i = 0
-        frames.clear()
-        for (child in root.children) {
-            child.frame.update();
-            var frame = WidgetFrame(child.frame)
-            frames.add(frame)
-            i++
-        }
     }
 
     fun performInterpolationMeasure(
@@ -179,9 +245,12 @@ internal class MotionMeasurer : Measurer() {
     ): IntSize {
         this.density = measureScope
         this.measureScope = measureScope
-        if (motionProgress != progress || frameCache.isEmpty()) {
+        if (motionProgress != progress
+            || transition.isEmpty()
+            || frameCache.isEmpty()) {
             motionProgress = progress
-            if (frameCache.isEmpty()) {
+            if (transition.isEmpty() || frameCache.isEmpty()) {
+                transition.clear()
                 reset()
                 // Define the size of the ConstraintLayout.
                 state.width(
@@ -202,35 +271,35 @@ internal class MotionMeasurer : Measurer() {
                 state.rootIncomingConstraints = constraints
                 state.layoutDirection = layoutDirection
 
-                fillFrames(optimizationLevel, framesStart, constraintSetStart, measurables, constraints)
-                fillFrames(optimizationLevel, framesEnd, constraintSetEnd, measurables, constraints)
+                measureConstraintSet(optimizationLevel, constraintSetStart, measurables, constraints)
+                transition.updateFrom(root, Transition.START)
+                measureConstraintSet(optimizationLevel, constraintSetEnd, measurables, constraints)
+                transition.updateFrom(root, Transition.END)
             }
+            transition.interpolate(progress)
             var index = 0
             for (child in root.children) {
                 val measurable = child.companionWidget
                 if (measurable !is Measurable) continue
-                var startFrame = framesStart[index]
-                var endFrame = framesEnd[index]
-                var interpolatedFrame = frameCache[measurable]
+                var interpolatedFrame = transition.getInterpolated(child)
                 if (interpolatedFrame == null) {
-                    interpolatedFrame = WidgetFrame(child).update()
-                    frameCache[measurable] = interpolatedFrame
+                    continue
                 }
-                WidgetFrame.interpolate(interpolatedFrame, startFrame, endFrame, progress)
                 val placeable = placeables[measurable]
                 val currentWidth = placeable?.width
                 val currentHeight = placeable?.height
                 if (placeable == null
-                    || currentWidth != interpolatedFrame!!.width()
+                    || currentWidth != interpolatedFrame.width()
                     || currentHeight != interpolatedFrame.height()
                 ) {
                     measurable.measure(
-                        Constraints.fixed(interpolatedFrame!!.width(), interpolatedFrame.height())
+                        Constraints.fixed(interpolatedFrame.width(), interpolatedFrame.height())
                     )
                         .also {
                             placeables[measurable] = it
                         }
                 }
+                frameCache[measurable] = interpolatedFrame
                 index++
             }
         }
@@ -243,8 +312,8 @@ internal class MotionMeasurer : Measurer() {
             var index = 0
             val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
             for (child in root.children) {
-                val startFrame = framesStart[index]
-                val endFrame = framesEnd[index]
+                val startFrame = transition.getStart(child)
+                val endFrame = transition.getEnd(child)
                 translate(2f, 2f) {
                     drawFrame(startFrame, pathEffect, Color.White)
                     drawFrame(endFrame, pathEffect, Color.White)
@@ -326,8 +395,31 @@ internal class MotionMeasurer : Measurer() {
         }
     }
 
-    fun clear() {
-        frameCache.clear()
+    fun getCustomColor(id: String, name: String): Color {
+        if (!transition.contains(id)) {
+            return Color.Black
+        }
+        val startFrame = transition.getStart(id)
+        val endFrame = transition.getEnd(id)
+        val startColor = startFrame.getCustomColor(name)
+        val endColor = endFrame.getCustomColor(name)
+        if (startColor != null && endColor != null) {
+            var result = WidgetFrame.Color(0f, 0f, 0f, 0f)
+            WidgetFrame.interpolateColor(result, startColor, endColor, motionProgress)
+            return Color(result.r, result.g, result.b, result.a)
+        }
+        return Color.Black
+    }
+
+    fun getCustomFloat(id: String, name: String): Float {
+        if (!transition.contains(id)) {
+            return 0f;
+        }
+        val startFrame = transition.getStart(id)
+        val endFrame = transition.getEnd(id)
+        val startFloat = startFrame.getCustomFloat(name)
+        val endFloat = endFrame.getCustomFloat(name)
+        return (1f - motionProgress) * startFloat + motionProgress * endFloat
     }
 }
 

@@ -18,6 +18,8 @@ package androidx.constraintlayout.core.state;
 
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
+import java.util.HashMap;
+
 /**
  * Utility class to encapsulate layout of a widget
  */
@@ -29,6 +31,9 @@ public class WidgetFrame {
     public int bottom = 0;
 
     // transforms
+
+    public float pivotX = Float.NaN;
+    public float pivotY = Float.NaN;
 
     public float rotationX = Float.NaN;
     public float rotationY = Float.NaN;
@@ -42,8 +47,35 @@ public class WidgetFrame {
 
     public float alpha = Float.NaN;
 
+    public HashMap<String, Color> mCustomColors = null;
+    public HashMap<String, Float> mCustomFloats = null;
+
+    public static class Color {
+        public float r;
+        public float g;
+        public float b;
+        public float a;
+
+        public Color(float r, float g, float b, float a) {
+            this.r = r;
+            this.g = g;
+            this.b = b;
+            this.a = a;
+        }
+
+        public void copy(Color start) {
+            this.r = start.r;
+            this.g = start.g;
+            this.b = start.b;
+            this.a = start.a;
+        }
+    }
+
+
     public int width() { return right - left; }
     public int height() { return bottom - top; }
+
+    public WidgetFrame() {}
 
     public WidgetFrame(ConstraintWidget widget) {
         this.widget = widget;
@@ -55,6 +87,8 @@ public class WidgetFrame {
         top = frame.top;
         right = frame.right;
         bottom = frame.bottom;
+        pivotX = frame.pivotX;
+        pivotY = frame.pivotY;
         rotationX = frame.rotationX;
         rotationY = frame.rotationY;
         rotationZ = frame.rotationZ;
@@ -63,17 +97,25 @@ public class WidgetFrame {
         scaleX = frame.scaleX;
         scaleY = frame.scaleY;
         alpha = frame.alpha;
+        if (frame.mCustomColors != null) {
+            mCustomColors = new HashMap<>();
+            mCustomColors.putAll(frame.mCustomColors);
+        }
+        if (frame.mCustomFloats != null) {
+            mCustomFloats = new HashMap<>();
+            mCustomFloats.putAll(frame.mCustomFloats);
+        }
     }
 
     public boolean isDefaultTransform() {
-        return rotationX == Float.NaN
-                && rotationY == Float.NaN
-                && rotationZ == Float.NaN
-                && translationX == Float.NaN
-                && translationY == Float.NaN
-                && scaleX == Float.NaN
-                && scaleY == Float.NaN
-                && alpha == Float.NaN;
+        return Float.isNaN(rotationX)
+                && Float.isNaN(rotationY)
+                && Float.isNaN(rotationZ)
+                && Float.isNaN(translationX)
+                && Float.isNaN(translationY)
+                && Float.isNaN(scaleX)
+                && Float.isNaN(scaleY)
+                && Float.isNaN(alpha);
     }
 
     public static void interpolate(WidgetFrame frame, WidgetFrame start, WidgetFrame end, float progress) {
@@ -82,6 +124,9 @@ public class WidgetFrame {
         frame.top = (int) (start.top + progress*(end.top - start.top));
         frame.right = (int) (start.right + progress*(end.right - start.right));
         frame.bottom = (int) (start.bottom + progress*(end.bottom - start.bottom));
+
+        frame.pivotX = interpolate(start.pivotX, end.pivotX, 0f, progress);
+        frame.pivotY = interpolate(start.pivotY, end.pivotY, 0f, progress);
 
         frame.rotationX = interpolate(start.rotationX, end.rotationX, 0f, progress);
         frame.rotationY = interpolate(start.rotationY, end.rotationY, 0f, progress);
@@ -111,6 +156,19 @@ public class WidgetFrame {
         return (start + progress * (end - start));
     }
 
+    public static void interpolateColor(Color result, Color start, Color end, float progress) {
+        if (progress < 0) {
+            result.copy(start);
+        } else if (progress > 1) {
+            result.copy(end);
+        } else {
+            result.r = (1f - progress) * start.r + progress * (end.r);
+            result.g = (1f - progress) * start.g + progress * (end.g);
+            result.b = (1f - progress) * start.b + progress * (end.b);
+            result.a = (1f - progress) * start.a + progress * (end.a);
+        }
+    }
+
     public float centerX() {
         return left + (right - left)/2f;
     }
@@ -125,9 +183,66 @@ public class WidgetFrame {
             top = widget.getTop();
             right = widget.getRight();
             bottom = widget.getBottom();
+            WidgetFrame frame = widget.frame;
+            pivotX = frame.pivotX;
+            pivotY = frame.pivotY;
+            rotationX = frame.rotationX;
+            rotationY = frame.rotationY;
+            rotationZ = frame.rotationZ;
+            translationX = frame.translationX;
+            translationY = frame.translationY;
+            scaleX = frame.scaleX;
+            scaleY = frame.scaleY;
+            alpha = frame.alpha;
+            if (frame.mCustomColors != null) {
+                mCustomColors = new HashMap<>();
+                mCustomColors.putAll(frame.mCustomColors);
+            }
+            if (frame.mCustomFloats != null) {
+                mCustomFloats = new HashMap<>();
+                mCustomFloats.putAll(frame.mCustomFloats);
+            }
         }
         return this;
     }
 
+
+    public WidgetFrame update(ConstraintWidget widget) {
+        if (widget == null) {
+            return this;
+        }
+        this.widget = widget;
+        update();
+        return this;
+    }
+
+    public void addCustomColor(String name, float r, float g, float b, float a) {
+        Color color = new Color(r, g, b, a);
+        if (mCustomColors == null) {
+            mCustomColors = new HashMap<>();
+        }
+        mCustomColors.put(name, color);
+    }
+
+    public Color getCustomColor(String name) {
+        if (mCustomColors == null) {
+            return null;
+        }
+        return mCustomColors.get(name);
+    }
+
+    public void addCustomFloat(String name, float value) {
+        if (mCustomFloats == null) {
+            mCustomFloats = new HashMap<>();
+        }
+        mCustomFloats.put(name, value);
+    }
+
+    public float getCustomFloat(String name) {
+        if (mCustomFloats == null) {
+            return 0f;
+        }
+        return mCustomFloats.get(name);
+    }
 
 }
