@@ -31,6 +31,19 @@ public class MotionKeyPosition extends MotionKey {
     public static final String SIZE_PERCENT = "sizePercent";
     public static final String PERCENT_X = "percentX";
     public static final String PERCENT_Y = "percentY";
+
+
+    public static final int TYPE_TRANSITION_EASING = 501;
+    public static final int TYPE_DRAWPATH= 502;
+    public static final int TYPE_PERCENT_WIDTH= 503;
+    public static final int TYPE_PERCENT_HEIGHT= 504;
+    public static final int TYPE_SIZE_PERCENT = 505;
+    public static final int TYPE_PERCENT_X= 506;
+    public static final int TYPE_PERCENT_Y= 507;
+    public static final int TYPE_POSITION_TYPE= 508;
+
+
+
     private float mCalculatedPositionX = Float.NaN;
     private float mCalculatedPositionY = Float.NaN;
     static final int KEY_TYPE = 2;
@@ -260,6 +273,52 @@ public class MotionKeyPosition extends MotionKey {
     }
 
     public void addValues(HashMap<String, SplineSet> splines) {
+    }
+
+    public void setValue(int type, int value){
+        switch (type) {
+            case TYPE_POSITION_TYPE:
+                mPositionType = value;
+                break;
+            case TYPE_FRAME_POSITION:
+                mPositionType = value;
+                break;
+            default:
+                super.setValue(type,value);
+        }
+
+    }
+
+    public void setValue(int type, float value){
+        switch (type) {
+            case TYPE_PERCENT_WIDTH:
+                mPercentWidth = value;
+                break;
+            case TYPE_PERCENT_HEIGHT:
+                mPercentHeight = value;
+                break;
+            case TYPE_SIZE_PERCENT:
+                mPercentHeight = mPercentWidth = value;
+                break;
+            case TYPE_PERCENT_X:
+                mPercentX = value;
+                break;
+            case TYPE_PERCENT_Y:
+                mPercentY = value;
+                break;
+            default:
+                super.setValue(type,value);
+        }
+    }
+
+    public void setValue(int type, String value){
+        switch (type) {
+            case TYPE_TRANSITION_EASING:
+                mTransitionEasing = value.toString();
+                break;
+            default:
+                super.setValue(type,value);
+        }
     }
 
 

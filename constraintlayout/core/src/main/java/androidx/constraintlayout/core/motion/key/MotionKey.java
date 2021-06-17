@@ -19,6 +19,7 @@ package androidx.constraintlayout.core.motion.key;
 import androidx.constraintlayout.core.motion.CustomAttribute;
 import androidx.constraintlayout.core.motion.utils.FloatRect;
 import androidx.constraintlayout.core.motion.utils.SplineSet;
+import androidx.constraintlayout.core.motion.utils.TypedBundle;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,7 +31,7 @@ import java.util.HashSet;
  * @hide
  */
 
-public abstract class MotionKey {
+public abstract class MotionKey implements TypedBundle.TypedValues {
     public static int UNSET = -1;
     public int mFramePosition = UNSET;
     int mTargetId = UNSET;
@@ -65,6 +66,10 @@ public abstract class MotionKey {
     public static final String MOTIONPROGRESS = "motionProgress";
     public static final String TRANSITIONEASING = "transitionEasing";
     public static final String VISIBILITY = "visibility";
+
+    public static final int TYPE_FRAME_POSITION = 100;
+    public static final int TYPE_TARGET = 101;
+
 
     boolean matches(String constraintTag) {
         if (mTargetString == null || constraintTag == null) return false;
@@ -164,4 +169,31 @@ public abstract class MotionKey {
     public int getFramePosition() {
         return mFramePosition;
     }
- }
+
+   public void setValue(int type, int value){
+
+       switch (type) {
+           case TYPE_FRAME_POSITION:
+               mFramePosition = value;
+               break;
+       }
+    }
+
+    public void setValue(int type, float value){
+
+    }
+
+    public void setValue(int type, String value){
+        switch (type) {
+            case TYPE_TARGET:
+                mTargetString = value;
+                break;
+        }
+    }
+
+    public void setValue(int type, boolean value){
+
+    }
+
+
+}

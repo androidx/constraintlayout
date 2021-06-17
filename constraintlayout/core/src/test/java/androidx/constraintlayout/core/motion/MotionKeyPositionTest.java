@@ -81,7 +81,6 @@ public class MotionKeyPositionTest {
         assertEquals(313 , res.getRight());
         assertEquals(117, res.getTop());
         assertEquals(157 , res.getBottom());
-
     }
 
     @Test
@@ -107,20 +106,27 @@ public class MotionKeyPositionTest {
         motion.setup(1000, 1000, 2, 1000000);
         motion.interpolate(res, 0.5f, 1000000 + (int)(0.5*100), cache);
         System.out.println("0.5 "+ res  );
-        if (true) {
+        if (DEBUG) {
 
             for (float p = 0; p <= 1; p += 0.01) {
                 motion.interpolate(res, p, 1000000 + (int) (p * 100), cache);
                 System.out.println(res + " ,     " + p);
             }
         }
+        motion.interpolate(res, 0f, 1000000 + 1000, cache);
+        assertEquals("0, 0, 30, 40", res.toString()  );
+        motion.interpolate(res, 0.2f, 1000000 + 1000, cache);
+        assertEquals("198, 83, 243, 125", res.toString()  );
+        motion.interpolate(res, 0.3f, 1000000 + 1000, cache);
+        assertEquals("298, 124, 350, 168", res.toString()  );
         motion.interpolate(res, 0.5f, 1000000 + 1000, cache);
-
-        assertEquals(283, res.getLeft()  );
-        assertEquals(313 , res.getRight());
-        assertEquals(117, res.getTop());
-        assertEquals(157 , res.getBottom());
-
+        assertEquals("400, 206, 460, 254", res.toString()  );
+        motion.interpolate(res, 0.7f, 1000000 + 1000, cache);
+        assertEquals("400, 284, 460, 344", res.toString()  );
+        motion.interpolate(res, 0.9f, 1000000 + 1000, cache);
+        assertEquals("400, 361, 460, 435", res.toString()  );
+        motion.interpolate(res, 1f, 1000000 + 1000, cache);
+        assertEquals("400, 400, 460, 480", res.toString()  );
     }
     @Test
     public void keyPosition4() {
@@ -145,8 +151,7 @@ public class MotionKeyPositionTest {
         motion.setup(1000, 1000, 2, 1000000);
         motion.interpolate(res, 0.5f, 1000000 + (int)(0.5*100), cache);
         System.out.println("0.5 "+ res  );
-        if (true) {
-
+        if (DEBUG) {
             for (float p = 0; p <= 1; p += 0.01) {
                 motion.interpolate(res, p, 1000000 + (int) (p * 100), cache);
                 System.out.println(res + " ,     " + p);
@@ -154,10 +159,8 @@ public class MotionKeyPositionTest {
         }
         motion.interpolate(res, 0.5f, 1000000 + 1000, cache);
 
-        assertEquals(283, res.getLeft()  );
-        assertEquals(313 , res.getRight());
-        assertEquals(117, res.getTop());
-        assertEquals(157 , res.getBottom());
+        assertEquals("400, 325, 460, 385", res.toString()  );
+
 
     }
 

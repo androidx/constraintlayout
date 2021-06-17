@@ -136,7 +136,7 @@ public class MotionControlTest {
         motion.setup(1000, 1000, 2, 1000000);
         motion.interpolate(res, 0.5f, 1000000 + (int)(0.5*100), cache);
         System.out.println("0.5 "+ res  );
-        if (true) {
+        if (DEBUG) {
             String str ="";
             for (float p = 0; p <= 1; p += 0.01) {
                 motion.interpolate(res, p, 1000000 + (int) (p * 100), cache);
@@ -148,11 +148,7 @@ public class MotionControlTest {
         String str = res.toString();
                 System.out.println(str );
 
-        assertEquals("283", res.getLeft()  );
-        assertEquals(313 , res.getRight());
-        assertEquals(117, res.getTop());
-        assertEquals(157 , res.getBottom());
-
+        assertEquals("400, 288, 460, 328", str  );
     }
 
     

@@ -53,7 +53,7 @@ public class MotionWidget {
     }
 
     public String toString() {
-        return widgetFrame.left + ","+ widgetFrame.top + ", " + widgetFrame.right + ", " + widgetFrame.bottom;
+        return widgetFrame.left + ", "+ widgetFrame.top + ", " + widgetFrame.right + ", " + widgetFrame.bottom;
     }
 
     public void setBounds(int left, int top, int right, int bottom) {
@@ -64,6 +64,14 @@ public class MotionWidget {
         widgetFrame.left = left;
         widgetFrame.right = right;
         widgetFrame.bottom = bottom;
+    }
+
+    public MotionWidget() {
+
+    }
+
+    public MotionWidget(WidgetFrame f) {
+        widgetFrame = f;
     }
 
     /**
@@ -213,5 +221,9 @@ public class MotionWidget {
 
     public int getHeight() {
         return widgetFrame.bottom - widgetFrame.top;
+    }
+
+    public WidgetFrame getWidgetFrame() {
+        return widgetFrame;
     }
 }
