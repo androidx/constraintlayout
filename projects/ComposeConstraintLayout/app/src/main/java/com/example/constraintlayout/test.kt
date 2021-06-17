@@ -943,51 +943,15 @@ public fun ScreenExample11() {
                 .fillMaxSize()
                 .background(Color.White)
         ) {
-            Box(modifier = Modifier
-                .layoutId("h1")
-                .width(100.dp)
-                .height(60.dp)
-                .background(Color.Red))
-            Box(modifier = Modifier
-                .layoutId("h2")
-                .width(100.dp)
-                .height(60.dp)
-                .background(Color.Green))
-            Box(modifier = Modifier
-                .layoutId("h3")
-                .width(100.dp)
-                .height(60.dp)
-                .background(Color.Blue))
-            Box(modifier = Modifier
-                .layoutId("h4")
-                .width(100.dp)
-                .height(60.dp)
-                .background(Color.Gray))
-            Box(modifier = Modifier
-                .layoutId("h5")
-                .width(100.dp)
-                .height(60.dp)
-                .background(Color.Yellow))
-            Box(modifier = Modifier
-                .layoutId("h6")
-                .width(100.dp)
-                .height(60.dp)
-                .background(Color.Cyan))
-            Box(modifier = Modifier
-                .layoutId("h7")
-                .width(100.dp)
-                .height(60.dp)
-                .background(Color.Magenta))
-            Box(modifier = Modifier
-                .layoutId("h8")
-                .width(100.dp)
-                .height(60.dp)
-                .background(Color.Red))
-            Box(modifier = Modifier
-                .layoutId("h9")
-                .width(100.dp)
-                .height(60.dp)
-                .background(Color.DarkGray))
+            Box(modifier = Modifier.layoutId("h1").width(100.dp).height(60.dp).background(Color.Red))
+            Box(modifier = Modifier.layoutId("h2").width(100.dp).height(60.dp).background(Color.Green))
+            Box(modifier = Modifier.layoutId("h3").width(100.dp).height(60.dp).background(Color.Blue))
+            Box(modifier = Modifier.layoutId("h4").width(100.dp).height(60.dp).background(Color.Gray))
+            Box(modifier = Modifier.layoutId("h5").width(100.dp).height(60.dp).background(Color.Yellow))
+            Box(modifier = Modifier.layoutId("h6").width(100.dp).height(60.dp).background(Color.Cyan))
+            Box(modifier = Modifier.layoutId("h7").width(100.dp).height(60.dp).background(Color.Magenta))
+            Box(modifier = Modifier.layoutId("h8").width(100.dp).height(60.dp).background(Color.Red))
+            Box(modifier = Modifier.layoutId("h9").width(100.dp).height(60.dp).background(Color.DarkGray))
         }
     }
 }
