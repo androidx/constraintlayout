@@ -120,12 +120,6 @@ public class WidgetFrame {
 
     public static void interpolate(int parentWidth, int parentHeight, WidgetFrame frame, WidgetFrame start, WidgetFrame end, Transition transition, float progress) {
         int frameNumber = (int) (progress * 100);
-        Transition.KeyPosition firstPosition = transition.findPreviousPosition(frame.widget.stringId, frameNumber);
-        Transition.KeyPosition lastPosition = transition.findNextPosition(frame.widget.stringId, frameNumber);
-
-        if (firstPosition == lastPosition) {
-            lastPosition = null;
-        }
         int startX = start.left;
         int startY = start.top;
         int endX = end.left;
@@ -136,21 +130,30 @@ public class WidgetFrame {
         int endHeight = end.bottom - end.top;
 
         float progressPosition = progress;
-        int interpolateStartFrame = 0;
-        int interpolateEndFrame = 100;
 
-        if (firstPosition != null) {
-            startX = (int) (firstPosition.x * parentWidth);
-            startY = (int) (firstPosition.y * parentHeight);
-            interpolateStartFrame = firstPosition.frame;
-        }
-        if (lastPosition != null) {
-            endX = (int) (lastPosition.x * parentWidth);
-            endY = (int) (lastPosition.y * parentHeight);
-            interpolateEndFrame = lastPosition.frame;
-        }
+        if (frame.widget != null && transition.hasPositionKeyframes()) {
+            Transition.KeyPosition firstPosition = transition.findPreviousPosition(frame.widget.stringId, frameNumber);
+            Transition.KeyPosition lastPosition = transition.findNextPosition(frame.widget.stringId, frameNumber);
 
-        progressPosition = (progress * 100f - interpolateStartFrame) / (float) (interpolateEndFrame - interpolateStartFrame);
+            if (firstPosition == lastPosition) {
+                lastPosition = null;
+            }
+            int interpolateStartFrame = 0;
+            int interpolateEndFrame = 100;
+
+            if (firstPosition != null) {
+                startX = (int) (firstPosition.x * parentWidth);
+                startY = (int) (firstPosition.y * parentHeight);
+                interpolateStartFrame = firstPosition.frame;
+            }
+            if (lastPosition != null) {
+                endX = (int) (lastPosition.x * parentWidth);
+                endY = (int) (lastPosition.y * parentHeight);
+                interpolateEndFrame = lastPosition.frame;
+            }
+
+            progressPosition = (progress * 100f - interpolateStartFrame) / (float) (interpolateEndFrame - interpolateStartFrame);
+        }
 
         frame.widget = start.widget;
 

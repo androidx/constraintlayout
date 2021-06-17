@@ -92,6 +92,10 @@ public class Transition {
         }
     }
 
+    public boolean hasPositionKeyframes() {
+        return keyPositions.size() > 0;
+    }
+
     static class WidgetState {
         WidgetFrame start;
         WidgetFrame end;

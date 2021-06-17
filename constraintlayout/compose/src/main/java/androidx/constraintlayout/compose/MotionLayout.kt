@@ -30,7 +30,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.DrawStyle
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.layout.Measurable
@@ -68,7 +67,7 @@ inline fun MotionLayout(
     val progressState = remember { mutableStateOf(0f) }
     SideEffect { progressState.value = progress }
     val measurePolicy =
-        rememberMotionLayoutMeasurePolicy(optimizationLevel, start, end, progressState, measurer)
+        rememberMotionLayoutMeasurePolicy(optimizationLevel, start, end, keyframes, progressState, measurer)
     if (!debug.contains(MotionLayoutDebugFlags.NONE)) {
         Box {
             @Suppress("DEPRECATION")
@@ -188,15 +187,19 @@ internal fun rememberMotionLayoutMeasurePolicy(
     optimizationLevel: Int,
     constraintSetStart: ConstraintSet,
     constraintSetEnd: ConstraintSet,
+    keyframes: Keyframes?,
     progress: MutableState<Float>,
     measurer: MotionMeasurer
-) = remember(optimizationLevel, constraintSetStart, constraintSetEnd) {
+) = remember(optimizationLevel, constraintSetStart, constraintSetEnd, keyframes,
+) {
+    measurer.clearConstraintSets()
     MeasurePolicy { measurables, constraints ->
         val layoutSize = measurer.performInterpolationMeasure(
             constraints,
             layoutDirection,
             constraintSetStart,
             constraintSetEnd,
+            keyframes,
             measurables,
             optimizationLevel,
             progress.value,
@@ -223,6 +226,7 @@ internal class MotionMeasurer(
     init {
         start.applyTo(transition, Transition.START)
         end.applyTo(transition, Transition.END)
+        transition.interpolate(0, 0, progress)
         if (keyframes != null) {
             keyframes.applyTo(transition, 0)
         }
@@ -264,6 +268,7 @@ internal class MotionMeasurer(
         layoutDirection: LayoutDirection,
         constraintSetStart: ConstraintSet,
         constraintSetEnd: ConstraintSet,
+        keyframes: Keyframes?,
         measurables: List<Measurable>,
         optimizationLevel: Int,
         progress: Float,
@@ -301,6 +306,9 @@ internal class MotionMeasurer(
                 transition.updateFrom(root, Transition.START)
                 measureConstraintSet(optimizationLevel, constraintSetEnd, measurables, constraints)
                 transition.updateFrom(root, Transition.END)
+                if (keyframes != null) {
+                    keyframes.applyTo(transition, 0)
+                }
             }
             transition.interpolate(root.width, root.height, progress)
             var index = 0
@@ -396,7 +404,6 @@ internal class MotionMeasurer(
                 path.lineTo(curX + pathSize, curY)
                 path.lineTo(curX, curY - pathSize)
                 path.close()
-                drawPath(path, Color.White)
                 var stroke = Stroke(width = 3f)
                 drawPath(path, color, 1f, stroke)
                 prex = curX
@@ -493,6 +500,11 @@ internal class MotionMeasurer(
         val startFloat = startFrame.getCustomFloat(name)
         val endFloat = endFrame.getCustomFloat(name)
         return (1f - motionProgress) * startFloat + motionProgress * endFloat
+    }
+
+    fun clearConstraintSets() {
+        transition.clear()
+        frameCache.clear()
     }
 }
 

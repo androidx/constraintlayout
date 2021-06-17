@@ -1081,7 +1081,7 @@ public fun ScreenExample13() {
               a: {
                 end: ['parent', 'end', 16],
                 top: ['parent', 'top', 16],
-                rotationZ: 0,
+                rotationZ: 360,
                 custom: {
                   background: '#0000FF',
                   textColor: '#FFFFFF',
@@ -1204,9 +1204,9 @@ public fun ScreenExample15() {
                 """
             {
               a: {
-                width: 100,
+                width: 150,
                 height: 100,
-                rotationZ: -20,
+                rotationZ: 390,
                 end: ['parent', 'end', 16],
                 top: ['parent', 'top', 16]
               }
@@ -1221,9 +1221,9 @@ public fun ScreenExample15() {
                    target: ['a'],
                    frames: [25,50,75],
                    percentX: [0.1, 0.8, 0.1],
-                   percentY: [0.5, 0.8, 0.0]
+                   percentY: [0.4, 0.8, 0.0]
                 }
-                ]               
+                ]
               }
             }
             """),
