@@ -32,7 +32,6 @@ public class MotionKeyPosition extends MotionKey {
     public static final String PERCENT_X = "percentX";
     public static final String PERCENT_Y = "percentY";
 
-
     public static final int TYPE_TRANSITION_EASING = 501;
     public static final int TYPE_DRAWPATH= 502;
     public static final int TYPE_PERCENT_WIDTH= 503;
@@ -40,8 +39,9 @@ public class MotionKeyPosition extends MotionKey {
     public static final int TYPE_SIZE_PERCENT = 505;
     public static final int TYPE_PERCENT_X= 506;
     public static final int TYPE_PERCENT_Y= 507;
-    public static final int TYPE_POSITION_TYPE= 508;
-
+    public static final int TYPE_CURVE_FIT= 508;
+    public static final int TYPE_PATH_MOTION_ARC= 509;
+    public static final int TYPE_POSITION_TYPE= 510;
 
 
     private float mCalculatedPositionX = Float.NaN;
@@ -281,8 +281,12 @@ public class MotionKeyPosition extends MotionKey {
                 mPositionType = value;
                 break;
             case TYPE_FRAME_POSITION:
-                mPositionType = value;
+                mFramePosition = value;
                 break;
+            case TYPE_CURVE_FIT:
+                mCurveFit = value;
+                break;
+
             default:
                 super.setValue(type,value);
         }

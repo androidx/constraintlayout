@@ -39,7 +39,11 @@ public class TypedBundle {
         mTypeFloat[mCountFloat] = type;
         mValueFloat[mCountFloat++] = value;
     }
-
+    public void addIfNotNull(int type, String value) {
+        if (value != null) {
+            add(type,value);
+        }
+    }
     public void add(int type, String value) {
         if (mCountString >= mTypeString.length) {
             mTypeString = Arrays.copyOf(mTypeString, mTypeString.length * 2);

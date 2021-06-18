@@ -43,7 +43,7 @@ import java.util.Set;
  *
  * @hide
  */
-class MotionPaths implements Comparable<MotionPaths> {
+public class MotionPaths implements Comparable<MotionPaths> {
     public static final String TAG = "MotionPaths";
     public static final boolean DEBUG = false;
     public static final boolean OLD_WAY = false; // the computes the positions the old way
@@ -55,9 +55,9 @@ class MotionPaths implements Comparable<MotionPaths> {
     static final int OFF_PATH_ROTATE = 5;
 
     // mode and type have same numbering scheme
-    static final int PERPENDICULAR = MotionKeyPosition.TYPE_PATH;
-    static final int CARTESIAN = MotionKeyPosition.TYPE_CARTESIAN;
-    static final int SCREEN =  MotionKeyPosition.TYPE_SCREEN;
+    public static final int PERPENDICULAR = MotionKeyPosition.TYPE_PATH;
+    public static final int CARTESIAN = MotionKeyPosition.TYPE_CARTESIAN;
+    public static final int SCREEN =  MotionKeyPosition.TYPE_SCREEN;
     static String[] names = {"position", "x", "y", "width", "height", "pathRotate"};
     Easing mKeyFrameEasing;
     int mDrawPath = 0;

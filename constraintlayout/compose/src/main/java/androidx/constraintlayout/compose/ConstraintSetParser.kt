@@ -15,7 +15,10 @@
  */
 package androidx.constraintlayout.compose
 
+import android.util.Log
 import androidx.compose.ui.unit.Dp
+import androidx.constraintlayout.core.motion.key.MotionKeyPosition
+import androidx.constraintlayout.core.motion.utils.TypedBundle
 import androidx.constraintlayout.core.state.ConstraintReference
 import androidx.constraintlayout.core.state.Dimension
 import androidx.constraintlayout.core.state.Dimension.SPREAD_DIMENSION
@@ -71,7 +74,7 @@ class LayoutVariables {
         return 0f
     }
 
-    fun getList(elementName: String) : ArrayList<String>? {
+    fun getList(elementName: String): ArrayList<String>? {
         if (arrayIds.containsKey(elementName)) {
             return arrayIds[elementName]
         }
@@ -83,17 +86,18 @@ class LayoutVariables {
     }
 
 }
+
 interface GeneratedValue {
-    fun value() : Float
+    fun value(): Float
 }
 
 class Generator(start: Float, incrementBy: Float) : GeneratedValue {
-    var start : Float = start
+    var start: Float = start
     var incrementBy: Float = incrementBy
-    var current : Float = start
+    var current: Float = start
     var stop = false
 
-    override fun value() : Float {
+    override fun value(): Float {
         if (!stop) {
             current += incrementBy
         }
@@ -102,8 +106,8 @@ class Generator(start: Float, incrementBy: Float) : GeneratedValue {
 }
 
 class OverrideValue(value: Float) : GeneratedValue {
-    var value : Float = value
-    override fun value() : Float {
+    var value: Float = value
+    override fun value(): Float {
         return value
     }
 }
@@ -126,27 +130,86 @@ internal fun parseKeyframesJSON(content: String, transition: Transition) {
     }
 }
 
+fun getArray(keyposition: JSONObject, name: String): JSONArray? {
+    return if (keyposition.has(name)) keyposition.getJSONArray(name) else null;
+}
+
 fun parseKeyPosition(keyposition: JSONObject, transition: Transition) {
+    var bundle = TypedBundle()
+    Log.d("JOHN" , "parseKeyPosition: ")
     val targets = keyposition.getJSONArray("target")
     val frames = keyposition.getJSONArray("frames")
-    val percentX = keyposition.getJSONArray("percentX")
-    val percentY = keyposition.getJSONArray("percentY")
-    if (frames.length() != percentX.length() || frames.length() != percentY.length()) {
+    val percentX = getArray(keyposition, "percentX")
+    val percentY = getArray(keyposition, "percentY")
+    val percentWidth = getArray(keyposition, "percentWidth")
+    val percentHeight = getArray(keyposition, "percentHeight")
+    val pathMotionArc = keyposition.opt("pathMotionArc")
+    val transitionEasing = keyposition.opt("transitionEasing")
+    val curveFit = keyposition.opt("curveFit")
+    val type = keyposition.opt("type")
+    if (percentX != null && frames.length() != percentX.length()) {
+        return
+    }
+    if (percentY != null && frames.length() != percentY.length()) {
         return
     }
     (0 until targets.length()).forEach { i ->
         val target = targets.getString(i)
+        bundle.clear();
+        if (type != null) {
+
+            bundle.add(
+                MotionKeyPosition.TYPE_POSITION_TYPE, when (type) {
+                    "deltaRelative" -> 0
+                    "pathRelative" -> 1
+                    "parentRelative" -> 2
+                    else -> 0
+                }
+            )
+        }
+        if (curveFit!=null) {
+            when (curveFit) {
+                "spline" -> bundle.add(MotionKeyPosition.TYPE_CURVE_FIT,0)
+                "linear" -> bundle.add(MotionKeyPosition.TYPE_CURVE_FIT,1)
+
+            }
+        }
+        bundle.addIfNotNull(MotionKeyPosition.TYPE_TRANSITION_EASING, transitionEasing?.toString())
+
+        if (pathMotionArc!=null) {
+            when (pathMotionArc) {
+                "none" -> bundle.add(MotionKeyPosition.TYPE_PATH_MOTION_ARC,0)
+                "startVertical" -> bundle.add(MotionKeyPosition.TYPE_PATH_MOTION_ARC,1)
+                "startHorizontal" -> bundle.add(MotionKeyPosition.TYPE_PATH_MOTION_ARC,2)
+                "flip" -> bundle.add(MotionKeyPosition.TYPE_PATH_MOTION_ARC,3)
+            }
+        }
+
         (0 until frames.length()).forEach { j ->
             val frame = frames.getInt(j)
-            val x = percentX.getDouble(j).toFloat()
-            val y = percentY.getDouble(j).toFloat()
-            transition.addKeyPosition(target, frame, 0, x, y)
+            bundle.add(MotionKeyPosition.TYPE_FRAME_POSITION, frame);
+            if (percentX != null) {
+                bundle.add(MotionKeyPosition.TYPE_PERCENT_X, percentX.getDouble(j).toFloat());
+            }
+            if (percentY != null) {
+                bundle.add(MotionKeyPosition.TYPE_PERCENT_Y, percentY.getDouble(j).toFloat());
+            }
+            if (percentWidth != null) {
+                bundle.add(MotionKeyPosition.TYPE_PERCENT_Y, percentWidth.getDouble(j).toFloat());
+            }
+            if (percentHeight != null) {
+                bundle.add(MotionKeyPosition.TYPE_PERCENT_Y, percentHeight.getDouble(j).toFloat());
+            }
+
+            transition.addKeyPosition(target, bundle)
         }
     }
 }
 
-internal fun parseJSON(content: String, transition: Transition,
-                       state: Int, layoutVariables: LayoutVariables) {
+internal fun parseJSON(
+    content: String, transition: Transition,
+    state: Int, layoutVariables: LayoutVariables
+) {
     val json = JSONObject(content)
     val elements = json.names() ?: return
     (0 until elements.length()).forEach { i ->
@@ -208,8 +271,18 @@ internal fun parseJSON(content: String, state: State, layoutVariables: LayoutVar
                     var type = lookForType(element)
                     if (type != null) {
                         when (type) {
-                            "hGuideline" -> parseGuidelineParams(ConstraintWidget.HORIZONTAL, state, elementName, element)
-                            "vGuideline" -> parseGuidelineParams(ConstraintWidget.VERTICAL, state, elementName, element)
+                            "hGuideline" -> parseGuidelineParams(
+                                ConstraintWidget.HORIZONTAL,
+                                state,
+                                elementName,
+                                element
+                            )
+                            "vGuideline" -> parseGuidelineParams(
+                                ConstraintWidget.VERTICAL,
+                                state,
+                                elementName,
+                                element
+                            )
                             "barrier" -> parseBarrier(state, elementName, element)
                         }
                     } else if (type == null) {
@@ -239,7 +312,7 @@ fun parseVariables(state: State, layoutVariables: LayoutVariables, json: Any) {
             } else if (element.has("ids")) {
                 var ids = element.getJSONArray("ids");
                 var arrayIds = arrayListOf<String>()
-                for (i in 0..ids.length()-1) {
+                for (i in 0..ids.length() - 1) {
                     arrayIds.add(ids.getString(i))
                 }
                 layoutVariables.put(elementName, arrayIds)
@@ -261,8 +334,18 @@ fun parseHelpers(state: State, layoutVariables: LayoutVariables, element: Any) {
             when (helper[0]) {
                 "hChain" -> parseChain(ConstraintWidget.HORIZONTAL, state, layoutVariables, helper)
                 "vChain" -> parseChain(ConstraintWidget.VERTICAL, state, layoutVariables, helper)
-                "hGuideline" -> parseGuideline(ConstraintWidget.HORIZONTAL, state, layoutVariables, helper)
-                "vGuideline" -> parseGuideline(ConstraintWidget.VERTICAL, state, layoutVariables, helper)
+                "hGuideline" -> parseGuideline(
+                    ConstraintWidget.HORIZONTAL,
+                    state,
+                    layoutVariables,
+                    helper
+                )
+                "vGuideline" -> parseGuideline(
+                    ConstraintWidget.VERTICAL,
+                    state,
+                    layoutVariables,
+                    helper
+                )
             }
         }
     }
@@ -286,7 +369,8 @@ fun parseGenerate(state: State, layoutVariables: LayoutVariables, json: Any) {
 }
 
 fun parseChain(orientation: Int, state: State, margins: LayoutVariables, helper: JSONArray) {
-    var chain = if (orientation == ConstraintWidget.HORIZONTAL) state.horizontalChain() else state.verticalChain()
+    var chain =
+        if (orientation == ConstraintWidget.HORIZONTAL) state.horizontalChain() else state.verticalChain()
     var refs = helper[1]
     if (!(refs is JSONArray) || refs.length() < 1) {
         return
@@ -300,12 +384,12 @@ fun parseChain(orientation: Int, state: State, margins: LayoutVariables, helper:
             return
         }
         val constraints = params.names() ?: return
-        (0 until constraints.length()).forEach{ i ->
+        (0 until constraints.length()).forEach { i ->
             val constraintName = constraints[i].toString()
             when (constraintName) {
                 "style" -> {
                     val styleObject = params[constraintName]
-                    val styleValue : String
+                    val styleValue: String
                     if (styleObject is JSONArray && styleObject.length() > 1) {
                         styleValue = styleObject[0].toString()
                         var biasValue = styleObject[1].toString().toFloat()
@@ -320,7 +404,13 @@ fun parseChain(orientation: Int, state: State, margins: LayoutVariables, helper:
                     }
                 }
                 else -> {
-                    parseConstraint(state, margins, params, chain as ConstraintReference, constraintName)
+                    parseConstraint(
+                        state,
+                        margins,
+                        params,
+                        chain as ConstraintReference,
+                        constraintName
+                    )
                 }
             }
         }
@@ -333,7 +423,7 @@ fun parseGuideline(orientation: Int, state: State, margins: LayoutVariables, hel
         return
     }
     val guidelineId = params.opt("id")
-    if (guidelineId == null)  {
+    if (guidelineId == null) {
         return
     }
     parseGuidelineParams(orientation, state, guidelineId as String, params)
@@ -385,8 +475,10 @@ private fun parseGuidelineParams(
 
 fun parseBarrier(
     state: State,
-    elementName: String, element: JSONObject) {
-    val reference = state.barrier(elementName, androidx.constraintlayout.core.state.State.Direction.END)
+    elementName: String, element: JSONObject
+) {
+    val reference =
+        state.barrier(elementName, androidx.constraintlayout.core.state.State.Direction.END)
     val constraints = element.names() ?: return
     var barrierReference = reference
     (0 until constraints.length()).forEach { i ->

@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasurePolicy
 import androidx.compose.ui.layout.MeasureScope
@@ -39,6 +40,7 @@ import androidx.compose.ui.layout.MultiMeasureLayout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.*
+import androidx.constraintlayout.core.motion.Motion
 import androidx.constraintlayout.core.state.Dimension
 import androidx.constraintlayout.core.state.Transition
 import androidx.constraintlayout.core.state.WidgetFrame
@@ -353,6 +355,11 @@ internal class MotionMeasurer : Measurer() {
         drawFrame(startFrame, pathEffect, color)
         drawFrame(endFrame, pathEffect, color)
         var numKeyPositions = transition.getNumberKeyPositions(startFrame)
+        var debugRender = MotionRenderDebug(23f);
+
+        debugRender.draw(drawContext.canvas.nativeCanvas,transition.getMotion(startFrame.widget.stringId),
+            1000,   Motion.DRAW_PATH_BASIC,
+              parentWidth.toInt(), parentHeight.toInt()  )
         if (numKeyPositions == 0) {
             drawLine(
                 start = Offset(startFrame.centerX(), startFrame.centerY()),
@@ -389,6 +396,7 @@ internal class MotionMeasurer : Measurer() {
                 path.lineTo(curX + pathSize, curY)
                 path.lineTo(curX, curY - pathSize)
                 path.close()
+
                 var stroke = Stroke(width = 3f)
                 drawPath(path, color, 1f, stroke)
                 prex = curX
@@ -502,9 +510,9 @@ internal class MotionMeasurer : Measurer() {
         start.applyTo(transition, Transition.START)
         end.applyTo(transition, Transition.END)
         transition.interpolate(0, 0, progress)
-        if (keyframes != null) {
-            keyframes.applyTo(transition, 0)
-        }
+//        if (keyframes != null) {
+//            keyframes.applyTo(transition, 0)
+//        }
     }
 }
 

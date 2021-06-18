@@ -7,6 +7,7 @@ import androidx.constraintlayout.core.motion.MotionWidget;
 import androidx.constraintlayout.core.motion.key.MotionKeyPosition;
 import androidx.constraintlayout.core.motion.utils.ArcCurveFit;
 import androidx.constraintlayout.core.motion.utils.KeyCache;
+import androidx.constraintlayout.core.motion.utils.Utils;
 
 import org.junit.Test;
 
@@ -89,29 +90,36 @@ public class MotionKeyPositionTest {
         MotionWidget mw2 = new MotionWidget();
         MotionWidget res = new MotionWidget();
         KeyCache cache = new KeyCache();
-        MotionKeyPosition keyPosition = new MotionKeyPosition();
         mw1.setBounds(0, 0, 30, 40);
         mw2.setBounds(400, 400, 460, 480);
-        keyPosition.setFramePosition(50);
-        keyPosition.setValue(MotionKeyPosition.PERCENT_X, 1);
-        keyPosition.setValue(MotionKeyPosition.PERCENT_Y, 0.5);
-        keyPosition.setValue(MotionKeyPosition.PERCENT_HEIGHT, 0.2);
-        keyPosition.setValue(MotionKeyPosition.PERCENT_WIDTH, 1);
+        MotionKeyPosition keyPosition = new MotionKeyPosition();
+        keyPosition.setFramePosition(30);
+        keyPosition.setValue(MotionKeyPosition.PERCENT_X, 0.3);
+        keyPosition.setValue(MotionKeyPosition.PERCENT_Y, 0.3);
+
+        MotionKeyPosition keyPosition2 = new MotionKeyPosition();
+        keyPosition2.setFramePosition(88);
+        keyPosition2.setValue(MotionKeyPosition.PERCENT_X, .9);
+        keyPosition2.setValue(MotionKeyPosition.PERCENT_Y, 0.5);
+
         // mw1.motion.mPathMotionArc = MotionWidget.A
         Motion motion = new Motion(mw1);
       //  motion.setPathMotionArc(ArcCurveFit.ARC_START_HORIZONTAL);
         motion.setStart(mw1);
         motion.setEnd(mw2);
         motion.addKey(keyPosition);
+        motion.addKey(keyPosition2);
         motion.setup(1000, 1000, 2, 1000000);
         motion.interpolate(res, 0.5f, 1000000 + (int)(0.5*100), cache);
         System.out.println("0.5 "+ res  );
-        if (DEBUG) {
+        if (true) {
 
+            String str ="";
             for (float p = 0; p <= 1; p += 0.01) {
                 motion.interpolate(res, p, 1000000 + (int) (p * 100), cache);
-                System.out.println(res + " ,     " + p);
+                str += res+"\n";
             }
+            Utils.socketSend(str);
         }
         motion.interpolate(res, 0f, 1000000 + 1000, cache);
         assertEquals("0, 0, 30, 40", res.toString()  );

@@ -165,7 +165,12 @@ public class Motion {
         mTransformPivotView = null;
     }
 
-    MotionPaths getKeyFrame(int i) {
+    /**
+     * provides acces to MotionPath objects
+     * @param i
+     * @return
+     */
+   public MotionPaths getKeyFrame(int i) {
         return mMotionPaths.get(i);
     }
 
@@ -290,7 +295,7 @@ public class Motion {
      * @param pointCount
      * @return number of key frames
      */
-    void buildPath(float[] points, int pointCount) {
+    public void buildPath(float[] points, int pointCount) {
         float mils = 1.0f / (pointCount - 1);
         SplineSet trans_x = (mAttributesMap == null) ? null : mAttributesMap.get(MotionKey.TRANSLATION_X);
         SplineSet trans_y = (mAttributesMap == null) ? null : mAttributesMap.get(MotionKey.TRANSLATION_Y);
@@ -503,7 +508,7 @@ public class Motion {
         return null;
     }
 
-    int buildKeyFrames(float[] keyFrames, int[] mode) {
+    public int buildKeyFrames(float[] keyFrames, int[] mode) {
         if (keyFrames != null) {
             int count = 0;
             double[] time = mSpline[0].getTimePoints();
@@ -559,7 +564,7 @@ public class Motion {
         return points.length;
     }
 
-    void buildRect(float p, float[] path, int offset) {
+   public void buildRect(float p, float[] path, int offset) {
         p = getAdjustedPosition(p, null);
         mSpline[0].getPos(p, mInterpolateData);
         mStartMotionPath.getRect(mInterpolateVariables, mInterpolateData, path, offset);
