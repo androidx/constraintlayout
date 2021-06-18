@@ -47,6 +47,8 @@ public class WidgetFrame {
 
     public float alpha = Float.NaN;
 
+    public int visibility = ConstraintWidget.VISIBLE;
+
     public HashMap<String, Color> mCustomColors = null;
     public HashMap<String, Float> mCustomFloats = null;
 
@@ -97,6 +99,7 @@ public class WidgetFrame {
         scaleX = frame.scaleX;
         scaleY = frame.scaleY;
         alpha = frame.alpha;
+        visibility = frame.visibility;
         if (frame.mCustomColors != null) {
             mCustomColors = new HashMap<>();
             mCustomColors.putAll(frame.mCustomColors);
@@ -130,6 +133,40 @@ public class WidgetFrame {
         int endHeight = end.bottom - end.top;
 
         float progressPosition = progress;
+
+        float startAlpha = start.alpha;
+        float endAlpha = end.alpha;
+
+        if (start.visibility == ConstraintWidget.GONE) {
+            // On visibility gone, keep the same size to do an alpha to zero
+            startX -= endWidth / 2f;
+            startY -= endHeight / 2f;
+            startWidth = endWidth;
+            startHeight = endHeight;
+            if (Float.isNaN(startAlpha)) {
+                // override only if not defined...
+                startAlpha = 0f;
+            }
+        }
+
+        if (end.visibility == ConstraintWidget.GONE) {
+            // On visibility gone, keep the same size to do an alpha to zero
+            endX -= startWidth / 2f;
+            endY -= startHeight / 2f;
+            endWidth = startWidth;
+            endHeight = startHeight;
+            if (Float.isNaN(endAlpha)) {
+                // override only if not defined...
+                endAlpha = 0f;
+            }
+        }
+
+        if (Float.isNaN(startAlpha) && !Float.isNaN(endAlpha)) {
+            startAlpha = 1f;
+        }
+        if (!Float.isNaN(startAlpha) && Float.isNaN(endAlpha)) {
+            endAlpha = 1f;
+        }
 
         if (frame.widget != null && transition.hasPositionKeyframes()) {
             Transition.KeyPosition firstPosition = transition.findPreviousPosition(frame.widget.stringId, frameNumber);
@@ -177,7 +214,7 @@ public class WidgetFrame {
         frame.translationX = interpolate(start.translationX, end.translationX, 0f, progress);
         frame.translationY = interpolate(start.translationY, end.translationY, 0f, progress);
 
-        frame.alpha = interpolate(start.alpha, end.alpha, 0f, progress);
+        frame.alpha = interpolate(startAlpha, endAlpha, 0f, progress);
     }
 
     private static float interpolate(float start, float end, float defaultValue, float progress) {
@@ -233,6 +270,7 @@ public class WidgetFrame {
             scaleX = frame.scaleX;
             scaleY = frame.scaleY;
             alpha = frame.alpha;
+            visibility = frame.visibility;
             if (frame.mCustomColors != null) {
                 mCustomColors = new HashMap<>();
                 mCustomColors.putAll(frame.mCustomColors);

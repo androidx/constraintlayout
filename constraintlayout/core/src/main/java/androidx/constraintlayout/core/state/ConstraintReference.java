@@ -76,21 +76,23 @@ public class ConstraintReference implements Reference {
     int mMarginTopGone = 0;
     int mMarginBottomGone = 0;
 
-    float mPivotX = 0.5f;
-    float mPivotY = 0.5f;
+    float mPivotX = Float.NaN;
+    float mPivotY = Float.NaN;
 
-    float mRotationX = 0;
-    float mRotationY = 0;
-    float mRotationZ = 0;
+    float mRotationX = Float.NaN;
+    float mRotationY = Float.NaN;
+    float mRotationZ = Float.NaN;
 
-    float mTranslationX = 0;
-    float mTranslationY = 0;
-    float mTranslationZ = 0;
+    float mTranslationX = Float.NaN;
+    float mTranslationY = Float.NaN;
+    float mTranslationZ = Float.NaN;
 
-    float mAlpha = 1f;
+    float mAlpha = Float.NaN;
 
-    float mScaleX = 1f;
-    float mScaleY = 1f;
+    float mScaleX = Float.NaN;
+    float mScaleY = Float.NaN;
+
+    int mVisibility = ConstraintWidget.VISIBLE;
 
     Object mLeftToLeft = null;
     Object mLeftToRight = null;
@@ -312,6 +314,11 @@ public class ConstraintReference implements Reference {
 
     public ConstraintReference alpha(float alpha) {
         mAlpha = alpha;
+        return this;
+    }
+
+    public ConstraintReference visibility(int visibility) {
+        mVisibility = visibility;
         return this;
     }
 
@@ -871,6 +878,8 @@ public class ConstraintReference implements Reference {
         mConstraintWidget.frame.scaleX = mScaleX;
         mConstraintWidget.frame.scaleY = mScaleY;
         mConstraintWidget.frame.alpha = mAlpha;
+        mConstraintWidget.frame.visibility = mVisibility;
+        mConstraintWidget.setVisibility(mVisibility);
 
         mConstraintWidget.frame.mCustomFloats = mCustomFloats;
         mConstraintWidget.frame.mCustomColors = mCustomColors;

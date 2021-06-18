@@ -509,6 +509,14 @@ fun parseWidget(
                 val value = layoutVariables.get(element[constraintName])
                 reference.rotationZ(value)
             }
+            "visibility" -> {
+                val value = element[constraintName]
+                when(value) {
+                    "visible" -> reference.visibility(ConstraintWidget.VISIBLE)
+                    "invisible" -> reference.visibility(ConstraintWidget.INVISIBLE)
+                    "gone" -> reference.visibility(ConstraintWidget.GONE)
+                }
+            }
             "custom" -> {
                 parseCustomProperties(element, reference, constraintName)
             }
@@ -571,11 +579,16 @@ private fun parseConstraint(
     if (constraint != null && constraint.length() > 1) {
         val target = constraint[0]
         val anchor = constraint[1]
-        var margin: Int = 0
+        var margin = 0
+        var marginGone = 0
         if (constraint.length() > 2) {
             margin = layoutVariables.get(constraint[2]).toInt()
+            margin = state.convertDimension(Dp(margin.toFloat()))
         }
-        margin = state.convertDimension(Dp(margin.toFloat()))
+        if (constraint.length() > 3) {
+            marginGone = layoutVariables.get(constraint[3]).toInt()
+            marginGone = state.convertDimension(Dp(marginGone.toFloat()))
+        }
 
         val targetReference = if (target.toString().equals("parent")) {
             state.constraints(SolverState.PARENT)
@@ -618,7 +631,7 @@ private fun parseConstraint(
                 }
             }
         }
-        reference.margin(margin)
+        reference.margin(margin).marginGone(marginGone)
     } else {
         var target = element.optString(constraintName)
         if (target != null) {
