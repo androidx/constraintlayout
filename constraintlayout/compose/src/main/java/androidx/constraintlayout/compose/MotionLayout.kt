@@ -415,10 +415,14 @@ internal class MotionMeasurer : Measurer() {
                 Size(frame.width().toFloat(), frame.height().toFloat()), style = drawStyle)
         } else {
             var matrix = Matrix()
-            matrix.preRotate(frame.rotationZ, frame.centerX(), frame.centerY())
+            if (!frame.rotationZ.isNaN()) {
+                matrix.preRotate(frame.rotationZ, frame.centerX(), frame.centerY())
+            }
+            var scaleX = if (frame.scaleX.isNaN()) 1f else frame.scaleX
+            var scaleY = if (frame.scaleY.isNaN()) 1f else frame.scaleY
             matrix.preScale(
-                frame.scaleX,
-                frame.scaleY,
+                scaleX,
+                scaleY,
                 frame.centerX(),
                 frame.centerY()
             )

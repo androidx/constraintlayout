@@ -1204,6 +1204,72 @@ public fun ScreenExample15() {
     }
 }
 
+@Preview(group = "motion8")
+@Composable
+public fun ScreenExample16() {
+    var animateToEnd by remember { mutableStateOf(false) }
+
+    val progress by animateFloatAsState(
+        targetValue = if (animateToEnd) 1f else 0f,
+        animationSpec = tween(6000)
+    )
+    Column {
+        MotionLayout(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(400.dp)
+                .background(Color.White) ,
+            start = ConstraintSet("""
+            {
+              a: {
+                width: 40,
+                height: 40,
+                start: ['parent', 'start', 16],
+                bottom: ['parent', 'bottom', 16]
+              },
+              b: {
+                width: 40,
+                height: 40,
+                bottom: ['a', 'top', 16],
+                start: ['a', 'end', 16]
+              }
+            }
+            """
+            ),
+            end = ConstraintSet(
+                """
+            {
+              a: {
+                width: 40,
+                height: 40,
+                visibility: 'gone',
+                end: ['parent', 'end', 100],
+                top: ['parent', 'top', 100]
+              },
+              b: {
+                width: 40,
+                height: 40,
+                top: ['a', 'bottom', 16, 20],
+                end: ['a', 'start', 16, 20]
+              }
+            }
+            """
+            ),
+            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
+            progress = progress) {
+            Box(modifier = Modifier
+                .layoutId("a")
+                .background(Color.Red))
+            Box(modifier = Modifier
+                .layoutId("b")
+                .background(Color.Blue))
+        }
+
+        Button(onClick = { animateToEnd = !animateToEnd }) {
+            Text(text = "Run")
+        }
+    }
+}
 
 
 

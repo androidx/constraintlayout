@@ -1663,14 +1663,28 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                         val pivotY = if (frame.pivotY.isNaN()) 0.5f else frame.pivotY
                         transformOrigin = TransformOrigin(pivotX, pivotY)
                     }
-                    rotationX = frame.rotationX
-                    rotationY = frame.rotationY
-                    rotationZ = frame.rotationZ
-                    translationX = frame.translationX
-                    translationY = frame.translationY
-                    scaleX = frame.scaleX
-                    scaleY = frame.scaleY
-                    alpha = frame.alpha
+                    if (!frame.rotationX.isNaN()) {
+                        rotationX = frame.rotationX
+                    }
+                    if (!frame.rotationY.isNaN()) {
+                        rotationY = frame.rotationY
+                    }
+                    if (!frame.rotationZ.isNaN()) {
+                        rotationZ = frame.rotationZ
+                    }
+                    if (!frame.translationX.isNaN()) {
+                        translationX = frame.translationX
+                    }
+                    if (!frame.translationY.isNaN()) {
+                        translationY = frame.translationY
+                    }
+                    if (!frame.scaleX.isNaN() || !frame.scaleY.isNaN()) {
+                        scaleX = if (frame.scaleX.isNaN()) 1f else frame.scaleX
+                        scaleY = if (frame.scaleY.isNaN()) 1f else frame.scaleY
+                    }
+                    if (!frame.alpha.isNaN()) {
+                        alpha = frame.alpha
+                    }
                 }
                 val x = frameCache[measurable]!!.left
                 val y = frameCache[measurable]!!.top
