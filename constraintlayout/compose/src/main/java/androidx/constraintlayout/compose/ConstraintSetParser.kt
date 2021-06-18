@@ -199,6 +199,117 @@ internal fun parseJSON(content: String, transition: Transition,
     }
 }
 
+internal fun parseMotionSceneJSON(scene: MotionScene, content: String) {
+    try {
+        val json = JSONObject(content)
+        val elements = json.names() ?: return
+        (0 until elements.length()).forEach { i ->
+            val elementName = elements[i].toString()
+            val element = json[elementName]
+            when (elementName) {
+                "ConstraintSets" -> parseConstraintSets(scene, element)
+                "Transitions" -> parseTransitions(scene, element)
+            }
+        }
+    } catch (e: JSONException) {
+        System.err.println("Error parsing JSON $e")
+    }
+}
+
+fun parseConstraintSets(scene: MotionScene, json: Any) {
+    if (!(json is JSONObject)) {
+        return
+    }
+    val elements = json.names() ?: return
+    (0 until elements.length()).forEach { i ->
+        val elementName = elements[i].toString()
+        val element = json[elementName]
+        var added = false
+        if (element is JSONObject) {
+            val extends = element.optString("Extends")
+            if (extends.length > 0) {
+                val base = scene.getConstraintSet(extends)
+                if (base != null) {
+                    val baseJson = JSONObject(base)
+                    val widgetsOverride = element.names()
+                    if (widgetsOverride != null) {
+                        (0 until widgetsOverride.length()).forEach { j ->
+                            val widgetOverrideName = widgetsOverride[j].toString()
+                            val value = element[widgetOverrideName]
+                            if (value is JSONObject) {
+                                override(baseJson, widgetOverrideName, value)
+                            }
+                        }
+                        scene.setConstraintSetContent(elementName, baseJson.toString())
+                        added = true
+                    }
+                }
+            }
+        }
+        if (!added) {
+            scene.setConstraintSetContent(elementName, element.toString())
+        }
+    }
+}
+
+fun override(baseJson: JSONObject, name: String, overrideValue: JSONObject) {
+    if (!baseJson.has(name)) {
+        baseJson.put(name, overrideValue)
+    } else {
+        var base = baseJson.getJSONObject(name)
+        var keys = overrideValue.keys()
+        for (key in keys) {
+            if (key.equals("clear")) {
+                var toClear = overrideValue.getJSONArray("clear")
+                (0 until toClear.length()).forEach { i ->
+                    var clearedKey = toClear[i]
+                    if (clearedKey is String) {
+                        when (clearedKey) {
+                            "dimensions" -> {
+                                base.remove("width")
+                                base.remove("height")
+                            }
+                            "constraints" -> {
+                                base.remove("start")
+                                base.remove("end")
+                                base.remove("top")
+                                base.remove("bottom")
+                                base.remove("baseline")
+                            }
+                            "transforms" -> {
+                                base.remove("pivotX")
+                                base.remove("pivotY")
+                                base.remove("rotationX")
+                                base.remove("rotationY")
+                                base.remove("rotationZ")
+                                base.remove("scaleX")
+                                base.remove("scaleY")
+                                base.remove("translationX")
+                                base.remove("translationY")
+                            }
+                            else -> base.remove(clearedKey)
+                        }
+                    }
+                }
+            } else {
+                base.put(key, overrideValue.get(key))
+            }
+        }
+    }
+}
+
+fun parseTransitions(scene: MotionScene, json: Any) {
+    if (!(json is JSONObject)) {
+        return
+    }
+    val elements = json.names() ?: return
+    (0 until elements.length()).forEach { i ->
+        val elementName = elements[i].toString()
+        val element = json[elementName]
+        scene.setTransitionContent(elementName, element.toString())
+    }
+}
+
 internal fun parseJSON(content: String, state: State, layoutVariables: LayoutVariables) {
     try {
         val json = JSONObject(content)

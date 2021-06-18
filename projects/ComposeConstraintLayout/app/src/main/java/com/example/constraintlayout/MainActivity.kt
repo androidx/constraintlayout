@@ -34,7 +34,9 @@ class MainActivity : AppCompatActivity() {
                 15 -> ScreenExample15()
                 16 -> ScreenExample16()
                 17 -> ScreenExample17()
-                18 -> ScreenExample18()
+                18 -> MotionExample1()
+                19 -> MotionExample2()
+                20 -> MotionExample3()
             }
         }
     }
