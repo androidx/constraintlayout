@@ -90,6 +90,76 @@ inline fun MotionLayout(
     }
 }
 
+@Suppress("NOTHING_TO_INLINE")
+@Composable
+inline fun MotionLayout(
+    motionScene: MotionScene,
+    progress: Float,
+    debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
+    modifier: Modifier = Modifier,
+    optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
+    crossinline content: @Composable MotionLayoutScope.() -> Unit
+) {
+    var startContent = remember(motionScene) {
+        motionScene.getConstraintSet("start")
+    }
+    var endContent = remember(motionScene) {
+        motionScene.getConstraintSet("end")
+    }
+    var transitionContent = remember(motionScene) {
+        motionScene.getTransition("default")
+    }
+    if (startContent == null || endContent == null) {
+        return
+    }
+    val start = ConstraintSet(startContent)
+    val end = ConstraintSet(endContent)
+    val keyframes : Keyframes? = if (transitionContent != null) Keyframes(transitionContent) else null
+    MotionLayout(start = start, end = end, keyframes = keyframes, progress = progress,
+        debug = debug, modifier = modifier, optimizationLevel = optimizationLevel, content)
+}
+
+@Immutable
+interface MotionScene {
+    fun setConstraintSetContent(name: String, content: String)
+    fun setTransitionContent(name: String, content: String)
+    fun getConstraintSet(name: String): String?
+    fun getTransition(name: String) : String?
+}
+
+@SuppressLint("ComposableNaming")
+@Composable
+fun MotionScene(@Language("json5") content : String) : MotionScene {
+    val constraintset = remember {
+        mutableStateOf(object : MotionScene {
+            private val constraintSetsContent = HashMap<String, String>()
+            private val transitionsContent = HashMap<String, String>()
+
+            init {
+                parseMotionSceneJSON(this, content);
+            }
+
+            override fun setConstraintSetContent(name: String, content: String) {
+                constraintSetsContent[name] = content
+            }
+
+            override fun setTransitionContent(name: String, content: String) {
+                transitionsContent[name] = content
+            }
+
+            override fun getConstraintSet(name: String): String? {
+                return constraintSetsContent[name]
+            }
+
+            override fun getTransition(name: String): String? {
+                return transitionsContent[name]
+            }
+        })
+    }
+
+    return constraintset.value
+}
+
 @LayoutScopeMarker
 class MotionLayoutScope @PublishedApi internal constructor(measurer: MotionMeasurer) {
     private var myMeasurer = measurer

@@ -1218,6 +1218,71 @@ public fun ScreenExample16() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(400.dp)
+                .background(Color.White),
+            motionScene = MotionScene("""{
+                ConstraintSets: {
+                  start: {
+                    a: {
+                      width: 40,
+                      height: 40,
+                      start: ['parent', 'start', 16],
+                      bottom: ['parent', 'bottom', 16]
+                    }
+                  },
+                  end: {
+                    a: {
+                      width: 150,
+                      height: 100,
+                      rotationZ: 390,
+                      end: ['parent', 'end', 16],
+                      top: ['parent', 'top', 16]
+                    }
+                  }
+                },
+                Transitions: {
+                  default: {
+                    from: 'start',
+                    to: 'end',
+                    KeyFrames: {
+                      KeyPositions: [
+                        {
+                          target: ['a'],
+                          frames: [25, 50, 75],
+                          percentX: [0.1, 0.8, 0.5],
+                          percentY: [0.4, 0.8, 0.5]
+                        }
+                      ]
+                    }
+                  }
+                }
+            }"""),
+            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
+            progress = progress) {
+            Box(modifier = Modifier
+                .layoutId("a")
+                .background(Color.Red))
+        }
+
+        Button(onClick = { animateToEnd = !animateToEnd }) {
+            Text(text = "Run")
+        }
+    }
+}
+
+@Preview(group = "motion9")
+@Composable
+public fun ScreenExample17() {
+    var animateToEnd by remember { mutableStateOf(false) }
+
+    val progress by animateFloatAsState(
+        targetValue = if (animateToEnd) 1f else 0f,
+        animationSpec = tween(6000)
+    )
+    Column {
+        MotionLayout(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(400.dp)
                 .background(Color.White) ,
             start = ConstraintSet("""
             {

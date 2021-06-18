@@ -26,7 +26,7 @@ import androidx.constraintlayout.compose.*
 
 @Preview(group = "motion1")
 @Composable
-public fun ScreenExample16() {
+public fun MotionExample1() {
     var animateToEnd by remember { mutableStateOf(false) }
     val progress by animateFloatAsState(
         targetValue = if (animateToEnd) 1f else 0f,
@@ -104,7 +104,7 @@ public fun ScreenExample16() {
 
 @Preview(group = "motion2")
 @Composable
-public fun ScreenExample17() {
+public fun MotionExample2() {
     var animateToEnd by remember { mutableStateOf(false) }
     val progress by animateFloatAsState(
         targetValue = if (animateToEnd) 1f else 0f,
@@ -273,7 +273,7 @@ public fun ScreenExample17() {
 
 @Preview(group = "motion3")
 @Composable
-public fun ScreenExample18() {
+public fun MotionExample3() {
     var animateToEnd by remember { mutableStateOf(false) }
     val progress by animateFloatAsState(
         targetValue = if (animateToEnd) 1f else 0f,
@@ -489,6 +489,203 @@ public fun ScreenExample18() {
             )
 
 
+        }
+    }
+}
+
+@Preview(group = "motion4")
+@Composable
+public fun MotionExample4() {
+    var animateToEnd by remember { mutableStateOf(false) }
+    val progress by animateFloatAsState(
+        targetValue = if (animateToEnd) 1f else 0f,
+        animationSpec = tween(4000)
+    )
+    Column(Modifier.background(Color.White)) {
+        MotionLayout(
+            MotionScene(
+                """{
+  ConstraintSets: {
+    start: {
+      background: {
+        custom: {
+          color: '#ffffff'
+        }
+      },
+      circle: {
+        width: 200,
+        height: 200,
+        start: ['parent', 'start', 0],
+        end: ['parent', 'end', 0],
+        top: ['parent', 'top', 100],
+        custom: {
+          color: '#fcb045'
+        }
+      },
+      title: {
+        width: "spread",
+        start: ['parent', 'start', 36],
+        top: ['circle', 'bottom', 16],
+        end: ['parent', 'end', 36],
+        custom: {
+          color: "#000000"
+        }
+      },
+      description: {
+        width: "spread",
+        start: ['parent', 'start', 36],
+        top: ['title', 'bottom', 16],
+        end: ['parent', 'end', 36],
+        custom: {
+          color: "#ffffff"
+        }
+      },
+      backgroundSwitch: {
+        width: 300,
+        height: 72,
+        start: ['parent', 'start', 36],
+        top: ['description', 'bottom', 16],
+        end: ['parent', 'end', 36],
+        custom: {
+          color: "#d2d2d2"
+        }
+      },
+      moonShadow: {
+        width: 170,
+        height: 170,
+        top: ['circle', 'top', 4],
+        end: ['circle', 'end', 4],
+        alpha: 0.0
+      },
+      buttonSwitch: {
+        width: 150,
+        height: 72,
+        top: ['backgroundSwitch', 'top', 0],
+        start: ['backgroundSwitch', 'start', 0]
+      },
+      light: {
+        top: ['backgroundSwitch', 'top', 0],
+        start: ['backgroundSwitch', 'start', 0],
+        bottom: ['backgroundSwitch', 'bottom', 0]
+      },
+      dark: {
+        top: ['backgroundSwitch', 'top', 0],
+        end: ['backgroundSwitch', 'end', 0],
+        bottom: ['backgroundSwitch', 'bottom', 0]
+      }
+    },
+    end: {
+      Extends: 'start',
+      background: {
+        custom: {
+          color: '#000000'
+        }
+      },
+      circle: {
+        custom: {
+          color: '#7400ab'
+        }
+      },
+      title: {
+        custom: {
+          color: "#ffffff"
+        }
+      },
+      description: {
+        custom: {
+          color: "#000000"
+        }
+      },
+      backgroundSwitch: {
+        custom: {
+          color: "#343434"
+        }
+      },
+      moonShadow: {
+        alpha: 1.0
+      },
+      buttonSwitch: {
+        clear: ['constraints'],
+        top: ['backgroundSwitch', 'top', 0],
+        end: ['backgroundSwitch', 'end', 0]
+      }
+    }
+  }
+}"""
+            ),
+            progress = progress,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+        ) {
+            Box(
+                modifier = Modifier
+                    .layoutId("background")
+                    .fillMaxSize()
+                    .clickable(onClick = { animateToEnd = !animateToEnd })
+                    .background(motionProperties("background").value.color("color"))
+            )
+
+            Box(
+                modifier = Modifier
+                    .layoutId("circle")
+                    .clip(CircleShape)
+                    .background(motionProperties("circle").value.color("color"))
+            )
+
+            Text(
+                text = "Chose a style",
+                modifier = Modifier.layoutId("title"),
+                color = motionProperties("title").value.color("color"),
+                fontSize = 24.sp,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                text = "Pop or subtle. Day or Night. \\n Customize your interface",
+                modifier = Modifier.layoutId("description"),
+                color = motionProperties("title").value.color("color"),
+                fontSize = 18.sp,
+                textAlign = TextAlign.Center
+            )
+            Box(
+                modifier = Modifier
+                    .layoutId("backgroundSwitch")
+                    .clip(RoundedCornerShape(36.dp))
+                    .background(motionProperties("backgroundSwitch").value.color("color"))
+            )
+
+            Box(
+                modifier = Modifier
+                    .layoutId("moonShadow")
+                    .clip(CircleShape)
+                    .background(Color.Black)
+            )
+
+            Box(
+                modifier = Modifier
+                    .layoutId("buttonSwitch")
+                    .clip(RoundedCornerShape(36.dp))
+                    .background(Color.Gray)
+            )
+
+            Text(
+                text = "Light",
+                modifier = Modifier
+                    .layoutId("light")
+                    .width(150.dp),
+                color = Color.White,
+                fontSize = 24.sp,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                text = "Dark",
+                modifier = Modifier
+                    .layoutId("dark")
+                    .width(150.dp),
+                color = Color.Black,
+                fontSize = 24.sp,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
