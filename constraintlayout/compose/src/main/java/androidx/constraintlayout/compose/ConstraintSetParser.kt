@@ -24,6 +24,7 @@ import androidx.constraintlayout.core.state.Transition
 import androidx.constraintlayout.core.state.helpers.GuidelineReference
 import androidx.constraintlayout.core.widgets.ConstraintWidget
 import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 
 internal val PARSER_DEBUG = false
@@ -109,20 +110,24 @@ class OverrideValue(value: Float) : GeneratedValue {
 }
 
 internal fun parseKeyframesJSON(content: String, transition: Transition) {
-    val json = JSONObject(content)
-    val keyframes = json.optJSONObject("KeyFrames")
-    if (keyframes == null) {
-        return
-    }
-    val keypositions = keyframes.optJSONArray("KeyPositions")
-    if (keypositions == null) {
-        return
-    }
-    (0 until keypositions.length()).forEach { i ->
-        val keyposition = keypositions[i]
-        if (keyposition is JSONObject) {
-            parseKeyPosition(keyposition, transition)
+    try {
+        val json = JSONObject(content)
+        val keyframes = json.optJSONObject("KeyFrames")
+        if (keyframes == null) {
+            return
         }
+        val keypositions = keyframes.optJSONArray("KeyPositions")
+        if (keypositions == null) {
+            return
+        }
+        (0 until keypositions.length()).forEach { i ->
+            val keyposition = keypositions[i]
+            if (keyposition is JSONObject) {
+                parseKeyPosition(keyposition, transition)
+            }
+        }
+    } catch (e: JSONException) {
+        System.err.println("Error parsing JSON $e")
     }
 }
 
@@ -147,77 +152,95 @@ fun parseKeyPosition(keyposition: JSONObject, transition: Transition) {
 
 internal fun parseJSON(content: String, transition: Transition,
                        state: Int, layoutVariables: LayoutVariables) {
-    val json = JSONObject(content)
-    val elements = json.names() ?: return
-    (0 until elements.length()).forEach { i ->
-        val elementName = elements[i].toString()
-        val element = json[elementName]
-        if (element is JSONObject) {
-            val customProperties = element.optJSONObject("custom")
-            if (customProperties != null) {
-                val properties = customProperties.names() ?: return
-                (0 until properties.length()).forEach { i ->
-                    val property = properties[i].toString()
-                    val value = customProperties[property]
-                    if (value is Int) {
-                        transition.addCustomFloat(state, elementName, property, value.toFloat())
-                    } else if (value is Float) {
-                        transition.addCustomFloat(state, elementName, property, value)
-                    } else if (value is String) {
-                        if (value.startsWith('#')) {
-                            var r = 0f
-                            var g = 0f
-                            var b = 0f
-                            var a = 1f
-                            if (value.length == 7 || value.length == 9) {
-                                var hr = Integer.valueOf(value.substring(1, 3), 16)
-                                var hg = Integer.valueOf(value.substring(3, 5), 16)
-                                var hb = Integer.valueOf(value.substring(5, 7), 16)
-                                r = hr.toFloat() / 255f
-                                g = hg.toFloat() / 255f
-                                b = hb.toFloat() / 255f
+    try {
+        val json = JSONObject(content)
+        val elements = json.names() ?: return
+        (0 until elements.length()).forEach { i ->
+            val elementName = elements[i].toString()
+            val element = json[elementName]
+            if (element is JSONObject) {
+                val customProperties = element.optJSONObject("custom")
+                if (customProperties != null) {
+                    val properties = customProperties.names() ?: return
+                    (0 until properties.length()).forEach { i ->
+                        val property = properties[i].toString()
+                        val value = customProperties[property]
+                        if (value is Int) {
+                            transition.addCustomFloat(state, elementName, property, value.toFloat())
+                        } else if (value is Float) {
+                            transition.addCustomFloat(state, elementName, property, value)
+                        } else if (value is String) {
+                            if (value.startsWith('#')) {
+                                var r = 0f
+                                var g = 0f
+                                var b = 0f
+                                var a = 1f
+                                if (value.length == 7 || value.length == 9) {
+                                    var hr = Integer.valueOf(value.substring(1, 3), 16)
+                                    var hg = Integer.valueOf(value.substring(3, 5), 16)
+                                    var hb = Integer.valueOf(value.substring(5, 7), 16)
+                                    r = hr.toFloat() / 255f
+                                    g = hg.toFloat() / 255f
+                                    b = hb.toFloat() / 255f
+                                }
+                                if (value.length == 9) {
+                                    var ha = Integer.valueOf(value.substring(5, 7), 16)
+                                    a = ha.toFloat() / 255f
+                                }
+                                transition.addCustomColor(state, elementName, property, r, g, b, a)
                             }
-                            if (value.length == 9) {
-                                var ha = Integer.valueOf(value.substring(5, 7), 16)
-                                a = ha.toFloat() / 255f
-                            }
-                            transition.addCustomColor(state, elementName, property, r, g, b, a)
                         }
                     }
                 }
             }
         }
+    } catch (e: JSONException) {
+        System.err.println("Error parsing JSON $e")
     }
 }
 
 internal fun parseJSON(content: String, state: State, layoutVariables: LayoutVariables) {
-    val json = JSONObject(content)
-    val elements = json.names() ?: return
-    (0 until elements.length()).forEach { i ->
-        val elementName = elements[i].toString()
-        val element = json[elementName]
-        if (PARSER_DEBUG) {
-            System.out.println("element <$elementName = $element> " + element.javaClass)
-        }
-        when (elementName) {
-            "Variables" -> parseVariables(state, layoutVariables, element)
-            "Helpers" -> parseHelpers(state, layoutVariables, element)
-            "Generate" -> parseGenerate(state, layoutVariables, element)
-            else -> {
-                if (element is JSONObject) {
-                    var type = lookForType(element)
-                    if (type != null) {
-                        when (type) {
-                            "hGuideline" -> parseGuidelineParams(ConstraintWidget.HORIZONTAL, state, elementName, element)
-                            "vGuideline" -> parseGuidelineParams(ConstraintWidget.VERTICAL, state, elementName, element)
-                            "barrier" -> parseBarrier(state, elementName, element)
+    try {
+        val json = JSONObject(content)
+        val elements = json.names() ?: return
+        (0 until elements.length()).forEach { i ->
+            val elementName = elements[i].toString()
+            val element = json[elementName]
+            if (PARSER_DEBUG) {
+                System.out.println("element <$elementName = $element> " + element.javaClass)
+            }
+            when (elementName) {
+                "Variables" -> parseVariables(state, layoutVariables, element)
+                "Helpers" -> parseHelpers(state, layoutVariables, element)
+                "Generate" -> parseGenerate(state, layoutVariables, element)
+                else -> {
+                    if (element is JSONObject) {
+                        var type = lookForType(element)
+                        if (type != null) {
+                            when (type) {
+                                "hGuideline" -> parseGuidelineParams(
+                                    ConstraintWidget.HORIZONTAL,
+                                    state,
+                                    elementName,
+                                    element
+                                )
+                                "vGuideline" -> parseGuidelineParams(
+                                    ConstraintWidget.VERTICAL,
+                                    state,
+                                    elementName,
+                                    element
+                                )
+                                "barrier" -> parseBarrier(state, elementName, element)
+                            }
+                        } else if (type == null) {
+                            parseWidget(state, layoutVariables, elementName, element)
                         }
-                    } else if (type == null) {
-                        parseWidget(state, layoutVariables, elementName, element)
                     }
                 }
             }
         }
+    } catch (e: JSONException) {
+        System.err.println("Error parsing JSON $e")
     }
 }
 
