@@ -201,20 +201,20 @@ public class WidgetFrame {
         frame.right = frame.left + width;
         frame.bottom = frame.top + height;
 
-        frame.pivotX = interpolate(start.pivotX, end.pivotX, 0f, progress);
-        frame.pivotY = interpolate(start.pivotY, end.pivotY, 0f, progress);
+        frame.pivotX = interpolate(start.pivotX, end.pivotX, 0.5f, progress);
+        frame.pivotY = interpolate(start.pivotY, end.pivotY, 0.5f, progress);
 
         frame.rotationX = interpolate(start.rotationX, end.rotationX, 0f, progress);
         frame.rotationY = interpolate(start.rotationY, end.rotationY, 0f, progress);
         frame.rotationZ = interpolate(start.rotationZ, end.rotationZ, 0f, progress);
 
-        frame.scaleX = interpolate(start.scaleX, end.scaleX, 0f, progress);
-        frame.scaleY = interpolate(start.scaleY, end.scaleY, 0f, progress);
+        frame.scaleX = interpolate(start.scaleX, end.scaleX, 1f, progress);
+        frame.scaleY = interpolate(start.scaleY, end.scaleY, 1f, progress);
 
         frame.translationX = interpolate(start.translationX, end.translationX, 0f, progress);
         frame.translationY = interpolate(start.translationY, end.translationY, 0f, progress);
 
-        frame.alpha = interpolate(startAlpha, endAlpha, 0f, progress);
+        frame.alpha = interpolate(startAlpha, endAlpha, 1f, progress);
     }
 
     private static float interpolate(float start, float end, float defaultValue, float progress) {

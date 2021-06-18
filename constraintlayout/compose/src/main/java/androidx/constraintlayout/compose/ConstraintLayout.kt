@@ -1678,11 +1678,9 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                     if (!frame.translationY.isNaN()) {
                         translationY = frame.translationY
                     }
-                    if (!frame.scaleX.isNaN()) {
-                        scaleX = frame.scaleX
-                    }
-                    if (!frame.scaleY.isNaN()) {
-                        scaleY = frame.scaleY
+                    if (!frame.scaleX.isNaN() || !frame.scaleY.isNaN()) {
+                        scaleX = if (frame.scaleX.isNaN()) 1f else frame.scaleX
+                        scaleY = if (frame.scaleY.isNaN()) 1f else frame.scaleY
                     }
                     if (!frame.alpha.isNaN()) {
                         alpha = frame.alpha
