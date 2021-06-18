@@ -3,7 +3,7 @@ plugins {
     id 'kotlin-android'
 }
 
-def compose_version = '1.0.0-beta08'
+def compose_version = '1.0.0-beta09'
 
 android {
     compileSdkVersion 30
@@ -56,7 +56,7 @@ dependencies {
 
     implementation project(':core')
     implementation project(':compose')
-//    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha07"
+//    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha08"
 
     implementation "androidx.activity:activity-compose:1.3.0-alpha08"
 

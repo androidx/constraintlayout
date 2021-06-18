@@ -16,6 +16,7 @@
 
 package androidx.constraintlayout.compose
 
+import android.annotation.SuppressLint
 import android.graphics.Matrix
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
@@ -26,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -41,6 +43,7 @@ import androidx.constraintlayout.core.state.Dimension
 import androidx.constraintlayout.core.state.Transition
 import androidx.constraintlayout.core.state.WidgetFrame
 import androidx.constraintlayout.core.widgets.Optimizer
+import org.intellij.lang.annotations.Language
 import java.util.*
 
 /**
@@ -52,18 +55,19 @@ import java.util.*
 inline fun MotionLayout(
     start: ConstraintSet,
     end: ConstraintSet,
+    keyframes: Keyframes? = null,
     progress: Float,
     debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     modifier: Modifier = Modifier,
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
     crossinline content: @Composable MotionLayoutScope.() -> Unit
 ) {
-    val measurer = remember { MotionMeasurer(start, end, progress) }
+    val measurer = remember { MotionMeasurer() }
     val scope = remember { MotionLayoutScope(measurer) }
     val progressState = remember { mutableStateOf(0f) }
     SideEffect { progressState.value = progress }
     val measurePolicy =
-        rememberMotionLayoutMeasurePolicy(optimizationLevel, start, end, progressState, measurer)
+        rememberMotionLayoutMeasurePolicy(optimizationLevel, start, end, keyframes, progressState, measurer)
     if (!debug.contains(MotionLayoutDebugFlags.NONE)) {
         Box {
             @Suppress("DEPRECATION")
@@ -154,6 +158,24 @@ class MotionLayoutScope @PublishedApi internal constructor(measurer: MotionMeasu
     }
 }
 
+@Immutable
+interface Keyframes {
+    fun applyTo(transition: Transition, type: Int)
+}
+
+@SuppressLint("ComposableNaming")
+@Composable
+fun Keyframes(@Language("json5") content : String) : Keyframes {
+    val keyframes = remember {
+        mutableStateOf(object : Keyframes {
+            override fun applyTo(transition: Transition, type: Int) {
+                parseKeyframesJSON(content, transition)
+            }
+        })
+    }
+    return keyframes.value
+}
+
 enum class MotionLayoutDebugFlags {
     NONE,
     SHOW_ALL
@@ -165,15 +187,18 @@ internal fun rememberMotionLayoutMeasurePolicy(
     optimizationLevel: Int,
     constraintSetStart: ConstraintSet,
     constraintSetEnd: ConstraintSet,
+    keyframes: Keyframes?,
     progress: MutableState<Float>,
     measurer: MotionMeasurer
-) = remember(optimizationLevel, constraintSetStart, constraintSetEnd) {
+) = remember(optimizationLevel, constraintSetStart, constraintSetEnd, keyframes) {
+    measurer.initWith(constraintSetStart, constraintSetEnd, keyframes, progress.value)
     MeasurePolicy { measurables, constraints ->
         val layoutSize = measurer.performInterpolationMeasure(
             constraints,
             layoutDirection,
             constraintSetStart,
             constraintSetEnd,
+            keyframes,
             measurables,
             optimizationLevel,
             progress.value,
@@ -188,19 +213,9 @@ internal fun rememberMotionLayoutMeasurePolicy(
 }
 
 @PublishedApi
-internal class MotionMeasurer(
-    start: ConstraintSet,
-    end: ConstraintSet,
-    progress: Float
-) : Measurer() {
+internal class MotionMeasurer : Measurer() {
     private var motionProgress = 0f
     val transition = Transition()
-
-    init {
-        start.applyTo(transition, Transition.START)
-        end.applyTo(transition, Transition.END)
-        transition.interpolate(progress)
-    }
 
     fun getProgress() : Float { return motionProgress }
 
@@ -238,6 +253,7 @@ internal class MotionMeasurer(
         layoutDirection: LayoutDirection,
         constraintSetStart: ConstraintSet,
         constraintSetEnd: ConstraintSet,
+        keyframes: Keyframes?,
         measurables: List<Measurable>,
         optimizationLevel: Int,
         progress: Float,
@@ -275,8 +291,11 @@ internal class MotionMeasurer(
                 transition.updateFrom(root, Transition.START)
                 measureConstraintSet(optimizationLevel, constraintSetEnd, measurables, constraints)
                 transition.updateFrom(root, Transition.END)
+                if (keyframes != null) {
+                    keyframes.applyTo(transition, 0)
+                }
             }
-            transition.interpolate(progress)
+            transition.interpolate(root.width, root.height, progress)
             var index = 0
             for (child in root.children) {
                 val measurable = child.companionWidget
@@ -315,27 +334,73 @@ internal class MotionMeasurer(
                 val startFrame = transition.getStart(child)
                 val endFrame = transition.getEnd(child)
                 translate(2f, 2f) {
-                    drawFrame(startFrame, pathEffect, Color.White)
-                    drawFrame(endFrame, pathEffect, Color.White)
-                    drawLine(
-                        start = Offset(startFrame.centerX(), startFrame.centerY()),
-                        end = Offset(endFrame.centerX(), endFrame.centerY()),
-                        color = Color.White,
-                        strokeWidth = 3f,
-                        pathEffect = pathEffect
-                    )
+                    drawFrameDebug(size.width, size.height, startFrame, endFrame, pathEffect, Color.White)
                 }
-                drawFrame(startFrame, pathEffect, Color.Blue)
-                drawFrame(endFrame, pathEffect, Color.Blue)
+                drawFrameDebug(size.width, size.height, startFrame, endFrame, pathEffect, Color.Blue)
+                index++
+            }
+        }
+    }
+
+    private fun DrawScope.drawFrameDebug(
+        parentWidth: Float,
+        parentHeight: Float,
+        startFrame: WidgetFrame,
+        endFrame: WidgetFrame,
+        pathEffect: PathEffect,
+        color: Color
+    ) {
+        drawFrame(startFrame, pathEffect, color)
+        drawFrame(endFrame, pathEffect, color)
+        var numKeyPositions = transition.getNumberKeyPositions(startFrame)
+        if (numKeyPositions == 0) {
+            drawLine(
+                start = Offset(startFrame.centerX(), startFrame.centerY()),
+                end = Offset(endFrame.centerX(), endFrame.centerY()),
+                color = color,
+                strokeWidth = 3f,
+                pathEffect = pathEffect
+            )
+        } else {
+            var x = FloatArray(numKeyPositions)
+            var y = FloatArray(numKeyPositions)
+            var pos = FloatArray(numKeyPositions)
+            transition.fillKeyPositions(startFrame, x, y, pos)
+            var prex = startFrame.centerX()
+            var prey = startFrame.centerY()
+
+            for (i in 0 .. numKeyPositions-1) {
+                var keyFrameProgress = pos[i] / 100f
+                var frameWidth = ((1 - keyFrameProgress) * startFrame.width()) + (keyFrameProgress * endFrame.width())
+                var frameHeight = ((1 - keyFrameProgress) * startFrame.height()) + (keyFrameProgress * endFrame.height())
+                var curX = x[i] * parentWidth + frameWidth / 2f
+                var curY = y[i] * parentHeight + frameHeight / 2f
                 drawLine(
-                    start = Offset(startFrame.centerX(), startFrame.centerY()),
-                    end = Offset(endFrame.centerX(), endFrame.centerY()),
-                    color = Color.Blue,
+                    start = Offset(prex, prey),
+                    end = Offset(curX, curY),
+                    color = color,
                     strokeWidth = 3f,
                     pathEffect = pathEffect
                 )
-                index++
+                var path = Path()
+                var pathSize = 20f
+                path.moveTo(curX - pathSize, curY)
+                path.lineTo(curX, curY + pathSize)
+                path.lineTo(curX + pathSize, curY)
+                path.lineTo(curX, curY - pathSize)
+                path.close()
+                var stroke = Stroke(width = 3f)
+                drawPath(path, color, 1f, stroke)
+                prex = curX
+                prey = curY
             }
+            drawLine(
+                start = Offset(prex, prey),
+                end = Offset(endFrame.centerX(), endFrame.centerY()),
+                color = color,
+                strokeWidth = 3f,
+                pathEffect = pathEffect
+            )
         }
     }
 
@@ -420,6 +485,26 @@ internal class MotionMeasurer(
         val startFloat = startFrame.getCustomFloat(name)
         val endFloat = endFrame.getCustomFloat(name)
         return (1f - motionProgress) * startFloat + motionProgress * endFloat
+    }
+
+    fun clearConstraintSets() {
+        transition.clear()
+        frameCache.clear()
+    }
+
+    fun initWith(
+        start: ConstraintSet,
+        end: ConstraintSet,
+        keyframes: Keyframes?,
+        progress: Float
+    ) {
+        clearConstraintSets()
+        start.applyTo(transition, Transition.START)
+        end.applyTo(transition, Transition.END)
+        transition.interpolate(0, 0, progress)
+        if (keyframes != null) {
+            keyframes.applyTo(transition, 0)
+        }
     }
 }
 

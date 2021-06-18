@@ -26,7 +26,7 @@ import androidx.constraintlayout.compose.*
 
 @Preview(group = "motion1")
 @Composable
-public fun ScreenExample14() {
+public fun ScreenExample16() {
     var animateToEnd by remember { mutableStateOf(false) }
     val progress by animateFloatAsState(
         targetValue = if (animateToEnd) 1f else 0f,
@@ -104,7 +104,7 @@ public fun ScreenExample14() {
 
 @Preview(group = "motion2")
 @Composable
-public fun ScreenExample15() {
+public fun ScreenExample17() {
     var animateToEnd by remember { mutableStateOf(false) }
     val progress by animateFloatAsState(
         targetValue = if (animateToEnd) 1f else 0f,
@@ -242,7 +242,7 @@ public fun ScreenExample15() {
                 fontSize = motionProperties("title").value.fontSize("textSize")
             )
             Text(
-                text = "Demo screen 15",
+                text = "Demo screen 17",
                 modifier = Modifier.layoutId("description"),
                 color = Color.Black,
                 fontSize = motionProperties("description").value.fontSize("textSize")
@@ -273,7 +273,7 @@ public fun ScreenExample15() {
 
 @Preview(group = "motion3")
 @Composable
-public fun ScreenExample16() {
+public fun ScreenExample18() {
     var animateToEnd by remember { mutableStateOf(false) }
     val progress by animateFloatAsState(
         targetValue = if (animateToEnd) 1f else 0f,
