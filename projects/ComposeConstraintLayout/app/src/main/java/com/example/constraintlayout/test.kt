@@ -1355,30 +1355,30 @@ public fun ScreenExample18() {
   ConstraintSets: {
     start: {
       a: {
-        width: 40,
-        height: 40,
+        width: 100,
+        height: 100,
         start: ['parent', 'start', 16],
         centerVertically: 'parent'
       },
       b: {
-        width: 40,
-        height: 40,
+        width: 100,
+        height: 100,
         start: ['parent', 'start', 36],
         top: ['a', 'top', 20],
-        translationZ: 30,
+        translationZ: 30
       }
     },
     end: {
       a: {
-        width: 40,
-        height: 40,
+        width: 100,
+        height: 100,
         translationZ: 30,
         end: ['parent', 'end', 16],
         centerVertically: 'parent'
       },
       b: {
-        width: 40,
-        height: 40,
+        width: 100,
+        height: 100,
         end: ['parent', 'end', 36],
         top: ['a', 'top', 20]
       }
