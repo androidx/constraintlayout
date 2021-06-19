@@ -623,6 +623,10 @@ fun parseWidget(
                 val value = layoutVariables.get(element[constraintName])
                 reference.translationY(value)
             }
+            "translationZ" -> {
+                val value = layoutVariables.get(element[constraintName])
+                reference.translationZ(value)
+            }
             "pivotX" -> {
                 val value = layoutVariables.get(element[constraintName])
                 reference.pivotX(value)
@@ -650,18 +654,6 @@ fun parseWidget(
                     "invisible" -> reference.visibility(ConstraintWidget.INVISIBLE)
                     "gone" -> reference.visibility(ConstraintWidget.GONE)
                 }
-            }
-            "zIndex" -> {
-                val value = layoutVariables.get(element[constraintName])
-                reference.zIndex(value)
-            }
-            "shadowElevation" -> {
-                val value = layoutVariables.get(element[constraintName])
-                reference.shadowElevation(value)
-            }
-            "cameraDistance" -> {
-                val value = layoutVariables.get(element[constraintName])
-                reference.cameraDistance(value)
             }
             "custom" -> {
                 parseCustomProperties(element, reference, constraintName)

@@ -41,14 +41,12 @@ public class WidgetFrame {
 
     public float translationX = Float.NaN;
     public float translationY = Float.NaN;
+    public float translationZ = Float.NaN;
 
     public float scaleX = Float.NaN;
     public float scaleY = Float.NaN;
 
     public float alpha = Float.NaN;
-    public float zIndex = Float.NaN;
-    public float shadowElevation = Float.NaN;
-    public float cameraDistance = Float.NaN;
 
     public int visibility = ConstraintWidget.VISIBLE;
 
@@ -103,13 +101,12 @@ public class WidgetFrame {
         rotationZ = frame.rotationZ;
         translationX = frame.translationX;
         translationY = frame.translationY;
+        translationZ = frame.translationZ;
         scaleX = frame.scaleX;
         scaleY = frame.scaleY;
         alpha = frame.alpha;
         visibility = frame.visibility;
-        zIndex = frame.zIndex;
-        shadowElevation = frame.shadowElevation;
-        cameraDistance = frame.cameraDistance;
+
         if (frame.mCustomColors != null) {
             mCustomColors = new HashMap<>();
             mCustomColors.putAll(frame.mCustomColors);
@@ -126,11 +123,10 @@ public class WidgetFrame {
                 && Float.isNaN(rotationZ)
                 && Float.isNaN(translationX)
                 && Float.isNaN(translationY)
+                && Float.isNaN(translationZ)
                 && Float.isNaN(scaleX)
                 && Float.isNaN(scaleY)
-                && Float.isNaN(alpha)
-                && Float.isNaN(shadowElevation)
-                && Float.isNaN(cameraDistance);
+                && Float.isNaN(alpha);
     }
 
     public static void interpolate(int parentWidth, int parentHeight, WidgetFrame frame, WidgetFrame start, WidgetFrame end, Transition transition, float progress) {
@@ -225,11 +221,9 @@ public class WidgetFrame {
 
         frame.translationX = interpolate(start.translationX, end.translationX, 0f, progress);
         frame.translationY = interpolate(start.translationY, end.translationY, 0f, progress);
+        frame.translationZ = interpolate(start.translationZ, end.translationZ, 0f, progress);
 
         frame.alpha = interpolate(startAlpha, endAlpha, 1f, progress);
-        frame.zIndex = interpolate(start.zIndex, end.zIndex, 0f, progress);
-        frame.shadowElevation = interpolate(start.shadowElevation, end.shadowElevation, 0f, progress);
-        frame.cameraDistance = interpolate(start.cameraDistance, end.cameraDistance, 8f, progress);
     }
 
     private static float interpolate(float start, float end, float defaultValue, float progress) {

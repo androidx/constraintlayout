@@ -1652,11 +1652,10 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         }
         measurables.fastForEach { measurable ->
             var frame = frameCache[measurable]!!
-            val zIndex = if (frame.zIndex.isNaN()) 0f else frame.zIndex
             if (frame.isDefaultTransform()) {
                 val x = frameCache[measurable]!!.left
                 val y = frameCache[measurable]!!.top
-                placeables[measurable]?.place(IntOffset(x, y), zIndex = zIndex)
+                placeables[measurable]?.place(IntOffset(x, y))
             } else {
                 val layerBlock: GraphicsLayerScope.() -> Unit = {
                     if (!frame.pivotX.isNaN() || !frame.pivotY.isNaN()) {
@@ -1679,6 +1678,9 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                     if (!frame.translationY.isNaN()) {
                         translationY = frame.translationY
                     }
+                    if (!frame.translationZ.isNaN()) {
+                        shadowElevation = frame.translationZ
+                    }
                     if (!frame.scaleX.isNaN() || !frame.scaleY.isNaN()) {
                         scaleX = if (frame.scaleX.isNaN()) 1f else frame.scaleX
                         scaleY = if (frame.scaleY.isNaN()) 1f else frame.scaleY
@@ -1686,15 +1688,10 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                     if (!frame.alpha.isNaN()) {
                         alpha = frame.alpha
                     }
-                    if (!frame.shadowElevation.isNaN()) {
-                        shadowElevation = frame.shadowElevation
-                    }
-                    if (!frame.cameraDistance.isNaN()) {
-                        cameraDistance = frame.cameraDistance
-                    }
                 }
                 val x = frameCache[measurable]!!.left
                 val y = frameCache[measurable]!!.top
+                val zIndex = if (frame.translationZ.isNaN()) 0f else frame.translationZ
                 placeables[measurable]?.placeWithLayer(x, y, layerBlock = layerBlock, zIndex = zIndex)
             }
         }

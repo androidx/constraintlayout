@@ -1365,16 +1365,14 @@ public fun ScreenExample18() {
         height: 40,
         start: ['parent', 'start', 36],
         top: ['a', 'top', 20],
-        shadowElevation: 30,
-        zIndex: 1
+        translationZ: 30,
       }
     },
     end: {
       a: {
         width: 40,
         height: 40,
-        shadowElevation: 30,
-        zIndex: 1,
+        translationZ: 30,
         end: ['parent', 'end', 16],
         centerVertically: 'parent'
       },
