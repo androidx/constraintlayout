@@ -651,6 +651,18 @@ fun parseWidget(
                     "gone" -> reference.visibility(ConstraintWidget.GONE)
                 }
             }
+            "zIndex" -> {
+                val value = layoutVariables.get(element[constraintName])
+                reference.zIndex(value)
+            }
+            "shadowElevation" -> {
+                val value = layoutVariables.get(element[constraintName])
+                reference.shadowElevation(value)
+            }
+            "cameraDistance" -> {
+                val value = layoutVariables.get(element[constraintName])
+                reference.cameraDistance(value)
+            }
             "custom" -> {
                 parseCustomProperties(element, reference, constraintName)
             }

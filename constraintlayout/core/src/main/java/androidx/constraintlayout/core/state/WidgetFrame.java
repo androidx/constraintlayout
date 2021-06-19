@@ -46,6 +46,9 @@ public class WidgetFrame {
     public float scaleY = Float.NaN;
 
     public float alpha = Float.NaN;
+    public float zIndex = Float.NaN;
+    public float shadowElevation = Float.NaN;
+    public float cameraDistance = Float.NaN;
 
     public int visibility = ConstraintWidget.VISIBLE;
 
@@ -89,6 +92,10 @@ public class WidgetFrame {
         top = frame.top;
         right = frame.right;
         bottom = frame.bottom;
+        updateAttributes(frame);
+    }
+
+    private void updateAttributes(WidgetFrame frame) {
         pivotX = frame.pivotX;
         pivotY = frame.pivotY;
         rotationX = frame.rotationX;
@@ -100,6 +107,9 @@ public class WidgetFrame {
         scaleY = frame.scaleY;
         alpha = frame.alpha;
         visibility = frame.visibility;
+        zIndex = frame.zIndex;
+        shadowElevation = frame.shadowElevation;
+        cameraDistance = frame.cameraDistance;
         if (frame.mCustomColors != null) {
             mCustomColors = new HashMap<>();
             mCustomColors.putAll(frame.mCustomColors);
@@ -118,7 +128,9 @@ public class WidgetFrame {
                 && Float.isNaN(translationY)
                 && Float.isNaN(scaleX)
                 && Float.isNaN(scaleY)
-                && Float.isNaN(alpha);
+                && Float.isNaN(alpha)
+                && Float.isNaN(shadowElevation)
+                && Float.isNaN(cameraDistance);
     }
 
     public static void interpolate(int parentWidth, int parentHeight, WidgetFrame frame, WidgetFrame start, WidgetFrame end, Transition transition, float progress) {
@@ -215,6 +227,9 @@ public class WidgetFrame {
         frame.translationY = interpolate(start.translationY, end.translationY, 0f, progress);
 
         frame.alpha = interpolate(startAlpha, endAlpha, 1f, progress);
+        frame.zIndex = interpolate(start.zIndex, end.zIndex, 0f, progress);
+        frame.shadowElevation = interpolate(start.shadowElevation, end.shadowElevation, 0f, progress);
+        frame.cameraDistance = interpolate(start.cameraDistance, end.cameraDistance, 8f, progress);
     }
 
     private static float interpolate(float start, float end, float defaultValue, float progress) {
@@ -260,25 +275,7 @@ public class WidgetFrame {
             right = widget.getRight();
             bottom = widget.getBottom();
             WidgetFrame frame = widget.frame;
-            pivotX = frame.pivotX;
-            pivotY = frame.pivotY;
-            rotationX = frame.rotationX;
-            rotationY = frame.rotationY;
-            rotationZ = frame.rotationZ;
-            translationX = frame.translationX;
-            translationY = frame.translationY;
-            scaleX = frame.scaleX;
-            scaleY = frame.scaleY;
-            alpha = frame.alpha;
-            visibility = frame.visibility;
-            if (frame.mCustomColors != null) {
-                mCustomColors = new HashMap<>();
-                mCustomColors.putAll(frame.mCustomColors);
-            }
-            if (frame.mCustomFloats != null) {
-                mCustomFloats = new HashMap<>();
-                mCustomFloats.putAll(frame.mCustomFloats);
-            }
+            updateAttributes(frame);
         }
         return this;
     }

@@ -92,6 +92,10 @@ public class ConstraintReference implements Reference {
     float mScaleX = Float.NaN;
     float mScaleY = Float.NaN;
 
+    float mZIndex = Float.NaN;
+    float mShadowElevation = Float.NaN;
+    float mCameraDistance = Float.NaN;
+
     int mVisibility = ConstraintWidget.VISIBLE;
 
     Object mLeftToLeft = null;
@@ -314,6 +318,21 @@ public class ConstraintReference implements Reference {
 
     public ConstraintReference alpha(float alpha) {
         mAlpha = alpha;
+        return this;
+    }
+
+    public ConstraintReference zIndex(float zIndex) {
+        mZIndex = zIndex;
+        return this;
+    }
+
+    public ConstraintReference shadowElevation(float elevation) {
+        mShadowElevation = elevation;
+        return this;
+    }
+
+    public ConstraintReference cameraDistance(float cameraDistance) {
+        mCameraDistance = cameraDistance;
         return this;
     }
 
@@ -878,6 +897,9 @@ public class ConstraintReference implements Reference {
         mConstraintWidget.frame.scaleX = mScaleX;
         mConstraintWidget.frame.scaleY = mScaleY;
         mConstraintWidget.frame.alpha = mAlpha;
+        mConstraintWidget.frame.zIndex = mZIndex;
+        mConstraintWidget.frame.shadowElevation = mShadowElevation;
+        mConstraintWidget.frame.cameraDistance = mCameraDistance;
         mConstraintWidget.frame.visibility = mVisibility;
         mConstraintWidget.setVisibility(mVisibility);
 

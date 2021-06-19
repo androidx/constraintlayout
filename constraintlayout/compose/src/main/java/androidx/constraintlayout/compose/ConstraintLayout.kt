@@ -1652,10 +1652,11 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         }
         measurables.fastForEach { measurable ->
             var frame = frameCache[measurable]!!
+            val zIndex = if (frame.zIndex.isNaN()) 0f else frame.zIndex
             if (frame.isDefaultTransform()) {
                 val x = frameCache[measurable]!!.left
                 val y = frameCache[measurable]!!.top
-                placeables[measurable]?.place(IntOffset(x, y))
+                placeables[measurable]?.place(IntOffset(x, y), zIndex = zIndex)
             } else {
                 val layerBlock: GraphicsLayerScope.() -> Unit = {
                     if (!frame.pivotX.isNaN() || !frame.pivotY.isNaN()) {
@@ -1685,10 +1686,16 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                     if (!frame.alpha.isNaN()) {
                         alpha = frame.alpha
                     }
+                    if (!frame.shadowElevation.isNaN()) {
+                        shadowElevation = frame.shadowElevation
+                    }
+                    if (!frame.cameraDistance.isNaN()) {
+                        cameraDistance = frame.cameraDistance
+                    }
                 }
                 val x = frameCache[measurable]!!.left
                 val y = frameCache[measurable]!!.top
-                placeables[measurable]?.placeWithLayer(x, y, layerBlock = layerBlock)
+                placeables[measurable]?.placeWithLayer(x, y, layerBlock = layerBlock, zIndex = zIndex)
             }
         }
     }
