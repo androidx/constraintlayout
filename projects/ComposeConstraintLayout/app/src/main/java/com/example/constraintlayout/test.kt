@@ -1336,6 +1336,71 @@ public fun ScreenExample17() {
     }
 }
 
+@Preview(group = "motion10")
+@Composable
+public fun ScreenExample18() {
+    var animateToEnd by remember { mutableStateOf(false) }
+
+    val progress by animateFloatAsState(
+        targetValue = if (animateToEnd) 1f else 0f,
+        animationSpec = tween(6000)
+    )
+    Column {
+        MotionLayout(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(400.dp)
+                .background(Color.White),
+            motionScene = MotionScene("""{
+  ConstraintSets: {
+    start: {
+      a: {
+        width: 100,
+        height: 100,
+        start: ['parent', 'start', 16],
+        centerVertically: 'parent'
+      },
+      b: {
+        width: 100,
+        height: 100,
+        start: ['parent', 'start', 36],
+        top: ['a', 'top', 20],
+        translationZ: 30
+      }
+    },
+    end: {
+      a: {
+        width: 100,
+        height: 100,
+        translationZ: 30,
+        end: ['parent', 'end', 16],
+        centerVertically: 'parent'
+      },
+      b: {
+        width: 100,
+        height: 100,
+        end: ['parent', 'end', 36],
+        top: ['a', 'top', 20]
+      }
+    }
+  }
+}
+"""),
+            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
+            progress = progress) {
+            Box(modifier = Modifier
+                .layoutId("a")
+                .background(Color.Red))
+            Box(modifier = Modifier
+                .layoutId("b")
+                .background(Color.Green))
+        }
+
+        Button(onClick = { animateToEnd = !animateToEnd }) {
+            Text(text = "Run")
+        }
+    }
+}
 
 
 

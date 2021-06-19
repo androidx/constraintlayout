@@ -875,6 +875,7 @@ public class ConstraintReference implements Reference {
         mConstraintWidget.frame.rotationZ = mRotationZ;
         mConstraintWidget.frame.translationX = mTranslationX;
         mConstraintWidget.frame.translationY = mTranslationY;
+        mConstraintWidget.frame.translationZ = mTranslationZ;
         mConstraintWidget.frame.scaleX = mScaleX;
         mConstraintWidget.frame.scaleY = mScaleY;
         mConstraintWidget.frame.alpha = mAlpha;

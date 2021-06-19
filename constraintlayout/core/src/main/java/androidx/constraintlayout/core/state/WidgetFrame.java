@@ -41,6 +41,7 @@ public class WidgetFrame {
 
     public float translationX = Float.NaN;
     public float translationY = Float.NaN;
+    public float translationZ = Float.NaN;
 
     public float scaleX = Float.NaN;
     public float scaleY = Float.NaN;
@@ -89,6 +90,10 @@ public class WidgetFrame {
         top = frame.top;
         right = frame.right;
         bottom = frame.bottom;
+        updateAttributes(frame);
+    }
+
+    private void updateAttributes(WidgetFrame frame) {
         pivotX = frame.pivotX;
         pivotY = frame.pivotY;
         rotationX = frame.rotationX;
@@ -96,10 +101,12 @@ public class WidgetFrame {
         rotationZ = frame.rotationZ;
         translationX = frame.translationX;
         translationY = frame.translationY;
+        translationZ = frame.translationZ;
         scaleX = frame.scaleX;
         scaleY = frame.scaleY;
         alpha = frame.alpha;
         visibility = frame.visibility;
+
         if (frame.mCustomColors != null) {
             mCustomColors = new HashMap<>();
             mCustomColors.putAll(frame.mCustomColors);
@@ -116,6 +123,7 @@ public class WidgetFrame {
                 && Float.isNaN(rotationZ)
                 && Float.isNaN(translationX)
                 && Float.isNaN(translationY)
+                && Float.isNaN(translationZ)
                 && Float.isNaN(scaleX)
                 && Float.isNaN(scaleY)
                 && Float.isNaN(alpha);
@@ -213,6 +221,7 @@ public class WidgetFrame {
 
         frame.translationX = interpolate(start.translationX, end.translationX, 0f, progress);
         frame.translationY = interpolate(start.translationY, end.translationY, 0f, progress);
+        frame.translationZ = interpolate(start.translationZ, end.translationZ, 0f, progress);
 
         frame.alpha = interpolate(startAlpha, endAlpha, 1f, progress);
     }
@@ -260,25 +269,7 @@ public class WidgetFrame {
             right = widget.getRight();
             bottom = widget.getBottom();
             WidgetFrame frame = widget.frame;
-            pivotX = frame.pivotX;
-            pivotY = frame.pivotY;
-            rotationX = frame.rotationX;
-            rotationY = frame.rotationY;
-            rotationZ = frame.rotationZ;
-            translationX = frame.translationX;
-            translationY = frame.translationY;
-            scaleX = frame.scaleX;
-            scaleY = frame.scaleY;
-            alpha = frame.alpha;
-            visibility = frame.visibility;
-            if (frame.mCustomColors != null) {
-                mCustomColors = new HashMap<>();
-                mCustomColors.putAll(frame.mCustomColors);
-            }
-            if (frame.mCustomFloats != null) {
-                mCustomFloats = new HashMap<>();
-                mCustomFloats.putAll(frame.mCustomFloats);
-            }
+            updateAttributes(frame);
         }
         return this;
     }

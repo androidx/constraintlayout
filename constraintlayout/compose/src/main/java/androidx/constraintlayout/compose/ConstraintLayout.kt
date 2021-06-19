@@ -1678,6 +1678,9 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                     if (!frame.translationY.isNaN()) {
                         translationY = frame.translationY
                     }
+                    if (!frame.translationZ.isNaN()) {
+                        shadowElevation = frame.translationZ
+                    }
                     if (!frame.scaleX.isNaN() || !frame.scaleY.isNaN()) {
                         scaleX = if (frame.scaleX.isNaN()) 1f else frame.scaleX
                         scaleY = if (frame.scaleY.isNaN()) 1f else frame.scaleY
@@ -1688,7 +1691,8 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                 }
                 val x = frameCache[measurable]!!.left
                 val y = frameCache[measurable]!!.top
-                placeables[measurable]?.placeWithLayer(x, y, layerBlock = layerBlock)
+                val zIndex = if (frame.translationZ.isNaN()) 0f else frame.translationZ
+                placeables[measurable]?.placeWithLayer(x, y, layerBlock = layerBlock, zIndex = zIndex)
             }
         }
     }

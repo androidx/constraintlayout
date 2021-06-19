@@ -623,6 +623,10 @@ fun parseWidget(
                 val value = layoutVariables.get(element[constraintName])
                 reference.translationY(value)
             }
+            "translationZ" -> {
+                val value = layoutVariables.get(element[constraintName])
+                reference.translationZ(value)
+            }
             "pivotX" -> {
                 val value = layoutVariables.get(element[constraintName])
                 reference.pivotX(value)
