@@ -1,10 +1,10 @@
-MotionLayout Compose Samples
+## MotionLayout Compose Samples
 =========================
 This repository contains a list of Composables that showcases the various features and usage of
 [ConstraintLayout](https://developer.android.com/reference/android/support/constraint/ConstraintLayout.html) and
 [MotionLayout](https://developer.android.com/reference/android/support/constraint/motion/MotionLayout)
 
-MotionLayout samples overview
+## MotionLayout samples overview
 -----------------------------
 
 |  Title  |  GIF  | Composable |
