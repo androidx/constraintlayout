@@ -48,6 +48,8 @@ public class WidgetFrame {
 
     public float alpha = Float.NaN;
 
+    public int visibility = ConstraintWidget.VISIBLE;
+
     public HashMap<String, Color> mCustomColors = null;
     public HashMap<String, Float> mCustomFloats = null;
 
@@ -88,6 +90,10 @@ public class WidgetFrame {
         top = frame.top;
         right = frame.right;
         bottom = frame.bottom;
+        updateAttributes(frame);
+    }
+
+    private void updateAttributes(WidgetFrame frame) {
         pivotX = frame.pivotX;
         pivotY = frame.pivotY;
         rotationX = frame.rotationX;
@@ -95,9 +101,12 @@ public class WidgetFrame {
         rotationZ = frame.rotationZ;
         translationX = frame.translationX;
         translationY = frame.translationY;
+        translationZ = frame.translationZ;
         scaleX = frame.scaleX;
         scaleY = frame.scaleY;
         alpha = frame.alpha;
+        visibility = frame.visibility;
+
         if (frame.mCustomColors != null) {
             mCustomColors = new HashMap<>();
             mCustomColors.putAll(frame.mCustomColors);
@@ -114,6 +123,7 @@ public class WidgetFrame {
                 && Float.isNaN(rotationZ)
                 && Float.isNaN(translationX)
                 && Float.isNaN(translationY)
+                && Float.isNaN(translationZ)
                 && Float.isNaN(scaleX)
                 && Float.isNaN(scaleY)
                 && Float.isNaN(alpha);
@@ -131,6 +141,40 @@ public class WidgetFrame {
         int endHeight = end.bottom - end.top;
 
         float progressPosition = progress;
+
+        float startAlpha = start.alpha;
+        float endAlpha = end.alpha;
+
+        if (start.visibility == ConstraintWidget.GONE) {
+            // On visibility gone, keep the same size to do an alpha to zero
+            startX -= endWidth / 2f;
+            startY -= endHeight / 2f;
+            startWidth = endWidth;
+            startHeight = endHeight;
+            if (Float.isNaN(startAlpha)) {
+                // override only if not defined...
+                startAlpha = 0f;
+            }
+        }
+
+        if (end.visibility == ConstraintWidget.GONE) {
+            // On visibility gone, keep the same size to do an alpha to zero
+            endX -= startWidth / 2f;
+            endY -= startHeight / 2f;
+            endWidth = startWidth;
+            endHeight = startHeight;
+            if (Float.isNaN(endAlpha)) {
+                // override only if not defined...
+                endAlpha = 0f;
+            }
+        }
+
+        if (Float.isNaN(startAlpha) && !Float.isNaN(endAlpha)) {
+            startAlpha = 1f;
+        }
+        if (!Float.isNaN(startAlpha) && Float.isNaN(endAlpha)) {
+            endAlpha = 1f;
+        }
 
         if (frame.widget != null && transition.hasPositionKeyframes()) {
             Transition.KeyPosition firstPosition = transition.findPreviousPosition(frame.widget.stringId, frameNumber);
@@ -165,20 +209,21 @@ public class WidgetFrame {
         frame.right = frame.left + width;
         frame.bottom = frame.top + height;
 
-        frame.pivotX = interpolate(start.pivotX, end.pivotX, 0f, progress);
-        frame.pivotY = interpolate(start.pivotY, end.pivotY, 0f, progress);
+        frame.pivotX = interpolate(start.pivotX, end.pivotX, 0.5f, progress);
+        frame.pivotY = interpolate(start.pivotY, end.pivotY, 0.5f, progress);
 
         frame.rotationX = interpolate(start.rotationX, end.rotationX, 0f, progress);
         frame.rotationY = interpolate(start.rotationY, end.rotationY, 0f, progress);
         frame.rotationZ = interpolate(start.rotationZ, end.rotationZ, 0f, progress);
 
-        frame.scaleX = interpolate(start.scaleX, end.scaleX, 0f, progress);
-        frame.scaleY = interpolate(start.scaleY, end.scaleY, 0f, progress);
+        frame.scaleX = interpolate(start.scaleX, end.scaleX, 1f, progress);
+        frame.scaleY = interpolate(start.scaleY, end.scaleY, 1f, progress);
 
         frame.translationX = interpolate(start.translationX, end.translationX, 0f, progress);
         frame.translationY = interpolate(start.translationY, end.translationY, 0f, progress);
+        frame.translationZ = interpolate(start.translationZ, end.translationZ, 0f, progress);
 
-        frame.alpha = interpolate(start.alpha, end.alpha, 0f, progress);
+        frame.alpha = interpolate(startAlpha, endAlpha, 1f, progress);
     }
 
     private static float interpolate(float start, float end, float defaultValue, float progress) {
@@ -224,24 +269,7 @@ public class WidgetFrame {
             right = widget.getRight();
             bottom = widget.getBottom();
             WidgetFrame frame = widget.frame;
-            pivotX = frame.pivotX;
-            pivotY = frame.pivotY;
-            rotationX = frame.rotationX;
-            rotationY = frame.rotationY;
-            rotationZ = frame.rotationZ;
-            translationX = frame.translationX;
-            translationY = frame.translationY;
-            scaleX = frame.scaleX;
-            scaleY = frame.scaleY;
-            alpha = frame.alpha;
-            if (frame.mCustomColors != null) {
-                mCustomColors = new HashMap<>();
-                mCustomColors.putAll(frame.mCustomColors);
-            }
-            if (frame.mCustomFloats != null) {
-                mCustomFloats = new HashMap<>();
-                mCustomFloats.putAll(frame.mCustomFloats);
-            }
+            updateAttributes(frame);
         }
         return this;
     }
