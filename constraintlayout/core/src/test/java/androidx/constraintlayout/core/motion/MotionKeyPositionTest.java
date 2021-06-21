@@ -7,6 +7,7 @@ import androidx.constraintlayout.core.motion.MotionWidget;
 import androidx.constraintlayout.core.motion.key.MotionKeyPosition;
 import androidx.constraintlayout.core.motion.utils.ArcCurveFit;
 import androidx.constraintlayout.core.motion.utils.KeyCache;
+import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.motion.utils.Utils;
 
 import org.junit.Test;
@@ -94,13 +95,13 @@ public class MotionKeyPositionTest {
         mw2.setBounds(400, 400, 460, 480);
         MotionKeyPosition keyPosition = new MotionKeyPosition();
         keyPosition.setFramePosition(30);
-        keyPosition.setValue(MotionKeyPosition.PERCENT_X, 0.3);
-        keyPosition.setValue(MotionKeyPosition.PERCENT_Y, 0.3);
+        keyPosition.setValue(TypedValues.Position.TYPE_PERCENT_X, 0.3f);
+        keyPosition.setValue(TypedValues.Position.TYPE_PERCENT_Y, 0.3f);
 
         MotionKeyPosition keyPosition2 = new MotionKeyPosition();
         keyPosition2.setFramePosition(88);
-        keyPosition2.setValue(MotionKeyPosition.PERCENT_X, .9);
-        keyPosition2.setValue(MotionKeyPosition.PERCENT_Y, 0.5);
+        keyPosition2.setValue(TypedValues.Position.TYPE_PERCENT_X, .9f);
+        keyPosition2.setValue(TypedValues.Position.TYPE_PERCENT_Y, 0.5f);
 
         // mw1.motion.mPathMotionArc = MotionWidget.A
         Motion motion = new Motion(mw1);
@@ -146,10 +147,10 @@ public class MotionKeyPositionTest {
         mw1.setBounds(0, 0, 30, 40);
         mw2.setBounds(400, 400, 460, 480);
         keyPosition.setFramePosition(20);
-        keyPosition.setValue(MotionKeyPosition.PERCENT_X, 1);
-        keyPosition.setValue(MotionKeyPosition.PERCENT_Y, 0.5);
-        keyPosition.setValue(MotionKeyPosition.PERCENT_HEIGHT, 0.2);
-        keyPosition.setValue(MotionKeyPosition.PERCENT_WIDTH, 1);
+        keyPosition.setValue(TypedValues.Position.TYPE_PERCENT_X, 1f);
+        keyPosition.setValue(TypedValues.Position.TYPE_PERCENT_Y, 0.5f);
+        keyPosition.setValue(TypedValues.Position.TYPE_PERCENT_HEIGHT, 0.2f);
+        keyPosition.setValue(TypedValues.Position.TYPE_PERCENT_WIDTH, 1f);
         // mw1.motion.mPathMotionArc = MotionWidget.A
         Motion motion = new Motion(mw1);
         //  motion.setPathMotionArc(ArcCurveFit.ARC_START_HORIZONTAL);

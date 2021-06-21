@@ -643,7 +643,12 @@ public class Motion {
     public void setPathMotionArc(int arc) {
         mPathMotionArc = arc;
     }
-
+    //##############################################################################################
+    //##############################################################################################
+    //##############################################################################################
+    //##############################################################################################
+    //##############################################################################################
+    //##############################################################################################
     /**
      * Called after all TimePoints & Cycles have been added;
      * Spines are evaluated
@@ -726,13 +731,13 @@ public class Motion {
                     }
                     splineSets = SplineSet.makeCustomSpline(attribute, attrList);
                 } else {
-        //            splineSets = SplineSet.makeSpline(attribute);
+                    splineSets = SplineSet.makeSpline(attribute, currentTime);
                 }
-//                if (splineSets == null) {
-//                    continue;
-//                }
-//                splineSets.setType(attribute);
-//                mAttributesMap.put(attribute, splineSets);
+                if (splineSets == null) {
+                    continue;
+                }
+                splineSets.setType(attribute);
+                mAttributesMap.put(attribute, splineSets);
             }
             if (mKeyList != null) {
                 for (MotionKey key : mKeyList) {
@@ -1003,12 +1008,10 @@ public class Motion {
     }
 
     public void setEnd(MotionWidget mw) {
-
         mEndMotionPath.time = 1;
         mEndMotionPath.position = 1;
         readView(mEndMotionPath);
         mEndMotionPath.setBounds(mw.getLeft(), mw.getTop(), mw.getWidth(), mw.getHeight());
-//        mEndMotionPath.applyParameters(constraintSet.getParameters(mId));
         mEndPoint.setState(mw);
     }
 
@@ -1219,6 +1222,12 @@ public class Motion {
 //                }
 //            }
     }
+    //##############################################################################################
+    //$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%
+    //$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%
+    //$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%
+    //$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%
+    //##############################################################################################
 
     /**
      * The main driver of interpolation
@@ -1249,12 +1258,12 @@ public class Motion {
             }
             position = section * steps + jump;
         }
-//        MotionKeyTimeCycle.PathRotate timePathRotate = null;
-//        if (mAttributesMap != null) {
-//            for ( SplineSet aSpline : mAttributesMap.values()) {
-//                aSpline.setProperty(child, position);
-//            }
-//        }
+       // MotionKeyTimeCycle.PathRotate timePathRotate = null;
+        if (mAttributesMap != null) {
+            for ( SplineSet aSpline : mAttributesMap.values()) {
+                aSpline.setProperty(child, position);
+            }
+        }
 
 //        if (mTimeCycleAttributesMap != null) {
 //            for (ViewTimeCycle aSpline : mTimeCycleAttributesMap.values()) {

@@ -3,12 +3,13 @@ package androidx.constraintlayout.core.motion.key;
 import androidx.constraintlayout.core.motion.MotionWidget;
 import androidx.constraintlayout.core.motion.utils.FloatRect;
 import androidx.constraintlayout.core.motion.utils.SplineSet;
+import androidx.constraintlayout.core.motion.utils.TypedValues;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class MotionKeyTrigger extends MotionKey{
+public class MotionKeyTrigger extends MotionKey {
     private static final String TAG = "KeyTrigger";
     public static final String VIEW_TRANSITION_ON_CROSS = "viewTransitionOnCross";
     public static final String VIEW_TRANSITION_ON_POSITIVE_CROSS = "viewTransitionOnPositiveCross";
@@ -30,7 +31,7 @@ public class MotionKeyTrigger extends MotionKey{
     private String mPositiveCross = null;
     private int mTriggerID = UNSET;
     private int mTriggerCollisionId = UNSET;
-    private MotionWidget mTriggerCollisionView = null;
+//   TODO private MotionWidget mTriggerCollisionView = null;
     float mTriggerSlack = .1f;
     private boolean mFireCrossReset = true;
     private boolean mFireNegativeReset = true;
@@ -41,6 +42,19 @@ public class MotionKeyTrigger extends MotionKey{
     int mViewTransitionOnNegativeCross = UNSET;
     int mViewTransitionOnPositiveCross = UNSET;
     int mViewTransitionOnCross = UNSET;
+
+    public static final int TYPE_VIEW_TRANSITION_ON_CROSS = 301;
+    public static final int TYPE_VIEW_TRANSITION_ON_POSITIVE_CROSS = 302;
+    public static final int TYPE_VIEW_TRANSITION_ON_NEGATIVE_CROSS = 303;
+    public static final int TYPE_POST_LAYOUT = 304;
+    public static final int TYPE_TRIGGER_SLACK = 305;
+    public static final int TYPE_TRIGGER_COLLISION_VIEW = 306;
+    public static final int TYPE_TRIGGER_COLLISION_ID = 307;
+    public static final int TYPE_TRIGGER_ID = 308;
+    public static final int TYPE_POSITIVE_CROSS = 309;
+    public static final int TYPE_NEGATIVE_CROSS = 310;
+    public static final int TYPE_TRIGGER_RECEIVER = 311;
+    public static final int TYPE_CROSS = 312;
 
     FloatRect mCollisionRect = new FloatRect();
     FloatRect mTargetRect = new FloatRect();
@@ -63,48 +77,33 @@ public class MotionKeyTrigger extends MotionKey{
     }
 
     @Override
-    public void setValue(String tag, Object value) {
-        switch (tag) {
-            case CROSS:
-                mCross = value.toString();
-                break;
-            case TRIGGER_RECEIVER:
-                mTriggerReceiver = toInt(value);
-                break;
-            case NEGATIVE_CROSS:
-                mNegativeCross = value.toString();
-                break;
-            case POSITIVE_CROSS:
-                mPositiveCross = value.toString();
-                break;
-            case TRIGGER_ID:
-                mTriggerID = toInt(value);
-                break;
-            case TRIGGER_COLLISION_ID:
-                mTriggerCollisionId = toInt(value);
-                break;
-            case TRIGGER_COLLISION_VIEW:
-                mTriggerCollisionView = (MotionWidget) value;
-                break;
-            case TRIGGER_SLACK:
-                mTriggerSlack = toFloat(value);
-                break;
-            case POST_LAYOUT:
-                mPostLayout = toBoolean(value);
-                break;
-            case VIEW_TRANSITION_ON_NEGATIVE_CROSS:
-                mViewTransitionOnNegativeCross = toInt(value);
-                break;
-            case VIEW_TRANSITION_ON_POSITIVE_CROSS:
-                mViewTransitionOnPositiveCross = toInt(value);
-                break;
+    public int getId(String name) {
+        switch (name) {
             case VIEW_TRANSITION_ON_CROSS:
-                mViewTransitionOnCross = toInt(value);
-                break;
-
+                return TYPE_VIEW_TRANSITION_ON_CROSS;
+            case VIEW_TRANSITION_ON_POSITIVE_CROSS:
+                return TYPE_VIEW_TRANSITION_ON_POSITIVE_CROSS;
+            case VIEW_TRANSITION_ON_NEGATIVE_CROSS:
+                return TYPE_VIEW_TRANSITION_ON_NEGATIVE_CROSS;
+            case POST_LAYOUT:
+                return TYPE_POST_LAYOUT;
+            case TRIGGER_SLACK:
+                return TYPE_TRIGGER_SLACK;
+            case TRIGGER_COLLISION_VIEW:
+                return TYPE_TRIGGER_COLLISION_VIEW;
+            case TRIGGER_COLLISION_ID:
+                return TYPE_TRIGGER_COLLISION_ID;
+            case TRIGGER_ID:
+                return TYPE_TRIGGER_ID;
+            case POSITIVE_CROSS:
+                return TYPE_POSITIVE_CROSS;
+            case NEGATIVE_CROSS:
+                return TYPE_NEGATIVE_CROSS;
+            case TRIGGER_RECEIVER:
+                return TYPE_TRIGGER_RECEIVER;
         }
+        return -1;
     }
-
 
     public MotionKeyTrigger copy(MotionKey src) {
         super.copy(src);
@@ -116,7 +115,7 @@ public class MotionKeyTrigger extends MotionKey{
         mPositiveCross = k.mPositiveCross;
         mTriggerID = k.mTriggerID;
         mTriggerCollisionId = k.mTriggerCollisionId;
-        mTriggerCollisionView = k.mTriggerCollisionView;
+        // TODO mTriggerCollisionView = k.mTriggerCollisionView;
         mTriggerSlack = k.mTriggerSlack;
         mFireCrossReset = k.mFireCrossReset;
         mFireNegativeReset = k.mFireNegativeReset;
@@ -136,4 +135,78 @@ public class MotionKeyTrigger extends MotionKey{
 
     public void conditionallyFire(float position, MotionWidget child) {
     }
+
+    public boolean setValue(int type, int value) {
+        switch (type) {
+            case Trigger.TYPE_TRIGGER_RECEIVER:
+                mTriggerReceiver = value;
+                break;
+            case Trigger.TYPE_TRIGGER_ID:
+                mTriggerID = toInt(value);
+                break;
+            case Trigger.TYPE_TRIGGER_COLLISION_ID:
+                mTriggerCollisionId = value;
+                break;
+            case Trigger.TYPE_VIEW_TRANSITION_ON_NEGATIVE_CROSS:
+                mViewTransitionOnNegativeCross = value;
+                break;
+            case Trigger.TYPE_VIEW_TRANSITION_ON_POSITIVE_CROSS:
+                mViewTransitionOnPositiveCross = value;
+                break;
+
+            case Trigger.TYPE_VIEW_TRANSITION_ON_CROSS:
+                mViewTransitionOnCross = value;
+                break;
+            default:
+                return super.setValue(type, value);
+        }
+        return true;
+    }
+
+    public boolean setValue(int type, float value) {
+        switch (type) {
+            case Trigger.TYPE_TRIGGER_SLACK:
+                mTriggerSlack = value;
+                break;
+            default:
+            return super.setValue(type, value);
+        }
+        return true;
+    }
+
+    public boolean setValue(int type, String value) {
+        switch (type) {
+            case Trigger.TYPE_CROSS:
+                mCross = value;
+                break;
+            case Trigger.TYPE_NEGATIVE_CROSS:
+                mNegativeCross = value;
+                break;
+            case Trigger.TYPE_POSITIVE_CROSS:
+                mPositiveCross = value;
+                break;
+//                TODO
+//            case TRIGGER_COLLISION_VIEW:
+//                mTriggerCollisionView = (MotionWidget) value;
+//                break;
+
+            default:
+
+                return super.setValue(type, value);
+        }
+        return true;
+    }
+
+    public boolean setValue(int type, boolean value) {
+        switch (type) {
+            case Trigger.TYPE_POST_LAYOUT:
+                mPostLayout = value;
+                break;
+            default:
+                return super.setValue(type, value);
+        }
+        return true;
+    }
+
+
 }

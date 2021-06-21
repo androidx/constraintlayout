@@ -5,6 +5,7 @@ import androidx.constraintlayout.core.motion.MotionWidget;
 import androidx.constraintlayout.core.motion.utils.Oscillator;
 import androidx.constraintlayout.core.motion.utils.SplineSet;
 import androidx.constraintlayout.core.motion.utils.TimeCycleSplineSet;
+import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.motion.utils.Utils;
 
 import java.util.HashMap;
@@ -64,144 +65,165 @@ public class MotionKeyTimeCycle extends MotionKey {
                 continue;
             }
             switch (s) {
-                case MotionKey.ALPHA:
+                case TypedValues.Attributes.S_ALPHA:
                     if (!Float.isNaN(mAlpha)) {
                         splineSet.setPoint(mFramePosition, mAlpha, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
-                case MotionKey.ELEVATION:
-                    if (!Float.isNaN(mElevation)) {
-                        splineSet.setPoint(mFramePosition, mElevation, mWavePeriod, mWaveShape, mWaveOffset);
-                    }
-                    break;
-                case MotionKey.ROTATION:
-                    if (!Float.isNaN(mRotation)) {
-                        splineSet.setPoint(mFramePosition, mRotation, mWavePeriod, mWaveShape, mWaveOffset);
-                    }
-                    break;
-                case MotionKey.ROTATION_X:
+
+                case TypedValues.Attributes.S_ROTATION_X:
                     if (!Float.isNaN(mRotationX)) {
                         splineSet.setPoint(mFramePosition, mRotationX, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
-                case MotionKey.ROTATION_Y:
+                case TypedValues.Attributes.S_ROTATION_Y:
                     if (!Float.isNaN(mRotationY)) {
                         splineSet.setPoint(mFramePosition, mRotationY, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
-                case MotionKey.TRANSITION_PATH_ROTATE:
+                case TypedValues.Attributes.S_ROTATION_Z:
+                    if (!Float.isNaN(mRotation)) {
+                        splineSet.setPoint(mFramePosition, mRotation, mWavePeriod, mWaveShape, mWaveOffset);
+                    }
+                    break;
+                case TypedValues.Attributes.S_PATH_ROTATE:
                     if (!Float.isNaN(mTransitionPathRotate)) {
                         splineSet.setPoint(mFramePosition, mTransitionPathRotate, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
-                case MotionKey.SCALE_X:
+
+                case TypedValues.Attributes.S_SCALE_X:
                     if (!Float.isNaN(mScaleX)) {
                         splineSet.setPoint(mFramePosition, mScaleX, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
-                case MotionKey.SCALE_Y:
+                case TypedValues.Attributes.S_SCALE_Y:
                     if (!Float.isNaN(mScaleY)) {
                         splineSet.setPoint(mFramePosition, mScaleY, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
-                case MotionKey.TRANSLATION_X:
+                case TypedValues.Attributes.S_TRANSLATION_X:
                     if (!Float.isNaN(mTranslationX)) {
                         splineSet.setPoint(mFramePosition, mTranslationX, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
-                case MotionKey.TRANSLATION_Y:
+                case TypedValues.Attributes.S_TRANSLATION_Y:
                     if (!Float.isNaN(mTranslationY)) {
                         splineSet.setPoint(mFramePosition, mTranslationY, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
-                case MotionKey.TRANSLATION_Z:
+                case TypedValues.Attributes.S_TRANSLATION_Z:
                     if (!Float.isNaN(mTranslationZ)) {
                         splineSet.setPoint(mFramePosition, mTranslationZ, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
-                case MotionKey.PROGRESS:
+                case TypedValues.Attributes.S_ELEVATION:
+                    if (!Float.isNaN(mTranslationZ)) {
+                        splineSet.setPoint(mFramePosition, mTranslationZ, mWavePeriod, mWaveShape, mWaveOffset);
+                    }
+                    break;
+                case TypedValues.Attributes.S_PROGRESS:
                     if (!Float.isNaN(mProgress)) {
                         splineSet.setPoint(mFramePosition, mProgress, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
                 default:
-                     Utils.loge("KeyTimeCycles", "UNKNOWN addValues \"" + s + "\"");
+                    Utils.loge("KeyTimeCycles", "UNKNOWN addValues \"" + s + "\"");
             }
         }
     }
 
     @Override
-    public void getAttributeNames(HashSet<String> attributes) {
-
-    }
-
-    @Override
     public void addValues(HashMap<String, SplineSet> splines) {
-
     }
 
-    @Override
-    public void setValue(String tag, Object value) {
-        switch (tag) {
-            case ALPHA:
-                mAlpha = toFloat(value);
+    public boolean setValue(int type, int value) {
+
+        switch (type) {
+            case TypedValues.TYPE_FRAME_POSITION:
+                mFramePosition = value;
                 break;
-            case CURVEFIT:
+            case Cycle.TYPE_WAVE_SHAPE:
+                mWaveShape = value;
+                break;
+            default:
+                return super.setValue(type, value);
+        }
+        return true;
+    }
+
+    public boolean setValue(int type, float value) {
+        switch (type) {
+            case Cycle.TYPE_ALPHA:
+                mAlpha = value;
+                break;
+            case Cycle.TYPE_CURVE_FIT:
                 mCurveFit = toInt(value);
                 break;
-            case ELEVATION:
+            case Cycle.TYPE_ELEVATION:
                 mElevation = toFloat(value);
                 break;
-            case MOTIONPROGRESS:
+            case Cycle.TYPE_PROGRESS:
                 mProgress = toFloat(value);
                 break;
-            case ROTATION:
+            case Cycle.TYPE_ROTATION_Z:
                 mRotation = toFloat(value);
                 break;
-            case ROTATION_X:
+            case Cycle.TYPE_ROTATION_X:
                 mRotationX = toFloat(value);
                 break;
-            case ROTATION_Y:
+            case Cycle.TYPE_ROTATION_Y:
                 mRotationY = toFloat(value);
                 break;
-            case SCALE_X:
+            case Cycle.TYPE_SCALE_X:
                 mScaleX = toFloat(value);
                 break;
-            case SCALE_Y:
+            case Cycle.TYPE_SCALE_Y:
                 mScaleY = toFloat(value);
                 break;
-            case TRANSITIONEASING:
-                mTransitionEasing = value.toString();
-                break;
-            case TRANSITION_PATH_ROTATE:
+            case Cycle.TYPE_PATH_ROTATE:
                 mTransitionPathRotate = toFloat(value);
                 break;
-            case TRANSLATION_X:
+            case Cycle.TYPE_TRANSLATION_X:
                 mTranslationX = toFloat(value);
                 break;
-            case TRANSLATION_Y:
+            case Cycle.TYPE_TRANSLATION_Y:
                 mTranslationY = toFloat(value);
                 break;
-            case TRANSLATION_Z:
+            case Cycle.TYPE_TRANSLATION_Z:
                 mTranslationZ = toFloat(value);
                 break;
-            case WAVE_PERIOD:
+            case Cycle.TYPE_WAVE_PERIOD:
                 mWavePeriod = toFloat(value);
                 break;
-            case WAVE_OFFSET:
+            case Cycle.TYPE_WAVE_OFFSET:
                 mWaveOffset = toFloat(value);
                 break;
-            case WAVE_SHAPE:
-                if (value instanceof Integer) {
-                    mWaveShape = toInt(value);
-                } else {
-                    mWaveShape = Oscillator.CUSTOM;
-                    mCustomWaveShape = value.toString();
-                }
-                break;
+            default:
+                return super.setValue(type, value);
         }
-
+        return true;
     }
+
+    public boolean setValue(int type, String value) {
+        switch (type) {
+            case Cycle.TYPE_WAVE_SHAPE:
+                mWaveShape = Oscillator.CUSTOM;
+                mCustomWaveShape = value;
+                break;
+            case Cycle.TYPE_EASING:
+                mTransitionEasing = value;
+                break;
+            default:
+                return super.setValue(type, value);
+        }
+        return true;
+    }
+
+    public boolean setValue(int type, boolean value) {
+        return super.setValue(type, value);
+    }
+
     public MotionKeyTimeCycle copy(MotionKey src) {
         super.copy(src);
         MotionKeyTimeCycle k = (MotionKeyTimeCycle) src;
@@ -225,7 +247,54 @@ public class MotionKeyTimeCycle extends MotionKey {
         return this;
     }
 
+    @Override
+    public void getAttributeNames(HashSet<String> attributes) {
+        if (!Float.isNaN(mAlpha)) {
+            attributes.add(Cycle.S_ALPHA);
+        }
+        if (!Float.isNaN(mElevation)) {
+            attributes.add(Cycle.S_ELEVATION);
+        }
+        if (!Float.isNaN(mRotation)) {
+            attributes.add(Cycle.S_ROTATION_Z);
+        }
+        if (!Float.isNaN(mRotationX)) {
+            attributes.add(Cycle.S_ROTATION_X);
+        }
+        if (!Float.isNaN(mRotationY)) {
+            attributes.add(Cycle.S_ROTATION_Y);
+        }
+        if (!Float.isNaN(mScaleX)) {
+            attributes.add(Cycle.S_SCALE_X);
+        }
+        if (!Float.isNaN(mScaleY)) {
+            attributes.add(Cycle.S_SCALE_Y);
+        }
+        if (!Float.isNaN(mTransitionPathRotate)) {
+            attributes.add(Cycle.S_PATH_ROTATE);
+        }
+        if (!Float.isNaN(mTranslationX)) {
+            attributes.add(Cycle.S_TRANSLATION_X);
+        }
+        if (!Float.isNaN(mTranslationY)) {
+            attributes.add(Cycle.S_TRANSLATION_Y);
+        }
+        if (!Float.isNaN(mTranslationZ)) {
+            attributes.add(Cycle.S_TRANSLATION_Z);
+        }
+//        if (mCustomConstraints.size() > 0) {
+//            for (String s : mCustomConstraints.keySet()) {
+//                attributes.add(Cycle.S_CUSTOM + "," + s);
+//            }
+//        }
+    }
+
     public MotionKey clone() {
         return new MotionKeyTimeCycle().copy(this);
+    }
+
+    @Override
+    public int getId(String name) {
+        return Cycle.getId(name);
     }
 }

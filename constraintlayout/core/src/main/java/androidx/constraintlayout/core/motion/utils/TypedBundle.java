@@ -62,16 +62,6 @@ public class TypedBundle {
         mValueBoolean[mCountBoolean++] = value;
     }
 
-    public interface TypedValues {
-        void setValue(int type, int value);
-
-        void setValue(int type, float value);
-
-        void setValue(int type, String value);
-
-        void setValue(int type, boolean value);
-    }
-
     public void applyDelta(TypedValues values) {
         for (int i = 0; i < mCountInt; i++) {
             values.setValue(mTypeInt[i], mValueInt[i]);

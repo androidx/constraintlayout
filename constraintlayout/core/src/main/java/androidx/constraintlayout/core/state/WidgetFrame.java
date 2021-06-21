@@ -41,6 +41,7 @@ public class WidgetFrame {
 
     public float translationX = Float.NaN;
     public float translationY = Float.NaN;
+    public float translationZ = Float.NaN;
 
     public float scaleX = Float.NaN;
     public float scaleY = Float.NaN;

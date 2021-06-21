@@ -15,15 +15,12 @@
  */
 package androidx.constraintlayout.core.motion.key;
 
-
 import androidx.constraintlayout.core.motion.CustomAttribute;
-import androidx.constraintlayout.core.motion.utils.FloatRect;
 import androidx.constraintlayout.core.motion.utils.SplineSet;
-import androidx.constraintlayout.core.motion.utils.TypedBundle;
+import androidx.constraintlayout.core.motion.utils.TypedValues;
 
 import java.util.HashMap;
 import java.util.HashSet;
-
 
 /**
  * Base class in an element in a KeyFrame
@@ -31,13 +28,12 @@ import java.util.HashSet;
  * @hide
  */
 
-public abstract class MotionKey implements TypedBundle.TypedValues {
+public abstract class MotionKey implements TypedValues {
     public static int UNSET = -1;
     public int mFramePosition = UNSET;
     int mTargetId = UNSET;
     String mTargetString = null;
     public int mType;
-
 
     public HashMap<String, CustomAttribute> mCustomConstraints;
 
@@ -45,7 +41,7 @@ public abstract class MotionKey implements TypedBundle.TypedValues {
 
     public static final String ALPHA = "alpha";
     public static final String ELEVATION = "elevation";
-    public static final String ROTATION = "rotation";
+    public static final String ROTATION = "rotationZ";
     public static final String ROTATION_X = "rotationX";
     public static final String ROTATION_Y = "rotationY";
     public static final String PIVOT_X = "transformPivotX";
@@ -67,8 +63,6 @@ public abstract class MotionKey implements TypedBundle.TypedValues {
     public static final String TRANSITIONEASING = "transitionEasing";
     public static final String VISIBILITY = "visibility";
 
-    public static final int TYPE_FRAME_POSITION = 100;
-    public static final int TYPE_TARGET = 101;
 
 
     boolean matches(String constraintTag) {
@@ -85,14 +79,6 @@ public abstract class MotionKey implements TypedBundle.TypedValues {
      */
     public abstract void addValues(HashMap<String, SplineSet> splines);
 
-    /**
-     * Set the value associated with this tag
-     *
-     * @param tag
-     * @param value
-     * @hide
-     */
-    public abstract void setValue(String tag, Object value);
 
     /**
      * Return the float given a value. If the value is a "Float" object it is casted
@@ -170,29 +156,31 @@ public abstract class MotionKey implements TypedBundle.TypedValues {
         return mFramePosition;
     }
 
-   public void setValue(int type, int value){
+   public boolean setValue(int type, int value){
 
        switch (type) {
-           case TYPE_FRAME_POSITION:
+           case TypedValues.TYPE_FRAME_POSITION:
                mFramePosition = value;
-               break;
+               return true;
        }
+       return false;
     }
 
-    public void setValue(int type, float value){
-
+    public boolean setValue(int type, float value){
+        return false;
     }
 
-    public void setValue(int type, String value){
+    public boolean setValue(int type, String value){
         switch (type) {
-            case TYPE_TARGET:
+            case TypedValues.TYPE_TARGET:
                 mTargetString = value;
-                break;
+                return true;
         }
+        return false;
     }
 
-    public void setValue(int type, boolean value){
-
+    public boolean setValue(int type, boolean value){
+        return false;
     }
 
 

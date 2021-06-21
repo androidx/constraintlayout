@@ -36,6 +36,10 @@ public abstract class SplineSet {
     private int count;
     private String mType;
 
+    public void setProperty(TypedValues widget, float t) {
+
+    }
+
     @Override
     public String toString() {
         String str = mType;
@@ -102,14 +106,16 @@ public abstract class SplineSet {
         }
         mCurveFit = CurveFit.get(curveType, time, values);
     }
+
     public static SplineSet makeCustomSpline(String str, KeyFrameArray<CustomAttribute> attrList) {
         return new CustomSet(str, attrList);
     }
 
     public static SplineSet makeSpline(String str, long currentTime) {
 
-        return null;
+        return new CoreSpline(str, currentTime);
     }
+
     private static class Sort {
 
         static void doubleQuickSort(int[] key, float[] value, int low, int hi) {
@@ -199,4 +205,20 @@ public abstract class SplineSet {
         }
     }
 
+
+    private static class CoreSpline extends SplineSet {
+        String type;
+        long start;
+
+        public CoreSpline(String str, long currentTime) {
+            type = str;
+            start = currentTime;
+        }
+
+        public void setProperty(TypedValues widget, float t) {
+              int id =  widget.getId(type);
+              widget.setValue(id, get(t));
+        }
+
+    }
 }

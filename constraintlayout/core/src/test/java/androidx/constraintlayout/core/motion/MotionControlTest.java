@@ -123,10 +123,10 @@ public class MotionControlTest {
         mw1.setBounds(0, 0, 3, 4);
         mw2.setBounds(400, 400, 460, 480);
         keyPosition.setFramePosition(50);
-        keyPosition.setValue(MotionKeyPosition.PERCENT_X, 1);
-        keyPosition.setValue(MotionKeyPosition.PERCENT_Y, 0.5);
-        keyPosition.setValue(MotionKeyPosition.PERCENT_HEIGHT, 0.2);
-        keyPosition.setValue(MotionKeyPosition.PERCENT_WIDTH, 1);
+        keyPosition.setValue(TypedValues.Position.TYPE_PERCENT_X, 1.0f);
+        keyPosition.setValue(TypedValues.Position.TYPE_PERCENT_Y, 0.5f);
+        keyPosition.setValue(TypedValues.Position.TYPE_PERCENT_HEIGHT, 0.2f);
+        keyPosition.setValue(TypedValues.Position.TYPE_PERCENT_WIDTH, 1f);
         // mw1.motion.mPathMotionArc = MotionWidget.A
         Motion motion = new Motion(mw1);
       //  motion.setPathMotionArc(ArcCurveFit.ARC_START_HORIZONTAL);

@@ -19,6 +19,7 @@ import android.util.Log
 import androidx.compose.ui.unit.Dp
 import androidx.constraintlayout.core.motion.key.MotionKeyPosition
 import androidx.constraintlayout.core.motion.utils.TypedBundle
+import androidx.constraintlayout.core.motion.utils.TypedValues
 import androidx.constraintlayout.core.state.ConstraintReference
 import androidx.constraintlayout.core.state.Dimension
 import androidx.constraintlayout.core.state.Dimension.SPREAD_DIMENSION
@@ -159,7 +160,7 @@ fun parseKeyPosition(keyposition: JSONObject, transition: Transition) {
         if (type != null) {
 
             bundle.add(
-                MotionKeyPosition.TYPE_POSITION_TYPE, when (type) {
+                TypedValues.Position.TYPE_POSITION_TYPE, when (type) {
                     "deltaRelative" -> 0
                     "pathRelative" -> 1
                     "parentRelative" -> 2
@@ -169,36 +170,36 @@ fun parseKeyPosition(keyposition: JSONObject, transition: Transition) {
         }
         if (curveFit!=null) {
             when (curveFit) {
-                "spline" -> bundle.add(MotionKeyPosition.TYPE_CURVE_FIT,0)
-                "linear" -> bundle.add(MotionKeyPosition.TYPE_CURVE_FIT,1)
+                "spline" -> bundle.add(TypedValues.Position.TYPE_CURVE_FIT,0)
+                "linear" -> bundle.add(TypedValues.Position.TYPE_CURVE_FIT,1)
 
             }
         }
-        bundle.addIfNotNull(MotionKeyPosition.TYPE_TRANSITION_EASING, transitionEasing?.toString())
+        bundle.addIfNotNull(TypedValues.Position.TYPE_TRANSITION_EASING, transitionEasing?.toString())
 
         if (pathMotionArc!=null) {
             when (pathMotionArc) {
-                "none" -> bundle.add(MotionKeyPosition.TYPE_PATH_MOTION_ARC,0)
-                "startVertical" -> bundle.add(MotionKeyPosition.TYPE_PATH_MOTION_ARC,1)
-                "startHorizontal" -> bundle.add(MotionKeyPosition.TYPE_PATH_MOTION_ARC,2)
-                "flip" -> bundle.add(MotionKeyPosition.TYPE_PATH_MOTION_ARC,3)
+                "none" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC,0)
+                "startVertical" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC,1)
+                "startHorizontal" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC,2)
+                "flip" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC,3)
             }
         }
 
         (0 until frames.length()).forEach { j ->
             val frame = frames.getInt(j)
-            bundle.add(MotionKeyPosition.TYPE_FRAME_POSITION, frame);
+            bundle.add(TypedValues.TYPE_FRAME_POSITION, frame);
             if (percentX != null) {
-                bundle.add(MotionKeyPosition.TYPE_PERCENT_X, percentX.getDouble(j).toFloat());
+                bundle.add(TypedValues.Position.TYPE_PERCENT_X, percentX.getDouble(j).toFloat());
             }
             if (percentY != null) {
-                bundle.add(MotionKeyPosition.TYPE_PERCENT_Y, percentY.getDouble(j).toFloat());
+                bundle.add(TypedValues.Position.TYPE_PERCENT_Y, percentY.getDouble(j).toFloat());
             }
             if (percentWidth != null) {
-                bundle.add(MotionKeyPosition.TYPE_PERCENT_Y, percentWidth.getDouble(j).toFloat());
+                bundle.add(TypedValues.Position.TYPE_PERCENT_Y, percentWidth.getDouble(j).toFloat());
             }
             if (percentHeight != null) {
-                bundle.add(MotionKeyPosition.TYPE_PERCENT_Y, percentHeight.getDouble(j).toFloat());
+                bundle.add(TypedValues.Position.TYPE_PERCENT_Y, percentHeight.getDouble(j).toFloat());
             }
 
             transition.addKeyPosition(target, bundle)

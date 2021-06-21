@@ -1,7 +1,5 @@
-package androidx.constraintlayout.core.motion;
-
 /*
- * Copyright (C) 2018 The Android Open Source Project
+ * Copyright (C) 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,28 +13,17 @@ package androidx.constraintlayout.core.motion;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package androidx.constraintlayout.core.motion;
 
-//
-//        import android.graphics.Rect;
-//                import android.os.Build;
-//                import android.util.Log;
-//                import android.view.View;
-
-import androidx.constraintlayout.core.motion.key.MotionKey;
 import androidx.constraintlayout.core.motion.utils.Easing;
 import androidx.constraintlayout.core.motion.utils.Rect;
 import androidx.constraintlayout.core.motion.utils.SplineSet;
+import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.motion.utils.Utils;
-import androidx.constraintlayout.core.state.WidgetFrame;
-//                import androidx.constraintlayout.motion.utils.ViewSpline;
-//                import androidx.constraintlayout.widget.ConstraintAttribute;
-//                import androidx.constraintlayout.widget.ConstraintSet;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.Set;
-
 
 /**
  * All the parameter it extracts from a ConstraintSet/View
@@ -99,52 +86,55 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
      */
     void different(MotionConstrainedPoint points, HashSet<String> keySet) {
         if (diff(alpha, points.alpha)) {
-            keySet.add(MotionKey.ALPHA);
+            keySet.add(TypedValues.Attributes.S_ALPHA);
         }
         if (diff(elevation, points.elevation)) {
-            keySet.add(MotionKey.ELEVATION);
+            keySet.add(TypedValues.Attributes.S_TRANSLATION_Z);
         }
         if (visibility != points.visibility
                 && mVisibilityMode == MotionWidget.VISIBILITY_MODE_NORMAL
                 && (visibility == MotionWidget.VISIBLE
                 || points.visibility == MotionWidget.VISIBLE)) {
-            keySet.add(MotionKey.ALPHA);
+            keySet.add(TypedValues.Attributes.S_ALPHA);
         }
         if (diff(rotation, points.rotation)) {
-            keySet.add(MotionKey.ROTATION);
+            keySet.add(TypedValues.Attributes.S_ROTATION_Z);
         }
         if (!(Float.isNaN(mPathRotate) && Float.isNaN(points.mPathRotate))) {
-            keySet.add(MotionKey.TRANSITION_PATH_ROTATE);
+            keySet.add(TypedValues.Attributes.S_PATH_ROTATE);
         }
         if (!(Float.isNaN(mProgress) && Float.isNaN(points.mProgress))) {
-            keySet.add(MotionKey.PROGRESS);
+            keySet.add(TypedValues.Attributes.S_PROGRESS);
         }
         if (diff(rotationX, points.rotationX)) {
-            keySet.add(MotionKey.ROTATION_X);
+            keySet.add(TypedValues.Attributes.S_ROTATION_X);
         }
         if (diff(rotationY, points.rotationY)) {
-            keySet.add(MotionKey.ROTATION_Y);
+            keySet.add(TypedValues.Attributes.S_ROTATION_Y);
         }
         if (diff(mPivotX, points.mPivotX)) {
-            keySet.add(MotionKey.PIVOT_X);
+            keySet.add(TypedValues.Attributes.S_PIVOT_X);
         }
         if (diff(mPivotY, points.mPivotY)) {
-            keySet.add(MotionKey.PIVOT_Y);
+            keySet.add(TypedValues.Attributes.S_PIVOT_Y);
         }
         if (diff(scaleX, points.scaleX)) {
-            keySet.add(MotionKey.SCALE_X);
+            keySet.add(TypedValues.Attributes.S_SCALE_X);
         }
         if (diff(scaleY, points.scaleY)) {
-            keySet.add(MotionKey.SCALE_Y);
+            keySet.add(TypedValues.Attributes.S_SCALE_Y);
         }
         if (diff(translationX, points.translationX)) {
-            keySet.add(MotionKey.TRANSLATION_X);
+            keySet.add(TypedValues.Attributes.S_TRANSLATION_X);
         }
         if (diff(translationY, points.translationY)) {
-            keySet.add(MotionKey.TRANSLATION_Y);
+            keySet.add(TypedValues.Attributes.S_TRANSLATION_Y);
         }
         if (diff(translationZ, points.translationZ)) {
-            keySet.add(MotionKey.TRANSLATION_Z);
+            keySet.add(TypedValues.Attributes.S_TRANSLATION_Z);
+        }
+        if (diff(elevation, points.elevation)) {
+            keySet.add(TypedValues.Attributes.S_ELEVATION);
         }
     }
 
@@ -155,7 +145,6 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
         mask[c++] |= diff(y, points.y);
         mask[c++] |= diff(width, points.width);
         mask[c++] |= diff(height, points.height);
-
     }
 
     double[] mTempValue = new double[18];
@@ -227,38 +216,6 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
 
     }
 
-//    public void applyParameters(ConstraintSet.Constraint c) {
-//        this.mVisibilityMode = c.propertySet.mVisibilityMode;
-//        this.visibility = c.propertySet.visibility;
-//        this.alpha = (c.propertySet.visibility != ConstraintSet.VISIBLE &&
-//                mVisibilityMode == ConstraintSet.VISIBILITY_MODE_NORMAL) ? 0.0f : c.propertySet.alpha;
-//        this.applyElevation = c.transform.applyElevation;
-//        this.elevation = c.transform.elevation;
-//        this.rotation = c.transform.rotation;
-//        this.rotationX = c.transform.rotationX;
-//        this.rotationY = c.transform.rotationY;
-//        this.scaleX = c.transform.scaleX;
-//        this.scaleY = c.transform.scaleY;
-//        this.mPivotX = c.transform.transformPivotX;
-//        this.mPivotY = c.transform.transformPivotY;
-//        this.translationX = c.transform.translationX;
-//        this.translationY = c.transform.translationY;
-//        this.translationZ = c.transform.translationZ;
-//
-//        this.mKeyFrameEasing = Easing.getInterpolator(c.motion.mTransitionEasing);
-//        this.mPathRotate = c.motion.mPathRotate;
-//        this.mDrawPath = c.motion.mDrawPath;
-//        this.mAnimateRelativeTo = c.motion.mAnimateRelativeTo;
-//        this.mProgress = c.propertySet.mProgress;
-//        Set<String> at = c.mCustomConstraints.keySet();
-//        for (String s : at) {
-//            ConstraintAttribute attr = c.mCustomConstraints.get(s);
-//            if (attr.isContinuous()) {
-//                this.attributes.put(s, attr);
-//            }
-//        }
-//    }
-
     public void addValues(HashMap<String, SplineSet> splines, int mFramePosition) {
         for (String s : splines.keySet()) {
             SplineSet ViewSpline = splines.get(s);
@@ -266,46 +223,43 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
                 Utils.log(TAG, "setPoint" + mFramePosition + "  spline set = " + s);
             }
             switch (s) {
-                case MotionKey.ALPHA:
+                case TypedValues.Attributes.S_ALPHA:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(alpha) ? 1 : alpha);
                     break;
-                case MotionKey.ELEVATION:
-                    ViewSpline.setPoint(mFramePosition, Float.isNaN(elevation) ? 0 : elevation);
-                    break;
-                case MotionKey.ROTATION:
+                case TypedValues.Attributes.S_ROTATION_Z:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(rotation) ? 0 : rotation);
                     break;
-                case MotionKey.ROTATION_X:
+                case TypedValues.Attributes.S_ROTATION_X:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(rotationX) ? 0 : rotationX);
                     break;
-                case MotionKey.ROTATION_Y:
+                case TypedValues.Attributes.S_ROTATION_Y:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(rotationY) ? 0 : rotationY);
                     break;
-                case MotionKey.PIVOT_X:
+                case TypedValues.Attributes.S_PIVOT_X:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(mPivotX) ? 0 : mPivotX);
                     break;
-                case MotionKey.PIVOT_Y:
+                case TypedValues.Attributes.S_PIVOT_Y:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(mPivotY) ? 0 : mPivotY);
                     break;
-                case MotionKey.TRANSITION_PATH_ROTATE:
+                case TypedValues.Attributes.S_PATH_ROTATE:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(mPathRotate) ? 0 : mPathRotate);
                     break;
-                case MotionKey.PROGRESS:
+                case TypedValues.Attributes.S_PROGRESS:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(mProgress) ? 0 : mProgress);
                     break;
-                case MotionKey.SCALE_X:
+                case TypedValues.Attributes.S_SCALE_X:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(scaleX) ? 1 : scaleX);
                     break;
-                case MotionKey.SCALE_Y:
+                case TypedValues.Attributes.S_SCALE_Y:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(scaleY) ? 1 : scaleY);
                     break;
-                case MotionKey.TRANSLATION_X:
+                case TypedValues.Attributes.S_TRANSLATION_X:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(translationX) ? 0 : translationX);
                     break;
-                case MotionKey.TRANSLATION_Y:
+                case TypedValues.Attributes.S_TRANSLATION_Y:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(translationY) ? 0 : translationY);
                     break;
-                case MotionKey.TRANSLATION_Z:
+                case TypedValues.Attributes.S_TRANSLATION_Z:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(translationZ) ? 0 : translationZ);
                     break;
                 default:
@@ -358,6 +312,8 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
         }
     }
 
+
+//   TODO support Screen Rotation
 //    /**
 //     * Sets the state of the position given a rect, constraintset, rotation and viewid
 //     *

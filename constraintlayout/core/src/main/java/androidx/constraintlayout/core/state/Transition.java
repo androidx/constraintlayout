@@ -21,6 +21,7 @@ import androidx.constraintlayout.core.motion.MotionWidget;
 import androidx.constraintlayout.core.motion.key.MotionKeyPosition;
 import androidx.constraintlayout.core.motion.utils.KeyCache;
 import androidx.constraintlayout.core.motion.utils.TypedBundle;
+import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 
@@ -201,10 +202,10 @@ public class Transition {
 
     public void addKeyPosition(String target, int frame, int type, float x, float y) {
         TypedBundle bundle = new TypedBundle();
-        bundle.add(MotionKeyPosition.TYPE_POSITION_TYPE, 2);
-        bundle.add(MotionKeyPosition.TYPE_FRAME_POSITION, frame);
-        bundle.add(MotionKeyPosition.TYPE_PERCENT_X, x);
-        bundle.add(MotionKeyPosition.TYPE_PERCENT_Y, y);
+        bundle.add(TypedValues.Position.TYPE_POSITION_TYPE, 2);
+        bundle.add(TypedValues.TYPE_FRAME_POSITION, frame);
+        bundle.add(TypedValues.Position.TYPE_PERCENT_X, x);
+        bundle.add(TypedValues.Position.TYPE_PERCENT_Y, y);
         System.out.println(">>>>" + frame);
         getWidgetState(target, null, 0).setKeyPosition(bundle);
 
