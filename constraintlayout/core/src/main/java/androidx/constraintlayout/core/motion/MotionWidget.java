@@ -1,12 +1,27 @@
+/*
+ * Copyright (C) 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package androidx.constraintlayout.core.motion;
 
-
-import androidx.constraintlayout.core.motion.key.MotionKeyAttributes;
-import androidx.constraintlayout.core.motion.utils.FloatRect;
-import androidx.constraintlayout.core.motion.utils.Rect;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.state.WidgetFrame;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
+
+import java.util.HashMap;
+import java.util.Set;
 
 public class MotionWidget implements TypedValues {
     WidgetFrame widgetFrame = new WidgetFrame();
@@ -125,7 +140,7 @@ public class MotionWidget implements TypedValues {
 
     @Override
     public boolean setValue(int id, String value) {
-       return setValueMotion(id, value);
+        return setValueMotion(id, value);
     }
 
     @Override
@@ -215,7 +230,7 @@ public class MotionWidget implements TypedValues {
                 widgetFrame.translationY = value;
                 break;
             case TypedValues.Attributes.TYPE_TRANSLATION_Z:
-                 widgetFrame.translationZ = value;
+                widgetFrame.translationZ = value;
                 break;
             case TypedValues.Attributes.TYPE_ROTATION_X:
                 widgetFrame.rotationX = value;
@@ -249,7 +264,6 @@ public class MotionWidget implements TypedValues {
         }
         return true;
     }
-
 
     @Override
     public int getId(String name) {
@@ -325,7 +339,7 @@ public class MotionWidget implements TypedValues {
     }
 
     public void setTranslationZ(float tz) {
-            widgetFrame.translationZ = tz;
+        widgetFrame.translationZ = tz;
     }
 
     public float getTranslationZ() {
@@ -384,5 +398,27 @@ public class MotionWidget implements TypedValues {
         return widgetFrame;
     }
 
+    public Set<String> getCustomAttributeNames() {
+        return widgetFrame.getCustomAttributeNames();
+    }
 
+    public void setCustomAttribute(String name, int type, float value) {
+        widgetFrame.setCustomAttribute(name, type, value);
+    }
+
+    public void setCustomAttribute(String name, int type, int value) {
+        widgetFrame.setCustomAttribute(name, type, value);
+    }
+
+    public void setCustomAttribute(String name, int type, boolean value) {
+        widgetFrame.setCustomAttribute(name, type, value);
+    }
+
+    public void setCustomAttribute(String name, int type, String value) {
+        widgetFrame.setCustomAttribute(name, type, value);
+    }
+
+    public CustomVariable getCustomAttribute(String name) {
+        return widgetFrame.getCustomAttribute(name);
+    }
 }

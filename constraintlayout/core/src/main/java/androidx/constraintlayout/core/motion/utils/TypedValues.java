@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package androidx.constraintlayout.core.motion.utils;
 
 /**
@@ -83,6 +98,7 @@ public interface TypedValues {
         public static final String S_PROGRESS = "progress";
         public static final String S_PATH_ROTATE = "path_rotate";
         public static final String S_EASING = "easing";
+        public static final  String S_CUSTOM = "CUSTOM";
 
         /**
          * Method to go from String names of values to id of the values
@@ -156,7 +172,6 @@ public interface TypedValues {
         public static final int TYPE_WAVE_PERIOD = 423;
         public static final int TYPE_WAVE_OFFSET = 424;
         public static final int TYPE_WAVE_PHASE = 425;
-
 
         public static final String S_CURVE_FIT = "curve_fit";
         public static final String S_VISIBILITY = "visibility";
@@ -356,7 +371,6 @@ public interface TypedValues {
         public static final String S_QUANTIZE_INTERPOLATOR_TYPE = "QuantizeInterpolatorType";
         public static final String S_QUANTIZE_INTERPOLATOR_ID = "QuantizeInterpolatorID";
 
-
         public static final int TYPE_STAGGER = 600;
         public static final int TYPE_PATH_ROTATE = 601;
         public static final int TYPE_QUANTIZE_MOTION_PHASE = 602;
@@ -406,6 +420,51 @@ public interface TypedValues {
                     return TYPE_QUANTIZE_INTERPOLATOR_TYPE;
                 case S_QUANTIZE_INTERPOLATOR_ID:
                     return TYPE_QUANTIZE_INTERPOLATOR_ID;
+            }
+            return -1;
+        }
+    }
+
+    interface Custom {
+        public static final String S_INT = "integer";
+        public static final String S_FLOAT = "float";
+        public static final String S_COLOR = "color";
+        public static final String S_STRING = "string";
+        public static final String S_BOOLEAN = "boolean";
+        public static final String S_DIMENSION = "dimension";
+        public static final String S_REFERENCE = "refrence";
+
+        public static final int TYPE_INT = 900;
+        public static final int TYPE_FLOAT = 901;
+        public static final int TYPE_COLOR = 902;
+        public static final int TYPE_STRING = 903;
+        public static final int TYPE_BOOLEAN = 904;
+        public static final int TYPE_DIMENSION = 905;
+        public static final int TYPE_REFERENCE = 906;
+
+        /**
+         * Method to go from String names of values to id of the values
+         * IDs are use for efficiency
+         *
+         * @param name the name of the value
+         * @return the id of the vlalue or -1 if no value exist
+         */
+        public static int getId(String name) {
+            switch (name) {
+                case S_INT:
+                    return TYPE_INT;
+                case S_FLOAT:
+                    return TYPE_FLOAT;
+                case S_COLOR:
+                    return TYPE_COLOR;
+                case S_STRING:
+                    return TYPE_STRING;
+                case S_BOOLEAN:
+                    return TYPE_BOOLEAN;
+                case S_DIMENSION:
+                    return TYPE_DIMENSION;
+                case S_REFERENCE:
+                    return TYPE_REFERENCE;
             }
             return -1;
         }

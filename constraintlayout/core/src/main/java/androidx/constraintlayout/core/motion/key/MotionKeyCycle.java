@@ -45,7 +45,7 @@ public class MotionKeyCycle extends MotionKey {
 
     {
         mType = KEY_TYPE;
-        mCustomConstraints = new HashMap<>();
+        mCustom = new HashMap<>();
     }
 
     @Override

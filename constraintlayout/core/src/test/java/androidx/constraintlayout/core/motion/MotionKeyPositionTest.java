@@ -14,7 +14,6 @@ import org.junit.Test;
 
 public class MotionKeyPositionTest {
 
-
     private static final boolean DEBUG = false;
 
     @Test
@@ -22,7 +21,6 @@ public class MotionKeyPositionTest {
         assertEquals(2, 1 + 1);
 
     }
-
 
     @Test
     public void keyPosition1() {
@@ -46,12 +44,12 @@ public class MotionKeyPositionTest {
             }
         }
         motion.interpolate(res, 0.5f, 1000000 + 1000, cache);
-        int left =(int)( 0.5+400* (1 - Math.sqrt(0.5)));
-        int top = (int) (0.5+400*(Math.sqrt(0.5)));
+        int left = (int) (0.5 + 400 * (1 - Math.sqrt(0.5)));
+        int top = (int) (0.5 + 400 * (Math.sqrt(0.5)));
         assertEquals(left, res.getLeft());
-        assertEquals(147  , res.getRight());
+        assertEquals(147, res.getRight());
         assertEquals(top, res.getTop(), 0.01);
-        assertEquals(top +40 , res.getBottom());
+        assertEquals(top + 40, res.getBottom());
 
     }
 
@@ -69,8 +67,8 @@ public class MotionKeyPositionTest {
         motion.setStart(mw1);
         motion.setEnd(mw2);
         motion.setup(1000, 1000, 2, 1000000);
-        motion.interpolate(res, 0.5f, 1000000 + (int)(0.5*100), cache);
-        System.out.println("0.5 "+ res  );
+        motion.interpolate(res, 0.5f, 1000000 + (int) (0.5 * 100), cache);
+        System.out.println("0.5 " + res);
         if (DEBUG) {
             for (float p = 0; p <= 1; p += 0.01) {
                 motion.interpolate(res, p, 1000000 + (int) (p * 100), cache);
@@ -79,10 +77,10 @@ public class MotionKeyPositionTest {
         }
         motion.interpolate(res, 0.5f, 1000000 + 1000, cache);
 
-        assertEquals(283, res.getLeft()  );
-        assertEquals(313 , res.getRight());
+        assertEquals(283, res.getLeft());
+        assertEquals(313, res.getRight());
         assertEquals(117, res.getTop());
-        assertEquals(157 , res.getBottom());
+        assertEquals(157, res.getBottom());
     }
 
     @Test
@@ -105,38 +103,39 @@ public class MotionKeyPositionTest {
 
         // mw1.motion.mPathMotionArc = MotionWidget.A
         Motion motion = new Motion(mw1);
-      //  motion.setPathMotionArc(ArcCurveFit.ARC_START_HORIZONTAL);
+        //  motion.setPathMotionArc(ArcCurveFit.ARC_START_HORIZONTAL);
         motion.setStart(mw1);
         motion.setEnd(mw2);
         motion.addKey(keyPosition);
         motion.addKey(keyPosition2);
         motion.setup(1000, 1000, 2, 1000000);
-        motion.interpolate(res, 0.5f, 1000000 + (int)(0.5*100), cache);
-        System.out.println("0.5 "+ res  );
+        motion.interpolate(res, 0.5f, 1000000 + (int) (0.5 * 100), cache);
+        System.out.println("0.5 " + res);
         if (true) {
 
-            String str ="";
+            String str = "";
             for (float p = 0; p <= 1; p += 0.01) {
                 motion.interpolate(res, p, 1000000 + (int) (p * 100), cache);
-                str += res+"\n";
+                str += res + "\n";
             }
             Utils.socketSend(str);
         }
         motion.interpolate(res, 0f, 1000000 + 1000, cache);
-        assertEquals("0, 0, 30, 40", res.toString()  );
+        assertEquals("0, 0, 30, 40", res.toString());
         motion.interpolate(res, 0.2f, 1000000 + 1000, cache);
-        assertEquals("198, 83, 243, 125", res.toString()  );
+        assertEquals("80, 86, 116, 134", res.toString());
         motion.interpolate(res, 0.3f, 1000000 + 1000, cache);
-        assertEquals("298, 124, 350, 168", res.toString()  );
+        assertEquals("120, 120, 159, 172", res.toString());
         motion.interpolate(res, 0.5f, 1000000 + 1000, cache);
-        assertEquals("400, 206, 460, 254", res.toString()  );
+        assertEquals("204, 120, 249, 180", res.toString());
         motion.interpolate(res, 0.7f, 1000000 + 1000, cache);
-        assertEquals("400, 284, 460, 344", res.toString()  );
+        assertEquals("289, 106, 339, 174", res.toString());
         motion.interpolate(res, 0.9f, 1000000 + 1000, cache);
-        assertEquals("400, 361, 460, 435", res.toString()  );
+        assertEquals("367, 215, 424, 291", res.toString());
         motion.interpolate(res, 1f, 1000000 + 1000, cache);
-        assertEquals("400, 400, 460, 480", res.toString()  );
+        assertEquals("400, 400, 460, 480", res.toString());
     }
+
     @Test
     public void keyPosition4() {
         MotionWidget mw1 = new MotionWidget();
@@ -158,8 +157,8 @@ public class MotionKeyPositionTest {
         motion.setEnd(mw2);
         motion.addKey(keyPosition);
         motion.setup(1000, 1000, 2, 1000000);
-        motion.interpolate(res, 0.5f, 1000000 + (int)(0.5*100), cache);
-        System.out.println("0.5 "+ res  );
+        motion.interpolate(res, 0.5f, 1000000 + (int) (0.5 * 100), cache);
+        System.out.println("0.5 " + res);
         if (DEBUG) {
             for (float p = 0; p <= 1; p += 0.01) {
                 motion.interpolate(res, p, 1000000 + (int) (p * 100), cache);
@@ -168,10 +167,6 @@ public class MotionKeyPositionTest {
         }
         motion.interpolate(res, 0.5f, 1000000 + 1000, cache);
 
-        assertEquals("400, 325, 460, 385", res.toString()  );
-
-
+        assertEquals("400, 325, 460, 385", res.toString());
     }
-
-    
 }

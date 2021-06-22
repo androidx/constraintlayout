@@ -1,6 +1,7 @@
 package androidx.constraintlayout.core.motion.key;
 
 import androidx.constraintlayout.core.motion.CustomAttribute;
+import androidx.constraintlayout.core.motion.CustomVariable;
 import androidx.constraintlayout.core.motion.MotionWidget;
 import androidx.constraintlayout.core.motion.utils.Oscillator;
 import androidx.constraintlayout.core.motion.utils.SplineSet;
@@ -47,7 +48,7 @@ public class MotionKeyTimeCycle extends MotionKey {
 
     {
         mType = KEY_TYPE;
-        mCustomConstraints = new HashMap<>();
+        mCustom = new HashMap<>();
     }
 
     public void addTimeValues(HashMap<String, TimeCycleSplineSet> splines) {
@@ -58,9 +59,9 @@ public class MotionKeyTimeCycle extends MotionKey {
             }
             if (s.startsWith(CUSTOM)) {
                 String cKey = s.substring(CUSTOM.length() + 1);
-                CustomAttribute cValue = mCustomConstraints.get(cKey);
+                CustomVariable cValue = mCustom.get(cKey);
                 if (cValue != null) {
-                    ((TimeCycleSplineSet.CustomSet) splineSet).setPoint(mFramePosition, cValue, mWavePeriod, mWaveShape, mWaveOffset);
+                    ((TimeCycleSplineSet.CustomVarSet) splineSet).setPoint(mFramePosition, cValue, mWavePeriod, mWaveShape, mWaveOffset);
                 }
                 continue;
             }

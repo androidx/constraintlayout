@@ -1,20 +1,19 @@
+/*
+ * Copyright (C) 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package androidx.constraintlayout.core.motion;
-
-
-//import android.content.Context;
-//import android.graphics.Rect;
-//import android.graphics.RectF;
-//import android.util.Log;
-//import android.util.SparseArray;
-//import android.view.View;
-//import android.view.ViewGroup;
-//import android.view.animation.AccelerateDecelerateInterpolator;
-//import android.view.animation.AccelerateInterpolator;
-//import android.view.animation.AnimationUtils;
-//import android.view.animation.BounceInterpolator;
-//import android.view.animation.DecelerateInterpolator;
-//import android.view.animation.Interpolator;
-//import android.view.animation.OvershootInterpolator;
 
 import static androidx.constraintlayout.core.motion.MotionWidget.UNSET;
 
@@ -39,15 +38,6 @@ import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.motion.utils.VelocityMatrix;
 import androidx.constraintlayout.core.motion.utils.ViewState;
 import androidx.constraintlayout.core.state.WidgetFrame;
-//import androidx.constraintlayout.motion.utils.ViewOscillator;
-//import androidx.constraintlayout.motion.utils.ViewSpline;
-//import androidx.constraintlayout.motion.utils.ViewState;
-//import androidx.constraintlayout.motion.utils.ViewTimeCycle;
-//import androidx.constraintlayout.widget.ConstraintAttribute;
-//import androidx.constraintlayout.widget.ConstraintLayout;
-//import androidx.constraintlayout.widget.ConstraintSet;
-
-
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,9 +60,6 @@ import java.util.HashSet;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
-
 
 /**
  * This contains the picture of a view through the a transition and is used to interpolate it
@@ -97,7 +84,6 @@ public class Motion {
     public final static int DRAW_PATH_AS_CONFIGURED = 4;
     public final static int DRAW_PATH_RECTANGLE = 5;
     public final static int DRAW_PATH_SCREEN = 6;
-
 
     public static final int ROTATION_RIGHT = 1;
     public static final int ROTATION_LEFT = 2;
@@ -167,10 +153,11 @@ public class Motion {
 
     /**
      * provides acces to MotionPath objects
+     *
      * @param i
      * @return
      */
-   public MotionPaths getKeyFrame(int i) {
+    public MotionPaths getKeyFrame(int i) {
         return mMotionPaths.get(i);
     }
 
@@ -564,7 +551,7 @@ public class Motion {
         return points.length;
     }
 
-   public void buildRect(float p, float[] path, int offset) {
+    public void buildRect(float p, float[] path, int offset) {
         p = getAdjustedPosition(p, null);
         mSpline[0].getPos(p, mInterpolateData);
         mStartMotionPath.getRect(mInterpolateVariables, mInterpolateData, path, offset);
@@ -649,6 +636,7 @@ public class Motion {
     //##############################################################################################
     //##############################################################################################
     //##############################################################################################
+
     /**
      * Called after all TimePoints & Cycles have been added;
      * Spines are evaluated
@@ -665,7 +653,7 @@ public class Motion {
                 Utils.log(TAG, ">>>>>>>>>>>>>>> mKeyList==null");
 
             } else {
-                Utils.log(TAG, ">>>>>>>>>>>>>>> mKeyList for " +  mView.getName());
+                Utils.log(TAG, ">>>>>>>>>>>>>>> mKeyList for " + mView.getName());
 
             }
         }
@@ -675,6 +663,7 @@ public class Motion {
         }
 
         mStartPoint.different(mEndPoint, splineAttributes);
+        System.out.println(" >>>>>>>>>>>>> " + Arrays.toString(splineAttributes.toArray()));
         if (DEBUG) {
             HashSet<String> attr = new HashSet<>();
             mStartPoint.different(mEndPoint, attr);
@@ -703,6 +692,7 @@ public class Motion {
                 }
             }
         }
+        System.out.println(" >>>>>>>>>>>>> " + Arrays.toString(splineAttributes.toArray()));
 
         //--------------------------- trigger support --------------------
 
@@ -710,26 +700,24 @@ public class Motion {
             mKeyTriggers = triggerList.toArray(new MotionKeyTrigger[0]);
         }
 
-
-
         //--------------------------- splines support --------------------
         if (!splineAttributes.isEmpty()) {
             mAttributesMap = new HashMap<>();
             for (String attribute : splineAttributes) {
                 SplineSet splineSets;
                 if (attribute.startsWith("CUSTOM,")) {
-                    KeyFrameArray<CustomAttribute> attrList = new KeyFrameArray<>();
+                    KeyFrameArray<CustomVariable> attrList = new KeyFrameArray<>();
                     String customAttributeName = attribute.split(",")[1];
                     for (MotionKey key : mKeyList) {
-                        if (key.mCustomConstraints == null) {
+                        if (key.mCustom == null) {
                             continue;
                         }
-                        CustomAttribute customAttribute = key.mCustomConstraints.get(customAttributeName);
+                        CustomVariable customAttribute = key.mCustom.get(customAttributeName);
                         if (customAttribute != null) {
                             attrList.append(key.mFramePosition, customAttribute);
                         }
                     }
-                    splineSets = SplineSet.makeCustomSpline(attribute, attrList);
+                    splineSets = SplineSet.makeCustomSplineSet(attribute, attrList);
                 } else {
                     splineSets = SplineSet.makeSpline(attribute, currentTime);
                 }
@@ -776,18 +764,18 @@ public class Motion {
 
                 SplineSet splineSets = null;
                 if (attribute.startsWith("CUSTOM,")) {
-                    KeyFrameArray<CustomAttribute> attrList = new KeyFrameArray<>();
+                    KeyFrameArray<CustomVariable> attrList = new KeyFrameArray<>();
                     String customAttributeName = attribute.split(",")[1];
                     for (MotionKey key : mKeyList) {
-                        if (key.mCustomConstraints == null) {
+                        if (key.mCustom == null) {
                             continue;
                         }
-                        CustomAttribute customAttribute = key.mCustomConstraints.get(customAttributeName);
+                        CustomVariable customAttribute = key.mCustom.get(customAttributeName);
                         if (customAttribute != null) {
                             attrList.append(key.mFramePosition, customAttribute);
                         }
                     }
-                    splineSets = SplineSet.makeCustomSpline(attribute, attrList);
+                    splineSets = SplineSet.makeCustomSplineSet(attribute, attrList);
                 } else {
                     splineSets = SplineSet.makeSpline(attribute, currentTime);
                 }
@@ -831,8 +819,8 @@ public class Motion {
         // -----  setup custom attributes which must be in the start and end constraint sets
         int variables = 18;
         HashSet<String> attributeNameSet = new HashSet<>();
-        for (String s : mEndMotionPath.attributes.keySet()) {
-            if (mStartMotionPath.attributes.containsKey(s)) {
+        for (String s : mEndMotionPath.customAttributes.keySet()) {
+            if (mStartMotionPath.customAttributes.containsKey(s)) {
                 if (!splineAttributes.contains("CUSTOM," + s))
                     attributeNameSet.add(s);
             }
@@ -844,8 +832,8 @@ public class Motion {
             String attributeName = mAttributeNames[i];
             mAttributeInterpolatorCount[i] = 0;
             for (int j = 0; j < points.length; j++) {
-                if (points[j].attributes.containsKey(attributeName)) {
-                    CustomAttribute attribute = points[j].attributes.get(attributeName);
+                if (points[j].customAttributes.containsKey(attributeName)) {
+                    CustomVariable attribute = points[j].customAttributes.get(attributeName);
                     if (attribute != null) {
                         mAttributeInterpolatorCount[i] += attribute.numberOfInterpolatedValues();
                         break;
@@ -940,7 +928,7 @@ public class Motion {
         mCycleMap = new HashMap<>();
         if (mKeyList != null) {
             for (String attribute : cycleAttributes) {
-                KeyCycleOscillator cycle =null;// KeyCycleOscillator.makeSpline(attribute);
+                KeyCycleOscillator cycle = null;// KeyCycleOscillator.makeSpline(attribute);
                 if (cycle == null) {
                     continue;
                 }
@@ -1004,6 +992,7 @@ public class Motion {
         mStartMotionPath.time = 0;
         mStartMotionPath.position = 0;
         mStartMotionPath.setBounds(mw.getX(), mw.getY(), mw.getWidth(), mw.getHeight());
+        mStartMotionPath.applyParameters(mw);
         mStartPoint.setState(mw);
     }
 
@@ -1012,6 +1001,7 @@ public class Motion {
         mEndMotionPath.position = 1;
         readView(mEndMotionPath);
         mEndMotionPath.setBounds(mw.getLeft(), mw.getTop(), mw.getWidth(), mw.getHeight());
+        mEndMotionPath.applyParameters(mw);
         mEndPoint.setState(mw);
     }
 
@@ -1120,6 +1110,7 @@ public class Motion {
                 final Easing easing = Easing.getInterpolator(interpolatorString);
                 return new DifferentialInterpolator() {
                     float mX;
+
                     @Override
                     public float getInterpolation(float x) {
                         mX = x;
@@ -1128,7 +1119,7 @@ public class Motion {
 
                     @Override
                     public float getVelocity() {
-                        return (float)easing.getDiff(mX);
+                        return (float) easing.getDiff(mX);
                     }
                 };
 
@@ -1258,9 +1249,9 @@ public class Motion {
             }
             position = section * steps + jump;
         }
-       // MotionKeyTimeCycle.PathRotate timePathRotate = null;
+        // MotionKeyTimeCycle.PathRotate timePathRotate = null;
         if (mAttributesMap != null) {
-            for ( SplineSet aSpline : mAttributesMap.values()) {
+            for (SplineSet aSpline : mAttributesMap.values()) {
                 aSpline.setProperty(child, position);
             }
         }
@@ -1321,8 +1312,8 @@ public class Motion {
             for (int i = 1; i < mSpline.length; i++) {
                 CurveFit spline = mSpline[i];
                 spline.getPos(position, mValuesBuff);
-                mStartMotionPath.attributes.get(mAttributeNames[i - 1]).setInterpolatedValue(child, mValuesBuff);
-
+                //interpolated here
+                mStartMotionPath.customAttributes.get(mAttributeNames[i - 1]).setInterpolatedValue(child, mValuesBuff);
             }
             if (mStartPoint.mVisibilityMode == MotionWidget.VISIBILITY_MODE_NORMAL) {
                 if (position <= 0.0f) {
@@ -1521,7 +1512,7 @@ public class Motion {
 
     String name() {
 
-        return  mView.getName();
+        return mView.getName();
     }
 
     void positionKeyframe(MotionWidget view, MotionKeyPosition key, float x, float y, String[] attribute, float[] value) {

@@ -16,6 +16,7 @@
 package androidx.constraintlayout.core.motion.key;
 
 import androidx.constraintlayout.core.motion.CustomAttribute;
+import androidx.constraintlayout.core.motion.CustomVariable;
 import androidx.constraintlayout.core.motion.utils.SplineSet;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
 
@@ -34,8 +35,9 @@ public abstract class MotionKey implements TypedValues {
     int mTargetId = UNSET;
     String mTargetString = null;
     public int mType;
+    public HashMap<String, CustomVariable> mCustom;
 
-    public HashMap<String, CustomAttribute> mCustomConstraints;
+
 
     public abstract void getAttributeNames(HashSet<String> attributes);
 
@@ -127,7 +129,6 @@ public abstract class MotionKey implements TypedValues {
         mTargetId = src.mTargetId;
         mTargetString = src.mTargetString;
         mType = src.mType;
-        mCustomConstraints = src.mCustomConstraints;
         return this;
     }
 
@@ -184,4 +185,17 @@ public abstract class MotionKey implements TypedValues {
     }
 
 
+
+    public void setCustomAttribute( String name, int type,float value) {
+        mCustom.put(name, new CustomVariable(name,type,value));
+    }
+    public void setCustomAttribute(int type, String name, int value) {
+        mCustom.put(name, new CustomVariable(name,type,value));
+    }
+    public void setCustomAttribute(int type, String name, boolean value) {
+        mCustom.put(name, new CustomVariable(name,type,value));
+    }
+    public void setCustomAttribute(int type, String name, String value) {
+        mCustom.put(name, new CustomVariable(name,type,value));
+    }
 }

@@ -64,7 +64,7 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
     static final int CARTESIAN = 2;
     static String[] names = {"position", "x", "y", "width", "height", "pathRotate"};
 
-    LinkedHashMap<String, CustomAttribute> attributes = new LinkedHashMap<>();
+    LinkedHashMap<String, CustomVariable> mCustomVariable = new LinkedHashMap<>();
     int mMode = 0; // how was this point computed 1=perpendicular 2=deltaRelative
 
     public MotionConstrainedPoint() {
@@ -162,15 +162,15 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
     }
 
     boolean hasCustomData(String name) {
-        return attributes.containsKey(name);
+        return mCustomVariable.containsKey(name);
     }
 
     int getCustomDataCount(String name) {
-        return attributes.get(name).numberOfInterpolatedValues();
+        return mCustomVariable.get(name).numberOfInterpolatedValues();
     }
 
     int getCustomData(String name, double[] value, int offset) {
-        CustomAttribute a = attributes.get(name);
+        CustomVariable a = mCustomVariable.get(name);
         if (a.numberOfInterpolatedValues() == 1) {
             value[offset] = a.getValueToInterpolate();
             return 1;
@@ -265,10 +265,10 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
                 default:
                     if (s.startsWith("CUSTOM")) {
                         String customName = s.split(",")[1];
-                        if (attributes.containsKey(customName)) {
-                            CustomAttribute custom = attributes.get(customName);
-                            if (ViewSpline instanceof SplineSet.CustomSet) {
-                                ((SplineSet.CustomSet) ViewSpline).setPoint(mFramePosition, custom);
+                        if (mCustomVariable.containsKey(customName)) {
+                            CustomVariable custom = mCustomVariable.get(customName);
+                            if (ViewSpline instanceof SplineSet.CustomSpline) {
+                                ((SplineSet.CustomSpline) ViewSpline).setPoint(mFramePosition, custom);
                             } else {
                                 Utils.loge(TAG, s + " ViewSpline not a CustomSet frame = " +
                                         mFramePosition + ", value" + custom.getValueToInterpolate() +
@@ -284,7 +284,6 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
         }
 
     }
-
 
     public void setState(MotionWidget view) {
         setBounds(view.getX(), view.getY(), view.getWidth(), view.getHeight());
@@ -311,7 +310,6 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
                 break;
         }
     }
-
 
 //   TODO support Screen Rotation
 //    /**

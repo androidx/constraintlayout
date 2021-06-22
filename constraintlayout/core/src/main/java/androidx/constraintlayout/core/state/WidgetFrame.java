@@ -16,9 +16,12 @@
 
 package androidx.constraintlayout.core.state;
 
+import androidx.constraintlayout.core.motion.CustomVariable;
+import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Utility class to encapsulate layout of a widget
@@ -52,6 +55,7 @@ public class WidgetFrame {
 
     public HashMap<String, Color> mCustomColors = null;
     public HashMap<String, Float> mCustomFloats = null;
+    HashMap<String, CustomVariable> mCustom = new HashMap<>();
 
     public static class Color {
         public float r;
@@ -75,10 +79,16 @@ public class WidgetFrame {
     }
 
 
-    public int width() { return right - left; }
-    public int height() { return bottom - top; }
+    public int width() {
+        return right - left;
+    }
 
-    public WidgetFrame() {}
+    public int height() {
+        return bottom - top;
+    }
+
+    public WidgetFrame() {
+    }
 
     public WidgetFrame(ConstraintWidget widget) {
         this.widget = widget;
@@ -202,8 +212,8 @@ public class WidgetFrame {
 
         frame.widget = start.widget;
 
-        frame.left = (int) (startX + progressPosition*(endX - startX));
-        frame.top = (int) (startY + progressPosition*(endY - startY));
+        frame.left = (int) (startX + progressPosition * (endX - startX));
+        frame.top = (int) (startY + progressPosition * (endY - startY));
         int width = (int) ((1 - progress) * startWidth + (progress * endWidth));
         int height = (int) ((1 - progress) * startHeight + (progress * endHeight));
         frame.right = frame.left + width;
@@ -255,11 +265,11 @@ public class WidgetFrame {
     }
 
     public float centerX() {
-        return left + (right - left)/2f;
+        return left + (right - left) / 2f;
     }
 
     public float centerY() {
-        return top + (bottom - top)/2f;
+        return top + (bottom - top) / 2f;
     }
 
     public WidgetFrame update() {
@@ -290,13 +300,23 @@ public class WidgetFrame {
             mCustomColors = new HashMap<>();
         }
         mCustomColors.put(name, color);
+        setCustomAttribute(name, TypedValues.Custom.TYPE_COLOR, CustomVariable.rgbaTocColor(r, g, b, a));
     }
 
     public Color getCustomColor(String name) {
         if (mCustomColors == null) {
             return null;
         }
-        return mCustomColors.get(name);
+        // return mCustomColors.get(name);
+        if (mCustom.containsKey(name)) {
+            int color = mCustom.get(name).getColorValue();
+            float fr = ((color >> 16) & 0xFF) / 255f;
+            float fg = ((color >> 8) & 0xFF) / 255f;
+            float fb = ((color) & 0xFF) / 255f;
+            float fa = ((color >> 24) & 0xFF) / 255f;
+            return new Color(fr, fg, fb, fa);
+        }
+        return new Color(1, 0.5f, 0.5f, 1);
     }
 
     public void addCustomFloat(String name, float value) {
@@ -304,13 +324,57 @@ public class WidgetFrame {
             mCustomFloats = new HashMap<>();
         }
         mCustomFloats.put(name, value);
+        setCustomAttribute(name, TypedValues.Custom.TYPE_FLOAT, value);
     }
 
     public float getCustomFloat(String name) {
         if (mCustomFloats == null) {
             return 0f;
         }
-        return mCustomFloats.get(name);
+        // return mCustomFloats.get(name);
+        if (mCustom.containsKey(name)) {
+            return mCustom.get(name).getFloatValue();
+        }
+        return Float.NaN;
     }
 
+    public void setCustomAttribute(String name, int type, float value) {
+        if (mCustom.containsKey(name)) {
+            mCustom.get(name).setFloatValue(value);
+        } else {
+            mCustom.put(name, new CustomVariable(name, type, value));
+        }
+    }
+
+    public void setCustomAttribute(String name, int type, int value) {
+        if (mCustom.containsKey(name)) {
+            mCustom.get(name).setIntValue(value);
+        } else {
+            mCustom.put(name, new CustomVariable(name, type, value));
+        }
+    }
+
+    public void setCustomAttribute(String name, int type, boolean value) {
+        if (mCustom.containsKey(name)) {
+            mCustom.get(name).setBooleanValue(value);
+        } else {
+            mCustom.put(name, new CustomVariable(name, type, value));
+        }
+    }
+
+    public void setCustomAttribute(String name, int type, String value) {
+        if (mCustom.containsKey(name)) {
+            mCustom.get(name).setStringValue(value);
+        } else {
+            mCustom.put(name, new CustomVariable(name, type, value));
+        }
+    }
+
+    public CustomVariable getCustomAttribute(String name) {
+        return mCustom.get(name);
+    }
+
+    public Set<String> getCustomAttributeNames() {
+        return mCustom.keySet();
+    }
 }

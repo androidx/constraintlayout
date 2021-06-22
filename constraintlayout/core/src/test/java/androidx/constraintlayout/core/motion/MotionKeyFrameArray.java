@@ -18,7 +18,7 @@ public class MotionKeyFrameArray {
         Random random = new Random();
         for (int i = 0; i < 32; i++) {
             assertEquals(i, array.size());
-            array.append(i,i);
+            array.append(i, i);
         }
         array.dump();
         for (int i = 0; i < array.size(); i++) {
@@ -28,9 +28,9 @@ public class MotionKeyFrameArray {
         }
         array.clear();
         for (int i = 0; i < 32; i++) {
-             int k = random.nextInt(100);
+            int k = random.nextInt(100);
             System.out.println(k);
-            array.append(k,k);
+            array.append(k, k);
             array.dump();
         }
 

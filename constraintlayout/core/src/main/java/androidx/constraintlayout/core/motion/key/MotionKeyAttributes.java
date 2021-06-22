@@ -1,5 +1,6 @@
 package androidx.constraintlayout.core.motion.key;
 
+import androidx.constraintlayout.core.motion.CustomVariable;
 import androidx.constraintlayout.core.motion.utils.SplineSet;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
 
@@ -28,12 +29,11 @@ public class MotionKeyAttributes extends MotionKey {
     private float mTranslationZ = Float.NaN;
     private float mProgress = Float.NaN;
 
-
     public static final int KEY_TYPE = 1;
 
     {
         mType = KEY_TYPE;
-        mCustomConstraints = new HashMap<>();
+
     }
 
 
@@ -97,14 +97,14 @@ public class MotionKeyAttributes extends MotionKey {
                 continue;
             }
             // TODO support custom
-//            if (s.startsWith(Key.CUSTOM)) {
-//                String cKey = s.substring(Key.CUSTOM.length() + 1);
-//                ConstraintAttribute cValue = mCustomConstraints.get(cKey);
-//                if (cValue != null) {
-//                    ((ViewSpline.CustomSet) splineSet).setPoint(mFramePosition, cValue);
-//                }
-//                continue;
-//            }
+            if (s.startsWith(Attributes.S_CUSTOM)) {
+                String cKey = s.substring(Attributes.S_CUSTOM.length() + 1);
+                CustomVariable cValue = mCustom.get(cKey);
+                if (cValue != null) {
+                    ((SplineSet.CustomSpline)splineSet).setPoint(mFramePosition, cValue);
+                }
+                continue;
+            }
             switch (s) {
                 case Attributes.S_ALPHA:
                     if (!Float.isNaN(mAlpha)) {
@@ -332,4 +332,7 @@ public class MotionKeyAttributes extends MotionKey {
     public int getCurveFit() {
         return mCurveFit;
     }
+
+
+
 }

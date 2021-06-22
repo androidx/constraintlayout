@@ -29,13 +29,11 @@ import org.junit.Test;
 
 import java.text.DecimalFormat;
 
-
 public class MotionBasicTest {
 
     @Test
     public void testBasic() {
         assertEquals(2, 1 + 1);
-
     }
 
     @Test
