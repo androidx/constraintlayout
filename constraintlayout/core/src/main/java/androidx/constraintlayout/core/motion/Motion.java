@@ -1047,28 +1047,29 @@ public class Motion {
         }
     }
 
-//    void setStartState(Rect cw, ConstraintSet constraintSet, int parentWidth, int parentHeight) {
-//        int rotate = constraintSet.mRotate; // for rotated frames
-//        if (rotate != 0) {
-//            rotate(cw, mTempRect, rotate, parentWidth, parentHeight);
-//        }
-//        mStartMotionPath.time = 0;
-//        mStartMotionPath.position = 0;
-//        readView(mStartMotionPath);
-//        mStartMotionPath.setBounds(cw.left, cw.top, cw.width(), cw.height());
-//        ConstraintSet.Constraint constraint = constraintSet.getParameters(mId);
-//        mStartMotionPath.applyParameters(constraint);
-//        mMotionStagger = constraint.motion.mMotionStagger;
-//        mStartPoint.setState(cw, constraintSet, rotate, mId);
-//        mTransformPivotTarget = constraint.transform.transformPivotTarget;
-//        mQuantizeMotionSteps = constraint.motion.mQuantizeMotionSteps;
-//        mQuantizeMotionPhase = constraint.motion.mQuantizeMotionPhase;
-//        mQuantizeMotionInterpolator = getInterpolator(mView.getContext(),
-//                constraint.motion.mQuantizeInterpolatorType,
-//                constraint.motion.mQuantizeInterpolatorString,
-//                constraint.motion.mQuantizeInterpolatorID
-//        );
-//    }
+    // Todo : Implement  QuantizeMotion scene rotate
+    //    void setStartState(Rect cw, ConstraintSet constraintSet, int parentWidth, int parentHeight) {
+    //        int rotate = constraintSet.mRotate; // for rotated frames
+    //        if (rotate != 0) {
+    //            rotate(cw, mTempRect, rotate, parentWidth, parentHeight);
+    //        }
+    //        mStartMotionPath.time = 0;
+    //        mStartMotionPath.position = 0;
+    //        readView(mStartMotionPath);
+    //        mStartMotionPath.setBounds(cw.left, cw.top, cw.width(), cw.height());
+    //        ConstraintSet.Constraint constraint = constraintSet.getParameters(mId);
+    //        mStartMotionPath.applyParameters(constraint);
+    //        mMotionStagger = constraint.motion.mMotionStagger;
+    //        mStartPoint.setState(cw, constraintSet, rotate, mId);
+    //        mTransformPivotTarget = constraint.transform.transformPivotTarget;
+    //        mQuantizeMotionSteps = constraint.motion.mQuantizeMotionSteps;
+    //        mQuantizeMotionPhase = constraint.motion.mQuantizeMotionPhase;
+    //        mQuantizeMotionInterpolator = getInterpolator(mView.getContext(),
+    //                constraint.motion.mQuantizeInterpolatorType,
+    //                constraint.motion.mQuantizeInterpolatorString,
+    //                constraint.motion.mQuantizeInterpolatorID
+    //        );
+    //    }
 
     static final int EASE_IN_OUT = 0;
     static final int EASE_IN = 1;
@@ -1232,15 +1233,16 @@ public class Motion {
             }
         }
 
-//        if (mTimeCycleAttributesMap != null) {
-//            for (ViewTimeCycle aSpline : mTimeCycleAttributesMap.values()) {
-//                if (aSpline instanceof ViewTimeCycle.PathRotate) {
-//                    timePathRotate = (ViewTimeCycle.PathRotate) aSpline;
-//                    continue;
-//                }
-//                timeAnimation |= aSpline.setProperty(child, position, time, keyCache);
-//            }
-//        }
+        //       TODO add KeyTimeCycle
+        //        if (mTimeCycleAttributesMap != null) {
+        //            for (ViewTimeCycle aSpline : mTimeCycleAttributesMap.values()) {
+        //                if (aSpline instanceof ViewTimeCycle.PathRotate) {
+        //                    timePathRotate = (ViewTimeCycle.PathRotate) aSpline;
+        //                    continue;
+        //                }
+        //                timeAnimation |= aSpline.setProperty(child, position, time, keyCache);
+        //            }
+        //        }
 
         if (mSpline != null) {
             mSpline[0].getPos(position, mInterpolateData);
@@ -1272,18 +1274,19 @@ public class Motion {
                 }
             }
 
-//            if (mAttributesMap != null) {
-//                for (SplineSet aSpline : mAttributesMap.values()) {
-//                    if (aSpline instanceof ViewSpline.PathRotate && mInterpolateVelocity.length > 1)
-//                        ((ViewSpline.PathRotate) aSpline).setPathRotate(child, position,
-//                                mInterpolateVelocity[0], mInterpolateVelocity[1]);
-//                }
-//
-//            }
-//            if (timePathRotate != null) {
-//                timeAnimation |= timePathRotate.setPathRotate(child, keyCache, position, time,
-//                        mInterpolateVelocity[0], mInterpolateVelocity[1]);
-//            }
+        //       TODO add support for path rotate
+        //            if (mAttributesMap != null) {
+        //                for (SplineSet aSpline : mAttributesMap.values()) {
+        //                    if (aSpline instanceof ViewSpline.PathRotate && mInterpolateVelocity.length > 1)
+        //                        ((ViewSpline.PathRotate) aSpline).setPathRotate(child, position,
+        //                                mInterpolateVelocity[0], mInterpolateVelocity[1]);
+        //                }
+        //
+        //            }
+        //            if (timePathRotate != null) {
+        //                timeAnimation |= timePathRotate.setPathRotate(child, keyCache, position, time,
+        //                        mInterpolateVelocity[0], mInterpolateVelocity[1]);
+        //            }
 
             for (int i = 1; i < mSpline.length; i++) {
                 CurveFit spline = mSpline[i];
@@ -1328,26 +1331,23 @@ public class Motion {
                 r = l + width;
                 b = t + height;
             }
-//            if (mEndMotionPath.width != mStartMotionPath.width
-//                    || mEndMotionPath.height != mStartMotionPath.height) {
-//                int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY);
-//                int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY);
-//                child.measure(widthMeasureSpec, heightMeasureSpec);
-//            }
+            // widget is responsible to call measure
             child.layout(l, t, r, b);
         }
 
-//        if (mCycleMap != null) {
-//            for (KeyCycleOscillator osc : mCycleMap.values()) {
-//                if (osc instanceof KeyCycleOscillator.PathRotateSet) {
-//                    ((KeyCycleOscillator.PathRotateSet) osc).setPathRotate(child, position,
-//                            mInterpolateVelocity[0], mInterpolateVelocity[1]);
-//                } else {
-//                    osc.setProperty(child, position);
-//                }
-//            }
-//        }
-//        return timeAnimation;
+        // TODO add pathRotate KeyCycles
+        //        if (mCycleMap != null) {
+        //            for (KeyCycleOscillator osc : mCycleMap.values()) {
+        //                if (osc instanceof KeyCycleOscillator.PathRotateSet) {
+        //                    ((KeyCycleOscillator.PathRotateSet) osc).setPathRotate(child, position,
+        //                            mInterpolateVelocity[0], mInterpolateVelocity[1]);
+        //                } else {
+        //                    osc.setProperty(child, position);
+        //                }
+        //            }
+        //        }
+        //   When we support TimeCycle return true if repaint is needed
+        //        return timeAnimation;
         return false;
     }
 

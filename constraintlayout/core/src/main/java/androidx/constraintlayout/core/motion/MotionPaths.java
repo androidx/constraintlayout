@@ -1,27 +1,5 @@
-package androidx.constraintlayout.core.motion;
-
-//import android.util.Log;
-//import android.view.View;
-//
-//import androidx.annotation.NonNull;
-
-import static androidx.constraintlayout.core.motion.MotionWidget.UNSET;
-
-import androidx.constraintlayout.core.motion.key.MotionKeyPosition;
-import androidx.constraintlayout.core.motion.utils.Easing;
-import androidx.constraintlayout.core.motion.utils.Utils;
-//import androidx.constraintlayout.widget.ConstraintAttribute;
-//import androidx.constraintlayout.widget.ConstraintSet;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Set;
-
-//import static androidx.constraintlayout.motion.widget.Key.UNSET;
-
 /*
- * Copyright (C) 2018 The Android Open Source Project
+ * Copyright (C) 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +13,17 @@ import java.util.Set;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package androidx.constraintlayout.core.motion;
+
+import static androidx.constraintlayout.core.motion.MotionWidget.UNSET;
+
+import androidx.constraintlayout.core.motion.key.MotionKeyPosition;
+import androidx.constraintlayout.core.motion.utils.Easing;
+import androidx.constraintlayout.core.motion.utils.Utils;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Set;
 
 /**
  * This is used to capture and play back path of the layout.
@@ -607,14 +596,7 @@ public class MotionPaths implements Comparable<MotionPaths> {
             }
         }
 
-//        if (view instanceof FloatLayout) {
-//            float l = v_x;
-//            float t = v_y;
-//            float r = v_x + v_width;
-//            float b = v_y + v_height;
-//            ((FloatLayout) view).layout(l, t, r, b);
-//            return;
-//        }
+       // Todo: develop a concept of Float layout in MotionWidget widget.layout(float ...)
         int l = (int) (0.5f + v_x);
         int t = (int) (0.5f + v_y);
         int r = (int) (0.5f + v_x + v_width);
@@ -630,15 +612,7 @@ public class MotionPaths implements Comparable<MotionPaths> {
             b = t + i_height;
         }
 
-//        boolean remeasure = i_width != view.getMeasuredWidth() || i_height != view.getMeasuredHeight();
-
-//        if (remeasure) {
-//            int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(i_width, View.MeasureSpec.EXACTLY);
-//            int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(i_height, View.MeasureSpec.EXACTLY);
-//
-//            view.measure(widthMeasureSpec, heightMeasureSpec);
-//        }
-
+        // MotionWidget must do Android View measure if layout changes
         view.layout(l, t, r, b);
         if (DEBUG) {
             if (toUse.length > 0) {

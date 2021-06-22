@@ -584,9 +584,7 @@ internal class MotionMeasurer : Measurer() {
         start.applyTo(transition, Transition.START)
         end.applyTo(transition, Transition.END)
         transition.interpolate(0, 0, progress)
-//        if (keyframes != null) {
-//            keyframes.applyTo(transition, 0)
-//        }
+        keyframes?.applyTo(transition, 0)
     }
 }
 

@@ -15,13 +15,11 @@ package androidx.constraintlayout.core.motion;
  * limitations under the License.
  */
 
+import androidx.constraintlayout.core.motion.utils.Utils;
 
- 
-        import androidx.constraintlayout.core.motion.utils.Utils;
-
-        import java.lang.reflect.InvocationTargetException;
-        import java.lang.reflect.Method;
-        import java.util.HashMap;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
 
 /**
  * Defines non standard Attributes
@@ -56,6 +54,7 @@ public class CustomAttribute {
 
     /**
      * Continuous types are interpolated they are fired only at
+     *
      * @return
      */
     public boolean isContinuous() {
@@ -169,7 +168,7 @@ public class CustomAttribute {
                 break;
             case COLOR_DRAWABLE_TYPE:
             case COLOR_TYPE:
-                mColorValue = hsvToRgb(value[0],value[1],value[2]);
+                mColorValue = hsvToRgb(value[0], value[1], value[2]);
                 mColorValue = (mColorValue & 0xFFFFFF) | (clamp((int) (0xFF * value[3])) << 24);
                 break;
             case STRING_TYPE:
@@ -182,6 +181,7 @@ public class CustomAttribute {
 
         }
     }
+
     public static int hsvToRgb(float hue, float saturation, float value) {
         int h = (int) (hue * 6);
         float f = hue * 6 - h;
@@ -289,9 +289,9 @@ public class CustomAttribute {
 
             try {
 
-                    Method method = viewClass.getMethod("getMap" + name);
-                    Object val = method.invoke(view);
-                    ret.put(name, new CustomAttribute(CustomAttribute, val));
+                Method method = viewClass.getMethod("getMap" + name);
+                Object val = method.invoke(view);
+                ret.put(name, new CustomAttribute(CustomAttribute, val));
 
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
@@ -453,7 +453,7 @@ public class CustomAttribute {
                     break;
             }
         } catch (NoSuchMethodException e) {
-            Utils.loge(TAG, "no method " + methodName + " on View \"" +view.getClass().getName() + "\"");
+            Utils.loge(TAG, "no method " + methodName + " on View \"" + view.getClass().getName() + "\"");
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             Utils.loge(TAG, "cannot access method " + methodName + " on View \"" + view.getClass().getName() + "\"");
@@ -462,6 +462,5 @@ public class CustomAttribute {
             e.printStackTrace();
         }
     }
-
 
 }

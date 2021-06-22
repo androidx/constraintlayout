@@ -27,6 +27,7 @@ import java.util.Set;
  * Utility class to encapsulate layout of a widget
  */
 public class WidgetFrame {
+    private final static boolean OLD_SYSTEM = false;
     public ConstraintWidget widget = null;
     public int left = 0;
     public int top = 0;
@@ -295,19 +296,23 @@ public class WidgetFrame {
     }
 
     public void addCustomColor(String name, float r, float g, float b, float a) {
-        Color color = new Color(r, g, b, a);
-        if (mCustomColors == null) {
-            mCustomColors = new HashMap<>();
+        if (OLD_SYSTEM) {
+            Color color = new Color(r, g, b, a);
+            if (mCustomColors == null) {
+                mCustomColors = new HashMap<>();
+            }
+            mCustomColors.put(name, color);
         }
-        mCustomColors.put(name, color);
         setCustomAttribute(name, TypedValues.Custom.TYPE_COLOR, CustomVariable.rgbaTocColor(r, g, b, a));
     }
 
     public Color getCustomColor(String name) {
-        if (mCustomColors == null) {
-            return null;
+        if (OLD_SYSTEM) {
+            if (mCustomColors == null) {
+                return null;
+            }
+            return mCustomColors.get(name);
         }
-        // return mCustomColors.get(name);
         if (mCustom.containsKey(name)) {
             int color = mCustom.get(name).getColorValue();
             float fr = ((color >> 16) & 0xFF) / 255f;
@@ -320,18 +325,22 @@ public class WidgetFrame {
     }
 
     public void addCustomFloat(String name, float value) {
-        if (mCustomFloats == null) {
-            mCustomFloats = new HashMap<>();
+        if (OLD_SYSTEM) {
+            if (mCustomFloats == null) {
+                mCustomFloats = new HashMap<>();
+            }
+            mCustomFloats.put(name, value);
         }
-        mCustomFloats.put(name, value);
         setCustomAttribute(name, TypedValues.Custom.TYPE_FLOAT, value);
     }
 
     public float getCustomFloat(String name) {
-        if (mCustomFloats == null) {
-            return 0f;
+        if (OLD_SYSTEM) {
+            if (mCustomFloats == null) {
+                return 0f;
+            }
+            return mCustomFloats.get(name);
         }
-        // return mCustomFloats.get(name);
         if (mCustom.containsKey(name)) {
             return mCustom.get(name).getFloatValue();
         }

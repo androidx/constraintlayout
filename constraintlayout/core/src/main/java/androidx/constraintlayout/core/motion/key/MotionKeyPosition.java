@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package androidx.constraintlayout.core.motion.key;
 
 import androidx.constraintlayout.core.motion.MotionWidget;
@@ -71,7 +86,6 @@ public class MotionKeyPosition extends MotionKey {
     float getPositionY() {
         return mCalculatedPositionY;
     }
-
 
     public void positionAttributes(MotionWidget view, FloatRect start, FloatRect end, float x, float y, String[] attribute, float[] value) {
         switch (mPositionType) {
@@ -172,7 +186,6 @@ public class MotionKeyPosition extends MotionKey {
         }
     }
 
-
     public boolean intersects(int layoutWidth, int layoutHeight, FloatRect start, FloatRect end, float x, float y) {
         calcPosition(layoutWidth, layoutHeight, start.centerX(), start.centerY(), end.centerX(), end.centerY());
         if ((Math.abs(x - mCalculatedPositionX) < SELECTION_SLOPE)
@@ -181,33 +194,6 @@ public class MotionKeyPosition extends MotionKey {
         }
         return false;
     }
-
-
-//    public void setValue(int tag, Object value) {
-//        switch (tag) {
-//            case TypedValues.Position.TYPE_TRANSITION_EASING:
-//                mTransitionEasing = value.toString();
-//                break;
-//            case TypedValues.Position.TYPE_DRAWPATH:
-//                mDrawPath = toInt(value);
-//                break;
-//            case TypedValues.Position.TYPE_PERCENT_WIDTH:
-//                mPercentWidth = toFloat(value);
-//                break;
-//            case TypedValues.Position.TYPE_PERCENT_HEIGHT:
-//                mPercentHeight = toFloat(value);
-//                break;
-//            case TypedValues.Position.TYPE_SIZE_PERCENT:
-//                mPercentHeight = mPercentWidth = toFloat(value);
-//                break;
-//            case TypedValues.Position.TYPE_PERCENT_X:
-//                mPercentX = toFloat(value);
-//                break;
-//            case TypedValues.Position.TYPE_PERCENT_Y:
-//                mPercentY = toFloat(value);
-//                break;
-//        }
-//    }
 
     public MotionKey copy(MotionKey src) {
         super.copy(src);
@@ -229,7 +215,6 @@ public class MotionKeyPosition extends MotionKey {
     public MotionKey clone() {
         return new MotionKeyPosition().copy(this);
     }
-
 
     void calcPosition(int layoutWidth, int layoutHeight, float start_x, float start_y, float end_x, float end_y) {
         switch (mPositionType) {
@@ -315,6 +300,5 @@ public class MotionKeyPosition extends MotionKey {
     public int getId(String name) {
         return TypedValues.Position.getId(name);
     }
-
 
 }
