@@ -119,6 +119,7 @@ public abstract class WidgetRun implements Dependency {
                 VerticalWidgetRun run = targetWidget.verticalRun;
                 target = run.end;
             } break;
+            default: break;
         }
         return target;
     }
@@ -216,6 +217,7 @@ public abstract class WidgetRun implements Dependency {
                 }
             }
             break;
+            default: break;
         }
     }
 
@@ -272,6 +274,7 @@ public abstract class WidgetRun implements Dependency {
             case RIGHT: {
                 target = run.end;
             } break;
+            default: break;
         }
         return target;
     }

@@ -24,7 +24,7 @@ import static androidx.constraintlayout.core.LinearSystem.FULL_DEBUG;
 /**
  * Represents a given variable used in the {@link LinearSystem linear expression solver}.
  */
-public class SolverVariable {
+public class SolverVariable implements Comparable<SolverVariable> {
 
     private static final boolean INTERNAL_DEBUG = FULL_DEBUG;
     private static final boolean VAR_USE_HASH = false;
@@ -169,7 +169,7 @@ public class SolverVariable {
         return representation;
     }
 
-    HashSet<ArrayRow> inRows = VAR_USE_HASH ? new HashSet() : null;
+    HashSet<ArrayRow> inRows = VAR_USE_HASH ? new HashSet<ArrayRow>() : null;
 
     public final void addToRow(ArrayRow row) {
         if (VAR_USE_HASH) {
@@ -293,6 +293,11 @@ public class SolverVariable {
         if (INTERNAL_DEBUG && mName == null) {
             mName = getUniqueName(type, prefix);
         }
+    }
+
+    @Override
+    public int compareTo(SolverVariable v) {
+        return this.id - v.id;
     }
 
     /**
