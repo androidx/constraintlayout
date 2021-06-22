@@ -283,11 +283,11 @@ public class MotionKeyTimeCycle extends MotionKey {
         if (!Float.isNaN(mTranslationZ)) {
             attributes.add(Cycle.S_TRANSLATION_Z);
         }
-//        if (mCustomConstraints.size() > 0) {
-//            for (String s : mCustomConstraints.keySet()) {
-//                attributes.add(Cycle.S_CUSTOM + "," + s);
-//            }
-//        }
+        if (mCustom.size() > 0) {
+            for (String s : mCustom.keySet()) {
+                attributes.add(TypedValues.S_CUSTOM + "," + s);
+            }
+        }
     }
 
     public MotionKey clone() {

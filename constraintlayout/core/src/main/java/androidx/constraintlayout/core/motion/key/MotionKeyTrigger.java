@@ -1,5 +1,6 @@
 package androidx.constraintlayout.core.motion.key;
 
+import androidx.constraintlayout.core.motion.CustomVariable;
 import androidx.constraintlayout.core.motion.MotionWidget;
 import androidx.constraintlayout.core.motion.utils.FloatRect;
 import androidx.constraintlayout.core.motion.utils.SplineSet;
@@ -8,6 +9,7 @@ import androidx.constraintlayout.core.motion.utils.TypedValues;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 
 public class MotionKeyTrigger extends MotionKey {
     private static final String TAG = "KeyTrigger";
@@ -132,7 +134,21 @@ public class MotionKeyTrigger extends MotionKey {
     public MotionKey clone() {
         return new MotionKeyTrigger().copy(this);
     }
-
+    private void fireCustom(String str, MotionWidget widget) {
+        boolean callAll = str.length() == 1;
+        if (!callAll) {
+            str = str.substring(1).toLowerCase(Locale.ROOT);
+        }
+        for (String name : mCustom.keySet()) {
+            String lowerCase = name.toLowerCase(Locale.ROOT);
+            if (callAll || lowerCase.matches(str)) {
+                CustomVariable custom = mCustom.get(name);
+                if (custom != null) {
+                    custom.applyToWidget(widget);
+                }
+            }
+        }
+    }
     public void conditionallyFire(float position, MotionWidget child) {
     }
 

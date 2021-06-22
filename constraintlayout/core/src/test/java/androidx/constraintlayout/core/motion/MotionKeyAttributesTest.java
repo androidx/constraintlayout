@@ -14,7 +14,7 @@ import androidx.constraintlayout.core.motion.utils.Utils;
 import org.junit.Test;
 
 public class MotionKeyAttributesTest {
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     @Test
     public void basic() {

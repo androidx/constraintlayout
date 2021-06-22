@@ -1,5 +1,7 @@
 package androidx.constraintlayout.core.motion.key;
 
+import androidx.constraintlayout.core.motion.CustomVariable;
+import androidx.constraintlayout.core.motion.utils.KeyCycleOscillator;
 import androidx.constraintlayout.core.motion.utils.Oscillator;
 import androidx.constraintlayout.core.motion.utils.SplineSet;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
@@ -83,11 +85,11 @@ public class MotionKeyCycle extends MotionKey {
         if (!Float.isNaN(mTranslationZ)) {
             attributes.add(Cycle.S_TRANSLATION_Z);
         }
-//        if (mCustomConstraints.size() > 0) {
-//            for (String s : mCustomConstraints.keySet()) {
-//                attributes.add(Cycle.S_CUSTOM + "," + s);
-//            }
-//        }
+        if (mCustom.size() > 0) {
+            for (String s : mCustom.keySet()) {
+                attributes.add(TypedValues.S_CUSTOM + "," + s);
+            }
+        }
     }
 
     @Override
@@ -170,9 +172,45 @@ public class MotionKeyCycle extends MotionKey {
                 mWavePhase = value;
                 break;
             default:
-               return super.setValue(type, value);
+                return super.setValue(type, value);
         }
         return true;
+    }
+
+
+    public float getValue(String key) {
+        switch (key) {
+            case Cycle.S_ALPHA:
+                return mAlpha;
+            case Cycle.S_ELEVATION:
+                return mElevation;
+            case Cycle.S_ROTATION_Z:
+                return mRotation;
+            case Cycle.S_ROTATION_X:
+                return mRotationX;
+            case Cycle.S_ROTATION_Y:
+                return mRotationY;
+            case Cycle.S_PATH_ROTATE:
+                return mTransitionPathRotate;
+            case Cycle.S_SCALE_X:
+                return mScaleX;
+            case Cycle.S_SCALE_Y:
+                return mScaleY;
+            case Cycle.S_TRANSLATION_X:
+                return mTranslationX;
+            case Cycle.S_TRANSLATION_Y:
+                return mTranslationY;
+            case Cycle.S_TRANSLATION_Z:
+                return mTranslationZ;
+            case Cycle.S_WAVE_OFFSET:
+                return mWaveOffset;
+            case Cycle.S_WAVE_PHASE:
+                return mWavePhase;
+            case Cycle.S_PROGRESS:
+                return mProgress;
+            default:
+                return Float.NaN;
+        }
     }
 
     @Override
@@ -229,4 +267,37 @@ public class MotionKeyCycle extends MotionKey {
         }
         return -1;
     }
+
+    public void addCycleValues(HashMap<String, KeyCycleOscillator> oscSet) {
+
+        for (String key : oscSet.keySet()) {
+            if (key.startsWith(TypedValues.S_CUSTOM)) {
+                String customKey = key.substring(TypedValues.S_CUSTOM.length() + 1);
+                CustomVariable cValue = mCustom.get(customKey);
+                if (cValue == null || cValue.getType() != Custom.TYPE_FLOAT) {
+                    continue;
+                }
+
+                KeyCycleOscillator osc = oscSet.get(key);
+                if (osc == null) {
+                    continue;
+                }
+
+                osc.setPoint(mFramePosition, mWaveShape, mCustomWaveShape, -1, mWavePeriod, mWaveOffset, mWavePhase, cValue.getValueToInterpolate(), cValue);
+                continue;
+            }
+            float value = getValue(key);
+            if (Float.isNaN(value)) {
+                continue;
+            }
+
+            KeyCycleOscillator osc = oscSet.get(key);
+            if (osc == null) {
+                continue;
+            }
+
+            osc.setPoint(mFramePosition, mWaveShape, mCustomWaveShape, -1, mWavePeriod, mWaveOffset, mWavePhase, value);
+        }
+    }
+
 }

@@ -20,6 +20,8 @@ package androidx.constraintlayout.core.motion.utils;
  * Starting and Ending Widgets
  */
 public interface TypedValues {
+    public static final  String S_CUSTOM = "CUSTOM";
+
     /**
      * Used to set integer values
      *

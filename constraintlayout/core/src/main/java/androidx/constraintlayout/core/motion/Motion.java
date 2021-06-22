@@ -45,22 +45,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 
-/*
- * Copyright (C) 2018 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 /**
  * This contains the picture of a view through the a transition and is used to interpolate it
  * During an transition every view has a MotionController which drives its position.
@@ -630,12 +614,6 @@ public class Motion {
     public void setPathMotionArc(int arc) {
         mPathMotionArc = arc;
     }
-    //##############################################################################################
-    //##############################################################################################
-    //##############################################################################################
-    //##############################################################################################
-    //##############################################################################################
-    //##############################################################################################
 
     /**
      * Called after all TimePoints & Cycles have been added;
@@ -663,8 +641,7 @@ public class Motion {
         }
 
         mStartPoint.different(mEndPoint, splineAttributes);
-        System.out.println(" >>>>>>>>>>>>> " + Arrays.toString(splineAttributes.toArray()));
-        if (DEBUG) {
+         if (DEBUG) {
             HashSet<String> attr = new HashSet<>();
             mStartPoint.different(mEndPoint, attr);
             Utils.log(TAG, ">>>>>>>>>>>>>>> MotionConstrainedPoint found " + Arrays.toString(attr.toArray()));
@@ -692,7 +669,6 @@ public class Motion {
                 }
             }
         }
-        System.out.println(" >>>>>>>>>>>>> " + Arrays.toString(splineAttributes.toArray()));
 
         //--------------------------- trigger support --------------------
 
@@ -941,11 +917,11 @@ public class Motion {
                 cycle.setType(attribute);
                 mCycleMap.put(attribute, cycle);
             }
-//            for (Key key : mKeyList) {
-//                if (key instanceof KeyCycle) {
-//                    ((KeyCycle) key).addCycleValues(mCycleMap);
-//                }
-//            }
+            for (MotionKey key : mKeyList) {
+                if (key instanceof MotionKeyCycle) {
+                    ((MotionKeyCycle) key).addCycleValues(mCycleMap);
+                }
+            }
             for (KeyCycleOscillator cycle : mCycleMap.values()) {
                 cycle.setup(distance);
             }

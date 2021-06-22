@@ -33,7 +33,7 @@ public class MotionKeyAttributes extends MotionKey {
 
     {
         mType = KEY_TYPE;
-
+        mCustom = new HashMap<>();
     }
 
 
@@ -82,11 +82,11 @@ public class MotionKeyAttributes extends MotionKey {
         if (!Float.isNaN(mProgress)) {
             attributes.add(Attributes.S_PROGRESS);
         }
-//        if (mCustomConstraints.size() > 0) {
-//            for (String s : mCustomConstraints.keySet()) {
-//                attributes.add(Attributes.CUSTOM + "," + s);
-//            }
-//        }
+        if (mCustom.size() > 0) {
+            for (String s : mCustom.keySet()) {
+                attributes.add(TypedValues.S_CUSTOM + "," + s);
+            }
+        }
     }
 
     @Override

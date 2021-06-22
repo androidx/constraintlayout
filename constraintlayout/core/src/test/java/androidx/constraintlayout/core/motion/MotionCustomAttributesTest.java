@@ -9,7 +9,7 @@ import androidx.constraintlayout.core.motion.utils.TypedValues;
 import org.junit.Test;
 
 public class MotionCustomAttributesTest {
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     @Test
     public void testBasic() {

@@ -353,4 +353,23 @@ public class CustomVariable {
         int ia = clamp((int) (a * 255f));
         return ia << 24 | (ir << 16) | (ig << 8) | ib;
     }
+
+    public void applyToWidget(MotionWidget view) {
+        switch (mType) {
+            case TypedValues.Custom.TYPE_INT:
+            case TypedValues.Custom.TYPE_COLOR:
+            case TypedValues.Custom.TYPE_REFERENCE:
+                view.setCustomAttribute(mName, mType, mIntegerValue);
+              break;
+            case TypedValues.Custom.TYPE_STRING:
+                view.setCustomAttribute(mName, mType, mStringValue);
+            case TypedValues.Custom.TYPE_BOOLEAN:
+                view.setCustomAttribute(mName, mType,mBooleanValue);
+                break;
+            case TypedValues.Custom.TYPE_DIMENSION:
+            case TypedValues.Custom.TYPE_FLOAT:
+                view.setCustomAttribute(mName, mType, mFloatValue);
+                break;
+        }
+    }
 }
