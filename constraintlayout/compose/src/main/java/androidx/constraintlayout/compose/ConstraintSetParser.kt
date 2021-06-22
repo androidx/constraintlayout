@@ -16,6 +16,8 @@
 package androidx.constraintlayout.compose
 
 import androidx.compose.ui.unit.Dp
+import androidx.constraintlayout.core.motion.utils.TypedBundle
+import androidx.constraintlayout.core.motion.utils.TypedValues
 import androidx.constraintlayout.core.state.ConstraintReference
 import androidx.constraintlayout.core.state.Dimension
 import androidx.constraintlayout.core.state.Dimension.SPREAD_DIMENSION
@@ -131,21 +133,77 @@ internal fun parseKeyframesJSON(content: String, transition: Transition) {
     }
 }
 
+internal fun getArray(keyposition: JSONObject, name: String): JSONArray? {
+    return if (keyposition.has(name)) keyposition.getJSONArray(name) else null;
+}
+
 fun parseKeyPosition(keyposition: JSONObject, transition: Transition) {
+    var bundle = TypedBundle()
     val targets = keyposition.getJSONArray("target")
     val frames = keyposition.getJSONArray("frames")
-    val percentX = keyposition.getJSONArray("percentX")
-    val percentY = keyposition.getJSONArray("percentY")
-    if (frames.length() != percentX.length() || frames.length() != percentY.length()) {
+    val percentX = getArray(keyposition, "percentX")
+    val percentY = getArray(keyposition, "percentY")
+    val percentWidth = getArray(keyposition, "percentWidth")
+    val percentHeight = getArray(keyposition, "percentHeight")
+    val pathMotionArc = keyposition.opt("pathMotionArc")
+    val transitionEasing = keyposition.opt("transitionEasing")
+    val curveFit = keyposition.opt("curveFit")
+    val type = keyposition.opt("type")
+    if (percentX != null && frames.length() != percentX.length()) {
+        return
+    }
+    if (percentY != null && frames.length() != percentY.length()) {
         return
     }
     (0 until targets.length()).forEach { i ->
         val target = targets.getString(i)
+        bundle.clear();
+        if (type != null) {
+
+            bundle.add(
+                TypedValues.Position.TYPE_POSITION_TYPE, when (type) {
+                    "deltaRelative" -> 0
+                    "pathRelative" -> 1
+                    "parentRelative" -> 2
+                    else -> 0
+                }
+            )
+        }
+        if (curveFit!=null) {
+            when (curveFit) {
+                "spline" -> bundle.add(TypedValues.Position.TYPE_CURVE_FIT,0)
+                "linear" -> bundle.add(TypedValues.Position.TYPE_CURVE_FIT,1)
+
+            }
+        }
+        bundle.addIfNotNull(TypedValues.Position.TYPE_TRANSITION_EASING, transitionEasing?.toString())
+
+        if (pathMotionArc!=null) {
+            when (pathMotionArc) {
+                "none" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC,0)
+                "startVertical" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC,1)
+                "startHorizontal" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC,2)
+                "flip" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC,3)
+            }
+        }
+
         (0 until frames.length()).forEach { j ->
             val frame = frames.getInt(j)
-            val x = percentX.getDouble(j).toFloat()
-            val y = percentY.getDouble(j).toFloat()
-            transition.addKeyPosition(target, frame, 0, x, y)
+            bundle.add(TypedValues.TYPE_FRAME_POSITION, frame);
+            if (percentX != null) {
+                bundle.add(TypedValues.Position.TYPE_PERCENT_X, percentX.getDouble(j).toFloat());
+            }
+            if (percentY != null) {
+                bundle.add(TypedValues.Position.TYPE_PERCENT_Y, percentY.getDouble(j).toFloat());
+            }
+            if (percentWidth != null) {
+                bundle.add(TypedValues.Position.TYPE_PERCENT_Y, percentWidth.getDouble(j).toFloat());
+            }
+            if (percentHeight != null) {
+                bundle.add(TypedValues.Position.TYPE_PERCENT_Y, percentHeight.getDouble(j).toFloat());
+            }
+
+            transition.addKeyPosition(target, bundle)
         }
     }
 }

@@ -16,6 +16,11 @@
 
 package androidx.constraintlayout.core.motion.utils;
 
+import androidx.constraintlayout.core.motion.CustomAttribute;
+import androidx.constraintlayout.core.motion.CustomVariable;
+import androidx.constraintlayout.core.motion.MotionWidget;
+import androidx.constraintlayout.core.state.WidgetFrame;
+
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
@@ -32,6 +37,10 @@ public abstract class SplineSet {
     protected float[] mValues = new float[10];
     private int count;
     private String mType;
+
+    public void setProperty(TypedValues widget, float t) {
+        widget.setValue(TypedValues.Attributes.getId(mType), get(t));
+    }
 
     @Override
     public String toString() {
@@ -60,7 +69,8 @@ public abstract class SplineSet {
         return mCurveFit;
     }
 
-    public void setPoint(int position, float value) {
+
+        public void setPoint(int position, float value) {
         if (mTimePoints.length < count + 1) {
             mTimePoints = Arrays.copyOf(mTimePoints, mTimePoints.length * 2);
             mValues = Arrays.copyOf(mValues, mValues.length * 2);
@@ -98,6 +108,17 @@ public abstract class SplineSet {
             k++;
         }
         mCurveFit = CurveFit.get(curveType, time, values);
+    }
+
+    public static SplineSet makeCustomSpline(String str, KeyFrameArray<CustomAttribute> attrList) {
+        return new CustomSet(str, attrList);
+    }
+    public static SplineSet makeCustomSplineSet(String str, KeyFrameArray<CustomVariable> attrList) {
+        return new CustomSpline(str, attrList);
+    }
+    public static SplineSet makeSpline(String str, long currentTime) {
+
+        return new CoreSpline(str, currentTime);
     }
 
     private static class Sort {
@@ -142,4 +163,112 @@ public abstract class SplineSet {
             value[b] = tmpv;
         }
     }
+
+
+    public static class CustomSet extends SplineSet {
+        String mAttributeName;
+        KeyFrameArray<CustomAttribute> mConstraintAttributeList;
+        float[] mTempValues;
+
+        public CustomSet(String attribute, KeyFrameArray<CustomAttribute> attrList) {
+            mAttributeName = attribute.split(",")[1];
+            mConstraintAttributeList = attrList;
+        }
+
+        public void setup(int curveType) {
+            int size = mConstraintAttributeList.size();
+            int dimensionality = mConstraintAttributeList.valueAt(0).numberOfInterpolatedValues();
+            double[] time = new double[size];
+            mTempValues = new float[dimensionality];
+            double[][] values = new double[size][dimensionality];
+            for (int i = 0; i < size; i++) {
+
+                int key = mConstraintAttributeList.keyAt(i);
+                CustomAttribute ca = mConstraintAttributeList.valueAt(i);
+
+                time[i] = key * 1E-2;
+                ca.getValuesToInterpolate(mTempValues);
+                for (int k = 0; k < mTempValues.length; k++) {
+                    values[i][k] = mTempValues[k];
+                }
+
+            }
+            mCurveFit = CurveFit.get(curveType, time, values);
+        }
+
+        public void setPoint(int position, float value) {
+            throw new RuntimeException("don't call for custom attribute call setPoint(pos, ConstraintAttribute)");
+        }
+
+        public void setPoint(int position, CustomAttribute value) {
+            mConstraintAttributeList.append(position, value);
+        }
+
+        public void setProperty(WidgetFrame view, float t) {
+            mCurveFit.getPos(t, mTempValues);
+            mConstraintAttributeList.valueAt(0).setInterpolatedValue(view, mTempValues);
+        }
+    }
+
+
+    private static class CoreSpline extends SplineSet {
+        String type;
+        long start;
+
+        public CoreSpline(String str, long currentTime) {
+            type = str;
+            start = currentTime;
+        }
+
+        public void setProperty(TypedValues widget, float t) {
+              int id =  widget.getId(type);
+              widget.setValue(id, get(t));
+        }
+    }
+
+    public static class CustomSpline extends SplineSet {
+        String mAttributeName;
+        KeyFrameArray<CustomVariable> mConstraintAttributeList;
+        float[] mTempValues;
+
+        public CustomSpline(String attribute, KeyFrameArray<CustomVariable> attrList) {
+            mAttributeName = attribute.split(",")[1];
+            mConstraintAttributeList = attrList;
+        }
+
+        public void setup(int curveType) {
+            int size = mConstraintAttributeList.size();
+            int dimensionality = mConstraintAttributeList.valueAt(0).numberOfInterpolatedValues();
+            double[] time = new double[size];
+            mTempValues = new float[dimensionality];
+            double[][] values = new double[size][dimensionality];
+            for (int i = 0; i < size; i++) {
+
+                int key = mConstraintAttributeList.keyAt(i);
+                CustomVariable ca = mConstraintAttributeList.valueAt(i);
+
+                time[i] = key * 1E-2;
+                ca.getValuesToInterpolate(mTempValues);
+                for (int k = 0; k < mTempValues.length; k++) {
+                    values[i][k] = mTempValues[k];
+                }
+
+            }
+            mCurveFit = CurveFit.get(curveType, time, values);
+        }
+
+        public void setPoint(int position, float value) {
+            throw new RuntimeException("don't call for custom attribute call setPoint(pos, ConstraintAttribute)");
+        }
+
+        public void setPoint(int position, CustomVariable value) {
+            mConstraintAttributeList.append(position, value);
+        }
+
+        public void setProperty(MotionWidget view, float t) {
+            mCurveFit.getPos(t, mTempValues);
+           mConstraintAttributeList.valueAt(0).setInterpolatedValue(view, mTempValues);
+        }
+    }
+
 }

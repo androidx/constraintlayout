@@ -23,7 +23,7 @@ import java.util.Arrays;
  * quarter ellipses
  */
 
-class ArcCurveFit extends CurveFit {
+public class ArcCurveFit extends CurveFit {
     public static final int ARC_START_VERTICAL = 1;
     public static final int ARC_START_HORIZONTAL = 2;
     public static final int ARC_START_FLIP = 3;
@@ -421,7 +421,7 @@ class ArcCurveFit extends CurveFit {
                 double pos = i / (double) (mLut.length - 1);
                 int index = Arrays.binarySearch(ourPercent, pos);
                 if (index >= 0) {
-                    mLut[i] = index / (ourPercent.length - 1);
+                    mLut[i] = index /(double) (ourPercent.length - 1);
                 } else if (index == -1) {
                     mLut[i] = 0;
                 } else {

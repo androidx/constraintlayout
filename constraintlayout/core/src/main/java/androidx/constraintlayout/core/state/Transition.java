@@ -16,9 +16,16 @@
 
 package androidx.constraintlayout.core.state;
 
+import androidx.constraintlayout.core.motion.Motion;
+import androidx.constraintlayout.core.motion.MotionWidget;
+import androidx.constraintlayout.core.motion.key.MotionKeyPosition;
+import androidx.constraintlayout.core.motion.utils.KeyCache;
+import androidx.constraintlayout.core.motion.utils.TypedBundle;
+import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -74,6 +81,10 @@ public class Transition {
         return numKeyPositions;
     }
 
+    public Motion getMotion(String id) {
+        return getWidgetState(id, null, 0).motionControl;
+    }
+
     public void fillKeyPositions(WidgetFrame frame, float[] x, float[] y, float[] pos) {
         int numKeyPositions = 0;
         int frameNumber = 0;
@@ -100,23 +111,41 @@ public class Transition {
         WidgetFrame start;
         WidgetFrame end;
         WidgetFrame interpolated;
+        Motion motionControl;
+        MotionWidget motionWidgetStart;
+        MotionWidget motionWidgetEnd;
+        MotionWidget motionWidgetInterpolated;
+        KeyCache myKeyCache = new KeyCache();
+        int myParentHeight = -1;
+        int myParentWidth = -1;
 
         public WidgetState() {
             start = new WidgetFrame();
             end = new WidgetFrame();
             interpolated = new WidgetFrame();
+            motionWidgetStart = new MotionWidget(start);
+            motionWidgetEnd = new MotionWidget(end);
+            motionWidgetInterpolated = new MotionWidget(interpolated);
+            motionControl = new Motion(motionWidgetStart);
+            motionControl.setStart(motionWidgetStart);
+            motionControl.setEnd(motionWidgetEnd);
         }
 
-        public void interpolate(int parentWidth, int parentHeight, float progress, Transition transition) {
-            WidgetFrame.interpolate(parentWidth, parentHeight, interpolated, start, end, transition, progress);
+        public void setKeyPosition(TypedBundle prop) {
+            MotionKeyPosition keyPosition = new MotionKeyPosition();
+            prop.applyDelta(keyPosition);
+            motionControl.addKey(keyPosition);
         }
 
         public void update(ConstraintWidget child, int state) {
             if (state == START) {
                 start.update(child);
+                motionControl.setStart(motionWidgetStart);
             } else if (state == END) {
                 end.update(child);
+                motionControl.setEnd(motionWidgetEnd);
             }
+            myParentWidth = -1;
         }
 
         public WidgetFrame getFrame(int type) {
@@ -126,6 +155,16 @@ public class Transition {
                 return end;
             }
             return interpolated;
+        }
+
+        public void interpolate(int parentWidth, int parentHeight, float progress, Transition transition) {
+            if (parentHeight != myParentHeight || parentWidth != myParentWidth) {
+                myParentHeight = parentHeight;
+                myParentWidth = parentWidth;
+                motionControl.setup(parentWidth, parentHeight, 1, System.nanoTime());
+            }
+            WidgetFrame.interpolate(parentWidth, parentHeight, interpolated, start, end, transition, progress);
+            motionControl.interpolate(motionWidgetInterpolated, progress, System.nanoTime(), myKeyCache);
         }
     }
 
@@ -157,7 +196,19 @@ public class Transition {
         return state.containsKey(key);
     }
 
+    public void addKeyPosition(String target, TypedBundle bundle) {
+        getWidgetState(target, null, 0).setKeyPosition(bundle);
+    }
+
     public void addKeyPosition(String target, int frame, int type, float x, float y) {
+        TypedBundle bundle = new TypedBundle();
+        bundle.add(TypedValues.Position.TYPE_POSITION_TYPE, 2);
+        bundle.add(TypedValues.TYPE_FRAME_POSITION, frame);
+        bundle.add(TypedValues.Position.TYPE_PERCENT_X, x);
+        bundle.add(TypedValues.Position.TYPE_PERCENT_Y, y);
+        System.out.println(">>>>" + frame);
+        getWidgetState(target, null, 0).setKeyPosition(bundle);
+
         KeyPosition keyPosition = new KeyPosition(target, frame, type, x, y);
         HashMap<String, KeyPosition> map = keyPositions.get(frame);
         if (map == null) {
@@ -227,6 +278,7 @@ public class Transition {
 
     /**
      * Used in debug draw
+     *
      * @param child
      * @return
      */
@@ -236,6 +288,7 @@ public class Transition {
 
     /**
      * Used in debug draw
+     *
      * @param child
      * @return
      */
@@ -245,6 +298,7 @@ public class Transition {
 
     /**
      * Used after the interpolation
+     *
      * @param child
      * @return
      */
