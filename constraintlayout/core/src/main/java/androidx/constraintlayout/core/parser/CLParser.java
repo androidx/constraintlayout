@@ -53,6 +53,9 @@ public class CLParser {
       if (false) {
         System.out.println("Looking at " + i + " : <" + c + ">");
       }
+      if (currentElement == null) {
+        break;
+      }
       if (currentElement.isDone()) {
         currentElement = getNextJsonElement(i, c, currentElement, content);
       } else if (currentElement instanceof CLObject) {

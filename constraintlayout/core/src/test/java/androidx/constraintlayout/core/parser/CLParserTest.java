@@ -106,6 +106,43 @@ public class CLParserTest {
             assertTrue(false);
         }
     }
+
+    @Test
+    public void testMultilines() {
+        String test = "{\n" +
+                "  firstName: 'John',\n" +
+                "  lastName: 'Smith',\n" +
+                "  isAlive: true,\n" +
+                "  age: 27,\n" +
+                "  address: {\n" +
+                "    streetAddress: '21 2nd Street',\n" +
+                "    city: 'New York',\n" +
+                "    state: 'NY',\n" +
+                "    postalCode: '10021-3100'\n" +
+                "  },\n" +
+                "  phoneNumbers: [\n" +
+                "    {\n" +
+                "      type: 'home',\n" +
+                "      number: '212 555-1234'\n" +
+                "    },\n" +
+                "    {\n" +
+                "      type: 'office',\n" +
+                "      number: '646 555-4567'\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  children: [],\n" +
+                "  spouse: null\n" +
+                "}          ";
+        try {
+            CLObject parsedContent = CLParser.parse(test);
+            assertEquals("John", parsedContent.getString("firstName"));
+            assertEquals("{ firstName: 'John', lastName: 'Smith', isAlive: true, age: 27, address: { streetAddress: '21 2nd Street', city: 'New York', state: 'NY', postalCode: '10021-3100' }, phoneNumbers: [{ type: 'home', number: '212 555-1234' }, { type: 'office', number: '646 555-4567' }], children: [], spouse: null }", parsedContent.toJSON());
+        } catch (CLParsingException e) {
+            System.err.println("Exception " + e.reason());
+            e.printStackTrace();
+            assertTrue(false);
+        }
+    }
 }
 
 
