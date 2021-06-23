@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package androidx.constraintlayout.core.json;
+package androidx.constraintlayout.core.parser;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class JSONParserTest {
-    
+public class CLParserTest {
+
     private void testBasicJson(String json) {
         try {
-            JSONObject jsonObject = JSONParser.parse(json);
+            CLObject jsonObject = CLParser.parse(json);
             assertEquals(jsonObject.toJSON(), json);
-        } catch (JSONParsingException e) {
+        } catch (CLParsingException e) {
             System.err.println("Exception " + e.reason());
             e.printStackTrace();
             assertTrue(false);
@@ -48,7 +48,7 @@ public class JSONParserTest {
     public void testJsonValue() {
         try {
             String test = "{ test: ['hello', 'world', { value: 42 }], value: false, plop: 23, hello: { key: 49, text: 'bonjour' } }";
-            JSONObject jsonObject = JSONParser.parse(test);
+            CLObject jsonObject = CLParser.parse(test);
             assertTrue(jsonObject.toJSON().equals(test));
             assertEquals("hello", jsonObject.getArray("test").getString(0));
             assertEquals("world", jsonObject.getArray("test").getString(1));
@@ -57,7 +57,7 @@ public class JSONParserTest {
             assertEquals(23, jsonObject.getInt("plop"));
             assertEquals(49, jsonObject.getObject("hello").getInt("key"));
             assertEquals("bonjour", jsonObject.getObject("hello").getString("text"));
-        } catch (JSONParsingException e) {
+        } catch (CLParsingException e) {
             System.err.println("Exception " + e.reason());
             e.printStackTrace();
             assertTrue(false);
@@ -68,9 +68,9 @@ public class JSONParserTest {
     public void testException() {
         try {
             String test = "{ test: ['hello', 'world', { value: 42 }], value: false, plop: 23, hello: { key: 49, text: 'bonjour' } }";
-            JSONObject jsonObject = JSONParser.parse(test);
+            CLObject jsonObject = CLParser.parse(test);
             jsonObject.getObject("test").getString(0);
-        } catch (JSONParsingException e) {
+        } catch (CLParsingException e) {
             assertEquals("no object associated for key <test>", e.reason());
             e.printStackTrace();
         }
@@ -80,11 +80,11 @@ public class JSONParserTest {
     public void testTrailingCommas() {
         try {
             String test = "{ test: ['hello', 'world'],,,,,,, }";
-            JSONObject jsonObject = JSONParser.parse(test);
+            CLObject jsonObject = CLParser.parse(test);
             assertEquals("hello", jsonObject.getArray("test").getString(0));
             assertEquals("world", jsonObject.getArray("test").getString(1));
             assertEquals("{ test: ['hello', 'world'] }", jsonObject.toJSON());
-        } catch (JSONParsingException e) {
+        } catch (CLParsingException e) {
             System.err.println("Exception " + e.reason());
             e.printStackTrace();
             assertTrue(false);
@@ -96,11 +96,11 @@ public class JSONParserTest {
     public void testIncompleteObject() {
         try {
             String test = "{ test: ['hello', 'world";
-            JSONObject jsonObject = JSONParser.parse(test);
+            CLObject jsonObject = CLParser.parse(test);
             assertEquals("hello", jsonObject.getArray("test").getString(0));
             assertEquals("world", jsonObject.getArray("test").getString(1));
             assertEquals("{ test: ['hello', 'world'] }", jsonObject.toJSON());
-        } catch (JSONParsingException e) {
+        } catch (CLParsingException e) {
             System.err.println("Exception " + e.reason());
             e.printStackTrace();
             assertTrue(false);

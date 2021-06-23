@@ -13,29 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package androidx.constraintlayout.core.json;
+package androidx.constraintlayout.core.parser;
 
-public class JSONKey extends JSONContainer {
+public class CLObject extends CLContainer {
 
-  public JSONKey(char[] content) {
+  public CLObject(char[] content) {
     super(content);
   }
 
-  public static JSONElement allocate(char[] content) {
-    return new JSONKey(content);
+  public static CLObject allocate(char[] content) {
+    return new CLObject(content);
   }
 
-  protected String toJSON() {
-    if (mElements.size() > 0) {
-      return getDebugName() + content() + ": " + mElements.get(0).toJSON();
+  public String toJSON() {
+    StringBuilder json = new StringBuilder(getDebugName() + "{ ");
+    boolean first = true;
+    for (CLElement element : mElements) {
+      if (!first) {
+        json.append(", ");
+      } else {
+        first = false;
+      }
+      json.append(element.toJSON());
     }
-    return getDebugName() + content() + ": <> ";
+    json.append(" }");
+    return json.toString();
   }
 
-  public JSONElement getValue() {
-    if (mElements.size() > 0) {
-      return mElements.get(0);
-    }
-    return null;
-  }
 }

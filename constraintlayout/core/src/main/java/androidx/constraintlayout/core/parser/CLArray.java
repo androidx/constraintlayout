@@ -13,15 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package androidx.constraintlayout.core.json;
+package androidx.constraintlayout.core.parser;
 
-public class JSONParsingException extends Throwable {
-  String mReason;
-  public JSONParsingException(String reason) {
-    mReason = reason;
+public class CLArray extends CLContainer {
+  public CLArray(char[] content) {
+    super(content);
   }
 
-  public String reason() {
-    return mReason;
+  public static CLElement allocate(char[] content) {
+    return new CLArray(content);
+  }
+
+  protected String toJSON() {
+    StringBuilder content = new StringBuilder(getDebugName() + "[");
+    boolean first = true;
+    for (int i = 0; i < mElements.size(); i++) {
+      if (!first) {
+        content.append(", ");
+      } else {
+        first = false;
+      }
+      content.append(mElements.get(i).toJSON());
+    }
+    return content + "]";
   }
 }

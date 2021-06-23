@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package androidx.constraintlayout.core.json;
+package androidx.constraintlayout.core.parser;
 
-public class JSONNumber extends JSONElement {
+public class CLNumber extends CLElement {
 
   float value = Float.NaN;
-  public JSONNumber(char[] content) {
+  public CLNumber(char[] content) {
     super(content);
   }
 
-  public static JSONElement allocate(char[] content) {
-    return new JSONNumber(content);
+  public static CLElement allocate(char[] content) {
+    return new CLNumber(content);
   }
 
   protected String toJSON() {

@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package androidx.constraintlayout.core.json;
+package androidx.constraintlayout.core.parser;
 
-public class JSONParser {
+public class CLParser {
 
   static boolean DEBUG = false;
 
   enum TYPE {UNKNOWN, OBJECT, ARRAY, NUMBER, STRING, KEY, TOKEN}
 
-  public static JSONObject parse(String string) throws JSONParsingException {
-    JSONObject root = null;
+  public static CLObject parse(String string) throws CLParsingException {
+    CLObject root = null;
 
     char[] content = string.toCharArray();
-    JSONElement currentElement = null;
+    CLElement currentElement = null;
 
     final int length = content.length;
 
@@ -40,11 +40,11 @@ public class JSONParser {
       }
     }
     if (startIndex == -1) {
-      throw new JSONParsingException("invalid json content");
+      throw new CLParsingException("invalid json content");
     }
 
     // We have a root object, let's start
-    root = JSONObject.allocate(content);
+    root = CLObject.allocate(content);
     root.setStart(startIndex);
     currentElement = root;
 
@@ -55,27 +55,27 @@ public class JSONParser {
       }
       if (currentElement.isDone()) {
         currentElement = getNextJsonElement(i, c, currentElement, content);
-      } else if (currentElement instanceof JSONObject) {
+      } else if (currentElement instanceof CLObject) {
         if (c == '}') {
           currentElement.setEnd(i - 1);
         } else {
           currentElement = getNextJsonElement(i, c, currentElement, content);
         }
-      } else if (currentElement instanceof JSONArray) {
+      } else if (currentElement instanceof CLArray) {
         if (c == ']') {
           currentElement.setEnd(i - 1);
         } else {
           currentElement = getNextJsonElement(i, c, currentElement, content);
         }
-      } else if (currentElement instanceof JSONString) {
+      } else if (currentElement instanceof CLString) {
         if (c == '\'' || c == '"') {
           currentElement.setEnd(i - 1);
         }
       } else {
-        if (currentElement instanceof JSONToken) {
-          JSONToken token = (JSONToken) currentElement;
+        if (currentElement instanceof CLToken) {
+          CLToken token = (CLToken) currentElement;
           if (!token.validate(c, i)) {
-            throw new JSONParsingException("parsing incorrect token " + token.content());
+            throw new CLParsingException("parsing incorrect token " + token.content());
           }
         }
         if (c == '}' || c == ']' || c == ',' || c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == ':') {
@@ -87,7 +87,7 @@ public class JSONParser {
         }
       }
 
-      if (currentElement.isDone() && (!(currentElement instanceof JSONKey) || ((JSONKey) currentElement).mElements.size() > 0) ) {
+      if (currentElement.isDone() && (!(currentElement instanceof CLKey) || ((CLKey) currentElement).mElements.size() > 0) ) {
         currentElement = currentElement.getContainer();
       }
     }
@@ -105,8 +105,8 @@ public class JSONParser {
     return root;
   }
 
-  private static JSONElement getNextJsonElement(int i, char c, JSONElement currentElement,
-      char[] content) throws JSONParsingException {
+  private static CLElement getNextJsonElement(int i, char c, CLElement currentElement,
+                                              char[] content) throws CLParsingException {
     switch (c) {
       case ' ':
       case ':':
@@ -152,11 +152,11 @@ public class JSONParser {
       }
       break;
       default: {
-        if (currentElement instanceof JSONContainer && !(currentElement instanceof JSONObject)) {
+        if (currentElement instanceof CLContainer && !(currentElement instanceof CLObject)) {
           currentElement = createElement(currentElement, i, TYPE.TOKEN, true, content);
-          JSONToken token = (JSONToken) currentElement;
+          CLToken token = (CLToken) currentElement;
           if (!token.validate(c, i)) {
-            throw new JSONParsingException("incorrect token <" + c + ">");
+            throw new CLParsingException("incorrect token <" + c + ">");
           }
         } else {
           currentElement = createElement(currentElement, i, TYPE.KEY, true, content);
@@ -166,38 +166,38 @@ public class JSONParser {
     return currentElement;
   }
 
-  private static JSONElement createElement(JSONElement currentElement, int position,
-      TYPE type, boolean applyStart, char[] content) {
-    JSONElement newElement = null;
+  private static CLElement createElement(CLElement currentElement, int position,
+                                         TYPE type, boolean applyStart, char[] content) {
+    CLElement newElement = null;
     if (DEBUG) {
       System.out.println("CREATE " + type + " at " + content[position]);
     }
     switch (type) {
       case OBJECT: {
-        newElement = JSONObject.allocate(content);
+        newElement = CLObject.allocate(content);
         position++;
       }
       break;
       case ARRAY: {
-        newElement = JSONArray.allocate(content);
+        newElement = CLArray.allocate(content);
         position++;
       }
       break;
       case STRING: {
-        newElement = JSONString.allocate(content);
+        newElement = CLString.allocate(content);
         position++;
       }
       break;
       case NUMBER: {
-        newElement = JSONNumber.allocate(content);
+        newElement = CLNumber.allocate(content);
       }
       break;
       case KEY: {
-        newElement = JSONKey.allocate(content);
+        newElement = CLKey.allocate(content);
       }
       break;
       case TOKEN: {
-        newElement = JSONToken.allocate(content);
+        newElement = CLToken.allocate(content);
       }
       break;
     }
@@ -207,8 +207,8 @@ public class JSONParser {
     if (applyStart) {
       newElement.setStart(position);
     }
-    if (currentElement instanceof JSONContainer) {
-      JSONContainer container = (JSONContainer) currentElement;
+    if (currentElement instanceof CLContainer) {
+      CLContainer container = (CLContainer) currentElement;
       newElement.setContainer(container);
     }
     return newElement;

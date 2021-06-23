@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package androidx.constraintlayout.core.json;
+package androidx.constraintlayout.core.parser;
 
-public class JSONElement {
+public class CLElement {
 
   private final char[] mContent;
   protected long start = -1;
   protected long end = Long.MAX_VALUE;
-  private JSONContainer mContainer;
+  private CLContainer mContainer;
 
-  public JSONElement(char[] content) {
+  public CLElement(char[] content) {
     mContent = content;
   }
 
@@ -39,7 +39,7 @@ public class JSONElement {
       return;
     }
     this.end = end;
-    if (JSONParser.DEBUG) {
+    if (CLParser.DEBUG) {
       System.out.println("closing " + this.hashCode() + " -> " + this);
     }
     if (mContainer != null) {
@@ -64,7 +64,7 @@ public class JSONElement {
   }
 
   protected String getDebugName() {
-    if (JSONParser.DEBUG) {
+    if (CLParser.DEBUG) {
       return getStrClass() + " -> ";
     }
     return "";
@@ -82,11 +82,11 @@ public class JSONElement {
     return end != Long.MAX_VALUE;
   }
 
-  public void setContainer(JSONContainer element) {
+  public void setContainer(CLContainer element) {
     mContainer = element;
   }
 
-  public JSONElement getContainer() {
+  public CLElement getContainer() {
     return mContainer;
   }
 
@@ -99,15 +99,15 @@ public class JSONElement {
   }
 
   public int getInt() {
-    if (this instanceof JSONNumber) {
-      return ((JSONNumber) this).getInt();
+    if (this instanceof CLNumber) {
+      return ((CLNumber) this).getInt();
     }
     return 0;
   }
 
   public float getFloat() {
-    if (this instanceof JSONNumber) {
-      return ((JSONNumber) this).getInt();
+    if (this instanceof CLNumber) {
+      return ((CLNumber) this).getInt();
     }
     return 0f;
   }

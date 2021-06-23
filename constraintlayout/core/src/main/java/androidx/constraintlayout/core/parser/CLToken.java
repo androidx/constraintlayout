@@ -13,27 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package androidx.constraintlayout.core.json;
+package androidx.constraintlayout.core.parser;
 
-public class JSONToken extends JSONElement {
+public class CLToken extends CLElement {
   int index = 0;
   Type type = Type.UNKNOWN;
 
-  public boolean getBoolean() throws JSONParsingException {
+  public boolean getBoolean() throws CLParsingException {
     if (type == Type.TRUE) {
       return true;
     }
     if (type == Type.FALSE) {
       return false;
     }
-    throw new JSONParsingException("this token is not a boolean: <" + content() + ">");
+    throw new CLParsingException("this token is not a boolean: <" + content() + ">");
   }
 
-  public boolean isNull() throws JSONParsingException {
+  public boolean isNull() throws CLParsingException {
     if (type == Type.NULL) {
       return true;
     }
-    throw new JSONParsingException("this token is not a null: <" + content() + ">");
+    throw new CLParsingException("this token is not a null: <" + content() + ">");
   }
 
   enum Type { UNKNOWN, TRUE, FALSE, NULL }
@@ -42,16 +42,16 @@ public class JSONToken extends JSONElement {
   char[] tokenFalse = "false".toCharArray();
   char[] tokenNull = "null".toCharArray();
 
-  public JSONToken(char[] content) {
+  public CLToken(char[] content) {
     super(content);
   }
 
-  public static JSONElement allocate(char[] content) {
-    return new JSONToken(content);
+  public static CLElement allocate(char[] content) {
+    return new CLToken(content);
   }
 
   protected String toJSON() {
-    if (JSONParser.DEBUG) {
+    if (CLParser.DEBUG) {
       return "<" + content() + ">";
     } else {
       return content();

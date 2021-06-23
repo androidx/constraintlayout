@@ -13,17 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package androidx.constraintlayout.core.json;
+package androidx.constraintlayout.core.parser;
 
-public class JSONString extends JSONElement {
+public class CLParsingException extends Throwable {
+  String mReason;
+  public CLParsingException(String reason) {
+    mReason = reason;
+  }
 
-  public JSONString(char[] content) {
-    super(content);
-  }
-  public static JSONElement allocate(char[] content) {
-    return new JSONString(content);
-  }
-  protected String toJSON() {
-    return "'" + content() + "'";
+  public String reason() {
+    return mReason;
   }
 }
