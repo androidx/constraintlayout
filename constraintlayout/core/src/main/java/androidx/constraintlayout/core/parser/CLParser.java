@@ -81,11 +81,24 @@ public class CLParser {
             throw new CLParsingException("parsing incorrect token " + token.content());
           }
         }
-        if (c == '}' || c == ']' || c == ',' || c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == ':') {
-          currentElement.setEnd(i - 1);
-          if (c == '}' || c == ']') {
-            currentElement = currentElement.getContainer();
+        if (currentElement instanceof CLKey) {
+          char ck = content[(int) currentElement.start];
+          if (ck == '\'' && c == '\'') {
+            currentElement.setStart(currentElement.start + 1);
             currentElement.setEnd(i - 1);
+          }
+          else if (ck == '"' && c == '"') {
+            currentElement.setStart(currentElement.start + 1);
+            currentElement.setEnd(i - 1);
+          }
+        }
+        if (!currentElement.isDone()) {
+          if (c == '}' || c == ']' || c == ',' || c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == ':') {
+            currentElement.setEnd(i - 1);
+            if (c == '}' || c == ']') {
+              currentElement = currentElement.getContainer();
+              currentElement.setEnd(i - 1);
+            }
           }
         }
       }
@@ -136,7 +149,11 @@ public class CLParser {
       } break;
       case '"':
       case '\'': {
-        currentElement = createElement(currentElement, i, TYPE.STRING, true, content);
+        if (currentElement instanceof CLObject) {
+          currentElement = createElement(currentElement, i, TYPE.KEY, true, content);
+        } else {
+          currentElement = createElement(currentElement, i, TYPE.STRING, true, content);
+        }
       }
       break;
       case '-':
