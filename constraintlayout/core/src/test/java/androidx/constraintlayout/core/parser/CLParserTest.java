@@ -22,10 +22,10 @@ import org.junit.Test;
 
 public class CLParserTest {
 
-    private void testBasicJson(String json) {
+    private void testBasicFormat(String content) {
         try {
-            CLObject jsonObject = CLParser.parse(json);
-            assertEquals(jsonObject.toJSON(), json);
+            CLObject parsedContent = CLParser.parse(content);
+            assertEquals(parsedContent.toJSON(), content);
         } catch (CLParsingException e) {
             System.err.println("Exception " + e.reason());
             e.printStackTrace();
@@ -34,29 +34,29 @@ public class CLParserTest {
     }
 
     @Test
-    public void testJson() {
-        testBasicJson("{ a: { start: ['parent', 'start', 20], top: ['parent', 'top', 30] } }");
-        testBasicJson("{ test: 'hello, the', key: 'world' }");
-        testBasicJson("{ test: [1, 2, 3] }");
-        testBasicJson("{ test: ['hello', 'world', { value: 42 }] }");
-        testBasicJson("{ test: [null] }");
-        testBasicJson("{ test: [null, false, true] }");
-        testBasicJson("{ test: ['hello', 'world', { value: 42 }], value: false, plop: 23, hello: { key: 42, text: 'bonjour' } }");
+    public void testParsing() {
+        testBasicFormat("{ a: { start: ['parent', 'start', 20], top: ['parent', 'top', 30] } }");
+        testBasicFormat("{ test: 'hello, the', key: 'world' }");
+        testBasicFormat("{ test: [1, 2, 3] }");
+        testBasicFormat("{ test: ['hello', 'world', { value: 42 }] }");
+        testBasicFormat("{ test: [null] }");
+        testBasicFormat("{ test: [null, false, true] }");
+        testBasicFormat("{ test: ['hello', 'world', { value: 42 }], value: false, plop: 23, hello: { key: 42, text: 'bonjour' } }");
     }
 
     @Test
-    public void testJsonValue() {
+    public void testValue() {
         try {
             String test = "{ test: ['hello', 'world', { value: 42 }], value: false, plop: 23, hello: { key: 49, text: 'bonjour' } }";
-            CLObject jsonObject = CLParser.parse(test);
-            assertTrue(jsonObject.toJSON().equals(test));
-            assertEquals("hello", jsonObject.getArray("test").getString(0));
-            assertEquals("world", jsonObject.getArray("test").getString(1));
-            assertEquals(42, jsonObject.getArray("test").getObject(2).get("value").getInt());
-            assertEquals(false, jsonObject.getBoolean("value"));
-            assertEquals(23, jsonObject.getInt("plop"));
-            assertEquals(49, jsonObject.getObject("hello").getInt("key"));
-            assertEquals("bonjour", jsonObject.getObject("hello").getString("text"));
+            CLObject parsedContent = CLParser.parse(test);
+            assertTrue(parsedContent.toJSON().equals(test));
+            assertEquals("hello", parsedContent.getArray("test").getString(0));
+            assertEquals("world", parsedContent.getArray("test").getString(1));
+            assertEquals(42, parsedContent.getArray("test").getObject(2).get("value").getInt());
+            assertEquals(false, parsedContent.getBoolean("value"));
+            assertEquals(23, parsedContent.getInt("plop"));
+            assertEquals(49, parsedContent.getObject("hello").getInt("key"));
+            assertEquals("bonjour", parsedContent.getObject("hello").getString("text"));
         } catch (CLParsingException e) {
             System.err.println("Exception " + e.reason());
             e.printStackTrace();
@@ -68,8 +68,8 @@ public class CLParserTest {
     public void testException() {
         try {
             String test = "{ test: ['hello', 'world', { value: 42 }], value: false, plop: 23, hello: { key: 49, text: 'bonjour' } }";
-            CLObject jsonObject = CLParser.parse(test);
-            jsonObject.getObject("test").getString(0);
+            CLObject parsedContent = CLParser.parse(test);
+            parsedContent.getObject("test").getString(0);
         } catch (CLParsingException e) {
             assertEquals("no object associated for key <test>", e.reason());
             e.printStackTrace();
@@ -80,10 +80,10 @@ public class CLParserTest {
     public void testTrailingCommas() {
         try {
             String test = "{ test: ['hello', 'world'],,,,,,, }";
-            CLObject jsonObject = CLParser.parse(test);
-            assertEquals("hello", jsonObject.getArray("test").getString(0));
-            assertEquals("world", jsonObject.getArray("test").getString(1));
-            assertEquals("{ test: ['hello', 'world'] }", jsonObject.toJSON());
+            CLObject parsedContent = CLParser.parse(test);
+            assertEquals("hello", parsedContent.getArray("test").getString(0));
+            assertEquals("world", parsedContent.getArray("test").getString(1));
+            assertEquals("{ test: ['hello', 'world'] }", parsedContent.toJSON());
         } catch (CLParsingException e) {
             System.err.println("Exception " + e.reason());
             e.printStackTrace();
@@ -96,10 +96,10 @@ public class CLParserTest {
     public void testIncompleteObject() {
         try {
             String test = "{ test: ['hello', 'world";
-            CLObject jsonObject = CLParser.parse(test);
-            assertEquals("hello", jsonObject.getArray("test").getString(0));
-            assertEquals("world", jsonObject.getArray("test").getString(1));
-            assertEquals("{ test: ['hello', 'world'] }", jsonObject.toJSON());
+            CLObject parsedContent = CLParser.parse(test);
+            assertEquals("hello", parsedContent.getArray("test").getString(0));
+            assertEquals("world", parsedContent.getArray("test").getString(1));
+            assertEquals("{ test: ['hello', 'world'] }", parsedContent.toJSON());
         } catch (CLParsingException e) {
             System.err.println("Exception " + e.reason());
             e.printStackTrace();
