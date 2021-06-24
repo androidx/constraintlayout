@@ -438,7 +438,7 @@ public fun MotionExample3() {
                 textAlign = TextAlign.Center
             )
             Text(
-                text = "Pop or subtle. Day or Night. \\n Customize your interface",
+                text = "Pop or subtle. Day or Night. \n Customize your interface",
                 modifier = Modifier.layoutId("description"),
                 color = motionProperties("title").value.color("color"),
                 fontSize = 18.sp,
@@ -643,7 +643,7 @@ public fun MotionExample4() {
                 textAlign = TextAlign.Center
             )
             Text(
-                text = "Pop or subtle. Day or Night. \\n Customize your interface",
+                text = "Pop or subtle. Day or Night. \n Customize your interface",
                 modifier = Modifier.layoutId("description"),
                 color = motionProperties("title").value.color("color"),
                 fontSize = 18.sp,

@@ -47,8 +47,54 @@ public class CLContainer extends CLElement {
     return super.toString() + " value : <" + list + " >";
   }
 
-  public int size() {
+  public int length() {
     return mElements.size();
+  }
+
+  public ArrayList<String> names() {
+    ArrayList<String> names = new ArrayList<>();
+    for (CLElement element : mElements) {
+      if (element instanceof CLKey) {
+        CLKey key = (CLKey) element;
+        names.add(key.content());
+      }
+    }
+    return names;
+  }
+
+  public boolean has(String name) {
+    for (CLElement element : mElements) {
+      CLKey key = (CLKey) element;
+      if (key.content().equals(name)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public void put(String name, CLElement value) {
+    for (CLElement element : mElements) {
+      CLKey key = (CLKey) element;
+      if (key.content().equals(name)) {
+        key.set(value);
+        return;
+      }
+    }
+    CLKey key = (CLKey) CLKey.allocate(name, value);
+    mElements.add(key);
+  }
+
+  public void remove(String name) {
+    ArrayList<CLElement> toRemove = new ArrayList<>();
+    for (CLElement element : mElements) {
+      CLKey key = (CLKey) element;
+      if (key.content().equals(name)) {
+        toRemove.add(element);
+      }
+    }
+    for (CLElement element : toRemove) {
+      mElements.remove(element);
+    }
   }
 
   /////////////////////////////////////////////////////////////////////////
@@ -114,6 +160,44 @@ public class CLContainer extends CLElement {
   }
 
   /////////////////////////////////////////////////////////////////////////
+  // Optional
+  /////////////////////////////////////////////////////////////////////////
+
+  public CLElement getOrNull(String name) {
+    for (CLElement element : mElements) {
+      CLKey key = (CLKey) element;
+      if (key.content().equals(name)) {
+        return key.getValue();
+      }
+    }
+    return null;
+  }
+
+  public CLObject getObjectOrNull(String name) {
+    CLElement element = getOrNull(name);
+    if (element instanceof CLObject) {
+      return (CLObject) element;
+    }
+    return null;
+  }
+
+  public CLArray getArrayOrNull(String name) {
+    CLElement element = getOrNull(name);
+    if (element instanceof CLArray) {
+      return (CLArray) element;
+    }
+    return null;
+  }
+
+  public String getStringOrNull(String name) {
+    CLElement element = getOrNull(name);
+    if (element instanceof CLString) {
+      return  element.content();
+    }
+    return null;
+  }
+
+  /////////////////////////////////////////////////////////////////////////
   // By index
   /////////////////////////////////////////////////////////////////////////
 
@@ -170,5 +254,24 @@ public class CLContainer extends CLElement {
       return ((CLToken) element).getBoolean();
     }
     throw new CLParsingException("no boolean at index " + index);
+  }
+
+  /////////////////////////////////////////////////////////////////////////
+  // Optional
+  /////////////////////////////////////////////////////////////////////////
+
+  public CLElement getOrNull(int index) {
+    if (index >= 0 && index < mElements.size()) {
+      return mElements.get(index);
+    }
+    return null;
+  }
+
+  public String getStringOrNull(int index) {
+    CLElement element = getOrNull(index);
+    if (element instanceof CLString) {
+      return  element.content();
+    }
+    return null;
   }
 }

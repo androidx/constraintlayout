@@ -1248,8 +1248,8 @@ public fun ScreenExample16() {
                         {
                           target: ['a'],
                           frames: [25, 50, 75],
-                          percentX: [0.1, 0.8, 0.5],
-                          percentY: [0.4, 0.8, 0.5]
+                          percentX: [0.1, 0.8, 0.1],
+                          percentY: [0.4, 0.8, 0.0]
                         }
                       ]
                     }
