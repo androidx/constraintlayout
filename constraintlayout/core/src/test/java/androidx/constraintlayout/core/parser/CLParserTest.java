@@ -178,7 +178,7 @@ public class CLParserTest {
                     "{ type: 'office', number: '646 555-4567' }], " +
                     "children: [], spouse: null }",
                     parsedContent.toJSON());
-            assertEquals(2, parsedContent.getArray("phoneNumbers").length());
+            assertEquals(2, parsedContent.getArray("phoneNumbers").size());
             CLElement element = parsedContent.get("spouse");
             if (element instanceof CLToken) {
                 CLToken token = (CLToken) element;
@@ -226,7 +226,7 @@ public class CLParserTest {
                     "phoneNumbers: [{ type: 'home', number: '212 555-1234' }, " +
                     "{ type: 'office', number: '646 555-4567' }], " +
                     "children: [], spouse: null }", parsedContent.toJSON());
-            assertEquals(2, parsedContent.getArray("phoneNumbers").length());
+            assertEquals(2, parsedContent.getArray("phoneNumbers").size());
             CLElement element = parsedContent.get("spouse");
             if (element instanceof CLToken) {
                 CLToken token = (CLToken) element;

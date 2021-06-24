@@ -118,7 +118,7 @@ internal fun parseKeyframesJSON(content: String, transition: Transition) {
         if (keypositions == null) {
             return
         }
-        (0 until keypositions.length()).forEach { i ->
+        (0 until keypositions.size()).forEach { i ->
             val keyposition = keypositions[i]
             if (keyposition is CLObject) {
                 parseKeyPosition(keyposition, transition)
@@ -141,13 +141,13 @@ fun parseKeyPosition(keyposition: CLObject, transition: Transition) {
     val transitionEasing = keyposition.getStringOrNull("transitionEasing")
     val curveFit = keyposition.getStringOrNull("curveFit")
     var type = keyposition.getStringOrNull("type") ?: "parentRelative"
-    if (percentX != null && frames.length() != percentX.length()) {
+    if (percentX != null && frames.size() != percentX.size()) {
         return
     }
-    if (percentY != null && frames.length() != percentY.length()) {
+    if (percentY != null && frames.size() != percentY.size()) {
         return
     }
-    (0 until targets.length()).forEach { i ->
+    (0 until targets.size()).forEach { i ->
         val target = targets.getString(i)
         bundle.clear();
         if (type != null) {
@@ -177,7 +177,7 @@ fun parseKeyPosition(keyposition: CLObject, transition: Transition) {
             }
         }
 
-        (0 until frames.length()).forEach { j ->
+        (0 until frames.size()).forEach { j ->
             val frame = frames.getInt(j)
             bundle.add(TypedValues.TYPE_FRAME_POSITION, frame);
             if (percentX != null) {
@@ -306,7 +306,7 @@ fun override(baseJson: CLObject, name: String, overrideValue: CLObject) {
         for (key in keys) {
             if (key.equals("clear")) {
                 var toClear = overrideValue.getArray("clear")
-                (0 until toClear.length()).forEach { i ->
+                (0 until toClear.size()).forEach { i ->
                     var clearedKey = toClear.getStringOrNull(i)
                     if (clearedKey is String) {
                         when (clearedKey) {
@@ -420,7 +420,7 @@ fun parseVariables(state: State, layoutVariables: LayoutVariables, json: Any) {
             } else if (element.has("ids")) {
                 var ids = element.getArray("ids");
                 var arrayIds = arrayListOf<String>()
-                for (i in 0..ids.length()-1) {
+                for (i in 0..ids.size()-1) {
                     arrayIds.add(ids.getString(i))
                 }
                 layoutVariables.put(elementName, arrayIds)
@@ -436,9 +436,9 @@ fun parseHelpers(state: State, layoutVariables: LayoutVariables, element: Any) {
     if (!(element is CLArray)) {
         return
     }
-    (0 until element.length()).forEach { i ->
+    (0 until element.size()).forEach { i ->
         val helper = element[i]
-        if (helper is CLArray && helper.length() > 1) {
+        if (helper is CLArray && helper.size() > 1) {
             when (helper.getString(0)) {
                 "hChain" -> parseChain(ConstraintWidget.HORIZONTAL, state, layoutVariables, helper)
                 "vChain" -> parseChain(ConstraintWidget.VERTICAL, state, layoutVariables, helper)
@@ -469,13 +469,13 @@ fun parseGenerate(state: State, layoutVariables: LayoutVariables, json: Any) {
 fun parseChain(orientation: Int, state: State, margins: LayoutVariables, helper: CLArray) {
     var chain = if (orientation == ConstraintWidget.HORIZONTAL) state.horizontalChain() else state.verticalChain()
     var refs = helper[1]
-    if (!(refs is CLArray) || refs.length() < 1) {
+    if (!(refs is CLArray) || refs.size() < 1) {
         return
     }
-    (0 until refs.length()).forEach { i ->
+    (0 until refs.size()).forEach { i ->
         chain.add(refs.getString(i))
     }
-    if (helper.length() > 2) { // we have additional parameters
+    if (helper.size() > 2) { // we have additional parameters
         var params = helper[2]
         if (!(params is CLObject)) {
             return
@@ -487,7 +487,7 @@ fun parseChain(orientation: Int, state: State, margins: LayoutVariables, helper:
                 "style" -> {
                     val styleObject = params[constraintName]
                     val styleValue : String
-                    if (styleObject is CLArray && styleObject.length() > 1) {
+                    if (styleObject is CLArray && styleObject.size() > 1) {
                         styleValue = styleObject.getString(0)
                         var biasValue = styleObject.getFloat(1)
                         chain.bias(biasValue)
@@ -585,7 +585,7 @@ fun parseBarrier(
             "contains" -> {
                 val list = element.getArrayOrNull(constraintName)
                 if (list != null) {
-                    for (i in 0..list.length() - 1) {
+                    for (i in 0..list.size() - 1) {
                         var elementName = list.get(i)
                         val reference = state.constraints(elementName)
                         System.out.println("Add REFERENCE ($elementName = $reference) TO BARRIER ")
@@ -758,16 +758,16 @@ private fun parseConstraint(
     constraintName: String
 ) {
     val constraint = element.getArrayOrNull(constraintName)
-    if (constraint != null && constraint.length() > 1) {
+    if (constraint != null && constraint.size() > 1) {
         val target = constraint.getString(0)
         val anchor = constraint.getStringOrNull(1)
         var margin = 0f
         var marginGone = 0f
-        if (constraint.length() > 2) {
+        if (constraint.size() > 2) {
             margin = layoutVariables.get(constraint.getOrNull(2)!!)
             margin = state.convertDimension(Dp(margin)).toFloat()
         }
-        if (constraint.length() > 3) {
+        if (constraint.size() > 3) {
             marginGone = layoutVariables.get(constraint.getOrNull(3)!!)
             marginGone = state.convertDimension(Dp(marginGone)).toFloat()
         }

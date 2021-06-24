@@ -47,7 +47,7 @@ public class CLContainer extends CLElement {
     return super.toString() + " value : <" + list + " >";
   }
 
-  public int length() {
+  public int size() {
     return mElements.size();
   }
 
