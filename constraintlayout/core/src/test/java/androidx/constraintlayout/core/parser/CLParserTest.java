@@ -264,6 +264,86 @@ public class CLParserTest {
             assertTrue(false);
         }
     }
+
+    @Test
+    public void testConstraints() {
+        String test = "{\n" +
+                      "  g1 : { type: 'vGuideline', start: 44 },\n" +
+                      "  g2 : { type: 'vGuideline', end: 44 },\n" +
+                      "  image: {\n" +
+                      "    width: 201, height: 179,\n" +
+                      "    top: ['parent','top', 32],\n" +
+                      "    start: 'g1'\n" +
+                      "  },\n";
+        try {
+            CLObject parsedContent = CLParser.parse(test);
+            assertEquals("{ g1: { type: 'vGuideline', start: 44 }, " +
+                            "g2: { type: 'vGuideline', end: 44 }, " +
+                            "image: { width: 201, height: 179, top: ['parent', 'top', 32], " +
+                            "start: 'g1' } }",
+                    parsedContent.toJSON());
+        } catch (CLParsingException e) {
+            System.err.println("Exception " + e.reason());
+            e.printStackTrace();
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testConstraints2() {
+        String test = "            {\n" +
+                "              Variables: {\n" +
+                "                bottom: 20\n" +
+                "              },\n" +
+                "              Helpers: [\n" +
+                "                ['hChain', ['a','b','c'], {\n" +
+                "                  start: ['leftGuideline1', 'start'],\n" +
+                "                  style: 'packed'\n" +
+                "                }],\n" +
+                "                ['hChain', ['d','e','f']],\n" +
+                "                ['vChain', ['d','e','f'], {\n" +
+                "                  bottom: ['topGuideline1', 'top']\n" +
+                "                }],\n" +
+                "                ['vGuideline', {\n" +
+                "                  id: 'leftGuideline1', start: 100\n" +
+                "                }],\n" +
+                "                ['hGuideline', {\n" +
+                "                  id: 'topGuideline1', percent: 0.5\n" +
+                "                }]\n" +
+                "              ],\n" +
+                "              a: {\n" +
+                "                bottom: ['b', 'top', 'bottom']\n" +
+                "              },\n" +
+                "              b: {\n" +
+                "                width: '30%',\n" +
+                "                height: '1:1',\n" +
+                "                centerVertically: 'parent'\n" +
+                "              },\n" +
+                "              c: {\n" +
+                "                top: ['b', 'bottom']\n" +
+                "              }\n" +
+                "            }";
+        try {
+            CLObject parsedContent = CLParser.parse(test);
+            assertEquals("{ " +
+                            "Variables: { bottom: 20 }, " +
+                            "Helpers: [" +
+                            "['hChain', ['a', 'b', 'c'], { start: ['leftGuideline1', 'start'], style: 'packed' }], " +
+                            "['hChain', ['d', 'e', 'f']], " +
+                            "['vChain', ['d', 'e', 'f'], { bottom: ['topGuideline1', 'top'] }], " +
+                            "['vGuideline', { id: 'leftGuideline1', start: 100 }], " +
+                            "['hGuideline', { id: 'topGuideline1', percent: 0.5 }]" +
+                            "], " +
+                            "a: { bottom: ['b', 'top', 'bottom'] }, " +
+                            "b: { width: '30%', height: '1:1', centerVertically: 'parent' }, " +
+                            "c: { top: ['b', 'bottom'] } }",
+                    parsedContent.toJSON());
+        } catch (CLParsingException e) {
+            System.err.println("Exception " + e.reason());
+            e.printStackTrace();
+            assertTrue(false);
+        }
+    }
 }
 
 

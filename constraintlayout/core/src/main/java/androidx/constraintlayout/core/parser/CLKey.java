@@ -25,11 +25,27 @@ public class CLKey extends CLContainer {
     return new CLKey(content);
   }
 
+  public static CLElement allocate(String name, CLElement value) {
+    CLKey key = new CLKey(name.toCharArray());
+    key.setStart(0);
+    key.setEnd(name.length() -1);
+    key.set(value);
+    return key;
+  }
+
   protected String toJSON() {
     if (mElements.size() > 0) {
       return getDebugName() + content() + ": " + mElements.get(0).toJSON();
     }
     return getDebugName() + content() + ": <> ";
+  }
+
+  public void set(CLElement value) {
+    if (mElements.size() > 0) {
+      mElements.set(0, value);
+    } else {
+      mElements.add(value);
+    }
   }
 
   public CLElement getValue() {
