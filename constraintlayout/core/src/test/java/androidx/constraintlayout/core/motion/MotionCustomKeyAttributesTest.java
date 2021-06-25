@@ -17,20 +17,20 @@ package androidx.constraintlayout.core.motion;
 
 import static org.junit.Assert.assertEquals;
 
+import androidx.constraintlayout.core.motion.Motion;
+import androidx.constraintlayout.core.motion.MotionWidget;
+import androidx.constraintlayout.core.motion.key.MotionKeyAttributes;
 import androidx.constraintlayout.core.motion.utils.ArcCurveFit;
 import androidx.constraintlayout.core.motion.utils.KeyCache;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
 
 import org.junit.Test;
 
-public class MotionCustomAttributesTest {
+import java.text.DecimalFormat;
+
+public class MotionCustomKeyAttributesTest {
     private static final boolean DEBUG = true;
-
-    @Test
-    public void testBasic() {
-        assertEquals(2, 1 + 1);
-
-    }
+    DecimalFormat df = new DecimalFormat("0.0");
 
     class Scene {
         MotionWidget mw1 = new MotionWidget();
@@ -55,8 +55,8 @@ public class MotionCustomAttributesTest {
 
         void sample(Runnable r) {
             for (int p = 0; p <= 10; p++) {
-                pos = p;
-                motion.interpolate(res, p * 0.1f, 1000000 + (int) (p * 100), cache);
+                pos = p * 0.1f;
+                motion.interpolate(res, pos, 1000000 + (int) (p * 100), cache);
                 r.run();
             }
         }
@@ -67,53 +67,62 @@ public class MotionCustomAttributesTest {
         Scene s = new Scene();
         s.mw1.setCustomAttribute("bob", TypedValues.Custom.TYPE_FLOAT, 0f);
         s.mw2.setCustomAttribute("bob", TypedValues.Custom.TYPE_FLOAT, 1f);
+        MotionKeyAttributes mka = new MotionKeyAttributes();
+        mka.setFramePosition(50);
+        mka.setCustomAttribute("bob", TypedValues.Custom.TYPE_FLOAT, 2f);
+        s.motion.addKey(mka);
         s.setup();
 
         if (DEBUG) {
+            s.motion.interpolate(s.res, 0.5f, 1000000 + 1000, s.cache);
+
             s.sample(() -> {
-                System.out.println(s.res.getCustomAttribute("bob").getFloatValue());
+                System.out.println(df.format(s.pos) + " " + s.res.getCustomAttribute("bob"));
             });
         }
         s.motion.interpolate(s.res, 0.5f, 1000000 + 1000, s.cache);
-        assertEquals(0.5, s.res.getCustomAttribute("bob").getFloatValue(), 0.001);
+        assertEquals(2, s.res.getCustomAttribute("bob").getFloatValue(), 0.001);
     }
 
     @Test
     public void customColor1() {
         Scene s = new Scene();
-        s.mw1.setCustomAttribute("fish", TypedValues.Custom.TYPE_COLOR, 0xFF00FF00);
-        s.mw2.setCustomAttribute("fish", TypedValues.Custom.TYPE_COLOR, 0xFFFF00FF);
+        s.mw1.setCustomAttribute("fish", TypedValues.Custom.TYPE_COLOR, 0xFF000000);
+        s.mw2.setCustomAttribute("fish", TypedValues.Custom.TYPE_COLOR, 0xFFFFFFFF);
+        MotionKeyAttributes mka = new MotionKeyAttributes();
+        mka.setFramePosition(50);
+        mka.setCustomAttribute("fish", TypedValues.Custom.TYPE_COLOR, 0xFF000000);
+        s.motion.addKey(mka);
         s.setup();
 
         if (DEBUG) {
             s.sample(() -> {
-                System.out.println(s.pos + " " +
-                        Integer.toHexString(
-                                s.res.getCustomAttribute("fish")
-                                        .getColorValue()));
+                System.out.println(df.format(s.pos) + "\t" + s.res.getCustomAttribute("fish"));
             });
         }
         s.motion.interpolate(s.res, 0.5f, 1000000 + 1000, s.cache);
-        assertEquals(0xffbababa, s.res.getCustomAttribute("fish").getColorValue());
+        assertEquals(0xFF000000, s.res.getCustomAttribute("fish").getColorValue());
     }
 
     @Test
     public void customColor2() {
         Scene s = new Scene();
-        s.mw1.setCustomAttribute("fish", TypedValues.Custom.TYPE_COLOR, 0xFF000000);
-        s.mw2.setCustomAttribute("fish", TypedValues.Custom.TYPE_COLOR, 0x00880088);
+        s.mw1.setCustomAttribute("fish", TypedValues.Custom.TYPE_COLOR, 0xFFFF0000);
+        s.mw2.setCustomAttribute("fish", TypedValues.Custom.TYPE_COLOR, 0xFF0000FF);
+        MotionKeyAttributes mka = new MotionKeyAttributes();
+        mka.setFramePosition(50);
+        mka.setCustomAttribute("fish", TypedValues.Custom.TYPE_COLOR, 0xFF00FF00);
+        s.motion.addKey(mka);
         s.setup();
 
         if (DEBUG) {
             s.sample(() -> {
-                System.out.println(s.pos + " " +
-                        Integer.toHexString(
-                                s.res.getCustomAttribute("fish")
-                                        .getColorValue()));
+                System.out.println(df.format(s.pos) + " " + s.res.getCustomAttribute("fish"));
+
             });
         }
         s.motion.interpolate(s.res, 0.5f, 1000000 + 1000, s.cache);
-        assertEquals(0x7f630063, s.res.getCustomAttribute("fish").getColorValue());
+        assertEquals(0xFF00FF00, s.res.getCustomAttribute("fish").getColorValue());
     }
 
 
