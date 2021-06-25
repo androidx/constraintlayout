@@ -35,6 +35,12 @@ public class CLNumber extends CLElement {
     return "" + value;
   }
 
+  public boolean isInt() {
+    float value = getFloat();
+    int intValue = (int) value;
+    return ((float) intValue == value);
+  }
+
   @Override
   public int getInt() {
     if (Float.isNaN(value)) {

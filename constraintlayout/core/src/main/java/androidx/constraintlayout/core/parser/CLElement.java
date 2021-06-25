@@ -72,7 +72,7 @@ public class CLElement {
 
   public String content() {
     String content = new String(mContent);
-    if (end == Long.MAX_VALUE) {
+    if (end == Long.MAX_VALUE || end < start) {
       return content.substring((int) start, (int) start + 1);
     }
     return content.substring((int) start, (int) end + 1);
