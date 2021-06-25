@@ -21,6 +21,11 @@ package androidx.constraintlayout.core.motion.utils;
  */
 public interface TypedValues {
     public static final  String S_CUSTOM = "CUSTOM";
+    public static final int BOOLEAN_MASK = 1;
+    public static final int INT_MASK = 2;
+    public static final int FLOAT_MASK = 4;
+    public static final int STRING_MASK = 8;
+
 
     /**
      * Used to set integer values
@@ -81,26 +86,31 @@ public interface TypedValues {
         public static final int TYPE_PROGRESS = 315;
         public static final int TYPE_PATH_ROTATE = 316;
         public static final int TYPE_EASING = 317;
+        public static final int TYPE_PIVOT_TARGET = 318;
 
-        public static final String S_CURVE_FIT = "curve_fit";
+        public static final String S_CURVE_FIT = "curveFit";
         public static final String S_VISIBILITY = "visibility";
-        public static final String S_ALPHA = "ALPHA ";
-        public static final String S_TRANSLATION_X = "translation_x";
-        public static final String S_TRANSLATION_Y = "translation_y";
-        public static final String S_TRANSLATION_Z = "translation_z";
-        public static final String S_ELEVATION = "elevation ";
+        public static final String S_ALPHA = "alpha";
 
-        public static final String S_ROTATION_X = "rotation_x";
-        public static final String S_ROTATION_Y = "rotation_y";
-        public static final String S_ROTATION_Z = "rotation_z";
-        public static final String S_SCALE_X = "scale_x";
-        public static final String S_SCALE_Y = "scale_y";
-        public static final String S_PIVOT_X = "pivot_x";
-        public static final String S_PIVOT_Y = "pivot_y";
+        public static final String S_TRANSLATION_X = "translationX";
+        public static final String S_TRANSLATION_Y = "translationY";
+        public static final String S_TRANSLATION_Z = "translationZ";
+        public static final String S_ELEVATION = "elevation";
+        public static final String S_ROTATION_X = "rotationX";
+        public static final String S_ROTATION_Y = "rotationY";
+        public static final String S_ROTATION_Z = "rotationZ";
+        public static final String S_SCALE_X = "scaleX";
+        public static final String S_SCALE_Y = "scaleY";
+        public static final String S_PIVOT_X = "pivotX";
+        public static final String S_PIVOT_Y = "pivotY";
         public static final String S_PROGRESS = "progress";
-        public static final String S_PATH_ROTATE = "path_rotate";
+        public static final String S_PATH_ROTATE = "pathRotate";
         public static final String S_EASING = "easing";
         public static final  String S_CUSTOM = "CUSTOM";
+        public static final  String S_FRAME= "frame";
+        public static final  String S_TARGET = "target";
+        public static final  String S_PIVOT_TARGET = "pivotTarget";
+
 
         /**
          * Method to go from String names of values to id of the values
@@ -145,6 +155,41 @@ public interface TypedValues {
                     return TYPE_PATH_ROTATE;
                 case S_EASING:
                     return TYPE_EASING;
+                case S_FRAME:
+                    return TYPE_FRAME_POSITION;
+                case S_TARGET:
+                    return TYPE_TARGET;
+                case S_PIVOT_TARGET:
+                    return TYPE_PIVOT_TARGET;
+            }
+            return -1;
+        }
+
+        public static int getType(int name) {
+            switch (name) {
+                case TYPE_CURVE_FIT:
+                case TYPE_VISIBILITY:
+                case TYPE_FRAME_POSITION:
+                    return INT_MASK;
+                case TYPE_ALPHA:
+                case TYPE_TRANSLATION_X:
+                case TYPE_TRANSLATION_Y:
+                case TYPE_TRANSLATION_Z:
+                case TYPE_ELEVATION:
+                case TYPE_ROTATION_X:
+                case TYPE_ROTATION_Y:
+                case TYPE_ROTATION_Z:
+                case TYPE_SCALE_X:
+                case TYPE_SCALE_Y:
+                case TYPE_PIVOT_X:
+                case TYPE_PIVOT_Y:
+                case TYPE_PROGRESS:
+                case TYPE_PATH_ROTATE:
+                    return FLOAT_MASK;
+                case TYPE_EASING:
+                 case TYPE_TARGET:
+                case TYPE_PIVOT_TARGET:
+                    return STRING_MASK;
             }
             return -1;
         }
@@ -175,23 +220,23 @@ public interface TypedValues {
         public static final int TYPE_WAVE_OFFSET = 424;
         public static final int TYPE_WAVE_PHASE = 425;
 
-        public static final String S_CURVE_FIT = "curve_fit";
+        public static final String S_CURVE_FIT = "curveFit";
         public static final String S_VISIBILITY = "visibility";
-        public static final String S_ALPHA = "ALPHA ";
-        public static final String S_TRANSLATION_X = "translation_x";
-        public static final String S_TRANSLATION_Y = "translation_y";
-        public static final String S_TRANSLATION_Z = "translation_z";
-        public static final String S_ROTATION_X = "rotation_x";
-        public static final String S_ROTATION_Y = "rotation_y";
-        public static final String S_ROTATION_Z = "rotation_z";
+        public static final String S_ALPHA = "alpha";
+        public static final String S_TRANSLATION_X = "translationX";
+        public static final String S_TRANSLATION_Y = "translationY";
+        public static final String S_TRANSLATION_Z = "translationZ";
         public static final String S_ELEVATION = "elevation";
-
-        public static final String S_SCALE_X = "scale_x";
-        public static final String S_SCALE_Y = "scale_y";
-        public static final String S_PIVOT_X = "pivot_x";
-        public static final String S_PIVOT_Y = "pivot_y";
+        public static final String S_ROTATION_X = "rotationX";
+        public static final String S_ROTATION_Y = "rotationY";
+        public static final String S_ROTATION_Z = "rotationZ";
+        public static final String S_SCALE_X = "scaleX";
+        public static final String S_SCALE_Y = "scaleY";
+        public static final String S_PIVOT_X = "pivotX";
+        public static final String S_PIVOT_Y = "pivotY";
         public static final String S_PROGRESS = "progress";
-        public static final String S_PATH_ROTATE = "path_rotate";
+
+        public static final String S_PATH_ROTATE = "pathRotate";
         public static final String S_EASING = "easing";
         public static final String S_WAVE_SHAPE = "waveShape";
         public static final String S_CUSTOM_WAVE_SHAPE = "customWave";

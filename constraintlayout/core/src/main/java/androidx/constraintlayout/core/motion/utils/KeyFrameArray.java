@@ -29,6 +29,7 @@ public class KeyFrameArray<E> {
 
     public void clear() {
         Arrays.fill(keys, EMPTY);
+        Arrays.fill(values, null);
         count = 0;
     }
 

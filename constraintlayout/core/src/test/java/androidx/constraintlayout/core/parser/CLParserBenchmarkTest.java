@@ -49,6 +49,7 @@ public class CLParserBenchmarkTest {
             assertTrue(false);
         }
     }
+
     @Test
     public void parse1000x() {
         try {
@@ -62,6 +63,7 @@ public class CLParserBenchmarkTest {
             assertTrue(false);
         }
     }
+
     private void parseOnce() throws CLParsingException {
         String test = simpleFromWiki2;
         CLObject parsedContent = CLParser.parse(test);
