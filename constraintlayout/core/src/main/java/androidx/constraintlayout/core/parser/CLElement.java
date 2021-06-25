@@ -21,6 +21,7 @@ public class CLElement {
   protected long start = -1;
   protected long end = Long.MAX_VALUE;
   private CLContainer mContainer;
+  private int line;
 
   public CLElement(char[] content) {
     mContent = content;
@@ -29,6 +30,9 @@ public class CLElement {
   public boolean notStarted() {
     return start == -1;
   }
+
+  public void setLine(int line) { this.line = line; }
+  public int getLine() { return line; }
 
   public void setStart(long start) {
     this.start = start;
@@ -55,7 +59,7 @@ public class CLElement {
     String content = new String(mContent);
     content = content.substring((int) start, (int) end + 1);
 
-    return getStrClass() + " (" + start + " : " + end + ") <" + content + ">";
+    return getStrClass() + " (" + start + " : " + end + ") <<" + content + ">>";
   }
 
   protected String getStrClass() {

@@ -16,12 +16,17 @@
 package androidx.constraintlayout.core.parser;
 
 public class CLParsingException extends Throwable {
-  String mReason;
-  public CLParsingException(String reason) {
+  private final String mReason;
+  private final int mLineNumber;
+  private final String mElementClass;
+
+  public CLParsingException(String reason, CLElement element) {
     mReason = reason;
+    mElementClass = element.getStrClass();
+    mLineNumber = element.getLine();
   }
 
   public String reason() {
-    return mReason;
+    return mReason + " (" + mElementClass + " at line " + mLineNumber + ")";
   }
 }

@@ -56,11 +56,12 @@ public class CLParser {
       }
     }
     if (startIndex == -1) {
-      throw new CLParsingException("invalid json content");
+      throw new CLParsingException("invalid json content", null);
     }
 
     // We have a root object, let's start
     root = CLObject.allocate(content);
+    root.setLine(lineNumber);
     root.setStart(startIndex);
     currentElement = root;
 
@@ -100,7 +101,7 @@ public class CLParser {
           CLToken token = (CLToken) currentElement;
           if (!token.validate(c, i)) {
             throw new CLParsingException("parsing incorrect token " + token.content() +
-                    " at line " + lineNumber);
+                    " at line " + lineNumber, token);
           }
         }
         if (currentElement instanceof CLKey || currentElement instanceof CLString) {
@@ -209,7 +210,7 @@ public class CLParser {
           currentElement = createElement(currentElement, position, TYPE.TOKEN, true, content);
           CLToken token = (CLToken) currentElement;
           if (!token.validate(c, position)) {
-            throw new CLParsingException("incorrect token <" + c + "> at line " + lineNumber);
+            throw new CLParsingException("incorrect token <" + c + "> at line " + lineNumber, token);
           }
         } else {
           currentElement = createElement(currentElement, position, TYPE.KEY, true, content);
@@ -256,6 +257,7 @@ public class CLParser {
     if (newElement == null) {
       return null;
     }
+    newElement.setLine(lineNumber);
     if (applyStart) {
       newElement.setStart(position);
     }
