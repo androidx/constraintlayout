@@ -42,15 +42,15 @@ public class MotionCustomAttributesTest {
 
         Scene() {
             motion = new Motion(mw1);
-            mw1.setBounds(0, 0, 30, 40);
-            mw2.setBounds(400, 400, 430, 440);
-            motion.setPathMotionArc(ArcCurveFit.ARC_START_VERTICAL);
+//            mw1.setBounds(0, 0, 30, 40);
+//            mw2.setBounds(400, 400, 430, 440);
+//            motion.setPathMotionArc(ArcCurveFit.ARC_START_VERTICAL);
         }
 
         public void setup() {
             motion.setStart(mw1);
             motion.setEnd(mw2);
-            motion.setup(1000, 1000, 1, 1000000);
+            motion.setup(0, 0, 1, 1000000);
         }
 
         void sample(Runnable r) {
@@ -85,7 +85,7 @@ public class MotionCustomAttributesTest {
         s.mw2.setCustomAttribute("fish", TypedValues.Custom.TYPE_COLOR, 0xFFFF00FF);
         s.setup();
 
-        if (DEBUG) {
+        if (true || DEBUG) {
             s.sample(() -> {
                 System.out.println(s.pos + " " +
                         Integer.toHexString(

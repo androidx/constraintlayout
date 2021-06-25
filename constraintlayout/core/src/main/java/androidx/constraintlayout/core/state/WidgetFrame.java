@@ -104,7 +104,7 @@ public class WidgetFrame {
         updateAttributes(frame);
     }
 
-    private void updateAttributes(WidgetFrame frame) {
+    public void updateAttributes(WidgetFrame frame) {
         pivotX = frame.pivotX;
         pivotY = frame.pivotY;
         rotationX = frame.rotationX;
@@ -118,6 +118,10 @@ public class WidgetFrame {
         alpha = frame.alpha;
         visibility = frame.visibility;
 
+        if (frame.mCustom != null) {
+            mCustom = new HashMap<>();
+            mCustom.putAll(frame.mCustom);
+        }
         if (frame.mCustomColors != null) {
             mCustomColors = new HashMap<>();
             mCustomColors.putAll(frame.mCustomColors);
