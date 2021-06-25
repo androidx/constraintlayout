@@ -1095,7 +1095,7 @@ public class MotionLayout extends ConstraintLayout implements
     private int mPreRotateHeight;
     private int mPreviouseRotation;
     Rect mTempRect = new Rect();
-    private boolean mDelayedApply =false;
+    private boolean mDelayedApply = false;
 
     MotionController getMotionController(int mTouchAnchorId) {
         return mFrameArrayList.get(findViewById(mTouchAnchorId));
@@ -4839,7 +4839,7 @@ public class MotionLayout extends ConstraintLayout implements
      * Is initial state changes are applied during onAttachedToWindow or after.
      * @return
      */
-    public boolean isDelayedApplicationOfInitalState() {
+    public boolean isDelayedApplicationOfInitialState() {
         return mDelayedApply;
     }
 
@@ -4847,7 +4847,7 @@ public class MotionLayout extends ConstraintLayout implements
      * Initial state changes are applied during onAttachedToWindow unless this is set to true.
      * @param delayedApply
      */
-    public void setDelayedApplicationOfInitalState(boolean delayedApply) {
+    public void setDelayedApplicationOfInitialState(boolean delayedApply) {
         this.mDelayedApply = delayedApply;
     }
 

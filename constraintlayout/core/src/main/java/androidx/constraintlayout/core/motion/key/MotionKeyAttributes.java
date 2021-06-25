@@ -265,6 +265,9 @@ public class MotionKeyAttributes extends MotionKey {
             case TypedValues.Attributes.TYPE_PATH_ROTATE:
                 mTransitionPathRotate = value;
                 break;
+            case TypedValues.TYPE_FRAME_POSITION:
+                mTransitionPathRotate = value;
+                break;
             default:
                 return super.setValue(type, value);
         }

@@ -24,6 +24,7 @@ import androidx.constraintlayout.core.motion.utils.Utils;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.Set;
 
 /**
  * All the parameter it extracts from a ConstraintSet/View
@@ -213,6 +214,14 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
         this.translationX = view.getTranslationX();
         this.translationY = view.getTranslationY();
         this.translationZ = view.getTranslationZ();
+        Set<String> at = view.getCustomAttributeNames();
+        for (String s : at) {
+            CustomVariable attr = view.getCustomAttribute(s);
+            if (attr != null && attr.isContinuous()) {
+                this.mCustomVariable.put(s, attr);
+            }
+        }
+
 
     }
 

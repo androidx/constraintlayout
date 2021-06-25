@@ -27,7 +27,7 @@ import java.util.Set;
  * Utility class to encapsulate layout of a widget
  */
 public class WidgetFrame {
-    private final static boolean OLD_SYSTEM = false;
+    private final static boolean OLD_SYSTEM = true;
     public ConstraintWidget widget = null;
     public int left = 0;
     public int top = 0;
@@ -78,7 +78,6 @@ public class WidgetFrame {
             this.a = start.a;
         }
     }
-
 
     public int width() {
         return right - left;
@@ -253,15 +252,19 @@ public class WidgetFrame {
     }
 
     public static void interpolateColor(Color result, Color start, Color end, float progress) {
-        if (progress < 0) {
-            result.copy(start);
-        } else if (progress > 1) {
-            result.copy(end);
+        if (OLD_SYSTEM) {
+            if (progress < 0) {
+                result.copy(start);
+            } else if (progress > 1) {
+                result.copy(end);
+            } else {
+                result.r = (1f - progress) * start.r + progress * (end.r);
+                result.g = (1f - progress) * start.g + progress * (end.g);
+                result.b = (1f - progress) * start.b + progress * (end.b);
+                result.a = (1f - progress) * start.a + progress * (end.a);
+            }
         } else {
-            result.r = (1f - progress) * start.r + progress * (end.r);
-            result.g = (1f - progress) * start.g + progress * (end.g);
-            result.b = (1f - progress) * start.b + progress * (end.b);
-            result.a = (1f - progress) * start.a + progress * (end.a);
+
         }
     }
 

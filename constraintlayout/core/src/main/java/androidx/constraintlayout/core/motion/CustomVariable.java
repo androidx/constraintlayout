@@ -57,6 +57,31 @@ public class CustomVariable {
         mBooleanValue = value;
     }
 
+    private static String colorString(int v) {
+        String str = "00000000" + Integer.toHexString(v);
+        return "#" + str.substring(str.length() - 8);
+    }
+
+    @Override
+    public String toString() {
+        String str = mName + ':';
+        switch (mType) {
+            case TypedValues.Custom.TYPE_INT:
+                return str + mIntegerValue;
+            case TypedValues.Custom.TYPE_FLOAT:
+                return str + mFloatValue;
+            case TypedValues.Custom.TYPE_COLOR:
+                return str + colorString(mIntegerValue);
+            case TypedValues.Custom.TYPE_STRING:
+                return str + mStringValue;
+            case TypedValues.Custom.TYPE_BOOLEAN:
+                return str + (Boolean) mBooleanValue;
+            case TypedValues.Custom.TYPE_DIMENSION:
+                return str + mFloatValue;
+        }
+        return str + "????";
+    }
+
     public int getType() {
         return mType;
     }
@@ -315,7 +340,7 @@ public class CustomVariable {
         int g = clamp((int) ((float) Math.pow(value[1], 1.0 / 2.2) * 255.0f));
         int b = clamp((int) ((float) Math.pow(value[2], 1.0 / 2.2) * 255.0f));
         int a = clamp((int) (value[3] * 255.0f));
-        int color = a << 24 | (r << 16) | (g << 8) | b;
+        int color = (a << 24) | (r << 16) | (g << 8) | b;
         return color;
     }
 
@@ -330,7 +355,7 @@ public class CustomVariable {
                 int g = clamp((int) ((float) Math.pow(value[1], 1.0 / 2.2) * 255.0f));
                 int b = clamp((int) ((float) Math.pow(value[2], 1.0 / 2.2) * 255.0f));
                 int a = clamp((int) (value[3] * 255.0f));
-                int color = a << 24 | (r << 16) | (g << 8) | b;
+                int color = (a << 24) | (r << 16) | (g << 8) | b;
                 view.setCustomAttribute(mName, mType, color);
                 break;
             case TypedValues.Custom.TYPE_REFERENCE:
@@ -351,7 +376,8 @@ public class CustomVariable {
         int ig = clamp((int) (g * 255f));
         int ib = clamp((int) (b * 255f));
         int ia = clamp((int) (a * 255f));
-        return ia << 24 | (ir << 16) | (ig << 8) | ib;
+        int color = (ia << 24) | (ir << 16) | (ig << 8) | ib;
+        return color;
     }
 
     public void applyToWidget(MotionWidget view) {
@@ -360,11 +386,11 @@ public class CustomVariable {
             case TypedValues.Custom.TYPE_COLOR:
             case TypedValues.Custom.TYPE_REFERENCE:
                 view.setCustomAttribute(mName, mType, mIntegerValue);
-              break;
+                break;
             case TypedValues.Custom.TYPE_STRING:
                 view.setCustomAttribute(mName, mType, mStringValue);
             case TypedValues.Custom.TYPE_BOOLEAN:
-                view.setCustomAttribute(mName, mType,mBooleanValue);
+                view.setCustomAttribute(mName, mType, mBooleanValue);
                 break;
             case TypedValues.Custom.TYPE_DIMENSION:
             case TypedValues.Custom.TYPE_FLOAT:
