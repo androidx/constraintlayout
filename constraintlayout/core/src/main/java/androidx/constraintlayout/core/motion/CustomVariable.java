@@ -29,6 +29,19 @@ public class CustomVariable {
     private String mStringValue = null;
     boolean mBooleanValue;
 
+    public CustomVariable copy() {
+        return new CustomVariable(this);
+    }
+
+    public CustomVariable(CustomVariable c) {
+        mName = c.mName;
+        mType = c.mType;
+        mIntegerValue = c.mIntegerValue;
+        mFloatValue = c.mFloatValue;
+        mStringValue = c.mStringValue;
+        mBooleanValue = c.mBooleanValue;
+    }
+
     public CustomVariable(String name, int type, String value) {
         mName = name;
         mType = type;
@@ -57,7 +70,7 @@ public class CustomVariable {
         mBooleanValue = value;
     }
 
-    private static String colorString(int v) {
+    public static String colorString(int v) {
         String str = "00000000" + Integer.toHexString(v);
         return "#" + str.substring(str.length() - 8);
     }
@@ -334,8 +347,8 @@ public class CustomVariable {
         c += N;
         return c;
     }
-
-    public int getInterpolatedColor(float[] value) {
+   
+   public int getInterpolatedColor(float[] value) {
         int r = clamp((int) ((float) Math.pow(value[0], 1.0 / 2.2) * 255.0f));
         int g = clamp((int) ((float) Math.pow(value[1], 1.0 / 2.2) * 255.0f));
         int b = clamp((int) ((float) Math.pow(value[2], 1.0 / 2.2) * 255.0f));
@@ -379,7 +392,7 @@ public class CustomVariable {
         int color = (ia << 24) | (ir << 16) | (ig << 8) | ib;
         return color;
     }
-
+  
     public void applyToWidget(MotionWidget view) {
         switch (mType) {
             case TypedValues.Custom.TYPE_INT:
@@ -397,5 +410,9 @@ public class CustomVariable {
                 view.setCustomAttribute(mName, mType, mFloatValue);
                 break;
         }
+    }
+
+    public String getName() {
+        return mName;
     }
 }

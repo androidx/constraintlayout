@@ -431,13 +431,13 @@ internal class MotionMeasurer : Measurer() {
             1000,   Motion.DRAW_PATH_BASIC,
               parentWidth.toInt(), parentHeight.toInt()  )
         if (numKeyPositions == 0) {
-            drawLine(
-                start = Offset(startFrame.centerX(), startFrame.centerY()),
-                end = Offset(endFrame.centerX(), endFrame.centerY()),
-                color = color,
-                strokeWidth = 3f,
-                pathEffect = pathEffect
-            )
+//            drawLine(
+//                start = Offset(startFrame.centerX(), startFrame.centerY()),
+//                end = Offset(endFrame.centerX(), endFrame.centerY()),
+//                color = color,
+//                strokeWidth = 3f,
+//                pathEffect = pathEffect
+//            )
         } else {
             var x = FloatArray(numKeyPositions)
             var y = FloatArray(numKeyPositions)
@@ -452,13 +452,13 @@ internal class MotionMeasurer : Measurer() {
                 var frameHeight = ((1 - keyFrameProgress) * startFrame.height()) + (keyFrameProgress * endFrame.height())
                 var curX = x[i] * parentWidth + frameWidth / 2f
                 var curY = y[i] * parentHeight + frameHeight / 2f
-                drawLine(
-                    start = Offset(prex, prey),
-                    end = Offset(curX, curY),
-                    color = color,
-                    strokeWidth = 3f,
-                    pathEffect = pathEffect
-                )
+//                drawLine(
+//                    start = Offset(prex, prey),
+//                    end = Offset(curX, curY),
+//                    color = color,
+//                    strokeWidth = 3f,
+//                    pathEffect = pathEffect
+//                )
                 var path = Path()
                 var pathSize = 20f
                 path.moveTo(curX - pathSize, curY)
@@ -472,13 +472,13 @@ internal class MotionMeasurer : Measurer() {
                 prex = curX
                 prey = curY
             }
-            drawLine(
-                start = Offset(prex, prey),
-                end = Offset(endFrame.centerX(), endFrame.centerY()),
-                color = color,
-                strokeWidth = 3f,
-                pathEffect = pathEffect
-            )
+//            drawLine(
+//                start = Offset(prex, prey),
+//                end = Offset(endFrame.centerX(), endFrame.centerY()),
+//                color = color,
+//                strokeWidth = 3f,
+//                pathEffect = pathEffect
+//            )
         }
     }
 
@@ -548,14 +548,12 @@ internal class MotionMeasurer : Measurer() {
         }
         val startFrame = transition.getStart(id)
         val endFrame = transition.getEnd(id)
-        val startColor = startFrame.getCustomColor(name)
-        val endColor = endFrame.getCustomColor(name)
-        if (startColor != null && endColor != null) {
-            var result = WidgetFrame.Color(0f, 0f, 0f, 0f)
-            WidgetFrame.interpolateColor(result, startColor, endColor, motionProgress)
-            return Color(result.r, result.g, result.b, result.a)
-        }
-        return Color.Black
+
+        transition.interpolate(root.width, root.height, motionProgress)
+
+        val interpolatedFrame = transition.getInterpolated(id)
+        val color = interpolatedFrame.getCustomColor(name)
+        return Color(color);
     }
 
     fun getCustomFloat(id: String, name: String): Float {

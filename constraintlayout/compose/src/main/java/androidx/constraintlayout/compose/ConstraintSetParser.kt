@@ -27,6 +27,7 @@ import androidx.constraintlayout.core.state.State.Chain.*
 import androidx.constraintlayout.core.state.Transition
 import androidx.constraintlayout.core.state.helpers.GuidelineReference
 import androidx.constraintlayout.core.widgets.ConstraintWidget
+import java.lang.Long.parseLong
 
 internal val PARSER_DEBUG = false
 
@@ -234,7 +235,11 @@ internal fun parseJSON(content: String, transition: Transition,
                                     var ha = Integer.valueOf(stringValue.substring(5, 7), 16)
                                     a = ha.toFloat() / 255f
                                 }
-                                transition.addCustomColor(state, elementName, property, r, g, b, a)
+                                var color = Integer.valueOf(stringValue.substring(1),16)
+                                if (stringValue.length == 7) {
+                                    color = color or 0xFF000000.toInt()
+                                }
+                                transition.addCustomColor(state, elementName, property, color);
                             }
                         }
                     }
@@ -726,25 +731,13 @@ private fun parseCustomProperties(
         if (value is CLNumber) {
             reference.addCustomFloat(property, value.getFloat())
         } else if (value is CLString) {
-            var stringValue = value.content();
-            if (stringValue.startsWith('#')) {
-                var r = 0f
-                var g = 0f
-                var b = 0f
-                var a = 1f
-                if (stringValue.length == 7 || stringValue.length == 9) {
-                    var hr = Integer.valueOf(stringValue.substring(1, 3), 16)
-                    var hg = Integer.valueOf(stringValue.substring(3, 5), 16)
-                    var hb = Integer.valueOf(stringValue.substring(5, 7), 16)
-                    r = hr.toFloat() / 255f
-                    g = hg.toFloat() / 255f
-                    b = hb.toFloat() / 255f
+            var str = value.content().toString()
+            if (str.startsWith('#')) {
+                str = str.substring(1)
+                if(str.length == 6) {
+                    str = "FF"+str;
                 }
-                if (stringValue.length == 9) {
-                    var ha = Integer.valueOf(stringValue.substring(5, 7), 16)
-                    a = ha.toFloat() / 255f
-                }
-                reference.addCustomColor(property, r, g, b, a)
+                reference.addCustomColor(property, parseLong(str,16).toInt())
             }
         }
     }
