@@ -26,14 +26,14 @@ public class CLToken extends CLElement {
     if (type == Type.FALSE) {
       return false;
     }
-    throw new CLParsingException("this token is not a boolean: <" + content() + ">");
+    throw new CLParsingException("this token is not a boolean: <" + content() + ">", this);
   }
 
   public boolean isNull() throws CLParsingException {
     if (type == Type.NULL) {
       return true;
     }
-    throw new CLParsingException("this token is not a null: <" + content() + ">");
+    throw new CLParsingException("this token is not a null: <" + content() + ">", this);
   }
 
   enum Type { UNKNOWN, TRUE, FALSE, NULL }

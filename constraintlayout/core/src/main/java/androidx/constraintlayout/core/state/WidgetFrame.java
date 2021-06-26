@@ -55,7 +55,7 @@ public class WidgetFrame {
     public int visibility = ConstraintWidget.VISIBLE;
 
     final HashMap<String, CustomVariable> mCustom = new HashMap<>();
-
+  
     public int width() {
         return right - left;
     }

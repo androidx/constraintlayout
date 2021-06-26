@@ -44,7 +44,7 @@ public class CLContainer extends CLElement {
       }
       list.append(element);
     }
-    return super.toString() + " value : <" + list + " >";
+    return super.toString() + " = <" + list + " >";
   }
 
   public int size() {
@@ -108,7 +108,7 @@ public class CLContainer extends CLElement {
         return key.getValue();
       }
     }
-    throw new CLParsingException("no element for key <" + name + ">");
+    throw new CLParsingException("no element for key <" + name + ">", this);
   }
 
   public int getInt(String name) throws CLParsingException {
@@ -116,7 +116,8 @@ public class CLContainer extends CLElement {
     if (element != null) {
       return element.getInt();
     }
-    throw new CLParsingException("no int for key <" + name + ">");
+    throw new CLParsingException("no int found for key <" + name + ">," +
+            " found [" + element.getStrClass() + "] : " + element, this);
   }
 
   public float getFloat(String name) throws CLParsingException {
@@ -124,7 +125,8 @@ public class CLContainer extends CLElement {
     if (element != null) {
       return element.getFloat();
     }
-    throw new CLParsingException("no float for key <" + name + ">");
+    throw new CLParsingException("no float found for key <" + name + ">," +
+            " found [" + element.getStrClass() + "] : " + element, this);
   }
 
   public CLArray getArray(String name) throws CLParsingException {
@@ -132,7 +134,8 @@ public class CLContainer extends CLElement {
     if (element instanceof CLArray) {
       return (CLArray) element;
     }
-    throw new CLParsingException("no array for key <" + name + ">");
+    throw new CLParsingException("no array found for key <" + name + ">," +
+            " found [" + element.getStrClass() + "] : " + element, this);
   }
 
   public CLObject getObject(String name) throws CLParsingException {
@@ -140,7 +143,8 @@ public class CLContainer extends CLElement {
     if (element instanceof CLObject) {
       return (CLObject) element;
     }
-    throw new CLParsingException("no object associated for key <" + name + ">");
+    throw new CLParsingException("no object found for key <" + name + ">," +
+            " found [" + element.getStrClass() + "] : " + element, this);
   }
 
   public String getString(String name) throws CLParsingException {
@@ -148,7 +152,8 @@ public class CLContainer extends CLElement {
     if (element instanceof CLString) {
       return  element.content();
     }
-    throw new CLParsingException("no string associated for key <" + name + ">");
+    throw new CLParsingException("no string found for key <" + name + ">," +
+            " found [" + element.getStrClass() + "] : " + element, this);
   }
 
   public boolean getBoolean(String name) throws CLParsingException {
@@ -156,7 +161,8 @@ public class CLContainer extends CLElement {
     if (element instanceof CLToken) {
       return ((CLToken) element).getBoolean();
     }
-    throw new CLParsingException("no boolean associated for key <" + name + ">");
+    throw new CLParsingException("no boolean found for key <" + name + ">," +
+            " found [" + element.getStrClass() + "] : " + element, this);
   }
 
   /////////////////////////////////////////////////////////////////////////
@@ -205,7 +211,7 @@ public class CLContainer extends CLElement {
     if (index >= 0 && index < mElements.size()) {
       return mElements.get(index);
     }
-    throw new CLParsingException("no element at index " + index);
+    throw new CLParsingException("no element at index " + index, this);
   }
 
   public int getInt(int index) throws CLParsingException {
@@ -213,7 +219,7 @@ public class CLContainer extends CLElement {
     if (element != null) {
       return element.getInt();
     }
-    throw new CLParsingException("no int at index " + index);
+    throw new CLParsingException("no int at index " + index, this);
   }
 
   public float getFloat(int index) throws CLParsingException {
@@ -221,7 +227,7 @@ public class CLContainer extends CLElement {
     if (element != null) {
       return element.getFloat();
     }
-    throw new CLParsingException("no float at index " + index);
+    throw new CLParsingException("no float at index " + index, this);
   }
 
   public CLArray getArray(int index) throws CLParsingException {
@@ -229,7 +235,7 @@ public class CLContainer extends CLElement {
     if (element instanceof CLArray) {
       return (CLArray) element;
     }
-    throw new CLParsingException("no array at index " + index);
+    throw new CLParsingException("no array at index " + index, this);
   }
 
   public CLObject getObject(int index) throws CLParsingException {
@@ -237,7 +243,7 @@ public class CLContainer extends CLElement {
     if (element instanceof CLObject) {
       return (CLObject) element;
     }
-    throw new CLParsingException("no object at index " + index);
+    throw new CLParsingException("no object at index " + index, this);
   }
 
   public String getString(int index) throws CLParsingException {
@@ -245,7 +251,7 @@ public class CLContainer extends CLElement {
     if (element instanceof CLString) {
       return  element.content();
     }
-    throw new CLParsingException("no string at index " + index);
+    throw new CLParsingException("no string at index " + index, this);
   }
 
   public boolean getBoolean(int index) throws CLParsingException {
@@ -253,7 +259,7 @@ public class CLContainer extends CLElement {
     if (element instanceof CLToken) {
       return ((CLToken) element).getBoolean();
     }
-    throw new CLParsingException("no boolean at index " + index);
+    throw new CLParsingException("no boolean at index " + index, this);
   }
 
   /////////////////////////////////////////////////////////////////////////

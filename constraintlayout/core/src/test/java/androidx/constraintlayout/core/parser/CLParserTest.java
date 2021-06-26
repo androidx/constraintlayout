@@ -75,7 +75,11 @@ public class CLParserTest {
             CLObject parsedContent = CLParser.parse(test);
             parsedContent.getObject("test").getString(0);
         } catch (CLParsingException e) {
-            assertEquals("no object associated for key <test>", e.reason());
+            assertEquals("no object found for key <test>, found [CLArray] : " +
+                    "CLArray (9 : 39) <<'hello', 'world', { value: 42 }>> = <CLString (10 : 14) " +
+                    "<<hello>>; CLString (19 : 23) <<world>>; CLObject (28 : 39) " +
+                    "<< value: 42 }>> = <CLKey (29 : 33) <<value>> = <CLNumber (36 : 37) " +
+                    "<<42>> > > > (CLObject at line 1)", e.reason());
             e.printStackTrace();
         }
     }
