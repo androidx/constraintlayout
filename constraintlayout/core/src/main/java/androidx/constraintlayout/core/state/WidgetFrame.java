@@ -54,30 +54,7 @@ public class WidgetFrame {
 
     public int visibility = ConstraintWidget.VISIBLE;
 
-    public HashMap<String, Color> mCustomColors = null;
-    public HashMap<String, Float> mCustomFloats = null;
-    HashMap<String, CustomVariable> mCustom = new HashMap<>();
-
-    public static class Color {
-        public float r;
-        public float g;
-        public float b;
-        public float a;
-
-        public Color(float r, float g, float b, float a) {
-            this.r = r;
-            this.g = g;
-            this.b = b;
-            this.a = a;
-        }
-
-        public void copy(Color start) {
-            this.r = start.r;
-            this.g = start.g;
-            this.b = start.b;
-            this.a = start.a;
-        }
-    }
+    final HashMap<String, CustomVariable> mCustom = new HashMap<>();
 
     public int width() {
         return right - left;
@@ -117,17 +94,11 @@ public class WidgetFrame {
         alpha = frame.alpha;
         visibility = frame.visibility;
 
-        if (frame.mCustom != null) {
-            mCustom = new HashMap<>();
-            mCustom.putAll(frame.mCustom);
-        }
-        if (frame.mCustomColors != null) {
-            mCustomColors = new HashMap<>();
-            mCustomColors.putAll(frame.mCustomColors);
-        }
-        if (frame.mCustomFloats != null) {
-            mCustomFloats = new HashMap<>();
-            mCustomFloats.putAll(frame.mCustomFloats);
+        mCustom.clear();
+        if (frame != null) {
+            for (CustomVariable c : frame.mCustom.values()) {
+                mCustom.put(c.getName(), c.copy());
+            }
         }
     }
 
@@ -255,23 +226,6 @@ public class WidgetFrame {
         return (start + progress * (end - start));
     }
 
-    public static void interpolateColor(Color result, Color start, Color end, float progress) {
-        if (OLD_SYSTEM) {
-            if (progress < 0) {
-                result.copy(start);
-            } else if (progress > 1) {
-                result.copy(end);
-            } else {
-                result.r = (1f - progress) * start.r + progress * (end.r);
-                result.g = (1f - progress) * start.g + progress * (end.g);
-                result.b = (1f - progress) * start.b + progress * (end.b);
-                result.a = (1f - progress) * start.a + progress * (end.a);
-            }
-        } else {
-
-        }
-    }
-
     public float centerX() {
         return left + (right - left) / 2f;
     }
@@ -292,62 +246,33 @@ public class WidgetFrame {
         return this;
     }
 
-
     public WidgetFrame update(ConstraintWidget widget) {
         if (widget == null) {
             return this;
         }
+
         this.widget = widget;
         update();
         return this;
     }
 
-    public void addCustomColor(String name, float r, float g, float b, float a) {
-        if (OLD_SYSTEM) {
-            Color color = new Color(r, g, b, a);
-            if (mCustomColors == null) {
-                mCustomColors = new HashMap<>();
-            }
-            mCustomColors.put(name, color);
-        }
-        setCustomAttribute(name, TypedValues.Custom.TYPE_COLOR, CustomVariable.rgbaTocColor(r, g, b, a));
+    public void addCustomColor(String name, int color) {
+        setCustomAttribute(name, TypedValues.Custom.TYPE_COLOR, color);
     }
 
-    public Color getCustomColor(String name) {
-        if (OLD_SYSTEM) {
-            if (mCustomColors == null) {
-                return null;
-            }
-            return mCustomColors.get(name);
-        }
+    public int getCustomColor(String name) {
         if (mCustom.containsKey(name)) {
             int color = mCustom.get(name).getColorValue();
-            float fr = ((color >> 16) & 0xFF) / 255f;
-            float fg = ((color >> 8) & 0xFF) / 255f;
-            float fb = ((color) & 0xFF) / 255f;
-            float fa = ((color >> 24) & 0xFF) / 255f;
-            return new Color(fr, fg, fb, fa);
+            return color;
         }
-        return new Color(1, 0.5f, 0.5f, 1);
+        return 0xFFFFAA88;
     }
 
     public void addCustomFloat(String name, float value) {
-        if (OLD_SYSTEM) {
-            if (mCustomFloats == null) {
-                mCustomFloats = new HashMap<>();
-            }
-            mCustomFloats.put(name, value);
-        }
         setCustomAttribute(name, TypedValues.Custom.TYPE_FLOAT, value);
     }
 
     public float getCustomFloat(String name) {
-        if (OLD_SYSTEM) {
-            if (mCustomFloats == null) {
-                return 0f;
-            }
-            return mCustomFloats.get(name);
-        }
         if (mCustom.containsKey(name)) {
             return mCustom.get(name).getFloatValue();
         }
@@ -393,4 +318,33 @@ public class WidgetFrame {
     public Set<String> getCustomAttributeNames() {
         return mCustom.keySet();
     }
+
+    void printCustomAttributes() {
+        StackTraceElement s = new Throwable().getStackTrace()[1];
+        String ss = ".(" + s.getFileName() + ":" + s.getLineNumber() + ") " + s.getMethodName();
+        ss += " " + (this.hashCode() % 1000);
+        if (widget != null) {
+            ss += "/" + (widget.hashCode() % 1000) + " ";
+        } else {
+            ss += "/NULL ";
+        }
+        if (mCustom != null)
+            for (String key : mCustom.keySet()) {
+                System.out.println(ss + mCustom.get(key).toString());
+            }
+    }
+
+    void logv(String str) {
+        StackTraceElement s = new Throwable().getStackTrace()[1];
+        String ss = ".(" + s.getFileName() + ":" + s.getLineNumber() + ") " + s.getMethodName();
+        ss += " " + (this.hashCode() % 1000);
+        if (widget != null) {
+            ss += "/" + (widget.hashCode() % 1000);
+        } else {
+            ss += "/NULL";
+        }
+
+        System.out.println(ss + " " + str);
+    }
+
 }

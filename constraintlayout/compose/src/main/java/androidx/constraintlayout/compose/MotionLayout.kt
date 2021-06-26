@@ -553,16 +553,7 @@ internal class MotionMeasurer : Measurer() {
 
         val interpolatedFrame = transition.getInterpolated(id)
         val color = interpolatedFrame.getCustomColor(name)
-        return Color(color.r, color.g, color.b, color.a)
-//
-//        val startColor = startFrame.getCustomColor(name)
-//        val endColor = endFrame.getCustomColor(name)
-//        if (startColor != null && endColor != null) {
-//            var result = WidgetFrame.Color(0f, 0f, 0f, 0f)
-//            WidgetFrame.interpolateColor(result, startColor, endColor, motionProgress)
-//            return Color(result.r, result.g, result.b, result.a)
-//        }
-//        return Color.Black
+        return Color(color);
     }
 
     fun getCustomFloat(id: String, name: String): Float {

@@ -29,6 +29,19 @@ public class CustomVariable {
     private String mStringValue = null;
     boolean mBooleanValue;
 
+    public CustomVariable copy() {
+        return new CustomVariable(this);
+    }
+
+    public CustomVariable(CustomVariable c) {
+        mName = c.mName;
+        mType = c.mType;
+        mIntegerValue = c.mIntegerValue;
+        mFloatValue = c.mFloatValue;
+        mStringValue = c.mStringValue;
+        mBooleanValue = c.mBooleanValue;
+    }
+
     public CustomVariable(String name, int type, String value) {
         mName = name;
         mType = type;
@@ -57,7 +70,7 @@ public class CustomVariable {
         mBooleanValue = value;
     }
 
-    private static String colorString(int v) {
+    public static String colorString(int v) {
         String str = "00000000" + Integer.toHexString(v);
         return "#" + str.substring(str.length() - 8);
     }
@@ -335,15 +348,6 @@ public class CustomVariable {
         return c;
     }
 
-    public int getInterpolatedColor(float[] value) {
-        int r = clamp((int) ((float) Math.pow(value[0], 1.0 / 2.2) * 255.0f));
-        int g = clamp((int) ((float) Math.pow(value[1], 1.0 / 2.2) * 255.0f));
-        int b = clamp((int) ((float) Math.pow(value[2], 1.0 / 2.2) * 255.0f));
-        int a = clamp((int) (value[3] * 255.0f));
-        int color = (a << 24) | (r << 16) | (g << 8) | b;
-        return color;
-    }
-
     public void setInterpolatedValue(MotionWidget view, float[] value) {
 
         switch (mType) {
@@ -371,15 +375,6 @@ public class CustomVariable {
         }
     }
 
-    public static int rgbaTocColor(float r, float g, float b, float a) {
-        int ir = clamp((int) (r * 255f));
-        int ig = clamp((int) (g * 255f));
-        int ib = clamp((int) (b * 255f));
-        int ia = clamp((int) (a * 255f));
-        int color = (ia << 24) | (ir << 16) | (ig << 8) | ib;
-        return color;
-    }
-
     public void applyToWidget(MotionWidget view) {
         switch (mType) {
             case TypedValues.Custom.TYPE_INT:
@@ -397,5 +392,9 @@ public class CustomVariable {
                 view.setCustomAttribute(mName, mType, mFloatValue);
                 break;
         }
+    }
+
+    public String getName() {
+        return mName;
     }
 }

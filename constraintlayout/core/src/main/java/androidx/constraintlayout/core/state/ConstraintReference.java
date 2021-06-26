@@ -16,6 +16,7 @@
 
 package androidx.constraintlayout.core.state;
 
+import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.state.helpers.Facade;
 import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
@@ -119,8 +120,8 @@ public class ConstraintReference implements Reference {
     private Object mView;
     private ConstraintWidget mConstraintWidget;
 
-    private HashMap<String, WidgetFrame.Color> mCustomColors = null;
-    private HashMap<String, Float> mCustomFloats = null;
+    private HashMap<String, Integer> mCustomColors = new HashMap();
+    private HashMap<String, Float> mCustomFloats = new HashMap();
 
     public void setView(Object view) {
         mView = view;
@@ -381,11 +382,7 @@ public class ConstraintReference implements Reference {
         return this;
     }
 
-    public void addCustomColor(String name, float r, float g, float b, float a) {
-        WidgetFrame.Color color = new WidgetFrame.Color(r, g, b, a);
-        if (mCustomColors == null) {
-            mCustomColors = new HashMap<>();
-        }
+    public void addCustomColor(String name, int color) {
         mCustomColors.put(name, color);
     }
 
@@ -881,8 +878,17 @@ public class ConstraintReference implements Reference {
         mConstraintWidget.frame.alpha = mAlpha;
         mConstraintWidget.frame.visibility = mVisibility;
         mConstraintWidget.setVisibility(mVisibility);
-
-        mConstraintWidget.frame.mCustomFloats = mCustomFloats;
-        mConstraintWidget.frame.mCustomColors = mCustomColors;
+        if (mCustomColors != null) {
+            for (String key : mCustomColors.keySet()) {
+                Integer color = mCustomColors.get(key);
+                mConstraintWidget.frame.setCustomAttribute(key, TypedValues.Custom.TYPE_COLOR, color);
+            }
+        }
+        if (mCustomFloats != null) {
+            for (String key : mCustomFloats.keySet()) {
+                float value = mCustomFloats.get(key);
+                mConstraintWidget.frame.setCustomAttribute(key, TypedValues.Custom.TYPE_FLOAT, value);
+            }
+        }
     }
 }

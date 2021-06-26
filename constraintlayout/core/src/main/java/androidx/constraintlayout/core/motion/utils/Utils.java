@@ -37,4 +37,49 @@ public class Utils {
            e.printStackTrace();
        }
    }
+
+    private static int clamp(int c) {
+        int N = 255;
+        c &= ~(c >> 31);
+        c -= N;
+        c &= (c >> 31);
+        c += N;
+        return c;
+    }
+
+    public int getInterpolatedColor(float[] value) {
+        int r = clamp((int) ((float) Math.pow(value[0], 1.0 / 2.2) * 255.0f));
+        int g = clamp((int) ((float) Math.pow(value[1], 1.0 / 2.2) * 255.0f));
+        int b = clamp((int) ((float) Math.pow(value[2], 1.0 / 2.2) * 255.0f));
+        int a = clamp((int) (value[3] * 255.0f));
+        int color = (a << 24) | (r << 16) | (g << 8) | b;
+        return color;
+    }
+
+    public static int rgbaTocColor(float r, float g, float b, float a) {
+        int ir = clamp((int) (r * 255f));
+        int ig = clamp((int) (g * 255f));
+        int ib = clamp((int) (b * 255f));
+        int ia = clamp((int) (a * 255f));
+        int color = (ia << 24) | (ir << 16) | (ig << 8) | ib;
+        return color;
+    }
+    public static void logStack(String msg, int n) {
+        StackTraceElement[] st = new Throwable().getStackTrace();
+        String s = " ";
+        n = Math.min(n, st.length - 1);
+        for (int i = 1; i <= n; i++) {
+            StackTraceElement ste = st[i];
+            String stack = ".(" + st[i].getFileName() + ":" + st[i].getLineNumber() + ") " + st[i].getMethodName();
+            s += " ";
+            System.out.println(msg + s + stack + s);
+        }
+    }
+
+    public static void log(String str) {
+        StackTraceElement s = new Throwable().getStackTrace()[1];
+        String ss = ".(" + s.getFileName() + ":" + s.getLineNumber() + ") " + s.getMethodName();
+        System.out.println(ss + " " + str);
+    }
+
 }

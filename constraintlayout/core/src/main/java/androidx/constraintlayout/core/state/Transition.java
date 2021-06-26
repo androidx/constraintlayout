@@ -225,11 +225,10 @@ public class Transition {
         frame.addCustomFloat(property, value);
     }
 
-    public void addCustomColor(int state, String widgetId, String property,
-                               float r, float g, float b, float a) {
+    public void addCustomColor(int state, String widgetId, String property, int color) {
         WidgetState widgetState = getWidgetState(widgetId, null, state);
         WidgetFrame frame = widgetState.getFrame(state);
-        frame.addCustomColor(property, r, g, b, a);
+        frame.addCustomColor(property, color);
     }
 
     public void updateFrom(ConstraintWidgetContainer container, int state) {
