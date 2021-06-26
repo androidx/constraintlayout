@@ -425,7 +425,7 @@ public fun ScreenExample3() {
             {
                 g1: { type: 'vGuideline', start: 80 },
                 button: {
-                  top: ['title', 'bottom', 16],
+                  top: ['title', 'bottom', 160],
                   start: ['g1', 'start']
                 },
                 title: {

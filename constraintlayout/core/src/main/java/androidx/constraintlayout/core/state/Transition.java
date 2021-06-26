@@ -158,13 +158,14 @@ public class Transition {
         }
 
         public void interpolate(int parentWidth, int parentHeight, float progress, Transition transition) {
-            if (parentHeight != myParentHeight || parentWidth != myParentWidth) {
+            if (true || parentHeight != myParentHeight || parentWidth != myParentWidth) {
                 myParentHeight = parentHeight;
                 myParentWidth = parentWidth;
                 motionControl.setup(parentWidth, parentHeight, 1, System.nanoTime());
             }
             WidgetFrame.interpolate(parentWidth, parentHeight, interpolated, start, end, transition, progress);
             motionControl.interpolate(motionWidgetInterpolated, progress, System.nanoTime(), myKeyCache);
+            System.out.println("toto");
         }
     }
 
@@ -262,6 +263,14 @@ public class Transition {
             return null;
         }
         return widgetState.end;
+    }
+
+    public WidgetFrame getInterpolated(String id) {
+        WidgetState widgetState = state.get(id);
+        if (widgetState == null) {
+            return null;
+        }
+        return widgetState.interpolated;
     }
 
     private WidgetState getWidgetState(String widgetId, ConstraintWidget child, int transitionState) {
