@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     app:motionDebug="SHOW_PROGRESS"
     android:layout_height="match_parent"
-    android:background="#052067">
+    android:background="#FFF">
 <!--
 androidx.constraintlayout.motion.widget.MotionLayout
 
@@ -19,135 +19,136 @@ androidx.constraintlayout.motion.widget.MotionLayout
         android:layout_height="wrap_content"
         android:textSize="24sp"
         android:textColor="#555"
+        android:layout_marginBottom="22dp"
         android:text="modern"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-    <androidx.constraintlayout.utils.widget.MotionButton
+    <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/region1"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:background="#FF9999"
+        android:background="#FF7F7F"
         android:text="1"
         app:layout_constraintTag="hop" />
 
-    <androidx.constraintlayout.utils.widget.MotionButton
+    <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/region2"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:background="#FFCA99"
+        android:background="#FBBA7D"
         android:text="2"
         app:layout_constraintTag="hop" />
 
-    <androidx.constraintlayout.utils.widget.MotionButton
+    <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/region3"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:background="#FCFF99"
+        android:background="#FFEA7F"
         android:text="3"
         app:layout_constraintTag="hop" />
 
-    <androidx.constraintlayout.utils.widget.MotionButton
+    <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/region4"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:background="#F0FF99"
+        android:background="#FFF980"
         android:text="4"
         app:layout_constraintTag="hop" />
 
-    <androidx.constraintlayout.utils.widget.MotionButton
+    <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/region5"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:background="#AFFF99"
+        android:background="#D9FF80"
         android:text="5"
         app:layout_constraintTag="hop" />
 
-    <androidx.constraintlayout.utils.widget.MotionButton
+    <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/region6"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:background="#99FFA5"
+        android:background="#80FF8F"
         android:text="6"
         app:layout_constraintTag="hop" />
 
-    <androidx.constraintlayout.utils.widget.MotionButton
+    <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/region7"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:background="#99FFD8"
+        android:background="#7EFBC5"
         android:text="7"
         app:layout_constraintTag="hop" />
 
-    <androidx.constraintlayout.utils.widget.MotionButton
+    <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/region8"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:background="#99F6FF"
+        android:background="#81F4FF"
         android:text="8"
         app:layout_constraintTag="hop" />
 
-    <androidx.constraintlayout.utils.widget.MotionButton
+    <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/region9"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:background="#99DBFF"
+        android:background="#80D2FF"
         android:text="9"
         app:layout_constraintTag="hop" />
 
-    <androidx.constraintlayout.utils.widget.MotionButton
+    <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/region10"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:background="#99CCFF"
+        android:background="#80BFFF"
         android:text="10"
         app:layout_constraintTag="hop" />
 
-    <androidx.constraintlayout.utils.widget.MotionButton
+    <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/region11"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:background="#FF9"
+        android:background="#9280FF"
         android:text="11"
         app:layout_constraintTag="hop" />
 
-    <androidx.constraintlayout.utils.widget.MotionButton
+    <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/region12"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:background="#FF9"
+        android:background="#CB80FF"
         android:text="12"
         app:layout_constraintTag="hop" />
 
-    <androidx.constraintlayout.utils.widget.MotionButton
+    <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/region13"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:background="#FF9"
+        android:background="#E17CF8"
         android:text="13"
         app:layout_constraintTag="hop" />
 
-    <androidx.constraintlayout.utils.widget.MotionButton
+    <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/region14"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:background="#FF9"
+        android:background="#FF80C2"
         android:text="14"
 
         app:layout_constraintTag="hop" />
 
-    <androidx.constraintlayout.utils.widget.MotionButton
+    <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/region15"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:background="#FF9"
+        android:background="#FF81A5"
         android:text="15"
         app:layout_constraintTag="hop" />
 
-    <androidx.constraintlayout.utils.widget.MotionButton
+    <androidx.constraintlayout.utils.widget.MotionLabel
         android:id="@+id/region16"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:background="#FF9999"
+        android:background="#FF7E7E"
         android:text="16"
         app:layout_constraintTag="hop" />
 
@@ -157,6 +158,10 @@ androidx.constraintlayout.motion.widget.MotionLayout
         android:layout_height="match_parent"
         app:flow_maxElementsWrap="4"
         app:flow_wrapMode="chain"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:constraint_referenced_ids="region1,region2,region3,region4,region5,region6,region7,region8,region9,region10,region11,region12,region13,region14,region15,region16" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>
