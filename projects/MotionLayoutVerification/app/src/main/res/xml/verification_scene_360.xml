@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto"
+    motion:defaultDuration="2000">
+    <ConstraintSet
+        android:id="@+id/alt"
+        motion:deriveConstraintsFrom="@id/base"/>
+
+    <ConstraintSet android:id="@+id/small"
+        motion:deriveConstraintsFrom="@id/base">
+
+        <ConstraintOverride motion:motionTarget="hop" >
+            <CustomAttribute motion:attributeName="roundPercent" motion:customFloatValue="0"/>
+        </ConstraintOverride>
+
+        <Constraint android:id="@id/region1">
+            <Layout
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent"
+                android:layout_height="1dp"
+                android:layout_width="1dp" />
+        </Constraint>
+        <Constraint android:id="@id/region1">
+            <Layout
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent"
+                android:layout_height="1dp"
+                android:layout_width="1dp" />
+        </Constraint>
+        <Constraint android:id="@id/region2">
+            <Layout
+
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent"
+                android:layout_height="1dp"
+                android:layout_width="1dp" />
+        </Constraint>
+        <Constraint android:id="@id/region3">
+            <Layout
+
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent"
+                android:layout_height="1dp"
+                android:layout_width="1dp" />
+        </Constraint>
+        <Constraint android:id="@id/region4">
+            <Layout
+
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent"
+                android:layout_height="1dp"
+                android:layout_width="1dp" />
+        </Constraint>
+        <Constraint android:id="@id/region5">
+            <Layout
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent"
+                android:layout_height="1dp"
+                android:layout_width="1dp" />
+        </Constraint>
+        <Constraint android:id="@id/region6">
+            <Layout
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent"
+                android:layout_height="1dp"
+                android:layout_width="1dp" />
+        </Constraint>
+        <Constraint android:id="@id/region7">
+            <Layout
+
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent"
+                android:layout_height="1dp"
+                android:layout_width="1dp" />
+        </Constraint>
+        <Constraint android:id="@id/region8">
+            <Layout
+
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent"
+                android:layout_height="1dp"
+                android:layout_width="1dp" />
+        </Constraint>
+        <Constraint android:id="@id/region9">
+            <Layout
+
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent"
+                android:layout_height="1dp"
+                android:layout_width="1dp" />
+        </Constraint>
+        <Constraint android:id="@id/region10">
+            <Layout
+
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent"
+                android:layout_height="1dp"
+                android:layout_width="1dp" />
+        </Constraint>
+        <Constraint android:id="@id/region11">
+            <Layout
+
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent"
+                android:layout_height="1dp"
+                android:layout_width="1dp" />
+        </Constraint>
+        <Constraint android:id="@id/region12">
+            <Layout
+
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent"
+                android:layout_height="1dp"
+                android:layout_width="1dp" />
+        </Constraint>
+        <Constraint android:id="@id/region13">
+            <Layout
+
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent"
+                android:layout_height="1dp"
+                android:layout_width="1dp" />
+        </Constraint>
+        <Constraint android:id="@id/region14">
+            <Layout
+
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent"
+                android:layout_height="1dp"
+                android:layout_width="1dp" />
+        </Constraint>
+        <Constraint android:id="@id/region15">
+            <Layout
+
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent"
+                android:layout_height="1dp"
+                android:layout_width="1dp" />
+        </Constraint>
+        <Constraint android:id="@id/region16">
+            <Layout
+
+                motion:layout_constraintStart_toStartOf="parent"
+                motion:layout_constraintTop_toTopOf="parent"
+                android:layout_height="1dp"
+                android:layout_width="1dp" />
+        </Constraint>
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/base">
+
+        <ConstraintOverride motion:motionTarget="hop" >
+            <CustomAttribute motion:attributeName="roundPercent" motion:customFloatValue="0.3"/>
+        </ConstraintOverride>
+
+
+        <Constraint android:id="@id/region1">
+            <Motion
+                motion:motionStagger="1"
+                motion:pathMotionArc="startHorizontal" />
+        </Constraint>
+        <Constraint android:id="@id/region2">
+            <Motion
+                motion:motionStagger="2"
+                motion:pathMotionArc="startHorizontal" />
+        </Constraint>
+        <Constraint android:id="@id/region3">
+            <Motion
+                motion:motionStagger="3"
+                motion:pathMotionArc="startHorizontal" />
+        </Constraint>
+        <Constraint android:id="@id/region4">
+            <Motion
+                motion:motionStagger="4"
+                motion:pathMotionArc="startHorizontal" />
+        </Constraint>
+        <Constraint android:id="@id/region5">
+            <Motion
+                motion:motionStagger="5"
+                motion:pathMotionArc="startHorizontal" />
+        </Constraint>
+        <Constraint android:id="@id/region6">
+            <Motion
+                motion:motionStagger="6"
+                motion:pathMotionArc="startHorizontal" />
+        </Constraint>
+        <Constraint android:id="@id/region7">
+            <Motion
+                motion:motionStagger="7"
+                motion:pathMotionArc="startHorizontal" />
+        </Constraint>
+        <Constraint android:id="@id/region8">
+            <Motion
+                motion:motionStagger="8"
+                motion:pathMotionArc="startHorizontal" />
+        </Constraint>
+        <Constraint android:id="@id/region9">
+            <Motion
+                motion:motionStagger="9"
+                motion:pathMotionArc="startHorizontal" />
+        </Constraint>
+        <Constraint android:id="@id/region10">
+            <Motion
+                motion:motionStagger="10"
+                motion:pathMotionArc="startHorizontal" />
+        </Constraint>
+        <Constraint android:id="@id/region11">
+            <Motion
+                motion:motionStagger="11"
+                motion:pathMotionArc="startHorizontal" />
+        </Constraint>
+        <Constraint android:id="@id/region12">
+            <Motion
+                motion:motionStagger="12"
+                motion:pathMotionArc="startHorizontal" />
+        </Constraint>
+        <Constraint android:id="@id/region13">
+            <Motion
+                motion:motionStagger="13"
+                motion:pathMotionArc="startHorizontal" />
+        </Constraint>
+        <Constraint android:id="@id/region14">
+            <Motion
+                motion:motionStagger="14"
+                motion:pathMotionArc="startHorizontal" />
+        </Constraint>
+        <Constraint android:id="@id/region15">
+            <Motion
+                motion:motionStagger="15"
+                motion:pathMotionArc="startHorizontal" />
+        </Constraint>
+        <Constraint android:id="@id/region16">
+            <Motion
+                motion:motionStagger="16"
+                motion:pathMotionArc="startHorizontal" />
+        </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/state2"
+        motion:deriveConstraintsFrom="@id/state1">
+
+    <ConstraintOverride  motion:motionTarget="hop"
+        android:layout_height="16dp"
+        android:rotation="45"
+        android:layout_width="16dp" >
+        <CustomAttribute motion:attributeName="roundPercent" motion:customFloatValue="1"/>
+    </ConstraintOverride>
+
+        <ConstraintOverride android:id="@+id/grid"
+            android:layout_marginStart="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom= "50dp"
+            />
+    </ConstraintSet>
+    <ConstraintSet
+        android:id="@+id/state1"
+        motion:deriveConstraintsFrom="@id/base">
+
+        <ConstraintOverride motion:motionTarget="hop">
+            <CustomAttribute
+                motion:attributeName="roundPercent"
+                motion:customFloatValue="0" />
+        </ConstraintOverride>
+
+        <ConstraintOverride
+            android:id="@+id/grid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </ConstraintSet>
+
+    <Transition
+        motion:constraintSetEnd="@+id/base"
+        motion:constraintSetStart="@+id/small"
+        motion:duration="1000"
+        >
+        <OnClick motion:clickAction="toggle"  />
+
+        <KeyFrameSet>
+            <KeyPosition
+                motion:framePosition="50"
+                motion:motionTarget="hop"
+                motion:keyPositionType="parentRelative"
+                motion:percentX="0.5"
+                motion:percentY="0.5" />
+
+            <KeyCycle
+                android:translationX="0dp"
+                motion:framePosition="0"
+                motion:motionTarget="hop"
+                motion:wavePeriod="0"
+                motion:waveShape="sin" />
+
+            <KeyCycle
+                android:translationX="0dp"
+                motion:framePosition="15"
+                motion:motionTarget="hop"
+                motion:wavePeriod="0"
+                motion:waveShape="sin" />
+
+            <KeyCycle
+                android:translationX="200dp"
+                motion:framePosition="75"
+                motion:motionTarget="hop"
+                motion:wavePeriod="1"
+                motion:waveShape="sin" />
+
+            <KeyCycle
+                android:translationX="0dp"
+                motion:framePosition="100"
+                motion:motionTarget="hop"
+                motion:wavePeriod="0"
+                motion:waveShape="sin" />
+
+            <KeyCycle
+                android:translationY="0dp"
+                motion:framePosition="0"
+                motion:motionTarget="hop"
+                motion:wavePeriod="0"
+                motion:waveShape="cos" />
+
+            <KeyCycle
+                android:translationY="0dp"
+                motion:framePosition="15"
+                motion:motionTarget="hop"
+                motion:wavePeriod="0"
+                motion:waveShape="cos" />
+
+            <KeyCycle
+                android:translationY="200dp"
+                motion:framePosition="75"
+                motion:motionTarget="hop"
+                motion:wavePeriod="1"
+                motion:waveShape="cos" />
+
+            <KeyCycle
+                android:translationY="0dp"
+                motion:framePosition="0100"
+                motion:motionTarget="hop"
+                motion:wavePeriod="0"
+                motion:waveShape="cos" />
+        </KeyFrameSet>
+
+    </Transition>
+    <Transition
+        motion:autoTransition="animateToEnd"
+        motion:constraintSetEnd="@id/state2"
+        motion:constraintSetStart="@id/state1"
+        motion:motionInterpolator="easeIn"
+        motion:duration="4000"
+        />
+
+    <Transition
+        motion:autoTransition="animateToEnd"
+        motion:constraintSetEnd="@id/state1"
+        motion:constraintSetStart="@id/small"
+        motion:motionInterpolator="easeIn"
+        motion:duration="4000"
+        motion:staggered="-0.4">
+
+        <KeyFrameSet>
+            <KeyPosition
+                motion:framePosition="50"
+                motion:motionTarget="hop"
+                motion:keyPositionType="parentRelative"
+                motion:percentX="0.5"
+                motion:percentY="0.5" />
+            <KeyCycle
+                android:translationX="0dp"
+                motion:framePosition="0"
+                motion:motionTarget="hop"
+                motion:wavePeriod="0"
+                motion:waveShape="sin" />
+            <KeyCycle
+                android:translationX="0dp"
+                motion:framePosition="15"
+                motion:motionTarget="hop"
+                motion:wavePeriod="0"
+                motion:waveShape="sin" />
+            <KeyCycle
+                android:translationX="200dp"
+                motion:framePosition="75"
+                motion:motionTarget="hop"
+                motion:wavePeriod="1"
+                motion:waveShape="sin" />
+            <KeyCycle
+                android:translationX="0dp"
+                motion:framePosition="100"
+                motion:motionTarget="hop"
+                motion:wavePeriod="0"
+                motion:waveShape="sin" />
+
+            <KeyCycle
+                android:translationY="0dp"
+                motion:framePosition="0"
+                motion:motionTarget="hop"
+                motion:wavePeriod="0"
+                motion:waveShape="cos" />
+            <KeyCycle
+                android:translationY="0dp"
+                motion:framePosition="15"
+                motion:motionTarget="hop"
+                motion:wavePeriod="0"
+                motion:waveShape="cos" />
+            <KeyCycle
+                android:translationY="200dp"
+                motion:framePosition="75"
+                motion:motionTarget="hop"
+                motion:wavePeriod="1"
+                motion:waveShape="cos" />
+
+            <KeyCycle
+                android:translationY="0dp"
+                motion:framePosition="0100"
+                motion:motionTarget="hop"
+                motion:wavePeriod="0"
+                motion:waveShape="cos" />
+        </KeyFrameSet>
+
+    </Transition>
+
+    <Transition
+        motion:autoTransition="animateToStart"
+        motion:constraintSetEnd="@id/state2"
+        motion:constraintSetStart="@id/base"
+        motion:motionInterpolator="easeIn"
+        motion:duration="4000"
+        motion:staggered="-0.4">
+
+        <KeyFrameSet>
+            <KeyPosition
+                motion:framePosition="50"
+                motion:motionTarget="hop"
+                motion:keyPositionType="parentRelative"
+                motion:percentX="0.5"
+                motion:percentY="0.5" />
+            <KeyCycle
+                android:translationX="0dp"
+                motion:framePosition="0"
+                motion:motionTarget="hop"
+                motion:wavePeriod="0"
+                motion:waveShape="sin" />
+            <KeyCycle
+                android:translationX="0dp"
+                motion:framePosition="15"
+                motion:motionTarget="hop"
+                motion:wavePeriod="0"
+                motion:waveShape="sin" />
+            <KeyCycle
+                android:translationX="200dp"
+                motion:framePosition="75"
+                motion:motionTarget="hop"
+                motion:wavePeriod="1"
+                motion:waveShape="sin" />
+            <KeyCycle
+                android:translationX="0dp"
+                motion:framePosition="100"
+                motion:motionTarget="hop"
+                motion:wavePeriod="0"
+                motion:waveShape="sin" />
+
+            <KeyCycle
+                android:translationY="0dp"
+                motion:framePosition="0"
+                motion:motionTarget="hop"
+                motion:wavePeriod="0"
+                motion:waveShape="cos" />
+            <KeyCycle
+                android:translationY="0dp"
+                motion:framePosition="15"
+                motion:motionTarget="hop"
+                motion:wavePeriod="0"
+                motion:waveShape="cos" />
+            <KeyCycle
+                android:translationY="200dp"
+                motion:framePosition="75"
+                motion:motionTarget="hop"
+                motion:wavePeriod="1"
+                motion:waveShape="cos" />
+
+            <KeyCycle
+                android:translationY="0dp"
+                motion:framePosition="0100"
+                motion:motionTarget="hop"
+                motion:wavePeriod="0"
+                motion:waveShape="cos" />
+        </KeyFrameSet>
+
+    </Transition>
+
+
+
+</MotionScene>

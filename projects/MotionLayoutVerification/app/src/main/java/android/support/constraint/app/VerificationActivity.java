@@ -75,6 +75,7 @@ import java.util.Random;
 /* This test the visibility*/
 public class VerificationActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "Verification00";
+    private static final boolean DEBUG_LAYOUT = false;
     private String KEY = "layout";
     private static final boolean DEBUG = false;
     String layout_name;
@@ -105,7 +106,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     private static boolean REVERSE = false;
 
 
-    private static final String RUN_FIRST = (true) ? "v_000" : "bug_005";
+    private static final String RUN_FIRST = (true) ? "verification_360" : "bug_005";
     private final String LAYOUTS_MATCHES = "v.*_.*";
 
     private static String SHOW_FIRST = "";
@@ -156,7 +157,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         ViewGroup root = ((ViewGroup) findViewById(android.R.id.content).getRootView());
         View mlView = findViewById(R.id.motionLayout);
         mMotionLayout = (mlView != null) ? (MotionLayout) mlView : findMotionLayout(root);
-        if (mMotionLayout != null) {
+        if (mMotionLayout != null || DEBUG_LAYOUT) {
             ConstraintSet set = new ConstraintSet();
             set.clone(mMotionLayout);
             StringWriter writer = new StringWriter();

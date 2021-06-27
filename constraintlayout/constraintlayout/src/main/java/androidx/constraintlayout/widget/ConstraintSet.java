@@ -37,6 +37,7 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.HelperWidget;
 import androidx.constraintlayout.core.motion.utils.Easing;
 import androidx.constraintlayout.motion.widget.Debug;
+import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.constraintlayout.motion.widget.MotionScene;
 import androidx.constraintlayout.widget.ConstraintAttribute.AttributeType;
 import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams;
@@ -85,6 +86,7 @@ public class ConstraintSet {
 
     private boolean mValidate;
     public String mIdString;
+    public String derivedState = "";
     public static final int ROTATE_NONE = 0;
     public static final int ROTATE_PORTRATE_OF_RIGHT = 1;
     public static final int ROTATE_PORTRATE_OF_LEFT = 2;
@@ -340,6 +342,7 @@ public class ConstraintSet {
     private static final int LAYOUT_CONSTRAINT_WIDTH = 95;
     private static final int LAYOUT_CONSTRAINT_HEIGHT = 96;
     private static final int LAYOUT_WRAP_BEHAVIOR = 97;
+    private static final int MOTION_TARGET = 98;
 
     private static final String KEY_WEIGHT = "weight";
     private static final String KEY_RATIO = "ratio";
@@ -527,6 +530,8 @@ public class ConstraintSet {
         overrideMapToConstant.append(R.styleable.ConstraintOverride_transitionPathRotate, TRANSITION_PATH_ROTATE);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_motionStagger, MOTION_STAGGER);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_android_id, VIEW_ID);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_motionTarget, MOTION_TARGET);
+
         overrideMapToConstant.append(R.styleable.ConstraintOverride_motionProgress, PROGRESS);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintWidth_percent, WIDTH_PERCENT);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintHeight_percent, HEIGHT_PERCENT);
@@ -669,10 +674,27 @@ public class ConstraintSet {
     }
 
     public void applyDeltaFrom(ConstraintSet cs) {
+        Log.v(TAG, Debug.getLoc() + " override target " + cs.mIdString +" size="+cs.mConstraints.size());
+
         for (Constraint from : cs.mConstraints.values()) {
             if (from.mDelta != null) {
-                Constraint constraint = getConstraint(from.mViewId);
-                from.mDelta.applyDelta(constraint);
+                if (from.mTargetString != null) {
+                    Log.v(TAG, Debug.getLoc() + " override target " + from.mTargetString);
+                    int count = 0;
+                    for (int key : mConstraints.keySet()) {
+                        Constraint potential = getConstraint(key);
+                        if (potential.layout.mConstraintTag != null) {
+                            if (from.mTargetString.matches(potential.layout.mConstraintTag)) {
+                                from.mDelta.applyDelta(potential);
+                                potential.mCustomConstraints.putAll((HashMap)from.mCustomConstraints.clone());
+                            }
+                        }
+                    }
+                } else {
+                    Constraint constraint = getConstraint(from.mViewId);
+                    from.mDelta.applyDelta(constraint);
+                }
+
             }
         }
     }
@@ -1785,6 +1807,7 @@ public class ConstraintSet {
      */
     public static class Constraint {
         int mViewId;
+        String mTargetString;
         public final PropertySet propertySet = new PropertySet();
         public final Motion motion = new Motion();
         public final Layout layout = new Layout();
@@ -4418,6 +4441,20 @@ public class ConstraintSet {
                 case VIEW_ID:
                     c.mViewId = a.getResourceId(attr, c.mViewId);
                     delta.add(VIEW_ID, c.mViewId);
+                    break;
+                case MOTION_TARGET:
+                    if (MotionLayout.IS_IN_EDIT_MODE) {
+                        c.mViewId = a.getResourceId(attr, c.mViewId);
+                        if (c.mViewId == -1) {
+                            c.mTargetString = a.getString(attr);
+                        }
+                    } else {
+                        if (a.peekValue(attr).type == TypedValue.TYPE_STRING) {
+                            c.mTargetString = a.getString(attr);
+                        } else {
+                            c.mViewId = a.getResourceId(attr, c.mViewId);
+                        }
+                    }
                     break;
                 case DIMENSION_RATIO:
                     delta.add(DIMENSION_RATIO, a.getString(attr));

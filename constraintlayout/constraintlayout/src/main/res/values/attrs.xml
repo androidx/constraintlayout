@@ -972,6 +972,7 @@
     <declare-styleable name="ConstraintOverride">
         <attr name="android:orientation" />
         <attr name="android:id" />
+        <attr name="motionTarget" />
 
         <!-- Controls the initial visibility of the view.  -->
         <attr name="android:visibility" />
