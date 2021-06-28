@@ -904,7 +904,7 @@ public class Motion {
         mCycleMap = new HashMap<>();
         if (mKeyList != null) {
             for (String attribute : cycleAttributes) {
-                KeyCycleOscillator cycle = null;// KeyCycleOscillator.makeSpline(attribute);
+                KeyCycleOscillator cycle = KeyCycleOscillator.makeWidgetCycle(attribute);
                 if (cycle == null) {
                     continue;
                 }
@@ -1336,16 +1336,16 @@ public class Motion {
         }
 
         // TODO add pathRotate KeyCycles
-        //        if (mCycleMap != null) {
-        //            for (KeyCycleOscillator osc : mCycleMap.values()) {
-        //                if (osc instanceof KeyCycleOscillator.PathRotateSet) {
-        //                    ((KeyCycleOscillator.PathRotateSet) osc).setPathRotate(child, position,
-        //                            mInterpolateVelocity[0], mInterpolateVelocity[1]);
-        //                } else {
-        //                    osc.setProperty(child, position);
-        //                }
-        //            }
-        //        }
+                if (mCycleMap != null) {
+                    for (KeyCycleOscillator osc : mCycleMap.values()) {
+                        if (osc instanceof KeyCycleOscillator.PathRotateSet) {
+                            ((KeyCycleOscillator.PathRotateSet) osc).setPathRotate(child, position,
+                                    mInterpolateVelocity[0], mInterpolateVelocity[1]);
+                        } else {
+                            osc.setProperty(child, position);
+                        }
+                    }
+                }
         //   When we support TimeCycle return true if repaint is needed
         //        return timeAnimation;
         return false;

@@ -121,6 +121,10 @@ public class MotionKeyCycle extends MotionKey {
                 mWaveShape = value;
                 return true;
             default:
+                boolean ret =  setValue( type, (float) value);
+                if (ret) {
+                    return true;
+                }
                 return super.setValue(type, value);
         }
     }
@@ -174,10 +178,10 @@ public class MotionKeyCycle extends MotionKey {
             case Cycle.TYPE_PROGRESS:
                 mProgress = value;
                 break;
-            case Attributes.TYPE_PATH_ROTATE:
+            case Cycle.TYPE_PATH_ROTATE:
                 mTransitionPathRotate = value;
                 break;
-            case Cycle.TYPE_PATH_ROTATE:
+            case Cycle.TYPE_WAVE_PERIOD:
                 mWavePeriod = value;
                 break;
             case Cycle.TYPE_WAVE_OFFSET:
@@ -315,4 +319,15 @@ public class MotionKeyCycle extends MotionKey {
         }
     }
 
+
+
+    public void dump() {
+        System.out.println( "MotionKeyCycle{" +
+                "mWaveShape=" + mWaveShape +
+                ", mWavePeriod=" + mWavePeriod +
+                ", mWaveOffset=" + mWaveOffset +
+                ", mWavePhase=" + mWavePhase +
+                ", mRotation=" + mRotation +
+                '}');
+    }
 }
