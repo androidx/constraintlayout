@@ -677,7 +677,6 @@ public class ConstraintSet {
         for (Constraint from : cs.mConstraints.values()) {
             if (from.mDelta != null) {
                 if (from.mTargetString != null) {
-                    Log.v(TAG, Debug.getLoc() + " override target " + from.mTargetString);
                     int count = 0;
                     for (int key : mConstraints.keySet()) {
                         Constraint potential = getConstraint(key);
@@ -2288,7 +2287,7 @@ public class ConstraintSet {
             View view = constraintLayout.getChildAt(i);
             int id = view.getId();
             if (!mConstraints.containsKey(id)) {
-                Log.v(TAG, "id unknown " + Debug.getName(view));
+                Log.w(TAG, "id unknown " + Debug.getName(view));
                 continue;
             }
             if (mForceId && id == -1) {
