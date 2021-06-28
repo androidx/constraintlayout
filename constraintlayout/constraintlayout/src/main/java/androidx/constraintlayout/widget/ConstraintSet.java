@@ -674,8 +674,6 @@ public class ConstraintSet {
     }
 
     public void applyDeltaFrom(ConstraintSet cs) {
-        Log.v(TAG, Debug.getLoc() + " override target " + cs.mIdString +" size="+cs.mConstraints.size());
-
         for (Constraint from : cs.mConstraints.values()) {
             if (from.mDelta != null) {
                 if (from.mTargetString != null) {
