@@ -264,7 +264,44 @@ public class MotionWidget implements TypedValues {
         }
         return true;
     }
+    /**
+     * Sets the attributes
+     *
+     * @param id
+     */
+    public float getValueAttributes(int id) {
+        switch (id) {
+            case TypedValues.Attributes.TYPE_ALPHA:
+                return widgetFrame.alpha;
+            case TypedValues.Attributes.TYPE_TRANSLATION_X:
+                return widgetFrame.translationX;
+            case TypedValues.Attributes.TYPE_TRANSLATION_Y:
+                return widgetFrame.translationY;
+            case TypedValues.Attributes.TYPE_TRANSLATION_Z:
+                return widgetFrame.translationZ;
+            case TypedValues.Attributes.TYPE_ROTATION_X:
+                return widgetFrame.rotationX;
+            case TypedValues.Attributes.TYPE_ROTATION_Y:
+                return widgetFrame.rotationY;
+            case TypedValues.Attributes.TYPE_ROTATION_Z:
+                return widgetFrame.rotationZ;
+            case TypedValues.Attributes.TYPE_SCALE_X:
+                return widgetFrame.scaleX;
+            case TypedValues.Attributes.TYPE_SCALE_Y:
+                return widgetFrame.scaleY;
+            case TypedValues.Attributes.TYPE_PIVOT_X:
+                return widgetFrame.pivotX;
+            case TypedValues.Attributes.TYPE_PIVOT_Y:
+                return widgetFrame.pivotY;
+            case TypedValues.Attributes.TYPE_PROGRESS:
+                return  mProgress;
+            case TypedValues.Attributes.TYPE_PATH_ROTATE:
+                return mTransitionPathRotate;
+            default:
+                return Float.NaN;
+        }
 
+    }
     @Override
     public int getId(String name) {
         int ret = TypedValues.Attributes.getId(name);

@@ -91,11 +91,11 @@ public class MotionKeyAttributesTest {
         }
     }
 
-    @Test
-    public void attributes2() {
+
+    public Scene basicRange(int type, float start, float end) {
         Scene s = new Scene();
-        s.mw1.setRotationZ(0);
-        s.mw2.setRotationZ(360);
+        s.mw1.setValue(type, start);
+        s.mw2.setValue(type,end);
         s.setup();
 
         if (DEBUG) {
@@ -104,9 +104,60 @@ public class MotionKeyAttributesTest {
             });
         }
         s.motion.interpolate(s.res, 0.5f, 1000000 + 1000, s.cache);
+
+        return s;
+    }
+
+
+    @Test
+    public void checkRotationZ() {
+        Scene s = basicRange(TypedValues.Attributes.TYPE_ROTATION_Z,0,360);
         assertEquals(180, s.res.getRotationZ(), 0.001);
     }
 
+
+    @Test
+    public void checkRotationX() {
+        Scene s = basicRange(TypedValues.Attributes.TYPE_ROTATION_X,0,100);
+        assertEquals(50, s.res.getRotationX(), 0.001);
+    }
+
+    @Test
+    public void checkRotationY() {
+        Scene s = basicRange(TypedValues.Attributes.TYPE_ROTATION_Y,0,50);
+        assertEquals(25, s.res.getRotationY(), 0.001);
+    }
+
+    @Test
+    public void checkTranslateX() {
+        Scene s = basicRange(TypedValues.Attributes.TYPE_TRANSLATION_X,0,30);
+        assertEquals(15, s.res.getTranslationX(), 0.001);
+    }
+
+    @Test
+    public void checkTranslateY() {
+        Scene s = basicRange(TypedValues.Attributes.TYPE_TRANSLATION_Y,0,40);
+        assertEquals(20, s.res.getTranslationY(), 0.001);
+    }
+
+    @Test
+    public void checkTranslateZ() {
+        Scene s = basicRange(TypedValues.Attributes.TYPE_TRANSLATION_Z,0,18);
+        assertEquals(9, s.res.getTranslationZ(), 0.001);
+    }
+
+    @Test
+    public void checkScaleX() {
+        Scene s = basicRange(TypedValues.Attributes.TYPE_SCALE_X,1,19);
+        assertEquals(10, s.res.getScaleX(), 0.001);
+    }
+
+
+    @Test
+    public void checkScaleY() {
+        Scene s = basicRange(TypedValues.Attributes.TYPE_SCALE_Y,1,3);
+        assertEquals(2, s.res.getScaleY(), 0.001);
+    }
 
     @Test
     public void attributesRotateX() {
