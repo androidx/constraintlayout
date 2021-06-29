@@ -588,6 +588,15 @@ public class Motion {
     }
 
     private void insertKey(MotionPaths point) {
+        MotionPaths redundant = null;
+        for (MotionPaths p : mMotionPaths) {
+            if (point.position == p.position) {
+                redundant = p;
+            }
+        }
+        if (redundant != null) {
+            mMotionPaths.remove(redundant);
+        }
         int pos = Collections.binarySearch(mMotionPaths, point);
         if (pos == 0) {
             Utils.loge(TAG, " KeyPath position \"" + point.position + "\" outside of range");
