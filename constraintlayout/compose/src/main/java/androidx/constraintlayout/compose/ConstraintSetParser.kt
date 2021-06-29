@@ -208,7 +208,7 @@ internal fun parseJSON(content: String, transition: Transition,
             val elementName = elements[i]
             val element = json[elementName]
             if (element is CLObject) {
-                val customProperties = element.getObject("custom")
+                val customProperties = element.getObjectOrNull("custom")
                 if (customProperties != null) {
                     val properties = customProperties.names() ?: return
                     (0 until properties.size).forEach { i ->
@@ -418,9 +418,9 @@ fun parseVariables(state: State, layoutVariables: LayoutVariables, json: Any) {
         if (element is CLNumber) {
             layoutVariables.put(elementName, element.int)
         } else if (element is CLObject) {
-            if (element.has("start") && element.has("increment")) {
-                var start = layoutVariables.get(element["start"])
-                var increment = layoutVariables.get(element["increment"])
+            if (element.has("from") && element.has("step")) {
+                var start = layoutVariables.get(element["from"])
+                var increment = layoutVariables.get(element["step"])
                 layoutVariables.put(elementName, start, increment)
             } else if (element.has("ids")) {
                 var ids = element.getArray("ids");

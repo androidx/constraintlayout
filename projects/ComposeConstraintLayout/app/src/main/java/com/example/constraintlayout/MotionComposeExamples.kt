@@ -58,8 +58,8 @@ public fun MotionExample1() {
     var baseConstraintSetEnd = """
             {
                 Variables: {
-                  angle: { start: 0, increment: 10 },
-                  rotation: { start: 0, increment: 10 },
+                  angle: { from: 0, to: 10 },
+                  rotation: { from: 0, to: 10 },
                   distance: 100,
                   mylist: { tag: 'box' }
                 },

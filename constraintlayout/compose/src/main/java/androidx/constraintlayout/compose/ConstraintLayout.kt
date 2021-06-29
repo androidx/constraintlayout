@@ -36,6 +36,10 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
+import androidx.constraintlayout.core.parser.CLKey
+import androidx.constraintlayout.core.parser.CLObject
+import androidx.constraintlayout.core.parser.CLParser
+import androidx.constraintlayout.core.parser.CLParsingException
 import androidx.constraintlayout.core.state.ConstraintReference
 import androidx.constraintlayout.core.state.Dimension.*
 import androidx.constraintlayout.core.state.Transition
@@ -1252,17 +1256,37 @@ interface ConstraintSet {
 
 @SuppressLint("ComposableNaming")
 @Composable
-fun ConstraintSet(@Language("json5") content : String) : ConstraintSet {
+fun ConstraintSet(@Language("json5") content : String,
+                  @Language("json5") overrideVariables: String? = null) : ConstraintSet {
     val constraintset = remember {
         mutableStateOf(object : ConstraintSet {
             private val overridedVariables = HashMap<String, Float>()
 
             override fun applyTo(transition: Transition, type: Int) {
                 val layoutVariables = LayoutVariables()
+                applyLayoutVariables(layoutVariables)
+                parseJSON(content, transition, type, layoutVariables)
+            }
+
+            private fun applyLayoutVariables(layoutVariables: LayoutVariables) {
+                if (overrideVariables != null) {
+                    try {
+                        var variables = CLParser.parse(overrideVariables)
+                        for (i in 0..variables.size() - 1) {
+                            var key = variables[i] as CLKey
+                            if (key != null) {
+                                var variable = key.value.float
+                                // TODO: allow arbitrary override, not just float values
+                                layoutVariables.putOverride(key.content(), variable)
+                            }
+                        }
+                    } catch (e: CLParsingException) {
+                        System.err.println("exception: " + e)
+                    }
+                }
                 for (name in overridedVariables.keys) {
                     layoutVariables.putOverride(name, overridedVariables[name]!!)
                 }
-                parseJSON(content, transition, type, layoutVariables)
             }
 
             override fun applyTo(state: State, measurables: List<Measurable>) {
@@ -1276,9 +1300,7 @@ fun ConstraintSet(@Language("json5") content : String) : ConstraintSet {
                     }
                 }
                 val layoutVariables = LayoutVariables()
-                for (name in overridedVariables.keys) {
-                    layoutVariables.putOverride(name, overridedVariables[name]!!)
-                }
+                applyLayoutVariables(layoutVariables)
                 parseJSON(content, state, layoutVariables)
             }
 
