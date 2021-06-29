@@ -29,4 +29,9 @@ public class CLParsingException extends Throwable {
   public String reason() {
     return mReason + " (" + mElementClass + " at line " + mLineNumber + ")";
   }
+
+  @Override
+  public String toString() {
+    return "CLParsingException (" + this.hashCode() + ") : " + reason();
+  }
 }

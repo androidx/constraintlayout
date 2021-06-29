@@ -165,7 +165,6 @@ public class Transition {
             }
             WidgetFrame.interpolate(parentWidth, parentHeight, interpolated, start, end, transition, progress);
             motionControl.interpolate(motionWidgetInterpolated, progress, System.nanoTime(), myKeyCache);
-            System.out.println("toto");
         }
     }
 

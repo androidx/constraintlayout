@@ -967,8 +967,8 @@ public fun ScreenExample12() {
     var baseConstraintSet = """
             {
                 Variables: {
-                  angle: { start: 0, increment: 10 },
-                  rotation: { start: 'startRotation', increment: 10 },
+                  angle: { from: 0, step: 10 },
+                  rotation: { from: 'startRotation', step: 10 },
                   distance: 100,
                   mylist: { tag: 'box' }
                 },
@@ -986,8 +986,8 @@ public fun ScreenExample12() {
             }
         """
 
-    var cs1 = ConstraintSet(baseConstraintSet).override("startRotation", 0f)
-    var cs2 = ConstraintSet(baseConstraintSet).override("startRotation", 90f)
+    var cs1 = ConstraintSet(baseConstraintSet, overrideVariables = "{ startRotation: 0 }")
+    var cs2 = ConstraintSet(baseConstraintSet, overrideVariables = "{ startRotation: 90 }")
 
     Column {
         Button(onClick = { animateToEnd = !animateToEnd }) {
@@ -1402,7 +1402,64 @@ public fun ScreenExample18() {
     }
 }
 
+@Preview(group = "motion11")
+@Composable
+public fun ScreenExample19() {
+    var animateToEnd by remember { mutableStateOf(false) }
+    val progress by animateFloatAsState(
+        targetValue = if (animateToEnd) 1f else 0f,
+        animationSpec = tween(2000)
+    )
 
+    Column {
+        Button(onClick = { animateToEnd = !animateToEnd }) {
+            Text(text = "Run")
+        }
+        MotionLayout(motionScene = MotionScene("""{
+                ConstraintSets: {
+                  start: {
+                    Variables: {
+                      angle: { from: 0, step: 10 },
+                      rotation: { from: 0, step: 10 },
+                      distance: 100,
+                      mylist: { tag: 'box' }
+                    },
+                    Generate: {
+                      mylist: {
+                        width: 200,
+                        height: 40,
+                        circular: ['parent', 'angle', 'distance'],
+                        pivotX: 0.1,
+                        pivotY: 0.1,
+                        translationX: 225,
+                        rotationZ: 'rotation'
+                      }
+                    }
+                  },
+                  end: {
+                    Extends: 'start',
+                    Variables: {
+                      rotation: { from: 90, step: 10 },
+                      distance: 100,
+                    }                    
+                  }
+                }
+            }"""),
+            progress = progress,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+        ) {
+            var colors = arrayListOf<Color>(Color.Red, Color.Green, Color.Blue, Color.Cyan, Color.Yellow)
+
+            for (i in 1..36) {
+                Box(modifier = Modifier
+                    .layoutId("h$i", "box")
+                    .background(colors[i % colors.size]))
+            }
+        }
+    }
+}
 
 
 
