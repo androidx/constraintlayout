@@ -203,6 +203,14 @@ public class CLContainer extends CLElement {
     return null;
   }
 
+  public float getFloatOrNaN(String name) {
+    CLElement element = getOrNull(name);
+    if (element instanceof CLNumber) {
+      return element.getFloat();
+    }
+    return Float.NaN;
+  }
+
   /////////////////////////////////////////////////////////////////////////
   // By index
   /////////////////////////////////////////////////////////////////////////

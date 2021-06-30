@@ -70,6 +70,13 @@ public class CLParser {
       if (c == '\n') {
         lineNumber++;
       }
+      if (hasComment) {
+        if (c == '\n') {
+          hasComment = false;
+        } else {
+          continue;
+        }
+      }
       if (false) {
         System.out.println("Looking at " + i + " : <" + c + ">");
       }
@@ -145,12 +152,6 @@ public class CLParser {
 
   private CLElement getNextJsonElement(int position, char c, CLElement currentElement,
                                               char[] content) throws CLParsingException {
-    if (hasComment) {
-      if (c == '\n') {
-        hasComment = false;
-      }
-      return currentElement;
-    }
     switch (c) {
       case ' ':
       case ':':

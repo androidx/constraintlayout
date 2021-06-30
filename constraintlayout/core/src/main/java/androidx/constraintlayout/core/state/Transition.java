@@ -18,6 +18,7 @@ package androidx.constraintlayout.core.state;
 
 import androidx.constraintlayout.core.motion.Motion;
 import androidx.constraintlayout.core.motion.MotionWidget;
+import androidx.constraintlayout.core.motion.key.MotionKeyAttributes;
 import androidx.constraintlayout.core.motion.key.MotionKeyPosition;
 import androidx.constraintlayout.core.motion.utils.KeyCache;
 import androidx.constraintlayout.core.motion.utils.TypedBundle;
@@ -36,6 +37,8 @@ public class Transition {
     public final static int START = 0;
     public final static int END = 1;
     public final static int INTERPOLATED = 2;
+
+    private int pathMotionArc = -1;
 
     public KeyPosition findPreviousPosition(String target, int frameNumber) {
         while (frameNumber >= 0) {
@@ -107,6 +110,10 @@ public class Transition {
         return keyPositions.size() > 0;
     }
 
+    public void setTransitionProperties(TypedBundle bundle) {
+        pathMotionArc = bundle.getInteger(TypedValues.Position.TYPE_PATH_MOTION_ARC);
+    }
+
     static class WidgetState {
         WidgetFrame start;
         WidgetFrame end;
@@ -135,6 +142,12 @@ public class Transition {
             MotionKeyPosition keyPosition = new MotionKeyPosition();
             prop.applyDelta(keyPosition);
             motionControl.addKey(keyPosition);
+        }
+
+        public void setKeyAttribute(TypedBundle prop) {
+            MotionKeyAttributes keyAttributes = new MotionKeyAttributes();
+            prop.applyDelta(keyAttributes);
+            motionControl.addKey(keyAttributes);
         }
 
         public void update(ConstraintWidget child, int state) {
@@ -198,6 +211,10 @@ public class Transition {
 
     public void addKeyPosition(String target, TypedBundle bundle) {
         getWidgetState(target, null, 0).setKeyPosition(bundle);
+    }
+
+    public void addKeyAttribute(String target, TypedBundle bundle) {
+        getWidgetState(target, null, 0).setKeyAttribute(bundle);
     }
 
     public void addKeyPosition(String target, int frame, int type, float x, float y) {
@@ -275,6 +292,9 @@ public class Transition {
         WidgetState widgetState = this.state.get(widgetId);
         if (widgetState == null) {
             widgetState = new WidgetState();
+            if (pathMotionArc != -1) {
+                widgetState.motionControl.setPathMotionArc(pathMotionArc);
+            }
             state.put(widgetId, widgetState);
             if (child != null) {
                 widgetState.update(child, transitionState);

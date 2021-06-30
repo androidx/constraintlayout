@@ -1110,7 +1110,7 @@ public fun ScreenExample14() {
             }
             """
             ),
-            keyframes = Keyframes("""
+            transition = Transition("""
             {
               KeyFrames: {
                 KeyPositions: [
@@ -1177,7 +1177,7 @@ public fun ScreenExample15() {
             }
             """
             ),
-            keyframes = Keyframes("""
+            transition = Transition("""
             {
               KeyFrames: {
                 KeyPositions: [

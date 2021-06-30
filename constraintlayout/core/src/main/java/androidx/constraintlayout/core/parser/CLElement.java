@@ -113,6 +113,6 @@ public class CLElement {
     if (this instanceof CLNumber) {
       return ((CLNumber) this).getInt();
     }
-    return 0f;
+    return Float.NaN;
   }
 }
