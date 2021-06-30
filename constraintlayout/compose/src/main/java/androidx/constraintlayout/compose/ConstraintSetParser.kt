@@ -18,6 +18,7 @@ package androidx.constraintlayout.compose
 import androidx.compose.ui.unit.Dp
 import androidx.constraintlayout.core.motion.utils.TypedBundle
 import androidx.constraintlayout.core.motion.utils.TypedValues
+import androidx.constraintlayout.core.motion.utils.Utils
 import androidx.constraintlayout.core.parser.*
 import androidx.constraintlayout.core.state.ConstraintReference
 import androidx.constraintlayout.core.state.Dimension
@@ -223,60 +224,75 @@ fun parseKeyAttribute(keyattribute: CLObject, transition: Transition) {
     val frames = keyattribute.getArray("frames")
     val transitionEasing = keyattribute.getStringOrNull("transitionEasing")
 
-    val types = arrayListOf<String>("scaleX", "scaleY")
-    val values = arrayListOf<Int>(
-        TypedValues.Attributes.TYPE_SCALE_X,
-        TypedValues.Attributes.TYPE_SCALE_Y
+    val attrNames = arrayListOf<String>(
+        TypedValues.Attributes.S_SCALE_X,
+        TypedValues.Attributes.S_SCALE_Y,
+        TypedValues.Attributes.S_TRANSLATION_X,
+        TypedValues.Attributes.S_TRANSLATION_Y,
+        TypedValues.Attributes.S_TRANSLATION_Z,
+        TypedValues.Attributes.S_ROTATION_X,
+        TypedValues.Attributes.S_ROTATION_Y,
+        TypedValues.Attributes.S_ROTATION_Z,
     )
+    val attrIds = arrayListOf<Int>(
+        TypedValues.Attributes.TYPE_SCALE_X,
+        TypedValues.Attributes.TYPE_SCALE_Y,
+        TypedValues.Attributes.TYPE_TRANSLATION_X,
+        TypedValues.Attributes.TYPE_TRANSLATION_Y,
+        TypedValues.Attributes.TYPE_TRANSLATION_Z,
+        TypedValues.Attributes.TYPE_ROTATION_X,
+        TypedValues.Attributes.TYPE_ROTATION_Y,
+        TypedValues.Attributes.TYPE_ROTATION_Z,
+        )
 
     var bundles = ArrayList<TypedBundle>()
-    (0 until targets.size()).forEach { i ->
+    (0 until frames.size()).forEach { i ->
         bundles.add(TypedBundle())
     }
 
-    for (k in 0 .. types.size - 1) {
-        var type = types[k]
-        val arrayValues = keyattribute.getArrayOrNull(type)
-        if (arrayValues != null && arrayValues.size() != targets.size()) {
-            throw CLParsingException("incorrect size for $type array, " +
+    for (k in 0 .. attrNames.size - 1) {
+        var attrName = attrNames[k]
+        var attrId    = attrIds[k];
+
+        val arrayValues = keyattribute.getArrayOrNull(attrName)
+        // array must contain one per frame
+        if (arrayValues != null && arrayValues.size() != bundles.size) {
+            throw CLParsingException("incorrect size for $attrName array, " +
                     "not matching targets array!", keyattribute)
         }
         if (arrayValues != null) {
-            (0 until targets.size()).forEach { i ->
-                var bundle = bundles.get(i)
-                (0 until frames.size()).forEach { j ->
-                    bundle.add(values[k], arrayValues.getFloat(j));
-                }
+            (0 until bundles.size).forEach { i ->
+              bundles.get(i) .add(attrId, arrayValues.getFloat(i));
             }
         } else {
-            val value = keyattribute.getFloatOrNaN(type)
+            val value = keyattribute.getFloatOrNaN(attrName)
             if (!value.isNaN()) {
-                (0 until targets.size()).forEach { i ->
-                    var bundle = bundles.get(i)
-                    (0 until frames.size()).forEach { j ->
-                        bundle.add(values[k], value);
+                (0 until bundles.size).forEach { i ->
+                     bundles.get(i).add(attrId, value);
                     }
                 }
             }
         }
-    }
-
     val curveFit = keyattribute.getStringOrNull("curveFit")
     (0 until targets.size()).forEach { i ->
-        var bundle = bundles.get(i)
+    (0 until bundles.size).forEach { j ->
         val target = targets.getString(i)
-        if (curveFit != null) {
-            when (curveFit) {
-                "spline" -> bundle.add(TypedValues.Position.TYPE_CURVE_FIT, 0)
-                "linear" -> bundle.add(TypedValues.Position.TYPE_CURVE_FIT, 1)
-            }
-        }
-        bundle.addIfNotNull(TypedValues.Position.TYPE_TRANSITION_EASING, transitionEasing)
 
-        (0 until frames.size()).forEach { j ->
-            val frame = frames.getInt(j)
-            bundle.add(TypedValues.TYPE_FRAME_POSITION, frame);
-            transition.addKeyAttribute(target, bundle)
+            var bundle = bundles.get(j)
+
+            if (curveFit != null) {
+                when (curveFit) {
+                    "spline" -> bundle.add(TypedValues.Position.TYPE_CURVE_FIT, 0)
+                    "linear" -> bundle.add(TypedValues.Position.TYPE_CURVE_FIT, 1)
+                }
+            }
+            bundle.addIfNotNull(TypedValues.Position.TYPE_TRANSITION_EASING, transitionEasing)
+
+
+                val frame = frames.getInt(j)
+                bundle.add(TypedValues.TYPE_FRAME_POSITION, frame);
+                transition.addKeyAttribute(target, bundle)
+
         }
     }
 }
