@@ -797,7 +797,10 @@ public fun MotionExample5() {
                 Icons.Sharp.KeyboardArrowUp,
                 contentDescription = "SwipeUp",
                 tint = Color.White,
-                modifier = Modifier.layoutId("swipeUp").width(40.dp).height(40.dp)
+                modifier = Modifier
+                    .layoutId("swipeUp")
+                    .width(40.dp)
+                    .height(40.dp)
             )
 
         }
@@ -808,25 +811,14 @@ public fun MotionExample5() {
 @Preview(group = "motion6")
 @Composable
 public fun MotionExample6() {
-    var animateToEnd by remember { mutableStateOf(false) }
-    val progress by animateFloatAsState(
-        targetValue = if (animateToEnd) 1f else 0f,
-        animationSpec = tween(2000)
-    )
-    var componentHeight by remember { mutableStateOf(600f) }
-    var height = 64.dp
-    val heightPx = with(LocalDensity.current) { height.toPx() }
+    var componentHeight by remember { mutableStateOf(1000f) }
     val swipeableState = rememberSwipeableState("Bottom")
     val anchors = mapOf(0f to "Bottom", componentHeight to "Top")
 
-    println("component height is $componentHeight")
-    println("progress fraction is " + swipeableState.progress.fraction)
+    val mprogress = (swipeableState.offset.value / componentHeight)
 
-    Column {
-        Button(onClick = { animateToEnd = !animateToEnd }) {
-            Text(text = "Run")
-        }
-        MotionLayout(motionScene = MotionScene("""{
+    MotionLayout(motionScene = MotionScene(
+        """{
                 ConstraintSets: {
                   start: {
                     Variables: {
@@ -887,7 +879,7 @@ public fun MotionExample6() {
                       end: ['parent', 'end', 16],
                       top: ['parent', 'top', 90]
                     }
-                  },
+                  }
                 },
                 Transitions: {
                   default: {
@@ -906,35 +898,41 @@ public fun MotionExample6() {
                     }
                   }
                 }
-            }"""),
-            progress = swipeableState.progress.fraction,
-            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)
-                .swipeable(
-                    state = swipeableState,
-                    anchors = anchors,
-                    resistance = null,
-                    thresholds = { _, _ -> FractionalThreshold(0.3f) },
-                    orientation = Orientation.Vertical
-                )
-                .onSizeChanged { size ->
-                    componentHeight = size.height.toFloat()
-                    println("SIZE CHANGE component height is $componentHeight")
-                }
-
-        ) {
-            Box(modifier = Modifier
-                .layoutId("content")
-                .background(Color.LightGray))
-            Box(modifier = Modifier
-                .layoutId("box")
-                .background(Color.Cyan))
-            Text(modifier = Modifier.layoutId("name"), text = "MotionLayout")
-            for (i in 0 until 6) {
-                Text(modifier = Modifier.layoutId("text$i", "text"), text = "Test $i")
+            }"""
+    ),
+        progress = mprogress,
+        debug = EnumSet.of(MotionLayoutDebugFlags.NONE),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .swipeable(
+                state = swipeableState,
+                anchors = anchors,
+                resistance = null,
+                reverseDirection = true,
+                thresholds = { _, _ -> FractionalThreshold(0.3f) },
+                orientation = Orientation.Vertical
+            )
+            .onSizeChanged { size ->
+                componentHeight = size.height.toFloat()
+                println("SIZE CHANGE component height is $componentHeight")
             }
+
+    ) {
+        Box(
+            modifier = Modifier
+                .layoutId("content")
+                .background(Color.LightGray)
+        )
+        Box(
+            modifier = Modifier
+                .layoutId("box")
+                .background(Color.Cyan)
+        )
+        Text(modifier = Modifier.layoutId("name"), text = "MotionLayout")
+        for (i in 0 until 6) {
+            Text(modifier = Modifier.layoutId("text$i", "text"), text = "Test $i")
         }
     }
+
 }
