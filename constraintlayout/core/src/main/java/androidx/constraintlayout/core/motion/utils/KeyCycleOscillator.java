@@ -41,7 +41,6 @@ public abstract class KeyCycleOscillator {
     ArrayList<WavePoint> mWavePoints = new ArrayList<>();
 
     public static KeyCycleOscillator makeWidgetCycle(String attribute) {
-        System.out.println(" >> "+attribute);
         if (attribute.equals(TypedValues.Attributes.S_PATH_ROTATE)) {
             return new PathRotateSet(attribute);
         }

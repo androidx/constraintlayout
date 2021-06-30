@@ -240,9 +240,9 @@ public interface TypedValues {
         public static final String S_EASING = "easing";
         public static final String S_WAVE_SHAPE = "waveShape";
         public static final String S_CUSTOM_WAVE_SHAPE = "customWave";
-        public static final String S_WAVE_PERIOD = "wavePeriod";
-        public static final String S_WAVE_OFFSET = "waveOffset";
-        public static final String S_WAVE_PHASE = "wavePhase";
+        public static final String S_WAVE_PERIOD = "period";
+        public static final String S_WAVE_OFFSET = "offset";
+        public static final String S_WAVE_PHASE = "phase";
 
         /**
          * Method to go from String names of values to id of the values

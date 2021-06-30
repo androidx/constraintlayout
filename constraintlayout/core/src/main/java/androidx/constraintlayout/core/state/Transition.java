@@ -19,6 +19,7 @@ package androidx.constraintlayout.core.state;
 import androidx.constraintlayout.core.motion.Motion;
 import androidx.constraintlayout.core.motion.MotionWidget;
 import androidx.constraintlayout.core.motion.key.MotionKeyAttributes;
+import androidx.constraintlayout.core.motion.key.MotionKeyCycle;
 import androidx.constraintlayout.core.motion.key.MotionKeyPosition;
 import androidx.constraintlayout.core.motion.utils.KeyCache;
 import androidx.constraintlayout.core.motion.utils.TypedBundle;
@@ -149,6 +150,12 @@ public class Transition {
             prop.applyDelta(keyAttributes);
             motionControl.addKey(keyAttributes);
         }
+        public void setKeyCycle(TypedBundle prop) {
+            MotionKeyCycle keyAttributes = new MotionKeyCycle();
+            prop.applyDelta(keyAttributes);
+            keyAttributes.printAttributes();
+            motionControl.addKey(keyAttributes);
+        }
 
         public void update(ConstraintWidget child, int state) {
             if (state == START) {
@@ -217,13 +224,16 @@ public class Transition {
         getWidgetState(target, null, 0).setKeyAttribute(bundle);
     }
 
+    public void addKeyCycle(String target, TypedBundle bundle) {
+        getWidgetState(target, null, 0).setKeyCycle(bundle);
+    }
+
     public void addKeyPosition(String target, int frame, int type, float x, float y) {
         TypedBundle bundle = new TypedBundle();
         bundle.add(TypedValues.Position.TYPE_POSITION_TYPE, 2);
         bundle.add(TypedValues.TYPE_FRAME_POSITION, frame);
         bundle.add(TypedValues.Position.TYPE_PERCENT_X, x);
         bundle.add(TypedValues.Position.TYPE_PERCENT_Y, y);
-        System.out.println(">>>>" + frame);
         getWidgetState(target, null, 0).setKeyPosition(bundle);
 
         KeyPosition keyPosition = new KeyPosition(target, frame, type, x, y);

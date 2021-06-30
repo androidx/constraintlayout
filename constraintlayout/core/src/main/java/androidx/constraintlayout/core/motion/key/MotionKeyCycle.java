@@ -20,6 +20,7 @@ import androidx.constraintlayout.core.motion.utils.KeyCycleOscillator;
 import androidx.constraintlayout.core.motion.utils.Oscillator;
 import androidx.constraintlayout.core.motion.utils.SplineSet;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
+import androidx.constraintlayout.core.motion.utils.Utils;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -330,4 +331,24 @@ public class MotionKeyCycle extends MotionKey {
                 ", mRotation=" + mRotation +
                 '}');
     }
+
+    public void printAttributes() {
+        HashSet<String> nameSet = new HashSet<>();
+        getAttributeNames(nameSet);
+
+        Utils.log(" ------------- " + mFramePosition +" -------------");
+        Utils.log( "MotionKeyCycle{" +
+                "Shape=" + mWaveShape +
+                ", Period=" + mWavePeriod +
+                ", Offset=" + mWaveOffset +
+                ", Phase=" + mWavePhase +
+                '}');
+        String[]names = nameSet.toArray(new String[0]);
+        for (int i = 0; i < names.length; i++) {
+            int id = TypedValues.Attributes.getId(names[i]);
+            Utils.log(names[i]+ ":"+ getValue(names[i]));
+        }
+    }
+
+
 }
