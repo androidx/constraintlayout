@@ -908,16 +908,14 @@ public fun MotionExample6() {
             .swipeable(
                 state = swipeableState,
                 anchors = anchors,
-                resistance = null,
+               // resistance = null,
                 reverseDirection = true,
                 thresholds = { _, _ -> FractionalThreshold(0.3f) },
                 orientation = Orientation.Vertical
             )
             .onSizeChanged { size ->
                 componentHeight = size.height.toFloat()
-                println("SIZE CHANGE component height is $componentHeight")
             }
-
     ) {
         Box(
             modifier = Modifier
