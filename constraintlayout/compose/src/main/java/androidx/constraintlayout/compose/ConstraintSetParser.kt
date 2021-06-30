@@ -108,21 +108,40 @@ class OverrideValue(value: Float) : GeneratedValue {
     }
 }
 
-internal fun parseKeyframesJSON(content: String, transition: Transition) {
+internal fun parseTransition(content: String, transition: Transition) {
     try {
         val json = CLParser.parse(content)
+        val pathMotionArc = json.getStringOrNull("pathMotionArc")
+        if (pathMotionArc != null) {
+            var bundle = TypedBundle()
+            when (pathMotionArc) {
+                "none" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC, 0)
+                "startVertical" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC, 1)
+                "startHorizontal" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC, 2)
+                "flip" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC, 3)
+            }
+            transition.setTransitionProperties(bundle)
+        }
         val keyframes = json.getObjectOrNull("KeyFrames")
         if (keyframes == null) {
             return
         }
         val keypositions = keyframes.getArrayOrNull("KeyPositions")
-        if (keypositions == null) {
-            return
+        if (keypositions != null) {
+            (0 until keypositions.size()).forEach { i ->
+                val keyposition = keypositions[i]
+                if (keyposition is CLObject) {
+                    parseKeyPosition(keyposition, transition)
+                }
+            }
         }
-        (0 until keypositions.size()).forEach { i ->
-            val keyposition = keypositions[i]
-            if (keyposition is CLObject) {
-                parseKeyPosition(keyposition, transition)
+        val keyattributes = keyframes.getArrayOrNull("KeyAttributes")
+        if (keyattributes != null) {
+            (0 until keyattributes.size()).forEach { i ->
+                val keyattribute = keyattributes[i]
+                if (keyattribute is CLObject) {
+                    parseKeyAttribute(keyattribute, transition)
+                }
             }
         }
     } catch (e: CLParsingException) {
@@ -195,6 +214,69 @@ fun parseKeyPosition(keyposition: CLObject, transition: Transition) {
             }
 
             transition.addKeyPosition(target, bundle)
+        }
+    }
+}
+
+fun parseKeyAttribute(keyattribute: CLObject, transition: Transition) {
+    val targets = keyattribute.getArray("target")
+    val frames = keyattribute.getArray("frames")
+    val transitionEasing = keyattribute.getStringOrNull("transitionEasing")
+
+    val types = arrayListOf<String>("scaleX", "scaleY")
+    val values = arrayListOf<Int>(
+        TypedValues.Attributes.TYPE_SCALE_X,
+        TypedValues.Attributes.TYPE_SCALE_Y
+    )
+
+    var bundles = ArrayList<TypedBundle>()
+    (0 until targets.size()).forEach { i ->
+        bundles.add(TypedBundle())
+    }
+
+    for (k in 0 .. types.size - 1) {
+        var type = types[k]
+        val arrayValues = keyattribute.getArrayOrNull(type)
+        if (arrayValues != null && arrayValues.size() != targets.size()) {
+            throw CLParsingException("incorrect size for $type array, " +
+                    "not matching targets array!", keyattribute)
+        }
+        if (arrayValues != null) {
+            (0 until targets.size()).forEach { i ->
+                var bundle = bundles.get(i)
+                (0 until frames.size()).forEach { j ->
+                    bundle.add(values[k], arrayValues.getFloat(j));
+                }
+            }
+        } else {
+            val value = keyattribute.getFloatOrNaN(type)
+            if (!value.isNaN()) {
+                (0 until targets.size()).forEach { i ->
+                    var bundle = bundles.get(i)
+                    (0 until frames.size()).forEach { j ->
+                        bundle.add(values[k], value);
+                    }
+                }
+            }
+        }
+    }
+
+    val curveFit = keyattribute.getStringOrNull("curveFit")
+    (0 until targets.size()).forEach { i ->
+        var bundle = bundles.get(i)
+        val target = targets.getString(i)
+        if (curveFit != null) {
+            when (curveFit) {
+                "spline" -> bundle.add(TypedValues.Position.TYPE_CURVE_FIT, 0)
+                "linear" -> bundle.add(TypedValues.Position.TYPE_CURVE_FIT, 1)
+            }
+        }
+        bundle.addIfNotNull(TypedValues.Position.TYPE_TRANSITION_EASING, transitionEasing)
+
+        (0 until frames.size()).forEach { j ->
+            val frame = frames.getInt(j)
+            bundle.add(TypedValues.TYPE_FRAME_POSITION, frame);
+            transition.addKeyAttribute(target, bundle)
         }
     }
 }

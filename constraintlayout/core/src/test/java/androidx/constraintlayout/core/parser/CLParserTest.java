@@ -16,6 +16,7 @@
 package androidx.constraintlayout.core.parser;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -342,6 +343,70 @@ public class CLParserTest {
                             "b: { width: '30%', height: '1:1', centerVertically: 'parent' }, " +
                             "c: { top: ['b', 'bottom'] } }",
                     parsedContent.toJSON());
+        } catch (CLParsingException e) {
+            System.err.println("Exception " + e.reason());
+            e.printStackTrace();
+            assertTrue(false);
+        }
+    }
+
+
+    @Test
+    public void testConstraints3() {
+        String test = "{\n" +
+                "                ConstraintSets: {\n" +
+                "                  start: {\n" +
+                "                    a: {\n" +
+                "                      width: 40,\n" +
+                "                      height: 40,\n" +
+                "                      start: ['parent', 'start', 16],\n" +
+                "                      bottom: ['parent', 'bottom', 16]\n" +
+                "                    }\n" +
+                "                  },\n" +
+                "                  end: {\n" +
+                "                    a: {\n" +
+                "                      width: 40,\n" +
+                "                      height: 40,\n" +
+                "                      //rotationZ: 390,\n" +
+                "                      end: ['parent', 'end', 16],\n" +
+                "                      top: ['parent', 'top', 16]\n" +
+                "                    }\n" +
+                "                  }\n" +
+                "                },\n" +
+                "                Transitions: {\n" +
+                "                  default: {\n" +
+                "                    from: 'start',\n" +
+                "                    to: 'end',\n" +
+                "                    pathMotionArc: 'startHorizontal',\n" +
+                "                    KeyFrames: {\n" +
+                "//                      KeyPositions: [\n" +
+                "//                        {\n" +
+                "//                          target: ['a'],\n" +
+                "//                          frames: [25, 50, 75],\n" +
+                "////                          percentX: [0.4, 0.8, 0.1],\n" +
+                "////                          percentY: [0.4, 0.8, 0.3]\n" +
+                "//                        }\n" +
+                "//                      ],\n" +
+                "                      KeyAttributes: [\n" +
+                "                        {\n" +
+                "                          target: ['a'],\n" +
+                "                          frames: [25, 50],\n" +
+                "                          scaleX: 3,\n" +
+                "                          scaleY: .3\n" +
+                "                        }\n" +
+                "                      ]\n" +
+                "                    }\n" +
+                "                  }\n" +
+                "                }\n" +
+                "            }";
+        try {
+            CLObject parsedContent = CLParser.parse(test);
+            assertEquals("{ ConstraintSets: { start: { a: { width: 40, height: 40, start: ['parent', 'start', 16], bottom: ['parent', 'bottom', 16] } }, end: { a: { width: 40, height: 40, end: ['parent', 'end', 16], top: ['parent', 'top', 16] } } }, Transitions: { default: { from: 'start', to: 'end', pathMotionArc: 'startHorizontal', KeyFrames: { KeyAttributes: [{ target: ['a'], frames: [25, 50], scaleX: 3, scaleY: 0.3 }] } } } }", parsedContent.toJSON());
+            CLObject transitions = parsedContent.getObject("Transitions");
+            CLObject transition = transitions.getObject("default");
+            CLObject keyframes = transition.getObjectOrNull("KeyFrames");
+            CLArray keyattributes = keyframes.getArrayOrNull("KeyAttributes");
+            assertNotNull(keyattributes);
         } catch (CLParsingException e) {
             System.err.println("Exception " + e.reason());
             e.printStackTrace();

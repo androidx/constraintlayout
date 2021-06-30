@@ -59,7 +59,7 @@ public class CLElement {
     String content = new String(mContent);
     content = content.substring((int) start, (int) end + 1);
 
-    return getStrClass() + " (" + start + " : " + end + ") <<" + content + ">>";
+    return getStrClass() + " (" + start + " : " + end + ")"; //<<" + content + ">>";
   }
 
   protected String getStrClass() {
@@ -113,6 +113,6 @@ public class CLElement {
     if (this instanceof CLNumber) {
       return ((CLNumber) this).getInt();
     }
-    return 0f;
+    return Float.NaN;
   }
 }
