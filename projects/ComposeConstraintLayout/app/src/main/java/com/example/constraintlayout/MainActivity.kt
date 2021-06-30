@@ -10,8 +10,15 @@ import androidx.constraintlayout.compose.*
 
 class MainActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
-    private var composeNum = 23
-    private var MAX = 24
+    private var composeNum = 24
+    private var MAX = 28
+    var map = HashMap<Int,String>();
+   init {
+       map.put(24,"test of scaleX/Y")
+       map.put(25,"test of translationX/Y")
+       map.put(26,"test of rotationZ")
+       map.put(27,"test of rotationXY")
+    }
 
     private fun show(com: ComposeView) {
         com.setContent() {
@@ -40,6 +47,10 @@ class MainActivity : AppCompatActivity() {
                 21 -> MotionExample3()
                 22 -> MotionExample4()
                 23 -> MotionExample5()
+                24 -> AttributesScale()
+                25 -> AttributesTranslationXY()
+                26 -> AttributesRotationZ()
+                27 -> AttributesRotationXY()
             }
         }
     }
@@ -55,8 +66,12 @@ class MainActivity : AppCompatActivity() {
         if (mFrameLayout!!.childCount > 0) {
             mFrameLayout!!.removeAllViews()
         }
-        title = " example " + composeNum;
-        findViewById<TextView>(R.id.layoutName).text = " example " + composeNum;
+        var sub   = " example " + composeNum
+        if (map.containsKey(composeNum)) {
+            sub += " "+ map.get(composeNum)
+        }
+        title = sub;
+        findViewById<TextView>(R.id.layoutName).text = "! example " + composeNum;
         var com = ComposeView(this);
         mFrameLayout!!.addView(com)
         show(com)

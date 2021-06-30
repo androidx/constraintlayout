@@ -18,6 +18,7 @@ package androidx.constraintlayout.core.motion.key;
 import androidx.constraintlayout.core.motion.CustomVariable;
 import androidx.constraintlayout.core.motion.utils.SplineSet;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
+import androidx.constraintlayout.core.motion.utils.Utils;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -348,4 +349,52 @@ public class MotionKeyAttributes extends MotionKey {
         return mCurveFit;
     }
 
+    public void printAttributes() {
+        HashSet<String> nameSet = new HashSet<>();
+        getAttributeNames(nameSet);
+
+        System.out.println(" ------------- " + mFramePosition +" -------------");
+        String[]names = nameSet.toArray(new String[0]);
+        for (int i = 0; i < names.length; i++) {
+            int id = TypedValues.Attributes.getId(names[i]);
+            System.out.println(names[i]+ ":"+ getFloatValue(id));
+        }
+    }
+
+    private float getFloatValue(int id) {
+        switch (id) {
+            case TypedValues.Attributes.TYPE_ALPHA:
+                return mAlpha;
+            case TypedValues.Attributes.TYPE_TRANSLATION_X:
+                return mTranslationX;
+            case TypedValues.Attributes.TYPE_TRANSLATION_Y:
+                return mTranslationY;
+            case TypedValues.Attributes.TYPE_TRANSLATION_Z:
+                return mTranslationZ;
+            case Attributes.TYPE_ELEVATION:
+                return mElevation;
+            case TypedValues.Attributes.TYPE_ROTATION_X:
+                return mRotationX;
+            case TypedValues.Attributes.TYPE_ROTATION_Y:
+                return mRotationY;
+            case TypedValues.Attributes.TYPE_ROTATION_Z:
+                return mRotation;
+            case TypedValues.Attributes.TYPE_SCALE_X:
+                return mScaleX;
+            case TypedValues.Attributes.TYPE_SCALE_Y:
+                return mScaleY;
+            case TypedValues.Attributes.TYPE_PIVOT_X:
+                return mPivotX;
+            case TypedValues.Attributes.TYPE_PIVOT_Y:
+                return mPivotY;
+            case TypedValues.Attributes.TYPE_PROGRESS:
+                return mProgress;
+            case TypedValues.Attributes.TYPE_PATH_ROTATE:
+                return mTransitionPathRotate;
+            case TypedValues.TYPE_FRAME_POSITION:
+                return mFramePosition;
+            default:
+                return Float.NaN;
+        }
+    }
 }
