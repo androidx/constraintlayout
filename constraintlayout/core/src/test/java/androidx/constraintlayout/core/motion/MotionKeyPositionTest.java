@@ -215,38 +215,33 @@ public class MotionKeyPositionTest {
     @Test
     public void keyPosition3x() {
         Scene s = new Scene();
-         KeyCache cache = new KeyCache();
-       int [] frames = {25,50,75};
+        KeyCache cache = new KeyCache();
+        int[] frames = {25, 50, 75};
 
-        float []  percentX = {0.1f, 0.8f, 0.1f};
-        float [] percentY = { 0.4f, 0.8f, 0.0f};
+        float[] percentX = {0.1f, 0.8f, 0.1f};
+        float[] percentY = {0.4f, 0.8f, 0.0f};
         for (int i = 0; i < frames.length; i++) {
             MotionKeyPosition keyPosition = new MotionKeyPosition();
             keyPosition.setFramePosition(frames[i]);
             keyPosition.setValue(TypedValues.Position.TYPE_PERCENT_X, percentX[i]);
-            keyPosition.setValue(TypedValues.Position.TYPE_PERCENT_Y,  percentY[i]);
+            keyPosition.setValue(TypedValues.Position.TYPE_PERCENT_Y, percentY[i]);
 
             s.motion.addKey(keyPosition);
         }
-
-
-
 
         s.setup();
         s.motion.interpolate(s.res, 0.5f, 1000000 + (int) (0.5 * 100), cache);
         System.out.println("0.5 " + s.res);
         if (DEBUG) {
-            s.sample(()->{
+            s.sample(() -> {
                 System.out.println(s.progress + " ,     " + s.res);
             });
-
-
-            }
+        }
 
         s.motion.interpolate(s.res, 0.5f, 1000000 + (int) (0.5 * 100), cache);
         System.out.println("0.5 " + s.res);
 
-        assertEquals("400, 325, 460, 385", s.res.toString());
+        assertEquals("320, 320, 350, 360", s.res.toString());
     }
 
 

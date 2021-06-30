@@ -152,12 +152,6 @@ public class CLParser {
 
   private CLElement getNextJsonElement(int position, char c, CLElement currentElement,
                                               char[] content) throws CLParsingException {
-    if (hasComment) {
-      if (c == '\n') {
-        hasComment = false;
-      }
-      return currentElement;
-    }
     switch (c) {
       case ' ':
       case ':':
