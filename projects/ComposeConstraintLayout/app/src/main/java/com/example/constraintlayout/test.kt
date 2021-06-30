@@ -1422,18 +1422,24 @@ public fun ScreenExample19() {
                       angle: { from: 0, step: 10 },
                       rotation: { from: 0, step: 10 },
                       distance: 100,
-                      mylist: { tag: 'box' }
+                      mylist: { tag: 'box' },
+                      test: { from: 1, to: 36, prefix: 'h' },
+                      color: ['#ff0000', '#00ff00']
                     },
                     Generate: {
-                      mylist: {
+                      test: {
                         width: 200,
                         height: 40,
                         circular: ['parent', 'angle', 'distance'],
                         pivotX: 0.1,
                         pivotY: 0.1,
                         translationX: 225,
-                        rotationZ: 'rotation'
-                      }
+                        translationZ: 20, 
+                        rotationZ: 'rotation',
+                        custom: {
+                          background: 'color'
+                        }
+                      },
                     }
                   },
                   end: {
@@ -1453,9 +1459,12 @@ public fun ScreenExample19() {
             var colors = arrayListOf<Color>(Color.Red, Color.Green, Color.Blue, Color.Cyan, Color.Yellow)
 
             for (i in 1..36) {
+                var properties = motionProperties("h$i")
                 Box(modifier = Modifier
                     .layoutId("h$i", "box")
-                    .background(colors[i % colors.size]))
+                    .background(properties.value.color("background"))
+                //    .background(colors[i % colors.size])
+                )
             }
         }
     }

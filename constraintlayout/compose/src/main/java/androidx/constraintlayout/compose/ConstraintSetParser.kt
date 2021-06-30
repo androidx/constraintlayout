@@ -50,6 +50,17 @@ class LayoutVariables {
         generators[elementName] = generator
     }
 
+    fun put(elementName: String, from: Float, to: Float, step: Float, prefix: String, postfix: String) {
+        if (generators.containsKey(elementName)) {
+            if (generators[elementName] is OverrideValue) {
+                return
+            }
+        }
+        val generator = FiniteGenerator(from, to, step, prefix, postfix)
+        generators[elementName] = generator
+        arrayIds[elementName] = generator.array()
+    }
+
     fun putOverride(elementName: String, value: Float) {
         val generator = OverrideValue(value)
         generators[elementName] = generator
@@ -82,6 +93,7 @@ class LayoutVariables {
     }
 
 }
+
 interface GeneratedValue {
     fun value() : Float
 }
@@ -96,6 +108,37 @@ class Generator(start: Float, private var incrementBy: Float) : GeneratedValue {
         }
         return current
     }
+}
+
+class FiniteGenerator(from: Float, to: Float,
+                      private var step: Float = 1f, private var prefix: String = "",
+                      private var postfix: String = ""
+) : GeneratedValue {
+    private var current : Float = from
+    private var stop = false
+    private var initial = from
+    private var max = to
+
+    override fun value(): Float {
+        if (current >= max) {
+            stop = true
+        }
+        if (!stop) {
+            current += step
+        }
+        return current
+    }
+
+    fun array() : ArrayList<String> {
+        val array = arrayListOf<String>()
+        var value = initial.toInt()
+        for (i in initial.toInt() .. max.toInt()) {
+            array.add(prefix + value + postfix)
+            value += step.toInt()
+        }
+        return array
+    }
+
 }
 
 class OverrideValue(private var value: Float) : GeneratedValue {
@@ -491,7 +534,13 @@ fun parseVariables(state: State, layoutVariables: LayoutVariables, json: Any) {
         if (element is CLNumber) {
             layoutVariables.put(elementName, element.int)
         } else if (element is CLObject) {
-            if (element.has("from") && element.has("step")) {
+            if (element.has("from") && element.has("to")) {
+                val from = layoutVariables.get(element["from"])
+                val to = layoutVariables.get(element["to"])
+                val prefix = element.getStringOrNull("prefix") ?: ""
+                val postfix = element.getStringOrNull("postfix") ?: ""
+                layoutVariables.put(elementName, from, to, 1f, prefix, postfix)
+            } else if (element.has("from") && element.has("step")) {
                 val start = layoutVariables.get(element["from"])
                 val increment = layoutVariables.get(element["step"])
                 layoutVariables.put(elementName, start, increment)
