@@ -57,11 +57,11 @@ public class WidgetFrame {
     final HashMap<String, CustomVariable> mCustom = new HashMap<>();
   
     public int width() {
-        return right - left;
+        return Math.max(0, right - left);
     }
 
     public int height() {
-        return bottom - top;
+        return Math.max(0, bottom - top);
     }
 
     public WidgetFrame() {

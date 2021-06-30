@@ -1441,8 +1441,7 @@ public fun ScreenExample19() {
                   end: {
                     Extends: 'start',
                     Variables: {
-                      rotation: { from: 90, step: 10 },
-                      distance: 100,
+                      rotation: { from: 90, step: 10 }
                     }                    
                   }
                 }
