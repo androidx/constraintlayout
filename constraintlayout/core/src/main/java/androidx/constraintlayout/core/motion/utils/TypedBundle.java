@@ -37,6 +37,15 @@ public class TypedBundle {
     boolean[] mValueBoolean = new boolean[INITIAL_BOOLEAN];
     int mCountBoolean = 0;
 
+    public int getInteger(int type) {
+        for (int i = 0; i < mCountInt; i++) {
+            if (mTypeInt[i] == type) {
+                return mValueInt[i];
+            }
+        }
+        return -1;
+    }
+
     public void add(int type, int value) {
         if (mCountInt >= mTypeInt.length) {
             mTypeInt = Arrays.copyOf(mTypeInt, mTypeInt.length * 2);

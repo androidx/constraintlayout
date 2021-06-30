@@ -55,21 +55,21 @@ import java.util.*
 @Suppress("NOTHING_TO_INLINE")
 @Composable
 inline fun MotionLayout(
-    start: ConstraintSet,
-    end: ConstraintSet,
-    keyframes: Keyframes? = null,
-    progress: Float,
-    debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
-    modifier: Modifier = Modifier,
-    optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
-    crossinline content: @Composable MotionLayoutScope.() -> Unit
+        start: ConstraintSet,
+        end: ConstraintSet,
+        transition: androidx.constraintlayout.compose.Transition? = null,
+        progress: Float,
+        debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
+        modifier: Modifier = Modifier,
+        optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
+        crossinline content: @Composable MotionLayoutScope.() -> Unit
 ) {
     val measurer = remember { MotionMeasurer() }
     val scope = remember { MotionLayoutScope(measurer) }
     val progressState = remember { mutableStateOf(0f) }
     SideEffect { progressState.value = progress }
     val measurePolicy =
-        rememberMotionLayoutMeasurePolicy(optimizationLevel, start, end, keyframes, progressState, measurer)
+        rememberMotionLayoutMeasurePolicy(optimizationLevel, start, end, transition, progressState, measurer)
     if (!debug.contains(MotionLayoutDebugFlags.NONE)) {
         Box {
             @Suppress("DEPRECATION")
@@ -116,8 +116,8 @@ inline fun MotionLayout(
     }
     val start = ConstraintSet(startContent)
     val end = ConstraintSet(endContent)
-    val keyframes : Keyframes? = if (transitionContent != null) Keyframes(transitionContent) else null
-    MotionLayout(start = start, end = end, keyframes = keyframes, progress = progress,
+    val transition : androidx.constraintlayout.compose.Transition? = if (transitionContent != null) Transition(transitionContent) else null
+    MotionLayout(start = start, end = end, transition = transition, progress = progress,
         debug = debug, modifier = modifier, optimizationLevel = optimizationLevel, content)
 }
 
@@ -231,21 +231,21 @@ class MotionLayoutScope @PublishedApi internal constructor(measurer: MotionMeasu
 }
 
 @Immutable
-interface Keyframes {
+interface Transition {
     fun applyTo(transition: Transition, type: Int)
 }
 
 @SuppressLint("ComposableNaming")
 @Composable
-fun Keyframes(@Language("json5") content : String) : Keyframes {
-    val keyframes = remember {
-        mutableStateOf(object : Keyframes {
+fun Transition(@Language("json5") content : String) : androidx.constraintlayout.compose.Transition {
+    val transition = remember {
+        mutableStateOf(object : androidx.constraintlayout.compose.Transition {
             override fun applyTo(transition: Transition, type: Int) {
-                parseKeyframesJSON(content, transition)
+                parseTransition(content, transition)
             }
         })
     }
-    return keyframes.value
+    return transition.value
 }
 
 enum class MotionLayoutDebugFlags {
@@ -256,21 +256,21 @@ enum class MotionLayoutDebugFlags {
 @Composable
 @PublishedApi
 internal fun rememberMotionLayoutMeasurePolicy(
-    optimizationLevel: Int,
-    constraintSetStart: ConstraintSet,
-    constraintSetEnd: ConstraintSet,
-    keyframes: Keyframes?,
-    progress: MutableState<Float>,
-    measurer: MotionMeasurer
-) = remember(optimizationLevel, constraintSetStart, constraintSetEnd, keyframes) {
-    measurer.initWith(constraintSetStart, constraintSetEnd, keyframes, progress.value)
+        optimizationLevel: Int,
+        constraintSetStart: ConstraintSet,
+        constraintSetEnd: ConstraintSet,
+        transition: androidx.constraintlayout.compose.Transition?,
+        progress: MutableState<Float>,
+        measurer: MotionMeasurer
+) = remember(optimizationLevel, constraintSetStart, constraintSetEnd, transition) {
+    measurer.initWith(constraintSetStart, constraintSetEnd, transition, progress.value)
     MeasurePolicy { measurables, constraints ->
         val layoutSize = measurer.performInterpolationMeasure(
             constraints,
             layoutDirection,
             constraintSetStart,
             constraintSetEnd,
-            keyframes,
+            transition,
             measurables,
             optimizationLevel,
             progress.value,
@@ -321,24 +321,24 @@ internal class MotionMeasurer : Measurer() {
     }
 
     fun performInterpolationMeasure(
-        constraints: Constraints,
-        layoutDirection: LayoutDirection,
-        constraintSetStart: ConstraintSet,
-        constraintSetEnd: ConstraintSet,
-        keyframes: Keyframes?,
-        measurables: List<Measurable>,
-        optimizationLevel: Int,
-        progress: Float,
-        measureScope: MeasureScope
+            constraints: Constraints,
+            layoutDirection: LayoutDirection,
+            constraintSetStart: ConstraintSet,
+            constraintSetEnd: ConstraintSet,
+            transition: androidx.constraintlayout.compose.Transition?,
+            measurables: List<Measurable>,
+            optimizationLevel: Int,
+            progress: Float,
+            measureScope: MeasureScope
     ): IntSize {
         this.density = measureScope
         this.measureScope = measureScope
         if (motionProgress != progress
-            || transition.isEmpty()
+            || this.transition.isEmpty()
             || frameCache.isEmpty()) {
             motionProgress = progress
-            if (transition.isEmpty() || frameCache.isEmpty()) {
-                transition.clear()
+            if (this.transition.isEmpty() || frameCache.isEmpty()) {
+                this.transition.clear()
                 reset()
                 // Define the size of the ConstraintLayout.
                 state.width(
@@ -360,19 +360,19 @@ internal class MotionMeasurer : Measurer() {
                 state.layoutDirection = layoutDirection
 
                 measureConstraintSet(optimizationLevel, constraintSetStart, measurables, constraints)
-                transition.updateFrom(root, Transition.START)
+                this.transition.updateFrom(root, Transition.START)
                 measureConstraintSet(optimizationLevel, constraintSetEnd, measurables, constraints)
-                transition.updateFrom(root, Transition.END)
-                if (keyframes != null) {
-                    keyframes.applyTo(transition, 0)
+                this.transition.updateFrom(root, Transition.END)
+                if (transition != null) {
+                    transition.applyTo(this.transition, 0)
                 }
             }
-            transition.interpolate(root.width, root.height, progress)
+            this.transition.interpolate(root.width, root.height, progress)
             var index = 0
             for (child in root.children) {
                 val measurable = child.companionWidget
                 if (measurable !is Measurable) continue
-                var interpolatedFrame = transition.getInterpolated(child)
+                var interpolatedFrame = this.transition.getInterpolated(child)
                 if (interpolatedFrame == null) {
                     continue
                 }
@@ -573,16 +573,16 @@ internal class MotionMeasurer : Measurer() {
     }
 
     fun initWith(
-        start: ConstraintSet,
-        end: ConstraintSet,
-        keyframes: Keyframes?,
-        progress: Float
+            start: ConstraintSet,
+            end: ConstraintSet,
+            transition: androidx.constraintlayout.compose.Transition?,
+            progress: Float
     ) {
         clearConstraintSets()
-        start.applyTo(transition, Transition.START)
-        end.applyTo(transition, Transition.END)
-        transition.interpolate(0, 0, progress)
-        keyframes?.applyTo(transition, 0)
+        start.applyTo(this.transition, Transition.START)
+        end.applyTo(this.transition, Transition.END)
+        this.transition.interpolate(0, 0, progress)
+        transition?.applyTo(this.transition, 0)
     }
 }
 
