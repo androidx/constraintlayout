@@ -1264,7 +1264,7 @@ fun ConstraintSet(@Language("json5") content : String,
             override fun applyTo(transition: Transition, type: Int) {
                 val layoutVariables = LayoutVariables()
                 applyLayoutVariables(layoutVariables)
-                parseJSON(content, transition, type, layoutVariables)
+                parseJSON(content, transition, type)
             }
 
             private fun applyLayoutVariables(layoutVariables: LayoutVariables) {
