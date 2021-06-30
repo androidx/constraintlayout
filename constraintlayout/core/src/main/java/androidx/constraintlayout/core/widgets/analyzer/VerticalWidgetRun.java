@@ -93,6 +93,7 @@ public class VerticalWidgetRun extends WidgetRun {
                 updateRunCenter(dependency, widget.mTop, widget.mBottom, VERTICAL);
                 return;
             }
+            default: break;
         }
         if (true || dependency == dimension) {
             if (dimension.readyToSolve && !dimension.resolved) {
@@ -112,6 +113,7 @@ public class VerticalWidgetRun extends WidgetRun {
                                     case ConstraintWidget.UNKNOWN: {
                                         size = (int) (0.5f + widget.horizontalRun.dimension.value / widget.getDimensionRatio());
                                     } break;
+                                    default: break;
                                 }
                                 dimension.resolve(size);
                             }
@@ -127,6 +129,7 @@ public class VerticalWidgetRun extends WidgetRun {
                                 }
                             }
                         } break;
+                        default: break;
                     }
                 }
             }
@@ -330,7 +333,8 @@ public class VerticalWidgetRun extends WidgetRun {
                     } break;
                     case MATCH_CONSTRAINT_SPREAD: {
                         // the work is done in the update()
-                    }
+                    } break;
+                    default: break;
                 }
             } else {
                 dimension.addDependency(this);

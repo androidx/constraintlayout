@@ -221,6 +221,8 @@ public class HorizontalWidgetRun extends WidgetRun {
                     case MATCH_CONSTRAINT_SPREAD: {
                         // the work is done in the update()
                     }
+                    break;
+                    default: break;
                 }
             }
             if (widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT].mTarget != null && widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT].mTarget != null) { // <-s-d-e->
@@ -301,6 +303,7 @@ public class HorizontalWidgetRun extends WidgetRun {
                 dimensions[VERTICAL] = verticalSide;
             }
             break;
+            default: break;
         }
     }
 
@@ -319,6 +322,7 @@ public class HorizontalWidgetRun extends WidgetRun {
                 updateRunCenter(dependency, widget.mLeft, widget.mRight, HORIZONTAL);
                 return;
             }
+            default: break;
         }
 
         if (!dimension.resolved) {
@@ -408,6 +412,8 @@ public class HorizontalWidgetRun extends WidgetRun {
                                         dimension.resolve(ldx);
                                         widget.verticalRun.dimension.resolve(ldy);
                                     }
+                                    break;
+                                    default: break;
                                 }
                             } else if (s2 && e2) {
                                 if (!(secondStart.readyToSolve && secondEnd.readyToSolve)) {
@@ -443,6 +449,7 @@ public class HorizontalWidgetRun extends WidgetRun {
                                         widget.verticalRun.dimension.resolve(ldy);
                                     }
                                     break;
+                                    default: break;
                                 }
                             }
                         } else {
@@ -461,6 +468,7 @@ public class HorizontalWidgetRun extends WidgetRun {
                                     size = (int) (0.5f + widget.verticalRun.dimension.value * widget.getDimensionRatio());
                                 }
                                 break;
+                                default: break;
                             }
                             dimension.resolve(size);
                         }
@@ -478,6 +486,7 @@ public class HorizontalWidgetRun extends WidgetRun {
                         }
                     }
                     break;
+                    default: break;
                 }
             }
         }

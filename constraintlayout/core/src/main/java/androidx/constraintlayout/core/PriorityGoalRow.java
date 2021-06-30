@@ -32,7 +32,7 @@ public class PriorityGoalRow extends ArrayRow {
     private int numGoals = 0;
     GoalVariableAccessor accessor = new GoalVariableAccessor(this);
 
-    class GoalVariableAccessor implements Comparable {
+    class GoalVariableAccessor {
         SolverVariable variable;
         PriorityGoalRow row;
 
@@ -123,12 +123,6 @@ public class PriorityGoalRow extends ArrayRow {
                 }
             }
             return true;
-        }
-
-        @Override
-        public int compareTo(Object o) {
-            SolverVariable v = (SolverVariable) o;
-            return variable.id - v.id;
         }
 
         public void reset() {
