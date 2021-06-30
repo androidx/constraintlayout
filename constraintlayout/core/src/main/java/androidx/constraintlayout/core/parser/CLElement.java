@@ -59,7 +59,7 @@ public class CLElement {
     String content = new String(mContent);
     content = content.substring((int) start, (int) end + 1);
 
-    return getStrClass() + " (" + start + " : " + end + ")"; //<<" + content + ">>";
+    return getStrClass() + " (" + start + " : " + end + ") <<" + content + ">>";
   }
 
   protected String getStrClass() {
