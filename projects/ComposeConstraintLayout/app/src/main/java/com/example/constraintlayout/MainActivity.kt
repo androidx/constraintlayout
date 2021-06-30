@@ -10,14 +10,19 @@ import androidx.constraintlayout.compose.*
 
 class MainActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
-    private var composeNum = 24
-    private var MAX = 28
+    private var composeNum = 28
+    private var MAX = 32
     var map = HashMap<Int,String>();
    init {
-       map.put(24,"test of scaleX/Y")
-       map.put(25,"test of translationX/Y")
-       map.put(26,"test of rotationZ")
-       map.put(27,"test of rotationXY")
+       var count = 24;
+       map.put(24,"scaleX/Y")
+       map.put(25,"tanslationX/Y")
+       map.put(26,"rotationZ")
+       map.put(27,"rotationXY")
+       map.put(28,"Cycle Scale")
+       map.put(29,"Cycle TranslationXY")
+       map.put(30,"Cycle RotationZ")
+       map.put(31,"Cycle RotationXY")
     }
 
     private fun show(com: ComposeView) {
@@ -47,10 +52,16 @@ class MainActivity : AppCompatActivity() {
                 21 -> MotionExample3()
                 22 -> MotionExample4()
                 23 -> MotionExample5()
+
                 24 -> AttributesScale()
                 25 -> AttributesTranslationXY()
                 26 -> AttributesRotationZ()
                 27 -> AttributesRotationXY()
+
+                28 -> CycleScale()
+                29 -> CycleTranslationXY()
+                30 -> CycleRotationZ()
+                31 -> CycleRotationXY()
             }
         }
     }

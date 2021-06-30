@@ -180,6 +180,16 @@ internal fun parseTransition(content: String, transition: Transition) {
                 }
             }
         }
+        val keyCycles = keyframes.getArrayOrNull("KeyCycles")
+        if (keyCycles != null) {
+            (0 until keyCycles.size()).forEach { i ->
+                val keyCycle = keyCycles[i]
+                if (keyCycle is CLObject) {
+                    parseKeyCycle(keyCycle, transition)
+                }
+            }
+        }
+
     } catch (e: CLParsingException) {
         System.err.println("Error parsing JSON $e")
     }
@@ -328,6 +338,105 @@ fun parseKeyAttribute(keyAttribute: CLObject, transition: Transition) {
         }
     }
 }
+
+
+
+fun parseKeyCycle(keyCycleData: CLObject, transition: Transition) {
+    val targets = keyCycleData.getArray("target")
+    val frames = keyCycleData.getArray("frames")
+    val transitionEasing = keyCycleData.getStringOrNull("transitionEasing")
+
+    val attrNames = arrayListOf<String>(
+        TypedValues.Cycle.S_SCALE_X,
+        TypedValues.Cycle.S_SCALE_Y,
+        TypedValues.Cycle.S_TRANSLATION_X,
+        TypedValues.Cycle.S_TRANSLATION_Y,
+        TypedValues.Cycle.S_TRANSLATION_Z,
+        TypedValues.Cycle.S_ROTATION_X,
+        TypedValues.Cycle.S_ROTATION_Y,
+        TypedValues.Cycle.S_ROTATION_Z,
+        TypedValues.Cycle.S_WAVE_PERIOD,
+        TypedValues.Cycle.S_WAVE_OFFSET,
+        TypedValues.Cycle.S_WAVE_PHASE,
+    )
+    val attrIds = arrayListOf<Int>(
+        TypedValues.Cycle.TYPE_SCALE_X,
+        TypedValues.Cycle.TYPE_SCALE_Y,
+        TypedValues.Cycle.TYPE_TRANSLATION_X,
+        TypedValues.Cycle.TYPE_TRANSLATION_Y,
+        TypedValues.Cycle.TYPE_TRANSLATION_Z,
+        TypedValues.Cycle.TYPE_ROTATION_X,
+        TypedValues.Cycle.TYPE_ROTATION_Y,
+        TypedValues.Cycle.TYPE_ROTATION_Z,
+        TypedValues.Cycle.TYPE_WAVE_PERIOD,
+        TypedValues.Cycle.TYPE_WAVE_OFFSET,
+        TypedValues.Cycle.TYPE_WAVE_PHASE,
+    )
+
+// TODO S_WAVE_SHAPE S_CUSTOM_WAVE_SHAPE
+    var bundles = ArrayList<TypedBundle>()
+    (0 until frames.size()).forEach { i ->
+        bundles.add(TypedBundle())
+    }
+
+    for (k in 0 .. attrNames.size - 1) {
+        var attrName = attrNames[k]
+        var attrId    = attrIds[k];
+
+        val arrayValues = keyCycleData.getArrayOrNull(attrName)
+        // array must contain one per frame
+        if (arrayValues != null && arrayValues.size() != bundles.size) {
+            throw CLParsingException("incorrect size for $attrName array, " +
+                    "not matching targets array!", keyCycleData)
+        }
+        if (arrayValues != null) {
+            (0 until bundles.size).forEach { i ->
+                bundles.get(i) .add(attrId, arrayValues.getFloat(i));
+            }
+        } else {
+            val value = keyCycleData.getFloatOrNaN(attrName)
+            if (!value.isNaN()) {
+                (0 until bundles.size).forEach { i ->
+                    bundles.get(i).add(attrId, value);
+                }
+            }
+        }
+    }
+    val curveFit = keyCycleData.getStringOrNull(TypedValues.Cycle.S_CURVE_FIT)
+    val easing = keyCycleData.getStringOrNull(TypedValues.Cycle.S_EASING)
+    val waveShape = keyCycleData.getStringOrNull(TypedValues.Cycle.S_WAVE_SHAPE)
+    val customWave = keyCycleData.getStringOrNull(TypedValues.Cycle.S_CUSTOM_WAVE_SHAPE)
+    (0 until targets.size()).forEach { i ->
+        (0 until bundles.size).forEach { j ->
+            val target = targets.getString(i)
+            var bundle = bundles.get(j)
+
+
+            if (curveFit != null) {
+                when (curveFit) {
+                    "spline" -> bundle.add(TypedValues.Cycle.TYPE_CURVE_FIT, 0)
+                    "linear" -> bundle.add(TypedValues.Cycle.TYPE_CURVE_FIT, 1)
+                }
+            }
+            bundle.addIfNotNull(TypedValues.Position.TYPE_TRANSITION_EASING, transitionEasing)
+            if (easing != null) {
+                bundle.add(TypedValues.Cycle.TYPE_EASING, easing)
+            }
+            if (waveShape != null) {
+                bundle.add(TypedValues.Cycle.TYPE_WAVE_SHAPE, waveShape)
+            }
+            if (customWave != null) {
+                bundle.add(TypedValues.Cycle.TYPE_CUSTOM_WAVE_SHAPE, customWave)
+            }
+
+            val frame = frames.getInt(j)
+            bundle.add(TypedValues.TYPE_FRAME_POSITION, frame);
+            transition.addKeyCycle(target, bundle)
+
+        }
+    }
+}
+
 
 internal fun parseJSON(
     content: String, transition: Transition,
