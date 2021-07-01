@@ -79,12 +79,10 @@ class Main : JPanel(BorderLayout()) {
         editor.font = font
         editor.document.addDocumentListener(object: DocumentListener {
             override fun insertUpdate(e: DocumentEvent?) {
-                println("UPDATE!!")
                 sendContent()
             }
 
             override fun removeUpdate(e: DocumentEvent?) {
-                println("UPDATE!!")
                 sendContent()
             }
 
@@ -176,10 +174,10 @@ class Main : JPanel(BorderLayout()) {
 
         @JvmStatic
         fun main(vararg args: String) {
-            val f = JFrame("Live Editor")
+            val f = JFrame("ConstraintLayout Live Editor")
             val p: Main = Main()
             f.contentPane = p
-            f.setBounds(100, 100, 1500, 800)
+            f.setBounds(100, 100, 1200, 800)
             f.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
             f.isVisible = true
         }
