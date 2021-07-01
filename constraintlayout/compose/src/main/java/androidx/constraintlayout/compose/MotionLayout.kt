@@ -18,6 +18,8 @@ package androidx.constraintlayout.compose
 
 import android.annotation.SuppressLint
 import android.graphics.Matrix
+import android.os.Handler
+import android.os.Looper
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -33,20 +35,17 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.layout.Measurable
-import androidx.compose.ui.layout.MeasurePolicy
-import androidx.compose.ui.layout.MeasureScope
-import androidx.compose.ui.layout.MultiMeasureLayout
-import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.layout.*
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.*
 import androidx.constraintlayout.core.motion.Motion
+import androidx.constraintlayout.core.state.*
 import androidx.constraintlayout.core.state.Dimension
 import androidx.constraintlayout.core.state.Transition
-import androidx.constraintlayout.core.state.WidgetFrame
 import androidx.constraintlayout.core.widgets.Optimizer
 import org.intellij.lang.annotations.Language
 import java.util.*
+
 
 /**
  * Layout that interpolate its children layout given two sets of constraint and
@@ -69,7 +68,7 @@ inline fun MotionLayout(
     val progressState = remember { mutableStateOf(0f) }
     SideEffect { progressState.value = progress }
     val measurePolicy =
-        rememberMotionLayoutMeasurePolicy(optimizationLevel, start, end, transition, progressState, measurer)
+        rememberMotionLayoutMeasurePolicy(optimizationLevel, debug, start, end, transition, progressState, measurer)
     if (!debug.contains(MotionLayoutDebugFlags.NONE)) {
         Box {
             @Suppress("DEPRECATION")
@@ -100,25 +99,38 @@ inline fun MotionLayout(
     debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     modifier: Modifier = Modifier,
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
-    crossinline content: @Composable MotionLayoutScope.() -> Unit
+    crossinline content: @Composable() (MotionLayoutScope.() -> Unit),
 ) {
-    var startContent = remember(motionScene) {
+    val needsUpdate = remember {
+        mutableStateOf(0L)
+    }
+    motionScene.setUpdateFlag(needsUpdate)
+
+    var usedDebugMode = debug
+    if (motionScene.getForcedDrawDebug() != MotionLayoutDebugFlags.UNKNOWN) {
+        usedDebugMode = EnumSet.of(motionScene.getForcedDrawDebug())
+    }
+
+    val startContent = remember(motionScene, needsUpdate.value) {
         motionScene.getConstraintSet("start")
     }
-    var endContent = remember(motionScene) {
+    val endContent = remember(motionScene, needsUpdate.value) {
         motionScene.getConstraintSet("end")
     }
-    var transitionContent = remember(motionScene) {
+    val transitionContent = remember(motionScene, needsUpdate.value) {
         motionScene.getTransition("default")
     }
+    val forcedProgress = motionScene.getForcedProgress()
+    val usedProgress = if (forcedProgress.isNaN()) progress else forcedProgress
+
     if (startContent == null || endContent == null) {
         return
     }
     val start = ConstraintSet(startContent)
     val end = ConstraintSet(endContent)
     val transition : androidx.constraintlayout.compose.Transition? = if (transitionContent != null) Transition(transitionContent) else null
-    MotionLayout(start = start, end = end, transition = transition, progress = progress,
-        debug = debug, modifier = modifier, optimizationLevel = optimizationLevel, content)
+    MotionLayout(start = start, end = end, transition = transition, progress = usedProgress,
+        debug = usedDebugMode, modifier = modifier, optimizationLevel = optimizationLevel, content)
 }
 
 @Immutable
@@ -127,39 +139,123 @@ interface MotionScene {
     fun setTransitionContent(name: String, content: String)
     fun getConstraintSet(name: String): String?
     fun getTransition(name: String) : String?
+    fun setUpdateFlag(needsUpdate: MutableState<Long>)
+    fun setDebugName(name: String?)
+    fun getForcedProgress(): Float
+    fun getDebugName() : String?
+    fun getForcedDrawDebug(): MotionLayoutDebugFlags
+}
+
+class InternalMotionScene(@Language("json5") content : String) : MotionScene {
+
+    private var forcedDrawDebug: MotionLayoutDebugFlags = MotionLayoutDebugFlags.UNKNOWN
+    private var forcedProgress: Float = Float.NaN
+    private var updateFlag: MutableState<Long>? = null
+    private val constraintSetsContent = HashMap<String, String>()
+    private val transitionsContent = HashMap<String, String>()
+    private var debugName:String? = null
+    private var currentContent = content
+
+    init {
+        parseMotionSceneJSON(this, currentContent);
+        if (debugName != null) {
+            val mainHandler = Handler(Looper.getMainLooper())
+            val scene = this
+            val callback = object : RegistryCallback {
+                override fun onNewMotionScene(content: String?) {
+                    if (content == null) {
+                        return
+                    }
+                    mainHandler.post {
+                        try {
+                            currentContent = content
+                            parseMotionSceneJSON(scene, currentContent);
+                            if (updateFlag != null) {
+                                updateFlag!!.value = updateFlag!!.value + 1
+                            }
+                        } catch (e : Exception) {}
+                    }
+                }
+
+                override fun onProgress(progress: Float) {
+                    mainHandler.post {
+                        try {
+                            forcedProgress = progress
+                            if (updateFlag != null) {
+                                updateFlag!!.value = updateFlag!!.value + 1
+                            }
+                        } catch (e : Exception) {}
+                    }
+                }
+
+                override fun currentMotionScene() : String {
+                    return currentContent
+                }
+
+                override fun setDrawDebug(debugMode: Int) {
+                    mainHandler.post {
+                        try {
+                            when (debugMode) {
+                                -1 -> forcedDrawDebug = MotionLayoutDebugFlags.UNKNOWN
+                                MotionLayoutDebugFlags.UNKNOWN.ordinal -> forcedDrawDebug = MotionLayoutDebugFlags.UNKNOWN
+                                MotionLayoutDebugFlags.NONE.ordinal -> forcedDrawDebug = MotionLayoutDebugFlags.NONE
+                                MotionLayoutDebugFlags.SHOW_ALL.ordinal -> forcedDrawDebug = MotionLayoutDebugFlags.SHOW_ALL
+                            }
+                            if (updateFlag != null) {
+                                updateFlag!!.value = updateFlag!!.value + 1
+                            }
+                        } catch (e : Exception) {}
+                    }
+                }
+            }
+            val registry = Registry.getInstance()
+            registry.register(debugName, callback)
+        }
+    }
+
+    override fun setConstraintSetContent(name: String, content: String) {
+        constraintSetsContent[name] = content
+    }
+
+    override fun setTransitionContent(name: String, content: String) {
+        transitionsContent[name] = content
+    }
+
+    override fun getConstraintSet(name: String): String? {
+        return constraintSetsContent[name]
+    }
+
+    override fun getTransition(name: String): String? {
+        return transitionsContent[name]
+    }
+
+    override fun getForcedProgress() : Float {
+        return forcedProgress;
+    }
+
+    override fun setUpdateFlag(needsUpdate: MutableState<Long>) {
+        updateFlag = needsUpdate
+    }
+
+    override fun setDebugName(name: String?) {
+        debugName = name
+    }
+
+    override fun getDebugName() : String?{
+        return debugName
+    }
+
+    override fun getForcedDrawDebug(): MotionLayoutDebugFlags {
+        return forcedDrawDebug
+    }
 }
 
 @SuppressLint("ComposableNaming")
 @Composable
-fun MotionScene(@Language("json5") content : String) : MotionScene {
-    val constraintset = remember {
-        mutableStateOf(object : MotionScene {
-            private val constraintSetsContent = HashMap<String, String>()
-            private val transitionsContent = HashMap<String, String>()
-
-            init {
-                parseMotionSceneJSON(this, content);
-            }
-
-            override fun setConstraintSetContent(name: String, content: String) {
-                constraintSetsContent[name] = content
-            }
-
-            override fun setTransitionContent(name: String, content: String) {
-                transitionsContent[name] = content
-            }
-
-            override fun getConstraintSet(name: String): String? {
-                return constraintSetsContent[name]
-            }
-
-            override fun getTransition(name: String): String? {
-                return transitionsContent[name]
-            }
-        })
+fun MotionScene(@Language("json5") content: String): MotionScene {
+    return remember(content) {
+        InternalMotionScene(content)
     }
-
-    return constraintset.value
 }
 
 @LayoutScopeMarker
@@ -238,7 +334,7 @@ interface Transition {
 @SuppressLint("ComposableNaming")
 @Composable
 fun Transition(@Language("json5") content : String) : androidx.constraintlayout.compose.Transition {
-    val transition = remember {
+    val transition = remember(content) {
         mutableStateOf(object : androidx.constraintlayout.compose.Transition {
             override fun applyTo(transition: Transition, type: Int) {
                 parseTransition(content, transition)
@@ -250,19 +346,21 @@ fun Transition(@Language("json5") content : String) : androidx.constraintlayout.
 
 enum class MotionLayoutDebugFlags {
     NONE,
-    SHOW_ALL
+    SHOW_ALL,
+    UNKNOWN
 }
 
 @Composable
 @PublishedApi
 internal fun rememberMotionLayoutMeasurePolicy(
-        optimizationLevel: Int,
-        constraintSetStart: ConstraintSet,
-        constraintSetEnd: ConstraintSet,
-        transition: androidx.constraintlayout.compose.Transition?,
-        progress: MutableState<Float>,
-        measurer: MotionMeasurer
-) = remember(optimizationLevel, constraintSetStart, constraintSetEnd, transition) {
+    optimizationLevel: Int,
+    debug: EnumSet<MotionLayoutDebugFlags>,
+    constraintSetStart: ConstraintSet,
+    constraintSetEnd: ConstraintSet,
+    transition: androidx.constraintlayout.compose.Transition?,
+    progress: MutableState<Float>,
+    measurer: MotionMeasurer
+) = remember(optimizationLevel, debug, constraintSetStart, constraintSetEnd, transition) {
     measurer.initWith(constraintSetStart, constraintSetEnd, transition, progress.value)
     MeasurePolicy { measurables, constraints ->
         val layoutSize = measurer.performInterpolationMeasure(

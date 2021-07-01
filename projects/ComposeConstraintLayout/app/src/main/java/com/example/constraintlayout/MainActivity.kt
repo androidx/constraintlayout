@@ -10,7 +10,7 @@ import androidx.constraintlayout.compose.*
 
 class MainActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
-    private var composeNum = 28
+    private var composeNum = 16
     private var MAX = 32
     var map = HashMap<Int,String>();
    init {
@@ -23,6 +23,8 @@ class MainActivity : AppCompatActivity() {
        map.put(29,"Cycle TranslationXY")
        map.put(30,"Cycle RotationZ")
        map.put(31,"Cycle RotationXY")
+
+       DebugServer().start()
     }
 
     private fun show(com: ComposeView) {
@@ -47,21 +49,22 @@ class MainActivity : AppCompatActivity() {
                 16 -> ScreenExample16()
                 17 -> ScreenExample17()
                 18 -> ScreenExample18()
-                19 -> MotionExample1()
-                20 -> MotionExample2()
-                21 -> MotionExample3()
-                22 -> MotionExample4()
-                23 -> MotionExample5()
+                19 -> ScreenExample19()
+                20 -> MotionExample1()
+                21 -> MotionExample2()
+                22 -> MotionExample3()
+                23 -> MotionExample4()
+                24 -> MotionExample5()
 
-                24 -> AttributesScale()
-                25 -> AttributesTranslationXY()
-                26 -> AttributesRotationZ()
-                27 -> AttributesRotationXY()
+                25 -> AttributesScale()
+                26 -> AttributesTranslationXY()
+                27 -> AttributesRotationZ()
+                28 -> AttributesRotationXY()
 
-                28 -> CycleScale()
-                29 -> CycleTranslationXY()
-                30 -> CycleRotationZ()
-                31 -> CycleRotationXY()
+                29 -> CycleScale()
+                30 -> CycleTranslationXY()
+                31 -> CycleRotationZ()
+                32 -> CycleRotationXY()
             }
         }
     }

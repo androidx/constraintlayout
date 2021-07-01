@@ -1257,7 +1257,7 @@ interface ConstraintSet {
 @Composable
 fun ConstraintSet(@Language("json5") content : String,
                   @Language("json5") overrideVariables: String? = null) : ConstraintSet {
-    val constraintset = remember {
+    val constraintset = remember(content, overrideVariables) {
         mutableStateOf(object : ConstraintSet {
             private val overridedVariables = HashMap<String, Float>()
 
@@ -1672,7 +1672,10 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             }
         }
         measurables.fastForEach { measurable ->
-            var frame = frameCache[measurable]!!
+            val frame = frameCache[measurable]
+            if (frame == null) {
+                return
+            }
             if (frame.isDefaultTransform()) {
                 val x = frameCache[measurable]!!.left
                 val y = frameCache[measurable]!!.top
