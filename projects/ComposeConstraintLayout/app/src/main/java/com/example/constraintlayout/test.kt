@@ -1416,6 +1416,9 @@ public fun ScreenExample19() {
             Text(text = "Run")
         }
         MotionLayout(motionScene = MotionScene("""{
+                Debug: {
+                  name: 'test'
+                },
                 ConstraintSets: {
                   start: {
                     Variables: {

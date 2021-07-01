@@ -486,6 +486,7 @@ internal fun parseMotionSceneJSON(scene: MotionScene, content: String) {
             when (elementName) {
                 "ConstraintSets" -> parseConstraintSets(scene, element)
                 "Transitions" -> parseTransitions(scene, element)
+                "Debug" -> parseDebug(scene, element)
             }
         }
     } catch (e: CLParsingException) {
@@ -583,6 +584,14 @@ fun parseTransitions(scene: MotionScene, json: Any) {
         val element = json.getObject(elementName)
         scene.setTransitionContent(elementName, element.toJSON())
     }
+}
+
+fun parseDebug(scene: MotionScene, json: Any) {
+    if (json !is CLObject) {
+        return
+    }
+    val name = json.getStringOrNull("name")
+    scene.setDebugName(name)
 }
 
 internal fun parseJSON(content: String, state: State, layoutVariables: LayoutVariables) {
