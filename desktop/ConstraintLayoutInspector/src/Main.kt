@@ -29,21 +29,15 @@ class Main : JPanel(BorderLayout()) {
     private var GET_CURRENT_CONTENT = 3
     private var SET_DRAW_DEBUG = 4
 
+    private var connected = false
     private var drawDebug = false
 
     var debugName = "test2"
-    var socket = Socket("localhost", 9999)
-    var writer = DataOutputStream(socket.getOutputStream())
-    var reader = DataInputStream(socket.getInputStream())
+    lateinit var socket : Socket
+    lateinit var writer : DataOutputStream
+    lateinit var reader : DataInputStream
     var editor = JEditorPane()
     val textField = JTextField()
-
-    fun reconnect() {
-        socket.close()
-        socket = Socket("localhost", 9999)
-        writer = DataOutputStream(socket.getOutputStream())
-        reader = DataInputStream(socket.getInputStream())
-    }
 
     init {
         val slider = JSlider()
@@ -114,8 +108,7 @@ class Main : JPanel(BorderLayout()) {
 
     fun sendProgress(value : Float) {
         try {
-            if (!socket.isConnected) { reconnect() }
-            debugName = textField.text
+            prepareConnection()
             writer.writeInt(UPDATE_PROGRESS)
             writer.writeUTF(debugName)
             writer.writeFloat(value)
@@ -126,8 +119,7 @@ class Main : JPanel(BorderLayout()) {
 
     fun getContent() {
         try {
-            if (!socket.isConnected) { reconnect() }
-            debugName = textField.text
+            prepareConnection()
             writer.writeInt(GET_CURRENT_CONTENT)
             writer.writeUTF(debugName)
             editor.text = reader.readUTF()
@@ -138,8 +130,7 @@ class Main : JPanel(BorderLayout()) {
 
     fun sendContent() {
         try {
-            if (!socket.isConnected) { reconnect() }
-            debugName = textField.text
+            prepareConnection()
             writer.writeInt(UPDATE_CONTENT)
             writer.writeUTF(debugName)
             var content = editor.text
@@ -151,8 +142,7 @@ class Main : JPanel(BorderLayout()) {
 
     fun setDrawDebug(active: Boolean) {
         try {
-            if (!socket.isConnected) { reconnect() }
-            debugName = textField.text
+            prepareConnection()
             writer.writeInt(SET_DRAW_DEBUG)
             writer.writeUTF(debugName)
             writer.writeBoolean(active)
@@ -161,7 +151,28 @@ class Main : JPanel(BorderLayout()) {
         }
     }
 
-    object companion {
+    fun prepareConnection() {
+        if (!connected || !socket.isConnected) {
+            reconnect()
+        }
+        debugName = textField.text
+    }
+
+    fun reconnect() {
+        if (connected) {
+            socket.close()
+        }
+        try {
+            socket = Socket("localhost", 9999)
+            writer = DataOutputStream(socket.getOutputStream())
+            reader = DataInputStream(socket.getInputStream())
+            connected = true
+        } catch (e : Exception) {
+            println("Could not connect to application")
+        }
+    }
+
+    companion object {
 
         @JvmStatic
         fun main(vararg args: String) {
