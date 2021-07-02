@@ -16,6 +16,7 @@
 package androidx.constraintlayout.core.state;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class Registry {
 
@@ -62,5 +63,9 @@ public class Registry {
         if (callback != null) {
             callback.setDrawDebug(debugMode);
         }
+    }
+
+    public Set<String> getLayoutList() {
+        return mCallbacks.keySet();
     }
 }

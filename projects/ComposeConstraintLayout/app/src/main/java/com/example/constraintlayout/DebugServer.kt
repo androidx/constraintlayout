@@ -31,6 +31,7 @@ class DebugServer {
     private var UPDATE_PROGRESS = 2
     private var GET_CURRENT_CONTENT = 3
     private var SET_DRAW_DEBUG = 4
+    private var GET_LAYOUT_LIST = 5
 
     init {
         server = ServerSocket(port)
@@ -78,6 +79,13 @@ class DebugServer {
                         MotionLayoutDebugFlags.SHOW_ALL else
                         MotionLayoutDebugFlags.NONE
                     registry.setDrawDebug(name, debugMode.ordinal)
+                } else if (type == GET_LAYOUT_LIST) {
+                    val list = registry.getLayoutList()
+                    writer.writeInt(list.size)
+                    for (layout in list) {
+                        println("layout: $layout")
+                        writer.writeUTF(layout)
+                    }
                 }
             } catch (e : Exception) {
                 println("Exception $e")
