@@ -46,6 +46,7 @@ class Main : JPanel(BorderLayout()) {
     private val listModel = DefaultListModel<String>()
 
     var editor = JEditorPane()
+    var scroll = JScrollPane(editor)
     val textField = JTextField()
     val layoutListPanel = JList<String>()
 
@@ -74,7 +75,7 @@ class Main : JPanel(BorderLayout()) {
 
         add(topPanel, BorderLayout.NORTH)
         add(scrollPane, BorderLayout.WEST)
-        add(editor)
+        add(scroll)
         add(bottomPanel, BorderLayout.SOUTH)
 
         connectButton.addActionListener {
