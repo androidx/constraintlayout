@@ -23,8 +23,8 @@ public class CLElement {
   protected CLContainer mContainer;
   private int line;
 
-  protected static int MAX_LINE = 80;
-  protected static int INDENT = 2;
+  protected static int MAX_LINE = 80; // Max number of characters before the formatter indents
+  protected static int BASE_INDENT = 2; // default indentation value
 
   public CLElement(char[] content) {
     mContent = content;

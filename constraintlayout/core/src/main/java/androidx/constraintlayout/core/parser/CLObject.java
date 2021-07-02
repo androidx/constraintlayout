@@ -54,7 +54,7 @@ public class CLObject extends CLContainer {
       } else {
         first = false;
       }
-      json.append(element.toFormattedJSON(indent + INDENT, forceIndent - 1));
+      json.append(element.toFormattedJSON(indent + BASE_INDENT, forceIndent - 1));
     }
     json.append("\n");
     addIndent(json, indent);

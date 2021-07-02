@@ -52,8 +52,8 @@ public class CLArray extends CLContainer {
         } else {
           first = false;
         }
-        addIndent(json, indent + INDENT);
-        json.append(element.toFormattedJSON(indent + INDENT, forceIndent - 1));
+        addIndent(json, indent + BASE_INDENT);
+        json.append(element.toFormattedJSON(indent + BASE_INDENT, forceIndent - 1));
       }
       json.append("\n");
       addIndent(json, indent);
