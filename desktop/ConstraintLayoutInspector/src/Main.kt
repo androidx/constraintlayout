@@ -57,7 +57,7 @@ class Main : JPanel(BorderLayout()) {
         val resetProgressButton = JButton("Reset Progress")
         val toggleDrawDebug = JButton("Toggle Debug")
 
-        val scrollPane = JScrollPane(layoutListPanel)
+        val scrollPaneList = JScrollPane(layoutListPanel)
 
         val topPanel = JPanel()
         topPanel.layout = BoxLayout(topPanel, BoxLayout.LINE_AXIS)
@@ -72,9 +72,11 @@ class Main : JPanel(BorderLayout()) {
         bottomPanel.add(slider)
         bottomPanel.add(resetProgressButton)
 
+        val scrollPaneEditor = JScrollPane(editor)
+
         add(topPanel, BorderLayout.NORTH)
-        add(scrollPane, BorderLayout.WEST)
-        add(editor)
+        add(scrollPaneList, BorderLayout.WEST)
+        add(scrollPaneEditor)
         add(bottomPanel, BorderLayout.SOUTH)
 
         connectButton.addActionListener {
@@ -95,10 +97,9 @@ class Main : JPanel(BorderLayout()) {
         layoutListPanel.model = listModel
         val mouseListener: MouseListener = object : MouseAdapter() {
             override fun mouseClicked(e: MouseEvent) {
-                if (e.clickCount == 2) {
-                    val index = layoutListPanel.locationToIndex(e.point)
-                    textField.text = listModel[index]
-                }
+                val index = layoutListPanel.locationToIndex(e.point)
+                textField.text = listModel[index]
+                getContent()
             }
         }
         layoutListPanel.addMouseListener(mouseListener)
