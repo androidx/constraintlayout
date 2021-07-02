@@ -41,7 +41,7 @@ public class CLArray extends CLContainer {
   protected String toFormattedJSON(int indent, int forceIndent) {
     StringBuilder json = new StringBuilder();
     String val = toJSON();
-    if (val.length() + indent < MAX_LINE) {
+    if (forceIndent <= 0 && val.length() + indent < MAX_LINE) {
       json.append(val);
     } else {
       json.append("[\n");

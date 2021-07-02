@@ -489,7 +489,14 @@ public class CLParserTest {
                     "      to: 'end',\n" +
                     "      pathMotionArc: 'startHorizontal',\n" +
                     "      KeyFrames: {\n" +
-                    "        KeyAttributes: [{ target: ['a'], frames: [25, 50], scaleX: 3, scaleY: 0.3 }]\n" +
+                    "        KeyAttributes: [\n" +
+                    "          {\n" +
+                    "            target: ['a'],\n" +
+                    "            frames: [25, 50],\n" +
+                    "            scaleX: 3,\n" +
+                    "            scaleY: 0.3\n" +
+                    "          }\n" +
+                    "        ]\n" +
                     "      }\n" +
                     "    }\n" +
                     "  }\n" +
@@ -524,6 +531,38 @@ public class CLParserTest {
 
     @Test
     public void testFormatting4() {
+        String test = "{ Transitions: { default: { from: 'start', to: 'end', " +
+                "pathMotionArc: 'startHorizontal', KeyFrames: { KeyAttributes: [{ target: ['a'], " +
+                "frames: [25, 50], scaleX: 3, scaleY: 0.3 }] } } } }";
+        try {
+            CLObject parsedContent = CLParser.parse(test);
+            assertEquals("{\n" +
+                    "  Transitions: {\n" +
+                    "    default: {\n" +
+                    "      from: 'start',\n" +
+                    "      to: 'end',\n" +
+                    "      pathMotionArc: 'startHorizontal',\n" +
+                    "      KeyFrames: {\n" +
+                    "        KeyAttributes: [\n" +
+                    "          {\n" +
+                    "            target: ['a'],\n" +
+                    "            frames: [25, 50],\n" +
+                    "            scaleX: 3,\n" +
+                    "            scaleY: 0.3\n" +
+                    "          }\n" +
+                    "        ]\n" +
+                    "      }\n" +
+                    "    }\n" +
+                    "  }\n" +
+                    "}", parsedContent.toFormattedJSON());
+        } catch (CLParsingException e) {
+            System.err.println("Exception " + e.reason());
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testFormatting5() {
         String test = "{ Debug: { name: 'motion6' }, ConstraintSets: {\n" +
                 "    start: { Variables: { texts: { tag: 'text' }, margin: { from: 0, step: 50 }\n" +
                 "      }, Generate: { texts: { top: ['parent', 'top', 'margin'], start: ['parent', 'end', 16] }\n" +
