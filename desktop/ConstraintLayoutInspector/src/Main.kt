@@ -13,8 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import java.awt.BorderLayout
 import java.awt.Font
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
+import java.awt.event.MouseListener
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.net.Socket
@@ -22,12 +26,14 @@ import javax.swing.*
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
 
+
 class Main : JPanel(BorderLayout()) {
 
     private var UPDATE_CONTENT = 1
     private var UPDATE_PROGRESS = 2
     private var GET_CURRENT_CONTENT = 3
     private var SET_DRAW_DEBUG = 4
+    private var GET_LAYOUT_LIST = 5
 
     private var connected = false
     private var drawDebug = false
@@ -36,18 +42,26 @@ class Main : JPanel(BorderLayout()) {
     lateinit var socket : Socket
     lateinit var writer : DataOutputStream
     lateinit var reader : DataInputStream
+
+    private val listModel = DefaultListModel<String>()
+
     var editor = JEditorPane()
     val textField = JTextField()
+    val layoutListPanel = JList<String>()
 
     init {
         val slider = JSlider()
         val getButton = JButton("Get")
+        val connectButton = JButton("Connect")
         val sendButton = JButton("Send")
         val resetProgressButton = JButton("Reset Progress")
         val toggleDrawDebug = JButton("Toggle Debug")
 
+        val scrollPane = JScrollPane(layoutListPanel)
+
         val topPanel = JPanel()
         topPanel.layout = BoxLayout(topPanel, BoxLayout.LINE_AXIS)
+        topPanel.add(connectButton)
         topPanel.add(textField)
         topPanel.add(toggleDrawDebug)
         topPanel.add(getButton)
@@ -59,9 +73,13 @@ class Main : JPanel(BorderLayout()) {
         bottomPanel.add(resetProgressButton)
 
         add(topPanel, BorderLayout.NORTH)
+        add(scrollPane, BorderLayout.WEST)
         add(editor)
         add(bottomPanel, BorderLayout.SOUTH)
 
+        connectButton.addActionListener {
+            getLayoutList()
+        }
         toggleDrawDebug.addActionListener {
             drawDebug = !drawDebug
             setDrawDebug(drawDebug)
@@ -74,6 +92,16 @@ class Main : JPanel(BorderLayout()) {
             getContent()
         }
 
+        layoutListPanel.model = listModel
+        val mouseListener: MouseListener = object : MouseAdapter() {
+            override fun mouseClicked(e: MouseEvent) {
+                if (e.clickCount == 2) {
+                    val index = layoutListPanel.locationToIndex(e.point)
+                    textField.text = listModel[index]
+                }
+            }
+        }
+        layoutListPanel.addMouseListener(mouseListener)
 
         var font = Font("Courier", Font.PLAIN, 20)
         editor.font = font
@@ -101,6 +129,25 @@ class Main : JPanel(BorderLayout()) {
 
         sendButton.addActionListener {
             sendContent()
+        }
+    }
+
+    private fun getLayoutList() {
+        try {
+            prepareConnection()
+            writer.writeInt(GET_LAYOUT_LIST)
+            writer.writeUTF(debugName)
+            var numLayouts = reader.readInt()
+            println("found $numLayouts layouts")
+            listModel.clear()
+            for (i in 0 until numLayouts) {
+                listModel.add(i, reader.readUTF())
+            }
+            if (!listModel.isEmpty) {
+                textField.text = listModel[0]
+            }
+        } catch (e : Exception) {
+            reconnect()
         }
     }
 

@@ -1220,6 +1220,9 @@ public fun ScreenExample16() {
                 .height(400.dp)
                 .background(Color.White),
             motionScene = MotionScene("""{
+                Debug: {
+                  name: 'motion8'
+                },
                 ConstraintSets: {
                   start: {
                     a: {
@@ -1417,7 +1420,7 @@ public fun ScreenExample19() {
         }
         MotionLayout(motionScene = MotionScene("""{
                 Debug: {
-                  name: 'test'
+                  name: 'exemple19'
                 },
                 ConstraintSets: {
                   start: {
