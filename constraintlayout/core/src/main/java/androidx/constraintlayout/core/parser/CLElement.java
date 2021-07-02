@@ -20,8 +20,11 @@ public class CLElement {
   private final char[] mContent;
   protected long start = -1;
   protected long end = Long.MAX_VALUE;
-  private CLContainer mContainer;
+  protected CLContainer mContainer;
   private int line;
+
+  protected static int MAX_LINE = 80;
+  protected static int INDENT = 2;
 
   public CLElement(char[] content) {
     mContent = content;
@@ -99,6 +102,10 @@ public class CLElement {
   }
 
   protected String toJSON() {
+    return "";
+  }
+
+  protected String toFormattedJSON(int indent, int forceIndent) {
     return "";
   }
 

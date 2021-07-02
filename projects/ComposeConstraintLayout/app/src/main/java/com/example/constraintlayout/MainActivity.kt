@@ -5,13 +5,14 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.platform.ComposeView
 import androidx.constraintlayout.compose.*
 
 class MainActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
-    private var composeNum = 16
-    private var MAX = 32
+    private var composeNum = 25
+    private var MAX = 33
     var map = HashMap<Int,String>();
    init {
        var count = 24;
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
        DebugServer().start()
     }
 
+    @ExperimentalMaterialApi
     private fun show(com: ComposeView) {
         com.setContent() {
             when (composeNum) {
@@ -55,20 +57,22 @@ class MainActivity : AppCompatActivity() {
                 22 -> MotionExample3()
                 23 -> MotionExample4()
                 24 -> MotionExample5()
+                25 -> MotionExample6()
 
-                25 -> AttributesScale()
-                26 -> AttributesTranslationXY()
-                27 -> AttributesRotationZ()
-                28 -> AttributesRotationXY()
+                26 -> AttributesScale()
+                27 -> AttributesTranslationXY()
+                28 -> AttributesRotationZ()
+                29 -> AttributesRotationXY()
 
-                29 -> CycleScale()
-                30 -> CycleTranslationXY()
-                31 -> CycleRotationZ()
-                32 -> CycleRotationXY()
+                30 -> CycleScale()
+                31 -> CycleTranslationXY()
+                32 -> CycleRotationZ()
+                33 -> CycleRotationXY()
             }
         }
     }
 
+    @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -76,6 +80,7 @@ class MainActivity : AppCompatActivity() {
         setCompose();
     }
 
+    @ExperimentalMaterialApi
     fun setCompose() {
         if (mFrameLayout!!.childCount > 0) {
             mFrameLayout!!.removeAllViews()
@@ -91,11 +96,13 @@ class MainActivity : AppCompatActivity() {
         show(com)
     }
 
+    @ExperimentalMaterialApi
     fun prev(view: View) {
         composeNum = (composeNum + MAX - 1) % MAX
         setCompose()
     }
 
+    @ExperimentalMaterialApi
     fun next(view: View) {
         composeNum = (composeNum + 1) % MAX
         setCompose();

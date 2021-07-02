@@ -37,4 +37,32 @@ public class CLArray extends CLContainer {
     }
     return content + "]";
   }
+
+  protected String toFormattedJSON(int indent, int forceIndent) {
+    StringBuilder json = new StringBuilder();
+    String val = toJSON();
+    if (val.length() + indent < MAX_LINE) {
+      json.append(val);
+    } else {
+      json.append("[\n");
+      boolean first = true;
+      for (CLElement element : mElements) {
+        if (!first) {
+          json.append(",\n");
+        } else {
+          first = false;
+        }
+        for (int i = 0; i < indent + INDENT; i++) {
+          json.append(' ');
+        }
+        json.append(element.toFormattedJSON(indent + INDENT, forceIndent - 1));
+      }
+      json.append("\n");
+      for (int i = 0; i < indent; i++) {
+        json.append(' ');
+      }
+      json.append("]");
+    }
+    return json.toString();
+  }
 }

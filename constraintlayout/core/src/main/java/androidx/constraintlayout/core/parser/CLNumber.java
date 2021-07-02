@@ -35,6 +35,21 @@ public class CLNumber extends CLElement {
     return "" + value;
   }
 
+  protected String toFormattedJSON(int indent, int forceIndent) {
+    StringBuilder json = new StringBuilder();
+    for (int i = 0; i < indent; i++) {
+      json.append(' ');
+    }
+    float value = Float.parseFloat(content());
+    int intValue = (int) value;
+    if ((float) intValue == value) {
+      json.append(intValue);
+    } else {
+      json.append(value);
+    }
+    return json.toString();
+  }
+
   public boolean isInt() {
     float value = getFloat();
     int intValue = (int) value;

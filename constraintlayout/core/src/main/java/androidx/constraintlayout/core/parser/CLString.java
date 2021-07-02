@@ -26,4 +26,16 @@ public class CLString extends CLElement {
   protected String toJSON() {
     return "'" + content() + "'";
   }
+  protected String toFormattedJSON(int indent, int forceIndent) {
+    StringBuilder json = new StringBuilder();
+    for (int i = 0; i < indent; i++) {
+      json.append(' ');
+    }
+    json.append("'");
+    json.append(content());
+    json.append("'");
+    return json.toString();
+  }
 }
+
+

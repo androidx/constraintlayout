@@ -413,6 +413,234 @@ public class CLParserTest {
             assertTrue(false);
         }
     }
+
+    @Test
+    public void testFormatting() {
+        String test = "{ firstName: 'John', lastName: 'Smith', isAlive: true, " +
+                "age: 27, address: { streetAddress: '21 2nd Street', city: 'New York', " +
+                "state: 'NY', postalCode: '10021-3100' }, " +
+                "phoneNumbers: [{ type: 'home', number: '212 555-1234' }, " +
+                "{ type: 'office', number: '646 555-4567' }], " +
+                "children: [], spouse: null }";
+        try {
+            CLObject parsedContent = CLParser.parse(test);
+            assertEquals("{\n" +
+                    "  firstName: 'John',\n" +
+                    "  lastName: 'Smith',\n" +
+                    "  isAlive: true,\n" +
+                    "  age: 27,\n" +
+                    "  address: {\n" +
+                    "    streetAddress: '21 2nd Street',\n" +
+                    "    city: 'New York',\n" +
+                    "    state: 'NY',\n" +
+                    "    postalCode: '10021-3100'\n" +
+                    "  },\n" +
+                    "  phoneNumbers: [\n" +
+                    "    {\n" +
+                    "      type: 'home',\n" +
+                    "      number: '212 555-1234'\n" +
+                    "    },\n" +
+                    "    {\n" +
+                    "      type: 'office',\n" +
+                    "      number: '646 555-4567'\n" +
+                    "    }\n" +
+                    "  ],\n" +
+                    "  children: [],\n" +
+                    "  spouse: null\n" +
+                    "}", parsedContent.toFormattedJSON());
+        } catch (CLParsingException e) {
+            System.err.println("Exception " + e.reason());
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testFormatting2() {
+        String test = "{ ConstraintSets: { start: { a: { width: 40, height: 40, " +
+        "start: ['parent', 'start', 16], bottom: ['parent', 'bottom', 16] } }, end: " +
+        "{ a: { width: 40, height: 40, end: ['parent', 'end', 16], top: ['parent', 'top', 16]" +
+        " } } }, Transitions: { default: { from: 'start', to: 'end', " +
+        "pathMotionArc: 'startHorizontal', KeyFrames: { KeyAttributes: [{ target: ['a'], " +
+        "frames: [25, 50], scaleX: 3, scaleY: 0.3 }] } } } }";
+        try {
+            CLObject parsedContent = CLParser.parse(test);
+            assertEquals("{\n" +
+                    "  ConstraintSets: {\n" +
+                    "    start: {\n" +
+                    "      a: {\n" +
+                    "        width: 40,\n" +
+                    "        height: 40,\n" +
+                    "        start: ['parent', 'start', 16],\n" +
+                    "        bottom: ['parent', 'bottom', 16]\n" +
+                    "      }\n" +
+                    "    },\n" +
+                    "    end: {\n" +
+                    "      a: {\n" +
+                    "        width: 40,\n" +
+                    "        height: 40,\n" +
+                    "        end: ['parent', 'end', 16],\n" +
+                    "        top: ['parent', 'top', 16]\n" +
+                    "      }\n" +
+                    "    }\n" +
+                    "  },\n" +
+                    "  Transitions: {\n" +
+                    "    default: {\n" +
+                    "      from: 'start',\n" +
+                    "      to: 'end',\n" +
+                    "      pathMotionArc: 'startHorizontal',\n" +
+                    "      KeyFrames: {\n" +
+                    "        KeyAttributes: [{ target: ['a'], frames: [25, 50], scaleX: 3, scaleY: 0.3 }]\n" +
+                    "      }\n" +
+                    "    }\n" +
+                    "  }\n" +
+                    "}", parsedContent.toFormattedJSON());
+        } catch (CLParsingException e) {
+            System.err.println("Exception " + e.reason());
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testFormatting3() {
+        String test = "{ ConstraintSets: {\n" +
+                "      Generate: { texts: { top: ['parent', 'top', 'margin'], start: ['parent', 'end', 16] } } } }\n";
+        try {
+            CLObject parsedContent = CLParser.parse(test);
+            assertEquals("{\n" +
+                    "  ConstraintSets: {\n" +
+                    "    Generate: {\n" +
+                    "      texts: {\n" +
+                    "        top: ['parent', 'top', 'margin'],\n" +
+                    "        start: ['parent', 'end', 16]\n" +
+                    "      }\n" +
+                    "    }\n" +
+                    "  }\n" +
+                    "}", parsedContent.toFormattedJSON());
+        } catch (CLParsingException e) {
+            System.err.println("Exception " + e.reason());
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testFormatting4() {
+        String test = "{ Debug: { name: 'motion6' }, ConstraintSets: {\n" +
+                "    start: { Variables: { texts: { tag: 'text' }, margin: { from: 0, step: 50 }\n" +
+                "      }, Generate: { texts: { top: ['parent', 'top', 'margin'], start: ['parent', 'end', 16] }\n" +
+                "      }, box: { width: 'spread', height: 64, centerHorizontally: 'parent',\n" +
+                "        bottom: ['parent', 'bottom'] }, content: { width: 'spread',\n" +
+                "        height: '400', centerHorizontally: 'parent', top: ['box', 'bottom', 32]\n" +
+                "      }, name: { centerVertically: 'box', start: ['parent', 'start', 16] }\n" +
+                "    }, end: { Variables: { texts: { tag: 'text' },\n" +
+                "        margin: { from: 0, step: 50 } }, Generate: {\n" +
+                "        texts: { start: ['parent', 'start', 32], top: ['content', 'top', 'margin'] }\n" +
+                "      }, box: { width: 'spread', height: 200, centerHorizontally: 'parent',\n" +
+                "        top: ['parent', 'top'] }, content: {\n" +
+                "        width: 'spread', height: 'spread', centerHorizontally: 'parent',\n" +
+                "        top: ['box', 'bottom'], bottom: ['parent', 'bottom']\n" +
+                "      }, name: { rotationZ: 90, scaleX: 2, scaleY: 2,\n" +
+                "        end: ['parent', 'end', 16], top: ['parent', 'top', 90]\n" +
+                "      } } }, Transitions: { default: { from: 'start', to: 'end',\n" +
+                "      pathMotionArc: 'startHorizontal', KeyFrames: {\n" +
+                "        KeyAttributes: [ { target: ['box', 'content'],\n" +
+                "            frames: [50], rotationZ: [25], rotationY: [25]\n" +
+                "          } ] } } } }";
+        try {
+            CLObject parsedContent = CLParser.parse(test);
+            assertEquals("{\n" +
+                    "  Debug: { name: 'motion6' },\n" +
+                    "  ConstraintSets: {\n" +
+                    "    start: {\n" +
+                    "      Variables: {\n" +
+                    "        texts: {\n" +
+                    "          tag: 'text'\n" +
+                    "        },\n" +
+                    "        margin: {\n" +
+                    "          from: 0,\n" +
+                    "          step: 50\n" +
+                    "        }\n" +
+                    "      },\n" +
+                    "      Generate: {\n" +
+                    "        texts: {\n" +
+                    "          top: ['parent', 'top', 'margin'],\n" +
+                    "          start: ['parent', 'end', 16]\n" +
+                    "        }\n" +
+                    "      },\n" +
+                    "      box: {\n" +
+                    "        width: 'spread',\n" +
+                    "        height: 64,\n" +
+                    "        centerHorizontally: 'parent',\n" +
+                    "        bottom: ['parent', 'bottom']\n" +
+                    "      },\n" +
+                    "      content: {\n" +
+                    "        width: 'spread',\n" +
+                    "        height: '400',\n" +
+                    "        centerHorizontally: 'parent',\n" +
+                    "        top: ['box', 'bottom', 32]\n" +
+                    "      },\n" +
+                    "      name: { centerVertically: 'box', start: ['parent', 'start', 16] }\n" +
+                    "    },\n" +
+                    "    end: {\n" +
+                    "      Variables: {\n" +
+                    "        texts: {\n" +
+                    "          tag: 'text'\n" +
+                    "        },\n" +
+                    "        margin: {\n" +
+                    "          from: 0,\n" +
+                    "          step: 50\n" +
+                    "        }\n" +
+                    "      },\n" +
+                    "      Generate: {\n" +
+                    "        texts: {\n" +
+                    "          start: ['parent', 'start', 32],\n" +
+                    "          top: ['content', 'top', 'margin']\n" +
+                    "        }\n" +
+                    "      },\n" +
+                    "      box: {\n" +
+                    "        width: 'spread',\n" +
+                    "        height: 200,\n" +
+                    "        centerHorizontally: 'parent',\n" +
+                    "        top: ['parent', 'top']\n" +
+                    "      },\n" +
+                    "      content: {\n" +
+                    "        width: 'spread',\n" +
+                    "        height: 'spread',\n" +
+                    "        centerHorizontally: 'parent',\n" +
+                    "        top: ['box', 'bottom'],\n" +
+                    "        bottom: ['parent', 'bottom']\n" +
+                    "      },\n" +
+                    "      name: {\n" +
+                    "        rotationZ: 90,\n" +
+                    "        scaleX: 2,\n" +
+                    "        scaleY: 2,\n" +
+                    "        end: ['parent', 'end', 16],\n" +
+                    "        top: ['parent', 'top', 90]\n" +
+                    "      }\n" +
+                    "    }\n" +
+                    "  },\n" +
+                    "  Transitions: {\n" +
+                    "    default: {\n" +
+                    "      from: 'start',\n" +
+                    "      to: 'end',\n" +
+                    "      pathMotionArc: 'startHorizontal',\n" +
+                    "      KeyFrames: {\n" +
+                    "        KeyAttributes: [\n" +
+                    "          {\n" +
+                    "            target: ['box', 'content'],\n" +
+                    "            frames: [50],\n" +
+                    "            rotationZ: [25],\n" +
+                    "            rotationY: [25]\n" +
+                    "          }\n" +
+                    "        ]\n" +
+                    "      }\n" +
+                    "    }\n" +
+                    "  }\n" +
+                    "}", parsedContent.toFormattedJSON());
+        } catch (CLParsingException e) {
+            System.err.println("Exception " + e.reason());
+            e.printStackTrace();
+        }
+    }
 }
 
 

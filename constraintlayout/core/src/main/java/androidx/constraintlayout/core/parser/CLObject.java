@@ -40,4 +40,28 @@ public class CLObject extends CLContainer {
     return json.toString();
   }
 
+  public String toFormattedJSON() {
+    return toFormattedJSON(0, 0);
+  }
+
+  public String toFormattedJSON(int indent, int forceIndent) {
+    StringBuilder json = new StringBuilder(getDebugName());
+    json.append("{\n");
+    boolean first = true;
+    for (CLElement element : mElements) {
+      if (!first) {
+        json.append(",\n");
+      } else {
+        first = false;
+      }
+      json.append(element.toFormattedJSON(indent + INDENT, forceIndent - 1));
+    }
+    json.append("\n");
+    for (int i = 0; i < indent; i++) {
+      json.append(' ');
+    }
+    json.append("}");
+    return json.toString();
+  }
+
 }
