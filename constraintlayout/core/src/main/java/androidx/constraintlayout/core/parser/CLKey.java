@@ -57,9 +57,7 @@ public class CLKey extends CLContainer {
 
   protected String toFormattedJSON(int indent, int forceIndent) {
     StringBuilder json = new StringBuilder(getDebugName());
-    for (int i = 0; i < indent; i++) {
-      json.append(' ');
-    }
+    addIndent(json, indent);
     String content = content();
     if (mElements.size() > 0) {
       json.append(content);

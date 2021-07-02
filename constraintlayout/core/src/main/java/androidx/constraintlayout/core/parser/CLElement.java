@@ -54,6 +54,12 @@ public class CLElement {
     }
   }
 
+  protected void addIndent(StringBuilder builder, int indent) {
+    for (int i = 0; i < indent; i++) {
+      builder.append(' ');
+    }
+  }
+
   @Override
   public String toString() {
     if (start > end || end == Long.MAX_VALUE) {

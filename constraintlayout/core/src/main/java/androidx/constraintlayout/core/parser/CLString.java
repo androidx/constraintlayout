@@ -28,9 +28,7 @@ public class CLString extends CLElement {
   }
   protected String toFormattedJSON(int indent, int forceIndent) {
     StringBuilder json = new StringBuilder();
-    for (int i = 0; i < indent; i++) {
-      json.append(' ');
-    }
+    addIndent(json, indent);
     json.append("'");
     json.append(content());
     json.append("'");

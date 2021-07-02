@@ -37,9 +37,7 @@ public class CLNumber extends CLElement {
 
   protected String toFormattedJSON(int indent, int forceIndent) {
     StringBuilder json = new StringBuilder();
-    for (int i = 0; i < indent; i++) {
-      json.append(' ');
-    }
+    addIndent(json, indent);
     float value = Float.parseFloat(content());
     int intValue = (int) value;
     if ((float) intValue == value) {

@@ -52,15 +52,11 @@ public class CLArray extends CLContainer {
         } else {
           first = false;
         }
-        for (int i = 0; i < indent + INDENT; i++) {
-          json.append(' ');
-        }
+        addIndent(json, indent + INDENT);
         json.append(element.toFormattedJSON(indent + INDENT, forceIndent - 1));
       }
       json.append("\n");
-      for (int i = 0; i < indent; i++) {
-        json.append(' ');
-      }
+      addIndent(json, indent);
       json.append("]");
     }
     return json.toString();
