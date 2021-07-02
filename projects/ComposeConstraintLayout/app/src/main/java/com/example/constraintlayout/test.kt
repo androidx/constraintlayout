@@ -1355,6 +1355,9 @@ public fun ScreenExample18() {
                 .height(400.dp)
                 .background(Color.White),
             motionScene = MotionScene("""{
+  Debug: {
+    name: 'example 18'
+  },
   ConstraintSets: {
     start: {
       a: {
