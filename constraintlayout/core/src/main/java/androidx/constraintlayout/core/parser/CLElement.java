@@ -38,31 +38,34 @@ public class CLElement {
         this.line = line;
     }
 
-  /**
-   * get the line Number
-   * @return return the line number this element was on
-   */
-  public int getLine() {
+    /**
+     * get the line Number
+     *
+     * @return return the line number this element was on
+     */
+    public int getLine() {
         return line;
     }
 
-  public void setStart(long start) {
+    public void setStart(long start) {
         this.start = start;
     }
 
-  /**
-   *  The character index this element was started on
-   * @return
-   */
+    /**
+     * The character index this element was started on
+     *
+     * @return
+     */
     public long getStart() {
         return this.start;
     }
 
-  /**
-   * The character index this element was ended on
-   * @return
-   */
-  public long getEnd() {
+    /**
+     * The character index this element was ended on
+     *
+     * @return
+     */
+    public long getEnd() {
         return this.end;
     }
 
