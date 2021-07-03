@@ -39,6 +39,8 @@ import androidx.compose.ui.layout.*
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.*
 import androidx.constraintlayout.core.motion.Motion
+import androidx.constraintlayout.core.parser.CLParser
+import androidx.constraintlayout.core.parser.CLParsingException
 import androidx.constraintlayout.core.state.*
 import androidx.constraintlayout.core.state.Dimension
 import androidx.constraintlayout.core.state.Transition
@@ -155,9 +157,17 @@ class InternalMotionScene(@Language("json5") content : String) : MotionScene {
     private val transitionsContent = HashMap<String, String>()
     private var debugName:String? = null
     private var currentContent = content
+    private var currentFormattedContent = ""
 
     init {
-        parseMotionSceneJSON(this, currentContent);
+        parseMotionSceneJSON(this, currentContent)
+        try {
+            var json = CLParser.parse(currentContent)
+            currentFormattedContent = json.toFormattedJSON()
+        } catch (e : CLParsingException) {
+
+        }
+
         if (debugName != null) {
             val mainHandler = Handler(Looper.getMainLooper())
             val scene = this
@@ -170,6 +180,12 @@ class InternalMotionScene(@Language("json5") content : String) : MotionScene {
                         try {
                             currentContent = content
                             parseMotionSceneJSON(scene, currentContent);
+                            try {
+                                var json = CLParser.parse(currentContent)
+                                currentFormattedContent = json.toFormattedJSON()
+                            } catch (e : CLParsingException) {
+
+                            }
                             if (updateFlag != null) {
                                 updateFlag!!.value = updateFlag!!.value + 1
                             }
@@ -189,7 +205,7 @@ class InternalMotionScene(@Language("json5") content : String) : MotionScene {
                 }
 
                 override fun currentMotionScene() : String {
-                    return currentContent
+                    return currentFormattedContent
                 }
 
                 override fun setDrawDebug(debugMode: Int) {

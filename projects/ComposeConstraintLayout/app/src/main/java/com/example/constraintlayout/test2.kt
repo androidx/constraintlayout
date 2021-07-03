@@ -23,7 +23,7 @@ import java.util.*
 
 @Preview(group = "motion8")
 @Composable
-public fun ScreenExample16() {
+public fun ScreenExample16_() {
     var animateToEnd by remember { mutableStateOf(false) }
 
     val progress by animateFloatAsState(

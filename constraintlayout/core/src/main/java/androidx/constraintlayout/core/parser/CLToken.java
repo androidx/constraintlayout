@@ -58,6 +58,13 @@ public class CLToken extends CLElement {
     }
   }
 
+  protected String toFormattedJSON(int indent, int forceIndent) {
+    StringBuilder json = new StringBuilder();
+    addIndent(json, indent);
+    json.append(content());
+    return json.toString();
+  }
+
   public Type getType() {
     return type;
   }

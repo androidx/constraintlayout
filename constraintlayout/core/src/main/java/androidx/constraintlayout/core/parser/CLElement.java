@@ -20,8 +20,11 @@ public class CLElement {
   private final char[] mContent;
   protected long start = -1;
   protected long end = Long.MAX_VALUE;
-  private CLContainer mContainer;
+  protected CLContainer mContainer;
   private int line;
+
+  protected static int MAX_LINE = 80; // Max number of characters before the formatter indents
+  protected static int BASE_INDENT = 2; // default indentation value
 
   public CLElement(char[] content) {
     mContent = content;
@@ -48,6 +51,12 @@ public class CLElement {
     }
     if (mContainer != null) {
       mContainer.add(this);
+    }
+  }
+
+  protected void addIndent(StringBuilder builder, int indent) {
+    for (int i = 0; i < indent; i++) {
+      builder.append(' ');
     }
   }
 
@@ -99,6 +108,10 @@ public class CLElement {
   }
 
   protected String toJSON() {
+    return "";
+  }
+
+  protected String toFormattedJSON(int indent, int forceIndent) {
     return "";
   }
 
