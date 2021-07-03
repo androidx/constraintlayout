@@ -25,8 +25,7 @@ public interface TypedValues {
     public static final int INT_MASK = 2;
     public static final int FLOAT_MASK = 4;
     public static final int STRING_MASK = 8;
-
-
+    
     /**
      * Used to set integer values
      *
