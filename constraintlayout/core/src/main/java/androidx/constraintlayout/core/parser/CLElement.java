@@ -17,115 +17,140 @@ package androidx.constraintlayout.core.parser;
 
 public class CLElement {
 
-  private final char[] mContent;
-  protected long start = -1;
-  protected long end = Long.MAX_VALUE;
-  protected CLContainer mContainer;
-  private int line;
+    private final char[] mContent;
+    protected long start = -1;
+    protected long end = Long.MAX_VALUE;
+    protected CLContainer mContainer;
+    private int line;
 
-  protected static int MAX_LINE = 80; // Max number of characters before the formatter indents
-  protected static int BASE_INDENT = 2; // default indentation value
+    protected static int MAX_LINE = 80; // Max number of characters before the formatter indents
+    protected static int BASE_INDENT = 2; // default indentation value
 
-  public CLElement(char[] content) {
-    mContent = content;
-  }
+    public CLElement(char[] content) {
+        mContent = content;
+    }
 
-  public boolean notStarted() {
-    return start == -1;
-  }
+    public boolean notStarted() {
+        return start == -1;
+    }
 
-  public void setLine(int line) { this.line = line; }
-  public int getLine() { return line; }
+    public void setLine(int line) {
+        this.line = line;
+    }
+
+  /**
+   * get the line Number
+   * @return return the line number this element was on
+   */
+  public int getLine() {
+        return line;
+    }
 
   public void setStart(long start) {
-    this.start = start;
-  }
-
-  public void setEnd(long end) {
-    if (this.end != Long.MAX_VALUE) {
-      return;
+        this.start = start;
     }
-    this.end = end;
-    if (CLParser.DEBUG) {
-      System.out.println("closing " + this.hashCode() + " -> " + this);
+
+  /**
+   *  The character index this element was started on
+   * @return
+   */
+    public long getStart() {
+        return this.start;
     }
-    if (mContainer != null) {
-      mContainer.add(this);
+
+  /**
+   * The character index this element was ended on
+   * @return
+   */
+  public long getEnd() {
+        return this.end;
     }
-  }
 
-  protected void addIndent(StringBuilder builder, int indent) {
-    for (int i = 0; i < indent; i++) {
-      builder.append(' ');
+    public void setEnd(long end) {
+        if (this.end != Long.MAX_VALUE) {
+            return;
+        }
+        this.end = end;
+        if (CLParser.DEBUG) {
+            System.out.println("closing " + this.hashCode() + " -> " + this);
+        }
+        if (mContainer != null) {
+            mContainer.add(this);
+        }
     }
-  }
 
-  @Override
-  public String toString() {
-    if (start > end || end == Long.MAX_VALUE) {
-      return this.getClass() + " (INVALID, " + start + "-" + end + ")";
+    protected void addIndent(StringBuilder builder, int indent) {
+        for (int i = 0; i < indent; i++) {
+            builder.append(' ');
+        }
     }
-    String content = new String(mContent);
-    content = content.substring((int) start, (int) end + 1);
 
-    return getStrClass() + " (" + start + " : " + end + ") <<" + content + ">>";
-  }
+    @Override
+    public String toString() {
+        if (start > end || end == Long.MAX_VALUE) {
+            return this.getClass() + " (INVALID, " + start + "-" + end + ")";
+        }
+        String content = new String(mContent);
+        content = content.substring((int) start, (int) end + 1);
 
-  protected String getStrClass() {
-    String myClass = this.getClass().toString();
-    return myClass.substring(myClass.lastIndexOf('.') + 1);
-  }
-
-  protected String getDebugName() {
-    if (CLParser.DEBUG) {
-      return getStrClass() + " -> ";
+        return getStrClass() + " (" + start + " : " + end + ") <<" + content + ">>";
     }
-    return "";
-  }
 
-  public String content() {
-    String content = new String(mContent);
-    if (end == Long.MAX_VALUE || end < start) {
-      return content.substring((int) start, (int) start + 1);
+    protected String getStrClass() {
+        String myClass = this.getClass().toString();
+        return myClass.substring(myClass.lastIndexOf('.') + 1);
     }
-    return content.substring((int) start, (int) end + 1);
-  }
 
-  public boolean isDone() {
-    return end != Long.MAX_VALUE;
-  }
-
-  public void setContainer(CLContainer element) {
-    mContainer = element;
-  }
-
-  public CLElement getContainer() {
-    return mContainer;
-  }
-
-  public boolean isStarted() {
-    return start > -1;
-  }
-
-  protected String toJSON() {
-    return "";
-  }
-
-  protected String toFormattedJSON(int indent, int forceIndent) {
-    return "";
-  }
-
-  public int getInt() {
-    if (this instanceof CLNumber) {
-      return ((CLNumber) this).getInt();
+    protected String getDebugName() {
+        if (CLParser.DEBUG) {
+            return getStrClass() + " -> ";
+        }
+        return "";
     }
-    return 0;
-  }
 
-  public float getFloat() {
-    if (this instanceof CLNumber) {
-      return ((CLNumber) this).getInt();
+    public String content() {
+        String content = new String(mContent);
+        if (end == Long.MAX_VALUE || end < start) {
+            return content.substring((int) start, (int) start + 1);
+        }
+        return content.substring((int) start, (int) end + 1);
     }
-    return Float.NaN;
-  }
+
+    public boolean isDone() {
+        return end != Long.MAX_VALUE;
+    }
+
+    public void setContainer(CLContainer element) {
+        mContainer = element;
+    }
+
+    public CLElement getContainer() {
+        return mContainer;
+    }
+
+    public boolean isStarted() {
+        return start > -1;
+    }
+
+    protected String toJSON() {
+        return "";
+    }
+
+    protected String toFormattedJSON(int indent, int forceIndent) {
+        return "";
+    }
+
+    public int getInt() {
+        if (this instanceof CLNumber) {
+            return ((CLNumber) this).getInt();
+        }
+        return 0;
+    }
+
+    public float getFloat() {
+        if (this instanceof CLNumber) {
+            return ((CLNumber) this).getInt();
+        }
+        return Float.NaN;
+    }
 }

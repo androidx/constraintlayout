@@ -20,7 +20,7 @@ package androidx.constraintlayout.core.motion.utils;
  * Starting and Ending Widgets
  */
 public interface TypedValues {
-    public static final  String S_CUSTOM = "CUSTOM";
+    public static final String S_CUSTOM = "CUSTOM";
     public static final int BOOLEAN_MASK = 1;
     public static final int INT_MASK = 2;
     public static final int FLOAT_MASK = 4;
@@ -106,11 +106,34 @@ public interface TypedValues {
         public static final String S_PROGRESS = "progress";
         public static final String S_PATH_ROTATE = "pathRotate";
         public static final String S_EASING = "easing";
-        public static final  String S_CUSTOM = "CUSTOM";
-        public static final  String S_FRAME= "frame";
-        public static final  String S_TARGET = "target";
-        public static final  String S_PIVOT_TARGET = "pivotTarget";
+        public static final String S_CUSTOM = "CUSTOM";
+        public static final String S_FRAME = "frame";
+        public static final String S_TARGET = "target";
+        public static final String S_PIVOT_TARGET = "pivotTarget";
 
+        public static final String[] KEY_WORDS = {
+                S_CURVE_FIT,
+                S_VISIBILITY,
+                S_ALPHA,
+                S_TRANSLATION_X,
+                S_TRANSLATION_Y,
+                S_TRANSLATION_Z,
+                S_ELEVATION,
+                S_ROTATION_X,
+                S_ROTATION_Y,
+                S_ROTATION_Z,
+                S_SCALE_X,
+                S_SCALE_Y,
+                S_PIVOT_X,
+                S_PIVOT_Y,
+                S_PROGRESS,
+                S_PATH_ROTATE,
+                S_EASING,
+                S_CUSTOM,
+                S_FRAME,
+                S_TARGET,
+                S_PIVOT_TARGET,
+        };
 
         /**
          * Method to go from String names of values to id of the values
@@ -187,7 +210,7 @@ public interface TypedValues {
                 case TYPE_PATH_ROTATE:
                     return FLOAT_MASK;
                 case TYPE_EASING:
-                 case TYPE_TARGET:
+                case TYPE_TARGET:
                 case TYPE_PIVOT_TARGET:
                     return STRING_MASK;
             }
@@ -199,7 +222,7 @@ public interface TypedValues {
         public static final int TYPE_CURVE_FIT = 401;
         public static final int TYPE_VISIBILITY = 402;
         public static final int TYPE_ALPHA = 403;
-        public static final int TYPE_TRANSLATION_X =  Attributes.TYPE_TRANSLATION_X;
+        public static final int TYPE_TRANSLATION_X = Attributes.TYPE_TRANSLATION_X;
         public static final int TYPE_TRANSLATION_Y = Attributes.TYPE_TRANSLATION_Y;
         public static final int TYPE_TRANSLATION_Z = Attributes.TYPE_TRANSLATION_Z;
         public static final int TYPE_ELEVATION = Attributes.TYPE_ELEVATION;
@@ -243,6 +266,31 @@ public interface TypedValues {
         public static final String S_WAVE_PERIOD = "period";
         public static final String S_WAVE_OFFSET = "offset";
         public static final String S_WAVE_PHASE = "phase";
+        public static final String[] KEY_WORDS = {
+                S_CURVE_FIT,
+                S_VISIBILITY,
+                S_ALPHA,
+                S_TRANSLATION_X,
+                S_TRANSLATION_Y,
+                S_TRANSLATION_Z,
+                S_ELEVATION,
+                S_ROTATION_X,
+                S_ROTATION_Y,
+                S_ROTATION_Z,
+                S_SCALE_X,
+                S_SCALE_Y,
+                S_PIVOT_X,
+                S_PIVOT_Y,
+                S_PROGRESS,
+
+                S_PATH_ROTATE,
+                S_EASING,
+                S_WAVE_SHAPE,
+                S_CUSTOM_WAVE_SHAPE,
+                S_WAVE_PERIOD,
+                S_WAVE_OFFSET,
+                S_WAVE_PHASE,
+        };
 
         /**
          * Method to go from String names of values to id of the values
@@ -303,7 +351,20 @@ public interface TypedValues {
         public static final String NEGATIVE_CROSS = "negativeCross";
         public static final String TRIGGER_RECEIVER = "triggerReceiver";
         public static final String CROSS = "CROSS";
-
+        public static final String[] KEY_WORDS = {
+                VIEW_TRANSITION_ON_CROSS,
+                VIEW_TRANSITION_ON_POSITIVE_CROSS,
+                VIEW_TRANSITION_ON_NEGATIVE_CROSS,
+                POST_LAYOUT,
+                TRIGGER_SLACK,
+                TRIGGER_COLLISION_VIEW,
+                TRIGGER_COLLISION_ID,
+                TRIGGER_ID,
+                POSITIVE_CROSS,
+                NEGATIVE_CROSS,
+                TRIGGER_RECEIVER,
+                CROSS,
+        };
         public static final int TYPE_VIEW_TRANSITION_ON_CROSS = 301;
         public static final int TYPE_VIEW_TRANSITION_ON_POSITIVE_CROSS = 302;
         public static final int TYPE_VIEW_TRANSITION_ON_NEGATIVE_CROSS = 303;
@@ -374,6 +435,15 @@ public interface TypedValues {
         public static final int TYPE_CURVE_FIT = 508;
         public static final int TYPE_PATH_MOTION_ARC = 509;
         public static final int TYPE_POSITION_TYPE = 510;
+        public static final String[] KEY_WORDS = {
+                S_TRANSITION_EASING,
+                S_DRAWPATH,
+                S_PERCENT_WIDTH,
+                S_PERCENT_HEIGHT,
+                S_SIZE_PERCENT,
+                S_PERCENT_X,
+                S_PERCENT_Y,
+        };
 
         /**
          * Method to go from String names of values to id of the values
@@ -417,7 +487,21 @@ public interface TypedValues {
         public static final String S_QUANTIZE_MOTIONSTEPS = "QuantizeMotionSteps";
         public static final String S_QUANTIZE_INTERPOLATOR_TYPE = "QuantizeInterpolatorType";
         public static final String S_QUANTIZE_INTERPOLATOR_ID = "QuantizeInterpolatorID";
-
+        public static final String[] KEY_WORDS = {
+                S_STAGGER,
+                S_PATH_ROTATE,
+                S_QUANTIZE_MOTION_PHASE,
+                S_EASING,
+                S_QUANTIZE_INTERPOLATOR,
+                S_ANIMATE_RELATIVE_TO,
+                S_ANIMATE_CIRCLEANGLE_TO,
+                S_PATHMOTION_ARC,
+                S_DRAW_PATH,
+                S_POLAR_RELATIVETO,
+                S_QUANTIZE_MOTIONSTEPS,
+                S_QUANTIZE_INTERPOLATOR_TYPE,
+                S_QUANTIZE_INTERPOLATOR_ID,
+        };
         public static final int TYPE_STAGGER = 600;
         public static final int TYPE_PATH_ROTATE = 601;
         public static final int TYPE_QUANTIZE_MOTION_PHASE = 602;
@@ -470,6 +554,7 @@ public interface TypedValues {
             }
             return -1;
         }
+
     }
 
     interface Custom {
@@ -480,7 +565,14 @@ public interface TypedValues {
         public static final String S_BOOLEAN = "boolean";
         public static final String S_DIMENSION = "dimension";
         public static final String S_REFERENCE = "refrence";
-
+        public static final String[] KEY_WORDS = {
+                S_FLOAT,
+                S_COLOR,
+                S_STRING,
+                S_BOOLEAN,
+                S_DIMENSION,
+                S_REFERENCE,
+        };
         public static final int TYPE_INT = 900;
         public static final int TYPE_FLOAT = 901;
         public static final int TYPE_COLOR = 902;
