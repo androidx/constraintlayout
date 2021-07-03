@@ -131,8 +131,36 @@ inline fun MotionLayout(
     val start = ConstraintSet(startContent)
     val end = ConstraintSet(endContent)
     val transition : androidx.constraintlayout.compose.Transition? = if (transitionContent != null) Transition(transitionContent) else null
-    MotionLayout(start = start, end = end, transition = transition, progress = usedProgress,
-        debug = usedDebugMode, modifier = modifier, optimizationLevel = optimizationLevel, content)
+
+    val measurer = remember { MotionMeasurer() }
+    val scope = remember { MotionLayoutScope(measurer) }
+    val progressState = remember { mutableStateOf(0f) }
+    SideEffect { progressState.value = usedProgress }
+    val measurePolicy =
+        rememberMotionLayoutMeasurePolicy(optimizationLevel, usedDebugMode, start, end, transition, progressState, measurer)
+    measurer.setLayoutInformationReceiver(motionScene as InternalMotionScene)
+
+    if (!usedDebugMode.contains(MotionLayoutDebugFlags.NONE)) {
+        Box {
+            @Suppress("DEPRECATION")
+            (MultiMeasureLayout(
+                modifier = modifier.semantics { designInfoProvider = measurer },
+                measurePolicy = measurePolicy,
+                content = { scope.content() }
+            ))
+            with(measurer) {
+                drawDebug()
+            }
+        }
+    } else {
+        @Suppress("DEPRECATION")
+        (MultiMeasureLayout(
+            modifier = modifier.semantics { designInfoProvider = measurer },
+            measurePolicy = measurePolicy,
+            content = { scope.content() }
+        ))
+    }
+
 }
 
 @Immutable
@@ -148,7 +176,7 @@ interface MotionScene {
     fun getForcedDrawDebug(): MotionLayoutDebugFlags
 }
 
-class InternalMotionScene(@Language("json5") content : String) : MotionScene {
+class InternalMotionScene(@Language("json5") content : String) : MotionScene, LayoutInformationReceiver {
 
     private var forcedDrawDebug: MotionLayoutDebugFlags = MotionLayoutDebugFlags.UNKNOWN
     private var forcedProgress: Float = Float.NaN
@@ -158,6 +186,7 @@ class InternalMotionScene(@Language("json5") content : String) : MotionScene {
     private var debugName:String? = null
     private var currentContent = content
     private var currentFormattedContent = ""
+    private var layoutInformation = ""
 
     init {
         parseMotionSceneJSON(this, currentContent)
@@ -206,6 +235,10 @@ class InternalMotionScene(@Language("json5") content : String) : MotionScene {
 
                 override fun currentMotionScene() : String {
                     return currentFormattedContent
+                }
+
+                override fun currentLayoutInformation() : String {
+                    return layoutInformation
                 }
 
                 override fun setDrawDebug(debugMode: Int) {
@@ -263,6 +296,10 @@ class InternalMotionScene(@Language("json5") content : String) : MotionScene {
 
     override fun getForcedDrawDebug(): MotionLayoutDebugFlags {
         return forcedDrawDebug
+    }
+
+    override fun setLayoutInformation(information: String) {
+        layoutInformation = information
     }
 }
 
@@ -398,8 +435,13 @@ internal fun rememberMotionLayoutMeasurePolicy(
     }
 }
 
+interface LayoutInformationReceiver {
+    fun setLayoutInformation(information: String)
+}
+
 @PublishedApi
 internal class MotionMeasurer : Measurer() {
+    private var layoutInformationReceiver: LayoutInformationReceiver? = null
     private var motionProgress = 0f
     val transition = Transition()
 
@@ -697,6 +739,10 @@ internal class MotionMeasurer : Measurer() {
         end.applyTo(this.transition, Transition.END)
         this.transition.interpolate(0, 0, progress)
         transition?.applyTo(this.transition, 0)
+    }
+
+    fun setLayoutInformationReceiver(layoutReceiver: LayoutInformationReceiver) {
+        layoutInformationReceiver = layoutReceiver
     }
 }
 
