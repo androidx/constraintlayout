@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import scan.SyntaxHighlight
 import java.awt.BorderLayout
 import java.awt.Font
 import java.awt.event.MouseAdapter
@@ -45,9 +46,10 @@ class Main : JPanel(BorderLayout()) {
 
     private val listModel = DefaultListModel<String>()
 
-    var editor = JEditorPane()
+    var editor = JTextPane()
     val textField = JTextField()
     val layoutListPanel = JList<String>()
+    val highlight = SyntaxHighlight(editor)
 
     init {
         val slider = JSlider()
@@ -108,10 +110,16 @@ class Main : JPanel(BorderLayout()) {
         editor.font = font
         editor.document.addDocumentListener(object: DocumentListener {
             override fun insertUpdate(e: DocumentEvent?) {
+                if (highlight.update) {
+                    return
+                }
                 sendContent()
             }
 
             override fun removeUpdate(e: DocumentEvent?) {
+                if (highlight.update) {
+                    return
+                }
                 sendContent()
             }
 
