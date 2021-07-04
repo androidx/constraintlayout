@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import scan.SimpleEditor
 import scan.SyntaxHighlight
 import java.awt.BorderLayout
 import java.awt.Font
@@ -27,15 +26,15 @@ import java.util.prefs.Preferences
 import javax.swing.*
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
-
+import javax.swing.JFrame
 
 class Main : JPanel(BorderLayout()) {
-
     private var UPDATE_CONTENT = 1
     private var UPDATE_PROGRESS = 2
     private var GET_CURRENT_CONTENT = 3
     private var SET_DRAW_DEBUG = 4
     private var GET_LAYOUT_LIST = 5
+    private var GET_CURRENT_LAYOUT = 6
 
     private var connected = false
     private var drawDebug = false
@@ -47,6 +46,7 @@ class Main : JPanel(BorderLayout()) {
 
     private val listModel = DefaultListModel<String>()
 
+    var layoutView : LayoutView? = null
     var editor = JTextPane()
     val textField = JTextField()
     val layoutListPanel = JList<String>()
@@ -59,6 +59,7 @@ class Main : JPanel(BorderLayout()) {
         val sendButton = JButton("Send")
         val resetProgressButton = JButton("Reset Progress")
         val toggleDrawDebug = JButton("Toggle Debug")
+        val showLayout = JButton("Show Layout")
 
         val scrollPaneList = JScrollPane(layoutListPanel)
 
@@ -67,6 +68,7 @@ class Main : JPanel(BorderLayout()) {
         topPanel.add(connectButton)
         topPanel.add(textField)
         topPanel.add(toggleDrawDebug)
+        topPanel.add(showLayout)
         topPanel.add(getButton)
         topPanel.add(sendButton)
 
@@ -88,6 +90,9 @@ class Main : JPanel(BorderLayout()) {
         toggleDrawDebug.addActionListener {
             drawDebug = !drawDebug
             setDrawDebug(drawDebug)
+        }
+        showLayout.addActionListener{
+            getLayoutInformation()
         }
         resetProgressButton.addActionListener {
             sendProgress(Float.NaN)
@@ -167,6 +172,7 @@ class Main : JPanel(BorderLayout()) {
             writer.writeInt(UPDATE_PROGRESS)
             writer.writeUTF(debugName)
             writer.writeFloat(value)
+            updateLayoutInformation()
         } catch (e : Exception) {
             reconnect()
         }
@@ -178,6 +184,30 @@ class Main : JPanel(BorderLayout()) {
             writer.writeInt(GET_CURRENT_CONTENT)
             writer.writeUTF(debugName)
             editor.text = reader.readUTF()
+        } catch (e : java.lang.Exception) {
+            reconnect()
+        }
+    }
+
+    fun getLayoutInformation() {
+        if (layoutView == null) {
+            layoutView = LayoutView()
+            val f = JFrame("Layout visualisation")
+            f.contentPane = layoutView
+            f.setBounds(500, 100, 400, 800)
+            f.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
+            f.isVisible = true
+        }
+        updateLayoutInformation()
+    }
+
+    fun updateLayoutInformation() {
+        try {
+            prepareConnection()
+            writer.writeInt(GET_CURRENT_LAYOUT)
+            writer.writeUTF(debugName)
+            var layoutInfos = reader.readUTF()
+            layoutView?.setLayoutInformation(layoutInfos)
         } catch (e : java.lang.Exception) {
             reconnect()
         }
@@ -235,7 +265,7 @@ class Main : JPanel(BorderLayout()) {
             val p: Main = Main()
             f.contentPane = p
 
-            val pref = Preferences.userNodeForPackage(SimpleEditor::class.java)
+            val pref = Preferences.userNodeForPackage(Main::class.java)
             val pos = Rectangle(100, 100, 1200, 800)
             if (pref != null && pref.getInt("base_x", -1) != -1) {
                 pos.x = pref.getInt("base_x", pos.x)

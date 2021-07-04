@@ -20,4 +20,6 @@ public interface RegistryCallback {
     void onProgress(float progress);
     String currentMotionScene();
     void setDrawDebug(int debugMode);
+    String currentLayoutInformation();
+    void setLayoutInformationMode(int layoutInformationMode);
 }

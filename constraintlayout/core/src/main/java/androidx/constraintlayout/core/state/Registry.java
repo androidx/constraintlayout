@@ -58,10 +58,25 @@ public class Registry {
         return null;
     }
 
+    public String currentLayoutInformation(String name) {
+        RegistryCallback callback = mCallbacks.get(name);
+        if (callback != null) {
+            return callback.currentLayoutInformation();
+        }
+        return null;
+    }
+
     public void setDrawDebug(String name, int debugMode) {
         RegistryCallback callback = mCallbacks.get(name);
         if (callback != null) {
             callback.setDrawDebug(debugMode);
+        }
+    }
+
+    public void setLayoutInformationMode(String name, int mode) {
+        RegistryCallback callback = mCallbacks.get(name);
+        if (callback != null) {
+            callback.setLayoutInformationMode(mode);
         }
     }
 

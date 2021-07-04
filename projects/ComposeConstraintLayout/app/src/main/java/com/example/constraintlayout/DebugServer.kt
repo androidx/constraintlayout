@@ -32,6 +32,7 @@ class DebugServer {
     private var GET_CURRENT_CONTENT = 3
     private var SET_DRAW_DEBUG = 4
     private var GET_LAYOUT_LIST = 5
+    private var GET_CURRENT_LAYOUT = 6
 
     init {
         server = ServerSocket(port)
@@ -59,32 +60,46 @@ class DebugServer {
                 println("Type $type")
                 val name = reader.readUTF()
                 println("name $name")
-                if (type == UPDATE_CONTENT) {
-                    val content = reader.readUTF()
-                    registry.updateContent(name, content)
-                } else if (type == UPDATE_PROGRESS) {
-                    val progress = reader.readFloat()
-                    println("Progress $progress")
-                    registry.updateProgress(name, progress)
-                } else if (type == GET_CURRENT_CONTENT) {
-                    var content = registry.currentContent(name)
-                    if (content == null) {
-                        content = "<not found>"
+                when (type) {
+                    UPDATE_CONTENT -> {
+                        val content = reader.readUTF()
+                        registry.updateContent(name, content)
                     }
-                    writer.writeUTF(content)
-                } else if (type == SET_DRAW_DEBUG) {
-                    val drawDebug = reader.readBoolean()
-                    println("Read drawDebug $drawDebug")
-                    val debugMode = if (drawDebug)
-                        MotionLayoutDebugFlags.SHOW_ALL else
-                        MotionLayoutDebugFlags.NONE
-                    registry.setDrawDebug(name, debugMode.ordinal)
-                } else if (type == GET_LAYOUT_LIST) {
-                    val list = registry.getLayoutList()
-                    writer.writeInt(list.size)
-                    for (layout in list) {
-                        println("layout: $layout")
-                        writer.writeUTF(layout)
+                    UPDATE_PROGRESS -> {
+                        val progress = reader.readFloat()
+                        println("Progress $progress")
+                        registry.updateProgress(name, progress)
+                    }
+                    GET_CURRENT_CONTENT -> {
+                        var content = registry.currentContent(name)
+                        if (content == null) {
+                            content = "{ error: '$name not found' }"
+                        }
+                        writer.writeUTF(content)
+                    }
+                    SET_DRAW_DEBUG -> {
+                        val drawDebug = reader.readBoolean()
+                        println("Read drawDebug $drawDebug")
+                        val debugMode = if (drawDebug)
+                            MotionLayoutDebugFlags.SHOW_ALL else
+                            MotionLayoutDebugFlags.NONE
+                        registry.setDrawDebug(name, debugMode.ordinal)
+                    }
+                    GET_LAYOUT_LIST -> {
+                        val list = registry.getLayoutList()
+                        writer.writeInt(list.size)
+                        for (layout in list) {
+                            println("layout: $layout")
+                            writer.writeUTF(layout)
+                        }
+                    }
+                    GET_CURRENT_LAYOUT -> {
+                        registry.setLayoutInformationMode(name, 1)
+                        var content = registry.currentLayoutInformation(name)
+                        if (content == null) {
+                            content = "{ error: '$name not found' }"
+                        }
+                        writer.writeUTF(content)
                     }
                 }
             } catch (e : Exception) {
