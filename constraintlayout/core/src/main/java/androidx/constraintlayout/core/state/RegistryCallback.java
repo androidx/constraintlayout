@@ -21,4 +21,5 @@ public interface RegistryCallback {
     String currentMotionScene();
     void setDrawDebug(int debugMode);
     String currentLayoutInformation();
+    void setLayoutInformationMode(int layoutInformationMode);
 }

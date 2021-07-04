@@ -73,6 +73,13 @@ public class Registry {
         }
     }
 
+    public void setLayoutInformationMode(String name, int mode) {
+        RegistryCallback callback = mCallbacks.get(name);
+        if (callback != null) {
+            callback.setLayoutInformationMode(mode);
+        }
+    }
+
     public Set<String> getLayoutList() {
         return mCallbacks.keySet();
     }

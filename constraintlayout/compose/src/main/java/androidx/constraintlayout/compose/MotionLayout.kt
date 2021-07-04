@@ -180,6 +180,7 @@ interface MotionScene {
 class InternalMotionScene(@Language("json5") content : String) : MotionScene, LayoutInformationReceiver {
 
     private var forcedDrawDebug: MotionLayoutDebugFlags = MotionLayoutDebugFlags.UNKNOWN
+    private var layoutInformationMode: LayoutInfoFlags = LayoutInfoFlags.NONE
     private var forcedProgress: Float = Float.NaN
     private var updateFlag: MutableState<Long>? = null
     private val constraintSetsContent = HashMap<String, String>()
@@ -242,6 +243,20 @@ class InternalMotionScene(@Language("json5") content : String) : MotionScene, La
                     return layoutInformation
                 }
 
+                override fun setLayoutInformationMode(mode: Int) {
+                    mainHandler.post {
+                        try {
+                            when (mode) {
+                                LayoutInfoFlags.NONE.ordinal -> layoutInformationMode = LayoutInfoFlags.NONE
+                                LayoutInfoFlags.BOUNDS.ordinal -> layoutInformationMode = LayoutInfoFlags.BOUNDS
+                            }
+                            if (updateFlag != null) {
+                                updateFlag!!.value = updateFlag!!.value + 1
+                            }
+                        } catch (e : Exception) {}
+                    }
+                }
+
                 override fun setDrawDebug(debugMode: Int) {
                     mainHandler.post {
                         try {
@@ -297,6 +312,10 @@ class InternalMotionScene(@Language("json5") content : String) : MotionScene, La
 
     override fun getForcedDrawDebug(): MotionLayoutDebugFlags {
         return forcedDrawDebug
+    }
+
+    override fun getLayoutInformationMode(): LayoutInfoFlags {
+        return layoutInformationMode
     }
 
     override fun setLayoutInformation(information: String) {
@@ -404,6 +423,11 @@ enum class MotionLayoutDebugFlags {
     UNKNOWN
 }
 
+enum class LayoutInfoFlags {
+    NONE,
+    BOUNDS
+}
+
 @Composable
 @PublishedApi
 internal fun rememberMotionLayoutMeasurePolicy(
@@ -438,6 +462,7 @@ internal fun rememberMotionLayoutMeasurePolicy(
 
 interface LayoutInformationReceiver {
     fun setLayoutInformation(information: String)
+    fun getLayoutInformationMode() : LayoutInfoFlags
 }
 
 @PublishedApi
@@ -550,7 +575,9 @@ internal class MotionMeasurer : Measurer() {
                 frameCache[measurable] = interpolatedFrame
                 index++
             }
-            computeLayoutResult()
+            if (layoutInformationReceiver?.getLayoutInformationMode() == LayoutInfoFlags.BOUNDS) {
+                computeLayoutResult()
+            }
         }
         return IntSize(root.width, root.height)
     }
