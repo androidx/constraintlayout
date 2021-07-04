@@ -29,12 +29,7 @@ import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
 import javax.swing.JFrame
 
-
-
-
-
 class Main : JPanel(BorderLayout()) {
-
     private var UPDATE_CONTENT = 1
     private var UPDATE_PROGRESS = 2
     private var GET_CURRENT_CONTENT = 3
