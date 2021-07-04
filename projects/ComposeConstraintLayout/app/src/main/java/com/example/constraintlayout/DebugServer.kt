@@ -32,6 +32,7 @@ class DebugServer {
     private var GET_CURRENT_CONTENT = 3
     private var SET_DRAW_DEBUG = 4
     private var GET_LAYOUT_LIST = 5
+    private var GET_CURRENT_LAYOUT = 6
 
     init {
         server = ServerSocket(port)
@@ -86,6 +87,12 @@ class DebugServer {
                         println("layout: $layout")
                         writer.writeUTF(layout)
                     }
+                } else if (type == GET_CURRENT_LAYOUT) {
+                    var content = registry.currentLayoutInformation(name)
+                    if (content == null) {
+                        content = "<not found>"
+                    }
+                    writer.writeUTF(content)
                 }
             } catch (e : Exception) {
                 println("Exception $e")

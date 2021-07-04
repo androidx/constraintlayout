@@ -46,6 +46,7 @@ import androidx.constraintlayout.core.state.Dimension
 import androidx.constraintlayout.core.state.Transition
 import androidx.constraintlayout.core.widgets.Optimizer
 import org.intellij.lang.annotations.Language
+import java.lang.StringBuilder
 import java.util.*
 
 
@@ -191,7 +192,7 @@ class InternalMotionScene(@Language("json5") content : String) : MotionScene, La
     init {
         parseMotionSceneJSON(this, currentContent)
         try {
-            var json = CLParser.parse(currentContent)
+            val json = CLParser.parse(currentContent)
             currentFormattedContent = json.toFormattedJSON()
         } catch (e : CLParsingException) {
 
@@ -210,7 +211,7 @@ class InternalMotionScene(@Language("json5") content : String) : MotionScene, La
                             currentContent = content
                             parseMotionSceneJSON(scene, currentContent);
                             try {
-                                var json = CLParser.parse(currentContent)
+                                val json = CLParser.parse(currentContent)
                                 currentFormattedContent = json.toFormattedJSON()
                             } catch (e : CLParsingException) {
 
@@ -549,8 +550,22 @@ internal class MotionMeasurer : Measurer() {
                 frameCache[measurable] = interpolatedFrame
                 index++
             }
+            computeLayoutResult()
         }
         return IntSize(root.width, root.height)
+    }
+
+    fun computeLayoutResult() {
+        val json = StringBuilder()
+        json.append("{ [")
+        json.append("{ root: [ 0, 0, ${root.width}, ${root.height} ] }")
+        for (child in root.children) {
+            val frame = transition.getInterpolated(child.stringId)
+            json.append(", ")
+            json.append("{ ${child.stringId}: [ ${frame.left}, ${frame.top}, ${frame.right}, ${frame.bottom} ] }")
+        }
+        json.append("] }")
+        layoutInformationReceiver?.setLayoutInformation(json.toString())
     }
 
     @Composable
