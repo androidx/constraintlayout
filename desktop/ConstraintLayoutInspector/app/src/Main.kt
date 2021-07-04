@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import scan.SimpleEditor
 import scan.SyntaxHighlight
 import java.awt.BorderLayout
 import java.awt.Font
@@ -266,7 +265,7 @@ class Main : JPanel(BorderLayout()) {
             val p: Main = Main()
             f.contentPane = p
 
-            val pref = Preferences.userNodeForPackage(SimpleEditor::class.java)
+            val pref = Preferences.userNodeForPackage(Main::class.java)
             val pos = Rectangle(100, 100, 1200, 800)
             if (pref != null && pref.getInt("base_x", -1) != -1) {
                 pos.x = pref.getInt("base_x", pos.x)
