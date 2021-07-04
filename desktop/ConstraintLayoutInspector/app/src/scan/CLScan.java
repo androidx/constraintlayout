@@ -27,7 +27,7 @@ import java.util.HashSet;
  * Code that scans the CL text providing a callback to for each of the important words
  */
 public class CLScan {
-    static HashSet<String> sSectionKeyWord = new HashSet<>(Arrays.asList("Variables", "ConstraintSets", "Debug", "Generate", "KeyFrames", "Transition", "KeyAttributes", "KeyPosition"));
+    static HashSet<String> sSectionKeyWord = new HashSet<>(Arrays.asList("Variables", "ConstraintSets", "Debug", "Generate", "KeyFrames", "Transitions", "KeyAttributes", "KeyPositions"));
     static HashSet<String> sAttributesKeyWord = new HashSet<>(Arrays.asList(
             "start",
             "end",
@@ -45,6 +45,15 @@ public class CLScan {
             "visible",
             "invisible",
             "gone",
+            "Extends",
+            "circular",
+            "frames",
+            "from",
+            "to",
+            "step",
+            "tag",
+            "pathMotionArc",
+            "default",
             "custom"));
 
     static {
@@ -95,9 +104,13 @@ public class CLScan {
                         int count = array.size();
                         for (int j = 0; j < count; j++) {
                             CLElement v = array.get(j);
-                            int valStart = (int) v.getStart();
-                            int valLen = 1 + (int) v.getEnd() - valStart;
-                            scan.object(v.getClass().getSimpleName(), 0, valStart, valLen);
+                            if (v instanceof CLObject) {
+                                scan((CLObject) v, level + 1, scan);
+                            } else {
+                                int valStart = (int) v.getStart();
+                                int valLen = 1 + (int) v.getEnd() - valStart;
+                                scan.object(v.getClass().getSimpleName(), 0, valStart, valLen);
+                            }
                         }
                         scan.object(attr, getElementClass(attr), attStart, attrLen);
 
@@ -118,6 +131,7 @@ public class CLScan {
         }
 
     }
+
 
     public static int getElementClass(String str) {
         if (sSectionKeyWord.contains(str)) {
