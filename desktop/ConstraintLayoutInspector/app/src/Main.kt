@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
+import scan.SimpleEditor
 import scan.SyntaxHighlight
 import java.awt.BorderLayout
 import java.awt.Font
-import java.awt.event.MouseAdapter
-import java.awt.event.MouseEvent
-import java.awt.event.MouseListener
+import java.awt.Rectangle
+import java.awt.event.*
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.net.Socket
+import java.util.prefs.Preferences
 import javax.swing.*
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
@@ -233,9 +234,29 @@ class Main : JPanel(BorderLayout()) {
             val f = JFrame("ConstraintLayout Live Editor")
             val p: Main = Main()
             f.contentPane = p
-            f.setBounds(100, 100, 1200, 800)
+
+            val pref = Preferences.userNodeForPackage(SimpleEditor::class.java)
+            val pos = Rectangle(100, 100, 1200, 800)
+            if (pref != null && pref.getInt("base_x", -1) != -1) {
+                pos.x = pref.getInt("base_x", pos.x)
+                pos.y = pref.getInt("base_y", pos.y)
+                pos.width = pref.getInt("base_width", pos.width)
+                pos.height = pref.getInt("base_height", pos.height)
+            }
+            f.setBounds(pos)
+            f.addComponentListener(object : ComponentAdapter() {
+                override fun componentMoved(evt: ComponentEvent) {
+                    f.getBounds(pos)
+                    pref!!.putInt("base_x", pos.x)
+                    pref!!.putInt("base_y", pos.y)
+                    pref!!.putInt("base_width", pos.width)
+                    pref!!.putInt("base_height", pos.height)
+                }
+            })
+            
             f.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
             f.isVisible = true
+
         }
 
     }
