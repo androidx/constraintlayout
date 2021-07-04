@@ -29,7 +29,7 @@ import java.awt.*;
  */
 public class SyntaxHighlight {
     JTextPane mEditor;
-    Color sectionColor = new Color(0x00677a);
+    Color sectionColor = new Color(0x5099D4);
     Color keywordColor = new Color(0x903890);
     Color attributeColor = new Color(0x384790);
     Color numberColor = new Color(0x0077e5);
@@ -95,6 +95,7 @@ public class SyntaxHighlight {
                             switch (keyword) {
                                 case SECTION_ELEMENT:
                                     aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, sectionColor);
+                                    break;
                                 case ATTRIBUTE_ELEMENT:
                                     aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, keywordColor);
                                     break;
