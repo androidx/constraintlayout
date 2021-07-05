@@ -1,4 +1,4 @@
-/*
+package androidx.constraintLayout.desktop.link/*
  * Copyright 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -73,8 +73,12 @@ class LayoutView : JPanel(BorderLayout()) {
                             val top = (bounds[1] as CLNumber).float.toInt()
                             val right = (bounds[2] as CLNumber).float.toInt()
                             val bottom = (bounds[3] as CLNumber).float.toInt()
-                            widgets.add(Widget(widgetId,
-                                        left, top, right, bottom))
+                            widgets.add(
+                                Widget(
+                                    widgetId,
+                                    left, top, right, bottom
+                                )
+                            )
                         }
                     }
                 }
