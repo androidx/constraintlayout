@@ -15,8 +15,13 @@ package androidx.constraintLayout.desktop.link/*
  */
 
 import androidx.constraintlayout.core.parser.*
-import java.awt.*
+import java.awt.BorderLayout
+import java.awt.Color
+import java.awt.Graphics
+import java.awt.Graphics2D
+import javax.swing.JFrame
 import javax.swing.JPanel
+import javax.swing.WindowConstants
 
 class LayoutView : JPanel(BorderLayout()) {
     var widgets = ArrayList<Widget>()
@@ -85,5 +90,17 @@ class LayoutView : JPanel(BorderLayout()) {
             }
         }
         repaint()
+    }
+
+    companion object {
+        fun showLayoutView(): LayoutView? {
+            val frame = JFrame("Layout visualisation")
+            val layoutView = LayoutView()
+            frame.contentPane = layoutView
+            frame.setBounds(100, 100, 1200, 800)
+            frame.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
+            frame.isVisible = true
+            return layoutView
+        }
     }
 }
