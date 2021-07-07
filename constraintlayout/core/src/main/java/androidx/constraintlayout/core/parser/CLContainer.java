@@ -152,8 +152,12 @@ public class CLContainer extends CLElement {
     if (element instanceof CLString) {
       return  element.content();
     }
+    String strClass = null;
+    if (element != null) {
+      strClass = element.getStrClass();
+    }
     throw new CLParsingException("no string found for key <" + name + ">," +
-            " found [" + element.getStrClass() + "] : " + element, this);
+            " found [" + strClass + "] : " + element, this);
   }
 
   public boolean getBoolean(String name) throws CLParsingException {

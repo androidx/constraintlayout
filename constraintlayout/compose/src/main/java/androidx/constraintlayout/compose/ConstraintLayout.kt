@@ -17,6 +17,8 @@
 package androidx.constraintlayout.compose
 
 import android.annotation.SuppressLint
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.layout.LayoutScopeMarker
@@ -37,12 +39,12 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import androidx.constraintlayout.core.parser.CLKey
+import androidx.constraintlayout.core.parser.CLObject
 import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.parser.CLParsingException
-import androidx.constraintlayout.core.state.ConstraintReference
+import androidx.constraintlayout.core.state.*
 import androidx.constraintlayout.core.state.Dimension.*
 import androidx.constraintlayout.core.state.Transition
-import androidx.constraintlayout.core.state.WidgetFrame
 import androidx.constraintlayout.core.widgets.ConstraintWidget
 import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.FIXED
 import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
@@ -56,6 +58,7 @@ import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.TRY_GIVEN_DIMENSIONS
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.USE_GIVEN_DIMENSIONS
 import org.intellij.lang.annotations.Language
+import java.lang.StringBuilder
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -161,8 +164,21 @@ inline fun ConstraintLayout(
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
     noinline content: @Composable () -> Unit
 ) {
+    val needsUpdate = remember {
+        mutableStateOf(0L)
+    }
+
     val measurer = remember { Measurer() }
-    val measurePolicy = rememberConstraintLayoutMeasurePolicy(optimizationLevel, constraintSet, measurer)
+    val measurePolicy = rememberConstraintLayoutMeasurePolicy(optimizationLevel, needsUpdate, constraintSet, measurer)
+    if (constraintSet is EditableJSONLayout) {
+        constraintSet.setUpdateFlag(needsUpdate)
+    }
+    if (constraintSet is JSONConstraintSet) {
+        measurer.addLayoutInformationReceiver(constraintSet as JSONConstraintSet)
+    } else {
+        measurer.addLayoutInformationReceiver(null)
+    }
+
     @Suppress("DEPRECATION")
     MultiMeasureLayout(
         modifier = modifier.semantics { designInfoProvider = measurer },
@@ -175,9 +191,10 @@ inline fun ConstraintLayout(
 @PublishedApi
 internal fun rememberConstraintLayoutMeasurePolicy(
     optimizationLevel: Int,
+    needsUpdate: MutableState<Long>,
     constraintSet: ConstraintSet,
     measurer: Measurer
-) = remember(optimizationLevel, constraintSet) {
+) = remember(optimizationLevel, needsUpdate.value, constraintSet) {
     MeasurePolicy { measurables, constraints ->
         val layoutSize = measurer.performMeasure(
             constraints,
@@ -1258,59 +1275,237 @@ interface ConstraintSet {
 fun ConstraintSet(@Language("json5") content : String,
                   @Language("json5") overrideVariables: String? = null) : ConstraintSet {
     val constraintset = remember(content, overrideVariables) {
-        mutableStateOf(object : ConstraintSet {
-            private val overridedVariables = HashMap<String, Float>()
+        JSONConstraintSet(content, overrideVariables)
+    }
+    return constraintset
+}
 
-            override fun applyTo(transition: Transition, type: Int) {
-                val layoutVariables = LayoutVariables()
-                applyLayoutVariables(layoutVariables)
-                parseJSON(content, transition, type)
-            }
+/**
+ * Handles update back to the composable
+ */
+open class EditableJSONLayout(@Language("json5") content: String) :
+    LayoutInformationReceiver {
+    private var forcedDrawDebug: MotionLayoutDebugFlags = MotionLayoutDebugFlags.UNKNOWN
+    private var updateFlag: MutableState<Long>? = null
+    private var layoutInformationMode: LayoutInfoFlags = LayoutInfoFlags.NONE
+    private var layoutInformation = ""
+    private var debugName : String? = null
 
-            private fun applyLayoutVariables(layoutVariables: LayoutVariables) {
-                if (overrideVariables != null) {
-                    try {
-                        var variables = CLParser.parse(overrideVariables)
-                        for (i in 0..variables.size() - 1) {
-                            var key = variables[i] as CLKey
-                            if (key != null) {
-                                var variable = key.value.float
-                                // TODO: allow arbitrary override, not just float values
-                                layoutVariables.putOverride(key.content(), variable)
-                            }
+    private var currentContent = content
+    private var currentFormattedContent = ""
+
+    protected fun initialization() {
+        try {
+            onNewContent(currentContent)
+            if (debugName != null) {
+                val mainHandler = Handler(Looper.getMainLooper())
+                val callback = object : RegistryCallback {
+                    override fun onNewMotionScene(content: String?) {
+                        if (content == null) {
+                            return
                         }
-                    } catch (e: CLParsingException) {
-                        System.err.println("exception: " + e)
+                        mainHandler.post {
+                            try {
+                                onNewContent(content)
+                            } catch (e : Exception) {}
+                        }
+                    }
+
+                    override fun onProgress(progress: Float) {
+                        mainHandler.post {
+                            try {
+                                onNewProgress(progress)
+                            } catch (e : Exception) {}
+                        }
+                    }
+
+                    override fun currentMotionScene(): String {
+                        return currentFormattedContent
+                    }
+
+                    override fun currentLayoutInformation() : String {
+                        return layoutInformation
+                    }
+
+                    override fun setLayoutInformationMode(mode: Int) {
+                        mainHandler.post {
+                            try {
+                                onLayoutInformation(mode)
+                            } catch (e : Exception) {}
+                        }
+                    }
+
+                    override fun setDrawDebug(debugMode: Int) {
+                        mainHandler.post {
+                            try {
+                                onDrawDebug(debugMode)
+                            } catch (e : Exception) {}
+                        }
                     }
                 }
-                for (name in overridedVariables.keys) {
-                    layoutVariables.putOverride(name, overridedVariables[name]!!)
-                }
+                val registry = Registry.getInstance()
+                registry.register(debugName, callback)
             }
+        } catch (e : CLParsingException) {
 
-            override fun applyTo(state: State, measurables: List<Measurable>) {
-                measurables.forEach { measurable ->
-                    val layoutId =
-                        measurable.layoutId ?: measurable.constraintLayoutId ?: createId()
-                    state.map(layoutId, measurable)
-                    val tag = measurable.constraintLayoutTag
-                    if (tag != null && tag is String && layoutId is String) {
-                        state.setTag(layoutId, tag)
-                    }
-                }
-                val layoutVariables = LayoutVariables()
-                applyLayoutVariables(layoutVariables)
-                parseJSON(content, state, layoutVariables)
-            }
-
-            override fun override(name: String, value: Float): ConstraintSet {
-                overridedVariables[name] = value
-                return this
-            }
-        })
+        }
     }
 
-    return constraintset.value
+    ///////////////////////////////////////////////////////////////////////////
+    // Accessors
+    ///////////////////////////////////////////////////////////////////////////
+
+    fun setUpdateFlag(needsUpdate: MutableState<Long>) {
+        updateFlag = needsUpdate
+    }
+
+    protected fun signalUpdate() {
+        if (updateFlag != null) {
+            updateFlag!!.value = updateFlag!!.value + 1
+        }
+    }
+
+    fun setCurrentContent(content: String) {
+        currentContent = content
+    }
+
+    fun getCurrentContent() : String{
+        return currentContent
+    }
+
+    fun setDebugName(name: String?) {
+        debugName = name
+    }
+
+    fun getDebugName() : String?{
+        return debugName
+    }
+
+    fun getForcedDrawDebug(): MotionLayoutDebugFlags {
+        return forcedDrawDebug
+    }
+
+    override fun setLayoutInformation(information: String) {
+        layoutInformation = information
+    }
+
+    fun getLayoutInformation() : String {
+        return layoutInformation
+    }
+
+    override fun getLayoutInformationMode(): LayoutInfoFlags {
+        return layoutInformationMode
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // on update methods
+    ///////////////////////////////////////////////////////////////////////////
+
+    protected open fun onNewContent(content: String) {
+        currentContent = content
+        val json = CLParser.parse(currentContent)
+        if (json is CLObject) {
+            val firstTime = debugName == null
+            if (firstTime) {
+                val debug = json.getObjectOrNull("Debug")
+                if (debug != null) {
+                    debugName = debug.getStringOrNull("name")
+                }
+            }
+            if (debugName != null) {
+                currentFormattedContent = json.toFormattedJSON(0, 2)
+            }
+            if (!firstTime) {
+                signalUpdate()
+            }
+        }
+    }
+
+    protected open fun onNewProgress(progress: Float) {
+        // nothing for ConstraintSet
+    }
+
+    protected fun onLayoutInformation(mode: Int) {
+        when (mode) {
+            LayoutInfoFlags.NONE.ordinal -> layoutInformationMode = LayoutInfoFlags.NONE
+            LayoutInfoFlags.BOUNDS.ordinal -> layoutInformationMode = LayoutInfoFlags.BOUNDS
+        }
+        signalUpdate()
+    }
+
+    protected fun onDrawDebug(debugMode: Int) {
+        when (debugMode) {
+            -1 -> forcedDrawDebug = MotionLayoutDebugFlags.UNKNOWN
+            MotionLayoutDebugFlags.UNKNOWN.ordinal -> forcedDrawDebug = MotionLayoutDebugFlags.UNKNOWN
+            MotionLayoutDebugFlags.NONE.ordinal -> forcedDrawDebug = MotionLayoutDebugFlags.NONE
+            MotionLayoutDebugFlags.SHOW_ALL.ordinal -> forcedDrawDebug = MotionLayoutDebugFlags.SHOW_ALL
+        }
+        signalUpdate()
+    }
+}
+
+class JSONConstraintSet(@Language("json5") content: String,
+                        @Language("json5") overrideVariables: String? = null)
+        : EditableJSONLayout(content), ConstraintSet {
+    private val overridedVariables = HashMap<String, Float>()
+    private val overrideVariables = overrideVariables
+
+    init {
+        initialization()
+    }
+
+    // Only called by MotionLayout in MotionMeasurer
+    override fun applyTo(transition: Transition, type: Int) {
+        val layoutVariables = LayoutVariables()
+        applyLayoutVariables(layoutVariables)
+        parseJSON(getCurrentContent(), transition, type)
+    }
+
+    // Called by both MotionLayout & ConstraintLayout measurers
+    override fun applyTo(state: State, measurables: List<Measurable>) {
+        measurables.forEach { measurable ->
+            val layoutId =
+                measurable.layoutId ?: measurable.constraintLayoutId ?: createId()
+            state.map(layoutId, measurable)
+            val tag = measurable.constraintLayoutTag
+            if (tag != null && tag is String && layoutId is String) {
+                state.setTag(layoutId, tag)
+            }
+        }
+        val layoutVariables = LayoutVariables()
+        applyLayoutVariables(layoutVariables)
+        // TODO: Need to better handle half parsed JSON and/or incorrect states.
+        try {
+            parseJSON(getCurrentContent(), state, layoutVariables)
+        } catch (e : Exception) {
+            // nothing
+        }
+    }
+
+    override fun override(name: String, value: Float): ConstraintSet {
+        overridedVariables[name] = value
+        return this
+    }
+
+    private fun applyLayoutVariables(layoutVariables: LayoutVariables) {
+        if (overrideVariables != null) {
+            try {
+                val variables = CLParser.parse(overrideVariables)
+                for (i in 0..variables.size() - 1) {
+                    val key = variables[i] as CLKey
+                    val variable = key.value.float
+                    // TODO: allow arbitrary override, not just float values
+                    layoutVariables.putOverride(key.content(), variable)
+                }
+            } catch (e: CLParsingException) {
+                System.err.println("exception: " + e)
+            }
+        }
+        for (name in overridedVariables.keys) {
+            layoutVariables.putOverride(name, overridedVariables[name]!!)
+        }
+    }
+
 }
 
 /**
@@ -1384,8 +1579,15 @@ class State(val density: Density) : SolverState() {
     }
 }
 
+interface LayoutInformationReceiver {
+    fun setLayoutInformation(information: String)
+    fun getLayoutInformationMode() : LayoutInfoFlags
+}
+
 @PublishedApi
 internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
+    private var computedLayoutResult: String = ""
+    protected var layoutInformationReceiver: LayoutInformationReceiver? = null
     protected val root = ConstraintWidgetContainer(0, 0).also { it.measurer = this }
     protected val placeables = mutableMapOf<Measurable, Placeable>()
     private val lastMeasures = mutableMapOf<Measurable, Array<Int>>()
@@ -1529,6 +1731,35 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             measure.measuredHeight != measure.verticalDimension
     }
 
+    fun addLayoutInformationReceiver(layoutReceiver: LayoutInformationReceiver?) {
+        layoutInformationReceiver = layoutReceiver
+        layoutInformationReceiver?.setLayoutInformation(computedLayoutResult)
+    }
+
+    open fun computeLayoutResult() {
+        val json = StringBuilder()
+        json.append("{ [")
+        json.append("{ root: [ 0, 0, ${root.width}, ${root.height} ] }")
+
+        for (child in root.children) {
+            val measurable = child.companionWidget
+            if (measurable !is Measurable) continue
+            if (child.stringId == null) {
+                val id = measurable.layoutId ?: measurable.constraintLayoutId
+                child.stringId = id?.toString()
+            }
+            val frame = frameCache[measurable]?.widget
+            if (frame == null) {
+                continue
+            }
+            json.append(", ")
+            json.append("{ ${child.stringId}: [ ${frame.left}, ${frame.top}, ${frame.right}, ${frame.bottom} ] }")
+        }
+        json.append("] }")
+        computedLayoutResult = json.toString()
+        layoutInformationReceiver?.setLayoutInformation(json.toString())
+    }
+
     /**
      * Calculates the [Constraints] in one direction that should be used to measure a child,
      * based on the solver measure request. Returns `true` if the constraints correspond to a
@@ -1658,7 +1889,6 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         if (DEBUG) {
             Log.d("CCL", "ConstraintLayout is at the end ${root.width} ${root.height}")
         }
-
         return IntSize(root.width, root.height)
     }
 
@@ -1718,6 +1948,9 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                 val zIndex = if (frame.translationZ.isNaN()) 0f else frame.translationZ
                 placeables[measurable]?.placeWithLayer(x, y, layerBlock = layerBlock, zIndex = zIndex)
             }
+        }
+        if (layoutInformationReceiver?.getLayoutInformationMode() == LayoutInfoFlags.BOUNDS) {
+            computeLayoutResult()
         }
     }
 
