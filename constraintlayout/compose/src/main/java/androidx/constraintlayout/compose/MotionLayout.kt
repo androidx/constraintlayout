@@ -581,20 +581,7 @@ internal class MotionMeasurer : Measurer() {
         }
         return IntSize(root.width, root.height)
     }
-
-//    fun computeLayoutResult() {
-//        val json = StringBuilder()
-//        json.append("{ [")
-//        json.append("{ root: [ 0, 0, ${root.width}, ${root.height} ] }")
-//        for (child in root.children) {
-//            val frame = transition.getInterpolated(child.stringId)
-//            json.append(", ")
-//            json.append("{ ${child.stringId}: [ ${frame.left}, ${frame.top}, ${frame.right}, ${frame.bottom} ] }")
-//        }
-//        json.append("] }")
-//        layoutInformationReceiver?.setLayoutInformation(json.toString())
-//    }
-
+    
     fun computeLayoutResult() {
         val json = StringBuilder()
         json.append("{ ")
