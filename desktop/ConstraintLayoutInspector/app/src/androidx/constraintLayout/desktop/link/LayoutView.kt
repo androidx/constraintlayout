@@ -29,39 +29,20 @@ import javax.swing.WindowConstants
 class LayoutView : JPanel(BorderLayout()) {
     var widgets = ArrayList<Widget>()
 
-//    data class Widget(val id : String,
-//                      val l: Int, val t: Int,
-//                      val r: Int, val b: Int) {
-//        fun width() : Int { return r - l }
-//        fun height() : Int { return b - t }
-//        fun draw(g: Graphics2D) {
-//            g.drawLine(l , t , r , t)
-//            g.drawLine(r, t, r, b)
-//            g.drawLine(r, b, l, b)
-//            g.drawLine(l, b, l, t)
-//        }
-//    }
+    data class Widget(val id : String, val key: CLKey) {
+      var frame = WidgetFrame()
 
-data class Widget(val id : String, val key: CLKey) {
-    var frame = WidgetFrame()
+      init {
+          WidgetFrameUtils.deserialize(key, frame)
+      }
 
-    init {
-        WidgetFrameUtils.deserialize(key, frame)
+      fun width(): Int { return frame.width()  }
+      fun height(): Int { return frame.height()  }
+
+      fun draw(g: Graphics2D) {
+          WidgetFrameUtils.render(frame, g)
+      }
     }
-
-    fun width(): Int { return frame.width()  }
-
-    fun height(): Int {  return frame.height()  }
-
-    fun draw(g: Graphics2D) {
-
-
-//              g.drawRect(frame.left,frame.top,frame.right-frame.left,frame.bottom-frame.top)
-
-        WidgetFrameUtils.render(frame, g)
-    }
-}
-
 
     override fun paint(g: Graphics?) {
         super.paint(g)
@@ -84,37 +65,6 @@ data class Widget(val id : String, val key: CLKey) {
         }
     }
 
-//    fun setLayoutInformation(information: String) {
-//        // { [{ text0: [ 157, 591, 272, 648 ] } ...
-//        widgets.clear()
-//        val info = CLParser.parse(information)
-//        val list = info[0]
-//        if (list is CLArray) {
-//            for (i in 0 until list.size()) {
-//                val widgetInfo = list[i]
-//                if (widgetInfo is CLObject) {
-//                    val widget = widgetInfo[0]
-//                    if (widget is CLKey) {
-//                        val widgetId = widget.content()
-//                        val bounds = widget.value
-//                        if (bounds is CLArray) {
-//                            val left = (bounds[0] as CLNumber).float.toInt()
-//                            val top = (bounds[1] as CLNumber).float.toInt()
-//                            val right = (bounds[2] as CLNumber).float.toInt()
-//                            val bottom = (bounds[3] as CLNumber).float.toInt()
-//                            widgets.add(
-//                                Widget(
-//                                    widgetId,
-//                                    left, top, right, bottom
-//                                )
-//                            )
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        repaint()
-//    }
 
     fun setLayoutInformation(information: String) {
         // { [{ text0: [ 157, 591, 272, 648 ] } ...
@@ -123,16 +73,11 @@ data class Widget(val id : String, val key: CLKey) {
         val list = CLParser.parse(information)
 
             for (i in 0 until list.size()) {
-                println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>> ")
                 val widget = list[i]
-
-
                     if (widget is CLKey) {
                         val widgetId = widget.content()
-
                         widgets.add( Widget(widgetId, widget) )
                     }
-
         }
         repaint()
     }

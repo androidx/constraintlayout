@@ -329,7 +329,6 @@ public class WidgetFrame {
             case "pivotY":
                 pivotY = value.getFloat();
                 break;
-
             case "rotationX":
                 rotationX = value.getFloat();
                 break;
