@@ -4,6 +4,7 @@ import androidx.constraintLayout.desktop.link.LayoutView.Companion.showLayoutVie
 import androidx.constraintLayout.desktop.scan.CLTreeNode
 import androidx.constraintLayout.desktop.scan.SyntaxHighlight
 import androidx.constraintlayout.core.parser.CLParsingException
+import com.formdev.flatlaf.FlatIntelliJLaf
 import java.awt.*
 import java.awt.event.ActionEvent
 import java.awt.event.ComponentAdapter
@@ -186,6 +187,7 @@ class Main2 internal constructor() : JPanel(BorderLayout()) {
     companion object {
         @JvmStatic
         fun main(str: Array<String>) {
+            FlatIntelliJLaf.install()
             val frame = JFrame("ConstraintLayout Live Editor")
             frame.contentPane = Main2()
             val pos = Rectangle(100, 100, 1200, 800)
