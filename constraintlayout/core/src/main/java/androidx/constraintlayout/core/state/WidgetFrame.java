@@ -18,6 +18,7 @@ package androidx.constraintlayout.core.state;
 
 import androidx.constraintlayout.core.motion.CustomVariable;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
+import androidx.constraintlayout.core.parser.*;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
 import java.util.HashMap;
@@ -54,8 +55,8 @@ public class WidgetFrame {
 
     public int visibility = ConstraintWidget.VISIBLE;
 
-    final HashMap<String, CustomVariable> mCustom = new HashMap<>();
-  
+    final public HashMap<String, CustomVariable> mCustom = new HashMap<>();
+
     public int width() {
         return Math.max(0, right - left);
     }
@@ -317,6 +318,160 @@ public class WidgetFrame {
 
     public Set<String> getCustomAttributeNames() {
         return mCustom.keySet();
+    }
+
+
+    public boolean setValue(String key, CLElement value) throws CLParsingException {
+        switch (key) {
+            case "pivotX":
+                pivotX = value.getFloat();
+                break;
+            case "pivotY":
+                pivotY = value.getFloat();
+                break;
+            case "rotationX":
+                rotationX = value.getFloat();
+                break;
+            case "rotationY":
+                rotationY = value.getFloat();
+                break;
+            case "rotationZ":
+                rotationZ = value.getFloat();
+                break;
+            case "translationX":
+                translationX = value.getFloat();
+                break;
+            case "translationY":
+                translationY = value.getFloat();
+                break;
+            case "translationZ":
+                translationZ = value.getFloat();
+                break;
+            case "scaleX":
+                scaleX = value.getFloat();
+                break;
+            case "scaleY":
+                scaleY = value.getFloat();
+                break;
+            case "alpha":
+                alpha = value.getFloat();
+                break;
+            case "top":
+                top = value.getInt();
+                break;
+            case "left":
+                left = value.getInt();
+                break;
+            case "right":
+                right = value.getInt();
+                break;
+            case "bottom":
+                bottom = value.getInt();
+                break;
+            case "custom":
+                parseCustom(value);
+                break;
+            default:
+                return false;
+        }
+        return true;
+    }
+    void parseCustom(CLElement custom) throws CLParsingException {
+        CLObject obj = ((CLObject)custom);
+        int n = obj.size();
+        for (int i = 0; i < n; i++) {
+            CLElement tmp = obj.get(i);
+            CLKey k = ((CLKey) tmp);
+            String name = k.content();
+            CLElement v = k.getValue();
+            String vStr = v.content();
+            if( vStr.matches("#[0-9a-fA-F]+")) {
+                int color = Integer.parseInt(vStr.substring(1),16);
+                setCustomAttribute(k.content(), TypedValues.Custom.TYPE_COLOR, color);
+            } else  if( v instanceof CLNumber) {
+                setCustomAttribute(k.content(), TypedValues.Custom.TYPE_FLOAT, v.getFloat());
+            } else {
+                setCustomAttribute(k.content(), TypedValues.Custom.TYPE_STRING, vStr);
+
+            }
+        }
+    }
+
+    public StringBuilder serialize(StringBuilder ret) {
+        WidgetFrame frame = this;
+        ret.append("{\n");
+        add(ret, "left", frame.left);
+        add(ret, "top", frame.top);
+         add(ret, "right", frame.right);
+        add(ret, "bottom", frame.bottom);
+        add(ret, "pivotX", frame.pivotX);
+        add(ret, "pivotY", frame.pivotY);
+        add(ret, "rotationX", frame.rotationX);
+        add(ret, "rotationY", frame.rotationY);
+        add(ret, "rotationZ", frame.rotationZ);
+        add(ret, "translationX", frame.translationX);
+        add(ret, "translationY", frame.translationY);
+        add(ret, "translationZ", frame.translationZ);
+        add(ret, "scaleX", frame.scaleX);
+        add(ret, "scaleY", frame.scaleY);
+        add(ret, "alpha", frame.alpha);
+        add(ret, "visibility", frame.left);
+
+        if (frame.mCustom.size() != 0) {
+            ret.append("custom : {\n");
+            for (String s : frame.mCustom.keySet()) {
+                CustomVariable value = frame.mCustom.get(s);
+                ret.append(s);
+                ret.append(": ");
+                switch (value.getType()) {
+                    case TypedValues.Custom.TYPE_INT:
+                        ret.append(value.getIntegerValue());
+                        ret.append(",\n");
+                        break;
+                    case TypedValues.Custom.TYPE_FLOAT:
+                    case TypedValues.Custom.TYPE_DIMENSION:
+                        ret.append(value.getFloatValue());
+                        ret.append(",\n");
+                        break;
+                    case TypedValues.Custom.TYPE_COLOR:
+                        ret.append("'");
+                        ret.append(CustomVariable.colorString(value.getIntegerValue()));
+                        ret.append("',\n");
+                        break;
+                    case TypedValues.Custom.TYPE_STRING:
+                        ret.append("'");
+                        ret.append(value.getStringValue());
+                        ret.append("',\n");
+                        break;
+                    case TypedValues.Custom.TYPE_BOOLEAN:
+                        ret.append("'");
+                        ret.append(value.getBooleanValue());
+                        ret.append("',\n");
+                        break;
+                }
+            }
+            ret.append("}\n");
+        }
+
+        ret.append("}\n");
+        return ret;
+    }
+
+    private static void add(StringBuilder s, String title, int value) {
+        s.append(title);
+        s.append(": ");
+        s.append(value);
+        s.append(",\n");
+    }
+
+    private static void add(StringBuilder s, String title, float value) {
+        if (Float.isNaN(value)) {
+            return;
+        }
+        s.append(title);
+        s.append(": ");
+        s.append(value);
+        s.append(",\n");
     }
 
     void printCustomAttributes() {

@@ -152,7 +152,7 @@ public class CLElement {
 
     public float getFloat() {
         if (this instanceof CLNumber) {
-            return ((CLNumber) this).getInt();
+            return ((CLNumber) this).getFloat();
         }
         return Float.NaN;
     }
