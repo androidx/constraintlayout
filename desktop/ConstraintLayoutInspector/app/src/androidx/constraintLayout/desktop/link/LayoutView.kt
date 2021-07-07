@@ -67,8 +67,6 @@ class LayoutView : JPanel(BorderLayout()) {
 
 
     fun setLayoutInformation(information: String) {
-        // { [{ text0: [ 157, 591, 272, 648 ] } ...
-        println(information)
         widgets.clear()
         val list = CLParser.parse(information)
 

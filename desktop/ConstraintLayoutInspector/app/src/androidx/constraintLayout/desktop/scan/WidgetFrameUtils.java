@@ -1,3 +1,18 @@
+/*
+ * Copyright 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package androidx.constraintLayout.desktop.scan;
 
 import androidx.constraintlayout.core.parser.*;
@@ -8,12 +23,10 @@ import java.awt.geom.AffineTransform;
 
 public class WidgetFrameUtils {
 
-
     public static void deserialize(CLKey object, WidgetFrame dest) throws CLParsingException {
         CLKey clkey = ((CLKey) object);
         CLElement value = clkey.getValue();
         if (value instanceof CLObject) {
-            System.out.println(value.getClass().getSimpleName());
             CLObject obj = ((CLObject) value);
             int n = obj.size();
             for (int i = 0; i < n; i++) {
@@ -24,9 +37,6 @@ public class WidgetFrameUtils {
                 dest.setValue(name, v);
             }
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        dest.serialize(stringBuilder);
-        System.out.println(">>>>>" + stringBuilder.toString());
     }
 
     public static void render(WidgetFrame frame, Graphics2D g2d) {
@@ -68,7 +78,6 @@ public class WidgetFrameUtils {
 
         g.fillRect(frame.left, frame.top, frame.right - frame.left, frame.bottom - frame.top);
         g.drawRect(frame.left, frame.top, frame.right - frame.left, frame.bottom - frame.top);
-
     }
 
     public static void main(String[] str) throws CLParsingException {
@@ -92,6 +101,5 @@ public class WidgetFrameUtils {
         StringBuilder builder = new StringBuilder();
         frame.serialize(builder);
         System.out.println(builder.toString());
-
     }
 }
