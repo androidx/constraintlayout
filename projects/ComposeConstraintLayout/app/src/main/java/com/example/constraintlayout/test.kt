@@ -423,9 +423,10 @@ public fun ScreenExample3() {
     ConstraintLayout(
         ConstraintSet("""
             {
+                Debug: { name: 'example 3'},
                 g1: { type: 'vGuideline', start: 80 },
                 button: {
-                  top: ['title', 'bottom', 160],
+                  top: ['title', 'bottom', 16],
                   start: ['g1', 'start']
                 },
                 title: {
@@ -455,6 +456,7 @@ public fun ScreenExample4() {
     ConstraintLayout(
         ConstraintSet("""
             {
+                Debug: { name: 'example 4'},
                 g1: { type: 'vGuideline', percent: 0.5 },
                 button: {
                   start: ['g1', 'start']
