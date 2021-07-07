@@ -18,7 +18,7 @@ At the moment, this is only enabled for MotionLayout in Compose.
 - This only works for JSON MotionScenes for now
 - the JSON description should contain a `Debug: { name: 'somename' }` (see example 19)
 - copy the DebugServer.kt file in your app
-- make sure to setup an ADB tunnel: `adb forwarc tcp:9999 tcp:9999`
+- make sure to setup an ADB tunnel: `adb forward tcp:9999 tcp:9999`
 - run your app and your phone or emulator and the live inspector app on your desktop
 
 # Notes

@@ -1,4 +1,4 @@
-/*
+package androidx.constraintLayout.desktop.link/*
  * Copyright 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-import scan.SyntaxHighlight
+import androidx.constraintLayout.desktop.scan.CLScan
+import androidx.constraintLayout.desktop.scan.SyntaxHighlight
+import androidx.constraintlayout.core.motion.utils.Utils
 import java.awt.BorderLayout
 import java.awt.Font
 import java.awt.Rectangle
@@ -26,7 +28,7 @@ import java.util.prefs.Preferences
 import javax.swing.*
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
-import javax.swing.JFrame
+import javax.swing.text.JTextComponent
 
 class Main : JPanel(BorderLayout()) {
     private var UPDATE_CONTENT = 1
@@ -145,7 +147,87 @@ class Main : JPanel(BorderLayout()) {
         sendButton.addActionListener {
             sendContent()
         }
+        val mouseAdapter: MouseAdapter = object : MouseAdapter() {
+            override fun mousePressed(e: MouseEvent) {
+                Utils.log(e.paramString())
+                if (e.isPopupTrigger) popup(e)
+            }
+
+            override fun mouseReleased(e: MouseEvent) {
+                Utils.log(e.paramString())
+                if (e.isPopupTrigger) popup(e)
+            }
+
+            fun popup(e: MouseEvent) {
+                val menu = PopUpDemo(e, editor)
+                menu.show(e.component, e.x, e.y)
+            }
+        }
+        editor.addMouseListener(mouseAdapter)
     }
+
+
+    internal class PopUpDemo(e: MouseEvent, editor: JTextPane) : JPopupMenu() {
+        fun getLineOfOffset(comp: JTextComponent, offset: Int): Int {
+            val doc = comp.document
+            return if (offset < 0) {
+                -1
+            } else if (offset > doc.length) {
+                -1
+            } else {
+                val map = doc.defaultRootElement
+                map.getElementIndex(offset)
+            }
+        }
+
+        init {
+            var anItem: JMenuItem
+            var subMenu: JMenu
+            val offset = editor.viewToModel2D(e.point)
+            val line_number = getLineOfOffset(editor, offset)
+            editor.caretPosition = offset
+            anItem = JMenuItem("edit")
+            anItem.font = anItem.font.deriveFont(Font.BOLD)
+            add(anItem)
+            anItem = JMenuItem("line number:$line_number")
+            add(anItem)
+            add(Separator())
+            val scan = CLScan.getTreeAtLocation(editor.text, offset)
+            for (i in scan.indices) {
+                val pad = String(CharArray(i)).replace(0.toChar(), ' ')
+                val name = scan[i].content()
+                var toMake = CLScan.creationMap[name]
+                if (toMake == null && i > 0) {
+                    val prevName = scan[i - 1].content()
+                    toMake = CLScan.creationMap["$prevName*"]
+                }
+                if (toMake == null && i > 1) {
+                    val prevName = scan[i - 2].content()
+                    toMake = CLScan.creationMap["$prevName**"]
+                }
+                if (toMake != null) {
+                    subMenu = JMenu(pad + name)
+                    add(subMenu)
+                    for (j in toMake.indices) {
+                        var s = toMake[j]
+                        if (s == "*") {
+                            s = "new"
+                            anItem = JMenuItem(s)
+                            anItem.font = anItem.font.deriveFont(Font.ITALIC)
+                        } else {
+                            anItem = JMenuItem(s)
+                        }
+                        subMenu.add(anItem)
+                    }
+                    continue
+                }
+                anItem = JMenuItem(pad + name)
+                anItem.isEnabled = false
+                add(anItem)
+            }
+        }
+    }
+
 
     private fun getLayoutList() {
         try {
@@ -262,7 +344,8 @@ class Main : JPanel(BorderLayout()) {
         @JvmStatic
         fun main(vararg args: String) {
             val f = JFrame("ConstraintLayout Live Editor")
-            val p: Main = Main()
+            val p: Main =
+                Main()
             f.contentPane = p
 
             val pref = Preferences.userNodeForPackage(Main::class.java)

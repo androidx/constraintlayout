@@ -1,4 +1,4 @@
-/*
+package androidx.constraintLayout.desktop.link/*
  * Copyright 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +15,13 @@
  */
 
 import androidx.constraintlayout.core.parser.*
-import java.awt.*
+import java.awt.BorderLayout
+import java.awt.Color
+import java.awt.Graphics
+import java.awt.Graphics2D
+import javax.swing.JFrame
 import javax.swing.JPanel
+import javax.swing.WindowConstants
 
 class LayoutView : JPanel(BorderLayout()) {
     var widgets = ArrayList<Widget>()
@@ -73,13 +78,29 @@ class LayoutView : JPanel(BorderLayout()) {
                             val top = (bounds[1] as CLNumber).float.toInt()
                             val right = (bounds[2] as CLNumber).float.toInt()
                             val bottom = (bounds[3] as CLNumber).float.toInt()
-                            widgets.add(Widget(widgetId,
-                                        left, top, right, bottom))
+                            widgets.add(
+                                Widget(
+                                    widgetId,
+                                    left, top, right, bottom
+                                )
+                            )
                         }
                     }
                 }
             }
         }
         repaint()
+    }
+
+    companion object {
+        fun showLayoutView(): LayoutView? {
+            val frame = JFrame("Layout visualisation")
+            val layoutView = LayoutView()
+            frame.contentPane = layoutView
+            frame.setBounds(100, 100, 1200, 800)
+            frame.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
+            frame.isVisible = true
+            return layoutView
+        }
     }
 }
