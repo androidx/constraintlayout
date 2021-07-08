@@ -65,10 +65,12 @@ public class WidgetFrameUtils {
         at.translate(pivotX, pivotY);
 //     Todo:    at.scale(scaleX * Math.cos(rotationY), scaleY + Math.cos(rotationX));
         at.rotate(Math.toRadians(rotationZ));
+        at.scale(scaleX , scaleY);
         at.translate(-pivotX, -pivotY);
 
         Graphics2D g = (Graphics2D) g2d.create();
-        g.setTransform(at);
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+        g.transform(at);
         g.drawRect(frame.left, frame.top, frame.right - frame.left, frame.bottom - frame.top);
 
         int rgb = g.getColor().getRGB();
