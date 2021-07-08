@@ -18,6 +18,7 @@ package androidx.constraintlayout.core.state;
 public interface RegistryCallback {
     void onNewMotionScene(String content);
     void onProgress(float progress);
+    void onDimensions(int width, int height);
     String currentMotionScene();
     void setDrawDebug(int debugMode);
     String currentLayoutInformation();

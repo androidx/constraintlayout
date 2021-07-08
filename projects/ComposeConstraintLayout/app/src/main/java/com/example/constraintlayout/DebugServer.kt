@@ -33,6 +33,7 @@ class DebugServer {
     private var SET_DRAW_DEBUG = 4
     private var GET_LAYOUT_LIST = 5
     private var GET_CURRENT_LAYOUT = 6
+    private var UPDATE_LAYOUT_DIMENSIONS = 7
 
     init {
         server = ServerSocket(port)
@@ -67,7 +68,6 @@ class DebugServer {
                     }
                     UPDATE_PROGRESS -> {
                         val progress = reader.readFloat()
-                        println("Progress $progress")
                         registry.updateProgress(name, progress)
                     }
                     GET_CURRENT_CONTENT -> {
@@ -100,6 +100,11 @@ class DebugServer {
                             content = "{ error: '$name not found' }"
                         }
                         writer.writeUTF(content)
+                    }
+                    UPDATE_LAYOUT_DIMENSIONS -> {
+                        val width = reader.readInt()
+                        val height = reader.readInt()
+                        registry.updateDimensions(name, width, height)
                     }
                 }
             } catch (e : Exception) {

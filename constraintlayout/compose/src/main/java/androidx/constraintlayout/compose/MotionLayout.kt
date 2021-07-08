@@ -45,7 +45,6 @@ import org.intellij.lang.annotations.Language
 import java.lang.StringBuilder
 import java.util.*
 
-
 /**
  * Layout that interpolate its children layout given two sets of constraint and
  * a progress (from 0 to 1)
@@ -67,7 +66,7 @@ inline fun MotionLayout(
     val progressState = remember { mutableStateOf(0f) }
     SideEffect { progressState.value = progress }
     val measurePolicy =
-        rememberMotionLayoutMeasurePolicy(optimizationLevel, debug, start, end, transition, progressState, measurer)
+        rememberMotionLayoutMeasurePolicy(optimizationLevel, debug, 0, start, end, transition, progressState, measurer)
     if (!debug.contains(MotionLayoutDebugFlags.NONE)) {
         Box {
             @Suppress("DEPRECATION")
@@ -134,7 +133,7 @@ inline fun MotionLayout(
     val progressState = remember { mutableStateOf(0f) }
     SideEffect { progressState.value = usedProgress }
     val measurePolicy =
-        rememberMotionLayoutMeasurePolicy(optimizationLevel, usedDebugMode, start, end, transition, progressState, measurer)
+        rememberMotionLayoutMeasurePolicy(optimizationLevel, usedDebugMode, needsUpdate.value, start, end, transition, progressState, measurer)
     measurer.addLayoutInformationReceiver(motionScene as JSONMotionScene)
 
     if (!usedDebugMode.contains(MotionLayoutDebugFlags.NONE)) {
@@ -214,7 +213,11 @@ class JSONMotionScene(@Language("json5") content : String)
 
     override fun onNewContent(content: String) {
         super.onNewContent(content)
-        parseMotionSceneJSON(this, content);
+        try {
+            parseMotionSceneJSON(this, content);
+        } catch (e : Exception) {
+            // nothing (content might be invalid, sent by live edit)
+        }
     }
 
     override fun onNewProgress(progress: Float) {
@@ -334,12 +337,13 @@ enum class LayoutInfoFlags {
 internal fun rememberMotionLayoutMeasurePolicy(
     optimizationLevel: Int,
     debug: EnumSet<MotionLayoutDebugFlags>,
+    needsUpdate: Long,
     constraintSetStart: ConstraintSet,
     constraintSetEnd: ConstraintSet,
     transition: androidx.constraintlayout.compose.Transition?,
     progress: MutableState<Float>,
     measurer: MotionMeasurer
-) = remember(optimizationLevel, debug, constraintSetStart, constraintSetEnd, transition) {
+) = remember(optimizationLevel, debug, needsUpdate, constraintSetStart, constraintSetEnd, transition) {
     measurer.initWith(constraintSetStart, constraintSetEnd, transition, progress.value)
     MeasurePolicy { measurables, constraints ->
         val layoutSize = measurer.performInterpolationMeasure(
@@ -376,6 +380,12 @@ internal class MotionMeasurer : Measurer() {
         state.apply(root)
         root.width = constraints.maxWidth
         root.height = constraints.maxHeight
+        if (layoutInformationReceiver != null && layoutInformationReceiver?.getForcedWidth() != Int.MIN_VALUE) {
+            root.width = layoutInformationReceiver!!.getForcedWidth()
+        }
+        if (layoutInformationReceiver != null && layoutInformationReceiver?.getForcedHeight() != Int.MIN_VALUE) {
+            root.height = layoutInformationReceiver!!.getForcedHeight()
+        }
         root.updateHierarchy()
 
         if (DEBUG) {
@@ -387,8 +397,8 @@ internal class MotionMeasurer : Measurer() {
         }
 
         root.children.forEach { child ->
-            var measurable = (child.companionWidget as? Measurable)
-            var id = measurable?.layoutId ?: measurable?.constraintLayoutId
+            val measurable = (child.companionWidget as? Measurable)
+            val id = measurable?.layoutId ?: measurable?.constraintLayoutId
             child.stringId = id?.toString()
         }
 
@@ -411,6 +421,8 @@ internal class MotionMeasurer : Measurer() {
         this.density = measureScope
         this.measureScope = measureScope
         if (motionProgress != progress
+            || (layoutInformationReceiver?.getForcedWidth() != Int.MIN_VALUE
+                    && layoutInformationReceiver?.getForcedHeight() != Int.MIN_VALUE)
             || this.transition.isEmpty()
             || frameCache.isEmpty()) {
             motionProgress = progress

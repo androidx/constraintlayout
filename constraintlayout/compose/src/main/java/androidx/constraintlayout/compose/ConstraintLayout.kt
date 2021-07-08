@@ -24,8 +24,7 @@ import androidx.annotation.FloatRange
 import androidx.compose.foundation.layout.LayoutScopeMarker
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.GraphicsLayerScope
-import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.platform.InspectorValueInfo
 import androidx.compose.ui.platform.debugInspectorInfo
@@ -45,15 +44,11 @@ import androidx.constraintlayout.core.parser.CLParsingException
 import androidx.constraintlayout.core.state.*
 import androidx.constraintlayout.core.state.Dimension.*
 import androidx.constraintlayout.core.state.Transition
-import androidx.constraintlayout.core.widgets.ConstraintWidget
+import androidx.constraintlayout.core.widgets.*
+import androidx.constraintlayout.core.widgets.ConstraintWidget.*
 import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.FIXED
 import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
 import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.WRAP_CONTENT
-import androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_SPREAD
-import androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_WRAP
-import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer
-import androidx.constraintlayout.core.widgets.HelperWidget
-import androidx.constraintlayout.core.widgets.Optimizer
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.TRY_GIVEN_DIMENSIONS
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.USE_GIVEN_DIMENSIONS
@@ -174,7 +169,7 @@ inline fun ConstraintLayout(
         constraintSet.setUpdateFlag(needsUpdate)
     }
     if (constraintSet is JSONConstraintSet) {
-        measurer.addLayoutInformationReceiver(constraintSet as JSONConstraintSet)
+        measurer.addLayoutInformationReceiver(constraintSet)
     } else {
         measurer.addLayoutInformationReceiver(null)
     }
@@ -1285,9 +1280,11 @@ fun ConstraintSet(@Language("json5") content : String,
  */
 open class EditableJSONLayout(@Language("json5") content: String) :
     LayoutInformationReceiver {
+    private var forcedWidth: Int = Int.MIN_VALUE
+    private var forcedHeight: Int = Int.MIN_VALUE
     private var forcedDrawDebug: MotionLayoutDebugFlags = MotionLayoutDebugFlags.UNKNOWN
     private var updateFlag: MutableState<Long>? = null
-    private var layoutInformationMode: LayoutInfoFlags = LayoutInfoFlags.NONE
+    private var layoutInformationMode: LayoutInfoFlags = LayoutInfoFlags.BOUNDS
     private var layoutInformation = ""
     private var debugName : String? = null
 
@@ -1315,6 +1312,14 @@ open class EditableJSONLayout(@Language("json5") content: String) :
                         mainHandler.post {
                             try {
                                 onNewProgress(progress)
+                            } catch (e : Exception) {}
+                        }
+                    }
+
+                    override fun onDimensions(width: Int, height: Int) {
+                        mainHandler.post {
+                            try {
+                                onNewDimensions(width, height)
                             } catch (e : Exception) {}
                         }
                     }
@@ -1385,6 +1390,14 @@ open class EditableJSONLayout(@Language("json5") content: String) :
         return forcedDrawDebug
     }
 
+    override fun getForcedWidth(): Int {
+        return forcedWidth
+    }
+
+    override fun getForcedHeight(): Int {
+        return forcedHeight
+    }
+
     override fun setLayoutInformation(information: String) {
         layoutInformation = information
     }
@@ -1403,26 +1416,38 @@ open class EditableJSONLayout(@Language("json5") content: String) :
 
     protected open fun onNewContent(content: String) {
         currentContent = content
-        val json = CLParser.parse(currentContent)
-        if (json is CLObject) {
-            val firstTime = debugName == null
-            if (firstTime) {
-                val debug = json.getObjectOrNull("Debug")
-                if (debug != null) {
-                    debugName = debug.getStringOrNull("name")
+        try {
+            val json = CLParser.parse(currentContent)
+            if (json is CLObject) {
+                val firstTime = debugName == null
+                if (firstTime) {
+                    val debug = json.getObjectOrNull("Debug")
+                    if (debug != null) {
+                        debugName = debug.getStringOrNull("name")
+                    }
+                }
+                if (debugName != null) {
+                    currentFormattedContent = json.toFormattedJSON(0, 2)
+                }
+                if (!firstTime) {
+                    signalUpdate()
                 }
             }
-            if (debugName != null) {
-                currentFormattedContent = json.toFormattedJSON(0, 2)
-            }
-            if (!firstTime) {
-                signalUpdate()
-            }
+        } catch (e : CLParsingException) {
+            // nothing (content might be invalid, sent by live edit)
+        } catch (e : Exception) {
+            // nothing (content might be invalid, sent by live edit)
         }
     }
 
     protected open fun onNewProgress(progress: Float) {
         // nothing for ConstraintSet
+    }
+
+    fun onNewDimensions(width: Int, height: Int) {
+        forcedWidth = width
+        forcedHeight = height
+        signalUpdate()
     }
 
     protected fun onLayoutInformation(mode: Int) {
@@ -1478,7 +1503,7 @@ class JSONConstraintSet(@Language("json5") content: String,
         try {
             parseJSON(getCurrentContent(), state, layoutVariables)
         } catch (e : Exception) {
-            // nothing
+            // nothing (content might be invalid, sent by live edit)
         }
     }
 
@@ -1582,6 +1607,8 @@ class State(val density: Density) : SolverState() {
 interface LayoutInformationReceiver {
     fun setLayoutInformation(information: String)
     fun getLayoutInformationMode() : LayoutInfoFlags
+    fun getForcedWidth(): Int
+    fun getForcedHeight(): Int
 }
 
 @PublishedApi
@@ -1738,26 +1765,43 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
 
     open fun computeLayoutResult() {
         val json = StringBuilder()
-        json.append("{ [")
-        json.append("{ root: [ 0, 0, ${root.width}, ${root.height} ] }")
+        json.append("{ ")
+        json.append("  root: {")
+        json.append("interpolated: { left:  0,")
+        json.append("  top:  0,")
+        json.append("  right:   ${root.width} ,")
+        json.append("  bottom:  ${root.height} ,")
+        json.append(" } }")
 
         for (child in root.children) {
             val measurable = child.companionWidget
-            if (measurable !is Measurable) continue
+            if (measurable !is Measurable) {
+                if (child is Guideline) {
+                    json.append(" ${child.stringId}: {")
+                    json.append(" interpolated: ")
+                    json.append(" { left: ${child.x}, top: ${child.y}, " +
+                            "right: ${child.x + child.width}, " +
+                            "bottom: ${child.y + child.height} }")
+                    json.append("}, ")
+                }
+                continue
+            }
             if (child.stringId == null) {
                 val id = measurable.layoutId ?: measurable.constraintLayoutId
                 child.stringId = id?.toString()
             }
-            val frame = frameCache[measurable]?.widget
+            val frame = frameCache[measurable]?.widget?.frame
             if (frame == null) {
                 continue
             }
-            json.append(", ")
-            json.append("{ ${child.stringId}: [ ${frame.left}, ${frame.top}, ${frame.right}, ${frame.bottom} ] }")
+            json.append(" ${child.stringId}: {")
+            json.append(" interpolated : ")
+            frame.serialize(json);
+            json.append("}, ")
         }
-        json.append("] }")
+        json.append(" }")
         computedLayoutResult = json.toString()
-        layoutInformationReceiver?.setLayoutInformation(json.toString())
+        layoutInformationReceiver?.setLayoutInformation(computedLayoutResult)
     }
 
     /**
@@ -1849,6 +1893,25 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         state.apply(root)
         root.width = constraints.maxWidth
         root.height = constraints.maxHeight
+
+        var forcedWidth = Int.MIN_VALUE
+        var forcedHeight = Int.MIN_VALUE
+        if (layoutInformationReceiver != null) {
+            if (layoutInformationReceiver!!.getForcedWidth() != Int.MIN_VALUE
+                && layoutInformationReceiver!!.getForcedHeight() != Int.MIN_VALUE) {
+                forcedWidth = layoutInformationReceiver!!.getForcedWidth()
+                forcedHeight = layoutInformationReceiver!!.getForcedHeight()
+
+                var ratio = forcedHeight / forcedWidth
+            }
+        }
+
+        if (layoutInformationReceiver != null && layoutInformationReceiver?.getForcedWidth() != Int.MIN_VALUE) {
+            root.width = layoutInformationReceiver!!.getForcedWidth()
+        }
+        if (layoutInformationReceiver != null && layoutInformationReceiver?.getForcedHeight() != Int.MIN_VALUE) {
+            root.height = layoutInformationReceiver!!.getForcedHeight()
+        }
         root.updateHierarchy()
 
         if (DEBUG) {

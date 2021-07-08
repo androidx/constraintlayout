@@ -83,4 +83,11 @@ public class Registry {
     public Set<String> getLayoutList() {
         return mCallbacks.keySet();
     }
+
+    public void updateDimensions(String name, int width, int height) {
+        RegistryCallback callback = mCallbacks.get(name);
+        if (callback != null) {
+            callback.onDimensions(width, height);
+        }
+    }
 }

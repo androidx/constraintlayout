@@ -1,4 +1,4 @@
-package androidx.constraintLayout.desktop.link/*
+/*
  * Copyright 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,6 +14,8 @@ package androidx.constraintLayout.desktop.link/*
  * limitations under the License.
  */
 
+package androidx.constraintLayout.desktop.link
+
 import androidx.constraintLayout.desktop.scan.WidgetFrameUtils
 import androidx.constraintlayout.core.parser.CLKey
 import androidx.constraintlayout.core.parser.CLObject
@@ -22,10 +24,11 @@ import androidx.constraintlayout.core.state.WidgetFrame
 import java.awt.BorderLayout
 import java.awt.Graphics
 import java.awt.Graphics2D
+import java.awt.RenderingHints
+import java.lang.Exception
 import java.awt.geom.Path2D
 import javax.swing.JFrame
 import javax.swing.JPanel
-import javax.swing.WindowConstants
 
 class LayoutView : JPanel(BorderLayout()) {
     var widgets = ArrayList<Widget>()
@@ -51,7 +54,6 @@ class LayoutView : JPanel(BorderLayout()) {
                     "end" -> WidgetFrameUtils.deserialize(sec, start)
                     "interpolated" -> WidgetFrameUtils.deserialize(sec, interpolated)
                     "path" -> WidgetFrameUtils.getPath(sec, path);
-
                 }
             }
         }
@@ -64,16 +66,19 @@ class LayoutView : JPanel(BorderLayout()) {
             return interpolated.height()
         }
 
-        fun draw(g: Graphics2D) {
+        fun draw(g: Graphics2D, drawOnlyBounds: Boolean) {
             val END_LOOK = WidgetFrameUtils.OUTLINE or WidgetFrameUtils.DASH_OUTLINE;
-
             g.color = WidgetFrameUtils.START_COLOR
             WidgetFrameUtils.render(start, g, END_LOOK);
             g.color = WidgetFrameUtils.END_COLOR
             WidgetFrameUtils.render(end, g, END_LOOK);
             WidgetFrameUtils.renderPath(path, g);
             g.color = WidgetFrameUtils.INTERPOLATED_COLOR
-            WidgetFrameUtils.render(interpolated, g, WidgetFrameUtils.FILL);
+            var style = WidgetFrameUtils.FILL
+            if (drawOnlyBounds) {
+                style = WidgetFrameUtils.OUTLINE
+            }
+            WidgetFrameUtils.render(interpolated, g, style);
         }
     }
 
@@ -91,22 +96,23 @@ class LayoutView : JPanel(BorderLayout()) {
         var offY = 0.0f
         if (scaleX < scaleY) {
             scaleY = scaleX
-
         } else {
             scaleX = scaleY
         }
+
         scaleX *= zoom
         scaleY *= zoom
         offX = (width - root.width().toFloat() * scaleX) / 2
         offY = (height - root.height().toFloat() * scaleY) / 2
+
         val g2 = g as Graphics2D
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_ON);
         g2.translate(offX.toDouble(), offY.toDouble())
         g2.scale(scaleX.toDouble(), scaleY.toDouble())
 
-
-
         for (widget in widgets) {
-            widget.draw(g2)
+            widget.draw(g2, widget == root)
         }
     }
 
@@ -115,29 +121,31 @@ class LayoutView : JPanel(BorderLayout()) {
         if (information.trim().isEmpty()) {
             return
         }
-        widgets.clear()
-        val list = CLParser.parse(information)
 
-        for (i in 0 until list.size()) {
-            val widget = list[i]
-            if (widget is CLKey) {
-                val widgetId = widget.content()
-                widgets.add(Widget(widgetId, widget))
+        try {
+            val list = CLParser.parse(information)
+            widgets.clear()
+
+            for (i in 0 until list.size()) {
+                val widget = list[i]
+                if (widget is CLKey) {
+                    val widgetId = widget.content()
+                    widgets.add(Widget(widgetId, widget))
+                }
             }
-        }
-        repaint()
+            repaint()
+        } catch (e : Exception) {}
     }
 
     companion object {
 
-        fun showLayoutView(): LayoutView? {
-            val frame = JFrame("Layout visualisation")
-            val layoutView = LayoutView()
-            frame.contentPane = layoutView
+        fun showLayoutView(link: MotionLink): LayoutView? {
+            val frame = JFrame("Layout Inspector")
+            val inspector = LayoutInspector(link)
+            frame.contentPane = inspector
             frame.setBounds(100, 100, 1200, 800)
-            frame.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
             frame.isVisible = true
-            return layoutView
+            return inspector.layoutView
         }
     }
 }
