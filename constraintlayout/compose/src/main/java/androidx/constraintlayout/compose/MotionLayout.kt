@@ -37,8 +37,6 @@ import androidx.compose.ui.layout.*
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.*
 import androidx.constraintlayout.core.motion.Motion
-import androidx.constraintlayout.core.parser.CLParser
-import androidx.constraintlayout.core.parser.CLParsingException
 import androidx.constraintlayout.core.state.*
 import androidx.constraintlayout.core.state.Dimension
 import androidx.constraintlayout.core.state.Transition
@@ -478,22 +476,35 @@ internal class MotionMeasurer : Measurer() {
         }
         return IntSize(root.width, root.height)
     }
- 
+
     override fun computeLayoutResult() {
         val json = StringBuilder()
         json.append("{ ")
-        json.append("  root: ")
-        json.append("{ left:  0,")
+        json.append("  root: {")
+        json.append("interpolated: { left:  0,")
         json.append("  top:  0,")
         json.append("  right:   ${root.width} ,")
         json.append("  bottom:  ${root.height} ,")
-        json.append(" },")
+        json.append(" } }")
 
         for (child in root.children) {
-            val frame = transition.getInterpolated(child.stringId)
-            json.append(" ${child.stringId}: ")
-            frame.serialize(json);
-            json.append(", ")
+            val start = transition.getStart(child.stringId)
+            val end = transition.getEnd(child.stringId)
+            val interpolated = transition.getInterpolated(child.stringId)
+            val path = transition.getPath(child.stringId)
+            json.append(" ${child.stringId}: {")
+            json.append(" interpolated : ")
+            interpolated.serialize(json);
+            json.append(", start : ")
+            start.serialize(json);
+            json.append(", end : ")
+            end.serialize(json);
+            json.append(" path : [")
+            for (point in path) {
+                json.append(" $point ,")
+            }
+            json.append(" ] ")
+            json.append("}, ")
         }
         json.append(" }")
         layoutInformationReceiver?.setLayoutInformation(json.toString())

@@ -15,33 +15,66 @@ package androidx.constraintLayout.desktop.link/*
  */
 
 import androidx.constraintLayout.desktop.scan.WidgetFrameUtils
-import androidx.constraintlayout.core.parser.*
+import androidx.constraintlayout.core.parser.CLKey
+import androidx.constraintlayout.core.parser.CLObject
+import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.state.WidgetFrame
 import java.awt.BorderLayout
-import java.awt.Color
 import java.awt.Graphics
 import java.awt.Graphics2D
-import java.lang.StringBuilder
+import java.awt.geom.Path2D
 import javax.swing.JFrame
 import javax.swing.JPanel
 import javax.swing.WindowConstants
 
 class LayoutView : JPanel(BorderLayout()) {
     var widgets = ArrayList<Widget>()
+    var zoom = 0.9f
 
-    data class Widget(val id : String, val key: CLKey) {
-      var frame = WidgetFrame()
+    data class Widget(val id: String, val key: CLKey) {
+        var interpolated = WidgetFrame()
+        var start = WidgetFrame()
+        var end = WidgetFrame()
+        var name = "unknown";
+        var path = Path2D.Float()
 
-      init {
-          WidgetFrameUtils.deserialize(key, frame)
-      }
+        init {
+            name = key.content()
 
-      fun width(): Int { return frame.width()  }
-      fun height(): Int { return frame.height()  }
+            val sections = key.value as CLObject
+            val count = sections.size()
 
-      fun draw(g: Graphics2D) {
-          WidgetFrameUtils.render(frame, g)
-      }
+            for (i in 0 until count) {
+                val sec = sections[i] as CLKey
+                when (sec.content()) {
+                    "start" -> WidgetFrameUtils.deserialize(sec, end)
+                    "end" -> WidgetFrameUtils.deserialize(sec, start)
+                    "interpolated" -> WidgetFrameUtils.deserialize(sec, interpolated)
+                    "path" -> WidgetFrameUtils.getPath(sec, path);
+
+                }
+            }
+        }
+
+        fun width(): Int {
+            return interpolated.width()
+        }
+
+        fun height(): Int {
+            return interpolated.height()
+        }
+
+        fun draw(g: Graphics2D) {
+            val END_LOOK = WidgetFrameUtils.OUTLINE or WidgetFrameUtils.DASH_OUTLINE;
+
+            g.color = WidgetFrameUtils.START_COLOR
+            WidgetFrameUtils.render(start, g, END_LOOK);
+            g.color = WidgetFrameUtils.END_COLOR
+            WidgetFrameUtils.render(end, g, END_LOOK);
+            WidgetFrameUtils.renderPath(path, g);
+            g.color = WidgetFrameUtils.INTERPOLATED_COLOR
+            WidgetFrameUtils.render(interpolated, g, WidgetFrameUtils.FILL);
+        }
     }
 
     override fun paint(g: Graphics?) {
@@ -50,16 +83,28 @@ class LayoutView : JPanel(BorderLayout()) {
             return
         }
         val root = widgets[0]
-        var scaleX = width / root.width().toFloat()
-        var scaleY = height / root.height().toFloat()
+        var rootWidth = root.width().toFloat()
+        var rootHeight = root.height().toFloat()
+        var scaleX = width / rootWidth
+        var scaleY = height / rootHeight
+        var offX = 0.0f
+        var offY = 0.0f
         if (scaleX < scaleY) {
             scaleY = scaleX
+
         } else {
             scaleX = scaleY
         }
+        scaleX *= zoom
+        scaleY *= zoom
+        offX = (width - root.width().toFloat() * scaleX) / 2
+        offY = (height - root.height().toFloat() * scaleY) / 2
         val g2 = g as Graphics2D
+        g2.translate(offX.toDouble(), offY.toDouble())
         g2.scale(scaleX.toDouble(), scaleY.toDouble())
-        g2.color = Color.BLUE
+
+
+
         for (widget in widgets) {
             widget.draw(g2)
         }
@@ -67,20 +112,24 @@ class LayoutView : JPanel(BorderLayout()) {
 
 
     fun setLayoutInformation(information: String) {
+        if (information.trim().isEmpty()) {
+            return
+        }
         widgets.clear()
         val list = CLParser.parse(information)
 
-            for (i in 0 until list.size()) {
-                val widget = list[i]
-                    if (widget is CLKey) {
-                        val widgetId = widget.content()
-                        widgets.add( Widget(widgetId, widget) )
-                    }
+        for (i in 0 until list.size()) {
+            val widget = list[i]
+            if (widget is CLKey) {
+                val widgetId = widget.content()
+                widgets.add(Widget(widgetId, widget))
+            }
         }
         repaint()
     }
 
     companion object {
+
         fun showLayoutView(): LayoutView? {
             val frame = JFrame("Layout visualisation")
             val layoutView = LayoutView()

@@ -16,7 +16,7 @@ public class MotionLink {
     private static final int SET_DRAW_DEBUG = 4;
     private static final int GET_LAYOUT_LIST = 5;
     private static final int GET_CURRENT_LAYOUT = 6;
-    private boolean dispatchOnUIThread = false;
+    private boolean dispatchOnUIThread = true;
 
     DataOutputStream writer;
     DataInputStream reader;

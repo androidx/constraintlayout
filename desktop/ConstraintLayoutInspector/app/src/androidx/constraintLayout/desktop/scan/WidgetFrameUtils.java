@@ -20,11 +20,25 @@ import androidx.constraintlayout.core.state.WidgetFrame;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Path2D;
 
 public class WidgetFrameUtils {
+    public static final int FILL = 1;
+    public static final int OUTLINE = 2;
+    public static final int DASH_OUTLINE = 4;
+    public static final Color START_COLOR = Color.BLUE.darker();
+    public static final Color END_COLOR = Color.BLUE.brighter();
+    public static final Color INTERPOLATED_COLOR = Color.BLUE;
+    final static float dash1[] = {10.0f};
+    final static BasicStroke dashed =
+            new BasicStroke(3f,
+                    BasicStroke.CAP_BUTT,
+                    BasicStroke.JOIN_MITER,
+                    10.0f, dash1, 0.0f);
 
     public static void deserialize(CLKey object, WidgetFrame dest) throws CLParsingException {
         CLKey clkey = ((CLKey) object);
+
         CLElement value = clkey.getValue();
         if (value instanceof CLObject) {
             CLObject obj = ((CLObject) value);
@@ -39,7 +53,7 @@ public class WidgetFrameUtils {
         }
     }
 
-    public static void render(WidgetFrame frame, Graphics2D g2d) {
+    public static void render(WidgetFrame frame, Graphics2D g2d, int mask) {
         float cx = (frame.left + frame.right) / 2f;
         float cy = (frame.top + frame.bottom) / 2f;
         float dx = frame.right - frame.left;
@@ -52,7 +66,6 @@ public class WidgetFrameUtils {
         float rotationX = Float.isNaN(frame.rotationX) ? 0 : frame.rotationX;
         float rotationY = Float.isNaN(frame.rotationY) ? 0 : frame.rotationY;
 
-
         float translationX = Float.isNaN(frame.translationX) ? 0 : frame.translationX;
         float translationY = Float.isNaN(frame.translationY) ? 0 : frame.translationY;
         float translationZ = Float.isNaN(frame.translationZ) ? 0 : frame.translationZ;
@@ -63,23 +76,66 @@ public class WidgetFrameUtils {
         AffineTransform at = new AffineTransform();
         at.translate(translationX, translationY);
         at.translate(pivotX, pivotY);
-//     Todo:    at.scale(scaleX * Math.cos(rotationY), scaleY + Math.cos(rotationX));
+
         at.rotate(Math.toRadians(rotationZ));
-        at.scale(scaleX , scaleY);
+
+        at.scale(scaleX, scaleY);
         at.translate(-pivotX, -pivotY);
 
         Graphics2D g = (Graphics2D) g2d.create();
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.transform(at);
-        g.drawRect(frame.left, frame.top, frame.right - frame.left, frame.bottom - frame.top);
-
-        int rgb = g.getColor().getRGB();
+        if ((mask & DASH_OUTLINE) == 0) {
+            g.drawRect(frame.left, frame.top, frame.right - frame.left, frame.bottom - frame.top);
+        }
+         int rgb = g.getColor().getRGB();
         int alpha = ((int) (0.5f + ((rgb >> 24) & 0xFF) * 0.2));
 
         g.setColor(new Color((rgb & 0xFFFFFF) | (alpha << 24), true));
 
-        g.fillRect(frame.left, frame.top, frame.right - frame.left, frame.bottom - frame.top);
+        if ((mask & FILL) != 0)
+            g.fillRect(frame.left, frame.top, frame.right - frame.left, frame.bottom - frame.top);
+        Stroke restore = null;
+        if ((mask & DASH_OUTLINE) != 0) {
+            restore = g.getStroke();
+            g.setStroke(dashed);
+        }
         g.drawRect(frame.left, frame.top, frame.right - frame.left, frame.bottom - frame.top);
+        if ((mask & DASH_OUTLINE) != 0) {
+
+            g.setStroke(restore);
+        }
+    }
+
+    public static void renderPath(Path2D path, Graphics2D g2d) {
+        if (path == null) {
+            return;
+        }
+        g2d.setStroke(new BasicStroke(1));
+        g2d.draw(path);
+    }
+
+    public static void getPath(CLKey pathKey, Path2D.Float path2d) {
+
+        CLArray array = ((CLArray) pathKey.getValue());
+        int size = array.size();
+
+        for (int i = 0; i < size; i += 4) {
+
+            try {
+                float x1 = array.get(i).getFloat();
+                float y1 = array.get(i + 1).getFloat();
+                float x2 = array.get(i + 2).getFloat();
+                float y2 = array.get(i + 3).getFloat();
+
+                path2d.moveTo(x1, y1);
+                path2d.lineTo(x2, y2);
+            } catch (CLParsingException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println(" ] " + size);
+
     }
 
     public static void main(String[] str) throws CLParsingException {
