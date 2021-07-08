@@ -16,6 +16,8 @@ public class MotionLink {
     private static final int SET_DRAW_DEBUG = 4;
     private static final int GET_LAYOUT_LIST = 5;
     private static final int GET_CURRENT_LAYOUT = 6;
+    private static final int UPDATE_LAYOUT_DIMENSIONS = 7;
+
     private boolean dispatchOnUIThread = true;
 
     DataOutputStream writer;
@@ -128,6 +130,7 @@ public class MotionLink {
 
     public void sendProgress(float value) {
         addTask(() -> _sendProgress(value));
+        updateLayoutInformation();
     }
 
     private void _sendProgress(Float value) {
@@ -136,7 +139,23 @@ public class MotionLink {
             writer.writeInt(UPDATE_PROGRESS);
             writer.writeUTF(selectedLayoutName);
             writer.writeFloat(value);
-            updateLayoutInformation();
+        } catch (Exception e) {
+            reconnect();
+        }
+    }
+
+    public void sendLayoutDimensions(int width, int height) {
+        addTask(() -> _sendLayoutDimensions(width, height));
+        updateLayoutInformation();
+    }
+
+    private void _sendLayoutDimensions(int width, int height) {
+        try {
+            prepareConnection();
+            writer.writeInt(UPDATE_LAYOUT_DIMENSIONS);
+            writer.writeUTF(selectedLayoutName);
+            writer.writeInt(width);
+            writer.writeInt(height);
         } catch (Exception e) {
             reconnect();
         }
@@ -191,6 +210,7 @@ public class MotionLink {
 
     public void sendContent(String value) {
         addTask(() -> _sendContent(value));
+        updateLayoutInformation();
     }
 
     public void _sendContent(String content) {
