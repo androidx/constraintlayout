@@ -121,7 +121,6 @@ public class WidgetFrameUtils {
         int size = array.size();
 
         for (int i = 0; i < size; i += 4) {
-
             try {
                 float x1 = array.get(i).getFloat();
                 float y1 = array.get(i + 1).getFloat();
@@ -134,8 +133,6 @@ public class WidgetFrameUtils {
                 e.printStackTrace();
             }
         }
-        System.out.println(" ] " + size);
-
     }
 
     public static void main(String[] str) throws CLParsingException {

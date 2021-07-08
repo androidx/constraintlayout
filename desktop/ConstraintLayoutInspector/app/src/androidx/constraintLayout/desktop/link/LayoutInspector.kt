@@ -20,7 +20,9 @@ import java.awt.BorderLayout
 import java.awt.event.ComponentAdapter
 import java.awt.event.ComponentEvent
 import javax.swing.JButton
+import javax.swing.JCheckBox
 import javax.swing.JPanel
+import javax.swing.event.ChangeListener
 
 class LayoutInspector(link: MotionLink) : JPanel(BorderLayout()) {
 
@@ -29,9 +31,19 @@ class LayoutInspector(link: MotionLink) : JPanel(BorderLayout()) {
     var forceDimension = false
 
     init {
-        val toggle = JButton("link")
-        add(toggle, BorderLayout.NORTH)
+        val northPanel = JPanel()
+        val toggle = JButton("link resize")
+        val liveConnection = JCheckBox("Live connection")
+        liveConnection.isSelected = true
+
+        northPanel.add(toggle)
+        northPanel.add(liveConnection)
+        add(northPanel, BorderLayout.NORTH)
         add(layoutView, BorderLayout.CENTER)
+
+        liveConnection.addChangeListener {
+            motionLink.setUpdateLayoutPolling(liveConnection.isSelected)
+        }
 
         addComponentListener(object : ComponentAdapter() {
             override fun componentResized(e: ComponentEvent) {
@@ -48,7 +60,7 @@ class LayoutInspector(link: MotionLink) : JPanel(BorderLayout()) {
                 toggle.text = "Driving root dimension..."
             } else {
                 motionLink.sendLayoutDimensions(Int.MIN_VALUE, Int.MIN_VALUE)
-                toggle.text = "Link"
+                toggle.text = "link resize"
             }
         }
     }

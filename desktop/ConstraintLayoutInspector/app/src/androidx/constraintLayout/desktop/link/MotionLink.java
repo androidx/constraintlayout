@@ -1,6 +1,8 @@
 package androidx.constraintLayout.desktop.link;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
@@ -49,7 +51,7 @@ public class MotionLink {
 
     ArrayList<DataUpdateListener> listeners = new ArrayList<>();
 
-    Vector<Runnable> mTaskQue = new Vector<Runnable>();
+    Vector<Runnable> mTaskQue = new Vector<>();
     Thread taskThread = new Thread(() -> executeTask());
 
     void executeTask() {
@@ -188,6 +190,23 @@ public class MotionLink {
                 mSelectedIndex = i;
                 selectedLayoutName = name;
             }
+        }
+    }
+
+    Timer timer = null;
+
+    public void setUpdateLayoutPolling(boolean run) {
+        if (run && timer == null) {
+            timer = new Timer(15, e -> {
+                updateLayoutInformation();
+            });
+            timer.setRepeats(true);
+            timer.start();
+        } else if (!run) {
+            if (timer != null) {
+                timer.stop();
+            }
+            timer = null;
         }
     }
 
