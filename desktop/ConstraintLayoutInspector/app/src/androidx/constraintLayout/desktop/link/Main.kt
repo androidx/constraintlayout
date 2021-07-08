@@ -113,7 +113,6 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         }
         getButton.addActionListener { e: ActionEvent? -> motionLink.getContent() }
         mSlider.addChangeListener { e: ChangeEvent? ->
-            println("value " + mSlider.value)
             motionLink.sendProgress(
                 mSlider.value / 100f
             )
@@ -158,6 +157,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
             MotionLink.Event.LAYOUT_UPDATE -> {
                 if (layoutView == null) {
                     layoutView = showLayoutView(link)
+                    link.setUpdateLayoutPolling(true)
                 }
                 layoutView!!.setLayoutInformation(link.layoutInfos)
             }
