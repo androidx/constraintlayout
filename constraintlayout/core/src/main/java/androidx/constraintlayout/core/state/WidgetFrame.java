@@ -320,7 +320,6 @@ public class WidgetFrame {
         return mCustom.keySet();
     }
 
-
     public boolean setValue(String key, CLElement value) throws CLParsingException {
         switch (key) {
             case "pivotX":
@@ -376,8 +375,9 @@ public class WidgetFrame {
         }
         return true;
     }
+
     void parseCustom(CLElement custom) throws CLParsingException {
-        CLObject obj = ((CLObject)custom);
+        CLObject obj = ((CLObject) custom);
         int n = obj.size();
         for (int i = 0; i < n; i++) {
             CLElement tmp = obj.get(i);
@@ -385,10 +385,10 @@ public class WidgetFrame {
             String name = k.content();
             CLElement v = k.getValue();
             String vStr = v.content();
-            if( vStr.matches("#[0-9a-fA-F]+")) {
-                int color = Integer.parseInt(vStr.substring(1),16);
+            if (vStr.matches("#[0-9a-fA-F]+")) {
+                int color = Integer.parseInt(vStr.substring(1), 16);
                 setCustomAttribute(k.content(), TypedValues.Custom.TYPE_COLOR, color);
-            } else  if( v instanceof CLNumber) {
+            } else if (v instanceof CLNumber) {
                 setCustomAttribute(k.content(), TypedValues.Custom.TYPE_FLOAT, v.getFloat());
             } else {
                 setCustomAttribute(k.content(), TypedValues.Custom.TYPE_STRING, vStr);
@@ -402,7 +402,7 @@ public class WidgetFrame {
         ret.append("{\n");
         add(ret, "left", frame.left);
         add(ret, "top", frame.top);
-         add(ret, "right", frame.right);
+        add(ret, "right", frame.right);
         add(ret, "bottom", frame.bottom);
         add(ret, "pivotX", frame.pivotX);
         add(ret, "pivotY", frame.pivotY);

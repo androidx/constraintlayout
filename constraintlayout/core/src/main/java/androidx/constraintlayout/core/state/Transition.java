@@ -298,6 +298,15 @@ public class Transition {
         return widgetState.interpolated;
     }
 
+    public float[] getPath(String id) {
+        WidgetState widgetState = state.get(id);
+        int duration = 1000;
+        int frames =  duration/16;
+        float []mPoints = new float[frames * 2];
+        widgetState.motionControl.buildPath(mPoints, frames);
+        return mPoints;
+    }
+
     private WidgetState getWidgetState(String widgetId, ConstraintWidget child, int transitionState) {
         WidgetState widgetState = this.state.get(widgetId);
         if (widgetState == null) {
