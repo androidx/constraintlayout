@@ -215,7 +215,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
 
     fun remoteEdit() {
         try {
-            val tmp = File.createTempFile(motionLink.selectedLayoutName, ".JSON5")
+            val tmp = File.createTempFile(motionLink.selectedLayoutName, ".json5")
             val fw = FileWriter(tmp)
             fw.write(motionLink.motionSceneText)
             fw.close()
