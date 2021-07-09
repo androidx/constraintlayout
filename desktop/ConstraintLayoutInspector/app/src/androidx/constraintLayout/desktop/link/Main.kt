@@ -60,6 +60,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         val resetProgressButton = JButton("Reset Progress")
         val toggleDrawDebug = JButton("Toggle Debug")
         val showLayout = JButton("Show Layout")
+        val formatText = JButton("Format Text")
         mMessages.horizontalAlignment = SwingConstants.RIGHT
         val font = Font("Courier", Font.PLAIN, 20)
         mMainText.font = font
@@ -70,6 +71,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         northPanel.add(showLayout)
         northPanel.add(getButton)
         northPanel.add(sendButton)
+        northPanel.add(formatText)
         val southPanel = JPanel(BorderLayout())
         southPanel.add(mSlider, BorderLayout.CENTER)
         southPanel.add(resetProgressButton, BorderLayout.EAST)
@@ -122,6 +124,13 @@ class Main internal constructor() : JPanel(BorderLayout()) {
             motionLink.sendProgress(
                 mSlider.value / 100f
             )
+        }
+        formatText.addActionListener {
+            try {
+                mMainText.text = formatJson(mMainText.text)
+                updateTree()
+            } catch (e : Exception) {
+            }
         }
 
         mMainText.document.addDocumentListener(object : DocumentListener {
@@ -180,14 +189,22 @@ class Main internal constructor() : JPanel(BorderLayout()) {
             }
             MotionLink.Event.MOTION_SCENE_UPDATE -> {
                 try {
-                    val json = CLParser.parse(link.motionSceneText)
-                    mMainText.text = json.toFormattedJSON(0, 2)
+                    mMainText.text = formatJson(link.motionSceneText)
                 } catch (e : Exception) {
                     mMainText.text = link.motionSceneText
                 }
                 updateTree()
             }
         }
+    }
+
+    private fun formatJson(text: String) : String {
+        val json = CLParser.parse(text)
+        var indentation = 2
+        if (json.has("ConstraintSets")) {
+            indentation = 3
+        }
+        return json.toFormattedJSON(0, indentation)
     }
 
     private fun updateTree() {
