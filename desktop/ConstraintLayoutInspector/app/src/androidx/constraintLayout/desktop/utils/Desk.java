@@ -26,7 +26,7 @@ public class Desk {
 
         return createTopMenu(file, edit);
     }
-    
+
     static class EmptyAction extends AbstractAction {
 
         public EmptyAction(String str) {

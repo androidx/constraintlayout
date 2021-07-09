@@ -274,7 +274,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
                     }
                 }
             )
-            frame.jMenuBar = Desk.createTopMenu(*main)
+            frame.jMenuBar = Desk.createTopMenu(main)
             Desk.rememberPosition(frame, null)
 
             frame.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
