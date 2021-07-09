@@ -17,6 +17,7 @@
 package androidx.constraintLayout.desktop.link
 
 import androidx.constraintLayout.desktop.scan.WidgetFrameUtils
+import androidx.constraintLayout.desktop.utils.Desk;
 import androidx.constraintlayout.core.parser.CLKey
 import androidx.constraintlayout.core.parser.CLObject
 import androidx.constraintlayout.core.parser.CLParser
@@ -143,7 +144,7 @@ class LayoutView : JPanel(BorderLayout()) {
             val frame = JFrame("Layout Inspector")
             val inspector = LayoutInspector(link)
             frame.contentPane = inspector
-            frame.setBounds(100, 100, 1200, 800)
+            Desk.rememberPosition(frame, null)
             frame.isVisible = true
             return inspector.layoutView
         }
