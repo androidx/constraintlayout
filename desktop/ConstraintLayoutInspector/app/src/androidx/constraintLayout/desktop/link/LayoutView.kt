@@ -22,10 +22,7 @@ import androidx.constraintlayout.core.parser.CLKey
 import androidx.constraintlayout.core.parser.CLObject
 import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.state.WidgetFrame
-import java.awt.BorderLayout
-import java.awt.Graphics
-import java.awt.Graphics2D
-import java.awt.RenderingHints
+import java.awt.*
 import java.lang.Exception
 import java.awt.geom.Path2D
 import javax.swing.JFrame
@@ -41,6 +38,7 @@ class LayoutView : JPanel(BorderLayout()) {
         var end = WidgetFrame()
         var name = "unknown";
         var path = Path2D.Float()
+        val drawFont = Font("Helvetica", Font.ITALIC, 32)
 
         init {
             name = key.content()
@@ -67,18 +65,22 @@ class LayoutView : JPanel(BorderLayout()) {
             return interpolated.height()
         }
 
-        fun draw(g: Graphics2D, drawOnlyBounds: Boolean) {
+        fun draw(g: Graphics2D, drawRoot: Boolean) {
             val END_LOOK = WidgetFrameUtils.OUTLINE or WidgetFrameUtils.DASH_OUTLINE;
-            g.color = WidgetFrameUtils.START_COLOR
+            g.color = WidgetFrameUtils.theme.startColor()
             WidgetFrameUtils.render(start, g, END_LOOK);
-            g.color = WidgetFrameUtils.END_COLOR
+            g.color = WidgetFrameUtils.theme.endColor()
             WidgetFrameUtils.render(end, g, END_LOOK);
+            g.color = WidgetFrameUtils.theme.pathColor()
             WidgetFrameUtils.renderPath(path, g);
-            g.color = WidgetFrameUtils.INTERPOLATED_COLOR
+            g.color = WidgetFrameUtils.theme.interpolatedColor()
             var style = WidgetFrameUtils.FILL
-            if (drawOnlyBounds) {
-                style = WidgetFrameUtils.OUTLINE
+            if (drawRoot) {
+                g.color = WidgetFrameUtils.theme.rootBackgroundColor()
             }
+            g.font = drawFont
+            style += WidgetFrameUtils.TEXT
+            interpolated.name = name
             WidgetFrameUtils.render(interpolated, g, style);
         }
     }
@@ -105,6 +107,9 @@ class LayoutView : JPanel(BorderLayout()) {
         scaleY *= zoom
         offX = (width - root.width().toFloat() * scaleX) / 2
         offY = (height - root.height().toFloat() * scaleY) / 2
+
+        g!!.color = WidgetFrameUtils.theme.backgroundColor()
+        g!!.fillRect(0, 0, width, height)
 
         val g2 = g as Graphics2D
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,

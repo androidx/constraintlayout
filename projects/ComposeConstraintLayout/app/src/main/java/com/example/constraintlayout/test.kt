@@ -465,6 +465,7 @@ public fun ScreenExample4() {
         """),
         modifier = Modifier
             .fillMaxSize()
+            .background(Color.White)
     ) {
         Button(
             modifier = Modifier.layoutId("button"),

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package androidx.constraintLayout.desktop.scan;
 
 import androidx.constraintlayout.core.parser.*;
@@ -24,11 +25,11 @@ import java.awt.geom.Path2D;
 
 public class WidgetFrameUtils {
     public static final int FILL = 1;
-    public static final int OUTLINE = 2;
-    public static final int DASH_OUTLINE = 4;
-    public static final Color START_COLOR = Color.BLUE.darker();
-    public static final Color END_COLOR = Color.BLUE.brighter();
-    public static final Color INTERPOLATED_COLOR = Color.BLUE;
+    public static final int FILL_OPAQUE = 2;
+    public static final int OUTLINE = 4;
+    public static final int DASH_OUTLINE = 8;
+    public static final int TEXT = 16;
+    public static final Theme theme = new Theme(false);
     final static float dash1[] = {10.0f};
     final static BasicStroke dashed =
             new BasicStroke(3f,
@@ -88,10 +89,6 @@ public class WidgetFrameUtils {
         if ((mask & DASH_OUTLINE) == 0) {
             g.drawRect(frame.left, frame.top, frame.right - frame.left, frame.bottom - frame.top);
         }
-         int rgb = g.getColor().getRGB();
-        int alpha = ((int) (0.5f + ((rgb >> 24) & 0xFF) * 0.2));
-
-        g.setColor(new Color((rgb & 0xFFFFFF) | (alpha << 24), true));
 
         if ((mask & FILL) != 0)
             g.fillRect(frame.left, frame.top, frame.right - frame.left, frame.bottom - frame.top);
@@ -102,8 +99,11 @@ public class WidgetFrameUtils {
         }
         g.drawRect(frame.left, frame.top, frame.right - frame.left, frame.bottom - frame.top);
         if ((mask & DASH_OUTLINE) != 0) {
-
             g.setStroke(restore);
+        }
+        if (((mask & TEXT) != 0) && frame.name != null) {
+            g.setColor(theme.textColor());
+            g.drawString(frame.name, frame.left + 8, frame.bottom - 8);
         }
     }
 

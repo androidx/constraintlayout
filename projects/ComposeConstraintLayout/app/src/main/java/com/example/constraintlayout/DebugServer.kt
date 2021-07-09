@@ -58,9 +58,7 @@ class DebugServer {
         while (running) {
             try {
                 val type = reader.readInt()
-                println("Type $type")
                 val name = reader.readUTF()
-                println("name $name")
                 when (type) {
                     UPDATE_CONTENT -> {
                         val content = reader.readUTF()

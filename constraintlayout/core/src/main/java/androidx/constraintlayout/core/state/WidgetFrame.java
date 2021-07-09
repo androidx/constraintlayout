@@ -57,6 +57,8 @@ public class WidgetFrame {
 
     final public HashMap<String, CustomVariable> mCustom = new HashMap<>();
 
+    public String name = null;
+
     public int width() {
         return Math.max(0, right - left);
     }
