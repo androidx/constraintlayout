@@ -43,11 +43,20 @@ class DebugServer {
         println("Starting server")
         thread {
             while (true) {
-                val client = server.accept()
+                val client = try {
+                    server.accept()
+                } catch (e: Exception) {
+                    return@thread
+                } finally {
+                }
                 println("Client connected")
                 thread { handleRequest(client) }
             }
         }
+    }
+
+    fun stop() {
+        server.close()
     }
 
     private fun handleRequest(socket: Socket) {
