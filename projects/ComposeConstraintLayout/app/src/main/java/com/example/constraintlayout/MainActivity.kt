@@ -7,25 +7,45 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.platform.ComposeView
-import androidx.constraintlayout.compose.*
+import androidx.constraintlayout.compose.ScreenExample
+import androidx.constraintlayout.compose.ScreenExample10
+import androidx.constraintlayout.compose.ScreenExample11
+import androidx.constraintlayout.compose.ScreenExample12
+import androidx.constraintlayout.compose.ScreenExample13
+import androidx.constraintlayout.compose.ScreenExample14
+import androidx.constraintlayout.compose.ScreenExample15
+import androidx.constraintlayout.compose.ScreenExample16
+import androidx.constraintlayout.compose.ScreenExample17
+import androidx.constraintlayout.compose.ScreenExample18
+import androidx.constraintlayout.compose.ScreenExample19
+import androidx.constraintlayout.compose.ScreenExample2
+import androidx.constraintlayout.compose.ScreenExample3
+import androidx.constraintlayout.compose.ScreenExample4
+import androidx.constraintlayout.compose.ScreenExample5
+import androidx.constraintlayout.compose.ScreenExample6
+import androidx.constraintlayout.compose.ScreenExample7
+import androidx.constraintlayout.compose.ScreenExample8
+import androidx.constraintlayout.compose.ScreenExample9
 
 class MainActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
     private var composeNum = 19
     private var MAX = 33
-    var map = HashMap<Int,String>();
-   init {
-       var count = 24;
-       map.put(24,"scaleX/Y")
-       map.put(25,"tanslationX/Y")
-       map.put(26,"rotationZ")
-       map.put(27,"rotationXY")
-       map.put(28,"Cycle Scale")
-       map.put(29,"Cycle TranslationXY")
-       map.put(30,"Cycle RotationZ")
-       map.put(31,"Cycle RotationXY")
+    var map = HashMap<Int, String>();
+    val debugServer = DebugServer()
 
-       DebugServer().start()
+    init {
+
+        map.put(24, "scaleX/Y")
+        map.put(25, "tanslationX/Y")
+        map.put(26, "rotationZ")
+        map.put(27, "rotationXY")
+        map.put(28, "Cycle Scale")
+        map.put(29, "Cycle TranslationXY")
+        map.put(30, "Cycle RotationZ")
+        map.put(31, "Cycle RotationXY")
+
+        debugServer.start()
     }
 
     @ExperimentalMaterialApi
@@ -68,6 +88,10 @@ class MainActivity : AppCompatActivity() {
                 31 -> CycleTranslationXY()
                 32 -> CycleRotationZ()
                 33 -> CycleRotationXY()
+                else -> {
+                    composeNum = 0
+                    ScreenExample()
+                }
             }
         }
     }
@@ -75,9 +99,26 @@ class MainActivity : AppCompatActivity() {
     @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (savedInstanceState != null) {
+ 
+
+        if (savedInstanceState.containsKey("SHOWNUM")) {
+            composeNum = savedInstanceState.getInt("SHOWNUM")
+        }
+        }
         setContentView(R.layout.activity_main)
         mFrameLayout = findViewById<FrameLayout>(R.id.frame)
         setCompose();
+    }
+
+    override fun onPause() {
+        super.onPause()
+        debugServer.stop()
+    }
+
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        super.onSaveInstanceState(savedInstanceState)
+        savedInstanceState.putInt("SHOWNUM", composeNum)
     }
 
     @ExperimentalMaterialApi
@@ -85,9 +126,9 @@ class MainActivity : AppCompatActivity() {
         if (mFrameLayout!!.childCount > 0) {
             mFrameLayout!!.removeAllViews()
         }
-        var sub   = " example " + composeNum
+        var sub = " example " + composeNum
         if (map.containsKey(composeNum)) {
-            sub += " "+ map.get(composeNum)
+            sub += " " + map.get(composeNum)
         }
         title = sub;
         findViewById<TextView>(R.id.layoutName).text = "! example " + composeNum;
