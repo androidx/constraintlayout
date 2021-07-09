@@ -1310,7 +1310,6 @@ open class EditableJSONLayout(@Language("json5") content: String) :
     private var debugName : String? = null
 
     private var currentContent = content
-    private var currentFormattedContent = ""
 
     protected fun initialization() {
         try {
@@ -1346,7 +1345,7 @@ open class EditableJSONLayout(@Language("json5") content: String) :
                     }
 
                     override fun currentMotionScene(): String {
-                        return currentFormattedContent
+                        return currentContent
                     }
 
                     override fun currentLayoutInformation() : String {
@@ -1446,9 +1445,6 @@ open class EditableJSONLayout(@Language("json5") content: String) :
                     if (debug != null) {
                         debugName = debug.getStringOrNull("name")
                     }
-                }
-                if (debugName != null) {
-                    currentFormattedContent = json.toFormattedJSON(0, 2)
                 }
                 if (!firstTime) {
                     signalUpdate()

@@ -33,7 +33,7 @@ class Theme(isDarkMode: Boolean) {
         if (darkMode) {
             return Color(0, 0, 80)
         }
-        return Color(220, 220, 220)
+        return Color(255, 255, 255)
     }
 
     fun startColor(): Color {
