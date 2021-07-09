@@ -22,8 +22,13 @@ public class CLParsingException extends Throwable {
 
   public CLParsingException(String reason, CLElement element) {
     mReason = reason;
-    mElementClass = element.getStrClass();
-    mLineNumber = element.getLine();
+    if (element != null) {
+      mElementClass = element.getStrClass();
+      mLineNumber = element.getLine();
+    } else {
+      mElementClass = "unknown";
+      mLineNumber = 0;
+    }
   }
 
   public String reason() {

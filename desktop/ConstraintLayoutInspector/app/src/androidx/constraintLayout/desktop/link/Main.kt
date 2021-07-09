@@ -20,6 +20,7 @@ import androidx.constraintLayout.desktop.link.LayoutView.Companion.showLayoutVie
 import androidx.constraintLayout.desktop.scan.CLTreeNode
 import androidx.constraintLayout.desktop.scan.SyntaxHighlight
 import androidx.constraintLayout.desktop.utils.Desk
+import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.parser.CLParsingException
 import com.formdev.flatlaf.FlatIntelliJLaf
 import java.awt.*
@@ -34,6 +35,9 @@ import javax.swing.event.ChangeEvent
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
 import javax.swing.event.TreeSelectionListener
+import javax.swing.text.AbstractDocument
+import javax.swing.text.AttributeSet
+import javax.swing.text.DocumentFilter
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 
@@ -119,6 +123,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
                 mSlider.value / 100f
             )
         }
+
         mMainText.document.addDocumentListener(object : DocumentListener {
             override fun insertUpdate(e: DocumentEvent) {
                 if (highlight.update) {
@@ -142,7 +147,6 @@ class Main internal constructor() : JPanel(BorderLayout()) {
             }
         })
     }
-
 
     private fun fromLink(event: MotionLink.Event, link: MotionLink) {
         when (event) {
@@ -175,7 +179,12 @@ class Main internal constructor() : JPanel(BorderLayout()) {
                 layoutListTree.model = model
             }
             MotionLink.Event.MOTION_SCENE_UPDATE -> {
-                mMainText.text = link.motionSceneText
+                try {
+                    val json = CLParser.parse(link.motionSceneText)
+                    mMainText.text = json.toFormattedJSON(0, 2)
+                } catch (e : Exception) {
+                    mMainText.text = link.motionSceneText
+                }
                 updateTree()
             }
         }

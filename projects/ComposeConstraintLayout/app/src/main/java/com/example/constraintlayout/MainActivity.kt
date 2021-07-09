@@ -11,7 +11,7 @@ import androidx.constraintlayout.compose.*
 
 class MainActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
-    private var composeNum = 19
+    private var composeNum = 4
     private var MAX = 33
     var map = HashMap<Int,String>();
    init {
