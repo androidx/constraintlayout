@@ -21,9 +21,14 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.annotation.FloatRange
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.LayoutScopeMarker
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.platform.InspectorValueInfo
@@ -174,12 +179,28 @@ inline fun ConstraintLayout(
         measurer.addLayoutInformationReceiver(null)
     }
 
-    @Suppress("DEPRECATION")
-    MultiMeasureLayout(
-        modifier = modifier.semantics { designInfoProvider = measurer },
-        measurePolicy = measurePolicy,
-        content = content
-    )
+    val forcedScaleFactor = measurer.forcedScaleFactor
+    if (!forcedScaleFactor.isNaN()) {
+        var mod = modifier.scale(measurer.forcedScaleFactor)
+        Box {
+            @Suppress("DEPRECATION")
+            MultiMeasureLayout(
+                modifier = mod.semantics { designInfoProvider = measurer },
+                measurePolicy = measurePolicy,
+                content = content
+            )
+            with(measurer) {
+                drawDebugBounds(forcedScaleFactor)
+            }
+        }
+    } else {
+        @Suppress("DEPRECATION")
+        MultiMeasureLayout(
+            modifier = modifier.semantics { designInfoProvider = measurer },
+            measurePolicy = measurePolicy,
+            content = content
+        )
+    }
 }
 
 @Composable
@@ -1628,6 +1649,10 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
     private val widthConstraintsHolder = IntArray(2)
     private val heightConstraintsHolder = IntArray(2)
 
+    var forcedScaleFactor = Float.NaN
+    var layoutCurrentWidth: Int = 0
+    var layoutCurrentHeight: Int = 0
+
     protected fun reset() {
         placeables.clear()
         lastMeasures.clear()
@@ -1778,6 +1803,11 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             if (measurable !is Measurable) {
                 if (child is Guideline) {
                     json.append(" ${child.stringId}: {")
+                    if (child.orientation == ConstraintWidget.HORIZONTAL) {
+                        json.append(" type: 'hGuideline', ")
+                    } else {
+                        json.append(" type: 'vGuideline', ")
+                    }
                     json.append(" interpolated: ")
                     json.append(" { left: ${child.x}, top: ${child.y}, " +
                             "right: ${child.x + child.width}, " +
@@ -1891,27 +1921,7 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         state.layoutDirection = layoutDirection
         constraintSet.applyTo(state, measurables)
         state.apply(root)
-        root.width = constraints.maxWidth
-        root.height = constraints.maxHeight
-
-        var forcedWidth = Int.MIN_VALUE
-        var forcedHeight = Int.MIN_VALUE
-        if (layoutInformationReceiver != null) {
-            if (layoutInformationReceiver!!.getForcedWidth() != Int.MIN_VALUE
-                && layoutInformationReceiver!!.getForcedHeight() != Int.MIN_VALUE) {
-                forcedWidth = layoutInformationReceiver!!.getForcedWidth()
-                forcedHeight = layoutInformationReceiver!!.getForcedHeight()
-
-                var ratio = forcedHeight / forcedWidth
-            }
-        }
-
-        if (layoutInformationReceiver != null && layoutInformationReceiver?.getForcedWidth() != Int.MIN_VALUE) {
-            root.width = layoutInformationReceiver!!.getForcedWidth()
-        }
-        if (layoutInformationReceiver != null && layoutInformationReceiver?.getForcedHeight() != Int.MIN_VALUE) {
-            root.height = layoutInformationReceiver!!.getForcedHeight()
-        }
+        applyRootSize(constraints)
         root.updateHierarchy()
 
         if (DEBUG) {
@@ -1953,6 +1963,38 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             Log.d("CCL", "ConstraintLayout is at the end ${root.width} ${root.height}")
         }
         return IntSize(root.width, root.height)
+    }
+
+    protected fun applyRootSize(constraints: Constraints) {
+        root.width = constraints.maxWidth
+        root.height = constraints.maxHeight
+        forcedScaleFactor = Float.NaN
+        if (layoutInformationReceiver != null && layoutInformationReceiver?.getForcedWidth() != Int.MIN_VALUE) {
+            val forcedWidth = layoutInformationReceiver!!.getForcedWidth()
+            if (forcedWidth > root.width) {
+                val scale = root.width / forcedWidth.toFloat()
+                forcedScaleFactor = scale
+            } else {
+                forcedScaleFactor = 1f
+            }
+            root.width = forcedWidth
+        }
+        if (layoutInformationReceiver != null && layoutInformationReceiver?.getForcedHeight() != Int.MIN_VALUE) {
+            val forcedHeight = layoutInformationReceiver!!.getForcedHeight()
+            var scaleFactor = 1f
+            if (forcedScaleFactor.isNaN()) {
+                forcedScaleFactor = 1f
+            }
+            if (forcedHeight > root.height) {
+                scaleFactor = root.height / forcedHeight.toFloat()
+            }
+            if (scaleFactor < forcedScaleFactor) {
+                forcedScaleFactor = scaleFactor
+            }
+            root.height = forcedHeight
+        }
+        layoutCurrentWidth = root.width
+        layoutCurrentHeight = root.height
     }
 
     fun Placeable.PlacementScope.performLayout(measurables: List<Measurable>) {
@@ -2018,6 +2060,28 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
     }
 
     override fun didMeasures() {}
+
+    @Composable
+    fun BoxScope.drawDebugBounds(forcedScaleFactor: Float) {
+        Canvas(modifier = Modifier.matchParentSize()) {
+            val w = layoutCurrentWidth * forcedScaleFactor
+            val h = layoutCurrentHeight * forcedScaleFactor
+            var dx = (size.width -w) / 2f
+            var dy = (size.height -h) / 2f
+            var color = Color.White
+            drawLine(color, Offset(dx, dy), Offset(dx + w, dy))
+            drawLine(color, Offset(dx + w, dy), Offset(dx + w, dy + h))
+            drawLine(color, Offset(dx + w, dy + h), Offset(dx, dy + h))
+            drawLine(color, Offset(dx, dy + h), Offset(dx, dy))
+            dx += 1
+            dy += 1
+            color = Color.Black
+            drawLine(color, Offset(dx, dy), Offset(dx + w, dy))
+            drawLine(color, Offset(dx + w, dy), Offset(dx + w, dy + h))
+            drawLine(color, Offset(dx + w, dy + h), Offset(dx, dy + h))
+            drawLine(color, Offset(dx, dy + h), Offset(dx, dy))
+        }
+    }
 }
 
 private typealias SolverDimension = androidx.constraintlayout.core.state.Dimension

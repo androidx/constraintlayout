@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.LayoutScopeMarker
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -67,16 +68,27 @@ inline fun MotionLayout(
     SideEffect { progressState.value = progress }
     val measurePolicy =
         rememberMotionLayoutMeasurePolicy(optimizationLevel, debug, 0, start, end, transition, progressState, measurer)
-    if (!debug.contains(MotionLayoutDebugFlags.NONE)) {
+
+    val forcedScaleFactor = measurer.forcedScaleFactor
+    if (!debug.contains(MotionLayoutDebugFlags.NONE) || !forcedScaleFactor.isNaN()) {
+        var mod = modifier
+        if (!forcedScaleFactor.isNaN()) {
+            mod = modifier.scale(measurer.forcedScaleFactor)
+        }
         Box {
             @Suppress("DEPRECATION")
             (MultiMeasureLayout(
-                modifier = modifier.semantics { designInfoProvider = measurer },
+                modifier = mod.semantics { designInfoProvider = measurer },
                 measurePolicy = measurePolicy,
                 content = { scope.content() }
             ))
             with(measurer) {
-                drawDebug()
+                if (!forcedScaleFactor.isNaN()) {
+                    drawDebugBounds(forcedScaleFactor)
+                }
+                if (!debug.contains(MotionLayoutDebugFlags.NONE)) {
+                    drawDebug()
+                }
             }
         }
     } else {
@@ -136,16 +148,26 @@ inline fun MotionLayout(
         rememberMotionLayoutMeasurePolicy(optimizationLevel, usedDebugMode, needsUpdate.value, start, end, transition, progressState, measurer)
     measurer.addLayoutInformationReceiver(motionScene as JSONMotionScene)
 
-    if (!usedDebugMode.contains(MotionLayoutDebugFlags.NONE)) {
+    val forcedScaleFactor = measurer.forcedScaleFactor
+    if (!debug.contains(MotionLayoutDebugFlags.NONE) || !forcedScaleFactor.isNaN()) {
+        var mod = modifier
+        if (!forcedScaleFactor.isNaN()) {
+            mod = modifier.scale(measurer.forcedScaleFactor)
+        }
         Box {
             @Suppress("DEPRECATION")
             (MultiMeasureLayout(
-                modifier = modifier.semantics { designInfoProvider = measurer },
+                modifier = mod.semantics { designInfoProvider = measurer },
                 measurePolicy = measurePolicy,
                 content = { scope.content() }
             ))
             with(measurer) {
-                drawDebug()
+                if (!forcedScaleFactor.isNaN()) {
+                    drawDebugBounds(forcedScaleFactor)
+                }
+                if (!debug.contains(MotionLayoutDebugFlags.NONE)) {
+                    drawDebug()
+                }
             }
         }
     } else {
@@ -378,14 +400,7 @@ internal class MotionMeasurer : Measurer() {
         state.reset()
         constraintSetStart.applyTo(state, measurables)
         state.apply(root)
-        root.width = constraints.maxWidth
-        root.height = constraints.maxHeight
-        if (layoutInformationReceiver != null && layoutInformationReceiver?.getForcedWidth() != Int.MIN_VALUE) {
-            root.width = layoutInformationReceiver!!.getForcedWidth()
-        }
-        if (layoutInformationReceiver != null && layoutInformationReceiver?.getForcedHeight() != Int.MIN_VALUE) {
-            root.height = layoutInformationReceiver!!.getForcedHeight()
-        }
+        applyRootSize(constraints)
         root.updateHierarchy()
 
         if (DEBUG) {
