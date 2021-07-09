@@ -19,14 +19,16 @@ package androidx.constraintLayout.desktop.link
 import androidx.constraintLayout.desktop.link.LayoutView.Companion.showLayoutView
 import androidx.constraintLayout.desktop.scan.CLTreeNode
 import androidx.constraintLayout.desktop.scan.SyntaxHighlight
+import androidx.constraintLayout.desktop.utils.Desk
 import androidx.constraintlayout.core.parser.CLParsingException
 import com.formdev.flatlaf.FlatIntelliJLaf
 import java.awt.*
 import java.awt.event.ActionEvent
-import java.awt.event.ComponentAdapter
-import java.awt.event.ComponentEvent
-import java.util.prefs.BackingStoreException
-import java.util.prefs.Preferences
+import java.awt.event.ActionListener
+import java.io.File
+import java.io.FileReader
+import java.io.FileWriter
+import java.io.IOException
 import javax.swing.*
 import javax.swing.event.ChangeEvent
 import javax.swing.event.DocumentEvent
@@ -201,45 +203,80 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         layoutListTree.expandRow(motionLink.mSelectedIndex)
     }
 
+    var myTmpFile: File? = null
+    var myTempLastModified: Long = 0
+    var myTmpTimer: Timer? = null
+
+    fun remoteEditStop() {
+        myTmpTimer!!.stop()
+        myTmpFile!!.deleteOnExit()
+        myTmpFile = null
+    }
+
+    fun remoteEdit() {
+        try {
+            val tmp = File.createTempFile(motionLink.selectedLayoutName, ".json5")
+            val fw = FileWriter(tmp)
+            fw.write(motionLink.motionSceneText)
+            fw.close()
+            myTempLastModified = tmp.lastModified()
+            Desktop.getDesktop().open(tmp)
+            myTmpFile = tmp;
+            myTmpTimer = Timer(500, ActionListener { e: ActionEvent? -> checkForUpdate() })
+            myTmpTimer!!.isRepeats = true
+            myTmpTimer!!.start()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun checkForUpdate() {
+        val lastM = myTmpFile!!.lastModified()
+        if (lastM - myTempLastModified > 0) {
+            try {
+                myTempLastModified = lastM
+                val fr = FileReader(myTmpFile)
+                val buff = CharArray(myTmpFile!!.length().toInt())
+                var off = 0
+                while (true) {
+                    val len = fr.read(buff, off, buff.size - off)
+                    println(len)
+                    if (len <= 0) break
+                    off += len
+                }
+                fr.close()
+                mMainText.text = String(buff, 0, off)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
     companion object {
         @JvmStatic
         fun main(str: Array<String>) {
             FlatIntelliJLaf.install()
             val frame = JFrame("ConstraintLayout Live Editor")
-            frame.contentPane = Main()
-            val pos = Rectangle(100, 100, 1200, 800)
-            val pref =
-                Preferences.userNodeForPackage(Main::class.java)
-            if (pref != null && pref.getInt("base_x", -1) != -1) {
-                pos.x = pref.getInt("base_x", pos.x)
-                pos.y = pref.getInt("base_y", pos.y)
-                pos.width = pref.getInt("base_width", pos.width)
-                pos.height = pref.getInt("base_height", pos.height)
-                println(pos)
-            }
-            frame.bounds = pos
-            frame.addComponentListener(object : ComponentAdapter() {
-                override fun componentResized(e: ComponentEvent) {
-                    resize()
-                }
-
-                override fun componentMoved(evt: ComponentEvent) {
-                    resize()
-                }
-
-                fun resize() {
-                    val posNew = frame.bounds
-                    pref!!.putInt("base_x", posNew.x)
-                    pref.putInt("base_y", posNew.y)
-                    pref.putInt("base_width", posNew.width)
-                    pref.putInt("base_height", posNew.height)
-                    try {
-                        pref.flush()
-                    } catch (e: BackingStoreException) {
-                        e.printStackTrace()
+            val panel = Main()
+            frame.contentPane = panel
+            val main: Array<Action> = arrayOf<Action>(
+                object : AbstractAction("File") {
+                    override fun actionPerformed(e: ActionEvent) {}
+                },
+                object : AbstractAction("Link") {
+                    override fun actionPerformed(e: ActionEvent) {
+                        panel.remoteEdit()
+                    }
+                },
+                object : AbstractAction("UnLink") {
+                    override fun actionPerformed(e: ActionEvent) {
+                        panel.remoteEditStop()
                     }
                 }
-            })
+            )
+            frame.jMenuBar = Desk.createTopMenu(main)
+            Desk.rememberPosition(frame, null)
+
             frame.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
             frame.isVisible = true
         }
