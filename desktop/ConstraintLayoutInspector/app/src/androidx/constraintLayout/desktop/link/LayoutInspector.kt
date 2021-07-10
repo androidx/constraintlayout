@@ -16,6 +16,9 @@
 
 package androidx.constraintLayout.desktop.link
 
+import androidx.constraintLayout.desktop.ui.timeline.TimeLinePanel
+import androidx.constraintLayout.desktop.ui.ui.MotionEditorSelector
+import androidx.constraintlayout.core.parser.CLObject
 import java.awt.BorderLayout
 import java.awt.event.ComponentAdapter
 import java.awt.event.ComponentEvent
@@ -24,23 +27,28 @@ import javax.swing.JCheckBox
 import javax.swing.JPanel
 
 class LayoutInspector(link: MotionLink) : JPanel(BorderLayout()) {
-
-    val layoutView = LayoutView(link)
+    val layoutView = LayoutView()
+    val editorView = LayoutEditor()
     val motionLink = link
     var forceDimension = false
     var timeLineStart = JButton("TimeLine...")
+    var editing = false
 
+    var mTimeLinePanel: TimeLinePanel? = null
+    var mSceneString: String? = null
 
     init {
         val northPanel = JPanel()
         val toggle = JButton("link resize")
+        val edit = JButton("Edit")
         val liveConnection = JCheckBox("Live connection")
-
         liveConnection.isSelected = true
 
         northPanel.add(timeLineStart)
         northPanel.add(toggle)
+        northPanel.add(edit)
         northPanel.add(liveConnection)
+
         add(northPanel, BorderLayout.NORTH)
         add(layoutView, BorderLayout.CENTER)
 
@@ -67,9 +75,48 @@ class LayoutInspector(link: MotionLink) : JPanel(BorderLayout()) {
             }
         }
 
-        timeLineStart.addActionListener {
-            layoutView.showTimeLine()
+        edit.addActionListener {
+            if (!editing) {
+                remove(layoutView)
+                add(editorView, BorderLayout.CENTER)
+            } else {
+                remove(editorView)
+                add(layoutView, BorderLayout.CENTER)
+            }
+            revalidate()
+            repaint()
+            editing = !editing
         }
 
+        timeLineStart.addActionListener {
+            showTimeLine()
+        }
+
+    }
+
+    fun setLayoutInformation(layoutInfos: String) {
+        layoutView.setLayoutInformation(layoutInfos)
+        editorView.setLayoutInformation(layoutInfos)
+    }
+
+    fun setModel(jsonModel: CLObject) {
+        editorView.setModel(jsonModel)
+    }
+
+    fun showTimeLine() {
+        if (mTimeLinePanel == null && mSceneString != null) {
+            mTimeLinePanel = TimeLinePanel.showTimeline(mSceneString)
+            mTimeLinePanel?.addTimeLineListener { cmd: MotionEditorSelector.TimeLineCmd?, pos: Float -> motionLink.sendProgress(pos) }
+        } else {
+            mTimeLinePanel?.popUp()
+        }
+    }
+
+    fun hideTimeLine() {
+        mTimeLinePanel?.popDown()
+    }
+
+    fun setSceneString(str : String) {
+        mSceneString = str
     }
 }
