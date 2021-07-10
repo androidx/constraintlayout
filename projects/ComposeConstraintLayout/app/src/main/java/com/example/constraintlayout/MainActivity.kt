@@ -29,7 +29,8 @@ import androidx.constraintlayout.compose.ScreenExample9
 
 class MainActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
-    private var composeNum = 4
+    private var composeNum = 16
+
     private var MAX = 33
     var map = HashMap<Int, String>();
     val debugServer = DebugServer()

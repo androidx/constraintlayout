@@ -16,14 +16,15 @@
 
 package androidx.constraintLayout.desktop.link
 
+import androidx.constraintLayout.desktop.scan.KeyFrameNodes
 import androidx.constraintLayout.desktop.scan.WidgetFrameUtils
-import androidx.constraintLayout.desktop.utils.Desk;
+import androidx.constraintLayout.desktop.utils.Desk
+import androidx.constraintlayout.core.motion.utils.Utils
 import androidx.constraintlayout.core.parser.CLKey
 import androidx.constraintlayout.core.parser.CLObject
 import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.state.WidgetFrame
 import java.awt.*
-import java.lang.Exception
 import java.awt.geom.Path2D
 import javax.swing.JFrame
 import javax.swing.JPanel
@@ -39,20 +40,21 @@ class LayoutView : JPanel(BorderLayout()) {
         var name = "unknown";
         var path = Path2D.Float()
         val drawFont = Font("Helvetica", Font.ITALIC, 32)
-
+        val keyFrames = KeyFrameNodes()
         init {
             name = key.content()
-
             val sections = key.value as CLObject
             val count = sections.size()
-
             for (i in 0 until count) {
                 val sec = sections[i] as CLKey
                 when (sec.content()) {
                     "start" -> WidgetFrameUtils.deserialize(sec, end)
                     "end" -> WidgetFrameUtils.deserialize(sec, start)
                     "interpolated" -> WidgetFrameUtils.deserialize(sec, interpolated)
-                    "path" -> WidgetFrameUtils.getPath(sec, path);
+                    "path" -> WidgetFrameUtils.getPath(sec, path)
+                    "keyPos" -> keyFrames.setKeyFramesPos(sec)
+                    "keyTypes" -> keyFrames.setKeyFramesTypes(sec)
+                    "keyFrames" -> keyFrames.setKeyFramesProgress(sec)
                 }
             }
         }
@@ -66,13 +68,17 @@ class LayoutView : JPanel(BorderLayout()) {
         }
 
         fun draw(g: Graphics2D, drawRoot: Boolean) {
+
             val END_LOOK = WidgetFrameUtils.OUTLINE or WidgetFrameUtils.DASH_OUTLINE;
             g.color = WidgetFrameUtils.theme.startColor()
             WidgetFrameUtils.render(start, g, END_LOOK);
+            keyFrames.render(g)
             g.color = WidgetFrameUtils.theme.endColor()
             WidgetFrameUtils.render(end, g, END_LOOK);
+
             g.color = WidgetFrameUtils.theme.pathColor()
             WidgetFrameUtils.renderPath(path, g);
+
             g.color = WidgetFrameUtils.theme.interpolatedColor()
             var style = WidgetFrameUtils.FILL
             if (drawRoot) {
@@ -82,6 +88,7 @@ class LayoutView : JPanel(BorderLayout()) {
             style += WidgetFrameUtils.TEXT
             interpolated.name = name
             WidgetFrameUtils.render(interpolated, g, style);
+
         }
     }
 
@@ -134,13 +141,15 @@ class LayoutView : JPanel(BorderLayout()) {
 
             for (i in 0 until list.size()) {
                 val widget = list[i]
+
                 if (widget is CLKey) {
                     val widgetId = widget.content()
+
                     widgets.add(Widget(widgetId, widget))
                 }
             }
             repaint()
-        } catch (e : Exception) {}
+        } catch (e : Exception) { e.printStackTrace() }
     }
 
     companion object {
