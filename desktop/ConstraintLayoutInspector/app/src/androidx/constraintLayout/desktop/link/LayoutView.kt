@@ -18,6 +18,9 @@ package androidx.constraintLayout.desktop.link
 
 import androidx.constraintLayout.desktop.scan.KeyFrameNodes
 import androidx.constraintLayout.desktop.scan.WidgetFrameUtils
+import androidx.constraintLayout.desktop.ui.timeline.TimeLinePanel
+import androidx.constraintLayout.desktop.ui.ui.MotionEditorSelector.TimeLineCmd
+import androidx.constraintLayout.desktop.ui.ui.MotionEditorSelector.TimeLineListener
 import androidx.constraintLayout.desktop.utils.Desk
 import androidx.constraintlayout.core.motion.utils.Utils
 import androidx.constraintlayout.core.parser.CLKey
@@ -29,9 +32,12 @@ import java.awt.geom.Path2D
 import javax.swing.JFrame
 import javax.swing.JPanel
 
-class LayoutView : JPanel(BorderLayout()) {
+class LayoutView(link: MotionLink) : JPanel(BorderLayout()) {
     var widgets = ArrayList<Widget>()
     var zoom = 0.9f
+    val motionLink = link
+    var mTimeLinePanel: TimeLinePanel? = null
+    var mSceneString: String? = null
 
     data class Widget(val id: String, val key: CLKey) {
         var interpolated = WidgetFrame()
@@ -129,6 +135,22 @@ class LayoutView : JPanel(BorderLayout()) {
         }
     }
 
+    fun showTimeLine() {
+        if (mTimeLinePanel == null && mSceneString != null) {
+            mTimeLinePanel = TimeLinePanel.showTimeline(mSceneString)
+            mTimeLinePanel?.addTimeLineListener { cmd: TimeLineCmd?, pos: Float -> motionLink.sendProgress(pos) }
+        } else {
+            mTimeLinePanel?.popUp()
+        }
+    }
+
+    fun hideTimeLine() {
+            mTimeLinePanel?.popDown()
+    }
+
+    fun setSceneString(str : String) {
+        mSceneString  = str
+    }
 
     fun setLayoutInformation(information: String) {
         if (information.trim().isEmpty()) {
@@ -148,6 +170,7 @@ class LayoutView : JPanel(BorderLayout()) {
                     widgets.add(Widget(widgetId, widget))
                 }
             }
+
             repaint()
         } catch (e : Exception) { e.printStackTrace() }
     }

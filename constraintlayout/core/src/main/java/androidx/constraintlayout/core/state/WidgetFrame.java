@@ -68,7 +68,6 @@ public class WidgetFrame {
     }
 
     public WidgetFrame() {
-
     }
 
     public WidgetFrame(ConstraintWidget widget) {

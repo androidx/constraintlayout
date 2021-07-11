@@ -22,20 +22,23 @@ import java.awt.event.ComponentEvent
 import javax.swing.JButton
 import javax.swing.JCheckBox
 import javax.swing.JPanel
-import javax.swing.event.ChangeListener
 
 class LayoutInspector(link: MotionLink) : JPanel(BorderLayout()) {
 
-    val layoutView = LayoutView()
+    val layoutView = LayoutView(link)
     val motionLink = link
     var forceDimension = false
+    var timeLineStart = JButton("TimeLine...")
+
 
     init {
         val northPanel = JPanel()
         val toggle = JButton("link resize")
         val liveConnection = JCheckBox("Live connection")
+
         liveConnection.isSelected = true
 
+        northPanel.add(timeLineStart)
         northPanel.add(toggle)
         northPanel.add(liveConnection)
         add(northPanel, BorderLayout.NORTH)
@@ -63,5 +66,10 @@ class LayoutInspector(link: MotionLink) : JPanel(BorderLayout()) {
                 toggle.text = "link resize"
             }
         }
+
+        timeLineStart.addActionListener {
+            layoutView.showTimeLine()
+        }
+
     }
 }
