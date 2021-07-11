@@ -68,7 +68,6 @@ public class WidgetFrame {
     }
 
     public WidgetFrame() {
-        System.out.println("created");
     }
 
     public WidgetFrame(ConstraintWidget widget) {

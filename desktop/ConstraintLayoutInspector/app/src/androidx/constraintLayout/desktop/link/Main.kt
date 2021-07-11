@@ -190,6 +190,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
             MotionLink.Event.MOTION_SCENE_UPDATE -> {
                 try {
                     mMainText.text = formatJson(link.motionSceneText)
+                    layoutView!!.setSceneString(mMainText.text)
                 } catch (e : Exception) {
                     mMainText.text = link.motionSceneText
                 }
