@@ -118,5 +118,6 @@ class LayoutInspector(link: MotionLink) : JPanel(BorderLayout()) {
 
     fun setSceneString(str : String) {
         mSceneString = str
+        mTimeLinePanel?.updateMotionScene(mSceneString);
     }
 }
