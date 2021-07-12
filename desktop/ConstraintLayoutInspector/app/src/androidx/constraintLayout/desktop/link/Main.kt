@@ -16,13 +16,14 @@
 
 package androidx.constraintLayout.desktop.link
 
-import androidx.constraintLayout.desktop.link.LayoutView.Companion.showLayoutView
 import androidx.constraintLayout.desktop.scan.CLTreeNode
 import androidx.constraintLayout.desktop.scan.SyntaxHighlight
+import androidx.constraintLayout.desktop.ui.utils.Debug
 import androidx.constraintLayout.desktop.utils.Desk
+import androidx.constraintlayout.core.parser.CLElement
+import androidx.constraintlayout.core.parser.CLObject
 import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.parser.CLParsingException
-import com.formdev.flatlaf.FlatIntelliJLaf
 import java.awt.*
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
@@ -36,9 +37,6 @@ import javax.swing.event.ChangeEvent
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
 import javax.swing.event.TreeSelectionListener
-import javax.swing.text.AbstractDocument
-import javax.swing.text.AttributeSet
-import javax.swing.text.DocumentFilter
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 
@@ -52,7 +50,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
     var mMainTextScrollPane = JScrollPane(mMainText)
     var mSlider = JSlider()
     var drawDebug = false
-    var layoutView: LayoutView? = null
+    var layoutInspector: LayoutInspector? = null
 
     init {
         val getButton = JButton("Get")
@@ -127,7 +125,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         }
         formatText.addActionListener {
             try {
-                mMainText.text = formatJson(mMainText.text)
+                setText(formatJson(mMainText.text))
                 updateTree()
             } catch (e : Exception) {
             }
@@ -139,6 +137,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
                     return
                 }
                 motionLink.sendContent(mMainText.text)
+                updateModel(mMainText.text)
             }
 
             override fun removeUpdate(e: DocumentEvent) {
@@ -146,6 +145,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
                     return
                 }
                 motionLink.sendContent(mMainText.text)
+                updateModel(mMainText.text)
             }
 
             override fun changedUpdate(e: DocumentEvent) {
@@ -153,8 +153,14 @@ class Main internal constructor() : JPanel(BorderLayout()) {
                     return
                 }
                 motionLink.sendContent(mMainText.text)
+                updateModel(mMainText.text)
             }
         })
+    }
+
+    interface DesignSurfaceModification {
+        fun getElement(name: String) : CLElement?
+        fun updateElement(name: String, content: CLElement)
     }
 
     private fun fromLink(event: MotionLink.Event, link: MotionLink) {
@@ -170,11 +176,25 @@ class Main internal constructor() : JPanel(BorderLayout()) {
                 link.errorMessage = ""
             }
             MotionLink.Event.LAYOUT_UPDATE -> {
-                if (layoutView == null) {
-                    layoutView = showLayoutView(link)
+                if (layoutInspector == null) {
+                    layoutInspector = showLayoutInspector(link, object: DesignSurfaceModification {
+                        override fun getElement(name: String): CLElement? {
+                            if (jsonModel != null && jsonModel is CLObject) {
+                                return jsonModel!!.get(name)
+                            }
+                            return null
+                        }
+
+                        override fun updateElement(name: String, content: CLElement) {
+                            if (jsonModel != null && jsonModel is CLObject) {
+                                jsonModel!!.put(name, content)
+                                setText(jsonModel!!.toFormattedJSON(0, 2))
+                            }
+                        }
+                    })
                     link.setUpdateLayoutPolling(true)
                 }
-                layoutView!!.setLayoutInformation(link.layoutInfos)
+                layoutInspector!!.setLayoutInformation(link.layoutInfos)
             }
             MotionLink.Event.LAYOUT_LIST_UPDATE -> {
                 val root = DefaultMutableTreeNode("root")
@@ -189,13 +209,31 @@ class Main internal constructor() : JPanel(BorderLayout()) {
             }
             MotionLink.Event.MOTION_SCENE_UPDATE -> {
                 try {
-                    mMainText.text = formatJson(link.motionSceneText)
-                    layoutView!!.setSceneString(mMainText.text)
-                } catch (e : Exception) {
-                    mMainText.text = link.motionSceneText
+                    setText(formatJson(link.motionSceneText))
+                    updateTree()
+                } catch (e : CLParsingException) {
+                    Debug.log("exception $e")
                 }
-                updateTree()
             }
+        }
+    }
+
+    var jsonModel : CLObject? = null
+
+    private fun setText(text: String) {
+        mMainText.text = text
+        updateModel(text)
+    }
+
+    private fun updateModel(text: String) {
+        try {
+            jsonModel = CLParser.parse(text)
+            if (layoutInspector != null && jsonModel is CLObject) {
+                layoutInspector!!.setModel(jsonModel!!)
+                layoutInspector!!.setSceneString(mMainText.text)
+            }
+        } catch (e: CLParsingException) {
+            // nothing here... (text might be malformed as edit happens)
         }
     }
 
@@ -280,17 +318,26 @@ class Main internal constructor() : JPanel(BorderLayout()) {
                     off += len
                 }
                 fr.close()
-                mMainText.text = String(buff, 0, off)
+                setText(String(buff, 0, off))
             } catch (e: IOException) {
                 e.printStackTrace()
             }
         }
     }
 
+    fun showLayoutInspector(link: MotionLink, callback: Main.DesignSurfaceModification): LayoutInspector? {
+        val frame = JFrame("Layout Inspector")
+        val inspector = LayoutInspector(link)
+        frame.contentPane = inspector
+        Desk.rememberPosition(frame, null)
+        frame.isVisible = true
+        inspector.editorView.designSurfaceModificationCallback = callback
+        return inspector
+    }
+
     companion object {
         @JvmStatic
         fun main(str: Array<String>) {
-            FlatIntelliJLaf.install()
             val frame = JFrame("ConstraintLayout Live Editor")
             val panel = Main()
             frame.contentPane = panel

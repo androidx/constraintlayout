@@ -1196,6 +1196,9 @@ public class TimeLinePanel extends JPanel {
             Debug.log("-----------------");
         }
 
+        if (transition.getChildTags(KEY_FRAME_SET).length == 0) {
+            return;
+        }
         MTag  tag = transition.getChildTags(KEY_FRAME_SET)[0];
          TimeLinePanel tlp = this;
 
