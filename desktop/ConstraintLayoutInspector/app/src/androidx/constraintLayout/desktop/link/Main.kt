@@ -57,7 +57,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         val connectButton = JButton("Connect")
         val sendButton = JButton("Send")
         val toggleDrawDebug = JButton("Toggle Debug")
-        val showLayout = JButton("Layout Inspector")
+        val showLayout = JButton("Inspect")
         val formatText = JButton("Format Text")
         mMessages.horizontalAlignment = SwingConstants.RIGHT
         val font = Font("Courier", Font.PLAIN, 20)
