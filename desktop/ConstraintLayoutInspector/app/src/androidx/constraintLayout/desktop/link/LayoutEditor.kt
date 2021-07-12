@@ -137,11 +137,11 @@ class LayoutEditor : LayoutView() {
     }
 
     fun setModel(model: CLObject) {
+        guidelines.clear()
         if (model.has("ConstraintSets")) {
             // For now don't operate on MotionScenes
             return
         }
-        guidelines.clear()
 
         var count = model.size()
         for (i in 0 until count) {
