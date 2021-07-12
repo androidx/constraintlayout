@@ -76,22 +76,26 @@ class LayoutInspector(link: MotionLink) : JPanel(BorderLayout()) {
         }
 
         edit.addActionListener {
-            if (!editing) {
-                remove(layoutView)
-                add(editorView, BorderLayout.CENTER)
-            } else {
-                remove(editorView)
-                add(layoutView, BorderLayout.CENTER)
-            }
-            revalidate()
-            repaint()
             editing = !editing
+            updateEditorMode()
         }
 
         timeLineStart.addActionListener {
             showTimeLine()
         }
 
+    }
+
+    private fun updateEditorMode() {
+        if (editing) {
+            remove(layoutView)
+            add(editorView, BorderLayout.CENTER)
+        } else {
+            remove(editorView)
+            add(layoutView, BorderLayout.CENTER)
+        }
+        revalidate()
+        repaint()
     }
 
     fun setLayoutInformation(layoutInfos: String) {
@@ -119,5 +123,10 @@ class LayoutInspector(link: MotionLink) : JPanel(BorderLayout()) {
     fun setSceneString(str : String) {
         mSceneString = str
         mTimeLinePanel?.updateMotionScene(mSceneString);
+    }
+
+    fun resetEdit() {
+        editing = false
+        updateEditorMode()
     }
 }
