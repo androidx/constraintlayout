@@ -48,7 +48,6 @@ class Main internal constructor() : JPanel(BorderLayout()) {
     var scrollPaneList = JScrollPane(layoutListTree)
     var highlight = SyntaxHighlight(mMainText)
     var mMainTextScrollPane = JScrollPane(mMainText)
-    var mSlider = JSlider()
     var drawDebug = false
     var layoutInspector: LayoutInspector? = null
 
@@ -56,7 +55,6 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         val getButton = JButton("Get")
         val connectButton = JButton("Connect")
         val sendButton = JButton("Send")
-        val resetProgressButton = JButton("Reset Progress")
         val toggleDrawDebug = JButton("Toggle Debug")
         val showLayout = JButton("Show Layout")
         val formatText = JButton("Format Text")
@@ -72,14 +70,11 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         northPanel.add(sendButton)
         northPanel.add(formatText)
         val southPanel = JPanel(BorderLayout())
-        southPanel.add(mSlider, BorderLayout.CENTER)
-        southPanel.add(resetProgressButton, BorderLayout.EAST)
         southPanel.add(mMessages, BorderLayout.SOUTH)
         add(northPanel, BorderLayout.NORTH)
         add(scrollPaneList, BorderLayout.WEST)
         add(mMainTextScrollPane, BorderLayout.CENTER)
         add(southPanel, BorderLayout.SOUTH)
-        mSlider.value = 0
         motionLink.addListener { event: MotionLink.Event, link: MotionLink ->
             fromLink(
                 event,
@@ -112,17 +107,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
             )
         }
         showLayout.addActionListener { e: ActionEvent? -> motionLink.getLayoutList() }
-        resetProgressButton.addActionListener { e: ActionEvent? ->
-            motionLink.sendProgress(
-                Float.NaN
-            )
-        }
         getButton.addActionListener { e: ActionEvent? -> motionLink.getContent() }
-        mSlider.addChangeListener { e: ChangeEvent? ->
-            motionLink.sendProgress(
-                mSlider.value / 100f
-            )
-        }
         formatText.addActionListener {
             try {
                 setText(formatJson(mMainText.text))

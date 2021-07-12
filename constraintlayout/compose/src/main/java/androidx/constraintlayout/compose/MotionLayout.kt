@@ -138,8 +138,17 @@ inline fun MotionLayout(
     val transitionContent = remember(motionScene, needsUpdate.value) {
         motionScene.getTransition("default")
     }
+    var lastOutsideProgress = remember {
+        mutableStateOf(0f)
+    }
     val forcedProgress = motionScene.getForcedProgress()
-    val usedProgress = if (forcedProgress.isNaN()) progress else forcedProgress
+    var usedProgress = progress
+    if (!forcedProgress.isNaN() && lastOutsideProgress.value == progress) {
+        usedProgress = forcedProgress
+    } else {
+        motionScene.resetForcedProgress()
+    }
+    lastOutsideProgress.value = progress
 
     if (startContent == null || endContent == null) {
         return
@@ -208,6 +217,7 @@ interface MotionScene {
     fun setUpdateFlag(needsUpdate: MutableState<Long>)
     fun setDebugName(name: String?)
     fun getForcedProgress(): Float
+    fun resetForcedProgress()
     fun getForcedDrawDebug(): MotionLayoutDebugFlags
 }
 
@@ -245,6 +255,10 @@ class JSONMotionScene(@Language("json5") content: String) : EditableJSONLayout(c
 
     override fun getForcedProgress(): Float {
         return forcedProgress;
+    }
+
+    override fun resetForcedProgress() {
+        forcedProgress = Float.NaN
     }
 
     ///////////////////////////////////////////////////////////////////////////
