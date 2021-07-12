@@ -41,6 +41,7 @@ import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 
 class Main internal constructor() : JPanel(BorderLayout()) {
+    private var layoutInspectorWindow: JFrame? = null
     var motionLink = MotionLink()
     var mMainText = JTextPane()
     var mMessages = JLabel()
@@ -56,7 +57,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         val connectButton = JButton("Connect")
         val sendButton = JButton("Send")
         val toggleDrawDebug = JButton("Toggle Debug")
-        val showLayout = JButton("Show Layout")
+        val showLayout = JButton("Layout Inspector")
         val formatText = JButton("Format Text")
         mMessages.horizontalAlignment = SwingConstants.RIGHT
         val font = Font("Courier", Font.PLAIN, 20)
@@ -64,10 +65,11 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         scrollPaneList.preferredSize = Dimension(200, 100)
         val northPanel = JPanel()
         northPanel.add(connectButton)
-        northPanel.add(toggleDrawDebug)
         northPanel.add(showLayout)
-        northPanel.add(getButton)
-        northPanel.add(sendButton)
+        // TODO: migrate to file menu?
+        //        northPanel.add(toggleDrawDebug)
+        //        northPanel.add(getButton)
+        //        northPanel.add(sendButton)
         northPanel.add(formatText)
         val southPanel = JPanel(BorderLayout())
         southPanel.add(mMessages, BorderLayout.SOUTH)
@@ -106,7 +108,16 @@ class Main internal constructor() : JPanel(BorderLayout()) {
                 !drawDebug.also { drawDebug = it }
             )
         }
-        showLayout.addActionListener { e: ActionEvent? -> motionLink.getLayoutList() }
+        showLayout.addActionListener { e: ActionEvent? ->
+            if (layoutInspectorWindow != null && layoutInspectorWindow!!.isVisible()) {
+                layoutInspector?.resetEdit()
+                layoutInspectorWindow!!.isVisible = false
+            } else {
+                motionLink.getLayoutList()
+                layoutInspector?.resetEdit()
+                layoutInspectorWindow?.isVisible = true
+            }
+        }
         getButton.addActionListener { e: ActionEvent? -> motionLink.getContent() }
         formatText.addActionListener {
             try {
@@ -315,8 +326,8 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         val inspector = LayoutInspector(link)
         frame.contentPane = inspector
         Desk.rememberPosition(frame, null)
-        frame.isVisible = true
         inspector.editorView.designSurfaceModificationCallback = callback
+        layoutInspectorWindow = frame
         return inspector
     }
 
