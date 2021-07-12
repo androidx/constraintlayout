@@ -228,7 +228,7 @@ public class CLScan {
                 }
                 CLKey clkey = ((CLKey) tmp);
                 String attr = clkey.content();
-                System.out.println(Debug.indent(0)+attr);
+
                 if (name.equals(attr)) {
                     return clkey;
                 }

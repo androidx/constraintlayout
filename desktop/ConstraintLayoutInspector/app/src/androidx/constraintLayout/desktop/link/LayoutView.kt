@@ -150,6 +150,7 @@ class LayoutView(link: MotionLink) : JPanel(BorderLayout()) {
 
     fun setSceneString(str : String) {
         mSceneString  = str
+        mTimeLinePanel?.updateMotionScene(mSceneString);
     }
 
     fun setLayoutInformation(information: String) {
