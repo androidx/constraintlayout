@@ -18,6 +18,7 @@ package androidx.constraintLayout.desktop.link
 
 import androidx.constraintLayout.desktop.scan.CLTreeNode
 import androidx.constraintLayout.desktop.scan.SyntaxHighlight
+import androidx.constraintLayout.desktop.ui.utils.Debug
 import androidx.constraintLayout.desktop.utils.Desk
 import androidx.constraintlayout.core.parser.CLElement
 import androidx.constraintlayout.core.parser.CLObject
@@ -209,10 +210,10 @@ class Main internal constructor() : JPanel(BorderLayout()) {
             MotionLink.Event.MOTION_SCENE_UPDATE -> {
                 try {
                     setText(formatJson(link.motionSceneText))
-                } catch (e : Exception) {
-                    setText(link.motionSceneText)
+                    updateTree()
+                } catch (e : CLParsingException) {
+                    Debug.log("exception $e")
                 }
-                updateTree()
             }
         }
     }
