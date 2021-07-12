@@ -25,6 +25,7 @@ import androidx.constraintLayout.desktop.ui.ui.MotionEditorSelector;
 import androidx.constraintLayout.desktop.ui.ui.MotionEditorSelector.TimeLineCmd;
 import androidx.constraintLayout.desktop.ui.ui.MotionEditorSelector.TimeLineListener;
 import androidx.constraintLayout.desktop.ui.ui.Utils;
+import androidx.constraintLayout.desktop.ui.utils.Debug;
 import androidx.constraintLayout.desktop.utils.Desk;
 import androidx.constraintlayout.core.parser.CLKey;
 import androidx.constraintlayout.core.parser.CLObject;
@@ -54,6 +55,7 @@ import static androidx.constraintLayout.desktop.ui.adapters.MotionSceneAttrs.Tag
  * The panel that displays the timeline
  */
 public class TimeLinePanel extends JPanel {
+    public static final boolean DEBUG = false;
     private static int PLAY_TIMEOUT = 60 * 60 * 1000;
     private static int MS_PER_FRAME = 15;
     private static float TIMELINE_MIN = 0.0f;
@@ -1172,7 +1174,6 @@ public class TimeLinePanel extends JPanel {
 
     public static TimeLinePanel showTimeline(String motionSceneString) {
         JFrame frame = new JFrame();
-        System.out.println(" hello ");
         TimeLinePanel tlp = new TimeLinePanel();
         tlp.updateMotionScene(motionSceneString);
         tlp.setListeners(new MotionEditorSelector());
@@ -1189,6 +1190,12 @@ public class TimeLinePanel extends JPanel {
     public void updateMotionScene(String motionSceneString){
 
         DefaultMTag transition = (DefaultMTag) KeyFramesTag.parseForTimeLine(motionSceneString);
+        if (DEBUG) {
+            Debug.log("Transition ... ");
+            transition.printFormal("|", System.out);
+            Debug.log("-----------------");
+        }
+
         MTag  tag = transition.getChildTags(KEY_FRAME_SET)[0];
          TimeLinePanel tlp = this;
 

@@ -17,6 +17,7 @@ package androidx.constraintLayout.desktop.ui.adapters;
 
 import androidx.constraintLayout.desktop.scan.CLScan;
 import androidx.constraintLayout.desktop.ui.adapters.Annotations.Nullable;
+import androidx.constraintLayout.desktop.ui.utils.Debug;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.parser.*;
 
@@ -56,23 +57,20 @@ public class KeyFramesTag implements MTag {
             CLKey obj = CLScan.findCLKey(CLParser.parse(str), "KeyFrames");
 
             if (obj == null) {
-                System.out.println("No Key frames found");
-                System.out.println("-----------------------------------");
-                System.out.println(str);
-                System.out.println("-----------------------------------");
+                System.err.println("No Key frames found!");
+                System.err.println("-----------------------------------");
+                System.err.println(str);
+                System.err.println("-----------------------------------");
                 return;
             }
             CLKey clTransitions = CLScan.findCLKey(CLParser.parse(str), "Transitions");
             CLObject def = (CLObject) ((CLObject) clTransitions.getValue()).get("default");
             String constraintSetStart = def.get("from").content();
             String constraintSetEnd = def.get("to").content();
-            System.out.println("constraintSetStart= "+constraintSetStart);
-            System.out.println("constraintSetEnd= "+constraintSetEnd);
 
             KeyFramesTag keyFrames = new KeyFramesTag();
             keyFrames.mParent = transition;
             if (transition != null) {
-                System.out.println("adding constraintSetStart constraintSetEnd= "+constraintSetEnd);
                 transition.addChild(keyFrames);
                 transition.addAttribute("constraintSetStart", constraintSetStart);
                 transition.addAttribute("constraintSetEnd", constraintSetEnd);
@@ -83,8 +81,7 @@ public class KeyFramesTag implements MTag {
             int numberOf_types = clo.size();
 
             for (int i = 0; i < numberOf_types; i++) {
-                CLElement o = clo.get(0);
-                System.out.println(o.getClass().getSimpleName() + " " + o.content());
+                CLElement o = clo.get(i);
                 CLKey clKey = (CLKey) o;
                 switch (clKey.content()) {
                     case "KeyPositions":
