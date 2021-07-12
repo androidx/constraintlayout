@@ -1195,6 +1195,7 @@ public class TimeLinePanel extends JPanel {
             transition.printFormal("|", System.out);
             Debug.log("-----------------");
         }
+ 
         DefaultMTag motionScene = new DefaultMTag("MotionScene");
         motionScene.addChild(transition);
         DefaultMTag startTag = new DefaultMTag("ConstraintSet");

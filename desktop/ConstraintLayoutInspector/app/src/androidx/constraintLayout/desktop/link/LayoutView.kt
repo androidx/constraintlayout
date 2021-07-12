@@ -18,26 +18,23 @@ package androidx.constraintLayout.desktop.link
 
 import androidx.constraintLayout.desktop.scan.KeyFrameNodes
 import androidx.constraintLayout.desktop.scan.WidgetFrameUtils
-import androidx.constraintLayout.desktop.ui.timeline.TimeLinePanel
-import androidx.constraintLayout.desktop.ui.ui.MotionEditorSelector.TimeLineCmd
-import androidx.constraintLayout.desktop.ui.ui.MotionEditorSelector.TimeLineListener
-import androidx.constraintLayout.desktop.utils.Desk
-import androidx.constraintlayout.core.motion.utils.Utils
 import androidx.constraintlayout.core.parser.CLKey
 import androidx.constraintlayout.core.parser.CLObject
 import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.state.WidgetFrame
 import java.awt.*
 import java.awt.geom.Path2D
-import javax.swing.JFrame
 import javax.swing.JPanel
 
-class LayoutView(link: MotionLink) : JPanel(BorderLayout()) {
-    var widgets = ArrayList<Widget>()
+open class LayoutView : JPanel(BorderLayout()) {
+    protected var widgets = ArrayList<Widget>()
     var zoom = 0.9f
-    val motionLink = link
-    var mTimeLinePanel: TimeLinePanel? = null
-    var mSceneString: String? = null
+
+    protected var scaleX = 0f
+    protected var scaleY = 0f
+    protected var offX = 0.0f
+    protected var offY = 0.0f
+
 
     data class Widget(val id: String, val key: CLKey) {
         var interpolated = WidgetFrame()
@@ -47,6 +44,8 @@ class LayoutView(link: MotionLink) : JPanel(BorderLayout()) {
         var path = Path2D.Float()
         val drawFont = Font("Helvetica", Font.ITALIC, 32)
         val keyFrames = KeyFrameNodes()
+        var isGuideline = false
+
         init {
             name = key.content()
             val sections = key.value as CLObject
@@ -104,12 +103,12 @@ class LayoutView(link: MotionLink) : JPanel(BorderLayout()) {
             return
         }
         val root = widgets[0]
-        var rootWidth = root.width().toFloat()
-        var rootHeight = root.height().toFloat()
-        var scaleX = width / rootWidth
-        var scaleY = height / rootHeight
-        var offX = 0.0f
-        var offY = 0.0f
+        val rootWidth = root.width().toFloat()
+        val rootHeight = root.height().toFloat()
+        scaleX = width / rootWidth
+        scaleY = height / rootHeight
+        offX = 0.0f
+        offY = 0.0f
         if (scaleX < scaleY) {
             scaleY = scaleX
         } else {
@@ -121,36 +120,22 @@ class LayoutView(link: MotionLink) : JPanel(BorderLayout()) {
         offX = (width - root.width().toFloat() * scaleX) / 2
         offY = (height - root.height().toFloat() * scaleY) / 2
 
-        g!!.color = WidgetFrameUtils.theme.backgroundColor()
-        g!!.fillRect(0, 0, width, height)
-
-        val g2 = g as Graphics2D
+        val g2 = g!!.create() as Graphics2D
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
+
+        g2.color = WidgetFrameUtils.theme.backgroundColor()
+        g2.fillRect(0, 0, width, height)
+
         g2.translate(offX.toDouble(), offY.toDouble())
         g2.scale(scaleX.toDouble(), scaleY.toDouble())
 
         for (widget in widgets) {
+            if (widget.isGuideline) {
+                continue
+            }
             widget.draw(g2, widget == root)
         }
-    }
-
-    fun showTimeLine() {
-        if (mTimeLinePanel == null && mSceneString != null) {
-            mTimeLinePanel = TimeLinePanel.showTimeline(mSceneString)
-            mTimeLinePanel?.addTimeLineListener { cmd: TimeLineCmd?, pos: Float -> motionLink.sendProgress(pos) }
-        } else {
-            mTimeLinePanel?.popUp()
-        }
-    }
-
-    fun hideTimeLine() {
-            mTimeLinePanel?.popDown()
-    }
-
-    fun setSceneString(str : String) {
-        mSceneString  = str
-        mTimeLinePanel?.updateMotionScene(mSceneString);
     }
 
     fun setLayoutInformation(information: String) {
@@ -176,15 +161,4 @@ class LayoutView(link: MotionLink) : JPanel(BorderLayout()) {
         } catch (e : Exception) { e.printStackTrace() }
     }
 
-    companion object {
-
-        fun showLayoutView(link: MotionLink): LayoutView? {
-            val frame = JFrame("Layout Inspector")
-            val inspector = LayoutInspector(link)
-            frame.contentPane = inspector
-            Desk.rememberPosition(frame, null)
-            frame.isVisible = true
-            return inspector.layoutView
-        }
-    }
 }
