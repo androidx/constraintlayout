@@ -37,9 +37,9 @@ public class MotionLayoutAttrs {
       "translationY",
       "translationZ",
     };
+
   public static String[] KeyAttributesKey =
     {
-
       "motionProgress",
       "visibility",
       "alpha",
@@ -55,6 +55,25 @@ public class MotionLayoutAttrs {
       "translationZ",
     };
 
+  public static final String ATTR_MOTIONPROGRESS = "motionProgress";
+  public static final String ATTR_VISIBILITY = "visibility";
+  public static final String ATTR_ALPHA = "alpha";
+  public static final String ATTR_ELEVATION = "elevation";
+  public static final String ATTR_ROTATION = "rotation";
+  public static final String ATTR_ROTATION_X = "rotationX";
+  public static final String ATTR_ROTATION_Y = "rotationY";
+  public static final String ATTR_TRANSITION_PATH_ROTATE = "transitionPathRotate";
+  public static final String ATTR_SCALE_X = "scaleX";
+  public static final String ATTR_SCALE_Y = "scaleY";
+  public static final String ATTR_TRANSLATION_X = "translationX";
+  public static final String ATTR_TRANSLATION_Y = "translationY";
+  public static final String ATTR_TRANSLATION_Z = "translationZ";
+  public static final String ATTR_TRANSFORM_PIVOT_X = "transformPivotX";
+  public static final String ATTR_TRANSFORM_PIVOT_Y = "transformPivotY";
+  public static final String ATTR_TRANSFORM_PIVOT_TARGET = "transformPivotTarget";
+  public static final String ATTR_PROGRESS = "transformPivotTarget";
+
+
   public static final String PERCENT_X = "percentX";
   public static final String PERCENT_Y = "percentY";
   public static final String PERCENT_WIDTH = "percentWidth";
@@ -66,8 +85,6 @@ public class MotionLayoutAttrs {
   public static final String KEY_POSITION_TYPE = "keyPositionType";
   public static final String FRAME_POSITION = "framePosition";
   public static final String MOTION_TARGET = "motionTarget";
-
-
 
 
   public static String[] KeyPositionAll = {
@@ -85,7 +102,6 @@ public class MotionLayoutAttrs {
     "sizePercent"
   };
   public static String[] KeyPositionKey = {
-
   };
 
   public static String[] KeyCycleAll = {
@@ -124,6 +140,7 @@ public class MotionLayoutAttrs {
     "translationY",
     "translationZ",
   };
+
   public static String[] KeyTimeCycleAll = {
     "framePosition",
     "motionTarget",
@@ -146,6 +163,7 @@ public class MotionLayoutAttrs {
     "translationY",
     "translationZ"
   };
+
   public static String[] KeyTimeCycleKey = {
     "motionProgress",
     "alpha",
@@ -160,6 +178,7 @@ public class MotionLayoutAttrs {
     "translationY",
     "translationZ"
   };
+
   public static String[] KeyTriggerAll = {
     "framePosition",
     "motionTarget",
@@ -172,5 +191,6 @@ public class MotionLayoutAttrs {
     "motion_postLayoutCollision",
     "motion_triggerOnCollision",
   };
+
   public static String[] KeyTriggerKey = {};
 }

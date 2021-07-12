@@ -30,6 +30,7 @@ import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 import java.io.IOException
+import java.lang.RuntimeException
 import javax.swing.*
 import javax.swing.event.ChangeEvent
 import javax.swing.event.DocumentEvent
@@ -86,7 +87,6 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         }
         layoutListTree.selectionModel.addTreeSelectionListener(TreeSelectionListener { e ->
             val path = e.path
-            println(path)
             if (path.pathCount > 2) {
                 val selected = path.lastPathComponent as CLTreeNode
                 println("selected " + selected.mKeyStart + "," + selected.mKeyEnd)
@@ -237,12 +237,21 @@ class Main internal constructor() : JPanel(BorderLayout()) {
     }
 
     private fun formatJson(text: String) : String {
-        val json = CLParser.parse(text)
-        var indentation = 2
-        if (json.has("ConstraintSets")) {
-            indentation = 3
+        if (text.length == 0) {
+            return ""
         }
-        return json.toFormattedJSON(0, indentation)
+        try {
+            val json = CLParser.parse(text)
+            var indentation = 2
+            if (json.has("ConstraintSets")) {
+                indentation = 3
+            }
+            return json.toFormattedJSON(0, indentation)
+        } catch (e: CLParsingException) {
+            System.err.println("error in parsing text \""+text+"\"")
+            throw RuntimeException("Parse error",e)
+        }
+
     }
 
     private fun updateTree() {
@@ -254,7 +263,6 @@ class Main internal constructor() : JPanel(BorderLayout()) {
                 root.getChildAt(i) as DefaultMutableTreeNode
             child.removeAllChildren()
             if (motionLink.mSelectedIndex == i) {
-                println(i)
                 try {
                     CLTreeNode.parse(motionLink.motionSceneText, child)
                 } catch (e: CLParsingException) {

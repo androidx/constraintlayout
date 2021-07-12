@@ -37,6 +37,9 @@ public fun AttributesScale() {
                 .height(400.dp)
                 .background(Color.White),
             motionScene = MotionScene("""{
+                Debug: {
+                  name: 'motion26'
+                },
                 ConstraintSets: {
                   start: {
                     a: {
@@ -62,14 +65,14 @@ public fun AttributesScale() {
                     to: 'end',
                     pathMotionArc: 'startHorizontal',
                     KeyFrames: {
-//                      KeyPositions: [
-//                        {
-//                          target: ['a'],
-//                          frames: [25, 50, 75],
-////                          percentX: [0.4, 0.8, 0.1],
-////                          percentY: [0.4, 0.8, 0.3]
-//                        }
-//                      ],
+                      KeyPositions: [
+                        {
+                          target: ['a'],
+                          frames: [25, 50, 75],
+                          percentX: [0.4, 0.8, 0.1],
+                          percentY: [0.4, 0.8, 0.3]
+                        }
+                      ],
                       KeyAttributes: [
                         {
                           target: ['a'],
@@ -111,6 +114,9 @@ public fun AttributesTranslationXY() {
                 .height(400.dp)
                 .background(Color.White),
             motionScene = MotionScene("""{
+                Debug: {
+                  name: 'Translation27'
+                },
                 ConstraintSets: {
                   start: {
                     a: {
@@ -185,6 +191,9 @@ public fun AttributesRotationZ() {
                 .height(400.dp)
                 .background(Color.White),
             motionScene = MotionScene("""{
+                 Debug: {
+                  name: 'RotationZ28'
+                },
                 ConstraintSets: {
                   start: {
                     a: {
