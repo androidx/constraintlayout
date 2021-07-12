@@ -72,7 +72,11 @@ public class MotionLayoutAttrs {
   public static final String ATTR_TRANSFORM_PIVOT_Y = "transformPivotY";
   public static final String ATTR_TRANSFORM_PIVOT_TARGET = "transformPivotTarget";
   public static final String ATTR_PROGRESS = "transformPivotTarget";
-
+  public static final String ATTR_WAVE_SHAPE= "waveShape";
+  public static final String ATTR_WAVE_PERIOD= "wavePeriod";
+  public static final String ATTR_WAVE_OFFSET= "waveOffset";
+  public static final String ATTR_WAVE_PHASE= "wavePhase";
+  public static final String ATTR_CUSTOM_WAVE_SHAPE= "waveShape";
 
   public static final String PERCENT_X = "percentX";
   public static final String PERCENT_Y = "percentY";

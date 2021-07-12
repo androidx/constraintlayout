@@ -1195,51 +1195,56 @@ public class TimeLinePanel extends JPanel {
             transition.printFormal("|", System.out);
             Debug.log("-----------------");
         }
-
-        MTag  tag = transition.getChildTags(KEY_FRAME_SET)[0];
-         TimeLinePanel tlp = this;
-
-        MTag kfs = transition.getChildTags("KeyFrameSet")[0];
-        MTag []keyFrames = kfs.getChildTags();
-        HashSet<String> ids = new HashSet<>();
-        for (int i = 0; i < keyFrames.length; i++) {
-            MTag keyFrame = keyFrames[i];
-            ids.add(  keyFrame.getAttributeValue("motionTarget"));
-        }
-        String []widgets = ids.toArray(new String[0]);
         DefaultMTag motionScene = new DefaultMTag("MotionScene");
         motionScene.addChild(transition);
-        String start =  transition.getAttributeValue("constraintSetStart");
-        String end  =  transition.getAttributeValue("constraintSetEnd");
+        DefaultMTag startTag = new DefaultMTag("ConstraintSet");
+        DefaultMTag endTag = new DefaultMTag("ConstraintSet");
+        motionScene.addChild(startTag, endTag);
 
-        try {
-            CLKey key = CLScan.findCLKey(CLParser.parse(motionSceneString), "ConstraintSets");
-            CLObject obj = (CLObject) key.getValue();
-            CLObject startObj =  (CLObject) obj.get(start);
-            CLObject endObj =  (CLObject)  obj.get(end);
-            DefaultMTag startTag = new DefaultMTag("ConstraintSet");
-            DefaultMTag endTag = new DefaultMTag("ConstraintSet");
-            motionScene.addChild(startTag,endTag);
-            startTag.addAttribute("id", start);
-            endTag.addAttribute("id", end);
-            for (int i = 0; i < widgets.length; i++) {
-                String widget = widgets[i];
-                DefaultMTag wc_s = new DefaultMTag("Constraint");
-                startTag.addChild(wc_s);
-                wc_s.addAttribute("layout_constraintTag",widget);
-                wc_s.addAttribute("id",widget);
+        MTag[] tags = transition.getChildTags(KEY_FRAME_SET);
+        MTag keyFramesTag = null;
+        if (tags.length > 0) {
+            keyFramesTag = tags[0];
 
-                DefaultMTag wc_e = new DefaultMTag("Constraint");
-                wc_e.addAttribute("layout_constraintTag",widget);
-                wc_e.addAttribute("id",widget);
-                endTag.addChild(wc_e);
+            MTag kfs = keyFramesTag;
+            MTag[] keyFrames = kfs.getChildTags();
+            HashSet<String> ids = new HashSet<>();
+            for (int i = 0; i < keyFrames.length; i++) {
+                MTag keyFrame = keyFrames[i];
+                ids.add(keyFrame.getAttributeValue("motionTarget"));
             }
+            String[] widgets = ids.toArray(new String[0]);
 
-        } catch (CLParsingException e) {
-            e.printStackTrace();
+            String start = transition.getAttributeValue("constraintSetStart");
+            String end = transition.getAttributeValue("constraintSetEnd");
+
+            try {
+                CLKey key = CLScan.findCLKey(CLParser.parse(motionSceneString), "ConstraintSets");
+                CLObject obj = (CLObject) key.getValue();
+                CLObject startObj = (CLObject) obj.get(start);
+                CLObject endObj = (CLObject) obj.get(end);
+
+                startTag.addAttribute("id", start);
+                endTag.addAttribute("id", end);
+                for (int i = 0; i < widgets.length; i++) {
+                    String widget = widgets[i];
+                    DefaultMTag wc_s = new DefaultMTag("Constraint");
+                    startTag.addChild(wc_s);
+                    wc_s.addAttribute("layout_constraintTag", widget);
+                    wc_s.addAttribute("id", widget);
+
+                    DefaultMTag wc_e = new DefaultMTag("Constraint");
+                    wc_e.addAttribute("layout_constraintTag", widget);
+                    wc_e.addAttribute("id", widget);
+                    endTag.addChild(wc_e);
+                }
+
+            } catch (CLParsingException e) {
+                e.printStackTrace();
+            }
         }
 
-        tlp.setMTag(transition, new MeModel(  motionScene,   null,   null,   null,   null));
+        setMTag(transition, new MeModel(motionScene, null,   null,   null,   null));
       }
     public void exitTimeLine() {
         if (mTimeLineFrame != null) {

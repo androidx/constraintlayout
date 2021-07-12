@@ -91,7 +91,8 @@ class MainActivity : AppCompatActivity() {
                 32 -> CycleRotationZ()
                 33 -> CycleRotationXY()
                 else -> {
-                    composeNum = 0
+                    composeNum = (composeNum + 33) % 33
+                    println(composeNum)
                     ScreenExample()
                 }
             }
@@ -128,15 +129,15 @@ class MainActivity : AppCompatActivity() {
         if (mFrameLayout!!.childCount > 0) {
             mFrameLayout!!.removeAllViews()
         }
+        var com = ComposeView(this);
+        mFrameLayout!!.addView(com)
+        show(com)
+        findViewById<TextView>(R.id.layoutName).text = "! example " + composeNum;
         var sub = " example " + composeNum
         if (map.containsKey(composeNum)) {
             sub += " " + map.get(composeNum)
         }
         title = sub;
-        findViewById<TextView>(R.id.layoutName).text = "! example " + composeNum;
-        var com = ComposeView(this);
-        mFrameLayout!!.addView(com)
-        show(com)
     }
 
     @ExperimentalMaterialApi

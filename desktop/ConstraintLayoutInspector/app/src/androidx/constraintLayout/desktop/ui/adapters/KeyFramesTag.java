@@ -57,10 +57,12 @@ public class KeyFramesTag implements MTag {
             CLKey obj = CLScan.findCLKey(CLParser.parse(str), "KeyFrames");
 
             if (obj == null) {
-                System.err.println("No Key frames found!");
-                System.err.println("-----------------------------------");
-                System.err.println(str);
-                System.err.println("-----------------------------------");
+                if (DEBUG) {
+                    System.err.println("No Key frames found!");
+                    System.err.println("-----------------------------------");
+                    System.err.println(str);
+                    System.err.println("-----------------------------------");
+                }
                 return;
             }
             CLKey clTransitions = CLScan.findCLKey(CLParser.parse(str), "Transitions");
@@ -104,6 +106,9 @@ public class KeyFramesTag implements MTag {
             CLElement c = obj.getValue();
 
         } catch (CLParsingException e) {
+            System.err.println(e.reason()+"\n-----------------------------------");
+            System.err.println(str);
+            System.err.println("-----------------------------------");
             e.printStackTrace();
         }
         return;
@@ -192,8 +197,6 @@ public class KeyFramesTag implements MTag {
                 CLObject obj = (CLObject) clArray.get(i);
                 buildKeyAttribute(obj, parent);
             }
-
-
         }
     }
 
@@ -310,6 +313,7 @@ public class KeyFramesTag implements MTag {
     }
 
     /////////////////////////////// KEY cycles ///////////////////////////////////////////
+
     static void buildKeyCycles(CLElement element, KeyFramesTag parent) throws CLParsingException {
         if (element instanceof CLArray) {
             CLArray clArray = (CLArray) element;
@@ -326,38 +330,100 @@ public class KeyFramesTag implements MTag {
     static void buildKeyCycle(CLObject obj, KeyFramesTag parent) throws CLParsingException {
         String[] targets = buildStringArray(obj.get("target"));
         int[] positions = buildIntArray(obj.get("frames"));
+        String pivotTarget = null;
         String easing = null;
         String curveFit = null;
-        float[] percentWidth = null;
-        float[] percentHeight = null;
-        float[] sizePercent = null;
-        float[] percentX = null;
-        float[] percentY = null;
+        float[] translationX = null;
+        float[] translationY = null;
+        float[] translationZ = null;
+        float[] elevation = null;
+        float[] rotationX = null;
+        float[] rotationY = null;
+        float[] rotationZ = null;
+        float[] scaleX = null;
+        float[] scaleY = null;
+        float[] pivotX = null;
+        float[] pivotY = null;
+        float[] pathRotate = null;
+        float[] progress = null;
+        float[] waveOffset = null;
+        float[] wavePeriod = null;
+        float[] wavePhase = null;
+        String waveShape = null;
+        String customWaveShape = null;
+
         int size = obj.size();
         for (int i = 0; i < size; i++) {
             CLKey clKey = (CLKey) obj.get(i);
             switch (clKey.content()) {
-                case TypedValues.Position.S_TRANSITION_EASING:
+                case TypedValues.Cycle.S_TRANSLATION_X:
+                    translationX = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Cycle.S_TRANSLATION_Y:
+                    translationY = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Cycle.S_TRANSLATION_Z:
+                    translationZ = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Cycle.S_ELEVATION:
+                    elevation = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Cycle.S_ROTATION_X:
+                    rotationX = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Cycle.S_ROTATION_Y:
+                    rotationY = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Cycle.S_ROTATION_Z:
+                    rotationZ = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Cycle.S_SCALE_X:
+                    scaleX = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Cycle.S_SCALE_Y:
+                    scaleY = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Cycle.S_PIVOT_X:
+                    pivotX = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Cycle.S_PIVOT_Y:
+                    pivotY = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Cycle.S_PROGRESS:
+                    progress = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Cycle.S_WAVE_OFFSET:
+                    waveOffset = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Cycle.S_WAVE_PERIOD:
+                    wavePeriod = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Cycle.S_WAVE_PHASE:
+                    wavePhase = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Cycle.S_WAVE_SHAPE:
+                    waveShape =  clKey.getValue().content();
+                    break;
+                case TypedValues.Cycle.S_CUSTOM_WAVE_SHAPE:
+                    customWaveShape = clKey.getValue().content();
+                    break;
+
+                case TypedValues.Cycle.S_PATH_ROTATE:
+                    pathRotate = buildFloatArray(clKey.getValue());
+                    break;
+
+                case TypedValues.Cycle.S_EASING:
                     easing = clKey.getValue().content();
                     break;
-                case TypedValues.Position.S_PERCENT_WIDTH:
-                    percentWidth = buildFloatArray(clKey.getValue());
-                    break;
-                case TypedValues.Position.S_PERCENT_HEIGHT:
-                    percentHeight = buildFloatArray(clKey.getValue());
-                    break;
-                case TypedValues.Position.S_SIZE_PERCENT:
-                    sizePercent = buildFloatArray(clKey.getValue());
-                    break;
-                case TypedValues.Position.S_PERCENT_X:
-                    percentX = buildFloatArray(clKey.getValue());
-                    break;
-                case TypedValues.Position.S_PERCENT_Y:
-                    percentY = buildFloatArray(clKey.getValue());
-                    break;
+
+
                 case TypedValues.Attributes.S_CURVE_FIT:
                     curveFit = clKey.getValue().content();
                     break;
+                // todo CUSTOM SUPPORT
+                //  case TypedValues.Attributes.S_CUSTOM:
+                //  CUSTOM = clKey.getValue().content();
+                //   break;
             }
         }
         for (int i = 0; i < targets.length; i++) {
@@ -365,16 +431,35 @@ public class KeyFramesTag implements MTag {
             for (int j = 0; j < positions.length; j++) {
                 String position = Integer.toString(positions[j]);
                 KeyFramesTag kTag = new KeyFramesTag();
-                kTag.name = MotionSceneAttrs.Tags.KEY_POSITION;
-                kTag.add(KEY_POSITION_TYPE, "delta");
+                kTag.name = MotionSceneAttrs.Tags.KEY_CYCLE;
                 kTag.add(FRAME_POSITION, position);
                 kTag.add(MOTION_TARGET, target);
+                kTag.add(ATTR_TRANSLATION_X, strLookup(translationX, j));
+                kTag.add(ATTR_TRANSLATION_Y, strLookup(translationY, j));
+                kTag.add(ATTR_TRANSLATION_Z, strLookup(translationZ, j));
+                kTag.add(ATTR_ELEVATION, strLookup(elevation, j));
+                kTag.add(ATTR_ROTATION_X, strLookup(rotationX, j));
+                kTag.add(ATTR_ROTATION_Y, strLookup(rotationY, j));
+                kTag.add(ATTR_ROTATION, strLookup(rotationZ, j));
+                kTag.add(ATTR_SCALE_X, strLookup(scaleX, j));
+                kTag.add(ATTR_SCALE_Y, strLookup(scaleY, j));
+                kTag.add(ATTR_TRANSFORM_PIVOT_X, strLookup(pivotX, j));
+                kTag.add(ATTR_TRANSFORM_PIVOT_Y, strLookup(pivotY, j));
+                kTag.add(ATTR_TRANSITION_PATH_ROTATE, strLookup(pathRotate, j));
+                kTag.add(ATTR_PROGRESS, strLookup(progress, j));
 
-                kTag.add(PERCENT_X, strLookup(percentX, j));
-                kTag.add(PERCENT_Y, strLookup(percentY, j));
-                kTag.add(PERCENT_WIDTH, strLookup(percentWidth, j));
-                kTag.add(PERCENT_HEIGHT, strLookup(percentHeight, j));
-                kTag.add(SIZE_PERCENT, strLookup(sizePercent, j));
+                kTag.add(ATTR_WAVE_OFFSET, strLookup(waveOffset, j));
+                kTag.add(ATTR_WAVE_PERIOD, strLookup(wavePeriod, j));
+                kTag.add(ATTR_WAVE_PHASE, strLookup(wavePhase, j));
+
+                kTag.add(ATTR_CUSTOM_WAVE_SHAPE, customWaveShape);
+                kTag.add(ATTR_WAVE_SHAPE, waveShape);
+
+                kTag.add(ATTR_TRANSFORM_PIVOT_TARGET,  pivotTarget );
+                kTag.add(ATTR_PROGRESS, strLookup(progress, j));
+                kTag.add(TRANSITION_EASING, easing);
+                kTag.add(CURVE_FIT, curveFit);
+
                 kTag.mParent = parent;
                 parent.mChildren.add(kTag);
             }
