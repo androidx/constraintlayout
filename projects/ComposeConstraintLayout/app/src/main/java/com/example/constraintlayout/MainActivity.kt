@@ -29,9 +29,9 @@ import androidx.constraintlayout.compose.ScreenExample9
 
 class MainActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
-    private var composeNum = 16
+    private var composeNum = 26
 
-    private var MAX = 33
+
     var map = HashMap<Int, String>();
     val debugServer = DebugServer()
 
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
         map.put(24, "scaleX/Y")
         map.put(25, "tanslationX/Y")
-        map.put(26, "rotationZ")
+       // map.put(26, "rotationZ")
         map.put(27, "rotationXY")
         map.put(28, "Cycle Scale")
         map.put(29, "Cycle TranslationXY")
@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
 
     @ExperimentalMaterialApi
     private fun show(com: ComposeView) {
+        println(" $composeNum ")
         com.setContent() {
             when (composeNum) {
                 0 -> ScreenExample()
@@ -140,13 +141,13 @@ class MainActivity : AppCompatActivity() {
 
     @ExperimentalMaterialApi
     fun prev(view: View) {
-        composeNum = (composeNum + MAX - 1) % MAX
+        composeNum--
         setCompose()
     }
 
     @ExperimentalMaterialApi
     fun next(view: View) {
-        composeNum = (composeNum + 1) % MAX
+        composeNum++
         setCompose();
     }
 }

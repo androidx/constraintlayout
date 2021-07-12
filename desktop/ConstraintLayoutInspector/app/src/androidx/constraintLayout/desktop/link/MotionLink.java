@@ -1,5 +1,7 @@
 package androidx.constraintLayout.desktop.link;
 
+import androidx.constraintLayout.desktop.ui.utils.Debug;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -118,7 +120,6 @@ public class MotionLink {
             writer.writeUTF(selectedLayoutName);
             var numLayouts = reader.readInt();
 
-            log("found layouts " + numLayouts);
             layoutNames = new String[numLayouts];
             for (int i = 0; i < numLayouts; i++) {
                 layoutNames[i] = reader.readUTF();
@@ -281,7 +282,8 @@ public class MotionLink {
     }
 
     private void log(String err) {
-        System.out.println(err);
+        StackTraceElement s = new Throwable().getStackTrace()[1];
+        System.out.println(".(" + s.getFileName() + ":" + s.getLineNumber() + ")" + err);
     }
 
     public static void main(String[] arg) throws InterruptedException {

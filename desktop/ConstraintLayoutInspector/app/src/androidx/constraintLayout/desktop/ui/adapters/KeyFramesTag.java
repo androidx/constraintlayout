@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 The Android Open Source Project
+ * Copyright (C) 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package androidx.constraintLayout.desktop.ui.adapters;
 
 import androidx.constraintLayout.desktop.scan.CLScan;
 import androidx.constraintLayout.desktop.ui.adapters.Annotations.Nullable;
+import androidx.constraintLayout.desktop.ui.utils.Debug;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.parser.*;
 
@@ -37,54 +38,61 @@ public class KeyFramesTag implements MTag {
 
     private static final boolean DEBUG = false;
     String name;
-    KeyFramesTag mParent;
+    MTag mParent;
     Object clientData;
     CLElement mClElement;
     HashMap<String, Attribute> mAttrList = new HashMap<>();
     ArrayList<MTag> mChildren = new ArrayList<>();
 
 
-    public static KeyFramesTag parseForTimeLine(String str) {
-        KeyFramesTag transition = new KeyFramesTag();
-        KeyFramesTag tag = parse(str);
-        if (tag != null) {
-            transition.mChildren.add(tag);
-        }
-        transition.name = "Transition";
+    public static MTag parseForTimeLine(String str) {
+        DefaultMTag transition = new DefaultMTag("Transition");
+        parseKeyFrames(str, transition);
         return transition;
     }
 
-    public static KeyFramesTag parse(String str) {
+    public static void parseKeyFrames(String str, DefaultMTag transition ) {
 
         try {
             CLKey obj = CLScan.findCLKey(CLParser.parse(str), "KeyFrames");
 
             if (obj == null) {
-                System.out.println("No Key frames found");
-                System.out.println("-----------------------------------");
-                System.out.println(str);
-                System.out.println("-----------------------------------");
-                return null;
+                System.err.println("No Key frames found!");
+                System.err.println("-----------------------------------");
+                System.err.println(str);
+                System.err.println("-----------------------------------");
+                return;
             }
+            CLKey clTransitions = CLScan.findCLKey(CLParser.parse(str), "Transitions");
+            CLObject def = (CLObject) ((CLObject) clTransitions.getValue()).get("default");
+            String constraintSetStart = def.get("from").content();
+            String constraintSetEnd = def.get("to").content();
 
-
-            KeyFramesTag root = new KeyFramesTag();
-            root.name = KEY_FRAME_SET;
+            KeyFramesTag keyFrames = new KeyFramesTag();
+            keyFrames.mParent = transition;
+            if (transition != null) {
+                transition.addChild(keyFrames);
+                transition.addAttribute("constraintSetStart", constraintSetStart);
+                transition.addAttribute("constraintSetEnd", constraintSetEnd);
+            }
+            keyFrames.name = KEY_FRAME_SET;
             CLObject object = (CLObject) obj.getValue();
             CLObject clo = (CLObject) obj.get(0);
             int numberOf_types = clo.size();
 
             for (int i = 0; i < numberOf_types; i++) {
-                CLElement o = clo.get(0);
-                System.out.println(o.getClass().getSimpleName() + " " + o.content());
+                CLElement o = clo.get(i);
                 CLKey clKey = (CLKey) o;
                 switch (clKey.content()) {
                     case "KeyPositions":
-                        buildKeyPositions(clKey.getValue(), root);
+                        buildKeyPositions(clKey.getValue(), keyFrames);
                         break;
                     case "KeyCycles":
+                        buildKeyCycles(clKey.getValue(), keyFrames);
+
                         break;
                     case "KeyAttributes":
+                        buildKeyAttributes(clKey.getValue(), keyFrames);
                         break;
                     default:
                         System.err.println("UNKNOWN ! " + clKey.content());
@@ -95,11 +103,10 @@ public class KeyFramesTag implements MTag {
 
             CLElement c = obj.getValue();
 
-            return root;
         } catch (CLParsingException e) {
             e.printStackTrace();
         }
-        return null;
+        return;
     }
 
     static void buildKeyPositions(CLElement element, KeyFramesTag parent) throws CLParsingException {
@@ -115,18 +122,208 @@ public class KeyFramesTag implements MTag {
         }
     }
 
-    private void add(String name, String value) {
-        if (value == null) {
-            return;
+    static void buildKeyPosition(CLObject obj, KeyFramesTag parent) throws CLParsingException {
+        String[] targets = buildStringArray(obj.get("target"));
+        int[] positions = buildIntArray(obj.get("frames"));
+        String easing = null;
+        String curveFit = null;
+        float[] percentWidth = null;
+        float[] percentHeight = null;
+        float[] sizePercent = null;
+        float[] percentX = null;
+        float[] percentY = null;
+        int size = obj.size();
+        for (int i = 0; i < size; i++) {
+            CLKey clKey = (CLKey) obj.get(i);
+            switch (clKey.content()) {
+                case TypedValues.Position.S_TRANSITION_EASING:
+                    easing = clKey.getValue().content();
+                    break;
+                case TypedValues.Position.S_PERCENT_WIDTH:
+                    percentWidth = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Position.S_PERCENT_HEIGHT:
+                    percentHeight = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Position.S_SIZE_PERCENT:
+                    sizePercent = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Position.S_PERCENT_X:
+                    percentX = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Position.S_PERCENT_Y:
+                    percentY = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Attributes.S_CURVE_FIT:
+                    curveFit = clKey.getValue().content();
+                    break;
+            }
         }
-        Attribute a = new Attribute();
-        a.mAttribute = name;
-        a.mNamespace = "";
-        a.mValue = value;
-        mAttrList.put(name, a);
+        for (int i = 0; i < targets.length; i++) {
+            String target = targets[i];
+            for (int j = 0; j < positions.length; j++) {
+                String position = Integer.toString(positions[j]);
+                KeyFramesTag kTag = new KeyFramesTag();
+                kTag.name = MotionSceneAttrs.Tags.KEY_POSITION;
+                kTag.add(KEY_POSITION_TYPE, "deltaRelative");
+                kTag.add(FRAME_POSITION, position);
+                kTag.add(MOTION_TARGET, target);
+
+                kTag.add(PERCENT_X, strLookup(percentX, j));
+                kTag.add(PERCENT_Y, strLookup(percentY, j));
+                kTag.add(PERCENT_WIDTH, strLookup(percentWidth, j));
+                kTag.add(PERCENT_HEIGHT, strLookup(percentHeight, j));
+                kTag.add(SIZE_PERCENT, strLookup(sizePercent, j));
+                kTag.mParent = parent;
+                parent.mChildren.add(kTag);
+            }
+
+        }
+
     }
 
-    static void buildKeyPosition(CLObject obj, KeyFramesTag parent) throws CLParsingException {
+    /////////////////////////////// KEY ATTRIBUTES ///////////////////////////////////////////
+
+    static void buildKeyAttributes(CLElement element, KeyFramesTag parent) throws CLParsingException {
+        if (element instanceof CLArray) {
+            CLArray clArray = (CLArray) element;
+            int size = clArray.size();
+            for (int i = 0; i < size; i++) {
+                CLObject obj = (CLObject) clArray.get(i);
+                buildKeyAttribute(obj, parent);
+            }
+
+
+        }
+    }
+
+    static void buildKeyAttribute(CLObject obj, KeyFramesTag parent) throws CLParsingException {
+        String[] targets = buildStringArray(obj.get("target"));
+        int[] positions = buildIntArray(obj.get("frames"));
+        String pivotTarget = null;
+        String easing = null;
+        String curveFit = null;
+        float[] translationX = null;
+        float[] translationY = null;
+        float[] translationZ = null;
+        float[] elevation = null;
+        float[] rotationX = null;
+        float[] rotationY = null;
+        float[] rotationZ = null;
+        float[] scaleX = null;
+        float[] scaleY = null;
+        float[] pivotX = null;
+        float[] pivotY = null;
+        float[] pathRotate = null;
+        float[] progress = null;
+        int size = obj.size();
+        for (int i = 0; i < size; i++) {
+            CLKey clKey = (CLKey) obj.get(i);
+            switch (clKey.content()) {
+                case TypedValues.Attributes.S_TRANSLATION_X:
+                    translationX = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Attributes.S_TRANSLATION_Y:
+                    translationY = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Attributes.S_TRANSLATION_Z:
+                    translationZ = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Attributes.S_ELEVATION:
+                    elevation = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Attributes.S_ROTATION_X:
+                    rotationX = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Attributes.S_ROTATION_Y:
+                    rotationY = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Attributes.S_ROTATION_Z:
+                    rotationZ = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Attributes.S_SCALE_X:
+                    scaleX = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Attributes.S_SCALE_Y:
+                    scaleY = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Attributes.S_PIVOT_X:
+                    pivotX = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Attributes.S_PIVOT_Y:
+                    pivotY = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Attributes.S_PROGRESS:
+                    progress = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Attributes.S_PATH_ROTATE:
+                    pathRotate = buildFloatArray(clKey.getValue());
+                    break;
+                case TypedValues.Attributes.S_EASING:
+                    easing = clKey.getValue().content();
+                    break;
+                case TypedValues.Attributes.S_PIVOT_TARGET:
+                    pivotTarget = clKey.getValue().content();
+                    break;
+
+                case TypedValues.Attributes.S_CURVE_FIT:
+                    curveFit = clKey.getValue().content();
+                    break;
+                // todo CUSTOM SUPPORT
+                //  case TypedValues.Attributes.S_CUSTOM:
+                //  CUSTOM = clKey.getValue().content();
+                //   break;
+            }
+        }
+        for (int i = 0; i < targets.length; i++) {
+            String target = targets[i];
+            for (int j = 0; j < positions.length; j++) {
+                String position = Integer.toString(positions[j]);
+                KeyFramesTag kTag = new KeyFramesTag();
+                kTag.name = MotionSceneAttrs.Tags.KEY_ATTRIBUTE;
+                kTag.add(FRAME_POSITION, position);
+                kTag.add(MOTION_TARGET, target);
+                kTag.add(ATTR_TRANSLATION_X, strLookup(translationX, j));
+                kTag.add(ATTR_TRANSLATION_Y, strLookup(translationY, j));
+                kTag.add(ATTR_TRANSLATION_Z, strLookup(translationZ, j));
+                kTag.add(ATTR_ELEVATION, strLookup(elevation, j));
+                kTag.add(ATTR_ROTATION_X, strLookup(rotationX, j));
+                kTag.add(ATTR_ROTATION_Y, strLookup(rotationY, j));
+                kTag.add(ATTR_ROTATION, strLookup(rotationZ, j));
+                kTag.add(ATTR_SCALE_X, strLookup(scaleX, j));
+                kTag.add(ATTR_SCALE_Y, strLookup(scaleY, j));
+                kTag.add(ATTR_TRANSFORM_PIVOT_X, strLookup(pivotX, j));
+                kTag.add(ATTR_TRANSFORM_PIVOT_Y, strLookup(pivotY, j));
+                kTag.add(ATTR_TRANSITION_PATH_ROTATE, strLookup(pathRotate, j));
+                kTag.add(ATTR_PROGRESS, strLookup(progress, j));
+                kTag.add(ATTR_TRANSFORM_PIVOT_TARGET,  pivotTarget );
+                kTag.add(ATTR_PROGRESS, strLookup(progress, j));
+                kTag.add(TRANSITION_EASING, easing);
+                kTag.add(CURVE_FIT, curveFit);
+
+                kTag.mParent = parent;
+                parent.mChildren.add(kTag);
+            }
+
+        }
+
+    }
+
+    /////////////////////////////// KEY cycles ///////////////////////////////////////////
+    static void buildKeyCycles(CLElement element, KeyFramesTag parent) throws CLParsingException {
+        if (element instanceof CLArray) {
+            CLArray clArray = (CLArray) element;
+            int size = clArray.size();
+            for (int i = 0; i < size; i++) {
+                CLObject obj = (CLObject) clArray.get(i);
+                buildKeyCycle(obj, parent);
+            }
+
+
+        }
+    }
+
+    static void buildKeyCycle(CLObject obj, KeyFramesTag parent) throws CLParsingException {
         String[] targets = buildStringArray(obj.get("target"));
         int[] positions = buildIntArray(obj.get("frames"));
         String easing = null;
@@ -184,6 +381,19 @@ public class KeyFramesTag implements MTag {
 
         }
 
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+
+    private void add(String name, String value) {
+        if (value == null) {
+            return;
+        }
+        Attribute a = new Attribute();
+        a.mAttribute = name;
+        a.mNamespace = "";
+        a.mValue = value;
+        mAttrList.put(name, a);
     }
 
     private static String strLookup(float[] array, int index) {
@@ -535,7 +745,7 @@ public class KeyFramesTag implements MTag {
         } else {
             System.out.println("not found");
         }
-        KeyFramesTag tag = parse(str);
+        MTag tag = parseForTimeLine(str);
         if (tag != null) {
             tag.print(" ");
         }

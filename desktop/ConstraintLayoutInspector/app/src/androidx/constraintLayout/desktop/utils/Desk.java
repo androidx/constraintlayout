@@ -94,7 +94,6 @@ public class Desk {
             pos.y = pref.getInt(prefix + "base_y", pos.y);
             pos.width = pref.getInt(prefix + "base_width", pos.width);
             pos.height = pref.getInt(prefix + "base_height", pos.height);
-            System.out.println(pos);
         }
         frame.setBounds(pos);
         frame.addComponentListener(new ComponentAdapter() {

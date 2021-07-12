@@ -15,6 +15,7 @@
  */
 package androidx.constraintLayout.desktop.ui.timeline;
 
+import androidx.constraintLayout.desktop.scan.CLScan;
 import androidx.constraintLayout.desktop.ui.adapters.Annotations.NotNull;
 import androidx.constraintLayout.desktop.ui.adapters.*;
 import androidx.constraintLayout.desktop.ui.timeline.TimeLineTopLeft.TimelineCommands;
@@ -24,7 +25,12 @@ import androidx.constraintLayout.desktop.ui.ui.MotionEditorSelector;
 import androidx.constraintLayout.desktop.ui.ui.MotionEditorSelector.TimeLineCmd;
 import androidx.constraintLayout.desktop.ui.ui.MotionEditorSelector.TimeLineListener;
 import androidx.constraintLayout.desktop.ui.ui.Utils;
+import androidx.constraintLayout.desktop.ui.utils.Debug;
 import androidx.constraintLayout.desktop.utils.Desk;
+import androidx.constraintlayout.core.parser.CLKey;
+import androidx.constraintlayout.core.parser.CLObject;
+import androidx.constraintlayout.core.parser.CLParser;
+import androidx.constraintlayout.core.parser.CLParsingException;
 
 import javax.swing.Timer;
 import javax.swing.*;
@@ -43,10 +49,13 @@ import java.io.IOException;
 import java.util.List;
 import java.util.*;
 
+import static androidx.constraintLayout.desktop.ui.adapters.MotionSceneAttrs.Tags.KEY_FRAME_SET;
+
 /**
  * The panel that displays the timeline
  */
 public class TimeLinePanel extends JPanel {
+    public static final boolean DEBUG = false;
     private static int PLAY_TIMEOUT = 60 * 60 * 1000;
     private static int MS_PER_FRAME = 15;
     private static float TIMELINE_MIN = 0.0f;
@@ -1163,17 +1172,13 @@ public class TimeLinePanel extends JPanel {
 
     JFrame mTimeLineFrame;
 
-    public static TimeLinePanel showTimeline(String str) {
-
-        KeyFramesTag tag = KeyFramesTag.parseForTimeLine(str);
-        tag.print(" ");
+    public static TimeLinePanel showTimeline(String motionSceneString) {
         JFrame frame = new JFrame();
-        System.out.println(" hello ");
         TimeLinePanel tlp = new TimeLinePanel();
+        tlp.updateMotionScene(motionSceneString);
         tlp.setListeners(new MotionEditorSelector());
         frame.setContentPane(tlp);
 
-        tlp.setMTag(tag, new MeModel());
         frame.setTitle("TimeLinePanel");
         Desk.rememberPosition(frame, null);
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -1182,6 +1187,60 @@ public class TimeLinePanel extends JPanel {
         return tlp;
     }
 
+    public void updateMotionScene(String motionSceneString){
+
+        DefaultMTag transition = (DefaultMTag) KeyFramesTag.parseForTimeLine(motionSceneString);
+        if (DEBUG) {
+            Debug.log("Transition ... ");
+            transition.printFormal("|", System.out);
+            Debug.log("-----------------");
+        }
+
+        MTag  tag = transition.getChildTags(KEY_FRAME_SET)[0];
+         TimeLinePanel tlp = this;
+
+        MTag kfs = transition.getChildTags("KeyFrameSet")[0];
+        MTag []keyFrames = kfs.getChildTags();
+        HashSet<String> ids = new HashSet<>();
+        for (int i = 0; i < keyFrames.length; i++) {
+            MTag keyFrame = keyFrames[i];
+            ids.add(  keyFrame.getAttributeValue("motionTarget"));
+        }
+        String []widgets = ids.toArray(new String[0]);
+        DefaultMTag motionScene = new DefaultMTag("MotionScene");
+        motionScene.addChild(transition);
+        String start =  transition.getAttributeValue("constraintSetStart");
+        String end  =  transition.getAttributeValue("constraintSetEnd");
+
+        try {
+            CLKey key = CLScan.findCLKey(CLParser.parse(motionSceneString), "ConstraintSets");
+            CLObject obj = (CLObject) key.getValue();
+            CLObject startObj =  (CLObject) obj.get(start);
+            CLObject endObj =  (CLObject)  obj.get(end);
+            DefaultMTag startTag = new DefaultMTag("ConstraintSet");
+            DefaultMTag endTag = new DefaultMTag("ConstraintSet");
+            motionScene.addChild(startTag,endTag);
+            startTag.addAttribute("id", start);
+            endTag.addAttribute("id", end);
+            for (int i = 0; i < widgets.length; i++) {
+                String widget = widgets[i];
+                DefaultMTag wc_s = new DefaultMTag("Constraint");
+                startTag.addChild(wc_s);
+                wc_s.addAttribute("layout_constraintTag",widget);
+                wc_s.addAttribute("id",widget);
+
+                DefaultMTag wc_e = new DefaultMTag("Constraint");
+                wc_e.addAttribute("layout_constraintTag",widget);
+                wc_e.addAttribute("id",widget);
+                endTag.addChild(wc_e);
+            }
+
+        } catch (CLParsingException e) {
+            e.printStackTrace();
+        }
+
+        tlp.setMTag(transition, new MeModel(  motionScene,   null,   null,   null,   null));
+      }
     public void exitTimeLine() {
         if (mTimeLineFrame != null) {
             mTimeLineFrame.setVisible(false);
@@ -1204,7 +1263,7 @@ public class TimeLinePanel extends JPanel {
         });
     }
     public void updateTransition(String str) {
-        KeyFramesTag tag = KeyFramesTag.parseForTimeLine(str);
+        MTag tag = KeyFramesTag.parseForTimeLine(str);
         setMTag(tag, mMeModel);
     }
 
