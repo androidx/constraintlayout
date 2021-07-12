@@ -37,6 +37,9 @@ public fun CycleScale() {
                 .height(400.dp)
                 .background(Color.White),
             motionScene = MotionScene("""{
+                   Debug: {
+                  name: 'Cycle30'
+                },
                 ConstraintSets: {
                   start: {
                     a: {
@@ -112,6 +115,9 @@ public fun CycleTranslationXY() {
                 .height(400.dp)
                 .background(Color.White),
             motionScene = MotionScene("""{
+               Debug: {
+                  name: 'Cycle31'
+                },
                 ConstraintSets: {
                   start: {
                     a: {
@@ -187,6 +193,9 @@ public fun CycleRotationZ() {
                 .height(400.dp)
                 .background(Color.White),
             motionScene = MotionScene("""{
+               Debug: {
+                  name: 'Cycle32'
+                },
                 ConstraintSets: {
                   start: {
                     a: {

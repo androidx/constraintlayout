@@ -153,7 +153,6 @@ public class Transition {
         public void setKeyCycle(TypedBundle prop) {
             MotionKeyCycle keyAttributes = new MotionKeyCycle();
             prop.applyDelta(keyAttributes);
-            keyAttributes.printAttributes();
             motionControl.addKey(keyAttributes);
         }
 
