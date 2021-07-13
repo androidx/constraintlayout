@@ -15,7 +15,6 @@
  */
 package androidx.constraintLayout.desktop.utils;
 
-
 import androidx.constraintLayout.desktop.ui.utils.Debug;
 import androidx.constraintlayout.core.motion.utils.Rect;
 
@@ -48,7 +47,6 @@ public class Desk {
 
         return createTopMenu(file, edit);
     }
-
 
     static class EmptyAction extends AbstractAction {
 
@@ -83,7 +81,6 @@ public class Desk {
             editMenu.add(item);
         }
 
-
         return editMenu;
     }
 
@@ -102,7 +99,6 @@ public class Desk {
         System.out.println(" " + ourLayoutPrefs);
         ourCurrentLayout.readDefault(ourLayoutPrefs);
     }
-
 
     private static class Layouts {
         HashMap<String, Rectangle> layouts = new HashMap<>();
@@ -205,7 +201,6 @@ public class Desk {
         ourLayoutPrefs.flush();
     }
 
-
     static void saveLayoutAs(String name) {
         ourCurrentLayout.mName = name;
         ourCurrentLayout.uniqueName = nameToUniqueName(name);
@@ -229,13 +224,11 @@ public class Desk {
         }
     }
 
-
     private static String nameToUniqueName(String name) {
         String ret = name.replaceAll("[^a-zA-Z0-9]", "");
         ret += System.currentTimeMillis() % 10000000; // chance of repeating is small risk is low
         return ret;
     }
-
 
     private static void setup() {
         if (ourCurrentUniqueNames == null) {
@@ -243,10 +236,7 @@ public class Desk {
         }
     }
 
-
     public static void makeLayoutCurrent(String newCurrent) {
-//        ounKnownFrames;
-
         Layouts layout = new Layouts();
         layout.read(ourLayoutPrefs,newCurrent);
         ourCurrentLayout = layout;
@@ -257,7 +247,6 @@ public class Desk {
             if (rect!= null) {
                 frame.setBounds(rect);
             }
-
         }
     }
 
@@ -324,6 +313,5 @@ public class Desk {
             }
         });
     }
-
 
 }

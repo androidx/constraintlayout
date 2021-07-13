@@ -354,8 +354,6 @@ class Main internal constructor() : JPanel(BorderLayout()) {
                 }
             }
 
-
-
             val menuBar = JMenuBar()
             val fileMenu = JMenu("File")
             val editMenu = JMenu("Edit")
@@ -370,8 +368,6 @@ class Main internal constructor() : JPanel(BorderLayout()) {
 
             advMenu.add(unlink)
             advMenu.add(link)
-
-
 
             Desk.setupMenu(viewMenu)
 
