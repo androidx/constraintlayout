@@ -893,7 +893,7 @@ public fun MotionExample6() {
                           target: ['box','content'],
                           frames: [50],
                           rotationZ: [25],
-                          rotationY: [25], 
+                          //rotationY: [25], 
                         }
                       ]
                     }

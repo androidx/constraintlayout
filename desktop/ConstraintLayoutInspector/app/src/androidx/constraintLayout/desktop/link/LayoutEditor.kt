@@ -34,9 +34,12 @@ import javax.imageio.ImageIO
 import kotlin.math.max
 import kotlin.math.min
 
-class LayoutEditor : LayoutView() {
+class LayoutEditor(link: MotionLink) : LayoutView() {
+    private var pressX: Int = 0
+    private var pressY: Int = 0
+    var link = link
     var scenePicker = ScenePicker()
-    var currentDragElement : GuidelineModel? = null
+    var currentDragElement : Any? = null
 
     var currentX : Int = 0
     var rangeX : Int = 0
@@ -51,19 +54,30 @@ class LayoutEditor : LayoutView() {
 
     var guidelines = ArrayList<GuidelineModel>()
 
+    private val density = 3
+    var resize = ResizeHandle()
+
     init {
         scenePicker.setSelectListener { over, dist ->
-            currentDragElement = over as GuidelineModel
+            currentDragElement = over
         }
 
         addMouseListener(object: MouseListener {
             override fun mouseClicked(e: MouseEvent) {
+                if (e.clickCount == 2) {
+                    scenePicker.find(e.x, e.y)
+                    if (currentDragElement is ResizeHandle) {
+                        link.sendLayoutDimensions(Int.MIN_VALUE, Int.MIN_VALUE)
+                    }
+                }
             }
 
             override fun mousePressed(e: MouseEvent) {
                 scenePicker.find(e.x, e.y)
                 if (currentDragElement != null) {
                     dragging = true
+                    pressX = e.x
+                    pressY = e.y
                 }
             }
 
@@ -81,6 +95,7 @@ class LayoutEditor : LayoutView() {
         })
 
         addMouseMotionListener(object: MouseMotionListener {
+
             override fun mouseDragged(e: MouseEvent) {
                 if (currentDragElement is GuidelineModel) {
                     var value = 0f
@@ -93,7 +108,7 @@ class LayoutEditor : LayoutView() {
                     }
                     value = max(0f, min(1f, value))
                     value = (value * 100).toInt() / 100f
-                    val target = currentDragElement?.name as String
+                    val target = (currentDragElement as GuidelineModel)?.name as String
                     if (designSurfaceModificationCallback != null) {
                         var element = designSurfaceModificationCallback!!.getElement(target)
                         if (element is CLObject) {
@@ -101,6 +116,12 @@ class LayoutEditor : LayoutView() {
                             designSurfaceModificationCallback?.updateElement(target, element)
                         }
                     }
+                } else if (currentDragElement is ResizeHandle) {
+                    val dx = (pressX - offX)
+                    val dy = (pressY - offY)
+                    val x = (e.x - offX) * (lastRootWidth / dx)
+                    val y = (e.y - offY) * (lastRootHeight / dy)
+                    link.sendLayoutDimensions(x.toInt(), y.toInt())
                 }
             }
 
@@ -108,6 +129,12 @@ class LayoutEditor : LayoutView() {
             }
 
         })
+    }
+
+    override fun computeScale(rootWidth : Float, rootHeight: Float) {
+        if (!dragging) {
+            super.computeScale(rootWidth, rootHeight)
+        }
     }
 
     override fun paint(g: Graphics?) {
@@ -124,7 +151,6 @@ class LayoutEditor : LayoutView() {
         g2.translate(offX.toDouble(), offY.toDouble())
 
         scenePicker.reset()
-
         offsetX = offX.toInt()
         rangeX = (rootWidth * scaleX).toInt()
         offsetY = offY.toInt()
@@ -134,6 +160,9 @@ class LayoutEditor : LayoutView() {
             guideline.draw(g2, rangeX, rangeY)
             guideline.addToPicker(scenePicker, offsetX, offsetY, rangeX, rangeY)
         }
+
+        resize.draw(g2, rangeX, rangeY)
+        resize.addToPicker(scenePicker, offsetX, offsetY, rangeX, rangeY)
     }
 
     fun setModel(model: CLObject) {
@@ -165,6 +194,32 @@ class LayoutEditor : LayoutView() {
             }
         }
         repaint()
+    }
+
+    class ResizeHandle {
+        lateinit var img : BufferedImage
+        val gap = 4
+        val size = 30
+
+        init {
+            try {
+                img = ImageIO.read(File("images/resize.png"))
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+        fun draw(g: Graphics2D, w: Int, h: Int) {
+            g.drawImage(img, w + gap, h + gap, size, size,null)
+        }
+        fun addToPicker(scenePicker: ScenePicker, ox: Int, oy: Int, w: Int, h: Int) {
+            val ih = img.height
+            val iw = img.width
+            val x1 = ox + w + gap
+            val x2 = x1 + iw
+            val y1 = oy + h + gap
+            val y2 = y1 + ih
+            scenePicker.addRect(this, 0, x1, y1, x2, y2)
+        }
     }
 
     abstract class GuidelineModel(val id: String, val p : Float = 0f) {
