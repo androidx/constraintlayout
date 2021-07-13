@@ -305,6 +305,10 @@ public class MotionScene {
                     if (region != null && lastTouchDown != null && (!region.contains(lastTouchDown.getX(), lastTouchDown.getY()))) {
                         continue;
                     }
+                    region = transition.mTouchResponse.getLimitBoundsTo(mMotionLayout, cache);
+                    if (region != null && lastTouchDown != null && (!region.contains(lastTouchDown.getX(), lastTouchDown.getY()))) {
+                        continue;
+                    }
 
                     float val = transition.mTouchResponse.dot(dx, dy);
                     if (transition.mTouchResponse.mIsRotateMode && lastTouchDown != null) {
