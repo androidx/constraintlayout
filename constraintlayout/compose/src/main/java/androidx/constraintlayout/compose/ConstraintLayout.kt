@@ -1316,6 +1316,7 @@ open class EditableJSONLayout(@Language("json5") content: String) :
     private var updateFlag: MutableState<Long>? = null
     private var layoutInformationMode: LayoutInfoFlags = LayoutInfoFlags.BOUNDS
     private var layoutInformation = ""
+    private var last = System.nanoTime();
     private var debugName : String? = null
 
     private var currentContent = content
@@ -1326,6 +1327,8 @@ open class EditableJSONLayout(@Language("json5") content: String) :
             if (debugName != null) {
                 val mainHandler = Handler(Looper.getMainLooper())
                 val callback = object : RegistryCallback {
+
+
                     override fun onNewMotionScene(content: String?) {
                         if (content == null) {
                             return
@@ -1367,6 +1370,10 @@ open class EditableJSONLayout(@Language("json5") content: String) :
                                 onLayoutInformation(mode)
                             } catch (e : Exception) {}
                         }
+                    }
+
+                    override fun getLastModified(): Long {
+                         return last;
                     }
 
                     override fun setDrawDebug(debugMode: Int) {
@@ -1428,6 +1435,7 @@ open class EditableJSONLayout(@Language("json5") content: String) :
     }
 
     override fun setLayoutInformation(information: String) {
+        last = System.nanoTime();
         layoutInformation = information
     }
 

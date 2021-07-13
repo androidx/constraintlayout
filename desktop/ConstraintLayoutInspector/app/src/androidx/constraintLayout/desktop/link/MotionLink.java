@@ -42,6 +42,8 @@ public class MotionLink {
     private boolean connected = false;
 
     public String[] layoutNames;
+    public long[] layoutTimes;
+    public  int lastUpdateLayout;
     public String selectedLayoutName = "test2";
     public String motionSceneText; // Big MotionScene String
     public String layoutInfos;
@@ -120,9 +122,16 @@ public class MotionLink {
             var numLayouts = reader.readInt();
 
             layoutNames = new String[numLayouts];
+            layoutTimes = new long[numLayouts];
+            int max = 0;
             for (int i = 0; i < numLayouts; i++) {
                 layoutNames[i] = reader.readUTF();
+                layoutTimes[i] = reader.readLong();
+                if (layoutTimes[i] >  layoutTimes[max]) {
+                    max = i;
+                }
             }
+            lastUpdateLayout = max;
             notifyListeners(Event.LAYOUT_LIST_UPDATE);
 
         } catch (Exception e) {
