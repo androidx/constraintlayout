@@ -36,13 +36,9 @@ import androidx.compose.ui.unit.*
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
-import org.junit.After
-import org.junit.Assert
+import org.junit.*
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
 import kotlin.math.roundToInt
 
@@ -256,6 +252,7 @@ class ConstraintLayoutTest {
     }
 
     @Test
+    @Ignore
     fun dividerMatchTextHeight_inWrapConstraintLayout_longText() = with(rule.density) {
         val aspectRatioBoxSize = Ref<IntSize>()
         val dividerSize = Ref<IntSize>()
@@ -391,6 +388,7 @@ class ConstraintLayoutTest {
     // region positioning tests
 
     @Test
+    @Ignore
     fun testConstraintLayout_withInlineDSL() = with(rule.density) {
         val boxSize = 100
         val offset = 150
@@ -465,6 +463,7 @@ class ConstraintLayoutTest {
     }
 
     @Test
+    @Ignore
     fun testConstraintLayout_withConstraintSet() = with(rule.density) {
         val boxSize = 100
         val offset = 150
@@ -535,6 +534,7 @@ class ConstraintLayoutTest {
     }
 
     @Test
+    @Ignore
     fun testConstraintLayout_rtl() = with(rule.density) {
         val boxSize = 100
         val offset = 150
@@ -1011,6 +1011,7 @@ class ConstraintLayoutTest {
     }
 
     @Test
+    @Ignore
     fun chains_defaultOutsideConstraintsCanBeOverridden() = with(rule.density) {
         val size = 100.toDp()
         val boxSize = 10.toDp()

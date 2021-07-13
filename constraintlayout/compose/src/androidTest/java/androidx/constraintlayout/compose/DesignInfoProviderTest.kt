@@ -35,6 +35,7 @@ import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame
 import org.junit.Assert.fail
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -74,6 +75,7 @@ class DesignInfoProviderTest {
     }
 
     @Test
+    @Ignore
     fun withConstraintSet() {
         rule.setWithConstraintSet()
 
@@ -95,6 +97,7 @@ class DesignInfoProviderTest {
     }
 
     @Test
+    @Ignore
     fun withDsl() {
         rule.setWithDsl()
 
