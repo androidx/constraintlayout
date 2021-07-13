@@ -25,6 +25,8 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.LayoutScopeMarker
+import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -187,7 +189,10 @@ inline fun ConstraintLayout(
             MultiMeasureLayout(
                 modifier = mod.semantics { designInfoProvider = measurer },
                 measurePolicy = measurePolicy,
-                content = content
+                content = {
+                    measurer.createDesignElements()
+                    content()
+                }
             )
             with(measurer) {
                 drawDebugBounds(forcedScaleFactor)
@@ -198,7 +203,10 @@ inline fun ConstraintLayout(
         MultiMeasureLayout(
             modifier = modifier.semantics { designInfoProvider = measurer },
             measurePolicy = measurePolicy,
-            content = content
+            content = {
+                measurer.createDesignElements()
+                content()
+            }
         )
     }
 }
@@ -211,6 +219,7 @@ internal fun rememberConstraintLayoutMeasurePolicy(
     constraintSet: ConstraintSet,
     measurer: Measurer
 ) = remember(optimizationLevel, needsUpdate.value, constraintSet) {
+    measurer.parseDesignElements(constraintSet)
     MeasurePolicy { measurables, constraints ->
         val layoutSize = measurer.performMeasure(
             constraints,
@@ -1486,6 +1495,8 @@ open class EditableJSONLayout(@Language("json5") content: String) :
     }
 }
 
+data class DesignElement(var id: String, var type: String, var param: String)
+
 class JSONConstraintSet(@Language("json5") content: String,
                         @Language("json5") overrideVariables: String? = null)
         : EditableJSONLayout(content), ConstraintSet {
@@ -1501,6 +1512,15 @@ class JSONConstraintSet(@Language("json5") content: String,
         val layoutVariables = LayoutVariables()
         applyLayoutVariables(layoutVariables)
         parseJSON(getCurrentContent(), transition, type)
+    }
+
+    fun emitDesignElements(designElements: ArrayList<DesignElement>) {
+        try {
+            designElements.clear()
+            parseDesignElementsJSON(getCurrentContent(), designElements)
+        } catch (e : Exception) {
+            // nothing (content might be invalid, sent by live edit)
+        }
     }
 
     // Called by both MotionLayout & ConstraintLayout measurers
@@ -2076,6 +2096,35 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             drawLine(color, Offset(dx + w, dy), Offset(dx + w, dy + h))
             drawLine(color, Offset(dx + w, dy + h), Offset(dx, dy + h))
             drawLine(color, Offset(dx, dy + h), Offset(dx, dy))
+        }
+    }
+
+    private var designElements = arrayListOf<DesignElement>()
+
+    @Composable
+    fun createDesignElements() {
+        for (element in designElements) {
+            var id = element.id
+            when (element.type) {
+                "button" -> {
+                    Button(
+                        modifier = Modifier.layoutId(id),
+                        onClick = {},
+                    ) {
+                        Text(text = element.param)
+                    }
+                }
+                "text" -> {
+                    Text(modifier = Modifier.layoutId(id),
+                         text=element.param)
+                }
+            }
+        }
+    }
+
+    fun parseDesignElements(constraintSet: ConstraintSet) {
+        if (constraintSet is JSONConstraintSet) {
+            constraintSet.emitDesignElements(designElements)
         }
     }
 }

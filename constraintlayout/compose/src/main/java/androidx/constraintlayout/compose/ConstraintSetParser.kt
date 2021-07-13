@@ -677,6 +677,34 @@ fun parseVariables(state: State, layoutVariables: LayoutVariables, json: Any) {
     }
 }
 
+fun parseDesignElementsJSON(content: String, list: ArrayList<DesignElement>) {
+    val json = CLParser.parse(content)
+    val elements = json.names() ?: return
+    (0 until elements.size).forEach { i ->
+        val elementName = elements[i]
+        val element = json[elementName]
+        if (PARSER_DEBUG) {
+            println("element <$elementName = $element> " + element.javaClass)
+        }
+        when (elementName) {
+            "Design" -> {
+                val elements = (element as CLObject).names() ?: return
+                (0 until elements.size).forEach { i ->
+                    val elementName = elements[i]
+                    val element = element.get(elementName) as CLObject
+                    System.out.printf("element found <$elementName>")
+                    val type = element.getStringOrNull("type")
+                    val param = element.getStringOrNull("param")
+                    val text = element.getStringOrNull("text")
+                    val parameter = if (param != null) param else text
+                    var designElement = DesignElement(elementName, type, parameter)
+                    list.add(designElement)
+                }
+            }
+        }
+    }
+}
+
 fun parseHelpers(state: State, layoutVariables: LayoutVariables, element: Any) {
     if (element !is CLArray) {
         return
