@@ -84,6 +84,14 @@ public class Registry {
         return mCallbacks.keySet();
     }
 
+    public long getLastModified(String name) {
+        RegistryCallback callback = mCallbacks.get(name);
+        if (callback != null) {
+            return callback.getLastModified();
+        }
+        return Long.MAX_VALUE;
+    }
+
     public void updateDimensions(String name, int width, int height) {
         RegistryCallback callback = mCallbacks.get(name);
         if (callback != null) {

@@ -98,6 +98,7 @@ class DebugServer {
                         for (layout in list) {
                             println("layout: $layout")
                             writer.writeUTF(layout)
+                            writer.writeLong(registry.getLastModified(layout))
                         }
                     }
                     GET_CURRENT_LAYOUT -> {

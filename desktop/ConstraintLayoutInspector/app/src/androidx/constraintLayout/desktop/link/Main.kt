@@ -33,7 +33,6 @@ import java.io.FileWriter
 import java.io.IOException
 import java.lang.RuntimeException
 import javax.swing.*
-import javax.swing.event.ChangeEvent
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
 import javax.swing.event.TreeSelectionListener
@@ -197,7 +196,13 @@ class Main internal constructor() : JPanel(BorderLayout()) {
                 val model = DefaultTreeModel(root)
                 var i = 0
                 while (i < link.layoutNames.size) {
-                    root.add(DefaultMutableTreeNode(link.layoutNames[i]))
+                   var name = link.layoutNames[i]
+                    if (i == link.lastUpdateLayout) {
+                       name = "<html><b>*" + name +"*</b></html>"
+                    }
+                    var node = DefaultMutableTreeNode(name)
+
+                    root.add(node)
                     i++
                 }
                 layoutListTree.isRootVisible = false
@@ -337,22 +342,40 @@ class Main internal constructor() : JPanel(BorderLayout()) {
             val frame = JFrame("ConstraintLayout Live Editor")
             val panel = Main()
             frame.contentPane = panel
-            val main: Array<Action> = arrayOf<Action>(
-                object : AbstractAction("File") {
-                    override fun actionPerformed(e: ActionEvent) {}
-                },
-                object : AbstractAction("Link") {
-                    override fun actionPerformed(e: ActionEvent) {
-                        panel.remoteEdit()
-                    }
-                },
-                object : AbstractAction("UnLink") {
-                    override fun actionPerformed(e: ActionEvent) {
-                        panel.remoteEditStop()
-                    }
+
+            val unlink: AbstractAction = object : AbstractAction("unlink") {
+                override fun actionPerformed(e: ActionEvent) {
+                    panel.remoteEditStop()
                 }
-            )
-            frame.jMenuBar = Desk.createTopMenu(main)
+            }
+            val link: AbstractAction = object : AbstractAction("link") {
+                override fun actionPerformed(e: ActionEvent) {
+                    panel.remoteEdit()
+                }
+            }
+
+
+
+            val menuBar = JMenuBar()
+            val fileMenu = JMenu("File")
+            val editMenu = JMenu("Edit")
+            val viewMenu = JMenu("View")
+            val advMenu = JMenu("Advanced")
+
+            menuBar.add(fileMenu)
+            menuBar.add(editMenu)
+            menuBar.add(viewMenu)
+
+            fileMenu.add(advMenu)
+
+            advMenu.add(unlink)
+            advMenu.add(link)
+
+
+
+            Desk.setupMenu(viewMenu)
+
+            frame.jMenuBar = menuBar
             Desk.rememberPosition(frame, null)
 
             frame.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE

@@ -23,4 +23,5 @@ public interface RegistryCallback {
     void setDrawDebug(int debugMode);
     String currentLayoutInformation();
     void setLayoutInformationMode(int layoutInformationMode);
+    long getLastModified();
 }
