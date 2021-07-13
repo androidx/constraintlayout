@@ -50,8 +50,9 @@ class Main internal constructor() : JPanel(BorderLayout()) {
     var mMainTextScrollPane = JScrollPane(mMainText)
     var drawDebug = false
     var layoutInspector: LayoutInspector? = null
-
+    var showWest = true
     init {
+        val hide = JButton("<")
         val getButton = JButton("Get")
         val connectButton = JButton("Connect")
         val sendButton = JButton("Send")
@@ -63,6 +64,10 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         mMainText.font = font
         scrollPaneList.preferredSize = Dimension(200, 100)
         val northPanel = JPanel()
+        val bigNorth = JPanel(BorderLayout())
+        bigNorth.add(northPanel)
+        bigNorth.add(hide, BorderLayout.WEST)
+
         northPanel.add(connectButton)
         northPanel.add(showLayout)
         // TODO: migrate to file menu?
@@ -72,10 +77,25 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         northPanel.add(formatText)
         val southPanel = JPanel(BorderLayout())
         southPanel.add(mMessages, BorderLayout.SOUTH)
-        add(northPanel, BorderLayout.NORTH)
+        add(bigNorth, BorderLayout.NORTH)
         add(scrollPaneList, BorderLayout.WEST)
         add(mMainTextScrollPane, BorderLayout.CENTER)
         add(southPanel, BorderLayout.SOUTH)
+        hide.preferredSize = hide.preferredSize
+        hide.background = Color(0,0,0,0)
+        hide.isOpaque = false
+        hide.border = null
+
+        hide.addActionListener{e: ActionEvent? ->
+          if (showWest) {
+              remove(scrollPaneList)
+              hide.text = ">"
+          } else {
+              add(scrollPaneList, BorderLayout.WEST)
+              hide.text = "<"
+          }
+            showWest = !showWest
+        }
         motionLink.addListener { event: MotionLink.Event, link: MotionLink ->
             fromLink(
                 event,
