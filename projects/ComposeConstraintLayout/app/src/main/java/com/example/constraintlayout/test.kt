@@ -1484,6 +1484,12 @@ public fun ScreenExample20() {
           Debug: {
             name: 'guidelines'
           },
+          Design: {
+            toto: {
+              type: 'button',
+              text: 'plop'
+            }
+          },
           Variables: {
             margin: 8
           },
