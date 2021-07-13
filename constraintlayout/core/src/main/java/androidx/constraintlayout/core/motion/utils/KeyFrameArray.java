@@ -21,13 +21,15 @@ public class KeyFrameArray<E> {
     int[] keys = new int[101];
     E[] values = (E[]) new Object[101];
     int count;
+    private static final int EMPTY = 999;
 
     public KeyFrameArray() {
         clear();
     }
 
     public void clear() {
-        Arrays.fill(keys, 999);
+        Arrays.fill(keys, EMPTY);
+        Arrays.fill(values, null);
         count = 0;
     }
 
@@ -53,8 +55,27 @@ public class KeyFrameArray<E> {
     }
 
     public void append(int position, E value) {
+        if (values[position] != null) {
+            remove(position);
+        }
         values[position] = value;
         keys[count++] = position;
         Arrays.sort(keys);
+    }
+
+    public void remove(int position) {
+        values[position] = null;
+        for (int j = 0, i = 0; i < count; i++) {
+            if (position == keys[i]) {
+                keys[i] = EMPTY;
+                j++;
+            }
+            if (i != j) {
+                keys[i] = keys[j];
+            }
+            j++;
+
+        }
+        count--;
     }
 }

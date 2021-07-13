@@ -15,6 +15,9 @@
  */
 package androidx.constraintlayout.core.motion.utils;
 
+import androidx.constraintlayout.core.motion.MotionWidget;
+import androidx.constraintlayout.core.state.WidgetFrame;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,6 +39,46 @@ public abstract class KeyCycleOscillator {
 
     public int mVariesBy = 0; // 0 = position, 2=path
     ArrayList<WavePoint> mWavePoints = new ArrayList<>();
+
+    public static KeyCycleOscillator makeWidgetCycle(String attribute) {
+        if (attribute.equals(TypedValues.Attributes.S_PATH_ROTATE)) {
+            return new PathRotateSet(attribute);
+        }
+        return new CoreSpline(attribute);
+    }
+
+    private static class CoreSpline extends KeyCycleOscillator {
+        String type;
+        int typeId;
+
+        public CoreSpline(String str) {
+            type = str;
+            typeId = TypedValues.Cycle.getId(type);
+        }
+
+        public void setProperty(MotionWidget widget, float t) {
+            widget.setValue(typeId, get(t));
+        }
+    }
+
+    public static class PathRotateSet extends KeyCycleOscillator {
+        String type;
+        int typeId;
+
+        public PathRotateSet(String str) {
+            type = str;
+            typeId = TypedValues.Cycle.getId(type);
+        }
+
+        @Override
+        public void setProperty(MotionWidget widget, float t) {
+            widget.setValue(typeId, get(t));
+        }
+
+        public void setPathRotate(MotionWidget view, float t, double dx, double dy) {
+            view.setRotationZ(get(t) + (float) Math.toDegrees(Math.atan2(dy, dx)));
+        }
+    }
 
     public boolean variesByPath() {
         return mVariesBy == 1;
@@ -364,4 +407,9 @@ public abstract class KeyCycleOscillator {
             }
         }
     }
-}
+
+    public void setProperty(MotionWidget widget, float t) {
+
+    }
+
+    }

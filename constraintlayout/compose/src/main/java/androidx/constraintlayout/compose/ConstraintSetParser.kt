@@ -18,23 +18,23 @@ package androidx.constraintlayout.compose
 import androidx.compose.ui.unit.Dp
 import androidx.constraintlayout.core.motion.utils.TypedBundle
 import androidx.constraintlayout.core.motion.utils.TypedValues
+import androidx.constraintlayout.core.parser.*
 import androidx.constraintlayout.core.state.ConstraintReference
 import androidx.constraintlayout.core.state.Dimension
+import androidx.constraintlayout.core.state.Dimension.Fixed
 import androidx.constraintlayout.core.state.Dimension.SPREAD_DIMENSION
 import androidx.constraintlayout.core.state.State.Chain.*
 import androidx.constraintlayout.core.state.Transition
 import androidx.constraintlayout.core.state.helpers.GuidelineReference
 import androidx.constraintlayout.core.widgets.ConstraintWidget
-import org.json.JSONArray
-import org.json.JSONException
-import org.json.JSONObject
+import java.lang.Long.parseLong
 
-internal val PARSER_DEBUG = false
+internal const val PARSER_DEBUG = false
 
 class LayoutVariables {
-    val margins = HashMap<String, Int>()
-    val generators = HashMap<String, GeneratedValue>()
-    val arrayIds = HashMap<String, ArrayList<String>>()
+    private val margins = HashMap<String, Int>()
+    private val generators = HashMap<String, GeneratedValue>()
+    private val arrayIds = HashMap<String, ArrayList<String>>()
 
     fun put(elementName: String, element: Int) {
         margins[elementName] = element
@@ -46,30 +46,37 @@ class LayoutVariables {
                 return
             }
         }
-        var generator = Generator(start, incrementBy)
+        val generator = Generator(start, incrementBy)
         generators[elementName] = generator
     }
 
+    fun put(elementName: String, from: Float, to: Float, step: Float, prefix: String, postfix: String) {
+        if (generators.containsKey(elementName)) {
+            if (generators[elementName] is OverrideValue) {
+                return
+            }
+        }
+        val generator = FiniteGenerator(from, to, step, prefix, postfix)
+        generators[elementName] = generator
+        arrayIds[elementName] = generator.array()
+    }
+
     fun putOverride(elementName: String, value: Float) {
-        var generator = OverrideValue(value)
+        val generator = OverrideValue(value)
         generators[elementName] = generator
     }
 
     fun get(elementName: Any): Float {
-        if (elementName is String) {
-            if (generators.containsKey(elementName)) {
-                val value = generators[elementName]!!.value()
-                return value
+        if (elementName is CLString) {
+            val stringValue = elementName.content()
+            if (generators.containsKey(stringValue)) {
+                return generators[stringValue]!!.value()
             }
-            if (margins.containsKey(elementName)) {
-                return margins[elementName]!!.toFloat()
+            if (margins.containsKey(stringValue)) {
+                return margins[stringValue]!!.toFloat()
             }
-        } else if (elementName is Int) {
-            return elementName.toFloat()
-        } else if (elementName is Double) {
-            return elementName.toFloat()
-        } else if (elementName is Float) {
-            return elementName
+        } else if (elementName is CLNumber) {
+            return elementName.float
         }
         return 0f
     }
@@ -86,15 +93,14 @@ class LayoutVariables {
     }
 
 }
+
 interface GeneratedValue {
     fun value() : Float
 }
 
-class Generator(start: Float, incrementBy: Float) : GeneratedValue {
-    var start : Float = start
-    var incrementBy: Float = incrementBy
-    var current : Float = start
-    var stop = false
+class Generator(start: Float, private var incrementBy: Float) : GeneratedValue {
+    private var current : Float = start
+    private var stop = false
 
     override fun value() : Float {
         if (!stop) {
@@ -104,103 +110,151 @@ class Generator(start: Float, incrementBy: Float) : GeneratedValue {
     }
 }
 
-class OverrideValue(value: Float) : GeneratedValue {
-    var value : Float = value
+class FiniteGenerator(from: Float, to: Float,
+                      private var step: Float = 1f, private var prefix: String = "",
+                      private var postfix: String = ""
+) : GeneratedValue {
+    private var current : Float = from
+    private var stop = false
+    private var initial = from
+    private var max = to
+
+    override fun value(): Float {
+        if (current >= max) {
+            stop = true
+        }
+        if (!stop) {
+            current += step
+        }
+        return current
+    }
+
+    fun array() : ArrayList<String> {
+        val array = arrayListOf<String>()
+        var value = initial.toInt()
+        for (i in initial.toInt() .. max.toInt()) {
+            array.add(prefix + value + postfix)
+            value += step.toInt()
+        }
+        return array
+    }
+
+}
+
+class OverrideValue(private var value: Float) : GeneratedValue {
     override fun value() : Float {
         return value
     }
 }
 
-internal fun parseKeyframesJSON(content: String, transition: Transition) {
+internal fun parseTransition(content: String, transition: Transition) {
     try {
-        val json = JSONObject(content)
-        val keyframes = json.optJSONObject("KeyFrames")
-        if (keyframes == null) {
-            return
+        val json = CLParser.parse(content)
+        val pathMotionArc = json.getStringOrNull("pathMotionArc")
+        if (pathMotionArc != null) {
+            val bundle = TypedBundle()
+            when (pathMotionArc) {
+                "none" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC, 0)
+                "startVertical" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC, 1)
+                "startHorizontal" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC, 2)
+                "flip" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC, 3)
+            }
+            transition.setTransitionProperties(bundle)
         }
-        val keypositions = keyframes.optJSONArray("KeyPositions")
-        if (keypositions == null) {
-            return
-        }
-        (0 until keypositions.length()).forEach { i ->
-            val keyposition = keypositions[i]
-            if (keyposition is JSONObject) {
-                parseKeyPosition(keyposition, transition)
+        val keyframes = json.getObjectOrNull("KeyFrames") ?: return
+        val keyPositions = keyframes.getArrayOrNull("KeyPositions")
+        if (keyPositions != null) {
+            (0 until keyPositions.size()).forEach { i ->
+                val keyPosition = keyPositions[i]
+                if (keyPosition is CLObject) {
+                    parseKeyPosition(keyPosition, transition)
+                }
             }
         }
-    } catch (e: JSONException) {
+        val keyAttributes = keyframes.getArrayOrNull("KeyAttributes")
+        if (keyAttributes != null) {
+            (0 until keyAttributes.size()).forEach { i ->
+                val keyAttribute = keyAttributes[i]
+                if (keyAttribute is CLObject) {
+                    parseKeyAttribute(keyAttribute, transition)
+                }
+            }
+        }
+        val keyCycles = keyframes.getArrayOrNull("KeyCycles")
+        if (keyCycles != null) {
+            (0 until keyCycles.size()).forEach { i ->
+                val keyCycle = keyCycles[i]
+                if (keyCycle is CLObject) {
+                    parseKeyCycle(keyCycle, transition)
+                }
+            }
+        }
+
+    } catch (e: CLParsingException) {
         System.err.println("Error parsing JSON $e")
     }
 }
 
-internal fun getArray(keyposition: JSONObject, name: String): JSONArray? {
-    return if (keyposition.has(name)) keyposition.getJSONArray(name) else null;
-}
-
-fun parseKeyPosition(keyposition: JSONObject, transition: Transition) {
-    var bundle = TypedBundle()
-    val targets = keyposition.getJSONArray("target")
-    val frames = keyposition.getJSONArray("frames")
-    val percentX = getArray(keyposition, "percentX")
-    val percentY = getArray(keyposition, "percentY")
-    val percentWidth = getArray(keyposition, "percentWidth")
-    val percentHeight = getArray(keyposition, "percentHeight")
-    val pathMotionArc = keyposition.opt("pathMotionArc")
-    val transitionEasing = keyposition.opt("transitionEasing")
-    val curveFit = keyposition.opt("curveFit")
-    val type = keyposition.opt("type")
-    if (percentX != null && frames.length() != percentX.length()) {
+fun parseKeyPosition(keyPosition: CLObject, transition: Transition) {
+    val bundle = TypedBundle()
+    val targets = keyPosition.getArray("target")
+    val frames = keyPosition.getArray("frames")
+    val percentX = keyPosition.getArrayOrNull("percentX")
+    val percentY = keyPosition.getArrayOrNull("percentY")
+    val percentWidth = keyPosition.getArrayOrNull("percentWidth")
+    val percentHeight = keyPosition.getArrayOrNull("percentHeight")
+    val pathMotionArc = keyPosition.getStringOrNull("pathMotionArc")
+    val transitionEasing = keyPosition.getStringOrNull("transitionEasing")
+    val curveFit = keyPosition.getStringOrNull("curveFit")
+    val type = keyPosition.getStringOrNull("type") ?: "parentRelative"
+    if (percentX != null && frames.size() != percentX.size()) {
         return
     }
-    if (percentY != null && frames.length() != percentY.length()) {
+    if (percentY != null && frames.size() != percentY.size()) {
         return
     }
-    (0 until targets.length()).forEach { i ->
+    (0 until targets.size()).forEach { i ->
         val target = targets.getString(i)
-        bundle.clear();
-        if (type != null) {
-
-            bundle.add(
-                TypedValues.Position.TYPE_POSITION_TYPE, when (type) {
-                    "deltaRelative" -> 0
-                    "pathRelative" -> 1
-                    "parentRelative" -> 2
-                    else -> 0
-                }
-            )
-        }
-        if (curveFit!=null) {
+        bundle.clear()
+        bundle.add(
+            TypedValues.Position.TYPE_POSITION_TYPE, when (type) {
+                "deltaRelative" -> 0
+                "pathRelative" -> 1
+                "parentRelative" -> 2
+                else -> 0
+            }
+        )
+        if (curveFit != null) {
             when (curveFit) {
-                "spline" -> bundle.add(TypedValues.Position.TYPE_CURVE_FIT,0)
-                "linear" -> bundle.add(TypedValues.Position.TYPE_CURVE_FIT,1)
-
+                "spline" -> bundle.add(TypedValues.Position.TYPE_CURVE_FIT, 0)
+                "linear" -> bundle.add(TypedValues.Position.TYPE_CURVE_FIT, 1)
             }
         }
-        bundle.addIfNotNull(TypedValues.Position.TYPE_TRANSITION_EASING, transitionEasing?.toString())
+        bundle.addIfNotNull(TypedValues.Position.TYPE_TRANSITION_EASING, transitionEasing)
 
-        if (pathMotionArc!=null) {
+        if (pathMotionArc != null) {
             when (pathMotionArc) {
-                "none" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC,0)
-                "startVertical" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC,1)
-                "startHorizontal" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC,2)
-                "flip" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC,3)
+                "none" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC, 0)
+                "startVertical" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC, 1)
+                "startHorizontal" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC, 2)
+                "flip" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC, 3)
             }
         }
 
-        (0 until frames.length()).forEach { j ->
+        (0 until frames.size()).forEach { j ->
             val frame = frames.getInt(j)
-            bundle.add(TypedValues.TYPE_FRAME_POSITION, frame);
+            bundle.add(TypedValues.TYPE_FRAME_POSITION, frame)
             if (percentX != null) {
-                bundle.add(TypedValues.Position.TYPE_PERCENT_X, percentX.getDouble(j).toFloat());
+                bundle.add(TypedValues.Position.TYPE_PERCENT_X, percentX.getFloat(j))
             }
             if (percentY != null) {
-                bundle.add(TypedValues.Position.TYPE_PERCENT_Y, percentY.getDouble(j).toFloat());
+                bundle.add(TypedValues.Position.TYPE_PERCENT_Y, percentY.getFloat(j))
             }
             if (percentWidth != null) {
-                bundle.add(TypedValues.Position.TYPE_PERCENT_Y, percentWidth.getDouble(j).toFloat());
+                bundle.add(TypedValues.Position.TYPE_PERCENT_Y, percentWidth.getFloat(j))
             }
             if (percentHeight != null) {
-                bundle.add(TypedValues.Position.TYPE_PERCENT_Y, percentHeight.getDouble(j).toFloat());
+                bundle.add(TypedValues.Position.TYPE_PERCENT_Y, percentHeight.getFloat(j))
             }
 
             transition.addKeyPosition(target, bundle)
@@ -208,119 +262,283 @@ fun parseKeyPosition(keyposition: JSONObject, transition: Transition) {
     }
 }
 
-internal fun parseJSON(content: String, transition: Transition,
-                       state: Int, layoutVariables: LayoutVariables) {
+fun parseKeyAttribute(keyAttribute: CLObject, transition: Transition) {
+    val targets = keyAttribute.getArray("target")
+    val frames = keyAttribute.getArray("frames")
+    val transitionEasing = keyAttribute.getStringOrNull("transitionEasing")
+
+    val attrNames = arrayListOf(
+        TypedValues.Attributes.S_SCALE_X,
+        TypedValues.Attributes.S_SCALE_Y,
+        TypedValues.Attributes.S_TRANSLATION_X,
+        TypedValues.Attributes.S_TRANSLATION_Y,
+        TypedValues.Attributes.S_TRANSLATION_Z,
+        TypedValues.Attributes.S_ROTATION_X,
+        TypedValues.Attributes.S_ROTATION_Y,
+        TypedValues.Attributes.S_ROTATION_Z,
+    )
+    val attrIds = arrayListOf(
+        TypedValues.Attributes.TYPE_SCALE_X,
+        TypedValues.Attributes.TYPE_SCALE_Y,
+        TypedValues.Attributes.TYPE_TRANSLATION_X,
+        TypedValues.Attributes.TYPE_TRANSLATION_Y,
+        TypedValues.Attributes.TYPE_TRANSLATION_Z,
+        TypedValues.Attributes.TYPE_ROTATION_X,
+        TypedValues.Attributes.TYPE_ROTATION_Y,
+        TypedValues.Attributes.TYPE_ROTATION_Z,
+        )
+
+    val bundles = ArrayList<TypedBundle>()
+    (0 until frames.size()).forEach { _ ->
+        bundles.add(TypedBundle())
+    }
+
+    for (k in 0 until attrNames.size) {
+        val attrName = attrNames[k]
+        val attrId    = attrIds[k]
+
+        val arrayValues = keyAttribute.getArrayOrNull(attrName)
+        // array must contain one per frame
+        if (arrayValues != null && arrayValues.size() != bundles.size) {
+            throw CLParsingException("incorrect size for $attrName array, " +
+                    "not matching targets array!", keyAttribute)
+        }
+        if (arrayValues != null) {
+            (0 until bundles.size).forEach { i ->
+              bundles[i].add(attrId, arrayValues.getFloat(i))
+            }
+        } else {
+            val value = keyAttribute.getFloatOrNaN(attrName)
+            if (!value.isNaN()) {
+                (0 until bundles.size).forEach { i ->
+                     bundles[i].add(attrId, value)
+                }
+                }
+            }
+        }
+    val curveFit = keyAttribute.getStringOrNull("curveFit")
+    (0 until targets.size()).forEach { i ->
+    (0 until bundles.size).forEach { j ->
+        val target = targets.getString(i)
+
+            val bundle = bundles[j]
+
+            if (curveFit != null) {
+                when (curveFit) {
+                    "spline" -> bundle.add(TypedValues.Position.TYPE_CURVE_FIT, 0)
+                    "linear" -> bundle.add(TypedValues.Position.TYPE_CURVE_FIT, 1)
+                }
+            }
+            bundle.addIfNotNull(TypedValues.Position.TYPE_TRANSITION_EASING, transitionEasing)
+
+
+                val frame = frames.getInt(j)
+                bundle.add(TypedValues.TYPE_FRAME_POSITION, frame)
+        transition.addKeyAttribute(target, bundle)
+        }
+    }
+}
+
+
+
+fun parseKeyCycle(keyCycleData: CLObject, transition: Transition) {
+    val targets = keyCycleData.getArray("target")
+    val frames = keyCycleData.getArray("frames")
+    val transitionEasing = keyCycleData.getStringOrNull("transitionEasing")
+
+    val attrNames = arrayListOf<String>(
+        TypedValues.Cycle.S_SCALE_X,
+        TypedValues.Cycle.S_SCALE_Y,
+        TypedValues.Cycle.S_TRANSLATION_X,
+        TypedValues.Cycle.S_TRANSLATION_Y,
+        TypedValues.Cycle.S_TRANSLATION_Z,
+        TypedValues.Cycle.S_ROTATION_X,
+        TypedValues.Cycle.S_ROTATION_Y,
+        TypedValues.Cycle.S_ROTATION_Z,
+        TypedValues.Cycle.S_WAVE_PERIOD,
+        TypedValues.Cycle.S_WAVE_OFFSET,
+        TypedValues.Cycle.S_WAVE_PHASE,
+    )
+    val attrIds = arrayListOf<Int>(
+        TypedValues.Cycle.TYPE_SCALE_X,
+        TypedValues.Cycle.TYPE_SCALE_Y,
+        TypedValues.Cycle.TYPE_TRANSLATION_X,
+        TypedValues.Cycle.TYPE_TRANSLATION_Y,
+        TypedValues.Cycle.TYPE_TRANSLATION_Z,
+        TypedValues.Cycle.TYPE_ROTATION_X,
+        TypedValues.Cycle.TYPE_ROTATION_Y,
+        TypedValues.Cycle.TYPE_ROTATION_Z,
+        TypedValues.Cycle.TYPE_WAVE_PERIOD,
+        TypedValues.Cycle.TYPE_WAVE_OFFSET,
+        TypedValues.Cycle.TYPE_WAVE_PHASE,
+    )
+
+// TODO S_WAVE_SHAPE S_CUSTOM_WAVE_SHAPE
+    var bundles = ArrayList<TypedBundle>()
+    (0 until frames.size()).forEach { i ->
+        bundles.add(TypedBundle())
+    }
+
+    for (k in 0 .. attrNames.size - 1) {
+        var attrName = attrNames[k]
+        var attrId    = attrIds[k];
+
+        val arrayValues = keyCycleData.getArrayOrNull(attrName)
+        // array must contain one per frame
+        if (arrayValues != null && arrayValues.size() != bundles.size) {
+            throw CLParsingException("incorrect size for $attrName array, " +
+                    "not matching targets array!", keyCycleData)
+        }
+        if (arrayValues != null) {
+            (0 until bundles.size).forEach { i ->
+                bundles.get(i) .add(attrId, arrayValues.getFloat(i));
+            }
+        } else {
+            val value = keyCycleData.getFloatOrNaN(attrName)
+            if (!value.isNaN()) {
+                (0 until bundles.size).forEach { i ->
+                    bundles.get(i).add(attrId, value);
+                }
+            }
+        }
+    }
+    val curveFit = keyCycleData.getStringOrNull(TypedValues.Cycle.S_CURVE_FIT)
+    val easing = keyCycleData.getStringOrNull(TypedValues.Cycle.S_EASING)
+    val waveShape = keyCycleData.getStringOrNull(TypedValues.Cycle.S_WAVE_SHAPE)
+    val customWave = keyCycleData.getStringOrNull(TypedValues.Cycle.S_CUSTOM_WAVE_SHAPE)
+    (0 until targets.size()).forEach { i ->
+        (0 until bundles.size).forEach { j ->
+            val target = targets.getString(i)
+            var bundle = bundles.get(j)
+
+
+            if (curveFit != null) {
+                when (curveFit) {
+                    "spline" -> bundle.add(TypedValues.Cycle.TYPE_CURVE_FIT, 0)
+                    "linear" -> bundle.add(TypedValues.Cycle.TYPE_CURVE_FIT, 1)
+                }
+            }
+            bundle.addIfNotNull(TypedValues.Position.TYPE_TRANSITION_EASING, transitionEasing)
+            if (easing != null) {
+                bundle.add(TypedValues.Cycle.TYPE_EASING, easing)
+            }
+            if (waveShape != null) {
+                bundle.add(TypedValues.Cycle.TYPE_WAVE_SHAPE, waveShape)
+            }
+            if (customWave != null) {
+                bundle.add(TypedValues.Cycle.TYPE_CUSTOM_WAVE_SHAPE, customWave)
+            }
+
+            val frame = frames.getInt(j)
+            bundle.add(TypedValues.TYPE_FRAME_POSITION, frame);
+            transition.addKeyCycle(target, bundle)
+
+        }
+    }
+}
+
+
+internal fun parseJSON(
+    content: String, transition: Transition,
+    state: Int
+) {
     try {
-        val json = JSONObject(content)
+        val json = CLParser.parse(content)
         val elements = json.names() ?: return
-        (0 until elements.length()).forEach { i ->
-            val elementName = elements[i].toString()
+        (0 until elements.size).forEach { i ->
+            val elementName = elements[i]
             val element = json[elementName]
-            if (element is JSONObject) {
-                val customProperties = element.optJSONObject("custom")
+            if (element is CLObject) {
+                val customProperties = element.getObjectOrNull("custom")
                 if (customProperties != null) {
                     val properties = customProperties.names() ?: return
-                    (0 until properties.length()).forEach { i ->
-                        val property = properties[i].toString()
-                        val value = customProperties[property]
-                        if (value is Int) {
-                            transition.addCustomFloat(state, elementName, property, value.toFloat())
-                        } else if (value is Float) {
-                            transition.addCustomFloat(state, elementName, property, value)
-                        } else if (value is String) {
-                            if (value.startsWith('#')) {
-                                var r = 0f
-                                var g = 0f
-                                var b = 0f
-                                var a = 1f
-                                if (value.length == 7 || value.length == 9) {
-                                    var hr = Integer.valueOf(value.substring(1, 3), 16)
-                                    var hg = Integer.valueOf(value.substring(3, 5), 16)
-                                    var hb = Integer.valueOf(value.substring(5, 7), 16)
-                                    r = hr.toFloat() / 255f
-                                    g = hg.toFloat() / 255f
-                                    b = hb.toFloat() / 255f
+                    (0 until properties.size).forEach { j ->
+                        val property = properties[j]
+                        val value = customProperties.get(property)
+                        if (value is CLNumber) {
+                            transition.addCustomFloat(state, elementName, property, value.getFloat())
+                        } else if (value is CLString) {
+                            val stringValue = value.content()
+                            if (stringValue.startsWith('#')) {
+                                var color = Integer.valueOf(stringValue.substring(1),16)
+                                if (stringValue.length == 7) {
+                                    color = color or 0xFF000000.toInt()
                                 }
-                                if (value.length == 9) {
-                                    var ha = Integer.valueOf(value.substring(5, 7), 16)
-                                    a = ha.toFloat() / 255f
-                                }
-                                transition.addCustomColor(state, elementName, property, r, g, b, a)
+                                transition.addCustomColor(state, elementName, property, color)
                             }
                         }
                     }
                 }
             }
         }
-    } catch (e: JSONException) {
+    } catch (e: CLParsingException) {
         System.err.println("Error parsing JSON $e")
     }
 }
 
 internal fun parseMotionSceneJSON(scene: MotionScene, content: String) {
     try {
-        val json = JSONObject(content)
+        val json = CLParser.parse(content)
         val elements = json.names() ?: return
-        (0 until elements.length()).forEach { i ->
-            val elementName = elements[i].toString()
+        (0 until elements.size).forEach { i ->
+            val elementName = elements[i]
             val element = json[elementName]
             when (elementName) {
                 "ConstraintSets" -> parseConstraintSets(scene, element)
                 "Transitions" -> parseTransitions(scene, element)
+                "Debug" -> parseDebug(scene, element)
             }
         }
-    } catch (e: JSONException) {
+    } catch (e: CLParsingException) {
         System.err.println("Error parsing JSON $e")
     }
 }
 
 fun parseConstraintSets(scene: MotionScene, json: Any) {
-    if (!(json is JSONObject)) {
+    if (json !is CLObject) {
         return
     }
     val elements = json.names() ?: return
-    (0 until elements.length()).forEach { i ->
-        val elementName = elements[i].toString()
-        val element = json[elementName]
+    (0 until elements.size).forEach { i ->
+        val elementName = elements[i]
+        val element = json.getObject(elementName)
         var added = false
-        if (element is JSONObject) {
-            val extends = element.optString("Extends")
-            if (extends.length > 0) {
-                val base = scene.getConstraintSet(extends)
-                if (base != null) {
-                    val baseJson = JSONObject(base)
-                    val widgetsOverride = element.names()
-                    if (widgetsOverride != null) {
-                        (0 until widgetsOverride.length()).forEach { j ->
-                            val widgetOverrideName = widgetsOverride[j].toString()
-                            val value = element[widgetOverrideName]
-                            if (value is JSONObject) {
-                                override(baseJson, widgetOverrideName, value)
-                            }
+        val extends = element.getStringOrNull("Extends")
+        if (extends != null && extends.isNotEmpty()) {
+            val base = scene.getConstraintSet(extends)
+            if (base != null) {
+                val baseJson = CLParser.parse(base)
+                val widgetsOverride = element.names()
+                if (widgetsOverride != null) {
+                    (0 until widgetsOverride.size).forEach { j ->
+                        val widgetOverrideName = widgetsOverride[j]
+                        val value = element[widgetOverrideName]
+                        if (value is CLObject) {
+                            override(baseJson, widgetOverrideName, value)
                         }
-                        scene.setConstraintSetContent(elementName, baseJson.toString())
-                        added = true
                     }
+                    scene.setConstraintSetContent(elementName, baseJson.toJSON())
+                    added = true
                 }
             }
         }
         if (!added) {
-            scene.setConstraintSetContent(elementName, element.toString())
+            scene.setConstraintSetContent(elementName, element.toJSON())
         }
     }
 }
 
-fun override(baseJson: JSONObject, name: String, overrideValue: JSONObject) {
+fun override(baseJson: CLObject, name: String, overrideValue: CLObject) {
     if (!baseJson.has(name)) {
         baseJson.put(name, overrideValue)
     } else {
-        var base = baseJson.getJSONObject(name)
-        var keys = overrideValue.keys()
+        val base = baseJson.getObject(name)
+        val keys = overrideValue.names()
         for (key in keys) {
             if (key.equals("clear")) {
-                var toClear = overrideValue.getJSONArray("clear")
-                (0 until toClear.length()).forEach { i ->
-                    var clearedKey = toClear[i]
+                val toClear = overrideValue.getArray("clear")
+                (0 until toClear.size()).forEach { i ->
+                    val clearedKey = toClear.getStringOrNull(i)
                     if (clearedKey is String) {
                         when (clearedKey) {
                             "dimensions" -> {
@@ -357,34 +575,42 @@ fun override(baseJson: JSONObject, name: String, overrideValue: JSONObject) {
 }
 
 fun parseTransitions(scene: MotionScene, json: Any) {
-    if (!(json is JSONObject)) {
+    if (json !is CLObject) {
         return
     }
     val elements = json.names() ?: return
-    (0 until elements.length()).forEach { i ->
-        val elementName = elements[i].toString()
-        val element = json[elementName]
-        scene.setTransitionContent(elementName, element.toString())
+    (0 until elements.size).forEach { i ->
+        val elementName = elements[i]
+        val element = json.getObject(elementName)
+        scene.setTransitionContent(elementName, element.toJSON())
     }
+}
+
+fun parseDebug(scene: MotionScene, json: Any) {
+    if (json !is CLObject) {
+        return
+    }
+    val name = json.getStringOrNull("name")
+    scene.setDebugName(name)
 }
 
 internal fun parseJSON(content: String, state: State, layoutVariables: LayoutVariables) {
     try {
-        val json = JSONObject(content)
+        val json = CLParser.parse(content)
         val elements = json.names() ?: return
-        (0 until elements.length()).forEach { i ->
-            val elementName = elements[i].toString()
+        (0 until elements.size).forEach { i ->
+            val elementName = elements[i]
             val element = json[elementName]
             if (PARSER_DEBUG) {
-                System.out.println("element <$elementName = $element> " + element.javaClass)
+                println("element <$elementName = $element> " + element.javaClass)
             }
             when (elementName) {
                 "Variables" -> parseVariables(state, layoutVariables, element)
                 "Helpers" -> parseHelpers(state, layoutVariables, element)
                 "Generate" -> parseGenerate(state, layoutVariables, element)
                 else -> {
-                    if (element is JSONObject) {
-                        var type = lookForType(element)
+                    if (element is CLObject) {
+                        val type = lookForType(element)
                         if (type != null) {
                             when (type) {
                                 "hGuideline" -> parseGuidelineParams(
@@ -401,75 +627,111 @@ internal fun parseJSON(content: String, state: State, layoutVariables: LayoutVar
                                 )
                                 "barrier" -> parseBarrier(state, elementName, element)
                             }
-                        } else if (type == null) {
+                        } else {
                             parseWidget(state, layoutVariables, elementName, element)
                         }
+                    } else if (element is CLNumber) {
+                        layoutVariables.put(elementName, element.int)
                     }
                 }
             }
         }
-    } catch (e: JSONException) {
+    } catch (e: CLParsingException) {
         System.err.println("Error parsing JSON $e")
     }
 }
 
 fun parseVariables(state: State, layoutVariables: LayoutVariables, json: Any) {
-    if (!(json is JSONObject)) {
+    if (json !is CLObject) {
         return
     }
     val elements = json.names() ?: return
-    (0 until elements.length()).forEach { i ->
-        val elementName = elements[i].toString()
-        val element = json[elementName]
-        if (element is Int) {
-            layoutVariables.put(elementName, element)
-        } else if (element is JSONObject) {
-            if (element.has("start") && element.has("increment")) {
-                var start = layoutVariables.get(element["start"])
-                var increment = layoutVariables.get(element["increment"])
+    (0 until elements.size).forEach { i ->
+        val elementName = elements[i]
+        val element = json.get(elementName)
+        if (element is CLNumber) {
+            layoutVariables.put(elementName, element.int)
+        } else if (element is CLObject) {
+            if (element.has("from") && element.has("to")) {
+                val from = layoutVariables.get(element["from"])
+                val to = layoutVariables.get(element["to"])
+                val prefix = element.getStringOrNull("prefix") ?: ""
+                val postfix = element.getStringOrNull("postfix") ?: ""
+                layoutVariables.put(elementName, from, to, 1f, prefix, postfix)
+            } else if (element.has("from") && element.has("step")) {
+                val start = layoutVariables.get(element["from"])
+                val increment = layoutVariables.get(element["step"])
                 layoutVariables.put(elementName, start, increment)
             } else if (element.has("ids")) {
-                var ids = element.getJSONArray("ids");
-                var arrayIds = arrayListOf<String>()
-                for (i in 0..ids.length()-1) {
-                    arrayIds.add(ids.getString(i))
+                val ids = element.getArray("ids")
+                val arrayIds = arrayListOf<String>()
+                for (j in 0 until ids.size()) {
+                    arrayIds.add(ids.getString(j))
                 }
                 layoutVariables.put(elementName, arrayIds)
             } else if (element.has("tag")) {
-                var arrayIds = state.getIdsForTag(element.getString("tag"))
+                val arrayIds = state.getIdsForTag(element.getString("tag"))
                 layoutVariables.put(elementName, arrayIds)
+            }
+        }
+    }
+}
+
+fun parseDesignElementsJSON(content: String, list: ArrayList<DesignElement>) {
+    val json = CLParser.parse(content)
+    val elements = json.names() ?: return
+    (0 until elements.size).forEach { i ->
+        val elementName = elements[i]
+        val element = json[elementName]
+        if (PARSER_DEBUG) {
+            println("element <$elementName = $element> " + element.javaClass)
+        }
+        when (elementName) {
+            "Design" -> {
+                val elements = (element as CLObject).names() ?: return
+                (0 until elements.size).forEach { i ->
+                    val elementName = elements[i]
+                    val element = element.get(elementName) as CLObject
+                    System.out.printf("element found <$elementName>")
+                    val type = element.getStringOrNull("type")
+                    val param = element.getStringOrNull("param")
+                    val text = element.getStringOrNull("text")
+                    val parameter = if (param != null) param else text
+                    var designElement = DesignElement(elementName, type, parameter)
+                    list.add(designElement)
+                }
             }
         }
     }
 }
 
 fun parseHelpers(state: State, layoutVariables: LayoutVariables, element: Any) {
-    if (!(element is JSONArray)) {
+    if (element !is CLArray) {
         return
     }
-    (0 until element.length()).forEach { i ->
+    (0 until element.size()).forEach { i ->
         val helper = element[i]
-        if (helper is JSONArray && helper.length() > 1) {
-            when (helper[0]) {
+        if (helper is CLArray && helper.size() > 1) {
+            when (helper.getString(0)) {
                 "hChain" -> parseChain(ConstraintWidget.HORIZONTAL, state, layoutVariables, helper)
                 "vChain" -> parseChain(ConstraintWidget.VERTICAL, state, layoutVariables, helper)
-                "hGuideline" -> parseGuideline(ConstraintWidget.HORIZONTAL, state, layoutVariables, helper)
-                "vGuideline" -> parseGuideline(ConstraintWidget.VERTICAL, state, layoutVariables, helper)
+                "hGuideline" -> parseGuideline(ConstraintWidget.HORIZONTAL, state, helper)
+                "vGuideline" -> parseGuideline(ConstraintWidget.VERTICAL, state, helper)
             }
         }
     }
 }
 
 fun parseGenerate(state: State, layoutVariables: LayoutVariables, json: Any) {
-    if (!(json is JSONObject)) {
+    if (json !is CLObject) {
         return
     }
     val elements = json.names() ?: return
-    (0 until elements.length()).forEach { i ->
-        val elementName = elements[i].toString()
+    (0 until elements.size).forEach { i ->
+        val elementName = elements[i]
         val element = json[elementName]
-        var arrayIds = layoutVariables.getList(elementName)
-        if (arrayIds != null && element is JSONObject) {
+        val arrayIds = layoutVariables.getList(elementName)
+        if (arrayIds != null && element is CLObject) {
             for (id in arrayIds) {
                 parseWidget(state, layoutVariables, id, element)
             }
@@ -477,33 +739,32 @@ fun parseGenerate(state: State, layoutVariables: LayoutVariables, json: Any) {
     }
 }
 
-fun parseChain(orientation: Int, state: State, margins: LayoutVariables, helper: JSONArray) {
-    var chain = if (orientation == ConstraintWidget.HORIZONTAL) state.horizontalChain() else state.verticalChain()
-    var refs = helper[1]
-    if (!(refs is JSONArray) || refs.length() < 1) {
+fun parseChain(orientation: Int, state: State, margins: LayoutVariables, helper: CLArray) {
+    val chain = if (orientation == ConstraintWidget.HORIZONTAL) state.horizontalChain() else state.verticalChain()
+    val refs = helper[1]
+    if (refs !is CLArray || refs.size() < 1) {
         return
     }
-    (0 until refs.length()).forEach { i ->
-        chain.add(refs[i])
+    (0 until refs.size()).forEach { i ->
+        chain.add(refs.getString(i))
     }
-    if (helper.length() > 2) { // we have additional parameters
-        var params = helper[2]
-        if (!(params is JSONObject)) {
+    if (helper.size() > 2) { // we have additional parameters
+        val params = helper[2]
+        if (params !is CLObject) {
             return
         }
         val constraints = params.names() ?: return
-        (0 until constraints.length()).forEach{ i ->
-            val constraintName = constraints[i].toString()
-            when (constraintName) {
+        (0 until constraints.size).forEach{ i ->
+            when (val constraintName = constraints[i]) {
                 "style" -> {
                     val styleObject = params[constraintName]
                     val styleValue : String
-                    if (styleObject is JSONArray && styleObject.length() > 1) {
-                        styleValue = styleObject[0].toString()
-                        var biasValue = styleObject[1].toString().toFloat()
+                    if (styleObject is CLArray && styleObject.size() > 1) {
+                        styleValue = styleObject.getString(0)
+                        val biasValue = styleObject.getFloat(1)
                         chain.bias(biasValue)
                     } else {
-                        styleValue = styleObject.toString()
+                        styleValue = styleObject.content()
                     }
                     when (styleValue) {
                         "packed" -> chain.style(PACKED)
@@ -519,39 +780,35 @@ fun parseChain(orientation: Int, state: State, margins: LayoutVariables, helper:
     }
 }
 
-fun parseGuideline(orientation: Int, state: State, margins: LayoutVariables, helper: JSONArray) {
-    var params = helper[1]
-    if (!(params is JSONObject)) {
+fun parseGuideline(orientation: Int, state: State, helper: CLArray) {
+    val params = helper[1]
+    if (params !is CLObject) {
         return
     }
-    val guidelineId = params.opt("id")
-    if (guidelineId == null)  {
-        return
-    }
-    parseGuidelineParams(orientation, state, guidelineId as String, params)
+    val guidelineId = params.getStringOrNull("id") ?: return
+    parseGuidelineParams(orientation, state, guidelineId, params)
 }
 
 private fun parseGuidelineParams(
     orientation: Int,
     state: State,
     guidelineId: String,
-    params: JSONObject
+    params: CLObject
 ) {
     val constraints = params.names() ?: return
-    var reference = state.constraints(guidelineId)
+    val reference = state.constraints(guidelineId)
     if (orientation == ConstraintWidget.HORIZONTAL) {
         state.horizontalGuideline(guidelineId)
     } else {
         state.verticalGuideline(guidelineId)
     }
-    var guidelineReference = reference.facade as GuidelineReference
-    (0 until constraints.length()).forEach { i ->
-        val constraintName = constraints[i].toString()
-        when (constraintName) {
+    val guidelineReference = reference.facade as GuidelineReference
+    (0 until constraints.size).forEach { i ->
+        when (val constraintName = constraints[i]) {
             "start" -> {
                 val margin = state.convertDimension(
                     Dp(
-                        params.getInt(constraintName).toFloat()
+                        params.getFloat(constraintName)
                     )
                 )
                 guidelineReference.start(margin)
@@ -559,16 +816,14 @@ private fun parseGuidelineParams(
             "end" -> {
                 val margin = state.convertDimension(
                     Dp(
-                        params.getInt(constraintName).toFloat()
+                        params.getFloat(constraintName)
                     )
                 )
                 guidelineReference.end(margin)
             }
             "percent" -> {
                 guidelineReference.percent(
-                    params.getDouble(
-                        constraintName
-                    ).toFloat()
+                    params.getFloat(constraintName)
                 )
             }
         }
@@ -577,32 +832,31 @@ private fun parseGuidelineParams(
 
 fun parseBarrier(
     state: State,
-    elementName: String, element: JSONObject) {
+    elementName: String, element: CLObject) {
     val reference = state.barrier(elementName, androidx.constraintlayout.core.state.State.Direction.END)
     val constraints = element.names() ?: return
-    var barrierReference = reference
-    (0 until constraints.length()).forEach { i ->
-        val constraintName = constraints[i].toString()
-        when (constraintName) {
+    (0 until constraints.size).forEach { i ->
+        when (val constraintName = constraints[i]) {
             "direction" -> {
-                var direction = element.getString(constraintName)
-                when (direction) {
-                    "start" -> barrierReference.setBarrierDirection(androidx.constraintlayout.core.state.State.Direction.START)
-                    "end" -> barrierReference.setBarrierDirection(androidx.constraintlayout.core.state.State.Direction.END)
-                    "left" -> barrierReference.setBarrierDirection(androidx.constraintlayout.core.state.State.Direction.LEFT)
-                    "right" -> barrierReference.setBarrierDirection(androidx.constraintlayout.core.state.State.Direction.RIGHT)
-                    "top" -> barrierReference.setBarrierDirection(androidx.constraintlayout.core.state.State.Direction.TOP)
-                    "bottom" -> barrierReference.setBarrierDirection(androidx.constraintlayout.core.state.State.Direction.BOTTOM)
+                when (element.getString(constraintName)) {
+                    "start" -> reference.setBarrierDirection(androidx.constraintlayout.core.state.State.Direction.START)
+                    "end" -> reference.setBarrierDirection(androidx.constraintlayout.core.state.State.Direction.END)
+                    "left" -> reference.setBarrierDirection(androidx.constraintlayout.core.state.State.Direction.LEFT)
+                    "right" -> reference.setBarrierDirection(androidx.constraintlayout.core.state.State.Direction.RIGHT)
+                    "top" -> reference.setBarrierDirection(androidx.constraintlayout.core.state.State.Direction.TOP)
+                    "bottom" -> reference.setBarrierDirection(androidx.constraintlayout.core.state.State.Direction.BOTTOM)
                 }
             }
             "contains" -> {
-                val list = element.optJSONArray(constraintName)
+                val list = element.getArrayOrNull(constraintName)
                 if (list != null) {
-                    for (i in 0..list.length() - 1) {
-                        var elementName = list.get(i)
-                        val reference = state.constraints(elementName)
-                        System.out.println("Add REFERENCE ($elementName = $reference) TO BARRIER ")
-                        barrierReference.add(reference)
+                    for (j in 0 until list.size()) {
+                        val elementNameReference = list.get(j)
+                        val elementReference = state.constraints(elementNameReference)
+                        if (PARSER_DEBUG) {
+                            println("Add REFERENCE ($elementNameReference = $elementReference) TO BARRIER ")
+                        }
+                        reference.add(elementReference)
                     }
                 }
             }
@@ -614,15 +868,14 @@ fun parseWidget(
     state: State,
     layoutVariables: LayoutVariables,
     elementName: String,
-    element: JSONObject
+    element: CLObject
 ) {
     val reference = state.constraints(elementName)
     val constraints = element.names() ?: return
     reference.width = Dimension.Wrap()
     reference.height = Dimension.Wrap()
-    (0 until constraints.length()).forEach { i ->
-        val constraintName = constraints[i].toString()
-        when (constraintName) {
+    (0 until constraints.size).forEach { i ->
+        when (val constraintName = constraints[i]) {
             "width" -> {
                 reference.width = parseDimension(element, constraintName, state)
             }
@@ -631,7 +884,7 @@ fun parseWidget(
             }
             "center" -> {
                 val target = element.getString(constraintName)
-                val targetReference = if (target.toString().equals("parent")) {
+                val targetReference = if (target.equals("parent")) {
                     state.constraints(SolverState.PARENT)
                 } else {
                     state.constraints(target)
@@ -643,7 +896,7 @@ fun parseWidget(
             }
             "centerHorizontally" -> {
                 val target = element.getString(constraintName)
-                val targetReference = if (target.toString().equals("parent")) {
+                val targetReference = if (target.equals("parent")) {
                     state.constraints(SolverState.PARENT)
                 } else {
                     state.constraints(target)
@@ -653,7 +906,7 @@ fun parseWidget(
             }
             "centerVertically" -> {
                 val target = element.getString(constraintName)
-                val targetReference = if (target.toString().equals("parent")) {
+                val targetReference = if (target.equals("parent")) {
                     state.constraints(SolverState.PARENT)
                 } else {
                     state.constraints(target)
@@ -706,8 +959,7 @@ fun parseWidget(
                 reference.rotationZ(value)
             }
             "visibility" -> {
-                val value = element[constraintName]
-                when(value) {
+                when(element.getString(constraintName)) {
                     "visible" -> reference.visibility(ConstraintWidget.VISIBLE)
                     "invisible" -> reference.visibility(ConstraintWidget.INVISIBLE)
                     "gone" -> reference.visibility(ConstraintWidget.GONE)
@@ -724,41 +976,25 @@ fun parseWidget(
 }
 
 private fun parseCustomProperties(
-    element: JSONObject,
+    element: CLObject,
     reference: ConstraintReference,
     constraintName: String
 ) {
-    var json = element.optJSONObject(constraintName)
-    if (json == null) {
-        return
-    }
+    val json = element.getObjectOrNull(constraintName) ?: return
     val properties = json.names() ?: return
-    (0 until properties.length()).forEach { i ->
-        val property = properties[i].toString()
-        val value = json[property]
-        if (value is Int) {
-            reference.addCustomFloat(property, value.toFloat())
-        } else if (value is Float) {
-            reference.addCustomFloat(property, value)
-        } else if (value is String) {
-            if (value.startsWith('#')) {
-                var r = 0f
-                var g = 0f
-                var b = 0f
-                var a = 1f
-                if (value.length == 7 || value.length == 9) {
-                    var hr = Integer.valueOf(value.substring(1, 3), 16)
-                    var hg = Integer.valueOf(value.substring(3, 5), 16)
-                    var hb = Integer.valueOf(value.substring(5, 7), 16)
-                    r = hr.toFloat() / 255f
-                    g = hg.toFloat() / 255f
-                    b = hb.toFloat() / 255f
+    (0 until properties.size).forEach { i ->
+        val property = properties[i]
+        val value = json.get(property)
+        if (value is CLNumber) {
+            reference.addCustomFloat(property, value.getFloat())
+        } else if (value is CLString) {
+            var str = value.content().toString()
+            if (str.startsWith('#')) {
+                str = str.substring(1)
+                if(str.length == 6) {
+                    str = "FF$str"
                 }
-                if (value.length == 9) {
-                    var ha = Integer.valueOf(value.substring(5, 7), 16)
-                    a = ha.toFloat() / 255f
-                }
-                reference.addCustomColor(property, r, g, b, a)
+                reference.addCustomColor(property, parseLong(str,16).toInt())
             }
         }
     }
@@ -767,33 +1003,33 @@ private fun parseCustomProperties(
 private fun parseConstraint(
     state: State,
     layoutVariables: LayoutVariables,
-    element: JSONObject,
+    element: CLObject,
     reference: ConstraintReference,
     constraintName: String
 ) {
-    val constraint = element.optJSONArray(constraintName)
-    if (constraint != null && constraint.length() > 1) {
-        val target = constraint[0]
-        val anchor = constraint[1]
-        var margin = 0
-        var marginGone = 0
-        if (constraint.length() > 2) {
-            margin = layoutVariables.get(constraint[2]).toInt()
-            margin = state.convertDimension(Dp(margin.toFloat()))
+    val constraint = element.getArrayOrNull(constraintName)
+    if (constraint != null && constraint.size() > 1) {
+        val target = constraint.getString(0)
+        val anchor = constraint.getStringOrNull(1)
+        var margin = 0f
+        var marginGone = 0f
+        if (constraint.size() > 2) {
+            margin = layoutVariables.get(constraint.getOrNull(2)!!)
+            margin = state.convertDimension(Dp(margin)).toFloat()
         }
-        if (constraint.length() > 3) {
-            marginGone = layoutVariables.get(constraint[3]).toInt()
-            marginGone = state.convertDimension(Dp(marginGone.toFloat()))
+        if (constraint.size() > 3) {
+            marginGone = layoutVariables.get(constraint.getOrNull(3)!!)
+            marginGone = state.convertDimension(Dp(marginGone)).toFloat()
         }
 
-        val targetReference = if (target.toString().equals("parent")) {
+        val targetReference = if (target.equals("parent")) {
             state.constraints(SolverState.PARENT)
         } else {
             state.constraints(target)
         }
         when (constraintName) {
             "circular" -> {
-                var angle = layoutVariables.get(constraint[1])
+                val angle = layoutVariables.get(constraint.get(1))
                 reference.circularConstraint(targetReference, angle, 0f)
             }
             "start" -> {
@@ -827,11 +1063,11 @@ private fun parseConstraint(
                 }
             }
         }
-        reference.margin(margin).marginGone(marginGone)
+        reference.margin(margin).marginGone(marginGone.toInt())
     } else {
-        var target = element.optString(constraintName)
+        val target = element.getStringOrNull(constraintName)
         if (target != null) {
-            val targetReference = if (target.toString().equals("parent")) {
+            val targetReference = if (target.equals("parent")) {
                 state.constraints(SolverState.PARENT)
             } else {
                 state.constraints(target)
@@ -847,42 +1083,44 @@ private fun parseConstraint(
 }
 
 private fun parseDimension(
-    element: JSONObject,
+    element: CLObject,
     constraintName: String,
     state: State
 ): Dimension {
-    var dimensionString = element.getString(constraintName)
-    var dimension: Dimension
-    when (dimensionString) {
-        "wrap" -> dimension = Dimension.Wrap()
-        "spread" -> dimension = Dimension.Suggested(SPREAD_DIMENSION)
-        "parent" -> dimension = Dimension.Parent()
-        else -> {
-            if (dimensionString.endsWith('%')) {
-                // parent percent
-                var percentString = dimensionString.substringBefore('%')
-                var percentValue = percentString.toFloat() / 100f
-                dimension = Dimension.Percent(0, percentValue).suggested(0)
-            } else if (dimensionString.contains(':')) {
-                dimension = Dimension.Ratio(dimensionString).suggested(0)
-            } else {
-                dimension = Dimension.Fixed(
-                    state.convertDimension(
-                        Dp(
-                            element.getInt(constraintName).toFloat()
-                        )
-                    )
-                )
+    val dimensionElement = element.get(constraintName)
+    var dimension: Dimension = Fixed(0)
+    if (dimensionElement is CLString) {
+        when (val dimensionString = dimensionElement.content()) {
+            "wrap" -> dimension = Dimension.Wrap()
+            "spread" -> dimension = Dimension.Suggested(SPREAD_DIMENSION)
+            "parent" -> dimension = Dimension.Parent()
+            else -> {
+                if (dimensionString.endsWith('%')) {
+                    // parent percent
+                    val percentString = dimensionString.substringBefore('%')
+                    val percentValue = percentString.toFloat() / 100f
+                    dimension = Dimension.Percent(0, percentValue).suggested(0)
+                } else if (dimensionString.contains(':')) {
+                    dimension = Dimension.Ratio(dimensionString).suggested(0)
+                }
             }
         }
+    } else if (dimensionElement is CLNumber) {
+        dimension = Fixed(
+            state.convertDimension(
+                Dp(
+                    element.getFloat(constraintName)
+                )
+            )
+        )
     }
     return dimension
 }
 
-fun lookForType(element: JSONObject): String? {
+fun lookForType(element: CLObject): String? {
     val constraints = element.names() ?: return null
-    (0 until constraints.length()).forEach { i ->
-        val constraintName = constraints[i].toString()
+    (0 until constraints.size).forEach { i ->
+        val constraintName = constraints[i]
         if (constraintName.equals("type")) {
             return element.getString("type")
         }

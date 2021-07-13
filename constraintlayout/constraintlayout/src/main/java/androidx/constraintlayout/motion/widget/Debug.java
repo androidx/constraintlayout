@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.lang.reflect.Field;
+import java.nio.CharBuffer;
 
 import static android.view.MotionEvent.ACTION_DOWN;
 
@@ -174,7 +175,6 @@ public class Debug {
             return "UNKNOWN";
         }
     }
-
     /**
      * convert an id number to an id String useful in debugging
      *
@@ -183,11 +183,37 @@ public class Debug {
      * @return
      */
     public static String getState(MotionLayout layout, int stateId) {
+        return getState(layout, stateId,-1);
+    }
+
+    /**
+     * convert an id number to an id String useful in debugging
+     *
+     * @param layout
+     * @param stateId
+     * @param len trim if string > len
+     * @return
+     */
+    public static String getState(MotionLayout layout, int stateId, int len) {
         if (stateId == -1) {
             return "UNDEFINED";
         }
         Context context = layout.getContext();
-        return context.getResources().getResourceEntryName(stateId);
+        String str =  context.getResources().getResourceEntryName(stateId);
+        if (len != -1) {
+            if (str.length()> len) {
+               str = str.replaceAll("([^_])[aeiou]+","$1"); // del vowels ! at start
+            }
+            if (str.length()>len) {
+                int n = str.replaceAll("[^_]","").length(); // count number of "_"
+                if (n>0){
+                   int extra = (str.length()-len)/n;
+                   String reg = CharBuffer.allocate( extra ).toString().replace( '\0', '.' )+"_";
+                    str = str.replaceAll(reg,"_");
+                }
+            }
+        }
+        return str;
     }
 
     /**

@@ -37,35 +37,24 @@ public abstract class MotionKey implements TypedValues {
     public int mType;
     public HashMap<String, CustomVariable> mCustom;
 
-
-
     public abstract void getAttributeNames(HashSet<String> attributes);
 
     public static final String ALPHA = "alpha";
     public static final String ELEVATION = "elevation";
     public static final String ROTATION = "rotationZ";
     public static final String ROTATION_X = "rotationX";
-    public static final String ROTATION_Y = "rotationY";
-    public static final String PIVOT_X = "transformPivotX";
-    public static final String PIVOT_Y = "transformPivotY";
+
     public static final String TRANSITION_PATH_ROTATE = "transitionPathRotate";
     public static final String SCALE_X = "scaleX";
     public static final String SCALE_Y = "scaleY";
-    public static final String WAVE_PERIOD = "wavePeriod";
-    public static final String WAVE_OFFSET = "waveOffset";
-    public static final String WAVE_PHASE = "wavePhase";
-    public static final String WAVE_VARIES_BY = "waveVariesBy";
+
+
     public static final String TRANSLATION_X = "translationX";
     public static final String TRANSLATION_Y = "translationY";
-    public static final String TRANSLATION_Z = "translationZ";
-    public static final String PROGRESS = "progress";
+
     public static final String CUSTOM = "CUSTOM";
-    public static final String CURVEFIT = "curveFit";
-    public static final String MOTIONPROGRESS = "motionProgress";
-    public static final String TRANSITIONEASING = "transitionEasing";
+
     public static final String VISIBILITY = "visibility";
-
-
 
     boolean matches(String constraintTag) {
         if (mTargetString == null || constraintTag == null) return false;
@@ -80,7 +69,6 @@ public abstract class MotionKey implements TypedValues {
      * @hide
      */
     public abstract void addValues(HashMap<String, SplineSet> splines);
-
 
     /**
      * Return the float given a value. If the value is a "Float" object it is casted
@@ -157,21 +145,21 @@ public abstract class MotionKey implements TypedValues {
         return mFramePosition;
     }
 
-   public boolean setValue(int type, int value){
+    public boolean setValue(int type, int value) {
 
-       switch (type) {
-           case TypedValues.TYPE_FRAME_POSITION:
-               mFramePosition = value;
-               return true;
-       }
-       return false;
-    }
-
-    public boolean setValue(int type, float value){
+        switch (type) {
+            case TypedValues.TYPE_FRAME_POSITION:
+                mFramePosition = value;
+                return true;
+        }
         return false;
     }
 
-    public boolean setValue(int type, String value){
+    public boolean setValue(int type, float value) {
+        return false;
+    }
+
+    public boolean setValue(int type, String value) {
         switch (type) {
             case TypedValues.TYPE_TARGET:
                 mTargetString = value;
@@ -180,22 +168,23 @@ public abstract class MotionKey implements TypedValues {
         return false;
     }
 
-    public boolean setValue(int type, boolean value){
+    public boolean setValue(int type, boolean value) {
         return false;
     }
 
+    public void setCustomAttribute(String name, int type, float value) {
+        mCustom.put(name, new CustomVariable(name, type, value));
+    }
 
+    public void setCustomAttribute(String name, int type, int value) {
+        mCustom.put(name, new CustomVariable(name, type, value));
+    }
 
-    public void setCustomAttribute( String name, int type,float value) {
-        mCustom.put(name, new CustomVariable(name,type,value));
+    public void setCustomAttribute(String name, int type, boolean value) {
+        mCustom.put(name, new CustomVariable(name, type, value));
     }
-    public void setCustomAttribute(int type, String name, int value) {
-        mCustom.put(name, new CustomVariable(name,type,value));
-    }
-    public void setCustomAttribute(int type, String name, boolean value) {
-        mCustom.put(name, new CustomVariable(name,type,value));
-    }
-    public void setCustomAttribute(int type, String name, String value) {
-        mCustom.put(name, new CustomVariable(name,type,value));
+
+    public void setCustomAttribute(String name, int type, String value) {
+        mCustom.put(name, new CustomVariable(name, type, value));
     }
 }

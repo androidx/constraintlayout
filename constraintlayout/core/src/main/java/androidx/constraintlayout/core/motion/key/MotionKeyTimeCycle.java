@@ -28,16 +28,6 @@ import java.util.HashSet;
 public class MotionKeyTimeCycle extends MotionKey {
     static final String NAME = "KeyTimeCycle";
     private static final String TAG = NAME;
-    public static final String WAVE_PERIOD = "wavePeriod";
-    public static final String WAVE_OFFSET = "waveOffset";
-    public static final String WAVE_SHAPE = "waveShape";
-    public static final int SHAPE_SIN_WAVE = Oscillator.SIN_WAVE;
-    public static final int SHAPE_SQUARE_WAVE = Oscillator.SQUARE_WAVE;
-    public static final int SHAPE_TRIANGLE_WAVE = Oscillator.TRIANGLE_WAVE;
-    public static final int SHAPE_SAW_WAVE = Oscillator.SAW_WAVE;
-    public static final int SHAPE_REVERSE_SAW_WAVE = Oscillator.REVERSE_SAW_WAVE;
-    public static final int SHAPE_COS_WAVE = Oscillator.COS_WAVE;
-    public static final int SHAPE_BOUNCE = Oscillator.BOUNCE;
 
     private String mTransitionEasing;
     private int mCurveFit = -1;

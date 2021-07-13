@@ -525,6 +525,117 @@ public class ConstraintWidget {
         mHeightOverride = -1;
     }
 
+    ///////////////////////////////////SERIALIZE///////////////////////////////////////////////
+
+    private void serializeAnchor(StringBuilder ret, String side, ConstraintAnchor a) {
+        if (a.mTarget == null) {
+            return;
+        }
+        ret.append(side);
+        ret.append(" : [ '");
+        ret.append(a.mTarget);
+        ret.append("',");
+        ret.append(a.mMargin);
+        ret.append(",");
+        ret.append(a.mGoneMargin);
+        ret.append(",");
+        ret.append(" ] ,\n");
+    }
+    private void serializeCircle(StringBuilder ret,  ConstraintAnchor a, float angle){
+        if (  a.mTarget == null) {
+            return;
+        }
+
+        ret.append("circle : [ '");
+        ret.append(a.mTarget);
+        ret.append("',");
+        ret.append(a.mMargin);
+        ret.append(",");
+        ret.append(angle);
+        ret.append(",");
+        ret.append(" ] ,\n");
+    }
+
+    private void serializeAttribute(StringBuilder ret, String type, float value, float def){
+        if (value == def) {
+            return;
+        }
+        ret.append(type);
+        ret.append(" :   ");
+        ret.append(def);
+        ret.append(",\n");
+    }
+
+    private void serializeDimensionRatio(StringBuilder ret, String type, float value, int  whichSide ){
+        if (value == 0) {
+            return;
+        }
+        ret.append(type);
+        ret.append(" :  [");
+        ret.append(value);
+        ret.append(",");
+        ret.append(whichSide);
+        ret.append("");
+        ret.append("],\n");
+    }
+
+    private void serializeSize(StringBuilder ret, String type, int size,
+                               int min, int max, int override,
+                               int matchConstraintMin, int matchConstraintDefault,
+                               float MatchConstraintPercent,
+                               float weight){
+        ret.append(type);
+        ret.append(" :  {\n");
+        serializeAttribute(ret,"size",size,Integer.MIN_VALUE);
+        serializeAttribute(ret,"min",min,0);
+        serializeAttribute(ret,"max",max, Integer.MAX_VALUE);
+        serializeAttribute(ret,"matchMin",matchConstraintMin, 0);
+        serializeAttribute(ret,"matchDef",matchConstraintDefault, MATCH_CONSTRAINT_SPREAD);
+        serializeAttribute(ret,"matchPercent",matchConstraintDefault, 1);
+        ret.append("},\n");
+    }
+
+    public StringBuilder serialize(StringBuilder ret) {
+        ret.append("{\n");
+        serializeAnchor(ret,"left", mLeft);
+        serializeAnchor(ret,"top", mTop );
+        serializeAnchor(ret,"right", mRight);
+        serializeAnchor(ret,"bottom", mBottom);
+        serializeAnchor(ret,"baseline", mBaseline);
+        serializeAnchor(ret,"centerX", mCenterX);
+        serializeAnchor(ret,"centerY", mCenterY);
+        serializeCircle(ret, mCenter,mCircleConstraintAngle);
+
+        serializeSize(ret,"width",
+                mWidth,
+                mMinWidth,
+                mMaxDimension[HORIZONTAL],
+                mWidthOverride,
+                mMatchConstraintMinWidth,
+                mMatchConstraintDefaultWidth,
+                mMatchConstraintPercentWidth,
+                mWeight[DIMENSION_HORIZONTAL]
+         );
+        
+        serializeSize(ret,"height",
+                mHeight,
+                mMinHeight,
+                mMaxDimension[VERTICAL],
+                mHeightOverride,
+                mMatchConstraintMinHeight,
+                mMatchConstraintDefaultHeight,
+                mMatchConstraintPercentHeight,
+                mWeight[DIMENSION_VERTICAL]);
+
+        serializeDimensionRatio(ret,"dimensionRatio",mDimensionRatio, mDimensionRatioSide);
+        serializeAttribute(ret,"horizontalBias",mHorizontalBiasPercent,DEFAULT_BIAS );
+        serializeAttribute(ret,"verticalBias",mVerticalBiasPercent,DEFAULT_BIAS );
+        ret.append("}\n");
+
+        return ret;
+    }
+    ///////////////////////////////////END SERIALIZE///////////////////////////////////////////
+
     public int horizontalGroup = -1;
     public int verticalGroup = -1;
 

@@ -18,6 +18,7 @@ package androidx.constraintlayout.core.state;
 
 import androidx.constraintlayout.core.motion.CustomVariable;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
+import androidx.constraintlayout.core.parser.*;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
 import java.util.HashMap;
@@ -27,7 +28,7 @@ import java.util.Set;
  * Utility class to encapsulate layout of a widget
  */
 public class WidgetFrame {
-    private final static boolean OLD_SYSTEM = false;
+    private final static boolean OLD_SYSTEM = true;
     public ConstraintWidget widget = null;
     public int left = 0;
     public int top = 0;
@@ -54,42 +55,19 @@ public class WidgetFrame {
 
     public int visibility = ConstraintWidget.VISIBLE;
 
-    public HashMap<String, Color> mCustomColors = null;
-    public HashMap<String, Float> mCustomFloats = null;
-    HashMap<String, CustomVariable> mCustom = new HashMap<>();
+    final public HashMap<String, CustomVariable> mCustom = new HashMap<>();
 
-    public static class Color {
-        public float r;
-        public float g;
-        public float b;
-        public float a;
-
-        public Color(float r, float g, float b, float a) {
-            this.r = r;
-            this.g = g;
-            this.b = b;
-            this.a = a;
-        }
-
-        public void copy(Color start) {
-            this.r = start.r;
-            this.g = start.g;
-            this.b = start.b;
-            this.a = start.a;
-        }
-    }
-
+    public String name = null;
 
     public int width() {
-        return right - left;
+        return Math.max(0, right - left);
     }
 
     public int height() {
-        return bottom - top;
+        return Math.max(0, bottom - top);
     }
 
-    public WidgetFrame() {
-    }
+    public WidgetFrame() {}
 
     public WidgetFrame(ConstraintWidget widget) {
         this.widget = widget;
@@ -104,7 +82,7 @@ public class WidgetFrame {
         updateAttributes(frame);
     }
 
-    private void updateAttributes(WidgetFrame frame) {
+    public void updateAttributes(WidgetFrame frame) {
         pivotX = frame.pivotX;
         pivotY = frame.pivotY;
         rotationX = frame.rotationX;
@@ -118,13 +96,11 @@ public class WidgetFrame {
         alpha = frame.alpha;
         visibility = frame.visibility;
 
-        if (frame.mCustomColors != null) {
-            mCustomColors = new HashMap<>();
-            mCustomColors.putAll(frame.mCustomColors);
-        }
-        if (frame.mCustomFloats != null) {
-            mCustomFloats = new HashMap<>();
-            mCustomFloats.putAll(frame.mCustomFloats);
+        mCustom.clear();
+        if (frame != null) {
+            for (CustomVariable c : frame.mCustom.values()) {
+                mCustom.put(c.getName(), c.copy());
+            }
         }
     }
 
@@ -252,19 +228,6 @@ public class WidgetFrame {
         return (start + progress * (end - start));
     }
 
-    public static void interpolateColor(Color result, Color start, Color end, float progress) {
-        if (progress < 0) {
-            result.copy(start);
-        } else if (progress > 1) {
-            result.copy(end);
-        } else {
-            result.r = (1f - progress) * start.r + progress * (end.r);
-            result.g = (1f - progress) * start.g + progress * (end.g);
-            result.b = (1f - progress) * start.b + progress * (end.b);
-            result.a = (1f - progress) * start.a + progress * (end.a);
-        }
-    }
-
     public float centerX() {
         return left + (right - left) / 2f;
     }
@@ -285,62 +248,33 @@ public class WidgetFrame {
         return this;
     }
 
-
     public WidgetFrame update(ConstraintWidget widget) {
         if (widget == null) {
             return this;
         }
+
         this.widget = widget;
         update();
         return this;
     }
 
-    public void addCustomColor(String name, float r, float g, float b, float a) {
-        if (OLD_SYSTEM) {
-            Color color = new Color(r, g, b, a);
-            if (mCustomColors == null) {
-                mCustomColors = new HashMap<>();
-            }
-            mCustomColors.put(name, color);
-        }
-        setCustomAttribute(name, TypedValues.Custom.TYPE_COLOR, CustomVariable.rgbaTocColor(r, g, b, a));
+    public void addCustomColor(String name, int color) {
+        setCustomAttribute(name, TypedValues.Custom.TYPE_COLOR, color);
     }
 
-    public Color getCustomColor(String name) {
-        if (OLD_SYSTEM) {
-            if (mCustomColors == null) {
-                return null;
-            }
-            return mCustomColors.get(name);
-        }
+    public int getCustomColor(String name) {
         if (mCustom.containsKey(name)) {
             int color = mCustom.get(name).getColorValue();
-            float fr = ((color >> 16) & 0xFF) / 255f;
-            float fg = ((color >> 8) & 0xFF) / 255f;
-            float fb = ((color) & 0xFF) / 255f;
-            float fa = ((color >> 24) & 0xFF) / 255f;
-            return new Color(fr, fg, fb, fa);
+            return color;
         }
-        return new Color(1, 0.5f, 0.5f, 1);
+        return 0xFFFFAA88;
     }
 
     public void addCustomFloat(String name, float value) {
-        if (OLD_SYSTEM) {
-            if (mCustomFloats == null) {
-                mCustomFloats = new HashMap<>();
-            }
-            mCustomFloats.put(name, value);
-        }
         setCustomAttribute(name, TypedValues.Custom.TYPE_FLOAT, value);
     }
 
     public float getCustomFloat(String name) {
-        if (OLD_SYSTEM) {
-            if (mCustomFloats == null) {
-                return 0f;
-            }
-            return mCustomFloats.get(name);
-        }
         if (mCustom.containsKey(name)) {
             return mCustom.get(name).getFloatValue();
         }
@@ -386,4 +320,187 @@ public class WidgetFrame {
     public Set<String> getCustomAttributeNames() {
         return mCustom.keySet();
     }
+
+    public boolean setValue(String key, CLElement value) throws CLParsingException {
+        switch (key) {
+            case "pivotX":
+                pivotX = value.getFloat();
+                break;
+            case "pivotY":
+                pivotY = value.getFloat();
+                break;
+            case "rotationX":
+                rotationX = value.getFloat();
+                break;
+            case "rotationY":
+                rotationY = value.getFloat();
+                break;
+            case "rotationZ":
+                rotationZ = value.getFloat();
+                break;
+            case "translationX":
+                translationX = value.getFloat();
+                break;
+            case "translationY":
+                translationY = value.getFloat();
+                break;
+            case "translationZ":
+                translationZ = value.getFloat();
+                break;
+            case "scaleX":
+                scaleX = value.getFloat();
+                break;
+            case "scaleY":
+                scaleY = value.getFloat();
+                break;
+            case "alpha":
+                alpha = value.getFloat();
+                break;
+            case "top":
+                top = value.getInt();
+                break;
+            case "left":
+                left = value.getInt();
+                break;
+            case "right":
+                right = value.getInt();
+                break;
+            case "bottom":
+                bottom = value.getInt();
+                break;
+            case "custom":
+                parseCustom(value);
+                break;
+            default:
+                return false;
+        }
+        return true;
+    }
+
+    void parseCustom(CLElement custom) throws CLParsingException {
+        CLObject obj = ((CLObject) custom);
+        int n = obj.size();
+        for (int i = 0; i < n; i++) {
+            CLElement tmp = obj.get(i);
+            CLKey k = ((CLKey) tmp);
+            String name = k.content();
+            CLElement v = k.getValue();
+            String vStr = v.content();
+            if (vStr.matches("#[0-9a-fA-F]+")) {
+                int color = Integer.parseInt(vStr.substring(1), 16);
+                setCustomAttribute(k.content(), TypedValues.Custom.TYPE_COLOR, color);
+            } else if (v instanceof CLNumber) {
+                setCustomAttribute(k.content(), TypedValues.Custom.TYPE_FLOAT, v.getFloat());
+            } else {
+                setCustomAttribute(k.content(), TypedValues.Custom.TYPE_STRING, vStr);
+
+            }
+        }
+    }
+
+    public StringBuilder serialize(StringBuilder ret) {
+        WidgetFrame frame = this;
+        ret.append("{\n");
+        add(ret, "left", frame.left);
+        add(ret, "top", frame.top);
+        add(ret, "right", frame.right);
+        add(ret, "bottom", frame.bottom);
+        add(ret, "pivotX", frame.pivotX);
+        add(ret, "pivotY", frame.pivotY);
+        add(ret, "rotationX", frame.rotationX);
+        add(ret, "rotationY", frame.rotationY);
+        add(ret, "rotationZ", frame.rotationZ);
+        add(ret, "translationX", frame.translationX);
+        add(ret, "translationY", frame.translationY);
+        add(ret, "translationZ", frame.translationZ);
+        add(ret, "scaleX", frame.scaleX);
+        add(ret, "scaleY", frame.scaleY);
+        add(ret, "alpha", frame.alpha);
+        add(ret, "visibility", frame.left);
+
+        if (frame.mCustom.size() != 0) {
+            ret.append("custom : {\n");
+            for (String s : frame.mCustom.keySet()) {
+                CustomVariable value = frame.mCustom.get(s);
+                ret.append(s);
+                ret.append(": ");
+                switch (value.getType()) {
+                    case TypedValues.Custom.TYPE_INT:
+                        ret.append(value.getIntegerValue());
+                        ret.append(",\n");
+                        break;
+                    case TypedValues.Custom.TYPE_FLOAT:
+                    case TypedValues.Custom.TYPE_DIMENSION:
+                        ret.append(value.getFloatValue());
+                        ret.append(",\n");
+                        break;
+                    case TypedValues.Custom.TYPE_COLOR:
+                        ret.append("'");
+                        ret.append(CustomVariable.colorString(value.getIntegerValue()));
+                        ret.append("',\n");
+                        break;
+                    case TypedValues.Custom.TYPE_STRING:
+                        ret.append("'");
+                        ret.append(value.getStringValue());
+                        ret.append("',\n");
+                        break;
+                    case TypedValues.Custom.TYPE_BOOLEAN:
+                        ret.append("'");
+                        ret.append(value.getBooleanValue());
+                        ret.append("',\n");
+                        break;
+                }
+            }
+            ret.append("}\n");
+        }
+
+        ret.append("}\n");
+        return ret;
+    }
+
+    private static void add(StringBuilder s, String title, int value) {
+        s.append(title);
+        s.append(": ");
+        s.append(value);
+        s.append(",\n");
+    }
+
+    private static void add(StringBuilder s, String title, float value) {
+        if (Float.isNaN(value)) {
+            return;
+        }
+        s.append(title);
+        s.append(": ");
+        s.append(value);
+        s.append(",\n");
+    }
+
+    void printCustomAttributes() {
+        StackTraceElement s = new Throwable().getStackTrace()[1];
+        String ss = ".(" + s.getFileName() + ":" + s.getLineNumber() + ") " + s.getMethodName();
+        ss += " " + (this.hashCode() % 1000);
+        if (widget != null) {
+            ss += "/" + (widget.hashCode() % 1000) + " ";
+        } else {
+            ss += "/NULL ";
+        }
+        if (mCustom != null)
+            for (String key : mCustom.keySet()) {
+                System.out.println(ss + mCustom.get(key).toString());
+            }
+    }
+
+    void logv(String str) {
+        StackTraceElement s = new Throwable().getStackTrace()[1];
+        String ss = ".(" + s.getFileName() + ":" + s.getLineNumber() + ") " + s.getMethodName();
+        ss += " " + (this.hashCode() % 1000);
+        if (widget != null) {
+            ss += "/" + (widget.hashCode() % 1000);
+        } else {
+            ss += "/NULL";
+        }
+
+        System.out.println(ss + " " + str);
+    }
+
 }

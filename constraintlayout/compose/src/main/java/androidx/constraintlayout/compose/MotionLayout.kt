@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.LayoutScopeMarker
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -33,17 +34,13 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.layout.Measurable
-import androidx.compose.ui.layout.MeasurePolicy
-import androidx.compose.ui.layout.MeasureScope
-import androidx.compose.ui.layout.MultiMeasureLayout
-import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.layout.*
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.*
 import androidx.constraintlayout.core.motion.Motion
+import androidx.constraintlayout.core.state.*
 import androidx.constraintlayout.core.state.Dimension
 import androidx.constraintlayout.core.state.Transition
-import androidx.constraintlayout.core.state.WidgetFrame
 import androidx.constraintlayout.core.widgets.Optimizer
 import org.intellij.lang.annotations.Language
 import java.util.*
@@ -57,7 +54,7 @@ import java.util.*
 inline fun MotionLayout(
     start: ConstraintSet,
     end: ConstraintSet,
-    keyframes: Keyframes? = null,
+    transition: androidx.constraintlayout.compose.Transition? = null,
     progress: Float,
     debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     modifier: Modifier = Modifier,
@@ -69,17 +66,37 @@ inline fun MotionLayout(
     val progressState = remember { mutableStateOf(0f) }
     SideEffect { progressState.value = progress }
     val measurePolicy =
-        rememberMotionLayoutMeasurePolicy(optimizationLevel, start, end, keyframes, progressState, measurer)
-    if (!debug.contains(MotionLayoutDebugFlags.NONE)) {
+        rememberMotionLayoutMeasurePolicy(
+            optimizationLevel,
+            debug,
+            0,
+            start,
+            end,
+            transition,
+            progressState,
+            measurer
+        )
+
+    val forcedScaleFactor = measurer.forcedScaleFactor
+    if (!debug.contains(MotionLayoutDebugFlags.NONE) || !forcedScaleFactor.isNaN()) {
+        var mod = modifier
+        if (!forcedScaleFactor.isNaN()) {
+            mod = modifier.scale(measurer.forcedScaleFactor)
+        }
         Box {
             @Suppress("DEPRECATION")
             (MultiMeasureLayout(
-                modifier = modifier.semantics { designInfoProvider = measurer },
+                modifier = mod.semantics { designInfoProvider = measurer },
                 measurePolicy = measurePolicy,
                 content = { scope.content() }
             ))
             with(measurer) {
-                drawDebug()
+                if (!forcedScaleFactor.isNaN()) {
+                    drawDebugBounds(forcedScaleFactor)
+                }
+                if (!debug.contains(MotionLayoutDebugFlags.NONE)) {
+                    drawDebug()
+                }
             }
         }
     } else {
@@ -100,25 +117,95 @@ inline fun MotionLayout(
     debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     modifier: Modifier = Modifier,
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
-    crossinline content: @Composable MotionLayoutScope.() -> Unit
+    crossinline content: @Composable() (MotionLayoutScope.() -> Unit),
 ) {
-    var startContent = remember(motionScene) {
+    val needsUpdate = remember {
+        mutableStateOf(0L)
+    }
+    motionScene.setUpdateFlag(needsUpdate)
+
+    var usedDebugMode = debug
+    if (motionScene.getForcedDrawDebug() != MotionLayoutDebugFlags.UNKNOWN) {
+        usedDebugMode = EnumSet.of(motionScene.getForcedDrawDebug())
+    }
+
+    val startContent = remember(motionScene, needsUpdate.value) {
         motionScene.getConstraintSet("start")
     }
-    var endContent = remember(motionScene) {
+    val endContent = remember(motionScene, needsUpdate.value) {
         motionScene.getConstraintSet("end")
     }
-    var transitionContent = remember(motionScene) {
+    val transitionContent = remember(motionScene, needsUpdate.value) {
         motionScene.getTransition("default")
     }
+    var lastOutsideProgress = remember {
+        mutableStateOf(0f)
+    }
+    val forcedProgress = motionScene.getForcedProgress()
+    var usedProgress = progress
+    if (!forcedProgress.isNaN() && lastOutsideProgress.value == progress) {
+        usedProgress = forcedProgress
+    } else {
+        motionScene.resetForcedProgress()
+    }
+    lastOutsideProgress.value = progress
+
     if (startContent == null || endContent == null) {
         return
     }
     val start = ConstraintSet(startContent)
     val end = ConstraintSet(endContent)
-    val keyframes : Keyframes? = if (transitionContent != null) Keyframes(transitionContent) else null
-    MotionLayout(start = start, end = end, keyframes = keyframes, progress = progress,
-        debug = debug, modifier = modifier, optimizationLevel = optimizationLevel, content)
+    val transition: androidx.constraintlayout.compose.Transition? =
+        if (transitionContent != null) Transition(transitionContent) else null
+
+    val measurer = remember { MotionMeasurer() }
+    val scope = remember { MotionLayoutScope(measurer) }
+    val progressState = remember { mutableStateOf(0f) }
+    SideEffect { progressState.value = usedProgress }
+    val measurePolicy =
+        rememberMotionLayoutMeasurePolicy(
+            optimizationLevel,
+            usedDebugMode,
+            needsUpdate.value,
+            start,
+            end,
+            transition,
+            progressState,
+            measurer
+        )
+    measurer.addLayoutInformationReceiver(motionScene as JSONMotionScene)
+
+    val forcedScaleFactor = measurer.forcedScaleFactor
+    if (!debug.contains(MotionLayoutDebugFlags.NONE) || !forcedScaleFactor.isNaN()) {
+        var mod = modifier
+        if (!forcedScaleFactor.isNaN()) {
+            mod = modifier.scale(measurer.forcedScaleFactor)
+        }
+        Box {
+            @Suppress("DEPRECATION")
+            (MultiMeasureLayout(
+                modifier = mod.semantics { designInfoProvider = measurer },
+                measurePolicy = measurePolicy,
+                content = { scope.content() }
+            ))
+            with(measurer) {
+                if (!forcedScaleFactor.isNaN()) {
+                    drawDebugBounds(forcedScaleFactor)
+                }
+                if (!debug.contains(MotionLayoutDebugFlags.NONE)) {
+                    drawDebug()
+                }
+            }
+        }
+    } else {
+        @Suppress("DEPRECATION")
+        (MultiMeasureLayout(
+            modifier = modifier.semantics { designInfoProvider = measurer },
+            measurePolicy = measurePolicy,
+            content = { scope.content() }
+        ))
+    }
+
 }
 
 @Immutable
@@ -126,64 +213,108 @@ interface MotionScene {
     fun setConstraintSetContent(name: String, content: String)
     fun setTransitionContent(name: String, content: String)
     fun getConstraintSet(name: String): String?
-    fun getTransition(name: String) : String?
+    fun getTransition(name: String): String?
+    fun setUpdateFlag(needsUpdate: MutableState<Long>)
+    fun setDebugName(name: String?)
+    fun getForcedProgress(): Float
+    fun resetForcedProgress()
+    fun getForcedDrawDebug(): MotionLayoutDebugFlags
+}
+
+class JSONMotionScene(@Language("json5") content: String) : EditableJSONLayout(content),
+    MotionScene {
+
+    private val constraintSetsContent = HashMap<String, String>()
+    private val transitionsContent = HashMap<String, String>()
+    private var forcedProgress: Float = Float.NaN
+
+    init {
+        // call parent init here so that hashmaps are created
+        initialization()
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Accessors
+    ///////////////////////////////////////////////////////////////////////////
+
+    override fun setConstraintSetContent(name: String, content: String) {
+        constraintSetsContent[name] = content
+    }
+
+    override fun setTransitionContent(name: String, content: String) {
+        transitionsContent[name] = content
+    }
+
+    override fun getConstraintSet(name: String): String? {
+        return constraintSetsContent[name]
+    }
+
+    override fun getTransition(name: String): String? {
+        return transitionsContent[name]
+    }
+
+    override fun getForcedProgress(): Float {
+        return forcedProgress;
+    }
+
+    override fun resetForcedProgress() {
+        forcedProgress = Float.NaN
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // on update methods
+    ///////////////////////////////////////////////////////////////////////////
+
+    override fun onNewContent(content: String) {
+        super.onNewContent(content)
+        try {
+            parseMotionSceneJSON(this, content);
+        } catch (e: Exception) {
+            // nothing (content might be invalid, sent by live edit)
+        }
+    }
+
+    override fun onNewProgress(progress: Float) {
+        forcedProgress = progress
+        signalUpdate()
+    }
+
 }
 
 @SuppressLint("ComposableNaming")
 @Composable
-fun MotionScene(@Language("json5") content : String) : MotionScene {
-    val constraintset = remember {
-        mutableStateOf(object : MotionScene {
-            private val constraintSetsContent = HashMap<String, String>()
-            private val transitionsContent = HashMap<String, String>()
-
-            init {
-                parseMotionSceneJSON(this, content);
-            }
-
-            override fun setConstraintSetContent(name: String, content: String) {
-                constraintSetsContent[name] = content
-            }
-
-            override fun setTransitionContent(name: String, content: String) {
-                transitionsContent[name] = content
-            }
-
-            override fun getConstraintSet(name: String): String? {
-                return constraintSetsContent[name]
-            }
-
-            override fun getTransition(name: String): String? {
-                return transitionsContent[name]
-            }
-        })
+fun MotionScene(@Language("json5") content: String): MotionScene {
+    return remember(content) {
+        JSONMotionScene(content)
     }
-
-    return constraintset.value
 }
 
 @LayoutScopeMarker
 class MotionLayoutScope @PublishedApi internal constructor(measurer: MotionMeasurer) {
     private var myMeasurer = measurer
 
-    class MotionProperties internal constructor(id: String, tag: String?, measurer: MotionMeasurer) {
+    class MotionProperties internal constructor(
+        id: String,
+        tag: String?,
+        measurer: MotionMeasurer
+    ) {
         private var myId = id
         private var myTag = null
         private var myMeasurer = measurer
 
-        fun id() : String {
+        fun id(): String {
             return myId
         }
 
-        fun tag() : String? {
+        fun tag(): String? {
             return myTag
         }
 
-        fun color(name: String) : Color {
+        fun color(name: String): Color {
             return myMeasurer.getCustomColor(myId, name)
         }
 
-        fun float(name: String) : Float {
+        fun float(name: String): Float {
             return myMeasurer.getCustomFloat(myId, name)
         }
 
@@ -195,7 +326,7 @@ class MotionLayoutScope @PublishedApi internal constructor(measurer: MotionMeasu
             return myMeasurer.getCustomFloat(myId, name).dp
         }
 
-        fun fontSize(name: String) : TextUnit {
+        fun fontSize(name: String): TextUnit {
             return myMeasurer.getCustomFloat(myId, name).sp
         }
     }
@@ -205,7 +336,7 @@ class MotionLayoutScope @PublishedApi internal constructor(measurer: MotionMeasu
         mutableStateOf(MotionProperties(id, null, myMeasurer))
     }
 
-    fun motionProperties(id: String, tag: String): MotionProperties{
+    fun motionProperties(id: String, tag: String): MotionProperties {
         return MotionProperties(id, tag, myMeasurer)
     }
 
@@ -231,46 +362,61 @@ class MotionLayoutScope @PublishedApi internal constructor(measurer: MotionMeasu
 }
 
 @Immutable
-interface Keyframes {
+interface Transition {
     fun applyTo(transition: Transition, type: Int)
 }
 
 @SuppressLint("ComposableNaming")
 @Composable
-fun Keyframes(@Language("json5") content : String) : Keyframes {
-    val keyframes = remember {
-        mutableStateOf(object : Keyframes {
+fun Transition(@Language("json5") content: String): androidx.constraintlayout.compose.Transition {
+    val transition = remember(content) {
+        mutableStateOf(object : androidx.constraintlayout.compose.Transition {
             override fun applyTo(transition: Transition, type: Int) {
-                parseKeyframesJSON(content, transition)
+                parseTransition(content, transition)
             }
         })
     }
-    return keyframes.value
+    return transition.value
 }
 
 enum class MotionLayoutDebugFlags {
     NONE,
-    SHOW_ALL
+    SHOW_ALL,
+    UNKNOWN
+}
+
+enum class LayoutInfoFlags {
+    NONE,
+    BOUNDS
 }
 
 @Composable
 @PublishedApi
 internal fun rememberMotionLayoutMeasurePolicy(
     optimizationLevel: Int,
+    debug: EnumSet<MotionLayoutDebugFlags>,
+    needsUpdate: Long,
     constraintSetStart: ConstraintSet,
     constraintSetEnd: ConstraintSet,
-    keyframes: Keyframes?,
+    transition: androidx.constraintlayout.compose.Transition?,
     progress: MutableState<Float>,
     measurer: MotionMeasurer
-) = remember(optimizationLevel, constraintSetStart, constraintSetEnd, keyframes) {
-    measurer.initWith(constraintSetStart, constraintSetEnd, keyframes, progress.value)
+) = remember(
+    optimizationLevel,
+    debug,
+    needsUpdate,
+    constraintSetStart,
+    constraintSetEnd,
+    transition
+) {
+    measurer.initWith(constraintSetStart, constraintSetEnd, transition, progress.value)
     MeasurePolicy { measurables, constraints ->
         val layoutSize = measurer.performInterpolationMeasure(
             constraints,
             layoutDirection,
             constraintSetStart,
             constraintSetEnd,
-            keyframes,
+            transition,
             measurables,
             optimizationLevel,
             progress.value,
@@ -289,16 +435,18 @@ internal class MotionMeasurer : Measurer() {
     private var motionProgress = 0f
     val transition = Transition()
 
-    fun getProgress() : Float { return motionProgress }
+    fun getProgress(): Float {
+        return motionProgress
+    }
 
-    private fun measureConstraintSet(optimizationLevel: Int, constraintSetStart: ConstraintSet,
-                                     measurables: List<Measurable>, constraints: Constraints
+    private fun measureConstraintSet(
+        optimizationLevel: Int, constraintSetStart: ConstraintSet,
+        measurables: List<Measurable>, constraints: Constraints
     ) {
         state.reset()
         constraintSetStart.applyTo(state, measurables)
         state.apply(root)
-        root.width = constraints.maxWidth
-        root.height = constraints.maxHeight
+        applyRootSize(constraints)
         root.updateHierarchy()
 
         if (DEBUG) {
@@ -310,8 +458,8 @@ internal class MotionMeasurer : Measurer() {
         }
 
         root.children.forEach { child ->
-            var measurable = (child.companionWidget as? Measurable)
-            var id = measurable?.layoutId ?: measurable?.constraintLayoutId
+            val measurable = (child.companionWidget as? Measurable)
+            val id = measurable?.layoutId ?: measurable?.constraintLayoutId
             child.stringId = id?.toString()
         }
 
@@ -325,7 +473,7 @@ internal class MotionMeasurer : Measurer() {
         layoutDirection: LayoutDirection,
         constraintSetStart: ConstraintSet,
         constraintSetEnd: ConstraintSet,
-        keyframes: Keyframes?,
+        transition: androidx.constraintlayout.compose.Transition?,
         measurables: List<Measurable>,
         optimizationLevel: Int,
         progress: Float,
@@ -334,11 +482,14 @@ internal class MotionMeasurer : Measurer() {
         this.density = measureScope
         this.measureScope = measureScope
         if (motionProgress != progress
-            || transition.isEmpty()
-            || frameCache.isEmpty()) {
+            || (layoutInformationReceiver?.getForcedWidth() != Int.MIN_VALUE
+                    && layoutInformationReceiver?.getForcedHeight() != Int.MIN_VALUE)
+            || this.transition.isEmpty()
+            || frameCache.isEmpty()
+        ) {
             motionProgress = progress
-            if (transition.isEmpty() || frameCache.isEmpty()) {
-                transition.clear()
+            if (this.transition.isEmpty() || frameCache.isEmpty()) {
+                this.transition.clear()
                 reset()
                 // Define the size of the ConstraintLayout.
                 state.width(
@@ -359,20 +510,25 @@ internal class MotionMeasurer : Measurer() {
                 state.rootIncomingConstraints = constraints
                 state.layoutDirection = layoutDirection
 
-                measureConstraintSet(optimizationLevel, constraintSetStart, measurables, constraints)
-                transition.updateFrom(root, Transition.START)
+                measureConstraintSet(
+                    optimizationLevel,
+                    constraintSetStart,
+                    measurables,
+                    constraints
+                )
+                this.transition.updateFrom(root, Transition.START)
                 measureConstraintSet(optimizationLevel, constraintSetEnd, measurables, constraints)
-                transition.updateFrom(root, Transition.END)
-                if (keyframes != null) {
-                    keyframes.applyTo(transition, 0)
+                this.transition.updateFrom(root, Transition.END)
+                if (transition != null) {
+                    transition.applyTo(this.transition, 0)
                 }
             }
-            transition.interpolate(root.width, root.height, progress)
+            this.transition.interpolate(root.width, root.height, progress)
             var index = 0
             for (child in root.children) {
                 val measurable = child.companionWidget
                 if (measurable !is Measurable) continue
-                var interpolatedFrame = transition.getInterpolated(child)
+                var interpolatedFrame = this.transition.getInterpolated(child)
                 if (interpolatedFrame == null) {
                     continue
                 }
@@ -393,8 +549,88 @@ internal class MotionMeasurer : Measurer() {
                 frameCache[measurable] = interpolatedFrame
                 index++
             }
+            if (layoutInformationReceiver?.getLayoutInformationMode() == LayoutInfoFlags.BOUNDS) {
+                computeLayoutResult()
+            }
         }
         return IntSize(root.width, root.height)
+    }
+
+    private fun encodeKeyFrames(
+        json: StringBuilder,
+        location: FloatArray,
+        types: IntArray,
+        progress: IntArray,
+        count: Int
+    ) {
+        if (count == 0) {
+            return
+        }
+        json.append("keyTypes : [")
+        for (i in 0 until count) {
+            val m = types[i]
+            json.append(" $m,")
+        }
+        json.append("],\n")
+
+        json.append("keyPos : [")
+        for (i in 0 until count * 2) {
+            val f = location[i]
+            json.append(" $f,")
+        }
+        json.append("],\n ")
+
+        json.append("keyFrames : [")
+        for (i in 0 until count) {
+            val f = progress[i]
+            json.append(" $f,")
+        }
+        json.append("],\n ")
+    }
+
+    fun encodeRoot(json: StringBuilder) {
+        json.append("  root: {")
+        json.append("interpolated: { left:  0,")
+        json.append("  top:  0,")
+        json.append("  right:   ${root.width} ,")
+        json.append("  bottom:  ${root.height} ,")
+        json.append(" } }")
+    }
+
+    override fun computeLayoutResult() {
+        val json = StringBuilder()
+        json.append("{ ")
+        encodeRoot(json)
+        val mode = IntArray(50)
+        val pos = IntArray(50)
+        var key = FloatArray(100)
+
+        for (child in root.children) {
+            val start = transition.getStart(child.stringId)
+            val end = transition.getEnd(child.stringId)
+            val interpolated = transition.getInterpolated(child.stringId)
+            val path = transition.getPath(child.stringId)
+            val count = transition.getKeyFrames(child.stringId, key, mode, pos)
+
+            json.append(" ${child.stringId}: {")
+            json.append(" interpolated : ")
+            interpolated.serialize(json);
+
+            json.append(", start : ")
+            start.serialize(json);
+
+            json.append(", end : ")
+            end.serialize(json);
+            encodeKeyFrames(json, key, mode, pos, count)
+            json.append(" path : [")
+            for (point in path) {
+                json.append(" $point ,")
+            }
+            json.append(" ] ")
+            json.append("}, ")
+        }
+        json.append(" }")
+        layoutInformationReceiver?.setLayoutInformation(json.toString())
     }
 
     @Composable
@@ -406,9 +642,23 @@ internal class MotionMeasurer : Measurer() {
                 val startFrame = transition.getStart(child)
                 val endFrame = transition.getEnd(child)
                 translate(2f, 2f) {
-                    drawFrameDebug(size.width, size.height, startFrame, endFrame, pathEffect, Color.White)
+                    drawFrameDebug(
+                        size.width,
+                        size.height,
+                        startFrame,
+                        endFrame,
+                        pathEffect,
+                        Color.White
+                    )
                 }
-                drawFrameDebug(size.width, size.height, startFrame, endFrame, pathEffect, Color.Blue)
+                drawFrameDebug(
+                    size.width,
+                    size.height,
+                    startFrame,
+                    endFrame,
+                    pathEffect,
+                    Color.Blue
+                )
                 index++
             }
         }
@@ -427,17 +677,19 @@ internal class MotionMeasurer : Measurer() {
         var numKeyPositions = transition.getNumberKeyPositions(startFrame)
         var debugRender = MotionRenderDebug(23f);
 
-        debugRender.draw(drawContext.canvas.nativeCanvas,transition.getMotion(startFrame.widget.stringId),
-            1000,   Motion.DRAW_PATH_BASIC,
-              parentWidth.toInt(), parentHeight.toInt()  )
+        debugRender.draw(
+            drawContext.canvas.nativeCanvas, transition.getMotion(startFrame.widget.stringId),
+            1000, Motion.DRAW_PATH_BASIC,
+            parentWidth.toInt(), parentHeight.toInt()
+        )
         if (numKeyPositions == 0) {
-            drawLine(
-                start = Offset(startFrame.centerX(), startFrame.centerY()),
-                end = Offset(endFrame.centerX(), endFrame.centerY()),
-                color = color,
-                strokeWidth = 3f,
-                pathEffect = pathEffect
-            )
+//            drawLine(
+//                start = Offset(startFrame.centerX(), startFrame.centerY()),
+//                end = Offset(endFrame.centerX(), endFrame.centerY()),
+//                color = color,
+//                strokeWidth = 3f,
+//                pathEffect = pathEffect
+//            )
         } else {
             var x = FloatArray(numKeyPositions)
             var y = FloatArray(numKeyPositions)
@@ -446,19 +698,21 @@ internal class MotionMeasurer : Measurer() {
             var prex = startFrame.centerX()
             var prey = startFrame.centerY()
 
-            for (i in 0 .. numKeyPositions-1) {
+            for (i in 0..numKeyPositions - 1) {
                 var keyFrameProgress = pos[i] / 100f
-                var frameWidth = ((1 - keyFrameProgress) * startFrame.width()) + (keyFrameProgress * endFrame.width())
-                var frameHeight = ((1 - keyFrameProgress) * startFrame.height()) + (keyFrameProgress * endFrame.height())
+                var frameWidth =
+                    ((1 - keyFrameProgress) * startFrame.width()) + (keyFrameProgress * endFrame.width())
+                var frameHeight =
+                    ((1 - keyFrameProgress) * startFrame.height()) + (keyFrameProgress * endFrame.height())
                 var curX = x[i] * parentWidth + frameWidth / 2f
                 var curY = y[i] * parentHeight + frameHeight / 2f
-                drawLine(
-                    start = Offset(prex, prey),
-                    end = Offset(curX, curY),
-                    color = color,
-                    strokeWidth = 3f,
-                    pathEffect = pathEffect
-                )
+//                drawLine(
+//                    start = Offset(prex, prey),
+//                    end = Offset(curX, curY),
+//                    color = color,
+//                    strokeWidth = 3f,
+//                    pathEffect = pathEffect
+//                )
                 var path = Path()
                 var pathSize = 20f
                 path.moveTo(curX - pathSize, curY)
@@ -472,13 +726,13 @@ internal class MotionMeasurer : Measurer() {
                 prex = curX
                 prey = curY
             }
-            drawLine(
-                start = Offset(prex, prey),
-                end = Offset(endFrame.centerX(), endFrame.centerY()),
-                color = color,
-                strokeWidth = 3f,
-                pathEffect = pathEffect
-            )
+//            drawLine(
+//                start = Offset(prex, prey),
+//                end = Offset(endFrame.centerX(), endFrame.centerY()),
+//                color = color,
+//                strokeWidth = 3f,
+//                pathEffect = pathEffect
+//            )
         }
     }
 
@@ -489,8 +743,10 @@ internal class MotionMeasurer : Measurer() {
     ) {
         if (frame.isDefaultTransform) {
             var drawStyle = Stroke(width = 3f, pathEffect = pathEffect)
-            drawRect(color, Offset(frame.left.toFloat(), frame.top.toFloat()),
-                Size(frame.width().toFloat(), frame.height().toFloat()), style = drawStyle)
+            drawRect(
+                color, Offset(frame.left.toFloat(), frame.top.toFloat()),
+                Size(frame.width().toFloat(), frame.height().toFloat()), style = drawStyle
+            )
         } else {
             var matrix = Matrix()
             if (!frame.rotationZ.isNaN()) {
@@ -548,14 +804,12 @@ internal class MotionMeasurer : Measurer() {
         }
         val startFrame = transition.getStart(id)
         val endFrame = transition.getEnd(id)
-        val startColor = startFrame.getCustomColor(name)
-        val endColor = endFrame.getCustomColor(name)
-        if (startColor != null && endColor != null) {
-            var result = WidgetFrame.Color(0f, 0f, 0f, 0f)
-            WidgetFrame.interpolateColor(result, startColor, endColor, motionProgress)
-            return Color(result.r, result.g, result.b, result.a)
-        }
-        return Color.Black
+
+        transition.interpolate(root.width, root.height, motionProgress)
+
+        val interpolatedFrame = transition.getInterpolated(id)
+        val color = interpolatedFrame.getCustomColor(name)
+        return Color(color);
     }
 
     fun getCustomFloat(id: String, name: String): Float {
@@ -577,14 +831,14 @@ internal class MotionMeasurer : Measurer() {
     fun initWith(
         start: ConstraintSet,
         end: ConstraintSet,
-        keyframes: Keyframes?,
+        transition: androidx.constraintlayout.compose.Transition?,
         progress: Float
     ) {
         clearConstraintSets()
-        start.applyTo(transition, Transition.START)
-        end.applyTo(transition, Transition.END)
-        transition.interpolate(0, 0, progress)
-        keyframes?.applyTo(transition, 0)
+        start.applyTo(this.transition, Transition.START)
+        end.applyTo(this.transition, Transition.END)
+        this.transition.interpolate(0, 0, progress)
+        transition?.applyTo(this.transition, 0)
     }
 }
 

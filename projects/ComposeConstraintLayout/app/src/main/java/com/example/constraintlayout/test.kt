@@ -423,6 +423,7 @@ public fun ScreenExample3() {
     ConstraintLayout(
         ConstraintSet("""
             {
+                Debug: { name: 'example 3'},
                 g1: { type: 'vGuideline', start: 80 },
                 button: {
                   top: ['title', 'bottom', 16],
@@ -455,6 +456,7 @@ public fun ScreenExample4() {
     ConstraintLayout(
         ConstraintSet("""
             {
+                Debug: { name: 'example 4'},
                 g1: { type: 'vGuideline', percent: 0.5 },
                 button: {
                   start: ['g1', 'start']
@@ -463,6 +465,7 @@ public fun ScreenExample4() {
         """),
         modifier = Modifier
             .fillMaxSize()
+            .background(Color.White)
     ) {
         Button(
             modifier = Modifier.layoutId("button"),
@@ -967,8 +970,8 @@ public fun ScreenExample12() {
     var baseConstraintSet = """
             {
                 Variables: {
-                  angle: { start: 0, increment: 10 },
-                  rotation: { start: 'startRotation', increment: 10 },
+                  angle: { from: 0, step: 10 },
+                  rotation: { from: 'startRotation', step: 10 },
                   distance: 100,
                   mylist: { tag: 'box' }
                 },
@@ -986,8 +989,8 @@ public fun ScreenExample12() {
             }
         """
 
-    var cs1 = ConstraintSet(baseConstraintSet).override("startRotation", 0f)
-    var cs2 = ConstraintSet(baseConstraintSet).override("startRotation", 90f)
+    var cs1 = ConstraintSet(baseConstraintSet, overrideVariables = "{ startRotation: 0 }")
+    var cs2 = ConstraintSet(baseConstraintSet, overrideVariables = "{ startRotation: 90 }")
 
     Column {
         Button(onClick = { animateToEnd = !animateToEnd }) {
@@ -1110,7 +1113,7 @@ public fun ScreenExample14() {
             }
             """
             ),
-            keyframes = Keyframes("""
+            transition = Transition("""
             {
               KeyFrames: {
                 KeyPositions: [
@@ -1177,7 +1180,7 @@ public fun ScreenExample15() {
             }
             """
             ),
-            keyframes = Keyframes("""
+            transition = Transition("""
             {
               KeyFrames: {
                 KeyPositions: [
@@ -1220,6 +1223,9 @@ public fun ScreenExample16() {
                 .height(400.dp)
                 .background(Color.White),
             motionScene = MotionScene("""{
+                Debug: {
+                  name: 'motion8'
+                },
                 ConstraintSets: {
                   start: {
                     a: {
@@ -1248,8 +1254,8 @@ public fun ScreenExample16() {
                         {
                           target: ['a'],
                           frames: [25, 50, 75],
-                          percentX: [0.1, 0.8, 0.5],
-                          percentY: [0.4, 0.8, 0.5]
+                          percentX: [0.1, 0.8, 0.1],
+                          percentY: [0.4, 0.8, 0.0]
                         }
                       ]
                     }
@@ -1352,6 +1358,9 @@ public fun ScreenExample18() {
                 .height(400.dp)
                 .background(Color.White),
             motionScene = MotionScene("""{
+  Debug: {
+    name: 'example 18'
+  },
   ConstraintSets: {
     start: {
       a: {
@@ -1402,9 +1411,126 @@ public fun ScreenExample18() {
     }
 }
 
+@Preview(group = "motion11")
+@Composable
+public fun ScreenExample19() {
+    var animateToEnd by remember { mutableStateOf(false) }
+    val progress by animateFloatAsState(
+        targetValue = if (animateToEnd) 1f else 0f,
+        animationSpec = tween(2000)
+    )
 
+    Column {
+        Button(onClick = { animateToEnd = !animateToEnd }) {
+            Text(text = "Run")
+        }
+        MotionLayout(motionScene = MotionScene("""{
+                Debug: {
+                  name: 'exemple19'
+                },
+                ConstraintSets: {
+                  start: {
+                    Variables: {
+                      angle: { from: 0, step: 10 },
+                      rotation: { from: 0, step: 10 },
+                      distance: 100,
+                      mylist: { tag: 'box' },
+                      test: { from: 1, to: 36, prefix: 'h' },
+                    },
+                    Generate: {
+                      test: {
+                        width: 200,
+                        height: 40,
+                        circular: ['parent', 'angle', 'distance'],
+                        pivotX: 0.1,
+                        pivotY: 0.1,
+                        translationX: 225,
+                        translationZ: 20, 
+                        rotationZ: 'rotation'
+                      },
+                    }
+                  },
+                  end: {
+                    Extends: 'start',
+                    Variables: {
+                      rotation: { from: 90, step: 10 }
+                    }                    
+                  }
+                }
+            }"""),
+            progress = progress,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+        ) {
+            var colors = arrayListOf<Color>(Color.Red, Color.Green, Color.Blue, Color.Cyan, Color.Yellow)
 
+            for (i in 1..36) {
+                Box(modifier = Modifier
+                    .layoutId("h$i", "box")
+                    .background(colors[i % colors.size])
+                )
+            }
+        }
+    }
+}
 
+@Preview(group = "guidelines")
+@Composable
+public fun ScreenExample20() {
+    ConstraintLayout(
+        ConstraintSet("""
+        {
+          Debug: {
+            name: 'guidelines'
+          },
+          Design: {
+            toto: {
+              type: 'button',
+              text: 'plop'
+            }
+          },
+          Variables: {
+            margin: 8
+          },
+          g1: {
+            type: 'hGuideline',
+            percent: 0.34
+          },
+          g2: {
+            type: 'hGuideline',
+            percent: 0.63
+          },
+          g5: {
+            type: 'vGuideline',
+            percent: 0.57
+          },
+          g6: {
+            type: 'vGuideline',
+            percent: 0.29
+          },
+          button: {
+            width: 'spread',
+            height: 'spread',
+            top: ['g1', 'bottom', 'margin'],
+            bottom: ['g2', 'top', 'margin'],
+            start: ['g6', 'start', 'margin'],
+            end: ['g5', 'end', 'margin']
+          }
+        }
+        """),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
+        Button(
+            modifier = Modifier.layoutId("button"),
+            onClick = {},
+        ) {
+            Text(text = stringResource(id = R.string.log_in))
+        }
+    }
+}
 
 
 

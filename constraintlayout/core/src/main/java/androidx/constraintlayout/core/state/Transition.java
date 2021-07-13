@@ -18,6 +18,8 @@ package androidx.constraintlayout.core.state;
 
 import androidx.constraintlayout.core.motion.Motion;
 import androidx.constraintlayout.core.motion.MotionWidget;
+import androidx.constraintlayout.core.motion.key.MotionKeyAttributes;
+import androidx.constraintlayout.core.motion.key.MotionKeyCycle;
 import androidx.constraintlayout.core.motion.key.MotionKeyPosition;
 import androidx.constraintlayout.core.motion.utils.KeyCache;
 import androidx.constraintlayout.core.motion.utils.TypedBundle;
@@ -25,7 +27,6 @@ import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -36,6 +37,8 @@ public class Transition {
     public final static int START = 0;
     public final static int END = 1;
     public final static int INTERPOLATED = 2;
+
+    private int pathMotionArc = -1;
 
     public KeyPosition findPreviousPosition(String target, int frameNumber) {
         while (frameNumber >= 0) {
@@ -107,6 +110,10 @@ public class Transition {
         return keyPositions.size() > 0;
     }
 
+    public void setTransitionProperties(TypedBundle bundle) {
+        pathMotionArc = bundle.getInteger(TypedValues.Position.TYPE_PATH_MOTION_ARC);
+    }
+
     static class WidgetState {
         WidgetFrame start;
         WidgetFrame end;
@@ -137,6 +144,18 @@ public class Transition {
             motionControl.addKey(keyPosition);
         }
 
+        public void setKeyAttribute(TypedBundle prop) {
+            MotionKeyAttributes keyAttributes = new MotionKeyAttributes();
+            prop.applyDelta(keyAttributes);
+            motionControl.addKey(keyAttributes);
+        }
+
+        public void setKeyCycle(TypedBundle prop) {
+            MotionKeyCycle keyAttributes = new MotionKeyCycle();
+            prop.applyDelta(keyAttributes);
+            motionControl.addKey(keyAttributes);
+        }
+
         public void update(ConstraintWidget child, int state) {
             if (state == START) {
                 start.update(child);
@@ -158,7 +177,7 @@ public class Transition {
         }
 
         public void interpolate(int parentWidth, int parentHeight, float progress, Transition transition) {
-            if (parentHeight != myParentHeight || parentWidth != myParentWidth) {
+            if (true || parentHeight != myParentHeight || parentWidth != myParentWidth) {
                 myParentHeight = parentHeight;
                 myParentWidth = parentWidth;
                 motionControl.setup(parentWidth, parentHeight, 1, System.nanoTime());
@@ -200,13 +219,20 @@ public class Transition {
         getWidgetState(target, null, 0).setKeyPosition(bundle);
     }
 
+    public void addKeyAttribute(String target, TypedBundle bundle) {
+        getWidgetState(target, null, 0).setKeyAttribute(bundle);
+    }
+
+    public void addKeyCycle(String target, TypedBundle bundle) {
+        getWidgetState(target, null, 0).setKeyCycle(bundle);
+    }
+
     public void addKeyPosition(String target, int frame, int type, float x, float y) {
         TypedBundle bundle = new TypedBundle();
         bundle.add(TypedValues.Position.TYPE_POSITION_TYPE, 2);
         bundle.add(TypedValues.TYPE_FRAME_POSITION, frame);
         bundle.add(TypedValues.Position.TYPE_PERCENT_X, x);
         bundle.add(TypedValues.Position.TYPE_PERCENT_Y, y);
-        System.out.println(">>>>" + frame);
         getWidgetState(target, null, 0).setKeyPosition(bundle);
 
         KeyPosition keyPosition = new KeyPosition(target, frame, type, x, y);
@@ -224,11 +250,10 @@ public class Transition {
         frame.addCustomFloat(property, value);
     }
 
-    public void addCustomColor(int state, String widgetId, String property,
-                               float r, float g, float b, float a) {
+    public void addCustomColor(int state, String widgetId, String property, int color) {
         WidgetState widgetState = getWidgetState(widgetId, null, state);
         WidgetFrame frame = widgetState.getFrame(state);
-        frame.addCustomColor(property, r, g, b, a);
+        frame.addCustomColor(property, color);
     }
 
     public void updateFrom(ConstraintWidgetContainer container, int state) {
@@ -264,10 +289,35 @@ public class Transition {
         return widgetState.end;
     }
 
+    public WidgetFrame getInterpolated(String id) {
+        WidgetState widgetState = state.get(id);
+        if (widgetState == null) {
+            return null;
+        }
+        return widgetState.interpolated;
+    }
+
+    public float[] getPath(String id) {
+        WidgetState widgetState = state.get(id);
+        int duration = 1000;
+        int frames = duration / 16;
+        float[] mPoints = new float[frames * 2];
+        widgetState.motionControl.buildPath(mPoints, frames);
+        return mPoints;
+    }
+
+    public int getKeyFrames(String id, float[] rectangles, int[] pathMode, int[] position) {
+        WidgetState widgetState = state.get(id);
+        return widgetState.motionControl.buildKeyFrames(rectangles, pathMode, position);
+    }
+
     private WidgetState getWidgetState(String widgetId, ConstraintWidget child, int transitionState) {
         WidgetState widgetState = this.state.get(widgetId);
         if (widgetState == null) {
             widgetState = new WidgetState();
+            if (pathMotionArc != -1) {
+                widgetState.motionControl.setPathMotionArc(pathMotionArc);
+            }
             state.put(widgetId, widgetState);
             if (child != null) {
                 widgetState.update(child, transitionState);

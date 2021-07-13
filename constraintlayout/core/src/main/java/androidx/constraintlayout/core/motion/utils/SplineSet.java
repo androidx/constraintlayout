@@ -70,7 +70,7 @@ public abstract class SplineSet {
     }
 
 
-        public void setPoint(int position, float value) {
+    public void setPoint(int position, float value) {
         if (mTimePoints.length < count + 1) {
             mTimePoints = Arrays.copyOf(mTimePoints, mTimePoints.length * 2);
             mValues = Arrays.copyOf(mValues, mValues.length * 2);
@@ -113,9 +113,11 @@ public abstract class SplineSet {
     public static SplineSet makeCustomSpline(String str, KeyFrameArray<CustomAttribute> attrList) {
         return new CustomSet(str, attrList);
     }
+
     public static SplineSet makeCustomSplineSet(String str, KeyFrameArray<CustomVariable> attrList) {
         return new CustomSpline(str, attrList);
     }
+
     public static SplineSet makeSpline(String str, long currentTime) {
 
         return new CoreSpline(str, currentTime);
@@ -221,8 +223,8 @@ public abstract class SplineSet {
         }
 
         public void setProperty(TypedValues widget, float t) {
-              int id =  widget.getId(type);
-              widget.setValue(id, get(t));
+            int id = widget.getId(type);
+            widget.setValue(id, get(t));
         }
     }
 
@@ -261,13 +263,17 @@ public abstract class SplineSet {
             throw new RuntimeException("don't call for custom attribute call setPoint(pos, ConstraintAttribute)");
         }
 
+        public void setProperty(TypedValues widget, float t) {
+            setProperty((MotionWidget) widget, t);
+        }
+
         public void setPoint(int position, CustomVariable value) {
             mConstraintAttributeList.append(position, value);
         }
 
         public void setProperty(MotionWidget view, float t) {
             mCurveFit.getPos(t, mTempValues);
-           mConstraintAttributeList.valueAt(0).setInterpolatedValue(view, mTempValues);
+            mConstraintAttributeList.valueAt(0).setInterpolatedValue(view, mTempValues);
         }
     }
 

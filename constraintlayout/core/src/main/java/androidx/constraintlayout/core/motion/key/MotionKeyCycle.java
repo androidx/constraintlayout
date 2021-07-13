@@ -20,6 +20,7 @@ import androidx.constraintlayout.core.motion.utils.KeyCycleOscillator;
 import androidx.constraintlayout.core.motion.utils.Oscillator;
 import androidx.constraintlayout.core.motion.utils.SplineSet;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
+import androidx.constraintlayout.core.motion.utils.Utils;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -121,6 +122,10 @@ public class MotionKeyCycle extends MotionKey {
                 mWaveShape = value;
                 return true;
             default:
+                boolean ret =  setValue( type, (float) value);
+                if (ret) {
+                    return true;
+                }
                 return super.setValue(type, value);
         }
     }
@@ -174,10 +179,10 @@ public class MotionKeyCycle extends MotionKey {
             case Cycle.TYPE_PROGRESS:
                 mProgress = value;
                 break;
-            case Attributes.TYPE_PATH_ROTATE:
+            case Cycle.TYPE_PATH_ROTATE:
                 mTransitionPathRotate = value;
                 break;
-            case Cycle.TYPE_PATH_ROTATE:
+            case Cycle.TYPE_WAVE_PERIOD:
                 mWavePeriod = value;
                 break;
             case Cycle.TYPE_WAVE_OFFSET:
@@ -314,5 +319,36 @@ public class MotionKeyCycle extends MotionKey {
             osc.setPoint(mFramePosition, mWaveShape, mCustomWaveShape, -1, mWavePeriod, mWaveOffset, mWavePhase, value);
         }
     }
+
+
+
+    public void dump() {
+        System.out.println( "MotionKeyCycle{" +
+                "mWaveShape=" + mWaveShape +
+                ", mWavePeriod=" + mWavePeriod +
+                ", mWaveOffset=" + mWaveOffset +
+                ", mWavePhase=" + mWavePhase +
+                ", mRotation=" + mRotation +
+                '}');
+    }
+
+    public void printAttributes() {
+        HashSet<String> nameSet = new HashSet<>();
+        getAttributeNames(nameSet);
+
+        Utils.log(" ------------- " + mFramePosition +" -------------");
+        Utils.log( "MotionKeyCycle{" +
+                "Shape=" + mWaveShape +
+                ", Period=" + mWavePeriod +
+                ", Offset=" + mWaveOffset +
+                ", Phase=" + mWavePhase +
+                '}');
+        String[]names = nameSet.toArray(new String[0]);
+        for (int i = 0; i < names.length; i++) {
+            int id = TypedValues.Attributes.getId(names[i]);
+            Utils.log(names[i]+ ":"+ getValue(names[i]));
+        }
+    }
+
 
 }

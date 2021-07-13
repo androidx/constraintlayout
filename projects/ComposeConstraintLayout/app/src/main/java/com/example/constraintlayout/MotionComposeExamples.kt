@@ -5,12 +5,12 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.PlayArrow
@@ -19,12 +19,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.*
+import java.util.*
 
 @Preview(group = "motion1")
 @Composable
@@ -58,8 +62,8 @@ public fun MotionExample1() {
     var baseConstraintSetEnd = """
             {
                 Variables: {
-                  angle: { start: 0, increment: 10 },
-                  rotation: { start: 0, increment: 10 },
+                  angle: { from: 0, to: 10 },
+                  rotation: { from: 0, to: 10 },
                   distance: 100,
                   mylist: { tag: 'box' }
                 },
@@ -438,7 +442,7 @@ public fun MotionExample3() {
                 textAlign = TextAlign.Center
             )
             Text(
-                text = "Pop or subtle. Day or Night. \\n Customize your interface",
+                text = "Pop or subtle. Day or Night. \n Customize your interface",
                 modifier = Modifier.layoutId("description"),
                 color = motionProperties("title").value.color("color"),
                 fontSize = 18.sp,
@@ -643,7 +647,7 @@ public fun MotionExample4() {
                 textAlign = TextAlign.Center
             )
             Text(
-                text = "Pop or subtle. Day or Night. \\n Customize your interface",
+                text = "Pop or subtle. Day or Night. \n Customize your interface",
                 modifier = Modifier.layoutId("description"),
                 color = motionProperties("title").value.color("color"),
                 fontSize = 18.sp,
@@ -793,9 +797,141 @@ public fun MotionExample5() {
                 Icons.Sharp.KeyboardArrowUp,
                 contentDescription = "SwipeUp",
                 tint = Color.White,
-                modifier = Modifier.layoutId("swipeUp").width(40.dp).height(40.dp)
+                modifier = Modifier
+                    .layoutId("swipeUp")
+                    .width(40.dp)
+                    .height(40.dp)
             )
 
         }
     }
+}
+
+@ExperimentalMaterialApi
+@Preview(group = "motion6")
+@Composable
+public fun MotionExample6() {
+    var componentHeight by remember { mutableStateOf(1000f) }
+    val swipeableState = rememberSwipeableState("Bottom")
+    val anchors = mapOf(0f to "Bottom", componentHeight to "Top")
+
+    val mprogress = (swipeableState.offset.value / componentHeight)
+
+    MotionLayout(motionScene = MotionScene(
+        """{
+                Debug: { name: 'motion6'},
+                ConstraintSets: {
+                  start: {
+                    Variables: {
+                      texts: { tag: 'text' },
+                      margin: { from: 0, step: 50 }
+                    },
+                    Generate: {
+                      texts: {
+                        top: ['parent', 'top', 'margin'],
+                        start: ['parent', 'end', 16 ]
+                      }
+                    },
+                    box: {
+                      width: 'spread',
+                      height: 64,
+                      centerHorizontally: 'parent',
+                      bottom: ['parent','bottom']
+                    },
+                    content: {
+                      width: 'spread',
+                      height: '400',
+                      centerHorizontally: 'parent',
+                      top: ['box','bottom', 32]
+                    },
+                    name: {
+                      centerVertically: 'box',
+                      start: ['parent', 'start', 16]
+                    }
+                  },
+                  end: {
+                    Variables: {
+                      texts: { tag: 'text' },
+                      margin: { from: 0, step: 50 }
+                    },
+                    Generate: {
+                      texts: {
+                        start: ['parent','start', 32],
+                        top: ['content', 'top', 'margin']
+                      }
+                    },
+                    box: {
+                      width: 'spread',
+                      height: 200,
+                      centerHorizontally: 'parent',
+                      top: ['parent','top']
+                    },
+                    content: {
+                      width: 'spread',
+                      height: 'spread',
+                      centerHorizontally: 'parent',
+                      top: ['box','bottom'],
+                      bottom: ['parent', 'bottom']
+                    },
+                    name: {
+                      rotationZ: 90,
+                      scaleX: 2,
+                      scaleY: 2,
+                      end: ['parent', 'end', 16],
+                      top: ['parent', 'top', 90]
+                    }
+                  }
+                },
+                Transitions: {
+                  default: {
+                    from: 'start',
+                    to: 'end',
+                    pathMotionArc: 'startHorizontal',
+                    KeyFrames: {
+                      KeyAttributes: [
+                        {
+                          target: ['box','content'],
+                          frames: [50],
+                          rotationZ: [25],
+                          //rotationY: [25], 
+                        }
+                      ]
+                    }
+                  }
+                }
+            }"""
+    ),
+        progress = mprogress,
+        debug = EnumSet.of(MotionLayoutDebugFlags.NONE),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .swipeable(
+                state = swipeableState,
+                anchors = anchors,
+               // resistance = null,
+                reverseDirection = true,
+                thresholds = { _, _ -> FractionalThreshold(0.3f) },
+                orientation = Orientation.Vertical
+            )
+            .onSizeChanged { size ->
+                componentHeight = size.height.toFloat()
+            }
+    ) {
+        Box(
+            modifier = Modifier
+                .layoutId("content")
+                .background(Color.LightGray)
+        )
+        Box(
+            modifier = Modifier
+                .layoutId("box")
+                .background(Color.Cyan)
+        )
+        Text(modifier = Modifier.layoutId("name"), text = "MotionLayout")
+        for (i in 0 until 6) {
+            Text(modifier = Modifier.layoutId("text$i", "text"), text = "Test $i")
+        }
+    }
+
 }

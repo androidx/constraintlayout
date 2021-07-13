@@ -20,8 +20,12 @@ package androidx.constraintlayout.core.motion.utils;
  * Starting and Ending Widgets
  */
 public interface TypedValues {
-    public static final  String S_CUSTOM = "CUSTOM";
-
+    public static final String S_CUSTOM = "CUSTOM";
+    public static final int BOOLEAN_MASK = 1;
+    public static final int INT_MASK = 2;
+    public static final int FLOAT_MASK = 4;
+    public static final int STRING_MASK = 8;
+    
     /**
      * Used to set integer values
      *
@@ -81,26 +85,54 @@ public interface TypedValues {
         public static final int TYPE_PROGRESS = 315;
         public static final int TYPE_PATH_ROTATE = 316;
         public static final int TYPE_EASING = 317;
+        public static final int TYPE_PIVOT_TARGET = 318;
 
-        public static final String S_CURVE_FIT = "curve_fit";
+        public static final String S_CURVE_FIT = "curveFit";
         public static final String S_VISIBILITY = "visibility";
-        public static final String S_ALPHA = "ALPHA ";
-        public static final String S_TRANSLATION_X = "translation_x";
-        public static final String S_TRANSLATION_Y = "translation_y";
-        public static final String S_TRANSLATION_Z = "translation_z";
-        public static final String S_ELEVATION = "elevation ";
+        public static final String S_ALPHA = "alpha";
 
-        public static final String S_ROTATION_X = "rotation_x";
-        public static final String S_ROTATION_Y = "rotation_y";
-        public static final String S_ROTATION_Z = "rotation_z";
-        public static final String S_SCALE_X = "scale_x";
-        public static final String S_SCALE_Y = "scale_y";
-        public static final String S_PIVOT_X = "pivot_x";
-        public static final String S_PIVOT_Y = "pivot_y";
+        public static final String S_TRANSLATION_X = "translationX";
+        public static final String S_TRANSLATION_Y = "translationY";
+        public static final String S_TRANSLATION_Z = "translationZ";
+        public static final String S_ELEVATION = "elevation";
+        public static final String S_ROTATION_X = "rotationX";
+        public static final String S_ROTATION_Y = "rotationY";
+        public static final String S_ROTATION_Z = "rotationZ";
+        public static final String S_SCALE_X = "scaleX";
+        public static final String S_SCALE_Y = "scaleY";
+        public static final String S_PIVOT_X = "pivotX";
+        public static final String S_PIVOT_Y = "pivotY";
         public static final String S_PROGRESS = "progress";
-        public static final String S_PATH_ROTATE = "path_rotate";
+        public static final String S_PATH_ROTATE = "pathRotate";
         public static final String S_EASING = "easing";
-        public static final  String S_CUSTOM = "CUSTOM";
+        public static final String S_CUSTOM = "CUSTOM";
+        public static final String S_FRAME = "frame";
+        public static final String S_TARGET = "target";
+        public static final String S_PIVOT_TARGET = "pivotTarget";
+
+        public static final String[] KEY_WORDS = {
+                S_CURVE_FIT,
+                S_VISIBILITY,
+                S_ALPHA,
+                S_TRANSLATION_X,
+                S_TRANSLATION_Y,
+                S_TRANSLATION_Z,
+                S_ELEVATION,
+                S_ROTATION_X,
+                S_ROTATION_Y,
+                S_ROTATION_Z,
+                S_SCALE_X,
+                S_SCALE_Y,
+                S_PIVOT_X,
+                S_PIVOT_Y,
+                S_PROGRESS,
+                S_PATH_ROTATE,
+                S_EASING,
+                S_CUSTOM,
+                S_FRAME,
+                S_TARGET,
+                S_PIVOT_TARGET,
+        };
 
         /**
          * Method to go from String names of values to id of the values
@@ -145,6 +177,41 @@ public interface TypedValues {
                     return TYPE_PATH_ROTATE;
                 case S_EASING:
                     return TYPE_EASING;
+                case S_FRAME:
+                    return TYPE_FRAME_POSITION;
+                case S_TARGET:
+                    return TYPE_TARGET;
+                case S_PIVOT_TARGET:
+                    return TYPE_PIVOT_TARGET;
+            }
+            return -1;
+        }
+
+        public static int getType(int name) {
+            switch (name) {
+                case TYPE_CURVE_FIT:
+                case TYPE_VISIBILITY:
+                case TYPE_FRAME_POSITION:
+                    return INT_MASK;
+                case TYPE_ALPHA:
+                case TYPE_TRANSLATION_X:
+                case TYPE_TRANSLATION_Y:
+                case TYPE_TRANSLATION_Z:
+                case TYPE_ELEVATION:
+                case TYPE_ROTATION_X:
+                case TYPE_ROTATION_Y:
+                case TYPE_ROTATION_Z:
+                case TYPE_SCALE_X:
+                case TYPE_SCALE_Y:
+                case TYPE_PIVOT_X:
+                case TYPE_PIVOT_Y:
+                case TYPE_PROGRESS:
+                case TYPE_PATH_ROTATE:
+                    return FLOAT_MASK;
+                case TYPE_EASING:
+                case TYPE_TARGET:
+                case TYPE_PIVOT_TARGET:
+                    return STRING_MASK;
             }
             return -1;
         }
@@ -154,19 +221,19 @@ public interface TypedValues {
         public static final int TYPE_CURVE_FIT = 401;
         public static final int TYPE_VISIBILITY = 402;
         public static final int TYPE_ALPHA = 403;
-        public static final int TYPE_TRANSLATION_X = 404;
-        public static final int TYPE_TRANSLATION_Y = 405;
-        public static final int TYPE_TRANSLATION_Z = 406;
-        public static final int TYPE_ELEVATION = 407;
+        public static final int TYPE_TRANSLATION_X = Attributes.TYPE_TRANSLATION_X;
+        public static final int TYPE_TRANSLATION_Y = Attributes.TYPE_TRANSLATION_Y;
+        public static final int TYPE_TRANSLATION_Z = Attributes.TYPE_TRANSLATION_Z;
+        public static final int TYPE_ELEVATION = Attributes.TYPE_ELEVATION;
 
-        public static final int TYPE_ROTATION_X = 408;
-        public static final int TYPE_ROTATION_Y = 409;
-        public static final int TYPE_ROTATION_Z = 410;
-        public static final int TYPE_SCALE_X = 411;
-        public static final int TYPE_SCALE_Y = 412;
-        public static final int TYPE_PIVOT_X = 413;
-        public static final int TYPE_PIVOT_Y = 414;
-        public static final int TYPE_PROGRESS = 415;
+        public static final int TYPE_ROTATION_X = Attributes.TYPE_ROTATION_X;
+        public static final int TYPE_ROTATION_Y = Attributes.TYPE_ROTATION_Y;
+        public static final int TYPE_ROTATION_Z = Attributes.TYPE_ROTATION_Z;
+        public static final int TYPE_SCALE_X = Attributes.TYPE_SCALE_X;
+        public static final int TYPE_SCALE_Y = Attributes.TYPE_SCALE_Y;
+        public static final int TYPE_PIVOT_X = Attributes.TYPE_PIVOT_X;
+        public static final int TYPE_PIVOT_Y = Attributes.TYPE_PIVOT_Y;
+        public static final int TYPE_PROGRESS = Attributes.TYPE_PROGRESS;
         public static final int TYPE_PATH_ROTATE = 416;
         public static final int TYPE_EASING = 420;
         public static final int TYPE_WAVE_SHAPE = 421;
@@ -175,29 +242,54 @@ public interface TypedValues {
         public static final int TYPE_WAVE_OFFSET = 424;
         public static final int TYPE_WAVE_PHASE = 425;
 
-        public static final String S_CURVE_FIT = "curve_fit";
+        public static final String S_CURVE_FIT = "curveFit";
         public static final String S_VISIBILITY = "visibility";
-        public static final String S_ALPHA = "ALPHA ";
-        public static final String S_TRANSLATION_X = "translation_x";
-        public static final String S_TRANSLATION_Y = "translation_y";
-        public static final String S_TRANSLATION_Z = "translation_z";
-        public static final String S_ROTATION_X = "rotation_x";
-        public static final String S_ROTATION_Y = "rotation_y";
-        public static final String S_ROTATION_Z = "rotation_z";
-        public static final String S_ELEVATION = "elevation";
+        public static final String S_ALPHA = Attributes.S_ALPHA;
+        public static final String S_TRANSLATION_X = Attributes.S_TRANSLATION_X;
+        public static final String S_TRANSLATION_Y = Attributes.S_TRANSLATION_Y;
+        public static final String S_TRANSLATION_Z = Attributes.S_TRANSLATION_Z;
+        public static final String S_ELEVATION = Attributes.S_ELEVATION;
+        public static final String S_ROTATION_X = Attributes.S_ROTATION_X;
+        public static final String S_ROTATION_Y = Attributes.S_ROTATION_Y;
+        public static final String S_ROTATION_Z = Attributes.S_ROTATION_Z;
+        public static final String S_SCALE_X = Attributes.S_SCALE_X;
+        public static final String S_SCALE_Y = Attributes.S_SCALE_Y;
+        public static final String S_PIVOT_X = Attributes.S_PIVOT_X;
+        public static final String S_PIVOT_Y = Attributes.S_PIVOT_Y;
+        public static final String S_PROGRESS = Attributes.S_PROGRESS;
 
-        public static final String S_SCALE_X = "scale_x";
-        public static final String S_SCALE_Y = "scale_y";
-        public static final String S_PIVOT_X = "pivot_x";
-        public static final String S_PIVOT_Y = "pivot_y";
-        public static final String S_PROGRESS = "progress";
-        public static final String S_PATH_ROTATE = "path_rotate";
+        public static final String S_PATH_ROTATE = "pathRotate";
         public static final String S_EASING = "easing";
         public static final String S_WAVE_SHAPE = "waveShape";
         public static final String S_CUSTOM_WAVE_SHAPE = "customWave";
-        public static final String S_WAVE_PERIOD = "wavePeriod";
-        public static final String S_WAVE_OFFSET = "waveOffset";
-        public static final String S_WAVE_PHASE = "wavePhase";
+        public static final String S_WAVE_PERIOD = "period";
+        public static final String S_WAVE_OFFSET = "offset";
+        public static final String S_WAVE_PHASE = "phase";
+        public static final String[] KEY_WORDS = {
+                S_CURVE_FIT,
+                S_VISIBILITY,
+                S_ALPHA,
+                S_TRANSLATION_X,
+                S_TRANSLATION_Y,
+                S_TRANSLATION_Z,
+                S_ELEVATION,
+                S_ROTATION_X,
+                S_ROTATION_Y,
+                S_ROTATION_Z,
+                S_SCALE_X,
+                S_SCALE_Y,
+                S_PIVOT_X,
+                S_PIVOT_Y,
+                S_PROGRESS,
+
+                S_PATH_ROTATE,
+                S_EASING,
+                S_WAVE_SHAPE,
+                S_CUSTOM_WAVE_SHAPE,
+                S_WAVE_PERIOD,
+                S_WAVE_OFFSET,
+                S_WAVE_PHASE,
+        };
 
         /**
          * Method to go from String names of values to id of the values
@@ -258,7 +350,20 @@ public interface TypedValues {
         public static final String NEGATIVE_CROSS = "negativeCross";
         public static final String TRIGGER_RECEIVER = "triggerReceiver";
         public static final String CROSS = "CROSS";
-
+        public static final String[] KEY_WORDS = {
+                VIEW_TRANSITION_ON_CROSS,
+                VIEW_TRANSITION_ON_POSITIVE_CROSS,
+                VIEW_TRANSITION_ON_NEGATIVE_CROSS,
+                POST_LAYOUT,
+                TRIGGER_SLACK,
+                TRIGGER_COLLISION_VIEW,
+                TRIGGER_COLLISION_ID,
+                TRIGGER_ID,
+                POSITIVE_CROSS,
+                NEGATIVE_CROSS,
+                TRIGGER_RECEIVER,
+                CROSS,
+        };
         public static final int TYPE_VIEW_TRANSITION_ON_CROSS = 301;
         public static final int TYPE_VIEW_TRANSITION_ON_POSITIVE_CROSS = 302;
         public static final int TYPE_VIEW_TRANSITION_ON_NEGATIVE_CROSS = 303;
@@ -329,6 +434,15 @@ public interface TypedValues {
         public static final int TYPE_CURVE_FIT = 508;
         public static final int TYPE_PATH_MOTION_ARC = 509;
         public static final int TYPE_POSITION_TYPE = 510;
+        public static final String[] KEY_WORDS = {
+                S_TRANSITION_EASING,
+                S_DRAWPATH,
+                S_PERCENT_WIDTH,
+                S_PERCENT_HEIGHT,
+                S_SIZE_PERCENT,
+                S_PERCENT_X,
+                S_PERCENT_Y,
+        };
 
         /**
          * Method to go from String names of values to id of the values
@@ -372,7 +486,21 @@ public interface TypedValues {
         public static final String S_QUANTIZE_MOTIONSTEPS = "QuantizeMotionSteps";
         public static final String S_QUANTIZE_INTERPOLATOR_TYPE = "QuantizeInterpolatorType";
         public static final String S_QUANTIZE_INTERPOLATOR_ID = "QuantizeInterpolatorID";
-
+        public static final String[] KEY_WORDS = {
+                S_STAGGER,
+                S_PATH_ROTATE,
+                S_QUANTIZE_MOTION_PHASE,
+                S_EASING,
+                S_QUANTIZE_INTERPOLATOR,
+                S_ANIMATE_RELATIVE_TO,
+                S_ANIMATE_CIRCLEANGLE_TO,
+                S_PATHMOTION_ARC,
+                S_DRAW_PATH,
+                S_POLAR_RELATIVETO,
+                S_QUANTIZE_MOTIONSTEPS,
+                S_QUANTIZE_INTERPOLATOR_TYPE,
+                S_QUANTIZE_INTERPOLATOR_ID,
+        };
         public static final int TYPE_STAGGER = 600;
         public static final int TYPE_PATH_ROTATE = 601;
         public static final int TYPE_QUANTIZE_MOTION_PHASE = 602;
@@ -425,6 +553,7 @@ public interface TypedValues {
             }
             return -1;
         }
+
     }
 
     interface Custom {
@@ -435,7 +564,14 @@ public interface TypedValues {
         public static final String S_BOOLEAN = "boolean";
         public static final String S_DIMENSION = "dimension";
         public static final String S_REFERENCE = "refrence";
-
+        public static final String[] KEY_WORDS = {
+                S_FLOAT,
+                S_COLOR,
+                S_STRING,
+                S_BOOLEAN,
+                S_DIMENSION,
+                S_REFERENCE,
+        };
         public static final int TYPE_INT = 900;
         public static final int TYPE_FLOAT = 901;
         public static final int TYPE_COLOR = 902;

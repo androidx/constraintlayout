@@ -1773,6 +1773,7 @@ public class MotionScene {
      */
     private void readConstraintChain(int key, MotionLayout motionLayout) {
         ConstraintSet cs = mConstraintSetMap.get(key);
+        cs.derivedState = cs.mIdString;
         int derivedFromId = mDeriveMap.get(key);
         if (derivedFromId > 0) {
             readConstraintChain(derivedFromId, motionLayout);
@@ -1782,8 +1783,10 @@ public class MotionScene {
                         Debug.getName(mMotionLayout.getContext(), derivedFromId));
                 return;
             }
+            cs.derivedState += "/"+ derivedFrom.derivedState;
             cs.readFallback(derivedFrom);
         } else {
+            cs.derivedState += "  layout";
             cs.readFallback(motionLayout);
         }
         cs.applyDeltaFrom(cs);
