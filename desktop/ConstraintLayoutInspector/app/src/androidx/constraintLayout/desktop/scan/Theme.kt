@@ -68,6 +68,6 @@ class Theme(isDarkMode: Boolean) {
         if (darkMode) {
             return Color(200, 200, 200)
         }
-        return Color(0, 90, 200, 200)
+        return Color(0, 90, 200, 240)
     }
 }

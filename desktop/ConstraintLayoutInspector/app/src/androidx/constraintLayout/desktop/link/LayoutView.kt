@@ -28,7 +28,13 @@ import javax.swing.JPanel
 
 open class LayoutView : JPanel(BorderLayout()) {
     protected var widgets = ArrayList<Widget>()
-    var zoom = 0.9f
+    var zoom = 0.85f
+
+    private var rootWidth: Float = 0f
+    private var rootHeight: Float = 0f
+
+    protected var lastRootWidth: Float = 0f
+    protected var lastRootHeight: Float = 0f
 
     protected var scaleX = 0f
     protected var scaleY = 0f
@@ -97,28 +103,35 @@ open class LayoutView : JPanel(BorderLayout()) {
         }
     }
 
-    override fun paint(g: Graphics?) {
-        super.paint(g)
-        if (widgets.size == 0) {
-            return
-        }
-        val root = widgets[0]
-        val rootWidth = root.width().toFloat()
-        val rootHeight = root.height().toFloat()
+    open fun computeScale(rootWidth : Float, rootHeight: Float) {
+        lastRootWidth = rootWidth
+        lastRootHeight = rootHeight
         scaleX = width / rootWidth
         scaleY = height / rootHeight
-        offX = 0.0f
-        offY = 0.0f
+
+        scaleX *= zoom
+        scaleY *= zoom
+
         if (scaleX < scaleY) {
             scaleY = scaleX
         } else {
             scaleX = scaleY
         }
 
-        scaleX *= zoom
-        scaleY *= zoom
-        offX = (width - root.width().toFloat() * scaleX) / 2
-        offY = (height - root.height().toFloat() * scaleY) / 2
+        offX = (width - rootWidth * scaleX) / 2
+        offY = (height - rootHeight * scaleY) / 2
+
+    }
+
+    override fun paint(g: Graphics?) {
+        super.paint(g)
+        if (widgets.size == 0) {
+            return
+        }
+        val root = widgets[0]
+        rootWidth = root.width().toFloat()
+        rootHeight = root.height().toFloat()
+        computeScale(rootWidth, rootHeight)
 
         val g2 = g!!.create() as Graphics2D
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -160,5 +173,4 @@ open class LayoutView : JPanel(BorderLayout()) {
             repaint()
         } catch (e : Exception) { e.printStackTrace() }
     }
-
 }

@@ -111,7 +111,7 @@ public class WidgetFrameUtils {
         if (path == null) {
             return;
         }
-        g2d.setStroke(new BasicStroke(1));
+        g2d.setStroke(new BasicStroke(2));
         g2d.draw(path);
     }
 

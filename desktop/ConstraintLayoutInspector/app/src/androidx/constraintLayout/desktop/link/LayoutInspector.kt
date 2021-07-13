@@ -20,17 +20,14 @@ import androidx.constraintLayout.desktop.ui.timeline.TimeLinePanel
 import androidx.constraintLayout.desktop.ui.ui.MotionEditorSelector
 import androidx.constraintlayout.core.parser.CLObject
 import java.awt.BorderLayout
-import java.awt.event.ComponentAdapter
-import java.awt.event.ComponentEvent
 import javax.swing.JButton
 import javax.swing.JCheckBox
 import javax.swing.JPanel
 
 class LayoutInspector(link: MotionLink) : JPanel(BorderLayout()) {
     val layoutView = LayoutView()
-    val editorView = LayoutEditor()
+    val editorView = LayoutEditor(link)
     val motionLink = link
-    var forceDimension = false
     var timeLineStart = JButton("TimeLine...")
     var editing = false
 
@@ -39,13 +36,11 @@ class LayoutInspector(link: MotionLink) : JPanel(BorderLayout()) {
 
     init {
         val northPanel = JPanel()
-        val toggle = JButton("link resize")
         val edit = JButton("Edit")
         val liveConnection = JCheckBox("Live connection")
         liveConnection.isSelected = true
 
         northPanel.add(timeLineStart)
-        northPanel.add(toggle)
         northPanel.add(edit)
         northPanel.add(liveConnection)
 
@@ -54,25 +49,6 @@ class LayoutInspector(link: MotionLink) : JPanel(BorderLayout()) {
 
         liveConnection.addChangeListener {
             motionLink.setUpdateLayoutPolling(liveConnection.isSelected)
-        }
-
-        addComponentListener(object : ComponentAdapter() {
-            override fun componentResized(e: ComponentEvent) {
-                if (forceDimension) {
-                    motionLink.sendLayoutDimensions(width * 3, height * 3)
-                }
-            }
-        })
-
-        toggle.addActionListener {
-            forceDimension = !forceDimension
-            if (forceDimension) {
-                motionLink.sendLayoutDimensions(width * 3, height * 3)
-                toggle.text = "Driving root dimension..."
-            } else {
-                motionLink.sendLayoutDimensions(Int.MIN_VALUE, Int.MIN_VALUE)
-                toggle.text = "link resize"
-            }
         }
 
         edit.addActionListener {
