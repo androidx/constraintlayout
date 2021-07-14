@@ -36,7 +36,7 @@ public class State {
 
     protected HashMap<Object, Reference> mReferences = new HashMap<>();
     protected HashMap<Object, HelperReference> mHelperReferences = new HashMap<>();
-    HashMap<String, ArrayList<String>> mTags = new HashMap();
+    HashMap<String, ArrayList<String>> mTags = new HashMap<>();
 
     final static int UNKNOWN = -1;
     final static int CONSTRAINT_SPREAD = 0;
@@ -284,9 +284,9 @@ public class State {
         if (ref instanceof ConstraintReference) {
             ConstraintReference reference = (ConstraintReference) ref;
             reference.setTag(tag);
-            ArrayList list = null;
+            ArrayList<String> list = null;
             if (!mTags.containsKey(tag)) {
-                list = new ArrayList();
+                list = new ArrayList<>();
                 mTags.put(tag, list);
             } else {
                 list = mTags.get(tag);

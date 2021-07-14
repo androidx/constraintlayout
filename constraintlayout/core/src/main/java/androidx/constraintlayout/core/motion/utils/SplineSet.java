@@ -110,11 +110,11 @@ public abstract class SplineSet {
         mCurveFit = CurveFit.get(curveType, time, values);
     }
 
-    public static SplineSet makeCustomSpline(String str, KeyFrameArray<CustomAttribute> attrList) {
+    public static SplineSet makeCustomSpline(String str, KeyFrameArray.CustomArray attrList) {
         return new CustomSet(str, attrList);
     }
 
-    public static SplineSet makeCustomSplineSet(String str, KeyFrameArray<CustomVariable> attrList) {
+    public static SplineSet makeCustomSplineSet(String str, KeyFrameArray.CustomVar attrList) {
         return new CustomSpline(str, attrList);
     }
 
@@ -169,10 +169,10 @@ public abstract class SplineSet {
 
     public static class CustomSet extends SplineSet {
         String mAttributeName;
-        KeyFrameArray<CustomAttribute> mConstraintAttributeList;
+        KeyFrameArray.CustomArray mConstraintAttributeList;
         float[] mTempValues;
 
-        public CustomSet(String attribute, KeyFrameArray<CustomAttribute> attrList) {
+        public CustomSet(String attribute, KeyFrameArray.CustomArray attrList) {
             mAttributeName = attribute.split(",")[1];
             mConstraintAttributeList = attrList;
         }
@@ -230,10 +230,10 @@ public abstract class SplineSet {
 
     public static class CustomSpline extends SplineSet {
         String mAttributeName;
-        KeyFrameArray<CustomVariable> mConstraintAttributeList;
+        KeyFrameArray.CustomVar mConstraintAttributeList;
         float[] mTempValues;
 
-        public CustomSpline(String attribute, KeyFrameArray<CustomVariable> attrList) {
+        public CustomSpline(String attribute, KeyFrameArray.CustomVar attrList) {
             mAttributeName = attribute.split(",")[1];
             mConstraintAttributeList = attrList;
         }

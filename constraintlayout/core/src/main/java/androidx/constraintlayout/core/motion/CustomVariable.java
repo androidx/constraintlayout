@@ -402,6 +402,7 @@ public class CustomVariable {
                 break;
             case TypedValues.Custom.TYPE_STRING:
                 view.setCustomAttribute(mName, mType, mStringValue);
+                break;
             case TypedValues.Custom.TYPE_BOOLEAN:
                 view.setCustomAttribute(mName, mType, mBooleanValue);
                 break;
