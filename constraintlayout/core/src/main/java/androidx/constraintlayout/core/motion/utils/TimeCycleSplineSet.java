@@ -102,12 +102,12 @@ public abstract class TimeCycleSplineSet {
 
     public static class CustomSet extends TimeCycleSplineSet {
         String mAttributeName;
-        KeyFrameArray<CustomAttribute> mConstraintAttributeList;
-        KeyFrameArray<float[]> mWaveProperties = new KeyFrameArray<>();
+        KeyFrameArray.CustomArray  mConstraintAttributeList;
+        KeyFrameArray.FloatArray mWaveProperties = new KeyFrameArray.FloatArray();
         float[] mTempValues;
         float[] mCache;
 
-        public CustomSet(String attribute, KeyFrameArray<CustomAttribute> attrList) {
+        public CustomSet(String attribute, KeyFrameArray.CustomArray attrList) {
             mAttributeName = attribute.split(",")[1];
             mConstraintAttributeList = attrList;
         }
@@ -253,12 +253,12 @@ public abstract class TimeCycleSplineSet {
 
     public static class CustomVarSet extends TimeCycleSplineSet {
         String mAttributeName;
-        KeyFrameArray<CustomVariable> mConstraintAttributeList;
-        KeyFrameArray<float[]> mWaveProperties = new KeyFrameArray<>();
+        KeyFrameArray.CustomVar mConstraintAttributeList;
+        KeyFrameArray.FloatArray mWaveProperties = new KeyFrameArray.FloatArray();
         float[] mTempValues;
         float[] mCache;
 
-        public CustomVarSet(String attribute, KeyFrameArray<CustomVariable> attrList) {
+        public CustomVarSet(String attribute, KeyFrameArray.CustomVar attrList) {
             mAttributeName = attribute.split(",")[1];
             mConstraintAttributeList = attrList;
         }
