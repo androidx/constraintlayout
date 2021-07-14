@@ -696,7 +696,7 @@ public class Motion {
             for (String attribute : splineAttributes) {
                 SplineSet splineSets;
                 if (attribute.startsWith("CUSTOM,")) {
-                    KeyFrameArray<CustomVariable> attrList = new KeyFrameArray<>();
+                    KeyFrameArray.CustomVar attrList = new  KeyFrameArray.CustomVar();
                     String customAttributeName = attribute.split(",")[1];
                     for (MotionKey key : mKeyList) {
                         if (key.mCustom == null) {
@@ -754,7 +754,7 @@ public class Motion {
 
                 SplineSet splineSets = null;
                 if (attribute.startsWith("CUSTOM,")) {
-                    KeyFrameArray<CustomVariable> attrList = new KeyFrameArray<>();
+                    KeyFrameArray.CustomVar attrList = new  KeyFrameArray.CustomVar();
                     String customAttributeName = attribute.split(",")[1];
                     for (MotionKey key : mKeyList) {
                         if (key.mCustom == null) {

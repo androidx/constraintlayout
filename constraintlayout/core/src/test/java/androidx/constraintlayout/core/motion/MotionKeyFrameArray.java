@@ -29,23 +29,24 @@ import java.util.Random;
 public class MotionKeyFrameArray {
     @Test
     public void arcTest1() {
-        KeyFrameArray<Integer> array = new KeyFrameArray<>();
+
+        KeyFrameArray.CustomArray array = new KeyFrameArray.CustomArray();
         Random random = new Random();
         for (int i = 0; i < 32; i++) {
             assertEquals(i, array.size());
-            array.append(i, i);
+            array.append(i,null);
         }
         array.dump();
         for (int i = 0; i < array.size(); i++) {
             int k = array.keyAt(i);
-            Integer val = array.valueAt(i);
-            assertEquals(k, val.intValue());
+            Object val = array.valueAt(i);
+            assertEquals(null, val);
         }
         array.clear();
         for (int i = 0; i < 32; i++) {
             int k = random.nextInt(100);
             System.out.println(k);
-            array.append(k, k);
+            array.append(k, new CustomAttribute("foo", CustomAttribute.AttributeType.INT_TYPE));
             array.dump();
         }
 
