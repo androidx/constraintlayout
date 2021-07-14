@@ -571,7 +571,8 @@ public class ConstraintReference implements Reference {
                 } break;
                 case CIRCULAR_CONSTRAINT: {
                     mCircularDistance = value;
-                }
+                } break;
+                default: break;
             }
         } else {
             mMarginLeft = value;
@@ -614,6 +615,7 @@ public class ConstraintReference implements Reference {
                 case BASELINE_TO_BASELINE: {
                     // nothing
                 } break;
+                default: break;
             }
         } else {
             mMarginLeftGone = value;
@@ -659,6 +661,7 @@ public class ConstraintReference implements Reference {
             case BOTTOM_TO_BOTTOM: {
                 mVerticalBias = value;
             } break;
+            default: break;
         }
         return this;
     }
@@ -721,6 +724,8 @@ public class ConstraintReference implements Reference {
                 case CIRCULAR_CONSTRAINT: {
                     mCircularConstraint = null;
                 }
+                break;
+                default: break;
             }
         } else {
             mLeftToLeft = null;
@@ -770,6 +775,7 @@ public class ConstraintReference implements Reference {
         }
         switch (type) {
             // TODO: apply RTL
+            default: break;
         }
         switch (type) {
             case START_TO_START: {
@@ -826,6 +832,7 @@ public class ConstraintReference implements Reference {
             case CIRCULAR_CONSTRAINT: {
                 widget.connectCircularConstraint(target, mCircularAngle, (int) mCircularDistance);
             } break;
+            default: break;
         }
     }
 

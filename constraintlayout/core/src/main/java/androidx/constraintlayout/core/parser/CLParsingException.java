@@ -15,7 +15,7 @@
  */
 package androidx.constraintlayout.core.parser;
 
-public class CLParsingException extends Throwable {
+public class CLParsingException extends Exception {
   private final String mReason;
   private final int mLineNumber;
   private final String mElementClass;

@@ -169,7 +169,7 @@ public class KeyFrameArray {
             System.out.println("V: " + Arrays.toString(Arrays.copyOf(keys, count)));
             System.out.print("K: [");
             for (int i = 0; i < count; i++) {
-                System.out.print(((i == 0 ? "" : ", ")) + valueAt(i));
+                System.out.print(((i == 0 ? "" : ", ")) + Arrays.toString(valueAt(i)));
             }
             System.out.println("]");
         }
