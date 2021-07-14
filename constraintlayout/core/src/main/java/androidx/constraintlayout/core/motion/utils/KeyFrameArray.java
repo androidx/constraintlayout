@@ -15,67 +15,200 @@
  */
 package androidx.constraintlayout.core.motion.utils;
 
+import androidx.constraintlayout.core.motion.CustomAttribute;
+import androidx.constraintlayout.core.motion.CustomVariable;
+
 import java.util.Arrays;
 
-public class KeyFrameArray<E> {
-    int[] keys = new int[101];
-    E[] values = (E[]) new Object[101];
-    int count;
-    private static final int EMPTY = 999;
+public class KeyFrameArray {
 
-    public KeyFrameArray() {
-        clear();
-    }
+    // =================================== CustomAttribute =================================
+    public static class CustomArray {
+        int[] keys = new int[101];
+        CustomAttribute[] values = new CustomAttribute[101];
+        int count;
+        private static final int EMPTY = 999;
 
-    public void clear() {
-        Arrays.fill(keys, EMPTY);
-        Arrays.fill(values, null);
-        count = 0;
-    }
-
-    public void dump() {
-        System.out.println("V: " + Arrays.toString(Arrays.copyOf(keys, count)));
-        System.out.print("K: [");
-        for (int i = 0; i < count; i++) {
-            System.out.print(((i == 0 ? "" : ", ")) + valueAt(i));
+        public CustomArray() {
+            clear();
         }
-        System.out.println("]");
-    }
 
-    public int size() {
-        return count;
-    }
-
-    public E valueAt(int i) {
-        return values[keys[i]];
-    }
-
-    public int keyAt(int i) {
-        return keys[i];
-    }
-
-    public void append(int position, E value) {
-        if (values[position] != null) {
-            remove(position);
+        public void clear() {
+            Arrays.fill(keys, EMPTY);
+            Arrays.fill(values, null);
+            count = 0;
         }
-        values[position] = value;
-        keys[count++] = position;
-        Arrays.sort(keys);
-    }
 
-    public void remove(int position) {
-        values[position] = null;
-        for (int j = 0, i = 0; i < count; i++) {
-            if (position == keys[i]) {
-                keys[i] = EMPTY;
+        public void dump() {
+            System.out.println("V: " + Arrays.toString(Arrays.copyOf(keys, count)));
+            System.out.print("K: [");
+            for (int i = 0; i < count; i++) {
+                System.out.print(((i == 0 ? "" : ", ")) + valueAt(i));
+            }
+            System.out.println("]");
+        }
+
+        public int size() {
+            return count;
+        }
+
+        public CustomAttribute valueAt(int i) {
+            return values[keys[i]];
+        }
+
+        public int keyAt(int i) {
+            return keys[i];
+        }
+
+        public void append(int position, CustomAttribute value) {
+            if (values[position] != null) {
+                remove(position);
+            }
+            values[position] = value;
+            keys[count++] = position;
+            Arrays.sort(keys);
+        }
+
+        public void remove(int position) {
+            values[position] = null;
+            for (int j = 0, i = 0; i < count; i++) {
+                if (position == keys[i]) {
+                    keys[i] = EMPTY;
+                    j++;
+                }
+                if (i != j) {
+                    keys[i] = keys[j];
+                }
                 j++;
-            }
-            if (i != j) {
-                keys[i] = keys[j];
-            }
-            j++;
 
+            }
+            count--;
         }
-        count--;
+    }
+    // =================================== CustomVar =================================
+    public static class CustomVar {
+        int[] keys = new int[101];
+        CustomVariable[] values = new CustomVariable[101];
+        int count;
+        private static final int EMPTY = 999;
+
+        public CustomVar() {
+            clear();
+        }
+
+        public void clear() {
+            Arrays.fill(keys, EMPTY);
+            Arrays.fill(values, null);
+            count = 0;
+        }
+
+        public void dump() {
+            System.out.println("V: " + Arrays.toString(Arrays.copyOf(keys, count)));
+            System.out.print("K: [");
+            for (int i = 0; i < count; i++) {
+                System.out.print(((i == 0 ? "" : ", ")) + valueAt(i));
+            }
+            System.out.println("]");
+        }
+
+        public int size() {
+            return count;
+        }
+
+        public CustomVariable valueAt(int i) {
+            return values[keys[i]];
+        }
+
+        public int keyAt(int i) {
+            return keys[i];
+        }
+
+        public void append(int position, CustomVariable value) {
+            if (values[position] != null) {
+                remove(position);
+            }
+            values[position] = value;
+            keys[count++] = position;
+            Arrays.sort(keys);
+        }
+
+        public void remove(int position) {
+            values[position] = null;
+            for (int j = 0, i = 0; i < count; i++) {
+                if (position == keys[i]) {
+                    keys[i] = EMPTY;
+                    j++;
+                }
+                if (i != j) {
+                    keys[i] = keys[j];
+                }
+                j++;
+
+            }
+            count--;
+        }
+    }
+    // =================================== FloatArray ======================================
+   static class FloatArray {
+        int[] keys = new int[101];
+        float[][] values = new float[101][];
+        int count;
+        private static final int EMPTY = 999;
+
+        public FloatArray() {
+            clear();
+        }
+
+        public void clear() {
+            Arrays.fill(keys, EMPTY);
+            Arrays.fill(values, null);
+            count = 0;
+        }
+
+        public void dump() {
+            System.out.println("V: " + Arrays.toString(Arrays.copyOf(keys, count)));
+            System.out.print("K: [");
+            for (int i = 0; i < count; i++) {
+                System.out.print(((i == 0 ? "" : ", ")) + valueAt(i));
+            }
+            System.out.println("]");
+        }
+
+        public int size() {
+            return count;
+        }
+
+        public float[] valueAt(int i) {
+            return values[keys[i]];
+        }
+
+        public int keyAt(int i) {
+            return keys[i];
+        }
+
+        public void append(int position, float[] value) {
+            if (values[position] != null) {
+                remove(position);
+            }
+            values[position] = value;
+            keys[count++] = position;
+            Arrays.sort(keys);
+        }
+
+        public void remove(int position) {
+            values[position] = null;
+            for (int j = 0, i = 0; i < count; i++) {
+                if (position == keys[i]) {
+                    keys[i] = EMPTY;
+                    j++;
+                }
+                if (i != j) {
+                    keys[i] = keys[j];
+                }
+                j++;
+
+            }
+            count--;
+        }
     }
 }
