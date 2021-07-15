@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.platform.ComposeView
 import androidx.constraintlayout.compose.*
+import androidx.constraintlayout.coreAndroid.PhoneState
 
 class MainActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
@@ -95,6 +96,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         mFrameLayout = findViewById<FrameLayout>(R.id.frame)
         setCompose();
+         PhoneState(this) // monitor orientation present PhoneState.phoneOrientation
     }
 
     override fun onPause() {

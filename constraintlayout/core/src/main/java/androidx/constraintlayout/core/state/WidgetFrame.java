@@ -69,7 +69,8 @@ public class WidgetFrame {
         return Math.max(0, bottom - top);
     }
 
-    public WidgetFrame() {}
+    public WidgetFrame() {
+    }
 
     public WidgetFrame(ConstraintWidget widget) {
         this.widget = widget;
@@ -360,6 +361,8 @@ public class WidgetFrame {
                 break;
             case "interpolatedPos":
                 interpolatedPos = value.getFloat();
+            case "phone_orientation":
+                phone_orientation = value.getFloat();
                 break;
             case "top":
                 top = value.getInt();
@@ -376,6 +379,7 @@ public class WidgetFrame {
             case "custom":
                 parseCustom(value);
                 break;
+
             default:
                 return false;
         }
@@ -403,6 +407,17 @@ public class WidgetFrame {
         }
     }
 
+ 
+    public StringBuilder serialize(StringBuilder ret) {
+        return serialize(ret, false);
+    }
+
+    /**
+     * If true also send the phone orientation
+     * @param ret
+     * @param sendPhoneOrientation
+     * @return
+     */
     public StringBuilder serialize(StringBuilder ret, boolean sendPhoneOrientation) {
         WidgetFrame frame = this;
         ret.append("{\n");
@@ -423,11 +438,13 @@ public class WidgetFrame {
         add(ret, "alpha", frame.alpha);
         add(ret, "visibility", frame.left);
         add(ret, "interpolatedPos", frame.interpolatedPos);
-
         if (sendPhoneOrientation) {
             add(ret, "phone_orientation", phone_orientation);
         }
-
+        if (sendPhoneOrientation) {
+            add(ret, "phone_orientation", phone_orientation);
+        }
+ 
         if (frame.mCustom.size() != 0) {
             ret.append("custom : {\n");
             for (String s : frame.mCustom.keySet()) {

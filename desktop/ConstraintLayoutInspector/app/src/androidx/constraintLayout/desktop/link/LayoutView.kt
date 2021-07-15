@@ -191,11 +191,11 @@ open class LayoutView(inspector: LayoutInspector) : JPanel(BorderLayout()) {
         g2.translate(offX.toDouble(), offY.toDouble())
         g2.scale(scaleX.toDouble(), scaleY.toDouble())
 
-//        if (mReflectOrientation && !WidgetFrame.interpolatedPos.isNaN()) {
-//            g2.rotate(-WidgetFrame.interpolatedPos.toDouble(), rootWidth/2.0,rootHeight/2.0);
-//        }
+        if (mReflectOrientation && !WidgetFrame.phone_orientation.isNaN()) {
+            g2.rotate(-WidgetFrame.phone_orientation.toDouble(), rootWidth/2.0,rootHeight/2.0);
+        }
         picker.reset()
-
+        
         for (widget in widgets) {
             if (widget.isGuideline) {
                 continue

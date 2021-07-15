@@ -614,7 +614,7 @@ internal class MotionMeasurer : Measurer() {
 
             json.append(" ${child.stringId}: {")
             json.append(" interpolated : ")
-            interpolated.serialize(json);
+            interpolated.serialize(json, true);
 
             json.append(", start : ")
             start.serialize(json);
