@@ -203,36 +203,17 @@ public class ConstraintWidget {
 
     public boolean hasResolvedTargets(int orientation, int size) {
         if (orientation == HORIZONTAL) {
-            boolean left = mLeft.mTarget == null;
-            if (!left && mLeft.mTarget.hasFinalValue()) {
-                left = true;
-            }
-            boolean right = mRight.mTarget == null;
-            if (!right && mRight.mTarget.hasFinalValue()) {
-                right = true;
-            }
-            if (left && right) {
-                int availableSpace = mRight.mTarget.getFinalValue() - mLeft.mTarget.getFinalValue();
-                System.out.println("Well, available h space " + availableSpace + " vs size " + size);
-                return (availableSpace >= size);
+            if (mLeft.mTarget != null && mLeft.mTarget.hasFinalValue()
+                && mRight.mTarget != null && mRight.mTarget.hasFinalValue()) {
+                return (mRight.mTarget.getFinalValue() - mLeft.mTarget.getFinalValue()) >= size;
             }
         } else {
-            boolean baseline = mBaseline.mTarget == null;
-            if (!baseline && mBaseline.mTarget.hasFinalValue()) {
+            if (mBaseline.mTarget != null && mBaseline.mTarget.hasFinalValue()) {
                 return true;
             }
-            boolean top = mTop.mTarget == null;
-            if (!top && mTop.mTarget.hasFinalValue()) {
-                top = true;
-            }
-            boolean bottom = mBottom.mTarget == null;
-            if (!bottom && mBottom.mTarget.hasFinalValue()) {
-                bottom = true;
-            }
-            if (top && bottom) {
-                int availableSpace = mBottom.mTarget.getFinalValue() - mTop.mTarget.getFinalValue();
-                System.out.println("Well, available v space " + availableSpace + " vs size " + size);
-                return (availableSpace >= size);
+            if (mTop.mTarget != null && mTop.mTarget.hasFinalValue()
+                    && mBottom.mTarget != null && mBottom.mTarget.hasFinalValue()) {
+                return (mBottom.mTarget.getFinalValue() - mTop.mTarget.getFinalValue()) >= size;
             }
         }
         return false;
