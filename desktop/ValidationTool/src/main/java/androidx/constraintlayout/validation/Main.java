@@ -389,7 +389,9 @@ public class Main extends JPanel {
             resultType = ResultType.PASSABLE;
         } else if (delta > 4) {
             if (DEBUG) {
-                System.out.println("Failure on " + referenceMeasure.getString("id"));
+                if (referenceMeasure.has("id")) {
+                    System.out.println("Failure on " + referenceMeasure.getString("id"));
+                }
             }
             return ResultType.FAILURE;
         }

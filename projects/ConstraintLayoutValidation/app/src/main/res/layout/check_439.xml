@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#F00"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Top popup for banners like incognito and wifi-only. -->
+    <androidx.constraintlayout.validation.MyLinearLayout
+        android:id="@+id/top_popup_container"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:outlineProvider="bounds"
+        android:layout_width="@dimen/match_constraint"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <!-- The main layout of the app -->
+    <FrameLayout
+        android:id="@+id/mainmap_container"
+        android:layout_width="@dimen/match_constraint"
+        android:layout_height="@dimen/match_constraint"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top_popup_container"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_popup_container"/>
+
+    <FrameLayout
+        android:id="@+id/bottom_popup_container"
+        android:visibility="gone"
+        android:layout_width="@dimen/match_constraint"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <!-- The container for HaTS surveys. -->
+    <FrameLayout
+        android:id="@+id/survey_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <!-- The container for the picture-in-picture animation cover. -->
+    <FrameLayout
+        android:id="@+id/picture_in_picture_cover"
+        android:layout_width="@dimen/match_constraint"
+        android:layout_height="@dimen/match_constraint"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
