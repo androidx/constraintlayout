@@ -201,6 +201,43 @@ public class ConstraintWidget {
         }
     }
 
+    public boolean hasResolvedTargets(int orientation, int size) {
+        if (orientation == HORIZONTAL) {
+            boolean left = mLeft.mTarget == null;
+            if (!left && mLeft.mTarget.hasFinalValue()) {
+                left = true;
+            }
+            boolean right = mRight.mTarget == null;
+            if (!right && mRight.mTarget.hasFinalValue()) {
+                right = true;
+            }
+            if (left && right) {
+                int availableSpace = mRight.mTarget.getFinalValue() - mLeft.mTarget.getFinalValue();
+                System.out.println("Well, available h space " + availableSpace + " vs size " + size);
+                return (availableSpace >= size);
+            }
+        } else {
+            boolean baseline = mBaseline.mTarget == null;
+            if (!baseline && mBaseline.mTarget.hasFinalValue()) {
+                return true;
+            }
+            boolean top = mTop.mTarget == null;
+            if (!top && mTop.mTarget.hasFinalValue()) {
+                top = true;
+            }
+            boolean bottom = mBottom.mTarget == null;
+            if (!bottom && mBottom.mTarget.hasFinalValue()) {
+                bottom = true;
+            }
+            if (top && bottom) {
+                int availableSpace = mBottom.mTarget.getFinalValue() - mTop.mTarget.getFinalValue();
+                System.out.println("Well, available v space " + availableSpace + " vs size " + size);
+                return (availableSpace >= size);
+            }
+        }
+        return false;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static final int MATCH_CONSTRAINT_SPREAD = 0;

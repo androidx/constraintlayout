@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.GONE;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.HORIZONTAL;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_WRAP;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
 
 /**
@@ -737,21 +738,27 @@ public class Direct {
         boolean isParentHorizontalFixed = parent != null && parent.getHorizontalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.FIXED;
         boolean isParentVerticalFixed = parent != null && parent.getVerticalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.FIXED;
         boolean isHorizontalFixed = horizontalBehaviour == ConstraintWidget.DimensionBehaviour.FIXED
+                || layout.isResolvedHorizontally()
                 || (APPLY_MATCH_PARENT && horizontalBehaviour == ConstraintWidget.DimensionBehaviour.MATCH_PARENT && isParentHorizontalFixed)
                 || horizontalBehaviour == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT
                 || (horizontalBehaviour == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
                         && layout.mMatchConstraintDefaultWidth == ConstraintWidget.MATCH_CONSTRAINT_SPREAD
                         && layout.mDimensionRatio == 0
                         && layout.hasDanglingDimension(HORIZONTAL))
-                || layout.isResolvedHorizontally();
+                || (horizontalBehaviour == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+                        && layout.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_WRAP
+                        && layout.hasResolvedTargets(HORIZONTAL, layout.getWidth()));
         boolean isVerticalFixed = verticalBehaviour == ConstraintWidget.DimensionBehaviour.FIXED
+                || layout.isResolvedVertically()
                 || (APPLY_MATCH_PARENT && verticalBehaviour == ConstraintWidget.DimensionBehaviour.MATCH_PARENT && isParentVerticalFixed)
                 || verticalBehaviour == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT
                 || (verticalBehaviour == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
                         && layout.mMatchConstraintDefaultHeight == ConstraintWidget.MATCH_CONSTRAINT_SPREAD
                         && layout.mDimensionRatio == 0
                         && layout.hasDanglingDimension(ConstraintWidget.VERTICAL))
-                || layout.isResolvedVertically();
+                || (horizontalBehaviour == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+                        && layout.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_WRAP
+                        && layout.hasResolvedTargets(VERTICAL, layout.getHeight()));
         if (layout.mDimensionRatio > 0 && (isHorizontalFixed || isVerticalFixed)) {
             return true;
         }
