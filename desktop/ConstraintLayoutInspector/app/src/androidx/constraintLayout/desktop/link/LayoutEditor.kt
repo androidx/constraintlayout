@@ -34,11 +34,14 @@ import javax.imageio.ImageIO
 import kotlin.math.max
 import kotlin.math.min
 
-class LayoutEditor(link: MotionLink) : LayoutView() {
+class LayoutEditor(
+    inspector: LayoutInspector
+) : LayoutView(inspector) {
     private var pressX: Int = 0
     private var pressY: Int = 0
-    var link = link
+    var link = inspector.motionLink
     var scenePicker = ScenePicker()
+
     var currentDragElement : Any? = null
 
     var currentX : Int = 0

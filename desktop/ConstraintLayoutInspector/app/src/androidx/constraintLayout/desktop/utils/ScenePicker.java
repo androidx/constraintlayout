@@ -39,12 +39,16 @@ public class ScenePicker {
   private final static int OBJECT_CURVE = 2;
   private final static int OBJECT_RECTANGLE = 3;
   private final static int OBJECT_CIRCLE = 4;
+  private final static int OBJECT_QUADRILATERAL = 5;
+
   LineSelectionEngine mLine = new LineSelectionEngine();
   PointSelectionEngine mPoint = new PointSelectionEngine();
   CurveToSelectionEngine mCurve = new CurveToSelectionEngine();
+  QuadrilateralToSelectionEngine mQuadrilateral = new QuadrilateralToSelectionEngine();
+
   RectangleSelectionEngine mRectangle = new RectangleSelectionEngine();
   CircleSelectionEngine mCircle = new CircleSelectionEngine();
-  SelectionEngine[] myEngines = new SelectionEngine[OBJECT_CIRCLE + 1];
+  SelectionEngine[] myEngines = new SelectionEngine[OBJECT_QUADRILATERAL + 1];
 
   {
     myEngines[OBJECT_LINE] = mLine;
@@ -52,6 +56,7 @@ public class ScenePicker {
     myEngines[OBJECT_CURVE] = mCurve;
     myEngines[OBJECT_RECTANGLE] = mRectangle;
     myEngines[OBJECT_CIRCLE] = mCircle;
+    myEngines[OBJECT_QUADRILATERAL] = mQuadrilateral;
   }
 
   /**
@@ -214,6 +219,26 @@ public class ScenePicker {
     mCurve.add(e, range, x1, y1, x2, y2, x3, y3, x4, y4, width);
   }
 
+  /**
+   * Add a convex Quadrilateral
+   *
+   * @param e
+   * @param x1
+   * @param y1
+   * @param x2
+   * @param y2
+   * @param x3
+   * @param y3
+   * @param x4
+   * @param y4
+   * @param width
+   */
+  public void  addQuadrilateral(Object e,int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int width) {
+    mQuadrilateral.add(e, 0, x1, y1, x2, y2, x3, y3, x4, y4, width);
+  }
+  public void  addQuadrilateral(Object e,double[]p, int width) {
+    mQuadrilateral.add(e, 0, p, width);
+  }
   /*-----------------------------------------------------------------------*/
   // Support point Selection
   /*-----------------------------------------------------------------------*/
@@ -642,6 +667,105 @@ public class ScenePicker {
       }
       addRect((int) minx - range, (int) miny - range,
         (int) (maxx + range), (int) (maxy + range));
+    }
+
+    @Override
+    double distance() {
+      return mDistance;
+    }
+  }
+
+  /*-----------------------------------------------------------------------*/
+  // Support convex Quadrilateral Selection because we render transformed polygons
+  /*-----------------------------------------------------------------------*/
+
+  public class QuadrilateralToSelectionEngine extends SelectionEngine {
+    double m_x1,  m_y1,  m_x2,  m_y2,  m_x3,  m_y3, m_x4,  m_y4;
+    double w;
+    double mDistance;
+
+    public void add(Object select, int range, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int width) {
+      resizeTables();
+      mObjectOffset[mObjectCount] = mObjectDataUsed;
+      mObjectData[mObjectDataUsed++] = range;
+      // compute simplified polynomial expressions for efficiency
+
+      mObjectData[mObjectDataUsed++] = m_x1 = x1;
+      mObjectData[mObjectDataUsed++]= m_y1 = y1;
+      mObjectData[mObjectDataUsed++]= m_x2 = x2;
+      mObjectData[mObjectDataUsed++]= m_y2 = y2;
+      mObjectData[mObjectDataUsed++]= m_x3 = x3;
+      mObjectData[mObjectDataUsed++]= m_y3 = y3;
+      mObjectData[mObjectDataUsed++]= m_x4 = x4;
+      mObjectData[mObjectDataUsed++]= m_y4 = y4;
+      mObjectData[mObjectDataUsed++] = width;
+      mObjects[mObjectCount] = select;
+      mTypes[mObjectCount] = OBJECT_QUADRILATERAL;
+      bounds(range + width);
+      mObjectCount++;
+    }
+    public void add(Object select, int range, double[] p, int width) {
+      resizeTables();
+      mObjectOffset[mObjectCount] = mObjectDataUsed;
+      mObjectData[mObjectDataUsed++] = range;
+      // compute simplified polynomial expressions for efficiency
+      mObjectData[mObjectDataUsed++]= m_x1 = p[0];
+      mObjectData[mObjectDataUsed++]= m_y1 = p[1];
+      mObjectData[mObjectDataUsed++]= m_x2 = p[2];
+      mObjectData[mObjectDataUsed++]= m_y2 = p[3];
+      mObjectData[mObjectDataUsed++]= m_x3 = p[4];
+      mObjectData[mObjectDataUsed++]= m_y3 = p[5];
+      mObjectData[mObjectDataUsed++]= m_x4 = p[6];
+      mObjectData[mObjectDataUsed++]= m_y4 = p[7];
+      mObjectData[mObjectDataUsed++] = width;
+      mObjects[mObjectCount] = select;
+      mTypes[mObjectCount] = OBJECT_QUADRILATERAL;
+      bounds(range + width);
+      mObjectCount++;
+    }
+
+    @Override
+    protected boolean inRange() {
+      double range = mObjectData[mDataOffset]; // TODO we ignore range need to calculate distance to convex
+      m_x1 = mObjectData[mDataOffset + 1];
+      m_y1 = mObjectData[mDataOffset + 2];
+      m_x2 = mObjectData[mDataOffset + 3];
+      m_y2 = mObjectData[mDataOffset + 4];
+      m_x3 = mObjectData[mDataOffset + 5];
+      m_y3 = mObjectData[mDataOffset + 6];
+      m_x4 = mObjectData[mDataOffset + 7];
+      m_y4 = mObjectData[mDataOffset + 8];
+      w = mObjectData[mDataOffset + 9];
+
+      double dist = 0;
+
+      boolean result = false;
+      if ((m_y1 > mMouseY) != (m_y4 > mMouseY) && (mMouseX < (m_x4 - m_x1) * (mMouseY - m_y1) / (m_y4 - m_y1) + m_x1)) {
+
+        result = !result;
+      }
+      if ((m_y2 > mMouseY) != (m_y1 > mMouseY) && (mMouseX < (m_x1 - m_x2) * (mMouseY - m_y2) / (m_y1 - m_y2) + m_x2)) {
+        result = !result;
+      }
+      if ((m_y3 > mMouseY) != (m_y2 > mMouseY) && (mMouseX < (m_x2 - m_x3) * (mMouseY - m_y3) / (m_y2 - m_y3) + m_x3)) {
+        result = !result;
+      }
+      if ((m_y4 > mMouseY) != (m_y3 > mMouseY) && (mMouseX < (m_x3 - m_x4) * (mMouseY - m_y4) / (m_y3 - m_y4) + m_x4)) {
+        result = !result;
+      }
+      mDistance = 6000;
+      return result;
+      }
+
+    public final void bounds(int range) {
+      double minx = Math.min(m_x1, Math.min(m_x2, Math.min(m_x3, m_x4)));
+      double miny = Math.min(m_y1, Math.min(m_y2, Math.min(m_y3, m_y4)));
+      double maxx = Math.max(m_x1, Math.max(m_x2, Math.max(m_x3, m_x4)));
+      double maxy = Math.max(m_y1, Math.max(m_y2, Math.max(m_y3, m_y4)));
+
+      addRect((int) minx - range, (int) miny - range,
+              (int) (maxx + range), (int) (maxy + range));
+
     }
 
     @Override

@@ -183,6 +183,7 @@ public class Transition {
                 motionControl.setup(parentWidth, parentHeight, 1, System.nanoTime());
             }
             WidgetFrame.interpolate(parentWidth, parentHeight, interpolated, start, end, transition, progress);
+            interpolated.interpolatedPos = progress;
             motionControl.interpolate(motionWidgetInterpolated, progress, System.nanoTime(), myKeyCache);
         }
     }
