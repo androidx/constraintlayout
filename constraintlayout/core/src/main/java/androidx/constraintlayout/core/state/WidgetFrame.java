@@ -47,12 +47,14 @@ public class WidgetFrame {
     public float translationX = Float.NaN;
     public float translationY = Float.NaN;
     public float translationZ = Float.NaN;
+    public static float phone_orientation = Float.NaN;
 
     public float scaleX = Float.NaN;
     public float scaleY = Float.NaN;
 
     public float alpha = Float.NaN;
     public float interpolatedPos = Float.NaN;
+    
     public int visibility = ConstraintWidget.VISIBLE;
 
     final public HashMap<String, CustomVariable> mCustom = new HashMap<>();
@@ -359,9 +361,6 @@ public class WidgetFrame {
             case "interpolatedPos":
                 interpolatedPos = value.getFloat();
                 break;
-            case "phone_orientation":
-                phone_orientation = value.getFloat();
-                break;
             case "top":
                 top = value.getInt();
                 break;
@@ -404,7 +403,7 @@ public class WidgetFrame {
         }
     }
 
-    public StringBuilder serialize(StringBuilder ret) {
+    public StringBuilder serialize(StringBuilder ret, boolean sendPhoneOrientation) {
         WidgetFrame frame = this;
         ret.append("{\n");
         add(ret, "left", frame.left);
@@ -423,15 +422,12 @@ public class WidgetFrame {
         add(ret, "scaleY", frame.scaleY);
         add(ret, "alpha", frame.alpha);
         add(ret, "visibility", frame.left);
-<<<<<<< Updated upstream
-
-=======
         add(ret, "interpolatedPos", frame.interpolatedPos);
 
         if (sendPhoneOrientation) {
             add(ret, "phone_orientation", phone_orientation);
         }
->>>>>>> Stashed changes
+
         if (frame.mCustom.size() != 0) {
             ret.append("custom : {\n");
             for (String s : frame.mCustom.keySet()) {

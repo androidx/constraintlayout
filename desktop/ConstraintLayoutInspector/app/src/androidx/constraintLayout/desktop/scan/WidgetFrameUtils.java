@@ -171,7 +171,7 @@ public class WidgetFrameUtils {
         WidgetFrame frame = new WidgetFrame();
         deserialize(tmp, frame);
         StringBuilder builder = new StringBuilder();
-        frame.serialize(builder);
+        frame.serialize(builder, false);
         System.out.println(builder.toString());
     }
 }
