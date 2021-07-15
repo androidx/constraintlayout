@@ -120,8 +120,9 @@ public class CustomAttribute {
                 return mBooleanValue ? 1 : 0;
             case DIMENSION_TYPE:
                 return mFloatValue;
+            default:
+                return Float.NaN;
         }
-        return Float.NaN;
     }
 
     public void getValuesToInterpolate(float[] ret) {
@@ -154,6 +155,7 @@ public class CustomAttribute {
             case DIMENSION_TYPE:
                 ret[0] = mFloatValue;
                 break;
+            default: break;
         }
     }
 
@@ -178,7 +180,8 @@ public class CustomAttribute {
                 break;
             case DIMENSION_TYPE:
                 mFloatValue = value[0];
-
+                break;
+            default: break;
         }
     }
 
@@ -202,9 +205,9 @@ public class CustomAttribute {
                 return 0XFF000000 | (t << 16) + (p << 8) + v;
             case 5:
                 return 0XFF000000 | (v << 16) + (p << 8) + q;
-
+            default:
+                return 0;
         }
-        return 0;
     }
 
     /**
@@ -232,8 +235,9 @@ public class CustomAttribute {
                 return mBooleanValue == CustomAttribute.mBooleanValue;
             case DIMENSION_TYPE:
                 return mFloatValue == CustomAttribute.mFloatValue;
+            default:
+                return false;
         }
-        return false;
     }
 
     public CustomAttribute(String name, AttributeType attributeType) {
@@ -277,6 +281,7 @@ public class CustomAttribute {
             case DIMENSION_TYPE:
                 mFloatValue = (Float) value;
                 break;
+            default: break;
         }
     }
 
@@ -342,6 +347,8 @@ public class CustomAttribute {
                     case REFERENCE_TYPE:
                         method = viewClass.getMethod(methodName, Integer.TYPE);
                         method.invoke(view, CustomAttribute.mIntegerValue);
+                        break;
+                    default: break;
                 }
             } catch (NoSuchMethodException e) {
                 Utils.loge(TAG, e.getMessage());
@@ -392,6 +399,7 @@ public class CustomAttribute {
                     method = viewClass.getMethod(methodName, Float.TYPE);
                     method.invoke(view, this.mFloatValue);
                     break;
+                default: break;
             }
         } catch (NoSuchMethodException e) {
             Utils.loge(TAG, e.getMessage());
@@ -451,6 +459,7 @@ public class CustomAttribute {
                     method = viewClass.getMethod(methodName, Float.TYPE);
                     method.invoke(view, value[0]);
                     break;
+                default: break;
             }
         } catch (NoSuchMethodException e) {
             Utils.loge(TAG, "no method " + methodName + " on View \"" + view.getClass().getName() + "\"");
