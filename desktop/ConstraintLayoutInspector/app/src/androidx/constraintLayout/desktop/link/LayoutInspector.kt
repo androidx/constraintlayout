@@ -16,13 +16,18 @@
 
 package androidx.constraintLayout.desktop.link
 
+import androidx.constraintLayout.desktop.ui.adapters.vd.ListIcons
+import androidx.constraintLayout.desktop.ui.adapters.vg.VDIcon
 import androidx.constraintLayout.desktop.ui.timeline.TimeLinePanel
 import androidx.constraintLayout.desktop.ui.ui.MotionEditorSelector
 import androidx.constraintlayout.core.parser.CLObject
+import com.intellij.ui.layout.selected
 import java.awt.BorderLayout
+import java.awt.Dimension
 import javax.swing.JButton
 import javax.swing.JCheckBox
 import javax.swing.JPanel
+import javax.swing.JToggleButton
 
 class LayoutInspector(link: MotionLink) : JPanel(BorderLayout()) {
     val layoutView = LayoutView()
@@ -30,7 +35,6 @@ class LayoutInspector(link: MotionLink) : JPanel(BorderLayout()) {
     val motionLink = link
     var timeLineStart = JButton("TimeLine...")
     var editing = false
-
     var mTimeLinePanel: TimeLinePanel? = null
     var mSceneString: String? = null
 
@@ -38,12 +42,16 @@ class LayoutInspector(link: MotionLink) : JPanel(BorderLayout()) {
         val northPanel = JPanel()
         val edit = JButton("Edit")
         val liveConnection = JCheckBox("Live connection")
+        val rotate = JToggleButton(VDIcon(ListIcons.getStream("screen_rotation.xml")))
+        rotate.preferredSize= Dimension(24,24)
+        rotate.isFocusable = false
+        rotate.isSelected = false
         liveConnection.isSelected = true
 
         northPanel.add(timeLineStart)
         northPanel.add(edit)
         northPanel.add(liveConnection)
-
+        northPanel.add(rotate)
         add(northPanel, BorderLayout.NORTH)
         add(layoutView, BorderLayout.CENTER)
 
@@ -55,7 +63,9 @@ class LayoutInspector(link: MotionLink) : JPanel(BorderLayout()) {
             editing = !editing
             updateEditorMode()
         }
-
+        rotate.addActionListener{
+            layoutView.mReflectOrientation = rotate.isSelected
+        }
         timeLineStart.addActionListener {
             showTimeLine()
         }

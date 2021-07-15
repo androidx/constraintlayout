@@ -35,6 +35,7 @@ open class LayoutView : JPanel(BorderLayout()) {
 
     protected var lastRootWidth: Float = 0f
     protected var lastRootHeight: Float = 0f
+    var mReflectOrientation = false
 
     protected var scaleX = 0f
     protected var scaleY = 0f
@@ -142,7 +143,9 @@ open class LayoutView : JPanel(BorderLayout()) {
 
         g2.translate(offX.toDouble(), offY.toDouble())
         g2.scale(scaleX.toDouble(), scaleY.toDouble())
-
+        if (mReflectOrientation && !WidgetFrame.phone_orientation.isNaN()) {
+            g2.rotate(-WidgetFrame.phone_orientation.toDouble(), rootWidth/2.0,rootHeight/2.0);
+        }
         for (widget in widgets) {
             if (widget.isGuideline) {
                 continue

@@ -63,6 +63,7 @@ import org.intellij.lang.annotations.Language
 import java.lang.StringBuilder
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * Layout that positions its children according to the constraints between them.
@@ -1850,7 +1851,7 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             }
             json.append(" ${child.stringId}: {")
             json.append(" interpolated : ")
-            frame.serialize(json);
+            frame.serialize(json, true);
             json.append("}, ")
         }
         json.append(" }")
