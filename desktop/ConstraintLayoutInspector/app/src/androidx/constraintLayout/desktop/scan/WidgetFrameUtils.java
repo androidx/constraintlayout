@@ -16,6 +16,7 @@
 
 package androidx.constraintLayout.desktop.scan;
 
+import androidx.constraintLayout.desktop.utils.ScenePicker;
 import androidx.constraintlayout.core.parser.*;
 import androidx.constraintlayout.core.state.WidgetFrame;
 
@@ -53,8 +54,9 @@ public class WidgetFrameUtils {
             }
         }
     }
-
-    public static void render(WidgetFrame frame, Graphics2D g2d, int mask) {
+    private static double []srcPts = new double[8];
+    private static double []dstPts = new double[8];
+    public static void render(WidgetFrame frame, Graphics2D g2d, ScenePicker scenePicker, int mask) {
         float cx = (frame.left + frame.right) / 2f;
         float cy = (frame.top + frame.bottom) / 2f;
         float dx = frame.right - frame.left;
@@ -97,6 +99,21 @@ public class WidgetFrameUtils {
             restore = g.getStroke();
             g.setStroke(dashed);
         }
+        if (scenePicker != null) {
+            srcPts[0] = frame.left;// top left
+            srcPts[1] = frame.top;
+            srcPts[2] = frame.right;
+            srcPts[3] = frame.top;
+            srcPts[4] = frame.right;
+            srcPts[5] = frame.bottom;
+            srcPts[6] = frame.left;
+            srcPts[7] = frame.bottom;
+
+
+            g.getTransform().transform(srcPts, 0, dstPts, 0, 4);
+            scenePicker.addQuadrilateral(frame, dstPts, 0);
+        }
+
         g.drawRect(frame.left, frame.top, frame.right - frame.left, frame.bottom - frame.top);
         if ((mask & DASH_OUTLINE) != 0) {
             g.setStroke(restore);

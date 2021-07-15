@@ -52,7 +52,7 @@ public class WidgetFrame {
     public float scaleY = Float.NaN;
 
     public float alpha = Float.NaN;
-
+    public float interpolatedPos = Float.NaN;
     public int visibility = ConstraintWidget.VISIBLE;
 
     final public HashMap<String, CustomVariable> mCustom = new HashMap<>();
@@ -356,6 +356,12 @@ public class WidgetFrame {
             case "alpha":
                 alpha = value.getFloat();
                 break;
+            case "interpolatedPos":
+                interpolatedPos = value.getFloat();
+                break;
+            case "phone_orientation":
+                phone_orientation = value.getFloat();
+                break;
             case "top":
                 top = value.getInt();
                 break;
@@ -417,7 +423,15 @@ public class WidgetFrame {
         add(ret, "scaleY", frame.scaleY);
         add(ret, "alpha", frame.alpha);
         add(ret, "visibility", frame.left);
+<<<<<<< Updated upstream
 
+=======
+        add(ret, "interpolatedPos", frame.interpolatedPos);
+
+        if (sendPhoneOrientation) {
+            add(ret, "phone_orientation", phone_orientation);
+        }
+>>>>>>> Stashed changes
         if (frame.mCustom.size() != 0) {
             ret.append("custom : {\n");
             for (String s : frame.mCustom.keySet()) {

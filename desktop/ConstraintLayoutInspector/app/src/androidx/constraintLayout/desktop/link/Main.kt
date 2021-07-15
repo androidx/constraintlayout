@@ -16,6 +16,7 @@
 
 package androidx.constraintLayout.desktop.link
 
+import androidx.constraintLayout.desktop.scan.CLScan
 import androidx.constraintLayout.desktop.scan.CLTreeNode
 import androidx.constraintLayout.desktop.scan.SyntaxHighlight
 import androidx.constraintLayout.desktop.ui.utils.Debug
@@ -31,7 +32,6 @@ import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 import java.io.IOException
-import java.lang.RuntimeException
 import javax.swing.*
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
@@ -51,6 +51,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
     var drawDebug = false
     var layoutInspector: LayoutInspector? = null
     var showWest = true
+
     init {
         val hide = JButton("<")
         val getButton = JButton("Get")
@@ -82,18 +83,18 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         add(mMainTextScrollPane, BorderLayout.CENTER)
         add(southPanel, BorderLayout.SOUTH)
         hide.preferredSize = hide.preferredSize
-        hide.background = Color(0,0,0,0)
+        hide.background = Color(0, 0, 0, 0)
         hide.isOpaque = false
         hide.border = null
 
-        hide.addActionListener{e: ActionEvent? ->
-          if (showWest) {
-              remove(scrollPaneList)
-              hide.text = ">"
-          } else {
-              add(scrollPaneList, BorderLayout.WEST)
-              hide.text = "<"
-          }
+        hide.addActionListener { e: ActionEvent? ->
+            if (showWest) {
+                remove(scrollPaneList)
+                hide.text = ">"
+            } else {
+                add(scrollPaneList, BorderLayout.WEST)
+                hide.text = "<"
+            }
             showWest = !showWest
         }
         motionLink.addListener { event: MotionLink.Event, link: MotionLink ->
@@ -142,7 +143,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
             try {
                 setText(formatJson(mMainText.text))
                 updateTree()
-            } catch (e : Exception) {
+            } catch (e: Exception) {
             }
         }
 
@@ -174,25 +175,25 @@ class Main internal constructor() : JPanel(BorderLayout()) {
     }
 
     interface DesignSurfaceModification {
-        fun getElement(name: String) : CLElement?
+        fun getElement(name: String): CLElement?
         fun updateElement(name: String, content: CLElement)
     }
 
     private fun fromLink(event: MotionLink.Event, link: MotionLink) {
         when (event) {
-            MotionLink.Event.ERROR -> {
+            MotionLink.Event.ERROR -> {   // ============ the ERROR case
                 mMessages.text = link.errorMessage
                 mMessages.foreground = Color.RED.darker()
                 link.errorMessage = ""
             }
-            MotionLink.Event.STATUS -> {
+            MotionLink.Event.STATUS -> { // ============ the STATUS case
                 mMessages.text = link.statusMessage
                 mMessages.foreground = Color.BLACK
                 link.errorMessage = ""
             }
-            MotionLink.Event.LAYOUT_UPDATE -> {
+            MotionLink.Event.LAYOUT_UPDATE -> {  // ============ the LAYOUT_UPDATE case
                 if (layoutInspector == null) {
-                    layoutInspector = showLayoutInspector(link, object: DesignSurfaceModification {
+                    layoutInspector = showLayoutInspector(link, object : DesignSurfaceModification {
                         override fun getElement(name: String): CLElement? {
                             if (jsonModel != null && jsonModel is CLObject) {
                                 return jsonModel!!.get(name)
@@ -211,14 +212,14 @@ class Main internal constructor() : JPanel(BorderLayout()) {
                 }
                 layoutInspector!!.setLayoutInformation(link.layoutInfos)
             }
-            MotionLink.Event.LAYOUT_LIST_UPDATE -> {
+            MotionLink.Event.LAYOUT_LIST_UPDATE -> { // ============ the LAYOUT_LIST_UPDATE case
                 val root = DefaultMutableTreeNode("root")
                 val model = DefaultTreeModel(root)
                 var i = 0
                 while (i < link.layoutNames.size) {
-                   var name = link.layoutNames[i]
+                    var name = link.layoutNames[i]
                     if (i == link.lastUpdateLayout) {
-                       name = "<html><b>*" + name +"*</b></html>"
+                        name = "<html><b>*" + name + "*</b></html>"
                     }
                     var node = DefaultMutableTreeNode(name)
 
@@ -228,18 +229,18 @@ class Main internal constructor() : JPanel(BorderLayout()) {
                 layoutListTree.isRootVisible = false
                 layoutListTree.model = model
             }
-            MotionLink.Event.MOTION_SCENE_UPDATE -> {
+            MotionLink.Event.MOTION_SCENE_UPDATE -> {  // ============ the MOTION_SCENE_UPDATE case
                 try {
                     setText(formatJson(link.motionSceneText))
                     updateTree()
-                } catch (e : CLParsingException) {
+                } catch (e: CLParsingException) {
                     Debug.log("exception $e")
                 }
             }
         }
     }
 
-    var jsonModel : CLObject? = null
+    var jsonModel: CLObject? = null
 
     private fun setText(text: String) {
         mMainText.text = text
@@ -258,7 +259,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         }
     }
 
-    private fun formatJson(text: String) : String {
+    private fun formatJson(text: String): String {
         if (text.length == 0) {
             return ""
         }
@@ -270,8 +271,8 @@ class Main internal constructor() : JPanel(BorderLayout()) {
             }
             return json.toFormattedJSON(0, indentation)
         } catch (e: CLParsingException) {
-            System.err.println("error in parsing text \""+text+"\"")
-            throw RuntimeException("Parse error",e)
+            System.err.println("error in parsing text \"" + text + "\"")
+            throw RuntimeException("Parse error", e)
         }
 
     }
@@ -305,6 +306,19 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         myTmpTimer!!.stop()
         myTmpFile!!.deleteOnExit()
         myTmpFile = null
+    }
+
+    fun selectKey(widget: String) {
+        println("select " + widget)
+        val key = CLScan.findCLKey(CLParser.parse(mMainText.text), widget)
+        if (key != null) {
+
+          mMainText.selectionStart = key.start.toInt()
+            mMainText.selectionEnd = key.end.toInt()+1
+            mMainText.requestFocus()
+            println(" > "+ key.start.toInt()+" - "+key.end.toInt())
+
+        }
     }
 
     fun remoteEdit() {
@@ -348,7 +362,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
 
     fun showLayoutInspector(link: MotionLink, callback: Main.DesignSurfaceModification): LayoutInspector? {
         val frame = JFrame("Layout Inspector")
-        val inspector = LayoutInspector(link)
+        val inspector = LayoutInspector(link, this)
         frame.contentPane = inspector
         Desk.rememberPosition(frame, null)
         inspector.editorView.designSurfaceModificationCallback = callback
