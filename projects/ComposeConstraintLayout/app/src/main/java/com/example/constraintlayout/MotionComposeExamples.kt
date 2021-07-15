@@ -909,7 +909,7 @@ public fun MotionExample6() {
             .swipeable(
                 state = swipeableState,
                 anchors = anchors,
-               // resistance = null,
+                // resistance = null,
                 reverseDirection = true,
                 thresholds = { _, _ -> FractionalThreshold(0.3f) },
                 orientation = Orientation.Vertical
@@ -934,4 +934,208 @@ public fun MotionExample6() {
         }
     }
 
+}
+
+@Preview(group = "motion7")
+@Composable
+public fun MotionExample7() {
+    var animateToEnd by remember { mutableStateOf(false) }
+
+    val progress by animateFloatAsState(
+        targetValue = if (animateToEnd) 1f else 0f,
+        animationSpec = tween(1000)
+    )
+    Column {
+        MotionLayout(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .background(Color.Black),
+            motionScene = MotionScene(
+                """{
+        ConstraintSets: {
+        start: {
+          box1: {
+            start: ['parent', 'start', 16],
+            bottom: ['parent','bottom',16]
+          },
+          box2: {
+            start: ['box1', 'end', 16],
+            bottom: ['parent','bottom',16]
+          },
+          box3: {
+            end: ['box2', 'end', 0],
+            bottom: ['box2','top',16]
+          },
+          box4: {
+            start: ['parent', 'end', 16],
+            bottom: ['box3','bottom',16]
+          },
+          box5: {
+            start: ['parent', 'start', 16],
+            top: ['box6','bottom',16]
+          },
+          box6: {
+            start: ['parent', 'start', 16],
+            top: ['parent','top',16]
+          },
+          box7: {
+            start: ['box6', 'end', 16],
+            top: ['box6','top',0]
+          },
+          box8: {
+            start: ['parent', 'end', 16],
+            bottom: ['box7','bottom', 0]
+          },
+          box9: {
+            start: ['parent', 'start', 16],
+            top: ['box5','bottom', 16]
+          }
+        },
+        end: {
+          box1: {
+            end: ['parent','start',0],
+            bottom: ['parent','bottom',16]
+          },
+          box2: {
+            width: 120,
+            height: 80,
+            start: ['parent', 'start', 16],
+            bottom: ['parent','bottom',16]
+          },
+          box3: {
+            start: ['box2', 'end', 16],
+            bottom: ['parent','bottom',16]
+          },
+          box4: {
+            width: 200,
+            height: 160,
+            end: ['box3', 'end', 0],
+            bottom: ['box3','top',16]
+          },
+          box5: {
+            width: 120,
+            height: 280,
+            start: ['parent', 'start', 16],
+            top: ['box6','bottom',16]
+          },
+          box6: {
+            start: ['parent', 'start', 16],
+            top: ['box7','bottom',16]
+          },
+          box7: {
+            width: 120,
+            height: 80,
+            start: ['parent', 'start', 16],
+            top: ['parent','top',16]
+          },
+          box8: {
+            width: 200,
+            height: 160,
+            start: ['box7', 'end', 16],
+            top: ['box7','top', 0]
+          },
+          box9: {
+            end: ['parent', 'start', 0],
+            top: ['box5','top',0]
+          }
+        }
+      }
+}
+"""
+            ),
+            progress = progress
+        ) {
+            Box(
+                modifier = Modifier
+                    .layoutId("box1")
+                    .height(80.dp)
+                    .width(120.dp)
+                    .background(Color.Gray)
+                    .clip(shape = CircleShape)
+                    .clickable(onClick = { animateToEnd = !animateToEnd })
+            )
+
+            Box(
+                modifier = Modifier
+                    .layoutId("box2")
+                    .height(160.dp)
+                    .width(200.dp)
+                    .background(Color.Red)
+                    .clip(shape = CircleShape)
+                    .clickable(onClick = { animateToEnd = !animateToEnd })
+            )
+
+            Box(
+                modifier = Modifier
+                    .layoutId("box3")
+                    .height(160.dp)
+                    .width(200.dp)
+                    .background(Color.White)
+                    .clip(shape = CircleShape)
+                    .clickable(onClick = { animateToEnd = !animateToEnd })
+            )
+
+            Box(
+                modifier = Modifier
+                    .layoutId("box4")
+                    .height(80.dp)
+                    .width(120.dp)
+                    .background(Color.Green)
+                    .clip(shape = CircleShape)
+                    .clickable(onClick = { animateToEnd = !animateToEnd })
+            )
+
+            Box(
+                modifier = Modifier
+                    .layoutId("box5")
+                    .height(80.dp)
+                    .width(120.dp)
+                    .background(Color.Blue)
+                    .clip(shape = CircleShape)
+                    .clickable(onClick = { animateToEnd = !animateToEnd })
+            )
+
+            Box(
+                modifier = Modifier
+                    .layoutId("box6")
+                    .height(80.dp)
+                    .width(120.dp)
+                    .background(Color.Yellow)
+                    .clip(shape = CircleShape)
+                    .clickable(onClick = { animateToEnd = !animateToEnd })
+            )
+
+            Box(
+                modifier = Modifier
+                    .layoutId("box7")
+                    .height(160.dp)
+                    .width(200.dp)
+                    .background(Color.Cyan)
+                    .clip(shape = CircleShape)
+                    .clickable(onClick = { animateToEnd = !animateToEnd })
+            )
+
+            Box(
+                modifier = Modifier
+                    .layoutId("box8")
+                    .height(80.dp)
+                    .width(120.dp)
+                    .background(Color.Magenta)
+                    .clip(shape = CircleShape)
+                    .clickable(onClick = { animateToEnd = !animateToEnd })
+            )
+
+            Box(
+                modifier = Modifier
+                    .layoutId("box9")
+                    .height(280.dp)
+                    .width(120.dp)
+                    .background(Color.DarkGray)
+                    .clip(shape = CircleShape)
+                    .clickable(onClick = { animateToEnd = !animateToEnd })
+            )
+
+        }
+    }
 }
