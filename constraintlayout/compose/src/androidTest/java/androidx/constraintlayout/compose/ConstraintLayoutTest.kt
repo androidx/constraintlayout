@@ -1315,6 +1315,88 @@ class ConstraintLayoutTest {
     }
 
     @Test
+    fun testConstraintLayout_doesNotRebuildFromDsl_whenResizedOnly() = with(rule.density) {
+        var size by mutableStateOf(100.dp)
+        var builds = 0
+        rule.setContent {
+            val onBuild = remember { { ++builds } }
+            ConstraintLayout(Modifier.size(size)) {
+                val box = createRef()
+                Box(Modifier.constrainAs(box) { onBuild();
+            }
+        }
+
+        rule.runOnIdle {
+            assertEquals(1, builds)
+            size = 200.dp
+        }
+
+        rule.runOnIdle {
+            assertEquals(1, builds)
+        }
+    }
+
+    @Test
+    fun testConstraintLayout_rebuildsConstraintSet_whenHelpersChange() = with(rule.density) {
+        var offset by mutableStateOf(10.dp)
+        var builds = 0
+        var obtainedX = 0f
+        rule.setContent {
+            ConstraintLayout {
+                val box = createRef()
+                val g = createGuidelineFromStart(offset)
+                Box(
+                    Modifier
+                        .constrainAs(box) {
+                            start.linkTo(g)
+                            ++builds
+                        }
+                        .onGloballyPositioned { obtainedX = it.positionInRoot().x })
+            }
+        }
+
+        rule.runOnIdle {
+            assertEquals(offset.roundToPx().toFloat(), obtainedX)
+            offset = 20.dp
+            assertEquals(1, builds)
+        }
+
+        rule.runOnIdle {
+            assertEquals(offset.roundToPx().toFloat(), obtainedX)
+            assertEquals(2, builds)
+        }
+    }
+
+    @Test
+    fun testConstraintLayout_rebuilds_whenLambdaChanges() = with(rule.density) {
+        var first by mutableStateOf(true)
+        var obtainedX = 0f
+        rule.setContent {
+            ConstraintLayout {
+                val l1 = remember<ConstrainScope.() -> Unit> {
+                    { start.linkTo(parent.start, 10.dp) }
+                }
+                val l2 = remember<ConstrainScope.() -> Unit> {
+                    { start.linkTo(parent.start, 20.dp) }
+                }
+                val box = createRef()
+                Box(Modifier.constrainAs(box, if (first) l1 else l2).onGloballyPositioned {
+                    obtainedX = it.positionInRoot().x
+                })
+            }
+        }
+
+        rule.runOnIdle {
+            assertEquals(10.dp.roundToPx().toFloat(), obtainedX)
+            first = false
+        }
+
+        rule.runOnIdle {
+            assertEquals(20.dp.roundToPx().toFloat(), obtainedX)
+        }
+    }
+
+    @Test
     fun testConstraintLayout_updates_whenConstraintSetChangesConstraints() = with(rule.density) {
         val box1Size = 20
         var first by mutableStateOf(true)
