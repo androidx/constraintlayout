@@ -361,6 +361,7 @@ public class WidgetFrame {
                 break;
             case "interpolatedPos":
                 interpolatedPos = value.getFloat();
+                break;
             case "phone_orientation":
                 phone_orientation = value.getFloat();
                 break;
