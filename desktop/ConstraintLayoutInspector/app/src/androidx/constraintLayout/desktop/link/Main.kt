@@ -40,10 +40,13 @@ import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
 import javax.swing.event.TreeSelectionListener
 import javax.swing.text.BadLocationException
+import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter
+import javax.swing.text.Highlighter
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 
 class Main internal constructor() : JPanel(BorderLayout()) {
+    private var mSelectionHighlight: Any? = null
     private var layoutInspectorWindow: JFrame? = null
     var motionLink = MotionLink()
     var mMainText = JTextPane()
@@ -267,8 +270,12 @@ class Main internal constructor() : JPanel(BorderLayout()) {
             }
             MotionLink.Event.MOTION_SCENE_UPDATE -> {  // ============ the MOTION_SCENE_UPDATE case
                 try {
+                    highlight.inOpposingBracketColor = true
                     setText(formatJson(link.motionSceneText))
+
                     updateTree()
+                    highlight.inOpposingBracketColor = false
+
                 } catch (e: CLParsingException) {
                     Debug.log("exception $e")
                 }
@@ -345,16 +352,27 @@ class Main internal constructor() : JPanel(BorderLayout()) {
     }
 
     fun selectKey(widget: String) {
-        println("select " + widget)
         val key = CLScan.findCLKey(CLParser.parse(mMainText.text), widget)
+        clearSelectedKey();
         if (key != null) {
 
-          mMainText.selectionStart = key.start.toInt()
-            mMainText.selectionEnd = key.end.toInt()+1
-            mMainText.requestFocus()
-            println(" > "+ key.start.toInt()+" - "+key.end.toInt())
+            val h: Highlighter = mMainText.getHighlighter()
+            try {
+                mSelectionHighlight =  h.addHighlight(   key.start.toInt(),
+                    key.end.toInt() + 1,
+                    DefaultHighlightPainter(   Color.PINK  )  )
+            } catch (e: BadLocationException) {
+                e.printStackTrace()
+            }
 
         }
+    }
+    fun clearSelectedKey(){
+        if (mSelectionHighlight == null) {
+            return
+        }
+        val h: Highlighter = mMainText.getHighlighter()
+        h.removeHighlight(mSelectionHighlight)
     }
 
     fun remoteEdit() {

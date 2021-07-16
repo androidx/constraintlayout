@@ -57,6 +57,19 @@ class Theme(isDarkMode: Boolean) {
         return Color(0, 90, 200, 40)
     }
 
+    fun interpolatedSelectedColor(): Color {
+        if (darkMode) {
+            return Color(240, 140, 240, 100)
+        }
+        return Color(255, 128, 128, 100)
+    }
+
+    fun interpolatedHoverColor(): Color {
+        if (darkMode) {
+            return Color(100, 100, 180, 100)
+        }
+        return Color(10, 190, 200, 40)
+    }
     fun textColor(): Color {
         if (darkMode) {
             return Color(200, 200, 200)
