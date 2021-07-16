@@ -1796,6 +1796,7 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                 Log.d("CCL", "Measuring ${measurable.layoutId} with $constraints")
             }
             val placeable = measurable.measure(constraints).also { placeables[measurable] = it }
+            constraintWidget.isMeasureRequested = false
             if (DEBUG) {
                 Log.d(
                     "CCL",
@@ -1836,6 +1837,7 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                     Log.d("CCL", "Remeasuring coerced ${measurable.layoutId} with $constraints")
                 }
                 measurable.measure(constraints).also { placeables[measurable] = it }
+                constraintWidget.isMeasureRequested = false
             }
         }
 

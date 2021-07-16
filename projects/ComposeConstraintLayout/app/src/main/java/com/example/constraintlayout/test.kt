@@ -1475,6 +1475,37 @@ public fun ScreenExample19() {
     }
 }
 
+@Preview(group = "cl-opt")
+@Composable
+public fun ScreenExample21() {
+    ConstraintLayout {
+        val (image, text1, text2, text3) = createRefs()
+        Box(Modifier.size(50.dp)
+            .background(Color.Blue).constrainAs(image) {
+            start.linkTo(parent.start, margin = 16.dp)
+            centerVerticallyTo(parent)
+        })
+        Box(Modifier.size(100.dp, 30.dp)
+            .background(Color.Blue).constrainAs(text1) {
+            top.linkTo(parent.top)
+            linkTo(image.end, parent.end, 16.dp, 16.dp)
+            width = Dimension.preferredWrapContent
+        })
+        Box(Modifier.size(200.dp, 30.dp)
+            .background(Color.Blue).constrainAs(text2) {
+            top.linkTo(text1.bottom, margin = 16.dp)
+            linkTo(image.end, parent.end, 16.dp, 16.dp)
+            width = Dimension.preferredWrapContent
+        })
+        Box(Modifier.size(300.dp, 30.dp)
+            .background(Color.Blue).constrainAs(text3) {
+            top.linkTo(text2.bottom, margin = 16.dp)
+            linkTo(image.end, parent.end, 16.dp, 16.dp)
+            width = Dimension.preferredWrapContent
+        })
+    }
+}
+
 @Preview(group = "guidelines")
 @Composable
 public fun ScreenExample20() {
