@@ -1644,6 +1644,7 @@ class JSONConstraintSet(@Language("json5") content: String,
  */
 fun ConstraintSet(description: ConstraintSetScope.() -> Unit) = object : ConstraintSet {
     override fun applyTo(state: State, measurables: List<Measurable>) {
+        buildMapping(state, measurables)
         val scope = ConstraintSetScope()
         scope.description()
         scope.applyTo(state)
@@ -1998,10 +1999,10 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         if (constraintSet.isDirty(measurables)) {
             state.reset()
             constraintSet.applyTo(state, measurables)
-            buildMapping(measurables)
+            buildMapping(state, measurables)
             state.apply(root)
         } else {
-            buildMapping(measurables)
+            buildMapping(state, measurables)
         }
         applyRootSize(constraints)
         root.updateHierarchy()
@@ -2051,15 +2052,6 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         placeables.clear()
         lastMeasures.clear()
         frameCache.clear()
-    }
-
-    internal fun buildMapping(measurables: List<Measurable>) {
-        measurables.fastForEach { measurable ->
-            val parentData = measurable.parentData as? ConstraintLayoutParentData
-            // Map the id and the measurable, to be retrieved later during measurement.
-            val givenTag = parentData?.ref?.id ?: measurable.layoutId
-            state.map(givenTag ?: createId(), measurable)
-        }
     }
 
     protected fun applyRootSize(constraints: Constraints) {
@@ -2204,6 +2196,15 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         if (constraintSet is JSONConstraintSet) {
             constraintSet.emitDesignElements(designElements)
         }
+    }
+}
+
+internal fun buildMapping(state: State, measurables: List<Measurable>) {
+    measurables.fastForEach { measurable ->
+        val parentData = measurable.parentData as? ConstraintLayoutParentData
+        // Map the id and the measurable, to be retrieved later during measurement.
+        val givenTag = parentData?.ref?.id ?: measurable.layoutId
+        state.map(givenTag ?: createId(), measurable)
     }
 }
 

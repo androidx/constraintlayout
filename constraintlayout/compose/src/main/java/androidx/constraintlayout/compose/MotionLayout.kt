@@ -444,7 +444,6 @@ internal class MotionMeasurer : Measurer() {
         measurables: List<Measurable>, constraints: Constraints
     ) {
         state.reset()
-        buildMapping(measurables)
         constraintSetStart.applyTo(state, measurables)
         state.apply(root)
         applyRootSize(constraints)
