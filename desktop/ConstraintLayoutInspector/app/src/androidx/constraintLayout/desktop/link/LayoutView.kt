@@ -20,6 +20,7 @@ import androidx.constraintLayout.desktop.scan.KeyFrameNodes
 import androidx.constraintLayout.desktop.scan.WidgetFrameUtils
 import androidx.constraintLayout.desktop.utils.ScenePicker
 import androidx.constraintLayout.desktop.utils.ScenePicker.HitElementListener
+import androidx.constraintLayout.desktop.utils.WidgetAttributes
 import androidx.constraintlayout.core.parser.CLKey
 import androidx.constraintlayout.core.parser.CLObject
 import androidx.constraintlayout.core.parser.CLParser
@@ -34,6 +35,7 @@ import javax.swing.*
 import kotlin.collections.ArrayList
 
 open class LayoutView(inspector: LayoutInspector) : JPanel(BorderLayout()) {
+    private var attDisplay: WidgetAttributes? = null
     protected var widgets = ArrayList<Widget>()
     var zoom = 0.85f
     var picker = ScenePicker()
@@ -293,10 +295,26 @@ fun setLayoutInformation(information: String) {
                 inspector.mTimeLinePanel?.setMotionProgress(pos)
             }
         }
+        if (primarySelected != null && attDisplay != null) {
+            for (widget in widgets) {
+                if (widget.name == primarySelected) {
+                   attDisplay?.setWidgetFrame(widget.interpolated);
+                }
+            }
+        }
 
         repaint()
     } catch (e: Exception) {
         e.printStackTrace()
     }
 }
+
+    fun displayWidgetAttributes() {
+        for (widget in widgets) {
+            if (widget.name == primarySelected) {
+               attDisplay  =  WidgetAttributes.display(widget.interpolated);
+            }
+        }
+
+    }
 }
