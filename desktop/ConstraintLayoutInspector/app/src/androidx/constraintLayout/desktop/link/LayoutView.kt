@@ -20,21 +20,22 @@ import androidx.constraintLayout.desktop.scan.KeyFrameNodes
 import androidx.constraintLayout.desktop.scan.WidgetFrameUtils
 import androidx.constraintLayout.desktop.utils.ScenePicker
 import androidx.constraintLayout.desktop.utils.ScenePicker.HitElementListener
+import androidx.constraintLayout.desktop.utils.WidgetAttributes
 import androidx.constraintlayout.core.parser.CLKey
 import androidx.constraintlayout.core.parser.CLObject
 import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.state.WidgetFrame
 import java.awt.*
+import java.awt.event.ActionEvent
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.geom.Path2D
 import java.util.*
-import javax.swing.JMenuItem
-import javax.swing.JPanel
-import javax.swing.JPopupMenu
+import javax.swing.*
 import kotlin.collections.ArrayList
 
 open class LayoutView(inspector: LayoutInspector) : JPanel(BorderLayout()) {
+    private var attDisplay: WidgetAttributes? = null
     protected var widgets = ArrayList<Widget>()
     var zoom = 0.85f
     var picker = ScenePicker()
@@ -247,8 +248,25 @@ fun rightMouse(e: MouseEvent) {
     println("popup")
     var menu = JPopupMenu()
     menu.add("Selected")
-    for (a in overWidgets)
-        menu.add(JMenuItem(a))
+    for (wId in overWidgets) {
+        if (wId == "root") {
+            continue
+        }
+        var sub = JMenu(wId)
+        menu.add(sub)
+        sub.add(JMenuItem(object : AbstractAction("centerVertically"){
+            override fun actionPerformed(e: ActionEvent) {
+                inspector.main.addConstraint(wId, "centerVertically: 'parent'")
+            }
+        }))
+        sub.add(JMenuItem(object : AbstractAction("centerHorizontally"){
+            override fun actionPerformed(e: ActionEvent) {
+                inspector.main.addConstraint(wId, "centerHorizontally: 'parent'")
+            }
+        }))
+
+
+    }
     menu.show(e.component, e.x, e.y)
 
 }
@@ -277,10 +295,26 @@ fun setLayoutInformation(information: String) {
                 inspector.mTimeLinePanel?.setMotionProgress(pos)
             }
         }
+        if (primarySelected != null && attDisplay != null) {
+            for (widget in widgets) {
+                if (widget.name == primarySelected) {
+                   attDisplay?.setWidgetFrame(widget.interpolated);
+                }
+            }
+        }
 
         repaint()
     } catch (e: Exception) {
         e.printStackTrace()
     }
 }
+
+    fun displayWidgetAttributes() {
+        for (widget in widgets) {
+            if (widget.name == primarySelected) {
+               attDisplay  =  WidgetAttributes.display(widget.interpolated);
+            }
+        }
+
+    }
 }
