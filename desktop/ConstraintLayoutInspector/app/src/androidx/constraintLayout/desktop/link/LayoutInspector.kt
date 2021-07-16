@@ -38,6 +38,8 @@ class LayoutInspector(
     val motionLink = link
     val main = main
     var timeLineStart = JButton("TimeLine...")
+    var addButtonButton = JButton("Button+")
+    var addTextButton = JButton("Text+")
     var editing = false
     var mTimeLinePanel: TimeLinePanel? = null
     var mSceneString: String? = null
@@ -52,6 +54,8 @@ class LayoutInspector(
         rotate.isSelected = false
         liveConnection.isSelected = true
 
+        northPanel.add(addButtonButton)
+        northPanel.add(addTextButton)
         northPanel.add(timeLineStart)
         northPanel.add(edit)
         northPanel.add(liveConnection)
@@ -62,6 +66,9 @@ class LayoutInspector(
         liveConnection.addChangeListener {
             motionLink.setUpdateLayoutPolling(liveConnection.isSelected)
         }
+
+        addButtonButton.addActionListener { main.addDesign("button") }
+        addTextButton.addActionListener {  main.addDesign("text")}
 
         edit.addActionListener {
             editing = !editing

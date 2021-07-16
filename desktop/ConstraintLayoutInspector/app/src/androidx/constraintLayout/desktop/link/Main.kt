@@ -42,6 +42,7 @@ import javax.swing.event.TreeSelectionListener
 import javax.swing.text.BadLocationException
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter
 import javax.swing.text.Highlighter
+import javax.swing.text.StyledDocument
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 
@@ -154,10 +155,9 @@ class Main internal constructor() : JPanel(BorderLayout()) {
             }
         }
 
-        mMainText.addCaretListener( CaretListener {
+        mMainText.addCaretListener(CaretListener {
             val str = mMainText.text
-            highlight.opposingBracketColor(str,mMainText.caretPosition,str.length)
-
+            highlight.opposingBracketColor(str, mMainText.caretPosition, str.length)
         })
 
         mMainText.addKeyListener(object : KeyAdapter() {
@@ -351,6 +351,54 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         myTmpFile = null
     }
 
+    var widgetCount = 1;
+    fun addDesign(type: String) {
+        val key = CLScan.findCLKey(CLParser.parse(mMainText.text), "Design")
+        val uType = upperCaseFirst(type)
+        if (key != null) {
+            val end = key.value.end.toInt() - 2
+            val document: StyledDocument = mMainText.getDocument() as StyledDocument
+            document.insertString(
+                end,
+                ",\n    $type$widgetCount:{ type: '$type' , text: '$uType$widgetCount' }",
+                null
+            )
+        } else {
+            val key = CLScan.findCLKey(CLParser.parse(mMainText.text), "Debug")
+            if (key != null) {
+                widgetCount = 1;
+                val end = key.value.end.toInt() + 2
+                val document: StyledDocument = mMainText.getDocument() as StyledDocument
+                val str = "\n  Design : { \n" +
+                        "    $type$widgetCount:{ type: '$type' , text: '$uType$widgetCount'} \n  }";
+                document.insertString(end, str, null)
+            }
+        }
+        widgetCount++
+    }
+
+    fun addConstraint(widget: String, constraint: String) {
+        val key = CLScan.findCLKeyInRoot(CLParser.parse(mMainText.text), widget)
+        if (key == null) {
+            val pos = mMainText.text.length - 2
+            val str = ",\n  " + widget + ": {\n    " +
+                    constraint + ", \n" +
+                    "   }\n"
+            val document: StyledDocument = mMainText.getDocument() as StyledDocument
+            document.insertString(pos, str, null)
+        } else {
+            val pos = key.value.end.toInt() - 1
+            val str = ",\n    " +constraint + ", \n"
+
+            val document: StyledDocument = mMainText.getDocument() as StyledDocument
+            document.insertString(pos, str, null)
+        }
+    }
+
+    fun upperCaseFirst(str: String): String? {
+        return str.substring(0, 1).toUpperCase() + str.substring(1)
+    }
+
     fun selectKey(widget: String) {
         val key = CLScan.findCLKey(CLParser.parse(mMainText.text), widget)
         clearSelectedKey();
@@ -358,16 +406,19 @@ class Main internal constructor() : JPanel(BorderLayout()) {
 
             val h: Highlighter = mMainText.getHighlighter()
             try {
-                mSelectionHighlight =  h.addHighlight(   key.start.toInt(),
+                mSelectionHighlight = h.addHighlight(
+                    key.start.toInt(),
                     key.end.toInt() + 1,
-                    DefaultHighlightPainter(   Color.PINK  )  )
+                    DefaultHighlightPainter(Color.PINK)
+                )
             } catch (e: BadLocationException) {
                 e.printStackTrace()
             }
 
         }
     }
-    fun clearSelectedKey(){
+
+    fun clearSelectedKey() {
         if (mSelectionHighlight == null) {
             return
         }

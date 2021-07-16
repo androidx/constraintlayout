@@ -25,13 +25,12 @@ import androidx.constraintlayout.core.parser.CLObject
 import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.state.WidgetFrame
 import java.awt.*
+import java.awt.event.ActionEvent
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.geom.Path2D
 import java.util.*
-import javax.swing.JMenuItem
-import javax.swing.JPanel
-import javax.swing.JPopupMenu
+import javax.swing.*
 import kotlin.collections.ArrayList
 
 open class LayoutView(inspector: LayoutInspector) : JPanel(BorderLayout()) {
@@ -247,8 +246,25 @@ fun rightMouse(e: MouseEvent) {
     println("popup")
     var menu = JPopupMenu()
     menu.add("Selected")
-    for (a in overWidgets)
-        menu.add(JMenuItem(a))
+    for (wId in overWidgets) {
+        if (wId == "root") {
+            continue
+        }
+        var sub = JMenu(wId)
+        menu.add(sub)
+        sub.add(JMenuItem(object : AbstractAction("centerVertically"){
+            override fun actionPerformed(e: ActionEvent) {
+                inspector.main.addConstraint(wId, "centerVertically: 'parent'")
+            }
+        }))
+        sub.add(JMenuItem(object : AbstractAction("centerHorizontally"){
+            override fun actionPerformed(e: ActionEvent) {
+                inspector.main.addConstraint(wId, "centerHorizontally: 'parent'")
+            }
+        }))
+
+
+    }
     menu.show(e.component, e.x, e.y)
 
 }

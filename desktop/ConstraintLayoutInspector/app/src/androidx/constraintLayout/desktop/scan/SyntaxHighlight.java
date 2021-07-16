@@ -74,7 +74,7 @@ public class SyntaxHighlight {
             return;
         }
         inOpposingBracketColor = true;
-        StyleContext sc = StyleContext.getDefaultStyleContext();
+
         if (highlight != null) {
             Highlighter h = mEditor.getHighlighter();
             h.removeHighlight(highlight);
@@ -110,7 +110,7 @@ public class SyntaxHighlight {
 //                currentHhighlight = pos;
             }
         }
-        mEditor.setCaretPosition(cur);
+
         inOpposingBracketColor = false;
     }
 
