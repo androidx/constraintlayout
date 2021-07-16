@@ -18,10 +18,7 @@ package androidx.constraintLayout.desktop.scan;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyleContext;
+import javax.swing.text.*;
 import java.awt.*;
 
 /**
@@ -69,19 +66,18 @@ public class SyntaxHighlight {
 
     }
 
-    boolean inopposingBracketColor = false;
-    int currentHhighlight = -1;
+    public boolean inOpposingBracketColor = false;
+    Object highlight = null;
 
     public void opposingBracketColor(String str, int cur, int len) {
-        if (inopposingBracketColor) {
+        if (inOpposingBracketColor) {
             return;
         }
-        inopposingBracketColor = true;
+        inOpposingBracketColor = true;
         StyleContext sc = StyleContext.getDefaultStyleContext();
-        if (currentHhighlight != -1) {
-            AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, Color.BLACK);
-            highlight(mEditor, currentHhighlight, 1, aset);
-            currentHhighlight = -1;
+        if (highlight != null) {
+            Highlighter h = mEditor.getHighlighter();
+            h.removeHighlight(highlight);
         }
         if (len >= cur && cur != 0) {
             char c = str.charAt(cur - 1);
@@ -102,13 +98,20 @@ public class SyntaxHighlight {
             }
 
             if (pos != -1) {
-                AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, opposingBracketColor);
-                highlight(mEditor, pos, 1, aset);
-                currentHhighlight = pos;
+                Highlighter h = mEditor.getHighlighter();
+                try {
+                    highlight = h.addHighlight(pos, pos+1, new DefaultHighlighter.DefaultHighlightPainter(
+                            Color.red));
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
+//                AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, opposingBracketColor);
+//                highlight(mEditor, pos, 1, aset);
+//                currentHhighlight = pos;
             }
         }
         mEditor.setCaretPosition(cur);
-        inopposingBracketColor = false;
+        inOpposingBracketColor = false;
     }
 
     int findMatching(String str, int len, int loc, char c, char rev_c, boolean forward) {
@@ -141,7 +144,7 @@ public class SyntaxHighlight {
 
 
     private void syntaxHighlight() {
-        inopposingBracketColor = true;
+        inOpposingBracketColor = true;
         try {
             int cur = mEditor.getCaretPosition();
             mEditor.setSelectedTextColor(Color.RED);
@@ -186,7 +189,7 @@ public class SyntaxHighlight {
             AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, Color.BLACK);
             mEditor.setCharacterAttributes(aset, false);
             mEditor.setCaretPosition(cur);
-            inopposingBracketColor = false;
+            inOpposingBracketColor = false;
             opposingBracketColor(str, cur, len);
 
         } catch (Exception ex) {

@@ -275,4 +275,25 @@ public class CLScan {
         return Scan.UNKNOWN_ELEMENT;
     }
 
+    void  foo() {
+
+        HashSet<String> selectWidgets  = new HashSet<>();
+        String primarySelected = "";
+        for (String s : selectWidgets) {
+            if (s.equals("root")) {
+                continue;
+            }
+            if  (primarySelected == null) {
+                primarySelected = s;
+                break;
+            }
+            if (!primarySelected.equals(s)) {
+                primarySelected = s;
+            }
+        }
+
+    }
+
+
+
 }
