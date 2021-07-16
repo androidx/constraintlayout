@@ -34,6 +34,7 @@ public class SyntaxHighlight {
     Color attributeColor = new Color(0x384790);
     Color numberColor = new Color(0x0077e5);
     Color textColor = new Color(0x007726);
+    Color opposingBracketColor = new Color(0xE08A63);
     Timer timer = new Timer(20, (a) -> syntaxHighlight());
     public boolean update = false;
 
@@ -68,16 +69,89 @@ public class SyntaxHighlight {
 
     }
 
+    boolean inopposingBracketColor = false;
+    int currentHhighlight = -1;
+
+    public void opposingBracketColor(String str, int cur, int len) {
+        if (inopposingBracketColor) {
+            return;
+        }
+        inopposingBracketColor = true;
+        StyleContext sc = StyleContext.getDefaultStyleContext();
+        if (currentHhighlight != -1) {
+            AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, Color.BLACK);
+            highlight(mEditor, currentHhighlight, 1, aset);
+            currentHhighlight = -1;
+        }
+        if (len >= cur && cur != 0) {
+            char c = str.charAt(cur - 1);
+            int pos = -1;
+            switch (c) {
+                case '{':
+                    pos = findMatching(str, len, cur, '{', '}', true);
+                    break;
+                case '}':
+                    pos = findMatching(str, len, cur, '{', '}', false);
+                    break;
+                case '[':
+                    pos = findMatching(str, len, cur, '[', ']', true);
+                    break;
+                case ']':
+                    pos = findMatching(str, len, cur, '[', ']', false);
+                    break;
+            }
+
+            if (pos != -1) {
+                AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, opposingBracketColor);
+                highlight(mEditor, pos, 1, aset);
+                currentHhighlight = pos;
+            }
+        }
+        mEditor.setCaretPosition(cur);
+        inopposingBracketColor = false;
+    }
+
+    int findMatching(String str, int len, int loc, char c, char rev_c, boolean forward) {
+        int count = 1;
+        if (forward) {
+            for (int i = loc; i < len; i++) {
+                if (str.charAt(i) == c) {
+                    count++;
+                } else if (str.charAt(i) == rev_c) {
+                    count--;
+                }
+                if (count == 0) {
+                    return i;
+                }
+            }
+        } else {
+            for (int i = loc - 2; i >= 0; i--) {
+                if (str.charAt(i) == rev_c) {
+                    count++;
+                } else if (str.charAt(i) == c) {
+                    count--;
+                }
+                if (count == 0) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+
     private void syntaxHighlight() {
+        inopposingBracketColor = true;
         try {
             int cur = mEditor.getCaretPosition();
             mEditor.setSelectedTextColor(Color.RED);
             StyleContext sc = StyleContext.getDefaultStyleContext();
             String str = mEditor.getText();
-            if (str.length() == 0) {
-
+            int len = str.length();
+            if (len == 0) {
                 return;
             }
+
             CLScan.parse(str, new CLScan.Scan() {
                 @Override
                 public void object(String type, int keyword, int offset, int length) {
@@ -112,7 +186,8 @@ public class SyntaxHighlight {
             AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, Color.BLACK);
             mEditor.setCharacterAttributes(aset, false);
             mEditor.setCaretPosition(cur);
-
+            inopposingBracketColor = false;
+            opposingBracketColor(str, cur, len);
 
         } catch (Exception ex) {
             ex.printStackTrace();

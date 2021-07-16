@@ -28,14 +28,18 @@ import androidx.constraintlayout.core.parser.CLParsingException
 import java.awt.*
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
+import java.awt.event.KeyAdapter
+import java.awt.event.KeyEvent
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 import java.io.IOException
 import javax.swing.*
+import javax.swing.event.CaretListener
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
 import javax.swing.event.TreeSelectionListener
+import javax.swing.text.BadLocationException
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 
@@ -147,6 +151,38 @@ class Main internal constructor() : JPanel(BorderLayout()) {
             }
         }
 
+        mMainText.addCaretListener( CaretListener {
+            val str = mMainText.text
+            highlight.opposingBracketColor(str,mMainText.caretPosition,str.length)
+
+        })
+
+        mMainText.addKeyListener(object : KeyAdapter() {
+            override fun keyTyped(e: KeyEvent) {
+                if ('\n' == e.keyChar) {
+                    val str = mMainText.text
+                    val offset = mMainText.caretPosition
+                    var count = 0
+                    for (i in offset - 2 downTo 1) {
+                        val c = str[i]
+                        if (Character.isAlphabetic(c.toInt())) {
+                            count = 0
+                            continue
+                        } else if (Character.isSpaceChar(c)) {
+                            count++
+                        } else if (c == '\n') {
+                            break
+                        }
+                    }
+                    val s = String(CharArray(count)).replace(0.toChar(), ' ')
+                    try {
+                        mMainText.document.insertString(offset, s, null)
+                    } catch (badLocationException: BadLocationException) {
+                        badLocationException.printStackTrace()
+                    }
+                }
+            }
+        })
         mMainText.document.addDocumentListener(object : DocumentListener {
             override fun insertUpdate(e: DocumentEvent) {
                 if (highlight.update) {
