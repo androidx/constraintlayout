@@ -27,6 +27,7 @@ import androidx.constraintLayout.desktop.ui.ui.MotionEditorSelector.TimeLineList
 import androidx.constraintLayout.desktop.ui.ui.Utils;
 import androidx.constraintLayout.desktop.ui.utils.Debug;
 import androidx.constraintLayout.desktop.utils.Desk;
+import androidx.constraintLayout.desktop.utils.ScenePicker;
 import androidx.constraintlayout.core.parser.CLKey;
 import androidx.constraintlayout.core.parser.CLObject;
 import androidx.constraintlayout.core.parser.CLParser;
@@ -1188,7 +1189,13 @@ public class TimeLinePanel extends JPanel {
     }
 
     public void updateMotionScene(String motionSceneString){
-
+        ScenePicker picker = new ScenePicker();
+        picker.foreachObject(p->{
+            if (p instanceof  MouseAdapter) {
+                MouseAdapter ma = (MouseAdapter) p;
+                ma.mouseDragged(null);
+            }
+        });
         DefaultMTag transition = (DefaultMTag) KeyFramesTag.parseForTimeLine(motionSceneString);
         if (DEBUG) {
             Debug.log("Transition ... ");
@@ -1262,6 +1269,13 @@ public class TimeLinePanel extends JPanel {
     interface ProgressListener {
         void setProgress(float p);
     }
+
+    public void setMotionProgress(float progress){
+         mMeModel.setProgress(progress);
+        mMotionProgress = progress;
+        repaint();
+    }
+
     public void setProgressListener(ProgressListener listener) {
         TimeLinePanel mTimeLinePanel = null;
         mTimeLinePanel.addTimeLineListener( (cmd, pos) ->{

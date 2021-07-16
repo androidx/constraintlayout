@@ -29,10 +29,14 @@ import javax.swing.JCheckBox
 import javax.swing.JPanel
 import javax.swing.JToggleButton
 
-class LayoutInspector(link: MotionLink) : JPanel(BorderLayout()) {
-    val layoutView = LayoutView()
-    val editorView = LayoutEditor(link)
+class LayoutInspector(
+    link: MotionLink,
+    main: Main
+) : JPanel(BorderLayout()) {
+    val layoutView = LayoutView(this)
+    val editorView = LayoutEditor(this)
     val motionLink = link
+    val main = main
     var timeLineStart = JButton("TimeLine...")
     var editing = false
     var mTimeLinePanel: TimeLinePanel? = null

@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.LayoutScopeMarker
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateObserver
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
@@ -44,6 +45,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
+import androidx.compose.ui.util.fastForEachIndexed
 import androidx.constraintlayout.core.parser.CLKey
 import androidx.constraintlayout.core.parser.CLObject
 import androidx.constraintlayout.core.parser.CLParser
@@ -80,7 +82,7 @@ inline fun ConstraintLayout(
     val measurer = remember { Measurer() }
     val scope = remember { ConstraintLayoutScope() }
     val remeasureRequesterState = remember { mutableStateOf(false) }
-    val measurePolicy = rememberConstraintLayoutMeasurePolicy(
+    val (measurePolicy, onHelpersChanged) = rememberConstraintLayoutMeasurePolicy(
         optimizationLevel,
         scope,
         remeasureRequesterState,
@@ -94,11 +96,7 @@ inline fun ConstraintLayout(
             val previousHelpersHashCode = scope.helpersHashCode
             scope.reset()
             scope.content()
-            if (scope.helpersHashCode != previousHelpersHashCode) {
-                // If the helpers have changed, we need to request remeasurement. To achieve this,
-                // we are changing this boolean state that is read during measurement.
-                remeasureRequesterState.value = !remeasureRequesterState.value
-            }
+            if (scope.helpersHashCode != previousHelpersHashCode) onHelpersChanged()
         }
     )
 }
@@ -110,31 +108,11 @@ internal fun rememberConstraintLayoutMeasurePolicy(
     scope: ConstraintLayoutScope,
     remeasureRequesterState: MutableState<Boolean>,
     measurer: Measurer
-): MeasurePolicy =
-    remember(optimizationLevel) {
-        MeasurePolicy { measurables, constraints ->
-            val constraintSet = object : ConstraintSet {
-                override fun applyTo(state: State, measurables: List<Measurable>) {
-                    scope.applyTo(state)
-                    measurables.fastForEach { measurable ->
-                        val parentData = measurable.parentData as? ConstraintLayoutParentData
-                        // Map the id and the measurable, to be retrieved later during measurement.
-                        val givenTag = parentData?.ref?.id
-                        state.map(givenTag ?: createId(), measurable)
-                        // Run the constrainAs block of the child, to obtain its constraints.
-                        if (parentData != null) {
-                            val constrainScope = ConstrainScope(parentData.ref.id)
-                            parentData.constrain(constrainScope)
-                            constrainScope.applyTo(state)
-                        }
-                    }
-                }
+): Pair<MeasurePolicy, () -> Unit> {
+    val constraintSet = remember { ConstraintSetForInlineDsl(scope) }
 
-                override fun override(name: String, value: Float) : ConstraintSet {
-                    // nothing here yet
-                    return this
-                }
-            }
+    return remember(optimizationLevel) {
+        val measurePolicy = MeasurePolicy { measurables, constraints ->
             val layoutSize = measurer.performMeasure(
                 constraints,
                 layoutDirection,
@@ -151,7 +129,78 @@ internal fun rememberConstraintLayoutMeasurePolicy(
                 with(measurer) { performLayout(measurables) }
             }
         }
+
+        val onHelpersChanged = {
+            // If the helpers have changed, we need to request remeasurement. To achieve this,
+            // we are changing this boolean state that is read during measurement.
+            remeasureRequesterState.value = !remeasureRequesterState.value
+            constraintSet.knownDirty = true
+        }
+
+        measurePolicy to onHelpersChanged
     }
+}
+
+private class ConstraintSetForInlineDsl(
+    val scope: ConstraintLayoutScope
+) : ConstraintSet, RememberObserver {
+    private var handler: Handler? = null
+    private val observer = SnapshotStateObserver {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            it()
+        } else {
+            val h = handler ?: Handler(Looper.getMainLooper()).also { h -> handler = h }
+            h.post(it)
+        }
+    }
+
+    override fun applyTo(state: State, measurables: List<Measurable>) {
+        scope.applyTo(state)
+        previousDatas.clear()
+        observer.observeReads(Unit, onCommitAffectingConstrainLambdas) {
+            measurables.fastForEach { measurable ->
+                val parentData = measurable.parentData as? ConstraintLayoutParentData
+                // Run the constrainAs block of the child, to obtain its constraints.
+                if (parentData != null) {
+                    val constrainScope = ConstrainScope(parentData.ref.id)
+                    parentData.constrain(constrainScope)
+                    constrainScope.applyTo(state)
+                }
+                previousDatas.add(parentData)
+            }
+        }
+        knownDirty = false
+    }
+
+    var knownDirty = true
+
+    private val onCommitAffectingConstrainLambdas = { _: Unit -> knownDirty = true }
+
+    override fun isDirty(measurables: List<Measurable>): Boolean {
+        if (knownDirty || measurables.size != previousDatas.size) return true
+
+        measurables.fastForEachIndexed { index, measurable ->
+            if (measurable.parentData as? ConstraintLayoutParentData != previousDatas[index]) {
+                return true
+            }
+        }
+
+        return false
+    }
+
+    private val previousDatas = mutableListOf<ConstraintLayoutParentData?>()
+
+    override fun onRemembered() {
+        observer.start()
+    }
+
+    override fun onForgotten() {
+        observer.stop()
+        observer.clear()
+    }
+
+    override fun onAbandoned() {}
+}
 
 /**
  * Layout that positions its children according to the constraints between them.
@@ -703,11 +752,13 @@ class ConstraintLayoutScope @PublishedApi internal constructor() : ConstraintLay
      * [Modifier] that defines the constraints, as part of a [ConstraintLayout], of the layout
      * element.
      */
+    @Stable
     fun Modifier.constrainAs(
         ref: ConstrainedLayoutReference,
         constrainBlock: ConstrainScope.() -> Unit
     ) = this.then(ConstrainAsModifier(ref, constrainBlock))
 
+    @Stable
     private class ConstrainAsModifier(
         private val ref: ConstrainedLayoutReference,
         private val constrainBlock: ConstrainScope.() -> Unit
@@ -792,17 +843,24 @@ class ChainStyle internal constructor(
 /**
  * Parent data provided by `Modifier.constrainAs`.
  */
+@Stable
 private class ConstraintLayoutParentData(
     val ref: ConstrainedLayoutReference,
     val constrain: ConstrainScope.() -> Unit
 ) : LayoutIdParentData {
     override val layoutId: Any = ref.id
+
+    override fun equals(other: Any?) = other is ConstraintLayoutParentData &&
+            ref.id == other.ref.id && constrain == other.constrain
+
+    override fun hashCode() = ref.id.hashCode() * 31 + constrain.hashCode()
 }
 
 /**
  * Scope used by `Modifier.constrainAs`.
  */
 @LayoutScopeMarker
+@Stable
 class ConstrainScope internal constructor(internal val id: Any) {
     internal val tasks = mutableListOf<(State) -> Unit>()
     internal fun applyTo(state: State) = tasks.forEach { it(state) }
@@ -1290,10 +1348,12 @@ interface ConstraintSet {
      */
     fun applyTo(state: State, measurables: List<Measurable>)
 
-    fun override(name: String, value: Float) : ConstraintSet
+    fun override(name: String, value: Float) = this
     fun applyTo(transition: Transition, type: Int) {
         // nothing here, used in MotionLayout
     }
+
+    fun isDirty(measurables: List<Measurable>): Boolean = true
 }
 
 @SuppressLint("ComposableNaming")
@@ -1584,9 +1644,6 @@ class JSONConstraintSet(@Language("json5") content: String,
  */
 fun ConstraintSet(description: ConstraintSetScope.() -> Unit) = object : ConstraintSet {
     override fun applyTo(state: State, measurables: List<Measurable>) {
-        measurables.forEach { measurable ->
-            state.map((measurable.layoutId ?: createId()), measurable)
-        }
         val scope = ConstraintSetScope()
         scope.description()
         scope.applyTo(state)
@@ -1664,7 +1721,6 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
     protected val root = ConstraintWidgetContainer(0, 0).also { it.measurer = this }
     protected val placeables = mutableMapOf<Measurable, Placeable>()
     private val lastMeasures = mutableMapOf<Measurable, Array<Int>>()
-    private val lastMeasureDefaultsHolder = arrayOf(0, 0, 0)
     protected val frameCache = mutableMapOf<Measurable, WidgetFrame>()
 
     protected lateinit var density: Density
@@ -1677,13 +1733,6 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
     var forcedScaleFactor = Float.NaN
     var layoutCurrentWidth: Int = 0
     var layoutCurrentHeight: Int = 0
-
-    protected fun reset() {
-        placeables.clear()
-        lastMeasures.clear()
-        frameCache.clear()
-        state.reset()
-    }
 
     /**
      * Method called by Compose tooling. Returns a JSON string that represents the Constraints
@@ -1927,7 +1976,6 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
     ): IntSize {
         this.density = measureScope
         this.measureScope = measureScope
-        reset()
         // Define the size of the ConstraintLayout.
         state.width(
             if (constraints.hasFixedWidth) {
@@ -1946,8 +1994,15 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         // Build constraint set and apply it to the state.
         state.rootIncomingConstraints = constraints
         state.layoutDirection = layoutDirection
-        constraintSet.applyTo(state, measurables)
-        state.apply(root)
+        resetMeasureState()
+        if (constraintSet.isDirty(measurables)) {
+            state.reset()
+            constraintSet.applyTo(state, measurables)
+            buildMapping(measurables)
+            state.apply(root)
+        } else {
+            buildMapping(measurables)
+        }
         applyRootSize(constraints)
         root.updateHierarchy()
 
@@ -1992,6 +2047,21 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         return IntSize(root.width, root.height)
     }
 
+    internal fun resetMeasureState() {
+        placeables.clear()
+        lastMeasures.clear()
+        frameCache.clear()
+    }
+
+    internal fun buildMapping(measurables: List<Measurable>) {
+        measurables.fastForEach { measurable ->
+            val parentData = measurable.parentData as? ConstraintLayoutParentData
+            // Map the id and the measurable, to be retrieved later during measurement.
+            val givenTag = parentData?.ref?.id ?: measurable.layoutId
+            state.map(givenTag ?: createId(), measurable)
+        }
+    }
+
     protected fun applyRootSize(constraints: Constraints) {
         root.width = constraints.maxWidth
         root.height = constraints.maxHeight
@@ -2034,11 +2104,8 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             }
         }
         measurables.fastForEach { measurable ->
-            val frame = frameCache[measurable]
-            if (frame == null) {
-                return
-            }
-            if (frame.isDefaultTransform()) {
+            val frame = frameCache[measurable] ?: return
+            if (frame.isDefaultTransform) {
                 val x = frameCache[measurable]!!.left
                 val y = frameCache[measurable]!!.top
                 placeables[measurable]?.place(IntOffset(x, y))

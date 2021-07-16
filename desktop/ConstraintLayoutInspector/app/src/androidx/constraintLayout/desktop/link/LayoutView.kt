@@ -18,21 +18,27 @@ package androidx.constraintLayout.desktop.link
 
 import androidx.constraintLayout.desktop.scan.KeyFrameNodes
 import androidx.constraintLayout.desktop.scan.WidgetFrameUtils
+import androidx.constraintLayout.desktop.utils.ScenePicker
+import androidx.constraintLayout.desktop.utils.ScenePicker.HitElementListener
 import androidx.constraintlayout.core.parser.CLKey
 import androidx.constraintlayout.core.parser.CLObject
 import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.state.WidgetFrame
 import java.awt.*
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
 import java.awt.geom.Path2D
+import javax.swing.JMenuItem
 import javax.swing.JPanel
+import javax.swing.JPopupMenu
 
-open class LayoutView : JPanel(BorderLayout()) {
+open class LayoutView(inspector: LayoutInspector) : JPanel(BorderLayout()) {
     protected var widgets = ArrayList<Widget>()
     var zoom = 0.85f
-
+    var picker = ScenePicker()
     private var rootWidth: Float = 0f
     private var rootHeight: Float = 0f
-
+    private var inspector = inspector
     protected var lastRootWidth: Float = 0f
     protected var lastRootHeight: Float = 0f
     var mReflectOrientation = false
@@ -41,8 +47,49 @@ open class LayoutView : JPanel(BorderLayout()) {
     protected var scaleY = 0f
     protected var offX = 0.0f
     protected var offY = 0.0f
+    protected var overWidgets = ArrayList<WidgetFrame>()
+    protected var selected : WidgetFrame? = null
 
+ init {
+     val mouseAdapter: MouseAdapter = object : MouseAdapter() {
+         override fun mousePressed(e: MouseEvent) {
+             overWidgets.clear()
+             picker.setSelectListener(
+                 HitElementListener { over, dist -> if (over is WidgetFrame) overWidgets.add(over) })
+             picker.find(e.x, e.y)
+             if (e.isPopupTrigger)
+               rightMouse(e)
+         }
 
+         override fun mouseReleased(e: MouseEvent) {
+             if (e.isPopupTrigger)
+                 rightMouse(e)
+             else {
+                 for(a in overWidgets) {
+                     if ("root".equals(a.name)) {
+                         continue
+                     }
+                     if (selected != null && a == selected) {
+                         continue
+                     }
+                     selected = a;
+                     inspector.main.selectKey(a.name)
+
+                 }
+             }
+         }
+
+         override fun mouseDragged(e: MouseEvent) {
+
+         }
+
+         override fun mouseMoved(e: MouseEvent?) {
+
+         }
+     }
+     addMouseListener(mouseAdapter)
+     addMouseMotionListener(mouseAdapter)
+ }
     data class Widget(val id: String, val key: CLKey) {
         var interpolated = WidgetFrame()
         var start = WidgetFrame()
@@ -79,14 +126,14 @@ open class LayoutView : JPanel(BorderLayout()) {
             return interpolated.height()
         }
 
-        fun draw(g: Graphics2D, drawRoot: Boolean) {
+        fun draw(g: Graphics2D, drawRoot: Boolean, scenePicker: ScenePicker) {
 
             val END_LOOK = WidgetFrameUtils.OUTLINE or WidgetFrameUtils.DASH_OUTLINE;
             g.color = WidgetFrameUtils.theme.startColor()
-            WidgetFrameUtils.render(start, g, END_LOOK);
+            WidgetFrameUtils.render(start, g, null,END_LOOK);
             keyFrames.render(g)
             g.color = WidgetFrameUtils.theme.endColor()
-            WidgetFrameUtils.render(end, g, END_LOOK);
+            WidgetFrameUtils.render(end, g, null, END_LOOK);
 
             g.color = WidgetFrameUtils.theme.pathColor()
             WidgetFrameUtils.renderPath(path, g);
@@ -99,7 +146,7 @@ open class LayoutView : JPanel(BorderLayout()) {
             g.font = drawFont
             style += WidgetFrameUtils.TEXT
             interpolated.name = name
-            WidgetFrameUtils.render(interpolated, g, style);
+            WidgetFrameUtils.render(interpolated, g, scenePicker, style);
 
         }
     }
@@ -143,15 +190,28 @@ open class LayoutView : JPanel(BorderLayout()) {
 
         g2.translate(offX.toDouble(), offY.toDouble())
         g2.scale(scaleX.toDouble(), scaleY.toDouble())
+
         if (mReflectOrientation && !WidgetFrame.phone_orientation.isNaN()) {
             g2.rotate(-WidgetFrame.phone_orientation.toDouble(), rootWidth/2.0,rootHeight/2.0);
         }
+        picker.reset()
+        
         for (widget in widgets) {
             if (widget.isGuideline) {
                 continue
             }
-            widget.draw(g2, widget == root)
+            widget.draw(g2, widget == root, picker)
         }
+    }
+
+    fun rightMouse(e : MouseEvent) {
+        println("popup")
+        var menu = JPopupMenu()
+        menu.add("Selected")
+        for (a in overWidgets)
+        menu.add(JMenuItem(a.name))
+        menu.show(e.component, e.x, e.y)
+
     }
 
     fun setLayoutInformation(information: String) {
@@ -162,14 +222,20 @@ open class LayoutView : JPanel(BorderLayout()) {
         try {
             val list = CLParser.parse(information)
             widgets.clear()
-
+            var pos = Float.NaN
             for (i in 0 until list.size()) {
                 val widget = list[i]
 
                 if (widget is CLKey) {
                     val widgetId = widget.content()
-
-                    widgets.add(Widget(widgetId, widget))
+                    var w = Widget(widgetId, widget)
+                    widgets.add(w)
+                    if (!(w.interpolated.interpolatedPos.isNaN())) {
+                        pos = w.interpolated.interpolatedPos
+                    }
+                }
+                if (!(pos.isNaN())) {
+                    inspector.mTimeLinePanel?.setMotionProgress(pos)
                 }
             }
 

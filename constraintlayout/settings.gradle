@@ -8,7 +8,7 @@ pluginManagement {
     }
 
     plugins {
-        id 'org.jetbrains.kotlin.android' version '1.4.32'
+        id 'org.jetbrains.kotlin.android' version '1.5.10'
     }
     resolutionStrategy {
         eachPlugin {
