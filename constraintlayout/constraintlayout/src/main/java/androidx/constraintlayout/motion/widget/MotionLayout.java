@@ -1486,7 +1486,12 @@ public class MotionLayout extends ConstraintLayout implements
                         onNewStateAttachHandlers();
                         if (mStateCache != null) {
                             if (mDelayedApply) {
-                                post(() -> mStateCache.apply());
+                                post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mStateCache.apply();
+                                    }
+                                });
                             } else {
                                 mStateCache.apply();
                             }
@@ -4142,7 +4147,12 @@ public class MotionLayout extends ConstraintLayout implements
         onNewStateAttachHandlers();
         if (mStateCache != null) {
             if (mDelayedApply) {
-                post(() -> mStateCache.apply());
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mStateCache.apply();
+                    }
+                });
             } else {
                 mStateCache.apply();
             }
