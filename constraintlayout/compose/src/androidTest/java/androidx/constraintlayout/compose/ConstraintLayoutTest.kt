@@ -1322,7 +1322,7 @@ class ConstraintLayoutTest {
             val onBuild = remember { { ++builds } }
             ConstraintLayout(Modifier.size(size)) {
                 val box = createRef()
-                Box(Modifier.constrainAs(box) { onBuild();
+                Box(Modifier.constrainAs(box) { onBuild() })
             }
         }
 
