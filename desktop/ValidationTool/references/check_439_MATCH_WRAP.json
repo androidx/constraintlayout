@@ -1,0 +1,69 @@
+{
+  "duration": "149000",
+  "layout": {
+    "children": [
+      {
+        "children": [],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "top_popup_container",
+        "class": "MyLinearLayout"
+      },
+      {
+        "children": [],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "1080"
+        },
+        "id": "mainmap_container",
+        "class": "FrameLayout"
+      },
+      {
+        "children": [],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "bottom_popup_container",
+        "class": "FrameLayout"
+      },
+      {
+        "children": [],
+        "bounds": {
+          "top": "0",
+          "left": "540",
+          "bottom": "0",
+          "right": "540"
+        },
+        "id": "survey_container",
+        "class": "FrameLayout"
+      },
+      {
+        "children": [],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "picture_in_picture_cover",
+        "class": "FrameLayout"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "0",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}

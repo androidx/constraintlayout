@@ -4,7 +4,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
-def compose_version = '1.0.0-beta09'
+def compose_version = '1.0.0-rc02'
 
 android {
     compileSdkVersion 30

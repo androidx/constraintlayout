@@ -490,7 +490,8 @@ internal class MotionMeasurer : Measurer() {
             motionProgress = progress
             if (this.transition.isEmpty() || frameCache.isEmpty()) {
                 this.transition.clear()
-                reset()
+                resetMeasureState()
+                state.reset()
                 // Define the size of the ConstraintLayout.
                 state.width(
                     if (constraints.hasFixedWidth) {
@@ -614,7 +615,7 @@ internal class MotionMeasurer : Measurer() {
 
             json.append(" ${child.stringId}: {")
             json.append(" interpolated : ")
-            interpolated.serialize(json);
+            interpolated.serialize(json, true);
 
             json.append(", start : ")
             start.serialize(json);

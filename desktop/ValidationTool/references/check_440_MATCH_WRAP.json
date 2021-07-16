@@ -1,0 +1,45 @@
+{
+  "duration": "146000",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "txtTest",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "grpTest",
+        "class": "Group"
+      },
+      {
+        "bounds": {
+          "top": "24",
+          "left": "24",
+          "bottom": "132",
+          "right": "741"
+        },
+        "id": "editTextTextPersonName",
+        "class": "AppCompatEditText"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "132",
+      "right": "1080"
+    },
+    "id": "container",
+    "class": "ConstraintLayout"
+  }
+}

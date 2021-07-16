@@ -8,11 +8,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.platform.ComposeView
 import androidx.constraintlayout.compose.*
+import androidx.constraintlayout.coreAndroid.PhoneState
 
 class MainActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
-    private var composeNum = 20
-    private var MAX = 34
+    private var composeNum = 36
+    private var MAX = 36
 
     var map = HashMap<Int, String>();
     val debugServer = DebugServer()
@@ -57,6 +58,7 @@ class MainActivity : AppCompatActivity() {
                 18 -> ScreenExample18()
                 19 -> ScreenExample19()
                 20 -> ScreenExample20()
+
                 21 -> MotionExample1()
                 22 -> MotionExample2()
                 23 -> MotionExample3()
@@ -73,8 +75,11 @@ class MainActivity : AppCompatActivity() {
                 32 -> CycleTranslationXY()
                 33 -> CycleRotationZ()
                 34 -> CycleRotationXY()
+
+                35 -> MotionExample7()
+                36 -> ScreenExample21()
                 else -> {
-                    composeNum = (composeNum + 33) % 33
+                    composeNum = (composeNum + 35) % 35
                     println(composeNum)
                     ScreenExample()
                 }
@@ -95,6 +100,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         mFrameLayout = findViewById<FrameLayout>(R.id.frame)
         setCompose();
+         PhoneState(this) // monitor orientation present PhoneState.phoneOrientation
     }
 
     override fun onPause() {

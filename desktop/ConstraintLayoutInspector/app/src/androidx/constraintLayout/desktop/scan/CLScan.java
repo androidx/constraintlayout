@@ -15,7 +15,6 @@
  */
 package androidx.constraintLayout.desktop.scan;
 
-import androidx.constraintLayout.desktop.ui.utils.Debug;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.parser.*;
 
@@ -27,7 +26,7 @@ import java.util.*;
  * Code that scans the CL text providing a callback to for each of the important words
  */
 public class CLScan {
-    static HashSet<String> sSectionKeyWord = new HashSet<>(Arrays.asList("Variables", "ConstraintSets", "Debug", "Generate", "KeyFrames", "Transitions", "KeyAttributes", "KeyPositions"));
+    static HashSet<String> sSectionKeyWord = new HashSet<>(Arrays.asList("Variables", "ConstraintSets", "Debug", "Design", "Generate", "KeyFrames", "Transitions", "KeyAttributes", "KeyPositions"));
     static HashSet<String> sAttributesKeyWord = new HashSet<>(Arrays.asList(
             "start",
             "end",
@@ -217,7 +216,7 @@ public class CLScan {
         return ret;
     }
 
-   public  static  CLKey findCLKey(CLObject obj, String name ) {
+    public static CLKey findCLKey(CLObject obj, String name) {
 
         int n = obj.size();
         try {
@@ -264,6 +263,29 @@ public class CLScan {
         return null;
     }
 
+    public static CLKey findCLKeyInRoot(CLObject obj, String name) {
+
+        int n = obj.size();
+        try {
+            for (int i = 0; i < n; i++) {
+                CLElement tmp = obj.get(i);
+                if (!(tmp instanceof CLKey)) {
+                    continue;
+                }
+                CLKey clkey = ((CLKey) tmp);
+                String attr = clkey.content();
+
+                if (name.equals(attr)) {
+                    return clkey;
+                }
+            }
+
+        } catch (CLParsingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     public static int getElementClass(String str) {
         if (sSectionKeyWord.contains(str)) {
@@ -274,5 +296,25 @@ public class CLScan {
         }
         return Scan.UNKNOWN_ELEMENT;
     }
+
+    void foo() {
+
+        HashSet<String> selectWidgets = new HashSet<>();
+        String primarySelected = "";
+        for (String s : selectWidgets) {
+            if (s.equals("root")) {
+                continue;
+            }
+            if (primarySelected == null) {
+                primarySelected = s;
+                break;
+            }
+            if (!primarySelected.equals(s)) {
+                primarySelected = s;
+            }
+        }
+
+    }
+
 
 }

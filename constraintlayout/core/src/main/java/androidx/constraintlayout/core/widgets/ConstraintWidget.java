@@ -201,6 +201,24 @@ public class ConstraintWidget {
         }
     }
 
+    public boolean hasResolvedTargets(int orientation, int size) {
+        if (orientation == HORIZONTAL) {
+            if (mLeft.mTarget != null && mLeft.mTarget.hasFinalValue()
+                && mRight.mTarget != null && mRight.mTarget.hasFinalValue()) {
+                return (mRight.mTarget.getFinalValue() - mLeft.mTarget.getFinalValue()) >= size;
+            }
+        } else {
+            if (mBaseline.mTarget != null && mBaseline.mTarget.hasFinalValue()) {
+                return true;
+            }
+            if (mTop.mTarget != null && mTop.mTarget.hasFinalValue()
+                    && mBottom.mTarget != null && mBottom.mTarget.hasFinalValue()) {
+                return (mBottom.mTarget.getFinalValue() - mTop.mTarget.getFinalValue()) >= size;
+            }
+        }
+        return false;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static final int MATCH_CONSTRAINT_SPREAD = 0;

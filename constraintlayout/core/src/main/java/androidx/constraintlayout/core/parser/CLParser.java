@@ -254,6 +254,7 @@ public class CLParser {
         newElement = CLToken.allocate(content);
       }
       break;
+      default: break;
     }
     if (newElement == null) {
       return null;

@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "androidx.constaitnlayout.experiments.template"
-        minSdkVersion 30
+        minSdkVersion 29
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"

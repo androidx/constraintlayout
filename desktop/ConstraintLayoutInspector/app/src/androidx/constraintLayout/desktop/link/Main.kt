@@ -16,6 +16,7 @@
 
 package androidx.constraintLayout.desktop.link
 
+import androidx.constraintLayout.desktop.scan.CLScan
 import androidx.constraintLayout.desktop.scan.CLTreeNode
 import androidx.constraintLayout.desktop.scan.SyntaxHighlight
 import androidx.constraintLayout.desktop.ui.utils.Debug
@@ -27,19 +28,26 @@ import androidx.constraintlayout.core.parser.CLParsingException
 import java.awt.*
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
+import java.awt.event.KeyAdapter
+import java.awt.event.KeyEvent
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 import java.io.IOException
-import java.lang.RuntimeException
 import javax.swing.*
+import javax.swing.event.CaretListener
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
 import javax.swing.event.TreeSelectionListener
+import javax.swing.text.BadLocationException
+import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter
+import javax.swing.text.Highlighter
+import javax.swing.text.StyledDocument
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 
 class Main internal constructor() : JPanel(BorderLayout()) {
+    private var mSelectionHighlight: Any? = null
     private var layoutInspectorWindow: JFrame? = null
     var motionLink = MotionLink()
     var mMainText = JTextPane()
@@ -51,6 +59,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
     var drawDebug = false
     var layoutInspector: LayoutInspector? = null
     var showWest = true
+
     init {
         val hide = JButton("<")
         val getButton = JButton("Get")
@@ -82,18 +91,18 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         add(mMainTextScrollPane, BorderLayout.CENTER)
         add(southPanel, BorderLayout.SOUTH)
         hide.preferredSize = hide.preferredSize
-        hide.background = Color(0,0,0,0)
+        hide.background = Color(0, 0, 0, 0)
         hide.isOpaque = false
         hide.border = null
 
-        hide.addActionListener{e: ActionEvent? ->
-          if (showWest) {
-              remove(scrollPaneList)
-              hide.text = ">"
-          } else {
-              add(scrollPaneList, BorderLayout.WEST)
-              hide.text = "<"
-          }
+        hide.addActionListener { e: ActionEvent? ->
+            if (showWest) {
+                remove(scrollPaneList)
+                hide.text = ">"
+            } else {
+                add(scrollPaneList, BorderLayout.WEST)
+                hide.text = "<"
+            }
             showWest = !showWest
         }
         motionLink.addListener { event: MotionLink.Event, link: MotionLink ->
@@ -142,10 +151,41 @@ class Main internal constructor() : JPanel(BorderLayout()) {
             try {
                 setText(formatJson(mMainText.text))
                 updateTree()
-            } catch (e : Exception) {
+            } catch (e: Exception) {
             }
         }
 
+        mMainText.addCaretListener(CaretListener {
+            val str = mMainText.text
+            highlight.opposingBracketColor(str, mMainText.caretPosition, str.length)
+        })
+
+        mMainText.addKeyListener(object : KeyAdapter() {
+            override fun keyTyped(e: KeyEvent) {
+                if ('\n' == e.keyChar) {
+                    val str = mMainText.text
+                    val offset = mMainText.caretPosition
+                    var count = 0
+                    for (i in offset - 2 downTo 1) {
+                        val c = str[i]
+                        if (Character.isAlphabetic(c.toInt())) {
+                            count = 0
+                            continue
+                        } else if (Character.isSpaceChar(c)) {
+                            count++
+                        } else if (c == '\n') {
+                            break
+                        }
+                    }
+                    val s = String(CharArray(count)).replace(0.toChar(), ' ')
+                    try {
+                        mMainText.document.insertString(offset, s, null)
+                    } catch (badLocationException: BadLocationException) {
+                        badLocationException.printStackTrace()
+                    }
+                }
+            }
+        })
         mMainText.document.addDocumentListener(object : DocumentListener {
             override fun insertUpdate(e: DocumentEvent) {
                 if (highlight.update) {
@@ -174,25 +214,25 @@ class Main internal constructor() : JPanel(BorderLayout()) {
     }
 
     interface DesignSurfaceModification {
-        fun getElement(name: String) : CLElement?
+        fun getElement(name: String): CLElement?
         fun updateElement(name: String, content: CLElement)
     }
 
     private fun fromLink(event: MotionLink.Event, link: MotionLink) {
         when (event) {
-            MotionLink.Event.ERROR -> {
+            MotionLink.Event.ERROR -> {   // ============ the ERROR case
                 mMessages.text = link.errorMessage
                 mMessages.foreground = Color.RED.darker()
                 link.errorMessage = ""
             }
-            MotionLink.Event.STATUS -> {
+            MotionLink.Event.STATUS -> { // ============ the STATUS case
                 mMessages.text = link.statusMessage
                 mMessages.foreground = Color.BLACK
                 link.errorMessage = ""
             }
-            MotionLink.Event.LAYOUT_UPDATE -> {
+            MotionLink.Event.LAYOUT_UPDATE -> {  // ============ the LAYOUT_UPDATE case
                 if (layoutInspector == null) {
-                    layoutInspector = showLayoutInspector(link, object: DesignSurfaceModification {
+                    layoutInspector = showLayoutInspector(link, object : DesignSurfaceModification {
                         override fun getElement(name: String): CLElement? {
                             if (jsonModel != null && jsonModel is CLObject) {
                                 return jsonModel!!.get(name)
@@ -211,14 +251,14 @@ class Main internal constructor() : JPanel(BorderLayout()) {
                 }
                 layoutInspector!!.setLayoutInformation(link.layoutInfos)
             }
-            MotionLink.Event.LAYOUT_LIST_UPDATE -> {
+            MotionLink.Event.LAYOUT_LIST_UPDATE -> { // ============ the LAYOUT_LIST_UPDATE case
                 val root = DefaultMutableTreeNode("root")
                 val model = DefaultTreeModel(root)
                 var i = 0
                 while (i < link.layoutNames.size) {
-                   var name = link.layoutNames[i]
+                    var name = link.layoutNames[i]
                     if (i == link.lastUpdateLayout) {
-                       name = "<html><b>*" + name +"*</b></html>"
+                        name = "<html><b>*" + name + "*</b></html>"
                     }
                     var node = DefaultMutableTreeNode(name)
 
@@ -228,18 +268,22 @@ class Main internal constructor() : JPanel(BorderLayout()) {
                 layoutListTree.isRootVisible = false
                 layoutListTree.model = model
             }
-            MotionLink.Event.MOTION_SCENE_UPDATE -> {
+            MotionLink.Event.MOTION_SCENE_UPDATE -> {  // ============ the MOTION_SCENE_UPDATE case
                 try {
+                    highlight.inOpposingBracketColor = true
                     setText(formatJson(link.motionSceneText))
+
                     updateTree()
-                } catch (e : CLParsingException) {
+                    highlight.inOpposingBracketColor = false
+
+                } catch (e: CLParsingException) {
                     Debug.log("exception $e")
                 }
             }
         }
     }
 
-    var jsonModel : CLObject? = null
+    var jsonModel: CLObject? = null
 
     private fun setText(text: String) {
         mMainText.text = text
@@ -258,7 +302,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         }
     }
 
-    private fun formatJson(text: String) : String {
+    private fun formatJson(text: String): String {
         if (text.length == 0) {
             return ""
         }
@@ -270,8 +314,8 @@ class Main internal constructor() : JPanel(BorderLayout()) {
             }
             return json.toFormattedJSON(0, indentation)
         } catch (e: CLParsingException) {
-            System.err.println("error in parsing text \""+text+"\"")
-            throw RuntimeException("Parse error",e)
+            System.err.println("error in parsing text \"" + text + "\"")
+            throw RuntimeException("Parse error", e)
         }
 
     }
@@ -305,6 +349,81 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         myTmpTimer!!.stop()
         myTmpFile!!.deleteOnExit()
         myTmpFile = null
+    }
+
+    var widgetCount = 1;
+    fun addDesign(type: String) {
+        val key = CLScan.findCLKey(CLParser.parse(mMainText.text), "Design")
+        val uType = upperCaseFirst(type)
+        if (key != null) {
+            val end = key.value.end.toInt() - 2
+            val document: StyledDocument = mMainText.getDocument() as StyledDocument
+            document.insertString(
+                end,
+                ",\n    $type$widgetCount:{ type: '$type' , text: '$uType$widgetCount' }",
+                null
+            )
+        } else {
+            val key = CLScan.findCLKey(CLParser.parse(mMainText.text), "Debug")
+            if (key != null) {
+                widgetCount = 1;
+                val end = key.value.end.toInt() + 2
+                val document: StyledDocument = mMainText.getDocument() as StyledDocument
+                val str = "\n  Design : { \n" +
+                        "    $type$widgetCount:{ type: '$type' , text: '$uType$widgetCount'} \n  }";
+                document.insertString(end, str, null)
+            }
+        }
+        widgetCount++
+    }
+
+    fun addConstraint(widget: String, constraint: String) {
+        val key = CLScan.findCLKeyInRoot(CLParser.parse(mMainText.text), widget)
+        if (key == null) {
+            val pos = mMainText.text.length - 2
+            val str = ",\n  " + widget + ": {\n    " +
+                    constraint + ", \n" +
+                    "   }\n"
+            val document: StyledDocument = mMainText.getDocument() as StyledDocument
+            document.insertString(pos, str, null)
+        } else {
+            val pos = key.value.end.toInt() - 1
+            val str = ",\n    " +constraint + ", \n"
+
+            val document: StyledDocument = mMainText.getDocument() as StyledDocument
+            document.insertString(pos, str, null)
+        }
+    }
+
+    fun upperCaseFirst(str: String): String? {
+        return str.substring(0, 1).toUpperCase() + str.substring(1)
+    }
+
+    fun selectKey(widget: String) {
+        val key = CLScan.findCLKey(CLParser.parse(mMainText.text), widget)
+        clearSelectedKey();
+        if (key != null) {
+
+            val h: Highlighter = mMainText.getHighlighter()
+            try {
+                mSelectionHighlight = h.addHighlight(
+                    key.start.toInt(),
+                    key.end.toInt() + 1,
+                    DefaultHighlightPainter(Color.PINK)
+                )
+            } catch (e: BadLocationException) {
+                e.printStackTrace()
+            }
+
+        }
+    }
+
+    fun clearSelectedKey() {
+        if (mSelectionHighlight == null) {
+            return
+        }
+        val h: Highlighter = mMainText.getHighlighter()
+        h.removeHighlight(mSelectionHighlight)
     }
 
     fun remoteEdit() {
@@ -348,7 +467,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
 
     fun showLayoutInspector(link: MotionLink, callback: Main.DesignSurfaceModification): LayoutInspector? {
         val frame = JFrame("Layout Inspector")
-        val inspector = LayoutInspector(link)
+        val inspector = LayoutInspector(link, this)
         frame.contentPane = inspector
         Desk.rememberPosition(frame, null)
         inspector.editorView.designSurfaceModificationCallback = callback

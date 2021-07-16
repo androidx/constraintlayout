@@ -16,48 +16,83 @@
 
 package androidx.constraintLayout.desktop.link
 
+import androidx.constraintLayout.desktop.ui.adapters.vd.ListIcons
+import androidx.constraintLayout.desktop.ui.adapters.vg.VDIcon
 import androidx.constraintLayout.desktop.ui.timeline.TimeLinePanel
 import androidx.constraintLayout.desktop.ui.ui.MotionEditorSelector
+import androidx.constraintLayout.desktop.utils.WidgetAttributes
 import androidx.constraintlayout.core.parser.CLObject
-import java.awt.BorderLayout
-import javax.swing.JButton
-import javax.swing.JCheckBox
-import javax.swing.JPanel
+import java.awt.*
+import javax.swing.*
 
-class LayoutInspector(link: MotionLink) : JPanel(BorderLayout()) {
-    val layoutView = LayoutView()
-    val editorView = LayoutEditor(link)
+class LayoutInspector(
+    link: MotionLink,
+    main: Main
+) : JPanel(BorderLayout()) {
+    val layoutView = LayoutView(this)
+    val editorView = LayoutEditor(this)
     val motionLink = link
+    val main = main
     var timeLineStart = JButton("TimeLine...")
-    var editing = false
+    var showWidgetAttributes = JButton("Attributes...")
 
+    var addButtonButton = JButton("Button+")
+    var addTextButton = JButton("Text+")
+    var editing = false
     var mTimeLinePanel: TimeLinePanel? = null
     var mSceneString: String? = null
 
     init {
         val northPanel = JPanel()
+        val westPanel = JPanel(GridBagLayout())
+        var gbc = GridBagConstraints()
+        gbc.weightx = 1.0
+        gbc.fill = GridBagConstraints.HORIZONTAL
+        gbc.gridwidth = GridBagConstraints.REMAINDER
+
         val edit = JButton("Edit")
         val liveConnection = JCheckBox("Live connection")
+        val rotate = JToggleButton(VDIcon(ListIcons.getStream("screen_rotation.xml")))
+        rotate.preferredSize= Dimension(24,24)
+        rotate.isFocusable = false
+        rotate.isSelected = false
         liveConnection.isSelected = true
 
+        westPanel.add(addButtonButton,gbc)
+        westPanel.add(addTextButton,gbc)
+        gbc.weighty = 1.0
+        westPanel.add(Box.createGlue(),gbc)
         northPanel.add(timeLineStart)
+        northPanel.add(showWidgetAttributes)
+
         northPanel.add(edit)
         northPanel.add(liveConnection)
-
+        northPanel.add(rotate)
         add(northPanel, BorderLayout.NORTH)
         add(layoutView, BorderLayout.CENTER)
+        add(westPanel, BorderLayout.WEST)
+
 
         liveConnection.addChangeListener {
             motionLink.setUpdateLayoutPolling(liveConnection.isSelected)
         }
 
+        addButtonButton.addActionListener { main.addDesign("button") }
+        addTextButton.addActionListener {  main.addDesign("text")}
+
         edit.addActionListener {
             editing = !editing
             updateEditorMode()
         }
-
+        rotate.addActionListener{
+            layoutView.mReflectOrientation = rotate.isSelected
+        }
         timeLineStart.addActionListener {
             showTimeLine()
+        }
+        showWidgetAttributes.addActionListener{
+
+           layoutView.displayWidgetAttributes();
         }
 
     }
