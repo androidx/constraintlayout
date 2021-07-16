@@ -29,9 +29,10 @@ class LayoutInspector(
     link: MotionLink,
     main: Main
 ) : JPanel(BorderLayout()) {
+    val motionLink = link
     val layoutView = LayoutView(this)
     val editorView = LayoutEditor(this)
-    val motionLink = link
+
     val main = main
     var timeLineStart = JButton("TimeLine...")
     var showWidgetAttributes = JButton("Attributes...")
