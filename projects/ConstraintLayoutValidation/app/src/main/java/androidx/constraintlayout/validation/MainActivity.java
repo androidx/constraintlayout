@@ -258,6 +258,18 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
         return true;
     };
 
+    TestLayout testLayout_443 = (view, mode, widthMeasureSpec, heightMeasureSpec, layoutParams) -> {
+        Fragment fragmentBig = new CLBugFragment_443(R.layout.fragment_check_443_big);
+        view.postDelayed(() -> {
+            getSupportFragmentManager().beginTransaction().add(R.id.googleapp_incognito_topbar_container, fragmentBig).commit();
+        }, 20);
+        Fragment fragmentSmall = new CLBugFragment_443(R.layout.fragment_check_443_small);
+        view.postDelayed(() -> {
+            getSupportFragmentManager().beginTransaction().replace(R.id.googleapp_incognito_topbar_container, fragmentSmall).commit();
+        }, 200);
+        return true;
+    };
+
     Command listCommand = (activity, server, writer, reader, out) -> {
         String[] layouts = getLayouts();
         for (int i = 0; i < layouts.length; i++) {
@@ -643,12 +655,14 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
         mTests.put("check_408", testLayout_408);
         mTests.put("check_420", testLayout_420);
         mTests.put("check_438", testLayout_438);
+        mTests.put("check_443", testLayout_443);
 
         mTestsDelay.put("check_265", 1500);
         mTestsDelay.put("check_335", 1500);
         mTestsDelay.put("check_397", 1500);
         mTestsDelay.put("check_420", 500);
         mTestsDelay.put("check_438", 500);
+        mTestsDelay.put("check_443", 500);
 
         // We skip those for now
         // (depends on moving to LayoutParams instead of MarginLayoutParams)
@@ -676,7 +690,7 @@ public class MainActivity extends AppCompatActivity implements Server.Requests {
 //        list_view.setLayoutManager(linearLayoutManager);
 //        list_view.setAdapter(new Adapter339(getApplicationContext(), xVals));
 
-        setContentView(R.layout.check_441);
+        setContentView(R.layout.check_443);
 
         //setContentView(R.layout.check_251);
 //        setContentView(R.layout.check_024);

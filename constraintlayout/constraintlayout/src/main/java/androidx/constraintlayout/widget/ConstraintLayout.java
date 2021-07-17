@@ -799,9 +799,6 @@ public class ConstraintLayout extends ViewGroup {
             int height = 0;
             int baseline = 0;
 
-            boolean alreadyMeasured = (widget.getLastHorizontalMeasureSpec() == horizontalSpec
-                    && widget.getLastVerticalMeasureSpec() == verticalSpec);
-
             if ((measure.measureStrategy == BasicMeasure.Measure.TRY_GIVEN_DIMENSIONS
                     || measure.measureStrategy == BasicMeasure.Measure.USE_GIVEN_DIMENSIONS) ||
                     !(horizontalMatchConstraints && widget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_SPREAD
@@ -811,9 +808,7 @@ public class ConstraintLayout extends ViewGroup {
                     androidx.constraintlayout.core.widgets.VirtualLayout layout = (androidx.constraintlayout.core.widgets.VirtualLayout) widget;
                     ((VirtualLayout) child).onMeasure(layout, horizontalSpec, verticalSpec);
                 } else {
-                    if (!alreadyMeasured) {
-                        child.measure(horizontalSpec, verticalSpec);
-                    }
+                    child.measure(horizontalSpec, verticalSpec);
                 }
                 widget.setLastMeasureSpec(horizontalSpec, verticalSpec);
 
@@ -824,7 +819,7 @@ public class ConstraintLayout extends ViewGroup {
                 width = w;
                 height = h;
 
-                if (DEBUG && !alreadyMeasured) {
+                if (DEBUG) {
                     String measurement = MeasureSpec.toString(horizontalSpec) + " x " + MeasureSpec.toString(verticalSpec) + " => " + width + " x " + height;
                     System.out.println("    (M) measure " + " (" + widget.getDebugName() + ") : " + measurement);
                 }
@@ -866,7 +861,7 @@ public class ConstraintLayout extends ViewGroup {
                     width = child.getMeasuredWidth();
                     height = child.getMeasuredHeight();
                     baseline = child.getBaseline();
-                    if (DEBUG && !alreadyMeasured) {
+                    if (DEBUG) {
                         String measurement2 = MeasureSpec.toString(horizontalSpec) + " x " + MeasureSpec.toString(verticalSpec) + " => " + width + " x " + height;
                         System.out.println("measure (b) " + widget.getDebugName() + " : " + measurement2);
                     }
@@ -1650,7 +1645,7 @@ public class ConstraintLayout extends ViewGroup {
 
         boolean sameSpecsAsPreviousMeasure = (mOnMeasureWidthMeasureSpec == widthMeasureSpec
                 && mOnMeasureHeightMeasureSpec == heightMeasureSpec);
-
+        sameSpecsAsPreviousMeasure = false; //TODO re-enable
         if (!mDirtyHierarchy && !sameSpecsAsPreviousMeasure) {
             // it's possible that, if we are already marked for a relayout, a view would not call to request a layout;
             // in that case we'd miss updating the hierarchy correctly (window insets change may do that -- we receive

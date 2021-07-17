@@ -481,14 +481,24 @@ internal class MotionMeasurer : Measurer() {
     ): IntSize {
         this.density = measureScope
         this.measureScope = measureScope
+        var layoutSizeChanged = false
+        if (constraints.hasFixedWidth
+            && !state.sameFixedWidth(constraints.maxWidth)) {
+            layoutSizeChanged = true
+        }
+        if (constraints.hasFixedHeight
+            && !state.sameFixedHeight(constraints.maxHeight)) {
+            layoutSizeChanged = true
+        }
         if (motionProgress != progress
             || (layoutInformationReceiver?.getForcedWidth() != Int.MIN_VALUE
                     && layoutInformationReceiver?.getForcedHeight() != Int.MIN_VALUE)
             || this.transition.isEmpty()
             || frameCache.isEmpty()
+            || layoutSizeChanged
         ) {
             motionProgress = progress
-            if (this.transition.isEmpty() || frameCache.isEmpty()) {
+            if (layoutSizeChanged || this.transition.isEmpty() || frameCache.isEmpty()) {
                 this.transition.clear()
                 resetMeasureState()
                 state.reset()

@@ -1563,6 +1563,23 @@ public fun ScreenExample20() {
     }
 }
 
+@Preview(group = "guidelines")
+@Composable
+public fun ScreenExample22() {
+    ConstraintLayout(
+        ConstraintSet("""
+        {
+          Debug: {
+            name: 'Playground'
+          }
+        }
+        """),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
+    }
+}
 
 
 

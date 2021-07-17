@@ -22,11 +22,12 @@ import android.os.Looper
 import android.util.Log
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.Canvas
+//import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.LayoutScopeMarker
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+//import androidx.compose.material.Button
+//import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateObserver
 import androidx.compose.ui.Modifier
@@ -61,6 +62,7 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviou
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.TRY_GIVEN_DIMENSIONS
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.USE_GIVEN_DIMENSIONS
+//import com.google.accompanist.coil.rememberCoilPainter
 import org.intellij.lang.annotations.Language
 import java.lang.StringBuilder
 import java.util.*
@@ -2176,6 +2178,7 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         for (element in designElements) {
             var id = element.id
             when (element.type) {
+                /* // commenting for now until we provide hooks
                 "button" -> {
                     Button(
                         modifier = Modifier.layoutId(id),
@@ -2188,6 +2191,13 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                     Text(modifier = Modifier.layoutId(id),
                          text=element.param)
                 }
+                "image" -> {
+                    Image(modifier = Modifier.layoutId(id),
+                        painter = rememberCoilPainter(element.param),
+                        contentDescription = ""
+                    )
+                }
+                 */
             }
         }
     }

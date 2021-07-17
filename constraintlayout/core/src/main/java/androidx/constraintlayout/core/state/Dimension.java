@@ -42,6 +42,21 @@ public class Dimension {
     Object mInitialValue = WRAP_DIMENSION;
     boolean mIsSuggested = false;
 
+    /**
+     * Returns true if the dimension is a fixed dimension of
+     * the same given value
+     *
+     * @param value
+     * @return
+     */
+    public boolean equalsFixedValue(int value) {
+        if (mInitialValue == null
+            && mValue == value) {
+            return true;
+        }
+        return false;
+    }
+
     public enum Type {
         FIXED,
         WRAP,
