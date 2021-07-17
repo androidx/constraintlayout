@@ -128,6 +128,14 @@ public class State {
         return new ConstraintReference(this);
     }
 
+    public boolean sameFixedWidth(int width) {
+        return mParent.getWidth().equalsFixedValue(width);
+    }
+
+    public boolean sameFixedHeight(int height) {
+        return mParent.getHeight().equalsFixedValue(height);
+    }
+
     public State width(Dimension dimension) {
         return setWidth(dimension);
     }

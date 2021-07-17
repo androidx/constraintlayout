@@ -1,0 +1,75 @@
+{
+  "duration": "848500",
+  "layout": {
+    "children": [
+      {
+        "children": [{
+          "children": [{
+            "bounds": {
+              "top": "2",
+              "left": "0",
+              "bottom": "55",
+              "right": "1080"
+            },
+            "id": "googleapp_incognito_topbar_text",
+            "class": "MaterialTextView"
+          }],
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "83",
+            "right": "1080"
+          },
+          "id": "googleapp_incognito_topbar_wrapper",
+          "class": "RelativeLayout"
+        }],
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "83",
+          "right": "1080"
+        },
+        "id": "googleapp_incognito_topbar_container",
+        "class": "FragmentContainerView"
+      },
+      {
+        "children": [],
+        "bounds": {
+          "top": "83",
+          "left": "540",
+          "bottom": "83",
+          "right": "540"
+        },
+        "id": "googleapp_top_level_destination_container",
+        "class": "ConstraintLayout"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "googleapp_promotion_container",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "206",
+          "left": "459",
+          "bottom": "259",
+          "right": "622"
+        },
+        "id": "googleapp_bottom_navigation_container",
+        "class": "MaterialTextView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "259",
+      "right": "1080"
+    },
+    "class": "ConstraintLayout"
+  }
+}
