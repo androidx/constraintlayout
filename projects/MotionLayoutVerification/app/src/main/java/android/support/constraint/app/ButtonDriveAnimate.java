@@ -44,9 +44,20 @@ public class ButtonDriveAnimate extends AppCompatActivity {
         Context ctx = getApplicationContext();
         int id = ctx.getResources().getIdentifier(prelayout, "layout", ctx.getPackageName());
         setContentView(id);
-        setTitle(layout_name);
+        setTitle(layout_name+ " "+this.getClass().getSimpleName());
         mMotionLayout = Utils.findMotionLayout(this);
-        mMotionLayout.setTransitionListener(new TransitionAdapter() {
+        mMotionLayout.addTransitionListener(new TransitionAdapter() {
+            int count = 0;
+            @Override
+            public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
+                if (count++ > 4){
+                    mMotionLayout.removeTransitionListener(this);
+                    Log.v(TAG, Debug.getLoc()+"  removing TransitionListener");
+
+                }
+                Log.v(TAG, Debug.getLoc()+" "+Debug.getName(getApplicationContext(),endId));
+            }
+
             @Override
             public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
                 Log.v(TAG, Debug.getLoc()+" "+Debug.getName(getApplicationContext(),currentId));

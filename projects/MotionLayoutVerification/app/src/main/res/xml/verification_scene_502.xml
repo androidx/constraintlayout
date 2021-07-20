@@ -13,7 +13,8 @@
             motion:autoCompleteMode="spring"
             motion:onTouchUp="neverCompleteToEnd"
             motion:springBoundary="overshoot"
-            motion:springStiffness="500" />
+            motion:springDamping="16"
+            motion:springStiffness="400" />
         <KeyFrameSet></KeyFrameSet>
     </Transition>
 
@@ -26,12 +27,11 @@
         <OnSwipe
             motion:touchAnchorId="@+id/clock"
             motion:dragDirection="dragRight"
-            motion:springDamping="0.2"
-            motion:springMass="1"
+            motion:springDamping="16"
             motion:autoCompleteMode="spring"
             motion:springBoundary="overshoot"
             motion:onTouchUp="neverCompleteToEnd"
-            motion:springStiffness="500" />
+            motion:springStiffness="400" />
         <KeyFrameSet>
             <KeyAttribute motion:motionTarget="@id/clock" motion:framePosition="55" motion:alpha="0"/>
             <KeyTrigger motion:triggerId="@+id/foobar" motion:framePosition="50"  motion:motionTarget="@id/clock"  />

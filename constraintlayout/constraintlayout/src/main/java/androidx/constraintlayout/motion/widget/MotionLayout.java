@@ -65,6 +65,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static androidx.constraintlayout.motion.widget.MotionScene.Transition.TRANSITION_FLAG_FIRST_DRAW;
@@ -1061,7 +1062,7 @@ public class MotionLayout extends ConstraintLayout implements
     private ArrayList<MotionHelper> mOnShowHelpers = null;
     private ArrayList<MotionHelper> mOnHideHelpers = null;
     private ArrayList<MotionHelper> mDecoratorsHelpers = null;
-    private ArrayList<TransitionListener> mTransitionListeners = null;
+    private CopyOnWriteArrayList<TransitionListener> mTransitionListeners = null;
     private int mFrames = 0;
     private long mLastDrawTime = -1;
     private float mLastFps = 0;
@@ -4280,7 +4281,7 @@ public class MotionLayout extends ConstraintLayout implements
      */
     public void addTransitionListener(TransitionListener listener) {
         if (mTransitionListeners == null) {
-            mTransitionListeners = new ArrayList<>();
+            mTransitionListeners = new CopyOnWriteArrayList<>();
         }
         mTransitionListeners.add(listener);
     }
@@ -4461,7 +4462,7 @@ public class MotionLayout extends ConstraintLayout implements
         if (view instanceof MotionHelper) {
             MotionHelper helper = (MotionHelper) view;
             if (mTransitionListeners == null) {
-                mTransitionListeners = new ArrayList<>();
+                mTransitionListeners = new CopyOnWriteArrayList<>();
             }
             mTransitionListeners.add(helper);
 
