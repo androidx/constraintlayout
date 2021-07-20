@@ -1,14 +1,14 @@
 {
-  "duration": "1877500",
+  "duration": "330500",
   "layout": {
     "children": [
       {
         "children": [{
           "children": [{
             "bounds": {
-              "top": "2",
+              "top": "3",
               "left": "0",
-              "bottom": "55",
+              "bottom": "60",
               "right": "1080"
             },
             "id": "googleapp_incognito_topbar_text",
@@ -17,7 +17,7 @@
           "bounds": {
             "top": "0",
             "left": "0",
-            "bottom": "83",
+            "bottom": "90",
             "right": "1080"
           },
           "id": "googleapp_incognito_topbar_wrapper",
@@ -26,7 +26,7 @@
         "bounds": {
           "top": "0",
           "left": "0",
-          "bottom": "83",
+          "bottom": "90",
           "right": "1080"
         },
         "id": "googleapp_incognito_topbar_container",
@@ -35,9 +35,9 @@
       {
         "children": [],
         "bounds": {
-          "top": "83",
+          "top": "90",
           "left": "540",
-          "bottom": "1647",
+          "bottom": "1344",
           "right": "540"
         },
         "id": "googleapp_top_level_destination_container",
@@ -55,10 +55,10 @@
       },
       {
         "bounds": {
-          "top": "1770",
-          "left": "459",
-          "bottom": "1823",
-          "right": "622"
+          "top": "1479",
+          "left": "453",
+          "bottom": "1536",
+          "right": "627"
         },
         "id": "googleapp_bottom_navigation_container",
         "class": "MaterialTextView"
@@ -67,9 +67,9 @@
     "bounds": {
       "top": "0",
       "left": "0",
-      "bottom": "1823",
+      "bottom": "1536",
       "right": "1080"
     },
-    "class": "ConstraintLayout"
+    "class": "ConstraintLayoutWithInsetsFix"
   }
 }

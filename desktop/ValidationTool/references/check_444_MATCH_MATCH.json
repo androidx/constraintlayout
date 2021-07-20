@@ -1,0 +1,85 @@
+{
+  "duration": "1271500",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "1536",
+          "right": "1080"
+        },
+        "id": "background_image",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "72",
+          "left": "540",
+          "bottom": "129",
+          "right": "540"
+        },
+        "id": "header_text",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "177",
+          "left": "108",
+          "bottom": "1041",
+          "right": "972"
+        },
+        "id": "cover_image",
+        "class": "AppCompatImageView"
+      },
+      {
+        "bounds": {
+          "top": "1089",
+          "left": "85",
+          "bottom": "1146",
+          "right": "996"
+        },
+        "id": "item_title",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "1194",
+          "left": "540",
+          "bottom": "1251",
+          "right": "540"
+        },
+        "id": "item_subtitle",
+        "class": "MaterialTextView"
+      },
+      {
+        "bounds": {
+          "top": "1368",
+          "left": "468",
+          "bottom": "1512",
+          "right": "612"
+        },
+        "id": "action_button",
+        "class": "Chip"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "0",
+          "right": "0"
+        },
+        "id": "progress_bar",
+        "class": "ProgressBar"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "id": "spotlight_card_container",
+    "class": "ConstraintLayout"
+  }
+}

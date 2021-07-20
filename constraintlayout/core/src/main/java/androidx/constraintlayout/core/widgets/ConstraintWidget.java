@@ -205,15 +205,14 @@ public class ConstraintWidget {
         if (orientation == HORIZONTAL) {
             if (mLeft.mTarget != null && mLeft.mTarget.hasFinalValue()
                 && mRight.mTarget != null && mRight.mTarget.hasFinalValue()) {
-                return (mRight.mTarget.getFinalValue() - mLeft.mTarget.getFinalValue()) >= size;
+                return ((mRight.mTarget.getFinalValue() - mRight.getMargin())
+                        - (mLeft.mTarget.getFinalValue() + mLeft.getMargin())) >= size;
             }
         } else {
-            if (mBaseline.mTarget != null && mBaseline.mTarget.hasFinalValue()) {
-                return true;
-            }
             if (mTop.mTarget != null && mTop.mTarget.hasFinalValue()
                     && mBottom.mTarget != null && mBottom.mTarget.hasFinalValue()) {
-                return (mBottom.mTarget.getFinalValue() - mTop.mTarget.getFinalValue()) >= size;
+                return ((mBottom.mTarget.getFinalValue() - mBottom.getMargin())
+                        - (mTop.mTarget.getFinalValue() + mTop.getMargin())) >= size;
             }
         }
         return false;
