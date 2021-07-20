@@ -60,8 +60,9 @@ public class Direct {
         ConstraintWidget.DimensionBehaviour vertical = layout.getVerticalDimensionBehaviour();
         hcount = 0;
         vcount = 0;
-        long time = System.nanoTime();
+        long time = 0;
         if (DEBUG) {
+            time = System.nanoTime();
             System.out.println("#### SOLVING PASS (horiz " + horizontal + ", vert " + vertical + ") ####");
         }
         layout.resetFinalResolution();
