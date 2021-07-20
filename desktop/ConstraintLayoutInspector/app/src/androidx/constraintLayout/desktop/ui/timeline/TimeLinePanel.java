@@ -88,6 +88,7 @@ public class TimeLinePanel extends JPanel {
     private MTagActionListener mListener;
     Timer myMouseDownTimer;
     JPopupMenu myPlaybackSpeedPopupMenu = new JPopupMenu();
+    private long mLastEmitted;
 
     @Override
     public void updateUI() {
@@ -396,6 +397,7 @@ public class TimeLinePanel extends JPanel {
     }
 
     public void notifyTimeLineListeners(TimeLineCmd cmd, Float value) {
+        mLastEmitted = System.currentTimeMillis();
         for (TimeLineListener listener : mTimeLineListeners) {
             listener.command(cmd, value);
         }
@@ -1188,10 +1190,10 @@ public class TimeLinePanel extends JPanel {
         return tlp;
     }
 
-    public void updateMotionScene(String motionSceneString){
+    public void updateMotionScene(String motionSceneString) {
         ScenePicker picker = new ScenePicker();
-        picker.foreachObject(p->{
-            if (p instanceof  MouseAdapter) {
+        picker.foreachObject(p -> {
+            if (p instanceof MouseAdapter) {
                 MouseAdapter ma = (MouseAdapter) p;
                 ma.mouseDragged(null);
             }
@@ -1202,7 +1204,7 @@ public class TimeLinePanel extends JPanel {
             transition.printFormal("|", System.out);
             Debug.log("-----------------");
         }
- 
+
         DefaultMTag motionScene = new DefaultMTag("MotionScene");
         motionScene.addChild(transition);
         DefaultMTag startTag = new DefaultMTag("ConstraintSet");
@@ -1252,16 +1254,19 @@ public class TimeLinePanel extends JPanel {
             }
         }
 
-        setMTag(transition, new MeModel(motionScene, null,   null,   null,   null));
-      }
+        setMTag(transition, new MeModel(motionScene, null, null, null, null));
+    }
+
     public void exitTimeLine() {
         if (mTimeLineFrame != null) {
             mTimeLineFrame.setVisible(false);
         }
     }
+
     public void popUp() {
         mTimeLineFrame.setVisible(true);
     }
+
     public void popDown() {
         mTimeLineFrame.setVisible(false);
     }
@@ -1270,18 +1275,22 @@ public class TimeLinePanel extends JPanel {
         void setProgress(float p);
     }
 
-    public void setMotionProgress(float progress){
-         mMeModel.setProgress(progress);
+    public void setMotionProgress(float progress) {
+        if (( System.currentTimeMillis() - mLastEmitted) < 800) {
+            return;
+        }
+        mMeModel.setProgress(progress);
         mMotionProgress = progress;
         repaint();
     }
 
     public void setProgressListener(ProgressListener listener) {
         TimeLinePanel mTimeLinePanel = null;
-        mTimeLinePanel.addTimeLineListener( (cmd, pos) ->{
+        mTimeLinePanel.addTimeLineListener((cmd, pos) -> {
             System.out.println(pos);
         });
     }
+
     public void updateTransition(String str) {
         MTag tag = KeyFramesTag.parseForTimeLine(str);
         setMTag(tag, mMeModel);
