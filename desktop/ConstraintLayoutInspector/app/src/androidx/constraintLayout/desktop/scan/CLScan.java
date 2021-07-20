@@ -26,7 +26,7 @@ import java.util.*;
  * Code that scans the CL text providing a callback to for each of the important words
  */
 public class CLScan {
-    static HashSet<String> sSectionKeyWord = new HashSet<>(Arrays.asList("Variables", "ConstraintSets", "Debug", "Design", "Generate", "KeyFrames", "Transitions", "KeyAttributes", "KeyPositions"));
+    static HashSet<String> sSectionKeyWord = new HashSet<>(Arrays.asList("Variables", "ConstraintSets", "Header", "Design", "Generate", "KeyFrames", "Transitions", "KeyAttributes", "KeyPositions"));
     static HashSet<String> sAttributesKeyWord = new HashSet<>(Arrays.asList(
             "start",
             "end",

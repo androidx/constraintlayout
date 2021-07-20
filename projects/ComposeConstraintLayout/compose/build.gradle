@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 //apply plugin: 'maven'
 apply plugin: 'kotlin-android'
 
-def compose_version = '1.0.0-rc01'
+def compose_version = '1.0.0-rc02'
 
 android {
     compileSdkVersion 30
@@ -64,6 +64,7 @@ dependencies {
         implementation "androidx.compose.foundation:foundation:$compose_version"
         implementation "androidx.compose.material:material:$compose_version"
         implementation project(':core')
+//        implementation "com.google.accompanist:accompanist-coil:0.14.0"
         androidTestImplementation 'junit:junit:4.13.1'
         androidTestImplementation "androidx.compose.ui:ui-test:$compose_version"
         androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"

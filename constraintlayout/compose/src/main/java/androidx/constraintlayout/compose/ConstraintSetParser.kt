@@ -21,8 +21,7 @@ import androidx.constraintlayout.core.motion.utils.TypedValues
 import androidx.constraintlayout.core.parser.*
 import androidx.constraintlayout.core.state.ConstraintReference
 import androidx.constraintlayout.core.state.Dimension
-import androidx.constraintlayout.core.state.Dimension.Fixed
-import androidx.constraintlayout.core.state.Dimension.SPREAD_DIMENSION
+import androidx.constraintlayout.core.state.Dimension.*
 import androidx.constraintlayout.core.state.State.Chain.*
 import androidx.constraintlayout.core.state.Transition
 import androidx.constraintlayout.core.state.helpers.GuidelineReference
@@ -486,7 +485,7 @@ internal fun parseMotionSceneJSON(scene: MotionScene, content: String) {
             when (elementName) {
                 "ConstraintSets" -> parseConstraintSets(scene, element)
                 "Transitions" -> parseTransitions(scene, element)
-                "Debug" -> parseDebug(scene, element)
+                "Header" -> parseHeader(scene, element)
             }
         }
     } catch (e: CLParsingException) {
@@ -586,12 +585,14 @@ fun parseTransitions(scene: MotionScene, json: Any) {
     }
 }
 
-fun parseDebug(scene: MotionScene, json: Any) {
+fun parseHeader(scene: MotionScene, json: Any) {
     if (json !is CLObject) {
         return
     }
-    val name = json.getStringOrNull("name")
-    scene.setDebugName(name)
+    val name = json.getStringOrNull("export")
+    if (name != null) {
+        scene.setDebugName(name)
+    }
 }
 
 internal fun parseJSON(content: String, state: State, layoutVariables: LayoutVariables) {
@@ -1082,6 +1083,27 @@ private fun parseConstraint(
     }
 }
 
+private fun parseDimensionMode(dimensionString : String) : Dimension {
+    var dimension: Dimension = Fixed(0)
+    when (dimensionString) {
+        "wrap" -> dimension = Dimension.Wrap()
+        "preferWrap" -> dimension = Dimension.Suggested(WRAP_DIMENSION)
+        "spread" -> dimension = Dimension.Suggested(SPREAD_DIMENSION)
+        "parent" -> dimension = Dimension.Parent()
+        else -> {
+            if (dimensionString.endsWith('%')) {
+                // parent percent
+                val percentString = dimensionString.substringBefore('%')
+                val percentValue = percentString.toFloat() / 100f
+                dimension = Dimension.Percent(0, percentValue).suggested(0)
+            } else if (dimensionString.contains(':')) {
+                dimension = Dimension.Ratio(dimensionString).suggested(0)
+            }
+        }
+    }
+    return dimension
+}
+
 private fun parseDimension(
     element: CLObject,
     constraintName: String,
@@ -1090,21 +1112,7 @@ private fun parseDimension(
     val dimensionElement = element.get(constraintName)
     var dimension: Dimension = Fixed(0)
     if (dimensionElement is CLString) {
-        when (val dimensionString = dimensionElement.content()) {
-            "wrap" -> dimension = Dimension.Wrap()
-            "spread" -> dimension = Dimension.Suggested(SPREAD_DIMENSION)
-            "parent" -> dimension = Dimension.Parent()
-            else -> {
-                if (dimensionString.endsWith('%')) {
-                    // parent percent
-                    val percentString = dimensionString.substringBefore('%')
-                    val percentValue = percentString.toFloat() / 100f
-                    dimension = Dimension.Percent(0, percentValue).suggested(0)
-                } else if (dimensionString.contains(':')) {
-                    dimension = Dimension.Ratio(dimensionString).suggested(0)
-                }
-            }
-        }
+        dimension = parseDimensionMode(dimensionElement.content())
     } else if (dimensionElement is CLNumber) {
         dimension = Fixed(
             state.convertDimension(
@@ -1113,6 +1121,19 @@ private fun parseDimension(
                 )
             )
         )
+    } else if (dimensionElement is CLObject) {
+        val mode = dimensionElement.getStringOrNull("value")
+        if (mode != null) {
+            dimension = parseDimensionMode(mode)
+        }
+        val min = dimensionElement.getFloatOrNaN("min")
+        if (!min.isNaN()) {
+            dimension.min(state.convertDimension(Dp(min)))
+        }
+        val max = dimensionElement.getFloatOrNaN("max")
+        if (!max.isNaN()) {
+            dimension.max(state.convertDimension(Dp(max)))
+        }
     }
     return dimension
 }

@@ -960,6 +960,10 @@ public class ConstraintWidgetContainer extends WidgetContainer {
                         }
                     }
                 }
+
+                if (countSolve > MAX_ITERATIONS) {
+                    needsSolving = false;
+                }
             }
         }
         if (DEBUG_LAYOUT) {
