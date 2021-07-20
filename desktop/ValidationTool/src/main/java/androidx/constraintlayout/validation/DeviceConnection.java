@@ -44,60 +44,32 @@ public class DeviceConnection {
     }
 
     class Reader {
-        BufferedInputStream stream;
-        final int bufferSize = 8192;
-        byte[] buffer = new byte[bufferSize];
+        DataInputStream stream;
 
         Reader(InputStream stream) {
-            this.stream = new BufferedInputStream(stream);
+            this.stream = new DataInputStream(stream);
         }
 
         String nextLine() {
-            int size = bufferSize;
-            int offset = 0;
-            while (offset < size) {
-                int toRead = size - offset;
-                int read = 0;
-                try {
-                    read = stream.read(buffer, offset, toRead);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                if (read > 0) {
-                    offset += read;
-                }
+            try {
+                return stream.readUTF();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            int indexEnd = 0;
-            for (int i = 0; i < size; i++) {
-                if (buffer[i] == 0) {
-                    indexEnd = i;
-                    break;
-                }
-            }
-            String line = new String(buffer, 0, indexEnd, StandardCharsets.UTF_8);
-            return line;
+            return "";
         }
     }
 
     class Writer {
-        BufferedOutputStream stream;
-        final int bufferSize = 8192;
-        byte[] buffer = new byte[bufferSize];
+        DataOutputStream stream;
 
         Writer(OutputStream stream) {
-            this.stream = new BufferedOutputStream(stream);
+            this.stream = new DataOutputStream(stream);
         }
 
         void println(String text) {
-            byte[] byteArr = text.getBytes(StandardCharsets.UTF_8);
-            int len = Math.min(bufferSize, byteArr.length);
-            for (int i = 0; i < len; i++) {
-                buffer[i] = byteArr[i];
-            }
-            buffer[len] = 0;
             try {
-                stream.write(buffer);
-                stream.flush();
+                stream.writeUTF(text);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -198,7 +170,7 @@ public class DeviceConnection {
         byte[] bytes = new byte[size];
         BufferedImage image = null;
         try {
-            BufferedInputStream inputStream = reader.stream;
+            InputStream inputStream = reader.stream;
             int offset = 0;
             while (offset < size) {
                 int toRead = size - offset;

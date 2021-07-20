@@ -1,0 +1,34 @@
+{
+  "duration": "255000",
+  "layout": {
+    "children": [
+      {
+        "bounds": {
+          "top": "0",
+          "left": "256",
+          "bottom": "144",
+          "right": "520"
+        },
+        "id": "plateIv",
+        "class": "MaterialButton"
+      },
+      {
+        "bounds": {
+          "top": "0",
+          "left": "0",
+          "bottom": "144",
+          "right": "244"
+        },
+        "id": "carIv",
+        "class": "AppCompatImageView"
+      }
+    ],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "144",
+      "right": "520"
+    },
+    "class": "ConstraintLayout"
+  }
+}

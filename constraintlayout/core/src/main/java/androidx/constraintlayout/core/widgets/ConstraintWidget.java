@@ -92,6 +92,9 @@ public class ConstraintWidget {
     private boolean resolvedHorizontal = false;
     private boolean resolvedVertical = false;
 
+    private boolean horizontalSolvingPass = false;
+    private boolean verticalSolvingPass = false;
+
     public void setFinalFrame(int left, int top, int right, int bottom, int baseline, int orientation) {
         setFrame(left, top, right, bottom);
         setBaselineDistance(baseline);
@@ -120,7 +123,31 @@ public class ConstraintWidget {
         mY = y1;
     }
 
+    public void resetSolvingPassFlag() {
+        horizontalSolvingPass = false;
+        verticalSolvingPass = false;
+    }
+
+    public boolean isHorizontalSolvingPassDone() {
+        return horizontalSolvingPass;
+    }
+
+    public boolean isVerticalSolvingPassDone() {
+        return verticalSolvingPass;
+    }
+
+    public void markHorizontalSolvingPassDone() {
+        horizontalSolvingPass = true;
+    }
+
+    public void markVerticalSolvingPassDone() {
+        verticalSolvingPass = true;
+    }
+
     public void setFinalHorizontal(int x1, int x2) {
+        if (resolvedHorizontal) {
+            return;
+        }
         mLeft.setFinalValue(x1);
         mRight.setFinalValue(x2);
         mX = x1;
@@ -133,6 +160,9 @@ public class ConstraintWidget {
     }
 
     public void setFinalVertical(int y1, int y2) {
+        if (resolvedVertical) {
+            return;
+        }
         mTop.setFinalValue(y1);
         mBottom.setFinalValue(y2);
         mY = y1;
@@ -171,6 +201,8 @@ public class ConstraintWidget {
     public void resetFinalResolution() {
         resolvedHorizontal = false;
         resolvedVertical = false;
+        horizontalSolvingPass = false;
+        verticalSolvingPass = false;
         for (int i = 0, mAnchorsSize = mAnchors.size(); i < mAnchorsSize; i++) {
             final ConstraintAnchor anchor = mAnchors.get(i);
             anchor.resetFinalResolution();
