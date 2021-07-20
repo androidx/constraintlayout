@@ -1,0 +1,2153 @@
+{
+  "duration": "3429000",
+  "layout": {
+    "children": [{
+      "children": [
+        {
+          "bounds": {
+            "top": "48",
+            "left": "48",
+            "bottom": "105",
+            "right": "1032"
+          },
+          "id": "textView",
+          "class": "MaterialTextView"
+        },
+        {
+          "children": [],
+          "bounds": {
+            "top": "129",
+            "left": "48",
+            "bottom": "275",
+            "right": "1032"
+          },
+          "id": "spCustomerType",
+          "class": "AppCompatSpinner"
+        },
+        {
+          "children": [
+            {
+              "children": [{
+                "children": [
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "textinput_placeholder",
+                    "class": "AppCompatTextView"
+                  },
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "tfFirstName",
+                    "class": "TextInputEditText"
+                  },
+                  {
+                    "children": [
+                      {
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "text_input_start_icon",
+                        "class": "CheckableImageButton"
+                      },
+                      {
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "textinput_prefix_text",
+                        "class": "AppCompatTextView"
+                      }
+                    ],
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "class": "LinearLayout"
+                  },
+                  {
+                    "children": [
+                      {
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "textinput_suffix_text",
+                        "class": "AppCompatTextView"
+                      },
+                      {
+                        "children": [{
+                          "bounds": {
+                            "top": "0",
+                            "left": "0",
+                            "bottom": "0",
+                            "right": "0"
+                          },
+                          "id": "text_input_end_icon",
+                          "class": "CheckableImageButton"
+                        }],
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "class": "FrameLayout"
+                      },
+                      {
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "text_input_end_icon",
+                        "class": "CheckableImageButton"
+                      }
+                    ],
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "class": "LinearLayout"
+                  }
+                ],
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "0",
+                  "right": "0"
+                },
+                "class": "FrameLayout"
+              }],
+              "bounds": {
+                "top": "0",
+                "left": "0",
+                "bottom": "0",
+                "right": "0"
+              },
+              "class": "TextInputLayout"
+            },
+            {
+              "children": [{
+                "children": [
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "textinput_placeholder",
+                    "class": "AppCompatTextView"
+                  },
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "tfLastName",
+                    "class": "TextInputEditText"
+                  },
+                  {
+                    "children": [
+                      {
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "text_input_start_icon",
+                        "class": "CheckableImageButton"
+                      },
+                      {
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "textinput_prefix_text",
+                        "class": "AppCompatTextView"
+                      }
+                    ],
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "class": "LinearLayout"
+                  },
+                  {
+                    "children": [
+                      {
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "textinput_suffix_text",
+                        "class": "AppCompatTextView"
+                      },
+                      {
+                        "children": [{
+                          "bounds": {
+                            "top": "0",
+                            "left": "0",
+                            "bottom": "0",
+                            "right": "0"
+                          },
+                          "id": "text_input_end_icon",
+                          "class": "CheckableImageButton"
+                        }],
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "class": "FrameLayout"
+                      },
+                      {
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "text_input_end_icon",
+                        "class": "CheckableImageButton"
+                      }
+                    ],
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "class": "LinearLayout"
+                  }
+                ],
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "0",
+                  "right": "0"
+                },
+                "class": "FrameLayout"
+              }],
+              "bounds": {
+                "top": "0",
+                "left": "0",
+                "bottom": "0",
+                "right": "0"
+              },
+              "class": "TextInputLayout"
+            },
+            {
+              "children": [{
+                "children": [
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "textinput_placeholder",
+                    "class": "AppCompatTextView"
+                  },
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "tfMiddleName",
+                    "class": "TextInputEditText"
+                  },
+                  {
+                    "children": [
+                      {
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "text_input_start_icon",
+                        "class": "CheckableImageButton"
+                      },
+                      {
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "textinput_prefix_text",
+                        "class": "AppCompatTextView"
+                      }
+                    ],
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "class": "LinearLayout"
+                  },
+                  {
+                    "children": [
+                      {
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "textinput_suffix_text",
+                        "class": "AppCompatTextView"
+                      },
+                      {
+                        "children": [{
+                          "bounds": {
+                            "top": "0",
+                            "left": "0",
+                            "bottom": "0",
+                            "right": "0"
+                          },
+                          "id": "text_input_end_icon",
+                          "class": "CheckableImageButton"
+                        }],
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "class": "FrameLayout"
+                      },
+                      {
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "text_input_end_icon",
+                        "class": "CheckableImageButton"
+                      }
+                    ],
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "class": "LinearLayout"
+                  }
+                ],
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "0",
+                  "right": "0"
+                },
+                "class": "FrameLayout"
+              }],
+              "bounds": {
+                "top": "0",
+                "left": "0",
+                "bottom": "0",
+                "right": "0"
+              },
+              "class": "TextInputLayout"
+            }
+          ],
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "0",
+            "right": "0"
+          },
+          "id": "llClientNames",
+          "class": "LinearLayout"
+        },
+        {
+          "children": [{
+            "children": [
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "0",
+                  "right": "0"
+                },
+                "id": "textinput_placeholder",
+                "class": "AppCompatTextView"
+              },
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "0",
+                  "right": "0"
+                },
+                "id": "tfCompanyName",
+                "class": "TextInputEditText"
+              },
+              {
+                "children": [
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "text_input_start_icon",
+                    "class": "CheckableImageButton"
+                  },
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "textinput_prefix_text",
+                    "class": "AppCompatTextView"
+                  }
+                ],
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "0",
+                  "right": "0"
+                },
+                "class": "LinearLayout"
+              },
+              {
+                "children": [
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "textinput_suffix_text",
+                    "class": "AppCompatTextView"
+                  },
+                  {
+                    "children": [{
+                      "bounds": {
+                        "top": "0",
+                        "left": "0",
+                        "bottom": "0",
+                        "right": "0"
+                      },
+                      "id": "text_input_end_icon",
+                      "class": "CheckableImageButton"
+                    }],
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "class": "FrameLayout"
+                  },
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "text_input_end_icon",
+                    "class": "CheckableImageButton"
+                  }
+                ],
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "0",
+                  "right": "0"
+                },
+                "class": "LinearLayout"
+              }
+            ],
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "0",
+              "right": "0"
+            },
+            "class": "FrameLayout"
+          }],
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "0",
+            "right": "0"
+          },
+          "id": "tiLCompanyName",
+          "class": "TextInputLayout"
+        },
+        {
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "0",
+            "right": "0"
+          },
+          "id": "textView2",
+          "class": "MaterialTextView"
+        },
+        {
+          "children": [],
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "0",
+            "right": "0"
+          },
+          "id": "spCustomerStatus",
+          "class": "AppCompatSpinner"
+        },
+        {
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "0",
+            "right": "0"
+          },
+          "id": "lblGenderTV",
+          "class": "MaterialTextView"
+        },
+        {
+          "children": [],
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "0",
+            "right": "0"
+          },
+          "id": "spGender",
+          "class": "AppCompatSpinner"
+        },
+        {
+          "children": [{
+            "children": [
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "185",
+                  "right": "984"
+                },
+                "id": "textinput_placeholder",
+                "class": "AppCompatTextView"
+              },
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "185",
+                  "right": "984"
+                },
+                "id": "etPhoneNumber",
+                "class": "TextInputEditText"
+              },
+              {
+                "children": [
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "text_input_start_icon",
+                    "class": "CheckableImageButton"
+                  },
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "textinput_prefix_text",
+                    "class": "AppCompatTextView"
+                  }
+                ],
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "185",
+                  "right": "0"
+                },
+                "class": "LinearLayout"
+              },
+              {
+                "children": [
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "textinput_suffix_text",
+                    "class": "AppCompatTextView"
+                  },
+                  {
+                    "children": [{
+                      "bounds": {
+                        "top": "0",
+                        "left": "0",
+                        "bottom": "0",
+                        "right": "0"
+                      },
+                      "id": "text_input_end_icon",
+                      "class": "CheckableImageButton"
+                    }],
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "185",
+                      "right": "0"
+                    },
+                    "class": "FrameLayout"
+                  },
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "text_input_end_icon",
+                    "class": "CheckableImageButton"
+                  }
+                ],
+                "bounds": {
+                  "top": "0",
+                  "left": "984",
+                  "bottom": "185",
+                  "right": "984"
+                },
+                "class": "LinearLayout"
+              }
+            ],
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "185",
+              "right": "984"
+            },
+            "class": "FrameLayout"
+          }],
+          "bounds": {
+            "top": "299",
+            "left": "48",
+            "bottom": "484",
+            "right": "1032"
+          },
+          "id": "textInputLayout4",
+          "class": "TextInputLayout"
+        },
+        {
+          "children": [{
+            "children": [
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "185",
+                  "right": "984"
+                },
+                "id": "textinput_placeholder",
+                "class": "AppCompatTextView"
+              },
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "185",
+                  "right": "984"
+                },
+                "id": "etSecondaryPhone",
+                "class": "TextInputEditText"
+              },
+              {
+                "children": [
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "text_input_start_icon",
+                    "class": "CheckableImageButton"
+                  },
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "textinput_prefix_text",
+                    "class": "AppCompatTextView"
+                  }
+                ],
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "185",
+                  "right": "0"
+                },
+                "class": "LinearLayout"
+              },
+              {
+                "children": [
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "textinput_suffix_text",
+                    "class": "AppCompatTextView"
+                  },
+                  {
+                    "children": [{
+                      "bounds": {
+                        "top": "0",
+                        "left": "0",
+                        "bottom": "0",
+                        "right": "0"
+                      },
+                      "id": "text_input_end_icon",
+                      "class": "CheckableImageButton"
+                    }],
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "185",
+                      "right": "0"
+                    },
+                    "class": "FrameLayout"
+                  },
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "text_input_end_icon",
+                    "class": "CheckableImageButton"
+                  }
+                ],
+                "bounds": {
+                  "top": "0",
+                  "left": "984",
+                  "bottom": "185",
+                  "right": "984"
+                },
+                "class": "LinearLayout"
+              }
+            ],
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "185",
+              "right": "984"
+            },
+            "class": "FrameLayout"
+          }],
+          "bounds": {
+            "top": "508",
+            "left": "48",
+            "bottom": "693",
+            "right": "1032"
+          },
+          "id": "textInputLayout5",
+          "class": "TextInputLayout"
+        },
+        {
+          "children": [{
+            "children": [
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "185",
+                  "right": "984"
+                },
+                "id": "textinput_placeholder",
+                "class": "AppCompatTextView"
+              },
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "185",
+                  "right": "984"
+                },
+                "id": "etEmail",
+                "class": "TextInputEditText"
+              },
+              {
+                "children": [
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "text_input_start_icon",
+                    "class": "CheckableImageButton"
+                  },
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "textinput_prefix_text",
+                    "class": "AppCompatTextView"
+                  }
+                ],
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "185",
+                  "right": "0"
+                },
+                "class": "LinearLayout"
+              },
+              {
+                "children": [
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "textinput_suffix_text",
+                    "class": "AppCompatTextView"
+                  },
+                  {
+                    "children": [{
+                      "bounds": {
+                        "top": "0",
+                        "left": "0",
+                        "bottom": "0",
+                        "right": "0"
+                      },
+                      "id": "text_input_end_icon",
+                      "class": "CheckableImageButton"
+                    }],
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "185",
+                      "right": "0"
+                    },
+                    "class": "FrameLayout"
+                  },
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "text_input_end_icon",
+                    "class": "CheckableImageButton"
+                  }
+                ],
+                "bounds": {
+                  "top": "0",
+                  "left": "984",
+                  "bottom": "185",
+                  "right": "984"
+                },
+                "class": "LinearLayout"
+              }
+            ],
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "185",
+              "right": "984"
+            },
+            "class": "FrameLayout"
+          }],
+          "bounds": {
+            "top": "717",
+            "left": "48",
+            "bottom": "902",
+            "right": "1032"
+          },
+          "id": "textInputLayout6",
+          "class": "TextInputLayout"
+        },
+        {
+          "children": [{
+            "children": [
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "185",
+                  "right": "984"
+                },
+                "id": "textinput_placeholder",
+                "class": "AppCompatTextView"
+              },
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "185",
+                  "right": "984"
+                },
+                "id": "etHouseNumber",
+                "class": "TextInputEditText"
+              },
+              {
+                "children": [
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "text_input_start_icon",
+                    "class": "CheckableImageButton"
+                  },
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "textinput_prefix_text",
+                    "class": "AppCompatTextView"
+                  }
+                ],
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "185",
+                  "right": "0"
+                },
+                "class": "LinearLayout"
+              },
+              {
+                "children": [
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "textinput_suffix_text",
+                    "class": "AppCompatTextView"
+                  },
+                  {
+                    "children": [{
+                      "bounds": {
+                        "top": "0",
+                        "left": "0",
+                        "bottom": "0",
+                        "right": "0"
+                      },
+                      "id": "text_input_end_icon",
+                      "class": "CheckableImageButton"
+                    }],
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "185",
+                      "right": "0"
+                    },
+                    "class": "FrameLayout"
+                  },
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "text_input_end_icon",
+                    "class": "CheckableImageButton"
+                  }
+                ],
+                "bounds": {
+                  "top": "0",
+                  "left": "984",
+                  "bottom": "185",
+                  "right": "984"
+                },
+                "class": "LinearLayout"
+              }
+            ],
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "185",
+              "right": "984"
+            },
+            "class": "FrameLayout"
+          }],
+          "bounds": {
+            "top": "926",
+            "left": "48",
+            "bottom": "1111",
+            "right": "1032"
+          },
+          "id": "hseNumberTIl",
+          "class": "TextInputLayout"
+        },
+        {
+          "children": [{
+            "children": [
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "185",
+                  "right": "984"
+                },
+                "id": "textinput_placeholder",
+                "class": "AppCompatTextView"
+              },
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "185",
+                  "right": "984"
+                },
+                "id": "propertyOwnerNameTIET",
+                "class": "TextInputEditText"
+              },
+              {
+                "children": [
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "text_input_start_icon",
+                    "class": "CheckableImageButton"
+                  },
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "textinput_prefix_text",
+                    "class": "AppCompatTextView"
+                  }
+                ],
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "185",
+                  "right": "0"
+                },
+                "class": "LinearLayout"
+              },
+              {
+                "children": [
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "textinput_suffix_text",
+                    "class": "AppCompatTextView"
+                  },
+                  {
+                    "children": [{
+                      "bounds": {
+                        "top": "0",
+                        "left": "0",
+                        "bottom": "0",
+                        "right": "0"
+                      },
+                      "id": "text_input_end_icon",
+                      "class": "CheckableImageButton"
+                    }],
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "185",
+                      "right": "0"
+                    },
+                    "class": "FrameLayout"
+                  },
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "text_input_end_icon",
+                    "class": "CheckableImageButton"
+                  }
+                ],
+                "bounds": {
+                  "top": "0",
+                  "left": "984",
+                  "bottom": "185",
+                  "right": "984"
+                },
+                "class": "LinearLayout"
+              }
+            ],
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "185",
+              "right": "984"
+            },
+            "class": "FrameLayout"
+          }],
+          "bounds": {
+            "top": "1135",
+            "left": "48",
+            "bottom": "1320",
+            "right": "1032"
+          },
+          "id": "textInputLayout7",
+          "class": "TextInputLayout"
+        },
+        {
+          "bounds": {
+            "top": "1344",
+            "left": "48",
+            "bottom": "1401",
+            "right": "1032"
+          },
+          "id": "textView4",
+          "class": "MaterialTextView"
+        },
+        {
+          "children": [],
+          "bounds": {
+            "top": "1425",
+            "left": "48",
+            "bottom": "1571",
+            "right": "1032"
+          },
+          "id": "spPropertyType",
+          "class": "AppCompatSpinner"
+        },
+        {
+          "bounds": {
+            "top": "1595",
+            "left": "48",
+            "bottom": "1652",
+            "right": "1032"
+          },
+          "id": "textView5",
+          "class": "MaterialTextView"
+        },
+        {
+          "children": [],
+          "bounds": {
+            "top": "1676",
+            "left": "48",
+            "bottom": "1822",
+            "right": "1032"
+          },
+          "id": "spNumOfRooms",
+          "class": "AppCompatSpinner"
+        },
+        {
+          "bounds": {
+            "top": "1846",
+            "left": "48",
+            "bottom": "1903",
+            "right": "1032"
+          },
+          "id": "textView6",
+          "class": "MaterialTextView"
+        },
+        {
+          "children": [],
+          "bounds": {
+            "top": "1927",
+            "left": "48",
+            "bottom": "2073",
+            "right": "1032"
+          },
+          "id": "spSvcProvider",
+          "class": "AppCompatSpinner"
+        },
+        {
+          "bounds": {
+            "top": "2097",
+            "left": "48",
+            "bottom": "2154",
+            "right": "1032"
+          },
+          "id": "tvRegion",
+          "class": "MaterialTextView"
+        },
+        {
+          "children": [],
+          "bounds": {
+            "top": "2178",
+            "left": "48",
+            "bottom": "2324",
+            "right": "1032"
+          },
+          "id": "spRegion",
+          "class": "AppCompatSpinner"
+        },
+        {
+          "bounds": {
+            "top": "2348",
+            "left": "48",
+            "bottom": "2405",
+            "right": "1032"
+          },
+          "id": "tvDistrict",
+          "class": "MaterialTextView"
+        },
+        {
+          "children": [],
+          "bounds": {
+            "top": "2429",
+            "left": "48",
+            "bottom": "2575",
+            "right": "1032"
+          },
+          "id": "spDistrict",
+          "class": "AppCompatSpinner"
+        },
+        {
+          "bounds": {
+            "top": "2599",
+            "left": "48",
+            "bottom": "2656",
+            "right": "1032"
+          },
+          "id": "tvSubMetro",
+          "class": "MaterialTextView"
+        },
+        {
+          "children": [],
+          "bounds": {
+            "top": "2680",
+            "left": "48",
+            "bottom": "2826",
+            "right": "1032"
+          },
+          "id": "spSubmetro",
+          "class": "AppCompatSpinner"
+        },
+        {
+          "bounds": {
+            "top": "2850",
+            "left": "48",
+            "bottom": "2907",
+            "right": "1032"
+          },
+          "id": "tvCommunity",
+          "class": "MaterialTextView"
+        },
+        {
+          "children": [],
+          "bounds": {
+            "top": "2931",
+            "left": "48",
+            "bottom": "3077",
+            "right": "1032"
+          },
+          "id": "spCommunity",
+          "class": "AppCompatSpinner"
+        },
+        {
+          "children": [{
+            "children": [
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "185",
+                  "right": "984"
+                },
+                "id": "textinput_placeholder",
+                "class": "AppCompatTextView"
+              },
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "185",
+                  "right": "984"
+                },
+                "id": "areaNameTIET",
+                "class": "TextInputEditText"
+              },
+              {
+                "children": [
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "text_input_start_icon",
+                    "class": "CheckableImageButton"
+                  },
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "textinput_prefix_text",
+                    "class": "AppCompatTextView"
+                  }
+                ],
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "185",
+                  "right": "0"
+                },
+                "class": "LinearLayout"
+              },
+              {
+                "children": [
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "textinput_suffix_text",
+                    "class": "AppCompatTextView"
+                  },
+                  {
+                    "children": [{
+                      "bounds": {
+                        "top": "0",
+                        "left": "0",
+                        "bottom": "0",
+                        "right": "0"
+                      },
+                      "id": "text_input_end_icon",
+                      "class": "CheckableImageButton"
+                    }],
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "185",
+                      "right": "0"
+                    },
+                    "class": "FrameLayout"
+                  },
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "text_input_end_icon",
+                    "class": "CheckableImageButton"
+                  }
+                ],
+                "bounds": {
+                  "top": "0",
+                  "left": "984",
+                  "bottom": "185",
+                  "right": "984"
+                },
+                "class": "LinearLayout"
+              }
+            ],
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "185",
+              "right": "984"
+            },
+            "class": "FrameLayout"
+          }],
+          "bounds": {
+            "top": "3125",
+            "left": "48",
+            "bottom": "3310",
+            "right": "1032"
+          },
+          "id": "textInputLayout10",
+          "class": "TextInputLayout"
+        },
+        {
+          "bounds": {
+            "top": "3334",
+            "left": "48",
+            "bottom": "3391",
+            "right": "1032"
+          },
+          "id": "tvAreaType",
+          "class": "MaterialTextView"
+        },
+        {
+          "children": [],
+          "bounds": {
+            "top": "3415",
+            "left": "48",
+            "bottom": "3561",
+            "right": "1032"
+          },
+          "id": "spAreaCategory",
+          "class": "AppCompatSpinner"
+        },
+        {
+          "bounds": {
+            "top": "3585",
+            "left": "48",
+            "bottom": "3642",
+            "right": "1032"
+          },
+          "id": "textView11",
+          "class": "MaterialTextView"
+        },
+        {
+          "bounds": {
+            "top": "3666",
+            "left": "48",
+            "bottom": "3739",
+            "right": "1032"
+          },
+          "id": "LatLngTV",
+          "class": "MaterialTextView"
+        },
+        {
+          "children": [{
+            "children": [
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "185",
+                  "right": "984"
+                },
+                "id": "textinput_placeholder",
+                "class": "AppCompatTextView"
+              },
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "185",
+                  "right": "984"
+                },
+                "id": "tfDigitalAddress",
+                "class": "TextInputEditText"
+              },
+              {
+                "children": [
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "text_input_start_icon",
+                    "class": "CheckableImageButton"
+                  },
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "textinput_prefix_text",
+                    "class": "AppCompatTextView"
+                  }
+                ],
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "185",
+                  "right": "0"
+                },
+                "class": "LinearLayout"
+              },
+              {
+                "children": [
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "textinput_suffix_text",
+                    "class": "AppCompatTextView"
+                  },
+                  {
+                    "children": [{
+                      "bounds": {
+                        "top": "0",
+                        "left": "0",
+                        "bottom": "0",
+                        "right": "0"
+                      },
+                      "id": "text_input_end_icon",
+                      "class": "CheckableImageButton"
+                    }],
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "185",
+                      "right": "0"
+                    },
+                    "class": "FrameLayout"
+                  },
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "text_input_end_icon",
+                    "class": "CheckableImageButton"
+                  }
+                ],
+                "bounds": {
+                  "top": "0",
+                  "left": "984",
+                  "bottom": "185",
+                  "right": "984"
+                },
+                "class": "LinearLayout"
+              }
+            ],
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "185",
+              "right": "984"
+            },
+            "class": "FrameLayout"
+          }],
+          "bounds": {
+            "top": "3787",
+            "left": "48",
+            "bottom": "3972",
+            "right": "1032"
+          },
+          "id": "textInputLayout8",
+          "class": "TextInputLayout"
+        },
+        {
+          "children": [{
+            "children": [
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "0",
+                  "right": "0"
+                },
+                "id": "textinput_placeholder",
+                "class": "AppCompatTextView"
+              },
+              {
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "0",
+                  "right": "0"
+                },
+                "id": "etRate",
+                "class": "TextInputEditText"
+              },
+              {
+                "children": [
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "text_input_start_icon",
+                    "class": "CheckableImageButton"
+                  },
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "textinput_prefix_text",
+                    "class": "AppCompatTextView"
+                  }
+                ],
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "0",
+                  "right": "0"
+                },
+                "class": "LinearLayout"
+              },
+              {
+                "children": [
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "textinput_suffix_text",
+                    "class": "AppCompatTextView"
+                  },
+                  {
+                    "children": [{
+                      "bounds": {
+                        "top": "0",
+                        "left": "0",
+                        "bottom": "0",
+                        "right": "0"
+                      },
+                      "id": "text_input_end_icon",
+                      "class": "CheckableImageButton"
+                    }],
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "class": "FrameLayout"
+                  },
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "text_input_end_icon",
+                    "class": "CheckableImageButton"
+                  }
+                ],
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "0",
+                  "right": "0"
+                },
+                "class": "LinearLayout"
+              }
+            ],
+            "bounds": {
+              "top": "0",
+              "left": "0",
+              "bottom": "0",
+              "right": "0"
+            },
+            "class": "FrameLayout"
+          }],
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "0",
+            "right": "0"
+          },
+          "id": "textInputLayout9",
+          "class": "TextInputLayout"
+        },
+        {
+          "bounds": {
+            "top": "3996",
+            "left": "48",
+            "bottom": "4140",
+            "right": "1032"
+          },
+          "id": "btnSwitch",
+          "class": "SwitchCompat"
+        },
+        {
+          "children": [
+            {
+              "bounds": {
+                "top": "0",
+                "left": "0",
+                "bottom": "0",
+                "right": "0"
+              },
+              "id": "textView13",
+              "class": "MaterialTextView"
+            },
+            {
+              "children": [{
+                "children": [
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "textinput_placeholder",
+                    "class": "AppCompatTextView"
+                  },
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "input60Litres",
+                    "class": "TextInputEditText"
+                  },
+                  {
+                    "children": [
+                      {
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "text_input_start_icon",
+                        "class": "CheckableImageButton"
+                      },
+                      {
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "textinput_prefix_text",
+                        "class": "AppCompatTextView"
+                      }
+                    ],
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "class": "LinearLayout"
+                  },
+                  {
+                    "children": [
+                      {
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "textinput_suffix_text",
+                        "class": "AppCompatTextView"
+                      },
+                      {
+                        "children": [{
+                          "bounds": {
+                            "top": "0",
+                            "left": "0",
+                            "bottom": "0",
+                            "right": "0"
+                          },
+                          "id": "text_input_end_icon",
+                          "class": "CheckableImageButton"
+                        }],
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "class": "FrameLayout"
+                      },
+                      {
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "text_input_end_icon",
+                        "class": "CheckableImageButton"
+                      }
+                    ],
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "class": "LinearLayout"
+                  }
+                ],
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "0",
+                  "right": "0"
+                },
+                "class": "FrameLayout"
+              }],
+              "bounds": {
+                "top": "0",
+                "left": "0",
+                "bottom": "0",
+                "right": "0"
+              },
+              "class": "TextInputLayout"
+            },
+            {
+              "children": [{
+                "children": [
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "textinput_placeholder",
+                    "class": "AppCompatTextView"
+                  },
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "input120Litres",
+                    "class": "TextInputEditText"
+                  },
+                  {
+                    "children": [
+                      {
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "text_input_start_icon",
+                        "class": "CheckableImageButton"
+                      },
+                      {
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "textinput_prefix_text",
+                        "class": "AppCompatTextView"
+                      }
+                    ],
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "class": "LinearLayout"
+                  },
+                  {
+                    "children": [
+                      {
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "textinput_suffix_text",
+                        "class": "AppCompatTextView"
+                      },
+                      {
+                        "children": [{
+                          "bounds": {
+                            "top": "0",
+                            "left": "0",
+                            "bottom": "0",
+                            "right": "0"
+                          },
+                          "id": "text_input_end_icon",
+                          "class": "CheckableImageButton"
+                        }],
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "class": "FrameLayout"
+                      },
+                      {
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "text_input_end_icon",
+                        "class": "CheckableImageButton"
+                      }
+                    ],
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "class": "LinearLayout"
+                  }
+                ],
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "0",
+                  "right": "0"
+                },
+                "class": "FrameLayout"
+              }],
+              "bounds": {
+                "top": "0",
+                "left": "0",
+                "bottom": "0",
+                "right": "0"
+              },
+              "class": "TextInputLayout"
+            },
+            {
+              "children": [{
+                "children": [
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "textinput_placeholder",
+                    "class": "AppCompatTextView"
+                  },
+                  {
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "id": "input240Litres",
+                    "class": "TextInputEditText"
+                  },
+                  {
+                    "children": [
+                      {
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "text_input_start_icon",
+                        "class": "CheckableImageButton"
+                      },
+                      {
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "textinput_prefix_text",
+                        "class": "AppCompatTextView"
+                      }
+                    ],
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "class": "LinearLayout"
+                  },
+                  {
+                    "children": [
+                      {
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "textinput_suffix_text",
+                        "class": "AppCompatTextView"
+                      },
+                      {
+                        "children": [{
+                          "bounds": {
+                            "top": "0",
+                            "left": "0",
+                            "bottom": "0",
+                            "right": "0"
+                          },
+                          "id": "text_input_end_icon",
+                          "class": "CheckableImageButton"
+                        }],
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "class": "FrameLayout"
+                      },
+                      {
+                        "bounds": {
+                          "top": "0",
+                          "left": "0",
+                          "bottom": "0",
+                          "right": "0"
+                        },
+                        "id": "text_input_end_icon",
+                        "class": "CheckableImageButton"
+                      }
+                    ],
+                    "bounds": {
+                      "top": "0",
+                      "left": "0",
+                      "bottom": "0",
+                      "right": "0"
+                    },
+                    "class": "LinearLayout"
+                  }
+                ],
+                "bounds": {
+                  "top": "0",
+                  "left": "0",
+                  "bottom": "0",
+                  "right": "0"
+                },
+                "class": "FrameLayout"
+              }],
+              "bounds": {
+                "top": "0",
+                "left": "0",
+                "bottom": "0",
+                "right": "0"
+              },
+              "class": "TextInputLayout"
+            }
+          ],
+          "bounds": {
+            "top": "0",
+            "left": "0",
+            "bottom": "0",
+            "right": "0"
+          },
+          "id": "llnonTaggedBins",
+          "class": "LinearLayout"
+        },
+        {
+          "bounds": {
+            "top": "4188",
+            "left": "48",
+            "bottom": "4332",
+            "right": "1032"
+          },
+          "id": "submitCustomerRegistration",
+          "class": "MaterialButton"
+        }
+      ],
+      "bounds": {
+        "top": "0",
+        "left": "0",
+        "bottom": "4428",
+        "right": "1080"
+      },
+      "id": "root",
+      "class": "ConstraintLayout"
+    }],
+    "bounds": {
+      "top": "0",
+      "left": "0",
+      "bottom": "1536",
+      "right": "1080"
+    },
+    "class": "ScrollView"
+  }
+}

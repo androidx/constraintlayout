@@ -24,6 +24,8 @@ import androidx.annotation.RequiresApi;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -64,71 +66,33 @@ public class Server {
     }
 
     class Reader {
-        BufferedInputStream stream;
-        final int bufferSize = 8192;
-        byte[] buffer = new byte[bufferSize];
-
+        DataInputStream stream;
         Reader(InputStream stream) {
-            this.stream = new BufferedInputStream(stream);
+            this.stream = new DataInputStream(stream);
         }
 
         @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
         String nextLine() {
-            int size = bufferSize;
-            int offset = 0;
-            String line = null;
-            while (offset < size) {
-                int toRead = size - offset;
-                int read = 0;
-                try {
-                    read = stream.read(buffer, offset, toRead);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return line;
-                }
-                if (read > 0) {
-                    offset += read;
-                } else {
-                    return line;
-                }
+            try {
+                return stream.readUTF();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            int indexEnd = 0;
-            for (int i = 0; i < size; i++) {
-                if (buffer[i] == 0) {
-                    indexEnd = i;
-                    break;
-                }
-            }
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                line = new String(buffer, 0, indexEnd, StandardCharsets.UTF_8);
-            }
-            return line;
+            return "";
         }
     }
 
     static class Writer {
-        BufferedOutputStream stream;
-        final int bufferSize = 8192;
-        byte[] buffer = new byte[bufferSize];
+        DataOutputStream stream;
 
         Writer(OutputStream stream) {
-            this.stream = new BufferedOutputStream(stream);
+            this.stream = new DataOutputStream(stream);
         }
 
         @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
         void println(String text) {
-            byte[] byteArr = new byte[0];
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                byteArr = text.getBytes(StandardCharsets.UTF_8);
-            }
-            int len = Math.min(bufferSize, byteArr.length);
-            for (int i = 0; i < len; i++) {
-                buffer[i] = byteArr[i];
-            }
-            buffer[len] = 0;
             try {
-                stream.write(buffer);
-                stream.flush();
+                stream.writeUTF(text);
             } catch (IOException e) {
                 e.printStackTrace();
             }

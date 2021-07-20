@@ -44,6 +44,10 @@ public class Direct {
     private static final boolean DEBUG = LinearSystem.FULL_DEBUG;
     private static final boolean APPLY_MATCH_PARENT = false;
     private static BasicMeasure.Measure measure = new BasicMeasure.Measure();
+    private static final boolean EARLY_TERMINATION = true; // feature flag -- remove after release.
+
+    private static int hcount = 0;
+    private static int vcount = 0;
 
     /**
      * Walk the dependency graph and solves it.
@@ -54,12 +58,19 @@ public class Direct {
     public static void solvingPass(ConstraintWidgetContainer layout, BasicMeasure.Measurer measurer) {
         ConstraintWidget.DimensionBehaviour horizontal = layout.getHorizontalDimensionBehaviour();
         ConstraintWidget.DimensionBehaviour vertical = layout.getVerticalDimensionBehaviour();
+        hcount = 0;
+        vcount = 0;
+        long time = 0;
         if (DEBUG) {
+            time = System.nanoTime();
             System.out.println("#### SOLVING PASS (horiz " + horizontal + ", vert " + vertical + ") ####");
         }
         layout.resetFinalResolution();
         ArrayList<ConstraintWidget> children = layout.getChildren();
         final int count = children.size();
+        if (DEBUG) {
+            System.out.println("#### SOLVING PASS on " + count + " widgeets ####");
+        }
         for (int i = 0; i < count; i++) {
             ConstraintWidget child = children.get(i);
             child.resetFinalResolution();
@@ -250,7 +261,9 @@ public class Direct {
         }
 
         if (DEBUG) {
-            System.out.println("\n*** THROUGH WITH DIRECT PASS ***\n");
+            time = System.nanoTime() - time;
+            System.out.println("\n*** THROUGH WITH DIRECT PASS in " + time + " ns ***\n");
+            System.out.println("hcount: " + hcount + " vcount: " + vcount);
         }
     }
 
@@ -294,6 +307,13 @@ public class Direct {
      * @param isRtl
      */
     private static void horizontalSolvingPass(int level, ConstraintWidget layout, BasicMeasure.Measurer measurer, boolean isRtl) {
+        if (EARLY_TERMINATION && layout.isHorizontalSolvingPassDone()) {
+            if (DEBUG) {
+                System.out.println(ls(level) + "HORIZONTAL SOLVING PASS ON " + layout.getDebugName() + " ALREADY CALLED");
+            }
+            return;
+        }
+        hcount++;
         if (DEBUG) {
             System.out.println(ls(level) + "HORIZONTAL SOLVING PASS ON " + layout.getDebugName());
         }
@@ -405,6 +425,7 @@ public class Direct {
                 }
             }
         }
+        layout.markHorizontalSolvingPassDone();
     }
 
     /**
@@ -416,6 +437,13 @@ public class Direct {
      * @param measurer the measurer object to measure the widgets.
      */
     private static void verticalSolvingPass(int level, ConstraintWidget layout, BasicMeasure.Measurer measurer) {
+        if (EARLY_TERMINATION && layout.isVerticalSolvingPassDone()) {
+            if (DEBUG) {
+                System.out.println(ls(level) + "VERTICAL SOLVING PASS ON " + layout.getDebugName() + " ALREADY CALLED");
+            }
+            return;
+        }
+        vcount++;
         if (DEBUG) {
             System.out.println(ls(level) + "VERTICAL SOLVING PASS ON " + layout.getDebugName());
         }
@@ -554,7 +582,7 @@ public class Direct {
                 }
             }
         }
-
+        layout.markVerticalSolvingPassDone();
     }
 
     /**
