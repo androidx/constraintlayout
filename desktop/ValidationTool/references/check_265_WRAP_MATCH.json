@@ -1,5 +1,5 @@
 {
-  "duration": "72500",
+  "duration": "65000",
   "layout": {
     "children": [
       {
@@ -179,16 +179,16 @@
         "bounds": {
           "top": "0",
           "left": "0",
-          "bottom": "458",
+          "bottom": "578",
           "right": "365"
         },
         "class": "ScrollView"
       },
       {
         "bounds": {
-          "top": "458",
+          "top": "578",
           "left": "51",
-          "bottom": "602",
+          "bottom": "722",
           "right": "315"
         },
         "id": "bt_next",
@@ -198,7 +198,7 @@
     "bounds": {
       "top": "0",
       "left": "0",
-      "bottom": "746",
+      "bottom": "866",
       "right": "365"
     },
     "class": "ConstraintLayout"

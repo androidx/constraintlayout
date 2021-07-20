@@ -1,14 +1,14 @@
 {
-  "duration": "1492000",
+  "duration": "214000",
   "layout": {
     "children": [
       {
         "children": [{
           "children": [{
             "bounds": {
-              "top": "2",
+              "top": "3",
               "left": "0",
-              "bottom": "55",
+              "bottom": "60",
               "right": "1080"
             },
             "id": "googleapp_incognito_topbar_text",
@@ -17,7 +17,7 @@
           "bounds": {
             "top": "0",
             "left": "0",
-            "bottom": "83",
+            "bottom": "90",
             "right": "1080"
           },
           "id": "googleapp_incognito_topbar_wrapper",
@@ -26,7 +26,7 @@
         "bounds": {
           "top": "0",
           "left": "0",
-          "bottom": "83",
+          "bottom": "90",
           "right": "1080"
         },
         "id": "googleapp_incognito_topbar_container",
@@ -35,9 +35,9 @@
       {
         "children": [],
         "bounds": {
-          "top": "83",
+          "top": "90",
           "left": "0",
-          "bottom": "83",
+          "bottom": "90",
           "right": "1080"
         },
         "id": "googleapp_top_level_destination_container",
@@ -55,9 +55,9 @@
       },
       {
         "bounds": {
-          "top": "206",
+          "top": "225",
           "left": "0",
-          "bottom": "259",
+          "bottom": "282",
           "right": "1080"
         },
         "id": "googleapp_bottom_navigation_container",
@@ -67,9 +67,9 @@
     "bounds": {
       "top": "0",
       "left": "0",
-      "bottom": "259",
+      "bottom": "282",
       "right": "1080"
     },
-    "class": "ConstraintLayout"
+    "class": "ConstraintLayoutWithInsetsFix"
   }
 }
