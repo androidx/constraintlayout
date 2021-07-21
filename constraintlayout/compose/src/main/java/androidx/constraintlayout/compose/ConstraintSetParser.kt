@@ -695,11 +695,20 @@ fun parseDesignElementsJSON(content: String, list: ArrayList<DesignElement>) {
                     val element = element.get(elementName) as CLObject
                     System.out.printf("element found <$elementName>")
                     val type = element.getStringOrNull("type")
-                    val param = element.getStringOrNull("param")
-                    val text = element.getStringOrNull("text")
-                    val parameter = if (param != null) param else text
-                    var designElement = DesignElement(elementName, type, parameter)
-                    list.add(designElement)
+                    if (type != null) {
+                        var parameters = HashMap<String, String>()
+                        val size = element.size()
+                        for (j in 0.. size -1) {
+                            val key = element[j] as CLKey
+                            val paramName = key.content()
+                            val paramValue = key.value?.content()
+                            if (paramValue != null) {
+                                parameters[paramName] = paramValue
+                            }
+                        }
+                        var designElement = DesignElement(elementName, type, parameters)
+                        list.add(designElement)
+                    }
                 }
             }
         }

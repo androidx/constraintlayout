@@ -5,10 +5,16 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.Image
+import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.ComposeView
 import androidx.constraintlayout.compose.*
 import androidx.constraintlayout.coreAndroid.PhoneState
+import com.google.accompanist.coil.rememberCoilPainter
 
 class MainActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
@@ -29,7 +35,35 @@ class MainActivity : AppCompatActivity() {
         map.put(30, "Cycle RotationZ")
         map.put(31, "Cycle RotationXY")
 
+        defineDesignElements()
         debugServer.start()
+    }
+
+    private fun defineDesignElements() {
+        DesignElements.define("wow") {
+                id, params ->
+            val text = params["text"] ?: "text"
+            Text(modifier = Modifier.layoutId(id),
+                text= text)
+        }
+        DesignElements.define("button") {
+                id, params ->
+            val text = params["text"] ?: "text"
+            Button(modifier = Modifier.layoutId(id),
+                onClick = {},
+            ) {
+                Text(text = text)
+            }
+        }
+        DesignElements.define("image") {
+                id, params ->
+            val url = params["url"] ?: "url"
+            val description = params["description"] ?: "Image Description"
+            Image(modifier = Modifier.layoutId(id),
+                painter = rememberCoilPainter(url),
+                contentDescription = description
+            )
+        }
     }
 
     @ExperimentalMaterialApi
