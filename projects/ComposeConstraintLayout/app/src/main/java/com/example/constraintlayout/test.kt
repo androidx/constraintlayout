@@ -423,7 +423,7 @@ public fun ScreenExample3() {
     ConstraintLayout(
         ConstraintSet("""
             {
-                Debug: { name: 'example 3'},
+                Header: { exportAs: 'example 3'},
                 g1: { type: 'vGuideline', start: 80 },
                 button: {
                   top: ['title', 'bottom', 16],
@@ -456,7 +456,7 @@ public fun ScreenExample4() {
     ConstraintLayout(
         ConstraintSet("""
             {
-                Debug: { name: 'example 4'},
+                Header: { exportAs: 'example 4'},
                 g1: { type: 'vGuideline', percent: 0.5 },
                 button: {
                   start: ['g1', 'start']
@@ -1223,8 +1223,8 @@ public fun ScreenExample16() {
                 .height(400.dp)
                 .background(Color.White),
             motionScene = MotionScene("""{
-                Debug: {
-                  name: 'motion8'
+                Header: {
+                  exportAs: 'motion8'
                 },
                 ConstraintSets: {
                   start: {
@@ -1358,8 +1358,8 @@ public fun ScreenExample18() {
                 .height(400.dp)
                 .background(Color.White),
             motionScene = MotionScene("""{
-  Debug: {
-    name: 'example 18'
+  Header: {
+    exportAs: 'example 18'
   },
   ConstraintSets: {
     start: {
@@ -1425,8 +1425,8 @@ public fun ScreenExample19() {
             Text(text = "Run")
         }
         MotionLayout(motionScene = MotionScene("""{
-                Debug: {
-                  name: 'exemple19'
+                Header: {
+                  exportAs: 'exemple19'
                 },
                 ConstraintSets: {
                   start: {
@@ -1512,8 +1512,8 @@ public fun ScreenExample20() {
     ConstraintLayout(
         ConstraintSet("""
         {
-          Debug: {
-            name: 'guidelines'
+          Header: {
+            exportAs: 'guidelines'
           },
           Design: {
             toto: {
@@ -1569,8 +1569,8 @@ public fun ScreenExample22() {
     ConstraintLayout(
         ConstraintSet("""
         {
-          Debug: {
-            name: 'Playground'
+          Header: {
+            exportAs: 'Playground'
           }
         }
         """),

@@ -12,8 +12,8 @@ import androidx.constraintlayout.coreAndroid.PhoneState
 
 class MainActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
-    private var composeNum = 38
-    private var MAX = 38
+    private var composeNum = 39
+    private var MAX = 39
 
     var map = HashMap<Int, String>();
     val debugServer = DebugServer()
@@ -80,8 +80,10 @@ class MainActivity : AppCompatActivity() {
                 36 -> ScreenExample21()
                 37 -> ResizeExample1()
                 38 -> ScreenExample22()
+
+                39 -> ExampleLayout()
                 else -> {
-                    composeNum = (composeNum + 35) % 35
+                    composeNum = (composeNum + 39) % 39
                     println(composeNum)
                     ScreenExample()
                 }

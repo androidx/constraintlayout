@@ -33,8 +33,8 @@ public fun ResizeExample2() {
     ConstraintLayout(
         ConstraintSet("""
             {
-              Debug: {
-                name: 'ResizeContent'
+              Header: {
+                exportAs: 'ResizeContent'
               },
               content: {
                 width: 'spread',
@@ -106,8 +106,8 @@ public fun ResizeExample3() {
     ConstraintLayout(
         ConstraintSet("""
             {
-              Debug: {
-                name: 'ResizeContent'
+              Header: {
+                exportAs: 'ResizeContent'
               },
               content: {
                 width: 'spread',
@@ -133,8 +133,8 @@ public fun ResizeExample3() {
                     .background(Color.Black),
                 start = ConstraintSet(
                     """{
-                    Debug: {
-                      name: 'ResizeStart'
+                    Header: {
+                      exportAs: 'ResizeStart'
                     },
           box1: {
             start: ['parent', 'start', 16],
@@ -201,8 +201,8 @@ public fun ResizeExample1() {
     ConstraintLayout(
         ConstraintSet("""
             {
-              Debug: {
-                name: 'ResizeContent'
+              Header: {
+                exportAs: 'ResizeContent'
               },
               content: {
                 width: 'spread',
@@ -228,8 +228,8 @@ public fun ResizeExample1() {
                 .background(Color.Black),
             motionScene = MotionScene(
                 """{
-                    Debug: {
-                      name: 'Resize'
+                    Header: {
+                      exportAs: 'Resize'
                     },
         ConstraintSets: {
         start: {

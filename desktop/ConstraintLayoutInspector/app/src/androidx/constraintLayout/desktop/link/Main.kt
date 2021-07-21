@@ -364,7 +364,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
                 null
             )
         } else {
-            val key = CLScan.findCLKey(CLParser.parse(mMainText.text), "Debug")
+            val key = CLScan.findCLKey(CLParser.parse(mMainText.text), "Header")
             if (key != null) {
                 widgetCount = 1;
                 val end = key.value.end.toInt() + 2

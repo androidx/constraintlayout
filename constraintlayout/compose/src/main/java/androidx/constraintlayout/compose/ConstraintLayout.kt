@@ -58,6 +58,7 @@ import androidx.constraintlayout.core.widgets.*
 import androidx.constraintlayout.core.widgets.ConstraintWidget.*
 import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.FIXED
 import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.MATCH_PARENT
 import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.WRAP_CONTENT
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.TRY_GIVEN_DIMENSIONS
@@ -1521,9 +1522,9 @@ open class EditableJSONLayout(@Language("json5") content: String) :
             if (json is CLObject) {
                 val firstTime = debugName == null
                 if (firstTime) {
-                    val debug = json.getObjectOrNull("Debug")
+                    val debug = json.getObjectOrNull("Header")
                     if (debug != null) {
-                        debugName = debug.getStringOrNull("name")
+                        debugName = debug.getStringOrNull("exportAs")
                     }
                 }
                 if (!firstTime) {
@@ -1958,8 +1959,13 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             outConstraints[1] = if (useDimension) dimension else rootMaxConstraint
             !useDimension
         }
+        MATCH_PARENT -> {
+            outConstraints[0] = rootMaxConstraint
+            outConstraints[1] = rootMaxConstraint
+            false
+        }
         else -> {
-            error("MATCH_PARENT is not supported")
+            error("$dimensionBehaviour is not supported")
         }
     }
 

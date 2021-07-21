@@ -819,7 +819,7 @@ public fun MotionExample6() {
 
     MotionLayout(motionScene = MotionScene(
         """{
-                Debug: { name: 'motion6'},
+                Header: { exportAs: 'motion6'},
                 ConstraintSets: {
                   start: {
                     Variables: {
