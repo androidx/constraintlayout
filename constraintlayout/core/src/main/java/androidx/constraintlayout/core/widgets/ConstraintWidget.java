@@ -369,6 +369,10 @@ public class ConstraintWidget {
         mIsInBarrier[orientation] = value;
     }
 
+    public boolean isInBarrier(int orientation) {
+        return mIsInBarrier[orientation];
+    }
+
     public void setMeasureRequested(boolean measureRequested) {
         mMeasureRequested = measureRequested;
     }

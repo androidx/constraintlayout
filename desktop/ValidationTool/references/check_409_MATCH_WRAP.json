@@ -1,13 +1,13 @@
 {
-  "duration": "445500",
+  "duration": "193500",
   "layout": {
     "children": [
       {
         "bounds": {
           "top": "0",
-          "left": "1080",
+          "left": "225",
           "bottom": "0",
-          "right": "1080"
+          "right": "225"
         },
         "id": "barrierStart",
         "class": "Barrier"
@@ -15,9 +15,9 @@
       {
         "bounds": {
           "top": "0",
-          "left": "0",
+          "left": "855",
           "bottom": "0",
-          "right": "0"
+          "right": "855"
         },
         "id": "barrierEnd",
         "class": "Barrier"
@@ -25,9 +25,9 @@
       {
         "bounds": {
           "top": "0",
-          "left": "1080",
+          "left": "225",
           "bottom": "120",
-          "right": "1260"
+          "right": "405"
         },
         "id": "view1",
         "class": "MaterialTextView"
@@ -35,9 +35,9 @@
       {
         "bounds": {
           "top": "0",
-          "left": "0",
+          "left": "405",
           "bottom": "120",
-          "right": "0"
+          "right": "855"
         },
         "id": "view2",
         "class": "MaterialTextView"
