@@ -2178,6 +2178,32 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
 
     private var designElements = arrayListOf<DesignElement>()
 
+
+    private fun getColor(str: String?, defaultColor: Color = Color.Black) : Color {
+        if (str != null && str.startsWith('#')) {
+            var str2 = str.substring(1)
+            if(str2.length == 6) {
+                str2 = "FF$str2"
+            }
+            try {
+                return Color(java.lang.Long.parseLong(str2, 16).toInt())
+            } catch (e: Exception) {
+                return defaultColor
+            }
+        }
+        return defaultColor
+    }
+
+    private fun getTextStyle(params: HashMap<String, String>) : TextStyle {
+        val fontSizeString = params["size"]
+        var fontSize = TextUnit.Unspecified
+        if (fontSizeString != null) {
+            fontSize = fontSizeString.toFloat().sp
+        }
+        var textColor = getColor(params["color"])
+        return TextStyle(fontSize = fontSize, color = textColor)
+    }
+
     @Composable
     fun createDesignElements() {
         for (element in designElements) {
@@ -2189,29 +2215,28 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                 when (element.type) {
                     "button" -> {
                         val text = element.params["text"] ?: "text"
-                        var style = TextStyle.Default
-                        val fontSizeString = element.params["size"]
-                        if (fontSizeString != null) {
-                            val fontSize = fontSizeString.toFloat().sp
-                            style = TextStyle(fontSize = fontSize)
-                        }
+                        val colorBackground = getColor(element.params["backgroundColor"], Color.LightGray)
                         BasicText(modifier = Modifier
                             .layoutId(id)
                             .clip(RoundedCornerShape(20))
-                            .background(Color.LightGray)
+                            .background(colorBackground)
                             .padding(8.dp),
-                            text = text, style = style)
+                            text = text, style = getTextStyle(element.params))
+                    }
+                    "box" -> {
+                        val text = element.params["text"] ?: ""
+                        val colorBackground = getColor(element.params["backgroundColor"], Color.LightGray)
+                        Box(modifier = Modifier.layoutId(id).background(colorBackground)) {
+                            BasicText(
+                                modifier = Modifier.padding(8.dp),
+                                text = text, style = getTextStyle(element.params)
+                            )
+                        }
                     }
                     "text" -> {
                         val text = element.params["text"] ?: "text"
-                        var style = TextStyle.Default
-                        val fontSizeString = element.params["size"]
-                        if (fontSizeString != null) {
-                            val fontSize = fontSizeString.toFloat().sp
-                            style = TextStyle(fontSize = fontSize)
-                        }
                         BasicText(modifier = Modifier.layoutId(id),
-                            text = text, style = style)
+                            text = text, style = getTextStyle(element.params))
                     }
                     "textfield" -> {
                         val text = element.params["text"] ?: "text"
