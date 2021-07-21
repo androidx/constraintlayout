@@ -18,7 +18,7 @@ import com.google.accompanist.coil.rememberCoilPainter
 
 class MainActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
-    private var composeNum = 39
+    private var composeNum = 38
     private var MAX = 39
 
     var map = HashMap<Int, String>();
@@ -40,13 +40,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun defineDesignElements() {
-        DesignElements.define("wow") {
+        DesignElements.define("text-material") {
                 id, params ->
             val text = params["text"] ?: "text"
             Text(modifier = Modifier.layoutId(id),
                 text= text)
         }
-        DesignElements.define("button") {
+        DesignElements.define("button-material") {
                 id, params ->
             val text = params["text"] ?: "text"
             Button(modifier = Modifier.layoutId(id),
@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                 Text(text = text)
             }
         }
-        DesignElements.define("image") {
+        DesignElements.define("image-coil") {
                 id, params ->
             val url = params["url"] ?: "url"
             val description = params["description"] ?: "Image Description"
