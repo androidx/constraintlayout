@@ -152,6 +152,9 @@ public class Chain {
                 if (isSpreadOnly && !isChainPacked) {
                     strength = SolverVariable.STRENGTH_EQUALITY;
                 }
+                if (widget == firstVisibleWidget && isChainPacked && widget.isInBarrier(orientation)) {
+                    strength = SolverVariable.STRENGTH_EQUALITY;
+                }
                 system.addEquality(begin.mSolverVariable, begin.mTarget.mSolverVariable, margin,
                     strength);
             }
