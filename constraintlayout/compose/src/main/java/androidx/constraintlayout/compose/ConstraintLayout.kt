@@ -22,29 +22,29 @@ import android.os.Looper
 import android.util.Log
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.Canvas
-//import androidx.compose.foundation.Image
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.LayoutScopeMarker
-//import androidx.compose.material.Button
-//import androidx.compose.material.Text
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateObserver
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.platform.InspectorValueInfo
 import androidx.compose.ui.platform.debugInspectorInfo
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.*
 import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastForEachIndexed
 import androidx.constraintlayout.core.parser.CLKey
@@ -63,7 +63,6 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviou
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.TRY_GIVEN_DIMENSIONS
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.USE_GIVEN_DIMENSIONS
-//import com.google.accompanist.coil.rememberCoilPainter
 import org.intellij.lang.annotations.Language
 import java.lang.StringBuilder
 import java.util.*
@@ -1567,7 +1566,7 @@ open class EditableJSONLayout(@Language("json5") content: String) :
     }
 }
 
-data class DesignElement(var id: String, var type: String, var param: String)
+data class DesignElement(var id: String, var type: String, var params: HashMap<String, String>)
 
 class JSONConstraintSet(@Language("json5") content: String,
                         @Language("json5") overrideVariables: String? = null)
@@ -2183,27 +2182,53 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
     fun createDesignElements() {
         for (element in designElements) {
             var id = element.id
-            when (element.type) {
-                /* // commenting for now until we provide hooks
-                "button" -> {
-                    Button(
-                        modifier = Modifier.layoutId(id),
-                        onClick = {},
-                    ) {
-                        Text(text = element.param)
+            var function = DesignElements.map[element.type]
+            if (function != null) {
+                function(id, element.params)
+            } else {
+                when (element.type) {
+                    "button" -> {
+                        val text = element.params["text"] ?: "text"
+                        var style = TextStyle.Default
+                        val fontSizeString = element.params["size"]
+                        if (fontSizeString != null) {
+                            val fontSize = fontSizeString.toFloat().sp
+                            style = TextStyle(fontSize = fontSize)
+                        }
+                        BasicText(modifier = Modifier
+                            .layoutId(id)
+                            .clip(RoundedCornerShape(20))
+                            .background(Color.LightGray)
+                            .padding(8.dp),
+                            text = text, style = style)
+                    }
+                    "text" -> {
+                        val text = element.params["text"] ?: "text"
+                        var style = TextStyle.Default
+                        val fontSizeString = element.params["size"]
+                        if (fontSizeString != null) {
+                            val fontSize = fontSizeString.toFloat().sp
+                            style = TextStyle(fontSize = fontSize)
+                        }
+                        BasicText(modifier = Modifier.layoutId(id),
+                            text = text, style = style)
+                    }
+                    "textfield" -> {
+                        val text = element.params["text"] ?: "text"
+                        BasicTextField(
+                            modifier = Modifier.layoutId(id),
+                            value = text,
+                            onValueChange = {}
+                        )
+                    }
+                    "image" -> {
+                        Image(
+                            modifier = Modifier.layoutId(id),
+                            painter = painterResource(id = android.R.drawable.ic_menu_gallery),
+                            contentDescription = "Placeholder Image"
+                        )
                     }
                 }
-                "text" -> {
-                    Text(modifier = Modifier.layoutId(id),
-                         text=element.param)
-                }
-                "image" -> {
-                    Image(modifier = Modifier.layoutId(id),
-                        painter = rememberCoilPainter(element.param),
-                        contentDescription = ""
-                    )
-                }
-                 */
             }
         }
     }
@@ -2212,6 +2237,13 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         if (constraintSet is JSONConstraintSet) {
             constraintSet.emitDesignElements(designElements)
         }
+    }
+}
+
+object DesignElements {
+    var map = HashMap<String, @Composable (String, HashMap<String, String>) -> Unit >()
+    fun define(name: String, function : @Composable (String, HashMap<String, String>) -> Unit) {
+        map[name] = function
     }
 }
 
