@@ -1104,6 +1104,16 @@ class ConstrainScope internal constructor(internal val id: Any) {
         linkTo(anchor, anchor)
     }
 
+    /**
+     * Set a circular constraint relative to the center of [other].
+     * This will position the current widget at a relative angle and distance from [other].
+     */
+    fun circular(other: ConstrainedLayoutReference, angle: Float, distance: Dp) {
+        tasks.add { state ->
+            state.constraints(id).circularConstraint(other.id, angle, state.convertDimension(distance).toFloat())
+        }
+    }
+
     internal companion object {
         val verticalAnchorFunctions:
             Array<Array<ConstraintReference.(Any, LayoutDirection) -> ConstraintReference>> =
