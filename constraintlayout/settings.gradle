@@ -23,6 +23,7 @@ rootProject.name = 'constraintlayout'
 
 include ':core',
         ':constraintlayout',
+        ':tools',
         ':compose'
 
 includeBuild 'build-logic'

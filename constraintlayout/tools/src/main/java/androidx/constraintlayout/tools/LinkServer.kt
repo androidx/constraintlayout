@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.constraintlayout
+package androidx.constraintlayout.tools
 
-import androidx.constraintlayout.compose.MotionLayoutDebugFlags
 import androidx.constraintlayout.core.state.Registry
 import java.io.DataInputStream
 import java.io.DataOutputStream
@@ -23,7 +22,7 @@ import java.net.ServerSocket
 import java.net.Socket
 import kotlin.concurrent.thread
 
-class DebugServer {
+class LinkServer {
     private var server: ServerSocket
     private var port = 9999
 
@@ -34,6 +33,12 @@ class DebugServer {
     private var GET_LAYOUT_LIST = 5
     private var GET_CURRENT_LAYOUT = 6
     private var UPDATE_LAYOUT_DIMENSIONS = 7
+
+    enum class MotionLayoutDebugFlags {
+        NONE,
+        SHOW_ALL,
+        UNKNOWN
+    }
 
     init {
         server = ServerSocket(port)

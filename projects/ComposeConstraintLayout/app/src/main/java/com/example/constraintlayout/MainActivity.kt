@@ -14,15 +14,16 @@ import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.ComposeView
 import androidx.constraintlayout.compose.*
 import androidx.constraintlayout.coreAndroid.PhoneState
+import androidx.constraintlayout.tools.LinkServer
 import com.google.accompanist.coil.rememberCoilPainter
 
 class MainActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
-    private var composeNum = 38
+    private var composeNum = 37
     private var MAX = 39
 
     var map = HashMap<Int, String>();
-    val debugServer = DebugServer()
+    val linkServer = LinkServer()
 
     init {
 
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         map.put(31, "Cycle RotationXY")
 
         defineDesignElements()
-        debugServer.start()
+        linkServer.start()
     }
 
     private fun defineDesignElements() {
@@ -143,7 +144,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        debugServer.stop()
+        linkServer.stop()
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
