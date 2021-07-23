@@ -1,4 +1,6 @@
 plugins {
+    id("org.jetbrains.kotlin.jvm") version "1.4.31" 
+    id 'androidx.build.base'
     id 'androidx.build.java-library'
     id 'androidx.build.publishing'
 }
