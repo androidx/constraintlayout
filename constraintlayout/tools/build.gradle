@@ -1,0 +1,21 @@
+plugins {
+    id 'androidx.build.java-library'
+    id 'androidx.build.publishing'
+}
+
+globalConfig {
+    pomName = 'Android ConstraintLayout Tools'
+    pomDescription = 'ConstraintLayout Tools'
+}
+
+dependencies {
+    implementation project(':core')
+    testImplementation "junit:junit:4.13.1"
+}
+
+configurations.all {
+    resolutionStrategy.dependencySubstitution {
+        substitute module("androidx.constraintlayout:constraintlayout-core") using project(":core") because "we work with the unreleased development version"
+    }
+}
+
