@@ -680,6 +680,63 @@ public class CLParserTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void testFormatting6() {
+        String test = "{ root: {interpolated: {left: 0, top: 0, right: 800, bottom: 772}}, " +
+                "button: {interpolated: {left: 0, top: 372, right: 800, bottom: 401}}, " +
+                "text1: {interpolated: {left: 100, top: 285, right: 208, bottom: 301}}, " +
+                "text2: {interpolated: {left: 723, top: 736, right: 780, bottom: 752}}, " +
+                "g1: {type: 'vGuideline',interpolated: {left: 100, top: 0, right: 100, bottom: 772}}, }";
+        try {
+            CLObject parsedContent = CLParser.parse(test);
+            assertEquals("{\n" +
+                    "  root: { interpolated: { left: 0, top: 0, right: 800, bottom: 772 } },\n" +
+                    "  button: { interpolated: { left: 0, top: 372, right: 800, bottom: 401 } },\n" +
+                    "  text1: { interpolated: { left: 100, top: 285, right: 208, bottom: 301 } },\n" +
+                    "  text2: { interpolated: { left: 723, top: 736, right: 780, bottom: 752 } },\n" +
+                    "  g1: {\n" +
+                    "    type: 'vGuideline',\n" +
+                    "    interpolated: { left: 100, top: 0, right: 100, bottom: 772 }\n" +
+                    "  }\n" +
+                    "}", parsedContent.toFormattedJSON());
+        } catch (CLParsingException e) {
+            System.err.println("Exception " + e.reason());
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testFormatting7() {
+        String test = "{ root: {left: 0, top: 0, right: 800, bottom: 772}, " +
+                "button: {left: 0, top: 372, right: 800, bottom: 401}, ";
+        try {
+            CLObject parsedContent = CLParser.parse(test);
+            assertEquals("{\n" +
+                    "  root: { left: 0, top: 0, right: 800, bottom: 772 },\n" +
+                    "  button: { left: 0, top: 372, right: 800, bottom: 401 }\n" +
+                    "}", parsedContent.toFormattedJSON());
+        } catch (CLParsingException e) {
+            System.err.println("Exception " + e.reason());
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testFormatting8() {
+        String test = "{ root: { bottom: 772}, " +
+                "button: { bottom: 401 }, ";
+        try {
+            CLObject parsedContent = CLParser.parse(test);
+            assertEquals("{\n" +
+                    "  root: { bottom: 772 },\n" +
+                    "  button: { bottom: 401 }\n" +
+                    "}", parsedContent.toFormattedJSON());
+        } catch (CLParsingException e) {
+            System.err.println("Exception " + e.reason());
+            e.printStackTrace();
+        }
+    }
 }
 
 

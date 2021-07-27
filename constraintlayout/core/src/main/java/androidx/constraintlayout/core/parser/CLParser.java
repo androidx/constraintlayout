@@ -124,6 +124,10 @@ public class CLParser {
             if (c == '}' || c == ']') {
               currentElement = currentElement.getContainer();
               currentElement.setEnd(i - 1);
+              if (currentElement instanceof CLKey) {
+                currentElement = currentElement.getContainer();
+                currentElement.setEnd(i - 1);
+              }
             }
           }
         }

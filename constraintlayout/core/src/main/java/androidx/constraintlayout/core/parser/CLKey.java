@@ -48,6 +48,8 @@ public class CLKey extends CLContainer {
     return key;
   }
 
+  public String getName() { return content(); }
+
   protected String toJSON() {
     if (mElements.size() > 0) {
       return getDebugName() + content() + ": " + mElements.get(0).toJSON();
