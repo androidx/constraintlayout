@@ -64,9 +64,11 @@ public class CLContainer extends CLElement {
 
   public boolean has(String name) {
     for (CLElement element : mElements) {
-      CLKey key = (CLKey) element;
-      if (key.content().equals(name)) {
-        return true;
+      if (element instanceof CLKey) {
+        CLKey key = (CLKey) element;
+        if (key.content().equals(name)) {
+          return true;
+        }
       }
     }
     return false;

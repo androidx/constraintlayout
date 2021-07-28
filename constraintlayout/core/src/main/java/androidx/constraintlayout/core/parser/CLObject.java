@@ -15,7 +15,9 @@
  */
 package androidx.constraintlayout.core.parser;
 
-public class CLObject extends CLContainer {
+import java.util.Iterator;
+
+public class CLObject extends CLContainer implements Iterable<CLKey>{
 
   public CLObject(char[] content) {
     super(content);
@@ -62,4 +64,28 @@ public class CLObject extends CLContainer {
     return json.toString();
   }
 
+  @Override
+  public Iterator iterator() {
+    return new CLObjectIterator(this);
+  }
+
+  private class CLObjectIterator implements Iterator {
+    CLObject myObject;
+    int index = 0;
+    public CLObjectIterator(CLObject clObject) {
+      myObject = clObject;
+    }
+
+    @Override
+    public boolean hasNext() {
+      return index < myObject.size();
+    }
+
+    @Override
+    public Object next() {
+      CLKey key = (CLKey) myObject.mElements.get(index);
+      index++;
+      return key;
+    }
+  }
 }
