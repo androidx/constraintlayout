@@ -18,6 +18,9 @@ package androidx.constraintlayout.compose
 
 import android.annotation.SuppressLint
 import android.graphics.Matrix
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -42,8 +45,52 @@ import androidx.constraintlayout.core.state.*
 import androidx.constraintlayout.core.state.Dimension
 import androidx.constraintlayout.core.state.Transition
 import androidx.constraintlayout.core.widgets.Optimizer
+import kotlinx.coroutines.channels.Channel
 import org.intellij.lang.annotations.Language
 import java.util.*
+
+private val defaultAnimation = spring<Float>()
+/**
+ * Layout that interpolate its children layout given a set of constraints and
+ * animates any changes to those constraints
+ */
+@Composable
+fun MotionLayout(
+    constraintSet: ConstraintSet,
+    modifier: Modifier = Modifier,
+    animationSpec: AnimationSpec<Float> = defaultAnimation,
+    finishedListener: (() -> Unit)? = null,
+    content: @Composable MotionLayoutScope.() -> Unit
+) {
+    var currentConstraints by remember { mutableStateOf(constraintSet) }
+    val progress = remember { Animatable(0.0f) }
+    val channel = remember { Channel<ConstraintSet>(Channel.CONFLATED) }
+
+    SideEffect {
+        channel.trySend(constraintSet)
+    }
+
+    LaunchedEffect(channel) {
+        for (constraints in channel) {
+            val newConstraints = channel.tryReceive().getOrNull() ?: constraints
+            if (newConstraints != currentConstraints) {
+                progress.snapTo(0f)
+                progress.animateTo(1f, animationSpec)
+
+                currentConstraints = newConstraints
+                finishedListener?.invoke()
+            }
+        }
+
+    }
+
+    MotionLayout(
+        start = currentConstraints,
+        end = constraintSet,
+        progress = progress.value,
+        modifier = modifier,
+        content = content)
+}
 
 /**
  * Layout that interpolate its children layout given two sets of constraint and
