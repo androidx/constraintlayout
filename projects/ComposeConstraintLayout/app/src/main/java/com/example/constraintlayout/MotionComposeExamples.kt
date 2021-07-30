@@ -27,6 +27,61 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.*
 import java.util.*
 
+
+@Preview(group = "constraintlayout1")
+@Composable
+public fun AnimatedConstraintLayoutExample1() {
+    var animateToEnd by remember { mutableStateOf(false) }
+
+    val baseConstraintSetStart = """
+            {
+                box: {
+                    width: 100,
+                    height: 150,
+                    centerHorizontally: 'parent',
+                    top: ['parent', 'top', 16]
+                }
+            }
+
+        """
+
+    val baseConstraintSetEnd = """
+            {
+                box: {
+                    width: 100,
+                    height: 150,
+                    centerHorizontally: 'parent',
+                    bottom: ['parent', 'bottom', 16]
+                }
+            }
+        """
+
+    val cs1 = ConstraintSet(baseConstraintSetStart)
+    val cs2 = ConstraintSet(baseConstraintSetEnd)
+
+    val constraints = if (animateToEnd) cs2 else cs1
+    Column {
+        Button(onClick = { animateToEnd = !animateToEnd }) {
+            Text(text = "Run")
+        }
+        ConstraintLayout(
+            constraints,
+            animateChanges = true,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+        ) {
+            Box(
+                modifier = Modifier
+                    .layoutId("box")
+                    .width(100.dp)
+                    .height(150.dp)
+                    .background(Color.Blue)
+            )
+        }
+    }
+}
+
 @Preview(group = "motion1")
 @Composable
 public fun MotionExample1() {
@@ -78,8 +133,9 @@ public fun MotionExample1() {
         Button(onClick = { animateToEnd = !animateToEnd }) {
             Text(text = "Run")
         }
-        MotionLayout(
+        ConstraintLayout(
             constraints,
+            animateChanges = true,
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)

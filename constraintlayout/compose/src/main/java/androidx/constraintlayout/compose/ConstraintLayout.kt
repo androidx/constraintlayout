@@ -21,6 +21,9 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.annotation.FloatRange
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -63,6 +66,7 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviou
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.TRY_GIVEN_DIMENSIONS
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.USE_GIVEN_DIMENSIONS
+import kotlinx.coroutines.channels.Channel
 import org.intellij.lang.annotations.Language
 import java.lang.StringBuilder
 import java.util.*
@@ -209,6 +213,11 @@ private class ConstraintSetForInlineDsl(
  *
  * Example usage:
  * @sample androidx.compose.foundation.layout.samples.DemoConstraintSet
+ *
+ * When recomposed with different constraintsets, you can use the animateChanges parameter
+ * to animate the layout changes (animationSpec and finishedAnimationListener attributes can
+ * also be useful in this mode). This is only intended for basic transitions, if more control
+ * is needed, we recommend using MotionLayout instead.
  */
 @Suppress("NOTHING_TO_INLINE")
 @Composable
@@ -216,50 +225,94 @@ inline fun ConstraintLayout(
     constraintSet: ConstraintSet,
     modifier: Modifier = Modifier,
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
+    animateChanges: Boolean = false,
+    animationSpec: AnimationSpec<Float> = tween<Float>(),
+    noinline finishedAnimationListener: (() -> Unit)? = null,
     noinline content: @Composable () -> Unit
 ) {
-    val needsUpdate = remember {
-        mutableStateOf(0L)
-    }
+    if (animateChanges) {
+        var startConstraint by remember { mutableStateOf(constraintSet) }
+        var endConstraint by remember { mutableStateOf(constraintSet) }
+        val progress = remember { Animatable(0.0f) }
+        val channel = remember { Channel<ConstraintSet>(Channel.CONFLATED) }
+        val direction = remember { mutableStateOf(1) }
 
-    val measurer = remember { Measurer() }
-    val measurePolicy = rememberConstraintLayoutMeasurePolicy(optimizationLevel, needsUpdate, constraintSet, measurer)
-    if (constraintSet is EditableJSONLayout) {
-        constraintSet.setUpdateFlag(needsUpdate)
-    }
-    if (constraintSet is JSONConstraintSet) {
-        measurer.addLayoutInformationReceiver(constraintSet)
+        SideEffect {
+            channel.trySend(constraintSet)
+        }
+
+        LaunchedEffect(channel) {
+            for (constraints in channel) {
+                val newConstraints = channel.tryReceive().getOrNull() ?: constraints
+                val currentConstraints = if (direction.value == 1) startConstraint else endConstraint
+                if (newConstraints != currentConstraints) {
+                    if (direction.value == 1) {
+                        endConstraint = newConstraints
+                    } else {
+                        startConstraint = newConstraints
+                    }
+                    progress.animateTo(direction.value.toFloat(), animationSpec)
+                    direction.value = if (direction.value == 1) 0 else 1
+                    finishedAnimationListener?.invoke()
+                }
+            }
+        }
+
+        MotionLayout(
+            start = startConstraint,
+            end = endConstraint,
+            progress = progress.value,
+            modifier = modifier,
+            content = { content() })
     } else {
-        measurer.addLayoutInformationReceiver(null)
-    }
+        val needsUpdate = remember {
+            mutableStateOf(0L)
+        }
 
-    val forcedScaleFactor = measurer.forcedScaleFactor
-    if (!forcedScaleFactor.isNaN()) {
-        var mod = modifier.scale(measurer.forcedScaleFactor)
-        Box {
+        val measurer = remember { Measurer() }
+        val measurePolicy = rememberConstraintLayoutMeasurePolicy(
+            optimizationLevel,
+            needsUpdate,
+            constraintSet,
+            measurer
+        )
+        if (constraintSet is EditableJSONLayout) {
+            constraintSet.setUpdateFlag(needsUpdate)
+        }
+        if (constraintSet is JSONConstraintSet) {
+            measurer.addLayoutInformationReceiver(constraintSet)
+        } else {
+            measurer.addLayoutInformationReceiver(null)
+        }
+
+        val forcedScaleFactor = measurer.forcedScaleFactor
+        if (!forcedScaleFactor.isNaN()) {
+            var mod = modifier.scale(measurer.forcedScaleFactor)
+            Box {
+                @Suppress("DEPRECATION")
+                MultiMeasureLayout(
+                    modifier = mod.semantics { designInfoProvider = measurer },
+                    measurePolicy = measurePolicy,
+                    content = {
+                        measurer.createDesignElements()
+                        content()
+                    }
+                )
+                with(measurer) {
+                    drawDebugBounds(forcedScaleFactor)
+                }
+            }
+        } else {
             @Suppress("DEPRECATION")
             MultiMeasureLayout(
-                modifier = mod.semantics { designInfoProvider = measurer },
+                modifier = modifier.semantics { designInfoProvider = measurer },
                 measurePolicy = measurePolicy,
                 content = {
                     measurer.createDesignElements()
                     content()
                 }
             )
-            with(measurer) {
-                drawDebugBounds(forcedScaleFactor)
-            }
         }
-    } else {
-        @Suppress("DEPRECATION")
-        MultiMeasureLayout(
-            modifier = modifier.semantics { designInfoProvider = measurer },
-            measurePolicy = measurePolicy,
-            content = {
-                measurer.createDesignElements()
-                content()
-            }
-        )
     }
 }
 
