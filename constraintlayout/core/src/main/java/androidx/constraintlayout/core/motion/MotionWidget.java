@@ -54,7 +54,7 @@ public class MotionWidget implements TypedValues {
     public static final int MATCH_CONSTRAINT_WRAP = ConstraintWidget.MATCH_CONSTRAINT_WRAP;
 
     /**
-     * @hide
+     * @suppress
      */
     public static class Motion {
         public int mAnimateRelativeTo = UNSET;

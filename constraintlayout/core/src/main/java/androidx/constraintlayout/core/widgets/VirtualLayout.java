@@ -20,7 +20,7 @@ import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure;
 import java.util.HashSet;
 
 /**
- * @hide
+ * @suppress
  *
  * Base class for Virtual layouts
  *

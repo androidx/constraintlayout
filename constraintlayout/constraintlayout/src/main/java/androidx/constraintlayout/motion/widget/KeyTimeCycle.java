@@ -37,7 +37,7 @@ import java.util.HashSet;
  * Defines container for a key frame of for storing KeyTimeCycles.
  * KeyTimeCycles change post layout values of a view.
  *
- * @hide
+ * @suppress
  */
 public class KeyTimeCycle extends Key {
     static final String NAME = "KeyTimeCycle";

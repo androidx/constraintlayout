@@ -373,7 +373,7 @@ public class MotionScene {
      * @param motionLayout
      * @param currentState
      * @return
-     * @hide
+     * @suppress
      */
     boolean autoTransition(MotionLayout motionLayout, int currentState) {
         if (isProcessingTouch()) {

@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 /**
- * @hide
+ * @suppress
  * <b>Added in 1.1</b>
  * <p>
  *     This class manages a set of referenced widgets. HelperWidget objects can be created to act upon the set
@@ -43,37 +43,37 @@ import java.util.HashMap;
 public abstract class ConstraintHelper extends View {
 
     /**
-     * @hide
+     * @suppress
      */
     protected int[] mIds = new int[32];
     /**
-     * @hide
+     * @suppress
      */
     protected int mCount;
 
     /**
-     * @hide
+     * @suppress
      */
     protected Context myContext;
     /**
-     * @hide
+     * @suppress
      */
     protected Helper mHelperWidget;
     /**
-     * @hide
+     * @suppress
      */
     protected boolean mUseViewMeasure = false;
     /**
-     * @hide
+     * @suppress
      */
     protected String mReferenceIds;
     /**
-     * @hide
+     * @suppress
      */
     protected String mReferenceTags;
 
     /**
-     * @hide
+     * @suppress
      */
     private View[] mViews = null;
 
@@ -98,7 +98,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     protected void init(AttributeSet attrs) {
         if (attrs != null) {
@@ -201,7 +201,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     private void addRscID(int id) {
         if (id == getId()) {
@@ -215,7 +215,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     @Override
     public void onDraw(Canvas canvas) {
@@ -223,7 +223,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -235,7 +235,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
+     * @suppress
      * Allows a helper to replace the default ConstraintWidget in LayoutParams by its own subclass
      */
     public void validateParams() {
@@ -250,7 +250,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     private void addID(String idString) {
         if (idString == null || idString.length() == 0) {
@@ -276,7 +276,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     private void addTag(String tagString) {
         if (tagString == null || tagString.length() == 0) {
@@ -395,7 +395,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     protected void setIds(String idList) {
         mReferenceIds = idList;
@@ -416,7 +416,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     protected void setReferenceTags(String tagList) {
         mReferenceTags = tagList;
@@ -437,7 +437,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
+     * @suppress
      * @param container
      */
     protected void applyLayoutFeatures(ConstraintLayout container) {
@@ -459,7 +459,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     protected void applyLayoutFeatures() {
         ViewParent parent = getParent();
@@ -469,12 +469,12 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     protected void applyLayoutFeaturesInConstraintSet(ConstraintLayout container) {}
 
     /**
-     * @hide
+     * @suppress
      * Allows a helper a chance to update its internal object pre layout or set up connections for the pointed elements
      *
      * @param container
@@ -532,7 +532,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
+     * @suppress
      * Allows a helper a chance to update its internal object post layout or set up connections for the pointed elements
      *
      * @param container
@@ -542,7 +542,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
+     * @suppress
      * @param container
      */
     public void updatePostMeasure(ConstraintLayout container) {

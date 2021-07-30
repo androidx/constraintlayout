@@ -27,7 +27,7 @@ import androidx.constraintlayout.motion.widget.MotionInterpolator;
  * ending at 0 velocity.
  * The path is computed such that the velocities are continuous
  *
- * @hide
+ * @suppress
  */
 public class StopLogic extends MotionInterpolator {
     private StopLogicEngine mStopLogicEngine = new StopLogicEngine();

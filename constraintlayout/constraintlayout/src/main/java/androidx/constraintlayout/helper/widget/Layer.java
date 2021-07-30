@@ -53,7 +53,7 @@ public class Layer extends ConstraintHelper {
 
     /**
      * @param attrs
-     * @hide
+     * @suppress
      */
     protected void init(AttributeSet attrs) {
         super.init(attrs);
@@ -103,7 +103,7 @@ public class Layer extends ConstraintHelper {
 
     /**
      * @param container
-     * @hide
+     * @suppress
      */
     @Override
     public void updatePreDraw(ConstraintLayout container) {
@@ -193,7 +193,7 @@ public class Layer extends ConstraintHelper {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     @Override
     public void setVisibility(int visibility) {
@@ -202,7 +202,7 @@ public class Layer extends ConstraintHelper {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     @Override
     public void setElevation(float elevation) {
@@ -212,7 +212,7 @@ public class Layer extends ConstraintHelper {
 
     /**
      * @param container
-     * @hide
+     * @suppress
      */
     @Override
     public void updatePostLayout(ConstraintLayout container) {
@@ -336,7 +336,7 @@ public class Layer extends ConstraintHelper {
     }
 
     /**
-     * @hide
+     * @suppress
      * @param container
      */
     @Override

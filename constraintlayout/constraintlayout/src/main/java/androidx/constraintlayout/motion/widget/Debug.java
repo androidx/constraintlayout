@@ -31,7 +31,7 @@ import static android.view.MotionEvent.ACTION_DOWN;
 
 /**
  * Utilities useful for debugging
- * @hide
+ * @suppress
  */
 @SuppressLint("LogConditional")
 public class Debug {
@@ -42,7 +42,7 @@ public class Debug {
      * @param tag
      * @param msg
      * @param n
-     * @hide
+     * @suppress
      */
     public static void logStack(String tag, String msg, int n) {
         StackTraceElement[] st = new Throwable().getStackTrace();
@@ -61,7 +61,7 @@ public class Debug {
      *
      * @param msg
      * @param n
-     * @hide
+     * @suppress
      */
     public static void printStack(String msg, int n) {
         StackTraceElement[] st = new Throwable().getStackTrace();
@@ -80,7 +80,7 @@ public class Debug {
      *
      * @param view
      * @return name of view
-     * @hide
+     * @suppress
      */
     public static String getName(View view) {
         try {
@@ -132,7 +132,7 @@ public class Debug {
      * @param context
      * @param id
      * @return name of view
-     * @hide
+     * @suppress
      */
     public static String getName(Context context, int id) {
         try {
@@ -152,7 +152,7 @@ public class Debug {
      * @param context
      * @param id
      * @return name of view
-     * @hide
+     * @suppress
      */
     public static String getName(Context context, int []id) {
         try {

@@ -963,7 +963,7 @@ public class ConstraintSet {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     public static class Layout {
         public boolean mIsGuideline = false;
@@ -1511,7 +1511,7 @@ public class ConstraintSet {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     public static class Transform {
         public boolean mApply = false;
@@ -1633,7 +1633,7 @@ public class ConstraintSet {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     public static class PropertySet {
         public boolean mApply = false;
@@ -1673,7 +1673,7 @@ public class ConstraintSet {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     public static class Motion {
         public boolean mApply = false;
@@ -1800,7 +1800,7 @@ public class ConstraintSet {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     public static class Constraint {
         int mViewId;
@@ -3430,14 +3430,14 @@ public class ConstraintSet {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     public void setEditorAbsoluteX(int viewId, int position) {
         get(viewId).layout.editorAbsoluteX = position;
     }
 
     /**
-     * @hide
+     * @suppress
      */
     public void setEditorAbsoluteY(int viewId, int position) {
         get(viewId).layout.editorAbsoluteY = position;
@@ -5257,7 +5257,7 @@ public class ConstraintSet {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     public Constraint getConstraint(int id) {
         if (mConstraints.containsKey(id)) {
@@ -5267,7 +5267,7 @@ public class ConstraintSet {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     public int[] getKnownIds() {
         Integer[] arr = mConstraints.keySet().toArray(new Integer[0]);

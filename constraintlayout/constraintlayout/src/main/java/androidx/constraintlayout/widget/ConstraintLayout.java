@@ -359,11 +359,11 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * <h6>Percent dimension</h6>
  * To use percent, you need to set the following:
  * <ul>
- * <li>The dimension should be set to {@code MATCH_CONSTRAINT} (0dp)
+ * <li>The dimension should be set to {@code MATCH_CONSTRAINT} (0dp)</li>
  * <li>The default should be set to percent {@code app:layout_constraintWidth_default="percent"}
- * or {@code app:layout_constraintHeight_default="percent"}
+ * or {@code app:layout_constraintHeight_default="percent"}</li>
  * <li>Then set the {@code layout_constraintWidth_percent}
- * or {@code layout_constraintHeight_percent} attributes to a value between 0 and 1
+ * or {@code layout_constraintHeight_percent} attributes to a value between 0 and 1</li>
  * </ul>
  * </p>
  * <h5>Ratio</h5>
@@ -485,7 +485,7 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  */
 public class ConstraintLayout extends ViewGroup {
     /**
-     * @hide
+     * @suppress
      */
     public static final String VERSION = "ConstraintLayout-2.1.0";
     private static final String TAG = "ConstraintLayout";
@@ -527,7 +527,7 @@ public class ConstraintLayout extends ViewGroup {
     private SparseArray<ConstraintWidget> mTempMapIdToWidget = new SparseArray<>();
 
     /**
-     * @hide
+     * @suppress
      */
     public final static int DESIGN_INFO_ID = 0;
     private ConstraintsChangedListener mConstraintsChangedListener;
@@ -548,7 +548,7 @@ public class ConstraintLayout extends ViewGroup {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     public void setDesignInformation(int type, Object value1, Object value2) {
         if (type == DESIGN_INFO_ID && value1 instanceof String && value2 instanceof Integer) {
@@ -566,7 +566,7 @@ public class ConstraintLayout extends ViewGroup {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     public Object getDesignInformation(int type, Object value) {
         if (type == DESIGN_INFO_ID && value instanceof String) {
@@ -600,7 +600,7 @@ public class ConstraintLayout extends ViewGroup {
     }
 
     /**
-     * {@hide}
+     * @suppress
      */
     @Override
     public void setId(int id) {
@@ -995,7 +995,7 @@ public class ConstraintLayout extends ViewGroup {
     }
 
     /**
-     * {@hide}
+     * @suppress
      */
     @Override
     public void onViewAdded(View view) {
@@ -1023,7 +1023,7 @@ public class ConstraintLayout extends ViewGroup {
     }
 
     /**
-     * {@hide}
+     * @suppress
      */
     @Override
     public void onViewRemoved(View view) {
@@ -1519,7 +1519,7 @@ public class ConstraintLayout extends ViewGroup {
     /**
      * @param view
      * @return
-     * @hide
+     * @suppress
      */
     public final ConstraintWidget getViewWidget(View view) {
         if (view == this) {
@@ -1539,7 +1539,7 @@ public class ConstraintLayout extends ViewGroup {
 
     /**
      * @param metrics
-     * @hide Fills metrics object
+     * @suppress Fills metrics object
      */
     public void fillMetrics(Metrics metrics) {
         mMetrics = metrics;
@@ -1927,7 +1927,7 @@ public class ConstraintLayout extends ViewGroup {
     }
 
     /**
-     * {@hide}
+     * @suppress
      */
     @Override
     public LayoutParams generateLayoutParams(AttributeSet attrs) {
@@ -1970,14 +1970,14 @@ public class ConstraintLayout extends ViewGroup {
     /**
      * @param id the view id
      * @return the child view, can return null
-     * @hide Return a direct child view by its id if it exists
+     * @suppress Return a direct child view by its id if it exists
      */
     public View getViewById(int id) {
         return mChildrenByIds.get(id);
     }
 
     /**
-     * @hide
+     * @suppress
      */
     @Override
     protected void dispatchDraw(Canvas canvas) {
@@ -2473,8 +2473,8 @@ public class ConstraintLayout extends ViewGroup {
          * <li>{@link #MATCH_CONSTRAINT_WRAP} -- DEPRECATED -- use instead WRAP_CONTENT and
          * constrainedWidth=true<br>
          * The dimension will be the same as WRAP_CONTENT, unless the size ends
-         * up too large for the constraints; in that case the dimension will expand up to the constraints, minus margins</li>
-         * This attribute may not be applied if the widget is part of a chain in that dimension.
+         * up too large for the constraints; in that case the dimension will expand up to the constraints, minus margins
+         * This attribute may not be applied if the widget is part of a chain in that dimension.</li>
          * <li>{@link #MATCH_CONSTRAINT_PERCENT} -- The dimension will be a percent of another
          * widget (by default, the parent)</li>
          * </ul>
@@ -2489,8 +2489,8 @@ public class ConstraintLayout extends ViewGroup {
          * <li>{@link #MATCH_CONSTRAINT_WRAP} -- DEPRECATED -- use instead WRAP_CONTENT and
          * constrainedWidth=true<br>
          * The dimension will be the same as WRAP_CONTENT, unless the size ends
-         * up too large for the constraints; in that case the dimension will expand up to the constraints, minus margins</li>
-         * This attribute may not be applied if the widget is part of a chain in that dimension.
+         * up too large for the constraints; in that case the dimension will expand up to the constraints, minus margins
+         * This attribute may not be applied if the widget is part of a chain in that dimension.</li>
          * <li>{@link #MATCH_CONSTRAINT_PERCENT} -- The dimension will be a percent of another
          * widget (by default, the parent)</li>
          * </ul>
@@ -2609,7 +2609,7 @@ public class ConstraintLayout extends ViewGroup {
         ConstraintWidget widget = new ConstraintWidget();
 
         /**
-         * @hide
+         * @suppress
          */
         public ConstraintWidget getConstraintWidget() {
             return widget;
@@ -2617,7 +2617,7 @@ public class ConstraintLayout extends ViewGroup {
 
         /**
          * @param text
-         * @hide
+         * @suppress
          */
         public void setWidgetDebugName(String text) {
             widget.setDebugName(text);
@@ -3611,7 +3611,7 @@ public class ConstraintLayout extends ViewGroup {
     }
 
     /**
-     * {@hide}
+     * @suppress
      *
      * @return
      */
