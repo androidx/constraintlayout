@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 //apply plugin: 'maven'
 apply plugin: 'kotlin-android'
 
-def compose_version = '1.0.0-rc02'
+def compose_version = '1.0.0'
 
 android {
     compileSdkVersion 30
