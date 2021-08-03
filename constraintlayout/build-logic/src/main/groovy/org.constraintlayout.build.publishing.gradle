@@ -1,0 +1,93 @@
+import androidx.constraintlayout.GenerateSourcePropsTask
+
+plugins {
+    id 'androidx.build.base'
+    id 'maven-publish'
+}
+
+group = 'org.constraintlayout'
+def aid = project.name != 'constraintlayout' ? "constraintlayout-${project.name}" : project.name
+def distRepo = rootProject.layout.buildDirectory.dir("repo")
+
+publishing {
+    repositories {
+        maven {
+            name = "maven"
+            url = globalConfig.repoLocation
+        }
+        maven {
+            name = "dist"
+            url = distRepo
+        }
+    }
+}
+
+task androidSourceJar(type: Jar) {
+    if (project.hasProperty('android')) {
+        from android.sourceSets.main.java.srcDirs
+        archiveClassifier.set('sources')
+    }
+}
+
+components.configureEach {component ->
+    if (component.name in ['release', 'java']) {
+        publishing.publications {
+            maven(MavenPublication) {
+                from component
+                artifactId aid
+                if (project.hasProperty('android')) {
+		    artifact androidSourceJar
+		}
+            }
+        }
+    }
+}
+
+publishing.publications.configureEach {
+    pom {
+        name = globalConfig.pomName
+        description = globalConfig.pomDescription
+        url = 'http://tools.android.com'
+        inceptionYear = '2007'
+
+        licenses {
+            license {
+                name = 'The Apache Software License, Version 2.0'
+                url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution = 'repo'
+            }
+        }
+
+        scm {
+            url = 'https://github.com/androidx/constraintlayout'
+            connection = 'git@github.com:androidx/constraintlayout.git'
+        }
+        developers {
+            developer {
+                name = 'The Android Open Source Project'
+            }
+        }
+    }
+}
+
+def generateSourceProps = tasks.register("generateSourceProps", GenerateSourcePropsTask) {
+    outputDirectory.set(layout.buildDirectory.dir("source-props"))
+}
+
+def releaseZip = tasks.register("releaseZip", Zip) {
+    dependsOn "publishMavenPublicationToDistRepository"
+
+    String path = "${project.group.replace('.', '/')}/${aid}/${project.version}"
+    //destinationDirectory = "/Users/nicolasroard/.m2/repository/" //rootProject.layout.buildDirectory.dir("dist")
+    destinationDirectory = rootProject.layout.buildDirectory.dir("dist")
+    archiveBaseName = "${aid}"
+    archiveVersion = globalConfig.buildNumber.orElse(project.version)
+    from generateSourceProps
+    into(path) {
+        from distRepo.map { new File("$it/$path") }
+    }
+}
+
+tasks.register("dist") {
+    dependsOn releaseZip
+}
