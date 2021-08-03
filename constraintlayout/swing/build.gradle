@@ -1,17 +1,16 @@
 plugins {
-    id 'androidx.build.base'
     id 'androidx.build.java-library'
     id 'org.constraintlayout.build.publishing'
-    id 'org.jetbrains.kotlin.jvm' version '1.4.31'
 }
 
 globalConfig {
-    pomName = 'ConstraintLayout Tools'
-    pomDescription = 'ConstraintLayout Tools'
+    pomName = 'ConstraintLayout Swing'
+    pomDescription = 'ConstraintLayout Swing Layout Manager'
 }
 
 dependencies {
     implementation project(':core')
+    implementation "org.jetbrains:annotations:20.1.0"
     testImplementation "junit:junit:4.13.1"
 }
 

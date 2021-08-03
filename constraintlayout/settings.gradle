@@ -4,7 +4,7 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         google()
-        jcenter()
+        mavenCentral()
     }
 
     plugins {
@@ -24,7 +24,8 @@ rootProject.name = 'constraintlayout'
 include ':core',
         ':constraintlayout',
         ':tools',
-        ':compose'
+        ':compose',
+        ':swing'
 
 includeBuild 'build-logic'
 
@@ -34,7 +35,7 @@ dependencyResolutionManagement {
         google()
         maven { url "../../prebuilts/tools/common/m2/repository" }
         maven { url "https://androidx.dev/snapshots/builds/7352378/artifacts/repository/" }
-        jcenter()
+        mavenCentral()
     }
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
 }
