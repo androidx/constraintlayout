@@ -110,14 +110,14 @@ public class ReactiveGuide extends View implements SharedValues.SharedValuesList
     }
 
     /**
-     * {@hide
+     * @suppress
      */
     @Override
     public void setVisibility(int visibility) {
     }
 
     /**
-     * {@hide
+     * @suppress
      */
     @SuppressLint("MissingSuperCall")
     @Override
@@ -125,7 +125,7 @@ public class ReactiveGuide extends View implements SharedValues.SharedValuesList
     }
 
     /**
-     * {@hide
+     * @suppress
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

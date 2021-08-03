@@ -33,7 +33,7 @@ import java.lang.reflect.Method;
 /**
  * This engine allows manipulation of attributes by wave shapes oscillating in time
  *
- * @hide
+ * @suppress
  */
 public abstract class ViewTimeCycle extends TimeCycleSplineSet {
     private static final String TAG = "ViewTimeCycle";

@@ -24,7 +24,7 @@ import java.util.HashMap;
 /**
  * Defines non standard Attributes
  *
- * @hide
+ * @suppress
  */
 public class CustomAttribute {
     private static final String TAG = "TransitionLayout";

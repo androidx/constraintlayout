@@ -40,7 +40,7 @@ import java.util.Locale;
  * Defines container for a key frame of for storing KeyAttributes.
  * KeyAttributes change post layout values of a view.
  *
- * @hide
+ * @suppress
  */
 
 public class KeyTrigger extends Key {

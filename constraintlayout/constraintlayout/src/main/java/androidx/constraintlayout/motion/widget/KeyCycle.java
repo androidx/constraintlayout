@@ -37,7 +37,7 @@ import java.util.HashSet;
 /**
  * Provide the passive data structure to get KeyPosition information form XML
  *
- * @hide
+ * @suppress
  */
 public class KeyCycle extends Key {
     private static final String TAG = "KeyCycle";

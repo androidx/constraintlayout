@@ -77,7 +77,7 @@ import kotlin.collections.HashMap
  * Layout that positions its children according to the constraints between them.
  *
  * Example usage:
- * @sample androidx.compose.foundation.layout.samples.DemoInlineDSL
+ * @sample androidx.constraintlayout.compose.samples.DemoInlineDSL
  */
 @Composable
 inline fun ConstraintLayout(
@@ -212,7 +212,7 @@ private class ConstraintSetForInlineDsl(
  * Layout that positions its children according to the constraints between them.
  *
  * Example usage:
- * @sample androidx.compose.foundation.layout.samples.DemoConstraintSet
+ * @sample androidx.constraintlayout.compose.samples.DemoConstraintSet
  *
  * When recomposed with different constraintsets, you can use the animateChanges parameter
  * to animate the layout changes (animationSpec and finishedAnimationListener attributes can

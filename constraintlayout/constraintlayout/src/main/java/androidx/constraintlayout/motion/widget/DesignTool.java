@@ -64,7 +64,7 @@ interface ProxyInterface {
 /**
  * Utility class to manipulate MotionLayout from the layout editor
  *
- * @hide
+ * @suppress
  */
 public class DesignTool implements ProxyInterface {
 
@@ -255,7 +255,7 @@ public class DesignTool implements ProxyInterface {
 
     /**
      * @param position
-     * @hide
+     * @suppress
      */
     public void setToolPosition(float position) {
         if (mMotionLayout.mScene == null) {
@@ -456,7 +456,7 @@ public class DesignTool implements ProxyInterface {
      * @param x
      * @param y
      * @return
-     * @hide
+     * @suppress
      */
     public float getKeyFramePosition(Object view, int type, float x, float y) {
         if (!(view instanceof View)) {
@@ -476,7 +476,7 @@ public class DesignTool implements ProxyInterface {
      * @param position
      * @param name
      * @param value
-     * @hide
+     * @suppress
      */
     public void setKeyFrame(Object view, int position, String name, Object value) {
         if (DEBUG) {
@@ -500,7 +500,7 @@ public class DesignTool implements ProxyInterface {
      * @param x
      * @param y
      * @return
-     * @hide
+     * @suppress
      */
     public boolean setKeyFramePosition(Object view, int position, int type, float x, float y) {
         if (!(view instanceof View)) {
@@ -528,7 +528,7 @@ public class DesignTool implements ProxyInterface {
     /**
      * @param view
      * @param debugMode
-     * @hide
+     * @suppress
      */
     public void setViewDebug(Object view, int debugMode) {
         if (!(view instanceof View)) {

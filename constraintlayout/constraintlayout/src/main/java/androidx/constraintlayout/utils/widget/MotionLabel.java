@@ -55,11 +55,13 @@ import androidx.core.widget.TextViewCompat;
  * for example it uses setTextPanX(float x) where 0 is centered -1 is left +1 is right
  *
  * It supports the following features:
- * <ul>color outlines</ul>
- * <ul>Textured text</ul>
- * <ul>Blured Textured Text</ul>
- * <ul>Scrolling of Texture in text</ul>
- * <ul>PanX, PanY instead of Gravity</ul>
+ * <ul>
+ * <li>color outlines</li>
+ * <li>Textured text</li>
+ * <li>Blured Textured Text</li>
+ * <li>Scrolling of Texture in text</li>
+ * <li>PanX, PanY instead of Gravity</li>
+ * </ul>
  */
 public class MotionLabel extends View implements FloatLayout {
     static String TAG = "MotionLabel";

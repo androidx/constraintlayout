@@ -37,10 +37,10 @@ import java.util.Arrays;
  *
  * XML attributes that are needed:
  * <ul>
- *     <li>constraint_referenced_ids = "view2, view3, view4,view5,view6"</li>. It receives id's of the views that will add the references.
- *     <li>circularflow_viewCenter = "view1"</li>. It receives the id of the view of the center where the views received in constraint_referenced_ids will be referenced.
- *     <li>circularflow_angles = "45,90,135,180,225"</li>. Receive the angles that you will assign to each view.
- *     <li>circularflow_radiusInDP = "90,100,110,120,130"</li>. Receive the radios in DP that you will assign to each view.
+ *     <li>constraint_referenced_ids = "view2, view3, view4,view5,view6". It receives id's of the views that will add the references.</li>
+ *     <li>circularflow_viewCenter = "view1". It receives the id of the view of the center where the views received in constraint_referenced_ids will be referenced.</li>
+ *     <li>circularflow_angles = "45,90,135,180,225". Receive the angles that you will assign to each view.</li>
+ *     <li>circularflow_radiusInDP = "90,100,110,120,130". Receive the radios in DP that you will assign to each view.</li>
  * </ul>
  *
  * Example in XML:
@@ -67,42 +67,42 @@ public class CircularFlow extends VirtualLayout {
     private static int DEFAULT_RADIUS = 0;
     private static float DEFAULT_ANGLE = 0F;
     /**
-     * @hide
+     * @suppress
      */
     private float[] mAngles;
 
     /**
-     * @hide
+     * @suppress
      */
     private int[] mRadius;
 
     /**
-     * @hide
+     * @suppress
      */
     private int mCountRadius;
 
     /**
-     * @hide
+     * @suppress
      */
     private int mCountAngle;
 
     /**
-     * @hide
+     * @suppress
      */
     private String mReferenceAngles;
 
     /**
-     * @hide
+     * @suppress
      */
     private String mReferenceRadius;
 
     /**
-     * @hide
+     * @suppress
      */
     private Float mReferenceDefaultAngle;
 
     /**
-     * @hide
+     * @suppress
      */
     private Integer mReferenceDefaultRadius;
 
@@ -356,7 +356,7 @@ public class CircularFlow extends VirtualLayout {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     private float[] removeAngle(float[] angles, int index) {
         if (angles == null
@@ -369,7 +369,7 @@ public class CircularFlow extends VirtualLayout {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     private int[] removeRadius(int[] radius, int index) {
         if (radius == null
@@ -382,7 +382,7 @@ public class CircularFlow extends VirtualLayout {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     private void setAngles(String idList) {
         if (idList == null) {
@@ -402,7 +402,7 @@ public class CircularFlow extends VirtualLayout {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     private void setRadius(String idList) {
         if (idList == null) {
@@ -422,7 +422,7 @@ public class CircularFlow extends VirtualLayout {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     private void addAngle(String angleString) {
         if (angleString == null || angleString.length() == 0) {
@@ -443,7 +443,7 @@ public class CircularFlow extends VirtualLayout {
     }
 
     /**
-     * @hide
+     * @suppress
      */
     private void addRadius(String radiusString) {
         if (radiusString == null || radiusString.length() == 0) {

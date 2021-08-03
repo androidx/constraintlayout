@@ -20,7 +20,7 @@ import java.util.Arrays;
 /**
  * This generates variable frequency oscillation curves
  *
- * @hide
+ * @suppress
  */
 public class Oscillator {
     public static String TAG = "Oscillator";

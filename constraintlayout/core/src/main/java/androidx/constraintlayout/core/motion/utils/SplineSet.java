@@ -27,7 +27,7 @@ import java.util.Arrays;
 /**
  * This engine allows manipulation of attributes by Curves
  *
- * @hide
+ * @suppress
  */
 
 public abstract class SplineSet {

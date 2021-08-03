@@ -19,7 +19,7 @@ package androidx.constraintlayout.core.motion.utils;
 /**
  * This performs a simple linear interpolation in multiple dimensions
  *
- * @hide
+ * @suppress
  */
 public class LinearCurveFit extends CurveFit {
     private static final String TAG = "LinearCurveFit";

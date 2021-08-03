@@ -27,7 +27,7 @@ import java.util.Comparator;
  * Provide the engine for executing cycles.
  * KeyCycleOscillator
  *
- * @hide
+ * @suppress
  */
 public abstract class KeyCycleOscillator {
     private static final String TAG = "KeyCycleOscillator";

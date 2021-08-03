@@ -48,7 +48,7 @@ public class Group extends ConstraintHelper {
     }
 
     /**
-     * @hide
+     * @suppress
      * @param attrs
      */
     protected void init(AttributeSet attrs) {
@@ -75,7 +75,7 @@ public class Group extends ConstraintHelper {
     }
 
     /**
-     * @hide
+     * @suppress
      * @param container
      */
     @Override
@@ -84,7 +84,7 @@ public class Group extends ConstraintHelper {
     }
     
     /**
-     * @hide
+     * @suppress
      * @param container
      */
     @Override

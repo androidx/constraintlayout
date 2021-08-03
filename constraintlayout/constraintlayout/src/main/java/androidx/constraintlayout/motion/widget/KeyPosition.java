@@ -36,7 +36,7 @@ import java.util.HashMap;
 /**
  * Provide the passive data structure to get KeyPosition information form XML
  *
- * @hide
+ * @suppress
  */
 
 public class KeyPosition extends KeyPositionBase {

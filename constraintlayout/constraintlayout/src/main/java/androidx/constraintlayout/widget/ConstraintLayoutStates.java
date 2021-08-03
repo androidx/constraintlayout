@@ -32,7 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * @hide
+ * @suppress
  */
 public class ConstraintLayoutStates {
     public static final String TAG = "ConstraintLayoutStates";

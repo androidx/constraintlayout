@@ -26,10 +26,6 @@ public interface FloatLayout {
        * l = (int)(0.5f + lf);
        * You are expected to do your own measure if you need it.
        * This will be called only during animation.
-       * @param lf
-       * @param tf
-       * @param rf
-       * @param bf
        */
       void layout(float lf, float tf, float rf, float bf);
 }
