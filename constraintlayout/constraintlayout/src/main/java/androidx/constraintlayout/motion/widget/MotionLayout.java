@@ -2725,25 +2725,7 @@ public class MotionLayout extends ConstraintLayout implements
             mHeightMeasureMode = heightMode;
             int optimisationLevel = getOptimizationLevel();
 
-            if (mCurrentState == getStartState()) {
-                resolveSystem(mLayoutEnd, optimisationLevel,
-                        (mEnd == null || mEnd.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
-                        (mEnd == null || mEnd.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
-                if (mStart != null) {
-                    resolveSystem(mLayoutStart, optimisationLevel,
-                            (mStart.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
-                            (mStart.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
-                }
-            } else {
-                if (mStart != null) {
-                    resolveSystem(mLayoutStart, optimisationLevel,
-                            (mStart.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
-                            (mStart.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
-                }
-                resolveSystem(mLayoutEnd, optimisationLevel,
-                        (mEnd == null || mEnd.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
-                        (mEnd == null || mEnd.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
-            }
+            computeStartEndSize(widthMeasureSpec, heightMeasureSpec);
 
             // This works around the problem that MotionLayout calls its children Wrap content children
             // with measure(AT_MOST,AT_MOST) then measure(EXACTLY, EXACTLY)
@@ -2755,28 +2737,7 @@ public class MotionLayout extends ConstraintLayout implements
                 recompute_start_end_size = false;
             }
             if (recompute_start_end_size) {
-                mWidthMeasureMode = widthMode;
-                mHeightMeasureMode = heightMode;
-
-                if (mCurrentState == getStartState()) {
-                    resolveSystem(mLayoutEnd, optimisationLevel,
-                            (mEnd.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
-                            (mEnd.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
-                    if (mStart != null) {
-                        resolveSystem(mLayoutStart, optimisationLevel,
-                                (mStart.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
-                                (mStart.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
-                    }
-                } else {
-                    if (mStart != null) {
-                        resolveSystem(mLayoutStart, optimisationLevel,
-                                (mStart.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
-                                (mStart.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
-                    }
-                    resolveSystem(mLayoutEnd, optimisationLevel,
-                            (mEnd.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
-                            (mEnd.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
-                }
+                computeStartEndSize(widthMeasureSpec, heightMeasureSpec);
 
                 mStartWrapWidth = mLayoutStart.getWidth();
                 mStartWrapHeight = mLayoutStart.getHeight();
@@ -2806,6 +2767,30 @@ public class MotionLayout extends ConstraintLayout implements
                 Debug.logStack(TAG, ">>>>>>>>", 3);
                 debugLayout(">>>>>>> measure str ", mLayoutStart);
                 debugLayout(">>>>>>> measure end ", mLayoutEnd);
+            }
+        }
+
+        private void computeStartEndSize(int widthMeasureSpec, int heightMeasureSpec) {
+            int optimisationLevel = getOptimizationLevel();
+
+            if (mCurrentState == getStartState()) {
+                resolveSystem(mLayoutEnd, optimisationLevel,
+                        (mEnd == null || mEnd.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
+                        (mEnd == null || mEnd.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
+                if (mStart != null) {
+                    resolveSystem(mLayoutStart, optimisationLevel,
+                            (mStart.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
+                            (mStart.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
+                }
+            } else {
+                if (mStart != null) {
+                    resolveSystem(mLayoutStart, optimisationLevel,
+                            (mStart.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
+                            (mStart.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
+                }
+                resolveSystem(mLayoutEnd, optimisationLevel,
+                        (mEnd == null || mEnd.mRotate == 0) ? widthMeasureSpec : heightMeasureSpec,
+                        (mEnd == null || mEnd.mRotate == 0) ? heightMeasureSpec : widthMeasureSpec);
             }
         }
 
