@@ -328,6 +328,42 @@ public class Flow extends VirtualLayout {
     }
 
     /**
+     * Set the style of the last Horizontal column.
+     * @param style Flow.CHAIN_SPREAD, Flow.CHAIN_SPREAD_INSIDE, or Flow.CHAIN_PACKED
+     */
+    public void setLastHorizontalStyle(int style) {
+        mFlow.setLastHorizontalStyle(style);
+        requestLayout();
+    }
+
+    /**
+     * Set the style of the last vertical row.
+     * @param style  Flow.CHAIN_SPREAD, Flow.CHAIN_SPREAD_INSIDE, or Flow.CHAIN_PACKED
+     */
+    public void setLastVerticalStyle(int style) {
+        mFlow.setLastVerticalStyle(style);
+        requestLayout();
+    }
+
+    /**
+     * Set the bias of the last Horizontal column.
+     * @param bias
+     */
+    public void setLastHorizontalBias(float bias) {
+        mFlow.setLastHorizontalBias(bias);
+        requestLayout();
+    }
+
+    /**
+     * Set the bias of the last vertical row.
+     * @param bias
+     */
+    public void setLastVerticalBias(float bias) {
+        mFlow.setLastVerticalBias(bias);
+        requestLayout();
+    }
+
+    /**
      * Set wrap mode for the layout. Can be:
      *
      * Flow.WRAP_NONE (default) -- no wrap behavior, create a single chain

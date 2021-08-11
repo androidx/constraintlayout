@@ -17,6 +17,7 @@
 package android.support.constraint.app;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -79,7 +80,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     private String KEY = "layout";
     private static final boolean DEBUG = false;
     String layout_name;
-    HashMap<String, Class> activity_map = new HashMap<>();
+    HashMap<String, Class<? extends Activity>> activity_map = new HashMap<>();
 
     {
         activity_map.put("verification_400", CheckSharedValues.class);

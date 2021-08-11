@@ -7,7 +7,7 @@ java {
 
 sourceSets{
     main.java.srcDirs = ['../../../constraintlayout/core/src/main/java']
-    test.java.srcDirs = ['../../../constraintlayout/core/src/test']
+    test.java.srcDirs = ['../../../constraintlayout/core/src/test/java']
 }
 
 dependencies {

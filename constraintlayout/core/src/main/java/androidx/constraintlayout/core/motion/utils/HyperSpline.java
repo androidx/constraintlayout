@@ -186,9 +186,6 @@ public class HyperSpline {
             mD = d;
         }
 
-        public static final double THIRD = 1 / 3.0;
-        public static final double HALF = 1 / 2.0;
-
         public double eval(double u) {
             return (((mD * u) + mC) * u + mB) * u + mA;
         }
@@ -199,7 +196,7 @@ public class HyperSpline {
             // diff with respect to u = mB + u*mC/2+ u*u*mD/3
             // made efficient (mD*u/3+mC/2)*u+mB;
 
-            return (mD * THIRD * v + mC * HALF) * v + mB;
+            return (mD * 3 * v + mC * 2) * v + mB;
         }
     }
 }
