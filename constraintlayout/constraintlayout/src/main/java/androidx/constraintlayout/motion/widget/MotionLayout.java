@@ -3868,6 +3868,15 @@ public class MotionLayout extends ConstraintLayout implements
         rebuildScene();
     }
 
+    /**
+     * Get the motion scene of the layout.
+     *
+     * @return the motion scene
+     */
+    public MotionScene getScene() {
+        return mScene;
+    }
+
     private void checkStructure() {
         if (mScene == null) {
             Log.e(TAG, "CHECK: motion scene not set! set \"app:layoutDescription=\"@xml/file\"");
