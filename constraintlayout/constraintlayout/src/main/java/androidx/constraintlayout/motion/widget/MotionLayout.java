@@ -3870,7 +3870,8 @@ public class MotionLayout extends ConstraintLayout implements
 
     /**
      * Get the motion scene of the layout.
-     *
+     * Warning! This gives you direct access to the internal state of the MotionLayout making it easy
+     * corrupt the state.
      * @return the motion scene
      */
     public MotionScene getScene() {

@@ -7,7 +7,7 @@ java {
 }
 
 sourceSets{
-    main.java.srcDirs = ['../../../constraintlayout/tools/src/main/java']
+    main.java.srcDirs = ['../../../constraintlayout/tools/src/main/kotlin']
 }
 
 dependencies {
