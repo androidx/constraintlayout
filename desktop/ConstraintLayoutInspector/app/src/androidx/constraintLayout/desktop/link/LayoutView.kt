@@ -16,7 +16,9 @@
 
 package androidx.constraintLayout.desktop.link
 
+import androidx.constraintLayout.desktop.constraintRendering.layout3d.CheckLayout3d
 import androidx.constraintLayout.desktop.scan.KeyFrameNodes
+import androidx.constraintLayout.desktop.scan.LayoutConstraints
 import androidx.constraintLayout.desktop.scan.WidgetFrameUtils
 import androidx.constraintLayout.desktop.utils.ScenePicker
 import androidx.constraintLayout.desktop.utils.ScenePicker.HitElementListener
@@ -29,14 +31,20 @@ import java.awt.*
 import java.awt.event.ActionEvent
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
+import java.awt.geom.AffineTransform
 import java.awt.geom.Path2D
 import java.util.*
 import javax.swing.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+
 
 open class LayoutView(inspector: LayoutInspector) : JPanel(BorderLayout()) {
     private var attDisplay: WidgetAttributes? = null
+    private var display3d: CheckLayout3d? = null
     protected var widgets = ArrayList<Widget>()
+    var startLayoutMap = HashMap<String, LayoutConstraints>()
+    var endLayoutMap = HashMap<String, LayoutConstraints>()
     var zoom = 0.85f
     var picker = ScenePicker()
     private var rootWidth: Float = 0f
@@ -119,6 +127,8 @@ data class Widget(val id: String, val key: CLKey) {
     var interpolated = WidgetFrame()
     var start = WidgetFrame()
     var end = WidgetFrame()
+    var endLayout = LayoutConstraints()
+    var startLayout = LayoutConstraints()
     var name = "unknown";
     var path = Path2D.Float()
     val drawFont = Font("Helvetica", Font.ITALIC, 32)
@@ -127,14 +137,16 @@ data class Widget(val id: String, val key: CLKey) {
 
     init {
         name = key.content()
+        endLayout.name = name
+        startLayout.name = name
         val sections = key.value as CLObject
         val count = sections.size()
         for (i in 0 until count) {
             val sec = sections[i] as CLKey
             when (sec.content()) {
-                "start" -> WidgetFrameUtils.deserialize(sec, end)
-                "end" -> WidgetFrameUtils.deserialize(sec, start)
-                "interpolated" -> WidgetFrameUtils.deserialize(sec, interpolated)
+                "start" -> WidgetFrameUtils.deserialize(sec, end, endLayout)
+                "end" -> WidgetFrameUtils.deserialize(sec, start, startLayout)
+                "interpolated" -> WidgetFrameUtils.deserialize(sec, interpolated, null)
                 "path" -> WidgetFrameUtils.getPath(sec, path)
                 "keyPos" -> keyFrames.setKeyFramesPos(sec)
                 "keyTypes" -> keyFrames.setKeyFramesTypes(sec)
@@ -156,13 +168,13 @@ data class Widget(val id: String, val key: CLKey) {
         over: HashSet<String>,
         selected: String?
     ) {
-
+        val renderScale = WidgetFrameUtils.getTouchScale(g);
         val END_LOOK = WidgetFrameUtils.OUTLINE or WidgetFrameUtils.DASH_OUTLINE;
         g.color = WidgetFrameUtils.theme.startColor()
-        WidgetFrameUtils.render(start, g, null, END_LOOK);
+        WidgetFrameUtils.render(start, g, null, END_LOOK, null, startLayout);
         keyFrames.render(g)
         g.color = WidgetFrameUtils.theme.endColor()
-        WidgetFrameUtils.render(end, g, null, END_LOOK);
+        WidgetFrameUtils.render(end, g, null, END_LOOK, null, endLayout);
 
         g.color = WidgetFrameUtils.theme.pathColor()
         WidgetFrameUtils.renderPath(path, g);
@@ -184,11 +196,30 @@ data class Widget(val id: String, val key: CLKey) {
         }
         g.font = drawFont
         style += WidgetFrameUtils.TEXT
-        WidgetFrameUtils.render(interpolated, g, scenePicker, style);
+        WidgetFrameUtils.render(interpolated, g, scenePicker, style, renderScale, if (drawRoot) endLayout else null);
+        if (drawRoot) {
+            startLayout.bounds = endLayout.bounds
+        }
+    }
 
+    fun drawConnections(
+        g: Graphics2D,
+        picker: ScenePicker,
+        startLayoutMap: HashMap<String, LayoutConstraints>,
+        endLayoutMap: HashMap<String, LayoutConstraints>,
+        root: Widget
+    ) {
+        startLayout.render(g, startLayoutMap, picker, root.endLayout);
+        endLayout.render(g, endLayoutMap, picker, root.endLayout);
     }
 }
 
+    fun isRet(graphics: Graphics2D) : Boolean {
+        val g = graphics
+        val retinaTest = (g.fontRenderContext.transform
+                == AffineTransform.getScaleInstance(2.0, 2.0))
+        return retinaTest
+    }
 open fun computeScale(rootWidth: Float, rootHeight: Float) {
     lastRootWidth = rootWidth
     lastRootHeight = rootHeight
@@ -235,13 +266,24 @@ override fun paint(g: Graphics?) {
         g2.rotate(-WidgetFrame.phone_orientation.toDouble(), rootWidth / 2.0, rootHeight / 2.0);
     }
     picker.reset()
+    endLayoutMap.clear()
+    startLayoutMap.clear()
     for (widget in widgets) {
         if (widget.isGuideline) {
             continue
         }
 
         widget.draw(g2, widget == root, picker, overWidgets, primarySelected)
+        endLayoutMap.put(widget.endLayout.name, widget.endLayout)
+        startLayoutMap.put(widget.startLayout.name, widget.startLayout)
     }
+    for (widget in widgets) {
+        if (widget.isGuideline || widget == root) {
+            continue
+        }
+        widget.drawConnections(g2, picker, startLayoutMap, endLayoutMap, root)
+    }
+
 }
 
 fun rightMouse(e: MouseEvent) {
@@ -302,7 +344,7 @@ fun setLayoutInformation(information: String) {
                 }
             }
         }
-
+        display3d?.update(widgets);
         repaint()
     } catch (e: Exception) {
         e.printStackTrace()
@@ -316,5 +358,8 @@ fun setLayoutInformation(information: String) {
             }
         }
 
+    }
+    fun display3d() {
+       display3d =  CheckLayout3d.create3d(widgets)
     }
 }

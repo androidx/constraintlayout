@@ -29,6 +29,7 @@ class LayoutInspector(
     link: MotionLink,
     main: Main
 ) : JPanel(BorderLayout()) {
+    var SHOW3D = false
     val motionLink = link
     val layoutView = LayoutView(this)
     val editorView = LayoutEditor(this)
@@ -36,6 +37,7 @@ class LayoutInspector(
     val main = main
     var timeLineStart = JButton("TimeLine...")
     var showWidgetAttributes = JButton("Attributes...")
+    var show3d = JButton("3D...")
 
     var addButtonButton = JButton("Button+")
     var addTextButton = JButton("Text+")
@@ -65,6 +67,10 @@ class LayoutInspector(
         westPanel.add(Box.createGlue(),gbc)
         northPanel.add(timeLineStart)
         northPanel.add(showWidgetAttributes)
+        if (SHOW3D) {
+            northPanel.add(show3d)
+        }
+
 
         northPanel.add(edit)
         northPanel.add(liveConnection)
@@ -95,7 +101,10 @@ class LayoutInspector(
 
            layoutView.displayWidgetAttributes();
         }
+        show3d.addActionListener{
 
+            layoutView.display3d();
+        }
     }
 
     private fun updateEditorMode() {

@@ -16,13 +16,16 @@
 
 package androidx.constraintLayout.desktop.scan;
 
+import androidx.constraintLayout.desktop.ui.utils.Debug;
 import androidx.constraintLayout.desktop.utils.ScenePicker;
 import androidx.constraintlayout.core.parser.*;
 import androidx.constraintlayout.core.state.WidgetFrame;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Path2D;
+import java.util.Arrays;
 
 public class WidgetFrameUtils {
     public static final int FILL = 1;
@@ -38,7 +41,7 @@ public class WidgetFrameUtils {
                     BasicStroke.JOIN_MITER,
                     10.0f, dash1, 0.0f);
 
-    public static void deserialize(CLKey object, WidgetFrame dest) throws CLParsingException {
+    public static void deserialize(CLKey object, WidgetFrame dest, LayoutConstraints layoutConstraints) throws CLParsingException {
         CLKey clkey = ((CLKey) object);
 
         CLElement value = clkey.getValue();
@@ -50,13 +53,22 @@ public class WidgetFrameUtils {
                 CLKey k = ((CLKey) tmp);
                 String name = k.content();
                 CLElement v = k.getValue();
-                dest.setValue(name, v);
+                if (name.startsWith("Anchor")) {
+                    if (layoutConstraints != null) {
+                        layoutConstraints.setValue(name, v);
+                    }
+                } else {
+                    dest.setValue(name, v);
+                }
+
             }
         }
     }
     private static double []srcPts = new double[8];
     private static double []dstPts = new double[8];
-    public static void render(WidgetFrame frame, Graphics2D g2d, ScenePicker scenePicker, int mask) {
+    public static void render(WidgetFrame frame, Graphics2D g2d, ScenePicker scenePicker,
+                              int mask, AffineTransform transform,
+                              LayoutConstraints lc) {
         float cx = (frame.left + frame.right) / 2f;
         float cy = (frame.top + frame.bottom) / 2f;
         float dx = frame.right - frame.left;
@@ -99,20 +111,41 @@ public class WidgetFrameUtils {
             restore = g.getStroke();
             g.setStroke(dashed);
         }
-        if (scenePicker != null) {
-            srcPts[0] = frame.left;// top left
-            srcPts[1] = frame.top;
-            srcPts[2] = frame.right;
-            srcPts[3] = frame.top;
-            srcPts[4] = frame.right;
-            srcPts[5] = frame.bottom;
-            srcPts[6] = frame.left;
-            srcPts[7] = frame.bottom;
 
+        srcPts[0] = frame.left;// top left
+        srcPts[1] = frame.top;
+        srcPts[2] = frame.right;
+        srcPts[3] = frame.top;
+        srcPts[4] = frame.right;
+        srcPts[5] = frame.bottom;
+        srcPts[6] = frame.left;
+        srcPts[7] = frame.bottom;
 
-            g.getTransform().transform(srcPts, 0, dstPts, 0, 4);
-            scenePicker.addQuadrilateral(frame, dstPts, 0);
+        if (lc != null) {
+//            Debug.log(lc.mName + "  " + Arrays.toString(srcPts));
+            if (transform != null) {
+                transform.transform(srcPts, 0, dstPts, 0, 4);
+                at.transform(srcPts, 0, dstPts, 0, 4);
+                lc.setBounds(dstPts);
+            } else {
+                at.transform(srcPts, 0, dstPts, 0, 4);
+                lc.setBounds(dstPts);
+            }
         }
+
+        g.getTransform().transform(srcPts, 0, dstPts, 0, 4);
+        if (transform != null) {
+            transform.transform(dstPts, 0, srcPts, 0, 4);
+            if (scenePicker != null) {
+                scenePicker.addQuadrilateral(frame, srcPts, 0);
+            }
+
+        }  else {
+            if (scenePicker != null) {
+                scenePicker.addQuadrilateral(frame, dstPts, 0);
+            }
+         }
+
 
         g.drawRect(frame.left, frame.top, frame.right - frame.left, frame.bottom - frame.top);
         if ((mask & DASH_OUTLINE) != 0) {
@@ -169,9 +202,19 @@ public class WidgetFrameUtils {
         CLObject obj = CLParser.parse(clString);
         CLKey tmp = (CLKey) obj.get(0);
         WidgetFrame frame = new WidgetFrame();
-        deserialize(tmp, frame);
+        deserialize(tmp, frame, new LayoutConstraints());
         StringBuilder builder = new StringBuilder();
         frame.serialize(builder, false);
         System.out.println(builder.toString());
     }
+
+    public static AffineTransform getTouchScale(Graphics2D g) {
+        try {
+            return g.getFontRenderContext ().getTransform().createInverse();
+        } catch (NoninvertibleTransformException e) {
+             return new AffineTransform();
+        }
+
+    }
+
 }
