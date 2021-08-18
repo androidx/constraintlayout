@@ -16,7 +16,6 @@
 
 package androidx.constraintLayout.desktop.scan;
 
-import androidx.constraintLayout.desktop.ui.utils.Debug;
 import androidx.constraintLayout.desktop.utils.ScenePicker;
 import androidx.constraintlayout.core.parser.*;
 import androidx.constraintlayout.core.state.WidgetFrame;
@@ -25,7 +24,6 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Path2D;
-import java.util.Arrays;
 
 public class WidgetFrameUtils {
     public static final int FILL = 1;
@@ -33,13 +31,22 @@ public class WidgetFrameUtils {
     public static final int OUTLINE = 4;
     public static final int DASH_OUTLINE = 8;
     public static final int TEXT = 16;
-    public static final Theme theme = new Theme(false);
+    public static final LinkColors theme = LinkColors.getTheme(false);
     final static float dash1[] = {10.0f};
     final static BasicStroke dashed =
             new BasicStroke(3f,
                     BasicStroke.CAP_BUTT,
                     BasicStroke.JOIN_MITER,
                     10.0f, dash1, 0.0f);
+
+    public enum FrameType {
+        START,
+        END,
+        INTERPOLATED,
+        INTERPOLATED_HOVER,
+        INTERPOLATED_SELECTED,
+        ROOT,
+    }
 
     public static void deserialize(CLKey object, WidgetFrame dest, LayoutConstraints layoutConstraints) throws CLParsingException {
         CLKey clkey = ((CLKey) object);
@@ -64,11 +71,43 @@ public class WidgetFrameUtils {
             }
         }
     }
-    private static double []srcPts = new double[8];
-    private static double []dstPts = new double[8];
-    public static void render(WidgetFrame frame, Graphics2D g2d, ScenePicker scenePicker,
-                              int mask, AffineTransform transform,
+
+    public static class LayoutColors {
+        Color mUnTransformedColor = new Color(29, 34, 85);
+        Color mTransformedColor = new Color(32, 80, 92);
+        ;
+
+    }
+
+    private static double[] srcPts = new double[8];
+    private static double[] transPts = new double[8];
+    private static double[] dstPts = new double[8];
+
+    public static void render(WidgetFrame frame, Graphics2D g2d, ScenePicker scenePicker, FrameType type,
+                              int mask, boolean pre, AffineTransform transform,
                               LayoutConstraints lc) {
+
+        switch (type) {
+            case START:
+                g2d.setColor(theme.startColor());
+                break;
+            case END:
+                g2d.setColor(theme.endColor());
+                break;
+            case ROOT:
+                g2d.setColor(theme.rootBackgroundColor());
+                break;
+            case INTERPOLATED:
+                g2d.setColor(theme.interpolatedColor());
+                break;
+            case INTERPOLATED_SELECTED:
+                g2d.setColor(theme.interpolatedSelectedColor());
+                break;
+            case INTERPOLATED_HOVER:
+                g2d.setColor(theme.interpolatedHoverColor());
+                break;
+        }
+
         float cx = (frame.left + frame.right) / 2f;
         float cy = (frame.top + frame.bottom) / 2f;
         float dx = frame.right - frame.left;
@@ -122,31 +161,38 @@ public class WidgetFrameUtils {
         srcPts[7] = frame.bottom;
 
         if (lc != null) {
-//            Debug.log(lc.mName + "  " + Arrays.toString(srcPts));
-            if (transform != null) {
-                transform.transform(srcPts, 0, dstPts, 0, 4);
-                at.transform(srcPts, 0, dstPts, 0, 4);
-                lc.setBounds(dstPts);
-            } else {
-                at.transform(srcPts, 0, dstPts, 0, 4);
-                lc.setBounds(dstPts);
-            }
+            lc.setBounds(srcPts);
         }
 
         g.getTransform().transform(srcPts, 0, dstPts, 0, 4);
         if (transform != null) {
-            transform.transform(dstPts, 0, srcPts, 0, 4);
+            transform.transform(dstPts, 0, transPts, 0, 4);
             if (scenePicker != null) {
-                scenePicker.addQuadrilateral(frame, srcPts, 0);
+                scenePicker.addQuadrilateral(frame, transPts, 0);
             }
 
-        }  else {
+        } else {
             if (scenePicker != null) {
                 scenePicker.addQuadrilateral(frame, dstPts, 0);
             }
-         }
+        }
+        if (type == FrameType.END || type == FrameType.START && pre) {
+            if (translationX != 0 || translationY != 0 || rotationZ != 0 || scaleX != 1 || scaleY != 1) {
+                g2d.setColor(theme.preTransformColor);
+                g2d.drawRect(frame.left, frame.top, frame.right - frame.left, frame.bottom - frame.top);
+                at.transform(srcPts, 0, dstPts, 0, 4);
 
+                for (int i = 0; i < 8; i += 2) {
+                    GradientPaint paint = new GradientPaint(
+                            (float) srcPts[i], (float) srcPts[i + 1], theme.preTransformColor,
+                            (float) dstPts[i], (float) dstPts[i + 1], g.getColor());
+                    g2d.setPaint(paint);
+                    g2d.drawLine((int) srcPts[i], (int) srcPts[i + 1], (int) dstPts[i], (int) dstPts[i + 1]);
+                }
 
+            }
+
+        }
         g.drawRect(frame.left, frame.top, frame.right - frame.left, frame.bottom - frame.top);
         if ((mask & DASH_OUTLINE) != 0) {
             g.setStroke(restore);
@@ -161,6 +207,7 @@ public class WidgetFrameUtils {
         if (path == null) {
             return;
         }
+        g2d.setColor(theme.pathColor());
         g2d.setStroke(new BasicStroke(2));
         g2d.draw(path);
     }
@@ -210,9 +257,9 @@ public class WidgetFrameUtils {
 
     public static AffineTransform getTouchScale(Graphics2D g) {
         try {
-            return g.getFontRenderContext ().getTransform().createInverse();
+            return g.getFontRenderContext().getTransform().createInverse();
         } catch (NoninvertibleTransformException e) {
-             return new AffineTransform();
+            return new AffineTransform();
         }
 
     }
