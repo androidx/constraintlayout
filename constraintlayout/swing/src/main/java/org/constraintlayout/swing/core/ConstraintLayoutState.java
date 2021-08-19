@@ -14,8 +14,12 @@
  * limitations under the License.
  */
 
-package org.constraintlayout.swing;
+package org.constraintlayout.swing.core;
 
+/**
+ * Container for the state of a ConstraintLayout
+ * has containers for ConstraintState and GuidelineState
+ */
 public class ConstraintLayoutState {
     public ConstraintsState constraints = new ConstraintsState();
     public GuidelinesState guidelines = new GuidelinesState();
