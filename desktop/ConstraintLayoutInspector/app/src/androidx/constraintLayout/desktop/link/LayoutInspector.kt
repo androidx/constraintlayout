@@ -20,9 +20,16 @@ import androidx.constraintLayout.desktop.ui.adapters.vd.ListIcons
 import androidx.constraintLayout.desktop.ui.adapters.vg.VDIcon
 import androidx.constraintLayout.desktop.ui.timeline.TimeLinePanel
 import androidx.constraintLayout.desktop.ui.ui.MotionEditorSelector
-import androidx.constraintLayout.desktop.utils.WidgetAttributes
 import androidx.constraintlayout.core.parser.CLObject
-import java.awt.*
+import java.awt.BorderLayout
+import java.awt.Dimension
+import java.awt.GridBagConstraints
+import java.awt.GridBagLayout
+import java.awt.event.ActionEvent
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
+import java.beans.PropertyChangeEvent
+import java.util.HashMap
 import javax.swing.*
 
 class LayoutInspector(
@@ -35,6 +42,7 @@ class LayoutInspector(
     val editorView = LayoutEditor(this)
 
     val main = main
+    var settings = settings();
     var timeLineStart = JButton("TimeLine...")
     var showWidgetAttributes = JButton("Attributes...")
     var show3d = JButton("3D...")
@@ -65,6 +73,7 @@ class LayoutInspector(
         westPanel.add(addTextButton,gbc)
         gbc.weighty = 1.0
         westPanel.add(Box.createGlue(),gbc)
+        northPanel.add(settings)
         northPanel.add(timeLineStart)
         northPanel.add(showWidgetAttributes)
         if (SHOW3D) {
@@ -105,6 +114,37 @@ class LayoutInspector(
 
             layoutView.display3d();
         }
+    }
+
+    fun getSetting() : HashMap<String, Boolean>? {
+       return settings?.getClientProperty("map") as HashMap<String, Boolean>?
+    }
+    fun settings(settings: Array<String> = arrayOf("Start", "End", "Constraints", "Path", "PreTransform")): JButton? {
+
+        val button = JButton("Show")
+        val popup = JPopupMenu()
+        popup.add(JMenuItem("Show"))
+        popup.addSeparator()
+        val show = HashMap<String, Boolean>()
+        button.putClientProperty("map", show)
+        for (i in settings.indices) {
+            val set = settings[i]
+            val cbox = JCheckBoxMenuItem(object : AbstractAction(set) {
+                override fun actionPerformed(e: ActionEvent) {
+                    val item = e.source as JCheckBoxMenuItem
+                    show[set] = item.isSelected
+                }
+            })
+            cbox.isSelected = true
+            show[set] = true
+            popup.add(cbox)
+        }
+        button.addMouseListener(object : MouseAdapter() {
+            override fun mousePressed(e: MouseEvent) {
+                popup.show(e.component, e.x, e.y)
+            }
+        })
+        return button
     }
 
     private fun updateEditorMode() {

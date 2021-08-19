@@ -124,6 +124,7 @@ open class LayoutView(inspector: LayoutInspector) : JPanel(BorderLayout()) {
 }
 
 data class Widget(val id: String, val key: CLKey) {
+    private val layoutColors =  WidgetFrameUtils.LayoutColors()
     var interpolated = WidgetFrame()
     var start = WidgetFrame()
     var end = WidgetFrame()
@@ -164,39 +165,47 @@ data class Widget(val id: String, val key: CLKey) {
     }
 
     fun draw(
-        g: Graphics2D, drawRoot: Boolean, scenePicker: ScenePicker,
+        g: Graphics2D,
+        drawRoot: Boolean,
+        scenePicker: ScenePicker,
         over: HashSet<String>,
-        selected: String?
+        selected: String?,
+        map: java.util.HashMap<String, Boolean>?
     ) {
         val renderScale = WidgetFrameUtils.getTouchScale(g);
         val END_LOOK = WidgetFrameUtils.OUTLINE or WidgetFrameUtils.DASH_OUTLINE;
-        g.color = WidgetFrameUtils.theme.startColor()
-        WidgetFrameUtils.render(start, g, null, END_LOOK, null, startLayout);
-        keyFrames.render(g)
-        g.color = WidgetFrameUtils.theme.endColor()
-        WidgetFrameUtils.render(end, g, null, END_LOOK, null, endLayout);
+        val pre = (map?.get("PreTransform")==true)
+        if (map?.get("Start")==true) {
+            WidgetFrameUtils.render(start, g, null, WidgetFrameUtils.FrameType.START, END_LOOK, pre, null, startLayout);
+        }
+        if (map?.get("Path")==true) {
+            keyFrames.render(g)
+        }
+        if (map?.get("End")==true) {
+            WidgetFrameUtils.render(end, g, null, WidgetFrameUtils.FrameType.END, END_LOOK, pre, null, endLayout);
+        }
+        if (map?.get("Path")==true) {
+            WidgetFrameUtils.renderPath(path, g);
+        }
 
-        g.color = WidgetFrameUtils.theme.pathColor()
-        WidgetFrameUtils.renderPath(path, g);
 
-        g.color = WidgetFrameUtils.theme.interpolatedColor()
         var style = WidgetFrameUtils.FILL
         interpolated.name = name
-
+        var  type = WidgetFrameUtils.FrameType.INTERPOLATED
         if (drawRoot) {
-            g.color = WidgetFrameUtils.theme.rootBackgroundColor()
+            type = WidgetFrameUtils.FrameType.ROOT
         } else {
             if (over.contains(interpolated.name)) {
-
-                g.color = WidgetFrameUtils.theme.interpolatedHoverColor()
+                type = WidgetFrameUtils.FrameType.INTERPOLATED_HOVER
             }
             if (selected == interpolated.name) {
-                g.color = WidgetFrameUtils.theme.interpolatedSelectedColor()
+                type = WidgetFrameUtils.FrameType.INTERPOLATED_SELECTED
             }
         }
         g.font = drawFont
         style += WidgetFrameUtils.TEXT
-        WidgetFrameUtils.render(interpolated, g, scenePicker, style, renderScale, if (drawRoot) endLayout else null);
+        WidgetFrameUtils.render(interpolated, g, scenePicker,
+            type, style,  pre, renderScale,  if (drawRoot) endLayout else null);
         if (drawRoot) {
             startLayout.bounds = endLayout.bounds
         }
@@ -268,12 +277,13 @@ override fun paint(g: Graphics?) {
     picker.reset()
     endLayoutMap.clear()
     startLayoutMap.clear()
+    var map = inspector.getSetting()
     for (widget in widgets) {
         if (widget.isGuideline) {
             continue
         }
 
-        widget.draw(g2, widget == root, picker, overWidgets, primarySelected)
+        widget.draw(g2, widget == root, picker, overWidgets, primarySelected, map)
         endLayoutMap.put(widget.endLayout.name, widget.endLayout)
         startLayoutMap.put(widget.startLayout.name, widget.startLayout)
     }
@@ -281,7 +291,9 @@ override fun paint(g: Graphics?) {
         if (widget.isGuideline || widget == root) {
             continue
         }
-        widget.drawConnections(g2, picker, startLayoutMap, endLayoutMap, root)
+        if (inspector.getSetting()?.get("Constraints") == true) {
+            widget.drawConnections(g2, picker, startLayoutMap, endLayoutMap, root)
+        }
     }
 
 }
