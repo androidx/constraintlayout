@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package org.constraintlayout.swing;
+package org.constraintlayout.swing.core;
 
 import androidx.constraintlayout.core.parser.*;
-import androidx.constraintlayout.core.state.Registry;
-import androidx.constraintlayout.core.state.RegistryCallback;
 
-class ConstraintSetParser {
+/**
+ * The basic parser converts the json syntax into the ConstraintLayoutState object
+ */
+public class ConstraintSetParser {
 
     private String exportedName;
 

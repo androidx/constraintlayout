@@ -16,23 +16,23 @@
 
 package org.constraintlayout.swing;
 
-import androidx.constraintlayout.core.state.Registry;
-import androidx.constraintlayout.core.state.RegistryCallback;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 import androidx.constraintlayout.core.widgets.Guideline;
 import androidx.constraintlayout.core.widgets.Optimizer;
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure;
-import org.intellij.lang.annotations.Language;
+import org.constraintlayout.swing.core.ConstraintLayoutState;
+import org.constraintlayout.swing.core.ConstraintSetParser;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 
 /**
- * Naive implementation of ConstraintLayout as a Swing LayoutManager
+ * Basic implementation of ConstraintLayout as a Swing LayoutManager
  */
-public class ConstraintLayout implements LayoutManager2, BasicMeasure.Measurer {
-
+public class ConstraintLayout implements LayoutManager2 {
+    private static final boolean DEBUG = true;
     private ConstraintWidgetContainer mLayout = new ConstraintWidgetContainer();
     private HashMap<Component, ConstraintWidget> mViewsToConstraints = new HashMap<>();
     private ConstraintSetParser parser = new ConstraintSetParser();
@@ -42,109 +42,40 @@ public class ConstraintLayout implements LayoutManager2, BasicMeasure.Measurer {
     private HashMap<String, ConstraintWidget> idsToConstraintWidgets = new HashMap<>();
     Container parentContainer;
 
-    public ConstraintLayout() {}
+    public ConstraintLayout() {
+    }
 
     public ConstraintLayout(@Language("JSON5") String content) {
         parse(content);
     }
 
+    public ConstraintLayout(@Language("JSON5") String content, Runnable runnable) {
+        parse(content);
+        SwingUtilities.invokeLater(runnable);
+    }
+
     public void parse(@Language("JSON5") String content) {
         parser.parse(content, state);
         idsToConstraintWidgets.put("parent", mLayout);
-        System.out.println("state:\n" + state.serialize());
-        mLayout.setMeasurer(this);
+        if (DEBUG) {
+            System.out.println("state:\n" + state.serialize());
+        }
+        mLayout.setMeasurer(new BasicMeasure.Measurer() {
+
+            @Override
+            public void measure(ConstraintWidget widget, BasicMeasure.Measure measure) {
+                innerMeasure(widget, measure);
+            }
+
+            @Override
+            public void didMeasures() {
+
+            }
+        });
 
         if (parser.getExportedName() != null) {
-                Registry registry = Registry.getInstance();
-                registry.register(parser.getExportedName(), new RegistryCallback() {
-                    @Override
-                    public void onNewMotionScene(String content) {
-                        try {
-                            parser.parse(content, state);
-                            if (parentContainer != null) {
-                                parentContainer.revalidate();
-                            }
-                        } catch (Exception e) {
-
-                        }
-                    }
-
-                    @Override
-                    public void onProgress(float progress) {
-
-                    }
-
-                    @Override
-                    public void onDimensions(int width, int height) {
-
-                    }
-
-                    @Override
-                    public String currentMotionScene() {
-                        return content;
-                    }
-
-                    @Override
-                    public void setDrawDebug(int debugMode) {
-
-                    }
-
-                    @Override
-                    public String currentLayoutInformation() {
-                        String layout = getSerializedLayout();
-                        System.out.println("layout:\n" + layout);
-                        return layout;
-                    }
-
-                    @Override
-                    public void setLayoutInformationMode(int layoutInformationMode) {
-
-                    }
-
-                    @Override
-                    public long getLastModified() {
-                        return 0;
-                    }
-                });
+            RemoteDebug.debug(parser, content, state, mLayout, this);
         }
-    }
-
-    private void serializeWidget(StringBuilder builder, ConstraintWidget widget) {
-        builder.append(widget.stringId);
-        builder.append(": {");
-        if (widget instanceof Guideline) {
-            Guideline guideline = (Guideline) widget;
-            if (guideline.getOrientation() == Guideline.HORIZONTAL) {
-                builder.append("type: 'hGuideline',");
-            } else {
-                builder.append("type: 'vGuideline',");
-            }
-        }
-        builder.append(" interpolated: { ");
-        builder.append(" left: ");
-        builder.append(widget.getLeft());
-        builder.append(", top: ");
-        builder.append(widget.getTop());
-        builder.append(", ");
-        builder.append("right: ");
-        builder.append(widget.getRight());
-        builder.append(", bottom: ");
-        builder.append(widget.getBottom());
-        builder.append("}}, ");
-    }
-
-    public String getSerializedLayout() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("{\n");
-        mLayout.stringId = "root";
-        serializeWidget(builder, mLayout);
-
-        for (ConstraintWidget widget : mLayout.getChildren()) {
-            serializeWidget(builder, widget);
-        }
-
-        builder.append("}");
-        return builder.toString();
     }
 
     @Override
@@ -244,8 +175,8 @@ public class ConstraintLayout implements LayoutManager2, BasicMeasure.Measurer {
         return mLayout;
     }
 
-    @Override
-    public void measure(ConstraintWidget constraintWidget, BasicMeasure.Measure measure) {
+
+    private void innerMeasure(ConstraintWidget constraintWidget, BasicMeasure.Measure measure) {
         Component component = (Component) constraintWidget.getCompanionWidget();
         int measuredWidth = constraintWidget.getWidth();
         int measuredHeight = constraintWidget.getHeight();
@@ -261,10 +192,5 @@ public class ConstraintLayout implements LayoutManager2, BasicMeasure.Measurer {
         }
         measure.measuredWidth = measuredWidth;
         measure.measuredHeight = measuredHeight;
-    }
-
-    @Override
-    public void didMeasures() {
-
     }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.constraintlayout.swing;
+package org.constraintlayout.swing.core;
 
 import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
@@ -23,6 +23,11 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviou
 import java.util.Arrays;
 import java.util.HashMap;
 
+/**
+ * Container for Constraints
+ * Constraints are stored in a fixture structure in the int table which is grown as things are added
+ * Floats are "unpacked" using Float.intBitsToFloat
+ */
 public class ConstraintsState {
     int MAX = 2 * TOTAL;
     int[] table = new int[MAX];

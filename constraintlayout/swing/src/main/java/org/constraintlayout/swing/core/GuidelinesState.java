@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.constraintlayout.swing;
+package org.constraintlayout.swing.core;
 
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
@@ -23,6 +23,12 @@ import androidx.constraintlayout.core.widgets.Guideline;
 import java.util.Arrays;
 import java.util.HashMap;
 
+/**
+ * Container for GuidelinesStates
+ * Constraints are stored in a fixture structure in the int table which is grown as things are added
+ * Floats are "unpacked" using Float.intBitsToFloat
+ * Todo generalize this to store manage Helper information
+ */
 public class GuidelinesState {
     int MAX = 2 * TOTAL;
     int[] table = new int[MAX];
