@@ -250,10 +250,10 @@ fun parseKeyPosition(keyPosition: CLObject, transition: Transition) {
                 bundle.add(TypedValues.Position.TYPE_PERCENT_Y, percentY.getFloat(j))
             }
             if (percentWidth != null) {
-                bundle.add(TypedValues.Position.TYPE_PERCENT_Y, percentWidth.getFloat(j))
+                bundle.add(TypedValues.Position.TYPE_PERCENT_WIDTH, percentWidth.getFloat(j))
             }
             if (percentHeight != null) {
-                bundle.add(TypedValues.Position.TYPE_PERCENT_Y, percentHeight.getFloat(j))
+                bundle.add(TypedValues.Position.TYPE_PERCENT_HEIGHT, percentHeight.getFloat(j))
             }
 
             transition.addKeyPosition(target, bundle)
