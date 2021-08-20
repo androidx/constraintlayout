@@ -190,6 +190,36 @@ public class Desk {
         ourCurrentUniqueNames.addAll(Arrays.asList(str));
 
     }
+    public static void saveBooleanMap(String name, HashMap<String,Boolean>map) throws BackingStoreException {
+        String str = null;
+        for (String s : map.keySet()) {
+            if (str == null) {
+                str = s;
+            } else {
+                str += ","+s;
+            }
+        }
+
+        ourLayoutPrefs.put(name, str);
+        for (String s : map.keySet()) {
+            ourLayoutPrefs.put(name+"_"+s, map.get(s).toString());
+        }
+        ourLayoutPrefs.flush();
+    }
+   public static HashMap<String,Boolean> getBooleanMap(String name) throws BackingStoreException {
+        String str = ourLayoutPrefs.get(name, null);
+        if (str == null) {
+            return null;
+        }
+        String []sp  = str.split(",");
+        HashMap<String,Boolean> map = new HashMap<>();
+        for (int i = 0; i < sp.length; i++) {
+            String s = sp[i];
+            String val = ourLayoutPrefs.get(name+"_"+sp[i], "false");
+            map.put(sp[i],Boolean.parseBoolean(val));
+        }
+        return map;
+    }
 
     static void saveAllLayoutNames() throws BackingStoreException {
         String[] str = ourCurrentUniqueNames.toArray(new String[0]);

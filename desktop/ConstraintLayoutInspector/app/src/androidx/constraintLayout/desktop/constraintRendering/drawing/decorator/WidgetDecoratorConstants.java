@@ -13,20 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.android.tools.idea.uibuilder.handlers.constraint.drawing.decorator;
 
-package com.example.experiments
+import java.awt.Image;
 
-import org.junit.Assert.assertEquals
-import org.junit.Test
-
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-class ExampleUnitTest {
-    @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
-    }
+public class WidgetDecoratorConstants {
+  public static final int BLUEPRINT_STYLE = 0;
+  public static final int ANDROID_STYLE = 1;
+  public static Image sLockImageIcon = null;
+  public static Image sUnlockImageIcon = null;
+  public static Image sDeleteConnectionsImageIcon = null;
+  public static Image sPackChainImageIcon = null;
 }

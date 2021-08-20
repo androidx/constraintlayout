@@ -1186,3 +1186,119 @@ public fun MotionExample7() {
         }
     }
 }
+
+@Preview(group = "motion8")
+@Composable
+public fun MotionExample8() {
+    var animateToEnd by remember { mutableStateOf(false) }
+
+    val progress by animateFloatAsState(
+        targetValue = if (animateToEnd) 1f else 0f,
+        animationSpec = tween(2000)
+    )
+    Column {
+        MotionLayout(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .background(Color.Black),
+            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
+            motionScene = MotionScene(
+                """
+                    {
+                ConstraintSets: {
+                start: {
+                  box1: {
+                    rotationZ: 0,
+                    translationZ: 4,
+                    start: ['parent', 'start', 16],
+                    end: ['parent', 'end', 16],
+                    bottom: ['parent','bottom',44]
+                  },
+                  box2: {
+                    rotationZ: 20,
+                    translationZ: 2,
+                    start: ['parent', 'start', 16],
+                    end: ['parent', 'end', 16],
+                    bottom: ['parent','bottom',44]
+                  },
+                  box3: {
+                    rotationZ: -20,
+                    translationZ: 0,
+                    start: ['parent', 'start', 16],
+                    end: ['parent', 'end', 16],
+                    bottom: ['parent','bottom',44]
+                  }
+                },
+                end : {
+                  Extends: 'start',
+                  box1: {
+                    rotationZ: -20,
+                    translationZ: 0,
+                  },
+                  box2: {
+                    rotationZ: 0,
+                    translationZ: 4,
+                  },
+                  box3: {
+                    rotationZ: 20,
+                    translationZ: 2,
+                  }
+                },
+                },
+                Transitions: {
+                  default: {
+                    from: 'start',
+                    to: 'end',
+                    pathMotionArc: 'startHorizontal',
+                    KeyFrames: {
+                      KeyPositions: [
+                        {
+                       type: 'parentRelative',
+                           target: ['box1'],
+                           frames: [50],
+                           percentX: [0.5],
+                           percentY: [0.4]
+                        }
+                      ]
+                    }
+                  }
+                }
+                }
+"""
+            ),
+            progress = progress
+        ) {
+            Box(
+                modifier = Modifier
+                    .layoutId("box1")
+                    .height(125.dp)
+                    .width(188.dp)
+                    .clip(shape = RoundedCornerShape(12.dp))
+                    .background(Color.Green)
+                    .clickable(onClick = { animateToEnd = !animateToEnd })
+            )
+
+            Box(
+                modifier = Modifier
+                    .layoutId("box2")
+                    .height(125.dp)
+                    .width(188.dp)
+                    .clip(shape = RoundedCornerShape(12.dp))
+                    .background(Color.Blue)
+                    .clickable(onClick = { animateToEnd = !animateToEnd })
+            )
+
+            Box(
+                modifier = Modifier
+                    .layoutId("box3")
+                    .height(125.dp)
+                    .width(188.dp)
+                    .clip(shape = RoundedCornerShape(12.dp))
+                    .background(Color.Red)
+                    .clickable(onClick = { animateToEnd = !animateToEnd })
+            )
+
+        }
+    }
+}

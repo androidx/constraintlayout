@@ -1,4 +1,2 @@
 rootProject.name = "FoldableExperiments"
 include ':app'
-include ':constraintlayout'
-include ':core'

@@ -19,6 +19,7 @@ package androidx.constraintlayout.core.state;
 import androidx.constraintlayout.core.motion.CustomVariable;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.parser.*;
+import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
 import java.util.HashMap;
@@ -439,6 +440,11 @@ public class WidgetFrame {
         add(ret, "alpha", frame.alpha);
         add(ret, "visibility", frame.left);
         add(ret, "interpolatedPos", frame.interpolatedPos);
+        if (widget != null) {
+            for (ConstraintAnchor.Type  side : ConstraintAnchor.Type.values()) {
+                serializeAnchor(ret, side);
+            }
+        }
         if (sendPhoneOrientation) {
             add(ret, "phone_orientation", phone_orientation);
         }
@@ -485,7 +491,23 @@ public class WidgetFrame {
         ret.append("}\n");
         return ret;
     }
+    private void serializeAnchor(StringBuilder ret, ConstraintAnchor.Type type){
+         ConstraintAnchor anchor = widget.getAnchor(type);
+        if (anchor == null || anchor.mTarget == null){
+            return;
+        }
+        ret.append("Anchor");
+        ret.append(type.name());
+        ret.append(": ['");
+        String str = anchor.mTarget.getOwner().stringId;
+        ret.append(str==null?"#PARENT":str);
+        ret.append("', '");
+        ret.append(anchor.mTarget.getType().name());
+        ret.append("', '");
+        ret.append(anchor.mMargin);
+        ret.append("'],\n");
 
+    }
     private static void add(StringBuilder s, String title, int value) {
         s.append(title);
         s.append(": ");

@@ -22,6 +22,7 @@ import androidx.constraintlayout.core.state.WidgetFrame;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Path2D;
 
 public class WidgetFrameUtils {
@@ -30,7 +31,7 @@ public class WidgetFrameUtils {
     public static final int OUTLINE = 4;
     public static final int DASH_OUTLINE = 8;
     public static final int TEXT = 16;
-    public static final Theme theme = new Theme(false);
+    public static final LinkColors theme = LinkColors.getTheme(false);
     final static float dash1[] = {10.0f};
     final static BasicStroke dashed =
             new BasicStroke(3f,
@@ -38,7 +39,16 @@ public class WidgetFrameUtils {
                     BasicStroke.JOIN_MITER,
                     10.0f, dash1, 0.0f);
 
-    public static void deserialize(CLKey object, WidgetFrame dest) throws CLParsingException {
+    public enum FrameType {
+        START,
+        END,
+        INTERPOLATED,
+        INTERPOLATED_HOVER,
+        INTERPOLATED_SELECTED,
+        ROOT,
+    }
+
+    public static void deserialize(CLKey object, WidgetFrame dest, LayoutConstraints layoutConstraints) throws CLParsingException {
         CLKey clkey = ((CLKey) object);
 
         CLElement value = clkey.getValue();
@@ -50,13 +60,54 @@ public class WidgetFrameUtils {
                 CLKey k = ((CLKey) tmp);
                 String name = k.content();
                 CLElement v = k.getValue();
-                dest.setValue(name, v);
+                if (name.startsWith("Anchor")) {
+                    if (layoutConstraints != null) {
+                        layoutConstraints.setValue(name, v);
+                    }
+                } else {
+                    dest.setValue(name, v);
+                }
+
             }
         }
     }
-    private static double []srcPts = new double[8];
-    private static double []dstPts = new double[8];
-    public static void render(WidgetFrame frame, Graphics2D g2d, ScenePicker scenePicker, int mask) {
+
+    public static class LayoutColors {
+        Color mUnTransformedColor = new Color(29, 34, 85);
+        Color mTransformedColor = new Color(32, 80, 92);
+        ;
+
+    }
+
+    private static double[] srcPts = new double[8];
+    private static double[] transPts = new double[8];
+    private static double[] dstPts = new double[8];
+
+    public static void render(WidgetFrame frame, Graphics2D g2d, ScenePicker scenePicker, FrameType type,
+                              int mask, boolean pre, AffineTransform transform,
+                              LayoutConstraints lc) {
+
+        switch (type) {
+            case START:
+                g2d.setColor(theme.startColor());
+                break;
+            case END:
+                g2d.setColor(theme.endColor());
+                break;
+            case ROOT:
+                g2d.setColor(theme.rootBackgroundColor());
+                break;
+            case INTERPOLATED:
+                g2d.setColor(theme.interpolatedColor());
+                break;
+            case INTERPOLATED_SELECTED:
+                g2d.setColor(theme.interpolatedSelectedColor());
+                break;
+            case INTERPOLATED_HOVER:
+                g2d.setColor(theme.interpolatedHoverColor());
+                break;
+        }
+
         float cx = (frame.left + frame.right) / 2f;
         float cy = (frame.top + frame.bottom) / 2f;
         float dx = frame.right - frame.left;
@@ -99,21 +150,49 @@ public class WidgetFrameUtils {
             restore = g.getStroke();
             g.setStroke(dashed);
         }
-        if (scenePicker != null) {
-            srcPts[0] = frame.left;// top left
-            srcPts[1] = frame.top;
-            srcPts[2] = frame.right;
-            srcPts[3] = frame.top;
-            srcPts[4] = frame.right;
-            srcPts[5] = frame.bottom;
-            srcPts[6] = frame.left;
-            srcPts[7] = frame.bottom;
 
+        srcPts[0] = frame.left;// top left
+        srcPts[1] = frame.top;
+        srcPts[2] = frame.right;
+        srcPts[3] = frame.top;
+        srcPts[4] = frame.right;
+        srcPts[5] = frame.bottom;
+        srcPts[6] = frame.left;
+        srcPts[7] = frame.bottom;
 
-            g.getTransform().transform(srcPts, 0, dstPts, 0, 4);
-            scenePicker.addQuadrilateral(frame, dstPts, 0);
+        if (lc != null) {
+            lc.setBounds(srcPts);
         }
 
+        g.getTransform().transform(srcPts, 0, dstPts, 0, 4);
+        if (transform != null) {
+            transform.transform(dstPts, 0, transPts, 0, 4);
+            if (scenePicker != null) {
+                scenePicker.addQuadrilateral(frame, transPts, 0);
+            }
+
+        } else {
+            if (scenePicker != null) {
+                scenePicker.addQuadrilateral(frame, dstPts, 0);
+            }
+        }
+        if (type == FrameType.END || type == FrameType.START && pre) {
+            if (translationX != 0 || translationY != 0 || rotationZ != 0 || scaleX != 1 || scaleY != 1) {
+                g2d.setColor(theme.preTransformColor);
+                g2d.drawRect(frame.left, frame.top, frame.right - frame.left, frame.bottom - frame.top);
+                at.transform(srcPts, 0, dstPts, 0, 4);
+
+                for (int i = 0; i < 8; i += 2) {
+                    GradientPaint paint = new GradientPaint(
+                            (float) srcPts[i], (float) srcPts[i + 1], theme.preTransformColor,
+                            (float) dstPts[i], (float) dstPts[i + 1], g.getColor());
+                    g2d.setPaint(paint);
+                    g2d.drawLine((int) srcPts[i], (int) srcPts[i + 1], (int) dstPts[i], (int) dstPts[i + 1]);
+                }
+
+            }
+
+        }
         g.drawRect(frame.left, frame.top, frame.right - frame.left, frame.bottom - frame.top);
         if ((mask & DASH_OUTLINE) != 0) {
             g.setStroke(restore);
@@ -128,6 +207,7 @@ public class WidgetFrameUtils {
         if (path == null) {
             return;
         }
+        g2d.setColor(theme.pathColor());
         g2d.setStroke(new BasicStroke(2));
         g2d.draw(path);
     }
@@ -169,9 +249,19 @@ public class WidgetFrameUtils {
         CLObject obj = CLParser.parse(clString);
         CLKey tmp = (CLKey) obj.get(0);
         WidgetFrame frame = new WidgetFrame();
-        deserialize(tmp, frame);
+        deserialize(tmp, frame, new LayoutConstraints());
         StringBuilder builder = new StringBuilder();
         frame.serialize(builder, false);
         System.out.println(builder.toString());
     }
+
+    public static AffineTransform getTouchScale(Graphics2D g) {
+        try {
+            return g.getFontRenderContext().getTransform().createInverse();
+        } catch (NoninvertibleTransformException e) {
+            return new AffineTransform();
+        }
+
+    }
+
 }
