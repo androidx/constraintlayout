@@ -16,46 +16,52 @@
 
 package com.example.experiments
 
-import android.app.Activity
 import android.graphics.Rect
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.util.Consumer
-import androidx.window.DisplayFeature
-import androidx.window.FoldingFeature
-import androidx.window.WindowLayoutInfo
-import androidx.window.WindowManager
-import java.util.concurrent.Executor
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.window.layout.DisplayFeature
+import androidx.window.layout.FoldingFeature
+import androidx.window.layout.WindowInfoRepository
+import androidx.window.layout.WindowInfoRepository.Companion.windowInfoRepository
+import androidx.window.layout.WindowLayoutInfo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
-class MainActivity : Activity() {
+@ExperimentalCoroutinesApi
+class MainActivity : AppCompatActivity() {
     private lateinit var motionLayout: MotionLayout
-    private lateinit var windowManager: WindowManager
-    private val handler = Handler(Looper.getMainLooper())
-    private val mainThreadExecutor = Executor { r: Runnable -> handler.post(r) }
-    private val stateContainer = StateContainer()
+    lateinit var windowInfoRepository: WindowInfoRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        windowManager = WindowManager(this)
+        windowInfoRepository = windowInfoRepository()
+
+        // Create a new coroutine since repeatOnLifecycle is a suspend function
+        lifecycleScope.launch(Dispatchers.Main) {
+            // The block passed to repeatOnLifecycle is executed when the lifecycle
+            // is at least STARTED and is cancelled when the lifecycle is STOPPED.
+            // It automatically restarts the block when the lifecycle is STARTED again.
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // Safely collects from windowInfoRepository when the lifecycle is STARTED
+                // and stops collection when the lifecycle is STOPPED.
+                windowInfoRepository.windowLayoutInfo
+                    .collect { newLayoutInfo ->
+                        updateCurrentLayout(newLayoutInfo)
+                    }
+            }
+        }
 
         setContentView(R.layout.activity_main2)
         motionLayout = findViewById<MotionLayout>(R.id.root)
-    }
-
-
-    override fun onStart() {
-        super.onStart()
-        windowManager.registerLayoutChangeCallback(mainThreadExecutor, stateContainer)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        windowManager.unregisterLayoutChangeCallback(stateContainer)
     }
 
     /**
@@ -100,7 +106,7 @@ class MainActivity : Activity() {
         val featureRectInView = Rect(displayFeature.bounds)
         val intersects = featureRectInView.intersect(viewRect)
 
-        //Checks to see if the display feature overlaps with our view at all
+        // Checks to see if the display feature overlaps with our view at all
         if ((featureRectInView.width() == 0 && featureRectInView.height() == 0) ||
             !intersects
         ) {
@@ -113,26 +119,29 @@ class MainActivity : Activity() {
         return featureRectInView
     }
 
-    inner class StateContainer : Consumer<WindowLayoutInfo> {
-        var lastLayoutInfo: WindowLayoutInfo? = null
-
-        override fun accept(newLayoutInfo: WindowLayoutInfo) {
-
-            // Add views that represent display features
-            for (displayFeature in newLayoutInfo.displayFeatures) {
-                val foldFeature = displayFeature as? FoldingFeature
-                if (foldFeature != null) {
-                    if (foldFeature.isSeparating &&
-                        foldFeature.orientation == FoldingFeature.ORIENTATION_HORIZONTAL
-                    ) {
-                        // The foldable device is in tabletop mode
-                        val fold = foldPosition(motionLayout, foldFeature)
-                        ConstraintLayout.getSharedValues().fireNewValue(R.id.fold, fold)
-                    } else {
-                        ConstraintLayout.getSharedValues().fireNewValue(R.id.fold, 0);
-                    }
+    /**
+     * Update the current layout based on the passed WindowLayoutInfo
+     */
+    private fun updateCurrentLayout(newLayoutInfo: WindowLayoutInfo) {
+        // Add views that represent display features
+        for (displayFeature in newLayoutInfo.displayFeatures) {
+            val foldFeature = displayFeature as? FoldingFeature
+            if (foldFeature != null) {
+                if (isTableTopMode(foldFeature)) {
+                    // The foldable device is in tabletop mode
+                    val fold = foldPosition(motionLayout, foldFeature)
+                    ConstraintLayout.getSharedValues().fireNewValue(R.id.fold, fold)
+                } else {
+                    ConstraintLayout.getSharedValues().fireNewValue(R.id.fold, 0)
                 }
             }
         }
     }
+
+    /**
+     * Returns true if the current posture is TableTop
+     */
+    private fun isTableTopMode(foldFeature: FoldingFeature) =
+        foldFeature.state == FoldingFeature.State.HALF_OPENED &&
+            foldFeature.orientation == FoldingFeature.Orientation.HORIZONTAL
 }
