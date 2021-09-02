@@ -135,6 +135,18 @@ Hello World
 
 🌊 [Flow](https://developer.android.com/reference/androidx/constraintlayout/helper/widget/Flow) is a VirtualLayout that allows positioning of referenced widgets horizontally or vertically similar to a Chain. If the referenced elements do not fit within the given bounds it has the ability to wrap them and create multiple chains. See [projects/CalculatorExperiments](projects/CalculatorExperiments) for examples.
 
+🌀 [CircularFlow](https://developer.android.com/reference/androidx/constraintlayout/helper/widget/CircularFlow) is a VirtualLayout that easily organize objects in a circular pattern. See [projects/CarouselExperiments](projects/CarouselExperiments) for basic examples and [projects/MotionLayoutVerification](projects/MotionLayoutVerification) for examples with MotionLayout.
+```xml
+<androidx.constraintlayout.helper.widget.CircularFlow
+   android:id="@+id/circularFlow"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   app:circularflow_angles="0,40,80,120"
+   app:circularflow_radiusInDP="90,100,110,120"
+   app:circularflow_viewCenter="@+id/view1"
+   app:constraint_referenced_ids="view2,view3,view4,view5" />
+```
+
 ## 📚👩‍🏫 Learning Materials
 
 - [Build a Responsive UI with ConstraintLayout](https://developer.android.com/training/constraint-layout)
