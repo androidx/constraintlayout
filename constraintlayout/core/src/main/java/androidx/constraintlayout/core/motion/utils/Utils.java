@@ -78,7 +78,10 @@ public class Utils {
 
     public static void log(String str) {
         StackTraceElement s = new Throwable().getStackTrace()[1];
-        String ss = ".(" + s.getFileName() + ":" + s.getLineNumber() + ") " + s.getMethodName();
+        String methodName =  s.getMethodName();
+        methodName = (methodName+"                  ").substring(0,17);
+        String  npad = "    ".substring(Integer.toString(s.getLineNumber()).length());
+        String ss = ".(" + s.getFileName() + ":" + s.getLineNumber() + ")" + npad +methodName;
         System.out.println(ss + " " + str);
     }
 

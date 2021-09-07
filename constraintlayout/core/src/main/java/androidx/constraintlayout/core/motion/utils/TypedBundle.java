@@ -102,6 +102,21 @@ public class TypedBundle {
             values.setValue(mTypeBoolean[i], mValueBoolean[i]);
         }
     }
+    public void applyDelta(TypedBundle values) {
+        for (int i = 0; i < mCountInt; i++) {
+            values.add(mTypeInt[i], mValueInt[i]);
+        }
+        for (int i = 0; i < mCountFloat; i++) {
+            values.add(mTypeFloat[i], mValueFloat[i]);
+        }
+        for (int i = 0; i < mCountString; i++) {
+            values.add(mTypeString[i], mValueString[i]);
+        }
+        for (int i = 0; i < mCountBoolean; i++) {
+            values.add(mTypeBoolean[i], mValueBoolean[i]);
+        }
+    }
+
 
     public void clear() {
         mCountBoolean = 0;

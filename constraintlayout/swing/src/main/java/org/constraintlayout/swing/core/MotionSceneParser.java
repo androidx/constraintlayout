@@ -16,35 +16,25 @@
 
 package org.constraintlayout.swing.core;
 
-import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.parser.*;
-
-import java.awt.geom.Path2D;
 
 /**
  * The basic parser converts the json syntax into the ConstraintLayoutState object
  */
-public class ConstraintSetParser {
+public class MotionSceneParser {
 
     private String exportedName;
 
     public void parse(String content, ConstraintLayoutState state) {
         try {
-            parse( CLParser.parse(content),state);
-        } catch (CLParsingException e) {
-            e.printStackTrace();
-        }
-    }
-    public void parse(CLObject json , ConstraintLayoutState state) {
-        try {
             state.clear();
-
+            CLObject json = CLParser.parse(content);
             for (CLKey key : json) {
                 String name = key.getName();
                 if (name.equals("Header")) {
                     CLElement value = key.getValue();
                     if (value instanceof CLObject) {
-                        parseHeader((CLObject) value);
+                        parseHeader((CLObject) value, content);
                     }
                 } else {
 //                    System.out.println("object <" + name + ">");
@@ -237,7 +227,7 @@ public class ConstraintSetParser {
         }
     }
 
-    private void parseHeader(CLObject header) {
+    private void parseHeader(CLObject header, String content) {
         exportedName = header.getStringOrNull("exportAs");
     }
 

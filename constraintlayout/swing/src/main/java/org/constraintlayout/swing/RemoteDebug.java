@@ -16,6 +16,7 @@
 
 package org.constraintlayout.swing;
 
+import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.state.Registry;
 import androidx.constraintlayout.core.state.RegistryCallback;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
@@ -28,7 +29,7 @@ import org.constraintlayout.swing.core.ConstraintSetParser;
  * Utility class for SwingConstraintLayout to support remote debugging
  */
 public class RemoteDebug {
-
+    private static final boolean DEBUG = false;
     public static void debug(ConstraintSetParser parser, String content, ConstraintLayoutState state, ConstraintWidgetContainer widgetContainer, ConstraintLayout constraintLayout) {
         Registry registry = Registry.getInstance();
         registry.register(parser.getExportedName(), new RegistryCallback() {
@@ -67,7 +68,9 @@ public class RemoteDebug {
             @Override
             public String currentLayoutInformation() {
                 String layout = getSerializedLayout(widgetContainer);
-                System.out.println("layout:\n" + layout);
+                if (DEBUG) {
+                    Utils.log("layout:\n" + layout);
+                }
                 return layout;
             }
 
