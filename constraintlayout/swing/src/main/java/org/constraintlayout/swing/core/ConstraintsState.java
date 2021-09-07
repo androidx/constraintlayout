@@ -16,6 +16,7 @@
 
 package org.constraintlayout.swing.core;
 
+import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
@@ -29,6 +30,7 @@ import java.util.HashMap;
  * Floats are "unpacked" using Float.intBitsToFloat
  */
 public class ConstraintsState {
+    private static boolean DEBUG = false;
     int MAX = 2 * TOTAL;
     int[] table = new int[MAX];
     int lastId = 1; // container
@@ -117,6 +119,30 @@ public class ConstraintsState {
         mapAnchorType.put(ANCHOR_BOTTOM, ConstraintAnchor.Type.BOTTOM);
         mapAnchorType.put(ANCHOR_BASELINE, ConstraintAnchor.Type.BASELINE);
     }
+    public void set(int item, int offset, int value) {
+        table[item + offset] = value;
+    }
+    public void set(int item, int value) {
+        table[item ] = value;
+    }
+    public void set(int item, int offset, float value) {
+        set(item, offset, Float.floatToIntBits(value));
+    }
+    public void set(int item, float value) {
+        set(item,  Float.floatToIntBits(value));
+    }
+
+    int getInt(int item, int offset) {
+        return table[item + offset];
+    }
+    int getInt(int item) {
+        return table[item];
+    }
+
+    float getFloat(int item, int offset) {
+        return Float.intBitsToFloat(getInt(item, offset));
+    }
+
 
     public ConstraintsState() {
         mapIdsToIdx.put("parent", 1);
@@ -279,10 +305,10 @@ public class ConstraintsState {
     public void addConstraint(String id, int from, String targetId, int to, int margin, int marginGone) {
         int index = getIndex(id) * TOTAL + from;
         int indexTarget = getIndex(targetId);
-        table[index + OFFSET_CONSTRAINT_TARGET] = indexTarget;
-        table[index + OFFSET_CONSTRAINT_ANCHOR] = to;
-        table[index + OFFSET_CONSTRAINT_MARGIN] = margin;
-        table[index + OFFSET_CONSTRAINT_MARGIN_GONE] = marginGone;
+        set(index,OFFSET_CONSTRAINT_TARGET, indexTarget);
+        set(index,OFFSET_CONSTRAINT_ANCHOR, to);
+        set(index,OFFSET_CONSTRAINT_MARGIN, margin);
+        set(index,OFFSET_CONSTRAINT_MARGIN_GONE, marginGone);
     }
 
     public void addConstraint(String id, String from, String targetId, String to, int margin, int marginGone) {
@@ -292,42 +318,60 @@ public class ConstraintsState {
        // displayTable();
     }
 
-    public void addWidthDimension(String id, String type) {
-        addDimension(id, type, WIDTH_IDX);
+    public void addWidthDimension(String id, String type, int value) {
+        addDimension(id, type, WIDTH_IDX,value);
     }
 
-    public void addHeightDimension(String id, String type) {
-        addDimension(id, type, HEIGHT_IDX);
+    public void addHeightDimension(String id, String type, int value) {
+        addDimension(id, type, HEIGHT_IDX, value);
     }
 
-    public void addDimension(String id, String type, int dimension) {
+    public static final String WRAP=  "wrap";
+    public static final String PARENT=  "parent";
+    public static final String SPREAD=  "spread";
+    public static final String VALUE=  "value";
+    public static final String PREFER_WRAP=  "PREFER_WRAP";
+    public static final String PERCENT=  "PERCENT";
+    public static final String RATIO=  "RATIO";
+
+    public void addDimension(String id, String type, int dimension, int value) {
         int index = getIndex(id) * TOTAL + dimension;
         switch (type) {
-            case "wrap": {
+            case WRAP:
                 table[index + OFFSET_DIMENSION_TYPE] = DIMENSION_WRAP;
-            } break;
-            case "parent": {
+            break;
+            case PARENT:
                 table[index + OFFSET_DIMENSION_TYPE] = DIMENSION_PARENT;
-            } break;
-            case "spread": {
+             break;
+            case SPREAD:
                 table[index + OFFSET_DIMENSION_TYPE] = DIMENSION_SPREAD;
-            } break;
-            // TODO: Handle other dimensions types
+            break;
+            case VALUE:
+                table[index + OFFSET_DIMENSION_TYPE] = DIMENSION_VALUE;
+                table[index + OFFSET_DIMENSION_VALUE] = value;
+            break;
+            default:
+                Utils.log("Not support yet type "+type);
+                break;
+                // TODO: Handle other dimensions types
+                //    final static int DIMENSION_PREFER_WRAP = 3;
+                //    final static int DIMENSION_PERCENT = 6;
+                //    final static int DIMENSION_RATIO = 7;
         }
     }
 
     public void addCenterHorizontallyConstraint(String id, String targetId, float bias) {
         int index = getIndex(id) * TOTAL;
         int indexTarget = getIndex(targetId);
-        table[index + ANCHOR_HORIZONTAL_CENTER + OFFSET_CENTER_CONSTRAINT] = indexTarget;
-        table[index + ANCHOR_HORIZONTAL_CENTER + OFFSET_CENTER_BIAS] = Float.floatToIntBits(bias);
+        set(index,ANCHOR_HORIZONTAL_CENTER + OFFSET_CENTER_CONSTRAINT, indexTarget);
+        set(index,ANCHOR_HORIZONTAL_CENTER + OFFSET_CENTER_BIAS, bias);
     }
 
     public void addCenterVerticallyConstraint(String id, String targetId, float bias) {
         int index = getIndex(id) * TOTAL;
         int indexTarget = getIndex(targetId);
-        table[index + ANCHOR_VERTICAL_CENTER + OFFSET_CENTER_CONSTRAINT] = indexTarget;
-        table[index + ANCHOR_VERTICAL_CENTER + OFFSET_CENTER_BIAS] = Float.floatToIntBits(bias);
+        set(index,ANCHOR_VERTICAL_CENTER + OFFSET_CENTER_CONSTRAINT, indexTarget);
+        set(index,ANCHOR_VERTICAL_CENTER + OFFSET_CENTER_BIAS, bias);
     }
 
     public void addCenterConstraint(String id, String targetId) {
@@ -347,7 +391,9 @@ public class ConstraintsState {
 
     public void apply(HashMap<String, ConstraintWidget> idsToConstraintWidgets, ConstraintWidget constraintWidget) {
         String id = constraintWidget.stringId;
-        System.out.println("Apply <" + id + ">");
+        if (DEBUG) {
+            Utils.log("Apply <" + id + ">");
+        }
         int index = getIndex(id) * TOTAL;
         constraintWidget.resetAllConstraints();
         applyDimension(constraintWidget, index, WIDTH_IDX);
@@ -381,6 +427,11 @@ public class ConstraintsState {
                     constraintWidget.setHorizontalDimensionBehaviour(DimensionBehaviour.MATCH_CONSTRAINT);
                 }
                 break;
+                case DIMENSION_VALUE: {
+                    constraintWidget.setHorizontalDimensionBehaviour(DimensionBehaviour.FIXED);
+                    constraintWidget.setWidth(value);
+                }
+                break;
             }
         } else if (dimension == HEIGHT_IDX) {
             switch (type) {
@@ -394,6 +445,11 @@ public class ConstraintsState {
                 break;
                 case DIMENSION_SPREAD: {
                     constraintWidget.setVerticalDimensionBehaviour(DimensionBehaviour.MATCH_CONSTRAINT);
+                }
+                break;
+                case DIMENSION_VALUE: {
+                    constraintWidget.setVerticalDimensionBehaviour(DimensionBehaviour.FIXED);
+                    constraintWidget.setHeight(value);
                 }
                 break;
             }

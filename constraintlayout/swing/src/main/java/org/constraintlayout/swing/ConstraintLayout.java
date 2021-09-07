@@ -16,6 +16,7 @@
 
 package org.constraintlayout.swing;
 
+import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 import androidx.constraintlayout.core.widgets.Guideline;
@@ -32,14 +33,13 @@ import java.util.HashMap;
  * Basic implementation of ConstraintLayout as a Swing LayoutManager
  */
 public class ConstraintLayout implements LayoutManager2 {
-    private static final boolean DEBUG = true;
-    private ConstraintWidgetContainer mLayout = new ConstraintWidgetContainer();
-    private HashMap<Component, ConstraintWidget> mViewsToConstraints = new HashMap<>();
-    private ConstraintSetParser parser = new ConstraintSetParser();
-    private ConstraintLayoutState state = new ConstraintLayoutState();
-
-    private HashMap<Component, String> viewsToIds = new HashMap<>();
-    private HashMap<String, ConstraintWidget> idsToConstraintWidgets = new HashMap<>();
+    private static final boolean DEBUG = false;
+    private final ConstraintWidgetContainer mLayout = new ConstraintWidgetContainer();
+    private final HashMap<Component, ConstraintWidget> mViewsToConstraints = new HashMap<>();
+    private final ConstraintSetParser parser = new ConstraintSetParser();
+    private final ConstraintLayoutState state = new ConstraintLayoutState();
+    private final HashMap<Component, String> viewsToIds = new HashMap<>();
+    private final HashMap<String, ConstraintWidget> idsToConstraintWidgets = new HashMap<>();
     Container parentContainer;
 
     public ConstraintLayout() {
@@ -87,6 +87,7 @@ public class ConstraintLayout implements LayoutManager2 {
             constraintWidget.stringId = id;
             constraintWidget.setCompanionWidget(comp);
             idsToConstraintWidgets.put(id, constraintWidget);
+            viewsToIds.put(comp,id);
         }
     }
 
@@ -140,9 +141,9 @@ public class ConstraintLayout implements LayoutManager2 {
         parentContainer = parent;
 
         state.guidelines.apply(mLayout, idsToConstraintWidgets);
-
-        System.out.println("Current system is:\n" + state.serialize());
-
+        if (DEBUG) {
+            Utils.log("Current system is:\n" + state.serialize());
+        }
         for (String id : idsToConstraintWidgets.keySet()) {
             if (id.equals("parent")) {
                 continue;
@@ -152,7 +153,9 @@ public class ConstraintLayout implements LayoutManager2 {
             if (constraintWidget instanceof Guideline) {
                 continue;
             }
-            System.out.println("applying " + id);
+            if (DEBUG) {
+                Utils.log("applying " + id);
+            }
             state.constraints.apply(idsToConstraintWidgets, constraintWidget);
         }
 
@@ -166,6 +169,9 @@ public class ConstraintLayout implements LayoutManager2 {
         for (ConstraintWidget child : mLayout.getChildren()) {
             Component component = (Component) child.getCompanionWidget();
             if (component != null) {
+                if (DEBUG) {
+                    Utils.log("applying " + child.getWidth()+" "+child.getHeight());
+                }
                 component.setBounds(child.getX(), child.getY(), child.getWidth(), child.getHeight());
             }
         }
@@ -180,6 +186,9 @@ public class ConstraintLayout implements LayoutManager2 {
         Component component = (Component) constraintWidget.getCompanionWidget();
         int measuredWidth = constraintWidget.getWidth();
         int measuredHeight = constraintWidget.getHeight();
+        if (DEBUG) {
+            Utils.log(" measure " + measuredWidth+" "+measuredHeight);
+        }
         if (measure.horizontalBehavior == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
             measuredWidth = component.getMinimumSize().width;
         } else if (measure.horizontalBehavior == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {

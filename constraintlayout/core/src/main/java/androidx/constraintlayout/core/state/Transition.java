@@ -24,6 +24,7 @@ import androidx.constraintlayout.core.motion.key.MotionKeyPosition;
 import androidx.constraintlayout.core.motion.utils.KeyCache;
 import androidx.constraintlayout.core.motion.utils.TypedBundle;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
+import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 
@@ -31,7 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Transition {
-    HashMap<String, WidgetState> state = new HashMap<>();
+    private HashMap<String, WidgetState> state = new HashMap<>();
     HashMap<Integer, HashMap<String, KeyPosition>> keyPositions = new HashMap<>();
 
     public final static int START = 0;
@@ -310,6 +311,9 @@ public class Transition {
     public int getKeyFrames(String id, float[] rectangles, int[] pathMode, int[] position) {
         WidgetState widgetState = state.get(id);
         return widgetState.motionControl.buildKeyFrames(rectangles, pathMode, position);
+    }
+    private WidgetState getWidgetState(String widgetId) {
+        return  this.state.get(widgetId);
     }
 
     private WidgetState getWidgetState(String widgetId, ConstraintWidget child, int transitionState) {

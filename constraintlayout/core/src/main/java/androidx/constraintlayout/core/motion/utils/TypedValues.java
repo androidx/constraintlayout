@@ -25,7 +25,7 @@ public interface TypedValues {
     public static final int INT_MASK = 2;
     public static final int FLOAT_MASK = 4;
     public static final int STRING_MASK = 8;
-    
+
     /**
      * Used to set integer values
      *
@@ -68,6 +68,8 @@ public interface TypedValues {
     public static final int TYPE_TARGET = 101;
 
     interface Attributes {
+        public static final String NAME = "KeyAttributes";
+
         public static final int TYPE_CURVE_FIT = 301;
         public static final int TYPE_VISIBILITY = 302;
         public static final int TYPE_ALPHA = 303;
@@ -187,7 +189,7 @@ public interface TypedValues {
             return -1;
         }
 
-        public static int getType(int name) {
+        static int getType(int name) {
             switch (name) {
                 case TYPE_CURVE_FIT:
                 case TYPE_VISIBILITY:
@@ -218,6 +220,7 @@ public interface TypedValues {
     }
 
     interface Cycle {
+        public static final String NAME = "KeyCycle";
         public static final int TYPE_CURVE_FIT = 401;
         public static final int TYPE_VISIBILITY = 402;
         public static final int TYPE_ALPHA = 403;
@@ -335,9 +338,42 @@ public interface TypedValues {
             }
             return -1;
         }
+
+        static int getType(int name) {
+            switch (name) {
+                case TYPE_CURVE_FIT:
+                case TYPE_VISIBILITY:
+                case TYPE_FRAME_POSITION:
+                    return INT_MASK;
+                case TYPE_ALPHA:
+                case TYPE_TRANSLATION_X:
+                case TYPE_TRANSLATION_Y:
+                case TYPE_TRANSLATION_Z:
+                case TYPE_ELEVATION:
+                case TYPE_ROTATION_X:
+                case TYPE_ROTATION_Y:
+                case TYPE_ROTATION_Z:
+                case TYPE_SCALE_X:
+                case TYPE_SCALE_Y:
+                case TYPE_PIVOT_X:
+                case TYPE_PIVOT_Y:
+                case TYPE_PROGRESS:
+                case TYPE_PATH_ROTATE:
+                case TYPE_WAVE_PERIOD:
+                case TYPE_WAVE_OFFSET:
+                case TYPE_WAVE_PHASE:
+                    return FLOAT_MASK;
+                case TYPE_EASING:
+                case TYPE_TARGET:
+                case TYPE_WAVE_SHAPE:
+                    return STRING_MASK;
+            }
+            return -1;
+        }
     }
 
     interface Trigger {
+        public static final String NAME = "KeyTrigger";
         public static final String VIEW_TRANSITION_ON_CROSS = "viewTransitionOnCross";
         public static final String VIEW_TRANSITION_ON_POSITIVE_CROSS = "viewTransitionOnPositiveCross";
         public static final String VIEW_TRANSITION_ON_NEGATIVE_CROSS = "viewTransitionOnNegativeCross";
@@ -416,6 +452,7 @@ public interface TypedValues {
     }
 
     interface Position {
+        public static final String NAME = "KeyPosition";
         public static final String S_TRANSITION_EASING = "transitionEasing";
         public static final String S_DRAWPATH = "drawPath";
         public static final String S_PERCENT_WIDTH = "percentWidth";
@@ -470,9 +507,32 @@ public interface TypedValues {
             }
             return -1;
         }
+
+        static int getType(int name) {
+            switch (name) {
+                case TYPE_CURVE_FIT:
+                case TYPE_FRAME_POSITION:
+                    return INT_MASK;
+                case TYPE_PERCENT_WIDTH:
+                case TYPE_PERCENT_HEIGHT:
+                case TYPE_SIZE_PERCENT:
+                case TYPE_PERCENT_X:
+                case TYPE_PERCENT_Y:
+                    return FLOAT_MASK;
+                case TYPE_TRANSITION_EASING:
+                case TYPE_TARGET:
+                case TYPE_DRAWPATH:
+                    return STRING_MASK;
+            }
+            return -1;
+        }
+
+
     }
 
     interface Motion {
+        public static final String NAME = "motion";
+
         public static final String S_STAGGER = "Stagger";
         public static final String S_PATH_ROTATE = "PathRotate";
         public static final String S_QUANTIZE_MOTION_PHASE = "QuantizeMotionPhase";
@@ -557,6 +617,7 @@ public interface TypedValues {
     }
 
     interface Custom {
+        public static final String NAME = "Custom";
         public static final String S_INT = "integer";
         public static final String S_FLOAT = "float";
         public static final String S_COLOR = "color";
@@ -606,6 +667,175 @@ public interface TypedValues {
             }
             return -1;
         }
+    }
+
+    interface MotionScene {
+        public static final String NAME = "MotionScene";
+        public static final String S_DEFAULT_DURATION = "defaultDuration";
+        public static final String S_LAYOUT_DURING_TRANSITION = "layoutDuringTransition";
+        public static final int TYPE_DEFAULT_DURATION = 600;
+        public static final int TYPE_LAYOUT_DURING_TRANSITION = 601;
+
+        public static final String[] KEY_WORDS = {
+                S_DEFAULT_DURATION,
+                S_LAYOUT_DURING_TRANSITION,
+        };
+
+        public static int getType(int name) {
+            switch (name) {
+                case TYPE_DEFAULT_DURATION:
+                    return INT_MASK;
+                case TYPE_LAYOUT_DURING_TRANSITION:
+                    return BOOLEAN_MASK;
+            }
+            return -1;
+        }
+
+        /**
+         * Method to go from String names of values to id of the values
+         * IDs are use for efficiency
+         *
+         * @param name the name of the value
+         * @return the id of the vlalue or -1 if no value exist
+         */
+        public static int getId(String name) {
+            switch (name) {
+                case S_DEFAULT_DURATION:
+                    return TYPE_DEFAULT_DURATION;
+                case S_LAYOUT_DURING_TRANSITION:
+                    return TYPE_LAYOUT_DURING_TRANSITION;
+            }
+            return -1;
+        }
+    }
+
+    interface Transition {
+        public static final String NAME = "Transitions";
+        public static final String S_DURATION = "duration";
+        public static final String S_FROM = "from";
+        public static final String S_TO = "to";
+        public static final String S_PATH_MOTION_ARC = "pathMotionArc";
+        public static final String S_AUTO_TRANSITION = "autoTransition";
+        public static final String S_INTERPOLATOR = "motionInterpolator";
+        public static final String S_STAGGERED = "staggered";
+        public static final String S_TRANSITION_FLAGS = "transitionFlags";
+
+        public static final int TYPE_DURATION = 700;
+        public static final int TYPE_FROM = 701;
+        public static final int TYPE_TO = 702;
+        public static final int TYPE_PATH_MOTION_ARC = 703;
+        public static final int TYPE_AUTO_TRANSITION = 704;
+        public static final int TYPE_INTERPOLATOR = 705;
+        public static final int TYPE_STAGGERED = 706;
+        public static final int TYPE_TRANSITION_FLAGS = 707;
+
+
+        public static final String[] KEY_WORDS = {
+                S_DURATION,
+                S_FROM,
+                S_TO,
+                S_PATH_MOTION_ARC,
+                S_AUTO_TRANSITION,
+                S_INTERPOLATOR,
+                S_STAGGERED,
+                S_FROM,
+                S_TRANSITION_FLAGS,
+        };
+
+        public static int getType(int name) {
+            switch (name) {
+                case TYPE_DURATION:
+                    return INT_MASK;
+                case TYPE_FROM:
+                case TYPE_TO:
+                case TYPE_INTERPOLATOR:
+                case TYPE_PATH_MOTION_ARC:
+                case TYPE_TRANSITION_FLAGS:
+                    return STRING_MASK;
+
+                case TYPE_STAGGERED:
+                    return FLOAT_MASK;
+            }
+            return -1;
+        }
+
+        /**
+         * Method to go from String names of values to id of the values
+         * IDs are use for efficiency
+         *
+         * @param name the name of the value
+         * @return the id of the vlalue or -1 if no value exist
+         */
+        public static int getId(String name) {
+            switch (name) {
+                case S_DURATION:
+                    return TYPE_DURATION;
+                case S_FROM:
+                    return TYPE_FROM;
+                case S_TO:
+                    return TYPE_TO;
+                case S_PATH_MOTION_ARC:
+                    return TYPE_PATH_MOTION_ARC;
+                case S_AUTO_TRANSITION:
+                    return TYPE_AUTO_TRANSITION;
+                case S_INTERPOLATOR:
+                    return TYPE_INTERPOLATOR;
+                case S_STAGGERED:
+                    return TYPE_STAGGERED;
+                case S_TRANSITION_FLAGS:
+                    return TYPE_TRANSITION_FLAGS;
+            }
+            return -1;
+        }
+    }
+
+    interface OnSwipe {
+        public static final String DRAG_SCALE = "dragscale";
+        public static final String DRAG_THRESHOLD = "dragthreshold";
+
+        public static final String MAX_VELOCITY = "maxvelocity";
+        public static final String MAX_ACCELERATION = "maxacceleration";
+        public static final String SPRING_MASS = "springmass";
+        public static final String SPRING_STIFFNESS = "springstiffness";
+        public static final String SPRING_DAMPING = "springdamping";
+        public static final String SPRINGS_TOP_THRESHOLD = "springstopthreshold";
+
+        public static final String DRAG_DIRECTION = "dragdirection";
+        public static final String TOUCH_ANCHOR_ID = "touchanchorid";
+        public static final String TOUCH_ANCHOR_SIDE = "touchanchorside";
+        public static final String ROTATION_CENTER_ID = "rotationcenterid";
+        public static final String TOUCH_REGION_ID = "touchregionid";
+        public static final String LIMIT_BOUNDS_TO = "limitboundsto";
+
+        public static final String MOVE_WHEN_SCROLLAT_TOP = "movewhenscrollattop";
+        public static final String ON_TOUCH_UP = "ontouchup";
+        public static final String[] ON_TOUCH_UP_ENUM = {"autoComplete",
+                "autoCompleteToStart",
+                "autoCompleteToEnd",
+                "stop",
+                "decelerate",
+                "decelerateAndComplete",
+                "neverCompleteToStart",
+                "neverCompleteToEnd"};
+
+
+        public static final String SPRING_BOUNDARY = "springboundary";
+        public static final String[] SPRING_BOUNDARY_ENUM = {"overshoot",
+                "bounceStart",
+                "bounceEnd",
+                "bounceBoth"};
+
+        public static final String AUTOCOMPLETE_MODE = "autocompletemode";
+        public static final String[] AUTOCOMPLETE_MODE_ENUM = {
+                "continuousVelocity",
+                "spring"};
+
+        public static final String NESTED_SCROLL_FLAGS = "nestedscrollflags";
+        public static final String[] NESTED_SCROLL_FLAGS_ENUM = {"none",
+                "disablePostScroll",
+                "disableScroll",
+                "supportScrollUp"};
+
     }
 
 }
