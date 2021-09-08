@@ -195,7 +195,7 @@ public class ConstraintSetParser {
 
     private void parseDimension(ConstraintsState state, String widgetId, String constraintName, CLElement constraint) {
         switch (constraintName) {
-            case "width":
+            case CSetAttributes.WIDTH:
                 if (constraint instanceof CLString){
                     state.addWidthDimension(widgetId, constraint.content(),0);
                 }  else {
@@ -204,7 +204,7 @@ public class ConstraintSetParser {
                     }
                 }
                     break;
-            case "height":
+            case CSetAttributes.HEIGHT:
                 if (constraint instanceof CLString){
                     state.addHeightDimension(widgetId, constraint.content(),0);
                 }  else {

@@ -13,13 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.constraintlayout.swing.core.motion.model;
 
-import androidx.constraintlayout.core.motion.utils.TypedBundle;
-
-
-public class OnClickModel {
-    TypedBundle mData = new TypedBundle();
+public class JsonKeys {
+    public static final String MOTION_SCENE = "motionScene";
+    public static final String HEADER = "Header";
+    public static final String CONSTRAINT_SETS = "ConstraintSets";
+    public static final String KEY_FRAMES = "KeyFrames";
+    public static final String DEFAULT_TRANSITION = "default";
+    public static final String TRANSITIONS = "Transitions";
+    public static final String KEY_POSITIONS = "KeyPositions";
+    public static final String KEY_CYCLES = "KeyCycles";
+    public static final String KEY_ATTRIBUTES = "KeyAttributes";
 
 
 }

@@ -16,7 +16,6 @@
 package org.constraintlayout.swing.core.motion.model;
 
 import androidx.constraintlayout.core.parser.*;
-import androidx.constraintlayout.core.state.Transition;
 
 import java.util.HashMap;
 

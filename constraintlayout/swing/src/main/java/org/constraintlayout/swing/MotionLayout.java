@@ -42,6 +42,13 @@ public class MotionLayout implements LayoutManager2 {
         parse(content);
     }
 
+    /**
+     * Create a MotionLayout. This pattern allow user to put all construction of widget into the runnable.
+     * It enables this class to then know when all of the Components have been created.
+     * In kotlin it can be used as MotionLayout(motionScene) {  .... create widgets here ... }
+     * @param content
+     * @param runnable put construction and adding of widgets in this runnable
+     */
     public MotionLayout(@Language("JSON5") String content, Runnable runnable) {
         parse(content);
         SwingUtilities.invokeLater(runnable);

@@ -18,7 +18,6 @@ package org.constraintlayout.swing;
 
 import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.state.WidgetFrame;
-import org.constraintlayout.swing.core.motion.model.MotionEngine;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,14 +25,13 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.RectangularShape;
-import java.util.HashMap;
 
 /**
  * Basic implementation of ConstraintLayout as a Swing LayoutManager
  */
-public class MotionPanel extends JComponent  {
-    MotionLayout  mMotionLayout;
+public class MotionPanel extends JComponent {
+    MotionLayout mMotionLayout;
+
     public MotionPanel() {
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -43,9 +41,18 @@ public class MotionPanel extends JComponent  {
         });
     }
 
+    /**
+     * sets the LayoutManager Must be a subclass of MotionLayout
+     * @param mgr must be a subclass of MotionLayout
+     */
     @Override
     public void setLayout(LayoutManager mgr) {
-
+        if (mgr instanceof MotionLayout) {
+            mMotionLayout = (MotionLayout) mgr;
+            super.setLayout(mgr);
+        } else {
+            throw new RuntimeException("You cannot set a Layout Manager on a MotionPanel it uses MotionLayout");
+        }
     }
 
     public void setLayoutDescription(@Language("JSON5") String content) {
@@ -57,19 +64,20 @@ public class MotionPanel extends JComponent  {
     }
 
     public MotionPanel(@Language("JSON5") String content, Runnable runnable) {
-         SwingUtilities.invokeLater(runnable);
+        SwingUtilities.invokeLater(runnable);
     }
 
     public void add(Component comp, Object constraints) {
         super.add(comp, constraints);
     }
+
     AffineTransform at = new AffineTransform();
 
     @Override
     public void paint(Graphics g) {
         g.setColor(getBackground());
-g.setClip(0,0,getWidth(),getHeight());
-        g.fillRect(0,0,getWidth(),getHeight());
+        g.setClip(0, 0, getWidth(), getHeight());
+        g.fillRect(0, 0, getWidth(), getHeight());
         super.paint(g);
     }
 
@@ -77,7 +85,7 @@ g.setClip(0,0,getWidth(),getHeight());
     protected void paintChildren(Graphics g) {
         Graphics sg = g;
 
-        synchronized(getTreeLock()) {
+        synchronized (getTreeLock()) {
             int i = getComponentCount() - 1;
             if (i < 0) {
                 return;
@@ -90,7 +98,7 @@ g.setClip(0,0,getWidth(),getHeight());
 
             final Window window = SwingUtilities.getWindowAncestor(this);
             final boolean isWindowOpaque = window == null || window.isOpaque();
-            for (; i >= 0 ; i--) {
+            for (; i >= 0; i--) {
                 Component comp = getComponent(i);
                 String id = mMotionLayout.mViewsToIds.get(comp);
 
@@ -103,31 +111,31 @@ g.setClip(0,0,getWidth(),getHeight());
                 // Enable painting of heavyweights in non-opaque windows.
                 // See 6884960
 
-                    Rectangle cr;
+                Rectangle cr;
 
-                    cr = comp.getBounds(tmpRect);
-                     Shape clip =null;//g.getClip();
-                    boolean hitClip = clip == null || clip.intersects(cr.x, cr.y, cr.width, cr.height);
+                cr = comp.getBounds(tmpRect);
+                Shape clip = null;//g.getClip();
+                boolean hitClip = clip == null || clip.intersects(cr.x, cr.y, cr.width, cr.height);
 
-                    if (hitClip) {
+                if (hitClip) {
 //                        Graphics2D cg = (Graphics2D) sg.create(cr.x, cr.y, cr.width,
 //                                cr.height);
-                        Graphics2D cg = (Graphics2D) sg.create(  );
-                        WidgetFrame m = mMotionLayout.getInterpolated(id);
-                        setupTransform(m);
-                        cg.transform(at);
-                        cg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                        cg.translate(cr.x, cr.y);
-                        cg.clip(new Rectangle2D.Float(0,0,cr.width,cr.height));
-                        cg.setColor(comp.getForeground());
-                        cg.setFont(comp.getFont());
-                        boolean shouldSetFlagBack = false;
-                        try {
-                                    comp.paint(cg);
-                        } finally {
-                            cg.dispose();
-                        }
+                    Graphics2D cg = (Graphics2D) sg.create();
+                    WidgetFrame m = mMotionLayout.getInterpolated(id);
+                    setupTransform(m);
+                    cg.transform(at);
+                    cg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    cg.translate(cr.x, cr.y);
+                    cg.clip(new Rectangle2D.Float(0, 0, cr.width, cr.height));
+                    cg.setColor(comp.getForeground());
+                    cg.setFont(comp.getFont());
+                    boolean shouldSetFlagBack = false;
+                    try {
+                        comp.paint(cg);
+                    } finally {
+                        cg.dispose();
                     }
+                }
 
 
             }
@@ -141,8 +149,8 @@ g.setClip(0,0,getWidth(),getHeight());
 //        float cy = (frame.top + frame.bottom) / 2f;
 //        float dx = frame.right - frame.left;
 //        float dy = frame.bottom - frame.top;
-        float cx = (frame.right-frame.left ) / 2f;
-        float cy = (frame.bottom-frame.top) / 2f;
+        float cx = (frame.right - frame.left) / 2f;
+        float cy = (frame.bottom - frame.top) / 2f;
         float dx = frame.right - frame.left;
         float dy = frame.bottom - frame.top;
 
@@ -152,7 +160,7 @@ g.setClip(0,0,getWidth(),getHeight());
         float rotationX = Float.isNaN(frame.rotationX) ? 0 : frame.rotationX;
         float rotationY = Float.isNaN(frame.rotationY) ? 0 : frame.rotationY;
 
-        float translationX  = Float.isNaN(frame.translationX) ? 0 : frame.translationX;
+        float translationX = Float.isNaN(frame.translationX) ? 0 : frame.translationX;
         float translationY = Float.isNaN(frame.translationY) ? 0 : frame.translationY;
         float translationZ = Float.isNaN(frame.translationZ) ? 0 : frame.translationZ;
 
@@ -171,7 +179,7 @@ g.setClip(0,0,getWidth(),getHeight());
     }
 
     public void layoutContainer(Container parent) {
-        Utils.logStack("???",3);
+        Utils.logStack("???", 3);
     }
 
 

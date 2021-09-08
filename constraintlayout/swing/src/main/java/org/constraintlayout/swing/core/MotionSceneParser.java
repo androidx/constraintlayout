@@ -18,6 +18,8 @@ package org.constraintlayout.swing.core;
 
 import androidx.constraintlayout.core.parser.*;
 
+import static org.constraintlayout.swing.core.motion.model.JsonKeys.HEADER;
+
 /**
  * The basic parser converts the json syntax into the ConstraintLayoutState object
  */
@@ -31,13 +33,12 @@ public class MotionSceneParser {
             CLObject json = CLParser.parse(content);
             for (CLKey key : json) {
                 String name = key.getName();
-                if (name.equals("Header")) {
+                if (name.equals(HEADER)) {
                     CLElement value = key.getValue();
                     if (value instanceof CLObject) {
                         parseHeader((CLObject) value, content);
                     }
                 } else {
-//                    System.out.println("object <" + name + ">");
                     CLElement value = key.getValue();
                     if (value instanceof CLObject) {
                         CLObject object = (CLObject) value;
@@ -131,8 +132,6 @@ public class MotionSceneParser {
     private void parseConstraints(ConstraintsState state, String widgetId, CLObject json) {
         for (CLKey key : json) {
             String name = key.getName();
-//            System.out.println("parsing constraint " + name);
-
             switch (name) {
                 case CSetAttributes.START:
                 case CSetAttributes.END:
@@ -185,7 +184,7 @@ public class MotionSceneParser {
 
     private void parseDimension(ConstraintsState state, String widgetId, String constraintName, CLElement constraint) {
         switch (constraintName) {
-            case "width":
+            case CSetAttributes.WIDTH:
                 if (constraint instanceof CLString){
                     state.addWidthDimension(widgetId, constraint.content(),0);
                 }  else {
@@ -194,7 +193,7 @@ public class MotionSceneParser {
                     }
                 }
                     break;
-            case "height":
+            case CSetAttributes.HEIGHT:
                 if (constraint instanceof CLString){
                     state.addHeightDimension(widgetId, constraint.content(),0);
                 }  else {
