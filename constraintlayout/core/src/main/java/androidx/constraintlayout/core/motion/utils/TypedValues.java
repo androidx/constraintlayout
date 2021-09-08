@@ -531,7 +531,7 @@ public interface TypedValues {
     }
 
     interface Motion {
-        public static final String NAME = "motion";
+        public static final String NAME = "Motion";
 
         public static final String S_STAGGER = "Stagger";
         public static final String S_PATH_ROTATE = "PathRotate";
