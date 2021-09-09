@@ -146,51 +146,45 @@ class OverrideValue(private var value: Float) : GeneratedValue {
     }
 }
 
-internal fun parseTransition(content: String, transition: Transition) {
-    try {
-        val json = CLParser.parse(content)
-        val pathMotionArc = json.getStringOrNull("pathMotionArc")
-        if (pathMotionArc != null) {
-            val bundle = TypedBundle()
-            when (pathMotionArc) {
-                "none" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC, 0)
-                "startVertical" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC, 1)
-                "startHorizontal" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC, 2)
-                "flip" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC, 3)
-            }
-            transition.setTransitionProperties(bundle)
+internal fun parseTransition(json: CLObject, transition: Transition) {
+    val pathMotionArc = json.getStringOrNull("pathMotionArc")
+    if (pathMotionArc != null) {
+        val bundle = TypedBundle()
+        when (pathMotionArc) {
+            "none" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC, 0)
+            "startVertical" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC, 1)
+            "startHorizontal" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC, 2)
+            "flip" -> bundle.add(TypedValues.Position.TYPE_PATH_MOTION_ARC, 3)
         }
-        val keyframes = json.getObjectOrNull("KeyFrames") ?: return
-        val keyPositions = keyframes.getArrayOrNull("KeyPositions")
-        if (keyPositions != null) {
-            (0 until keyPositions.size()).forEach { i ->
-                val keyPosition = keyPositions[i]
-                if (keyPosition is CLObject) {
-                    parseKeyPosition(keyPosition, transition)
-                }
+        transition.setTransitionProperties(bundle)
+    }
+    val keyframes = json.getObjectOrNull("KeyFrames") ?: return
+    val keyPositions = keyframes.getArrayOrNull("KeyPositions")
+    if (keyPositions != null) {
+        (0 until keyPositions.size()).forEach { i ->
+            val keyPosition = keyPositions[i]
+            if (keyPosition is CLObject) {
+                parseKeyPosition(keyPosition, transition)
             }
         }
-        val keyAttributes = keyframes.getArrayOrNull("KeyAttributes")
-        if (keyAttributes != null) {
-            (0 until keyAttributes.size()).forEach { i ->
-                val keyAttribute = keyAttributes[i]
-                if (keyAttribute is CLObject) {
-                    parseKeyAttribute(keyAttribute, transition)
-                }
+    }
+    val keyAttributes = keyframes.getArrayOrNull("KeyAttributes")
+    if (keyAttributes != null) {
+        (0 until keyAttributes.size()).forEach { i ->
+            val keyAttribute = keyAttributes[i]
+            if (keyAttribute is CLObject) {
+                parseKeyAttribute(keyAttribute, transition)
             }
         }
-        val keyCycles = keyframes.getArrayOrNull("KeyCycles")
-        if (keyCycles != null) {
-            (0 until keyCycles.size()).forEach { i ->
-                val keyCycle = keyCycles[i]
-                if (keyCycle is CLObject) {
-                    parseKeyCycle(keyCycle, transition)
-                }
+    }
+    val keyCycles = keyframes.getArrayOrNull("KeyCycles")
+    if (keyCycles != null) {
+        (0 until keyCycles.size()).forEach { i ->
+            val keyCycle = keyCycles[i]
+            if (keyCycle is CLObject) {
+                parseKeyCycle(keyCycle, transition)
             }
         }
-
-    } catch (e: CLParsingException) {
-        System.err.println("Error parsing JSON $e")
     }
 }
 
@@ -493,36 +487,39 @@ internal fun parseMotionSceneJSON(scene: MotionScene, content: String) {
     }
 }
 
+/**
+ * For the given [json] parses all ConstraintSets into the [scene].
+ */
 fun parseConstraintSets(scene: MotionScene, json: Any) {
     if (json !is CLObject) {
         return
     }
-    val elements = json.names() ?: return
-    (0 until elements.size).forEach { i ->
-        val elementName = elements[i]
-        val element = json.getObject(elementName)
+    val constraintSetNames = json.names() ?: return
+    (0 until constraintSetNames.size).forEach { i ->
+        val csName = constraintSetNames[i]
+        val constraintSet = json.getObject(csName)
         var added = false
-        val extends = element.getStringOrNull("Extends")
+        val extends = constraintSet.getStringOrNull("Extends")
         if (extends != null && extends.isNotEmpty()) {
             val base = scene.getConstraintSet(extends)
             if (base != null) {
                 val baseJson = CLParser.parse(base)
-                val widgetsOverride = element.names()
+                val widgetsOverride = constraintSet.names()
                 if (widgetsOverride != null) {
                     (0 until widgetsOverride.size).forEach { j ->
                         val widgetOverrideName = widgetsOverride[j]
-                        val value = element[widgetOverrideName]
+                        val value = constraintSet[widgetOverrideName]
                         if (value is CLObject) {
                             override(baseJson, widgetOverrideName, value)
                         }
                     }
-                    scene.setConstraintSetContent(elementName, baseJson.toJSON())
+                    scene.setConstraintSetContent(csName, baseJson.toJSON())
                     added = true
                 }
             }
         }
         if (!added) {
-            scene.setConstraintSetContent(elementName, element.toJSON())
+            scene.setConstraintSetContent(csName, constraintSet.toJSON())
         }
     }
 }

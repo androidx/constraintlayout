@@ -41,6 +41,9 @@ import androidx.compose.ui.layout.*
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.*
 import androidx.constraintlayout.core.motion.Motion
+import androidx.constraintlayout.core.parser.CLObject
+import androidx.constraintlayout.core.parser.CLParser
+import androidx.constraintlayout.core.parser.CLParsingException
 import androidx.constraintlayout.core.state.*
 import androidx.constraintlayout.core.state.Dimension
 import androidx.constraintlayout.core.state.Transition
@@ -121,7 +124,7 @@ inline fun MotionLayout(
     debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     modifier: Modifier = Modifier,
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
-    crossinline content: @Composable() (MotionLayoutScope.() -> Unit),
+    crossinline content: @Composable (MotionLayoutScope.() -> Unit),
 ) {
     val needsUpdate = remember {
         mutableStateOf(0L)
@@ -133,34 +136,42 @@ inline fun MotionLayout(
         usedDebugMode = EnumSet.of(motionScene.getForcedDrawDebug())
     }
 
-    val startContent = remember(motionScene, needsUpdate.value) {
-        motionScene.getConstraintSet("start")
-    }
-    val endContent = remember(motionScene, needsUpdate.value) {
-        motionScene.getConstraintSet("end")
-    }
     val transitionContent = remember(motionScene, needsUpdate.value) {
         motionScene.getTransition("default")
     }
-    var lastOutsideProgress = remember {
-        mutableStateOf(0f)
+
+    val transition: androidx.constraintlayout.compose.Transition? =
+        transitionContent?.let { Transition(it) }
+
+    val startId = transition?.getStartConstraintSetId() ?: "start"
+    val endId = transition?.getEndConstraintSetId() ?: "end"
+
+    val startContent = remember(motionScene, needsUpdate.value) {
+        motionScene.getConstraintSet(startId) ?: motionScene.getConstraintSet(0)
     }
-    val forcedProgress = motionScene.getForcedProgress()
-    var usedProgress = progress
-    if (!forcedProgress.isNaN() && lastOutsideProgress.value == progress) {
-        usedProgress = forcedProgress
-    } else {
-        motionScene.resetForcedProgress()
+    val endContent = remember(motionScene, needsUpdate.value) {
+        motionScene.getConstraintSet(endId) ?: motionScene.getConstraintSet(1)
     }
-    lastOutsideProgress.value = progress
 
     if (startContent == null || endContent == null) {
         return
     }
+
     val start = ConstraintSet(startContent)
     val end = ConstraintSet(endContent)
-    val transition: androidx.constraintlayout.compose.Transition? =
-        if (transitionContent != null) Transition(transitionContent) else null
+
+    var lastOutsideProgress by remember {
+        mutableStateOf(0f)
+    }
+    val forcedProgress = motionScene.getForcedProgress()
+    var usedProgress = progress
+    if (!forcedProgress.isNaN() && lastOutsideProgress == progress) {
+        usedProgress = forcedProgress
+    } else {
+        motionScene.resetForcedProgress()
+    }
+    @Suppress("UNUSED_VALUE")
+    lastOutsideProgress = progress
 
     val measurer = remember { MotionMeasurer() }
     val scope = remember { MotionLayoutScope(measurer) }
@@ -217,6 +228,7 @@ interface MotionScene {
     fun setConstraintSetContent(name: String, content: String)
     fun setTransitionContent(name: String, content: String)
     fun getConstraintSet(name: String): String?
+    fun getConstraintSet(index: Int): String?
     fun getTransition(name: String): String?
     fun setUpdateFlag(needsUpdate: MutableState<Long>)
     fun setDebugName(name: String?)
@@ -251,6 +263,10 @@ class JSONMotionScene(@Language("json5") content: String) : EditableJSONLayout(c
 
     override fun getConstraintSet(name: String): String? {
         return constraintSetsContent[name]
+    }
+
+    override fun getConstraintSet(index: Int): String? {
+        return constraintSetsContent.values.elementAtOrNull(index)
     }
 
     override fun getTransition(name: String): String? {
@@ -368,17 +384,39 @@ class MotionLayoutScope @PublishedApi internal constructor(measurer: MotionMeasu
 @Immutable
 interface Transition {
     fun applyTo(transition: Transition, type: Int)
+    fun getStartConstraintSetId(): String
+    fun getEndConstraintSetId(): String
 }
 
 @SuppressLint("ComposableNaming")
 @Composable
-fun Transition(@Language("json5") content: String): androidx.constraintlayout.compose.Transition {
+fun Transition(@Language("json5") content: String): androidx.constraintlayout.compose.Transition? {
     val transition = remember(content) {
-        mutableStateOf(object : androidx.constraintlayout.compose.Transition {
-            override fun applyTo(transition: Transition, type: Int) {
-                parseTransition(content, transition)
+        val parsed = try {
+            CLParser.parse(content)
+        } catch (e: CLParsingException) {
+            System.err.println("Error parsing JSON $e")
+            null
+        }
+        mutableStateOf(
+            if (parsed != null) {
+                object : androidx.constraintlayout.compose.Transition {
+                    override fun applyTo(transition: Transition, type: Int) {
+                        parseTransition(parsed, transition)
+                    }
+
+                    override fun getStartConstraintSetId(): String {
+                        return parsed.getStringOrNull("from") ?: "start"
+                    }
+
+                    override fun getEndConstraintSetId(): String {
+                        return parsed.getStringOrNull("to") ?: "start"
+                    }
+                }
+            } else {
+                null
             }
-        })
+        )
     }
     return transition.value
 }

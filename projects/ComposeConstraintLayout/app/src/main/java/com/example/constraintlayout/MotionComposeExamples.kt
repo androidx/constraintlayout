@@ -556,7 +556,7 @@ public fun MotionExample4() {
     )
     Column(Modifier.background(Color.White)) {
         MotionLayout(
-            MotionScene(
+            motionScene = MotionScene(
                 """{
   ConstraintSets: {
     start: {
@@ -1299,6 +1299,87 @@ public fun MotionExample8() {
                     .clickable(onClick = { animateToEnd = !animateToEnd })
             )
 
+        }
+    }
+}
+
+@Preview(group = "motion9")
+@Composable
+fun MotionExample9() {
+    var animateToEnd by remember { mutableStateOf(false) }
+
+    val progress by animateFloatAsState(
+        targetValue = if (animateToEnd) 1f else 0f,
+        animationSpec = tween(2000)
+    )
+    Column {
+        MotionLayout(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .background(Color.Black),
+            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
+            motionScene = MotionScene(
+                """
+{
+                ConstraintSets: {
+                  csTopLeft: {
+                    box1: {
+                      start: ['parent', 'start', 16],
+                      top: ['parent', 'top', 16]
+                    },
+                  },
+                  csTopRight : {
+                    box1: {
+                      end: ['parent', 'end', 16],
+                      top: ['parent', 'top', 16]
+                    },
+                  },
+                  csBottomLeft : {
+                    box1: {
+                      start: ['parent', 'start', 16],
+                      bottom: ['parent', 'bottom', 16]
+                    },
+                  },
+                  csBottomRight : {
+                    box1: {
+                      end: ['parent', 'end', 16],
+                      bottom: ['parent', 'bottom', 16]
+                    },
+                  }
+                },
+                Transitions: {
+                  default: {
+                    from: 'csBottomRight',
+                    to: 'csTopLeft',
+                    pathMotionArc: 'startHorizontal',
+                    KeyFrames: {
+                      KeyPositions: [
+                        {
+                       type: 'parentRelative',
+                           target: ['box1'],
+                           frames: [50],
+                           percentX: [0.5],
+                           percentY: [0.4]
+                        }
+                      ]
+                    }
+                  }
+                }
+}
+"""
+            ),
+            progress = progress
+        ) {
+            Box(
+                modifier = Modifier
+                    .layoutId("box1")
+                    .height(125.dp)
+                    .width(188.dp)
+                    .clip(shape = RoundedCornerShape(12.dp))
+                    .background(Color.Green)
+                    .clickable(onClick = { animateToEnd = !animateToEnd })
+            )
         }
     }
 }
