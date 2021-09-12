@@ -282,7 +282,7 @@
         android:id="@+id/click3"
         motion:motionTarget="button3"
         motion:viewTransitionMode="noState"
-        motion:onStateTransition="actionDown"
+        motion:onStateTransition="actionDownUp"
         motion:duration="200">
 
         <KeyFrameSet>
@@ -317,8 +317,8 @@
         android:id="@+id/click4"
         motion:motionTarget="button4"
         motion:viewTransitionMode="noState"
-        motion:onStateTransition="actionDown"
-        motion:duration="200">
+        motion:onStateTransition="actionDownUp"
+        motion:duration="500">
 
         <KeyFrameSet>
             <KeyAttribute
@@ -327,7 +327,7 @@
                 android:scaleX="1">
                 <CustomAttribute
                     motion:attributeName="roundPercent"
-                    motion:customFloatValue="1" />
+                    motion:customFloatValue="@dimen/calc_round" />
                 <CustomAttribute
                     motion:attributeName="background"
                     motion:customColorDrawableValue="@color/adv_background" />
@@ -335,8 +335,8 @@
 
             <KeyAttribute
                 motion:framePosition="20"
-                android:scaleY="0.5"
-                android:scaleX="0.5">
+                android:scaleY="1.2"
+                android:scaleX="1.2">
                 <CustomAttribute
                     motion:attributeName="roundPercent"
                     motion:customFloatValue=".3" />
@@ -434,7 +434,7 @@
         android:id="@+id/spin_equ"
         motion:motionTarget="@+id/button10"
         motion:viewTransitionMode="noState"
-        motion:onStateTransition="actionDown"
+        motion:onStateTransition="actionDownUp"
         motion:duration="200">
 
         <KeyFrameSet>
@@ -442,9 +442,7 @@
                 motion:framePosition="0"
                 android:scaleY="1"
                 android:scaleX="1">
-                <CustomAttribute
-                    motion:attributeName="background"
-                    motion:customColorDrawableValue="#906e68" />
+
             </KeyAttribute>
 
             <KeyAttribute
@@ -452,19 +450,15 @@
                 android:scaleY="0.5"
                 android:scaleX="0.5">
 
-                <CustomAttribute
-                    motion:attributeName="background"
-                    motion:customColorDrawableValue="#FFF" />
+
             </KeyAttribute>
 
             <KeyAttribute
                 motion:framePosition="100"
-                android:scaleY="1"
-                android:scaleX="1">
+                android:scaleY="0.5"
+                android:scaleX="0.5">
 
-                <CustomAttribute
-                    motion:attributeName="background"
-                    motion:customColorDrawableValue="#906e68" />
+
             </KeyAttribute>
         </KeyFrameSet>
     </ViewTransition>
