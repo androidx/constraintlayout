@@ -159,23 +159,17 @@
     <androidx.constraintlayout.utils.widget.MotionButton
         android:onClick="key"
         android:id="@+id/button10"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@color/enter_background"
-        android:stateListAnimator="@null"
         android:text="enter"
-        android:textColor="@color/enter_text_color"
-        android:textSize="10pt"
         app:layout_constraintHorizontal_weight="2.1"
         app:layout_constraintStart_toEndOf="@+id/button12"
         app:layout_constraintTop_toTopOf="@+id/button12"
         app:layout_constraintEnd_toEndOf="@id/basic"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTag="button3"
-        app:roundPercent="0.1" />
+        style="@style/EnterButtonStyle"
+        />
 
     <android.support.constraint.calc.Graph2D
         android:id="@+id/graph"

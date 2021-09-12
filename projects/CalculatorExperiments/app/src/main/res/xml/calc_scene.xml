@@ -26,19 +26,7 @@
             motion:layout_constraintHeight_percent="0.3"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintStart_toStartOf="parent" />
-        <Constraint android:id="@+id/button10">
-            <CustomAttribute
-                motion:attributeName="roundPercent"
-                motion:customFloatValue=".2" />
-        </Constraint>
 
-        <!--        <ConstraintOverride-->
-        <!--            android:id="@+id/line0"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            >-->
-        <!--            <CustomAttribute motion:attributeName="textSize"-->
-        <!--                motion:customDimension="32sp"/>-->
-        <!--        </ConstraintOverride>-->
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
@@ -58,17 +46,7 @@
             motion:layout_constraintHeight_percent=".3"
             android:background="#888"
             motion:layout_constraintBottom_toTopOf="@id/graph_bottom" />
-        <Constraint android:id="@+id/button10">
-            <CustomAttribute
-                motion:attributeName="roundPercent"
-                motion:customFloatValue="0.3" />
-        </Constraint>
-        <!--        <ConstraintOverride-->
-        <!--            android:id="@+id/line0"-->
-        <!--            android:layout_height="0dp"-->
-        <!--            >-->
 
-        <!--        </ConstraintOverride>-->
     </ConstraintSet>
 
 <ConstraintSet android:id="@+id/mode_no_graph">
@@ -307,7 +285,7 @@
         android:id="@+id/click3"
         motion:motionTarget="button3"
         motion:viewTransitionMode="noState"
-        motion:onStateTransition="actionDown"
+        motion:onStateTransition="actionDownUp"
         motion:duration="200">
 
         <KeyFrameSet>
@@ -342,7 +320,7 @@
         android:id="@+id/click4"
         motion:motionTarget="button4"
         motion:viewTransitionMode="noState"
-        motion:onStateTransition="actionDown"
+        motion:onStateTransition="actionDownUp"
         motion:duration="200">
 
         <KeyFrameSet>
@@ -352,7 +330,7 @@
                 android:scaleX="1">
                 <CustomAttribute
                     motion:attributeName="roundPercent"
-                    motion:customFloatValue="1" />
+                    motion:customFloatValue="@dimen/calc_round" />
                 <CustomAttribute
                     motion:attributeName="background"
                     motion:customColorDrawableValue="@color/adv_background" />
@@ -376,7 +354,7 @@
                 android:scaleX="1">
                 <CustomAttribute
                     motion:attributeName="roundPercent"
-                    motion:customFloatValue="@dimen/calc_round" />
+                    motion:customFloatValue=".3" />
                 <CustomAttribute
                     motion:attributeName="background"
                     motion:customColorDrawableValue="@color/adv_background" />
@@ -459,7 +437,7 @@
         android:id="@+id/spin_equ"
         motion:motionTarget="@+id/button10"
         motion:viewTransitionMode="noState"
-        motion:onStateTransition="actionDown"
+        motion:onStateTransition="actionDownUp"
         motion:duration="200">
 
         <KeyFrameSet>
@@ -467,9 +445,7 @@
                 motion:framePosition="0"
                 android:scaleY="1"
                 android:scaleX="1">
-                <CustomAttribute
-                    motion:attributeName="background"
-                    motion:customColorDrawableValue="#906e68" />
+
             </KeyAttribute>
 
             <KeyAttribute
@@ -477,9 +453,7 @@
                 android:scaleY="0.5"
                 android:scaleX="0.5">
 
-                <CustomAttribute
-                    motion:attributeName="background"
-                    motion:customColorDrawableValue="#FFF" />
+
             </KeyAttribute>
 
             <KeyAttribute
@@ -487,9 +461,7 @@
                 android:scaleY="1"
                 android:scaleX="1">
 
-                <CustomAttribute
-                    motion:attributeName="background"
-                    motion:customColorDrawableValue="#906e68" />
+
             </KeyAttribute>
         </KeyFrameSet>
     </ViewTransition>
