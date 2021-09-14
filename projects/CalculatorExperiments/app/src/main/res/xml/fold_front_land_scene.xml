@@ -233,7 +233,7 @@
         android:id="@+id/spin_equ"
         motion:motionTarget="@+id/button10"
         motion:viewTransitionMode="noState"
-        motion:onStateTransition="actionDown"
+        motion:onStateTransition="actionDownUp"
         motion:duration="200">
 
         <KeyFrameSet>
@@ -241,9 +241,7 @@
                 motion:framePosition="0"
                 android:scaleY="1"
                 android:scaleX="1">
-                <CustomAttribute
-                    motion:attributeName="background"
-                    motion:customColorDrawableValue="#906e68" />
+
             </KeyAttribute>
 
             <KeyAttribute
@@ -251,19 +249,15 @@
                 android:scaleY="0.5"
                 android:scaleX="0.5">
 
-                <CustomAttribute
-                    motion:attributeName="background"
-                    motion:customColorDrawableValue="#FFF" />
+
             </KeyAttribute>
 
             <KeyAttribute
                 motion:framePosition="100"
-                android:scaleY="1"
-                android:scaleX="1">
+                android:scaleY="0.5"
+                android:scaleX="0.5">
 
-                <CustomAttribute
-                    motion:attributeName="background"
-                    motion:customColorDrawableValue="#906e68" />
+
             </KeyAttribute>
         </KeyFrameSet>
     </ViewTransition>

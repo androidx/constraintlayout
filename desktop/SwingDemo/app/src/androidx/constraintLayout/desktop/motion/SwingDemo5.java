@@ -1,3 +1,4 @@
+
 /*
  * Copyright (C) 2021 The Android Open Source Project
  *
@@ -16,73 +17,57 @@
 package androidx.constraintLayout.desktop.motion;
 
 import androidx.constraintlayout.core.motion.utils.Utils;
+package androidx.constraintLayout.desktop.motion;
+ 
 import org.constraintlayout.swing.MotionLayout;
 import org.constraintlayout.swing.MotionPanel;
 
 import javax.swing.*;
 
+ 
 public class SwingDemo5 extends MotionPanel {
     static String motionScene = "{\n" +
             "                 Header: {\n" +
             "                  name: 'RotationZ28'\n" +
             "                },\n" +
             "                ConstraintSets: {\n" +
-            "                  cs1: {\n" +
-            "                    widget1: {  width: 90,  height: 40,\n" +
+
+            "                  start: {\n" +
+            "                    b1: {\n" +
+            "                      width: 90,\n" +
+            "                      height: 40,\n" +
             "                      start: ['parent', 'start', 70],\n" +
             "                      bottom: ['parent', 'bottom', 16]\n" +
             "                    }\n" +
-            "                    widget2: {  width: 90,  height: 40,\n" +
+            "                    b2: {\n" +
+            "                      width: 90,\n" +
+            "                      height: 40,\n" +
+            "                      rotationZ: 0,\n" +
             "                      start: ['b1', 'end', 16],\n" +
             "                      bottom: ['b1', 'bottom', 0]\n" +
             "                    }\n" +
             "                  },\n" +
-            "                  cs2: {\n" +
-            "                    widget1: {  width: 90,  height: 40,\n" +
+            "                  end: {\n" +
+            "                    b1: {\n" +
+            "                      width: 90,\n" +
+            "                      height: 40,\n" +
             "                      end: ['parent', 'end', 16],\n" +
             "                      top: ['parent', 'top', 16]\n" +
             "                    }\n" +
-            "                    widget2: {  width: 90,  height: 40,\n" +
-            "                      start: ['b1', 'start', 120],\n" +
-            "                      top: ['b1', 'top', 16]\n" +
+            "                    b2: {\n" +
+            "                      width: 90,\n" +
+            "                      height: 40,\n" +
+            "                      rotationZ: 0,\n" +
+            "                      start: ['b1', 'start', 0],\n" +
+            "                      top: ['b1', 'bottom', 16]\n" +
             "                    }\n" +
             "                  }\n" +
             "                },\n" +
-            "                  cs3: {\n" +
-            "                    widget1: {  width: 90,  height: 40,\n" +
-            "                      start: ['parent', 'start', 70],\n" +
-            "                      bottom: ['parent', 'bottom', 16]\n" +
-            "                    }\n" +
-            "                    widget2: {  width: 90,  height: 40,\n" +
-            "                      start: ['b1', 'end', 16],\n" +
-            "                      bottom: ['b1', 'bottom', 0]\n" +
-            "                    }\n" +
-            "                  },\n" +
-            "                  cs4: {\n" +
-            "                    widget1: {  width: 90,  height: 40,\n" +
-            "                      start: ['parent', 'start', 70],\n" +
-            "                      bottom: ['parent', 'bottom', 16]\n" +
-            "                    }\n" +
-            "                    widget2: {  width: 90,  height: 40,\n" +
-            "                      start: ['b1', 'end', 16],\n" +
-            "                      bottom: ['b1', 'bottom', 0]\n" +
-            "                    }\n" +
-            "                  },\n" +
-            "                  cs5: {\n" +
-            "                    widget1: {  width: 90,  height: 40,\n" +
-            "                      start: ['parent', 'start', 70],\n" +
-            "                      bottom: ['parent', 'bottom', 16]\n" +
-            "                    }\n" +
-            "                    widget2: {  width: 90,  height: 40,\n" +
-            "                      start: ['b1', 'end', 16],\n" +
-            "                      bottom: ['b1', 'bottom', 0]\n" +
-            "                    }\n" +
-            "                  },\n" +
             "                Transitions: {\n" +
             "                  default: {\n" +
-            "                    from: 'cs1',\n" +
-            "                    to: 'cs2',\n" +
-//            "                    pathMotionArc: 'startHorizontal',\n" +
+            "                    from: 'start',\n" +
+            "                    to: 'end',\n" +
+           "                    pathMotionArc: 'startHorizontal',\n" +
             "                    KeyFrames: {\n" +
             "                      KeyAttributes: [\n" +
             "                        {\n" +
@@ -99,6 +84,7 @@ public class SwingDemo5 extends MotionPanel {
     MotionLayout ml;
     float p = 0;
 
+ 
     public SwingDemo5() {
         setLayoutDescription(motionScene);
 
@@ -107,6 +93,7 @@ public class SwingDemo5 extends MotionPanel {
 
         add(button1, "widget1");
         add(button2, "widget2");
+ 
 
         Timer timer = new Timer(16, (e) -> setProgress(p = (p + 0.01f) % 1));
         timer.setRepeats(true);
@@ -117,6 +104,7 @@ public class SwingDemo5 extends MotionPanel {
         JFrame frame = new JFrame(SwingDemo5.class.getSimpleName());
         Utils.log(frame.getTitle());
         SwingDemo5 panel = new SwingDemo5();
+ 
         frame.setContentPane(panel);
         frame.setBounds(100, 100, 400, 500);
 
