@@ -21,10 +21,10 @@ import androidx.constraintlayout.core.motion.MotionWidget;
 import androidx.constraintlayout.core.motion.key.MotionKeyAttributes;
 import androidx.constraintlayout.core.motion.key.MotionKeyCycle;
 import androidx.constraintlayout.core.motion.key.MotionKeyPosition;
+import androidx.constraintlayout.core.motion.utils.Easing;
 import androidx.constraintlayout.core.motion.utils.KeyCache;
 import androidx.constraintlayout.core.motion.utils.TypedBundle;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
-import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 
@@ -40,6 +40,22 @@ public class Transition {
     public final static int INTERPOLATED = 2;
 
     private int pathMotionArc = -1;
+    // Interpolation
+    private int mDefaultInterpolator = 0;
+    private String mDefaultInterpolatorString = null;
+    private static final int SPLINE_STRING = -1;
+    private static final int INTERPOLATOR_REFERENCE_ID = -2;
+    static final int EASE_IN_OUT = 0;
+    static final int EASE_IN = 1;
+    static final int EASE_OUT = 2;
+    static final int LINEAR = 3;
+    static final int BOUNCE = 4;
+    static final int OVERSHOOT = 5;
+    static final int ANTICIPATE = 6;
+
+    private int mAutoTransition = 0;
+    private int mDuration = 400;
+    private float mStagger = 0.0f;
 
     public KeyPosition findPreviousPosition(String target, int frameNumber) {
         while (frameNumber >= 0) {
@@ -113,6 +129,7 @@ public class Transition {
 
     public void setTransitionProperties(TypedBundle bundle) {
         pathMotionArc = bundle.getInteger(TypedValues.Position.TYPE_PATH_MOTION_ARC);
+        mAutoTransition = bundle.getInteger(TypedValues.Transition.TYPE_AUTO_TRANSITION);
     }
 
     static class WidgetState {
@@ -312,8 +329,9 @@ public class Transition {
         WidgetState widgetState = state.get(id);
         return widgetState.motionControl.buildKeyFrames(rectangles, pathMode, position);
     }
+
     private WidgetState getWidgetState(String widgetId) {
-        return  this.state.get(widgetId);
+        return this.state.get(widgetId);
     }
 
     private WidgetState getWidgetState(String widgetId, ConstraintWidget child, int transitionState) {
@@ -359,5 +377,35 @@ public class Transition {
      */
     public WidgetFrame getInterpolated(ConstraintWidget child) {
         return getWidgetState(child.stringId, null, Transition.INTERPOLATED).interpolated;
+    }
+
+    public Interpolator getInterpolator() {
+        return getInterpolator(mDefaultInterpolator, mDefaultInterpolatorString);
+    }
+
+    public static Interpolator getInterpolator(int interpolator, String interpolatorString) {
+        switch (interpolator) {
+            case SPLINE_STRING:
+                return v -> (float) Easing.getInterpolator(interpolatorString).get(v);
+            case EASE_IN_OUT:
+                return v -> (float) Easing.getInterpolator("standard").get(v);
+            case EASE_IN:
+                return v -> (float) Easing.getInterpolator("accelerate").get(v);
+            case EASE_OUT:
+                return v -> (float) Easing.getInterpolator("decelerate").get(v);
+            case LINEAR:
+                return v -> (float) Easing.getInterpolator("linear").get(v);
+            case ANTICIPATE:
+                return v -> (float) Easing.getInterpolator("anticipate").get(v);
+            case OVERSHOOT:
+                return v -> (float) Easing.getInterpolator("overshoot").get(v);
+            case BOUNCE: // TODO make a better bounce
+                return v -> (float) Easing.getInterpolator("spline(0.0, 0.2, 0.4, 0.6, 0.8 ,1.0, 0.8, 1.0, 0.9, 1.0)").get(v);
+        }
+        return null;
+    }
+
+    public int getAutoTransition() {
+        return mAutoTransition;
     }
 }

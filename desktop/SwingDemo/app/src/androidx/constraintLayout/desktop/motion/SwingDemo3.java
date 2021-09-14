@@ -1,5 +1,21 @@
+/*
+ * Copyright (C) 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package androidx.constraintLayout.desktop.motion;
 
+import androidx.constraintlayout.core.motion.utils.Utils;
 import org.constraintlayout.swing.ConstraintLayout;
 import org.constraintlayout.swing.MotionLayout;
 
@@ -14,7 +30,7 @@ public class SwingDemo3 extends JPanel {
             "                ConstraintSets: {\n" +
             "                  start: {\n" +
             "                    b1: {\n" +
-            "                      width: 400,\n" +
+            "                      width: 40,\n" +
             "                      height: 40,\n" +
             "                      start: ['parent', 'start', 116],\n" +
             "                      bottom: ['parent', 'bottom', 16]\n" +
@@ -30,16 +46,14 @@ public class SwingDemo3 extends JPanel {
             "                    b1: {\n" +
             "                      width: 40,\n" +
             "                      height: 40,\n" +
-            "                      //rotationZ: 390,\n" +
             "                      end: ['parent', 'end', 16],\n" +
             "                      top: ['parent', 'top', 16]\n" +
             "                    }\n" +
             "                    b2: {\n" +
             "                      width: 40,\n" +
             "                      height: 40,\n" +
-            "                      //rotationZ: 390,\n" +
             "                      end: ['parent', 'end', 16],\n" +
-            "                      top: ['parent', 'top', 16]\n" +
+            "                      top: ['parent', 'top', 136]\n" +
             "                    }\n" +
             "                  }\n" +
             "                },\n" +
@@ -78,7 +92,8 @@ public class SwingDemo3 extends JPanel {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        JFrame frame = new JFrame("Demo2");
+        JFrame frame = new JFrame(SwingDemo3.class.getSimpleName());
+        Utils.log(frame.getTitle());
         SwingDemo3 panel = new SwingDemo3();
 
         frame.setContentPane(panel);

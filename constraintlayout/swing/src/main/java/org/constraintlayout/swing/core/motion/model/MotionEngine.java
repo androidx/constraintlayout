@@ -15,6 +15,7 @@
  */
 package org.constraintlayout.swing.core.motion.model;
 
+import androidx.constraintlayout.core.motion.Motion;
 import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.state.Transition;
 import androidx.constraintlayout.core.state.WidgetFrame;
@@ -23,6 +24,7 @@ import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 import androidx.constraintlayout.core.widgets.Guideline;
 import androidx.constraintlayout.core.widgets.Optimizer;
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure;
+import org.constraintlayout.swing.MotionRenderDebug;
 import org.constraintlayout.swing.core.ConstraintLayoutState;
 import org.constraintlayout.swing.core.ConstraintSetParser;
 
@@ -41,7 +43,7 @@ public class MotionEngine {
     private final HashMap<String, ConstraintWidget> mEndConstraintMap = new HashMap<>();
     private final HashMap<String, ConstraintWidget> mStartConstraintMap = new HashMap<>();
     MotionSceneModel motionSceneModel = new MotionSceneModel();
-
+    MotionRenderDebug mRenderDebug = new MotionRenderDebug(23); // TODO only create when needed
 
     private TransitionModel mCurrentTransition;
     private Transition mTransition = new Transition();
@@ -53,6 +55,7 @@ public class MotionEngine {
     public void remeasure() {
         mNeedMeasure = true;
     }
+
     public void parse(String content) {
         motionSceneModel.parse(content);
         mInterConstraintMap.put("parent", mInterLayout);
@@ -99,7 +102,6 @@ public class MotionEngine {
 
         mNeedMeasure = true;
 
-
     }
 
     void addConstraintWidget(String id, ConstraintWidgetContainer layout, HashMap<String, ConstraintWidget> mInterConstraintMap) {
@@ -134,6 +136,13 @@ public class MotionEngine {
         mProgress = p;
     }
 
+    public void renderDebug(Graphics2D g) {
+        for (String mId : mIds) {
+            mRenderDebug.draw(g, mTransition.getMotion(mId), 1000, Motion.DRAW_PATH_BASIC, getWidth(), getHeight());
+        }
+
+    }
+
     public interface LayoutWidget {
         void layout(String id, WidgetFrame widget);
     }
@@ -142,7 +151,6 @@ public class MotionEngine {
         Utils.log("  " + width + " " + height);
 
         mNeedMeasure = false;
-
 
         Utils.log(" ================ start");
         mStartConstraintSet.mState.guidelines.apply(mStartLayout, mStartConstraintMap);
@@ -214,7 +222,6 @@ public class MotionEngine {
         }
         mTransition.interpolate(0, 0, mProgress);
 
-
         for (String child : mIds) {
             WidgetFrame component = mTransition.getInterpolated(child);
             if (component == null) {
@@ -244,6 +251,7 @@ public class MotionEngine {
         measure.measuredWidth = measuredWidth;
         measure.measuredHeight = measuredHeight;
     }
+
     public WidgetFrame getInterpolated(String id) {
         return mTransition.getInterpolated(id);
     }
