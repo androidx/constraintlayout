@@ -31,8 +31,7 @@ public class MotionRenderDebug {
     static final int MAX_KEY_FRAMES = 50;
     private static final int DEBUG_PATH_TICKS_PER_MS = 16;
     float[] mPoints;
-    int[] mPointsX;
-    int[] mPointsY;
+    Path2D mPointsPath = new Path2D.Float();
     int[] mPathMode;
     float[] mKeyFramePoints;
     Path2D mPath;
@@ -104,17 +103,19 @@ public class MotionRenderDebug {
             if (mPoints == null || mPoints.length != frames * 2) {
                 mPoints = new float[frames * 2];
                 mPath = new Path2D.Float();
-                mPointsX = new int[frames];
-                mPointsY = new int[frames];
             }
 
             g2d.translate(mShadowTranslate, mShadowTranslate);
 
             g2d.setColor(Color.BLACK);
             motionController.buildPath(mPoints, frames);
+            mPointsPath.reset();
             for (int i = 0; i < frames; i++) {
-                mPointsX[i] = (int) mPoints[i * 2];
-                mPointsY[i] = (int) mPoints[i * 2 + 1];
+                if ((i&1)==0) {
+                    mPointsPath.moveTo(mPoints[i * 2], mPoints[i * 2 + 1]);
+                } else {
+                    mPointsPath.lineTo(mPoints[i * 2], mPoints[i * 2 + 1]);
+                }
 
             }
             drawAll(g2d, mode, mKeyFrameCount, motionController, layoutWidth, layoutHeight);
@@ -130,6 +131,7 @@ public class MotionRenderDebug {
 
     public void drawAll(Graphics2D g2d, int mode, int keyFrames, Motion motionController,
                         int layoutWidth, int layoutHeight) {
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
         if (mode == Motion.DRAW_PATH_AS_CONFIGURED) {
             drawPathAsConfigured(g2d);
         }
@@ -144,7 +146,7 @@ public class MotionRenderDebug {
     }
 
     private void drawBasicPath(Graphics2D g2d) {
-        g2d.drawPolyline(mPointsX, mPointsY, mPointsX.length);
+        g2d.draw(mPointsPath);
     }
 
     private void drawTicks(Graphics2D g2d, int mode, int keyFrames, Motion motionController,
