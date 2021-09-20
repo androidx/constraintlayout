@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:background="#CFC"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:motionDebug="SHOW_ALL"
+    app:layoutDescription="@xml/verification_scene_130"
+>
+
+    <androidx.constraintlayout.helper.widget.MotionPlaceholder
+        android:id="@+id/p0"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"/>
+
+    <androidx.constraintlayout.helper.widget.MotionPlaceholder
+        android:id="@+id/p1"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:background="#777"
+        android:visibility="invisible"
+        app:constraint_referenced_ids="view_a"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <androidx.constraintlayout.helper.widget.MotionPlaceholder
+        android:id="@+id/p2"
+        android:layout_width="128dp"
+        android:layout_height="256dp"
+        android:background="#777"
+        android:visibility="invisible"
+        app:constraint_referenced_ids="view_b"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/p1"
+        app:layout_constraintEnd_toStartOf="@id/p3"
+        />
+
+
+    <androidx.constraintlayout.helper.widget.MotionPlaceholder
+        android:id="@+id/p3"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:background="#777"
+        android:visibility="invisible"
+        app:constraint_referenced_ids="view_c"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.constraintlayout.helper.widget.MotionPlaceholder
+        android:id="@+id/p4"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="placeholder test 5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/view_a"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#F44336"
+        android:gravity="center"
+        android:text="A"
+        android:textSize="42sp"
+        tools:layout_editor_absoluteX="156dp"
+        tools:layout_editor_absoluteY="34dp" />
+
+    <TextView
+        android:id="@+id/view_b"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#00BCD4"
+        android:gravity="center"
+        android:text="B"
+        android:textSize="42sp"
+        android:visibility="visible"
+        tools:layout_editor_absoluteX="156dp"
+        tools:layout_editor_absoluteY="182dp" />
+
+    <TextView
+        android:id="@+id/view_c"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#8BC34A"
+        android:gravity="center"
+        android:text="C"
+        android:textSize="42sp"
+        tools:layout_editor_absoluteX="156dp"
+        tools:layout_editor_absoluteY="331dp" />
+</androidx.constraintlayout.motion.widget.MotionLayout >

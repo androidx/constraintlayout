@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:background="#CFC"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:motionDebug="SHOW_ALL"
+    app:layoutDescription="@xml/verification_scene_130"
+>
+
+    <androidx.constraintlayout.helper.widget.MotionPlaceholder
+        android:id="@+id/p1"
+        android:layout_width="match_parent"
+        android:layout_height="128dp"
+        android:layout_marginTop="20dp"
+        android:background="#777"
+        app:constraint_referenced_ids="view_a"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.helper.widget.MotionPlaceholder
+        android:id="@+id/p2"
+        android:layout_width="match_parent"
+        android:layout_height="128dp"
+        android:layout_marginTop="20dp"
+        android:background="#777"
+        app:layout_constraintTop_toBottomOf="@id/p1"
+        app:constraint_referenced_ids="view_b"
+        />
+
+    <androidx.constraintlayout.helper.widget.MotionPlaceholder
+        android:id="@+id/p3"
+        android:layout_width="match_parent"
+        android:layout_height="128dp"
+        android:layout_marginTop="20dp"
+        android:background="#777"
+        app:layout_constraintTop_toBottomOf="@id/p2"
+        app:constraint_referenced_ids="view_c"
+        />
+
+    <TextView
+        android:id="@+id/view_a"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#F44336"
+        android:gravity="center"
+        android:text="a"
+        />
+
+    <TextView
+        android:id="@+id/view_b"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#00BCD4"
+        android:gravity="center"
+        android:text="b"
+        android:visibility="visible"
+        />
+
+
+    <TextView
+        android:id="@+id/view_c"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#8BC34A"
+        android:gravity="center"
+        android:text="c"
+        />
+
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="placeholder test 5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2049,7 +2049,8 @@ public class ConstraintWidget {
     /**
      * Reset all the constraints set on this widget
      */
-    public void resetAllConstraints() { resetAnchors();
+    public void resetAllConstraints() {
+        resetAnchors();
         setVerticalBiasPercent(DEFAULT_BIAS);
         setHorizontalBiasPercent(DEFAULT_BIAS);
     }

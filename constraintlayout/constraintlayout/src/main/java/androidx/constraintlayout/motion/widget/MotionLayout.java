@@ -50,6 +50,7 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 import androidx.constraintlayout.core.widgets.Flow;
 import androidx.constraintlayout.core.widgets.Helper;
+import androidx.constraintlayout.core.widgets.Placeholder;
 import androidx.constraintlayout.motion.utils.StopLogic;
 import androidx.constraintlayout.motion.utils.ViewState;
 import androidx.constraintlayout.widget.Barrier;
@@ -2512,6 +2513,8 @@ public class MotionLayout extends ConstraintLayout implements
                     child_d = new androidx.constraintlayout.core.widgets.Guideline();
                 } else if (child_s instanceof Flow) {
                     child_d = new Flow();
+                } else if (child_s instanceof Placeholder) {
+                    child_d = new Placeholder();
                 } else if (child_s instanceof androidx.constraintlayout.core.widgets.Helper) {
                     child_d = new androidx.constraintlayout.core.widgets.HelperWidget();
                 } else {

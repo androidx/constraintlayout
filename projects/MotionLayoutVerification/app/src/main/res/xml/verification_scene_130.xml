@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+
+        <Transition
+            android:id="@+id/previous"
+            motion:constraintSetStart="@id/start"
+            motion:constraintSetEnd="@+id/previous"
+            motion:duration="1000">
+            <OnSwipe motion:dragDirection="dragRight"/>
+        </Transition>
+
+    <Transition
+        android:id="@+id/forward"
+        motion:constraintSetStart="@id/start"
+        motion:constraintSetEnd="@+id/next"
+        motion:duration="1000">
+        <OnSwipe motion:dragDirection="dragLeft"/>
+    </Transition>
+
+
+    <ConstraintSet android:id="@+id/previous" >
+        <ConstraintOverride android:id="@id/p0"  motion:constraint_referenced_ids=""/>
+        <ConstraintOverride android:id="@id/p1"  motion:constraint_referenced_ids=""/>
+        <ConstraintOverride android:id="@id/p2"  motion:constraint_referenced_ids="view_a"/>
+        <ConstraintOverride android:id="@id/p3"  motion:constraint_referenced_ids="view_b" />
+        <ConstraintOverride android:id="@id/p4"  motion:constraint_referenced_ids="view_c" />
+    </ConstraintSet>
+
+        <ConstraintSet android:id="@+id/start">
+            <ConstraintOverride android:id="@id/p0"  motion:constraint_referenced_ids=""/>
+            <ConstraintOverride android:id="@id/p1"  motion:constraint_referenced_ids="view_a"/>
+            <ConstraintOverride android:id="@id/p2"  motion:constraint_referenced_ids="view_b"/>
+            <ConstraintOverride android:id="@id/p3"  motion:constraint_referenced_ids="view_c" />
+            <ConstraintOverride android:id="@id/p4"  motion:constraint_referenced_ids="" />
+        </ConstraintSet>
+
+        <ConstraintSet android:id="@+id/next">
+            <ConstraintOverride android:id="@id/p0"  motion:constraint_referenced_ids="view_a"/>
+            <ConstraintOverride android:id="@id/p1"  motion:constraint_referenced_ids="view_b"/>
+            <ConstraintOverride android:id="@id/p2"  motion:constraint_referenced_ids="view_c"/>
+            <ConstraintOverride android:id="@id/p3"  motion:constraint_referenced_ids="" />
+            <ConstraintOverride android:id="@id/p4"  motion:constraint_referenced_ids="" />
+        </ConstraintSet>
+
+
+</MotionScene>
