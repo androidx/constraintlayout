@@ -1101,7 +1101,7 @@ public class ConstraintSet {
             mHelperType = src.mHelperType;
             mConstraintTag = src.mConstraintTag;
 
-            if (src.mReferenceIds != null) {
+            if (src.mReferenceIds != null && src.mReferenceIdString == null) {
                 mReferenceIds = Arrays.copyOf(src.mReferenceIds, src.mReferenceIds.length);
             } else {
                 mReferenceIds = null;
@@ -4798,6 +4798,8 @@ public class ConstraintSet {
                 break;
             case CONSTRAINT_REFERENCED_IDS:
                 c.layout.mReferenceIdString = value;
+                // If a string is defined, clear up the reference ids array
+                c.layout.mReferenceIds = null;
                 break;
             case CONSTRAINT_TAG:
                 c.layout.mConstraintTag = value;
@@ -5218,6 +5220,10 @@ public class ConstraintSet {
                             "Unknown attribute 0x" + Integer.toHexString(attr) + "   " + mapToConstant.get(attr));
             }
         }
+        if (c.layout.mReferenceIdString != null) {
+            // in case the strings are set, make sure to clear up the cached ids
+            c.layout.mReferenceIds = null;
+        };
     }
 
     private int[] convertReferenceString(View view, String referenceIdString) {

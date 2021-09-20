@@ -562,18 +562,23 @@ public abstract class ConstraintHelper extends View {
         // as this makes changing referenced views tricky at runtime
         if (constraint.layout.mReferenceIds != null) {
             setReferencedIds(constraint.layout.mReferenceIds);
-        } else if (constraint.layout.mReferenceIdString != null
-            && constraint.layout.mReferenceIdString.length() > 0) {
-            constraint.layout.mReferenceIds = convertReferenceString(this,
-                    constraint.layout.mReferenceIdString);
+        } else if (constraint.layout.mReferenceIdString != null) {
+            if (constraint.layout.mReferenceIdString.length() > 0) {
+                constraint.layout.mReferenceIds = convertReferenceString(this,
+                        constraint.layout.mReferenceIdString);
+            } else {
+                constraint.layout.mReferenceIds = null;
+            }
         }
-        child.removeAllIds();
-        if (constraint.layout.mReferenceIds != null) {
-            for (int i = 0; i < constraint.layout.mReferenceIds.length; i++) {
-                int id = constraint.layout.mReferenceIds[i];
-                ConstraintWidget widget = mapIdToWidget.get(id);
-                if (widget != null) {
-                    child.add(widget);
+        if (child != null) {
+            child.removeAllIds();
+            if (constraint.layout.mReferenceIds != null) {
+                for (int i = 0; i < constraint.layout.mReferenceIds.length; i++) {
+                    int id = constraint.layout.mReferenceIds[i];
+                    ConstraintWidget widget = mapIdToWidget.get(id);
+                    if (widget != null) {
+                        child.add(widget);
+                    }
                 }
             }
         }
