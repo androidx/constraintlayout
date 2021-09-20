@@ -26,6 +26,16 @@ public class JsonKeys {
     public static final String KEY_POSITIONS = "KeyPositions";
     public static final String KEY_CYCLES = "KeyCycles";
     public static final String KEY_ATTRIBUTES = "KeyAttributes";
+    public static final String []CURVE_FIT_TYPES = {"spline", "linear"};
+    public static final String [] PATH_MOTION_ARC_TYPES = {"none", "startVertical", "startHorizontal", "flip"};
+    public static final String [] POSITION_TYPE = {"deltaRelative", "pathRelative", "parentRelative"};
 
-
+    public static int indexOf(String value, String... types) {
+        for (int i = 0; i < types.length; i++) {
+            if (value.equals(types[i])) {
+                return i;
+            }
+        }
+        return 0;
+    }
 }

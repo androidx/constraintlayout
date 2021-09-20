@@ -25,6 +25,8 @@ import androidx.constraintlayout.core.state.Transition;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static androidx.constraintlayout.core.motion.utils.TypedValues.Transition.TYPE_PATH_MOTION_ARC;
+
 public class TransitionModel extends MotionModel {
     TypedBundle data = new TypedBundle();
     String mName;
@@ -101,6 +103,7 @@ public class TransitionModel extends MotionModel {
                     continue;
                 }
                 String str;
+                System.out.println("type = "+type);
                 switch (dtype.get(id)) {
                     case TypedValues.FLOAT_MASK:
                         data.add(id, value.getFloat());
@@ -113,12 +116,15 @@ public class TransitionModel extends MotionModel {
                         } else if (id == TypedValues.Transition.TYPE_TO) {
                             mTo = str;
                         }
-                        System.out.println("parse " + type + " STRING_MASK > " + value.content());
+                        Utils.log("parse " + type + " STRING_MASK > " + value.content());
 
                         break;
                     case TypedValues.INT_MASK:
+                        if (id == TYPE_PATH_MOTION_ARC) {
+                            data.add(id, JsonKeys.indexOf(value.content(), JsonKeys.PATH_MOTION_ARC_TYPES));
+                        }
                         data.add(id, value.getInt());
-                        System.out.println("parse " + type + " INT_MASK > " + value.getInt());
+                        Utils.log("parse " + type + " INT_MASK > " + data.getInteger(id));
                         break;
                     case TypedValues.BOOLEAN_MASK:
                         data.add(id, json.getBoolean(i));

@@ -24,6 +24,8 @@ import androidx.constraintlayout.core.parser.CLParsingException;
 import androidx.constraintlayout.core.state.Transition;
 import java.util.ArrayList;
 
+import static org.constraintlayout.swing.core.motion.model.JsonKeys.CURVE_FIT_TYPES;
+
 public class KeyCycleModel extends KeyFrame {
     String mTarget;
     TypedBundle mData = new TypedBundle();
@@ -108,7 +110,7 @@ public class KeyCycleModel extends KeyFrame {
                 TypedBundle bundle = bundles[j];
 
                 if (curveFit != null) {
-                    bundle.add(TypedValues.Cycle.TYPE_CURVE_FIT, indexOf(curveFit, "spline", "linear"));
+                    bundle.add(TypedValues.Cycle.TYPE_CURVE_FIT, indexOf(curveFit, CURVE_FIT_TYPES));
                 }
                 bundle.addIfNotNull(TypedValues.Position.TYPE_TRANSITION_EASING, transitionEasing);
                 if (easing != null) {

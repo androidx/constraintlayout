@@ -25,6 +25,8 @@ import androidx.constraintlayout.core.state.Transition;
 
 import java.util.ArrayList;
 
+import static org.constraintlayout.swing.core.motion.model.JsonKeys.CURVE_FIT_TYPES;
+
 public class KeyAttributeModel extends KeyFrame {
     String mTarget;
     TypedBundle mData = new TypedBundle();
@@ -107,7 +109,7 @@ public class KeyAttributeModel extends KeyFrame {
             for (int j = 0; j < bundles.length; j++) {
                 TypedBundle bundle = bundles[j];
                 if (curveFit != null) {
-                    bundle.add(TypedValues.Position.TYPE_CURVE_FIT, indexOf(curveFit, "spline", "linear"));
+                    bundle.add(TypedValues.Position.TYPE_CURVE_FIT, indexOf(curveFit, CURVE_FIT_TYPES));
                 }
 
                 bundle.addIfNotNull(TypedValues.Position.TYPE_TRANSITION_EASING, transitionEasing);

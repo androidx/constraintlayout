@@ -31,7 +31,6 @@ import java.awt.geom.Rectangle2D;
  */
 public class MotionPanel extends JComponent {
     MotionLayout mMotionLayout;
-
     public MotionPanel() {
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -84,7 +83,7 @@ public class MotionPanel extends JComponent {
     @Override
     protected void paintChildren(Graphics g) {
         Graphics sg = g;
-
+        mMotionLayout.motionEngine.renderDebug((Graphics2D)g);
         synchronized (getTreeLock()) {
             int i = getComponentCount() - 1;
             if (i < 0) {

@@ -1,16 +1,37 @@
+
+/*
+ * Copyright (C) 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package androidx.constraintLayout.desktop.motion;
 
+import androidx.constraintlayout.core.motion.utils.Utils;
+package androidx.constraintLayout.desktop.motion;
+ 
 import org.constraintlayout.swing.MotionLayout;
 import org.constraintlayout.swing.MotionPanel;
 
 import javax.swing.*;
 
-public class SwingDemo4 extends MotionPanel {
+ 
+public class SwingDemo5 extends MotionPanel {
     static String motionScene = "{\n" +
             "                 Header: {\n" +
             "                  name: 'RotationZ28'\n" +
             "                },\n" +
             "                ConstraintSets: {\n" +
+
             "                  start: {\n" +
             "                    b1: {\n" +
             "                      width: 90,\n" +
@@ -46,13 +67,13 @@ public class SwingDemo4 extends MotionPanel {
             "                  default: {\n" +
             "                    from: 'start',\n" +
             "                    to: 'end',\n" +
-//            "                    pathMotionArc: 'startHorizontal',\n" +
+           "                    pathMotionArc: 'startHorizontal',\n" +
             "                    KeyFrames: {\n" +
             "                      KeyAttributes: [\n" +
             "                        {\n" +
             "                          target: ['b2'],\n" +
             "                          frames: [33, 66],\n" +
-            "                          rotationZ: [32, 0.0 ],\n" +
+            "                          translationX: [32, 0.0 ],\n" +
             "                          \n" +
             "                        }\n" +
             "                      ]\n" +
@@ -63,14 +84,16 @@ public class SwingDemo4 extends MotionPanel {
     MotionLayout ml;
     float p = 0;
 
-    public SwingDemo4() {
+ 
+    public SwingDemo5() {
         setLayoutDescription(motionScene);
 
-        JButton button1 = new JButton("b1");
-        JButton button2 = new JButton("b2");
+        JButton button1 = new JButton("widget1");
+        JButton button2 = new JButton("widget2");
 
-        add(button1, "b1");
-        add(button2, "b2");
+        add(button1, "widget1");
+        add(button2, "widget2");
+ 
 
         Timer timer = new Timer(16, (e) -> setProgress(p = (p + 0.01f) % 1));
         timer.setRepeats(true);
@@ -78,8 +101,10 @@ public class SwingDemo4 extends MotionPanel {
     }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Demo2");
-        SwingDemo4 panel = new SwingDemo4();
+        JFrame frame = new JFrame(SwingDemo5.class.getSimpleName());
+        Utils.log(frame.getTitle());
+        SwingDemo5 panel = new SwingDemo5();
+ 
         frame.setContentPane(panel);
         frame.setBounds(100, 100, 400, 500);
 

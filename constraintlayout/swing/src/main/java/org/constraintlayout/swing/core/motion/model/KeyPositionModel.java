@@ -24,6 +24,8 @@ import androidx.constraintlayout.core.state.Transition;
 
 import java.util.ArrayList;
 
+import static org.constraintlayout.swing.core.motion.model.JsonKeys.*;
+
 public class KeyPositionModel extends KeyFrame {
     String mTarget;
     TypedBundle mData = new TypedBundle();
@@ -67,17 +69,17 @@ public class KeyPositionModel extends KeyFrame {
             data.clear();
             target = targets.getString(i);
             data.add(TypedValues.Position.TYPE_POSITION_TYPE, indexOf(type,
-                    "deltaRelative", "pathRelative", "parentRelative"));
+                    POSITION_TYPE));
 
 
             if (curveFit != null) {
-                data.add(TypedValues.Position.TYPE_CURVE_FIT, indexOf(curveFit, "spline", "linear"));
+                data.add(TypedValues.Position.TYPE_CURVE_FIT, indexOf(curveFit, CURVE_FIT_TYPES));
             }
             data.addIfNotNull(TypedValues.Position.TYPE_TRANSITION_EASING, transitionEasing);
 
             if (pathMotionArc != null) {
                 data.add(TypedValues.Position.TYPE_PATH_MOTION_ARC,
-                        indexOf(curveFit, "none", "startVertical", "startHorizontal", "flip"));
+                        indexOf(curveFit, PATH_MOTION_ARC_TYPES));
             }
             for (int j = 0; j < frames.size(); j++) {
                 int frame = frames.getInt(j);

@@ -723,7 +723,7 @@ public interface TypedValues {
         public static final int TYPE_DURATION = 700;
         public static final int TYPE_FROM = 701;
         public static final int TYPE_TO = 702;
-        public static final int TYPE_PATH_MOTION_ARC = 703;
+        public static final int TYPE_PATH_MOTION_ARC = Position.TYPE_PATH_MOTION_ARC;
         public static final int TYPE_AUTO_TRANSITION = 704;
         public static final int TYPE_INTERPOLATOR = 705;
         public static final int TYPE_STAGGERED = 706;
@@ -745,11 +745,11 @@ public interface TypedValues {
         public static int getType(int name) {
             switch (name) {
                 case TYPE_DURATION:
+                case TYPE_PATH_MOTION_ARC:
                     return INT_MASK;
                 case TYPE_FROM:
                 case TYPE_TO:
                 case TYPE_INTERPOLATOR:
-                case TYPE_PATH_MOTION_ARC:
                 case TYPE_TRANSITION_FLAGS:
                     return STRING_MASK;
 
