@@ -190,7 +190,6 @@ public abstract class ConstraintHelper extends View {
 
     /**
      * Helpers typically reference a collection of ids
-     * @return ids referenced
      */
     public void setReferencedIds(int[] ids) {
         mReferenceIds = null;
