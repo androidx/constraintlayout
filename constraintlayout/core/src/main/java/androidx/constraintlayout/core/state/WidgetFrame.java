@@ -167,6 +167,14 @@ public class WidgetFrame {
             endAlpha = 1f;
         }
 
+        if (start.visibility == ConstraintWidget.INVISIBLE) {
+            startAlpha = 0f;
+        }
+
+        if (end.visibility == ConstraintWidget.INVISIBLE) {
+            endAlpha = 0f;
+        }
+
         if (frame.widget != null && transition.hasPositionKeyframes()) {
             Transition.KeyPosition firstPosition = transition.findPreviousPosition(frame.widget.stringId, frameNumber);
             Transition.KeyPosition lastPosition = transition.findNextPosition(frame.widget.stringId, frameNumber);

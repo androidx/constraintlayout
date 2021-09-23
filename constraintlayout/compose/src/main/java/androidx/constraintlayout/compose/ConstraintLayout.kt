@@ -1641,6 +1641,13 @@ class JSONConstraintSet(@Language("json5") content: String,
         initialization()
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (other is JSONConstraintSet) {
+            return this.getCurrentContent() == other.getCurrentContent()
+        }
+        return false
+    }
+
     // Only called by MotionLayout in MotionMeasurer
     override fun applyTo(transition: Transition, type: Int) {
         val layoutVariables = LayoutVariables()
