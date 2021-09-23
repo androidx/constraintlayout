@@ -20,7 +20,7 @@ import android.annotation.SuppressLint
 import android.graphics.Matrix
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -41,12 +41,11 @@ import androidx.compose.ui.layout.*
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.*
 import androidx.constraintlayout.core.motion.Motion
-import androidx.constraintlayout.core.parser.CLObject
 import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.parser.CLParsingException
-import androidx.constraintlayout.core.state.*
 import androidx.constraintlayout.core.state.Dimension
 import androidx.constraintlayout.core.state.Transition
+import androidx.constraintlayout.core.state.WidgetFrame
 import androidx.constraintlayout.core.widgets.Optimizer
 import kotlinx.coroutines.channels.Channel
 import org.intellij.lang.annotations.Language
@@ -68,6 +67,149 @@ inline fun MotionLayout(
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
     crossinline content: @Composable MotionLayoutScope.() -> Unit
 ) {
+    MotionLayout(
+        start = start,
+        end = end,
+        transition = transition,
+        progress = progress,
+        debug = debug,
+        informationReceiver = null,
+        modifier = modifier,
+        optimizationLevel = optimizationLevel,
+        content = content
+    )
+}
+
+/**
+ * Layout that takes a MotionScene and animates by providing a [constraintSetName] to animate to.
+ *
+ * During recomposition, MotionLayout will interpolate from whichever ConstraintSet it is currently
+ * in, to [constraintSetName].
+ *
+ * Typically the first value of [constraintSetName] should match the start ConstraintSet in the
+ * default transition, or be null.
+ *
+ * Animation is run by [animationSpec], and will only start another animation once any other ones
+ * are finished. Use [finishedAnimationListener] to know when a transition has stopped.
+ */
+@Composable
+inline fun MotionLayout(
+    motionScene: MotionScene,
+    constraintSetName: String? = null,
+    animationSpec: AnimationSpec<Float> = tween<Float>(),
+    debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
+    modifier: Modifier = Modifier,
+    optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
+    noinline finishedAnimationListener: (() -> Unit)? = null,
+    crossinline content: @Composable (MotionLayoutScope.() -> Unit)
+) {
+    val needsUpdate = remember {
+        mutableStateOf(0L)
+    }
+    motionScene.setUpdateFlag(needsUpdate)
+
+    var usedDebugMode = debug
+    if (motionScene.getForcedDrawDebug() != MotionLayoutDebugFlags.UNKNOWN) {
+        usedDebugMode = EnumSet.of(motionScene.getForcedDrawDebug())
+    }
+
+    val transitionContent = remember(motionScene, needsUpdate.value) {
+        motionScene.getTransition("default")
+    }
+
+    val transition: androidx.constraintlayout.compose.Transition? =
+        transitionContent?.let { Transition(it) }
+
+    val startId = transition?.getStartConstraintSetId() ?: "start"
+    val endId = transition?.getEndConstraintSetId() ?: "end"
+
+    val startContent = remember(motionScene, needsUpdate.value) {
+        motionScene.getConstraintSet(startId) ?: motionScene.getConstraintSet(0)
+    }
+    val endContent = remember(motionScene, needsUpdate.value) {
+        motionScene.getConstraintSet(endId) ?: motionScene.getConstraintSet(1)
+    }
+
+    val targetEndContent = remember(motionScene, constraintSetName) {
+        constraintSetName?.let { motionScene.getConstraintSet(constraintSetName) }
+    }
+
+    if (startContent == null || endContent == null) {
+        return
+    }
+
+    var start: ConstraintSet by remember(motionScene) { mutableStateOf(JSONConstraintSet(content = startContent)) }
+    var end: ConstraintSet by remember(motionScene) { mutableStateOf(JSONConstraintSet(content = endContent)) }
+    val targetConstraintSet = targetEndContent?.let { JSONConstraintSet(targetEndContent) }
+
+    val progress = remember { Animatable(0f) }
+
+    var animateToEnd by remember(motionScene) { mutableStateOf(true) }
+
+    val channel = remember { Channel<ConstraintSet>(Channel.CONFLATED) }
+
+    if (targetConstraintSet != null) {
+        SideEffect {
+            channel.trySend(targetConstraintSet)
+        }
+
+        LaunchedEffect(motionScene, channel) {
+            for (constraints in channel) {
+                val newConstraintSet = channel.tryReceive().getOrNull() ?: constraints
+                val animTargetValue = if (animateToEnd) 1f else 0f
+                val currentSet = if (animateToEnd) start else end
+                if (newConstraintSet != currentSet) {
+                    if (animateToEnd) {
+                        end = newConstraintSet
+                    } else {
+                        start = newConstraintSet
+                    }
+                    progress.animateTo(animTargetValue, animationSpec)
+                    animateToEnd = !animateToEnd
+                    finishedAnimationListener?.invoke()
+                }
+            }
+        }
+    }
+
+    val lastOutsideProgress = remember { mutableStateOf(0f) }
+    val forcedProgress = motionScene.getForcedProgress()
+
+    val currentProgress =
+        if (!forcedProgress.isNaN() && lastOutsideProgress.value == progress.value) {
+            forcedProgress
+        } else {
+            motionScene.resetForcedProgress()
+            progress.value
+        }
+
+    lastOutsideProgress.value = progress.value
+
+    MotionLayout(
+        start = start,
+        end = end,
+        transition = transition,
+        progress = currentProgress,
+        debug = usedDebugMode,
+        informationReceiver = motionScene as? JSONMotionScene,
+        modifier = modifier,
+        optimizationLevel = optimizationLevel,
+        content = content
+    )
+}
+
+@Composable
+inline fun MotionLayout(
+    start: ConstraintSet,
+    end: ConstraintSet,
+    transition: androidx.constraintlayout.compose.Transition? = null,
+    progress: Float,
+    debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
+    informationReceiver: LayoutInformationReceiver? = null,
+    modifier: Modifier = Modifier,
+    optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
+    crossinline content: @Composable MotionLayoutScope.() -> Unit
+) {
     val measurer = remember { MotionMeasurer() }
     val scope = remember { MotionLayoutScope(measurer) }
     val progressState = remember { mutableStateOf(0f) }
@@ -83,6 +225,7 @@ inline fun MotionLayout(
             progressState,
             measurer
         )
+    measurer.addLayoutInformationReceiver(informationReceiver)
 
     val forcedScaleFactor = measurer.forcedScaleFactor
     if (!debug.contains(MotionLayoutDebugFlags.NONE) || !forcedScaleFactor.isNaN()) {
@@ -220,7 +363,6 @@ inline fun MotionLayout(
             content = { scope.content() }
         ))
     }
-
 }
 
 @Immutable
@@ -525,11 +667,13 @@ internal class MotionMeasurer : Measurer() {
         this.measureScope = measureScope
         var layoutSizeChanged = false
         if (constraints.hasFixedWidth
-            && !state.sameFixedWidth(constraints.maxWidth)) {
+            && !state.sameFixedWidth(constraints.maxWidth)
+        ) {
             layoutSizeChanged = true
         }
         if (constraints.hasFixedHeight
-            && !state.sameFixedHeight(constraints.maxHeight)) {
+            && !state.sameFixedHeight(constraints.maxHeight)
+        ) {
             layoutSizeChanged = true
         }
         if (motionProgress != progress

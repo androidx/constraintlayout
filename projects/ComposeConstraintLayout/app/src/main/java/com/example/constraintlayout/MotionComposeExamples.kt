@@ -166,7 +166,7 @@ public fun MotionExample2() {
 
     Column(Modifier.background(Color.White)) {
         MotionLayout(
-            ConstraintSet(
+            start = ConstraintSet(
                 """ {
                     background: { 
                 width: "spread",
@@ -216,7 +216,7 @@ public fun MotionExample2() {
                 }
             } """
             ),
-            ConstraintSet(
+            end = ConstraintSet(
                 """ {
                 background: { 
                 width: "spread",
@@ -256,7 +256,7 @@ public fun MotionExample2() {
                 height: 400,
                 start: ['parent', 'start', 16],
                 end: ['parent', 'end', 16],
-                top: ['description', 'bottom', 16]
+                top: ['description', 'bottom', 16],
                 },
                 play: { 
                 start: ['parent', 'end', 8],
@@ -1379,6 +1379,103 @@ fun MotionExample9() {
                     .clip(shape = RoundedCornerShape(12.dp))
                     .background(Color.Green)
                     .clickable(onClick = { animateToEnd = !animateToEnd })
+            )
+        }
+    }
+}
+
+@Preview(group = "motion10")
+@Composable
+fun MotionExample10() {
+    val states = remember {
+        listOf(
+        "csTopRight",
+        "csBottomLeft",
+        "csBottomRight",
+        "csTopLeft"
+        )
+    }
+
+    var currentState by remember {
+        mutableStateOf(-1)
+    }
+
+    Column {
+        Button(
+            onClick = {
+                currentState = if (currentState >= (states.size - 1)) {
+                    0
+                } else {
+                    currentState + 1
+                }
+        }) {
+            Text("Run")
+        }
+        MotionLayout(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .background(Color.Black),
+            debug = EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
+            motionScene = MotionScene(
+                """
+{
+                ConstraintSets: {
+                  csTopLeft: {
+                    box1: {
+                      start: ['parent', 'start', 16],
+                      top: ['parent', 'top', 16]
+                    },
+                  },
+                  csTopRight : {
+                    box1: {
+                      end: ['parent', 'end', 16],
+                      top: ['parent', 'top', 16]
+                    },
+                  },
+                  csBottomLeft : {
+                    box1: {
+                      start: ['parent', 'start', 16],
+                      bottom: ['parent', 'bottom', 16]
+                    },
+                  },
+                  csBottomRight : {
+                    box1: {
+                      end: ['parent', 'end', 16],
+                      bottom: ['parent', 'bottom', 16]
+                    },
+                  }
+                },
+                Transitions: {
+                  default: {
+                    from: 'csBottomRight',
+                    to: 'csTopLeft',
+                    pathMotionArc: 'startHorizontal',
+                    KeyFrames: {
+                      KeyPositions: [
+                        {
+                       type: 'parentRelative',
+                           target: ['box1'],
+                           frames: [50],
+                           percentX: [0.5],
+                           percentY: [0.4]
+                        }
+                      ]
+                    }
+                  }
+                }
+}
+"""
+            ),
+            constraintSetName = states.getOrNull(currentState),
+        ) {
+            Box(
+                modifier = Modifier
+                    .layoutId("box1")
+                    .height(125.dp)
+                    .width(188.dp)
+                    .clip(shape = RoundedCornerShape(12.dp))
+                    .background(Color.Green)
             )
         }
     }

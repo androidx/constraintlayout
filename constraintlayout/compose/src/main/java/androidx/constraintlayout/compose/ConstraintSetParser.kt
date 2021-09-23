@@ -547,8 +547,13 @@ fun override(baseJson: CLObject, name: String, overrideValue: CLObject) {
                                 base.remove("top")
                                 base.remove("bottom")
                                 base.remove("baseline")
+                                base.remove("center")
+                                base.remove("centerHorizontally")
+                                base.remove("centerVertically")
                             }
                             "transforms" -> {
+                                base.remove("visibility")
+                                base.remove("alpha")
                                 base.remove("pivotX")
                                 base.remove("pivotY")
                                 base.remove("rotationX")
