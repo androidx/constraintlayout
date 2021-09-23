@@ -1236,7 +1236,7 @@ public class MotionScene {
                 case "deriveConstraintsFrom":
                     derivedId = getId(context, value);
                     break;
-                case "ConstraintRotate":
+                case "constraintRotate":
                     set.mRotate = Integer.parseInt(value);
                     break;
             }
