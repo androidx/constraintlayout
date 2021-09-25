@@ -4,11 +4,20 @@
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
     <Transition
-        motion:constraintSetEnd="@+id/end"
-        motion:constraintSetStart="@id/start"
+        motion:constraintSetEnd="@+id/landscape_R90"
+        motion:constraintSetStart="@id/portrait"
+        motion:pathMotionArc="startHorizontal"
         motion:duration="1000">
        <KeyFrameSet>
        </KeyFrameSet>
+    </Transition>
+    <Transition
+        motion:constraintSetEnd="@+id/landscape_right_RN90R90"
+        motion:constraintSetStart="@id/portrait"
+        motion:pathMotionArc="startHorizontal"
+        motion:duration="1000">
+        <KeyFrameSet>
+        </KeyFrameSet>
     </Transition>
 
     <ConstraintSet android:id="@+id/start">
@@ -18,7 +27,7 @@
     <ConstraintSet android:id="@+id/end">
     </ConstraintSet>
 
-
+    <!--    Used in this demo-->
     <ConstraintSet android:id="@+id/portrait">
     </ConstraintSet>
 
@@ -29,21 +38,22 @@
         >
     </Transition>
 
+<!--    Used in this demo-->
     <ConstraintSet android:id="@+id/landscape_R90"
         motion:deriveConstraintsFrom="@id/landscape"
-        motion:ConstraintRotate="left" >
-
+        motion:constraintRotate="left" >
     </ConstraintSet>
 
+    <!--    Used in this demo-->
     <ConstraintSet android:id="@+id/landscape_right_RN90"
         motion:deriveConstraintsFrom="@id/landscape_right"
-        motion:ConstraintRotate="right">
+        motion:constraintRotate="right">
 
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/portrait_R90"
         motion:deriveConstraintsFrom="@id/portrait"
-        motion:ConstraintRotate="right">
+        motion:constraintRotate="right">
 
     </ConstraintSet>
 
@@ -51,20 +61,10 @@
 
     <ConstraintSet android:id="@+id/portrait_RN90"
         motion:deriveConstraintsFrom="@id/portrait"
-        motion:ConstraintRotate="x_left">
-
+        motion:constraintRotate="x_left">
 
     </ConstraintSet>
     <ConstraintSet android:id="@+id/landscape_right"   >
-<!--        <Constraint-->
-<!--            android:id="@+id/fullscreen_content"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:textColor="#FFF"-->
-<!--            motion:layout_constraintBottom_toBottomOf="parent"-->
-<!--            motion:layout_constraintEnd_toEndOf="parent"-->
-<!--            motion:layout_constraintStart_toStartOf="parent"-->
-<!--            motion:layout_constraintTop_toTopOf="parent" />-->
 
         <Constraint
             android:id="@+id/imageView3"
@@ -108,7 +108,6 @@
             motion:layout_constraintBottom_toTopOf="@+id/imageView5"
             motion:layout_constraintStart_toStartOf="@+id/imageView"
             motion:layout_constraintTop_toBottomOf="@+id/imageView"  />
-
 
 
     </ConstraintSet>
