@@ -16,12 +16,6 @@
 
 package androidx.demo.mycamera;
 
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.res.Configuration;
 import android.hardware.Sensor;
@@ -35,11 +29,14 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.core.app.ActivityCompat;
 
 import java.util.ArrayList;
-
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -47,18 +44,15 @@ import java.util.ArrayList;
  */
 public class FullscreenActivity extends AppCompatActivity {
     private static final String TAG = "FullscreenActivity";
-
-    MotionLayout mMotionLayout;
-    private SensorManager sensorManager;
-    CameraPreview mCam;
-
-    float mAngle;
     final float D_FACTOR = 10;
-    int mCurrentTransitionType = -1;
     final int TRANSITION_LEFT_FROM_TOP = 0;
     final int TRANSITION_RIGHT_FROM_TOP = 1;
     final int TRANSITION_RIGHT_FROM_LEFT = 2;
     final int TRANSITION_LEFT_FROM_RIGHT = 3;
+    MotionLayout mMotionLayout;
+    CameraPreview mCam;
+    float mAngle;
+    int mCurrentTransitionType = -1;
     int[][] mTransition = {
             {R.id.portrait, R.id.landscape_R90}, //TRANSITION_LEFT_FROM_TOP
             {R.id.portrait, R.id.landscape_right_RN90}, //TRANSITION_RIGHT_FROM_TOP
@@ -68,7 +62,40 @@ public class FullscreenActivity extends AppCompatActivity {
     int count = 0;
     float[] mAccValues;
     int mLastProcessOrientation;
+    ArrayList<ActivityCompat.OnRequestPermissionsResultCallback> permissionCallbacks = new ArrayList<>();
+    long waitTill = System.currentTimeMillis();
+    int mHold = 0;
+    SensorEventListener gravity_listener = new SensorEventListener() {
+        float dampX, dampY;
+        float prevX, prevY;
 
+        @Override
+        public void onSensorChanged(SensorEvent sensorEvent) {
+            mAccValues = sensorEvent.values;
+            float x = mAccValues[0];
+            float y = mAccValues[1];
+            if (Math.hypot(x, y) < 2) {
+                return;
+            }
+            dampX = x + dampX * D_FACTOR;
+            dampY = y + dampY * D_FACTOR;
+            dampX /= (1 + D_FACTOR);
+            dampY /= (1 + D_FACTOR);
+
+            if ((Math.abs(dampX - prevX) < 0.01 && Math.abs(dampY - prevY) < 0.01)) {
+                return;
+            }
+            prevX = dampX;
+            prevY = dampY;
+            mAngle = curve(dampX, dampY);
+            orientation();
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int i) {
+        }
+    };
+    private SensorManager sensorManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +108,6 @@ public class FullscreenActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_fullscreen);
-
 
         mCam = findViewById(R.id.fake_cam);
         mMotionLayout = findViewById(R.id.motionLayout);
@@ -96,13 +122,12 @@ public class FullscreenActivity extends AppCompatActivity {
         permissionCallbacks.add(mCam);
 
     }
-    ArrayList<ActivityCompat.OnRequestPermissionsResultCallback> permissionCallbacks  = new ArrayList<>();
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         for (ActivityCompat.OnRequestPermissionsResultCallback subsystem : permissionCallbacks) {
-            subsystem.onRequestPermissionsResult(requestCode,permissions,grantResults);
+            subsystem.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 
@@ -132,13 +157,11 @@ public class FullscreenActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
-    public void onConfigurationChanged(@NonNull  Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         mCurrentTransitionType = -1;
         orientation();
         super.onConfigurationChanged(newConfig);
     }
-
-    long waitTill = System.currentTimeMillis();
 
     /**
      * Compute the constraint set to transition to.
@@ -210,38 +233,6 @@ public class FullscreenActivity extends AppCompatActivity {
 
         mMotionLayout.setProgress(progress);
     }
-
-    SensorEventListener gravity_listener = new SensorEventListener() {
-        float dampX, dampY;
-        float prevX, prevY;
-
-        @Override
-        public void onSensorChanged(SensorEvent sensorEvent) {
-            mAccValues = sensorEvent.values;
-            float x = mAccValues[0];
-            float y = mAccValues[1];
-            if (Math.hypot(x, y) < 2) {
-                return;
-            }
-            dampX = x + dampX * D_FACTOR;
-            dampY = y + dampY * D_FACTOR;
-            dampX /= (1 + D_FACTOR);
-            dampY /= (1 + D_FACTOR);
-
-            if ((Math.abs(dampX - prevX) < 0.01 && Math.abs(dampY - prevY) < 0.01)) {
-                return;
-            }
-            prevX = dampX;
-            prevY = dampY;
-            mAngle = curve(dampX, dampY);
-            orientation();
-        }
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int i) {
-        }
-    };
-    int mHold = 0;
 
     float pmap(float p) {
         float t = p - 0.5f;

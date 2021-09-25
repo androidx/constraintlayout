@@ -1,41 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
- <androidx.demo.mycamera.CameraPreview
+    <androidx.demo.mycamera.CameraPreview
         android:id="@+id/fake_cam"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/space"
-       />
+        android:src="@drawable/space" />
 
-    <androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.motion.widget.MotionLayout
         android:id="@+id/motionLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
-        app:layoutDescription="@xml/activity_fullscreen_scene"
-        tools:context=".FullscreenActivity">
-
-        <!-- The primary full-screen view. This can be replaced with whatever view
-             is needed to present your content, e.g. VideoView, SurfaceView,
-             TextureView, etc. -->
-<!--            <androidx.constraintlayout.utils.widget.ImageFilterView-->
-<!--                android:id="@+id/fullscreen_content"-->
-<!--                android:layout_width="1dp"-->
-<!--                android:layout_height="1dp"-->
-
-<!--                android:src="@drawable/space"-->
-<!--                app:imageZoom="1"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent" />-->
+        app:layoutDescription="@xml/activity_fullscreen_scene">
 
         <ImageView
             android:id="@+id/imageView"
@@ -87,7 +66,6 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/imageView2"
             app:srcCompat="@drawable/circle" />
-
 
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </FrameLayout>
