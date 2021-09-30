@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <androidx.demo.mycamera.CameraPreview
-        android:id="@+id/fake_cam"
+        android:id="@+id/camera"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/space" />

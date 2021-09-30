@@ -12,7 +12,7 @@
        </KeyFrameSet>
     </Transition>
     <Transition
-        motion:constraintSetEnd="@+id/landscape_right_RN90R90"
+        motion:constraintSetEnd="@+id/landscape_right_RN90"
         motion:constraintSetStart="@id/portrait"
         motion:pathMotionArc="startHorizontal"
         motion:duration="1000">
@@ -41,7 +41,7 @@
 <!--    Used in this demo-->
     <ConstraintSet android:id="@+id/landscape_R90"
         motion:deriveConstraintsFrom="@id/landscape"
-        motion:constraintRotate="left" >
+        >
     </ConstraintSet>
 
     <!--    Used in this demo-->

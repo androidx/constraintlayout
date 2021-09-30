@@ -53,7 +53,7 @@ public fun AttributesScale() {
                 .height(400.dp)
                 .background(Color.White),
             motionScene = MotionScene("""{
-                Debug: {
+                Header: {
                   name: 'motion26'
                 },
                 ConstraintSets: {

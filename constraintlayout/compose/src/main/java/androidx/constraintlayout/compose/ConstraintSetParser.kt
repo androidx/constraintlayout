@@ -269,7 +269,8 @@ fun parseKeyAttribute(keyAttribute: CLObject, transition: Transition) {
         TypedValues.Attributes.S_ROTATION_X,
         TypedValues.Attributes.S_ROTATION_Y,
         TypedValues.Attributes.S_ROTATION_Z,
-    )
+        TypedValues.Attributes.S_ALPHA,
+        )
     val attrIds = arrayListOf(
         TypedValues.Attributes.TYPE_SCALE_X,
         TypedValues.Attributes.TYPE_SCALE_Y,
@@ -279,6 +280,7 @@ fun parseKeyAttribute(keyAttribute: CLObject, transition: Transition) {
         TypedValues.Attributes.TYPE_ROTATION_X,
         TypedValues.Attributes.TYPE_ROTATION_Y,
         TypedValues.Attributes.TYPE_ROTATION_Z,
+        TypedValues.Attributes.TYPE_ALPHA,
         )
 
     val bundles = ArrayList<TypedBundle>()
@@ -348,6 +350,7 @@ fun parseKeyCycle(keyCycleData: CLObject, transition: Transition) {
         TypedValues.Cycle.S_ROTATION_X,
         TypedValues.Cycle.S_ROTATION_Y,
         TypedValues.Cycle.S_ROTATION_Z,
+        TypedValues.Cycle.S_ALPHA,
         TypedValues.Cycle.S_WAVE_PERIOD,
         TypedValues.Cycle.S_WAVE_OFFSET,
         TypedValues.Cycle.S_WAVE_PHASE,
@@ -361,6 +364,7 @@ fun parseKeyCycle(keyCycleData: CLObject, transition: Transition) {
         TypedValues.Cycle.TYPE_ROTATION_X,
         TypedValues.Cycle.TYPE_ROTATION_Y,
         TypedValues.Cycle.TYPE_ROTATION_Z,
+        TypedValues.Cycle.TYPE_ALPHA,
         TypedValues.Cycle.TYPE_WAVE_PERIOD,
         TypedValues.Cycle.TYPE_WAVE_OFFSET,
         TypedValues.Cycle.TYPE_WAVE_PHASE,
