@@ -18,6 +18,7 @@ package com.example.constraintlayout
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -34,8 +35,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -52,10 +55,10 @@ public fun AnimatedConstraintLayoutExample1() {
     val baseConstraintSetStart = """
             {
                 box: {
-                    width: 100,
-                    height: 150,
+                    width: 'wrap', height: 150,
                     centerHorizontally: 'parent',
-                    top: ['parent', 'top', 16]
+                    top: ['parent', 'top', 16],
+                    rotationX: 360
                 }
             }
 
@@ -64,9 +67,8 @@ public fun AnimatedConstraintLayoutExample1() {
     val baseConstraintSetEnd = """
             {
                 box: {
-                    width: 100,
-                    height: 150,
-                    centerHorizontally: 'parent',
+                    width: 100, height: 150,
+                    end:    ['parent', 'end', 16],
                     bottom: ['parent', 'bottom', 16]
                 }
             }
@@ -85,15 +87,13 @@ public fun AnimatedConstraintLayoutExample1() {
             animateChanges = true,
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(Color.White),
+            animationSpec = tween<Float>(5000)
         ) {
-            Box(
-                modifier = Modifier
-                    .layoutId("box")
-                    .width(100.dp)
-                    .height(150.dp)
-                    .background(Color.Blue)
-            )
+            var shape = RoundedCornerShape(10.dp)
+            Image( painterResource(id = R.drawable.pepper),"",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.clip(shape).layoutId("box").fillMaxSize())
         }
     }
 }
@@ -147,7 +147,7 @@ public fun MotionExample1() {
     val constraints = if (animateToEnd) cs2 else cs1
     Column {
         Button(onClick = { animateToEnd = !animateToEnd }) {
-            Text(text = "Run")
+            Text(text = "Play")
         }
         ConstraintLayout(
             constraints,

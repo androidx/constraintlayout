@@ -109,7 +109,7 @@ public class FullscreenActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_fullscreen);
 
-        mCam = findViewById(R.id.fake_cam);
+        mCam = findViewById(R.id.camera);
         mMotionLayout = findViewById(R.id.motionLayout);
         boolean landscape = (getWindowManager().getDefaultDisplay().getRotation() & 1) == 1;
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
