@@ -1237,7 +1237,29 @@ public class MotionScene {
                     derivedId = getId(context, value);
                     break;
                 case "constraintRotate":
-                    set.mRotate = Integer.parseInt(value);
+                    try {
+                        set.mRotate = Integer.parseInt(value);
+                    } catch (NumberFormatException exception) {
+                        switch (value) {
+                            case "none":
+                                set.mRotate = 0;
+                                break;
+                            case "right":
+                                set.mRotate = 1;
+                                break;
+                            case "left":
+                                set.mRotate = 2;
+                                break;
+                            case "x_right":
+                                set.mRotate = 3;
+                                break;
+                            case "x_left":
+                                set.mRotate = 4;
+                                break;
+                        }
+                    }
+
+
                     break;
             }
         }
