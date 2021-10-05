@@ -494,7 +494,7 @@ public class MotionScene {
         private int mTransitionFlags = 0;
         final static int TRANSITION_FLAG_FIRST_DRAW = 1;
         final static int TRANSITION_FLAG_INTRA_AUTO = 2;
-
+        final static int TRANSITION_FLAG_INTERCEPT_TOUCH = 4;
 
         public void setOnSwipe(OnSwipe onSwipe) {
             mTouchResponse = (onSwipe == null) ? null : new TouchResponse(mMotionScene.mMotionLayout, onSwipe);

@@ -885,5 +885,8 @@ class TouchResponse {
         return mSpringBoundary;
     }
 
+    boolean isDragStarted() {
+        return mDragStarted;
+    }
 
 }

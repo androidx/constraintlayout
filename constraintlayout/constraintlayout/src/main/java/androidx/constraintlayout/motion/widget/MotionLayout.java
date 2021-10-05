@@ -70,6 +70,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static androidx.constraintlayout.motion.widget.MotionScene.Transition.TRANSITION_FLAG_FIRST_DRAW;
+import static androidx.constraintlayout.motion.widget.MotionScene.Transition.TRANSITION_FLAG_INTERCEPT_TOUCH;
 import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID;
 import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
 
@@ -4113,6 +4114,9 @@ public class MotionLayout extends ConstraintLayout implements
                 return super.onTouchEvent(event);
             }
             mScene.processTouchEvent(event, getCurrentState(), this);
+            if (mScene.mCurrentTransition.isTransitionFlag(TRANSITION_FLAG_INTERCEPT_TOUCH)) {
+                 return mScene.mCurrentTransition.getTouchResponse().isDragStarted();
+            }
             return true;
         }
         if (DEBUG) {
