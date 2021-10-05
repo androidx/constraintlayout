@@ -552,7 +552,7 @@ fun Transition(@Language("json5") content: String): androidx.constraintlayout.co
                     }
 
                     override fun getEndConstraintSetId(): String {
-                        return parsed.getStringOrNull("to") ?: "start"
+                        return parsed.getStringOrNull("to") ?: "end"
                     }
                 }
             } else {

@@ -1078,6 +1078,15 @@ private fun parseConstraint(
                     }
                 }
             }
+            "baseline" -> {
+                when (anchor) {
+                    "baseline" -> {
+                        state.baselineNeededFor(reference.key)
+                        state.baselineNeededFor(targetReference.key)
+                        reference.baselineToBaseline(targetReference)
+                    }
+                }
+            }
         }
         reference.margin(margin).marginGone(marginGone.toInt())
     } else {
@@ -1093,6 +1102,11 @@ private fun parseConstraint(
                 "end" -> reference.endToEnd(targetReference)
                 "top" -> reference.topToTop(targetReference)
                 "bottom" -> reference.bottomToBottom(targetReference)
+                "baseline" -> {
+                    state.baselineNeededFor(reference.key)
+                    state.baselineNeededFor(targetReference.key)
+                    reference.baselineToBaseline(targetReference)
+                }
             }
         }
     }

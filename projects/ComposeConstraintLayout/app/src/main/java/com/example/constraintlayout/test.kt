@@ -508,7 +508,7 @@ public fun ScreenExample5() {
               },
               b: {
                 start: ['parent', 'start', 'm1' ],
-                top : ['a', 'bottom', 'm1' ]
+                baseline : ['a', 'baseline']
               },
               c: {
                 start:  ['barrier', 'start'],
