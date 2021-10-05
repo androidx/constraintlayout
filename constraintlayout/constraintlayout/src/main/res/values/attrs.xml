@@ -1235,7 +1235,7 @@
             <flag name="none" value="0" />
             <flag name="beginOnFirstDraw" value="1" />
             <flag name="disableIntraAutoTransition" value="2" />
-            />
+            <flag name="onInterceptTouchReturnSwipe" value="4" />
         </attr>
     </declare-styleable>
 

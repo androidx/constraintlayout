@@ -494,7 +494,7 @@ public class MotionScene {
         private int mTransitionFlags = 0;
         final static int TRANSITION_FLAG_FIRST_DRAW = 1;
         final static int TRANSITION_FLAG_INTRA_AUTO = 2;
-
+        final static int TRANSITION_FLAG_INTERCEPT_TOUCH = 4;
 
         public void setOnSwipe(OnSwipe onSwipe) {
             mTouchResponse = (onSwipe == null) ? null : new TouchResponse(mMotionScene.mMotionLayout, onSwipe);
@@ -1237,7 +1237,29 @@ public class MotionScene {
                     derivedId = getId(context, value);
                     break;
                 case "constraintRotate":
-                    set.mRotate = Integer.parseInt(value);
+                    try {
+                        set.mRotate = Integer.parseInt(value);
+                    } catch (NumberFormatException exception) {
+                        switch (value) {
+                            case "none":
+                                set.mRotate = 0;
+                                break;
+                            case "right":
+                                set.mRotate = 1;
+                                break;
+                            case "left":
+                                set.mRotate = 2;
+                                break;
+                            case "x_right":
+                                set.mRotate = 3;
+                                break;
+                            case "x_left":
+                                set.mRotate = 4;
+                                break;
+                        }
+                    }
+
+
                     break;
             }
         }

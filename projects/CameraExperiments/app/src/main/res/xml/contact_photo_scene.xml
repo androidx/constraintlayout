@@ -100,7 +100,7 @@
             motion:layout_constraintTop_toTopOf="parent"
             motion:roundPercent="2" />
 
-        <TextView
+        <Constraint
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
