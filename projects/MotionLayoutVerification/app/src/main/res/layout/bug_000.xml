@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layoutDescription="@xml/bug_000_scene"
+    android:background="#F9F"
+    >
+
+    <View
+        android:id="@+id/bg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#000"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="@id/spaceEnd"
+        app:layout_constraintStart_toStartOf="@id/spaceStart" />
+
+    <!--            app:layout_constraintEnd_toEndOf="@id/spaceEnd"
+            app:layout_constraintStart_toStartOf="@id/spaceStart"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"
+    -->
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="62dp"
+        android:textColor="#FFF"
+        app:layout_constraintBottom_toBottomOf="@id/bg"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/bg"
+        android:text="10241024"
+        tools:text="10241024" />
+
+    <TextView
+        android:id="@+id/spaceStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:background="#F389"
+        app:layout_constraintEnd_toStartOf="@id/text"
+        app:layout_constraintTop_toTopOf="@id/text" />
+
+    <TextView
+        android:id="@+id/spaceEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:background="#93F"
+        app:layout_constraintStart_toEndOf="@id/text"
+        app:layout_constraintTop_toTopOf="@id/text" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>
