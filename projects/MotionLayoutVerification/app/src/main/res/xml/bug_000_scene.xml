@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ConstraintSet android:id="@+id/v0">
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/v1">
+        <ConstraintOverride
+            android:id="@+id/bg"
+            android:layout_marginBottom="100dp">
+
+        </ConstraintOverride>
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/v12">
+        <ConstraintOverride
+            android:id="@+id/bg"
+            app:layout_constraintDimensionRatio="1:1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="140dp">
+
+        </ConstraintOverride>
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/v2">
+        <Constraint
+            android:id="@+id/bg"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="200dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="@id/spaceEnd"
+            app:layout_constraintStart_toStartOf="@id/spaceStart" />
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/v3">
+        <Constraint android:id="@+id/bg">
+            <Layout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="300dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="@id/spaceEnd"
+                app:layout_constraintStart_toStartOf="@id/spaceStart" />
+        </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/v4">
+        <Constraint android:id="@+id/bg">
+            <Layout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="500dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintLeft_toRightOf="@id/spaceStart"
+                app:layout_constraintRight_toLeftOf="@id/spaceEnd"
+                app:layout_constraintStart_toEndOf="@id/spaceStart"
+                app:layout_constraintEnd_toStartOf="@id/spaceEnd" />
+        </Constraint>
+    </ConstraintSet>
+
+    <Transition
+        app:constraintSetEnd="@id/v2"
+        app:constraintSetStart="@+id/v0">
+        <OnClick />
+    </Transition>
+</MotionScene>

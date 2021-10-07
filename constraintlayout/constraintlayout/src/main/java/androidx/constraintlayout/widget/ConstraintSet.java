@@ -1020,10 +1020,10 @@ public class ConstraintSet {
         public int verticalChainStyle = CHAIN_SPREAD;
         public int widthDefault = ConstraintWidget.MATCH_CONSTRAINT_SPREAD;
         public int heightDefault = ConstraintWidget.MATCH_CONSTRAINT_SPREAD;
-        public int widthMax = UNSET;
-        public int heightMax = UNSET;
-        public int widthMin = UNSET;
-        public int heightMin = UNSET;
+        public int widthMax = 0;
+        public int heightMax = 0;
+        public int widthMin = 0;
+        public int heightMin = 0;
         public float widthPercent = 1;
         public float heightPercent = 1;
         public int mBarrierDirection = UNSET;
