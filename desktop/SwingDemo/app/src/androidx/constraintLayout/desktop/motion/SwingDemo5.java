@@ -17,8 +17,7 @@
 package androidx.constraintLayout.desktop.motion;
 
 import androidx.constraintlayout.core.motion.utils.Utils;
-package androidx.constraintLayout.desktop.motion;
- 
+
 import org.constraintlayout.swing.MotionLayout;
 import org.constraintlayout.swing.MotionPanel;
 
