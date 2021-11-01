@@ -13,7 +13,7 @@ pluginManagement {
     resolutionStrategy {
         eachPlugin {
             if (it.requested.id.namespace == "com.android") {
-                it.useModule("com.android.tools.build:gradle:4.2.0-beta06")
+                it.useModule("com.android.tools.build:gradle:7.0.0")
             }
         }
     }

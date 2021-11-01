@@ -178,7 +178,6 @@ public class CustomVariable {
             case TypedValues.Custom.TYPE_FLOAT:
                 return mFloatValue;
             case TypedValues.Custom.TYPE_COLOR:
-
                 throw new RuntimeException("Color does not have a single color to interpolate");
             case TypedValues.Custom.TYPE_STRING:
                 throw new RuntimeException("Cannot interpolate String");
@@ -212,7 +211,7 @@ public class CustomVariable {
                 ret[3] = a / 255f;
                 break;
             case TypedValues.Custom.TYPE_STRING:
-                throw new RuntimeException("Color does not have a single color to interpolate");
+                throw new RuntimeException("Cannot interpolate String");
             case TypedValues.Custom.TYPE_BOOLEAN:
                 ret[0] = mBooleanValue ? 1 : 0;
                 break;
@@ -233,11 +232,17 @@ public class CustomVariable {
                 mFloatValue = value[0];
                 break;
             case TypedValues.Custom.TYPE_COLOR:
-                mIntegerValue = hsvToRgb(value[0], value[1], value[2]);
-                mIntegerValue = (mIntegerValue & 0xFFFFFF) | (clamp((int) (0xFF * value[3])) << 24);
+                float f_r = value[0];
+                float f_g = value[1];
+                float f_b = value[2];
+                int r = 0xFF & Math.round((float)Math.pow(f_r, 1.0/2.0) * 255.0f);
+                int g = 0xFF & Math.round((float)Math.pow(f_g, 1.0/2.0) * 255.0f);
+                int b = 0xFF & Math.round((float)Math.pow(f_b, 1.0/2.0) * 255.0f);
+                int a = 0xFF & Math.round(value[3] * 255.0f);
+                mIntegerValue = a << 24 | r << 16 | g << 8 | b;
                 break;
             case TypedValues.Custom.TYPE_STRING:
-                throw new RuntimeException("Color does not have a single color to interpolate");
+                throw new RuntimeException("Cannot interpolate String");
             case TypedValues.Custom.TYPE_BOOLEAN:
                 mBooleanValue = value[0] > 0.5;
                 break;

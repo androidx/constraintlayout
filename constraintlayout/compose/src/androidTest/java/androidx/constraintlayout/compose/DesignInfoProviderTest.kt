@@ -75,7 +75,6 @@ class DesignInfoProviderTest {
     }
 
     @Test
-    @Ignore
     fun withConstraintSet() {
         rule.setWithConstraintSet()
 
@@ -97,7 +96,6 @@ class DesignInfoProviderTest {
     }
 
     @Test
-    @Ignore
     fun withDsl() {
         rule.setWithDsl()
 

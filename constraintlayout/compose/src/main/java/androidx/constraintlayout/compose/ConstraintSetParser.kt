@@ -49,7 +49,14 @@ class LayoutVariables {
         generators[elementName] = generator
     }
 
-    fun put(elementName: String, from: Float, to: Float, step: Float, prefix: String, postfix: String) {
+    fun put(
+        elementName: String,
+        from: Float,
+        to: Float,
+        step: Float,
+        prefix: String,
+        postfix: String
+    ) {
         if (generators.containsKey(elementName)) {
             if (generators[elementName] is OverrideValue) {
                 return
@@ -80,7 +87,7 @@ class LayoutVariables {
         return 0f
     }
 
-    fun getList(elementName: String) : ArrayList<String>? {
+    fun getList(elementName: String): ArrayList<String>? {
         if (arrayIds.containsKey(elementName)) {
             return arrayIds[elementName]
         }
@@ -94,14 +101,14 @@ class LayoutVariables {
 }
 
 interface GeneratedValue {
-    fun value() : Float
+    fun value(): Float
 }
 
 class Generator(start: Float, private var incrementBy: Float) : GeneratedValue {
-    private var current : Float = start
+    private var current: Float = start
     private var stop = false
 
-    override fun value() : Float {
+    override fun value(): Float {
         if (!stop) {
             current += incrementBy
         }
@@ -109,11 +116,12 @@ class Generator(start: Float, private var incrementBy: Float) : GeneratedValue {
     }
 }
 
-class FiniteGenerator(from: Float, to: Float,
-                      private var step: Float = 1f, private var prefix: String = "",
-                      private var postfix: String = ""
+class FiniteGenerator(
+    from: Float, to: Float,
+    private var step: Float = 1f, private var prefix: String = "",
+    private var postfix: String = ""
 ) : GeneratedValue {
-    private var current : Float = from
+    private var current: Float = from
     private var stop = false
     private var initial = from
     private var max = to
@@ -128,10 +136,10 @@ class FiniteGenerator(from: Float, to: Float,
         return current
     }
 
-    fun array() : ArrayList<String> {
+    fun array(): ArrayList<String> {
         val array = arrayListOf<String>()
         var value = initial.toInt()
-        for (i in initial.toInt() .. max.toInt()) {
+        for (i in initial.toInt()..max.toInt()) {
             array.add(prefix + value + postfix)
             value += step.toInt()
         }
@@ -141,7 +149,7 @@ class FiniteGenerator(from: Float, to: Float,
 }
 
 class OverrideValue(private var value: Float) : GeneratedValue {
-    override fun value() : Float {
+    override fun value(): Float {
         return value
     }
 }
@@ -256,8 +264,8 @@ fun parseKeyPosition(keyPosition: CLObject, transition: Transition) {
 }
 
 fun parseKeyAttribute(keyAttribute: CLObject, transition: Transition) {
-    val targets = keyAttribute.getArray("target")
-    val frames = keyAttribute.getArray("frames")
+    val targets = keyAttribute.getArrayOrNull("target") ?: return
+    val frames = keyAttribute.getArrayOrNull("frames") ?: return
     val transitionEasing = keyAttribute.getStringOrNull("transitionEasing")
 
     val attrNames = arrayListOf(
@@ -270,7 +278,7 @@ fun parseKeyAttribute(keyAttribute: CLObject, transition: Transition) {
         TypedValues.Attributes.S_ROTATION_Y,
         TypedValues.Attributes.S_ROTATION_Z,
         TypedValues.Attributes.S_ALPHA,
-        )
+    )
     val attrIds = arrayListOf(
         TypedValues.Attributes.TYPE_SCALE_X,
         TypedValues.Attributes.TYPE_SCALE_Y,
@@ -281,7 +289,7 @@ fun parseKeyAttribute(keyAttribute: CLObject, transition: Transition) {
         TypedValues.Attributes.TYPE_ROTATION_Y,
         TypedValues.Attributes.TYPE_ROTATION_Z,
         TypedValues.Attributes.TYPE_ALPHA,
-        )
+    )
 
     val bundles = ArrayList<TypedBundle>()
     (0 until frames.size()).forEach { _ ->
@@ -290,31 +298,33 @@ fun parseKeyAttribute(keyAttribute: CLObject, transition: Transition) {
 
     for (k in 0 until attrNames.size) {
         val attrName = attrNames[k]
-        val attrId    = attrIds[k]
+        val attrId = attrIds[k]
 
         val arrayValues = keyAttribute.getArrayOrNull(attrName)
         // array must contain one per frame
         if (arrayValues != null && arrayValues.size() != bundles.size) {
-            throw CLParsingException("incorrect size for $attrName array, " +
-                    "not matching targets array!", keyAttribute)
+            throw CLParsingException(
+                "incorrect size for $attrName array, " +
+                        "not matching targets array!", keyAttribute
+            )
         }
         if (arrayValues != null) {
             (0 until bundles.size).forEach { i ->
-              bundles[i].add(attrId, arrayValues.getFloat(i))
+                bundles[i].add(attrId, arrayValues.getFloat(i))
             }
         } else {
             val value = keyAttribute.getFloatOrNaN(attrName)
             if (!value.isNaN()) {
                 (0 until bundles.size).forEach { i ->
-                     bundles[i].add(attrId, value)
-                }
+                    bundles[i].add(attrId, value)
                 }
             }
         }
+    }
     val curveFit = keyAttribute.getStringOrNull("curveFit")
     (0 until targets.size()).forEach { i ->
-    (0 until bundles.size).forEach { j ->
-        val target = targets.getString(i)
+        (0 until bundles.size).forEach { j ->
+            val target = targets.getString(i)
 
             val bundle = bundles[j]
 
@@ -327,13 +337,12 @@ fun parseKeyAttribute(keyAttribute: CLObject, transition: Transition) {
             bundle.addIfNotNull(TypedValues.Position.TYPE_TRANSITION_EASING, transitionEasing)
 
 
-                val frame = frames.getInt(j)
-                bundle.add(TypedValues.TYPE_FRAME_POSITION, frame)
-        transition.addKeyAttribute(target, bundle)
+            val frame = frames.getInt(j)
+            bundle.add(TypedValues.TYPE_FRAME_POSITION, frame)
+            transition.addKeyAttribute(target, bundle)
         }
     }
 }
-
 
 
 fun parseKeyCycle(keyCycleData: CLObject, transition: Transition) {
@@ -376,19 +385,21 @@ fun parseKeyCycle(keyCycleData: CLObject, transition: Transition) {
         bundles.add(TypedBundle())
     }
 
-    for (k in 0 .. attrNames.size - 1) {
+    for (k in 0..attrNames.size - 1) {
         var attrName = attrNames[k]
-        var attrId    = attrIds[k];
+        var attrId = attrIds[k];
 
         val arrayValues = keyCycleData.getArrayOrNull(attrName)
         // array must contain one per frame
         if (arrayValues != null && arrayValues.size() != bundles.size) {
-            throw CLParsingException("incorrect size for $attrName array, " +
-                    "not matching targets array!", keyCycleData)
+            throw CLParsingException(
+                "incorrect size for $attrName array, " +
+                        "not matching targets array!", keyCycleData
+            )
         }
         if (arrayValues != null) {
             (0 until bundles.size).forEach { i ->
-                bundles.get(i) .add(attrId, arrayValues.getFloat(i));
+                bundles.get(i).add(attrId, arrayValues.getFloat(i));
             }
         } else {
             val value = keyCycleData.getFloatOrNaN(attrName)
@@ -435,10 +446,7 @@ fun parseKeyCycle(keyCycleData: CLObject, transition: Transition) {
 }
 
 
-internal fun parseJSON(
-    content: String, transition: Transition,
-    state: Int
-) {
+internal fun parseJSON(content: String, transition: Transition, state: Int) {
     try {
         val json = CLParser.parse(content)
         val elements = json.names() ?: return
@@ -453,14 +461,14 @@ internal fun parseJSON(
                         val property = properties[j]
                         val value = customProperties.get(property)
                         if (value is CLNumber) {
-                            transition.addCustomFloat(state, elementName, property, value.getFloat())
+                            transition.addCustomFloat(
+                                state,
+                                elementName,
+                                property,
+                                value.getFloat()
+                            )
                         } else if (value is CLString) {
-                            val stringValue = value.content()
-                            if (stringValue.startsWith('#')) {
-                                var color = Integer.valueOf(stringValue.substring(1),16)
-                                if (stringValue.length == 7) {
-                                    color = color or 0xFF000000.toInt()
-                                }
+                            parseColorString(value.content())?.let { color ->
                                 transition.addCustomColor(state, elementName, property, color)
                             }
                         }
@@ -704,7 +712,7 @@ fun parseDesignElementsJSON(content: String, list: ArrayList<DesignElement>) {
                     if (type != null) {
                         var parameters = HashMap<String, String>()
                         val size = element.size()
-                        for (j in 0.. size -1) {
+                        for (j in 0..size - 1) {
                             val key = element[j] as CLKey
                             val paramName = key.content()
                             val paramValue = key.value?.content()
@@ -756,7 +764,8 @@ fun parseGenerate(state: State, layoutVariables: LayoutVariables, json: Any) {
 }
 
 fun parseChain(orientation: Int, state: State, margins: LayoutVariables, helper: CLArray) {
-    val chain = if (orientation == ConstraintWidget.HORIZONTAL) state.horizontalChain() else state.verticalChain()
+    val chain =
+        if (orientation == ConstraintWidget.HORIZONTAL) state.horizontalChain() else state.verticalChain()
     val refs = helper[1]
     if (refs !is CLArray || refs.size() < 1) {
         return
@@ -770,11 +779,11 @@ fun parseChain(orientation: Int, state: State, margins: LayoutVariables, helper:
             return
         }
         val constraints = params.names() ?: return
-        (0 until constraints.size).forEach{ i ->
+        (0 until constraints.size).forEach { i ->
             when (val constraintName = constraints[i]) {
                 "style" -> {
                     val styleObject = params[constraintName]
-                    val styleValue : String
+                    val styleValue: String
                     if (styleObject is CLArray && styleObject.size() > 1) {
                         styleValue = styleObject.getString(0)
                         val biasValue = styleObject.getFloat(1)
@@ -789,7 +798,13 @@ fun parseChain(orientation: Int, state: State, margins: LayoutVariables, helper:
                     }
                 }
                 else -> {
-                    parseConstraint(state, margins, params, chain as ConstraintReference, constraintName)
+                    parseConstraint(
+                        state,
+                        margins,
+                        params,
+                        chain as ConstraintReference,
+                        constraintName
+                    )
                 }
             }
         }
@@ -848,8 +863,10 @@ private fun parseGuidelineParams(
 
 fun parseBarrier(
     state: State,
-    elementName: String, element: CLObject) {
-    val reference = state.barrier(elementName, androidx.constraintlayout.core.state.State.Direction.END)
+    elementName: String, element: CLObject
+) {
+    val reference =
+        state.barrier(elementName, androidx.constraintlayout.core.state.State.Direction.END)
     val constraints = element.names() ?: return
     (0 until constraints.size).forEach { i ->
         when (val constraintName = constraints[i]) {
@@ -975,7 +992,7 @@ fun parseWidget(
                 reference.rotationZ(value)
             }
             "visibility" -> {
-                when(element.getString(constraintName)) {
+                when (element.getString(constraintName)) {
                     "visible" -> reference.visibility(ConstraintWidget.VISIBLE)
                     "invisible" -> reference.visibility(ConstraintWidget.INVISIBLE)
                     "gone" -> reference.visibility(ConstraintWidget.GONE)
@@ -1004,13 +1021,8 @@ private fun parseCustomProperties(
         if (value is CLNumber) {
             reference.addCustomFloat(property, value.getFloat())
         } else if (value is CLString) {
-            var str = value.content().toString()
-            if (str.startsWith('#')) {
-                str = str.substring(1)
-                if(str.length == 6) {
-                    str = "FF$str"
-                }
-                reference.addCustomColor(property, parseLong(str,16).toInt())
+            parseColorString(value.content())?.let {
+                reference.addCustomColor(property, it)
             }
         }
     }
@@ -1098,7 +1110,7 @@ private fun parseConstraint(
     }
 }
 
-private fun parseDimensionMode(dimensionString : String) : Dimension {
+private fun parseDimensionMode(dimensionString: String): Dimension {
     var dimension: Dimension = Fixed(0)
     when (dimensionString) {
         "wrap" -> dimension = Dimension.Wrap()
@@ -1151,6 +1163,19 @@ private fun parseDimension(
         }
     }
     return dimension
+}
+
+private fun parseColorString(value: String): Int? {
+    var str = value
+    if (str.startsWith('#')) {
+        str = str.substring(1)
+        if (str.length == 6) {
+            str = "FF$str"
+        }
+        return parseLong(str, 16).toInt()
+    } else {
+        return null
+    }
 }
 
 fun lookForType(element: CLObject): String? {

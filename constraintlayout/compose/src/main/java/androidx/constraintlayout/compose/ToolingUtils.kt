@@ -58,14 +58,8 @@ internal fun parseConstraintsToJson(
     root.children.forEach { constraintWidget ->
         val constraintsInfoArray = JSONArray()
         val helperReferences = mutableListOf<String>()
-        val isParent = root == constraintWidget
         val isHelper = constraintWidget is HelperWidget
-        val widgetId = when {
-            // The Id for helpers are set differently from Composables
-            isParent -> rootId
-            isHelper -> constraintWidget.getHelperId(state)
-            else -> constraintWidget.getRefId()
-        }
+        val widgetId = constraintWidget.stringId
 
         if (isHelper) {
             addReferencesIds(constraintWidget as HelperWidget, helperReferences, root, rootId)
@@ -134,7 +128,7 @@ private fun ConstraintWidget.getHelperId(state: State): String =
  * Returns the Id used for Composables within the layout. Blank if there's no Id.
  */
 private fun ConstraintWidget?.getRefId(): String =
-    (this?.companionWidget as? Measurable)?.layoutId.toString()
+    (this?.companionWidget as? Measurable)?.layoutId?.toString() ?: this?.stringId.toString()
 
 private fun createDesignInfoJson(content: JSONObject) = JSONObject()
     .put("type", "CONSTRAINTS")
