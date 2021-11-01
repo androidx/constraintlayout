@@ -380,7 +380,7 @@ public fun MotionExample3() {
                     top: ['title', 'bottom', 16],
                     end: ['parent', 'end', 36],
                     custom: {
-                      color: "#ffffff"
+                      color: "#000000"
                     }
                 },
                 backgroundSwitch: { 
@@ -427,7 +427,6 @@ public fun MotionExample3() {
                       color: '#7400ab'
                     }
                 },
-                    
                 title: { 
                     width: "spread",
                     start: ['parent', 'start', 36],
@@ -443,7 +442,7 @@ public fun MotionExample3() {
                     top: ['title', 'bottom', 16],
                     end: ['parent', 'end', 36],
                     custom: {
-                      color: "#000000"
+                      color: "#ffffff"
                     }
                 },
                 backgroundSwitch: { 
@@ -507,7 +506,7 @@ public fun MotionExample3() {
             Text(
                 text = "Pop or subtle. Day or Night. \n Customize your interface",
                 modifier = Modifier.layoutId("description"),
-                color = motionProperties("title").value.color("color"),
+                color = motionProperties("description").value.color("color"),
                 fontSize = 18.sp,
                 textAlign = TextAlign.Center
             )

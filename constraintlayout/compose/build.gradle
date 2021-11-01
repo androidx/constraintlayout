@@ -5,6 +5,7 @@ plugins {
 }
 
 def compose_version = '1.0.0-rc02'
+def kotlin_version = "1.5.10"
 
 android {
     compileSdkVersion 30
@@ -34,7 +35,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerVersion "1.5.10"
+        kotlinCompilerVersion kotlin_version
         kotlinCompilerExtensionVersion compose_version
     }
 
@@ -51,6 +52,7 @@ android {
         implementation "androidx.compose.foundation:foundation:$compose_version"
         implementation "androidx.compose.material:material:$compose_version"
         implementation project(':core')
+        androidTestImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
         androidTestImplementation 'junit:junit:4.13.1'
         androidTestImplementation "androidx.compose.ui:ui-test:$compose_version"
         androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"

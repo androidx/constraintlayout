@@ -55,7 +55,7 @@ public class WidgetFrame {
 
     public float alpha = Float.NaN;
     public float interpolatedPos = Float.NaN;
-    
+
     public int visibility = ConstraintWidget.VISIBLE;
 
     final public HashMap<String, CustomVariable> mCustom = new HashMap<>();
@@ -223,6 +223,30 @@ public class WidgetFrame {
         frame.translationZ = interpolate(start.translationZ, end.translationZ, 0f, progress);
 
         frame.alpha = interpolate(startAlpha, endAlpha, 1f, progress);
+
+        Set<String> keys = end.mCustom.keySet();
+        frame.mCustom.clear();
+        for (String key : keys) {
+            if (start.mCustom.containsKey(key)) {
+                CustomVariable startVariable = start.mCustom.get(key);
+                CustomVariable endVariable = end.mCustom.get(key);
+                CustomVariable interpolated = new CustomVariable(startVariable);
+                frame.mCustom.put(key, interpolated);
+                if (startVariable.numberOfInterpolatedValues() == 1) {
+                    interpolated.setValue(interpolate(startVariable.getValueToInterpolate(), endVariable.getValueToInterpolate(), 0f, progress));
+                } else {
+                    int N = startVariable.numberOfInterpolatedValues();
+                    float[] startValues = new float[N];
+                    float[] endValues = new float[N];
+                    startVariable.getValuesToInterpolate(startValues);
+                    endVariable.getValuesToInterpolate(endValues);
+                    for (int i = 0; i < N; i++) {
+                        startValues[i] = interpolate(startValues[i], endValues[i], 0f, progress);
+                        interpolated.setValue(startValues);
+                    }
+                }
+            }
+        }
     }
 
     private static float interpolate(float start, float end, float defaultValue, float progress) {
@@ -276,8 +300,7 @@ public class WidgetFrame {
 
     public int getCustomColor(String name) {
         if (mCustom.containsKey(name)) {
-            int color = mCustom.get(name).getColorValue();
-            return color;
+            return mCustom.get(name).getColorValue();
         }
         return 0xFFFFAA88;
     }
@@ -417,13 +440,14 @@ public class WidgetFrame {
         }
     }
 
- 
+
     public StringBuilder serialize(StringBuilder ret) {
         return serialize(ret, false);
     }
 
     /**
      * If true also send the phone orientation
+     *
      * @param ret
      * @param sendPhoneOrientation
      * @return
@@ -449,7 +473,7 @@ public class WidgetFrame {
         add(ret, "visibility", frame.left);
         add(ret, "interpolatedPos", frame.interpolatedPos);
         if (widget != null) {
-            for (ConstraintAnchor.Type  side : ConstraintAnchor.Type.values()) {
+            for (ConstraintAnchor.Type side : ConstraintAnchor.Type.values()) {
                 serializeAnchor(ret, side);
             }
         }
@@ -459,7 +483,7 @@ public class WidgetFrame {
         if (sendPhoneOrientation) {
             add(ret, "phone_orientation", phone_orientation);
         }
- 
+
         if (frame.mCustom.size() != 0) {
             ret.append("custom : {\n");
             for (String s : frame.mCustom.keySet()) {
@@ -499,16 +523,17 @@ public class WidgetFrame {
         ret.append("}\n");
         return ret;
     }
-    private void serializeAnchor(StringBuilder ret, ConstraintAnchor.Type type){
-         ConstraintAnchor anchor = widget.getAnchor(type);
-        if (anchor == null || anchor.mTarget == null){
+
+    private void serializeAnchor(StringBuilder ret, ConstraintAnchor.Type type) {
+        ConstraintAnchor anchor = widget.getAnchor(type);
+        if (anchor == null || anchor.mTarget == null) {
             return;
         }
         ret.append("Anchor");
         ret.append(type.name());
         ret.append(": ['");
         String str = anchor.mTarget.getOwner().stringId;
-        ret.append(str==null?"#PARENT":str);
+        ret.append(str == null ? "#PARENT" : str);
         ret.append("', '");
         ret.append(anchor.mTarget.getType().name());
         ret.append("', '");
@@ -516,6 +541,7 @@ public class WidgetFrame {
         ret.append("'],\n");
 
     }
+
     private static void add(StringBuilder s, String title, int value) {
         s.append(title);
         s.append(": ");

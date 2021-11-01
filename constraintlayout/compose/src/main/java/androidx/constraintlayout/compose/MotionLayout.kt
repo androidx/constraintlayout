@@ -544,7 +544,11 @@ fun Transition(@Language("json5") content: String): androidx.constraintlayout.co
             if (parsed != null) {
                 object : androidx.constraintlayout.compose.Transition {
                     override fun applyTo(transition: Transition, type: Int) {
-                        parseTransition(parsed, transition)
+                        try {
+                            parseTransition(parsed, transition)
+                        } catch (e: CLParsingException) {
+                            System.err.println("Error parsing JSON $e")
+                        }
                     }
 
                     override fun getStartConstraintSetId(): String {
@@ -999,8 +1003,6 @@ internal class MotionMeasurer : Measurer() {
         if (!transition.contains(id)) {
             return Color.Black
         }
-        val startFrame = transition.getStart(id)
-        val endFrame = transition.getEnd(id)
 
         transition.interpolate(root.width, root.height, motionProgress)
 

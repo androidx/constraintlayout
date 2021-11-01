@@ -390,8 +390,8 @@ public class State {
             Reference reference = mReferences.get(key);
             reference.apply();
             ConstraintWidget widget = reference.getConstraintWidget();
-            if (widget != null && key instanceof String) {
-                widget.stringId = (String) key;
+            if (widget != null && key != null) {
+                widget.stringId = key.toString();
             }
         }
     }
