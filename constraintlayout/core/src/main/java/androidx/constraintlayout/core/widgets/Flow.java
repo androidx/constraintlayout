@@ -473,7 +473,7 @@ public class Flow extends VirtualLayout {
                     break;
                 }
                 ConstraintWidget widget = mDisplayedWidgets[mStartIndex + index];
-                if (widget.getVisibility() == VISIBLE) {
+                if (widget != null && widget.getVisibility() == VISIBLE) {
                     if (firstVisible == -1) {
                         firstVisible = i;
                     }
@@ -525,6 +525,9 @@ public class Flow extends VirtualLayout {
                         break;
                     }
                     ConstraintWidget widget = mDisplayedWidgets[mStartIndex + index];
+                    if (widget == null) {
+                        continue;
+                    }
                     if (i == 0) {
                         widget.connect(widget.mLeft, mLeft, mPaddingLeft);
                     }
@@ -619,6 +622,9 @@ public class Flow extends VirtualLayout {
                         break;
                     }
                     ConstraintWidget widget = mDisplayedWidgets[mStartIndex + i];
+                    if (widget == null) {
+                        continue;
+                    }
                     if (i == 0) {
                         widget.connect(widget.mTop, mTop, mPaddingTop);
                         int style = mVerticalStyle;
