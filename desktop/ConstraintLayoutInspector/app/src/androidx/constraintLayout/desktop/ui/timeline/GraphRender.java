@@ -247,8 +247,8 @@ public class GraphRender {
   static class Attribute {
     String mType;
     MonotoneSpline spline;
-    int[] xPoints = new int[1000];
-    int[] yPoints = new int[1000];
+    int[] xPoints = new int[2000];
+    int[] yPoints = new int[2000];
     double mMin;
     double mMax;
 
