@@ -38,6 +38,7 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.TextView;
 
@@ -1590,7 +1591,9 @@ public class MotionLayout extends ConstraintLayout implements
         setProgress(pos);
         setState(TransitionState.MOVING);
         mLastVelocity = velocity;
-        animateTo(1);
+        if (velocity != 0.0f) {
+            animateTo(velocity>0?1:0);
+        }
     }
 
     /////////////////////// use to cache the state
