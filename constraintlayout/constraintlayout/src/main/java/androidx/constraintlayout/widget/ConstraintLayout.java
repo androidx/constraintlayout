@@ -487,7 +487,7 @@ public class ConstraintLayout extends ViewGroup {
     /**
      * @suppress
      */
-    public static final String VERSION = "ConstraintLayout-2.1.1";
+    public static final String VERSION = "ConstraintLayout-2.1.2";
     private static final String TAG = "ConstraintLayout";
 
     private static final boolean USE_CONSTRAINTS_HELPER = true;
