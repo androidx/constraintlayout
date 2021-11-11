@@ -108,7 +108,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     private static boolean REVERSE = false;
 
 
-    private static final String RUN_FIRST = (true) ? "verification_800" : "bug_005";
+    private static final String RUN_FIRST = (true) ? "verification_801" : "bug_005";
     private final String LAYOUTS_MATCHES = "v.*_.*";
 
     private static String SHOW_FIRST = "";

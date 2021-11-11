@@ -129,6 +129,15 @@
         app:layout_constraintStart_toStartOf="@+id/b8"
         app:layout_constraintTop_toBottomOf="@+id/b8" />
 
+    <Button
+        android:id="@+id/ba"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="progressP5"
+        android:onClick="progressP50"
+        app:layout_constraintStart_toStartOf="@+id/b9"
+        app:layout_constraintTop_toBottomOf="@+id/b9" />
 
-
+<!--This is used to test setProgress(p,v)-->
 </androidx.constraintlayout.motion.widget.MotionLayout>

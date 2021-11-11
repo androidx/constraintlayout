@@ -489,7 +489,7 @@ class MotionPaths implements Comparable<MotionPaths> {
     double[] mTempDelta = new double[18];
 
     // Called on the start Time Point
-    void setView(float position, View view, int[] toUse, double[] data, double[] slope, double[] cycle) {
+    void setView(float position, View view, int[] toUse, double[] data, double[] slope, double[] cycle, boolean mForceMeasure) {
         float v_x = x;
         float v_y = y;
         float v_width = width;
@@ -630,7 +630,7 @@ class MotionPaths implements Comparable<MotionPaths> {
 
         boolean remeasure = i_width != view.getMeasuredWidth() || i_height != view.getMeasuredHeight();
 
-        if (remeasure) {
+        if (remeasure || mForceMeasure) {
             int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(i_width, View.MeasureSpec.EXACTLY);
             int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(i_height, View.MeasureSpec.EXACTLY);
 
