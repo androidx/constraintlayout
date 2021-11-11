@@ -19,6 +19,7 @@ package android.support.constraint.app;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,7 +30,7 @@ import androidx.constraintlayout.motion.widget.TransitionAdapter;
 /**
  * Test transitionToState bug
  */
-public class OnCreateTransiton extends AppCompatActivity {
+public class CheckSetProgress extends AppCompatActivity {
     private static final String TAG = "CustomSwipeClick";
     String layout_name;
     MotionLayout mMotionLayout;
@@ -59,6 +60,44 @@ public class OnCreateTransiton extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void progressP0(View v) {
+        mMotionLayout.setProgress(0);
+    }
+    public void progressP5(View v){
+        mMotionLayout.setProgress(0.5f);
+    }
+    public void progressP1(View v){
+        mMotionLayout.setProgress(1f);
+    }
+    public void progressP0V0(View v) {
+        mMotionLayout.setProgress(0,0);
+
+    }
+    public void progressP0V1(View v) {
+        mMotionLayout.setProgress(0,1);
+
+    }
+    public void progressP5V_1(View v){
+        mMotionLayout.setProgress(0.5f,-0.1f);
+
+    }
+    public void progressP5V1(View v){
+        mMotionLayout.setProgress(0.5f,0.1f);
+
+    }
+    public void progressP1V0(View v){
+        mMotionLayout.setProgress(1f,0f);
+
+    }
+    public void progressP1V_1(View v){
+        mMotionLayout.setProgress(1f,-0.1f);
+
+    }
+    public void progressP50(View v){
+        mMotionLayout.setProgress((float) Math.random(),0f);
+
     }
 
 }
