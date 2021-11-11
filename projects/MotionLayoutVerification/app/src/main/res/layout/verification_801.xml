@@ -329,6 +329,8 @@
         app:flow_maxElementsWrap="4"
         app:flow_verticalGap="2dp"
         app:flow_wrapMode="chain"
+        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
