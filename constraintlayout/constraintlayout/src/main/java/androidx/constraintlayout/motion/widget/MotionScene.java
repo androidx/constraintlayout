@@ -82,7 +82,7 @@ public class MotionScene {
     private int mLayoutDuringTransition = 0;
     public static final int LAYOUT_IGNORE_REQUEST = 0;
     public static final int LAYOUT_HONOR_REQUEST = 1;
-    public static final int LAYOUT_CALL_MEASURE = 3;
+    public static final int LAYOUT_CALL_MEASURE = 2;
 
     private MotionEvent mLastTouchDown;
     private boolean mIgnoreTouch = false;
