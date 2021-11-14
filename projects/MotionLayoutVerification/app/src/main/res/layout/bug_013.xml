@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+     >
+<!--    android:padding="24dp"
+    android:layout_margin="24dp"-->
+    <View
+        android:background="@android:color/holo_blue_dark"
+        android:id="@+id/view1"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
+    <View
+        android:background="@android:color/holo_blue_dark"
+        android:id="@+id/view2"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
+    <View
+        android:background="@android:color/holo_blue_dark"
+        android:id="@+id/view3"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
+    <View
+        android:background="@android:color/holo_blue_dark"
+        android:id="@+id/view4"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
+    <View
+        android:background="@android:color/holo_blue_dark"
+        android:id="@+id/view5"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
+    <View
+        android:background="@android:color/holo_blue_dark"
+        android:id="@+id/view6"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
+    <View
+        android:background="@android:color/holo_blue_dark"
+        android:id="@+id/view7"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
+    <View
+        android:background="@android:color/holo_blue_dark"
+        android:id="@+id/view8"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
+    <View
+        android:background="@android:color/holo_blue_dark"
+        android:id="@+id/view9"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:constraint_referenced_ids="view1,view2,view3,view4,view5,view6,view7,view8,view9"
+        app:flow_horizontalGap="24dp"
+        app:flow_maxElementsWrap="3"
+        app:flow_verticalGap="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
