@@ -277,7 +277,7 @@ public abstract class ViewTimeCycle extends TimeCycleSplineSet {
                 mContinue |= mTempValues[i] != 0.0;
                 mCache[i] = mTempValues[i] * wave + offset;
             }
-            mConstraintAttributeList.valueAt(0).setInterpolatedValue(view, mCache);
+            CustomSupport.setInterpolatedValue(mConstraintAttributeList.valueAt(0),view, mCache);
             if (period != 0.0f) {
                 mContinue = true;
             }

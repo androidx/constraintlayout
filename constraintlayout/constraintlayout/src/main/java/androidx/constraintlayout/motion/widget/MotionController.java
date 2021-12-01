@@ -36,6 +36,7 @@ import androidx.constraintlayout.core.motion.utils.Easing;
 import androidx.constraintlayout.core.motion.utils.KeyCache;
 import androidx.constraintlayout.core.motion.utils.SplineSet;
 import androidx.constraintlayout.core.motion.utils.VelocityMatrix;
+import androidx.constraintlayout.motion.utils.CustomSupport;
 import androidx.constraintlayout.motion.utils.ViewOscillator;
 import androidx.constraintlayout.motion.utils.ViewSpline;
 import androidx.constraintlayout.motion.utils.ViewState;
@@ -1318,7 +1319,7 @@ public class MotionController {
             for (int i = 1; i < mSpline.length; i++) {
                 CurveFit spline = mSpline[i];
                 spline.getPos(position, mValuesBuff);
-                mStartMotionPath.attributes.get(mAttributeNames[i - 1]).setInterpolatedValue(child, mValuesBuff);
+                CustomSupport.setInterpolatedValue(mStartMotionPath.attributes.get(mAttributeNames[i - 1]), child, mValuesBuff);
 
             }
             if (mStartPoint.mVisibilityMode == ConstraintSet.VISIBILITY_MODE_NORMAL) {

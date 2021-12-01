@@ -16,6 +16,7 @@
 
 package androidx.constraintlayout.core.state;
 
+import androidx.constraintlayout.core.motion.CustomAttribute;
 import androidx.constraintlayout.core.motion.CustomVariable;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.parser.*;
@@ -419,6 +420,10 @@ public class WidgetFrame {
         return true;
     }
 
+    public String getId() {
+        return widget.stringId;
+    }
+
     void parseCustom(CLElement custom) throws CLParsingException {
         CLObject obj = ((CLObject) custom);
         int n = obj.size();
@@ -559,6 +564,9 @@ public class WidgetFrame {
         s.append(",\n");
     }
 
+    /**
+     * For debugging only
+     */
     void printCustomAttributes() {
         StackTraceElement s = new Throwable().getStackTrace()[1];
         String ss = ".(" + s.getFileName() + ":" + s.getLineNumber() + ") " + s.getMethodName();
@@ -574,6 +582,10 @@ public class WidgetFrame {
             }
     }
 
+    /**
+     * For debugging only
+     * @param str
+     */
     void logv(String str) {
         StackTraceElement s = new Throwable().getStackTrace()[1];
         String ss = ".(" + s.getFileName() + ":" + s.getLineNumber() + ") " + s.getMethodName();
@@ -587,4 +599,6 @@ public class WidgetFrame {
         System.out.println(ss + " " + str);
     }
 
+    public void setCustomValue(CustomAttribute valueAt, float[] mTempValues) {
+    }
 }

@@ -53,6 +53,7 @@ public class MotionWidget implements TypedValues {
     public static final int GONE_UNSET = Integer.MIN_VALUE;
     public static final int MATCH_CONSTRAINT_WRAP = ConstraintWidget.MATCH_CONSTRAINT_WRAP;
 
+
     /**
      * @suppress
      */
@@ -99,7 +100,7 @@ public class MotionWidget implements TypedValues {
     }
 
     public String getName() {
-        return getClass().getSimpleName();
+        return widgetFrame.getId();
     }
 
     public void layout(int l, int t, int r, int b) {
@@ -458,4 +459,8 @@ public class MotionWidget implements TypedValues {
     public CustomVariable getCustomAttribute(String name) {
         return widgetFrame.getCustomAttribute(name);
     }
+    public void setInterpolatedValue(CustomAttribute attribute, float[] mCache) {
+        widgetFrame.setCustomAttribute(attribute.mName,TypedValues.Custom.TYPE_FLOAT, mCache[0]);
+    }
+
 }

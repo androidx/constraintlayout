@@ -61,6 +61,34 @@ public class ConstraintAttribute {
         REFERENCE_TYPE
     }
 
+    public String getName() {
+        return mName;
+    }
+
+    public boolean isMethod() {
+        return mMethod;
+    }
+
+    public int getIntegerValue() {
+        return mIntegerValue;
+    }
+
+    public float getFloatValue() {
+        return mFloatValue;
+    }
+
+    public String getStringValue() {
+        return mStringValue;
+    }
+
+    public boolean isBooleanValue() {
+        return mBooleanValue;
+    }
+
+    public int getColorValue() {
+        return mColorValue;
+    }
+
     public AttributeType getType() {
         return mType;
     }
@@ -420,7 +448,7 @@ public class ConstraintAttribute {
         return c;
     }
 
-    public void setInterpolatedValue(View view, float[] value) {
+    public void setInterpolatedValue_(View view, float[] value) {
         Class<? extends View> viewClass = view.getClass();
 
         String methodName = "set" + mName;
