@@ -421,6 +421,9 @@ public class WidgetFrame {
     }
 
     public String getId() {
+        if (widget == null) {
+            return "unknown";
+        }
         return widget.stringId;
     }
 

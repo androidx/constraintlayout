@@ -459,6 +459,7 @@ public class MotionWidget implements TypedValues {
     public CustomVariable getCustomAttribute(String name) {
         return widgetFrame.getCustomAttribute(name);
     }
+
     public void setInterpolatedValue(CustomAttribute attribute, float[] mCache) {
         widgetFrame.setCustomAttribute(attribute.mName,TypedValues.Custom.TYPE_FLOAT, mCache[0]);
     }
