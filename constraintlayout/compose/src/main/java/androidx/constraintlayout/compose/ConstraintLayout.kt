@@ -59,19 +59,13 @@ import androidx.constraintlayout.core.state.Dimension.*
 import androidx.constraintlayout.core.state.Transition
 import androidx.constraintlayout.core.widgets.*
 import androidx.constraintlayout.core.widgets.ConstraintWidget.*
-import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.FIXED
-import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
-import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.MATCH_PARENT
-import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.WRAP_CONTENT
+import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.*
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.TRY_GIVEN_DIMENSIONS
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.USE_GIVEN_DIMENSIONS
 import kotlinx.coroutines.channels.Channel
 import org.intellij.lang.annotations.Language
-import java.lang.StringBuilder
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 /**
  * Layout that positions its children according to the constraints between them.
@@ -988,6 +982,122 @@ class ConstrainScope internal constructor(internal val id: Any) {
         }
 
     /**
+     * The transparency value when rendering the content.
+     */
+    @FloatRange(from = 0.0, to = 1.0)
+    var alpha: Float = 1.0f
+        set(value) {
+            field = value
+            addTransform { alpha(value) }
+        }
+
+    /**
+     * The percent scaling value on the horizontal axis. Where 1 is 100%.
+     */
+    var scaleX: Float = 1.0f
+        set(value) {
+            field = value
+            addTransform { scaleX(value) }
+        }
+
+    /**
+     * The percent scaling value on the vertical axis. Where 1 is 100%.
+     */
+    var scaleY: Float = 1.0f
+        set(value) {
+            field = value
+            addTransform { scaleY(value) }
+        }
+
+
+    /**
+     * The degrees to rotate the content over the horizontal axis.
+     */
+    var rotationX: Float = 0.0f
+        set(value) {
+            field = value
+            addTransform { rotationX(value) }
+        }
+
+    /**
+     * The degrees to rotate the content over the vertical axis.
+     */
+    var rotationY: Float = 0.0f
+        set(value) {
+            field = value
+            addTransform { rotationY(value) }
+        }
+
+    /**
+     * The degrees to rotate the content on the screen plane.
+     */
+    var rotationZ: Float = 0.0f
+        set(value) {
+            field = value
+            addTransform { rotationZ(value) }
+        }
+
+    /**
+     * The distance to offset the content over the X axis.
+     */
+    var translationX: Dp = 0.dp
+        set(value) {
+            field = value
+            addFloatTransformFromDp(value) { floatValue -> translationX(floatValue) }
+        }
+
+    /**
+     * The distance to offset the content over the Y axis.
+     */
+    var translationY: Dp = 0.dp
+        set(value) {
+            field = value
+            addFloatTransformFromDp(value) { floatValue -> translationY(floatValue) }
+        }
+
+    /**
+     * The distance to offset the content over the Z axis.
+     */
+    var translationZ: Dp = 0.dp
+        set(value) {
+            field = value
+            addFloatTransformFromDp(value) { floatValue -> translationZ(floatValue) }
+        }
+
+    /**
+     * The X axis offset percent where the content is rotated and scaled.
+     *
+     * @see [TransformOrigin]
+     */
+    var pivotX: Float = 0.5f
+        set(value) {
+            field = value
+            addTransform { pivotX(value) }
+        }
+
+    /**
+     * The Y axis offset percent where the content is rotated and scaled.
+     *
+     * @see [TransformOrigin]
+     */
+    var pivotY: Float = 0.5f
+        set(value) {
+            field = value
+            addTransform { pivotY(value) }
+        }
+
+    private fun addTransform(change: ConstraintReference.() -> Unit) =
+        tasks.add { state -> change(state.constraints(id)) }
+
+    private fun addFloatTransformFromDp(dpValue: Dp, change: ConstraintReference.(Float) -> Unit) =
+        tasks.add { state ->
+            (state as? State)?.also {
+                state.constraints(id).change(state.convertDimension(dpValue).toFloat())
+            }
+        }
+
+
+    /**
      * Represents a vertical side of a layout (i.e start and end) that can be anchored using
      * [linkTo] in their `Modifier.constrainAs` blocks.
      */
@@ -1714,15 +1824,43 @@ class JSONConstraintSet(@Language("json5") content: String,
 /**
  * Creates a [ConstraintSet].
  */
-fun ConstraintSet(description: ConstraintSetScope.() -> Unit) = object : ConstraintSet {
+fun ConstraintSet(description: ConstraintSetScope.() -> Unit): ConstraintSet =
+    DslConstraintSet(description)
+
+/**
+ * Creates a [ConstraintSet] that extends the changes applied by [extendConstraintSet].
+ */
+fun ConstraintSet(
+    extendConstraintSet: ConstraintSet,
+    description: ConstraintSetScope.() -> Unit
+): ConstraintSet =
+    DslConstraintSet(description, extendConstraintSet)
+
+private class DslConstraintSet constructor(
+    val description: ConstraintSetScope.() -> Unit
+) : ConstraintSet {
+    // TODO: Detach the DSL specific logic, same for JSONConstraintSet, so that any ConstraintSet
+    //  can extend another
+    private var dependingDescription: (ConstraintSetScope.() -> Unit)? = null
+
+    constructor(
+        description: ConstraintSetScope.() -> Unit,
+        otherConstraintSet: ConstraintSet
+    ) : this(description) {
+        if (otherConstraintSet is DslConstraintSet) {
+            dependingDescription = otherConstraintSet.description
+        }
+    }
+
     override fun applyTo(state: State, measurables: List<Measurable>) {
         buildMapping(state, measurables)
         val scope = ConstraintSetScope()
+        dependingDescription?.invoke(scope)
         scope.description()
         scope.applyTo(state)
     }
 
-    override fun override(name: String, value: Float) : ConstraintSet {
+    override fun override(name: String, value: Float): ConstraintSet {
         // nothing yet
         return this
     }
@@ -2296,7 +2434,9 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                     "box" -> {
                         val text = element.params["text"] ?: ""
                         val colorBackground = getColor(element.params["backgroundColor"], Color.LightGray)
-                        Box(modifier = Modifier.layoutId(id).background(colorBackground)) {
+                        Box(modifier = Modifier
+                            .layoutId(id)
+                            .background(colorBackground)) {
                             BasicText(
                                 modifier = Modifier.padding(8.dp),
                                 text = text, style = getTextStyle(element.params)
