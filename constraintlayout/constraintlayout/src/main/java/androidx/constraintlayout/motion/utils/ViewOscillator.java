@@ -171,7 +171,7 @@ public abstract class ViewOscillator extends KeyCycleOscillator {
         @Override
         public void setProperty(View view, float t) {
             value[0] = get(t);
-            mCustom.setInterpolatedValue(view, value);
+            CustomSupport.setInterpolatedValue(mCustom,view, value);
         }
     }
 

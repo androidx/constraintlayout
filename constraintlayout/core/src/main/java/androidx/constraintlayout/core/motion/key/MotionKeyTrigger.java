@@ -19,9 +19,7 @@ import androidx.constraintlayout.core.motion.CustomVariable;
 import androidx.constraintlayout.core.motion.MotionWidget;
 import androidx.constraintlayout.core.motion.utils.FloatRect;
 import androidx.constraintlayout.core.motion.utils.SplineSet;
-import androidx.constraintlayout.core.motion.utils.TypedValues;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
@@ -75,7 +73,6 @@ public class MotionKeyTrigger extends MotionKey {
 
     FloatRect mCollisionRect = new FloatRect();
     FloatRect mTargetRect = new FloatRect();
-    HashMap<String, Method> mMethodHashMap = new HashMap<>();
     public static final int KEY_TYPE = 5;
 
     {
@@ -142,7 +139,6 @@ public class MotionKeyTrigger extends MotionKey {
         mPostLayout = k.mPostLayout;
         mCollisionRect = k.mCollisionRect;
         mTargetRect = k.mTargetRect;
-        mMethodHashMap = k.mMethodHashMap;
         return this;
     }
 

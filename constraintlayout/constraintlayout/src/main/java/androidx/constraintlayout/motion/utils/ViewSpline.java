@@ -21,9 +21,9 @@ import android.util.SparseArray;
 import android.view.View;
 
 import androidx.constraintlayout.core.motion.utils.CurveFit;
+import androidx.constraintlayout.core.motion.utils.SplineSet;
 import androidx.constraintlayout.motion.widget.Key;
 import androidx.constraintlayout.motion.widget.MotionLayout;
-import androidx.constraintlayout.core.motion.utils.SplineSet;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 
 import java.lang.reflect.InvocationTargetException;
@@ -31,8 +31,6 @@ import java.lang.reflect.Method;
 
 public abstract class ViewSpline extends SplineSet {
     private static final String TAG = "ViewSpline";
-
-    public abstract void setProperty(View view, float t);
 
     public static ViewSpline makeCustomSpline(String str, SparseArray<ConstraintAttribute> attrList) {
         return new CustomSet(str, attrList);
@@ -78,6 +76,8 @@ public abstract class ViewSpline extends SplineSet {
 
         }
     }
+
+    public abstract void setProperty(View view, float t);
 
     static class ElevationSet extends ViewSpline {
         @Override
@@ -219,7 +219,7 @@ public abstract class ViewSpline extends SplineSet {
         @Override
         public void setProperty(View view, float t) {
             mCurveFit.getPos(t, mTempValues);
-            mConstraintAttributeList.valueAt(0).setInterpolatedValue(view, mTempValues);
+            CustomSupport.setInterpolatedValue(mConstraintAttributeList.valueAt(0), view, mTempValues);
         }
     }
 
