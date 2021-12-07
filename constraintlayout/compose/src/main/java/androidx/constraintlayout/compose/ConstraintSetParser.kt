@@ -905,8 +905,6 @@ fun parseWidget(
 ) {
     val reference = state.constraints(elementName)
     val constraints = element.names() ?: return
-    reference.width = Dimension.Wrap()
-    reference.height = Dimension.Wrap()
     (0 until constraints.size).forEach { i ->
         when (val constraintName = constraints[i]) {
             "width" -> {

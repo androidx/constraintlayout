@@ -37,13 +37,7 @@ import com.example.constraintlayout.R
 
 @Preview
 @Composable
-private fun DslMotionTransformsExample() {
-    var animateToEnd by remember { mutableStateOf(false) }
-    val progress by animateFloatAsState(
-        targetValue = if (animateToEnd) 1f else 0f,
-        animationSpec = tween(2000)
-    )
-
+private fun DslStartWithJsonEndExample() {
     val start = ConstraintSet {
         val image1 = createRefFor("image1")
         val image2 = createRefFor("image2")
@@ -60,15 +54,66 @@ private fun DslMotionTransformsExample() {
             centerHorizontallyTo(parent)
         }
     }
+    val end = ConstraintSet(start, jsonContent = """
+        {
+          image1: {
+          // Other constraints are derived from the start ConstraintSet in DSL
+            rotationZ: -45
+          }
+        }
+    """.trimIndent())
+
+    CommonMotionLayout(start = start, end = end)
+}
+
+@Preview
+@Composable
+private fun JsonStartWithDslEndExample() {
+    val start = ConstraintSet(jsonContent = """
+        {
+          Helpers: [
+                ['vChain', ['image1','image2'], {
+                  top: ['parent', 'top'],
+                  bottom: ['parent', 'bottom'],
+                  style: 'spread'
+                }]],
+          image1: {
+            width: 200, height: 200,
+            centerHorizontally: 'parent',
+            rotationZ: 90,
+          },
+          image2: {
+            width: 200, height: 200,
+            centerHorizontally: 'parent'
+          }
+        }
+    """.trimIndent())
+
     val end = ConstraintSet(start) {
         constrain(createRefFor("image1")) {
-            rotationZ = -45f
+            rotationZ = -90f
         }
     }
+    CommonMotionLayout(start = start, end = end)
+}
+
+
+@Composable
+private fun CommonMotionLayout(
+    start: ConstraintSet,
+    end: ConstraintSet
+) {
+    var animateToEnd by remember { mutableStateOf(false) }
+    val progress by animateFloatAsState(
+        targetValue = if (animateToEnd) 1f else 0f,
+        animationSpec = tween(2000)
+    )
 
     Column {
         MotionLayout(
-            modifier = Modifier.fillMaxWidth().height(500.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(500.dp),
             start = start,
             end = end,
             progress = progress) {

@@ -138,9 +138,9 @@ inline fun MotionLayout(
         return
     }
 
-    var start: ConstraintSet by remember(motionScene) { mutableStateOf(JSONConstraintSet(content = startContent)) }
-    var end: ConstraintSet by remember(motionScene) { mutableStateOf(JSONConstraintSet(content = endContent)) }
-    val targetConstraintSet = targetEndContent?.let { JSONConstraintSet(targetEndContent) }
+    var start: ConstraintSet by remember(motionScene) { mutableStateOf(ConstraintSet(jsonContent = startContent)) }
+    var end: ConstraintSet by remember(motionScene) { mutableStateOf(ConstraintSet(jsonContent = endContent)) }
+    val targetConstraintSet = targetEndContent?.let { ConstraintSet(jsonContent = targetEndContent) }
 
     val progress = remember { Animatable(0f) }
 
@@ -379,7 +379,7 @@ interface MotionScene {
     fun getForcedDrawDebug(): MotionLayoutDebugFlags
 }
 
-class JSONMotionScene(@Language("json5") content: String) : EditableJSONLayout(content),
+internal class JSONMotionScene(@Language("json5") content: String) : EditableJSONLayout(content),
     MotionScene {
 
     private val constraintSetsContent = HashMap<String, String>()
