@@ -50,13 +50,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastForEachIndexed
-import androidx.constraintlayout.core.parser.CLKey
 import androidx.constraintlayout.core.parser.CLObject
 import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.parser.CLParsingException
 import androidx.constraintlayout.core.state.*
 import androidx.constraintlayout.core.state.Dimension.*
-import androidx.constraintlayout.core.state.Transition
 import androidx.constraintlayout.core.widgets.*
 import androidx.constraintlayout.core.widgets.ConstraintWidget.*
 import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.*
@@ -270,14 +268,10 @@ inline fun ConstraintLayout(
             constraintSet,
             measurer
         )
-        if (constraintSet is EditableJSONLayout) {
+        if (constraintSet is EditableJSON) {
             constraintSet.setUpdateFlag(needsUpdate)
         }
-        if (constraintSet is JSONConstraintSet) {
-            measurer.addLayoutInformationReceiver(constraintSet)
-        } else {
-            measurer.addLayoutInformationReceiver(null)
-        }
+        measurer.addLayoutInformationReceiver(constraintSet as? LayoutInformationReceiver)
 
         val forcedScaleFactor = measurer.forcedScaleFactor
         if (!forcedScaleFactor.isNaN()) {
@@ -1364,7 +1358,7 @@ class ConstrainScope internal constructor(internal val id: Any) {
  * to from the outside of the scope (e.g. barriers, layout references in the modifier-based API,
  * etc.).
  */
-private fun createId() = object : Any() {}
+internal fun createId() = object : Any() {}
 
 /**
  * Represents a dimension that can be assigned to the width or height of a [ConstraintLayout]
@@ -1513,24 +1507,6 @@ internal class DimensionDescription internal constructor(
     }
 }
 
-/**
- * Immutable description of the constraints used to layout the children of a [ConstraintLayout].
- */
-@Immutable
-interface ConstraintSet {
-    /**
-     * Applies the [ConstraintSet] to a state.
-     */
-    fun applyTo(state: State, measurables: List<Measurable>)
-
-    fun override(name: String, value: Float) = this
-    fun applyTo(transition: Transition, type: Int) {
-        // nothing here, used in MotionLayout
-    }
-
-    fun isDirty(measurables: List<Measurable>): Boolean = true
-}
-
 @SuppressLint("ComposableNaming")
 @Composable
 fun ConstraintSet(@Language("json5") content : String,
@@ -1542,10 +1518,22 @@ fun ConstraintSet(@Language("json5") content : String,
 }
 
 /**
+ * For internal use only.
+ *
+ * Exposed api required from using inline declarations.
+ */
+interface EditableJSON {
+    // TODO: Move more functions or properties here that may be public from using inline
+    //  declarations
+
+    fun setUpdateFlag(needsUpdate: MutableState<Long>)
+}
+
+/**
  * Handles update back to the composable
  */
-open class EditableJSONLayout(@Language("json5") content: String) :
-    LayoutInformationReceiver {
+internal abstract class EditableJSONLayout(@Language("json5") content: String) :
+    LayoutInformationReceiver, EditableJSON {
     private var forcedWidth: Int = Int.MIN_VALUE
     private var forcedHeight: Int = Int.MIN_VALUE
     private var forcedDrawDebug: MotionLayoutDebugFlags = MotionLayoutDebugFlags.UNKNOWN
@@ -1632,7 +1620,7 @@ open class EditableJSONLayout(@Language("json5") content: String) :
     // Accessors
     ///////////////////////////////////////////////////////////////////////////
 
-    fun setUpdateFlag(needsUpdate: MutableState<Long>) {
+    override fun setUpdateFlag(needsUpdate: MutableState<Long>) {
         updateFlag = needsUpdate
     }
 
@@ -1741,85 +1729,21 @@ open class EditableJSONLayout(@Language("json5") content: String) :
 
 data class DesignElement(var id: String, var type: String, var params: HashMap<String, String>)
 
-class JSONConstraintSet(@Language("json5") content: String,
-                        @Language("json5") overrideVariables: String? = null)
-        : EditableJSONLayout(content), ConstraintSet {
-    private val overridedVariables = HashMap<String, Float>()
-    private val overrideVariables = overrideVariables
+/**
+ * Creates a [ConstraintSet] from a [jsonContent] string.
+ */
+fun ConstraintSet(@Language(value = "json5") jsonContent: String): ConstraintSet =
+    JSONConstraintSet(content = jsonContent)
 
-    init {
-        initialization()
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (other is JSONConstraintSet) {
-            return this.getCurrentContent() == other.getCurrentContent()
-        }
-        return false
-    }
-
-    // Only called by MotionLayout in MotionMeasurer
-    override fun applyTo(transition: Transition, type: Int) {
-        val layoutVariables = LayoutVariables()
-        applyLayoutVariables(layoutVariables)
-        parseJSON(getCurrentContent(), transition, type)
-    }
-
-    fun emitDesignElements(designElements: ArrayList<DesignElement>) {
-        try {
-            designElements.clear()
-            parseDesignElementsJSON(getCurrentContent(), designElements)
-        } catch (e : Exception) {
-            // nothing (content might be invalid, sent by live edit)
-        }
-    }
-
-    // Called by both MotionLayout & ConstraintLayout measurers
-    override fun applyTo(state: State, measurables: List<Measurable>) {
-        measurables.forEach { measurable ->
-            val layoutId =
-                measurable.layoutId ?: measurable.constraintLayoutId ?: createId()
-            state.map(layoutId, measurable)
-            val tag = measurable.constraintLayoutTag
-            if (tag != null && tag is String && layoutId is String) {
-                state.setTag(layoutId, tag)
-            }
-        }
-        val layoutVariables = LayoutVariables()
-        applyLayoutVariables(layoutVariables)
-        // TODO: Need to better handle half parsed JSON and/or incorrect states.
-        try {
-            parseJSON(getCurrentContent(), state, layoutVariables)
-        } catch (e : Exception) {
-            // nothing (content might be invalid, sent by live edit)
-        }
-    }
-
-    override fun override(name: String, value: Float): ConstraintSet {
-        overridedVariables[name] = value
-        return this
-    }
-
-    private fun applyLayoutVariables(layoutVariables: LayoutVariables) {
-        if (overrideVariables != null) {
-            try {
-                val variables = CLParser.parse(overrideVariables)
-                for (i in 0..variables.size() - 1) {
-                    val key = variables[i] as CLKey
-                    val variable = key.value.float
-                    // TODO: allow arbitrary override, not just float values
-                    layoutVariables.putOverride(key.content(), variable)
-                }
-            } catch (e: CLParsingException) {
-                System.err.println("exception: " + e)
-            }
-        }
-        for (name in overridedVariables.keys) {
-            layoutVariables.putOverride(name, overridedVariables[name]!!)
-        }
-    }
-
-}
+/**
+ * Creates a [ConstraintSet] from a [jsonContent] string that extends the changes applied by
+ * [extendConstraintSet].
+ */
+fun ConstraintSet(
+    extendConstraintSet: ConstraintSet,
+    @Language(value = "json5") jsonContent: String
+): ConstraintSet =
+    JSONConstraintSet(content = jsonContent, extendFrom = extendConstraintSet)
 
 /**
  * Creates a [ConstraintSet].
@@ -1835,36 +1759,6 @@ fun ConstraintSet(
     description: ConstraintSetScope.() -> Unit
 ): ConstraintSet =
     DslConstraintSet(description, extendConstraintSet)
-
-private class DslConstraintSet constructor(
-    val description: ConstraintSetScope.() -> Unit
-) : ConstraintSet {
-    // TODO: Detach the DSL specific logic, same for JSONConstraintSet, so that any ConstraintSet
-    //  can extend another
-    private var dependingDescription: (ConstraintSetScope.() -> Unit)? = null
-
-    constructor(
-        description: ConstraintSetScope.() -> Unit,
-        otherConstraintSet: ConstraintSet
-    ) : this(description) {
-        if (otherConstraintSet is DslConstraintSet) {
-            dependingDescription = otherConstraintSet.description
-        }
-    }
-
-    override fun applyTo(state: State, measurables: List<Measurable>) {
-        buildMapping(state, measurables)
-        val scope = ConstraintSetScope()
-        dependingDescription?.invoke(scope)
-        scope.description()
-        scope.applyTo(state)
-    }
-
-    override fun override(name: String, value: Float): ConstraintSet {
-        // nothing yet
-        return this
-    }
-}
 
 /**
  * The state of the [ConstraintLayout] solver.
@@ -2482,12 +2376,23 @@ object DesignElements {
     }
 }
 
+/**
+ * Maps ID and Tag to each compose [Measurable] into [state].
+ *
+ * The ID could be provided from [androidx.compose.ui.layout.layoutId],
+ * [ConstraintLayoutParentData.ref] or [ConstraintLayoutTagParentData.constraintLayoutId].
+ *
+ * The Tag is set from [ConstraintLayoutTagParentData.constraintLayoutTag].
+ */
 internal fun buildMapping(state: State, measurables: List<Measurable>) {
     measurables.fastForEach { measurable ->
-        val parentData = measurable.parentData as? ConstraintLayoutParentData
+        val id = measurable.layoutId ?: measurable.constraintLayoutId ?: createId()
         // Map the id and the measurable, to be retrieved later during measurement.
-        val givenTag = parentData?.ref?.id ?: measurable.layoutId
-        state.map(givenTag ?: createId(), measurable)
+        state.map(id, measurable)
+        val tag = measurable.constraintLayoutTag
+        if (tag != null && tag is String && id is String) {
+            state.setTag(id, tag)
+        }
     }
 }
 
