@@ -904,6 +904,14 @@ fun parseWidget(
     element: CLObject
 ) {
     val reference = state.constraints(elementName)
+    if (reference.width == null) {
+        // Default to Wrap when the Dimension has not been assigned
+        reference.width = Wrap()
+    }
+    if (reference.height == null) {
+        // Default to Wrap when the Dimension has not been assigned
+        reference.height = Wrap()
+    }
     val constraints = element.names() ?: return
     (0 until constraints.size).forEach { i ->
         when (val constraintName = constraints[i]) {
