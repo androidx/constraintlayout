@@ -1402,6 +1402,20 @@ interface Dimension {
             DimensionDescription { state -> SolverDimension.Fixed(state.convertDimension(dp)) }
 
         /**
+         * Sets the dimensions to be defined as a ratio of the width and height. The assigned
+         * dimension will be considered to also be [fillToConstraints].
+         *
+         * The string to define a ratio is defined by the format: 'W:H'.
+         * Where H is the height as a proportion of W (the width).
+         *
+         * Eg: width = Dimension.ratio('1:2') sets the width to be half as large as the height.
+         *
+         * Note that only one dimension should be defined as a ratio.
+         */
+        fun ratio(ratio: String): Dimension =
+            DimensionDescription { SolverDimension.Ratio(ratio).suggested(SPREAD_DIMENSION) }
+
+        /**
          * A [Dimension] with suggested wrap content behavior. The wrap content size
          * will be respected unless the constraints in the [ConstraintSet] do not allow it.
          * To make the value fixed (respected regardless the [ConstraintSet]), [wrapContent]
@@ -1862,8 +1876,8 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         run {
             val measurableLastMeasures = lastMeasures[measurable]
             obtainConstraints(
-                constraintWidget.horizontalDimensionBehaviour,
-                constraintWidget.width,
+                measure.horizontalBehavior,
+                measure.horizontalDimension,
                 constraintWidget.mMatchConstraintDefaultWidth,
                 measure.measureStrategy,
                 (measurableLastMeasures?.get(1) ?: 0) == constraintWidget.height,
@@ -1872,8 +1886,8 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                 widthConstraintsHolder
             )
             obtainConstraints(
-                constraintWidget.verticalDimensionBehaviour,
-                constraintWidget.height,
+                measure.verticalBehavior,
+                measure.verticalDimension,
                 constraintWidget.mMatchConstraintDefaultHeight,
                 measure.measureStrategy,
                 (measurableLastMeasures?.get(0) ?: 0) == constraintWidget.width,
@@ -1892,10 +1906,10 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
 
         if ((measure.measureStrategy == TRY_GIVEN_DIMENSIONS ||
                 measure.measureStrategy == USE_GIVEN_DIMENSIONS) ||
-            constraintWidget.horizontalDimensionBehaviour != MATCH_CONSTRAINT ||
-            constraintWidget.mMatchConstraintDefaultWidth != MATCH_CONSTRAINT_SPREAD ||
-            constraintWidget.verticalDimensionBehaviour != MATCH_CONSTRAINT ||
-            constraintWidget.mMatchConstraintDefaultHeight != MATCH_CONSTRAINT_SPREAD
+            !(measure.horizontalBehavior == MATCH_CONSTRAINT &&
+            constraintWidget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_SPREAD &&
+            measure.verticalBehavior == MATCH_CONSTRAINT &&
+            constraintWidget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_SPREAD)
         ) {
             if (DEBUG) {
                 Log.d("CCL", "Measuring ${measurable.layoutId} with $constraints")
