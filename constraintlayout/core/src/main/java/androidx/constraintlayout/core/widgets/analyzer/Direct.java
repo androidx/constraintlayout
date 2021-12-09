@@ -784,7 +784,7 @@ public class Direct {
                         && layout.mMatchConstraintDefaultHeight == ConstraintWidget.MATCH_CONSTRAINT_SPREAD
                         && layout.mDimensionRatio == 0
                         && layout.hasDanglingDimension(ConstraintWidget.VERTICAL))
-                || (horizontalBehaviour == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+                || (verticalBehaviour == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
                         && layout.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_WRAP
                         && layout.hasResolvedTargets(VERTICAL, layout.getHeight()));
         if (layout.mDimensionRatio > 0 && (isHorizontalFixed || isVerticalFixed)) {

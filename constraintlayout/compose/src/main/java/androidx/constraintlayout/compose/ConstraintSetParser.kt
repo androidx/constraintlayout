@@ -1144,7 +1144,7 @@ private fun parseDimensionMode(dimensionString: String): Dimension {
                 val percentValue = percentString.toFloat() / 100f
                 dimension = Dimension.Percent(0, percentValue).suggested(0)
             } else if (dimensionString.contains(':')) {
-                dimension = Dimension.Ratio(dimensionString).suggested(0)
+                dimension = Dimension.Ratio(dimensionString).suggested(SPREAD_DIMENSION)
             }
         }
     }
