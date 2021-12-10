@@ -40,6 +40,8 @@ internal var SemanticsPropertyReceiver.designInfoProvider by DesignInfoDataKey
 
 /**
  * Interface used for Studio tooling.
+ *
+ * Returns a json string with the constraints and bounding box for each ID in the system.
  */
 fun interface DesignInfoProvider {
     fun getDesignInfo(startX: Int, startY: Int, args: String): String
@@ -53,6 +55,9 @@ internal fun parseConstraintsToJson(
     startX: Int,
     startY: Int
 ): String {
+    // TODO: Take arguments to filter specific information, eg: "BOUNDS_ONLY" would remove
+    //  'constraints' and 'helperReferences' from the json
+    // TODO: Add information on the render-time transforms, eg: transforms: { rotationZ: 10 }
     // The root id is not user defined, so we create one
     val rootId = PARENT.toString()
     val idToConstraintsJson = JSONObject()
