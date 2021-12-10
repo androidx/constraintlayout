@@ -44,7 +44,7 @@ fun DslTest() {
         constrain(box1) {
             centerTo(parent)
             alpha = 0.5f
-            visibility = if (hide) Visibility.Invisible else Visibility.Visible
+            visibility = if (hide) Visibility.Gone else Visibility.Visible
             width = Dimension.value(30.dp)
             height = Dimension.value(100.dp)
         }
