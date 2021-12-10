@@ -33,6 +33,44 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.*
 import java.util.*
 
+
+@Composable
+public fun End() {
+    ConstraintLayout(
+        ConstraintSet("""
+            {
+               
+                g1: { type: 'vGuideline', start: 80 },
+                g2: { type: 'vGuideline', end: 80 },
+                button: {
+                  width: 'spread',
+                  top: ['title', 'bottom', 16],
+                  start: ['g1', 'start'],
+                  end: ['g2', 'end']
+                },
+                title: {
+                  width: { value: 'wrap', max: 300 },
+                  centerVertically: 'parent',
+                  start: ['g1', 'start'],
+                  end: ['g2','end']
+                }
+            }
+        """),
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Button(
+            modifier = Modifier.layoutId("button"),
+            onClick = {},
+        ) {
+            Text(text = "end of ")
+        }
+        Text(modifier = Modifier.layoutId("title").background(Color.White),
+            text = "We Are Done",
+            style = MaterialTheme.typography.body1,
+        )
+    }
+}
+
 @Preview(group = "new")
 @Composable
 public fun VTest02a() {

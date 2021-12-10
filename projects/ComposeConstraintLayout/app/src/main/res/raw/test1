@@ -1,0 +1,21 @@
+{   root: {interpolated: { left:  0,  top:  0,  right:   1316 ,  bottom:  1954 , } } button: { interpolated : {
+left: 256,
+top: 1606,
+right: 480,
+bottom: 1714,
+visibility: 256,
+AnchorLEFT: ['title', 'LEFT', '48'],
+AnchorBOTTOM: ['g2', 'TOP', '0'],
+}
+},  g1: { type: 'hGuideline',  interpolated:  { left: 0, top: 240, right: 1316, bottom: 240 }},  g2: { type: 'hGuideline',  interpolated:  { left: 0, top: 1714, right: 1316, bottom: 1714 }},  title: { interpolated : {
+left: 208,
+top: 916,
+right: 1108,
+bottom: 1038,
+visibility: 208,
+AnchorLEFT: ['0', 'LEFT', '0'],
+AnchorTOP: ['g1', 'TOP', '0'],
+AnchorRIGHT: ['0', 'RIGHT', '0'],
+AnchorBOTTOM: ['g2', 'TOP', '0'],
+}
+},  }
