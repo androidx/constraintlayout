@@ -20,6 +20,7 @@ import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.semantics.SemanticsPropertyKey
 import androidx.compose.ui.semantics.SemanticsPropertyReceiver
+import androidx.constraintlayout.core.state.State.PARENT
 import androidx.constraintlayout.core.widgets.ConstraintWidget
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer
 import androidx.constraintlayout.core.widgets.HelperWidget
@@ -29,7 +30,7 @@ import org.json.JSONObject
 /**
  * [SemanticsPropertyKey] to test [DesignInfoProvider]
  */
-internal val DesignInfoDataKey = SemanticsPropertyKey<DesignInfoProvider>("DesignInfoProvider")
+val DesignInfoDataKey = SemanticsPropertyKey<DesignInfoProvider>("DesignInfoProvider")
 
 /**
  * [SemanticsPropertyReceiver] to test [DesignInfoProvider]
@@ -40,7 +41,7 @@ internal var SemanticsPropertyReceiver.designInfoProvider by DesignInfoDataKey
 /**
  * Interface used for Studio tooling.
  */
-internal fun interface DesignInfoProvider {
+fun interface DesignInfoProvider {
     fun getDesignInfo(startX: Int, startY: Int, args: String): String
 }
 
@@ -53,7 +54,7 @@ internal fun parseConstraintsToJson(
     startY: Int
 ): String {
     // The root id is not user defined, so we create one
-    val rootId = Any().toString()
+    val rootId = PARENT.toString()
     val idToConstraintsJson = JSONObject()
     root.children.forEach { constraintWidget ->
         val constraintsInfoArray = JSONArray()

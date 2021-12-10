@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.constraintlayout
+package com.example.constraintlayout.verification
 
 import android.os.Bundle
 import android.util.Log
@@ -33,10 +33,10 @@ import androidx.constraintlayout.compose.DesignElements
 import androidx.constraintlayout.coreAndroid.PhoneState
 import androidx.constraintlayout.motion.widget.Debug
 import androidx.constraintlayout.tools.LinkServer
+import com.example.constraintlayout.R
 import com.example.constraintlayout.link.MotionLink
 import com.google.accompanist.coil.rememberCoilPainter
 import java.util.*
-
 
 class VerifyActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
@@ -95,13 +95,12 @@ class VerifyActivity : AppCompatActivity() {
         Log.v(TAG, Debug.getLoc() + " $composeNum ")
 
         com.setContent {
-
             when (composeNum) {
-                0 -> End()
-                1 -> VTest02a()
-                2 -> VTest02b()
-                3 -> VTest02a()
-                4 -> VTest02b()
+                0 -> VTest()
+                1 -> VTest1()
+                2 -> VTest2()
+                3 -> VTest1()
+                4 -> VTest2()
 //                4 -> VTest02a()
 //                5 -> VTest02b()
 //                6 -> VTest02a()
@@ -111,7 +110,7 @@ class VerifyActivity : AppCompatActivity() {
                 else -> {
                     composeNum = 0;
                     Log.v(TAG, Debug.getLoc() + composeNum)
-                    VTest02a()
+                    VTest2()
                 }
             }
         }
@@ -122,8 +121,6 @@ class VerifyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState != null) {
-
-
             if (savedInstanceState.containsKey("SHOWNUM")) {
                 composeNum = savedInstanceState.getInt("SHOWNUM")
             }
@@ -149,9 +146,6 @@ class VerifyActivity : AppCompatActivity() {
 //        Log.v(TAG, "===========================================================================================")
 //        Log.v(TAG, Debug.getLoc() + " " + Arrays.toString(link.layoutNames))
 //        Log.v(TAG, Debug.getLoc() + " " + link.layoutNames[link.lastUpdateLayout] + "  " + layouts.size)
-
-
-
         when (event) {
             MotionLink.Event.STATUS -> {
                 Log.v(TAG, Debug.getLoc() + " STATUS")
@@ -184,21 +178,17 @@ class VerifyActivity : AppCompatActivity() {
     }
 
     fun printResults() {
-
         for (s in layouts.keys) {
             Log.v(TAG, "=======================$s===================")
-            Log.v(TAG," "+ layouts[s])
+            Log.v(TAG, " " + layouts[s])
             val str = readFromRaw(resources.getIdentifier(s, "raw", packageName))
             val s2 = layouts[s];
             if (s2 != null) {
                 multi_line_comp(str, s2);
             }
             Log.v(TAG, " ")
-
         }
-
         Log.v(TAG, "================ DONE=========================")
-
     }
 
     fun multi_line_comp(s1: String, s2: String) {
@@ -221,7 +211,6 @@ class VerifyActivity : AppCompatActivity() {
 
     fun readFromRaw(raw: Int): String {
         try {
-
             val ins = resources.openRawResource(raw)
             val b = ByteArray(ins.available())
             ins.read(b)
@@ -238,7 +227,6 @@ class VerifyActivity : AppCompatActivity() {
         setCompose();
         if (composeNum != 0) {
             mFrameLayout?.postDelayed(Runnable { getLayout() }, 1000)
-
         }
     }
 
