@@ -14,28 +14,26 @@
  * limitations under the License.
  */
 
-package com.example.constraintlayout
+package com.example.constraintlayout.verification
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.*
-import java.util.*
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.ConstraintSet
+import com.example.constraintlayout.R
 
-
+@Preview
 @Composable
-public fun End() {
+fun VTest() {
     ConstraintLayout(
         ConstraintSet("""
             {
@@ -73,7 +71,7 @@ public fun End() {
 
 @Preview(group = "new")
 @Composable
-public fun VTest02a() {
+fun VTest1() {
     ConstraintLayout(
         ConstraintSet("""
             {
@@ -111,7 +109,7 @@ public fun VTest02a() {
 
 @Preview(group = "new")
 @Composable
-public fun VTest02b() {
+fun VTest2() {
     ConstraintLayout(
         ConstraintSet("""
             {

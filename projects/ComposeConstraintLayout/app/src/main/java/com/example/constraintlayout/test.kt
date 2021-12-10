@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package androidx.constraintlayout.compose
+package com.example.constraintlayout
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
@@ -31,7 +31,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.constraintlayout.R
+import androidx.constraintlayout.compose.*
 import java.util.*
 
 @Preview

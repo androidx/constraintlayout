@@ -9,7 +9,7 @@ android {
     compileSdkVersion 30
 
     defaultConfig {
-        applicationId "androidx.constaitnlayout.experiments.template"
+        applicationId "androidx.constaitnlayout.compose.app"
         minSdkVersion 29
         targetSdkVersion 30
         versionCode 1
@@ -45,7 +45,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerVersion "1.4.32"
+        kotlinCompilerVersion kotlin_version
         kotlinCompilerExtensionVersion compose_version
     }
 
@@ -67,8 +67,6 @@ dependencies {
     implementation "androidx.compose.ui:ui-util:$compose_version"
     implementation "androidx.compose.foundation:foundation-layout:$compose_version"
     implementation "androidx.compose.foundation:foundation:$compose_version"
-    implementation "androidx.compose.ui:ui-test:$compose_version"
-
     implementation("androidx.compose.ui:ui-tooling:$compose_version")
 
     implementation "com.google.accompanist:accompanist-coil:0.14.0"
@@ -78,8 +76,11 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'com.google.android.material:material:1.4.0'
     testImplementation 'junit:junit:4.13.1'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    androidTestImplementation "androidx.compose.ui:ui-test:$compose_version"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    debugImplementation("androidx.compose.ui:ui-test-manifest:$compose_version")
 }
 
 configurations.all {
