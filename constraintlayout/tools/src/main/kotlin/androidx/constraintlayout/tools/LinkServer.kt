@@ -101,7 +101,7 @@ class LinkServer {
                         val list = registry.getLayoutList()
                         writer.writeInt(list.size)
                         for (layout in list) {
-                            println("layout: $layout")
+
                             writer.writeUTF(layout)
                             writer.writeLong(registry.getLastModified(layout))
                         }
