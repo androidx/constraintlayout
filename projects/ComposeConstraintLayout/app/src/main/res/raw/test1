@@ -1,21 +1,40 @@
-{   root: {interpolated: { left:  0,  top:  0,  right:   1316 ,  bottom:  1954 , } } button: { interpolated : {
-left: 256,
-top: 1606,
-right: 480,
-bottom: 1714,
-visibility: 256,
-AnchorLEFT: ['title', 'LEFT', '48'],
-AnchorBOTTOM: ['g2', 'TOP', '0'],
+{
+  root: { interpolated: { left: 0, top: 0, right: 1080, bottom: 1670 } },
+  guide2: {
+    type: 'vGuideline',
+    interpolated: { left: 860, top: 0, right: 860, bottom: 1670 }
+  },
+  guid1: {
+    type: 'vGuideline',
+    interpolated: { left: 220, top: 0, right: 220, bottom: 1670 }
+  },
+  title: {
+    interpolated: {
+      left: 128,
+      top: 780,
+      right: 953,
+      bottom: 891,
+      visibility: 128,
+      AnchorLEFT: ['guid1', 'LEFT', '0'],
+      AnchorTOP: ['0', 'TOP', '0'],
+      AnchorRIGHT: ['guide2', 'LEFT', '0'],
+      AnchorBOTTOM: ['0', 'BOTTOM', '0'],
+      phone_orientation: 0,
+      phone_orientation: 0
+    }
+  },
+  button1: {
+    interpolated: {
+      left: 220,
+      top: 935,
+      right: 860,
+      bottom: 1034,
+      visibility: 220,
+      AnchorLEFT: ['guid1', 'LEFT', '0'],
+      AnchorTOP: ['title', 'BOTTOM', '44'],
+      AnchorRIGHT: ['guide2', 'LEFT', '0'],
+      phone_orientation: 0,
+      phone_orientation: 0
+    }
+  }
 }
-},  g1: { type: 'hGuideline',  interpolated:  { left: 0, top: 240, right: 1316, bottom: 240 }},  g2: { type: 'hGuideline',  interpolated:  { left: 0, top: 1714, right: 1316, bottom: 1714 }},  title: { interpolated : {
-left: 208,
-top: 916,
-right: 1108,
-bottom: 1038,
-visibility: 208,
-AnchorLEFT: ['0', 'LEFT', '0'],
-AnchorTOP: ['g1', 'TOP', '0'],
-AnchorRIGHT: ['0', 'RIGHT', '0'],
-AnchorBOTTOM: ['g2', 'TOP', '0'],
-}
-},  }

@@ -1,0 +1,32 @@
+{
+  root: { interpolated: { left: 0, top: 0, right: 1080, bottom: 1670 } },
+  button3: {
+    interpolated: {
+      left: 0,
+      top: 786,
+      right: 1080,
+      bottom: 885,
+      visibility: 0,
+      AnchorLEFT: ['0', 'LEFT', '0'],
+      AnchorTOP: ['0', 'TOP', '0'],
+      AnchorRIGHT: ['0', 'RIGHT', '0'],
+      AnchorBOTTOM: ['0', 'BOTTOM', '0'],
+      phone_orientation: 0,
+      phone_orientation: 0
+    }
+  },
+  title: {
+    interpolated: {
+      left: 86,
+      top: 885,
+      right: 995,
+      bottom: 944,
+      visibility: 86,
+      AnchorLEFT: ['button3', 'LEFT', '0'],
+      AnchorTOP: ['button3', 'BOTTOM', '0'],
+      AnchorRIGHT: ['button3', 'RIGHT', '0'],
+      phone_orientation: 0,
+      phone_orientation: 0
+    }
+  }
+}

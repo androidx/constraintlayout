@@ -31,109 +31,148 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import com.example.constraintlayout.R
 
-@Preview
-@Composable
-fun VTest() {
-    ConstraintLayout(
-        ConstraintSet("""
-            {
-               
-                g1: { type: 'vGuideline', start: 80 },
-                g2: { type: 'vGuideline', end: 80 },
-                button: {
-                  width: 'spread',
-                  top: ['title', 'bottom', 16],
-                  start: ['g1', 'start'],
-                  end: ['g2', 'end']
-                },
-                title: {
-                  width: { value: 'wrap', max: 300 },
-                  centerVertically: 'parent',
-                  start: ['g1', 'start'],
-                  end: ['g2','end']
-                }
-            }
-        """),
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Button(
-            modifier = Modifier.layoutId("button"),
-            onClick = {},
-        ) {
-            Text(text = "end of ")
-        }
-        Text(modifier = Modifier.layoutId("title").background(Color.White),
-            text = "We Are Done",
-            style = MaterialTheme.typography.body1,
-        )
-    }
-}
 
 
+@Preview(group = "VTest02d")
 @Composable
-public fun End() {
-    ConstraintLayout(
-        ConstraintSet("""
-            {
-               
-                g1: { type: 'vGuideline', start: 80 },
-                g2: { type: 'vGuideline', end: 80 },
-                button: {
-                  width: 'spread',
-                  top: ['title', 'bottom', 16],
-                  start: ['g1', 'start'],
-                  end: ['g2', 'end']
-                },
-                title: {
-                  width: { value: 'wrap', max: 300 },
-                  centerVertically: 'parent',
-                  start: ['g1', 'start'],
-                  end: ['g2','end']
-                }
-            }
-        """),
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Button(
-            modifier = Modifier.layoutId("button"),
-            onClick = {},
-        ) {
-            Text(text = "end of ")
-        }
-        Text(modifier = Modifier.layoutId("title").background(Color.White),
-            text = "We Are Done",
-            style = MaterialTheme.typography.body1,
-        )
-    }
-}
-
-@Preview(group = "new")
-@Composable
-fun VTest1() {
+fun VTest02a() {
     ConstraintLayout(
         ConstraintSet("""
             {
                 Header: { exportAs: 'test1'},
-                g1: { type: 'vGuideline', start: 80 },
-                g2: { type: 'vGuideline', end: 80 },
-                button: {
+                guid1: { type: 'vGuideline', start: 80 },
+                guide2: { type: 'vGuideline', end: 80 },
+                button1: {
                   width: 'spread',
                   top: ['title', 'bottom', 16],
-                  start: ['g1', 'start'],
-                  end: ['g2', 'end']
+                  start: ['guid1', 'start'],
+                  end: ['guide2', 'end']
                 },
                 title: {
                   width: { value: 'wrap', max: 300 },
                   centerVertically: 'parent',
-                  start: ['g1', 'start'],
-                  end: ['g2','end']
+                  start: ['guid1', 'start'],
+                  end: ['guide2','end']
                 }
             }
         """),
         modifier = Modifier.fillMaxSize()
     ) {
         Button(
-            modifier = Modifier.layoutId("button"),
+            modifier = Modifier.layoutId("button1"),
+            onClick = {},
+        ) {
+            Text(text = stringResource(id = R.string.log_in))
+        }
+        Text(modifier = Modifier.layoutId("title").background(Color.Red),
+            text = "ABC dsa sdfs sdf adfas asdas asdad asdas",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
+            style = MaterialTheme.typography.body1,
+        )
+    }
+}
+
+@Preview(group = "VTest02d")
+@Composable
+fun VTest02b() {
+    ConstraintLayout(
+        ConstraintSet("""
+            {
+                Header: { exportAs: 'test2'},
+                gl1: { type: 'hGuideline', start: 80 },
+                gl2: { type: 'hGuideline', end: 80 },
+                button2: {
+                  width: 'spread',
+                  start: ['title', 'start', 16],
+                  bottom: ['gl2', 'bottom'],
+                  rotationZ: 32,
+                },
+                title: {
+                  width: { value: 'wrap', max: 300 },
+                  centerHorizontally: 'parent',
+                  top: ['gl1', 'top'],
+                  bottom: ['gl2','bottom']
+                }
+            }
+        """),
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Button(
+            modifier = Modifier.layoutId("button2"),
+            onClick = {},
+        ) {
+            Text(text = stringResource(id = R.string.log_in))
+        }
+        Text(modifier = Modifier.layoutId("title").background(Color.Red),
+            text = "ABC dsa sdfs sdf adfas asdas asdad asdas",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
+            style = MaterialTheme.typography.body1,
+        )
+    }
+}
+
+
+@Preview(group = "VTest02d")
+@Composable
+public fun VTest02c() {
+    ConstraintLayout(
+        ConstraintSet("""
+            {
+                Header: { exportAs: 'test3'},
+             
+                button3: {
+                  width: 'spread',
+                  centerHorizontally:  'parent',
+                  centerVertically: 'parent',
+              
+                },
+                title: {
+                  
+                  centerHorizontally: 'button3',
+                  top: ['button3', 'bottom'],
+                
+                }
+            }
+        """),
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Button(
+            modifier = Modifier.layoutId("button3"),
+            onClick = {},
+        ) {
+            Text(text = stringResource(id = R.string.log_in))
+        }
+        Text(modifier = Modifier.layoutId("title").background(Color.Red),
+            text = "ABC dsa sdfs sdf adfas asdas asdad asdas",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
+            style = MaterialTheme.typography.body1,
+        )
+    }
+}
+
+@Preview(group = "VTest02d")
+@Composable
+public fun VTest02d() {
+    ConstraintLayout(
+        ConstraintSet("""
+            {
+                Header: { exportAs: 'test4'},
+             
+                button4: {
+                  width: 'wrap',
+                  centerHorizontally:  'parent',
+                  centerVertically: 'parent',
+              
+                },
+                title: {
+                   width: '200',
+                  centerHorizontally: 'button4',
+                  top: ['button4', 'bottom',32],
+                
+                }
+            }
+        """),
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Button(
+            modifier = Modifier.layoutId("button4"),
             onClick = {},
         ) {
             Text(text = stringResource(id = R.string.log_in))
@@ -147,31 +186,30 @@ fun VTest1() {
 
 @Preview(group = "new")
 @Composable
-fun VTest2() {
+public fun VTest02e() {
     ConstraintLayout(
         ConstraintSet("""
             {
-                Header: { exportAs: 'test2'},
-                g1: { type: 'hGuideline', start: 80 },
-                g2: { type: 'hGuideline', end: 80 },
-                button: {
-                  width: 'spread',
-                  start: ['title', 'start', 16],
-                  
-                  bottom: ['g2', 'bottom']
+                Header: { exportAs: 'test5'},
+             
+                button5: {
+                  width: 'wrap',
+                  centerHorizontally:  'parent',
+                  centerVertically: 'parent',
+              
                 },
                 title: {
-                  width: { value: 'wrap', max: 300 },
-                  centerHorizontally: 'parent',
-                  top: ['g1', 'top'],
-                  bottom: ['g2','bottom']
+                   width: 'spread',
+                  centerHorizontally: 'button5',
+                  bottom: ['parent5', 'bottom',20],
+                
                 }
             }
         """),
         modifier = Modifier.fillMaxSize()
     ) {
         Button(
-            modifier = Modifier.layoutId("button"),
+            modifier = Modifier.layoutId("button5"),
             onClick = {},
         ) {
             Text(text = stringResource(id = R.string.log_in))
