@@ -478,7 +478,7 @@ public class WidgetFrame {
         add(ret, "scaleX", frame.scaleX);
         add(ret, "scaleY", frame.scaleY);
         add(ret, "alpha", frame.alpha);
-        add(ret, "visibility", frame.left);
+        add(ret, "visibility", frame.visibility);
         add(ret, "interpolatedPos", frame.interpolatedPos);
         if (widget != null) {
             for (ConstraintAnchor.Type side : ConstraintAnchor.Type.values()) {

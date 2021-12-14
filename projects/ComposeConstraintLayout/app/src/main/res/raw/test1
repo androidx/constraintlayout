@@ -14,13 +14,11 @@
       top: 780,
       right: 953,
       bottom: 891,
-      visibility: 128,
+      visibility: 0,
       AnchorLEFT: ['guid1', 'LEFT', '0'],
       AnchorTOP: ['0', 'TOP', '0'],
       AnchorRIGHT: ['guide2', 'LEFT', '0'],
-      AnchorBOTTOM: ['0', 'BOTTOM', '0'],
-      phone_orientation: 0,
-      phone_orientation: 0
+      AnchorBOTTOM: ['0', 'BOTTOM', '0']
     }
   },
   button1: {
@@ -29,12 +27,10 @@
       top: 935,
       right: 860,
       bottom: 1034,
-      visibility: 220,
+      visibility: 0,
       AnchorLEFT: ['guid1', 'LEFT', '0'],
       AnchorTOP: ['title', 'BOTTOM', '44'],
-      AnchorRIGHT: ['guide2', 'LEFT', '0'],
-      phone_orientation: 0,
-      phone_orientation: 0
+      AnchorRIGHT: ['guide2', 'LEFT', '0']
     }
   }
 }
