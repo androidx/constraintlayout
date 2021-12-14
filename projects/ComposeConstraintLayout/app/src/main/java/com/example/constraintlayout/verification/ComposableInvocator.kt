@@ -22,8 +22,7 @@ import java.util.*
 
 class ComposableInvocator {
     private val supportedPackages = listOf<String>(
-        "com.example.constraintlayout",
-        "com.example.constraintlayout.verification"
+        "com.example.constraintlayout.verification.dsl"
     )
 
     /**
@@ -31,8 +30,7 @@ class ComposableInvocator {
      * Eg: for "test" it will automatically look for "test1", "test2", ...
      */
     private val supportedFileNames = listOf<String>(
-        "test",
-        "VTest"
+        "DslVerification"
     )
 
     /**
@@ -42,10 +40,7 @@ class ComposableInvocator {
      * Eg: for "Example" it will also look for "Example1", "Example2", ...
      */
     private val baseComposableNames = listOf<String>(
-        "ScreenExample",
-        "Screen",
-        "ExampleLayout",
-        "VTest"
+        "Test"
     )
 
     private val composablesIndex = mutableListOf<ComposableData>()
