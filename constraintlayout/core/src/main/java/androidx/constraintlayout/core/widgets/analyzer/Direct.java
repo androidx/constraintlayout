@@ -339,6 +339,8 @@ public class Direct {
                     ConstraintWidgetContainer.measure(level + 1, widget, measurer, measure, BasicMeasure.Measure.SELF_DIMENSIONS);
                 }
 
+                boolean bothConnected = (first == widget.mLeft && widget.mRight.mTarget != null && widget.mRight.mTarget.hasFinalValue())
+                        || (first == widget.mRight && widget.mLeft.mTarget != null && widget.mLeft.mTarget.hasFinalValue());
                 if (widget.getHorizontalDimensionBehaviour() != ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
                         || canMeasure) {
                     if (widget.isMeasureRequested()) {
@@ -358,8 +360,7 @@ public class Direct {
                         x1 = x2 - widget.getWidth();
                         widget.setFinalHorizontal(x1, x2);
                         horizontalSolvingPass(level + 1, widget, measurer, isRtl);
-                    } else if (first == widget.mLeft && widget.mRight.mTarget != null
-                            && widget.mRight.mTarget.hasFinalValue() && !widget.isInHorizontalChain()) {
+                    } else if (bothConnected && !widget.isInHorizontalChain()) {
                         solveHorizontalCenterConstraints(level + 1, measurer, widget, isRtl);
                     } else if (APPLY_MATCH_PARENT && widget.getHorizontalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
                         widget.setFinalHorizontal(0, widget.getWidth());
@@ -369,8 +370,6 @@ public class Direct {
                         && widget.mMatchConstraintMaxWidth >= 0 && widget.mMatchConstraintMinWidth >= 0
                         && (widget.getVisibility() == ConstraintWidget.GONE || ((widget.mMatchConstraintDefaultWidth == ConstraintWidget.MATCH_CONSTRAINT_SPREAD) && widget.getDimensionRatio() == 0))
                         && !widget.isInHorizontalChain() && !widget.isInVirtualLayout()) {
-                    boolean bothConnected = (first == widget.mLeft && widget.mRight.mTarget != null && widget.mRight.mTarget.hasFinalValue())
-                            || (first == widget.mRight && widget.mLeft.mTarget != null && widget.mLeft.mTarget.hasFinalValue());
                     if (bothConnected && !widget.isInHorizontalChain()) {
                         solveHorizontalMatchConstraint(level + 1, layout, measurer, widget, isRtl);
                     }
@@ -469,6 +468,8 @@ public class Direct {
                     ConstraintWidgetContainer.measure(level + 1, widget, measurer, measure, BasicMeasure.Measure.SELF_DIMENSIONS);
                 }
 
+                boolean bothConnected = (first == widget.mTop && widget.mBottom.mTarget != null && widget.mBottom.mTarget.hasFinalValue())
+                        || (first == widget.mBottom && widget.mTop.mTarget != null && widget.mTop.mTarget.hasFinalValue());
                 if (widget.getVerticalDimensionBehaviour() != ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
                         || canMeasure) {
                     if (widget.isMeasureRequested()) {
@@ -483,13 +484,12 @@ public class Direct {
                         y2 = y1 + widget.getHeight();
                         widget.setFinalVertical(y1, y2);
                         verticalSolvingPass(level + 1, widget, measurer);
-                    } else if (first == widget.mBottom && widget.mBottom.mTarget == null) {
+                    } else if (first == widget.mBottom && widget.mTop.mTarget == null) {
                         y2 = t - widget.mBottom.getMargin();
                         y1 = y2 - widget.getHeight();
                         widget.setFinalVertical(y1, y2);
                         verticalSolvingPass(level + 1, widget, measurer);
-                    } else if (first == widget.mTop && widget.mBottom.mTarget != null
-                            && widget.mBottom.mTarget.hasFinalValue()) {
+                    } else if (bothConnected && !widget.isInVerticalChain()) {
                         solveVerticalCenterConstraints(level + 1, measurer, widget);
                     } else if (APPLY_MATCH_PARENT && widget.getVerticalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
                         widget.setFinalVertical(0, widget.getHeight());
@@ -499,8 +499,6 @@ public class Direct {
                         && widget.mMatchConstraintMaxHeight >= 0 && widget.mMatchConstraintMinHeight >= 0
                         && (widget.getVisibility() == ConstraintWidget.GONE || ((widget.mMatchConstraintDefaultHeight == ConstraintWidget.MATCH_CONSTRAINT_SPREAD) && widget.getDimensionRatio() == 0))
                         && !widget.isInVerticalChain() && !widget.isInVirtualLayout()) {
-                    boolean bothConnected = (first == widget.mTop && widget.mBottom.mTarget != null && widget.mBottom.mTarget.hasFinalValue())
-                            || (first == widget.mBottom && widget.mTop.mTarget != null && widget.mTop.mTarget.hasFinalValue());
                     if (bothConnected && !widget.isInVerticalChain()) {
                         solveVerticalMatchConstraint(level + 1, layout, measurer, widget);
                     }
@@ -594,6 +592,7 @@ public class Direct {
      * @param isRtl
      */
     private static void solveHorizontalCenterConstraints(int level, BasicMeasure.Measurer measurer, ConstraintWidget widget, boolean isRtl) {
+        // TODO: Handle match constraints here or before calling this
         int x1;
         int x2;
         float bias = widget.getHorizontalBiasPercent();
@@ -635,6 +634,7 @@ public class Direct {
      * @param widget
      */
     private static void solveVerticalCenterConstraints(int level, BasicMeasure.Measurer measurer, ConstraintWidget widget) {
+        // TODO: Handle match constraints here or before calling this
         int y1;
         int y2;
         float bias = widget.getVerticalBiasPercent();

@@ -1,0 +1,110 @@
+/*
+ * Copyright (C) 2021 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@file:JvmName("DslVerificationKt")
+@file:JvmMultifileClass
+
+package com.example.constraintlayout.verification.dsl
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.Button
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.ConstraintSet
+import androidx.constraintlayout.compose.Dimension
+
+@Preview
+@Composable
+fun Test5() {
+    val constraintSet = ConstraintSet {
+        val box1 = createRefFor("box1")
+        constrain(box1) {
+            width = Dimension.fillToConstraints
+            height = Dimension.ratio("1:1.2")
+            centerTo(parent)
+        }
+    }
+    Column {
+        ConstraintLayout(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f, fill = true), constraintSet = constraintSet
+        ) {
+            Box(
+                modifier = Modifier
+                    .background(Color.Red)
+                    .layoutId("box1")
+            )
+        }
+        Button(onClick = { }) {
+            Text(text = "Run")
+        }
+    }
+}
+
+@Preview
+@Composable
+fun Test6() {
+    val constraintSet = ConstraintSet {
+        val text1 = createRefFor("text1")
+        val box1 = createRefFor("box1")
+
+        constrain(text1) {
+            width = Dimension.wrapContent
+            height = Dimension.ratio("1:2")
+            centerVerticallyTo(parent)
+            start.linkTo(parent.start)
+            end.linkTo(box1.start)
+        }
+        constrain(box1) {
+            width = Dimension.value(50.dp)
+            height = Dimension.value(50.dp)
+            centerVerticallyTo(parent)
+            end.linkTo(parent.end, 8.dp)
+        }
+    }
+    Column {
+        ConstraintLayout(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f, fill = true), constraintSet = constraintSet
+        ) {
+            Text(
+                modifier = Modifier
+                    .layoutId("text1")
+                    .background(Color.Red),
+                text = "Hello, World!"
+            )
+            Box(
+                modifier = Modifier
+                    .layoutId("box1")
+                    .background(Color.Blue)
+            )
+        }
+        Button(onClick = { }) {
+            Text(text = "Run")
+        }
+    }
+}

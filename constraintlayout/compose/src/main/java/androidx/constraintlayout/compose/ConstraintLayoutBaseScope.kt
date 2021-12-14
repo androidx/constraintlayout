@@ -802,7 +802,7 @@ class ConstrainScope internal constructor(internal val id: Any) {
     }
 
     /**
-     * Adds both start and end links towards other [ConstraintLayoutBaseScope.HorizontalAnchor]s.
+     * Adds both start and end links towards other [ConstraintLayoutBaseScope.VerticalAnchor]s.
      */
     // TODO(popam, b/158069248): add parameter for gone margin
     fun linkTo(
@@ -815,7 +815,8 @@ class ConstrainScope internal constructor(internal val id: Any) {
         this@ConstrainScope.start.linkTo(start, startMargin)
         this@ConstrainScope.end.linkTo(end, endMargin)
         tasks.add { state ->
-            state.constraints(id).horizontalBias(bias)
+            val resolvedBias = if (state.layoutDirection == LayoutDirection.Rtl) 1 - bias else bias
+            state.constraints(id).horizontalBias(resolvedBias)
         }
     }
 
@@ -871,8 +872,11 @@ class ConstrainScope internal constructor(internal val id: Any) {
      * This will center horizontally the current layout inside or around (depending on size)
      * [other].
      */
-    fun centerHorizontallyTo(other: ConstrainedLayoutReference) {
-        linkTo(other.start, other.end)
+    fun centerHorizontallyTo(
+        other: ConstrainedLayoutReference,
+        @FloatRange(from = 0.0f.toDouble(), to = 1.0f.toDouble()) bias: Float = 0.5f
+    ) {
+        linkTo(other.start, other.end, bias = bias)
     }
 
     /**
@@ -880,8 +884,11 @@ class ConstrainScope internal constructor(internal val id: Any) {
      * This will center vertically the current layout inside or around (depending on size)
      * [other].
      */
-    fun centerVerticallyTo(other: ConstrainedLayoutReference) {
-        linkTo(other.top, other.bottom)
+    fun centerVerticallyTo(
+        other: ConstrainedLayoutReference,
+        @FloatRange(from = 0.0f.toDouble(), to = 1.0f.toDouble()) bias: Float = 0.5f
+    ) {
+        linkTo(other.top, other.bottom, bias = bias)
     }
 
     /**
@@ -906,7 +913,35 @@ class ConstrainScope internal constructor(internal val id: Any) {
      */
     fun circular(other: ConstrainedLayoutReference, angle: Float, distance: Dp) {
         tasks.add { state ->
-            state.constraints(id).circularConstraint(other.id, angle, state.convertDimension(distance).toFloat())
+            state.constraints(id)
+                .circularConstraint(other.id, angle, state.convertDimension(distance).toFloat())
+        }
+    }
+
+    /**
+     * Clear the constraints on the horizontal axis (left, right, start, end).
+     */
+    fun clearHorizontal() {
+        tasks.add { state ->
+            state.constraints(id).clearHorizontal()
+        }
+    }
+
+    /**
+     * Clear the constraints on the vertical axis (top, bottom, baseline).
+     */
+    fun clearVertical() {
+        tasks.add { state ->
+            state.constraints(id).clearVertical()
+        }
+    }
+
+    /**
+     * Clear all constraints (vertical, horizontal, circular).
+     */
+    fun clearConstraints() {
+        tasks.add { state ->
+            state.constraints(id).clear()
         }
     }
 
