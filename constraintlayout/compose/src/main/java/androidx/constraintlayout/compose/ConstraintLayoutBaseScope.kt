@@ -719,6 +719,30 @@ class ConstrainScope internal constructor(internal val id: Any) {
             addTransform { pivotY(value) }
         }
 
+    /**
+     * Whenever the width is not fixed, this weight may be used by an horizontal Chain to decide how
+     * much space assign to this widget.
+     */
+    var horizontalChainWeight: Float = Float.NaN
+        set(value) {
+            field = value
+            tasks.add { state ->
+                state.constraints(id).horizontalChainWeight = value
+            }
+        }
+
+    /**
+     * Whenever the height is not fixed, this weight may be used by a vertical Chain to decide how
+     * much space assign to this widget.
+     */
+    var verticalChainWeight: Float = Float.NaN
+        set(value) {
+            field = value
+            tasks.add { state ->
+                state.constraints(id).verticalChainWeight = value
+            }
+        }
+
     private fun addTransform(change: ConstraintReference.() -> Unit) =
         tasks.add { state -> change(state.constraints(id)) }
 

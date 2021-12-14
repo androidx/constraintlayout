@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.HORIZONTAL;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.UNKNOWN;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
 
 public class ConstraintReference implements Reference {
@@ -59,6 +60,9 @@ public class ConstraintReference implements Reference {
 
     int mHorizontalChainStyle = ConstraintWidget.CHAIN_SPREAD;
     int mVerticalChainStyle = ConstraintWidget.CHAIN_SPREAD;
+
+    float mHorizontalChainWeight = UNKNOWN;
+    float mVerticalChainWeight = UNKNOWN;
 
     float mHorizontalBias = 0.5f;
     float mVerticalBias = 0.5f;
@@ -234,6 +238,22 @@ public class ConstraintReference implements Reference {
 
     public int getVerticalChainStyle(int chainStyle) {
         return mVerticalChainStyle;
+    }
+
+    public float getHorizontalChainWeight() {
+        return mHorizontalChainWeight;
+    }
+
+    public void setHorizontalChainWeight(float weight) {
+        mHorizontalChainWeight = weight;
+    }
+
+    public float getVerticalChainWeight() {
+        return mVerticalChainWeight;
+    }
+
+    public void setVerticalChainWeight(float weight) {
+        mVerticalChainWeight = weight;
     }
 
     public ConstraintReference clearVertical() {
@@ -867,6 +887,12 @@ public class ConstraintReference implements Reference {
         }
         if (mVerticalChainStyle != ConstraintWidget.CHAIN_SPREAD) {
             mConstraintWidget.setVerticalChainStyle(mVerticalChainStyle);
+        }
+        if (mHorizontalChainWeight != UNKNOWN) {
+            mConstraintWidget.setHorizontalWeight(mHorizontalChainWeight);
+        }
+        if (mVerticalChainWeight != UNKNOWN) {
+            mConstraintWidget.setVerticalWeight(mVerticalChainWeight);
         }
 
         mConstraintWidget.setHorizontalBiasPercent(mHorizontalBias);
