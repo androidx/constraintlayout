@@ -81,11 +81,14 @@ fun VTest02b() {
                 gl1: { type: 'hGuideline', start: 80 },
                 gl2: { type: 'hGuideline', end: 80 },
                 button2: {
+ 
                   width: '38%',
+ 
                   start: ['title', 'start', 16],
                   bottom: ['gl2', 'bottom'],
                   rotationZ: 32,
                 },
+ 
                 title0: {
                   width: 100,
                   centerHorizontally: 'parent',
@@ -109,6 +112,7 @@ fun VTest02b() {
                   centerHorizontally: 'parent',
                   top: ['title2', 'bottom', 16],
                  
+
                 }
             }
         """),
@@ -120,6 +124,7 @@ fun VTest02b() {
         ) {
             Text(text = stringResource(id = R.string.log_in))
         }
+
         Text(modifier = Modifier.layoutId("title0").background(Color.Red),
             text = "This is a test of width",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
             style = MaterialTheme.typography.body1,
@@ -189,7 +194,7 @@ public fun VTest02c() {
                   width: { value: 'preferWrap' }  ,
                   centerHorizontally: 'parent',
                   top: ['title4', 'bottom', 16],
-                 
+
                 }
             }
         """),
