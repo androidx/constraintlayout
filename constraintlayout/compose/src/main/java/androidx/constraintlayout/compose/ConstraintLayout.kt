@@ -484,14 +484,19 @@ interface Dimension {
 
     companion object {
         /**
-         * Creates a [Dimension] representing a suggested dp size. The requested size will
-         * be respected unless the constraints in the [ConstraintSet] do not allow it. The min
-         * and max bounds will be respected regardless of the constraints in the [ConstraintSet].
+         * Links should be specified from both sides corresponding to this dimension, in order for
+         * this to work.
+         *
+         * Creates a [Dimension] such that if the constraints allow it, will have the size given by
+         * [dp], otherwise will take the size remaining within the constraints.
+         *
+         * This is effectively a shorthand for [fillToConstraints] with a max value.
+         *
          * To make the value fixed (respected regardless the [ConstraintSet]), [value] should
          * be used instead.
          */
-        fun preferredValue(dp: Dp): Dimension.Coercible =
-            DimensionDescription { state -> SolverDimension.Suggested(state.convertDimension(dp)) }
+        fun preferredValue(dp: Dp): Dimension.MinCoercible =
+            DimensionDescription { state -> SolverDimension.Suggested(state.convertDimension(dp)).suggested(SPREAD_DIMENSION) }
 
         /**
          * Creates a [Dimension] representing a fixed dp size. The size will not change
@@ -515,6 +520,9 @@ interface Dimension {
             DimensionDescription { SolverDimension.Ratio(ratio).suggested(SPREAD_DIMENSION) }
 
         /**
+         * Links should be specified from both sides corresponding to this dimension, in order for
+         * this to work.
+         *
          * A [Dimension] with suggested wrap content behavior. The wrap content size
          * will be respected unless the constraints in the [ConstraintSet] do not allow it.
          * To make the value fixed (respected regardless the [ConstraintSet]), [wrapContent]
@@ -524,17 +532,26 @@ interface Dimension {
             get() = DimensionDescription { SolverDimension.Suggested(WRAP_DIMENSION) }
 
         /**
-         * A [Dimension] with fixed wrap content behavior. The size will not change
+         * A fixed [Dimension] with wrap content behavior. The size will not change
          * according to the constraints in the [ConstraintSet].
          */
         val wrapContent: Dimension
             get() = DimensionDescription { SolverDimension.Fixed(WRAP_DIMENSION) }
 
         /**
-         * A [Dimension] that spreads to match constraints. Links should be specified from both
-         * sides corresponding to this dimension, in order for this to work.
+         * A fixed [Dimension] that matches the dimensions of the root ConstraintLayout. The size
+         * will not change accoring to the constraints in the [ConstraintSet].
          */
-        val fillToConstraints: Dimension
+        val matchParent: Dimension
+            get() = DimensionDescription { SolverDimension.Parent() }
+
+        /**
+         * Links should be specified from both sides corresponding to this dimension, in order for
+         * this to work.
+         *
+         * A [Dimension] that spreads to match constraints.
+         */
+        val fillToConstraints: Dimension.Coercible
             get() = DimensionDescription { SolverDimension.Suggested(SPREAD_DIMENSION) }
 
         /**
@@ -573,7 +590,14 @@ val Dimension.Coercible.atMostWrapContent: Dimension.MinCoercible
 /**
  * Sets the lower bound of the current [Dimension] to a fixed [dp] value.
  */
+@Deprecated(message = "Unintended method name, use atLeast(dp) instead", replaceWith = ReplaceWith("this.atLeast(dp)", "androidx.constraintlayout.compose.atLeast"))
 fun Dimension.MinCoercible.atLeastWrapContent(dp: Dp): Dimension =
+    (this as DimensionDescription).also { it.min = dp }
+
+/**
+ * Sets the lower bound of the current [Dimension] to a fixed [dp] value.
+ */
+fun Dimension.MinCoercible.atLeast(dp: Dp): Dimension =
     (this as DimensionDescription).also { it.min = dp }
 
 /**
@@ -1012,12 +1036,12 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             }
 
             val coercedWidth = placeable.width.coerceIn(
-                constraintWidget.minWidth.takeIf { it > 0 },
-                constraintWidget.maxWidth.takeIf { it > 0 }
+                constraintWidget.mMatchConstraintMinWidth.takeIf { it > 0 },
+                constraintWidget.mMatchConstraintMaxWidth.takeIf { it > 0 }
             )
             val coercedHeight = placeable.height.coerceIn(
-                constraintWidget.minHeight.takeIf { it > 0 },
-                constraintWidget.maxHeight.takeIf { it > 0 }
+                constraintWidget.mMatchConstraintMinHeight.takeIf { it > 0 },
+                constraintWidget.mMatchConstraintMaxHeight.takeIf { it > 0 }
             )
 
             var remeasure = false

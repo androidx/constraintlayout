@@ -39,6 +39,8 @@ class  VerificationTest {
 
     @Test
     fun verifyComposables() {
+        // TODO: Test doesn't work very well with Json, some part in the helper parser is not
+        //  stable, either from user-string to binary or binary to result-string
         val results = HashMap<String, String>()
         var composableIndex by mutableStateOf(0) // Observable state that we'll use to change the content in a recomposition
         var fqComposable = ""
