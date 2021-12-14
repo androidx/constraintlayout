@@ -81,16 +81,38 @@ fun VTest02b() {
                 gl1: { type: 'hGuideline', start: 80 },
                 gl2: { type: 'hGuideline', end: 80 },
                 button2: {
-                  width: 'spread',
+ 
+                  width: '38%',
+ 
                   start: ['title', 'start', 16],
                   bottom: ['gl2', 'bottom'],
                   rotationZ: 32,
                 },
-                title: {
-                  width: { value: 'wrap', max: 300 },
+ 
+                title0: {
+                  width: 100,
                   centerHorizontally: 'parent',
-                  top: ['gl1', 'top'],
-                  bottom: ['gl2','bottom']
+                  top: ['gl1', 'bottom', 16],
+                  
+                },
+                title1: {
+                  width: 'spread',
+                  centerHorizontally: 'title3',
+                  top: ['title0', 'bottom', 16],
+             
+                },
+                 title2: {
+                  width: 'parent',
+                  centerHorizontally: 'parent',
+                  top: ['title1', 'bottom', 16],
+                 
+                },
+                 title3: {
+                  width: '38%'  ,
+                  centerHorizontally: 'parent',
+                  top: ['title2', 'bottom', 16],
+                 
+
                 }
             }
         """),
@@ -102,8 +124,21 @@ fun VTest02b() {
         ) {
             Text(text = stringResource(id = R.string.log_in))
         }
-        Text(modifier = Modifier.layoutId("title").background(Color.Red),
-            text = "ABC dsa sdfs sdf adfas asdas asdad asdas",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
+
+        Text(modifier = Modifier.layoutId("title0").background(Color.Red),
+            text = "This is a test of width",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
+            style = MaterialTheme.typography.body1,
+        )
+        Text(modifier = Modifier.layoutId("title1").background(Color.Red),
+            text = "This is a test of width",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
+            style = MaterialTheme.typography.body1,
+        )
+        Text(modifier = Modifier.layoutId("title2").background(Color.Red),
+            text = "This is a test of width",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
+            style = MaterialTheme.typography.body1,
+        )
+        Text(modifier = Modifier.layoutId("title3").background(Color.Red),
+            text = "This is a test of width",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
             style = MaterialTheme.typography.body1,
         )
     }
@@ -117,18 +152,49 @@ public fun VTest02c() {
         ConstraintSet("""
             {
                 Header: { exportAs: 'test3'},
-             
+                gl1: { type: 'hGuideline', start: 80 },
+                gl2: { type: 'hGuideline', end: 80 },
                 button3: {
-                  width: 'spread',
-                  centerHorizontally:  'parent',
-                  centerVertically: 'parent',
-              
+                  width: { value: '38%' },
+                  start: ['parent', 'start', 50],
+                  bottom: ['gl2', 'bottom'],
+ 
                 },
-                title: {
+                title0: {
+                  width:  { value: 'wrap', min: 60  },
+                  centerHorizontally: 'parent',
+                  top: ['gl1', 'bottom', 16],
                   
-                  centerHorizontally: 'button3',
-                  top: ['button3', 'bottom'],
-                
+                },
+                title1: {
+                  width:  { value: 'spread', min: 200  },
+                  centerHorizontally: 'title3',
+                  top: ['title0', 'bottom', 16],
+             
+                },
+                 title2: {
+                  width:  { value: 'parent', min: 400 }, 
+                  centerHorizontally: 'parent',
+                  top: ['title1', 'bottom', 16],
+                 
+                },
+                 title3: {
+                  width: { value: '30%' }  ,
+                  centerHorizontally: 'parent',
+                  top: ['title2', 'bottom', 16],
+                 
+                },
+                 title4: {
+                  width: { value: 'parent', max: 100  }  ,
+                  centerHorizontally: 'title3',
+                  top: ['title3', 'bottom', 16],
+                 
+                },
+                 title5: {
+                  width: { value: 'preferWrap' }  ,
+                  centerHorizontally: 'parent',
+                  top: ['title4', 'bottom', 16],
+
                 }
             }
         """),
@@ -140,8 +206,28 @@ public fun VTest02c() {
         ) {
             Text(text = stringResource(id = R.string.log_in))
         }
-        Text(modifier = Modifier.layoutId("title").background(Color.Red),
-            text = "ABC dsa sdfs sdf adfas asdas asdad asdas",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
+        Text(modifier = Modifier.layoutId("title0").background(Color.White),
+            text = "a b title0 d e",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
+            style = MaterialTheme.typography.body1,
+        )
+        Text(modifier = Modifier.layoutId("title1").background(Color.White),
+            text = "a b c d e f g h j title1 p q r s t u v w x y z",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
+            style = MaterialTheme.typography.body1,
+        )
+        Text(modifier = Modifier.layoutId("title2").background(Color.White),
+            text = "a b c d e f g h title2 n o p q r s t u v w x y z",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
+            style = MaterialTheme.typography.body1,
+        )
+        Text(modifier = Modifier.layoutId("title3").background(Color.White),
+            text = "a b c d e f g h j k title3 q r s t u v w x y z",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
+            style = MaterialTheme.typography.body1,
+        )
+        Text(modifier = Modifier.layoutId("title4").background(Color.White),
+            text = "a b c d e f g h j k l title4 m n o p q r s t u v w x y z",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
+            style = MaterialTheme.typography.body1,
+        )
+        Text(modifier = Modifier.layoutId("title5").background(Color.White),
+            text = "a b c d e f g h j k l title5 m n o p q r s t u v w x y z",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
             style = MaterialTheme.typography.body1,
         )
     }
@@ -154,19 +240,50 @@ public fun VTest02d() {
         ConstraintSet("""
             {
                 Header: { exportAs: 'test4'},
-             
+                 lside: { type: 'vGuideline', percent: 0.33 },
+                rside: { type: 'vGuideline', percent: 0.66 },
                 button4: {
-                  width: 'wrap',
-                  centerHorizontally:  'parent',
-                  centerVertically: 'parent',
-              
+                  width: { value: 'spread'  },
+                  start: ['lside', 'start' ],
+                  end: ['rside', 'end' ],
+                  bottom: ['parent', 'bottom',20],
+
                 },
-                title: {
-                   width: '200',
+                title0: {
+                  width:  { value: 'spread', min: 200},
                   centerHorizontally: 'button4',
-                  top: ['button4', 'bottom',32],
-                
-                }
+                  top: ['parent', 'top', 20],
+                  
+                },
+                title1: {
+                  width:  { value: 'spread',max: 100  },
+                  centerHorizontally: 'button4',
+                  top: ['title0', 'bottom', 16],
+             
+                },
+                 title2: {
+                  width:  { value: 'spread',min: 'wrap' }, 
+                  centerHorizontally: 'button4',
+                  top: ['title1', 'bottom', 16],
+                 
+                },
+                 title3: {
+                  width: { value: 'spread',min: 'wrap'  }  ,
+                  centerHorizontally: 'button4',
+                  top: ['title2', 'bottom', 16],
+                 
+                },
+                 title4: {
+                  width: { value: 'spread',min: 'I'  }  ,
+                  centerHorizontally: 'button4',
+                  top: ['title3', 'bottom', 16],
+                 
+                },
+                 title5: {
+                  width: { value: 'spread' }  ,
+                  centerHorizontally: 'button4',
+                  top: ['title4', 'bottom', 16],
+                 }
             }
         """),
         modifier = Modifier.fillMaxSize()
@@ -177,8 +294,28 @@ public fun VTest02d() {
         ) {
             Text(text = stringResource(id = R.string.log_in))
         }
-        Text(modifier = Modifier.layoutId("title").background(Color.Red),
-            text = "ABC dsa sdfs sdf adfas asdas asdad asdas",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
+        Text(modifier = Modifier.layoutId("title0").background(Color.Red),
+            text = "a b c d e f g h j k l m n o p q r s t u v w x y z",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
+            style = MaterialTheme.typography.body1,
+        )
+        Text(modifier = Modifier.layoutId("title1").background(Color.Red),
+            text = "a b c d e f g h j k l m n o p q r s t u v w x y z",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
+            style = MaterialTheme.typography.body1,
+        )
+        Text(modifier = Modifier.layoutId("title2").background(Color.Red),
+            text = "a b c d e f g h j k l m n o p q r s t u v w x y z",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
+            style = MaterialTheme.typography.body1,
+        )
+        Text(modifier = Modifier.layoutId("title3").background(Color.Red),
+            text = "a b c d e f g h j k l m n o p q r s t u v w x y z",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
+            style = MaterialTheme.typography.body1,
+        )
+        Text(modifier = Modifier.layoutId("title4").background(Color.White),
+            text = "a b c d e f g h j k l preferWrap m n o p q r s t u v w x y z",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
+            style = MaterialTheme.typography.body1,
+        )
+        Text(modifier = Modifier.layoutId("title5").background(Color.White),
+            text = "a b c d e f g h j k l preferWrap m n o p q r s t u v w x y z",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
             style = MaterialTheme.typography.body1,
         )
     }

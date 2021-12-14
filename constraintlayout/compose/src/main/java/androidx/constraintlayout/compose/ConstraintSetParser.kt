@@ -18,7 +18,14 @@ package androidx.constraintlayout.compose
 import androidx.compose.ui.unit.Dp
 import androidx.constraintlayout.core.motion.utils.TypedBundle
 import androidx.constraintlayout.core.motion.utils.TypedValues
-import androidx.constraintlayout.core.parser.*
+import androidx.constraintlayout.core.parser.CLArray
+import androidx.constraintlayout.core.parser.CLElement
+import androidx.constraintlayout.core.parser.CLKey
+import androidx.constraintlayout.core.parser.CLNumber
+import androidx.constraintlayout.core.parser.CLObject
+import androidx.constraintlayout.core.parser.CLParser
+import androidx.constraintlayout.core.parser.CLParsingException
+import androidx.constraintlayout.core.parser.CLString
 import androidx.constraintlayout.core.state.ConstraintReference
 import androidx.constraintlayout.core.state.Dimension
 import androidx.constraintlayout.core.state.Dimension.*
@@ -1173,13 +1180,24 @@ private fun parseDimension(
         if (mode != null) {
             dimension = parseDimensionMode(mode)
         }
-        val min = dimensionElement.getFloatOrNaN("min")
-        if (!min.isNaN()) {
-            dimension.min(state.convertDimension(Dp(min)))
+
+        val minEl = dimensionElement.getOrNull("min")
+        if (minEl != null) {
+            if (minEl is CLNumber) {
+                val min = minEl.getFloat()
+                dimension.min(state.convertDimension(Dp(min)))
+            } else if (minEl is CLString) {
+                dimension.min(WRAP_DIMENSION)
+            }
         }
-        val max = dimensionElement.getFloatOrNaN("max")
-        if (!max.isNaN()) {
-            dimension.max(state.convertDimension(Dp(max)))
+        val maxEl = dimensionElement.getOrNull("max")
+        if (maxEl != null) {
+            if (maxEl is CLNumber) {
+                val max = maxEl.getFloat()
+                dimension.max(state.convertDimension(Dp(max)))
+            } else if (maxEl is CLString) {
+                dimension.max(WRAP_DIMENSION)
+            }
         }
     }
     return dimension

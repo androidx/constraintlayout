@@ -6,13 +6,11 @@
       top: 786,
       right: 642,
       bottom: 885,
-      visibility: 438,
+      visibility: 0,
       AnchorLEFT: ['0', 'LEFT', '0'],
       AnchorTOP: ['0', 'TOP', '0'],
       AnchorRIGHT: ['0', 'RIGHT', '0'],
-      AnchorBOTTOM: ['0', 'BOTTOM', '0'],
-      phone_orientation: 0,
-      phone_orientation: 0
+      AnchorBOTTOM: ['0', 'BOTTOM', '0']
     }
   },
   title: {
@@ -21,12 +19,10 @@
       top: -373,
       right: 642,
       bottom: -54,
-      visibility: 438,
+      visibility: 0,
       AnchorLEFT: ['button5', 'LEFT', '0'],
       AnchorRIGHT: ['button5', 'RIGHT', '0'],
-      AnchorBOTTOM: ['parent5', 'BOTTOM', '55'],
-      phone_orientation: 0,
-      phone_orientation: 0
+      AnchorBOTTOM: ['parent5', 'BOTTOM', '55']
     }
   }
 }
