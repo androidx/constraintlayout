@@ -43,7 +43,7 @@ class VerifyActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
     private var composeNum = 0
 
-    private var MAX = 7
+    private var MAX = 8
     private val TAG = "VerifyActivity"
     var map = HashMap<Int, String>();
     val linkServer = LinkServer()
@@ -96,6 +96,7 @@ class VerifyActivity : AppCompatActivity() {
                 5 -> VTest02e()
                 6 -> VTest02f()
                 7 -> VTest02g()
+                8 -> VTest02h()
 
                 else -> {
                     composeNum = 0;
