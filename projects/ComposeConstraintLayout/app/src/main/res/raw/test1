@@ -10,10 +10,10 @@
   },
   title: {
     interpolated: {
-      left: 128,
-      top: 780,
-      right: 953,
-      bottom: 891,
+      left: 86,
+      top: 806,
+      right: 995,
+      bottom: 865,
       visibility: 0,
       AnchorLEFT: ['guid1', 'LEFT', '0'],
       AnchorTOP: ['0', 'TOP', '0'],
@@ -24,9 +24,9 @@
   button1: {
     interpolated: {
       left: 220,
-      top: 935,
+      top: 909,
       right: 860,
-      bottom: 1034,
+      bottom: 1008,
       visibility: 0,
       AnchorLEFT: ['guid1', 'LEFT', '0'],
       AnchorTOP: ['title', 'BOTTOM', '44'],

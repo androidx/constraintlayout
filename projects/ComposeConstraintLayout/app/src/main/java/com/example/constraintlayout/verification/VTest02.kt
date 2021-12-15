@@ -331,14 +331,29 @@ public fun VTest02e() {
              
                 button5: {
                   width: 'wrap',
-                  centerHorizontally:  'parent',
+                  right: ['title','right'],
                   centerVertically: 'parent',
               
                 },
+                  button5a: {
+                  width: 'wrap',
+                  left: ['title','left'],
+                  bottom: ['button5', 'top',20, 100],
+                },
+               button5b: {
+                  width: 'wrap',
+                  start: ['title','start'],
+                  bottom: ['button5a', 'top',20, 100],
+                },
+                button5c: {
+                  width: 'wrap',
+                  end: ['title','end'],
+                  bottom: ['button5b', 'top',20, 100],
+                },
                 title: {
-                   width: 'spread',
-                  centerHorizontally: 'button5',
-                  bottom: ['parent5', 'bottom',20],
+                   width: 'wrap',
+                  centerHorizontally: 'parent',
+                  top: ['button5', 'bottom',20, 100],
                 
                 }
             }
@@ -349,7 +364,25 @@ public fun VTest02e() {
             modifier = Modifier.layoutId("button5"),
             onClick = {},
         ) {
-            Text(text = stringResource(id = R.string.log_in))
+            Text(text = "right")
+        }
+        Button(
+            modifier = Modifier.layoutId("button5a"),
+            onClick = {},
+        ) {
+            Text(text = "left")
+        }
+        Button(
+            modifier = Modifier.layoutId("button5b"),
+            onClick = {},
+        ) {
+            Text(text = "start")
+        }
+        Button(
+            modifier = Modifier.layoutId("button5c"),
+            onClick = {},
+        ) {
+            Text(text = "end")
         }
         Text(modifier = Modifier.layoutId("title").background(Color.Red),
             text = "ABC dsa sdfs sdf adfas asdas asdad asdas",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
