@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
@@ -388,5 +389,95 @@ public fun VTest02e() {
             text = "ABC dsa sdfs sdf adfas asdas asdad asdas",// DEF GHI JKL MNO PQR STU VWX YZ ABC DEF",
             style = MaterialTheme.typography.body1,
         )
+
+    }
+}
+
+@Preview(group = "new")
+@Composable
+public fun VTest02f() {
+    ConstraintLayout(
+        ConstraintSet("""
+            {
+                Header: { exportAs: 'test6'},
+             
+                button5: {
+                  width: 'wrap',
+                  pivotX: 0,
+                  pivotY: 0,
+                  rotationZ: 20,
+                  circular: ['title',0,120],
+                },
+                  button5a: {
+                  width: 'wrap',
+                  rotationZ: 90,
+                    circular: ['title',90,120],
+                },
+               button5b: {
+                  width: 'wrap',
+                  rotationX: 30,
+                    circular: ['title',180,120],
+                },
+                button5c: {
+                  width: 'wrap',
+                  rotationY: 30,
+                      scaleY: 1.4,
+                    circular: ['title',270,120],
+                },
+                title: {
+                   width: 'wrap',
+                   translationZ: 13,
+                   scaleX: 1.4,
+                  centerHorizontally: 'parent',
+                                    centerVertically 'parent',
+
+                
+                },
+              base1: {
+                   width: 'wrap',
+            
+           right: ['title','right'],
+           baseline: ['title','top',30],
+                 
+                
+                }
+            }
+        """),
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Button(
+            modifier = Modifier.layoutId("button5"),
+            onClick = {},
+        ) {
+            Text(text = "12")
+        }
+        Button(
+            modifier = Modifier.layoutId("button5a"),
+            onClick = {},
+        ) {
+            Text(text = "3")
+        }
+        Button(
+            modifier = Modifier.layoutId("button5b"),
+            onClick = {},
+        ) {
+            Text(text = "6")
+        }
+        Button(
+            modifier = Modifier.layoutId("button5c"),
+            onClick = {},
+        ) {
+            Text(text = "9")
+        }
+        Text(modifier = Modifier.layoutId("title").background(Color.Red),
+            text = "clock",
+            style = MaterialTheme.typography.body1,
+        )
+        Button(
+            modifier = Modifier.layoutId("base1"),
+            onClick = {},
+        ) {
+            Text(text = "baseline")
+        }
     }
 }

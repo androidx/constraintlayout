@@ -43,7 +43,7 @@ class VerifyActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
     private var composeNum = 0
 
-    private var MAX = 5
+    private var MAX = 6
     private val TAG = "VerifyActivity"
     var map = HashMap<Int, String>();
     val linkServer = LinkServer()
@@ -92,12 +92,13 @@ class VerifyActivity : AppCompatActivity() {
                 1 -> VTest02a()
                 2 -> VTest02b()
                 3 -> VTest02c()
-                4 -> VTest02d();
+                4 -> VTest02d()
                 5 -> VTest02e()
+                6 -> VTest02f()
 
                 else -> {
                     composeNum = 0;
-                    Log.v(TAG, Debug.getLoc() + " reset " +composeNum)
+                    Log.v(TAG, Debug.getLoc() + " reset " + composeNum)
                     End()
                 }
             }
@@ -176,12 +177,12 @@ class VerifyActivity : AppCompatActivity() {
         for (s in layouts.keys) {
 
             var str = readFromRaw(resources.getIdentifier(s, "raw", packageName))
-            str =  CLParser.parse(str).toFormattedJSON()
+            str = CLParser.parse(str).toFormattedJSON()
             var s2 = layouts[s];
-            s2 =  CLParser.parse(s2).toFormattedJSON()
+            s2 = CLParser.parse(s2).toFormattedJSON()
             if (s2 != null) {
                 if (multiLineComp(str, s2)) {
-                   Log.v(TAG, Debug.getLoc() + "  $s fail !!!!!!!!!!!!!")
+                    Log.v(TAG, Debug.getLoc() + "  $s fail !!!!!!!!!!!!!")
                     Log.v(TAG, Debug.getLoc() + "\n" + s2);
                 } else {
                     Log.v(TAG, Debug.getLoc() + " $s  pass")
@@ -202,26 +203,26 @@ class VerifyActivity : AppCompatActivity() {
         var i2 = 0;
         var dif = 0
 
-            while (i1 < l1.size && i2 < l2.size) {
-                if (l1[i1].contains("phone_orientation")) {
-                    i1++;
-                    continue
-                }
-                if (l2[i2].contains("phone_orientation")) {
-                    i2++;
-                    continue
-                }
-            if ( l1[i1] != l2[i2]) {
+        while (i1 < l1.size && i2 < l2.size) {
+            if (l1[i1].contains("phone_orientation")) {
+                i1++;
+                continue
+            }
+            if (l2[i2].contains("phone_orientation")) {
+                i2++;
+                continue
+            }
+            if (l1[i1] != l2[i2]) {
 
                 if (l2.size <= i2) {
                     Log.v(TAG, " " + i1 + ": \"" + l1[i1] + "\" \"")
                 } else {
-                    Log.v(TAG, " " + i1 + ": \"" + l1[i1] + "\"  -------   \"" +l2[i2]+"\"")
+                    Log.v(TAG, " " + i1 + ": \"" + l1[i1] + "\"  -------   \"" + l2[i2] + "\"")
                 }
                 dif++
             }
-                i1++
-                i2++
+            i1++
+            i2++
         }
         if (dif > 0) {
             Log.v(TAG, "======== $dif lines")

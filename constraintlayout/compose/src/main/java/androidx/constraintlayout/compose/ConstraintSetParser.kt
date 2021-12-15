@@ -1124,6 +1124,16 @@ private fun parseConstraint(
                         state.baselineNeededFor(targetReference.key)
                         reference.baselineToBaseline(targetReference)
                     }
+                    "top" -> {
+                        state.baselineNeededFor(reference.key)
+                        state.baselineNeededFor(targetReference.key)
+                        reference.baselineToTop(targetReference)
+                    }
+                    "bottom" -> {
+                        state.baselineNeededFor(reference.key)
+                        state.baselineNeededFor(targetReference.key)
+                        reference.baselineToBottom(targetReference)
+                    }
                 }
             }
         }
