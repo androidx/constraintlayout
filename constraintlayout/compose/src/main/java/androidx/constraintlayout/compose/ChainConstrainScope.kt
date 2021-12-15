@@ -32,22 +32,22 @@ class HorizontalChainScope internal constructor(internal val id: Any) {
     val parent = ConstrainedLayoutReference(SolverState.PARENT)
 
     /**
-     * The start anchor of the layout - can be constrained using [VerticalAnchorable.linkTo].
+     * The start anchor of the chain - can be constrained using [VerticalAnchorable.linkTo].
      */
     val start: VerticalAnchorable = ChainVerticalAnchorable(tasks, id, -2)
 
     /**
-     * The left anchor of the layout - can be constrained using [VerticalAnchorable.linkTo].
+     * The left anchor of the chain - can be constrained using [VerticalAnchorable.linkTo].
      */
     val absoluteLeft: VerticalAnchorable = ChainVerticalAnchorable(tasks, id, 0)
 
     /**
-     * The end anchor of the layout - can be constrained using [VerticalAnchorable.linkTo].
+     * The end anchor of the chain - can be constrained using [VerticalAnchorable.linkTo].
      */
     val end: VerticalAnchorable = ChainVerticalAnchorable(tasks, id, -1)
 
     /**
-     * The right anchor of the layout - can be constrained using [VerticalAnchorable.linkTo].
+     * The right anchor of the chain - can be constrained using [VerticalAnchorable.linkTo].
      */
     val absoluteRight: VerticalAnchorable = ChainVerticalAnchorable(tasks, id, 1)
 }
@@ -62,8 +62,14 @@ class VerticalChainScope internal constructor(internal val id: Any) {
      */
     val parent = ConstrainedLayoutReference(SolverState.PARENT)
 
+    /**
+     * The top anchor of the chain - can be constrained using [VerticalAnchorable.linkTo].
+     */
     val top: HorizontalAnchorable = ChainHorizontalAnchorable(tasks, id, 0)
 
+    /**
+     * The bottom anchor of the chain - can be constrained using [VerticalAnchorable.linkTo].
+     */
     val bottom: HorizontalAnchorable = ChainHorizontalAnchorable(tasks, id, 1)
 }
 

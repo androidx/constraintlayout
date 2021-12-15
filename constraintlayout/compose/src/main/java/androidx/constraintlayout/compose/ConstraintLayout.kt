@@ -931,12 +931,6 @@ class State(val density: Density) : SolverState() {
         return constraintWidget in baselineNeededWidgets
     }
 
-    internal fun updateHelpers() {
-        mHelperReferences.values.forEach {
-            it.apply()
-        }
-    }
-
     internal fun getKeyId(helperWidget: HelperWidget): Any? {
         return mHelperReferences.entries.firstOrNull { it.value.helperWidget == helperWidget }?.key
     }

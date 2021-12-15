@@ -61,20 +61,20 @@ interface BaselineAnchorable {
 
 
 internal abstract class BaseVerticalAnchorable(
-private val tasks: MutableList<(State) -> Unit>,
-private val index: Int
-): VerticalAnchorable {
+    private val tasks: MutableList<(State) -> Unit>,
+    private val index: Int
+) : VerticalAnchorable {
     abstract fun getConstraintReference(state: State): ConstraintReference
 
     final override fun linkTo(anchor: ConstraintLayoutBaseScope.VerticalAnchor, margin: Dp) {
         tasks.add { state ->
-                val layoutDirection = state.layoutDirection
-                val index1 =
-                    AnchorFunctions.verticalAnchorIndexToFunctionIndex(index, layoutDirection)
-                val index2 = AnchorFunctions.verticalAnchorIndexToFunctionIndex(
-                    anchor.index,
-                    layoutDirection
-                )
+            val layoutDirection = state.layoutDirection
+            val index1 =
+                AnchorFunctions.verticalAnchorIndexToFunctionIndex(index, layoutDirection)
+            val index2 = AnchorFunctions.verticalAnchorIndexToFunctionIndex(
+                anchor.index,
+                layoutDirection
+            )
             with(getConstraintReference(state)) {
                 verticalAnchorFunctions[index1][index2]
                     .invoke(this, anchor.id, state.layoutDirection)
@@ -87,7 +87,7 @@ private val index: Int
 internal abstract class BaseHorizontalAnchorable(
     private val tasks: MutableList<(State) -> Unit>,
     private val index: Int
-): HorizontalAnchorable {
+) : HorizontalAnchorable {
     abstract fun getConstraintReference(state: State): ConstraintReference
 
     final override fun linkTo(anchor: ConstraintLayoutBaseScope.HorizontalAnchor, margin: Dp) {
