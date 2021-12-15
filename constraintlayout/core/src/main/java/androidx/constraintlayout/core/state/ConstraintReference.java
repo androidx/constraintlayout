@@ -577,6 +577,10 @@ public class ConstraintReference implements Reference {
         return margin(mState.convertDimension(marginValue));
     }
 
+    public ConstraintReference marginGone(Object marginGoneValue) {
+        return marginGone(mState.convertDimension(marginGoneValue));
+    }
+
     public ConstraintReference margin(int value) {
         if (mLast != null) {
             switch (mLast) {

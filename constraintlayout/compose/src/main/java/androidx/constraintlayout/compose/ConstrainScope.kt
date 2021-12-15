@@ -274,16 +274,21 @@ class ConstrainScope internal constructor(internal val id: Any) {
     /**
      * Adds both start and end links towards other [ConstraintLayoutBaseScope.VerticalAnchor]s.
      */
-    // TODO(popam, b/158069248): add parameter for gone margin
     fun linkTo(
         start: ConstraintLayoutBaseScope.VerticalAnchor,
         end: ConstraintLayoutBaseScope.VerticalAnchor,
         startMargin: Dp = 0.dp,
         endMargin: Dp = 0.dp,
+        startGoneMargin: Dp = 0.dp,
+        endGoneMargin: Dp = 0.dp,
         @FloatRange(from = 0.0, to = 1.0) bias: Float = 0.5f
     ) {
-        this@ConstrainScope.start.linkTo(start, startMargin)
-        this@ConstrainScope.end.linkTo(end, endMargin)
+        this@ConstrainScope.start.linkTo(
+            anchor = start,
+            margin = startMargin,
+            goneMargin = startGoneMargin
+        )
+        this@ConstrainScope.end.linkTo(anchor = end, margin = endMargin, goneMargin = endGoneMargin)
         tasks.add { state ->
             val resolvedBias = if (state.layoutDirection == LayoutDirection.Rtl) 1 - bias else bias
             state.constraints(id).horizontalBias(resolvedBias)
@@ -293,16 +298,21 @@ class ConstrainScope internal constructor(internal val id: Any) {
     /**
      * Adds both top and bottom links towards other [ConstraintLayoutBaseScope.HorizontalAnchor]s.
      */
-    // TODO(popam, b/158069248): add parameter for gone margin
     fun linkTo(
         top: ConstraintLayoutBaseScope.HorizontalAnchor,
         bottom: ConstraintLayoutBaseScope.HorizontalAnchor,
         topMargin: Dp = 0.dp,
         bottomMargin: Dp = 0.dp,
+        topGoneMargin: Dp = 0.dp,
+        bottomGoneMargin: Dp = 0.dp,
         @FloatRange(from = 0.0, to = 1.0) bias: Float = 0.5f
     ) {
-        this@ConstrainScope.top.linkTo(top, topMargin)
-        this@ConstrainScope.bottom.linkTo(bottom, bottomMargin)
+        this@ConstrainScope.top.linkTo(anchor = top, margin = topMargin, goneMargin = topGoneMargin)
+        this@ConstrainScope.bottom.linkTo(
+            anchor = bottom,
+            margin = bottomMargin,
+            goneMargin = bottomGoneMargin
+        )
         tasks.add { state ->
             state.constraints(id).verticalBias(bias)
         }
@@ -312,7 +322,6 @@ class ConstrainScope internal constructor(internal val id: Any) {
      * Adds all start, top, end, bottom links towards
      * other [ConstraintLayoutBaseScope.HorizontalAnchor]s.
      */
-    // TODO(popam, b/158069248): add parameter for gone margin
     fun linkTo(
         start: ConstraintLayoutBaseScope.VerticalAnchor,
         top: ConstraintLayoutBaseScope.HorizontalAnchor,
@@ -322,11 +331,31 @@ class ConstrainScope internal constructor(internal val id: Any) {
         topMargin: Dp = 0.dp,
         endMargin: Dp = 0.dp,
         bottomMargin: Dp = 0.dp,
+        startGoneMargin: Dp = 0.dp,
+        topGoneMargin: Dp = 0.dp,
+        endGoneMargin: Dp = 0.dp,
+        bottomGoneMargin: Dp = 0.dp,
         @FloatRange(from = 0.0, to = 1.0) horizontalBias: Float = 0.5f,
         @FloatRange(from = 0.0, to = 1.0) verticalBias: Float = 0.5f
     ) {
-        linkTo(start, end, startMargin, endMargin, horizontalBias)
-        linkTo(top, bottom, topMargin, bottomMargin, verticalBias)
+        linkTo(
+            start = start,
+            end = end,
+            startMargin = startMargin,
+            endMargin = endMargin,
+            startGoneMargin = startGoneMargin,
+            endGoneMargin = endGoneMargin,
+            bias = horizontalBias
+        )
+        linkTo(
+            top = top,
+            bottom = bottom,
+            topMargin = topMargin,
+            bottomMargin = bottomMargin,
+            topGoneMargin = topGoneMargin,
+            bottomGoneMargin = bottomGoneMargin,
+            bias = verticalBias
+        )
     }
 
     /**
@@ -346,7 +375,7 @@ class ConstrainScope internal constructor(internal val id: Any) {
         other: ConstrainedLayoutReference,
         @FloatRange(from = 0.0f.toDouble(), to = 1.0f.toDouble()) bias: Float = 0.5f
     ) {
-        linkTo(other.start, other.end, bias = bias)
+        linkTo(start = other.start, end = other.end, bias = bias)
     }
 
     /**
@@ -390,6 +419,8 @@ class ConstrainScope internal constructor(internal val id: Any) {
 
     /**
      * Clear the constraints on the horizontal axis (left, right, start, end).
+     *
+     * Useful when extending another [ConstraintSet] with unwanted constraints on this axis.
      */
     fun clearHorizontal() {
         tasks.add { state ->
@@ -399,6 +430,8 @@ class ConstrainScope internal constructor(internal val id: Any) {
 
     /**
      * Clear the constraints on the vertical axis (top, bottom, baseline).
+     *
+     * Useful when extending another [ConstraintSet] with unwanted constraints on this axis.
      */
     fun clearVertical() {
         tasks.add { state ->
@@ -408,10 +441,55 @@ class ConstrainScope internal constructor(internal val id: Any) {
 
     /**
      * Clear all constraints (vertical, horizontal, circular).
+     *
+     * Useful when extending another [ConstraintSet] with unwanted constraints applied.
      */
     fun clearConstraints() {
         tasks.add { state ->
             state.constraints(id).clear()
+        }
+    }
+
+    /**
+     * Resets the [width] and [height] to their default values.
+     *
+     * Useful when extending another [ConstraintSet] with unwanted dimensions.
+     */
+    fun resetDimensions() {
+        tasks.add { state ->
+            val defaultDimension =
+                (Dimension.wrapContent as DimensionDescription).toSolverDimension(state)
+            state.constraints(id)
+                .width(defaultDimension)
+                .height(defaultDimension)
+        }
+    }
+
+    /**
+     * Reset all render-time transforms of the content to their default values.
+     *
+     * Does not modify the [visibility] property.
+     *
+     * Useful when extending another [ConstraintSet] with unwanted transforms applied.
+     */
+    fun resetTransforms() {
+        tasks.add { state ->
+            state.constraints(id)
+                .alpha(Float.NaN)
+
+                .scaleX(Float.NaN)
+                .scaleY(Float.NaN)
+
+                .rotationX(Float.NaN)
+                .rotationY(Float.NaN)
+                .rotationZ(Float.NaN)
+
+                .translationX(Float.NaN)
+                .translationY(Float.NaN)
+                .translationZ(Float.NaN)
+
+                .pivotX(Float.NaN)
+                .pivotY(Float.NaN)
         }
     }
 }
@@ -424,7 +502,7 @@ private class ConstraintVerticalAnchorable constructor(
     val id: Any,
     index: Int,
     tasks: MutableList<(State) -> Unit>
-): BaseVerticalAnchorable(tasks, index) {
+) : BaseVerticalAnchorable(tasks, index) {
     override fun getConstraintReference(state: State): ConstraintReference =
         state.constraints(id)
 }
@@ -437,7 +515,7 @@ private class ConstraintHorizontalAnchorable constructor(
     val id: Any,
     index: Int,
     tasks: MutableList<(State) -> Unit>
-): BaseHorizontalAnchorable(tasks, index) {
+) : BaseHorizontalAnchorable(tasks, index) {
     override fun getConstraintReference(state: State): ConstraintReference =
         state.constraints(id)
 }
@@ -449,19 +527,22 @@ private class ConstraintHorizontalAnchorable constructor(
 private class ConstraintBaselineAnchorable constructor(
     val id: Any,
     val tasks: MutableList<(State) -> Unit>
-): BaselineAnchorable {
+) : BaselineAnchorable {
     /**
      * Adds a link towards a [ConstraintLayoutBaseScope.BaselineAnchor].
      */
-    // TODO(popam, b/158069248): add parameter for gone margin
-    override fun linkTo(anchor: ConstraintLayoutBaseScope.BaselineAnchor, margin: Dp) {
+    override fun linkTo(
+        anchor: ConstraintLayoutBaseScope.BaselineAnchor,
+        margin: Dp,
+        goneMargin: Dp
+    ) {
         tasks.add { state ->
             (state as? State)?.let {
                 it.baselineNeededFor(id)
                 it.baselineNeededFor(anchor.id)
             }
             with(state.constraints(id)) {
-                baselineAnchorFunction.invoke(this, anchor.id).margin(margin)
+                baselineAnchorFunction.invoke(this, anchor.id).margin(margin).marginGone(goneMargin)
             }
         }
     }

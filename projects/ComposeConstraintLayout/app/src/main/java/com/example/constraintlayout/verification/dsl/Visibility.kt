@@ -16,22 +16,18 @@
 
 @file:JvmName("DslVerificationKt")
 @file:JvmMultifileClass
+
 package com.example.constraintlayout.verification.dsl
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Visibility
+import com.example.constraintlayout.verification.dsl.DslVerification.TwoBoxConstraintSet
+import com.example.constraintlayout.verification.dsl.DslVerification.TwoBoxLayout
 
 @Preview
 @Composable
@@ -44,17 +40,31 @@ fun Test() {
             visibility = if (hide) Visibility.Gone else Visibility.Visible
         }
     }
-    Column {
-        ConstraintLayout(modifier = Modifier
-            .fillMaxWidth()
-            .weight(1f, fill = true), constraintSet = constraintSet) {
-            Box(modifier = Modifier
-                .background(Color.Red)
-                .layoutId("box1"))
-            Box(modifier = Modifier
-                .background(Color.Blue)
-                .layoutId("box2"))
+
+    TwoBoxLayout(constraintSet) {
+        Button(onClick = { hide = !hide }) {
+            Text(text = "Run")
         }
+    }
+}
+
+@Preview
+@Composable
+fun Test15() {
+    var hide by remember { mutableStateOf(true) }
+    val constraintSet = ConstraintSet(TwoBoxConstraintSet) {
+        val box1 = createRefFor("box1")
+        val box2 = createRefFor("box2")
+        constrain(box1) {
+            alpha = 0.5f
+            visibility = if (hide) Visibility.Gone else Visibility.Visible
+        }
+        constrain(box2) {
+            // Due to gone margin, the box should be off-center when box1 is Gone
+            top.linkTo(box1.bottom, margin = 8.dp, goneMargin = 100.dp)
+        }
+    }
+    TwoBoxLayout(constraintSet) {
         Button(onClick = { hide = !hide }) {
             Text(text = "Run")
         }
