@@ -1,0 +1,95 @@
+{
+  root: { interpolated: { left: 0, top: 0, right: 1080, bottom: 1670 } },
+  vGuide1: {
+    type: 'vGuideline',
+    interpolated: { left: 220, top: 0, right: 220, bottom: 1670 }
+  },
+  vGuide12: {
+    type: 'vGuideline',
+    interpolated: { left: 860, top: 0, right: 860, bottom: 1670 }
+  },
+  hGuide12: {
+    type: 'hGuideline',
+    interpolated: { left: 0, top: 1450, right: 1080, bottom: 1450 }
+  },
+  title: {
+    interpolated: {
+      left: 500,
+      top: 795,
+      right: 581,
+      bottom: 876,
+      visibility: 0,
+      AnchorLEFT: ['0', 'LEFT', '0'],
+      AnchorTOP: ['0', 'TOP', '0'],
+      AnchorRIGHT: ['0', 'RIGHT', '0'],
+      AnchorBOTTOM: ['0', 'BOTTOM', '0']
+    }
+  },
+  hGuide1: {
+    type: 'hGuideline',
+    interpolated: { left: 0, top: 220, right: 1080, bottom: 220 }
+  },
+  base1: {
+    interpolated: {
+      left: 396,
+      top: 69,
+      right: 581,
+      bottom: 173,
+      visibility: 0,
+      AnchorTOP: ['button5', 'BOTTOM', '0'],
+      AnchorRIGHT: ['title', 'RIGHT', '0'],
+      AnchorBOTTOM: ['title', 'TOP', '0']
+    }
+  },
+  id2: {
+    interpolated: {
+      left: 81,
+      top: 1256,
+      right: 356,
+      bottom: 1531,
+      visibility: 0,
+      AnchorLEFT: ['0', 'LEFT', '0'],
+      AnchorTOP: ['0', 'TOP', '0'],
+      AnchorRIGHT: ['0', 'RIGHT', '0'],
+      AnchorBOTTOM: ['0', 'BOTTOM', '0']
+    }
+  },
+  id1: {
+    interpolated: {
+      left: 81,
+      top: 63,
+      right: 356,
+      bottom: 217,
+      visibility: 0,
+      AnchorLEFT: ['0', 'LEFT', '0'],
+      AnchorTOP: ['0', 'TOP', '63'],
+      AnchorRIGHT: ['0', 'RIGHT', '0']
+    }
+  },
+  id4: {
+    interpolated: {
+      left: 668,
+      top: 1199,
+      right: 1006,
+      bottom: 1537,
+      visibility: 0,
+      AnchorLEFT: ['0', 'LEFT', '0'],
+      AnchorTOP: ['0', 'TOP', '0'],
+      AnchorRIGHT: ['0', 'RIGHT', '0'],
+      AnchorBOTTOM: ['0', 'BOTTOM', '0']
+    }
+  },
+  id3: {
+    interpolated: {
+      left: 814,
+      top: 149,
+      right: 990,
+      bottom: 325,
+      visibility: 0,
+      AnchorLEFT: ['0', 'LEFT', '0'],
+      AnchorTOP: ['0', 'TOP', '0'],
+      AnchorRIGHT: ['0', 'RIGHT', '0'],
+      AnchorBOTTOM: ['0', 'BOTTOM', '0']
+    }
+  }
+}

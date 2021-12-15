@@ -667,3 +667,111 @@ public fun VTest02h() {
         }
     }
 }
+
+
+@Preview(group = "new")
+@Composable
+public fun VTest02i() {
+    ConstraintLayout(
+        ConstraintSet("""
+            {
+                Header: { exportAs: 'test9'},
+                vGuide1: { type: 'vGuideline', start: 80 },
+                vGuide12: { type: 'vGuideline', end: 80 },
+                hGuide1: { type: 'hGuideline', start: 80 },
+                hGuide12: { type: 'hGuideline', end: 80 },
+                id1: {
+                  width: 100,
+                  height: 'spread',
+                   centerHorizontally: 'parent',
+                    top: ['parent','top',23],
+                    aspect: '16:9',
+                   hBias: 0.1,
+                   vBias: 0.1,
+                },
+                  id2: {
+                     width: 100,
+                  height: 'spread',
+                   centerHorizontally: 'parent',
+                   centerVertically: 'parent',
+                    aspect: '1:1',
+                   hBias: 0.1,
+                   vBias: 0.9,
+                },
+               id3: {
+                  width: 'wrap',
+                  height: 'spread',
+                   centerHorizontally: 'parent',
+                   centerVertically: 'parent',
+                   hBias: 0.9,
+                       aspect: '1:1',
+                   vBias: 0.1,
+                },
+                id4: {
+                  width: 'spread',
+                  height: 123,
+                   centerHorizontally: 'parent',
+                   centerVertically: 'parent',
+                   aspect: '1:1',
+                   hBias: 0.9,
+                   vBias: 0.9,
+                },
+                title: {
+                   width: 'wrap',
+                  height: 'spread',
+                   centerHorizontally: 'parent',
+                   centerVertically: 'parent',
+                    aspect: '1:1',
+                   hBias: 0.5,
+                   vBias: 0.5,
+                },
+              base1: {
+                   width: 'wrap',
+               height: 'spread',
+              aspect: '16:9',
+           right: ['title','right'],
+           top: ['button5','bottom',0],
+           bottom: ['title','top',0],
+                 vBias: 0.1,
+                
+                }
+            }
+        """),
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Button(
+            modifier = Modifier.layoutId("id1"),
+            onClick = {},
+        ) {
+            Text(text = "id1")
+        }
+        Button(
+            modifier = Modifier.layoutId("id2"),
+            onClick = {},
+        ) {
+            Text(text = "id2")
+        }
+        Button(
+            modifier = Modifier.layoutId("id3"),
+            onClick = {},
+        ) {
+            Text(text = "id3")
+        }
+        Button(
+            modifier = Modifier.layoutId("id4"),
+            onClick = {},
+        ) {
+            Text(text = "id4")
+        }
+        Text(modifier = Modifier.layoutId("title").background(Color.Red),
+            text = "title",
+            style = MaterialTheme.typography.body1,
+        )
+        Button(
+            modifier = Modifier.layoutId("base1"),
+            onClick = {},
+        ) {
+            Text(text = "ratio")
+        }
+    }
+}

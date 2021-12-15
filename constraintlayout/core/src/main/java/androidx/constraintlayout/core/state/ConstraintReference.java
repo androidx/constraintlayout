@@ -63,6 +63,7 @@ public class ConstraintReference implements Reference {
 
     float mHorizontalChainWeight = UNKNOWN;
     float mVerticalChainWeight = UNKNOWN;
+    private String mDimensionRatio = null;
 
     float mHorizontalBias = 0.5f;
     float mVerticalBias = 0.5f;
@@ -259,7 +260,9 @@ public class ConstraintReference implements Reference {
     public void setVerticalChainWeight(float weight) {
         mVerticalChainWeight = weight;
     }
-
+    public void setDimensionRatio(String ratio) {
+        mDimensionRatio = ratio;
+    }
     public ConstraintReference clearVertical() {
         top().clear();
         baseline().clear();
@@ -799,6 +802,7 @@ public class ConstraintReference implements Reference {
             mMarginEndGone = 0;
             mMarginTopGone = 0;
             mMarginBottomGone = 0;
+            mDimensionRatio = null;
         }
         return this;
     }
@@ -954,5 +958,6 @@ public class ConstraintReference implements Reference {
                 mConstraintWidget.frame.setCustomAttribute(key, TypedValues.Custom.TYPE_FLOAT, value);
             }
         }
+        mConstraintWidget.setDimensionRatio(mDimensionRatio);
     }
 }

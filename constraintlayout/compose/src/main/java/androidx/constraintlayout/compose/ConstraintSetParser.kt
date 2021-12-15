@@ -1027,6 +1027,9 @@ fun parseWidget(
                 val value = layoutVariables.get(element[constraintName])
                 reference.horizontalChainWeight = value
             }
+            "aspect"  -> {
+                reference.setDimensionRatio(element[constraintName].content())
+            }
             "custom" -> {
                 parseCustomProperties(element, reference, constraintName)
             }
