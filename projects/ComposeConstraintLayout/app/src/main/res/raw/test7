@@ -1,0 +1,80 @@
+{
+  root: { interpolated: { left: 0, top: 0, right: 1080, bottom: 1670 } },
+  button5: {
+    interpolated: {
+      left: 90,
+      top: 157,
+      right: 266,
+      bottom: 256,
+      visibility: 0,
+      AnchorLEFT: ['0', 'LEFT', '0'],
+      AnchorTOP: ['0', 'TOP', '0'],
+      AnchorRIGHT: ['0', 'RIGHT', '0'],
+      AnchorBOTTOM: ['0', 'BOTTOM', '0']
+    }
+  },
+  base1: {
+    interpolated: {
+      left: 336,
+      top: 301,
+      right: 596,
+      bottom: 400,
+      visibility: 0,
+      AnchorTOP: ['button5', 'BOTTOM', '0'],
+      AnchorRIGHT: ['title', 'RIGHT', '0'],
+      AnchorBOTTOM: ['title', 'TOP', '0']
+    }
+  },
+  button5c: {
+    interpolated: {
+      left: 814,
+      top: 1414,
+      right: 990,
+      bottom: 1513,
+      visibility: 0,
+      AnchorLEFT: ['0', 'LEFT', '0'],
+      AnchorTOP: ['0', 'TOP', '0'],
+      AnchorRIGHT: ['0', 'RIGHT', '0'],
+      AnchorBOTTOM: ['0', 'BOTTOM', '0']
+    }
+  },
+  button5b: {
+    interpolated: {
+      left: 814,
+      top: 157,
+      right: 990,
+      bottom: 256,
+      visibility: 0,
+      AnchorLEFT: ['0', 'LEFT', '0'],
+      AnchorTOP: ['0', 'TOP', '0'],
+      AnchorRIGHT: ['0', 'RIGHT', '0'],
+      AnchorBOTTOM: ['0', 'BOTTOM', '0']
+    }
+  },
+  button5a: {
+    interpolated: {
+      left: 90,
+      top: 1414,
+      right: 266,
+      bottom: 1513,
+      visibility: 0,
+      AnchorLEFT: ['0', 'LEFT', '0'],
+      AnchorTOP: ['0', 'TOP', '0'],
+      AnchorRIGHT: ['0', 'RIGHT', '0'],
+      AnchorBOTTOM: ['0', 'BOTTOM', '0']
+    }
+  },
+  title: {
+    interpolated: {
+      left: 484,
+      top: 806,
+      right: 596,
+      bottom: 865,
+      visibility: 0,
+      AnchorLEFT: ['0', 'LEFT', '0'],
+      AnchorTOP: ['0', 'TOP', '0'],
+      AnchorRIGHT: ['0', 'RIGHT', '0'],
+      AnchorBOTTOM: ['0', 'BOTTOM', '0']
+    }
+  }
+}
