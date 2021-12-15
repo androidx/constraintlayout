@@ -67,8 +67,8 @@ public class ConstraintReference implements Reference {
     float mHorizontalBias = 0.5f;
     float mVerticalBias = 0.5f;
 
-    int mMarginLeft = 0;
-    int mMarginRight = 0;
+    protected int mMarginLeft = 0;
+    protected int mMarginRight = 0;
     protected int mMarginStart = 0;
     protected int mMarginEnd = 0;
     int mMarginTop = 0;
@@ -99,10 +99,10 @@ public class ConstraintReference implements Reference {
 
     int mVisibility = ConstraintWidget.VISIBLE;
 
-    Object mLeftToLeft = null;
-    Object mLeftToRight = null;
-    Object mRightToLeft = null;
-    Object mRightToRight = null;
+    protected Object mLeftToLeft = null;
+    protected Object mLeftToRight = null;
+    protected Object mRightToLeft = null;
+    protected Object mRightToRight = null;
     protected Object mStartToStart = null;
     protected Object mStartToEnd = null;
     protected Object mEndToStart = null;

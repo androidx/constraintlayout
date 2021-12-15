@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.core.state.ConstraintReference
+import androidx.constraintlayout.core.state.helpers.HorizontalChainReference
 import androidx.constraintlayout.core.widgets.ConstraintWidget
 
 /**
@@ -354,11 +355,13 @@ abstract class ConstraintLayoutBaseScope {
     fun createHorizontalChain(
         vararg elements: ConstrainedLayoutReference,
         chainStyle: ChainStyle = ChainStyle.Spread
-    ) {
+    ): androidx.constraintlayout.compose.HorizontalChainReference {
+        val id = createHelperId()
         tasks.add { state ->
-            state.horizontalChain(*(elements.map { it.id }.toTypedArray()))
-                .also { it.style(chainStyle.style) }
-                .apply()
+            val helper = state.helper(id, androidx.constraintlayout.core.state.State.Helper.HORIZONTAL_CHAIN) as HorizontalChainReference
+            helper.add(*(elements.map { it.id }.toTypedArray()))
+            helper.style(chainStyle.style)
+            helper.apply()
             if (chainStyle.bias != null) {
                 state.constraints(elements[0].id).horizontalBias(chainStyle.bias)
             }
@@ -366,6 +369,7 @@ abstract class ConstraintLayoutBaseScope {
         updateHelpersHashCode(16)
         elements.forEach { updateHelpersHashCode(it.hashCode()) }
         updateHelpersHashCode(chainStyle.hashCode())
+        return androidx.constraintlayout.compose.HorizontalChainReference(id)
     }
 
     /**
@@ -436,6 +440,33 @@ class ConstrainedLayoutReference(val id: Any) {
      */
     @Stable
     val baseline = ConstraintLayoutBaseScope.BaselineAnchor(id)
+}
+
+@Stable
+class HorizontalChainReference internal constructor(internal val id: Any) {
+    /**
+     * The start anchor of this layout. Represents left in LTR layout direction, or right in RTL.
+     */
+    @Stable
+    val start = ConstraintLayoutBaseScope.VerticalAnchor(id, -2)
+
+    /**
+     * The left anchor of this layout.
+     */
+    @Stable
+    val absoluteLeft = ConstraintLayoutBaseScope.VerticalAnchor(id, 0)
+
+    /**
+     * The end anchor of this layout. Represents right in LTR layout direction, or left in RTL.
+     */
+    @Stable
+    val end = ConstraintLayoutBaseScope.VerticalAnchor(id, -1)
+
+    /**
+     * The right anchor of this layout.
+     */
+    @Stable
+    val absoluteRight = ConstraintLayoutBaseScope.VerticalAnchor(id, 1)
 }
 
 /**
@@ -530,37 +561,37 @@ class ConstrainScope internal constructor(internal val id: Any) {
     /**
      * The start anchor of the layout - can be constrained using [VerticalAnchorable.linkTo].
      */
-    val start = VerticalAnchorable(id, -2)
+    val start: VerticalAnchorable = ConstraintVerticalAnchorable(id, -2)
 
     /**
      * The left anchor of the layout - can be constrained using [VerticalAnchorable.linkTo].
      */
-    val absoluteLeft = VerticalAnchorable(id, 0)
+    val absoluteLeft: VerticalAnchorable = ConstraintVerticalAnchorable(id, 0)
 
     /**
      * The top anchor of the layout - can be constrained using [HorizontalAnchorable.linkTo].
      */
-    val top = HorizontalAnchorable(id, 0)
+    val top: HorizontalAnchorable = ConstraintHorizontalAnchorable(id, 0)
 
     /**
      * The end anchor of the layout - can be constrained using [VerticalAnchorable.linkTo].
      */
-    val end = VerticalAnchorable(id, -1)
+    val end: VerticalAnchorable = ConstraintVerticalAnchorable(id, -1)
 
     /**
      * The right anchor of the layout - can be constrained using [VerticalAnchorable.linkTo].
      */
-    val absoluteRight = VerticalAnchorable(id, 1)
+    val absoluteRight: VerticalAnchorable = ConstraintVerticalAnchorable(id, 1)
 
     /**
      * The bottom anchor of the layout - can be constrained using [HorizontalAnchorable.linkTo].
      */
-    val bottom = HorizontalAnchorable(id, 1)
+    val bottom: HorizontalAnchorable = ConstraintHorizontalAnchorable(id, 1)
 
     /**
      * The [FirstBaseline] of the layout - can be constrained using [BaselineAnchorable.linkTo].
      */
-    val baseline = BaselineAnchorable(id)
+    val baseline: BaselineAnchorable = ConstraintBaselineAnchorable(id)
 
     /**
      * The width of the [ConstraintLayout] child.
@@ -758,15 +789,15 @@ class ConstrainScope internal constructor(internal val id: Any) {
      * Represents a vertical side of a layout (i.e start and end) that can be anchored using
      * [linkTo] in their `Modifier.constrainAs` blocks.
      */
-    inner class VerticalAnchorable internal constructor(
+    internal inner class ConstraintVerticalAnchorable internal constructor(
         internal val id: Any,
         internal val index: Int
-    ) {
+    ): VerticalAnchorable {
         /**
          * Adds a link towards a [ConstraintLayoutBaseScope.VerticalAnchor].
          */
         // TODO(popam, b/158069248): add parameter for gone margin
-        fun linkTo(anchor: ConstraintLayoutBaseScope.VerticalAnchor, margin: Dp = 0.dp) {
+        override fun linkTo(anchor: ConstraintLayoutBaseScope.VerticalAnchor, margin: Dp) {
             tasks.add { state ->
                 with(state.constraints(id)) {
                     val layoutDirection = state.layoutDirection
@@ -784,15 +815,15 @@ class ConstrainScope internal constructor(internal val id: Any) {
      * Represents a horizontal side of a layout (i.e top and bottom) that can be anchored using
      * [linkTo] in their `Modifier.constrainAs` blocks.
      */
-    inner class HorizontalAnchorable internal constructor(
+    internal inner class ConstraintHorizontalAnchorable internal constructor(
         internal val tag: Any,
         internal val index: Int
-    ) {
+    ): HorizontalAnchorable {
         /**
          * Adds a link towards a [ConstraintLayoutBaseScope.HorizontalAnchor].
          */
         // TODO(popam, b/158069248): add parameter for gone margin
-        fun linkTo(anchor: ConstraintLayoutBaseScope.HorizontalAnchor, margin: Dp = 0.dp) {
+        override fun linkTo(anchor: ConstraintLayoutBaseScope.HorizontalAnchor, margin: Dp) {
             tasks.add { state ->
                 with(state.constraints(id)) {
                     horizontalAnchorFunctions[index][anchor.index]
@@ -807,12 +838,14 @@ class ConstrainScope internal constructor(internal val id: Any) {
      * Represents the [FirstBaseline] of a layout that can be anchored
      * using [linkTo] in their `Modifier.constrainAs` blocks.
      */
-    inner class BaselineAnchorable internal constructor(internal val id: Any) {
+    internal inner class ConstraintBaselineAnchorable internal constructor(
+        internal val id: Any
+        ): BaselineAnchorable {
         /**
          * Adds a link towards a [ConstraintLayoutBaseScope.BaselineAnchor].
          */
         // TODO(popam, b/158069248): add parameter for gone margin
-        fun linkTo(anchor: ConstraintLayoutBaseScope.BaselineAnchor, margin: Dp = 0.dp) {
+        override fun linkTo(anchor: ConstraintLayoutBaseScope.BaselineAnchor, margin: Dp) {
             tasks.add { state ->
                 (state as? State)?.let {
                     it.baselineNeededFor(id)
@@ -1048,5 +1081,77 @@ class ConstrainScope internal constructor(internal val id: Any) {
                 bottomToBottom(null)
                 baselineToBaseline(other)
             }
+    }
+}
+
+interface VerticalAnchorable {
+    fun linkTo(anchor: ConstraintLayoutBaseScope.VerticalAnchor, margin: Dp = 0.dp)
+}
+
+interface HorizontalAnchorable {
+    fun linkTo(anchor: ConstraintLayoutBaseScope.HorizontalAnchor, margin: Dp = 0.dp)
+}
+
+interface BaselineAnchorable {
+    fun linkTo(anchor: ConstraintLayoutBaseScope.BaselineAnchor, margin: Dp = 0.dp)
+}
+
+@LayoutScopeMarker
+@Stable
+class HorizontalChainScope internal constructor(internal val id: Any) {
+    internal val tasks = mutableListOf<(State) -> Unit>()
+    internal fun applyTo(state: State) = tasks.forEach { it(state) }
+
+    /**
+     * Reference to the [ConstraintLayout] itself, which can be used to specify constraints
+     * between itself and its children.
+     */
+    val parent = ConstrainedLayoutReference(SolverState.PARENT)
+
+    /**
+     * The start anchor of the layout - can be constrained using [VerticalAnchorable.linkTo].
+     */
+    val start: VerticalAnchorable = HelperVerticalAnchorable(id, -2)
+
+    /**
+     * The left anchor of the layout - can be constrained using [VerticalAnchorable.linkTo].
+     */
+    val absoluteLeft: VerticalAnchorable = HelperVerticalAnchorable(id, 0)
+
+    /**
+     * The end anchor of the layout - can be constrained using [VerticalAnchorable.linkTo].
+     */
+    val end: VerticalAnchorable = HelperVerticalAnchorable(id, -1)
+
+    /**
+     * The right anchor of the layout - can be constrained using [VerticalAnchorable.linkTo].
+     */
+    val absoluteRight: VerticalAnchorable = HelperVerticalAnchorable(id, 1)
+
+    internal inner class HelperVerticalAnchorable internal constructor(
+        private val id: Any,
+        private val index: Int
+    ): VerticalAnchorable {
+        override fun linkTo(anchor: ConstraintLayoutBaseScope.VerticalAnchor, margin: Dp) {
+            tasks.add { state ->
+                with(state.helper(id, androidx.constraintlayout.core.state.State.Helper.HORIZONTAL_CHAIN)) {
+                    val layoutDirection = state.layoutDirection
+                    val index1 =
+                        ConstrainScope.verticalAnchorIndexToFunctionIndex(
+                            index,
+                            layoutDirection
+                        )
+                    val index2 =
+                        ConstrainScope.verticalAnchorIndexToFunctionIndex(
+                            anchor.index,
+                            layoutDirection
+                        )
+                    ConstrainScope.verticalAnchorFunctions[index1][index2]
+                        .invoke(this, anchor.id, state.layoutDirection)
+                        .margin(margin)
+                    apply()
+                }
+            }
+        }
     }
 }

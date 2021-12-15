@@ -434,6 +434,14 @@ class ConstraintSetScope internal constructor() : ConstraintLayoutBaseScope() {
         constrainBlock()
         this@ConstraintSetScope.tasks.addAll(this.tasks)
     }
+
+    fun constrain(
+        ref: HorizontalChainReference,
+        constrainBlock: HorizontalChainScope.() -> Unit
+    ) = HorizontalChainScope(ref.id).apply {
+        constrainBlock()
+        this@ConstraintSetScope.tasks.addAll(this.tasks)
+    }
 }
 
 /**
@@ -931,6 +939,12 @@ class State(val density: Density) : SolverState() {
             dirtyBaselineNeededWidgets = false
         }
         return constraintWidget in baselineNeededWidgets
+    }
+
+    internal fun updateHelpers() {
+        mHelperReferences.values.forEach {
+            it.apply()
+        }
     }
 
     internal fun getKeyId(helperWidget: HelperWidget): Any? {
