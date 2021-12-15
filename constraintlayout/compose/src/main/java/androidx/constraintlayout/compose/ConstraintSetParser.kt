@@ -1087,6 +1087,20 @@ private fun parseConstraint(
                     "end" -> reference.endToEnd(targetReference)
                 }
             }
+            "left" -> {
+                when (anchor) {
+                    "left" -> {
+                        reference.leftToLeft(targetReference)
+                    }
+                    "right" -> reference.leftToRight(targetReference)
+                }
+            }
+            "right" -> {
+                when (anchor) {
+                    "left" -> reference.rightToLeft(targetReference)
+                    "right" -> reference.rightToRight(targetReference)
+                }
+            }
             "top" -> {
                 when (anchor) {
                     "top" -> reference.topToTop(targetReference)
@@ -1109,6 +1123,16 @@ private fun parseConstraint(
                         state.baselineNeededFor(reference.key)
                         state.baselineNeededFor(targetReference.key)
                         reference.baselineToBaseline(targetReference)
+                    }
+                    "top" -> {
+                        state.baselineNeededFor(reference.key)
+                        state.baselineNeededFor(targetReference.key)
+                        reference.baselineToTop(targetReference)
+                    }
+                    "bottom" -> {
+                        state.baselineNeededFor(reference.key)
+                        state.baselineNeededFor(targetReference.key)
+                        reference.baselineToBottom(targetReference)
                     }
                 }
             }

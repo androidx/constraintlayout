@@ -64,7 +64,7 @@
       left: 0,
       top: 832,
       right: 1080,
-      bottom: 1047,
+      bottom: 891,
       visibility: 0,
       AnchorLEFT: ['title3', 'LEFT', '0'],
       AnchorTOP: ['title3', 'BOTTOM', '44'],
@@ -78,9 +78,9 @@
   title5: {
     interpolated: {
       left: 34,
-      top: 1091,
+      top: 935,
       right: 1046,
-      bottom: 1150,
+      bottom: 994,
       visibility: 0,
       AnchorLEFT: ['0', 'LEFT', '0'],
       AnchorTOP: ['title4', 'BOTTOM', '44'],
