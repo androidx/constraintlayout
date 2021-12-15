@@ -1,0 +1,84 @@
+{
+  root: { interpolated: { left: 0, top: 0, right: 1080, bottom: 1670 } },
+  button4: {
+    interpolated: {
+      left: 1080,
+      top: 167,
+      right: 1080,
+      bottom: 167,
+      visibility: 8,
+      AnchorTOP: ['title', 'BOTTOM', '0'],
+      AnchorRIGHT: ['0', 'RIGHT', '0'],
+      phone_orientation: -9.892756E-6,
+      phone_orientation: -9.892756E-6
+    }
+  },
+  button5: {
+    interpolated: {
+      left: 625,
+      top: 167,
+      right: 805,
+      bottom: 501,
+      visibility: 0,
+      AnchorTOP: ['title', 'BOTTOM', '0'],
+      AnchorRIGHT: ['button4', 'RIGHT', '825'],
+      phone_orientation: -9.892756E-6,
+      phone_orientation: -9.892756E-6
+    }
+  },
+  button2: {
+    interpolated: {
+      left: 900,
+      top: 668,
+      right: 1080,
+      bottom: 1002,
+      visibility: 0,
+      AnchorTOP: ['0', 'TOP', '0'],
+      AnchorRIGHT: ['title', 'RIGHT', '0'],
+      AnchorBOTTOM: ['0', 'BOTTOM', '0'],
+      phone_orientation: -9.892756E-6,
+      phone_orientation: -9.892756E-6
+    }
+  },
+  button3: {
+    interpolated: {
+      left: 625,
+      top: 668,
+      right: 805,
+      bottom: 1002,
+      visibility: 0,
+      AnchorTOP: ['0', 'TOP', '0'],
+      AnchorRIGHT: ['title', 'RIGHT', '275'],
+      AnchorBOTTOM: ['0', 'BOTTOM', '0'],
+      phone_orientation: -9.892756E-6,
+      phone_orientation: -9.892756E-6
+    }
+  },
+  title: {
+    interpolated: {
+      left: 344,
+      top: 0,
+      right: 1080,
+      bottom: 167,
+      visibility: 0,
+      AnchorTOP: ['0', 'TOP', '0'],
+      AnchorRIGHT: ['0', 'RIGHT', '0'],
+      phone_orientation: -9.892756E-6,
+      phone_orientation: -9.892756E-6
+    }
+  },
+  button1: {
+    interpolated: {
+      left: 164,
+      top: 668,
+      right: 344,
+      bottom: 1002,
+      visibility: 0,
+      AnchorTOP: ['0', 'TOP', '0'],
+      AnchorRIGHT: ['title', 'LEFT', '0'],
+      AnchorBOTTOM: ['0', 'BOTTOM', '0'],
+      phone_orientation: -9.892756E-6,
+      phone_orientation: -9.892756E-6
+    }
+  }
+}
