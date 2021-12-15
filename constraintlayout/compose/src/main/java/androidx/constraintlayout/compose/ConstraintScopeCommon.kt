@@ -31,8 +31,11 @@ interface VerticalAnchorable {
     /**
      * Adds a link towards a [ConstraintLayoutBaseScope.VerticalAnchor].
      */
-    // TODO(popam, b/158069248): add parameter for gone margin
-    fun linkTo(anchor: ConstraintLayoutBaseScope.VerticalAnchor, margin: Dp = 0.dp)
+    fun linkTo(
+        anchor: ConstraintLayoutBaseScope.VerticalAnchor,
+        margin: Dp = 0.dp,
+        goneMargin: Dp = 0.dp
+    )
 }
 
 /**
@@ -43,8 +46,11 @@ interface HorizontalAnchorable {
     /**
      * Adds a link towards a [ConstraintLayoutBaseScope.HorizontalAnchor].
      */
-    // TODO(popam, b/158069248): add parameter for gone margin
-    fun linkTo(anchor: ConstraintLayoutBaseScope.HorizontalAnchor, margin: Dp = 0.dp)
+    fun linkTo(
+        anchor: ConstraintLayoutBaseScope.HorizontalAnchor,
+        margin: Dp = 0.dp,
+        goneMargin: Dp = 0.dp
+    )
 }
 
 /**
@@ -55,8 +61,11 @@ interface BaselineAnchorable {
     /**
      * Adds a link towards a [ConstraintLayoutBaseScope.BaselineAnchor].
      */
-    // TODO(popam, b/158069248): add parameter for gone margin
-    fun linkTo(anchor: ConstraintLayoutBaseScope.BaselineAnchor, margin: Dp = 0.dp)
+    fun linkTo(
+        anchor: ConstraintLayoutBaseScope.BaselineAnchor,
+        margin: Dp = 0.dp,
+        goneMargin: Dp = 0.dp
+    )
 }
 
 
@@ -66,7 +75,11 @@ internal abstract class BaseVerticalAnchorable(
 ) : VerticalAnchorable {
     abstract fun getConstraintReference(state: State): ConstraintReference
 
-    final override fun linkTo(anchor: ConstraintLayoutBaseScope.VerticalAnchor, margin: Dp) {
+    final override fun linkTo(
+        anchor: ConstraintLayoutBaseScope.VerticalAnchor,
+        margin: Dp,
+        goneMargin: Dp
+    ) {
         tasks.add { state ->
             val layoutDirection = state.layoutDirection
             val index1 =
@@ -79,6 +92,7 @@ internal abstract class BaseVerticalAnchorable(
                 verticalAnchorFunctions[index1][index2]
                     .invoke(this, anchor.id, state.layoutDirection)
                     .margin(margin)
+                    .marginGone(goneMargin)
             }
         }
     }
@@ -90,12 +104,17 @@ internal abstract class BaseHorizontalAnchorable(
 ) : HorizontalAnchorable {
     abstract fun getConstraintReference(state: State): ConstraintReference
 
-    final override fun linkTo(anchor: ConstraintLayoutBaseScope.HorizontalAnchor, margin: Dp) {
+    final override fun linkTo(
+        anchor: ConstraintLayoutBaseScope.HorizontalAnchor,
+        margin: Dp,
+        goneMargin: Dp
+    ) {
         tasks.add { state ->
             with(getConstraintReference(state)) {
                 AnchorFunctions.horizontalAnchorFunctions[index][anchor.index]
                     .invoke(this, anchor.id)
                     .margin(margin)
+                    .marginGone(goneMargin)
             }
         }
     }

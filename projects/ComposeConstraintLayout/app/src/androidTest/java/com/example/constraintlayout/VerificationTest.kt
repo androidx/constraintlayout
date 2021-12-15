@@ -29,9 +29,17 @@ import org.junit.runner.RunWith
 import com.example.constraintlayout.verification.ComposableInvocator
 import junit.framework.TestCase
 
+/**
+ * Unit test to verify layout results.
+ *
+ * Currently only for Composables written with the Kotlin DSL. See [ComposableInvocator] for
+ * details.
+ *
+ * Run tests using device: Pixel 3 on API 30.
+ */
 @MediumTest
 @RunWith(AndroidJUnit4::class)
-class  VerificationTest {
+class VerificationTest {
     @get:Rule
     val rule = createComposeRule()
 
@@ -50,7 +58,8 @@ class  VerificationTest {
             fqComposable = invocator.invokeComposable(composableIndex, currentComposer)
             // We can only get the Resources in this context
             baselineRaw =
-                LocalContext.current.resources.openRawResource(R.raw.results).bufferedReader().readText()
+                LocalContext.current.resources.openRawResource(R.raw.results).bufferedReader()
+                    .readText()
         }
         for (i in 0..invocator.max) {
             rule.runOnUiThread {
@@ -63,7 +72,12 @@ class  VerificationTest {
             nodeInteration.assertExists()
             // Get the output from 'getDesignInfo'
             // A json with the constraints and bounds of the widgets in the layout
-            val result = nodeInteration.fetchSemanticsNode().config[DesignInfoDataKey].getDesignInfo(0, 0, "")
+            val result =
+                nodeInteration.fetchSemanticsNode().config[DesignInfoDataKey].getDesignInfo(
+                    startX = 0,
+                    startY = 0,
+                    args = ""
+                )
 
             // Save the result in a composable->result map
             results[fqComposable] = result
@@ -77,14 +91,16 @@ class  VerificationTest {
             val nameValue = it.takeIf { it.isNotBlank() }?.trimIndent()?.split("=")
             if (nameValue?.size == 2) {
                 Pair(nameValue[0], nameValue[1])
-            }
-            else {
+            } else {
                 null
             }
         }.toMap(mutableMapOf())
     }
 
-    private fun checkTest(baselineResults: MutableMap<String, String>, results: Map<String, String>) {
+    private fun checkTest(
+        baselineResults: MutableMap<String, String>,
+        results: Map<String, String>
+    ) {
         var failed = false
         for (result in results) {
             if (baselineResults.contains(result.key)) {
@@ -97,8 +113,7 @@ class  VerificationTest {
                     failed = true
                 }
                 baselineResults.remove(result.key)
-            }
-            else {
+            } else {
                 println("----------")
                 println("New Composable Result: ${result.key}")
                 println("----------")
@@ -117,6 +132,9 @@ class  VerificationTest {
             val base = results.map { "${it.key}=${it.value}" }.joinToString(";\n")
             // TODO: Find a better way to output the result, so that it's easy to update the
             //  baseline (results.txt), alternatively, reduce the amount of text in the file
+
+            // You can update results.txt by placing a breakpoint here in debugging mode and copying
+            // the contents of 'base' into the file.
             TestCase.assertEquals("", base)
             println("----------")
         }
