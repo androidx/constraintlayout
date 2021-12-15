@@ -204,6 +204,7 @@ public class State {
                     reference = new HelperReference(this, type);
                 }
             }
+            reference.setKey(key);
             mHelperReferences.put(key, reference);
         }
         return reference;
