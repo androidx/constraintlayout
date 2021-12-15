@@ -428,10 +428,8 @@ public fun VTest02f() {
                    width: 'wrap',
                    translationZ: 13,
                    scaleX: 1.4,
-                  centerHorizontally: 'parent',
-                                    centerVertically 'parent',
-
-                
+                   centerHorizontally: 'parent',
+                   centerVertically: 'parent',
                 },
               base1: {
                    width: 'wrap',
@@ -471,6 +469,194 @@ public fun VTest02f() {
         }
         Text(modifier = Modifier.layoutId("title").background(Color.Red),
             text = "clock",
+            style = MaterialTheme.typography.body1,
+        )
+        Button(
+            modifier = Modifier.layoutId("base1"),
+            onClick = {},
+        ) {
+            Text(text = "baseline")
+        }
+    }
+}
+
+@Preview(group = "new")
+@Composable
+public fun VTest02g() {
+    ConstraintLayout(
+        ConstraintSet("""
+            {
+                Header: { exportAs: 'test7'},
+             
+                button5: {
+                  width: 'wrap',
+ 
+                   centerHorizontally: 'parent',
+                   centerVertically: 'parent',
+                   hBias: 0.1,
+                   vBias: 0.1,
+                },
+                  button5a: {
+                  width: 'wrap',
+                   centerHorizontally: 'parent',
+                   centerVertically: 'parent',
+                   hBias: 0.1,
+                   vBias: 0.9,
+                },
+               button5b: {
+                  width: 'wrap',
+                   centerHorizontally: 'parent',
+                   centerVertically: 'parent',
+                   hBias: 0.9,
+                   vBias: 0.1,
+                },
+                button5c: {
+                  width: 'wrap',
+                   centerHorizontally: 'parent',
+                   centerVertically: 'parent',
+                   hBias: 0.9,
+                   vBias: 0.9,
+                },
+                title: {
+                   width: 'wrap',
+ 
+                   centerHorizontally: 'parent',
+                   centerVertically: 'parent',
+                   hBias: 0.5,
+                   vBias: 0.5,
+                },
+              base1: {
+                   width: 'wrap',
+            
+           right: ['title','right'],
+           top: ['button5','bottom',0],
+           bottom: ['title','top',0],
+                 vBias: 0.1,
+                
+                }
+            }
+        """),
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Button(
+            modifier = Modifier.layoutId("button5"),
+            onClick = {},
+        ) {
+            Text(text = "12")
+        }
+        Button(
+            modifier = Modifier.layoutId("button5a"),
+            onClick = {},
+        ) {
+            Text(text = "3")
+        }
+        Button(
+            modifier = Modifier.layoutId("button5b"),
+            onClick = {},
+        ) {
+            Text(text = "6")
+        }
+        Button(
+            modifier = Modifier.layoutId("button5c"),
+            onClick = {},
+        ) {
+            Text(text = "9")
+        }
+        Text(modifier = Modifier.layoutId("title").background(Color.Red),
+            text = "clock",
+            style = MaterialTheme.typography.body1,
+        )
+        Button(
+            modifier = Modifier.layoutId("base1"),
+            onClick = {},
+        ) {
+            Text(text = "baseline")
+        }
+    }
+}
+
+@Preview(group = "new")
+@Composable
+public fun VTest02h() {
+    ConstraintLayout(
+        ConstraintSet("""
+            {
+                Header: { exportAs: 'test8'},
+             Helpers: [
+                  ['hChain', ['button5','button5a','button5b'], {
+                        start: ['title', 'end'], style: 'spread_inside'}],
+                  ['vChain', ['button5a','button5b','button5c'], {
+                        top: ['title', 'bottom'], style: 'spread'}],
+               ],
+                button5: {
+                   centerVertically: 'parent',
+                   vBias: 0.45
+                },
+                  button5a: {
+                   centerVertically: 'parent',
+                     height: 'spread',
+                      vWeight: 1
+                },
+               button5b: {
+                   centerVertically: 'parent',
+                      height: 'spread',
+                       vWeight: 2
+                },
+                button5c: {
+                  width: 'wrap',
+                  height: 'spread',
+                   centerHorizontally: 'parent',
+                   centerVertically: 'parent',
+                   hBias: 0.9,
+                   vWeight: 3
+                },
+                title: {
+                   width: 'wrap',
+ 
+                   centerHorizontally: 'parent',
+                   centerVertically: 'parent',
+                   hBias: 0.1,
+                   vBias: 0.5,
+                },
+              base1: {
+                   width: 'wrap',
+            
+           start: ['button5','start'],
+           top: ['button5','bottom',0],
+           bottom: ['parent','bottom',0],
+                 vBias: 0.5,
+                
+                }
+            }
+        """),
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Button(
+            modifier = Modifier.layoutId("button5"),
+            onClick = {},
+        ) {
+            Text(text = "1")
+        }
+        Button(
+            modifier = Modifier.layoutId("button5a"),
+            onClick = {},
+        ) {
+            Text(text = "2")
+        }
+        Button(
+            modifier = Modifier.layoutId("button5b"),
+            onClick = {},
+        ) {
+            Text(text = "3")
+        }
+        Button(
+            modifier = Modifier.layoutId("button5c"),
+            onClick = {},
+        ) {
+            Text(text = "4")
+        }
+        Text(modifier = Modifier.layoutId("title").background(Color.Red),
+            text = "chain",
             style = MaterialTheme.typography.body1,
         )
         Button(

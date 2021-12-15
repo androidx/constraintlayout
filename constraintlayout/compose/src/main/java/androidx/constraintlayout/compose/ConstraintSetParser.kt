@@ -1011,6 +1011,22 @@ fun parseWidget(
                     "gone" -> reference.visibility(ConstraintWidget.GONE)
                 }
             }
+            "vBias" -> {
+                val value = layoutVariables.get(element[constraintName])
+                reference.verticalBias(value)
+            }
+            "hBias" -> {
+                val value = layoutVariables.get(element[constraintName])
+                reference.horizontalBias(value)
+            }
+            "vWeight" -> {
+                val value = layoutVariables.get(element[constraintName])
+                reference.verticalChainWeight = value
+            }
+            "hWeight" -> {
+                val value = layoutVariables.get(element[constraintName])
+                reference.horizontalChainWeight = value
+            }
             "custom" -> {
                 parseCustomProperties(element, reference, constraintName)
             }
