@@ -37,7 +37,7 @@ import java.lang.Long.parseLong
 
 internal const val PARSER_DEBUG = false
 
-class LayoutVariables {
+internal class LayoutVariables {
     private val margins = HashMap<String, Int>()
     private val generators = HashMap<String, GeneratedValue>()
     private val arrayIds = HashMap<String, ArrayList<String>>()
@@ -107,11 +107,11 @@ class LayoutVariables {
 
 }
 
-interface GeneratedValue {
+internal interface GeneratedValue {
     fun value(): Float
 }
 
-class Generator(start: Float, private var incrementBy: Float) : GeneratedValue {
+internal class Generator(start: Float, private var incrementBy: Float) : GeneratedValue {
     private var current: Float = start
     private var stop = false
 
@@ -123,7 +123,7 @@ class Generator(start: Float, private var incrementBy: Float) : GeneratedValue {
     }
 }
 
-class FiniteGenerator(
+internal class FiniteGenerator(
     from: Float, to: Float,
     private var step: Float = 1f, private var prefix: String = "",
     private var postfix: String = ""
@@ -155,7 +155,7 @@ class FiniteGenerator(
 
 }
 
-class OverrideValue(private var value: Float) : GeneratedValue {
+internal class OverrideValue(private var value: Float) : GeneratedValue {
     override fun value(): Float {
         return value
     }
@@ -203,7 +203,7 @@ internal fun parseTransition(json: CLObject, transition: Transition) {
     }
 }
 
-fun parseKeyPosition(keyPosition: CLObject, transition: Transition) {
+internal fun parseKeyPosition(keyPosition: CLObject, transition: Transition) {
     val bundle = TypedBundle()
     val targets = keyPosition.getArray("target")
     val frames = keyPosition.getArray("frames")
@@ -270,7 +270,7 @@ fun parseKeyPosition(keyPosition: CLObject, transition: Transition) {
     }
 }
 
-fun parseKeyAttribute(keyAttribute: CLObject, transition: Transition) {
+internal fun parseKeyAttribute(keyAttribute: CLObject, transition: Transition) {
     val targets = keyAttribute.getArrayOrNull("target") ?: return
     val frames = keyAttribute.getArrayOrNull("frames") ?: return
     val transitionEasing = keyAttribute.getStringOrNull("transitionEasing")
@@ -351,8 +351,7 @@ fun parseKeyAttribute(keyAttribute: CLObject, transition: Transition) {
     }
 }
 
-
-fun parseKeyCycle(keyCycleData: CLObject, transition: Transition) {
+internal fun parseKeyCycle(keyCycleData: CLObject, transition: Transition) {
     val targets = keyCycleData.getArray("target")
     val frames = keyCycleData.getArray("frames")
     val transitionEasing = keyCycleData.getStringOrNull("transitionEasing")
@@ -509,7 +508,7 @@ internal fun parseMotionSceneJSON(scene: MotionScene, content: String) {
 /**
  * For the given [json] parses all ConstraintSets into the [scene].
  */
-fun parseConstraintSets(scene: MotionScene, json: Any) {
+internal fun parseConstraintSets(scene: MotionScene, json: Any) {
     if (json !is CLObject) {
         return
     }
@@ -543,7 +542,7 @@ fun parseConstraintSets(scene: MotionScene, json: Any) {
     }
 }
 
-fun override(baseJson: CLObject, name: String, overrideValue: CLObject) {
+internal fun override(baseJson: CLObject, name: String, overrideValue: CLObject) {
     if (!baseJson.has(name)) {
         baseJson.put(name, overrideValue)
     } else {
@@ -594,7 +593,7 @@ fun override(baseJson: CLObject, name: String, overrideValue: CLObject) {
     }
 }
 
-fun parseTransitions(scene: MotionScene, json: Any) {
+internal fun parseTransitions(scene: MotionScene, json: Any) {
     if (json !is CLObject) {
         return
     }
@@ -606,7 +605,7 @@ fun parseTransitions(scene: MotionScene, json: Any) {
     }
 }
 
-fun parseHeader(scene: MotionScene, json: Any) {
+internal fun parseHeader(scene: MotionScene, json: Any) {
     if (json !is CLObject) {
         return
     }
@@ -663,7 +662,7 @@ internal fun parseJSON(content: String, state: State, layoutVariables: LayoutVar
     }
 }
 
-fun parseVariables(state: State, layoutVariables: LayoutVariables, json: Any) {
+internal fun parseVariables(state: State, layoutVariables: LayoutVariables, json: Any) {
     if (json !is CLObject) {
         return
     }
@@ -699,7 +698,7 @@ fun parseVariables(state: State, layoutVariables: LayoutVariables, json: Any) {
     }
 }
 
-fun parseDesignElementsJSON(content: String, list: ArrayList<DesignElement>) {
+internal fun parseDesignElementsJSON(content: String, list: ArrayList<DesignElement>) {
     val json = CLParser.parse(content)
     val elements = json.names() ?: return
     (0 until elements.size).forEach { i ->
@@ -736,7 +735,7 @@ fun parseDesignElementsJSON(content: String, list: ArrayList<DesignElement>) {
     }
 }
 
-fun parseHelpers(state: State, layoutVariables: LayoutVariables, element: Any) {
+internal fun parseHelpers(state: State, layoutVariables: LayoutVariables, element: Any) {
     if (element !is CLArray) {
         return
     }
@@ -753,7 +752,7 @@ fun parseHelpers(state: State, layoutVariables: LayoutVariables, element: Any) {
     }
 }
 
-fun parseGenerate(state: State, layoutVariables: LayoutVariables, json: Any) {
+internal fun parseGenerate(state: State, layoutVariables: LayoutVariables, json: Any) {
     if (json !is CLObject) {
         return
     }
@@ -770,7 +769,7 @@ fun parseGenerate(state: State, layoutVariables: LayoutVariables, json: Any) {
     }
 }
 
-fun parseChain(orientation: Int, state: State, margins: LayoutVariables, helper: CLArray) {
+internal fun parseChain(orientation: Int, state: State, margins: LayoutVariables, helper: CLArray) {
     val chain =
         if (orientation == ConstraintWidget.HORIZONTAL) state.horizontalChain() else state.verticalChain()
     val refs = helper[1]
@@ -818,7 +817,7 @@ fun parseChain(orientation: Int, state: State, margins: LayoutVariables, helper:
     }
 }
 
-fun parseGuideline(orientation: Int, state: State, helper: CLArray) {
+internal fun parseGuideline(orientation: Int, state: State, helper: CLArray) {
     val params = helper[1]
     if (params !is CLObject) {
         return
@@ -868,7 +867,7 @@ private fun parseGuidelineParams(
     }
 }
 
-fun parseBarrier(
+internal fun parseBarrier(
     state: State,
     elementName: String, element: CLObject
 ) {
@@ -904,7 +903,7 @@ fun parseBarrier(
     }
 }
 
-fun parseWidget(
+internal fun parseWidget(
     state: State,
     layoutVariables: LayoutVariables,
     elementName: String,
@@ -1256,7 +1255,7 @@ private fun parseColorString(value: String): Int? {
     }
 }
 
-fun lookForType(element: CLObject): String? {
+internal fun lookForType(element: CLObject): String? {
     val constraints = element.names() ?: return null
     (0 until constraints.size).forEach { i ->
         val constraintName = constraints[i]

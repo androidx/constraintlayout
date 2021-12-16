@@ -851,7 +851,7 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
     }
 }
 
-data class DesignElement(var id: String, var type: String, var params: HashMap<String, String>)
+internal data class DesignElement(var id: String, var type: String, var params: HashMap<String, String>)
 
 /**
  * Creates a [ConstraintSet] from a [jsonContent] string.
