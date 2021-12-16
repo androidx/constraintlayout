@@ -89,6 +89,11 @@ configurations.all {
     }
 }
 
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions {
+        freeCompilerArgs += "-opt-in=androidx.constraintlayout.compose.ExperimentalMotionApi"
+    }
+}
 //configurations.configureEach {
 //    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
 //        if (details.requested.group == 'androidx.lifecycle' &&

@@ -57,6 +57,7 @@ import java.util.*
  */
 @Suppress("NOTHING_TO_INLINE")
 @Composable
+@ExperimentalMotionApi
 inline fun MotionLayout(
     start: ConstraintSet,
     end: ConstraintSet,
@@ -93,6 +94,7 @@ inline fun MotionLayout(
  * are finished. Use [finishedAnimationListener] to know when a transition has stopped.
  */
 @Composable
+@ExperimentalMotionApi
 inline fun MotionLayout(
     motionScene: MotionScene,
     constraintSetName: String? = null,
@@ -199,6 +201,7 @@ inline fun MotionLayout(
 }
 
 @Composable
+@ExperimentalMotionApi
 inline fun MotionLayout(
     start: ConstraintSet,
     end: ConstraintSet,
@@ -261,6 +264,7 @@ inline fun MotionLayout(
 
 @Suppress("NOTHING_TO_INLINE")
 @Composable
+@ExperimentalMotionApi
 inline fun MotionLayout(
     motionScene: MotionScene,
     progress: Float,

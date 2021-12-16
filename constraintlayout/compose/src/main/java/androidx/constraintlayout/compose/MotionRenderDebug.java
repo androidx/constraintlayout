@@ -26,7 +26,7 @@ import androidx.constraintlayout.core.motion.MotionPaths;
 
 import java.util.HashMap;
 
-public class MotionRenderDebug {
+class MotionRenderDebug {
     public static final int DEBUG_SHOW_NONE = 0;
     public static final int DEBUG_SHOW_PROGRESS = 1;
     public static final int DEBUG_SHOW_PATH = 2;
