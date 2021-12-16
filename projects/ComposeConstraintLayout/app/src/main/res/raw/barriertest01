@@ -1,0 +1,109 @@
+{
+  root: { interpolated: { left: 0, top: 0, right: 1080, bottom: 1670 } },
+  button4: {
+    interpolated: {
+      left: 658,
+      top: 0,
+      right: 838,
+      bottom: 84,
+      visibility: 0,
+      AnchorLEFT: ['barrier1', 'RIGHT', '28'],
+      phone_orientation: -9.849226E-6,
+      phone_orientation: -9.849226E-6
+    }
+  },
+  button5: {
+    interpolated: {
+      left: 0,
+      top: 178,
+      right: 180,
+      bottom: 261,
+      visibility: 0,
+      AnchorBOTTOM: ['barrier3', 'TOP', '14'],
+      phone_orientation: -9.849226E-6,
+      phone_orientation: -9.849226E-6
+    }
+  },
+  button2: {
+    interpolated: {
+      left: 450,
+      top: 793,
+      right: 630,
+      bottom: 877,
+      visibility: 0,
+      AnchorLEFT: ['0', 'LEFT', '0'],
+      AnchorTOP: ['0', 'TOP', '0'],
+      AnchorRIGHT: ['0', 'RIGHT', '0'],
+      AnchorBOTTOM: ['0', 'BOTTOM', '0'],
+      phone_orientation: -9.849226E-6,
+      phone_orientation: -9.849226E-6
+    }
+  },
+  button3: {
+    interpolated: {
+      left: 40,
+      top: 762,
+      right: 220,
+      bottom: 845,
+      visibility: 0,
+      AnchorRIGHT: ['barrier2', 'LEFT', '55'],
+      AnchorBOTTOM: ['0', 'BOTTOM', '825'],
+      phone_orientation: -9.849226E-6,
+      phone_orientation: -9.849226E-6
+    }
+  },
+  button8: {
+    interpolated: {
+      left: 685,
+      top: 793,
+      right: 865,
+      bottom: 877,
+      visibility: 0,
+      AnchorLEFT: ['barrier6', 'LEFT', '55'],
+      AnchorTOP: ['0', 'TOP', '0'],
+      AnchorBOTTOM: ['0', 'BOTTOM', '0'],
+      phone_orientation: -9.849226E-6,
+      phone_orientation: -9.849226E-6
+    }
+  },
+  button6: {
+    interpolated: {
+      left: 900,
+      top: 932,
+      right: 1080,
+      bottom: 1015,
+      visibility: 0,
+      AnchorTOP: ['barrier4', 'BOTTOM', '55'],
+      AnchorRIGHT: ['0', 'RIGHT', '0'],
+      phone_orientation: -9.849226E-6,
+      phone_orientation: -9.849226E-6
+    }
+  },
+  button7: {
+    interpolated: {
+      left: 81,
+      top: 793,
+      right: 261,
+      bottom: 877,
+      visibility: 0,
+      AnchorTOP: ['0', 'TOP', '0'],
+      AnchorRIGHT: ['barrier5', 'RIGHT', '14'],
+      AnchorBOTTOM: ['0', 'BOTTOM', '0'],
+      phone_orientation: -9.849226E-6,
+      phone_orientation: -9.849226E-6
+    }
+  },
+  button1: {
+    interpolated: {
+      left: 275,
+      top: 275,
+      right: 455,
+      bottom: 359,
+      visibility: 0,
+      AnchorLEFT: ['0', 'LEFT', '275'],
+      AnchorTOP: ['0', 'TOP', '275'],
+      phone_orientation: -9.849226E-6,
+      phone_orientation: -9.849226E-6
+    }
+  }
+}

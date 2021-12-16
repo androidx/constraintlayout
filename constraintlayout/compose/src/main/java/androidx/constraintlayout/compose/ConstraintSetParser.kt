@@ -891,7 +891,7 @@ fun parseBarrier(
                 val list = element.getArrayOrNull(constraintName)
                 if (list != null) {
                     for (j in 0 until list.size()) {
-                        val elementNameReference = list.get(j)
+                        val elementNameReference = list.get(j).content()
                         val elementReference = state.constraints(elementNameReference)
                         if (PARSER_DEBUG) {
                             println("Add REFERENCE ($elementNameReference = $elementReference) TO BARRIER ")
