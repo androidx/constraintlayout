@@ -886,6 +886,11 @@ internal fun parseBarrier(
                     "bottom" -> reference.setBarrierDirection(androidx.constraintlayout.core.state.State.Direction.BOTTOM)
                 }
             }
+            "margin" -> {
+                val margin =  element.getFloatOrNaN(constraintName)
+                if (!margin.isNaN())
+                   reference.margin(margin.toInt())
+            }
             "contains" -> {
                 val list = element.getArrayOrNull(constraintName)
                 if (list != null) {

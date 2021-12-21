@@ -2,13 +2,14 @@
   root: { interpolated: { left: 0, top: 0, right: 1080, bottom: 1670 } },
   button3: {
     interpolated: {
-      left: 138,
-      top: 1351,
-      right: 548,
-      bottom: 1450,
+      left: 690,
+      top: 0,
+      right: 894,
+      bottom: 1670,
       visibility: 0,
-      AnchorLEFT: ['0', 'LEFT', '138'],
-      AnchorBOTTOM: ['gl2', 'TOP', '0']
+      AnchorLEFT: ['ma', 'LEFT', '0'],
+      AnchorTOP: ['0', 'TOP', '0'],
+      AnchorBOTTOM: ['0', 'BOTTOM', '0']
     }
   },
   title0: {
