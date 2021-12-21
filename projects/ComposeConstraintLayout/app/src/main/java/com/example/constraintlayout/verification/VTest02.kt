@@ -155,11 +155,13 @@ public fun VTest02c() {
                 Header: { exportAs: 'test3'},
                 gl1: { type: 'hGuideline', start: 80 },
                 gl2: { type: 'hGuideline', end: 80 },
+                ma: {type: 'barrier', direction: 'end' , contains: ['title0', 'title3'], margin: -12},
                 button3: {
-                  width: { value: '38%' },
-                  start: ['parent', 'start', 50],
-                  bottom: ['gl2', 'bottom'],
- 
+                  width: { value: 'wrap' },
+                            height: 'spread',
+                  start: ['ma', 'start', 0],
+                 
+                  centerVertically: 'parent'
                 },
                 title0: {
                   width:  { value: 'wrap', min: 60  },
