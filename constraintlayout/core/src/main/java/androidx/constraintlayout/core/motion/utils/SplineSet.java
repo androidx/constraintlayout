@@ -39,7 +39,7 @@ public abstract class SplineSet {
     private String mType;
 
     public void setProperty(TypedValues widget, float t) {
-        widget.setValue(TypedValues.Attributes.getId(mType), get(t));
+        widget.setValue(TypedValues.AttributesType.getId(mType), get(t));
     }
 
     @Override

@@ -69,37 +69,37 @@ public class MotionKeyCycle extends MotionKey {
     @Override
     public void getAttributeNames(HashSet<String> attributes) {
         if (!Float.isNaN(mAlpha)) {
-            attributes.add(Cycle.S_ALPHA);
+            attributes.add(CycleType.S_ALPHA);
         }
         if (!Float.isNaN(mElevation)) {
-            attributes.add(Cycle.S_ELEVATION);
+            attributes.add(CycleType.S_ELEVATION);
         }
         if (!Float.isNaN(mRotation)) {
-            attributes.add(Cycle.S_ROTATION_Z);
+            attributes.add(CycleType.S_ROTATION_Z);
         }
         if (!Float.isNaN(mRotationX)) {
-            attributes.add(Cycle.S_ROTATION_X);
+            attributes.add(CycleType.S_ROTATION_X);
         }
         if (!Float.isNaN(mRotationY)) {
-            attributes.add(Cycle.S_ROTATION_Y);
+            attributes.add(CycleType.S_ROTATION_Y);
         }
         if (!Float.isNaN(mScaleX)) {
-            attributes.add(Cycle.S_SCALE_X);
+            attributes.add(CycleType.S_SCALE_X);
         }
         if (!Float.isNaN(mScaleY)) {
-            attributes.add(Cycle.S_SCALE_Y);
+            attributes.add(CycleType.S_SCALE_Y);
         }
         if (!Float.isNaN(mTransitionPathRotate)) {
-            attributes.add(Cycle.S_PATH_ROTATE);
+            attributes.add(CycleType.S_PATH_ROTATE);
         }
         if (!Float.isNaN(mTranslationX)) {
-            attributes.add(Cycle.S_TRANSLATION_X);
+            attributes.add(CycleType.S_TRANSLATION_X);
         }
         if (!Float.isNaN(mTranslationY)) {
-            attributes.add(Cycle.S_TRANSLATION_Y);
+            attributes.add(CycleType.S_TRANSLATION_Y);
         }
         if (!Float.isNaN(mTranslationZ)) {
-            attributes.add(Cycle.S_TRANSLATION_Z);
+            attributes.add(CycleType.S_TRANSLATION_Z);
         }
         if (mCustom.size() > 0) {
             for (String s : mCustom.keySet()) {
@@ -115,10 +115,10 @@ public class MotionKeyCycle extends MotionKey {
 
     public boolean setValue(int type, int value) {
         switch (type) {
-            case Cycle.TYPE_CURVE_FIT:
+            case CycleType.TYPE_CURVE_FIT:
                 mCurveFit = value;
                 return true;
-            case Cycle.TYPE_WAVE_SHAPE:
+            case CycleType.TYPE_WAVE_SHAPE:
                 mWaveShape = value;
                 return true;
             default:
@@ -132,10 +132,10 @@ public class MotionKeyCycle extends MotionKey {
 
     public boolean setValue(int type, String value) {
         switch (type) {
-            case Cycle.TYPE_EASING:
+            case CycleType.TYPE_EASING:
                 mTransitionEasing = value;
                 return true;
-            case Cycle.TYPE_CUSTOM_WAVE_SHAPE:
+            case CycleType.TYPE_CUSTOM_WAVE_SHAPE:
                 mCustomWaveShape = value;
                 return true;
             default:
@@ -146,49 +146,49 @@ public class MotionKeyCycle extends MotionKey {
 
     public boolean setValue(int type, float value) {
         switch (type) {
-            case Cycle.TYPE_ALPHA:
+            case CycleType.TYPE_ALPHA:
                 mAlpha = value;
                 break;
-            case Cycle.TYPE_TRANSLATION_X:
+            case CycleType.TYPE_TRANSLATION_X:
                 mTranslationX = value;
                 break;
-            case Cycle.TYPE_TRANSLATION_Y:
+            case CycleType.TYPE_TRANSLATION_Y:
                 mTranslationY = value;
                 break;
-            case Cycle.TYPE_TRANSLATION_Z:
+            case CycleType.TYPE_TRANSLATION_Z:
                 mTranslationZ = value;
                 break;
-            case Cycle.TYPE_ELEVATION:
+            case CycleType.TYPE_ELEVATION:
                 mElevation = value;
                 break;
-            case Cycle.TYPE_ROTATION_X:
+            case CycleType.TYPE_ROTATION_X:
                 mRotationX = value;
                 break;
-            case Cycle.TYPE_ROTATION_Y:
+            case CycleType.TYPE_ROTATION_Y:
                 mRotationY = value;
                 break;
-            case Cycle.TYPE_ROTATION_Z:
+            case CycleType.TYPE_ROTATION_Z:
                 mRotation = value;
                 break;
-            case Cycle.TYPE_SCALE_X:
+            case CycleType.TYPE_SCALE_X:
                 mScaleX = value;
                 break;
-            case Cycle.TYPE_SCALE_Y:
+            case CycleType.TYPE_SCALE_Y:
                 mScaleY = value;
                 break;
-            case Cycle.TYPE_PROGRESS:
+            case CycleType.TYPE_PROGRESS:
                 mProgress = value;
                 break;
-            case Cycle.TYPE_PATH_ROTATE:
+            case CycleType.TYPE_PATH_ROTATE:
                 mTransitionPathRotate = value;
                 break;
-            case Cycle.TYPE_WAVE_PERIOD:
+            case CycleType.TYPE_WAVE_PERIOD:
                 mWavePeriod = value;
                 break;
-            case Cycle.TYPE_WAVE_OFFSET:
+            case CycleType.TYPE_WAVE_OFFSET:
                 mWaveOffset = value;
                 break;
-            case Cycle.TYPE_WAVE_PHASE:
+            case CycleType.TYPE_WAVE_PHASE:
                 mWavePhase = value;
                 break;
             default:
@@ -200,33 +200,33 @@ public class MotionKeyCycle extends MotionKey {
 
     public float getValue(String key) {
         switch (key) {
-            case Cycle.S_ALPHA:
+            case CycleType.S_ALPHA:
                 return mAlpha;
-            case Cycle.S_ELEVATION:
+            case CycleType.S_ELEVATION:
                 return mElevation;
-            case Cycle.S_ROTATION_Z:
+            case CycleType.S_ROTATION_Z:
                 return mRotation;
-            case Cycle.S_ROTATION_X:
+            case CycleType.S_ROTATION_X:
                 return mRotationX;
-            case Cycle.S_ROTATION_Y:
+            case CycleType.S_ROTATION_Y:
                 return mRotationY;
-            case Cycle.S_PATH_ROTATE:
+            case CycleType.S_PATH_ROTATE:
                 return mTransitionPathRotate;
-            case Cycle.S_SCALE_X:
+            case CycleType.S_SCALE_X:
                 return mScaleX;
-            case Cycle.S_SCALE_Y:
+            case CycleType.S_SCALE_Y:
                 return mScaleY;
-            case Cycle.S_TRANSLATION_X:
+            case CycleType.S_TRANSLATION_X:
                 return mTranslationX;
-            case Cycle.S_TRANSLATION_Y:
+            case CycleType.S_TRANSLATION_Y:
                 return mTranslationY;
-            case Cycle.S_TRANSLATION_Z:
+            case CycleType.S_TRANSLATION_Z:
                 return mTranslationZ;
-            case Cycle.S_WAVE_OFFSET:
+            case CycleType.S_WAVE_OFFSET:
                 return mWaveOffset;
-            case Cycle.S_WAVE_PHASE:
+            case CycleType.S_WAVE_PHASE:
                 return mWavePhase;
-            case Cycle.S_PROGRESS:
+            case CycleType.S_PROGRESS:
                 return mProgress;
             default:
                 return Float.NaN;
@@ -241,48 +241,48 @@ public class MotionKeyCycle extends MotionKey {
     @Override
     public int getId(String name) {
         switch (name) {
-            case Cycle.S_CURVE_FIT:
-                return Cycle.TYPE_CURVE_FIT;
-            case Cycle.S_VISIBILITY:
-                return Cycle.TYPE_VISIBILITY;
-            case Cycle.S_ALPHA:
-                return Cycle.TYPE_ALPHA;
-            case Cycle.S_TRANSLATION_X:
-                return Cycle.TYPE_TRANSLATION_X;
-            case Cycle.S_TRANSLATION_Y:
-                return Cycle.TYPE_TRANSLATION_Y;
-            case Cycle.S_TRANSLATION_Z:
-                return Cycle.TYPE_TRANSLATION_Z;
-            case Cycle.S_ROTATION_X:
-                return Cycle.TYPE_ROTATION_X;
-            case Cycle.S_ROTATION_Y:
-                return Cycle.TYPE_ROTATION_Y;
-            case Cycle.S_ROTATION_Z:
-                return Cycle.TYPE_ROTATION_Z;
-            case Cycle.S_SCALE_X:
-                return Cycle.TYPE_SCALE_X;
-            case Cycle.S_SCALE_Y:
-                return Cycle.TYPE_SCALE_Y;
-            case Cycle.S_PIVOT_X:
-                return Cycle.TYPE_PIVOT_X;
-            case Cycle.S_PIVOT_Y:
-                return Cycle.TYPE_PIVOT_Y;
-            case Cycle.S_PROGRESS:
-                return Cycle.TYPE_PROGRESS;
-            case Cycle.S_PATH_ROTATE:
-                return Cycle.TYPE_PATH_ROTATE;
-            case Cycle.S_EASING:
-                return Cycle.TYPE_EASING;
-            case Cycle.S_WAVE_PERIOD:
-                return Cycle.TYPE_WAVE_PERIOD;
-            case Cycle.S_WAVE_SHAPE:
-                return Cycle.TYPE_WAVE_SHAPE;
-            case Cycle.S_WAVE_PHASE:
-                return Cycle.TYPE_WAVE_PHASE;
-            case Cycle.S_WAVE_OFFSET:
-                return Cycle.TYPE_WAVE_OFFSET;
-            case Cycle.S_CUSTOM_WAVE_SHAPE:
-                return Cycle.TYPE_CUSTOM_WAVE_SHAPE;
+            case CycleType.S_CURVE_FIT:
+                return CycleType.TYPE_CURVE_FIT;
+            case CycleType.S_VISIBILITY:
+                return CycleType.TYPE_VISIBILITY;
+            case CycleType.S_ALPHA:
+                return CycleType.TYPE_ALPHA;
+            case CycleType.S_TRANSLATION_X:
+                return CycleType.TYPE_TRANSLATION_X;
+            case CycleType.S_TRANSLATION_Y:
+                return CycleType.TYPE_TRANSLATION_Y;
+            case CycleType.S_TRANSLATION_Z:
+                return CycleType.TYPE_TRANSLATION_Z;
+            case CycleType.S_ROTATION_X:
+                return CycleType.TYPE_ROTATION_X;
+            case CycleType.S_ROTATION_Y:
+                return CycleType.TYPE_ROTATION_Y;
+            case CycleType.S_ROTATION_Z:
+                return CycleType.TYPE_ROTATION_Z;
+            case CycleType.S_SCALE_X:
+                return CycleType.TYPE_SCALE_X;
+            case CycleType.S_SCALE_Y:
+                return CycleType.TYPE_SCALE_Y;
+            case CycleType.S_PIVOT_X:
+                return CycleType.TYPE_PIVOT_X;
+            case CycleType.S_PIVOT_Y:
+                return CycleType.TYPE_PIVOT_Y;
+            case CycleType.S_PROGRESS:
+                return CycleType.TYPE_PROGRESS;
+            case CycleType.S_PATH_ROTATE:
+                return CycleType.TYPE_PATH_ROTATE;
+            case CycleType.S_EASING:
+                return CycleType.TYPE_EASING;
+            case CycleType.S_WAVE_PERIOD:
+                return CycleType.TYPE_WAVE_PERIOD;
+            case CycleType.S_WAVE_SHAPE:
+                return CycleType.TYPE_WAVE_SHAPE;
+            case CycleType.S_WAVE_PHASE:
+                return CycleType.TYPE_WAVE_PHASE;
+            case CycleType.S_WAVE_OFFSET:
+                return CycleType.TYPE_WAVE_OFFSET;
+            case CycleType.S_CUSTOM_WAVE_SHAPE:
+                return CycleType.TYPE_CUSTOM_WAVE_SHAPE;
 
         }
         return -1;
@@ -345,7 +345,7 @@ public class MotionKeyCycle extends MotionKey {
                 '}');
         String[]names = nameSet.toArray(new String[0]);
         for (int i = 0; i < names.length; i++) {
-            int id = TypedValues.Attributes.getId(names[i]);
+            int id = AttributesType.getId(names[i]);
             Utils.log(names[i]+ ":"+ getValue(names[i]));
         }
     }

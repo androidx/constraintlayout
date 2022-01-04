@@ -16,7 +16,6 @@
 package androidx.constraintlayout.core.motion.utils;
 
 import androidx.constraintlayout.core.motion.MotionWidget;
-import androidx.constraintlayout.core.state.WidgetFrame;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -41,7 +40,7 @@ public abstract class KeyCycleOscillator {
     ArrayList<WavePoint> mWavePoints = new ArrayList<>();
 
     public static KeyCycleOscillator makeWidgetCycle(String attribute) {
-        if (attribute.equals(TypedValues.Attributes.S_PATH_ROTATE)) {
+        if (attribute.equals(TypedValues.AttributesType.S_PATH_ROTATE)) {
             return new PathRotateSet(attribute);
         }
         return new CoreSpline(attribute);
@@ -53,7 +52,7 @@ public abstract class KeyCycleOscillator {
 
         public CoreSpline(String str) {
             type = str;
-            typeId = TypedValues.Cycle.getId(type);
+            typeId = TypedValues.CycleType.getId(type);
         }
 
         public void setProperty(MotionWidget widget, float t) {
@@ -67,7 +66,7 @@ public abstract class KeyCycleOscillator {
 
         public PathRotateSet(String str) {
             type = str;
-            typeId = TypedValues.Cycle.getId(type);
+            typeId = TypedValues.CycleType.getId(type);
         }
 
         @Override

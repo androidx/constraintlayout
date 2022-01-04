@@ -20,7 +20,6 @@ import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.state.WidgetFrame;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
-import java.util.HashMap;
 import java.util.Set;
 
 public class MotionWidget implements TypedValues {
@@ -151,28 +150,28 @@ public class MotionWidget implements TypedValues {
 
     public boolean setValueMotion(int id, int value) {
         switch (id) {
-            case TypedValues.Motion.TYPE_ANIMATE_RELATIVE_TO:
+            case MotionType.TYPE_ANIMATE_RELATIVE_TO:
                 motion.mAnimateRelativeTo = value;
                 break;
-            case TypedValues.Motion.TYPE_ANIMATE_CIRCLEANGLE_TO:
+            case MotionType.TYPE_ANIMATE_CIRCLEANGLE_TO:
                 motion.mAnimateCircleAngleTo = value;
                 break;
-            case TypedValues.Motion.TYPE_PATHMOTION_ARC:
+            case MotionType.TYPE_PATHMOTION_ARC:
                 motion.mPathMotionArc = value;
                 break;
-            case TypedValues.Motion.TYPE_DRAW_PATH:
+            case MotionType.TYPE_DRAW_PATH:
                 motion.mDrawPath = value;
                 break;
-            case TypedValues.Motion.TYPE_POLAR_RELATIVETO:
+            case MotionType.TYPE_POLAR_RELATIVETO:
                 motion.mPolarRelativeTo = value;
                 break;
-            case TypedValues.Motion.TYPE_QUANTIZE_MOTIONSTEPS:
+            case MotionType.TYPE_QUANTIZE_MOTIONSTEPS:
                 motion.mQuantizeMotionSteps = value;
                 break;
-            case TypedValues.Motion.TYPE_QUANTIZE_INTERPOLATOR_TYPE:
+            case MotionType.TYPE_QUANTIZE_INTERPOLATOR_TYPE:
                 motion.mQuantizeInterpolatorType = value;
                 break; // undefined
-            case TypedValues.Motion.TYPE_QUANTIZE_INTERPOLATOR_ID:
+            case MotionType.TYPE_QUANTIZE_INTERPOLATOR_ID:
                 motion.mQuantizeInterpolatorID = value;
                 break;
             default:
@@ -184,10 +183,10 @@ public class MotionWidget implements TypedValues {
     public boolean setValueMotion(int id, String value) {
         switch (id) {
 
-            case TypedValues.Motion.TYPE_EASING:
+            case MotionType.TYPE_EASING:
                 motion.mTransitionEasing = value;
                 break;
-            case TypedValues.Motion.TYPE_QUANTIZE_INTERPOLATOR:
+            case MotionType.TYPE_QUANTIZE_INTERPOLATOR:
                 motion.mQuantizeInterpolatorString = value;
                 break;
             default:
@@ -198,13 +197,13 @@ public class MotionWidget implements TypedValues {
 
     public boolean setValueMotion(int id, float value) {
         switch (id) {
-            case TypedValues.Motion.TYPE_STAGGER:
+            case MotionType.TYPE_STAGGER:
                 motion.mMotionStagger = value;
                 break;
-            case TypedValues.Motion.TYPE_PATH_ROTATE:
+            case MotionType.TYPE_PATH_ROTATE:
                 motion.mPathRotate = value;
                 break;
-            case TypedValues.Motion.TYPE_QUANTIZE_MOTION_PHASE:
+            case MotionType.TYPE_QUANTIZE_MOTION_PHASE:
                 motion.mQuantizeMotionPhase = value;
                 break;
             default:
@@ -221,43 +220,43 @@ public class MotionWidget implements TypedValues {
      */
     public boolean setValueAttributes(int id, float value) {
         switch (id) {
-            case TypedValues.Attributes.TYPE_ALPHA:
+            case AttributesType.TYPE_ALPHA:
                 widgetFrame.alpha = value;
                 break;
-            case TypedValues.Attributes.TYPE_TRANSLATION_X:
+            case AttributesType.TYPE_TRANSLATION_X:
                 widgetFrame.translationX = value;
                 break;
-            case TypedValues.Attributes.TYPE_TRANSLATION_Y:
+            case AttributesType.TYPE_TRANSLATION_Y:
                 widgetFrame.translationY = value;
                 break;
-            case TypedValues.Attributes.TYPE_TRANSLATION_Z:
+            case AttributesType.TYPE_TRANSLATION_Z:
                 widgetFrame.translationZ = value;
                 break;
-            case TypedValues.Attributes.TYPE_ROTATION_X:
+            case AttributesType.TYPE_ROTATION_X:
                 widgetFrame.rotationX = value;
                 break;
-            case TypedValues.Attributes.TYPE_ROTATION_Y:
+            case AttributesType.TYPE_ROTATION_Y:
                 widgetFrame.rotationY = value;
                 break;
-            case TypedValues.Attributes.TYPE_ROTATION_Z:
+            case AttributesType.TYPE_ROTATION_Z:
                 widgetFrame.rotationZ = value;
                 break;
-            case TypedValues.Attributes.TYPE_SCALE_X:
+            case AttributesType.TYPE_SCALE_X:
                 widgetFrame.scaleX = value;
                 break;
-            case TypedValues.Attributes.TYPE_SCALE_Y:
+            case AttributesType.TYPE_SCALE_Y:
                 widgetFrame.scaleY = value;
                 break;
-            case TypedValues.Attributes.TYPE_PIVOT_X:
+            case AttributesType.TYPE_PIVOT_X:
                 widgetFrame.pivotX = value;
                 break;
-            case TypedValues.Attributes.TYPE_PIVOT_Y:
+            case AttributesType.TYPE_PIVOT_Y:
                 widgetFrame.pivotY = value;
                 break;
-            case TypedValues.Attributes.TYPE_PROGRESS:
+            case AttributesType.TYPE_PROGRESS:
                 mProgress = value;
                 break;
-            case TypedValues.Attributes.TYPE_PATH_ROTATE:
+            case AttributesType.TYPE_PATH_ROTATE:
                 mTransitionPathRotate = value;
                 break;
             default:
@@ -272,31 +271,31 @@ public class MotionWidget implements TypedValues {
      */
     public float getValueAttributes(int id) {
         switch (id) {
-            case TypedValues.Attributes.TYPE_ALPHA:
+            case AttributesType.TYPE_ALPHA:
                 return widgetFrame.alpha;
-            case TypedValues.Attributes.TYPE_TRANSLATION_X:
+            case AttributesType.TYPE_TRANSLATION_X:
                 return widgetFrame.translationX;
-            case TypedValues.Attributes.TYPE_TRANSLATION_Y:
+            case AttributesType.TYPE_TRANSLATION_Y:
                 return widgetFrame.translationY;
-            case TypedValues.Attributes.TYPE_TRANSLATION_Z:
+            case AttributesType.TYPE_TRANSLATION_Z:
                 return widgetFrame.translationZ;
-            case TypedValues.Attributes.TYPE_ROTATION_X:
+            case AttributesType.TYPE_ROTATION_X:
                 return widgetFrame.rotationX;
-            case TypedValues.Attributes.TYPE_ROTATION_Y:
+            case AttributesType.TYPE_ROTATION_Y:
                 return widgetFrame.rotationY;
-            case TypedValues.Attributes.TYPE_ROTATION_Z:
+            case AttributesType.TYPE_ROTATION_Z:
                 return widgetFrame.rotationZ;
-            case TypedValues.Attributes.TYPE_SCALE_X:
+            case AttributesType.TYPE_SCALE_X:
                 return widgetFrame.scaleX;
-            case TypedValues.Attributes.TYPE_SCALE_Y:
+            case AttributesType.TYPE_SCALE_Y:
                 return widgetFrame.scaleY;
-            case TypedValues.Attributes.TYPE_PIVOT_X:
+            case AttributesType.TYPE_PIVOT_X:
                 return widgetFrame.pivotX;
-            case TypedValues.Attributes.TYPE_PIVOT_Y:
+            case AttributesType.TYPE_PIVOT_Y:
                 return widgetFrame.pivotY;
-            case TypedValues.Attributes.TYPE_PROGRESS:
+            case AttributesType.TYPE_PROGRESS:
                 return  mProgress;
-            case TypedValues.Attributes.TYPE_PATH_ROTATE:
+            case AttributesType.TYPE_PATH_ROTATE:
                 return mTransitionPathRotate;
             default:
                 return Float.NaN;
@@ -305,11 +304,11 @@ public class MotionWidget implements TypedValues {
     }
     @Override
     public int getId(String name) {
-        int ret = TypedValues.Attributes.getId(name);
+        int ret = AttributesType.getId(name);
         if (ret != -1) {
             return ret;
         }
-        return TypedValues.Motion.getId(name);
+        return MotionType.getId(name);
     }
 
     public int getTop() {

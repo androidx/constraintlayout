@@ -69,64 +69,64 @@ public class MotionKeyTimeCycle extends MotionKey {
                 continue;
             }
             switch (s) {
-                case TypedValues.Attributes.S_ALPHA:
+                case AttributesType.S_ALPHA:
                     if (!Float.isNaN(mAlpha)) {
                         splineSet.setPoint(mFramePosition, mAlpha, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
 
-                case TypedValues.Attributes.S_ROTATION_X:
+                case AttributesType.S_ROTATION_X:
                     if (!Float.isNaN(mRotationX)) {
                         splineSet.setPoint(mFramePosition, mRotationX, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
-                case TypedValues.Attributes.S_ROTATION_Y:
+                case AttributesType.S_ROTATION_Y:
                     if (!Float.isNaN(mRotationY)) {
                         splineSet.setPoint(mFramePosition, mRotationY, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
-                case TypedValues.Attributes.S_ROTATION_Z:
+                case AttributesType.S_ROTATION_Z:
                     if (!Float.isNaN(mRotation)) {
                         splineSet.setPoint(mFramePosition, mRotation, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
-                case TypedValues.Attributes.S_PATH_ROTATE:
+                case AttributesType.S_PATH_ROTATE:
                     if (!Float.isNaN(mTransitionPathRotate)) {
                         splineSet.setPoint(mFramePosition, mTransitionPathRotate, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
 
-                case TypedValues.Attributes.S_SCALE_X:
+                case AttributesType.S_SCALE_X:
                     if (!Float.isNaN(mScaleX)) {
                         splineSet.setPoint(mFramePosition, mScaleX, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
-                case TypedValues.Attributes.S_SCALE_Y:
+                case AttributesType.S_SCALE_Y:
                     if (!Float.isNaN(mScaleY)) {
                         splineSet.setPoint(mFramePosition, mScaleY, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
-                case TypedValues.Attributes.S_TRANSLATION_X:
+                case AttributesType.S_TRANSLATION_X:
                     if (!Float.isNaN(mTranslationX)) {
                         splineSet.setPoint(mFramePosition, mTranslationX, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
-                case TypedValues.Attributes.S_TRANSLATION_Y:
+                case AttributesType.S_TRANSLATION_Y:
                     if (!Float.isNaN(mTranslationY)) {
                         splineSet.setPoint(mFramePosition, mTranslationY, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
-                case TypedValues.Attributes.S_TRANSLATION_Z:
+                case AttributesType.S_TRANSLATION_Z:
                     if (!Float.isNaN(mTranslationZ)) {
                         splineSet.setPoint(mFramePosition, mTranslationZ, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
-                case TypedValues.Attributes.S_ELEVATION:
+                case AttributesType.S_ELEVATION:
                     if (!Float.isNaN(mTranslationZ)) {
                         splineSet.setPoint(mFramePosition, mTranslationZ, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
-                case TypedValues.Attributes.S_PROGRESS:
+                case AttributesType.S_PROGRESS:
                     if (!Float.isNaN(mProgress)) {
                         splineSet.setPoint(mFramePosition, mProgress, mWavePeriod, mWaveShape, mWaveOffset);
                     }
@@ -147,7 +147,7 @@ public class MotionKeyTimeCycle extends MotionKey {
             case TypedValues.TYPE_FRAME_POSITION:
                 mFramePosition = value;
                 break;
-            case Cycle.TYPE_WAVE_SHAPE:
+            case CycleType.TYPE_WAVE_SHAPE:
                 mWaveShape = value;
                 break;
             default:
@@ -158,49 +158,49 @@ public class MotionKeyTimeCycle extends MotionKey {
 
     public boolean setValue(int type, float value) {
         switch (type) {
-            case Cycle.TYPE_ALPHA:
+            case CycleType.TYPE_ALPHA:
                 mAlpha = value;
                 break;
-            case Cycle.TYPE_CURVE_FIT:
+            case CycleType.TYPE_CURVE_FIT:
                 mCurveFit = toInt(value);
                 break;
-            case Cycle.TYPE_ELEVATION:
+            case CycleType.TYPE_ELEVATION:
                 mElevation = toFloat(value);
                 break;
-            case Cycle.TYPE_PROGRESS:
+            case CycleType.TYPE_PROGRESS:
                 mProgress = toFloat(value);
                 break;
-            case Cycle.TYPE_ROTATION_Z:
+            case CycleType.TYPE_ROTATION_Z:
                 mRotation = toFloat(value);
                 break;
-            case Cycle.TYPE_ROTATION_X:
+            case CycleType.TYPE_ROTATION_X:
                 mRotationX = toFloat(value);
                 break;
-            case Cycle.TYPE_ROTATION_Y:
+            case CycleType.TYPE_ROTATION_Y:
                 mRotationY = toFloat(value);
                 break;
-            case Cycle.TYPE_SCALE_X:
+            case CycleType.TYPE_SCALE_X:
                 mScaleX = toFloat(value);
                 break;
-            case Cycle.TYPE_SCALE_Y:
+            case CycleType.TYPE_SCALE_Y:
                 mScaleY = toFloat(value);
                 break;
-            case Cycle.TYPE_PATH_ROTATE:
+            case CycleType.TYPE_PATH_ROTATE:
                 mTransitionPathRotate = toFloat(value);
                 break;
-            case Cycle.TYPE_TRANSLATION_X:
+            case CycleType.TYPE_TRANSLATION_X:
                 mTranslationX = toFloat(value);
                 break;
-            case Cycle.TYPE_TRANSLATION_Y:
+            case CycleType.TYPE_TRANSLATION_Y:
                 mTranslationY = toFloat(value);
                 break;
-            case Cycle.TYPE_TRANSLATION_Z:
+            case CycleType.TYPE_TRANSLATION_Z:
                 mTranslationZ = toFloat(value);
                 break;
-            case Cycle.TYPE_WAVE_PERIOD:
+            case CycleType.TYPE_WAVE_PERIOD:
                 mWavePeriod = toFloat(value);
                 break;
-            case Cycle.TYPE_WAVE_OFFSET:
+            case CycleType.TYPE_WAVE_OFFSET:
                 mWaveOffset = toFloat(value);
                 break;
             default:
@@ -211,11 +211,11 @@ public class MotionKeyTimeCycle extends MotionKey {
 
     public boolean setValue(int type, String value) {
         switch (type) {
-            case Cycle.TYPE_WAVE_SHAPE:
+            case CycleType.TYPE_WAVE_SHAPE:
                 mWaveShape = Oscillator.CUSTOM;
                 mCustomWaveShape = value;
                 break;
-            case Cycle.TYPE_EASING:
+            case CycleType.TYPE_EASING:
                 mTransitionEasing = value;
                 break;
             default:
@@ -254,37 +254,37 @@ public class MotionKeyTimeCycle extends MotionKey {
     @Override
     public void getAttributeNames(HashSet<String> attributes) {
         if (!Float.isNaN(mAlpha)) {
-            attributes.add(Cycle.S_ALPHA);
+            attributes.add(CycleType.S_ALPHA);
         }
         if (!Float.isNaN(mElevation)) {
-            attributes.add(Cycle.S_ELEVATION);
+            attributes.add(CycleType.S_ELEVATION);
         }
         if (!Float.isNaN(mRotation)) {
-            attributes.add(Cycle.S_ROTATION_Z);
+            attributes.add(CycleType.S_ROTATION_Z);
         }
         if (!Float.isNaN(mRotationX)) {
-            attributes.add(Cycle.S_ROTATION_X);
+            attributes.add(CycleType.S_ROTATION_X);
         }
         if (!Float.isNaN(mRotationY)) {
-            attributes.add(Cycle.S_ROTATION_Y);
+            attributes.add(CycleType.S_ROTATION_Y);
         }
         if (!Float.isNaN(mScaleX)) {
-            attributes.add(Cycle.S_SCALE_X);
+            attributes.add(CycleType.S_SCALE_X);
         }
         if (!Float.isNaN(mScaleY)) {
-            attributes.add(Cycle.S_SCALE_Y);
+            attributes.add(CycleType.S_SCALE_Y);
         }
         if (!Float.isNaN(mTransitionPathRotate)) {
-            attributes.add(Cycle.S_PATH_ROTATE);
+            attributes.add(CycleType.S_PATH_ROTATE);
         }
         if (!Float.isNaN(mTranslationX)) {
-            attributes.add(Cycle.S_TRANSLATION_X);
+            attributes.add(CycleType.S_TRANSLATION_X);
         }
         if (!Float.isNaN(mTranslationY)) {
-            attributes.add(Cycle.S_TRANSLATION_Y);
+            attributes.add(CycleType.S_TRANSLATION_Y);
         }
         if (!Float.isNaN(mTranslationZ)) {
-            attributes.add(Cycle.S_TRANSLATION_Z);
+            attributes.add(CycleType.S_TRANSLATION_Z);
         }
         if (mCustom.size() > 0) {
             for (String s : mCustom.keySet()) {
@@ -299,6 +299,6 @@ public class MotionKeyTimeCycle extends MotionKey {
 
     @Override
     public int getId(String name) {
-        return Cycle.getId(name);
+        return CycleType.getId(name);
     }
 }

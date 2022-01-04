@@ -18,7 +18,6 @@ package androidx.constraintlayout.core.motion.key;
 import androidx.constraintlayout.core.motion.CustomVariable;
 import androidx.constraintlayout.core.motion.utils.SplineSet;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
-import androidx.constraintlayout.core.motion.utils.Utils;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -56,46 +55,46 @@ public class MotionKeyAttributes extends MotionKey {
     public void getAttributeNames(HashSet<String> attributes) {
 
         if (!Float.isNaN(mAlpha)) {
-            attributes.add(Attributes.S_ALPHA);
+            attributes.add(AttributesType.S_ALPHA);
         }
         if (!Float.isNaN(mElevation)) {
-            attributes.add(Attributes.S_ELEVATION);
+            attributes.add(AttributesType.S_ELEVATION);
         }
         if (!Float.isNaN(mRotation)) {
-            attributes.add(Attributes.S_ROTATION_Z);
+            attributes.add(AttributesType.S_ROTATION_Z);
         }
         if (!Float.isNaN(mRotationX)) {
-            attributes.add(Attributes.S_ROTATION_X);
+            attributes.add(AttributesType.S_ROTATION_X);
         }
         if (!Float.isNaN(mRotationY)) {
-            attributes.add(Attributes.S_ROTATION_Y);
+            attributes.add(AttributesType.S_ROTATION_Y);
         }
         if (!Float.isNaN(mPivotX)) {
-            attributes.add(Attributes.S_PIVOT_X);
+            attributes.add(AttributesType.S_PIVOT_X);
         }
         if (!Float.isNaN(mPivotY)) {
-            attributes.add(Attributes.S_PIVOT_Y);
+            attributes.add(AttributesType.S_PIVOT_Y);
         }
         if (!Float.isNaN(mTranslationX)) {
-            attributes.add(Attributes.S_TRANSLATION_X);
+            attributes.add(AttributesType.S_TRANSLATION_X);
         }
         if (!Float.isNaN(mTranslationY)) {
-            attributes.add(Attributes.S_TRANSLATION_Y);
+            attributes.add(AttributesType.S_TRANSLATION_Y);
         }
         if (!Float.isNaN(mTranslationZ)) {
-            attributes.add(Attributes.S_TRANSLATION_Z);
+            attributes.add(AttributesType.S_TRANSLATION_Z);
         }
         if (!Float.isNaN(mTransitionPathRotate)) {
-            attributes.add(Attributes.S_PATH_ROTATE);
+            attributes.add(AttributesType.S_PATH_ROTATE);
         }
         if (!Float.isNaN(mScaleX)) {
-            attributes.add(Attributes.S_SCALE_X);
+            attributes.add(AttributesType.S_SCALE_X);
         }
         if (!Float.isNaN(mScaleY)) {
-            attributes.add(Attributes.S_SCALE_Y);
+            attributes.add(AttributesType.S_SCALE_Y);
         }
         if (!Float.isNaN(mProgress)) {
-            attributes.add(Attributes.S_PROGRESS);
+            attributes.add(AttributesType.S_PROGRESS);
         }
         if (mCustom.size() > 0) {
             for (String s : mCustom.keySet()) {
@@ -112,8 +111,8 @@ public class MotionKeyAttributes extends MotionKey {
                 continue;
             }
             // TODO support custom
-            if (s.startsWith(Attributes.S_CUSTOM)) {
-                String cKey = s.substring(Attributes.S_CUSTOM.length() + 1);
+            if (s.startsWith(AttributesType.S_CUSTOM)) {
+                String cKey = s.substring(AttributesType.S_CUSTOM.length() + 1);
                 CustomVariable cValue = mCustom.get(cKey);
                 if (cValue != null) {
                     ((SplineSet.CustomSpline)splineSet).setPoint(mFramePosition, cValue);
@@ -121,72 +120,72 @@ public class MotionKeyAttributes extends MotionKey {
                 continue;
             }
             switch (s) {
-                case Attributes.S_ALPHA:
+                case AttributesType.S_ALPHA:
                     if (!Float.isNaN(mAlpha)) {
                         splineSet.setPoint(mFramePosition, mAlpha);
                     }
                     break;
-                case Attributes.S_ELEVATION:
+                case AttributesType.S_ELEVATION:
                     if (!Float.isNaN(mElevation)) {
                         splineSet.setPoint(mFramePosition, mElevation);
                     }
                     break;
-                case Attributes.S_ROTATION_Z:
+                case AttributesType.S_ROTATION_Z:
                     if (!Float.isNaN(mRotation)) {
                         splineSet.setPoint(mFramePosition, mRotation);
                     }
                     break;
-                case Attributes.S_ROTATION_X:
+                case AttributesType.S_ROTATION_X:
                     if (!Float.isNaN(mRotationX)) {
                         splineSet.setPoint(mFramePosition, mRotationX);
                     }
                     break;
-                case Attributes.S_ROTATION_Y:
+                case AttributesType.S_ROTATION_Y:
                     if (!Float.isNaN(mRotationY)) {
                         splineSet.setPoint(mFramePosition, mRotationY);
                     }
                     break;
-                case Attributes.S_PIVOT_X:
+                case AttributesType.S_PIVOT_X:
                     if (!Float.isNaN(mRotationX)) {
                         splineSet.setPoint(mFramePosition, mPivotX);
                     }
                     break;
-                case Attributes.S_PIVOT_Y:
+                case AttributesType.S_PIVOT_Y:
                     if (!Float.isNaN(mRotationY)) {
                         splineSet.setPoint(mFramePosition, mPivotY);
                     }
                     break;
-                case Attributes.S_PATH_ROTATE:
+                case AttributesType.S_PATH_ROTATE:
                     if (!Float.isNaN(mTransitionPathRotate)) {
                         splineSet.setPoint(mFramePosition, mTransitionPathRotate);
                     }
                     break;
-                case Attributes.S_SCALE_X:
+                case AttributesType.S_SCALE_X:
                     if (!Float.isNaN(mScaleX)) {
                         splineSet.setPoint(mFramePosition, mScaleX);
                     }
                     break;
-                case Attributes.S_SCALE_Y:
+                case AttributesType.S_SCALE_Y:
                     if (!Float.isNaN(mScaleY)) {
                         splineSet.setPoint(mFramePosition, mScaleY);
                     }
                     break;
-                case Attributes.S_TRANSLATION_X:
+                case AttributesType.S_TRANSLATION_X:
                     if (!Float.isNaN(mTranslationX)) {
                         splineSet.setPoint(mFramePosition, mTranslationX);
                     }
                     break;
-                case Attributes.S_TRANSLATION_Y:
+                case AttributesType.S_TRANSLATION_Y:
                     if (!Float.isNaN(mTranslationY)) {
                         splineSet.setPoint(mFramePosition, mTranslationY);
                     }
                     break;
-                case Attributes.S_TRANSLATION_Z:
+                case AttributesType.S_TRANSLATION_Z:
                     if (!Float.isNaN(mTranslationZ)) {
                         splineSet.setPoint(mFramePosition, mTranslationZ);
                     }
                     break;
-                case Attributes.S_PROGRESS:
+                case AttributesType.S_PROGRESS:
                     if (!Float.isNaN(mProgress)) {
                         splineSet.setPoint(mFramePosition, mProgress);
                     }
@@ -205,10 +204,10 @@ public class MotionKeyAttributes extends MotionKey {
     public boolean setValue(int type, int value) {
 
         switch (type) {
-            case TypedValues.Attributes.TYPE_VISIBILITY:
+            case AttributesType.TYPE_VISIBILITY:
                 mVisibility = value;
                 break;
-            case TypedValues.Attributes.TYPE_CURVE_FIT:
+            case AttributesType.TYPE_CURVE_FIT:
                 mCurveFit = value;
                 break;
             case TypedValues.TYPE_FRAME_POSITION:
@@ -224,46 +223,46 @@ public class MotionKeyAttributes extends MotionKey {
 
     public boolean setValue(int type, float value) {
         switch (type) {
-            case TypedValues.Attributes.TYPE_ALPHA:
+            case AttributesType.TYPE_ALPHA:
                 mAlpha = value;
                 break;
-            case TypedValues.Attributes.TYPE_TRANSLATION_X:
+            case AttributesType.TYPE_TRANSLATION_X:
                 mTranslationX = value;
                 break;
-            case TypedValues.Attributes.TYPE_TRANSLATION_Y:
+            case AttributesType.TYPE_TRANSLATION_Y:
                 mTranslationY = value;
                 break;
-            case TypedValues.Attributes.TYPE_TRANSLATION_Z:
+            case AttributesType.TYPE_TRANSLATION_Z:
                 mTranslationZ = value;
                 break;
-            case Attributes.TYPE_ELEVATION:
+            case AttributesType.TYPE_ELEVATION:
                 mElevation = value;
                 break;
-            case TypedValues.Attributes.TYPE_ROTATION_X:
+            case AttributesType.TYPE_ROTATION_X:
                 mRotationX = value;
                 break;
-            case TypedValues.Attributes.TYPE_ROTATION_Y:
+            case AttributesType.TYPE_ROTATION_Y:
                 mRotationY = value;
                 break;
-            case TypedValues.Attributes.TYPE_ROTATION_Z:
+            case AttributesType.TYPE_ROTATION_Z:
                 mRotation = value;
                 break;
-            case TypedValues.Attributes.TYPE_SCALE_X:
+            case AttributesType.TYPE_SCALE_X:
                 mScaleX = value;
                 break;
-            case TypedValues.Attributes.TYPE_SCALE_Y:
+            case AttributesType.TYPE_SCALE_Y:
                 mScaleY = value;
                 break;
-            case TypedValues.Attributes.TYPE_PIVOT_X:
+            case AttributesType.TYPE_PIVOT_X:
                 mPivotX = value;
                 break;
-            case TypedValues.Attributes.TYPE_PIVOT_Y:
+            case AttributesType.TYPE_PIVOT_Y:
                 mPivotY = value;
                 break;
-            case TypedValues.Attributes.TYPE_PROGRESS:
+            case AttributesType.TYPE_PROGRESS:
                 mProgress = value;
                 break;
-            case TypedValues.Attributes.TYPE_PATH_ROTATE:
+            case AttributesType.TYPE_PATH_ROTATE:
                 mTransitionPathRotate = value;
                 break;
             case TypedValues.TYPE_FRAME_POSITION:
@@ -277,57 +276,57 @@ public class MotionKeyAttributes extends MotionKey {
 
     public void setInterpolation(HashMap<String, Integer> interpolation) {
         if (!Float.isNaN(mAlpha)) {
-            interpolation.put(TypedValues.Attributes.S_ALPHA, mCurveFit);
+            interpolation.put(AttributesType.S_ALPHA, mCurveFit);
         }
         if (!Float.isNaN(mElevation)) {
-            interpolation.put(TypedValues.Attributes.S_ELEVATION, mCurveFit);
+            interpolation.put(AttributesType.S_ELEVATION, mCurveFit);
         }
         if (!Float.isNaN(mRotation)) {
-            interpolation.put(TypedValues.Attributes.S_ROTATION_Z, mCurveFit);
+            interpolation.put(AttributesType.S_ROTATION_Z, mCurveFit);
         }
         if (!Float.isNaN(mRotationX)) {
-            interpolation.put(TypedValues.Attributes.S_ROTATION_X, mCurveFit);
+            interpolation.put(AttributesType.S_ROTATION_X, mCurveFit);
         }
         if (!Float.isNaN(mRotationY)) {
-            interpolation.put(TypedValues.Attributes.S_ROTATION_Y, mCurveFit);
+            interpolation.put(AttributesType.S_ROTATION_Y, mCurveFit);
         }
         if (!Float.isNaN(mPivotX)) {
-            interpolation.put(TypedValues.Attributes.S_PIVOT_X, mCurveFit);
+            interpolation.put(AttributesType.S_PIVOT_X, mCurveFit);
         }
         if (!Float.isNaN(mPivotY)) {
-            interpolation.put(TypedValues.Attributes.S_PIVOT_Y, mCurveFit);
+            interpolation.put(AttributesType.S_PIVOT_Y, mCurveFit);
         }
         if (!Float.isNaN(mTranslationX)) {
-            interpolation.put(TypedValues.Attributes.S_TRANSLATION_X, mCurveFit);
+            interpolation.put(AttributesType.S_TRANSLATION_X, mCurveFit);
         }
         if (!Float.isNaN(mTranslationY)) {
-            interpolation.put(TypedValues.Attributes.S_TRANSLATION_Y, mCurveFit);
+            interpolation.put(AttributesType.S_TRANSLATION_Y, mCurveFit);
         }
         if (!Float.isNaN(mTranslationZ)) {
-            interpolation.put(TypedValues.Attributes.S_TRANSLATION_Z, mCurveFit);
+            interpolation.put(AttributesType.S_TRANSLATION_Z, mCurveFit);
         }
         if (!Float.isNaN(mTransitionPathRotate)) {
-            interpolation.put(TypedValues.Attributes.S_PATH_ROTATE, mCurveFit);
+            interpolation.put(AttributesType.S_PATH_ROTATE, mCurveFit);
         }
         if (!Float.isNaN(mScaleX)) {
-            interpolation.put(TypedValues.Attributes.S_SCALE_X, mCurveFit);
+            interpolation.put(AttributesType.S_SCALE_X, mCurveFit);
         }
         if (!Float.isNaN(mScaleY)) {
-            interpolation.put(TypedValues.Attributes.S_SCALE_Y, mCurveFit);
+            interpolation.put(AttributesType.S_SCALE_Y, mCurveFit);
         }
         if (!Float.isNaN(mProgress)) {
-            interpolation.put(TypedValues.Attributes.S_PROGRESS, mCurveFit);
+            interpolation.put(AttributesType.S_PROGRESS, mCurveFit);
         }
         if (mCustom.size() > 0) {
             for (String s : mCustom.keySet()) {
-                interpolation.put(TypedValues.Attributes.S_CUSTOM + "," + s, mCurveFit);
+                interpolation.put(AttributesType.S_CUSTOM + "," + s, mCurveFit);
             }
         }
     }
 
     public boolean setValue(int type, String value) {
         switch (type) {
-            case TypedValues.Attributes.TYPE_EASING:
+            case AttributesType.TYPE_EASING:
                 mTransitionEasing = value;
                 break;
 
@@ -342,7 +341,7 @@ public class MotionKeyAttributes extends MotionKey {
 
     @Override
     public int getId(String name) {
-        return TypedValues.Attributes.getId(name);
+        return AttributesType.getId(name);
     }
 
     public int getCurveFit() {
@@ -356,40 +355,40 @@ public class MotionKeyAttributes extends MotionKey {
         System.out.println(" ------------- " + mFramePosition +" -------------");
         String[]names = nameSet.toArray(new String[0]);
         for (int i = 0; i < names.length; i++) {
-            int id = TypedValues.Attributes.getId(names[i]);
+            int id = AttributesType.getId(names[i]);
             System.out.println(names[i]+ ":"+ getFloatValue(id));
         }
     }
 
     private float getFloatValue(int id) {
         switch (id) {
-            case TypedValues.Attributes.TYPE_ALPHA:
+            case AttributesType.TYPE_ALPHA:
                 return mAlpha;
-            case TypedValues.Attributes.TYPE_TRANSLATION_X:
+            case AttributesType.TYPE_TRANSLATION_X:
                 return mTranslationX;
-            case TypedValues.Attributes.TYPE_TRANSLATION_Y:
+            case AttributesType.TYPE_TRANSLATION_Y:
                 return mTranslationY;
-            case TypedValues.Attributes.TYPE_TRANSLATION_Z:
+            case AttributesType.TYPE_TRANSLATION_Z:
                 return mTranslationZ;
-            case Attributes.TYPE_ELEVATION:
+            case AttributesType.TYPE_ELEVATION:
                 return mElevation;
-            case TypedValues.Attributes.TYPE_ROTATION_X:
+            case AttributesType.TYPE_ROTATION_X:
                 return mRotationX;
-            case TypedValues.Attributes.TYPE_ROTATION_Y:
+            case AttributesType.TYPE_ROTATION_Y:
                 return mRotationY;
-            case TypedValues.Attributes.TYPE_ROTATION_Z:
+            case AttributesType.TYPE_ROTATION_Z:
                 return mRotation;
-            case TypedValues.Attributes.TYPE_SCALE_X:
+            case AttributesType.TYPE_SCALE_X:
                 return mScaleX;
-            case TypedValues.Attributes.TYPE_SCALE_Y:
+            case AttributesType.TYPE_SCALE_Y:
                 return mScaleY;
-            case TypedValues.Attributes.TYPE_PIVOT_X:
+            case AttributesType.TYPE_PIVOT_X:
                 return mPivotX;
-            case TypedValues.Attributes.TYPE_PIVOT_Y:
+            case AttributesType.TYPE_PIVOT_Y:
                 return mPivotY;
-            case TypedValues.Attributes.TYPE_PROGRESS:
+            case AttributesType.TYPE_PROGRESS:
                 return mProgress;
-            case TypedValues.Attributes.TYPE_PATH_ROTATE:
+            case AttributesType.TYPE_PATH_ROTATE:
                 return mTransitionPathRotate;
             case TypedValues.TYPE_FRAME_POSITION:
                 return mFramePosition;

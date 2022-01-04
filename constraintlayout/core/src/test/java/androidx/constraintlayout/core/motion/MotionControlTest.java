@@ -17,11 +17,8 @@ package androidx.constraintlayout.core.motion;
 
 import static org.junit.Assert.assertEquals;
 
-import androidx.constraintlayout.core.motion.Motion;
-import androidx.constraintlayout.core.motion.MotionWidget;
 import androidx.constraintlayout.core.motion.key.MotionKeyPosition;
 import androidx.constraintlayout.core.motion.utils.ArcCurveFit;
-import androidx.constraintlayout.core.motion.utils.CurveFit;
 import androidx.constraintlayout.core.motion.utils.KeyCache;
 import androidx.constraintlayout.core.motion.utils.*;
 
@@ -133,10 +130,10 @@ public class MotionControlTest {
         mw1.setBounds(0, 0, 3, 4);
         mw2.setBounds(400, 400, 460, 480);
         keyPosition.setFramePosition(50);
-        keyPosition.setValue(TypedValues.Position.TYPE_PERCENT_X, 1.0f);
-        keyPosition.setValue(TypedValues.Position.TYPE_PERCENT_Y, 0.5f);
-        keyPosition.setValue(TypedValues.Position.TYPE_PERCENT_HEIGHT, 0.2f);
-        keyPosition.setValue(TypedValues.Position.TYPE_PERCENT_WIDTH, 1f);
+        keyPosition.setValue(TypedValues.PositionType.TYPE_PERCENT_X, 1.0f);
+        keyPosition.setValue(TypedValues.PositionType.TYPE_PERCENT_Y, 0.5f);
+        keyPosition.setValue(TypedValues.PositionType.TYPE_PERCENT_HEIGHT, 0.2f);
+        keyPosition.setValue(TypedValues.PositionType.TYPE_PERCENT_WIDTH, 1f);
         // mw1.motion.mPathMotionArc = MotionWidget.A
         Motion motion = new Motion(mw1);
         //  motion.setPathMotionArc(ArcCurveFit.ARC_START_HORIZONTAL);

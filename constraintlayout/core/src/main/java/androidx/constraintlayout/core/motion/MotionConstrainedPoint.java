@@ -87,55 +87,55 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
      */
     void different(MotionConstrainedPoint points, HashSet<String> keySet) {
         if (diff(alpha, points.alpha)) {
-            keySet.add(TypedValues.Attributes.S_ALPHA);
+            keySet.add(TypedValues.AttributesType.S_ALPHA);
         }
         if (diff(elevation, points.elevation)) {
-            keySet.add(TypedValues.Attributes.S_TRANSLATION_Z);
+            keySet.add(TypedValues.AttributesType.S_TRANSLATION_Z);
         }
         if (visibility != points.visibility
                 && mVisibilityMode == MotionWidget.VISIBILITY_MODE_NORMAL
                 && (visibility == MotionWidget.VISIBLE
                 || points.visibility == MotionWidget.VISIBLE)) {
-            keySet.add(TypedValues.Attributes.S_ALPHA);
+            keySet.add(TypedValues.AttributesType.S_ALPHA);
         }
         if (diff(rotation, points.rotation)) {
-            keySet.add(TypedValues.Attributes.S_ROTATION_Z);
+            keySet.add(TypedValues.AttributesType.S_ROTATION_Z);
         }
         if (!(Float.isNaN(mPathRotate) && Float.isNaN(points.mPathRotate))) {
-            keySet.add(TypedValues.Attributes.S_PATH_ROTATE);
+            keySet.add(TypedValues.AttributesType.S_PATH_ROTATE);
         }
         if (!(Float.isNaN(mProgress) && Float.isNaN(points.mProgress))) {
-            keySet.add(TypedValues.Attributes.S_PROGRESS);
+            keySet.add(TypedValues.AttributesType.S_PROGRESS);
         }
         if (diff(rotationX, points.rotationX)) {
-            keySet.add(TypedValues.Attributes.S_ROTATION_X);
+            keySet.add(TypedValues.AttributesType.S_ROTATION_X);
         }
         if (diff(rotationY, points.rotationY)) {
-            keySet.add(TypedValues.Attributes.S_ROTATION_Y);
+            keySet.add(TypedValues.AttributesType.S_ROTATION_Y);
         }
         if (diff(mPivotX, points.mPivotX)) {
-            keySet.add(TypedValues.Attributes.S_PIVOT_X);
+            keySet.add(TypedValues.AttributesType.S_PIVOT_X);
         }
         if (diff(mPivotY, points.mPivotY)) {
-            keySet.add(TypedValues.Attributes.S_PIVOT_Y);
+            keySet.add(TypedValues.AttributesType.S_PIVOT_Y);
         }
         if (diff(scaleX, points.scaleX)) {
-            keySet.add(TypedValues.Attributes.S_SCALE_X);
+            keySet.add(TypedValues.AttributesType.S_SCALE_X);
         }
         if (diff(scaleY, points.scaleY)) {
-            keySet.add(TypedValues.Attributes.S_SCALE_Y);
+            keySet.add(TypedValues.AttributesType.S_SCALE_Y);
         }
         if (diff(translationX, points.translationX)) {
-            keySet.add(TypedValues.Attributes.S_TRANSLATION_X);
+            keySet.add(TypedValues.AttributesType.S_TRANSLATION_X);
         }
         if (diff(translationY, points.translationY)) {
-            keySet.add(TypedValues.Attributes.S_TRANSLATION_Y);
+            keySet.add(TypedValues.AttributesType.S_TRANSLATION_Y);
         }
         if (diff(translationZ, points.translationZ)) {
-            keySet.add(TypedValues.Attributes.S_TRANSLATION_Z);
+            keySet.add(TypedValues.AttributesType.S_TRANSLATION_Z);
         }
         if (diff(elevation, points.elevation)) {
-            keySet.add(TypedValues.Attributes.S_ELEVATION);
+            keySet.add(TypedValues.AttributesType.S_ELEVATION);
         }
     }
 
@@ -232,43 +232,43 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
                 Utils.log(TAG, "setPoint" + mFramePosition + "  spline set = " + s);
             }
             switch (s) {
-                case TypedValues.Attributes.S_ALPHA:
+                case TypedValues.AttributesType.S_ALPHA:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(alpha) ? 1 : alpha);
                     break;
-                case TypedValues.Attributes.S_ROTATION_Z:
+                case TypedValues.AttributesType.S_ROTATION_Z:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(rotation) ? 0 : rotation);
                     break;
-                case TypedValues.Attributes.S_ROTATION_X:
+                case TypedValues.AttributesType.S_ROTATION_X:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(rotationX) ? 0 : rotationX);
                     break;
-                case TypedValues.Attributes.S_ROTATION_Y:
+                case TypedValues.AttributesType.S_ROTATION_Y:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(rotationY) ? 0 : rotationY);
                     break;
-                case TypedValues.Attributes.S_PIVOT_X:
+                case TypedValues.AttributesType.S_PIVOT_X:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(mPivotX) ? 0 : mPivotX);
                     break;
-                case TypedValues.Attributes.S_PIVOT_Y:
+                case TypedValues.AttributesType.S_PIVOT_Y:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(mPivotY) ? 0 : mPivotY);
                     break;
-                case TypedValues.Attributes.S_PATH_ROTATE:
+                case TypedValues.AttributesType.S_PATH_ROTATE:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(mPathRotate) ? 0 : mPathRotate);
                     break;
-                case TypedValues.Attributes.S_PROGRESS:
+                case TypedValues.AttributesType.S_PROGRESS:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(mProgress) ? 0 : mProgress);
                     break;
-                case TypedValues.Attributes.S_SCALE_X:
+                case TypedValues.AttributesType.S_SCALE_X:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(scaleX) ? 1 : scaleX);
                     break;
-                case TypedValues.Attributes.S_SCALE_Y:
+                case TypedValues.AttributesType.S_SCALE_Y:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(scaleY) ? 1 : scaleY);
                     break;
-                case TypedValues.Attributes.S_TRANSLATION_X:
+                case TypedValues.AttributesType.S_TRANSLATION_X:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(translationX) ? 0 : translationX);
                     break;
-                case TypedValues.Attributes.S_TRANSLATION_Y:
+                case TypedValues.AttributesType.S_TRANSLATION_Y:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(translationY) ? 0 : translationY);
                     break;
-                case TypedValues.Attributes.S_TRANSLATION_Z:
+                case TypedValues.AttributesType.S_TRANSLATION_Z:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(translationZ) ? 0 : translationZ);
                     break;
                 default:
