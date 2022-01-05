@@ -66,7 +66,6 @@ public class MotionKeyTimeCycleTest {
             cycle.setValue(type, amp[i]);
             cycle.setValue(TypedValues.CycleType.TYPE_WAVE_PERIOD, period[i]);
             cycle.setFramePosition(pos[i]);
-         //   cycle.dump();
             s.motion.addKey(cycle);
         }
     }

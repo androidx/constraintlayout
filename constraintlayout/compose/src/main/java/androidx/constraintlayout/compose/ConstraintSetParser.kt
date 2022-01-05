@@ -180,7 +180,7 @@ internal fun parseTransition(json: CLObject, transition: Transition) {
         bundle.add(TypedValues.TransitionType.TYPE_INTERPOLATOR, interpolator)
     }
     val staggered = json.getFloatOrNaN("staggered")
-    if (staggered.isNaN()) {
+    if (!staggered.isNaN()) {
         setBundle = true
         bundle.add(TypedValues.TransitionType.TYPE_STAGGERED, staggered)
     }

@@ -1598,7 +1598,7 @@ public class Motion implements TypedValues {
                 setPathMotionArc(value);
                 return true;
             case TypedValues.TransitionType.TYPE_AUTO_TRANSITION:
-             //   mAutoTransition = value;
+               // TODO add support for auto transitions mAutoTransition = value;
                 return true;
         }
         return false;
