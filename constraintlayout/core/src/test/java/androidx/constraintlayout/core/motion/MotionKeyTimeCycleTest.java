@@ -17,14 +17,14 @@ package androidx.constraintlayout.core.motion;
 
 import static org.junit.Assert.assertEquals;
 
-import androidx.constraintlayout.core.motion.key.MotionKeyCycle;
+import androidx.constraintlayout.core.motion.key.MotionKeyTimeCycle;
 import androidx.constraintlayout.core.motion.utils.ArcCurveFit;
 import androidx.constraintlayout.core.motion.utils.KeyCache;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
 
 import org.junit.Test;
 
-public class MotionKeyCycleTest {
+public class MotionKeyTimeCycleTest {
     private static final boolean DEBUG = true;
     private static final int SAMPLES = 30;
 
@@ -62,11 +62,10 @@ public class MotionKeyCycleTest {
         int[] pos = {0, 50, 100};
         float[] period = {0, 2, 0};
         for (int i = 0; i < amp.length; i++) {
-            MotionKeyCycle cycle = new MotionKeyCycle();
+            MotionKeyTimeCycle cycle = new MotionKeyTimeCycle();
             cycle.setValue(type, amp[i]);
             cycle.setValue(TypedValues.CycleType.TYPE_WAVE_PERIOD, period[i]);
             cycle.setFramePosition(pos[i]);
-            cycle.dump();
             s.motion.addKey(cycle);
         }
     }

@@ -17,13 +17,10 @@ package androidx.constraintlayout.core.motion;
 
 import static org.junit.Assert.assertEquals;
 
-import androidx.constraintlayout.core.motion.Motion;
-import androidx.constraintlayout.core.motion.MotionWidget;
 import androidx.constraintlayout.core.motion.key.MotionKeyPosition;
 import androidx.constraintlayout.core.motion.utils.ArcCurveFit;
 import androidx.constraintlayout.core.motion.utils.KeyCache;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
-import androidx.constraintlayout.core.motion.utils.Utils;
 
 import org.junit.Test;
 
@@ -40,13 +37,13 @@ public class MotionBenchmarkTest {
         mw2.setBounds(400, 400, 460, 480);
         MotionKeyPosition keyPosition = new MotionKeyPosition();
         keyPosition.setFramePosition(30);
-        keyPosition.setValue(TypedValues.Position.TYPE_PERCENT_X, 0.3f);
-        keyPosition.setValue(TypedValues.Position.TYPE_PERCENT_Y, 0.3f);
+        keyPosition.setValue(TypedValues.PositionType.TYPE_PERCENT_X, 0.3f);
+        keyPosition.setValue(TypedValues.PositionType.TYPE_PERCENT_Y, 0.3f);
 
         MotionKeyPosition keyPosition2 = new MotionKeyPosition();
         keyPosition2.setFramePosition(88);
-        keyPosition2.setValue(TypedValues.Position.TYPE_PERCENT_X, .9f);
-        keyPosition2.setValue(TypedValues.Position.TYPE_PERCENT_Y, 0.5f);
+        keyPosition2.setValue(TypedValues.PositionType.TYPE_PERCENT_X, .9f);
+        keyPosition2.setValue(TypedValues.PositionType.TYPE_PERCENT_Y, 0.5f);
 
         Motion motion = new Motion(mw1);
         motion.setStart(mw1);
@@ -67,13 +64,13 @@ public class MotionBenchmarkTest {
         mw2.setBounds(400, 400, 460, 480);
         MotionKeyPosition keyPosition = new MotionKeyPosition();
         keyPosition.setFramePosition(30);
-        keyPosition.setValue(TypedValues.Position.TYPE_PERCENT_X, 0.3f);
-        keyPosition.setValue(TypedValues.Position.TYPE_PERCENT_Y, 0.3f);
+        keyPosition.setValue(TypedValues.PositionType.TYPE_PERCENT_X, 0.3f);
+        keyPosition.setValue(TypedValues.PositionType.TYPE_PERCENT_Y, 0.3f);
 
         MotionKeyPosition keyPosition2 = new MotionKeyPosition();
         keyPosition2.setFramePosition(88);
-        keyPosition2.setValue(TypedValues.Position.TYPE_PERCENT_X, .9f);
-        keyPosition2.setValue(TypedValues.Position.TYPE_PERCENT_Y, 0.5f);
+        keyPosition2.setValue(TypedValues.PositionType.TYPE_PERCENT_X, .9f);
+        keyPosition2.setValue(TypedValues.PositionType.TYPE_PERCENT_Y, 0.5f);
 
         Motion motion = new Motion(mw1);
         motion.setPathMotionArc(ArcCurveFit.ARC_START_HORIZONTAL);

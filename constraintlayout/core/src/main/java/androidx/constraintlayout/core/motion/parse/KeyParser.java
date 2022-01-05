@@ -23,8 +23,6 @@ import androidx.constraintlayout.core.parser.CLObject;
 import androidx.constraintlayout.core.parser.CLParser;
 import androidx.constraintlayout.core.parser.CLParsingException;
 
-import javax.swing.text.html.parser.Parser;
-
 public class KeyParser {
 
     private interface Ids {
@@ -76,7 +74,7 @@ public class KeyParser {
     }
 
     public static TypedBundle parseAttributes(String str) {
-        return parse(str, TypedValues.Attributes::getId, TypedValues.Attributes::getType);
+        return parse(str, TypedValues.AttributesType::getId, TypedValues.AttributesType::getType);
     }
 
     public static void main(String[] args) {

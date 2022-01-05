@@ -165,23 +165,23 @@ public class MotionKeyTrigger extends MotionKey {
 
     public boolean setValue(int type, int value) {
         switch (type) {
-            case Trigger.TYPE_TRIGGER_RECEIVER:
+            case TriggerType.TYPE_TRIGGER_RECEIVER:
                 mTriggerReceiver = value;
                 break;
-            case Trigger.TYPE_TRIGGER_ID:
+            case TriggerType.TYPE_TRIGGER_ID:
                 mTriggerID = toInt(value);
                 break;
-            case Trigger.TYPE_TRIGGER_COLLISION_ID:
+            case TriggerType.TYPE_TRIGGER_COLLISION_ID:
                 mTriggerCollisionId = value;
                 break;
-            case Trigger.TYPE_VIEW_TRANSITION_ON_NEGATIVE_CROSS:
+            case TriggerType.TYPE_VIEW_TRANSITION_ON_NEGATIVE_CROSS:
                 mViewTransitionOnNegativeCross = value;
                 break;
-            case Trigger.TYPE_VIEW_TRANSITION_ON_POSITIVE_CROSS:
+            case TriggerType.TYPE_VIEW_TRANSITION_ON_POSITIVE_CROSS:
                 mViewTransitionOnPositiveCross = value;
                 break;
 
-            case Trigger.TYPE_VIEW_TRANSITION_ON_CROSS:
+            case TriggerType.TYPE_VIEW_TRANSITION_ON_CROSS:
                 mViewTransitionOnCross = value;
                 break;
             default:
@@ -192,7 +192,7 @@ public class MotionKeyTrigger extends MotionKey {
 
     public boolean setValue(int type, float value) {
         switch (type) {
-            case Trigger.TYPE_TRIGGER_SLACK:
+            case TriggerType.TYPE_TRIGGER_SLACK:
                 mTriggerSlack = value;
                 break;
             default:
@@ -203,13 +203,13 @@ public class MotionKeyTrigger extends MotionKey {
 
     public boolean setValue(int type, String value) {
         switch (type) {
-            case Trigger.TYPE_CROSS:
+            case TriggerType.TYPE_CROSS:
                 mCross = value;
                 break;
-            case Trigger.TYPE_NEGATIVE_CROSS:
+            case TriggerType.TYPE_NEGATIVE_CROSS:
                 mNegativeCross = value;
                 break;
-            case Trigger.TYPE_POSITIVE_CROSS:
+            case TriggerType.TYPE_POSITIVE_CROSS:
                 mPositiveCross = value;
                 break;
 //                TODO
@@ -226,7 +226,7 @@ public class MotionKeyTrigger extends MotionKey {
 
     public boolean setValue(int type, boolean value) {
         switch (type) {
-            case Trigger.TYPE_POST_LAYOUT:
+            case TriggerType.TYPE_POST_LAYOUT:
                 mPostLayout = value;
                 break;
             default:

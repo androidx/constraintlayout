@@ -124,13 +124,13 @@ public class MotionKeyPosition extends MotionKey {
         float perpendicular = (dx * (y - startCenterY) - (x - startCenterX) * dy) / distance;
         float dist = (dx * (x - startCenterX) + dy * (y - startCenterY)) / distance;
         if (attribute[0] != null) {
-            if (TypedValues.Position.S_PERCENT_X.equals(attribute[0])) {
+            if (PositionType.S_PERCENT_X.equals(attribute[0])) {
                 value[0] = dist;
                 value[1] = perpendicular;
             }
         } else {
-            attribute[0] = TypedValues.Position.S_PERCENT_X;
-            attribute[1] = TypedValues.Position.S_PERCENT_Y;
+            attribute[0] = PositionType.S_PERCENT_X;
+            attribute[1] = PositionType.S_PERCENT_Y;
             value[0] = dist;
             value[1] = perpendicular;
         }
@@ -148,7 +148,7 @@ public class MotionKeyPosition extends MotionKey {
         int height = viewGroup.getHeight();
 
         if (attribute[0] != null) { // they are saying what to use
-            if (TypedValues.Position.S_PERCENT_X.equals(attribute[0])) {
+            if (PositionType.S_PERCENT_X.equals(attribute[0])) {
                 value[0] = x / width;
                 value[1] = y / height;
             } else {
@@ -156,9 +156,9 @@ public class MotionKeyPosition extends MotionKey {
                 value[0] = y / height;
             }
         } else { // we will use what we want to
-            attribute[0] = TypedValues.Position.S_PERCENT_X;
+            attribute[0] = PositionType.S_PERCENT_X;
             value[0] = x / width;
-            attribute[1] = TypedValues.Position.S_PERCENT_Y;
+            attribute[1] = PositionType.S_PERCENT_Y;
             value[1] = y / height;
         }
     }
@@ -171,7 +171,7 @@ public class MotionKeyPosition extends MotionKey {
         float pathVectorX = endCenterX - startCenterX;
         float pathVectorY = endCenterY - startCenterY;
         if (attribute[0] != null) { // they are saying what to use
-            if (TypedValues.Position.S_PERCENT_X.equals(attribute[0])) {
+            if (PositionType.S_PERCENT_X.equals(attribute[0])) {
                 value[0] = (x - startCenterX) / pathVectorX;
                 value[1] = (y - startCenterY) / pathVectorY;
             } else {
@@ -179,9 +179,9 @@ public class MotionKeyPosition extends MotionKey {
                 value[0] = (y - startCenterY) / pathVectorY;
             }
         } else { // we will use what we want to
-            attribute[0] = TypedValues.Position.S_PERCENT_X;
+            attribute[0] = PositionType.S_PERCENT_X;
             value[0] = (x - startCenterX) / pathVectorX;
-            attribute[1] = TypedValues.Position.S_PERCENT_Y;
+            attribute[1] = PositionType.S_PERCENT_Y;
             value[1] = (y - startCenterY) / pathVectorY;
         }
     }
@@ -243,13 +243,13 @@ public class MotionKeyPosition extends MotionKey {
     @Override
     public boolean setValue(int type, int value) {
         switch (type) {
-            case TypedValues.Position.TYPE_POSITION_TYPE:
+            case PositionType.TYPE_POSITION_TYPE:
                 mPositionType = value;
                 break;
             case TypedValues.TYPE_FRAME_POSITION:
                 mFramePosition = value;
                 break;
-            case TypedValues.Position.TYPE_CURVE_FIT:
+            case PositionType.TYPE_CURVE_FIT:
                 mCurveFit = value;
                 break;
 
@@ -263,19 +263,19 @@ public class MotionKeyPosition extends MotionKey {
     @Override
     public boolean setValue(int type, float value) {
         switch (type) {
-            case TypedValues.Position.TYPE_PERCENT_WIDTH:
+            case PositionType.TYPE_PERCENT_WIDTH:
                 mPercentWidth = value;
                 break;
-            case TypedValues.Position.TYPE_PERCENT_HEIGHT:
+            case PositionType.TYPE_PERCENT_HEIGHT:
                 mPercentHeight = value;
                 break;
-            case TypedValues.Position.TYPE_SIZE_PERCENT:
+            case PositionType.TYPE_SIZE_PERCENT:
                 mPercentHeight = mPercentWidth = value;
                 break;
-            case TypedValues.Position.TYPE_PERCENT_X:
+            case PositionType.TYPE_PERCENT_X:
                 mPercentX = value;
                 break;
-            case TypedValues.Position.TYPE_PERCENT_Y:
+            case PositionType.TYPE_PERCENT_Y:
                 mPercentY = value;
                 break;
             default:
@@ -287,7 +287,7 @@ public class MotionKeyPosition extends MotionKey {
     @Override
     public boolean setValue(int type, String value) {
         switch (type) {
-            case TypedValues.Position.TYPE_TRANSITION_EASING:
+            case PositionType.TYPE_TRANSITION_EASING:
                 mTransitionEasing = value.toString();
                 break;
             default:
@@ -298,7 +298,7 @@ public class MotionKeyPosition extends MotionKey {
 
     @Override
     public int getId(String name) {
-        return TypedValues.Position.getId(name);
+        return PositionType.getId(name);
     }
 
 }
