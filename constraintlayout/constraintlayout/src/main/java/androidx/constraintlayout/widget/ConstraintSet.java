@@ -343,6 +343,7 @@ public class ConstraintSet {
     private static final int LAYOUT_CONSTRAINT_HEIGHT = 96;
     private static final int LAYOUT_WRAP_BEHAVIOR = 97;
     private static final int MOTION_TARGET = 98;
+    private static final int GUIDELINE_USE_RTL = 99;
 
     private static final String KEY_WEIGHT = "weight";
     private static final String KEY_RATIO = "ratio";
@@ -367,6 +368,8 @@ public class ConstraintSet {
         mapToConstant.append(R.styleable.Constraint_layout_constraintGuide_begin, GUIDE_BEGIN);
         mapToConstant.append(R.styleable.Constraint_layout_constraintGuide_end, GUIDE_END);
         mapToConstant.append(R.styleable.Constraint_layout_constraintGuide_percent, GUIDE_PERCENT);
+        mapToConstant.append(R.styleable.Constraint_guidelineUseRtl, GUIDELINE_USE_RTL);
+
         mapToConstant.append(R.styleable.Constraint_android_orientation, ORIENTATION);
         mapToConstant.append(R.styleable.Constraint_layout_constraintStart_toEndOf, START_TO_END);
         mapToConstant.append(R.styleable.Constraint_layout_constraintStart_toStartOf, START_TO_START);
@@ -976,6 +979,7 @@ public class ConstraintSet {
         public int guideBegin = UNSET;
         public int guideEnd = UNSET;
         public float guidePercent = UNSET;
+        public boolean guidelineUseRtl = true;
         public int leftToLeft = UNSET;
         public int leftToRight = UNSET;
         public int rightToLeft = UNSET;
@@ -1046,6 +1050,7 @@ public class ConstraintSet {
             guideBegin = src.guideBegin;
             guideEnd = src.guideEnd;
             guidePercent = src.guidePercent;
+            guidelineUseRtl = src.guidelineUseRtl;
             leftToLeft = src.leftToLeft;
             leftToRight = src.leftToRight;
             rightToLeft = src.rightToLeft;
@@ -1168,7 +1173,24 @@ public class ConstraintSet {
         private static final int BARRIER_MARGIN = 73;
         private static final int CONSTRAINT_REFERENCED_IDS = 74;
         private static final int BARRIER_ALLOWS_GONE_WIDGETS = 75;
-        private static final int UNUSED = 76;
+
+        private static final int LAYOUT_WRAP_BEHAVIOR = 76;
+        private static final int BASELINE_TO_TOP = 77;
+        private static final int BASELINE_TO_BOTTOM = 78;
+        private static final int GONE_BASELINE_MARGIN = 79;
+        private static final int BASELINE_MARGIN = 80;
+        private static final int WIDTH_DEFAULT = 81;
+        private static final int HEIGHT_DEFAULT = 82;
+        private static final int HEIGHT_MAX = 83;
+        private static final int WIDTH_MAX = 84;
+        private static final int HEIGHT_MIN = 85;
+        private static final int WIDTH_MIN = 86;
+        private static final int CONSTRAINED_WIDTH = 87;
+        private static final int CONSTRAINED_HEIGHT = 88;
+        private static final int CONSTRAINT_TAG = 89;
+        private static final int GUIDE_USE_RTL = 90;
+
+        private static final int UNUSED = 91;
 
         static {
             mapToConstant.append(R.styleable.Layout_layout_constraintLeft_toLeftOf, LEFT_TO_LEFT);
@@ -1186,6 +1208,7 @@ public class ConstraintSet {
             mapToConstant.append(R.styleable.Layout_layout_constraintGuide_begin, GUIDE_BEGIN);
             mapToConstant.append(R.styleable.Layout_layout_constraintGuide_end, GUIDE_END);
             mapToConstant.append(R.styleable.Layout_layout_constraintGuide_percent, GUIDE_PERCENT);
+            mapToConstant.append(R.styleable.Layout_guidelineUseRtl, GUIDE_USE_RTL);
             mapToConstant.append(R.styleable.Layout_android_orientation, ORIENTATION);
             mapToConstant.append(R.styleable.Layout_layout_constraintStart_toEndOf, START_TO_END);
             mapToConstant.append(R.styleable.Layout_layout_constraintStart_toStartOf, START_TO_START);
@@ -1293,6 +1316,10 @@ public class ConstraintSet {
                     case GUIDE_PERCENT:
                         guidePercent = a.getFloat(attr, guidePercent);
                         break;
+                    case GUIDE_USE_RTL:
+                        guidelineUseRtl = a.getBoolean(attr, guidelineUseRtl);
+                        break;
+
                     case ORIENTATION:
                         orientation = a.getInt(attr, orientation);
                         break;
@@ -1470,11 +1497,6 @@ public class ConstraintSet {
                 if (Modifier.isStatic(field.getModifiers())) {
                     continue;
                 }
-//                 if (!field.isAccessible()) {
-//                    continue;
-//                }       if (!field.isAccessible()) {
-//                    continue;
-//                }
 
                 try {
                     Object value = field.get(this);
@@ -4272,6 +4294,9 @@ public class ConstraintSet {
                     break;
                 case GUIDE_PERCENT:
                     delta.add(GUIDE_PERCENT, a.getFloat(attr, c.layout.guidePercent));
+                    break;
+                case GUIDELINE_USE_RTL:
+                    delta.add(GUIDELINE_USE_RTL, a.getBoolean(attr, c.layout.guidelineUseRtl));
                     break;
                 case ORIENTATION:
                     delta.add(ORIENTATION, a.getInt(attr, c.layout.orientation));
