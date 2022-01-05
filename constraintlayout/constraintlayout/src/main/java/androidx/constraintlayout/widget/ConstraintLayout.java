@@ -2226,6 +2226,11 @@ public class ConstraintLayout extends ViewGroup {
         public float guidePercent = UNSET;
 
         /**
+         * The ratio of the distance to the parent's sides
+         */
+        public boolean guidelineUseRtl = true;
+
+        /**
          * Constrains the left side of a child to the left side of a target child (contains the target child id).
          */
         public int leftToLeft = UNSET;
@@ -2657,6 +2662,7 @@ public class ConstraintLayout extends ViewGroup {
             this.guideBegin = source.guideBegin;
             this.guideEnd = source.guideEnd;
             this.guidePercent = source.guidePercent;
+            this.guidelineUseRtl = source.guidelineUseRtl;
             this.leftToLeft = source.leftToLeft;
             this.leftToRight = source.leftToRight;
             this.rightToLeft = source.rightToLeft;
@@ -2795,6 +2801,7 @@ public class ConstraintLayout extends ViewGroup {
             public static final int LAYOUT_CONSTRAINT_WIDTH = 64;
             public static final int LAYOUT_CONSTRAINT_HEIGHT = 65;
             public static final int LAYOUT_WRAP_BEHAVIOR_IN_PARENT = 66;
+            public static final int GUIDELINE_USE_RTL = 67;
 
             public final static SparseIntArray map = new SparseIntArray();
 
@@ -2832,6 +2839,7 @@ public class ConstraintLayout extends ViewGroup {
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintGuide_begin, LAYOUT_CONSTRAINT_GUIDE_BEGIN);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintGuide_end, LAYOUT_CONSTRAINT_GUIDE_END);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintGuide_percent, LAYOUT_CONSTRAINT_GUIDE_PERCENT);
+                map.append(R.styleable.ConstraintLayout_Layout_guidelineUseRtl, GUIDELINE_USE_RTL);
                 map.append(R.styleable.ConstraintLayout_Layout_android_orientation, ANDROID_ORIENTATION);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintStart_toEndOf, LAYOUT_CONSTRAINT_START_TO_END_OF);
                 map.append(R.styleable.ConstraintLayout_Layout_layout_constraintStart_toStartOf, LAYOUT_CONSTRAINT_START_TO_START_OF);
@@ -3091,6 +3099,10 @@ public class ConstraintLayout extends ViewGroup {
 
                     case Table.LAYOUT_CONSTRAINT_GUIDE_PERCENT: {
                         guidePercent = a.getFloat(attr, guidePercent);
+                        break;
+                    }
+                    case Table.GUIDELINE_USE_RTL: {
+                        guidelineUseRtl = a.getBoolean(attr, guidelineUseRtl);
                         break;
                     }
 
@@ -3510,7 +3522,7 @@ public class ConstraintLayout extends ViewGroup {
                 }
 
                 // Only apply to vertical guidelines
-                if (isGuideline && orientation == Guideline.VERTICAL) {
+                if (isGuideline && orientation == Guideline.VERTICAL && guidelineUseRtl) {
                     if (guidePercent != UNSET) {
                         resolvedGuidePercent = 1 - guidePercent;
                         resolvedGuideBegin = UNSET;

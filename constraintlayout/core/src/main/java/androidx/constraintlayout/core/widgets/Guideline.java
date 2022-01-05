@@ -15,12 +15,12 @@
  */
 package androidx.constraintlayout.core.widgets;
 
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.WRAP_CONTENT;
+
 import androidx.constraintlayout.core.LinearSystem;
 import androidx.constraintlayout.core.SolverVariable;
 
 import java.util.HashMap;
-
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.WRAP_CONTENT;
 
 /**
  * Guideline
@@ -37,6 +37,7 @@ public class Guideline extends ConstraintWidget {
     protected float mRelativePercent = -1;
     protected int mRelativeBegin = -1;
     protected int mRelativeEnd = -1;
+    protected boolean guidelineUseRtl = true;
 
     private ConstraintAnchor mAnchor = mTop;
     private int mOrientation = HORIZONTAL;
@@ -59,6 +60,7 @@ public class Guideline extends ConstraintWidget {
         mRelativePercent = srcGuideline.mRelativePercent;
         mRelativeBegin = srcGuideline.mRelativeBegin;
         mRelativeEnd = srcGuideline.mRelativeEnd;
+        guidelineUseRtl = srcGuideline.guidelineUseRtl;
         setOrientation(srcGuideline.mOrientation);
     }
 
