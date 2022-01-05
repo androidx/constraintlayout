@@ -67,7 +67,7 @@ public interface TypedValues {
     public static final int TYPE_FRAME_POSITION = 100;
     public static final int TYPE_TARGET = 101;
 
-    interface Attributes {
+    interface AttributesType {
         public static final String NAME = "KeyAttributes";
 
         public static final int TYPE_CURVE_FIT = 301;
@@ -219,24 +219,24 @@ public interface TypedValues {
         }
     }
 
-    interface Cycle {
+    interface CycleType {
         public static final String NAME = "KeyCycle";
         public static final int TYPE_CURVE_FIT = 401;
         public static final int TYPE_VISIBILITY = 402;
         public static final int TYPE_ALPHA = 403;
-        public static final int TYPE_TRANSLATION_X = Attributes.TYPE_TRANSLATION_X;
-        public static final int TYPE_TRANSLATION_Y = Attributes.TYPE_TRANSLATION_Y;
-        public static final int TYPE_TRANSLATION_Z = Attributes.TYPE_TRANSLATION_Z;
-        public static final int TYPE_ELEVATION = Attributes.TYPE_ELEVATION;
+        public static final int TYPE_TRANSLATION_X = AttributesType.TYPE_TRANSLATION_X;
+        public static final int TYPE_TRANSLATION_Y = AttributesType.TYPE_TRANSLATION_Y;
+        public static final int TYPE_TRANSLATION_Z = AttributesType.TYPE_TRANSLATION_Z;
+        public static final int TYPE_ELEVATION = AttributesType.TYPE_ELEVATION;
 
-        public static final int TYPE_ROTATION_X = Attributes.TYPE_ROTATION_X;
-        public static final int TYPE_ROTATION_Y = Attributes.TYPE_ROTATION_Y;
-        public static final int TYPE_ROTATION_Z = Attributes.TYPE_ROTATION_Z;
-        public static final int TYPE_SCALE_X = Attributes.TYPE_SCALE_X;
-        public static final int TYPE_SCALE_Y = Attributes.TYPE_SCALE_Y;
-        public static final int TYPE_PIVOT_X = Attributes.TYPE_PIVOT_X;
-        public static final int TYPE_PIVOT_Y = Attributes.TYPE_PIVOT_Y;
-        public static final int TYPE_PROGRESS = Attributes.TYPE_PROGRESS;
+        public static final int TYPE_ROTATION_X = AttributesType.TYPE_ROTATION_X;
+        public static final int TYPE_ROTATION_Y = AttributesType.TYPE_ROTATION_Y;
+        public static final int TYPE_ROTATION_Z = AttributesType.TYPE_ROTATION_Z;
+        public static final int TYPE_SCALE_X = AttributesType.TYPE_SCALE_X;
+        public static final int TYPE_SCALE_Y = AttributesType.TYPE_SCALE_Y;
+        public static final int TYPE_PIVOT_X = AttributesType.TYPE_PIVOT_X;
+        public static final int TYPE_PIVOT_Y = AttributesType.TYPE_PIVOT_Y;
+        public static final int TYPE_PROGRESS = AttributesType.TYPE_PROGRESS;
         public static final int TYPE_PATH_ROTATE = 416;
         public static final int TYPE_EASING = 420;
         public static final int TYPE_WAVE_SHAPE = 421;
@@ -247,19 +247,19 @@ public interface TypedValues {
 
         public static final String S_CURVE_FIT = "curveFit";
         public static final String S_VISIBILITY = "visibility";
-        public static final String S_ALPHA = Attributes.S_ALPHA;
-        public static final String S_TRANSLATION_X = Attributes.S_TRANSLATION_X;
-        public static final String S_TRANSLATION_Y = Attributes.S_TRANSLATION_Y;
-        public static final String S_TRANSLATION_Z = Attributes.S_TRANSLATION_Z;
-        public static final String S_ELEVATION = Attributes.S_ELEVATION;
-        public static final String S_ROTATION_X = Attributes.S_ROTATION_X;
-        public static final String S_ROTATION_Y = Attributes.S_ROTATION_Y;
-        public static final String S_ROTATION_Z = Attributes.S_ROTATION_Z;
-        public static final String S_SCALE_X = Attributes.S_SCALE_X;
-        public static final String S_SCALE_Y = Attributes.S_SCALE_Y;
-        public static final String S_PIVOT_X = Attributes.S_PIVOT_X;
-        public static final String S_PIVOT_Y = Attributes.S_PIVOT_Y;
-        public static final String S_PROGRESS = Attributes.S_PROGRESS;
+        public static final String S_ALPHA = AttributesType.S_ALPHA;
+        public static final String S_TRANSLATION_X = AttributesType.S_TRANSLATION_X;
+        public static final String S_TRANSLATION_Y = AttributesType.S_TRANSLATION_Y;
+        public static final String S_TRANSLATION_Z = AttributesType.S_TRANSLATION_Z;
+        public static final String S_ELEVATION = AttributesType.S_ELEVATION;
+        public static final String S_ROTATION_X = AttributesType.S_ROTATION_X;
+        public static final String S_ROTATION_Y = AttributesType.S_ROTATION_Y;
+        public static final String S_ROTATION_Z = AttributesType.S_ROTATION_Z;
+        public static final String S_SCALE_X = AttributesType.S_SCALE_X;
+        public static final String S_SCALE_Y = AttributesType.S_SCALE_Y;
+        public static final String S_PIVOT_X = AttributesType.S_PIVOT_X;
+        public static final String S_PIVOT_Y = AttributesType.S_PIVOT_Y;
+        public static final String S_PROGRESS = AttributesType.S_PROGRESS;
 
         public static final String S_PATH_ROTATE = "pathRotate";
         public static final String S_EASING = "easing";
@@ -372,7 +372,7 @@ public interface TypedValues {
         }
     }
 
-    interface Trigger {
+    interface TriggerType {
         public static final String NAME = "KeyTrigger";
         public static final String VIEW_TRANSITION_ON_CROSS = "viewTransitionOnCross";
         public static final String VIEW_TRANSITION_ON_POSITIVE_CROSS = "viewTransitionOnPositiveCross";
@@ -451,7 +451,7 @@ public interface TypedValues {
         }
     }
 
-    interface Position {
+    interface PositionType {
         public static final String NAME = "KeyPosition";
         public static final String S_TRANSITION_EASING = "transitionEasing";
         public static final String S_DRAWPATH = "drawPath";
@@ -491,19 +491,19 @@ public interface TypedValues {
         public static int getId(String name) {
             switch (name) {
                 case S_TRANSITION_EASING:
-                    return TypedValues.Position.TYPE_TRANSITION_EASING;
+                    return PositionType.TYPE_TRANSITION_EASING;
                 case S_DRAWPATH:
-                    return TypedValues.Position.TYPE_DRAWPATH;
+                    return PositionType.TYPE_DRAWPATH;
                 case S_PERCENT_WIDTH:
-                    return TypedValues.Position.TYPE_PERCENT_WIDTH;
+                    return PositionType.TYPE_PERCENT_WIDTH;
                 case S_PERCENT_HEIGHT:
-                    return TypedValues.Position.TYPE_PERCENT_HEIGHT;
+                    return PositionType.TYPE_PERCENT_HEIGHT;
                 case S_SIZE_PERCENT:
-                    return TypedValues.Position.TYPE_SIZE_PERCENT;
+                    return PositionType.TYPE_SIZE_PERCENT;
                 case S_PERCENT_X:
-                    return TypedValues.Position.TYPE_PERCENT_X;
+                    return PositionType.TYPE_PERCENT_X;
                 case S_PERCENT_Y:
-                    return TypedValues.Position.TYPE_PERCENT_Y;
+                    return PositionType.TYPE_PERCENT_Y;
             }
             return -1;
         }
@@ -530,7 +530,7 @@ public interface TypedValues {
 
     }
 
-    interface Motion {
+    interface MotionType {
         public static final String NAME = "Motion";
 
         public static final String S_STAGGER = "Stagger";
@@ -709,7 +709,7 @@ public interface TypedValues {
         }
     }
 
-    interface Transition {
+    interface TransitionType {
         public static final String NAME = "Transitions";
         public static final String S_DURATION = "duration";
         public static final String S_FROM = "from";
@@ -723,7 +723,7 @@ public interface TypedValues {
         public static final int TYPE_DURATION = 700;
         public static final int TYPE_FROM = 701;
         public static final int TYPE_TO = 702;
-        public static final int TYPE_PATH_MOTION_ARC = Position.TYPE_PATH_MOTION_ARC;
+        public static final int TYPE_PATH_MOTION_ARC = PositionType.TYPE_PATH_MOTION_ARC;
         public static final int TYPE_AUTO_TRANSITION = 704;
         public static final int TYPE_INTERPOLATOR = 705;
         public static final int TYPE_STAGGERED = 706;

@@ -1,0 +1,71 @@
+{
+  root: { interpolated: { left: 0, top: 0, right: 1080, bottom: 1670 } },
+  button2: {
+    interpolated: {
+      left: 44,
+      top: 1351,
+      right: 454,
+      bottom: 1450,
+      rotationZ: 32,
+      visibility: 0,
+      AnchorLEFT: ['title', 'LEFT', '44'],
+      AnchorBOTTOM: ['gl2', 'TOP', '0']
+    }
+  },
+  title0: {
+    interpolated: {
+      left: 403,
+      top: 264,
+      right: 678,
+      bottom: 375,
+      visibility: 0,
+      AnchorLEFT: ['0', 'LEFT', '0'],
+      AnchorTOP: ['gl1', 'TOP', '44'],
+      AnchorRIGHT: ['0', 'RIGHT', '0']
+    }
+  },
+  title1: {
+    interpolated: {
+      left: 335,
+      top: 419,
+      right: 745,
+      bottom: 530,
+      visibility: 0,
+      AnchorLEFT: ['title3', 'LEFT', '0'],
+      AnchorTOP: ['title0', 'BOTTOM', '44'],
+      AnchorRIGHT: ['title3', 'RIGHT', '0']
+    }
+  },
+  title2: {
+    interpolated: {
+      left: 0,
+      top: 574,
+      right: 1080,
+      bottom: 633,
+      visibility: 0,
+      AnchorLEFT: ['0', 'LEFT', '0'],
+      AnchorTOP: ['title1', 'BOTTOM', '44'],
+      AnchorRIGHT: ['0', 'RIGHT', '0']
+    }
+  },
+  title3: {
+    interpolated: {
+      left: 335,
+      top: 677,
+      right: 745,
+      bottom: 788,
+      visibility: 0,
+      AnchorLEFT: ['0', 'LEFT', '0'],
+      AnchorTOP: ['title2', 'BOTTOM', '44'],
+      AnchorRIGHT: ['0', 'RIGHT', '0']
+    }
+  },
+  gl2: {
+    type: 'hGuideline',
+    interpolated: { left: 0, top: 1450, right: 1080, bottom: 1450 }
+  },
+  gl1: {
+    type: 'hGuideline',
+    interpolated: { left: 0, top: 220, right: 1080, bottom: 220 }
+  }
+}

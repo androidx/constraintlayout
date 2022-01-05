@@ -43,6 +43,7 @@ public class Flow extends VirtualLayout {
     public static final int WRAP_NONE = 0;
     public static final int WRAP_CHAIN = 1;
     public static final int WRAP_ALIGNED = 2;
+    public static final int WRAP_CHAIN_DEPRECATED = 3;
 
     private int mHorizontalStyle = UNKNOWN;
     private int mVerticalStyle = UNKNOWN;
@@ -290,6 +291,10 @@ public class Flow extends VirtualLayout {
             break;
             case WRAP_CHAIN: {
                 measureChainWrap(widgets, count, mOrientation, max, measured);
+            }
+            break;
+            case WRAP_CHAIN_DEPRECATED: {
+                measureChainWrap_broken(widgets, count, mOrientation, max, measured);
             }
             break;
             case WRAP_NONE: {
@@ -774,13 +779,13 @@ public class Flow extends VirtualLayout {
 
     /**
      * Measure the virtual layout using a list of chains for the children
-     *  @param widgets     list of widgets
+     * @param widgets     list of widgets
      * @param count
      * @param orientation the layout orientation (horizontal or vertical)
      * @param max         the maximum available space
      * @param measured    output parameters -- will contain the resulting measure
      */
-    private void measureChainWrap(ConstraintWidget[] widgets, int count, int orientation, int max, int[] measured) {
+    private void measureChainWrap_broken(ConstraintWidget[] widgets, int count, int orientation, int max, int[] measured) {
         if (count == 0) {
             return;
         }
@@ -862,6 +867,163 @@ public class Flow extends VirtualLayout {
         boolean needInternalMeasure =
                     getHorizontalDimensionBehaviour() == DimensionBehaviour.WRAP_CONTENT
                  || getVerticalDimensionBehaviour() == DimensionBehaviour.WRAP_CONTENT;
+
+        if (nbMatchConstraintsWidgets > 0 && needInternalMeasure) {
+            // we have to remeasure them.
+            for (int i = 0; i < listCount; i++) {
+                WidgetsList current = mChainList.get(i);
+                if (orientation == HORIZONTAL) {
+                    current.measureMatchConstraints(max - current.getWidth());
+                } else {
+                    current.measureMatchConstraints(max - current.getHeight());
+                }
+            }
+        }
+
+        for (int i = 0; i < listCount; i++) {
+            WidgetsList current = mChainList.get(i);
+            if (orientation == HORIZONTAL) {
+                if (i < listCount - 1) {
+                    WidgetsList next = mChainList.get(i + 1);
+                    bottom = next.biggest.mTop;
+                    paddingBottom = 0;
+                } else {
+                    bottom = mBottom;
+                    paddingBottom = getPaddingBottom();
+                }
+                ConstraintAnchor currentBottom = current.biggest.mBottom;
+                current.setup(orientation, left, top, right, bottom,
+                        paddingLeft, paddingTop, paddingRight, paddingBottom, max);
+                top = currentBottom;
+                paddingTop = 0;
+                maxWidth = Math.max(maxWidth, current.getWidth());
+                maxHeight += current.getHeight();
+                if (i > 0) {
+                    maxHeight += mVerticalGap;
+                }
+            } else {
+                if (i < listCount - 1) {
+                    WidgetsList next = mChainList.get(i + 1);
+                    right = next.biggest.mLeft;
+                    paddingRight = 0;
+                } else {
+                    right = mRight;
+                    paddingRight = getPaddingRight();
+                }
+                ConstraintAnchor currentRight = current.biggest.mRight;
+                current.setup(orientation, left, top, right, bottom,
+                        paddingLeft, paddingTop, paddingRight, paddingBottom, max);
+                left = currentRight;
+                paddingLeft = 0;
+                maxWidth += current.getWidth();
+                maxHeight = Math.max(maxHeight, current.getHeight());
+                if (i > 0) {
+                    maxWidth += mHorizontalGap;
+                }
+            }
+        }
+        measured[HORIZONTAL] = maxWidth;
+        measured[VERTICAL] = maxHeight;
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    // Measure Chain Wrap
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Measure the virtual layout using a list of chains for the children
+     *  @param widgets     list of widgets
+     * @param count
+     * @param orientation the layout orientation (horizontal or vertical)
+     * @param max         the maximum available space
+     * @param measured    output parameters -- will contain the resulting measure
+     */
+    private void measureChainWrap(ConstraintWidget[] widgets, int count, int orientation, int max, int[] measured) {
+        if (count == 0) {
+            return;
+        }
+
+        mChainList.clear();
+        WidgetsList list = new WidgetsList(orientation, mLeft, mTop, mRight, mBottom, max);
+        mChainList.add(list);
+
+        int nbMatchConstraintsWidgets = 0;
+
+        if (orientation == HORIZONTAL) {
+            int width = 0;
+            int col = 0;
+            for (int i = 0; i < count; i++) {
+                col++;
+                ConstraintWidget widget = widgets[i];
+                int w = getWidgetWidth(widget, max);
+                if (widget.getHorizontalDimensionBehaviour() == DimensionBehaviour.MATCH_CONSTRAINT) {
+                    nbMatchConstraintsWidgets++;
+                }
+                boolean doWrap = (width == max || (width + mHorizontalGap + w) > max) && list.biggest != null;
+                if (!doWrap && i > 0 && mMaxElementsWrap > 0 && (col > mMaxElementsWrap)) {
+                    doWrap = true;
+                }
+                if (doWrap) {
+                    width = w;
+                    list = new WidgetsList(orientation, mLeft, mTop, mRight, mBottom, max);
+                    list.setStartIndex(i);
+                    mChainList.add(list);
+                } else {
+                    col = 0;
+                    if (i > 0) {
+                        width += mHorizontalGap + w;
+                    } else {
+                        width = w;
+                    }
+                }
+                list.add(widget);
+            }
+        } else {
+            int height = 0;
+            int row = 0;
+            for (int i = 0; i < count; i++) {
+                ConstraintWidget widget = widgets[i];
+                int h = getWidgetHeight(widget, max);
+                if (widget.getVerticalDimensionBehaviour() == DimensionBehaviour.MATCH_CONSTRAINT) {
+                    nbMatchConstraintsWidgets++;
+                }
+                boolean doWrap = (height == max || (height + mVerticalGap + h ) > max) && list.biggest != null;
+                if (!doWrap && i > 0 && mMaxElementsWrap > 0 && (row > mMaxElementsWrap)) {
+                    doWrap = true;
+                }
+                if (doWrap) {
+                    height = h;
+                    list = new WidgetsList(orientation, mLeft, mTop, mRight, mBottom, max);
+                    list.setStartIndex(i);
+                    mChainList.add(list);
+                } else {
+                    row = 0;
+                    if (i > 0) {
+                        height += mVerticalGap + h;
+                    } else {
+                        height = h;
+                    }
+                }
+                list.add(widget);
+            }
+        }
+        final int listCount = mChainList.size();
+
+        ConstraintAnchor left = mLeft;
+        ConstraintAnchor top = mTop;
+        ConstraintAnchor right = mRight;
+        ConstraintAnchor bottom = mBottom;
+
+        int paddingLeft = getPaddingLeft();
+        int paddingTop = getPaddingTop();
+        int paddingRight = getPaddingRight();
+        int paddingBottom = getPaddingBottom();
+
+        int maxWidth = 0;
+        int maxHeight = 0;
+
+        boolean needInternalMeasure =
+                getHorizontalDimensionBehaviour() == DimensionBehaviour.WRAP_CONTENT
+                        || getVerticalDimensionBehaviour() == DimensionBehaviour.WRAP_CONTENT;
 
         if (nbMatchConstraintsWidgets > 0 && needInternalMeasure) {
             // we have to remeasure them.

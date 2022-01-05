@@ -1,0 +1,36 @@
+{
+  root: { interpolated: { left: 0, top: 0, right: 1080, bottom: 1670 } },
+  guide2: {
+    type: 'vGuideline',
+    interpolated: { left: 860, top: 0, right: 860, bottom: 1670 }
+  },
+  guid1: {
+    type: 'vGuideline',
+    interpolated: { left: 220, top: 0, right: 220, bottom: 1670 }
+  },
+  title: {
+    interpolated: {
+      left: 86,
+      top: 806,
+      right: 995,
+      bottom: 865,
+      visibility: 0,
+      AnchorLEFT: ['guid1', 'LEFT', '0'],
+      AnchorTOP: ['0', 'TOP', '0'],
+      AnchorRIGHT: ['guide2', 'LEFT', '0'],
+      AnchorBOTTOM: ['0', 'BOTTOM', '0']
+    }
+  },
+  button1: {
+    interpolated: {
+      left: 220,
+      top: 909,
+      right: 860,
+      bottom: 1008,
+      visibility: 0,
+      AnchorLEFT: ['guid1', 'LEFT', '0'],
+      AnchorTOP: ['title', 'BOTTOM', '44'],
+      AnchorRIGHT: ['guide2', 'LEFT', '0']
+    }
+  }
+}

@@ -61,6 +61,34 @@ public class ConstraintAttribute {
         REFERENCE_TYPE
     }
 
+    public String getName() {
+        return mName;
+    }
+
+    public boolean isMethod() {
+        return mMethod;
+    }
+
+    public int getIntegerValue() {
+        return mIntegerValue;
+    }
+
+    public float getFloatValue() {
+        return mFloatValue;
+    }
+
+    public String getStringValue() {
+        return mStringValue;
+    }
+
+    public boolean isBooleanValue() {
+        return mBooleanValue;
+    }
+
+    public int getColorValue() {
+        return mColorValue;
+    }
+
     public AttributeType getType() {
         return mType;
     }
@@ -418,65 +446,6 @@ public class ConstraintAttribute {
         c &= (c >> 31);
         c += N;
         return c;
-    }
-
-    public void setInterpolatedValue(View view, float[] value) {
-        Class<? extends View> viewClass = view.getClass();
-
-        String methodName = "set" + mName;
-        try {
-            Method method;
-            switch (mType) {
-                case INT_TYPE:
-                    method = viewClass.getMethod(methodName, Integer.TYPE);
-                    method.invoke(view, (int) value[0]);
-                    break;
-                case FLOAT_TYPE:
-                    method = viewClass.getMethod(methodName, Float.TYPE);
-                    method.invoke(view, value[0]);
-                    break;
-                case COLOR_DRAWABLE_TYPE: {
-                    method = viewClass.getMethod(methodName, Drawable.class);
-                    int r = clamp((int) ((float) Math.pow(value[0], 1.0 / 2.2) * 255.0f));
-                    int g = clamp((int) ((float) Math.pow(value[1], 1.0 / 2.2) * 255.0f));
-                    int b = clamp((int) ((float) Math.pow(value[2], 1.0 / 2.2) * 255.0f));
-                    int a = clamp((int) (value[3] * 255.0f));
-                    int color = a << 24 | (r << 16) | (g << 8) | b;
-                    ColorDrawable drawable = new ColorDrawable(); // TODO cache
-                    drawable.setColor(color);
-                    method.invoke(view, drawable);
-                }
-                break;
-                case COLOR_TYPE:
-                    method = viewClass.getMethod(methodName, Integer.TYPE);
-                    int r = clamp((int) ((float) Math.pow(value[0], 1.0 / 2.2) * 255.0f));
-                    int g = clamp((int) ((float) Math.pow(value[1], 1.0 / 2.2) * 255.0f));
-                    int b = clamp((int) ((float) Math.pow(value[2], 1.0 / 2.2) * 255.0f));
-                    int a = clamp((int) (value[3] * 255.0f));
-                    int color = a << 24 | (r << 16) | (g << 8) | b;
-                    method.invoke(view, color);
-                    break;
-                case STRING_TYPE:
-                    throw new RuntimeException("unable to interpolate strings " + mName);
-
-                case BOOLEAN_TYPE:
-                    method = viewClass.getMethod(methodName, Boolean.TYPE);
-                    method.invoke(view, value[0] > 0.5f);
-                    break;
-                case DIMENSION_TYPE:
-                    method = viewClass.getMethod(methodName, Float.TYPE);
-                    method.invoke(view, value[0]);
-                    break;
-            }
-        } catch (NoSuchMethodException e) {
-            Log.e(TAG, "no method " + methodName + " on View \"" + Debug.getName(view) + "\"");
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            Log.e(TAG, "cannot access method " + methodName + " on View \"" + Debug.getName(view) + "\"");
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
     }
 
     public static void parse(Context context, XmlPullParser parser, HashMap<String, ConstraintAttribute> custom) {

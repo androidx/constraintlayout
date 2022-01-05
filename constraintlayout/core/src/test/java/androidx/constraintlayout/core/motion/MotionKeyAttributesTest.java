@@ -17,14 +17,10 @@ package androidx.constraintlayout.core.motion;
 
 import static org.junit.Assert.assertEquals;
 
-import androidx.constraintlayout.core.motion.Motion;
-import androidx.constraintlayout.core.motion.MotionWidget;
 import androidx.constraintlayout.core.motion.key.MotionKeyAttributes;
-import androidx.constraintlayout.core.motion.key.MotionKeyPosition;
 import androidx.constraintlayout.core.motion.utils.ArcCurveFit;
 import androidx.constraintlayout.core.motion.utils.KeyCache;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
-import androidx.constraintlayout.core.motion.utils.Utils;
 
 import org.junit.Test;
 
@@ -111,51 +107,51 @@ public class MotionKeyAttributesTest {
 
     @Test
     public void checkRotationZ() {
-        Scene s = basicRange(TypedValues.Attributes.TYPE_ROTATION_Z,0,360);
+        Scene s = basicRange(TypedValues.AttributesType.TYPE_ROTATION_Z,0,360);
         assertEquals(180, s.res.getRotationZ(), 0.001);
     }
 
 
     @Test
     public void checkRotationX() {
-        Scene s = basicRange(TypedValues.Attributes.TYPE_ROTATION_X,0,100);
+        Scene s = basicRange(TypedValues.AttributesType.TYPE_ROTATION_X,0,100);
         assertEquals(50, s.res.getRotationX(), 0.001);
     }
 
     @Test
     public void checkRotationY() {
-        Scene s = basicRange(TypedValues.Attributes.TYPE_ROTATION_Y,0,50);
+        Scene s = basicRange(TypedValues.AttributesType.TYPE_ROTATION_Y,0,50);
         assertEquals(25, s.res.getRotationY(), 0.001);
     }
 
     @Test
     public void checkTranslateX() {
-        Scene s = basicRange(TypedValues.Attributes.TYPE_TRANSLATION_X,0,30);
+        Scene s = basicRange(TypedValues.AttributesType.TYPE_TRANSLATION_X,0,30);
         assertEquals(15, s.res.getTranslationX(), 0.001);
     }
 
     @Test
     public void checkTranslateY() {
-        Scene s = basicRange(TypedValues.Attributes.TYPE_TRANSLATION_Y,0,40);
+        Scene s = basicRange(TypedValues.AttributesType.TYPE_TRANSLATION_Y,0,40);
         assertEquals(20, s.res.getTranslationY(), 0.001);
     }
 
     @Test
     public void checkTranslateZ() {
-        Scene s = basicRange(TypedValues.Attributes.TYPE_TRANSLATION_Z,0,18);
+        Scene s = basicRange(TypedValues.AttributesType.TYPE_TRANSLATION_Z,0,18);
         assertEquals(9, s.res.getTranslationZ(), 0.001);
     }
 
     @Test
     public void checkScaleX() {
-        Scene s = basicRange(TypedValues.Attributes.TYPE_SCALE_X,1,19);
+        Scene s = basicRange(TypedValues.AttributesType.TYPE_SCALE_X,1,19);
         assertEquals(10, s.res.getScaleX(), 0.001);
     }
 
 
     @Test
     public void checkScaleY() {
-        Scene s = basicRange(TypedValues.Attributes.TYPE_SCALE_Y,1,3);
+        Scene s = basicRange(TypedValues.AttributesType.TYPE_SCALE_Y,1,3);
         assertEquals(2, s.res.getScaleY(), 0.001);
     }
 
@@ -325,7 +321,7 @@ public class MotionKeyAttributesTest {
         s.mw1.setRotationX(-10);
         s.mw2.setRotationX(10);
         MotionKeyAttributes attribute = new MotionKeyAttributes();
-        attribute.setValue(TypedValues.Attributes.TYPE_ROTATION_X, 23f);
+        attribute.setValue(TypedValues.AttributesType.TYPE_ROTATION_X, 23f);
         attribute.setFramePosition(50);
         s.motion.addKey(attribute);
         s.setup();
@@ -345,7 +341,7 @@ public class MotionKeyAttributesTest {
         s.mw1.setRotationY(-10);
         s.mw2.setRotationY(10);
         MotionKeyAttributes attribute = new MotionKeyAttributes();
-        attribute.setValue(TypedValues.Attributes.TYPE_ROTATION_Y, 23f);
+        attribute.setValue(TypedValues.AttributesType.TYPE_ROTATION_Y, 23f);
         attribute.setFramePosition(50);
         s.motion.addKey(attribute);
         s.setup();
@@ -365,7 +361,7 @@ public class MotionKeyAttributesTest {
         s.mw1.setRotationZ(-10);
         s.mw2.setRotationZ(10);
         MotionKeyAttributes attribute = new MotionKeyAttributes();
-        attribute.setValue(TypedValues.Attributes.TYPE_ROTATION_Z, 23f);
+        attribute.setValue(TypedValues.AttributesType.TYPE_ROTATION_Z, 23f);
         attribute.setFramePosition(50);
         s.motion.addKey(attribute);
         s.setup();
@@ -386,7 +382,7 @@ public class MotionKeyAttributesTest {
         s.mw1.setTranslationX(-10);
         s.mw2.setTranslationX(10);
         MotionKeyAttributes attribute = new MotionKeyAttributes();
-        attribute.setValue(TypedValues.Attributes.TYPE_TRANSLATION_X, 23f);
+        attribute.setValue(TypedValues.AttributesType.TYPE_TRANSLATION_X, 23f);
         attribute.setFramePosition(50);
         s.motion.addKey(attribute);
         s.setup();
@@ -406,7 +402,7 @@ public class MotionKeyAttributesTest {
         s.mw1.setTranslationY(-10);
         s.mw2.setTranslationY(10);
         MotionKeyAttributes attribute = new MotionKeyAttributes();
-        attribute.setValue(TypedValues.Attributes.TYPE_TRANSLATION_Y, 23f);
+        attribute.setValue(TypedValues.AttributesType.TYPE_TRANSLATION_Y, 23f);
         attribute.setFramePosition(50);
         s.motion.addKey(attribute);
         s.setup();
@@ -426,7 +422,7 @@ public class MotionKeyAttributesTest {
         s.mw1.setTranslationZ(-10);
         s.mw2.setTranslationZ(10);
         MotionKeyAttributes attribute = new MotionKeyAttributes();
-        attribute.setValue(TypedValues.Attributes.TYPE_TRANSLATION_Z, 23f);
+        attribute.setValue(TypedValues.AttributesType.TYPE_TRANSLATION_Z, 23f);
         attribute.setFramePosition(50);
         s.motion.addKey(attribute);
         s.setup();
@@ -446,7 +442,7 @@ public class MotionKeyAttributesTest {
         s.mw1.setScaleX(-10);
         s.mw2.setScaleX(10);
         MotionKeyAttributes attribute = new MotionKeyAttributes();
-        attribute.setValue(TypedValues.Attributes.TYPE_SCALE_X, 23f);
+        attribute.setValue(TypedValues.AttributesType.TYPE_SCALE_X, 23f);
         attribute.setFramePosition(50);
         s.motion.addKey(attribute);
         s.setup();
@@ -466,7 +462,7 @@ public class MotionKeyAttributesTest {
         s.mw1.setScaleY(-10);
         s.mw2.setScaleY(10);
         MotionKeyAttributes attribute = new MotionKeyAttributes();
-        attribute.setValue(TypedValues.Attributes.TYPE_SCALE_Y, 23f);
+        attribute.setValue(TypedValues.AttributesType.TYPE_SCALE_Y, 23f);
         attribute.setFramePosition(50);
         s.motion.addKey(attribute);
         s.setup();
@@ -485,7 +481,7 @@ public class MotionKeyAttributesTest {
         Scene s = new Scene();
 
         MotionKeyAttributes attribute = new MotionKeyAttributes();
-        attribute.setValue(TypedValues.Attributes.TYPE_ROTATION_X, 23f);
+        attribute.setValue(TypedValues.AttributesType.TYPE_ROTATION_X, 23f);
         attribute.setFramePosition(50);
         s.motion.addKey(attribute);
         s.setup();
@@ -504,7 +500,7 @@ public class MotionKeyAttributesTest {
         Scene s = new Scene();
 
         MotionKeyAttributes attribute = new MotionKeyAttributes();
-        attribute.setValue(TypedValues.Attributes.TYPE_ROTATION_Y, 23f);
+        attribute.setValue(TypedValues.AttributesType.TYPE_ROTATION_Y, 23f);
         attribute.setFramePosition(50);
         s.motion.addKey(attribute);
         s.setup();
@@ -523,7 +519,7 @@ public class MotionKeyAttributesTest {
         Scene s = new Scene();
 
         MotionKeyAttributes attribute = new MotionKeyAttributes();
-        attribute.setValue(TypedValues.Attributes.TYPE_ROTATION_Z, 23f);
+        attribute.setValue(TypedValues.AttributesType.TYPE_ROTATION_Z, 23f);
         attribute.setFramePosition(50);
         s.motion.addKey(attribute);
         s.setup();
@@ -543,7 +539,7 @@ public class MotionKeyAttributesTest {
         Scene s = new Scene();
 
         MotionKeyAttributes attribute = new MotionKeyAttributes();
-        attribute.setValue(TypedValues.Attributes.TYPE_TRANSLATION_X, 23f);
+        attribute.setValue(TypedValues.AttributesType.TYPE_TRANSLATION_X, 23f);
         attribute.setFramePosition(50);
         s.motion.addKey(attribute);
         s.setup();
@@ -562,7 +558,7 @@ public class MotionKeyAttributesTest {
         Scene s = new Scene();
 
         MotionKeyAttributes attribute = new MotionKeyAttributes();
-        attribute.setValue(TypedValues.Attributes.TYPE_TRANSLATION_Y, 23f);
+        attribute.setValue(TypedValues.AttributesType.TYPE_TRANSLATION_Y, 23f);
         attribute.setFramePosition(50);
         s.motion.addKey(attribute);
         s.setup();
@@ -581,7 +577,7 @@ public class MotionKeyAttributesTest {
         Scene s = new Scene();
 
         MotionKeyAttributes attribute = new MotionKeyAttributes();
-        attribute.setValue(TypedValues.Attributes.TYPE_TRANSLATION_Z, 23f);
+        attribute.setValue(TypedValues.AttributesType.TYPE_TRANSLATION_Z, 23f);
         attribute.setFramePosition(50);
         s.motion.addKey(attribute);
         s.setup();
@@ -600,7 +596,7 @@ public class MotionKeyAttributesTest {
         Scene s = new Scene();
 
         MotionKeyAttributes attribute = new MotionKeyAttributes();
-        attribute.setValue(TypedValues.Attributes.TYPE_SCALE_X, 23f);
+        attribute.setValue(TypedValues.AttributesType.TYPE_SCALE_X, 23f);
         attribute.setFramePosition(50);
         s.motion.addKey(attribute);
         s.setup();
@@ -618,7 +614,7 @@ public class MotionKeyAttributesTest {
     public void keyFrameNoAttrScaleY() {
         Scene s = new Scene();
         MotionKeyAttributes attribute = new MotionKeyAttributes();
-        attribute.setValue(TypedValues.Attributes.TYPE_SCALE_Y, 23f);
+        attribute.setValue(TypedValues.AttributesType.TYPE_SCALE_Y, 23f);
         attribute.setFramePosition(50);
         s.motion.addKey(attribute);
         s.setup();

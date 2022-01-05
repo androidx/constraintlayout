@@ -49,6 +49,7 @@ public class TimeLineRow extends JPanel {
   private boolean mHasGraph = true;
   private boolean mGraphOpen = false;
   GraphRender mGraph = new GraphRender();
+  private boolean mShowNewGraph = true;
 
   @Override
   public void updateUI() {
@@ -70,6 +71,7 @@ public class TimeLineRow extends JPanel {
   TimeLineRow(TimelineStructure timelineStructure) {
     setPreferredSize(MEUI.size(100, 20));
     mTimelineStructure = timelineStructure;
+    mGraph.setShowNewGraph(mShowNewGraph);
   }
 
   @Override
@@ -186,8 +188,10 @@ public class TimeLineRow extends JPanel {
       int gy = myRowHeight + ((mShowTitle) ? myTitleHeight : 0);
       mGraph.draw(g, mTimelineStructure, MEUI.ourLeftColumnWidth, gy, w - MEUI.ourLeftColumnWidth, myGraphHeight);
     }
-    g.setColor(MEUI.myGridColor);
-    drawTicks(g, mTimelineStructure, h);
+    if (!mShowNewGraph) {
+      g.setColor(MEUI.myGridColor);
+      TimeLineRow.drawTicks(g, mTimelineStructure, h);
+    }
   }
 
   public void drawArrow(Graphics g, int y) {
@@ -216,9 +220,13 @@ public class TimeLineRow extends JPanel {
   }
 
   public static void drawTicks(Graphics g, TimelineStructure mTimelineStructure, int h) {
+    drawTicks(g, mTimelineStructure, h, 0);
+  }
+
+  public static void drawTicks(Graphics g, TimelineStructure mTimelineStructure, int h, int y) {
     for (int i = 0; i < mTimelineStructure.myXTicksPixels.length; i++) {
       int x = mTimelineStructure.myXTicksPixels[i] + MEUI.ourLeftColumnWidth;
-      g.fillRect(x, 0, 1, h);
+      g.fillRect(x, y, 1, h);
     }
   }
 

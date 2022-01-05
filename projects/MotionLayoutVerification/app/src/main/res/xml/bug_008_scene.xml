@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+<ConstraintSet android:id="@+id/a">
+    <ConstraintOverride  android:id="@id/view" motion:layout_constraintHorizontal_bias="0"/>
+
+</ConstraintSet>
+
+<ConstraintSet android:id="@+id/b">
+
+</ConstraintSet>
+
+    <ConstraintSet android:id="@+id/c">
+        <ConstraintOverride  android:id="@id/view" motion:layout_constraintHorizontal_bias="1"/>
+
+    </ConstraintSet>
+
+<Transition
+    motion:constraintSetEnd="@id/b"
+    motion:constraintSetStart="@id/a"
+    motion:duration="300">
+    <OnClick motion:targetId="@+id/view3"/>
+</Transition>
+
+
+    <Transition
+        motion:constraintSetEnd="@id/c"
+        motion:constraintSetStart="@id/b"
+        motion:duration="300">
+        <OnSwipe motion:touchAnchorId="@id/view" motion:dragDirection="dragRight"
+            motion:limitBoundsTo="@id/view2"/>
+
+    </Transition>
+
+</MotionScene>

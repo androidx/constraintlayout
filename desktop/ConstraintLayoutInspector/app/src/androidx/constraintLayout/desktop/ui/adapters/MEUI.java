@@ -51,6 +51,10 @@ public class MEUI {
     return !dark ? new Color(rgb) : new Color(darkRGB);
   }
 
+  public static Color makeColorWithAlpha(int rgba, int darkRGBA) {
+    return !dark ? new Color(rgba, true) : new Color(darkRGBA, true);
+  }
+
   private static Color makeColor(String name, int rgb, int darkRGB) {
     return makeColor(rgb, darkRGB);
   }
@@ -110,7 +114,7 @@ public class MEUI {
   public static final Color ourMySelectedLineColor = new Color(0x3879d9);
   public static final Color ourAddConstraintColor = makeColor("UIDesigner.motion.AddConstraintColor", 0xff838383, 0xff666666);
   public static final Color ourAddConstraintPlus = makeColor("UIDesigner.motion.AddConstraintPlus", 0xffc9c9c9, 0xff333333);
-
+  public static final Color ourDashedLineColor = makeColor(0xA0A0A0, 0xBBBBBB);
 
   public static void copy(MTag tag) {
   }
@@ -118,7 +122,24 @@ public class MEUI {
   public static void cut(MTag mSelectedKeyFrame) {
   }
 
-
+  /** List of colors with alpha = 0.7 for graphs. */
+  public static Color[] graphColors = {
+          makeColorWithAlpha(0xa6bcc9b3, 0x8da9bab3),
+          makeColorWithAlpha(0xaee3feb3, 0xaee3feb3),
+          makeColorWithAlpha(0xf8a981b3, 0xf68f5bb3),
+          makeColorWithAlpha(0x89e69ab3, 0x67df7db3),
+          makeColorWithAlpha(0xb39bdeb3, 0x9c7cd4b3),
+          makeColorWithAlpha(0xea85aab3, 0xe46391b3),
+          makeColorWithAlpha(0x6de9d6b3, 0x49e4cdb3),
+          makeColorWithAlpha(0xe3d2abb3, 0xd9c28cb3),
+          makeColorWithAlpha(0x0ab4ffb3, 0x0095d6b3),
+          makeColorWithAlpha(0x1bb6a2b3, 0x138173b3),
+          makeColorWithAlpha(0x9363e3b3, 0x7b40ddb3),
+          makeColorWithAlpha(0xe26b27b3, 0xc1571ab3),
+          makeColorWithAlpha(0x4070bfb3, 0x335a99b3),
+          makeColorWithAlpha(0xc6c54eb3, 0xadac38b3),
+          makeColorWithAlpha(0xcb53a3b3, 0xb8388eb3),
+          makeColorWithAlpha(0x3d8effb3, 0x1477ffb3)};
 
   public static final int DIR_LEFT = 0;
   public static final int DIR_RIGHT = 1;

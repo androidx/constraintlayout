@@ -31,11 +31,6 @@ package androidx.constraintlayout.core.motion;
  * limitations under the License.
  */
 
-import androidx.constraintlayout.core.motion.utils.Utils;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
 
 /**
  * Defines non standard Attributes
@@ -301,136 +296,6 @@ public class CustomAttribute {
         }
     }
 
-    public static HashMap<String, CustomAttribute> extractAttributes(
-            HashMap<String, CustomAttribute> base, Object view) {
-        HashMap<String, CustomAttribute> ret = new HashMap<>();
-        Class<? extends Object> viewClass = view.getClass();
-        for (String name : base.keySet()) {
-            CustomAttribute CustomAttribute = base.get(name);
-
-            try {
-
-                Method method = viewClass.getMethod("getMap" + name);
-                Object val = method.invoke(view);
-                ret.put(name, new CustomAttribute(CustomAttribute, val));
-
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
-        }
-        return ret;
-    }
-
-    public static void setAttributes(Object view, HashMap<String, CustomAttribute> map) {
-        Class<? extends Object> viewClass = view.getClass();
-        for (String name : map.keySet()) {
-            CustomAttribute CustomAttribute = map.get(name);
-            String methodName = name;
-            if (!CustomAttribute.mMethod) {
-                methodName = "set" + methodName;
-            }
-            try {
-                Method method;
-                switch (CustomAttribute.mType) {
-                    case INT_TYPE:
-                        method = viewClass.getMethod(methodName, Integer.TYPE);
-                        method.invoke(view, CustomAttribute.mIntegerValue);
-                        break;
-                    case FLOAT_TYPE:
-                        method = viewClass.getMethod(methodName, Float.TYPE);
-                        method.invoke(view, CustomAttribute.mFloatValue);
-                        break;
-                    case COLOR_TYPE:
-                        method = viewClass.getMethod(methodName, Integer.TYPE);
-                        method.invoke(view, CustomAttribute.mColorValue);
-                        break;
-                    case STRING_TYPE:
-                        method = viewClass.getMethod(methodName, CharSequence.class);
-                        method.invoke(view, CustomAttribute.mStringValue);
-                        break;
-                    case BOOLEAN_TYPE:
-                        method = viewClass.getMethod(methodName, Boolean.TYPE);
-                        method.invoke(view, CustomAttribute.mBooleanValue);
-                        break;
-                    case DIMENSION_TYPE:
-                        method = viewClass.getMethod(methodName, Float.TYPE);
-                        method.invoke(view, CustomAttribute.mFloatValue);
-                        break;
-                    case REFERENCE_TYPE:
-                        method = viewClass.getMethod(methodName, Integer.TYPE);
-                        method.invoke(view, CustomAttribute.mIntegerValue);
-                        break;
-                    default: break;
-                }
-            } catch (NoSuchMethodException e) {
-                Utils.loge(TAG, e.getMessage());
-                Utils.loge(TAG, " Custom Attribute \"" + name + "\" not found on " + viewClass.getName());
-                Utils.loge(TAG, viewClass.getName() + " must have a method " + methodName);
-            } catch (IllegalAccessException e) {
-                Utils.loge(TAG, " Custom Attribute \"" + name + "\" not found on " + viewClass.getName());
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                Utils.loge(TAG, " Custom Attribute \"" + name + "\" not found on " + viewClass.getName());
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void applyCustom(Object view) {
-        Class<? extends Object> viewClass = view.getClass();
-        String name = this.mName;
-        String methodName = name;
-        if (!mMethod) {
-            methodName = "set" + methodName;
-        }
-        try {
-            Method method;
-            switch (this.mType) {
-                case INT_TYPE:
-                case REFERENCE_TYPE:
-                    method = viewClass.getMethod(methodName, Integer.TYPE);
-                    method.invoke(view, this.mIntegerValue);
-                    break;
-                case FLOAT_TYPE:
-                    method = viewClass.getMethod(methodName, Float.TYPE);
-                    method.invoke(view, this.mFloatValue);
-                    break;
-                case COLOR_TYPE:
-                    method = viewClass.getMethod(methodName, Integer.TYPE);
-                    method.invoke(view, this.mColorValue);
-                    break;
-                case STRING_TYPE:
-                    method = viewClass.getMethod(methodName, CharSequence.class);
-                    method.invoke(view, this.mStringValue);
-                    break;
-                case BOOLEAN_TYPE:
-                    method = viewClass.getMethod(methodName, Boolean.TYPE);
-                    method.invoke(view, this.mBooleanValue);
-                    break;
-                case DIMENSION_TYPE:
-                    method = viewClass.getMethod(methodName, Float.TYPE);
-                    method.invoke(view, this.mFloatValue);
-                    break;
-                default: break;
-            }
-        } catch (NoSuchMethodException e) {
-            Utils.loge(TAG, e.getMessage());
-            Utils.loge(TAG, " Custom Attribute \"" + name + "\" not found on " + viewClass.getName());
-            Utils.loge(TAG, viewClass.getName() + " must have a method " + methodName);
-        } catch (IllegalAccessException e) {
-            Utils.loge(TAG, " Custom Attribute \"" + name + "\" not found on " + viewClass.getName());
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            Utils.loge(TAG, " Custom Attribute \"" + name + "\" not found on " + viewClass.getName());
-            e.printStackTrace();
-        }
-
-    }
-
     private static int clamp(int c) {
         int N = 255;
         c &= ~(c >> 31);
@@ -438,54 +303,6 @@ public class CustomAttribute {
         c &= (c >> 31);
         c += N;
         return c;
-    }
-
-    public void setInterpolatedValue(Object view, float[] value) {
-        Class<? extends Object> viewClass = view.getClass();
-
-        String methodName = "set" + mName;
-        try {
-            Method method;
-            switch (mType) {
-                case INT_TYPE:
-                    method = viewClass.getMethod(methodName, Integer.TYPE);
-                    method.invoke(view, (int) value[0]);
-                    break;
-                case FLOAT_TYPE:
-                    method = viewClass.getMethod(methodName, Float.TYPE);
-                    method.invoke(view, value[0]);
-                    break;
-                case COLOR_TYPE:
-                    method = viewClass.getMethod(methodName, Integer.TYPE);
-                    int r = clamp((int) ((float) Math.pow(value[0], 1.0 / 2.2) * 255.0f));
-                    int g = clamp((int) ((float) Math.pow(value[1], 1.0 / 2.2) * 255.0f));
-                    int b = clamp((int) ((float) Math.pow(value[2], 1.0 / 2.2) * 255.0f));
-                    int a = clamp((int) (value[3] * 255.0f));
-                    int color = a << 24 | (r << 16) | (g << 8) | b;
-                    method.invoke(view, color);
-                    break;
-                case STRING_TYPE:
-                    throw new RuntimeException("unable to interpolate strings " + mName);
-
-                case BOOLEAN_TYPE:
-                    method = viewClass.getMethod(methodName, Boolean.TYPE);
-                    method.invoke(view, value[0] > 0.5f);
-                    break;
-                case DIMENSION_TYPE:
-                    method = viewClass.getMethod(methodName, Float.TYPE);
-                    method.invoke(view, value[0]);
-                    break;
-                default: break;
-            }
-        } catch (NoSuchMethodException e) {
-            Utils.loge(TAG, "no method " + methodName + " on View \"" + view.getClass().getName() + "\"");
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            Utils.loge(TAG, "cannot access method " + methodName + " on View \"" + view.getClass().getName() + "\"");
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
     }
 
 }

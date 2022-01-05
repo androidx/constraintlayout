@@ -31,20 +31,10 @@ import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Transition {
-    private HashMap<String, WidgetState> state = new HashMap<>();
-    HashMap<Integer, HashMap<String, KeyPosition>> keyPositions = new HashMap<>();
-
+public class Transition implements TypedValues {
     public final static int START = 0;
     public final static int END = 1;
     public final static int INTERPOLATED = 2;
-
-    private int pathMotionArc = -1;
-    // Interpolation
-    private int mDefaultInterpolator = 0;
-    private String mDefaultInterpolatorString = null;
-    private static final int SPLINE_STRING = -1;
-    private static final int INTERPOLATOR_REFERENCE_ID = -2;
     static final int EASE_IN_OUT = 0;
     static final int EASE_IN = 1;
     static final int EASE_OUT = 2;
@@ -52,10 +42,40 @@ public class Transition {
     static final int BOUNCE = 4;
     static final int OVERSHOOT = 5;
     static final int ANTICIPATE = 6;
-
+    private static final int SPLINE_STRING = -1;
+    private static final int INTERPOLATOR_REFERENCE_ID = -2;
+    HashMap<Integer, HashMap<String, KeyPosition>> keyPositions = new HashMap<>();
+    private HashMap<String, WidgetState> state = new HashMap<>();
+    TypedBundle mBundle = new TypedBundle();
+    // Interpolation
+    private int mDefaultInterpolator = 0;
+    private String mDefaultInterpolatorString = null;
+    private Easing mEasing = null;
     private int mAutoTransition = 0;
     private int mDuration = 400;
     private float mStagger = 0.0f;
+
+    public static Interpolator getInterpolator(int interpolator, String interpolatorString) {
+        switch (interpolator) {
+            case SPLINE_STRING:
+                return v -> (float) Easing.getInterpolator(interpolatorString).get(v);
+            case EASE_IN_OUT:
+                return v -> (float) Easing.getInterpolator("standard").get(v);
+            case EASE_IN:
+                return v -> (float) Easing.getInterpolator("accelerate").get(v);
+            case EASE_OUT:
+                return v -> (float) Easing.getInterpolator("decelerate").get(v);
+            case LINEAR:
+                return v -> (float) Easing.getInterpolator("linear").get(v);
+            case ANTICIPATE:
+                return v -> (float) Easing.getInterpolator("anticipate").get(v);
+            case OVERSHOOT:
+                return v -> (float) Easing.getInterpolator("overshoot").get(v);
+            case BOUNCE: // TODO make a better bounce
+                return v -> (float) Easing.getInterpolator("spline(0.0, 0.2, 0.4, 0.6, 0.8 ,1.0, 0.8, 1.0, 0.9, 1.0)").get(v);
+        }
+        return null;
+    }
 
     public KeyPosition findPreviousPosition(String target, int frameNumber) {
         while (frameNumber >= 0) {
@@ -128,8 +148,206 @@ public class Transition {
     }
 
     public void setTransitionProperties(TypedBundle bundle) {
-        pathMotionArc = bundle.getInteger(TypedValues.Position.TYPE_PATH_MOTION_ARC);
-        mAutoTransition = bundle.getInteger(TypedValues.Transition.TYPE_AUTO_TRANSITION);
+        bundle.applyDelta(mBundle);
+        bundle.applyDelta(this);
+    }
+
+    @Override
+    public boolean setValue(int id, int value) {
+        return false;
+    }
+
+    @Override
+    public boolean setValue(int id, float value) {
+        if (id == TypedValues.TransitionType.TYPE_STAGGERED) {
+            mStagger = value;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean setValue(int id, String value) {
+        if (id == TransitionType.TYPE_INTERPOLATOR) {
+            mEasing = Easing.getInterpolator(mDefaultInterpolatorString = value);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean setValue(int id, boolean value) {
+        return false;
+    }
+
+    @Override
+    public int getId(String name) {
+        return 0;
+    }
+
+    public boolean isEmpty() {
+        return state.isEmpty();
+    }
+
+    public void clear() {
+        state.clear();
+    }
+
+    public boolean contains(String key) {
+        return state.containsKey(key);
+    }
+
+    public void addKeyPosition(String target, TypedBundle bundle) {
+        getWidgetState(target, null, 0).setKeyPosition(bundle);
+    }
+
+    public void addKeyAttribute(String target, TypedBundle bundle) {
+        getWidgetState(target, null, 0).setKeyAttribute(bundle);
+    }
+
+    public void addKeyCycle(String target, TypedBundle bundle) {
+        getWidgetState(target, null, 0).setKeyCycle(bundle);
+    }
+
+    public void addKeyPosition(String target, int frame, int type, float x, float y) {
+        TypedBundle bundle = new TypedBundle();
+        bundle.add(TypedValues.PositionType.TYPE_POSITION_TYPE, 2);
+        bundle.add(TypedValues.TYPE_FRAME_POSITION, frame);
+        bundle.add(TypedValues.PositionType.TYPE_PERCENT_X, x);
+        bundle.add(TypedValues.PositionType.TYPE_PERCENT_Y, y);
+        getWidgetState(target, null, 0).setKeyPosition(bundle);
+
+        KeyPosition keyPosition = new KeyPosition(target, frame, type, x, y);
+        HashMap<String, KeyPosition> map = keyPositions.get(frame);
+        if (map == null) {
+            map = new HashMap<>();
+            keyPositions.put(frame, map);
+        }
+        map.put(target, keyPosition);
+    }
+
+    public void addCustomFloat(int state, String widgetId, String property, float value) {
+        WidgetState widgetState = getWidgetState(widgetId, null, state);
+        WidgetFrame frame = widgetState.getFrame(state);
+        frame.addCustomFloat(property, value);
+    }
+
+    public void addCustomColor(int state, String widgetId, String property, int color) {
+        WidgetState widgetState = getWidgetState(widgetId, null, state);
+        WidgetFrame frame = widgetState.getFrame(state);
+        frame.addCustomColor(property, color);
+    }
+
+    public void updateFrom(ConstraintWidgetContainer container, int state) {
+        final ArrayList<ConstraintWidget> children = container.getChildren();
+        final int count = children.size();
+        for (int i = 0; i < count; i++) {
+            ConstraintWidget child = children.get(i);
+            WidgetState widgetState = getWidgetState(child.stringId, null, state);
+            widgetState.update(child, state);
+        }
+    }
+
+    public void interpolate(int parentWidth, int parentHeight, float progress) {
+        if (mEasing != null) {
+            progress = (float) mEasing.get(progress);
+        }
+        for (String key : state.keySet()) {
+            WidgetState widget = state.get(key);
+            widget.interpolate(parentWidth, parentHeight, progress, this);
+        }
+    }
+
+    public WidgetFrame getStart(String id) {
+        WidgetState widgetState = state.get(id);
+        if (widgetState == null) {
+            return null;
+        }
+        return widgetState.start;
+    }
+
+    public WidgetFrame getEnd(String id) {
+        WidgetState widgetState = state.get(id);
+        if (widgetState == null) {
+            return null;
+        }
+        return widgetState.end;
+    }
+
+    public WidgetFrame getInterpolated(String id) {
+        WidgetState widgetState = state.get(id);
+        if (widgetState == null) {
+            return null;
+        }
+        return widgetState.interpolated;
+    }
+
+    public float[] getPath(String id) {
+        WidgetState widgetState = state.get(id);
+        int duration = 1000;
+        int frames = duration / 16;
+        float[] mPoints = new float[frames * 2];
+        widgetState.motionControl.buildPath(mPoints, frames);
+        return mPoints;
+    }
+
+    public int getKeyFrames(String id, float[] rectangles, int[] pathMode, int[] position) {
+        WidgetState widgetState = state.get(id);
+        return widgetState.motionControl.buildKeyFrames(rectangles, pathMode, position);
+    }
+
+    private WidgetState getWidgetState(String widgetId) {
+        return this.state.get(widgetId);
+    }
+
+    private WidgetState getWidgetState(String widgetId, ConstraintWidget child, int transitionState) {
+        WidgetState widgetState = this.state.get(widgetId);
+        if (widgetState == null) {
+            widgetState = new WidgetState();
+            mBundle.applyDelta(widgetState.motionControl);
+
+            state.put(widgetId, widgetState);
+            if (child != null) {
+                widgetState.update(child, transitionState);
+            }
+        }
+        return widgetState;
+    }
+
+    /**
+     * Used in debug draw
+     *
+     * @param child
+     * @return
+     */
+    public WidgetFrame getStart(ConstraintWidget child) {
+        return getWidgetState(child.stringId, null, Transition.START).start;
+    }
+
+    /**
+     * Used in debug draw
+     *
+     * @param child
+     * @return
+     */
+    public WidgetFrame getEnd(ConstraintWidget child) {
+        return getWidgetState(child.stringId, null, Transition.END).end;
+    }
+
+    /**
+     * Used after the interpolation
+     *
+     * @param child
+     * @return
+     */
+    public WidgetFrame getInterpolated(ConstraintWidget child) {
+        return getWidgetState(child.stringId, null, Transition.INTERPOLATED).interpolated;
+    }
+
+    public Interpolator getInterpolator() {
+        return getInterpolator(mDefaultInterpolator, mDefaultInterpolatorString);
+    }
+
+    public int getAutoTransition() {
+        return mAutoTransition;
     }
 
     static class WidgetState {
@@ -220,192 +438,5 @@ public class Transition {
             this.x = x;
             this.y = y;
         }
-    }
-
-    public boolean isEmpty() {
-        return state.isEmpty();
-    }
-
-    public void clear() {
-        state.clear();
-    }
-
-    public boolean contains(String key) {
-        return state.containsKey(key);
-    }
-
-    public void addKeyPosition(String target, TypedBundle bundle) {
-        getWidgetState(target, null, 0).setKeyPosition(bundle);
-    }
-
-    public void addKeyAttribute(String target, TypedBundle bundle) {
-        getWidgetState(target, null, 0).setKeyAttribute(bundle);
-    }
-
-    public void addKeyCycle(String target, TypedBundle bundle) {
-        getWidgetState(target, null, 0).setKeyCycle(bundle);
-    }
-
-    public void addKeyPosition(String target, int frame, int type, float x, float y) {
-        TypedBundle bundle = new TypedBundle();
-        bundle.add(TypedValues.Position.TYPE_POSITION_TYPE, 2);
-        bundle.add(TypedValues.TYPE_FRAME_POSITION, frame);
-        bundle.add(TypedValues.Position.TYPE_PERCENT_X, x);
-        bundle.add(TypedValues.Position.TYPE_PERCENT_Y, y);
-        getWidgetState(target, null, 0).setKeyPosition(bundle);
-
-        KeyPosition keyPosition = new KeyPosition(target, frame, type, x, y);
-        HashMap<String, KeyPosition> map = keyPositions.get(frame);
-        if (map == null) {
-            map = new HashMap<>();
-            keyPositions.put(frame, map);
-        }
-        map.put(target, keyPosition);
-    }
-
-    public void addCustomFloat(int state, String widgetId, String property, float value) {
-        WidgetState widgetState = getWidgetState(widgetId, null, state);
-        WidgetFrame frame = widgetState.getFrame(state);
-        frame.addCustomFloat(property, value);
-    }
-
-    public void addCustomColor(int state, String widgetId, String property, int color) {
-        WidgetState widgetState = getWidgetState(widgetId, null, state);
-        WidgetFrame frame = widgetState.getFrame(state);
-        frame.addCustomColor(property, color);
-    }
-
-    public void updateFrom(ConstraintWidgetContainer container, int state) {
-        final ArrayList<ConstraintWidget> children = container.getChildren();
-        final int count = children.size();
-        for (int i = 0; i < count; i++) {
-            ConstraintWidget child = children.get(i);
-            WidgetState widgetState = getWidgetState(child.stringId, null, state);
-            widgetState.update(child, state);
-        }
-    }
-
-    public void interpolate(int parentWidth, int parentHeight, float progress) {
-        for (String key : state.keySet()) {
-            WidgetState widget = state.get(key);
-            widget.interpolate(parentWidth, parentHeight, progress, this);
-        }
-    }
-
-    public WidgetFrame getStart(String id) {
-        WidgetState widgetState = state.get(id);
-        if (widgetState == null) {
-            return null;
-        }
-        return widgetState.start;
-    }
-
-    public WidgetFrame getEnd(String id) {
-        WidgetState widgetState = state.get(id);
-        if (widgetState == null) {
-            return null;
-        }
-        return widgetState.end;
-    }
-
-    public WidgetFrame getInterpolated(String id) {
-        WidgetState widgetState = state.get(id);
-        if (widgetState == null) {
-            return null;
-        }
-        return widgetState.interpolated;
-    }
-
-    public float[] getPath(String id) {
-        WidgetState widgetState = state.get(id);
-        int duration = 1000;
-        int frames = duration / 16;
-        float[] mPoints = new float[frames * 2];
-        widgetState.motionControl.buildPath(mPoints, frames);
-        return mPoints;
-    }
-
-    public int getKeyFrames(String id, float[] rectangles, int[] pathMode, int[] position) {
-        WidgetState widgetState = state.get(id);
-        return widgetState.motionControl.buildKeyFrames(rectangles, pathMode, position);
-    }
-
-    private WidgetState getWidgetState(String widgetId) {
-        return this.state.get(widgetId);
-    }
-
-    private WidgetState getWidgetState(String widgetId, ConstraintWidget child, int transitionState) {
-        WidgetState widgetState = this.state.get(widgetId);
-        if (widgetState == null) {
-            widgetState = new WidgetState();
-            if (pathMotionArc != -1) {
-                widgetState.motionControl.setPathMotionArc(pathMotionArc);
-            }
-            state.put(widgetId, widgetState);
-            if (child != null) {
-                widgetState.update(child, transitionState);
-            }
-        }
-        return widgetState;
-    }
-
-    /**
-     * Used in debug draw
-     *
-     * @param child
-     * @return
-     */
-    public WidgetFrame getStart(ConstraintWidget child) {
-        return getWidgetState(child.stringId, null, Transition.START).start;
-    }
-
-    /**
-     * Used in debug draw
-     *
-     * @param child
-     * @return
-     */
-    public WidgetFrame getEnd(ConstraintWidget child) {
-        return getWidgetState(child.stringId, null, Transition.END).end;
-    }
-
-    /**
-     * Used after the interpolation
-     *
-     * @param child
-     * @return
-     */
-    public WidgetFrame getInterpolated(ConstraintWidget child) {
-        return getWidgetState(child.stringId, null, Transition.INTERPOLATED).interpolated;
-    }
-
-    public Interpolator getInterpolator() {
-        return getInterpolator(mDefaultInterpolator, mDefaultInterpolatorString);
-    }
-
-    public static Interpolator getInterpolator(int interpolator, String interpolatorString) {
-        switch (interpolator) {
-            case SPLINE_STRING:
-                return v -> (float) Easing.getInterpolator(interpolatorString).get(v);
-            case EASE_IN_OUT:
-                return v -> (float) Easing.getInterpolator("standard").get(v);
-            case EASE_IN:
-                return v -> (float) Easing.getInterpolator("accelerate").get(v);
-            case EASE_OUT:
-                return v -> (float) Easing.getInterpolator("decelerate").get(v);
-            case LINEAR:
-                return v -> (float) Easing.getInterpolator("linear").get(v);
-            case ANTICIPATE:
-                return v -> (float) Easing.getInterpolator("anticipate").get(v);
-            case OVERSHOOT:
-                return v -> (float) Easing.getInterpolator("overshoot").get(v);
-            case BOUNCE: // TODO make a better bounce
-                return v -> (float) Easing.getInterpolator("spline(0.0, 0.2, 0.4, 0.6, 0.8 ,1.0, 0.8, 1.0, 0.9, 1.0)").get(v);
-        }
-        return null;
-    }
-
-    public int getAutoTransition() {
-        return mAutoTransition;
     }
 }

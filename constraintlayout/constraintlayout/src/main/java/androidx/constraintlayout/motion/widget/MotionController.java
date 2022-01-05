@@ -36,6 +36,7 @@ import androidx.constraintlayout.core.motion.utils.Easing;
 import androidx.constraintlayout.core.motion.utils.KeyCache;
 import androidx.constraintlayout.core.motion.utils.SplineSet;
 import androidx.constraintlayout.core.motion.utils.VelocityMatrix;
+import androidx.constraintlayout.motion.utils.CustomSupport;
 import androidx.constraintlayout.motion.utils.ViewOscillator;
 import androidx.constraintlayout.motion.utils.ViewSpline;
 import androidx.constraintlayout.motion.utils.ViewState;
@@ -86,6 +87,7 @@ public class MotionController {
     private static final boolean FAVOR_FIXED_SIZE_VIEWS = false;
     View mView;
     int mId;
+    boolean mForceMeasure = false;
     String mConstraintTag;
     private int mCurveFitType = KeyFrames.UNSET;
     private MotionPaths mStartMotionPath = new MotionPaths();
@@ -257,6 +259,13 @@ public class MotionController {
         mSpline[0].getSlope(p, velocity);
         Arrays.fill(vel, 0);
         mStartMotionPath.getCenter(p, mInterpolateVariables, position, pos, velocity, vel);
+    }
+
+    /**
+     * During the next layout call measure then layout
+     */
+    public void remeasure() {
+        mForceMeasure = true;
     }
 
     /**
@@ -1274,7 +1283,8 @@ public class MotionController {
             }
 
             if (!mNoMovement) {
-                mStartMotionPath.setView(position, child, mInterpolateVariables, mInterpolateData, mInterpolateVelocity, null);
+                mStartMotionPath.setView(position, child, mInterpolateVariables, mInterpolateData, mInterpolateVelocity, null, mForceMeasure);
+                mForceMeasure = false;
             }
             if (mTransformPivotTarget != UNSET) {
                 if (mTransformPivotView == null) {
@@ -1309,7 +1319,7 @@ public class MotionController {
             for (int i = 1; i < mSpline.length; i++) {
                 CurveFit spline = mSpline[i];
                 spline.getPos(position, mValuesBuff);
-                mStartMotionPath.attributes.get(mAttributeNames[i - 1]).setInterpolatedValue(child, mValuesBuff);
+                CustomSupport.setInterpolatedValue(mStartMotionPath.attributes.get(mAttributeNames[i - 1]), child, mValuesBuff);
 
             }
             if (mStartPoint.mVisibilityMode == ConstraintSet.VISIBILITY_MODE_NORMAL) {
@@ -1350,10 +1360,11 @@ public class MotionController {
                 b = t + height;
             }
             if (mEndMotionPath.width != mStartMotionPath.width
-                    || mEndMotionPath.height != mStartMotionPath.height) {
+                    || mEndMotionPath.height != mStartMotionPath.height || mForceMeasure) {
                 int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY);
                 int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY);
                 child.measure(widthMeasureSpec, heightMeasureSpec);
+                mForceMeasure = false;
             }
             child.layout(l, t, r, b);
         }

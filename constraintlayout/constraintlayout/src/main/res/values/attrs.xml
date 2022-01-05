@@ -245,6 +245,7 @@
         <enum name="none" value="0" />
         <enum name="chain" value="1" />
         <enum name="aligned" value="2" />
+        <enum name="deprecatedChain" value="3" />
     </attr>
 
     <!-- if defined, wrap after max elements -->
@@ -1204,6 +1205,8 @@
     <attr name="layoutDuringTransition" format="enum">
         <enum name="ignoreRequest" value="0" />
         <enum name="honorRequest" value="1" />
+        <enum name="callMeasure" value="2" />
+
     </attr>
 
     <attr name="transitionDisable" format="boolean" />

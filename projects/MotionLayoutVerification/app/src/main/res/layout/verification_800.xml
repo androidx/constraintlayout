@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motionLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layoutDescription="@xml/verification_scene_800"
+    app:motionDebug="SHOW_PATH"
+
+    android:background="#FF003b60">
+
+
+
+    <ImageView
+        android:id="@+id/earth"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/earth"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/moon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/moon"
+
+        app:layout_constraintCircleRadius="30dp"
+        app:layout_constraintCircleAngle="0"
+        app:layout_constraintCircle="@id/earth"
+        />
+
+    <Button
+        android:id="@+id/b1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="35dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="48dp"
+        android:text="progressP0"
+        android:onClick="progressP0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Button
+        android:id="@+id/b2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="progressP1"
+        android:onClick="progressP1"
+        app:layout_constraintStart_toStartOf="@+id/b1"
+        app:layout_constraintTop_toBottomOf="@+id/b1" />
+    <Button
+        android:id="@+id/b3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="progressP0V0"
+        android:onClick="progressP0V0"
+        app:layout_constraintStart_toStartOf="@+id/b2"
+        app:layout_constraintTop_toBottomOf="@+id/b2" />
+
+    <Button
+        android:id="@+id/b4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="progressP0V1"
+        android:onClick="progressP0V1"
+        app:layout_constraintStart_toStartOf="@+id/b3"
+        app:layout_constraintTop_toBottomOf="@+id/b3" />
+
+    <Button
+        android:id="@+id/b5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="progressP1V0"
+        android:onClick="progressP1V0"
+        app:layout_constraintStart_toStartOf="@+id/b4"
+        app:layout_constraintTop_toBottomOf="@+id/b4" />
+
+    <Button
+        android:id="@+id/b6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="progressP1V_1"
+        android:onClick="progressP1V_1"
+        app:layout_constraintStart_toStartOf="@+id/b5"
+        app:layout_constraintTop_toBottomOf="@+id/b5" />
+
+    <Button
+        android:id="@+id/b7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="progressP5V1"
+        android:onClick="progressP5V1"
+        app:layout_constraintStart_toStartOf="@+id/b6"
+        app:layout_constraintTop_toBottomOf="@+id/b6" />
+
+    <Button
+        android:id="@+id/b8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="progressP5V_1"
+        android:onClick="progressP5V_1"
+        app:layout_constraintStart_toStartOf="@+id/b7"
+        app:layout_constraintTop_toBottomOf="@+id/b7" />
+
+    <Button
+        android:id="@+id/b9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="progressP5"
+        android:onClick="progressP5"
+        app:layout_constraintStart_toStartOf="@+id/b8"
+        app:layout_constraintTop_toBottomOf="@+id/b8" />
+
+    <Button
+        android:id="@+id/ba"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="progressP5"
+        android:onClick="progressP50"
+        app:layout_constraintStart_toStartOf="@+id/b9"
+        app:layout_constraintTop_toBottomOf="@+id/b9" />
+
+<!--This is used to test setProgress(p,v)-->
+</androidx.constraintlayout.motion.widget.MotionLayout>

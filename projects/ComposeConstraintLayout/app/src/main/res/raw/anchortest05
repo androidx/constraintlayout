@@ -1,0 +1,53 @@
+{
+  root: { interpolated: { left: 0, top: 0, right: 1080, bottom: 1670 } },
+  button2: {
+    interpolated: {
+      left: 450,
+      top: 668,
+      right: 630,
+      bottom: 1002,
+      visibility: 0,
+      AnchorCENTER: ['title', 'CENTER', '0'],
+      phone_orientation: -9.849507E-6,
+      phone_orientation: -9.849507E-6
+    }
+  },
+  button3: {
+    interpolated: {
+      left: 1000,
+      top: 668,
+      right: 1180,
+      bottom: 1002,
+      visibility: 0,
+      AnchorCENTER: ['title', 'CENTER', '550'],
+      phone_orientation: -9.849507E-6,
+      phone_orientation: -9.849507E-6
+    }
+  },
+  title: {
+    interpolated: {
+      left: 172,
+      top: 752,
+      right: 908,
+      bottom: 919,
+      visibility: 0,
+      AnchorLEFT: ['0', 'LEFT', '0'],
+      AnchorTOP: ['0', 'TOP', '0'],
+      AnchorRIGHT: ['0', 'RIGHT', '0'],
+      AnchorBOTTOM: ['0', 'BOTTOM', '0'],
+      phone_orientation: -9.849507E-6,
+      phone_orientation: -9.849507E-6
+    }
+  },
+  button1: {
+    interpolated: {
+      left: 0,
+      top: 0,
+      right: 180,
+      bottom: 167,
+      visibility: 0,
+      phone_orientation: -9.849507E-6,
+      phone_orientation: -9.849507E-6
+    }
+  }
+}

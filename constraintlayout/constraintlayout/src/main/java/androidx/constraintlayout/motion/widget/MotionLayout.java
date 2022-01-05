@@ -16,6 +16,12 @@
 
 package androidx.constraintlayout.motion.widget;
 
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static androidx.constraintlayout.motion.widget.MotionScene.Transition.TRANSITION_FLAG_FIRST_DRAW;
+import static androidx.constraintlayout.motion.widget.MotionScene.Transition.TRANSITION_FLAG_INTERCEPT_TOUCH;
+import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID;
+import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -67,12 +73,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-import static androidx.constraintlayout.motion.widget.MotionScene.Transition.TRANSITION_FLAG_FIRST_DRAW;
-import static androidx.constraintlayout.motion.widget.MotionScene.Transition.TRANSITION_FLAG_INTERCEPT_TOUCH;
-import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID;
-import static androidx.constraintlayout.widget.ConstraintSet.UNSET;
 
 
 /**
@@ -1590,7 +1590,11 @@ public class MotionLayout extends ConstraintLayout implements
         setProgress(pos);
         setState(TransitionState.MOVING);
         mLastVelocity = velocity;
-        animateTo(1);
+        if (velocity != 0.0f) {
+            animateTo(velocity > 0 ? 1 : 0);
+        } else if (pos != 0f && pos != 1f) {
+            animateTo(pos > 0.5f ? 1 : 0);
+        }
     }
 
     /////////////////////// use to cache the state
@@ -2875,9 +2879,19 @@ public class MotionLayout extends ConstraintLayout implements
     public void requestLayout() {
         if (!(mMeasureDuringTransition)) {
             if (mCurrentState == UNSET && mScene != null
-                    && mScene.mCurrentTransition != null
-                    && mScene.mCurrentTransition.getLayoutDuringTransition() == MotionScene.LAYOUT_IGNORE_REQUEST) {
-                return;
+                    && mScene.mCurrentTransition != null) {
+                int mode = mScene.mCurrentTransition.getLayoutDuringTransition();
+                if (mode == MotionScene.LAYOUT_IGNORE_REQUEST) {
+                    return;
+                } else if (mode == MotionScene.LAYOUT_CALL_MEASURE) {
+                    final int n = getChildCount();
+                    for (int i = 0; i < n; i++) {
+                        View v = getChildAt(i);
+                        MotionController motionController = mFrameArrayList.get(v);
+                        motionController.remeasure();
+                    }
+                    return;
+                }
             }
         }
         super.requestLayout();

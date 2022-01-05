@@ -34,6 +34,7 @@ import androidx.constraintlayout.core.motion.utils.KeyFrameArray;
 import androidx.constraintlayout.core.motion.utils.Rect;
 import androidx.constraintlayout.core.motion.utils.SplineSet;
 import androidx.constraintlayout.core.motion.utils.TimeCycleSplineSet;
+import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.motion.utils.VelocityMatrix;
 import androidx.constraintlayout.core.motion.utils.ViewState;
@@ -54,7 +55,7 @@ import java.util.HashSet;
  *
  * @suppress
  */
-public class Motion {
+public class Motion implements TypedValues {
     public static final int PATH_PERCENT = 0;
     public static final int PATH_PERPENDICULAR = 1;
     public static final int HORIZONTAL_PATH_X = 2;
@@ -1588,5 +1589,42 @@ public class Motion {
         }
 
         return count;
+    }
+
+    @Override
+    public boolean setValue(int id, int value) {
+        switch (id) {
+            case TypedValues.PositionType.TYPE_PATH_MOTION_ARC:
+                setPathMotionArc(value);
+                return true;
+            case TypedValues.TransitionType.TYPE_AUTO_TRANSITION:
+               // TODO add support for auto transitions mAutoTransition = value;
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean setValue(int id, float value) {
+        return false;
+    }
+
+    @Override
+    public boolean setValue(int id, String value) {
+        if (TransitionType.TYPE_INTERPOLATOR == id) {
+            System.out.println("TYPE_INTERPOLATOR  "+value);
+           mQuantizeMotionInterpolator = getInterpolator(SPLINE_STRING, value,0);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean setValue(int id, boolean value) {
+        return false;
+    }
+
+    @Override
+    public int getId(String name) {
+        return 0;
     }
 }

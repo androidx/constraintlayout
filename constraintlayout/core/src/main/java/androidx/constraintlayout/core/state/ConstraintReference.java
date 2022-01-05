@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.HORIZONTAL;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.UNKNOWN;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
 
 public class ConstraintReference implements Reference {
@@ -60,11 +61,14 @@ public class ConstraintReference implements Reference {
     int mHorizontalChainStyle = ConstraintWidget.CHAIN_SPREAD;
     int mVerticalChainStyle = ConstraintWidget.CHAIN_SPREAD;
 
+    float mHorizontalChainWeight = UNKNOWN;
+    float mVerticalChainWeight = UNKNOWN;
+
     float mHorizontalBias = 0.5f;
     float mVerticalBias = 0.5f;
 
-    int mMarginLeft = 0;
-    int mMarginRight = 0;
+    protected int mMarginLeft = 0;
+    protected int mMarginRight = 0;
     protected int mMarginStart = 0;
     protected int mMarginEnd = 0;
     int mMarginTop = 0;
@@ -76,6 +80,8 @@ public class ConstraintReference implements Reference {
     int mMarginEndGone = 0;
     int mMarginTopGone = 0;
     int mMarginBottomGone = 0;
+    int mMarginBaseline = 0;
+    int mMarginBaselineGone = 0;
 
     float mPivotX = Float.NaN;
     float mPivotY = Float.NaN;
@@ -95,10 +101,10 @@ public class ConstraintReference implements Reference {
 
     int mVisibility = ConstraintWidget.VISIBLE;
 
-    Object mLeftToLeft = null;
-    Object mLeftToRight = null;
-    Object mRightToLeft = null;
-    Object mRightToRight = null;
+    protected Object mLeftToLeft = null;
+    protected Object mLeftToRight = null;
+    protected Object mRightToLeft = null;
+    protected Object mRightToRight = null;
     protected Object mStartToStart = null;
     protected Object mStartToEnd = null;
     protected Object mEndToStart = null;
@@ -108,6 +114,8 @@ public class ConstraintReference implements Reference {
     protected Object mBottomToTop = null;
     protected Object mBottomToBottom = null;
     Object mBaselineToBaseline = null;
+    Object mBaselineToTop = null;
+    Object mBaselineToBottom = null;
     Object mCircularConstraint = null;
     private float mCircularAngle;
     private float mCircularDistance;
@@ -234,6 +242,22 @@ public class ConstraintReference implements Reference {
 
     public int getVerticalChainStyle(int chainStyle) {
         return mVerticalChainStyle;
+    }
+
+    public float getHorizontalChainWeight() {
+        return mHorizontalChainWeight;
+    }
+
+    public void setHorizontalChainWeight(float weight) {
+        mHorizontalChainWeight = weight;
+    }
+
+    public float getVerticalChainWeight() {
+        return mVerticalChainWeight;
+    }
+
+    public void setVerticalChainWeight(float weight) {
+        mVerticalChainWeight = weight;
     }
 
     public ConstraintReference clearVertical() {
@@ -407,6 +431,8 @@ public class ConstraintReference implements Reference {
         mBottomToTop = get(mBottomToTop);
         mBottomToBottom = get(mBottomToBottom);
         mBaselineToBaseline = get(mBaselineToBaseline);
+        mBaselineToTop = get(mBaselineToTop);
+        mBaselineToBottom = get(mBaselineToBottom);
     }
 
     public ConstraintReference leftToLeft(Object reference) {
@@ -487,6 +513,18 @@ public class ConstraintReference implements Reference {
         return this;
     }
 
+    public ConstraintReference baselineToTop(Object reference) {
+        mLast = State.Constraint.BASELINE_TO_TOP;
+        mBaselineToTop = reference;
+        return this;
+    }
+
+    public ConstraintReference baselineToBottom(Object reference) {
+        mLast = State.Constraint.BASELINE_TO_BOTTOM;
+        mBaselineToBottom = reference;
+        return this;
+    }
+
     public ConstraintReference centerHorizontally(Object reference) {
         Object ref = get(reference);
         mStartToStart = ref;
@@ -539,6 +577,10 @@ public class ConstraintReference implements Reference {
         return margin(mState.convertDimension(marginValue));
     }
 
+    public ConstraintReference marginGone(Object marginGoneValue) {
+        return marginGone(mState.convertDimension(marginGoneValue));
+    }
+
     public ConstraintReference margin(int value) {
         if (mLast != null) {
             switch (mLast) {
@@ -566,9 +608,12 @@ public class ConstraintReference implements Reference {
                 case BOTTOM_TO_BOTTOM: {
                     mMarginBottom = value;
                 } break;
+                case BASELINE_TO_BOTTOM:
+                case BASELINE_TO_TOP:
                 case BASELINE_TO_BASELINE: {
-                    // nothing
-                } break;
+                    mMarginBaseline = value;
+                }
+
                 case CIRCULAR_CONSTRAINT: {
                     mCircularDistance = value;
                 } break;
@@ -612,8 +657,10 @@ public class ConstraintReference implements Reference {
                 case BOTTOM_TO_BOTTOM: {
                     mMarginBottomGone = value;
                 } break;
+                case BASELINE_TO_TOP:
+                case BASELINE_TO_BOTTOM:
                 case BASELINE_TO_BASELINE: {
-                    // nothing
+                    mMarginBaselineGone = value;
                 } break;
                 default: break;
             }
@@ -827,7 +874,13 @@ public class ConstraintReference implements Reference {
                         ConstraintAnchor.Type.BOTTOM), mMarginBottom, mMarginBottomGone, false);
             } break;
             case BASELINE_TO_BASELINE: {
-                widget.immediateConnect(ConstraintAnchor.Type.BASELINE, target, ConstraintAnchor.Type.BASELINE, 0, 0);
+                widget.immediateConnect(ConstraintAnchor.Type.BASELINE, target, ConstraintAnchor.Type.BASELINE, mMarginBaseline, mMarginBaselineGone);
+            } break;
+            case BASELINE_TO_TOP: {
+                widget.immediateConnect(ConstraintAnchor.Type.BASELINE, target, ConstraintAnchor.Type.TOP, mMarginBaseline, mMarginBaselineGone);
+            } break;
+            case BASELINE_TO_BOTTOM: {
+                widget.immediateConnect(ConstraintAnchor.Type.BASELINE, target, ConstraintAnchor.Type.BOTTOM, mMarginBaseline, mMarginBaselineGone);
             } break;
             case CIRCULAR_CONSTRAINT: {
                 widget.connectCircularConstraint(target, mCircularAngle, (int) mCircularDistance);
@@ -860,6 +913,8 @@ public class ConstraintReference implements Reference {
         applyConnection(mConstraintWidget, mBottomToTop, State.Constraint.BOTTOM_TO_TOP);
         applyConnection(mConstraintWidget, mBottomToBottom, State.Constraint.BOTTOM_TO_BOTTOM);
         applyConnection(mConstraintWidget, mBaselineToBaseline, State.Constraint.BASELINE_TO_BASELINE);
+        applyConnection(mConstraintWidget, mBaselineToTop, State.Constraint.BASELINE_TO_TOP);
+        applyConnection(mConstraintWidget, mBaselineToBottom, State.Constraint.BASELINE_TO_BOTTOM);
         applyConnection(mConstraintWidget, mCircularConstraint, State.Constraint.CIRCULAR_CONSTRAINT);
 
         if (mHorizontalChainStyle != ConstraintWidget.CHAIN_SPREAD) {
@@ -867,6 +922,12 @@ public class ConstraintReference implements Reference {
         }
         if (mVerticalChainStyle != ConstraintWidget.CHAIN_SPREAD) {
             mConstraintWidget.setVerticalChainStyle(mVerticalChainStyle);
+        }
+        if (mHorizontalChainWeight != UNKNOWN) {
+            mConstraintWidget.setHorizontalWeight(mHorizontalChainWeight);
+        }
+        if (mVerticalChainWeight != UNKNOWN) {
+            mConstraintWidget.setVerticalWeight(mVerticalChainWeight);
         }
 
         mConstraintWidget.setHorizontalBiasPercent(mHorizontalBias);

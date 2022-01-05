@@ -42,6 +42,7 @@
         <activity android:name=".CheckSetStates" />
         <activity android:name=".Bug010" />
         <activity android:name=".FullScreenActivity" />
+        <activity android:name=".CheckSetProgress" />
     </application>
 
 </manifest>

@@ -42,6 +42,12 @@ public class HorizontalChainReference extends ChainReference {
                     first.startToStart(mStartToStart).margin(mMarginStart);
                 } else if (mStartToEnd != null) {
                     first.startToEnd(mStartToEnd).margin(mMarginStart);
+                } else if (mLeftToLeft != null) {
+                    // TODO: Hack until we support RTL properly
+                    first.startToStart(mLeftToLeft).margin(mMarginLeft);
+                } else if (mLeftToRight != null) {
+                    // TODO: Hack until we support RTL properly
+                    first.startToEnd(mLeftToRight).margin(mMarginLeft);
                 } else {
                     first.startToStart(State.PARENT);
                 }
@@ -58,6 +64,12 @@ public class HorizontalChainReference extends ChainReference {
                 previous.endToStart(mEndToStart).margin(mMarginEnd);
             } else if (mEndToEnd != null) {
                 previous.endToEnd(mEndToEnd).margin(mMarginEnd);
+            } else if (mRightToLeft != null) {
+                // TODO: Hack until we support RTL properly
+                previous.endToStart(mRightToLeft).margin(mMarginRight);
+            }else if (mRightToRight != null) {
+                // TODO: Hack until we support RTL properly
+                previous.endToEnd(mRightToRight).margin(mMarginRight);
             } else {
                 previous.endToEnd(State.PARENT);
             }

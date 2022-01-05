@@ -151,6 +151,9 @@ public class Dimension {
 
     public Dimension suggested(int value) {
         mIsSuggested = true;
+        if (value >= 0) {
+            mMax = value;
+        }
         return this;
     }
 

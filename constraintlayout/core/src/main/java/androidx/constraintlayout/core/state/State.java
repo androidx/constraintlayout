@@ -61,6 +61,8 @@ public class State {
         BOTTOM_TO_TOP,
         BOTTOM_TO_BOTTOM,
         BASELINE_TO_BASELINE,
+        BASELINE_TO_TOP,
+        BASELINE_TO_BOTTOM,
         CENTER_HORIZONTALLY,
         CENTER_VERTICALLY,
         CIRCULAR_CONSTRAINT
@@ -202,6 +204,7 @@ public class State {
                     reference = new HelperReference(this, type);
                 }
             }
+            reference.setKey(key);
             mHelperReferences.put(key, reference);
         }
         return reference;

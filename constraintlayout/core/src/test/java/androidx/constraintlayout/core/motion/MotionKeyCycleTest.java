@@ -17,15 +17,10 @@ package androidx.constraintlayout.core.motion;
 
 import static org.junit.Assert.assertEquals;
 
-import androidx.constraintlayout.core.motion.Motion;
-import androidx.constraintlayout.core.motion.MotionWidget;
-import androidx.constraintlayout.core.motion.key.MotionKeyAttributes;
 import androidx.constraintlayout.core.motion.key.MotionKeyCycle;
-import androidx.constraintlayout.core.motion.key.MotionKeyPosition;
 import androidx.constraintlayout.core.motion.utils.ArcCurveFit;
 import androidx.constraintlayout.core.motion.utils.KeyCache;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
-import androidx.constraintlayout.core.motion.utils.Utils;
 
 import org.junit.Test;
 
@@ -69,7 +64,7 @@ public class MotionKeyCycleTest {
         for (int i = 0; i < amp.length; i++) {
             MotionKeyCycle cycle = new MotionKeyCycle();
             cycle.setValue(type, amp[i]);
-            cycle.setValue(TypedValues.Cycle.TYPE_WAVE_PERIOD, period[i]);
+            cycle.setValue(TypedValues.CycleType.TYPE_WAVE_PERIOD, period[i]);
             cycle.setFramePosition(pos[i]);
             cycle.dump();
             s.motion.addKey(cycle);
@@ -92,49 +87,49 @@ public class MotionKeyCycleTest {
 
     @Test
     public void keyCycleRotationX() {
-        Scene s = basicRunThrough(TypedValues.Cycle.TYPE_ROTATION_X);
+        Scene s = basicRunThrough(TypedValues.CycleType.TYPE_ROTATION_X);
         assertEquals(0.0, s.res.getRotationX(), 0.0001);
     }
 
     @Test
     public void keyCycleRotationY() {
-        Scene s = basicRunThrough(TypedValues.Cycle.TYPE_ROTATION_Y);
+        Scene s = basicRunThrough(TypedValues.CycleType.TYPE_ROTATION_Y);
         assertEquals(0.0, s.res.getRotationY(), 0.0001);
     }
 
     @Test
     public void keyCycleRotationZ() {
-        Scene s = basicRunThrough(TypedValues.Cycle.TYPE_ROTATION_Z);
+        Scene s = basicRunThrough(TypedValues.CycleType.TYPE_ROTATION_Z);
         assertEquals(0.0, s.res.getRotationZ(), 0.0001);
     }
 
     @Test
     public void keyCycleTranslationX() {
-        Scene s = basicRunThrough(TypedValues.Cycle.TYPE_TRANSLATION_X);
+        Scene s = basicRunThrough(TypedValues.CycleType.TYPE_TRANSLATION_X);
         assertEquals(0.0, s.res.getTranslationX(), 0.0001);
     }
 
     @Test
     public void keyCycleTranslationY() {
-        Scene s = basicRunThrough(TypedValues.Cycle.TYPE_TRANSLATION_Y);
+        Scene s = basicRunThrough(TypedValues.CycleType.TYPE_TRANSLATION_Y);
         assertEquals(0.0, s.res.getTranslationY(), 0.0001);
     }
 
     @Test
     public void keyCycleTranslationZ() {
-        Scene s = basicRunThrough(TypedValues.Cycle.TYPE_TRANSLATION_Z);
+        Scene s = basicRunThrough(TypedValues.CycleType.TYPE_TRANSLATION_Z);
         assertEquals(0.0, s.res.getTranslationZ(), 0.0001);
     }
 
     @Test
     public void keyCycleScaleX() {
-        Scene s = basicRunThrough(TypedValues.Cycle.TYPE_SCALE_X);
+        Scene s = basicRunThrough(TypedValues.CycleType.TYPE_SCALE_X);
         assertEquals(0.0, s.res.getScaleX(), 0.0001);
     }
 
     @Test
     public void keyCycleScaleY() {
-        Scene s = basicRunThrough(TypedValues.Cycle.TYPE_SCALE_Y);
+        Scene s = basicRunThrough(TypedValues.CycleType.TYPE_SCALE_Y);
         assertEquals(0.0, s.res.getScaleY(), 0.0001);
     }
 }

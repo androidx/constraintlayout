@@ -1,0 +1,95 @@
+{
+  root: { interpolated: { left: 0, top: 0, right: 1080, bottom: 1670 } },
+  button3: {
+    interpolated: {
+      left: 690,
+      top: 0,
+      right: 894,
+      bottom: 1670,
+      visibility: 0,
+      AnchorLEFT: ['ma', 'LEFT', '0'],
+      AnchorTOP: ['0', 'TOP', '0'],
+      AnchorBOTTOM: ['0', 'BOTTOM', '0']
+    }
+  },
+  title0: {
+    interpolated: {
+      left: 410,
+      top: 264,
+      right: 670,
+      bottom: 323,
+      visibility: 0,
+      AnchorLEFT: ['0', 'LEFT', '0'],
+      AnchorTOP: ['gl1', 'TOP', '44'],
+      AnchorRIGHT: ['0', 'RIGHT', '0']
+    }
+  },
+  title1: {
+    interpolated: {
+      left: 265,
+      top: 367,
+      right: 815,
+      bottom: 478,
+      visibility: 0,
+      AnchorLEFT: ['title3', 'LEFT', '0'],
+      AnchorTOP: ['title0', 'BOTTOM', '44'],
+      AnchorRIGHT: ['title3', 'RIGHT', '0']
+    }
+  },
+  title2: {
+    interpolated: {
+      left: 0,
+      top: 522,
+      right: 1100,
+      bottom: 581,
+      visibility: 0,
+      AnchorLEFT: ['0', 'LEFT', '0'],
+      AnchorTOP: ['title1', 'BOTTOM', '44'],
+      AnchorRIGHT: ['0', 'RIGHT', '0']
+    }
+  },
+  title3: {
+    interpolated: {
+      left: 378,
+      top: 625,
+      right: 702,
+      bottom: 788,
+      visibility: 0,
+      AnchorLEFT: ['0', 'LEFT', '0'],
+      AnchorTOP: ['title2', 'BOTTOM', '44'],
+      AnchorRIGHT: ['0', 'RIGHT', '0']
+    }
+  },
+  title4: {
+    interpolated: {
+      left: 0,
+      top: 832,
+      right: 1080,
+      bottom: 891,
+      visibility: 0,
+      AnchorLEFT: ['title3', 'LEFT', '0'],
+      AnchorTOP: ['title3', 'BOTTOM', '44'],
+      AnchorRIGHT: ['title3', 'RIGHT', '0']
+    }
+  },
+  gl2: {
+    type: 'hGuideline',
+    interpolated: { left: 0, top: 1450, right: 1080, bottom: 1450 }
+  },
+  title5: {
+    interpolated: {
+      left: 34,
+      top: 935,
+      right: 1046,
+      bottom: 994,
+      visibility: 0,
+      AnchorLEFT: ['0', 'LEFT', '0'],
+      AnchorTOP: ['title4', 'BOTTOM', '44'],
+      AnchorRIGHT: ['0', 'RIGHT', '0']
+    }
+  },
+  gl1: {
+    type: 'hGuideline',
+    interpolated: { left: 0, top: 220, right: 1080, bottom: 220 }
+  }
+}

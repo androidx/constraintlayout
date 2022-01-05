@@ -1,0 +1,60 @@
+{
+  root: { interpolated: { left: 0, top: 0, right: 1080, bottom: 1670 } },
+  button5: {
+    interpolated: {
+      left: 810,
+      top: 786,
+      right: 995,
+      bottom: 885,
+      visibility: 0,
+      AnchorTOP: ['0', 'TOP', '0'],
+      AnchorRIGHT: ['title', 'RIGHT', '0'],
+      AnchorBOTTOM: ['0', 'BOTTOM', '0']
+    }
+  },
+  button5c: {
+    interpolated: {
+      left: 819,
+      top: 324,
+      right: 995,
+      bottom: 423,
+      visibility: 0,
+      AnchorRIGHT: ['title', 'RIGHT', '0'],
+      AnchorBOTTOM: ['button5b', 'TOP', '55']
+    }
+  },
+  button5b: {
+    interpolated: {
+      left: 86,
+      top: 478,
+      right: 273,
+      bottom: 577,
+      visibility: 0,
+      AnchorLEFT: ['title', 'LEFT', '0'],
+      AnchorBOTTOM: ['button5a', 'TOP', '55']
+    }
+  },
+  button5a: {
+    interpolated: {
+      left: 86,
+      top: 632,
+      right: 262,
+      bottom: 731,
+      visibility: 0,
+      AnchorLEFT: ['title', 'LEFT', '0'],
+      AnchorBOTTOM: ['button5', 'TOP', '55']
+    }
+  },
+  title: {
+    interpolated: {
+      left: 86,
+      top: 940,
+      right: 995,
+      bottom: 999,
+      visibility: 0,
+      AnchorLEFT: ['0', 'LEFT', '0'],
+      AnchorTOP: ['button5', 'BOTTOM', '55'],
+      AnchorRIGHT: ['0', 'RIGHT', '0']
+    }
+  }
+}

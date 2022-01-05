@@ -1,0 +1,95 @@
+{
+  root: { interpolated: { left: 0, top: 0, right: 1080, bottom: 1670 } },
+  button4: {
+    interpolated: {
+      left: 356,
+      top: 1516,
+      right: 713,
+      bottom: 1615,
+      visibility: 0,
+      AnchorLEFT: ['lside', 'LEFT', '0'],
+      AnchorRIGHT: ['rside', 'LEFT', '0'],
+      AnchorBOTTOM: ['0', 'BOTTOM', '55']
+    }
+  },
+  lside: {
+    type: 'vGuideline',
+    interpolated: { left: 356, top: 0, right: 356, bottom: 1670 }
+  },
+  rside: {
+    type: 'vGuideline',
+    interpolated: { left: 713, top: 0, right: 713, bottom: 1670 }
+  },
+  title0: {
+    interpolated: {
+      left: 260,
+      top: 55,
+      right: 810,
+      bottom: 166,
+      visibility: 0,
+      AnchorLEFT: ['button4', 'LEFT', '0'],
+      AnchorTOP: ['0', 'TOP', '55'],
+      AnchorRIGHT: ['button4', 'RIGHT', '0']
+    }
+  },
+  title1: {
+    interpolated: {
+      left: 397,
+      top: 210,
+      right: 672,
+      bottom: 425,
+      visibility: 0,
+      AnchorLEFT: ['button4', 'LEFT', '0'],
+      AnchorTOP: ['title0', 'BOTTOM', '44'],
+      AnchorRIGHT: ['button4', 'RIGHT', '0']
+    }
+  },
+  title2: {
+    interpolated: {
+      left: 88,
+      top: 469,
+      right: 982,
+      bottom: 528,
+      visibility: 0,
+      AnchorLEFT: ['button4', 'LEFT', '0'],
+      AnchorTOP: ['title1', 'BOTTOM', '44'],
+      AnchorRIGHT: ['button4', 'RIGHT', '0']
+    }
+  },
+  title3: {
+    interpolated: {
+      left: 88,
+      top: 572,
+      right: 982,
+      bottom: 631,
+      visibility: 0,
+      AnchorLEFT: ['button4', 'LEFT', '0'],
+      AnchorTOP: ['title2', 'BOTTOM', '44'],
+      AnchorRIGHT: ['button4', 'RIGHT', '0']
+    }
+  },
+  title4: {
+    interpolated: {
+      left: -5,
+      top: 675,
+      right: 1075,
+      bottom: 786,
+      visibility: 0,
+      AnchorLEFT: ['button4', 'LEFT', '0'],
+      AnchorTOP: ['title3', 'BOTTOM', '44'],
+      AnchorRIGHT: ['button4', 'RIGHT', '0']
+    }
+  },
+  title5: {
+    interpolated: {
+      left: 356,
+      top: 830,
+      right: 713,
+      bottom: 1045,
+      visibility: 0,
+      AnchorLEFT: ['button4', 'LEFT', '0'],
+      AnchorTOP: ['title4', 'BOTTOM', '44'],
+      AnchorRIGHT: ['button4', 'RIGHT', '0']
+    }
+  }
+}
