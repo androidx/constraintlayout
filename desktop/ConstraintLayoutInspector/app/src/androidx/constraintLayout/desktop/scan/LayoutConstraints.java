@@ -160,20 +160,21 @@ public class LayoutConstraints {
 
         boolean parent = (to.equals("#PARENT"));
         LayoutConstraints toLayout = parent ? root : layoutMap.get(to);
-
-        DrawConnection.draw(g, set,
-                picker,
-                null,
-                DrawConnection.TYPE_NORMAL,
-                mBoundsXY,
-                dir,
-                toLayout.mBoundsXY,
-                toSide,
-                parent ? DrawConnection.DEST_PARENT :DrawConnection.DEST_NORMAL ,
-                margin,
-                margin,
-                false
-        );
+        if (toLayout != null) {
+            DrawConnection.draw(g, set,
+                    picker,
+                    null,
+                    DrawConnection.TYPE_NORMAL,
+                    mBoundsXY,
+                    dir,
+                    toLayout.mBoundsXY,
+                    toSide,
+                    parent ? DrawConnection.DEST_PARENT : DrawConnection.DEST_NORMAL,
+                    margin,
+                    margin,
+                    false
+            );
+        }
     }
 
 

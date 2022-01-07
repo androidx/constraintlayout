@@ -1,10 +1,7 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="ConstraintLayoutInspector:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/ConstraintLayoutInspector_jar</output-path>
+  <artifact type="jar" name="ConstraintLayoutInspector:jar2">
+    <output-path>$PROJECT_DIR$/out/artifacts/ConstraintLayoutInspector_jar2</output-path>
     <root id="archive" name="ConstraintLayoutInspector.jar">
-      <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
-      </element>
       <element id="module-output" name="app" />
       <element id="module-output" name="core" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/kotlin-stdlib.jar" path-in-jar="/" />
