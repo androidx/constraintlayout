@@ -19,9 +19,12 @@ At the moment, this is only enabled for MotionLayout in Compose.
 - the JSON description should contain a `Debug: { name: 'somename' }` (see example 19)
 - copy the DebugServer.kt file in your app
 - make sure to setup an ADB tunnel: `adb forward tcp:9999 tcp:9999`
+- build or download the executable jar Link.jar (to run: "java -jar Link.jar")
 - run your app and your phone or emulator and the live inspector app on your desktop
 
 # Notes
 
 The value set via the slider takes over the progress value of the running composable;
 to reset it to be handled by compose, click on the reset button.
+
+https://github.com/androidx/constraintlayout/raw/main/desktop/ConstraintLayoutInspector/Link.jar
