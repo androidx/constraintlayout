@@ -26,3 +26,5 @@ At the moment, this is only enabled for MotionLayout in Compose.
 
 The value set via the slider takes over the progress value of the running composable;
 to reset it to be handled by compose, click on the reset button.
+
+https://github.com/androidx/constraintlayout/raw/main/desktop/ConstraintLayoutInspector/Link.jar
