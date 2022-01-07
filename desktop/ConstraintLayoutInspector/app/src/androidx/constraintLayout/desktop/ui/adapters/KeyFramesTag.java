@@ -89,7 +89,7 @@ public class KeyFramesTag implements MTag {
                     case "KeyPositions":
                         buildKeyPositions(clKey.getValue(), keyFrames);
                         break;
-                    case "KeyCycles":
+                    case "KeyCycleTypes":
                         buildKeyCycles(clKey.getValue(), keyFrames);
 
                         break;
@@ -141,25 +141,25 @@ public class KeyFramesTag implements MTag {
         for (int i = 0; i < size; i++) {
             CLKey clKey = (CLKey) obj.get(i);
             switch (clKey.content()) {
-                case TypedValues.Position.S_TRANSITION_EASING:
+                case TypedValues.PositionType.S_TRANSITION_EASING:
                     easing = clKey.getValue().content();
                     break;
-                case TypedValues.Position.S_PERCENT_WIDTH:
+                case TypedValues.PositionType.S_PERCENT_WIDTH:
                     percentWidth = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Position.S_PERCENT_HEIGHT:
+                case TypedValues.PositionType.S_PERCENT_HEIGHT:
                     percentHeight = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Position.S_SIZE_PERCENT:
+                case TypedValues.PositionType.S_SIZE_PERCENT:
                     sizePercent = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Position.S_PERCENT_X:
+                case TypedValues.PositionType.S_PERCENT_X:
                     percentX = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Position.S_PERCENT_Y:
+                case TypedValues.PositionType.S_PERCENT_Y:
                     percentY = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Attributes.S_CURVE_FIT:
+                case TypedValues.AttributesType.S_CURVE_FIT:
                     curveFit = clKey.getValue().content();
                     break;
             }
@@ -223,57 +223,57 @@ public class KeyFramesTag implements MTag {
         for (int i = 0; i < size; i++) {
             CLKey clKey = (CLKey) obj.get(i);
             switch (clKey.content()) {
-                case TypedValues.Attributes.S_TRANSLATION_X:
+                case TypedValues.AttributesType.S_TRANSLATION_X:
                     translationX = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Attributes.S_TRANSLATION_Y:
+                case TypedValues.AttributesType.S_TRANSLATION_Y:
                     translationY = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Attributes.S_TRANSLATION_Z:
+                case TypedValues.AttributesType.S_TRANSLATION_Z:
                     translationZ = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Attributes.S_ELEVATION:
+                case TypedValues.AttributesType.S_ELEVATION:
                     elevation = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Attributes.S_ROTATION_X:
+                case TypedValues.AttributesType.S_ROTATION_X:
                     rotationX = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Attributes.S_ROTATION_Y:
+                case TypedValues.AttributesType.S_ROTATION_Y:
                     rotationY = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Attributes.S_ROTATION_Z:
+                case TypedValues.AttributesType.S_ROTATION_Z:
                     rotationZ = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Attributes.S_SCALE_X:
+                case TypedValues.AttributesType.S_SCALE_X:
                     scaleX = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Attributes.S_SCALE_Y:
+                case TypedValues.AttributesType.S_SCALE_Y:
                     scaleY = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Attributes.S_PIVOT_X:
+                case TypedValues.AttributesType.S_PIVOT_X:
                     pivotX = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Attributes.S_PIVOT_Y:
+                case TypedValues.AttributesType.S_PIVOT_Y:
                     pivotY = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Attributes.S_PROGRESS:
+                case TypedValues.AttributesType.S_PROGRESS:
                     progress = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Attributes.S_PATH_ROTATE:
+                case TypedValues.AttributesType.S_PATH_ROTATE:
                     pathRotate = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Attributes.S_EASING:
+                case TypedValues.AttributesType.S_EASING:
                     easing = clKey.getValue().content();
                     break;
-                case TypedValues.Attributes.S_PIVOT_TARGET:
+                case TypedValues.AttributesType.S_PIVOT_TARGET:
                     pivotTarget = clKey.getValue().content();
                     break;
 
-                case TypedValues.Attributes.S_CURVE_FIT:
+                case TypedValues.AttributesType.S_CURVE_FIT:
                     curveFit = clKey.getValue().content();
                     break;
                 // todo CUSTOM SUPPORT
-                //  case TypedValues.Attributes.S_CUSTOM:
+                //  case TypedValues.AttributesType.S_CUSTOM:
                 //  CUSTOM = clKey.getValue().content();
                 //   break;
             }
@@ -356,72 +356,72 @@ public class KeyFramesTag implements MTag {
         for (int i = 0; i < size; i++) {
             CLKey clKey = (CLKey) obj.get(i);
             switch (clKey.content()) {
-                case TypedValues.Cycle.S_TRANSLATION_X:
+                case TypedValues.CycleType.S_TRANSLATION_X:
                     translationX = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Cycle.S_TRANSLATION_Y:
+                case TypedValues.CycleType.S_TRANSLATION_Y:
                     translationY = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Cycle.S_TRANSLATION_Z:
+                case TypedValues.CycleType.S_TRANSLATION_Z:
                     translationZ = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Cycle.S_ELEVATION:
+                case TypedValues.CycleType.S_ELEVATION:
                     elevation = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Cycle.S_ROTATION_X:
+                case TypedValues.CycleType.S_ROTATION_X:
                     rotationX = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Cycle.S_ROTATION_Y:
+                case TypedValues.CycleType.S_ROTATION_Y:
                     rotationY = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Cycle.S_ROTATION_Z:
+                case TypedValues.CycleType.S_ROTATION_Z:
                     rotationZ = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Cycle.S_SCALE_X:
+                case TypedValues.CycleType.S_SCALE_X:
                     scaleX = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Cycle.S_SCALE_Y:
+                case TypedValues.CycleType.S_SCALE_Y:
                     scaleY = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Cycle.S_PIVOT_X:
+                case TypedValues.CycleType.S_PIVOT_X:
                     pivotX = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Cycle.S_PIVOT_Y:
+                case TypedValues.CycleType.S_PIVOT_Y:
                     pivotY = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Cycle.S_PROGRESS:
+                case TypedValues.CycleType.S_PROGRESS:
                     progress = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Cycle.S_WAVE_OFFSET:
+                case TypedValues.CycleType.S_WAVE_OFFSET:
                     waveOffset = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Cycle.S_WAVE_PERIOD:
+                case TypedValues.CycleType.S_WAVE_PERIOD:
                     wavePeriod = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Cycle.S_WAVE_PHASE:
+                case TypedValues.CycleType.S_WAVE_PHASE:
                     wavePhase = buildFloatArray(clKey.getValue());
                     break;
-                case TypedValues.Cycle.S_WAVE_SHAPE:
+                case TypedValues.CycleType.S_WAVE_SHAPE:
                     waveShape =  clKey.getValue().content();
                     break;
-                case TypedValues.Cycle.S_CUSTOM_WAVE_SHAPE:
+                case TypedValues.CycleType.S_CUSTOM_WAVE_SHAPE:
                     customWaveShape = clKey.getValue().content();
                     break;
 
-                case TypedValues.Cycle.S_PATH_ROTATE:
+                case TypedValues.CycleType.S_PATH_ROTATE:
                     pathRotate = buildFloatArray(clKey.getValue());
                     break;
 
-                case TypedValues.Cycle.S_EASING:
+                case TypedValues.CycleType.S_EASING:
                     easing = clKey.getValue().content();
                     break;
 
 
-                case TypedValues.Attributes.S_CURVE_FIT:
+                case TypedValues.AttributesType.S_CURVE_FIT:
                     curveFit = clKey.getValue().content();
                     break;
                 // todo CUSTOM SUPPORT
-                //  case TypedValues.Attributes.S_CUSTOM:
+                //  case TypedValues.AttributesType.S_CUSTOM:
                 //  CUSTOM = clKey.getValue().content();
                 //   break;
             }

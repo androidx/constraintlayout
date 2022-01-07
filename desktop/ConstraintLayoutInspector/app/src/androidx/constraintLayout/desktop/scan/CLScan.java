@@ -56,10 +56,10 @@ public class CLScan {
             "custom"));
 
     static {
-        sAttributesKeyWord.addAll(Arrays.asList(TypedValues.Attributes.KEY_WORDS));
-        sAttributesKeyWord.addAll(Arrays.asList(TypedValues.Position.KEY_WORDS));
+        sAttributesKeyWord.addAll(Arrays.asList(TypedValues.AttributesType.KEY_WORDS));
+        sAttributesKeyWord.addAll(Arrays.asList(TypedValues.PositionType.KEY_WORDS));
         sAttributesKeyWord.addAll(Arrays.asList(TypedValues.Custom.KEY_WORDS));
-        sAttributesKeyWord.addAll(Arrays.asList(TypedValues.Cycle.KEY_WORDS));
+        sAttributesKeyWord.addAll(Arrays.asList(TypedValues.CycleType.KEY_WORDS));
     }
 
     static String[] sConstraintList = {
@@ -73,9 +73,9 @@ public class CLScan {
     public static Map<String, String[]> creationMap = new HashMap<>();
 
     static {
-        creationMap.put("KeyPositions", TypedValues.Position.KEY_WORDS);
-        creationMap.put("KeyCycles", TypedValues.Position.KEY_WORDS);
-        creationMap.put("KeyAttributes", TypedValues.Position.KEY_WORDS);
+        creationMap.put("KeyPositions", TypedValues.PositionType.KEY_WORDS);
+        creationMap.put("KeyCycles", TypedValues.PositionType.KEY_WORDS);
+        creationMap.put("KeyAttributes", TypedValues.PositionType.KEY_WORDS);
         creationMap.put("KeyFrames", new String[]{"KeyAttributes", "KeyPositions", "KeyCycles"});
         creationMap.put("Transitions", new String[]{"default", "KeyFrames"});
         creationMap.put("default", new String[]{"from", "to", "pathMotionArc"});
