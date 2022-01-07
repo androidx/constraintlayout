@@ -19,6 +19,7 @@ At the moment, this is only enabled for MotionLayout in Compose.
 - the JSON description should contain a `Debug: { name: 'somename' }` (see example 19)
 - copy the DebugServer.kt file in your app
 - make sure to setup an ADB tunnel: `adb forward tcp:9999 tcp:9999`
+- build or download the executable jar Link.jar (to run: "java -jar Link.jar")
 - run your app and your phone or emulator and the live inspector app on your desktop
 
 # Notes
