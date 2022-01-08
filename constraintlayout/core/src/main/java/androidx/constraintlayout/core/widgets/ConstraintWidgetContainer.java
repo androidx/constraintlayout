@@ -1101,4 +1101,21 @@ public class ConstraintWidgetContainer extends WidgetContainer {
     public void setPass(int pass) {
         this.pass = pass;
     }
+
+    public void getSceneString(StringBuilder ret ) {
+
+        ret.append(stringId+":{\n");
+        ret.append("  actualWidth:" + mWidth);
+        ret.append("\n");
+        ret.append("  actualHeight:" + mHeight);
+        ret.append("\n");
+
+        ArrayList<ConstraintWidget> children = getChildren();
+        for (ConstraintWidget child : children) {
+            child.getSceneString(ret);
+            ret.append(",\n");
+        }
+        ret.append("}");
+
+    }
 }
