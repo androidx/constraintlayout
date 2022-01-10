@@ -615,7 +615,17 @@ public class ConstraintWidget {
         }
         ret.append(type);
         ret.append(" :   ");
-        ret.append(def);
+        ret.append(value);
+        ret.append(",\n");
+    }
+
+    private void serializeAttribute(StringBuilder ret, String type, int value, int def){
+        if (value == def) {
+            return;
+        }
+        ret.append(type);
+        ret.append(" :   ");
+        ret.append(value);
         ret.append(",\n");
     }
 
@@ -3553,4 +3563,87 @@ public class ConstraintWidget {
         // horizontal
     }
 
+    public void getSceneString(StringBuilder ret ) {
+
+        ret.append("  "+stringId+":{\n");
+        ret.append("    actualWidth:" + mWidth);
+        ret.append("\n");
+        ret.append("    actualHeight:" + mHeight);
+        ret.append("\n");
+        ret.append("    actualLeft:" + mX);
+        ret.append("\n");
+        ret.append("    actualTop:" + mY);
+        ret.append("\n");
+        getSceneString(ret,"left", mLeft);
+        getSceneString(ret,"top", mTop );
+        getSceneString(ret,"right", mRight);
+        getSceneString(ret,"bottom", mBottom);
+        getSceneString(ret,"baseline", mBaseline);
+        getSceneString(ret,"centerX", mCenterX);
+        getSceneString(ret,"centerY", mCenterY);
+        getSceneString(ret,"    width",
+                mWidth,
+                mMinWidth,
+                mMaxDimension[HORIZONTAL],
+                mWidthOverride,
+                mMatchConstraintMinWidth,
+                mMatchConstraintDefaultWidth,
+                mMatchConstraintPercentWidth,
+                mWeight[DIMENSION_HORIZONTAL]
+        );
+
+        getSceneString(ret,"    height",
+                mHeight,
+                mMinHeight,
+                mMaxDimension[VERTICAL],
+                mHeightOverride,
+                mMatchConstraintMinHeight,
+                mMatchConstraintDefaultHeight,
+                mMatchConstraintPercentHeight,
+                mWeight[DIMENSION_VERTICAL]);
+        serializeDimensionRatio(ret,"    dimensionRatio",mDimensionRatio, mDimensionRatioSide);
+        serializeAttribute(ret,"    horizontalBias",mHorizontalBiasPercent,DEFAULT_BIAS );
+        serializeAttribute(ret,"    verticalBias",mVerticalBiasPercent,DEFAULT_BIAS );
+        serializeAttribute(ret,"    horizontalChainStyle",mHorizontalChainStyle,CHAIN_SPREAD );
+        serializeAttribute(ret,"    verticalChainStyle",mVerticalChainStyle,CHAIN_SPREAD );
+
+        ret.append("  }");
+
+    }
+
+    private void getSceneString(StringBuilder ret, String type, int size,
+                               int min, int max, int override,
+                               int matchConstraintMin, int matchConstraintDefault,
+                               float MatchConstraintPercent,
+                               float weight){
+        ret.append(type);
+        ret.append(" :  {\n");
+        serializeAttribute(ret,"      size",size,0);
+        serializeAttribute(ret,"      min",min,0);
+        serializeAttribute(ret,"      max",max, Integer.MAX_VALUE);
+        serializeAttribute(ret,"      matchMin",matchConstraintMin, 0);
+        serializeAttribute(ret,"      matchDef",matchConstraintDefault, MATCH_CONSTRAINT_SPREAD);
+        serializeAttribute(ret,"      matchPercent",MatchConstraintPercent, 1);
+        ret.append("    },\n");
+    }
+    private void getSceneString(StringBuilder ret, String side, ConstraintAnchor a) {
+        if (a.mTarget == null) {
+            return;
+        }
+        ret.append("    ");
+        ret.append(side);
+        ret.append(" : [ '");
+        ret.append(a.mTarget);
+        ret.append("'");
+        if (a.mGoneMargin != Integer.MIN_VALUE || a.mMargin != 0) {
+            ret.append(",");
+            ret.append(a.mMargin);
+            if (a.mGoneMargin != Integer.MIN_VALUE) {
+                ret.append(",");
+                ret.append(a.mGoneMargin);
+                ret.append(",");
+            }
+        }
+        ret.append(" ] ,\n");
+    }
 }

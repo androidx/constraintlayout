@@ -3631,4 +3631,49 @@ public class ConstraintLayout extends ViewGroup {
     public boolean shouldDelayChildPressedState() {
         return false;
     }
+
+    /**
+     * Returns a JSON5 string useful for debugging the constraints actually applied.
+     * In situations where a complex set of code dynamically constructs constraints
+     * it is useful to be able to query the layout for what are the constraints.
+     * @return json5 string representing the constraint in effect now.
+     */
+    public String getSceneString() {
+        StringBuilder ret = new StringBuilder();
+
+        if (mLayoutWidget.stringId == null) {
+            int id = this.getId();
+            if (id != -1) {
+                String str = getContext().getResources().getResourceEntryName(id);
+                mLayoutWidget.stringId = str;
+            } else {
+                mLayoutWidget.stringId = "parent";
+            }
+        }
+        if (mLayoutWidget.getDebugName() == null) {
+            mLayoutWidget.setDebugName(mLayoutWidget.stringId);
+            Log.v(TAG, " setDebugName " + mLayoutWidget.getDebugName());
+        }
+
+        ArrayList<ConstraintWidget> children = mLayoutWidget.getChildren();
+        for (ConstraintWidget child : children) {
+            View v = (View) child.getCompanionWidget();
+            if (v != null) {
+                if (child.stringId == null) {
+                    int id = v.getId();
+                    if (id != -1) {
+                        String str = getContext().getResources().getResourceEntryName(id);
+                        child.stringId = str;
+                    }
+                }
+                if (child.getDebugName() == null) {
+                    child.setDebugName(child.stringId);
+                    Log.v(TAG, " setDebugName " + child.getDebugName());
+                }
+
+            }
+        }
+        mLayoutWidget.getSceneString(ret);
+        return ret.toString();
+    }
 }
