@@ -15,11 +15,10 @@
  */
 package androidx.constraintLayout.desktop.ui.adapters.vg;
 
-import java.awt.Component;
-import java.awt.Graphics;
+import javax.swing.*;
+import java.awt.*;
 import java.io.InputStream;
 import java.net.URL;
-import javax.swing.Icon;
 
 public class VDIcon implements Icon {
 
@@ -50,6 +49,12 @@ public class VDIcon implements Icon {
   public void paintIcon(Component c, Graphics g, int x, int y) {
     if (mAPath != null) {
       mAPath.draw(g, c);
+    }
+  }
+
+  public void paint(Graphics g, int x, int y, int w, int h) {
+    if (mAPath != null) {
+      mAPath.draw(g, x, y, w, h);
     }
   }
 

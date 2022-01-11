@@ -14,25 +14,26 @@
  * limitations under the License.
  */
 
-package androidx.constraintLayout.desktop.link
+package androidx.constraintLayout.desktop.link.kotlin
 
 import androidx.constraintLayout.desktop.constraintRendering.layout3d.CheckLayout3d
-import androidx.constraintLayout.desktop.scan.KeyFrameNodes
+import androidx.constraintLayout.desktop.link.Widget
 import androidx.constraintLayout.desktop.scan.LayoutConstraints
 import androidx.constraintLayout.desktop.scan.WidgetFrameUtils
 import androidx.constraintLayout.desktop.utils.ScenePicker
 import androidx.constraintLayout.desktop.utils.ScenePicker.HitElementListener
 import androidx.constraintLayout.desktop.utils.WidgetAttributes
 import androidx.constraintlayout.core.parser.CLKey
-import androidx.constraintlayout.core.parser.CLObject
 import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.state.WidgetFrame
-import java.awt.*
+import java.awt.BorderLayout
+import java.awt.Graphics
+import java.awt.Graphics2D
+import java.awt.RenderingHints
 import java.awt.event.ActionEvent
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.geom.AffineTransform
-import java.awt.geom.Path2D
 import java.util.*
 import javax.swing.*
 import kotlin.collections.ArrayList
@@ -91,7 +92,6 @@ open class LayoutView(inspector: LayoutInspector) : JPanel(BorderLayout()) {
                     }
                 }
                 repaint();
-
         }
 
         override fun mouseReleased(e: MouseEvent) {
@@ -123,105 +123,105 @@ open class LayoutView(inspector: LayoutInspector) : JPanel(BorderLayout()) {
     addMouseMotionListener(mouseAdapter)
 }
 
-data class Widget(val id: String, val key: CLKey) {
-    private val layoutColors =  WidgetFrameUtils.LayoutColors()
-    var interpolated = WidgetFrame()
-    var start = WidgetFrame()
-    var end = WidgetFrame()
-    var endLayout = LayoutConstraints()
-    var startLayout = LayoutConstraints()
-    var name = "unknown";
-    var path = Path2D.Float()
-    val drawFont = Font("Helvetica", Font.ITALIC, 32)
-    val keyFrames = KeyFrameNodes()
-    var isGuideline = false
-
-    init {
-        name = key.content()
-        endLayout.name = name
-        startLayout.name = name
-        val sections = key.value as CLObject
-        val count = sections.size()
-        for (i in 0 until count) {
-            val sec = sections[i] as CLKey
-            when (sec.content()) {
-                "start" -> WidgetFrameUtils.deserialize(sec, end, endLayout)
-                "end" -> WidgetFrameUtils.deserialize(sec, start, startLayout)
-                "interpolated" -> WidgetFrameUtils.deserialize(sec, interpolated, null)
-                "path" -> WidgetFrameUtils.getPath(sec, path)
-                "keyPos" -> keyFrames.setKeyFramesPos(sec)
-                "keyTypes" -> keyFrames.setKeyFramesTypes(sec)
-                "keyFrames" -> keyFrames.setKeyFramesProgress(sec)
-            }
-        }
-    }
-
-    fun width(): Int {
-        return interpolated.width()
-    }
-
-    fun height(): Int {
-        return interpolated.height()
-    }
-
-    fun draw(
-        g: Graphics2D,
-        drawRoot: Boolean,
-        scenePicker: ScenePicker,
-        over: HashSet<String>,
-        selected: String?,
-        map: java.util.HashMap<String, Boolean>?
-    ) {
-        val renderScale = WidgetFrameUtils.getTouchScale(g);
-        val END_LOOK = WidgetFrameUtils.OUTLINE or WidgetFrameUtils.DASH_OUTLINE;
-        val pre = (map?.get("PreTransform")==true)
-        if (map?.get("Start")==true) {
-            WidgetFrameUtils.render(start, g, null, WidgetFrameUtils.FrameType.START, END_LOOK, pre, null, startLayout);
-        }
-        if (map?.get("Path")==true) {
-            keyFrames.render(g)
-        }
-        if (map?.get("End")==true) {
-            WidgetFrameUtils.render(end, g, null, WidgetFrameUtils.FrameType.END, END_LOOK, pre, null, endLayout);
-        }
-        if (map?.get("Path")==true) {
-            WidgetFrameUtils.renderPath(path, g);
-        }
-
-
-        var style = WidgetFrameUtils.FILL
-        interpolated.name = name
-        var  type = WidgetFrameUtils.FrameType.INTERPOLATED
-        if (drawRoot) {
-            type = WidgetFrameUtils.FrameType.ROOT
-        } else {
-            if (over.contains(interpolated.name)) {
-                type = WidgetFrameUtils.FrameType.INTERPOLATED_HOVER
-            }
-            if (selected == interpolated.name) {
-                type = WidgetFrameUtils.FrameType.INTERPOLATED_SELECTED
-            }
-        }
-        g.font = drawFont
-        style += WidgetFrameUtils.TEXT
-        WidgetFrameUtils.render(interpolated, g, scenePicker,
-            type, style,  pre, renderScale,  if (drawRoot) endLayout else null);
-        if (drawRoot) {
-            startLayout.bounds = endLayout.bounds
-        }
-    }
-
-    fun drawConnections(
-        g: Graphics2D,
-        picker: ScenePicker,
-        startLayoutMap: HashMap<String, LayoutConstraints>,
-        endLayoutMap: HashMap<String, LayoutConstraints>,
-        root: Widget
-    ) {
-        startLayout.render(g, startLayoutMap, picker, root.endLayout);
-        endLayout.render(g, endLayoutMap, picker, root.endLayout);
-    }
-}
+//data class Widget(val id: String, val key: CLKey) {
+//    private val layoutColors =  WidgetFrameUtils.LayoutColors()
+//    var interpolated = WidgetFrame()
+//    var start = WidgetFrame()
+//    var end = WidgetFrame()
+//    var endLayout = LayoutConstraints()
+//    var startLayout = LayoutConstraints()
+//    var name = "unknown";
+//    var path = Path2D.Float()
+//    val drawFont = Font("Helvetica", Font.ITALIC, 32)
+//    val keyFrames = KeyFrameNodes()
+//    var isGuideline = false
+//
+//    init {
+//        name = key.content()
+//        endLayout.name = name
+//        startLayout.name = name
+//        val sections = key.value as CLObject
+//        val count = sections.size()
+//        for (i in 0 until count) {
+//            val sec = sections[i] as CLKey
+//            when (sec.content()) {
+//                "start" -> WidgetFrameUtils.deserialize(sec, end, endLayout)
+//                "end" -> WidgetFrameUtils.deserialize(sec, start, startLayout)
+//                "interpolated" -> WidgetFrameUtils.deserialize(sec, interpolated, null)
+//                "path" -> WidgetFrameUtils.getPath(sec, path)
+//                "keyPos" -> keyFrames.setKeyFramesPos(sec)
+//                "keyTypes" -> keyFrames.setKeyFramesTypes(sec)
+//                "keyFrames" -> keyFrames.setKeyFramesProgress(sec)
+//            }
+//        }
+//    }
+//
+//    fun width(): Int {
+//        return interpolated.width()
+//    }
+//
+//    fun height(): Int {
+//        return interpolated.height()
+//    }
+//
+//    fun draw(
+//        g: Graphics2D,
+//        drawRoot: Boolean,
+//        scenePicker: ScenePicker,
+//        over: HashSet<String>,
+//        selected: String?,
+//        map: java.util.HashMap<String, Boolean>?
+//    ) {
+//        val renderScale = WidgetFrameUtils.getTouchScale(g);
+//        val END_LOOK = WidgetFrameUtils.OUTLINE or WidgetFrameUtils.DASH_OUTLINE;
+//        val pre = (map?.get("PreTransform")==true)
+//        if (map?.get("Start")==true) {
+//            WidgetFrameUtils.render(start, g, null, WidgetFrameUtils.FrameType.START, END_LOOK, pre, null, startLayout);
+//        }
+//        if (map?.get("Path")==true) {
+//            keyFrames.render(g)
+//        }
+//        if (map?.get("End")==true) {
+//            WidgetFrameUtils.render(end, g, null, WidgetFrameUtils.FrameType.END, END_LOOK, pre, null, endLayout);
+//        }
+//        if (map?.get("Path")==true) {
+//            WidgetFrameUtils.renderPath(path, g);
+//        }
+//
+//
+//        var style = WidgetFrameUtils.FILL
+//        interpolated.name = name
+//        var  type = WidgetFrameUtils.FrameType.INTERPOLATED
+//        if (drawRoot) {
+//            type = WidgetFrameUtils.FrameType.ROOT
+//        } else {
+//            if (over.contains(interpolated.name)) {
+//                type = WidgetFrameUtils.FrameType.INTERPOLATED_HOVER
+//            }
+//            if (selected == interpolated.name) {
+//                type = WidgetFrameUtils.FrameType.INTERPOLATED_SELECTED
+//            }
+//        }
+//        g.font = drawFont
+//        style += WidgetFrameUtils.TEXT
+//        WidgetFrameUtils.render(interpolated, g, scenePicker,
+//            type, style,  pre, renderScale,  if (drawRoot) endLayout else null);
+//        if (drawRoot) {
+//            startLayout.bounds = endLayout.bounds
+//        }
+//    }
+//
+//    fun drawConnections(
+//        g: Graphics2D,
+//        picker: ScenePicker,
+//        startLayoutMap: HashMap<String, LayoutConstraints>,
+//        endLayoutMap: HashMap<String, LayoutConstraints>,
+//        root: Widget
+//    ) {
+//        startLayout.render(g, startLayoutMap, picker, root.endLayout);
+//        endLayout.render(g, endLayoutMap, picker, root.endLayout);
+//    }
+//}
 
     fun isRet(graphics: Graphics2D) : Boolean {
         val g = graphics
@@ -339,7 +339,13 @@ fun setLayoutInformation(information: String) {
 
             if (widget is CLKey) {
                 val widgetId = widget.content()
-                var w = Widget(widgetId, widget)
+
+
+                    var     w  =
+                        if (widgets.size == 0) Widget(widgetId, widget,true)
+                 else
+                    Widget(widgetId, widget)
+
                 widgets.add(w)
                 if (!(w.interpolated.interpolatedPos.isNaN())) {
                     pos = w.interpolated.interpolatedPos

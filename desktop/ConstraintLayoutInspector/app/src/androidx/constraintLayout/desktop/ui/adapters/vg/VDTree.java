@@ -16,13 +16,7 @@
 
 package androidx.constraintLayout.desktop.ui.adapters.vg;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -87,6 +81,43 @@ public class VDTree {
       VDPath path = (VDPath) mChildren.get(i);
       logger.log(Level.FINE, "mCurrentPaths[" + i + "]=" + path.getName() +
           Integer.toHexString(path.mFillColor));
+      if (mChildren.get(i) != null) {
+        Rectangle r = drawPath(path, g, w, h, scale);
+        if (bounds == null) {
+          bounds = r;
+        } else {
+          bounds.add(r);
+        }
+      }
+    }
+    g.dispose();
+    logger.log(Level.FINE, "Rectangle " + bounds);
+    logger.log(Level.FINE, "Port  " + mPortWidth + "," + mPortHeight);
+    double right = mPortWidth - bounds.getMaxX();
+    double bot = mPortHeight - bounds.getMaxY();
+    logger.log(Level.FINE, "x " + bounds.getMinX() + ", " + right);
+    logger.log(Level.FINE, "y " + bounds.getMinY() + ", " + bot);
+  }
+
+  public void draw(Graphics g1, int x, int y, int w, int h) {
+
+    float scale = w / mPortWidth;
+    scale = Math.min(h / mPortHeight, scale);
+
+    if (mChildren == null) {
+      logger.log(Level.FINE, "no pathes");
+      return;
+    }
+    Graphics2D g = (Graphics2D) g1.create();
+    g.translate(x, y);
+    ((Graphics2D) g).scale(scale, scale);
+
+    Rectangle bounds = null;
+    for (int i = 0; i < mChildren.size(); i++) {
+      // TODO: do things differently when it is a path or group!!
+      VDPath path = (VDPath) mChildren.get(i);
+      logger.log(Level.FINE, "mCurrentPaths[" + i + "]=" + path.getName() +
+              Integer.toHexString(path.mFillColor));
       if (mChildren.get(i) != null) {
         Rectangle r = drawPath(path, g, w, h, scale);
         if (bounds == null) {

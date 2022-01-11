@@ -16,6 +16,7 @@
 
 package androidx.constraintLayout.desktop.scan;
 
+import androidx.constraintLayout.desktop.ui.utils.Debug;
 import androidx.constraintLayout.desktop.utils.ScenePicker;
 import androidx.constraintlayout.core.parser.*;
 import androidx.constraintlayout.core.state.WidgetFrame;
@@ -66,7 +67,7 @@ public class WidgetFrameUtils {
                     }
                 } else {
                     dest.setValue(name, v);
-                }
+                 }
 
             }
         }
@@ -75,7 +76,6 @@ public class WidgetFrameUtils {
     public static class LayoutColors {
         Color mUnTransformedColor = new Color(29, 34, 85);
         Color mTransformedColor = new Color(32, 80, 92);
-        ;
 
     }
 
@@ -165,7 +165,7 @@ public class WidgetFrameUtils {
         }
 
         g.getTransform().transform(srcPts, 0, dstPts, 0, 4);
-        if (transform != null) {
+        if (transform != null && false) {
             transform.transform(dstPts, 0, transPts, 0, 4);
             if (scenePicker != null) {
                 scenePicker.addQuadrilateral(frame, transPts, 0);

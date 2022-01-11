@@ -14,8 +14,11 @@
 * limitations under the License.
 */
 
-package androidx.constraintLayout.desktop.link
+package androidx.constraintLayout.desktop.link.kotlin
 
+import androidx.constraintLayout.desktop.link.DesignSurfaceModification
+import androidx.constraintLayout.desktop.link.MainUI
+import androidx.constraintLayout.desktop.link.MotionLink
 import androidx.constraintLayout.desktop.scan.CLScan
 import androidx.constraintLayout.desktop.scan.CLTreeNode
 import androidx.constraintLayout.desktop.scan.SyntaxHighlight
@@ -46,7 +49,8 @@ import javax.swing.text.StyledDocument
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 
-class Main internal constructor() : JPanel(BorderLayout()) {
+class Main internal constructor() : JPanel(BorderLayout()),
+    MainUI {
     private var mSelectionHighlight: Any? = null
     private var layoutInspectorWindow: JFrame? = null
     var motionLink = MotionLink()
@@ -213,11 +217,6 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         })
     }
 
-    interface DesignSurfaceModification {
-        fun getElement(name: String): CLElement?
-        fun updateElement(name: String, content: CLElement)
-    }
-
     private fun fromLink(event: MotionLink.Event, link: MotionLink) {
         when (event) {
             MotionLink.Event.ERROR -> {   // ============ the ERROR case
@@ -232,7 +231,8 @@ class Main internal constructor() : JPanel(BorderLayout()) {
             }
             MotionLink.Event.LAYOUT_UPDATE -> {  // ============ the LAYOUT_UPDATE case
                 if (layoutInspector == null) {
-                    layoutInspector = showLayoutInspector(link, object : DesignSurfaceModification {
+                    layoutInspector = showLayoutInspector(link, object :
+                        DesignSurfaceModification {
                         override fun getElement(name: String): CLElement? {
                             if (jsonModel != null && jsonModel is CLObject) {
                                 return jsonModel!!.get(name)
@@ -352,7 +352,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
     }
 
     var widgetCount = 1;
-    fun addDesign(type: String) {
+    override fun addDesign(type: String) {
         val key = CLScan.findCLKey(CLParser.parse(mMainText.text), "Design")
         val uType = upperCaseFirst(type)
         if (key != null) {
@@ -377,7 +377,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         widgetCount++
     }
 
-    fun addConstraint(widget: String, constraint: String) {
+    override fun addConstraint(widget: String, constraint: String) {
         val key = CLScan.findCLKeyInRoot(CLParser.parse(mMainText.text), widget)
         if (key == null) {
             val pos = mMainText.text.length - 2
@@ -399,7 +399,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         return str.substring(0, 1).toUpperCase() + str.substring(1)
     }
 
-    fun selectKey(widget: String) {
+    override fun selectKey(widget: String) {
         val key = CLScan.findCLKey(CLParser.parse(mMainText.text), widget)
         clearSelectedKey();
         if (key != null) {
@@ -418,7 +418,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         }
     }
 
-    fun clearSelectedKey() {
+    override fun clearSelectedKey() {
         if (mSelectionHighlight == null) {
             return
         }
@@ -465,7 +465,7 @@ class Main internal constructor() : JPanel(BorderLayout()) {
         }
     }
 
-    fun showLayoutInspector(link: MotionLink, callback: Main.DesignSurfaceModification): LayoutInspector? {
+    fun showLayoutInspector(link: MotionLink, callback: DesignSurfaceModification): LayoutInspector? {
         val frame = JFrame("Layout Inspector")
         val inspector = LayoutInspector(link, this)
         frame.contentPane = inspector
@@ -517,5 +517,4 @@ class Main internal constructor() : JPanel(BorderLayout()) {
             frame.isVisible = true
         }
     }
-
 }

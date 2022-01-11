@@ -16,18 +16,13 @@
 package androidx.constraintLayout.desktop.constraintRendering.layout3d;
 
 
-import androidx.constraintLayout.desktop.link.LayoutView;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.prefs.Preferences;
-
+import java.util.List;
+import androidx.constraintLayout.desktop.link.*;
 
 /**
  * This is a simple test driver for the 3d engine
@@ -81,6 +76,7 @@ public class CheckLayout3d extends JPanel {
     return v;
   }
 
+
   private void savePref() {
     Preferences prefs = Preferences.userNodeForPackage(CheckLayout3d.class);
     final String ORIENTATION = "name_of_preference";
@@ -115,10 +111,11 @@ public class CheckLayout3d extends JPanel {
   }
 
 
-  public static Layout.Widget get3dWidgets(ArrayList<LayoutView.Widget> widgets) {
+  public static Layout.Widget get3dWidgets(List<Widget> widgets) {
 
     Layout.Widget rw = null;
-    for (LayoutView.Widget widget : widgets) {
+
+    for (Widget widget : widgets) {
       float top = widget.getInterpolated().top;
       float bottom = widget.getInterpolated().bottom;
       float left = widget.getInterpolated().left;
@@ -133,7 +130,7 @@ public class CheckLayout3d extends JPanel {
       return null;
     }
     float z = 0;
-    for (LayoutView.Widget widget : widgets) {
+    for (Widget widget : widgets) {
       float top = widget.getInterpolated().top;
       float bottom = widget.getInterpolated().bottom;
       float left = widget.getInterpolated().left;
@@ -151,12 +148,13 @@ public class CheckLayout3d extends JPanel {
   }
 
   BufferedImage img;
-  public void update(ArrayList<LayoutView.Widget> widgets) {
+
+  public void update(List<Widget> widgets) {
     myDisplay3D.updateTriData(new Layout(img, get3dWidgets(widgets)));
     myDisplay3D.isImageInvalid = true;
     myDisplay3D.repaint();
   }
-  public static CheckLayout3d create3d(ArrayList<LayoutView.Widget> widgets) {
+  public static CheckLayout3d create3d(List<Widget> widgets) {
     JFrame f = new JFrame("CheckTriangles");
     CheckLayout3d p = new CheckLayout3d();
     f.setContentPane(p);
