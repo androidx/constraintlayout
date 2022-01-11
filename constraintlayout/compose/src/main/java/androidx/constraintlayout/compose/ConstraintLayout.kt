@@ -248,7 +248,6 @@ inline fun ConstraintLayout(
                 }
             }
         }
-        @OptIn(ExperimentalMotionApi::class)
         MotionLayout(
             start = startConstraint,
             end = endConstraint,
