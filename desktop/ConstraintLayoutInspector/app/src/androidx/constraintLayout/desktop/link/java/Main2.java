@@ -281,7 +281,6 @@ public class Main2 extends JPanel implements MainUI {
                 updateTree();
                 highlight.inOpposingBracketColor = false;
         }
-
     }
 
     private void setText(String text) {
@@ -297,7 +296,7 @@ public class Main2 extends JPanel implements MainUI {
                 layoutInspector.setSceneString(mMainText.getText());
             }
         } catch (CLParsingException e) {
-            // nothing here... (text might be malformed as edit happens)
+            // Todo nothing here... (text might be malformed as edit happens)
         }
     }
 
@@ -340,15 +339,15 @@ public class Main2 extends JPanel implements MainUI {
 
     File myTmpFile = null;
     long myTempLastModified = 0;
-    Timer myTmpTimer  = null;
+    Timer myTmpTimer = null;
 
-    void  remoteEditStop() {
+    void remoteEditStop() {
         myTmpTimer.stop();
         myTmpFile.deleteOnExit();
         myTmpFile = null;
     }
 
-     public void addDesign(String type) throws CLParsingException, BadLocationException {
+    public void addDesign(String type) throws CLParsingException, BadLocationException {
         CLKey key = CLScan.findCLKey(CLParser.parse(mMainText.getText()), "Design");
         String uType = upperCaseFirst(type);
         if (key != null) {
@@ -383,10 +382,8 @@ public class Main2 extends JPanel implements MainUI {
         }
         if (key == null) {
             int pos = mMainText.getText().length() - 2;
-            String str = ",\n  " + widget + ": {\n    " +
-                    constraint + ", \n" +
-                    "   }\n";
-            StyledDocument document  = (StyledDocument) mMainText.getDocument();
+            String str = ",\n  " + widget + ": {\n    " + constraint + ", \n" + "   }\n";
+            StyledDocument document = (StyledDocument) mMainText.getDocument();
             try {
                 document.insertString(pos, str, null);
             } catch (BadLocationException e) {
@@ -394,9 +391,9 @@ public class Main2 extends JPanel implements MainUI {
             }
         } else {
             int pos = (int) key.getValue().getEnd() - 1;
-            String str = ",\n    " +constraint + ", \n";
+            String str = ",\n    " + constraint + ", \n";
 
-            StyledDocument document=  (StyledDocument) mMainText.getDocument();
+            StyledDocument document = (StyledDocument) mMainText.getDocument();
             try {
                 document.insertString(pos, str, null);
             } catch (BadLocationException e) {
@@ -408,6 +405,7 @@ public class Main2 extends JPanel implements MainUI {
     String upperCaseFirst(String str) {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
+
     @Override
     public void selectKey(String widget) throws CLParsingException {
         CLKey key = CLScan.findCLKey(CLParser.parse(mMainText.getText()), widget);
@@ -437,7 +435,7 @@ public class Main2 extends JPanel implements MainUI {
         h.removeHighlight(mSelectionHighlight);
     }
 
-    void  remoteEdit() {
+    void remoteEdit() {
         try {
             File tmp = File.createTempFile(motionLink.selectedLayoutName, ".json5");
             FileWriter fw = new FileWriter(tmp);
@@ -446,7 +444,7 @@ public class Main2 extends JPanel implements MainUI {
             myTempLastModified = tmp.lastModified();
             Desktop.getDesktop().open(tmp);
             myTmpFile = tmp;
-            myTmpTimer = new Timer(500,  e -> checkForUpdate()  );
+            myTmpTimer = new Timer(500, e -> checkForUpdate());
             myTmpTimer.setRepeats(true);
             myTmpTimer.start();
         } catch (IOException e) {
@@ -460,7 +458,7 @@ public class Main2 extends JPanel implements MainUI {
             try {
                 myTempLastModified = lastM;
                 FileReader fr = new FileReader(myTmpFile);
-                char []buff =  new char[(int) myTmpFile.length()];
+                char[] buff = new char[(int) myTmpFile.length()];
                 int off = 0;
                 while (true) {
                     int len = fr.read(buff, off, buff.length - off);
@@ -475,6 +473,7 @@ public class Main2 extends JPanel implements MainUI {
             }
         }
     }
+
     public LayoutInspector2 showLayoutInspector(MotionLink link, DesignSurfaceModification callback) {
         JFrame frame = new JFrame("Layout Inspector");
         LayoutInspector2 inspector = new LayoutInspector2(link, this);

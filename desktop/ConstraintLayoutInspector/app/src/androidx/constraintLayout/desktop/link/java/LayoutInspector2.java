@@ -5,7 +5,6 @@ import androidx.constraintLayout.desktop.link.MotionLink;
 import androidx.constraintLayout.desktop.ui.adapters.vd.ListIcons;
 import androidx.constraintLayout.desktop.ui.adapters.vg.VDIcon;
 import androidx.constraintLayout.desktop.ui.timeline.TimeLinePanel;
-import androidx.constraintLayout.desktop.ui.utils.Debug;
 import androidx.constraintlayout.core.parser.CLObject;
 import androidx.constraintlayout.core.parser.CLParsingException;
 
@@ -84,7 +83,6 @@ class LayoutInspector2 extends JPanel {
         add(layoutView, BorderLayout.CENTER);
         add(westPanel, BorderLayout.WEST);
 
-
         liveConnection.addChangeListener(e -> motionLink.setUpdateLayoutPolling(liveConnection.isSelected()));
 
         addButtonButton.addActionListener(e -> {
@@ -98,13 +96,13 @@ class LayoutInspector2 extends JPanel {
         });
 
         addTextButton.addActionListener(e -> {
-                try {
-                    main.addDesign("text");
-                } catch (CLParsingException clParsingException) {
-                    clParsingException.printStackTrace();
-                } catch (BadLocationException badLocationException) {
-                    badLocationException.printStackTrace();
-                }
+            try {
+                main.addDesign("text");
+            } catch (CLParsingException clParsingException) {
+                clParsingException.printStackTrace();
+            } catch (BadLocationException badLocationException) {
+                badLocationException.printStackTrace();
+            }
         });
 
         edit.addActionListener(e -> {
@@ -124,10 +122,7 @@ class LayoutInspector2 extends JPanel {
         show3d.addActionListener(e -> {
             layoutView.display3d();
         });
-
-
     }
-
 
     HashMap<String, Boolean> getSetting() {
         return (HashMap<String, Boolean>) settings.getClientProperty("map");
@@ -173,9 +168,6 @@ class LayoutInspector2 extends JPanel {
             add(layoutView, BorderLayout.CENTER);
             layoutView.setBackground(Color.BLUE);
         }
-
-
-
 
         revalidate();
         repaint();

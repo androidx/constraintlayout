@@ -92,292 +92,194 @@ open class LayoutView(inspector: LayoutInspector) : JPanel(BorderLayout()) {
                     }
                 }
                 repaint();
-        }
-
-        override fun mouseReleased(e: MouseEvent) {
-
-            inspector.main.clearSelectedKey();
-            repaint();
-            if (e.isPopupTrigger) {
-                rightMouse(e)
-            }
-        }
-
-        override fun mouseDragged(e: MouseEvent) {
-        }
-
-        override fun mouseMoved(e: MouseEvent?) {
-            if (e == null) {
-                return
             }
 
-            overWidgets.clear()
-            picker.setSelectListener(
-                HitElementListener { over, dist -> if (over is WidgetFrame) overWidgets.add(over.name) })
-            picker.find(e.x, e.y)
+            override fun mouseReleased(e: MouseEvent) {
 
-            repaint()
+                inspector.main.clearSelectedKey();
+                repaint();
+                if (e.isPopupTrigger) {
+                    rightMouse(e)
+                }
+            }
+
+            override fun mouseDragged(e: MouseEvent) {
+            }
+
+            override fun mouseMoved(e: MouseEvent?) {
+                if (e == null) {
+                    return
+                }
+
+                overWidgets.clear()
+                picker.setSelectListener(
+                    HitElementListener { over, dist -> if (over is WidgetFrame) overWidgets.add(over.name) })
+                picker.find(e.x, e.y)
+
+                repaint()
+            }
         }
+        addMouseListener(mouseAdapter)
+        addMouseMotionListener(mouseAdapter)
     }
-    addMouseListener(mouseAdapter)
-    addMouseMotionListener(mouseAdapter)
-}
 
-//data class Widget(val id: String, val key: CLKey) {
-//    private val layoutColors =  WidgetFrameUtils.LayoutColors()
-//    var interpolated = WidgetFrame()
-//    var start = WidgetFrame()
-//    var end = WidgetFrame()
-//    var endLayout = LayoutConstraints()
-//    var startLayout = LayoutConstraints()
-//    var name = "unknown";
-//    var path = Path2D.Float()
-//    val drawFont = Font("Helvetica", Font.ITALIC, 32)
-//    val keyFrames = KeyFrameNodes()
-//    var isGuideline = false
-//
-//    init {
-//        name = key.content()
-//        endLayout.name = name
-//        startLayout.name = name
-//        val sections = key.value as CLObject
-//        val count = sections.size()
-//        for (i in 0 until count) {
-//            val sec = sections[i] as CLKey
-//            when (sec.content()) {
-//                "start" -> WidgetFrameUtils.deserialize(sec, end, endLayout)
-//                "end" -> WidgetFrameUtils.deserialize(sec, start, startLayout)
-//                "interpolated" -> WidgetFrameUtils.deserialize(sec, interpolated, null)
-//                "path" -> WidgetFrameUtils.getPath(sec, path)
-//                "keyPos" -> keyFrames.setKeyFramesPos(sec)
-//                "keyTypes" -> keyFrames.setKeyFramesTypes(sec)
-//                "keyFrames" -> keyFrames.setKeyFramesProgress(sec)
-//            }
-//        }
-//    }
-//
-//    fun width(): Int {
-//        return interpolated.width()
-//    }
-//
-//    fun height(): Int {
-//        return interpolated.height()
-//    }
-//
-//    fun draw(
-//        g: Graphics2D,
-//        drawRoot: Boolean,
-//        scenePicker: ScenePicker,
-//        over: HashSet<String>,
-//        selected: String?,
-//        map: java.util.HashMap<String, Boolean>?
-//    ) {
-//        val renderScale = WidgetFrameUtils.getTouchScale(g);
-//        val END_LOOK = WidgetFrameUtils.OUTLINE or WidgetFrameUtils.DASH_OUTLINE;
-//        val pre = (map?.get("PreTransform")==true)
-//        if (map?.get("Start")==true) {
-//            WidgetFrameUtils.render(start, g, null, WidgetFrameUtils.FrameType.START, END_LOOK, pre, null, startLayout);
-//        }
-//        if (map?.get("Path")==true) {
-//            keyFrames.render(g)
-//        }
-//        if (map?.get("End")==true) {
-//            WidgetFrameUtils.render(end, g, null, WidgetFrameUtils.FrameType.END, END_LOOK, pre, null, endLayout);
-//        }
-//        if (map?.get("Path")==true) {
-//            WidgetFrameUtils.renderPath(path, g);
-//        }
-//
-//
-//        var style = WidgetFrameUtils.FILL
-//        interpolated.name = name
-//        var  type = WidgetFrameUtils.FrameType.INTERPOLATED
-//        if (drawRoot) {
-//            type = WidgetFrameUtils.FrameType.ROOT
-//        } else {
-//            if (over.contains(interpolated.name)) {
-//                type = WidgetFrameUtils.FrameType.INTERPOLATED_HOVER
-//            }
-//            if (selected == interpolated.name) {
-//                type = WidgetFrameUtils.FrameType.INTERPOLATED_SELECTED
-//            }
-//        }
-//        g.font = drawFont
-//        style += WidgetFrameUtils.TEXT
-//        WidgetFrameUtils.render(interpolated, g, scenePicker,
-//            type, style,  pre, renderScale,  if (drawRoot) endLayout else null);
-//        if (drawRoot) {
-//            startLayout.bounds = endLayout.bounds
-//        }
-//    }
-//
-//    fun drawConnections(
-//        g: Graphics2D,
-//        picker: ScenePicker,
-//        startLayoutMap: HashMap<String, LayoutConstraints>,
-//        endLayoutMap: HashMap<String, LayoutConstraints>,
-//        root: Widget
-//    ) {
-//        startLayout.render(g, startLayoutMap, picker, root.endLayout);
-//        endLayout.render(g, endLayoutMap, picker, root.endLayout);
-//    }
-//}
-
-    fun isRet(graphics: Graphics2D) : Boolean {
+    fun isRet(graphics: Graphics2D): Boolean {
         val g = graphics
         val retinaTest = (g.fontRenderContext.transform
                 == AffineTransform.getScaleInstance(2.0, 2.0))
         return retinaTest
     }
-open fun computeScale(rootWidth: Float, rootHeight: Float) {
-    lastRootWidth = rootWidth
-    lastRootHeight = rootHeight
-    scaleX = width / rootWidth
-    scaleY = height / rootHeight
 
-    scaleX *= zoom
-    scaleY *= zoom
+    open fun computeScale(rootWidth: Float, rootHeight: Float) {
+        lastRootWidth = rootWidth
+        lastRootHeight = rootHeight
+        scaleX = width / rootWidth
+        scaleY = height / rootHeight
 
-    if (scaleX < scaleY) {
-        scaleY = scaleX
-    } else {
-        scaleX = scaleY
-    }
+        scaleX *= zoom
+        scaleY *= zoom
 
-    offX = (width - rootWidth * scaleX) / 2
-    offY = (height - rootHeight * scaleY) / 2
-
-}
-
-override fun paint(g: Graphics?) {
-    super.paint(g)
-    if (widgets.size == 0) {
-        return
-    }
-    val root = widgets[0]
-    rootWidth = root.width().toFloat()
-    rootHeight = root.height().toFloat()
-    computeScale(rootWidth, rootHeight)
-
-    val g2 = g!!.create() as Graphics2D
-    g2.setRenderingHint(
-        RenderingHints.KEY_ANTIALIASING,
-        RenderingHints.VALUE_ANTIALIAS_ON
-    );
-
-    g2.color = WidgetFrameUtils.theme.backgroundColor()
-    g2.fillRect(0, 0, width, height)
-
-    g2.translate(offX.toDouble(), offY.toDouble())
-    g2.scale(scaleX.toDouble(), scaleY.toDouble())
-
-    if (mReflectOrientation && !WidgetFrame.phone_orientation.isNaN()) {
-        g2.rotate(-WidgetFrame.phone_orientation.toDouble(), rootWidth / 2.0, rootHeight / 2.0);
-    }
-    picker.reset()
-    endLayoutMap.clear()
-    startLayoutMap.clear()
-    var map = inspector.getSetting()
-    for (widget in widgets) {
-        if (widget.isGuideline) {
-            continue
+        if (scaleX < scaleY) {
+            scaleY = scaleX
+        } else {
+            scaleX = scaleY
         }
 
-        widget.draw(g2, widget == root, picker, overWidgets, primarySelected, map)
-        endLayoutMap.put(widget.endLayout.name, widget.endLayout)
-        startLayoutMap.put(widget.startLayout.name, widget.startLayout)
-    }
-    for (widget in widgets) {
-        if (widget.isGuideline || widget == root) {
-            continue
-        }
-        if (inspector.getSetting()?.get("Constraints") == true) {
-            widget.drawConnections(g2, picker, startLayoutMap, endLayoutMap, root)
-        }
+        offX = (width - rootWidth * scaleX) / 2
+        offY = (height - rootHeight * scaleY) / 2
+
     }
 
-}
-
-fun rightMouse(e: MouseEvent) {
-    println("popup")
-    var menu = JPopupMenu()
-    menu.add("Selected")
-    for (wId in overWidgets) {
-        if (wId == "root") {
-            continue
+    override fun paint(g: Graphics?) {
+        super.paint(g)
+        if (widgets.size == 0) {
+            return
         }
-        var sub = JMenu(wId)
-        menu.add(sub)
-        sub.add(JMenuItem(object : AbstractAction("centerVertically"){
-            override fun actionPerformed(e: ActionEvent) {
-                inspector.main.addConstraint(wId, "centerVertically: 'parent'")
+        val root = widgets[0]
+        rootWidth = root.width().toFloat()
+        rootHeight = root.height().toFloat()
+        computeScale(rootWidth, rootHeight)
+
+        val g2 = g!!.create() as Graphics2D
+        g2.setRenderingHint(
+            RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_ON
+        );
+
+        g2.color = WidgetFrameUtils.theme.backgroundColor()
+        g2.fillRect(0, 0, width, height)
+
+        g2.translate(offX.toDouble(), offY.toDouble())
+        g2.scale(scaleX.toDouble(), scaleY.toDouble())
+
+        if (mReflectOrientation && !WidgetFrame.phone_orientation.isNaN()) {
+            g2.rotate(-WidgetFrame.phone_orientation.toDouble(), rootWidth / 2.0, rootHeight / 2.0);
+        }
+        picker.reset()
+        endLayoutMap.clear()
+        startLayoutMap.clear()
+        var map = inspector.getSetting()
+        for (widget in widgets) {
+            if (widget.isGuideline) {
+                continue
             }
-        }))
-        sub.add(JMenuItem(object : AbstractAction("centerHorizontally"){
-            override fun actionPerformed(e: ActionEvent) {
-                inspector.main.addConstraint(wId, "centerHorizontally: 'parent'")
+
+            widget.draw(g2, widget == root, picker, overWidgets, primarySelected, map)
+            endLayoutMap.put(widget.endLayout.name, widget.endLayout)
+            startLayoutMap.put(widget.startLayout.name, widget.startLayout)
+        }
+        for (widget in widgets) {
+            if (widget.isGuideline || widget == root) {
+                continue
             }
-        }))
-
+            if (inspector.getSetting()?.get("Constraints") == true) {
+                widget.drawConnections(g2, picker, startLayoutMap, endLayoutMap, root)
+            }
+        }
 
     }
-    menu.show(e.component, e.x, e.y)
 
-}
+    fun rightMouse(e: MouseEvent) {
+        println("popup")
+        var menu = JPopupMenu()
+        menu.add("Selected")
+        for (wId in overWidgets) {
+            if (wId == "root") {
+                continue
+            }
+            var sub = JMenu(wId)
+            menu.add(sub)
+            sub.add(JMenuItem(object : AbstractAction("centerVertically") {
+                override fun actionPerformed(e: ActionEvent) {
+                    inspector.main.addConstraint(wId, "centerVertically: 'parent'")
+                }
+            }))
+            sub.add(JMenuItem(object : AbstractAction("centerHorizontally") {
+                override fun actionPerformed(e: ActionEvent) {
+                    inspector.main.addConstraint(wId, "centerHorizontally: 'parent'")
+                }
+            }))
 
-fun setLayoutInformation(information: String) {
-    if (information.trim().isEmpty()) {
-        return
+
+        }
+        menu.show(e.component, e.x, e.y)
+
     }
 
-    try {
-        val list = CLParser.parse(information)
-        widgets.clear()
-        var pos = Float.NaN
-        for (i in 0 until list.size()) {
-            val widget = list[i]
+    fun setLayoutInformation(information: String) {
+        if (information.trim().isEmpty()) {
+            return
+        }
 
-            if (widget is CLKey) {
-                val widgetId = widget.content()
+        try {
+            val list = CLParser.parse(information)
+            widgets.clear()
+            var pos = Float.NaN
+            for (i in 0 until list.size()) {
+                val widget = list[i]
+
+                if (widget is CLKey) {
+                    val widgetId = widget.content()
 
 
-                    var     w  =
-                        if (widgets.size == 0) Widget(widgetId, widget,true)
-                 else
-                    Widget(widgetId, widget)
+                    var w =
+                        if (widgets.size == 0) Widget(widgetId, widget, true)
+                        else
+                            Widget(widgetId, widget)
 
-                widgets.add(w)
-                if (!(w.interpolated.interpolatedPos.isNaN())) {
-                    pos = w.interpolated.interpolatedPos
+                    widgets.add(w)
+                    if (!(w.interpolated.interpolatedPos.isNaN())) {
+                        pos = w.interpolated.interpolatedPos
+                    }
+                }
+                if (!(pos.isNaN())) {
+                    inspector.mTimeLinePanel?.setMotionProgress(pos)
                 }
             }
-            if (!(pos.isNaN())) {
-                inspector.mTimeLinePanel?.setMotionProgress(pos)
-            }
-        }
-        if (primarySelected != null && attDisplay != null) {
-            for (widget in widgets) {
-                if (widget.name == primarySelected) {
-                   attDisplay?.setWidgetFrame(widget.interpolated);
+            if (primarySelected != null && attDisplay != null) {
+                for (widget in widgets) {
+                    if (widget.name == primarySelected) {
+                        attDisplay?.setWidgetFrame(widget.interpolated);
+                    }
                 }
             }
+            display3d?.update(widgets);
+            repaint()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-        display3d?.update(widgets);
-        repaint()
-    } catch (e: Exception) {
-        e.printStackTrace()
     }
-}
 
     fun displayWidgetAttributes() {
         for (widget in widgets) {
             if (widget.name == primarySelected) {
-               attDisplay  =  WidgetAttributes.display(widget.interpolated);
+                attDisplay = WidgetAttributes.display(widget.interpolated);
             }
         }
 
     }
+
     fun display3d() {
-       display3d =  CheckLayout3d.create3d(widgets)
+        display3d = CheckLayout3d.create3d(widgets)
     }
 }

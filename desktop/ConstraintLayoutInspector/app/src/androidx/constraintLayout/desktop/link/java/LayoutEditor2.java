@@ -123,7 +123,6 @@ public class LayoutEditor2 extends LayoutView2 {
         }
     }
 
-
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -270,7 +269,6 @@ public class LayoutEditor2 extends LayoutView2 {
             scenePicker.addRect(this, 0, x1, y1, x2, y2);
         }
     }
-
 
     class VerticalGuideline extends GuidelineModel {
         BufferedImage img;
