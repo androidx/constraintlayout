@@ -14,27 +14,25 @@
  * limitations under the License.
  */
 
-package androidx.constraintLayout.desktop.link
+package androidx.constraintLayout.desktop.link.kotlin
 
+import androidx.constraintLayout.desktop.link.MainUI
+import androidx.constraintLayout.desktop.link.MotionLink
 import androidx.constraintLayout.desktop.ui.adapters.vd.ListIcons
 import androidx.constraintLayout.desktop.ui.adapters.vg.VDIcon
 import androidx.constraintLayout.desktop.ui.timeline.TimeLinePanel
 import androidx.constraintLayout.desktop.ui.ui.MotionEditorSelector
 import androidx.constraintlayout.core.parser.CLObject
-import java.awt.BorderLayout
-import java.awt.Dimension
-import java.awt.GridBagConstraints
-import java.awt.GridBagLayout
+import java.awt.*
 import java.awt.event.ActionEvent
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
-import java.beans.PropertyChangeEvent
-import java.util.HashMap
+import java.util.*
 import javax.swing.*
 
 class LayoutInspector(
     link: MotionLink,
-    main: Main
+    main: MainUI
 ) : JPanel(BorderLayout()) {
     var SHOW3D = false
     val motionLink = link
@@ -87,7 +85,7 @@ class LayoutInspector(
         add(northPanel, BorderLayout.NORTH)
         add(layoutView, BorderLayout.CENTER)
         add(westPanel, BorderLayout.WEST)
-
+        northPanel.background = Color.RED
 
         liveConnection.addChangeListener {
             motionLink.setUpdateLayoutPolling(liveConnection.isSelected)

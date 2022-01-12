@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package androidx.constraintLayout.desktop.link
+package androidx.constraintLayout.desktop.link.kotlin
 
+import androidx.constraintLayout.desktop.link.DesignSurfaceModification
 import androidx.constraintLayout.desktop.scan.WidgetFrameUtils
 import androidx.constraintLayout.desktop.utils.ScenePicker
 import androidx.constraintlayout.core.parser.CLKey
@@ -53,7 +54,7 @@ class LayoutEditor(
     var offsetY : Int = 0
 
     var dragging : Boolean = false
-    var designSurfaceModificationCallback: Main.DesignSurfaceModification? = null
+    var designSurfaceModificationCallback: DesignSurfaceModification? = null
 
     var guidelines = ArrayList<GuidelineModel>()
 
@@ -308,11 +309,19 @@ class LayoutEditor(
     private fun addGuideline(name: String, element: CLObject, orientation: Int) {
         when (orientation) {
             ConstraintWidget.HORIZONTAL -> {
-                val guideline = HorizontalGuideline(name, element)
+                val guideline =
+                    HorizontalGuideline(
+                        name,
+                        element
+                    )
                 guidelines.add(guideline)
             }
             ConstraintWidget.VERTICAL -> {
-                val guideline = VerticalGuideline(name, element)
+                val guideline =
+                    VerticalGuideline(
+                        name,
+                        element
+                    )
                 guidelines.add(guideline)
             }
         }
