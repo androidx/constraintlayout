@@ -62,6 +62,7 @@ internal class MotionParserTest {
         isDebugInspectorInfoEnabled = false
     }
 
+    @OptIn(ExperimentalMotionApi::class)
     @Test
     fun testTransitionParseFailsSilently() {
         // We don't want applications to hard-crash when the parser sees an error
