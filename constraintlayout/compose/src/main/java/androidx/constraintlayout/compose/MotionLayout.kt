@@ -269,9 +269,9 @@ internal inline fun MotionLayoutCore(
     )
 }
 
-@Suppress("NOTHING_TO_INLINE")
+@PublishedApi
 @Composable
-inline fun MotionLayoutCore(
+internal inline fun MotionLayoutCore(
     motionScene: MotionScene,
     progress: Float,
     debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
