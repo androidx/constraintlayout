@@ -55,6 +55,7 @@ import java.util.*
  * Layout that interpolate its children layout given two sets of constraint and
  * a progress (from 0 to 1)
  */
+@ExperimentalMotionApi
 @Suppress("NOTHING_TO_INLINE")
 @Composable
 inline fun MotionLayout(
@@ -81,6 +82,24 @@ inline fun MotionLayout(
 }
 
 /**
+ * Layout that animates the default transition of a [MotionScene] with a progress value (from 0 to
+ * 1).
+ */
+@ExperimentalMotionApi
+@Suppress("NOTHING_TO_INLINE")
+@Composable
+inline fun MotionLayout(
+    motionScene: MotionScene,
+    progress: Float,
+    debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
+    modifier: Modifier = Modifier,
+    optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
+    crossinline content: @Composable (MotionLayoutScope.() -> Unit),
+) {
+    MotionLayoutCore(motionScene, progress, debug, modifier, optimizationLevel, content)
+}
+
+/**
  * Layout that takes a MotionScene and animates by providing a [constraintSetName] to animate to.
  *
  * During recomposition, MotionLayout will interpolate from whichever ConstraintSet it is currently
@@ -92,8 +111,60 @@ inline fun MotionLayout(
  * Animation is run by [animationSpec], and will only start another animation once any other ones
  * are finished. Use [finishedAnimationListener] to know when a transition has stopped.
  */
+@ExperimentalMotionApi
 @Composable
 inline fun MotionLayout(
+    motionScene: MotionScene,
+    constraintSetName: String? = null,
+    animationSpec: AnimationSpec<Float> = tween<Float>(),
+    debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
+    modifier: Modifier = Modifier,
+    optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
+    noinline finishedAnimationListener: (() -> Unit)? = null,
+    crossinline content: @Composable (MotionLayoutScope.() -> Unit)
+) {
+    MotionLayoutCore(
+        motionScene = motionScene,
+        constraintSetName = constraintSetName,
+        animationSpec = animationSpec,
+        debug = debug,
+        modifier = modifier,
+        optimizationLevel = optimizationLevel,
+        finishedAnimationListener = finishedAnimationListener,
+        content = content
+    )
+}
+
+@ExperimentalMotionApi
+@Composable
+inline fun MotionLayout(
+    start: ConstraintSet,
+    end: ConstraintSet,
+    transition: androidx.constraintlayout.compose.Transition? = null,
+    progress: Float,
+    debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
+    informationReceiver: LayoutInformationReceiver? = null,
+    modifier: Modifier = Modifier,
+    optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
+    crossinline content: @Composable MotionLayoutScope.() -> Unit
+) {
+    MotionLayoutCore(
+        start = start,
+        end = end,
+        transition = transition,
+        progress = progress,
+        debug = debug,
+        informationReceiver = informationReceiver,
+        modifier = modifier,
+        optimizationLevel = optimizationLevel,
+        content = content
+    )
+}
+
+@OptIn(ExperimentalMotionApi::class)
+@PublishedApi
+@Composable
+internal inline fun MotionLayoutCore(
     motionScene: MotionScene,
     constraintSetName: String? = null,
     animationSpec: AnimationSpec<Float> = tween<Float>(),
@@ -198,70 +269,9 @@ inline fun MotionLayout(
     )
 }
 
-@Composable
-inline fun MotionLayout(
-    start: ConstraintSet,
-    end: ConstraintSet,
-    transition: androidx.constraintlayout.compose.Transition? = null,
-    progress: Float,
-    debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
-    informationReceiver: LayoutInformationReceiver? = null,
-    modifier: Modifier = Modifier,
-    optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
-    crossinline content: @Composable MotionLayoutScope.() -> Unit
-) {
-    val measurer = remember { MotionMeasurer() }
-    val scope = remember { MotionLayoutScope(measurer) }
-    val progressState = remember { mutableStateOf(0f) }
-    SideEffect { progressState.value = progress }
-    val measurePolicy =
-        rememberMotionLayoutMeasurePolicy(
-            optimizationLevel,
-            debug,
-            0,
-            start,
-            end,
-            transition,
-            progressState,
-            measurer
-        )
-    measurer.addLayoutInformationReceiver(informationReceiver)
-
-    val forcedScaleFactor = measurer.forcedScaleFactor
-    if (!debug.contains(MotionLayoutDebugFlags.NONE) || !forcedScaleFactor.isNaN()) {
-        var mod = modifier
-        if (!forcedScaleFactor.isNaN()) {
-            mod = modifier.scale(measurer.forcedScaleFactor)
-        }
-        Box {
-            @Suppress("DEPRECATION")
-            (MultiMeasureLayout(
-                modifier = mod.semantics { designInfoProvider = measurer },
-                measurePolicy = measurePolicy,
-                content = { scope.content() }
-            ))
-            with(measurer) {
-                if (!forcedScaleFactor.isNaN()) {
-                    drawDebugBounds(forcedScaleFactor)
-                }
-                if (!debug.contains(MotionLayoutDebugFlags.NONE)) {
-                    drawDebug()
-                }
-            }
-        }
-    } else {
-        @Suppress("DEPRECATION")
-        (MultiMeasureLayout(
-            modifier = modifier.semantics { designInfoProvider = measurer },
-            measurePolicy = measurePolicy,
-            content = { scope.content() }
-        ))
-    }
-}
-
 @Suppress("NOTHING_TO_INLINE")
 @Composable
-inline fun MotionLayout(
+inline fun MotionLayoutCore(
     motionScene: MotionScene,
     progress: Float,
     debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
@@ -332,6 +342,68 @@ inline fun MotionLayout(
             measurer
         )
     measurer.addLayoutInformationReceiver(motionScene as JSONMotionScene)
+
+    val forcedScaleFactor = measurer.forcedScaleFactor
+    if (!debug.contains(MotionLayoutDebugFlags.NONE) || !forcedScaleFactor.isNaN()) {
+        var mod = modifier
+        if (!forcedScaleFactor.isNaN()) {
+            mod = modifier.scale(measurer.forcedScaleFactor)
+        }
+        Box {
+            @Suppress("DEPRECATION")
+            (MultiMeasureLayout(
+                modifier = mod.semantics { designInfoProvider = measurer },
+                measurePolicy = measurePolicy,
+                content = { scope.content() }
+            ))
+            with(measurer) {
+                if (!forcedScaleFactor.isNaN()) {
+                    drawDebugBounds(forcedScaleFactor)
+                }
+                if (!debug.contains(MotionLayoutDebugFlags.NONE)) {
+                    drawDebug()
+                }
+            }
+        }
+    } else {
+        @Suppress("DEPRECATION")
+        (MultiMeasureLayout(
+            modifier = modifier.semantics { designInfoProvider = measurer },
+            measurePolicy = measurePolicy,
+            content = { scope.content() }
+        ))
+    }
+}
+
+@PublishedApi
+@Composable
+internal inline fun MotionLayoutCore(
+    start: ConstraintSet,
+    end: ConstraintSet,
+    transition: androidx.constraintlayout.compose.Transition? = null,
+    progress: Float,
+    debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
+    informationReceiver: LayoutInformationReceiver? = null,
+    modifier: Modifier = Modifier,
+    optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
+    crossinline content: @Composable MotionLayoutScope.() -> Unit
+) {
+    val measurer = remember { MotionMeasurer() }
+    val scope = remember { MotionLayoutScope(measurer) }
+    val progressState = remember { mutableStateOf(0f) }
+    SideEffect { progressState.value = progress }
+    val measurePolicy =
+        rememberMotionLayoutMeasurePolicy(
+            optimizationLevel,
+            debug,
+            0,
+            start,
+            end,
+            transition,
+            progressState,
+            measurer
+        )
+    measurer.addLayoutInformationReceiver(informationReceiver)
 
     val forcedScaleFactor = measurer.forcedScaleFactor
     if (!debug.contains(MotionLayoutDebugFlags.NONE) || !forcedScaleFactor.isNaN()) {
@@ -627,12 +699,15 @@ internal class MotionMeasurer : Measurer() {
         return motionProgress
     }
 
+    // TODO: Explicitly declare `getDesignInfo` so that studio tooling can identify the method, also
+    //  make sure that the constraints/dimensions returned are for the start/current ConstraintSet
+
     private fun measureConstraintSet(
-        optimizationLevel: Int, constraintSetStart: ConstraintSet,
+        optimizationLevel: Int, constraintSet: ConstraintSet,
         measurables: List<Measurable>, constraints: Constraints
     ) {
         state.reset()
-        constraintSetStart.applyTo(state, measurables)
+        constraintSet.applyTo(state, measurables)
         state.apply(root)
         applyRootSize(constraints)
         root.updateHierarchy()
@@ -669,6 +744,8 @@ internal class MotionMeasurer : Measurer() {
     ): IntSize {
         this.density = measureScope
         this.measureScope = measureScope
+        // TODO: Add another check for whenever a measurable/child has changed size, that triggers a
+        //  measure of the constraintsets and interpolation
         var layoutSizeChanged = false
         if (constraints.hasFixedWidth
             && !state.sameFixedWidth(constraints.maxWidth)
@@ -712,13 +789,12 @@ internal class MotionMeasurer : Measurer() {
                 state.layoutDirection = layoutDirection
 
                 measureConstraintSet(
-                    optimizationLevel,
-                    constraintSetStart,
-                    measurables,
-                    constraints
+                    optimizationLevel, constraintSetStart, measurables, constraints
                 )
                 this.transition.updateFrom(root, Transition.START)
-                measureConstraintSet(optimizationLevel, constraintSetEnd, measurables, constraints)
+                measureConstraintSet(
+                    optimizationLevel, constraintSetEnd, measurables, constraints
+                )
                 this.transition.updateFrom(root, Transition.END)
                 if (transition != null) {
                     transition.applyTo(this.transition, 0)

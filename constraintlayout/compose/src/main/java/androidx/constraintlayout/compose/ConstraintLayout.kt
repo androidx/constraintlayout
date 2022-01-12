@@ -210,6 +210,7 @@ private class ConstraintSetForInlineDsl(
  * also be useful in this mode). This is only intended for basic transitions, if more control
  * is needed, we recommend using MotionLayout instead.
  */
+@OptIn(ExperimentalMotionApi::class)
 @Suppress("NOTHING_TO_INLINE")
 @Composable
 inline fun ConstraintLayout(
@@ -663,7 +664,7 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
     private var updateFlag: MutableState<Long>? = null
     private var layoutInformationMode: LayoutInfoFlags = LayoutInfoFlags.BOUNDS
     private var layoutInformation = ""
-    private var last = System.nanoTime();
+    private var last = System.nanoTime()
     private var debugName : String? = null
 
     private var currentContent = content
@@ -672,35 +673,20 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
         try {
             onNewContent(currentContent)
             if (debugName != null) {
-                val mainHandler = Handler(Looper.getMainLooper())
                 val callback = object : RegistryCallback {
-
-
                     override fun onNewMotionScene(content: String?) {
                         if (content == null) {
                             return
                         }
-                        mainHandler.post {
-                            try {
-                                onNewContent(content)
-                            } catch (e : Exception) {}
-                        }
+                        onNewContent(content)
                     }
 
                     override fun onProgress(progress: Float) {
-                        mainHandler.post {
-                            try {
-                                onNewProgress(progress)
-                            } catch (e : Exception) {}
-                        }
+                        onNewProgress(progress)
                     }
 
                     override fun onDimensions(width: Int, height: Int) {
-                        mainHandler.post {
-                            try {
-                                onNewDimensions(width, height)
-                            } catch (e : Exception) {}
-                        }
+                        onNewDimensions(width, height)
                     }
 
                     override fun currentMotionScene(): String {
@@ -712,11 +698,7 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
                     }
 
                     override fun setLayoutInformationMode(mode: Int) {
-                        mainHandler.post {
-                            try {
-                                onLayoutInformation(mode)
-                            } catch (e : Exception) {}
-                        }
+                        onLayoutInformation(mode)
                     }
 
                     override fun getLastModified(): Long {
@@ -724,11 +706,7 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
                     }
 
                     override fun setDrawDebug(debugMode: Int) {
-                        mainHandler.post {
-                            try {
-                                onDrawDebug(debugMode)
-                            } catch (e : Exception) {}
-                        }
+                        onDrawDebug(debugMode)
                     }
                 }
                 val registry = Registry.getInstance()
@@ -782,7 +760,7 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
     }
 
     override fun setLayoutInformation(information: String) {
-        last = System.nanoTime();
+        last = System.nanoTime()
         layoutInformation = information
     }
 
