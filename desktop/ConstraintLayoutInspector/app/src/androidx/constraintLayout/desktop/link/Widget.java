@@ -32,52 +32,6 @@ public class Widget {
     boolean isGuideline = false;
     String id;
 
-    public Widget(String id, CLKey key, boolean debug) {
-        this.id = id;
-        name = key.content();
-        endLayout.setName(name);
-        startLayout.setName(name);
-        CLObject sections = (CLObject) key.getValue();
-        int count = sections.size();
-        for (int i = 0; i < count; i++) {
-
-            CLKey sec = null;
-            try {
-                sec = (CLKey) sections.get(i);
-            } catch (CLParsingException e) {
-                e.printStackTrace();
-                return;
-            }
-            try {
-                switch (sec.content()) {
-                    case "start":
-                        WidgetFrameUtils.deserialize(sec, end, endLayout);
-                        break;
-                    case "end":
-                        WidgetFrameUtils.deserialize(sec, start, startLayout);
-                        break;
-                    case "interpolated":
-                        WidgetFrameUtils.deserialize(sec, interpolated, null);
-                        break;
-                    case "path":
-                        WidgetFrameUtils.getPath(sec, path);
-                        break;
-                    case "keyPos":
-                        keyFrames.setKeyFramesPos(sec);
-                        break;
-                    case "keyTypes":
-                        keyFrames.setKeyFramesTypes(sec);
-                        break;
-                    case "keyFrames":
-                        keyFrames.setKeyFramesProgress(sec);
-                        break;
-                }
-            } catch (Exception e) {
-
-            }
-        }
-    }
-
     public Widget(String id, CLKey key) {
         this.id = id;
         name = key.content();
@@ -103,9 +57,7 @@ public class Widget {
                         WidgetFrameUtils.deserialize(sec, start, startLayout);
                         break;
                     case "interpolated":
-
                         WidgetFrameUtils.deserialize(sec, interpolated, null);
-
                         break;
                     case "path":
                         WidgetFrameUtils.getPath(sec, path);
@@ -142,6 +94,9 @@ public class Widget {
             String selected,
             java.util.HashMap<String, Boolean> map
     ) {
+        if (map == null) {
+            return;
+        }
         AffineTransform renderScale = WidgetFrameUtils.getTouchScale(g);
         int END_LOOK = WidgetFrameUtils.OUTLINE | DASH_OUTLINE;
         boolean pre = (map.get("PreTransform") == true);

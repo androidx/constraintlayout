@@ -89,10 +89,10 @@ public class LayoutEditor2 extends LayoutView2 {
                     float value = 0f;
                     if (currentDragElement instanceof LayoutEditor2.HorizontalGuideline) {
                         currentY = e.getY();
-                        value = (currentY - offsetY) / rangeY;
+                        value = (currentY - offsetY) / (float) rangeY;
                     } else if (currentDragElement instanceof LayoutEditor2.VerticalGuideline) {
                         currentX = e.getX();
-                        value = (currentX - offsetX) / rangeX;
+                        value = (currentX - offsetX) / (float) rangeX;
                     }
                     value = Math.max(0f, Math.min(1f, value));
                     value = (int) (value * 100) / 100f;
@@ -148,7 +148,7 @@ public class LayoutEditor2 extends LayoutView2 {
             guideline.addToPicker(scenePicker, offsetX, offsetY, rangeX, rangeY);
         }
 
-        resize.draw(this, g2, rangeX, rangeY);
+        resize.draw(g2, rangeX, rangeY);
         resize.addToPicker(scenePicker, offsetX, offsetY, rangeX, rangeY);
     }
 
@@ -198,7 +198,7 @@ public class LayoutEditor2 extends LayoutView2 {
         ResizeHandle() {
         }
 
-        void draw(Component c, Graphics2D g, int w, int h) {
+        void draw(Graphics2D g, int w, int h) {
             g.setColor(Color.BLUE);
             icon.paint( g,w + gap, h + gap, size, size);
         }
@@ -245,6 +245,7 @@ public class LayoutEditor2 extends LayoutView2 {
             }
         }
 
+        @Override
         void draw(Graphics2D g, int w, int h) {
             g.setColor(WidgetFrameUtils.theme.pathColor());
             int y = (int) (h * percent);
@@ -258,6 +259,7 @@ public class LayoutEditor2 extends LayoutView2 {
             g.drawImage(img, -gap - w, y - h / 2, null);
         }
 
+        @Override
         void addToPicker(ScenePicker scenePicker, int ox, int oy, int w, int h) {
             int ih = img.getHeight();
             int iw = img.getWidth();
@@ -282,7 +284,7 @@ public class LayoutEditor2 extends LayoutView2 {
                 e.printStackTrace();
             }
         }
-
+        @Override
         void draw(Graphics2D g, int w, int h) {
             g.setColor(WidgetFrameUtils.theme.pathColor());
             int x = (int) (w * percent);
@@ -296,6 +298,7 @@ public class LayoutEditor2 extends LayoutView2 {
             g.drawImage(img, x - w / 2, -gap - h, null);
         }
 
+        @Override
         void addToPicker(ScenePicker scenePicker, int ox, int oy, int w, int h) {
             int ih = img.getHeight();
             int iw = img.getWidth();

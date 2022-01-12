@@ -151,6 +151,7 @@ class LayoutInspector2 extends JPanel {
             popup.add(cbox);
         }
         button.addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent e) {
                 popup.show(e.getComponent(), e.getX(), e.getY());
             }
@@ -183,16 +184,20 @@ class LayoutInspector2 extends JPanel {
     }
 
     void showTimeLine() {
-        if (mTimeLinePanel == null && mSceneString != null) {
-            mTimeLinePanel = TimeLinePanel.showTimeline(mSceneString);
-            mTimeLinePanel.addTimeLineListener((cmd, pos) -> motionLink.sendProgress(pos));
+        if (mTimeLinePanel == null) {
+            if (mSceneString != null) {
+                mTimeLinePanel = TimeLinePanel.showTimeline(mSceneString);
+                mTimeLinePanel.addTimeLineListener((cmd, pos) -> motionLink.sendProgress(pos));
+            }
         } else {
             mTimeLinePanel.popUp();
         }
     }
 
     void hideTimeLine() {
-        mTimeLinePanel.popDown();
+        if (mTimeLinePanel != null) {
+            mTimeLinePanel.popDown();
+        }
     }
 
     void setSceneString(String str) {

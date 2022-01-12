@@ -240,13 +240,7 @@ open class LayoutView(inspector: LayoutInspector) : JPanel(BorderLayout()) {
 
                 if (widget is CLKey) {
                     val widgetId = widget.content()
-
-
-                    var w =
-                        if (widgets.size == 0) Widget(widgetId, widget, true)
-                        else
-                            Widget(widgetId, widget)
-
+                    var w = Widget(widgetId, widget)
                     widgets.add(w)
                     if (!(w.interpolated.interpolatedPos.isNaN())) {
                         pos = w.interpolated.interpolatedPos

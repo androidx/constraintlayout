@@ -342,11 +342,16 @@ public class Main2 extends JPanel implements MainUI {
     Timer myTmpTimer = null;
 
     void remoteEditStop() {
-        myTmpTimer.stop();
-        myTmpFile.deleteOnExit();
+        if (myTmpTimer != null) {
+            myTmpTimer.stop();
+        }
+        if (myTmpFile != null) {
+            myTmpFile.deleteOnExit();
+        }
         myTmpFile = null;
     }
 
+    @Override
     public void addDesign(String type) throws CLParsingException, BadLocationException {
         CLKey key = CLScan.findCLKey(CLParser.parse(mMainText.getText()), "Design");
         String uType = upperCaseFirst(type);
