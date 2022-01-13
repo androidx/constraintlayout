@@ -102,6 +102,7 @@ class VerificationTest {
         results: Map<String, String>
     ) {
         var failed = false
+        var failedCount = 0
         for (result in results) {
             if (baselineResults.contains(result.key)) {
                 if (baselineResults[result.key] != result.value) {
@@ -111,6 +112,7 @@ class VerificationTest {
                     println("Was: ${result.value}")
                     println("----------")
                     failed = true
+                    failedCount++
                 }
                 baselineResults.remove(result.key)
             } else {
@@ -118,6 +120,7 @@ class VerificationTest {
                 println("New Composable Result: ${result.key}")
                 println("----------")
                 failed = true
+                failedCount++
             }
         }
         for (baseline in baselineResults) {
@@ -125,9 +128,11 @@ class VerificationTest {
             println("Missing result for: ${baseline.key}")
             println("----------")
             failed = true
+            failedCount++
         }
         if (failed) {
             println("----------")
+            println("$failedCount Composables failed")
             println("New Baseline:")
             val base = results.map { "${it.key}=${it.value}" }.joinToString(";\n")
             // TODO: Find a better way to output the result, so that it's easy to update the
