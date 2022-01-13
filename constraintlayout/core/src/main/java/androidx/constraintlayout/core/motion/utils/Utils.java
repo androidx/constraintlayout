@@ -64,6 +64,13 @@ public class Utils {
         int color = (ia << 24) | (ir << 16) | (ig << 8) | ib;
         return color;
     }
+    public interface DebugHandle {
+        void message(String str);
+    }
+    static DebugHandle ourHandle;
+    public static void setDebugHandle(DebugHandle handle) {
+        ourHandle = handle;
+    }
     public static void logStack(String msg, int n) {
         StackTraceElement[] st = new Throwable().getStackTrace();
         String s = " ";
@@ -83,6 +90,9 @@ public class Utils {
         String  npad = "    ".substring(Integer.toString(s.getLineNumber()).length());
         String ss = ".(" + s.getFileName() + ":" + s.getLineNumber() + ")" + npad +methodName;
         System.out.println(ss + " " + str);
+        if (ourHandle != null) {
+            ourHandle.message(ss + " " + str);
+        }
     }
 
 }

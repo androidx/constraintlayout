@@ -43,7 +43,7 @@ public class Flow extends VirtualLayout {
     public static final int WRAP_NONE = 0;
     public static final int WRAP_CHAIN = 1;
     public static final int WRAP_ALIGNED = 2;
-    public static final int WRAP_CHAIN_DEPRECATED = 3;
+    public static final int WRAP_CHAIN_NEW = 3;
 
     private int mHorizontalStyle = UNKNOWN;
     private int mVerticalStyle = UNKNOWN;
@@ -170,6 +170,9 @@ public class Flow extends VirtualLayout {
 
     public void setMaxElementsWrap(int value) { mMaxElementsWrap = value; }
 
+    public float getMaxElementsWrap() {
+        return mMaxElementsWrap;
+    }
     /////////////////////////////////////////////////////////////////////////////////////////////
     // Utility methods
     /////////////////////////////////////////////////////////////////////////////////////////////
@@ -293,14 +296,15 @@ public class Flow extends VirtualLayout {
                 measureChainWrap(widgets, count, mOrientation, max, measured);
             }
             break;
-            case WRAP_CHAIN_DEPRECATED: {
-                measureChainWrap_broken(widgets, count, mOrientation, max, measured);
-            }
-            break;
             case WRAP_NONE: {
                 measureNoWrap(widgets, count, mOrientation, max, measured);
             }
             break;
+            case WRAP_CHAIN_NEW: {
+                measureChainWrap_new(widgets, count, mOrientation, max, measured);
+            }
+            break;
+
         }
 
         width = measured[HORIZONTAL] + paddingLeft + paddingRight;
@@ -785,7 +789,7 @@ public class Flow extends VirtualLayout {
      * @param max         the maximum available space
      * @param measured    output parameters -- will contain the resulting measure
      */
-    private void measureChainWrap_broken(ConstraintWidget[] widgets, int count, int orientation, int max, int[] measured) {
+    private void measureChainWrap(ConstraintWidget[] widgets, int count, int orientation, int max, int[] measured) {
         if (count == 0) {
             return;
         }
@@ -926,18 +930,18 @@ public class Flow extends VirtualLayout {
         measured[VERTICAL] = maxHeight;
     }
     /////////////////////////////////////////////////////////////////////////////////////////////
-    // Measure Chain Wrap
+    // Measure Chain Wrap new
     /////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Measure the virtual layout using a list of chains for the children
+     * Measure the virtual layout using a list of chains for the children in new "fixed way"
      *  @param widgets     list of widgets
      * @param count
      * @param orientation the layout orientation (horizontal or vertical)
      * @param max         the maximum available space
      * @param measured    output parameters -- will contain the resulting measure
      */
-    private void measureChainWrap(ConstraintWidget[] widgets, int count, int orientation, int max, int[] measured) {
+    private void measureChainWrap_new(ConstraintWidget[] widgets, int count, int orientation, int max, int[] measured) {
         if (count == 0) {
             return;
         }
@@ -1406,6 +1410,14 @@ public class Flow extends VirtualLayout {
             case WRAP_ALIGNED: {
                 createAlignedConstraints(isInRtl);
             }
+            break;
+            case WRAP_CHAIN_NEW: {
+                final int count = mChainList.size();
+                for (int i = 0; i < count; i++) {
+                    WidgetsList list = mChainList.get(i);
+                    list.createConstraints(isInRtl, i, i == count - 1);
+                }
+            } break;
         }
         needsCallbackFromSolver(false);
     }
