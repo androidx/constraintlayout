@@ -2,7 +2,7 @@
 
 ![core](https://github.com/androidx/constraintlayout/workflows/core/badge.svg) [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 
-<img src="https://img.shields.io/badge/stable-2.1.2-blue"/><img src="https://img.shields.io/badge/compose-1.0.0--rc02-blue"/> 
+<img src="https://img.shields.io/badge/stable-2.1.3-blue"/><img src="https://img.shields.io/badge/compose-1.0.0-blue"/> 
 
 
 ConstraintLayout is a layout manager for Android which allows you to position and size widgets in a flexible way. It's available for both the Android view system and Jetpack Compose.
@@ -34,7 +34,7 @@ If using ConstraintLayout with the Android View system, add:
 ```gradle
 dependencies {
 
-    implementation("androidx.constraintlayout:constraintlayout:2.1.2")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.3")
 
 }
 ```
@@ -47,6 +47,20 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0-rc02")
 
 }
+```
+
+Additionally, for MotionLayout with Jetpack Compose, you require to opt-in to ExprimentalMotionApi:
+```gradle
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions {
+        // For Kotlin 1.6.0+
+        freeCompilerArgs += "-opt-in=androidx.constraintlayout.compose.ExperimentalMotionApi"
+        
+        // For older than Kotlin 1.6.0
+        freeCompilerArgs += "-Xopt-in=androidx.constraintlayout.compose.ExperimentalMotionApi"
+    }
+}
+
 ```
 
 ### 🎒🥾 Requirements
