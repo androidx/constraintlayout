@@ -80,7 +80,7 @@ internal class JSONConstraintSet(
         if (overrideVariables != null) {
             try {
                 val variables = CLParser.parse(overrideVariables)
-                for (i in 0..variables.size() - 1) {
+                for (i in 0 until variables.size()) {
                     val key = variables[i] as CLKey
                     val variable = key.value.float
                     // TODO: allow arbitrary override, not just float values

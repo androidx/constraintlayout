@@ -76,7 +76,7 @@ class VerificationTest {
                 nodeInteration.fetchSemanticsNode().config[DesignInfoDataKey].getDesignInfo(
                     startX = 0,
                     startY = 0,
-                    args = ""
+                    args = 0b10.toString() // Second bit from the right for Bounds only
                 )
 
             // Save the result in a composable->result map

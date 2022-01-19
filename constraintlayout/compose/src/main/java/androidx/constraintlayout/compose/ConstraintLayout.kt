@@ -66,9 +66,6 @@ import java.util.*
 
 /**
  * Layout that positions its children according to the constraints between them.
- *
- * Example usage:
- * @sample androidx.constraintlayout.compose.samples.DemoInlineDSL
  */
 @Composable
 inline fun ConstraintLayout(
@@ -202,13 +199,10 @@ private class ConstraintSetForInlineDsl(
 /**
  * Layout that positions its children according to the constraints between them.
  *
- * Example usage:
- * @sample androidx.constraintlayout.compose.samples.DemoConstraintSet
- *
- * When recomposed with different constraintsets, you can use the animateChanges parameter
- * to animate the layout changes (animationSpec and finishedAnimationListener attributes can
+ * When recomposed with different [constraintSet], you can use the [animateChanges] parameter
+ * to animate the layout changes ([animationSpec] and [finishedAnimationListener] attributes can
  * also be useful in this mode). This is only intended for basic transitions, if more control
- * is needed, we recommend using MotionLayout instead.
+ * is needed, we recommend using [MotionLayout] instead.
  */
 @OptIn(ExperimentalMotionApi::class)
 @Suppress("NOTHING_TO_INLINE")
@@ -642,6 +636,18 @@ internal class DimensionDescription internal constructor(
     }
 }
 
+/**
+ * Parses [content] into a [ConstraintSet] and sets the variables defined in the `Variables` block
+ * with the values of [overrideVariables].
+ *
+ * Eg:
+ *
+ *  For `Variables: { margin: { from: 'initialMargin', step: 10 } }`
+ *
+ *  overrideVariables = `"{ 'initialMargin' = 50 }"`
+ *
+ *  Will create a ConstraintSet where `initialMargin` is 50.
+ */
 @SuppressLint("ComposableNaming")
 @Composable
 fun ConstraintSet(@Language("json5") content : String,
@@ -831,7 +837,9 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
 internal data class DesignElement(var id: String, var type: String, var params: HashMap<String, String>)
 
 /**
- * Creates a [ConstraintSet] from a [jsonContent] string.
+ * Parses the given JSON5 into a [ConstraintSet].
+ *
+ * See the official [Github Wiki](https://github.com/androidx/constraintlayout/wiki/ConstraintSet-JSON5-syntax) to learn the syntax.
  */
 fun ConstraintSet(@Language(value = "json5") jsonContent: String): ConstraintSet =
     JSONConstraintSet(content = jsonContent)
@@ -945,7 +953,7 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
      * defined for this ConstraintLayout Composable.
      */
     override fun getDesignInfo(startX: Int, startY: Int, args: String) =
-        parseConstraintsToJson(root, state, startX, startY)
+        parseConstraintsToJson(root, state, startX, startY, args)
 
     override fun measure(constraintWidget: ConstraintWidget, measure: BasicMeasure.Measure) {
         val measurable = constraintWidget.companionWidget
