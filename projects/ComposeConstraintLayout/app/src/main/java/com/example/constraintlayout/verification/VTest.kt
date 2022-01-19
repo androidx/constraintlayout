@@ -17,6 +17,7 @@
 package com.example.constraintlayout.verification
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
@@ -30,7 +31,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import com.example.constraintlayout.R
-
+@Composable
+fun DisplayResults(reslts: HashMap<String, String>) {
+    Column {
+        reslts.keys.sorted().forEach { key ->
+            Text(key+" : "+reslts[key])
+        }
+    }
+}
 @Preview
 @Composable
 fun VTest() {
