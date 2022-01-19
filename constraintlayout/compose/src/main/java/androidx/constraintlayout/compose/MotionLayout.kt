@@ -437,6 +437,9 @@ internal inline fun MotionLayoutCore(
     }
 }
 
+/**
+ * Information for MotionLayout to animate between multiple [ConstraintSet]s.
+ */
 @Immutable
 interface MotionScene {
     fun setConstraintSetContent(name: String, content: String)
@@ -515,6 +518,11 @@ internal class JSONMotionScene(@Language("json5") content: String) : EditableJSO
 
 }
 
+/**
+ * Parses the given JSON5 into a [MotionScene].
+ *
+ * See the official [Github Wiki](https://github.com/androidx/constraintlayout/wiki/Compose-MotionLayout-JSON-Syntax) to learn the syntax.
+ */
 @SuppressLint("ComposableNaming")
 @Composable
 fun MotionScene(@Language("json5") content: String): MotionScene {
@@ -595,6 +603,9 @@ class MotionLayoutScope @PublishedApi internal constructor(measurer: MotionMeasu
     }
 }
 
+/**
+ * Defines interpolation parameters between two [ConstraintSet]s.
+ */
 @Immutable
 interface Transition {
     fun applyTo(transition: Transition, type: Int)
@@ -602,6 +613,11 @@ interface Transition {
     fun getEndConstraintSetId(): String
 }
 
+/**
+ * Parses the given JSON5 into a [Transition].
+ *
+ * See the official [Github Wiki](https://github.com/androidx/constraintlayout/wiki/Compose-MotionLayout-JSON-Syntax#transitions) to learn the syntax.
+ */
 @SuppressLint("ComposableNaming")
 @Composable
 fun Transition(@Language("json5") content: String): androidx.constraintlayout.compose.Transition? {
