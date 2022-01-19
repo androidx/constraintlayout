@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -65,6 +66,13 @@ public class Main extends JPanel {
     JLabel progressLabel;
     GraphView performancesDisplay = new GraphView();
     BoxPlotView boxPlotDisplay = new BoxPlotView();
+    JButton connect = new JButton("Connect");
+    JButton validateSelection = new JButton("Validate selection");
+    JButton validate = new JButton("Validate");
+    JButton updateAllBaselines = new JButton("Update Full Baseline");
+    JButton updateSelectionBaseline = new JButton("Update Baseline of selection");
+    JButton showPerformancesButton = new JButton("Show Performances");
+
 
     private HashMap<String, Result> results = new HashMap<>();
 
@@ -102,13 +110,9 @@ public class Main extends JPanel {
     public Main() {
         super(new BorderLayout());
         progressBar = new JProgressBar();
-        progressLabel = new JLabel("status: 0/0");
-        JButton connect = new JButton("Connect");
-        JButton validateSelection = new JButton("Validate selection");
-        JButton validate = new JButton("Validate");
-        JButton updateAllBaselines = new JButton("Update Full Baseline");
-        JButton updateSelectionBaseline = new JButton("Update Baseline of selection");
-        JButton showPerformances = new JButton("Show Performances");
+
+
+        progressLabel = new JLabel("<html><h3>first</h3> <i> adb -s emulator-5554 forward tcp:4242 tcp:424</i> <h3>then press</h3>[Connect] ");
 
         JCheckBox showImage = new JCheckBox("Show Render", true);
         JCheckBox showReferenceBounds = new JCheckBox("Show Reference Bounds", true);
@@ -138,12 +142,19 @@ public class Main extends JPanel {
         });
 
         validate.setEnabled(false);
+        showPerformancesButton.setEnabled(false);
+        validateSelection.setEnabled(false);
+        updateAllBaselines.setEnabled(false);
+        updateSelectionBaseline.setEnabled(false);
         connect.addActionListener(e -> {
             if (client != null) {
                 client.close();
             }
             client = new DeviceConnection();
             validate.setEnabled(true);
+            showPerformancesButton.setEnabled(true);
+            updateSelectionBaseline.setEnabled(true);
+            progressLabel.setText("status: 0/0");
             updateFiles();
         });
         validate.addActionListener(e -> validateLayouts());
@@ -151,7 +162,7 @@ public class Main extends JPanel {
 
         updateAllBaselines.addActionListener(e -> updateAllBaselines());
         updateSelectionBaseline.addActionListener(e -> updateSelectionBaseline());
-        showPerformances.addActionListener(e -> showPerformances());
+        showPerformancesButton.addActionListener(e -> showPerformances());
 
         table = new JTable(new TableModel(layouts));
         table.setColumnSelectionAllowed(true);
@@ -195,13 +206,16 @@ public class Main extends JPanel {
         add(splitPane, BorderLayout.CENTER);
 
         JPanel controlPanel = new JPanel();
+        controlPanel.setBorder(new EtchedBorder());
+
         controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.PAGE_AXIS));
+        controlPanel.add(connect);
+        controlPanel.add(validate);
+        controlPanel.add(validateSelection);
+        controlPanel.add(showPerformancesButton);
         controlPanel.add(updateAllBaselines);
         controlPanel.add(updateSelectionBaseline);
-        controlPanel.add(validateSelection);
-        controlPanel.add(validate);
-        controlPanel.add(showPerformances);
-        controlPanel.add(connect);
+
 
         JPanel progressPanel = new JPanel();
         progressPanel.setLayout(new BoxLayout(progressPanel, BoxLayout.PAGE_AXIS));
@@ -298,11 +312,17 @@ public class Main extends JPanel {
                 n++;
                 progressBar.getModel().setValue(n);
                 long duration = System.currentTimeMillis() - start;
+                SwingUtilities.invokeLater(()  ->{
                 progressLabel.setText("success: " + results[0] + "/" + total
                         + " passable: " + results[1]
                         + " failures: " + results[2] + " in " + duration + " ms");
                 updateLayoutMeasures(layouts);
+                });
             }
+            SwingUtilities.invokeLater(()  ->{
+                updateAllBaselines.setEnabled(true);
+                showPerformancesButton.setEnabled(true);
+            });
         }).start();
         ((TableModel) table.getModel()).updateResults();
     }
@@ -675,9 +695,15 @@ public class Main extends JPanel {
     private ListSelectionListener createListSelectionListener() {
         return e -> {
             int selectedRow = table.getSelectedRow();
+
             if (selectedRow < 0) {
+                validateSelection.setEnabled(false);
+                updateSelectionBaseline.setEnabled(false);
                 return;
             }
+            validateSelection.setEnabled(true);
+            updateSelectionBaseline.setEnabled(true);
+
             if (table.getSelectedRowCount() == 1) {
                 ArrayList<Layout> layouts = ((TableModel) table.getModel()).getLayouts(table);
                 updateLayoutMeasures(layouts);

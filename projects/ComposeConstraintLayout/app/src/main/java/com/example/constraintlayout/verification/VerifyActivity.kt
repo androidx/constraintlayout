@@ -49,6 +49,7 @@ class VerifyActivity : AppCompatActivity() {
     val linkServer = LinkServer()
     lateinit var link: MotionLink
     val layouts = java.util.HashMap<String, String>()
+    val resultList =  HashMap<String,String>()
 
     init {
         defineDesignElements()
@@ -88,6 +89,7 @@ class VerifyActivity : AppCompatActivity() {
         com.setContent {
 
             when (composeNum) {
+                -1 -> DisplayResults(resultList)
                 0 -> End()
                 1 -> VTest02a()
                 2 -> VTest02b()
@@ -174,6 +176,7 @@ class VerifyActivity : AppCompatActivity() {
 
     }
 
+    @ExperimentalMaterialApi
     fun printResults() {
 
         for (s in layouts.keys) {
@@ -186,12 +189,16 @@ class VerifyActivity : AppCompatActivity() {
                 if (multiLineComp(str, s2)) {
                     Log.v(TAG, Debug.getLoc() + "  $s fail !!!!!!!!!!!!!")
                     Log.v(TAG, Debug.getLoc() + "\n" + s2);
+                    resultList[s] = "fail"
                 } else {
                     Log.v(TAG, Debug.getLoc() + " $s  pass")
+                    resultList[s] = "pass"
                 }
             }
 
         }
+        composeNum=-1
+        setCompose();
     }
 
     private fun multiLineComp(s1: String?, s2: String): Boolean {
@@ -247,6 +254,9 @@ class VerifyActivity : AppCompatActivity() {
 
     @ExperimentalMaterialApi
     fun doNext() {
+        if (composeNum == -1) {
+            return
+        }
         composeNum++
         setCompose();
         if (composeNum != 0) {

@@ -51,6 +51,7 @@ import android.view.View;
  * {@sample resources/examples/Guideline.xml Guideline}
  */
 public class Guideline extends View {
+    private boolean mFilterRedundantCalls = true;
     public Guideline(Context context) {
         super(context);
         super.setVisibility(View.GONE);
@@ -104,6 +105,9 @@ public class Guideline extends View {
      */
     public void setGuidelineBegin(int margin) {
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) getLayoutParams();
+        if (mFilterRedundantCalls && params.guideBegin == margin) {
+            return;
+        }
         params.guideBegin = margin;
         setLayoutParams(params);
     }
@@ -115,6 +119,9 @@ public class Guideline extends View {
      */
     public void setGuidelineEnd(int margin) {
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) getLayoutParams();
+        if (mFilterRedundantCalls && params.guideEnd == margin) {
+            return;
+        }
         params.guideEnd = margin;
         setLayoutParams(params);
     }
@@ -125,7 +132,23 @@ public class Guideline extends View {
      */
     public void setGuidelinePercent(float ratio) {
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) getLayoutParams();
+        if (mFilterRedundantCalls && params.guidePercent == ratio) {
+            return;
+        }
         params.guidePercent = ratio;
         setLayoutParams(params);
+    }
+
+    /**
+     * filter redundant calls to setGuidelineBegin, setGuidelineEnd & setGuidelinePercent.
+     *
+     * By default calling setGuidelineStart,setGuideLineEnd and setGuidelinePercent will do nothing
+     * if the value is the same as the current value. This can disable that behaviour and call
+     * setLayoutParams(..) while will call requestLayout
+     *
+     * @param filter default true set false to always generate a setLayoutParams
+     */
+    public void setFilterRedundantCalls(boolean filter) {
+        this.mFilterRedundantCalls = filter;
     }
 }

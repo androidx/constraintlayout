@@ -38,6 +38,8 @@ import com.example.constraintlayout.R
 import com.example.constraintlayout.link.MotionLink
 import com.google.accompanist.coil.rememberCoilPainter
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class VerifyMotion : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
@@ -49,7 +51,7 @@ class VerifyMotion : AppCompatActivity() {
     val linkServer = LinkServer()
     lateinit var link: MotionLink
     val layouts = java.util.HashMap<String, String>()
-
+    val resultList =  HashMap<String,String>()
     init {
         defineDesignElements()
         linkServer.start()
@@ -88,6 +90,7 @@ class VerifyMotion : AppCompatActivity() {
         com.setContent {
 
             when (composeNum) {
+                -1 -> DisplayResults(resultList)
                 0 -> End()
                 1 -> MTest01()
                 2 -> MTest02()
@@ -173,7 +176,9 @@ class VerifyMotion : AppCompatActivity() {
 
     }
 
+    @ExperimentalMaterialApi
     fun printResults() {
+
 
         for (s in layouts.keys) {
 
@@ -189,12 +194,16 @@ class VerifyMotion : AppCompatActivity() {
                 if (multiLineComp(str, s2)) {
                     Log.v(TAG, Debug.getLoc() + "  $s fail !!!!!!!!!!!!!")
                     Log.v(TAG, Debug.getLoc() + "\n" + s2);
+                    resultList[s] = "fail"
                 } else {
                     Log.v(TAG, Debug.getLoc() + " $s  pass")
+                    resultList[s] = "pass"
                 }
             }
 
         }
+        composeNum=-1
+        setCompose();
     }
 
     private fun multiLineComp(s1: String?, s2: String): Boolean {
@@ -250,6 +259,9 @@ class VerifyMotion : AppCompatActivity() {
 
     @ExperimentalMaterialApi
     fun doNext() {
+        if (composeNum == -1) {
+            return
+        }
         composeNum++
         setCompose();
         if (composeNum != 0) {
