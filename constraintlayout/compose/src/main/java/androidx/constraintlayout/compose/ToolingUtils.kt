@@ -43,17 +43,22 @@ internal var SemanticsPropertyReceiver.designInfoProvider by DesignInfoDataKey
  *
  * Returns a json string with the constraints and bounding box for each ID in the system.
  */
-fun interface DesignInfoProvider {
+interface DesignInfoProvider {
     fun getDesignInfo(startX: Int, startY: Int, args: String): String
 }
 
 private const val CONSTRAINTS_JSON_VERSION = 1
 
+// These flags represent bit positions starting at 0
+private const val CONSTRAINTS = 0
+private const val BOUNDS = 1
+
 internal fun parseConstraintsToJson(
     root: ConstraintWidgetContainer,
     state: State,
     startX: Int,
-    startY: Int
+    startY: Int,
+    args: String
 ): String {
     // TODO: Take arguments to filter specific information, eg: "BOUNDS_ONLY" would remove
     //  'constraints' and 'helperReferences' from the json
@@ -61,6 +66,16 @@ internal fun parseConstraintsToJson(
     // The root id is not user defined, so we create one
     val rootId = PARENT.toString()
     val idToConstraintsJson = JSONObject()
+
+    // Add bounds and constraints by default
+    var withConstraints = true
+    var withBounds = true
+
+    args.toIntOrNull()?.let {
+        withBounds = it shr BOUNDS == 1
+        withConstraints = it shr CONSTRAINTS == 1
+    }
+
     root.children.forEach { constraintWidget ->
         val constraintsInfoArray = JSONArray()
         val helperReferences = mutableListOf<String>()
@@ -97,7 +112,9 @@ internal fun parseConstraintsToJson(
             isHelper = constraintWidget is HelperWidget,
             isRoot = false,
             helperReferences = helperReferences,
-            constraintsInfoArray = constraintsInfoArray
+            constraintsInfoArray = constraintsInfoArray,
+            withConstraints = withConstraints,
+            withBounds = withBounds
         )
     }
     idToConstraintsJson.putViewIdToBoundsAndConstraints(
@@ -106,7 +123,9 @@ internal fun parseConstraintsToJson(
         isHelper = false,
         isRoot = true,
         helperReferences = emptyList(),
-        constraintsInfoArray = JSONArray()
+        constraintsInfoArray = JSONArray(),
+        withConstraints = withConstraints,
+        withBounds = withBounds
     )
     return createDesignInfoJson(idToConstraintsJson)
 }
@@ -153,11 +172,16 @@ private fun JSONObject.putViewIdToBoundsAndConstraints(
     isHelper: Boolean,
     isRoot: Boolean,
     helperReferences: List<String>,
-    constraintsInfoArray: JSONArray
+    constraintsInfoArray: JSONArray,
+    withConstraints: Boolean = true,
+    withBounds: Boolean = true
 ) {
     val viewWithBoundsAndConstraints = JSONObject()
     viewWithBoundsAndConstraints.put("viewId", viewId)
-    viewWithBoundsAndConstraints.put("box", boxJson)
+
+    if (withBounds) {
+        viewWithBoundsAndConstraints.put("box", boxJson)
+    }
     viewWithBoundsAndConstraints.put("isHelper", isHelper)
     viewWithBoundsAndConstraints.put("isRoot", isRoot)
 
@@ -165,6 +189,8 @@ private fun JSONObject.putViewIdToBoundsAndConstraints(
     helperReferences.forEach(helperReferencesArray::put)
     viewWithBoundsAndConstraints.put("helperReferences", helperReferencesArray)
 
-    viewWithBoundsAndConstraints.put("constraints", constraintsInfoArray)
+    if (withConstraints) {
+        viewWithBoundsAndConstraints.put("constraints", constraintsInfoArray)
+    }
     put(viewId, viewWithBoundsAndConstraints)
 }
