@@ -19,18 +19,38 @@ package androidx.constraintlayout.validation;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import javax.swing.*;
-import javax.swing.border.EtchedBorder;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableCellRenderer;
-import java.awt.*;
-import java.io.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTable;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
+import javax.swing.border.EtchedBorder;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellRenderer;
 
 public class Main extends JPanel {
 
@@ -312,14 +332,14 @@ public class Main extends JPanel {
                 n++;
                 progressBar.getModel().setValue(n);
                 long duration = System.currentTimeMillis() - start;
-                SwingUtilities.invokeLater(()  ->{
+                SwingUtilities.invokeLater(() -> {
                 progressLabel.setText("success: " + results[0] + "/" + total
                         + " passable: " + results[1]
                         + " failures: " + results[2] + " in " + duration + " ms");
                 updateLayoutMeasures(layouts);
                 });
             }
-            SwingUtilities.invokeLater(()  ->{
+            SwingUtilities.invokeLater(() -> {
                 updateAllBaselines.setEnabled(true);
                 showPerformancesButton.setEnabled(true);
             });
