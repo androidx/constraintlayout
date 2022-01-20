@@ -37,14 +37,14 @@ public class MotionLayoutModel {
         supportedChildren.put(MOTION_SCENE, new HashSet<>(Arrays.asList(HEADER, CONSTRAINT_SETS, "Transitions")));
         supportedChildren.put(TRANSITIONS, new HashSet<>(Arrays.asList(DEFAULT_TRANSITION, KEY_FRAMES)));
         supportedChildren.put(KEY_FRAMES, new HashSet<>(
-                Arrays.asList(TypedValues.Position.NAME,
-                        TypedValues.Cycle.NAME, TypedValues.Attributes.NAME)));
+                Arrays.asList(TypedValues.PositionType.NAME,
+                        TypedValues.CycleType.NAME, TypedValues.AttributesType.NAME)));
     }
 
     HashSet<String> subGroup = new HashSet<>(Arrays.asList("KeyFrames", "KeyAttributes",
-            TypedValues.Position.NAME,
-            TypedValues.Cycle.NAME,
-            TypedValues.Attributes.NAME));
+            TypedValues.PositionType.NAME,
+            TypedValues.CycleType.NAME,
+            TypedValues.AttributesType.NAME));
 
     void parseMotionScene(String pad, String str) {
         name = "motionScene";
@@ -75,7 +75,7 @@ public class MotionLayoutModel {
                 //todo model.parse(  object, );
                 break;
             case TRANSITIONS:
-                model.parseTransition(object, TypedValues.Transition::getId, TypedValues.Transition::getType);
+                model.parseTransition(object, TypedValues.TransitionType::getId, TypedValues.TransitionType::getType);
                 break;
         }
 
@@ -95,16 +95,16 @@ public class MotionLayoutModel {
                     // todo parser header ... model.parse(  object, );
                     break;
                 case KEY_POSITIONS:
-                    model.parse(object, TypedValues.Position::getId, TypedValues.Position::getType);
+                    model.parse(object, TypedValues.PositionType::getId, TypedValues.PositionType::getType);
                     break;
                 case KEY_CYCLES:
-                    model.parse(object, TypedValues.Cycle::getId, TypedValues.Cycle::getType);
+                    model.parse(object, TypedValues.CycleType::getId, TypedValues.CycleType::getType);
                     break;
                 case KEY_ATTRIBUTES:
-                    model.parse(object, TypedValues.Attributes::getId, TypedValues.Attributes::getType);
+                    model.parse(object, TypedValues.AttributesType::getId, TypedValues.AttributesType::getType);
                     break;
                 case TRANSITIONS:
-                    model.parse(object, TypedValues.Transition::getId, TypedValues.Transition::getType);
+                    model.parse(object, TypedValues.TransitionType::getId, TypedValues.TransitionType::getType);
                     break;
             }
 
@@ -116,13 +116,13 @@ public class MotionLayoutModel {
         switch (type) {
 
             case KEY_POSITIONS:
-                return TypedValues.Position::getId;
+                return TypedValues.PositionType::getId;
             case KEY_CYCLES:
-                return TypedValues.Cycle::getId;
+                return TypedValues.CycleType::getId;
             case KEY_ATTRIBUTES:
-                return TypedValues.Attributes::getId;
+                return TypedValues.AttributesType::getId;
             case TRANSITIONS:
-                return TypedValues.Transition::getId;
+                return TypedValues.TransitionType::getId;
         }
         return null;
     }
@@ -130,13 +130,13 @@ public class MotionLayoutModel {
     static DataType getType(String type) {
         switch (type) {
             case KEY_POSITIONS:
-                return TypedValues.Position::getType;
+                return TypedValues.PositionType::getType;
             case KEY_CYCLES:
-                return TypedValues.Cycle::getType;
+                return TypedValues.CycleType::getType;
             case KEY_ATTRIBUTES:
-                return TypedValues.Attributes::getType;
+                return TypedValues.AttributesType::getType;
             case TRANSITIONS:
-                return TypedValues.Transition::getType;
+                return TypedValues.TransitionType::getType;
         }
         return null;
     }

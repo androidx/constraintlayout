@@ -60,17 +60,17 @@ public class ParseKeyFrames {
         for (int i = 0; i < targets.size(); i++) {
             data.clear();
             target = targets.getString(i);
-            data.add(TypedValues.Position.TYPE_POSITION_TYPE, indexOf(type,
+            data.add(TypedValues.PositionType.TYPE_POSITION_TYPE, indexOf(type,
                     "deltaRelative", "pathRelative", "parentRelative"));
 
 
             if (curveFit != null) {
-                data.add(TypedValues.Position.TYPE_CURVE_FIT, indexOf(curveFit, "spline", "linear"));
+                data.add(TypedValues.PositionType.TYPE_CURVE_FIT, indexOf(curveFit, "spline", "linear"));
             }
-            data.addIfNotNull(TypedValues.Position.TYPE_TRANSITION_EASING, transitionEasing);
+            data.addIfNotNull(TypedValues.PositionType.TYPE_TRANSITION_EASING, transitionEasing);
 
             if (pathMotionArc != null) {
-                data.add(TypedValues.Position.TYPE_PATH_MOTION_ARC,
+                data.add(TypedValues.PositionType.TYPE_PATH_MOTION_ARC,
                         indexOf(curveFit, "none", "startVertical", "startHorizontal", "flip"));
             }
             for (int j = 0; j < frames.size(); j++) {
@@ -78,16 +78,16 @@ public class ParseKeyFrames {
                 data.add(TypedValues.TYPE_FRAME_POSITION, frame);
 
                 if (percentX != null) {
-                    data.add(TypedValues.Position.TYPE_PERCENT_X, percentX.getFloat(j));
+                    data.add(TypedValues.PositionType.TYPE_PERCENT_X, percentX.getFloat(j));
                 }
                 if (percentY != null) {
-                    data.add(TypedValues.Position.TYPE_PERCENT_Y, percentY.getFloat(j));
+                    data.add(TypedValues.PositionType.TYPE_PERCENT_Y, percentY.getFloat(j));
                 }
                 if (percentWidth != null) {
-                    data.add(TypedValues.Position.TYPE_PERCENT_WIDTH, percentWidth.getFloat(j));
+                    data.add(TypedValues.PositionType.TYPE_PERCENT_WIDTH, percentWidth.getFloat(j));
                 }
                 if (percentHeight != null) {
-                    data.add(TypedValues.Position.TYPE_PERCENT_HEIGHT, percentHeight.getFloat(j));
+                    data.add(TypedValues.PositionType.TYPE_PERCENT_HEIGHT, percentHeight.getFloat(j));
                 }
 
                 transition.addKeyPosition(target, data);
@@ -102,24 +102,24 @@ public class ParseKeyFrames {
         String transitionEasing = keyAttribute.getStringOrNull("transitionEasing");
 
         String[] attrNames = {
-                TypedValues.Attributes.S_SCALE_X,
-                TypedValues.Attributes.S_SCALE_Y,
-                TypedValues.Attributes.S_TRANSLATION_X,
-                TypedValues.Attributes.S_TRANSLATION_Y,
-                TypedValues.Attributes.S_TRANSLATION_Z,
-                TypedValues.Attributes.S_ROTATION_X,
-                TypedValues.Attributes.S_ROTATION_Y,
-                TypedValues.Attributes.S_ROTATION_Z,
+                TypedValues.AttributesType.S_SCALE_X,
+                TypedValues.AttributesType.S_SCALE_Y,
+                TypedValues.AttributesType.S_TRANSLATION_X,
+                TypedValues.AttributesType.S_TRANSLATION_Y,
+                TypedValues.AttributesType.S_TRANSLATION_Z,
+                TypedValues.AttributesType.S_ROTATION_X,
+                TypedValues.AttributesType.S_ROTATION_Y,
+                TypedValues.AttributesType.S_ROTATION_Z,
         };
         int[] attrIds = {
-                TypedValues.Attributes.TYPE_SCALE_X,
-                TypedValues.Attributes.TYPE_SCALE_Y,
-                TypedValues.Attributes.TYPE_TRANSLATION_X,
-                TypedValues.Attributes.TYPE_TRANSLATION_Y,
-                TypedValues.Attributes.TYPE_TRANSLATION_Z,
-                TypedValues.Attributes.TYPE_ROTATION_X,
-                TypedValues.Attributes.TYPE_ROTATION_Y,
-                TypedValues.Attributes.TYPE_ROTATION_Z,
+                TypedValues.AttributesType.TYPE_SCALE_X,
+                TypedValues.AttributesType.TYPE_SCALE_Y,
+                TypedValues.AttributesType.TYPE_TRANSLATION_X,
+                TypedValues.AttributesType.TYPE_TRANSLATION_Y,
+                TypedValues.AttributesType.TYPE_TRANSLATION_Z,
+                TypedValues.AttributesType.TYPE_ROTATION_X,
+                TypedValues.AttributesType.TYPE_ROTATION_Y,
+                TypedValues.AttributesType.TYPE_ROTATION_Z,
         };
 
         TypedBundle[] bundles = new TypedBundle[frames.size()];
@@ -160,10 +160,10 @@ public class ParseKeyFrames {
             for (int j = 0; j < bundles.length; j++) {
                 TypedBundle bundle = bundles[j];
                 if (curveFit != null) {
-                    bundle.add(TypedValues.Position.TYPE_CURVE_FIT, indexOf(curveFit, "spline", "linear"));
+                    bundle.add(TypedValues.PositionType.TYPE_CURVE_FIT, indexOf(curveFit, "spline", "linear"));
                 }
 
-                bundle.addIfNotNull(TypedValues.Position.TYPE_TRANSITION_EASING, transitionEasing);
+                bundle.addIfNotNull(TypedValues.PositionType.TYPE_TRANSITION_EASING, transitionEasing);
                 int frame = frames.getInt(j);
                 bundle.add(TypedValues.TYPE_FRAME_POSITION, frame);
                 transition.addKeyAttribute(target, bundle);
@@ -178,30 +178,30 @@ public class ParseKeyFrames {
         String transitionEasing = keyCycleData.getStringOrNull("transitionEasing");
 
         String[] attrNames = {
-                TypedValues.Cycle.S_SCALE_X,
-                TypedValues.Cycle.S_SCALE_Y,
-                TypedValues.Cycle.S_TRANSLATION_X,
-                TypedValues.Cycle.S_TRANSLATION_Y,
-                TypedValues.Cycle.S_TRANSLATION_Z,
-                TypedValues.Cycle.S_ROTATION_X,
-                TypedValues.Cycle.S_ROTATION_Y,
-                TypedValues.Cycle.S_ROTATION_Z,
-                TypedValues.Cycle.S_WAVE_PERIOD,
-                TypedValues.Cycle.S_WAVE_OFFSET,
-                TypedValues.Cycle.S_WAVE_PHASE,
+                TypedValues.CycleType.S_SCALE_X,
+                TypedValues.CycleType.S_SCALE_Y,
+                TypedValues.CycleType.S_TRANSLATION_X,
+                TypedValues.CycleType.S_TRANSLATION_Y,
+                TypedValues.CycleType.S_TRANSLATION_Z,
+                TypedValues.CycleType.S_ROTATION_X,
+                TypedValues.CycleType.S_ROTATION_Y,
+                TypedValues.CycleType.S_ROTATION_Z,
+                TypedValues.CycleType.S_WAVE_PERIOD,
+                TypedValues.CycleType.S_WAVE_OFFSET,
+                TypedValues.CycleType.S_WAVE_PHASE,
         };
         int[] attrIds = {
-                TypedValues.Cycle.TYPE_SCALE_X,
-                TypedValues.Cycle.TYPE_SCALE_Y,
-                TypedValues.Cycle.TYPE_TRANSLATION_X,
-                TypedValues.Cycle.TYPE_TRANSLATION_Y,
-                TypedValues.Cycle.TYPE_TRANSLATION_Z,
-                TypedValues.Cycle.TYPE_ROTATION_X,
-                TypedValues.Cycle.TYPE_ROTATION_Y,
-                TypedValues.Cycle.TYPE_ROTATION_Z,
-                TypedValues.Cycle.TYPE_WAVE_PERIOD,
-                TypedValues.Cycle.TYPE_WAVE_OFFSET,
-                TypedValues.Cycle.TYPE_WAVE_PHASE,
+                TypedValues.CycleType.TYPE_SCALE_X,
+                TypedValues.CycleType.TYPE_SCALE_Y,
+                TypedValues.CycleType.TYPE_TRANSLATION_X,
+                TypedValues.CycleType.TYPE_TRANSLATION_Y,
+                TypedValues.CycleType.TYPE_TRANSLATION_Z,
+                TypedValues.CycleType.TYPE_ROTATION_X,
+                TypedValues.CycleType.TYPE_ROTATION_Y,
+                TypedValues.CycleType.TYPE_ROTATION_Z,
+                TypedValues.CycleType.TYPE_WAVE_PERIOD,
+                TypedValues.CycleType.TYPE_WAVE_OFFSET,
+                TypedValues.CycleType.TYPE_WAVE_PHASE,
         };
 
 // TODO S_WAVE_SHAPE S_CUSTOM_WAVE_SHAPE
@@ -233,10 +233,10 @@ public class ParseKeyFrames {
                 }
             }
         }
-        String curveFit = keyCycleData.getStringOrNull(TypedValues.Cycle.S_CURVE_FIT);
-        String easing = keyCycleData.getStringOrNull(TypedValues.Cycle.S_EASING);
-        String waveShape = keyCycleData.getStringOrNull(TypedValues.Cycle.S_WAVE_SHAPE);
-        String customWave = keyCycleData.getStringOrNull(TypedValues.Cycle.S_CUSTOM_WAVE_SHAPE);
+        String curveFit = keyCycleData.getStringOrNull(TypedValues.CycleType.S_CURVE_FIT);
+        String easing = keyCycleData.getStringOrNull(TypedValues.CycleType.S_EASING);
+        String waveShape = keyCycleData.getStringOrNull(TypedValues.CycleType.S_WAVE_SHAPE);
+        String customWave = keyCycleData.getStringOrNull(TypedValues.CycleType.S_CUSTOM_WAVE_SHAPE);
         for (int i = 0; i < targets.size(); i++) {
             String target = targets.getString(i);
 
@@ -244,17 +244,17 @@ public class ParseKeyFrames {
                 TypedBundle bundle = bundles[j];
 
                 if (curveFit != null) {
-                    bundle.add(TypedValues.Cycle.TYPE_CURVE_FIT, indexOf(curveFit, "spline", "linear"));
+                    bundle.add(TypedValues.CycleType.TYPE_CURVE_FIT, indexOf(curveFit, "spline", "linear"));
                 }
-                bundle.addIfNotNull(TypedValues.Position.TYPE_TRANSITION_EASING, transitionEasing);
+                bundle.addIfNotNull(TypedValues.PositionType.TYPE_TRANSITION_EASING, transitionEasing);
                 if (easing != null) {
-                    bundle.add(TypedValues.Cycle.TYPE_EASING, easing);
+                    bundle.add(TypedValues.CycleType.TYPE_EASING, easing);
                 }
                 if (waveShape != null) {
-                    bundle.add(TypedValues.Cycle.TYPE_WAVE_SHAPE, waveShape);
+                    bundle.add(TypedValues.CycleType.TYPE_WAVE_SHAPE, waveShape);
                 }
                 if (customWave != null) {
-                    bundle.add(TypedValues.Cycle.TYPE_CUSTOM_WAVE_SHAPE, customWave);
+                    bundle.add(TypedValues.CycleType.TYPE_CUSTOM_WAVE_SHAPE, customWave);
                 }
 
                 int frame = frames.getInt(j);
