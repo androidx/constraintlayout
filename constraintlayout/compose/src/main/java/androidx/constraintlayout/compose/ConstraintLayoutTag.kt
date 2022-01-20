@@ -26,16 +26,29 @@ import androidx.compose.ui.platform.InspectorValueInfo
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.Density
 
-fun Modifier.layoutId(layoutId: String, tag: String) = this.then(
-    ConstraintLayoutTag(
-        constraintLayoutId = layoutId,
-        constraintLayoutTag = tag,
-        inspectorInfo = debugInspectorInfo {
-            name = "constraintLayoutId"
-            value = layoutId
-        }
-    )
-)
+/**
+ * Alternative to [androidx.compose.ui.layout.layoutId] that enables the use of [tag].
+ *
+ * @param layoutId The unique Id string assigned to the Composable
+ * @param tag A string to represent a group of Composables that may be affected by a
+ * ConstraintLayout function. Eg: The `Variables` block in a JSON5 based [ConstraintSet]
+ */
+fun Modifier.layoutId(layoutId: String, tag: String? = null) = this.run {
+    if (tag == null) {
+        this.layoutId(layoutId)
+    } else {
+        then(
+            ConstraintLayoutTag(
+                constraintLayoutId = layoutId,
+                constraintLayoutTag = tag,
+                inspectorInfo = debugInspectorInfo {
+                    name = "constraintLayoutId"
+                    value = layoutId
+                }
+            )
+        )
+    }
+}
 
 @Immutable
 private class ConstraintLayoutTag(
