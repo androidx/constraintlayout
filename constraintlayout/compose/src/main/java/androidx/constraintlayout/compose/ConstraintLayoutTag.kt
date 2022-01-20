@@ -33,11 +33,12 @@ import androidx.compose.ui.unit.Density
  * @param tag A string to represent a group of Composables that may be affected by a
  * ConstraintLayout function. Eg: The `Variables` block in a JSON5 based [ConstraintSet]
  */
-fun Modifier.layoutId(layoutId: String, tag: String? = null) = this.run {
+fun Modifier.layoutId(layoutId: String, tag: String? = null): Modifier {
     if (tag == null) {
-        this.layoutId(layoutId)
+        // Fallback to androidx.compose.ui.layout.layoutId
+        return this.layoutId(layoutId)
     } else {
-        then(
+        return this.then(
             ConstraintLayoutTag(
                 constraintLayoutId = layoutId,
                 constraintLayoutTag = tag,
