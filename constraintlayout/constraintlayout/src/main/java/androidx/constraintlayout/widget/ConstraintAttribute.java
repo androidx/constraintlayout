@@ -37,7 +37,7 @@ import java.util.HashMap;
 /**
  * Defines non standard Attributes
  *
- * @suppress
+ * @hide
  */
 public class ConstraintAttribute {
     private static final String TAG = "TransitionLayout";

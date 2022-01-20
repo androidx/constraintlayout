@@ -67,42 +67,42 @@ public class CircularFlow extends VirtualLayout {
     private static int DEFAULT_RADIUS = 0;
     private static float DEFAULT_ANGLE = 0F;
     /**
-     * @suppress
+     * @hide
      */
     private float[] mAngles;
 
     /**
-     * @suppress
+     * @hide
      */
     private int[] mRadius;
 
     /**
-     * @suppress
+     * @hide
      */
     private int mCountRadius;
 
     /**
-     * @suppress
+     * @hide
      */
     private int mCountAngle;
 
     /**
-     * @suppress
+     * @hide
      */
     private String mReferenceAngles;
 
     /**
-     * @suppress
+     * @hide
      */
     private String mReferenceRadius;
 
     /**
-     * @suppress
+     * @hide
      */
     private Float mReferenceDefaultAngle;
 
     /**
-     * @suppress
+     * @hide
      */
     private Integer mReferenceDefaultRadius;
 
@@ -356,7 +356,7 @@ public class CircularFlow extends VirtualLayout {
     }
 
     /**
-     * @suppress
+     * @hide
      */
     private float[] removeAngle(float[] angles, int index) {
         if (angles == null
@@ -369,7 +369,7 @@ public class CircularFlow extends VirtualLayout {
     }
 
     /**
-     * @suppress
+     * @hide
      */
     private int[] removeRadius(int[] radius, int index) {
         if (radius == null
@@ -382,7 +382,7 @@ public class CircularFlow extends VirtualLayout {
     }
 
     /**
-     * @suppress
+     * @hide
      */
     private void setAngles(String idList) {
         if (idList == null) {
@@ -402,7 +402,7 @@ public class CircularFlow extends VirtualLayout {
     }
 
     /**
-     * @suppress
+     * @hide
      */
     private void setRadius(String idList) {
         if (idList == null) {
@@ -422,7 +422,7 @@ public class CircularFlow extends VirtualLayout {
     }
 
     /**
-     * @suppress
+     * @hide
      */
     private void addAngle(String angleString) {
         if (angleString == null || angleString.length() == 0) {
@@ -443,7 +443,7 @@ public class CircularFlow extends VirtualLayout {
     }
 
     /**
-     * @suppress
+     * @hide
      */
     private void addRadius(String radiusString) {
         if (radiusString == null || radiusString.length() == 0) {

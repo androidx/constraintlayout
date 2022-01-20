@@ -37,7 +37,7 @@ import java.util.HashSet;
  * Defines container for a key frame of for storing KeyAttributes.
  * KeyAttributes change post layout values of a view.
  *
- * @suppress
+ * @hide
  */
 
 public class KeyAttributes extends Key {

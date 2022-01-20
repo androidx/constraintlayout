@@ -22,7 +22,7 @@ package androidx.constraintlayout.core.motion.utils;
  * ending at 0 velocity.
  * The path is computed such that the velocities are continuous
  *
- * @suppress
+ * @hide
  */
 public class StopLogicEngine implements StopEngine {
     private float mStage1Velocity, mStage2Velocity, mStage3Velocity; // the velocity at the start of each period

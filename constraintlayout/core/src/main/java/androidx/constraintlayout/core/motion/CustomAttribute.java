@@ -35,7 +35,7 @@ package androidx.constraintlayout.core.motion;
 /**
  * Defines non standard Attributes
  *
- * @suppress
+ * @hide
  */
 public class CustomAttribute {
     private static final String TAG = "TransitionLayout";
