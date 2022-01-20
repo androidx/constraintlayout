@@ -96,7 +96,14 @@ inline fun MotionLayout(
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
     crossinline content: @Composable (MotionLayoutScope.() -> Unit),
 ) {
-    MotionLayoutCore(motionScene, progress, debug, modifier, optimizationLevel, content)
+    MotionLayoutCore(
+        motionScene = motionScene,
+        progress = progress,
+        debug = debug,
+        modifier = modifier,
+        optimizationLevel = optimizationLevel,
+        content = content
+    )
 }
 
 /**
@@ -326,53 +333,17 @@ internal inline fun MotionLayoutCore(
     @Suppress("UNUSED_VALUE")
     lastOutsideProgress = progress
 
-    val measurer = remember { MotionMeasurer() }
-    val scope = remember { MotionLayoutScope(measurer) }
-    val progressState = remember { mutableStateOf(0f) }
-    SideEffect { progressState.value = usedProgress }
-    val measurePolicy =
-        rememberMotionLayoutMeasurePolicy(
-            optimizationLevel,
-            usedDebugMode,
-            needsUpdate.value,
-            start,
-            end,
-            transition,
-            progressState,
-            measurer
-        )
-    measurer.addLayoutInformationReceiver(motionScene as JSONMotionScene)
-
-    val forcedScaleFactor = measurer.forcedScaleFactor
-    if (!debug.contains(MotionLayoutDebugFlags.NONE) || !forcedScaleFactor.isNaN()) {
-        var mod = modifier
-        if (!forcedScaleFactor.isNaN()) {
-            mod = modifier.scale(measurer.forcedScaleFactor)
-        }
-        Box {
-            @Suppress("DEPRECATION")
-            (MultiMeasureLayout(
-                modifier = mod.semantics { designInfoProvider = measurer },
-                measurePolicy = measurePolicy,
-                content = { scope.content() }
-            ))
-            with(measurer) {
-                if (!forcedScaleFactor.isNaN()) {
-                    drawDebugBounds(forcedScaleFactor)
-                }
-                if (!debug.contains(MotionLayoutDebugFlags.NONE)) {
-                    drawDebug()
-                }
-            }
-        }
-    } else {
-        @Suppress("DEPRECATION")
-        (MultiMeasureLayout(
-            modifier = modifier.semantics { designInfoProvider = measurer },
-            measurePolicy = measurePolicy,
-            content = { scope.content() }
-        ))
-    }
+    MotionLayoutCore(
+        start = start,
+        end = end,
+        transition = transition,
+        progress = usedProgress,
+        debug = usedDebugMode,
+        informationReceiver = motionScene as? LayoutInformationReceiver,
+        modifier = modifier,
+        optimizationLevel = optimizationLevel,
+        content = content
+    )
 }
 
 @PublishedApi
