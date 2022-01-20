@@ -25,7 +25,7 @@ import androidx.constraintlayout.core.state.Transition;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static androidx.constraintlayout.core.motion.utils.TypedValues.Transition.TYPE_PATH_MOTION_ARC;
+import static androidx.constraintlayout.core.motion.utils.TypedValues.TransitionType.TYPE_PATH_MOTION_ARC;
 
 public class TransitionModel extends MotionModel {
     TypedBundle data = new TypedBundle();
@@ -45,7 +45,7 @@ public class TransitionModel extends MotionModel {
     TransitionModel(String name, CLObject json) {
         mName = name;
         try {
-            parseTransition(json,TypedValues.Transition::getId, TypedValues.Transition::getType );
+            parseTransition(json,TypedValues.TransitionType::getId, TypedValues.TransitionType::getType);
         } catch (CLParsingException e) {
             e.printStackTrace();
         }
@@ -111,9 +111,9 @@ public class TransitionModel extends MotionModel {
                         break;
                     case TypedValues.STRING_MASK:
                         data.add(id, str = value.content());
-                        if (id == TypedValues.Transition.TYPE_FROM) {
+                        if (id == TypedValues.TransitionType.TYPE_FROM) {
                             mFrom = str;
-                        } else if (id == TypedValues.Transition.TYPE_TO) {
+                        } else if (id == TypedValues.TransitionType.TYPE_TO) {
                             mTo = str;
                         }
                         Utils.log("parse " + type + " STRING_MASK > " + value.content());
