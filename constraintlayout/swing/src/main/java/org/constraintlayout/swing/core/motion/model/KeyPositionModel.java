@@ -68,17 +68,17 @@ public class KeyPositionModel extends KeyFrame {
         for (int i = 0; i < targets.size(); i++) {
             data.clear();
             target = targets.getString(i);
-            data.add(TypedValues.Position.TYPE_POSITION_TYPE, indexOf(type,
+            data.add(TypedValues.PositionType.TYPE_POSITION_TYPE, indexOf(type,
                     POSITION_TYPE));
 
 
             if (curveFit != null) {
-                data.add(TypedValues.Position.TYPE_CURVE_FIT, indexOf(curveFit, CURVE_FIT_TYPES));
+                data.add(TypedValues.PositionType.TYPE_CURVE_FIT, indexOf(curveFit, CURVE_FIT_TYPES));
             }
-            data.addIfNotNull(TypedValues.Position.TYPE_TRANSITION_EASING, transitionEasing);
+            data.addIfNotNull(TypedValues.PositionType.TYPE_TRANSITION_EASING, transitionEasing);
 
             if (pathMotionArc != null) {
-                data.add(TypedValues.Position.TYPE_PATH_MOTION_ARC,
+                data.add(TypedValues.PositionType.TYPE_PATH_MOTION_ARC,
                         indexOf(curveFit, PATH_MOTION_ARC_TYPES));
             }
             for (int j = 0; j < frames.size(); j++) {
@@ -86,16 +86,16 @@ public class KeyPositionModel extends KeyFrame {
                 data.add(TypedValues.TYPE_FRAME_POSITION, frame);
 
                 if (percentX != null) {
-                    data.add(TypedValues.Position.TYPE_PERCENT_X, percentX.getFloat(j));
+                    data.add(TypedValues.PositionType.TYPE_PERCENT_X, percentX.getFloat(j));
                 }
                 if (percentY != null) {
-                    data.add(TypedValues.Position.TYPE_PERCENT_Y, percentY.getFloat(j));
+                    data.add(TypedValues.PositionType.TYPE_PERCENT_Y, percentY.getFloat(j));
                 }
                 if (percentWidth != null) {
-                    data.add(TypedValues.Position.TYPE_PERCENT_WIDTH, percentWidth.getFloat(j));
+                    data.add(TypedValues.PositionType.TYPE_PERCENT_WIDTH, percentWidth.getFloat(j));
                 }
                 if (percentHeight != null) {
-                    data.add(TypedValues.Position.TYPE_PERCENT_HEIGHT, percentHeight.getFloat(j));
+                    data.add(TypedValues.PositionType.TYPE_PERCENT_HEIGHT, percentHeight.getFloat(j));
                 }
 
                 keyFrames.add(new KeyPositionModel(target, data));

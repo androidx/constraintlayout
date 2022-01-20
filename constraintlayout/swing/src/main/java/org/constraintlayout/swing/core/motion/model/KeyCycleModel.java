@@ -44,30 +44,30 @@ public class KeyCycleModel extends KeyFrame {
         String transitionEasing = json.getStringOrNull("transitionEasing");
 
         String[] attrNames = {
-                TypedValues.Cycle.S_SCALE_X,
-                TypedValues.Cycle.S_SCALE_Y,
-                TypedValues.Cycle.S_TRANSLATION_X,
-                TypedValues.Cycle.S_TRANSLATION_Y,
-                TypedValues.Cycle.S_TRANSLATION_Z,
-                TypedValues.Cycle.S_ROTATION_X,
-                TypedValues.Cycle.S_ROTATION_Y,
-                TypedValues.Cycle.S_ROTATION_Z,
-                TypedValues.Cycle.S_WAVE_PERIOD,
-                TypedValues.Cycle.S_WAVE_OFFSET,
-                TypedValues.Cycle.S_WAVE_PHASE,
+                TypedValues.CycleType.S_SCALE_X,
+                TypedValues.CycleType.S_SCALE_Y,
+                TypedValues.CycleType.S_TRANSLATION_X,
+                TypedValues.CycleType.S_TRANSLATION_Y,
+                TypedValues.CycleType.S_TRANSLATION_Z,
+                TypedValues.CycleType.S_ROTATION_X,
+                TypedValues.CycleType.S_ROTATION_Y,
+                TypedValues.CycleType.S_ROTATION_Z,
+                TypedValues.CycleType.S_WAVE_PERIOD,
+                TypedValues.CycleType.S_WAVE_OFFSET,
+                TypedValues.CycleType.S_WAVE_PHASE,
         };
         int[] attrIds = {
-                TypedValues.Cycle.TYPE_SCALE_X,
-                TypedValues.Cycle.TYPE_SCALE_Y,
-                TypedValues.Cycle.TYPE_TRANSLATION_X,
-                TypedValues.Cycle.TYPE_TRANSLATION_Y,
-                TypedValues.Cycle.TYPE_TRANSLATION_Z,
-                TypedValues.Cycle.TYPE_ROTATION_X,
-                TypedValues.Cycle.TYPE_ROTATION_Y,
-                TypedValues.Cycle.TYPE_ROTATION_Z,
-                TypedValues.Cycle.TYPE_WAVE_PERIOD,
-                TypedValues.Cycle.TYPE_WAVE_OFFSET,
-                TypedValues.Cycle.TYPE_WAVE_PHASE,
+                TypedValues.CycleType.TYPE_SCALE_X,
+                TypedValues.CycleType.TYPE_SCALE_Y,
+                TypedValues.CycleType.TYPE_TRANSLATION_X,
+                TypedValues.CycleType.TYPE_TRANSLATION_Y,
+                TypedValues.CycleType.TYPE_TRANSLATION_Z,
+                TypedValues.CycleType.TYPE_ROTATION_X,
+                TypedValues.CycleType.TYPE_ROTATION_Y,
+                TypedValues.CycleType.TYPE_ROTATION_Z,
+                TypedValues.CycleType.TYPE_WAVE_PERIOD,
+                TypedValues.CycleType.TYPE_WAVE_OFFSET,
+                TypedValues.CycleType.TYPE_WAVE_PHASE,
         };
 
 // TODO S_WAVE_SHAPE S_CUSTOM_WAVE_SHAPE
@@ -99,10 +99,10 @@ public class KeyCycleModel extends KeyFrame {
                 }
             }
         }
-        String curveFit = json.getStringOrNull(TypedValues.Cycle.S_CURVE_FIT);
-        String easing = json.getStringOrNull(TypedValues.Cycle.S_EASING);
-        String waveShape = json.getStringOrNull(TypedValues.Cycle.S_WAVE_SHAPE);
-        String customWave = json.getStringOrNull(TypedValues.Cycle.S_CUSTOM_WAVE_SHAPE);
+        String curveFit = json.getStringOrNull(TypedValues.CycleType.S_CURVE_FIT);
+        String easing = json.getStringOrNull(TypedValues.CycleType.S_EASING);
+        String waveShape = json.getStringOrNull(TypedValues.CycleType.S_WAVE_SHAPE);
+        String customWave = json.getStringOrNull(TypedValues.CycleType.S_CUSTOM_WAVE_SHAPE);
         for (int i = 0; i < targets.size(); i++) {
             String target = targets.getString(i);
 
@@ -110,17 +110,17 @@ public class KeyCycleModel extends KeyFrame {
                 TypedBundle bundle = bundles[j];
 
                 if (curveFit != null) {
-                    bundle.add(TypedValues.Cycle.TYPE_CURVE_FIT, indexOf(curveFit, CURVE_FIT_TYPES));
+                    bundle.add(TypedValues.CycleType.TYPE_CURVE_FIT, indexOf(curveFit, CURVE_FIT_TYPES));
                 }
-                bundle.addIfNotNull(TypedValues.Position.TYPE_TRANSITION_EASING, transitionEasing);
+                bundle.addIfNotNull(TypedValues.PositionType.TYPE_TRANSITION_EASING, transitionEasing);
                 if (easing != null) {
-                    bundle.add(TypedValues.Cycle.TYPE_EASING, easing);
+                    bundle.add(TypedValues.CycleType.TYPE_EASING, easing);
                 }
                 if (waveShape != null) {
-                    bundle.add(TypedValues.Cycle.TYPE_WAVE_SHAPE, waveShape);
+                    bundle.add(TypedValues.CycleType.TYPE_WAVE_SHAPE, waveShape);
                 }
                 if (customWave != null) {
-                    bundle.add(TypedValues.Cycle.TYPE_CUSTOM_WAVE_SHAPE, customWave);
+                    bundle.add(TypedValues.CycleType.TYPE_CUSTOM_WAVE_SHAPE, customWave);
                 }
 
                 int frame = frames.getInt(j);
