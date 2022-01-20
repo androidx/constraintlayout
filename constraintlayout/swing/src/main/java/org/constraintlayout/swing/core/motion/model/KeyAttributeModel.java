@@ -51,24 +51,24 @@ public class KeyAttributeModel extends KeyFrame {
         String transitionEasing = json.getStringOrNull("transitionEasing");
 
         String[] attrNames = {
-                TypedValues.Attributes.S_SCALE_X,
-                TypedValues.Attributes.S_SCALE_Y,
-                TypedValues.Attributes.S_TRANSLATION_X,
-                TypedValues.Attributes.S_TRANSLATION_Y,
-                TypedValues.Attributes.S_TRANSLATION_Z,
-                TypedValues.Attributes.S_ROTATION_X,
-                TypedValues.Attributes.S_ROTATION_Y,
-                TypedValues.Attributes.S_ROTATION_Z,
+                TypedValues.AttributesType.S_SCALE_X,
+                TypedValues.AttributesType.S_SCALE_Y,
+                TypedValues.AttributesType.S_TRANSLATION_X,
+                TypedValues.AttributesType.S_TRANSLATION_Y,
+                TypedValues.AttributesType.S_TRANSLATION_Z,
+                TypedValues.AttributesType.S_ROTATION_X,
+                TypedValues.AttributesType.S_ROTATION_Y,
+                TypedValues.AttributesType.S_ROTATION_Z,
         };
         int[] attrIds = {
-                TypedValues.Attributes.TYPE_SCALE_X,
-                TypedValues.Attributes.TYPE_SCALE_Y,
-                TypedValues.Attributes.TYPE_TRANSLATION_X,
-                TypedValues.Attributes.TYPE_TRANSLATION_Y,
-                TypedValues.Attributes.TYPE_TRANSLATION_Z,
-                TypedValues.Attributes.TYPE_ROTATION_X,
-                TypedValues.Attributes.TYPE_ROTATION_Y,
-                TypedValues.Attributes.TYPE_ROTATION_Z,
+                TypedValues.AttributesType.TYPE_SCALE_X,
+                TypedValues.AttributesType.TYPE_SCALE_Y,
+                TypedValues.AttributesType.TYPE_TRANSLATION_X,
+                TypedValues.AttributesType.TYPE_TRANSLATION_Y,
+                TypedValues.AttributesType.TYPE_TRANSLATION_Z,
+                TypedValues.AttributesType.TYPE_ROTATION_X,
+                TypedValues.AttributesType.TYPE_ROTATION_Y,
+                TypedValues.AttributesType.TYPE_ROTATION_Z,
         };
 
         TypedBundle[] bundles = new TypedBundle[frames.size()];
@@ -109,10 +109,10 @@ public class KeyAttributeModel extends KeyFrame {
             for (int j = 0; j < bundles.length; j++) {
                 TypedBundle bundle = bundles[j];
                 if (curveFit != null) {
-                    bundle.add(TypedValues.Position.TYPE_CURVE_FIT, indexOf(curveFit, CURVE_FIT_TYPES));
+                    bundle.add(TypedValues.PositionType.TYPE_CURVE_FIT, indexOf(curveFit, CURVE_FIT_TYPES));
                 }
 
-                bundle.addIfNotNull(TypedValues.Position.TYPE_TRANSITION_EASING, transitionEasing);
+                bundle.addIfNotNull(TypedValues.PositionType.TYPE_TRANSITION_EASING, transitionEasing);
                 int frame = frames.getInt(j);
                 bundle.add(TypedValues.TYPE_FRAME_POSITION, frame);
                 keyFrames.add(new KeyAttributeModel(target, bundle));
