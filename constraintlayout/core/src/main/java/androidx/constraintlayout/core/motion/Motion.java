@@ -53,7 +53,7 @@ import java.util.HashSet;
  * All parameter which affect a views motion are added to MotionController and then setup()
  * builds out the splines that control the view.
  *
- * @suppress
+ * @hide
  */
 public class Motion implements TypedValues {
     public static final int PATH_PERCENT = 0;

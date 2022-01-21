@@ -23,7 +23,7 @@ import java.util.HashSet;
 
 /**
  * Defines a KeyPositionBase abstract base class KeyPositionBase elements provide
- * @suppress
+ * @hide
  */
 
 abstract class KeyPositionBase extends Key {
@@ -40,19 +40,19 @@ abstract class KeyPositionBase extends Key {
      * @param start_y
      * @param end_x
      * @param end_y
-     * @suppress
+     * @hide
      */
     abstract void calcPosition(int layoutWidth, int layoutHeight, float start_x, float start_y, float end_x, float end_y);
 
     /**
      * @return
-     * @suppress
+     * @hide
      */
     abstract float getPositionX();
 
     /**
      * @return
-     * @suppress
+     * @hide
      */
     abstract float getPositionY();
 
@@ -69,7 +69,7 @@ abstract class KeyPositionBase extends Key {
      * @param y
      * @param attribute
      * @param value
-     * @suppress
+     * @hide
      */
     abstract void positionAttributes(View view, RectF start, RectF end, float x, float y, String[] attribute, float[] value);
 
@@ -82,7 +82,7 @@ abstract class KeyPositionBase extends Key {
      * @param x
      * @param y
      * @return
-     * @suppress
+     * @hide
      */
     public abstract boolean intersects(int layoutWidth, int layoutHeight, RectF start, RectF end, float x, float y);
 }

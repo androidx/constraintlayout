@@ -19,7 +19,7 @@ package androidx.constraintlayout.core.motion.utils;
 /**
  * This is used to calculate the related velocity matrix for a post layout matrix
  *
- * @suppress
+ * @hide
  */
 public class VelocityMatrix {
     float mDScaleX, mDScaleY, mDTranslateX, mDTranslateY, mDRotate;
@@ -91,7 +91,7 @@ public class VelocityMatrix {
      * @param width
      * @param height
      * @param mAnchorDpDt
-     * @suppress
+     * @hide
      */
     public void applyTransform(float locationX, float locationY, int width, int height, float[] mAnchorDpDt) {
         float dx = mAnchorDpDt[0];

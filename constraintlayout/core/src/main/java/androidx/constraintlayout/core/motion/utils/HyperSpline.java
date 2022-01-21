@@ -21,7 +21,7 @@ package androidx.constraintlayout.core.motion.utils;
  * Currently not used but it is anticipated that we will be using it in the
  * KeyMotion
  *
- * @suppress
+ * @hide
  */
 
 public class HyperSpline {

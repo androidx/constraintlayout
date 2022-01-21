@@ -60,7 +60,7 @@ import static androidx.constraintlayout.motion.widget.Key.UNSET;
  * All parameter which affect a views motion are added to MotionController and then setup()
  * builds out the splines that control the view.
  *
- * @suppress
+ * @hide
  */
 public class MotionController {
     public static final int PATH_PERCENT = 0;

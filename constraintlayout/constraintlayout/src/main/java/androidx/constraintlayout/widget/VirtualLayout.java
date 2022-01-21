@@ -25,7 +25,7 @@ import android.view.ViewParent;
  *  <b>Added in 2.0</b>
  *  <p>
  *  </p>
- *  @suppress
+ *  @hide
  */
 public abstract class VirtualLayout extends ConstraintHelper {
     private boolean mApplyVisibilityOnAttach;
@@ -66,7 +66,7 @@ public abstract class VirtualLayout extends ConstraintHelper {
     }
 
     /**
-     * @suppress
+     * @hide
      */
     @Override
     public void onAttachedToWindow() {
@@ -99,7 +99,7 @@ public abstract class VirtualLayout extends ConstraintHelper {
     }
 
     /**
-     * @suppress
+     * @hide
      */
     @Override
     public void setVisibility(int visibility) {
@@ -108,7 +108,7 @@ public abstract class VirtualLayout extends ConstraintHelper {
     }
 
     /**
-     * @suppress
+     * @hide
      */
     @Override
     public void setElevation(float elevation) {
@@ -117,7 +117,7 @@ public abstract class VirtualLayout extends ConstraintHelper {
     }
 
     /**
-     * @suppress
+     * @hide
      * @param container
      */
     @Override
