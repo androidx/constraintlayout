@@ -118,7 +118,7 @@ public class Placeholder extends View {
    * Placeholder does not draw anything itself - therefore Paint and Rect allocations
    * are fine to suppress and ignore.
    *
-   * @suppress
+   * @hide
    * @param canvas
    */
   public void onDraw(Canvas canvas) {
@@ -147,7 +147,7 @@ public class Placeholder extends View {
   }
 
   /**
-   * @suppress
+   * @hide
    * @param container
    */
   public void updatePreLayout(ConstraintLayout container) {
@@ -194,7 +194,7 @@ public class Placeholder extends View {
   }
 
   /**
-   * @suppress
+   * @hide
    * @param container
    */
   public void updatePostMeasure(ConstraintLayout container) {

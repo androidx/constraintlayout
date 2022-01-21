@@ -34,7 +34,7 @@ import static androidx.constraintlayout.motion.widget.Key.UNSET;
  * This is used to capture and play back path of the layout.
  * It is used to set the bounds of the view (view.layout(l, t, r, b))
  *
- * @suppress
+ * @hide
  */
 class MotionPaths implements Comparable<MotionPaths> {
     public static final String TAG = "MotionPaths";

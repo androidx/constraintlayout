@@ -16,7 +16,7 @@
 package androidx.constraintlayout.motion.widget;
 
 /**
- * @suppress
+ * @hide
  */
 public interface CustomFloatAttributes {
     String[]getListOfAttributes();
