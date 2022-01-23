@@ -498,6 +498,15 @@ public class MotionScene {
         final static int TRANSITION_FLAG_INTRA_AUTO = 2;
         final static int TRANSITION_FLAG_INTERCEPT_TOUCH = 4;
 
+        public static final int INTERPOLATE_REFERENCE_ID = -2;
+        public static final int INTERPOLATE_SPLINE_STRING = -1;
+        public static final int INTERPOLATE_EASE_IN_OUT = 0;
+        public static final int INTERPOLATE_EASE_IN = 1;
+        public static final int INTERPOLATE_EASE_OUT = 2;
+        public static final int INTERPOLATE_LINEAR = 3;
+        public static final int INTERPOLATE_BOUNCE = 4;
+        public static final int INTERPOLATE_OVERSHOOT = 5;
+        public static final int INTERPOLATE_ANTICIPATE = 6;
         public void setOnSwipe(OnSwipe onSwipe) {
             mTouchResponse = (onSwipe == null) ? null : new TouchResponse(mMotionScene.mMotionLayout, onSwipe);
         }
@@ -917,6 +926,23 @@ public class MotionScene {
             fillFromAttributeList(motionScene, context, Xml.asAttributeSet(parser));
         }
 
+        /**
+         * Sets the interpolation used for this transition.
+         * <br>
+         * The call support standard types EASE_IN_OUT etc.:<br>
+         * setInterpolatorInfo(MotionScene.Transition.INTERPOLATE_EASE_IN_OUT, null, 0);
+         * setInterpolatorInfo(MotionScene.Transition.INTERPOLATE_OVERSHOOT, null, 0);
+         * <br>
+         * Strings such as "cubic(...)" , "spline(...)"<br>
+         * setInterpolatorInfo(MotionScene.Transition.INTERPOLATE_SPLINE_STRING, "cubic(1,0,0,1)", 0);
+         * <br>
+         * Android interpolators in res/anim : <br>
+         * setInterpolatorInfo(MotionScene.Transition.INTERPOLATE_REFERENCE_ID, null, R.anim....);
+         * <br>
+         * @param interpolator sets the type of interpolation (MotionScene.Transition.INTERPOLATE_*)
+         * @param interpolatorString sets a string based custom interpolation
+         * @param interpolatorID sets the id of a Android Transition
+         */
         public void setInterpolatorInfo(int interpolator, String interpolatorString, int interpolatorID) {
             mDefaultInterpolator = interpolator;
             mDefaultInterpolatorString = interpolatorString;
