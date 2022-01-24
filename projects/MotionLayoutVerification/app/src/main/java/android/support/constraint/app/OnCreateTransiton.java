@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.MotionLayout;
+import androidx.constraintlayout.motion.widget.MotionScene;
 import androidx.constraintlayout.motion.widget.TransitionAdapter;
 
 /**
@@ -46,9 +47,51 @@ public class OnCreateTransiton extends AppCompatActivity {
         mMotionLayout = Utils.findMotionLayout(this);
         mMotionLayout.transitionToState(R.id.end);
         mMotionLayout.setTransitionListener(new TransitionAdapter() {
+            int mode = 0;
             @Override
             public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
                 Log.v(TAG, Debug.getLoc()+" ");
+                MotionScene.Transition tra = mMotionLayout.getTransition(R.id.my_transition);
+                if (tra == null) {
+                    return;
+                }
+                mode++;
+                switch (mode) {
+                    case 0:
+                        tra.setInterpolatorInfo(MotionScene.Transition.INTERPOLATE_EASE_IN_OUT,null,0);
+                        break;
+                    case 1:
+                        tra.setInterpolatorInfo(MotionScene.Transition.INTERPOLATE_EASE_IN,null,0);
+                        break;
+                    case 2:
+                        tra.setInterpolatorInfo(MotionScene.Transition.INTERPOLATE_EASE_OUT,null,0);
+                        break;
+                    case 3:
+                        tra.setInterpolatorInfo(MotionScene.Transition.INTERPOLATE_LINEAR,null,0);
+                        break;
+                    case 4:
+                        tra.setInterpolatorInfo(MotionScene.Transition.INTERPOLATE_BOUNCE,null,0);
+                        break;
+                    case 5:
+                        tra.setInterpolatorInfo(MotionScene.Transition.INTERPOLATE_OVERSHOOT,null,0);
+                        break;
+                    case 6:
+                        tra.setInterpolatorInfo(MotionScene.Transition.INTERPOLATE_ANTICIPATE,null,0);
+                        break;
+                    case 7:
+                        tra.setInterpolatorInfo(MotionScene.Transition.INTERPOLATE_REFERENCE_ID,null,R.anim.my_custom);
+                        break;
+                    case 8:
+                        tra.setInterpolatorInfo(MotionScene.Transition.INTERPOLATE_SPLINE_STRING,"cubic(0.34, 1.56, 0.64, 1)",0);
+                        break;
+                    case 9:
+                        tra.setInterpolatorInfo(MotionScene.Transition.INTERPOLATE_SPLINE_STRING,"spline(0.0,0,0,1,1,1)",0);
+                        mode = -1;
+                        break;
+
+                }
+                Log.v(TAG,Debug.getLoc()+" mode = " +mode);
+
             }
 
             @Override
