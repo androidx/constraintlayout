@@ -20,9 +20,9 @@ import androidx.compose.runtime.Composer
 import com.example.constraintlayout.verification.CommonPreviewUtilsCopy.findComposableMethod
 import java.util.*
 
-class ComposableInvocator {
+class ComposableInvocator(packageString: String, fileName: String) {
     private val supportedPackages = listOf<String>(
-        "com.example.constraintlayout.verification.dsl"
+        packageString
     )
 
     /**
@@ -30,7 +30,7 @@ class ComposableInvocator {
      * Eg: for "test" it will automatically look for "test1", "test2", ...
      */
     private val supportedFileNames = listOf<String>(
-        "DslVerification"
+        fileName
     )
 
     /**
