@@ -40,6 +40,8 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.layout.*
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.*
+import androidx.compose.ui.util.fastAny
+import androidx.compose.ui.util.fastForEach
 import androidx.constraintlayout.core.motion.Motion
 import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.parser.CLParsingException
@@ -362,7 +364,7 @@ internal inline fun MotionLayoutCore(
     val measurer = remember { MotionMeasurer() }
     val scope = remember { MotionLayoutScope(measurer) }
     val progressState = remember { mutableStateOf(0f) }
-    SideEffect { progressState.value = progress }
+    progressState.value = progress
     val measurePolicy =
         rememberMotionLayoutMeasurePolicy(
             optimizationLevel,
@@ -382,6 +384,7 @@ internal inline fun MotionLayoutCore(
         if (!forcedScaleFactor.isNaN()) {
             mod = modifier.scale(measurer.forcedScaleFactor)
         }
+        // FIXME: Consider removing this Box wrapper, it breaks the expected behavior of the layout
         Box {
             @Suppress("DEPRECATION")
             (MultiMeasureLayout(
@@ -690,8 +693,10 @@ internal class MotionMeasurer : Measurer() {
     //  make sure that the constraints/dimensions returned are for the start/current ConstraintSet
 
     private fun measureConstraintSet(
-        optimizationLevel: Int, constraintSet: ConstraintSet,
-        measurables: List<Measurable>, constraints: Constraints
+        optimizationLevel: Int,
+        constraintSet: ConstraintSet,
+        measurables: List<Measurable>,
+        constraints: Constraints
     ) {
         state.reset()
         constraintSet.applyTo(state, measurables)
@@ -731,93 +736,140 @@ internal class MotionMeasurer : Measurer() {
     ): IntSize {
         this.density = measureScope
         this.measureScope = measureScope
-        // TODO: Add another check for whenever a measurable/child has changed size, that triggers a
-        //  measure of the constraintsets and interpolation
-        var layoutSizeChanged = false
-        if (constraints.hasFixedWidth
-            && !state.sameFixedWidth(constraints.maxWidth)
-        ) {
-            layoutSizeChanged = true
-        }
-        if (constraints.hasFixedHeight
-            && !state.sameFixedHeight(constraints.maxHeight)
-        ) {
-            layoutSizeChanged = true
-        }
+
+        val needsRemeasure = needsRemeasure(constraints)
+
         if (motionProgress != progress
             || (layoutInformationReceiver?.getForcedWidth() != Int.MIN_VALUE
                     && layoutInformationReceiver?.getForcedHeight() != Int.MIN_VALUE)
-            || this.transition.isEmpty()
-            || frameCache.isEmpty()
-            || layoutSizeChanged
+            || needsRemeasure
         ) {
-            motionProgress = progress
-            if (layoutSizeChanged || this.transition.isEmpty() || frameCache.isEmpty()) {
-                this.transition.clear()
-                resetMeasureState()
-                state.reset()
-                // Define the size of the ConstraintLayout.
-                state.width(
-                    if (constraints.hasFixedWidth) {
-                        Dimension.Fixed(constraints.maxWidth)
-                    } else {
-                        Dimension.Wrap().min(constraints.minWidth)
-                    }
-                )
-                state.height(
-                    if (constraints.hasFixedHeight) {
-                        Dimension.Fixed(constraints.maxHeight)
-                    } else {
-                        Dimension.Wrap().min(constraints.minHeight)
-                    }
-                )
-                // Build constraint set and apply it to the state.
-                state.rootIncomingConstraints = constraints
-                state.layoutDirection = layoutDirection
-
-                measureConstraintSet(
-                    optimizationLevel, constraintSetStart, measurables, constraints
-                )
-                this.transition.updateFrom(root, Transition.START)
-                measureConstraintSet(
-                    optimizationLevel, constraintSetEnd, measurables, constraints
-                )
-                this.transition.updateFrom(root, Transition.END)
-                if (transition != null) {
-                    transition.applyTo(this.transition, 0)
-                }
-            }
-            this.transition.interpolate(root.width, root.height, progress)
-            var index = 0
-            for (child in root.children) {
-                val measurable = child.companionWidget
-                if (measurable !is Measurable) continue
-                var interpolatedFrame = this.transition.getInterpolated(child)
-                if (interpolatedFrame == null) {
-                    continue
-                }
-                val placeable = placeables[measurable]
-                val currentWidth = placeable?.width
-                val currentHeight = placeable?.height
-                if (placeable == null
-                    || currentWidth != interpolatedFrame.width()
-                    || currentHeight != interpolatedFrame.height()
-                ) {
-                    measurable.measure(
-                        Constraints.fixed(interpolatedFrame.width(), interpolatedFrame.height())
-                    )
-                        .also {
-                            placeables[measurable] = it
-                        }
-                }
-                frameCache[measurable] = interpolatedFrame
-                index++
-            }
-            if (layoutInformationReceiver?.getLayoutInformationMode() == LayoutInfoFlags.BOUNDS) {
-                computeLayoutResult()
-            }
+            recalculateInterpolation(
+                constraints = constraints,
+                layoutDirection = layoutDirection,
+                constraintSetStart = constraintSetStart,
+                constraintSetEnd = constraintSetEnd,
+                transition = transition,
+                measurables = measurables,
+                optimizationLevel = optimizationLevel,
+                progress = progress,
+                remeasure = needsRemeasure
+            )
         }
         return IntSize(root.width, root.height)
+    }
+
+    /**
+     * Indicates if the layout requires measuring before computing the interpolation.
+     *
+     * This might happen if the size of MotionLayout or any of its children changed.
+     *
+     * MotionLayout size might change from its parent Layout, and in some cases the children size
+     * might change (eg: A Text layout has a longer string appended).
+     */
+    private fun needsRemeasure(constraints: Constraints): Boolean {
+        if (this.transition.isEmpty || frameCache.isEmpty()) {
+            // Nothing measured (by MotionMeasurer)
+            return true
+        }
+
+        if ((constraints.hasFixedHeight  && !state.sameFixedHeight(constraints.maxHeight))
+                    || (constraints.hasFixedWidth && !state.sameFixedWidth(constraints.maxWidth))) {
+            // Layout size changed
+            return true
+        }
+
+        return root.children.fastAny { child ->
+            // Check if measurables have changed their size
+            val measurable = (child.companionWidget as? Measurable) ?: return@fastAny false
+            val interpolatedFrame = this.transition.getInterpolated(child) ?: return@fastAny false
+            val placeable = placeables[measurable] ?: return@fastAny false
+            val currentWidth = placeable.width
+            val currentHeight = placeable.height
+
+            // Need to recalculate interpolation if the size of any element changed
+            return@fastAny currentWidth != interpolatedFrame.width()
+                    || currentHeight != interpolatedFrame.height()
+        }
+    }
+
+    /**
+     * Remeasures based on [constraintSetStart] and [constraintSetEnd] if needed.
+     *
+     * Runs the interpolation for the given [progress].
+     *
+     * Finally, updates the [Measurable]s dimension if they changed during interpolation.
+     */
+    private fun recalculateInterpolation(
+        constraints: Constraints,
+        layoutDirection: LayoutDirection,
+        constraintSetStart: ConstraintSet,
+        constraintSetEnd: ConstraintSet,
+        transition: androidx.constraintlayout.compose.Transition?,
+        measurables: List<Measurable>,
+        optimizationLevel: Int,
+        progress: Float,
+        remeasure: Boolean
+    ) {
+        motionProgress = progress
+        if (remeasure) {
+            this.transition.clear()
+            resetMeasureState()
+            state.reset()
+            // Define the size of the ConstraintLayout.
+            state.width(
+                if (constraints.hasFixedWidth) {
+                    Dimension.Fixed(constraints.maxWidth)
+                } else {
+                    Dimension.Wrap().min(constraints.minWidth)
+                }
+            )
+            state.height(
+                if (constraints.hasFixedHeight) {
+                    Dimension.Fixed(constraints.maxHeight)
+                } else {
+                    Dimension.Wrap().min(constraints.minHeight)
+                }
+            )
+            // Build constraint set and apply it to the state.
+            state.rootIncomingConstraints = constraints
+            state.layoutDirection = layoutDirection
+
+            measureConstraintSet(
+                optimizationLevel, constraintSetStart, measurables, constraints
+            )
+            this.transition.updateFrom(root, Transition.START)
+            measureConstraintSet(
+                optimizationLevel, constraintSetEnd, measurables, constraints
+            )
+            this.transition.updateFrom(root, Transition.END)
+            transition?.applyTo(this.transition, 0)
+        }
+
+        this.transition.interpolate(root.width, root.height, progress)
+
+        root.children.fastForEach { child ->
+            // Update measurables to the interpolated dimensions
+            val measurable = (child.companionWidget as? Measurable) ?: return@fastForEach
+            val interpolatedFrame = this.transition.getInterpolated(child) ?: return@fastForEach
+            val placeable = placeables[measurable]
+            val currentWidth = placeable?.width
+            val currentHeight = placeable?.height
+            if (placeable == null
+                || currentWidth != interpolatedFrame.width()
+                || currentHeight != interpolatedFrame.height()) {
+                measurable.measure(
+                    Constraints.fixed(interpolatedFrame.width(), interpolatedFrame.height())
+                ).also { newPlaceable ->
+                    placeables[measurable] = newPlaceable
+                }
+            }
+            frameCache[measurable] = interpolatedFrame
+        }
+
+        if (layoutInformationReceiver?.getLayoutInformationMode() == LayoutInfoFlags.BOUNDS) {
+            computeLayoutResult()
+        }
     }
 
     private fun encodeKeyFrames(

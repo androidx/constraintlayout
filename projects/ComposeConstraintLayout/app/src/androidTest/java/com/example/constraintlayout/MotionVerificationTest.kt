@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 The Android Open Source Project
+ * Copyright (C) 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,35 +16,32 @@
 
 package com.example.constraintlayout
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.currentComposer
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.hasParent
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.constraintlayout.compose.DesignInfoDataKey
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
+import com.example.constraintlayout.verification.ComposableInvocator
+import com.example.constraintlayout.verification.motiondsl.MotionTestInfoProviderKey
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import com.example.constraintlayout.verification.ComposableInvocator
 
-/**
- * Unit test to verify layout results.
- *
- * Currently only for Composables written with the Kotlin DSL. See [ComposableInvocator] for
- * details.
- *
- * Run tests using device: Pixel 3 on API 30.
- */
 @MediumTest
 @RunWith(AndroidJUnit4::class)
-class VerificationTest {
+class MotionVerificationTest {
     @get:Rule
     val rule = createComposeRule()
 
     val invocator = ComposableInvocator(
-        packageString = "com.example.constraintlayout.verification.dsl",
-        fileName = "DslVerification"
+        packageString = "com.example.constraintlayout.verification.motiondsl",
+        fileName = "MotionDslVerification"
     )
 
     @Test
@@ -52,6 +49,7 @@ class VerificationTest {
         // TODO: Test doesn't work very well with Json, some part in the helper parser is not
         //  stable, either from user-string to binary or binary to result-string
         val results = HashMap<String, String>()
+
         var composableIndex by mutableStateOf(0) // Observable state that we'll use to change the content in a recomposition
         var fqComposable = ""
         var baselineRaw = ""
@@ -60,7 +58,8 @@ class VerificationTest {
             fqComposable = invocator.invokeComposable(composableIndex, currentComposer)
             // We can only get the Resources in this context
             baselineRaw =
-                LocalContext.current.resources.openRawResource(R.raw.results).bufferedReader()
+                LocalContext.current.resources.openRawResource(R.raw.motion_results)
+                    .bufferedReader()
                     .readText()
         }
         for (i in 0..invocator.max) {
@@ -70,21 +69,50 @@ class VerificationTest {
             }
             // Wait for the content to settle
             rule.waitForIdle()
-            val nodeInteration = rule.onNode(SemanticsMatcher.keyIsDefined(DesignInfoDataKey))
-            nodeInteration.assertExists()
-            // Get the output from 'getDesignInfo'
-            // A json with the constraints and bounds of the widgets in the layout
-            val result =
-                nodeInteration.fetchSemanticsNode().config[DesignInfoDataKey].getDesignInfo(
-                    startX = 0,
-                    startY = 0,
-                    args = 0b10.toString() // Second bit from the right for Bounds only
-                )
 
+            val motionInfoNode =
+                rule.onNode(SemanticsMatcher.keyIsDefined(MotionTestInfoProviderKey))
+            motionInfoNode.assertExists()
+            val motionInfo = motionInfoNode.fetchSemanticsNode().config[MotionTestInfoProviderKey]
+            val boundsStart = fetchBounds()
+
+            motionInfo.setProgress(0.5f)
+            rule.waitForIdle()
+            motionInfo.recompose()
+            rule.waitForIdle()
+            val boundsMidPoint = fetchBounds()
+
+            motionInfo.setProgress(1.0f)
+            rule.waitForIdle()
+            val boundsEnd = fetchBounds()
+
+            assert(boundsStart.size == boundsMidPoint.size && boundsMidPoint.size == boundsEnd.size)
             // Save the result in a composable->result map
-            results[fqComposable] = result
+            results[fqComposable] =
+                MotionTestResult(boundsStart, boundsMidPoint, boundsEnd).printString()
         }
         val baselineResults = parseBaselineResults(baselineRaw)
         checkTest(baselineResults, results)
+    }
+
+    private fun fetchBounds(): List<Rect> {
+        return rule.onAllNodes(hasParent(SemanticsMatcher.keyIsDefined(MotionTestInfoProviderKey)))
+            .fetchSemanticsNodes().map { it.boundsInRoot }
+    }
+}
+
+private data class MotionTestResult(
+    val start: List<Rect>,
+    val midPoint: List<Rect>,
+    val end: List<Rect>
+) {
+    fun printString(): String {
+        val buffer = StringBuffer()
+        start.joinTo(buffer, ",") { it.toString() }
+        buffer.append(":")
+        midPoint.joinTo(buffer, ",") { it.toString() }
+        buffer.append(":")
+        end.joinTo(buffer, ",") { it.toString() }
+        return buffer.toString()
     }
 }

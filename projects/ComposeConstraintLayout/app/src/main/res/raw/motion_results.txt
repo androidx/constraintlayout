@@ -1,0 +1,1 @@
+com.example.constraintlayout.verification.motiondsl.MotionDslVerificationKt#Test1=Rect.fromLTRB(28.0, 2080.0, 161.0, 2132.0):Rect.fromLTRB(386.0, 1104.0, 694.0, 1156.0):Rect.fromLTRB(744.0, 127.0, 1052.0, 179.0)
