@@ -481,7 +481,8 @@ public class ConstraintWidget {
 
     // Contains the visibility status of the widget (VISIBLE, INVISIBLE, or GONE)
     private int mVisibility = VISIBLE;
-
+    // Contains the visibility status of the widget (VISIBLE, INVISIBLE, or GONE)
+    private boolean mAnimated = false;
     private String mDebugName = null;
     private String mType = null;
 
@@ -920,6 +921,24 @@ public class ConstraintWidget {
      */
     public int getVisibility() {
         return mVisibility;
+    }
+
+    /**
+     * Set if this widget is animated. Currently only affects gone behaviour
+     *
+     * @param animated if true the widget must be positioned correctly when not visible
+     */
+    public void setAnimated(boolean animated) {
+        mAnimated = animated;
+    }
+
+    /**
+     * Returns the current visibility value for this widget
+     *
+     * @return true if ConstraintWidget is used in Animation
+     */
+    public boolean isAnimated() {
+        return mAnimated;
     }
 
     /**
@@ -2417,7 +2436,7 @@ public class ConstraintWidget {
             }
         }
 
-        if (mVisibility == GONE && !hasDependencies()
+        if (mVisibility == GONE && !hasDependencies()  && !mAnimated
                 && !mIsInBarrier[HORIZONTAL] && !mIsInBarrier[VERTICAL]) {
             return;
         }
@@ -3426,6 +3445,7 @@ public class ConstraintWidget {
         mCompanionWidget = src.mCompanionWidget;
         mContainerItemSkip = src.mContainerItemSkip;
         mVisibility = src.mVisibility;
+        mAnimated = src.mAnimated;
         mDebugName = src.mDebugName;
         mType = src.mType;
 

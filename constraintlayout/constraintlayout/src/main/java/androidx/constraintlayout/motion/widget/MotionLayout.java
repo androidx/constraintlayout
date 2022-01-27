@@ -2606,6 +2606,7 @@ public class MotionLayout extends ConstraintLayout implements
             }
             //  build id widget map
             for (ConstraintWidget child : base.getChildren()) {
+                child.setAnimated(true);
                 View view = (View) child.getCompanionWidget();
                 mapIdToWidget.put(view.getId(), child);
             }
