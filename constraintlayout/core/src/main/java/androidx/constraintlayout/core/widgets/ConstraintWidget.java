@@ -481,7 +481,7 @@ public class ConstraintWidget {
 
     // Contains the visibility status of the widget (VISIBLE, INVISIBLE, or GONE)
     private int mVisibility = VISIBLE;
-    // Contains the visibility status of the widget (VISIBLE, INVISIBLE, or GONE)
+    // Contains if this widget is animated. Currently only affects gone behaviour
     private boolean mAnimated = false;
     private String mDebugName = null;
     private String mType = null;
@@ -933,7 +933,7 @@ public class ConstraintWidget {
     }
 
     /**
-     * Returns the current visibility value for this widget
+     * Returns if this widget is animated. Currently only affects gone behaviour
      *
      * @return true if ConstraintWidget is used in Animation
      */
