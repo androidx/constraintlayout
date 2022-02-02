@@ -2436,8 +2436,8 @@ public class ConstraintWidget {
             }
         }
 
-        if (mVisibility == GONE && !hasDependencies()  && !mAnimated
-                && !mIsInBarrier[HORIZONTAL] && !mIsInBarrier[VERTICAL]) {
+        if (!(mVisibility != GONE ||  mAnimated || hasDependencies() ||
+                mIsInBarrier[HORIZONTAL] ||  mIsInBarrier[VERTICAL])) {
             return;
         }
 
