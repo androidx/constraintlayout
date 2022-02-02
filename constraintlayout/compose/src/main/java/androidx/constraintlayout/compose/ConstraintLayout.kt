@@ -668,7 +668,7 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
     private var forcedHeight: Int = Int.MIN_VALUE
     private var forcedDrawDebug: MotionLayoutDebugFlags = MotionLayoutDebugFlags.UNKNOWN
     private var updateFlag: MutableState<Long>? = null
-    private var layoutInformationMode: LayoutInfoFlags = LayoutInfoFlags.BOUNDS
+    private var layoutInformationMode: LayoutInfoFlags = LayoutInfoFlags.NONE
     private var layoutInformation = ""
     private var last = System.nanoTime()
     private var debugName : String? = null
