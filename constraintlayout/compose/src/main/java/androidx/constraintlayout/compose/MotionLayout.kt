@@ -701,6 +701,7 @@ internal class MotionMeasurer : Measurer() {
         state.reset()
         constraintSet.applyTo(state, measurables)
         state.apply(root)
+        root.children.fastForEach { it.isAnimated = true }
         applyRootSize(constraints)
         root.updateHierarchy()
 
