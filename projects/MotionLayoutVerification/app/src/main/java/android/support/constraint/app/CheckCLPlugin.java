@@ -1,14 +1,12 @@
 package android.support.constraint.app;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.core.ConstraintDelta;
-import androidx.constraintlayout.motion.widget.Debug;
-import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 public class CheckCLPlugin extends AppCompatActivity {
@@ -28,11 +26,20 @@ public class CheckCLPlugin extends AppCompatActivity {
         mConstraintLayout  = Utils.findConstraintLayout(this);
         mConstraintLayout.addValueModifier(new ConstraintLayout.ValueModifier() {
 
-            public void update(int width, int height, ConstraintDelta delta) {
-                Log.v(TAG, Debug.getLoc()+ " "+width+", "+height);
-                delta.setValue(R.id.view, ConstraintDelta.LAYOUT_WIDTH, height/3);
-                delta.setValue(R.id.view, ConstraintDelta.START_MARGIN, -width/3);
+
+            public void update(int width, int height, int id, View view, ConstraintLayout.LayoutParams params) {
+                if (id == R.id.view) {
+                    params.width = width/3;
+                    params.leftMargin = -width/3;
+                    params.verticalBias = (System.currentTimeMillis()%10000)/10000f;
+                    view.post(()->view.requestLayout());
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        params.setMarginStart(-width/3);
+
+                    }
+                }
             }
+
         });
 
     }

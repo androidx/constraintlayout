@@ -28,19 +28,14 @@ import android.graphics.Paint;
 import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.core.ConstraintDelta;
 import androidx.constraintlayout.core.LinearSystem;
 import androidx.constraintlayout.core.Metrics;
-import androidx.constraintlayout.core.motion.utils.TypedBundle;
-import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 import androidx.constraintlayout.core.widgets.Guideline;
 import androidx.constraintlayout.core.widgets.Optimizer;
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure;
-import androidx.constraintlayout.utils.ParamDeltas;
-import androidx.core.view.ViewCompat;
 
 import android.util.AttributeSet;
 import android.util.Log;
@@ -49,7 +44,6 @@ import android.util.SparseIntArray;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -3683,19 +3677,15 @@ public class ConstraintLayout extends ViewGroup {
         return ret.toString();
     }
 
-
     public interface ValueModifier {
-        void update(int width, int height, ConstraintDelta delta);
+        void update(int width, int height, int id, View view, LayoutParams delta);
     }
 
     ArrayList<ValueModifier> modifiers;
-    ConstraintDelta constraintDelta;
-    ParamDeltas paramDeltas = new ParamDeltas();
 
     public void addValueModifier(ValueModifier modifier) {
         if (modifiers == null) {
             modifiers = new ArrayList<>();
-            constraintDelta = new ConstraintDelta();
         }
         modifiers.add(modifier);
     }
@@ -3711,17 +3701,15 @@ public class ConstraintLayout extends ViewGroup {
         if (modifiers == null) {
             return;
         }
-
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
         for (ValueModifier m : modifiers) {
-            m.update(width, height, constraintDelta);
-        }
-
-        for (ConstraintWidget widget : mLayoutWidget.getChildren()) {
-            View view = (View) widget.getCompanionWidget();
-            int id = view.getId();
-            paramDeltas.setParams(view, constraintDelta.getBundle(id));
+            for (ConstraintWidget widget : mLayoutWidget.getChildren()) {
+                View view = (View) widget.getCompanionWidget();
+                int id = view.getId();
+                LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
+                m.update(width, height, id,view, layoutParams);
+            }
         }
     }
 }
