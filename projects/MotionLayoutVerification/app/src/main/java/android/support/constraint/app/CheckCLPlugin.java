@@ -18,17 +18,18 @@ public class CheckCLPlugin extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle extra = getIntent().getExtras();
-        String prelayout = extra.getString(Utils.KEY);
-        setTitle(layout_name = prelayout);
+        String preLayout = extra.getString(Utils.KEY);
+        setTitle(layout_name = preLayout);
         Context ctx = getApplicationContext();
-        int id = ctx.getResources().getIdentifier(prelayout, "layout", ctx.getPackageName());
+        int id = ctx.getResources().getIdentifier(preLayout, "layout", ctx.getPackageName());
         setContentView(id);
         mConstraintLayout  = Utils.findConstraintLayout(this);
+        if (mConstraintLayout == null) return;
         mConstraintLayout.addValueModifier(new ConstraintLayout.ValueModifier() {
 
 
-            public void update(int width, int height, int id, View view, ConstraintLayout.LayoutParams params) {
-                if (id == R.id.view) {
+            public boolean update(int width, int height, int id, View view, ConstraintLayout.LayoutParams params) {
+                if (id == R.id.myView) {
                     params.width = width/3;
                     params.leftMargin = -width/3;
                     params.verticalBias = (System.currentTimeMillis()%10000)/10000f;
@@ -37,11 +38,23 @@ public class CheckCLPlugin extends AppCompatActivity {
                         params.setMarginStart(-width/3);
 
                     }
+                    return true;
                 }
+                return false;
             }
 
         });
 
+/*
+        Typically you would use the Lambda. The above is shown for clarity
+        mConstraintLayout.addValueModifier((width, height, id1, view, params) -> {
+            if (id1 == R.id.myView) {
+                params.width = width/3;
+                return true;
+            }
+            return false;
+        });
+*/
     }
 
     @Override

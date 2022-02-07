@@ -1641,7 +1641,7 @@ public class ConstraintLayout extends ViewGroup {
         if (DEBUG) {
             time = System.currentTimeMillis();
         }
-        dynamicUpdateConstraints( widthMeasureSpec,  heightMeasureSpec);
+        mDirtyHierarchy |= dynamicUpdateConstraints( widthMeasureSpec,  heightMeasureSpec);
 
         boolean sameSpecsAsPreviousMeasure = (mOnMeasureWidthMeasureSpec == widthMeasureSpec
                 && mOnMeasureHeightMeasureSpec == heightMeasureSpec);
@@ -3678,7 +3678,7 @@ public class ConstraintLayout extends ViewGroup {
     }
 
     public interface ValueModifier {
-        void update(int width, int height, int id, View view, LayoutParams delta);
+        boolean update(int width, int height, int id, View view, LayoutParams delta);
     }
 
     ArrayList<ValueModifier> modifiers;
@@ -3697,10 +3697,11 @@ public class ConstraintLayout extends ViewGroup {
         modifiers.remove(modifier);
     }
 
-    protected void dynamicUpdateConstraints(int widthMeasureSpec, int heightMeasureSpec) {
+    protected boolean dynamicUpdateConstraints(int widthMeasureSpec, int heightMeasureSpec) {
         if (modifiers == null) {
-            return;
+            return false;
         }
+        boolean dirty = false;
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
         for (ValueModifier m : modifiers) {
@@ -3708,8 +3709,9 @@ public class ConstraintLayout extends ViewGroup {
                 View view = (View) widget.getCompanionWidget();
                 int id = view.getId();
                 LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
-                m.update(width, height, id,view, layoutParams);
+                dirty |= m.update(width, height, id,view, layoutParams);
             }
         }
+        return dirty;
     }
 }
