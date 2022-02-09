@@ -3677,12 +3677,31 @@ public class ConstraintLayout extends ViewGroup {
         return ret.toString();
     }
 
+    /**
+     * This is the interface to a valued modifier.
+     * implement this and add it using addValueModifier
+     */
     public interface ValueModifier {
-        boolean update(int width, int height, int id, View view, LayoutParams delta);
+        /**
+         *  if needed in the implementation modify params and return true
+         * @param width of the ConstraintLayout in pixels
+         * @param height of the ConstraintLayout in pixels
+         * @param id The id of the view which
+         * @param view The View
+         * @param params The layout params of the view
+         * @return true if you modified the layout params
+         */
+        boolean update(int width, int height, int id, View view, LayoutParams params);
     }
 
-    ArrayList<ValueModifier> modifiers;
+    private ArrayList<ValueModifier> modifiers;
 
+    /**
+     * a ValueModify to the ConstraintLayout.
+     * This can be useful to add custom behavour to the ConstraintLayout or
+     * address limitation of the capabilities of Constraint Layout
+     * @param modifier
+     */
     public void addValueModifier(ValueModifier modifier) {
         if (modifiers == null) {
             modifiers = new ArrayList<>();
@@ -3690,6 +3709,11 @@ public class ConstraintLayout extends ViewGroup {
         modifiers.add(modifier);
     }
 
+    /**
+     * Remove a value modifier this can be useful if the modifier is used during in one state of the
+     * system.
+     * @param modifier The modifier to remove
+     */
     void removeValueModifier(ValueModifier modifier) {
         if (modifier == null) {
             return;
@@ -3697,6 +3721,12 @@ public class ConstraintLayout extends ViewGroup {
         modifiers.remove(modifier);
     }
 
+    /**
+     * This can be overridden to change the way Modifiers are used.
+     * @param widthMeasureSpec
+     * @param heightMeasureSpec
+     * @return
+     */
     protected boolean dynamicUpdateConstraints(int widthMeasureSpec, int heightMeasureSpec) {
         if (modifiers == null) {
             return false;
