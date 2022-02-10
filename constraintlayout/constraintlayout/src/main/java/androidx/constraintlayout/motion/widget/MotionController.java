@@ -1238,7 +1238,7 @@ public class MotionController {
     boolean interpolate(View child, float global_position, long time, KeyCache keyCache) {
         boolean timeAnimation = false;
         float position = getAdjustedPosition(global_position, null);
-        // This quantize the position into steps e.g 4 steps = 0-0.25,0.25-0.50 etc
+        // This quantize the position into steps e.g. 4 steps = 0-0.25,0.25-0.50 etc
         if (mQuantizeMotionSteps != UNSET) {
             float pin = position;
             float steps = 1.0f / mQuantizeMotionSteps; // the length of a step
@@ -1559,7 +1559,7 @@ public class MotionController {
 
     /**
      * Get the keyFrames for the view controlled by this MotionController
-     * the info data structure is of the the form
+     * the info data structure is of the form
      * 0 length if your are at index i the [i+len+1] is the next entry
      * 1 type  1=Attributes, 2=Position, 3=TimeCycle 4=Cycle 5=Trigger
      * 2 position

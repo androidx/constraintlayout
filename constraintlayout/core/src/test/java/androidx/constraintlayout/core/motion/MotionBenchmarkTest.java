@@ -84,7 +84,7 @@ public class MotionBenchmarkTest {
     }
 
     @Test
-    public void motionControler1000xSetup() {
+    public void motionController1000xSetup() {
         for (int i = 0; i < 1000; i++) {
             int left = setUpMotionController();
             assertEquals(40, left);
@@ -92,7 +92,7 @@ public class MotionBenchmarkTest {
     }
 
     @Test
-    public void motionControlerArc1000xSetup() {
+    public void motionControllerArc1000xSetup() {
         for (int i = 0; i < 1000; i++) {
             int left = setUpMotionArcController();
             assertEquals(60, left);
