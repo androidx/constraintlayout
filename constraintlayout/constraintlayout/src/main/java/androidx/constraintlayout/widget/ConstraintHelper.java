@@ -43,7 +43,7 @@ import java.util.HashMap;
  *     of referenced widgets. The difference between {@code ConstraintHelper} and {@code ViewGroup} is that
  *     multiple {@code ConstraintHelper} can reference the same widgets.
  * <p>
- *     Widgets are referenced by being added to a comma separated list of ids, e.g:
+ *     Widgets are referenced by being added to a comma separated list of ids, e.g.:
  *     <pre>
  *     {@code
  *         <androidx.constraintlayout.widget.Barrier

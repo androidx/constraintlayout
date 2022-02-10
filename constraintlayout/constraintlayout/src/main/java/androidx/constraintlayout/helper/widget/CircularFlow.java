@@ -33,7 +33,7 @@ import java.util.Arrays;
  *
  * Allows positioning of referenced widgets circular.
  *
- * The elements referenced are indicated via constraint_referenced_ids, as with other ContraintHelper implementations.
+ * The elements referenced are indicated via constraint_referenced_ids, as with other ConstraintHelper implementations.
  *
  * XML attributes that are needed:
  * <ul>
@@ -58,7 +58,7 @@ import java.util.Arrays;
  *
  * Recommendation - always set radius and angle for all views in <i>constraint_referenced_ids</i>
  *
- * */
+ **/
 
 public class CircularFlow extends VirtualLayout {
     private static final String TAG = "CircularFlow";

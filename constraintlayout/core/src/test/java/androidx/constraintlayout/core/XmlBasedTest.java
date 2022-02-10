@@ -36,7 +36,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
- * This test the the ConstraintWidget system buy loading XML that contain tags with there positions.
+ * This test the ConstraintWidget system buy loading XML that contain tags with there positions.
  * the xml files can be designed in android studio.
  */
 @RunWith(Parameterized.class)

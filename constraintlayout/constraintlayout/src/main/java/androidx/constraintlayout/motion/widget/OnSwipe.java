@@ -17,7 +17,7 @@
 package androidx.constraintlayout.motion.widget;
 
 /**
- * Container for holding swipe infomation
+ * Container for holding swipe information
  */
 public class OnSwipe {
     private int mDragDirection = 0;
@@ -125,7 +125,7 @@ public class OnSwipe {
     }
 
     /**
-     * The maximum velocity (Change in progress per second) animation can achive
+     * The maximum velocity (Change in progress per second) animation can achieve
      *
      * @param maxVelocity
      * @return

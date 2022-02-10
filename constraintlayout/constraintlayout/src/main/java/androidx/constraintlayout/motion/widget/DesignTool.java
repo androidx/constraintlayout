@@ -571,7 +571,7 @@ public class DesignTool implements ProxyInterface {
                 return -1;
             }
 
-            if (view != null) { // Cant find the view
+            if (view != null) { // Can't find the view
                 motionController = mMotionLayout.mFrameArrayList.get(view);
                 if (motionController == null) {
                     return -1;
@@ -627,7 +627,7 @@ public class DesignTool implements ProxyInterface {
         if (mMotionLayout.mScene == null) {
             return -1;
         }
-        if (view != null) { // Cant find the view
+        if (view != null) { // Can't find the view
             motionController = mMotionLayout.mFrameArrayList.get(view);
             if (motionController == null) {
                 return null;

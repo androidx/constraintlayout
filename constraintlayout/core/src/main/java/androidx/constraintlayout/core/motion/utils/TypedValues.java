@@ -624,7 +624,7 @@ public interface TypedValues {
         public static final String S_STRING = "string";
         public static final String S_BOOLEAN = "boolean";
         public static final String S_DIMENSION = "dimension";
-        public static final String S_REFERENCE = "refrence";
+        public static final String S_REFERENCE = "reference";
         public static final String[] KEY_WORDS = {
                 S_FLOAT,
                 S_COLOR,

@@ -27,7 +27,7 @@ import android.view.ViewParent;
  * <b>Added in 1.1</b>
  * <p>
  *     This class controls the visibility of a set of referenced widgets.
- *     Widgets are referenced by being added to a comma separated list of ids, e.g:
+ *     Widgets are referenced by being added to a comma separated list of ids, e.g.:
  *     <pre>
  *     {@code
  *          <androidx.constraintlayout.widget.Group

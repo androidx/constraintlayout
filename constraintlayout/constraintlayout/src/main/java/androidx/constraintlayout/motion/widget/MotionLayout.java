@@ -2040,32 +2040,32 @@ public class MotionLayout extends ConstraintLayout implements
      * Basic deceleration interpolator
      */
     class DecelerateInterpolator extends MotionInterpolator {
-        float initalV = 0;
+        float initialV = 0;
         float currentP = 0;
         float maxA;
 
         public void config(float velocity, float position, float maxAcceleration) {
-            initalV = velocity;
+            initialV = velocity;
             currentP = position;
             maxA = maxAcceleration;
         }
 
         @Override
         public float getInterpolation(float time) {
-            if (initalV > 0) {
-                if (initalV / maxA < time) {
-                    time = initalV / maxA;
+            if (initialV > 0) {
+                if (initialV / maxA < time) {
+                    time = initialV / maxA;
                 }
-                mLastVelocity = initalV - maxA * time;
-                float pos = initalV * time - (maxA * time * time) / 2;
+                mLastVelocity = initialV - maxA * time;
+                float pos = initialV * time - (maxA * time * time) / 2;
                 return pos + currentP;
             } else {
 
-                if (-initalV / maxA < time) {
-                    time = -initalV / maxA;
+                if (-initialV / maxA < time) {
+                    time = -initialV / maxA;
                 }
-                mLastVelocity = initalV + maxA * time;
-                float pos = initalV * time + (maxA * time * time) / 2;
+                mLastVelocity = initialV + maxA * time;
+                float pos = initialV * time + (maxA * time * time) / 2;
                 return pos + currentP;
             }
         }
