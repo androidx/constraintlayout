@@ -99,6 +99,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         activity_map.put("verification_800", CheckSetProgress.class);
         activity_map.put("basic_cl_001", CheckDumpJson.class);
         activity_map.put("basic_cl_002", CheckDumpJson.class);
+        activity_map.put("check_cl01", CheckCLPlugin.class);
 
 
         //  activity_map.put("verification_037", RotationToolbar.class);
@@ -110,8 +111,8 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     private static boolean REVERSE = false;
 
 
-    private static final String RUN_FIRST = "basic_cl_001";// (true) ? "verification_801" : "bug_005";
-    private final String LAYOUTS_MATCHES = "[bv].*_.*";
+    private static final String RUN_FIRST = "check_cl01";// (true) ? "verification_801" : "bug_005";
+    private final String LAYOUTS_MATCHES = "[bcv].*_.*";
 
     private static String SHOW_FIRST = "";
     MotionLayout mMotionLayout;

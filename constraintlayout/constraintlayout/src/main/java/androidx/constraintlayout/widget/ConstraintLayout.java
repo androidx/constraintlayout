@@ -36,7 +36,6 @@ import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 import androidx.constraintlayout.core.widgets.Guideline;
 import androidx.constraintlayout.core.widgets.Optimizer;
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure;
-import androidx.core.view.ViewCompat;
 
 import android.util.AttributeSet;
 import android.util.Log;
@@ -1642,6 +1641,7 @@ public class ConstraintLayout extends ViewGroup {
         if (DEBUG) {
             time = System.currentTimeMillis();
         }
+        mDirtyHierarchy |= dynamicUpdateConstraints( widthMeasureSpec,  heightMeasureSpec);
 
         boolean sameSpecsAsPreviousMeasure = (mOnMeasureWidthMeasureSpec == widthMeasureSpec
                 && mOnMeasureHeightMeasureSpec == heightMeasureSpec);
@@ -3675,5 +3675,73 @@ public class ConstraintLayout extends ViewGroup {
         }
         mLayoutWidget.getSceneString(ret);
         return ret.toString();
+    }
+
+    /**
+     * This is the interface to a valued modifier.
+     * implement this and add it using addValueModifier
+     */
+    public interface ValueModifier {
+        /**
+         *  if needed in the implementation modify params and return true
+         * @param width of the ConstraintLayout in pixels
+         * @param height of the ConstraintLayout in pixels
+         * @param id The id of the view which
+         * @param view The View
+         * @param params The layout params of the view
+         * @return true if you modified the layout params
+         */
+        boolean update(int width, int height, int id, View view, LayoutParams params);
+    }
+
+    private ArrayList<ValueModifier> modifiers;
+
+    /**
+     * a ValueModify to the ConstraintLayout.
+     * This can be useful to add custom behavour to the ConstraintLayout or
+     * address limitation of the capabilities of Constraint Layout
+     * @param modifier
+     */
+    public void addValueModifier(ValueModifier modifier) {
+        if (modifiers == null) {
+            modifiers = new ArrayList<>();
+        }
+        modifiers.add(modifier);
+    }
+
+    /**
+     * Remove a value modifier this can be useful if the modifier is used during in one state of the
+     * system.
+     * @param modifier The modifier to remove
+     */
+    void removeValueModifier(ValueModifier modifier) {
+        if (modifier == null) {
+            return;
+        }
+        modifiers.remove(modifier);
+    }
+
+    /**
+     * This can be overridden to change the way Modifiers are used.
+     * @param widthMeasureSpec
+     * @param heightMeasureSpec
+     * @return
+     */
+    protected boolean dynamicUpdateConstraints(int widthMeasureSpec, int heightMeasureSpec) {
+        if (modifiers == null) {
+            return false;
+        }
+        boolean dirty = false;
+        int width = MeasureSpec.getSize(widthMeasureSpec);
+        int height = MeasureSpec.getSize(heightMeasureSpec);
+        for (ValueModifier m : modifiers) {
+            for (ConstraintWidget widget : mLayoutWidget.getChildren()) {
+                View view = (View) widget.getCompanionWidget();
+                int id = view.getId();
+                LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
+                dirty |= m.update(width, height, id,view, layoutParams);
+            }
+        }
+        return dirty;
     }
 }
