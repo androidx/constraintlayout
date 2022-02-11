@@ -184,7 +184,7 @@ public class MotionTransitionTest {
         System.out.println(e1.top + " ," + e1.left + " ----  " + e1.widget.getTop() + " ," + e1.widget.getLeft());
         System.out.println(f1.top + " ," + f1.left);
 
-        assertEquals(801, f1.top);
+        assertEquals(736, f1.top);
         assertEquals(267, f1.left);
         System.out.println(s1.top + " ," + s1.left + " ----  " + s1.widget.getTop() + " ," + s1.widget.getLeft());
         System.out.println(e1.top + " ," + e1.left + " ----  " + e1.widget.getTop() + " ," + e1.widget.getLeft());
