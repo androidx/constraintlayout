@@ -27,39 +27,28 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.window.layout.DisplayFeature
 import androidx.window.layout.FoldingFeature
-import androidx.window.layout.WindowInfoRepository
-import androidx.window.layout.WindowInfoRepository.Companion.windowInfoRepository
+import androidx.window.layout.WindowInfoTracker
 import androidx.window.layout.WindowLayoutInfo
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-@ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity() {
     private lateinit var motionLayout: MotionLayout
-    lateinit var windowInfoRepository: WindowInfoRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        windowInfoRepository = windowInfoRepository()
-
         // Create a new coroutine since repeatOnLifecycle is a suspend function
         lifecycleScope.launch(Dispatchers.Main) {
-            // The block passed to repeatOnLifecycle is executed when the lifecycle
-            // is at least STARTED and is cancelled when the lifecycle is STOPPED.
-            // It automatically restarts the block when the lifecycle is STARTED again.
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                // Safely collects from windowInfoRepository when the lifecycle is STARTED
-                // and stops collection when the lifecycle is STOPPED.
-                windowInfoRepository.windowLayoutInfo
+                WindowInfoTracker.getOrCreate(this@MainActivity)
+                    .windowLayoutInfo(this@MainActivity)
                     .collect { newLayoutInfo ->
                         updateCurrentLayout(newLayoutInfo)
                     }
             }
         }
-
         setContentView(R.layout.activity_main2)
         motionLayout = findViewById<MotionLayout>(R.id.root)
     }
@@ -67,7 +56,7 @@ class MainActivity : AppCompatActivity() {
     /**
      * Returns the position of the fold relative to the view
      */
-    fun foldPosition(view: View, foldingFeature: FoldingFeature): Int {
+    private fun foldPosition(view: View, foldingFeature: FoldingFeature): Int {
         val splitRect = getFeatureBoundsInWindow(foldingFeature, view)
         splitRect?.let {
             return view.height.minus(splitRect.top)
@@ -80,7 +69,7 @@ class MainActivity : AppCompatActivity() {
      * Get the bounds of the display feature translated to the View's coordinate space and current
      * position in the window. This will also include view padding in the calculations.
      */
-    fun getFeatureBoundsInWindow(
+    private fun getFeatureBoundsInWindow(
         displayFeature: DisplayFeature,
         view: View,
         includePadding: Boolean = true
