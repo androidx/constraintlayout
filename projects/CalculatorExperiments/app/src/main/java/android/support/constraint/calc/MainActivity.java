@@ -21,6 +21,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.os.Bundle;
 
 import android.provider.MediaStore;
@@ -42,8 +43,13 @@ import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.constraintlayout.utils.widget.MotionButton;
 import androidx.constraintlayout.utils.widget.MotionLabel;
-import androidx.window.DisplayFeature;
-import androidx.window.WindowManager;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.util.Consumer;
+import androidx.window.java.layout.WindowInfoTrackerCallbackAdapter;
+import androidx.window.layout.DisplayFeature;
+import androidx.window.layout.FoldingFeature;
+import androidx.window.layout.WindowInfoTracker;
+import androidx.window.layout.WindowLayoutInfo;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -55,9 +61,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-
-import static androidx.window.DisplayFeature.TYPE_FOLD;
 
 /* This test the visibility*/
 public class MainActivity extends AppCompatActivity {
@@ -67,7 +70,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String SAVE_STATE = "SAVE_STATE";
     int mGraphMode = 0;
     MotionLayout mMotionLayout;
-    Fold mFold;
+    private WindowInfoTrackerCallbackAdapter windowInfoTracker;
+    private Boolean mIsPostureTabletop = false;
+    private final LayoutStateChangeCallback layoutStateChangeCallback =
+            new LayoutStateChangeCallback();
     CalcEngine mCalcEngine = new CalcEngine();
     MotionLabel[] mStack = new MotionLabel[4];
     boolean mIsInInverseMode = false;
@@ -95,29 +101,36 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        boolean isfold = Fold.isFoldable(this);
-        Bundle extra = getIntent().getExtras();
-        setContentView((isfold) ? R.layout.fold : R.layout.calc);
+
+        setContentView(R.layout.fold);
         mMotionLayout = findView(MotionLayout.class);
         mGraph2D = findViewById(R.id.graph);
         mGraph3D = findViewById(R.id.graph3d);
         getStack();
-        mFold = new Fold(mMotionLayout);
         restoreState();
         regester_for_clipboard();
+
+        windowInfoTracker = new WindowInfoTrackerCallbackAdapter(
+                WindowInfoTracker.getOrCreate(this));
     }
 
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (mFold.isPostureHalfOpen()) {
+        Log.v(TAG, Debug.getLoc() + " State = " + Debug.getName(getApplicationContext(), mGraphMode));
+        Log.v(TAG, Debug.getLoc() + " mMotionLayout = " + mMotionLayout);
 
-            Log.v(TAG, Debug.getLoc() + " State = " + Debug.getName(getApplicationContext(), mGraphMode));
-            Log.v(TAG, Debug.getLoc() + " mMotionLayout = " + mMotionLayout);
+        if (mIsPostureTabletop) {
             if (mGraphMode == R.id.mode2d) {
                 mMotionLayout.post(() -> mMotionLayout.transitionToState(R.id.mode2d_fold));
             } else if (mGraphMode == R.id.mode3d) {
                 mMotionLayout.post(() -> mMotionLayout.transitionToState(R.id.mode3d_fold));
+            }
+        } else {
+            if (mGraphMode == R.id.mode2d) {
+                mMotionLayout.post(() -> mMotionLayout.transitionToState(R.id.mode2d));
+            } else if (mGraphMode == R.id.mode3d) {
+                mMotionLayout.post(() -> mMotionLayout.transitionToState(R.id.mode3d));
             }
         }
     }
@@ -141,6 +154,19 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return (T) null;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        windowInfoTracker.addWindowLayoutInfoListener(
+                this, Runnable::run, layoutStateChangeCallback);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        windowInfoTracker.removeWindowLayoutInfoListener(layoutStateChangeCallback);
     }
 
     @Override
@@ -331,33 +357,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void regester_for_clipboard() {
-      if (EXPERIMENTAL) {
-          ClipboardManager clipBoard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-          try {
-              ClipData clipData = clipBoard.getPrimaryClip();
-              if (clipData != null && clipData.getItemCount() > 0) {
-                  ClipData.Item item = clipData.getItemAt(0);
-                  String text = item.getText().toString();
-                  CalcEngine.Symbolic op = mCalcEngine.deserializeString(text);
-                  Log.v(TAG, Debug.getLoc() + " \"" + op.toString() + "\"");
-              }
-          } catch (Exception ex) {
+        if (EXPERIMENTAL) {
+            ClipboardManager clipBoard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+            try {
+                ClipData clipData = clipBoard.getPrimaryClip();
+                if (clipData != null && clipData.getItemCount() > 0) {
+                    ClipData.Item item = clipData.getItemAt(0);
+                    String text = item.getText().toString();
+                    CalcEngine.Symbolic op = mCalcEngine.deserializeString(text);
+                    Log.v(TAG, Debug.getLoc() + " \"" + op.toString() + "\"");
+                }
+            } catch (Exception ex) {
 
-          }
+            }
 
-          clipBoard.addPrimaryClipChangedListener(() -> {
-              try {
-                  ClipData clipData = clipBoard.getPrimaryClip();
-                  ClipData.Item item = clipData.getItemAt(0);
-                  String text = item.getText().toString();
-                  CalcEngine.Symbolic op = mCalcEngine.deserializeString(text);
-                  Log.v(TAG, Debug.getLoc() + " \"" + op.toString() + "\"");
-                  Log.v(TAG, Debug.getLoc() + " \"" + text + "\"");
-              } catch (Exception ex) {
+            clipBoard.addPrimaryClipChangedListener(() -> {
+                try {
+                    ClipData clipData = clipBoard.getPrimaryClip();
+                    ClipData.Item item = clipData.getItemAt(0);
+                    String text = item.getText().toString();
+                    CalcEngine.Symbolic op = mCalcEngine.deserializeString(text);
+                    Log.v(TAG, Debug.getLoc() + " \"" + op.toString() + "\"");
+                    Log.v(TAG, Debug.getLoc() + " \"" + text + "\"");
+                } catch (Exception ex) {
 
-              }
-          });
-      }
+                }
+            });
+        }
     }
 
     private void serializeToCopyBuffer() {
@@ -417,7 +443,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void plot() {
-        boolean fold = mFold.isPostureHalfOpen();
+        boolean fold = mIsPostureTabletop;
         CalcEngine.Symbolic s = mCalcEngine.stack.getVar(0);
         if (s == null) {
             mShow3d = false;
@@ -493,4 +519,89 @@ public class MainActivity extends AppCompatActivity {
         getStack();
         setState(data);
     }
+
+    class LayoutStateChangeCallback implements Consumer<WindowLayoutInfo> {
+        @Override
+        public void accept(WindowLayoutInfo windowLayoutInfo) {
+            int fold = 0;
+            for (DisplayFeature feature : windowLayoutInfo.getDisplayFeatures()) {
+                FoldingFeature foldingFeature = (FoldingFeature) feature;
+                Rect splitRect = getFeatureBoundsInWindow(feature, mMotionLayout, true);
+                if (splitRect != null) {
+                    fold = mMotionLayout.getHeight() - splitRect.top;
+                }
+                if (isTableTopMode(foldingFeature)) {
+                    mIsPostureTabletop = true;
+                    Log.v(TAG, Debug.getLoc() + " POSTURE: TABLETOP " + fold);
+                    if (mMotionLayout.getCurrentState() == R.id.mode2d) {
+                        mMotionLayout.transitionToState(R.id.mode2d_fold);
+                    } else if (mMotionLayout.getCurrentState() == R.id.mode3d) {
+                        mMotionLayout.transitionToState(R.id.mode3d_fold);
+                    } else if (mMotionLayout.getCurrentState() == R.id.mode_no_graph) {
+                        mMotionLayout.transitionToState(R.id.mode_no_graph_fold);
+                    }
+                    ConstraintLayout.getSharedValues().fireNewValue(R.id.fold, fold);
+                } else {
+                    Log.v(TAG, Debug.getLoc() + " POSTURE NOT TABLETOP " + fold);
+                    mIsPostureTabletop = false;
+                    if (mMotionLayout.getCurrentState() == R.id.mode2d_fold) {
+                        mMotionLayout.transitionToState(R.id.mode2d);
+                    } else if (mMotionLayout.getCurrentState() == R.id.mode3d_fold) {
+                        mMotionLayout.transitionToState(R.id.mode3d);
+                    } else if (mMotionLayout.getCurrentState() == R.id.mode_no_graph_fold) {
+                        mMotionLayout.transitionToState(R.id.mode_no_graph);
+                    }
+                    ConstraintLayout.getSharedValues().fireNewValue(R.id.fold, 0);
+                }
+            }
+        }
+
+        Boolean isTableTopMode(FoldingFeature foldFeature) {
+            return foldFeature.getState() == FoldingFeature.State.HALF_OPENED &&
+                    foldFeature.getOrientation() == FoldingFeature.Orientation.HORIZONTAL;
+        }
+
+        /**
+         * Get the bounds of the display feature translated to the View's coordinate space and current
+         * position in the window. This will also include view padding in the calculations.
+         */
+        Rect getFeatureBoundsInWindow(
+                DisplayFeature displayFeature,
+                View view,
+                Boolean includePadding
+        ) {
+            // The the location of the view in window to be in the same coordinate space as the feature.
+            int[] viewLocationInWindow = new int[2];
+            view.getLocationInWindow(viewLocationInWindow);
+
+            // Intersect the feature rectangle in window with view rectangle to clip the bounds.
+            Rect viewRect = new Rect(
+                    viewLocationInWindow[0], viewLocationInWindow[1],
+                    viewLocationInWindow[0] + view.getWidth(), viewLocationInWindow[1] + view.getHeight()
+            );
+
+            // Include padding if needed
+            if (includePadding) {
+                viewRect.left += view.getPaddingLeft();
+                viewRect.top += view.getPaddingTop();
+                viewRect.right -= view.getPaddingRight();
+                viewRect.bottom -= view.getPaddingBottom();
+            }
+
+            Rect featureRectInView = new Rect(displayFeature.getBounds());
+            boolean intersects = featureRectInView.intersect(viewRect);
+
+            //Checks to see if the display feature overlaps with our view at all
+            if ((featureRectInView.width() == 0 && featureRectInView.height() == 0) ||
+                    !intersects) {
+                return null;
+            }
+
+            // Offset the feature coordinates to view coordinate space start point
+            featureRectInView.offset(-viewLocationInWindow[0], -viewLocationInWindow[1]);
+            return featureRectInView;
+        }
+    }
+
+
 }
