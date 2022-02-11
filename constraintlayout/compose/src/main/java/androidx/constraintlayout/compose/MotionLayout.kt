@@ -608,7 +608,7 @@ fun Transition(@Language("json5") content: String): androidx.constraintlayout.co
                 object : androidx.constraintlayout.compose.Transition {
                     override fun applyTo(transition: Transition, type: Int) {
                         try {
-                            TransitionParser.parse(parsed,transition);
+                            TransitionParser.parse(parsed, transition);
                         } catch (e: CLParsingException) {
                             System.err.println("Error parsing JSON $e")
                         }
