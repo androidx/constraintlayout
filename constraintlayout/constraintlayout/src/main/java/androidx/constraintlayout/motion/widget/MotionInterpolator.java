@@ -18,8 +18,21 @@ package androidx.constraintlayout.motion.widget;
 
 import android.view.animation.Interpolator;
 
+/**
+ * Defines an interpolator that can return velocity
+ */
 public abstract class MotionInterpolator implements Interpolator {
 
-    abstract public float getInterpolation(float v);
+    /**
+     * Gets the interpolated given the original interpolation
+     * @param v
+     * @return
+     */
+    public abstract float getInterpolation(float v);
+
+    /**
+     * Gets the velocity at the last interpolated point
+     * @return
+     */
     public abstract float getVelocity();
 }

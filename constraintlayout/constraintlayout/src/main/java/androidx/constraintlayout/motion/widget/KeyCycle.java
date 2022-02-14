@@ -18,6 +18,10 @@ package androidx.constraintlayout.motion.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.util.SparseIntArray;
+import android.util.TypedValue;
 
 import androidx.constraintlayout.core.motion.utils.Oscillator;
 import androidx.constraintlayout.core.motion.utils.SplineSet;
@@ -25,11 +29,6 @@ import androidx.constraintlayout.motion.utils.ViewOscillator;
 import androidx.constraintlayout.motion.utils.ViewSpline;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.R;
-
-import android.util.AttributeSet;
-import android.util.Log;
-import android.util.SparseIntArray;
-import android.util.TypedValue;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -81,6 +80,11 @@ public class KeyCycle extends Key {
         mCustomConstraints = new HashMap<>();
     }
 
+    /**
+     * Load the KeyCycle from xml attributes
+     * @param context
+     * @param attrs
+     */
     public void load(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.KeyCycle);
         Loader.read(this, a);
@@ -128,12 +132,17 @@ public class KeyCycle extends Key {
         }
     }
 
+    /**
+     * Add this key cycle to the keyCycle engines
+     * @param oscSet
+     */
     public void addCycleValues(HashMap<String, ViewOscillator> oscSet) {
         for (String key : oscSet.keySet()) {
             if (key.startsWith(Key.CUSTOM)) {
                 String customKey = key.substring(Key.CUSTOM.length() + 1);
                 ConstraintAttribute cValue = mCustomConstraints.get(customKey);
-                if (cValue == null || cValue.getType() != ConstraintAttribute.AttributeType.FLOAT_TYPE) {
+                if (cValue == null
+                        || cValue.getType() != ConstraintAttribute.AttributeType.FLOAT_TYPE) {
                     continue;
                 }
 
@@ -142,7 +151,9 @@ public class KeyCycle extends Key {
                     continue;
                 }
 
-                osc.setPoint(mFramePosition, mWaveShape, mCustomWaveShape, mWaveVariesBy, mWavePeriod, mWaveOffset, mWavePhase, cValue.getValueToInterpolate(), cValue);
+                osc.setPoint(mFramePosition, mWaveShape, mCustomWaveShape, mWaveVariesBy,
+                        mWavePeriod, mWaveOffset, mWavePhase,
+                        cValue.getValueToInterpolate(), cValue);
                 continue;
             }
             float value = getValue(key);
@@ -155,10 +166,16 @@ public class KeyCycle extends Key {
                 continue;
             }
 
-            osc.setPoint(mFramePosition, mWaveShape, mCustomWaveShape, mWaveVariesBy, mWavePeriod, mWaveOffset, mWavePhase, value);
+            osc.setPoint(mFramePosition, mWaveShape, mCustomWaveShape, mWaveVariesBy,
+                    mWavePeriod, mWaveOffset, mWavePhase, value);
         }
     }
 
+    /**
+     * get the value for a given attribute of the keyCycel
+     * @param key
+     * @return
+     */
     public float getValue(String key) {
         switch (key) {
             case Key.ALPHA:
@@ -305,8 +322,8 @@ public class KeyCycle extends Key {
         }
 
         private static void read(KeyCycle c, TypedArray a) {
-            final int N = a.getIndexCount();
-            for (int i = 0; i < N; i++) {
+            final int n = a.getIndexCount();
+            for (int i = 0; i < n; i++) {
                 int attr = a.getIndex(i);
                 switch (mAttrMap.get(attr)) {
                     case TARGET_ID:
@@ -396,7 +413,8 @@ public class KeyCycle extends Key {
                         c.mWavePhase = a.getFloat(attr, c.mWavePhase) / 360;
                         break;
                     default:
-                        Log.e(TAG, "unused attribute 0x" + Integer.toHexString(attr) + "   " + mAttrMap.get(attr));
+                        Log.e(TAG, "unused attribute 0x" + Integer.toHexString(attr) +
+                                "   " + mAttrMap.get(attr));
                         break;
                 }
             }
@@ -468,6 +486,11 @@ public class KeyCycle extends Key {
         }
     }
 
+    /**
+     * Copy the key
+     * @param src to be copied
+     * @return self
+     */
     public Key copy(Key src) {
         super.copy(src);
         KeyCycle k = (KeyCycle) src;
@@ -494,6 +517,10 @@ public class KeyCycle extends Key {
         return this;
     }
 
+    /**
+     * Clone this KeyAttributes
+     * @return
+     */
     public Key clone() {
         return new KeyCycle().copy(this);
     }

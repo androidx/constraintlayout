@@ -19,17 +19,16 @@ package androidx.constraintlayout.motion.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.RectF;
-
-import androidx.constraintlayout.motion.utils.ViewSpline;
-import androidx.constraintlayout.widget.ConstraintAttribute;
-import androidx.constraintlayout.widget.R;
-
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.constraintlayout.motion.utils.ViewSpline;
+import androidx.constraintlayout.widget.ConstraintAttribute;
+import androidx.constraintlayout.widget.R;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -44,8 +43,6 @@ import java.util.Locale;
  */
 
 public class KeyTrigger extends Key {
-    static final String NAME = "KeyTrigger";
-    private static final String TAG = "KeyTrigger";
     public static final String VIEW_TRANSITION_ON_CROSS = "viewTransitionOnCross";
     public static final String VIEW_TRANSITION_ON_POSITIVE_CROSS = "viewTransitionOnPositiveCross";
     public static final String VIEW_TRANSITION_ON_NEGATIVE_CROSS = "viewTransitionOnNegativeCross";
@@ -58,7 +55,16 @@ public class KeyTrigger extends Key {
     public static final String NEGATIVE_CROSS = "negativeCross";
     public static final String TRIGGER_RECEIVER = "triggerReceiver";
     public static final String CROSS = "CROSS";
-
+    public static final int KEY_TYPE = 5;
+    static final String NAME = "KeyTrigger";
+    private static final String TAG = "KeyTrigger";
+    float mTriggerSlack = .1f;
+    int mViewTransitionOnNegativeCross = UNSET;
+    int mViewTransitionOnPositiveCross = UNSET;
+    int mViewTransitionOnCross = UNSET;
+    RectF mCollisionRect = new RectF();
+    RectF mTargetRect = new RectF();
+    HashMap<String, Method> mMethodHashMap = new HashMap<>();
     private int mCurveFit = -1;
     private String mCross = null;
     private int mTriggerReceiver = UNSET;
@@ -67,21 +73,12 @@ public class KeyTrigger extends Key {
     private int mTriggerID = UNSET;
     private int mTriggerCollisionId = UNSET;
     private View mTriggerCollisionView = null;
-    float mTriggerSlack = .1f;
     private boolean mFireCrossReset = true;
     private boolean mFireNegativeReset = true;
     private boolean mFirePositiveReset = true;
     private float mFireThreshold = Float.NaN;
     private float mFireLastPos;
     private boolean mPostLayout = false;
-    int mViewTransitionOnNegativeCross = UNSET;
-    int mViewTransitionOnPositiveCross = UNSET;
-    int mViewTransitionOnCross = UNSET;
-
-    RectF mCollisionRect = new RectF();
-    RectF mTargetRect = new RectF();
-    HashMap<String, Method> mMethodHashMap = new HashMap<>();
-    public static final int KEY_TYPE = 5;
 
     {
         mType = KEY_TYPE;
@@ -164,6 +161,12 @@ public class KeyTrigger extends Key {
         }
     }
 
+    /**
+     * This fires the keyTriggers associated with this view at that position
+     *
+     * @param pos   the progress
+     * @param child the view
+     */
     public void conditionallyFire(float pos, View child) {
         boolean fireCross = false;
         boolean fireNegative = false;
@@ -171,7 +174,8 @@ public class KeyTrigger extends Key {
 
         if (mTriggerCollisionId != UNSET) {
             if (mTriggerCollisionView == null) {
-                mTriggerCollisionView = ((ViewGroup) child.getParent()).findViewById(mTriggerCollisionId);
+                mTriggerCollisionView =
+                        ((ViewGroup) child.getParent()).findViewById(mTriggerCollisionId);
             }
 
             setUpRect(mCollisionRect, mTriggerCollisionView, mPostLayout);
@@ -250,14 +254,16 @@ public class KeyTrigger extends Key {
         if (fireNegative || fireCross || firePositive) {
             ((MotionLayout) child.getParent()).fireTrigger(mTriggerID, firePositive, pos);
         }
-        View call = (mTriggerReceiver == UNSET) ? child : ((MotionLayout) child.getParent()).findViewById(mTriggerReceiver);
+        View call = (mTriggerReceiver == UNSET) ? child :
+                ((MotionLayout) child.getParent()).findViewById(mTriggerReceiver);
 
         if (fireNegative) {
             if (mNegativeCross != null) {
                 fire(mNegativeCross, call);
             }
             if (mViewTransitionOnNegativeCross != UNSET) {
-                ((MotionLayout) child.getParent()).viewTransition(mViewTransitionOnNegativeCross, call);
+                ((MotionLayout) child.getParent()).viewTransition(mViewTransitionOnNegativeCross,
+                        call);
             }
         }
         if (firePositive) {
@@ -265,7 +271,8 @@ public class KeyTrigger extends Key {
                 fire(mPositiveCross, call);
             }
             if (mViewTransitionOnPositiveCross != UNSET) {
-                ((MotionLayout) child.getParent()).viewTransition(mViewTransitionOnPositiveCross, call);
+                ((MotionLayout) child.getParent()).viewTransition(mViewTransitionOnPositiveCross,
+                        call);
             }
         }
         if (fireCross) {
@@ -329,6 +336,45 @@ public class KeyTrigger extends Key {
         }
     }
 
+    /**
+     * Copy the key
+     *
+     * @param src to be copied
+     * @return self
+     */
+    public Key copy(Key src) {
+        super.copy(src);
+        KeyTrigger k = (KeyTrigger) src;
+        mCurveFit = k.mCurveFit;
+        mCross = k.mCross;
+        mTriggerReceiver = k.mTriggerReceiver;
+        mNegativeCross = k.mNegativeCross;
+        mPositiveCross = k.mPositiveCross;
+        mTriggerID = k.mTriggerID;
+        mTriggerCollisionId = k.mTriggerCollisionId;
+        mTriggerCollisionView = k.mTriggerCollisionView;
+        mTriggerSlack = k.mTriggerSlack;
+        mFireCrossReset = k.mFireCrossReset;
+        mFireNegativeReset = k.mFireNegativeReset;
+        mFirePositiveReset = k.mFirePositiveReset;
+        mFireThreshold = k.mFireThreshold;
+        mFireLastPos = k.mFireLastPos;
+        mPostLayout = k.mPostLayout;
+        mCollisionRect = k.mCollisionRect;
+        mTargetRect = k.mTargetRect;
+        mMethodHashMap = k.mMethodHashMap;
+        return this;
+    }
+
+    /**
+     * Clone this KeyAttributes
+     *
+     * @return
+     */
+    public Key clone() {
+        return new KeyTrigger().copy(this);
+    }
+
     private static class Loader {
         private static final int NEGATIVE_CROSS = 1;
         private static final int POSITIVE_CROSS = 2;
@@ -358,13 +404,15 @@ public class KeyTrigger extends Key {
             mAttrMap.append(R.styleable.KeyTrigger_motion_postLayoutCollision, POST_LAYOUT);
             mAttrMap.append(R.styleable.KeyTrigger_triggerReceiver, TRIGGER_RECEIVER);
             mAttrMap.append(R.styleable.KeyTrigger_viewTransitionOnCross, VT_CROSS);
-            mAttrMap.append(R.styleable.KeyTrigger_viewTransitionOnNegativeCross, VT_NEGATIVE_CROSS);
-            mAttrMap.append(R.styleable.KeyTrigger_viewTransitionOnPositiveCross, VT_POSITIVE_CROSS);
+            mAttrMap.append(R.styleable.KeyTrigger_viewTransitionOnNegativeCross,
+                    VT_NEGATIVE_CROSS);
+            mAttrMap.append(R.styleable.KeyTrigger_viewTransitionOnPositiveCross,
+                    VT_POSITIVE_CROSS);
         }
 
         public static void read(KeyTrigger c, TypedArray a, Context context) {
-            final int N = a.getIndexCount();
-            for (int i = 0; i < N; i++) {
+            final int n = a.getIndexCount();
+            for (int i = 0; i < n; i++) {
                 int attr = a.getIndex(i);
                 switch (mAttrMap.get(attr)) {
                     case FRAME_POS:
@@ -410,47 +458,22 @@ public class KeyTrigger extends Key {
                         c.mTriggerReceiver = a.getResourceId(attr, c.mTriggerReceiver);
                         break;
                     case VT_NEGATIVE_CROSS:
-                        c.mViewTransitionOnNegativeCross = a.getResourceId(attr, c.mViewTransitionOnNegativeCross);
+                        c.mViewTransitionOnNegativeCross = a.getResourceId(attr,
+                                c.mViewTransitionOnNegativeCross);
                         break;
                     case VT_POSITIVE_CROSS:
-                        c.mViewTransitionOnPositiveCross = a.getResourceId(attr, c.mViewTransitionOnPositiveCross);
+                        c.mViewTransitionOnPositiveCross = a.getResourceId(attr,
+                                c.mViewTransitionOnPositiveCross);
                         break;
                     case VT_CROSS:
                         c.mViewTransitionOnCross = a.getResourceId(attr, c.mViewTransitionOnCross);
                         break;
                     default:
-                        Log.e(NAME, "unused attribute 0x" + Integer.toHexString(attr) + "   " + mAttrMap.get(attr));
+                        Log.e(NAME, "unused attribute 0x" + Integer.toHexString(attr) +
+                                "   " + mAttrMap.get(attr));
                         break;
                 }
             }
         }
-    }
-
-    public Key copy(Key src) {
-        super.copy(src);
-        KeyTrigger k = (KeyTrigger) src;
-        mCurveFit = k.mCurveFit;
-        mCross = k.mCross;
-        mTriggerReceiver = k.mTriggerReceiver;
-        mNegativeCross = k.mNegativeCross;
-        mPositiveCross = k.mPositiveCross;
-        mTriggerID = k.mTriggerID;
-        mTriggerCollisionId = k.mTriggerCollisionId;
-        mTriggerCollisionView = k.mTriggerCollisionView;
-        mTriggerSlack = k.mTriggerSlack;
-        mFireCrossReset = k.mFireCrossReset;
-        mFireNegativeReset = k.mFireNegativeReset;
-        mFirePositiveReset = k.mFirePositiveReset;
-        mFireThreshold = k.mFireThreshold;
-        mFireLastPos = k.mFireLastPos;
-        mPostLayout = k.mPostLayout;
-        mCollisionRect = k.mCollisionRect;
-        mTargetRect = k.mTargetRect;
-        mMethodHashMap = k.mMethodHashMap;
-        return this;
-    }
-
-    public Key clone() {
-        return new KeyTrigger().copy(this);
     }
 }

@@ -25,6 +25,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.R;
 import androidx.constraintlayout.widget.VirtualLayout;
+
 import java.util.Arrays;
 
 /**
@@ -33,14 +34,19 @@ import java.util.Arrays;
  *
  * Allows positioning of referenced widgets circular.
  *
- * The elements referenced are indicated via constraint_referenced_ids, as with other ConstraintHelper implementations.
+ * The elements referenced are indicated via constraint_referenced_ids, as with other
+ * ConstraintHelper implementations.
  *
  * XML attributes that are needed:
  * <ul>
- *     <li>constraint_referenced_ids = "view2, view3, view4,view5,view6". It receives id's of the views that will add the references.</li>
- *     <li>circularflow_viewCenter = "view1". It receives the id of the view of the center where the views received in constraint_referenced_ids will be referenced.</li>
- *     <li>circularflow_angles = "45,90,135,180,225". Receive the angles that you will assign to each view.</li>
- *     <li>circularflow_radiusInDP = "90,100,110,120,130". Receive the radios in DP that you will assign to each view.</li>
+ *     <li>constraint_referenced_ids = "view2, view3, view4,view5,view6".
+ *     It receives id's of the views that will add the references.</li>
+ *     <li>circularflow_viewCenter = "view1". It receives the id of the view of the center where
+ *     the views received in constraint_referenced_ids will be referenced.</li>
+ *     <li>circularflow_angles = "45,90,135,180,225". Receive the angles that you
+ *     will assign to each view.</li>
+ *     <li>circularflow_radiusInDP = "90,100,110,120,130". Receive the radios in DP that you
+ *     will assign to each view.</li>
  * </ul>
  *
  * Example in XML:
@@ -133,10 +139,11 @@ public class CircularFlow extends VirtualLayout {
     protected void init(AttributeSet attrs) {
         super.init(attrs);
         if (attrs != null) {
-            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ConstraintLayout_Layout);
-            final int N = a.getIndexCount();
+            TypedArray a = getContext().obtainStyledAttributes(attrs,
+                    R.styleable.ConstraintLayout_Layout);
+            final int n = a.getIndexCount();
 
-            for (int i = 0; i < N; i++) {
+            for (int i = 0; i < n; i++) {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.ConstraintLayout_Layout_circularflow_viewCenter) {
                     mViewCenter = a.getResourceId(attr, 0);
@@ -211,9 +218,11 @@ public class CircularFlow extends VirtualLayout {
                 mAngles = getAngles();
                 mAngles[mCountAngle - 1] = angle;
             } else {
-                Log.e("CircularFlow", "Added angle to view with id: " + mMap.get(view.getId()));
+                Log.e("CircularFlow",
+                        "Added angle to view with id: " + mMap.get(view.getId()));
             }
-            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) view.getLayoutParams();
+            ConstraintLayout.LayoutParams params =
+                    (ConstraintLayout.LayoutParams) view.getLayoutParams();
             params.circleAngle = angle;
             params.circleConstraint = mViewCenter;
             params.circleRadius = radius;
@@ -223,16 +232,18 @@ public class CircularFlow extends VirtualLayout {
     }
 
     /**
-     * Add a view to the CircularFlow. The referenced view need to be a child of the container parent.
+     * Add a view to the CircularFlow.
+     * The referenced view need to be a child of the container parent.
      * The view also need to have its id set in order to be added.
-     * The views previous need to have its radius and angle set in order to be added correctly a new view.
+     * The views previous need to have its radius and angle set in order
+     * to be added correctly a new view.
      * @param view
      * @param radius
      * @param angle
      * @return
      */
     public void addViewToCircularFlow(View view, int radius, float angle) {
-        if (containsId(view.getId())){
+        if (containsId(view.getId())) {
             return;
         }
         addView(view);
@@ -241,12 +252,14 @@ public class CircularFlow extends VirtualLayout {
         mAngles[mCountAngle - 1] = angle;
         mCountRadius++;
         mRadius = getRadius();
-        mRadius[mCountRadius - 1] = (int) (radius * myContext.getResources().getDisplayMetrics().density);
+        mRadius[mCountRadius - 1] =
+                (int) (radius * myContext.getResources().getDisplayMetrics().density);
         anchorReferences();
     }
 
     /**
-     * Update radius from a view in CircularFlow. The referenced view need to be a child of the container parent.
+     * Update radius from a view in CircularFlow.
+     * The referenced view need to be a child of the container parent.
      * The view also need to have its id set in order to be added.
      * @param view
      * @param radius
@@ -254,7 +267,8 @@ public class CircularFlow extends VirtualLayout {
      */
     public void updateRadius(View view, int radius) {
         if (!isUpdatable(view)) {
-            Log.e("CircularFlow", "It was not possible to update radius to view with id: " + view.getId());
+            Log.e("CircularFlow",
+                    "It was not possible to update radius to view with id: " + view.getId());
             return;
         }
         int indexView = indexFromId(view.getId());
@@ -267,7 +281,8 @@ public class CircularFlow extends VirtualLayout {
     }
 
     /**
-     * Update angle from a view in CircularFlow. The referenced view need to be a child of the container parent.
+     * Update angle from a view in CircularFlow.
+     * The referenced view need to be a child of the container parent.
      * The view also need to have its id set in order to be added.
      * @param view
      * @param angle
@@ -275,7 +290,8 @@ public class CircularFlow extends VirtualLayout {
      */
     public void updateAngle(View view, float angle) {
         if (!isUpdatable(view)) {
-            Log.e("CircularFlow", "It was not possible to update angle to view with id: " + view.getId());
+            Log.e("CircularFlow",
+                    "It was not possible to update angle to view with id: " + view.getId());
             return;
         }
         int indexView = indexFromId(view.getId());
@@ -288,7 +304,8 @@ public class CircularFlow extends VirtualLayout {
     }
 
     /**
-     * Update angle and radius from a view in CircularFlow. The referenced view need to be a child of the container parent.
+     * Update angle and radius from a view in CircularFlow.
+     * The referenced view need to be a child of the container parent.
      * The view also need to have its id set in order to be added.
      * @param view
      * @param radius
@@ -297,7 +314,8 @@ public class CircularFlow extends VirtualLayout {
      */
     public void updateReference(View view, int radius, float angle) {
         if (!isUpdatable(view)) {
-            Log.e("CircularFlow", "It was not possible to update radius and angle to view with id: " + view.getId());
+            Log.e("CircularFlow",
+                    "It was not possible to update radius and angle to view with id: " + view.getId());
             return;
         }
         int indexView = indexFromId(view.getId());
@@ -307,7 +325,8 @@ public class CircularFlow extends VirtualLayout {
         }
         if (getRadius().length  > indexView) {
             mRadius = getRadius();
-            mRadius[indexView] = (int) (radius * myContext.getResources().getDisplayMetrics().density);
+            mRadius[indexView] =
+                    (int) (radius * myContext.getResources().getDisplayMetrics().density);
         }
         anchorReferences();
     }
@@ -460,11 +479,12 @@ public class CircularFlow extends VirtualLayout {
             mRadius = Arrays.copyOf(mRadius, mRadius.length + 1);
         }
 
-        mRadius[mCountRadius] = (int) (Integer.parseInt(radiusString) * myContext.getResources().getDisplayMetrics().density);
+        mRadius[mCountRadius] = (int) (Integer.parseInt(radiusString) *
+                myContext.getResources().getDisplayMetrics().density);
         mCountRadius++;
     }
 
-    public static int[] removeElementFromArray(int[] array, int index) {
+    private static int[] removeElementFromArray(int[] array, int index) {
         int[] newArray = new int[array.length - 1];
 
         for (int i = 0, k = 0; i < array.length; i++) {
@@ -476,7 +496,7 @@ public class CircularFlow extends VirtualLayout {
         return newArray;
     }
 
-    public static float[] removeElementFromArray(float[] array, int index) {
+    private static float[] removeElementFromArray(float[] array, int index) {
         float[] newArray = new float[array.length - 1];
 
         for (int i = 0, k = 0; i < array.length; i++) {
@@ -488,8 +508,13 @@ public class CircularFlow extends VirtualLayout {
         return newArray;
     }
 
+    /**
+     * if view is part of circular flow
+     * @param view
+     * @return true if the flow contains the view
+     */
     public boolean isUpdatable(View view) {
-        if (!containsId(view.getId())){
+        if (!containsId(view.getId())) {
             return false;
         }
         int indexView = indexFromId(view.getId());

@@ -17,11 +17,10 @@
 package androidx.constraintlayout.motion.widget;
 
 import android.content.Context;
+import android.util.AttributeSet;
 
 import androidx.constraintlayout.motion.utils.ViewSpline;
 import androidx.constraintlayout.widget.ConstraintAttribute;
-
-import android.util.AttributeSet;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -122,7 +121,8 @@ public abstract class Key {
      * @hide
      */
     boolean toBoolean(Object value) {
-        return (value instanceof Boolean) ? (Boolean) value : Boolean.parseBoolean(value.toString());
+        return (value instanceof Boolean) ? (Boolean) value :
+                Boolean.parseBoolean(value.toString());
     }
 
     /**
@@ -134,6 +134,11 @@ public abstract class Key {
     public void setInterpolation(HashMap<String, Integer> interpolation) {
     }
 
+    /**
+     * Return a copy of this key
+     * @param src
+     * @return
+     */
     public Key copy(Key src) {
         mFramePosition = src.mFramePosition;
         mTargetId = src.mTargetId;
@@ -143,8 +148,17 @@ public abstract class Key {
         return this;
     }
 
-    abstract public Key clone();
+    /**
+     * Return a copy of this
+     * @return
+     */
+    public abstract Key clone();
 
+    /**
+     * set the id of the view
+     * @param id
+     * @return
+     */
     public Key setViewId(int id) {
         mTargetId = id;
         return this;

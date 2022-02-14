@@ -19,17 +19,16 @@ package androidx.constraintlayout.motion.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.RectF;
-
-import androidx.constraintlayout.motion.utils.ViewSpline;
-import androidx.constraintlayout.widget.R;
-import androidx.constraintlayout.core.motion.utils.Easing;
-
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.constraintlayout.core.motion.utils.Easing;
+import androidx.constraintlayout.motion.utils.ViewSpline;
+import androidx.constraintlayout.widget.R;
 
 import java.util.HashMap;
 
@@ -86,18 +85,20 @@ public class KeyPosition extends KeyPositionBase {
     }
 
     @Override
-    void calcPosition(int layoutWidth, int layoutHeight, float start_x, float start_y, float end_x, float end_y) {
+    void calcPosition(int layoutWidth, int layoutHeight,
+                      float startX, float startY,
+                      float endX, float endY) {
         switch (mPositionType) {
             case TYPE_SCREEN:
                 calcScreenPosition(layoutWidth, layoutHeight);
                 return;
 
             case TYPE_PATH:
-                calcPathPosition(start_x, start_y, end_x, end_y);
+                calcPathPosition(startX, startY, endX, endY);
                 return;
             case TYPE_CARTESIAN:
             default:
-                calcCartesianPosition(start_x, start_y, end_x, end_y);
+                calcCartesianPosition(startX, startY, endX, endY);
                 return;
         }
     }
@@ -110,14 +111,14 @@ public class KeyPosition extends KeyPositionBase {
         mCalculatedPositionY = (layoutHeight - viewHeight) * mPercentX + viewHeight / 2;
     }
 
-    private void calcPathPosition(float start_x, float start_y,
-                                  float end_x, float end_y) {
-        float pathVectorX = end_x - start_x;
-        float pathVectorY = end_y - start_y;
+    private void calcPathPosition(float startX, float startY,
+                                  float endX, float endY) {
+        float pathVectorX = endX - startX;
+        float pathVectorY = endY - startY;
         float perpendicularX = -pathVectorY;
         float perpendicularY = pathVectorX;
-        mCalculatedPositionX = start_x + pathVectorX * mPercentX + perpendicularX * mPercentY;
-        mCalculatedPositionY = start_y + pathVectorY * mPercentX + perpendicularY * mPercentY;
+        mCalculatedPositionX = startX + pathVectorX * mPercentX + perpendicularX * mPercentY;
+        mCalculatedPositionY = startY + pathVectorY * mPercentX + perpendicularY * mPercentY;
     }
 
     private void calcCartesianPosition(float start_x, float start_y,
@@ -143,7 +144,13 @@ public class KeyPosition extends KeyPositionBase {
     }
 
     @Override
-    public void positionAttributes(View view, RectF start, RectF end, float x, float y, String[] attribute, float[] value) {
+    public void positionAttributes(View view,
+                                   RectF start,
+                                   RectF end,
+                                   float x,
+                                   float y,
+                                   String[] attribute,
+                                   float[] value) {
         switch (mPositionType) {
 
             case TYPE_PATH:
@@ -160,7 +167,12 @@ public class KeyPosition extends KeyPositionBase {
         }
     }
 
-    void positionPathAttributes(RectF start, RectF end, float x, float y, String[] attribute, float[] value) {
+    void positionPathAttributes(RectF start,
+                                RectF end,
+                                float x,
+                                float y,
+                                String[] attribute,
+                                float[] value) {
         float startCenterX = start.centerX();
         float startCenterY = start.centerY();
         float endCenterX = end.centerX();
@@ -192,7 +204,13 @@ public class KeyPosition extends KeyPositionBase {
         }
     }
 
-    void positionScreenAttributes(View view, RectF start, RectF end, float x, float y, String[] attribute, float[] value) {
+    void positionScreenAttributes(View view,
+                                  RectF start,
+                                  RectF end,
+                                  float x,
+                                  float y,
+                                  String[] attribute,
+                                  float[] value) {
         float startCenterX = start.centerX();
         float startCenterY = start.centerY();
         float endCenterX = end.centerX();
@@ -219,7 +237,12 @@ public class KeyPosition extends KeyPositionBase {
         }
     }
 
-    void positionCartAttributes(RectF start, RectF end, float x, float y, String[] attribute, float[] value) {
+    void positionCartAttributes(RectF start,
+                                RectF end,
+                                float x,
+                                float y,
+                                String[] attribute,
+                                float[] value) {
         float startCenterX = start.centerX();
         float startCenterY = start.centerY();
         float endCenterX = end.centerX();
@@ -243,8 +266,15 @@ public class KeyPosition extends KeyPositionBase {
     }
 
     @Override
-    public boolean intersects(int layoutWidth, int layoutHeight, RectF start, RectF end, float x, float y) {
-        calcPosition(layoutWidth, layoutHeight, start.centerX(), start.centerY(), end.centerX(), end.centerY());
+    public boolean intersects(int layoutWidth,
+                              int layoutHeight,
+                              RectF start,
+                              RectF end,
+                              float x,
+                              float y) {
+        calcPosition(layoutWidth, layoutHeight,
+                start.centerX(), start.centerY(),
+                end.centerX(), end.centerY());
         if ((Math.abs(x - mCalculatedPositionX) < SELECTION_SLOPE)
                 && (Math.abs(y - mCalculatedPositionY) < SELECTION_SLOPE)) {
             return true;
@@ -284,8 +314,8 @@ public class KeyPosition extends KeyPositionBase {
         }
 
         private static void read(KeyPosition c, TypedArray a) {
-            final int N = a.getIndexCount();
-            for (int i = 0; i < N; i++) {
+            final int n = a.getIndexCount();
+            for (int i = 0; i < n; i++) {
                 int attr = a.getIndex(i);
                 switch (mAttrMap.get(attr)) {
                     case TARGET_ID:
@@ -341,7 +371,8 @@ public class KeyPosition extends KeyPositionBase {
                         break;
 
                     default:
-                        Log.e(TAG, "unused attribute 0x" + Integer.toHexString(attr) + "   " + mAttrMap.get(attr));
+                        Log.e(TAG, "unused attribute 0x" + Integer.toHexString(attr) +
+                                "   " + mAttrMap.get(attr));
                         break;
                 }
             }
@@ -378,6 +409,11 @@ public class KeyPosition extends KeyPositionBase {
         }
     }
 
+    /**
+     * Copy the key
+     * @param src to be copied
+     * @return self
+     */
     public Key copy(Key src) {
         super.copy(src);
         KeyPosition k = (KeyPosition) src;
@@ -395,6 +431,10 @@ public class KeyPosition extends KeyPositionBase {
         return this;
     }
 
+    /**
+     * Clone this KeyAttributes
+     * @return
+     */
     public Key clone() {
         return new KeyPosition().copy(this);
     }

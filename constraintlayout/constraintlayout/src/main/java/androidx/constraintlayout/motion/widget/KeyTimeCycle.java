@@ -18,17 +18,16 @@ package androidx.constraintlayout.motion.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
-
-import androidx.constraintlayout.core.motion.utils.Oscillator;
-import androidx.constraintlayout.motion.utils.ViewTimeCycle;
-import androidx.constraintlayout.motion.utils.ViewSpline;
-import androidx.constraintlayout.widget.ConstraintAttribute;
-import androidx.constraintlayout.widget.R;
-
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseIntArray;
 import android.util.TypedValue;
+
+import androidx.constraintlayout.core.motion.utils.Oscillator;
+import androidx.constraintlayout.motion.utils.ViewSpline;
+import androidx.constraintlayout.motion.utils.ViewTimeCycle;
+import androidx.constraintlayout.widget.ConstraintAttribute;
+import androidx.constraintlayout.widget.R;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -40,8 +39,6 @@ import java.util.HashSet;
  * @hide
  */
 public class KeyTimeCycle extends Key {
-    static final String NAME = "KeyTimeCycle";
-    private static final String TAG = NAME;
     public static final String WAVE_PERIOD = "wavePeriod";
     public static final String WAVE_OFFSET = "waveOffset";
     public static final String WAVE_SHAPE = "waveShape";
@@ -52,7 +49,9 @@ public class KeyTimeCycle extends Key {
     public static final int SHAPE_REVERSE_SAW_WAVE = Oscillator.REVERSE_SAW_WAVE;
     public static final int SHAPE_COS_WAVE = Oscillator.COS_WAVE;
     public static final int SHAPE_BOUNCE = Oscillator.BOUNCE;
-
+    public static final int KEY_TYPE = 3;
+    static final String NAME = "KeyTimeCycle";
+    private static final String TAG = NAME;
     private String mTransitionEasing;
     private int mCurveFit = -1;
     private float mAlpha = Float.NaN;
@@ -68,10 +67,9 @@ public class KeyTimeCycle extends Key {
     private float mTranslationZ = Float.NaN;
     private float mProgress = Float.NaN;
     private int mWaveShape = 0;
-    private String mCustomWaveShape = null; // TODO add support of custom wave shapes in KeyTimeCycle
+    private String mCustomWaveShape = null; // TODO add support of custom wave shapes
     private float mWavePeriod = Float.NaN;
     private float mWaveOffset = 0;
-    public static final int KEY_TYPE = 3;
 
     {
         mType = KEY_TYPE;
@@ -133,6 +131,11 @@ public class KeyTimeCycle extends Key {
         }
     }
 
+    /**
+     * put key and position into the interpolation map
+     *
+     * @param interpolation
+     */
     public void setInterpolation(HashMap<String, Integer> interpolation) {
         if (mCurveFit == -1) {
             return;
@@ -186,6 +189,11 @@ public class KeyTimeCycle extends Key {
         throw new IllegalArgumentException(" KeyTimeCycles do not support SplineSet");
     }
 
+    /**
+     * Add values to TimeCycle Map
+     *
+     * @param splines
+     */
     public void addTimeValues(HashMap<String, ViewTimeCycle> splines) {
         for (String s : splines.keySet()) {
             ViewTimeCycle splineSet = splines.get(s);
@@ -196,69 +204,82 @@ public class KeyTimeCycle extends Key {
                 String cKey = s.substring(Key.CUSTOM.length() + 1);
                 ConstraintAttribute cValue = mCustomConstraints.get(cKey);
                 if (cValue != null) {
-                    ((ViewTimeCycle.CustomSet) splineSet).setPoint(mFramePosition, cValue, mWavePeriod, mWaveShape, mWaveOffset);
+                    ((ViewTimeCycle.CustomSet) splineSet).setPoint(mFramePosition, cValue,
+                            mWavePeriod, mWaveShape, mWaveOffset);
                 }
                 continue;
             }
             switch (s) {
                 case Key.ALPHA:
                     if (!Float.isNaN(mAlpha)) {
-                        splineSet.setPoint(mFramePosition, mAlpha, mWavePeriod, mWaveShape, mWaveOffset);
+                        splineSet.setPoint(mFramePosition, mAlpha,
+                                mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
                 case Key.ELEVATION:
                     if (!Float.isNaN(mElevation)) {
-                        splineSet.setPoint(mFramePosition, mElevation, mWavePeriod, mWaveShape, mWaveOffset);
+                        splineSet.setPoint(mFramePosition, mElevation,
+                                mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
                 case Key.ROTATION:
                     if (!Float.isNaN(mRotation)) {
-                        splineSet.setPoint(mFramePosition, mRotation, mWavePeriod, mWaveShape, mWaveOffset);
+                        splineSet.setPoint(mFramePosition, mRotation,
+                                mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
                 case Key.ROTATION_X:
                     if (!Float.isNaN(mRotationX)) {
-                        splineSet.setPoint(mFramePosition, mRotationX, mWavePeriod, mWaveShape, mWaveOffset);
+                        splineSet.setPoint(mFramePosition, mRotationX,
+                                mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
                 case Key.ROTATION_Y:
                     if (!Float.isNaN(mRotationY)) {
-                        splineSet.setPoint(mFramePosition, mRotationY, mWavePeriod, mWaveShape, mWaveOffset);
+                        splineSet.setPoint(mFramePosition, mRotationY,
+                                mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
                 case Key.TRANSITION_PATH_ROTATE:
                     if (!Float.isNaN(mTransitionPathRotate)) {
-                        splineSet.setPoint(mFramePosition, mTransitionPathRotate, mWavePeriod, mWaveShape, mWaveOffset);
+                        splineSet.setPoint(mFramePosition, mTransitionPathRotate,
+                                mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
                 case Key.SCALE_X:
                     if (!Float.isNaN(mScaleX)) {
-                        splineSet.setPoint(mFramePosition, mScaleX, mWavePeriod, mWaveShape, mWaveOffset);
+                        splineSet.setPoint(mFramePosition, mScaleX,
+                                mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
                 case Key.SCALE_Y:
                     if (!Float.isNaN(mScaleY)) {
-                        splineSet.setPoint(mFramePosition, mScaleY, mWavePeriod, mWaveShape, mWaveOffset);
+                        splineSet.setPoint(mFramePosition, mScaleY,
+                                mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
                 case Key.TRANSLATION_X:
                     if (!Float.isNaN(mTranslationX)) {
-                        splineSet.setPoint(mFramePosition, mTranslationX, mWavePeriod, mWaveShape, mWaveOffset);
+                        splineSet.setPoint(mFramePosition, mTranslationX,
+                                mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
                 case Key.TRANSLATION_Y:
                     if (!Float.isNaN(mTranslationY)) {
-                        splineSet.setPoint(mFramePosition, mTranslationY, mWavePeriod, mWaveShape, mWaveOffset);
+                        splineSet.setPoint(mFramePosition, mTranslationY,
+                                mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
                 case Key.TRANSLATION_Z:
                     if (!Float.isNaN(mTranslationZ)) {
-                        splineSet.setPoint(mFramePosition, mTranslationZ, mWavePeriod, mWaveShape, mWaveOffset);
+                        splineSet.setPoint(mFramePosition, mTranslationZ,
+                                mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
                 case Key.PROGRESS:
                     if (!Float.isNaN(mProgress)) {
-                        splineSet.setPoint(mFramePosition, mProgress, mWavePeriod, mWaveShape, mWaveOffset);
+                        splineSet.setPoint(mFramePosition, mProgress,
+                                mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
                 default:
@@ -330,6 +351,44 @@ public class KeyTimeCycle extends Key {
 
     }
 
+    /**
+     * Copy the key
+     *
+     * @param src to be copied
+     * @return self
+     */
+    public Key copy(Key src) {
+        super.copy(src);
+        KeyTimeCycle k = (KeyTimeCycle) src;
+        mTransitionEasing = k.mTransitionEasing;
+        mCurveFit = k.mCurveFit;
+        mWaveShape = k.mWaveShape;
+        mWavePeriod = k.mWavePeriod;
+        mWaveOffset = k.mWaveOffset;
+        mProgress = k.mProgress;
+        mAlpha = k.mAlpha;
+        mElevation = k.mElevation;
+        mRotation = k.mRotation;
+        mTransitionPathRotate = k.mTransitionPathRotate;
+        mRotationX = k.mRotationX;
+        mRotationY = k.mRotationY;
+        mScaleX = k.mScaleX;
+        mScaleY = k.mScaleY;
+        mTranslationX = k.mTranslationX;
+        mTranslationY = k.mTranslationY;
+        mTranslationZ = k.mTranslationZ;
+        return this;
+    }
+
+    /**
+     * Clone this KeyAttributes
+     *
+     * @return
+     */
+    public Key clone() {
+        return new KeyTimeCycle().copy(this);
+    }
+
     private static class Loader {
         private static final int ANDROID_ALPHA = 1;
         private static final int ANDROID_ELEVATION = 2;
@@ -375,8 +434,8 @@ public class KeyTimeCycle extends Key {
         }
 
         public static void read(KeyTimeCycle c, TypedArray a) {
-            final int N = a.getIndexCount();
-            for (int i = 0; i < N; i++) {
+            final int n = a.getIndexCount();
+            for (int i = 0; i < n; i++) {
                 int attr = a.getIndex(i);
                 switch (mAttrMap.get(attr)) {
                     case TARGET_ID:
@@ -460,37 +519,11 @@ public class KeyTimeCycle extends Key {
                         c.mProgress = a.getFloat(attr, c.mProgress);
                         break;
                     default:
-                        Log.e(NAME, "unused attribute 0x" + Integer.toHexString(attr) + "   " + mAttrMap.get(attr));
+                        Log.e(NAME, "unused attribute 0x" + Integer.toHexString(attr) +
+                                "   " + mAttrMap.get(attr));
                         break;
                 }
             }
         }
-    }
-
-    public Key copy(Key src) {
-        super.copy(src);
-        KeyTimeCycle k = (KeyTimeCycle) src;
-        mTransitionEasing = k.mTransitionEasing;
-        mCurveFit = k.mCurveFit;
-        mWaveShape = k.mWaveShape;
-        mWavePeriod = k.mWavePeriod;
-        mWaveOffset = k.mWaveOffset;
-        mProgress = k.mProgress;
-        mAlpha = k.mAlpha;
-        mElevation = k.mElevation;
-        mRotation = k.mRotation;
-        mTransitionPathRotate = k.mTransitionPathRotate;
-        mRotationX = k.mRotationX;
-        mRotationY = k.mRotationY;
-        mScaleX = k.mScaleX;
-        mScaleY = k.mScaleY;
-        mTranslationX = k.mTranslationX;
-        mTranslationY = k.mTranslationY;
-        mTranslationZ = k.mTranslationZ;
-        return this;
-    }
-
-    public Key clone() {
-        return new KeyTimeCycle().copy(this);
     }
 }

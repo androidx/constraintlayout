@@ -46,18 +46,34 @@ public class StopLogic extends MotionInterpolator {
         return mEngine.debug(desc, time);
     }
 
+    /**
+     * Get the velocity at a point in time
+     * @param x
+     * @return
+     */
     public float getVelocity(float x) {
         return mEngine.getVelocity(x);
     }
 
-    public void config(float currentPos, float destination, float currentVelocity, float maxTime, float maxAcceleration, float maxVelocity) {
+    /**
+     * Configure the stop logic base on the paramenters
+     * @param currentPos   start position
+     * @param destination  the ending position
+     * @param currentVelocity  the starting velocity
+     * @param maxTime   The maximum time to take
+     * @param maxAcceleration the maximum acceleration to use
+     * @param maxVelocity the maximum velocity to use
+     */
+    public void config(float currentPos, float destination, float currentVelocity,
+                       float maxTime, float maxAcceleration, float maxVelocity) {
         mEngine = mStopLogicEngine;
         mStopLogicEngine.config(currentPos, destination, currentVelocity, maxTime, maxAcceleration, maxVelocity);
     }
 
     /**
      * This configure the stop logic to be a spring.
-     * Moving from currentPosition(P0) to destination with an initial velocity of currentVelocity (V0)
+     * Moving from currentPosition(P0)
+     * to destination with an initial velocity of currentVelocity (V0)
      * moving as if it has a mass (m) with spring constant stiffness(k), and friction(c)
      * It moves with the equation acceleration a = (-k.x-c.v)/m.
      * x = current position - destination
@@ -70,7 +86,7 @@ public class StopLogic extends MotionInterpolator {
      * @param stiffness the stiffness or spring constant (the force by which the spring pulls)
      * @param damping the stiffness or spring constant. (the resistance to the motion)
      * @param stopThreshold (When the max velocity of the movement is below this it stops)
-     * @param boundaryMode This will allow you to control if it overshoots or bounces when it hits 0 and 1
+     * @param boundaryMode This controls if it overshoots or bounces when it hits 0 and 1
      */
     public void springConfig(float currentPos, float destination, float currentVelocity,
                              float mass, float stiffness, float damping, float stopThreshold,
@@ -79,7 +95,8 @@ public class StopLogic extends MotionInterpolator {
             mSpringStopEngine = new SpringStopEngine();
         }
         mEngine = mSpringStopEngine;
-        mSpringStopEngine.springConfig(currentPos, destination, currentVelocity, mass, stiffness, damping, stopThreshold, boundaryMode);
+        mSpringStopEngine.springConfig(currentPos, destination, currentVelocity, mass, stiffness,
+                damping, stopThreshold, boundaryMode);
     }
 
     @Override

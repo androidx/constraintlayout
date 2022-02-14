@@ -104,8 +104,8 @@ public class Carousel extends MotionHelper {
     private void init(Context context, AttributeSet attrs) {
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Carousel);
-            final int N = a.getIndexCount();
-            for (int i = 0; i < N; i++) {
+            final int n = a.getIndexCount();
+            for (int i = 0; i < n; i++) {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.Carousel_carousel_firstView) {
                     firstViewReference = a.getResourceId(attr, firstViewReference);
@@ -185,6 +185,9 @@ public class Carousel extends MotionHelper {
         refresh();
     }
 
+    /**
+     * Rebuilds the scene
+     */
     public void refresh() {
         final int count = mList.size();
         for (int i = 0; i < count; i++) {
@@ -200,9 +203,13 @@ public class Carousel extends MotionHelper {
     }
 
     @Override
-    public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
+    public void onTransitionChange(MotionLayout motionLayout,
+                                   int startId,
+                                   int endId,
+                                   float progress) {
         if (DEBUG) {
-            System.out.println("onTransitionChange from " + startId + " to " + endId + " progress " + progress);
+            System.out.println("onTransitionChange from " + startId +
+                    " to " + endId + " progress " + progress);
         }
         mLastStartId = startId;
     }
@@ -270,7 +277,8 @@ public class Carousel extends MotionHelper {
             updateItems();
             mAdapter.onNewItem(mIndex);
             float velocity = mMotionLayout.getVelocity();
-            if (touchUpMode == TOUCH_UP_CARRY_ON && velocity > velocityThreshold && mIndex < mAdapter.count() - 1) {
+            if (touchUpMode == TOUCH_UP_CARRY_ON && velocity > velocityThreshold
+                    && mIndex < mAdapter.count() - 1) {
                 final float v = velocity * dampening;
                 if (mIndex == 0 && mPreviousIndex > mIndex) {
                     // don't touch animate when reaching the first item
@@ -283,7 +291,8 @@ public class Carousel extends MotionHelper {
                 mMotionLayout.post(new Runnable() {
                     @Override
                     public void run() {
-                        mMotionLayout.touchAnimateTo(MotionLayout.TOUCH_UP_DECELERATE_AND_COMPLETE, 1, v);
+                        mMotionLayout.touchAnimateTo(MotionLayout.TOUCH_UP_DECELERATE_AND_COMPLETE,
+                                1, v);
                     }
                 });
             }

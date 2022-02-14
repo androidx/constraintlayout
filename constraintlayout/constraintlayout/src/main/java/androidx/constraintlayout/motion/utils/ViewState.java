@@ -24,6 +24,10 @@ public class ViewState {
     public float rotation;
     public int left, top, right, bottom;
 
+    /**
+     * Get the parameters of the view
+     * @param v the view
+     */
     public void getState(View v) {
         left = v.getLeft();
         top = v.getTop();
@@ -32,10 +36,18 @@ public class ViewState {
         rotation = v.getRotation();
     }
 
+    /**
+     * The width of the view
+     * @return the width
+     */
     public int width() {
         return right - left;
     }
 
+    /**
+     * the height of the view
+     * @return the width
+     */
     public int height() {
         return bottom - top;
     }

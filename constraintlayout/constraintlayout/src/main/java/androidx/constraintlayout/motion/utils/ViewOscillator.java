@@ -36,8 +36,18 @@ import java.lang.reflect.Method;
 public abstract class ViewOscillator extends KeyCycleOscillator {
     private static final String TAG = "ViewOscillator";
 
+    /**
+     * Set the property of that view
+     * @param view
+     * @param t
+     */
     public abstract void setProperty(View view, float t);
 
+    /**
+     * Create a spline that manipulates a specific property of a view
+     * @param str the property to manipulate
+     * @return
+     */
     public static ViewOscillator makeSpline(String str) {
         if (str.startsWith(Key.CUSTOM)) {
             return new CustomSet();
@@ -118,6 +128,13 @@ public abstract class ViewOscillator extends KeyCycleOscillator {
         public void setProperty(View view, float t) {
         }
 
+        /**
+         *  use to modify the rotation relative to the current path
+         * @param view the view to modify
+         * @param t the point in time to manipulate
+         * @param dx of the path
+         * @param dy of the path
+         */
         public void setPathRotate(View view, float t, double dx, double dy) {
             view.setRotation(get(t) + (float) Math.toDegrees(Math.atan2(dy, dx)));
         }
@@ -161,7 +178,7 @@ public abstract class ViewOscillator extends KeyCycleOscillator {
     }
 
     static class CustomSet extends ViewOscillator {
-        float[] value = new float[1];
+        float[] mValue = new float[1];
         protected ConstraintAttribute mCustom;
 
         protected void setCustom(Object custom) {
@@ -170,8 +187,8 @@ public abstract class ViewOscillator extends KeyCycleOscillator {
 
         @Override
         public void setProperty(View view, float t) {
-            value[0] = get(t);
-            CustomSupport.setInterpolatedValue(mCustom,view, value);
+            mValue[0] = get(t);
+            CustomSupport.setInterpolatedValue(mCustom, view, mValue);
         }
     }
 

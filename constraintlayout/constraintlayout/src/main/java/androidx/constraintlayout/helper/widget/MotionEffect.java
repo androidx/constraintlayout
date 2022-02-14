@@ -46,7 +46,6 @@ import java.util.HashMap;
  *
  * By default, will pick the opposite of the dominant direction (e.g. elements /not/ moving
  * in the dominant direction will have the keyframes inserted).
- * 
  */
 public class MotionEffect extends MotionHelper {
     public static final String TAG = "FadeMove";
@@ -85,8 +84,8 @@ public class MotionEffect extends MotionHelper {
     private void init(Context context, AttributeSet attrs) {
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MotionEffect);
-            final int N = a.getIndexCount();
-            for (int i = 0; i < N; i++) {
+            final int n = a.getIndexCount();
+            for (int i = 0; i < n; i++) {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.MotionEffect_motionEffect_start) {
                     motionEffectStart = a.getInt(attr, motionEffectStart);
@@ -95,9 +94,11 @@ public class MotionEffect extends MotionHelper {
                     motionEffectEnd = a.getInt(attr, motionEffectEnd);
                     motionEffectEnd = Math.max(Math.min(motionEffectEnd, 99), 0);
                 } else if (attr == R.styleable.MotionEffect_motionEffect_translationX) {
-                    motionEffectTranslationX = a.getDimensionPixelOffset(attr, motionEffectTranslationX);
+                    motionEffectTranslationX =
+                            a.getDimensionPixelOffset(attr, motionEffectTranslationX);
                 } else if (attr == R.styleable.MotionEffect_motionEffect_translationY) {
-                    motionEffectTranslationY = a.getDimensionPixelOffset(attr, motionEffectTranslationY);
+                    motionEffectTranslationY =
+                            a.getDimensionPixelOffset(attr, motionEffectTranslationY);
                 } else if (attr == R.styleable.MotionEffect_motionEffect_alpha) {
                     motionEffectAlpha = a.getFloat(attr, motionEffectAlpha);
                 } else if (attr == R.styleable.MotionEffect_motionEffect_move) {
@@ -125,7 +126,9 @@ public class MotionEffect extends MotionHelper {
     }
 
     @Override
-    public void onPreSetup(MotionLayout motionLayout, HashMap<View, MotionController> controllerMap) {
+    public void onPreSetup(MotionLayout motionLayout,
+                           HashMap<View,
+            MotionController> controllerMap) {
         View[] views = getViews((ConstraintLayout) this.getParent());
 
         if (views == null) {
@@ -187,10 +190,18 @@ public class MotionEffect extends MotionHelper {
                 float y = mc.getFinalY() - mc.getStartY();
                 // look at the direction for this view, and increment the opposite direction
                 // (as that's the one we will use to apply the fade)
-                if (y < 0) { direction[SOUTH]++; }
-                if (y > 0) { direction[NORTH]++; }
-                if (x > 0) { direction[WEST]++; }
-                if (x < 0) { direction[EAST]++; }
+                if (y < 0) {
+                    direction[SOUTH]++;
+                }
+                if (y > 0) {
+                    direction[NORTH]++;
+                }
+                if (x > 0) {
+                    direction[WEST]++;
+                }
+                if (x < 0) {
+                    direction[EAST]++;
+                }
             }
             int max = direction[0];
             moveDirection = 0;
@@ -207,8 +218,8 @@ public class MotionEffect extends MotionHelper {
             if (mc == null) {
                 continue;
             }
-            float x = mc.getFinalX()-mc.getStartX();
-            float y =  mc.getFinalY()-mc.getStartY();
+            float x = mc.getFinalX() - mc.getStartX();
+            float y = mc.getFinalY() - mc.getStartY();
             boolean apply = true;
 
             // Any view that is moving in the given direction will have the fade applied
@@ -247,7 +258,7 @@ public class MotionEffect extends MotionHelper {
                         mc.addKey(translationY2);
                     }
                 } else {
-                  motionLayout.applyViewTransition(viewTransitionId, mc);
+                    motionLayout.applyViewTransition(viewTransitionId, mc);
                 }
             }
         }
