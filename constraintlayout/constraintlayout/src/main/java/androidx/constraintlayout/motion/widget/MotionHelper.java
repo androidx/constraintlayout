@@ -18,14 +18,14 @@ package androidx.constraintlayout.motion.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import androidx.constraintlayout.widget.ConstraintHelper;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.R;
-
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.constraintlayout.widget.ConstraintHelper;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.R;
 
 import java.util.HashMap;
 
@@ -60,8 +60,8 @@ public class MotionHelper extends ConstraintHelper implements MotionHelperInterf
         super.init(attrs);
         if (attrs != null) {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.MotionHelper);
-            final int N = a.getIndexCount();
-            for (int i = 0; i < N; i++) {
+            final int n = a.getIndexCount();
+            for (int i = 0; i < n; i++) {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.MotionHelper_onShow) {
                     mUseOnShow = a.getBoolean(attr, mUseOnShow);
@@ -102,9 +102,9 @@ public class MotionHelper extends ConstraintHelper implements MotionHelperInterf
     public void setProgress(float progress) {
         mProgress = progress;
         if (this.mCount > 0) {
-            this.views = this.getViews((ConstraintLayout)this.getParent());
+            this.views = this.getViews((ConstraintLayout) this.getParent());
 
-            for(int i = 0; i < this.mCount; ++i) {
+            for (int i = 0; i < this.mCount; ++i) {
                 View view = this.views[i];
                 this.setProgress(view, progress);
             }
@@ -137,16 +137,21 @@ public class MotionHelper extends ConstraintHelper implements MotionHelperInterf
     }
 
     @Override
-    public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
-     }
+    public void onTransitionChange(MotionLayout motionLayout,
+                                   int startId,
+                                   int endId,
+                                   float progress) {
+    }
 
     @Override
     public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
     }
 
     @Override
-    public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
-
+    public void onTransitionTrigger(MotionLayout motionLayout,
+                                    int triggerId,
+                                    boolean positive,
+                                    float progress) {
     }
 
     @Override
@@ -169,7 +174,8 @@ public class MotionHelper extends ConstraintHelper implements MotionHelperInterf
     }
 
     @Override
-    public void onPreSetup(MotionLayout motionLayout, HashMap<View, MotionController> controllerMap) {
+    public void onPreSetup(MotionLayout motionLayout,
+                           HashMap<View, MotionController> controllerMap) {
 
     }
 

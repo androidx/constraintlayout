@@ -16,6 +16,8 @@
 
 package androidx.constraintlayout.motion.widget;
 
+import static androidx.constraintlayout.motion.widget.Key.UNSET;
+
 import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -51,8 +53,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import static androidx.constraintlayout.motion.widget.Key.UNSET;
-
 /**
  * This contains the picture of a view through the a transition and is used to interpolate it
  * During an transition every view has a MotionController which drives its position.
@@ -69,13 +69,13 @@ public class MotionController {
     public static final int HORIZONTAL_PATH_Y = 3;
     public static final int VERTICAL_PATH_X = 4;
     public static final int VERTICAL_PATH_Y = 5;
-    public final static int DRAW_PATH_NONE = 0;
-    public final static int DRAW_PATH_BASIC = 1;
-    public final static int DRAW_PATH_RELATIVE = 2;
-    public final static int DRAW_PATH_CARTESIAN = 3;
-    public final static int DRAW_PATH_AS_CONFIGURED = 4;
-    public final static int DRAW_PATH_RECTANGLE = 5;
-    public final static int DRAW_PATH_SCREEN = 6;
+    public static final int DRAW_PATH_NONE = 0;
+    public static final int DRAW_PATH_BASIC = 1;
+    public static final int DRAW_PATH_RELATIVE = 2;
+    public static final int DRAW_PATH_CARTESIAN = 3;
+    public static final int DRAW_PATH_AS_CONFIGURED = 4;
+    public static final int DRAW_PATH_RECTANGLE = 5;
+    public static final int DRAW_PATH_SCREEN = 6;
 
 
     public static final int ROTATION_RIGHT = 1;
@@ -96,7 +96,7 @@ public class MotionController {
     private MotionConstrainedPoint mStartPoint = new MotionConstrainedPoint();
     private MotionConstrainedPoint mEndPoint = new MotionConstrainedPoint();
 
-    private CurveFit[] mSpline; // spline 0 is the generic one that process all the standard attributes
+    private CurveFit[] mSpline; // spline 0 is the one that process all the standard attributes
     private CurveFit mArcSpline;
     float mMotionStagger = Float.NaN;
     float mStaggerOffset = 0;
@@ -109,18 +109,18 @@ public class MotionController {
     private String[] mAttributeNames;  // the names of the custom attributes
     private int[] mAttributeInterpolatorCount; // how many interpolators for each custom attribute
     private int MAX_DIMENSION = 4;
-    private float mValuesBuff[] = new float[MAX_DIMENSION];
+    private float []mValuesBuff = new float[MAX_DIMENSION];
     private ArrayList<MotionPaths> mMotionPaths = new ArrayList<>();
     private float[] mVelocity = new float[1]; // used as a temp buffer to return values
 
     private ArrayList<Key> mKeyList = new ArrayList<>(); // List of key frame items
-    private HashMap<String, ViewTimeCycle> mTimeCycleAttributesMap; // splines to calculate for use TimeCycles
+    private HashMap<String, ViewTimeCycle> mTimeCycleAttributesMap; // splines for use TimeCycles
     private HashMap<String, ViewSpline> mAttributesMap; // splines to calculate values of attributes
     private HashMap<String, ViewOscillator> mCycleMap; // splines to calculate values of attributes
     private KeyTrigger[] mKeyTriggers; // splines to calculate values of attributes
     private int mPathMotionArc = UNSET;
-    private int mTransformPivotTarget = UNSET; // if set, pivot point is maintained as the other object
-    private View mTransformPivotView = null; // if set, pivot point is maintained as the other object
+    private int mTransformPivotTarget = UNSET; // if set, pivot point is set to the other object
+    private View mTransformPivotView = null; // if set, pivot point is set to the other object
     private int mQuantizeMotionSteps = UNSET;
     private float mQuantizeMotionPhase = Float.NaN;
     private Interpolator mQuantizeMotionInterpolator = null;
@@ -238,19 +238,37 @@ public class MotionController {
         return mStartMotionPath.mAnimateRelativeTo;
     }
 
+    /**
+     * This ties one motionController to another to allow relative pathes
+     * @param motionController
+     */
     public void setupRelative(MotionController motionController) {
         mStartMotionPath.setupRelative(motionController, motionController.mStartMotionPath);
         mEndMotionPath.setupRelative(motionController, motionController.mEndMotionPath);
     }
 
+    /**
+     * Get the center X of the motion at the current progress
+     * @return
+     */
     public float getCenterX() {
         return mCurrentCenterX;
     }
 
+    /**
+     * Get the center Y of the motion at the current progress
+     * @return
+     */
     public float getCenterY() {
         return mCurrentCenterY;
     }
 
+    /**
+     * Get a center and velocities at the position p
+     * @param p
+     * @param pos
+     * @param vel
+     */
     public void getCenter(double p, float[] pos, float[] vel) {
         double[] position = new double[4];
         double[] velocity = new double[4];
@@ -330,7 +348,8 @@ public class MotionController {
                     mArcSpline.getPos(p, mInterpolateData);
                 }
             }
-            mStartMotionPath.getCenter(p, mInterpolateVariables, mInterpolateData, points, i * 2);
+            mStartMotionPath.getCenter(p, mInterpolateVariables, mInterpolateData,
+                    points, i * 2);
 
             if (osc_x != null) {
                 points[i * 2] += osc_x.get(position);
@@ -482,7 +501,8 @@ public class MotionController {
         end.bottom = end.top + mEndMotionPath.height;
         for (Key key : mKeyList) {
             if (key instanceof KeyPositionBase) {
-                if (((KeyPositionBase) key).intersects(layoutWidth, layoutHeight, start, end, x, y)) {
+                if (((KeyPositionBase) key).intersects(layoutWidth, layoutHeight,
+                        start, end, x, y)) {
                     return (KeyPositionBase) key;
                 }
             }
@@ -503,7 +523,8 @@ public class MotionController {
 
             for (int i = 0; i < time.length; i++) {
                 mSpline[0].getPos(time[i], mInterpolateData);
-                mStartMotionPath.getCenter(time[i], mInterpolateVariables, mInterpolateData, keyFrames, count);
+                mStartMotionPath.getCenter(time[i], mInterpolateVariables, mInterpolateData,
+                        keyFrames, count);
                 count += 2;
             }
             return count / 2;
@@ -524,7 +545,8 @@ public class MotionController {
 
             for (int i = 0; i < time.length; i++) {
                 mSpline[0].getPos(time[i], mInterpolateData);
-                mStartMotionPath.getBounds(mInterpolateVariables, mInterpolateData, keyBounds, count);
+                mStartMotionPath.getBounds(mInterpolateVariables, mInterpolateData,
+                        keyBounds, count);
                 count += 2;
             }
             return count / 2;
@@ -615,6 +637,10 @@ public class MotionController {
         }
     }
 
+    /**
+     * Add a key to the MotionController
+     * @param key
+     */
     public void addKey(Key key) {
         mKeyList.add(key);
         if (DEBUG) {
@@ -630,7 +656,10 @@ public class MotionController {
      * Called after all TimePoints & Cycles have been added;
      * Spines are evaluated
      */
-    public void setup(int parentWidth, int parentHeight, float transitionDuration, long currentTime) {
+    public void setup(int parentWidth,
+                      int parentHeight,
+                      float transitionDuration,
+                      long currentTime) {
         HashSet<String> springAttributes = new HashSet<>(); // attributes we need to interpolate
         HashSet<String> timeCycleAttributes = new HashSet<>(); // attributes we need to interpolate
         HashSet<String> splineAttributes = new HashSet<>(); // attributes we need to interpolate
@@ -655,13 +684,15 @@ public class MotionController {
         if (DEBUG) {
             HashSet<String> attr = new HashSet<>();
             mStartPoint.different(mEndPoint, attr);
-            Log.v(TAG, ">>>>>>>>>>>>>>> MotionConstrainedPoint found " + Arrays.toString(attr.toArray()));
+            Log.v(TAG, ">>>>>>>>>>>>>>> MotionConstrainedPoint found "
+                    + Arrays.toString(attr.toArray()));
         }
         if (mKeyList != null) {
             for (Key key : mKeyList) {
                 if (key instanceof KeyPosition) {
                     KeyPosition keyPath = (KeyPosition) key;
-                    insertKey(new MotionPaths(parentWidth, parentHeight, keyPath, mStartMotionPath, mEndMotionPath));
+                    insertKey(new MotionPaths(parentWidth, parentHeight, keyPath,
+                            mStartMotionPath, mEndMotionPath));
                     if (keyPath.mCurveFit != UNSET) {
                         mCurveFitType = keyPath.mCurveFit;
                     }
@@ -689,24 +720,24 @@ public class MotionController {
 
         if (DEBUG) {
             if (!cycleAttributes.isEmpty()) {
-                Log.v(TAG, ">>>>>>>>>>>>>>>>  found cycleA" +
-                        Debug.getName(mView) + " cycles     " +
-                        Arrays.toString(cycleAttributes.toArray()));
+                Log.v(TAG, ">>>>>>>>>>>>>>>>  found cycleA"
+                        + Debug.getName(mView) + " cycles     "
+                        + Arrays.toString(cycleAttributes.toArray()));
             }
             if (!splineAttributes.isEmpty()) {
-                Log.v(TAG, ">>>>>>>>>>>>>>>>  found spline " +
-                        Debug.getName(mView) + " attrs      " +
-                        Arrays.toString(splineAttributes.toArray()));
+                Log.v(TAG, ">>>>>>>>>>>>>>>>  found spline "
+                        + Debug.getName(mView) + " attrs      "
+                        + Arrays.toString(splineAttributes.toArray()));
             }
             if (!timeCycleAttributes.isEmpty()) {
-                Log.v(TAG, ">>>>>>>>>>>>>>>>  found timeCycle " +
-                        Debug.getName(mView) + " attrs      " +
-                        Arrays.toString(timeCycleAttributes.toArray()));
+                Log.v(TAG, ">>>>>>>>>>>>>>>>  found timeCycle "
+                        + Debug.getName(mView) + " attrs      "
+                        + Arrays.toString(timeCycleAttributes.toArray()));
             }
             if (!springAttributes.isEmpty()) {
-                Log.v(TAG, ">>>>>>>>>>>>>>>>  found springs " +
-                        Debug.getName(mView) + " attrs      " +
-                        Arrays.toString(springAttributes.toArray()));
+                Log.v(TAG, ">>>>>>>>>>>>>>>>  found springs "
+                        + Debug.getName(mView) + " attrs      "
+                        + Arrays.toString(springAttributes.toArray()));
             }
 
         }
@@ -723,7 +754,8 @@ public class MotionController {
                         if (key.mCustomConstraints == null) {
                             continue;
                         }
-                        ConstraintAttribute customAttribute = key.mCustomConstraints.get(customAttributeName);
+                        ConstraintAttribute customAttribute
+                                = key.mCustomConstraints.get(customAttributeName);
                         if (customAttribute != null) {
                             attrList.append(key.mFramePosition, customAttribute);
                         }
@@ -781,7 +813,8 @@ public class MotionController {
                         if (key.mCustomConstraints == null) {
                             continue;
                         }
-                        ConstraintAttribute customAttribute = key.mCustomConstraints.get(customAttributeName);
+                        ConstraintAttribute customAttribute
+                                = key.mCustomConstraints.get(customAttributeName);
                         if (customAttribute != null) {
                             attrList.append(key.mFramePosition, customAttribute);
                         }
@@ -833,8 +866,9 @@ public class MotionController {
         HashSet<String> attributeNameSet = new HashSet<>();
         for (String s : mEndMotionPath.attributes.keySet()) {
             if (mStartMotionPath.attributes.containsKey(s)) {
-                if (!splineAttributes.contains("CUSTOM," + s))
+                if (!splineAttributes.contains("CUSTOM," + s)) {
                     attributeNameSet.add(s);
+                }
             }
         }
 
@@ -873,8 +907,9 @@ public class MotionController {
 
         count = 0;
         for (int i = 1; i < mask.length; i++) {
-            if (mask[i])
+            if (mask[i]) {
                 mInterpolateVariables[count++] = i;
+            }
         }
 
         double[][] splineData = new double[points.length][mInterpolateVariables.length];
@@ -906,7 +941,8 @@ public class MotionController {
                 if (points[j].hasCustomData(name)) {
                     if (splinePoints == null) {
                         timePoints = new double[points.length];
-                        splinePoints = new double[points.length][points[j].getCustomDataCount(name)];
+                        splinePoints =
+                                new double[points.length][points[j].getCustomDataCount(name)];
                     }
                     timePoints[pointCount] = points[j].time;
                     points[j].getCustomData(name, splinePoints[pointCount], 0);
@@ -964,10 +1000,12 @@ public class MotionController {
         }
 
         if (DEBUG) {
-            Log.v(TAG, "Animation of splineAttributes " + Arrays.toString(splineAttributes.toArray()));
+            Log.v(TAG, "Animation of splineAttributes "
+                    + Arrays.toString(splineAttributes.toArray()));
             Log.v(TAG, "Animation of cycle " + Arrays.toString(mCycleMap.keySet().toArray()));
             if (mAttributesMap != null) {
-                Log.v(TAG, " splines = " + Arrays.toString(mAttributesMap.keySet().toArray()));
+                Log.v(TAG, " splines = "
+                        + Arrays.toString(mAttributesMap.keySet().toArray()));
                 for (String s : mAttributesMap.keySet()) {
                     Log.v(TAG, s + " = " + mAttributesMap.get(s));
                 }
@@ -989,7 +1027,8 @@ public class MotionController {
     }
 
     private void readView(MotionPaths motionPaths) {
-        motionPaths.setBounds((int) mView.getX(), (int) mView.getY(), mView.getWidth(), mView.getHeight());
+        motionPaths.setBounds((int) mView.getX(), (int) mView.getY(),
+                mView.getWidth(), mView.getHeight());
     }
 
     public void setView(View view) {
@@ -1001,6 +1040,10 @@ public class MotionController {
         }
     }
 
+    /**
+     * Get the view that is being controlled
+     * @return
+     */
     public View getView() {
         return mView;
     }
@@ -1012,6 +1055,14 @@ public class MotionController {
         mStartPoint.setState(v);
     }
 
+    /**
+     * configure the position of the view
+     * @param rect
+     * @param v
+     * @param rotation
+     * @param preWidth
+     * @param preHeight
+     */
     public void setStartState(ViewState rect, View v, int rotation, int preWidth, int preHeight) {
         mStartMotionPath.time = 0;
         mStartMotionPath.position = 0;
@@ -1111,7 +1162,10 @@ public class MotionController {
     private static final int INTERPOLATOR_REFERENCE_ID = -2;
     private static final int INTERPOLATOR_UNDEFINED = -3;
 
-    private static Interpolator getInterpolator(Context context, int type, String interpolatorString, int id) {
+    private static Interpolator getInterpolator(Context context,
+                                                int type,
+                                                String interpolatorString,
+                                                int id) {
         switch (type) {
             case SPLINE_STRING:
                 final Easing easing = Easing.getInterpolator(interpolatorString);
@@ -1218,26 +1272,27 @@ public class MotionController {
     }
 
     void endTrigger(boolean start) {
-        if ("button".equals(Debug.getName(mView)))
+        if ("button".equals(Debug.getName(mView))) {
             if (mKeyTriggers != null) {
                 for (int i = 0; i < mKeyTriggers.length; i++) {
                     mKeyTriggers[i].conditionallyFire(start ? -100 : 100, mView);
                 }
             }
+        }
     }
 
     /**
      * The main driver of interpolation
      *
      * @param child
-     * @param global_position
+     * @param globalPosition
      * @param time
      * @param keyCache
      * @return do you need to keep animating
      */
-    boolean interpolate(View child, float global_position, long time, KeyCache keyCache) {
+    boolean interpolate(View child, float globalPosition, long time, KeyCache keyCache) {
         boolean timeAnimation = false;
-        float position = getAdjustedPosition(global_position, null);
+        float position = getAdjustedPosition(globalPosition, null);
         // This quantize the position into steps e.g. 4 steps = 0-0.25,0.25-0.50 etc
         if (mQuantizeMotionSteps != UNSET) {
             float pin = position;
@@ -1283,7 +1338,9 @@ public class MotionController {
             }
 
             if (!mNoMovement) {
-                mStartMotionPath.setView(position, child, mInterpolateVariables, mInterpolateData, mInterpolateVelocity, null, mForceMeasure);
+                mStartMotionPath.setView(position, child,
+                        mInterpolateVariables, mInterpolateData, mInterpolateVelocity,
+                        null, mForceMeasure);
                 mForceMeasure = false;
             }
             if (mTransformPivotTarget != UNSET) {
@@ -1292,9 +1349,12 @@ public class MotionController {
                     mTransformPivotView = layout.findViewById(mTransformPivotTarget);
                 }
                 if (mTransformPivotView != null) {
-                    float cy = (mTransformPivotView.getTop() + mTransformPivotView.getBottom()) / 2.0f;
-                    float cx = (mTransformPivotView.getLeft() + mTransformPivotView.getRight()) / 2.0f;
-                    if (child.getRight() - child.getLeft() > 0 && child.getBottom() - child.getTop() > 0) {
+                    float cy = (mTransformPivotView.getTop()
+                            + mTransformPivotView.getBottom()) / 2.0f;
+                    float cx = (mTransformPivotView.getLeft()
+                            + mTransformPivotView.getRight()) / 2.0f;
+                    if (child.getRight() - child.getLeft() > 0
+                            && child.getBottom() - child.getTop() > 0) {
                         float px = (cx - child.getLeft());
                         float py = (cy - child.getTop());
                         child.setPivotX(px);
@@ -1305,9 +1365,10 @@ public class MotionController {
 
             if (mAttributesMap != null) {
                 for (SplineSet aSpline : mAttributesMap.values()) {
-                    if (aSpline instanceof ViewSpline.PathRotate && mInterpolateVelocity.length > 1)
+                    if (aSpline instanceof ViewSpline.PathRotate && mInterpolateVelocity.length > 1) {
                         ((ViewSpline.PathRotate) aSpline).setPathRotate(child, position,
                                 mInterpolateVelocity[0], mInterpolateVelocity[1]);
+                    }
                 }
 
             }
@@ -1319,7 +1380,8 @@ public class MotionController {
             for (int i = 1; i < mSpline.length; i++) {
                 CurveFit spline = mSpline[i];
                 spline.getPos(position, mValuesBuff);
-                CustomSupport.setInterpolatedValue(mStartMotionPath.attributes.get(mAttributeNames[i - 1]), child, mValuesBuff);
+                CustomSupport.setInterpolatedValue(mStartMotionPath
+                        .attributes.get(mAttributeNames[i - 1]), child, mValuesBuff);
 
             }
             if (mStartPoint.mVisibilityMode == ConstraintSet.VISIBILITY_MODE_NORMAL) {
@@ -1340,10 +1402,14 @@ public class MotionController {
         } else {
             // do the interpolation
 
-            float float_l = (mStartMotionPath.x + (mEndMotionPath.x - mStartMotionPath.x) * position);
-            float float_t = (mStartMotionPath.y + (mEndMotionPath.y - mStartMotionPath.y) * position);
-            float float_width = (mStartMotionPath.width + (mEndMotionPath.width - mStartMotionPath.width) * position);
-            float float_height = (mStartMotionPath.height + (mEndMotionPath.height - mStartMotionPath.height) * position);
+            float float_l = (mStartMotionPath.x
+                    + (mEndMotionPath.x - mStartMotionPath.x) * position);
+            float float_t = (mStartMotionPath.y
+                    + (mEndMotionPath.y - mStartMotionPath.y) * position);
+            float float_width = (mStartMotionPath.width
+                    + (mEndMotionPath.width - mStartMotionPath.width) * position);
+            float float_height = (mStartMotionPath.height
+                    + (mEndMotionPath.height - mStartMotionPath.height) * position);
             int l = (int) (0.5f + float_l);
             int t = (int) (0.5f + float_t);
             int r = (int) (0.5f + float_l + float_width);
@@ -1354,15 +1420,19 @@ public class MotionController {
             if (FAVOR_FIXED_SIZE_VIEWS) {
                 l = (int) (mStartMotionPath.x + (mEndMotionPath.x - mStartMotionPath.x) * position);
                 t = (int) (mStartMotionPath.y + (mEndMotionPath.y - mStartMotionPath.y) * position);
-                width = (int) (mStartMotionPath.width + (mEndMotionPath.width - mStartMotionPath.width) * position);
-                height = (int) (mStartMotionPath.height + (mEndMotionPath.height - mStartMotionPath.height) * position);
+                width = (int) (mStartMotionPath.width
+                        + (mEndMotionPath.width - mStartMotionPath.width) * position);
+                height = (int) (mStartMotionPath.height
+                        + (mEndMotionPath.height - mStartMotionPath.height) * position);
                 r = l + width;
                 b = t + height;
             }
             if (mEndMotionPath.width != mStartMotionPath.width
                     || mEndMotionPath.height != mStartMotionPath.height || mForceMeasure) {
-                int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY);
-                int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY);
+                int widthMeasureSpec =
+                        View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY);
+                int heightMeasureSpec =
+                        View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY);
                 child.measure(widthMeasureSpec, heightMeasureSpec);
                 mForceMeasure = false;
             }
@@ -1406,11 +1476,13 @@ public class MotionController {
                 if (mInterpolateData.length > 0) {
                     mArcSpline.getPos(position, mInterpolateData);
                     mArcSpline.getSlope(position, mInterpolateVelocity);
-                    mStartMotionPath.setDpDt(locationX, locationY, mAnchorDpDt, mInterpolateVariables, mInterpolateVelocity, mInterpolateData);
+                    mStartMotionPath.setDpDt(locationX, locationY, mAnchorDpDt,
+                            mInterpolateVariables, mInterpolateVelocity, mInterpolateData);
                 }
                 return;
             }
-            mStartMotionPath.setDpDt(locationX, locationY, mAnchorDpDt, mInterpolateVariables, mInterpolateVelocity, mInterpolateData);
+            mStartMotionPath.setDpDt(locationX, locationY, mAnchorDpDt,
+                    mInterpolateVariables, mInterpolateVelocity, mInterpolateData);
             return;
         }
         // do the interpolation
@@ -1435,9 +1507,15 @@ public class MotionController {
      * @param locationY   the y location on the view (0 = top, 1 = bottom)
      * @param mAnchorDpDt returns the differential of the motion with respect to the position
      */
-    void getPostLayoutDvDp(float position, int width, int height, float locationX, float locationY, float[] mAnchorDpDt) {
+    void getPostLayoutDvDp(float position,
+                           int width,
+                           int height,
+                           float locationX,
+                           float locationY,
+                           float[] mAnchorDpDt) {
         if (DEBUG) {
-            Log.v(TAG, " position= " + position + " location= " + locationX + " , " + locationY);
+            Log.v(TAG, " position= " + position + " location= "
+                    + locationX + " , " + locationY);
         }
         position = getAdjustedPosition(position, mVelocity);
 
@@ -1465,7 +1543,8 @@ public class MotionController {
             if (mInterpolateData.length > 0) {
                 mArcSpline.getPos(position, mInterpolateData);
                 mArcSpline.getSlope(position, mInterpolateVelocity);
-                mStartMotionPath.setDpDt(locationX, locationY, mAnchorDpDt, mInterpolateVariables, mInterpolateVelocity, mInterpolateData);
+                mStartMotionPath.setDpDt(locationX, locationY, mAnchorDpDt,
+                        mInterpolateVariables, mInterpolateVelocity, mInterpolateData);
             }
             vmat.applyTransform(locationX, locationY, width, height, mAnchorDpDt);
             return;
@@ -1478,7 +1557,8 @@ public class MotionController {
             for (int i = 0; i < mInterpolateVelocity.length; i++) {
                 mInterpolateVelocity[i] *= v;
             }
-            mStartMotionPath.setDpDt(locationX, locationY, mAnchorDpDt, mInterpolateVariables, mInterpolateVelocity, mInterpolateData);
+            mStartMotionPath.setDpDt(locationX, locationY, mAnchorDpDt,
+                    mInterpolateVariables, mInterpolateVelocity, mInterpolateData);
             vmat.applyTransform(locationX, locationY, width, height, mAnchorDpDt);
             return;
         }
@@ -1504,6 +1584,10 @@ public class MotionController {
         return;
     }
 
+    /**
+     * returns the draw path mode
+     * @return
+     */
     public int getDrawPath() {
         int mode = mStartMotionPath.mDrawPath;
         for (MotionPaths keyFrame : mMotionPaths) {
@@ -1522,7 +1606,12 @@ public class MotionController {
         return context.getResources().getResourceEntryName(mView.getId());
     }
 
-    void positionKeyframe(View view, KeyPositionBase key, float x, float y, String[] attribute, float[] value) {
+    void positionKeyframe(View view,
+                          KeyPositionBase key,
+                          float x,
+                          float y,
+                          String[] attribute,
+                          float[] value) {
         RectF start = new RectF();
         start.left = mStartMotionPath.x;
         start.top = mStartMotionPath.y;
@@ -1539,7 +1628,7 @@ public class MotionController {
     /**
      * Get the keyFrames for the view controlled by this MotionController
      *
-     * @param type is position(0-100) + 1000*mType(1=Attributes, 2=Position, 3=TimeCycle 4=Cycle 5=Trigger
+     * @param type is position(0-100) + 1000*mType(1=Attr, 2=Pos, 3=TimeCycle 4=Cycle 5=Trigger
      * @param pos  the x&y position of the keyFrame along the path
      * @return Number of keyFrames found
      */

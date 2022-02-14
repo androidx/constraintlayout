@@ -21,15 +21,39 @@ import android.view.View;
 
 import java.util.HashMap;
 
+/**
+ * This defined the interface for MotionLayout helpers
+ * Helpers can be used to draw motion effects or modify motions
+ */
 public interface MotionHelperInterface extends  Animatable, MotionLayout.TransitionListener {
+    /**
+     * Notify when view is visible
+     * @return
+     */
     boolean isUsedOnShow();
 
+    /**
+     * Notify when views are hidden
+     * @return
+     */
     boolean isUseOnHide();
 
+    /**
+     * is involved in painting
+     * @return
+     */
     boolean isDecorator();
 
+    /**
+     * Call before views are painted
+     * @param canvas
+     */
     void onPreDraw(Canvas canvas);
 
+    /**
+     * Called after views are painted
+     * @param canvas
+     */
     void onPostDraw(Canvas canvas);
 
     /**

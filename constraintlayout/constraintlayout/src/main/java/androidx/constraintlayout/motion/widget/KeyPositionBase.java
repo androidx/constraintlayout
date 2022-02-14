@@ -36,13 +36,18 @@ abstract class KeyPositionBase extends Key {
      *
      * @param layoutWidth
      * @param layoutHeight
-     * @param start_x
-     * @param start_y
-     * @param end_x
-     * @param end_y
+     * @param startX
+     * @param startY
+     * @param endX
+     * @param endY
      * @hide
      */
-    abstract void calcPosition(int layoutWidth, int layoutHeight, float start_x, float start_y, float end_x, float end_y);
+    abstract void calcPosition(int layoutWidth,
+                               int layoutHeight,
+                               float startX,
+                               float startY,
+                               float endX,
+                               float endY);
 
     /**
      * @return
@@ -71,7 +76,13 @@ abstract class KeyPositionBase extends Key {
      * @param value
      * @hide
      */
-    abstract void positionAttributes(View view, RectF start, RectF end, float x, float y, String[] attribute, float[] value);
+    abstract void positionAttributes(View view,
+                                     RectF start,
+                                     RectF end,
+                                     float x,
+                                     float y,
+                                     String[] attribute,
+                                     float[] value);
 
     /**
      *
@@ -84,5 +95,10 @@ abstract class KeyPositionBase extends Key {
      * @return
      * @hide
      */
-    public abstract boolean intersects(int layoutWidth, int layoutHeight, RectF start, RectF end, float x, float y);
+    public abstract boolean intersects(int layoutWidth,
+                                       int layoutHeight,
+                                       RectF start,
+                                       RectF end,
+                                       float x,
+                                       float y);
 }

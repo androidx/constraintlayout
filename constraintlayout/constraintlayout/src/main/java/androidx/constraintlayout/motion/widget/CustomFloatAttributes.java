@@ -16,10 +16,27 @@
 package androidx.constraintlayout.motion.widget;
 
 /**
+ * Interface to custom float attributes
  * @hide
  */
 public interface CustomFloatAttributes {
+    /**
+     * Get list of attributes
+     * @return
+     */
     String[]getListOfAttributes();
+
+    /**
+     * set the attributes
+     * @param attribute
+     * @param value
+     */
     void set(String attribute, float value);
+
+    /**
+     * get the value of the attributes
+     * @param attribute
+     * @return
+     */
     float get(String attribute);
 }

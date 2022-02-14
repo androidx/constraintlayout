@@ -38,8 +38,24 @@ import java.lang.reflect.Method;
 public abstract class ViewTimeCycle extends TimeCycleSplineSet {
     private static final String TAG = "ViewTimeCycle";
 
+    /**
+     * Set the time cycle parameters
+     * @param view
+     * @param t
+     * @param time
+     * @param cache
+     * @return
+     */
     public abstract boolean setProperty(View view, float t, long time, KeyCache cache);
 
+    /**
+     * get a value from the time cycle
+     * @param pos
+     * @param time
+     * @param view
+     * @param cache
+     * @return
+     */
     public float get(float pos, long time, View view, KeyCache cache) {
         mCurveFit.getPos(pos, mCache);
         float period = mCache[CURVE_PERIOD];
@@ -65,10 +81,23 @@ public abstract class ViewTimeCycle extends TimeCycleSplineSet {
         return value;
     }
 
-    public static ViewTimeCycle makeCustomSpline(String str, SparseArray<ConstraintAttribute> attrList) {
+    /**
+     * make a custom time cycle
+     * @param str
+     * @param attrList
+     * @return
+     */
+    public static ViewTimeCycle makeCustomSpline(String str,
+                                                 SparseArray<ConstraintAttribute> attrList) {
         return new CustomSet(str, attrList);
     }
 
+    /**
+     * Make a time cycle spline
+     * @param str
+     * @param currentTime
+     * @return
+     */
     public static ViewTimeCycle makeSpline(String str, long currentTime) {
         ViewTimeCycle timeCycle;
         switch (str) {
@@ -163,8 +192,24 @@ public abstract class ViewTimeCycle extends TimeCycleSplineSet {
             return mContinue;
         }
 
-        public boolean setPathRotate(View view, KeyCache cache, float t, long time, double dx, double dy) {
-            view.setRotation(get(t, time, view, cache) + (float) Math.toDegrees(Math.atan2(dy, dx)));
+        /**
+         *  DO NOT CALL
+         * @param view
+         * @param cache
+         * @param t
+         * @param time
+         * @param dx
+         * @param dy
+         * @return
+         */
+        public boolean setPathRotate(View view,
+                                     KeyCache cache,
+                                     float t,
+                                     long time,
+                                     double dx,
+                                     double dy) {
+            view.setRotation(get(t, time, view, cache) +
+                    (float) Math.toDegrees(Math.atan2(dy, dx)));
             return mContinue;
         }
     }
@@ -223,9 +268,14 @@ public abstract class ViewTimeCycle extends TimeCycleSplineSet {
             mConstraintAttributeList = attrList;
         }
 
+        /**
+         * Setup the curve
+         * @param curveType
+         */
         public void setup(int curveType) {
             int size = mConstraintAttributeList.size();
-            int dimensionality = mConstraintAttributeList.valueAt(0).numberOfInterpolatedValues();
+            int dimensionality =
+                    mConstraintAttributeList.valueAt(0).numberOfInterpolatedValues();
             double[] time = new double[size];
             mTempValues = new float[dimensionality + 2];
             mCache = new float[dimensionality];
@@ -246,15 +296,34 @@ public abstract class ViewTimeCycle extends TimeCycleSplineSet {
         }
 
         public void setPoint(int position, float value, float period, int shape, float offset) {
-            throw new RuntimeException("don't call for custom attribute call setPoint(pos, ConstraintAttribute,...)");
+            throw new RuntimeException("Wrong call for custom attribute");
         }
 
-        public void setPoint(int position, ConstraintAttribute value, float period, int shape, float offset) {
+        /**
+         * set the keyTimePoint
+         * @param position
+         * @param value
+         * @param period
+         * @param shape
+         * @param offset
+         */
+        public void setPoint(int position, ConstraintAttribute value,
+                             float period,
+                             int shape,
+                             float offset) {
             mConstraintAttributeList.append(position, value);
             mWaveProperties.append(position, new float[]{period, offset});
             mWaveShape = Math.max(mWaveShape, shape); // the highest value shape is chosen
         }
 
+        /**
+         * Set the property of the view given the position the current time
+         * @param view the view to set the property of
+         * @param t the position on the curve
+         * @param time the current time
+         * @param cache the cache used to keep the previous position
+         * @return true if it will need repaint
+         */
         @Override
         public boolean setProperty(View view, float t, long time, KeyCache cache) {
             mCurveFit.getPos(t, mTempValues);
@@ -277,7 +346,8 @@ public abstract class ViewTimeCycle extends TimeCycleSplineSet {
                 mContinue |= mTempValues[i] != 0.0;
                 mCache[i] = mTempValues[i] * wave + offset;
             }
-            CustomSupport.setInterpolatedValue(mConstraintAttributeList.valueAt(0),view, mCache);
+            CustomSupport.setInterpolatedValue(mConstraintAttributeList.valueAt(0),
+                        view, mCache);
             if (period != 0.0f) {
                 mContinue = true;
             }

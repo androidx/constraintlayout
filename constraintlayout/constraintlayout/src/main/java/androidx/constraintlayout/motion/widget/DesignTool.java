@@ -17,10 +17,12 @@
 package androidx.constraintlayout.motion.widget;
 
 import androidx.constraintlayout.widget.ConstraintSet;
+
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.constraintlayout.widget.R;
 
 import java.util.HashMap;
@@ -38,7 +40,8 @@ import static androidx.constraintlayout.widget.ConstraintSet.WRAP_CONTENT;
 
 /**
  * This is the interface used by androidStudio design surface
- * It is marked with the interface so that java proxy will use the same interface to build a proxy.
+ * It is marked with the interface so that java proxy will use the same interface
+ * to build a proxy.
  */
 interface ProxyInterface {
     void setToolPosition(float position);
@@ -50,13 +53,21 @@ interface ProxyInterface {
     int designAccess(int cmd, String type, Object viewObject,
                      float[] in, int inLength, float[] out, int outLength);
 
-    void setAttributes(int dpi, String constraintSetId, Object opaqueView, Object opaqueAttributes);
+    void setAttributes(int dpi,
+                       String constraintSetId,
+                       Object opaqueView,
+                       Object opaqueAttributes);
 
     float getKeyFramePosition(Object view, int type, float x, float y);
 
     void setKeyFrame(Object view, int position, String name, Object value);
 
-    Boolean getPositionKeyframe(Object keyFrame, Object view, float x, float y, String[] attribute, float[] value);
+    Boolean getPositionKeyframe(Object keyFrame,
+                                Object view,
+                                float x,
+                                float y,
+                                String[] attribute,
+                                float[] value);
 
     Object getKeyframeAtLocation(Object viewObject, float x, float y);
 }
@@ -68,23 +79,10 @@ interface ProxyInterface {
  */
 public class DesignTool implements ProxyInterface {
 
+    static final HashMap<Pair<Integer, Integer>, String> allAttributes = new HashMap<>();
+    static final HashMap<String, String> allMargins = new HashMap<>();
     private static final boolean DEBUG = false;
     private static final String TAG = "DesignTool";
-
-    private final MotionLayout mMotionLayout;
-    private MotionScene mSceneCache;
-
-    private String mLastStartState = null;
-    private String mLastEndState = null;
-    private int mLastStartStateId = -1;
-    private int mLastEndStateId = -1;
-
-    public DesignTool(MotionLayout motionLayout) {
-        mMotionLayout = motionLayout;
-    }
-
-    final static HashMap<Pair<Integer, Integer>, String> allAttributes = new HashMap<>();
-    final static HashMap<String, String> allMargins = new HashMap<>();
 
     static {
         allAttributes.put(Pair.create(BOTTOM, BOTTOM), "layout_constraintBottom_toBottomOf");
@@ -99,7 +97,8 @@ public class DesignTool implements ProxyInterface {
         allAttributes.put(Pair.create(LEFT, RIGHT), "layout_constraintLeft_toRightOf");
         allAttributes.put(Pair.create(RIGHT, RIGHT), "layout_constraintRight_toRightOf");
         allAttributes.put(Pair.create(RIGHT, LEFT), "layout_constraintRight_toLeftOf");
-        allAttributes.put(Pair.create(BASELINE, BASELINE), "layout_constraintBaseline_toBaselineOf");
+        allAttributes.put(Pair.create(BASELINE, BASELINE),
+                "layout_constraintBaseline_toBaselineOf");
 
         allMargins.put("layout_constraintBottom_toBottomOf", "layout_marginBottom");
         allMargins.put("layout_constraintBottom_toTopOf", "layout_marginBottom");
@@ -115,6 +114,17 @@ public class DesignTool implements ProxyInterface {
         allMargins.put("layout_constraintRight_toLeftOf", "layout_marginRight");
     }
 
+    private final MotionLayout mMotionLayout;
+    private MotionScene mSceneCache;
+    private String mLastStartState = null;
+    private String mLastEndState = null;
+    private int mLastStartStateId = -1;
+    private int mLastEndStateId = -1;
+
+    public DesignTool(MotionLayout motionLayout) {
+        mMotionLayout = motionLayout;
+    }
+
     private static int GetPxFromDp(int dpi, String value) {
         if (value == null) {
             return 0;
@@ -128,7 +138,12 @@ public class DesignTool implements ProxyInterface {
         return dpValue;
     }
 
-    private static void Connect(int dpi, ConstraintSet set, View view, HashMap<String, String> attributes, int from, int to) {
+    private static void Connect(int dpi,
+                                ConstraintSet set,
+                                View view,
+                                HashMap<String, String> attributes,
+                                int from,
+                                int to) {
         String connection = allAttributes.get(Pair.create(from, to));
         String connectionValue = attributes.get(connection);
 
@@ -143,7 +158,10 @@ public class DesignTool implements ProxyInterface {
         }
     }
 
-    private static void SetBias(ConstraintSet set, View view, HashMap<String, String> attributes, int type) {
+    private static void SetBias(ConstraintSet set,
+                                View view,
+                                HashMap<String, String> attributes,
+                                int type) {
         String bias = "layout_constraintHorizontal_bias";
         if (type == VERTICAL) {
             bias = "layout_constraintVertical_bias";
@@ -158,7 +176,11 @@ public class DesignTool implements ProxyInterface {
         }
     }
 
-    private static void SetDimensions(int dpi, ConstraintSet set, View view, HashMap<String, String> attributes, int type) {
+    private static void SetDimensions(int dpi,
+                                      ConstraintSet set,
+                                      View view,
+                                      HashMap<String, String> attributes,
+                                      int type) {
         String dimension = "layout_width";
         if (type == VERTICAL) {
             dimension = "layout_height";
@@ -177,7 +199,10 @@ public class DesignTool implements ProxyInterface {
         }
     }
 
-    private static void SetAbsolutePositions(int dpi, ConstraintSet set, View view, HashMap<String, String> attributes) {
+    private static void SetAbsolutePositions(int dpi,
+                                             ConstraintSet set,
+                                             View view,
+                                             HashMap<String, String> attributes) {
         String absoluteX = attributes.get("layout_editor_absoluteX");
         if (absoluteX != null) {
             set.setEditorAbsoluteX(view.getId(), GetPxFromDp(dpi, absoluteX));
@@ -267,6 +292,61 @@ public class DesignTool implements ProxyInterface {
         mMotionLayout.invalidate();
     }
 
+    public String getStartState() {
+        int startId = mMotionLayout.getStartState();
+        if (mLastStartStateId == startId) {
+            return mLastStartState;
+        }
+        String last = mMotionLayout.getConstraintSetNames(startId);
+
+        if (last != null) {
+            mLastStartState = last;
+            mLastStartStateId = startId;
+        }
+        return mMotionLayout.getConstraintSetNames(startId);
+    }
+
+    public String getEndState() {
+        int endId = mMotionLayout.getEndState();
+
+        if (mLastEndStateId == endId) {
+            return mLastEndState;
+        }
+        String last = mMotionLayout.getConstraintSetNames(endId);
+        if (last != null) {
+            mLastEndState = last;
+            mLastEndStateId = endId;
+        }
+        return last;
+    }
+
+    /**
+     * Return the current progress of the current transition
+     *
+     * @return current transition's progress
+     */
+    public float getProgress() {
+        return mMotionLayout.getProgress();
+    }
+
+    /**
+     * Return the current state (ConstraintSet id) as a string
+     *
+     * @return the last state set via the design tool bridge
+     */
+    public String getState() {
+        if (mLastStartState != null && mLastEndState != null) {
+            float progress = getProgress();
+            float epsilon = 0.01f;
+            if (progress <= epsilon) {
+                return mLastStartState;
+            } else if (progress >= 1 - epsilon) {
+                return mLastEndState;
+            }
+        }
+        return mLastStartState;
+    }
+
     /**
      * This sets the constraint set based on a string. (without the "@+id/")
      *
@@ -317,61 +397,6 @@ public class DesignTool implements ProxyInterface {
         mMotionLayout.requestLayout();
     }
 
-    public String getStartState() {
-       int startId =  mMotionLayout.getStartState();
-       if (mLastStartStateId == startId) {
-           return mLastStartState;
-       }
-        String last =  mMotionLayout.getConstraintSetNames(startId);
-
-        if (last != null) {
-            mLastStartState = last;
-            mLastStartStateId = startId;
-        }
-        return mMotionLayout.getConstraintSetNames(startId);
-    }
-
-    public String getEndState() {
-        int endId =  mMotionLayout.getEndState();
-
-        if (mLastEndStateId == endId) {
-            return mLastEndState;
-        }
-        String last =  mMotionLayout.getConstraintSetNames(endId);
-        if (last != null) {
-            mLastEndState = last;
-            mLastEndStateId = endId;
-        }
-        return last;
-    }
-
-    /**
-     * Return the current progress of the current transition
-     *
-     * @return current transition's progress
-     */
-    public float getProgress() {
-        return mMotionLayout.getProgress();
-    }
-
-    /**
-     * Return the current state (ConstraintSet id) as a string
-     *
-     * @return the last state set via the design tool bridge
-     */
-    public String getState() {
-        if (mLastStartState != null && mLastEndState != null) {
-            float progress = getProgress();
-            float epsilon = 0.01f;
-            if (progress <= epsilon) {
-                return mLastStartState;
-            } else if (progress >= 1 - epsilon) {
-                return mLastEndState;
-            }
-        }
-        return mLastStartState;
-    }
-
     /**
      * Utility method, returns true if we are currently in a transition
      *
@@ -396,17 +421,19 @@ public class DesignTool implements ProxyInterface {
 
         mMotionLayout.setTransition(startId, endId);
         mLastStartStateId = startId;
-        mLastEndStateId  = endId;
+        mLastEndStateId = endId;
 
         mLastStartState = start;
         mLastEndState = end;
     }
+
     /**
-     * this allow disabling autoTransitions to prevent design surface from being in undefined states
+     * this allow disabling autoTransitions to prevent design surface
+     * from being in undefined states
      *
      * @param disable
      */
-    public void disableAutoTransition(boolean disable){
+    public void disableAutoTransition(boolean disable) {
         mMotionLayout.disableAutoTransition(disable);
     }
 
@@ -424,17 +451,18 @@ public class DesignTool implements ProxyInterface {
      * The call is designed to be efficient because it will be called 30x Number of views a second
      *
      * @param view the view to return keyframe positions
-     * @param type is position(0-100) + 1000*mType(1=Attributes, 2=Position, 3=TimeCycle 4=Cycle 5=Trigger
-     * @param pos the x&y position of the keyFrame along the path
+     * @param type is pos(0-100) + 1000*mType(1=Attrib, 2=Position, 3=TimeCycle 4=Cycle 5=Trigger
+     * @param pos  the x&y position of the keyFrame along the path
      * @return Number of keyFrames found
      */
-    public int getKeyFramePositions(Object view,int []type, float[] pos) {
+    public int getKeyFramePositions(Object view, int[] type, float[] pos) {
         MotionController controller = mMotionLayout.mFrameArrayList.get((View) view);
         if (controller == null) {
-            return  0;
+            return 0;
         }
         return controller.getKeyFramePositions(type, pos);
     }
+
     /**
      * Get the keyFrames for the view controlled by this MotionController.
      * The call is designed to be efficient because it will be called 30x Number of views a second
@@ -448,8 +476,9 @@ public class DesignTool implements ProxyInterface {
         if (controller == null) {
             return 0;
         }
-        return controller.getKeyFrameInfo(type,info);
+        return controller.getKeyFrameInfo(type, info);
     }
+
     /**
      * @param view
      * @param type
@@ -508,11 +537,14 @@ public class DesignTool implements ProxyInterface {
         }
 
         if (mMotionLayout.mScene != null) {
-            MotionController motionController = mMotionLayout.mFrameArrayList.get(view);
+            MotionController controller = mMotionLayout.mFrameArrayList.get(view);
             position = (int) (mMotionLayout.mTransitionPosition * 100);
-            if (motionController != null && mMotionLayout.mScene.hasKeyFramePosition((View) view, position)) {
-                float fx = motionController.getKeyFrameParameter(MotionController.HORIZONTAL_PATH_X, x, y);
-                float fy = motionController.getKeyFrameParameter(MotionController.VERTICAL_PATH_Y, x, y);
+            if (controller != null &&
+                    mMotionLayout.mScene.hasKeyFramePosition((View) view, position)) {
+                float fx = controller.getKeyFrameParameter(MotionController.HORIZONTAL_PATH_X,
+                        x, y);
+                float fy = controller.getKeyFrameParameter(MotionController.VERTICAL_PATH_Y,
+                        x, y);
                 // TODO: supports path relative
                 mMotionLayout.mScene.setKeyframe((View) view, position, "motion:percentX", fx);
                 mMotionLayout.mScene.setKeyframe((View) view, position, "motion:percentY", fy);
@@ -641,7 +673,12 @@ public class DesignTool implements ProxyInterface {
         return motionController.getPositionKeyframe(layoutWidth, layoutHeight, x, y);
     }
 
-    public Boolean getPositionKeyframe(Object keyFrame, Object view, float x, float y, String[] attribute, float[] value) {
+    public Boolean getPositionKeyframe(Object keyFrame,
+                                       Object view,
+                                       float x,
+                                       float y,
+                                       String[] attribute,
+                                       float[] value) {
         if (keyFrame instanceof KeyPositionBase) {
             KeyPositionBase key = (KeyPositionBase) keyFrame;
             MotionController motionController = mMotionLayout.mFrameArrayList.get((View) view);
@@ -673,12 +710,15 @@ public class DesignTool implements ProxyInterface {
     /**
      * Live setting of attributes on a view
      *
-     * @param dpi dpi used by the application
-     * @param constraintSetId ConstraintSet id
-     * @param opaqueView the Android View we operate on, passed as an Object
+     * @param dpi              dpi used by the application
+     * @param constraintSetId  ConstraintSet id
+     * @param opaqueView       the Android View we operate on, passed as an Object
      * @param opaqueAttributes the list of attributes (hash<string,string>) we pass to the view
      */
-    public void setAttributes(int dpi, String constraintSetId, Object opaqueView, Object opaqueAttributes) {
+    public void setAttributes(int dpi,
+                              String constraintSetId,
+                              Object opaqueView,
+                              Object opaqueAttributes) {
         View view = (View) opaqueView;
         HashMap<String, String> attributes = (HashMap<String, String>) opaqueAttributes;
 
@@ -726,7 +766,7 @@ public class DesignTool implements ProxyInterface {
             mMotionLayout.mScene = mSceneCache;
         }
         int setId = mMotionLayout.lookUpConstraintId(set);
-        System.out.println(" dumping  "+set+" ("+setId+")");
+        System.out.println(" dumping  " + set + " (" + setId + ")");
         try {
             mMotionLayout.mScene.getConstraintSet(setId).dump(mMotionLayout.mScene);
         } catch (Exception ex) {

@@ -32,7 +32,8 @@ import java.lang.reflect.Method;
 public abstract class ViewSpline extends SplineSet {
     private static final String TAG = "ViewSpline";
 
-    public static ViewSpline makeCustomSpline(String str, SparseArray<ConstraintAttribute> attrList) {
+    public static ViewSpline makeCustomSpline(String str,
+                                              SparseArray<ConstraintAttribute> attrList) {
         return new CustomSet(str, attrList);
     }
 
@@ -77,6 +78,11 @@ public abstract class ViewSpline extends SplineSet {
         }
     }
 
+    /**
+     * the main interface to setting a view property
+     * @param view the view
+     * @param t the point of time
+     */
     public abstract void setProperty(View view, float t);
 
     static class ElevationSet extends ViewSpline {
@@ -135,6 +141,13 @@ public abstract class ViewSpline extends SplineSet {
         public void setProperty(View view, float t) {
         }
 
+        /**
+         * Use to set the rotation relative to the path
+         * @param view the view to set
+         * @param t the time point
+         * @param dx the path velocity in x
+         * @param dy the path velocity in y
+         */
         public void setPathRotate(View view, float t, double dx, double dy) {
             view.setRotation(get(t) + (float) Math.toDegrees(Math.atan2(dy, dx)));
         }
@@ -189,7 +202,8 @@ public abstract class ViewSpline extends SplineSet {
 
         public void setup(int curveType) {
             int size = mConstraintAttributeList.size();
-            int dimensionality = mConstraintAttributeList.valueAt(0).numberOfInterpolatedValues();
+            int dimensionality =
+                    mConstraintAttributeList.valueAt(0).numberOfInterpolatedValues();
             double[] time = new double[size];
             mTempValues = new float[dimensionality];
             double[][] values = new double[size][dimensionality];
@@ -208,10 +222,20 @@ public abstract class ViewSpline extends SplineSet {
             mCurveFit = CurveFit.get(curveType, time, values);
         }
 
+        /**
+         * this call will throw RuntimeException
+         * @param position the position
+         * @param value the value
+         */
         public void setPoint(int position, float value) {
-            throw new RuntimeException("don't call for custom attribute call setPoint(pos, ConstraintAttribute)");
+            throw new RuntimeException("call of custom attribute setPoint");
         }
 
+        /**
+         * set the CustomAttribute
+         * @param position
+         * @param value
+         */
         public void setPoint(int position, ConstraintAttribute value) {
             mConstraintAttributeList.append(position, value);
         }
@@ -219,7 +243,8 @@ public abstract class ViewSpline extends SplineSet {
         @Override
         public void setProperty(View view, float t) {
             mCurveFit.getPos(t, mTempValues);
-            CustomSupport.setInterpolatedValue(mConstraintAttributeList.valueAt(0), view, mTempValues);
+            CustomSupport.setInterpolatedValue(mConstraintAttributeList.valueAt(0),
+                    view, mTempValues);
         }
     }
 

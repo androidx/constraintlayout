@@ -18,10 +18,11 @@ package androidx.constraintlayout.motion.widget;
 
 import android.content.Context;
 import android.content.res.XmlResourceParser;
-import androidx.constraintlayout.widget.ConstraintAttribute;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import android.util.Log;
 import android.util.Xml;
+
+import androidx.constraintlayout.widget.ConstraintAttribute;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -58,6 +59,10 @@ public class KeyFrames {
         }
     }
 
+    /**
+     * Add a key to this set of keyframes
+     * @param key
+     */
     public void addKey(Key key) {
         if (!mFramesMap.containsKey(key.mTargetId)) {
             mFramesMap.put(key.mTargetId, new ArrayList<>());
@@ -67,9 +72,11 @@ public class KeyFrames {
             frames.add(key);
         }
     }
+
     public KeyFrames() {
 
     }
+
     public KeyFrames(Context context, XmlPullParser parser) {
         String tagName = null;
         try {
@@ -91,7 +98,8 @@ public class KeyFrames {
                                     key.load(context, Xml.asAttributeSet(parser));
                                     addKey(key);
                                 } else {
-                                    throw new NullPointerException("Keymaker for " + tagName + " not found");
+                                    throw new NullPointerException(
+                                            "Keymaker for " + tagName + " not found");
                                 }
                             } catch (Exception e) {
                                 Log.e(TAG, "unable to create ", e);
@@ -133,6 +141,10 @@ public class KeyFrames {
         }
     }
 
+    /**
+     * add the key frames to the motion controller
+     * @param motionController
+     */
     public void addFrames(MotionController motionController) {
         ArrayList<Key> list = mFramesMap.get(motionController.mId);
         if (list != null) {
@@ -142,7 +154,9 @@ public class KeyFrames {
 
         if (list != null) {
             for (Key key : list) {
-                String tag = ((ConstraintLayout.LayoutParams) (motionController.mView.getLayoutParams())).constraintTag;
+                String tag =
+                        ((ConstraintLayout.LayoutParams)
+                                (motionController.mView.getLayoutParams())).constraintTag;
                 if (key.matches(tag)) {
                     motionController.addKey(key);
                 }
@@ -160,6 +174,11 @@ public class KeyFrames {
         return mFramesMap.keySet();
     }
 
+    /**
+     * Get the list of keyframes given and ID
+     * @param id
+     * @return
+     */
     public ArrayList<Key> getKeyFramesForView(int id) {
         return mFramesMap.get(id);
     }

@@ -19,6 +19,15 @@ package androidx.constraintlayout.motion.widget;
  * A helper interface allowing MotionLayout to directly drive custom views
  */
 public interface Animatable {
+    /**
+     * Set the progress
+     * @param progress
+     */
     void setProgress(float progress);
+
+    /**
+     * get the progress
+     * @return
+     */
     float getProgress();
 }

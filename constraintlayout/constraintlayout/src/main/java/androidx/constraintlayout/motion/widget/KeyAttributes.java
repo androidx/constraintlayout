@@ -19,16 +19,15 @@ package androidx.constraintlayout.motion.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.util.SparseIntArray;
+import android.util.TypedValue;
 
 import androidx.constraintlayout.core.motion.utils.SplineSet;
 import androidx.constraintlayout.motion.utils.ViewSpline;
 import androidx.constraintlayout.widget.ConstraintAttribute;
 import androidx.constraintlayout.widget.R;
-
-import android.util.AttributeSet;
-import android.util.Log;
-import android.util.SparseIntArray;
-import android.util.TypedValue;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -135,6 +134,10 @@ public class KeyAttributes extends Key {
         }
     }
 
+    /**
+     * create the interpolations associated with this KeyAttribute
+     * @param interpolation will be added to with keyAttributes
+     */
     public void setInterpolation(HashMap<String, Integer> interpolation) {
         if (mCurveFit == -1) {
             return;
@@ -384,8 +387,8 @@ public class KeyAttributes extends Key {
         }
 
         public static void read(KeyAttributes c, TypedArray a) {
-            final int N = a.getIndexCount();
-            for (int i = 0; i < N; i++) {
+            final int n = a.getIndexCount();
+            for (int i = 0; i < n; i++) {
                 int attr = a.getIndex(i);
                 switch (mAttrMap.get(attr)) {
                     case TARGET_ID:
@@ -456,13 +459,19 @@ public class KeyAttributes extends Key {
                         c.mProgress = a.getFloat(attr, c.mProgress);
                         break;
                     default:
-                        Log.e(NAME, "unused attribute 0x" + Integer.toHexString(attr) + "   " + mAttrMap.get(attr));
+                        Log.e(NAME, "unused attribute 0x" +
+                                Integer.toHexString(attr) + "   " + mAttrMap.get(attr));
                         break;
                 }
             }
         }
     }
 
+    /**
+     * Copy the key
+     * @param src to be copied
+     * @return self
+     */
     public Key copy(Key src) {
         super.copy(src);
         KeyAttributes k = (KeyAttributes) src;
@@ -485,6 +494,10 @@ public class KeyAttributes extends Key {
         return this;
     }
 
+    /**
+     * Clone this KeyAttributes
+     * @return
+     */
     public Key clone() {
         return new KeyAttributes().copy(this);
     }

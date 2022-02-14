@@ -42,7 +42,10 @@ public class MotionPlaceholder extends VirtualLayout {
         super(context, attrs, defStyleAttr);
     }
 
-    public MotionPlaceholder(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public MotionPlaceholder(Context context,
+                             AttributeSet attrs,
+                             int defStyleAttr,
+                             int defStyleRes) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -53,7 +56,9 @@ public class MotionPlaceholder extends VirtualLayout {
     }
 
     @Override
-    public void onMeasure(androidx.constraintlayout.core.widgets.VirtualLayout layout, int widthMeasureSpec, int heightMeasureSpec) {
+    public void onMeasure(androidx.constraintlayout.core.widgets.VirtualLayout layout,
+                          int widthMeasureSpec,
+                          int heightMeasureSpec) {
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
@@ -62,7 +67,7 @@ public class MotionPlaceholder extends VirtualLayout {
             layout.measure(widthMode, widthSize, heightMode, heightSize);
             setMeasuredDimension(layout.getMeasuredWidth(), layout.getMeasuredHeight());
         } else {
-            setMeasuredDimension(0,0);
+            setMeasuredDimension(0, 0);
         }
     }
 

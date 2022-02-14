@@ -19,14 +19,17 @@ package androidx.constraintlayout.helper.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
-import androidx.constraintlayout.widget.*;
+
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
-import android.view.ViewParent;
+import androidx.constraintlayout.widget.ConstraintHelper;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.R;
 
 /**
- * Layer adds the ability to move and rotate a group of views as if they were contained in a viewGroup
+ * Layer adds the ability to move and rotate a group of views as if they were contained
+ * in a viewGroup
  * <b>Added in 2.0</b>
  * Methods such as setRotation(float) rotate all views about a common center.
  * For simple visibility manipulation use Group
@@ -75,9 +78,10 @@ public class Layer extends ConstraintHelper {
         super.init(attrs);
         mUseViewMeasure = false;
         if (attrs != null) {
-            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ConstraintLayout_Layout);
-            final int N = a.getIndexCount();
-            for (int i = 0; i < N; i++) {
+            TypedArray a = getContext().obtainStyledAttributes(attrs,
+                    R.styleable.ConstraintLayout_Layout);
+            final int n = a.getIndexCount();
+            for (int i = 0; i < n; i++) {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.ConstraintLayout_Layout_android_visibility) {
                     mApplyVisibilityOnAttach = true;
@@ -107,7 +111,9 @@ public class Layer extends ConstraintHelper {
                         view.setVisibility(visibility);
                     }
                     if (mApplyElevationOnAttach) {
-                        if (elevation > 0 && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                        if (elevation > 0 &&
+                                android.os.Build.VERSION.SDK_INT >=
+                                        android.os.Build.VERSION_CODES.LOLLIPOP) {
                             view.setTranslationZ(view.getTranslationZ() + elevation);
                         }
                     }
@@ -243,9 +249,9 @@ public class Layer extends ConstraintHelper {
         calcCenters();
         int left = (int) mComputedMinX - getPaddingLeft();
         int top = (int) mComputedMinY - getPaddingTop();
-        int right = (int) mComputedMaxX+ getPaddingRight();
-        int bottom = (int)mComputedMaxY + getPaddingBottom();
-        layout(left ,top,right,bottom);
+        int right = (int) mComputedMaxX + getPaddingRight();
+        int bottom = (int) mComputedMaxY + getPaddingBottom();
+        layout(left, top, right, bottom);
         transform();
     }
 
@@ -270,13 +276,13 @@ public class Layer extends ConstraintHelper {
         if (mContainer == null) {
             return;
         }
-        if (!mNeedBounds ) {
+        if (!mNeedBounds) {
             if (!(Float.isNaN(mComputedCenterX) || Float.isNaN(mComputedCenterY))) {
                 return;
             }
         }
         if (Float.isNaN(mRotationCenterX) || Float.isNaN(mRotationCenterY)) {
-           View[]views = getViews(mContainer);
+            View[] views = getViews(mContainer);
 
             int minx = views[0].getLeft();
             int miny = views[0].getTop();
@@ -291,8 +297,8 @@ public class Layer extends ConstraintHelper {
                 maxy = Math.max(maxy, view.getBottom());
             }
 
-             mComputedMaxX = maxx;
-             mComputedMaxY = maxy;
+            mComputedMaxX = maxx;
+            mComputedMaxY = maxy;
             mComputedMinX = minx;
             mComputedMinY = miny;
 
