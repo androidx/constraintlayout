@@ -133,7 +133,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
                 mLast++;
                 if (mLast >= mArrayIndices.length) {
                     mDidFillOnce = true;
-                    mLast = mArrayIndices.length-1;
+                    mLast = mArrayIndices.length - 1;
                 }
             }
             return;
@@ -209,7 +209,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
         }
         if (mLast >= mArrayIndices.length) {
             mDidFillOnce = true;
-            mLast = mArrayIndices.length-1;
+            mLast = mArrayIndices.length - 1;
         }
     }
 
@@ -240,7 +240,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
                 mLast++;
                 if (mLast >= mArrayIndices.length) {
                     mDidFillOnce = true;
-                    mLast = mArrayIndices.length-1;
+                    mLast = mArrayIndices.length - 1;
                 }
             }
             return;
@@ -335,7 +335,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
         }
         if (mLast >= mArrayIndices.length) {
             mDidFillOnce = true;
-            mLast = mArrayIndices.length-1;
+            mLast = mArrayIndices.length - 1;
         }
     }
 

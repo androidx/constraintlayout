@@ -293,7 +293,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
 
     void addVerticalWrapMaxVariable(ConstraintAnchor bottom) {
         if (verticalWrapMax == null || verticalWrapMax.get() == null
-            || bottom.getFinalValue() > verticalWrapMax.get().getFinalValue()) {
+                || bottom.getFinalValue() > verticalWrapMax.get().getFinalValue()) {
             verticalWrapMax = new WeakReference<>(bottom);
         }
     }
@@ -745,8 +745,8 @@ public class ConstraintWidgetContainer extends WidgetContainer {
         }
 
         if (count > 2 && (originalHorizontalDimensionBehaviour == WRAP_CONTENT
-            || originalVerticalDimensionBehaviour == WRAP_CONTENT)
-            && (Optimizer.enabled(mOptimizationLevel, Optimizer.OPTIMIZATION_GROUPING))) {
+                || originalVerticalDimensionBehaviour == WRAP_CONTENT)
+                && (Optimizer.enabled(mOptimizationLevel, Optimizer.OPTIMIZATION_GROUPING))) {
             if (Grouping.simpleSolvingPass(this, getMeasurer())) {
                 if (originalHorizontalDimensionBehaviour == WRAP_CONTENT) {
                     if (preW < getWidth() && preW > 0) {
@@ -1102,9 +1102,9 @@ public class ConstraintWidgetContainer extends WidgetContainer {
         this.pass = pass;
     }
 
-    public void getSceneString(StringBuilder ret ) {
+    public void getSceneString(StringBuilder ret) {
 
-        ret.append(stringId+":{\n");
+        ret.append(stringId + ":{\n");
         ret.append("  actualWidth:" + mWidth);
         ret.append("\n");
         ret.append("  actualHeight:" + mHeight);

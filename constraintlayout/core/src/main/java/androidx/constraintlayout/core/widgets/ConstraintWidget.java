@@ -236,7 +236,7 @@ public class ConstraintWidget {
     public boolean hasResolvedTargets(int orientation, int size) {
         if (orientation == HORIZONTAL) {
             if (mLeft.mTarget != null && mLeft.mTarget.hasFinalValue()
-                && mRight.mTarget != null && mRight.mTarget.hasFinalValue()) {
+                    && mRight.mTarget != null && mRight.mTarget.hasFinalValue()) {
                 return ((mRight.mTarget.getFinalValue() - mRight.getMargin())
                         - (mLeft.mTarget.getFinalValue() + mLeft.getMargin())) >= size;
             }
@@ -595,8 +595,8 @@ public class ConstraintWidget {
         ret.append(",");
         ret.append(" ] ,\n");
     }
-    private void serializeCircle(StringBuilder ret,  ConstraintAnchor a, float angle){
-        if (  a.mTarget == null) {
+    private void serializeCircle(StringBuilder ret,  ConstraintAnchor a, float angle) {
+        if (a.mTarget == null) {
             return;
         }
 
@@ -610,7 +610,7 @@ public class ConstraintWidget {
         ret.append(" ] ,\n");
     }
 
-    private void serializeAttribute(StringBuilder ret, String type, float value, float def){
+    private void serializeAttribute(StringBuilder ret, String type, float value, float def) {
         if (value == def) {
             return;
         }
@@ -620,7 +620,7 @@ public class ConstraintWidget {
         ret.append(",\n");
     }
 
-    private void serializeAttribute(StringBuilder ret, String type, int value, int def){
+    private void serializeAttribute(StringBuilder ret, String type, int value, int def) {
         if (value == def) {
             return;
         }
@@ -630,7 +630,7 @@ public class ConstraintWidget {
         ret.append(",\n");
     }
 
-    private void serializeDimensionRatio(StringBuilder ret, String type, float value, int  whichSide ){
+    private void serializeDimensionRatio(StringBuilder ret, String type, float value, int  whichSide) {
         if (value == 0) {
             return;
         }
@@ -647,30 +647,30 @@ public class ConstraintWidget {
                                int min, int max, int override,
                                int matchConstraintMin, int matchConstraintDefault,
                                float MatchConstraintPercent,
-                               float weight){
+                               float weight) {
         ret.append(type);
         ret.append(" :  {\n");
-        serializeAttribute(ret,"size",size,Integer.MIN_VALUE);
-        serializeAttribute(ret,"min",min,0);
-        serializeAttribute(ret,"max",max, Integer.MAX_VALUE);
-        serializeAttribute(ret,"matchMin",matchConstraintMin, 0);
-        serializeAttribute(ret,"matchDef",matchConstraintDefault, MATCH_CONSTRAINT_SPREAD);
-        serializeAttribute(ret,"matchPercent",matchConstraintDefault, 1);
+        serializeAttribute(ret, "size", size, Integer.MIN_VALUE);
+        serializeAttribute(ret, "min", min, 0);
+        serializeAttribute(ret, "max", max, Integer.MAX_VALUE);
+        serializeAttribute(ret, "matchMin", matchConstraintMin, 0);
+        serializeAttribute(ret, "matchDef", matchConstraintDefault, MATCH_CONSTRAINT_SPREAD);
+        serializeAttribute(ret, "matchPercent", matchConstraintDefault, 1);
         ret.append("},\n");
     }
 
     public StringBuilder serialize(StringBuilder ret) {
         ret.append("{\n");
-        serializeAnchor(ret,"left", mLeft);
-        serializeAnchor(ret,"top", mTop );
-        serializeAnchor(ret,"right", mRight);
-        serializeAnchor(ret,"bottom", mBottom);
-        serializeAnchor(ret,"baseline", mBaseline);
-        serializeAnchor(ret,"centerX", mCenterX);
-        serializeAnchor(ret,"centerY", mCenterY);
-        serializeCircle(ret, mCenter,mCircleConstraintAngle);
+        serializeAnchor(ret, "left", mLeft);
+        serializeAnchor(ret, "top", mTop);
+        serializeAnchor(ret, "right", mRight);
+        serializeAnchor(ret, "bottom", mBottom);
+        serializeAnchor(ret, "baseline", mBaseline);
+        serializeAnchor(ret, "centerX", mCenterX);
+        serializeAnchor(ret, "centerY", mCenterY);
+        serializeCircle(ret, mCenter, mCircleConstraintAngle);
 
-        serializeSize(ret,"width",
+        serializeSize(ret, "width",
                 mWidth,
                 mMinWidth,
                 mMaxDimension[HORIZONTAL],
@@ -681,7 +681,7 @@ public class ConstraintWidget {
                 mWeight[DIMENSION_HORIZONTAL]
          );
         
-        serializeSize(ret,"height",
+        serializeSize(ret, "height",
                 mHeight,
                 mMinHeight,
                 mMaxDimension[VERTICAL],
@@ -691,9 +691,9 @@ public class ConstraintWidget {
                 mMatchConstraintPercentHeight,
                 mWeight[DIMENSION_VERTICAL]);
 
-        serializeDimensionRatio(ret,"dimensionRatio",mDimensionRatio, mDimensionRatioSide);
-        serializeAttribute(ret,"horizontalBias",mHorizontalBiasPercent,DEFAULT_BIAS );
-        serializeAttribute(ret,"verticalBias",mVerticalBiasPercent,DEFAULT_BIAS );
+        serializeDimensionRatio(ret, "dimensionRatio", mDimensionRatio, mDimensionRatioSide);
+        serializeAttribute(ret, "horizontalBias", mHorizontalBiasPercent, DEFAULT_BIAS);
+        serializeAttribute(ret, "verticalBias", mVerticalBiasPercent, DEFAULT_BIAS);
         ret.append("}\n");
 
         return ret;
@@ -2459,7 +2459,7 @@ public class ConstraintWidget {
                         container.addHorizontalWrapMaxVariable(mRight);
                     } else {
                         int wrapStrength = SolverVariable.STRENGTH_EQUALITY;
-                        system.addGreaterThan(system.createObjectVariable(mParent.mRight), right,0, wrapStrength);
+                        system.addGreaterThan(system.createObjectVariable(mParent.mRight), right, 0, wrapStrength);
                     }
                 }
             }
@@ -2476,7 +2476,7 @@ public class ConstraintWidget {
                         container.addVerticalWrapMaxVariable(mBottom);
                     } else {
                         int wrapStrength = SolverVariable.STRENGTH_EQUALITY;
-                        system.addGreaterThan( system.createObjectVariable(mParent.mBottom), bottom,0, wrapStrength);
+                        system.addGreaterThan(system.createObjectVariable(mParent.mBottom), bottom, 0, wrapStrength);
                     }
                 }
             }
@@ -2965,9 +2965,9 @@ public class ConstraintWidget {
             }
         } else {
             if (numConnections != 2
-                  && !useRatio
-                  && ((matchConstraintDefault == MATCH_CONSTRAINT_WRAP)
-                      ||(matchConstraintDefault == MATCH_CONSTRAINT_SPREAD))) {
+                    && !useRatio
+                    && ((matchConstraintDefault == MATCH_CONSTRAINT_WRAP)
+                      || (matchConstraintDefault == MATCH_CONSTRAINT_SPREAD))) {
                 variableSize = false;
                 int d = Math.max(matchMinDimension, dimension);
                 if (matchMaxDimension > 0) {
@@ -3227,7 +3227,7 @@ public class ConstraintWidget {
 
             if (applyCentering) {
                 if (!variableSize && !oppositeVariable && !oppositeInChain
-                    && beginTarget == parentMin && endTarget == parentMax) {
+                        && beginTarget == parentMin && endTarget == parentMax) {
                     // for fixed size widgets, we can simplify the constraints
                     centeringStrength = SolverVariable.STRENGTH_FIXED;
                     rangeCheckStrength = SolverVariable.STRENGTH_FIXED;
@@ -3583,9 +3583,9 @@ public class ConstraintWidget {
         // horizontal
     }
 
-    public void getSceneString(StringBuilder ret ) {
+    public void getSceneString(StringBuilder ret) {
 
-        ret.append("  "+stringId+":{\n");
+        ret.append("  " + stringId + ":{\n");
         ret.append("    actualWidth:" + mWidth);
         ret.append("\n");
         ret.append("    actualHeight:" + mHeight);
@@ -3594,14 +3594,14 @@ public class ConstraintWidget {
         ret.append("\n");
         ret.append("    actualTop:" + mY);
         ret.append("\n");
-        getSceneString(ret,"left", mLeft);
-        getSceneString(ret,"top", mTop );
-        getSceneString(ret,"right", mRight);
-        getSceneString(ret,"bottom", mBottom);
-        getSceneString(ret,"baseline", mBaseline);
-        getSceneString(ret,"centerX", mCenterX);
-        getSceneString(ret,"centerY", mCenterY);
-        getSceneString(ret,"    width",
+        getSceneString(ret, "left", mLeft);
+        getSceneString(ret, "top", mTop);
+        getSceneString(ret, "right", mRight);
+        getSceneString(ret, "bottom", mBottom);
+        getSceneString(ret, "baseline", mBaseline);
+        getSceneString(ret, "centerX", mCenterX);
+        getSceneString(ret, "centerY", mCenterY);
+        getSceneString(ret, "    width",
                 mWidth,
                 mMinWidth,
                 mMaxDimension[HORIZONTAL],
@@ -3612,7 +3612,7 @@ public class ConstraintWidget {
                 mWeight[DIMENSION_HORIZONTAL]
         );
 
-        getSceneString(ret,"    height",
+        getSceneString(ret, "    height",
                 mHeight,
                 mMinHeight,
                 mMaxDimension[VERTICAL],
@@ -3621,11 +3621,11 @@ public class ConstraintWidget {
                 mMatchConstraintDefaultHeight,
                 mMatchConstraintPercentHeight,
                 mWeight[DIMENSION_VERTICAL]);
-        serializeDimensionRatio(ret,"    dimensionRatio",mDimensionRatio, mDimensionRatioSide);
-        serializeAttribute(ret,"    horizontalBias",mHorizontalBiasPercent,DEFAULT_BIAS );
-        serializeAttribute(ret,"    verticalBias",mVerticalBiasPercent,DEFAULT_BIAS );
-        serializeAttribute(ret,"    horizontalChainStyle",mHorizontalChainStyle,CHAIN_SPREAD );
-        serializeAttribute(ret,"    verticalChainStyle",mVerticalChainStyle,CHAIN_SPREAD );
+        serializeDimensionRatio(ret, "    dimensionRatio", mDimensionRatio, mDimensionRatioSide);
+        serializeAttribute(ret, "    horizontalBias", mHorizontalBiasPercent, DEFAULT_BIAS);
+        serializeAttribute(ret, "    verticalBias", mVerticalBiasPercent, DEFAULT_BIAS);
+        serializeAttribute(ret, "    horizontalChainStyle", mHorizontalChainStyle, CHAIN_SPREAD);
+        serializeAttribute(ret, "    verticalChainStyle", mVerticalChainStyle, CHAIN_SPREAD);
 
         ret.append("  }");
 
@@ -3635,15 +3635,15 @@ public class ConstraintWidget {
                                int min, int max, int override,
                                int matchConstraintMin, int matchConstraintDefault,
                                float MatchConstraintPercent,
-                               float weight){
+                               float weight) {
         ret.append(type);
         ret.append(" :  {\n");
-        serializeAttribute(ret,"      size",size,0);
-        serializeAttribute(ret,"      min",min,0);
-        serializeAttribute(ret,"      max",max, Integer.MAX_VALUE);
-        serializeAttribute(ret,"      matchMin",matchConstraintMin, 0);
-        serializeAttribute(ret,"      matchDef",matchConstraintDefault, MATCH_CONSTRAINT_SPREAD);
-        serializeAttribute(ret,"      matchPercent",MatchConstraintPercent, 1);
+        serializeAttribute(ret, "      size", size, 0);
+        serializeAttribute(ret, "      min", min, 0);
+        serializeAttribute(ret, "      max", max, Integer.MAX_VALUE);
+        serializeAttribute(ret, "      matchMin", matchConstraintMin, 0);
+        serializeAttribute(ret, "      matchDef", matchConstraintDefault, MATCH_CONSTRAINT_SPREAD);
+        serializeAttribute(ret, "      matchPercent", MatchConstraintPercent, 1);
         ret.append("    },\n");
     }
     private void getSceneString(StringBuilder ret, String side, ConstraintAnchor a) {

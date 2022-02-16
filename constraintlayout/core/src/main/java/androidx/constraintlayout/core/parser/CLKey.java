@@ -19,81 +19,81 @@ import java.util.ArrayList;
 
 public class CLKey extends CLContainer {
 
-  private static ArrayList<String> sections = new ArrayList<>();
+    private static ArrayList<String> sections = new ArrayList<>();
 
-  static {
-    sections.add("ConstraintSets");
-    sections.add("Variables");
-    sections.add("Generate");
-    sections.add("Transitions");
-    sections.add("KeyFrames");
-    sections.add("KeyAttributes");
-    sections.add("KeyPositions");
-    sections.add("KeyCycles");
-  }
-
-  public CLKey(char[] content) {
-    super(content);
-  }
-
-  public static CLElement allocate(char[] content) {
-    return new CLKey(content);
-  }
-
-  public static CLElement allocate(String name, CLElement value) {
-    CLKey key = new CLKey(name.toCharArray());
-    key.setStart(0);
-    key.setEnd(name.length() -1);
-    key.set(value);
-    return key;
-  }
-
-  public String getName() { return content(); }
-
-  protected String toJSON() {
-    if (mElements.size() > 0) {
-      return getDebugName() + content() + ": " + mElements.get(0).toJSON();
+    static {
+        sections.add("ConstraintSets");
+        sections.add("Variables");
+        sections.add("Generate");
+        sections.add("Transitions");
+        sections.add("KeyFrames");
+        sections.add("KeyAttributes");
+        sections.add("KeyPositions");
+        sections.add("KeyCycles");
     }
-    return getDebugName() + content() + ": <> ";
-  }
 
-  protected String toFormattedJSON(int indent, int forceIndent) {
-    StringBuilder json = new StringBuilder(getDebugName());
-    addIndent(json, indent);
-    String content = content();
-    if (mElements.size() > 0) {
-      json.append(content);
-      json.append(": ");
-      if (sections.contains(content)) {
-        forceIndent = 3;
-      }
-      if (forceIndent > 0) {
-        json.append(mElements.get(0).toFormattedJSON(indent, forceIndent - 1));
-      } else {
-        String val = mElements.get(0).toJSON();
-        if (val.length() + indent < MAX_LINE) {
-          json.append(val);
-        } else {
-          json.append(mElements.get(0).toFormattedJSON(indent, forceIndent - 1));
+    public CLKey(char[] content) {
+        super(content);
+    }
+
+    public static CLElement allocate(char[] content) {
+        return new CLKey(content);
+    }
+
+    public static CLElement allocate(String name, CLElement value) {
+        CLKey key = new CLKey(name.toCharArray());
+        key.setStart(0);
+        key.setEnd(name.length() - 1);
+        key.set(value);
+        return key;
+    }
+
+    public String getName() { return content(); }
+
+    protected String toJSON() {
+        if (mElements.size() > 0) {
+            return getDebugName() + content() + ": " + mElements.get(0).toJSON();
         }
-      }
-      return json.toString();
+        return getDebugName() + content() + ": <> ";
     }
-    return content + ": <> ";
-  }
 
-  public void set(CLElement value) {
-    if (mElements.size() > 0) {
-      mElements.set(0, value);
-    } else {
-      mElements.add(value);
+    protected String toFormattedJSON(int indent, int forceIndent) {
+        StringBuilder json = new StringBuilder(getDebugName());
+        addIndent(json, indent);
+        String content = content();
+        if (mElements.size() > 0) {
+            json.append(content);
+            json.append(": ");
+            if (sections.contains(content)) {
+                forceIndent = 3;
+            }
+            if (forceIndent > 0) {
+                json.append(mElements.get(0).toFormattedJSON(indent, forceIndent - 1));
+            } else {
+                String val = mElements.get(0).toJSON();
+                if (val.length() + indent < MAX_LINE) {
+                    json.append(val);
+                } else {
+                    json.append(mElements.get(0).toFormattedJSON(indent, forceIndent - 1));
+                }
+            }
+            return json.toString();
+        }
+        return content + ": <> ";
     }
-  }
 
-  public CLElement getValue() {
-    if (mElements.size() > 0) {
-      return mElements.get(0);
+    public void set(CLElement value) {
+        if (mElements.size() > 0) {
+            mElements.set(0, value);
+        } else {
+            mElements.add(value);
+        }
     }
-    return null;
-  }
+
+    public CLElement getValue() {
+        if (mElements.size() > 0) {
+            return mElements.get(0);
+        }
+        return null;
+    }
 }

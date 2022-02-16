@@ -58,7 +58,7 @@ public class BasicMeasure {
         for (int i = 0; i < childCount; i++) {
             ConstraintWidget widget = layout.mChildren.get(i);
             if (widget.getHorizontalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
-                || widget.getVerticalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT) {
+                    || widget.getVerticalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT) {
                 mVariableDimensionsWidgets.add(widget);
             }
         }
@@ -212,7 +212,7 @@ public class BasicMeasure {
                     break;
                 }
                 if (child.isInHorizontalChain()
-                    || child.isInVerticalChain()) {
+                        || child.isInVerticalChain()) {
                     optimize = false;
                     break;
                 }
