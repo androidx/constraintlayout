@@ -16,9 +16,8 @@
 
 package androidx.constraintlayout.motion.widget;
 
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.motion.widget.MotionScene.Transition;
-import android.util.Log;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 /**
  * Builder class for creating {@link Transition} programmatically.
@@ -42,15 +41,21 @@ public class TransitionBuilder {
         }
 
         if (scene.mCurrentTransition == null || scene.getDefinedTransitions().isEmpty()) {
-            throw new RuntimeException("Invalid motion layout. Motion Scene doesn't have any transition.");
+            throw new RuntimeException("Invalid motion layout. "
+                    + "Motion Scene doesn't have any transition.");
         }
     }
 
     /**
      * Builder for a basic transition that transition from the startConstraintSet to
      * the endConstraintSet.
-     *
+     * @param scene
      * @param transitionId a unique id to represent the created transition
+     * @param startConstraintSetId
+     * @param startConstraintSet
+     * @param endConstraintSetId
+     * @param endConstraintSet
+     * @return
      */
     public static Transition buildTransition(
             MotionScene scene,
