@@ -11,6 +11,8 @@ This repository contains the core Java engine, Android library, validation tools
 
 [Android Reference Docs](https://developer.android.com/reference/androidx/constraintlayout/widget/ConstraintLayout)
 
+[Reference Docs for Compose](https://developer.android.com/reference/kotlin/androidx/constraintlayout/compose/package-summary)
+
 Have a question that isn't answered here? Try StackOverflow for [ConstraintLayout](https://stackoverflow.com/questions/tagged/android-constraintlayout) or [MotionLayout](https://stackoverflow.com/questions/tagged/android-motionlayout).
 
 ## Using ConstraintLayout
