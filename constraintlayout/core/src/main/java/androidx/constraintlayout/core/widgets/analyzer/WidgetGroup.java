@@ -45,8 +45,12 @@ public class WidgetGroup {
         this.orientation = orientation;
     }
 
-    public int getOrientation() { return orientation; }
-    public int getId() { return id; }
+    public int getOrientation() {
+        return orientation;
+    }
+    public int getId() {
+        return id;
+    }
 
     public boolean add(ConstraintWidget widget) {
         if (widgets.contains(widget)) {
@@ -56,8 +60,12 @@ public class WidgetGroup {
         return true;
     }
 
-    public void setAuthoritative(boolean isAuthoritative) { authoritative = isAuthoritative; }
-    public boolean isAuthoritative() { return authoritative; }
+    public void setAuthoritative(boolean isAuthoritative) {
+        authoritative = isAuthoritative;
+    }
+    public boolean isAuthoritative() {
+        return authoritative;
+    }
 
     private String getOrientationString() {
         if (orientation == HORIZONTAL) {
@@ -102,8 +110,8 @@ public class WidgetGroup {
     private int measureWrap(int orientation, ConstraintWidget widget) {
         ConstraintWidget.DimensionBehaviour behaviour = widget.getDimensionBehaviour(orientation);
         if (behaviour == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT
-            || behaviour == ConstraintWidget.DimensionBehaviour.MATCH_PARENT
-            || behaviour == ConstraintWidget.DimensionBehaviour.FIXED) {
+                || behaviour == ConstraintWidget.DimensionBehaviour.MATCH_PARENT
+                || behaviour == ConstraintWidget.DimensionBehaviour.FIXED) {
             int dimension;
             if (orientation == HORIZONTAL) {
                 dimension = widget.getWidth();
@@ -232,7 +240,7 @@ public class WidgetGroup {
         int baseline;
         int orientation;
 
-        public MeasureResult(ConstraintWidget widget, LinearSystem system, int orientation) {
+        MeasureResult(ConstraintWidget widget, LinearSystem system, int orientation) {
             widgetRef = new WeakReference<>(widget);
             left = system.getObjectVariableValue(widget.mLeft);
             top = system.getObjectVariableValue(widget.mTop);

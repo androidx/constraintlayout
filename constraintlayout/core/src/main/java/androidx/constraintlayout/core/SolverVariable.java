@@ -222,7 +222,7 @@ public class SolverVariable implements Comparable<SolverVariable> {
 
     public void setFinalValue(LinearSystem system, float value) {
         if (false && INTERNAL_DEBUG) {
-            System.out.println("Set final value for " + this + " of "+ value);
+            System.out.println("Set final value for " + this + " of " + value);
         }
         computedValue = value;
         isFinalValue = true;
@@ -232,7 +232,7 @@ public class SolverVariable implements Comparable<SolverVariable> {
         final int count = mClientEquationsCount;
         definitionId = -1;
         for (int i = 0; i < count; i++) {
-            mClientEquations[i].updateFromFinalVariable(system,this, false);
+            mClientEquations[i].updateFromFinalVariable(system, this, false);
         }
         mClientEquationsCount = 0;
     }
@@ -247,7 +247,7 @@ public class SolverVariable implements Comparable<SolverVariable> {
         final int count = mClientEquationsCount;
         definitionId = -1;
         for (int i = 0; i < count; i++) {
-            mClientEquations[i].updateFromSynonymVariable(system,this, false);
+            mClientEquations[i].updateFromSynonymVariable(system, this, false);
         }
         mClientEquationsCount = 0;
         system.displayReadableRows();
@@ -287,7 +287,9 @@ public class SolverVariable implements Comparable<SolverVariable> {
         return mName;
     }
 
-    public void setName(String name) { mName = name; }
+    public void setName(String name) {
+        mName = name;
+    }
     public void setType(Type type, String prefix) {
         mType = type;
         if (INTERNAL_DEBUG && mName == null) {

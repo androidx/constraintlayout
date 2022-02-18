@@ -156,7 +156,7 @@ public class StopLogicEngine implements StopEngine {
 
     @Override
     public boolean isStopped() {
-        return getVelocity() < EPSILON && Math.abs(mStage3EndPosition-mLastPosition) < EPSILON;
+        return getVelocity() < EPSILON && Math.abs(mStage3EndPosition - mLastPosition) < EPSILON;
     }
 
     private void setup(float velocity, float distance, float maxAcceleration, float maxVelocity,

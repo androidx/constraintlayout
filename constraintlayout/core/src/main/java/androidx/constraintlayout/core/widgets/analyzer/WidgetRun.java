@@ -177,12 +177,12 @@ public abstract class WidgetRun implements Dependency {
             case MATCH_CONSTRAINT_PERCENT: {
                 ConstraintWidget parent = widget.getParent();
                 if (parent != null) {
-                    WidgetRun run = orientation == HORIZONTAL ?
-                            parent.horizontalRun
+                    WidgetRun run = orientation == HORIZONTAL
+                            ? parent.horizontalRun
                             : parent.verticalRun;
                     if (run.dimension.resolved) {
-                        float percent = orientation == HORIZONTAL ?
-                                widget.mMatchConstraintPercentWidth
+                        float percent = orientation == HORIZONTAL
+                                ? widget.mMatchConstraintPercentWidth
                                 : widget.mMatchConstraintPercentHeight;
                         int targetDimensionValue = run.dimension.value;
                         int size = (int) (0.5f + targetDimensionValue * percent);
@@ -262,8 +262,8 @@ public abstract class WidgetRun implements Dependency {
         }
         DependencyNode target = null;
         ConstraintWidget targetWidget = anchor.mTarget.mOwner;
-        WidgetRun run = (orientation == ConstraintWidget.HORIZONTAL) ?
-                targetWidget.horizontalRun : targetWidget.verticalRun;
+        WidgetRun run = (orientation == ConstraintWidget.HORIZONTAL)
+                ? targetWidget.horizontalRun : targetWidget.verticalRun;
         ConstraintAnchor.Type targetType = anchor.mTarget.mType;
         switch (targetType) {
             case TOP:
@@ -301,7 +301,9 @@ public abstract class WidgetRun implements Dependency {
         return 0;
     }
 
-    public boolean isResolved() { return resolved; }
+    public boolean isResolved() {
+        return resolved;
+    }
 
     enum RunType { NONE, START, END, CENTER }
 }

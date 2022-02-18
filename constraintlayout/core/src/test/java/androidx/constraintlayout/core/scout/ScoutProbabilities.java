@@ -175,8 +175,8 @@ public class ScoutProbabilities {
                 if (scoutWidget.isGuideline()) {
                     continue;
                 }
-                if (!widget.isGuideline() &&
-                    ScoutWidget.distance(scoutWidget, widget) > MAX_DIST_FOR_CENTER_OVERLAP) {
+                if (!widget.isGuideline()
+                        && ScoutWidget.distance(scoutWidget, widget) > MAX_DIST_FOR_CENTER_OVERLAP) {
                     continue;
                 }
                 if (!widget.isGuideline() || widget.isVerticalGuideline()) {
@@ -396,8 +396,8 @@ public class ScoutProbabilities {
             String s;
             if (DEBUG) {
                 System.out.println(" b check " + list[i] + " " + widgetProbability[4][maxIndex]);
-                s = list[i] + "(" + Direction.toString(baseline) + ") -> " + list[maxIndex] + " " +
-                        Direction.toString(baseline);
+                s = list[i] + "(" + Direction.toString(baseline) + ") -> " + list[maxIndex] + " "
+                        + Direction.toString(baseline);
                 System.out.println("try " + s);
             }
 
@@ -517,7 +517,7 @@ public class ScoutProbabilities {
                         }
                     }
                     if (widgetProbability[maxDirection] == null) {
-                        System.out.println(list[i]+" "+maxDirection);
+                        System.out.println(list[i] + " " + maxDirection);
                         continue;
                     }
                     int m, cDir;
@@ -535,9 +535,9 @@ public class ScoutProbabilities {
                         continue;
                     }
                     String s =
-                            list[i] + "(" + Direction.toString(maxDirection) + ") -> " + list[m] +
-                                    " " +
-                                    Direction.toString(cDir);
+                            list[i] + "(" + Direction.toString(maxDirection) + ") -> " + list[m]
+                                    + " "
+                                    + Direction.toString(cDir);
                     if (DEBUG) {
                         System.out.println("try " + s);
                     }
@@ -583,8 +583,8 @@ public class ScoutProbabilities {
                 }
             }
             if (widget.isCentered(Direction.ORIENTATION_HORIZONTAL)) {
-                if (centeredHorizontal == null ||
-                        centeredHorizontal.getWidth() > widget.getWidth()) {
+                if (centeredHorizontal == null
+                        || centeredHorizontal.getWidth() > widget.getWidth()) {
                     centeredHorizontal = widget;
                 }
             }
@@ -657,8 +657,8 @@ public class ScoutProbabilities {
             if ((candidates[j].length > 0) && (candidates[j + 1].length > 0)) {
                 Direction side = directions[j].getOpposite();
                 Direction otherSide = directions[j];
-                if (maxCandidate[j].getLocation(side) <
-                        maxCandidate[j + 1].getLocation(otherSide)) {
+                if (maxCandidate[j].getLocation(side)
+                        < maxCandidate[j + 1].getLocation(otherSide)) {
                     maxCandidate[j].setWeakConstraint(side.getDirection(), maxCandidate[j + 1],
                             otherSide.getDirection());
                     candidates[j] = new ScoutWidget[0]; // prevent next step from using
@@ -716,12 +716,12 @@ public class ScoutProbabilities {
         }
 
         if (to.isGuideline()) {
-            if ((toDir == Direction.NORTH || toDir == Direction.SOUTH) &&
-                    to.isVerticalGuideline()) {
+            if ((toDir == Direction.NORTH || toDir == Direction.SOUTH)
+                    && to.isVerticalGuideline()) {
                 return;
             }
-            if ((toDir == Direction.EAST || toDir == Direction.WEST) &&
-                    to.isHorizontalGuideline()) {
+            if ((toDir == Direction.EAST || toDir == Direction.WEST)
+                    && to.isHorizontalGuideline()) {
                 return;
             }
         }
@@ -796,8 +796,8 @@ public class ScoutProbabilities {
             }
         }
         // distance normalizing scale factor
-        float scale = 0.5f *
-                ((orientation == Direction.ORIENTATION_VERTICAL) ? from.getParent().getHeight() :
+        float scale = 0.5f
+                * ((orientation == Direction.ORIENTATION_VERTICAL) ? from.getParent().getHeight() :
                         from.getParent().getWidth());
         Direction fromLeft = Direction.getDirections(orientation)[0];
         Direction fromRight = Direction.getDirections(orientation)[1];
@@ -829,13 +829,13 @@ public class ScoutProbabilities {
         float distance2 = ScoutWidget.distance(from, to2) / scale;
         float diff = Math.abs(positionDiff1 - positionDiff2);
         float probability = ((diff < SLOPE_CENTER_CONNECTION) ? 1 : 0); // favor close distance
-        probability = probability / (1+ distance1 + distance2);
+        probability = probability / (1 + distance1 + distance2);
         probability += 1 / (1 + Math.abs(positionDiff1 - positionDiff2));
         probability *=
                 (to1.isRoot() && to2.isRoot()) ? 2 : ((SUPPORT_CENTER_TO_NON_ROOT) ? 1f : 0);
 
         result[RESULT_PROBABILITY] = probability;
-        result[RESULT_MARGIN] = Math.min(positionDiff1,positionDiff2);
+        result[RESULT_MARGIN] = Math.min(positionDiff1, positionDiff2);
     }
 
     /*-----------------------------------------------------------------------*/
@@ -930,8 +930,8 @@ public class ScoutProbabilities {
             for (int dir = 0; dir < mProbability[i].length; dir++) { // above, below, left, right
 
                 System.out.println(
-                        Utils.leftTrim(padd + i + " " + Direction.toString(dir), SIZE) + " " +
-                                Utils.toS(mProbability[i][dir]));
+                        Utils.leftTrim(padd + i + " " + Direction.toString(dir), SIZE) + " "
+                                + Utils.toS(mProbability[i][dir]));
                 System.out.println(padd + " " + Utils.toS(mMargin[i][dir]));
 
             }

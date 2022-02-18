@@ -21,22 +21,22 @@ import java.net.Socket;
 
 public class Utils {
     public static void log(String tag, String value) {
-        System.out.println(tag+" : "+value);
+        System.out.println(tag + " : " + value);
     }
     public static void loge(String tag, String value) {
-        System.err.println(tag+" : "+value);
+        System.err.println(tag + " : " + value);
     }
 
-   public static void socketSend(String str) {
-       try {
-           Socket socket = new Socket("127.0.0.1", 5327);
-           OutputStream out = socket.getOutputStream();
-           out.write(str.getBytes());
-           out.close();
-       } catch (IOException e) {
-           e.printStackTrace();
-       }
-   }
+    public static void socketSend(String str) {
+        try {
+            Socket socket = new Socket("127.0.0.1", 5327);
+            OutputStream out = socket.getOutputStream();
+            out.write(str.getBytes());
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private static int clamp(int c) {
         int N = 255;
@@ -86,9 +86,9 @@ public class Utils {
     public static void log(String str) {
         StackTraceElement s = new Throwable().getStackTrace()[1];
         String methodName =  s.getMethodName();
-        methodName = (methodName+"                  ").substring(0,17);
+        methodName = (methodName + "                  ").substring(0, 17);
         String  npad = "    ".substring(Integer.toString(s.getLineNumber()).length());
-        String ss = ".(" + s.getFileName() + ":" + s.getLineNumber() + ")" + npad +methodName;
+        String ss = ".(" + s.getFileName() + ":" + s.getLineNumber() + ")" + npad + methodName;
         System.out.println(ss + " " + str);
         if (ourHandle != null) {
             ourHandle.message(ss + " " + str);

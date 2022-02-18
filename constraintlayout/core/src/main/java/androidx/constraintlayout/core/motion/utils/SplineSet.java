@@ -208,7 +208,7 @@ public abstract class SplineSet {
 
         public void setProperty(WidgetFrame view, float t) {
             mCurveFit.getPos(t, mTempValues);
-            view.setCustomValue( mConstraintAttributeList.valueAt(0), mTempValues);
+            view.setCustomValue(mConstraintAttributeList.valueAt(0), mTempValues);
         }
     }
 

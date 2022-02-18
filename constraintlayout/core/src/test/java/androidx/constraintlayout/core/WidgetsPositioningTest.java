@@ -383,7 +383,7 @@ public class WidgetsPositioningTest {
             }
         });
         System.out.println("Widget A weak left, should move to the right");
-        A.getAnchor(ConstraintAnchor.Type.LEFT);//.setStrength(ConstraintAnchor.Strength.WEAK);
+        A.getAnchor(ConstraintAnchor.Type.LEFT); //.setStrength(ConstraintAnchor.Strength.WEAK);
         runTestOnWidgets(widgets, new Runnable() {
             @Override
             public void run() {
@@ -392,7 +392,7 @@ public class WidgetsPositioningTest {
             }
         });
         System.out.println("Widget A weak right, should go back to center");
-        A.getAnchor(ConstraintAnchor.Type.RIGHT);//.setStrength(ConstraintAnchor.Strength.WEAK);
+        A.getAnchor(ConstraintAnchor.Type.RIGHT); //.setStrength(ConstraintAnchor.Strength.WEAK);
         runTestOnWidgets(widgets, new Runnable() {
             @Override
             public void run() {
@@ -401,7 +401,7 @@ public class WidgetsPositioningTest {
             }
         });
         System.out.println("Widget A strong left, should move to the left");
-        A.getAnchor(ConstraintAnchor.Type.LEFT);//.setStrength(ConstraintAnchor.Strength.STRONG);
+        A.getAnchor(ConstraintAnchor.Type.LEFT); //.setStrength(ConstraintAnchor.Strength.STRONG);
         runTestOnWidgets(widgets, new Runnable() {
             @Override
             public void run() {
@@ -801,7 +801,7 @@ public class WidgetsPositioningTest {
                 w.updateFromSolver(s, optimize);
             }
 //            try {
-                check.run();
+            check.run();
 //            } catch (AssertionError e) {
 //                System.out.println("Assertion error: " + e);
 //                runTestOnUIWidgets(widgets);

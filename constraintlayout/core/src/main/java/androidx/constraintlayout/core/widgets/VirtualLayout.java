@@ -31,7 +31,7 @@ public class VirtualLayout extends HelperWidget {
     private int mPaddingBottom = 0;
     private int mPaddingLeft = 0;
     private int mPaddingRight = 0;
-    private int mPaddingStart =0;
+    private int mPaddingStart = 0;
     private int mPaddingEnd = 0;
     private int mResolvedPaddingLeft = 0;
     private int mResolvedPaddingRight = 0;
@@ -95,13 +95,21 @@ public class VirtualLayout extends HelperWidget {
         mPaddingBottom = value;
     }
 
-    public int getPaddingTop() { return mPaddingTop; }
+    public int getPaddingTop() {
+        return mPaddingTop;
+    }
 
-    public int getPaddingBottom() { return mPaddingBottom; }
+    public int getPaddingBottom() {
+        return mPaddingBottom;
+    }
 
-    public int getPaddingLeft() { return mResolvedPaddingLeft; }
+    public int getPaddingLeft() {
+        return mResolvedPaddingLeft;
+    }
 
-    public int getPaddingRight() { return mResolvedPaddingRight; }
+    public int getPaddingRight() {
+        return mResolvedPaddingRight;
+    }
 
     /////////////////////////////////////////////////////////////////////////////////////////////
     // Solver callback

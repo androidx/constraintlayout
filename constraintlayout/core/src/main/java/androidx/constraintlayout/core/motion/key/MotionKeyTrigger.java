@@ -196,7 +196,7 @@ public class MotionKeyTrigger extends MotionKey {
                 mTriggerSlack = value;
                 break;
             default:
-            return super.setValue(type, value);
+                return super.setValue(type, value);
         }
         return true;
     }

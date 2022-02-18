@@ -16,27 +16,27 @@
 package androidx.constraintlayout.core.parser;
 
 public class CLParsingException extends Exception {
-  private final String mReason;
-  private final int mLineNumber;
-  private final String mElementClass;
+    private final String mReason;
+    private final int mLineNumber;
+    private final String mElementClass;
 
-  public CLParsingException(String reason, CLElement element) {
-    mReason = reason;
-    if (element != null) {
-      mElementClass = element.getStrClass();
-      mLineNumber = element.getLine();
-    } else {
-      mElementClass = "unknown";
-      mLineNumber = 0;
+    public CLParsingException(String reason, CLElement element) {
+        mReason = reason;
+        if (element != null) {
+            mElementClass = element.getStrClass();
+            mLineNumber = element.getLine();
+        } else {
+            mElementClass = "unknown";
+            mLineNumber = 0;
+        }
     }
-  }
 
-  public String reason() {
-    return mReason + " (" + mElementClass + " at line " + mLineNumber + ")";
-  }
+    public String reason() {
+        return mReason + " (" + mElementClass + " at line " + mLineNumber + ")";
+    }
 
-  @Override
-  public String toString() {
-    return "CLParsingException (" + this.hashCode() + ") : " + reason();
-  }
+    @Override
+    public String toString() {
+        return "CLParsingException (" + this.hashCode() + ") : " + reason();
+    }
 }
