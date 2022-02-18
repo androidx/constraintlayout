@@ -22,10 +22,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import androidx.constraintlayout.widget.R;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
+
+import androidx.constraintlayout.widget.R;
 
 /**
  * A view that is useful for prototyping layouts. <b>Added in 2.0</b>
@@ -66,8 +67,8 @@ public class MockView extends View {
     private void init(Context context, AttributeSet attrs) {
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MockView);
-            final int N = a.getIndexCount();
-            for (int i = 0; i < N; i++) {
+            final int count = a.getIndexCount();
+            for (int i = 0; i < count; i++) {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.MockView_mock_label) {
                     mText = a.getString(attr);
@@ -96,7 +97,8 @@ public class MockView extends View {
         mPaintText.setColor(mTextColor);
         mPaintText.setAntiAlias(true);
         mPaintTextBackground.setColor(mTextBackgroundColor);
-        mMargin = Math.round(mMargin * (getResources().getDisplayMetrics().xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        mMargin = Math.round(mMargin * (getResources().getDisplayMetrics().xdpi
+                / DisplayMetrics.DENSITY_DEFAULT));
     }
 
     @Override

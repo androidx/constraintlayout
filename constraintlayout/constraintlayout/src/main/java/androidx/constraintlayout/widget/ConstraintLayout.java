@@ -16,6 +16,13 @@
 
 package androidx.constraintlayout.widget;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_SPREAD;
+import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_WRAP;
+import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID;
+import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.UNSET;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -26,6 +33,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
+import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.core.LinearSystem;
@@ -37,19 +51,8 @@ import androidx.constraintlayout.core.widgets.Guideline;
 import androidx.constraintlayout.core.widgets.Optimizer;
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure;
 
-import android.util.AttributeSet;
-import android.util.Log;
-import android.util.SparseArray;
-import android.util.SparseIntArray;
-import android.view.View;
-import android.view.ViewGroup;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.*;
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * A {@code ConstraintLayout} is a {@link android.view.ViewGroup} which allows you
@@ -131,8 +134,10 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  *                 app:layout_constraintLeft_toRightOf="@+id/buttonA" />
  *         }
  *     </pre>
- * This tells the system that we want the left side of button B to be constrained to the right side of button A.
- * Such a position constraint means that the system will try to have both sides share the same location.
+ * This tells the system that we want the left side of button
+ * B to be constrained to the right side of button A.
+ * Such a position constraint means that the system will try to have
+ * both sides share the same location.
  * <br><div align="center" >
  * <img width="350px" src="resources/images/relative-positioning-constraints.png">
  * <br><b><i>Fig. 2 - Relative Positioning Constraints</i></b>
@@ -155,7 +160,8 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * <li>{@code layout_constraintEnd_toEndOf}</li>
  * </ul>
  * <p>
- * They all take a reference {@code id} to another widget, or the {@code parent} (which will reference the parent container, i.e. the ConstraintLayout):
+ * They all take a reference {@code id} to another widget, or the
+ * {@code parent} (which will reference the parent container, i.e. the ConstraintLayout):
  * <pre>{@code
  *         <Button android:id="@+id/buttonB" ...
  *                 app:layout_constraintLeft_toLeftOf="parent" />
@@ -170,8 +176,9 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * <img width="325px" src="resources/images/relative-positioning-margin.png">
  * <br><b><i>Fig. 3 - Relative Positioning Margins</i></b>
  * </div>
- * <p>If side margins are set, they will be applied to the corresponding constraints (if they exist) (Fig. 3), enforcing
- * the margin as a space between the target and the source side. The usual layout margin attributes can be used to this effect:
+ * <p>If side margins are set, they will be applied to the corresponding constraints
+ * (if they exist) (Fig. 3), enforcing the margin as a space between
+ * the target and the source side. The usual layout margin attributes can be used to this effect:
  * <ul>
  * <li>{@code android:layout_marginStart}</li>
  * <li>{@code android:layout_marginEnd}</li>
@@ -181,9 +188,11 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * <li>{@code android:layout_marginBottom}</li>
  * <li>{@code layout_marginBaseline}</li>
  * </ul>
- * <p>Note that a margin can only be positive or equal to zero, and takes a {@code Dimension}.</p>
+ * <p>Note that a margin can only be positive or equal to zero,
+ * and takes a {@code Dimension}.</p>
  * <h4 id="GoneMargin"> Margins when connected to a GONE widget</h4>
- * <p>When a position constraint target's visibility is {@code View.GONE}, you can also indicate a different
+ * <p>When a position constraint target's visibility is {@code View.GONE},
+ * you can also indicate a different
  * margin value to be used using the following attributes:</p>
  * <ul>
  * <li>{@code layout_goneMarginStart}</li>
@@ -199,7 +208,8 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * </p>
  * <h4 id="CenteringPositioning"> Centering positioning and bias</h4>
  * <p>
- * A useful aspect of {@code ConstraintLayout} is in how it deals with "impossible" constraints. For example, if
+ * A useful aspect of {@code ConstraintLayout} is in how it deals with "impossible" constraints.
+ * For example, if
  * we have something like:
  * <pre>{@code
  *         <androidx.constraintlayout.widget.ConstraintLayout ...>
@@ -211,7 +221,8 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  *     </pre>
  * </p>
  * <p>
- * Unless the {@code ConstraintLayout} happens to have the exact same size as the {@code Button}, both constraints
+ * Unless the {@code ConstraintLayout} happens to have the exact same size as the
+ * {@code Button}, both constraints
  * cannot be satisfied at the same time (both sides cannot be where we want them to be).
  * <p><div align="center" >
  * <img width="325px" src="resources/images/centering-positioning.png">
@@ -219,12 +230,14 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * </div>
  * <p>
  * What happens in this case is that the constraints act like opposite forces
- * pulling the widget apart equally (Fig. 4); such that the widget will end up being centered in the parent container.
+ * pulling the widget apart equally (Fig. 4); such that the widget will end up being centered
+ * in the parent container.
  * This will apply similarly for vertical constraints.
  * </p>
  * <h5 id="Bias">Bias</h5>
  * <p>
- * The default when encountering such opposite constraints is to center the widget; but you can tweak
+ * The default when encountering such opposite constraints is to center the widget;
+ * but you can tweak
  * the positioning to favor one side over another using the bias attributes:
  * <ul>
  * <li>{@code layout_constraintHorizontal_bias}</li>
@@ -235,7 +248,8 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * <br><b><i>Fig. 5 - Centering Positioning with Bias</i></b>
  * </div>
  * <p>
- * For example the following will make the left side with a 30% bias instead of the default 50%, such that the left side will be
+ * For example the following will make the left side with a 30% bias instead of the default 50%,
+ * such that the left side will be
  * shorter, with the widget leaning more toward the left side (Fig. 5):
  * </p>
  * <pre>{@code
@@ -253,12 +267,14 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  *
  * <h4 id="CircularPositioning"> Circular positioning (<b>Added in 1.1</b>)</h4>
  * <p>
- * You can constrain a widget center relative to another widget center, at an angle and a distance. This allows
+ * You can constrain a widget center relative to another widget center,
+ * at an angle and a distance. This allows
  * you to position a widget on a circle (see Fig. 6). The following attributes can be used:
  * <ul>
  * <li>{@code layout_constraintCircle} : references another widget id</li>
  * <li>{@code layout_constraintCircleRadius} : the distance to the other widget center</li>
- * <li>{@code layout_constraintCircleAngle} : which angle the widget should be at (in degrees, from 0 to 360)</li>
+ * <li>{@code layout_constraintCircleAngle} : which angle the widget should be at
+ * (in degrees, from 0 to 360)</li>
  * </ul>
  * <p><div align="center" >
  * <img width="325px" src="resources/images/circle1.png">
@@ -278,27 +294,36 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * <h4 id="VisibilityBehavior"> Visibility behavior </h4>
  * <p>
  * {@code ConstraintLayout} has a specific handling of widgets being marked as {@code View.GONE}.
- * <p>{@code GONE} widgets, as usual, are not going to be displayed and are not part of the layout itself (i.e. their actual dimensions
+ * <p>{@code GONE} widgets, as usual, are not going to be displayed and
+ * are not part of the layout itself (i.e. their actual dimensions
  * will not be changed if marked as {@code GONE}).
  *
- * <p>But in terms of the layout computations, {@code GONE} widgets are still part of it, with an important distinction:
+ * <p>But in terms of the layout computations, {@code GONE} widgets are still part of it,
+ * with an important distinction:
  * <ul>
- * <li> For the layout pass, their dimension will be considered as zero (basically, they will be resolved to a point)</li>
- * <li> If they have constraints to other widgets they will still be respected, but any margins will be as if equals to zero</li>
+ * <li> For the layout pass, their dimension will be considered as zero
+ * (basically, they will be resolved to a point)</li>
+ * <li> If they have constraints to other widgets they will still be respected,
+ * but any margins will be as if equals to zero</li>
  * </ul>
  *
  * <p><div align="center" >
  * <img width="350px" src="resources/images/visibility-behavior.png">
  * <br><b><i>Fig. 7 - Visibility Behavior</i></b>
  * </div>
- * <p>This specific behavior allows to build layouts where you can temporarily mark widgets as being {@code GONE},
- * without breaking the layout (Fig. 7), which can be particularly useful when doing simple layout animations.
- * <p><b>Note: </b>The margin used will be the margin that B had defined when connecting to A (see Fig. 7 for an example).
- * In some cases, this might not be the margin you want (e.g. A had a 100dp margin to the side of its container,
+ * <p>This specific behavior allows to build layouts where you can
+ * temporarily mark widgets as being {@code GONE},
+ * without breaking the layout (Fig. 7), which can be particularly useful
+ * when doing simple layout animations.
+ * <p><b>Note: </b>The margin used will be the margin that B had
+ * defined when connecting to A (see Fig. 7 for an example).
+ * In some cases, this might not be the margin you want
+ * (e.g. A had a 100dp margin to the side of its container,
  * B only a 16dp to A, marking
  * A as gone, B will have a margin of 16dp to the container).
  * For this reason, you can specify an alternate
- * margin value to be used when the connection is to a widget being marked as gone (see <a href="#GoneMargin">the section above about the gone margin attributes</a>).
+ * margin value to be used when the connection is to a widget being marked as gone
+ * (see <a href="#GoneMargin">the section above about the gone margin attributes</a>).
  * </p>
  *
  * <h4 id="DimensionConstraints"> Dimensions constraints </h4>
@@ -311,14 +336,17 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * <li>{@code android:maxWidth} set the maximum width for the layout</li>
  * <li>{@code android:maxHeight} set the maximum height for the layout</li>
  * </ul>
- * Those minimum and maximum dimensions will be used by {@code ConstraintLayout} when its dimensions are set to {@code WRAP_CONTENT}.
+ * Those minimum and maximum dimensions will be used by
+ * {@code ConstraintLayout} when its dimensions are set to {@code WRAP_CONTENT}.
  * </p>
  * <h5>Widgets dimension constraints</h5>
  * <p>
- * The dimension of the widgets can be specified by setting the {@code android:layout_width} and
+ * The dimension of the widgets can be specified by setting the
+ * {@code android:layout_width} and
  * {@code android:layout_height} attributes in 3 different ways:
  * <ul>
- * <li>Using a specific dimension (either a literal value such as {@code 123dp} or a {@code Dimension} reference)</li>
+ * <li>Using a specific dimension (either a literal value such as
+ * {@code 123dp} or a {@code Dimension} reference)</li>
  * <li>Using {@code WRAP_CONTENT}, which will ask the widget to compute its own size</li>
  * <li>Using {@code 0dp}, which is the equivalent of "{@code MATCH_CONSTRAINT}"</li>
  * </ul>
@@ -326,19 +354,26 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * <img width="325px" src="resources/images/dimension-match-constraints.png">
  * <br><b><i>Fig. 8 - Dimension Constraints</i></b>
  * </div>
- * The first two works in a similar fashion as other layouts. The last one will resize the widget in such a way as
- * matching the constraints that are set (see Fig. 8, (a) is wrap_content, (b) is 0dp). If margins are set, they will be taken in account
+ * The first two works in a similar fashion as other layouts.
+ * The last one will resize the widget in such a way as
+ * matching the constraints that are set (see Fig. 8, (a) is wrap_content,
+ * (b) is 0dp). If margins are set, they will be taken in account
  * in the computation (Fig. 8, (c) with 0dp).
  * <p>
- * <b>Important: </b> {@code MATCH_PARENT} is not recommended for widgets contained in a {@code ConstraintLayout}. Similar behavior can
- * be defined by using {@code MATCH_CONSTRAINT} with the corresponding left/right or top/bottom constraints being set to {@code "parent"}.
+ * <b>Important: </b> {@code MATCH_PARENT} is not recommended for widgets
+ * contained in a {@code ConstraintLayout}. Similar behavior can
+ * be defined by using {@code MATCH_CONSTRAINT} with the corresponding
+ * left/right or top/bottom constraints being set to {@code "parent"}.
  * </p>
  * </p>
  * <h5>WRAP_CONTENT : enforcing constraints (<i><b>Added in 1.1</b></i>)</h5>
  * <p>
- * If a dimension is set to {@code WRAP_CONTENT}, in versions before 1.1 they will be treated as a literal dimension -- meaning, constraints will
- * not limit the resulting dimension. While in general this is enough (and faster), in some situations, you might want to use {@code WRAP_CONTENT},
- * yet keep enforcing constraints to limit the resulting dimension. In that case, you can add one of the corresponding attribute:
+ * If a dimension is set to {@code WRAP_CONTENT}, in versions before 1.1
+ * they will be treated as a literal dimension -- meaning, constraints will
+ * not limit the resulting dimension. While in general this is enough (and faster),
+ * in some situations, you might want to use {@code WRAP_CONTENT},
+ * yet keep enforcing constraints to limit the resulting dimension. In that case,
+ * you can add one of the corresponding attribute:
  * <ul>
  * <li>{@code app:layout_constrainedWidth="true|false"}</li>
  * <li>{@code app:layout_constrainedHeight="true|false"}</li>
@@ -346,15 +381,20 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * </p>
  * <h5>MATCH_CONSTRAINT dimensions (<i><b>Added in 1.1</b></i>)</h5>
  * <p>
- * When a dimension is set to {@code MATCH_CONSTRAINT}, the default behavior is to have the resulting size take all the available space.
+ * When a dimension is set to {@code MATCH_CONSTRAINT},
+ * the default behavior is to have the resulting size take all the available space.
  * Several additional modifiers are available:
  * <ul>
- * <li>{@code layout_constraintWidth_min} and {@code layout_constraintHeight_min} : will set the minimum size for this dimension</li>
- * <li>{@code layout_constraintWidth_max} and {@code layout_constraintHeight_max} : will set the maximum size for this dimension</li>
- * <li>{@code layout_constraintWidth_percent} and {@code layout_constraintHeight_percent} : will set the size of this dimension as a percentage of the parent</li>
+ * <li>{@code layout_constraintWidth_min} and {@code layout_constraintHeight_min} :
+ * will set the minimum size for this dimension</li>
+ * <li>{@code layout_constraintWidth_max} and {@code layout_constraintHeight_max} :
+ * will set the maximum size for this dimension</li>
+ * <li>{@code layout_constraintWidth_percent} and {@code layout_constraintHeight_percent} :
+ * will set the size of this dimension as a percentage of the parent</li>
  * </ul>
  * <h6>Min and Max</h6>
- * The value indicated for min and max can be either a dimension in Dp, or "wrap", which will use the same value as what {@code WRAP_CONTENT} would do.
+ * The value indicated for min and max can be either a dimension in Dp,
+ * or "wrap", which will use the same value as what {@code WRAP_CONTENT} would do.
  * <h6>Percent dimension</h6>
  * To use percent, you need to set the following:
  * <ul>
@@ -367,8 +407,10 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * </p>
  * <h5>Ratio</h5>
  * <p>
- * You can also define one dimension of a widget as a ratio of the other one. In order to do that, you
- * need to have at least one constrained dimension be set to {@code 0dp} (i.e., {@code MATCH_CONSTRAINT}), and set the
+ * You can also define one dimension of a widget as a ratio of the other one.
+ * In order to do that, you
+ * need to have at least one constrained dimension be set to
+ * {@code 0dp} (i.e., {@code MATCH_CONSTRAINT}), and set the
  * attribute {@code layout_constraintDimensionRatio} to a given ratio.
  * For example:
  * <pre>
@@ -387,13 +429,18 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * </ul>
  * </p>
  * <p>
- * You can also use ratio if both dimensions are set to {@code MATCH_CONSTRAINT} (0dp). In this case the system sets the
- * largest dimensions that satisfies all constraints and maintains the aspect ratio specified. To constrain one specific side
- * based on the dimensions of another, you can pre append {@code W,}" or {@code H,} to constrain the width or height
+ * You can also use ratio if both dimensions are set to
+ * {@code MATCH_CONSTRAINT} (0dp). In this case the system sets the
+ * largest dimensions that satisfies all constraints and maintains
+ * the aspect ratio specified. To constrain one specific side
+ * based on the dimensions of another, you can pre append
+ * {@code W,}" or {@code H,} to constrain the width or height
  * respectively.
  * For example,
- * If one dimension is constrained by two targets (e.g. width is 0dp and centered on parent) you can indicate which
- * side should be constrained, by adding the letter {@code W} (for constraining the width) or {@code H}
+ * If one dimension is constrained by two targets
+ * (e.g. width is 0dp and centered on parent) you can indicate which
+ * side should be constrained, by adding the letter
+ * {@code W} (for constraining the width) or {@code H}
  * (for constraining the height) in front of the ratio, separated
  * by a comma:
  * <pre>
@@ -405,16 +452,19 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  *                   app:layout_constraintTop_toTopOf="parent"/>
  *         }
  *     </pre>
- * will set the height of the button following a 16:9 ratio, while the width of the button will match the constraints
+ * will set the height of the button following a 16:9 ratio,
+ * while the width of the button will match the constraints
  * to its parent.
  *
  * </p>
  *
  * <h4 id="Chains">Chains</h4>
- * <p>Chains provide group-like behavior in a single axis (horizontally or vertically). The other axis can be constrained independently.</p>
+ * <p>Chains provide group-like behavior in a single axis (horizontally or vertically).
+ * The other axis can be constrained independently.</p>
  * <h5>Creating a chain</h5>
  * <p>
- * A set of widgets are considered a chain if they are linked together via a bi-directional connection (see Fig. 9, showing a minimal chain, with two widgets).
+ * A set of widgets are considered a chain if they are linked together via a
+ * bi-directional connection (see Fig. 9, showing a minimal chain, with two widgets).
  * </p>
  * <p><div align="center" >
  * <img width="325px" src="resources/images/chains.png">
@@ -423,23 +473,31 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * <p>
  * <h5>Chain heads</h5>
  * <p>
- * Chains are controlled by attributes set on the first element of the chain (the "head" of the chain):
+ * Chains are controlled by attributes set on the first element of the chain
+ * (the "head" of the chain):
  * </p>
  * <p><div align="center" >
  * <img width="400px" src="resources/images/chains-head.png">
  * <br><b><i>Fig. 10 - Chain Head</i></b>
  * </div>
- * <p>The head is the left-most widget for horizontal chains, and the top-most widget for vertical chains.</p>
+ * <p>The head is the left-most widget for horizontal chains,
+ * and the top-most widget for vertical chains.</p>
  * <h5>Margins in chains</h5>
- * <p>If margins are specified on connections, they will be taken into account. In the case of spread chains, margins will be deducted from the allocated space.</p>
+ * <p>If margins are specified on connections, they will be taken into account.
+ * In the case of spread chains, margins will be deducted from the allocated space.</p>
  * <h5>Chain Style</h5>
- * <p>When setting the attribute {@code layout_constraintHorizontal_chainStyle} or {@code layout_constraintVertical_chainStyle} on the first element of a chain,
- * the behavior of the chain will change according to the specified style (default is {@code CHAIN_SPREAD}).
+ * <p>When setting the attribute {@code layout_constraintHorizontal_chainStyle} or
+ * {@code layout_constraintVertical_chainStyle} on the first element of a chain,
+ * the behavior of the chain will change according to the specified style
+ * (default is {@code CHAIN_SPREAD}).
  * <ul>
  * <li>{@code CHAIN_SPREAD} -- the elements will be spread out (default style)</li>
- * <li>Weighted chain -- in {@code CHAIN_SPREAD} mode, if some widgets are set to {@code MATCH_CONSTRAINT}, they will split the available space</li>
- * <li>{@code CHAIN_SPREAD_INSIDE} -- similar, but the endpoints of the chain will not be spread out</li>
- * <li>{@code CHAIN_PACKED} -- the elements of the chain will be packed together. The horizontal or vertical
+ * <li>Weighted chain -- in {@code CHAIN_SPREAD} mode,
+ * if some widgets are set to {@code MATCH_CONSTRAINT}, they will split the available space</li>
+ * <li>{@code CHAIN_SPREAD_INSIDE} -- similar,
+ * but the endpoints of the chain will not be spread out</li>
+ * <li>{@code CHAIN_PACKED} -- the elements of the chain will be packed together.
+ * The horizontal or vertical
  * bias attribute of the child will then affect the positioning of the packed elements</li>
  * </ul>
  * <p><div align="center" >
@@ -448,37 +506,54 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * </div>
  * </p>
  * <h5>Weighted chains</h5>
- * <p>The default behavior of a chain is to spread the elements equally in the available space. If one or more elements are using {@code MATCH_CONSTRAINT}, they
- * will use the available empty space (equally divided among themselves). The attribute {@code layout_constraintHorizontal_weight} and {@code layout_constraintVertical_weight}
- * will control how the space will be distributed among the elements using {@code MATCH_CONSTRAINT}. For example, on a chain containing two elements using {@code MATCH_CONSTRAINT},
- * with the first element using a weight of 2 and the second a weight of 1, the space occupied by the first element will be twice that of the second element.</p>
+ * <p>The default behavior of a chain is to spread the elements equally in the available space.
+ * If one or more elements are using {@code MATCH_CONSTRAINT}, they
+ * will use the available empty space (equally divided among themselves).
+ * The attribute {@code layout_constraintHorizontal_weight} and
+ * {@code layout_constraintVertical_weight}
+ * will control how the space will be distributed among the elements using
+ * {@code MATCH_CONSTRAINT}. For example,
+ * on a chain containing two elements using {@code MATCH_CONSTRAINT},
+ * with the first element using a weight of 2 and the second a weight of 1,
+ * the space occupied by the first element will be twice that of the second element.</p>
  *
  * <h5>Margins and chains (<i><b>in 1.1</b></i>)</h5>
  * <p>When using margins on elements in a chain, the margins are additive.</p>
- * <p>For example, on a horizontal chain, if one element defines a right margin of 10dp and the next element
- * defines a left margin of 5dp, the resulting margin between those two elements is 15dp.</p>
- * <p>An item plus its margins are considered together when calculating leftover space used by chains
+ * <p>For example, on a horizontal chain, if one element defines
+ * a right margin of 10dp and the next element
+ * defines a left margin of 5dp, the resulting margin between those
+ * two elements is 15dp.</p>
+ * <p>An item plus its margins are considered together when calculating
+ * leftover space used by chains
  * to position items. The leftover space does not contain the margins.</p>
  *
  * <h4 id="VirtualHelpers"> Virtual Helper objects </h4>
- * <p>In addition to the intrinsic capabilities detailed previously, you can also use special helper objects
- * in {@code ConstraintLayout} to help you with your layout. Currently, the {@code Guideline}{@see Guideline} object allows you to create
- * Horizontal and Vertical guidelines which are positioned relative to the {@code ConstraintLayout} container. Widgets can
- * then be positioned by constraining them to such guidelines. In <b>1.1</b>, {@code Barrier} and {@code Group} were added too.</p>
+ * <p>In addition to the intrinsic capabilities detailed previously,
+ * you can also use special helper objects
+ * in {@code ConstraintLayout} to help you with your layout. Currently, the
+ * {@code Guideline}{@see Guideline} object allows you to create
+ * Horizontal and Vertical guidelines which are positioned relative to the
+ * {@code ConstraintLayout} container. Widgets can
+ * then be positioned by constraining them to such guidelines. In <b>1.1</b>,
+ * {@code Barrier} and {@code Group} were added too.</p>
  *
  * <h4 id="Optimizer">Optimizer (<i><b>in 1.1</b></i>)</h4>
  * <p>
- * In 1.1 we exposed the constraints optimizer. You can decide which optimizations are applied by adding the tag <i>app:layout_optimizationLevel</i> to the ConstraintLayout element.
+ * In 1.1 we exposed the constraints optimizer. You can decide which optimizations
+ * are applied by adding the tag <i>app:layout_optimizationLevel</i>
+ * to the ConstraintLayout element.
  * <ul>
  * <li><b>none</b> : no optimizations are applied</li>
  * <li><b>standard</b> : Default. Optimize direct and barrier constraints only</li>
  * <li><b>direct</b> : optimize direct constraints</li>
  * <li><b>barrier</b> : optimize barrier constraints</li>
  * <li><b>chain</b> : optimize chain constraints (experimental)</li>
- * <li><b>dimensions</b> : optimize dimensions measures (experimental), reducing the number of measures of match constraints elements</li>
+ * <li><b>dimensions</b> : optimize dimensions measures (experimental),
+ * reducing the number of measures of match constraints elements</li>
  * </ul>
  * </p>
- * <p>This attribute is a mask, so you can decide to turn on or off specific optimizations by listing the ones you want.
+ * <p>This attribute is a mask, so you can decide to turn on or off
+ * specific optimizations by listing the ones you want.
  * For example: <i>app:layout_optimizationLevel="direct|barrier|chain"</i> </p>
  * </div>
  */
@@ -528,7 +603,7 @@ public class ConstraintLayout extends ViewGroup {
     /**
      * @suppress
      */
-    public final static int DESIGN_INFO_ID = 0;
+    public static final int DESIGN_INFO_ID = 0;
     private ConstraintsChangedListener mConstraintsChangedListener;
     private Metrics mMetrics;
 
@@ -550,7 +625,9 @@ public class ConstraintLayout extends ViewGroup {
      * @suppress
      */
     public void setDesignInformation(int type, Object value1, Object value2) {
-        if (type == DESIGN_INFO_ID && value1 instanceof String && value2 instanceof Integer) {
+        if (type == DESIGN_INFO_ID
+                && value1 instanceof String
+                && value2 instanceof Integer) {
             if (mDesignIds == null) {
                 mDesignIds = new HashMap<>();
             }
@@ -587,13 +664,18 @@ public class ConstraintLayout extends ViewGroup {
         init(attrs, 0, 0);
     }
 
-    public ConstraintLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ConstraintLayout(@NonNull Context context,
+                            @Nullable AttributeSet attrs,
+                            int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(attrs, defStyleAttr, 0);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public ConstraintLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public ConstraintLayout(@NonNull Context context,
+                            @Nullable AttributeSet attrs,
+                            int defStyleAttr,
+                            int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(attrs, defStyleAttr, defStyleRes);
     }
@@ -624,7 +706,12 @@ public class ConstraintLayout extends ViewGroup {
         int layoutWidthSpec;
         int layoutHeightSpec;
 
-        public void captureLayoutInfo(int widthSpec, int heightSpec, int top, int bottom, int width, int height) {
+        public void captureLayoutInfo(int widthSpec,
+                                      int heightSpec,
+                                      int top,
+                                      int bottom,
+                                      int width,
+                                      int height) {
             paddingTop = top;
             paddingBottom = bottom;
             paddingWidth = width;
@@ -633,7 +720,7 @@ public class ConstraintLayout extends ViewGroup {
             layoutHeightSpec = heightSpec;
         }
 
-        public Measurer(ConstraintLayout l) {
+        Measurer(ConstraintLayout l) {
             layout = l;
         }
 
@@ -677,36 +764,46 @@ public class ConstraintLayout extends ViewGroup {
 
             switch (horizontalBehavior) {
                 case FIXED: {
-                    horizontalSpec = MeasureSpec.makeMeasureSpec(horizontalDimension, MeasureSpec.EXACTLY);
+                    horizontalSpec = MeasureSpec.makeMeasureSpec(horizontalDimension,
+                            MeasureSpec.EXACTLY);
                 }
                 break;
                 case WRAP_CONTENT: {
-                    horizontalSpec = getChildMeasureSpec(layoutWidthSpec, widthPadding, WRAP_CONTENT);
+                    horizontalSpec = getChildMeasureSpec(layoutWidthSpec,
+                            widthPadding, WRAP_CONTENT);
                 }
                 break;
                 case MATCH_PARENT: {
                     // Horizontal spec must account for margin as well as padding here.
                     horizontalSpec = getChildMeasureSpec(layoutWidthSpec,
-                            widthPadding + widget.getHorizontalMargin(), LayoutParams.MATCH_PARENT);
+                            widthPadding + widget.getHorizontalMargin(),
+                            LayoutParams.MATCH_PARENT);
                 }
                 break;
                 case MATCH_CONSTRAINT: {
-                    horizontalSpec = getChildMeasureSpec(layoutWidthSpec, widthPadding, WRAP_CONTENT);
-                    boolean shouldDoWrap = widget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_WRAP;
+                    horizontalSpec = getChildMeasureSpec(layoutWidthSpec,
+                            widthPadding, WRAP_CONTENT);
+                    boolean shouldDoWrap = widget.mMatchConstraintDefaultWidth
+                            == MATCH_CONSTRAINT_WRAP;
                     if (measure.measureStrategy == BasicMeasure.Measure.TRY_GIVEN_DIMENSIONS
                         || measure.measureStrategy == BasicMeasure.Measure.USE_GIVEN_DIMENSIONS) {
-                        // the solver gives us our new dimension, but if we previously had it measured with
+                        // the solver gives us our new dimension,
+                        // but if we previously had it measured with
                         // a wrap, it can be incorrect if the other side was also variable.
-                        // So in that case, we have to double-check the other side is stable (else we can't
+                        // So in that case, we have to double-check the
+                        // other side is stable (else we can't
                         // just assume the wrap value will be correct).
-                        boolean otherDimensionStable = child.getMeasuredHeight() == widget.getHeight();
-                        boolean useCurrent = measure.measureStrategy == BasicMeasure.Measure.USE_GIVEN_DIMENSIONS
+                        boolean otherDimensionStable = child.getMeasuredHeight()
+                                == widget.getHeight();
+                        boolean useCurrent = measure.measureStrategy
+                                == BasicMeasure.Measure.USE_GIVEN_DIMENSIONS
                                             || !shouldDoWrap
                                             || (shouldDoWrap && otherDimensionStable)
                                             || (child instanceof Placeholder)
                                             || (widget.isResolvedHorizontally());
                         if (useCurrent) {
-                            horizontalSpec = MeasureSpec.makeMeasureSpec(widget.getWidth(), MeasureSpec.EXACTLY);
+                            horizontalSpec = MeasureSpec.makeMeasureSpec(widget.getWidth(),
+                                    MeasureSpec.EXACTLY);
                         }
                     }
                 }
@@ -715,7 +812,8 @@ public class ConstraintLayout extends ViewGroup {
 
             switch (verticalBehavior) {
                 case FIXED: {
-                    verticalSpec = MeasureSpec.makeMeasureSpec(verticalDimension, MeasureSpec.EXACTLY);
+                    verticalSpec = MeasureSpec.makeMeasureSpec(verticalDimension,
+                            MeasureSpec.EXACTLY);
                 }
                 break;
                 case WRAP_CONTENT: {
@@ -726,27 +824,35 @@ public class ConstraintLayout extends ViewGroup {
                 case MATCH_PARENT: {
                     // Vertical spec must account for margin as well as padding here.
                     verticalSpec = getChildMeasureSpec(layoutHeightSpec,
-                            heightPadding + widget.getVerticalMargin(), LayoutParams.MATCH_PARENT);
+                            heightPadding + widget.getVerticalMargin(),
+                            LayoutParams.MATCH_PARENT);
                 }
                 break;
                 case MATCH_CONSTRAINT: {
                     verticalSpec = getChildMeasureSpec(layoutHeightSpec,
                             heightPadding, WRAP_CONTENT);
-                    boolean shouldDoWrap = widget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_WRAP;
+                    boolean shouldDoWrap = widget.mMatchConstraintDefaultHeight
+                            == MATCH_CONSTRAINT_WRAP;
                     if (measure.measureStrategy == BasicMeasure.Measure.TRY_GIVEN_DIMENSIONS
-                            || measure.measureStrategy == BasicMeasure.Measure.USE_GIVEN_DIMENSIONS) {
-                        // the solver gives us our new dimension, but if we previously had it measured with
+                            || measure.measureStrategy
+                            == BasicMeasure.Measure.USE_GIVEN_DIMENSIONS) {
+                        // the solver gives us our new dimension,
+                        // but if we previously had it measured with
                         // a wrap, it can be incorrect if the other side was also variable.
-                        // So in that case, we have to double-check the other side is stable (else we can't
+                        // So in that case, we have to double-check
+                        // the other side is stable (else we can't
                         // just assume the wrap value will be correct).
-                        boolean otherDimensionStable = child.getMeasuredWidth() == widget.getWidth();
-                        boolean useCurrent = measure.measureStrategy == BasicMeasure.Measure.USE_GIVEN_DIMENSIONS
+                        boolean otherDimensionStable = child.getMeasuredWidth()
+                                == widget.getWidth();
+                        boolean useCurrent = measure.measureStrategy
+                                == BasicMeasure.Measure.USE_GIVEN_DIMENSIONS
                                             || !shouldDoWrap
                                             || (shouldDoWrap && otherDimensionStable)
                                             || (child instanceof Placeholder)
                                             || (widget.isResolvedVertically());
                         if (useCurrent) {
-                            verticalSpec = MeasureSpec.makeMeasureSpec(widget.getHeight(), MeasureSpec.EXACTLY);
+                            verticalSpec = MeasureSpec.makeMeasureSpec(widget.getHeight(),
+                                    MeasureSpec.EXACTLY);
                         }
                     }
                 }
@@ -754,7 +860,8 @@ public class ConstraintLayout extends ViewGroup {
             }
 
             ConstraintWidgetContainer container = (ConstraintWidgetContainer) widget.getParent();
-            if (container != null && Optimizer.enabled(mOptimizationLevel, Optimizer.OPTIMIZATION_CACHE_MEASURES)) {
+            if (container != null && Optimizer.enabled(mOptimizationLevel,
+                    Optimizer.OPTIMIZATION_CACHE_MEASURES)) {
                 if (child.getMeasuredWidth() == widget.getWidth()
                         // note: the container check replicates legacy behavior, but we might want
                         // to not enforce that in 3.0
@@ -764,13 +871,16 @@ public class ConstraintLayout extends ViewGroup {
                         && child.getBaseline() == widget.getBaselineDistance()
                         && !widget.isMeasureRequested()
                 ) {
-                    boolean similar = isSimilarSpec(widget.getLastHorizontalMeasureSpec(), horizontalSpec, widget.getWidth())
-                            && isSimilarSpec(widget.getLastVerticalMeasureSpec(), verticalSpec, widget.getHeight());
+                    boolean similar = isSimilarSpec(widget.getLastHorizontalMeasureSpec(),
+                            horizontalSpec, widget.getWidth())
+                            && isSimilarSpec(widget.getLastVerticalMeasureSpec(),
+                            verticalSpec, widget.getHeight());
                     if (similar) {
                         measure.measuredWidth = widget.getWidth();
                         measure.measuredHeight = widget.getHeight();
                         measure.measuredBaseline = widget.getBaselineDistance();
-                        // if the dimensions of the solver widget are already the same as the real view, no need to remeasure.
+                        // if the dimensions of the solver widget are already the
+                        // same as the real view, no need to remeasure.
                         if (DEBUG) {
                             System.out.println("SKIPPED " + widget);
                         }
@@ -779,12 +889,16 @@ public class ConstraintLayout extends ViewGroup {
                 }
             }
 
-            boolean horizontalMatchConstraints = (horizontalBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
-            boolean verticalMatchConstraints = (verticalBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
+            boolean horizontalMatchConstraints = (horizontalBehavior
+                    == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
+            boolean verticalMatchConstraints = (verticalBehavior
+                    == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
 
-            boolean verticalDimensionKnown = (verticalBehavior == ConstraintWidget.DimensionBehaviour.MATCH_PARENT
+            boolean verticalDimensionKnown = (verticalBehavior
+                    == ConstraintWidget.DimensionBehaviour.MATCH_PARENT
                     || verticalBehavior == ConstraintWidget.DimensionBehaviour.FIXED);
-            boolean horizontalDimensionKnown = (horizontalBehavior == ConstraintWidget.DimensionBehaviour.MATCH_PARENT
+            boolean horizontalDimensionKnown = (horizontalBehavior
+                    == ConstraintWidget.DimensionBehaviour.MATCH_PARENT
                     || horizontalBehavior == ConstraintWidget.DimensionBehaviour.FIXED);
             boolean horizontalUseRatio = horizontalMatchConstraints && widget.mDimensionRatio > 0;
             boolean verticalUseRatio = verticalMatchConstraints && widget.mDimensionRatio > 0;
@@ -799,12 +913,16 @@ public class ConstraintLayout extends ViewGroup {
             int baseline = 0;
 
             if ((measure.measureStrategy == BasicMeasure.Measure.TRY_GIVEN_DIMENSIONS
-                    || measure.measureStrategy == BasicMeasure.Measure.USE_GIVEN_DIMENSIONS) ||
-                    !(horizontalMatchConstraints && widget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_SPREAD
-                            && verticalMatchConstraints && widget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_SPREAD)) {
+                    || measure.measureStrategy == BasicMeasure.Measure.USE_GIVEN_DIMENSIONS)
+                    || !(horizontalMatchConstraints
+                    && widget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_SPREAD
+                    && verticalMatchConstraints
+                    && widget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_SPREAD)) {
 
-                if (child instanceof VirtualLayout && widget instanceof androidx.constraintlayout.core.widgets.VirtualLayout) {
-                    androidx.constraintlayout.core.widgets.VirtualLayout layout = (androidx.constraintlayout.core.widgets.VirtualLayout) widget;
+                if (child instanceof VirtualLayout
+                        && widget instanceof androidx.constraintlayout.core.widgets.VirtualLayout) {
+                    androidx.constraintlayout.core.widgets.VirtualLayout layout =
+                            (androidx.constraintlayout.core.widgets.VirtualLayout) widget;
                     ((VirtualLayout) child).onMeasure(layout, horizontalSpec, verticalSpec);
                 } else {
                     child.measure(horizontalSpec, verticalSpec);
@@ -819,8 +937,11 @@ public class ConstraintLayout extends ViewGroup {
                 height = h;
 
                 if (DEBUG) {
-                    String measurement = MeasureSpec.toString(horizontalSpec) + " x " + MeasureSpec.toString(verticalSpec) + " => " + width + " x " + height;
-                    System.out.println("    (M) measure " + " (" + widget.getDebugName() + ") : " + measurement);
+                    String measurement = MeasureSpec.toString(horizontalSpec)
+                            + " x " + MeasureSpec.toString(verticalSpec)
+                            + " => " + width + " x " + height;
+                    System.out.println("    (M) measure "
+                            + " (" + widget.getDebugName() + ") : " + measurement);
                 }
 
                 if (widget.mMatchConstraintMinWidth > 0) {
@@ -836,7 +957,8 @@ public class ConstraintLayout extends ViewGroup {
                     height = Math.min(widget.mMatchConstraintMaxHeight, height);
                 }
 
-                boolean optimizeDirect = Optimizer.enabled(mOptimizationLevel, Optimizer.OPTIMIZATION_DIRECT);
+                boolean optimizeDirect = Optimizer.enabled(mOptimizationLevel,
+                        Optimizer.OPTIMIZATION_DIRECT);
                 if (!optimizeDirect) {
                     if (horizontalUseRatio && verticalDimensionKnown) {
                         float ratio = widget.mDimensionRatio;
@@ -861,8 +983,11 @@ public class ConstraintLayout extends ViewGroup {
                     height = child.getMeasuredHeight();
                     baseline = child.getBaseline();
                     if (DEBUG) {
-                        String measurement2 = MeasureSpec.toString(horizontalSpec) + " x " + MeasureSpec.toString(verticalSpec) + " => " + width + " x " + height;
-                        System.out.println("measure (b) " + widget.getDebugName() + " : " + measurement2);
+                        String measurement2 = MeasureSpec.toString(horizontalSpec)
+                                + " x " + MeasureSpec.toString(verticalSpec)
+                                + " => " + width + " x " + height;
+                        System.out.println("measure (b) " + widget.getDebugName()
+                                + " : " + measurement2);
                     }
                 }
 
@@ -945,9 +1070,10 @@ public class ConstraintLayout extends ViewGroup {
         mChildrenByIds.put(getId(), this);
         mConstraintSet = null;
         if (attrs != null) {
-            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ConstraintLayout_Layout, defStyleAttr, defStyleRes);
-            final int N = a.getIndexCount();
-            for (int i = 0; i < N; i++) {
+            TypedArray a = getContext().obtainStyledAttributes(attrs,
+                    R.styleable.ConstraintLayout_Layout, defStyleAttr, defStyleRes);
+            final int count = a.getIndexCount();
+            for (int i = 0; i < count; i++) {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.ConstraintLayout_Layout_android_minWidth) {
                     mMinWidth = a.getDimensionPixelOffset(attr, mMinWidth);
@@ -1243,14 +1369,16 @@ public class ConstraintLayout extends ViewGroup {
             }
             final LayoutParams layoutParams = (LayoutParams) child.getLayoutParams();
             mLayoutWidget.add(widget);
-            applyConstraintsFromLayoutParams(isInEditMode, child, widget, layoutParams, mTempMapIdToWidget);
+            applyConstraintsFromLayoutParams(isInEditMode, child, widget,
+                    layoutParams, mTempMapIdToWidget);
         }
     }
 
 
     protected void applyConstraintsFromLayoutParams(boolean isInEditMode,
                                                     View child,
-                                                    ConstraintWidget widget, LayoutParams layoutParams,
+                                                    ConstraintWidget widget,
+                                                    LayoutParams layoutParams,
                                                     SparseArray<ConstraintWidget> idToWidget) {
 
         layoutParams.validate();
@@ -1325,7 +1453,8 @@ public class ConstraintLayout extends ViewGroup {
             if (layoutParams.circleConstraint != UNSET) {
                 ConstraintWidget target = idToWidget.get(layoutParams.circleConstraint);
                 if (target != null) {
-                    widget.connectCircularConstraint(target, layoutParams.circleAngle, layoutParams.circleRadius);
+                    widget.connectCircularConstraint(target,
+                            layoutParams.circleAngle, layoutParams.circleRadius);
                 }
             } else {
                 // Left constraint
@@ -1421,45 +1550,57 @@ public class ConstraintLayout extends ViewGroup {
                 widget.setOrigin(layoutParams.editorAbsoluteX, layoutParams.editorAbsoluteY);
             }
 
-            // FIXME: need to agree on the correct magic value for this rather than simply using zero.
+            // FIXME: need to agree on the correct magic value for this
+            //  rather than simply using zero.
             if (!layoutParams.horizontalDimensionFixed) {
                 if (layoutParams.width == MATCH_PARENT) {
                     if (layoutParams.constrainedWidth) {
-                        widget.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
+                        widget.setHorizontalDimensionBehaviour(ConstraintWidget
+                                .DimensionBehaviour.MATCH_CONSTRAINT);
                     } else {
-                        widget.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_PARENT);
+                        widget.setHorizontalDimensionBehaviour(ConstraintWidget
+                                .DimensionBehaviour.MATCH_PARENT);
                     }
                     widget.getAnchor(ConstraintAnchor.Type.LEFT).mMargin = layoutParams.leftMargin;
-                    widget.getAnchor(ConstraintAnchor.Type.RIGHT).mMargin = layoutParams.rightMargin;
+                    widget.getAnchor(ConstraintAnchor.Type.RIGHT).mMargin =
+                            layoutParams.rightMargin;
                 } else {
-                    widget.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
+                    widget.setHorizontalDimensionBehaviour(ConstraintWidget
+                            .DimensionBehaviour.MATCH_CONSTRAINT);
                     widget.setWidth(0);
                 }
             } else {
-                widget.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.FIXED);
+                widget.setHorizontalDimensionBehaviour(ConstraintWidget
+                        .DimensionBehaviour.FIXED);
                 widget.setWidth(layoutParams.width);
                 if (layoutParams.width == WRAP_CONTENT) {
-                    widget.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
+                    widget.setHorizontalDimensionBehaviour(ConstraintWidget
+                            .DimensionBehaviour.WRAP_CONTENT);
                 }
             }
             if (!layoutParams.verticalDimensionFixed) {
                 if (layoutParams.height == MATCH_PARENT) {
                     if (layoutParams.constrainedHeight) {
-                        widget.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
+                        widget.setVerticalDimensionBehaviour(ConstraintWidget
+                                .DimensionBehaviour.MATCH_CONSTRAINT);
                     } else {
-                        widget.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_PARENT);
+                        widget.setVerticalDimensionBehaviour(ConstraintWidget
+                                .DimensionBehaviour.MATCH_PARENT);
                     }
                     widget.getAnchor(ConstraintAnchor.Type.TOP).mMargin = layoutParams.topMargin;
-                    widget.getAnchor(ConstraintAnchor.Type.BOTTOM).mMargin = layoutParams.bottomMargin;
+                    widget.getAnchor(ConstraintAnchor.Type.BOTTOM).mMargin =
+                            layoutParams.bottomMargin;
                 } else {
-                    widget.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
+                    widget.setVerticalDimensionBehaviour(ConstraintWidget
+                            .DimensionBehaviour.MATCH_CONSTRAINT);
                     widget.setHeight(0);
                 }
             } else {
                 widget.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.FIXED);
                 widget.setHeight(layoutParams.height);
                 if (layoutParams.height == WRAP_CONTENT) {
-                    widget.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
+                    widget.setVerticalDimensionBehaviour(ConstraintWidget
+                            .DimensionBehaviour.WRAP_CONTENT);
                 }
             }
 
@@ -1478,7 +1619,11 @@ public class ConstraintLayout extends ViewGroup {
         }
     }
 
-    private void setWidgetBaseline(ConstraintWidget widget, LayoutParams layoutParams, SparseArray<ConstraintWidget> idToWidget, int baselineTarget, ConstraintAnchor.Type type) {
+    private void setWidgetBaseline(ConstraintWidget widget,
+                                   LayoutParams layoutParams,
+                                   SparseArray<ConstraintWidget> idToWidget,
+                                   int baselineTarget,
+                                   ConstraintAnchor.Type type) {
         View view = mChildrenByIds.get(baselineTarget);
         ConstraintWidget target = idToWidget.get(baselineTarget);
         if (target != null && view != null && view.getLayoutParams() instanceof LayoutParams) {
@@ -1490,14 +1635,15 @@ public class ConstraintLayout extends ViewGroup {
             }
             ConstraintAnchor baseline = widget.getAnchor(ConstraintAnchor.Type.BASELINE);
             ConstraintAnchor targetAnchor = target.getAnchor(type);
-            baseline.connect(targetAnchor, layoutParams.baselineMargin, layoutParams.goneBaselineMargin, true);
+            baseline.connect(targetAnchor, layoutParams.baselineMargin,
+                    layoutParams.goneBaselineMargin, true);
             widget.setHasBaseline(true);
             widget.getAnchor(ConstraintAnchor.Type.TOP).reset();
             widget.getAnchor(ConstraintAnchor.Type.BOTTOM).reset();
         }
     }
 
-    private final ConstraintWidget getTargetWidget(int id) {
+    private ConstraintWidget getTargetWidget(int id) {
         if (id == LayoutParams.PARENT_ID) {
             return mLayoutWidget;
         } else {
@@ -1557,7 +1703,9 @@ public class ConstraintLayout extends ViewGroup {
      * @param heightMeasureSpec
      */
     protected void resolveSystem(ConstraintWidgetContainer layout,
-                                 int optimizationLevel, int widthMeasureSpec, int heightMeasureSpec) {
+                                 int optimizationLevel,
+                                 int widthMeasureSpec,
+                                 int heightMeasureSpec) {
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
@@ -1568,7 +1716,8 @@ public class ConstraintLayout extends ViewGroup {
         int paddingHeight = paddingY + paddingBottom;
         int paddingWidth = getPaddingWidth();
         int paddingX;
-        mMeasurer.captureLayoutInfo(widthMeasureSpec, heightMeasureSpec, paddingY, paddingBottom, paddingWidth, paddingHeight);
+        mMeasurer.captureLayoutInfo(widthMeasureSpec, heightMeasureSpec, paddingY, paddingBottom,
+                paddingWidth, paddingHeight);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             int paddingStart = Math.max(0, getPaddingStart());
@@ -1604,9 +1753,12 @@ public class ConstraintLayout extends ViewGroup {
      * @param isWidthMeasuredTooSmall
      * @param isHeightMeasuredTooSmall
      */
-    protected void resolveMeasuredDimension(int widthMeasureSpec, int heightMeasureSpec,
-                                            int measuredWidth, int measuredHeight,
-                                            boolean isWidthMeasuredTooSmall, boolean isHeightMeasuredTooSmall) {
+    protected void resolveMeasuredDimension(int widthMeasureSpec,
+                                            int heightMeasureSpec,
+                                            int measuredWidth,
+                                            int measuredHeight,
+                                            boolean isWidthMeasuredTooSmall,
+                                            boolean isHeightMeasuredTooSmall) {
         int childState = 0;
         int heightPadding = mMeasurer.paddingHeight;
         int widthPadding = mMeasurer.paddingWidth;
@@ -1614,7 +1766,8 @@ public class ConstraintLayout extends ViewGroup {
         int androidLayoutWidth = measuredWidth + widthPadding;
         int androidLayoutHeight = measuredHeight + heightPadding;
 
-        int resolvedWidthSize = resolveSizeAndState(androidLayoutWidth, widthMeasureSpec, childState);
+        int resolvedWidthSize = resolveSizeAndState(androidLayoutWidth,
+                widthMeasureSpec, childState);
         int resolvedHeightSize = resolveSizeAndState(androidLayoutHeight, heightMeasureSpec,
                 childState << MEASURED_HEIGHT_STATE_SHIFT);
         resolvedWidthSize &= MEASURED_SIZE_MASK;
@@ -1647,8 +1800,10 @@ public class ConstraintLayout extends ViewGroup {
                 && mOnMeasureHeightMeasureSpec == heightMeasureSpec);
         sameSpecsAsPreviousMeasure = false; //TODO re-enable
         if (!mDirtyHierarchy && !sameSpecsAsPreviousMeasure) {
-            // it's possible that, if we are already marked for a relayout, a view would not call to request a layout;
-            // in that case we'd miss updating the hierarchy correctly (window insets change may do that -- we receive
+            // it's possible that, if we are already marked for a relayout,
+            // a view would not call to request a layout;
+            // in that case we'd miss updating the hierarchy correctly
+            // (window insets change may do that -- we receive
             // a second onMeasure before onLayout).
             // We have to iterate on our children to verify that none set a request layout flag...
             final int count = getChildCount();
@@ -1656,7 +1811,8 @@ public class ConstraintLayout extends ViewGroup {
                 final View child = getChildAt(i);
                 if (child.isLayoutRequested()) {
                     if (DEBUG) {
-                        System.out.println("### CHILD " + child + " REQUESTED LAYOUT, FORCE DIRTY HIERARCHY");
+                        System.out.println("### CHILD " + child
+                                + " REQUESTED LAYOUT, FORCE DIRTY HIERARCHY");
                     }
                     mDirtyHierarchy = true;
                     break;
@@ -1666,8 +1822,10 @@ public class ConstraintLayout extends ViewGroup {
 
         if (!mDirtyHierarchy) {
             if (sameSpecsAsPreviousMeasure) {
-                resolveMeasuredDimension(widthMeasureSpec, heightMeasureSpec, mLayoutWidget.getWidth(), mLayoutWidget.getHeight(),
-                        mLayoutWidget.isWidthMeasuredTooSmall(), mLayoutWidget.isHeightMeasuredTooSmall());
+                resolveMeasuredDimension(widthMeasureSpec, heightMeasureSpec,
+                        mLayoutWidget.getWidth(), mLayoutWidget.getHeight(),
+                        mLayoutWidget.isWidthMeasuredTooSmall(),
+                        mLayoutWidget.isHeightMeasuredTooSmall());
                 return;
             }
             if (OPTIMIZE_HEIGHT_CHANGE
@@ -1677,13 +1835,17 @@ public class ConstraintLayout extends ViewGroup {
                     && MeasureSpec.getMode(mOnMeasureHeightMeasureSpec) == MeasureSpec.AT_MOST) {
                 int newSize = MeasureSpec.getSize(heightMeasureSpec);
                 if (DEBUG) {
-                    System.out.println("### COMPATIBLE REQ " + newSize + " >= ? " + mLayoutWidget.getHeight());
+                    System.out.println("### COMPATIBLE REQ " + newSize
+                            + " >= ? " + mLayoutWidget.getHeight());
                 }
-                if (newSize >= mLayoutWidget.getHeight() && !mLayoutWidget.isHeightMeasuredTooSmall()) {
+                if (newSize >= mLayoutWidget.getHeight()
+                        && !mLayoutWidget.isHeightMeasuredTooSmall()) {
                     mOnMeasureWidthMeasureSpec = widthMeasureSpec;
                     mOnMeasureHeightMeasureSpec = heightMeasureSpec;
-                    resolveMeasuredDimension(widthMeasureSpec, heightMeasureSpec, mLayoutWidget.getWidth(), mLayoutWidget.getHeight(),
-                            mLayoutWidget.isWidthMeasuredTooSmall(), mLayoutWidget.isHeightMeasuredTooSmall());
+                    resolveMeasuredDimension(widthMeasureSpec, heightMeasureSpec,
+                            mLayoutWidget.getWidth(), mLayoutWidget.getHeight(),
+                            mLayoutWidget.isWidthMeasuredTooSmall(),
+                            mLayoutWidget.isHeightMeasuredTooSmall());
                     return;
                 }
             }
@@ -1692,7 +1854,9 @@ public class ConstraintLayout extends ViewGroup {
         mOnMeasureHeightMeasureSpec = heightMeasureSpec;
 
         if (DEBUG) {
-            System.out.println("### ON MEASURE " + mDirtyHierarchy + " of " + mLayoutWidget.getDebugName() + " onMeasure width: " + MeasureSpec.toString(widthMeasureSpec)
+            System.out.println("### ON MEASURE " + mDirtyHierarchy
+                    + " of " + mLayoutWidget.getDebugName()
+                    + " onMeasure width: " + MeasureSpec.toString(widthMeasureSpec)
                     + " height: " + MeasureSpec.toString(heightMeasureSpec) + this);
         }
 
@@ -1706,13 +1870,16 @@ public class ConstraintLayout extends ViewGroup {
         }
 
         resolveSystem(mLayoutWidget, mOptimizationLevel, widthMeasureSpec, heightMeasureSpec);
-        resolveMeasuredDimension(widthMeasureSpec, heightMeasureSpec, mLayoutWidget.getWidth(), mLayoutWidget.getHeight(),
+        resolveMeasuredDimension(widthMeasureSpec, heightMeasureSpec,
+                mLayoutWidget.getWidth(), mLayoutWidget.getHeight(),
                 mLayoutWidget.isWidthMeasuredTooSmall(), mLayoutWidget.isHeightMeasuredTooSmall());
 
         if (DEBUG) {
             time = System.currentTimeMillis() - time;
-            System.out.println(mLayoutWidget.getDebugName() + " (" + getChildCount() + ") DONE onMeasure width: " + MeasureSpec.toString(widthMeasureSpec)
-                    + " height: " + MeasureSpec.toString(heightMeasureSpec) + " => " + mLastMeasureWidth + " x " + mLastMeasureHeight
+            System.out.println(mLayoutWidget.getDebugName() + " (" + getChildCount()
+                    + ") DONE onMeasure width: " + MeasureSpec.toString(widthMeasureSpec)
+                    + " height: " + MeasureSpec.toString(heightMeasureSpec) + " => "
+                    + mLastMeasureWidth + " x " + mLastMeasureHeight
                     + " lasted " + time
             );
         }
@@ -1720,7 +1887,8 @@ public class ConstraintLayout extends ViewGroup {
 
     protected boolean isRtl() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            boolean isRtlSupported = (getContext().getApplicationInfo().flags & ApplicationInfo.FLAG_SUPPORTS_RTL) != 0;
+            boolean isRtlSupported = (getContext().getApplicationInfo().flags
+                    & ApplicationInfo.FLAG_SUPPORTS_RTL) != 0;
             return isRtlSupported && (View.LAYOUT_DIRECTION_RTL == getLayoutDirection());
         }
         return false;
@@ -1743,13 +1911,19 @@ public class ConstraintLayout extends ViewGroup {
         return widthPadding;
     }
 
-    protected void setSelfDimensionBehaviour(ConstraintWidgetContainer layout, int widthMode, int widthSize, int heightMode, int heightSize) {
+    protected void setSelfDimensionBehaviour(ConstraintWidgetContainer layout,
+                                             int widthMode,
+                                             int widthSize,
+                                             int heightMode,
+                                             int heightSize) {
 
         int heightPadding = mMeasurer.paddingHeight;
         int widthPadding = mMeasurer.paddingWidth;
 
-        ConstraintWidget.DimensionBehaviour widthBehaviour = ConstraintWidget.DimensionBehaviour.FIXED;
-        ConstraintWidget.DimensionBehaviour heightBehaviour = ConstraintWidget.DimensionBehaviour.FIXED;
+        ConstraintWidget.DimensionBehaviour widthBehaviour =
+                ConstraintWidget.DimensionBehaviour.FIXED;
+        ConstraintWidget.DimensionBehaviour heightBehaviour =
+                ConstraintWidget.DimensionBehaviour.FIXED;
 
         int desiredWidth = 0;
         int desiredHeight = 0;
@@ -1815,7 +1989,8 @@ public class ConstraintLayout extends ViewGroup {
 
     /**
      * Set the State of the ConstraintLayout, causing it to load a particular ConstraintSet.
-     * For states with variants the variant with matching width and height constraintSet will be chosen
+     * For states with variants the variant with matching width and height
+     * constraintSet will be chosen
      *
      * @param id           the constraint set state
      * @param screenWidth  the width of the screen in pixels
@@ -1833,8 +2008,10 @@ public class ConstraintLayout extends ViewGroup {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         if (DEBUG) {
-            System.out.println(mLayoutWidget.getDebugName() + " onLayout changed: " + changed + " left: " + left + " top: " + top
-                    + " right: " + right + " bottom: " + bottom + " (" + (right - left) + " x " + (bottom - top) + ")");
+            System.out.println(mLayoutWidget.getDebugName() + " onLayout changed: "
+                    + changed + " left: " + left + " top: " + top
+                    + " right: " + right + " bottom: " + bottom
+                    + " (" + (right - left) + " x " + (bottom - top) + ")");
         }
         final int widgetsCount = getChildCount();
         final boolean isInEditMode = isInEditMode();
@@ -1843,8 +2020,13 @@ public class ConstraintLayout extends ViewGroup {
             LayoutParams params = (LayoutParams) child.getLayoutParams();
             ConstraintWidget widget = params.widget;
 
-            if (child.getVisibility() == GONE && !params.isGuideline && !params.isHelper && !params.isVirtualGroup && !isInEditMode) {
-                // If we are in edit mode, let's layout the widget so that they are at "the right place"
+            if (child.getVisibility() == GONE
+                    && !params.isGuideline
+                    && !params.isHelper
+                    && !params.isVirtualGroup
+                    && !isInEditMode) {
+                // If we are in edit mode, let's layout the widget
+                // so that they are at "the right place"
                 // visually in the editor (as we get our positions from layoutlib)
                 continue;
             }
@@ -1863,8 +2045,10 @@ public class ConstraintLayout extends ViewGroup {
                     int deltaX = Math.abs(child.getMeasuredWidth() - widget.getWidth());
                     int deltaY = Math.abs(child.getMeasuredHeight() - widget.getHeight());
                     if (deltaX > 1 || deltaY > 1) {
-                        System.out.println("child " + child + " measuredWidth " + child.getMeasuredWidth()
-                                + " vs " + widget.getWidth() + " x measureHeight " + child.getMeasuredHeight()
+                        System.out.println("child " + child
+                                + " measuredWidth " + child.getMeasuredWidth()
+                                + " vs " + widget.getWidth()
+                                + " x measureHeight " + child.getMeasuredHeight()
                                 + " vs " + widget.getHeight());
                     }
                 }
@@ -1905,7 +2089,8 @@ public class ConstraintLayout extends ViewGroup {
      * <li>Optimizer.OPTIMIZATION_CHAIN  (experimental) </li>
      * <li>Optimizer.OPTIMIZATION_DIMENSIONS  (experimental) </li>
      * </ul>
-     * Note that the current implementation of Optimizer.OPTIMIZATION_STANDARD is as a mask of DIRECT and BARRIER.
+     * Note that the current implementation of
+     * Optimizer.OPTIMIZATION_STANDARD is as a mask of DIRECT and BARRIER.
      * </p>
      *
      * @param level optimization level
@@ -1959,7 +2144,8 @@ public class ConstraintLayout extends ViewGroup {
     }
 
     /**
-     * Sets a ConstraintSet object to manage constraints. The ConstraintSet overrides LayoutParams of child views.
+     * Sets a ConstraintSet object to manage constraints.
+     * The ConstraintSet overrides LayoutParams of child views.
      *
      * @param set Layout children using ConstraintSet
      */
@@ -2074,6 +2260,10 @@ public class ConstraintLayout extends ViewGroup {
         }
     }
 
+    /**
+     * Notify of constraints changed
+     * @param constraintsChangedListener
+     */
     public void setOnConstraintsChanged(ConstraintsChangedListener constraintsChangedListener) {
         this.mConstraintsChangedListener = constraintsChangedListener;
         if (mConstraintLayoutSpec != null) {
@@ -2089,7 +2279,8 @@ public class ConstraintLayout extends ViewGroup {
     public void loadLayoutDescription(int layoutDescription) {
         if (layoutDescription != 0) {
             try {
-                mConstraintLayoutSpec = new ConstraintLayoutStates(getContext(), this, layoutDescription);
+                mConstraintLayoutSpec = new ConstraintLayoutStates(getContext(),
+                        this, layoutDescription);
             } catch (Resources.NotFoundException e) {
                 mConstraintLayoutSpec = null;
             }
@@ -2099,8 +2290,10 @@ public class ConstraintLayout extends ViewGroup {
     }
 
     /**
-     * This class contains the different attributes specifying how a view want to be laid out inside
-     * a {@link ConstraintLayout}. For building up constraints at run time, using {@link ConstraintSet} is recommended.
+     * This class contains the different attributes specifying
+     * how a view want to be laid out inside
+     * a {@link ConstraintLayout}. For building up constraints at run time,
+     * using {@link ConstraintSet} is recommended.
      */
     public static class LayoutParams extends ViewGroup.MarginLayoutParams {
         /**
@@ -2190,10 +2383,12 @@ public class ConstraintLayout extends ViewGroup {
         public static final int MATCH_CONSTRAINT_SPREAD = ConstraintWidget.MATCH_CONSTRAINT_SPREAD;
 
         /**
-         * Set matchConstraintDefault* percent to be based on a percent of another dimension (by default, the parent)
+         * Set matchConstraintDefault* percent to be based
+         * on a percent of another dimension (by default, the parent)
          * Use to set the matchConstraintDefaultWidth and matchConstraintDefaultHeight
          */
-        public static final int MATCH_CONSTRAINT_PERCENT = ConstraintWidget.MATCH_CONSTRAINT_PERCENT;
+        public static final int MATCH_CONSTRAINT_PERCENT =
+                ConstraintWidget.MATCH_CONSTRAINT_PERCENT;
 
         /**
          * Chain spread style
@@ -2231,62 +2426,74 @@ public class ConstraintLayout extends ViewGroup {
         public boolean guidelineUseRtl = true;
 
         /**
-         * Constrains the left side of a child to the left side of a target child (contains the target child id).
+         * Constrains the left side of a child to the left side of
+         * a target child (contains the target child id).
          */
         public int leftToLeft = UNSET;
 
         /**
-         * Constrains the left side of a child to the right side of a target child (contains the target child id).
+         * Constrains the left side of a child to the right side of
+         * a target child (contains the target child id).
          */
         public int leftToRight = UNSET;
 
         /**
-         * Constrains the right side of a child to the left side of a target child (contains the target child id).
+         * Constrains the right side of a child to the left side of
+         * a target child (contains the target child id).
          */
         public int rightToLeft = UNSET;
 
         /**
-         * Constrains the right side of a child to the right side of a target child (contains the target child id).
+         * Constrains the right side of a child to the right side of
+         * a target child (contains the target child id).
          */
         public int rightToRight = UNSET;
 
         /**
-         * Constrains the top side of a child to the top side of a target child (contains the target child id).
+         * Constrains the top side of a child to the top side of
+         * a target child (contains the target child id).
          */
         public int topToTop = UNSET;
 
         /**
-         * Constrains the top side of a child to the bottom side of a target child (contains the target child id).
+         * Constrains the top side of a child to the bottom side of
+         * a target child (contains the target child id).
          */
         public int topToBottom = UNSET;
 
         /**
-         * Constrains the bottom side of a child to the top side of a target child (contains the target child id).
+         * Constrains the bottom side of a child to the top side of
+         * a target child (contains the target child id).
          */
         public int bottomToTop = UNSET;
 
         /**
-         * Constrains the bottom side of a child to the bottom side of a target child (contains the target child id).
+         * Constrains the bottom side of a child to the bottom side of
+         * a target child (contains the target child id).
          */
         public int bottomToBottom = UNSET;
 
         /**
-         * Constrains the baseline of a child to the baseline of a target child (contains the target child id).
+         * Constrains the baseline of a child to the baseline of
+         * a target child (contains the target child id).
          */
         public int baselineToBaseline = UNSET;
 
         /**
-         * Constrains the baseline of a child to the top of a target child (contains the target child id).
+         * Constrains the baseline of a child to the top of
+         * a target child (contains the target child id).
          */
         public int baselineToTop = UNSET;
 
         /**
-         * Constrains the baseline of a child to the bottom of a target child (contains the target child id).
+         * Constrains the baseline of a child to the bottom of
+         * a target child (contains the target child id).
          */
         public int baselineToBottom = UNSET;
 
         /**
-         * Constrains the center of a child to the center of a target child (contains the target child id).
+         * Constrains the center of a child to the center of
+         * a target child (contains the target child id).
          */
         public int circleConstraint = UNSET;
 
@@ -2301,22 +2508,26 @@ public class ConstraintLayout extends ViewGroup {
         public float circleAngle = 0;
 
         /**
-         * Constrains the start side of a child to the end side of a target child (contains the target child id).
+         * Constrains the start side of a child to the end side of
+         * a target child (contains the target child id).
          */
         public int startToEnd = UNSET;
 
         /**
-         * Constrains the start side of a child to the start side of a target child (contains the target child id).
+         * Constrains the start side of a child to the start side of
+         * a target child (contains the target child id).
          */
         public int startToStart = UNSET;
 
         /**
-         * Constrains the end side of a child to the start side of a target child (contains the target child id).
+         * Constrains the end side of a child to the start side of
+         * a target child (contains the target child id).
          */
         public int endToStart = UNSET;
 
         /**
-         * Constrains the end side of a child to the end side of a target child (contains the target child id).
+         * Constrains the end side of a child to the end side of
+         * a target child (contains the target child id).
          */
         public int endToEnd = UNSET;
 
@@ -2406,7 +2617,8 @@ public class ConstraintLayout extends ViewGroup {
         ///////////////////////////////////////////////////////////////////////////////////////////
 
         /**
-         * The ratio between two connections when the left and right (or start and end) sides are constrained.
+         * The ratio between two connections when
+         * the left and right (or start and end) sides are constrained.
          */
         public float horizontalBias = 0.5f;
 
@@ -2478,8 +2690,10 @@ public class ConstraintLayout extends ViewGroup {
          * <li>{@link #MATCH_CONSTRAINT_WRAP} -- DEPRECATED -- use instead WRAP_CONTENT and
          * constrainedWidth=true<br>
          * The dimension will be the same as WRAP_CONTENT, unless the size ends
-         * up too large for the constraints; in that case the dimension will expand up to the constraints, minus margins
-         * This attribute may not be applied if the widget is part of a chain in that dimension.</li>
+         * up too large for the constraints;
+         * in that case the dimension will expand up to the constraints, minus margins
+         * This attribute may not be applied if
+         * the widget is part of a chain in that dimension.</li>
          * <li>{@link #MATCH_CONSTRAINT_PERCENT} -- The dimension will be a percent of another
          * widget (by default, the parent)</li>
          * </ul>
@@ -2494,8 +2708,10 @@ public class ConstraintLayout extends ViewGroup {
          * <li>{@link #MATCH_CONSTRAINT_WRAP} -- DEPRECATED -- use instead WRAP_CONTENT and
          * constrainedWidth=true<br>
          * The dimension will be the same as WRAP_CONTENT, unless the size ends
-         * up too large for the constraints; in that case the dimension will expand up to the constraints, minus margins
-         * This attribute may not be applied if the widget is part of a chain in that dimension.</li>
+         * up too large for the constraints;
+         * in that case the dimension will expand up to the constraints, minus margins
+         * This attribute may not be applied if the widget is
+         * part of a chain in that dimension.</li>
          * <li>{@link #MATCH_CONSTRAINT_PERCENT} -- The dimension will be a percent of another
          * widget (by default, the parent)</li>
          * </ul>
@@ -2503,25 +2719,29 @@ public class ConstraintLayout extends ViewGroup {
         public int matchConstraintDefaultHeight = MATCH_CONSTRAINT_SPREAD;
 
         /**
-         * Specify a minimum width size for the widget. It will only apply if the size of the widget
+         * Specify a minimum width size for the widget.
+         * It will only apply if the size of the widget
          * is set to MATCH_CONSTRAINT. Don't apply if the widget is part of a horizontal chain.
          */
         public int matchConstraintMinWidth = 0;
 
         /**
-         * Specify a minimum height size for the widget. It will only apply if the size of the widget
+         * Specify a minimum height size for the widget.
+         * It will only apply if the size of the widget
          * is set to MATCH_CONSTRAINT. Don't apply if the widget is part of a vertical chain.
          */
         public int matchConstraintMinHeight = 0;
 
         /**
-         * Specify a maximum width size for the widget. It will only apply if the size of the widget
+         * Specify a maximum width size for the widget.
+         * It will only apply if the size of the widget
          * is set to MATCH_CONSTRAINT. Don't apply if the widget is part of a horizontal chain.
          */
         public int matchConstraintMaxWidth = 0;
 
         /**
-         * Specify a maximum height size for the widget. It will only apply if the size of the widget
+         * Specify a maximum height size for the widget.
+         * It will only apply if the size of the widget
          * is set to MATCH_CONSTRAINT. Don't apply if the widget is part of a vertical chain.
          */
         public int matchConstraintMaxHeight = 0;
@@ -2551,20 +2771,25 @@ public class ConstraintLayout extends ViewGroup {
         public int orientation = UNSET;
 
         /**
-         * Specify if the horizontal dimension is constrained in case both left & right constraints are set
-         * and the widget dimension is not a fixed dimension. By default, if a widget is set to WRAP_CONTENT,
-         * we will treat that dimension as a fixed dimension, meaning the dimension will not change regardless
-         * of constraints. Setting this attribute to true allows the dimension to change in order to respect
-         * constraints.
+         * Specify if the horizontal dimension is constrained in
+         * case both left & right constraints are set
+         * and the widget dimension is not a fixed dimension. By default,
+         * if a widget is set to WRAP_CONTENT,
+         * we will treat that dimension as a fixed dimension,
+         * meaning the dimension will not change regardless
+         * of constraints. Setting this attribute to true allows the dimension to change
+         * in order to respect constraints.
          */
         public boolean constrainedWidth = false;
 
         /**
-         * Specify if the vertical dimension is constrained in case both top & bottom constraints are set
-         * and the widget dimension is not a fixed dimension. By default, if a widget is set to WRAP_CONTENT,
-         * we will treat that dimension as a fixed dimension, meaning the dimension will not change regardless
-         * of constraints. Setting this attribute to true allows the dimension to change in order to respect
-         * constraints.
+         * Specify if the vertical dimension is constrained in case both
+         * top & bottom constraints are set and the widget dimension is not a fixed dimension.
+         * By default, if a widget is set to WRAP_CONTENT,
+         * we will treat that dimension as a fixed dimension,
+         * meaning the dimension will not change regardless
+         * of constraints. Setting this attribute to true allows the
+         * dimension to change in order to respect constraints.
          */
         public boolean constrainedHeight = false;
 
@@ -2573,9 +2798,12 @@ public class ConstraintLayout extends ViewGroup {
          */
         public String constraintTag = null;
 
-        public static final int WRAP_BEHAVIOR_INCLUDED = ConstraintWidget.WRAP_BEHAVIOR_INCLUDED;
-        public static final int WRAP_BEHAVIOR_HORIZONTAL_ONLY = ConstraintWidget.WRAP_BEHAVIOR_HORIZONTAL_ONLY;
-        public static final int WRAP_BEHAVIOR_VERTICAL_ONLY = ConstraintWidget.WRAP_BEHAVIOR_VERTICAL_ONLY;
+        public static final int WRAP_BEHAVIOR_INCLUDED =
+                ConstraintWidget.WRAP_BEHAVIOR_INCLUDED;
+        public static final int WRAP_BEHAVIOR_HORIZONTAL_ONLY =
+                ConstraintWidget.WRAP_BEHAVIOR_HORIZONTAL_ONLY;
+        public static final int WRAP_BEHAVIOR_VERTICAL_ONLY =
+                ConstraintWidget.WRAP_BEHAVIOR_VERTICAL_ONLY;
         public static final int WRAP_BEHAVIOR_SKIPPED = ConstraintWidget.WRAP_BEHAVIOR_SKIPPED;
 
         /**
@@ -2628,6 +2856,9 @@ public class ConstraintLayout extends ViewGroup {
             widget.setDebugName(text);
         }
 
+        /**
+         * Reset the ConstraintWidget
+         */
         public void reset() {
             if (widget != null) {
                 widget.reset();
@@ -2644,9 +2875,9 @@ public class ConstraintLayout extends ViewGroup {
         public LayoutParams(LayoutParams source) {
             super(source);
 
-            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////
             // Layout margins handling TODO: re-activate in 3.0
-            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////
             // this.layoutDirection = source.layoutDirection;
             // this.isRtl = source.isRtl;
             // this.originalLeftMargin = source.originalLeftMargin;
@@ -2657,7 +2888,7 @@ public class ConstraintLayout extends ViewGroup {
             // this.rightMargin = source.rightMargin;
             // this.topMargin = source.topMargin;
             // this.bottomMargin = source.bottomMargin;
-            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////
 
             this.guideBegin = source.guideBegin;
             this.guideEnd = source.guideEnd;
@@ -2786,9 +3017,9 @@ public class ConstraintLayout extends ViewGroup {
             public static final int LAYOUT_CONSTRAINT_BASELINE_TO_BOTTOM_OF = 53;
             public static final int LAYOUT_MARGIN_BASELINE = 54;
             public static final int LAYOUT_GONE_MARGIN_BASELINE = 55;
-            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////
             // Layout margins handling TODO: re-activate in 3.0
-            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////
             // public static final int LAYOUT_MARGIN_LEFT = 56;
             // public static final int LAYOUT_MARGIN_RIGHT = 57;
             // public static final int LAYOUT_MARGIN_TOP = 58;
@@ -2797,86 +3028,153 @@ public class ConstraintLayout extends ViewGroup {
             // public static final int LAYOUT_MARGIN_END = 61;
             // public static final int LAYOUT_WIDTH = 62;
             // public static final int LAYOUT_HEIGHT = 63;
-            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////
             public static final int LAYOUT_CONSTRAINT_WIDTH = 64;
             public static final int LAYOUT_CONSTRAINT_HEIGHT = 65;
             public static final int LAYOUT_WRAP_BEHAVIOR_IN_PARENT = 66;
             public static final int GUIDELINE_USE_RTL = 67;
 
-            public final static SparseIntArray map = new SparseIntArray();
+            public static final SparseIntArray map = new SparseIntArray();
 
             static {
-                ///////////////////////////////////////////////////////////////////////////////////////////
+                ///////////////////////////////////////////////////////////////////////////////////
                 // Layout margins handling TODO: re-activate in 3.0
-                ///////////////////////////////////////////////////////////////////////////////////////////
-                // map.append(R.styleable.ConstraintLayout_Layout_android_layout_width, LAYOUT_WIDTH);
-                // map.append(R.styleable.ConstraintLayout_Layout_android_layout_height, LAYOUT_HEIGHT);
-                // map.append(R.styleable.ConstraintLayout_Layout_android_layout_marginLeft, LAYOUT_MARGIN_LEFT);
-                // map.append(R.styleable.ConstraintLayout_Layout_android_layout_marginRight, LAYOUT_MARGIN_RIGHT);
-                // map.append(R.styleable.ConstraintLayout_Layout_android_layout_marginTop, LAYOUT_MARGIN_TOP);
-                // map.append(R.styleable.ConstraintLayout_Layout_android_layout_marginBottom, LAYOUT_MARGIN_BOTTOM);
-                // map.append(R.styleable.ConstraintLayout_Layout_android_layout_marginStart, LAYOUT_MARGIN_START);
-                // map.append(R.styleable.ConstraintLayout_Layout_android_layout_marginEnd, LAYOUT_MARGIN_END);
-                ///////////////////////////////////////////////////////////////////////////////////////////
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintWidth, LAYOUT_CONSTRAINT_WIDTH);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHeight, LAYOUT_CONSTRAINT_HEIGHT);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintLeft_toLeftOf, LAYOUT_CONSTRAINT_LEFT_TO_LEFT_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintLeft_toRightOf, LAYOUT_CONSTRAINT_LEFT_TO_RIGHT_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintRight_toLeftOf, LAYOUT_CONSTRAINT_RIGHT_TO_LEFT_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintRight_toRightOf, LAYOUT_CONSTRAINT_RIGHT_TO_RIGHT_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintTop_toTopOf, LAYOUT_CONSTRAINT_TOP_TO_TOP_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintTop_toBottomOf, LAYOUT_CONSTRAINT_TOP_TO_BOTTOM_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBottom_toTopOf, LAYOUT_CONSTRAINT_BOTTOM_TO_TOP_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBottom_toBottomOf, LAYOUT_CONSTRAINT_BOTTOM_TO_BOTTOM_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBaseline_toBaselineOf, LAYOUT_CONSTRAINT_BASELINE_TO_BASELINE_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBaseline_toTopOf, LAYOUT_CONSTRAINT_BASELINE_TO_TOP_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBaseline_toBottomOf, LAYOUT_CONSTRAINT_BASELINE_TO_BOTTOM_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintCircle, LAYOUT_CONSTRAINT_CIRCLE);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintCircleRadius, LAYOUT_CONSTRAINT_CIRCLE_RADIUS);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintCircleAngle, LAYOUT_CONSTRAINT_CIRCLE_ANGLE);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_editor_absoluteX, LAYOUT_EDITOR_ABSOLUTEX);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_editor_absoluteY, LAYOUT_EDITOR_ABSOLUTEY);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintGuide_begin, LAYOUT_CONSTRAINT_GUIDE_BEGIN);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintGuide_end, LAYOUT_CONSTRAINT_GUIDE_END);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintGuide_percent, LAYOUT_CONSTRAINT_GUIDE_PERCENT);
-                map.append(R.styleable.ConstraintLayout_Layout_guidelineUseRtl, GUIDELINE_USE_RTL);
-                map.append(R.styleable.ConstraintLayout_Layout_android_orientation, ANDROID_ORIENTATION);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintStart_toEndOf, LAYOUT_CONSTRAINT_START_TO_END_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintStart_toStartOf, LAYOUT_CONSTRAINT_START_TO_START_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintEnd_toStartOf, LAYOUT_CONSTRAINT_END_TO_START_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintEnd_toEndOf, LAYOUT_CONSTRAINT_END_TO_END_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginLeft, LAYOUT_GONE_MARGIN_LEFT);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginTop, LAYOUT_GONE_MARGIN_TOP);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginRight, LAYOUT_GONE_MARGIN_RIGHT);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginBottom, LAYOUT_GONE_MARGIN_BOTTOM);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginStart, LAYOUT_GONE_MARGIN_START);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginEnd, LAYOUT_GONE_MARGIN_END);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginBaseline, LAYOUT_GONE_MARGIN_BASELINE);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_marginBaseline, LAYOUT_MARGIN_BASELINE);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHorizontal_bias, LAYOUT_CONSTRAINT_HORIZONTAL_BIAS);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintVertical_bias, LAYOUT_CONSTRAINT_VERTICAL_BIAS);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintDimensionRatio, LAYOUT_CONSTRAINT_DIMENSION_RATIO);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHorizontal_weight, LAYOUT_CONSTRAINT_HORIZONTAL_WEIGHT);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintVertical_weight, LAYOUT_CONSTRAINT_VERTICAL_WEIGHT);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHorizontal_chainStyle, LAYOUT_CONSTRAINT_HORIZONTAL_CHAINSTYLE);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintVertical_chainStyle, LAYOUT_CONSTRAINT_VERTICAL_CHAINSTYLE);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constrainedWidth, LAYOUT_CONSTRAINED_WIDTH);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constrainedHeight, LAYOUT_CONSTRAINED_HEIGHT);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintWidth_default, LAYOUT_CONSTRAINT_WIDTH_DEFAULT);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHeight_default, LAYOUT_CONSTRAINT_HEIGHT_DEFAULT);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintWidth_min, LAYOUT_CONSTRAINT_WIDTH_MIN);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintWidth_max, LAYOUT_CONSTRAINT_WIDTH_MAX);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintWidth_percent, LAYOUT_CONSTRAINT_WIDTH_PERCENT);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHeight_min, LAYOUT_CONSTRAINT_HEIGHT_MIN);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHeight_max, LAYOUT_CONSTRAINT_HEIGHT_MAX);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHeight_percent, LAYOUT_CONSTRAINT_HEIGHT_PERCENT);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintLeft_creator, LAYOUT_CONSTRAINT_LEFT_CREATOR);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintTop_creator, LAYOUT_CONSTRAINT_TOP_CREATOR);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintRight_creator, LAYOUT_CONSTRAINT_RIGHT_CREATOR);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBottom_creator, LAYOUT_CONSTRAINT_BOTTOM_CREATOR);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBaseline_creator, LAYOUT_CONSTRAINT_BASELINE_CREATOR);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintTag, LAYOUT_CONSTRAINT_TAG);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_wrapBehaviorInParent, LAYOUT_WRAP_BEHAVIOR_IN_PARENT);
+                ///////////////////////////////////////////////////////////////////////////////////
+                // map.append(R.styleable.ConstraintLayout_Layout_android_layout_width,
+                // LAYOUT_WIDTH);
+                // map.append(R.styleable.ConstraintLayout_Layout_android_layout_height,
+                // LAYOUT_HEIGHT);
+                // map.append(R.styleable.ConstraintLayout_Layout_android_layout_marginLeft,
+                // LAYOUT_MARGIN_LEFT);
+                // map.append(R.styleable.ConstraintLayout_Layout_android_layout_marginRight,
+                // LAYOUT_MARGIN_RIGHT);
+                // map.append(R.styleable.ConstraintLayout_Layout_android_layout_marginTop,
+                // LAYOUT_MARGIN_TOP);
+                // map.append(R.styleable.ConstraintLayout_Layout_android_layout_marginBottom,
+                // LAYOUT_MARGIN_BOTTOM);
+                // map.append(R.styleable.ConstraintLayout_Layout_android_layout_marginStart,
+                // LAYOUT_MARGIN_START);
+                // map.append(R.styleable.ConstraintLayout_Layout_android_layout_marginEnd,
+                // LAYOUT_MARGIN_END);
+                //////////////////////////////////////////////////////////////////////////////////
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintWidth,
+                        LAYOUT_CONSTRAINT_WIDTH);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHeight,
+                        LAYOUT_CONSTRAINT_HEIGHT);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintLeft_toLeftOf,
+                        LAYOUT_CONSTRAINT_LEFT_TO_LEFT_OF);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintLeft_toRightOf,
+                        LAYOUT_CONSTRAINT_LEFT_TO_RIGHT_OF);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintRight_toLeftOf,
+                        LAYOUT_CONSTRAINT_RIGHT_TO_LEFT_OF);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintRight_toRightOf,
+                        LAYOUT_CONSTRAINT_RIGHT_TO_RIGHT_OF);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintTop_toTopOf,
+                        LAYOUT_CONSTRAINT_TOP_TO_TOP_OF);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintTop_toBottomOf,
+                        LAYOUT_CONSTRAINT_TOP_TO_BOTTOM_OF);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBottom_toTopOf,
+                        LAYOUT_CONSTRAINT_BOTTOM_TO_TOP_OF);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBottom_toBottomOf,
+                        LAYOUT_CONSTRAINT_BOTTOM_TO_BOTTOM_OF);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBaseline_toBaselineOf,
+                        LAYOUT_CONSTRAINT_BASELINE_TO_BASELINE_OF);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBaseline_toTopOf,
+                        LAYOUT_CONSTRAINT_BASELINE_TO_TOP_OF);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBaseline_toBottomOf,
+                        LAYOUT_CONSTRAINT_BASELINE_TO_BOTTOM_OF);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintCircle,
+                        LAYOUT_CONSTRAINT_CIRCLE);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintCircleRadius,
+                        LAYOUT_CONSTRAINT_CIRCLE_RADIUS);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintCircleAngle,
+                        LAYOUT_CONSTRAINT_CIRCLE_ANGLE);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_editor_absoluteX,
+                        LAYOUT_EDITOR_ABSOLUTEX);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_editor_absoluteY,
+                        LAYOUT_EDITOR_ABSOLUTEY);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintGuide_begin,
+                        LAYOUT_CONSTRAINT_GUIDE_BEGIN);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintGuide_end,
+                        LAYOUT_CONSTRAINT_GUIDE_END);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintGuide_percent,
+                        LAYOUT_CONSTRAINT_GUIDE_PERCENT);
+                map.append(R.styleable.ConstraintLayout_Layout_guidelineUseRtl,
+                        GUIDELINE_USE_RTL);
+                map.append(R.styleable.ConstraintLayout_Layout_android_orientation,
+                        ANDROID_ORIENTATION);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintStart_toEndOf,
+                        LAYOUT_CONSTRAINT_START_TO_END_OF);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintStart_toStartOf,
+                        LAYOUT_CONSTRAINT_START_TO_START_OF);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintEnd_toStartOf,
+                        LAYOUT_CONSTRAINT_END_TO_START_OF);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintEnd_toEndOf,
+                        LAYOUT_CONSTRAINT_END_TO_END_OF);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginLeft,
+                        LAYOUT_GONE_MARGIN_LEFT);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginTop,
+                        LAYOUT_GONE_MARGIN_TOP);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginRight,
+                        LAYOUT_GONE_MARGIN_RIGHT);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginBottom,
+                        LAYOUT_GONE_MARGIN_BOTTOM);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginStart,
+                        LAYOUT_GONE_MARGIN_START);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginEnd,
+                        LAYOUT_GONE_MARGIN_END);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginBaseline,
+                        LAYOUT_GONE_MARGIN_BASELINE);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_marginBaseline,
+                        LAYOUT_MARGIN_BASELINE);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHorizontal_bias,
+                        LAYOUT_CONSTRAINT_HORIZONTAL_BIAS);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintVertical_bias,
+                        LAYOUT_CONSTRAINT_VERTICAL_BIAS);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintDimensionRatio,
+                        LAYOUT_CONSTRAINT_DIMENSION_RATIO);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHorizontal_weight,
+                        LAYOUT_CONSTRAINT_HORIZONTAL_WEIGHT);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintVertical_weight,
+                        LAYOUT_CONSTRAINT_VERTICAL_WEIGHT);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHorizontal_chainStyle,
+                        LAYOUT_CONSTRAINT_HORIZONTAL_CHAINSTYLE);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintVertical_chainStyle,
+                        LAYOUT_CONSTRAINT_VERTICAL_CHAINSTYLE);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constrainedWidth,
+                        LAYOUT_CONSTRAINED_WIDTH);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constrainedHeight,
+                        LAYOUT_CONSTRAINED_HEIGHT);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintWidth_default,
+                        LAYOUT_CONSTRAINT_WIDTH_DEFAULT);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHeight_default,
+                        LAYOUT_CONSTRAINT_HEIGHT_DEFAULT);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintWidth_min,
+                        LAYOUT_CONSTRAINT_WIDTH_MIN);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintWidth_max,
+                        LAYOUT_CONSTRAINT_WIDTH_MAX);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintWidth_percent,
+                        LAYOUT_CONSTRAINT_WIDTH_PERCENT);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHeight_min,
+                        LAYOUT_CONSTRAINT_HEIGHT_MIN);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHeight_max,
+                        LAYOUT_CONSTRAINT_HEIGHT_MAX);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHeight_percent,
+                        LAYOUT_CONSTRAINT_HEIGHT_PERCENT);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintLeft_creator,
+                        LAYOUT_CONSTRAINT_LEFT_CREATOR);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintTop_creator,
+                        LAYOUT_CONSTRAINT_TOP_CREATOR);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintRight_creator,
+                        LAYOUT_CONSTRAINT_RIGHT_CREATOR);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBottom_creator,
+                        LAYOUT_CONSTRAINT_BOTTOM_CREATOR);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBaseline_creator,
+                        LAYOUT_CONSTRAINT_BASELINE_CREATOR);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintTag,
+                        LAYOUT_CONSTRAINT_TAG);
+                map.append(R.styleable.ConstraintLayout_Layout_layout_wrapBehaviorInParent,
+                        LAYOUT_WRAP_BEHAVIOR_IN_PARENT);
             }
         }
 
@@ -2904,7 +3202,7 @@ public class ConstraintLayout extends ViewGroup {
             return layoutDirection;
         }
         */
-        ///////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////
 
         public LayoutParams(Context c, AttributeSet attrs) {
             super(c, attrs);
@@ -2912,18 +3210,19 @@ public class ConstraintLayout extends ViewGroup {
             TypedArray a = c.obtainStyledAttributes(attrs, R.styleable.ConstraintLayout_Layout);
             final int N = a.getIndexCount();
 
-            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////
             // Layout margins handling TODO: re-activate in 3.0
-            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////
             // super(WRAP_CONTENT, WRAP_CONTENT);
             /*
-            if (N == 0) {
+            if (n == 0) {
                // check if it's an include
                throw new IllegalArgumentException("Invalid LayoutParams supplied to " + this);
             }
 
             // let's first apply full margins if they are present.
-            int margin = a.getDimensionPixelSize(R.styleable.ConstraintLayout_Layout_android_layout_margin, -1);
+            int margin = a.getDimensionPixelSize(R.styleable
+            .ConstraintLayout_Layout_android_layout_margin, -1);
             int horizontalMargin = -1;
             int verticalMargin = -1;
             if (margin >= 0) {
@@ -2932,8 +3231,10 @@ public class ConstraintLayout extends ViewGroup {
                 topMargin = margin;
                 bottomMargin = margin;
             } else {
-                horizontalMargin = a.getDimensionPixelSize(R.styleable.ConstraintLayout_Layout_android_layout_marginHorizontal, -1);
-                verticalMargin = a.getDimensionPixelSize(R.styleable.ConstraintLayout_Layout_android_layout_marginVertical, -1);
+                horizontalMargin = a.getDimensionPixelSize(R.styleable
+                .ConstraintLayout_Layout_android_layout_marginHorizontal, -1);
+                verticalMargin = a.getDimensionPixelSize(R.styleable
+                .ConstraintLayout_Layout_android_layout_marginVertical, -1);
                 if (horizontalMargin >= 0) {
                     originalLeftMargin = horizontalMargin;
                     originalRightMargin = horizontalMargin;
@@ -2944,7 +3245,7 @@ public class ConstraintLayout extends ViewGroup {
                 }
             }
             */
-            ///////////////////////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////////////////
 
             for (int i = 0; i < N; i++) {
                 int attr = a.getIndex(i);
@@ -2964,22 +3265,24 @@ public class ConstraintLayout extends ViewGroup {
                         heightSet = true;
                         break;
                     }
-                    ///////////////////////////////////////////////////////////////////////////////////////////
+                    ///////////////////////////////////////////////////////////////////////////////
                     // Layout margins handling TODO: re-activate in 3.0
-                    ///////////////////////////////////////////////////////////////////////////////////////////
+                    ///////////////////////////////////////////////////////////////////////////////
                     /*
                     case Table.LAYOUT_WIDTH: {
-                        width = a.getLayoutDimension(R.styleable.ConstraintLayout_Layout_android_layout_width, "layout_width");
+                        width = a.getLayoutDimension(R.styleable
+                        .ConstraintLayout_Layout_android_layout_width, "layout_width");
                         widthSet = true;
                         break;
                     }
                     case Table.LAYOUT_HEIGHT: {
-                        height = a.getLayoutDimension(R.styleable.ConstraintLayout_Layout_android_layout_height, "layout_height");
+                        height = a.getLayoutDimension(R.styleable
+                        .ConstraintLayout_Layout_android_layout_height, "layout_height");
                         heightSet = true;
                         break;
                     }
                     */
-                    ///////////////////////////////////////////////////////////////////////////////////////////
+                    ///////////////////////////////////////////////////////////////////////////////
                     case Table.LAYOUT_WRAP_BEHAVIOR_IN_PARENT: {
                         wrapBehaviorInParent = a.getInt(attr, wrapBehaviorInParent);
                         break;
@@ -3171,9 +3474,9 @@ public class ConstraintLayout extends ViewGroup {
                         baselineMargin = a.getDimensionPixelSize(attr, baselineMargin);
                         break;
                     }
-                    ///////////////////////////////////////////////////////////////////////////////////////////
+                    //////////////////////////////////////////////////////////////////////////////
                     // Layout margins handling TODO: re-activate in 3.0
-                    ///////////////////////////////////////////////////////////////////////////////////////////
+                    //////////////////////////////////////////////////////////////////////////////
                     /*
                     case Table.LAYOUT_MARGIN_LEFT: {
                         if (margin == -1 && horizontalMargin == -1) {
@@ -3216,7 +3519,7 @@ public class ConstraintLayout extends ViewGroup {
                         break;
                     }
                     */
-                    ///////////////////////////////////////////////////////////////////////////////////////////
+                    ///////////////////////////////////////////////////////////////////////////////
                     case Table.LAYOUT_CONSTRAINT_HORIZONTAL_BIAS: {
                         horizontalBias = a.getFloat(attr, horizontalBias);
                         break;
@@ -3256,22 +3559,25 @@ public class ConstraintLayout extends ViewGroup {
                     case Table.LAYOUT_CONSTRAINT_WIDTH_DEFAULT: {
                         matchConstraintDefaultWidth = a.getInt(attr, MATCH_CONSTRAINT_SPREAD);
                         if (matchConstraintDefaultWidth == MATCH_CONSTRAINT_WRAP) {
-                            Log.e(TAG, "layout_constraintWidth_default=\"wrap\" is deprecated." +
-                                    "\nUse layout_width=\"WRAP_CONTENT\" and layout_constrainedWidth=\"true\" instead.");
+                            Log.e(TAG, "layout_constraintWidth_default=\"wrap\" is deprecated."
+                                    + "\nUse layout_width=\"WRAP_CONTENT\" and "
+                                    + "layout_constrainedWidth=\"true\" instead.");
                         }
                         break;
                     }
                     case Table.LAYOUT_CONSTRAINT_HEIGHT_DEFAULT: {
                         matchConstraintDefaultHeight = a.getInt(attr, MATCH_CONSTRAINT_SPREAD);
                         if (matchConstraintDefaultHeight == MATCH_CONSTRAINT_WRAP) {
-                            Log.e(TAG, "layout_constraintHeight_default=\"wrap\" is deprecated." +
-                                    "\nUse layout_height=\"WRAP_CONTENT\" and layout_constrainedHeight=\"true\" instead.");
+                            Log.e(TAG, "layout_constraintHeight_default=\"wrap\" is deprecated."
+                                    + "\nUse layout_height=\"WRAP_CONTENT\" and "
+                                    + "layout_constrainedHeight=\"true\" instead.");
                         }
                         break;
                     }
                     case Table.LAYOUT_CONSTRAINT_WIDTH_MIN: {
                         try {
-                            matchConstraintMinWidth = a.getDimensionPixelSize(attr, matchConstraintMinWidth);
+                            matchConstraintMinWidth = a.getDimensionPixelSize(attr,
+                                    matchConstraintMinWidth);
                         } catch (Exception e) {
                             int value = a.getInt(attr, matchConstraintMinWidth);
                             if (value == WRAP_CONTENT) {
@@ -3282,7 +3588,8 @@ public class ConstraintLayout extends ViewGroup {
                     }
                     case Table.LAYOUT_CONSTRAINT_WIDTH_MAX: {
                         try {
-                            matchConstraintMaxWidth = a.getDimensionPixelSize(attr, matchConstraintMaxWidth);
+                            matchConstraintMaxWidth = a.getDimensionPixelSize(attr,
+                                    matchConstraintMaxWidth);
                         } catch (Exception e) {
                             int value = a.getInt(attr, matchConstraintMaxWidth);
                             if (value == WRAP_CONTENT) {
@@ -3292,13 +3599,15 @@ public class ConstraintLayout extends ViewGroup {
                         break;
                     }
                     case Table.LAYOUT_CONSTRAINT_WIDTH_PERCENT: {
-                        matchConstraintPercentWidth = Math.max(0, a.getFloat(attr, matchConstraintPercentWidth));
+                        matchConstraintPercentWidth = Math.max(0, a.getFloat(attr,
+                                matchConstraintPercentWidth));
                         matchConstraintDefaultWidth = MATCH_CONSTRAINT_PERCENT;
                         break;
                     }
                     case Table.LAYOUT_CONSTRAINT_HEIGHT_MIN: {
                         try {
-                            matchConstraintMinHeight = a.getDimensionPixelSize(attr, matchConstraintMinHeight);
+                            matchConstraintMinHeight = a.getDimensionPixelSize(attr,
+                                    matchConstraintMinHeight);
                         } catch (Exception e) {
                             int value = a.getInt(attr, matchConstraintMinHeight);
                             if (value == WRAP_CONTENT) {
@@ -3309,7 +3618,8 @@ public class ConstraintLayout extends ViewGroup {
                     }
                     case Table.LAYOUT_CONSTRAINT_HEIGHT_MAX: {
                         try {
-                            matchConstraintMaxHeight = a.getDimensionPixelSize(attr, matchConstraintMaxHeight);
+                            matchConstraintMaxHeight = a.getDimensionPixelSize(attr,
+                                    matchConstraintMaxHeight);
                         } catch (Exception e) {
                             int value = a.getInt(attr, matchConstraintMaxHeight);
                             if (value == WRAP_CONTENT) {
@@ -3319,7 +3629,8 @@ public class ConstraintLayout extends ViewGroup {
                         break;
                     }
                     case Table.LAYOUT_CONSTRAINT_HEIGHT_PERCENT: {
-                        matchConstraintPercentHeight = Math.max(0, a.getFloat(attr, matchConstraintPercentHeight));
+                        matchConstraintPercentHeight = Math.max(0, a.getFloat(attr,
+                                matchConstraintPercentHeight));
                         matchConstraintDefaultHeight = MATCH_CONSTRAINT_PERCENT;
                         break;
                     }
@@ -3349,35 +3660,38 @@ public class ConstraintLayout extends ViewGroup {
                 }
             }
 
-            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////
             // Layout margins handling TODO: re-activate in 3.0
-            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////
             /*
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 leftMargin = originalLeftMargin;
                 rightMargin = originalRightMargin;
             }
             */
-            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////
 
             a.recycle();
             validate();
         }
 
+        /**
+         * validate the layout
+         */
         public void validate() {
             isGuideline = false;
             horizontalDimensionFixed = true;
             verticalDimensionFixed = true;
-            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////
             // Layout margins handling TODO: re-activate in 3.0
-            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////
             /*
             if (dimensionRatio != null && !widthSet && !heightSet) {
                 width = MATCH_CONSTRAINT;
                 height = MATCH_CONSTRAINT;
             }
             */
-            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////
 
             if (width == WRAP_CONTENT && constrainedWidth) {
                 horizontalDimensionFixed = false;
@@ -3393,20 +3707,26 @@ public class ConstraintLayout extends ViewGroup {
             }
             if (width == MATCH_CONSTRAINT || width == MATCH_PARENT) {
                 horizontalDimensionFixed = false;
-                // We have to reset LayoutParams width/height to WRAP_CONTENT here, as some widgets like TextView
-                // will use the layout params directly as a hint to know if they need to request a layout
+                // We have to reset LayoutParams width/height to WRAP_CONTENT here,
+                // as some widgets like TextView
+                // will use the layout params directly as a hint to know
+                // if they need to request a layout
                 // when their content change (e.g. during setTextView)
-                if (width == MATCH_CONSTRAINT && matchConstraintDefaultWidth == MATCH_CONSTRAINT_WRAP) {
+                if (width == MATCH_CONSTRAINT
+                        && matchConstraintDefaultWidth == MATCH_CONSTRAINT_WRAP) {
                     width = WRAP_CONTENT;
                     constrainedWidth = true;
                 }
             }
             if (height == MATCH_CONSTRAINT || height == MATCH_PARENT) {
                 verticalDimensionFixed = false;
-                // We have to reset LayoutParams width/height to WRAP_CONTENT here, as some widgets like TextView
-                // will use the layout params directly as a hint to know if they need to request a layout
+                // We have to reset LayoutParams width/height to WRAP_CONTENT here,
+                // as some widgets like TextView
+                // will use the layout params directly as a hint to know
+                // if they need to request a layout
                 // when their content change (e.g. during setTextView)
-                if (height == MATCH_CONSTRAINT && matchConstraintDefaultHeight == MATCH_CONSTRAINT_WRAP) {
+                if (height == MATCH_CONSTRAINT
+                        && matchConstraintDefaultHeight == MATCH_CONSTRAINT_WRAP) {
                     height = WRAP_CONTENT;
                     constrainedHeight = true;
                 }
@@ -3436,9 +3756,9 @@ public class ConstraintLayout extends ViewGroup {
         @Override
         @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
         public void resolveLayoutDirection(int layoutDirection) {
-            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////
             // Layout margins handling TODO: re-activate in 3.0
-            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////
             /*
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 this.layoutDirection = layoutDirection;
@@ -3467,7 +3787,7 @@ public class ConstraintLayout extends ViewGroup {
                 }
             }
             */
-            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////
             int originalLeftMargin = leftMargin;
             int originalRightMargin = rightMargin;
 
@@ -3476,7 +3796,7 @@ public class ConstraintLayout extends ViewGroup {
                 super.resolveLayoutDirection(layoutDirection);
                 isRtl = (View.LAYOUT_DIRECTION_RTL == getLayoutDirection());
             }
-            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////
 
             resolvedRightToLeft = UNSET;
             resolvedRightToRight = UNSET;

@@ -33,9 +33,9 @@ import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import androidx.constraintlayout.core.motion.utils.Easing;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.HelperWidget;
-import androidx.constraintlayout.core.motion.utils.Easing;
 import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.constraintlayout.motion.widget.MotionScene;
@@ -60,7 +60,8 @@ import java.util.Set;
  * This class allows you to define programmatically a set of constraints to be used with {@link ConstraintLayout}.
  * <p>
  * For details about Constraint behaviour see {@link ConstraintLayout}.
- * It lets you create and save constraints, and apply them to an existing ConstraintLayout. ConstraintsSet can be created in various ways:
+ * It lets you create and save constraints, and apply them to an existing ConstraintLayout.
+ * ConstraintsSet can be created in various ways:
  * <ul>
  * <li>
  * Manually <br> {@code c = new ConstraintSet(); c.connect(....);}
@@ -117,14 +118,17 @@ public class ConstraintSet {
     /**
      * How to calculate the size of a view in 0 dp by using its wrap_content size
      */
-    public static final int MATCH_CONSTRAINT_WRAP = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_WRAP;
+    public static final int MATCH_CONSTRAINT_WRAP =
+            ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_WRAP;
 
     /**
      * Calculate the size of a view in 0 dp by reducing the constrains gaps as much as possible
      */
-    public static final int MATCH_CONSTRAINT_SPREAD = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_SPREAD;
+    public static final int MATCH_CONSTRAINT_SPREAD =
+            ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_SPREAD;
 
-    public static final int MATCH_CONSTRAINT_PERCENT = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_PERCENT;
+    public static final int MATCH_CONSTRAINT_PERCENT =
+            ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_PERCENT;
 
     /**
      * References the id of the parent.
@@ -354,14 +358,19 @@ public class ConstraintSet {
         mapToConstant.append(R.styleable.Constraint_layout_constraintLeft_toLeftOf, LEFT_TO_LEFT);
         mapToConstant.append(R.styleable.Constraint_layout_constraintLeft_toRightOf, LEFT_TO_RIGHT);
         mapToConstant.append(R.styleable.Constraint_layout_constraintRight_toLeftOf, RIGHT_TO_LEFT);
-        mapToConstant.append(R.styleable.Constraint_layout_constraintRight_toRightOf, RIGHT_TO_RIGHT);
+        mapToConstant.append(
+                R.styleable.Constraint_layout_constraintRight_toRightOf, RIGHT_TO_RIGHT);
         mapToConstant.append(R.styleable.Constraint_layout_constraintTop_toTopOf, TOP_TO_TOP);
         mapToConstant.append(R.styleable.Constraint_layout_constraintTop_toBottomOf, TOP_TO_BOTTOM);
         mapToConstant.append(R.styleable.Constraint_layout_constraintBottom_toTopOf, BOTTOM_TO_TOP);
-        mapToConstant.append(R.styleable.Constraint_layout_constraintBottom_toBottomOf, BOTTOM_TO_BOTTOM);
-        mapToConstant.append(R.styleable.Constraint_layout_constraintBaseline_toBaselineOf, BASELINE_TO_BASELINE);
-        mapToConstant.append(R.styleable.Constraint_layout_constraintBaseline_toTopOf, BASELINE_TO_TOP);
-        mapToConstant.append(R.styleable.Constraint_layout_constraintBaseline_toBottomOf, BASELINE_TO_BOTTOM);
+        mapToConstant.append(
+                R.styleable.Constraint_layout_constraintBottom_toBottomOf, BOTTOM_TO_BOTTOM);
+        mapToConstant.append(
+                R.styleable.Constraint_layout_constraintBaseline_toBaselineOf, BASELINE_TO_BASELINE);
+        mapToConstant.append(
+                R.styleable.Constraint_layout_constraintBaseline_toTopOf, BASELINE_TO_TOP);
+        mapToConstant.append(
+                R.styleable.Constraint_layout_constraintBaseline_toBottomOf, BASELINE_TO_BOTTOM);
 
         mapToConstant.append(R.styleable.Constraint_layout_editor_absoluteX, EDITOR_ABSOLUTE_X);
         mapToConstant.append(R.styleable.Constraint_layout_editor_absoluteY, EDITOR_ABSOLUTE_Y);
@@ -372,7 +381,8 @@ public class ConstraintSet {
 
         mapToConstant.append(R.styleable.Constraint_android_orientation, ORIENTATION);
         mapToConstant.append(R.styleable.Constraint_layout_constraintStart_toEndOf, START_TO_END);
-        mapToConstant.append(R.styleable.Constraint_layout_constraintStart_toStartOf, START_TO_START);
+        mapToConstant.append(
+                R.styleable.Constraint_layout_constraintStart_toStartOf, START_TO_START);
         mapToConstant.append(R.styleable.Constraint_layout_constraintEnd_toStartOf, END_TO_START);
         mapToConstant.append(R.styleable.Constraint_layout_constraintEnd_toEndOf, END_TO_END);
         mapToConstant.append(R.styleable.Constraint_layout_goneMarginLeft, GONE_LEFT_MARGIN);
@@ -381,14 +391,21 @@ public class ConstraintSet {
         mapToConstant.append(R.styleable.Constraint_layout_goneMarginBottom, GONE_BOTTOM_MARGIN);
         mapToConstant.append(R.styleable.Constraint_layout_goneMarginStart, GONE_START_MARGIN);
         mapToConstant.append(R.styleable.Constraint_layout_goneMarginEnd, GONE_END_MARGIN);
-        mapToConstant.append(R.styleable.Constraint_layout_constraintVertical_weight, VERTICAL_WEIGHT);
-        mapToConstant.append(R.styleable.Constraint_layout_constraintHorizontal_weight, HORIZONTAL_WEIGHT);
-        mapToConstant.append(R.styleable.Constraint_layout_constraintHorizontal_chainStyle, HORIZONTAL_STYLE);
-        mapToConstant.append(R.styleable.Constraint_layout_constraintVertical_chainStyle, VERTICAL_STYLE);
+        mapToConstant.append(
+                R.styleable.Constraint_layout_constraintVertical_weight, VERTICAL_WEIGHT);
+        mapToConstant.append(
+                R.styleable.Constraint_layout_constraintHorizontal_weight, HORIZONTAL_WEIGHT);
+        mapToConstant.append(
+                R.styleable.Constraint_layout_constraintHorizontal_chainStyle, HORIZONTAL_STYLE);
+        mapToConstant.append(
+                R.styleable.Constraint_layout_constraintVertical_chainStyle, VERTICAL_STYLE);
 
-        mapToConstant.append(R.styleable.Constraint_layout_constraintHorizontal_bias, HORIZONTAL_BIAS);
-        mapToConstant.append(R.styleable.Constraint_layout_constraintVertical_bias, VERTICAL_BIAS);
-        mapToConstant.append(R.styleable.Constraint_layout_constraintDimensionRatio, DIMENSION_RATIO);
+        mapToConstant.append(
+                R.styleable.Constraint_layout_constraintHorizontal_bias, HORIZONTAL_BIAS);
+        mapToConstant.append(
+                R.styleable.Constraint_layout_constraintVertical_bias, VERTICAL_BIAS);
+        mapToConstant.append(
+                R.styleable.Constraint_layout_constraintDimensionRatio, DIMENSION_RATIO);
         mapToConstant.append(R.styleable.Constraint_layout_constraintLeft_creator, UNUSED);
         mapToConstant.append(R.styleable.Constraint_layout_constraintTop_creator, UNUSED);
         mapToConstant.append(R.styleable.Constraint_layout_constraintRight_creator, UNUSED);
@@ -401,9 +418,12 @@ public class ConstraintSet {
         mapToConstant.append(R.styleable.Constraint_android_layout_marginTop, TOP_MARGIN);
         mapToConstant.append(R.styleable.Constraint_android_layout_marginBottom, BOTTOM_MARGIN);
         mapToConstant.append(R.styleable.Constraint_android_layout_width, LAYOUT_WIDTH);
-        mapToConstant.append(R.styleable.Constraint_android_layout_height, LAYOUT_HEIGHT);
-        mapToConstant.append(R.styleable.Constraint_layout_constraintWidth, LAYOUT_CONSTRAINT_WIDTH);
-        mapToConstant.append(R.styleable.Constraint_layout_constraintHeight, LAYOUT_CONSTRAINT_HEIGHT);
+        mapToConstant.append(
+                R.styleable.Constraint_android_layout_height, LAYOUT_HEIGHT);
+        mapToConstant.append(
+                R.styleable.Constraint_layout_constraintWidth, LAYOUT_CONSTRAINT_WIDTH);
+        mapToConstant.append(
+                R.styleable.Constraint_layout_constraintHeight, LAYOUT_CONSTRAINT_HEIGHT);
         mapToConstant.append(R.styleable.Constraint_android_visibility, LAYOUT_VISIBILITY);
         mapToConstant.append(R.styleable.Constraint_android_alpha, ALPHA);
         mapToConstant.append(R.styleable.Constraint_android_elevation, ELEVATION);
@@ -433,80 +453,147 @@ public class ConstraintSet {
         mapToConstant.append(R.styleable.Constraint_motionStagger, MOTION_STAGGER);
         mapToConstant.append(R.styleable.Constraint_android_id, VIEW_ID);
         mapToConstant.append(R.styleable.Constraint_motionProgress, PROGRESS);
-        mapToConstant.append(R.styleable.Constraint_layout_constraintWidth_percent, WIDTH_PERCENT);
-        mapToConstant.append(R.styleable.Constraint_layout_constraintHeight_percent, HEIGHT_PERCENT);
-        mapToConstant.append(R.styleable.Constraint_layout_wrapBehaviorInParent, LAYOUT_WRAP_BEHAVIOR);
+        mapToConstant.append(
+                R.styleable.Constraint_layout_constraintWidth_percent, WIDTH_PERCENT);
+        mapToConstant.append(
+                R.styleable.Constraint_layout_constraintHeight_percent, HEIGHT_PERCENT);
+        mapToConstant.append(
+                R.styleable.Constraint_layout_wrapBehaviorInParent, LAYOUT_WRAP_BEHAVIOR);
 
         mapToConstant.append(R.styleable.Constraint_chainUseRtl, CHAIN_USE_RTL);
         mapToConstant.append(R.styleable.Constraint_barrierDirection, BARRIER_DIRECTION);
         mapToConstant.append(R.styleable.Constraint_barrierMargin, BARRIER_MARGIN);
-        mapToConstant.append(R.styleable.Constraint_constraint_referenced_ids, CONSTRAINT_REFERENCED_IDS);
-        mapToConstant.append(R.styleable.Constraint_barrierAllowsGoneWidgets, BARRIER_ALLOWS_GONE_WIDGETS);
+        mapToConstant.append(
+                R.styleable.Constraint_constraint_referenced_ids, CONSTRAINT_REFERENCED_IDS);
+        mapToConstant.append(
+                R.styleable.Constraint_barrierAllowsGoneWidgets, BARRIER_ALLOWS_GONE_WIDGETS);
         mapToConstant.append(R.styleable.Constraint_pathMotionArc, PATH_MOTION_ARC);
         mapToConstant.append(R.styleable.Constraint_layout_constraintTag, CONSTRAINT_TAG);
         mapToConstant.append(R.styleable.Constraint_visibilityMode, VISIBILITY_MODE);
-        mapToConstant.append(R.styleable.Constraint_layout_constrainedWidth, CONSTRAINED_WIDTH);
-        mapToConstant.append(R.styleable.Constraint_layout_constrainedHeight, CONSTRAINED_HEIGHT);
-        mapToConstant.append(R.styleable.Constraint_polarRelativeTo, ANIMATE_CIRCLE_ANGLE_TO);
-        mapToConstant.append(R.styleable.Constraint_transformPivotTarget, TRANSFORM_PIVOT_TARGET);
-        mapToConstant.append(R.styleable.Constraint_quantizeMotionSteps, QUANTIZE_MOTION_STEPS);
-        mapToConstant.append(R.styleable.Constraint_quantizeMotionPhase, QUANTIZE_MOTION_PHASE);
-        mapToConstant.append(R.styleable.Constraint_quantizeMotionInterpolator, QUANTIZE_MOTION_INTERPOLATOR);
+        mapToConstant.append(
+                R.styleable.Constraint_layout_constrainedWidth, CONSTRAINED_WIDTH);
+        mapToConstant.append(
+                R.styleable.Constraint_layout_constrainedHeight, CONSTRAINED_HEIGHT);
+        mapToConstant.append(
+                R.styleable.Constraint_polarRelativeTo, ANIMATE_CIRCLE_ANGLE_TO);
+        mapToConstant.append(
+                R.styleable.Constraint_transformPivotTarget, TRANSFORM_PIVOT_TARGET);
+        mapToConstant.append(
+                R.styleable.Constraint_quantizeMotionSteps, QUANTIZE_MOTION_STEPS);
+        mapToConstant.append(
+                R.styleable.Constraint_quantizeMotionPhase, QUANTIZE_MOTION_PHASE);
+        mapToConstant.append(
+                R.styleable.Constraint_quantizeMotionInterpolator, QUANTIZE_MOTION_INTERPOLATOR);
 
 
         /*
         The tags not available in constraintOverride
         Left here to help with documentation and understanding
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintLeft_toLeftOf, LEFT_TO_LEFT);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintLeft_toRightOf, LEFT_TO_RIGHT);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintRight_toLeftOf, RIGHT_TO_LEFT);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintRight_toRightOf, RIGHT_TO_RIGHT);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintTop_toTopOf, TOP_TO_TOP);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintTop_toBottomOf, TOP_TO_BOTTOM);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintBottom_toTopOf, BOTTOM_TO_TOP);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintBottom_toBottomOf, BOTTOM_TO_BOTTOM);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintBaseline_toBaselineOf, BASELINE_TO_BASELINE);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintGuide_begin, GUIDE_BEGIN);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintGuide_end, GUIDE_END);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintGuide_percent, GUIDE_PERCENT);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintStart_toEndOf, START_TO_END);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintStart_toStartOf, START_TO_START);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintEnd_toStartOf, END_TO_START);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintEnd_toEndOf, END_TO_END);
+        overrideMapToConstant.append(
+        R.styleable.ConstraintOverride_layout_constraintLeft_toLeftOf, LEFT_TO_LEFT);
+        overrideMapToConstant.append(
+        R.styleable.ConstraintOverride_layout_constraintLeft_toRightOf, LEFT_TO_RIGHT);
+        overrideMapToConstant.append(
+        R.styleable.ConstraintOverride_layout_constraintRight_toLeftOf, RIGHT_TO_LEFT);
+        overrideMapToConstant.append(
+        R.styleable.ConstraintOverride_layout_constraintRight_toRightOf, RIGHT_TO_RIGHT);
+        overrideMapToConstant.append(
+        R.styleable.ConstraintOverride_layout_constraintTop_toTopOf, TOP_TO_TOP);
+        overrideMapToConstant.append(
+        R.styleable.ConstraintOverride_layout_constraintTop_toBottomOf, TOP_TO_BOTTOM);
+        overrideMapToConstant.append(
+        R.styleable.ConstraintOverride_layout_constraintBottom_toTopOf, BOTTOM_TO_TOP);
+        overrideMapToConstant.append(
+        R.styleable.ConstraintOverride_layout_constraintBottom_toBottomOf, BOTTOM_TO_BOTTOM);
+        overrideMapToConstant.append(
+        R.styleable.ConstraintOverride_layout_constraintBaseline_toBaselineOf,
+        BASELINE_TO_BASELINE);
+        overrideMapToConstant.append(
+        R.styleable.ConstraintOverride_layout_constraintGuide_begin, GUIDE_BEGIN);
+        overrideMapToConstant.append(
+        R.styleable.ConstraintOverride_layout_constraintGuide_end, GUIDE_END);
+        overrideMapToConstant.append(
+        R.styleable.ConstraintOverride_layout_constraintGuide_percent, GUIDE_PERCENT);
+        overrideMapToConstant.append(
+        R.styleable.ConstraintOverride_layout_constraintStart_toEndOf, START_TO_END);
+        overrideMapToConstant.append(
+        R.styleable.ConstraintOverride_layout_constraintStart_toStartOf, START_TO_START);
+        overrideMapToConstant.append(
+        R.styleable.ConstraintOverride_layout_constraintEnd_toStartOf, END_TO_START);
+        overrideMapToConstant.append(
+        R.styleable.ConstraintOverride_layout_constraintEnd_toEndOf, END_TO_END);
         */
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_editor_absoluteY, EDITOR_ABSOLUTE_X);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_editor_absoluteY, EDITOR_ABSOLUTE_Y);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_orientation, ORIENTATION);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_goneMarginLeft, GONE_LEFT_MARGIN);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_goneMarginTop, GONE_TOP_MARGIN);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_goneMarginRight, GONE_RIGHT_MARGIN);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_goneMarginBottom, GONE_BOTTOM_MARGIN);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_goneMarginStart, GONE_START_MARGIN);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_goneMarginEnd, GONE_END_MARGIN);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintVertical_weight, VERTICAL_WEIGHT);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintHorizontal_weight, HORIZONTAL_WEIGHT);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintHorizontal_chainStyle, HORIZONTAL_STYLE);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintVertical_chainStyle, VERTICAL_STYLE);
+        overrideMapToConstant.append(
+                R.styleable.ConstraintOverride_layout_editor_absoluteY, EDITOR_ABSOLUTE_X);
+        overrideMapToConstant.append(
+                R.styleable.ConstraintOverride_layout_editor_absoluteY, EDITOR_ABSOLUTE_Y);
+        overrideMapToConstant.append(
+                R.styleable.ConstraintOverride_android_orientation, ORIENTATION);
+        overrideMapToConstant.append(
+                R.styleable.ConstraintOverride_layout_goneMarginLeft, GONE_LEFT_MARGIN);
+        overrideMapToConstant.append
+                (R.styleable.ConstraintOverride_layout_goneMarginTop, GONE_TOP_MARGIN);
+        overrideMapToConstant.append(
+                R.styleable.ConstraintOverride_layout_goneMarginRight, GONE_RIGHT_MARGIN);
+        overrideMapToConstant.append(
+                R.styleable.ConstraintOverride_layout_goneMarginBottom, GONE_BOTTOM_MARGIN);
+        overrideMapToConstant.append(
+                R.styleable.ConstraintOverride_layout_goneMarginStart, GONE_START_MARGIN);
+        overrideMapToConstant.append(
+                R.styleable.ConstraintOverride_layout_goneMarginEnd, GONE_END_MARGIN);
+        overrideMapToConstant.append(
+                R.styleable.ConstraintOverride_layout_constraintVertical_weight,
+                VERTICAL_WEIGHT);
+        overrideMapToConstant.append(
+                R.styleable.ConstraintOverride_layout_constraintHorizontal_weight,
+                HORIZONTAL_WEIGHT);
+        overrideMapToConstant.append(
+                R.styleable.ConstraintOverride_layout_constraintHorizontal_chainStyle,
+                HORIZONTAL_STYLE);
+        overrideMapToConstant.append(
+                R.styleable.ConstraintOverride_layout_constraintVertical_chainStyle,
+                VERTICAL_STYLE);
 
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintHorizontal_bias, HORIZONTAL_BIAS);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintVertical_bias, VERTICAL_BIAS);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintDimensionRatio, DIMENSION_RATIO);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintLeft_creator, UNUSED);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintTop_creator, UNUSED);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintRight_creator, UNUSED);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintBottom_creator, UNUSED);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintBaseline_creator, UNUSED);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_marginLeft, LEFT_MARGIN);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_marginRight, RIGHT_MARGIN);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_marginStart, START_MARGIN);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_marginEnd, END_MARGIN);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_marginTop, TOP_MARGIN);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_marginBottom, BOTTOM_MARGIN);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_width, LAYOUT_WIDTH);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_height, LAYOUT_HEIGHT);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintWidth, LAYOUT_CONSTRAINT_WIDTH);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintHeight, LAYOUT_CONSTRAINT_HEIGHT);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_visibility, LAYOUT_VISIBILITY);
+        overrideMapToConstant.append(
+                R.styleable.ConstraintOverride_layout_constraintHorizontal_bias,
+                HORIZONTAL_BIAS);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintVertical_bias,
+                VERTICAL_BIAS);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintDimensionRatio,
+                DIMENSION_RATIO);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintLeft_creator,
+                UNUSED);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintTop_creator,
+                UNUSED);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintRight_creator,
+                UNUSED);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintBottom_creator,
+                UNUSED);
+        overrideMapToConstant.append(
+                R.styleable.ConstraintOverride_layout_constraintBaseline_creator,
+                UNUSED);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_marginLeft,
+                LEFT_MARGIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_marginRight,
+                RIGHT_MARGIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_marginStart,
+                START_MARGIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_marginEnd,
+                END_MARGIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_marginTop,
+                TOP_MARGIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_marginBottom,
+                BOTTOM_MARGIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_width,
+                LAYOUT_WIDTH);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_layout_height,
+                LAYOUT_HEIGHT);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintWidth,
+                LAYOUT_CONSTRAINT_WIDTH);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintHeight,
+                LAYOUT_CONSTRAINT_HEIGHT);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_visibility,
+                LAYOUT_VISIBILITY);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_android_alpha, ALPHA);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_android_elevation, ELEVATION);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_android_rotationX, ROTATION_X);
@@ -514,47 +601,80 @@ public class ConstraintSet {
         overrideMapToConstant.append(R.styleable.ConstraintOverride_android_rotation, ROTATION);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_android_scaleX, SCALE_X);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_android_scaleY, SCALE_Y);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_transformPivotX, TRANSFORM_PIVOT_X);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_transformPivotY, TRANSFORM_PIVOT_Y);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_translationX, TRANSLATION_X);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_translationY, TRANSLATION_Y);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_translationZ, TRANSLATION_Z);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintWidth_default, WIDTH_DEFAULT);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintHeight_default, HEIGHT_DEFAULT);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintWidth_max, WIDTH_MAX);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintHeight_max, HEIGHT_MAX);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintWidth_min, WIDTH_MIN);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintHeight_min, HEIGHT_MIN);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintCircleRadius, CIRCLE_RADIUS);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintCircleAngle, CIRCLE_ANGLE);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_animateRelativeTo, ANIMATE_RELATIVE_TO);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_transitionEasing, TRANSITION_EASING);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_transformPivotX,
+                TRANSFORM_PIVOT_X);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_transformPivotY,
+                TRANSFORM_PIVOT_Y);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_translationX,
+                TRANSLATION_X);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_translationY,
+                TRANSLATION_Y);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_android_translationZ,
+                TRANSLATION_Z);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintWidth_default,
+                WIDTH_DEFAULT);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintHeight_default,
+                HEIGHT_DEFAULT);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintWidth_max,
+                WIDTH_MAX);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintHeight_max,
+                HEIGHT_MAX);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintWidth_min,
+                WIDTH_MIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintHeight_min,
+                HEIGHT_MIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintCircleRadius,
+                CIRCLE_RADIUS);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintCircleAngle,
+                CIRCLE_ANGLE);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_animateRelativeTo,
+                ANIMATE_RELATIVE_TO);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_transitionEasing,
+                TRANSITION_EASING);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_drawPath, DRAW_PATH);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_transitionPathRotate, TRANSITION_PATH_ROTATE);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_transitionPathRotate,
+                TRANSITION_PATH_ROTATE);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_motionStagger, MOTION_STAGGER);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_android_id, VIEW_ID);
         overrideMapToConstant.append(R.styleable.ConstraintOverride_motionTarget, MOTION_TARGET);
 
         overrideMapToConstant.append(R.styleable.ConstraintOverride_motionProgress, PROGRESS);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintWidth_percent, WIDTH_PERCENT);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintHeight_percent, HEIGHT_PERCENT);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintWidth_percent,
+                WIDTH_PERCENT);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintHeight_percent,
+                HEIGHT_PERCENT);
 
         overrideMapToConstant.append(R.styleable.ConstraintOverride_chainUseRtl, CHAIN_USE_RTL);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_barrierDirection, BARRIER_DIRECTION);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_barrierMargin, BARRIER_MARGIN);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_constraint_referenced_ids, CONSTRAINT_REFERENCED_IDS);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_barrierAllowsGoneWidgets, BARRIER_ALLOWS_GONE_WIDGETS);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_pathMotionArc, PATH_MOTION_ARC);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintTag, CONSTRAINT_TAG);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_visibilityMode, VISIBILITY_MODE);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constrainedWidth, CONSTRAINED_WIDTH);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constrainedHeight, CONSTRAINED_HEIGHT);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_polarRelativeTo, ANIMATE_CIRCLE_ANGLE_TO);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_transformPivotTarget, TRANSFORM_PIVOT_TARGET);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_quantizeMotionSteps, QUANTIZE_MOTION_STEPS);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_quantizeMotionPhase, QUANTIZE_MOTION_PHASE);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_quantizeMotionInterpolator, QUANTIZE_MOTION_INTERPOLATOR);
-        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_wrapBehaviorInParent, LAYOUT_WRAP_BEHAVIOR);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_barrierDirection,
+                BARRIER_DIRECTION);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_barrierMargin,
+                BARRIER_MARGIN);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_constraint_referenced_ids,
+                CONSTRAINT_REFERENCED_IDS);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_barrierAllowsGoneWidgets,
+                BARRIER_ALLOWS_GONE_WIDGETS);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_pathMotionArc,
+                PATH_MOTION_ARC);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constraintTag,
+                CONSTRAINT_TAG);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_visibilityMode,
+                VISIBILITY_MODE);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constrainedWidth,
+                CONSTRAINED_WIDTH);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_constrainedHeight,
+                CONSTRAINED_HEIGHT);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_polarRelativeTo,
+                ANIMATE_CIRCLE_ANGLE_TO);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_transformPivotTarget,
+                TRANSFORM_PIVOT_TARGET);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_quantizeMotionSteps,
+                QUANTIZE_MOTION_STEPS);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_quantizeMotionPhase,
+                QUANTIZE_MOTION_PHASE);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_quantizeMotionInterpolator,
+                QUANTIZE_MOTION_INTERPOLATOR);
+        overrideMapToConstant.append(R.styleable.ConstraintOverride_layout_wrapBehaviorInParent,
+                LAYOUT_WRAP_BEHAVIOR);
 
     }
 
@@ -613,11 +733,13 @@ public class ConstraintSet {
         int count = constraintLayout.getChildCount();
         for (int i = 0; i < count; i++) {
             View view = constraintLayout.getChildAt(i);
-            ConstraintLayout.LayoutParams param = (ConstraintLayout.LayoutParams) view.getLayoutParams();
+            ConstraintLayout.LayoutParams param =
+                    (ConstraintLayout.LayoutParams) view.getLayoutParams();
 
             int id = view.getId();
             if (mForceId && id == -1) {
-                throw new RuntimeException("All children of ConstraintLayout must have ids to use ConstraintSet");
+                throw new RuntimeException("All children of ConstraintLayout "
+                        + "must have ids to use ConstraintSet");
             }
             if (!mConstraints.containsKey(id)) {
                 mConstraints.put(id, new Constraint());
@@ -676,6 +798,10 @@ public class ConstraintSet {
 
     }
 
+    /**
+     * Get the delta form the ConstraintSet and aplly to this
+     * @param cs
+     */
     public void applyDeltaFrom(ConstraintSet cs) {
         for (Constraint from : cs.mConstraints.values()) {
             if (from.mDelta != null) {
@@ -686,7 +812,8 @@ public class ConstraintSet {
                         if (potential.layout.mConstraintTag != null) {
                             if (from.mTargetString.matches(potential.layout.mConstraintTag)) {
                                 from.mDelta.applyDelta(potential);
-                                potential.mCustomConstraints.putAll((HashMap)from.mCustomConstraints.clone());
+                                potential.mCustomConstraints.putAll(
+                                        (HashMap) from.mCustomConstraints.clone());
                             }
                         }
                     }
@@ -891,7 +1018,8 @@ public class ConstraintSet {
                     try {
                         float weight = Float.parseFloat(val);
                         if (data instanceof ConstraintLayout.LayoutParams) {
-                            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) data;
+                            ConstraintLayout.LayoutParams params =
+                                    (ConstraintLayout.LayoutParams) data;
                             if (orientation == HORIZONTAL) {
                                 params.width = MATCH_CONSTRAINT;
                                 params.horizontalWeight = weight;
@@ -926,7 +1054,8 @@ public class ConstraintSet {
                         float percent = Math.min(1, Float.parseFloat(val));
                         percent = Math.max(0, percent);
                         if (data instanceof ConstraintLayout.LayoutParams) {
-                            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) data;
+                            ConstraintLayout.LayoutParams params =
+                                    (ConstraintLayout.LayoutParams) data;
                             if (orientation == HORIZONTAL) {
                                 params.width = MATCH_CONSTRAINT;
                                 params.matchConstraintPercentWidth = percent;
@@ -1042,6 +1171,10 @@ public class ConstraintSet {
         public boolean mBarrierAllowsGoneWidgets = true;
         public int mWrapBehavior = ConstraintWidget.WRAP_BEHAVIOR_INCLUDED;
 
+        /**
+         * Copy from Layout
+         * @param src
+         */
         public void copyFrom(Layout src) {
             mIsGuideline = src.mIsGuideline;
             mWidth = src.mWidth;
@@ -1196,12 +1329,15 @@ public class ConstraintSet {
             mapToConstant.append(R.styleable.Layout_layout_constraintLeft_toLeftOf, LEFT_TO_LEFT);
             mapToConstant.append(R.styleable.Layout_layout_constraintLeft_toRightOf, LEFT_TO_RIGHT);
             mapToConstant.append(R.styleable.Layout_layout_constraintRight_toLeftOf, RIGHT_TO_LEFT);
-            mapToConstant.append(R.styleable.Layout_layout_constraintRight_toRightOf, RIGHT_TO_RIGHT);
+            mapToConstant.append(R.styleable.Layout_layout_constraintRight_toRightOf,
+                    RIGHT_TO_RIGHT);
             mapToConstant.append(R.styleable.Layout_layout_constraintTop_toTopOf, TOP_TO_TOP);
             mapToConstant.append(R.styleable.Layout_layout_constraintTop_toBottomOf, TOP_TO_BOTTOM);
             mapToConstant.append(R.styleable.Layout_layout_constraintBottom_toTopOf, BOTTOM_TO_TOP);
-            mapToConstant.append(R.styleable.Layout_layout_constraintBottom_toBottomOf, BOTTOM_TO_BOTTOM);
-            mapToConstant.append(R.styleable.Layout_layout_constraintBaseline_toBaselineOf, BASELINE_TO_BASELINE);
+            mapToConstant.append(R.styleable.Layout_layout_constraintBottom_toBottomOf,
+                    BOTTOM_TO_BOTTOM);
+            mapToConstant.append(R.styleable.Layout_layout_constraintBaseline_toBaselineOf,
+                    BASELINE_TO_BASELINE);
 
             mapToConstant.append(R.styleable.Layout_layout_editor_absoluteX, EDITOR_ABSOLUTE_X);
             mapToConstant.append(R.styleable.Layout_layout_editor_absoluteY, EDITOR_ABSOLUTE_Y);
@@ -1211,7 +1347,8 @@ public class ConstraintSet {
             mapToConstant.append(R.styleable.Layout_guidelineUseRtl, GUIDE_USE_RTL);
             mapToConstant.append(R.styleable.Layout_android_orientation, ORIENTATION);
             mapToConstant.append(R.styleable.Layout_layout_constraintStart_toEndOf, START_TO_END);
-            mapToConstant.append(R.styleable.Layout_layout_constraintStart_toStartOf, START_TO_START);
+            mapToConstant.append(R.styleable.Layout_layout_constraintStart_toStartOf,
+                    START_TO_START);
             mapToConstant.append(R.styleable.Layout_layout_constraintEnd_toStartOf, END_TO_START);
             mapToConstant.append(R.styleable.Layout_layout_constraintEnd_toEndOf, END_TO_END);
             mapToConstant.append(R.styleable.Layout_layout_goneMarginLeft, GONE_LEFT_MARGIN);
@@ -1220,14 +1357,21 @@ public class ConstraintSet {
             mapToConstant.append(R.styleable.Layout_layout_goneMarginBottom, GONE_BOTTOM_MARGIN);
             mapToConstant.append(R.styleable.Layout_layout_goneMarginStart, GONE_START_MARGIN);
             mapToConstant.append(R.styleable.Layout_layout_goneMarginEnd, GONE_END_MARGIN);
-            mapToConstant.append(R.styleable.Layout_layout_constraintVertical_weight, VERTICAL_WEIGHT);
-            mapToConstant.append(R.styleable.Layout_layout_constraintHorizontal_weight, HORIZONTAL_WEIGHT);
-            mapToConstant.append(R.styleable.Layout_layout_constraintHorizontal_chainStyle, HORIZONTAL_STYLE);
-            mapToConstant.append(R.styleable.Layout_layout_constraintVertical_chainStyle, VERTICAL_STYLE);
+            mapToConstant.append(R.styleable.Layout_layout_constraintVertical_weight,
+                    VERTICAL_WEIGHT);
+            mapToConstant.append(R.styleable.Layout_layout_constraintHorizontal_weight,
+                    HORIZONTAL_WEIGHT);
+            mapToConstant.append(R.styleable.Layout_layout_constraintHorizontal_chainStyle,
+                    HORIZONTAL_STYLE);
+            mapToConstant.append(R.styleable.Layout_layout_constraintVertical_chainStyle,
+                    VERTICAL_STYLE);
 
-            mapToConstant.append(R.styleable.Layout_layout_constraintHorizontal_bias, HORIZONTAL_BIAS);
-            mapToConstant.append(R.styleable.Layout_layout_constraintVertical_bias, VERTICAL_BIAS);
-            mapToConstant.append(R.styleable.Layout_layout_constraintDimensionRatio, DIMENSION_RATIO);
+            mapToConstant.append(R.styleable.Layout_layout_constraintHorizontal_bias,
+                    HORIZONTAL_BIAS);
+            mapToConstant.append(R.styleable.Layout_layout_constraintVertical_bias,
+                    VERTICAL_BIAS);
+            mapToConstant.append(R.styleable.Layout_layout_constraintDimensionRatio,
+                    DIMENSION_RATIO);
             mapToConstant.append(R.styleable.Layout_layout_constraintLeft_creator, UNUSED);
             mapToConstant.append(R.styleable.Layout_layout_constraintTop_creator, UNUSED);
             mapToConstant.append(R.styleable.Layout_layout_constraintRight_creator, UNUSED);
@@ -1241,30 +1385,38 @@ public class ConstraintSet {
             mapToConstant.append(R.styleable.Layout_android_layout_marginBottom, BOTTOM_MARGIN);
             mapToConstant.append(R.styleable.Layout_android_layout_width, LAYOUT_WIDTH);
             mapToConstant.append(R.styleable.Layout_android_layout_height, LAYOUT_HEIGHT);
-            mapToConstant.append(R.styleable.Layout_layout_constraintWidth, LAYOUT_CONSTRAINT_WIDTH);
-            mapToConstant.append(R.styleable.Layout_layout_constraintHeight, LAYOUT_CONSTRAINT_HEIGHT);
-            mapToConstant.append(R.styleable.Layout_layout_constrainedWidth, LAYOUT_CONSTRAINT_WIDTH);
-            mapToConstant.append(R.styleable.Layout_layout_constrainedHeight, LAYOUT_CONSTRAINT_HEIGHT);
-            mapToConstant.append(R.styleable.Layout_layout_wrapBehaviorInParent, LAYOUT_WRAP_BEHAVIOR);
+            mapToConstant.append(R.styleable.Layout_layout_constraintWidth,
+                    LAYOUT_CONSTRAINT_WIDTH);
+            mapToConstant.append(R.styleable.Layout_layout_constraintHeight,
+                    LAYOUT_CONSTRAINT_HEIGHT);
+            mapToConstant.append(R.styleable.Layout_layout_constrainedWidth,
+                    LAYOUT_CONSTRAINT_WIDTH);
+            mapToConstant.append(R.styleable.Layout_layout_constrainedHeight,
+                    LAYOUT_CONSTRAINT_HEIGHT);
+            mapToConstant.append(R.styleable.Layout_layout_wrapBehaviorInParent,
+                    LAYOUT_WRAP_BEHAVIOR);
 
             mapToConstant.append(R.styleable.Layout_layout_constraintCircle, CIRCLE);
             mapToConstant.append(R.styleable.Layout_layout_constraintCircleRadius, CIRCLE_RADIUS);
             mapToConstant.append(R.styleable.Layout_layout_constraintCircleAngle, CIRCLE_ANGLE);
             mapToConstant.append(R.styleable.Layout_layout_constraintWidth_percent, WIDTH_PERCENT);
-            mapToConstant.append(R.styleable.Layout_layout_constraintHeight_percent, HEIGHT_PERCENT);
+            mapToConstant.append(R.styleable.Layout_layout_constraintHeight_percent,
+                    HEIGHT_PERCENT);
 
             mapToConstant.append(R.styleable.Layout_chainUseRtl, CHAIN_USE_RTL);
             mapToConstant.append(R.styleable.Layout_barrierDirection, BARRIER_DIRECTION);
             mapToConstant.append(R.styleable.Layout_barrierMargin, BARRIER_MARGIN);
-            mapToConstant.append(R.styleable.Layout_constraint_referenced_ids, CONSTRAINT_REFERENCED_IDS);
-            mapToConstant.append(R.styleable.Layout_barrierAllowsGoneWidgets, BARRIER_ALLOWS_GONE_WIDGETS);
+            mapToConstant.append(R.styleable.Layout_constraint_referenced_ids,
+                    CONSTRAINT_REFERENCED_IDS);
+            mapToConstant.append(R.styleable.Layout_barrierAllowsGoneWidgets,
+                    BARRIER_ALLOWS_GONE_WIDGETS);
         }
 
         void fillFromAttributeList(Context context, AttributeSet attrs) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Layout);
             mApply = true;
-            final int N = a.getIndexCount();
-            for (int i = 0; i < N; i++) {
+            final int count = a.getIndexCount();
+            for (int i = 0; i < count; i++) {
                 int attr = a.getIndex(i);
 
                 switch (mapToConstant.get(attr)) {
@@ -1455,7 +1607,8 @@ public class ConstraintSet {
                         break;
                     case CHAIN_USE_RTL:
                         Log.e(TAG, "CURRENTLY UNSUPPORTED"); // TODO add support or remove
-                        //  TODO add support or remove  c.mChainUseRtl = a.getBoolean(attr,c.mChainUseRtl);
+                        //  TODO add support or remove  c.mChainUseRtl
+                        //   = a.getBoolean(attr,c.mChainUseRtl);
                         break;
                     case BARRIER_DIRECTION:
                         mBarrierDirection = a.getInt(attr, mBarrierDirection);
@@ -1477,17 +1630,24 @@ public class ConstraintSet {
                         break;
                     case UNUSED:
                         Log.w(TAG,
-                                "unused attribute 0x" + Integer.toHexString(attr) + "   " + mapToConstant.get(attr));
+                                "unused attribute 0x" + Integer.toHexString(attr)
+                                        + "   " + mapToConstant.get(attr));
                         break;
                     default:
                         Log.w(TAG,
-                                "Unknown attribute 0x" + Integer.toHexString(attr) + "   " + mapToConstant.get(attr));
+                                "Unknown attribute 0x" + Integer.toHexString(attr)
+                                        + "   " + mapToConstant.get(attr));
 
                 }
             }
             a.recycle();
         }
 
+        /**
+         * Print the content to a string
+         * @param scene
+         * @param stringBuilder
+         */
         public void dump(MotionScene scene, StringBuilder stringBuilder) {
             Field[] fields = this.getClass().getDeclaredFields();
             stringBuilder.append("\n");
@@ -1551,6 +1711,10 @@ public class ConstraintSet {
         public boolean applyElevation = false;
         public float elevation = 0;
 
+        /**
+         * Copy Transform from src
+         * @param src
+         */
         public void copyFrom(Transform src) {
             mApply = src.mApply;
             rotation = src.rotation;
@@ -1595,15 +1759,16 @@ public class ConstraintSet {
             mapToConstant.append(R.styleable.Transform_android_translationY, TRANSLATION_Y);
             mapToConstant.append(R.styleable.Transform_android_translationZ, TRANSLATION_Z);
             mapToConstant.append(R.styleable.Transform_android_elevation, ELEVATION);
-            mapToConstant.append(R.styleable.Transform_transformPivotTarget, TRANSFORM_PIVOT_TARGET);
+            mapToConstant.append(R.styleable.Transform_transformPivotTarget,
+                    TRANSFORM_PIVOT_TARGET);
 
         }
 
         void fillFromAttributeList(Context context, AttributeSet attrs) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Transform);
             mApply = true;
-            final int N = a.getIndexCount();
-            for (int i = 0; i < N; i++) {
+            final int count = a.getIndexCount();
+            for (int i = 0; i < count; i++) {
                 int attr = a.getIndex(i);
 
                 switch (mapToConstant.get(attr)) {
@@ -1675,8 +1840,8 @@ public class ConstraintSet {
         void fillFromAttributeList(Context context, AttributeSet attrs) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PropertySet);
             mApply = true;
-            final int N = a.getIndexCount();
-            for (int i = 0; i < N; i++) {
+            final int count = a.getIndexCount();
+            for (int i = 0; i < count; i++) {
                 int attr = a.getIndex(i);
 
                 if (attr == R.styleable.PropertySet_android_alpha) {
@@ -1751,14 +1916,15 @@ public class ConstraintSet {
             mapToConstant.append(R.styleable.Motion_motionStagger, MOTION_STAGGER);
             mapToConstant.append(R.styleable.Motion_quantizeMotionSteps, QUANTIZE_MOTION_STEPS);
             mapToConstant.append(R.styleable.Motion_quantizeMotionPhase, QUANTIZE_MOTION_PHASE);
-            mapToConstant.append(R.styleable.Motion_quantizeMotionInterpolator, QUANTIZE_MOTION_INTERPOLATOR);
+            mapToConstant.append(R.styleable.Motion_quantizeMotionInterpolator,
+                    QUANTIZE_MOTION_INTERPOLATOR);
         }
 
         void fillFromAttributeList(Context context, AttributeSet attrs) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Motion);
             mApply = true;
-            final int N = a.getIndexCount();
-            for (int i = 0; i < N; i++) {
+            final int count = a.getIndexCount();
+            for (int i = 0; i < count; i++) {
                 int attr = a.getIndex(i);
 
                 switch (mapToConstant.get(attr)) {
@@ -1930,12 +2096,20 @@ public class ConstraintSet {
             }
         }
 
+        /**
+         * Apply a delta to a constraint
+         * @param c
+         */
         public void applyDelta(Constraint c) {
             if (mDelta != null) {
                 mDelta.applyDelta(c);
             }
         }
 
+        /**
+         * Apply a delta file
+         * @param tag
+         */
         public void printDelta(String tag) {
             if (mDelta != null) {
                 mDelta.printDelta(tag);
@@ -1975,6 +2149,10 @@ public class ConstraintSet {
             get(attributeName, AttributeType.COLOR_TYPE).setColorValue(value);
         }
 
+        /**
+         * Return a copy of the Constraint
+         * @return
+         */
         public Constraint clone() {
             Constraint clone = new Constraint();
             clone.layout.copyFrom(layout);
@@ -1986,7 +2164,9 @@ public class ConstraintSet {
             return clone;
         }
 
-        private void fillFromConstraints(ConstraintHelper helper, int viewId, Constraints.LayoutParams param) {
+        private void fillFromConstraints(ConstraintHelper helper,
+                                         int viewId,
+                                         Constraints.LayoutParams param) {
             fillFromConstraints(viewId, param);
             if (helper instanceof Barrier) {
                 layout.mHelperType = BARRIER_TYPE;
@@ -2084,6 +2264,10 @@ public class ConstraintSet {
             }
         }
 
+        /**
+         * apply ConstraintSet to the layout params
+         * @param param
+         */
         public void applyTo(ConstraintLayout.LayoutParams param) {
             param.leftToLeft = layout.leftToLeft;
             param.leftToRight = layout.leftToRight;
@@ -2194,11 +2378,13 @@ public class ConstraintSet {
         mConstraints.clear();
         for (int i = 0; i < count; i++) {
             View view = constraintLayout.getChildAt(i);
-            ConstraintLayout.LayoutParams param = (ConstraintLayout.LayoutParams) view.getLayoutParams();
+            ConstraintLayout.LayoutParams param =
+                    (ConstraintLayout.LayoutParams) view.getLayoutParams();
 
             int id = view.getId();
             if (mForceId && id == -1) {
-                throw new RuntimeException("All children of ConstraintLayout must have ids to use ConstraintSet");
+                throw new RuntimeException("All children of ConstraintLayout must "
+                        + "have ids to use ConstraintSet");
             }
             if (!mConstraints.containsKey(id)) {
                 mConstraints.put(id, new Constraint());
@@ -2207,7 +2393,8 @@ public class ConstraintSet {
             if (constraint == null) {
                 continue;
             }
-            constraint.mCustomConstraints = ConstraintAttribute.extractAttributes(mSavedAttributes, view);
+            constraint.mCustomConstraints =
+                    ConstraintAttribute.extractAttributes(mSavedAttributes, view);
             constraint.fillFrom(id, param);
             constraint.propertySet.visibility = view.getVisibility();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -2259,7 +2446,8 @@ public class ConstraintSet {
 
             int id = view.getId();
             if (mForceId && id == -1) {
-                throw new RuntimeException("All children of ConstraintLayout must have ids to use ConstraintSet");
+                throw new RuntimeException("All children of ConstraintLayout "
+                        + "must have ids to use ConstraintSet");
             }
             if (!mConstraints.containsKey(id)) {
                 mConstraints.put(id, new Constraint());
@@ -2313,7 +2501,8 @@ public class ConstraintSet {
                 continue;
             }
             if (mForceId && id == -1) {
-                throw new RuntimeException("All children of ConstraintLayout must have ids to use ConstraintSet");
+                throw new RuntimeException("All children of ConstraintLayout "
+                        + "must have ids to use ConstraintSet");
             }
 
             if (mConstraints.containsKey(id)) {
@@ -2334,7 +2523,9 @@ public class ConstraintSet {
      * @param layoutParams
      * @param mapIdToWidget
      */
-    public void applyToHelper(ConstraintHelper helper, ConstraintWidget child, LayoutParams layoutParams, SparseArray<ConstraintWidget> mapIdToWidget) {
+    public void applyToHelper(ConstraintHelper helper, ConstraintWidget child,
+                              LayoutParams layoutParams,
+                              SparseArray<ConstraintWidget> mapIdToWidget) {
         int id = helper.getId();
         if (mConstraints.containsKey(id)) {
             Constraint constraint = mConstraints.get(id);
@@ -2375,7 +2566,8 @@ public class ConstraintSet {
             }
 
             if (mForceId && id == -1) {
-                throw new RuntimeException("All children of ConstraintLayout must have ids to use ConstraintSet");
+                throw new RuntimeException("All children of ConstraintLayout "
+                        + "must have ids to use ConstraintSet");
             }
             if (id == -1) {
                 continue;
@@ -2428,7 +2620,8 @@ public class ConstraintSet {
                         if (center != null) {
                             float cy = (center.getTop() + center.getBottom()) / 2.0f;
                             float cx = (center.getLeft() + center.getRight()) / 2.0f;
-                            if (view.getRight() - view.getLeft() > 0 && view.getBottom() - view.getTop() > 0) {
+                            if (view.getRight() - view.getLeft() > 0
+                                    && view.getBottom() - view.getTop() > 0) {
                                 float px = (cx - view.getLeft());
                                 float py = (cy - view.getTop());
                                 view.setPivotX(px);
@@ -2482,7 +2675,8 @@ public class ConstraintSet {
             if (constraint.layout.mIsGuideline) {
                 Guideline g = new Guideline(constraintLayout.getContext());
                 g.setId(id);
-                ConstraintLayout.LayoutParams param = constraintLayout.generateDefaultLayoutParams();
+                ConstraintLayout.LayoutParams param =
+                        constraintLayout.generateDefaultLayoutParams();
                 constraint.applyTo(param);
                 constraintLayout.addView(g, param);
             }
@@ -2498,7 +2692,8 @@ public class ConstraintSet {
 
     /**
      * Center widget between the other two widgets.
-     * (for sides see: {@link #TOP, {@link #BOTTOM}, {@link #START, {@link #END}, {@link #LEFT, {@link #RIGHT})
+     * (for sides see: {@link #TOP, {@link #BOTTOM}, {@link #START,
+     * {@link #END}, {@link #LEFT, {@link #RIGHT})
      * Note, sides must be all vertical or horizontal sides.
      *
      * @param centerID     ID of the widget to be centered
@@ -2561,10 +2756,17 @@ public class ConstraintSet {
      * @param rightId     The Id of the widget on the right side
      * @param rightSide   The side  of the rightId widget to connect to
      * @param rightMargin The margin on the right side
-     * @param bias        The ratio of the space on the left vs. right sides 0.5 is centered (default)
+     * @param bias        The ratio of the space on the left vs.
+     * right sides 0.5 is centered (default)
      */
-    public void centerHorizontally(int centerID, int leftId, int leftSide, int leftMargin,
-                                   int rightId, int rightSide, int rightMargin, float bias) {
+    public void centerHorizontally(int centerID,
+                                   int leftId,
+                                   int leftSide,
+                                   int leftMargin,
+                                   int rightId,
+                                   int rightSide,
+                                   int rightMargin,
+                                   float bias) {
         connect(centerID, LEFT, leftId, leftSide, leftMargin);
         connect(centerID, RIGHT, rightId, rightSide, rightMargin);
         Constraint constraint = mConstraints.get(centerID);
@@ -2608,7 +2810,8 @@ public class ConstraintSet {
      * @param bottomId     The Id of the widget on the bottom side
      * @param bottomSide   The side of the bottomId widget to connect to
      * @param bottomMargin The margin on the bottom side
-     * @param bias         The ratio of the space on the top vs. bottom sides 0.5 is centered (default)
+     * @param bias         The ratio of the space on the top vs.
+     * bottom sides 0.5 is centered (default)
      */
     public void centerVertically(int centerID, int topId, int topSide, int topMargin, int bottomId,
                                  int bottomSide, int bottomMargin, float bias) {
@@ -2635,7 +2838,12 @@ public class ConstraintSet {
      * @param weights    can be null
      * @param style      set the style of the chain
      */
-    public void createVerticalChain(int topId, int topSide, int bottomId, int bottomSide, int[] chainIds, float[] weights,
+    public void createVerticalChain(int topId,
+                                    int topSide,
+                                    int bottomId,
+                                    int bottomSide,
+                                    int[] chainIds,
+                                    float[] weights,
                                     int style) {
         if (chainIds.length < 2) {
             throw new IllegalArgumentException("must have 2 or more widgets in a chain");
@@ -2676,9 +2884,15 @@ public class ConstraintSet {
      * @param weights   The weight to assign to each element in the chain or null
      * @param style     The type of chain
      */
-    public void createHorizontalChain(int leftId, int leftSide, int rightId, int rightSide, int[] chainIds, float[] weights,
+    public void createHorizontalChain(int leftId,
+                                      int leftSide,
+                                      int rightId,
+                                      int rightSide,
+                                      int[] chainIds,
+                                      float[] weights,
                                       int style) {
-        createHorizontalChain(leftId, leftSide, rightId, rightSide, chainIds, weights, style, LEFT, RIGHT);
+        createHorizontalChain(leftId, leftSide, rightId, rightSide,
+                chainIds, weights, style, LEFT, RIGHT);
     }
 
     /**
@@ -2695,12 +2909,23 @@ public class ConstraintSet {
      * @param weights   The weight to assign to each element in the chain or null
      * @param style     The type of chain
      */
-    public void createHorizontalChainRtl(int startId, int startSide, int endId, int endSide, int[] chainIds, float[] weights,
+    public void createHorizontalChainRtl(int startId,
+                                         int startSide,
+                                         int endId,
+                                         int endSide,
+                                         int[] chainIds,
+                                         float[] weights,
                                          int style) {
-        createHorizontalChain(startId, startSide, endId, endSide, chainIds, weights, style, START, END);
+        createHorizontalChain(startId, startSide, endId, endSide,
+                chainIds, weights, style, START, END);
     }
 
-    private void createHorizontalChain(int leftId, int leftSide, int rightId, int rightSide, int[] chainIds, float[] weights,
+    private void createHorizontalChain(int leftId,
+                                       int leftSide,
+                                       int rightId,
+                                       int rightSide,
+                                       int[] chainIds,
+                                       float[] weights,
                                        int style, int left, int right) {
 
         if (chainIds.length < 2) {
@@ -2757,7 +2982,8 @@ public class ConstraintSet {
                     constraint.layout.leftToLeft = Layout.UNSET;
 
                 } else {
-                    throw new IllegalArgumentException("Left to " + sideToString(endSide) + " undefined");
+                    throw new IllegalArgumentException("Left to "
+                            + sideToString(endSide) + " undefined");
                 }
                 constraint.layout.leftMargin = margin;
                 break;
@@ -2771,7 +2997,8 @@ public class ConstraintSet {
                     constraint.layout.rightToLeft = Layout.UNSET;
 
                 } else {
-                    throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
+                    throw new IllegalArgumentException("right to "
+                            + sideToString(endSide) + " undefined");
                 }
                 constraint.layout.rightMargin = margin;
                 break;
@@ -2789,7 +3016,8 @@ public class ConstraintSet {
                     constraint.layout.baselineToTop = Layout.UNSET;
                     constraint.layout.baselineToBottom = Layout.UNSET;
                 } else {
-                    throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
+                    throw new IllegalArgumentException("right to "
+                            + sideToString(endSide) + " undefined");
                 }
                 constraint.layout.topMargin = margin;
                 break;
@@ -2807,7 +3035,8 @@ public class ConstraintSet {
                     constraint.layout.baselineToTop = Layout.UNSET;
                     constraint.layout.baselineToBottom = Layout.UNSET;
                 } else {
-                    throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
+                    throw new IllegalArgumentException("right to "
+                            + sideToString(endSide) + " undefined");
                 }
                 constraint.layout.bottomMargin = margin;
                 break;
@@ -2831,7 +3060,8 @@ public class ConstraintSet {
                     constraint.layout.topToTop = Layout.UNSET;
                     constraint.layout.topToBottom = Layout.UNSET;
                 } else {
-                    throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
+                    throw new IllegalArgumentException("right to "
+                            + sideToString(endSide) + " undefined");
                 }
                 break;
             case START:
@@ -2842,7 +3072,8 @@ public class ConstraintSet {
                     constraint.layout.startToEnd = endID;
                     constraint.layout.startToStart = Layout.UNSET;
                 } else {
-                    throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
+                    throw new IllegalArgumentException("right to "
+                            + sideToString(endSide) + " undefined");
                 }
                 constraint.layout.startMargin = margin;
                 break;
@@ -2854,7 +3085,8 @@ public class ConstraintSet {
                     constraint.layout.endToStart = endID;
                     constraint.layout.endToEnd = Layout.UNSET;
                 } else {
-                    throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
+                    throw new IllegalArgumentException("right to "
+                            + sideToString(endSide) + " undefined");
                 }
                 constraint.layout.endMargin = margin;
                 break;
@@ -2866,7 +3098,8 @@ public class ConstraintSet {
 
     /**
      * Create a constraint between two widgets.
-     * (for sides see: {@link #TOP, {@link #BOTTOM}, {@link #START, {@link #END}, {@link #LEFT, {@link #RIGHT}, {@link #BASELINE})
+     * (for sides see: {@link #TOP, {@link #BOTTOM}, {@link #START,
+     * {@link #END}, {@link #LEFT, {@link #RIGHT}, {@link #BASELINE})
      *
      * @param startID   the ID of the widget to be constrained
      * @param startSide the side of the widget to constrain
@@ -2890,7 +3123,8 @@ public class ConstraintSet {
                     constraint.layout.leftToRight = endID;
                     constraint.layout.leftToLeft = Layout.UNSET;
                 } else {
-                    throw new IllegalArgumentException("left to " + sideToString(endSide) + " undefined");
+                    throw new IllegalArgumentException("left to "
+                            + sideToString(endSide) + " undefined");
                 }
                 break;
             case RIGHT:
@@ -2902,7 +3136,8 @@ public class ConstraintSet {
                     constraint.layout.rightToRight = endID;
                     constraint.layout.rightToLeft = Layout.UNSET;
                 } else {
-                    throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
+                    throw new IllegalArgumentException("right to "
+                            + sideToString(endSide) + " undefined");
                 }
                 break;
             case TOP:
@@ -2919,7 +3154,8 @@ public class ConstraintSet {
                     constraint.layout.baselineToTop = Layout.UNSET;
                     constraint.layout.baselineToBottom = Layout.UNSET;
                 } else {
-                    throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
+                    throw new IllegalArgumentException("right to "
+                            + sideToString(endSide) + " undefined");
                 }
                 break;
             case BOTTOM:
@@ -2936,7 +3172,8 @@ public class ConstraintSet {
                     constraint.layout.baselineToTop = Layout.UNSET;
                     constraint.layout.baselineToBottom = Layout.UNSET;
                 } else {
-                    throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
+                    throw new IllegalArgumentException("right to "
+                            + sideToString(endSide) + " undefined");
                 }
                 break;
             case BASELINE:
@@ -2959,7 +3196,8 @@ public class ConstraintSet {
                     constraint.layout.topToTop = Layout.UNSET;
                     constraint.layout.topToBottom = Layout.UNSET;
                 } else {
-                    throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
+                    throw new IllegalArgumentException("right to "
+                            + sideToString(endSide) + " undefined");
                 }
                 break;
             case START:
@@ -2970,7 +3208,8 @@ public class ConstraintSet {
                     constraint.layout.startToEnd = endID;
                     constraint.layout.startToStart = Layout.UNSET;
                 } else {
-                    throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
+                    throw new IllegalArgumentException("right to "
+                            + sideToString(endSide) + " undefined");
                 }
                 break;
             case END:
@@ -2981,7 +3220,8 @@ public class ConstraintSet {
                     constraint.layout.endToStart = endID;
                     constraint.layout.endToEnd = Layout.UNSET;
                 } else {
-                    throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
+                    throw new IllegalArgumentException("right to "
+                            + sideToString(endSide) + " undefined");
                 }
                 break;
             default:
@@ -2998,9 +3238,11 @@ public class ConstraintSet {
      */
     public void centerHorizontally(int viewId, int toView) {
         if (toView == PARENT_ID) {
-            center(viewId, PARENT_ID, ConstraintSet.LEFT, 0, PARENT_ID, ConstraintSet.RIGHT, 0, 0.5f);
+            center(viewId, PARENT_ID, ConstraintSet.LEFT, 0, PARENT_ID,
+                    ConstraintSet.RIGHT, 0, 0.5f);
         } else {
-            center(viewId, toView, ConstraintSet.RIGHT, 0, toView, ConstraintSet.LEFT, 0, 0.5f);
+            center(viewId, toView, ConstraintSet.RIGHT, 0, toView,
+                    ConstraintSet.LEFT, 0, 0.5f);
         }
     }
 
@@ -3012,9 +3254,11 @@ public class ConstraintSet {
      */
     public void centerHorizontallyRtl(int viewId, int toView) {
         if (toView == PARENT_ID) {
-            center(viewId, PARENT_ID, ConstraintSet.START, 0, PARENT_ID, ConstraintSet.END, 0, 0.5f);
+            center(viewId, PARENT_ID, ConstraintSet.START, 0, PARENT_ID,
+                    ConstraintSet.END, 0, 0.5f);
         } else {
-            center(viewId, toView, ConstraintSet.END, 0, toView, ConstraintSet.START, 0, 0.5f);
+            center(viewId, toView, ConstraintSet.END, 0, toView,
+                    ConstraintSet.START, 0, 0.5f);
         }
     }
 
@@ -3026,9 +3270,11 @@ public class ConstraintSet {
      */
     public void centerVertically(int viewId, int toView) {
         if (toView == PARENT_ID) {
-            center(viewId, PARENT_ID, ConstraintSet.TOP, 0, PARENT_ID, ConstraintSet.BOTTOM, 0, 0.5f);
+            center(viewId, PARENT_ID, ConstraintSet.TOP, 0, PARENT_ID,
+                    ConstraintSet.BOTTOM, 0, 0.5f);
         } else {
-            center(viewId, toView, ConstraintSet.BOTTOM, 0, toView, ConstraintSet.TOP, 0, 0.5f);
+            center(viewId, toView, ConstraintSet.BOTTOM, 0, toView, ConstraintSet.TOP,
+                    0, 0.5f);
         }
     }
 
@@ -3893,7 +4139,8 @@ public class ConstraintSet {
      * Set a Guideline's percent.
      *
      * @param guidelineID ID of the guideline
-     * @param ratio       the ratio between the gap on the left and right 0.0 is top/left 0.5 is middle
+     * @param ratio       the ratio between the gap on the left and right
+     *                   0.0 is top/left 0.5 is middle
      */
     public void setGuidelinePercent(int guidelineID, float ratio) {
         get(guidelineID).layout.guidePercent = ratio;
@@ -3912,7 +4159,8 @@ public class ConstraintSet {
         if (constraint.layout.mReferenceIds == null) {
             return new int[0];
         }
-        return Arrays.copyOf(constraint.layout.mReferenceIds, constraint.layout.mReferenceIds.length);
+        return Arrays.copyOf(constraint.layout.mReferenceIds,
+                constraint.layout.mReferenceIds.length);
     }
 
     /**
@@ -3927,27 +4175,60 @@ public class ConstraintSet {
         constraint.layout.mReferenceIds = referenced;
     }
 
+    /**
+     * SEt tye type of barier
+     * @param id
+     * @param type
+     */
     public void setBarrierType(int id, int type) {
         Constraint constraint = get(id);
         constraint.layout.mHelperType = type;
     }
 
+    /**
+     * Remove the attribute
+     * @param attributeName
+     */
     public void removeAttribute(String attributeName) {
         mSavedAttributes.remove(attributeName);
     }
 
+    /**
+     * Set the value of an attribute of type int
+     * @param viewId
+     * @param attributeName
+     * @param value
+     */
     public void setIntValue(int viewId, String attributeName, int value) {
         get(viewId).setIntValue(attributeName, value);
     }
 
+    /**
+     * Set the value of an attribute of type color
+     * @param viewId
+     * @param attributeName
+     * @param value
+     */
     public void setColorValue(int viewId, String attributeName, int value) {
         get(viewId).setColorValue(attributeName, value);
     }
 
+    /**
+     * Set the value of an attribute of type float
+     * @param viewId
+     * @param attributeName
+     * @param value
+     */
     public void setFloatValue(int viewId, String attributeName, float value) {
         get(viewId).setFloatValue(attributeName, value);
     }
 
+    /**
+     * Set the value of an attribute of type string
+     * @param viewId
+     * @param attributeName
+     * @param value
+     */
     public void setStringValue(int viewId, String attributeName, String value) {
         get(viewId).setStringValue(attributeName, value);
     }
@@ -3971,6 +4252,11 @@ public class ConstraintSet {
         }
     }
 
+    /**
+     * Parse int
+     * @param set
+     * @param attributes
+     */
     public void parseIntAttributes(Constraint set, String attributes) {
         String[] sp = attributes.split(",");
         for (int i = 0; i < sp.length; i++) {
@@ -3983,6 +4269,11 @@ public class ConstraintSet {
         }
     }
 
+    /**
+     * Parse color
+     * @param set
+     * @param attributes
+     */
     public void parseColorAttributes(Constraint set, String attributes) {
         String[] sp = attributes.split(",");
         for (int i = 0; i < sp.length; i++) {
@@ -3995,6 +4286,11 @@ public class ConstraintSet {
         }
     }
 
+    /**
+     * Parse floats
+     * @param set
+     * @param attributes
+     */
     public void parseFloatAttributes(Constraint set, String attributes) {
         String[] sp = attributes.split(",");
         for (int i = 0; i < sp.length; i++) {
@@ -4007,6 +4303,11 @@ public class ConstraintSet {
         }
     }
 
+    /**
+     * Parse string
+     * @param set
+     * @param attributes
+     */
     public void parseStringAttributes(Constraint set, String attributes) {
         String[] sp = splitString(attributes);
         for (int i = 0; i < sp.length; i++) {
@@ -4033,18 +4334,34 @@ public class ConstraintSet {
         return list.toArray(new String[list.size()]);
     }
 
+    /**
+     * Add attribute of type Int
+     * @param attributeName
+     */
     public void addIntAttributes(String... attributeName) {
         addAttributes(AttributeType.INT_TYPE, attributeName);
     }
 
+    /**
+     * Add attribute of type Color
+     * @param attributeName
+     */
     public void addColorAttributes(String... attributeName) {
         addAttributes(AttributeType.COLOR_TYPE, attributeName);
     }
 
+    /**
+     * Add attribute of type float
+     * @param attributeName
+     */
     public void addFloatAttributes(String... attributeName) {
         addAttributes(AttributeType.FLOAT_TYPE, attributeName);
     }
 
+    /**
+     * Add attribute of type string
+     * @param attributeName
+     */
     public void addStringAttributes(String... attributeName) {
         addAttributes(AttributeType.STRING_TYPE, attributeName);
     }
@@ -4092,20 +4409,23 @@ public class ConstraintSet {
         try {
 
             for (int eventType = parser.getEventType();
-                 eventType != XmlResourceParser.END_DOCUMENT;
-                 eventType = parser.next()) {
+                    eventType != XmlResourceParser.END_DOCUMENT;
+                    eventType = parser.next()) {
                 switch (eventType) {
                     case XmlResourceParser.START_DOCUMENT:
                         document = parser.getName();
                         break;
                     case XmlResourceParser.START_TAG:
                         tagName = parser.getName();
-                        Constraint constraint = fillFromAttributeList(context, Xml.asAttributeSet(parser), false);
+                        Constraint constraint = fillFromAttributeList(context,
+                                Xml.asAttributeSet(parser), false);
                         if (tagName.equalsIgnoreCase("Guideline")) {
                             constraint.layout.mIsGuideline = true;
                         }
                         if (DEBUG) {
-                            Log.v(TAG, Debug.getLoc() + " cache " + Debug.getName(context, constraint.mViewId) + " " + constraint.mViewId);
+                            Log.v(TAG, Debug.getLoc() +
+                                    " cache " + Debug.getName(context, constraint.mViewId)
+                                    + " " + constraint.mViewId);
                         }
                         mConstraints.put(constraint.mViewId, constraint);
                         break;
@@ -4134,12 +4454,11 @@ public class ConstraintSet {
         try {
             Constraint constraint = null;
             for (int eventType = parser.getEventType();
-                 eventType != XmlResourceParser.END_DOCUMENT;
-                 eventType = parser.next()) {
+                    eventType != XmlResourceParser.END_DOCUMENT;
+                    eventType = parser.next()) {
                 switch (eventType) {
                     case XmlResourceParser.START_DOCUMENT:
                         String document = parser.getName();
-
                         break;
                     case XmlResourceParser.START_TAG:
                         tagName = parser.getName();
@@ -4148,59 +4467,76 @@ public class ConstraintSet {
                         }
                         switch (tagName) {
                             case "Constraint":
-                                constraint = fillFromAttributeList(context, Xml.asAttributeSet(parser), false);
+                                constraint = fillFromAttributeList(context,
+                                        Xml.asAttributeSet(parser), false);
                                 break;
                             case "ConstraintOverride":
-                                constraint = fillFromAttributeList(context, Xml.asAttributeSet(parser), true);
+                                constraint = fillFromAttributeList(context,
+                                        Xml.asAttributeSet(parser), true);
                                 break;
                             case "Guideline":
-                                constraint = fillFromAttributeList(context, Xml.asAttributeSet(parser), false);
+                                constraint = fillFromAttributeList(context,
+                                        Xml.asAttributeSet(parser), false);
                                 constraint.layout.mIsGuideline = true;
                                 constraint.layout.mApply = true;
                                 break;
                             case "Barrier":
-                                constraint = fillFromAttributeList(context, Xml.asAttributeSet(parser), false);
+                                constraint = fillFromAttributeList(context,
+                                        Xml.asAttributeSet(parser), false);
                                 constraint.layout.mHelperType = BARRIER_TYPE;
                                 break;
                             case "PropertySet":
                                 if (constraint == null) {
-                                    throw new RuntimeException(ERROR_MESSAGE + parser.getLineNumber());
+                                    throw new RuntimeException(ERROR_MESSAGE +
+                                            parser.getLineNumber());
                                 }
-                                constraint.propertySet.fillFromAttributeList(context, Xml.asAttributeSet(parser));
+                                constraint.propertySet.fillFromAttributeList(context,
+                                        Xml.asAttributeSet(parser));
                                 break;
                             case "Transform":
                                 if (constraint == null) {
-                                    throw new RuntimeException(ERROR_MESSAGE + parser.getLineNumber());
+                                    throw new RuntimeException(ERROR_MESSAGE +
+                                            parser.getLineNumber());
                                 }
-                                constraint.transform.fillFromAttributeList(context, Xml.asAttributeSet(parser));
+                                constraint.transform.fillFromAttributeList(context,
+                                        Xml.asAttributeSet(parser));
                                 break;
                             case "Layout":
                                 if (constraint == null) {
-                                    throw new RuntimeException(ERROR_MESSAGE + parser.getLineNumber());
+                                    throw new RuntimeException(ERROR_MESSAGE +
+                                            parser.getLineNumber());
                                 }
-                                constraint.layout.fillFromAttributeList(context, Xml.asAttributeSet(parser));
+                                constraint.layout.fillFromAttributeList(context,
+                                        Xml.asAttributeSet(parser));
                                 break;
                             case "Motion":
                                 if (constraint == null) {
-                                    throw new RuntimeException(ERROR_MESSAGE + parser.getLineNumber());
+                                    throw new RuntimeException(ERROR_MESSAGE +
+                                            parser.getLineNumber());
                                 }
-                                constraint.motion.fillFromAttributeList(context, Xml.asAttributeSet(parser));
+                                constraint.motion.fillFromAttributeList(context,
+                                        Xml.asAttributeSet(parser));
                                 break;
                             case "CustomAttribute":
                             case "CustomMethod":
                                 if (constraint == null) {
-                                    throw new RuntimeException(ERROR_MESSAGE + parser.getLineNumber());
+                                    throw new RuntimeException(ERROR_MESSAGE +
+                                            parser.getLineNumber());
                                 }
-                                ConstraintAttribute.parse(context, parser, constraint.mCustomConstraints);
+                                ConstraintAttribute.parse(context, parser,
+                                        constraint.mCustomConstraints);
                                 break;
                         }
 //                        if (tagName.equalsIgnoreCase("Constraint")) {
-//                            constraint = fillFromAttributeList(context, Xml.asAttributeSet(parser));
+//                            constraint = fillFromAttributeList(context,
+//                            Xml.asAttributeSet(parser));
 //                        } else if (tagName.equalsIgnoreCase("Guideline")) {
-//                            constraint = fillFromAttributeList(context, Xml.asAttributeSet(parser));
+//                            constraint = fillFromAttributeList(context,
+//                            Xml.asAttributeSet(parser));
 //                            constraint.layout.mIsGuideline = true;
 //                        } else if (tagName.equalsIgnoreCase("CustomAttribute")) {
-//                            ConstraintAttribute.parse(context, parser, constraint.mCustomConstraints);
+//                            ConstraintAttribute.parse(context, parser,
+//                            constraint.mCustomConstraints);
 //                        }
                         break;
                     case XmlResourceParser.END_TAG:
@@ -4235,9 +4571,12 @@ public class ConstraintSet {
         return ret;
     }
 
-    private Constraint fillFromAttributeList(Context context, AttributeSet attrs, boolean override) {
+    private Constraint fillFromAttributeList(Context context,
+                                             AttributeSet attrs,
+                                             boolean override) {
         Constraint c = new Constraint();
-        TypedArray a = context.obtainStyledAttributes(attrs, override ? R.styleable.ConstraintOverride : R.styleable.Constraint);
+        TypedArray a = context.obtainStyledAttributes(attrs,
+                override ? R.styleable.ConstraintOverride : R.styleable.Constraint);
         populateConstraint(context, c, a, override);
         a.recycle();
         return c;
@@ -4261,7 +4600,7 @@ public class ConstraintSet {
 
     private static void populateOverride(Context ctx, Constraint c, TypedArray a) {
 
-        final int N = a.getIndexCount();
+        final int count = a.getIndexCount();
         TypedValue type;
         Constraint.Delta delta = new Constraint.Delta();
         c.mDelta = delta;
@@ -4269,7 +4608,7 @@ public class ConstraintSet {
         c.layout.mApply = false;
         c.propertySet.mApply = false;
         c.transform.mApply = false;
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < count; i++) {
             int attr = a.getIndex(i);
 
 
@@ -4281,10 +4620,12 @@ public class ConstraintSet {
             switch (attrType) {
 
                 case EDITOR_ABSOLUTE_X:
-                    delta.add(EDITOR_ABSOLUTE_X, a.getDimensionPixelOffset(attr, c.layout.editorAbsoluteX));
+                    delta.add(EDITOR_ABSOLUTE_X,
+                            a.getDimensionPixelOffset(attr, c.layout.editorAbsoluteX));
                     break;
                 case EDITOR_ABSOLUTE_Y:
-                    delta.add(EDITOR_ABSOLUTE_Y, a.getDimensionPixelOffset(attr, c.layout.editorAbsoluteY));
+                    delta.add(EDITOR_ABSOLUTE_Y,
+                            a.getDimensionPixelOffset(attr, c.layout.editorAbsoluteY));
                     break;
                 case GUIDE_BEGIN:
                     delta.add(GUIDE_BEGIN, a.getDimensionPixelOffset(attr, c.layout.guideBegin));
@@ -4308,25 +4649,32 @@ public class ConstraintSet {
                     delta.add(CIRCLE_ANGLE, a.getFloat(attr, c.layout.circleAngle));
                     break;
                 case GONE_LEFT_MARGIN:
-                    delta.add(GONE_LEFT_MARGIN, a.getDimensionPixelSize(attr, c.layout.goneLeftMargin));
+                    delta.add(GONE_LEFT_MARGIN,
+                            a.getDimensionPixelSize(attr, c.layout.goneLeftMargin));
                     break;
                 case GONE_TOP_MARGIN:
-                    delta.add(GONE_TOP_MARGIN, a.getDimensionPixelSize(attr, c.layout.goneTopMargin));
+                    delta.add(GONE_TOP_MARGIN,
+                            a.getDimensionPixelSize(attr, c.layout.goneTopMargin));
                     break;
                 case GONE_RIGHT_MARGIN:
-                    delta.add(GONE_RIGHT_MARGIN, a.getDimensionPixelSize(attr, c.layout.goneRightMargin));
+                    delta.add(GONE_RIGHT_MARGIN,
+                            a.getDimensionPixelSize(attr, c.layout.goneRightMargin));
                     break;
                 case GONE_BOTTOM_MARGIN:
-                    delta.add(GONE_BOTTOM_MARGIN, a.getDimensionPixelSize(attr, c.layout.goneBottomMargin));
+                    delta.add(GONE_BOTTOM_MARGIN,
+                            a.getDimensionPixelSize(attr, c.layout.goneBottomMargin));
                     break;
                 case GONE_START_MARGIN:
-                    delta.add(GONE_START_MARGIN, a.getDimensionPixelSize(attr, c.layout.goneStartMargin));
+                    delta.add(GONE_START_MARGIN,
+                            a.getDimensionPixelSize(attr, c.layout.goneStartMargin));
                     break;
                 case GONE_END_MARGIN:
-                    delta.add(GONE_END_MARGIN, a.getDimensionPixelSize(attr, c.layout.goneEndMargin));
+                    delta.add(GONE_END_MARGIN,
+                            a.getDimensionPixelSize(attr, c.layout.goneEndMargin));
                     break;
                 case GONE_BASELINE_MARGIN:
-                    delta.add(GONE_BASELINE_MARGIN, a.getDimensionPixelSize(attr, c.layout.goneBaselineMargin));
+                    delta.add(GONE_BASELINE_MARGIN,
+                            a.getDimensionPixelSize(attr, c.layout.goneBaselineMargin));
                     break;
                 case HORIZONTAL_BIAS:
                     delta.add(HORIZONTAL_BIAS, a.getFloat(attr, c.layout.horizontalBias));
@@ -4357,7 +4705,8 @@ public class ConstraintSet {
                     delta.add(BOTTOM_MARGIN, a.getDimensionPixelSize(attr, c.layout.bottomMargin));
                     break;
                 case BASELINE_MARGIN:
-                    delta.add(BASELINE_MARGIN, a.getDimensionPixelSize(attr, c.layout.baselineMargin));
+                    delta.add(BASELINE_MARGIN,
+                            a.getDimensionPixelSize(attr, c.layout.baselineMargin));
                     break;
                 case LAYOUT_WIDTH:
                     delta.add(LAYOUT_WIDTH, a.getLayoutDimension(attr, c.layout.mWidth));
@@ -4399,7 +4748,8 @@ public class ConstraintSet {
                     delta.add(CONSTRAINED_HEIGHT, a.getBoolean(attr, c.layout.constrainedHeight));
                     break;
                 case LAYOUT_VISIBILITY:
-                    delta.add(LAYOUT_VISIBILITY, VISIBILITY_FLAGS[a.getInt(attr, c.propertySet.visibility)]);
+                    delta.add(LAYOUT_VISIBILITY,
+                            VISIBILITY_FLAGS[a.getInt(attr, c.propertySet.visibility)]);
                     break;
                 case VISIBILITY_MODE:
                     delta.add(VISIBILITY_MODE, a.getInt(attr, c.propertySet.mVisibilityMode));
@@ -4446,7 +4796,8 @@ public class ConstraintSet {
                     }
                     break;
                 case TRANSFORM_PIVOT_TARGET:
-                    delta.add(TRANSFORM_PIVOT_TARGET, lookupID(a, attr, c.transform.transformPivotTarget));
+                    delta.add(TRANSFORM_PIVOT_TARGET,
+                            lookupID(a, attr, c.transform.transformPivotTarget));
                     break;
                 case VERTICAL_WEIGHT:
                     delta.add(VERTICAL_WEIGHT, a.getFloat(attr, c.layout.verticalWeight));
@@ -4491,17 +4842,20 @@ public class ConstraintSet {
                     delta.add(PROGRESS, a.getFloat(attr, c.propertySet.mProgress));
                     break;
                 case ANIMATE_RELATIVE_TO:
-                    delta.add(ANIMATE_RELATIVE_TO, lookupID(a, attr, c.motion.mAnimateRelativeTo));
+                    delta.add(ANIMATE_RELATIVE_TO,
+                            lookupID(a, attr, c.motion.mAnimateRelativeTo));
                     break;
                 case ANIMATE_CIRCLE_ANGLE_TO:
-                    delta.add(ANIMATE_CIRCLE_ANGLE_TO, a.getInteger(attr, c.motion.mAnimateCircleAngleTo));
+                    delta.add(ANIMATE_CIRCLE_ANGLE_TO,
+                            a.getInteger(attr, c.motion.mAnimateCircleAngleTo));
                     break;
                 case TRANSITION_EASING:
                     type = a.peekValue(attr);
                     if (type.type == TypedValue.TYPE_STRING) {
                         delta.add(TRANSITION_EASING, a.getString(attr));
                     } else {
-                        delta.add(TRANSITION_EASING, Easing.NAMED_EASING[a.getInteger(attr, 0)]);
+                        delta.add(TRANSITION_EASING,
+                                Easing.NAMED_EASING[a.getInteger(attr, 0)]);
                     }
                     break;
                 case PATH_MOTION_ARC:
@@ -4515,38 +4869,48 @@ public class ConstraintSet {
                     break;
 
                 case QUANTIZE_MOTION_STEPS:
-                    delta.add(QUANTIZE_MOTION_STEPS, a.getInteger(attr, c.motion.mQuantizeMotionSteps));
+                    delta.add(QUANTIZE_MOTION_STEPS, a.getInteger(attr,
+                            c.motion.mQuantizeMotionSteps));
                     break;
                 case QUANTIZE_MOTION_PHASE:
-                    delta.add(QUANTIZE_MOTION_PHASE, a.getFloat(attr, c.motion.mQuantizeMotionPhase));
+                    delta.add(QUANTIZE_MOTION_PHASE, a.getFloat(attr,
+                            c.motion.mQuantizeMotionPhase));
                     break;
                 case QUANTIZE_MOTION_INTERPOLATOR:
                     type = a.peekValue(attr);
                     if (type.type == TypedValue.TYPE_REFERENCE) {
                         c.motion.mQuantizeInterpolatorID = a.getResourceId(attr, -1);
-                        delta.add(QUANTIZE_MOTION_INTERPOLATOR_ID, c.motion.mQuantizeInterpolatorID);
+                        delta.add(QUANTIZE_MOTION_INTERPOLATOR_ID,
+                                c.motion.mQuantizeInterpolatorID);
                         if (c.motion.mQuantizeInterpolatorID != -1) {
                             c.motion.mQuantizeInterpolatorType = Motion.INTERPOLATOR_REFERENCE_ID;
-                            delta.add(QUANTIZE_MOTION_INTERPOLATOR_TYPE, c.motion.mQuantizeInterpolatorType);
+                            delta.add(QUANTIZE_MOTION_INTERPOLATOR_TYPE,
+                                    c.motion.mQuantizeInterpolatorType);
                         }
                     } else if (type.type == TypedValue.TYPE_STRING) {
                         c.motion.mQuantizeInterpolatorString = a.getString(attr);
-                        delta.add(QUANTIZE_MOTION_INTERPOLATOR_STR, c.motion.mQuantizeInterpolatorString);
+                        delta.add(QUANTIZE_MOTION_INTERPOLATOR_STR,
+                                c.motion.mQuantizeInterpolatorString);
 
                         if (c.motion.mQuantizeInterpolatorString.indexOf("/") > 0) {
                             c.motion.mQuantizeInterpolatorID = a.getResourceId(attr, -1);
-                            delta.add(QUANTIZE_MOTION_INTERPOLATOR_ID, c.motion.mQuantizeInterpolatorID);
+                            delta.add(QUANTIZE_MOTION_INTERPOLATOR_ID,
+                                    c.motion.mQuantizeInterpolatorID);
 
                             c.motion.mQuantizeInterpolatorType = Motion.INTERPOLATOR_REFERENCE_ID;
-                            delta.add(QUANTIZE_MOTION_INTERPOLATOR_TYPE, c.motion.mQuantizeInterpolatorType);
+                            delta.add(QUANTIZE_MOTION_INTERPOLATOR_TYPE,
+                                    c.motion.mQuantizeInterpolatorType);
 
                         } else {
                             c.motion.mQuantizeInterpolatorType = Motion.SPLINE_STRING;
-                            delta.add(QUANTIZE_MOTION_INTERPOLATOR_TYPE, c.motion.mQuantizeInterpolatorType);
+                            delta.add(QUANTIZE_MOTION_INTERPOLATOR_TYPE,
+                                    c.motion.mQuantizeInterpolatorType);
                         }
                     } else {
-                        c.motion.mQuantizeInterpolatorType = a.getInteger(attr, c.motion.mQuantizeInterpolatorID);
-                        delta.add(QUANTIZE_MOTION_INTERPOLATOR_TYPE, c.motion.mQuantizeInterpolatorType);
+                        c.motion.mQuantizeInterpolatorType =
+                                a.getInteger(attr, c.motion.mQuantizeInterpolatorID);
+                        delta.add(QUANTIZE_MOTION_INTERPOLATOR_TYPE,
+                                c.motion.mQuantizeInterpolatorType);
                     }
                     break;
                 case DRAW_PATH:
@@ -4554,13 +4918,15 @@ public class ConstraintSet {
                     break;
                 case CHAIN_USE_RTL:
                     Log.e(TAG, "CURRENTLY UNSUPPORTED"); // TODO add support or remove
-                    //  TODO add support or remove  c.mChainUseRtl = a.getBoolean(attr,c.mChainUseRtl);
+                    //  TODO add support or remove
+                    //   c.mChainUseRtl = a.getBoolean(attr,c.mChainUseRtl);
                     break;
                 case BARRIER_DIRECTION:
                     delta.add(BARRIER_DIRECTION, a.getInt(attr, c.layout.mBarrierDirection));
                     break;
                 case BARRIER_MARGIN:
-                    delta.add(BARRIER_MARGIN, a.getDimensionPixelSize(attr, c.layout.mBarrierMargin));
+                    delta.add(BARRIER_MARGIN, a.getDimensionPixelSize(attr,
+                            c.layout.mBarrierMargin));
                     break;
                 case CONSTRAINT_REFERENCED_IDS:
                     delta.add(CONSTRAINT_REFERENCED_IDS, a.getString(attr));
@@ -4569,15 +4935,18 @@ public class ConstraintSet {
                     delta.add(CONSTRAINT_TAG, a.getString(attr));
                     break;
                 case BARRIER_ALLOWS_GONE_WIDGETS:
-                    delta.add(BARRIER_ALLOWS_GONE_WIDGETS, a.getBoolean(attr, c.layout.mBarrierAllowsGoneWidgets));
+                    delta.add(BARRIER_ALLOWS_GONE_WIDGETS, a.getBoolean(attr,
+                            c.layout.mBarrierAllowsGoneWidgets));
                     break;
                 case UNUSED:
                     Log.w(TAG,
-                            "unused attribute 0x" + Integer.toHexString(attr) + "   " + mapToConstant.get(attr));
+                            "unused attribute 0x" + Integer.toHexString(attr)
+                                    + "   " + mapToConstant.get(attr));
                     break;
                 default:
                     Log.w(TAG,
-                            "Unknown attribute 0x" + Integer.toHexString(attr) + "   " + mapToConstant.get(attr));
+                            "Unknown attribute 0x" + Integer.toHexString(attr)
+                                    + "   " + mapToConstant.get(attr));
             }
         }
     }
@@ -4863,8 +5232,8 @@ public class ConstraintSet {
             populateOverride(ctx, c, a);
             return;
         }
-        final int N = a.getIndexCount();
-        for (int i = 0; i < N; i++) {
+        final int count = a.getIndexCount();
+        for (int i = 0; i < count; i++) {
             int attr = a.getIndex(i);
             if (DEBUG) { // USEFUL when adding features to track tags being parsed
                 try {
@@ -4872,7 +5241,8 @@ public class ConstraintSet {
                     boolean found = false;
                     for (Field f : campos) {
                         try {
-                            if (f.getType().isPrimitive() && attr == f.getInt(null) && f.getName()
+                            if (f.getType().isPrimitive()
+                                    && attr == f.getInt(null) && f.getName()
                                     .contains("Constraint_")) {
                                 found = true;
                                 if (DEBUG) {
@@ -4888,7 +5258,8 @@ public class ConstraintSet {
                         campos = android.R.attr.class.getFields();
                         for (Field f : campos) {
                             try {
-                                if (f.getType().isPrimitive() && attr == f.getInt(null) && f.getName()
+                                if (f.getType().isPrimitive() && attr == f.getInt(null)
+                                        && f.getName()
                                         .contains("Constraint_")) {
                                     found = false;
                                     if (DEBUG) {
@@ -4910,9 +5281,9 @@ public class ConstraintSet {
             }
 
 
-            if (attr != R.styleable.Constraint_android_id &&
-                    R.styleable.Constraint_android_layout_marginStart != attr &&
-                    R.styleable.Constraint_android_layout_marginEnd != attr) {
+            if (attr != R.styleable.Constraint_android_id
+                    && R.styleable.Constraint_android_layout_marginStart != attr
+                    && R.styleable.Constraint_android_layout_marginEnd != attr) {
                 c.motion.mApply = true;
                 c.layout.mApply = true;
                 c.propertySet.mApply = true;
@@ -4954,10 +5325,12 @@ public class ConstraintSet {
                     c.layout.baselineToBottom = lookupID(a, attr, c.layout.baselineToBottom);
                     break;
                 case EDITOR_ABSOLUTE_X:
-                    c.layout.editorAbsoluteX = a.getDimensionPixelOffset(attr, c.layout.editorAbsoluteX);
+                    c.layout.editorAbsoluteX = a.getDimensionPixelOffset(attr,
+                            c.layout.editorAbsoluteX);
                     break;
                 case EDITOR_ABSOLUTE_Y:
-                    c.layout.editorAbsoluteY = a.getDimensionPixelOffset(attr, c.layout.editorAbsoluteY);
+                    c.layout.editorAbsoluteY = a.getDimensionPixelOffset(attr,
+                            c.layout.editorAbsoluteY);
                     break;
                 case GUIDE_BEGIN:
                     c.layout.guideBegin = a.getDimensionPixelOffset(attr, c.layout.guideBegin);
@@ -4993,16 +5366,19 @@ public class ConstraintSet {
                     c.layout.circleAngle = a.getFloat(attr, c.layout.circleAngle);
                     break;
                 case GONE_LEFT_MARGIN:
-                    c.layout.goneLeftMargin = a.getDimensionPixelSize(attr, c.layout.goneLeftMargin);
+                    c.layout.goneLeftMargin = a.getDimensionPixelSize(attr,
+                            c.layout.goneLeftMargin);
                     break;
                 case GONE_TOP_MARGIN:
                     c.layout.goneTopMargin = a.getDimensionPixelSize(attr, c.layout.goneTopMargin);
                     break;
                 case GONE_RIGHT_MARGIN:
-                    c.layout.goneRightMargin = a.getDimensionPixelSize(attr, c.layout.goneRightMargin);
+                    c.layout.goneRightMargin = a.getDimensionPixelSize(attr,
+                            c.layout.goneRightMargin);
                     break;
                 case GONE_BOTTOM_MARGIN:
-                    c.layout.goneBottomMargin = a.getDimensionPixelSize(attr, c.layout.goneBottomMargin);
+                    c.layout.goneBottomMargin = a.getDimensionPixelSize(attr,
+                            c.layout.goneBottomMargin);
                     break;
                 case GONE_START_MARGIN:
                     c.layout.goneStartMargin = a.getDimensionPixelSize(attr, c.layout.goneStartMargin);
@@ -5011,7 +5387,8 @@ public class ConstraintSet {
                     c.layout.goneEndMargin = a.getDimensionPixelSize(attr, c.layout.goneEndMargin);
                     break;
                 case GONE_BASELINE_MARGIN:
-                    c.layout.goneBaselineMargin = a.getDimensionPixelSize(attr, c.layout.goneBaselineMargin);
+                    c.layout.goneBaselineMargin = a.getDimensionPixelSize(attr,
+                            c.layout.goneBaselineMargin);
                     break;
                 case HORIZONTAL_BIAS:
                     c.layout.horizontalBias = a.getFloat(attr, c.layout.horizontalBias);
@@ -5042,7 +5419,8 @@ public class ConstraintSet {
                     c.layout.bottomMargin = a.getDimensionPixelSize(attr, c.layout.bottomMargin);
                     break;
                 case BASELINE_MARGIN:
-                    c.layout.baselineMargin = a.getDimensionPixelSize(attr, c.layout.baselineMargin);
+                    c.layout.baselineMargin = a.getDimensionPixelSize(attr,
+                            c.layout.baselineMargin);
                     break;
                 case LAYOUT_WIDTH:
                     c.layout.mWidth = a.getLayoutDimension(attr, c.layout.mWidth);
@@ -5132,7 +5510,8 @@ public class ConstraintSet {
                     }
                     break;
                 case TRANSFORM_PIVOT_TARGET:
-                    c.transform.transformPivotTarget = lookupID(a, attr, c.transform.transformPivotTarget);
+                    c.transform.transformPivotTarget =
+                            lookupID(a, attr, c.transform.transformPivotTarget);
                     break;
                 case VERTICAL_WEIGHT:
                     c.layout.verticalWeight = a.getFloat(attr, c.layout.verticalWeight);
@@ -5165,14 +5544,16 @@ public class ConstraintSet {
                     c.motion.mAnimateRelativeTo = lookupID(a, attr, c.motion.mAnimateRelativeTo);
                     break;
                 case ANIMATE_CIRCLE_ANGLE_TO:
-                    c.motion.mAnimateCircleAngleTo = a.getInteger(attr, c.motion.mAnimateCircleAngleTo);
+                    c.motion.mAnimateCircleAngleTo =
+                            a.getInteger(attr, c.motion.mAnimateCircleAngleTo);
                     break;
                 case TRANSITION_EASING:
                     TypedValue type = a.peekValue(attr);
                     if (type.type == TypedValue.TYPE_STRING) {
                         c.motion.mTransitionEasing = a.getString(attr);
                     } else {
-                        c.motion.mTransitionEasing = Easing.NAMED_EASING[a.getInteger(attr, 0)];
+                        c.motion.mTransitionEasing =
+                                Easing.NAMED_EASING[a.getInteger(attr, 0)];
                     }
                     break;
                 case PATH_MOTION_ARC:
@@ -5186,7 +5567,8 @@ public class ConstraintSet {
                     break;
 
                 case QUANTIZE_MOTION_STEPS:
-                    c.motion.mQuantizeMotionSteps = a.getInteger(attr, c.motion.mQuantizeMotionSteps);
+                    c.motion.mQuantizeMotionSteps = a.getInteger(attr,
+                            c.motion.mQuantizeMotionSteps);
                     break;
                 case QUANTIZE_MOTION_PHASE:
                     c.motion.mQuantizeMotionPhase = a.getFloat(attr, c.motion.mQuantizeMotionPhase);
@@ -5208,7 +5590,8 @@ public class ConstraintSet {
                             c.motion.mQuantizeInterpolatorType = Motion.SPLINE_STRING;
                         }
                     } else {
-                        c.motion.mQuantizeInterpolatorType = a.getInteger(attr, c.motion.mQuantizeInterpolatorID);
+                        c.motion.mQuantizeInterpolatorType = a.getInteger(attr,
+                                c.motion.mQuantizeInterpolatorID);
                     }
 
                     break;
@@ -5219,13 +5602,15 @@ public class ConstraintSet {
                     break;
                 case CHAIN_USE_RTL:
                     Log.e(TAG, "CURRENTLY UNSUPPORTED"); // TODO add support or remove
-                    //  TODO add support or remove  c.mChainUseRtl = a.getBoolean(attr,c.mChainUseRtl);
+                    //  TODO add support or remove  c.mChainUseRtl =
+                    //   a.getBoolean(attr,c.mChainUseRtl);
                     break;
                 case BARRIER_DIRECTION:
                     c.layout.mBarrierDirection = a.getInt(attr, c.layout.mBarrierDirection);
                     break;
                 case BARRIER_MARGIN:
-                    c.layout.mBarrierMargin = a.getDimensionPixelSize(attr, c.layout.mBarrierMargin);
+                    c.layout.mBarrierMargin = a.getDimensionPixelSize(attr,
+                            c.layout.mBarrierMargin);
                     break;
                 case CONSTRAINT_REFERENCED_IDS:
                     c.layout.mReferenceIdString = a.getString(attr);
@@ -5234,21 +5619,24 @@ public class ConstraintSet {
                     c.layout.mConstraintTag = a.getString(attr);
                     break;
                 case BARRIER_ALLOWS_GONE_WIDGETS:
-                    c.layout.mBarrierAllowsGoneWidgets = a.getBoolean(attr, c.layout.mBarrierAllowsGoneWidgets);
+                    c.layout.mBarrierAllowsGoneWidgets = a.getBoolean(attr,
+                            c.layout.mBarrierAllowsGoneWidgets);
                     break;
                 case UNUSED:
                     Log.w(TAG,
-                            "unused attribute 0x" + Integer.toHexString(attr) + "   " + mapToConstant.get(attr));
+                            "unused attribute 0x" + Integer.toHexString(attr)
+                                    + "   " + mapToConstant.get(attr));
                     break;
                 default:
                     Log.w(TAG,
-                            "Unknown attribute 0x" + Integer.toHexString(attr) + "   " + mapToConstant.get(attr));
+                            "Unknown attribute 0x" + Integer.toHexString(attr)
+                                    + "   " + mapToConstant.get(attr));
             }
         }
         if (c.layout.mReferenceIdString != null) {
             // in case the strings are set, make sure to clear up the cached ids
             c.layout.mReferenceIds = null;
-        };
+        }
     }
 
     private int[] convertReferenceString(View view, String referenceIdString) {
@@ -5382,16 +5770,17 @@ public class ConstraintSet {
      * @return
      */
     static String getLine(Context context, int resourceId, XmlPullParser pullParser) {
-        return ".(" + Debug.getName(context, resourceId) + ".xml:" + pullParser.getLineNumber() +
-                ") \"" + pullParser.getName() + "\"";
+        return ".(" + Debug.getName(context, resourceId)
+                + ".xml:" + pullParser.getLineNumber()
+                + ") \"" + pullParser.getName() + "\"";
     }
 
     static String getDebugName(int v) {
         for (Field field : ConstraintSet.class.getDeclaredFields()) {
-            if (field.getName().contains("_") &&
-                    field.getType() == int.class &&
-                    java.lang.reflect.Modifier.isStatic(field.getModifiers()) &&
-                    java.lang.reflect.Modifier.isFinal(field.getModifiers())) {
+            if (field.getName().contains("_")
+                    && field.getType() == int.class
+                    && java.lang.reflect.Modifier.isStatic(field.getModifiers())
+                    && java.lang.reflect.Modifier.isFinal(field.getModifiers())) {
                 int val = 0;
                 try {
                     val = field.getInt(null);
@@ -5407,6 +5796,13 @@ public class ConstraintSet {
         return "UNKNOWN";
     }
 
+    /**
+     * Write the state to a Writer
+     * @param writer
+     * @param layout
+     * @param flags
+     * @throws IOException
+     */
     public void writeState(Writer writer, ConstraintLayout layout, int flags) throws IOException {
         writer.write("\n---------------------------------------------\n");
         if ((flags & 1) == 1) {
@@ -5447,49 +5843,66 @@ public class ConstraintSet {
                 writer.write("  <Constraint");
                 writer.write(SPACE + "android:id" + "=\"" + idName + "\"");
                 Layout l = c.layout;
-                writeBaseDimension("android:layout_width", l.mWidth, -5); // nodefault
-                writeBaseDimension("android:layout_height", l.mHeight, -5);// nodefault
+                writeBaseDimension("android:layout_width", l.mWidth, -5);
+                writeBaseDimension("android:layout_height", l.mHeight, -5);
 
                 writeVariable("app:layout_constraintGuide_begin", l.guideBegin, UNSET);
                 writeVariable("app:layout_constraintGuide_end", l.guideEnd, UNSET);
                 writeVariable("app:layout_constraintGuide_percent", l.guidePercent, UNSET);
 
-                writeVariable("app:layout_constraintHorizontal_bias", l.horizontalBias, 0.5f);
-                writeVariable("app:layout_constraintVertical_bias", l.verticalBias, 0.5f);
-                writeVariable("app:layout_constraintDimensionRatio", l.dimensionRatio, null);
+                writeVariable("app:layout_constraintHorizontal_bias",
+                        l.horizontalBias, 0.5f);
+                writeVariable("app:layout_constraintVertical_bias",
+                        l.verticalBias, 0.5f);
+                writeVariable("app:layout_constraintDimensionRatio",
+                        l.dimensionRatio, null);
                 writeXmlConstraint("app:layout_constraintCircle", l.circleConstraint);
                 writeVariable("app:layout_constraintCircleRadius", l.circleRadius, 0);
                 writeVariable("app:layout_constraintCircleAngle", l.circleAngle, 0);
 
                 writeVariable("android:orientation", l.orientation, UNSET);
 
-                writeVariable("app:layout_constraintVertical_weight", l.verticalWeight, UNSET);
-                writeVariable("app:layout_constraintHorizontal_weight", l.horizontalWeight, UNSET);
-                writeVariable("app:layout_constraintHorizontal_chainStyle", l.horizontalChainStyle, CHAIN_SPREAD);
-                writeVariable("app:layout_constraintVertical_chainStyle", l.verticalChainStyle, CHAIN_SPREAD);
+                writeVariable("app:layout_constraintVertical_weight",
+                        l.verticalWeight, UNSET);
+                writeVariable("app:layout_constraintHorizontal_weight",
+                        l.horizontalWeight, UNSET);
+                writeVariable("app:layout_constraintHorizontal_chainStyle",
+                        l.horizontalChainStyle, CHAIN_SPREAD);
+                writeVariable("app:layout_constraintVertical_chainStyle",
+                        l.verticalChainStyle, CHAIN_SPREAD);
 
                 writeVariable("app:barrierDirection", l.mBarrierDirection, UNSET);
                 writeVariable("app:barrierMargin", l.mBarrierMargin, 0);
 
                 writeDimension("app:layout_marginLeft", l.leftMargin, 0);
-                writeDimension("app:layout_goneMarginLeft", l.goneLeftMargin, Layout.UNSET_GONE_MARGIN);
+                writeDimension("app:layout_goneMarginLeft",
+                        l.goneLeftMargin, Layout.UNSET_GONE_MARGIN);
                 writeDimension("app:layout_marginRight", l.rightMargin, 0);
-                writeDimension("app:layout_goneMarginRight", l.goneRightMargin, Layout.UNSET_GONE_MARGIN);
+                writeDimension("app:layout_goneMarginRight",
+                        l.goneRightMargin, Layout.UNSET_GONE_MARGIN);
                 writeDimension("app:layout_marginStart", l.startMargin, 0);
-                writeDimension("app:layout_goneMarginStart", l.goneStartMargin, Layout.UNSET_GONE_MARGIN);
+                writeDimension("app:layout_goneMarginStart",
+                        l.goneStartMargin, Layout.UNSET_GONE_MARGIN);
                 writeDimension("app:layout_marginEnd", l.endMargin, 0);
-                writeDimension("app:layout_goneMarginEnd", l.goneEndMargin, Layout.UNSET_GONE_MARGIN);
+                writeDimension("app:layout_goneMarginEnd",
+                        l.goneEndMargin, Layout.UNSET_GONE_MARGIN);
                 writeDimension("app:layout_marginTop", l.topMargin, 0);
-                writeDimension("app:layout_goneMarginTop", l.goneTopMargin, Layout.UNSET_GONE_MARGIN);
+                writeDimension("app:layout_goneMarginTop",
+                        l.goneTopMargin, Layout.UNSET_GONE_MARGIN);
                 writeDimension("app:layout_marginBottom", l.bottomMargin, 0);
-                writeDimension("app:layout_goneMarginBottom", l.goneBottomMargin, Layout.UNSET_GONE_MARGIN);
-                writeDimension("app:goneBaselineMargin", l.goneBaselineMargin, Layout.UNSET_GONE_MARGIN);
+                writeDimension("app:layout_goneMarginBottom",
+                        l.goneBottomMargin, Layout.UNSET_GONE_MARGIN);
+                writeDimension("app:goneBaselineMargin",
+                        l.goneBaselineMargin, Layout.UNSET_GONE_MARGIN);
                 writeDimension("app:baselineMargin", l.baselineMargin, 0);
 
                 writeBoolen("app:layout_constrainedWidth", l.constrainedWidth, false);
-                writeBoolen("app:layout_constrainedHeight", l.constrainedHeight, false);
-                writeBoolen("app:barrierAllowsGoneWidgets", l.mBarrierAllowsGoneWidgets, true);
-                writeVariable("app:layout_wrapBehaviorInParent", l.mWrapBehavior, ConstraintWidget.WRAP_BEHAVIOR_INCLUDED);
+                writeBoolen("app:layout_constrainedHeight",
+                        l.constrainedHeight, false);
+                writeBoolen("app:barrierAllowsGoneWidgets",
+                        l.mBarrierAllowsGoneWidgets, true);
+                writeVariable("app:layout_wrapBehaviorInParent", l.mWrapBehavior,
+                        ConstraintWidget.WRAP_BEHAVIOR_INCLUDED);
 
                 writeXmlConstraint("app:baselineToBaseline", l.baselineToBaseline);
                 writeXmlConstraint("app:baselineToBottom", l.baselineToBottom);
@@ -5508,22 +5921,31 @@ public class ConstraintSet {
                 writeXmlConstraint("app:layout_constraintTop_toTopOf", l.topToTop);
 
                 String[] typesConstraintDefault = {"spread", "wrap", "percent"};
-                writeEnum("app:layout_constraintHeight_default", l.heightDefault, typesConstraintDefault, ConstraintWidget.MATCH_CONSTRAINT_SPREAD);
+                writeEnum("app:layout_constraintHeight_default", l.heightDefault,
+                        typesConstraintDefault, ConstraintWidget.MATCH_CONSTRAINT_SPREAD);
                 writeVariable("app:layout_constraintHeight_percent", l.heightPercent, 1);
                 writeDimension("app:layout_constraintHeight_min", l.heightMin, 0);
                 writeDimension("app:layout_constraintHeight_max", l.heightMax, 0);
-                writeBoolen("android:layout_constrainedHeight", l.constrainedHeight, false);
+                writeBoolen("android:layout_constrainedHeight",
+                        l.constrainedHeight, false);
 
-                writeEnum("app:layout_constraintWidth_default", l.widthDefault, typesConstraintDefault, ConstraintWidget.MATCH_CONSTRAINT_SPREAD);
+                writeEnum("app:layout_constraintWidth_default",
+                        l.widthDefault, typesConstraintDefault,
+                        ConstraintWidget.MATCH_CONSTRAINT_SPREAD);
                 writeVariable("app:layout_constraintWidth_percent", l.widthPercent, 1);
                 writeDimension("app:layout_constraintWidth_min", l.widthMin, 0);
                 writeDimension("app:layout_constraintWidth_max", l.widthMax, 0);
-                writeBoolen("android:layout_constrainedWidth", l.constrainedWidth, false);
+                writeBoolen("android:layout_constrainedWidth",
+                        l.constrainedWidth, false);
 
-                writeVariable("app:layout_constraintVertical_weight", l.verticalWeight, UNSET);
-                writeVariable("app:layout_constraintHorizontal_weight", l.horizontalWeight, UNSET);
-                writeVariable("app:layout_constraintHorizontal_chainStyle", l.horizontalChainStyle);
-                writeVariable("app:layout_constraintVertical_chainStyle", l.verticalChainStyle);
+                writeVariable("app:layout_constraintVertical_weight",
+                        l.verticalWeight, UNSET);
+                writeVariable("app:layout_constraintHorizontal_weight",
+                        l.horizontalWeight, UNSET);
+                writeVariable("app:layout_constraintHorizontal_chainStyle",
+                        l.horizontalChainStyle);
+                writeVariable("app:layout_constraintVertical_chainStyle",
+                        l.verticalChainStyle);
                 String[] barrierDir = {"left", "right", "top", "bottom", "start", "end"};
                 writeEnum("app:barrierDirection", l.mBarrierDirection, barrierDir, UNSET);
                 writeVariable("app:layout_constraintTag", l.mConstraintTag, null);
@@ -5539,18 +5961,24 @@ public class ConstraintSet {
         private static final String SPACE = "\n       ";
 
         private void writeBoolen(String dimString, boolean val, boolean def) throws IOException {
-            if (val != def)
+            if (val != def) {
                 writer.write(SPACE + dimString + "=\"" + val + "dp\"");
+            }
         }
 
-        private void writeEnum(String dimString, int val, String[] types, int def) throws IOException {
-            if (val != def)
+        private void writeEnum(String dimString,
+                               int val,
+                               String[] types,
+                               int def) throws IOException {
+            if (val != def) {
                 writer.write(SPACE + dimString + "=\"" + types[val] + "\"");
+            }
         }
 
         private void writeDimension(String dimString, int dim, int def) throws IOException {
-            if (dim != def)
+            if (dim != def) {
                 writer.write(SPACE + dimString + "=\"" + dim + "dp\"");
+            }
         }
 
         private void writeBaseDimension(String dimString, int dim, int def) throws IOException {
@@ -5602,7 +6030,10 @@ public class ConstraintSet {
 
         }
 
-        void writeConstraint(String my, int leftToLeft, String other, int margin, int goneMargin) throws IOException {
+        void writeConstraint(String my, int leftToLeft,
+                             String other,
+                             int margin,
+                             int goneMargin) throws IOException {
             if (leftToLeft == UNSET) {
                 return;
             }
@@ -5618,7 +6049,9 @@ public class ConstraintSet {
 
         }
 
-        void writeCircle(int circleConstraint, float circleAngle, int circleRadius) throws IOException {
+        void writeCircle(int circleConstraint,
+                         float circleAngle,
+                         int circleRadius) throws IOException {
             if (circleConstraint == UNSET) {
                 return;
             }
@@ -5709,20 +6142,24 @@ public class ConstraintSet {
                 writer.write(idName + ":{\n");
                 Layout l = c.layout;
 
-                writeDimension("height", l.mHeight, l.heightDefault, l.heightPercent, l.heightMin, l.heightMax, l.constrainedHeight);
-                writeDimension("width", l.mWidth, l.widthDefault, l.widthPercent, l.widthMin, l.widthMax, l.constrainedWidth);
+                writeDimension("height", l.mHeight, l.heightDefault, l.heightPercent,
+                        l.heightMin, l.heightMax, l.constrainedHeight);
+                writeDimension("width", l.mWidth, l.widthDefault, l.widthPercent,
+                        l.widthMin, l.widthMax, l.constrainedWidth);
 
                 writeConstraint(LEFT, l.leftToLeft, LEFT, l.leftMargin, l.goneLeftMargin);
                 writeConstraint(LEFT, l.leftToRight, RIGHT, l.leftMargin, l.goneLeftMargin);
                 writeConstraint(RIGHT, l.rightToLeft, LEFT, l.rightMargin, l.goneRightMargin);
                 writeConstraint(RIGHT, l.rightToRight, RIGHT, l.rightMargin, l.goneRightMargin);
-                writeConstraint(BASELINE, l.baselineToBaseline, BASELINE, UNSET, l.goneBaselineMargin);
+                writeConstraint(BASELINE, l.baselineToBaseline, BASELINE, UNSET,
+                        l.goneBaselineMargin);
                 writeConstraint(BASELINE, l.baselineToTop, TOP, UNSET, l.goneBaselineMargin);
                 writeConstraint(BASELINE, l.baselineToBottom, BOTTOM, UNSET, l.goneBaselineMargin);
 
                 writeConstraint(TOP, l.topToBottom, BOTTOM, l.topMargin, l.goneTopMargin);
                 writeConstraint(TOP, l.topToTop, TOP, l.topMargin, l.goneTopMargin);
-                writeConstraint(BOTTOM, l.bottomToBottom, BOTTOM, l.bottomMargin, l.goneBottomMargin);
+                writeConstraint(BOTTOM, l.bottomToBottom, BOTTOM, l.bottomMargin,
+                        l.goneBottomMargin);
                 writeConstraint(BOTTOM, l.bottomToTop, TOP, l.bottomMargin, l.goneBottomMargin);
                 writeConstraint(START, l.startToStart, START, l.startMargin, l.goneStartMargin);
                 writeConstraint(START, l.startToEnd, END, l.startMargin, l.goneStartMargin);
@@ -5738,7 +6175,8 @@ public class ConstraintSet {
                 writeVariable("'barrierMargin'", l.mBarrierMargin);
                 writeVariable("'type'", l.mHelperType);
                 writeVariable("'ReferenceId'", l.mReferenceIdString);
-                writeVariable("'mBarrierAllowsGoneWidgets'", l.mBarrierAllowsGoneWidgets ,true );
+                writeVariable("'mBarrierAllowsGoneWidgets'",
+                        l.mBarrierAllowsGoneWidgets, true);
                 writeVariable("'WrapBehavior'", l.mWrapBehavior);
 
                 writeVariable("'verticalWeight'", l.verticalWeight);
@@ -5754,54 +6192,57 @@ public class ConstraintSet {
             writer.write("}\n");
         }
 
-        private void writeGuideline(int orientation, int guideBegin, int guideEnd, float guidePercent) {
+        private void writeGuideline(int orientation,
+                                    int guideBegin,
+                                    int guideEnd,
+                                    float guidePercent) {
         }
 
 
-
-        private void writeDimension(String dimString, int dim, int dimDefault, float dimPercent, int dimMin, int dimMax, boolean constrainedDim) throws IOException {
-
-
-
-
-                if ( dim  == 0 ) {
-                    if (dimMax != UNSET || dimMin != UNSET) {
-                        switch (dimDefault) {
-                            case  0: // spread
-                                writer.write(SPACE + dimString + ": {'spread' ," +dimMin +", "+dimMax+"}\n");
-                                break;
-                            case  1: //  wrap
-                                writer.write(SPACE + dimString + ": {'wrap' ," +dimMin +", "+dimMax+"}\n");
-                                return;
-                            case  2: // percent
-                                writer.write(SPACE + dimString + ": {'"+dimPercent+"'% ," +dimMin +", "+dimMax+"}\n");
-                                return;
-                        }
-                        return;
-                    }
-
+        private void writeDimension(String dimString,
+                                    int dim,
+                                    int dimDefault,
+                                    float dimPercent,
+                                    int dimMin,
+                                    int dimMax,
+                                    boolean constrainedDim) throws IOException {
+            if (dim == 0) {
+                if (dimMax != UNSET || dimMin != UNSET) {
                     switch (dimDefault) {
-                        case  0: // spread is the default
+                        case 0: // spread
+                            writer.write(SPACE + dimString
+                                    + ": {'spread' ," + dimMin + ", " + dimMax + "}\n");
                             break;
-                        case  1: //  wrap
-                            writer.write(SPACE + dimString + ": '???????????',\n");
+                        case 1: //  wrap
+                            writer.write(SPACE + dimString
+                                    + ": {'wrap' ," + dimMin + ", " + dimMax + "}\n");
                             return;
-                        case  2: // percent
-                            writer.write(SPACE + dimString + ": '"+dimPercent+"%',\n");
+                        case 2: // percent
+                            writer.write(SPACE + dimString + ": {'" + dimPercent
+                                    + "'% ," + dimMin + ", " + dimMax + "}\n");
                             return;
                     }
-
-
-
-                } else   if ( dim  == -2 ) {
-                    writer.write(SPACE + dimString + ": 'wrap'\n");
-                }  else   if ( dim  == -1 ) {
-                    writer.write(SPACE + dimString + ": 'parent'\n");
-
-                }  else {
-                    writer.write(SPACE + dimString + ": "+dim+",\n");
+                    return;
                 }
 
+                switch (dimDefault) {
+                    case 0: // spread is the default
+                        break;
+                    case 1: //  wrap
+                        writer.write(SPACE + dimString + ": '???????????',\n");
+                        return;
+                    case 2: // percent
+                        writer.write(SPACE + dimString + ": '" + dimPercent + "%',\n");
+                        return;
+                }
+
+            } else if (dim == -2) {
+                writer.write(SPACE + dimString + ": 'wrap'\n");
+            } else if (dim == -1) {
+                writer.write(SPACE + dimString + ": 'parent'\n");
+            } else {
+                writer.write(SPACE + dimString + ": " + dim + ",\n");
+            }
         }
 
         HashMap<Integer, String> idMap = new HashMap<>();
@@ -5830,7 +6271,11 @@ public class ConstraintSet {
             }
         }
 
-        void writeConstraint(String my, int leftToLeft, String other, int margin, int goneMargin) throws IOException {
+        void writeConstraint(String my,
+                             int leftToLeft,
+                             String other,
+                             int margin,
+                             int goneMargin) throws IOException {
             if (leftToLeft == UNSET) {
                 return;
             }
@@ -5846,7 +6291,9 @@ public class ConstraintSet {
 
         }
 
-        void writeCircle(int circleConstraint, float circleAngle, int circleRadius) throws IOException {
+        void writeCircle(int circleConstraint,
+                         float circleAngle,
+                         int circleRadius) throws IOException {
             if (circleConstraint == UNSET) {
                 return;
             }
@@ -5892,7 +6339,7 @@ public class ConstraintSet {
         }
 
         void writeVariable(String name, boolean value) throws IOException {
-            if (value == false) {
+            if (!value) {
                 return;
             }
             writer.write(SPACE + name);

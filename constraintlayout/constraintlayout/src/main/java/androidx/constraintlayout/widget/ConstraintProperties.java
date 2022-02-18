@@ -88,12 +88,14 @@ public class ConstraintProperties {
     /**
      * How to calculate the size of a view in 0 dp by using its wrap_content size
      */
-    public static final int MATCH_CONSTRAINT_WRAP = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_WRAP;
+    public static final int MATCH_CONSTRAINT_WRAP =
+            ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_WRAP;
 
     /**
      * Calculate the size of a view in 0 dp by reducing the constrains gaps as much as possible
      */
-    public static final int MATCH_CONSTRAINT_SPREAD = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_SPREAD;
+    public static final int MATCH_CONSTRAINT_SPREAD =
+            ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_SPREAD;
 
     /**
      * Center view between the other two widgets.
@@ -108,7 +110,13 @@ public class ConstraintProperties {
      * @return this
      */
 
-    public ConstraintProperties center(int firstID, int firstSide, int firstMargin, int secondId, int secondSide, int secondMargin, float bias) {
+    public ConstraintProperties center(int firstID,
+                                       int firstSide,
+                                       int firstMargin,
+                                       int secondId,
+                                       int secondSide,
+                                       int secondMargin,
+                                       float bias) {
         // Error checking
 
         if (firstMargin < 0) {
@@ -149,10 +157,17 @@ public class ConstraintProperties {
      * @param rightId     The Id of the widget on the right side
      * @param rightSide   The side  of the rightId widget to connect to
      * @param rightMargin The margin on the right side
-     * @param bias        The ratio of the space on the left vs. right sides 0.5 is centered (default)
+     * @param bias        The ratio of the space on the left vs.
+     *                    right sides 0.5 is centered (default)
      * @return this
      */
-    public ConstraintProperties centerHorizontally(int leftId, int leftSide, int leftMargin, int rightId, int rightSide, int rightMargin, float bias) {
+    public ConstraintProperties centerHorizontally(int leftId,
+                                                   int leftSide,
+                                                   int leftMargin,
+                                                   int rightId,
+                                                   int rightSide,
+                                                   int rightMargin,
+                                                   float bias) {
         connect(LEFT, leftId, leftSide, leftMargin);
         connect(RIGHT, rightId, rightSide, rightMargin);
         mParams.horizontalBias = bias;
@@ -171,7 +186,13 @@ public class ConstraintProperties {
      * @param bias        The ratio of the space on the start vs end side 0.5 is centered (default)
      * @return this
      */
-    public ConstraintProperties centerHorizontallyRtl(int startId, int startSide, int startMargin, int endId, int endSide, int endMargin, float bias) {
+    public ConstraintProperties centerHorizontallyRtl(int startId,
+                                                      int startSide,
+                                                      int startMargin,
+                                                      int endId,
+                                                      int endSide,
+                                                      int endMargin,
+                                                      float bias) {
         connect(START, startId, startSide, startMargin);
         connect(END, endId, endSide, endMargin);
         mParams.horizontalBias = bias;
@@ -187,10 +208,17 @@ public class ConstraintProperties {
      * @param bottomId     The Id of the widget on the bottom side
      * @param bottomSide   The side of the bottomId widget to connect to
      * @param bottomMargin The margin on the bottom side
-     * @param bias         The ratio of the space on the top vs. bottom sides 0.5 is centered (default)
+     * @param bias         The ratio of the space on the top vs.
+     *                     bottom sides 0.5 is centered (default)
      * @return this
      */
-    public ConstraintProperties centerVertically(int topId, int topSide, int topMargin, int bottomId, int bottomSide, int bottomMargin, float bias) {
+    public ConstraintProperties centerVertically(int topId,
+                                                 int topSide,
+                                                 int topMargin,
+                                                 int bottomId,
+                                                 int bottomSide,
+                                                 int bottomMargin,
+                                                 float bias) {
         connect(TOP, topId, topSide, topMargin);
         connect(BOTTOM, bottomId, bottomSide, bottomMargin);
         mParams.verticalBias = bias;
@@ -205,9 +233,11 @@ public class ConstraintProperties {
      */
     public ConstraintProperties centerHorizontally(int toView) {
         if (toView == PARENT_ID) {
-            center(PARENT_ID, ConstraintSet.LEFT, 0, PARENT_ID, ConstraintSet.RIGHT, 0, 0.5f);
+            center(PARENT_ID, ConstraintSet.LEFT, 0, PARENT_ID,
+                    ConstraintSet.RIGHT, 0, 0.5f);
         } else {
-            center(toView, ConstraintSet.RIGHT, 0, toView, ConstraintSet.LEFT, 0, 0.5f);
+            center(toView, ConstraintSet.RIGHT, 0, toView,
+                    ConstraintSet.LEFT, 0, 0.5f);
         }
         return this;
     }
@@ -220,9 +250,11 @@ public class ConstraintProperties {
      */
     public ConstraintProperties centerHorizontallyRtl(int toView) {
         if (toView == PARENT_ID) {
-            center(PARENT_ID, ConstraintSet.START, 0, PARENT_ID, ConstraintSet.END, 0, 0.5f);
+            center(PARENT_ID, ConstraintSet.START, 0, PARENT_ID,
+                    ConstraintSet.END, 0, 0.5f);
         } else {
-            center(toView, ConstraintSet.END, 0, toView, ConstraintSet.START, 0, 0.5f);
+            center(toView, ConstraintSet.END, 0, toView,
+                    ConstraintSet.START, 0, 0.5f);
         }
         return this;
     }
@@ -235,9 +267,11 @@ public class ConstraintProperties {
      */
     public ConstraintProperties centerVertically(int toView) {
         if (toView == PARENT_ID) {
-            center(PARENT_ID, ConstraintSet.TOP, 0, PARENT_ID, ConstraintSet.BOTTOM, 0, 0.5f);
+            center(PARENT_ID, ConstraintSet.TOP, 0, PARENT_ID,
+                    ConstraintSet.BOTTOM, 0, 0.5f);
         } else {
-            center(toView, ConstraintSet.BOTTOM, 0, toView, ConstraintSet.TOP, 0, 0.5f);
+            center(toView, ConstraintSet.BOTTOM, 0, toView,
+                    ConstraintSet.TOP, 0, 0.5f);
         }
         return this;
     }
@@ -559,7 +593,8 @@ public class ConstraintProperties {
     }
 
     /**
-     * Adjust the post-layout translation in Z of a view. This is the preferred way to adjust the shadow.
+     * Adjust the post-layout translation in Z of a view.
+     * This is the preferred way to adjust the shadow.
      *
      * @param translationZ the translationZ
      * @return this
@@ -695,7 +730,8 @@ public class ConstraintProperties {
      * <p>
      * <ul>
      *   <li>CHAIN_SPREAD -- the elements will be spread out</li>
-     *   <li>CHAIN_SPREAD_INSIDE -- similar, but the endpoints of the chain will not be spread out</li>
+     *   <li>CHAIN_SPREAD_INSIDE -- similar, but the endpoints of the
+     *   chain will not be spread out</li>
      *   <li>CHAIN_PACKED -- the elements of the chain will be packed together. The horizontal
      * bias attribute of the child will then affect the positioning of the packed elements</li>
      * </ul>
@@ -714,7 +750,8 @@ public class ConstraintProperties {
      * <p>
      * <ul>
      *   <li>CHAIN_SPREAD -- the elements will be spread out</li>
-     *   <li>CHAIN_SPREAD_INSIDE -- similar, but the endpoints of the chain will not be spread out</li>
+     *   <li>CHAIN_SPREAD_INSIDE -- similar, but the endpoints of the
+     *   chain will not be spread out</li>
      *   <li>CHAIN_PACKED -- the elements of the chain will be packed together. The horizontal
      * bias attribute of the child will then affect the positioning of the packed elements</li>
      * </ul>
@@ -912,7 +949,8 @@ public class ConstraintProperties {
                     mParams.leftToLeft = mParams.UNSET;
 
                 } else {
-                    throw new IllegalArgumentException("Left to " + sideToString(endSide) + " undefined");
+                    throw new IllegalArgumentException("Left to "
+                            + sideToString(endSide) + " undefined");
                 }
                 mParams.leftMargin = margin;
                 break;
@@ -926,7 +964,8 @@ public class ConstraintProperties {
                     mParams.rightToLeft = mParams.UNSET;
 
                 } else {
-                    throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
+                    throw new IllegalArgumentException("right to "
+                            + sideToString(endSide) + " undefined");
                 }
                 mParams.rightMargin = margin;
                 break;
@@ -944,7 +983,8 @@ public class ConstraintProperties {
                     mParams.baselineToTop = mParams.UNSET;
                     mParams.baselineToBottom = mParams.UNSET;
                 } else {
-                    throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
+                    throw new IllegalArgumentException("right to "
+                            + sideToString(endSide) + " undefined");
                 }
                 mParams.topMargin = margin;
                 break;
@@ -962,7 +1002,8 @@ public class ConstraintProperties {
                     mParams.baselineToTop = mParams.UNSET;
                     mParams.baselineToBottom = mParams.UNSET;
                 } else {
-                    throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
+                    throw new IllegalArgumentException("right to "
+                            + sideToString(endSide) + " undefined");
                 }
                 mParams.bottomMargin = margin;
                 break;
@@ -973,7 +1014,7 @@ public class ConstraintProperties {
                     mParams.bottomToTop = mParams.UNSET;
                     mParams.topToTop = mParams.UNSET;
                     mParams.topToBottom = mParams.UNSET;
-                } if (endSide == TOP) {
+                } else if (endSide == TOP) {
                     mParams.baselineToTop = endID;
                     mParams.bottomToBottom = mParams.UNSET;
                     mParams.bottomToTop = mParams.UNSET;
@@ -986,7 +1027,8 @@ public class ConstraintProperties {
                     mParams.topToTop = mParams.UNSET;
                     mParams.topToBottom = mParams.UNSET;
                 } else {
-                    throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
+                    throw new IllegalArgumentException("right to "
+                            + sideToString(endSide) + " undefined");
                 }
                 mParams.baselineMargin = margin;
                 break;
@@ -998,7 +1040,8 @@ public class ConstraintProperties {
                     mParams.startToEnd = endID;
                     mParams.startToStart = mParams.UNSET;
                 } else {
-                    throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
+                    throw new IllegalArgumentException("right to "
+                            + sideToString(endSide) + " undefined");
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     mParams.setMarginStart(margin);
@@ -1012,7 +1055,8 @@ public class ConstraintProperties {
                     mParams.endToStart = endID;
                     mParams.endToEnd = mParams.UNSET;
                 } else {
-                    throw new IllegalArgumentException("right to " + sideToString(endSide) + " undefined");
+                    throw new IllegalArgumentException("right to "
+                            + sideToString(endSide) + " undefined");
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
 
@@ -1057,6 +1101,10 @@ public class ConstraintProperties {
         }
     }
 
+    /**
+     * Should be called to apply the changes currently a no op
+     * in place for subclasses and future use
+     */
     public void apply() {
     }
 }
