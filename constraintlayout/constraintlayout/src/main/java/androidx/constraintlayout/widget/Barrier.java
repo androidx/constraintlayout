@@ -19,25 +19,29 @@ package androidx.constraintlayout.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
-import androidx.constraintlayout.core.widgets.ConstraintWidget;
-import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
-import androidx.constraintlayout.core.widgets.HelperWidget;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.View;
 
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
+import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
+import androidx.constraintlayout.core.widgets.HelperWidget;
+
 /**
  * <b>Added in 1.1</b>
  * <p>
- * A Barrier references multiple widgets as input, and creates a virtual guideline based on the most
- * extreme widget on the specified side. For example, a left barrier will align to the left of all the referenced views.
+ * A Barrier references multiple widgets as input,
+ * and creates a virtual guideline based on the most
+ * extreme widget on the specified side. For example,
+ * a left barrier will align to the left of all the referenced views.
  * </p>
  * <p>
  * <h2>Example</h2>
  *     <p><div align="center" >
  *       <img width="325px" src="resources/images/barrier-buttons.png">
  *     </div>
- *     Let's have two buttons, @id/button1 and @id/button2. The constraint_referenced_ids field will reference
+ *     Let's have two buttons, @id/button1 and @id/button2.
+ *     The constraint_referenced_ids field will reference
  *     them by simply having them as comma-separated list:
  *     <pre>
  *     {@code
@@ -60,19 +64,24 @@ import android.view.View;
  *       <img width="325px" src="resources/images/barrier-end.png">
  *     </div>
  *     <p>
- *         If the widgets dimensions change, the barrier will automatically move according to its direction to get
+ *         If the widgets dimensions change,
+ *         the barrier will automatically move according to its direction to get
  *         the most extreme widget:
  *     <p><div align="center" >
  *       <img width="325px" src="resources/images/barrier-adapt.png">
  *     </div>
  *
  *     <p>
- *         Other widgets can then be constrained to the barrier itself, instead of the individual widget. This allows a layout
- *         to automatically adapt on widget dimension changes (e.g. different languages will end up with different length for similar worlds).
+ *         Other widgets can then be constrained to the barrier itself,
+ *         instead of the individual widget. This allows a layout
+ *         to automatically adapt on widget dimension changes
+ *         (e.g. different languages will end up with different length for similar worlds).
  *     </p>
  * <h2>GONE widgets handling</h2>
- * <p>If the barrier references GONE widgets, the default behavior is to create a barrier on the resolved position of the GONE widget.
- * If you do not want to have the barrier take GONE widgets into account, you can change this by setting the attribute <i>barrierAllowsGoneWidgets</i>
+ * <p>If the barrier references GONE widgets,
+ * the default behavior is to create a barrier on the resolved position of the GONE widget.
+ * If you do not want to have the barrier take GONE widgets into account,
+ * you can change this by setting the attribute <i>barrierAllowsGoneWidgets</i>
  * to false (default being true).</p>
  *     </p>
  * </p>
@@ -174,7 +183,8 @@ public class Barrier extends ConstraintHelper {
             }
         }
         if (widget instanceof androidx.constraintlayout.core.widgets.Barrier) {
-            androidx.constraintlayout.core.widgets.Barrier barrier = (androidx.constraintlayout.core.widgets.Barrier) widget;
+            androidx.constraintlayout.core.widgets.Barrier barrier =
+                    (androidx.constraintlayout.core.widgets.Barrier) widget;
             barrier.setBarrierType(mResolvedType);
         }
     }
@@ -193,9 +203,10 @@ public class Barrier extends ConstraintHelper {
         super.init(attrs);
         mBarrier = new androidx.constraintlayout.core.widgets.Barrier();
         if (attrs != null) {
-            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ConstraintLayout_Layout);
-            final int N = a.getIndexCount();
-            for (int i = 0; i < N; i++) {
+            TypedArray a = getContext().obtainStyledAttributes(attrs,
+                    R.styleable.ConstraintLayout_Layout);
+            final int count = a.getIndexCount();
+            for (int i = 0; i < count; i++) {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.ConstraintLayout_Layout_barrierDirection) {
                     setType(a.getInt(attr, LEFT));
@@ -212,6 +223,10 @@ public class Barrier extends ConstraintHelper {
         validateParams();
     }
 
+    /**
+     * allows gone widgets to be included in the barrier
+     * @param supportGone
+     */
     public void setAllowsGoneWidget(boolean supportGone) {
         mBarrier.setAllowsGoneWidget(supportGone);
     }
@@ -221,8 +236,10 @@ public class Barrier extends ConstraintHelper {
      *
      * @return true if this barrier supports gone widgets, otherwise false
      *
-     * @deprecated This method should be called {@code getAllowsGoneWidget} such that {@code allowsGoneWidget}
-     * can be accessed as a property from Kotlin; {@see https://android.github.io/kotlin-guides/interop.html#property-prefixes}.
+     * @deprecated This method should be called
+     * {@code getAllowsGoneWidget} such that {@code allowsGoneWidget}
+     * can be accessed as a property from Kotlin;
+     * {@see https://android.github.io/kotlin-guides/interop.html#property-prefixes}.
      * Use {@link #getAllowsGoneWidget()} instead.
      */
     @Deprecated
@@ -269,10 +286,14 @@ public class Barrier extends ConstraintHelper {
     }
 
     @Override
-    public void loadParameters(ConstraintSet.Constraint constraint, HelperWidget child, ConstraintLayout.LayoutParams layoutParams, SparseArray<ConstraintWidget> mapIdToWidget) {
+    public void loadParameters(ConstraintSet.Constraint constraint,
+                               HelperWidget child,
+                               ConstraintLayout.LayoutParams layoutParams,
+                               SparseArray<ConstraintWidget> mapIdToWidget) {
         super.loadParameters(constraint, child, layoutParams, mapIdToWidget);
         if (child instanceof androidx.constraintlayout.core.widgets.Barrier) {
-            androidx.constraintlayout.core.widgets.Barrier barrier = (androidx.constraintlayout.core.widgets.Barrier) child;
+            androidx.constraintlayout.core.widgets.Barrier barrier =
+                    (androidx.constraintlayout.core.widgets.Barrier) child;
             ConstraintWidgetContainer container = (ConstraintWidgetContainer) child.getParent();
             boolean isRtl = container.isRtl();
             updateType(barrier, constraint.layout.mBarrierDirection, isRtl);

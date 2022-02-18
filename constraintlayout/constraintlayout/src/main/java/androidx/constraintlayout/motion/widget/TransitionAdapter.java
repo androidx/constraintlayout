@@ -23,7 +23,10 @@ public abstract class TransitionAdapter implements MotionLayout.TransitionListen
     }
 
     @Override
-    public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
+    public void onTransitionChange(MotionLayout motionLayout,
+                                   int startId,
+                                   int endId,
+                                   float progress) {
 
     }
 
@@ -33,7 +36,10 @@ public abstract class TransitionAdapter implements MotionLayout.TransitionListen
     }
 
     @Override
-    public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
+    public void onTransitionTrigger(MotionLayout motionLayout,
+                                    int triggerId,
+                                    boolean positive,
+                                    float progress) {
 
     }
 }

@@ -64,7 +64,7 @@ import androidx.core.widget.TextViewCompat;
  * </ul>
  */
 public class MotionLabel extends View implements FloatLayout {
-    static String TAG = "MotionLabel";
+    final static String TAG = "MotionLabel";
     TextPaint mPaint = new TextPaint();
     Path mPath = new Path();
     private int mTextFillColor = 0xFFFF;
@@ -133,10 +133,10 @@ public class MotionLabel extends View implements FloatLayout {
         if (attrs != null) {
             TypedArray a = getContext()
                     .obtainStyledAttributes(attrs, R.styleable.MotionLabel);
-            final int N = a.getIndexCount();
+            final int count = a.getIndexCount();
 
             int k = 0;
-            for (int i = 0; i < N; i++) {
+            for (int i = 0; i < count; i++) {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.MotionLabel_android_text) {
                     setText(a.getText(attr));
@@ -256,7 +256,8 @@ public class MotionLabel extends View implements FloatLayout {
             if (mTextureEffect != 0) {
                 mTextBackgroundBitmap = blur(mTextBackgroundBitmap, 4);
             }
-            mTextShader = new BitmapShader(mTextBackgroundBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+            mTextShader = new BitmapShader(mTextBackgroundBitmap,
+                    Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
         }
     }
 
@@ -287,8 +288,8 @@ public class MotionLabel extends View implements FloatLayout {
             gravity |= Gravity.TOP;
         }
         boolean newLayout = false;
-        if ((gravity & Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK) !=
-                (mGravity & Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)) {
+        if ((gravity & Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)
+                != (mGravity & Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)) {
             newLayout = true;
         }
         if (gravity != mGravity) {
@@ -351,6 +352,10 @@ public class MotionLabel extends View implements FloatLayout {
         mPaint.setColor(mTextFillColor = typedValue.data);
     }
 
+    /**
+     * set text
+     * @param text
+     */
     public void setText(CharSequence text) {
         mText = text.toString();
         invalidate();
@@ -368,7 +373,6 @@ public class MotionLabel extends View implements FloatLayout {
         mPaint.setFlags(Paint.SUBPIXEL_TEXT_FLAG);
         setTextSize(mTextSize);
         mPaint.setAntiAlias(true);
-        //   mLayout = new StaticLayout(mText, mPaint, getWidth(), Layout.Alignment.ALIGN_CENTER, 1, 0, true);
     }
 
     void buildShape(float scale) {
@@ -543,6 +547,10 @@ public class MotionLabel extends View implements FloatLayout {
         }
     }
 
+    /**
+     * Set outline thickness
+     * @param width
+     */
     public void setTextOutlineThickness(float width) {
         mTextOutlineThickness = width;
         mUseOutline = true;
@@ -614,6 +622,10 @@ public class MotionLabel extends View implements FloatLayout {
         }
     }
 
+    /**
+     * set the typeface
+     * @param tf
+     */
     public void setTypeface(Typeface tf) {
         if (mPaint.getTypeface() != tf) {
             mPaint.setTypeface(tf);
@@ -832,8 +844,10 @@ public class MotionLabel extends View implements FloatLayout {
     /**
      * Gets the pan from the center
      * pan of 1 the image is "all the way to the right"
-     * if the images width is greater than the screen width, pan = 1 results in the left edge lining up
-     * if the images width is less than the screen width, pan = 1 results in the right edges lining up
+     * if the images width is greater than the screen width,
+     * pan = 1 results in the left edge lining up
+     * if the images width is less than the screen width,
+     * pan = 1 results in the right edges lining up
      * if image width == screen width it does nothing
      *
      * @return the pan in X. Where 0 is centered = Float. NaN if not set
@@ -845,8 +859,10 @@ public class MotionLabel extends View implements FloatLayout {
     /**
      * gets the pan from the center
      * pan of 1 the image is "all the way to the bottom"
-     * if the images width is greater than the screen height, pan = 1 results in the bottom edge lining up
-     * if the images width is less than the screen height, pan = 1 results in the top edges lining up
+     * if the images width is greater than the screen height,
+     * pan = 1 results in the bottom edge lining up
+     * if the images width is less than the screen height,
+     * pan = 1 results in the top edges lining up
      * if image height == screen height it does nothing
      *
      * @return pan in y. Where 0 is centered NaN if not set
@@ -876,8 +892,10 @@ public class MotionLabel extends View implements FloatLayout {
     /**
      * sets the pan from the center
      * pan of 1 the image is "all the way to the right"
-     * if the images width is greater than the screen width, pan = 1 results in the left edge lining up
-     * if the images width is less than the screen width, pan = 1 results in the right edges lining up
+     * if the images width is greater than the screen width,
+     * pan = 1 results in the left edge lining up
+     * if the images width is less than the screen width,
+     * pan = 1 results in the right edges lining up
      * if image width == screen width it does nothing
      *
      * @param pan sets the pan in X. Where 0 is centered
@@ -891,8 +909,10 @@ public class MotionLabel extends View implements FloatLayout {
     /**
      * sets the pan from the center
      * pan of 1 the image is "all the way to the bottom"
-     * if the images width is greater than the screen height, pan = 1 results in the bottom edge lining up
-     * if the images width is less than the screen height, pan = 1 results in the top edges lining up
+     * if the images width is greater than the screen height,
+     * pan = 1 results in the bottom edge lining up
+     * if the images width is less than the screen height,
+     * pan = 1 results in the top edges lining up
      * if image height == screen height it does nothing
      *
      * @param pan sets the pan in X. Where 0 is centered

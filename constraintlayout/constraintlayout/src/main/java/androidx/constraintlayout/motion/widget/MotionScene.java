@@ -61,8 +61,8 @@ public class MotionScene {
     private static final String TAG = "MotionScene";
     private static final boolean DEBUG = false;
     private static final int MIN_DURATION = 8;
-    final static int TRANSITION_BACKWARD = 0;
-    final static int TRANSITION_FORWARD = 1;
+    static final int TRANSITION_BACKWARD = 0;
+    static final int TRANSITION_FORWARD = 1;
     private static final int SPLINE_STRING = -1;
     private static final int INTERPOLATOR_REFERENCE_ID = -2;
     public static final int UNSET = -1;
@@ -123,13 +123,13 @@ public class MotionScene {
             }
         }
         if (DEBUG) {
-            Log.v(TAG, Debug.getLocation() + " setTransition " +
-                    Debug.getName(mMotionLayout.getContext(), beginId) + " -> " +
-                    Debug.getName(mMotionLayout.getContext(), endId));
+            Log.v(TAG, Debug.getLocation() + " setTransition "
+                    + Debug.getName(mMotionLayout.getContext(), beginId) + " -> "
+                    + Debug.getName(mMotionLayout.getContext(), endId));
         }
         if (mCurrentTransition != null) {
-            if (mCurrentTransition.mConstraintSetEnd == endId &&
-                    mCurrentTransition.mConstraintSetStart == beginId) {
+            if (mCurrentTransition.mConstraintSetEnd == endId
+                    && mCurrentTransition.mConstraintSetStart == beginId) {
                 return;
             }
         }
@@ -139,9 +139,9 @@ public class MotionScene {
                     || (transition.mConstraintSetEnd == endId
                     && transition.mConstraintSetStart == beginId)) {
                 if (DEBUG) {
-                    Log.v(TAG, Debug.getLocation() + " found transition  " +
-                            Debug.getName(mMotionLayout.getContext(), beginId) + " -> " +
-                            Debug.getName(mMotionLayout.getContext(), endId));
+                    Log.v(TAG, Debug.getLocation() + " found transition  "
+                            + Debug.getName(mMotionLayout.getContext(), beginId) + " -> "
+                            + Debug.getName(mMotionLayout.getContext(), endId));
                 }
                 mCurrentTransition = transition;
                 if (mCurrentTransition != null && mCurrentTransition.mTouchResponse != null) {
@@ -245,11 +245,17 @@ public class MotionScene {
         return stateId;
     }
 
+    /**
+     * Get all transitions that include this state
+     * @param stateId
+     * @return
+     */
     public List<Transition> getTransitionsWithState(int stateId) {
         stateId = getRealID(stateId);
         ArrayList<Transition> ret = new ArrayList<>();
         for (Transition transition : mTransitionList) {
-            if (transition.mConstraintSetStart == stateId || transition.mConstraintSetEnd == stateId) {
+            if (transition.mConstraintSetStart == stateId
+                    || transition.mConstraintSetEnd == stateId) {
                 ret.add(transition);
             }
 
@@ -257,6 +263,11 @@ public class MotionScene {
         return ret;
     }
 
+    /**
+     * Add all on click listeners for the current state
+     * @param motionLayout
+     * @param currentState
+     */
     public void addOnClickListeners(MotionLayout motionLayout, int currentState) {
         // remove all on clicks listeners
         for (Transition transition : mTransitionList) {
@@ -290,7 +301,18 @@ public class MotionScene {
         }
     }
 
-    public Transition bestTransitionFor(int currentState, float dx, float dy, MotionEvent lastTouchDown) {
+    /**
+     * Find the best transition for the motion
+     * @param currentState
+     * @param dx drag delta x
+     * @param dy drag delta y
+     * @param lastTouchDown
+     * @return
+     */
+    public Transition bestTransitionFor(int currentState,
+                                        float dx,
+                                        float dy,
+                                        MotionEvent lastTouchDown) {
         List<Transition> candidates = null;
         if (currentState != -1) {
             candidates = getTransitionsWithState(currentState);
@@ -304,25 +326,29 @@ public class MotionScene {
                 if (transition.mTouchResponse != null) {
                     transition.mTouchResponse.setRTL(mRtl);
                     RectF region = transition.mTouchResponse.getTouchRegion(mMotionLayout, cache);
-                    if (region != null && lastTouchDown != null && (!region.contains(lastTouchDown.getX(), lastTouchDown.getY()))) {
+                    if (region != null && lastTouchDown != null
+                            && (!region.contains(lastTouchDown.getX(), lastTouchDown.getY()))) {
                         continue;
                     }
                     region = transition.mTouchResponse.getLimitBoundsTo(mMotionLayout, cache);
-                    if (region != null && lastTouchDown != null && (!region.contains(lastTouchDown.getX(), lastTouchDown.getY()))) {
+                    if (region != null && lastTouchDown != null
+                            && (!region.contains(lastTouchDown.getX(), lastTouchDown.getY()))) {
                         continue;
                     }
 
                     float val = transition.mTouchResponse.dot(dx, dy);
                     if (transition.mTouchResponse.mIsRotateMode && lastTouchDown != null) {
-                        float startX = lastTouchDown.getX() - transition.mTouchResponse.mRotateCenterX;
-                        float startY = lastTouchDown.getY() - transition.mTouchResponse.mRotateCenterY;
+                        float startX = lastTouchDown.getX()
+                                - transition.mTouchResponse.mRotateCenterX;
+                        float startY = lastTouchDown.getY()
+                                - transition.mTouchResponse.mRotateCenterY;
                         float endX = dx + startX;
                         float endY = dy + startY;
                         double endAngle = Math.atan2(endY, endX);
                         double startAngle = Math.atan2(startX, startY);
                         val = (float) (endAngle - startAngle) * 10;
                     }
-                    if (transition.mConstraintSetEnd == currentState) { // flip because this would be backwards
+                    if (transition.mConstraintSetEnd == currentState) { // flip because backwards
                         val *= -1;
                     } else {
                         val *= 1.1f; // slightly bias towards the transition which is start over end
@@ -336,7 +362,8 @@ public class MotionScene {
             }
             if (DEBUG) {
                 if (best != null) {
-                    Log.v(TAG, Debug.getLocation() + "  ### BEST ----- " + best.debugString(mMotionLayout.getContext()) + " ----");
+                    Log.v(TAG, Debug.getLocation() + "  ### BEST ----- "
+                            + best.debugString(mMotionLayout.getContext()) + " ----");
                 } else {
                     Log.v(TAG, Debug.getLocation() + "  ### BEST ----- " + null + " ----");
 
@@ -347,10 +374,19 @@ public class MotionScene {
         return mCurrentTransition;
     }
 
+    /**
+     * Get list of Transitions know to the system
+     * @return
+     */
     public ArrayList<Transition> getDefinedTransitions() {
         return mTransitionList;
     }
 
+    /**
+     * Find the transition based on the id
+     * @param id
+     * @return
+     */
     public Transition getTransitionById(int id) {
         for (Transition transition : mTransitionList) {
             if (transition.mId == id) {
@@ -360,6 +396,10 @@ public class MotionScene {
         return null;
     }
 
+    /**
+     * Get the list of all Constraint Sets Know to the system
+     * @return
+     */
     public int[] getConstraintSetIds() {
         int[] ids = new int[mConstraintSetMap.size()];
         for (int i = 0; i < ids.length; i++) {
@@ -394,8 +434,8 @@ public class MotionScene {
                 continue;
             }
             if (currentState == transition.mConstraintSetStart && (
-                    transition.mAutoTransition == Transition.AUTO_ANIMATE_TO_END ||
-                            transition.mAutoTransition == Transition.AUTO_JUMP_TO_END)) {
+                    transition.mAutoTransition == Transition.AUTO_ANIMATE_TO_END
+                            || transition.mAutoTransition == Transition.AUTO_JUMP_TO_END)) {
                 motionLayout.setState(MotionLayout.TransitionState.FINISHED);
                 motionLayout.setTransition(transition);
                 if (transition.mAutoTransition == Transition.AUTO_ANIMATE_TO_END) {
@@ -413,8 +453,8 @@ public class MotionScene {
                 return true;
             }
             if (currentState == transition.mConstraintSetEnd && (
-                    transition.mAutoTransition == Transition.AUTO_ANIMATE_TO_START ||
-                            transition.mAutoTransition == Transition.AUTO_JUMP_TO_START)) {
+                    transition.mAutoTransition == Transition.AUTO_ANIMATE_TO_START
+                            || transition.mAutoTransition == Transition.AUTO_JUMP_TO_START)) {
                 motionLayout.setState(MotionLayout.TransitionState.FINISHED);
                 motionLayout.setTransition(transition);
                 if (transition.mAutoTransition == Transition.AUTO_ANIMATE_TO_START) {
@@ -439,6 +479,10 @@ public class MotionScene {
         return (mVelocityTracker != null);
     }
 
+    /**
+     * Set Right to left
+     * @param rtl
+     */
     public void setRtl(boolean rtl) {
         mRtl = rtl;
         if (mCurrentTransition != null && mCurrentTransition.mTouchResponse != null) {
@@ -446,18 +490,39 @@ public class MotionScene {
         }
     }
 
+    /**
+     * Apply the viewTransition on the list of views
+     * @param id
+     * @param view
+     */
     public void viewTransition(int id, View... view) {
         mViewTransitionController.viewTransition(id, view);
     }
 
+    /**
+     * Enable this viewTransition
+     * @param id of viewTransition
+     * @param enable
+     */
     public void enableViewTransition(int id, boolean enable) {
         mViewTransitionController.enableViewTransition(id, enable);
     }
 
+    /**
+     * Is this view transition enabled
+     * @param id of viewTransition
+     * @return
+     */
     public boolean isViewTransitionEnabled(int id) {
         return mViewTransitionController.isViewTransitionEnabled(id);
     }
 
+    /**
+     * Apply a view transition to the MotionController
+     * @param viewTransitionId of viewTransition
+     * @param motionController
+     * @return
+     */
     public boolean applyViewTransition(int viewTransitionId, MotionController motionController) {
         return mViewTransitionController.applyViewTransition(viewTransitionId, motionController);
     }
@@ -494,9 +559,9 @@ public class MotionScene {
         private int mPathMotionArc = UNSET;
         private int mLayoutDuringTransition = 0;
         private int mTransitionFlags = 0;
-        final static int TRANSITION_FLAG_FIRST_DRAW = 1;
-        final static int TRANSITION_FLAG_INTRA_AUTO = 2;
-        final static int TRANSITION_FLAG_INTERCEPT_TOUCH = 4;
+        static final int TRANSITION_FLAG_FIRST_DRAW = 1;
+        static final int TRANSITION_FLAG_INTRA_AUTO = 2;
+        static final int TRANSITION_FLAG_INTERCEPT_TOUCH = 4;
 
         public static final int INTERPOLATE_REFERENCE_ID = -2;
         public static final int INTERPOLATE_SPLINE_STRING = -1;
@@ -507,10 +572,21 @@ public class MotionScene {
         public static final int INTERPOLATE_BOUNCE = 4;
         public static final int INTERPOLATE_OVERSHOOT = 5;
         public static final int INTERPOLATE_ANTICIPATE = 6;
+
+        /**
+         * Set the onSwipe for this Transition
+         * @param onSwipe
+         */
         public void setOnSwipe(OnSwipe onSwipe) {
-            mTouchResponse = (onSwipe == null) ? null : new TouchResponse(mMotionScene.mMotionLayout, onSwipe);
+            mTouchResponse = (onSwipe == null) ? null
+                    : new TouchResponse(mMotionScene.mMotionLayout, onSwipe);
         }
 
+        /**
+         * Add the onclick to this view
+         * @param id
+         * @param action
+         */
         public void addOnClick(int id, int action) {
             for (TransitionOnClick onClick : mOnClicks) {
                 if (onClick.mTargetId == id) {
@@ -522,6 +598,10 @@ public class MotionScene {
             mOnClicks.add(click);
         }
 
+        /**
+         * Remove the onclick added to this view
+         * @param id
+         */
         public void removeOnClick(int id) {
             TransitionOnClick toRemove = null;
             for (TransitionOnClick onClick : mOnClicks) {
@@ -535,14 +615,27 @@ public class MotionScene {
             }
         }
 
+        /**
+         * get the mode of layout during transition
+         * @return
+         */
         public int getLayoutDuringTransition() {
             return mLayoutDuringTransition;
         }
 
+        /**
+         * set the mode of layout during transition
+         * @param mode
+         */
         public void setLayoutDuringTransition(int mode) {
             mLayoutDuringTransition = mode;
         }
 
+        /**
+         * Add on Click support using the xml parser
+         * @param context
+         * @param parser
+         */
         public void addOnClick(Context context, XmlPullParser parser) {
             mOnClicks.add(new TransitionOnClick(context, this, parser));
         }
@@ -550,9 +643,10 @@ public class MotionScene {
         /**
          * sets the autoTransitionType
          * On reaching a state auto transitions may be run based on
-         * one of AUTO_NONE, AUTO_JUMP_TO_START, AUTO_JUMP_TO_END, AUTO_ANIMATE_TO_START, AUTO_ANIMATE_TO_END
+         * one of AUTO_NONE, AUTO_JUMP_TO_START, AUTO_JUMP_TO_END, AUTO_ANIMATE_TO_START,
+         * AUTO_ANIMATE_TO_END
          *
-         * @return 0=NONE, 1=JUMP_TO_START, 2=JUMP_TO_END, 3=ANIMATE_TO_START, 4=ANIMATE_TO_END
+         * @param type
          */
         public void setAutoTransition(int type) {
             mAutoTransition = type;
@@ -560,7 +654,8 @@ public class MotionScene {
 
         /**
          * return the autoTransitionType.
-         * one of AUTO_NONE, AUTO_JUMP_TO_START, AUTO_JUMP_TO_END, AUTO_ANIMATE_TO_START, AUTO_ANIMATE_TO_END
+         * one of AUTO_NONE, AUTO_JUMP_TO_START, AUTO_JUMP_TO_END, AUTO_ANIMATE_TO_START,
+         * AUTO_ANIMATE_TO_END
          *
          * @return 0=NONE, 1=JUMP_TO_START, 2=JUMP_TO_END, 3=ANIMATE_TO_START, 4=ANIMATE_TO_END
          */
@@ -627,8 +722,9 @@ public class MotionScene {
             return mKeyFramesList;
         }
 
-        /*
-         *
+        /**
+         *  add a keyframe to this motion scene
+         * @param keyFrames
          */
         public void addKeyFrame(KeyFrames keyFrames) {
             mKeyFramesList.add(keyFrames);
@@ -736,6 +832,11 @@ public class MotionScene {
             return ret;
         }
 
+        /**
+         * is the transition flag set
+         * @param flag
+         * @return
+         */
         public boolean isTransitionFlag(int flag) {
             return 0 != (mTransitionFlags & flag);
         }
@@ -744,6 +845,10 @@ public class MotionScene {
             mTransitionFlags = flag;
         }
 
+        /**
+         * Set the on touch up mode
+         * @param touchUpMode
+         */
         public void setOnTouchUp(int touchUpMode) {
             TouchResponse touchResponse = getTouchResponse();
             if (touchResponse != null) {
@@ -751,23 +856,26 @@ public class MotionScene {
             }
         }
 
-       public static class TransitionOnClick implements View.OnClickListener {
-            private final Transition mTransition;
-            int mTargetId = UNSET;
-            int mMode = 0x11;
+        public static class TransitionOnClick implements View.OnClickListener {
             public static final int ANIM_TO_END = 0x0001;
             public static final int ANIM_TOGGLE = 0x0011;
             public static final int ANIM_TO_START = 0x0010;
             public static final int JUMP_TO_END = 0x100;
             public static final int JUMP_TO_START = 0x1000;
+            private final Transition mTransition;
+            int mTargetId = UNSET;
+            int mMode = 0x11;
 
-            public TransitionOnClick(Context context, Transition transition, XmlPullParser parser) {
+            public TransitionOnClick(Context context,
+                                     Transition transition,
+                                     XmlPullParser parser) {
                 mTransition = transition;
-                TypedArray a = context.obtainStyledAttributes(Xml.asAttributeSet(parser), R.styleable.OnClick);
-                final int N = a.getIndexCount();
-                for (int i = 0; i < N; i++) {
-                    int attr = a.getIndex(i);
-                    if (attr == R.styleable.OnClick_targetId) {
+                TypedArray a = context.obtainStyledAttributes(Xml.asAttributeSet(parser),
+                        R.styleable.OnClick);
+                final int count = a.getIndexCount();
+                for (int i = 0; i < count; i++) {
+                       int attr = a.getIndex(i);
+                       if (attr == R.styleable.OnClick_targetId) {
                         mTargetId = a.getResourceId(attr, mTargetId);
                     } else if (attr == R.styleable.OnClick_clickAction) {
                         mMode = a.getInt(attr, mMode);
@@ -782,7 +890,16 @@ public class MotionScene {
                 mMode = action;
             }
 
-            public void addOnClickListeners(MotionLayout motionLayout, int currentState, Transition transition) {
+            /**
+             * Add the on click listeners for the current state
+             *
+             * @param motionLayout
+             * @param currentState
+             * @param transition
+             */
+            public void addOnClickListeners(MotionLayout motionLayout,
+                                            int currentState,
+                                            Transition transition) {
                 View v = mTargetId == UNSET ? motionLayout : motionLayout.findViewById(mTargetId);
                 if (v == null) {
                     Log.e(TAG, "OnClick could not find id " + mTargetId);
@@ -806,6 +923,11 @@ public class MotionScene {
                 }
             }
 
+            /**
+             * Remove the OnClickListeners (typically called because you are removing the transition)
+             *
+             * @param motionLayout
+             */
             public void removeOnClickListeners(MotionLayout motionLayout) {
                 if (mTargetId == UNSET) {
                     return;
@@ -934,30 +1056,36 @@ public class MotionScene {
          * setInterpolatorInfo(MotionScene.Transition.INTERPOLATE_OVERSHOOT, null, 0);
          * <br>
          * Strings such as "cubic(...)" , "spline(...)"<br>
-         * setInterpolatorInfo(MotionScene.Transition.INTERPOLATE_SPLINE_STRING, "cubic(1,0,0,1)", 0);
+         * setInterpolatorInfo(
+         * MotionScene.Transition.INTERPOLATE_SPLINE_STRING, "cubic(1,0,0,1)", 0);
          * <br>
          * Android interpolators in res/anim : <br>
-         * setInterpolatorInfo(MotionScene.Transition.INTERPOLATE_REFERENCE_ID, null, R.anim....);
+         * setInterpolatorInfo(
+         * MotionScene.Transition.INTERPOLATE_REFERENCE_ID, null, R.anim....);
          * <br>
          * @param interpolator sets the type of interpolation (MotionScene.Transition.INTERPOLATE_*)
          * @param interpolatorString sets a string based custom interpolation
          * @param interpolatorID sets the id of a Android Transition
          */
-        public void setInterpolatorInfo(int interpolator, String interpolatorString, int interpolatorID) {
+        public void setInterpolatorInfo(int interpolator,
+                                        String interpolatorString,
+                                        int interpolatorID) {
             mDefaultInterpolator = interpolator;
             mDefaultInterpolatorString = interpolatorString;
             mDefaultInterpolatorID = interpolatorID;
         }
 
-        private void fillFromAttributeList(MotionScene motionScene, Context context, AttributeSet attrs) {
+        private void fillFromAttributeList(MotionScene motionScene,
+                                           Context context,
+                                           AttributeSet attrs) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Transition);
             fill(motionScene, context, a);
             a.recycle();
         }
 
         private void fill(MotionScene motionScene, Context context, TypedArray a) {
-            final int N = a.getIndexCount();
-            for (int i = 0; i < N; i++) {
+            final int count = a.getIndexCount();
+            for (int i = 0; i < count; i++) {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.Transition_constraintSetEnd) {
                     mConstraintSetEnd = a.getResourceId(attr, UNSET);
@@ -967,7 +1095,8 @@ public class MotionScene {
                         cSet.load(context, mConstraintSetEnd);
                         motionScene.mConstraintSetMap.append(mConstraintSetEnd, cSet);
                         if (DEBUG) {
-                            Log.v(TAG, " constraint Set end loaded from layout " + Debug.getName(context, mConstraintSetEnd));
+                            Log.v(TAG, " constraint Set end loaded from layout "
+                                    + Debug.getName(context, mConstraintSetEnd));
                         }
                     } else if ("xml".equals(type)) {
                         int id = motionScene.parseInclude(context, mConstraintSetEnd);
@@ -1068,8 +1197,8 @@ public class MotionScene {
         try {
             Transition transition = null;
             for (int eventType = parser.getEventType();
-                 eventType != XmlResourceParser.END_DOCUMENT;
-                 eventType = parser.next()) {
+                    eventType != XmlResourceParser.END_DOCUMENT;
+                    eventType = parser.next()) {
                 switch (eventType) {
                     case XmlResourceParser.START_DOCUMENT:
                         document = parser.getName();
@@ -1087,10 +1216,12 @@ public class MotionScene {
                                 parseMotionSceneTags(context, parser);
                                 break;
                             case TRANSITION_TAG:
-                                mTransitionList.add(transition = new Transition(this, context, parser));
+                                mTransitionList.add(transition =
+                                        new Transition(this, context, parser));
                                 if (mCurrentTransition == null && !transition.mIsAbstract) {
                                     mCurrentTransition = transition;
-                                    if (mCurrentTransition != null && mCurrentTransition.mTouchResponse != null) {
+                                    if (mCurrentTransition != null
+                                            && mCurrentTransition.mTouchResponse != null) {
                                         mCurrentTransition.mTouchResponse.setRTL(mRtl);
                                     }
                                 }
@@ -1105,12 +1236,14 @@ public class MotionScene {
                                 break;
                             case ONSWIPE_TAG:
                                 if (DEBUG || transition == null) {
-                                    String name = context.getResources().getResourceEntryName(resourceId);
+                                    String name = context.getResources()
+                                            .getResourceEntryName(resourceId);
                                     int line = parser.getLineNumber();
                                     Log.v(TAG, " OnSwipe (" + name + ".xml:" + line + ")");
                                 }
                                 if (transition != null) {
-                                    transition.mTouchResponse = new TouchResponse(context, mMotionLayout, parser);
+                                    transition.mTouchResponse =
+                                            new TouchResponse(context, mMotionLayout, parser);
                                 }
                                 break;
                             case ONCLICK_TAG:
@@ -1140,7 +1273,8 @@ public class MotionScene {
                                 break;
                             default:
                                 if (DEBUG) {
-                                    Log.v(TAG, getLine(context, resourceId, parser) + "WARNING UNKNOWN ATTRIBUTE " + tagName);
+                                    Log.v(TAG, getLine(context, resourceId, parser)
+                                            + "WARNING UNKNOWN ATTRIBUTE " + tagName);
                                 }
                                 break;
                         }
@@ -1204,9 +1338,10 @@ public class MotionScene {
     }
 
     private void parseInclude(Context context, XmlPullParser mainParser) {
-        TypedArray a = context.obtainStyledAttributes(Xml.asAttributeSet(mainParser), R.styleable.include);
-        final int N = a.getIndexCount();
-        for (int i = 0; i < N; i++) {
+        TypedArray a = context
+                .obtainStyledAttributes(Xml.asAttributeSet(mainParser), R.styleable.include);
+        final int count = a.getIndexCount();
+        for (int i = 0; i < count; i++) {
             int attr = a.getIndex(i);
             if (attr == R.styleable.include_constraintSet) {
                 int resourceId = a.getResourceId(attr, UNSET);
@@ -1231,12 +1366,14 @@ public class MotionScene {
             }
         } catch (XmlPullParserException e) {
             if (DEBUG) {
-                Log.v(TAG, getLine(context, resourceId, includeParser) + " " + e.getMessage());
+                Log.v(TAG, getLine(context, resourceId, includeParser)
+                        + " " + e.getMessage());
             }
             e.printStackTrace();
         } catch (IOException e) {
             if (DEBUG) {
-                Log.v(TAG, getLine(context, resourceId, includeParser) + " " + e.getMessage());
+                Log.v(TAG, getLine(context, resourceId, includeParser)
+                        + " " + e.getMessage());
             }
             e.printStackTrace();
         }
@@ -1307,6 +1444,12 @@ public class MotionScene {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
     }
 
+    /**
+     * Get the constraintSet given the id
+     * @param context
+     * @param id
+     * @return
+     */
     public ConstraintSet getConstraintSet(Context context, String id) {
         if (DEBUG_DESKTOP) {
             System.out.println("id " + id);
@@ -1316,7 +1459,8 @@ public class MotionScene {
             int key = mConstraintSetMap.keyAt(i);
             String IdAsString = context.getResources().getResourceName(key);
             if (DEBUG_DESKTOP) {
-                System.out.println("Id for <" + i + "> is <" + IdAsString + "> looking for <" + id + ">");
+                System.out.println("Id for <" + i + "> is <"
+                        + IdAsString + "> looking for <" + id + ">");
             }
             if (id.equals(IdAsString)) {
                 return mConstraintSetMap.get(key);
@@ -1341,7 +1485,8 @@ public class MotionScene {
             }
         }
         if (mConstraintSetMap.get(id) == null) {
-            Log.e(TAG, "Warning could not find ConstraintSet id/" + Debug.getName(mMotionLayout.getContext(), id) + " In MotionScene");
+            Log.e(TAG, "Warning could not find ConstraintSet id/"
+                    + Debug.getName(mMotionLayout.getContext(), id) + " In MotionScene");
             return mConstraintSetMap.get(mConstraintSetMap.keyAt(0));
         }
         return mConstraintSetMap.get(id);
@@ -1438,9 +1583,17 @@ public class MotionScene {
         return false;
     }
 
+    /**
+     * Set a keyFrame on the current Transition
+     * @param view
+     * @param position
+     * @param name
+     * @param value
+     */
     public void setKeyframe(View view, int position, String name, Object value) {
         if (DEBUG) {
-            System.out.println("setKeyframe for pos " + position + " name <" + name + "> value: " + value);
+            System.out.println("setKeyframe for pos " + position
+                    + " name <" + name + "> value: " + value);
         }
         if (mCurrentTransition == null) {
             return;
@@ -1472,13 +1625,17 @@ public class MotionScene {
                     if (v == 0) {
                         v = 0.01f;
                     }
-                    if (name.equalsIgnoreCase("app:PerpendicularPath_percent")) {
-                    }
                 }
             }
         }
     }
 
+    /**
+     * Get the path percent  (Non functional currently)
+     * @param view
+     * @param position
+     * @return
+     */
     public float getPathPercent(View view, int position) {
         return 0;
     }
@@ -1510,9 +1667,10 @@ public class MotionScene {
             float time = (event.getEventTime() % 100000) / 1000f;
             float x = event.getRawX();
             float y = event.getRawY();
-            Log.v(TAG, " " + time + "  processTouchEvent " +
-                    "state=" + Debug.getState(motionLayout, currentState)
-                    + "  " + Debug.getActionType(event) + " " + x + ", " + y + " \t " + motionLayout.getProgress());
+            Log.v(TAG, " " + time + "  processTouchEvent "
+                    + "state=" + Debug.getState(motionLayout, currentState)
+                    + "  " + Debug.getActionType(event) + " " + x
+                    + ", " + y + " \t " + motionLayout.getProgress());
         }
 
         if (currentState != -1) {
@@ -1524,14 +1682,18 @@ public class MotionScene {
                     mLastTouchDown = event;
                     mIgnoreTouch = false;
                     if (mCurrentTransition.mTouchResponse != null) {
-                        region = mCurrentTransition.mTouchResponse.getLimitBoundsTo(mMotionLayout, cache);
-                        if (region != null && !region.contains(mLastTouchDown.getX(), mLastTouchDown.getY())) {
+                        region = mCurrentTransition.mTouchResponse
+                                .getLimitBoundsTo(mMotionLayout, cache);
+                        if (region != null
+                                && !region.contains(mLastTouchDown.getX(), mLastTouchDown.getY())) {
                             mLastTouchDown = null;
                             mIgnoreTouch = true;
                             return;
                         }
-                        region = mCurrentTransition.mTouchResponse.getTouchRegion(mMotionLayout, cache);
-                        if (region != null && (!region.contains(mLastTouchDown.getX(), mLastTouchDown.getY()))) {
+                        region = mCurrentTransition.mTouchResponse
+                                .getTouchRegion(mMotionLayout, cache);
+                        if (region != null
+                                && (!region.contains(mLastTouchDown.getX(), mLastTouchDown.getY()))) {
                             mMotionOutsideRegion = true;
                         } else {
                             mMotionOutsideRegion = false;
@@ -1555,15 +1717,19 @@ public class MotionScene {
                         return;
                     }
 
-                    Transition transition = bestTransitionFor(currentState, dx, dy, mLastTouchDown);
+                    Transition transition =
+                            bestTransitionFor(currentState, dx, dy, mLastTouchDown);
                     if (DEBUG) {
-                        Log.v(TAG, Debug.getLocation() + " best Transition For " + dx + "," + dy + " " +
-                                ((transition == null) ? null : transition.debugString(mMotionLayout.getContext())));
+                        Log.v(TAG, Debug.getLocation() + " best Transition For "
+                                + dx + "," + dy + " " +
+                                ((transition == null) ? null
+                                        : transition.debugString(mMotionLayout.getContext())));
                     }
                     if (transition != null) {
 
                         motionLayout.setTransition(transition);
-                        region = mCurrentTransition.mTouchResponse.getTouchRegion(mMotionLayout, cache);
+                        region = mCurrentTransition
+                                .mTouchResponse.getTouchRegion(mMotionLayout, cache);
                         mMotionOutsideRegion = region != null
                                 && (!region.contains(mLastTouchDown.getX(), mLastTouchDown.getY()));
                         mCurrentTransition.mTouchResponse.setUpTouchEvent(mLastTouchX, mLastTouchY);
@@ -1573,8 +1739,10 @@ public class MotionScene {
         if (mIgnoreTouch) {
             return;
         }
-        if (mCurrentTransition != null && mCurrentTransition.mTouchResponse != null && !mMotionOutsideRegion) {
-            mCurrentTransition.mTouchResponse.processTouchEvent(event, mVelocityTracker, currentState, this);
+        if (mCurrentTransition != null && mCurrentTransition.mTouchResponse != null
+                && !mMotionOutsideRegion) {
+            mCurrentTransition.mTouchResponse.processTouchEvent(event,
+                    mVelocityTracker, currentState, this);
         }
 
         mLastTouchX = event.getRawX();
@@ -1641,10 +1809,15 @@ public class MotionScene {
     static final int OVERSHOOT = 5;
     static final int ANTICIPATE = 6;
 
+    /**
+     * Get the interpolator define for the current Transition
+     * @return
+     */
     public Interpolator getInterpolator() {
         switch (mCurrentTransition.mDefaultInterpolator) {
             case SPLINE_STRING:
-                final Easing easing = Easing.getInterpolator(mCurrentTransition.mDefaultInterpolatorString);
+                final Easing easing = Easing
+                        .getInterpolator(mCurrentTransition.mDefaultInterpolatorString);
                 return new Interpolator() {
                     @Override
                     public float getInterpolation(float v) {
@@ -1697,6 +1870,10 @@ public class MotionScene {
         }
     }
 
+    /**
+     * The transition arc path mode
+     * @return
+     */
     public int gatPathMotionArc() {
         return (mCurrentTransition != null) ? mCurrentTransition.mPathMotionArc : UNSET;
     }
@@ -1784,6 +1961,7 @@ public class MotionScene {
      * read the constraints from the inflation of the ConstraintLayout
      * If the constraintset does not contain information about a view this information is used
      * as a "fallback" position.
+     *
      * @param motionLayout
      */
     void readFallback(MotionLayout motionLayout) {
@@ -1794,7 +1972,7 @@ public class MotionScene {
                 Log.e(TAG, "Cannot be derived from yourself");
                 return;
             }
-            readConstraintChain(key,motionLayout);
+            readConstraintChain(key, motionLayout);
         }
     }
 
@@ -1821,7 +1999,7 @@ public class MotionScene {
 
     /**
      * Recursive descent of the deriveConstraintsFrom tree reading the motionLayout if
-     * needed. 
+     * needed.
      *
      * @param key
      */
@@ -1833,11 +2011,11 @@ public class MotionScene {
             readConstraintChain(derivedFromId, motionLayout);
             ConstraintSet derivedFrom = mConstraintSetMap.get(derivedFromId);
             if (derivedFrom == null) {
-                Log.e(TAG, "ERROR! invalid deriveConstraintsFrom: @id/" +
-                        Debug.getName(mMotionLayout.getContext(), derivedFromId));
+                Log.e(TAG, "ERROR! invalid deriveConstraintsFrom: @id/"
+                        + Debug.getName(mMotionLayout.getContext(), derivedFromId));
                 return;
             }
-            cs.derivedState += "/"+ derivedFrom.derivedState;
+            cs.derivedState += "/" + derivedFrom.derivedState;
             cs.readFallback(derivedFrom);
         } else {
             cs.derivedState += "  layout";
@@ -1846,6 +2024,11 @@ public class MotionScene {
         cs.applyDeltaFrom(cs);
     }
 
+    /**
+     * Utility to strip the @id/ from an id
+     * @param id
+     * @return
+     */
     public static String stripID(String id) {
         if (id == null) {
             return "";
@@ -1909,7 +2092,7 @@ public class MotionScene {
      * @return
      */
     static String getLine(Context context, int resourceId, XmlPullParser pullParser) {
-        return ".(" + Debug.getName(context, resourceId) + ".xml:" + pullParser.getLineNumber() +
-                ") \"" + pullParser.getName() + "\"";
+        return ".(" + Debug.getName(context, resourceId) + ".xml:" + pullParser.getLineNumber()
+                + ") \"" + pullParser.getName() + "\"";
     }
 }

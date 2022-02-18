@@ -20,16 +20,17 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import androidx.constraintlayout.core.widgets.ConstraintWidget;
-import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
-import androidx.constraintlayout.core.widgets.Helper;
-import androidx.constraintlayout.core.widgets.HelperWidget;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
+import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
+import androidx.constraintlayout.core.widgets.Helper;
+import androidx.constraintlayout.core.widgets.HelperWidget;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -39,8 +40,10 @@ import java.util.HashMap;
  * @hide
  * <b>Added in 1.1</b>
  * <p>
- *     This class manages a set of referenced widgets. HelperWidget objects can be created to act upon the set
- *     of referenced widgets. The difference between {@code ConstraintHelper} and {@code ViewGroup} is that
+ *     This class manages a set of referenced widgets. HelperWidget objects can be
+ *     created to act upon the set
+ *     of referenced widgets. The difference between {@code ConstraintHelper} and
+ *     {@code ViewGroup} is that
  *     multiple {@code ConstraintHelper} can reference the same widgets.
  * <p>
  *     Widgets are referenced by being added to a comma separated list of ids, e.g.:
@@ -118,9 +121,10 @@ public abstract class ConstraintHelper extends View {
      */
     protected void init(AttributeSet attrs) {
         if (attrs != null) {
-            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ConstraintLayout_Layout);
-            final int N = a.getIndexCount();
-            for (int i = 0; i < N; i++) {
+            TypedArray a = getContext().obtainStyledAttributes(attrs,
+                    R.styleable.ConstraintLayout_Layout);
+            final int count = a.getIndexCount();
+            for (int i = 0; i < count; i++) {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.ConstraintLayout_Layout_constraint_referenced_ids) {
                     mReferenceIds = a.getString(attr);
@@ -184,7 +188,7 @@ public abstract class ConstraintHelper extends View {
         for (int i = 0; i < mCount; i++) {
             if (mIds[i] == id) {
                 index = i;
-                for (int j = i; j < mCount -1; j++) {
+                for (int j = i; j < mCount - 1; j++) {
                     mIds[j] = mIds[j + 1];
                 }
                 mIds[mCount - 1] = 0;
@@ -283,10 +287,11 @@ public abstract class ConstraintHelper extends View {
         }
         int rscId = findId(idString);
         if (rscId != 0) {
-            mMap.put(rscId, idString); // let's remember the idString used, as we may need it for dynamic modules
+            mMap.put(rscId, idString); // let's remember the idString used,
+            // as we may need it for dynamic modules
             addRscID(rscId);
         } else {
-            Log.w("ConstraintHelper", "Could not find id of \""+idString+"\"");
+            Log.w("ConstraintHelper", "Could not find id of \"" + idString + "\"");
         }
     }
 
@@ -319,7 +324,8 @@ public abstract class ConstraintHelper extends View {
                 ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) params;
                 if (tagString.equals(lp.constraintTag)) {
                     if (v.getId() == View.NO_ID) {
-                        Log.w("ConstraintHelper", "to use ConstraintTag view "+v.getClass().getSimpleName()+" must have an ID");
+                        Log.w("ConstraintHelper", "to use ConstraintTag view "
+                                + v.getClass().getSimpleName() + " must have an ID");
                     } else {
                         addRscID(v.getId());
                     }
@@ -466,7 +472,9 @@ public abstract class ConstraintHelper extends View {
             View view = container.getViewById(id);
             if (view != null) {
                 view.setVisibility(visibility);
-                if (elevation > 0 && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                if (elevation > 0
+                        && android.os.Build.VERSION.SDK_INT
+                        >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                     view.setTranslationZ(view.getTranslationZ() + elevation);
                 }
             }
@@ -490,7 +498,8 @@ public abstract class ConstraintHelper extends View {
 
     /**
      * @suppress
-     * Allows a helper a chance to update its internal object pre layout or set up connections for the pointed elements
+     * Allows a helper a chance to update its internal object pre layout or
+     * set up connections for the pointed elements
      *
      * @param container
      */
@@ -523,6 +532,12 @@ public abstract class ConstraintHelper extends View {
         mHelperWidget.updateConstraints(container.mLayoutWidget);
     }
 
+    /**
+     * called before solver resolution
+     * @param container
+     * @param helper
+     * @param map
+     */
     public void updatePreLayout(ConstraintWidgetContainer container,
                                 Helper helper,
                                 SparseArray<ConstraintWidget> map) {
@@ -548,7 +563,8 @@ public abstract class ConstraintHelper extends View {
 
     /**
      * @suppress
-     * Allows a helper a chance to update its internal object post layout or set up connections for the pointed elements
+     * Allows a helper a chance to update its internal object post layout or
+     * set up connections for the pointed elements
      *
      * @param container
      */
@@ -564,16 +580,34 @@ public abstract class ConstraintHelper extends View {
         // Do nothing
     }
 
+    /**
+     * update after constraints are resolved
+     * @param container
+     */
     public void updatePostConstraints(ConstraintLayout container) {
         // Do nothing
     }
 
+    /**
+     * called before the draw
+     * @param container
+     */
     public void updatePreDraw(ConstraintLayout container) {
         // Do nothing
     }
 
-    public void loadParameters(ConstraintSet.Constraint constraint, HelperWidget child, ConstraintLayout.LayoutParams layoutParams, SparseArray<ConstraintWidget> mapIdToWidget) {
-        // TODO: we need to rethink this -- the list of referenced views shouldn't be resolved at updatePreLayout stage,
+    /**
+     * Load the parameters
+     * @param constraint
+     * @param child
+     * @param layoutParams
+     * @param mapIdToWidget
+     */
+    public void loadParameters(ConstraintSet.Constraint constraint,
+                               HelperWidget child,
+                               ConstraintLayout.LayoutParams layoutParams,
+                               SparseArray<ConstraintWidget> mapIdToWidget) {
+        // TODO: rethink this. The list of views shouldn't be resolved at updatePreLayout stage,
         // as this makes changing referenced views tricky at runtime
         if (constraint.layout.mReferenceIds != null) {
             setReferencedIds(constraint.layout.mReferenceIds);
@@ -618,6 +652,11 @@ public abstract class ConstraintHelper extends View {
         return rscIds;
     }
 
+    /**
+     * resolve the RTL
+     * @param widget
+     * @param isRtl
+     */
     public void resolveRtl(ConstraintWidget widget, boolean isRtl) {
         // nothing here
     }
@@ -630,10 +669,16 @@ public abstract class ConstraintHelper extends View {
         }
     }
 
+    /**
+     * does id table contain the id
+     *
+     * @param id
+     * @return
+     */
     public boolean containsId(final int id) {
         boolean result = false;
-        for(int i : mIds){
-            if(i == id){
+        for (int i : mIds) {
+            if (i == id) {
                 result = true;
                 break;
             }
@@ -641,11 +686,17 @@ public abstract class ConstraintHelper extends View {
         return result;
     }
 
+    /**
+     * find the position of an id
+     *
+     * @param id
+     * @return
+     */
     public int indexFromId(final int id) {
         int index = -1;
-        for(int i : mIds) {
+        for (int i : mIds) {
             index++;
-            if(i == id){
+            if (i == id) {
                 return index;
             }
         }

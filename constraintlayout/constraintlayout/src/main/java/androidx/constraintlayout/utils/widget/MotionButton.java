@@ -19,12 +19,9 @@ package androidx.constraintlayout.utils.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Outline;
 import android.graphics.Path;
 import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
@@ -82,8 +79,8 @@ public class MotionButton extends androidx.appcompat.widget.AppCompatButton {
         if (attrs != null) {
             TypedArray a = getContext()
                     .obtainStyledAttributes(attrs, R.styleable.ImageFilterView);
-            final int N = a.getIndexCount();
-            for (int i = 0; i < N; i++) {
+            final int count = a.getIndexCount();
+            for (int i = 0; i < count; i++) {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.ImageFilterView_round) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

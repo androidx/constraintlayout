@@ -153,7 +153,8 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
                 }
                 if (centiKelvin < 66) {
                     if (centiKelvin > 19) {
-                        colorB = (138.5177312231f * (float) Math.log(centiKelvin - 10) - 305.0447927307f);
+                        colorB = (138.5177312231f
+                                * (float) Math.log(centiKelvin - 10) - 305.0447927307f);
                     } else {
                         colorB = 0;
                     }
@@ -183,7 +184,8 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
                 }
                 if (centiKelvin < 66) {
                     if (centiKelvin > 19) {
-                        colorB = (138.5177312231f * (float) Math.log(centiKelvin - 10) - 305.0447927307f);
+                        colorB = (138.5177312231f
+                                * (float) Math.log(centiKelvin - 10) - 305.0447927307f);
                     } else {
                         colorB = 0;
                     }
@@ -313,8 +315,10 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
     /**
      * Gets the pan from the center
      * pan of 1 the image is "all the way to the right"
-     * if the images width is greater than the screen width, pan = 1 results in the left edge lining up
-     * if the images width is less than the screen width, pan = 1 results in the right edges lining up
+     * if the images width is greater than the screen width,
+     * pan = 1 results in the left edge lining up
+     * if the images width is less than the screen width,
+     * pan = 1 results in the right edges lining up
      * if image width == screen width it does nothing
      *
      * @return the pan in X. Where 0 is centered = Float. NaN if not set
@@ -326,8 +330,10 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
     /**
      * gets the pan from the center
      * pan of 1 the image is "all the way to the bottom"
-     * if the images width is greater than the screen height, pan = 1 results in the bottom edge lining up
-     * if the images width is less than the screen height, pan = 1 results in the top edges lining up
+     * if the images width is greater than the screen height,
+     * pan = 1 results in the bottom edge lining up
+     * if the images width is less than the screen height,
+     * pan = 1 results in the top edges lining up
      * if image height == screen height it does nothing
      *
      * @return pan in y. Where 0 is centered NaN if not set
@@ -357,8 +363,10 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
     /**
      * sets the pan from the center
      * pan of 1 the image is "all the way to the right"
-     * if the images width is greater than the screen width, pan = 1 results in the left edge lining up
-     * if the images width is less than the screen width, pan = 1 results in the right edges lining up
+     * if the images width is greater than the screen width,
+     * pan = 1 results in the left edge lining up
+     * if the images width is less than the screen width,
+     * pan = 1 results in the right edges lining up
      * if image width == screen width it does nothing
      *
      * @param pan sets the pan in X. Where 0 is centered
@@ -371,8 +379,10 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
     /**
      * sets the pan from the center
      * pan of 1 the image is "all the way to the bottom"
-     * if the images width is greater than the screen height, pan = 1 results in the bottom edge lining up
-     * if the images width is less than the screen height, pan = 1 results in the top edges lining up
+     * if the images width is greater than the screen height,
+     * pan = 1 results in the bottom edge lining up
+     * if the images width is less than the screen height,
+     * pan = 1 results in the top edges lining up
      * if image height == screen height it does nothing
      *
      * @param pan sets the pan in X. Where 0 is centered
@@ -404,7 +414,7 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
 
     @Override
     public void setImageDrawable(Drawable drawable) {
-        if (mAltDrawable != null && drawable !=null) {
+        if (mAltDrawable != null && drawable != null) {
             mDrawable = drawable.mutate();
             mLayers[0] = mDrawable;
             mLayers[1] = mAltDrawable;
@@ -430,6 +440,10 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
         }
     }
 
+    /**
+     * Set the alternative Image resource used in cross fading
+     * @param resId id of drawable
+     */
     public void setAltImageResource(int resId) {
         mAltDrawable = AppCompatResources.getDrawable(getContext(), resId).mutate();
         mLayers[0] = mDrawable;
@@ -440,10 +454,10 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
     }
 
     private void updateViewMatrix() {
-        if (Float.isNaN(mPanX) &&
-                Float.isNaN(mPanY) &&
-                Float.isNaN(mZoom) &&
-                Float.isNaN(mRotate)
+        if (Float.isNaN(mPanX)
+                && Float.isNaN(mPanY)
+                && Float.isNaN(mZoom)
+                && Float.isNaN(mRotate)
         ) {
             setScaleType(ScaleType.FIT_CENTER);
             return;
@@ -452,10 +466,10 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
     }
 
     private void setMatrix() {
-        if (Float.isNaN(mPanX) &&
-                Float.isNaN(mPanY) &&
-                Float.isNaN(mZoom) &&
-                Float.isNaN(mRotate)
+        if (Float.isNaN(mPanX)
+                && Float.isNaN(mPanY)
+                && Float.isNaN(mZoom)
+                && Float.isNaN(mRotate)
         ) {
             return;
         }
@@ -498,10 +512,10 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
         if (attrs != null) {
             TypedArray a = getContext()
                     .obtainStyledAttributes(attrs, R.styleable.ImageFilterView);
-            final int N = a.getIndexCount();
+            final int count = a.getIndexCount();
             mAltDrawable = a.getDrawable(R.styleable.ImageFilterView_altSrc);
 
-            for (int i = 0; i < N; i++) {
+            for (int i = 0; i < count; i++) {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.ImageFilterView_crossfade) {
                     mCrossfade = a.getFloat(attr, 0);
@@ -557,7 +571,8 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
     }
 
     /**
-     * Defines whether the alt image will be faded in on top of the original image or if it will be crossfaded with it.
+     * Defines whether the alt image will be faded in on top
+     * of the original image or if it will be crossfaded with it.
      * Default is true;
      *
      * @param overlay

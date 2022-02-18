@@ -50,6 +50,13 @@ public class ConstraintLayoutStates {
         load(context, resourceID);
     }
 
+    /**
+     * Return true if it needs to change
+     * @param id
+     * @param width
+     * @param height
+     * @return
+     */
     public boolean needsToChange(int id, float width, float height) {
         if (mCurrentStateId != id) {
             return true;
@@ -69,6 +76,12 @@ public class ConstraintLayoutStates {
         return true;
     }
 
+    /**
+     * updateConstraints for the view with the id and width and height
+     * @param id
+     * @param width
+     * @param height
+     */
     public void updateConstraints(int id, float width, float height) {
         if (mCurrentStateId == id) {
             State state;
@@ -114,7 +127,8 @@ public class ConstraintLayoutStates {
                     state.mVariants.get(match).mConstraintID;
 
             if (constraintSet == null) {
-                Log.v(TAG, "NO Constraint set found ! id=" + id + ", dim =" + width + ", " + height);
+                Log.v(TAG, "NO Constraint set found ! id=" + id
+                        + ", dim =" + width + ", " + height);
                 return;
             }
             mCurrentConstraintNumber = match;
@@ -190,15 +204,15 @@ public class ConstraintLayoutStates {
         int mConstraintID = -1;
         ConstraintSet mConstraintSet;
 
-        public Variant(Context context, XmlPullParser parser) {
+        Variant(Context context, XmlPullParser parser) {
             AttributeSet attrs = Xml.asAttributeSet(parser);
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Variant);
-            final int N = a.getIndexCount();
+            final int count = a.getIndexCount();
             if (DEBUG) {
                 Log.v(TAG, "############### Variant");
             }
 
-            for (int i = 0; i < N; i++) {
+            for (int i = 0; i < count; i++) {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.Variant_constraints) {
                     mConstraintID = a.getResourceId(attr, mConstraintID);
@@ -216,7 +230,8 @@ public class ConstraintLayoutStates {
                         }
                     } else {
                         if (DEBUG) {
-                            Log.v(TAG, "############### id -> ConstraintSet should be in this file");
+                            Log.v(TAG, "############### id -> "
+                                    + "ConstraintSet should be in this file");
                         }
 
                     }
@@ -252,8 +267,10 @@ public class ConstraintLayoutStates {
 
         boolean match(float widthDp, float heightDp) {
             if (DEBUG) {
-                Log.v(TAG, "width = " + (int) widthDp + " < " + mMinWidth + " && " + (int) widthDp + " > " + mMaxWidth +
-                        " height = " + (int) heightDp + " < " + mMinHeight + " && " + (int) heightDp + " > " + mMaxHeight);
+                Log.v(TAG, "width = " + (int) widthDp
+                        + " < " + mMinWidth + " && " + (int) widthDp + " > " + mMaxWidth
+                        + " height = " + (int) heightDp
+                        + " < " + mMinHeight + " && " + (int) heightDp + " > " + mMaxHeight);
             }
             if (!Float.isNaN(mMinWidth)) {
                 if (widthDp < mMinWidth) return false;
@@ -290,8 +307,8 @@ public class ConstraintLayoutStates {
             Variant match;
             State state = null;
             for (int eventType = parser.getEventType();
-                 eventType != XmlResourceParser.END_DOCUMENT;
-                 eventType = parser.next()) {
+                    eventType != XmlResourceParser.END_DOCUMENT;
+                    eventType = parser.next()) {
                 switch (eventType) {
                     case XmlResourceParser.START_DOCUMENT:
                         document = parser.getName();

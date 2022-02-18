@@ -21,15 +21,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import androidx.constraintlayout.widget.R;
-import androidx.constraintlayout.motion.widget.Debug;
-import androidx.constraintlayout.motion.widget.MotionLayout;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.View;
 import android.view.ViewParent;
+
+import androidx.constraintlayout.motion.widget.MotionLayout;
+import androidx.constraintlayout.widget.R;
 
 /**
  * A view that is useful for prototyping Views that will move in MotionLayout. <b>Added in 2.0</b>
@@ -51,33 +47,34 @@ public class MotionTelltales extends MockView {
     int mVelocityMode = MotionLayout.VELOCITY_POST_LAYOUT;
     int mTailColor = Color.MAGENTA;
     float mTailScale = 0.25f;
+
     public MotionTelltales(Context context) {
         super(context);
-        init( context, null);
+        init(context, null);
     }
 
     public MotionTelltales(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init( context, attrs);
-     }
+        init(context, attrs);
+    }
 
     public MotionTelltales(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init( context, attrs);
-
+        init(context, attrs);
     }
+
     private void init(Context context, AttributeSet attrs) {
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MotionTelltales);
-            final int N = a.getIndexCount();
-            for (int i = 0; i < N; i++) {
+            final int count = a.getIndexCount();
+            for (int i = 0; i < count; i++) {
                 int attr = a.getIndex(i);
-                    if (attr == R.styleable.MotionTelltales_telltales_tailColor) {
-                        mTailColor = a.getColor(attr, mTailColor);
+                if (attr == R.styleable.MotionTelltales_telltales_tailColor) {
+                    mTailColor = a.getColor(attr, mTailColor);
                 } else if (attr == R.styleable.MotionTelltales_telltales_velocityMode) {
-                        mVelocityMode = a.getInt(attr, mVelocityMode);
+                    mVelocityMode = a.getInt(attr, mVelocityMode);
                 } else if (attr == R.styleable.MotionTelltales_telltales_tailScale) {
-                        mTailScale = a.getFloat(attr, mTailScale);
+                    mTailScale = a.getFloat(attr, mTailScale);
                 }
             }
             a.recycle();
@@ -91,6 +88,11 @@ public class MotionTelltales extends MockView {
         super.onAttachedToWindow();
 
     }
+
+    /**
+     * set the text
+     * @param text
+     */
     public void setText(CharSequence text) {
         mText = text.toString();
         requestLayout();
@@ -104,36 +106,34 @@ public class MotionTelltales extends MockView {
 
     @Override
     public void onDraw(Canvas canvas) {
-       super.onDraw(canvas);
+        super.onDraw(canvas);
         Matrix matrix = getMatrix();
         matrix.invert(mInvertMatrix);
         if (mMotionLayout == null) {
             ViewParent vp = getParent();
-            if (vp instanceof MotionLayout){
+            if (vp instanceof MotionLayout) {
                 mMotionLayout = (MotionLayout) vp;
             }
             return;
         }
         int width = getWidth();
         int height = getHeight();
-        float []f = {0.1f,0.25f,0.5f,0.75f,0.9f};
+        float[] f = {0.1f, 0.25f, 0.5f, 0.75f, 0.9f};
         for (int y = 0; y < f.length; y++) {
             float py = f[y];
             for (int x = 0; x < f.length; x++) {
                 float px = f[x];
-                mMotionLayout.getViewVelocity(this,px,py, velocity, mVelocityMode);
+                mMotionLayout.getViewVelocity(this, px, py, velocity, mVelocityMode);
                 mInvertMatrix.mapVectors(velocity);
 
-                float sx =  (width*px);
-                float sy =   (height*py);
-                float ex = sx - (velocity[0]*mTailScale);
-                float ey = sy -  (velocity[1]*mTailScale);
+                float sx = (width * px);
+                float sy = (height * py);
+                float ex = sx - (velocity[0] * mTailScale);
+                float ey = sy - (velocity[1] * mTailScale);
                 mInvertMatrix.mapVectors(velocity);
-                canvas.drawLine(sx,sy,ex,ey,mPaintTelltales);
+                canvas.drawLine(sx, sy, ex, ey, mPaintTelltales);
             }
 
         }
-//        Log.v(TAG, Debug.getLocation()+">>>>>>>>>>onDraw>>"+velocity[0]+","+velocity[1]+" dx,dy");
-
     }
 }

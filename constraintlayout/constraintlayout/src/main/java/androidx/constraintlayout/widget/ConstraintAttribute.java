@@ -26,8 +26,6 @@ import android.util.TypedValue;
 import android.util.Xml;
 import android.view.View;
 
-import androidx.constraintlayout.motion.widget.Debug;
-
 import org.xmlpull.v1.XmlPullParser;
 
 import java.lang.reflect.InvocationTargetException;
@@ -98,14 +96,14 @@ public class ConstraintAttribute {
      * @return
      */
     public boolean isContinuous() {
-       switch (mType) {
-           case REFERENCE_TYPE:
-           case BOOLEAN_TYPE:
-           case STRING_TYPE:
-               return false;
-           default:
-               return true;
-       }
+        switch (mType) {
+            case REFERENCE_TYPE:
+            case BOOLEAN_TYPE:
+            case STRING_TYPE:
+                return false;
+            default:
+                return true;
+        }
     }
 
     public void setFloatValue(float value) {
@@ -164,6 +162,10 @@ public class ConstraintAttribute {
         return Float.NaN;
     }
 
+    /**
+     * populate the float array with colors it will fill 4 values
+     * @param ret
+     */
     public void getValuesToInterpolate(float[] ret) {
         switch (mType) {
             case INT_TYPE:
@@ -197,6 +199,10 @@ public class ConstraintAttribute {
         }
     }
 
+    /**
+     * setValue based on the values in the array
+     * @param value
+     */
     public void setValue(float[] value) {
         switch (mType) {
             case REFERENCE_TYPE:
@@ -256,7 +262,10 @@ public class ConstraintAttribute {
         mType = attributeType;
     }
 
-    public ConstraintAttribute(String name, AttributeType attributeType, Object value, boolean method) {
+    public ConstraintAttribute(String name,
+                               AttributeType attributeType,
+                               Object value,
+                               boolean method) {
         mName = name;
         mType = attributeType;
         mMethod = method;
@@ -267,9 +276,12 @@ public class ConstraintAttribute {
         mName = source.mName;
         mType = source.mType;
         setValue(value);
-
     }
 
+    /**
+     * set the value based on casting the object
+     * @param value
+     */
     public void setValue(Object value) {
         switch (mType) {
             case REFERENCE_TYPE:
@@ -295,6 +307,12 @@ public class ConstraintAttribute {
         }
     }
 
+    /**
+     * extract attributes from the view
+     * @param base
+     * @param view
+     * @return
+     */
     public static HashMap<String, ConstraintAttribute> extractAttributes(
             HashMap<String, ConstraintAttribute> base, View view) {
         HashMap<String, ConstraintAttribute> ret = new HashMap<>();
@@ -324,6 +342,11 @@ public class ConstraintAttribute {
         return ret;
     }
 
+    /**
+     * set attributes from map on to the view
+     * @param view
+     * @param map
+     */
     public static void setAttributes(View view, HashMap<String, ConstraintAttribute> map) {
         Class<? extends View> viewClass = view.getClass();
         for (String name : map.keySet()) {
@@ -371,18 +394,25 @@ public class ConstraintAttribute {
                 }
             } catch (NoSuchMethodException e) {
                 Log.e(TAG, e.getMessage());
-                Log.e(TAG, " Custom Attribute \"" + name + "\" not found on " + viewClass.getName());
+                Log.e(TAG, " Custom Attribute \"" + name
+                        + "\" not found on " + viewClass.getName());
                 Log.e(TAG, viewClass.getName() + " must have a method " + methodName);
             } catch (IllegalAccessException e) {
-                Log.e(TAG, " Custom Attribute \"" + name + "\" not found on " + viewClass.getName());
+                Log.e(TAG, " Custom Attribute \"" + name
+                        + "\" not found on " + viewClass.getName());
                 e.printStackTrace();
             } catch (InvocationTargetException e) {
-                Log.e(TAG, " Custom Attribute \"" + name + "\" not found on " + viewClass.getName());
+                Log.e(TAG, " Custom Attribute \"" + name
+                        + "\" not found on " + viewClass.getName());
                 e.printStackTrace();
             }
         }
     }
 
+    /**
+     * Apply custom attributes to the view
+     * @param view
+     */
     public void applyCustom(View view) {
         Class<? extends View> viewClass = view.getClass();
         String name = this.mName;
@@ -440,23 +470,31 @@ public class ConstraintAttribute {
     }
 
     private static int clamp(int c) {
-        int N = 255;
+        int n = 255;
         c &= ~(c >> 31);
-        c -= N;
+        c -= n;
         c &= (c >> 31);
-        c += N;
+        c += n;
         return c;
     }
 
-    public static void parse(Context context, XmlPullParser parser, HashMap<String, ConstraintAttribute> custom) {
+    /**
+     * parse Custom attributes and fill Custom
+     * @param context
+     * @param parser
+     * @param custom
+     */
+    public static void parse(Context context,
+                             XmlPullParser parser,
+                             HashMap<String, ConstraintAttribute> custom) {
         AttributeSet attributeSet = Xml.asAttributeSet(parser);
         TypedArray a = context.obtainStyledAttributes(attributeSet, R.styleable.CustomAttribute);
         String name = null;
         boolean method = false;
         Object value = null;
         AttributeType type = null;
-        final int N = a.getIndexCount();
-        for (int i = 0; i < N; i++) {
+        final int count = a.getIndexCount();
+        for (int i = 0; i < count; i++) {
             int attr = a.getIndex(i);
             if (attr == R.styleable.CustomAttribute_attributeName) {
                 name = a.getString(attr);

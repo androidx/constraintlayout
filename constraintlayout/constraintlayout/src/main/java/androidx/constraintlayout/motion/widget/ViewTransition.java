@@ -174,6 +174,10 @@ public class ViewTransition {
         this.mSharedValueID = sharedValueID;
     }
 
+    /**
+     * debug string for a ViewTransition
+     * @return
+     */
     public String toString() {
         return "ViewTransition(" + Debug.getName(mContext, mId) + ")";
     }
@@ -215,8 +219,8 @@ public class ViewTransition {
         try {
             Key key = null;
             for (int eventType = parser.getEventType();
-                 eventType != XmlResourceParser.END_DOCUMENT;
-                 eventType = parser.next()) {
+                    eventType != XmlResourceParser.END_DOCUMENT;
+                    eventType = parser.next()) {
                 switch (eventType) {
                     case XmlResourceParser.START_DOCUMENT:
                         break;
@@ -234,7 +238,8 @@ public class ViewTransition {
                                 break;
                             case CUSTOM_ATTRIBUTE:
                             case CUSTOM_METHOD:
-                                ConstraintAttribute.parse(context, parser, mConstraintDelta.mCustomConstraints);
+                                ConstraintAttribute.parse(context, parser,
+                                        mConstraintDelta.mCustomConstraints);
                                 break;
                             default:
                                 Log.e(TAG, Debug.getLoc() + " unknown tag " + tagName);
@@ -300,7 +305,8 @@ public class ViewTransition {
                     }
                 } else if (type.type == TypedValue.TYPE_STRING) {
                     mDefaultInterpolatorString = a.getString(attr);
-                    if (mDefaultInterpolatorString != null && mDefaultInterpolatorString.indexOf("/") > 0) {
+                    if (mDefaultInterpolatorString != null
+                            && mDefaultInterpolatorString.indexOf("/") > 0) {
                         mDefaultInterpolatorID = a.getResourceId(attr, UNSET);
                         mDefaultInterpolator = INTERPOLATOR_REFERENCE_ID;
                     } else {
@@ -326,11 +332,14 @@ public class ViewTransition {
         a.recycle();
     }
 
-    void applyIndependentTransition(ViewTransitionController controller, MotionLayout motionLayout, View view) {
+    void applyIndependentTransition(ViewTransitionController controller,
+                                    MotionLayout motionLayout,
+                                    View view) {
         MotionController motionController = new MotionController(view);
         motionController.setBothStates(view);
         mKeyFrames.addAllFrames(motionController);
-        motionController.setup(motionLayout.getWidth(), motionLayout.getHeight(), mDuration, System.nanoTime());
+        motionController.setup(motionLayout.getWidth(), motionLayout.getHeight(),
+                mDuration, System.nanoTime());
         new Animate(controller, motionController,
                 mDuration, mUpDuration, mOnStateTransition,
                 getInterpolator(motionLayout.getContext()), mSetsTag, mClearsTag);
@@ -401,7 +410,8 @@ public class ViewTransition {
                 mPosition = 0.0f;
             }
 
-            float ipos = (mInterpolator == null) ? mPosition : mInterpolator.getInterpolation(mPosition);
+            float ipos = (mInterpolator == null) ? mPosition
+                    : mInterpolator.getInterpolation(mPosition);
             boolean repaint = mMC.interpolate(mMC.mView, ipos, current, mCache);
 
             if (mPosition <= 0) {
@@ -429,9 +439,9 @@ public class ViewTransition {
                 mPosition = 1.0f;
             }
 
-            float ipos = (mInterpolator == null) ? mPosition : mInterpolator.getInterpolation(mPosition);
+            float ipos = (mInterpolator == null) ? mPosition
+                    : mInterpolator.getInterpolation(mPosition);
             boolean repaint = mMC.interpolate(mMC.mView, ipos, current, mCache);
-
 
             if (mPosition >= 1) {
                 if (mSetsTag != UNSET) {
@@ -460,8 +470,9 @@ public class ViewTransition {
                     View view = mMC.getView();
                     view.getHitRect(mTempRec);
                     if (!mTempRec.contains((int) x, (int) y)) {
-                        if (!reverse)
+                        if (!reverse) {
                             reverse(true);
+                        }
                     }
             }
         }
@@ -510,7 +521,8 @@ public class ViewTransition {
         layout.updateState(fromId, transformedState);
         layout.updateState(R.id.view_transition, current);
         layout.setState(R.id.view_transition, -1, -1);
-        MotionScene.Transition tmpTransition = new MotionScene.Transition(-1, layout.mScene, R.id.view_transition, fromId);
+        MotionScene.Transition tmpTransition =
+                new MotionScene.Transition(-1, layout.mScene, R.id.view_transition, fromId);
         for (View view : views) {
             updateTransition(tmpTransition, view);
         }
@@ -534,7 +546,8 @@ public class ViewTransition {
             transition.setDuration(mDuration);
         }
         transition.setPathMotionArc(mPathMotionArc);
-        transition.setInterpolatorInfo(mDefaultInterpolator, mDefaultInterpolatorString, mDefaultInterpolatorID);
+        transition.setInterpolatorInfo(mDefaultInterpolator,
+                mDefaultInterpolatorString, mDefaultInterpolatorID);
         int id = view.getId();
         if (mKeyFrames != null) {
             ArrayList<Key> keys = mKeyFrames.getKeyFramesForView(KeyFrames.UNSET);
