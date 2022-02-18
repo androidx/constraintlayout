@@ -565,7 +565,7 @@ public class Direct {
                     ConstraintWidgetContainer.measure(level + 1, widget, measurer, measure, BasicMeasure.Measure.SELF_DIMENSIONS);
                 }
                 if (widget.getVerticalDimensionBehaviour() != ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
-                    || canMeasure) {
+                        || canMeasure) {
                     if (widget.isMeasureRequested()) {
                         // Widget needs to be measured
                         if (DEBUG) {
@@ -858,7 +858,7 @@ public class Direct {
         }
 
         int startPoint = begin.mTarget.getFinalValue() + firstVisibleWidget.mListAnchors[offset].getMargin();
-        int endPoint = end.mTarget.getFinalValue() - lastVisibleWidget.mListAnchors[offset+1].getMargin();
+        int endPoint = end.mTarget.getFinalValue() - lastVisibleWidget.mListAnchors[offset + 1].getMargin();
 
         int distance = endPoint - startPoint;
         if (distance <= 0) {
@@ -885,11 +885,11 @@ public class Direct {
 
             totalSize += widget.mListAnchors[offset].getMargin();
             if (orientation == HORIZONTAL) {
-                totalSize += + widget.getWidth();
+                totalSize += +widget.getWidth();
             } else {
                 totalSize += widget.getHeight();
             }
-            totalSize += widget.mListAnchors[offset+1].getMargin();
+            totalSize += widget.mListAnchors[offset + 1].getMargin();
 
             numWidgets++;
             if (widget.getVisibility() != ConstraintWidget.GONE) {
@@ -978,7 +978,7 @@ public class Direct {
                         Direct.verticalSolvingPass(level + 1, widget, container.getMeasurer());
                         current += widget.getHeight();
                     }
-                    current += widget.mListAnchors[offset+1].getMargin();
+                    current += widget.mListAnchors[offset + 1].getMargin();
                     current += gap;
                 }
 

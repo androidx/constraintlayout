@@ -155,7 +155,7 @@ public class ChainRun extends WidgetRun {
             lastVisibleWidget = i;
             break;
         }
-        for (int j = 0; j< 2; j++ ){
+        for (int j = 0; j < 2; j++) {
             for (int i = 0; i < count; i++) {
                 WidgetRun run = widgets.get(i);
                 if (run.widget.getVisibility() == GONE) {
@@ -498,7 +498,7 @@ public class ChainRun extends WidgetRun {
     }
 
     private ConstraintWidget getLastVisibleWidget() {
-        for (int i = widgets.size() -1; i >= 0; i--) {
+        for (int i = widgets.size() - 1; i >= 0; i--) {
             WidgetRun run = widgets.get(i);
             if (run.widget.getVisibility() != GONE) {
                 return run.widget;

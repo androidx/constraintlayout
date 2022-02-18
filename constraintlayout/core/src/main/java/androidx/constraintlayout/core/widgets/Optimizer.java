@@ -65,7 +65,7 @@ public class Optimizer {
         widget.mHorizontalResolution = UNKNOWN;
         widget.mVerticalResolution = UNKNOWN;
         if (container.mListDimensionBehaviors[DIMENSION_HORIZONTAL] != ConstraintWidget.DimensionBehaviour.WRAP_CONTENT
-            && widget.mListDimensionBehaviors[DIMENSION_HORIZONTAL] == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
+                && widget.mListDimensionBehaviors[DIMENSION_HORIZONTAL] == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
 
             int left = widget.mLeft.mMargin;
             int right = container.getWidth() - widget.mRight.mMargin;
@@ -78,7 +78,7 @@ public class Optimizer {
             widget.setHorizontalDimension(left, right);
         }
         if (container.mListDimensionBehaviors[DIMENSION_VERTICAL] != ConstraintWidget.DimensionBehaviour.WRAP_CONTENT
-            && widget.mListDimensionBehaviors[DIMENSION_VERTICAL] == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
+                && widget.mListDimensionBehaviors[DIMENSION_VERTICAL] == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
 
             int top = widget.mTop.mMargin;
             int bottom = container.getHeight() - widget.mBottom.mMargin;

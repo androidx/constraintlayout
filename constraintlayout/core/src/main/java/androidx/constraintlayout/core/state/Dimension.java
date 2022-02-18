@@ -51,7 +51,7 @@ public class Dimension {
      */
     public boolean equalsFixedValue(int value) {
         if (mInitialValue == null
-            && mValue == value) {
+                && mValue == value) {
             return true;
         }
         return false;

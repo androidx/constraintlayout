@@ -144,10 +144,10 @@ public class Chain {
             if (begin.mTarget != null) {
                 if (widget == firstVisibleWidget) {
                     system.addGreaterThan(begin.mSolverVariable, begin.mTarget.mSolverVariable,
-                        margin, SolverVariable.STRENGTH_BARRIER);
+                            margin, SolverVariable.STRENGTH_BARRIER);
                 } else {
                     system.addGreaterThan(begin.mSolverVariable, begin.mTarget.mSolverVariable,
-                        margin, SolverVariable.STRENGTH_FIXED);
+                            margin, SolverVariable.STRENGTH_FIXED);
                 }
                 if (isSpreadOnly && !isChainPacked) {
                     strength = SolverVariable.STRENGTH_EQUALITY;
@@ -156,15 +156,15 @@ public class Chain {
                     strength = SolverVariable.STRENGTH_EQUALITY;
                 }
                 system.addEquality(begin.mSolverVariable, begin.mTarget.mSolverVariable, margin,
-                    strength);
+                        strength);
             }
 
             if (isWrapContent) {
                 if (widget.getVisibility() != ConstraintWidget.GONE
-                    && widget.mListDimensionBehaviors[orientation] == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT){
+                        && widget.mListDimensionBehaviors[orientation] == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT){
                     system.addGreaterThan(widget.mListAnchors[offset + 1].mSolverVariable,
-                        widget.mListAnchors[offset].mSolverVariable, 0,
-                        SolverVariable.STRENGTH_EQUALITY);
+                            widget.mListAnchors[offset].mSolverVariable, 0,
+                            SolverVariable.STRENGTH_EQUALITY);
                 }
                 system.addGreaterThan(widget.mListAnchors[offset].mSolverVariable,
                         container.mListAnchors[offset].mSolverVariable,

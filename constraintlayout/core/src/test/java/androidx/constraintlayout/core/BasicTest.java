@@ -108,8 +108,8 @@ public class BasicTest {
 
         A.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
         B.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
-        A.setHorizontalMatchStyle(ConstraintWidget.MATCH_CONSTRAINT_WRAP,0,0,0);
-        B.setHorizontalMatchStyle(ConstraintWidget.MATCH_CONSTRAINT_WRAP,0,0,0);
+        A.setHorizontalMatchStyle(ConstraintWidget.MATCH_CONSTRAINT_WRAP, 0, 0, 0);
+        B.setHorizontalMatchStyle(ConstraintWidget.MATCH_CONSTRAINT_WRAP, 0, 0, 0);
         A.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
         A.connect(ConstraintAnchor.Type.RIGHT, guideline, ConstraintAnchor.Type.LEFT);
         B.connect(ConstraintAnchor.Type.LEFT, guideline, ConstraintAnchor.Type.RIGHT);
@@ -142,7 +142,7 @@ public class BasicTest {
     public void testSimpleConstraint() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 800);
         root.setMeasurer(sMeasurer);
-        ConstraintWidget A = new ConstraintWidget( 100, 30);
+        ConstraintWidget A = new ConstraintWidget(100, 30);
 
         root.setDebugName("root");
         A.setDebugName("A");
@@ -166,7 +166,7 @@ public class BasicTest {
     public void testSimpleWrapConstraint9() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 800);
         root.setMeasurer(sMeasurer);
-        ConstraintWidget A = new ConstraintWidget( 100, 30);
+        ConstraintWidget A = new ConstraintWidget(100, 30);
 
         root.setDebugName("root");
         A.setDebugName("A");
@@ -204,7 +204,7 @@ public class BasicTest {
     public void testSimpleWrapConstraint10() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 800);
         root.setMeasurer(sMeasurer);
-        ConstraintWidget A = new ConstraintWidget( 100, 30);
+        ConstraintWidget A = new ConstraintWidget(100, 30);
 
         root.setDebugName("root");
         A.setDebugName("A");
@@ -246,10 +246,10 @@ public class BasicTest {
     public void testSimpleWrapConstraint11() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 800);
         root.setMeasurer(sMeasurer);
-        ConstraintWidget A = new ConstraintWidget( 10, 30);
-        ConstraintWidget B = new ConstraintWidget( 800, 30);
-        ConstraintWidget C = new ConstraintWidget( 10, 30);
-        ConstraintWidget D = new ConstraintWidget( 800, 30);
+        ConstraintWidget A = new ConstraintWidget(10, 30);
+        ConstraintWidget B = new ConstraintWidget(800, 30);
+        ConstraintWidget C = new ConstraintWidget(10, 30);
+        ConstraintWidget D = new ConstraintWidget(800, 30);
 
         root.setDebugName("root");
         A.setDebugName("A");
@@ -303,8 +303,8 @@ public class BasicTest {
     public void testSimpleWrapConstraint() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 800);
         root.setMeasurer(sMeasurer);
-        ConstraintWidget A = new ConstraintWidget( 100, 30);
-        ConstraintWidget B = new ConstraintWidget( 100, 60);
+        ConstraintWidget A = new ConstraintWidget(100, 30);
+        ConstraintWidget B = new ConstraintWidget(100, 60);
 
         root.setDebugName("root");
         A.setDebugName("A");
@@ -362,8 +362,8 @@ public class BasicTest {
     public void testSimpleWrapConstraint2() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 800);
         root.setMeasurer(sMeasurer);
-        ConstraintWidget A = new ConstraintWidget( 100, 30);
-        ConstraintWidget B = new ConstraintWidget( 120, 60);
+        ConstraintWidget A = new ConstraintWidget(100, 30);
+        ConstraintWidget B = new ConstraintWidget(120, 60);
 
         root.setDebugName("root");
         A.setDebugName("A");
@@ -808,10 +808,10 @@ public class BasicTest {
     public void testSimpleWrapConstraint8() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 800);
         root.setMeasurer(sMeasurer);
-        ConstraintWidget A = new ConstraintWidget( 100, 30);
-        ConstraintWidget B = new ConstraintWidget( 10, 30);
-        ConstraintWidget C = new ConstraintWidget( 10, 30);
-        ConstraintWidget D = new ConstraintWidget( 100, 30);
+        ConstraintWidget A = new ConstraintWidget(100, 30);
+        ConstraintWidget B = new ConstraintWidget(10, 30);
+        ConstraintWidget C = new ConstraintWidget(10, 30);
+        ConstraintWidget D = new ConstraintWidget(100, 30);
 
         root.setDebugName("root");
         A.setDebugName("A");
@@ -867,8 +867,8 @@ public class BasicTest {
     public void testSimpleCircleConstraint() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 800);
         root.setMeasurer(sMeasurer);
-        ConstraintWidget A = new ConstraintWidget( 100, 30);
-        ConstraintWidget B = new ConstraintWidget( 100, 30);
+        ConstraintWidget A = new ConstraintWidget(100, 30);
+        ConstraintWidget B = new ConstraintWidget(100, 30);
 
         root.setDebugName("root");
         A.setDebugName("A");
@@ -928,10 +928,10 @@ public class BasicTest {
     public void testRatioChainConstraint() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 800);
         root.setMeasurer(sMeasurer);
-        ConstraintWidget A = new ConstraintWidget( 100, 30);
-        ConstraintWidget B = new ConstraintWidget( 0, 30);
-        ConstraintWidget C = new ConstraintWidget( 0, 30);
-        ConstraintWidget D = new ConstraintWidget( 100, 30);
+        ConstraintWidget A = new ConstraintWidget(100, 30);
+        ConstraintWidget B = new ConstraintWidget(0, 30);
+        ConstraintWidget C = new ConstraintWidget(0, 30);
+        ConstraintWidget D = new ConstraintWidget(100, 30);
 
         root.setDebugName("root");
         A.setDebugName("A");
@@ -973,10 +973,10 @@ public class BasicTest {
     public void testCycleConstraints() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 800);
         root.setMeasurer(sMeasurer);
-        ConstraintWidget A = new ConstraintWidget( 100, 30);
-        ConstraintWidget B = new ConstraintWidget( 40, 20);
-        ConstraintWidget C = new ConstraintWidget( 40, 20);
-        ConstraintWidget D = new ConstraintWidget( 30, 30);
+        ConstraintWidget A = new ConstraintWidget(100, 30);
+        ConstraintWidget B = new ConstraintWidget(40, 20);
+        ConstraintWidget C = new ConstraintWidget(40, 20);
+        ConstraintWidget D = new ConstraintWidget(30, 30);
 
         root.setDebugName("root");
         A.setDebugName("A");

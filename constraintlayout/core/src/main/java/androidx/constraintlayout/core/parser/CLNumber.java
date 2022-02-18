@@ -17,66 +17,66 @@ package androidx.constraintlayout.core.parser;
 
 public class CLNumber extends CLElement {
 
-  float value = Float.NaN;
-  public CLNumber(char[] content) {
-    super(content);
-  }
-
-  public CLNumber(float value) {
-    super(null);
-    this.value = value;
-  }
-
-  public static CLElement allocate(char[] content) {
-    return new CLNumber(content);
-  }
-
-  protected String toJSON() {
-    float value = getFloat();
-    int intValue = (int) value;
-    if ((float) intValue == value) {
-      return "" + intValue;
+    float value = Float.NaN;
+    public CLNumber(char[] content) {
+        super(content);
     }
-    return "" + value;
-  }
 
-  protected String toFormattedJSON(int indent, int forceIndent) {
-    StringBuilder json = new StringBuilder();
-    addIndent(json, indent);
-    float value = getFloat();
-    int intValue = (int) value;
-    if ((float) intValue == value) {
-      json.append(intValue);
-    } else {
-      json.append(value);
+    public CLNumber(float value) {
+        super(null);
+        this.value = value;
     }
-    return json.toString();
-  }
 
-  public boolean isInt() {
-    float value = getFloat();
-    int intValue = (int) value;
-    return ((float) intValue == value);
-  }
-
-  @Override
-  public int getInt() {
-    if (Float.isNaN(value)) {
-      value = Integer.parseInt(content());
+    public static CLElement allocate(char[] content) {
+        return new CLNumber(content);
     }
-    return (int) value;
-  }
 
-  @Override
-  public float getFloat() {
-    if (Float.isNaN(value)) {
-      value = Float.parseFloat(content());
+    protected String toJSON() {
+        float value = getFloat();
+        int intValue = (int) value;
+        if ((float) intValue == value) {
+            return "" + intValue;
+        }
+        return "" + value;
     }
-    return value;
-  }
 
-  public void putValue(float value) {
-    this.value = value;
-  }
+    protected String toFormattedJSON(int indent, int forceIndent) {
+        StringBuilder json = new StringBuilder();
+        addIndent(json, indent);
+        float value = getFloat();
+        int intValue = (int) value;
+        if ((float) intValue == value) {
+            json.append(intValue);
+        } else {
+            json.append(value);
+        }
+        return json.toString();
+    }
+
+    public boolean isInt() {
+        float value = getFloat();
+        int intValue = (int) value;
+        return ((float) intValue == value);
+    }
+
+    @Override
+    public int getInt() {
+        if (Float.isNaN(value)) {
+            value = Integer.parseInt(content());
+        }
+        return (int) value;
+    }
+
+    @Override
+    public float getFloat() {
+        if (Float.isNaN(value)) {
+            value = Float.parseFloat(content());
+        }
+        return value;
+    }
+
+    public void putValue(float value) {
+        this.value = value;
+    }
 
 }

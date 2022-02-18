@@ -102,8 +102,8 @@ public class WidgetGroup {
     private int measureWrap(int orientation, ConstraintWidget widget) {
         ConstraintWidget.DimensionBehaviour behaviour = widget.getDimensionBehaviour(orientation);
         if (behaviour == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT
-            || behaviour == ConstraintWidget.DimensionBehaviour.MATCH_PARENT
-            || behaviour == ConstraintWidget.DimensionBehaviour.FIXED) {
+                || behaviour == ConstraintWidget.DimensionBehaviour.MATCH_PARENT
+                || behaviour == ConstraintWidget.DimensionBehaviour.FIXED) {
             int dimension;
             if (orientation == HORIZONTAL) {
                 dimension = widget.getWidth();

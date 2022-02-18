@@ -290,7 +290,7 @@ public class VerticalWidgetRun extends WidgetRun {
             } else {
                 // no connections, nothing to do.
                 if (!(widget instanceof Helper) && widget.getParent() != null
-                    && widget.getAnchor(ConstraintAnchor.Type.CENTER).mTarget == null) {
+                        && widget.getAnchor(ConstraintAnchor.Type.CENTER).mTarget == null) {
                     DependencyNode top = widget.getParent().verticalRun.start;
                     addTarget(start, top, widget.getY());
                     addTarget(end, start, dimension.value);

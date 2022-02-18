@@ -82,7 +82,7 @@ public class Flow extends VirtualLayout {
 
 
     @Override
-    public void copy(ConstraintWidget src, HashMap<ConstraintWidget,ConstraintWidget> map) {
+    public void copy(ConstraintWidget src, HashMap<ConstraintWidget, ConstraintWidget> map) {
         super.copy(src, map);
         Flow srcFLow = (Flow) src;
 
@@ -207,7 +207,7 @@ public class Flow extends VirtualLayout {
         if (widget.getVerticalDimensionBehaviour() == DimensionBehaviour.MATCH_CONSTRAINT) {
             if (widget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_SPREAD) {
                 return 0;
-            } else if (widget.mMatchConstraintDefaultHeight== MATCH_CONSTRAINT_PERCENT) {
+            } else if (widget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_PERCENT) {
                 int value = (int) (widget.mMatchConstraintPercentHeight * max);
                 if (value != widget.getHeight()) {
                     widget.setMeasureRequested(true);
@@ -266,7 +266,7 @@ public class Flow extends VirtualLayout {
         ConstraintWidget[] widgets = mWidgets;
 
         int gone = 0;
-        for (int i = 0; i <mWidgetsCount; i++) {
+        for (int i = 0; i < mWidgetsCount; i++) {
             ConstraintWidget widget = mWidgets[i];
             if (widget.getVisibility() == GONE) {
                 gone++;
@@ -276,7 +276,7 @@ public class Flow extends VirtualLayout {
         if (gone > 0) {
             widgets = new ConstraintWidget[mWidgetsCount - gone];
             int j = 0;
-            for (int i = 0; i <mWidgetsCount; i++) {
+            for (int i = 0; i < mWidgetsCount; i++) {
                 ConstraintWidget widget = mWidgets[i];
                 if (widget.getVisibility() != GONE) {
                     widgets[j] = widget;
@@ -834,7 +834,7 @@ public class Flow extends VirtualLayout {
                 if (widget.getVerticalDimensionBehaviour() == DimensionBehaviour.MATCH_CONSTRAINT) {
                     nbMatchConstraintsWidgets++;
                 }
-                boolean doWrap = (height == max || (height + mVerticalGap + h ) > max) && list.biggest != null;
+                boolean doWrap = (height == max || (height + mVerticalGap + h) > max) && list.biggest != null;
                 if (!doWrap && i > 0 && mMaxElementsWrap > 0 && (i % mMaxElementsWrap == 0)) {
                     doWrap = true;
                 }
@@ -990,7 +990,7 @@ public class Flow extends VirtualLayout {
                 if (widget.getVerticalDimensionBehaviour() == DimensionBehaviour.MATCH_CONSTRAINT) {
                     nbMatchConstraintsWidgets++;
                 }
-                boolean doWrap = (height == max || (height + mVerticalGap + h ) > max) && list.biggest != null;
+                boolean doWrap = (height == max || (height + mVerticalGap + h) > max) && list.biggest != null;
                 if (!doWrap && i > 0 && mMaxElementsWrap > 0 && (row > mMaxElementsWrap)) {
                     doWrap = true;
                 }
@@ -1189,7 +1189,7 @@ public class Flow extends VirtualLayout {
         }
 
         if ((rows == 0 && orientation == VERTICAL)
-            || (cols == 0 && orientation == HORIZONTAL)) {
+                || (cols == 0 && orientation == HORIZONTAL)) {
             done = true;
         }
 
@@ -1371,7 +1371,7 @@ public class Flow extends VirtualLayout {
                 }
                 if (widget != biggestInRow) {
                     widget.connect(widget.mTop, biggestInRow.mTop, 0);
-                    widget.connect(widget.mBottom, biggestInRow.mBottom,0);
+                    widget.connect(widget.mBottom, biggestInRow.mBottom, 0);
                 }
             }
         }

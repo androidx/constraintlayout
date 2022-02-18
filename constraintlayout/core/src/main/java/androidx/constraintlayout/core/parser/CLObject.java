@@ -17,75 +17,75 @@ package androidx.constraintlayout.core.parser;
 
 import java.util.Iterator;
 
-public class CLObject extends CLContainer implements Iterable<CLKey>{
+public class CLObject extends CLContainer implements Iterable<CLKey> {
 
-  public CLObject(char[] content) {
-    super(content);
-  }
-
-  public static CLObject allocate(char[] content) {
-    return new CLObject(content);
-  }
-
-  public String toJSON() {
-    StringBuilder json = new StringBuilder(getDebugName() + "{ ");
-    boolean first = true;
-    for (CLElement element : mElements) {
-      if (!first) {
-        json.append(", ");
-      } else {
-        first = false;
-      }
-      json.append(element.toJSON());
+    public CLObject(char[] content) {
+        super(content);
     }
-    json.append(" }");
-    return json.toString();
-  }
 
-  public String toFormattedJSON() {
-    return toFormattedJSON(0, 0);
-  }
-
-  public String toFormattedJSON(int indent, int forceIndent) {
-    StringBuilder json = new StringBuilder(getDebugName());
-    json.append("{\n");
-    boolean first = true;
-    for (CLElement element : mElements) {
-      if (!first) {
-        json.append(",\n");
-      } else {
-        first = false;
-      }
-      json.append(element.toFormattedJSON(indent + BASE_INDENT, forceIndent - 1));
+    public static CLObject allocate(char[] content) {
+        return new CLObject(content);
     }
-    json.append("\n");
-    addIndent(json, indent);
-    json.append("}");
-    return json.toString();
-  }
 
-  @Override
-  public Iterator iterator() {
-    return new CLObjectIterator(this);
-  }
+    public String toJSON() {
+        StringBuilder json = new StringBuilder(getDebugName() + "{ ");
+        boolean first = true;
+        for (CLElement element : mElements) {
+            if (!first) {
+                json.append(", ");
+            } else {
+                first = false;
+            }
+            json.append(element.toJSON());
+        }
+        json.append(" }");
+        return json.toString();
+    }
 
-  private class CLObjectIterator implements Iterator {
-    CLObject myObject;
-    int index = 0;
-    public CLObjectIterator(CLObject clObject) {
-      myObject = clObject;
+    public String toFormattedJSON() {
+        return toFormattedJSON(0, 0);
+    }
+
+    public String toFormattedJSON(int indent, int forceIndent) {
+        StringBuilder json = new StringBuilder(getDebugName());
+        json.append("{\n");
+        boolean first = true;
+        for (CLElement element : mElements) {
+            if (!first) {
+                json.append(",\n");
+            } else {
+                first = false;
+            }
+            json.append(element.toFormattedJSON(indent + BASE_INDENT, forceIndent - 1));
+        }
+        json.append("\n");
+        addIndent(json, indent);
+        json.append("}");
+        return json.toString();
     }
 
     @Override
-    public boolean hasNext() {
-      return index < myObject.size();
+    public Iterator iterator() {
+        return new CLObjectIterator(this);
     }
 
-    @Override
-    public Object next() {
-      CLKey key = (CLKey) myObject.mElements.get(index);
-      index++;
-      return key;
+    private class CLObjectIterator implements Iterator {
+        CLObject myObject;
+        int index = 0;
+        public CLObjectIterator(CLObject clObject) {
+            myObject = clObject;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return index < myObject.size();
+        }
+
+        @Override
+        public Object next() {
+            CLKey key = (CLKey) myObject.mElements.get(index);
+            index++;
+            return key;
+        }
     }
-  }
 }
