@@ -198,8 +198,8 @@ class MotionRenderDebug {
             mPath.close();
 
             MotionPaths framePoint = motionController.getKeyFrame(i - 1);
-            float dx = 0; //framePoint.translationX;
-            float dy = 0; //framePoint.translationY;
+            float dx = 0; //framePoint.translationX
+            float dy = 0; //framePoint.translationY
             if (mode == Motion.DRAW_PATH_AS_CONFIGURED) {
 
                 if (mPathMode[i - 1] == MotionPaths.PERPENDICULAR) {
@@ -207,7 +207,8 @@ class MotionRenderDebug {
                 } else if (mPathMode[i - 1] == MotionPaths.CARTESIAN) {
                     drawPathCartesianTicks(canvas, x - dx, y - dy);
                 } else if (mPathMode[i - 1] == MotionPaths.SCREEN) {
-                    drawPathScreenTicks(canvas, x - dx, y - dy, viewWidth, viewHeight, layoutWidth, layoutHeight);
+                    drawPathScreenTicks(canvas, x - dx, y - dy,
+                            viewWidth, viewHeight, layoutWidth, layoutHeight);
                 }
 
                 canvas.drawPath(mPath, mFillPaint);
@@ -219,7 +220,8 @@ class MotionRenderDebug {
                 drawPathCartesianTicks(canvas, x - dx, y - dy);
             }
             if (mode == Motion.DRAW_PATH_SCREEN) {
-                drawPathScreenTicks(canvas, x - dx, y - dy, viewWidth, viewHeight, layoutWidth, layoutHeight);
+                drawPathScreenTicks(canvas, x - dx, y - dy,
+                        viewWidth, viewHeight, layoutWidth, layoutHeight);
             }
             if (dx != 0 || dy != 0) {
                 drawTranslation(canvas, x - dx, y - dy, x, y);
@@ -338,7 +340,8 @@ class MotionRenderDebug {
         float xgap = x;
         float ygap = y;
         // Horizontal line
-        String text = "" + ((int) (0.5 + 100 * (xgap - viewWidth / 2) / (layoutWidth - viewWidth))) / 100.0f;
+        String text = "" + ((int) (0.5 + 100 * (xgap - viewWidth / 2)
+                / (layoutWidth - viewWidth))) / 100.0f;
         getTextBounds(text, mTextPaint);
         float off = xgap / 2 - mBounds.width() / 2;
         canvas.drawText(text, off + minx, y - 20, mTextPaint);
@@ -346,7 +349,8 @@ class MotionRenderDebug {
                 Math.min(x1, x2), y, mPaintGraph);
 
         // Vertical line
-        text = "" + ((int) (0.5 + 100 * (ygap - viewHeight / 2) / (layoutHeight - viewHeight))) / 100.0f;
+        text = "" + ((int) (0.5 + 100 * (ygap - viewHeight / 2)
+                / (layoutHeight - viewHeight))) / 100.0f;
         getTextBounds(text, mTextPaint);
         off = ygap / 2 - mBounds.height() / 2;
         canvas.drawText(text, x + 5, maxy - off, mTextPaint);

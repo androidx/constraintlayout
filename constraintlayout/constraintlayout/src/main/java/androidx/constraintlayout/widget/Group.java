@@ -18,8 +18,6 @@ package androidx.constraintlayout.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.View;
-import android.view.ViewParent;
 
 /**
  * Control the visibility and elevation of the referenced views
@@ -40,12 +38,14 @@ import android.view.ViewParent;
  *     </pre>
  *     <p>
  *         The visibility of the group will be applied to the referenced widgets.
- *         It's a convenient way to easily hide/show a set of widgets without having to maintain this set
+ *         It's a convenient way to easily hide/show a set of widgets
+ *         without having to maintain this set
  *         programmatically.
  *     <p>
  *     <h2>Multiple groups</h2>
  *     <p>
- *         Multiple groups can reference the same widgets -- in that case, the XML declaration order will
+ *         Multiple groups can reference the same widgets
+ *         -- in that case, the XML declaration order will
  *         define the final visibility state (the group declared last will have the last word).
  * </p>
  */
@@ -98,7 +98,7 @@ public class Group extends ConstraintHelper {
     protected void applyLayoutFeaturesInConstraintSet(ConstraintLayout container) {
         applyLayoutFeatures(container);
     }
-    
+
     /**
      * @suppress
      * @param container
