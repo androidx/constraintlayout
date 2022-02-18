@@ -166,7 +166,7 @@ public abstract class TimeCycleSplineSet {
                 mContinue |= mTempValues[i] != 0.0;
                 mCache[i] = mTempValues[i] * wave + offset;
             }
-           view.setInterpolatedValue( mConstraintAttributeList.valueAt(0), mCache);
+            view.setInterpolatedValue(mConstraintAttributeList.valueAt(0), mCache);
             if (period != 0.0f) {
                 mContinue = true;
             }

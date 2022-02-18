@@ -141,21 +141,21 @@ public class MotionTransitionTest {
 
         transition.updateFrom(cwc2, Transition.END);
         String jstr =
-                "                  default: {\n" +
-                        "                    from: 'start',   to: 'end',\n" +
-                        "                    pathMotionArc: 'startVertical',\n" +
-                        "                    KeyFrames: {\n" +
-                        "                     KeyPositions: [\n" +
-                        "                     {\n" +
-                        "                      target: ['button1'],\n" +
-                        "                      frames: [25, 50, 75],\n" +
-                        "                      percentX: [0.2, 0.3, 0.7],\n" +
-                        "                      percentY: [0.4, 0.9, 0.7]\n" +
-                        "                      percentHeight: [0.4, 0.9, 0.7]\n" +
-                        "                     }\n" +
-                        "                     ]\n" +
-                        "                  },\n" +
-                        "                  }\n";
+                "                  default: {\n"
+                +        "                    from: 'start',   to: 'end',\n"
+                +        "                    pathMotionArc: 'startVertical',\n"
+                +        "                    KeyFrames: {\n"
+                +        "                     KeyPositions: [\n"
+                +        "                     {\n"
+                +        "                      target: ['button1'],\n"
+                +        "                      frames: [25, 50, 75],\n"
+                +        "                      percentX: [0.2, 0.3, 0.7],\n"
+                +        "                      percentY: [0.4, 0.9, 0.7]\n"
+                +        "                      percentHeight: [0.4, 0.9, 0.7]\n"
+                +        "                     }\n"
+                +        "                     ]\n"
+                +        "                  },\n"
+                +        "                  }\n";
 
         try {
             CLObject json = CLParser.parse(jstr);

@@ -146,8 +146,8 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
         if (DEBUG) {
             for (int i = 0; i < ret.length; i++) {
                 System.out.println(
-                        "[" + i + "] -> " + ret[i].mConstraintWidget + "    " +
-                                ret[i].mRootDistance);
+                        "[" + i + "] -> " + ret[i].mConstraintWidget + "    "
+                                + ret[i].mRootDistance);
             }
         }
         return ret;
@@ -275,8 +275,8 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
             }
         }
 
-        if (anchor1.isConnectionAllowed(to1.mConstraintWidget) &&
-                anchor2.isConnectionAllowed(to2.mConstraintWidget)) {
+        if (anchor1.isConnectionAllowed(to1.mConstraintWidget)
+                && anchor2.isConnectionAllowed(to2.mConstraintWidget)) {
             // Resize
             if (!isResizable(dir)) {
                 if (dir == 0) {
@@ -563,27 +563,27 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
      */
     public boolean isCandidateResizable(int dimension) {
         if (dimension == 0) {
-            return mConstraintWidget.getVerticalDimensionBehaviour() ==
-                    ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
-                    || ((mConstraintWidget.getVerticalDimensionBehaviour() ==
-                    ConstraintWidget.DimensionBehaviour.FIXED)
+            return mConstraintWidget.getVerticalDimensionBehaviour()
+                    == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+                    || ((mConstraintWidget.getVerticalDimensionBehaviour()
+                    == ConstraintWidget.DimensionBehaviour.FIXED)
                     && mConstraintWidget.getHeight() > mConstraintWidget.getMinHeight());
         } else {
-            return (mConstraintWidget.getHorizontalDimensionBehaviour() ==
-                    ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT)
-                    || ((mConstraintWidget.getHorizontalDimensionBehaviour() ==
-                    ConstraintWidget.DimensionBehaviour.FIXED)
+            return (mConstraintWidget.getHorizontalDimensionBehaviour()
+                    == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT)
+                    || ((mConstraintWidget.getHorizontalDimensionBehaviour()
+                    == ConstraintWidget.DimensionBehaviour.FIXED)
                     && mConstraintWidget.getWidth() > mConstraintWidget.getMinWidth());
         }
     }
 
     public boolean isResizable(int horizontal) {
         if (horizontal == 0) {
-            return mConstraintWidget.getVerticalDimensionBehaviour() ==
-                    ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT;
+            return mConstraintWidget.getVerticalDimensionBehaviour()
+                    == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT;
         } else {
-            return mConstraintWidget.getHorizontalDimensionBehaviour() ==
-                    ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT;
+            return mConstraintWidget.getHorizontalDimensionBehaviour()
+                    == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT;
 
         }
     }
@@ -826,11 +826,11 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
     public boolean isCentered(int orientationVertical) {
         if (isGuideline()) return false;
         if (orientationVertical == Direction.ORIENTATION_VERTICAL) {
-            return mConstraintWidget.getAnchor(ConstraintAnchor.Type.TOP).isConnected() &&
-                    mConstraintWidget.getAnchor(ConstraintAnchor.Type.BOTTOM).isConnected();
+            return mConstraintWidget.getAnchor(ConstraintAnchor.Type.TOP).isConnected()
+                    && mConstraintWidget.getAnchor(ConstraintAnchor.Type.BOTTOM).isConnected();
         }
-        return mConstraintWidget.getAnchor(ConstraintAnchor.Type.LEFT).isConnected() &&
-                mConstraintWidget.getAnchor(ConstraintAnchor.Type.RIGHT).isConnected();
+        return mConstraintWidget.getAnchor(ConstraintAnchor.Type.LEFT).isConnected()
+                && mConstraintWidget.getAnchor(ConstraintAnchor.Type.RIGHT).isConnected();
     }
 
     public boolean hasConnection(Direction dir) {

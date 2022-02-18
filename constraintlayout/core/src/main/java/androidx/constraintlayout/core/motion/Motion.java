@@ -1612,8 +1612,8 @@ public class Motion implements TypedValues {
     @Override
     public boolean setValue(int id, String value) {
         if (TransitionType.TYPE_INTERPOLATOR == id) {
-            System.out.println("TYPE_INTERPOLATOR  "+value);
-           mQuantizeMotionInterpolator = getInterpolator(SPLINE_STRING, value,0);
+            System.out.println("TYPE_INTERPOLATOR  " + value);
+            mQuantizeMotionInterpolator = getInterpolator(SPLINE_STRING, value, 0);
         }
         return false;
     }

@@ -214,7 +214,7 @@ public class SolverVariableValuesTest {
             SolverVariable variable = new SolverVariable("A" + i, SolverVariable.Type.SLACK);
             variable.id = i;
             values.put(variable, i);
-            results.put(variable, (float)i);
+            results.put(variable, (float) i);
             variables.add(variable);
         }
         ArrayList<SolverVariable> toRemove = new ArrayList<>();
@@ -229,7 +229,7 @@ public class SolverVariableValuesTest {
             SolverVariable variable = new SolverVariable("B" + i, SolverVariable.Type.SLACK);
             variable.id = 100 + i;
             values.put(variable, i);
-            results.put(variable, (float)i);
+            results.put(variable, (float) i);
             variables.add(variable);
         }
         for (SolverVariable variable : variables) {

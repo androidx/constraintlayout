@@ -54,7 +54,7 @@ class MotionRenderDebug {
     boolean mPresentationMode = false;
     int mShadowTranslate = 1;
 
-    public MotionRenderDebug(float textSize) {
+    MotionRenderDebug(float textSize) {
 
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
@@ -198,8 +198,8 @@ class MotionRenderDebug {
             mPath.close();
 
             MotionPaths framePoint = motionController.getKeyFrame(i - 1);
-            float dx = 0;//framePoint.translationX;
-            float dy = 0;//framePoint.translationY;
+            float dx = 0; //framePoint.translationX;
+            float dy = 0; //framePoint.translationY;
             if (mode == Motion.DRAW_PATH_AS_CONFIGURED) {
 
                 if (mPathMode[i - 1] == MotionPaths.PERPENDICULAR) {

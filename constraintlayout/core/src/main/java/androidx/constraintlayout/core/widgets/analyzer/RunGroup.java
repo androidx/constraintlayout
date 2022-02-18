@@ -64,15 +64,15 @@ class RunGroup {
 
         final int count = node.dependencies.size();
         for (int i = 0; i < count; i++) {
-                Dependency dependency = node.dependencies.get(i);
-                if (dependency instanceof DependencyNode) {
-                    DependencyNode nextNode = (DependencyNode) dependency;
-                    if (nextNode.run == run) {
-                        // skip our own sibling node
-                        continue;
-                    }
-                    position = Math.max(position, traverseStart(nextNode, startPosition + nextNode.margin));
+            Dependency dependency = node.dependencies.get(i);
+            if (dependency instanceof DependencyNode) {
+                DependencyNode nextNode = (DependencyNode) dependency;
+                if (nextNode.run == run) {
+                    // skip our own sibling node
+                    continue;
                 }
+                position = Math.max(position, traverseStart(nextNode, startPosition + nextNode.margin));
+            }
         }
 
         if (node == run.start) {
@@ -213,7 +213,7 @@ class RunGroup {
                 if (node.run == run) {
                     continue;
                 }
-                if (node == node.run.start){
+                if (node == node.run.start) {
                     if (run instanceof ChainRun) {
                         ChainRun chainRun = (ChainRun) run;
                         for (WidgetRun widgetChainRun : chainRun.widgets) {
@@ -221,7 +221,7 @@ class RunGroup {
                         }
                     } else {
                         if (!(run instanceof HelperReferences)) {
-                           run.widget.isTerminalWidget[orientation] = false;
+                            run.widget.isTerminalWidget[orientation] = false;
                         }
                     }
                     defineTerminalWidget(node.run, orientation);

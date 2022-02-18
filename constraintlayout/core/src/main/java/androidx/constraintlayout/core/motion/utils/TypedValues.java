@@ -20,11 +20,11 @@ package androidx.constraintlayout.core.motion.utils;
  * Starting and Ending Widgets
  */
 public interface TypedValues {
-    public static final String S_CUSTOM = "CUSTOM";
-    public static final int BOOLEAN_MASK = 1;
-    public static final int INT_MASK = 2;
-    public static final int FLOAT_MASK = 4;
-    public static final int STRING_MASK = 8;
+    String S_CUSTOM = "CUSTOM";
+    int BOOLEAN_MASK = 1;
+    int INT_MASK = 2;
+    int FLOAT_MASK = 4;
+    int STRING_MASK = 8;
 
     /**
      * Used to set integer values
@@ -64,55 +64,55 @@ public interface TypedValues {
 
     int getId(String name);
 
-    public static final int TYPE_FRAME_POSITION = 100;
-    public static final int TYPE_TARGET = 101;
+    int TYPE_FRAME_POSITION = 100;
+    int TYPE_TARGET = 101;
 
     interface AttributesType {
-        public static final String NAME = "KeyAttributes";
+        String NAME = "KeyAttributes";
 
-        public static final int TYPE_CURVE_FIT = 301;
-        public static final int TYPE_VISIBILITY = 302;
-        public static final int TYPE_ALPHA = 303;
-        public static final int TYPE_TRANSLATION_X = 304;
-        public static final int TYPE_TRANSLATION_Y = 305;
-        public static final int TYPE_TRANSLATION_Z = 306;
-        public static final int TYPE_ELEVATION = 307;
-        public static final int TYPE_ROTATION_X = 308;
-        public static final int TYPE_ROTATION_Y = 309;
-        public static final int TYPE_ROTATION_Z = 310;
-        public static final int TYPE_SCALE_X = 311;
-        public static final int TYPE_SCALE_Y = 312;
-        public static final int TYPE_PIVOT_X = 313;
-        public static final int TYPE_PIVOT_Y = 314;
-        public static final int TYPE_PROGRESS = 315;
-        public static final int TYPE_PATH_ROTATE = 316;
-        public static final int TYPE_EASING = 317;
-        public static final int TYPE_PIVOT_TARGET = 318;
+        int TYPE_CURVE_FIT = 301;
+        int TYPE_VISIBILITY = 302;
+        int TYPE_ALPHA = 303;
+        int TYPE_TRANSLATION_X = 304;
+        int TYPE_TRANSLATION_Y = 305;
+        int TYPE_TRANSLATION_Z = 306;
+        int TYPE_ELEVATION = 307;
+        int TYPE_ROTATION_X = 308;
+        int TYPE_ROTATION_Y = 309;
+        int TYPE_ROTATION_Z = 310;
+        int TYPE_SCALE_X = 311;
+        int TYPE_SCALE_Y = 312;
+        int TYPE_PIVOT_X = 313;
+        int TYPE_PIVOT_Y = 314;
+        int TYPE_PROGRESS = 315;
+        int TYPE_PATH_ROTATE = 316;
+        int TYPE_EASING = 317;
+        int TYPE_PIVOT_TARGET = 318;
 
-        public static final String S_CURVE_FIT = "curveFit";
-        public static final String S_VISIBILITY = "visibility";
-        public static final String S_ALPHA = "alpha";
+        String S_CURVE_FIT = "curveFit";
+        String S_VISIBILITY = "visibility";
+        String S_ALPHA = "alpha";
 
-        public static final String S_TRANSLATION_X = "translationX";
-        public static final String S_TRANSLATION_Y = "translationY";
-        public static final String S_TRANSLATION_Z = "translationZ";
-        public static final String S_ELEVATION = "elevation";
-        public static final String S_ROTATION_X = "rotationX";
-        public static final String S_ROTATION_Y = "rotationY";
-        public static final String S_ROTATION_Z = "rotationZ";
-        public static final String S_SCALE_X = "scaleX";
-        public static final String S_SCALE_Y = "scaleY";
-        public static final String S_PIVOT_X = "pivotX";
-        public static final String S_PIVOT_Y = "pivotY";
-        public static final String S_PROGRESS = "progress";
-        public static final String S_PATH_ROTATE = "pathRotate";
-        public static final String S_EASING = "easing";
-        public static final String S_CUSTOM = "CUSTOM";
-        public static final String S_FRAME = "frame";
-        public static final String S_TARGET = "target";
-        public static final String S_PIVOT_TARGET = "pivotTarget";
+        String S_TRANSLATION_X = "translationX";
+        String S_TRANSLATION_Y = "translationY";
+        String S_TRANSLATION_Z = "translationZ";
+        String S_ELEVATION = "elevation";
+        String S_ROTATION_X = "rotationX";
+        String S_ROTATION_Y = "rotationY";
+        String S_ROTATION_Z = "rotationZ";
+        String S_SCALE_X = "scaleX";
+        String S_SCALE_Y = "scaleY";
+        String S_PIVOT_X = "pivotX";
+        String S_PIVOT_Y = "pivotY";
+        String S_PROGRESS = "progress";
+        String S_PATH_ROTATE = "pathRotate";
+        String S_EASING = "easing";
+        String S_CUSTOM = "CUSTOM";
+        String S_FRAME = "frame";
+        String S_TARGET = "target";
+        String S_PIVOT_TARGET = "pivotTarget";
 
-        public static final String[] KEY_WORDS = {
+        String[] KEY_WORDS = {
                 S_CURVE_FIT,
                 S_VISIBILITY,
                 S_ALPHA,
@@ -143,7 +143,7 @@ public interface TypedValues {
          * @param name the name of the value
          * @return the id of the vlalue or -1 if no value exist
          */
-        public static int getId(String name) {
+        static int getId(String name) {
             switch (name) {
                 case S_CURVE_FIT:
                     return TYPE_CURVE_FIT;
@@ -220,55 +220,55 @@ public interface TypedValues {
     }
 
     interface CycleType {
-        public static final String NAME = "KeyCycle";
-        public static final int TYPE_CURVE_FIT = 401;
-        public static final int TYPE_VISIBILITY = 402;
-        public static final int TYPE_ALPHA = 403;
-        public static final int TYPE_TRANSLATION_X = AttributesType.TYPE_TRANSLATION_X;
-        public static final int TYPE_TRANSLATION_Y = AttributesType.TYPE_TRANSLATION_Y;
-        public static final int TYPE_TRANSLATION_Z = AttributesType.TYPE_TRANSLATION_Z;
-        public static final int TYPE_ELEVATION = AttributesType.TYPE_ELEVATION;
+        String NAME = "KeyCycle";
+        int TYPE_CURVE_FIT = 401;
+        int TYPE_VISIBILITY = 402;
+        int TYPE_ALPHA = 403;
+        int TYPE_TRANSLATION_X = AttributesType.TYPE_TRANSLATION_X;
+        int TYPE_TRANSLATION_Y = AttributesType.TYPE_TRANSLATION_Y;
+        int TYPE_TRANSLATION_Z = AttributesType.TYPE_TRANSLATION_Z;
+        int TYPE_ELEVATION = AttributesType.TYPE_ELEVATION;
 
-        public static final int TYPE_ROTATION_X = AttributesType.TYPE_ROTATION_X;
-        public static final int TYPE_ROTATION_Y = AttributesType.TYPE_ROTATION_Y;
-        public static final int TYPE_ROTATION_Z = AttributesType.TYPE_ROTATION_Z;
-        public static final int TYPE_SCALE_X = AttributesType.TYPE_SCALE_X;
-        public static final int TYPE_SCALE_Y = AttributesType.TYPE_SCALE_Y;
-        public static final int TYPE_PIVOT_X = AttributesType.TYPE_PIVOT_X;
-        public static final int TYPE_PIVOT_Y = AttributesType.TYPE_PIVOT_Y;
-        public static final int TYPE_PROGRESS = AttributesType.TYPE_PROGRESS;
-        public static final int TYPE_PATH_ROTATE = 416;
-        public static final int TYPE_EASING = 420;
-        public static final int TYPE_WAVE_SHAPE = 421;
-        public static final int TYPE_CUSTOM_WAVE_SHAPE = 422;
-        public static final int TYPE_WAVE_PERIOD = 423;
-        public static final int TYPE_WAVE_OFFSET = 424;
-        public static final int TYPE_WAVE_PHASE = 425;
+        int TYPE_ROTATION_X = AttributesType.TYPE_ROTATION_X;
+        int TYPE_ROTATION_Y = AttributesType.TYPE_ROTATION_Y;
+        int TYPE_ROTATION_Z = AttributesType.TYPE_ROTATION_Z;
+        int TYPE_SCALE_X = AttributesType.TYPE_SCALE_X;
+        int TYPE_SCALE_Y = AttributesType.TYPE_SCALE_Y;
+        int TYPE_PIVOT_X = AttributesType.TYPE_PIVOT_X;
+        int TYPE_PIVOT_Y = AttributesType.TYPE_PIVOT_Y;
+        int TYPE_PROGRESS = AttributesType.TYPE_PROGRESS;
+        int TYPE_PATH_ROTATE = 416;
+        int TYPE_EASING = 420;
+        int TYPE_WAVE_SHAPE = 421;
+        int TYPE_CUSTOM_WAVE_SHAPE = 422;
+        int TYPE_WAVE_PERIOD = 423;
+        int TYPE_WAVE_OFFSET = 424;
+        int TYPE_WAVE_PHASE = 425;
 
-        public static final String S_CURVE_FIT = "curveFit";
-        public static final String S_VISIBILITY = "visibility";
-        public static final String S_ALPHA = AttributesType.S_ALPHA;
-        public static final String S_TRANSLATION_X = AttributesType.S_TRANSLATION_X;
-        public static final String S_TRANSLATION_Y = AttributesType.S_TRANSLATION_Y;
-        public static final String S_TRANSLATION_Z = AttributesType.S_TRANSLATION_Z;
-        public static final String S_ELEVATION = AttributesType.S_ELEVATION;
-        public static final String S_ROTATION_X = AttributesType.S_ROTATION_X;
-        public static final String S_ROTATION_Y = AttributesType.S_ROTATION_Y;
-        public static final String S_ROTATION_Z = AttributesType.S_ROTATION_Z;
-        public static final String S_SCALE_X = AttributesType.S_SCALE_X;
-        public static final String S_SCALE_Y = AttributesType.S_SCALE_Y;
-        public static final String S_PIVOT_X = AttributesType.S_PIVOT_X;
-        public static final String S_PIVOT_Y = AttributesType.S_PIVOT_Y;
-        public static final String S_PROGRESS = AttributesType.S_PROGRESS;
+        String S_CURVE_FIT = "curveFit";
+        String S_VISIBILITY = "visibility";
+        String S_ALPHA = AttributesType.S_ALPHA;
+        String S_TRANSLATION_X = AttributesType.S_TRANSLATION_X;
+        String S_TRANSLATION_Y = AttributesType.S_TRANSLATION_Y;
+        String S_TRANSLATION_Z = AttributesType.S_TRANSLATION_Z;
+        String S_ELEVATION = AttributesType.S_ELEVATION;
+        String S_ROTATION_X = AttributesType.S_ROTATION_X;
+        String S_ROTATION_Y = AttributesType.S_ROTATION_Y;
+        String S_ROTATION_Z = AttributesType.S_ROTATION_Z;
+        String S_SCALE_X = AttributesType.S_SCALE_X;
+        String S_SCALE_Y = AttributesType.S_SCALE_Y;
+        String S_PIVOT_X = AttributesType.S_PIVOT_X;
+        String S_PIVOT_Y = AttributesType.S_PIVOT_Y;
+        String S_PROGRESS = AttributesType.S_PROGRESS;
 
-        public static final String S_PATH_ROTATE = "pathRotate";
-        public static final String S_EASING = "easing";
-        public static final String S_WAVE_SHAPE = "waveShape";
-        public static final String S_CUSTOM_WAVE_SHAPE = "customWave";
-        public static final String S_WAVE_PERIOD = "period";
-        public static final String S_WAVE_OFFSET = "offset";
-        public static final String S_WAVE_PHASE = "phase";
-        public static final String[] KEY_WORDS = {
+        String S_PATH_ROTATE = "pathRotate";
+        String S_EASING = "easing";
+        String S_WAVE_SHAPE = "waveShape";
+        String S_CUSTOM_WAVE_SHAPE = "customWave";
+        String S_WAVE_PERIOD = "period";
+        String S_WAVE_OFFSET = "offset";
+        String S_WAVE_PHASE = "phase";
+        String[] KEY_WORDS = {
                 S_CURVE_FIT,
                 S_VISIBILITY,
                 S_ALPHA,
@@ -301,7 +301,7 @@ public interface TypedValues {
          * @param name the name of the value
          * @return the id of the vlalue or -1 if no value exist
          */
-        public static int getId(String name) {
+        static int getId(String name) {
             switch (name) {
                 case S_CURVE_FIT:
                     return TYPE_CURVE_FIT;
@@ -373,20 +373,20 @@ public interface TypedValues {
     }
 
     interface TriggerType {
-        public static final String NAME = "KeyTrigger";
-        public static final String VIEW_TRANSITION_ON_CROSS = "viewTransitionOnCross";
-        public static final String VIEW_TRANSITION_ON_POSITIVE_CROSS = "viewTransitionOnPositiveCross";
-        public static final String VIEW_TRANSITION_ON_NEGATIVE_CROSS = "viewTransitionOnNegativeCross";
-        public static final String POST_LAYOUT = "postLayout";
-        public static final String TRIGGER_SLACK = "triggerSlack";
-        public static final String TRIGGER_COLLISION_VIEW = "triggerCollisionView";
-        public static final String TRIGGER_COLLISION_ID = "triggerCollisionId";
-        public static final String TRIGGER_ID = "triggerID";
-        public static final String POSITIVE_CROSS = "positiveCross";
-        public static final String NEGATIVE_CROSS = "negativeCross";
-        public static final String TRIGGER_RECEIVER = "triggerReceiver";
-        public static final String CROSS = "CROSS";
-        public static final String[] KEY_WORDS = {
+        String NAME = "KeyTrigger";
+        String VIEW_TRANSITION_ON_CROSS = "viewTransitionOnCross";
+        String VIEW_TRANSITION_ON_POSITIVE_CROSS = "viewTransitionOnPositiveCross";
+        String VIEW_TRANSITION_ON_NEGATIVE_CROSS = "viewTransitionOnNegativeCross";
+        String POST_LAYOUT = "postLayout";
+        String TRIGGER_SLACK = "triggerSlack";
+        String TRIGGER_COLLISION_VIEW = "triggerCollisionView";
+        String TRIGGER_COLLISION_ID = "triggerCollisionId";
+        String TRIGGER_ID = "triggerID";
+        String POSITIVE_CROSS = "positiveCross";
+        String NEGATIVE_CROSS = "negativeCross";
+        String TRIGGER_RECEIVER = "triggerReceiver";
+        String CROSS = "CROSS";
+        String[] KEY_WORDS = {
                 VIEW_TRANSITION_ON_CROSS,
                 VIEW_TRANSITION_ON_POSITIVE_CROSS,
                 VIEW_TRANSITION_ON_NEGATIVE_CROSS,
@@ -400,18 +400,18 @@ public interface TypedValues {
                 TRIGGER_RECEIVER,
                 CROSS,
         };
-        public static final int TYPE_VIEW_TRANSITION_ON_CROSS = 301;
-        public static final int TYPE_VIEW_TRANSITION_ON_POSITIVE_CROSS = 302;
-        public static final int TYPE_VIEW_TRANSITION_ON_NEGATIVE_CROSS = 303;
-        public static final int TYPE_POST_LAYOUT = 304;
-        public static final int TYPE_TRIGGER_SLACK = 305;
-        public static final int TYPE_TRIGGER_COLLISION_VIEW = 306;
-        public static final int TYPE_TRIGGER_COLLISION_ID = 307;
-        public static final int TYPE_TRIGGER_ID = 308;
-        public static final int TYPE_POSITIVE_CROSS = 309;
-        public static final int TYPE_NEGATIVE_CROSS = 310;
-        public static final int TYPE_TRIGGER_RECEIVER = 311;
-        public static final int TYPE_CROSS = 312;
+        int TYPE_VIEW_TRANSITION_ON_CROSS = 301;
+        int TYPE_VIEW_TRANSITION_ON_POSITIVE_CROSS = 302;
+        int TYPE_VIEW_TRANSITION_ON_NEGATIVE_CROSS = 303;
+        int TYPE_POST_LAYOUT = 304;
+        int TYPE_TRIGGER_SLACK = 305;
+        int TYPE_TRIGGER_COLLISION_VIEW = 306;
+        int TYPE_TRIGGER_COLLISION_ID = 307;
+        int TYPE_TRIGGER_ID = 308;
+        int TYPE_POSITIVE_CROSS = 309;
+        int TYPE_NEGATIVE_CROSS = 310;
+        int TYPE_TRIGGER_RECEIVER = 311;
+        int TYPE_CROSS = 312;
 
         /**
          * Method to go from String names of values to id of the values
@@ -420,7 +420,7 @@ public interface TypedValues {
          * @param name the name of the value
          * @return the id of the vlalue or -1 if no value exist
          */
-        public static int getId(String name) {
+        static int getId(String name) {
             switch (name) {
                 case VIEW_TRANSITION_ON_CROSS:
                     return TYPE_VIEW_TRANSITION_ON_CROSS;
@@ -452,26 +452,26 @@ public interface TypedValues {
     }
 
     interface PositionType {
-        public static final String NAME = "KeyPosition";
-        public static final String S_TRANSITION_EASING = "transitionEasing";
-        public static final String S_DRAWPATH = "drawPath";
-        public static final String S_PERCENT_WIDTH = "percentWidth";
-        public static final String S_PERCENT_HEIGHT = "percentHeight";
-        public static final String S_SIZE_PERCENT = "sizePercent";
-        public static final String S_PERCENT_X = "percentX";
-        public static final String S_PERCENT_Y = "percentY";
+        String NAME = "KeyPosition";
+        String S_TRANSITION_EASING = "transitionEasing";
+        String S_DRAWPATH = "drawPath";
+        String S_PERCENT_WIDTH = "percentWidth";
+        String S_PERCENT_HEIGHT = "percentHeight";
+        String S_SIZE_PERCENT = "sizePercent";
+        String S_PERCENT_X = "percentX";
+        String S_PERCENT_Y = "percentY";
 
-        public static final int TYPE_TRANSITION_EASING = 501;
-        public static final int TYPE_DRAWPATH = 502;
-        public static final int TYPE_PERCENT_WIDTH = 503;
-        public static final int TYPE_PERCENT_HEIGHT = 504;
-        public static final int TYPE_SIZE_PERCENT = 505;
-        public static final int TYPE_PERCENT_X = 506;
-        public static final int TYPE_PERCENT_Y = 507;
-        public static final int TYPE_CURVE_FIT = 508;
-        public static final int TYPE_PATH_MOTION_ARC = 509;
-        public static final int TYPE_POSITION_TYPE = 510;
-        public static final String[] KEY_WORDS = {
+        int TYPE_TRANSITION_EASING = 501;
+        int TYPE_DRAWPATH = 502;
+        int TYPE_PERCENT_WIDTH = 503;
+        int TYPE_PERCENT_HEIGHT = 504;
+        int TYPE_SIZE_PERCENT = 505;
+        int TYPE_PERCENT_X = 506;
+        int TYPE_PERCENT_Y = 507;
+        int TYPE_CURVE_FIT = 508;
+        int TYPE_PATH_MOTION_ARC = 509;
+        int TYPE_POSITION_TYPE = 510;
+        String[] KEY_WORDS = {
                 S_TRANSITION_EASING,
                 S_DRAWPATH,
                 S_PERCENT_WIDTH,
@@ -488,7 +488,7 @@ public interface TypedValues {
          * @param name the name of the value
          * @return the id of the vlalue or -1 if no value exist
          */
-        public static int getId(String name) {
+        static int getId(String name) {
             switch (name) {
                 case S_TRANSITION_EASING:
                     return PositionType.TYPE_TRANSITION_EASING;
@@ -531,22 +531,22 @@ public interface TypedValues {
     }
 
     interface MotionType {
-        public static final String NAME = "Motion";
+        String NAME = "Motion";
 
-        public static final String S_STAGGER = "Stagger";
-        public static final String S_PATH_ROTATE = "PathRotate";
-        public static final String S_QUANTIZE_MOTION_PHASE = "QuantizeMotionPhase";
-        public static final String S_EASING = "TransitionEasing";
-        public static final String S_QUANTIZE_INTERPOLATOR = "QuantizeInterpolator";
-        public static final String S_ANIMATE_RELATIVE_TO = "AnimateRelativeTo";
-        public static final String S_ANIMATE_CIRCLEANGLE_TO = "AnimateCircleAngleTo";
-        public static final String S_PATHMOTION_ARC = "PathMotionArc";
-        public static final String S_DRAW_PATH = "DrawPath";
-        public static final String S_POLAR_RELATIVETO = "PolarRelativeTo";
-        public static final String S_QUANTIZE_MOTIONSTEPS = "QuantizeMotionSteps";
-        public static final String S_QUANTIZE_INTERPOLATOR_TYPE = "QuantizeInterpolatorType";
-        public static final String S_QUANTIZE_INTERPOLATOR_ID = "QuantizeInterpolatorID";
-        public static final String[] KEY_WORDS = {
+        String S_STAGGER = "Stagger";
+        String S_PATH_ROTATE = "PathRotate";
+        String S_QUANTIZE_MOTION_PHASE = "QuantizeMotionPhase";
+        String S_EASING = "TransitionEasing";
+        String S_QUANTIZE_INTERPOLATOR = "QuantizeInterpolator";
+        String S_ANIMATE_RELATIVE_TO = "AnimateRelativeTo";
+        String S_ANIMATE_CIRCLEANGLE_TO = "AnimateCircleAngleTo";
+        String S_PATHMOTION_ARC = "PathMotionArc";
+        String S_DRAW_PATH = "DrawPath";
+        String S_POLAR_RELATIVETO = "PolarRelativeTo";
+        String S_QUANTIZE_MOTIONSTEPS = "QuantizeMotionSteps";
+        String S_QUANTIZE_INTERPOLATOR_TYPE = "QuantizeInterpolatorType";
+        String S_QUANTIZE_INTERPOLATOR_ID = "QuantizeInterpolatorID";
+        String[] KEY_WORDS = {
                 S_STAGGER,
                 S_PATH_ROTATE,
                 S_QUANTIZE_MOTION_PHASE,
@@ -561,19 +561,19 @@ public interface TypedValues {
                 S_QUANTIZE_INTERPOLATOR_TYPE,
                 S_QUANTIZE_INTERPOLATOR_ID,
         };
-        public static final int TYPE_STAGGER = 600;
-        public static final int TYPE_PATH_ROTATE = 601;
-        public static final int TYPE_QUANTIZE_MOTION_PHASE = 602;
-        public static final int TYPE_EASING = 603;
-        public static final int TYPE_QUANTIZE_INTERPOLATOR = 604;
-        public static final int TYPE_ANIMATE_RELATIVE_TO = 605;
-        public static final int TYPE_ANIMATE_CIRCLEANGLE_TO = 606;
-        public static final int TYPE_PATHMOTION_ARC = 607;
-        public static final int TYPE_DRAW_PATH = 608;
-        public static final int TYPE_POLAR_RELATIVETO = 609;
-        public static final int TYPE_QUANTIZE_MOTIONSTEPS = 610;
-        public static final int TYPE_QUANTIZE_INTERPOLATOR_TYPE = 611;
-        public static final int TYPE_QUANTIZE_INTERPOLATOR_ID = 612;
+        int TYPE_STAGGER = 600;
+        int TYPE_PATH_ROTATE = 601;
+        int TYPE_QUANTIZE_MOTION_PHASE = 602;
+        int TYPE_EASING = 603;
+        int TYPE_QUANTIZE_INTERPOLATOR = 604;
+        int TYPE_ANIMATE_RELATIVE_TO = 605;
+        int TYPE_ANIMATE_CIRCLEANGLE_TO = 606;
+        int TYPE_PATHMOTION_ARC = 607;
+        int TYPE_DRAW_PATH = 608;
+        int TYPE_POLAR_RELATIVETO = 609;
+        int TYPE_QUANTIZE_MOTIONSTEPS = 610;
+        int TYPE_QUANTIZE_INTERPOLATOR_TYPE = 611;
+        int TYPE_QUANTIZE_INTERPOLATOR_ID = 612;
 
         /**
          * Method to go from String names of values to id of the values
@@ -582,7 +582,7 @@ public interface TypedValues {
          * @param name the name of the value
          * @return the id of the vlalue or -1 if no value exist
          */
-        public static int getId(String name) {
+        static int getId(String name) {
             switch (name) {
                 case S_STAGGER:
                     return TYPE_STAGGER;
@@ -617,15 +617,15 @@ public interface TypedValues {
     }
 
     interface Custom {
-        public static final String NAME = "Custom";
-        public static final String S_INT = "integer";
-        public static final String S_FLOAT = "float";
-        public static final String S_COLOR = "color";
-        public static final String S_STRING = "string";
-        public static final String S_BOOLEAN = "boolean";
-        public static final String S_DIMENSION = "dimension";
-        public static final String S_REFERENCE = "reference";
-        public static final String[] KEY_WORDS = {
+        String NAME = "Custom";
+        String S_INT = "integer";
+        String S_FLOAT = "float";
+        String S_COLOR = "color";
+        String S_STRING = "string";
+        String S_BOOLEAN = "boolean";
+        String S_DIMENSION = "dimension";
+        String S_REFERENCE = "reference";
+        String[] KEY_WORDS = {
                 S_FLOAT,
                 S_COLOR,
                 S_STRING,
@@ -633,13 +633,13 @@ public interface TypedValues {
                 S_DIMENSION,
                 S_REFERENCE,
         };
-        public static final int TYPE_INT = 900;
-        public static final int TYPE_FLOAT = 901;
-        public static final int TYPE_COLOR = 902;
-        public static final int TYPE_STRING = 903;
-        public static final int TYPE_BOOLEAN = 904;
-        public static final int TYPE_DIMENSION = 905;
-        public static final int TYPE_REFERENCE = 906;
+        int TYPE_INT = 900;
+        int TYPE_FLOAT = 901;
+        int TYPE_COLOR = 902;
+        int TYPE_STRING = 903;
+        int TYPE_BOOLEAN = 904;
+        int TYPE_DIMENSION = 905;
+        int TYPE_REFERENCE = 906;
 
         /**
          * Method to go from String names of values to id of the values
@@ -648,7 +648,7 @@ public interface TypedValues {
          * @param name the name of the value
          * @return the id of the vlalue or -1 if no value exist
          */
-        public static int getId(String name) {
+        static int getId(String name) {
             switch (name) {
                 case S_INT:
                     return TYPE_INT;
@@ -670,18 +670,18 @@ public interface TypedValues {
     }
 
     interface MotionScene {
-        public static final String NAME = "MotionScene";
-        public static final String S_DEFAULT_DURATION = "defaultDuration";
-        public static final String S_LAYOUT_DURING_TRANSITION = "layoutDuringTransition";
-        public static final int TYPE_DEFAULT_DURATION = 600;
-        public static final int TYPE_LAYOUT_DURING_TRANSITION = 601;
+        String NAME = "MotionScene";
+        String S_DEFAULT_DURATION = "defaultDuration";
+        String S_LAYOUT_DURING_TRANSITION = "layoutDuringTransition";
+        int TYPE_DEFAULT_DURATION = 600;
+        int TYPE_LAYOUT_DURING_TRANSITION = 601;
 
-        public static final String[] KEY_WORDS = {
+        String[] KEY_WORDS = {
                 S_DEFAULT_DURATION,
                 S_LAYOUT_DURING_TRANSITION,
         };
 
-        public static int getType(int name) {
+        static int getType(int name) {
             switch (name) {
                 case TYPE_DEFAULT_DURATION:
                     return INT_MASK;
@@ -698,7 +698,7 @@ public interface TypedValues {
          * @param name the name of the value
          * @return the id of the vlalue or -1 if no value exist
          */
-        public static int getId(String name) {
+        static int getId(String name) {
             switch (name) {
                 case S_DEFAULT_DURATION:
                     return TYPE_DEFAULT_DURATION;
@@ -710,27 +710,27 @@ public interface TypedValues {
     }
 
     interface TransitionType {
-        public static final String NAME = "Transitions";
-        public static final String S_DURATION = "duration";
-        public static final String S_FROM = "from";
-        public static final String S_TO = "to";
-        public static final String S_PATH_MOTION_ARC = "pathMotionArc";
-        public static final String S_AUTO_TRANSITION = "autoTransition";
-        public static final String S_INTERPOLATOR = "motionInterpolator";
-        public static final String S_STAGGERED = "staggered";
-        public static final String S_TRANSITION_FLAGS = "transitionFlags";
+        String NAME = "Transitions";
+        String S_DURATION = "duration";
+        String S_FROM = "from";
+        String S_TO = "to";
+        String S_PATH_MOTION_ARC = "pathMotionArc";
+        String S_AUTO_TRANSITION = "autoTransition";
+        String S_INTERPOLATOR = "motionInterpolator";
+        String S_STAGGERED = "staggered";
+        String S_TRANSITION_FLAGS = "transitionFlags";
 
-        public static final int TYPE_DURATION = 700;
-        public static final int TYPE_FROM = 701;
-        public static final int TYPE_TO = 702;
-        public static final int TYPE_PATH_MOTION_ARC = PositionType.TYPE_PATH_MOTION_ARC;
-        public static final int TYPE_AUTO_TRANSITION = 704;
-        public static final int TYPE_INTERPOLATOR = 705;
-        public static final int TYPE_STAGGERED = 706;
-        public static final int TYPE_TRANSITION_FLAGS = 707;
+        int TYPE_DURATION = 700;
+        int TYPE_FROM = 701;
+        int TYPE_TO = 702;
+        int TYPE_PATH_MOTION_ARC = PositionType.TYPE_PATH_MOTION_ARC;
+        int TYPE_AUTO_TRANSITION = 704;
+        int TYPE_INTERPOLATOR = 705;
+        int TYPE_STAGGERED = 706;
+        int TYPE_TRANSITION_FLAGS = 707;
 
 
-        public static final String[] KEY_WORDS = {
+        String[] KEY_WORDS = {
                 S_DURATION,
                 S_FROM,
                 S_TO,
@@ -742,7 +742,7 @@ public interface TypedValues {
                 S_TRANSITION_FLAGS,
         };
 
-        public static int getType(int name) {
+        static int getType(int name) {
             switch (name) {
                 case TYPE_DURATION:
                 case TYPE_PATH_MOTION_ARC:
@@ -766,7 +766,7 @@ public interface TypedValues {
          * @param name the name of the value
          * @return the id of the vlalue or -1 if no value exist
          */
-        public static int getId(String name) {
+        static int getId(String name) {
             switch (name) {
                 case S_DURATION:
                     return TYPE_DURATION;
@@ -790,26 +790,26 @@ public interface TypedValues {
     }
 
     interface OnSwipe {
-        public static final String DRAG_SCALE = "dragscale";
-        public static final String DRAG_THRESHOLD = "dragthreshold";
+        String DRAG_SCALE = "dragscale";
+        String DRAG_THRESHOLD = "dragthreshold";
 
-        public static final String MAX_VELOCITY = "maxvelocity";
-        public static final String MAX_ACCELERATION = "maxacceleration";
-        public static final String SPRING_MASS = "springmass";
-        public static final String SPRING_STIFFNESS = "springstiffness";
-        public static final String SPRING_DAMPING = "springdamping";
-        public static final String SPRINGS_TOP_THRESHOLD = "springstopthreshold";
+        String MAX_VELOCITY = "maxvelocity";
+        String MAX_ACCELERATION = "maxacceleration";
+        String SPRING_MASS = "springmass";
+        String SPRING_STIFFNESS = "springstiffness";
+        String SPRING_DAMPING = "springdamping";
+        String SPRINGS_TOP_THRESHOLD = "springstopthreshold";
 
-        public static final String DRAG_DIRECTION = "dragdirection";
-        public static final String TOUCH_ANCHOR_ID = "touchanchorid";
-        public static final String TOUCH_ANCHOR_SIDE = "touchanchorside";
-        public static final String ROTATION_CENTER_ID = "rotationcenterid";
-        public static final String TOUCH_REGION_ID = "touchregionid";
-        public static final String LIMIT_BOUNDS_TO = "limitboundsto";
+        String DRAG_DIRECTION = "dragdirection";
+        String TOUCH_ANCHOR_ID = "touchanchorid";
+        String TOUCH_ANCHOR_SIDE = "touchanchorside";
+        String ROTATION_CENTER_ID = "rotationcenterid";
+        String TOUCH_REGION_ID = "touchregionid";
+        String LIMIT_BOUNDS_TO = "limitboundsto";
 
-        public static final String MOVE_WHEN_SCROLLAT_TOP = "movewhenscrollattop";
-        public static final String ON_TOUCH_UP = "ontouchup";
-        public static final String[] ON_TOUCH_UP_ENUM = {"autoComplete",
+        String MOVE_WHEN_SCROLLAT_TOP = "movewhenscrollattop";
+        String ON_TOUCH_UP = "ontouchup";
+        String[] ON_TOUCH_UP_ENUM = {"autoComplete",
                 "autoCompleteToStart",
                 "autoCompleteToEnd",
                 "stop",
@@ -819,19 +819,19 @@ public interface TypedValues {
                 "neverCompleteToEnd"};
 
 
-        public static final String SPRING_BOUNDARY = "springboundary";
-        public static final String[] SPRING_BOUNDARY_ENUM = {"overshoot",
+        String SPRING_BOUNDARY = "springboundary";
+        String[] SPRING_BOUNDARY_ENUM = {"overshoot",
                 "bounceStart",
                 "bounceEnd",
                 "bounceBoth"};
 
-        public static final String AUTOCOMPLETE_MODE = "autocompletemode";
-        public static final String[] AUTOCOMPLETE_MODE_ENUM = {
+        String AUTOCOMPLETE_MODE = "autocompletemode";
+        String[] AUTOCOMPLETE_MODE_ENUM = {
                 "continuousVelocity",
                 "spring"};
 
-        public static final String NESTED_SCROLL_FLAGS = "nestedscrollflags";
-        public static final String[] NESTED_SCROLL_FLAGS_ENUM = {"none",
+        String NESTED_SCROLL_FLAGS = "nestedscrollflags";
+        String[] NESTED_SCROLL_FLAGS_ENUM = {"none",
                 "disablePostScroll",
                 "disableScroll",
                 "supportScrollUp"};
