@@ -17,7 +17,6 @@
 package androidx.constraintlayout.widget;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.content.res.XmlResourceParser;
 import android.util.AttributeSet;
@@ -40,7 +39,7 @@ public class StateSet {
     private static final boolean DEBUG = false;
     int mDefaultState = -1;
 
-     ConstraintSet mDefaultConstraintSet;
+    ConstraintSet mDefaultConstraintSet;
     int mCurrentStateId = -1; // default
     int mCurrentConstraintNumber = -1; // default
     private SparseArray<State> mStateList = new SparseArray<>();
@@ -62,18 +61,18 @@ public class StateSet {
      * @param context    the context for the inflation
      * @param parser  mId of xml file in res/xml/
      */
-    private void load(Context context,XmlPullParser parser) {
+    private void load(Context context, XmlPullParser parser) {
         if (DEBUG) {
             Log.v(TAG, "#########load stateSet###### ");
         }
         // Parse the stateSet attributes
         AttributeSet attrs = Xml.asAttributeSet(parser);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.StateSet);
-        final int N = a.getIndexCount();
+        final int count = a.getIndexCount();
 
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < count; i++) {
             int attr = a.getIndex(i);
-            if (attr == R.styleable.StateSet_defaultState){
+            if (attr == R.styleable.StateSet_defaultState) {
                 mDefaultState = a.getResourceId(attr, mDefaultState);
             }
         }
@@ -85,8 +84,8 @@ public class StateSet {
             String document = null;
             State state = null;
             for (int eventType = parser.getEventType();
-                 eventType != XmlResourceParser.END_DOCUMENT;
-                 eventType = parser.next()) {
+                    eventType != XmlResourceParser.END_DOCUMENT;
+                    eventType = parser.next()) {
 
                 switch (eventType) {
                     case XmlResourceParser.START_DOCUMENT:
@@ -112,7 +111,7 @@ public class StateSet {
 
                             default:
                                 if (DEBUG) {
-                                    Log.v(TAG, "unknown tag "+tagName);
+                                    Log.v(TAG, "unknown tag " + tagName);
                                 }
                         }
 
@@ -122,7 +121,7 @@ public class StateSet {
                             if (DEBUG) {
                                 Log.v(TAG, "############ finished parsing state set");
                             }
-                                return;
+                            return;
                         }
 
                         tagName = null;
@@ -139,6 +138,13 @@ public class StateSet {
         }
     }
 
+    /**
+     * will the layout need to change
+     * @param id
+     * @param width
+     * @param height
+     * @return
+     */
     public boolean needsToChange(int id, float width, float height) {
         if (mCurrentStateId != id) {
             return true;
@@ -158,10 +164,21 @@ public class StateSet {
         return true;
     }
 
+    /**
+     * listen for changes in constraintSet
+     * @param constraintsChangedListener
+     */
     public void setOnConstraintsChanged(ConstraintsChangedListener constraintsChangedListener) {
         this.mConstraintsChangedListener = constraintsChangedListener;
     }
 
+    /**
+     * Get the constraint id for a state
+     * @param id
+     * @param width
+     * @param height
+     * @return
+     */
     public int stateGetConstraintID(int id, int width, int height) {
         return updateConstraints(-1, id, width, height);
     }
@@ -175,7 +192,10 @@ public class StateSet {
      * @param height
      * @return
      */
-    public int convertToConstraintSet(int currentConstrainSettId, int stateId, float width, float height) {
+    public int convertToConstraintSet(int currentConstrainSettId,
+                                      int stateId,
+                                      float width,
+                                      float height) {
         State state = mStateList.get(stateId);
         if (state == null) {
             return stateId;
@@ -193,7 +213,7 @@ public class StateSet {
         } else {
             Variant match = null;
             for (Variant mVariant : state.mVariants) {
-                if (mVariant.match(width,height)) {
+                if (mVariant.match(width, height)) {
                     if (currentConstrainSettId == mVariant.mConstraintID) {
                         return currentConstrainSettId;
                     }
@@ -208,6 +228,14 @@ public class StateSet {
         }
     }
 
+    /**
+     * Update the Constraints
+     * @param currentId
+     * @param id
+     * @param width
+     * @param height
+     * @return
+     */
     public int updateConstraints(int currentId, int id, float width, float height) {
         if (currentId == id) {
             State state;
@@ -251,11 +279,12 @@ public class StateSet {
         ArrayList<Variant> mVariants = new ArrayList<>();
         int mConstraintID = -1;
         boolean mIsLayout = false;
-        public State(Context context, XmlPullParser parser) {
+
+        State(Context context, XmlPullParser parser) {
             AttributeSet attrs = Xml.asAttributeSet(parser);
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.State);
-            final int N = a.getIndexCount();
-            for (int i = 0; i < N; i++) {
+            final int count = a.getIndexCount();
+            for (int i = 0; i < count; i++) {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.State_android_id) {
                     mId = a.getResourceId(attr, mId);
@@ -295,15 +324,15 @@ public class StateSet {
         int mConstraintID = -1;
         boolean mIsLayout = false;
 
-        public Variant(Context context, XmlPullParser parser) {
+        Variant(Context context, XmlPullParser parser) {
             AttributeSet attrs = Xml.asAttributeSet(parser);
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Variant);
-            final int N = a.getIndexCount();
+            final int count = a.getIndexCount();
             if (DEBUG) {
                 Log.v(TAG, "############### Variant");
             }
 
-            for (int i = 0; i < N; i++) {
+            for (int i = 0; i < count; i++) {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.Variant_constraints) {
                     mConstraintID = a.getResourceId(attr, mConstraintID);
@@ -345,8 +374,10 @@ public class StateSet {
 
         boolean match(float widthDp, float heightDp) {
             if (DEBUG) {
-                Log.v(TAG, "width = " + (int) widthDp + " < " + mMinWidth + " && " + (int) widthDp + " > " + mMaxWidth +
-                        " height = " + (int) heightDp + " < " + mMinHeight + " && " + (int) heightDp + " > " + mMaxHeight);
+                Log.v(TAG, "width = " + (int) widthDp
+                        + " < " + mMinWidth + " && " + (int) widthDp + " > " + mMaxWidth
+                        + " height = " + (int) heightDp
+                        + " < " + mMinHeight + " && " + (int) heightDp + " > " + mMaxHeight);
             }
             if (!Float.isNaN(mMinWidth)) {
                 if (widthDp < mMinWidth) return false;

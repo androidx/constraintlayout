@@ -60,17 +60,21 @@ public class ReactiveGuide extends View implements SharedValues.SharedValuesList
 
     private void init(AttributeSet attrs) {
         if (attrs != null) {
-            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ConstraintLayout_ReactiveGuide);
-            final int N = a.getIndexCount();
-            for (int i = 0; i < N; i++) {
+            TypedArray a = getContext().obtainStyledAttributes(attrs,
+                    R.styleable.ConstraintLayout_ReactiveGuide);
+            final int count = a.getIndexCount();
+            for (int i = 0; i < count; i++) {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.ConstraintLayout_ReactiveGuide_reactiveGuide_valueId) {
                     mAttributeId = a.getResourceId(attr, mAttributeId);
-                } else if (attr == R.styleable.ConstraintLayout_ReactiveGuide_reactiveGuide_animateChange) {
+                } else if (attr == R.styleable
+                        .ConstraintLayout_ReactiveGuide_reactiveGuide_animateChange) {
                     mAnimateChange = a.getBoolean(attr, mAnimateChange);
-                } else if (attr == R.styleable.ConstraintLayout_ReactiveGuide_reactiveGuide_applyToConstraintSet) {
+                } else if (attr == R.styleable
+                        .ConstraintLayout_ReactiveGuide_reactiveGuide_applyToConstraintSet) {
                     mApplyToConstraintSetId = a.getResourceId(attr, mApplyToConstraintSetId);
-                } else if (attr == R.styleable.ConstraintLayout_ReactiveGuide_reactiveGuide_applyToAllConstraintSets) {
+                } else if (attr == R.styleable
+                        .ConstraintLayout_ReactiveGuide_reactiveGuide_applyToAllConstraintSets) {
                     mApplyToAllConstraintSets = a.getBoolean(attr, mApplyToAllConstraintSets);
                 }
             }
@@ -82,7 +86,9 @@ public class ReactiveGuide extends View implements SharedValues.SharedValuesList
         }
     }
 
-    public int getAttributeId() { return mAttributeId; }
+    public int getAttributeId() {
+        return mAttributeId;
+    }
 
     public void setAttributeId(int id) {
         SharedValues sharedValues = ConstraintLayout.getSharedValues();
@@ -103,7 +109,9 @@ public class ReactiveGuide extends View implements SharedValues.SharedValuesList
         mApplyToConstraintSetId = id;
     }
 
-    public boolean isAnimatingChange() { return mAnimateChange; }
+    public boolean isAnimatingChange() {
+        return mAnimateChange;
+    }
 
     public void setAnimateChange(boolean animate) {
         mAnimateChange = animate;
@@ -179,7 +187,7 @@ public class ReactiveGuide extends View implements SharedValues.SharedValuesList
             }
             if (mAnimateChange) {
                 if (mApplyToAllConstraintSets) {
-                    int ids[] = motionLayout.getConstraintSetIds();
+                    int []ids = motionLayout.getConstraintSetIds();
                     for (int i = 0; i < ids.length; i++) {
                         int cs = ids[i];
                         if (cs != currentState) {
@@ -192,7 +200,7 @@ public class ReactiveGuide extends View implements SharedValues.SharedValuesList
                 motionLayout.updateStateAnimate(currentState, constraintSet, 1000);
             } else {
                 if (mApplyToAllConstraintSets) {
-                    int ids[] = motionLayout.getConstraintSetIds();
+                    int []ids = motionLayout.getConstraintSetIds();
                     for (int i = 0; i < ids.length; i++) {
                         int cs = ids[i];
                         changeValue(newValue, id, motionLayout, cs);

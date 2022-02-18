@@ -47,9 +47,10 @@ public abstract class VirtualLayout extends ConstraintHelper {
     protected void init(AttributeSet attrs) {
         super.init(attrs);
         if (attrs != null) {
-            TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ConstraintLayout_Layout);
-            final int N = a.getIndexCount();
-            for (int i = 0; i < N; i++) {
+            TypedArray a = getContext().obtainStyledAttributes(attrs,
+                    R.styleable.ConstraintLayout_Layout);
+            final int count = a.getIndexCount();
+            for (int i = 0; i < count; i++) {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.ConstraintLayout_Layout_android_visibility) {
                     mApplyVisibilityOnAttach = true;
@@ -61,7 +62,15 @@ public abstract class VirtualLayout extends ConstraintHelper {
         }
     }
 
-    public void onMeasure(androidx.constraintlayout.core.widgets.VirtualLayout layout, int widthMeasureSpec, int heightMeasureSpec) {
+    /**
+     * called to measure layout
+     * @param layout
+     * @param widthMeasureSpec
+     * @param heightMeasureSpec
+     */
+    public void onMeasure(androidx.constraintlayout.core.widgets.VirtualLayout layout,
+                          int widthMeasureSpec,
+                          int heightMeasureSpec) {
         // nothing
     }
 
@@ -88,7 +97,8 @@ public abstract class VirtualLayout extends ConstraintHelper {
                             view.setVisibility(visibility);
                         }
                         if (mApplyElevationOnAttach) {
-                            if (elevation > 0 && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                            if (elevation > 0
+                                    && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                                 view.setTranslationZ(view.getTranslationZ() + elevation);
                             }
                         }

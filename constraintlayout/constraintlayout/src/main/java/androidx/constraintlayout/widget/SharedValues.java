@@ -31,12 +31,21 @@ public class SharedValues {
     public static final int UNSET = -1;
 
     private SparseIntArray mValues = new SparseIntArray();
-    private HashMap<Integer, HashSet<WeakReference<SharedValuesListener>>> mValuesListeners = new HashMap<>();
+    private HashMap<Integer, HashSet<WeakReference<SharedValuesListener>>> mValuesListeners =
+            new HashMap<>();
 
+    /**
+     * interface for listeners
+     */
     public interface SharedValuesListener {
         void onNewValue(int key, int newValue, int oldValue);
     }
 
+    /**
+     * Add a listener for a key
+     * @param key
+     * @param listener
+     */
     public void addListener(int key, SharedValuesListener listener) {
         HashSet<WeakReference<SharedValuesListener>> listeners = mValuesListeners.get(key);
         if (listeners == null) {
@@ -46,6 +55,11 @@ public class SharedValues {
         listeners.add(new WeakReference<>(listener));
     }
 
+    /**
+     * Remove listener for a key (will not be removed for other keys)
+     * @param key
+     * @param listener
+     */
     public void removeListener(int key, SharedValuesListener listener) {
         HashSet<WeakReference<SharedValuesListener>> listeners = mValuesListeners.get(key);
         if (listeners == null) {
@@ -61,20 +75,37 @@ public class SharedValues {
         listeners.removeAll(toRemove);
     }
 
+    /**
+     * Remove a listener
+     * @param listener
+     */
     public void removeListener(SharedValuesListener listener) {
         for (Integer key : mValuesListeners.keySet()) {
             removeListener(key, listener);
         }
     }
 
+    /**
+     * remove all listeners
+     */
     public void clearListeners() {
         mValuesListeners.clear();
     }
 
+    /**
+     * get the value from the map
+     * @param key
+     * @return
+     */
     public int getValue(int key) {
         return mValues.get(key, UNSET);
     }
 
+    /**
+     * notify that value has changed
+     * @param key
+     * @param value
+     */
     public void fireNewValue(int key, int value) {
         boolean needsCleanup = false;
         int previousValue = mValues.get(key, UNSET);
