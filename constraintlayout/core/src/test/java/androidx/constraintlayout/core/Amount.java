@@ -28,7 +28,7 @@ class Amount {
      * @param numerator the numerator
      * @param denominator the denominator
      */
-    public Amount(int numerator, int denominator) {
+    Amount(int numerator, int denominator) {
         mNumerator = numerator;
         mDenominator = denominator;
         simplify();
@@ -38,12 +38,12 @@ class Amount {
      * Alternate constructor, set the numerator, with the denominator set to one.
      * @param numerator the amount's value
      */
-    public Amount(int numerator) {
+    Amount(int numerator) {
         mNumerator = numerator;
         mDenominator = 1;
     }
 
-    public Amount(Amount amount) {
+    Amount(Amount amount) {
         mNumerator = amount.mNumerator;
         mDenominator = amount.mDenominator;
         simplify();
@@ -154,13 +154,17 @@ class Amount {
      * Accessor for the numerator
      * @return the numerator
      */
-    public int getNumerator() { return mNumerator; }
+    public int getNumerator() {
+        return mNumerator;
+    }
 
     /**
      * Accessor for the denominator
      * @return the denominator
      */
-    public int getDenominator() { return mDenominator; }
+    public int getDenominator() {
+        return mDenominator;
+    }
 
     /**
      * Override equals method

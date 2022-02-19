@@ -19,23 +19,23 @@ package androidx.constraintlayout.core;
  * Utility to draw an histogram
  */
 public class HistogramCounter {
-    long[] calls = new long[256];
-    final String name;
+    long[] mCalls = new long[256];
+    final String mName;
 
     public void inc(int value) {
         if (value < 255) {
-            calls[value]++;
+            mCalls[value]++;
         } else {
-            calls[255]++;
+            mCalls[255]++;
         }
     }
 
     public HistogramCounter(String name) {
-        this.name = name;
+        this.mName = name;
     }
 
     public void reset() {
-        calls = new long[256];
+        mCalls = new long[256];
     }
 
     private String print(long n) {
@@ -48,18 +48,18 @@ public class HistogramCounter {
 
     @Override
     public String toString() {
-        String ret = name + " :\n";
+        String ret = mName + " :\n";
         int lastValue = 255;
         for (int i = 255; i >= 0; i--) {
-            if (calls[i] != 0) {
+            if (mCalls[i] != 0) {
                 lastValue = i;
                 break;
             }
         }
         int total = 0;
         for (int i = 0; i <= lastValue; i++) {
-            ret += "[" + i + "] = " + calls[i] + " -> " + print(calls[i]) + "\n";
-            total += calls[i];
+            ret += "[" + i + "] = " + mCalls[i] + " -> " + print(mCalls[i]) + "\n";
+            total += mCalls[i];
         }
         ret += "Total calls " + total;
         return ret;

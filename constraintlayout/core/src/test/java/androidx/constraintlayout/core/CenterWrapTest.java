@@ -18,61 +18,62 @@ package androidx.constraintlayout.core;
 import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
-import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 public class CenterWrapTest {
 
     @Test
     public void testRatioCenter() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 800, 600);
-        ConstraintWidget A = new ConstraintWidget(100, 20);
-        ConstraintWidget B = new ConstraintWidget(100, 20);
+        ConstraintWidget a = new ConstraintWidget(100, 20);
+        ConstraintWidget b = new ConstraintWidget(100, 20);
         root.setDebugName("Root");
-        A.setDebugName("A");
-        B.setDebugName("B");
-        root.add(A);
-        root.add(B);
+        a.setDebugName("A");
+        b.setDebugName("B");
+        root.add(a);
+        root.add(b);
 
-        A.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
-        A.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT);
-        A.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
-        A.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
-        A.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
-        A.setDimensionRatio(0.3f, ConstraintWidget.VERTICAL);
+        a.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
+        a.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT);
+        a.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        a.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
+        a.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
+        a.setDimensionRatio(0.3f, ConstraintWidget.VERTICAL);
 
-        B.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
-        B.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT);
-        B.connect(ConstraintAnchor.Type.TOP, A, ConstraintAnchor.Type.BOTTOM);
-        B.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM);
-        B.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
-        B.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
-        B.setDimensionRatio(1f, ConstraintWidget.VERTICAL);
+        b.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
+        b.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT);
+        b.connect(ConstraintAnchor.Type.TOP, a, ConstraintAnchor.Type.BOTTOM);
+        b.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM);
+        b.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
+        b.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
+        b.setDimensionRatio(1f, ConstraintWidget.VERTICAL);
 //        root.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
         root.setOptimizationLevel(0);
         root.layout();
-        System.out.println("root: " + root + " A: " + A);
+        System.out.println("root: " + root + " A: " + a);
     }
 
     @Test
     public void testSimpleWrap() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 800, 600);
-        ConstraintWidget A = new ConstraintWidget(100, 20);
+        ConstraintWidget a = new ConstraintWidget(100, 20);
         root.setDebugName("Root");
-        A.setDebugName("A");
-        root.add(A);
-        A.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
-        A.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT);
-        A.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
-        A.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM);
+        a.setDebugName("A");
+        root.add(a);
+        a.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
+        a.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT);
+        a.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        a.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM);
         root.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
         root.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
         root.setOptimizationLevel(0);
         root.layout();
-        System.out.println("root: " + root + " A: " + A);
-        assertEquals(A.getWidth(), 100);
-        assertEquals(A.getHeight(), 20);
+        System.out.println("root: " + root + " A: " + a);
+        assertEquals(a.getWidth(), 100);
+        assertEquals(a.getHeight(), 20);
         assertEquals(root.getWidth(), 100);
         assertEquals(root.getHeight(), 20);
     }
@@ -80,19 +81,19 @@ public class CenterWrapTest {
     @Test
     public void testSimpleWrap2() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 800, 600);
-        ConstraintWidget A = new ConstraintWidget(100, 20);
+        ConstraintWidget a = new ConstraintWidget(100, 20);
         root.setDebugName("Root");
-        A.setDebugName("A");
-        root.add(A);
-        A.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM);
-        A.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        a.setDebugName("A");
+        root.add(a);
+        a.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM);
+        a.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
         root.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
         root.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
         root.setOptimizationLevel(0);
         root.layout();
-        System.out.println("root: " + root + " A: " + A);
-        assertEquals(A.getWidth(), 100);
-        assertEquals(A.getHeight(), 20);
+        System.out.println("root: " + root + " A: " + a);
+        assertEquals(a.getWidth(), 100);
+        assertEquals(a.getHeight(), 20);
         assertEquals(root.getWidth(), 100);
         assertEquals(root.getHeight(), 20);
     }
@@ -100,172 +101,175 @@ public class CenterWrapTest {
     @Test
     public void testWrap() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 800, 600);
-        ConstraintWidget A = new ConstraintWidget(100, 20);
-        ConstraintWidget B = new ConstraintWidget(100, 20);
-        ConstraintWidget C = new ConstraintWidget(100, 20);
+        ConstraintWidget a = new ConstraintWidget(100, 20);
+        ConstraintWidget b = new ConstraintWidget(100, 20);
+        ConstraintWidget c = new ConstraintWidget(100, 20);
         root.setDebugName("Root");
-        A.setDebugName("A");
-        B.setDebugName("B");
-        C.setDebugName("C");
-        root.add(A);
-        root.add(B);
-        root.add(C);
+        a.setDebugName("A");
+        b.setDebugName("B");
+        c.setDebugName("C");
+        root.add(a);
+        root.add(b);
+        root.add(c);
 
-        A.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
-        A.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT);
-        A.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
-        A.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM);
-        B.connect(ConstraintAnchor.Type.LEFT, A, ConstraintAnchor.Type.RIGHT);
-        B.connect(ConstraintAnchor.Type.TOP, A, ConstraintAnchor.Type.TOP);
-        C.connect(ConstraintAnchor.Type.LEFT, B, ConstraintAnchor.Type.RIGHT);
-        C.connect(ConstraintAnchor.Type.TOP, B, ConstraintAnchor.Type.BOTTOM);
+        a.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
+        a.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT);
+        a.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        a.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM);
+        b.connect(ConstraintAnchor.Type.LEFT, a, ConstraintAnchor.Type.RIGHT);
+        b.connect(ConstraintAnchor.Type.TOP, a, ConstraintAnchor.Type.TOP);
+        c.connect(ConstraintAnchor.Type.LEFT, b, ConstraintAnchor.Type.RIGHT);
+        c.connect(ConstraintAnchor.Type.TOP, b, ConstraintAnchor.Type.BOTTOM);
         root.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
         root.setOptimizationLevel(0);
         root.layout();
-        System.out.println("root: " + root + " A: " + A + " B: " + B + " C: " + C);
-        assertEquals(A.getWidth(), 100);
-        assertEquals(B.getWidth(), 100);
-        assertEquals(C.getWidth(), 100);
-        assertEquals(A.getWidth(), 100);
-        assertEquals(A.getHeight(), 20);
-        assertEquals(B.getHeight(), 20);
-        assertEquals(C.getHeight(), 20);
+        System.out.println("root: " + root + " A: " + a + " B: " + b + " C: " + c);
+        assertEquals(a.getWidth(), 100);
+        assertEquals(b.getWidth(), 100);
+        assertEquals(c.getWidth(), 100);
+        assertEquals(a.getWidth(), 100);
+        assertEquals(a.getHeight(), 20);
+        assertEquals(b.getHeight(), 20);
+        assertEquals(c.getHeight(), 20);
     }
 
     @Test
     public void testWrapHeight() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 800, 600);
-        ConstraintWidget TL = new ConstraintWidget(100, 20);
-        ConstraintWidget TRL = new ConstraintWidget(100, 20);
-        ConstraintWidget TBL = new ConstraintWidget(100, 20);
-        ConstraintWidget IMG = new ConstraintWidget(100, 100);
+        ConstraintWidget tl = new ConstraintWidget(100, 20);
+        ConstraintWidget trl = new ConstraintWidget(100, 20);
+        ConstraintWidget tbl = new ConstraintWidget(100, 20);
+        ConstraintWidget img = new ConstraintWidget(100, 100);
 
         root.setDebugName("root");
-        TL.setDebugName("TL");
-        TRL.setDebugName("TRL");
-        TBL.setDebugName("TBL");
-        IMG.setDebugName("IMG");
+        tl.setDebugName("TL");
+        trl.setDebugName("TRL");
+        tbl.setDebugName("TBL");
+        img.setDebugName("IMG");
 
         // vertical
 
-        TL.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
-        TL.connect(ConstraintAnchor.Type.BOTTOM, TBL, ConstraintAnchor.Type.BOTTOM);
-        TRL.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        tl.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        tl.connect(ConstraintAnchor.Type.BOTTOM, tbl, ConstraintAnchor.Type.BOTTOM);
+        trl.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
         //TRL.connect(ConstraintAnchor.Type.BOTTOM, TBL, ConstraintAnchor.Type.TOP);
-        TBL.connect(ConstraintAnchor.Type.TOP, TRL, ConstraintAnchor.Type.BOTTOM);
+        tbl.connect(ConstraintAnchor.Type.TOP, trl, ConstraintAnchor.Type.BOTTOM);
 
-        IMG.connect(ConstraintAnchor.Type.TOP, TBL, ConstraintAnchor.Type.BOTTOM);
-        IMG.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM);
+        img.connect(ConstraintAnchor.Type.TOP, tbl, ConstraintAnchor.Type.BOTTOM);
+        img.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM);
 
-        root.add(TL);
-        root.add(TRL);
-        root.add(TBL);
-        root.add(IMG);
+        root.add(tl);
+        root.add(trl);
+        root.add(tbl);
+        root.add(img);
 
         root.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
         root.layout();
-        System.out.println("a) root: " + root + " TL: " + TL + " TRL: " + TRL + " TBL: " + TBL + " IMG: " + IMG);
+        System.out.println("a) root: " + root + " TL: " + tl
+                + " TRL: " + trl + " TBL: " + tbl + " IMG: " + img);
         assertEquals(root.getHeight(), 140);
     }
 
     @Test
     public void testComplexLayout() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 800, 600);
-        ConstraintWidget IMG = new ConstraintWidget(100, 100);
+        ConstraintWidget img = new ConstraintWidget(100, 100);
 
         int margin = 16;
 
-        ConstraintWidget BUTTON = new ConstraintWidget(50, 50);
-        ConstraintWidget A = new ConstraintWidget(100, 20);
-        ConstraintWidget B = new ConstraintWidget(100, 20);
-        ConstraintWidget C = new ConstraintWidget(100, 20);
+        ConstraintWidget button = new ConstraintWidget(50, 50);
+        ConstraintWidget a = new ConstraintWidget(100, 20);
+        ConstraintWidget b = new ConstraintWidget(100, 20);
+        ConstraintWidget c = new ConstraintWidget(100, 20);
 
-        IMG.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
-        IMG.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT);
-        IMG.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
-        IMG.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
+        img.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
+        img.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT);
+        img.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        img.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
 
-        BUTTON.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT, margin);
-        BUTTON.connect(ConstraintAnchor.Type.TOP, IMG, ConstraintAnchor.Type.BOTTOM);
-        BUTTON.connect(ConstraintAnchor.Type.BOTTOM, IMG, ConstraintAnchor.Type.BOTTOM);
+        button.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT, margin);
+        button.connect(ConstraintAnchor.Type.TOP, img, ConstraintAnchor.Type.BOTTOM);
+        button.connect(ConstraintAnchor.Type.BOTTOM, img, ConstraintAnchor.Type.BOTTOM);
 
-        A.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT, margin);
-        A.connect(ConstraintAnchor.Type.TOP, BUTTON, ConstraintAnchor.Type.BOTTOM, margin);
+        a.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT, margin);
+        a.connect(ConstraintAnchor.Type.TOP, button, ConstraintAnchor.Type.BOTTOM, margin);
 
-        B.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT, margin);
-        B.connect(ConstraintAnchor.Type.TOP, BUTTON, ConstraintAnchor.Type.BOTTOM, margin);
+        b.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT, margin);
+        b.connect(ConstraintAnchor.Type.TOP, button, ConstraintAnchor.Type.BOTTOM, margin);
 
-        C.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT, margin);
-        C.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT, margin);
-        C.connect(ConstraintAnchor.Type.TOP, A, ConstraintAnchor.Type.BOTTOM, margin);
-        C.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM);
+        c.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT, margin);
+        c.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT, margin);
+        c.connect(ConstraintAnchor.Type.TOP, a, ConstraintAnchor.Type.BOTTOM, margin);
+        c.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM);
 
-        root.add(IMG);
-        root.add(BUTTON);
-        root.add(A);
-        root.add(B);
-        root.add(C);
+        root.add(img);
+        root.add(button);
+        root.add(a);
+        root.add(b);
+        root.add(c);
 
         root.setDebugName("root");
-        IMG.setDebugName("IMG");
-        BUTTON.setDebugName("BUTTON");
-        A.setDebugName("A");
-        B.setDebugName("B");
-        C.setDebugName("C");
+        img.setDebugName("IMG");
+        button.setDebugName("BUTTON");
+        a.setDebugName("A");
+        b.setDebugName("B");
+        c.setDebugName("C");
 
         root.layout();
-        System.out.println("a) root: " + root + " IMG: " + IMG + " BUTTON: " + BUTTON + " A: " + A + " B: " + B + " C: " + C);
+        System.out.println("a) root: " + root + " IMG: " + img
+                + " BUTTON: " + button + " A: " + a + " B: " + b + " C: " + c);
         assertEquals(root.getWidth(), 800);
         assertEquals(root.getHeight(), 600);
-        assertEquals(IMG.getWidth(), root.getWidth());
-        assertEquals(BUTTON.getWidth(), 50);
-        assertEquals(A.getWidth(), 100);
-        assertEquals(B.getWidth(), 100);
-        assertEquals(C.getWidth(), 100);
-        assertEquals(IMG.getHeight(), 100);
-        assertEquals(BUTTON.getHeight(), 50);
-        assertEquals(A.getHeight(), 20);
-        assertEquals(B.getHeight(), 20);
-        assertEquals(C.getHeight(), 20);
-        assertEquals(IMG.getLeft(), 0);
-        assertEquals(IMG.getRight(), root.getRight());
-        assertEquals(BUTTON.getLeft(), 734);
-        assertEquals(BUTTON.getTop(), IMG.getBottom() - BUTTON.getHeight() / 2);
-        assertEquals(A.getLeft(), margin);
-        assertEquals(A.getTop(), BUTTON.getBottom() + margin);
-        assertEquals(B.getRight(), root.getRight() - margin);
-        assertEquals(B.getTop(), A.getTop());
-        assertEquals(C.getLeft(), 350);
-        assertEquals(C.getRight(), 450);
-        assertEquals(C.getTop(), 379, 1);
+        assertEquals(img.getWidth(), root.getWidth());
+        assertEquals(button.getWidth(), 50);
+        assertEquals(a.getWidth(), 100);
+        assertEquals(b.getWidth(), 100);
+        assertEquals(c.getWidth(), 100);
+        assertEquals(img.getHeight(), 100);
+        assertEquals(button.getHeight(), 50);
+        assertEquals(a.getHeight(), 20);
+        assertEquals(b.getHeight(), 20);
+        assertEquals(c.getHeight(), 20);
+        assertEquals(img.getLeft(), 0);
+        assertEquals(img.getRight(), root.getRight());
+        assertEquals(button.getLeft(), 734);
+        assertEquals(button.getTop(), img.getBottom() - button.getHeight() / 2);
+        assertEquals(a.getLeft(), margin);
+        assertEquals(a.getTop(), button.getBottom() + margin);
+        assertEquals(b.getRight(), root.getRight() - margin);
+        assertEquals(b.getTop(), a.getTop());
+        assertEquals(c.getLeft(), 350);
+        assertEquals(c.getRight(), 450);
+        assertEquals(c.getTop(), 379, 1);
 
         root.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
         root.layout();
         root.setOptimizationLevel(0);
-        System.out.println("b) root: " + root + " IMG: " + IMG + " BUTTON: " + BUTTON + " A: " + A + " B: " + B + " C: " + C);
+        System.out.println("b) root: " + root + " IMG: " + img
+                + " BUTTON: " + button + " A: " + a + " B: " + b + " C: " + c);
         assertEquals(root.getWidth(), 800);
         assertEquals(root.getHeight(), 197);
-        assertEquals(IMG.getWidth(), root.getWidth());
-        assertEquals(BUTTON.getWidth(), 50);
-        assertEquals(A.getWidth(), 100);
-        assertEquals(B.getWidth(), 100);
-        assertEquals(C.getWidth(), 100);
-        assertEquals(IMG.getHeight(), 100);
-        assertEquals(BUTTON.getHeight(), 50);
-        assertEquals(A.getHeight(), 20);
-        assertEquals(B.getHeight(), 20);
-        assertEquals(C.getHeight(), 20);
-        assertEquals(IMG.getLeft(), 0);
-        assertEquals(IMG.getRight(), root.getRight());
-        assertEquals(BUTTON.getLeft(), 734);
-        assertEquals(BUTTON.getTop(), IMG.getBottom() - BUTTON.getHeight() / 2);
-        assertEquals(A.getLeft(), margin);
-        assertEquals(A.getTop(), BUTTON.getBottom() + margin);
-        assertEquals(B.getRight(), root.getRight() - margin);
-        assertEquals(B.getTop(), A.getTop());
-        assertEquals(C.getLeft(), 350);
-        assertEquals(C.getRight(), 450);
-        assertEquals(C.getTop(), A.getBottom() + margin);
+        assertEquals(img.getWidth(), root.getWidth());
+        assertEquals(button.getWidth(), 50);
+        assertEquals(a.getWidth(), 100);
+        assertEquals(b.getWidth(), 100);
+        assertEquals(c.getWidth(), 100);
+        assertEquals(img.getHeight(), 100);
+        assertEquals(button.getHeight(), 50);
+        assertEquals(a.getHeight(), 20);
+        assertEquals(b.getHeight(), 20);
+        assertEquals(c.getHeight(), 20);
+        assertEquals(img.getLeft(), 0);
+        assertEquals(img.getRight(), root.getRight());
+        assertEquals(button.getLeft(), 734);
+        assertEquals(button.getTop(), img.getBottom() - button.getHeight() / 2);
+        assertEquals(a.getLeft(), margin);
+        assertEquals(a.getTop(), button.getBottom() + margin);
+        assertEquals(b.getRight(), root.getRight() - margin);
+        assertEquals(b.getTop(), a.getTop());
+        assertEquals(c.getLeft(), 350);
+        assertEquals(c.getRight(), 450);
+        assertEquals(c.getTop(), a.getBottom() + margin);
     }
 
     @Test
@@ -282,7 +286,8 @@ public class CenterWrapTest {
 
         // vertical
 
-        TextBox.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
+        TextBox.setHorizontalDimensionBehaviour(
+                ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
         TextBox.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP, 10);
         TextBox.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT, 10);
         TextBox.connect(ConstraintAnchor.Type.RIGHT, ValueBox, ConstraintAnchor.Type.LEFT, 10);
@@ -291,7 +296,8 @@ public class CenterWrapTest {
         ValueBox.connect(ConstraintAnchor.Type.TOP, TextBox, ConstraintAnchor.Type.TOP);
         ValueBox.connect(ConstraintAnchor.Type.BOTTOM, TextBox, ConstraintAnchor.Type.BOTTOM);
 
-        TextBoxGone.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
+        TextBoxGone.setHorizontalDimensionBehaviour(
+                ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
         TextBoxGone.connect(ConstraintAnchor.Type.TOP, TextBox, ConstraintAnchor.Type.BOTTOM, 10);
         TextBoxGone.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT, 10);
         TextBoxGone.connect(ConstraintAnchor.Type.RIGHT, TextBox, ConstraintAnchor.Type.RIGHT);
@@ -303,8 +309,10 @@ public class CenterWrapTest {
 
         root.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
         root.layout();
-        System.out.println("a) root: " + root + " TextBox: " + TextBox + " ValueBox: " + ValueBox + " TextBoxGone: " + TextBoxGone);
-        assertEquals(ValueBox.getTop(), TextBox.getTop() + ((TextBox.getHeight() - ValueBox.getHeight())/2));
+        System.out.println("a) root: " + root + " TextBox: " + TextBox
+                + " ValueBox: " + ValueBox + " TextBoxGone: " + TextBoxGone);
+        assertEquals(ValueBox.getTop(),
+                TextBox.getTop() + ((TextBox.getHeight() - ValueBox.getHeight()) / 2));
         assertEquals(root.getHeight(), 60);
     }
 }

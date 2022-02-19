@@ -16,62 +16,62 @@
 
 package androidx.constraintlayout.core;
 
+import static org.junit.Assert.*;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class AmountTest {
-    Amount a1 = new Amount(2, 3);
-    Amount a2 = new Amount(3, 5);
+    Amount mA1 = new Amount(2, 3);
+    Amount mA2 = new Amount(3, 5);
 
     @Before
     public void setUp() {
-        a1.set(2, 3);
-        a2.set(3, 5);
+        mA1.set(2, 3);
+        mA2.set(3, 5);
     }
 
     @Test
     public void testAdd() {
-        a1.add(a2);
-        assertEquals(a1.getNumerator(), 19);
-        assertEquals(a1.getDenominator(), 15);
+        mA1.add(mA2);
+        assertEquals(mA1.getNumerator(), 19);
+        assertEquals(mA1.getDenominator(), 15);
     }
 
     @Test
     public void testSubtract() {
-        a1.subtract(a2);
-        assertEquals(a1.getNumerator(), 1);
-        assertEquals(a1.getDenominator(), 15);
+        mA1.subtract(mA2);
+        assertEquals(mA1.getNumerator(), 1);
+        assertEquals(mA1.getDenominator(), 15);
     }
 
     @Test
     public void testMultiply() {
-        a1.multiply(a2);
-        assertEquals(a1.getNumerator(), 2);
-        assertEquals(a1.getDenominator(), 5);
+        mA1.multiply(mA2);
+        assertEquals(mA1.getNumerator(), 2);
+        assertEquals(mA1.getDenominator(), 5);
     }
 
     @Test
     public void testDivide() {
-        a1.divide(a2);
-        assertEquals(a1.getNumerator(), 10);
-        assertEquals(a1.getDenominator(), 9);
+        mA1.divide(mA2);
+        assertEquals(mA1.getNumerator(), 10);
+        assertEquals(mA1.getDenominator(), 9);
     }
 
     @Test
     public void testSimplify() {
-        a1.set(20, 30);
-        assertEquals(a1.getNumerator(), 2);
-        assertEquals(a1.getDenominator(), 3);
-        a1.set(77, 88);
-        assertEquals(a1.getNumerator(), 7);
-        assertEquals(a1.getDenominator(), 8);
+        mA1.set(20, 30);
+        assertEquals(mA1.getNumerator(), 2);
+        assertEquals(mA1.getDenominator(), 3);
+        mA1.set(77, 88);
+        assertEquals(mA1.getNumerator(), 7);
+        assertEquals(mA1.getDenominator(), 8);
     }
 
     @Test
     public void testEquality() {
-        a2.set(a1.getNumerator(), a1.getDenominator());
-        assertTrue(a1.equals(a2));
+        mA2.set(mA1.getNumerator(), mA1.getDenominator());
+        assertTrue(mA1.equals(mA2));
     }
 }

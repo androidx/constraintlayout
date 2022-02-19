@@ -16,9 +16,6 @@
 
 package androidx.constraintlayout.core;
 
-import androidx.constraintlayout.core.LinearSystem;
-import androidx.constraintlayout.core.SolverVariable;
-
 /**
  * EquationVariable is used to represent a variable in a {@link LinearEquation LinearEquation}
  */
@@ -33,7 +30,10 @@ class EquationVariable {
      * @param name the variable name
      * @param type the variable type
      */
-    public EquationVariable(LinearSystem system, Amount amount, String name, SolverVariable.Type type) {
+    EquationVariable(LinearSystem system,
+                     Amount amount,
+                     String name,
+                     SolverVariable.Type type) {
         mAmount = amount;
         mVariable = system.getVariable(name, type);
     }
@@ -42,7 +42,7 @@ class EquationVariable {
      * Alternate constructor, will set the type to be {@link SolverVariable.Type CONSTANT}
      * @param amount the amount associated with this variable
      */
-    public EquationVariable(Amount amount) {
+    EquationVariable(Amount amount) {
         mAmount = amount;
     }
 
@@ -53,7 +53,9 @@ class EquationVariable {
      * @param name the variable name
      * @param type the variable type
      */
-    public EquationVariable(LinearSystem system, int amount, String name, SolverVariable.Type type) {
+    EquationVariable(LinearSystem system,
+                     int amount, String name,
+                     SolverVariable.Type type) {
         mAmount = new Amount(amount);
         mVariable = system.getVariable(name, type);
     }
@@ -63,7 +65,7 @@ class EquationVariable {
      * @param system the {@link LinearSystem linear system} this equation variable belongs to
      * @param amount the amount associated with this variable
      */
-    public EquationVariable(LinearSystem system, int amount) {
+    EquationVariable(LinearSystem system, int amount) {
         mAmount = new Amount(amount);
     }
 
@@ -73,7 +75,7 @@ class EquationVariable {
      * @param name the variable name
      * @param type the variable type
      */
-    public EquationVariable(LinearSystem system, String name, SolverVariable.Type type) {
+    EquationVariable(LinearSystem system, String name, SolverVariable.Type type) {
         mAmount = new Amount(1);
         mVariable = system.getVariable(name, type);
     }
@@ -83,7 +85,7 @@ class EquationVariable {
      * @param amount the amount given
      * @param variable the variable we'll multiply
      */
-    public EquationVariable(Amount amount, EquationVariable variable) {
+    EquationVariable(Amount amount, EquationVariable variable) {
         mAmount = new Amount(amount);
         mAmount.multiply(variable.mAmount);
         mVariable = variable.getSolverVariable();
@@ -93,7 +95,7 @@ class EquationVariable {
      * Copy constructor
      * @param v variable to copy
      */
-    public EquationVariable(EquationVariable v) {
+    EquationVariable(EquationVariable v) {
         mAmount = new Amount(v.mAmount);
         mVariable = v.getSolverVariable();
     }

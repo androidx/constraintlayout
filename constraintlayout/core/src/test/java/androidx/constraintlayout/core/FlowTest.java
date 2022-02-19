@@ -16,6 +16,9 @@
 
 package androidx.constraintlayout.core;
 
+import static androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.EXACTLY;
+import static androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.UNSPECIFIED;
+
 import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
@@ -24,11 +27,9 @@ import androidx.constraintlayout.core.widgets.Optimizer;
 import androidx.constraintlayout.core.widgets.VirtualLayout;
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure;
 
-import org.junit.Test;
-
-import static androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.EXACTLY;
-import static androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.UNSPECIFIED;
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 public class FlowTest {
     static BasicMeasure.Measurer sMeasurer = new BasicMeasure.Measurer() {
@@ -46,14 +47,17 @@ public class FlowTest {
                 int heightMode = UNSPECIFIED;
                 int widthSize = 0;
                 int heightSize = 0;
-                if (layout.getHorizontalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
+                if (layout.getHorizontalDimensionBehaviour()
+                        == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
                     widthSize = layout.getParent() != null ? layout.getParent().getWidth() : 0;
                     widthMode = EXACTLY;
-                } else if (horizontalBehavior == ConstraintWidget.DimensionBehaviour.FIXED) {
+                } else if (horizontalBehavior
+                        == ConstraintWidget.DimensionBehaviour.FIXED) {
                     widthSize = horizontalDimension;
                     widthMode = EXACTLY;
                 }
-                if (layout.getVerticalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
+                if (layout.getVerticalDimensionBehaviour()
+                        == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
                     heightSize = layout.getParent() != null ? layout.getParent().getHeight() : 0;
                     heightMode = EXACTLY;
                 } else if (verticalBehavior == ConstraintWidget.DimensionBehaviour.FIXED) {
@@ -82,129 +86,129 @@ public class FlowTest {
     @Test
     public void testFlowBaseline() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 1080, 1536);
-        ConstraintWidget A = new ConstraintWidget(100, 20);
-        ConstraintWidget B = new ConstraintWidget(20, 15);
+        ConstraintWidget a = new ConstraintWidget(100, 20);
+        ConstraintWidget b = new ConstraintWidget(20, 15);
         Flow flow = new Flow();
 
         root.setMeasurer(sMeasurer);
 
         root.setDebugName("root");
-        A.setDebugName("A");
-        B.setDebugName("B");
+        a.setDebugName("A");
+        b.setDebugName("B");
         flow.setDebugName("Flow");
 
         flow.setVerticalAlign(Flow.VERTICAL_ALIGN_BASELINE);
-        flow.add(A);
-        flow.add(B);
-        A.setBaselineDistance(15);
+        flow.add(a);
+        flow.add(b);
+        a.setBaselineDistance(15);
 
         flow.setHeight(30);
         flow.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
         flow.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.FIXED);
-        flow.connect(ConstraintAnchor.Type.LEFT,root, ConstraintAnchor.Type.LEFT);
-        flow.connect(ConstraintAnchor.Type.RIGHT,root, ConstraintAnchor.Type.RIGHT);
-        flow.connect(ConstraintAnchor.Type.TOP,root, ConstraintAnchor.Type.TOP);
-        flow.connect(ConstraintAnchor.Type.BOTTOM,root, ConstraintAnchor.Type.BOTTOM);
+        flow.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
+        flow.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT);
+        flow.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        flow.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM);
 
         root.add(flow);
-        root.add(A);
-        root.add(B);
+        root.add(a);
+        root.add(b);
 
-        root.measure(Optimizer.OPTIMIZATION_NONE
-                , 0, 0, 0, 0, 0, 0, 0, 0);
+        root.measure(Optimizer.OPTIMIZATION_NONE,
+                0, 0, 0, 0, 0, 0, 0, 0);
         root.layout();
         System.out.println("a) root: " + root);
         System.out.println("flow: " + flow);
-        System.out.println("A: " + A);
-        System.out.println("B: " + B);
+        System.out.println("A: " + a);
+        System.out.println("B: " + b);
         assertEquals(flow.getWidth(), 1080);
         assertEquals(flow.getHeight(), 30);
         assertEquals(flow.getTop(), 753);
-        assertEquals(A.getLeft(), 320);
-        assertEquals(A.getTop(), 758);
-        assertEquals(B.getLeft(), 740);
-        assertEquals(B.getTop(), 761);
+        assertEquals(a.getLeft(), 320);
+        assertEquals(a.getTop(), 758);
+        assertEquals(b.getLeft(), 740);
+        assertEquals(b.getTop(), 761);
     }
 
     @Test
     public void testComplexChain() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 1080, 1536);
-        ConstraintWidget A = new ConstraintWidget(100, 20);
-        ConstraintWidget B = new ConstraintWidget(100, 20);
-        ConstraintWidget C = new ConstraintWidget(100, 20);
+        ConstraintWidget a = new ConstraintWidget(100, 20);
+        ConstraintWidget b = new ConstraintWidget(100, 20);
+        ConstraintWidget c = new ConstraintWidget(100, 20);
         Flow flow = new Flow();
 
         root.setMeasurer(sMeasurer);
 
         root.setDebugName("root");
-        A.setDebugName("A");
-        B.setDebugName("B");
-        C.setDebugName("C");
+        a.setDebugName("A");
+        b.setDebugName("B");
+        c.setDebugName("C");
         flow.setDebugName("Flow");
 
         flow.setWrapMode(Flow.WRAP_CHAIN);
         flow.setMaxElementsWrap(2);
 
-        flow.add(A);
-        flow.add(B);
-        flow.add(C);
+        flow.add(a);
+        flow.add(b);
+        flow.add(c);
 
         root.add(flow);
-        root.add(A);
-        root.add(B);
-        root.add(C);
+        root.add(a);
+        root.add(b);
+        root.add(c);
 
-        A.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
-        B.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
-        C.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
+        a.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
+        b.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
+        c.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
 
-        flow.connect(ConstraintAnchor.Type.LEFT,root, ConstraintAnchor.Type.LEFT);
-        flow.connect(ConstraintAnchor.Type.RIGHT,root, ConstraintAnchor.Type.RIGHT);
-        flow.connect(ConstraintAnchor.Type.TOP,root, ConstraintAnchor.Type.TOP);
-        flow.connect(ConstraintAnchor.Type.BOTTOM,root, ConstraintAnchor.Type.BOTTOM);
+        flow.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
+        flow.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT);
+        flow.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        flow.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM);
 
         flow.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_PARENT);
         flow.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
 
-        root.measure(Optimizer.OPTIMIZATION_NONE
-                , 0, 0, 0, 0, 0, 0, 0, 0);
+        root.measure(Optimizer.OPTIMIZATION_NONE,
+                0, 0, 0, 0, 0, 0, 0, 0);
         root.layout();
         System.out.println("a) root: " + root);
         System.out.println("flow: " + flow);
-        System.out.println("A: " + A);
-        System.out.println("B: " + B);
-        System.out.println("C: " + C);
+        System.out.println("A: " + a);
+        System.out.println("B: " + b);
+        System.out.println("C: " + c);
 
-        assertEquals(A.getWidth(), 540);
-        assertEquals(B.getWidth(), 540);
-        assertEquals(C.getWidth(), 1080);
+        assertEquals(a.getWidth(), 540);
+        assertEquals(b.getWidth(), 540);
+        assertEquals(c.getWidth(), 1080);
         assertEquals(flow.getWidth(), root.getWidth());
-        assertEquals(flow.getHeight(), Math.max(A.getHeight(), B.getHeight()) + C.getHeight());
+        assertEquals(flow.getHeight(), Math.max(a.getHeight(), b.getHeight()) + c.getHeight());
         assertEquals(flow.getTop(), 748);
     }
 
     @Test
     public void testFlowText() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(20, 5);
-        ConstraintWidget A = new ConstraintWidget(7, 1);
-        ConstraintWidget B = new ConstraintWidget(6, 1);
-        A.setDebugName("A");
-        B.setDebugName("B");
+        ConstraintWidget a = new ConstraintWidget(7, 1);
+        ConstraintWidget b = new ConstraintWidget(6, 1);
+        a.setDebugName("A");
+        b.setDebugName("B");
         Flow flow = new Flow();
         flow.setDebugName("flow");
         flow.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.FIXED);
         flow.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
         flow.setWidth(20);
         flow.setHeight(2);
-        flow.connect(ConstraintAnchor.Type.LEFT,root, ConstraintAnchor.Type.LEFT);
-        flow.connect(ConstraintAnchor.Type.RIGHT,root, ConstraintAnchor.Type.RIGHT);
-        flow.connect(ConstraintAnchor.Type.TOP,root, ConstraintAnchor.Type.TOP);
-        flow.connect(ConstraintAnchor.Type.BOTTOM,root, ConstraintAnchor.Type.BOTTOM);
-        flow.add(A);
-        flow.add(B);
+        flow.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
+        flow.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT);
+        flow.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        flow.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM);
+        flow.add(a);
+        flow.add(b);
         root.add(flow);
-        root.add(A);
-        root.add(B);
+        root.add(a);
+        root.add(b);
         root.setMeasurer(new BasicMeasure.Measurer() {
             @Override
             public void measure(ConstraintWidget widget, BasicMeasure.Measure measure) {
@@ -218,12 +222,12 @@ public class FlowTest {
             }
         });
         root.setMeasurer(sMeasurer);
-        root.measure(Optimizer.OPTIMIZATION_NONE
-                , 0, 0, 0, 0, 0, 0, 0, 0);
+        root.measure(Optimizer.OPTIMIZATION_NONE,
+                0, 0, 0, 0, 0, 0, 0, 0);
         //root.layout();
         System.out.println("root: " + root);
         System.out.println("flow: " + flow);
-        System.out.println("A: " + A);
-        System.out.println("B: " + B);
+        System.out.println("A: " + a);
+        System.out.println("B: " + b);
     }
 }
