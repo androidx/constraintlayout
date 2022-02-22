@@ -16,9 +16,9 @@
 
 package androidx.constraintlayout.core;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
 
 
 /**
@@ -30,19 +30,20 @@ public class ArrayLinkedVariablesTest {
     public void testNestedLayout() {
         Cache cache = new Cache();
         ArrayRow row = new ArrayRow(cache);
-        ArrayLinkedVariables variables = new ArrayLinkedVariables(row, cache );
+        ArrayLinkedVariables variables = new ArrayLinkedVariables(row, cache);
         SolverVariable []v = new SolverVariable[9];
         for (int i = 0; i < v.length; i++) {
             int p = i ^ 3;
-            v[i] = new SolverVariable("dog" + p + "(" + i + ")" + p, SolverVariable.Type.UNRESTRICTED);
+            v[i] = new SolverVariable("dog" + p + "(" + i + ")" + p,
+                    SolverVariable.Type.UNRESTRICTED);
             cache.mIndexedVariables[i] = v[i];
             v[i].id = i;
-            variables.add(v[i],20f, true);
+            variables.add(v[i], 20f, true);
             if (i % 2 == 1) {
                 variables.remove(v[i / 2], true);
 
             }
-             variables.display();
+            variables.display();
             System.out.println();
         }
         for (int i = 0; i < v.length; i++) {

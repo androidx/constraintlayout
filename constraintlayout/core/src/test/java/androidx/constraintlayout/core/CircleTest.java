@@ -19,15 +19,16 @@ import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 
-import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 public class CircleTest {
 
     @Test
     public void basic() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 1000, 600);
-        ConstraintWidget A = new ConstraintWidget(100, 20);
+        ConstraintWidget a = new ConstraintWidget(100, 20);
         ConstraintWidget w1 = new ConstraintWidget(10, 10);
         ConstraintWidget w2 = new ConstraintWidget(10, 10);
         ConstraintWidget w3 = new ConstraintWidget(10, 10);
@@ -42,7 +43,7 @@ public class CircleTest {
         ConstraintWidget w12 = new ConstraintWidget(10, 10);
 
         root.setDebugName("root");
-        A.setDebugName("A");
+        a.setDebugName("A");
         w1.setDebugName("w1");
         w2.setDebugName("w2");
         w3.setDebugName("w3");
@@ -56,7 +57,7 @@ public class CircleTest {
         w11.setDebugName("w11");
         w12.setDebugName("w12");
 
-        root.add(A);
+        root.add(a);
 
         root.add(w1);
         root.add(w2);
@@ -71,23 +72,23 @@ public class CircleTest {
         root.add(w11);
         root.add(w12);
 
-        A.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
-        A.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT);
-        A.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
-        A.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM);
+        a.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
+        a.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT);
+        a.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        a.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM);
 
-        w1.connectCircularConstraint(A, 30, 50);
-        w2.connectCircularConstraint(A, 60, 50);
-        w3.connectCircularConstraint(A, 90, 50);
-        w4.connectCircularConstraint(A, 120, 50);
-        w5.connectCircularConstraint(A, 150, 50);
-        w6.connectCircularConstraint(A, 180, 50);
-        w7.connectCircularConstraint(A, 210, 50);
-        w8.connectCircularConstraint(A, 240, 50);
-        w9.connectCircularConstraint(A, 270, 50);
-        w10.connectCircularConstraint(A, 300, 50);
-        w11.connectCircularConstraint(A, 330, 50);
-        w12.connectCircularConstraint(A, 360, 50);
+        w1.connectCircularConstraint(a, 30, 50);
+        w2.connectCircularConstraint(a, 60, 50);
+        w3.connectCircularConstraint(a, 90, 50);
+        w4.connectCircularConstraint(a, 120, 50);
+        w5.connectCircularConstraint(a, 150, 50);
+        w6.connectCircularConstraint(a, 180, 50);
+        w7.connectCircularConstraint(a, 210, 50);
+        w8.connectCircularConstraint(a, 240, 50);
+        w9.connectCircularConstraint(a, 270, 50);
+        w10.connectCircularConstraint(a, 300, 50);
+        w11.connectCircularConstraint(a, 330, 50);
+        w12.connectCircularConstraint(a, 360, 50);
 
         root.layout();
 

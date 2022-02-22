@@ -19,17 +19,14 @@ package androidx.constraintlayout.core;
 import androidx.constraintlayout.core.state.ConstraintReference;
 import androidx.constraintlayout.core.state.Dimension;
 import androidx.constraintlayout.core.state.State;
-import androidx.constraintlayout.core.state.helpers.GuidelineReference;
-import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
-import androidx.constraintlayout.core.widgets.Guideline;
 import androidx.constraintlayout.core.widgets.Optimizer;
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 public class ComposeLayoutsTest {
 
@@ -52,7 +49,7 @@ public class ComposeLayoutsTest {
             } else if (horizontalBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT) {
                 measure.measuredWidth = horizontalDimension;
                 if (widget.getCompanionWidget().equals("box")
-                       // && measure.measuredWidth == 0
+                        // && measure.measuredWidth == 0
                         && measure.measureStrategy == BasicMeasure.Measure.SELF_DIMENSIONS) {
                     measure.measuredWidth = 1080;
                 }
@@ -65,10 +62,11 @@ public class ComposeLayoutsTest {
                 measure.measuredHeight = verticalDimension;
             } else  if (verticalBehavior == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
                 if (widget.getCompanionWidget().equals("box")) {
-                    measure.measuredHeight = measure.measuredWidth /2;
+                    measure.measuredHeight = measure.measuredWidth / 2;
                 }
             }
-            System.out.println("Measure widget " + widget.getCompanionWidget() + " => " + measure.measuredWidth + " x " + measure.measuredHeight);
+            System.out.println("Measure widget " + widget.getCompanionWidget()
+                    + " => " + measure.measuredWidth + " x " + measure.measuredHeight);
         }
 
         @Override
@@ -101,7 +99,8 @@ public class ComposeLayoutsTest {
         root.setWidth(1080);
         root.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.FIXED);
         ConstraintWidget box = state.constraints("box").getConstraintWidget();
-        ConstraintWidget guideline = state.guideline("guideline", ConstraintWidget.VERTICAL).getConstraintWidget();
+        ConstraintWidget guideline = state.guideline("guideline",
+                ConstraintWidget.VERTICAL).getConstraintWidget();
         ConstraintWidget divider = state.constraints("divider").getConstraintWidget();
         root.setDebugName("root");
         box.setDebugName("box");
@@ -122,6 +121,6 @@ public class ComposeLayoutsTest {
         assertEquals(root.getWidth() / 2, box.getWidth());
         assertEquals(root.getWidth() / 2 / 2, box.getHeight());
         assertEquals(1, divider.getWidth());
-        assertEquals((int)(box.getHeight() * 0.8), divider.getHeight());
+        assertEquals((int) (box.getHeight() * 0.8), divider.getHeight());
     }
 }

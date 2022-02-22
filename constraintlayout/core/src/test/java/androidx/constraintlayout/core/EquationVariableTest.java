@@ -16,56 +16,56 @@
 
 package androidx.constraintlayout.core;
 
+import static org.junit.Assert.*;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class EquationVariableTest {
-    LinearSystem s;
-    EquationVariable e1;
-    EquationVariable e2;
+    LinearSystem mLinearSystem;
+    EquationVariable mEV1;
+    EquationVariable mEV2;
 
     @Before
     public void setUp() {
-        s = new LinearSystem();
-        e1 = new EquationVariable(s, 200);
-        e2 = new EquationVariable(s, 200);
+        mLinearSystem = new LinearSystem();
+        mEV1 = new EquationVariable(mLinearSystem, 200);
+        mEV2 = new EquationVariable(mLinearSystem, 200);
     }
 
     @Test
     public void testEquality() {
-        assertTrue(e1.getAmount().equals(e2.getAmount()));
+        assertTrue(mEV1.getAmount().equals(mEV2.getAmount()));
     }
 
     @Test
     public void testAddition() {
-        e1.add(e2);
-        assertEquals(e1.getAmount().getNumerator(), 400);
+        mEV1.add(mEV2);
+        assertEquals(mEV1.getAmount().getNumerator(), 400);
     }
 
     @Test
     public void testSubtraction() {
-        e1.subtract(e2);
-        assertEquals(e1.getAmount().getNumerator(), 0);
+        mEV1.subtract(mEV2);
+        assertEquals(mEV1.getAmount().getNumerator(), 0);
     }
 
     @Test
     public void testMultiply() {
-        e1.multiply(e2);
-        assertEquals(e1.getAmount().getNumerator(), 40000);
+        mEV1.multiply(mEV2);
+        assertEquals(mEV1.getAmount().getNumerator(), 40000);
     }
 
     @Test
     public void testDivide() {
-        e1.divide(e2);
-        assertEquals(e1.getAmount().getNumerator(), 1);
+        mEV1.divide(mEV2);
+        assertEquals(mEV1.getAmount().getNumerator(), 1);
     }
 
     @Test
     public void testCompatible() {
-        assertTrue(e1.isCompatible(e2));
-        e2 = new EquationVariable(s, 200, "TEST", SolverVariable.Type.UNRESTRICTED);
-        assertFalse(e1.isCompatible(e2));
+        assertTrue(mEV1.isCompatible(mEV2));
+        mEV2 = new EquationVariable(mLinearSystem, 200, "TEST", SolverVariable.Type.UNRESTRICTED);
+        assertFalse(mEV1.isCompatible(mEV2));
     }
 }
