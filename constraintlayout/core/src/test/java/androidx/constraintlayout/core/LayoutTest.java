@@ -18,6 +18,7 @@ package androidx.constraintlayout.core;
 import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
+
 import org.junit.Test;
 
 public class LayoutTest {
@@ -96,14 +97,18 @@ public class LayoutTest {
         toggleButton.connect(ConstraintAnchor.Type.TOP, button8, ConstraintAnchor.Type.BOTTOM);
         toggleButton.connect(ConstraintAnchor.Type.RIGHT, button8, ConstraintAnchor.Type.RIGHT);
 
-        toggleButton2.connect(ConstraintAnchor.Type.LEFT, toggleButton, ConstraintAnchor.Type.RIGHT);
+        toggleButton2.connect(ConstraintAnchor.Type.LEFT, toggleButton,
+                ConstraintAnchor.Type.RIGHT);
         toggleButton2.connect(ConstraintAnchor.Type.TOP, button9, ConstraintAnchor.Type.BOTTOM);
 
-        toggleButton3.connect(ConstraintAnchor.Type.LEFT, toggleButton2, ConstraintAnchor.Type.RIGHT);
+        toggleButton3.connect(ConstraintAnchor.Type.LEFT, toggleButton2,
+                ConstraintAnchor.Type.RIGHT);
         toggleButton3.connect(ConstraintAnchor.Type.TOP, toggleButton2, ConstraintAnchor.Type.TOP);
 
-        toggleButton4.connect(ConstraintAnchor.Type.LEFT, toggleButton3, ConstraintAnchor.Type.RIGHT);
-        toggleButton4.connect(ConstraintAnchor.Type.BASELINE, toggleButton3, ConstraintAnchor.Type.BASELINE);
+        toggleButton4.connect(ConstraintAnchor.Type.LEFT, toggleButton3,
+                ConstraintAnchor.Type.RIGHT);
+        toggleButton4.connect(ConstraintAnchor.Type.BASELINE,
+                toggleButton3, ConstraintAnchor.Type.BASELINE);
 
         textView.connect(ConstraintAnchor.Type.LEFT, textView2, ConstraintAnchor.Type.LEFT);
         textView.connect(ConstraintAnchor.Type.TOP, textView2, ConstraintAnchor.Type.BOTTOM);

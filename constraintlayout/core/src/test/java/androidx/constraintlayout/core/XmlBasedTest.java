@@ -16,24 +16,23 @@
 package androidx.constraintlayout.core;
 
 import androidx.constraintlayout.core.widgets.*;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
-import java.io.FileFilter;
 import java.util.*;
 
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
-import org.junit.runner.RunWith;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 /**
  * This test the ConstraintWidget system buy loading XML that contain tags with there positions.
@@ -42,45 +41,46 @@ import static org.junit.Assert.assertTrue;
 @RunWith(Parameterized.class)
 public class XmlBasedTest {
     private static final int ALLOWED_POSITION_ERROR = 1;
-    HashMap<String, ConstraintWidget> widgetMap;
-    HashMap<ConstraintWidget, String> boundsMap;
-    ConstraintWidgetContainer container;
-    ArrayList<Connection> connectionList;
-    String file;
+    HashMap<String, ConstraintWidget> mWidgetMap;
+    HashMap<ConstraintWidget, String> mBoundsMap;
+    ConstraintWidgetContainer mContainer;
+    ArrayList<Connection> mConnectionList;
+    String mFile;
 
     public XmlBasedTest(String file) {
-        this.file = file;
+        this.mFile = file;
     }
 
     static class Connection {
-        ConstraintWidget fromWidget;
-        ConstraintAnchor.Type fromType, toType;
-        String toName;
-        int margin;
-        int gonMargin = Integer.MIN_VALUE;
+        ConstraintWidget mFromWidget;
+        ConstraintAnchor.Type mFromType, mToType;
+        String mToName;
+        int mMargin;
+        int mGonMargin = Integer.MIN_VALUE;
     }
 
-    private static HashMap<String, Integer> visibilityMap = new HashMap<>();
-    private static Map<String, Integer> stringWidthMap = new HashMap<String, Integer>();
-    private static Map<String, Integer> stringHeightMap = new HashMap<String, Integer>();
-    private static Map<String, Integer> buttonWidthMap = new HashMap<String, Integer>();
-    private static Map<String, Integer> buttonHeightMap = new HashMap<String, Integer>();
+    private static HashMap<String, Integer> sVisibilityMap = new HashMap<>();
+    private static Map<String, Integer> sStringWidthMap = new HashMap<String, Integer>();
+    private static Map<String, Integer> sStringHeightMap = new HashMap<String, Integer>();
+    private static Map<String, Integer> sButtonWidthMap = new HashMap<String, Integer>();
+    private static Map<String, Integer> sButtonHeightMap = new HashMap<String, Integer>();
 
     static {
-        visibilityMap.put("gone", ConstraintWidget.GONE);
-        visibilityMap.put("visible", ConstraintWidget.VISIBLE);
-        visibilityMap.put("invisible", ConstraintWidget.INVISIBLE);
-        stringWidthMap.put("TextView", 171);
-        stringWidthMap.put("Button", 107);
-        stringWidthMap.put("Hello World!", 200);
-        stringHeightMap.put("TextView", 57);
-        stringHeightMap.put("Button", 51);
-        stringHeightMap.put("Hello World!", 51);
-        String s = "12345678 12345678 12345678 12345678 12345678 12345678 12345678 12345678 12345678 12345678 12345678 12345678 12345678 12345678";
-        stringWidthMap.put(s, 984);
-        stringHeightMap.put(s, 204);
-        buttonWidthMap.put("Button", 264);
-        buttonHeightMap.put("Button", 144);
+        sVisibilityMap.put("gone", ConstraintWidget.GONE);
+        sVisibilityMap.put("visible", ConstraintWidget.VISIBLE);
+        sVisibilityMap.put("invisible", ConstraintWidget.INVISIBLE);
+        sStringWidthMap.put("TextView", 171);
+        sStringWidthMap.put("Button", 107);
+        sStringWidthMap.put("Hello World!", 200);
+        sStringHeightMap.put("TextView", 57);
+        sStringHeightMap.put("Button", 51);
+        sStringHeightMap.put("Hello World!", 51);
+        String s = "12345678 12345678 12345678 12345678 12345678 12345678 12345678 "
+                + "12345678 12345678 12345678 12345678 12345678 12345678 12345678";
+        sStringWidthMap.put(s, 984);
+        sStringHeightMap.put(s, 204);
+        sButtonWidthMap.put("Button", 264);
+        sButtonHeightMap.put("Button", 144);
     }
 
     private static String rtl(String v) {
@@ -97,9 +97,11 @@ public class XmlBasedTest {
         assertTrue(" Could not get Path " + dirName, names.length > 1);
     }
 
-    static private String getDir() {
-//        String dirName = System.getProperty("user.dir") + File.separator+".."+File.separator+".."+File.separator+".."
-//                +File.separator+"constraintLayout"+File.separator+"core"+File.separator+"src"+File.separator+"test"+File.separator+"resources"+File.separator;
+    private static String getDir() {
+//        String dirName = System.getProperty("user.dir")
+//          + File.separator+".."+File.separator+".."+File.separator+".."
+//          +File.separator+"constraintLayout"+File.separator+"core"+File.separator
+//          +"src"+File.separator+"test"+File.separator+"resources"+File.separator;
 
         return System.getProperty("user.dir") + "/src/test/resources/";
     }
@@ -132,9 +134,9 @@ public class XmlBasedTest {
 
     @Test
     public void testSolverXML() {
-        parseXML(file);
-        container.setOptimizationLevel(Optimizer.OPTIMIZATION_NONE);
-        int[] perm = new int[boundsMap.size()];
+        parseXML(mFile);
+        mContainer.setOptimizationLevel(Optimizer.OPTIMIZATION_NONE);
+        int[] perm = new int[mBoundsMap.size()];
         for (int i = 0; i < perm.length; i++) {
             perm[i] = i;
         }
@@ -160,9 +162,9 @@ public class XmlBasedTest {
     @Test
     public void testDirectResolutionXML() {
 
-        parseXML(file);
-        container.setOptimizationLevel(Optimizer.OPTIMIZATION_STANDARD);
-        int[] perm = new int[boundsMap.size()];
+        parseXML(mFile);
+        mContainer.setOptimizationLevel(Optimizer.OPTIMIZATION_STANDARD);
+        int[] perm = new int[mBoundsMap.size()];
         for (int i = 0; i < perm.length; i++) {
             perm[i] = i;
         }
@@ -187,13 +189,13 @@ public class XmlBasedTest {
     /**
      * Calculate the Factorial of n
      *
-     * @param N input number
+     * @param n input number
      * @return Factorial of n
      */
-    public static int fact(int N) {
+    public static int fact(int n) {
         int ret = 1;
-        while (N > 0) {
-            ret *= (N--);
+        while (n > 0) {
+            ret *= (n--);
         }
         return ret;
     }
@@ -255,15 +257,15 @@ public class XmlBasedTest {
      */
     private void parseXML(String fileName) {
         System.err.println(fileName);
-        container = new ConstraintWidgetContainer(0, 0, 1080, 1920);
-        container.setDebugName("parent");
-        widgetMap = new HashMap<String, ConstraintWidget>();
-        boundsMap = new HashMap<ConstraintWidget, String>();
+        mContainer = new ConstraintWidgetContainer(0, 0, 1080, 1920);
+        mContainer.setDebugName("parent");
+        mWidgetMap = new HashMap<String, ConstraintWidget>();
+        mBoundsMap = new HashMap<ConstraintWidget, String>();
 
-        connectionList = new ArrayList<Connection>();
+        mConnectionList = new ArrayList<Connection>();
 
         DefaultHandler handler = new DefaultHandler() {
-            String parentId;
+            String mParentId;
 
             public void startDocument() throws SAXException {
             }
@@ -332,36 +334,42 @@ public class XmlBasedTest {
 
                     if (qName.endsWith("ConstraintLayout")) {
                         if (id != null) {
-                            container.setDebugName(id);
+                            mContainer.setDebugName(id);
                         }
-                        widgetMap.put(container.getDebugName(), container);
-                        widgetMap.put("parent", container);
+                        mWidgetMap.put(mContainer.getDebugName(), mContainer);
+                        mWidgetMap.put("parent", mContainer);
                     } else if (qName.endsWith("Guideline")) {
                         Guideline guideline = new Guideline();
                         if (id != null) {
                             guideline.setDebugName(id);
                         }
-                        widgetMap.put(guideline.getDebugName(), guideline);
-                        boundsMap.put(guideline, tag);
+                        mWidgetMap.put(guideline.getDebugName(), guideline);
+                        mBoundsMap.put(guideline, tag);
                         boolean horizontal = "horizontal".equals(orientation);
-                        System.out.println("Guideline " + id + " " + (horizontal ? "HORIZONTAL" : "VERTICAL"));
-                        guideline.setOrientation(horizontal ? Guideline.HORIZONTAL : Guideline.VERTICAL);
+                        System.out.println("Guideline " + id + " "
+                                + (horizontal ? "HORIZONTAL" : "VERTICAL"));
+                        guideline.setOrientation(horizontal
+                                ? Guideline.HORIZONTAL : Guideline.VERTICAL);
 
                         String constraintGuideBegin = appAttrs.get("layout_constraintGuide_begin");
-                        String constraintGuidePercent = appAttrs.get("layout_constraintGuide_percent");
+                        String constraintGuidePercent =
+                                appAttrs.get("layout_constraintGuide_percent");
                         String constraintGuideEnd = appAttrs.get("layout_constraintGuide_end");
 
                         if (constraintGuideBegin != null) {
                             guideline.setGuideBegin(parseDim(constraintGuideBegin));
-                            System.out.println("Guideline " + id + " setGuideBegin " + parseDim(constraintGuideBegin));
+                            System.out.println("Guideline " + id
+                                    + " setGuideBegin " + parseDim(constraintGuideBegin));
 
                         } else if (constraintGuidePercent != null) {
                             guideline.setGuidePercent(Float.parseFloat(constraintGuidePercent));
-                            System.out.println("Guideline " + id + " setGuidePercent " + Float.parseFloat(constraintGuidePercent));
+                            System.out.println("Guideline " + id + " setGuidePercent "
+                                    + Float.parseFloat(constraintGuidePercent));
 
                         } else if (constraintGuideEnd != null) {
                             guideline.setGuideEnd(parseDim(constraintGuideEnd));
-                            System.out.println("Guideline " + id + " setGuideBegin " + parseDim(constraintGuideEnd));
+                            System.out.println("Guideline " + id
+                                    + " setGuideBegin " + parseDim(constraintGuideEnd));
                         }
                         System.out.println(">>>>>>>>>>>>  " + guideline);
 
@@ -371,21 +379,25 @@ public class XmlBasedTest {
 
                         Connection[] connect = new Connection[5];
 
-                        String widgetLayoutConstraintDimensionRatio = appAttrs.get("layout_constraintDimensionRatio");
-                        String widgetLayoutConstraintHorizontalBias = appAttrs.get("layout_constraintHorizontal_bias");
-                        String widgetLayoutConstraintVerticalBias = appAttrs.get("layout_constraintVertical_bias");
+                        String widgetLayoutConstraintDimensionRatio =
+                                appAttrs.get("layout_constraintDimensionRatio");
+                        String widgetLayoutConstraintHorizontalBias =
+                                appAttrs.get("layout_constraintHorizontal_bias");
+                        String widgetLayoutConstraintVerticalBias =
+                                appAttrs.get("layout_constraintVertical_bias");
 
                         if (id != null) {
                             widget.setDebugName(id);
                         } else {
-                            widget.setDebugName("widget" + (widgetMap.size() + 1));
+                            widget.setDebugName("widget" + (mWidgetMap.size() + 1));
                         }
 
                         if (tag != null) {
-                            boundsMap.put(widget, tag);
+                            mBoundsMap.put(widget, tag);
                         }
 
-                        ConstraintWidget.DimensionBehaviour hBehaviour = ConstraintWidget.DimensionBehaviour.FIXED;
+                        ConstraintWidget.DimensionBehaviour hBehaviour =
+                                ConstraintWidget.DimensionBehaviour.FIXED;
                         if (layoutWidth == 0) {
                             hBehaviour = ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT;
                             widget.setDimension(layoutWidth, widget.getHeight());
@@ -396,7 +408,8 @@ public class XmlBasedTest {
                         }
                         widget.setHorizontalDimensionBehaviour(hBehaviour);
 
-                        ConstraintWidget.DimensionBehaviour vBehaviour = ConstraintWidget.DimensionBehaviour.FIXED;
+                        ConstraintWidget.DimensionBehaviour vBehaviour =
+                                ConstraintWidget.DimensionBehaviour.FIXED;
                         if (layoutHeight == 0) {
                             vBehaviour = ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT;
                             widget.setDimension(widget.getWidth(), layoutHeight);
@@ -409,18 +422,22 @@ public class XmlBasedTest {
 
                         if (text != null) {
                             System.out.print("text = \"" + text + "\"");
-                            Map<String, Integer> wmap = (qName.equals("Button")) ? buttonWidthMap : stringWidthMap;
-                            Map<String, Integer> hmap = (qName.equals("Button")) ? buttonHeightMap : stringHeightMap;
-                            if (wmap.containsKey(text) && widget.getHorizontalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
+                            Map<String, Integer> wmap = (qName.equals("Button"))
+                                    ? sButtonWidthMap : sStringWidthMap;
+                            Map<String, Integer> hmap = (qName.equals("Button"))
+                                    ? sButtonHeightMap : sStringHeightMap;
+                            if (wmap.containsKey(text) && widget.getHorizontalDimensionBehaviour()
+                                    == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
                                 widget.setWidth(wmap.get(text));
                             }
-                            if (hmap.containsKey(text) && widget.getVerticalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
+                            if (hmap.containsKey(text) && widget.getVerticalDimensionBehaviour()
+                                    == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
                                 widget.setHeight(hmap.get(text));
                             }
                         }
 
                         if (visibility != null) {
-                            widget.setVisibility(visibilityMap.get(visibility));
+                            widget.setVisibility(sVisibilityMap.get(visibility));
                         }
 
                         if (widgetLayoutConstraintDimensionRatio != null) {
@@ -428,47 +445,60 @@ public class XmlBasedTest {
                         }
 
                         if (widgetLayoutConstraintHorizontalBias != null) {
-                            System.out.println("widgetLayoutConstraintHorizontalBias " + widgetLayoutConstraintHorizontalBias);
-                            widget.setHorizontalBiasPercent(Float.parseFloat(widgetLayoutConstraintHorizontalBias));
+                            System.out.println("widgetLayoutConstraintHorizontalBias "
+                                    + widgetLayoutConstraintHorizontalBias);
+                            widget.setHorizontalBiasPercent(
+                                    Float.parseFloat(widgetLayoutConstraintHorizontalBias));
                         }
 
                         if (widgetLayoutConstraintVerticalBias != null) {
-                            System.out.println("widgetLayoutConstraintVerticalBias " + widgetLayoutConstraintVerticalBias);
-                            widget.setVerticalBiasPercent(Float.parseFloat(widgetLayoutConstraintVerticalBias));
+                            System.out.println("widgetLayoutConstraintVerticalBias "
+                                    + widgetLayoutConstraintVerticalBias);
+                            widget.setVerticalBiasPercent(
+                                    Float.parseFloat(widgetLayoutConstraintVerticalBias));
                         }
 
                         Set<String> constraintKeySet = widgetConstraints.keySet();
-                        String[] constraintKeys = constraintKeySet.toArray(new String[constraintKeySet.size()]);
+                        String[] constraintKeys =
+                                constraintKeySet.toArray(new String[constraintKeySet.size()]);
                         for (int i = 0; i < constraintKeys.length; i++) {
                             String attrName = constraintKeys[i];
                             String attrValue = widgetConstraints.get(attrName);
-                            String[] sp = attrName.substring("layout_constraint".length()).split("_to");
+                            String[] sp =
+                                    attrName.substring("layout_constraint".length()).split("_to");
                             String fromString = rtl(sp[0].toUpperCase());
                             ConstraintAnchor.Type from = ConstraintAnchor.Type.valueOf(fromString);
-                            String toString = rtl(sp[1].substring(0, sp[1].length() - 2).toUpperCase());
+                            String toString = rtl(sp[1].substring(0,
+                                    sp[1].length() - 2).toUpperCase());
                             ConstraintAnchor.Type to = ConstraintAnchor.Type.valueOf(toString);
                             int side = from.ordinal() - 1;
                             if (connect[side] == null) {
                                 connect[side] = new Connection();
                             }
-                            connect[side].fromWidget = widget;
-                            connect[side].fromType = from;
-                            connect[side].toType = to;
-                            connect[side].toName = attrValue;
+                            connect[side].mFromWidget = widget;
+                            connect[side].mFromType = from;
+                            connect[side].mToType = to;
+                            connect[side].mToName = attrValue;
                         }
 
                         Set<String> goneMarginSet = widgetGoneMargins.keySet();
-                        String[] goneMargins = goneMarginSet.toArray(new String[goneMarginSet.size()]);
+                        String[] goneMargins =
+                                goneMarginSet.toArray(new String[goneMarginSet.size()]);
                         for (int i = 0; i < goneMargins.length; i++) {
                             String attrName = goneMargins[i];
                             String attrValue = widgetGoneMargins.get(attrName);
-                            String marginSide = rtl(attrName.substring("layout_goneMargin".length()).toUpperCase());
-                            ConstraintAnchor.Type marginType = ConstraintAnchor.Type.valueOf(marginSide);
+                            String marginSide = rtl(
+                                    attrName.substring("layout_goneMargin".length()).toUpperCase()
+                            );
+                            ConstraintAnchor.Type marginType =
+                                    ConstraintAnchor.Type.valueOf(marginSide);
                             int side = marginType.ordinal() - 1;
                             if (connect[side] == null) {
                                 connect[side] = new Connection();
                             }
-                            connect[side].gonMargin = 3 * Integer.parseInt(attrValue.substring(0, attrValue.length() - 2));
+                            connect[side].mGonMargin = 3 * Integer.parseInt(
+                                    attrValue.substring(0, attrValue.length() - 2)
+                            );
                         }
 
                         Set<String> marginSet = widgetMargins.keySet();
@@ -476,21 +506,25 @@ public class XmlBasedTest {
                         for (int i = 0; i < margins.length; i++) {
                             String attrName = margins[i];
                             String attrValue = widgetMargins.get(attrName);
-                            // System.out.println("margin [" + attrName + "] by [" + attrValue +"]");
-                            String marginSide = rtl(attrName.substring("layout_margin".length()).toUpperCase());
-                            ConstraintAnchor.Type marginType = ConstraintAnchor.Type.valueOf(marginSide);
+                            // System.out.println("margin [" + attrName + "]
+                            //    by [" + attrValue +"]");
+                            String marginSide =
+                                    rtl(attrName.substring("layout_margin".length()).toUpperCase());
+                            ConstraintAnchor.Type marginType =
+                                    ConstraintAnchor.Type.valueOf(marginSide);
                             int side = marginType.ordinal() - 1;
                             if (connect[side] == null) {
                                 connect[side] = new Connection();
                             }
-                            connect[side].margin = 3 * Integer.parseInt(attrValue.substring(0, attrValue.length() - 2));
+                            connect[side].mMargin = 3 * Integer.parseInt(
+                                    attrValue.substring(0, attrValue.length() - 2));
                         }
 
-                        widgetMap.put(widget.getDebugName(), widget);
+                        mWidgetMap.put(widget.getDebugName(), widget);
 
                         for (int i = 0; i < connect.length; i++) {
                             if (connect[i] != null) {
-                                connectionList.add(connect[i]);
+                                mConnectionList.add(connect[i]);
                             }
                         }
 
@@ -518,65 +552,68 @@ public class XmlBasedTest {
 
     private void populateContainer(int[] order) {
         System.out.println(Arrays.toString(order));
-        ConstraintWidget[] widgetSet = boundsMap.keySet().toArray(new ConstraintWidget[0]);
+        ConstraintWidget[] widgetSet = mBoundsMap.keySet().toArray(new ConstraintWidget[0]);
         for (int i = 0; i < widgetSet.length; i++) {
             ConstraintWidget widget = widgetSet[order[i]];
             if (widget.getDebugName().equals("parent")) {
                 continue;
             }
-            ConstraintWidget.DimensionBehaviour hBehaviour = widget.getHorizontalDimensionBehaviour();
+            ConstraintWidget.DimensionBehaviour hBehaviour =
+                    widget.getHorizontalDimensionBehaviour();
             ConstraintWidget.DimensionBehaviour vBehaviour = widget.getVerticalDimensionBehaviour();
 
             if (widget instanceof Guideline) {
                 Guideline copy = new Guideline();
                 copy.copy(widget, new HashMap<>());
-                container.remove(widget);
+                mContainer.remove(widget);
                 widget.copy(copy, new HashMap<>());
             } else {
                 ConstraintWidget copy = new ConstraintWidget();
                 copy.copy(widget, new HashMap<>());
-                container.remove(widget);
+                mContainer.remove(widget);
                 widget.copy(copy, new HashMap<>());
             }
             widget.setHorizontalDimensionBehaviour(hBehaviour);
             widget.setVerticalDimensionBehaviour(vBehaviour);
-            container.add(widget);
+            mContainer.add(widget);
         }
     }
 
     private void makeConnections() {
-        for (Connection connection : connectionList) {
+        for (Connection connection : mConnectionList) {
             ConstraintWidget toConnect;
-            if (connection.toName.equalsIgnoreCase("parent") || connection.toName.equals(container.getDebugName())) {
-                toConnect = container;
+            if (connection.mToName.equalsIgnoreCase("parent")
+                    || connection.mToName.equals(mContainer.getDebugName())) {
+                toConnect = mContainer;
             } else {
-                toConnect = widgetMap.get(connection.toName);
+                toConnect = mWidgetMap.get(connection.mToName);
             }
             if (toConnect == null) {
-                System.err.println("   " + connection.toName);
+                System.err.println("   " + connection.mToName);
             } else {
-                connection.fromWidget.connect(connection.fromType, toConnect, connection.toType, connection.margin);
-                connection.fromWidget.setGoneMargin(connection.fromType, connection.gonMargin);
+                connection.mFromWidget.connect(connection.mFromType,
+                        toConnect, connection.mToType, connection.mMargin);
+                connection.mFromWidget.setGoneMargin(connection.mFromType, connection.mGonMargin);
             }
         }
     }
 
     private void layout() {
-        container.layout();
+        mContainer.layout();
     }
 
     private void validate() {
-        ConstraintWidgetContainer root = (ConstraintWidgetContainer) widgetMap.remove("parent");
+        ConstraintWidgetContainer root = (ConstraintWidgetContainer) mWidgetMap.remove("parent");
 
-        String[] keys = widgetMap.keySet().toArray(new String[0]);
+        String[] keys = mWidgetMap.keySet().toArray(new String[0]);
         boolean ok = true;
         StringBuilder layout = new StringBuilder("\n");
         for (String key : keys) {
             if (key.contains("activity_main")) {
                 continue;
             }
-            ConstraintWidget widget = widgetMap.get(key);
-            String bounds = boundsMap.get(widget);
+            ConstraintWidget widget = mWidgetMap.get(key);
+            String bounds = mBoundsMap.get(widget);
             String dim = dim(widget);
             boolean same = isSame(dim, bounds);
             String compare = rightPad(key, 17) + rightPad(dim, 15) + "   " + bounds;
@@ -591,7 +628,7 @@ public class XmlBasedTest {
         return s.substring(0, n);
     }
 
-    private static String R(String s) {
+    private static String r(String s) {
         s = "             " + s;
         return s.substring(s.length() - 13);
     }
@@ -607,8 +644,9 @@ public class XmlBasedTest {
         while (i > 0 && array[i - 1] >= array[i]) {
             i--;
         }
-        if (i <= 0)
+        if (i <= 0) {
             return false;
+        }
         int j = array.length - 1;
         while (array[j] <= array[i - 1]) {
             j--;
@@ -631,26 +669,26 @@ public class XmlBasedTest {
     }
 
     @Test
-    public void SimpleTest() {
+    public void simpleTest() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 1080, 1920);
 
-        final ConstraintWidget A = new ConstraintWidget(0, 0, 200, 51);
-        A.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
-        A.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
-        A.setDebugName("A");
-        A.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT, 0);
-        A.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP, 0);
-        A.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT, 0);
-        A.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM, 0);
-        root.add(A);
+        final ConstraintWidget a = new ConstraintWidget(0, 0, 200, 51);
+        a.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
+        a.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
+        a.setDebugName("A");
+        a.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT, 0);
+        a.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP, 0);
+        a.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT, 0);
+        a.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM, 0);
+        root.add(a);
         root.layout();
-        System.out.println("f) A: " + A + " " + A.getWidth() + "," + A.getHeight());
+        System.out.println("f) A: " + a + " " + a.getWidth() + "," + a.getHeight());
     }
 
     @Test
-    public void GuideLineTest() {
+    public void guideLineTest() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 1080, 1920);
-        final ConstraintWidget A = new ConstraintWidget(0, 0, 200, 51);
+        final ConstraintWidget a = new ConstraintWidget(0, 0, 200, 51);
         final Guideline guideline = new Guideline();
         root.add(guideline);
 
@@ -658,18 +696,19 @@ public class XmlBasedTest {
         guideline.setOrientation(Guideline.VERTICAL);
         guideline.setDebugName("guideline");
 
-        A.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
-        A.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
-        A.setDebugName("A");
-        A.connect(ConstraintAnchor.Type.LEFT, guideline, ConstraintAnchor.Type.LEFT, 0);
-        A.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP, 0);
-        A.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT, 0);
-        A.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM, 0);
-        root.add(A);
+        a.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
+        a.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
+        a.setDebugName("A");
+        a.connect(ConstraintAnchor.Type.LEFT, guideline, ConstraintAnchor.Type.LEFT, 0);
+        a.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP, 0);
+        a.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT, 0);
+        a.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM, 0);
+        root.add(a);
 
         root.layout();
-        System.out.println("f) A: " + A + " " + A.getWidth() + "," + A.getHeight());
-        System.out.println("f) A: " + guideline + " " + guideline.getWidth() + "," + guideline.getHeight());
+        System.out.println("f) A: " + a + " " + a.getWidth() + "," + a.getHeight());
+        System.out.println("f) A: " + guideline + " "
+                + guideline.getWidth() + "," + guideline.getHeight());
 
     }
 
