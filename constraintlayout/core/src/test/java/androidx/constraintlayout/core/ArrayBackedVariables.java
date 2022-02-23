@@ -24,90 +24,90 @@ import java.util.Arrays;
 class ArrayBackedVariables {
     private static final boolean DEBUG = false;
 
-    private SolverVariable[] variables = null;
-    private float[] values = null;
-    private int[] indexes = null;
-    private final int threshold = 16;
-    private int maxSize = 4;
-    private int currentSize = 0;
-    private int currentWriteSize = 0;
-    private SolverVariable candidate = null;
+    private SolverVariable[] mVariables = null;
+    private float[] mValues = null;
+    private int[] mIndexes = null;
+    private final int mThreshold = 16;
+    private int mMaxSize = 4;
+    private int mCurrentSize = 0;
+    private int mCurrentWriteSize = 0;
+    private SolverVariable mCandidate = null;
 
-    public ArrayBackedVariables(ArrayRow arrayRow, Cache cache) {
-        variables = new SolverVariable[maxSize];
-        values = new float[maxSize];
-        indexes = new int[maxSize];
+    ArrayBackedVariables(ArrayRow arrayRow, Cache cache) {
+        mVariables = new SolverVariable[mMaxSize];
+        mValues = new float[mMaxSize];
+        mIndexes = new int[mMaxSize];
     }
 
     public SolverVariable getPivotCandidate() {
-        if (candidate == null) {
-            for (int i = 0; i < currentSize; i++) {
-                int idx = indexes[i];
-                if (values[idx] < 0) {
-                    candidate = variables[idx];
+        if (mCandidate == null) {
+            for (int i = 0; i < mCurrentSize; i++) {
+                int idx = mIndexes[i];
+                if (mValues[idx] < 0) {
+                    mCandidate = mVariables[idx];
                     break;
                 }
             }
         }
-        return candidate;
+        return mCandidate;
     }
 
     void increaseSize() {
-        maxSize *= 2;
-        variables = Arrays.copyOf(variables, maxSize);
-        values = Arrays.copyOf(values, maxSize);
-        indexes = Arrays.copyOf(indexes, maxSize);
+        mMaxSize *= 2;
+        mVariables = Arrays.copyOf(mVariables, mMaxSize);
+        mValues = Arrays.copyOf(mValues, mMaxSize);
+        mIndexes = Arrays.copyOf(mIndexes, mMaxSize);
     }
 
     public final int size() {
-        return currentSize;
+        return mCurrentSize;
     }
 
     public final SolverVariable getVariable(int index) {
-        return variables[indexes[index]];
+        return mVariables[mIndexes[index]];
     }
 
     public final float getVariableValue(int index) {
-        return values[indexes[index]];
+        return mValues[mIndexes[index]];
     }
 
     public final void updateArray(ArrayBackedVariables target, float amount) {
         if (amount == 0) {
             return;
         }
-        for (int i = 0; i < currentSize; i++) {
-            final int idx = indexes[i];
-            SolverVariable v = variables[idx];
-            float value = values[idx];
+        for (int i = 0; i < mCurrentSize; i++) {
+            final int idx = mIndexes[i];
+            SolverVariable v = mVariables[idx];
+            float value = mValues[idx];
             target.add(v, (value * amount));
         }
     }
 
     public void setVariable(int index, float value) {
-        int idx = indexes[index];
-        values[idx] = value;
+        int idx = mIndexes[index];
+        mValues[idx] = value;
         if (value < 0) {
-            candidate = variables[idx];
+            mCandidate = mVariables[idx];
         }
     }
 
     public final float get(SolverVariable v) {
-        if (currentSize < threshold) {
-            for (int i = 0; i < currentSize; i++) {
-                int idx = indexes[i];
-                if (variables[idx] == v) {
-                    return values[idx];
+        if (mCurrentSize < mThreshold) {
+            for (int i = 0; i < mCurrentSize; i++) {
+                int idx = mIndexes[i];
+                if (mVariables[idx] == v) {
+                    return mValues[idx];
                 }
             }
         } else {
             int start = 0;
-            int end = currentSize - 1;
+            int end = mCurrentSize - 1;
             while (start <= end) {
                 int index = start + (end - start) / 2;
-                int idx = indexes[index];
-                SolverVariable current = variables[idx];
+                int idx = mIndexes[index];
+                SolverVariable current = mVariables[idx];
                 if (current == v) {
-                    return values[idx];
+                    return mValues[idx];
                 } else if (current.id < v.id) {
                     start = index + 1;
                 } else {
@@ -125,45 +125,45 @@ class ArrayBackedVariables {
         }
         while (true) {
             int firstEmptyIndex = -1;
-            for (int i = 0; i < currentWriteSize; i++) {
-                if (variables[i] == variable) {
-                    values[i] = value;
+            for (int i = 0; i < mCurrentWriteSize; i++) {
+                if (mVariables[i] == variable) {
+                    mValues[i] = value;
                     if (value < 0) {
-                        candidate = variable;
+                        mCandidate = variable;
                     }
                     return;
                 }
-                if (firstEmptyIndex == -1 && variables[i] == null) {
+                if (firstEmptyIndex == -1 && mVariables[i] == null) {
                     firstEmptyIndex = i;
                 }
             }
-            if (firstEmptyIndex == -1 && currentWriteSize < maxSize) {
-                firstEmptyIndex = currentWriteSize;
+            if (firstEmptyIndex == -1 && mCurrentWriteSize < mMaxSize) {
+                firstEmptyIndex = mCurrentWriteSize;
             }
             if (firstEmptyIndex != -1) {
-                variables[firstEmptyIndex] = variable;
-                values[firstEmptyIndex] = value;
+                mVariables[firstEmptyIndex] = variable;
+                mValues[firstEmptyIndex] = value;
                 // insert the position...
                 boolean inserted = false;
-                for (int j = 0; j < currentSize; j++) {
-                    int index = indexes[j];
-                    if (variables[index].id > variable.id) {
+                for (int j = 0; j < mCurrentSize; j++) {
+                    int index = mIndexes[j];
+                    if (mVariables[index].id > variable.id) {
                         // this is our insertion point
-                        System.arraycopy(indexes, j, indexes, j + 1, (currentSize - j));
-                        indexes[j] = firstEmptyIndex;
+                        System.arraycopy(mIndexes, j, mIndexes, j + 1, (mCurrentSize - j));
+                        mIndexes[j] = firstEmptyIndex;
                         inserted = true;
                         break;
                     }
                 }
                 if (!inserted) {
-                    indexes[currentSize] = firstEmptyIndex;
+                    mIndexes[mCurrentSize] = firstEmptyIndex;
                 }
-                currentSize++;
-                if (firstEmptyIndex + 1 > currentWriteSize) {
-                    currentWriteSize = firstEmptyIndex + 1;
+                mCurrentSize++;
+                if (firstEmptyIndex + 1 > mCurrentWriteSize) {
+                    mCurrentWriteSize = firstEmptyIndex + 1;
                 }
                 if (value < 0) {
-                    candidate = variable;
+                    mCandidate = variable;
                 }
                 return;
             } else {
@@ -178,48 +178,48 @@ class ArrayBackedVariables {
         }
         while (true) {
             int firstEmptyIndex = -1;
-            for (int i = 0; i < currentWriteSize; i++) {
-                if (variables[i] == variable) {
-                    values[i] += value;
+            for (int i = 0; i < mCurrentWriteSize; i++) {
+                if (mVariables[i] == variable) {
+                    mValues[i] += value;
                     if (value < 0) {
-                        candidate = variable;
+                        mCandidate = variable;
                     }
-                    if (values[i] == 0) {
+                    if (mValues[i] == 0) {
                         remove(variable);
                     }
                     return;
                 }
-                if (firstEmptyIndex == -1 && variables[i] == null) {
+                if (firstEmptyIndex == -1 && mVariables[i] == null) {
                     firstEmptyIndex = i;
                 }
             }
-            if (firstEmptyIndex == -1 && currentWriteSize < maxSize) {
-                firstEmptyIndex = currentWriteSize;
+            if (firstEmptyIndex == -1 && mCurrentWriteSize < mMaxSize) {
+                firstEmptyIndex = mCurrentWriteSize;
             }
             if (firstEmptyIndex != -1) {
-                variables[firstEmptyIndex] = variable;
-                values[firstEmptyIndex] = value;
+                mVariables[firstEmptyIndex] = variable;
+                mValues[firstEmptyIndex] = value;
                 // insert the position...
                 boolean inserted = false;
-                for (int j = 0; j < currentSize; j++) {
-                    int index = indexes[j];
-                    if (variables[index].id > variable.id) {
+                for (int j = 0; j < mCurrentSize; j++) {
+                    int index = mIndexes[j];
+                    if (mVariables[index].id > variable.id) {
                         // this is our insertion point
-                        System.arraycopy(indexes, j, indexes, j + 1, (currentSize - j));
-                        indexes[j] = firstEmptyIndex;
+                        System.arraycopy(mIndexes, j, mIndexes, j + 1, (mCurrentSize - j));
+                        mIndexes[j] = firstEmptyIndex;
                         inserted = true;
                         break;
                     }
                 }
                 if (!inserted) {
-                    indexes[currentSize] = firstEmptyIndex;
+                    mIndexes[mCurrentSize] = firstEmptyIndex;
                 }
-                currentSize++;
-                if (firstEmptyIndex + 1 > currentWriteSize) {
-                    currentWriteSize = firstEmptyIndex + 1;
+                mCurrentSize++;
+                if (firstEmptyIndex + 1 > mCurrentWriteSize) {
+                    mCurrentWriteSize = firstEmptyIndex + 1;
                 }
                 if (value < 0) {
-                    candidate = variable;
+                    mCandidate = variable;
                 }
                 return;
             } else {
@@ -229,26 +229,26 @@ class ArrayBackedVariables {
     }
 
     public void clear() {
-        for (int i = 0, length = variables.length; i < length; i++) {
-            variables[i] = null;
+        for (int i = 0, length = mVariables.length; i < length; i++) {
+            mVariables[i] = null;
         }
-        currentSize = 0;
-        currentWriteSize = 0;
+        mCurrentSize = 0;
+        mCurrentWriteSize = 0;
     }
 
     public boolean containsKey(SolverVariable variable) {
-        if (currentSize < 8) {
-            for (int i = 0; i < currentSize; i++) {
-                if (variables[indexes[i]] == variable) {
+        if (mCurrentSize < 8) {
+            for (int i = 0; i < mCurrentSize; i++) {
+                if (mVariables[mIndexes[i]] == variable) {
                     return true;
                 }
             }
         } else {
             int start = 0;
-            int end = currentSize - 1;
+            int end = mCurrentSize - 1;
             while (start <= end) {
                 int index = start + (end - start) / 2;
-                SolverVariable current = variables[indexes[index]];
+                SolverVariable current = mVariables[mIndexes[index]];
                 if (current == variable) {
                     return true;
                 } else if (current.id < variable.id) {
@@ -266,16 +266,16 @@ class ArrayBackedVariables {
             System.out.print("BEFORE REMOVE " + variable + " -> ");
             display();
         }
-        if (candidate == variable) {
-            candidate = null;
+        if (mCandidate == variable) {
+            mCandidate = null;
         }
-        for (int i = 0; i < currentWriteSize; i++) {
-            int idx = indexes[i];
-            if (variables[idx] == variable) {
-                float amount = values[idx];
-                variables[idx] = null;
-                System.arraycopy(indexes, i + 1, indexes, i, (currentWriteSize - i - 1));
-                currentSize--;
+        for (int i = 0; i < mCurrentWriteSize; i++) {
+            int idx = mIndexes[i];
+            if (mVariables[idx] == variable) {
+                float amount = mValues[idx];
+                mVariables[idx] = null;
+                System.arraycopy(mIndexes, i + 1, mIndexes, i, (mCurrentWriteSize - i - 1));
+                mCurrentSize--;
                 if (DEBUG) {
                     System.out.print("AFTER REMOVE ");
                     display();
@@ -288,9 +288,9 @@ class ArrayBackedVariables {
 
     public int sizeInBytes() {
         int size = 0;
-        size += (maxSize * 4);
-        size += (maxSize * 4);
-        size += (maxSize * 4);
+        size += (mMaxSize * 4);
+        size += (mMaxSize * 4);
+        size += (mMaxSize * 4);
         size += 4 + 4 + 4 + 4;
         return size;
     }
@@ -309,12 +309,12 @@ class ArrayBackedVariables {
         int count = size();
         str += "idx { ";
         for (int i = 0; i < count; i++) {
-            str += indexes[i] + " ";
+            str += mIndexes[i] + " ";
         }
         str += "}\n";
         str += "obj { ";
         for (int i = 0; i < count; i++) {
-            str += variables[i] + ":" + values[i] + " ";
+            str += mVariables[i] + ":" + mValues[i] + " ";
         }
         str += "}\n";
         return str;
@@ -324,12 +324,12 @@ class ArrayBackedVariables {
         int count = size();
         System.out.print("idx { ");
         for (int i = 0; i < count; i++) {
-            System.out.print(indexes[i] + " ");
+            System.out.print(mIndexes[i] + " ");
         }
         System.out.println("}");
         System.out.print("obj { ");
         for (int i = 0; i < count; i++) {
-            System.out.print(variables[i] + ":" + values[i] + " ");
+            System.out.print(mVariables[i] + ":" + mValues[i] + " ");
         }
         System.out.println("}");
     }

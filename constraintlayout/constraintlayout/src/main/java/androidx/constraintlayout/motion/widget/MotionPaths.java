@@ -71,6 +71,8 @@ class MotionPaths implements Comparable<MotionPaths> {
     int mMode = 0; // how was this point computed 1=perpendicular 2=deltaRelative
     int mAnimateCircleAngleTo; // since angles loop there are 4 ways we can pic direction
 
+    public MotionPaths () {
+    }
     /**
      * set up with Cartesian
      *
