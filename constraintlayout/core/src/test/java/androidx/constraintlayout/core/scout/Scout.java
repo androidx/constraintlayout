@@ -45,7 +45,8 @@ public class Scout {
         if (base == null) {
             return;
         }
-        if (base instanceof ConstraintWidgetContainer && ((ConstraintWidgetContainer) base).handlesInternalConstraints()) {
+        if (base instanceof ConstraintWidgetContainer
+                && ((ConstraintWidgetContainer) base).handlesInternalConstraints()) {
             return;
         }
         int preX = base.getX();
@@ -54,7 +55,7 @@ public class Scout {
         base.setY(0);
         for (ConstraintWidget constraintWidget : base.getChildren()) {
             if (constraintWidget instanceof ConstraintWidgetContainer) {
-                ConstraintWidgetContainer container = (ConstraintWidgetContainer)constraintWidget;
+                ConstraintWidgetContainer container = (ConstraintWidgetContainer) constraintWidget;
                 if (!container.getChildren().isEmpty()) {
                     inferConstraints(container);
                 }

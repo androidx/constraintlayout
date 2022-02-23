@@ -183,29 +183,29 @@ public class MotionKeyPositionTest {
         assertEquals("400, 325, 460, 385", res.toString());
     }
     class Scene {
-        MotionWidget mw1 = new MotionWidget();
-        MotionWidget mw2 = new MotionWidget();
-        MotionWidget res = new MotionWidget();
-        KeyCache cache = new KeyCache();
-        Motion motion;
-        float progress;
+        MotionWidget mMW1 = new MotionWidget();
+        MotionWidget mMW2 = new MotionWidget();
+        MotionWidget mRes = new MotionWidget();
+        KeyCache mCache = new KeyCache();
+        Motion mMotion;
+        float mProgress;
 
         Scene() {
-            motion = new Motion(mw1);
-            mw1.setBounds(0, 0, 30, 40);
-            mw2.setBounds(400, 400, 430, 440);
+            mMotion = new Motion(mMW1);
+            mMW1.setBounds(0, 0, 30, 40);
+            mMW2.setBounds(400, 400, 430, 440);
         }
 
         public void setup() {
-            motion.setStart(mw1);
-            motion.setEnd(mw2);
-            motion.setup(1000, 1000, 1, 1000000);
+            mMotion.setStart(mMW1);
+            mMotion.setEnd(mMW2);
+            mMotion.setup(1000, 1000, 1, 1000000);
         }
 
         void sample(Runnable r) {
             for (int p = 0; p <= 10; p++) {
-                progress = p*0.1f;
-                motion.interpolate(res, progress, 1000000 + (int) (p * 100), cache);
+                mProgress = p * 0.1f;
+                mMotion.interpolate(mRes, mProgress, 1000000 + (int) (p * 100), mCache);
                 r.run();
             }
         }
@@ -224,22 +224,22 @@ public class MotionKeyPositionTest {
             keyPosition.setValue(TypedValues.PositionType.TYPE_PERCENT_X, percentX[i]);
             keyPosition.setValue(TypedValues.PositionType.TYPE_PERCENT_Y, percentY[i]);
 
-            s.motion.addKey(keyPosition);
+            s.mMotion.addKey(keyPosition);
         }
 
         s.setup();
-        s.motion.interpolate(s.res, 0.5f, 1000000 + (int) (0.5 * 100), cache);
-        System.out.println("0.5 " + s.res);
+        s.mMotion.interpolate(s.mRes, 0.5f, 1000000 + (int) (0.5 * 100), cache);
+        System.out.println("0.5 " + s.mRes);
         if (DEBUG) {
             s.sample(() -> {
-                System.out.println(s.progress + " ,     " + s.res);
+                System.out.println(s.mProgress + " ,     " + s.mRes);
             });
         }
 
-        s.motion.interpolate(s.res, 0.5f, 1000000 + (int) (0.5 * 100), cache);
-        System.out.println("0.5 " + s.res);
+        s.mMotion.interpolate(s.mRes, 0.5f, 1000000 + (int) (0.5 * 100), cache);
+        System.out.println("0.5 " + s.mRes);
 
-        assertEquals("320, 320, 350, 360", s.res.toString());
+        assertEquals("320, 320, 350, 360", s.mRes.toString());
     }
 
 

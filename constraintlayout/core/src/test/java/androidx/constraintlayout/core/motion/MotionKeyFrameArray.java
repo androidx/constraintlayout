@@ -17,9 +17,6 @@ package androidx.constraintlayout.core.motion;
 
 import static org.junit.Assert.assertEquals;
 
-import androidx.constraintlayout.core.RandomLayoutTest;
-import androidx.constraintlayout.core.motion.utils.ArcCurveFit;
-import androidx.constraintlayout.core.motion.utils.CurveFit;
 import androidx.constraintlayout.core.motion.utils.KeyFrameArray;
 
 import org.junit.Test;
@@ -34,7 +31,7 @@ public class MotionKeyFrameArray {
         Random random = new Random();
         for (int i = 0; i < 32; i++) {
             assertEquals(i, array.size());
-            array.append(i,null);
+            array.append(i, null);
         }
         array.dump();
         for (int i = 0; i < array.size(); i++) {

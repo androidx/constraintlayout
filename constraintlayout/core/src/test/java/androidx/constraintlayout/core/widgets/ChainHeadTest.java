@@ -17,194 +17,196 @@
 package androidx.constraintlayout.core.widgets;
 
 import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour;
-import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
 
 public class ChainHeadTest {
 
     @Test
-    public void basicHorizontalChainHeadTest(){
+    public void basicHorizontalChainHeadTest() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 600);
-        ConstraintWidget A = new ConstraintWidget(100, 20);
-        ConstraintWidget B = new ConstraintWidget(100, 20);
-        ConstraintWidget C = new ConstraintWidget(100, 20);
+        ConstraintWidget a = new ConstraintWidget(100, 20);
+        ConstraintWidget b = new ConstraintWidget(100, 20);
+        ConstraintWidget c = new ConstraintWidget(100, 20);
 
         root.setDebugName("root");
-        A.setDebugName("A");
-        B.setDebugName("B");
-        C.setDebugName("C");
+        a.setDebugName("A");
+        b.setDebugName("B");
+        c.setDebugName("C");
 
-        root.add(A);
-        root.add(B);
-        root.add(C);
+        root.add(a);
+        root.add(b);
+        root.add(c);
 
-        A.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
-        A.connect(ConstraintAnchor.Type.RIGHT, B, ConstraintAnchor.Type.LEFT);
-        B.connect(ConstraintAnchor.Type.LEFT, A, ConstraintAnchor.Type.RIGHT);
-        B.connect(ConstraintAnchor.Type.RIGHT, C, ConstraintAnchor.Type.LEFT);
-        C.connect(ConstraintAnchor.Type.LEFT, B, ConstraintAnchor.Type.RIGHT);
-        C.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT);
-        A.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
-        B.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
-        C.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        a.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
+        a.connect(ConstraintAnchor.Type.RIGHT, b, ConstraintAnchor.Type.LEFT);
+        b.connect(ConstraintAnchor.Type.LEFT, a, ConstraintAnchor.Type.RIGHT);
+        b.connect(ConstraintAnchor.Type.RIGHT, c, ConstraintAnchor.Type.LEFT);
+        c.connect(ConstraintAnchor.Type.LEFT, b, ConstraintAnchor.Type.RIGHT);
+        c.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT);
+        a.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        b.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        c.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
 
-        ChainHead chainHead = new ChainHead(A, ConstraintWidget.HORIZONTAL, false);
+        ChainHead chainHead = new ChainHead(a, ConstraintWidget.HORIZONTAL, false);
         chainHead.define();
 
-        assertEquals(chainHead.getHead(), A);
-        assertEquals(chainHead.getFirst(), A);
-        assertEquals(chainHead.getFirstVisibleWidget(), A);
-        assertEquals(chainHead.getLast(), C);
-        assertEquals(chainHead.getLastVisibleWidget(), C);
+        assertEquals(chainHead.getHead(), a);
+        assertEquals(chainHead.getFirst(), a);
+        assertEquals(chainHead.getFirstVisibleWidget(), a);
+        assertEquals(chainHead.getLast(), c);
+        assertEquals(chainHead.getLastVisibleWidget(), c);
 
-        A.setVisibility(ConstraintWidget.GONE);
+        a.setVisibility(ConstraintWidget.GONE);
 
-        chainHead = new ChainHead(A, ConstraintWidget.HORIZONTAL, false);
+        chainHead = new ChainHead(a, ConstraintWidget.HORIZONTAL, false);
         chainHead.define();
 
-        assertEquals(chainHead.getHead(), A);
-        assertEquals(chainHead.getFirst(), A);
-        assertEquals(chainHead.getFirstVisibleWidget(), B);
+        assertEquals(chainHead.getHead(), a);
+        assertEquals(chainHead.getFirst(), a);
+        assertEquals(chainHead.getFirstVisibleWidget(), b);
 
 
-        chainHead = new ChainHead(A, ConstraintWidget.HORIZONTAL, true);
+        chainHead = new ChainHead(a, ConstraintWidget.HORIZONTAL, true);
         chainHead.define();
 
-        assertEquals(chainHead.getHead(), C);
-        assertEquals(chainHead.getFirst(), A);
-        assertEquals(chainHead.getFirstVisibleWidget(), B);
+        assertEquals(chainHead.getHead(), c);
+        assertEquals(chainHead.getFirst(), a);
+        assertEquals(chainHead.getFirstVisibleWidget(), b);
     }
 
     @Test
-    public void basicVerticalChainHeadTest(){
+    public void basicVerticalChainHeadTest() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 600);
-        ConstraintWidget A = new ConstraintWidget(100, 20);
-        ConstraintWidget B = new ConstraintWidget(100, 20);
-        ConstraintWidget C = new ConstraintWidget(100, 20);
+        ConstraintWidget a = new ConstraintWidget(100, 20);
+        ConstraintWidget b = new ConstraintWidget(100, 20);
+        ConstraintWidget c = new ConstraintWidget(100, 20);
 
         root.setDebugName("root");
-        A.setDebugName("A");
-        B.setDebugName("B");
-        C.setDebugName("C");
+        a.setDebugName("A");
+        b.setDebugName("B");
+        c.setDebugName("C");
 
-        root.add(A);
-        root.add(B);
-        root.add(C);
+        root.add(a);
+        root.add(b);
+        root.add(c);
 
-        A.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
-        A.connect(ConstraintAnchor.Type.BOTTOM, B, ConstraintAnchor.Type.TOP);
-        B.connect(ConstraintAnchor.Type.TOP, A, ConstraintAnchor.Type.BOTTOM);
-        B.connect(ConstraintAnchor.Type.BOTTOM, C, ConstraintAnchor.Type.TOP);
-        C.connect(ConstraintAnchor.Type.TOP, B, ConstraintAnchor.Type.BOTTOM);
-        C.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM);
-        A.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
-        B.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
-        C.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
+        a.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        a.connect(ConstraintAnchor.Type.BOTTOM, b, ConstraintAnchor.Type.TOP);
+        b.connect(ConstraintAnchor.Type.TOP, a, ConstraintAnchor.Type.BOTTOM);
+        b.connect(ConstraintAnchor.Type.BOTTOM, c, ConstraintAnchor.Type.TOP);
+        c.connect(ConstraintAnchor.Type.TOP, b, ConstraintAnchor.Type.BOTTOM);
+        c.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM);
+        a.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
+        b.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
+        c.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
 
-        ChainHead chainHead = new ChainHead(A, ConstraintWidget.VERTICAL, false);
+        ChainHead chainHead = new ChainHead(a, ConstraintWidget.VERTICAL, false);
         chainHead.define();
 
-        assertEquals(chainHead.getHead(), A);
-        assertEquals(chainHead.getFirst(), A);
-        assertEquals(chainHead.getFirstVisibleWidget(), A);
-        assertEquals(chainHead.getLast(), C);
-        assertEquals(chainHead.getLastVisibleWidget(), C);
+        assertEquals(chainHead.getHead(), a);
+        assertEquals(chainHead.getFirst(), a);
+        assertEquals(chainHead.getFirstVisibleWidget(), a);
+        assertEquals(chainHead.getLast(), c);
+        assertEquals(chainHead.getLastVisibleWidget(), c);
 
-        A.setVisibility(ConstraintWidget.GONE);
+        a.setVisibility(ConstraintWidget.GONE);
 
-        chainHead = new ChainHead(A, ConstraintWidget.VERTICAL, false);
+        chainHead = new ChainHead(a, ConstraintWidget.VERTICAL, false);
         chainHead.define();
 
-        assertEquals(chainHead.getHead(), A);
-        assertEquals(chainHead.getFirst(), A);
-        assertEquals(chainHead.getFirstVisibleWidget(), B);
+        assertEquals(chainHead.getHead(), a);
+        assertEquals(chainHead.getFirst(), a);
+        assertEquals(chainHead.getFirstVisibleWidget(), b);
 
 
-        chainHead = new ChainHead(A, ConstraintWidget.VERTICAL, true);
+        chainHead = new ChainHead(a, ConstraintWidget.VERTICAL, true);
         chainHead.define();
 
-        assertEquals(chainHead.getHead(), A);
-        assertEquals(chainHead.getFirst(), A);
-        assertEquals(chainHead.getFirstVisibleWidget(), B);
+        assertEquals(chainHead.getHead(), a);
+        assertEquals(chainHead.getFirst(), a);
+        assertEquals(chainHead.getFirstVisibleWidget(), b);
     }
 
     @Test
     public void basicMatchConstraintTest() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 600);
-        ConstraintWidget A = new ConstraintWidget(100, 20);
-        ConstraintWidget B = new ConstraintWidget(100, 20);
-        ConstraintWidget C = new ConstraintWidget(100, 20);
+        ConstraintWidget a = new ConstraintWidget(100, 20);
+        ConstraintWidget b = new ConstraintWidget(100, 20);
+        ConstraintWidget c = new ConstraintWidget(100, 20);
 
         root.setDebugName("root");
-        A.setDebugName("A");
-        B.setDebugName("B");
-        C.setDebugName("C");
+        a.setDebugName("A");
+        b.setDebugName("B");
+        c.setDebugName("C");
 
-        root.add(A);
-        root.add(B);
-        root.add(C);
+        root.add(a);
+        root.add(b);
+        root.add(c);
 
-        A.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
-        A.connect(ConstraintAnchor.Type.RIGHT, B, ConstraintAnchor.Type.LEFT);
-        B.connect(ConstraintAnchor.Type.LEFT, A, ConstraintAnchor.Type.RIGHT);
-        B.connect(ConstraintAnchor.Type.RIGHT, C, ConstraintAnchor.Type.LEFT);
-        C.connect(ConstraintAnchor.Type.LEFT, B, ConstraintAnchor.Type.RIGHT);
-        C.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT);
-        A.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
-        B.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
-        C.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
-        A.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
-        B.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
-        C.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
-        A.setHorizontalWeight(1f);
-        B.setHorizontalWeight(2f);
-        C.setHorizontalWeight(3f);
+        a.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
+        a.connect(ConstraintAnchor.Type.RIGHT, b, ConstraintAnchor.Type.LEFT);
+        b.connect(ConstraintAnchor.Type.LEFT, a, ConstraintAnchor.Type.RIGHT);
+        b.connect(ConstraintAnchor.Type.RIGHT, c, ConstraintAnchor.Type.LEFT);
+        c.connect(ConstraintAnchor.Type.LEFT, b, ConstraintAnchor.Type.RIGHT);
+        c.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT);
+        a.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        b.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        c.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        a.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
+        b.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
+        c.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
+        a.setHorizontalWeight(1f);
+        b.setHorizontalWeight(2f);
+        c.setHorizontalWeight(3f);
 
-        ChainHead chainHead = new ChainHead(A, ConstraintWidget.HORIZONTAL, false);
+        ChainHead chainHead = new ChainHead(a, ConstraintWidget.HORIZONTAL, false);
         chainHead.define();
 
-        assertEquals(chainHead.getFirstMatchConstraintWidget(), A);
-        assertEquals(chainHead.getLastMatchConstraintWidget(), C);
+        assertEquals(chainHead.getFirstMatchConstraintWidget(), a);
+        assertEquals(chainHead.getLastMatchConstraintWidget(), c);
         assertEquals(chainHead.getTotalWeight(), 6f, 0f);
 
-        C.setVisibility(ConstraintWidget.GONE);
+        c.setVisibility(ConstraintWidget.GONE);
 
-        chainHead = new ChainHead(A, ConstraintWidget.HORIZONTAL, false);
+        chainHead = new ChainHead(a, ConstraintWidget.HORIZONTAL, false);
         chainHead.define();
 
-        assertEquals(chainHead.getFirstMatchConstraintWidget(), A);
-        assertEquals(chainHead.getLastMatchConstraintWidget(), B);
+        assertEquals(chainHead.getFirstMatchConstraintWidget(), a);
+        assertEquals(chainHead.getLastMatchConstraintWidget(), b);
         assertEquals(chainHead.getTotalWeight(), 3f, 0f);
     }
 
     @Test
     public void chainOptimizerValuesTest() {
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 600, 600);
-        ConstraintWidget A = new ConstraintWidget(50, 20);
-        ConstraintWidget B = new ConstraintWidget(100, 20);
-        ConstraintWidget C = new ConstraintWidget(200, 20);
+        ConstraintWidget a = new ConstraintWidget(50, 20);
+        ConstraintWidget b = new ConstraintWidget(100, 20);
+        ConstraintWidget c = new ConstraintWidget(200, 20);
 
         root.setDebugName("root");
-        A.setDebugName("A");
-        B.setDebugName("B");
-        C.setDebugName("C");
+        a.setDebugName("A");
+        b.setDebugName("B");
+        c.setDebugName("C");
 
-        root.add(A, B, C);
+        root.add(a, b, c);
 
-        A.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT, 5);
-        A.connect(ConstraintAnchor.Type.RIGHT, B, ConstraintAnchor.Type.LEFT, 5);
-        B.connect(ConstraintAnchor.Type.LEFT, A, ConstraintAnchor.Type.RIGHT, 1);
-        B.connect(ConstraintAnchor.Type.RIGHT, C, ConstraintAnchor.Type.LEFT, 1);
-        C.connect(ConstraintAnchor.Type.LEFT, B, ConstraintAnchor.Type.RIGHT, 10);
-        C.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT, 10);
-        A.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
-        B.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
-        C.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        a.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT, 5);
+        a.connect(ConstraintAnchor.Type.RIGHT, b, ConstraintAnchor.Type.LEFT, 5);
+        b.connect(ConstraintAnchor.Type.LEFT, a, ConstraintAnchor.Type.RIGHT, 1);
+        b.connect(ConstraintAnchor.Type.RIGHT, c, ConstraintAnchor.Type.LEFT, 1);
+        c.connect(ConstraintAnchor.Type.LEFT, b, ConstraintAnchor.Type.RIGHT, 10);
+        c.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT, 10);
+        a.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        b.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        c.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
 
-        ChainHead chainHead = new ChainHead(A, ConstraintWidget.HORIZONTAL, false);
+        ChainHead chainHead = new ChainHead(a, ConstraintWidget.HORIZONTAL, false);
         chainHead.define();
 
         assertEquals(chainHead.mVisibleWidgets, 3);
@@ -213,9 +215,9 @@ public class ChainHeadTest {
         assertEquals(chainHead.mWidgetsMatchCount, 0);
         assertTrue(chainHead.mOptimizable);
 
-        B.setVisibility(ConstraintWidget.GONE);
+        b.setVisibility(ConstraintWidget.GONE);
 
-        chainHead = new ChainHead(A, ConstraintWidget.HORIZONTAL, false);
+        chainHead = new ChainHead(a, ConstraintWidget.HORIZONTAL, false);
         chainHead.define();
 
         assertEquals(chainHead.mVisibleWidgets, 2);
@@ -224,11 +226,11 @@ public class ChainHeadTest {
         assertEquals(chainHead.mWidgetsMatchCount, 0);
         assertTrue(chainHead.mOptimizable);
 
-        A.setVisibility(ConstraintWidget.GONE);
-        B.setVisibility(ConstraintWidget.VISIBLE);
-        C.setVisibility(ConstraintWidget.GONE);
+        a.setVisibility(ConstraintWidget.GONE);
+        b.setVisibility(ConstraintWidget.VISIBLE);
+        c.setVisibility(ConstraintWidget.GONE);
 
-        chainHead = new ChainHead(A, ConstraintWidget.HORIZONTAL, false);
+        chainHead = new ChainHead(a, ConstraintWidget.HORIZONTAL, false);
         chainHead.define();
 
         assertEquals(chainHead.mVisibleWidgets, 1);
@@ -237,13 +239,13 @@ public class ChainHeadTest {
         assertEquals(chainHead.mWidgetsMatchCount, 0);
         assertTrue(chainHead.mOptimizable);
 
-        A.setVisibility(ConstraintWidget.VISIBLE);
-        B.setVisibility(ConstraintWidget.VISIBLE);
-        C.setVisibility(ConstraintWidget.VISIBLE);
-        A.setHorizontalDimensionBehaviour(DimensionBehaviour.MATCH_CONSTRAINT);
-        A.mMatchConstraintDefaultWidth = ConstraintWidget.MATCH_CONSTRAINT_PERCENT;
+        a.setVisibility(ConstraintWidget.VISIBLE);
+        b.setVisibility(ConstraintWidget.VISIBLE);
+        c.setVisibility(ConstraintWidget.VISIBLE);
+        a.setHorizontalDimensionBehaviour(DimensionBehaviour.MATCH_CONSTRAINT);
+        a.mMatchConstraintDefaultWidth = ConstraintWidget.MATCH_CONSTRAINT_PERCENT;
 
-        chainHead = new ChainHead(A, ConstraintWidget.HORIZONTAL, false);
+        chainHead = new ChainHead(a, ConstraintWidget.HORIZONTAL, false);
         chainHead.define();
 
         assertEquals(chainHead.mVisibleWidgets, 3);

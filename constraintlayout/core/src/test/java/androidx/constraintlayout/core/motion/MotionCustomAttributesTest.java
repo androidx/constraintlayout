@@ -17,7 +17,6 @@ package androidx.constraintlayout.core.motion;
 
 import static org.junit.Assert.assertEquals;
 
-import androidx.constraintlayout.core.motion.utils.ArcCurveFit;
 import androidx.constraintlayout.core.motion.utils.KeyCache;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
 
@@ -33,30 +32,30 @@ public class MotionCustomAttributesTest {
     }
 
     class Scene {
-        MotionWidget mw1 = new MotionWidget();
-        MotionWidget mw2 = new MotionWidget();
-        MotionWidget res = new MotionWidget();
-        KeyCache cache = new KeyCache();
-        Motion motion;
-        float pos;
+        MotionWidget mMW1 = new MotionWidget();
+        MotionWidget mMW2 = new MotionWidget();
+        MotionWidget mRes = new MotionWidget();
+        KeyCache mCache = new KeyCache();
+        Motion mMotion;
+        float mPos;
 
         Scene() {
-            motion = new Motion(mw1);
+            mMotion = new Motion(mMW1);
 //            mw1.setBounds(0, 0, 30, 40);
 //            mw2.setBounds(400, 400, 430, 440);
 //            motion.setPathMotionArc(ArcCurveFit.ARC_START_VERTICAL);
         }
 
         public void setup() {
-            motion.setStart(mw1);
-            motion.setEnd(mw2);
-            motion.setup(0, 0, 1, 1000000);
+            mMotion.setStart(mMW1);
+            mMotion.setEnd(mMW2);
+            mMotion.setup(0, 0, 1, 1000000);
         }
 
         void sample(Runnable r) {
             for (int p = 0; p <= 10; p++) {
-                pos = p;
-                motion.interpolate(res, p * 0.1f, 1000000 + (int) (p * 100), cache);
+                mPos = p;
+                mMotion.interpolate(mRes, p * 0.1f, 1000000 + (int) (p * 100), mCache);
                 r.run();
             }
         }
@@ -65,55 +64,55 @@ public class MotionCustomAttributesTest {
     @Test
     public void customFloat() {
         Scene s = new Scene();
-        s.mw1.setCustomAttribute("bob", TypedValues.Custom.TYPE_FLOAT, 0f);
-        s.mw2.setCustomAttribute("bob", TypedValues.Custom.TYPE_FLOAT, 1f);
+        s.mMW1.setCustomAttribute("bob", TypedValues.Custom.TYPE_FLOAT, 0f);
+        s.mMW2.setCustomAttribute("bob", TypedValues.Custom.TYPE_FLOAT, 1f);
         s.setup();
 
         if (DEBUG) {
             s.sample(() -> {
-                System.out.println(s.res.getCustomAttribute("bob").getFloatValue());
+                System.out.println(s.mRes.getCustomAttribute("bob").getFloatValue());
             });
         }
-        s.motion.interpolate(s.res, 0.5f, 1000000 + 1000, s.cache);
-        assertEquals(0.5, s.res.getCustomAttribute("bob").getFloatValue(), 0.001);
+        s.mMotion.interpolate(s.mRes, 0.5f, 1000000 + 1000, s.mCache);
+        assertEquals(0.5, s.mRes.getCustomAttribute("bob").getFloatValue(), 0.001);
     }
 
     @Test
     public void customColor1() {
         Scene s = new Scene();
-        s.mw1.setCustomAttribute("fish", TypedValues.Custom.TYPE_COLOR, 0xFF00FF00);
-        s.mw2.setCustomAttribute("fish", TypedValues.Custom.TYPE_COLOR, 0xFFFF00FF);
+        s.mMW1.setCustomAttribute("fish", TypedValues.Custom.TYPE_COLOR, 0xFF00FF00);
+        s.mMW2.setCustomAttribute("fish", TypedValues.Custom.TYPE_COLOR, 0xFFFF00FF);
         s.setup();
 
         if (true || DEBUG) {
             s.sample(() -> {
-                System.out.println(s.pos + " " +
-                        Integer.toHexString(
-                                s.res.getCustomAttribute("fish")
+                System.out.println(s.mPos + " "
+                        + Integer.toHexString(
+                                s.mRes.getCustomAttribute("fish")
                                         .getColorValue()));
             });
         }
-        s.motion.interpolate(s.res, 0.5f, 1000000 + 1000, s.cache);
-        assertEquals(0xffbababa, s.res.getCustomAttribute("fish").getColorValue());
+        s.mMotion.interpolate(s.mRes, 0.5f, 1000000 + 1000, s.mCache);
+        assertEquals(0xffbababa, s.mRes.getCustomAttribute("fish").getColorValue());
     }
 
     @Test
     public void customColor2() {
         Scene s = new Scene();
-        s.mw1.setCustomAttribute("fish", TypedValues.Custom.TYPE_COLOR, 0xFF000000);
-        s.mw2.setCustomAttribute("fish", TypedValues.Custom.TYPE_COLOR, 0x00880088);
+        s.mMW1.setCustomAttribute("fish", TypedValues.Custom.TYPE_COLOR, 0xFF000000);
+        s.mMW2.setCustomAttribute("fish", TypedValues.Custom.TYPE_COLOR, 0x00880088);
         s.setup();
 
         if (DEBUG) {
             s.sample(() -> {
-                System.out.println(s.pos + " " +
-                        Integer.toHexString(
-                                s.res.getCustomAttribute("fish")
+                System.out.println(s.mPos + " "
+                        + Integer.toHexString(
+                                s.mRes.getCustomAttribute("fish")
                                         .getColorValue()));
             });
         }
-        s.motion.interpolate(s.res, 0.5f, 1000000 + 1000, s.cache);
-        assertEquals(0x7f630063, s.res.getCustomAttribute("fish").getColorValue());
+        s.mMotion.interpolate(s.mRes, 0.5f, 1000000 + 1000, s.mCache);
+        assertEquals(0x7f630063, s.mRes.getCustomAttribute("fish").getColorValue());
     }
 
 

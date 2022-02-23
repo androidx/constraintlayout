@@ -30,8 +30,6 @@ import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 
 import org.junit.Test;
 
-import jdk.nashorn.internal.parser.JSONParser;
-
 public class MotionTransitionTest {
 
     ConstraintWidgetContainer makeLayout1() {
@@ -103,8 +101,10 @@ public class MotionTransitionTest {
         assertEquals(0, s1.left);
         assertEquals(780, e1.top);
         assertEquals(890, e1.left);
-        System.out.println(s1.top + " ," + s1.left + " ----  " + s1.widget.getTop() + " ," + s1.widget.getLeft());
-        System.out.println(e1.top + " ," + e1.left + " ----  " + e1.widget.getTop() + " ," + e1.widget.getLeft());
+        System.out.println(s1.top + " ," + s1.left + " ----  "
+                + s1.widget.getTop() + " ," + s1.widget.getLeft());
+        System.out.println(e1.top + " ," + e1.left + " ----  "
+                + e1.widget.getTop() + " ," + e1.widget.getLeft());
         System.out.println(f1.top + " ," + f1.left);
 
         assertEquals(400, f1.top);
@@ -117,8 +117,10 @@ public class MotionTransitionTest {
         assertEquals(200, e1.bottom - e1.top);
         assertEquals(20, e1.right - e1.left);
 
-        System.out.println(s1.top + " ," + s1.left + " ----  " + s1.widget.getTop() + " ," + s1.widget.getLeft());
-        System.out.println(e1.top + " ," + e1.left + " ----  " + e1.widget.getTop() + " ," + e1.widget.getLeft());
+        System.out.println(s1.top + " ," + s1.left + " ----  "
+                + s1.widget.getTop() + " ," + s1.widget.getLeft());
+        System.out.println(e1.top + " ," + e1.left + " ----  "
+                + e1.widget.getTop() + " ," + e1.widget.getLeft());
         System.out.println(f1.top + " ," + f1.left);
     }
 
@@ -180,14 +182,18 @@ public class MotionTransitionTest {
         assertEquals(200, e1.bottom - e1.top);
         assertEquals(20, e1.right - e1.left);
 
-        System.out.println(s1.top + " ," + s1.left + " ----  " + s1.widget.getTop() + " ," + s1.widget.getLeft());
-        System.out.println(e1.top + " ," + e1.left + " ----  " + e1.widget.getTop() + " ," + e1.widget.getLeft());
+        System.out.println(s1.top + " ," + s1.left + " ----  "
+                + s1.widget.getTop() + " ," + s1.widget.getLeft());
+        System.out.println(e1.top + " ," + e1.left + " ----  "
+                + e1.widget.getTop() + " ," + e1.widget.getLeft());
         System.out.println(f1.top + " ," + f1.left);
 
         assertEquals(736, f1.top);
         assertEquals(267, f1.left);
-        System.out.println(s1.top + " ," + s1.left + " ----  " + s1.widget.getTop() + " ," + s1.widget.getLeft());
-        System.out.println(e1.top + " ," + e1.left + " ----  " + e1.widget.getTop() + " ," + e1.widget.getLeft());
+        System.out.println(s1.top + " ," + s1.left + " ----  "
+                + s1.widget.getTop() + " ," + s1.widget.getLeft());
+        System.out.println(e1.top + " ," + e1.left + " ----  "
+                + e1.widget.getTop() + " ," + e1.widget.getLeft());
         System.out.println(f1.top + " ," + f1.left);
     }
 }

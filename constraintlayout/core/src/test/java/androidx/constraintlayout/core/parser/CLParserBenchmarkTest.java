@@ -18,15 +18,11 @@ package androidx.constraintlayout.core.parser;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import androidx.constraintlayout.core.parser.CLObject;
-import androidx.constraintlayout.core.parser.CLParser;
-import androidx.constraintlayout.core.parser.CLParsingException;
-
 import org.junit.Test;
 
 public class CLParserBenchmarkTest {
 
-    String simpleFromWiki2 =
+    String mSimpleFromWiki2 =
             "{\n"
                     + "  firstName: 'John',\n"
                     + "  lastName: 'Smith',\n"
@@ -80,7 +76,7 @@ public class CLParserBenchmarkTest {
     }
 
     private void parseOnce() throws CLParsingException {
-        String test = simpleFromWiki2;
+        String test = mSimpleFromWiki2;
         CLObject parsedContent = CLParser.parse(test);
         CLObject o;
 
@@ -88,7 +84,7 @@ public class CLParserBenchmarkTest {
     }
 
     private void parseAndeCheck() throws CLParsingException {
-        String test = simpleFromWiki2;
+        String test = mSimpleFromWiki2;
         CLObject parsedContent = CLParser.parse(test);
         CLObject o;
 
@@ -97,7 +93,8 @@ public class CLParserBenchmarkTest {
         assertEquals(true, parsedContent.getBoolean("isAlive"));
         assertEquals(27, parsedContent.getInt("age"));
         assertEquals(
-                "{ streetAddress: '21 2nd Street', city: 'New York', state: 'NY', postalCode: '10021-3100' }",
+                "{ streetAddress: '21 2nd Street', city: 'New York'"
+                        + ", state: 'NY', postalCode: '10021-3100' }",
                 (o = parsedContent.getObject("address")).toJSON());
         assertEquals("21 2nd Street", o.getString("streetAddress"));
         assertEquals("New York", o.getString("city"));
@@ -106,10 +103,12 @@ public class CLParserBenchmarkTest {
         assertEquals("NY", o.getString("state"));
         assertEquals("NY", o.getString("state"));
         assertEquals("10021-3100", o.getString("postalCode"));
-        assertEquals("{ type: 'home', number: '212 555-1234' }", (o = parsedContent.getArray("phoneNumbers").getObject(0)).toJSON());
+        assertEquals("{ type: 'home', number: '212 555-1234' }",
+                (o = parsedContent.getArray("phoneNumbers").getObject(0)).toJSON());
         assertEquals("home", o.getString("type"));
         assertEquals("212 555-1234", o.getString("number"));
-        assertEquals("{ type: 'office', number: '646 555-4567' }", (o = parsedContent.getArray("phoneNumbers").getObject(1)).toJSON());
+        assertEquals("{ type: 'office', number: '646 555-4567' }",
+                (o = parsedContent.getArray("phoneNumbers").getObject(1)).toJSON());
         assertEquals("office", o.getString("type"));
         assertEquals("646 555-4567", o.getString("number"));
         assertEquals(0, parsedContent.getArray("children").mElements.size());

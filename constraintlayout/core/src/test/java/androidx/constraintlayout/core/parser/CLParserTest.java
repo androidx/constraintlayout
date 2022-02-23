@@ -333,7 +333,8 @@ public class CLParserTest {
             assertEquals("{ "
                             + "Variables: { bottom: 20 }, "
                             + "Helpers: ["
-                            + "['hChain', ['a', 'b', 'c'], { start: ['leftGuideline1', 'start'], style: 'packed' }], "
+                            + "['hChain', ['a', 'b', 'c'], { start: ['leftGuideline1', 'start'], "
+                            + "style: 'packed' }], "
                             + "['hChain', ['d', 'e', 'f']], "
                             + "['vChain', ['d', 'e', 'f'], { bottom: ['topGuideline1', 'top'] }], "
                             + "['vGuideline', { id: 'leftGuideline1', start: 100 }], "
@@ -401,7 +402,15 @@ public class CLParserTest {
                 + "            }";
         try {
             CLObject parsedContent = CLParser.parse(test);
-            assertEquals("{ ConstraintSets: { start: { a: { width: 40, height: 40, start: ['parent', 'start', 16], bottom: ['parent', 'bottom', 16] } }, end: { a: { width: 40, height: 40, end: ['parent', 'end', 16], top: ['parent', 'top', 16] } } }, Transitions: { default: { from: 'start', to: 'end', pathMotionArc: 'startHorizontal', KeyFrames: { KeyAttributes: [{ target: ['a'], frames: [25, 50], scaleX: 3, scaleY: 0.3 }] } } } }", parsedContent.toJSON());
+            assertEquals("{ ConstraintSets: { start: { a: { width: 40, height: 40, "
+                    + "start: ['parent', 'start', 16], bottom: ['parent', 'bottom', 16] } }, "
+                    + "end: { a: { width: 40, height: 40, end: ['parent', 'end', 16],"
+                            + " top: ['parent', 'top', 16] } } }, "
+                    + "Transitions: { default: { from: 'start', to: 'end', "
+                            + "pathMotionArc: 'startHorizontal', "
+                    + "KeyFrames: { KeyAttributes: [{ target: ['a'], frames: [25, 50], "
+                            + "scaleX: 3, scaleY: 0.3 }] } } } }",
+                    parsedContent.toJSON());
             CLObject transitions = parsedContent.getObject("Transitions");
             CLObject transition = transitions.getObject("default");
             CLObject keyframes = transition.getObjectOrNull("KeyFrames");
@@ -458,7 +467,8 @@ public class CLParserTest {
     public void testFormatting2() {
         String test = "{ ConstraintSets: { start: { a: { width: 40, height: 40, "
                 + "start: ['parent', 'start', 16], bottom: ['parent', 'bottom', 16] } }, end: "
-                + "{ a: { width: 40, height: 40, end: ['parent', 'end', 16], top: ['parent', 'top', 16]"
+                + "{ a: { width: 40, height: 40, end: ['parent', 'end', 16],"
+                + " top: ['parent', 'top', 16]"
                 + " } } }, Transitions: { default: { from: 'start', to: 'end', "
                 + "pathMotionArc: 'startHorizontal', KeyFrames: { KeyAttributes: [{ target: ['a'], "
                 + "frames: [25, 50], scaleX: 3, scaleY: 0.3 }] } } } }";
@@ -510,7 +520,8 @@ public class CLParserTest {
     @Test
     public void testFormatting3() {
         String test = "{ ConstraintSets: {\n"
-                + "      Generate: { texts: { top: ['parent', 'top', 'margin'], start: ['parent', 'end', 16] } } } }\n";
+                + "      Generate: { texts: { top: ['parent', 'top', 'margin'], "
+                + "start: ['parent', 'end', 16] } } } }\n";
         try {
             CLObject parsedContent = CLParser.parse(test);
             assertEquals("{\n"
@@ -564,15 +575,19 @@ public class CLParserTest {
     @Test
     public void testFormatting5() {
         String test = "{ Debug: { name: 'motion6' }, ConstraintSets: {\n"
-                + "    start: { Variables: { texts: { tag: 'text' }, margin: { from: 0, step: 50 }\n"
-                + "      }, Generate: { texts: { top: ['parent', 'top', 'margin'], start: ['parent', 'end', 16] }\n"
+                + "    start: { Variables: { texts: { tag: 'text' }, "
+                + "margin: { from: 0, step: 50 }\n"
+                + "      }, Generate: { texts: { top: ['parent', 'top', 'margin'], "
+                + "start: ['parent', 'end', 16] }\n"
                 + "      }, box: { width: 'spread', height: 64, centerHorizontally: 'parent',\n"
                 + "        bottom: ['parent', 'bottom'] }, content: { width: 'spread',\n"
-                + "        height: '400', centerHorizontally: 'parent', top: ['box', 'bottom', 32]\n"
+                + "        height: '400', centerHorizontally: 'parent', "
+                + "top: ['box', 'bottom', 32]\n"
                 + "      }, name: { centerVertically: 'box', start: ['parent', 'start', 16] }\n"
                 + "    }, end: { Variables: { texts: { tag: 'text' },\n"
                 + "        margin: { from: 0, step: 50 } }, Generate: {\n"
-                + "        texts: { start: ['parent', 'start', 32], top: ['content', 'top', 'margin'] }\n"
+                + "        texts: { start: ['parent', 'start', 32], "
+                + "top: ['content', 'top', 'margin'] }\n"
                 + "      }, box: { width: 'spread', height: 200, centerHorizontally: 'parent',\n"
                 + "        top: ['parent', 'top'] }, content: {\n"
                 + "        width: 'spread', height: 'spread', centerHorizontally: 'parent',\n"
@@ -687,14 +702,18 @@ public class CLParserTest {
                 + "button: {interpolated: {left: 0, top: 372, right: 800, bottom: 401}}, "
                 + "text1: {interpolated: {left: 100, top: 285, right: 208, bottom: 301}}, "
                 + "text2: {interpolated: {left: 723, top: 736, right: 780, bottom: 752}}, "
-                + "g1: {type: 'vGuideline',interpolated: {left: 100, top: 0, right: 100, bottom: 772}}, }";
+                + "g1: {type: 'vGuideline',interpolated: {left: 100, top: 0,"
+                + " right: 100, bottom: 772}}, }";
         try {
             CLObject parsedContent = CLParser.parse(test);
             assertEquals("{\n"
                     + "  root: { interpolated: { left: 0, top: 0, right: 800, bottom: 772 } },\n"
-                    + "  button: { interpolated: { left: 0, top: 372, right: 800, bottom: 401 } },\n"
-                    + "  text1: { interpolated: { left: 100, top: 285, right: 208, bottom: 301 } },\n"
-                    + "  text2: { interpolated: { left: 723, top: 736, right: 780, bottom: 752 } },\n"
+                    + "  button: { interpolated: { left: 0, top: 372, "
+                    + "right: 800, bottom: 401 } },\n"
+                    + "  text1: { interpolated: { left: 100, top: 285, "
+                    + "right: 208, bottom: 301 } },\n"
+                    + "  text2: { interpolated: { left: 723, top: 736, "
+                    + "right: 780, bottom: 752 } },\n"
                     + "  g1: {\n"
                     + "    type: 'vGuideline',\n"
                     + "    interpolated: { left: 100, top: 0, right: 100, bottom: 772 }\n"
