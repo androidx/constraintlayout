@@ -77,7 +77,8 @@ public class Utils {
         n = Math.min(n, st.length - 1);
         for (int i = 1; i <= n; i++) {
             StackTraceElement ste = st[i];
-            String stack = ".(" + st[i].getFileName() + ":" + st[i].getLineNumber() + ") " + st[i].getMethodName();
+            String stack = ".(" + st[i].getFileName() + ":"
+                    + st[i].getLineNumber() + ") " + st[i].getMethodName();
             s += " ";
             System.out.println(msg + s + stack + s);
         }

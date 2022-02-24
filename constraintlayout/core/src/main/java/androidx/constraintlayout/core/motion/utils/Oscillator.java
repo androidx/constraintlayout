@@ -112,7 +112,8 @@ public class Oscillator {
         } else if (index != 0) {
             index = -index - 1;
             double t = time;
-            double m = (mPeriod[index] - mPeriod[index - 1]) / (mPosition[index] - mPosition[index - 1]);
+            double m = (mPeriod[index] - mPeriod[index - 1])
+                    / (mPosition[index] - mPosition[index - 1]);
             p = mArea[index - 1]
                     + (mPeriod[index - 1] - m * mPosition[index - 1]) * (t - mPosition[index - 1])
                     + m * (t * t - mPosition[index - 1] * mPosition[index - 1]) / 2;
@@ -158,7 +159,8 @@ public class Oscillator {
         if (index != 0) {
             index = -index - 1;
             double t = time;
-            double m = (mPeriod[index] - mPeriod[index - 1]) / (mPosition[index] - mPosition[index - 1]);
+            double m = (mPeriod[index] - mPeriod[index - 1])
+                    / (mPosition[index] - mPosition[index - 1]);
             p = m * t + (mPeriod[index - 1] - m * mPosition[index - 1]);
         }
         return p;

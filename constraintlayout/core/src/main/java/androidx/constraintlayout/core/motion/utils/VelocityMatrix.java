@@ -24,7 +24,7 @@ package androidx.constraintlayout.core.motion.utils;
 public class VelocityMatrix {
     float mDScaleX, mDScaleY, mDTranslateX, mDTranslateY, mDRotate;
     float mRotate;
-    private static String TAG = "VelocityMatrix";
+    private static String sTag = "VelocityMatrix";
 
     public void clear() {
         mDScaleX = mDScaleY = mDTranslateX = mDTranslateY = mDRotate = 0;
@@ -37,49 +37,53 @@ public class VelocityMatrix {
         }
     }
 
-    public void setTranslationVelocity(SplineSet trans_x, SplineSet trans_y, float position) {
+    public void setTranslationVelocity(SplineSet transX, SplineSet transY, float position) {
 
-        if (trans_x != null) {
-            mDTranslateX = trans_x.getSlope(position);
+        if (transX != null) {
+            mDTranslateX = transX.getSlope(position);
         }
-        if (trans_y != null) {
-            mDTranslateY = trans_y.getSlope(position);
-        }
-    }
-
-    public void setScaleVelocity(SplineSet scale_x, SplineSet scale_y, float position) {
-
-        if (scale_x != null) {
-            mDScaleX = scale_x.getSlope(position);
-        }
-        if (scale_y != null) {
-            mDScaleY = scale_y.getSlope(position);
+        if (transY != null) {
+            mDTranslateY = transY.getSlope(position);
         }
     }
 
-    public void setRotationVelocity(KeyCycleOscillator osc_r, float position) {
-        if (osc_r != null) {
-            mDRotate = osc_r.getSlope(position);
+    public void setScaleVelocity(SplineSet scaleX, SplineSet scaleY, float position) {
+
+        if (scaleX != null) {
+            mDScaleX = scaleX.getSlope(position);
+        }
+        if (scaleY != null) {
+            mDScaleY = scaleY.getSlope(position);
         }
     }
 
-    public void setTranslationVelocity(KeyCycleOscillator osc_x, KeyCycleOscillator osc_y, float position) {
-
-        if (osc_x != null) {
-            mDTranslateX = osc_x.getSlope(position);
-        }
-
-        if (osc_y != null) {
-            mDTranslateY = osc_y.getSlope(position);
+    public void setRotationVelocity(KeyCycleOscillator oscR, float position) {
+        if (oscR != null) {
+            mDRotate = oscR.getSlope(position);
         }
     }
 
-    public void setScaleVelocity(KeyCycleOscillator osc_sx, KeyCycleOscillator osc_sy, float position) {
-        if (osc_sx != null) {
-            mDScaleX = osc_sx.getSlope(position);
+    public void setTranslationVelocity(KeyCycleOscillator oscX,
+                                       KeyCycleOscillator oscY,
+                                       float position) {
+
+        if (oscX != null) {
+            mDTranslateX = oscX.getSlope(position);
         }
-        if (osc_sy != null) {
-            mDScaleY = osc_sy.getSlope(position);
+
+        if (oscY != null) {
+            mDTranslateY = oscY.getSlope(position);
+        }
+    }
+
+    public void setScaleVelocity(KeyCycleOscillator oscSx,
+                                 KeyCycleOscillator oscSy,
+                                 float position) {
+        if (oscSx != null) {
+            mDScaleX = oscSx.getSlope(position);
+        }
+        if (oscSy != null) {
+            mDScaleY = oscSy.getSlope(position);
         }
     }
 
@@ -93,7 +97,11 @@ public class VelocityMatrix {
      * @param mAnchorDpDt
      * @hide
      */
-    public void applyTransform(float locationX, float locationY, int width, int height, float[] mAnchorDpDt) {
+    public void applyTransform(float locationX,
+                               float locationY,
+                               int width,
+                               int height,
+                               float[] mAnchorDpDt) {
         float dx = mAnchorDpDt[0];
         float dy = mAnchorDpDt[1];
         float offx = 2 * (locationX - 0.5f);

@@ -41,7 +41,7 @@ public class KeyParser {
             int n = parsedContent.size();
             for (int i = 0; i < n; i++) {
                 CLKey clkey = ((CLKey) parsedContent.get(i));
-                String type = clkey.content();;
+                String type = clkey.content();
                 CLElement value = clkey.getValue();
                 int id = table.get(type);
                 if (id == -1) {
@@ -78,27 +78,27 @@ public class KeyParser {
     }
 
     public static void main(String[] args) {
-        String str = "{" +
-                "frame:22,\n" +
-                "target:'widget1',\n" +
-                "easing:'easeIn',\n" +
-                "curveFit:'spline',\n" +
-                "progress:0.3,\n" +
-                "alpha:0.2,\n" +
-                "elevation:0.7,\n" +
-                "rotationZ:23,\n" +
-                "rotationX:25.0,\n" +
-                "rotationY:27.0,\n" +
-                "pivotX:15,\n" +
-                "pivotY:17,\n" +
-                "pivotTarget:'32',\n" +
-                "pathRotate:23,\n" +
-                "scaleX:0.5,\n" +
-                "scaleY:0.7,\n" +
-                "translationX:5,\n" +
-                "translationY:7,\n" +
-                "translationZ:11,\n" +
-                "}";
+        String str = "{"
+                + "frame:22,\n"
+                + "target:'widget1',\n"
+                + "easing:'easeIn',\n"
+                + "curveFit:'spline',\n"
+                + "progress:0.3,\n"
+                + "alpha:0.2,\n"
+                + "elevation:0.7,\n"
+                + "rotationZ:23,\n"
+                + "rotationX:25.0,\n"
+                + "rotationY:27.0,\n"
+                + "pivotX:15,\n"
+                + "pivotY:17,\n"
+                + "pivotTarget:'32',\n"
+                + "pathRotate:23,\n"
+                + "scaleX:0.5,\n"
+                + "scaleY:0.7,\n"
+                + "translationX:5,\n"
+                + "translationY:7,\n"
+                + "translationZ:11,\n"
+                + "}";
         parseAttributes(str);
     }
 }

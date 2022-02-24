@@ -32,13 +32,13 @@ public class MonotonicCurveFit extends CurveFit {
     double[] mSlopeTemp;
 
     public MonotonicCurveFit(double[] time, double[][] y) {
-        final int N = time.length;
+        final int n = time.length;
         final int dim = y[0].length;
         mSlopeTemp = new double[dim];
-        double[][] slope = new double[N - 1][dim]; // could optimize this out
-        double[][] tangent = new double[N][dim];
+        double[][] slope = new double[n - 1][dim]; // could optimize this out
+        double[][] tangent = new double[n][dim];
         for (int j = 0; j < dim; j++) {
-            for (int i = 0; i < N - 1; i++) {
+            for (int i = 0; i < n - 1; i++) {
                 double dt = time[i + 1] - time[i];
                 slope[i][j] = (y[i + 1][j] - y[i][j]) / dt;
                 if (i == 0) {
@@ -47,10 +47,10 @@ public class MonotonicCurveFit extends CurveFit {
                     tangent[i][j] = (slope[i - 1][j] + slope[i][j]) * 0.5f;
                 }
             }
-            tangent[N - 1][j] = slope[N - 2][j];
+            tangent[n - 1][j] = slope[n - 2][j];
         }
 
-        for (int i = 0; i < N - 1; i++) {
+        for (int i = 0; i < n - 1; i++) {
             for (int j = 0; j < dim; j++) {
                 if (slope[i][j] == 0.) {
                     tangent[i][j] = 0.;
@@ -279,7 +279,12 @@ public class MonotonicCurveFit extends CurveFit {
      *
      * @return
      */
-    private static double interpolate(double h, double x, double y1, double y2, double t1, double t2) {
+    private static double interpolate(double h,
+                                      double x,
+                                      double y1,
+                                      double y2,
+                                      double t1,
+                                      double t2) {
         double x2 = x * x;
         double x3 = x2 * x;
         return -2 * x3 * y2 + 3 * x2 * y2 + 2 * x3 * y1 - 3 * x2 * y1 + y1
@@ -294,8 +299,8 @@ public class MonotonicCurveFit extends CurveFit {
      */
     private static double diff(double h, double x, double y1, double y2, double t1, double t2) {
         double x2 = x * x;
-        return -6 * x2 * y2 + 6 * x * y2 + 6 * x2 * y1 - 6 * x * y1 + 3 * h * t2 * x2 +
-                3 * h * t1 * x2 - 2 * h * t2 * x - 4 * h * t1 * x + h * t1;
+        return -6 * x2 * y2 + 6 * x * y2 + 6 * x2 * y1 - 6 * x * y1 + 3 * h * t2 * x2
+                + 3 * h * t1 * x2 - 2 * h * t2 * x - 4 * h * t1 * x + h * t1;
     }
 
     /**

@@ -43,12 +43,19 @@ public class SpringStopEngine implements StopEngine {
 
     void log(String str) {
         StackTraceElement s = new Throwable().getStackTrace()[1];
-        String line = ".(" + s.getFileName() + ":" + s.getLineNumber() + ") " + s.getMethodName() + "() ";
+        String line = ".(" + s.getFileName() + ":"
+                + s.getLineNumber() + ") " + s.getMethodName() + "() ";
         System.out.println(line + str);
     }
 
-    public void springConfig(float currentPos, float target, float currentVelocity, float mass,
-                             float stiffness, float damping, float stopThreshold, int boundaryMode) {
+    public void springConfig(float currentPos,
+                             float target,
+                             float currentVelocity,
+                             float mass,
+                             float stiffness,
+                             float damping,
+                             float stopThreshold,
+                             int boundaryMode) {
         mTargetPos = target;
         mDamping = damping;
         mInitialized = false;

@@ -20,8 +20,8 @@ public class CLParser {
     static boolean DEBUG = false;
 
     private String mContent;
-    private boolean hasComment = false;
-    private int lineNumber;
+    private boolean mHasComment = false;
+    private int mLineNumber;
 
     enum TYPE {UNKNOWN, OBJECT, ARRAY, NUMBER, STRING, KEY, TOKEN}
 
@@ -42,7 +42,7 @@ public class CLParser {
         final int length = content.length;
 
         // First, let's find the root element start
-        lineNumber = 1;
+        mLineNumber = 1;
 
         int startIndex = -1;
         for (int i = 0; i < length; i++) {
@@ -52,7 +52,7 @@ public class CLParser {
                 break;
             }
             if (c == '\n') {
-                lineNumber++;
+                mLineNumber++;
             }
         }
         if (startIndex == -1) {
@@ -61,18 +61,18 @@ public class CLParser {
 
         // We have a root object, let's start
         root = CLObject.allocate(content);
-        root.setLine(lineNumber);
+        root.setLine(mLineNumber);
         root.setStart(startIndex);
         currentElement = root;
 
         for (int i = startIndex + 1; i < length; i++) {
             char c = content[i];
             if (c == '\n') {
-                lineNumber++;
+                mLineNumber++;
             }
-            if (hasComment) {
+            if (mHasComment) {
                 if (c == '\n') {
-                    hasComment = false;
+                    mHasComment = false;
                 } else {
                     continue;
                 }
@@ -107,8 +107,8 @@ public class CLParser {
                 if (currentElement instanceof CLToken) {
                     CLToken token = (CLToken) currentElement;
                     if (!token.validate(c, i)) {
-                        throw new CLParsingException("parsing incorrect token " + token.content() +
-                          " at line " + lineNumber, token);
+                        throw new CLParsingException("parsing incorrect token " + token.content()
+                                + " at line " + mLineNumber, token);
                     }
                 }
                 if (currentElement instanceof CLKey || currentElement instanceof CLString) {
@@ -119,7 +119,8 @@ public class CLParser {
                     }
                 }
                 if (!currentElement.isDone()) {
-                    if (c == '}' || c == ']' || c == ',' || c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == ':') {
+                    if (c == '}' || c == ']' || c == ',' || c == ' '
+                            || c == '\t' || c == '\r' || c == '\n' || c == ':') {
                         currentElement.setEnd(i - 1);
                         if (c == '}' || c == ']') {
                             currentElement = currentElement.getContainer();
@@ -133,12 +134,14 @@ public class CLParser {
                 }
             }
 
-            if (currentElement.isDone() && (!(currentElement instanceof CLKey) || ((CLKey) currentElement).mElements.size() > 0)) {
+            if (currentElement.isDone() && (!(currentElement instanceof CLKey)
+                    || ((CLKey) currentElement).mElements.size() > 0)) {
                 currentElement = currentElement.getContainer();
             }
         }
 
-        // Close all open elements -- allow us to be more resistant to invalid json, useful during editing.
+        // Close all open elements --
+        // allow us to be more resistant to invalid json, useful during editing.
         while (currentElement != null && !currentElement.isDone()) {
             if (currentElement instanceof CLString) {
                 currentElement.setStart((int) currentElement.start + 1);
@@ -167,11 +170,13 @@ public class CLParser {
             }
                 break;
             case '{': {
-                currentElement = createElement(currentElement, position, TYPE.OBJECT, true, content);
+                currentElement = createElement(currentElement,
+                        position, TYPE.OBJECT, true, content);
             }
             break;
             case '[': {
-                currentElement = createElement(currentElement, position, TYPE.ARRAY, true, content);
+                currentElement = createElement(currentElement,
+                        position, TYPE.ARRAY, true, content);
             }
             break;
             case ']':
@@ -179,18 +184,22 @@ public class CLParser {
                 currentElement.setEnd(position - 1);
                 currentElement = currentElement.getContainer();
                 currentElement.setEnd(position);
-            } break;
+            }
+                break;
             case '"':
             case '\'': {
                 if (currentElement instanceof CLObject) {
-                    currentElement = createElement(currentElement, position, TYPE.KEY, true, content);
+                    currentElement = createElement(currentElement,
+                            position, TYPE.KEY, true, content);
                 } else {
-                    currentElement = createElement(currentElement, position, TYPE.STRING, true, content);
+                    currentElement = createElement(currentElement,
+                            position, TYPE.STRING, true, content);
                 }
-            } break;
+            }
+                break;
             case '/': {
                 if (position + 1 < content.length && content[position + 1] == '/') {
-                    hasComment = true;
+                    mHasComment = true;
                 }
             }
             break;
@@ -207,18 +216,23 @@ public class CLParser {
             case '7':
             case '8':
             case '9': {
-                currentElement = createElement(currentElement, position, TYPE.NUMBER, true, content);
+                currentElement = createElement(currentElement,
+                        position, TYPE.NUMBER, true, content);
             }
                 break;
             default: {
-                if (currentElement instanceof CLContainer && !(currentElement instanceof CLObject)) {
-                    currentElement = createElement(currentElement, position, TYPE.TOKEN, true, content);
+                if (currentElement instanceof CLContainer
+                        && !(currentElement instanceof CLObject)) {
+                    currentElement = createElement(currentElement,
+                            position, TYPE.TOKEN, true, content);
                     CLToken token = (CLToken) currentElement;
                     if (!token.validate(c, position)) {
-                        throw new CLParsingException("incorrect token <" + c + "> at line " + lineNumber, token);
+                        throw new CLParsingException("incorrect token <"
+                                + c + "> at line " + mLineNumber, token);
                     }
                 } else {
-                    currentElement = createElement(currentElement, position, TYPE.KEY, true, content);
+                    currentElement = createElement(currentElement,
+                            position, TYPE.KEY, true, content);
                 }
             }
         }
@@ -263,7 +277,7 @@ public class CLParser {
         if (newElement == null) {
             return null;
         }
-        newElement.setLine(lineNumber);
+        newElement.setLine(mLineNumber);
         if (applyStart) {
             newElement.setStart(position);
         }
