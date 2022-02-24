@@ -738,7 +738,7 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
     }
 
     fun setCurrentContent(content: String) {
-        currentContent = content
+        onNewContent(content)
     }
 
     fun getCurrentContent() : String{
