@@ -16,6 +16,7 @@
 
 package androidx.constraintlayout.compose
 
+import androidx.compose.ui.layout.Measurable
 import androidx.constraintlayout.core.parser.CLKey
 import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.parser.CLParsingException
@@ -31,6 +32,7 @@ internal class JSONConstraintSet(
 ) : EditableJSONLayout(content), DerivedConstraintSet {
     private val overridedVariables = HashMap<String, Float>()
     private val overrideVariables = overrideVariables
+    private var _isDirty = true
 
     init {
         initialization()
@@ -41,6 +43,10 @@ internal class JSONConstraintSet(
             return this.getCurrentContent() == other.getCurrentContent()
         }
         return false
+    }
+
+    override fun isDirty(measurables: List<Measurable>): Boolean {
+        return _isDirty
     }
 
     // Only called by MotionLayout in MotionMeasurer
@@ -66,9 +72,16 @@ internal class JSONConstraintSet(
         // TODO: Need to better handle half parsed JSON and/or incorrect states.
         try {
             parseJSON(getCurrentContent(), state, layoutVariables)
+            _isDirty = false
         } catch (e : Exception) {
             // nothing (content might be invalid, sent by live edit)
+            _isDirty = true
         }
+    }
+
+    override fun onNewContent(content: String) {
+        super.onNewContent(content)
+        _isDirty = true
     }
 
     override fun override(name: String, value: Float): ConstraintSet {
