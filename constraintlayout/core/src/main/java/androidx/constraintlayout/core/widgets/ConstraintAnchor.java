@@ -45,7 +45,9 @@ public class ConstraintAnchor {
         }
     }
 
-    public HashSet<ConstraintAnchor> getDependents() { return mDependents; }
+    public HashSet<ConstraintAnchor> getDependents() {
+        return mDependents;
+    }
     public boolean hasDependents() {
         if (mDependents == null) {
             return false;
@@ -83,7 +85,9 @@ public class ConstraintAnchor {
         mFinalValue = 0;
     }
 
-    public boolean hasFinalValue() { return mHasFinalValue; }
+    public boolean hasFinalValue() {
+        return mHasFinalValue;
+    }
 
     /**
      * Define the type of anchor
@@ -137,7 +141,9 @@ public class ConstraintAnchor {
      * Return the solver variable for this anchor
      * @return
      */
-    public SolverVariable getSolverVariable() { return mSolverVariable; }
+    public SolverVariable getSolverVariable() {
+        return mSolverVariable;
+    }
 
     /**
      * Reset the solver variable
@@ -154,13 +160,17 @@ public class ConstraintAnchor {
      * Return the anchor's owner
      * @return the Widget owning the anchor
      */
-    public ConstraintWidget getOwner() { return mOwner; }
+    public ConstraintWidget getOwner() {
+        return mOwner;
+    }
 
     /**
      * Return the type of the anchor
      * @return type of the anchor.
      */
-    public Type getType() { return mType; }
+    public Type getType() {
+        return mType;
+    }
 
     /**
      * Return the connection's margin from this anchor to its target.
@@ -181,7 +191,9 @@ public class ConstraintAnchor {
      * Return the connection's target (null if not connected)
      * @return the ConstraintAnchor target
      */
-    public ConstraintAnchor getTarget() { return mTarget; }
+    public ConstraintAnchor getTarget() {
+        return mTarget;
+    }
 
     /**
      * Resets the anchor's connection.
@@ -350,7 +362,8 @@ public class ConstraintAnchor {
             case BOTTOM:
             case CENTER_Y:
             case BASELINE: {
-                return target == Type.TOP || target == Type.BOTTOM || target == Type.CENTER_Y || target == Type.BASELINE;
+                return target == Type.TOP || target == Type.BOTTOM
+                        || target == Type.CENTER_Y || target == Type.BASELINE;
             }
             case NONE:
                 return false;

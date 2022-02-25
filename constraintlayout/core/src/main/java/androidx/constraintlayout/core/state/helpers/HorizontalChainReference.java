@@ -16,9 +16,9 @@
 
 package androidx.constraintlayout.core.state.helpers;
 
-import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.state.ConstraintReference;
 import androidx.constraintlayout.core.state.State;
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
 public class HorizontalChainReference extends ChainReference {
 
@@ -67,7 +67,7 @@ public class HorizontalChainReference extends ChainReference {
             } else if (mRightToLeft != null) {
                 // TODO: Hack until we support RTL properly
                 previous.endToStart(mRightToLeft).margin(mMarginRight);
-            }else if (mRightToRight != null) {
+            } else if (mRightToRight != null) {
                 // TODO: Hack until we support RTL properly
                 previous.endToEnd(mRightToRight).margin(mMarginRight);
             } else {

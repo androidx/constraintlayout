@@ -49,32 +49,41 @@ public class Barrier extends HelperWidget {
         return true;
     }
 
-    public int getBarrierType() { return mBarrierType; }
+    public int getBarrierType() {
+        return mBarrierType;
+    }
 
     public void setBarrierType(int barrierType) {
         mBarrierType = barrierType;
     }
 
-    public void setAllowsGoneWidget(boolean allowsGoneWidget) { mAllowsGoneWidget = allowsGoneWidget; }
+    public void setAllowsGoneWidget(boolean allowsGoneWidget) {
+        mAllowsGoneWidget = allowsGoneWidget;
+    }
 
     /**
      * Find if this barrier supports gone widgets.
      *
      * @return true if this barrier supports gone widgets, otherwise false
      *
-     * @deprecated This method should be called {@code getAllowsGoneWidget} such that {@code allowsGoneWidget}
+     * @deprecated This method should be called {@code getAllowsGoneWidget}
+     *  such that {@code allowsGoneWidget}
      * can be accessed as a property from Kotlin; {@see https://android.github.io/kotlin-guides/interop.html#property-prefixes}.
      * Use {@link #getAllowsGoneWidget()} instead.
      */
     @Deprecated
-    public boolean allowsGoneWidget() { return mAllowsGoneWidget; }
+    public boolean allowsGoneWidget() {
+        return mAllowsGoneWidget;
+    }
 
     /**
      * Find if this barrier supports gone widgets.
      *
      * @return true if this barrier supports gone widgets, otherwise false
      */
-    public boolean getAllowsGoneWidget() { return mAllowsGoneWidget; }
+    public boolean getAllowsGoneWidget() {
+        return mAllowsGoneWidget;
+    }
 
     public boolean isResolvedHorizontally() {
         return resolved;
@@ -85,7 +94,7 @@ public class Barrier extends HelperWidget {
     }
 
     @Override
-    public void copy(ConstraintWidget src, HashMap<ConstraintWidget,ConstraintWidget> map) {
+    public void copy(ConstraintWidget src, HashMap<ConstraintWidget, ConstraintWidget> map) {
         super.copy(src, map);
         Barrier srcBarrier = (Barrier) src;
         mBarrierType = srcBarrier.mBarrierType;
@@ -166,7 +175,8 @@ public class Barrier extends HelperWidget {
             }
         }
 
-        // We have to handle the case where some of the elements referenced in the barrier are set as
+        // We have to handle the case where some of the elements
+        //  referenced in the barrier are set as
         // match_constraint; we have to take it in account to set the strength of the barrier.
         boolean hasMatchConstraintWidgets = false;
         for (int i = 0; i < mWidgetsCount; i++) {
@@ -175,24 +185,29 @@ public class Barrier extends HelperWidget {
                 continue;
             }
             if ((mBarrierType == LEFT || mBarrierType == RIGHT)
-                    && (widget.getHorizontalDimensionBehaviour() == DimensionBehaviour.MATCH_CONSTRAINT)
+                    && (widget.getHorizontalDimensionBehaviour()
+                        == DimensionBehaviour.MATCH_CONSTRAINT)
                     && widget.mLeft.mTarget != null && widget.mRight.mTarget != null) {
                 hasMatchConstraintWidgets = true;
                 break;
             } else if ((mBarrierType == TOP || mBarrierType == BOTTOM)
-                    && (widget.getVerticalDimensionBehaviour() == DimensionBehaviour.MATCH_CONSTRAINT)
+                    && (widget.getVerticalDimensionBehaviour()
+                        == DimensionBehaviour.MATCH_CONSTRAINT)
                     && widget.mTop.mTarget != null && widget.mBottom.mTarget != null) {
                 hasMatchConstraintWidgets = true;
                 break;
             }
         }
 
-        boolean mHasHorizontalCenteredDependents = mLeft.hasCenteredDependents() || mRight.hasCenteredDependents();
-        boolean mHasVerticalCenteredDependents = mTop.hasCenteredDependents() || mBottom.hasCenteredDependents();
-        boolean applyEqualityOnReferences = !hasMatchConstraintWidgets && ((mBarrierType == LEFT && mHasHorizontalCenteredDependents)
-                                         || (mBarrierType == TOP && mHasVerticalCenteredDependents)
-                                         || (mBarrierType == RIGHT && mHasHorizontalCenteredDependents)
-                                         || (mBarrierType == BOTTOM && mHasVerticalCenteredDependents));
+        boolean mHasHorizontalCenteredDependents =
+                mLeft.hasCenteredDependents() || mRight.hasCenteredDependents();
+        boolean mHasVerticalCenteredDependents =
+                mTop.hasCenteredDependents() || mBottom.hasCenteredDependents();
+        boolean applyEqualityOnReferences = !hasMatchConstraintWidgets
+                && ((mBarrierType == LEFT && mHasHorizontalCenteredDependents)
+                || (mBarrierType == TOP && mHasVerticalCenteredDependents)
+                || (mBarrierType == RIGHT && mHasHorizontalCenteredDependents)
+                || (mBarrierType == BOTTOM && mHasVerticalCenteredDependents));
 
         int equalityOnReferencesStrength = SolverVariable.STRENGTH_EQUALITY;
         if (!applyEqualityOnReferences) {
@@ -211,16 +226,21 @@ public class Barrier extends HelperWidget {
                 margin += widget.mListAnchors[mBarrierType].mMargin;
             }
             if (mBarrierType == LEFT || mBarrierType == TOP) {
-                system.addLowerBarrier(position.mSolverVariable, target, mMargin - margin, hasMatchConstraintWidgets);
+                system.addLowerBarrier(position.mSolverVariable, target,
+                        mMargin - margin, hasMatchConstraintWidgets);
             } else {
-                system.addGreaterBarrier(position.mSolverVariable, target, mMargin + margin, hasMatchConstraintWidgets);
+                system.addGreaterBarrier(position.mSolverVariable, target,
+                        mMargin + margin, hasMatchConstraintWidgets);
             }
             if (USE_RELAX_GONE) {
-                if (widget.getVisibility() != GONE || widget instanceof Guideline || widget instanceof Barrier) {
-                    system.addEquality(position.mSolverVariable, target, mMargin + margin, equalityOnReferencesStrength);
+                if (widget.getVisibility() != GONE
+                        || widget instanceof Guideline || widget instanceof Barrier) {
+                    system.addEquality(position.mSolverVariable, target,
+                            mMargin + margin, equalityOnReferencesStrength);
                 }
             } else {
-                system.addEquality(position.mSolverVariable, target, mMargin + margin, equalityOnReferencesStrength);
+                system.addEquality(position.mSolverVariable, target,
+                        mMargin + margin, equalityOnReferencesStrength);
             }
         }
 
@@ -228,21 +248,33 @@ public class Barrier extends HelperWidget {
         int barrierParentStrengthOpposite = SolverVariable.STRENGTH_NONE;
 
         if (mBarrierType == LEFT) {
-            system.addEquality(mRight.mSolverVariable, mLeft.mSolverVariable, 0, SolverVariable.STRENGTH_FIXED);
-            system.addEquality(mLeft.mSolverVariable, mParent.mRight.mSolverVariable, 0, barrierParentStrength);
-            system.addEquality(mLeft.mSolverVariable, mParent.mLeft.mSolverVariable, 0, barrierParentStrengthOpposite);
+            system.addEquality(mRight.mSolverVariable,
+                    mLeft.mSolverVariable, 0, SolverVariable.STRENGTH_FIXED);
+            system.addEquality(mLeft.mSolverVariable,
+                    mParent.mRight.mSolverVariable, 0, barrierParentStrength);
+            system.addEquality(mLeft.mSolverVariable,
+                    mParent.mLeft.mSolverVariable, 0, barrierParentStrengthOpposite);
         } else if (mBarrierType == RIGHT) {
-            system.addEquality(mLeft.mSolverVariable, mRight.mSolverVariable, 0, SolverVariable.STRENGTH_FIXED);
-            system.addEquality(mLeft.mSolverVariable, mParent.mLeft.mSolverVariable, 0, barrierParentStrength);
-            system.addEquality(mLeft.mSolverVariable, mParent.mRight.mSolverVariable, 0, barrierParentStrengthOpposite);
+            system.addEquality(mLeft.mSolverVariable,
+                    mRight.mSolverVariable, 0, SolverVariable.STRENGTH_FIXED);
+            system.addEquality(mLeft.mSolverVariable,
+                    mParent.mLeft.mSolverVariable, 0, barrierParentStrength);
+            system.addEquality(mLeft.mSolverVariable,
+                    mParent.mRight.mSolverVariable, 0, barrierParentStrengthOpposite);
         } else if (mBarrierType == TOP) {
-            system.addEquality(mBottom.mSolverVariable, mTop.mSolverVariable, 0, SolverVariable.STRENGTH_FIXED);
-            system.addEquality(mTop.mSolverVariable, mParent.mBottom.mSolverVariable, 0, barrierParentStrength);
-            system.addEquality(mTop.mSolverVariable, mParent.mTop.mSolverVariable, 0, barrierParentStrengthOpposite);
+            system.addEquality(mBottom.mSolverVariable,
+                    mTop.mSolverVariable, 0, SolverVariable.STRENGTH_FIXED);
+            system.addEquality(mTop.mSolverVariable,
+                    mParent.mBottom.mSolverVariable, 0, barrierParentStrength);
+            system.addEquality(mTop.mSolverVariable,
+                    mParent.mTop.mSolverVariable, 0, barrierParentStrengthOpposite);
         } else if (mBarrierType == BOTTOM) {
-            system.addEquality(mTop.mSolverVariable, mBottom.mSolverVariable, 0, SolverVariable.STRENGTH_FIXED);
-            system.addEquality(mTop.mSolverVariable, mParent.mTop.mSolverVariable, 0, barrierParentStrength);
-            system.addEquality(mTop.mSolverVariable, mParent.mBottom.mSolverVariable, 0, barrierParentStrengthOpposite);
+            system.addEquality(mTop.mSolverVariable,
+                    mBottom.mSolverVariable, 0, SolverVariable.STRENGTH_FIXED);
+            system.addEquality(mTop.mSolverVariable,
+                    mParent.mTop.mSolverVariable, 0, barrierParentStrength);
+            system.addEquality(mTop.mSolverVariable,
+                    mParent.mBottom.mSolverVariable, 0, barrierParentStrengthOpposite);
         }
     }
 
@@ -276,9 +308,11 @@ public class Barrier extends HelperWidget {
             if (!mAllowsGoneWidget && !widget.allowedInBarrier()) {
                 continue;
             }
-            if ((mBarrierType == LEFT || mBarrierType == RIGHT) && !widget.isResolvedHorizontally()) {
+            if ((mBarrierType == LEFT || mBarrierType == RIGHT)
+                    && !widget.isResolvedHorizontally()) {
                 hasAllWidgetsResolved = false;
-            } else if ((mBarrierType == TOP || mBarrierType == BOTTOM) && !widget.isResolvedVertically()) {
+            } else if ((mBarrierType == TOP || mBarrierType == BOTTOM)
+                    && !widget.isResolvedVertically()) {
                 hasAllWidgetsResolved = false;
             }
         }
@@ -294,24 +328,32 @@ public class Barrier extends HelperWidget {
                 }
                 if (!initialized) {
                     if (mBarrierType == LEFT) {
-                        barrierPosition = widget.getAnchor(ConstraintAnchor.Type.LEFT).getFinalValue();
+                        barrierPosition =
+                                widget.getAnchor(ConstraintAnchor.Type.LEFT).getFinalValue();
                     } else if (mBarrierType == RIGHT) {
-                        barrierPosition = widget.getAnchor(ConstraintAnchor.Type.RIGHT).getFinalValue();
+                        barrierPosition =
+                                widget.getAnchor(ConstraintAnchor.Type.RIGHT).getFinalValue();
                     } else if (mBarrierType == TOP) {
-                        barrierPosition = widget.getAnchor(ConstraintAnchor.Type.TOP).getFinalValue();
+                        barrierPosition =
+                                widget.getAnchor(ConstraintAnchor.Type.TOP).getFinalValue();
                     } else if (mBarrierType == BOTTOM) {
-                        barrierPosition = widget.getAnchor(ConstraintAnchor.Type.BOTTOM).getFinalValue();
+                        barrierPosition =
+                                widget.getAnchor(ConstraintAnchor.Type.BOTTOM).getFinalValue();
                     }
                     initialized = true;
                 }
                 if (mBarrierType == LEFT) {
-                    barrierPosition = Math.min(barrierPosition, widget.getAnchor(ConstraintAnchor.Type.LEFT).getFinalValue());
+                    barrierPosition = Math.min(barrierPosition,
+                            widget.getAnchor(ConstraintAnchor.Type.LEFT).getFinalValue());
                 } else if (mBarrierType == RIGHT) {
-                    barrierPosition = Math.max(barrierPosition, widget.getAnchor(ConstraintAnchor.Type.RIGHT).getFinalValue());
+                    barrierPosition = Math.max(barrierPosition,
+                            widget.getAnchor(ConstraintAnchor.Type.RIGHT).getFinalValue());
                 } else if (mBarrierType == TOP) {
-                    barrierPosition = Math.min(barrierPosition, widget.getAnchor(ConstraintAnchor.Type.TOP).getFinalValue());
+                    barrierPosition = Math.min(barrierPosition,
+                            widget.getAnchor(ConstraintAnchor.Type.TOP).getFinalValue());
                 } else if (mBarrierType == BOTTOM) {
-                    barrierPosition = Math.max(barrierPosition, widget.getAnchor(ConstraintAnchor.Type.BOTTOM).getFinalValue());
+                    barrierPosition = Math.max(barrierPosition,
+                            widget.getAnchor(ConstraintAnchor.Type.BOTTOM).getFinalValue());
                 }
             }
             barrierPosition += mMargin;
@@ -321,7 +363,8 @@ public class Barrier extends HelperWidget {
                 setFinalVertical(barrierPosition, barrierPosition);
             }
             if (LinearSystem.FULL_DEBUG) {
-                System.out.println("*** BARRIER " + getDebugName() + " SOLVED TO " + barrierPosition + " ***");
+                System.out.println("*** BARRIER " + getDebugName()
+                        + " SOLVED TO " + barrierPosition + " ***");
             }
             resolved = true;
             return true;

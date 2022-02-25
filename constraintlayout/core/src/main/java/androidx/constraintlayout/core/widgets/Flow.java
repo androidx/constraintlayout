@@ -16,15 +16,15 @@
 
 package androidx.constraintlayout.core.widgets;
 
+import static androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.AT_MOST;
+import static androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.EXACTLY;
+import static androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.UNSPECIFIED;
+
 import androidx.constraintlayout.core.LinearSystem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-
-import static androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.AT_MOST;
-import static androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.EXACTLY;
-import static androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.UNSPECIFIED;
 
 /**
  * Implements the Flow virtual layout.
@@ -120,13 +120,21 @@ public class Flow extends VirtualLayout {
         mOrientation = value;
     }
 
-    public void setFirstHorizontalStyle(int value) { mFirstHorizontalStyle = value; }
+    public void setFirstHorizontalStyle(int value) {
+        mFirstHorizontalStyle = value;
+    }
 
-    public void setFirstVerticalStyle(int value) { mFirstVerticalStyle = value; }
+    public void setFirstVerticalStyle(int value) {
+        mFirstVerticalStyle = value;
+    }
 
-    public void setLastHorizontalStyle(int value) { mLastHorizontalStyle = value; }
+    public void setLastHorizontalStyle(int value) {
+        mLastHorizontalStyle = value;
+    }
 
-    public void setLastVerticalStyle(int value) { mLastVerticalStyle = value; }
+    public void setLastVerticalStyle(int value) {
+        mLastVerticalStyle = value;
+    }
 
     public void setHorizontalStyle(int value) {
         mHorizontalStyle = value;
@@ -144,13 +152,21 @@ public class Flow extends VirtualLayout {
         mVerticalBias = value;
     }
 
-    public void setFirstHorizontalBias(float value) { mFirstHorizontalBias = value; }
+    public void setFirstHorizontalBias(float value) {
+        mFirstHorizontalBias = value;
+    }
 
-    public void setFirstVerticalBias(float value) { mFirstVerticalBias = value; }
+    public void setFirstVerticalBias(float value) {
+        mFirstVerticalBias = value;
+    }
 
-    public void setLastHorizontalBias(float value) { mLastHorizontalBias = value; }
+    public void setLastHorizontalBias(float value) {
+        mLastHorizontalBias = value;
+    }
 
-    public void setLastVerticalBias(float value) { mLastVerticalBias = value; }
+    public void setLastVerticalBias(float value) {
+        mLastVerticalBias = value;
+    }
 
     public void setHorizontalAlign(int value) {
         mHorizontalAlign = value;
@@ -164,11 +180,17 @@ public class Flow extends VirtualLayout {
         mWrapMode = value;
     }
 
-    public void setHorizontalGap(int value) { mHorizontalGap = value; }
+    public void setHorizontalGap(int value) {
+        mHorizontalGap = value;
+    }
 
-    public void setVerticalGap(int value) { mVerticalGap = value; }
+    public void setVerticalGap(int value) {
+        mVerticalGap = value;
+    }
 
-    public void setMaxElementsWrap(int value) { mMaxElementsWrap = value; }
+    public void setMaxElementsWrap(int value) {
+        mMaxElementsWrap = value;
+    }
 
     public float getMaxElementsWrap() {
         return mMaxElementsWrap;
@@ -177,7 +199,7 @@ public class Flow extends VirtualLayout {
     // Utility methods
     /////////////////////////////////////////////////////////////////////////////////////////////
 
-    final private int getWidgetWidth(ConstraintWidget widget, int max) {
+    private int getWidgetWidth(ConstraintWidget widget, int max) {
         if (widget == null) {
             return 0;
         }
@@ -188,7 +210,8 @@ public class Flow extends VirtualLayout {
                 int value = (int) (widget.mMatchConstraintPercentWidth * max);
                 if (value != widget.getWidth()) {
                     widget.setMeasureRequested(true);
-                    measure(widget, DimensionBehaviour.FIXED, value, widget.getVerticalDimensionBehaviour(), widget.getHeight());
+                    measure(widget, DimensionBehaviour.FIXED, value,
+                            widget.getVerticalDimensionBehaviour(), widget.getHeight());
                 }
                 return value;
             } else if (widget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_WRAP) {
@@ -200,7 +223,7 @@ public class Flow extends VirtualLayout {
         return widget.getWidth();
     }
 
-    final private int getWidgetHeight(ConstraintWidget widget, int max) {
+    private int getWidgetHeight(ConstraintWidget widget, int max) {
         if (widget == null) {
             return 0;
         }
@@ -211,7 +234,8 @@ public class Flow extends VirtualLayout {
                 int value = (int) (widget.mMatchConstraintPercentHeight * max);
                 if (value != widget.getHeight()) {
                     widget.setMeasureRequested(true);
-                    measure(widget, widget.getHorizontalDimensionBehaviour(), widget.getWidth(), DimensionBehaviour.FIXED, value);
+                    measure(widget, widget.getHorizontalDimensionBehaviour(),
+                            widget.getWidth(), DimensionBehaviour.FIXED, value);
                 }
                 return value;
             } else if (widget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_WRAP) {
@@ -241,7 +265,7 @@ public class Flow extends VirtualLayout {
         int paddingTop = getPaddingTop();
         int paddingBottom = getPaddingBottom();
 
-        int measured[] = new int[2];
+        int[] measured = new int[2];
         int max = widthSize - paddingLeft - paddingRight;
         if (mOrientation == VERTICAL) {
             max = heightSize - paddingTop - paddingBottom;
@@ -341,7 +365,7 @@ public class Flow extends VirtualLayout {
 
     private class WidgetsList {
         private int mOrientation = HORIZONTAL;
-        private ConstraintWidget biggest = null;
+        private ConstraintWidget mBiggest = null;
         int biggestDimension = 0;
         private ConstraintAnchor mLeft;
         private ConstraintAnchor mTop;
@@ -358,7 +382,7 @@ public class Flow extends VirtualLayout {
         private int mNbMatchConstraintsWidgets = 0;
         private int mMax = 0;
 
-        public WidgetsList(int orientation,
+        WidgetsList(int orientation,
                            ConstraintAnchor left, ConstraintAnchor top,
                            ConstraintAnchor right, ConstraintAnchor bottom,
                            int max) {
@@ -392,7 +416,7 @@ public class Flow extends VirtualLayout {
 
         public void clear() {
             biggestDimension = 0;
-            biggest = null;
+            mBiggest = null;
             mWidth = 0;
             mHeight = 0;
             mStartIndex = 0;
@@ -400,7 +424,9 @@ public class Flow extends VirtualLayout {
             mNbMatchConstraintsWidgets = 0;
         }
 
-        public void setStartIndex(int value) { mStartIndex = value; }
+        public void setStartIndex(int value) {
+            mStartIndex = value;
+        }
 
         public int getWidth() {
             if (mOrientation == HORIZONTAL) {
@@ -419,7 +445,8 @@ public class Flow extends VirtualLayout {
         public void add(ConstraintWidget widget) {
             if (mOrientation == HORIZONTAL) {
                 int width = getWidgetWidth(widget, mMax);
-                if (widget.getHorizontalDimensionBehaviour() == DimensionBehaviour.MATCH_CONSTRAINT) {
+                if (widget.getHorizontalDimensionBehaviour()
+                        == DimensionBehaviour.MATCH_CONSTRAINT) {
                     mNbMatchConstraintsWidgets++;
                     width = 0;
                 }
@@ -429,8 +456,8 @@ public class Flow extends VirtualLayout {
                 }
                 mWidth += width + gap;
                 int height = getWidgetHeight(widget, mMax);
-                if (biggest == null || biggestDimension < height) {
-                    biggest = widget;
+                if (mBiggest == null || biggestDimension < height) {
+                    mBiggest = widget;
                     biggestDimension = height;
                     mHeight = height;
                 }
@@ -446,8 +473,8 @@ public class Flow extends VirtualLayout {
                     gap = 0;
                 }
                 mHeight += height + gap;
-                if (biggest == null || biggestDimension < width) {
-                    biggest = widget;
+                if (mBiggest == null || biggestDimension < width) {
+                    mBiggest = widget;
                     biggestDimension = width;
                     mWidth = width;
                 }
@@ -466,7 +493,7 @@ public class Flow extends VirtualLayout {
                     widget.resetAnchors();
                 }
             }
-            if (count == 0 || biggest == null) {
+            if (count == 0 || mBiggest == null) {
                 return;
             }
 
@@ -492,7 +519,7 @@ public class Flow extends VirtualLayout {
 
             ConstraintWidget previous = null;
             if (mOrientation == HORIZONTAL) {
-                ConstraintWidget verticalWidget = biggest;
+                ConstraintWidget verticalWidget = mBiggest;
                 verticalWidget.setVerticalChainStyle(mVerticalStyle);
                 int padding = mPaddingTop;
                 if (chainIndex > 0) {
@@ -601,7 +628,7 @@ public class Flow extends VirtualLayout {
                     previous = widget;
                 }
             } else {
-                ConstraintWidget horizontalWidget = biggest;
+                ConstraintWidget horizontalWidget = mBiggest;
                 horizontalWidget.setHorizontalChainStyle(mHorizontalStyle);
                 int padding = mPaddingLeft;
                 if (chainIndex > 0) {
@@ -711,22 +738,28 @@ public class Flow extends VirtualLayout {
                 return;
             }
             final int count = mCount;
-            int widgetSize = availableSpace / mNbMatchConstraintsWidgets; // that's completely incorrect and only works for spread with no weights?
+
+            // that's completely incorrect and only works for spread with no weights?
+            int widgetSize = availableSpace / mNbMatchConstraintsWidgets;
             for (int i = 0; i < count; i++) {
                 if (mStartIndex + i >= mDisplayedWidgetsCount) {
                     break;
                 }
                 ConstraintWidget widget = mDisplayedWidgets[mStartIndex + i];
                 if (mOrientation == HORIZONTAL) {
-                    if (widget != null && widget.getHorizontalDimensionBehaviour() == DimensionBehaviour.MATCH_CONSTRAINT) {
+                    if (widget != null && widget.getHorizontalDimensionBehaviour()
+                            == DimensionBehaviour.MATCH_CONSTRAINT) {
                         if (widget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_SPREAD) {
-                            measure(widget, DimensionBehaviour.FIXED, widgetSize, widget.getVerticalDimensionBehaviour(), widget.getHeight());
+                            measure(widget, DimensionBehaviour.FIXED, widgetSize,
+                                    widget.getVerticalDimensionBehaviour(), widget.getHeight());
                         }
                     }
                 } else {
-                    if (widget != null && widget.getVerticalDimensionBehaviour() == DimensionBehaviour.MATCH_CONSTRAINT) {
+                    if (widget != null && widget.getVerticalDimensionBehaviour()
+                            == DimensionBehaviour.MATCH_CONSTRAINT) {
                         if (widget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_SPREAD) {
-                            measure(widget, widget.getHorizontalDimensionBehaviour(), widget.getWidth(), DimensionBehaviour.FIXED, widgetSize);
+                            measure(widget, widget.getHorizontalDimensionBehaviour(),
+                                    widget.getWidth(), DimensionBehaviour.FIXED, widgetSize);
                         }
                     }
                 }
@@ -737,7 +770,7 @@ public class Flow extends VirtualLayout {
         private void recomputeDimensions() {
             mWidth = 0;
             mHeight = 0;
-            biggest = null;
+            mBiggest = null;
             biggestDimension = 0;
             final int count = mCount;
             for (int i = 0; i < count; i++) {
@@ -753,8 +786,8 @@ public class Flow extends VirtualLayout {
                     }
                     mWidth += width + gap;
                     int height = getWidgetHeight(widget, mMax);
-                    if (biggest == null || biggestDimension < height) {
-                        biggest = widget;
+                    if (mBiggest == null || biggestDimension < height) {
+                        mBiggest = widget;
                         biggestDimension = height;
                         mHeight = height;
                     }
@@ -766,8 +799,8 @@ public class Flow extends VirtualLayout {
                         gap = 0;
                     }
                     mHeight += height + gap;
-                    if (biggest == null || biggestDimension < width) {
-                        biggest = widget;
+                    if (mBiggest == null || biggestDimension < width) {
+                        mBiggest = widget;
                         biggestDimension = width;
                         mWidth = width;
                     }
@@ -789,7 +822,11 @@ public class Flow extends VirtualLayout {
      * @param max         the maximum available space
      * @param measured    output parameters -- will contain the resulting measure
      */
-    private void measureChainWrap(ConstraintWidget[] widgets, int count, int orientation, int max, int[] measured) {
+    private void measureChainWrap(ConstraintWidget[] widgets,
+                                  int count,
+                                  int orientation,
+                                  int max,
+                                  int[] measured) {
         if (count == 0) {
             return;
         }
@@ -805,10 +842,12 @@ public class Flow extends VirtualLayout {
             for (int i = 0; i < count; i++) {
                 ConstraintWidget widget = widgets[i];
                 int w = getWidgetWidth(widget, max);
-                if (widget.getHorizontalDimensionBehaviour() == DimensionBehaviour.MATCH_CONSTRAINT) {
+                if (widget.getHorizontalDimensionBehaviour()
+                        == DimensionBehaviour.MATCH_CONSTRAINT) {
                     nbMatchConstraintsWidgets++;
                 }
-                boolean doWrap = (width == max || (width + mHorizontalGap + w) > max) && list.biggest != null;
+                boolean doWrap = (width == max || (width + mHorizontalGap + w) > max)
+                        && list.mBiggest != null;
                 if (!doWrap && i > 0 && mMaxElementsWrap > 0 && (i % mMaxElementsWrap == 0)) {
                     doWrap = true;
                 }
@@ -834,7 +873,8 @@ public class Flow extends VirtualLayout {
                 if (widget.getVerticalDimensionBehaviour() == DimensionBehaviour.MATCH_CONSTRAINT) {
                     nbMatchConstraintsWidgets++;
                 }
-                boolean doWrap = (height == max || (height + mVerticalGap + h) > max) && list.biggest != null;
+                boolean doWrap = (height == max || (height + mVerticalGap + h) > max)
+                        && list.mBiggest != null;
                 if (!doWrap && i > 0 && mMaxElementsWrap > 0 && (i % mMaxElementsWrap == 0)) {
                     doWrap = true;
                 }
@@ -889,13 +929,13 @@ public class Flow extends VirtualLayout {
             if (orientation == HORIZONTAL) {
                 if (i < listCount - 1) {
                     WidgetsList next = mChainList.get(i + 1);
-                    bottom = next.biggest.mTop;
+                    bottom = next.mBiggest.mTop;
                     paddingBottom = 0;
                 } else {
                     bottom = mBottom;
                     paddingBottom = getPaddingBottom();
                 }
-                ConstraintAnchor currentBottom = current.biggest.mBottom;
+                ConstraintAnchor currentBottom = current.mBiggest.mBottom;
                 current.setup(orientation, left, top, right, bottom,
                         paddingLeft, paddingTop, paddingRight, paddingBottom, max);
                 top = currentBottom;
@@ -908,13 +948,13 @@ public class Flow extends VirtualLayout {
             } else {
                 if (i < listCount - 1) {
                     WidgetsList next = mChainList.get(i + 1);
-                    right = next.biggest.mLeft;
+                    right = next.mBiggest.mLeft;
                     paddingRight = 0;
                 } else {
                     right = mRight;
                     paddingRight = getPaddingRight();
                 }
-                ConstraintAnchor currentRight = current.biggest.mRight;
+                ConstraintAnchor currentRight = current.mBiggest.mRight;
                 current.setup(orientation, left, top, right, bottom,
                         paddingLeft, paddingTop, paddingRight, paddingBottom, max);
                 left = currentRight;
@@ -941,7 +981,11 @@ public class Flow extends VirtualLayout {
      * @param max         the maximum available space
      * @param measured    output parameters -- will contain the resulting measure
      */
-    private void measureChainWrap_new(ConstraintWidget[] widgets, int count, int orientation, int max, int[] measured) {
+    private void measureChainWrap_new(ConstraintWidget[] widgets,
+                                      int count,
+                                      int orientation,
+                                      int max,
+                                      int[] measured) {
         if (count == 0) {
             return;
         }
@@ -959,10 +1003,12 @@ public class Flow extends VirtualLayout {
                 col++;
                 ConstraintWidget widget = widgets[i];
                 int w = getWidgetWidth(widget, max);
-                if (widget.getHorizontalDimensionBehaviour() == DimensionBehaviour.MATCH_CONSTRAINT) {
+                if (widget.getHorizontalDimensionBehaviour()
+                        == DimensionBehaviour.MATCH_CONSTRAINT) {
                     nbMatchConstraintsWidgets++;
                 }
-                boolean doWrap = (width == max || (width + mHorizontalGap + w) > max) && list.biggest != null;
+                boolean doWrap = (width == max || (width + mHorizontalGap + w) > max)
+                        && list.mBiggest != null;
                 if (!doWrap && i > 0 && mMaxElementsWrap > 0 && (col > mMaxElementsWrap)) {
                     doWrap = true;
                 }
@@ -990,7 +1036,8 @@ public class Flow extends VirtualLayout {
                 if (widget.getVerticalDimensionBehaviour() == DimensionBehaviour.MATCH_CONSTRAINT) {
                     nbMatchConstraintsWidgets++;
                 }
-                boolean doWrap = (height == max || (height + mVerticalGap + h) > max) && list.biggest != null;
+                boolean doWrap = (height == max || (height + mVerticalGap + h) > max)
+                        && list.mBiggest != null;
                 if (!doWrap && i > 0 && mMaxElementsWrap > 0 && (row > mMaxElementsWrap)) {
                     doWrap = true;
                 }
@@ -1046,13 +1093,13 @@ public class Flow extends VirtualLayout {
             if (orientation == HORIZONTAL) {
                 if (i < listCount - 1) {
                     WidgetsList next = mChainList.get(i + 1);
-                    bottom = next.biggest.mTop;
+                    bottom = next.mBiggest.mTop;
                     paddingBottom = 0;
                 } else {
                     bottom = mBottom;
                     paddingBottom = getPaddingBottom();
                 }
-                ConstraintAnchor currentBottom = current.biggest.mBottom;
+                ConstraintAnchor currentBottom = current.mBiggest.mBottom;
                 current.setup(orientation, left, top, right, bottom,
                         paddingLeft, paddingTop, paddingRight, paddingBottom, max);
                 top = currentBottom;
@@ -1065,13 +1112,13 @@ public class Flow extends VirtualLayout {
             } else {
                 if (i < listCount - 1) {
                     WidgetsList next = mChainList.get(i + 1);
-                    right = next.biggest.mLeft;
+                    right = next.mBiggest.mLeft;
                     paddingRight = 0;
                 } else {
                     right = mRight;
                     paddingRight = getPaddingRight();
                 }
-                ConstraintAnchor currentRight = current.biggest.mRight;
+                ConstraintAnchor currentRight = current.mBiggest.mRight;
                 current.setup(orientation, left, top, right, bottom,
                         paddingLeft, paddingTop, paddingRight, paddingBottom, max);
                 left = currentRight;
@@ -1099,7 +1146,11 @@ public class Flow extends VirtualLayout {
      * @param max         the maximum available space
      * @param measured    output parameters -- will contain the resulting measure
      */
-    private void measureNoWrap(ConstraintWidget[] widgets, int count, int orientation, int max, int[] measured) {
+    private void measureNoWrap(ConstraintWidget[] widgets,
+                               int count,
+                               int orientation,
+                               int max,
+                               int[] measured) {
         if (count == 0) {
             return;
         }
@@ -1135,7 +1186,11 @@ public class Flow extends VirtualLayout {
      * @param max         the maximum available space
      * @param measured    output parameters -- will contain the resulting measure
      */
-    private void measureAligned(ConstraintWidget[] widgets, int count, int orientation, int max, int[] measured) {
+    private void measureAligned(ConstraintWidget[] widgets,
+                                int count,
+                                int orientation,
+                                int max,
+                                int[] measured) {
         boolean done = false;
         int rows = 0;
         int cols = 0;
@@ -1203,12 +1258,14 @@ public class Flow extends VirtualLayout {
                 cols = (int) (Math.ceil(count / (float) rows));
             }
 
-            if (mAlignedBiggestElementsInCols == null || mAlignedBiggestElementsInCols.length < cols) {
+            if (mAlignedBiggestElementsInCols == null
+                    || mAlignedBiggestElementsInCols.length < cols) {
                 mAlignedBiggestElementsInCols = new ConstraintWidget[cols];
             } else {
                 Arrays.fill(mAlignedBiggestElementsInCols, null);
             }
-            if (mAlignedBiggestElementsInRows == null || mAlignedBiggestElementsInRows.length < rows) {
+            if (mAlignedBiggestElementsInRows == null
+                    || mAlignedBiggestElementsInRows.length < rows) {
                 mAlignedBiggestElementsInRows = new ConstraintWidget[rows];
             } else {
                 Arrays.fill(mAlignedBiggestElementsInRows, null);

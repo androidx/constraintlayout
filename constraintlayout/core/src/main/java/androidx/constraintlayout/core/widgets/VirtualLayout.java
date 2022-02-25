@@ -212,8 +212,10 @@ public class VirtualLayout extends HelperWidget {
     BasicMeasure.Measurer mMeasurer = null;
 
     protected void measure(ConstraintWidget widget,
-                         ConstraintWidget.DimensionBehaviour horizontalBehavior, int horizontalDimension,
-                         ConstraintWidget.DimensionBehaviour verticalBehavior, int verticalDimension) {
+                         ConstraintWidget.DimensionBehaviour horizontalBehavior,
+                           int horizontalDimension,
+                         ConstraintWidget.DimensionBehaviour verticalBehavior,
+                           int verticalDimension) {
         while (mMeasurer == null && getParent() != null) {
             ConstraintWidgetContainer parent = (ConstraintWidgetContainer) getParent();
             mMeasurer = parent.getMeasurer();

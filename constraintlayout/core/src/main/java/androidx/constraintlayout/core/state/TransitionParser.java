@@ -121,7 +121,8 @@ public class TransitionParser {
         }
     }
 
-    private static void parseKeyPosition(CLObject keyPosition, Transition transition) throws CLParsingException {
+    private static void parseKeyPosition(CLObject keyPosition,
+                                         Transition transition) throws CLParsingException {
         TypedBundle bundle = new TypedBundle();
         CLArray targets = keyPosition.getArray("target");
         CLArray frames = keyPosition.getArray("frames");
@@ -171,13 +172,15 @@ public class TransitionParser {
         }
     }
 
-    private static void set(TypedBundle bundle, int type, CLArray array, int index) throws CLParsingException {
+    private static void set(TypedBundle bundle, int type,
+                            CLArray array, int index) throws CLParsingException {
         if (array != null) {
             bundle.add(type, array.getFloat(index));
         }
     }
 
-    private static void parseKeyAttribute(CLObject keyAttribute, Transition transition) throws CLParsingException {
+    private static void parseKeyAttribute(CLObject keyAttribute,
+                                          Transition transition) throws CLParsingException {
         CLArray targets = keyAttribute.getArrayOrNull("target");
         if (targets == null) {
             return;
@@ -225,8 +228,8 @@ public class TransitionParser {
             // array must contain one per frame
             if (arrayValues != null && arrayValues.size() != bundles.length) {
                 throw new CLParsingException(
-                        "incorrect size for "+attrName+" array, " +
-                                "not matching targets array!", keyAttribute);
+                        "incorrect size for " + attrName + " array, "
+                                + "not matching targets array!", keyAttribute);
             }
             if (arrayValues != null) {
                 for (int i = 0; i < bundles.length; i++) {
@@ -248,9 +251,11 @@ public class TransitionParser {
                 TypedBundle bundle = bundles[j];
 
                 if (curveFit != null) {
-                    bundle.add(TypedValues.PositionType.TYPE_CURVE_FIT, map(curveFit, "spline", "linear"));
+                    bundle.add(TypedValues.PositionType.TYPE_CURVE_FIT,
+                            map(curveFit, "spline", "linear"));
                 }
-                bundle.addIfNotNull(TypedValues.PositionType.TYPE_TRANSITION_EASING, transitionEasing);
+                bundle.addIfNotNull(TypedValues.PositionType.TYPE_TRANSITION_EASING,
+                        transitionEasing);
                 int frame = frames.getInt(j);
                 bundle.add(TypedValues.TYPE_FRAME_POSITION, frame);
                 transition.addKeyAttribute(target, bundle);
@@ -258,7 +263,8 @@ public class TransitionParser {
         }
     }
 
-    private static void parseKeyCycle(CLObject keyCycleData, Transition transition) throws CLParsingException {
+    private static void parseKeyCycle(CLObject keyCycleData,
+                                      Transition transition) throws CLParsingException {
         CLArray targets = keyCycleData.getArray("target");
         CLArray frames = keyCycleData.getArray("frames");
         String transitionEasing = keyCycleData.getStringOrNull("transitionEasing");
@@ -306,8 +312,8 @@ public class TransitionParser {
             // array must contain one per frame
             if (arrayValues != null && arrayValues.size() != bundles.length) {
                 throw new CLParsingException(
-                        "incorrect size for $attrName array, " +
-                                "not matching targets array!", keyCycleData
+                        "incorrect size for $attrName array, "
+                                + "not matching targets array!", keyCycleData
                 );
             }
             if (arrayValues != null) {
@@ -343,7 +349,8 @@ public class TransitionParser {
                             break;
                     }
                 }
-                bundle.addIfNotNull(TypedValues.PositionType.TYPE_TRANSITION_EASING, transitionEasing);
+                bundle.addIfNotNull(TypedValues.PositionType.TYPE_TRANSITION_EASING,
+                        transitionEasing);
                 if (easing != null) {
                     bundle.add(TypedValues.CycleType.TYPE_EASING, easing);
                 }

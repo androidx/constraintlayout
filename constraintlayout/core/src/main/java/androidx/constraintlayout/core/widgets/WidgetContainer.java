@@ -71,7 +71,7 @@ public class WidgetContainer extends ConstraintWidget {
     public void add(ConstraintWidget widget) {
         mChildren.add(widget);
         if (widget.getParent() != null) {
-            WidgetContainer container = (WidgetContainer)widget.getParent();
+            WidgetContainer container = (WidgetContainer) widget.getParent();
             container.remove(widget);
         }
         widget.setParent(this);
@@ -118,13 +118,13 @@ public class WidgetContainer extends ConstraintWidget {
         ConstraintWidget parent = item.getParent();
         ConstraintWidgetContainer container = null;
         if (item instanceof ConstraintWidgetContainer) {
-            container = (ConstraintWidgetContainer)this;
+            container = (ConstraintWidgetContainer) this;
         }
         while (parent != null) {
             item = parent;
             parent = item.getParent();
             if (item instanceof ConstraintWidgetContainer) {
-                container = (ConstraintWidgetContainer)item;
+                container = (ConstraintWidgetContainer) item;
             }
         }
         return container;
@@ -162,7 +162,7 @@ public class WidgetContainer extends ConstraintWidget {
         for (int i = 0; i < count; i++) {
             ConstraintWidget widget = mChildren.get(i);
             if (widget instanceof WidgetContainer) {
-                ((WidgetContainer)widget).layout();
+                ((WidgetContainer) widget).layout();
             }
         }
     }
