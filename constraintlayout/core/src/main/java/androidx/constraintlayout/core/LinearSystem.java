@@ -44,7 +44,7 @@ public class LinearSystem {
     /*
      * Default size for the object pools
      */
-    private static int POOL_SIZE = 1000;
+    private static int sPoolSize = 1000;
     public boolean hasSimpleDefinition = false;
 
     /*
@@ -62,8 +62,8 @@ public class LinearSystem {
      */
     private Row mGoal;
 
-    private int TABLE_SIZE = 32; // default table size for the allocation
-    private int mMaxColumns = TABLE_SIZE;
+    private int mTableSize = 32; // default table size for the allocation
+    private int mMaxColumns = mTableSize;
     ArrayRow[] mRows = null;
 
     // if true, will use graph optimizations
@@ -71,15 +71,15 @@ public class LinearSystem {
     public boolean newgraphOptimizer = false;
 
     // Used in optimize()
-    private boolean[] mAlreadyTestedCandidates = new boolean[TABLE_SIZE];
+    private boolean[] mAlreadyTestedCandidates = new boolean[mTableSize];
 
     int mNumColumns = 1;
     int mNumRows = 0;
-    private int mMaxRows = TABLE_SIZE;
+    private int mMaxRows = mTableSize;
 
     final Cache mCache;
 
-    private SolverVariable[] mPoolVariables = new SolverVariable[POOL_SIZE];
+    private SolverVariable[] mPoolVariables = new SolverVariable[sPoolSize];
     private int mPoolVariablesCount = 0;
 
     public static Metrics sMetrics;
@@ -92,7 +92,7 @@ public class LinearSystem {
     }
 
     public LinearSystem() {
-        mRows = new ArrayRow[TABLE_SIZE];
+        mRows = new ArrayRow[mTableSize];
         releaseRows();
         mCache = new Cache();
         mGoal = new PriorityGoalRow(mCache);
@@ -121,7 +121,9 @@ public class LinearSystem {
         boolean isEmpty();
 
         void updateFromRow(LinearSystem system, ArrayRow definition, boolean b);
-        void updateFromFinalVariable(LinearSystem system, SolverVariable variable, boolean removeFromDefinition);
+        void updateFromFinalVariable(LinearSystem system,
+                                     SolverVariable variable,
+                                     boolean removeFromDefinition);
     }
 
     /*--------------------------------------------------------------------------------------------*/
@@ -134,18 +136,19 @@ public class LinearSystem {
     private void increaseTableSize() {
         if (DEBUG) {
             System.out.println("###########################");
-            System.out.println("### INCREASE TABLE TO " + (TABLE_SIZE * 2) + " (num rows: " + mNumRows + ", num cols: " + mNumColumns + "/" + mMaxColumns + ")");
+            System.out.println("### INCREASE TABLE TO " + (mTableSize * 2) + " (num rows: "
+                    + mNumRows + ", num cols: " + mNumColumns + "/" + mMaxColumns + ")");
             System.out.println("###########################");
         }
-        TABLE_SIZE *= 2;
-        mRows = Arrays.copyOf(mRows, TABLE_SIZE);
-        mCache.mIndexedVariables = Arrays.copyOf(mCache.mIndexedVariables, TABLE_SIZE);
-        mAlreadyTestedCandidates = new boolean[TABLE_SIZE];
-        mMaxColumns = TABLE_SIZE;
-        mMaxRows = TABLE_SIZE;
+        mTableSize *= 2;
+        mRows = Arrays.copyOf(mRows, mTableSize);
+        mCache.mIndexedVariables = Arrays.copyOf(mCache.mIndexedVariables, mTableSize);
+        mAlreadyTestedCandidates = new boolean[mTableSize];
+        mMaxColumns = mTableSize;
+        mMaxRows = mTableSize;
         if (sMetrics != null) {
             sMetrics.tableSizeIncrease++;
-            sMetrics.maxTableSize = Math.max(sMetrics.maxTableSize, TABLE_SIZE);
+            sMetrics.maxTableSize = Math.max(sMetrics.maxTableSize, mTableSize);
             sMetrics.lastTableSize = sMetrics.maxTableSize;
         }
     }
@@ -375,9 +378,9 @@ public class LinearSystem {
             variable.reset();
             variable.setType(type, prefix);
         }
-        if (mPoolVariablesCount >= POOL_SIZE) {
-            POOL_SIZE *= 2;
-            mPoolVariables = Arrays.copyOf(mPoolVariables, POOL_SIZE);
+        if (mPoolVariablesCount >= sPoolSize) {
+            sPoolSize *= 2;
+            mPoolVariables = Arrays.copyOf(mPoolVariables, sPoolSize);
         }
         mPoolVariables[mPoolVariablesCount++] = variable;
         return variable;
@@ -391,7 +394,9 @@ public class LinearSystem {
      * Simple accessor for the current goal. Used when minimizing the system's goal.
      * @return the current goal.
      */
-    Row getGoal() { return mGoal; }
+    Row getGoal() {
+        return mGoal;
+    }
 
     ArrayRow getRow(int n) {
         return mRows[n];
@@ -741,7 +746,8 @@ public class LinearSystem {
             }
             if (tries >= 2 * mNumColumns) {
                 if (DEBUG) {
-                    System.out.println("=> Exit optimization because tries " + tries + " >= " + (2 * mNumColumns));
+                    System.out.println("=> Exit optimization because tries "
+                            + tries + " >= " + (2 * mNumColumns));
                 }
                 return tries;
             }
@@ -757,7 +763,8 @@ public class LinearSystem {
             if (pivotCandidate != null) {
                 if (mAlreadyTestedCandidates[pivotCandidate.id]) {
                     if (DEBUG) {
-                        System.out.println("* Pivot candidate " + pivotCandidate + " already tested, let's bail");
+                        System.out.println("* Pivot candidate " + pivotCandidate
+                                + " already tested, let's bail");
                     }
                     return tries;
                 } else {
@@ -795,7 +802,8 @@ public class LinearSystem {
 
                     if (current.hasVariable(pivotCandidate)) {
                         if (DEBUG) {
-                            System.out.println("equation " + i + " " + current + " contains " + pivotCandidate);
+                            System.out.println("equation " + i + " "
+                                    + current + " contains " + pivotCandidate);
                         }
                         // the current row does contains the variable
                         // we want to pivot on
@@ -1002,7 +1010,8 @@ public class LinearSystem {
         }
 
         if (DEBUG) {
-            System.out.println("the current system should now be feasible [" + infeasibleSystem + "] after " + tries + " iterations");
+            System.out.println("the current system should now be feasible ["
+                    + infeasibleSystem + "] after " + tries + " iterations");
             displayReadableRows();
 
             // Let's make sure the system is correct
@@ -1069,7 +1078,8 @@ public class LinearSystem {
             SolverVariable variable = mCache.mIndexedVariables[i];
             if (variable != null && variable.isSynonym) {
                 SolverVariable synonym = mCache.mIndexedVariables[variable.synonym];
-                s += " ~[" + i + "] => " + variable + " = " + synonym + " + " + variable.synonymDelta + "\n";
+                s += " ~[" + i + "] => " + variable + " = "
+                        + synonym + " + " + variable.synonymDelta + "\n";
             }
         }
         s += "\n\n #  ";
@@ -1109,9 +1119,13 @@ public class LinearSystem {
     }
 
     @SuppressWarnings("unused")
-    public int getNumEquations() { return mNumRows; }
+    public int getNumEquations() {
+        return mNumRows;
+    }
     @SuppressWarnings("unused")
-    public int getNumVariables() { return mVariablesID; }
+    public int getNumVariables() {
+        return mVariablesID;
+    }
 
     /**
      * Display current system information
@@ -1119,7 +1133,7 @@ public class LinearSystem {
     void displaySystemInformation() {
         int count = 0;
         int rowSize = 0;
-        for (int i = 0; i < TABLE_SIZE; i++) {
+        for (int i = 0; i < mTableSize; i++) {
             if (mRows[i] != null) {
                 rowSize += mRows[i].sizeInBytes();
             }
@@ -1131,8 +1145,8 @@ public class LinearSystem {
             }
         }
 
-        System.out.println("Linear System -> Table size: " + TABLE_SIZE
-                + " (" + getDisplaySize(TABLE_SIZE * TABLE_SIZE)
+        System.out.println("Linear System -> Table size: " + mTableSize
+                + " (" + getDisplaySize(mTableSize * mTableSize)
                 + ") -- row sizes: " + getDisplaySize(rowSize)
                 + ", actual size: " + getDisplaySize(actualRowSize)
                 + " rows: " + mNumRows + "/" + mMaxRows
@@ -1209,7 +1223,8 @@ public class LinearSystem {
      */
     public void addGreaterThan(SolverVariable a, SolverVariable b, int margin, int strength) {
         if (DEBUG_CONSTRAINTS) {
-            System.out.println("-> " + a + " >= " + b + (margin != 0 ? " + " + margin : "") + " " + getDisplayStrength(strength));
+            System.out.println("-> " + a + " >= " + b + (margin != 0 ? " + " + margin : "")
+                    + " " + getDisplayStrength(strength));
         }
         ArrayRow row = createRow();
         SolverVariable slack = createSlackVariable();
@@ -1222,7 +1237,10 @@ public class LinearSystem {
         addConstraint(row);
     }
 
-    public void addGreaterBarrier(SolverVariable a, SolverVariable b, int margin, boolean hasMatchConstraintWidgets) {
+    public void addGreaterBarrier(SolverVariable a,
+                                  SolverVariable b,
+                                  int margin,
+                                  boolean hasMatchConstraintWidgets) {
         if (DEBUG_CONSTRAINTS) {
             System.out.println("-> Barrier " + a + " >= " + b);
         }
@@ -1242,7 +1260,8 @@ public class LinearSystem {
      */
     public void addLowerThan(SolverVariable a, SolverVariable b, int margin, int strength) {
         if (DEBUG_CONSTRAINTS) {
-            System.out.println("-> " + a + " <= " + b + (margin != 0 ? " + " + margin : "") + " " + getDisplayStrength(strength));
+            System.out.println("-> " + a + " <= " + b + (margin != 0 ? " + " + margin : "")
+                    + " " + getDisplayStrength(strength));
         }
         ArrayRow row = createRow();
         SolverVariable slack = createSlackVariable();
@@ -1255,7 +1274,10 @@ public class LinearSystem {
         addConstraint(row);
     }
 
-    public void addLowerBarrier(SolverVariable a, SolverVariable b, int margin, boolean hasMatchConstraintWidgets) {
+    public void addLowerBarrier(SolverVariable a,
+                                SolverVariable b,
+                                int margin,
+                                boolean hasMatchConstraintWidgets) {
         if (DEBUG_CONSTRAINTS) {
             System.out.println("-> Barrier " + a + " <= " + b);
         }
@@ -1293,9 +1315,15 @@ public class LinearSystem {
         addConstraint(row);
     }
 
-    public void addRatio(SolverVariable a, SolverVariable b, SolverVariable c, SolverVariable d, float ratio, int strength) {
+    public void addRatio(SolverVariable a,
+                         SolverVariable b,
+                         SolverVariable c,
+                         SolverVariable d,
+                         float ratio,
+                         int strength) {
         if (DEBUG_CONSTRAINTS) {
-            System.out.println("-> [ratio: " + ratio + "] : " + a + " = " + b + " + (" + c + " - " + d + ") * " + ratio + " " + getDisplayStrength(strength));
+            System.out.println("-> [ratio: " + ratio + "] : " + a + " = " + b
+                    + " + (" + c + " - " + d + ") * " + ratio + " " + getDisplayStrength(strength));
         }
         ArrayRow row = createRow();
         row.createRowDimensionRatio(a, b, c, d, ratio);
@@ -1333,16 +1361,20 @@ public class LinearSystem {
      * @param strength strength used
      */
     public ArrayRow addEquality(SolverVariable a, SolverVariable b, int margin, int strength) {
-        if (USE_BASIC_SYNONYMS && strength == SolverVariable.STRENGTH_FIXED && b.isFinalValue && a.definitionId == -1) {
+        if (USE_BASIC_SYNONYMS && strength == SolverVariable.STRENGTH_FIXED
+                && b.isFinalValue && a.definitionId == -1) {
             if (DEBUG_CONSTRAINTS) {
-                System.out.println("=> " + a + " = " + b + (margin != 0 ? " + " + margin : "") + " = " + (b.computedValue + margin) + " (Synonym)");
+                System.out.println("=> " + a + " = " + b + (margin != 0 ? " + " + margin : "")
+                        + " = " + (b.computedValue + margin) + " (Synonym)");
             }
             a.setFinalValue(this, b.computedValue + margin);
             return null;
         }
-        if (false && USE_SYNONYMS && strength == SolverVariable.STRENGTH_FIXED && a.definitionId == -1 && margin == 0) {
+        if (false && USE_SYNONYMS && strength == SolverVariable.STRENGTH_FIXED
+                && a.definitionId == -1 && margin == 0) {
             if (DEBUG_CONSTRAINTS) {
-                System.out.println("(S) -> " + a + " = " + b + (margin != 0 ? " + " + margin : "") + " " + getDisplayStrength(strength));
+                System.out.println("(S) -> " + a + " = " + b + (margin != 0 ? " + " + margin : "")
+                        + " " + getDisplayStrength(strength));
             }
             if (b.isSynonym) {
                 margin += b.synonymDelta;
@@ -1357,7 +1389,8 @@ public class LinearSystem {
             }
         }
         if (DEBUG_CONSTRAINTS) {
-            System.out.println("-> " + a + " = " + b + (margin != 0 ? " + " + margin : "") + " " + getDisplayStrength(strength));
+            System.out.println("-> " + a + " = " + b + (margin != 0 ? " + " + margin : "")
+                    + " " + getDisplayStrength(strength));
         }
         ArrayRow row = createRow();
         row.createRowEquals(a, b, margin);
@@ -1440,7 +1473,10 @@ public class LinearSystem {
      * @param angle from 0 to 360
      * @param radius the distance between the two centers
      */
-    public void addCenterPoint(ConstraintWidget widget, ConstraintWidget target, float angle, int radius) {
+    public void addCenterPoint(ConstraintWidget widget,
+                               ConstraintWidget target,
+                               float angle,
+                               int radius) {
 
         SolverVariable Al = createObjectVariable(widget.getAnchor(ConstraintAnchor.Type.LEFT));
         SolverVariable At = createObjectVariable(widget.getAnchor(ConstraintAnchor.Type.TOP));

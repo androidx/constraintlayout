@@ -224,28 +224,28 @@ public class CustomAttribute {
     /**
      * test if the two attributes are different
      *
-     * @param CustomAttribute
+     * @param customAttribute
      * @return
      */
-    public boolean diff(CustomAttribute CustomAttribute) {
-        if (CustomAttribute == null || mType != CustomAttribute.mType) {
+    public boolean diff(CustomAttribute customAttribute) {
+        if (customAttribute == null || mType != customAttribute.mType) {
             return false;
         }
         switch (mType) {
             case INT_TYPE:
             case REFERENCE_TYPE:
-                return mIntegerValue == CustomAttribute.mIntegerValue;
+                return mIntegerValue == customAttribute.mIntegerValue;
             case FLOAT_TYPE:
-                return mFloatValue == CustomAttribute.mFloatValue;
+                return mFloatValue == customAttribute.mFloatValue;
             case COLOR_TYPE:
             case COLOR_DRAWABLE_TYPE:
-                return mColorValue == CustomAttribute.mColorValue;
+                return mColorValue == customAttribute.mColorValue;
             case STRING_TYPE:
-                return mIntegerValue == CustomAttribute.mIntegerValue;
+                return mIntegerValue == customAttribute.mIntegerValue;
             case BOOLEAN_TYPE:
-                return mBooleanValue == CustomAttribute.mBooleanValue;
+                return mBooleanValue == customAttribute.mBooleanValue;
             case DIMENSION_TYPE:
-                return mFloatValue == CustomAttribute.mFloatValue;
+                return mFloatValue == customAttribute.mFloatValue;
             default:
                 return false;
         }
@@ -297,11 +297,11 @@ public class CustomAttribute {
     }
 
     private static int clamp(int c) {
-        int N = 255;
+        int n = 255;
         c &= ~(c >> 31);
-        c -= N;
+        c -= n;
         c &= (c >> 31);
-        c += N;
+        c += n;
         return c;
     }
 

@@ -38,7 +38,6 @@ import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.motion.utils.VelocityMatrix;
 import androidx.constraintlayout.core.motion.utils.ViewState;
-import androidx.constraintlayout.core.state.WidgetFrame;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,13 +61,13 @@ public class Motion implements TypedValues {
     public static final int HORIZONTAL_PATH_Y = 3;
     public static final int VERTICAL_PATH_X = 4;
     public static final int VERTICAL_PATH_Y = 5;
-    public final static int DRAW_PATH_NONE = 0;
-    public final static int DRAW_PATH_BASIC = 1;
-    public final static int DRAW_PATH_RELATIVE = 2;
-    public final static int DRAW_PATH_CARTESIAN = 3;
-    public final static int DRAW_PATH_AS_CONFIGURED = 4;
-    public final static int DRAW_PATH_RECTANGLE = 5;
-    public final static int DRAW_PATH_SCREEN = 6;
+    public static final int DRAW_PATH_NONE = 0;
+    public static final int DRAW_PATH_BASIC = 1;
+    public static final int DRAW_PATH_RELATIVE = 2;
+    public static final int DRAW_PATH_CARTESIAN = 3;
+    public static final int DRAW_PATH_AS_CONFIGURED = 4;
+    public static final int DRAW_PATH_RECTANGLE = 5;
+    public static final int DRAW_PATH_SCREEN = 6;
 
     public static final int ROTATION_RIGHT = 1;
     public static final int ROTATION_LEFT = 2;
@@ -87,7 +86,8 @@ public class Motion implements TypedValues {
     private MotionConstrainedPoint mStartPoint = new MotionConstrainedPoint();
     private MotionConstrainedPoint mEndPoint = new MotionConstrainedPoint();
 
-    private CurveFit[] mSpline; // spline 0 is the generic one that process all the standard attributes
+    // spline 0 is the generic one that process all the standard attributes
+    private CurveFit[] mSpline;
     private CurveFit mArcSpline;
     float mMotionStagger = Float.NaN;
     float mStaggerOffset = 0;
@@ -99,19 +99,27 @@ public class Motion implements TypedValues {
 
     private String[] mAttributeNames;  // the names of the custom attributes
     private int[] mAttributeInterpolatorCount; // how many interpolators for each custom attribute
-    private int MAX_DIMENSION = 4;
-    private float mValuesBuff[] = new float[MAX_DIMENSION];
+    private int mMaxDimension = 4;
+    private float[] mValuesBuff = new float[mMaxDimension];
     private ArrayList<MotionPaths> mMotionPaths = new ArrayList<>();
     private float[] mVelocity = new float[1]; // used as a temp buffer to return values
 
     private ArrayList<MotionKey> mKeyList = new ArrayList<>(); // List of key frame items
-    private HashMap<String, TimeCycleSplineSet> mTimeCycleAttributesMap; // splines to calculate for use TimeCycles
+
+    // splines to calculate for use TimeCycles
+    private HashMap<String, TimeCycleSplineSet> mTimeCycleAttributesMap;
     private HashMap<String, SplineSet> mAttributesMap; // splines to calculate values of attributes
-    private HashMap<String, KeyCycleOscillator> mCycleMap; // splines to calculate values of attributes
+
+    // splines to calculate values of attributes
+    private HashMap<String, KeyCycleOscillator> mCycleMap;
     private MotionKeyTrigger[] mKeyTriggers; // splines to calculate values of attributes
     private int mPathMotionArc = UNSET;
-    private int mTransformPivotTarget = UNSET; // if set, pivot point is maintained as the other object
-    private MotionWidget mTransformPivotView = null; // if set, pivot point is maintained as the other object
+
+    // if set, pivot point is maintained as the other object
+    private int mTransformPivotTarget = UNSET;
+
+    // if set, pivot point is maintained as the other object
+    private MotionWidget mTransformPivotView = null;
     private int mQuantizeMotionSteps = UNSET;
     private float mQuantizeMotionPhase = Float.NaN;
     private DifferentialInterpolator mQuantizeMotionInterpolator = null;
@@ -265,14 +273,17 @@ public class Motion implements TypedValues {
      *
      * @param points     array to fill (should be 2x the number of mPoints
      * @param pointCount
-     * @return number of key frames
      */
     public void buildPath(float[] points, int pointCount) {
         float mils = 1.0f / (pointCount - 1);
-        SplineSet trans_x = (mAttributesMap == null) ? null : mAttributesMap.get(MotionKey.TRANSLATION_X);
-        SplineSet trans_y = (mAttributesMap == null) ? null : mAttributesMap.get(MotionKey.TRANSLATION_Y);
-        KeyCycleOscillator osc_x = (mCycleMap == null) ? null : mCycleMap.get(MotionKey.TRANSLATION_X);
-        KeyCycleOscillator osc_y = (mCycleMap == null) ? null : mCycleMap.get(MotionKey.TRANSLATION_Y);
+        SplineSet trans_x =
+                (mAttributesMap == null) ? null : mAttributesMap.get(MotionKey.TRANSLATION_X);
+        SplineSet trans_y =
+                (mAttributesMap == null) ? null : mAttributesMap.get(MotionKey.TRANSLATION_Y);
+        KeyCycleOscillator osc_x =
+                (mCycleMap == null) ? null : mCycleMap.get(MotionKey.TRANSLATION_X);
+        KeyCycleOscillator osc_y =
+                (mCycleMap == null) ? null : mCycleMap.get(MotionKey.TRANSLATION_Y);
 
         for (int i = 0; i < pointCount; i++) {
             float position = (i) * mils;
@@ -356,10 +367,14 @@ public class Motion implements TypedValues {
      */
     void buildBounds(float[] bounds, int pointCount) {
         float mils = 1.0f / (pointCount - 1);
-        SplineSet trans_x = (mAttributesMap == null) ? null : mAttributesMap.get(MotionKey.TRANSLATION_X);
-        SplineSet trans_y = (mAttributesMap == null) ? null : mAttributesMap.get(MotionKey.TRANSLATION_Y);
-        KeyCycleOscillator osc_x = (mCycleMap == null) ? null : mCycleMap.get(MotionKey.TRANSLATION_X);
-        KeyCycleOscillator osc_y = (mCycleMap == null) ? null : mCycleMap.get(MotionKey.TRANSLATION_Y);
+        SplineSet trans_x =
+                (mAttributesMap == null) ? null : mAttributesMap.get(MotionKey.TRANSLATION_X);
+        SplineSet trans_y =
+                (mAttributesMap == null) ? null : mAttributesMap.get(MotionKey.TRANSLATION_Y);
+        KeyCycleOscillator osc_x =
+                (mCycleMap == null) ? null : mCycleMap.get(MotionKey.TRANSLATION_X);
+        KeyCycleOscillator osc_y =
+                (mCycleMap == null) ? null : mCycleMap.get(MotionKey.TRANSLATION_Y);
 
         for (int i = 0; i < pointCount; i++) {
             float position = (i) * mils;
@@ -472,7 +487,8 @@ public class Motion implements TypedValues {
         end.bottom = end.top + mEndMotionPath.height;
         for (MotionKey key : mKeyList) {
             if (key instanceof MotionKeyPosition) {
-                if (((MotionKeyPosition) key).intersects(layoutWidth, layoutHeight, start, end, x, y)) {
+                if (((MotionKeyPosition) key).intersects(layoutWidth,
+                        layoutHeight, start, end, x, y)) {
                     return (MotionKeyPosition) key;
                 }
             }
@@ -498,7 +514,8 @@ public class Motion implements TypedValues {
             }
             for (int i = 0; i < time.length; i++) {
                 mSpline[0].getPos(time[i], mInterpolateData);
-                mStartMotionPath.getCenter(time[i], mInterpolateVariables, mInterpolateData, keyFrames, count);
+                mStartMotionPath.getCenter(time[i],
+                        mInterpolateVariables, mInterpolateData, keyFrames, count);
                 count += 2;
             }
             return count / 2;
@@ -519,7 +536,8 @@ public class Motion implements TypedValues {
 
             for (int i = 0; i < time.length; i++) {
                 mSpline[0].getPos(time[i], mInterpolateData);
-                mStartMotionPath.getBounds(mInterpolateVariables, mInterpolateData, keyBounds, count);
+                mStartMotionPath.getBounds(mInterpolateVariables,
+                        mInterpolateData, keyBounds, count);
                 count += 2;
             }
             return count / 2;
@@ -527,7 +545,7 @@ public class Motion implements TypedValues {
         return 0;
     }
 
-    String[] attributeTable;
+    String[] mAttributeTable;
 
     int getAttributeValues(String attributeType, float[] points, int pointCount) {
         float mils = 1.0f / (pointCount - 1);
@@ -634,7 +652,10 @@ public class Motion implements TypedValues {
      * Called after all TimePoints & Cycles have been added;
      * Spines are evaluated
      */
-    public void setup(int parentWidth, int parentHeight, float transitionDuration, long currentTime) {
+    public void setup(int parentWidth,
+                      int parentHeight,
+                      float transitionDuration,
+                      long currentTime) {
         HashSet<String> springAttributes = new HashSet<>(); // attributes we need to interpolate
         HashSet<String> timeCycleAttributes = new HashSet<>(); // attributes we need to interpolate
         HashSet<String> splineAttributes = new HashSet<>(); // attributes we need to interpolate
@@ -659,13 +680,15 @@ public class Motion implements TypedValues {
         if (DEBUG) {
             HashSet<String> attr = new HashSet<>();
             mStartPoint.different(mEndPoint, attr);
-            Utils.log(TAG, ">>>>>>>>>>>>>>> MotionConstrainedPoint found " + Arrays.toString(attr.toArray()));
+            Utils.log(TAG, ">>>>>>>>>>>>>>> MotionConstrainedPoint found "
+                    + Arrays.toString(attr.toArray()));
         }
         if (mKeyList != null) {
             for (MotionKey key : mKeyList) {
                 if (key instanceof MotionKeyPosition) {
                     MotionKeyPosition keyPath = (MotionKeyPosition) key;
-                    insertKey(new MotionPaths(parentWidth, parentHeight, keyPath, mStartMotionPath, mEndMotionPath));
+                    insertKey(new MotionPaths(parentWidth, parentHeight,
+                            keyPath, mStartMotionPath, mEndMotionPath));
                     if (keyPath.mCurveFit != UNSET) {
                         mCurveFitType = keyPath.mCurveFit;
                     }
@@ -812,8 +835,9 @@ public class Motion implements TypedValues {
         HashSet<String> attributeNameSet = new HashSet<>();
         for (String s : mEndMotionPath.customAttributes.keySet()) {
             if (mStartMotionPath.customAttributes.containsKey(s)) {
-                if (!splineAttributes.contains("CUSTOM," + s))
+                if (!splineAttributes.contains("CUSTOM," + s)) {
                     attributeNameSet.add(s);
+                }
             }
         }
 
@@ -852,8 +876,9 @@ public class Motion implements TypedValues {
 
         count = 0;
         for (int i = 1; i < mask.length; i++) {
-            if (mask[i])
+            if (mask[i]) {
                 mInterpolateVariables[count++] = i;
+            }
         }
 
         double[][] splineData = new double[points.length][mInterpolateVariables.length];
@@ -885,7 +910,8 @@ public class Motion implements TypedValues {
                 if (points[j].hasCustomData(name)) {
                     if (splinePoints == null) {
                         timePoints = new double[points.length];
-                        splinePoints = new double[points.length][points[j].getCustomDataCount(name)];
+                        splinePoints =
+                                new double[points.length][points[j].getCustomDataCount(name)];
                     }
                     timePoints[pointCount] = points[j].time;
                     points[j].getCustomData(name, splinePoints[pointCount], 0);
@@ -943,7 +969,8 @@ public class Motion implements TypedValues {
         }
 
         if (DEBUG) {
-            Utils.log(TAG, "Animation of splineAttributes " + Arrays.toString(splineAttributes.toArray()));
+            Utils.log(TAG, "Animation of splineAttributes "
+                    + Arrays.toString(splineAttributes.toArray()));
             Utils.log(TAG, "Animation of cycle " + Arrays.toString(mCycleMap.keySet().toArray()));
             if (mAttributesMap != null) {
                 Utils.log(TAG, " splines = " + Arrays.toString(mAttributesMap.keySet().toArray()));
@@ -968,7 +995,8 @@ public class Motion implements TypedValues {
     }
 
     private void readView(MotionPaths motionPaths) {
-        motionPaths.setBounds((int) mView.getX(), (int) mView.getY(), mView.getWidth(), mView.getHeight());
+        motionPaths.setBounds((int) mView.getX(), (int) mView.getY(),
+                mView.getWidth(), mView.getHeight());
     }
 
     public void setView(MotionWidget view) {
@@ -996,7 +1024,11 @@ public class Motion implements TypedValues {
         mEndPoint.setState(mw);
     }
 
-    public void setStartState(ViewState rect, MotionWidget v, int rotation, int preWidth, int preHeight) {
+    public void setStartState(ViewState rect,
+                              MotionWidget v,
+                              int rotation,
+                              int preWidth,
+                              int preHeight) {
         mStartMotionPath.time = 0;
         mStartMotionPath.position = 0;
         int cx, cy;
@@ -1063,7 +1095,8 @@ public class Motion implements TypedValues {
     }
 
     // Todo : Implement  QuantizeMotion scene rotate
-    //    void setStartState(Rect cw, ConstraintSet constraintSet, int parentWidth, int parentHeight) {
+    //    void setStartState(Rect cw, ConstraintSet constraintSet,
+    //                      int parentWidth, int parentHeight) {
     //        int rotate = constraintSet.mRotate; // for rotated frames
     //        if (rotate != 0) {
     //            rotate(cw, mTempRect, rotate, parentWidth, parentHeight);
@@ -1096,7 +1129,9 @@ public class Motion implements TypedValues {
     private static final int INTERPOLATOR_REFERENCE_ID = -2;
     private static final int INTERPOLATOR_UNDEFINED = -3;
 
-    private static DifferentialInterpolator getInterpolator(int type, String interpolatorString, int id) {
+    private static DifferentialInterpolator getInterpolator(int type,
+                                                            String interpolatorString,
+                                                            int id) {
         switch (type) {
             case SPLINE_STRING:
                 final Easing easing = Easing.getInterpolator(interpolatorString);
@@ -1216,14 +1251,17 @@ public class Motion implements TypedValues {
      * The main driver of interpolation
      *
      * @param child
-     * @param global_position
+     * @param globalPosition
      * @param time
      * @param keyCache
      * @return do you need to keep animating
      */
-    public boolean interpolate(MotionWidget child, float global_position, long time, KeyCache keyCache) {
+    public boolean interpolate(MotionWidget child,
+                               float globalPosition,
+                               long time,
+                               KeyCache keyCache) {
         boolean timeAnimation = false;
-        float position = getAdjustedPosition(global_position, null);
+        float position = getAdjustedPosition(globalPosition, null);
         // This quantize the position into steps e.g. 4 steps = 0-0.25,0.25-0.50 etc
         if (mQuantizeMotionSteps != UNSET) {
             float pin = position;
@@ -1270,7 +1308,8 @@ public class Motion implements TypedValues {
             }
 
             if (!mNoMovement) {
-                mStartMotionPath.setView(position, child, mInterpolateVariables, mInterpolateData, mInterpolateVelocity, null);
+                mStartMotionPath.setView(position, child,
+                        mInterpolateVariables, mInterpolateData, mInterpolateVelocity, null);
             }
             if (mTransformPivotTarget != UNSET) {
                 if (mTransformPivotView == null) {
@@ -1278,9 +1317,12 @@ public class Motion implements TypedValues {
                     mTransformPivotView = layout.findViewById(mTransformPivotTarget);
                 }
                 if (mTransformPivotView != null) {
-                    float cy = (mTransformPivotView.getTop() + mTransformPivotView.getBottom()) / 2.0f;
-                    float cx = (mTransformPivotView.getLeft() + mTransformPivotView.getRight()) / 2.0f;
-                    if (child.getRight() - child.getLeft() > 0 && child.getBottom() - child.getTop() > 0) {
+                    float cy =
+                            (mTransformPivotView.getTop() + mTransformPivotView.getBottom()) / 2.0f;
+                    float cx =
+                            (mTransformPivotView.getLeft() + mTransformPivotView.getRight()) / 2.0f;
+                    if (child.getRight() - child.getLeft() > 0
+                            && child.getBottom() - child.getTop() > 0) {
                         float px = (cx - child.getLeft());
                         float py = (cy - child.getTop());
                         child.setPivotX(px);
@@ -1292,22 +1334,25 @@ public class Motion implements TypedValues {
             //       TODO add support for path rotate
             //            if (mAttributesMap != null) {
             //                for (SplineSet aSpline : mAttributesMap.values()) {
-            //                    if (aSpline instanceof ViewSpline.PathRotate && mInterpolateVelocity.length > 1)
-            //                        ((ViewSpline.PathRotate) aSpline).setPathRotate(child, position,
-            //                                mInterpolateVelocity[0], mInterpolateVelocity[1]);
+            //                    if (aSpline instanceof ViewSpline.PathRotate
+            //                          && mInterpolateVelocity.length > 1)
+            //                        ((ViewSpline.PathRotate) aSpline).setPathRotate(child,
+            //                        position, mInterpolateVelocity[0], mInterpolateVelocity[1]);
             //                }
             //
             //            }
             //            if (timePathRotate != null) {
-            //                timeAnimation |= timePathRotate.setPathRotate(child, keyCache, position, time,
-            //                        mInterpolateVelocity[0], mInterpolateVelocity[1]);
+            //                timeAnimation |= timePathRotate.setPathRotate(child, keyCache,
+            //                  position, time, mInterpolateVelocity[0], mInterpolateVelocity[1]);
             //            }
 
             for (int i = 1; i < mSpline.length; i++) {
                 CurveFit spline = mSpline[i];
                 spline.getPos(position, mValuesBuff);
                 //interpolated here
-                mStartMotionPath.customAttributes.get(mAttributeNames[i - 1]).setInterpolatedValue(child, mValuesBuff);
+                mStartMotionPath.customAttributes
+                        .get(mAttributeNames[i - 1])
+                        .setInterpolatedValue(child, mValuesBuff);
             }
             if (mStartPoint.mVisibilityMode == MotionWidget.VISIBILITY_MODE_NORMAL) {
                 if (position <= 0.0f) {
@@ -1327,10 +1372,14 @@ public class Motion implements TypedValues {
         } else {
             // do the interpolation
 
-            float float_l = (mStartMotionPath.x + (mEndMotionPath.x - mStartMotionPath.x) * position);
-            float float_t = (mStartMotionPath.y + (mEndMotionPath.y - mStartMotionPath.y) * position);
-            float float_width = (mStartMotionPath.width + (mEndMotionPath.width - mStartMotionPath.width) * position);
-            float float_height = (mStartMotionPath.height + (mEndMotionPath.height - mStartMotionPath.height) * position);
+            float float_l =
+                    (mStartMotionPath.x + (mEndMotionPath.x - mStartMotionPath.x) * position);
+            float float_t =
+                    (mStartMotionPath.y + (mEndMotionPath.y - mStartMotionPath.y) * position);
+            float float_width = (mStartMotionPath.width
+                    + (mEndMotionPath.width - mStartMotionPath.width) * position);
+            float float_height = (mStartMotionPath.height
+                    + (mEndMotionPath.height - mStartMotionPath.height) * position);
             int l = (int) (0.5f + float_l);
             int t = (int) (0.5f + float_t);
             int r = (int) (0.5f + float_l + float_width);
@@ -1341,8 +1390,10 @@ public class Motion implements TypedValues {
             if (FAVOR_FIXED_SIZE_VIEWS) {
                 l = (int) (mStartMotionPath.x + (mEndMotionPath.x - mStartMotionPath.x) * position);
                 t = (int) (mStartMotionPath.y + (mEndMotionPath.y - mStartMotionPath.y) * position);
-                width = (int) (mStartMotionPath.width + (mEndMotionPath.width - mStartMotionPath.width) * position);
-                height = (int) (mStartMotionPath.height + (mEndMotionPath.height - mStartMotionPath.height) * position);
+                width = (int) (mStartMotionPath.width
+                        + (mEndMotionPath.width - mStartMotionPath.width) * position);
+                height = (int) (mStartMotionPath.height
+                        + (mEndMotionPath.height - mStartMotionPath.height) * position);
                 r = l + width;
                 b = t + height;
             }
@@ -1390,11 +1441,13 @@ public class Motion implements TypedValues {
                 if (mInterpolateData.length > 0) {
                     mArcSpline.getPos(position, mInterpolateData);
                     mArcSpline.getSlope(position, mInterpolateVelocity);
-                    mStartMotionPath.setDpDt(locationX, locationY, mAnchorDpDt, mInterpolateVariables, mInterpolateVelocity, mInterpolateData);
+                    mStartMotionPath.setDpDt(locationX, locationY, mAnchorDpDt,
+                            mInterpolateVariables, mInterpolateVelocity, mInterpolateData);
                 }
                 return;
             }
-            mStartMotionPath.setDpDt(locationX, locationY, mAnchorDpDt, mInterpolateVariables, mInterpolateVelocity, mInterpolateData);
+            mStartMotionPath.setDpDt(locationX, locationY, mAnchorDpDt,
+                    mInterpolateVariables, mInterpolateVelocity, mInterpolateData);
             return;
         }
         // do the interpolation
@@ -1419,20 +1472,31 @@ public class Motion implements TypedValues {
      * @param locationY   the y location on the view (0 = top, 1 = bottom)
      * @param mAnchorDpDt returns the differential of the motion with respect to the position
      */
-    void getPostLayoutDvDp(float position, int width, int height, float locationX, float locationY, float[] mAnchorDpDt) {
+    void getPostLayoutDvDp(float position,
+                           int width,
+                           int height,
+                           float locationX,
+                           float locationY,
+                           float[] mAnchorDpDt) {
         if (DEBUG) {
-            Utils.log(TAG, " position= " + position + " location= " + locationX + " , " + locationY);
+            Utils.log(TAG, " position= " + position
+                    + " location= " + locationX + " , " + locationY);
         }
         position = getAdjustedPosition(position, mVelocity);
 
-        SplineSet trans_x = (mAttributesMap == null) ? null : mAttributesMap.get(MotionKey.TRANSLATION_X);
-        SplineSet trans_y = (mAttributesMap == null) ? null : mAttributesMap.get(MotionKey.TRANSLATION_Y);
-        SplineSet rotation = (mAttributesMap == null) ? null : mAttributesMap.get(MotionKey.ROTATION);
+        SplineSet trans_x =
+                (mAttributesMap == null) ? null : mAttributesMap.get(MotionKey.TRANSLATION_X);
+        SplineSet trans_y =
+                (mAttributesMap == null) ? null : mAttributesMap.get(MotionKey.TRANSLATION_Y);
+        SplineSet rotation =
+                (mAttributesMap == null) ? null : mAttributesMap.get(MotionKey.ROTATION);
         SplineSet scale_x = (mAttributesMap == null) ? null : mAttributesMap.get(MotionKey.SCALE_X);
         SplineSet scale_y = (mAttributesMap == null) ? null : mAttributesMap.get(MotionKey.SCALE_Y);
 
-        KeyCycleOscillator osc_x = (mCycleMap == null) ? null : mCycleMap.get(MotionKey.TRANSLATION_X);
-        KeyCycleOscillator osc_y = (mCycleMap == null) ? null : mCycleMap.get(MotionKey.TRANSLATION_Y);
+        KeyCycleOscillator osc_x =
+                (mCycleMap == null) ? null : mCycleMap.get(MotionKey.TRANSLATION_X);
+        KeyCycleOscillator osc_y =
+                (mCycleMap == null) ? null : mCycleMap.get(MotionKey.TRANSLATION_Y);
         KeyCycleOscillator osc_r = (mCycleMap == null) ? null : mCycleMap.get(MotionKey.ROTATION);
         KeyCycleOscillator osc_sx = (mCycleMap == null) ? null : mCycleMap.get(MotionKey.SCALE_X);
         KeyCycleOscillator osc_sy = (mCycleMap == null) ? null : mCycleMap.get(MotionKey.SCALE_Y);
@@ -1449,7 +1513,8 @@ public class Motion implements TypedValues {
             if (mInterpolateData.length > 0) {
                 mArcSpline.getPos(position, mInterpolateData);
                 mArcSpline.getSlope(position, mInterpolateVelocity);
-                mStartMotionPath.setDpDt(locationX, locationY, mAnchorDpDt, mInterpolateVariables, mInterpolateVelocity, mInterpolateData);
+                mStartMotionPath.setDpDt(locationX, locationY, mAnchorDpDt,
+                        mInterpolateVariables, mInterpolateVelocity, mInterpolateData);
             }
             vmat.applyTransform(locationX, locationY, width, height, mAnchorDpDt);
             return;
@@ -1462,7 +1527,8 @@ public class Motion implements TypedValues {
             for (int i = 0; i < mInterpolateVelocity.length; i++) {
                 mInterpolateVelocity[i] *= v;
             }
-            mStartMotionPath.setDpDt(locationX, locationY, mAnchorDpDt, mInterpolateVariables, mInterpolateVelocity, mInterpolateData);
+            mStartMotionPath.setDpDt(locationX, locationY, mAnchorDpDt,
+                    mInterpolateVariables, mInterpolateVelocity, mInterpolateData);
             vmat.applyTransform(locationX, locationY, width, height, mAnchorDpDt);
             return;
         }
@@ -1506,7 +1572,12 @@ public class Motion implements TypedValues {
         return mView.getName();
     }
 
-    void positionKeyframe(MotionWidget view, MotionKeyPosition key, float x, float y, String[] attribute, float[] value) {
+    void positionKeyframe(MotionWidget view,
+                          MotionKeyPosition key,
+                          float x,
+                          float y,
+                          String[] attribute,
+                          float[] value) {
         FloatRect start = new FloatRect();
         start.left = mStartMotionPath.x;
         start.top = mStartMotionPath.y;
@@ -1523,7 +1594,8 @@ public class Motion implements TypedValues {
     /**
      * Get the keyFrames for the view controlled by this MotionController
      *
-     * @param type is position(0-100) + 1000*mType(1=Attributes, 2=Position, 3=TimeCycle 4=Cycle 5=Trigger
+     * @param type is position(0-100) + 1000
+     *             * mType(1=Attributes, 2=Position, 3=TimeCycle 4=Cycle 5=Trigger
      * @param pos  the x&y position of the keyFrame along the path
      * @return Number of keyFrames found
      */

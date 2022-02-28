@@ -57,26 +57,26 @@ public class MotionKeyPosition extends MotionKey {
         mCalculatedPositionY = (layoutHeight - viewHeight) * mPercentX + viewHeight / 2;
     }
 
-    private void calcPathPosition(float start_x, float start_y,
-                                  float end_x, float end_y) {
-        float pathVectorX = end_x - start_x;
-        float pathVectorY = end_y - start_y;
+    private void calcPathPosition(float startX, float startY,
+                                  float endX, float endY) {
+        float pathVectorX = endX - startX;
+        float pathVectorY = endY - startY;
         float perpendicularX = -pathVectorY;
         float perpendicularY = pathVectorX;
-        mCalculatedPositionX = start_x + pathVectorX * mPercentX + perpendicularX * mPercentY;
-        mCalculatedPositionY = start_y + pathVectorY * mPercentX + perpendicularY * mPercentY;
+        mCalculatedPositionX = startX + pathVectorX * mPercentX + perpendicularX * mPercentY;
+        mCalculatedPositionY = startY + pathVectorY * mPercentX + perpendicularY * mPercentY;
     }
 
-    private void calcCartesianPosition(float start_x, float start_y,
-                                       float end_x, float end_y) {
-        float pathVectorX = end_x - start_x;
-        float pathVectorY = end_y - start_y;
+    private void calcCartesianPosition(float startX, float startY,
+                                       float endX, float endY) {
+        float pathVectorX = endX - startX;
+        float pathVectorY = endY - startY;
         float dxdx = (Float.isNaN(mPercentX)) ? 0 : mPercentX;
         float dydx = (Float.isNaN(mAltPercentY)) ? 0 : mAltPercentY;
         float dydy = (Float.isNaN(mPercentY)) ? 0 : mPercentY;
         float dxdy = (Float.isNaN(mAltPercentX)) ? 0 : mAltPercentX;
-        mCalculatedPositionX = (int) (start_x + pathVectorX * dxdx + pathVectorY * dxdy);
-        mCalculatedPositionY = (int) (start_y + pathVectorX * dydx + pathVectorY * dydy);
+        mCalculatedPositionX = (int) (startX + pathVectorX * dxdx + pathVectorY * dxdy);
+        mCalculatedPositionY = (int) (startY + pathVectorX * dydx + pathVectorY * dydy);
     }
 
     float getPositionX() {
@@ -87,7 +87,13 @@ public class MotionKeyPosition extends MotionKey {
         return mCalculatedPositionY;
     }
 
-    public void positionAttributes(MotionWidget view, FloatRect start, FloatRect end, float x, float y, String[] attribute, float[] value) {
+    public void positionAttributes(MotionWidget view,
+                                   FloatRect start,
+                                   FloatRect end,
+                                   float x,
+                                   float y,
+                                   String[] attribute,
+                                   float[] value) {
         switch (mPositionType) {
 
             case TYPE_PATH:
@@ -104,7 +110,12 @@ public class MotionKeyPosition extends MotionKey {
         }
     }
 
-    void positionPathAttributes(FloatRect start, FloatRect end, float x, float y, String[] attribute, float[] value) {
+    void positionPathAttributes(FloatRect start,
+                                FloatRect end,
+                                float x,
+                                float y,
+                                String[] attribute,
+                                float[] value) {
         float startCenterX = start.centerX();
         float startCenterY = start.centerY();
         float endCenterX = end.centerX();
@@ -136,7 +147,13 @@ public class MotionKeyPosition extends MotionKey {
         }
     }
 
-    void positionScreenAttributes(MotionWidget view, FloatRect start, FloatRect end, float x, float y, String[] attribute, float[] value) {
+    void positionScreenAttributes(MotionWidget view,
+                                  FloatRect start,
+                                  FloatRect end,
+                                  float x,
+                                  float y,
+                                  String[] attribute,
+                                  float[] value) {
         float startCenterX = start.centerX();
         float startCenterY = start.centerY();
         float endCenterX = end.centerX();
@@ -163,7 +180,12 @@ public class MotionKeyPosition extends MotionKey {
         }
     }
 
-    void positionCartAttributes(FloatRect start, FloatRect end, float x, float y, String[] attribute, float[] value) {
+    void positionCartAttributes(FloatRect start,
+                                FloatRect end,
+                                float x,
+                                float y,
+                                String[] attribute,
+                                float[] value) {
         float startCenterX = start.centerX();
         float startCenterY = start.centerY();
         float endCenterX = end.centerX();
@@ -186,8 +208,14 @@ public class MotionKeyPosition extends MotionKey {
         }
     }
 
-    public boolean intersects(int layoutWidth, int layoutHeight, FloatRect start, FloatRect end, float x, float y) {
-        calcPosition(layoutWidth, layoutHeight, start.centerX(), start.centerY(), end.centerX(), end.centerY());
+    public boolean intersects(int layoutWidth,
+                              int layoutHeight,
+                              FloatRect start,
+                              FloatRect end,
+                              float x,
+                              float y) {
+        calcPosition(layoutWidth, layoutHeight, start.centerX(),
+                start.centerY(), end.centerX(), end.centerY());
         if ((Math.abs(x - mCalculatedPositionX) < SELECTION_SLOPE)
                 && (Math.abs(y - mCalculatedPositionY) < SELECTION_SLOPE)) {
             return true;
@@ -216,18 +244,23 @@ public class MotionKeyPosition extends MotionKey {
         return new MotionKeyPosition().copy(this);
     }
 
-    void calcPosition(int layoutWidth, int layoutHeight, float start_x, float start_y, float end_x, float end_y) {
+    void calcPosition(int layoutWidth,
+                      int layoutHeight,
+                      float startX,
+                      float startY,
+                      float endX,
+                      float endY) {
         switch (mPositionType) {
             case TYPE_SCREEN:
                 calcScreenPosition(layoutWidth, layoutHeight);
                 return;
 
             case TYPE_PATH:
-                calcPathPosition(start_x, start_y, end_x, end_y);
+                calcPathPosition(startX, startY, endX, endY);
                 return;
             case TYPE_CARTESIAN:
             default:
-                calcCartesianPosition(start_x, start_y, end_x, end_y);
+                calcCartesianPosition(startX, startY, endX, endY);
                 return;
         }
     }

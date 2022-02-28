@@ -23,20 +23,20 @@ import java.util.Comparator;
  * Implements a row containing goals taking in account priorities.
  */
 public class PriorityGoalRow extends ArrayRow {
-    private static final float epsilon = 0.0001f;
+    private static final float EPSILON = 0.0001f;
     private static final boolean DEBUG = false;
 
-    private int TABLE_SIZE = 128;
-    private SolverVariable[] arrayGoals = new SolverVariable[TABLE_SIZE];
-    private SolverVariable[] sortArray = new SolverVariable[TABLE_SIZE];
-    private int numGoals = 0;
+    private int mTableSize = 128;
+    private SolverVariable[] mArrayGoals = new SolverVariable[mTableSize];
+    private SolverVariable[] mSortArray = new SolverVariable[mTableSize];
+    private int mNumGoals = 0;
     GoalVariableAccessor accessor = new GoalVariableAccessor(this);
 
     class GoalVariableAccessor {
         SolverVariable variable;
         PriorityGoalRow row;
 
-        public GoalVariableAccessor(PriorityGoalRow row) {
+        GoalVariableAccessor(PriorityGoalRow row) {
             this.row = row;
         }
 
@@ -50,7 +50,7 @@ public class PriorityGoalRow extends ArrayRow {
                 for (int i = 0; i < SolverVariable.MAX_STRENGTH; i++) {
                     variable.goalStrengthVector[i] += other.goalStrengthVector[i] * value;
                     float v = variable.goalStrengthVector[i];
-                    if (Math.abs(v) < epsilon) {
+                    if (Math.abs(v) < EPSILON) {
                         variable.goalStrengthVector[i] = 0;
                     } else {
                         empty = false;
@@ -64,7 +64,7 @@ public class PriorityGoalRow extends ArrayRow {
                     float strength = other.goalStrengthVector[i];
                     if (strength != 0) {
                         float v = value * strength;
-                        if (Math.abs(v) < epsilon) {
+                        if (Math.abs(v) < EPSILON) {
                             v = 0;
                         }
                         variable.goalStrengthVector[i] = v;
@@ -81,7 +81,7 @@ public class PriorityGoalRow extends ArrayRow {
             for (int i = 0; i < SolverVariable.MAX_STRENGTH; i++) {
                 variable.goalStrengthVector[i] += other.goalStrengthVector[i];
                 float value = variable.goalStrengthVector[i];
-                if (Math.abs(value) < epsilon) {
+                if (Math.abs(value) < EPSILON) {
                     variable.goalStrengthVector[i] = 0;
                 }
             }
@@ -101,7 +101,7 @@ public class PriorityGoalRow extends ArrayRow {
         }
 
         public final boolean isSmallerThan(SolverVariable other) {
-            for (int i = SolverVariable.MAX_STRENGTH - 1; i >= 0 ; i--) {
+            for (int i = SolverVariable.MAX_STRENGTH - 1; i >= 0; i--) {
                 float comparedValue = other.goalStrengthVector[i];
                 float value = variable.goalStrengthVector[i];
                 if (value == comparedValue) {
@@ -144,7 +144,7 @@ public class PriorityGoalRow extends ArrayRow {
 
     @Override
     public void clear() {
-        numGoals = 0;
+        mNumGoals = 0;
         constantValue = 0;
     }
 
@@ -157,16 +157,16 @@ public class PriorityGoalRow extends ArrayRow {
 
     @Override
     public boolean isEmpty() {
-        return numGoals == 0;
+        return mNumGoals == 0;
     }
 
-    final static int NOT_FOUND = -1;
+    static final int NOT_FOUND = -1;
 
     @Override
     public SolverVariable getPivotCandidate(LinearSystem system, boolean[] avoid) {
         int pivot = NOT_FOUND;
-        for (int i = 0; i < numGoals; i++) {
-            SolverVariable variable = arrayGoals[i];
+        for (int i = 0; i < mNumGoals; i++) {
+            SolverVariable variable = mArrayGoals[i];
             if (avoid[variable.id]) {
                 continue;
             }
@@ -175,14 +175,14 @@ public class PriorityGoalRow extends ArrayRow {
                 if (accessor.isNegative())  {
                     pivot = i;
                 }
-            } else if (accessor.isSmallerThan(arrayGoals[pivot])) {
+            } else if (accessor.isSmallerThan(mArrayGoals[pivot])) {
                 pivot = i;
             }
         }
         if (pivot == NOT_FOUND) {
             return null;
         }
-        return arrayGoals[pivot];
+        return mArrayGoals[pivot];
     }
 
     @Override
@@ -194,25 +194,25 @@ public class PriorityGoalRow extends ArrayRow {
     }
 
     private final void addToGoal(SolverVariable variable) {
-        if (numGoals + 1> arrayGoals.length) {
-            arrayGoals = Arrays.copyOf(arrayGoals, arrayGoals.length * 2);
-            sortArray = Arrays.copyOf(arrayGoals, arrayGoals.length * 2);
+        if (mNumGoals + 1 > mArrayGoals.length) {
+            mArrayGoals = Arrays.copyOf(mArrayGoals, mArrayGoals.length * 2);
+            mSortArray = Arrays.copyOf(mArrayGoals, mArrayGoals.length * 2);
         }
-        arrayGoals[numGoals] = variable;
-        numGoals++;
+        mArrayGoals[mNumGoals] = variable;
+        mNumGoals++;
 
-        if (numGoals > 1 && arrayGoals[numGoals - 1].id > variable.id) {
-            for (int i = 0; i < numGoals; i++) {
-                sortArray[i] = arrayGoals[i];
+        if (mNumGoals > 1 && mArrayGoals[mNumGoals - 1].id > variable.id) {
+            for (int i = 0; i < mNumGoals; i++) {
+                mSortArray[i] = mArrayGoals[i];
             }
-            Arrays.sort(sortArray, 0, numGoals, new Comparator<SolverVariable>() {
+            Arrays.sort(mSortArray, 0, mNumGoals, new Comparator<SolverVariable>() {
                 @Override
                 public int compare(SolverVariable variable1, SolverVariable variable2) {
                     return variable1.id - variable2.id;
                 }
             });
-            for (int i = 0; i < numGoals; i++) {
-                arrayGoals[i] = sortArray[i];
+            for (int i = 0; i < mNumGoals; i++) {
+                mArrayGoals[i] = mSortArray[i];
             }
         }
 
@@ -221,12 +221,12 @@ public class PriorityGoalRow extends ArrayRow {
     }
 
     private final void removeGoal(SolverVariable variable) {
-        for (int i = 0; i < numGoals; i++) {
-            if (arrayGoals[i] == variable) {
-                for (int j = i; j < numGoals - 1; j++) {
-                    arrayGoals[j] = arrayGoals[j + 1];
+        for (int i = 0; i < mNumGoals; i++) {
+            if (mArrayGoals[i] == variable) {
+                for (int j = i; j < mNumGoals - 1; j++) {
+                    mArrayGoals[j] = mArrayGoals[j + 1];
                 }
-                numGoals--;
+                mNumGoals--;
                 variable.inGoal = false;
                 return;
             }
@@ -234,7 +234,9 @@ public class PriorityGoalRow extends ArrayRow {
     }
 
     @Override
-    public void updateFromRow(LinearSystem system, ArrayRow definition, boolean removeFromDefinition) {
+    public void updateFromRow(LinearSystem system,
+                              ArrayRow definition,
+                              boolean removeFromDefinition) {
         SolverVariable goalVariable = definition.variable;
         if (goalVariable == null) {
             return;
@@ -258,8 +260,8 @@ public class PriorityGoalRow extends ArrayRow {
     public String toString() {
         String result = "";
         result += " goal -> (" + constantValue + ") : ";
-        for (int i = 0; i < numGoals; i++) {
-            SolverVariable v = arrayGoals[i];
+        for (int i = 0; i < mNumGoals; i++) {
+            SolverVariable v = mArrayGoals[i];
             accessor.init(v);
             result += accessor + " ";
         }

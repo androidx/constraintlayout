@@ -115,7 +115,7 @@ public class MotionKeyAttributes extends MotionKey {
                 String cKey = s.substring(AttributesType.S_CUSTOM.length() + 1);
                 CustomVariable cValue = mCustom.get(cKey);
                 if (cValue != null) {
-                    ((SplineSet.CustomSpline)splineSet).setPoint(mFramePosition, cValue);
+                    ((SplineSet.CustomSpline) splineSet).setPoint(mFramePosition, cValue);
                 }
                 continue;
             }
@@ -191,7 +191,7 @@ public class MotionKeyAttributes extends MotionKey {
                     }
                     break;
                 default:
-                    System.err.println("not supported by KeyAttributes "+s);
+                    System.err.println("not supported by KeyAttributes " + s);
             }
         }
     }
@@ -352,11 +352,11 @@ public class MotionKeyAttributes extends MotionKey {
         HashSet<String> nameSet = new HashSet<>();
         getAttributeNames(nameSet);
 
-        System.out.println(" ------------- " + mFramePosition +" -------------");
+        System.out.println(" ------------- " + mFramePosition + " -------------");
         String[]names = nameSet.toArray(new String[0]);
         for (int i = 0; i < names.length; i++) {
             int id = AttributesType.getId(names[i]);
-            System.out.println(names[i]+ ":"+ getFloatValue(id));
+            System.out.println(names[i] + ":" + getFloatValue(id));
         }
     }
 
