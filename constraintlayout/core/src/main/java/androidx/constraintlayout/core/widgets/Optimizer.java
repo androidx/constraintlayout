@@ -15,11 +15,9 @@
  */
 package androidx.constraintlayout.core.widgets;
 
-import androidx.constraintlayout.core.LinearSystem;
-
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.*;
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.FIXED;
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT;
+
+import androidx.constraintlayout.core.LinearSystem;
 
 /**
  * Implements direct resolution without using the solver
@@ -61,11 +59,15 @@ public class Optimizer {
      * @param system
      * @param widget
      */
-    static void checkMatchParent(ConstraintWidgetContainer container, LinearSystem system, ConstraintWidget widget) {
+    static void checkMatchParent(ConstraintWidgetContainer container,
+                                 LinearSystem system,
+                                 ConstraintWidget widget) {
         widget.mHorizontalResolution = UNKNOWN;
         widget.mVerticalResolution = UNKNOWN;
-        if (container.mListDimensionBehaviors[DIMENSION_HORIZONTAL] != ConstraintWidget.DimensionBehaviour.WRAP_CONTENT
-                && widget.mListDimensionBehaviors[DIMENSION_HORIZONTAL] == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
+        if (container.mListDimensionBehaviors[DIMENSION_HORIZONTAL]
+                    != ConstraintWidget.DimensionBehaviour.WRAP_CONTENT
+                && widget.mListDimensionBehaviors[DIMENSION_HORIZONTAL]
+                    == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
 
             int left = widget.mLeft.mMargin;
             int right = container.getWidth() - widget.mRight.mMargin;
@@ -77,8 +79,10 @@ public class Optimizer {
             widget.mHorizontalResolution = ConstraintWidget.DIRECT;
             widget.setHorizontalDimension(left, right);
         }
-        if (container.mListDimensionBehaviors[DIMENSION_VERTICAL] != ConstraintWidget.DimensionBehaviour.WRAP_CONTENT
-                && widget.mListDimensionBehaviors[DIMENSION_VERTICAL] == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
+        if (container.mListDimensionBehaviors[DIMENSION_VERTICAL]
+                    != ConstraintWidget.DimensionBehaviour.WRAP_CONTENT
+                && widget.mListDimensionBehaviors[DIMENSION_VERTICAL]
+                    == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
 
             int top = widget.mTop.mMargin;
             int bottom = container.getHeight() - widget.mBottom.mMargin;
@@ -89,14 +93,15 @@ public class Optimizer {
             system.addEquality(widget.mBottom.mSolverVariable, bottom);
             if (widget.mBaselineDistance > 0 || widget.getVisibility() == ConstraintWidget.GONE) {
                 widget.mBaseline.mSolverVariable = system.createObjectVariable(widget.mBaseline);
-                system.addEquality(widget.mBaseline.mSolverVariable, top + widget.mBaselineDistance);
+                system.addEquality(widget.mBaseline.mSolverVariable,
+                        top + widget.mBaselineDistance);
             }
             widget.mVerticalResolution = ConstraintWidget.DIRECT;
             widget.setVerticalDimension(top, bottom);
         }
     }
 
-    public final static boolean enabled(int optimizationLevel, int optimization) {
+    public static final boolean enabled(int optimizationLevel, int optimization) {
         return (optimizationLevel & optimization) == optimization;
     }
 }

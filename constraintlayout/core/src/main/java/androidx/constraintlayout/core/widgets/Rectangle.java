@@ -47,6 +47,10 @@ public class Rectangle {
                 && y >= this.y && y < this.y + this.height;
     }
 
-    public int getCenterX() { return (x + width) / 2; }
-    public int getCenterY() { return (y + height) / 2; }
+    public int getCenterX() {
+        return (x + width) / 2;
+    }
+    public int getCenterY() {
+        return (y + height) / 2;
+    }
 }

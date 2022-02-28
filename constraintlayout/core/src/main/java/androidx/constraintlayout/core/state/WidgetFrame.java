@@ -30,7 +30,7 @@ import java.util.Set;
  * Utility class to encapsulate layout of a widget
  */
 public class WidgetFrame {
-    private final static boolean OLD_SYSTEM = true;
+    private static final boolean OLD_SYSTEM = true;
     public ConstraintWidget widget = null;
     public int left = 0;
     public int top = 0;
@@ -59,7 +59,7 @@ public class WidgetFrame {
 
     public int visibility = ConstraintWidget.VISIBLE;
 
-    final public HashMap<String, CustomVariable> mCustom = new HashMap<>();
+    public final HashMap<String, CustomVariable> mCustom = new HashMap<>();
 
     public String name = null;
 
@@ -121,7 +121,13 @@ public class WidgetFrame {
                 && Float.isNaN(alpha);
     }
 
-    public static void interpolate(int parentWidth, int parentHeight, WidgetFrame frame, WidgetFrame start, WidgetFrame end, Transition transition, float progress) {
+    public static void interpolate(int parentWidth,
+                                   int parentHeight,
+                                   WidgetFrame frame,
+                                   WidgetFrame start,
+                                   WidgetFrame end,
+                                   Transition transition,
+                                   float progress) {
         int frameNumber = (int) (progress * 100);
         int startX = start.left;
         int startY = start.top;
@@ -177,8 +183,10 @@ public class WidgetFrame {
         }
 
         if (frame.widget != null && transition.hasPositionKeyframes()) {
-            Transition.KeyPosition firstPosition = transition.findPreviousPosition(frame.widget.stringId, frameNumber);
-            Transition.KeyPosition lastPosition = transition.findNextPosition(frame.widget.stringId, frameNumber);
+            Transition.KeyPosition firstPosition =
+                    transition.findPreviousPosition(frame.widget.stringId, frameNumber);
+            Transition.KeyPosition lastPosition =
+                    transition.findNextPosition(frame.widget.stringId, frameNumber);
 
             if (firstPosition == lastPosition) {
                 lastPosition = null;
@@ -197,7 +205,8 @@ public class WidgetFrame {
                 interpolateEndFrame = lastPosition.frame;
             }
 
-            progressPosition = (progress * 100f - interpolateStartFrame) / (float) (interpolateEndFrame - interpolateStartFrame);
+            progressPosition = (progress * 100f - interpolateStartFrame)
+                    / (float) (interpolateEndFrame - interpolateStartFrame);
         }
 
         frame.widget = start.widget;
@@ -234,14 +243,15 @@ public class WidgetFrame {
                 CustomVariable interpolated = new CustomVariable(startVariable);
                 frame.mCustom.put(key, interpolated);
                 if (startVariable.numberOfInterpolatedValues() == 1) {
-                    interpolated.setValue(interpolate(startVariable.getValueToInterpolate(), endVariable.getValueToInterpolate(), 0f, progress));
+                    interpolated.setValue(interpolate(startVariable.getValueToInterpolate(),
+                            endVariable.getValueToInterpolate(), 0f, progress));
                 } else {
-                    int N = startVariable.numberOfInterpolatedValues();
-                    float[] startValues = new float[N];
-                    float[] endValues = new float[N];
+                    int n = startVariable.numberOfInterpolatedValues();
+                    float[] startValues = new float[n];
+                    float[] endValues = new float[n];
                     startVariable.getValuesToInterpolate(startValues);
                     endVariable.getValuesToInterpolate(endValues);
-                    for (int i = 0; i < N; i++) {
+                    for (int i = 0; i < n; i++) {
                         startValues[i] = interpolate(startValues[i], endValues[i], 0f, progress);
                         interpolated.setValue(startValues);
                     }

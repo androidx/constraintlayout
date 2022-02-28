@@ -52,7 +52,7 @@ public class HelperWidget extends ConstraintWidget implements Helper {
     }
 
     @Override
-    public void copy(ConstraintWidget src, HashMap<ConstraintWidget,ConstraintWidget> map) {
+    public void copy(ConstraintWidget src, HashMap<ConstraintWidget, ConstraintWidget> map) {
         super.copy(src, map);
         HelperWidget srcHelper = (HelperWidget) src;
         mWidgetsCount = 0;
@@ -70,7 +70,9 @@ public class HelperWidget extends ConstraintWidget implements Helper {
         Arrays.fill(mWidgets, null);
     }
 
-    public void addDependents(ArrayList<WidgetGroup> dependencyLists, int orientation, WidgetGroup group) {
+    public void addDependents(ArrayList<WidgetGroup> dependencyLists,
+                              int orientation,
+                              WidgetGroup group) {
         for (int i = 0; i < mWidgetsCount; i++) {
             ConstraintWidget widget = mWidgets[i];
             group.add(widget);

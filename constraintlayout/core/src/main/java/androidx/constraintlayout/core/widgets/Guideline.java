@@ -42,7 +42,7 @@ public class Guideline extends ConstraintWidget {
     private ConstraintAnchor mAnchor = mTop;
     private int mOrientation = HORIZONTAL;
     private int mMinimumPosition = 0;
-    private boolean resolved;
+    private boolean mResolved;
 
     public Guideline() {
         mAnchors.clear();
@@ -54,7 +54,7 @@ public class Guideline extends ConstraintWidget {
     }
 
     @Override
-    public void copy(ConstraintWidget src, HashMap<ConstraintWidget,ConstraintWidget> map) {
+    public void copy(ConstraintWidget src, HashMap<ConstraintWidget, ConstraintWidget> map) {
         super.copy(src, map);
         Guideline srcGuideline = (Guideline) src;
         mRelativePercent = srcGuideline.mRelativePercent;
@@ -131,14 +131,14 @@ public class Guideline extends ConstraintWidget {
                     return mAnchor;
                 }
             }
-            break;
+                break;
             case TOP:
             case BOTTOM: {
                 if (mOrientation == HORIZONTAL) {
                     return mAnchor;
                 }
             }
-            break;
+                break;
             case BASELINE:
             case CENTER:
             case CENTER_X:
@@ -191,18 +191,19 @@ public class Guideline extends ConstraintWidget {
 
     public void setFinalValue(int position) {
         if (LinearSystem.FULL_DEBUG) {
-            System.out.println("*** SET FINAL GUIDELINE VALUE " + position + " FOR " + getDebugName());
+            System.out.println("*** SET FINAL GUIDELINE VALUE "
+                    + position + " FOR " + getDebugName());
         }
         mAnchor.setFinalValue(position);
-        resolved = true;
+        mResolved = true;
     }
 
     public boolean isResolvedHorizontally() {
-        return resolved;
+        return mResolved;
     }
 
     public boolean isResolvedVertically() {
-        return resolved;
+        return mResolved;
     }
 
 
@@ -220,30 +221,35 @@ public class Guideline extends ConstraintWidget {
         }
         ConstraintAnchor begin = parent.getAnchor(ConstraintAnchor.Type.LEFT);
         ConstraintAnchor end = parent.getAnchor(ConstraintAnchor.Type.RIGHT);
-        boolean parentWrapContent = mParent != null ? mParent.mListDimensionBehaviors[DIMENSION_HORIZONTAL] == WRAP_CONTENT : false;
+        boolean parentWrapContent = mParent != null
+                ? mParent.mListDimensionBehaviors[DIMENSION_HORIZONTAL] == WRAP_CONTENT : false;
         if (mOrientation == HORIZONTAL) {
             begin = parent.getAnchor(ConstraintAnchor.Type.TOP);
             end = parent.getAnchor(ConstraintAnchor.Type.BOTTOM);
-            parentWrapContent = mParent != null ? mParent.mListDimensionBehaviors[DIMENSION_VERTICAL] == WRAP_CONTENT : false;
+            parentWrapContent = mParent != null
+                    ? mParent.mListDimensionBehaviors[DIMENSION_VERTICAL] == WRAP_CONTENT : false;
         }
-        if (resolved && mAnchor.hasFinalValue()) {
+        if (mResolved && mAnchor.hasFinalValue()) {
             SolverVariable guide = system.createObjectVariable(mAnchor);
             if (LinearSystem.FULL_DEBUG) {
-                System.out.println("*** SET FINAL POSITION FOR GUIDELINE " + getDebugName() + " TO " + mAnchor.getFinalValue());
+                System.out.println("*** SET FINAL POSITION FOR GUIDELINE "
+                        + getDebugName() + " TO " + mAnchor.getFinalValue());
             }
             system.addEquality(guide, mAnchor.getFinalValue());
             if (mRelativeBegin != -1) {
                 if (parentWrapContent) {
-                    system.addGreaterThan(system.createObjectVariable(end), guide, 0, SolverVariable.STRENGTH_EQUALITY);
+                    system.addGreaterThan(system.createObjectVariable(end), guide,
+                            0, SolverVariable.STRENGTH_EQUALITY);
                 }
             } else if (mRelativeEnd != -1) {
                 if (parentWrapContent) {
                     SolverVariable parentRight = system.createObjectVariable(end);
-                    system.addGreaterThan(guide, system.createObjectVariable(begin), 0, SolverVariable.STRENGTH_EQUALITY);
+                    system.addGreaterThan(guide, system.createObjectVariable(begin),
+                            0, SolverVariable.STRENGTH_EQUALITY);
                     system.addGreaterThan(parentRight, guide, 0, SolverVariable.STRENGTH_EQUALITY);
                 }
             }
-            resolved = false;
+            mResolved = false;
             return;
         }
         if (mRelativeBegin != -1) {
@@ -251,14 +257,16 @@ public class Guideline extends ConstraintWidget {
             SolverVariable parentLeft = system.createObjectVariable(begin);
             system.addEquality(guide, parentLeft, mRelativeBegin, SolverVariable.STRENGTH_FIXED);
             if (parentWrapContent) {
-                system.addGreaterThan(system.createObjectVariable(end), guide, 0, SolverVariable.STRENGTH_EQUALITY);
+                system.addGreaterThan(system.createObjectVariable(end),
+                        guide, 0, SolverVariable.STRENGTH_EQUALITY);
             }
         } else if (mRelativeEnd != -1) {
             SolverVariable guide = system.createObjectVariable(mAnchor);
             SolverVariable parentRight = system.createObjectVariable(end);
             system.addEquality(guide, parentRight, -mRelativeEnd, SolverVariable.STRENGTH_FIXED);
             if (parentWrapContent) {
-                system.addGreaterThan(guide, system.createObjectVariable(begin), 0, SolverVariable.STRENGTH_EQUALITY);
+                system.addGreaterThan(guide, system.createObjectVariable(begin),
+                        0, SolverVariable.STRENGTH_EQUALITY);
                 system.addGreaterThan(parentRight, guide, 0, SolverVariable.STRENGTH_EQUALITY);
             }
         } else if (mRelativePercent != -1) {

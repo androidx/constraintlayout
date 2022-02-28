@@ -16,13 +16,13 @@
 
 package androidx.constraintlayout.core.widgets;
 
-import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour;
-
-import java.util.ArrayList;
-
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_PERCENT;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_RATIO;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_SPREAD;
+
+import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour;
+
+import java.util.ArrayList;
 
 /**
  * Class to represent a chain by its main elements.
@@ -73,9 +73,11 @@ public class ChainHead {
      * @param orientation current orientation, HORIZONTAL or VERTICAL
      * @return
      */
-    static private boolean isMatchConstraintEqualityCandidate(ConstraintWidget widget, int orientation) {
+    private static boolean isMatchConstraintEqualityCandidate(ConstraintWidget widget,
+                                                              int orientation) {
         return widget.getVisibility() != ConstraintWidget.GONE
-                && widget.mListDimensionBehaviors[orientation] == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+                && widget.mListDimensionBehaviors[orientation]
+                    == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
                 && (widget.mResolvedMatchConstraintDefault[orientation] == MATCH_CONSTRAINT_SPREAD
                 || widget.mResolvedMatchConstraintDefault[orientation] == MATCH_CONSTRAINT_RATIO);
     }
@@ -95,7 +97,8 @@ public class ChainHead {
             widget.mListNextMatchConstraintsWidget[mOrientation] = null;
             if (widget.getVisibility() != ConstraintWidget.GONE) {
                 mVisibleWidgets++;
-                if (widget.getDimensionBehaviour(mOrientation) != DimensionBehaviour.MATCH_CONSTRAINT) {
+                if (widget.getDimensionBehaviour(mOrientation)
+                        != DimensionBehaviour.MATCH_CONSTRAINT) {
                     mTotalSize += widget.getLength(mOrientation);
                 }
                 mTotalSize += widget.mListAnchors[offset].getMargin();
@@ -109,11 +112,17 @@ public class ChainHead {
                 mLastVisibleWidget = widget;
 
                 // Match constraint linked list.
-                if (widget.mListDimensionBehaviors[mOrientation] == DimensionBehaviour.MATCH_CONSTRAINT) {
-                    if (widget.mResolvedMatchConstraintDefault[mOrientation] == MATCH_CONSTRAINT_SPREAD
-                            || widget.mResolvedMatchConstraintDefault[mOrientation] == MATCH_CONSTRAINT_RATIO
-                            || widget.mResolvedMatchConstraintDefault[mOrientation] == MATCH_CONSTRAINT_PERCENT) {
-                        mWidgetsMatchCount++; // Note: Might cause an issue if we support MATCH_CONSTRAINT_RATIO_RESOLVED in chain optimization. (we currently don't)
+                if (widget.mListDimensionBehaviors[mOrientation]
+                        == DimensionBehaviour.MATCH_CONSTRAINT) {
+                    if (widget.mResolvedMatchConstraintDefault[mOrientation]
+                                == MATCH_CONSTRAINT_SPREAD
+                            || widget.mResolvedMatchConstraintDefault[mOrientation]
+                                == MATCH_CONSTRAINT_RATIO
+                            || widget.mResolvedMatchConstraintDefault[mOrientation]
+                                == MATCH_CONSTRAINT_PERCENT) {
+                        mWidgetsMatchCount++;
+                        // Note: Might cause an issue if we support MATCH_CONSTRAINT_RATIO_RESOLVED
+                        // in chain optimization. (we currently don't)
                         float weight = widget.mWeight[mOrientation];
                         if (weight > 0) {
                             mTotalWeight += widget.mWeight[mOrientation];
@@ -135,20 +144,25 @@ public class ChainHead {
                             mFirstMatchConstraintWidget = widget;
                         }
                         if (mLastMatchConstraintWidget != null) {
-                            mLastMatchConstraintWidget.mListNextMatchConstraintsWidget[mOrientation] = widget;
+                            mLastMatchConstraintWidget
+                                    .mListNextMatchConstraintsWidget[mOrientation] = widget;
                         }
                         mLastMatchConstraintWidget = widget;
                     }
                     if (mOrientation == ConstraintWidget.HORIZONTAL) {
-                        if (widget.mMatchConstraintDefaultWidth != ConstraintWidget.MATCH_CONSTRAINT_SPREAD) {
+                        if (widget.mMatchConstraintDefaultWidth
+                                != ConstraintWidget.MATCH_CONSTRAINT_SPREAD) {
                             mOptimizable = false;
-                        } else if (widget.mMatchConstraintMinWidth != 0 || widget.mMatchConstraintMaxWidth != 0) {
+                        } else if (widget.mMatchConstraintMinWidth != 0
+                                || widget.mMatchConstraintMaxWidth != 0) {
                             mOptimizable = false;
                         }
                     } else {
-                        if (widget.mMatchConstraintDefaultHeight != ConstraintWidget.MATCH_CONSTRAINT_SPREAD) {
+                        if (widget.mMatchConstraintDefaultHeight
+                                != ConstraintWidget.MATCH_CONSTRAINT_SPREAD) {
                             mOptimizable = false;
-                        } else if (widget.mMatchConstraintMinHeight != 0 || widget.mMatchConstraintMaxHeight != 0) {
+                        } else if (widget.mMatchConstraintMinHeight != 0
+                                || widget.mMatchConstraintMaxHeight != 0) {
                             mOptimizable = false;
                         }
                     }
