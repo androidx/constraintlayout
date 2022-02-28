@@ -161,8 +161,6 @@ internal class OverrideValue(private var value: Float) : GeneratedValue {
     }
 }
 
-
-
 internal fun parseJSON(content: String, transition: Transition, state: Int) {
     try {
         val json = CLParser.parse(content)
@@ -312,7 +310,7 @@ internal fun parseTransitions(scene: MotionScene, json: Any) {
     (0 until elements.size).forEach { i ->
         val elementName = elements[i]
         val element = json.getObject(elementName)
-        scene.setTransitionContent(elementName, element.toJSON())
+        scene.setTransitionContentObject(elementName, element)
     }
 }
 

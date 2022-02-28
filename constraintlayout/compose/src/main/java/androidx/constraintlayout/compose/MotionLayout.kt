@@ -18,9 +18,7 @@ package androidx.constraintlayout.compose
 
 import android.annotation.SuppressLint
 import android.graphics.Matrix
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationSpec
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -42,7 +40,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastForEach
+import androidx.constraintlayout.compose.motion.statemanager.StateToStateMotionManager
 import androidx.constraintlayout.core.motion.Motion
+import androidx.constraintlayout.core.parser.CLObject
 import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.parser.CLParsingException
 import androidx.constraintlayout.core.state.Dimension
@@ -51,8 +51,10 @@ import androidx.constraintlayout.core.state.TransitionParser
 import androidx.constraintlayout.core.state.WidgetFrame
 import androidx.constraintlayout.core.widgets.Optimizer
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.getOrElse
 import org.intellij.lang.annotations.Language
 import java.util.*
+import kotlin.collections.HashMap
 
 /**
  * Layout that interpolate its children layout given two sets of constraint and
@@ -133,7 +135,7 @@ inline fun MotionLayout(
     noinline finishedAnimationListener: (() -> Unit)? = null,
     crossinline content: @Composable (MotionLayoutScope.() -> Unit)
 ) {
-    MotionLayoutCore(
+    StateToStateMotionLayout(
         motionScene = motionScene,
         constraintSetName = constraintSetName,
         animationSpec = animationSpec,
@@ -174,105 +176,51 @@ inline fun MotionLayout(
 @OptIn(ExperimentalMotionApi::class)
 @PublishedApi
 @Composable
-internal inline fun MotionLayoutCore(
+internal inline fun StateToStateMotionLayout(
     motionScene: MotionScene,
-    constraintSetName: String? = null,
-    animationSpec: AnimationSpec<Float> = tween<Float>(),
-    debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
+    constraintSetName: String?,
+    animationSpec: AnimationSpec<Float>,
+    debug: EnumSet<MotionLayoutDebugFlags>,
+    optimizationLevel: Int,
     modifier: Modifier = Modifier,
-    optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
     noinline finishedAnimationListener: (() -> Unit)? = null,
     crossinline content: @Composable (MotionLayoutScope.() -> Unit)
 ) {
-    val needsUpdate = remember {
-        mutableStateOf(0L)
-    }
-    motionScene.setUpdateFlag(needsUpdate)
-
-    var usedDebugMode = debug
-    if (motionScene.getForcedDrawDebug() != MotionLayoutDebugFlags.UNKNOWN) {
-        usedDebugMode = EnumSet.of(motionScene.getForcedDrawDebug())
-    }
-
-    val transitionContent = remember(motionScene, needsUpdate.value) {
-        motionScene.getTransition("default")
+    val targetName: String? by rememberUpdatedState(newValue = constraintSetName)
+    val progress = remember(motionScene) { Animatable(0f) }
+    val stateManager = remember(motionScene) {
+        StateToStateMotionManager(
+            scene = motionScene,
+            animatableProgress = progress,
+            animationSpec = animationSpec
+        )
     }
 
-    val transition: androidx.constraintlayout.compose.Transition? =
-        transitionContent?.let { Transition(it) }
+    val channel = remember(motionScene) { Channel<String>(Channel.CONFLATED) }
 
-    val startId = transition?.getStartConstraintSetId() ?: "start"
-    val endId = transition?.getEndConstraintSetId() ?: "end"
-
-    val startContent = remember(motionScene, needsUpdate.value) {
-        motionScene.getConstraintSet(startId) ?: motionScene.getConstraintSet(0)
-    }
-    val endContent = remember(motionScene, needsUpdate.value) {
-        motionScene.getConstraintSet(endId) ?: motionScene.getConstraintSet(1)
+    SideEffect {
+        targetName?.let { channel.trySend(it) }
     }
 
-    val targetEndContent = remember(motionScene, constraintSetName) {
-        constraintSetName?.let { motionScene.getConstraintSet(constraintSetName) }
-    }
+    LaunchedEffect(channel) {
+        for (name in channel) {
+            // 'standard' way to consume channel events
+            val targetStateName = channel.tryReceive().getOrElse { name }
 
-    if (startContent == null || endContent == null) {
-        return
-    }
-
-    var start: ConstraintSet by remember(motionScene) { mutableStateOf(ConstraintSet(jsonContent = startContent)) }
-    var end: ConstraintSet by remember(motionScene) { mutableStateOf(ConstraintSet(jsonContent = endContent)) }
-    val targetConstraintSet = targetEndContent?.let { ConstraintSet(jsonContent = targetEndContent) }
-
-    val progress = remember { Animatable(0f) }
-
-    var animateToEnd by remember(motionScene) { mutableStateOf(true) }
-
-    val channel = remember { Channel<ConstraintSet>(Channel.CONFLATED) }
-
-    if (targetConstraintSet != null) {
-        SideEffect {
-            channel.trySend(targetConstraintSet)
-        }
-
-        LaunchedEffect(motionScene, channel) {
-            for (constraints in channel) {
-                val newConstraintSet = channel.tryReceive().getOrNull() ?: constraints
-                val animTargetValue = if (animateToEnd) 1f else 0f
-                val currentSet = if (animateToEnd) start else end
-                if (newConstraintSet != currentSet) {
-                    if (animateToEnd) {
-                        end = newConstraintSet
-                    } else {
-                        start = newConstraintSet
-                    }
-                    progress.animateTo(animTargetValue, animationSpec)
-                    animateToEnd = !animateToEnd
-                    finishedAnimationListener?.invoke()
-                }
-            }
+            stateManager.setTo(targetStateName)
+            finishedAnimationListener?.invoke()
         }
     }
 
-    val lastOutsideProgress = remember { mutableStateOf(0f) }
-    val forcedProgress = motionScene.getForcedProgress()
-
-    val currentProgress =
-        if (!forcedProgress.isNaN() && lastOutsideProgress.value == progress.value) {
-            forcedProgress
-        } else {
-            motionScene.resetForcedProgress()
-            progress.value
-        }
-
-    lastOutsideProgress.value = progress.value
+    // TODO: Support updates from informationReceiver
 
     MotionLayout(
-        start = start,
-        end = end,
-        transition = transition,
-        progress = currentProgress,
-        debug = usedDebugMode,
-        informationReceiver = motionScene as? JSONMotionScene,
+        start = stateManager.startConstraintSet,
+        end = stateManager.endConstraintSet,
+        transition = stateManager.transition,
+        progress = progress.value,
+        debug = debug,
+        informationReceiver = null,
         modifier = modifier,
         optimizationLevel = optimizationLevel,
         content = content
@@ -419,78 +367,17 @@ internal inline fun MotionLayoutCore(
 interface MotionScene {
     fun setConstraintSetContent(name: String, content: String)
     fun setTransitionContent(name: String, content: String)
+    fun setTransitionContentObject(name: String, parsedContent: CLObject)
     fun getConstraintSet(name: String): String?
     fun getConstraintSet(index: Int): String?
     fun getTransition(name: String): String?
+    fun getTransitionContentObject(name: String): CLObject?
+    fun getTransitionsNameSet(): Set<String>
     fun setUpdateFlag(needsUpdate: MutableState<Long>)
     fun setDebugName(name: String?)
     fun getForcedProgress(): Float
     fun resetForcedProgress()
     fun getForcedDrawDebug(): MotionLayoutDebugFlags
-}
-
-internal class JSONMotionScene(@Language("json5") content: String) : EditableJSONLayout(content),
-    MotionScene {
-
-    private val constraintSetsContent = HashMap<String, String>()
-    private val transitionsContent = HashMap<String, String>()
-    private var forcedProgress: Float = Float.NaN
-
-    init {
-        // call parent init here so that hashmaps are created
-        initialization()
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // Accessors
-    ///////////////////////////////////////////////////////////////////////////
-
-    override fun setConstraintSetContent(name: String, content: String) {
-        constraintSetsContent[name] = content
-    }
-
-    override fun setTransitionContent(name: String, content: String) {
-        transitionsContent[name] = content
-    }
-
-    override fun getConstraintSet(name: String): String? {
-        return constraintSetsContent[name]
-    }
-
-    override fun getConstraintSet(index: Int): String? {
-        return constraintSetsContent.values.elementAtOrNull(index)
-    }
-
-    override fun getTransition(name: String): String? {
-        return transitionsContent[name]
-    }
-
-    override fun getForcedProgress(): Float {
-        return forcedProgress;
-    }
-
-    override fun resetForcedProgress() {
-        forcedProgress = Float.NaN
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // on update methods
-    ///////////////////////////////////////////////////////////////////////////
-
-    override fun onNewContent(content: String) {
-        super.onNewContent(content)
-        try {
-            parseMotionSceneJSON(this, content);
-        } catch (e: Exception) {
-            // nothing (content might be invalid, sent by live edit)
-        }
-    }
-
-    override fun onNewProgress(progress: Float) {
-        forcedProgress = progress
-        signalUpdate()
-    }
-
 }
 
 /**
@@ -596,39 +483,18 @@ interface Transition {
 @SuppressLint("ComposableNaming")
 @Composable
 fun Transition(@Language("json5") content: String): androidx.constraintlayout.compose.Transition? {
-    val transition = remember(content) {
-        val parsed = try {
-            CLParser.parse(content)
-        } catch (e: CLParsingException) {
-            System.err.println("Error parsing JSON $e")
-            null
-        }
-        mutableStateOf(
-            if (parsed != null) {
-                object : androidx.constraintlayout.compose.Transition {
-                    override fun applyTo(transition: Transition, type: Int) {
-                        try {
-                            TransitionParser.parse(parsed, transition);
-                        } catch (e: CLParsingException) {
-                            System.err.println("Error parsing JSON $e")
-                        }
-                    }
-
-                    override fun getStartConstraintSetId(): String {
-                        return parsed.getStringOrNull("from") ?: "start"
-                    }
-
-                    override fun getEndConstraintSetId(): String {
-                        return parsed.getStringOrNull("to") ?: "end"
-                    }
-                }
-            } else {
-                null
-            }
-        )
+    return remember(content) {
+        parseOrNull(content)?.let(::JSONTransition)
     }
-    return transition.value
 }
+
+internal fun parseOrNull(string: String): CLObject? =
+    try {
+        CLParser.parse(string)
+    } catch (e: CLParsingException) {
+        System.err.println("Error parsing JSON $e")
+        null
+    }
 
 enum class MotionLayoutDebugFlags {
     NONE,
@@ -1120,8 +986,6 @@ internal class MotionMeasurer : Measurer() {
         if (!transition.contains(id)) {
             return Color.Black
         }
-
-        transition.interpolate(root.width, root.height, motionProgress)
 
         val interpolatedFrame = transition.getInterpolated(id)
         val color = interpolatedFrame.getCustomColor(name)
