@@ -15,7 +15,6 @@
  */
 package androidx.constraintlayout.core.motion.key;
 
-import androidx.constraintlayout.core.motion.CustomAttribute;
 import androidx.constraintlayout.core.motion.CustomVariable;
 import androidx.constraintlayout.core.motion.utils.SplineSet;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
@@ -100,7 +99,8 @@ public abstract class MotionKey implements TypedValues {
      * @hide
      */
     boolean toBoolean(Object value) {
-        return (value instanceof Boolean) ? (Boolean) value : Boolean.parseBoolean(value.toString());
+        return (value instanceof Boolean)
+                ? (Boolean) value : Boolean.parseBoolean(value.toString());
     }
 
     /**
@@ -120,7 +120,7 @@ public abstract class MotionKey implements TypedValues {
         return this;
     }
 
-    abstract public MotionKey clone();
+    public abstract MotionKey clone();
 
     public MotionKey setViewId(int id) {
         mTargetId = id;

@@ -25,23 +25,24 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
 
     private static final boolean DEBUG = false;
     private static final boolean HASH = true;
-    private static float epsilon = 0.001f;
-    private final int NONE = -1;
-    private int SIZE = 16;
-    private int HASH_SIZE = 16;
+    private static float sEpsilon = 0.001f;
+    private final int mNone = -1;
+    private int mSize = 16;
+    private int mHashSize = 16;
 
-    int[] keys = new int[SIZE];
-    int[] nextKeys = new int[SIZE];
+    int[] keys = new int[mSize];
+    int[] nextKeys = new int[mSize];
 
-    int[] variables = new int[SIZE];
-    float[] values = new float[SIZE];
-    int[] previous = new int[SIZE];
-    int[] next = new int[SIZE];
+    int[] variables = new int[mSize];
+    float[] values = new float[mSize];
+    int[] previous = new int[mSize];
+    int[] next = new int[mSize];
     int mCount = 0;
     int head = -1;
 
     private final ArrayRow mRow; // our owner
-    protected final Cache mCache; // pointer to the system-wide cache, allowing access to SolverVariables
+    // pointer to the system-wide cache, allowing access to SolverVariables
+    protected final Cache mCache;
 
     SolverVariableValues(ArrayRow row, Cache cache) {
         mRow = row;
@@ -62,11 +63,11 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
         }
         int j = head;
         for (int i = 0; i < count; i++) {
-            if (i == index && j != NONE) {
+            if (i == index && j != mNone) {
                 return mCache.mIndexedVariables[variables[j]];
             }
             j = next[j];
-            if (j == NONE) {
+            if (j == mNone) {
                 break;
             }
         }
@@ -82,7 +83,7 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
                 return values[j];
             }
             j = next[j];
-            if (j == NONE) {
+            if (j == mNone) {
                 break;
             }
         }
@@ -91,39 +92,39 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
 
     @Override
     public boolean contains(SolverVariable variable) {
-        return indexOf(variable) != NONE;
+        return indexOf(variable) != mNone;
     }
 
     @Override
     public int indexOf(SolverVariable variable) {
         if (mCount == 0 || variable == null) {
-            return NONE;
+            return mNone;
         }
         int id = variable.id;
-        int key = id % HASH_SIZE;
+        int key = id % mHashSize;
         key = keys[key];
-        if (key == NONE) {
-            return NONE;
+        if (key == mNone) {
+            return mNone;
         }
         if (variables[key] == id) {
             return key;
         }
-        while (nextKeys[key] != NONE && variables[nextKeys[key]] != id) {
+        while (nextKeys[key] != mNone && variables[nextKeys[key]] != id) {
             key = nextKeys[key];
         }
-        if (nextKeys[key] == NONE) {
-            return NONE;
+        if (nextKeys[key] == mNone) {
+            return mNone;
         }
         if (variables[nextKeys[key]] == id) {
             return nextKeys[key];
         }
-        return NONE;
+        return mNone;
     }
 
     @Override
     public float get(SolverVariable variable) {
         final int index = indexOf(variable);
-        if (index != NONE) {
+        if (index != mNone) {
             return values[index];
         }
         return 0;
@@ -155,13 +156,13 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
             str += v + " = " + getVariableValue(i) + " ";
             int index = indexOf(v);
             str += "[p: ";
-            if (previous[index] != NONE) {
+            if (previous[index] != mNone) {
                 str += mCache.mIndexedVariables[variables[previous[index]]];
             } else {
                 str += "none";
             }
             str += ", n: ";
-            if (next[index] != NONE) {
+            if (next[index] != mNone) {
                 str += mCache.mIndexedVariables[variables[next[index]]];
             } else {
                 str += "none";
@@ -184,66 +185,68 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
                 v.removeFromRow(mRow);
             }
         }
-        for (int i = 0; i < SIZE; i++) {
-            variables[i] = NONE;
-            nextKeys[i] = NONE;
+        for (int i = 0; i < mSize; i++) {
+            variables[i] = mNone;
+            nextKeys[i] = mNone;
         }
-        for (int i = 0; i < HASH_SIZE; i++) {
-            keys[i] = NONE;
+        for (int i = 0; i < mHashSize; i++) {
+            keys[i] = mNone;
         }
         mCount = 0;
         head = -1;
     }
 
     private void increaseSize() {
-        int size = SIZE * 2;
+        int size = this.mSize * 2;
         variables = Arrays.copyOf(variables, size);
         values = Arrays.copyOf(values, size);
         previous = Arrays.copyOf(previous, size);
         next = Arrays.copyOf(next, size);
         nextKeys = Arrays.copyOf(nextKeys, size);
-        for (int i = SIZE; i < size; i++) {
-            variables[i] = NONE;
-            nextKeys[i] = NONE;
+        for (int i = this.mSize; i < size; i++) {
+            variables[i] = mNone;
+            nextKeys[i] = mNone;
         }
-        SIZE = size;
+        this.mSize = size;
     }
 
     private void addToHashMap(SolverVariable variable, int index) {
         if (DEBUG) {
             System.out.println(this.hashCode() + " hash add " + variable.id + " @ " + index);
         }
-        int hash = variable.id % HASH_SIZE;
+        int hash = variable.id % mHashSize;
         int key = keys[hash];
-        if (key == NONE) {
+        if (key == mNone) {
             keys[hash] = index;
             if (DEBUG) {
-                System.out.println(this.hashCode() + " hash add " + variable.id + " @ " + index + " directly on keys " + hash);
+                System.out.println(this.hashCode() + " hash add "
+                        + variable.id + " @ " + index + " directly on keys " + hash);
             }
         } else {
-            while (nextKeys[key] != NONE) {
+            while (nextKeys[key] != mNone) {
                 key = nextKeys[key];
             }
             nextKeys[key] = index;
             if (DEBUG) {
-                System.out.println(this.hashCode() + " hash add " + variable.id + " @ " + index + " as nextkey of " + key);
+                System.out.println(this.hashCode() + " hash add "
+                        + variable.id + " @ " + index + " as nextkey of " + key);
             }
         }
-        nextKeys[index] = NONE;
+        nextKeys[index] = mNone;
         if (DEBUG) {
             displayHash();
         }
     }
 
     private void displayHash() {
-        for (int i = 0; i < HASH_SIZE; i++) {
-            if (keys[i] != NONE) {
+        for (int i = 0; i < mHashSize; i++) {
+            if (keys[i] != mNone) {
                 String str = this.hashCode() + " hash [" + i + "] => ";
                 int key = keys[i];
                 boolean done = false;
                 while (!done) {
                     str += " " + variables[key];
-                    if (nextKeys[key] != NONE) {
+                    if (nextKeys[key] != mNone) {
                         key = nextKeys[key];
                     } else {
                         done = true;
@@ -257,9 +260,9 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
         if (DEBUG) {
             System.out.println(this.hashCode() + " hash remove " + variable.id);
         }
-        int hash = variable.id % HASH_SIZE;
+        int hash = variable.id % mHashSize;
         int key = keys[hash];
-        if (key == NONE) {
+        if (key == mNone) {
             if (DEBUG) {
                 displayHash();
             }
@@ -269,15 +272,15 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
         // let's first find it
         if (variables[key] == id) {
             keys[hash] = nextKeys[key];
-            nextKeys[key] = NONE;
+            nextKeys[key] = mNone;
         } else {
-            while (nextKeys[key] != NONE && variables[nextKeys[key]] != id)  {
+            while (nextKeys[key] != mNone && variables[nextKeys[key]] != id)  {
                 key = nextKeys[key];
             }
             int currentKey = nextKeys[key];
-            if (currentKey != NONE && variables[currentKey] == id) {
+            if (currentKey != mNone && variables[currentKey] == id) {
                 nextKeys[key] = nextKeys[currentKey];
-                nextKeys[currentKey] = NONE;
+                nextKeys[currentKey] = mNone;
             }
         }
         if (DEBUG) {
@@ -288,16 +291,16 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
     private void addVariable(int index, SolverVariable variable, float value) {
         variables[index] = variable.id;
         values[index] = value;
-        previous[index] = NONE;
-        next[index] = NONE;
+        previous[index] = mNone;
+        next[index] = mNone;
         variable.addToRow(mRow);
         variable.usageInRowCount++;
         mCount++;
     }
 
     private int findEmptySlot() {
-        for (int i = 0; i < SIZE; i++) {
-            if (variables[i] == NONE) {
+        for (int i = 0; i < mSize; i++) {
+            if (variables[i] == mNone) {
                 return i;
             }
         }
@@ -307,20 +310,20 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
     private void insertVariable(int index, SolverVariable variable, float value) {
         int availableSlot = findEmptySlot();
         addVariable(availableSlot, variable, value);
-        if (index != NONE) {
+        if (index != mNone) {
             previous[availableSlot] = index;
             next[availableSlot] = next[index];
             next[index] = availableSlot;
         } else {
-            previous[availableSlot] = NONE;
+            previous[availableSlot] = mNone;
             if (mCount > 0) {
                 next[availableSlot] = head;
                 head = availableSlot;
             } else {
-                next[availableSlot] = NONE;
+                next[availableSlot] = mNone;
             }
         }
-        if (next[availableSlot] != NONE) {
+        if (next[availableSlot] != mNone) {
             previous[next[availableSlot]] = availableSlot;
         }
         addToHashMap(variable, availableSlot);
@@ -331,7 +334,7 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
         if (DEBUG) {
             System.out.println(this + " <put> " + variable.id + " = " + value);
         }
-        if (value > -epsilon && value < epsilon) {
+        if (value > -sEpsilon && value < sEpsilon) {
             remove(variable, true);
             return;
         }
@@ -341,10 +344,10 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
             head = 0;
         } else {
             final int index = indexOf(variable);
-            if (index != NONE) {
+            if (index != mNone) {
                 values[index] = value;
             } else {
-                if (mCount + 1 >= SIZE) {
+                if (mCount + 1 >= mSize) {
                     increaseSize();
                 }
                 final int count = mCount;
@@ -359,7 +362,7 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
                         previousItem = j;
                     }
                     j = next[j];
-                    if (j == NONE) {
+                    if (j == mNone) {
                         break;
                     }
                 }
@@ -379,7 +382,7 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
             System.out.println(this + " <remove> " + v.id);
         }
         int index = indexOf(v);
-        if (index == NONE) {
+        if (index == mNone) {
             return 0;
         }
         removeFromHashMap(v);
@@ -387,11 +390,11 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
         if (head == index) {
             head = next[index];
         }
-        variables[index] = NONE;
-        if (previous[index] != NONE) {
+        variables[index] = mNone;
+        if (previous[index] != mNone) {
             next[previous[index]] = next[index];
         }
-        if (next[index] != NONE) {
+        if (next[index] != mNone) {
             previous[next[index]] = previous[index];
         }
         mCount--;
@@ -407,15 +410,15 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
         if (DEBUG) {
             System.out.println(this + " <add> " + v.id + " = " + value);
         }
-        if (value > -epsilon && value < epsilon) {
+        if (value > -sEpsilon && value < sEpsilon) {
             return;
         }
         final int index = indexOf(v);
-        if (index == NONE) {
+        if (index == mNone) {
             put(v, value);
         } else {
             values[index] += value;
-            if (values[index] > -epsilon && values[index] < epsilon) {
+            if (values[index] > -sEpsilon && values[index] < sEpsilon) {
                 values[index] = 0;
                 remove(v, removeFromDefinition);
             }
@@ -442,19 +445,21 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
         if (false) {
             for (int i = 0; i < definitionSize; i++) {
                 float definitionValue = definition.values[j];
-                SolverVariable definitionVariable = mCache.mIndexedVariables[definition.variables[j]];
+                SolverVariable definitionVariable =
+                        mCache.mIndexedVariables[definition.variables[j]];
                 add(definitionVariable, definitionValue * value, removeFromDefinition);
                 j = definition.next[j];
-                if (j == NONE) {
+                if (j == mNone) {
                     break;
                 }
             }
         } else {
             j = 0;
             for (int i = 0; j < definitionSize; i++) {
-                if (definition.variables[i] != NONE) {
+                if (definition.variables[i] != mNone) {
                     float definitionValue = definition.values[i];
-                    SolverVariable definitionVariable = mCache.mIndexedVariables[definition.variables[i]];
+                    SolverVariable definitionVariable =
+                            mCache.mIndexedVariables[definition.variables[i]];
                     add(definitionVariable, definitionValue * value, removeFromDefinition);
                     j++;
                 }
@@ -470,7 +475,7 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
         for (int i = 0; i < count; i++) {
             values[j] *= -1;
             j = next[j];
-            if (j == NONE) {
+            if (j == mNone) {
                 break;
             }
         }
@@ -483,7 +488,7 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
         for (int i = 0; i < count; i++) {
             values[j] /= amount;
             j = next[j];
-            if (j == NONE) {
+            if (j == mNone) {
                 break;
             }
         }

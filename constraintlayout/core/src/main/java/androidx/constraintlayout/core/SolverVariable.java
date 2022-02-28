@@ -16,10 +16,10 @@
 
 package androidx.constraintlayout.core;
 
+import static androidx.constraintlayout.core.LinearSystem.FULL_DEBUG;
+
 import java.util.Arrays;
 import java.util.HashSet;
-
-import static androidx.constraintlayout.core.LinearSystem.FULL_DEBUG;
 
 /**
  * Represents a given variable used in the {@link LinearSystem linear expression solver}.
@@ -41,11 +41,11 @@ public class SolverVariable implements Comparable<SolverVariable> {
     public static final int STRENGTH_CENTERING = 7;
     public static final int STRENGTH_FIXED = 8;
 
-    private static int uniqueSlackId = 1;
-    private static int uniqueErrorId = 1;
-    private static int uniqueUnrestrictedId = 1;
-    private static int uniqueConstantId = 1;
-    private static int uniqueId = 1;
+    private static int sUniqueSlackId = 1;
+    private static int sUniqueErrorId = 1;
+    private static int sUniqueUnrestrictedId = 1;
+    private static int sUniqueConstantId = 1;
+    private static int sUniqueId = 1;
     public boolean inGoal;
 
     private String mName;
@@ -56,7 +56,7 @@ public class SolverVariable implements Comparable<SolverVariable> {
     public float computedValue;
     public boolean isFinalValue = false;
 
-    final static int MAX_STRENGTH = 9;
+    static final int MAX_STRENGTH = 9;
     float[] strengthVector = new float[MAX_STRENGTH];
     float[] goalStrengthVector = new float[MAX_STRENGTH];
 
@@ -96,22 +96,22 @@ public class SolverVariable implements Comparable<SolverVariable> {
     }
 
     static void increaseErrorId() {
-        uniqueErrorId++;
+        sUniqueErrorId++;
     }
 
     private static String getUniqueName(Type type, String prefix) {
         if (prefix != null) {
-            return prefix + uniqueErrorId;
+            return prefix + sUniqueErrorId;
         }
         switch (type) {
-            case UNRESTRICTED: return "U" + ++uniqueUnrestrictedId;
-            case CONSTANT: return "C" + ++uniqueConstantId;
-            case SLACK: return "S" + ++uniqueSlackId;
+            case UNRESTRICTED: return "U" + ++sUniqueUnrestrictedId;
+            case CONSTANT: return "C" + ++sUniqueConstantId;
+            case SLACK: return "S" + ++sUniqueSlackId;
             case ERROR: {
-                return "e" + ++uniqueErrorId;
+                return "e" + ++sUniqueErrorId;
             }
             case UNKNOWN:
-                return "V" + ++uniqueId;
+                return "V" + ++sUniqueId;
         }
         throw new AssertionError(type.name());
     }
@@ -169,11 +169,11 @@ public class SolverVariable implements Comparable<SolverVariable> {
         return representation;
     }
 
-    HashSet<ArrayRow> inRows = VAR_USE_HASH ? new HashSet<ArrayRow>() : null;
+    HashSet<ArrayRow> mInRows = VAR_USE_HASH ? new HashSet<ArrayRow>() : null;
 
     public final void addToRow(ArrayRow row) {
         if (VAR_USE_HASH) {
-            inRows.add(row);
+            mInRows.add(row);
         } else {
             for (int i = 0; i < mClientEquationsCount; i++) {
                 if (mClientEquations[i] == row) {
@@ -190,7 +190,7 @@ public class SolverVariable implements Comparable<SolverVariable> {
 
     public final void removeFromRow(ArrayRow row) {
         if (VAR_USE_HASH) {
-            inRows.remove(row);
+            mInRows.remove(row);
         } else {
             final int count = mClientEquationsCount;
             for (int i = 0; i < count; i++) {
@@ -207,10 +207,10 @@ public class SolverVariable implements Comparable<SolverVariable> {
 
     public final void updateReferencesWithNewDefinition(LinearSystem system, ArrayRow definition) {
         if (VAR_USE_HASH) {
-            for (ArrayRow row : inRows) {
+            for (ArrayRow row : mInRows) {
                 row.updateFromRow(system, definition, false);
             }
-            inRows.clear();
+            mInRows.clear();
         } else {
             final int count = mClientEquationsCount;
             for (int i = 0; i < count; i++) {
@@ -265,7 +265,7 @@ public class SolverVariable implements Comparable<SolverVariable> {
         synonym = -1;
         synonymDelta = 0;
         if (VAR_USE_HASH) {
-            inRows.clear();
+            mInRows.clear();
         } else {
             final int count = mClientEquationsCount;
             for (int i = 0; i < count; i++) {

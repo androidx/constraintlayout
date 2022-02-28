@@ -122,7 +122,7 @@ public class MotionKeyCycle extends MotionKey {
                 mWaveShape = value;
                 return true;
             default:
-                boolean ret =  setValue( type, (float) value);
+                boolean ret = setValue(type, (float) value);
                 if (ret) {
                     return true;
                 }
@@ -303,7 +303,8 @@ public class MotionKeyCycle extends MotionKey {
                     continue;
                 }
 
-                osc.setPoint(mFramePosition, mWaveShape, mCustomWaveShape, -1, mWavePeriod, mWaveOffset, mWavePhase, cValue.getValueToInterpolate(), cValue);
+                osc.setPoint(mFramePosition, mWaveShape, mCustomWaveShape, -1, mWavePeriod,
+                        mWaveOffset, mWavePhase, cValue.getValueToInterpolate(), cValue);
                 continue;
             }
             float value = getValue(key);
@@ -316,37 +317,38 @@ public class MotionKeyCycle extends MotionKey {
                 continue;
             }
 
-            osc.setPoint(mFramePosition, mWaveShape, mCustomWaveShape, -1, mWavePeriod, mWaveOffset, mWavePhase, value);
+            osc.setPoint(mFramePosition, mWaveShape, mCustomWaveShape,
+                    -1, mWavePeriod, mWaveOffset, mWavePhase, value);
         }
     }
 
 
 
     public void dump() {
-        System.out.println( "MotionKeyCycle{" +
-                "mWaveShape=" + mWaveShape +
-                ", mWavePeriod=" + mWavePeriod +
-                ", mWaveOffset=" + mWaveOffset +
-                ", mWavePhase=" + mWavePhase +
-                ", mRotation=" + mRotation +
-                '}');
+        System.out.println("MotionKeyCycle{"
+                + "mWaveShape=" + mWaveShape
+                + ", mWavePeriod=" + mWavePeriod
+                + ", mWaveOffset=" + mWaveOffset
+                + ", mWavePhase=" + mWavePhase
+                + ", mRotation=" + mRotation
+                + '}');
     }
 
     public void printAttributes() {
         HashSet<String> nameSet = new HashSet<>();
         getAttributeNames(nameSet);
 
-        Utils.log(" ------------- " + mFramePosition +" -------------");
-        Utils.log( "MotionKeyCycle{" +
-                "Shape=" + mWaveShape +
-                ", Period=" + mWavePeriod +
-                ", Offset=" + mWaveOffset +
-                ", Phase=" + mWavePhase +
-                '}');
+        Utils.log(" ------------- " + mFramePosition + " -------------");
+        Utils.log("MotionKeyCycle{"
+                + "Shape=" + mWaveShape
+                + ", Period=" + mWavePeriod
+                + ", Offset=" + mWaveOffset
+                + ", Phase=" + mWavePhase
+                + '}');
         String[]names = nameSet.toArray(new String[0]);
         for (int i = 0; i < names.length; i++) {
             int id = AttributesType.getId(names[i]);
-            Utils.log(names[i]+ ":"+ getValue(names[i]));
+            Utils.log(names[i] + ":" + getValue(names[i]));
         }
     }
 

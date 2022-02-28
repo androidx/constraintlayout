@@ -24,39 +24,44 @@ import java.util.Arrays;
  * space efficient, and relatively fast to maintain (add/remove).
  *
  * ArrayBackedVariables implements a sparse array, so is rather space efficient, but maintaining
- * the array sorted is costly, as we spend quite a bit of time recopying parts of the array on element deletion.
+ * the array sorted is costly,
+ * as we spend quite a bit of time recopying parts of the array on element deletion.
  *
- * LinkedVariables implements a standard linked list structure, and is able to be faster than ArrayBackedVariables
- * even though it's more costly to set up (pool of objects...), as the elements removal and maintenance of the
- * structure is a lot more efficient.
+ * LinkedVariables implements a standard linked list structure,
+ * and is able to be faster than ArrayBackedVariables
+ * even though it's more costly to set up (pool of objects...),
+ * as the elements removal and maintenance of the structure is a lot more efficient.
  *
- * This ArrayLinkedVariables class takes inspiration from both of the above, and implement a linked list
- * stored in several arrays. This allows us to be a lot more efficient in terms of setup (no need to deal with pool
+ * This ArrayLinkedVariables class takes inspiration from both of the above,
+ * and implement a linked list stored in several arrays.
+ * This allows us to be a lot more efficient in terms of setup (no need to deal with pool
  * of objects...), resetting the structure, and insertion/deletion of elements.
  */
 public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
     private static final boolean DEBUG = false;
 
-    final static int NONE = -1;
+    static final int NONE = -1;
     private static final boolean FULL_NEW_CHECK = false; // full validation (debug purposes)
 
     int currentSize = 0; // current size, accessed by ArrayRow and LinearSystem
 
     private final ArrayRow mRow; // our owner
-    protected final Cache mCache; // pointer to the system-wide cache, allowing access to SolverVariables
 
-    private int ROW_SIZE = 8; // default array size
+    // pointer to the system-wide cache, allowing access to SolverVariables
+    protected final Cache mCache;
 
-    private SolverVariable candidate = null;
+    private int mRowSize = 8; // default array size
+
+    private SolverVariable mCandidate = null;
 
     // mArrayIndices point to indexes in mCache.mIndexedVariables (i.e., the SolverVariables)
-    private int[] mArrayIndices = new int[ROW_SIZE];
+    private int[] mArrayIndices = new int[mRowSize];
 
     // mArrayNextIndices point to indexes in mArrayIndices
-    private int[] mArrayNextIndices = new int[ROW_SIZE];
+    private int[] mArrayNextIndices = new int[mRowSize];
 
     // mArrayValues contain the associated value from mArrayIndices
-    private float[] mArrayValues = new float[ROW_SIZE];
+    private float[] mArrayValues = new float[mRowSize];
 
     // mHead point to indexes in mArrayIndices
     private int mHead = NONE;
@@ -65,21 +70,24 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
     //
     // While mDidFillOnce is not set, mLast is simply incremented
     // monotonically in order to be sure to traverse the entire array; the idea here is that
-    // when we clear a linked list, we only set the counters to zero without traversing the array to fill
-    // it with NONE values, which would be costly.
+    // when we clear a linked list, we only set the counters to zero without traversing the array
+    // to fill it with NONE values, which would be costly.
     // But if we do not fill the array with NONE values, we cannot safely simply check if an entry
     // is set to NONE to know if we can use it or not, as it might contains a previous value...
     // So, when adding elements, we first ensure with this mechanism of mLast/mDidFillOnce
-    // that we do traverse the array linearly, avoiding for that first pass the need to check for the value
-    // of the item in mArrayIndices.
-    // This does mean that removed elements will leave empty spaces, but we /then/ set the removed element
-    // to NONE, so that once we did that first traversal filling the array, we can safely revert to linear traversal
-    // finding an empty spot by checking the values of mArrayIndices (i.e. finding an item containing NONE).
+    // that we do traverse the array linearly,
+    // avoiding for that first pass the need to check for the value of the item in mArrayIndices.
+    // This does mean that removed elements will leave empty spaces,
+    // but we /then/ set the removed element to NONE,
+    // so that once we did that first traversal filling the array,
+    // we can safely revert to linear traversal
+    // finding an empty spot by checking the values of mArrayIndices
+    // (i.e. finding an item containing NONE).
     private int mLast = NONE;
 
     // flag to keep trace if we did a full pass of the array or not, see above description
     private boolean mDidFillOnce = false;
-    private static float epsilon = 0.001f;
+    private static float sEpsilon = 0.001f;
 
     // Example of a basic loop
     // current or previous point to mArrayIndices
@@ -179,12 +187,12 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
         // ... make sure to grow the array as needed
         if (availableIndice >= mArrayIndices.length) {
             availableIndice = mArrayIndices.length;
-            ROW_SIZE *= 2;
+            mRowSize *= 2;
             mDidFillOnce = false;
             mLast = availableIndice - 1;
-            mArrayValues = Arrays.copyOf(mArrayValues, ROW_SIZE);
-            mArrayIndices = Arrays.copyOf(mArrayIndices, ROW_SIZE);
-            mArrayNextIndices = Arrays.copyOf(mArrayNextIndices, ROW_SIZE);
+            mArrayValues = Arrays.copyOf(mArrayValues, mRowSize);
+            mArrayIndices = Arrays.copyOf(mArrayIndices, mRowSize);
+            mArrayNextIndices = Arrays.copyOf(mArrayNextIndices, mRowSize);
         }
 
         // Finally, let's insert the element
@@ -223,7 +231,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
      * @param removeFromDefinition
      */
     public void add(SolverVariable variable, float value, boolean removeFromDefinition) {
-        if (value > -epsilon && value < epsilon) {
+        if (value > -sEpsilon && value < sEpsilon) {
             return;
         }
         // Special casing empty list...
@@ -252,7 +260,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
             int idx = mArrayIndices[current];
             if (idx == variable.id) {
                 float v = mArrayValues[current] + value;
-                if (v > -epsilon && v < epsilon) {
+                if (v > -sEpsilon && v < sEpsilon) {
                     v = 0;
                 }
                 mArrayValues[current] = v;
@@ -308,12 +316,12 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
         // ... make sure to grow the array as needed
         if (availableIndice >= mArrayIndices.length) {
             availableIndice = mArrayIndices.length;
-            ROW_SIZE *= 2;
+            mRowSize *= 2;
             mDidFillOnce = false;
             mLast = availableIndice - 1;
-            mArrayValues = Arrays.copyOf(mArrayValues, ROW_SIZE);
-            mArrayIndices = Arrays.copyOf(mArrayIndices, ROW_SIZE);
-            mArrayNextIndices = Arrays.copyOf(mArrayNextIndices, ROW_SIZE);
+            mArrayValues = Arrays.copyOf(mArrayValues, mRowSize);
+            mArrayIndices = Arrays.copyOf(mArrayIndices, mRowSize);
+            mArrayNextIndices = Arrays.copyOf(mArrayNextIndices, mRowSize);
         }
 
         // Finally, let's insert the element
@@ -366,8 +374,8 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
      * @return the value of the removed variable
      */
     public final float remove(SolverVariable variable, boolean removeFromDefinition) {
-        if (candidate == variable) {
-            candidate = null;
+        if (mCandidate == variable) {
+            mCandidate = null;
         }
         if (mHead == NONE) {
             return 0;
@@ -505,17 +513,36 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
         }
     }
 
-    public int getHead() { return mHead; }
-    public int getCurrentSize() { return currentSize; }
+    public int getHead() {
+        return mHead;
+    }
+    public int getCurrentSize() {
+        return currentSize;
+    }
 
+    /**
+     * get Id in mCache.mIndexedVariables given the index
+     * @param index
+     * @return
+     */
     public final int getId(int index) {
         return mArrayIndices[index];
     }
 
+    /**
+     * get value in mArrayValues given the index
+     * @param index
+     * @return
+     */
     public final float getValue(int index) {
         return mArrayValues[index];
     }
 
+    /**
+     * Get the next index in in mArrayIndices given the current one
+     * @param index
+     * @return
+     */
     public final int getNextIndice(int index) {
         return mArrayNextIndices[index];
     }
@@ -526,7 +553,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
      * @return return a variable we can pivot on
      */
     SolverVariable getPivotCandidate() {
-        if (candidate == null) {
+        if (mCandidate == null) {
             // if no candidate is known, let's figure it out
             int current = mHead;
             int counter = 0;
@@ -545,7 +572,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
             }
             return pivot;
         }
-        return candidate;
+        return mCandidate;
     }
 
     /**
@@ -602,7 +629,10 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
         return 0;
     }
 
-
+    /**
+     * Show size in bytes
+     * @return size in bytes
+     */
     public int sizeInBytes() {
         int size = 0;
         size += 3 * (mArrayIndices.length * 4);
@@ -610,6 +640,9 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
         return size;
     }
 
+    /**
+     * print out the variables and their values
+     */
     public void display() {
         int count = currentSize;
         System.out.print("{ ");

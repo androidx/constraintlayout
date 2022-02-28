@@ -35,28 +35,28 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
     public static final String TAG = "MotionPaths";
     public static final boolean DEBUG = false;
 
-    private float alpha = 1;
+    private float mAlpha = 1;
     int mVisibilityMode = MotionWidget.VISIBILITY_MODE_NORMAL;
     int visibility;
-    private boolean applyElevation = false;
-    private float elevation = 0;
-    private float rotation = 0;
-    private float rotationX = 0;
+    private boolean mApplyElevation = false;
+    private float mElevation = 0;
+    private float mRotation = 0;
+    private float mRotationX = 0;
     public float rotationY = 0;
-    private float scaleX = 1;
-    private float scaleY = 1;
+    private float mScaleX = 1;
+    private float mScaleY = 1;
     private float mPivotX = Float.NaN;
     private float mPivotY = Float.NaN;
-    private float translationX = 0;
-    private float translationY = 0;
-    private float translationZ = 0;
+    private float mTranslationX = 0;
+    private float mTranslationY = 0;
+    private float mTranslationZ = 0;
     private Easing mKeyFrameEasing;
     private int mDrawPath = 0;
-    private float position;
-    private float x;
-    private float y;
-    private float width;
-    private float height;
+    private float mPosition;
+    private float mX;
+    private float mY;
+    private float mWidth;
+    private float mHeight;
     private float mPathRotate = Float.NaN;
     private float mProgress = Float.NaN;
     private int mAnimateRelativeTo = -1;
@@ -68,7 +68,7 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
     LinkedHashMap<String, CustomVariable> mCustomVariable = new LinkedHashMap<>();
     int mMode = 0; // how was this point computed 1=perpendicular 2=deltaRelative
 
-    public MotionConstrainedPoint() {
+    MotionConstrainedPoint() {
 
     }
 
@@ -86,10 +86,10 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
      * @param keySet
      */
     void different(MotionConstrainedPoint points, HashSet<String> keySet) {
-        if (diff(alpha, points.alpha)) {
+        if (diff(mAlpha, points.mAlpha)) {
             keySet.add(TypedValues.AttributesType.S_ALPHA);
         }
-        if (diff(elevation, points.elevation)) {
+        if (diff(mElevation, points.mElevation)) {
             keySet.add(TypedValues.AttributesType.S_TRANSLATION_Z);
         }
         if (visibility != points.visibility
@@ -98,7 +98,7 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
                 || points.visibility == MotionWidget.VISIBLE)) {
             keySet.add(TypedValues.AttributesType.S_ALPHA);
         }
-        if (diff(rotation, points.rotation)) {
+        if (diff(mRotation, points.mRotation)) {
             keySet.add(TypedValues.AttributesType.S_ROTATION_Z);
         }
         if (!(Float.isNaN(mPathRotate) && Float.isNaN(points.mPathRotate))) {
@@ -107,7 +107,7 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
         if (!(Float.isNaN(mProgress) && Float.isNaN(points.mProgress))) {
             keySet.add(TypedValues.AttributesType.S_PROGRESS);
         }
-        if (diff(rotationX, points.rotationX)) {
+        if (diff(mRotationX, points.mRotationX)) {
             keySet.add(TypedValues.AttributesType.S_ROTATION_X);
         }
         if (diff(rotationY, points.rotationY)) {
@@ -119,41 +119,42 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
         if (diff(mPivotY, points.mPivotY)) {
             keySet.add(TypedValues.AttributesType.S_PIVOT_Y);
         }
-        if (diff(scaleX, points.scaleX)) {
+        if (diff(mScaleX, points.mScaleX)) {
             keySet.add(TypedValues.AttributesType.S_SCALE_X);
         }
-        if (diff(scaleY, points.scaleY)) {
+        if (diff(mScaleY, points.mScaleY)) {
             keySet.add(TypedValues.AttributesType.S_SCALE_Y);
         }
-        if (diff(translationX, points.translationX)) {
+        if (diff(mTranslationX, points.mTranslationX)) {
             keySet.add(TypedValues.AttributesType.S_TRANSLATION_X);
         }
-        if (diff(translationY, points.translationY)) {
+        if (diff(mTranslationY, points.mTranslationY)) {
             keySet.add(TypedValues.AttributesType.S_TRANSLATION_Y);
         }
-        if (diff(translationZ, points.translationZ)) {
+        if (diff(mTranslationZ, points.mTranslationZ)) {
             keySet.add(TypedValues.AttributesType.S_TRANSLATION_Z);
         }
-        if (diff(elevation, points.elevation)) {
+        if (diff(mElevation, points.mElevation)) {
             keySet.add(TypedValues.AttributesType.S_ELEVATION);
         }
     }
 
     void different(MotionConstrainedPoint points, boolean[] mask, String[] custom) {
         int c = 0;
-        mask[c++] |= diff(position, points.position);
-        mask[c++] |= diff(x, points.x);
-        mask[c++] |= diff(y, points.y);
-        mask[c++] |= diff(width, points.width);
-        mask[c++] |= diff(height, points.height);
+        mask[c++] |= diff(mPosition, points.mPosition);
+        mask[c++] |= diff(mX, points.mX);
+        mask[c++] |= diff(mY, points.mY);
+        mask[c++] |= diff(mWidth, points.mWidth);
+        mask[c++] |= diff(mHeight, points.mHeight);
     }
 
     double[] mTempValue = new double[18];
     double[] mTempDelta = new double[18];
 
     void fillStandard(double[] data, int[] toUse) {
-        float[] set = {position, x, y, width, height, alpha, elevation, rotation, rotationX, rotationY,
-                scaleX, scaleY, mPivotX, mPivotY, translationX, translationY, translationZ, mPathRotate};
+        float[] set = {mPosition, mX, mY, mWidth, mHeight, mAlpha, mElevation,
+                mRotation, mRotationX, rotationY, mScaleX, mScaleY, mPivotX,
+                mPivotY, mTranslationX, mTranslationY, mTranslationZ, mPathRotate};
         int c = 0;
         for (int i = 0; i < toUse.length; i++) {
             if (toUse[i] < set.length) {
@@ -176,44 +177,44 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
             value[offset] = a.getValueToInterpolate();
             return 1;
         } else {
-            int N = a.numberOfInterpolatedValues();
-            float[] f = new float[N];
+            int n = a.numberOfInterpolatedValues();
+            float[] f = new float[n];
             a.getValuesToInterpolate(f);
-            for (int i = 0; i < N; i++) {
+            for (int i = 0; i < n; i++) {
                 value[offset++] = f[i];
             }
-            return N;
+            return n;
         }
     }
 
     void setBounds(float x, float y, float w, float h) {
-        this.x = x;
-        this.y = y;
-        width = w;
-        height = h;
+        this.mX = x;
+        this.mY = y;
+        mWidth = w;
+        mHeight = h;
     }
 
     @Override
     public int compareTo(MotionConstrainedPoint o) {
-        return Float.compare(position, o.position);
+        return Float.compare(mPosition, o.mPosition);
     }
 
     public void applyParameters(MotionWidget view) {
 
         this.visibility = view.getVisibility();
-        this.alpha = (view.getVisibility() != MotionWidget.VISIBLE) ? 0.0f : view.getAlpha();
-        this.applyElevation = false; // TODO figure a way to cache parameters
+        this.mAlpha = (view.getVisibility() != MotionWidget.VISIBLE) ? 0.0f : view.getAlpha();
+        this.mApplyElevation = false; // TODO figure a way to cache parameters
 
-        this.rotation = view.getRotationZ();
-        this.rotationX = view.getRotationX();
+        this.mRotation = view.getRotationZ();
+        this.mRotationX = view.getRotationX();
         this.rotationY = view.getRotationY();
-        this.scaleX = view.getScaleX();
-        this.scaleY = view.getScaleY();
+        this.mScaleX = view.getScaleX();
+        this.mScaleY = view.getScaleY();
         this.mPivotX = view.getPivotX();
         this.mPivotY = view.getPivotY();
-        this.translationX = view.getTranslationX();
-        this.translationY = view.getTranslationY();
-        this.translationZ = view.getTranslationZ();
+        this.mTranslationX = view.getTranslationX();
+        this.mTranslationY = view.getTranslationY();
+        this.mTranslationZ = view.getTranslationZ();
         Set<String> at = view.getCustomAttributeNames();
         for (String s : at) {
             CustomVariable attr = view.getCustomAttribute(s);
@@ -233,13 +234,13 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
             }
             switch (s) {
                 case TypedValues.AttributesType.S_ALPHA:
-                    ViewSpline.setPoint(mFramePosition, Float.isNaN(alpha) ? 1 : alpha);
+                    ViewSpline.setPoint(mFramePosition, Float.isNaN(mAlpha) ? 1 : mAlpha);
                     break;
                 case TypedValues.AttributesType.S_ROTATION_Z:
-                    ViewSpline.setPoint(mFramePosition, Float.isNaN(rotation) ? 0 : rotation);
+                    ViewSpline.setPoint(mFramePosition, Float.isNaN(mRotation) ? 0 : mRotation);
                     break;
                 case TypedValues.AttributesType.S_ROTATION_X:
-                    ViewSpline.setPoint(mFramePosition, Float.isNaN(rotationX) ? 0 : rotationX);
+                    ViewSpline.setPoint(mFramePosition, Float.isNaN(mRotationX) ? 0 : mRotationX);
                     break;
                 case TypedValues.AttributesType.S_ROTATION_Y:
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(rotationY) ? 0 : rotationY);
@@ -257,19 +258,22 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
                     ViewSpline.setPoint(mFramePosition, Float.isNaN(mProgress) ? 0 : mProgress);
                     break;
                 case TypedValues.AttributesType.S_SCALE_X:
-                    ViewSpline.setPoint(mFramePosition, Float.isNaN(scaleX) ? 1 : scaleX);
+                    ViewSpline.setPoint(mFramePosition, Float.isNaN(mScaleX) ? 1 : mScaleX);
                     break;
                 case TypedValues.AttributesType.S_SCALE_Y:
-                    ViewSpline.setPoint(mFramePosition, Float.isNaN(scaleY) ? 1 : scaleY);
+                    ViewSpline.setPoint(mFramePosition, Float.isNaN(mScaleY) ? 1 : mScaleY);
                     break;
                 case TypedValues.AttributesType.S_TRANSLATION_X:
-                    ViewSpline.setPoint(mFramePosition, Float.isNaN(translationX) ? 0 : translationX);
+                    ViewSpline.setPoint(mFramePosition,
+                            Float.isNaN(mTranslationX) ? 0 : mTranslationX);
                     break;
                 case TypedValues.AttributesType.S_TRANSLATION_Y:
-                    ViewSpline.setPoint(mFramePosition, Float.isNaN(translationY) ? 0 : translationY);
+                    ViewSpline.setPoint(mFramePosition,
+                            Float.isNaN(mTranslationY) ? 0 : mTranslationY);
                     break;
                 case TypedValues.AttributesType.S_TRANSLATION_Z:
-                    ViewSpline.setPoint(mFramePosition, Float.isNaN(translationZ) ? 0 : translationZ);
+                    ViewSpline.setPoint(mFramePosition,
+                            Float.isNaN(mTranslationZ) ? 0 : mTranslationZ);
                     break;
                 default:
                     if (s.startsWith("CUSTOM")) {
@@ -277,11 +281,12 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
                         if (mCustomVariable.containsKey(customName)) {
                             CustomVariable custom = mCustomVariable.get(customName);
                             if (ViewSpline instanceof SplineSet.CustomSpline) {
-                                ((SplineSet.CustomSpline) ViewSpline).setPoint(mFramePosition, custom);
+                                ((SplineSet.CustomSpline) ViewSpline)
+                                        .setPoint(mFramePosition, custom);
                             } else {
-                                Utils.loge(TAG, s + " ViewSpline not a CustomSet frame = " +
-                                        mFramePosition + ", value" + custom.getValueToInterpolate() +
-                                        ViewSpline);
+                                Utils.loge(TAG, s + " ViewSpline not a CustomSet frame = "
+                                        + mFramePosition + ", value"
+                                        + custom.getValueToInterpolate() + ViewSpline);
 
                             }
 
@@ -312,10 +317,10 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
 
         switch (rotation) {
             case MotionWidget.ROTATE_PORTRATE_OF_LEFT:
-                this.rotation = prevous + 90;
+                this.mRotation = prevous + 90;
                 break;
             case MotionWidget.ROTATE_PORTRATE_OF_RIGHT:
-                this.rotation = prevous - 90;
+                this.mRotation = prevous - 90;
                 break;
         }
     }

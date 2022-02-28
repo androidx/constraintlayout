@@ -23,7 +23,7 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import java.util.Set;
 
 public class MotionWidget implements TypedValues {
-    WidgetFrame widgetFrame = new WidgetFrame();
+    WidgetFrame mWidgetFrame = new WidgetFrame();
     Motion motion = new Motion();
     PropertySet propertySet = new PropertySet();
     private float mProgress;
@@ -99,7 +99,7 @@ public class MotionWidget implements TypedValues {
     }
 
     public String getName() {
-        return widgetFrame.getId();
+        return mWidgetFrame.getId();
     }
 
     public void layout(int l, int t, int r, int b) {
@@ -107,21 +107,22 @@ public class MotionWidget implements TypedValues {
     }
 
     public String toString() {
-        return widgetFrame.left + ", " + widgetFrame.top + ", " + widgetFrame.right + ", " + widgetFrame.bottom;
+        return mWidgetFrame.left + ", " + mWidgetFrame.top + ", "
+                + mWidgetFrame.right + ", " + mWidgetFrame.bottom;
     }
 
     public void setBounds(int left, int top, int right, int bottom) {
-        if (widgetFrame == null) {
-            widgetFrame = new WidgetFrame((ConstraintWidget) null);
+        if (mWidgetFrame == null) {
+            mWidgetFrame = new WidgetFrame((ConstraintWidget) null);
         }
-        widgetFrame.top = top;
-        widgetFrame.left = left;
-        widgetFrame.right = right;
-        widgetFrame.bottom = bottom;
+        mWidgetFrame.top = top;
+        mWidgetFrame.left = left;
+        mWidgetFrame.right = right;
+        mWidgetFrame.bottom = bottom;
     }
 
     public MotionWidget(WidgetFrame f) {
-        widgetFrame = f;
+        mWidgetFrame = f;
     }
 
     @Override
@@ -221,37 +222,37 @@ public class MotionWidget implements TypedValues {
     public boolean setValueAttributes(int id, float value) {
         switch (id) {
             case AttributesType.TYPE_ALPHA:
-                widgetFrame.alpha = value;
+                mWidgetFrame.alpha = value;
                 break;
             case AttributesType.TYPE_TRANSLATION_X:
-                widgetFrame.translationX = value;
+                mWidgetFrame.translationX = value;
                 break;
             case AttributesType.TYPE_TRANSLATION_Y:
-                widgetFrame.translationY = value;
+                mWidgetFrame.translationY = value;
                 break;
             case AttributesType.TYPE_TRANSLATION_Z:
-                widgetFrame.translationZ = value;
+                mWidgetFrame.translationZ = value;
                 break;
             case AttributesType.TYPE_ROTATION_X:
-                widgetFrame.rotationX = value;
+                mWidgetFrame.rotationX = value;
                 break;
             case AttributesType.TYPE_ROTATION_Y:
-                widgetFrame.rotationY = value;
+                mWidgetFrame.rotationY = value;
                 break;
             case AttributesType.TYPE_ROTATION_Z:
-                widgetFrame.rotationZ = value;
+                mWidgetFrame.rotationZ = value;
                 break;
             case AttributesType.TYPE_SCALE_X:
-                widgetFrame.scaleX = value;
+                mWidgetFrame.scaleX = value;
                 break;
             case AttributesType.TYPE_SCALE_Y:
-                widgetFrame.scaleY = value;
+                mWidgetFrame.scaleY = value;
                 break;
             case AttributesType.TYPE_PIVOT_X:
-                widgetFrame.pivotX = value;
+                mWidgetFrame.pivotX = value;
                 break;
             case AttributesType.TYPE_PIVOT_Y:
-                widgetFrame.pivotY = value;
+                mWidgetFrame.pivotY = value;
                 break;
             case AttributesType.TYPE_PROGRESS:
                 mProgress = value;
@@ -272,27 +273,27 @@ public class MotionWidget implements TypedValues {
     public float getValueAttributes(int id) {
         switch (id) {
             case AttributesType.TYPE_ALPHA:
-                return widgetFrame.alpha;
+                return mWidgetFrame.alpha;
             case AttributesType.TYPE_TRANSLATION_X:
-                return widgetFrame.translationX;
+                return mWidgetFrame.translationX;
             case AttributesType.TYPE_TRANSLATION_Y:
-                return widgetFrame.translationY;
+                return mWidgetFrame.translationY;
             case AttributesType.TYPE_TRANSLATION_Z:
-                return widgetFrame.translationZ;
+                return mWidgetFrame.translationZ;
             case AttributesType.TYPE_ROTATION_X:
-                return widgetFrame.rotationX;
+                return mWidgetFrame.rotationX;
             case AttributesType.TYPE_ROTATION_Y:
-                return widgetFrame.rotationY;
+                return mWidgetFrame.rotationY;
             case AttributesType.TYPE_ROTATION_Z:
-                return widgetFrame.rotationZ;
+                return mWidgetFrame.rotationZ;
             case AttributesType.TYPE_SCALE_X:
-                return widgetFrame.scaleX;
+                return mWidgetFrame.scaleX;
             case AttributesType.TYPE_SCALE_Y:
-                return widgetFrame.scaleY;
+                return mWidgetFrame.scaleY;
             case AttributesType.TYPE_PIVOT_X:
-                return widgetFrame.pivotX;
+                return mWidgetFrame.pivotX;
             case AttributesType.TYPE_PIVOT_Y:
-                return widgetFrame.pivotY;
+                return mWidgetFrame.pivotY;
             case AttributesType.TYPE_PROGRESS:
                 return  mProgress;
             case AttributesType.TYPE_PATH_ROTATE:
@@ -312,91 +313,91 @@ public class MotionWidget implements TypedValues {
     }
 
     public int getTop() {
-        return widgetFrame.top;
+        return mWidgetFrame.top;
     }
 
     public int getLeft() {
-        return widgetFrame.left;
+        return mWidgetFrame.left;
     }
 
     public int getBottom() {
-        return widgetFrame.bottom;
+        return mWidgetFrame.bottom;
     }
 
     public int getRight() {
-        return widgetFrame.right;
+        return mWidgetFrame.right;
     }
 
     public void setPivotX(float px) {
-        widgetFrame.pivotX = px;
+        mWidgetFrame.pivotX = px;
     }
 
     public void setPivotY(float py) {
-        widgetFrame.pivotY = py;
+        mWidgetFrame.pivotY = py;
     }
 
     public float getRotationX() {
-        return widgetFrame.rotationX;
+        return mWidgetFrame.rotationX;
     }
 
     public void setRotationX(float rotationX) {
-        widgetFrame.rotationX = rotationX;
+        mWidgetFrame.rotationX = rotationX;
     }
 
     public float getRotationY() {
-        return widgetFrame.rotationY;
+        return mWidgetFrame.rotationY;
     }
 
     public void setRotationY(float rotationY) {
-        widgetFrame.rotationY = rotationY;
+        mWidgetFrame.rotationY = rotationY;
     }
 
     public float getRotationZ() {
-        return widgetFrame.rotationZ;
+        return mWidgetFrame.rotationZ;
     }
 
     public void setRotationZ(float rotationZ) {
-        widgetFrame.rotationZ = rotationZ;
+        mWidgetFrame.rotationZ = rotationZ;
     }
 
     public float getTranslationX() {
-        return widgetFrame.translationX;
+        return mWidgetFrame.translationX;
     }
 
     public void setTranslationX(float translationX) {
-        widgetFrame.translationX = translationX;
+        mWidgetFrame.translationX = translationX;
     }
 
     public float getTranslationY() {
-        return widgetFrame.translationY;
+        return mWidgetFrame.translationY;
     }
 
     public void setTranslationY(float translationY) {
-        widgetFrame.translationY = translationY;
+        mWidgetFrame.translationY = translationY;
     }
 
     public void setTranslationZ(float tz) {
-        widgetFrame.translationZ = tz;
+        mWidgetFrame.translationZ = tz;
     }
 
     public float getTranslationZ() {
-        return widgetFrame.translationZ;
+        return mWidgetFrame.translationZ;
     }
 
     public float getScaleX() {
-        return widgetFrame.scaleX;
+        return mWidgetFrame.scaleX;
     }
 
     public void setScaleX(float scaleX) {
-        widgetFrame.scaleX = scaleX;
+        mWidgetFrame.scaleX = scaleX;
     }
 
     public float getScaleY() {
-        return widgetFrame.scaleY;
+        return mWidgetFrame.scaleY;
     }
 
     public void setScaleY(float scaleY) {
-        widgetFrame.scaleY = scaleY;
+        mWidgetFrame.scaleY = scaleY;
     }
 
     public int getVisibility() {
@@ -404,11 +405,11 @@ public class MotionWidget implements TypedValues {
     }
 
     public float getPivotX() {
-        return widgetFrame.pivotX;
+        return mWidgetFrame.pivotX;
     }
 
     public float getPivotY() {
-        return widgetFrame.pivotY;
+        return mWidgetFrame.pivotY;
     }
 
     public float getAlpha() {
@@ -416,51 +417,51 @@ public class MotionWidget implements TypedValues {
     }
 
     public int getX() {
-        return widgetFrame.left;
+        return mWidgetFrame.left;
     }
 
     public int getY() {
-        return widgetFrame.top;
+        return mWidgetFrame.top;
     }
 
     public int getWidth() {
-        return widgetFrame.right - widgetFrame.left;
+        return mWidgetFrame.right - mWidgetFrame.left;
     }
 
     public int getHeight() {
-        return widgetFrame.bottom - widgetFrame.top;
+        return mWidgetFrame.bottom - mWidgetFrame.top;
     }
 
     public WidgetFrame getWidgetFrame() {
-        return widgetFrame;
+        return mWidgetFrame;
     }
 
     public Set<String> getCustomAttributeNames() {
-        return widgetFrame.getCustomAttributeNames();
+        return mWidgetFrame.getCustomAttributeNames();
     }
 
     public void setCustomAttribute(String name, int type, float value) {
-        widgetFrame.setCustomAttribute(name, type, value);
+        mWidgetFrame.setCustomAttribute(name, type, value);
     }
 
     public void setCustomAttribute(String name, int type, int value) {
-        widgetFrame.setCustomAttribute(name, type, value);
+        mWidgetFrame.setCustomAttribute(name, type, value);
     }
 
     public void setCustomAttribute(String name, int type, boolean value) {
-        widgetFrame.setCustomAttribute(name, type, value);
+        mWidgetFrame.setCustomAttribute(name, type, value);
     }
 
     public void setCustomAttribute(String name, int type, String value) {
-        widgetFrame.setCustomAttribute(name, type, value);
+        mWidgetFrame.setCustomAttribute(name, type, value);
     }
 
     public CustomVariable getCustomAttribute(String name) {
-        return widgetFrame.getCustomAttribute(name);
+        return mWidgetFrame.getCustomAttribute(name);
     }
 
     public void setInterpolatedValue(CustomAttribute attribute, float[] mCache) {
-        widgetFrame.setCustomAttribute(attribute.mName,TypedValues.Custom.TYPE_FLOAT, mCache[0]);
+        mWidgetFrame.setCustomAttribute(attribute.mName, TypedValues.Custom.TYPE_FLOAT, mCache[0]);
     }
 
 }

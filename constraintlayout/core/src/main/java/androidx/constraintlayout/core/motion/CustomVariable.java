@@ -235,9 +235,9 @@ public class CustomVariable {
                 float f_r = value[0];
                 float f_g = value[1];
                 float f_b = value[2];
-                int r = 0xFF & Math.round((float)Math.pow(f_r, 1.0/2.0) * 255.0f);
-                int g = 0xFF & Math.round((float)Math.pow(f_g, 1.0/2.0) * 255.0f);
-                int b = 0xFF & Math.round((float)Math.pow(f_b, 1.0/2.0) * 255.0f);
+                int r = 0xFF & Math.round((float) Math.pow(f_r, 1.0 / 2.0) * 255.0f);
+                int g = 0xFF & Math.round((float) Math.pow(f_g, 1.0 / 2.0) * 255.0f);
+                int b = 0xFF & Math.round((float) Math.pow(f_b, 1.0 / 2.0) * 255.0f);
                 int a = 0xFF & Math.round(value[3] * 255.0f);
                 mIntegerValue = a << 24 | r << 16 | g << 8 | b;
                 break;
@@ -277,27 +277,27 @@ public class CustomVariable {
     /**
      * test if the two attributes are different
      *
-     * @param CustomAttribute
+     * @param customAttribute
      * @return
      */
-    public boolean diff(CustomVariable CustomAttribute) {
-        if (CustomAttribute == null || mType != CustomAttribute.mType) {
+    public boolean diff(CustomVariable customAttribute) {
+        if (customAttribute == null || mType != customAttribute.mType) {
             return false;
         }
         switch (mType) {
             case TypedValues.Custom.TYPE_INT:
             case TypedValues.Custom.TYPE_REFERENCE:
-                return mIntegerValue == CustomAttribute.mIntegerValue;
+                return mIntegerValue == customAttribute.mIntegerValue;
             case TypedValues.Custom.TYPE_FLOAT:
-                return mFloatValue == CustomAttribute.mFloatValue;
+                return mFloatValue == customAttribute.mFloatValue;
             case TypedValues.Custom.TYPE_COLOR:
-                return mIntegerValue == CustomAttribute.mIntegerValue;
+                return mIntegerValue == customAttribute.mIntegerValue;
             case TypedValues.Custom.TYPE_STRING:
-                return mIntegerValue == CustomAttribute.mIntegerValue;
+                return mIntegerValue == customAttribute.mIntegerValue;
             case TypedValues.Custom.TYPE_BOOLEAN:
-                return mBooleanValue == CustomAttribute.mBooleanValue;
+                return mBooleanValue == customAttribute.mBooleanValue;
             case TypedValues.Custom.TYPE_DIMENSION:
-                return mFloatValue == CustomAttribute.mFloatValue;
+                return mFloatValue == customAttribute.mFloatValue;
         }
         return false;
     }
@@ -345,15 +345,15 @@ public class CustomVariable {
     }
 
     private static int clamp(int c) {
-        int N = 255;
+        int n = 255;
         c &= ~(c >> 31);
-        c -= N;
+        c -= n;
         c &= (c >> 31);
-        c += N;
+        c += n;
         return c;
     }
-   
-   public int getInterpolatedColor(float[] value) {
+
+    public int getInterpolatedColor(float[] value) {
         int r = clamp((int) ((float) Math.pow(value[0], 1.0 / 2.2) * 255.0f));
         int g = clamp((int) ((float) Math.pow(value[1], 1.0 / 2.2) * 255.0f));
         int b = clamp((int) ((float) Math.pow(value[2], 1.0 / 2.2) * 255.0f));
@@ -397,7 +397,7 @@ public class CustomVariable {
         int color = (ia << 24) | (ir << 16) | (ig << 8) | ib;
         return color;
     }
-  
+
     public void applyToWidget(MotionWidget view) {
         switch (mType) {
             case TypedValues.Custom.TYPE_INT:

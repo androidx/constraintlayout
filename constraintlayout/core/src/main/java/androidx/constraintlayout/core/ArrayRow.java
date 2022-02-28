@@ -16,9 +16,9 @@
 
 package androidx.constraintlayout.core;
 
-import java.util.ArrayList;
-
 import static androidx.constraintlayout.core.SolverVariable.*;
+
+import java.util.ArrayList;
 
 public class ArrayRow implements LinearSystem.Row {
     private static final boolean DEBUG = false;
@@ -28,7 +28,7 @@ public class ArrayRow implements LinearSystem.Row {
     boolean used = false;
     private static final boolean FULL_NEW_CHECK = false; // full validation (debug purposes)
 
-    ArrayList<SolverVariable> variablesToUpdate = new ArrayList<>();
+    ArrayList<SolverVariable> mVariablesToUpdate = new ArrayList<>();
 
     public ArrayRowVariables variables;
 
@@ -64,7 +64,7 @@ public class ArrayRow implements LinearSystem.Row {
                 (variable == null)
                         || (variable.mType != SolverVariable.Type.UNRESTRICTED
                         && constantValue < 0)
-        );
+            );
     }
 
     public String toString() {
@@ -154,7 +154,9 @@ public class ArrayRow implements LinearSystem.Row {
         return this;
     }
 
-    public ArrayRow createRowEquals(SolverVariable variableA, SolverVariable variableB, int margin) {
+    public ArrayRow createRowEquals(SolverVariable variableA,
+                                    SolverVariable variableB,
+                                    int margin) {
         boolean inverse = false;
         if (margin != 0) {
             int m = margin;
@@ -232,11 +234,12 @@ public class ArrayRow implements LinearSystem.Row {
         return this;
     }
 
-    public ArrayRow createRowEqualMatchDimensions(float currentWeight, float totalWeights, float nextWeight,
-                                        SolverVariable variableStartA,
-                                        SolverVariable variableEndA,
-                                        SolverVariable variableStartB,
-                                        SolverVariable variableEndB) {
+    public ArrayRow createRowEqualMatchDimensions(float currentWeight,
+                                                  float totalWeights, float nextWeight,
+                                                  SolverVariable variableStartA,
+                                                  SolverVariable variableEndA,
+                                                  SolverVariable variableStartB,
+                                                  SolverVariable variableEndB) {
         constantValue = 0;
         if (totalWeights == 0 || (currentWeight == nextWeight)) {
             // endA - startA == endB - startB
@@ -268,15 +271,19 @@ public class ArrayRow implements LinearSystem.Row {
         return this;
     }
 
-    public ArrayRow createRowEqualDimension(float currentWeight, float totalWeights, float nextWeight,
+    public ArrayRow createRowEqualDimension(float currentWeight,
+                                            float totalWeights, float nextWeight,
                                             SolverVariable variableStartA, int marginStartA,
                                             SolverVariable variableEndA, int marginEndA,
                                             SolverVariable variableStartB, int marginStartB,
                                             SolverVariable variableEndB, int marginEndB) {
         if (totalWeights == 0 || (currentWeight == nextWeight)) {
-            // endA - startA + marginStartA + marginEndA == endB - startB + marginStartB + marginEndB
-            // 0 = startA - endA - marginStartA - marginEndA + endB - startB + marginStartB + marginEndB
-            // 0 = (- marginStartA - marginEndA + marginStartB + marginEndB) + startA - endA + endB - startB
+            // endA - startA + marginStartA + marginEndA
+            //      == endB - startB + marginStartB + marginEndB
+            // 0 = startA - endA - marginStartA - marginEndA
+            //      + endB - startB + marginStartB + marginEndB
+            // 0 = (- marginStartA - marginEndA + marginStartB + marginEndB)
+            //      + startA - endA + endB - startB
             constantValue = -marginStartA - marginEndA + marginStartB + marginEndB;
             variables.put(variableStartA, 1);
             variables.put(variableEndA, -1);
@@ -286,10 +293,13 @@ public class ArrayRow implements LinearSystem.Row {
             float cw = currentWeight / totalWeights;
             float nw = nextWeight / totalWeights;
             float w = cw / nw;
-            // (endA - startA + marginStartA + marginEndA) = w * (endB - startB) + marginStartB + marginEndB;
-            // 0 = (startA - endA - marginStartA - marginEndA) + w * (endB - startB) + marginStartB + marginEndB
-            // 0 = (- marginStartA - marginEndA + marginStartB + marginEndB) + startA - endA + w * endB - w * startB
-            constantValue = - marginStartA - marginEndA + w * marginStartB + w * marginEndB;
+            // (endA - startA + marginStartA + marginEndA) =
+            //      w * (endB - startB) + marginStartB + marginEndB;
+            // 0 = (startA - endA - marginStartA - marginEndA)
+            //      + w * (endB - startB) + marginStartB + marginEndB
+            // 0 = (- marginStartA - marginEndA + marginStartB + marginEndB)
+            //      + startA - endA + w * endB - w * startB
+            constantValue = -marginStartA - marginEndA + w * marginStartB + w * marginEndB;
             variables.put(variableStartA, 1);
             variables.put(variableEndA, -1);
             variables.put(variableEndB, w);
@@ -298,8 +308,9 @@ public class ArrayRow implements LinearSystem.Row {
         return this;
     }
 
-    ArrayRow createRowCentering(SolverVariable variableA, SolverVariable variableB, int marginA,
-                                float bias, SolverVariable variableC, SolverVariable variableD, int marginB) {
+    ArrayRow createRowCentering(SolverVariable variableA, SolverVariable variableB,
+                                int marginA, float bias, SolverVariable variableC,
+                                SolverVariable variableD, int marginB) {
         if (variableB == variableC) {
             // centering on the same position
             // B - A == D - B
@@ -339,7 +350,7 @@ public class ArrayRow implements LinearSystem.Row {
             variables.put(variableC, -1 * bias);
             variables.put(variableD, 1 * bias);
             if (marginA > 0 || marginB > 0) {
-                constantValue = - marginA * (1 - bias) + marginB * bias;
+                constantValue = -marginA * (1 - bias) + marginB * bias;
             }
         }
         return this;
@@ -370,7 +381,8 @@ public class ArrayRow implements LinearSystem.Row {
      * @return the row
      */
     public ArrayRow createRowDimensionRatio(SolverVariable variableA, SolverVariable variableB,
-                                            SolverVariable variableC, SolverVariable variableD, float ratio) {
+                                            SolverVariable variableC, SolverVariable variableD,
+                                            float ratio) {
         // A = B + (C - D) * ratio
         variables.put(variableA, -1);
         variables.put(variableB, 1);
@@ -389,12 +401,16 @@ public class ArrayRow implements LinearSystem.Row {
      * @param angleComponent
      * @return
      */
-    public ArrayRow createRowWithAngle(SolverVariable at, SolverVariable ab, SolverVariable bt, SolverVariable bb, float angleComponent) {
+    public ArrayRow createRowWithAngle(SolverVariable at,
+                                       SolverVariable ab,
+                                       SolverVariable bt,
+                                       SolverVariable bb,
+                                       float angleComponent) {
         variables.put(bt, 0.5f);
         variables.put(bb, 0.5f);
         variables.put(at, -0.5f);
         variables.put(ab, -0.5f);
-        constantValue = - angleComponent;
+        constantValue = -angleComponent;
         return this;
     }
 
@@ -557,7 +573,9 @@ public class ArrayRow implements LinearSystem.Row {
     }
 
     @Override
-    public void updateFromRow(LinearSystem system, ArrayRow definition, boolean removeFromDefinition) {
+    public void updateFromRow(LinearSystem system,
+                              ArrayRow definition,
+                              boolean removeFromDefinition) {
         float value = variables.use(definition, removeFromDefinition);
 
         constantValue += definition.constantValue * value;
@@ -571,7 +589,9 @@ public class ArrayRow implements LinearSystem.Row {
         }
     }
 
-    public void updateFromFinalVariable(LinearSystem system, SolverVariable variable, boolean removeFromDefinition) {
+    public void updateFromFinalVariable(LinearSystem system,
+                                        SolverVariable variable,
+                                        boolean removeFromDefinition) {
         if (variable == null || !variable.isFinalValue) {
             return;
         }
@@ -588,7 +608,9 @@ public class ArrayRow implements LinearSystem.Row {
         }
     }
 
-    public void updateFromSynonymVariable(LinearSystem system, SolverVariable variable, boolean removeFromDefinition) {
+    public void updateFromSynonymVariable(LinearSystem system,
+                                          SolverVariable variable,
+                                          boolean removeFromDefinition) {
         if (variable == null || !variable.isSynonym) {
             return;
         }
@@ -598,7 +620,8 @@ public class ArrayRow implements LinearSystem.Row {
         if (removeFromDefinition) {
             variable.removeFromRow(this);
         }
-        variables.add(system.mCache.mIndexedVariables[variable.synonym], value, removeFromDefinition);
+        variables.add(system.mCache.mIndexedVariables[variable.synonym],
+                value, removeFromDefinition);
         if (LinearSystem.SIMPLIFY_SYNONYMS
                 && variables.getCurrentSize() == 0) {
             isSimpleDefinition = true;
@@ -719,13 +742,13 @@ public class ArrayRow implements LinearSystem.Row {
             for (int i = 0; i < currentSize; i++) {
                 SolverVariable variable = variables.getVariable(i);
                 if (variable.definitionId != -1 || variable.isFinalValue || variable.isSynonym) {
-                    variablesToUpdate.add(variable);
+                    mVariablesToUpdate.add(variable);
                 }
             }
-            final int size = variablesToUpdate.size();
+            final int size = mVariablesToUpdate.size();
             if (size > 0) {
                 for (int i = 0; i < size; i++) {
-                    SolverVariable variable = variablesToUpdate.get(i);
+                    SolverVariable variable = mVariablesToUpdate.get(i);
                     if (variable.isFinalValue) {
                         updateFromFinalVariable(system, variable, true);
                     } else if (variable.isSynonym) {
@@ -734,13 +757,13 @@ public class ArrayRow implements LinearSystem.Row {
                         updateFromRow(system, system.mRows[variable.definitionId], true);
                     }
                 }
-                variablesToUpdate.clear();
+                mVariablesToUpdate.clear();
             } else {
                 done = true;
             }
         }
         if (LinearSystem.SIMPLIFY_SYNONYMS
-            && variable != null && variables.getCurrentSize() == 0) {
+                && variable != null && variables.getCurrentSize() == 0) {
             isSimpleDefinition = true;
             system.hasSimpleDefinition = true;
         }
