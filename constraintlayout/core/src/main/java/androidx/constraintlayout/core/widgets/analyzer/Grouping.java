@@ -15,6 +15,13 @@
  */
 package androidx.constraintlayout.core.widgets.analyzer;
 
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.BOTH;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.FIXED;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.MATCH_PARENT;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.WRAP_CONTENT;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.HORIZONTAL;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
+
 import androidx.constraintlayout.core.widgets.Barrier;
 import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
@@ -25,17 +32,11 @@ import androidx.constraintlayout.core.widgets.HelperWidget;
 
 import java.util.ArrayList;
 
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.BOTH;
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.FIXED;
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.MATCH_PARENT;
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.WRAP_CONTENT;
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.HORIZONTAL;
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
-
 /**
  * Implements a simple grouping mechanism, to group interdependent widgets together.
  *
- * TODO: we should move towards a more leaner implementation -- this is more expensive as it could be.
+ * TODO: we should move towards a more leaner implementation
+ *          -- this is more expensive as it could be.
  */
 public class Grouping {
 
@@ -43,8 +44,10 @@ public class Grouping {
     private static final boolean DEBUG_GROUPING = false;
 
 
-    public static boolean validInGroup(ConstraintWidget.DimensionBehaviour layoutHorizontal, ConstraintWidget.DimensionBehaviour layoutVertical,
-                                ConstraintWidget.DimensionBehaviour widgetHorizontal, ConstraintWidget.DimensionBehaviour widgetVertical) {
+    public static boolean validInGroup(ConstraintWidget.DimensionBehaviour layoutHorizontal,
+                                       ConstraintWidget.DimensionBehaviour layoutVertical,
+                                       ConstraintWidget.DimensionBehaviour widgetHorizontal,
+                                       ConstraintWidget.DimensionBehaviour widgetVertical) {
         boolean fixedHorizontal = widgetHorizontal == FIXED || widgetHorizontal == WRAP_CONTENT
                 || (widgetHorizontal == MATCH_PARENT && layoutHorizontal != WRAP_CONTENT);
         boolean fixedVertical = widgetVertical == FIXED || widgetVertical == WRAP_CONTENT
@@ -55,7 +58,8 @@ public class Grouping {
         return false;
     }
 
-    public static boolean simpleSolvingPass(ConstraintWidgetContainer layout, BasicMeasure.Measurer measurer) {
+    public static boolean simpleSolvingPass(ConstraintWidgetContainer layout,
+                                            BasicMeasure.Measurer measurer) {
 
         if (DEBUG) {
             System.out.println("*** GROUP SOLVING ***");
@@ -73,8 +77,10 @@ public class Grouping {
 
         for (int i = 0; i < count; i++) {
             ConstraintWidget child = children.get(i);
-            if (!validInGroup(layout.getHorizontalDimensionBehaviour(), layout.getVerticalDimensionBehaviour(),
-                    child.getHorizontalDimensionBehaviour(), child.getVerticalDimensionBehaviour())) {
+            if (!validInGroup(layout.getHorizontalDimensionBehaviour(),
+                    layout.getVerticalDimensionBehaviour(),
+                    child.getHorizontalDimensionBehaviour(),
+                    child.getVerticalDimensionBehaviour())) {
                 if (DEBUG) {
                     System.out.println("*** NO GROUP SOLVING ***");
                 }
@@ -89,9 +95,12 @@ public class Grouping {
         }
         for (int i = 0; i < count; i++) {
             ConstraintWidget child = children.get(i);
-            if (!validInGroup(layout.getHorizontalDimensionBehaviour(), layout.getVerticalDimensionBehaviour(),
-                    child.getHorizontalDimensionBehaviour(), child.getVerticalDimensionBehaviour())) {
-                ConstraintWidgetContainer.measure(0, child, measurer, layout.mMeasure, BasicMeasure.Measure.SELF_DIMENSIONS);
+            if (!validInGroup(layout.getHorizontalDimensionBehaviour(),
+                    layout.getVerticalDimensionBehaviour(),
+                    child.getHorizontalDimensionBehaviour(),
+                    child.getVerticalDimensionBehaviour())) {
+                ConstraintWidgetContainer.measure(0, child, measurer,
+                        layout.mMeasure, BasicMeasure.Measure.SELF_DIMENSIONS);
             }
             if (child instanceof Guideline) {
                 Guideline guideline = (Guideline) child;
@@ -154,7 +163,8 @@ public class Grouping {
         ArrayList<WidgetGroup> allDependencyLists = new ArrayList<>();
 
         if (true || layout.getHorizontalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
-            ArrayList<WidgetGroup> dependencyLists = allDependencyLists; //horizontalDependencyLists; //new ArrayList<>();
+            //horizontalDependencyLists; //new ArrayList<>();
+            ArrayList<WidgetGroup> dependencyLists = allDependencyLists;
 
             if (verticalGuidelines != null) {
                 for (Guideline guideline : verticalGuidelines) {
@@ -172,21 +182,24 @@ public class Grouping {
             ConstraintAnchor left = layout.getAnchor(ConstraintAnchor.Type.LEFT);
             if (left.getDependents() != null) {
                 for (ConstraintAnchor first : left.getDependents()) {
-                    findDependents(first.mOwner, ConstraintWidget.HORIZONTAL, dependencyLists, null);
+                    findDependents(first.mOwner, ConstraintWidget.HORIZONTAL,
+                            dependencyLists, null);
                 }
             }
 
             ConstraintAnchor right = layout.getAnchor(ConstraintAnchor.Type.RIGHT);
             if (right.getDependents() != null) {
                 for (ConstraintAnchor first : right.getDependents()) {
-                    findDependents(first.mOwner, ConstraintWidget.HORIZONTAL, dependencyLists, null);
+                    findDependents(first.mOwner, ConstraintWidget.HORIZONTAL,
+                            dependencyLists, null);
                 }
             }
 
             ConstraintAnchor center = layout.getAnchor(ConstraintAnchor.Type.CENTER);
             if (center.getDependents() != null) {
                 for (ConstraintAnchor first : center.getDependents()) {
-                    findDependents(first.mOwner, ConstraintWidget.HORIZONTAL, dependencyLists, null);
+                    findDependents(first.mOwner, ConstraintWidget.HORIZONTAL,
+                            dependencyLists, null);
                 }
             }
 
@@ -198,7 +211,8 @@ public class Grouping {
         }
 
         if (true || layout.getVerticalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
-            ArrayList<WidgetGroup> dependencyLists = allDependencyLists; //verticalDependencyLists; //new ArrayList<>();
+            //verticalDependencyLists; //new ArrayList<>();
+            ArrayList<WidgetGroup> dependencyLists = allDependencyLists;
 
             if (horizontalGuidelines != null) {
                 for (Guideline guideline : horizontalGuidelines) {
@@ -255,7 +269,8 @@ public class Grouping {
                 WidgetGroup verticalGroup = findGroup(allDependencyLists, child.verticalGroup);
                 if (horizontalGroup != null && verticalGroup != null) {
                     if (DEBUG_GROUPING) {
-                        System.out.println("Merging " + horizontalGroup + " to " + verticalGroup + " for " + child);
+                        System.out.println("Merging " + horizontalGroup
+                                + " to " + verticalGroup + " for " + child);
                     }
                     horizontalGroup.moveTo(HORIZONTAL, verticalGroup);
                     verticalGroup.setOrientation(BOTH);
@@ -263,7 +278,8 @@ public class Grouping {
                 }
             }
             if (DEBUG_GROUPING) {
-                System.out.println("Widget " + child + " => " + child.horizontalGroup + " : " + child.verticalGroup);
+                System.out.println("Widget " + child + " => "
+                        + child.horizontalGroup + " : " + child.verticalGroup);
             }
         }
 
@@ -294,7 +310,8 @@ public class Grouping {
         WidgetGroup horizontalPick = null;
         WidgetGroup verticalPick = null;
 
-        if (layout.getHorizontalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
+        if (layout.getHorizontalDimensionBehaviour()
+                == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
             int maxWrap = 0;
             WidgetGroup picked = null;
             for (WidgetGroup list : allDependencyLists) {
@@ -322,7 +339,8 @@ public class Grouping {
             }
         }
 
-        if (layout.getVerticalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
+        if (layout.getVerticalDimensionBehaviour()
+                == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
             int maxWrap = 0;
             WidgetGroup picked = null;
             for (WidgetGroup list : allDependencyLists) {
@@ -352,7 +370,8 @@ public class Grouping {
         return horizontalPick != null || verticalPick != null;
     }
 
-    private static WidgetGroup findGroup(ArrayList<WidgetGroup> horizontalDependencyLists, int groupId) {
+    private static WidgetGroup findGroup(ArrayList<WidgetGroup> horizontalDependencyLists,
+                                         int groupId) {
         final int count = horizontalDependencyLists.size();
         for (int i = 0; i < count; i++) {
             WidgetGroup group = horizontalDependencyLists.get(i);
@@ -363,7 +382,10 @@ public class Grouping {
         return null;
     }
 
-    public static WidgetGroup findDependents(ConstraintWidget constraintWidget, int orientation, ArrayList<WidgetGroup> list, WidgetGroup group) {
+    public static WidgetGroup findDependents(ConstraintWidget constraintWidget,
+                                             int orientation,
+                                             ArrayList<WidgetGroup> list,
+                                             WidgetGroup group) {
         int groupId = -1;
         if (orientation == ConstraintWidget.HORIZONTAL) {
             groupId = constraintWidget.horizontalGroup;
@@ -371,13 +393,15 @@ public class Grouping {
             groupId = constraintWidget.verticalGroup;
         }
         if (DEBUG_GROUPING) {
-            System.out.println("--- find " + (orientation == HORIZONTAL ? "Horiz" : "Vert") + " dependents of " + constraintWidget.getDebugName()
+            System.out.println("--- find " + (orientation == HORIZONTAL ? "Horiz" : "Vert")
+                    + " dependents of " + constraintWidget.getDebugName()
                     + " group " + group + " widget group id " + groupId);
         }
         if (groupId != -1 && (group == null || (groupId != group.id))) {
             // already in a group!
             if (DEBUG_GROUPING) {
-                System.out.println("widget " + constraintWidget.getDebugName() + " already in group " + groupId + " group: " + group);
+                System.out.println("widget " + constraintWidget.getDebugName()
+                        + " already in group " + groupId + " group: " + group);
             }
             for (int i = 0; i < list.size(); i++) {
                 WidgetGroup widgetGroup = list.get(i);
@@ -414,26 +438,30 @@ public class Grouping {
                 group = new WidgetGroup(orientation);
             }
             if (DEBUG_GROUPING) {
-                System.out.println("Create group " + group + " for widget " + constraintWidget.getDebugName());
+                System.out.println("Create group " + group
+                        + " for widget " + constraintWidget.getDebugName());
             }
             list.add(group);
         }
         if (group.add(constraintWidget)) {
             if (constraintWidget instanceof Guideline) {
                 Guideline guideline = (Guideline) constraintWidget;
-                guideline.getAnchor().findDependents(guideline.getOrientation() == Guideline.HORIZONTAL ? VERTICAL : HORIZONTAL, list, group);
+                guideline.getAnchor().findDependents(guideline.getOrientation()
+                        == Guideline.HORIZONTAL ? VERTICAL : HORIZONTAL, list, group);
             }
             if (orientation == ConstraintWidget.HORIZONTAL) {
                 constraintWidget.horizontalGroup = group.getId();
                 if (DEBUG_GROUPING) {
-                    System.out.println("Widget " + constraintWidget.getDebugName() + " H group is " + constraintWidget.horizontalGroup);
+                    System.out.println("Widget " + constraintWidget.getDebugName()
+                            + " H group is " + constraintWidget.horizontalGroup);
                 }
                 constraintWidget.mLeft.findDependents(orientation, list, group);
                 constraintWidget.mRight.findDependents(orientation, list, group);
             } else {
                 constraintWidget.verticalGroup = group.getId();
                 if (DEBUG_GROUPING) {
-                    System.out.println("Widget " + constraintWidget.getDebugName() + " V group is " + constraintWidget.verticalGroup);
+                    System.out.println("Widget " + constraintWidget.getDebugName()
+                            + " V group is " + constraintWidget.verticalGroup);
                 }
                 constraintWidget.mTop.findDependents(orientation, list, group);
                 constraintWidget.mBaseline.findDependents(orientation, list, group);

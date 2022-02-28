@@ -21,7 +21,7 @@ import androidx.constraintlayout.core.widgets.Guideline;
 
 class GuidelineReference extends WidgetRun {
 
-    public GuidelineReference(ConstraintWidget widget) {
+    GuidelineReference(ConstraintWidget widget) {
         super(widget);
         widget.horizontalRun.clear();
         widget.verticalRun.clear();
@@ -44,7 +44,8 @@ class GuidelineReference extends WidgetRun {
         return false;
     }
 
-    private void addDependency(androidx.constraintlayout.core.widgets.analyzer.DependencyNode node) {
+    private void addDependency(
+            androidx.constraintlayout.core.widgets.analyzer.DependencyNode node) {
         start.dependencies.add(node);
         node.targets.add(start);
     }
@@ -58,7 +59,8 @@ class GuidelineReference extends WidgetRun {
             return;
         }
         // ready to solve, centering.
-        androidx.constraintlayout.core.widgets.analyzer.DependencyNode startTarget = start.targets.get(0);
+        androidx.constraintlayout.core.widgets.analyzer.DependencyNode startTarget =
+                start.targets.get(0);
         Guideline guideline = (Guideline) widget;
         int startPos = (int) (0.5f + startTarget.value * guideline.getRelativePercent());
         start.resolve(startPos);
@@ -84,7 +86,8 @@ class GuidelineReference extends WidgetRun {
                 start.targets.add(widget.mParent.horizontalRun.end);
                 widget.mParent.horizontalRun.end.dependencies.add(start);
             }
-            // FIXME -- if we move the DependencyNode directly in the ConstraintAnchor we'll be good.
+            // FIXME -- if we move the DependencyNode directly
+            //              in the ConstraintAnchor we'll be good.
             addDependency(widget.horizontalRun.start);
             addDependency(widget.horizontalRun.end);
         } else {
@@ -101,7 +104,8 @@ class GuidelineReference extends WidgetRun {
                 start.targets.add(widget.mParent.verticalRun.end);
                 widget.mParent.verticalRun.end.dependencies.add(start);
             }
-            // FIXME -- if we move the DependencyNode directly in the ConstraintAnchor we'll be good.
+            // FIXME -- if we move the DependencyNode directly
+            //              in the ConstraintAnchor we'll be good.
             addDependency(widget.verticalRun.start);
             addDependency(widget.verticalRun.end);
         }

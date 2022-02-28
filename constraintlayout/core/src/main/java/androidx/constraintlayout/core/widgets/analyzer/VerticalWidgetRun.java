@@ -16,10 +16,6 @@
 
 package androidx.constraintlayout.core.widgets.analyzer;
 
-import androidx.constraintlayout.core.widgets.ConstraintAnchor;
-import androidx.constraintlayout.core.widgets.ConstraintWidget;
-import androidx.constraintlayout.core.widgets.Helper;
-
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.FIXED;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.MATCH_PARENT;
@@ -29,6 +25,10 @@ import static androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONS
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_WRAP;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
 import static androidx.constraintlayout.core.widgets.analyzer.WidgetRun.RunType.CENTER;
+
+import androidx.constraintlayout.core.widgets.ConstraintAnchor;
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
+import androidx.constraintlayout.core.widgets.Helper;
 
 public class VerticalWidgetRun extends WidgetRun {
     public DependencyNode baseline = new DependencyNode(this);
@@ -105,13 +105,16 @@ public class VerticalWidgetRun extends WidgetRun {
                                 int ratioSide = widget.getDimensionRatioSide();
                                 switch (ratioSide) {
                                     case ConstraintWidget.HORIZONTAL: {
-                                        size = (int) (0.5f + widget.horizontalRun.dimension.value * widget.getDimensionRatio());
+                                        size = (int) (0.5f + widget.horizontalRun.dimension.value
+                                                * widget.getDimensionRatio());
                                     } break;
                                     case ConstraintWidget.VERTICAL: {
-                                        size = (int) (0.5f + widget.horizontalRun.dimension.value / widget.getDimensionRatio());
+                                        size = (int) (0.5f + widget.horizontalRun.dimension.value
+                                                / widget.getDimensionRatio());
                                     } break;
                                     case ConstraintWidget.UNKNOWN: {
-                                        size = (int) (0.5f + widget.horizontalRun.dimension.value / widget.getDimensionRatio());
+                                        size = (int) (0.5f + widget.horizontalRun.dimension.value
+                                                / widget.getDimensionRatio());
                                     } break;
                                     default: break;
                                 }
@@ -212,7 +215,8 @@ public class VerticalWidgetRun extends WidgetRun {
                 if (dimensionBehavior == MATCH_PARENT) {
                     ConstraintWidget parent = widget.getParent();
                     if (parent != null && parent.getVerticalDimensionBehaviour() == FIXED) {
-                        int resolvedDimension = parent.getHeight() - widget.mTop.getMargin() - widget.mBottom.getMargin();
+                        int resolvedDimension = parent.getHeight()
+                                - widget.mTop.getMargin() - widget.mBottom.getMargin();
                         addTarget(start, parent.verticalRun.start, widget.mTop.getMargin());
                         addTarget(end, parent.verticalRun.end, -widget.mBottom.getMargin());
                         dimension.resolve(resolvedDimension);
@@ -243,18 +247,24 @@ public class VerticalWidgetRun extends WidgetRun {
         //   s->d->e->
 
         if (dimension.resolved && widget.measured) {
-            if (widget.mListAnchors[ConstraintWidget.ANCHOR_TOP].mTarget != null && widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].mTarget != null) { // <-s-e->
+            if (widget.mListAnchors[ConstraintWidget.ANCHOR_TOP].mTarget != null
+                    && widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].mTarget
+                        != null) { // <-s-e->
                 if (widget.isInVerticalChain()) {
                     start.margin = widget.mListAnchors[ConstraintWidget.ANCHOR_TOP].getMargin();
                     end.margin = -widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].getMargin();
                 } else {
-                    DependencyNode startTarget = getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_TOP]);
+                    DependencyNode startTarget =
+                            getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_TOP]);
                     if (startTarget != null) {
-                        addTarget(start, startTarget, widget.mListAnchors[ConstraintWidget.ANCHOR_TOP].getMargin());
+                        addTarget(start, startTarget,
+                                widget.mListAnchors[ConstraintWidget.ANCHOR_TOP].getMargin());
                     }
-                    DependencyNode endTarget = getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM]);
+                    DependencyNode endTarget =
+                            getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM]);
                     if (endTarget != null) {
-                        addTarget(end, endTarget, -widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].getMargin());
+                        addTarget(end, endTarget,
+                                -widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].getMargin());
                     }
                     start.delegateToWidgetRun = true;
                     end.delegateToWidgetRun = true;
@@ -265,23 +275,29 @@ public class VerticalWidgetRun extends WidgetRun {
             } else if (widget.mListAnchors[ConstraintWidget.ANCHOR_TOP].mTarget != null) { // <-s-e
                 DependencyNode target = getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_TOP]);
                 if (target != null) {
-                    addTarget(start, target, widget.mListAnchors[ConstraintWidget.ANCHOR_TOP].getMargin());
+                    addTarget(start, target,
+                            widget.mListAnchors[ConstraintWidget.ANCHOR_TOP].getMargin());
                     addTarget(end, start, dimension.value);
                     if (widget.hasBaseline()) {
                         addTarget(baseline, start, widget.getBaselineDistance());
                     }
                 }
-            } else if (widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].mTarget != null) {   //   s-e->
-                DependencyNode target = getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM]);
+            } else if (widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].mTarget
+                    != null) {   //   s-e->
+                DependencyNode target =
+                        getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM]);
                 if (target != null) {
-                    addTarget(end, target, -widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].getMargin());
+                    addTarget(end, target,
+                            -widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].getMargin());
                     addTarget(start, end, -dimension.value);
                 }
                 if (widget.hasBaseline()) {
                     addTarget(baseline, start, widget.getBaselineDistance());
                 }
-            } else if (widget.mListAnchors[ConstraintWidget.ANCHOR_BASELINE].mTarget != null) {
-                DependencyNode target = getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_BASELINE]);
+            } else if (widget.mListAnchors[ConstraintWidget.ANCHOR_BASELINE].mTarget
+                    != null) {
+                DependencyNode target =
+                        getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_BASELINE]);
                 if (target != null) {
                     addTarget(baseline, target, 0);
                     addTarget(start, baseline, -widget.getBaselineDistance());
@@ -306,7 +322,8 @@ public class VerticalWidgetRun extends WidgetRun {
                         if (!widget.isInVerticalChain()) {
                             if (widget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_RATIO) {
                                 // need to look into both side
-                                // do nothing here -- let the HorizontalWidgetRun::update() deal with it.
+                                // do nothing here --
+                                //    let the HorizontalWidgetRun::update() deal with it.
                                 break;
                             }
                             // we have a ratio, but we depend on the other side computation
@@ -339,19 +356,26 @@ public class VerticalWidgetRun extends WidgetRun {
             } else {
                 dimension.addDependency(this);
             }
-            if (widget.mListAnchors[ConstraintWidget.ANCHOR_TOP].mTarget != null && widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].mTarget != null) { // <-s-d-e->
+            if (widget.mListAnchors[ConstraintWidget.ANCHOR_TOP].mTarget != null
+                    && widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].mTarget
+                        != null) { // <-s-d-e->
                 if (widget.isInVerticalChain()) {
                     start.margin = widget.mListAnchors[ConstraintWidget.ANCHOR_TOP].getMargin();
                     end.margin = -widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].getMargin();
                 } else {
-                    DependencyNode startTarget = getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_TOP]);
-                    DependencyNode endTarget = getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM]);
+                    DependencyNode startTarget =
+                            getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_TOP]);
+                    DependencyNode endTarget =
+                            getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM]);
                     if (false) {
                         if (startTarget != null) {
-                            addTarget(start, startTarget, widget.mListAnchors[ConstraintWidget.ANCHOR_TOP].getMargin());
+                            addTarget(start, startTarget,
+                                    widget.mListAnchors[ConstraintWidget.ANCHOR_TOP].getMargin());
                         }
                         if (endTarget != null) {
-                            addTarget(end, endTarget, -widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].getMargin());
+                            addTarget(end, endTarget,
+                                    -widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM]
+                                            .getMargin());
                         }
                     } else {
                         if (startTarget != null) {
@@ -366,10 +390,13 @@ public class VerticalWidgetRun extends WidgetRun {
                 if (widget.hasBaseline()) {
                     addTarget(baseline, start, 1, baselineDimension);
                 }
-            } else if (widget.mListAnchors[ConstraintWidget.ANCHOR_TOP].mTarget != null) { // <-s<-d<-e
-                DependencyNode target = getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_TOP]);
+            } else if (widget.mListAnchors[ConstraintWidget.ANCHOR_TOP].mTarget
+                    != null) { // <-s<-d<-e
+                DependencyNode target =
+                        getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_TOP]);
                 if (target != null) {
-                    addTarget(start, target, widget.mListAnchors[ConstraintWidget.ANCHOR_TOP].getMargin());
+                    addTarget(start, target,
+                            widget.mListAnchors[ConstraintWidget.ANCHOR_TOP].getMargin());
                     addTarget(end, start, 1, dimension);
                     if (widget.hasBaseline()) {
                         addTarget(baseline, start, 1, baselineDimension);
@@ -384,17 +411,21 @@ public class VerticalWidgetRun extends WidgetRun {
                         }
                     }
                 }
-            } else if (widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].mTarget != null) {   //   s->d->e->
-                DependencyNode target = getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM]);
+            } else if (widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].mTarget
+                    != null) {   //   s->d->e->
+                DependencyNode target =
+                        getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM]);
                 if (target != null) {
-                    addTarget(end, target, -widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].getMargin());
+                    addTarget(end, target,
+                            -widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].getMargin());
                     addTarget(start, end, -1, dimension);
                     if (widget.hasBaseline()) {
                         addTarget(baseline, start, 1, baselineDimension);
                     }
                 }
             } else if (widget.mListAnchors[ConstraintWidget.ANCHOR_BASELINE].mTarget != null) {
-                DependencyNode target = getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_BASELINE]);
+                DependencyNode target =
+                        getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_BASELINE]);
                 if (target != null) {
                     addTarget(baseline, target, 0);
                     addTarget(start, baseline, -1, baselineDimension);

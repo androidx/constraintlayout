@@ -16,15 +16,6 @@
 
 package androidx.constraintlayout.core.widgets.analyzer;
 
-import androidx.constraintlayout.core.widgets.Barrier;
-import androidx.constraintlayout.core.widgets.ConstraintWidget;
-import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
-import androidx.constraintlayout.core.widgets.Guideline;
-import androidx.constraintlayout.core.widgets.HelperWidget;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.FIXED;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.MATCH_PARENT;
@@ -37,6 +28,15 @@ import static androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONS
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_WRAP;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.UNKNOWN;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
+
+import androidx.constraintlayout.core.widgets.Barrier;
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
+import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
+import androidx.constraintlayout.core.widgets.Guideline;
+import androidx.constraintlayout.core.widgets.HelperWidget;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class DependencyGraph {
     private static final boolean USE_GROUPS = true;
@@ -78,7 +78,8 @@ public class DependencyGraph {
      * @param horizontalBehavior
      * @param verticalBehavior
      */
-    public void defineTerminalWidgets(ConstraintWidget.DimensionBehaviour horizontalBehavior, ConstraintWidget.DimensionBehaviour verticalBehavior) {
+    public void defineTerminalWidgets(ConstraintWidget.DimensionBehaviour horizontalBehavior,
+                                      ConstraintWidget.DimensionBehaviour verticalBehavior) {
         if (mNeedBuildGraph) {
             buildGraph();
 
@@ -93,7 +94,8 @@ public class DependencyGraph {
                 }
                 if (!hasBarrier) {
                     for (RunGroup group : mGroups) {
-                        group.defineTerminalWidgets(horizontalBehavior == WRAP_CONTENT, verticalBehavior == WRAP_CONTENT);
+                        group.defineTerminalWidgets(horizontalBehavior == WRAP_CONTENT,
+                                verticalBehavior == WRAP_CONTENT);
                     }
                 }
             }
@@ -131,8 +133,10 @@ public class DependencyGraph {
         container.setX(0);
         container.setY(0);
 
-        ConstraintWidget.DimensionBehaviour originalHorizontalDimension = container.getDimensionBehaviour(HORIZONTAL);
-        ConstraintWidget.DimensionBehaviour originalVerticalDimension = container.getDimensionBehaviour(VERTICAL);
+        ConstraintWidget.DimensionBehaviour originalHorizontalDimension =
+                container.getDimensionBehaviour(HORIZONTAL);
+        ConstraintWidget.DimensionBehaviour originalVerticalDimension =
+                container.getDimensionBehaviour(VERTICAL);
 
         if (mNeedBuildGraph) {
             buildGraph();
@@ -149,7 +153,8 @@ public class DependencyGraph {
         measureWidgets();
 
         // If we have to support wrap, let's see if we can compute it directly
-        if (originalHorizontalDimension == WRAP_CONTENT || originalVerticalDimension == WRAP_CONTENT) {
+        if (originalHorizontalDimension == WRAP_CONTENT
+                || originalVerticalDimension == WRAP_CONTENT) {
             if (optimizeWrap) {
                 for (WidgetRun run : mRuns) {
                     if (!run.supportsWrapComputation()) {
@@ -176,8 +181,10 @@ public class DependencyGraph {
         // Now, depending on our own dimension behavior, we may want to solve
         // one dimension before the other
 
-        if (container.mListDimensionBehaviors[HORIZONTAL] == ConstraintWidget.DimensionBehaviour.FIXED
-                || container.mListDimensionBehaviors[HORIZONTAL] == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
+        if (container.mListDimensionBehaviors[HORIZONTAL]
+                    == ConstraintWidget.DimensionBehaviour.FIXED
+                || container.mListDimensionBehaviors[HORIZONTAL]
+                    == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
 
             // solve horizontal dimension
             int x2 = x1 + container.getWidth();
@@ -217,7 +224,8 @@ public class DependencyGraph {
                 allResolved = false;
                 break;
             }
-            if (!run.dimension.resolved && !(run instanceof ChainRun) && !(run instanceof GuidelineReference)) {
+            if (!run.dimension.resolved
+                    && !(run instanceof ChainRun) && !(run instanceof GuidelineReference)) {
                 allResolved = false;
                 break;
             }
@@ -267,14 +275,17 @@ public class DependencyGraph {
     public boolean directMeasureWithOrientation(boolean optimizeWrap, int orientation) {
         optimizeWrap &= USE_GROUPS;
 
-        ConstraintWidget.DimensionBehaviour originalHorizontalDimension = container.getDimensionBehaviour(HORIZONTAL);
-        ConstraintWidget.DimensionBehaviour originalVerticalDimension = container.getDimensionBehaviour(VERTICAL);
+        ConstraintWidget.DimensionBehaviour originalHorizontalDimension =
+                container.getDimensionBehaviour(HORIZONTAL);
+        ConstraintWidget.DimensionBehaviour originalVerticalDimension =
+                container.getDimensionBehaviour(VERTICAL);
 
         int x1 = container.getX();
         int y1 = container.getY();
 
         // If we have to support wrap, let's see if we can compute it directly
-        if (optimizeWrap && (originalHorizontalDimension == WRAP_CONTENT || originalVerticalDimension == WRAP_CONTENT)) {
+        if (optimizeWrap && (originalHorizontalDimension == WRAP_CONTENT
+                                || originalVerticalDimension == WRAP_CONTENT)) {
             for (WidgetRun run : mRuns) {
                 if (run.orientation == orientation
                         && !run.supportsWrapComputation()) {
@@ -371,8 +382,10 @@ public class DependencyGraph {
      * @param verticalDimension
      */
     private void measure(ConstraintWidget widget,
-                         ConstraintWidget.DimensionBehaviour horizontalBehavior, int horizontalDimension,
-                         ConstraintWidget.DimensionBehaviour verticalBehavior, int verticalDimension) {
+                         ConstraintWidget.DimensionBehaviour horizontalBehavior,
+                         int horizontalDimension,
+                         ConstraintWidget.DimensionBehaviour verticalBehavior,
+                         int verticalDimension) {
         mMeasure.horizontalBehavior = horizontalBehavior;
         mMeasure.verticalBehavior = verticalBehavior;
         mMeasure.horizontalDimension = horizontalDimension;
@@ -386,7 +399,8 @@ public class DependencyGraph {
 
     private boolean basicMeasureWidgets(ConstraintWidgetContainer constraintWidgetContainer) {
         for (ConstraintWidget widget : constraintWidgetContainer.mChildren) {
-            ConstraintWidget.DimensionBehaviour horizontal = widget.mListDimensionBehaviors[HORIZONTAL];
+            ConstraintWidget.DimensionBehaviour horizontal =
+                    widget.mListDimensionBehaviors[HORIZONTAL];
             ConstraintWidget.DimensionBehaviour vertical = widget.mListDimensionBehaviors[VERTICAL];
 
             if (widget.getVisibility() == GONE) {
@@ -403,9 +417,11 @@ public class DependencyGraph {
                 widget.mMatchConstraintDefaultHeight = MATCH_CONSTRAINT_PERCENT;
             }
             if (widget.getDimensionRatio() > 0) {
-                if (horizontal == MATCH_CONSTRAINT && (vertical == WRAP_CONTENT || vertical == FIXED)) {
+                if (horizontal == MATCH_CONSTRAINT
+                        && (vertical == WRAP_CONTENT || vertical == FIXED)) {
                     widget.mMatchConstraintDefaultWidth = MATCH_CONSTRAINT_RATIO;
-                } else if (vertical == MATCH_CONSTRAINT && (horizontal == WRAP_CONTENT || horizontal == FIXED)) {
+                } else if (vertical == MATCH_CONSTRAINT
+                        && (horizontal == WRAP_CONTENT || horizontal == FIXED)) {
                     widget.mMatchConstraintDefaultHeight = MATCH_CONSTRAINT_RATIO;
                 } else if (horizontal == MATCH_CONSTRAINT && vertical == MATCH_CONSTRAINT) {
                     if (widget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_SPREAD) {
@@ -417,12 +433,14 @@ public class DependencyGraph {
                 }
             }
 
-            if (horizontal == MATCH_CONSTRAINT && widget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_WRAP) {
+            if (horizontal == MATCH_CONSTRAINT
+                    && widget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_WRAP) {
                 if (widget.mLeft.mTarget == null || widget.mRight.mTarget == null) {
                     horizontal = WRAP_CONTENT;
                 }
             }
-            if (vertical == MATCH_CONSTRAINT && widget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_WRAP) {
+            if (vertical == MATCH_CONSTRAINT
+                    && widget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_WRAP) {
                 if (widget.mTop.mTarget == null || widget.mBottom.mTarget == null) {
                     vertical = WRAP_CONTENT;
                 }
@@ -434,15 +452,18 @@ public class DependencyGraph {
             widget.verticalRun.matchConstraintsType = widget.mMatchConstraintDefaultHeight;
 
             if ((horizontal == MATCH_PARENT || horizontal == FIXED || horizontal == WRAP_CONTENT)
-                    && (vertical == MATCH_PARENT || vertical == FIXED || vertical == WRAP_CONTENT)) {
+                    && (vertical == MATCH_PARENT
+                        || vertical == FIXED || vertical == WRAP_CONTENT)) {
                 int width = widget.getWidth();
                 if (horizontal == MATCH_PARENT) {
-                    width = constraintWidgetContainer.getWidth() - widget.mLeft.mMargin - widget.mRight.mMargin;
+                    width = constraintWidgetContainer.getWidth()
+                            - widget.mLeft.mMargin - widget.mRight.mMargin;
                     horizontal = FIXED;
                 }
                 int height = widget.getHeight();
                 if (vertical == MATCH_PARENT) {
-                    height = constraintWidgetContainer.getHeight() - widget.mTop.mMargin - widget.mBottom.mMargin;
+                    height = constraintWidgetContainer.getHeight()
+                            - widget.mTop.mMargin - widget.mBottom.mMargin;
                     vertical = FIXED;
                 }
                 measure(widget, horizontal, width, vertical, height);
@@ -468,9 +489,11 @@ public class DependencyGraph {
                     measure(widget, WRAP_CONTENT, 0, vertical, 0);
                     widget.horizontalRun.dimension.wrapValue = widget.getWidth();
                     continue;
-                } else if (widget.mMatchConstraintDefaultWidth == ConstraintWidget.MATCH_CONSTRAINT_PERCENT) {
+                } else if (widget.mMatchConstraintDefaultWidth
+                        == ConstraintWidget.MATCH_CONSTRAINT_PERCENT) {
                     if (constraintWidgetContainer.mListDimensionBehaviors[HORIZONTAL] == FIXED
-                            || constraintWidgetContainer.mListDimensionBehaviors[HORIZONTAL] == MATCH_PARENT) {
+                            || constraintWidgetContainer.mListDimensionBehaviors[HORIZONTAL]
+                                == MATCH_PARENT) {
                         float percent = widget.mMatchConstraintPercentWidth;
                         int width = (int) (0.5f + percent * constraintWidgetContainer.getWidth());
                         int height = widget.getHeight();
@@ -492,7 +515,8 @@ public class DependencyGraph {
                     }
                 }
             }
-            if (vertical == MATCH_CONSTRAINT && (horizontal == WRAP_CONTENT || horizontal == FIXED)) {
+            if (vertical == MATCH_CONSTRAINT
+                    && (horizontal == WRAP_CONTENT || horizontal == FIXED)) {
                 if (widget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_RATIO) {
                     if (horizontal == WRAP_CONTENT) {
                         measure(widget, WRAP_CONTENT, 0, WRAP_CONTENT, 0);
@@ -513,9 +537,11 @@ public class DependencyGraph {
                     measure(widget, horizontal, 0, WRAP_CONTENT, 0);
                     widget.verticalRun.dimension.wrapValue = widget.getHeight();
                     continue;
-                } else if (widget.mMatchConstraintDefaultHeight == ConstraintWidget.MATCH_CONSTRAINT_PERCENT) {
+                } else if (widget.mMatchConstraintDefaultHeight
+                            == ConstraintWidget.MATCH_CONSTRAINT_PERCENT) {
                     if (constraintWidgetContainer.mListDimensionBehaviors[VERTICAL] == FIXED
-                            || constraintWidgetContainer.mListDimensionBehaviors[VERTICAL] == MATCH_PARENT) {
+                            || constraintWidgetContainer.mListDimensionBehaviors[VERTICAL]
+                                == MATCH_PARENT) {
                         float percent = widget.mMatchConstraintPercentHeight;
                         int width = widget.getWidth();
                         int height = (int) (0.5f + percent * constraintWidgetContainer.getHeight());
@@ -528,7 +554,8 @@ public class DependencyGraph {
                 } else {
                     // let's verify we have both constraints
                     if (widget.mListAnchors[ConstraintWidget.ANCHOR_TOP].mTarget == null
-                            || widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].mTarget == null) {
+                            || widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].mTarget
+                                == null) {
                         measure(widget, WRAP_CONTENT, 0, vertical, 0);
                         widget.horizontalRun.dimension.resolve(widget.getWidth());
                         widget.verticalRun.dimension.resolve(widget.getHeight());
@@ -543,8 +570,10 @@ public class DependencyGraph {
                     measure(widget, WRAP_CONTENT, 0, WRAP_CONTENT, 0);
                     widget.horizontalRun.dimension.wrapValue = widget.getWidth();
                     widget.verticalRun.dimension.wrapValue = widget.getHeight();
-                } else if (widget.mMatchConstraintDefaultHeight == ConstraintWidget.MATCH_CONSTRAINT_PERCENT
-                        && widget.mMatchConstraintDefaultWidth == ConstraintWidget.MATCH_CONSTRAINT_PERCENT
+                } else if (widget.mMatchConstraintDefaultHeight
+                            == ConstraintWidget.MATCH_CONSTRAINT_PERCENT
+                        && widget.mMatchConstraintDefaultWidth
+                            == ConstraintWidget.MATCH_CONSTRAINT_PERCENT
                         && constraintWidgetContainer.mListDimensionBehaviors[HORIZONTAL] == FIXED
                         && constraintWidgetContainer.mListDimensionBehaviors[VERTICAL] == FIXED) {
                     float horizPercent = widget.mMatchConstraintPercentWidth;
@@ -572,10 +601,12 @@ public class DependencyGraph {
             int vertMatchConstraintsType = widget.mMatchConstraintDefaultHeight;
 
             boolean horizWrap = horiz == WRAP_CONTENT
-                    || (horiz == MATCH_CONSTRAINT && horizMatchConstraintsType == MATCH_CONSTRAINT_WRAP);
+                    || (horiz == MATCH_CONSTRAINT
+                        && horizMatchConstraintsType == MATCH_CONSTRAINT_WRAP);
 
             boolean vertWrap = vert == WRAP_CONTENT
-                    || (vert == MATCH_CONSTRAINT && vertMatchConstraintsType == MATCH_CONSTRAINT_WRAP);
+                    || (vert == MATCH_CONSTRAINT
+                        && vertMatchConstraintsType == MATCH_CONSTRAINT_WRAP);
 
             boolean horizResolved = widget.horizontalRun.dimension.resolved;
             boolean vertResolved = widget.verticalRun.dimension.resolved;
@@ -706,9 +737,15 @@ public class DependencyGraph {
         System.out.println("content:<<\n" + content + "\n>>");
     }
 
-    private void applyGroup(DependencyNode node, int orientation, int direction, DependencyNode end, ArrayList<RunGroup> groups, RunGroup group) {
+    private void applyGroup(DependencyNode node,
+                            int orientation,
+                            int direction,
+                            DependencyNode end,
+                            ArrayList<RunGroup> groups,
+                            RunGroup group) {
         WidgetRun run = node.run;
-        if (run.runGroup != null || run == container.horizontalRun || run == container.verticalRun) {
+        if (run.runGroup != null
+                || run == container.horizontalRun || run == container.verticalRun) {
             return;
         }
 
@@ -721,18 +758,21 @@ public class DependencyGraph {
         group.add(run);
         for (Dependency dependent : run.start.dependencies) {
             if (dependent instanceof DependencyNode) {
-                applyGroup((DependencyNode) dependent, orientation, RunGroup.START, end, groups, group);
+                applyGroup((DependencyNode) dependent,
+                        orientation, RunGroup.START, end, groups, group);
             }
         }
         for (Dependency dependent : run.end.dependencies) {
             if (dependent instanceof DependencyNode) {
-                applyGroup((DependencyNode) dependent, orientation, RunGroup.END, end, groups, group);
+                applyGroup((DependencyNode) dependent,
+                        orientation, RunGroup.END, end, groups, group);
             }
         }
         if (orientation == VERTICAL && run instanceof VerticalWidgetRun) {
             for (Dependency dependent : ((VerticalWidgetRun) run).baseline.dependencies) {
                 if (dependent instanceof DependencyNode) {
-                    applyGroup((DependencyNode) dependent, orientation, RunGroup.BASELINE, end, groups, group);
+                    applyGroup((DependencyNode) dependent,
+                            orientation, RunGroup.BASELINE, end, groups, group);
                 }
             }
         }
@@ -785,7 +825,9 @@ public class DependencyGraph {
     }
 
 
-    private String generateDisplayNode(DependencyNode node, boolean centeredConnection, String content) {
+    private String generateDisplayNode(DependencyNode node,
+                                       boolean centeredConnection,
+                                       String content) {
         StringBuilder contentBuilder = new StringBuilder(content);
         for (DependencyNode target : node.targets) {
             String constraint = "\n" + node.name();
@@ -820,7 +862,8 @@ public class DependencyGraph {
         int orientation = run instanceof VerticalWidgetRun ? VERTICAL : HORIZONTAL;
         String name = run.widget.getDebugName();
         StringBuilder definition = new StringBuilder(name);
-        ConstraintWidget.DimensionBehaviour behaviour = orientation == HORIZONTAL ? run.widget.getHorizontalDimensionBehaviour()
+        ConstraintWidget.DimensionBehaviour behaviour =
+                orientation == HORIZONTAL ? run.widget.getHorizontalDimensionBehaviour()
                 : run.widget.getVerticalDimensionBehaviour();
         RunGroup runGroup = run.runGroup;
 
@@ -936,7 +979,8 @@ public class DependencyGraph {
         DependencyNode end = root.end;
         StringBuilder sb = new StringBuilder(content);
 
-        if (!(root instanceof HelperReferences) && start.dependencies.isEmpty() && end.dependencies.isEmpty() & start.targets.isEmpty() && end.targets.isEmpty()) {
+        if (!(root instanceof HelperReferences) && start.dependencies.isEmpty()
+                && end.dependencies.isEmpty() & start.targets.isEmpty() && end.targets.isEmpty()) {
             return content;
         }
         sb.append(nodeDefinition(root));
@@ -951,7 +995,8 @@ public class DependencyGraph {
 
         if (root instanceof HorizontalWidgetRun
                 || (root instanceof ChainRun && ((ChainRun) root).orientation == HORIZONTAL)) {
-            ConstraintWidget.DimensionBehaviour behaviour = root.widget.getHorizontalDimensionBehaviour();
+            ConstraintWidget.DimensionBehaviour behaviour =
+                    root.widget.getHorizontalDimensionBehaviour();
             if (behaviour == ConstraintWidget.DimensionBehaviour.FIXED
                     || behaviour == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
                 if (!start.targets.isEmpty() && end.targets.isEmpty()) {
@@ -978,7 +1023,8 @@ public class DependencyGraph {
             }
         } else if (root instanceof VerticalWidgetRun
                 || (root instanceof ChainRun && ((ChainRun) root).orientation == VERTICAL)) {
-            ConstraintWidget.DimensionBehaviour behaviour = root.widget.getVerticalDimensionBehaviour();
+            ConstraintWidget.DimensionBehaviour behaviour =
+                    root.widget.getVerticalDimensionBehaviour();
             if (behaviour == ConstraintWidget.DimensionBehaviour.FIXED
                     || behaviour == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
                 if (!start.targets.isEmpty() && end.targets.isEmpty()) {
