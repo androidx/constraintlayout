@@ -27,7 +27,7 @@ import org.junit.Test;
 public class MotionKeyTimeCycleTest {
     private static final boolean DEBUG = true;
     private static final int SAMPLES = 30;
-    private static boolean DISABLE = true;
+    private static final boolean DISABLE = true;
 
     void cycleBuilder(Scene s, int type) {
         float[] amp = {0, 50, 0};
@@ -38,7 +38,7 @@ public class MotionKeyTimeCycleTest {
             cycle.setValue(type, amp[i]);
             cycle.setValue(TypedValues.CycleType.TYPE_WAVE_PERIOD, period[i]);
             cycle.setFramePosition(pos[i]);
-            s.motion.addKey(cycle);
+            s.mMotion.addKey(cycle);
         }
     }
 
@@ -49,10 +49,10 @@ public class MotionKeyTimeCycleTest {
 
         if (DEBUG) {
             s.sample(() -> {
-                System.out.println(s.res.getValueAttributes(type));
+                System.out.println(s.mRes.getValueAttributes(type));
             });
         }
-        s.motion.interpolate(s.res, 0.5f, 1000000 + 1000, s.cache);
+        s.mMotion.interpolate(s.mRes, 0.5f, 1000000 + 1000, s.mCache);
         return s;
     }
 
@@ -71,7 +71,7 @@ public class MotionKeyTimeCycleTest {
         }
 
         Scene s = basicRunThrough(TypedValues.CycleType.TYPE_ROTATION_X);
-        assertEquals(0.0, s.res.getRotationX(), 0.0001);
+        assertEquals(0.0, s.mRes.getRotationX(), 0.0001);
     }
 
     @Test
@@ -80,7 +80,7 @@ public class MotionKeyTimeCycleTest {
             return;
         }
         Scene s = basicRunThrough(TypedValues.CycleType.TYPE_ROTATION_Y);
-        assertEquals(0.0, s.res.getRotationY(), 0.0001);
+        assertEquals(0.0, s.mRes.getRotationY(), 0.0001);
     }
 
     @Test
@@ -89,7 +89,7 @@ public class MotionKeyTimeCycleTest {
             return;
         }
         Scene s = basicRunThrough(TypedValues.CycleType.TYPE_ROTATION_Z);
-        assertEquals(0.0, s.res.getRotationZ(), 0.0001);
+        assertEquals(0.0, s.mRes.getRotationZ(), 0.0001);
     }
 
     @Test
@@ -98,7 +98,7 @@ public class MotionKeyTimeCycleTest {
             return;
         }
         Scene s = basicRunThrough(TypedValues.CycleType.TYPE_TRANSLATION_X);
-        assertEquals(0.0, s.res.getTranslationX(), 0.0001);
+        assertEquals(0.0, s.mRes.getTranslationX(), 0.0001);
     }
 
     @Test
@@ -107,7 +107,7 @@ public class MotionKeyTimeCycleTest {
             return;
         }
         Scene s = basicRunThrough(TypedValues.CycleType.TYPE_TRANSLATION_Y);
-        assertEquals(0.0, s.res.getTranslationY(), 0.0001);
+        assertEquals(0.0, s.mRes.getTranslationY(), 0.0001);
     }
 
     @Test
@@ -116,7 +116,7 @@ public class MotionKeyTimeCycleTest {
             return;
         }
         Scene s = basicRunThrough(TypedValues.CycleType.TYPE_TRANSLATION_Z);
-        assertEquals(0.0, s.res.getTranslationZ(), 0.0001);
+        assertEquals(0.0, s.mRes.getTranslationZ(), 0.0001);
     }
 
     @Test
@@ -125,7 +125,7 @@ public class MotionKeyTimeCycleTest {
             return;
         }
         Scene s = basicRunThrough(TypedValues.CycleType.TYPE_SCALE_X);
-        assertEquals(0.0, s.res.getScaleX(), 0.0001);
+        assertEquals(0.0, s.mRes.getScaleX(), 0.0001);
     }
 
     @Test
@@ -134,33 +134,33 @@ public class MotionKeyTimeCycleTest {
             return;
         }
         Scene s = basicRunThrough(TypedValues.CycleType.TYPE_SCALE_Y);
-        assertEquals(0.0, s.res.getScaleY(), 0.0001);
+        assertEquals(0.0, s.mRes.getScaleY(), 0.0001);
     }
 
     class Scene {
-        MotionWidget mw1 = new MotionWidget();
-        MotionWidget mw2 = new MotionWidget();
-        MotionWidget res = new MotionWidget();
-        KeyCache cache = new KeyCache();
-        Motion motion;
+        MotionWidget mMW1 = new MotionWidget();
+        MotionWidget mMW2 = new MotionWidget();
+        MotionWidget mRes = new MotionWidget();
+        KeyCache mCache = new KeyCache();
+        Motion mMotion;
 
         Scene() {
-            motion = new Motion(mw1);
-            mw1.setBounds(0, 0, 30, 40);
-            mw2.setBounds(400, 400, 430, 440);
-            motion.setPathMotionArc(ArcCurveFit.ARC_START_VERTICAL);
+            mMotion = new Motion(mMW1);
+            mMW1.setBounds(0, 0, 30, 40);
+            mMW2.setBounds(400, 400, 430, 440);
+            mMotion.setPathMotionArc(ArcCurveFit.ARC_START_VERTICAL);
         }
 
 
         public void setup() {
-            motion.setStart(mw1);
-            motion.setEnd(mw2);
-            motion.setup(1000, 1000, 1, 1000000);
+            mMotion.setStart(mMW1);
+            mMotion.setEnd(mMW2);
+            mMotion.setup(1000, 1000, 1, 1000000);
         }
 
         void sample(Runnable r) {
             for (int p = 0; p <= SAMPLES; p++) {
-                motion.interpolate(res, p * 0.1f, 1000000 + (int) (p * 100), cache);
+                mMotion.interpolate(mRes, p * 0.1f, 1000000 + (int) (p * 100), mCache);
                 r.run();
             }
         }

@@ -26,7 +26,7 @@ import java.util.Comparator;
 
 public class BasicSolverVariableValues implements ArrayRow.ArrayRowVariables {
 
-    private static float epsilon = 0.001f;
+    private static float sEpsilon = 0.001f;
 
     class Item {
         SolverVariable variable;
@@ -37,7 +37,7 @@ public class BasicSolverVariableValues implements ArrayRow.ArrayRowVariables {
     ArrayList<Item> list = new ArrayList<>();
     //LinkedList<Item> list = new LinkedList<>();
 
-    Comparator<Item> comparator = new Comparator<Item>() {
+    Comparator<Item> mComparator = new Comparator<Item>() {
         @Override
         public int compare(Item s1, Item s2) {
             return s1.variable.id - s2.variable.id;
@@ -118,7 +118,7 @@ public class BasicSolverVariableValues implements ArrayRow.ArrayRowVariables {
 
     @Override
     public void put(SolverVariable variable, float value) {
-        if (value > -epsilon && value < epsilon) {
+        if (value > -sEpsilon && value < sEpsilon) {
             remove(variable, true);
             return;
         }
@@ -144,7 +144,7 @@ public class BasicSolverVariableValues implements ArrayRow.ArrayRowVariables {
                 list.add(item);
                 variable.usageInRowCount++;
                 variable.addToRow(mRow);
-                Collections.sort(list, comparator);
+                Collections.sort(list, mComparator);
             }
 //            if (false) {
 //                int previousItem = -1;
@@ -191,7 +191,7 @@ public class BasicSolverVariableValues implements ArrayRow.ArrayRowVariables {
 
     @Override
     public void add(SolverVariable v, float value, boolean removeFromDefinition) {
-        if (value > -epsilon && value < epsilon) {
+        if (value > -sEpsilon && value < sEpsilon) {
             return;
         }
         if (!contains(v)) {
@@ -199,7 +199,7 @@ public class BasicSolverVariableValues implements ArrayRow.ArrayRowVariables {
         } else {
             Item item = list.get(indexOf(v));
             item.value += value;
-            if (item.value > -epsilon && item.value < epsilon) {
+            if (item.value > -sEpsilon && item.value < sEpsilon) {
                 item.value = 0;
                 list.remove(item);
                 v.usageInRowCount--;

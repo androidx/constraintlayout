@@ -407,8 +407,9 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
 //        fromWidget.getAnchor(fromType).setConnectionCreator(ConstraintAnchor.SCOUT_CREATOR);
     }
 
-    private static void connectWeak(ConstraintWidget fromWidget, ConstraintAnchor.Type fromType,
-                                    ConstraintWidget toWidget, ConstraintAnchor.Type toType, int gap) {
+    private static void connectWeak(ConstraintWidget fromWidget,
+                                    ConstraintAnchor.Type fromType, ConstraintWidget toWidget,
+                                    ConstraintAnchor.Type toType, int gap) {
         fromWidget.connect(fromType, toWidget, toType, gap);
 //        fromWidget.connect(fromType, toWidget, toType, gap, ConstraintAnchor.Strength.WEAK);
 //        fromWidget.getAnchor(fromType).setConnectionCreator(ConstraintAnchor.SCOUT_CREATOR);

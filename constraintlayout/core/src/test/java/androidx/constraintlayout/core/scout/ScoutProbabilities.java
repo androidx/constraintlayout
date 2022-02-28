@@ -48,7 +48,7 @@ public class ScoutProbabilities {
     float[][][] mMargin; // margin needed for that connection
     float[][][][] mBinaryBias; // Ratio needed for binary connections (should be .5 for now)
     float[][][][] mBinaryProbability; // probability of a left_right/up_down
-    int len;
+    int mLen;
 
     /**
      * This calculates a constraint tables
@@ -63,15 +63,15 @@ public class ScoutProbabilities {
             throw new IllegalArgumentException("list[0] must be root");
         }
 
-        len = list.length;
+        mLen = list.length;
 
-        mProbability = new float[len][][];
-        mMargin = new float[len][][];
+        mProbability = new float[mLen][][];
+        mMargin = new float[mLen][][];
 
         // calculate probability for normal connections
         float[] result = new float[2]; // estimation function return 2 values probability & margin
 
-        for (int i = 1; i < len; i++) { // for all non root widgets
+        for (int i = 1; i < mLen; i++) { // for all non root widgets
             Direction[] all = Direction.getAllDirections();
             if (list[i].isGuideline()) {
                 continue;
@@ -84,8 +84,8 @@ public class ScoutProbabilities {
 
                 // create the multidimensional array on the fly
                 // to account for the variying size of the probability space
-                mProbability[i][dir] = new float[len * connectTypes];
-                mMargin[i][dir] = new float[len * connectTypes];
+                mProbability[i][dir] = new float[mLen * connectTypes];
+                mMargin[i][dir] = new float[mLen * connectTypes];
 
                 // fill in all candidate connections
                 for (int candidate = 0; candidate < mMargin[i][dir].length; candidate++) {
@@ -102,15 +102,15 @@ public class ScoutProbabilities {
         }
 
         // calculate probability for "centered" connections
-        mBinaryProbability = new float[len][2][len * 2][len * 2];
-        mBinaryBias = new float[len][2][len * 2][len * 2];
+        mBinaryProbability = new float[mLen][2][mLen * 2][mLen * 2];
+        mBinaryBias = new float[mLen][2][mLen * 2][mLen * 2];
         Direction[][] directions =
                 { { Direction.NORTH, Direction.SOUTH }, { Direction.WEST, Direction.EAST } };
-        for (int i = 1; i < len; i++) {
+        for (int i = 1; i < mLen; i++) {
             for (int horizontal = 0; horizontal < 2; horizontal++) { // vert=0 or horizantal=1
                 Direction[] sides = directions[horizontal];
-                for (int candidate1 = 0; candidate1 < len * 2; candidate1++) {
-                    for (int candidate2 = 0; candidate2 < len * 2; candidate2++) {
+                for (int candidate1 = 0; candidate1 < mLen * 2; candidate1++) {
+                    for (int candidate2 = 0; candidate2 < mLen * 2; candidate2++) {
 
                         // candidates are 2 per widget (left/right or above/below)
                         int widget1Number = candidate1 / 2;
@@ -176,7 +176,8 @@ public class ScoutProbabilities {
                     continue;
                 }
                 if (!widget.isGuideline()
-                        && ScoutWidget.distance(scoutWidget, widget) > MAX_DIST_FOR_CENTER_OVERLAP) {
+                        && ScoutWidget.distance(scoutWidget, widget)
+                        > MAX_DIST_FOR_CENTER_OVERLAP) {
                     continue;
                 }
                 if (!widget.isGuideline() || widget.isVerticalGuideline()) {
@@ -231,12 +232,10 @@ public class ScoutProbabilities {
                     groups.add(current);
                     current.add(w[i - 1]);
                     current.add(w[i]);
-                }
-                else {
+                } else {
                     if (sameCol(current.get(0), w[i])) {
                         current.add(w[i]);
-                    }
-                    else {
+                    } else {
                         current = new ArrayList<ScoutWidget>();
                         groups.add(current);
                         current.add(w[i - 1]);
@@ -248,7 +247,8 @@ public class ScoutProbabilities {
         int[] dualIndex = new int[2];
 
         for (ArrayList<ScoutWidget> group : groups) {
-            if (SKIP_SPARSE_COLUMNS) { // skip columns that have lot of space to reject accidental columns.
+            if (SKIP_SPARSE_COLUMNS) {
+                // skip columns that have lot of space to reject accidental columns.
                 Rectangle union = null;
                 int area = 0;
                 for (ScoutWidget scoutWidget : group) {
@@ -256,8 +256,7 @@ public class ScoutProbabilities {
                     area += r.width * r.height;
                     if (union == null) {
                         union = r;
-                    }
-                    else {
+                    } else {
                         union = union.union(r);
                     }
                 }
@@ -267,9 +266,11 @@ public class ScoutProbabilities {
                 }
             }
 
-            ScoutWidget[] widgets = (ScoutWidget[])group.toArray(new ScoutWidget[group.size()]);
+            ScoutWidget[] widgets =
+                    (ScoutWidget[]) group.toArray(new ScoutWidget[group.size()]);
             Arrays.sort(widgets, ScoutWidget.sSortY);
-            boolean reverse = widgets[0].rootDistanceY() > widgets[widgets.length - 1].rootDistanceY();
+            boolean reverse = widgets[0].rootDistanceY()
+                    > widgets[widgets.length - 1].rootDistanceY();
             float[] max = new float[widgets.length];
             int[] map = new int[widgets.length];
 
@@ -280,7 +281,8 @@ public class ScoutProbabilities {
                     }
                 }
             }
-            // zero out probabilities of connecting to each other we are going to take care of it here
+            // zero out probabilities of connecting to each other
+            // we are going to take care of it here
             for (int i = 0; i < widgets.length; i++) {
                 for (int j = 0; j < widgets.length; j++) {
                     int l = map[j] * 2;
@@ -308,15 +310,16 @@ public class ScoutProbabilities {
                     int gap = widgets[i].mConstraintWidget.getY();
                     gap -= widgets[i - 1].mConstraintWidget.getY();
                     gap -= widgets[i - 1].mConstraintWidget.getHeight();
-                    widgets[i - 1].setConstraint(Direction.SOUTH.getDirection(), widgets[i], Direction.NORTH.getDirection(), gap);
+                    widgets[i - 1].setConstraint(Direction.SOUTH.getDirection(),
+                            widgets[i], Direction.NORTH.getDirection(), gap);
                 }
-            }
-            else {
+            } else {
                 for (int i = 1; i < widgets.length; i++) {
                     int gap = widgets[i].mConstraintWidget.getY();
                     gap -= widgets[i - 1].mConstraintWidget.getY();
                     gap -= widgets[i - 1].mConstraintWidget.getHeight();
-                    widgets[i].setConstraint(Direction.NORTH.getDirection(), widgets[i - 1], Direction.SOUTH.getDirection(), gap);
+                    widgets[i].setConstraint(Direction.NORTH.getDirection(),
+                            widgets[i - 1], Direction.SOUTH.getDirection(), gap);
                 }
             }
 
@@ -338,16 +341,14 @@ public class ScoutProbabilities {
                                                Direction.WEST,
                                                Direction.EAST, 0);
                 }
-            }
-            else {
+            } else {
                 if (reverse) {
                     for (int i = 1; i < widgets.length; i++) {
                         widgets[i - 1].setCentered(0, widgets[i], widgets[i],
                                                    Direction.WEST,
                                                    Direction.EAST, 0);
                     }
-                }
-                else {
+                } else {
                     for (int i = 1; i < widgets.length; i++) {
                         widgets[i].setCentered(0, widgets[i - 1], widgets[i - 1],
                                                Direction.WEST,
@@ -359,8 +360,8 @@ public class ScoutProbabilities {
     }
 
     private static boolean sameCol(ScoutWidget a, ScoutWidget b) {
-        return a.mConstraintWidget.getX() == b.mConstraintWidget.getX() &&
-                a.mConstraintWidget.getWidth() == b.mConstraintWidget.getWidth();
+        return a.mConstraintWidget.getX() == b.mConstraintWidget.getX()
+                && a.mConstraintWidget.getWidth() == b.mConstraintWidget.getWidth();
     }
 
     /**
@@ -376,7 +377,7 @@ public class ScoutProbabilities {
         final int west = Direction.WEST.getDirection();
 
         // Search for baseline connections
-        for (int i = 1; i < len; i++) {
+        for (int i = 1; i < mLen; i++) {
             float[][] widgetProbability = mProbability[i];
 
             if (widgetProbability == null || widgetProbability[baseline] == null) {
@@ -424,7 +425,7 @@ public class ScoutProbabilities {
         Direction[][] side =
                 { { Direction.NORTH, Direction.SOUTH }, { Direction.WEST, Direction.EAST } };
         int[] dualIndex = new int[2];
-        for (int i = 1; i < len; i++) {
+        for (int i = 1; i < mLen; i++) {
             float[][][] widgetBinaryProbability = mBinaryProbability[i];
             float[][][] widgetBinaryBias = mBinaryBias[i];
 
@@ -487,8 +488,8 @@ public class ScoutProbabilities {
         int[] maxMargin = { maxHeightMargin, maxWidthMargin };
         final int west = Direction.WEST.getDirection();
         // pick generic connections
-        int dirTypes[][] = { { north, south }, { west, east } };
-        for (int i = len - 1; i > 0; i--) {
+        int[][] dirTypes = { { north, south }, { west, east } };
+        for (int i = mLen - 1; i > 0; i--) {
             float[][] widgetProbability = mProbability[i];
 
             for (int horizontal = 0; horizontal < 2; horizontal++) {
@@ -860,25 +861,25 @@ public class ScoutProbabilities {
     public void printCenterTable(ScoutWidget[] list) {
         // PRINT DEBUG
         System.out.println("----------------- BASE TABLE --------------------");
-        final int SIZE = 10;
-        String padd = new String(new char[SIZE]).replace('\0', ' ');
+        final int size = 10;
+        String padd = new String(new char[size]).replace('\0', ' ');
 
         System.out.print("  ");
-        for (int i = 0; i < len; i++) {
+        for (int i = 0; i < mLen; i++) {
             String dbg = "[" + i + "] " + list[i] + "-------------------------";
             dbg = dbg.substring(0, 20);
-            System.out.print(dbg + ((i == len - 1) ? "\n" : ""));
+            System.out.print(dbg + ((i == mLen - 1) ? "\n" : ""));
         }
 
         String str = "[";
-        for (int con = 0; con < len * 2; con++) {
+        for (int con = 0; con < mLen * 2; con++) {
             int opposite = con & 0x1;
             str += (con / 2 + ((opposite == 0) ? "->" : "<-") + "           ").substring(0, 10);
         }
 
         System.out.println("  " + str);
 
-        for (int i = 1; i < len; i++) {
+        for (int i = 1; i < mLen; i++) {
             for (int dir = 0; dir < mBinaryProbability[i].length;
                     dir++) { // above, below, left, right
                 String tab = "";
@@ -899,38 +900,38 @@ public class ScoutProbabilities {
         // PRINT DEBUG
         System.out.println("----------------- CENTER TABLE --------------------");
 
-        final int SIZE = 10;
-        String padd = new String(new char[SIZE]).replace('\0', ' ');
+        final int size = 10;
+        String padd = new String(new char[size]).replace('\0', ' ');
 
         System.out.print(" ");
-        for (int i = 0; i < len; i++) {
+        for (int i = 0; i < mLen; i++) {
             String dbg = "[" + i + "] " + list[i] + "-------------------------";
             if (i == 0) {
                 dbg = padd + dbg.substring(0, 20);
             } else {
                 dbg = dbg.substring(0, 20);
             }
-            System.out.print(dbg + ((i == len - 1) ? "\n" : ""));
+            System.out.print(dbg + ((i == mLen - 1) ? "\n" : ""));
         }
 
         String str = "[";
-        for (int con = 0; con < len * 2; con++) {
+        for (int con = 0; con < mLen * 2; con++) {
             int opposite = con & 0x1;
             str += (con / 2 + ((opposite == 0) ? "->" : "<-") + "           ").substring(0, 10);
         }
 
-        String header = ("Connection " + padd).substring(0, SIZE);
+        String header = ("Connection " + padd).substring(0, size);
 
         System.out.println(header + " " + str);
 
-        for (int i = 1; i < len; i++) {
+        for (int i = 1; i < mLen; i++) {
             if (mProbability[i] == null) {
                 continue;
             }
             for (int dir = 0; dir < mProbability[i].length; dir++) { // above, below, left, right
 
                 System.out.println(
-                        Utils.leftTrim(padd + i + " " + Direction.toString(dir), SIZE) + " "
+                        Utils.leftTrim(padd + i + " " + Direction.toString(dir), size) + " "
                                 + Utils.toS(mProbability[i][dir]));
                 System.out.println(padd + " " + Utils.toS(mMargin[i][dir]));
 

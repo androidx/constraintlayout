@@ -21,13 +21,11 @@ import androidx.constraintlayout.core.motion.key.MotionKeyAttributes;
 import androidx.constraintlayout.core.motion.parse.KeyParser;
 import androidx.constraintlayout.core.motion.utils.ArcCurveFit;
 import androidx.constraintlayout.core.motion.utils.KeyCache;
-import androidx.constraintlayout.core.motion.utils.TypedValues;
 
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 
 public class MotionParsingTest {
@@ -35,68 +33,69 @@ public class MotionParsingTest {
     private static final boolean DEBUG = false;
 
     class Scene {
-        MotionWidget mw1 = new MotionWidget();
-        MotionWidget mw2 = new MotionWidget();
-        MotionWidget res = new MotionWidget();
-        KeyCache cache = new KeyCache();
-        Motion motion;
-        float pos;
+        MotionWidget mMW1 = new MotionWidget();
+        MotionWidget mMW2 = new MotionWidget();
+        MotionWidget mRes = new MotionWidget();
+        KeyCache mCache = new KeyCache();
+        Motion mMotion;
+        float mPos;
 
         Scene() {
-            motion = new Motion(mw1);
-            mw1.setBounds(0, 0, 30, 40);
-            mw2.setBounds(400, 400, 430, 440);
-            motion.setPathMotionArc(ArcCurveFit.ARC_START_VERTICAL);
+            mMotion = new Motion(mMW1);
+            mMW1.setBounds(0, 0, 30, 40);
+            mMW2.setBounds(400, 400, 430, 440);
+            mMotion.setPathMotionArc(ArcCurveFit.ARC_START_VERTICAL);
         }
 
         public void setup() {
-            motion.setStart(mw1);
-            motion.setEnd(mw2);
-            motion.setup(1000, 1000, 1, 1000000);
+            mMotion.setStart(mMW1);
+            mMotion.setEnd(mMW2);
+            mMotion.setup(1000, 1000, 1, 1000000);
         }
 
         void sample(Runnable r) {
             for (int p = 0; p <= 10; p++) {
-                pos = p * 0.1f;
-                motion.interpolate(res, pos, 1000000 + (int) (p * 100), cache);
+                mPos = p * 0.1f;
+                mMotion.interpolate(mRes, mPos, 1000000 + (int) (p * 100), mCache);
                 r.run();
             }
         }
     }
 
-    String str = "{" +
-            "frame:22,\n" +
-            "target:'widget1',\n" +
-            "easing:'easeIn',\n" +
-            "curveFit:'spline',\n" +
-            "progress:0.3,\n" +
-            "alpha:0.2,\n" +
-            "elevation:0.7,\n" +
-            "rotationZ:23,\n" +
-            "rotationX:25.0,\n" +
-            "rotationY:27.0,\n" +
-            "pivotX:15,\n" +
-            "pivotY:17,\n" +
-            "pivotTarget:'32',\n" +
-            "pathRotate:23,\n" +
-            "scaleX:0.5,\n" +
-            "scaleY:0.7,\n" +
-            "translationX:5,\n" +
-            "translationY:7,\n" +
-            "translationZ:11,\n" +
-            "}";
+    String mStr = "{"
+            + "frame:22,\n"
+            + "target:'widget1',\n"
+            + "easing:'easeIn',\n"
+            + "curveFit:'spline',\n"
+            + "progress:0.3,\n"
+            + "alpha:0.2,\n"
+            + "elevation:0.7,\n"
+            + "rotationZ:23,\n"
+            + "rotationX:25.0,\n"
+            + "rotationY:27.0,\n"
+            + "pivotX:15,\n"
+            + "pivotY:17,\n"
+            + "pivotTarget:'32',\n"
+            + "pathRotate:23,\n"
+            + "scaleX:0.5,\n"
+            + "scaleY:0.7,\n"
+            + "translationX:5,\n"
+            + "translationY:7,\n"
+            + "translationZ:11,\n"
+            + "}";
 
     @Test
-    public void ParseKeAttributes() {
+    public void parseKeAttributes() {
         MotionKeyAttributes mka = new MotionKeyAttributes();
-        KeyParser.parseAttributes(str).applyDelta(mka);
+        KeyParser.parseAttributes(mStr).applyDelta(mka);
         assertEquals(22, mka.mFramePosition);
         HashSet<String> attrs = new HashSet<>();
         mka.getAttributeNames(attrs);
-        String[] split = str.replace("\n", "").split("[,:\\{\\}]");
+        String[] split = mStr.replace("\n", "").split("[,:\\{\\}]");
         ArrayList<String> expectlist = new ArrayList<>();
         HashSet<String> exclude =
-                new HashSet<>(Arrays.asList("curveFit", "easing", "frame", "target", "pivotTarget"));
+                new HashSet<>(Arrays.asList("curveFit", "easing",
+                        "frame", "target", "pivotTarget"));
         for (int i = 1, j = 0; i < split.length; i += 2, j++) {
             System.out.println(i + " " + split[i]);
             if (!exclude.contains(split[i])) {

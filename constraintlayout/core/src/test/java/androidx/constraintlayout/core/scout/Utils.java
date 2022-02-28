@@ -28,7 +28,7 @@ import java.util.Arrays;
  * Simple Utilities used by the Inference system
  */
 public class Utils {
-    private static DecimalFormat df = new DecimalFormat("0.0#####");
+    private static DecimalFormat sDF = new DecimalFormat("0.0#####");
     /**
      * Calculate the maximum of an array
      * @param array
@@ -85,7 +85,7 @@ public class Utils {
             if (i != 0) {
                 s += " , ";
             }
-            String t = df.format(a[i]) + "       ";
+            String t = sDF.format(a[i]) + "       ";
             s += t.substring(0, 7);
 
         }
