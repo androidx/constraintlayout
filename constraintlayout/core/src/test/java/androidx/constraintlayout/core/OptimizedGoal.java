@@ -21,7 +21,7 @@ package androidx.constraintlayout.core;
  */
 public class OptimizedGoal extends OriginalGoal {
 
-    static int MAX = 6;
+    static int sMAX = 6;
 
     final LinearSystem mSystem;
 
@@ -38,15 +38,17 @@ public class OptimizedGoal extends OriginalGoal {
             if (element.mType != SolverVariable.Type.ERROR) {
                 continue;
             }
-            for (int k = MAX - 1; k >= 0; k--) {
+            for (int k = sMAX - 1; k >= 0; k--) {
                 float value = element.strengthVector[k];
                 if (candidate == null && value < 0 && (k >= strength)) {
                     strength = k;
                     candidate = element;
-//                    System.out.println("-> k: " + k + " strength: " + strength + " v: " + value + " candidate " + candidate);
+//                    System.out.println("-> k: " + k + " strength: " + strength
+//                    + " v: " + value + " candidate " + candidate);
                 }
                 if (value > 0 && k > strength) {
-//                    System.out.println("-> reset, k: " + k + " strength: " + strength + " v: " + value + " candidate " + candidate);
+//                    System.out.println("-> reset, k: " + k + " strength: " + strength
+//                    + " v: " + value + " candidate " + candidate);
                     strength = k;
                     candidate = null;
                 }
@@ -61,7 +63,7 @@ public class OptimizedGoal extends OriginalGoal {
             if (variable.mType != SolverVariable.Type.ERROR) {
                 continue;
             }
-            for (int j = 0; j < MAX; j ++) {
+            for (int j = 0; j < sMAX; j++) {
                 variable.strengthVector[j] = 0;
             }
             variable.strengthVector[variable.strength] = 1;
@@ -75,13 +77,14 @@ public class OptimizedGoal extends OriginalGoal {
             SolverVariable element = system.mCache.mIndexedVariables[i];
             if (element.definitionId != -1) {
                 ArrayRow definition = system.getRow(element.definitionId);
-                ArrayLinkedVariables variables = (ArrayLinkedVariables) (Object)  definition.variables;
+                ArrayLinkedVariables variables =
+                        (ArrayLinkedVariables) (Object)  definition.variables;
                 int size = variables.currentSize;
                 for (int j = 0; j < size; j++) {
                     SolverVariable var = variables.getVariable(j);
                     float value = variables.getVariableValue(j);
 //                    add(element, var, value);
-                    for (int k = 0; k < MAX; k++) {
+                    for (int k = 0; k < sMAX; k++) {
                         var.strengthVector[k] += element.strengthVector[k] * value;
                     }
                 }

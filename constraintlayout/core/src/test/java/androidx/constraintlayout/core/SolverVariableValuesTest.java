@@ -15,13 +15,13 @@
  */
 package androidx.constraintlayout.core;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-
-import static org.junit.Assert.assertEquals;
 
 public class SolverVariableValuesTest {
 
@@ -149,7 +149,8 @@ public class SolverVariableValuesTest {
             assertEquals(value, values.get(variable), 0f);
             i++;
         }
-//        System.out.println("array size: count: " + values.count + " keys: " + values.keys.length + " values: " + values.values.length);
+//        System.out.println("array size: count: " + values.count
+//          + " keys: " + values.keys.length + " values: " + values.values.length);
 //        values.maxDepth();
     }
 
@@ -170,7 +171,8 @@ public class SolverVariableValuesTest {
             assertEquals(value, values.get(variable), 0f);
             i++;
         }
-//        System.out.println("array size: count: " + values.count + " keys: " + values.keys.length + " values: " + values.values.length);
+//        System.out.println("array size: count: " + values.count
+//          + " keys: " + values.keys.length + " values: " + values.values.length);
 //        values.maxDepth();
     }
 
@@ -200,7 +202,8 @@ public class SolverVariableValuesTest {
             }
             i++;
         }
-//        System.out.println("array size: count: " + values.count + " keys: " + values.keys.length + " values: " + values.values.length);
+//        System.out.println("array size: count: " + values.count
+//          + " keys: " + values.keys.length + " values: " + values.values.length);
 //        values.maxDepth();
     }
 
@@ -236,7 +239,8 @@ public class SolverVariableValuesTest {
             float value = results.get(variable);
             assertEquals(value, values.get(variable), 0f);
         }
-//        System.out.println("array size: count: " + values.count + " keys: " + values.keys.length + " values: " + values.values.length);
+//        System.out.println("array size: count: " + values.count
+//          + " keys: " + values.keys.length + " values: " + values.values.length);
 //        values.maxDepth();
     }
 }

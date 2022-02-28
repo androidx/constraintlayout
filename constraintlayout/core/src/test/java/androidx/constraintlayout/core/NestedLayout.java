@@ -41,23 +41,23 @@ public class NestedLayout {
         assertEquals(container.getLeft(), 450);
         assertEquals(container.getWidth(), 100);
 
-        ConstraintWidget A = new ConstraintWidget(0, 0, 100, 20);
-        ConstraintWidget B = new ConstraintWidget(0, 0, 50, 20);
-        container.add(A);
-        container.add(B);
+        ConstraintWidget a = new ConstraintWidget(0, 0, 100, 20);
+        ConstraintWidget b = new ConstraintWidget(0, 0, 50, 20);
+        container.add(a);
+        container.add(b);
         container.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
-        A.connect(ConstraintAnchor.Type.LEFT, container, ConstraintAnchor.Type.LEFT);
-        A.connect(ConstraintAnchor.Type.RIGHT, B, ConstraintAnchor.Type.LEFT);
-        B.connect(ConstraintAnchor.Type.RIGHT, container, ConstraintAnchor.Type.RIGHT);
+        a.connect(ConstraintAnchor.Type.LEFT, container, ConstraintAnchor.Type.LEFT);
+        a.connect(ConstraintAnchor.Type.RIGHT, b, ConstraintAnchor.Type.LEFT);
+        b.connect(ConstraintAnchor.Type.RIGHT, container, ConstraintAnchor.Type.RIGHT);
         root.layout();
         System.out.println("container: " + container);
-        System.out.println("A: " + A);
-        System.out.println("B: " + B);
+        System.out.println("A: " + a);
+        System.out.println("B: " + b);
         assertEquals(container.getWidth(), 150);
         assertEquals(container.getLeft(), 425);
-        assertEquals(A.getLeft(), 425);
-        assertEquals(B.getLeft(), 525);
-        assertEquals(A.getWidth(), 100);
-        assertEquals(B.getWidth(), 50);
+        assertEquals(a.getLeft(), 425);
+        assertEquals(b.getLeft(), 525);
+        assertEquals(a.getWidth(), 100);
+        assertEquals(b.getWidth(), 50);
     }
 }

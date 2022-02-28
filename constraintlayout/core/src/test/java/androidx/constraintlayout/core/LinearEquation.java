@@ -16,20 +16,18 @@
 
 package androidx.constraintlayout.core;
 
-import androidx.constraintlayout.core.ArrayRow;
-import androidx.constraintlayout.core.LinearSystem;
-import androidx.constraintlayout.core.SolverVariable;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
 /**
  * LinearEquation is used to represent the linear equations fed into the solver.<br>
- * A linear equation can be an equality or an inequation (left term &le; or &ge; to the right term).<br>
- * The general form will be similar to {@code a0x0 + a1x1 + ... = C + a2x2 + a3x3 + ... ,} where {@code a0x0} is a term representing
- * a variable x0 of an amount {@code a0}, and {@code C} represent a constant term. The amount of terms on the left side or the right
- * side of the equation is arbitrary.
+ * A linear equation can be an equality or
+ * an inequation (left term &le; or &ge; to the right term).<br>
+ * The general form will be similar to {@code a0x0 + a1x1 + ... = C + a2x2 + a3x3 + ... ,}
+ * where {@code a0x0} is a term representing a variable x0 of an amount {@code a0},
+ * and {@code C} represent a constant term.
+ * The amount of terms on the left side or the right side of the equation is arbitrary.
  */
 class LinearEquation {
 
@@ -44,7 +42,8 @@ class LinearEquation {
         if (mLeftSide.size() == 1 && mRightSide.size() == 1) {
             EquationVariable v1 = mLeftSide.get(0);
             EquationVariable v2 = mRightSide.get(0);
-            if (v1.isConstant() && v2.isConstant() && v1.getAmount().isNull() && v2.getAmount().isNull()) {
+            if (v1.isConstant() && v2.isConstant()
+                    && v1.getAmount().isNull() && v2.getAmount().isNull()) {
                 return true;
             }
         }
@@ -57,34 +56,34 @@ class LinearEquation {
 
     private LinearSystem mSystem = null;
 
-    private static int artificialIndex = 0;
-    private static int slackIndex = 0;
-    private static int errorIndex = 0;
+    private static int sArtificialIndex = 0;
+    private static int sSlackIndex = 0;
+    private static int sErrorIndex = 0;
 
     static String getNextArtificialVariableName() {
-        return "a" + ++artificialIndex;
+        return "a" + ++sArtificialIndex;
     }
     static String getNextSlackVariableName() {
-        return "s" + ++slackIndex;
+        return "s" + ++sSlackIndex;
     }
     static String getNextErrorVariableName() {
-        return "e" + ++errorIndex;
+        return "e" + ++sErrorIndex;
     }
 
     /**
      * Reset the counters for the automatic slack and error variable naming
      */
     public static void resetNaming() {
-        artificialIndex = 0;
-        slackIndex = 0;
-        errorIndex = 0;
+        sArtificialIndex = 0;
+        sSlackIndex = 0;
+        sErrorIndex = 0;
     }
 
     /**
      * Copy constructor
      * @param equation to copy
      */
-    public LinearEquation(LinearEquation equation) {
+    LinearEquation(LinearEquation equation) {
         final ArrayList<EquationVariable> mLeftSide1 = equation.mLeftSide;
         for (int i = 0, mLeftSide1Size = mLeftSide1.size(); i < mLeftSide1Size; i++) {
             final EquationVariable v = mLeftSide1.get(i);
@@ -169,14 +168,14 @@ class LinearEquation {
     /**
      * Base constructor, set the current side to the left side.
      */
-    public LinearEquation() {
+    LinearEquation() {
         mCurrentSide = mLeftSide;
     }
 
     /**
      * Base constructor, set the current side to the left side.
      */
-    public LinearEquation(LinearSystem system) {
+    LinearEquation(LinearSystem system) {
         mCurrentSide = mLeftSide;
         mSystem = system;
     }
@@ -294,7 +293,8 @@ class LinearEquation {
 
     /**
      * Balance an equation to have only one term on the left side.
-     * The preference is to first pick an unconstrained variable, then a slack variable, then an error variable.
+     * The preference is to first pick an unconstrained variable,
+     * then a slack variable, then an error variable.
      */
     public void balance() {
         if (mLeftSide.size() == 0 && mRightSide.size() == 0) {
@@ -378,7 +378,8 @@ class LinearEquation {
     }
 
     /**
-     * Pivot this equation on the variable -- e.g. the variable will be the only term on the left side of the equation.
+     * Pivot this equation on the variable --
+     * e.g. the variable will be the only term on the left side of the equation.
      * @param variable variable pivoted on
      */
     public void pivot(SolverVariable variable) {
@@ -494,7 +495,8 @@ class LinearEquation {
     }
 
     /**
-     * Replace the variable v in this equation (left or right side) by the right side of the equation l
+     * Replace the variable v in this equation (left or right side)
+     * by the right side of the equation l
      * @param v the variable to replace
      * @param l the equation we use to replace it with
      */
@@ -623,7 +625,8 @@ class LinearEquation {
      * @return this
      */
     public LinearEquation var(int amount, String name) {
-        EquationVariable e = new EquationVariable(mSystem, amount, name, SolverVariable.Type.UNRESTRICTED);
+        EquationVariable e = new EquationVariable(mSystem,
+                amount, name, SolverVariable.Type.UNRESTRICTED);
         mCurrentSide.add(e);
         return this;
     }
@@ -638,7 +641,8 @@ class LinearEquation {
      */
     public LinearEquation var(int numerator, int denominator, String name) {
         Amount amount = new Amount(numerator, denominator);
-        EquationVariable e = new EquationVariable(mSystem, amount, name, SolverVariable.Type.UNRESTRICTED);
+        EquationVariable e = new EquationVariable(mSystem,
+                amount, name, SolverVariable.Type.UNRESTRICTED);
         mCurrentSide.add(e);
         return this;
     }
@@ -667,7 +671,8 @@ class LinearEquation {
     }
 
     /**
-     * Convenience function to add a negative variable, based on {@link LinearEquation#var(String) var)}
+     * Convenience function to add a negative variable,
+     * based on {@link LinearEquation#var(String) var)}
      *
      * @param name the variable's name
      * @return this
@@ -678,7 +683,8 @@ class LinearEquation {
     }
 
     /**
-     * Convenience function to add a negative variable, based on {@link LinearEquation#var(String) var)}
+     * Convenience function to add a negative variable,
+     * based on {@link LinearEquation#var(String) var)}
      *
      * @param amount the variable's amount
      * @param name the variable's name
@@ -701,7 +707,8 @@ class LinearEquation {
     }
 
     /**
-     * Convenience function to add a negative constant, based on {@link LinearEquation#var(int) var)}
+     * Convenience function to add a negative constant,
+     * based on {@link LinearEquation#var(int) var)}
      *
      * @param amount the constant's amount
      * @return this
@@ -712,7 +719,8 @@ class LinearEquation {
     }
 
     /**
-     * Convenience function to add a fractional constant, based on {@link LinearEquation#var(int) var)}
+     * Convenience function to add a fractional constant,
+     * based on {@link LinearEquation#var(int) var)}
      *
      * @param numerator   the value of the variable's numerator
      * @param denominator the value of the variable's denominator
@@ -724,7 +732,8 @@ class LinearEquation {
     }
 
     /**
-     * Convenience function to add a negative fractional constant, based on {@link LinearEquation#var(int) var)}
+     * Convenience function to add a negative fractional constant,
+     * based on {@link LinearEquation#var(int) var)}
      *
      * @param numerator   the value of the constant's numerator
      * @param denominator the value of the constant's denominator
@@ -743,7 +752,8 @@ class LinearEquation {
      * @return this
      */
     public LinearEquation withError(String name, int strength) {
-        EquationVariable e = new EquationVariable(mSystem, strength, name, SolverVariable.Type.ERROR);
+        EquationVariable e = new EquationVariable(mSystem,
+                strength, name, SolverVariable.Type.ERROR);
         mCurrentSide.add(e);
         return this;
     }
@@ -797,7 +807,8 @@ class LinearEquation {
      * @return this
      */
     public LinearEquation withSlack(String name, int strength) {
-        EquationVariable e = new EquationVariable(mSystem, strength, name, SolverVariable.Type.SLACK);
+        EquationVariable e = new EquationVariable(mSystem,
+                strength, name, SolverVariable.Type.SLACK);
         mCurrentSide.add(e);
         return this;
     }

@@ -19,13 +19,15 @@ import androidx.constraintlayout.core.scout.Scout;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 import androidx.constraintlayout.core.widgets.Guideline;
+
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static org.junit.Assert.assertTrue;
 
 /**
  * This test creates a random set of non overlapping rectangles uses the scout
@@ -114,9 +116,11 @@ public class RandomLayoutTest {
         for (int test = 0; test < LOOP_FOR; test++) {
             long seed = r.nextLong();
             System.out.println("seed = " + seed);
-            ArrayList<Rectangle> list = random(seed, MAX_WIDGETS, PERCENT_BIG_WIDGETS, LAYOUT_WIDTH, LAYOUT_HEIGHT);
+            ArrayList<Rectangle> list = random(seed, MAX_WIDGETS,
+                    PERCENT_BIG_WIDGETS, LAYOUT_WIDTH, LAYOUT_HEIGHT);
 
-            ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, LAYOUT_WIDTH, LAYOUT_HEIGHT);
+            ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0,
+                    LAYOUT_WIDTH, LAYOUT_HEIGHT);
 
             root.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.FIXED);
             root.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.FIXED);
@@ -134,8 +138,10 @@ public class RandomLayoutTest {
                 widget.setHeight(widget.getMinHeight());
                 widget.setWidth(widget.getWidth());
                 widget.setHeight(widget.getHeight());
-                widget.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
-                widget.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
+                widget.setHorizontalDimensionBehaviour(
+                        ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
+                widget.setVerticalDimensionBehaviour(
+                        ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
 
                 root.add(widget);
                 widget.setX(rec.x);
