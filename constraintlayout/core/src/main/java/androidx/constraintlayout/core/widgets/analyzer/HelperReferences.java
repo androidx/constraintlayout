@@ -20,7 +20,7 @@ import androidx.constraintlayout.core.widgets.Barrier;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
 class HelperReferences extends WidgetRun {
-    public HelperReferences(ConstraintWidget widget) {
+    HelperReferences(ConstraintWidget widget) {
         super(widget);
     }
 
@@ -57,13 +57,15 @@ class HelperReferences extends WidgetRun {
                     start.type = DependencyNode.Type.LEFT;
                     for (int i = 0; i < barrier.mWidgetsCount; i++) {
                         ConstraintWidget refWidget = barrier.mWidgets[i];
-                        if (!allowsGoneWidget && refWidget.getVisibility() == ConstraintWidget.GONE) {
+                        if (!allowsGoneWidget
+                                && refWidget.getVisibility() == ConstraintWidget.GONE) {
                             continue;
                         }
                         DependencyNode target = refWidget.horizontalRun.start;
                         target.dependencies.add(start);
                         start.targets.add(target);
-                        // FIXME -- if we move the DependencyNode directly in the ConstraintAnchor we'll be good.
+                        // FIXME -- if we move the DependencyNode directly
+                        //          in the ConstraintAnchor we'll be good.
                     }
                     addDependency(widget.horizontalRun.start);
                     addDependency(widget.horizontalRun.end);
@@ -72,13 +74,15 @@ class HelperReferences extends WidgetRun {
                     start.type = DependencyNode.Type.RIGHT;
                     for (int i = 0; i < barrier.mWidgetsCount; i++) {
                         ConstraintWidget refWidget = barrier.mWidgets[i];
-                        if (!allowsGoneWidget && refWidget.getVisibility() == ConstraintWidget.GONE) {
+                        if (!allowsGoneWidget
+                                && refWidget.getVisibility() == ConstraintWidget.GONE) {
                             continue;
                         }
                         DependencyNode target = refWidget.horizontalRun.end;
                         target.dependencies.add(start);
                         start.targets.add(target);
-                        // FIXME -- if we move the DependencyNode directly in the ConstraintAnchor we'll be good.
+                        // FIXME -- if we move the DependencyNode directly
+                        //              in the ConstraintAnchor we'll be good.
                     }
                     addDependency(widget.horizontalRun.start);
                     addDependency(widget.horizontalRun.end);
@@ -87,13 +91,15 @@ class HelperReferences extends WidgetRun {
                     start.type = DependencyNode.Type.TOP;
                     for (int i = 0; i < barrier.mWidgetsCount; i++) {
                         ConstraintWidget refwidget = barrier.mWidgets[i];
-                        if (!allowsGoneWidget && refwidget.getVisibility() == ConstraintWidget.GONE) {
+                        if (!allowsGoneWidget
+                                && refwidget.getVisibility() == ConstraintWidget.GONE) {
                             continue;
                         }
                         DependencyNode target = refwidget.verticalRun.start;
                         target.dependencies.add(start);
                         start.targets.add(target);
-                        // FIXME -- if we move the DependencyNode directly in the ConstraintAnchor we'll be good.
+                        // FIXME -- if we move the DependencyNode directly
+                        //              in the ConstraintAnchor we'll be good.
                     }
                     addDependency(widget.verticalRun.start);
                     addDependency(widget.verticalRun.end);
@@ -102,13 +108,15 @@ class HelperReferences extends WidgetRun {
                     start.type = DependencyNode.Type.BOTTOM;
                     for (int i = 0; i < barrier.mWidgetsCount; i++) {
                         ConstraintWidget refwidget = barrier.mWidgets[i];
-                        if (!allowsGoneWidget && refwidget.getVisibility() == ConstraintWidget.GONE) {
+                        if (!allowsGoneWidget
+                                && refwidget.getVisibility() == ConstraintWidget.GONE) {
                             continue;
                         }
                         DependencyNode target = refwidget.verticalRun.end;
                         target.dependencies.add(start);
                         start.targets.add(target);
-                        // FIXME -- if we move the DependencyNode directly in the ConstraintAnchor we'll be good.
+                        // FIXME -- if we move the DependencyNode directly
+                        //              in the ConstraintAnchor we'll be good.
                     }
                     addDependency(widget.verticalRun.start);
                     addDependency(widget.verticalRun.end);

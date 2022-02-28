@@ -18,7 +18,7 @@ package androidx.constraintlayout.core.widgets.analyzer;
 
 class BaselineDimensionDependency extends DimensionDependency {
 
-    public BaselineDimensionDependency(WidgetRun run) {
+    BaselineDimensionDependency(WidgetRun run) {
         super(run);
     }
 

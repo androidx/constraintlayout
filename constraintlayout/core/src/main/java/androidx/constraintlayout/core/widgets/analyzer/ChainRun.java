@@ -16,21 +16,21 @@
 
 package androidx.constraintlayout.core.widgets.analyzer;
 
-import androidx.constraintlayout.core.widgets.ConstraintAnchor;
-import androidx.constraintlayout.core.widgets.ConstraintWidget;
-import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
-
-import java.util.ArrayList;
-
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.GONE;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.HORIZONTAL;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_WRAP;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
 
+import androidx.constraintlayout.core.widgets.ConstraintAnchor;
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
+import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
+
+import java.util.ArrayList;
+
 public class ChainRun extends WidgetRun {
     ArrayList<WidgetRun> widgets = new ArrayList<>();
-    private int chainStyle;
+    private int mChainStyle;
 
     public ChainRun(ConstraintWidget widget, int orientation) {
         super(widget);
@@ -96,11 +96,13 @@ public class ChainRun extends WidgetRun {
                 run.widget.verticalChainRun = this;
             }
         }
-        boolean isInRtl = (orientation == HORIZONTAL) && ((ConstraintWidgetContainer) widget.getParent()).isRtl();
+        boolean isInRtl = (orientation == HORIZONTAL)
+                && ((ConstraintWidgetContainer) widget.getParent()).isRtl();
         if (isInRtl && widgets.size() > 1) {
             widget = widgets.get(widgets.size() - 1).widget;
         }
-        chainStyle = orientation == HORIZONTAL ? widget.getHorizontalChainStyle() : widget.getVerticalChainStyle();
+        mChainStyle = orientation == HORIZONTAL
+                ? widget.getHorizontalChainStyle() : widget.getVerticalChainStyle();
     }
 
 
@@ -217,7 +219,8 @@ public class ChainRun extends WidgetRun {
         }
         int matchConstraintsDimension = 0;
         if (numMatchConstraints > 0) {
-            matchConstraintsDimension = (int) (0.5f + (distance - size) / (float) numMatchConstraints);
+            matchConstraintsDimension =
+                    (int) (0.5f + (distance - size) / (float) numMatchConstraints);
 
             int appliedLimits = 0;
             for (int i = 0; i < count; i++) {
@@ -273,21 +276,22 @@ public class ChainRun extends WidgetRun {
                     }
                 }
             }
-            if (chainStyle == ConstraintWidget.CHAIN_PACKED && appliedLimits == 0) {
-                chainStyle = ConstraintWidget.CHAIN_SPREAD;
+            if (mChainStyle == ConstraintWidget.CHAIN_PACKED && appliedLimits == 0) {
+                mChainStyle = ConstraintWidget.CHAIN_SPREAD;
             }
         }
 
         if (size > distance) {
-            chainStyle = ConstraintWidget.CHAIN_PACKED;
+            mChainStyle = ConstraintWidget.CHAIN_PACKED;
         }
 
-        if (numVisibleWidgets > 0 && numMatchConstraints == 0 && firstVisibleWidget == lastVisibleWidget) {
+        if (numVisibleWidgets > 0 && numMatchConstraints == 0
+                && firstVisibleWidget == lastVisibleWidget) {
             // only one widget of fixed size to display...
-            chainStyle = ConstraintWidget.CHAIN_PACKED;
+            mChainStyle = ConstraintWidget.CHAIN_PACKED;
         }
 
-        if (chainStyle == ConstraintWidget.CHAIN_SPREAD_INSIDE) {
+        if (mChainStyle == ConstraintWidget.CHAIN_SPREAD_INSIDE) {
             int gap = 0;
             if (numVisibleWidgets > 1) {
                 gap = (distance - size) / (numVisibleWidgets - 1);
@@ -354,7 +358,7 @@ public class ChainRun extends WidgetRun {
                     }
                 }
             }
-        } else if (chainStyle == ConstraintWidget.CHAIN_SPREAD) {
+        } else if (mChainStyle == ConstraintWidget.CHAIN_SPREAD) {
             int gap = (distance - size) / (numVisibleWidgets + 1);
             if (numMatchConstraints > 0) {
                 gap = 0;
@@ -414,7 +418,7 @@ public class ChainRun extends WidgetRun {
                     }
                 }
             }
-        } else if (chainStyle == ConstraintWidget.CHAIN_PACKED) {
+        } else if (mChainStyle == ConstraintWidget.CHAIN_PACKED) {
             float bias = (orientation == HORIZONTAL) ? widget.getHorizontalBiasPercent()
                     : widget.getVerticalBiasPercent();
             if (isInRtl) {

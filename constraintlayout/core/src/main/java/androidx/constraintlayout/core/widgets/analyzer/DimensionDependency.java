@@ -20,7 +20,7 @@ class DimensionDependency extends DependencyNode {
 
     public int wrapValue;
 
-    public DimensionDependency(WidgetRun run) {
+    DimensionDependency(WidgetRun run) {
         super(run);
         if (run instanceof HorizontalWidgetRun) {
             type = Type.HORIZONTAL_DIMENSION;

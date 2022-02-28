@@ -16,10 +16,6 @@
 
 package androidx.constraintlayout.core.widgets.analyzer;
 
-import androidx.constraintlayout.core.widgets.ConstraintAnchor;
-import androidx.constraintlayout.core.widgets.ConstraintWidget;
-import androidx.constraintlayout.core.widgets.Helper;
-
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.FIXED;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.MATCH_PARENT;
@@ -32,9 +28,14 @@ import static androidx.constraintlayout.core.widgets.ConstraintWidget.UNKNOWN;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
 import static androidx.constraintlayout.core.widgets.analyzer.WidgetRun.RunType.CENTER;
 
+
+import androidx.constraintlayout.core.widgets.ConstraintAnchor;
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
+import androidx.constraintlayout.core.widgets.Helper;
+
 public class HorizontalWidgetRun extends WidgetRun {
 
-    private static int[] tempDimensions = new int[2];
+    private static int[] sTempDimensions = new int[2];
 
     public HorizontalWidgetRun(ConstraintWidget widget) {
         super(widget);
@@ -91,7 +92,8 @@ public class HorizontalWidgetRun extends WidgetRun {
                     if (parent != null
                             && (parent.getHorizontalDimensionBehaviour() == FIXED
                             || parent.getHorizontalDimensionBehaviour() == MATCH_PARENT)) {
-                        int resolvedDimension = parent.getWidth() - widget.mLeft.getMargin() - widget.mRight.getMargin();
+                        int resolvedDimension = parent.getWidth()
+                                - widget.mLeft.getMargin() - widget.mRight.getMargin();
                         addTarget(start, parent.horizontalRun.start, widget.mLeft.getMargin());
                         addTarget(end, parent.horizontalRun.end, -widget.mRight.getMargin());
                         dimension.resolve(resolvedDimension);
@@ -125,32 +127,44 @@ public class HorizontalWidgetRun extends WidgetRun {
         //   s->d->e->
 
         if (dimension.resolved && widget.measured) {
-            if (widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT].mTarget != null && widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT].mTarget != null) { // <-s-e->
+            if (widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT].mTarget != null
+                    && widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT].mTarget
+                    != null) { // <-s-e->
                 if (widget.isInHorizontalChain()) {
                     start.margin = widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT].getMargin();
                     end.margin = -widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT].getMargin();
                 } else {
-                    DependencyNode startTarget = getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT]);
+                    DependencyNode startTarget =
+                            getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT]);
                     if (startTarget != null) {
-                        addTarget(start, startTarget, widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT].getMargin());
+                        addTarget(start, startTarget,
+                                widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT].getMargin());
                     }
-                    DependencyNode endTarget = getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT]);
+                    DependencyNode endTarget =
+                            getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT]);
                     if (endTarget != null) {
-                        addTarget(end, endTarget, -widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT].getMargin());
+                        addTarget(end, endTarget,
+                                -widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT].getMargin());
                     }
                     start.delegateToWidgetRun = true;
                     end.delegateToWidgetRun = true;
                 }
-            } else if (widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT].mTarget != null) { // <-s-e
-                DependencyNode target = getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT]);
+            } else if (widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT].mTarget
+                    != null) { // <-s-e
+                DependencyNode target =
+                        getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT]);
                 if (target != null) {
-                    addTarget(start, target, widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT].getMargin());
+                    addTarget(start, target,
+                            widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT].getMargin());
                     addTarget(end, start, dimension.value);
                 }
-            } else if (widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT].mTarget != null) {   //   s-e->
-                DependencyNode target = getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT]);
+            } else if (widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT].mTarget
+                    != null) {   //   s-e->
+                DependencyNode target =
+                        getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT]);
                 if (target != null) {
-                    addTarget(end, target, -widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT].getMargin());
+                    addTarget(end, target,
+                            -widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT].getMargin());
                     addTarget(start, end, -dimension.value);
                 }
             } else {
@@ -225,20 +239,27 @@ public class HorizontalWidgetRun extends WidgetRun {
                     default: break;
                 }
             }
-            if (widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT].mTarget != null && widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT].mTarget != null) { // <-s-d-e->
+            if (widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT].mTarget != null
+                    && widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT].mTarget
+                        != null) { // <-s-d-e->
 
                 if (widget.isInHorizontalChain()) {
                     start.margin = widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT].getMargin();
                     end.margin = -widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT].getMargin();
                 } else {
-                    DependencyNode startTarget = getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT]);
-                    DependencyNode endTarget = getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT]);
+                    DependencyNode startTarget =
+                            getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT]);
+                    DependencyNode endTarget =
+                            getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT]);
                     if (false) {
                         if (startTarget != null) {
-                            addTarget(start, startTarget, widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT].getMargin());
+                            addTarget(start, startTarget,
+                                    widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT].getMargin());
                         }
                         if (endTarget != null) {
-                            addTarget(end, endTarget, -widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT].getMargin());
+                            addTarget(end, endTarget,
+                                    -widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT]
+                                            .getMargin());
                         }
                     } else {
                         if (startTarget != null) {
@@ -250,16 +271,22 @@ public class HorizontalWidgetRun extends WidgetRun {
                     }
                     mRunType = CENTER;
                 }
-            } else if (widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT].mTarget != null) { // <-s<-d<-e
-                DependencyNode target = getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT]);
+            } else if (widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT].mTarget
+                    != null) { // <-s<-d<-e
+                DependencyNode target =
+                        getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT]);
                 if (target != null) {
-                    addTarget(start, target, widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT].getMargin());
+                    addTarget(start, target,
+                            widget.mListAnchors[ConstraintWidget.ANCHOR_LEFT].getMargin());
                     addTarget(end, start, 1, dimension);
                 }
-            } else if (widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT].mTarget != null) {   //   s->d->e->
-                DependencyNode target = getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT]);
+            } else if (widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT].mTarget
+                    != null) {   //   s->d->e->
+                DependencyNode target =
+                        getTarget(widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT]);
                 if (target != null) {
-                    addTarget(end, target, -widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT].getMargin());
+                    addTarget(end, target,
+                            -widget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT].getMargin());
                     addTarget(start, end, -1, dimension);
                 }
             } else {
@@ -273,7 +300,13 @@ public class HorizontalWidgetRun extends WidgetRun {
         }
     }
 
-    private void computeInsetRatio(int[] dimensions, int x1, int x2, int y1, int y2, float ratio, int side) {
+    private void computeInsetRatio(int[] dimensions,
+                                   int x1,
+                                   int x2,
+                                   int y1,
+                                   int y2,
+                                   float ratio,
+                                   int side) {
         int dx = x2 - x1;
         int dy = y2 - y1;
         switch (side) {
@@ -350,9 +383,10 @@ public class HorizontalWidgetRun extends WidgetRun {
                                     int x2 = end.targets.get(0).value - end.margin;
                                     int y1 = secondStart.value + secondStart.margin;
                                     int y2 = secondEnd.value - secondEnd.margin;
-                                    computeInsetRatio(tempDimensions, x1, x2, y1, y2, ratio, definedSide);
-                                    dimension.resolve(tempDimensions[HORIZONTAL]);
-                                    widget.verticalRun.dimension.resolve(tempDimensions[VERTICAL]);
+                                    computeInsetRatio(sTempDimensions,
+                                            x1, x2, y1, y2, ratio, definedSide);
+                                    dimension.resolve(sTempDimensions[HORIZONTAL]);
+                                    widget.verticalRun.dimension.resolve(sTempDimensions[VERTICAL]);
                                     return;
                                 }
                                 if (start.resolved && end.resolved) {
@@ -363,9 +397,10 @@ public class HorizontalWidgetRun extends WidgetRun {
                                     int x2 = end.value - end.margin;
                                     int y1 = secondStart.targets.get(0).value + secondStart.margin;
                                     int y2 = secondEnd.targets.get(0).value - secondEnd.margin;
-                                    computeInsetRatio(tempDimensions, x1, x2, y1, y2, ratio, definedSide);
-                                    dimension.resolve(tempDimensions[HORIZONTAL]);
-                                    widget.verticalRun.dimension.resolve(tempDimensions[VERTICAL]);
+                                    computeInsetRatio(sTempDimensions,
+                                            x1, x2, y1, y2, ratio, definedSide);
+                                    dimension.resolve(sTempDimensions[HORIZONTAL]);
+                                    widget.verticalRun.dimension.resolve(sTempDimensions[VERTICAL]);
                                 }
                                 if (!(start.readyToSolve && end.readyToSolve
                                         && secondStart.readyToSolve
@@ -376,9 +411,10 @@ public class HorizontalWidgetRun extends WidgetRun {
                                 int x2 = end.targets.get(0).value - end.margin;
                                 int y1 = secondStart.targets.get(0).value + secondStart.margin;
                                 int y2 = secondEnd.targets.get(0).value - secondEnd.margin;
-                                computeInsetRatio(tempDimensions, x1, x2, y1, y2, ratio, definedSide);
-                                dimension.resolve(tempDimensions[HORIZONTAL]);
-                                widget.verticalRun.dimension.resolve(tempDimensions[VERTICAL]);
+                                computeInsetRatio(sTempDimensions,
+                                        x1, x2, y1, y2, ratio, definedSide);
+                                dimension.resolve(sTempDimensions[HORIZONTAL]);
+                                widget.verticalRun.dimension.resolve(sTempDimensions[VERTICAL]);
                             } else if (s1 && e1) {
                                 if (!(start.readyToSolve && end.readyToSolve)) {
                                     return;
@@ -400,7 +436,7 @@ public class HorizontalWidgetRun extends WidgetRun {
                                         dimension.resolve(ldx);
                                         widget.verticalRun.dimension.resolve(ldy);
                                     }
-                                    break;
+                                        break;
                                     case VERTICAL: {
                                         int dx = x2 - x1;
                                         int ldx = getLimitedDimension(dx, HORIZONTAL);
@@ -436,7 +472,7 @@ public class HorizontalWidgetRun extends WidgetRun {
                                         dimension.resolve(ldx);
                                         widget.verticalRun.dimension.resolve(ldy);
                                     }
-                                    break;
+                                        break;
                                     case HORIZONTAL: {
                                         int dy = y2 - y1;
                                         int ldy = getLimitedDimension(dy, VERTICAL);
@@ -457,15 +493,18 @@ public class HorizontalWidgetRun extends WidgetRun {
                             int ratioSide = widget.getDimensionRatioSide();
                             switch (ratioSide) {
                                 case HORIZONTAL: {
-                                    size = (int) (0.5f + widget.verticalRun.dimension.value / widget.getDimensionRatio());
+                                    size = (int) (0.5f + widget.verticalRun.dimension.value
+                                            / widget.getDimensionRatio());
                                 }
                                 break;
                                 case ConstraintWidget.VERTICAL: {
-                                    size = (int) (0.5f + widget.verticalRun.dimension.value * widget.getDimensionRatio());
+                                    size = (int) (0.5f + widget.verticalRun.dimension.value
+                                            * widget.getDimensionRatio());
                                 }
                                 break;
                                 case ConstraintWidget.UNKNOWN: {
-                                    size = (int) (0.5f + widget.verticalRun.dimension.value * widget.getDimensionRatio());
+                                    size = (int) (0.5f + widget.verticalRun.dimension.value
+                                            * widget.getDimensionRatio());
                                 }
                                 break;
                                 default: break;

@@ -16,6 +16,12 @@
 
 package androidx.constraintlayout.core.widgets.analyzer;
 
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.GONE;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.HORIZONTAL;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_SPREAD;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_WRAP;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
+
 import androidx.constraintlayout.core.LinearSystem;
 import androidx.constraintlayout.core.widgets.Barrier;
 import androidx.constraintlayout.core.widgets.ConstraintAnchor;
@@ -27,12 +33,6 @@ import androidx.constraintlayout.core.widgets.Optimizer;
 import androidx.constraintlayout.core.widgets.VirtualLayout;
 
 import java.util.ArrayList;
-
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.GONE;
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.HORIZONTAL;
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_SPREAD;
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_WRAP;
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
 
 /**
  * Implements basic measure for linear resolution
@@ -57,8 +57,10 @@ public class BasicMeasure {
         final int childCount = layout.mChildren.size();
         for (int i = 0; i < childCount; i++) {
             ConstraintWidget widget = layout.mChildren.get(i);
-            if (widget.getHorizontalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
-                    || widget.getVerticalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT) {
+            if (widget.getHorizontalDimensionBehaviour()
+                        == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+                    || widget.getVerticalDimensionBehaviour()
+                        == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT) {
                 mVariableDimensionsWidgets.add(widget);
             }
         }
@@ -87,14 +89,16 @@ public class BasicMeasure {
                 continue;
             }
 
-            if (optimize && child.horizontalRun != null && child.verticalRun != null &&
-                child.horizontalRun.dimension.resolved &&
-                child.verticalRun.dimension.resolved) {
+            if (optimize && child.horizontalRun != null && child.verticalRun != null
+                    && child.horizontalRun.dimension.resolved
+                    && child.verticalRun.dimension.resolved) {
                 continue;
             }
 
-            ConstraintWidget.DimensionBehaviour widthBehavior = child.getDimensionBehaviour(HORIZONTAL);
-            ConstraintWidget.DimensionBehaviour heightBehavior = child.getDimensionBehaviour(VERTICAL);
+            ConstraintWidget.DimensionBehaviour widthBehavior =
+                    child.getDimensionBehaviour(HORIZONTAL);
+            ConstraintWidget.DimensionBehaviour heightBehavior =
+                    child.getDimensionBehaviour(VERTICAL);
 
             boolean skip = widthBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
                     && child.mMatchConstraintDefaultWidth != MATCH_CONSTRAINT_WRAP
@@ -139,7 +143,11 @@ public class BasicMeasure {
         measurer.didMeasures();
     }
 
-    private void solveLinearSystem(ConstraintWidgetContainer layout, String reason, int pass, int w, int h) {
+    private void solveLinearSystem(ConstraintWidgetContainer layout,
+                                   String reason,
+                                   int pass,
+                                   int w,
+                                   int h) {
         long startLayout;
         if (LinearSystem.MEASURE) {
             startLayout = System.nanoTime();
@@ -159,8 +167,8 @@ public class BasicMeasure {
         constraintWidgetContainer.setPass(pass);
         constraintWidgetContainer.layout();
         if (LinearSystem.MEASURE && layout.mMetrics != null) {
-                long endLayout = System.nanoTime();
-                layout.mMetrics.measuresLayoutDuration += (endLayout - startLayout);
+            long endLayout = System.nanoTime();
+            layout.mMetrics.measuresLayoutDuration += (endLayout - startLayout);
         }
     }
 
@@ -190,14 +198,18 @@ public class BasicMeasure {
         int startingWidth = layout.getWidth();
         int startingHeight = layout.getHeight();
 
-        boolean optimizeWrap = Optimizer.enabled(optimizationLevel, Optimizer.OPTIMIZATION_GRAPH_WRAP);
-        boolean optimize = optimizeWrap || Optimizer.enabled(optimizationLevel, Optimizer.OPTIMIZATION_GRAPH);
+        boolean optimizeWrap =
+                Optimizer.enabled(optimizationLevel, Optimizer.OPTIMIZATION_GRAPH_WRAP);
+        boolean optimize = optimizeWrap
+                || Optimizer.enabled(optimizationLevel, Optimizer.OPTIMIZATION_GRAPH);
 
         if (optimize) {
             for (int i = 0; i < childCount; i++) {
                 ConstraintWidget child = layout.mChildren.get(i);
-                boolean matchWidth = child.getHorizontalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT;
-                boolean matchHeight = child.getVerticalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT;
+                boolean matchWidth = child.getHorizontalDimensionBehaviour()
+                        == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT;
+                boolean matchHeight = child.getVerticalDimensionBehaviour()
+                        == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT;
                 boolean ratio = matchWidth && matchHeight && child.getDimensionRatio() > 0;
                 if (child.isInHorizontalChain() && (ratio)) {
                     optimize = false;
@@ -231,7 +243,8 @@ public class BasicMeasure {
 
         if (optimize) {
             // For non-optimizer this doesn't seem to be a problem.
-            // For both cases, having the width address max size early seems to work (which makes sense).
+            // For both cases, having the width address max size early seems to work
+            //  (which makes sense).
             // Putting it specific to optimizer to reduce unnecessary risk.
             widthSize = Math.min(layout.getMaxWidth(), widthSize);
             heightSize = Math.min(layout.getMaxHeight(), heightSize);
@@ -302,7 +315,8 @@ public class BasicMeasure {
                 boolean containerWrapHeight = layout.getVerticalDimensionBehaviour()
                         == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT;
                 int minWidth = Math.max(layout.getWidth(), constraintWidgetContainer.getMinWidth());
-                int minHeight = Math.max(layout.getHeight(), constraintWidgetContainer.getMinHeight());
+                int minHeight = Math.max(layout.getHeight(),
+                        constraintWidgetContainer.getMinHeight());
 
                 ////////////////////////////////////////////////////////////////////////////////////
                 // Let's first apply sizes for VirtualLayouts if any
@@ -347,14 +361,15 @@ public class BasicMeasure {
                 for (int j = 0; j < maxIterations; j++) {
                     for (int i = 0; i < sizeDependentWidgetsCount; i++) {
                         ConstraintWidget widget = mVariableDimensionsWidgets.get(i);
-                        if ((widget instanceof Helper && !(widget instanceof VirtualLayout)) || widget instanceof Guideline) {
+                        if ((widget instanceof Helper && !(widget instanceof VirtualLayout))
+                                || widget instanceof Guideline) {
                             continue;
                         }
                         if (widget.getVisibility() == GONE) {
                             continue;
                         }
-                        if (optimize &&
-                            widget.horizontalRun.dimension.resolved && widget.verticalRun.dimension.resolved) {
+                        if (optimize && widget.horizontalRun.dimension.resolved
+                                && widget.verticalRun.dimension.resolved) {
                             continue;
                         }
                         if (widget instanceof VirtualLayout) {
@@ -366,7 +381,7 @@ public class BasicMeasure {
                         int preBaselineDistance = widget.getBaselineDistance();
 
                         int measureStrategy = Measure.TRY_GIVEN_DIMENSIONS;
-                        if (j == maxIterations -1) {
+                        if (j == maxIterations - 1) {
                             measureStrategy = Measure.USE_GIVEN_DIMENSIONS;
                         }
                         boolean hasMeasure = measure(measurer, widget, measureStrategy);
@@ -375,7 +390,8 @@ public class BasicMeasure {
                         }
                         needSolverPass |= hasMeasure;
                         if (DEBUG && hasMeasure) {
-                            System.out.println("{#} Needs Solver pass as measure true for " + widget.getDebugName());
+                            System.out.println("{#} Needs Solver pass as measure true for "
+                                    + widget.getDebugName());
                         }
                         if (layout.mMetrics != null) {
                             layout.mMetrics.measuredMatchWidgets++;
@@ -392,7 +408,9 @@ public class BasicMeasure {
                                 minWidth = Math.max(minWidth, w);
                             }
                             if (DEBUG) {
-                                System.out.println("{#} Needs Solver pass as Width for " + widget.getDebugName() + " changed: " + measuredWidth + " != " + preWidth);
+                                System.out.println("{#} Needs Solver pass as Width for "
+                                        + widget.getDebugName() + " changed: "
+                                        + measuredWidth + " != " + preWidth);
                             }
                             needSolverPass = true;
                         }
@@ -400,23 +418,31 @@ public class BasicMeasure {
                             widget.setHeight(measuredHeight);
                             if (containerWrapHeight && widget.getBottom() > minHeight) {
                                 int h = widget.getBottom()
-                                        + widget.getAnchor(ConstraintAnchor.Type.BOTTOM).getMargin();
+                                        + widget.getAnchor(ConstraintAnchor.Type.BOTTOM)
+                                                .getMargin();
                                 minHeight = Math.max(minHeight, h);
                             }
                             if (DEBUG) {
-                                System.out.println("{#} Needs Solver pass as Height for " + widget.getDebugName() + " changed: " + measuredHeight + " != " + preHeight);
+                                System.out.println("{#} Needs Solver pass as Height for "
+                                        + widget.getDebugName() + " changed: "
+                                        + measuredHeight + " != " + preHeight);
                             }
                             needSolverPass = true;
                         }
-                        if (widget.hasBaseline() && preBaselineDistance != widget.getBaselineDistance()) {
+                        if (widget.hasBaseline()
+                                && preBaselineDistance != widget.getBaselineDistance()) {
                             if (DEBUG) {
-                                System.out.println("{#} Needs Solver pass as Baseline for " + widget.getDebugName() + " changed: " + widget.getBaselineDistance() + " != " + preBaselineDistance);
+                                System.out.println("{#} Needs Solver pass as Baseline for "
+                                        + widget.getDebugName() + " changed: "
+                                        + widget.getBaselineDistance() + " != "
+                                        + preBaselineDistance);
                             }
                             needSolverPass = true;
                         }
                     }
                     if (needSolverPass) {
-                        solveLinearSystem(layout, "intermediate pass", 1 + j, startingWidth, startingHeight);
+                        solveLinearSystem(layout, "intermediate pass",
+                                1 + j, startingWidth, startingHeight);
                         needSolverPass = false;
                     } else {
                         break;
@@ -447,18 +473,22 @@ public class BasicMeasure {
         mMeasure.measuredNeedsSolverPass = false;
         mMeasure.measureStrategy = measureStrategy;
 
-        boolean horizontalMatchConstraints = (mMeasure.horizontalBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
-        boolean verticalMatchConstraints = (mMeasure.verticalBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
+        boolean horizontalMatchConstraints = (mMeasure.horizontalBehavior
+                == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
+        boolean verticalMatchConstraints = (mMeasure.verticalBehavior
+                == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
         boolean horizontalUseRatio = horizontalMatchConstraints && widget.mDimensionRatio > 0;
         boolean verticalUseRatio = verticalMatchConstraints && widget.mDimensionRatio > 0;
 
         if (horizontalUseRatio) {
-            if (widget.mResolvedMatchConstraintDefault[HORIZONTAL] == ConstraintWidget.MATCH_CONSTRAINT_RATIO_RESOLVED) {
+            if (widget.mResolvedMatchConstraintDefault[HORIZONTAL]
+                    == ConstraintWidget.MATCH_CONSTRAINT_RATIO_RESOLVED) {
                 mMeasure.horizontalBehavior = ConstraintWidget.DimensionBehaviour.FIXED;
             }
         }
         if (verticalUseRatio) {
-            if (widget.mResolvedMatchConstraintDefault[VERTICAL] == ConstraintWidget.MATCH_CONSTRAINT_RATIO_RESOLVED) {
+            if (widget.mResolvedMatchConstraintDefault[VERTICAL]
+                    == ConstraintWidget.MATCH_CONSTRAINT_RATIO_RESOLVED) {
                 mMeasure.verticalBehavior = ConstraintWidget.DimensionBehaviour.FIXED;
             }
         }

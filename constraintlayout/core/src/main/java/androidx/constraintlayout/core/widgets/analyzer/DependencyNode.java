@@ -24,7 +24,8 @@ public class DependencyNode implements Dependency {
     public boolean delegateToWidgetRun = false;
     public boolean readyToSolve = false;
 
-    enum Type { UNKNOWN, HORIZONTAL_DIMENSION, VERTICAL_DIMENSION, LEFT, RIGHT, TOP, BOTTOM, BASELINE }
+    enum Type { UNKNOWN, HORIZONTAL_DIMENSION, VERTICAL_DIMENSION,
+        LEFT, RIGHT, TOP, BOTTOM, BASELINE }
 
     WidgetRun run;
     Type type = Type.UNKNOWN;
@@ -43,7 +44,8 @@ public class DependencyNode implements Dependency {
     @Override
     public String toString() {
         return run.widget.getDebugName() + ":" + type + "("
-            + (resolved? value : "unresolved") + ") <t=" + targets.size() + ":d=" + dependencies.size() + ">";
+            + (resolved ? value : "unresolved") + ") <t="
+                + targets.size() + ":d=" + dependencies.size() + ">";
     }
 
     public void resolve(int value) {
@@ -55,7 +57,7 @@ public class DependencyNode implements Dependency {
         this.value = value;
         for (Dependency node : dependencies) {
             node.update(node);
-         }
+        }
     }
 
     public void update(Dependency node) {

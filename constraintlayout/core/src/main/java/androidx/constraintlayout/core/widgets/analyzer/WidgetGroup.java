@@ -15,6 +15,10 @@
  */
 package androidx.constraintlayout.core.widgets.analyzer;
 
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.BOTH;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.HORIZONTAL;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
+
 import androidx.constraintlayout.core.LinearSystem;
 import androidx.constraintlayout.core.widgets.Chain;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
@@ -22,10 +26,6 @@ import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.BOTH;
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.HORIZONTAL;
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
 
 /**
  * Represents a group of widget for the grouping mechanism.
@@ -90,7 +90,8 @@ public class WidgetGroup {
 
     public void moveTo(int orientation, WidgetGroup widgetGroup) {
         if (DEBUG) {
-            System.out.println("Move all widgets (" + this + ") from " + id + " to " + widgetGroup.getId() + "(" + widgetGroup + ")");
+            System.out.println("Move all widgets (" + this + ") from "
+                    + id + " to " + widgetGroup.getId() + "(" + widgetGroup + ")");
         }
         for (ConstraintWidget widget : widgets) {
             widgetGroup.add(widget);
@@ -132,8 +133,11 @@ public class WidgetGroup {
         return solverMeasure(system, widgets, orientation);
     }
 
-    private int solverMeasure(LinearSystem system, ArrayList<ConstraintWidget> widgets, int orientation) {
-        ConstraintWidgetContainer container = (ConstraintWidgetContainer) widgets.get(0).getParent();
+    private int solverMeasure(LinearSystem system,
+                              ArrayList<ConstraintWidget> widgets,
+                              int orientation) {
+        ConstraintWidgetContainer container =
+                (ConstraintWidgetContainer) widgets.get(0).getParent();
         system.reset();
         boolean prevDebug = LinearSystem.FULL_DEBUG;
         container.addToSolver(system, false);

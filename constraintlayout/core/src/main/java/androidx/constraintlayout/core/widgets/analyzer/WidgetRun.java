@@ -16,15 +16,15 @@
 
 package androidx.constraintlayout.core.widgets.analyzer;
 
-import androidx.constraintlayout.core.widgets.ConstraintAnchor;
-import androidx.constraintlayout.core.widgets.ConstraintWidget;
-
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.HORIZONTAL;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_PERCENT;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_RATIO;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_SPREAD;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_WRAP;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
+
+import androidx.constraintlayout.core.widgets.ConstraintAnchor;
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
 public abstract class WidgetRun implements Dependency {
     public int matchConstraintsType;
@@ -124,7 +124,10 @@ public abstract class WidgetRun implements Dependency {
         return target;
     }
 
-    protected void updateRunCenter(Dependency dependency, ConstraintAnchor startAnchor, ConstraintAnchor endAnchor, int orientation) {
+    protected void updateRunCenter(Dependency dependency,
+                                   ConstraintAnchor startAnchor,
+                                   ConstraintAnchor endAnchor,
+                                   int orientation) {
         DependencyNode startTarget = getTarget(startAnchor);
         DependencyNode endTarget = getTarget(endAnchor);
 
@@ -197,13 +200,16 @@ public abstract class WidgetRun implements Dependency {
             }
             break;
             case MATCH_CONSTRAINT_RATIO: {
-                if (widget.horizontalRun.dimensionBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+                if (widget.horizontalRun.dimensionBehavior
+                            == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
                         && widget.horizontalRun.matchConstraintsType == MATCH_CONSTRAINT_RATIO
-                        && widget.verticalRun.dimensionBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+                        && widget.verticalRun.dimensionBehavior
+                            == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
                         && widget.verticalRun.matchConstraintsType == MATCH_CONSTRAINT_RATIO) {
                     // pof
                 } else {
-                    WidgetRun run = (orientation == HORIZONTAL) ? widget.verticalRun : widget.horizontalRun;
+                    WidgetRun run = (orientation == HORIZONTAL)
+                            ? widget.verticalRun : widget.horizontalRun;
                     if (run.dimension.resolved) {
                         float ratio = widget.getDimensionRatio();
                         int value;
@@ -231,7 +237,7 @@ public abstract class WidgetRun implements Dependency {
 
     public void update(Dependency dependency) {}
 
-    final protected int getLimitedDimension(int dimension, int orientation) {
+    protected final int getLimitedDimension(int dimension, int orientation) {
         if (orientation == HORIZONTAL) {
             int max = widget.mMatchConstraintMaxWidth;
             int min = widget.mMatchConstraintMinWidth;
@@ -256,7 +262,7 @@ public abstract class WidgetRun implements Dependency {
         return dimension;
     }
 
-    final protected DependencyNode getTarget(ConstraintAnchor anchor, int orientation) {
+    protected final DependencyNode getTarget(ConstraintAnchor anchor, int orientation) {
         if (anchor.mTarget == null) {
             return null;
         }
@@ -269,23 +275,30 @@ public abstract class WidgetRun implements Dependency {
             case TOP:
             case LEFT: {
                 target = run.start;
-            } break;
+            }
+                break;
             case BOTTOM:
             case RIGHT: {
                 target = run.end;
-            } break;
+            }
+                break;
             default: break;
         }
         return target;
     }
 
-    final protected void addTarget(DependencyNode node, DependencyNode target, int margin) {
+    protected final void addTarget(DependencyNode node,
+                                   DependencyNode target,
+                                   int margin) {
         node.targets.add(target);
         node.margin = margin;
         target.dependencies.add(node);
     }
 
-    final protected void addTarget(DependencyNode node, DependencyNode target, int marginFactor, DimensionDependency dimensionDependency) {
+    protected final void addTarget(DependencyNode node,
+                                   DependencyNode target,
+                                   int marginFactor,
+                                   DimensionDependency dimensionDependency) {
         node.targets.add(target);
         node.targets.add(dimension);
         node.marginFactor = marginFactor;

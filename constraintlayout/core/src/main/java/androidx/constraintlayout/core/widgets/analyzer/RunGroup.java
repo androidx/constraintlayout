@@ -16,17 +16,17 @@
 
 package androidx.constraintlayout.core.widgets.analyzer;
 
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.HORIZONTAL;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
+
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 
 import java.util.ArrayList;
 
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.HORIZONTAL;
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
-
 class RunGroup {
-    public final static int START = 0;
-    public final static int END = 1;
-    public final static int BASELINE = 2;
+    public static final int START = 0;
+    public static final int END = 1;
+    public static final int BASELINE = 2;
 
     public static int index;
 
@@ -40,7 +40,7 @@ class RunGroup {
     int groupIndex = 0;
     int direction;
 
-    public RunGroup(WidgetRun run, int dir) {
+    RunGroup(WidgetRun run, int dir) {
         groupIndex = index;
         index++;
         firstRun = run;
@@ -71,7 +71,8 @@ class RunGroup {
                     // skip our own sibling node
                     continue;
                 }
-                position = Math.max(position, traverseStart(nextNode, startPosition + nextNode.margin));
+                position = Math.max(position,
+                        traverseStart(nextNode, startPosition + nextNode.margin));
             }
         }
 
@@ -103,7 +104,8 @@ class RunGroup {
                     // skip our own sibling node
                     continue;
                 }
-                position = Math.min(position, traverseEnd(nextNode, startPosition + nextNode.margin));
+                position = Math.min(position,
+                        traverseEnd(nextNode, startPosition + nextNode.margin));
             }
         }
 
@@ -134,8 +136,10 @@ class RunGroup {
                 }
             }
         }
-        DependencyNode containerStart = orientation == HORIZONTAL ? container.horizontalRun.start : container.verticalRun.start;
-        DependencyNode containerEnd = orientation == HORIZONTAL ? container.horizontalRun.end : container.verticalRun.end;
+        DependencyNode containerStart = orientation == HORIZONTAL
+                ? container.horizontalRun.start : container.verticalRun.start;
+        DependencyNode containerEnd = orientation == HORIZONTAL
+                ? container.horizontalRun.end : container.verticalRun.end;
 
         boolean runWithStartTarget = firstRun.start.targets.contains(containerStart);
         boolean runWithEndTarget = firstRun.end.targets.contains(containerEnd);
