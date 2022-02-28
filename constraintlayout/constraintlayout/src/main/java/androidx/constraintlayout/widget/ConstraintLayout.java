@@ -16,13 +16,6 @@
 
 package androidx.constraintlayout.widget;
 
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_SPREAD;
-import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_WRAP;
-import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID;
-import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.UNSET;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -33,13 +26,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.util.SparseArray;
-import android.util.SparseIntArray;
-import android.view.View;
-import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.core.LinearSystem;
@@ -51,8 +37,19 @@ import androidx.constraintlayout.core.widgets.Guideline;
 import androidx.constraintlayout.core.widgets.Optimizer;
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure;
 
+import android.util.AttributeSet;
+import android.util.Log;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
+import android.view.View;
+import android.view.ViewGroup;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.*;
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * A {@code ConstraintLayout} is a {@link android.view.ViewGroup} which allows you
