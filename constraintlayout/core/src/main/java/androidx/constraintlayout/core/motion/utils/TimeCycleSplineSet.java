@@ -135,10 +135,15 @@ public abstract class TimeCycleSplineSet {
         }
 
         public void setPoint(int position, float value, float period, int shape, float offset) {
-            throw new RuntimeException("don't call for custom attribute call setPoint(pos, ConstraintAttribute,...)");
+            throw new RuntimeException("don't call for custom attribute "
+                    + "call setPoint(pos, ConstraintAttribute,...)");
         }
 
-        public void setPoint(int position, CustomAttribute value, float period, int shape, float offset) {
+        public void setPoint(int position,
+                             CustomAttribute value,
+                             float period,
+                             int shape,
+                             float offset) {
             mConstraintAttributeList.append(position, value);
             mWaveProperties.append(position, new float[]{period, offset});
             mWaveShape = Math.max(mWaveShape, shape); // the highest value shape is chosen
@@ -286,10 +291,15 @@ public abstract class TimeCycleSplineSet {
         }
 
         public void setPoint(int position, float value, float period, int shape, float offset) {
-            throw new RuntimeException("don't call for custom attribute call setPoint(pos, ConstraintAttribute,...)");
+            throw new RuntimeException("don't call for custom attribute "
+                    + "call setPoint(pos, ConstraintAttribute,...)");
         }
 
-        public void setPoint(int position, CustomVariable value, float period, int shape, float offset) {
+        public void setPoint(int position,
+                             CustomVariable value,
+                             float period,
+                             int shape,
+                             float offset) {
             mConstraintAttributeList.append(position, value);
             mWaveProperties.append(position, new float[]{period, offset});
             mWaveShape = Math.max(mWaveShape, shape); // the highest value shape is chosen

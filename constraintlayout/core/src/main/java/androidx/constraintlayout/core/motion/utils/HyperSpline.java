@@ -121,7 +121,7 @@ public class HyperSpline {
     public double approxLength(Cubic[] curve) {
         double sum = 0;
 
-        int N = curve.length;
+        int n = curve.length;
         double[] old = new double[curve.length];
         for (double i = 0; i < 1; i += .1) {
             double s = 0;
@@ -148,7 +148,7 @@ public class HyperSpline {
     static Cubic[] calcNaturalCubic(int n, double[] x) {
         double[] gamma = new double[n];
         double[] delta = new double[n];
-        double[] D = new double[n];
+        double[] d = new double[n];
         n -= 1;
 
         gamma[0] = 1.0f / 2.0f;
@@ -163,17 +163,17 @@ public class HyperSpline {
         }
         delta[n] = (3 * (x[n] - x[n - 1]) - delta[n - 1]) * gamma[n];
 
-        D[n] = delta[n];
+        d[n] = delta[n];
         for (int i = n - 1; i >= 0; i--) {
-            D[i] = delta[i] - gamma[i] * D[i + 1];
+            d[i] = delta[i] - gamma[i] * d[i + 1];
         }
 
-        Cubic[] C = new Cubic[n];
+        Cubic[] c = new Cubic[n];
         for (int i = 0; i < n; i++) {
-            C[i] = new Cubic((float) x[i], D[i], 3 * (x[i + 1] - x[i]) - 2
-                    * D[i] - D[i + 1], 2 * (x[i] - x[i + 1]) + D[i] + D[i + 1]);
+            c[i] = new Cubic((float) x[i], d[i], 3 * (x[i + 1] - x[i]) - 2
+                    * d[i] - d[i + 1], 2 * (x[i] - x[i + 1]) + d[i] + d[i + 1]);
         }
-        return C;
+        return c;
     }
 
     public static class Cubic {

@@ -16,9 +16,9 @@
 
 package androidx.constraintlayout.core.state;
 
-import androidx.constraintlayout.core.widgets.ConstraintWidget;
-
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.*;
+
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
 /**
  * Represents a dimension (width or height) of a constrained widget
@@ -65,7 +65,9 @@ public class Dimension {
     }
 
     private Dimension() {}
-    private Dimension(Object type) { mInitialValue = type; }
+    private Dimension(Object type) {
+        mInitialValue = type;
+    }
 
     public static Dimension Suggested(int value) {
         Dimension dimension = new Dimension();
@@ -189,7 +191,9 @@ public class Dimension {
         mValue = value;
     }
 
-    int getValue() { return mValue; }
+    int getValue() {
+        return mValue;
+    }
 
     /**
      * Apply the dimension to the given constraint widget
@@ -202,7 +206,8 @@ public class Dimension {
         }
         if (orientation == ConstraintWidget.HORIZONTAL) {
             if (mIsSuggested) {
-                constraintWidget.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
+                constraintWidget.setHorizontalDimensionBehaviour(
+                        ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
                 int type = MATCH_CONSTRAINT_SPREAD;
                 if (mInitialValue == WRAP_DIMENSION) {
                     type = MATCH_CONSTRAINT_WRAP;
@@ -218,17 +223,21 @@ public class Dimension {
                     constraintWidget.setMaxWidth(mMax);
                 }
                 if (mInitialValue == WRAP_DIMENSION) {
-                    constraintWidget.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
+                    constraintWidget.setHorizontalDimensionBehaviour(
+                            ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
                 } else if (mInitialValue == PARENT_DIMENSION) {
-                    constraintWidget.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_PARENT);
+                    constraintWidget.setHorizontalDimensionBehaviour(
+                            ConstraintWidget.DimensionBehaviour.MATCH_PARENT);
                 } else if (mInitialValue == null) {
-                    constraintWidget.setHorizontalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.FIXED);
+                    constraintWidget.setHorizontalDimensionBehaviour(
+                            ConstraintWidget.DimensionBehaviour.FIXED);
                     constraintWidget.setWidth(mValue);
                 }
             }
         } else {
             if (mIsSuggested) {
-                constraintWidget.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
+                constraintWidget.setVerticalDimensionBehaviour(
+                        ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT);
                 int type = MATCH_CONSTRAINT_SPREAD;
                 if (mInitialValue == WRAP_DIMENSION) {
                     type = MATCH_CONSTRAINT_WRAP;
@@ -244,11 +253,14 @@ public class Dimension {
                     constraintWidget.setMaxHeight(mMax);
                 }
                 if (mInitialValue == WRAP_DIMENSION) {
-                    constraintWidget.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
+                    constraintWidget.setVerticalDimensionBehaviour(
+                            ConstraintWidget.DimensionBehaviour.WRAP_CONTENT);
                 } else if (mInitialValue == PARENT_DIMENSION) {
-                    constraintWidget.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.MATCH_PARENT);
+                    constraintWidget.setVerticalDimensionBehaviour(
+                            ConstraintWidget.DimensionBehaviour.MATCH_PARENT);
                 } else if (mInitialValue == null) {
-                    constraintWidget.setVerticalDimensionBehaviour(ConstraintWidget.DimensionBehaviour.FIXED);
+                    constraintWidget.setVerticalDimensionBehaviour(
+                            ConstraintWidget.DimensionBehaviour.FIXED);
                     constraintWidget.setHeight(mValue);
                 }
             }

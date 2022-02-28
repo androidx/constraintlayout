@@ -25,7 +25,7 @@ import java.util.Arrays;
  * it is used with the "spline(0,0.3,0.3,0.5,...0.9,1)" it should start at 0 and end at one 1
  */
 public class StepCurve extends Easing {
-    private final static boolean DEBUG = false;
+    private static final boolean DEBUG = false;
     MonotonicCurveFit mCurveFit;
 
     StepCurve(String configString) {

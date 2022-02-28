@@ -16,6 +16,10 @@
 
 package androidx.constraintlayout.core.state;
 
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.HORIZONTAL;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.UNKNOWN;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
+
 import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.state.helpers.Facade;
 import androidx.constraintlayout.core.widgets.ConstraintAnchor;
@@ -24,20 +28,16 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.HORIZONTAL;
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.UNKNOWN;
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
-
 public class ConstraintReference implements Reference {
 
-    private Object key;
+    private Object mKey;
 
     public void setKey(Object key) {
-        this.key = key;
+        this.mKey = key;
     }
 
     public Object getKey() {
-        return key;
+        return mKey;
     }
 
     public void setTag(String tag) {
@@ -149,7 +149,9 @@ public class ConstraintReference implements Reference {
         }
     }
 
-    public Facade getFacade() { return mFacade; }
+    public Facade getFacade() {
+        return mFacade;
+    }
 
     public void setConstraintWidget(ConstraintWidget widget) {
         if (widget == null) {
@@ -178,11 +180,13 @@ public class ConstraintReference implements Reference {
 
         private final ArrayList<String> mErrors;
 
-        public IncorrectConstraintException(ArrayList<String> errors) {
+        IncorrectConstraintException(ArrayList<String> errors) {
             mErrors = errors;
         }
 
-        public ArrayList<String> getErrors() { return mErrors; }
+        public ArrayList<String> getErrors() {
+            return mErrors;
+        }
 
         @Override
         public String toString() {
@@ -207,8 +211,10 @@ public class ConstraintReference implements Reference {
         if (mEndToStart != null && mEndToEnd != null) {
             errors.add("EndToStart and EndToEnd both defined");
         }
-        if ((mLeftToLeft != null || mLeftToRight != null || mRightToLeft != null || mRightToRight != null)
-                && (mStartToStart != null || mStartToEnd != null || mEndToStart != null || mEndToEnd != null)) {
+        if ((mLeftToLeft != null || mLeftToRight != null
+                || mRightToLeft != null || mRightToRight != null)
+                && (mStartToStart != null || mStartToEnd != null
+                || mEndToStart != null || mEndToEnd != null)) {
             errors.add("Both left/right and start/end constraints defined");
         }
         if (errors.size() > 0) {
@@ -226,7 +232,9 @@ public class ConstraintReference implements Reference {
         return reference;
     }
 
-    public ConstraintReference(State state) { mState = state; }
+    public ConstraintReference(State state) {
+        mState = state;
+    }
 
     public void setHorizontalChainStyle(int chainStyle) {
         mHorizontalChainStyle = chainStyle;
@@ -275,17 +283,39 @@ public class ConstraintReference implements Reference {
         return this;
     }
 
-    public float getTranslationX() { return mTranslationX; }
-    public float getTranslationY() { return mTranslationY; }
-    public float getTranslationZ() { return mTranslationZ; }
-    public float getScaleX() { return mScaleX; }
-    public float getScaleY() { return mScaleY; }
-    public float getAlpha() { return mAlpha; }
-    public float getPivotX() { return mPivotX; }
-    public float getPivotY() { return mPivotY; }
-    public float getRotationX() { return mRotationX; }
-    public float getRotationY() { return mRotationY; }
-    public float getRotationZ() { return mRotationZ; }
+    public float getTranslationX() {
+        return mTranslationX;
+    }
+    public float getTranslationY() {
+        return mTranslationY;
+    }
+    public float getTranslationZ() {
+        return mTranslationZ;
+    }
+    public float getScaleX() {
+        return mScaleX;
+    }
+    public float getScaleY() {
+        return mScaleY;
+    }
+    public float getAlpha() {
+        return mAlpha;
+    }
+    public float getPivotX() {
+        return mPivotX;
+    }
+    public float getPivotY() {
+        return mPivotY;
+    }
+    public float getRotationX() {
+        return mRotationX;
+    }
+    public float getRotationY() {
+        return mRotationY;
+    }
+    public float getRotationZ() {
+        return mRotationZ;
+    }
 
     public ConstraintReference pivotX(float x) {
         mPivotX = x;
@@ -560,14 +590,18 @@ public class ConstraintReference implements Reference {
         return setHeight(dimension);
     }
 
-    public Dimension getWidth() { return mHorizontalDimension; }
+    public Dimension getWidth() {
+        return mHorizontalDimension;
+    }
 
     public ConstraintReference setWidth(Dimension dimension) {
         mHorizontalDimension = dimension;
         return this;
     }
 
-    public Dimension getHeight() { return mVerticalDimension; }
+    public Dimension getHeight() {
+        return mVerticalDimension;
+    }
     public ConstraintReference setHeight(Dimension dimension) {
         mVerticalDimension = dimension;
         return this;
@@ -587,27 +621,33 @@ public class ConstraintReference implements Reference {
                 case LEFT_TO_LEFT:
                 case LEFT_TO_RIGHT: {
                     mMarginLeft = value;
-                } break;
+                }
+                    break;
                 case RIGHT_TO_LEFT:
                 case RIGHT_TO_RIGHT: {
                     mMarginRight = value;
-                } break;
+                }
+                    break;
                 case START_TO_START:
                 case START_TO_END: {
                     mMarginStart = value;
-                } break;
+                }
+                    break;
                 case END_TO_START:
                 case END_TO_END: {
                     mMarginEnd = value;
-                } break;
+                }
+                    break;
                 case TOP_TO_TOP:
                 case TOP_TO_BOTTOM: {
                     mMarginTop = value;
-                } break;
+                }
+                    break;
                 case BOTTOM_TO_TOP:
                 case BOTTOM_TO_BOTTOM: {
                     mMarginBottom = value;
-                } break;
+                }
+                    break;
                 case BASELINE_TO_BOTTOM:
                 case BASELINE_TO_TOP:
                 case BASELINE_TO_BASELINE: {
@@ -636,32 +676,39 @@ public class ConstraintReference implements Reference {
                 case LEFT_TO_LEFT:
                 case LEFT_TO_RIGHT: {
                     mMarginLeftGone = value;
-                } break;
+                }
+                    break;
                 case RIGHT_TO_LEFT:
                 case RIGHT_TO_RIGHT: {
                     mMarginRightGone = value;
-                } break;
+                }
+                    break;
                 case START_TO_START:
                 case START_TO_END: {
                     mMarginStartGone = value;
-                } break;
+                }
+                    break;
                 case END_TO_START:
                 case END_TO_END: {
                     mMarginEndGone = value;
-                } break;
+                }
+                    break;
                 case TOP_TO_TOP:
                 case TOP_TO_BOTTOM: {
                     mMarginTopGone = value;
-                } break;
+                }
+                    break;
                 case BOTTOM_TO_TOP:
                 case BOTTOM_TO_BOTTOM: {
                     mMarginBottomGone = value;
-                } break;
+                }
+                    break;
                 case BASELINE_TO_TOP:
                 case BASELINE_TO_BOTTOM:
                 case BASELINE_TO_BASELINE: {
                     mMarginBaselineGone = value;
-                } break;
+                }
+                    break;
                 default: break;
             }
         } else {
@@ -700,14 +747,16 @@ public class ConstraintReference implements Reference {
             case END_TO_START:
             case END_TO_END: {
                 mHorizontalBias = value;
-            } break;
+            }
+                break;
             case CENTER_VERTICALLY:
             case TOP_TO_TOP:
             case TOP_TO_BOTTOM:
             case BOTTOM_TO_TOP:
             case BOTTOM_TO_BOTTOM: {
                 mVerticalBias = value;
-            } break;
+            }
+                break;
             default: break;
         }
         return this;
@@ -723,7 +772,7 @@ public class ConstraintReference implements Reference {
                     mMarginLeft = 0;
                     mMarginLeftGone = 0;
                 }
-                break;
+                    break;
                 case RIGHT_TO_LEFT:
                 case RIGHT_TO_RIGHT: {
                     mRightToLeft = null;
@@ -731,7 +780,7 @@ public class ConstraintReference implements Reference {
                     mMarginRight = 0;
                     mMarginRightGone = 0;
                 }
-                break;
+                    break;
                 case START_TO_START:
                 case START_TO_END: {
                     mStartToStart = null;
@@ -739,7 +788,7 @@ public class ConstraintReference implements Reference {
                     mMarginStart = 0;
                     mMarginStartGone = 0;
                 }
-                break;
+                    break;
                 case END_TO_START:
                 case END_TO_END: {
                     mEndToStart = null;
@@ -747,7 +796,7 @@ public class ConstraintReference implements Reference {
                     mMarginEnd = 0;
                     mMarginEndGone = 0;
                 }
-                break;
+                    break;
                 case TOP_TO_TOP:
                 case TOP_TO_BOTTOM: {
                     mTopToTop = null;
@@ -755,7 +804,7 @@ public class ConstraintReference implements Reference {
                     mMarginTop = 0;
                     mMarginTopGone = 0;
                 }
-                break;
+                    break;
                 case BOTTOM_TO_TOP:
                 case BOTTOM_TO_BOTTOM: {
                     mBottomToTop = null;
@@ -763,7 +812,7 @@ public class ConstraintReference implements Reference {
                     mMarginBottom = 0;
                     mMarginBottomGone = 0;
                 }
-                break;
+                    break;
                 case BASELINE_TO_BASELINE: {
                     mBaselineToBaseline = null;
                 }
@@ -815,7 +864,9 @@ public class ConstraintReference implements Reference {
         return null;
     }
 
-    private void applyConnection(ConstraintWidget widget, Object opaqueTarget, State.Constraint type) {
+    private void applyConnection(ConstraintWidget widget,
+                                 Object opaqueTarget,
+                                 State.Constraint type) {
         ConstraintWidget target = getTarget(opaqueTarget);
         if (target == null) {
             return;
@@ -874,13 +925,16 @@ public class ConstraintReference implements Reference {
                         ConstraintAnchor.Type.BOTTOM), mMarginBottom, mMarginBottomGone, false);
             } break;
             case BASELINE_TO_BASELINE: {
-                widget.immediateConnect(ConstraintAnchor.Type.BASELINE, target, ConstraintAnchor.Type.BASELINE, mMarginBaseline, mMarginBaselineGone);
+                widget.immediateConnect(ConstraintAnchor.Type.BASELINE, target,
+                        ConstraintAnchor.Type.BASELINE, mMarginBaseline, mMarginBaselineGone);
             } break;
             case BASELINE_TO_TOP: {
-                widget.immediateConnect(ConstraintAnchor.Type.BASELINE, target, ConstraintAnchor.Type.TOP, mMarginBaseline, mMarginBaselineGone);
+                widget.immediateConnect(ConstraintAnchor.Type.BASELINE,
+                        target, ConstraintAnchor.Type.TOP, mMarginBaseline, mMarginBaselineGone);
             } break;
             case BASELINE_TO_BOTTOM: {
-                widget.immediateConnect(ConstraintAnchor.Type.BASELINE, target, ConstraintAnchor.Type.BOTTOM, mMarginBaseline, mMarginBaselineGone);
+                widget.immediateConnect(ConstraintAnchor.Type.BASELINE, target,
+                        ConstraintAnchor.Type.BOTTOM, mMarginBaseline, mMarginBaselineGone);
             } break;
             case CIRCULAR_CONSTRAINT: {
                 widget.connectCircularConstraint(target, mCircularAngle, (int) mCircularDistance);
@@ -912,10 +966,12 @@ public class ConstraintReference implements Reference {
         applyConnection(mConstraintWidget, mTopToBottom, State.Constraint.TOP_TO_BOTTOM);
         applyConnection(mConstraintWidget, mBottomToTop, State.Constraint.BOTTOM_TO_TOP);
         applyConnection(mConstraintWidget, mBottomToBottom, State.Constraint.BOTTOM_TO_BOTTOM);
-        applyConnection(mConstraintWidget, mBaselineToBaseline, State.Constraint.BASELINE_TO_BASELINE);
+        applyConnection(mConstraintWidget, mBaselineToBaseline,
+                State.Constraint.BASELINE_TO_BASELINE);
         applyConnection(mConstraintWidget, mBaselineToTop, State.Constraint.BASELINE_TO_TOP);
         applyConnection(mConstraintWidget, mBaselineToBottom, State.Constraint.BASELINE_TO_BOTTOM);
-        applyConnection(mConstraintWidget, mCircularConstraint, State.Constraint.CIRCULAR_CONSTRAINT);
+        applyConnection(mConstraintWidget, mCircularConstraint,
+                State.Constraint.CIRCULAR_CONSTRAINT);
 
         if (mHorizontalChainStyle != ConstraintWidget.CHAIN_SPREAD) {
             mConstraintWidget.setHorizontalChainStyle(mHorizontalChainStyle);
@@ -949,13 +1005,15 @@ public class ConstraintReference implements Reference {
         if (mCustomColors != null) {
             for (String key : mCustomColors.keySet()) {
                 Integer color = mCustomColors.get(key);
-                mConstraintWidget.frame.setCustomAttribute(key, TypedValues.Custom.TYPE_COLOR, color);
+                mConstraintWidget.frame.setCustomAttribute(key,
+                        TypedValues.Custom.TYPE_COLOR, color);
             }
         }
         if (mCustomFloats != null) {
             for (String key : mCustomFloats.keySet()) {
                 float value = mCustomFloats.get(key);
-                mConstraintWidget.frame.setCustomAttribute(key, TypedValues.Custom.TYPE_FLOAT, value);
+                mConstraintWidget.frame.setCustomAttribute(key,
+                        TypedValues.Custom.TYPE_FLOAT, value);
             }
         }
     }

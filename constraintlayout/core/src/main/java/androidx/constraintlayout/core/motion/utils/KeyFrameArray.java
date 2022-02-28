@@ -149,13 +149,13 @@ public class KeyFrameArray {
         }
     }
     // =================================== FloatArray ======================================
-   static class FloatArray {
+    static class FloatArray {
         int[] keys = new int[101];
         float[][] values = new float[101][];
         int count;
         private static final int EMPTY = 999;
 
-        public FloatArray() {
+        FloatArray() {
             clear();
         }
 

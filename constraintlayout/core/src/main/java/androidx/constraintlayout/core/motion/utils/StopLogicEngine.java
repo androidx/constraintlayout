@@ -25,7 +25,8 @@ package androidx.constraintlayout.core.motion.utils;
  * @hide
  */
 public class StopLogicEngine implements StopEngine {
-    private float mStage1Velocity, mStage2Velocity, mStage3Velocity; // the velocity at the start of each period
+    // the velocity at the start of each period
+    private float mStage1Velocity, mStage2Velocity, mStage3Velocity;
     private float mStage1Duration, mStage2Duration, mStage3Duration; // the time for each period
     private float mStage1EndPosition, mStage2EndPosition, mStage3EndPosition; // ending position
     private int mNumberOfStages;
@@ -45,15 +46,19 @@ public class StopLogicEngine implements StopEngine {
      */
     public String debug(String desc, float time) {
         String ret = desc + " ===== " + mType + "\n";
-        ret += desc + (mBackwards ? "backwards" : "forward ") + " time = " + time + "  stages " + mNumberOfStages + "\n";
-        ret += desc + " dur " + mStage1Duration + " vel " + mStage1Velocity + " pos " + mStage1EndPosition + "\n";
+        ret += desc + (mBackwards ? "backwards" : "forward ")
+                + " time = " + time + "  stages " + mNumberOfStages + "\n";
+        ret += desc + " dur " + mStage1Duration + " vel "
+                + mStage1Velocity + " pos " + mStage1EndPosition + "\n";
 
         if (mNumberOfStages > 1) {
-            ret += desc + " dur " + mStage2Duration + " vel " + mStage2Velocity + " pos " + mStage2EndPosition + "\n";
+            ret += desc + " dur " + mStage2Duration + " vel "
+                    + mStage2Velocity + " pos " + mStage2EndPosition + "\n";
 
         }
         if (mNumberOfStages > 2) {
-            ret += desc + " dur " + mStage3Duration + " vel " + mStage3Velocity + " pos " + mStage3EndPosition + "\n";
+            ret += desc + " dur " + mStage3Duration + " vel "
+                    + mStage3Velocity + " pos " + mStage3EndPosition + "\n";
         }
 
         if (time <= mStage1Duration) {
@@ -110,7 +115,8 @@ public class StopLogicEngine implements StopEngine {
     private float calcY(float time) {
         mDone = false;
         if (time <= mStage1Duration) {
-            return mStage1Velocity * time + (mStage2Velocity - mStage1Velocity) * time * time / (2 * mStage1Duration);
+            return mStage1Velocity * time + (mStage2Velocity - mStage1Velocity)
+                    * time * time / (2 * mStage1Duration);
         }
         if (mNumberOfStages == 1) {
             return mStage1EndPosition;
@@ -118,7 +124,8 @@ public class StopLogicEngine implements StopEngine {
         time -= mStage1Duration;
         if (time < mStage2Duration) {
 
-            return mStage1EndPosition + mStage2Velocity * time + (mStage3Velocity - mStage2Velocity) * time * time / (2 * mStage2Duration);
+            return mStage1EndPosition + mStage2Velocity * time
+                    + (mStage3Velocity - mStage2Velocity) * time * time / (2 * mStage2Duration);
         }
         if (mNumberOfStages == 2) {
             return mStage2EndPosition;
@@ -126,7 +133,8 @@ public class StopLogicEngine implements StopEngine {
         time -= mStage2Duration;
         if (time <= mStage3Duration) {
 
-            return mStage2EndPosition + mStage3Velocity * time - mStage3Velocity * time * time / (2 * mStage3Duration);
+            return mStage2EndPosition + mStage3Velocity
+                    * time - mStage3Velocity * time * time / (2 * mStage3Duration);
         }
         mDone = true;
         return mStage3EndPosition;
@@ -138,7 +146,8 @@ public class StopLogicEngine implements StopEngine {
         mStartPosition = currentPos;
         mBackwards = (currentPos > destination);
         if (mBackwards) {
-            setup(-currentVelocity, currentPos - destination, maxAcceleration, maxVelocity, maxTime);
+            setup(-currentVelocity, currentPos - destination,
+                    maxAcceleration, maxVelocity, maxTime);
         } else {
             setup(currentVelocity, destination - currentPos, maxAcceleration, maxVelocity, maxTime);
         }

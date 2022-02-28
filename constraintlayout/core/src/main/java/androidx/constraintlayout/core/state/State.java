@@ -16,15 +16,15 @@
 
 package androidx.constraintlayout.core.state;
 
-import androidx.constraintlayout.core.widgets.ConstraintWidget;
-import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
-import androidx.constraintlayout.core.widgets.HelperWidget;
 import androidx.constraintlayout.core.state.helpers.AlignHorizontallyReference;
 import androidx.constraintlayout.core.state.helpers.AlignVerticallyReference;
 import androidx.constraintlayout.core.state.helpers.BarrierReference;
 import androidx.constraintlayout.core.state.helpers.GuidelineReference;
-import androidx.constraintlayout.core.state.helpers.VerticalChainReference;
 import androidx.constraintlayout.core.state.helpers.HorizontalChainReference;
+import androidx.constraintlayout.core.state.helpers.VerticalChainReference;
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
+import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
+import androidx.constraintlayout.core.widgets.HelperWidget;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,12 +38,12 @@ public class State {
     protected HashMap<Object, HelperReference> mHelperReferences = new HashMap<>();
     HashMap<String, ArrayList<String>> mTags = new HashMap<>();
 
-    final static int UNKNOWN = -1;
-    final static int CONSTRAINT_SPREAD = 0;
-    final static int CONSTRAINT_WRAP = 1;
-    final static int CONSTRAINT_RATIO = 2;
+    static final int UNKNOWN = -1;
+    static final int CONSTRAINT_SPREAD = 0;
+    static final int CONSTRAINT_WRAP = 1;
+    static final int CONSTRAINT_RATIO = 2;
 
-    public final static Integer PARENT = 0;
+    public static final Integer PARENT = 0;
 
     public final ConstraintReference mParent = new ConstraintReference(this);
 
@@ -173,9 +173,9 @@ public class State {
         return null;
     }
 
-    private int numHelpers = 0;
+    private int mNumHelpers = 0;
     private String createHelperKey() {
-        return "__HELPER_KEY_" + numHelpers++ + "__";
+        return "__HELPER_KEY_" + mNumHelpers++ + "__";
     }
 
     public HelperReference helper(Object key, State.Helper type) {
@@ -220,7 +220,8 @@ public class State {
 
     public GuidelineReference guideline(Object key, int orientation) {
         ConstraintReference reference = constraints(key);
-        if (reference.getFacade() == null || !(reference.getFacade() instanceof GuidelineReference)) {
+        if (reference.getFacade() == null
+                || !(reference.getFacade() instanceof GuidelineReference)) {
             GuidelineReference guidelineReference = new GuidelineReference(this);
             guidelineReference.setOrientation(orientation);
             guidelineReference.setKey(key);
@@ -244,7 +245,8 @@ public class State {
     }
 
     public VerticalChainReference verticalChain(Object... references) {
-        VerticalChainReference reference = (VerticalChainReference) helper(null, State.Helper.VERTICAL_CHAIN);
+        VerticalChainReference reference =
+                (VerticalChainReference) helper(null, State.Helper.VERTICAL_CHAIN);
         reference.add(references);
         return reference;
     }
@@ -254,19 +256,22 @@ public class State {
     }
 
     public HorizontalChainReference horizontalChain(Object... references) {
-        HorizontalChainReference reference = (HorizontalChainReference) helper(null, Helper.HORIZONTAL_CHAIN);
+        HorizontalChainReference reference =
+                (HorizontalChainReference) helper(null, Helper.HORIZONTAL_CHAIN);
         reference.add(references);
         return reference;
     }
 
     public AlignHorizontallyReference centerHorizontally(Object... references) {
-        AlignHorizontallyReference reference = (AlignHorizontallyReference) helper(null, Helper.ALIGN_HORIZONTALLY);
+        AlignHorizontallyReference reference =
+                (AlignHorizontallyReference) helper(null, Helper.ALIGN_HORIZONTALLY);
         reference.add(references);
         return reference;
     }
 
     public AlignVerticallyReference centerVertically(Object... references) {
-        AlignVerticallyReference reference = (AlignVerticallyReference) helper(null, Helper.ALIGN_VERTICALLY);
+        AlignVerticallyReference reference =
+                (AlignVerticallyReference) helper(null, Helper.ALIGN_VERTICALLY);
         reference.add(references);
         return reference;
     }
@@ -331,7 +336,8 @@ public class State {
         for (Object key : mReferences.keySet()) {
             Reference reference = mReferences.get(key);
             if (reference != mParent && reference.getFacade() instanceof HelperReference) {
-                HelperWidget helperWidget = ((HelperReference) reference.getFacade()).getHelperWidget();
+                HelperWidget helperWidget =
+                        ((HelperReference) reference.getFacade()).getHelperWidget();
                 if (helperWidget != null) {
                     Reference constraintReference = mReferences.get(key);
                     if (constraintReference == null) {
