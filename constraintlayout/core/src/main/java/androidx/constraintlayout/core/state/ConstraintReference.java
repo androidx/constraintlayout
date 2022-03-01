@@ -613,7 +613,7 @@ public class ConstraintReference implements Reference {
                 case BASELINE_TO_BASELINE: {
                     mMarginBaseline = value;
                 }
-
+                    break;
                 case CIRCULAR_CONSTRAINT: {
                     mCircularDistance = value;
                 } break;
