@@ -39,11 +39,11 @@ public class Utils {
     }
 
     private static int clamp(int c) {
-        int N = 255;
+        int n = 255;
         c &= ~(c >> 31);
-        c -= N;
+        c -= n;
         c &= (c >> 31);
-        c += N;
+        c += n;
         return c;
     }
 
@@ -67,9 +67,9 @@ public class Utils {
     public interface DebugHandle {
         void message(String str);
     }
-    static DebugHandle ourHandle;
+    static DebugHandle sOurHandle;
     public static void setDebugHandle(DebugHandle handle) {
-        ourHandle = handle;
+        sOurHandle = handle;
     }
     public static void logStack(String msg, int n) {
         StackTraceElement[] st = new Throwable().getStackTrace();
@@ -91,8 +91,8 @@ public class Utils {
         String  npad = "    ".substring(Integer.toString(s.getLineNumber()).length());
         String ss = ".(" + s.getFileName() + ":" + s.getLineNumber() + ")" + npad + methodName;
         System.out.println(ss + " " + str);
-        if (ourHandle != null) {
-            ourHandle.message(ss + " " + str);
+        if (sOurHandle != null) {
+            sOurHandle.message(ss + " " + str);
         }
     }
 

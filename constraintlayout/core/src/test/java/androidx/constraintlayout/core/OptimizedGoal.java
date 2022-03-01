@@ -39,7 +39,7 @@ public class OptimizedGoal extends OriginalGoal {
                 continue;
             }
             for (int k = sMAX - 1; k >= 0; k--) {
-                float value = element.strengthVector[k];
+                float value = element.mStrengthVector[k];
                 if (candidate == null && value < 0 && (k >= strength)) {
                     strength = k;
                     candidate = element;
@@ -64,9 +64,9 @@ public class OptimizedGoal extends OriginalGoal {
                 continue;
             }
             for (int j = 0; j < sMAX; j++) {
-                variable.strengthVector[j] = 0;
+                variable.mStrengthVector[j] = 0;
             }
-            variable.strengthVector[variable.strength] = 1;
+            variable.mStrengthVector[variable.strength] = 1;
         }
     }
 
@@ -75,17 +75,17 @@ public class OptimizedGoal extends OriginalGoal {
         final int count = system.mNumColumns;
         for (int i = 1; i < count; i++) {
             SolverVariable element = system.mCache.mIndexedVariables[i];
-            if (element.definitionId != -1) {
-                ArrayRow definition = system.getRow(element.definitionId);
+            if (element.mDefinitionId != -1) {
+                ArrayRow definition = system.getRow(element.mDefinitionId);
                 ArrayLinkedVariables variables =
                         (ArrayLinkedVariables) (Object)  definition.variables;
-                int size = variables.currentSize;
+                int size = variables.mCurrentSize;
                 for (int j = 0; j < size; j++) {
                     SolverVariable var = variables.getVariable(j);
                     float value = variables.getVariableValue(j);
 //                    add(element, var, value);
                     for (int k = 0; k < sMAX; k++) {
-                        var.strengthVector[k] += element.strengthVector[k] * value;
+                        var.mStrengthVector[k] += element.mStrengthVector[k] * value;
                     }
                 }
             }
@@ -117,9 +117,9 @@ public class OptimizedGoal extends OriginalGoal {
                 continue;
             }
             representation += variable + "[";
-            for (int j = 0; j < variable.strengthVector.length; j++) {
-                representation += variable.strengthVector[j];
-                if (j < variable.strengthVector.length - 1) {
+            for (int j = 0; j < variable.mStrengthVector.length; j++) {
+                representation += variable.mStrengthVector[j];
+                if (j < variable.mStrengthVector.length - 1) {
                     representation += ", ";
                 } else {
                     representation += "], ";

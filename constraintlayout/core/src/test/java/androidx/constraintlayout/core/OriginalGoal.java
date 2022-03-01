@@ -23,21 +23,21 @@ import java.util.ArrayList;
  */
 public class OriginalGoal {
 
-    static int MAX = 6;
+    static int sMax = 6;
 
     class GoalElement {
-        float[] strengths = new float[MAX];
-        SolverVariable variable;
+        float[] mStrengths = new float[sMax];
+        SolverVariable mVariable;
         void clearStrengths() {
-            for (int i = 0; i < MAX; i++) {
-                strengths[i] = 0;
+            for (int i = 0; i < sMax; i++) {
+                mStrengths[i] = 0;
             }
         }
         public String toString() {
-            String representation = variable + "[";
-            for (int j = 0; j < strengths.length; j++) {
-                representation += strengths[j];
-                if (j < strengths.length - 1) {
+            String representation = mVariable + "[";
+            for (int j = 0; j < mStrengths.length; j++) {
+                representation += mStrengths[j];
+                if (j < mStrengths.length - 1) {
                     representation += ", ";
                 } else {
                     representation += "] ";
@@ -47,25 +47,27 @@ public class OriginalGoal {
         }
     }
 
-    ArrayList<GoalElement> variables = new ArrayList<>();
+    ArrayList<GoalElement> mVariables = new ArrayList<>();
 
     public SolverVariable getPivotCandidate() {
-        final int count = variables.size();
+        final int count = mVariables.size();
         SolverVariable candidate = null;
         int strength = 0;
 
         for (int i = 0; i < count; i++) {
-            GoalElement element = variables.get(i);
+            GoalElement element = mVariables.get(i);
 //            System.out.println("get pivot, looking at " + element);
-            for (int k = MAX - 1; k >= 0; k--) {
-                float value = element.strengths[k];
+            for (int k = sMax - 1; k >= 0; k--) {
+                float value = element.mStrengths[k];
                 if (candidate == null && value < 0 && (k >= strength)) {
                     strength = k;
-                    candidate = element.variable;
-//                    System.out.println("-> k: " + k + " strength: " + strength + " v: " + value + " candidate " + candidate);
+                    candidate = element.mVariable;
+//                    System.out.println("-> k: " + k + " strength: "
+//                      + strength + " v: " + value + " candidate " + candidate);
                 }
                 if (value > 0 && k > strength) {
-//                    System.out.println("-> reset, k: " + k + " strength: " + strength + " v: " + value + " candidate " + candidate);
+//                    System.out.println("-> reset, k: " + k + " strength: "
+//                      + strength + " v: " + value + " candidate " + candidate);
                     strength = k;
                     candidate = null;
                 }
@@ -81,22 +83,23 @@ public class OriginalGoal {
                 continue;
             }
             GoalElement element = new GoalElement();
-            element.variable = variable;
-            element.strengths[variable.strength] = 1;
-            variables.add(element);
+            element.mVariable = variable;
+            element.mStrengths[variable.strength] = 1;
+            mVariables.add(element);
         }
     }
 
     public void updateFromSystem(LinearSystem system) {
-        variables.clear();
+        mVariables.clear();
         updateFromSystemErrors(system);
-        final int count = variables.size();
+        final int count = mVariables.size();
         for (int i = 0; i < count; i++) {
-            GoalElement element = variables.get(i);
-            if (element.variable.definitionId != -1) {
-                ArrayRow definition = system.getRow(element.variable.definitionId);
-                ArrayLinkedVariables variables = (ArrayLinkedVariables) (Object) definition.variables;
-                int size = variables.currentSize;
+            GoalElement element = mVariables.get(i);
+            if (element.mVariable.mDefinitionId != -1) {
+                ArrayRow definition = system.getRow(element.mVariable.mDefinitionId);
+                ArrayLinkedVariables variables =
+                        (ArrayLinkedVariables) (Object) definition.variables;
+                int size = variables.mCurrentSize;
                 for (int j = 0; j < size; j++) {
                     SolverVariable var = variables.getVariable(j);
                     float value = variables.getVariableValue(j);
@@ -108,36 +111,36 @@ public class OriginalGoal {
     }
 
     public GoalElement getElement(SolverVariable variable) {
-        final int count = variables.size();
+        final int count = mVariables.size();
         for (int i = 0; i < count; i++) {
-            GoalElement element = variables.get(i);
-            if (element.variable == variable) {
+            GoalElement element = mVariables.get(i);
+            if (element.mVariable == variable) {
                 return element;
             }
         }
         GoalElement element = new GoalElement();
-        element.variable = variable;
-        element.strengths[variable.strength] = 1;
-        variables.add(element);
+        element.mVariable = variable;
+        element.mStrengths[variable.strength] = 1;
+        mVariables.add(element);
         return element;
     }
 
     public void add(GoalElement element, SolverVariable variable, float value) {
         GoalElement addition = getElement(variable);
-        for (int i = 0; i < MAX; i++) {
-            addition.strengths[i] += element.strengths[i] * value;
+        for (int i = 0; i < sMax; i++) {
+            addition.mStrengths[i] += element.mStrengths[i] * value;
         }
     }
 
     public String toString() {
         String representation = "OriginalGoal: ";
-        final int count = variables.size();
+        final int count = mVariables.size();
         for (int i = 0; i < count; i++) {
-            GoalElement element = variables.get(i);
-            representation += element.variable + "[";
-            for (int j = 0; j < element.strengths.length; j++) {
-                representation += element.strengths[j];
-                if (j < element.strengths.length - 1) {
+            GoalElement element = mVariables.get(i);
+            representation += element.mVariable + "[";
+            for (int j = 0; j < element.mStrengths.length; j++) {
+                representation += element.mStrengths[j];
+                if (j < element.mStrengths.length - 1) {
                     representation += ", ";
                 } else {
                     representation += "], ";

@@ -86,7 +86,7 @@ public class LinearSystem {
     private Row mTempGoal;
 
     class ValuesRow extends ArrayRow {
-        public ValuesRow(Cache cache) {
+        ValuesRow(Cache cache) {
             variables = new SolverVariableValues(this, cache);
         }
     }
@@ -161,7 +161,7 @@ public class LinearSystem {
             for (int i = 0; i < mNumRows; i++) {
                 ArrayRow row = mRows[i];
                 if (row != null) {
-                    mCache.optimizedArrayRowPool.release(row);
+                    mCache.mOptimizedArrayRowPool.release(row);
                 }
                 mRows[i] = null;
             }
@@ -169,7 +169,7 @@ public class LinearSystem {
             for (int i = 0; i < mNumRows; i++) {
                 ArrayRow row = mRows[i];
                 if (row != null) {
-                    mCache.arrayRowPool.release(row);
+                    mCache.mArrayRowPool.release(row);
                 }
                 mRows[i] = null;
             }
@@ -191,7 +191,7 @@ public class LinearSystem {
                 variable.reset();
             }
         }
-        mCache.solverVariablePool.releaseAll(mPoolVariables, mPoolVariablesCount);
+        mCache.mSolverVariablePool.releaseAll(mPoolVariables, mPoolVariablesCount);
         mPoolVariablesCount = 0;
 
         Arrays.fill(mCache.mIndexedVariables, null);
@@ -203,7 +203,7 @@ public class LinearSystem {
         mNumColumns = 1;
         for (int i = 0; i < mNumRows; i++) {
             if (mRows[i] != null) {
-                mRows[i].used = false;
+                mRows[i].mUsed = false;
             }
         }
         releaseRows();
@@ -255,7 +255,7 @@ public class LinearSystem {
     public ArrayRow createRow() {
         ArrayRow row;
         if (OPTIMIZED_ENGINE) {
-            row = mCache.optimizedArrayRowPool.acquire();
+            row = mCache.mOptimizedArrayRowPool.acquire();
             if (row == null) {
                 row = new ValuesRow(mCache);
                 OPTIMIZED_ARRAY_ROW_CREATION++;
@@ -263,7 +263,7 @@ public class LinearSystem {
                 row.reset();
             }
         } else {
-            row = mCache.arrayRowPool.acquire();
+            row = mCache.mArrayRowPool.acquire();
             if (row == null) {
                 row = new ArrayRow(mCache);
                 ARRAY_ROW_CREATION++;
@@ -370,7 +370,7 @@ public class LinearSystem {
      * @return instance of SolverVariable
      */
     private SolverVariable acquireSolverVariable(SolverVariable.Type type, String prefix) {
-        SolverVariable variable = mCache.solverVariablePool.acquire();
+        SolverVariable variable = mCache.mSolverVariablePool.acquire();
         if (variable == null) {
             variable = new SolverVariable(type, prefix);
             variable.setType(type, prefix);
@@ -470,7 +470,7 @@ public class LinearSystem {
             boolean fullySolved = true;
             for (int i = 0; i < mNumRows; i++) {
                 ArrayRow r = mRows[i];
-                if (!r.isSimpleDefinition) {
+                if (!r.mIsSimpleDefinition) {
                     fullySolved = false;
                     break;
                 }
@@ -529,11 +529,11 @@ public class LinearSystem {
         while (i < mNumRows) {
             ArrayRow current = mRows[i];
             if (current.variables.getCurrentSize() == 0) {
-                current.isSimpleDefinition = true;
+                current.mIsSimpleDefinition = true;
             }
-            if (current.isSimpleDefinition) {
-                current.variable.computedValue = current.constantValue;
-                current.variable.removeFromRow(current);
+            if (current.mIsSimpleDefinition) {
+                current.mVariable.computedValue = current.mConstantValue;
+                current.mVariable.removeFromRow(current);
                 for (int j = i; j < mNumRows - 1; j++) {
                     mRows[j] = mRows[j + 1];
                 }
@@ -541,9 +541,9 @@ public class LinearSystem {
                 mNumRows--;
                 i--;
                 if (OPTIMIZED_ENGINE) {
-                    mCache.optimizedArrayRowPool.release(current);
+                    mCache.mOptimizedArrayRowPool.release(current);
                 } else {
-                    mCache.arrayRowPool.release(current);
+                    mCache.mArrayRowPool.release(current);
                 }
             }
             i++;
@@ -560,7 +560,7 @@ public class LinearSystem {
         }
         if (sMetrics != null) {
             sMetrics.constraints++;
-            if (row.isSimpleDefinition) {
+            if (row.mIsSimpleDefinition) {
                 sMetrics.simpleconstraints++;
             }
         }
@@ -573,7 +573,7 @@ public class LinearSystem {
         }
 
         boolean added = false;
-        if (!row.isSimpleDefinition) {
+        if (!row.mIsSimpleDefinition) {
             // Update the equation with the variables already defined in the system
             row.updateFromSystem(this);
 
@@ -592,18 +592,18 @@ public class LinearSystem {
             if (row.chooseSubject(this)) {
                 // extra variable added... let's try to see if we can remove it
                 SolverVariable extra = createExtraVariable();
-                row.variable = extra;
+                row.mVariable = extra;
                 int numRows = mNumRows;
                 addRow(row);
                 if (mNumRows == numRows + 1) {
                     added = true;
                     mTempGoal.initFromRow(row);
                     optimize(mTempGoal, true);
-                    if (extra.definitionId == -1) {
+                    if (extra.mDefinitionId == -1) {
                         if (DEBUG) {
                             System.out.println("row added is 0, so get rid of it");
                         }
-                        if (row.variable == extra) {
+                        if (row.mVariable == extra) {
                             // move extra to be parametric
                             SolverVariable pivotCandidate = row.pickPivot(extra);
                             if (pivotCandidate != null) {
@@ -613,13 +613,13 @@ public class LinearSystem {
                                 row.pivot(pivotCandidate);
                             }
                         }
-                        if (!row.isSimpleDefinition) {
-                            row.variable.updateReferencesWithNewDefinition(this, row);
+                        if (!row.mIsSimpleDefinition) {
+                            row.mVariable.updateReferencesWithNewDefinition(this, row);
                         }
                         if (OPTIMIZED_ENGINE) {
-                            mCache.optimizedArrayRowPool.release(row);
+                            mCache.mOptimizedArrayRowPool.release(row);
                         } else {
-                            mCache.arrayRowPool.release(row);
+                            mCache.mArrayRowPool.release(row);
                         }
                         mNumRows--;
                     }
@@ -640,14 +640,14 @@ public class LinearSystem {
         }
     }
 
-    private final void addRow(ArrayRow row) {
-        if (SIMPLIFY_SYNONYMS && row.isSimpleDefinition) {
-            row.variable.setFinalValue(this, row.constantValue);
+    private void addRow(ArrayRow row) {
+        if (SIMPLIFY_SYNONYMS && row.mIsSimpleDefinition) {
+            row.mVariable.setFinalValue(this, row.mConstantValue);
         } else {
             mRows[mNumRows] = row;
-            row.variable.definitionId = mNumRows;
+            row.mVariable.mDefinitionId = mNumRows;
             mNumRows++;
-            row.variable.updateReferencesWithNewDefinition(this, row);
+            row.mVariable.updateReferencesWithNewDefinition(this, row);
         }
         if (DEBUG) {
             System.out.println("Row added: " + row);
@@ -660,20 +660,20 @@ public class LinearSystem {
                 if (mRows[i] == null) {
                     System.out.println("WTF");
                 }
-                if (mRows[i] != null && mRows[i].isSimpleDefinition) {
+                if (mRows[i] != null && mRows[i].mIsSimpleDefinition) {
                     ArrayRow removedRow = mRows[i];
-                    removedRow.variable.setFinalValue(this, removedRow.constantValue);
+                    removedRow.mVariable.setFinalValue(this, removedRow.mConstantValue);
                     if (OPTIMIZED_ENGINE) {
-                        mCache.optimizedArrayRowPool.release(removedRow);
+                        mCache.mOptimizedArrayRowPool.release(removedRow);
                     } else {
-                        mCache.arrayRowPool.release(removedRow);
+                        mCache.mArrayRowPool.release(removedRow);
                     }
                     mRows[i] = null;
                     int lastRow = i + 1;
                     for (int j = i + 1; j < mNumRows; j++) {
                         mRows[j - 1] = mRows[j];
-                        if (mRows[j - 1].variable.definitionId == j) {
-                            mRows[j - 1].variable.definitionId = j - 1;
+                        if (mRows[j - 1].mVariable.mDefinitionId == j) {
+                            mRows[j - 1].mVariable.mDefinitionId = j - 1;
                         }
                         lastRow = j;
                     }
@@ -689,24 +689,24 @@ public class LinearSystem {
     }
 
     public void removeRow(ArrayRow row) {
-        if (row.isSimpleDefinition && row.variable != null) {
-            if (row.variable.definitionId != -1) {
-                for (int i = row.variable.definitionId; i < mNumRows - 1; i++) {
-                    SolverVariable rowVariable = mRows[i + 1].variable;
-                    if (rowVariable.definitionId == i + 1) {
-                        rowVariable.definitionId = i;
+        if (row.mIsSimpleDefinition && row.mVariable != null) {
+            if (row.mVariable.mDefinitionId != -1) {
+                for (int i = row.mVariable.mDefinitionId; i < mNumRows - 1; i++) {
+                    SolverVariable rowVariable = mRows[i + 1].mVariable;
+                    if (rowVariable.mDefinitionId == i + 1) {
+                        rowVariable.mDefinitionId = i;
                     }
                     mRows[i] = mRows[i + 1];
                 }
                 mNumRows--;
             }
-            if (!row.variable.isFinalValue) {
-                row.variable.setFinalValue(this, row.constantValue);
+            if (!row.mVariable.isFinalValue) {
+                row.mVariable.setFinalValue(this, row.mConstantValue);
             }
             if (OPTIMIZED_ENGINE) {
-                mCache.optimizedArrayRowPool.release(row);
+                mCache.mOptimizedArrayRowPool.release(row);
             } else {
-                mCache.arrayRowPool.release(row);
+                mCache.mArrayRowPool.release(row);
             }
         }
     }
@@ -717,7 +717,7 @@ public class LinearSystem {
      * @param b
      * @return number of iterations.
      */
-    private final int optimize(Row goal, boolean b) {
+    private int optimize(Row goal, boolean b) {
         if (sMetrics != null) {
             sMetrics.optimize++;
         }
@@ -791,12 +791,12 @@ public class LinearSystem {
 
                 for (int i = 0; i < mNumRows; i++) {
                     ArrayRow current = mRows[i];
-                    SolverVariable variable = current.variable;
+                    SolverVariable variable = current.mVariable;
                     if (variable.mType == SolverVariable.Type.UNRESTRICTED) {
                         // skip unrestricted variables equations (to only look at Cs)
                         continue;
                     }
-                    if (current.isSimpleDefinition) {
+                    if (current.mIsSimpleDefinition) {
                         continue;
                     }
 
@@ -809,7 +809,7 @@ public class LinearSystem {
                         // we want to pivot on
                         float a_j = current.variables.get(pivotCandidate);
                         if (a_j < 0) {
-                            float value = -current.constantValue / a_j;
+                            float value = -current.mConstantValue / a_j;
                             if (value < min) {
                                 min = value;
                                 pivotRowIndex = i;
@@ -825,13 +825,13 @@ public class LinearSystem {
                         System.out.println("We pivot on " + pivotRowIndex);
                     }
                     ArrayRow pivotEquation = mRows[pivotRowIndex];
-                    pivotEquation.variable.definitionId = -1;
+                    pivotEquation.mVariable.mDefinitionId = -1;
                     if (sMetrics != null) {
                         sMetrics.pivots++;
                     }
                     pivotEquation.pivot(pivotCandidate);
-                    pivotEquation.variable.definitionId = pivotRowIndex;
-                    pivotEquation.variable.updateReferencesWithNewDefinition(this, pivotEquation);
+                    pivotEquation.mVariable.mDefinitionId = pivotRowIndex;
+                    pivotEquation.mVariable.updateReferencesWithNewDefinition(this, pivotEquation);
                     if (DEBUG) {
                         System.out.println("new system after pivot:");
                         displayReadableRows();
@@ -885,11 +885,11 @@ public class LinearSystem {
         // Let's check if that's the case or not.
         boolean infeasibleSystem = false;
         for (int i = 0; i < mNumRows; i++) {
-            SolverVariable variable = mRows[i].variable;
+            SolverVariable variable = mRows[i].mVariable;
             if (variable.mType == SolverVariable.Type.UNRESTRICTED) {
                 continue; // C can be either positive or negative.
             }
-            if (mRows[i].constantValue < 0) {
+            if (mRows[i].mConstantValue < 0) {
                 infeasibleSystem = true;
                 break;
             }
@@ -921,16 +921,16 @@ public class LinearSystem {
 
                 for (int i = 0; i < mNumRows; i++) {
                     ArrayRow current = mRows[i];
-                    SolverVariable variable = current.variable;
+                    SolverVariable variable = current.mVariable;
                     if (variable.mType == SolverVariable.Type.UNRESTRICTED) {
                         // skip unrestricted variables equations, as C
                         // can be either positive or negative.
                         continue;
                     }
-                    if (current.isSimpleDefinition) {
+                    if (current.mIsSimpleDefinition) {
                         continue;
                     }
-                    if (current.constantValue < 0) {
+                    if (current.mConstantValue < 0) {
                         // let's examine this row, see if we can find a good pivot
                         if (DEBUG) {
                             System.out.println("looking at pivoting on row " + current);
@@ -947,7 +947,7 @@ public class LinearSystem {
                                     System.out.println("candidate for pivot " + candidate);
                                 }
                                 for (int k = 0; k < SolverVariable.MAX_STRENGTH; k++) {
-                                    float value = candidate.strengthVector[k] / a_j;
+                                    float value = candidate.mStrengthVector[k] / a_j;
                                     if ((value < min && k == strength) || k > strength) {
                                         min = value;
                                         pivotRowIndex = i;
@@ -967,7 +967,7 @@ public class LinearSystem {
                                     System.out.println("candidate for pivot " + candidate);
                                 }
                                 for (int k = 0; k < SolverVariable.MAX_STRENGTH; k++) {
-                                    float value = candidate.strengthVector[k] / a_j;
+                                    float value = candidate.mStrengthVector[k] / a_j;
                                     if ((value < min && k == strength) || k > strength) {
                                         min = value;
                                         pivotRowIndex = i;
@@ -984,16 +984,16 @@ public class LinearSystem {
                     // We have a pivot!
                     ArrayRow pivotEquation = mRows[pivotRowIndex];
                     if (DEBUG) {
-                        System.out.println("Pivoting on " + pivotEquation.variable + " with "
+                        System.out.println("Pivoting on " + pivotEquation.mVariable + " with "
                                 + mCache.mIndexedVariables[pivotColumnIndex]);
                     }
-                    pivotEquation.variable.definitionId = -1;
+                    pivotEquation.mVariable.mDefinitionId = -1;
                     if (sMetrics != null) {
                         sMetrics.pivots++;
                     }
                     pivotEquation.pivot(mCache.mIndexedVariables[pivotColumnIndex]);
-                    pivotEquation.variable.definitionId = pivotRowIndex;
-                    pivotEquation.variable.updateReferencesWithNewDefinition(this, pivotEquation);
+                    pivotEquation.mVariable.mDefinitionId = pivotRowIndex;
+                    pivotEquation.mVariable.updateReferencesWithNewDefinition(this, pivotEquation);
 
                     if (DEBUG) {
                         System.out.println("new goal after pivot: " + goal);
@@ -1018,11 +1018,11 @@ public class LinearSystem {
             //noinspection UnusedAssignment
             infeasibleSystem = false;
             for (int i = 0; i < mNumRows; i++) {
-                SolverVariable variable = mRows[i].variable;
+                SolverVariable variable = mRows[i].mVariable;
                 if (variable.mType == SolverVariable.Type.UNRESTRICTED) {
                     continue; // C can be either positive or negative.
                 }
-                if (mRows[i].constantValue < 0) {
+                if (mRows[i].mConstantValue < 0) {
                     //noinspection UnusedAssignment
                     infeasibleSystem = true;
                     break;
@@ -1044,7 +1044,7 @@ public class LinearSystem {
     private void computeValues() {
         for (int i = 0; i < mNumRows; i++) {
             ArrayRow row = mRows[i];
-            row.variable.computedValue = row.constantValue;
+            row.mVariable.computedValue = row.mConstantValue;
         }
     }
 
@@ -1076,10 +1076,10 @@ public class LinearSystem {
         s += "\n";
         for (int i = 0; i < mVariablesID + 1; i++) {
             SolverVariable variable = mCache.mIndexedVariables[i];
-            if (variable != null && variable.isSynonym) {
-                SolverVariable synonym = mCache.mIndexedVariables[variable.synonym];
+            if (variable != null && variable.mIsSynonym) {
+                SolverVariable synonym = mCache.mIndexedVariables[variable.mSynonym];
                 s += " ~[" + i + "] => " + variable + " = "
-                        + synonym + " + " + variable.synonymDelta + "\n";
+                        + synonym + " + " + variable.mSynonymDelta + "\n";
             }
         }
         s += "\n\n #  ";
@@ -1098,7 +1098,7 @@ public class LinearSystem {
         displaySolverVariables();
         String s = "";
         for (int i = 0; i < mNumRows; i++) {
-            if (mRows[i].variable.mType == SolverVariable.Type.UNRESTRICTED) {
+            if (mRows[i].mVariable.mType == SolverVariable.Type.UNRESTRICTED) {
                 s += mRows[i].toReadableString();
                 s += "\n";
             }
@@ -1334,17 +1334,17 @@ public class LinearSystem {
     }
 
     public void addSynonym(SolverVariable a, SolverVariable b, int margin) {
-        if (a.definitionId == -1 && margin == 0) {
+        if (a.mDefinitionId == -1 && margin == 0) {
             if (DEBUG_CONSTRAINTS) {
                 System.out.println("(S) -> " + a + " = " + b + (margin != 0 ? " + " + margin : ""));
             }
-            if (b.isSynonym) {
-                margin += b.synonymDelta;
-                b = mCache.mIndexedVariables[b.synonym];
+            if (b.mIsSynonym) {
+                margin += b.mSynonymDelta;
+                b = mCache.mIndexedVariables[b.mSynonym];
             }
-            if (a.isSynonym) {
-                margin -= a.synonymDelta;
-                a = mCache.mIndexedVariables[a.synonym];
+            if (a.mIsSynonym) {
+                margin -= a.mSynonymDelta;
+                a = mCache.mIndexedVariables[a.mSynonym];
             } else {
                 a.setSynonym(this, b, 0);
             }
@@ -1362,7 +1362,7 @@ public class LinearSystem {
      */
     public ArrayRow addEquality(SolverVariable a, SolverVariable b, int margin, int strength) {
         if (USE_BASIC_SYNONYMS && strength == SolverVariable.STRENGTH_FIXED
-                && b.isFinalValue && a.definitionId == -1) {
+                && b.isFinalValue && a.mDefinitionId == -1) {
             if (DEBUG_CONSTRAINTS) {
                 System.out.println("=> " + a + " = " + b + (margin != 0 ? " + " + margin : "")
                         + " = " + (b.computedValue + margin) + " (Synonym)");
@@ -1371,18 +1371,18 @@ public class LinearSystem {
             return null;
         }
         if (false && USE_SYNONYMS && strength == SolverVariable.STRENGTH_FIXED
-                && a.definitionId == -1 && margin == 0) {
+                && a.mDefinitionId == -1 && margin == 0) {
             if (DEBUG_CONSTRAINTS) {
                 System.out.println("(S) -> " + a + " = " + b + (margin != 0 ? " + " + margin : "")
                         + " " + getDisplayStrength(strength));
             }
-            if (b.isSynonym) {
-                margin += b.synonymDelta;
-                b = mCache.mIndexedVariables[b.synonym];
+            if (b.mIsSynonym) {
+                margin += b.mSynonymDelta;
+                b = mCache.mIndexedVariables[b.mSynonym];
             }
-            if (a.isSynonym) {
-                margin -= a.synonymDelta;
-                a = mCache.mIndexedVariables[a.synonym];
+            if (a.mIsSynonym) {
+                margin -= a.mSynonymDelta;
+                a = mCache.mIndexedVariables[a.mSynonym];
             } else {
                 a.setSynonym(this, b, margin);
                 return null;
@@ -1407,15 +1407,15 @@ public class LinearSystem {
      * @param value the value we set
      */
     public void addEquality(SolverVariable a, int value) {
-        if (USE_BASIC_SYNONYMS && a.definitionId == -1) {
+        if (USE_BASIC_SYNONYMS && a.mDefinitionId == -1) {
             if (DEBUG_CONSTRAINTS) {
                 System.out.println("=> " + a + " = " + value + " (Synonym)");
             }
             a.setFinalValue(this, value);
             for (int i = 0; i < mVariablesID + 1; i++) {
                 SolverVariable variable = mCache.mIndexedVariables[i];
-                if (variable != null && variable.isSynonym && variable.synonym == a.id) {
-                    variable.setFinalValue(this, value + variable.synonymDelta);
+                if (variable != null && variable.mIsSynonym && variable.mSynonym == a.id) {
+                    variable.setFinalValue(this, value + variable.mSynonymDelta);
                 }
             }
             return;
@@ -1423,15 +1423,15 @@ public class LinearSystem {
         if (DEBUG_CONSTRAINTS) {
             System.out.println("-> " + a + " = " + value);
         }
-        int idx = a.definitionId;
-        if (a.definitionId != -1) {
+        int idx = a.mDefinitionId;
+        if (a.mDefinitionId != -1) {
             ArrayRow row = mRows[idx];
-            if (row.isSimpleDefinition) {
-                row.constantValue = value;
+            if (row.mIsSimpleDefinition) {
+                row.mConstantValue = value;
             } else {
                 if (row.variables.getCurrentSize() == 0) {
-                    row.isSimpleDefinition = true;
-                    row.constantValue = value;
+                    row.mIsSimpleDefinition = true;
+                    row.mConstantValue = value;
                 } else {
                     ArrayRow newRow = createRow();
                     newRow.createRowEquals(a, value);

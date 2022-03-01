@@ -16,21 +16,21 @@
 package androidx.constraintlayout.core.parser;
 
 public class CLToken extends CLElement {
-    int index = 0;
-    Type type = Type.UNKNOWN;
+    int mIndex = 0;
+    Type mType = Type.UNKNOWN;
 
     public boolean getBoolean() throws CLParsingException {
-        if (type == Type.TRUE) {
+        if (mType == Type.TRUE) {
             return true;
         }
-        if (type == Type.FALSE) {
+        if (mType == Type.FALSE) {
             return false;
         }
         throw new CLParsingException("this token is not a boolean: <" + content() + ">", this);
     }
 
     public boolean isNull() throws CLParsingException {
-        if (type == Type.NULL) {
+        if (mType == Type.NULL) {
             return true;
         }
         throw new CLParsingException("this token is not a null: <" + content() + ">", this);
@@ -38,9 +38,9 @@ public class CLToken extends CLElement {
 
     enum Type { UNKNOWN, TRUE, FALSE, NULL }
 
-    char[] tokenTrue = "true".toCharArray();
-    char[] tokenFalse = "false".toCharArray();
-    char[] tokenNull = "null".toCharArray();
+    char[] mTokenTrue = "true".toCharArray();
+    char[] mTokenFalse = "false".toCharArray();
+    char[] mTokenNull = "null".toCharArray();
 
     public CLToken(char[] content) {
         super(content);
@@ -51,7 +51,7 @@ public class CLToken extends CLElement {
     }
 
     protected String toJSON() {
-        if (CLParser.DEBUG) {
+        if (CLParser.sDebug) {
             return "<" + content() + ">";
         } else {
             return content();
@@ -66,45 +66,45 @@ public class CLToken extends CLElement {
     }
 
     public Type getType() {
-        return type;
+        return mType;
     }
 
     public boolean validate(char c, long position) {
         boolean isValid = false;
-        switch (type) {
+        switch (mType) {
             case TRUE: {
-                isValid = (tokenTrue[index] == c);
-                if (isValid && index + 1 == tokenTrue.length) {
+                isValid = (mTokenTrue[mIndex] == c);
+                if (isValid && mIndex + 1 == mTokenTrue.length) {
                     setEnd(position);
                 }
             } break;
             case FALSE: {
-                isValid = (tokenFalse[index] == c);
-                if (isValid && index + 1 == tokenFalse.length) {
+                isValid = (mTokenFalse[mIndex] == c);
+                if (isValid && mIndex + 1 == mTokenFalse.length) {
                     setEnd(position);
                 }
             } break;
             case NULL: {
-                isValid = (tokenNull[index] == c);
-                if (isValid && index + 1 == tokenNull.length) {
+                isValid = (mTokenNull[mIndex] == c);
+                if (isValid && mIndex + 1 == mTokenNull.length) {
                     setEnd(position);
                 }
             } break;
             case UNKNOWN: {
-                if (tokenTrue[index] == c) {
-                    type = Type.TRUE;
+                if (mTokenTrue[mIndex] == c) {
+                    mType = Type.TRUE;
                     isValid = true;
-                } else if (tokenFalse[index] == c) {
-                    type = Type.FALSE;
+                } else if (mTokenFalse[mIndex] == c) {
+                    mType = Type.FALSE;
                     isValid = true;
-                } else if (tokenNull[index] == c) {
-                    type = Type.NULL;
+                } else if (mTokenNull[mIndex] == c) {
+                    mType = Type.NULL;
                     isValid = true;
                 }
             }
         }
 
-        index++;
+        mIndex++;
         return isValid;
     }
 

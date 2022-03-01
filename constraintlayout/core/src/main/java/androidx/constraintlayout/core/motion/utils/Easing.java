@@ -25,7 +25,7 @@ import java.util.Arrays;
  */
 public class Easing {
     static Easing sDefault = new Easing();
-    String str = "identity";
+    String mStr = "identity";
     private static final String STANDARD = "cubic(0.4, 0.0, 0.2, 1)";
     private static final String ACCELERATE = "cubic(0.4, 0.05, 0.8, 0.7)";
     private static final String DECELERATE = "cubic(0.0, 0.0, 0.2, 0.95)";
@@ -82,7 +82,7 @@ public class Easing {
     }
 
     public String toString() {
-        return str;
+        return mStr;
     }
 
     public double getDiff(double x) {
@@ -93,20 +93,20 @@ public class Easing {
 
         private static double sError = 0.01;
         private static double sDError = 0.0001;
-        double x1, y1, x2, y2;
+        double mX1, mY1, mX2, mY2;
 
         CubicEasing(String configString) {
             // done this way for efficiency
-            str = configString;
+            mStr = configString;
             int start = configString.indexOf('(');
             int off1 = configString.indexOf(',', start);
-            x1 = Double.parseDouble(configString.substring(start + 1, off1).trim());
+            mX1 = Double.parseDouble(configString.substring(start + 1, off1).trim());
             int off2 = configString.indexOf(',', off1 + 1);
-            y1 = Double.parseDouble(configString.substring(off1 + 1, off2).trim());
+            mY1 = Double.parseDouble(configString.substring(off1 + 1, off2).trim());
             int off3 = configString.indexOf(',', off2 + 1);
-            x2 = Double.parseDouble(configString.substring(off2 + 1, off3).trim());
+            mX2 = Double.parseDouble(configString.substring(off2 + 1, off3).trim());
             int end = configString.indexOf(')', off3 + 1);
-            y2 = Double.parseDouble(configString.substring(off3 + 1, end).trim());
+            mY2 = Double.parseDouble(configString.substring(off3 + 1, end).trim());
         }
 
         CubicEasing(double x1, double y1, double x2, double y2) {
@@ -114,10 +114,10 @@ public class Easing {
         }
 
         void setup(double x1, double y1, double x2, double y2) {
-            this.x1 = x1;
-            this.y1 = y1;
-            this.x2 = x2;
-            this.y2 = y2;
+            this.mX1 = x1;
+            this.mY1 = y1;
+            this.mX2 = x2;
+            this.mY2 = y2;
         }
 
         private double getX(double t) {
@@ -126,7 +126,7 @@ public class Easing {
             double f1 = 3 * t1 * t1 * t;
             double f2 = 3 * t1 * t * t;
             double f3 = t * t * t;
-            return x1 * f1 + x2 * f2 + f3;
+            return mX1 * f1 + mX2 * f2 + f3;
         }
 
         private double getY(double t) {
@@ -135,17 +135,17 @@ public class Easing {
             double f1 = 3 * t1 * t1 * t;
             double f2 = 3 * t1 * t * t;
             double f3 = t * t * t;
-            return y1 * f1 + y2 * f2 + f3;
+            return mY1 * f1 + mY2 * f2 + f3;
         }
 
         private double getDiffX(double t) {
             double t1 = 1 - t;
-            return 3 * t1 * t1 * x1 + 6 * t1 * t * (x2 - x1) + 3 * t * t * (1 - x2);
+            return 3 * t1 * t1 * mX1 + 6 * t1 * t * (mX2 - mX1) + 3 * t * t * (1 - mX2);
         }
 
         private double getDiffY(double t) {
             double t1 = 1 - t;
-            return 3 * t1 * t1 * y1 + 6 * t1 * t * (y2 - y1) + 3 * t * t * (1 - y2);
+            return 3 * t1 * t1 * mY1 + 6 * t1 * t * (mY2 - mY1) + 3 * t * t * (1 - mY2);
         }
 
         /**

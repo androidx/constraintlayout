@@ -29,7 +29,7 @@ public class Schlick extends Easing {
     Schlick(String configString) {
         // done this way for efficiency
 
-        str = configString;
+        mStr = configString;
         int start = configString.indexOf('(');
         int off1 = configString.indexOf(',', start);
         mS = Double.parseDouble(configString.substring(start + 1, off1).trim());

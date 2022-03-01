@@ -47,31 +47,31 @@ public abstract class KeyCycleOscillator {
     }
 
     private static class CoreSpline extends KeyCycleOscillator {
-        String type;
-        int typeId;
+        String mType;
+        int mTypeId;
 
         CoreSpline(String str) {
-            type = str;
-            typeId = TypedValues.CycleType.getId(type);
+            mType = str;
+            mTypeId = TypedValues.CycleType.getId(mType);
         }
 
         public void setProperty(MotionWidget widget, float t) {
-            widget.setValue(typeId, get(t));
+            widget.setValue(mTypeId, get(t));
         }
     }
 
     public static class PathRotateSet extends KeyCycleOscillator {
-        String type;
-        int typeId;
+        String mType;
+        int mTypeId;
 
         public PathRotateSet(String str) {
-            type = str;
-            typeId = TypedValues.CycleType.getId(type);
+            mType = str;
+            mTypeId = TypedValues.CycleType.getId(mType);
         }
 
         @Override
         public void setProperty(MotionWidget widget, float t) {
-            widget.setValue(typeId, get(t));
+            widget.setValue(mTypeId, get(t));
         }
 
         public void setPathRotate(MotionWidget view, float t, double dx, double dy) {
@@ -302,15 +302,15 @@ public abstract class KeyCycleOscillator {
         private static final String TAG = "CycleOscillator";
         private final int mVariesBy;
         Oscillator mOscillator = new Oscillator();
-        private final int OFFST = 0;
-        private final int PHASE = 1;
+        private final int mOffst = 0;
+        private final int mPhase = 1;
         private final int mValue = 2;
 
         float[] mValues;
         double[] mPosition;
         float[] mPeriod;
-        float[] mOffset; // offsets will be spline interpolated
-        float[] mPhase; // phase will be spline interpolated
+        float[] mOffsetArr; // offsets will be spline interpolated
+        float[] mPhaseArr; // phase will be spline interpolated
         float[] mScale; // scales will be spline interpolated
         int mWaveShape;
         CurveFit mCurveFit;
@@ -325,8 +325,8 @@ public abstract class KeyCycleOscillator {
             mValues = new float[steps];
             mPosition = new double[steps];
             mPeriod = new float[steps];
-            mOffset = new float[steps];
-            mPhase = new float[steps];
+            mOffsetArr = new float[steps];
+            mPhaseArr = new float[steps];
             mScale = new float[steps];
         }
 
@@ -334,13 +334,13 @@ public abstract class KeyCycleOscillator {
             if (mCurveFit != null) {
                 mCurveFit.getPos(time, mSplineValueCache);
             } else { // only one value no need to interpolate
-                mSplineValueCache[OFFST] = mOffset[0];
-                mSplineValueCache[PHASE] = mPhase[0];
+                mSplineValueCache[mOffst] = mOffsetArr[0];
+                mSplineValueCache[mPhase] = mPhaseArr[0];
                 mSplineValueCache[mValue] = mValues[0];
 
             }
-            double offset = mSplineValueCache[OFFST];
-            double phase = mSplineValueCache[PHASE];
+            double offset = mSplineValueCache[mOffst];
+            double phase = mSplineValueCache[this.mPhase];
             double waveValue = mOscillator.getValue(time, phase);
             return offset + waveValue * mSplineValueCache[mValue];
         }
@@ -354,14 +354,14 @@ public abstract class KeyCycleOscillator {
                 mCurveFit.getSlope(time, mSplineSlopeCache);
                 mCurveFit.getPos(time, mSplineValueCache);
             } else { // only one value no need to interpolate
-                mSplineSlopeCache[OFFST] = 0;
-                mSplineSlopeCache[PHASE] = 0;
+                mSplineSlopeCache[mOffst] = 0;
+                mSplineSlopeCache[mPhase] = 0;
                 mSplineSlopeCache[mValue] = 0;
             }
-            double waveValue = mOscillator.getValue(time, mSplineValueCache[PHASE]);
+            double waveValue = mOscillator.getValue(time, mSplineValueCache[mPhase]);
             double waveSlope = mOscillator.getSlope(time,
-                    mSplineValueCache[PHASE], mSplineSlopeCache[PHASE]);
-            return mSplineSlopeCache[OFFST] + waveValue * mSplineSlopeCache[mValue]
+                    mSplineValueCache[mPhase], mSplineSlopeCache[mPhase]);
+            return mSplineSlopeCache[mOffst] + waveValue * mSplineSlopeCache[mValue]
                     + waveSlope * mSplineValueCache[mValue];
         }
 
@@ -380,8 +380,8 @@ public abstract class KeyCycleOscillator {
                              float values) {
             mPosition[index] = framePosition / 100.0;
             mPeriod[index] = wavePeriod;
-            mOffset[index] = offset;
-            mPhase[index] = phase;
+            mOffsetArr[index] = offset;
+            mPhaseArr[index] = phase;
             mValues[index] = values;
         }
 
@@ -399,8 +399,8 @@ public abstract class KeyCycleOscillator {
             }
 
             for (int i = 0; i < splineValues.length; i++) {
-                splineValues[i][OFFST] = mOffset[i];
-                splineValues[i][PHASE] = mPhase[i];
+                splineValues[i][mOffst] = mOffsetArr[i];
+                splineValues[i][mPhase] = mPhaseArr[i];
                 splineValues[i][mValue] = mValues[i];
                 mOscillator.addPoint(mPosition[i], mPeriod[i]);
             }

@@ -29,18 +29,18 @@ public class BasicSolverVariableValues implements ArrayRow.ArrayRowVariables {
     private static float sEpsilon = 0.001f;
 
     class Item {
-        SolverVariable variable;
-        float value;
+        SolverVariable mVariable;
+        float mValue;
     }
 
     private final ArrayRow mRow; // our owner
-    ArrayList<Item> list = new ArrayList<>();
+    ArrayList<Item> mList = new ArrayList<>();
     //LinkedList<Item> list = new LinkedList<>();
 
     Comparator<Item> mComparator = new Comparator<Item>() {
         @Override
         public int compare(Item s1, Item s2) {
-            return s1.variable.id - s2.variable.id;
+            return s1.mVariable.id - s2.mVariable.id;
         }
     };
 
@@ -50,23 +50,23 @@ public class BasicSolverVariableValues implements ArrayRow.ArrayRowVariables {
 
     @Override
     public int getCurrentSize() {
-        return list.size();
+        return mList.size();
     }
 
     @Override
     public SolverVariable getVariable(int i) {
-        return list.get(i).variable;
+        return mList.get(i).mVariable;
     }
 
     @Override
     public float getVariableValue(int i) {
-        return list.get(i).value;
+        return mList.get(i).mValue;
     }
 
     @Override
     public boolean contains(SolverVariable variable) {
-        for (Item item : list) {
-            if (item.variable.id == variable.id) {
+        for (Item item : mList) {
+            if (item.mVariable.id == variable.id) {
                 return true;
             }
         }
@@ -76,8 +76,8 @@ public class BasicSolverVariableValues implements ArrayRow.ArrayRowVariables {
     @Override
     public int indexOf(SolverVariable variable) {
         for (int i = 0; i < getCurrentSize(); i++) {
-            Item item = list.get(i);
-            if (item.variable.id == variable.id) {
+            Item item = mList.get(i);
+            if (item.mVariable.id == variable.id) {
                 return i;
             }
         }
@@ -87,7 +87,7 @@ public class BasicSolverVariableValues implements ArrayRow.ArrayRowVariables {
     @Override
     public float get(SolverVariable variable) {
         if (contains(variable)) {
-            return list.get(indexOf(variable)).value;
+            return mList.get(indexOf(variable)).mValue;
         }
         return 0;
     }
@@ -113,7 +113,7 @@ public class BasicSolverVariableValues implements ArrayRow.ArrayRowVariables {
             SolverVariable v = getVariable(i);
             v.removeFromRow(mRow);
         }
-        list.clear();
+        mList.clear();
     }
 
     @Override
@@ -125,26 +125,26 @@ public class BasicSolverVariableValues implements ArrayRow.ArrayRowVariables {
 //        System.out.println("Put " + variable + " [" + value + "] in " + mRow);
         //list.add(item);
 
-        if (list.size() == 0) {
+        if (mList.size() == 0) {
             Item item = new Item();
-            item.variable = variable;
-            item.value = value;
-            list.add(item);
+            item.mVariable = variable;
+            item.mValue = value;
+            mList.add(item);
             variable.addToRow(mRow);
             variable.usageInRowCount++;
         } else {
             if (contains(variable)) {
-                Item currentItem = list.get(indexOf(variable));
-                currentItem.value = value;
+                Item currentItem = mList.get(indexOf(variable));
+                currentItem.mValue = value;
                 return;
             } else {
                 Item item = new Item();
-                item.variable = variable;
-                item.value = value;
-                list.add(item);
+                item.mVariable = variable;
+                item.mValue = value;
+                mList.add(item);
                 variable.usageInRowCount++;
                 variable.addToRow(mRow);
-                Collections.sort(list, mComparator);
+                Collections.sort(mList, mComparator);
             }
 //            if (false) {
 //                int previousItem = -1;
@@ -180,8 +180,8 @@ public class BasicSolverVariableValues implements ArrayRow.ArrayRowVariables {
             return 0;
         }
         int index = indexOf(v);
-        float value = list.get(indexOf(v)).value;
-        list.remove(index);
+        float value = mList.get(indexOf(v)).mValue;
+        mList.remove(index);
         v.usageInRowCount--;
         if (removeFromDefinition) {
             v.removeFromRow(mRow);
@@ -197,11 +197,11 @@ public class BasicSolverVariableValues implements ArrayRow.ArrayRowVariables {
         if (!contains(v)) {
             put(v, value);
         } else {
-            Item item = list.get(indexOf(v));
-            item.value += value;
-            if (item.value > -sEpsilon && item.value < sEpsilon) {
-                item.value = 0;
-                list.remove(item);
+            Item item = mList.get(indexOf(v));
+            item.mValue += value;
+            if (item.mValue > -sEpsilon && item.mValue < sEpsilon) {
+                item.mValue = 0;
+                mList.remove(item);
                 v.usageInRowCount--;
                 if (removeFromDefinition) {
                     v.removeFromRow(mRow);
@@ -217,15 +217,15 @@ public class BasicSolverVariableValues implements ArrayRow.ArrayRowVariables {
 
     @Override
     public void invert() {
-        for (Item item : list) {
-            item.value *= -1;
+        for (Item item : mList) {
+            item.mValue *= -1;
         }
     }
 
     @Override
     public void divideByAmount(float amount) {
-        for (Item item : list) {
-            item.value /= amount;
+        for (Item item : mList) {
+            item.mValue /= amount;
         }
     }
 

@@ -25,17 +25,17 @@ import java.util.HashMap;
  */
 public class KeyCache {
 
-    HashMap<Object, HashMap<String, float[]>> map = new HashMap<>();
+    HashMap<Object, HashMap<String, float[]>> mMap = new HashMap<>();
 
     public void setFloatValue(Object view, String type, int element, float value) {
-        if (!map.containsKey(view)) {
+        if (!mMap.containsKey(view)) {
             HashMap<String, float[]> array = new HashMap<>();
             float[] vArray = new float[element + 1];
             vArray[element] = value;
             array.put(type, vArray);
-            map.put(view, array);
+            mMap.put(view, array);
         } else {
-            HashMap<String, float[]> array = map.get(view);
+            HashMap<String, float[]> array = mMap.get(view);
             if (array == null) {
                 array = new HashMap<>();
             }
@@ -44,7 +44,7 @@ public class KeyCache {
                 float[] vArray = new float[element + 1];
                 vArray[element] = value;
                 array.put(type, vArray);
-                map.put(view, array);
+                mMap.put(view, array);
             } else {
                 float[] vArray = array.get(type);
                 if (vArray == null) {
@@ -60,10 +60,10 @@ public class KeyCache {
     }
 
     public float getFloatValue(Object view, String type, int element) {
-        if (!map.containsKey(view)) {
+        if (!mMap.containsKey(view)) {
             return Float.NaN;
         } else {
-            HashMap<String, float[]> array = map.get(view);
+            HashMap<String, float[]> array = mMap.get(view);
             if (array == null || !array.containsKey(type)) {
                 return Float.NaN;
             }

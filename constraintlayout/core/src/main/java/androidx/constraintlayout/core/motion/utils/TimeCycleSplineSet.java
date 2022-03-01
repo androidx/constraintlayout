@@ -32,22 +32,22 @@ public abstract class TimeCycleSplineSet {
     protected int mWaveShape = 0;
     protected int[] mTimePoints = new int[10];
     protected float[][] mValues = new float[10][3];
-    protected int count;
+    protected int mCount;
     protected String mType;
     protected float[] mCache = new float[3];
     protected static final int CURVE_VALUE = 0;
     protected static final int CURVE_PERIOD = 1;
     protected static final int CURVE_OFFSET = 2;
-    protected static float VAL_2PI = (float) (2 * Math.PI);
+    protected static float sVal2PI = (float) (2 * Math.PI);
     protected boolean mContinue = false;
-    protected long last_time;
-    protected float last_cycle = Float.NaN;
+    protected long mLastTime;
+    protected float mLastCycle = Float.NaN;
 
     @Override
     public String toString() {
         String str = mType;
         DecimalFormat df = new DecimalFormat("##.##");
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < mCount; i++) {
             str += "[" + mTimePoints[i] + " , " + df.format(mValues[i]) + "] ";
         }
         return str;
@@ -66,9 +66,9 @@ public abstract class TimeCycleSplineSet {
         switch (mWaveShape) {
             default:
             case Oscillator.SIN_WAVE:
-                return (float) Math.sin(p * VAL_2PI);
+                return (float) Math.sin(p * sVal2PI);
             case Oscillator.SQUARE_WAVE:
-                return (float) Math.signum(p * VAL_2PI);
+                return (float) Math.signum(p * sVal2PI);
             case Oscillator.TRIANGLE_WAVE:
                 return 1 - Math.abs(p);
             case Oscillator.SAW_WAVE:
@@ -76,7 +76,7 @@ public abstract class TimeCycleSplineSet {
             case Oscillator.REVERSE_SAW_WAVE:
                 return (1 - ((p * 2 + 1) % 2));
             case Oscillator.COS_WAVE:
-                return (float) Math.cos(p * VAL_2PI);
+                return (float) Math.cos(p * sVal2PI);
             case Oscillator.BOUNCE:
                 float x = 1 - Math.abs((p * 4) % 4 - 2);
                 return 1 - x * x;
@@ -88,16 +88,16 @@ public abstract class TimeCycleSplineSet {
     }
 
     protected void setStartTime(long currentTime) {
-        last_time = currentTime;
+        mLastTime = currentTime;
     }
 
     public void setPoint(int position, float value, float period, int shape, float offset) {
-        mTimePoints[count] = position;
-        mValues[count][CURVE_VALUE] = value;
-        mValues[count][CURVE_PERIOD] = period;
-        mValues[count][CURVE_OFFSET] = offset;
+        mTimePoints[mCount] = position;
+        mValues[mCount][CURVE_VALUE] = value;
+        mValues[mCount][CURVE_PERIOD] = period;
+        mValues[mCount][CURVE_OFFSET] = offset;
         mWaveShape = Math.max(mWaveShape, shape); // the highest value shape is chosen
-        count++;
+        mCount++;
     }
 
     public static class CustomSet extends TimeCycleSplineSet {
@@ -154,18 +154,18 @@ public abstract class TimeCycleSplineSet {
             mCurveFit.getPos(t, mTempValues);
             float period = mTempValues[mTempValues.length - 2];
             float offset = mTempValues[mTempValues.length - 1];
-            long delta_time = time - last_time;
+            long delta_time = time - mLastTime;
 
-            if (Float.isNaN(last_cycle)) { // it has not been set
-                last_cycle = cache.getFloatValue(view, mAttributeName, 0); // check the cache
-                if (Float.isNaN(last_cycle)) {  // not in cache so set to 0 (start)
-                    last_cycle = 0;
+            if (Float.isNaN(mLastCycle)) { // it has not been set
+                mLastCycle = cache.getFloatValue(view, mAttributeName, 0); // check the cache
+                if (Float.isNaN(mLastCycle)) {  // not in cache so set to 0 (start)
+                    mLastCycle = 0;
                 }
             }
 
-            last_cycle = (float) ((last_cycle + delta_time * 1E-9 * period) % 1.0);
-            last_time = time;
-            float wave = calcWave(last_cycle);
+            mLastCycle = (float) ((mLastCycle + delta_time * 1E-9 * period) % 1.0);
+            mLastTime = time;
+            float wave = calcWave(mLastCycle);
             mContinue = false;
             for (int i = 0; i < mCache.length; i++) {
                 mContinue |= mTempValues[i] != 0.0;
@@ -180,11 +180,11 @@ public abstract class TimeCycleSplineSet {
     }
 
     public void setup(int curveType) {
-        if (count == 0) {
+        if (mCount == 0) {
             System.err.println("Error no points added to " + mType);
             return;
         }
-        Sort.doubleQuickSort(mTimePoints, mValues, 0, count - 1);
+        Sort.doubleQuickSort(mTimePoints, mValues, 0, mCount - 1);
         int unique = 0;
         for (int i = 1; i < mTimePoints.length; i++) {
             if (mTimePoints[i] != mTimePoints[i - 1]) {
@@ -198,7 +198,7 @@ public abstract class TimeCycleSplineSet {
         double[][] values = new double[unique][3];
         int k = 0;
 
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < mCount; i++) {
             if (i > 0 && mTimePoints[i] == mTimePoints[i - 1]) {
                 continue;
             }
@@ -310,18 +310,18 @@ public abstract class TimeCycleSplineSet {
             mCurveFit.getPos(t, mTempValues);
             float period = mTempValues[mTempValues.length - 2];
             float offset = mTempValues[mTempValues.length - 1];
-            long delta_time = time - last_time;
+            long delta_time = time - mLastTime;
 
-            if (Float.isNaN(last_cycle)) { // it has not been set
-                last_cycle = cache.getFloatValue(view, mAttributeName, 0); // check the cache
-                if (Float.isNaN(last_cycle)) {  // not in cache so set to 0 (start)
-                    last_cycle = 0;
+            if (Float.isNaN(mLastCycle)) { // it has not been set
+                mLastCycle = cache.getFloatValue(view, mAttributeName, 0); // check the cache
+                if (Float.isNaN(mLastCycle)) {  // not in cache so set to 0 (start)
+                    mLastCycle = 0;
                 }
             }
 
-            last_cycle = (float) ((last_cycle + delta_time * 1E-9 * period) % 1.0);
-            last_time = time;
-            float wave = calcWave(last_cycle);
+            mLastCycle = (float) ((mLastCycle + delta_time * 1E-9 * period) % 1.0);
+            mLastTime = time;
+            float wave = calcWave(mLastCycle);
             mContinue = false;
             for (int i = 0; i < mCache.length; i++) {
                 mContinue |= mTempValues[i] != 0.0;

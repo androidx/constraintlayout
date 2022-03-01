@@ -17,14 +17,14 @@ package androidx.constraintlayout.core.parser;
 
 public class CLNumber extends CLElement {
 
-    float value = Float.NaN;
+    float mValue = Float.NaN;
     public CLNumber(char[] content) {
         super(content);
     }
 
     public CLNumber(float value) {
         super(null);
-        this.value = value;
+        this.mValue = value;
     }
 
     public static CLElement allocate(char[] content) {
@@ -61,22 +61,22 @@ public class CLNumber extends CLElement {
 
     @Override
     public int getInt() {
-        if (Float.isNaN(value)) {
-            value = Integer.parseInt(content());
+        if (Float.isNaN(mValue)) {
+            mValue = Integer.parseInt(content());
         }
-        return (int) value;
+        return (int) mValue;
     }
 
     @Override
     public float getFloat() {
-        if (Float.isNaN(value)) {
-            value = Float.parseFloat(content());
+        if (Float.isNaN(mValue)) {
+            mValue = Float.parseFloat(content());
         }
-        return value;
+        return mValue;
     }
 
     public void putValue(float value) {
-        this.value = value;
+        this.mValue = value;
     }
 
 }

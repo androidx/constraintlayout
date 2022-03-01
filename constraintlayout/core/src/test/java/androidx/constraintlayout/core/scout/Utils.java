@@ -19,7 +19,7 @@ package androidx.constraintlayout.core.scout;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.Guideline;
 
-import java.awt.*;
+import java.awt.Rectangle;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;

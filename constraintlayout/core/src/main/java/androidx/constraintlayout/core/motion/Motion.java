@@ -164,7 +164,7 @@ public class Motion implements TypedValues {
      * @return the left most position
      */
     public float getStartX() {
-        return mStartMotionPath.x;
+        return mStartMotionPath.mX;
     }
 
     /**
@@ -174,7 +174,7 @@ public class Motion implements TypedValues {
      * @return the top most position
      */
     public float getStartY() {
-        return mStartMotionPath.y;
+        return mStartMotionPath.mY;
     }
 
     /**
@@ -183,7 +183,7 @@ public class Motion implements TypedValues {
      * @return the left most position
      */
     public float getFinalX() {
-        return mEndMotionPath.x;
+        return mEndMotionPath.mX;
     }
 
     /**
@@ -193,7 +193,7 @@ public class Motion implements TypedValues {
      * @return the top most position
      */
     public float getFinalY() {
-        return mEndMotionPath.y;
+        return mEndMotionPath.mY;
     }
 
     /**
@@ -202,7 +202,7 @@ public class Motion implements TypedValues {
      * @return the width at the start
      */
     public float getStartWidth() {
-        return mStartMotionPath.width;
+        return mStartMotionPath.mWidth;
     }
 
     /**
@@ -211,7 +211,7 @@ public class Motion implements TypedValues {
      * @return the height at the start
      */
     public float getStartHeight() {
-        return mStartMotionPath.height;
+        return mStartMotionPath.mHeight;
     }
 
     /**
@@ -220,7 +220,7 @@ public class Motion implements TypedValues {
      * @return the width at the end
      */
     public float getFinalWidth() {
-        return mEndMotionPath.width;
+        return mEndMotionPath.mWidth;
     }
 
     /**
@@ -229,7 +229,7 @@ public class Motion implements TypedValues {
      * @return the height at the end
      */
     public float getFinalHeight() {
-        return mEndMotionPath.height;
+        return mEndMotionPath.mHeight;
     }
 
     /**
@@ -304,12 +304,12 @@ public class Motion implements TypedValues {
             float end = Float.NaN;
             for (MotionPaths frame : mMotionPaths) {
                 if (frame.mKeyFrameEasing != null) { // this frame has an easing
-                    if (frame.time < position) {  // frame with easing is before the current pos
+                    if (frame.mTime < position) {  // frame with easing is before the current pos
                         easing = frame.mKeyFrameEasing; // this is the candidate
-                        start = frame.time; // this is also the starting time
+                        start = frame.mTime; // this is also the starting time
                     } else { // frame with easing is past the pos
                         if (Float.isNaN(end)) { // we never ended the time line
-                            end = frame.time;
+                            end = frame.mTime;
                         }
                     }
                 }
@@ -395,12 +395,12 @@ public class Motion implements TypedValues {
             float end = Float.NaN;
             for (MotionPaths frame : mMotionPaths) {
                 if (frame.mKeyFrameEasing != null) { // this frame has an easing
-                    if (frame.time < position) {  // frame with easing is before the current pos
+                    if (frame.mTime < position) {  // frame with easing is before the current pos
                         easing = frame.mKeyFrameEasing; // this is the candidate
-                        start = frame.time; // this is also the starting time
+                        start = frame.mTime; // this is also the starting time
                     } else { // frame with easing is past the pos
                         if (Float.isNaN(end)) { // we never ended the time line
-                            end = frame.time;
+                            end = frame.mTime;
                         }
                     }
                 }
@@ -442,12 +442,12 @@ public class Motion implements TypedValues {
             float end = Float.NaN;
             for (MotionPaths frame : mMotionPaths) {
                 if (frame.mKeyFrameEasing != null) { // this frame has an easing
-                    if (frame.time < position) {  // frame with easing is before the current pos
+                    if (frame.mTime < position) {  // frame with easing is before the current pos
                         easing = frame.mKeyFrameEasing; // this is the candidate
-                        start = frame.time; // this is also the starting time
+                        start = frame.mTime; // this is also the starting time
                     } else { // frame with easing is past the pos
                         if (Float.isNaN(end)) { // we never ended the time line
-                            end = frame.time;
+                            end = frame.mTime;
                         }
                     }
                 }
@@ -476,15 +476,15 @@ public class Motion implements TypedValues {
 
     MotionKeyPosition getPositionKeyframe(int layoutWidth, int layoutHeight, float x, float y) {
         FloatRect start = new FloatRect();
-        start.left = mStartMotionPath.x;
-        start.top = mStartMotionPath.y;
-        start.right = start.left + mStartMotionPath.width;
-        start.bottom = start.top + mStartMotionPath.height;
+        start.left = mStartMotionPath.mX;
+        start.top = mStartMotionPath.mY;
+        start.right = start.left + mStartMotionPath.mWidth;
+        start.bottom = start.top + mStartMotionPath.mHeight;
         FloatRect end = new FloatRect();
-        end.left = mEndMotionPath.x;
-        end.top = mEndMotionPath.y;
-        end.right = end.left + mEndMotionPath.width;
-        end.bottom = end.top + mEndMotionPath.height;
+        end.left = mEndMotionPath.mX;
+        end.top = mEndMotionPath.mY;
+        end.right = end.left + mEndMotionPath.mWidth;
+        end.bottom = end.top + mEndMotionPath.mHeight;
         for (MotionKey key : mKeyList) {
             if (key instanceof MotionKeyPosition) {
                 if (((MotionKeyPosition) key).intersects(layoutWidth,
@@ -508,7 +508,7 @@ public class Motion implements TypedValues {
             }
             if (pos != null) {
                 for (MotionPaths keyFrame : mMotionPaths) {
-                    pos[count++] = (int) (100 * keyFrame.position);
+                    pos[count++] = (int) (100 * keyFrame.mPosition);
                 }
                 count = 0;
             }
@@ -577,10 +577,10 @@ public class Motion implements TypedValues {
 
     float getKeyFrameParameter(int type, float x, float y) {
 
-        float dx = mEndMotionPath.x - mStartMotionPath.x;
-        float dy = mEndMotionPath.y - mStartMotionPath.y;
-        float startCenterX = mStartMotionPath.x + mStartMotionPath.width / 2;
-        float startCenterY = mStartMotionPath.y + mStartMotionPath.height / 2;
+        float dx = mEndMotionPath.mX - mStartMotionPath.mX;
+        float dy = mEndMotionPath.mY - mStartMotionPath.mY;
+        float startCenterX = mStartMotionPath.mX + mStartMotionPath.mWidth / 2;
+        float startCenterY = mStartMotionPath.mY + mStartMotionPath.mHeight / 2;
         float hypotenuse = (float) Math.hypot(dx, dy);
         if (hypotenuse < 0.0000001) {
             return Float.NaN;
@@ -614,7 +614,7 @@ public class Motion implements TypedValues {
     private void insertKey(MotionPaths point) {
         MotionPaths redundant = null;
         for (MotionPaths p : mMotionPaths) {
-            if (point.position == p.position) {
+            if (point.mPosition == p.mPosition) {
                 redundant = p;
             }
         }
@@ -623,7 +623,7 @@ public class Motion implements TypedValues {
         }
         int pos = Collections.binarySearch(mMotionPaths, point);
         if (pos == 0) {
-            Utils.loge(TAG, " KeyPath position \"" + point.position + "\" outside of range");
+            Utils.loge(TAG, " KeyPath position \"" + point.mPosition + "\" outside of range");
         }
         mMotionPaths.add(-pos - 1, point);
     }
@@ -833,8 +833,8 @@ public class Motion implements TypedValues {
         // -----  setup custom attributes which must be in the start and end constraint sets
         int variables = 18;
         HashSet<String> attributeNameSet = new HashSet<>();
-        for (String s : mEndMotionPath.customAttributes.keySet()) {
-            if (mStartMotionPath.customAttributes.containsKey(s)) {
+        for (String s : mEndMotionPath.mCustomAttributes.keySet()) {
+            if (mStartMotionPath.mCustomAttributes.containsKey(s)) {
                 if (!splineAttributes.contains("CUSTOM," + s)) {
                     attributeNameSet.add(s);
                 }
@@ -847,8 +847,8 @@ public class Motion implements TypedValues {
             String attributeName = mAttributeNames[i];
             mAttributeInterpolatorCount[i] = 0;
             for (int j = 0; j < points.length; j++) {
-                if (points[j].customAttributes.containsKey(attributeName)) {
-                    CustomVariable attribute = points[j].customAttributes.get(attributeName);
+                if (points[j].mCustomAttributes.containsKey(attributeName)) {
+                    CustomVariable attribute = points[j].mCustomAttributes.get(attributeName);
                     if (attribute != null) {
                         mAttributeInterpolatorCount[i] += attribute.numberOfInterpolatedValues();
                         break;
@@ -886,13 +886,13 @@ public class Motion implements TypedValues {
 
         for (int i = 0; i < points.length; i++) {
             points[i].fillStandard(splineData[i], mInterpolateVariables);
-            timePoint[i] = points[i].time;
+            timePoint[i] = points[i].mTime;
         }
 
         for (int j = 0; j < mInterpolateVariables.length; j++) {
             int interpolateVariable = mInterpolateVariables[j];
-            if (interpolateVariable < MotionPaths.names.length) {
-                String s = MotionPaths.names[mInterpolateVariables[j]] + " [";
+            if (interpolateVariable < MotionPaths.sNames.length) {
+                String s = MotionPaths.sNames[mInterpolateVariables[j]] + " [";
                 for (int i = 0; i < points.length; i++) {
                     s += splineData[i][j];
                 }
@@ -913,7 +913,7 @@ public class Motion implements TypedValues {
                         splinePoints =
                                 new double[points.length][points[j].getCustomDataCount(name)];
                     }
-                    timePoints[pointCount] = points[j].time;
+                    timePoints[pointCount] = points[j].mTime;
                     points[j].getCustomData(name, splinePoints[pointCount], 0);
                     pointCount++;
                 }
@@ -932,9 +932,9 @@ public class Motion implements TypedValues {
             double[][] values = new double[size][2];
             for (int i = 0; i < size; i++) {
                 mode[i] = points[i].mPathMotionArc;
-                time[i] = points[i].time;
-                values[i][0] = points[i].x;
-                values[i][1] = points[i].y;
+                time[i] = points[i].mTime;
+                values[i][0] = points[i].mX;
+                values[i][1] = points[i].mY;
             }
 
             mArcSpline = CurveFit.getArc(mode, time, values);
@@ -990,8 +990,8 @@ public class Motion implements TypedValues {
      * @return
      */
     public String toString() {
-        return " start: x: " + mStartMotionPath.x + " y: " + mStartMotionPath.y
-                + " end: x: " + mEndMotionPath.x + " y: " + mEndMotionPath.y;
+        return " start: x: " + mStartMotionPath.mX + " y: " + mStartMotionPath.mY
+                + " end: x: " + mEndMotionPath.mX + " y: " + mEndMotionPath.mY;
     }
 
     private void readView(MotionPaths motionPaths) {
@@ -1008,16 +1008,16 @@ public class Motion implements TypedValues {
     }
 
     public void setStart(MotionWidget mw) {
-        mStartMotionPath.time = 0;
-        mStartMotionPath.position = 0;
+        mStartMotionPath.mTime = 0;
+        mStartMotionPath.mPosition = 0;
         mStartMotionPath.setBounds(mw.getX(), mw.getY(), mw.getWidth(), mw.getHeight());
         mStartMotionPath.applyParameters(mw);
         mStartPoint.setState(mw);
     }
 
     public void setEnd(MotionWidget mw) {
-        mEndMotionPath.time = 1;
-        mEndMotionPath.position = 1;
+        mEndMotionPath.mTime = 1;
+        mEndMotionPath.mPosition = 1;
         readView(mEndMotionPath);
         mEndMotionPath.setBounds(mw.getLeft(), mw.getTop(), mw.getWidth(), mw.getHeight());
         mEndMotionPath.applyParameters(mw);
@@ -1029,8 +1029,8 @@ public class Motion implements TypedValues {
                               int rotation,
                               int preWidth,
                               int preHeight) {
-        mStartMotionPath.time = 0;
-        mStartMotionPath.position = 0;
+        mStartMotionPath.mTime = 0;
+        mStartMotionPath.mPosition = 0;
         int cx, cy;
         Rect r = new Rect();
         switch (rotation) {
@@ -1169,8 +1169,8 @@ public class Motion implements TypedValues {
 //    }
 
     void setBothStates(MotionWidget v) {
-        mStartMotionPath.time = 0;
-        mStartMotionPath.position = 0;
+        mStartMotionPath.mTime = 0;
+        mStartMotionPath.mPosition = 0;
         mNoMovement = true;
         mStartMotionPath.setBounds(v.getX(), v.getY(), v.getWidth(), v.getHeight());
         mEndMotionPath.setBounds(v.getX(), v.getY(), v.getWidth(), v.getHeight());
@@ -1207,12 +1207,12 @@ public class Motion implements TypedValues {
         float end = Float.NaN;
         for (MotionPaths frame : mMotionPaths) {
             if (frame.mKeyFrameEasing != null) { // this frame has an easing
-                if (frame.time < position) {  // frame with easing is before the current pos
+                if (frame.mTime < position) {  // frame with easing is before the current pos
                     easing = frame.mKeyFrameEasing; // this is the candidate
-                    start = frame.time; // this is also the starting time
+                    start = frame.mTime; // this is also the starting time
                 } else { // frame with easing is past the pos
                     if (Float.isNaN(end)) { // we never ended the time line
-                        end = frame.time;
+                        end = frame.mTime;
                     }
                 }
             }
@@ -1350,16 +1350,16 @@ public class Motion implements TypedValues {
                 CurveFit spline = mSpline[i];
                 spline.getPos(position, mValuesBuff);
                 //interpolated here
-                mStartMotionPath.customAttributes
+                mStartMotionPath.mCustomAttributes
                         .get(mAttributeNames[i - 1])
                         .setInterpolatedValue(child, mValuesBuff);
             }
             if (mStartPoint.mVisibilityMode == MotionWidget.VISIBILITY_MODE_NORMAL) {
                 if (position <= 0.0f) {
-                    child.setVisibility(mStartPoint.visibility);
+                    child.setVisibility(mStartPoint.mVisibility);
                 } else if (position >= 1.0f) {
-                    child.setVisibility(mEndPoint.visibility);
-                } else if (mEndPoint.visibility != mStartPoint.visibility) {
+                    child.setVisibility(mEndPoint.mVisibility);
+                } else if (mEndPoint.mVisibility != mStartPoint.mVisibility) {
                     child.setVisibility(MotionWidget.VISIBLE);
                 }
             }
@@ -1373,13 +1373,13 @@ public class Motion implements TypedValues {
             // do the interpolation
 
             float float_l =
-                    (mStartMotionPath.x + (mEndMotionPath.x - mStartMotionPath.x) * position);
+                    (mStartMotionPath.mX + (mEndMotionPath.mX - mStartMotionPath.mX) * position);
             float float_t =
-                    (mStartMotionPath.y + (mEndMotionPath.y - mStartMotionPath.y) * position);
-            float float_width = (mStartMotionPath.width
-                    + (mEndMotionPath.width - mStartMotionPath.width) * position);
-            float float_height = (mStartMotionPath.height
-                    + (mEndMotionPath.height - mStartMotionPath.height) * position);
+                    (mStartMotionPath.mY + (mEndMotionPath.mY - mStartMotionPath.mY) * position);
+            float float_width = (mStartMotionPath.mWidth
+                    + (mEndMotionPath.mWidth - mStartMotionPath.mWidth) * position);
+            float float_height = (mStartMotionPath.mHeight
+                    + (mEndMotionPath.mHeight - mStartMotionPath.mHeight) * position);
             int l = (int) (0.5f + float_l);
             int t = (int) (0.5f + float_t);
             int r = (int) (0.5f + float_l + float_width);
@@ -1388,12 +1388,12 @@ public class Motion implements TypedValues {
             int height = b - t;
 
             if (FAVOR_FIXED_SIZE_VIEWS) {
-                l = (int) (mStartMotionPath.x + (mEndMotionPath.x - mStartMotionPath.x) * position);
-                t = (int) (mStartMotionPath.y + (mEndMotionPath.y - mStartMotionPath.y) * position);
-                width = (int) (mStartMotionPath.width
-                        + (mEndMotionPath.width - mStartMotionPath.width) * position);
-                height = (int) (mStartMotionPath.height
-                        + (mEndMotionPath.height - mStartMotionPath.height) * position);
+                l = (int) (mStartMotionPath.mX + (mEndMotionPath.mX - mStartMotionPath.mX) * position);
+                t = (int) (mStartMotionPath.mY + (mEndMotionPath.mY - mStartMotionPath.mY) * position);
+                width = (int) (mStartMotionPath.mWidth
+                        + (mEndMotionPath.mWidth - mStartMotionPath.mWidth) * position);
+                height = (int) (mStartMotionPath.mHeight
+                        + (mEndMotionPath.mHeight - mStartMotionPath.mHeight) * position);
                 r = l + width;
                 b = t + height;
             }
@@ -1451,10 +1451,10 @@ public class Motion implements TypedValues {
             return;
         }
         // do the interpolation
-        float dleft = (mEndMotionPath.x - mStartMotionPath.x);
-        float dTop = (mEndMotionPath.y - mStartMotionPath.y);
-        float dWidth = (mEndMotionPath.width - mStartMotionPath.width);
-        float dHeight = (mEndMotionPath.height - mStartMotionPath.height);
+        float dleft = (mEndMotionPath.mX - mStartMotionPath.mX);
+        float dTop = (mEndMotionPath.mY - mStartMotionPath.mY);
+        float dWidth = (mEndMotionPath.mWidth - mStartMotionPath.mWidth);
+        float dHeight = (mEndMotionPath.mHeight - mStartMotionPath.mHeight);
         float dRight = dleft + dWidth;
         float dBottom = dTop + dHeight;
         mAnchorDpDt[0] = dleft * (1 - locationX) + dRight * (locationX);
@@ -1534,10 +1534,10 @@ public class Motion implements TypedValues {
         }
 
         // do the interpolation
-        float dleft = (mEndMotionPath.x - mStartMotionPath.x);
-        float dTop = (mEndMotionPath.y - mStartMotionPath.y);
-        float dWidth = (mEndMotionPath.width - mStartMotionPath.width);
-        float dHeight = (mEndMotionPath.height - mStartMotionPath.height);
+        float dleft = (mEndMotionPath.mX - mStartMotionPath.mX);
+        float dTop = (mEndMotionPath.mY - mStartMotionPath.mY);
+        float dWidth = (mEndMotionPath.mWidth - mStartMotionPath.mWidth);
+        float dHeight = (mEndMotionPath.mHeight - mStartMotionPath.mHeight);
         float dRight = dleft + dWidth;
         float dBottom = dTop + dHeight;
         mAnchorDpDt[0] = dleft * (1 - locationX) + dRight * (locationX);
@@ -1579,15 +1579,15 @@ public class Motion implements TypedValues {
                           String[] attribute,
                           float[] value) {
         FloatRect start = new FloatRect();
-        start.left = mStartMotionPath.x;
-        start.top = mStartMotionPath.y;
-        start.right = start.left + mStartMotionPath.width;
-        start.bottom = start.top + mStartMotionPath.height;
+        start.left = mStartMotionPath.mX;
+        start.top = mStartMotionPath.mY;
+        start.right = start.left + mStartMotionPath.mWidth;
+        start.bottom = start.top + mStartMotionPath.mHeight;
         FloatRect end = new FloatRect();
-        end.left = mEndMotionPath.x;
-        end.top = mEndMotionPath.y;
-        end.right = end.left + mEndMotionPath.width;
-        end.bottom = end.top + mEndMotionPath.height;
+        end.left = mEndMotionPath.mX;
+        end.top = mEndMotionPath.mY;
+        end.right = end.left + mEndMotionPath.mWidth;
+        end.bottom = end.top + mEndMotionPath.mHeight;
         key.positionAttributes(view, start, end, x, y, attribute, value);
     }
 

@@ -63,18 +63,18 @@ public abstract class ViewTimeCycle extends TimeCycleSplineSet {
             mContinue = false;
             return mCache[CURVE_OFFSET];
         }
-        if (Float.isNaN(last_cycle)) { // it has not been set
-            last_cycle = cache.getFloatValue(view, mType, 0); // check the cache
-            if (Float.isNaN(last_cycle)) {  // not in cache so set to 0 (start)
-                last_cycle = 0;
+        if (Float.isNaN(mLastCycle)) { // it has not been set
+            mLastCycle = cache.getFloatValue(view, mType, 0); // check the cache
+            if (Float.isNaN(mLastCycle)) {  // not in cache so set to 0 (start)
+                mLastCycle = 0;
             }
         }
-        long delta_time = time - last_time;
-        last_cycle = (float) ((last_cycle + delta_time * 1E-9 * period) % 1.0);
-        cache.setFloatValue(view, mType, 0, last_cycle);
-        last_time = time;
+        long delta_time = time - mLastTime;
+        mLastCycle = (float) ((mLastCycle + delta_time * 1E-9 * period) % 1.0);
+        cache.setFloatValue(view, mType, 0, mLastCycle);
+        mLastTime = time;
         float v = mCache[CURVE_VALUE];
-        float wave = calcWave(last_cycle);
+        float wave = calcWave(mLastCycle);
         float offset = mCache[CURVE_OFFSET];
         float value = v * wave + offset;
         mContinue = v != 0.0f || period != 0.0f;
@@ -329,18 +329,18 @@ public abstract class ViewTimeCycle extends TimeCycleSplineSet {
             mCurveFit.getPos(t, mTempValues);
             float period = mTempValues[mTempValues.length - 2];
             float offset = mTempValues[mTempValues.length - 1];
-            long delta_time = time - last_time;
+            long delta_time = time - mLastTime;
 
-            if (Float.isNaN(last_cycle)) { // it has not been set
-                last_cycle = cache.getFloatValue(view, mAttributeName, 0); // check the cache
-                if (Float.isNaN(last_cycle)) {  // not in cache so set to 0 (start)
-                    last_cycle = 0;
+            if (Float.isNaN(mLastCycle)) { // it has not been set
+                mLastCycle = cache.getFloatValue(view, mAttributeName, 0); // check the cache
+                if (Float.isNaN(mLastCycle)) {  // not in cache so set to 0 (start)
+                    mLastCycle = 0;
                 }
             }
 
-            last_cycle = (float) ((last_cycle + delta_time * 1E-9 * period) % 1.0);
-            last_time = time;
-            float wave = calcWave(last_cycle);
+            mLastCycle = (float) ((mLastCycle + delta_time * 1E-9 * period) % 1.0);
+            mLastTime = time;
+            float wave = calcWave(mLastCycle);
             mContinue = false;
             for (int i = 0; i < mCache.length; i++) {
                 mContinue |= mTempValues[i] != 0.0;

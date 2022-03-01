@@ -43,7 +43,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
     static final int NONE = -1;
     private static final boolean FULL_NEW_CHECK = false; // full validation (debug purposes)
 
-    int currentSize = 0; // current size, accessed by ArrayRow and LinearSystem
+    int mCurrentSize = 0; // current size, accessed by ArrayRow and LinearSystem
 
     private final ArrayRow mRow; // our owner
 
@@ -135,7 +135,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
             mArrayNextIndices[mHead] = NONE;
             variable.usageInRowCount++;
             variable.addToRow(mRow);
-            currentSize++;
+            mCurrentSize++;
             if (!mDidFillOnce) {
                 // only increment mLast if we haven't done the first filling pass
                 mLast++;
@@ -149,7 +149,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
         int current = mHead;
         int previous = NONE;
         int counter = 0;
-        while (current != NONE && counter < currentSize) {
+        while (current != NONE && counter < mCurrentSize) {
             if (mArrayIndices[current] == variable.id) {
                 mArrayValues[current] = value;
                 return;
@@ -174,7 +174,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
             }
         }
         if (availableIndice >= mArrayIndices.length) {
-            if (currentSize < mArrayIndices.length) {
+            if (mCurrentSize < mArrayIndices.length) {
                 // find an available spot
                 for (int i = 0; i < mArrayIndices.length; i++) {
                     if (mArrayIndices[i] == NONE) {
@@ -207,12 +207,12 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
         }
         variable.usageInRowCount++;
         variable.addToRow(mRow);
-        currentSize++;
+        mCurrentSize++;
         if (!mDidFillOnce) {
             // only increment mLast if we haven't done the first filling pass
             mLast++;
         }
-        if (currentSize >= mArrayIndices.length) {
+        if (mCurrentSize >= mArrayIndices.length) {
             mDidFillOnce = true;
         }
         if (mLast >= mArrayIndices.length) {
@@ -242,7 +242,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
             mArrayNextIndices[mHead] = NONE;
             variable.usageInRowCount++;
             variable.addToRow(mRow);
-            currentSize++;
+            mCurrentSize++;
             if (!mDidFillOnce) {
                 // only increment mLast if we haven't done the first filling pass
                 mLast++;
@@ -256,7 +256,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
         int current = mHead;
         int previous = NONE;
         int counter = 0;
-        while (current != NONE && counter < currentSize) {
+        while (current != NONE && counter < mCurrentSize) {
             int idx = mArrayIndices[current];
             if (idx == variable.id) {
                 float v = mArrayValues[current] + value;
@@ -279,7 +279,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
                         mLast = current;
                     }
                     variable.usageInRowCount--;
-                    currentSize--;
+                    mCurrentSize--;
                 }
                 return;
             }
@@ -303,7 +303,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
             }
         }
         if (availableIndice >= mArrayIndices.length) {
-            if (currentSize < mArrayIndices.length) {
+            if (mCurrentSize < mArrayIndices.length) {
                 // find an available spot
                 for (int i = 0; i < mArrayIndices.length; i++) {
                     if (mArrayIndices[i] == NONE) {
@@ -336,7 +336,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
         }
         variable.usageInRowCount++;
         variable.addToRow(mRow);
-        currentSize++;
+        mCurrentSize++;
         if (!mDidFillOnce) {
             // only increment mLast if we haven't done the first filling pass
             mLast++;
@@ -354,8 +354,8 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
      */
     @Override
     public float use(ArrayRow definition, boolean removeFromDefinition) {
-        float value = get(definition.variable);
-        remove(definition.variable, removeFromDefinition);
+        float value = get(definition.mVariable);
+        remove(definition.mVariable, removeFromDefinition);
         ArrayRow.ArrayRowVariables definitionVariables = definition.variables;
         int definitionSize = definitionVariables.getCurrentSize();
         for (int i = 0; i < definitionSize; i++) {
@@ -383,7 +383,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
         int current = mHead;
         int previous = NONE;
         int counter = 0;
-        while (current != NONE && counter < currentSize) {
+        while (current != NONE && counter < mCurrentSize) {
             int idx = mArrayIndices[current];
             if (idx == variable.id) {
                 if (current == mHead) {
@@ -396,7 +396,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
                     variable.removeFromRow(mRow);
                 }
                 variable.usageInRowCount--;
-                currentSize--;
+                mCurrentSize--;
                 mArrayIndices[current] = NONE;
                 if (mDidFillOnce) {
                     // If we did a full pass already, remember that spot
@@ -416,7 +416,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
     public final void clear() {
         int current = mHead;
         int counter = 0;
-        while (current != NONE && counter < currentSize) {
+        while (current != NONE && counter < mCurrentSize) {
             SolverVariable variable = mCache.mIndexedVariables[mArrayIndices[current]];
             if (variable != null) {
                 variable.removeFromRow(mRow);
@@ -427,7 +427,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
         mHead = NONE;
         mLast = NONE;
         mDidFillOnce = false;
-        currentSize = 0;
+        mCurrentSize = 0;
     }
 
     /**
@@ -442,7 +442,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
         }
         int current = mHead;
         int counter = 0;
-        while (current != NONE && counter < currentSize) {
+        while (current != NONE && counter < mCurrentSize) {
             if (mArrayIndices[current] == variable.id) {
                 return true;
             }
@@ -458,7 +458,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
         }
         int current = mHead;
         int counter = 0;
-        while (current != NONE && counter < currentSize) {
+        while (current != NONE && counter < mCurrentSize) {
             if (mArrayIndices[current] == variable.id) {
                 return current;
             }
@@ -477,7 +477,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
     boolean hasAtLeastOnePositiveVariable() {
         int current = mHead;
         int counter = 0;
-        while (current != NONE && counter < currentSize) {
+        while (current != NONE && counter < mCurrentSize) {
             if (mArrayValues[current] > 0) {
                 return true;
             }
@@ -492,7 +492,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
     public void invert() {
         int current = mHead;
         int counter = 0;
-        while (current != NONE && counter < currentSize) {
+        while (current != NONE && counter < mCurrentSize) {
             mArrayValues[current] *= -1;
             current = mArrayNextIndices[current]; counter++;
         }
@@ -507,7 +507,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
     public void divideByAmount(float amount) {
         int current = mHead;
         int counter = 0;
-        while (current != NONE && counter < currentSize) {
+        while (current != NONE && counter < mCurrentSize) {
             mArrayValues[current] /= amount;
             current = mArrayNextIndices[current]; counter++;
         }
@@ -517,7 +517,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
         return mHead;
     }
     public int getCurrentSize() {
-        return currentSize;
+        return mCurrentSize;
     }
 
     /**
@@ -558,7 +558,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
             int current = mHead;
             int counter = 0;
             SolverVariable pivot = null;
-            while (current != NONE && counter < currentSize) {
+            while (current != NONE && counter < mCurrentSize) {
                 if (mArrayValues[current] < 0) {
                     // We can return the first negative candidate as in ArrayLinkedVariables
                     // they are already sorted by id
@@ -584,7 +584,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
     public SolverVariable getVariable(int index) {
         int current = mHead;
         int counter = 0;
-        while (current != NONE && counter < currentSize) {
+        while (current != NONE && counter < mCurrentSize) {
             if (counter == index) {
                 return mCache.mIndexedVariables[mArrayIndices[current]];
             }
@@ -602,7 +602,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
     public float getVariableValue(int index) {
         int current = mHead;
         int counter = 0;
-        while (current != NONE && counter < currentSize) {
+        while (current != NONE && counter < mCurrentSize) {
             if (counter == index) {
                 return mArrayValues[current];
             }
@@ -619,7 +619,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
     public final float get(SolverVariable v) {
         int current = mHead;
         int counter = 0;
-        while (current != NONE && counter < currentSize) {
+        while (current != NONE && counter < mCurrentSize) {
             if (mArrayIndices[current] == v.id) {
                 return mArrayValues[current];
             }
@@ -644,7 +644,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
      * print out the variables and their values
      */
     public void display() {
-        int count = currentSize;
+        int count = mCurrentSize;
         System.out.print("{ ");
         for (int i = 0; i < count; i++) {
             SolverVariable v = getVariable(i);
@@ -666,7 +666,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
         String result = "";
         int current = mHead;
         int counter = 0;
-        while (current != NONE && counter < currentSize) {
+        while (current != NONE && counter < mCurrentSize) {
             result += " -> ";
             result += mArrayValues[current] + " : ";
             result += mCache.mIndexedVariables[mArrayIndices[current]];

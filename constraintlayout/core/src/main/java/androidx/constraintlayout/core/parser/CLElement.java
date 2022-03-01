@@ -18,24 +18,24 @@ package androidx.constraintlayout.core.parser;
 public class CLElement {
 
     private final char[] mContent;
-    protected long start = -1;
-    protected long end = Long.MAX_VALUE;
+    protected long mStart = -1;
+    protected long mEnd = Long.MAX_VALUE;
     protected CLContainer mContainer;
-    private int line;
+    private int mLine;
 
-    protected static int MAX_LINE = 80; // Max number of characters before the formatter indents
-    protected static int BASE_INDENT = 2; // default indentation value
+    protected static int sMaxLine = 80; // Max number of characters before the formatter indents
+    protected static int sBaseIndent = 2; // default indentation value
 
     public CLElement(char[] content) {
         mContent = content;
     }
 
     public boolean notStarted() {
-        return start == -1;
+        return mStart == -1;
     }
 
     public void setLine(int line) {
-        this.line = line;
+        this.mLine = line;
     }
 
     /**
@@ -44,11 +44,11 @@ public class CLElement {
      * @return return the line number this element was on
      */
     public int getLine() {
-        return line;
+        return mLine;
     }
 
     public void setStart(long start) {
-        this.start = start;
+        this.mStart = start;
     }
 
     /**
@@ -57,7 +57,7 @@ public class CLElement {
      * @return
      */
     public long getStart() {
-        return this.start;
+        return this.mStart;
     }
 
     /**
@@ -66,15 +66,15 @@ public class CLElement {
      * @return
      */
     public long getEnd() {
-        return this.end;
+        return this.mEnd;
     }
 
     public void setEnd(long end) {
-        if (this.end != Long.MAX_VALUE) {
+        if (this.mEnd != Long.MAX_VALUE) {
             return;
         }
-        this.end = end;
-        if (CLParser.DEBUG) {
+        this.mEnd = end;
+        if (CLParser.sDebug) {
             System.out.println("closing " + this.hashCode() + " -> " + this);
         }
         if (mContainer != null) {
@@ -90,13 +90,13 @@ public class CLElement {
 
     @Override
     public String toString() {
-        if (start > end || end == Long.MAX_VALUE) {
-            return this.getClass() + " (INVALID, " + start + "-" + end + ")";
+        if (mStart > mEnd || mEnd == Long.MAX_VALUE) {
+            return this.getClass() + " (INVALID, " + mStart + "-" + mEnd + ")";
         }
         String content = new String(mContent);
-        content = content.substring((int) start, (int) end + 1);
+        content = content.substring((int) mStart, (int) mEnd + 1);
 
-        return getStrClass() + " (" + start + " : " + end + ") <<" + content + ">>";
+        return getStrClass() + " (" + mStart + " : " + mEnd + ") <<" + content + ">>";
     }
 
     protected String getStrClass() {
@@ -105,7 +105,7 @@ public class CLElement {
     }
 
     protected String getDebugName() {
-        if (CLParser.DEBUG) {
+        if (CLParser.sDebug) {
             return getStrClass() + " -> ";
         }
         return "";
@@ -113,14 +113,14 @@ public class CLElement {
 
     public String content() {
         String content = new String(mContent);
-        if (end == Long.MAX_VALUE || end < start) {
-            return content.substring((int) start, (int) start + 1);
+        if (mEnd == Long.MAX_VALUE || mEnd < mStart) {
+            return content.substring((int) mStart, (int) mStart + 1);
         }
-        return content.substring((int) start, (int) end + 1);
+        return content.substring((int) mStart, (int) mEnd + 1);
     }
 
     public boolean isDone() {
-        return end != Long.MAX_VALUE;
+        return mEnd != Long.MAX_VALUE;
     }
 
     public void setContainer(CLContainer element) {
@@ -132,7 +132,7 @@ public class CLElement {
     }
 
     public boolean isStarted() {
-        return start > -1;
+        return mStart > -1;
     }
 
     protected String toJSON() {

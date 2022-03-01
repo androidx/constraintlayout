@@ -119,7 +119,7 @@ class LinearEquation {
                 float previous = row.variables.get(sv);
                 row.variables.put(sv, previous + v.getAmount().toFloat());
             } else {
-                row.constantValue = v.getAmount().toFloat();
+                row.mConstantValue = v.getAmount().toFloat();
             }
         }
         return row;
