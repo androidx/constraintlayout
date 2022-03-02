@@ -366,7 +366,7 @@ public class Flow extends VirtualLayout {
     private class WidgetsList {
         private int mOrientation = HORIZONTAL;
         private ConstraintWidget mBiggest = null;
-        int biggestDimension = 0;
+        int mBiggestDimension = 0;
         private ConstraintAnchor mLeft;
         private ConstraintAnchor mTop;
         private ConstraintAnchor mRight;
@@ -415,7 +415,7 @@ public class Flow extends VirtualLayout {
         }
 
         public void clear() {
-            biggestDimension = 0;
+            mBiggestDimension = 0;
             mBiggest = null;
             mWidth = 0;
             mHeight = 0;
@@ -456,9 +456,9 @@ public class Flow extends VirtualLayout {
                 }
                 mWidth += width + gap;
                 int height = getWidgetHeight(widget, mMax);
-                if (mBiggest == null || biggestDimension < height) {
+                if (mBiggest == null || mBiggestDimension < height) {
                     mBiggest = widget;
-                    biggestDimension = height;
+                    mBiggestDimension = height;
                     mHeight = height;
                 }
             } else {
@@ -473,9 +473,9 @@ public class Flow extends VirtualLayout {
                     gap = 0;
                 }
                 mHeight += height + gap;
-                if (mBiggest == null || biggestDimension < width) {
+                if (mBiggest == null || mBiggestDimension < width) {
                     mBiggest = widget;
-                    biggestDimension = width;
+                    mBiggestDimension = width;
                     mWidth = width;
                 }
             }
@@ -771,7 +771,7 @@ public class Flow extends VirtualLayout {
             mWidth = 0;
             mHeight = 0;
             mBiggest = null;
-            biggestDimension = 0;
+            mBiggestDimension = 0;
             final int count = mCount;
             for (int i = 0; i < count; i++) {
                 if (mStartIndex + i >= mDisplayedWidgetsCount) {
@@ -786,9 +786,9 @@ public class Flow extends VirtualLayout {
                     }
                     mWidth += width + gap;
                     int height = getWidgetHeight(widget, mMax);
-                    if (mBiggest == null || biggestDimension < height) {
+                    if (mBiggest == null || mBiggestDimension < height) {
                         mBiggest = widget;
-                        biggestDimension = height;
+                        mBiggestDimension = height;
                         mHeight = height;
                     }
                 } else {
@@ -799,9 +799,9 @@ public class Flow extends VirtualLayout {
                         gap = 0;
                     }
                     mHeight += height + gap;
-                    if (mBiggest == null || biggestDimension < width) {
+                    if (mBiggest == null || mBiggestDimension < width) {
                         mBiggest = widget;
-                        biggestDimension = width;
+                        mBiggestDimension = width;
                         mWidth = width;
                     }
                 }

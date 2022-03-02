@@ -16,9 +16,9 @@
 
 package androidx.constraintlayout.core.state.helpers;
 
-import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.state.ConstraintReference;
 import androidx.constraintlayout.core.state.State;
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
 public class VerticalChainReference extends ChainReference {
 

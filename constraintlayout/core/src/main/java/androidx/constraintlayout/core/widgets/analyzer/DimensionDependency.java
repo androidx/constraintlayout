@@ -23,9 +23,9 @@ class DimensionDependency extends DependencyNode {
     DimensionDependency(WidgetRun run) {
         super(run);
         if (run instanceof HorizontalWidgetRun) {
-            type = Type.HORIZONTAL_DIMENSION;
+            mType = Type.HORIZONTAL_DIMENSION;
         } else {
-            type = Type.VERTICAL_DIMENSION;
+            mType = Type.VERTICAL_DIMENSION;
         }
     }
 
@@ -35,7 +35,7 @@ class DimensionDependency extends DependencyNode {
         }
         this.resolved = true;
         this.value = value;
-        for (Dependency node : dependencies) {
+        for (Dependency node : mDependencies) {
             node.update(node);
         }
     }

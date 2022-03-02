@@ -23,8 +23,8 @@ class BaselineDimensionDependency extends DimensionDependency {
     }
 
     public void update(DependencyNode node) {
-        VerticalWidgetRun verticalRun = (VerticalWidgetRun) run;
-        verticalRun.baseline.margin = run.widget.getBaselineDistance();
+        VerticalWidgetRun verticalRun = (VerticalWidgetRun) mRun;
+        verticalRun.baseline.mMargin = mRun.mWidget.getBaselineDistance();
         resolved = true;
     }
 }

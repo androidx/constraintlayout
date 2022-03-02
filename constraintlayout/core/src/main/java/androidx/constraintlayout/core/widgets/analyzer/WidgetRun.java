@@ -28,20 +28,20 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
 public abstract class WidgetRun implements Dependency {
     public int matchConstraintsType;
-    ConstraintWidget widget;
-    RunGroup runGroup;
-    protected ConstraintWidget.DimensionBehaviour dimensionBehavior;
-    DimensionDependency dimension = new DimensionDependency(this);
+    ConstraintWidget mWidget;
+    RunGroup mRunGroup;
+    protected ConstraintWidget.DimensionBehaviour mDimensionBehavior;
+    DimensionDependency mDimension = new DimensionDependency(this);
 
     public int orientation = HORIZONTAL;
-    boolean resolved = false;
+    boolean mResolved = false;
     public DependencyNode start = new DependencyNode(this);
     public DependencyNode end = new DependencyNode(this);
 
     protected RunType mRunType = RunType.NONE;
 
     public WidgetRun(ConstraintWidget widget) {
-        this.widget = widget;
+        this.mWidget = widget;
     }
 
     abstract void clear();
@@ -52,22 +52,22 @@ public abstract class WidgetRun implements Dependency {
     abstract boolean supportsWrapComputation();
 
     public boolean isDimensionResolved() {
-        return dimension.resolved;
+        return mDimension.resolved;
     }
 
     public boolean isCenterConnection() {
         int connections = 0;
-        int count = start.targets.size();
+        int count = start.mTargets.size();
         for (int i = 0; i < count; i++) {
-            DependencyNode dependency = start.targets.get(i);
-            if (dependency.run != this) {
+            DependencyNode dependency = start.mTargets.get(i);
+            if (dependency.mRun != this) {
                 connections++;
             }
         }
-        count = end.targets.size();
+        count = end.mTargets.size();
         for (int i = 0; i < count; i++) {
-            DependencyNode dependency = end.targets.get(i);
-            if (dependency.run != this) {
+            DependencyNode dependency = end.mTargets.get(i);
+            if (dependency.mRun != this) {
                 connections++;
             }
         }
@@ -75,15 +75,15 @@ public abstract class WidgetRun implements Dependency {
     }
 
     public long wrapSize(int direction) {
-        if (dimension.resolved) {
-            long size = dimension.value;
+        if (mDimension.resolved) {
+            long size = mDimension.value;
             if (isCenterConnection()) { //start.targets.size() > 0 && end.targets.size() > 0) {
-                size += start.margin - end.margin;
+                size += start.mMargin - end.mMargin;
             } else {
                 if (direction == RunGroup.START) {
-                    size += start.margin;
+                    size += start.mMargin;
                 } else {
-                    size -= end.margin;
+                    size -= end.mMargin;
                 }
             }
             return size;
@@ -100,23 +100,23 @@ public abstract class WidgetRun implements Dependency {
         ConstraintAnchor.Type targetType = anchor.mTarget.mType;
         switch (targetType) {
             case LEFT: {
-                HorizontalWidgetRun run = targetWidget.horizontalRun;
+                HorizontalWidgetRun run = targetWidget.mHorizontalRun;
                 target = run.start;
             } break;
             case RIGHT: {
-                HorizontalWidgetRun run = targetWidget.horizontalRun;
+                HorizontalWidgetRun run = targetWidget.mHorizontalRun;
                 target = run.end;
             } break;
             case TOP: {
-                VerticalWidgetRun run = targetWidget.verticalRun;
+                VerticalWidgetRun run = targetWidget.mVerticalRun;
                 target = run.start;
             } break;
             case BASELINE: {
-                VerticalWidgetRun run = targetWidget.verticalRun;
+                VerticalWidgetRun run = targetWidget.mVerticalRun;
                 target = run.baseline;
             } break;
             case BOTTOM: {
-                VerticalWidgetRun run = targetWidget.verticalRun;
+                VerticalWidgetRun run = targetWidget.mVerticalRun;
                 target = run.end;
             } break;
             default: break;
@@ -139,24 +139,24 @@ public abstract class WidgetRun implements Dependency {
         int endPos = endTarget.value - endAnchor.getMargin();
         int distance = endPos - startPos;
 
-        if (!dimension.resolved
-                && dimensionBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT) {
+        if (!mDimension.resolved
+                && mDimensionBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT) {
             resolveDimension(orientation, distance);
         }
 
-        if (!dimension.resolved) {
+        if (!mDimension.resolved) {
             return;
         }
 
-        if (dimension.value == distance) {
+        if (mDimension.value == distance) {
             start.resolve(startPos);
             end.resolve(endPos);
             return;
         }
 
         // Otherwise, we have to center
-        float bias = orientation == HORIZONTAL ? widget.getHorizontalBiasPercent()
-                : widget.getVerticalBiasPercent();
+        float bias = orientation == HORIZONTAL ? mWidget.getHorizontalBiasPercent()
+                : mWidget.getVerticalBiasPercent();
 
         if (startTarget == endTarget) {
             startPos = startTarget.value;
@@ -166,59 +166,59 @@ public abstract class WidgetRun implements Dependency {
             bias = 0.5f;
         }
 
-        int availableDistance = (endPos - startPos - dimension.value);
+        int availableDistance = (endPos - startPos - mDimension.value);
         start.resolve((int) (0.5f + startPos + availableDistance * bias));
-        end.resolve(start.value + dimension.value);
+        end.resolve(start.value + mDimension.value);
     }
 
     private void resolveDimension(int orientation, int distance) {
         switch (matchConstraintsType) {
             case MATCH_CONSTRAINT_SPREAD: {
-                dimension.resolve(getLimitedDimension(distance, orientation));
+                mDimension.resolve(getLimitedDimension(distance, orientation));
             }
             break;
             case MATCH_CONSTRAINT_PERCENT: {
-                ConstraintWidget parent = widget.getParent();
+                ConstraintWidget parent = mWidget.getParent();
                 if (parent != null) {
                     WidgetRun run = orientation == HORIZONTAL
-                            ? parent.horizontalRun
-                            : parent.verticalRun;
-                    if (run.dimension.resolved) {
+                            ? parent.mHorizontalRun
+                            : parent.mVerticalRun;
+                    if (run.mDimension.resolved) {
                         float percent = orientation == HORIZONTAL
-                                ? widget.mMatchConstraintPercentWidth
-                                : widget.mMatchConstraintPercentHeight;
-                        int targetDimensionValue = run.dimension.value;
+                                ? mWidget.mMatchConstraintPercentWidth
+                                : mWidget.mMatchConstraintPercentHeight;
+                        int targetDimensionValue = run.mDimension.value;
                         int size = (int) (0.5f + targetDimensionValue * percent);
-                        dimension.resolve(getLimitedDimension(size, orientation));
+                        mDimension.resolve(getLimitedDimension(size, orientation));
                     }
                 }
             }
             break;
             case MATCH_CONSTRAINT_WRAP: {
-                int wrapValue = getLimitedDimension(dimension.wrapValue, orientation);
-                dimension.resolve(Math.min(wrapValue, distance));
+                int wrapValue = getLimitedDimension(mDimension.wrapValue, orientation);
+                mDimension.resolve(Math.min(wrapValue, distance));
             }
             break;
             case MATCH_CONSTRAINT_RATIO: {
-                if (widget.horizontalRun.dimensionBehavior
+                if (mWidget.mHorizontalRun.mDimensionBehavior
                             == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
-                        && widget.horizontalRun.matchConstraintsType == MATCH_CONSTRAINT_RATIO
-                        && widget.verticalRun.dimensionBehavior
+                        && mWidget.mHorizontalRun.matchConstraintsType == MATCH_CONSTRAINT_RATIO
+                        && mWidget.mVerticalRun.mDimensionBehavior
                             == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
-                        && widget.verticalRun.matchConstraintsType == MATCH_CONSTRAINT_RATIO) {
+                        && mWidget.mVerticalRun.matchConstraintsType == MATCH_CONSTRAINT_RATIO) {
                     // pof
                 } else {
                     WidgetRun run = (orientation == HORIZONTAL)
-                            ? widget.verticalRun : widget.horizontalRun;
-                    if (run.dimension.resolved) {
-                        float ratio = widget.getDimensionRatio();
+                            ? mWidget.mVerticalRun : mWidget.mHorizontalRun;
+                    if (run.mDimension.resolved) {
+                        float ratio = mWidget.getDimensionRatio();
                         int value;
                         if (orientation == VERTICAL) {
-                            value = (int) (0.5f + run.dimension.value / ratio);
+                            value = (int) (0.5f + run.mDimension.value / ratio);
                         } else {
-                            value = (int) (0.5f + ratio * run.dimension.value);
+                            value = (int) (0.5f + ratio * run.mDimension.value);
                         }
-                        dimension.resolve(value);
+                        mDimension.resolve(value);
                     }
                 }
             }
@@ -239,8 +239,8 @@ public abstract class WidgetRun implements Dependency {
 
     protected final int getLimitedDimension(int dimension, int orientation) {
         if (orientation == HORIZONTAL) {
-            int max = widget.mMatchConstraintMaxWidth;
-            int min = widget.mMatchConstraintMinWidth;
+            int max = mWidget.mMatchConstraintMaxWidth;
+            int min = mWidget.mMatchConstraintMinWidth;
             int value = Math.max(min, dimension);
             if (max > 0) {
                 value = Math.min(max, dimension);
@@ -249,8 +249,8 @@ public abstract class WidgetRun implements Dependency {
                 dimension = value;
             }
         } else {
-            int max = widget.mMatchConstraintMaxHeight;
-            int min = widget.mMatchConstraintMinHeight;
+            int max = mWidget.mMatchConstraintMaxHeight;
+            int min = mWidget.mMatchConstraintMinHeight;
             int value = Math.max(min, dimension);
             if (max > 0) {
                 value = Math.min(max, dimension);
@@ -269,7 +269,7 @@ public abstract class WidgetRun implements Dependency {
         DependencyNode target = null;
         ConstraintWidget targetWidget = anchor.mTarget.mOwner;
         WidgetRun run = (orientation == ConstraintWidget.HORIZONTAL)
-                ? targetWidget.horizontalRun : targetWidget.verticalRun;
+                ? targetWidget.mHorizontalRun : targetWidget.mVerticalRun;
         ConstraintAnchor.Type targetType = anchor.mTarget.mType;
         switch (targetType) {
             case TOP:
@@ -290,32 +290,32 @@ public abstract class WidgetRun implements Dependency {
     protected final void addTarget(DependencyNode node,
                                    DependencyNode target,
                                    int margin) {
-        node.targets.add(target);
-        node.margin = margin;
-        target.dependencies.add(node);
+        node.mTargets.add(target);
+        node.mMargin = margin;
+        target.mDependencies.add(node);
     }
 
     protected final void addTarget(DependencyNode node,
                                    DependencyNode target,
                                    int marginFactor,
                                    DimensionDependency dimensionDependency) {
-        node.targets.add(target);
-        node.targets.add(dimension);
-        node.marginFactor = marginFactor;
-        node.marginDependency = dimensionDependency;
-        target.dependencies.add(node);
-        dimensionDependency.dependencies.add(node);
+        node.mTargets.add(target);
+        node.mTargets.add(mDimension);
+        node.mMarginFactor = marginFactor;
+        node.mMarginDependency = dimensionDependency;
+        target.mDependencies.add(node);
+        dimensionDependency.mDependencies.add(node);
     }
 
     public long getWrapDimension() {
-        if (dimension.resolved) {
-            return dimension.value;
+        if (mDimension.resolved) {
+            return mDimension.value;
         }
         return 0;
     }
 
     public boolean isResolved() {
-        return resolved;
+        return mResolved;
     }
 
     enum RunType { NONE, START, END, CENTER }

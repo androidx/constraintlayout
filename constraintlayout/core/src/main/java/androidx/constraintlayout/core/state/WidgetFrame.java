@@ -19,7 +19,11 @@ package androidx.constraintlayout.core.state;
 import androidx.constraintlayout.core.motion.CustomAttribute;
 import androidx.constraintlayout.core.motion.CustomVariable;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
-import androidx.constraintlayout.core.parser.*;
+import androidx.constraintlayout.core.parser.CLElement;
+import androidx.constraintlayout.core.parser.CLKey;
+import androidx.constraintlayout.core.parser.CLNumber;
+import androidx.constraintlayout.core.parser.CLObject;
+import androidx.constraintlayout.core.parser.CLParsingException;
 import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
@@ -195,14 +199,14 @@ public class WidgetFrame {
             int interpolateEndFrame = 100;
 
             if (firstPosition != null) {
-                startX = (int) (firstPosition.x * parentWidth);
-                startY = (int) (firstPosition.y * parentHeight);
-                interpolateStartFrame = firstPosition.frame;
+                startX = (int) (firstPosition.mX * parentWidth);
+                startY = (int) (firstPosition.mY * parentHeight);
+                interpolateStartFrame = firstPosition.mFrame;
             }
             if (lastPosition != null) {
-                endX = (int) (lastPosition.x * parentWidth);
-                endY = (int) (lastPosition.y * parentHeight);
-                interpolateEndFrame = lastPosition.frame;
+                endX = (int) (lastPosition.mX * parentWidth);
+                endY = (int) (lastPosition.mY * parentHeight);
+                interpolateEndFrame = lastPosition.mFrame;
             }
 
             progressPosition = (progress * 100f - interpolateStartFrame)

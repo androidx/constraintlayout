@@ -35,7 +35,9 @@ public class HelperReference extends ConstraintReference implements Facade {
         mType = type;
     }
 
-    public State.Helper getType() { return mType; }
+    public State.Helper getType() {
+        return mType;
+    }
 
     public HelperReference add(Object... objects) {
         Collections.addAll(mReferences, objects);
@@ -46,7 +48,9 @@ public class HelperReference extends ConstraintReference implements Facade {
         mHelperWidget = helperWidget;
     }
 
-    public HelperWidget getHelperWidget() { return mHelperWidget; }
+    public HelperWidget getHelperWidget() {
+        return mHelperWidget;
+    }
 
     @Override
     public ConstraintWidget getConstraintWidget() {

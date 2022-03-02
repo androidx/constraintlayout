@@ -67,10 +67,10 @@ public class BasicMeasure {
         layout.invalidateGraph();
     }
 
-    private ConstraintWidgetContainer constraintWidgetContainer;
+    private ConstraintWidgetContainer mConstraintWidgetContainer;
 
     public BasicMeasure(ConstraintWidgetContainer constraintWidgetContainer) {
-        this.constraintWidgetContainer = constraintWidgetContainer;
+        this.mConstraintWidgetContainer = constraintWidgetContainer;
     }
 
     private void measureChildren(ConstraintWidgetContainer layout) {
@@ -89,9 +89,9 @@ public class BasicMeasure {
                 continue;
             }
 
-            if (optimize && child.horizontalRun != null && child.verticalRun != null
-                    && child.horizontalRun.dimension.resolved
-                    && child.verticalRun.dimension.resolved) {
+            if (optimize && child.mHorizontalRun != null && child.mVerticalRun != null
+                    && child.mHorizontalRun.mDimension.resolved
+                    && child.mVerticalRun.mDimension.resolved) {
                 continue;
             }
 
@@ -164,8 +164,8 @@ public class BasicMeasure {
         if (DEBUG) {
             System.out.println("### Solve <" + reason + "> ###");
         }
-        constraintWidgetContainer.setPass(pass);
-        constraintWidgetContainer.layout();
+        mConstraintWidgetContainer.setPass(pass);
+        mConstraintWidgetContainer.layout();
         if (LinearSystem.MEASURE && layout.mMetrics != null) {
             long endLayout = System.nanoTime();
             layout.mMetrics.measuresLayoutDuration += (endLayout - startLayout);
@@ -276,11 +276,11 @@ public class BasicMeasure {
             }
         } else {
             if (false) {
-                layout.horizontalRun.clear();
-                layout.verticalRun.clear();
+                layout.mHorizontalRun.clear();
+                layout.mVerticalRun.clear();
                 for (ConstraintWidget child : layout.getChildren()) {
-                    child.horizontalRun.clear();
-                    child.verticalRun.clear();
+                    child.mHorizontalRun.clear();
+                    child.mVerticalRun.clear();
                 }
             }
         }
@@ -314,9 +314,10 @@ public class BasicMeasure {
                         == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT;
                 boolean containerWrapHeight = layout.getVerticalDimensionBehaviour()
                         == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT;
-                int minWidth = Math.max(layout.getWidth(), constraintWidgetContainer.getMinWidth());
+                int minWidth = Math.max(layout.getWidth(),
+                        mConstraintWidgetContainer.getMinWidth());
                 int minHeight = Math.max(layout.getHeight(),
-                        constraintWidgetContainer.getMinHeight());
+                        mConstraintWidgetContainer.getMinHeight());
 
                 ////////////////////////////////////////////////////////////////////////////////////
                 // Let's first apply sizes for VirtualLayouts if any
@@ -368,8 +369,8 @@ public class BasicMeasure {
                         if (widget.getVisibility() == GONE) {
                             continue;
                         }
-                        if (optimize && widget.horizontalRun.dimension.resolved
-                                && widget.verticalRun.dimension.resolved) {
+                        if (optimize && widget.mHorizontalRun.mDimension.resolved
+                                && widget.mVerticalRun.mDimension.resolved) {
                             continue;
                         }
                         if (widget instanceof VirtualLayout) {

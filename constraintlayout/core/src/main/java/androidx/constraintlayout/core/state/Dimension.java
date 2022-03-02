@@ -16,7 +16,9 @@
 
 package androidx.constraintlayout.core.state;
 
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.*;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_PERCENT;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_SPREAD;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_WRAP;
 
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
@@ -32,7 +34,7 @@ public class Dimension {
     public static final Object PERCENT_DIMENSION = new Object();
     public static final Object RATIO_DIMENSION = new Object();
 
-    private final int WRAP_CONTENT = -2;
+    private final int mWrapContent = -2;
 
     int mMin = 0;
     int mMax = Integer.MAX_VALUE;
@@ -131,7 +133,7 @@ public class Dimension {
 
     public Dimension min(Object value) {
         if (value == WRAP_DIMENSION) {
-            mMin = WRAP_CONTENT;
+            mMin = mWrapContent;
         }
         return this;
     }

@@ -26,7 +26,7 @@ class HelperReferences extends WidgetRun {
 
     @Override
     void clear() {
-        runGroup = null;
+        mRunGroup = null;
         start.clear();
     }
 
@@ -41,85 +41,85 @@ class HelperReferences extends WidgetRun {
     }
 
     private void addDependency(DependencyNode node) {
-        start.dependencies.add(node);
-        node.targets.add(start);
+        start.mDependencies.add(node);
+        node.mTargets.add(start);
     }
 
     @Override
     void apply() {
-        if (widget instanceof Barrier) {
+        if (mWidget instanceof Barrier) {
             start.delegateToWidgetRun = true;
-            Barrier barrier = (Barrier) widget;
+            Barrier barrier = (Barrier) mWidget;
             int type = barrier.getBarrierType();
             boolean allowsGoneWidget = barrier.getAllowsGoneWidget();
             switch (type) {
                 case Barrier.LEFT: {
-                    start.type = DependencyNode.Type.LEFT;
+                    start.mType = DependencyNode.Type.LEFT;
                     for (int i = 0; i < barrier.mWidgetsCount; i++) {
                         ConstraintWidget refWidget = barrier.mWidgets[i];
                         if (!allowsGoneWidget
                                 && refWidget.getVisibility() == ConstraintWidget.GONE) {
                             continue;
                         }
-                        DependencyNode target = refWidget.horizontalRun.start;
-                        target.dependencies.add(start);
-                        start.targets.add(target);
+                        DependencyNode target = refWidget.mHorizontalRun.start;
+                        target.mDependencies.add(start);
+                        start.mTargets.add(target);
                         // FIXME -- if we move the DependencyNode directly
                         //          in the ConstraintAnchor we'll be good.
                     }
-                    addDependency(widget.horizontalRun.start);
-                    addDependency(widget.horizontalRun.end);
+                    addDependency(mWidget.mHorizontalRun.start);
+                    addDependency(mWidget.mHorizontalRun.end);
                 } break;
                 case Barrier.RIGHT: {
-                    start.type = DependencyNode.Type.RIGHT;
+                    start.mType = DependencyNode.Type.RIGHT;
                     for (int i = 0; i < barrier.mWidgetsCount; i++) {
                         ConstraintWidget refWidget = barrier.mWidgets[i];
                         if (!allowsGoneWidget
                                 && refWidget.getVisibility() == ConstraintWidget.GONE) {
                             continue;
                         }
-                        DependencyNode target = refWidget.horizontalRun.end;
-                        target.dependencies.add(start);
-                        start.targets.add(target);
+                        DependencyNode target = refWidget.mHorizontalRun.end;
+                        target.mDependencies.add(start);
+                        start.mTargets.add(target);
                         // FIXME -- if we move the DependencyNode directly
                         //              in the ConstraintAnchor we'll be good.
                     }
-                    addDependency(widget.horizontalRun.start);
-                    addDependency(widget.horizontalRun.end);
+                    addDependency(mWidget.mHorizontalRun.start);
+                    addDependency(mWidget.mHorizontalRun.end);
                 } break;
                 case Barrier.TOP: {
-                    start.type = DependencyNode.Type.TOP;
+                    start.mType = DependencyNode.Type.TOP;
                     for (int i = 0; i < barrier.mWidgetsCount; i++) {
                         ConstraintWidget refwidget = barrier.mWidgets[i];
                         if (!allowsGoneWidget
                                 && refwidget.getVisibility() == ConstraintWidget.GONE) {
                             continue;
                         }
-                        DependencyNode target = refwidget.verticalRun.start;
-                        target.dependencies.add(start);
-                        start.targets.add(target);
+                        DependencyNode target = refwidget.mVerticalRun.start;
+                        target.mDependencies.add(start);
+                        start.mTargets.add(target);
                         // FIXME -- if we move the DependencyNode directly
                         //              in the ConstraintAnchor we'll be good.
                     }
-                    addDependency(widget.verticalRun.start);
-                    addDependency(widget.verticalRun.end);
+                    addDependency(mWidget.mVerticalRun.start);
+                    addDependency(mWidget.mVerticalRun.end);
                 } break;
                 case Barrier.BOTTOM: {
-                    start.type = DependencyNode.Type.BOTTOM;
+                    start.mType = DependencyNode.Type.BOTTOM;
                     for (int i = 0; i < barrier.mWidgetsCount; i++) {
                         ConstraintWidget refwidget = barrier.mWidgets[i];
                         if (!allowsGoneWidget
                                 && refwidget.getVisibility() == ConstraintWidget.GONE) {
                             continue;
                         }
-                        DependencyNode target = refwidget.verticalRun.end;
-                        target.dependencies.add(start);
-                        start.targets.add(target);
+                        DependencyNode target = refwidget.mVerticalRun.end;
+                        target.mDependencies.add(start);
+                        start.mTargets.add(target);
                         // FIXME -- if we move the DependencyNode directly
                         //              in the ConstraintAnchor we'll be good.
                     }
-                    addDependency(widget.verticalRun.start);
-                    addDependency(widget.verticalRun.end);
+                    addDependency(mWidget.mVerticalRun.start);
+                    addDependency(mWidget.mVerticalRun.end);
                 } break;
             }
         }
@@ -127,12 +127,12 @@ class HelperReferences extends WidgetRun {
 
     @Override
     public void update(Dependency dependency) {
-        Barrier barrier = (Barrier) widget;
+        Barrier barrier = (Barrier) mWidget;
         int type = barrier.getBarrierType();
 
         int min = -1;
         int max = 0;
-        for (DependencyNode node : start.targets) {
+        for (DependencyNode node : start.mTargets) {
             int value = node.value;
             if (min == -1 || value < min) {
                 min = value;
@@ -149,14 +149,14 @@ class HelperReferences extends WidgetRun {
     }
 
     public void applyToWidget() {
-        if (widget instanceof Barrier) {
-            Barrier barrier = (Barrier) widget;
+        if (mWidget instanceof Barrier) {
+            Barrier barrier = (Barrier) mWidget;
             int type = barrier.getBarrierType();
             if (type == Barrier.LEFT
                     || type == Barrier.RIGHT) {
-                widget.setX(start.value);
+                mWidget.setX(start.value);
             } else {
-                widget.setY(start.value);
+                mWidget.setY(start.value);
             }
         }
     }

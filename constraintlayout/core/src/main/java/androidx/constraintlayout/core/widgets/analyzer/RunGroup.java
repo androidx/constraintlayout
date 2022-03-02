@@ -33,28 +33,28 @@ class RunGroup {
     public int position = 0;
     public boolean dual = false;
 
-    WidgetRun firstRun = null;
-    WidgetRun lastRun = null;
-    ArrayList<WidgetRun> runs = new ArrayList<>();
+    WidgetRun mFirstRun = null;
+    WidgetRun mLastRun = null;
+    ArrayList<WidgetRun> mRuns = new ArrayList<>();
 
-    int groupIndex = 0;
-    int direction;
+    int mGroupIndex = 0;
+    int mDirection;
 
     RunGroup(WidgetRun run, int dir) {
-        groupIndex = index;
+        mGroupIndex = index;
         index++;
-        firstRun = run;
-        lastRun = run;
-        direction = dir;
+        mFirstRun = run;
+        mLastRun = run;
+        mDirection = dir;
     }
 
     public void add(WidgetRun run) {
-        runs.add(run);
-        lastRun = run;
+        mRuns.add(run);
+        mLastRun = run;
     }
 
     private long traverseStart(DependencyNode node, long startPosition) {
-        WidgetRun run = node.run;
+        WidgetRun run = node.mRun;
         if (run instanceof HelperReferences) {
             return startPosition;
         }
@@ -62,17 +62,17 @@ class RunGroup {
 
         // first, compute stuff dependent on this node.
 
-        final int count = node.dependencies.size();
+        final int count = node.mDependencies.size();
         for (int i = 0; i < count; i++) {
-            Dependency dependency = node.dependencies.get(i);
+            Dependency dependency = node.mDependencies.get(i);
             if (dependency instanceof DependencyNode) {
                 DependencyNode nextNode = (DependencyNode) dependency;
-                if (nextNode.run == run) {
+                if (nextNode.mRun == run) {
                     // skip our own sibling node
                     continue;
                 }
                 position = Math.max(position,
-                        traverseStart(nextNode, startPosition + nextNode.margin));
+                        traverseStart(nextNode, startPosition + nextNode.mMargin));
             }
         }
 
@@ -80,14 +80,14 @@ class RunGroup {
             // let's go for our sibling
             long dimension = run.getWrapDimension();
             position = Math.max(position, traverseStart(run.end, startPosition + dimension));
-            position = Math.max(position, startPosition + dimension - run.end.margin);
+            position = Math.max(position, startPosition + dimension - run.end.mMargin);
         }
 
         return position;
     }
 
     private long traverseEnd(DependencyNode node, long startPosition) {
-        WidgetRun run = node.run;
+        WidgetRun run = node.mRun;
         if (run instanceof HelperReferences) {
             return startPosition;
         }
@@ -95,17 +95,17 @@ class RunGroup {
 
         // first, compute stuff dependent on this node.
 
-        final int count = node.dependencies.size();
+        final int count = node.mDependencies.size();
         for (int i = 0; i < count; i++) {
-            Dependency dependency = node.dependencies.get(i);
+            Dependency dependency = node.mDependencies.get(i);
             if (dependency instanceof DependencyNode) {
                 DependencyNode nextNode = (DependencyNode) dependency;
-                if (nextNode.run == run) {
+                if (nextNode.mRun == run) {
                     // skip our own sibling node
                     continue;
                 }
                 position = Math.min(position,
-                        traverseEnd(nextNode, startPosition + nextNode.margin));
+                        traverseEnd(nextNode, startPosition + nextNode.mMargin));
             }
         }
 
@@ -113,53 +113,53 @@ class RunGroup {
             // let's go for our sibling
             long dimension = run.getWrapDimension();
             position = Math.min(position, traverseEnd(run.start, startPosition - dimension));
-            position = Math.min(position, startPosition - dimension - run.start.margin);
+            position = Math.min(position, startPosition - dimension - run.start.mMargin);
         }
 
         return position;
     }
 
     public long computeWrapSize(ConstraintWidgetContainer container, int orientation) {
-        if (firstRun instanceof ChainRun) {
-            ChainRun chainRun = (ChainRun) firstRun;
+        if (mFirstRun instanceof ChainRun) {
+            ChainRun chainRun = (ChainRun) mFirstRun;
             if (chainRun.orientation != orientation) {
                 return 0;
             }
         } else {
             if (orientation == HORIZONTAL) {
-                if (!(firstRun instanceof HorizontalWidgetRun)) {
+                if (!(mFirstRun instanceof HorizontalWidgetRun)) {
                     return 0;
                 }
             } else {
-                if (!(firstRun instanceof VerticalWidgetRun)) {
+                if (!(mFirstRun instanceof VerticalWidgetRun)) {
                     return 0;
                 }
             }
         }
         DependencyNode containerStart = orientation == HORIZONTAL
-                ? container.horizontalRun.start : container.verticalRun.start;
+                ? container.mHorizontalRun.start : container.mVerticalRun.start;
         DependencyNode containerEnd = orientation == HORIZONTAL
-                ? container.horizontalRun.end : container.verticalRun.end;
+                ? container.mHorizontalRun.end : container.mVerticalRun.end;
 
-        boolean runWithStartTarget = firstRun.start.targets.contains(containerStart);
-        boolean runWithEndTarget = firstRun.end.targets.contains(containerEnd);
+        boolean runWithStartTarget = mFirstRun.start.mTargets.contains(containerStart);
+        boolean runWithEndTarget = mFirstRun.end.mTargets.contains(containerEnd);
 
-        long dimension = firstRun.getWrapDimension();
+        long dimension = mFirstRun.getWrapDimension();
 
         if (runWithStartTarget && runWithEndTarget) {
-            long maxPosition = traverseStart(firstRun.start, 0);
-            long minPosition = traverseEnd(firstRun.end, 0);
+            long maxPosition = traverseStart(mFirstRun.start, 0);
+            long minPosition = traverseEnd(mFirstRun.end, 0);
 
             // to compute the gaps, we subtract the margins
             long endGap = maxPosition - dimension;
-            if (endGap >= -firstRun.end.margin) {
-                endGap += firstRun.end.margin;
+            if (endGap >= -mFirstRun.end.mMargin) {
+                endGap += mFirstRun.end.mMargin;
             }
-            long startGap = -minPosition - dimension - firstRun.start.margin;
-            if (startGap >= firstRun.start.margin) {
-                startGap -= firstRun.start.margin;
+            long startGap = -minPosition - dimension - mFirstRun.start.mMargin;
+            if (startGap >= mFirstRun.start.mMargin) {
+                startGap -= mFirstRun.start.mMargin;
             }
-            float bias = firstRun.widget.getBiasPercent(orientation);
+            float bias = mFirstRun.mWidget.getBiasPercent(orientation);
             long gap = 0;
             if (bias > 0) {
                 gap = (long) ((startGap / bias) + (endGap / (1f - bias)));
@@ -169,66 +169,67 @@ class RunGroup {
             endGap = (long) (0.5f + (gap * (1f - bias)));
 
             long runDimension = startGap + dimension + endGap;
-            dimension = firstRun.start.margin + runDimension - firstRun.end.margin;
+            dimension = mFirstRun.start.mMargin + runDimension - mFirstRun.end.mMargin;
 
         } else if (runWithStartTarget) {
-            long maxPosition = traverseStart(firstRun.start, firstRun.start.margin);
-            long runDimension = firstRun.start.margin + dimension;
+            long maxPosition = traverseStart(mFirstRun.start, mFirstRun.start.mMargin);
+            long runDimension = mFirstRun.start.mMargin + dimension;
             dimension = Math.max(maxPosition, runDimension);
         } else if (runWithEndTarget) {
-            long minPosition = traverseEnd(firstRun.end, firstRun.end.margin);
-            long runDimension = -firstRun.end.margin + dimension;
+            long minPosition = traverseEnd(mFirstRun.end, mFirstRun.end.mMargin);
+            long runDimension = -mFirstRun.end.mMargin + dimension;
             dimension = Math.max(-minPosition, runDimension);
         } else {
-            dimension = firstRun.start.margin + firstRun.getWrapDimension() - firstRun.end.margin;
+            dimension = mFirstRun.start.mMargin
+                    + mFirstRun.getWrapDimension() - mFirstRun.end.mMargin;
         }
 
         return dimension;
     }
 
     private boolean defineTerminalWidget(WidgetRun run, int orientation) {
-        if (!run.widget.isTerminalWidget[orientation]) {
+        if (!run.mWidget.isTerminalWidget[orientation]) {
             return false;
         }
-        for (Dependency dependency : run.start.dependencies) {
+        for (Dependency dependency : run.start.mDependencies) {
             if (dependency instanceof DependencyNode) {
                 DependencyNode node = (DependencyNode) dependency;
-                if (node.run == run) {
+                if (node.mRun == run) {
                     continue;
                 }
-                if (node == node.run.start) {
+                if (node == node.mRun.start) {
                     if (run instanceof ChainRun) {
                         ChainRun chainRun = (ChainRun) run;
-                        for (WidgetRun widgetChainRun : chainRun.widgets) {
+                        for (WidgetRun widgetChainRun : chainRun.mWidgets) {
                             defineTerminalWidget(widgetChainRun, orientation);
                         }
                     } else {
                         if (!(run instanceof HelperReferences)) {
-                            run.widget.isTerminalWidget[orientation] = false;
+                            run.mWidget.isTerminalWidget[orientation] = false;
                         }
                     }
-                    defineTerminalWidget(node.run, orientation);
+                    defineTerminalWidget(node.mRun, orientation);
                 }
             }
         }
-        for (Dependency dependency : run.end.dependencies) {
+        for (Dependency dependency : run.end.mDependencies) {
             if (dependency instanceof DependencyNode) {
                 DependencyNode node = (DependencyNode) dependency;
-                if (node.run == run) {
+                if (node.mRun == run) {
                     continue;
                 }
-                if (node == node.run.start) {
+                if (node == node.mRun.start) {
                     if (run instanceof ChainRun) {
                         ChainRun chainRun = (ChainRun) run;
-                        for (WidgetRun widgetChainRun : chainRun.widgets) {
+                        for (WidgetRun widgetChainRun : chainRun.mWidgets) {
                             defineTerminalWidget(widgetChainRun, orientation);
                         }
                     } else {
                         if (!(run instanceof HelperReferences)) {
-                            run.widget.isTerminalWidget[orientation] = false;
+                            run.mWidget.isTerminalWidget[orientation] = false;
                         }
                     }
-                    defineTerminalWidget(node.run, orientation);
+                    defineTerminalWidget(node.mRun, orientation);
                 }
             }
         }
@@ -237,11 +238,11 @@ class RunGroup {
 
 
     public void defineTerminalWidgets(boolean horizontalCheck, boolean verticalCheck) {
-        if (horizontalCheck && firstRun instanceof HorizontalWidgetRun) {
-            defineTerminalWidget(firstRun, HORIZONTAL);
+        if (horizontalCheck && mFirstRun instanceof HorizontalWidgetRun) {
+            defineTerminalWidget(mFirstRun, HORIZONTAL);
         }
-        if (verticalCheck && firstRun instanceof VerticalWidgetRun) {
-            defineTerminalWidget(firstRun, VERTICAL);
+        if (verticalCheck && mFirstRun instanceof VerticalWidgetRun) {
+            defineTerminalWidget(mFirstRun, VERTICAL);
         }
     }
 }

@@ -27,25 +27,25 @@ public class DependencyNode implements Dependency {
     enum Type { UNKNOWN, HORIZONTAL_DIMENSION, VERTICAL_DIMENSION,
         LEFT, RIGHT, TOP, BOTTOM, BASELINE }
 
-    WidgetRun run;
-    Type type = Type.UNKNOWN;
-    int margin;
+    WidgetRun mRun;
+    Type mType = Type.UNKNOWN;
+    int mMargin;
     public int value;
-    int marginFactor = 1;
-    DimensionDependency marginDependency = null;
+    int mMarginFactor = 1;
+    DimensionDependency mMarginDependency = null;
     public boolean resolved = false;
 
     public DependencyNode(WidgetRun run) {
-        this.run = run;
+        this.mRun = run;
     }
-    List<Dependency> dependencies = new ArrayList<>();
-    List<DependencyNode> targets = new ArrayList<>();
+    List<Dependency> mDependencies = new ArrayList<>();
+    List<DependencyNode> mTargets = new ArrayList<>();
 
     @Override
     public String toString() {
-        return run.widget.getDebugName() + ":" + type + "("
+        return mRun.mWidget.getDebugName() + ":" + mType + "("
             + (resolved ? value : "unresolved") + ") <t="
-                + targets.size() + ":d=" + dependencies.size() + ">";
+                + mTargets.size() + ":d=" + mDependencies.size() + ">";
     }
 
     public void resolve(int value) {
@@ -55,13 +55,13 @@ public class DependencyNode implements Dependency {
 
         this.resolved = true;
         this.value = value;
-        for (Dependency node : dependencies) {
+        for (Dependency node : mDependencies) {
             node.update(node);
         }
     }
 
     public void update(Dependency node) {
-        for (DependencyNode target : targets) {
+        for (DependencyNode target : mTargets) {
             if (!target.resolved) {
                 return;
             }
@@ -71,12 +71,12 @@ public class DependencyNode implements Dependency {
             updateDelegate.update(this);
         }
         if (delegateToWidgetRun) {
-            run.update(this);
+            mRun.update(this);
             return;
         }
         DependencyNode target = null;
         int numTargets = 0;
-        for (DependencyNode t : targets) {
+        for (DependencyNode t : mTargets) {
             if (t instanceof DimensionDependency) {
                 continue;
             }
@@ -84,14 +84,14 @@ public class DependencyNode implements Dependency {
             numTargets++;
         }
         if (target != null && numTargets == 1 && target.resolved) {
-            if (marginDependency != null) {
-                if (marginDependency.resolved) {
-                    margin = marginFactor * marginDependency.value;
+            if (mMarginDependency != null) {
+                if (mMarginDependency.resolved) {
+                    mMargin = mMarginFactor * mMarginDependency.value;
                 } else {
                     return;
                 }
             }
-            resolve(target.value + margin);
+            resolve(target.value + mMargin);
         }
         if (updateDelegate != null) {
             updateDelegate.update(this);
@@ -99,27 +99,27 @@ public class DependencyNode implements Dependency {
     }
 
     public void addDependency(Dependency dependency) {
-        dependencies.add(dependency);
+        mDependencies.add(dependency);
         if (resolved) {
             dependency.update(dependency);
         }
     }
 
     public String name() {
-        String definition = run.widget.getDebugName();
-        if (type == Type.LEFT
-                || type == Type.RIGHT) {
+        String definition = mRun.mWidget.getDebugName();
+        if (mType == Type.LEFT
+                || mType == Type.RIGHT) {
             definition += "_HORIZONTAL";
         } else {
             definition += "_VERTICAL";
         }
-        definition += ":" + type.name();
+        definition += ":" + mType.name();
         return definition;
     }
 
     public void clear() {
-        targets.clear();
-        dependencies.clear();
+        mTargets.clear();
+        mDependencies.clear();
         resolved = false;
         value = 0;
         readyToSolve = false;
