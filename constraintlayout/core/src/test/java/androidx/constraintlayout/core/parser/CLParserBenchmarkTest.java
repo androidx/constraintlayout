@@ -115,7 +115,7 @@ public class CLParserBenchmarkTest {
         CLElement element = parsedContent.get("spouse");
         if (element instanceof CLToken) {
             CLToken token = (CLToken) element;
-            assertEquals(CLToken.Type.NULL, token.type);
+            assertEquals(CLToken.Type.NULL, token.mType);
         }
     }
 }

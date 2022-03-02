@@ -30,7 +30,7 @@ public class LinearCurveFit extends CurveFit {
     double[] mSlopeTemp;
 
     public LinearCurveFit(double[] time, double[][] y) {
-        final int N = time.length;
+        final int n = time.length;
         final int dim = y[0].length;
         mSlopeTemp = new double[dim];
         mT = time;

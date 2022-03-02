@@ -19,8 +19,8 @@ package androidx.constraintlayout.core;
  * Cache for common objects
  */
 public class Cache {
-    Pools.Pool<ArrayRow> optimizedArrayRowPool = new Pools.SimplePool<>(256);
-    Pools.Pool<ArrayRow> arrayRowPool = new Pools.SimplePool<>(256);
-    Pools.Pool<SolverVariable> solverVariablePool = new Pools.SimplePool<>(256);
+    Pools.Pool<ArrayRow> mOptimizedArrayRowPool = new Pools.SimplePool<>(256);
+    Pools.Pool<ArrayRow> mArrayRowPool = new Pools.SimplePool<>(256);
+    Pools.Pool<SolverVariable> mSolverVariablePool = new Pools.SimplePool<>(256);
     SolverVariable[] mIndexedVariables = new SolverVariable[32];
 }

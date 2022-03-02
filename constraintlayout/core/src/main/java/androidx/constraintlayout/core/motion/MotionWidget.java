@@ -24,8 +24,8 @@ import java.util.Set;
 
 public class MotionWidget implements TypedValues {
     WidgetFrame mWidgetFrame = new WidgetFrame();
-    Motion motion = new Motion();
-    PropertySet propertySet = new PropertySet();
+    Motion mMotion = new Motion();
+    PropertySet mPropertySet = new PropertySet();
     private float mProgress;
     float mTransitionPathRotate;
 
@@ -95,7 +95,7 @@ public class MotionWidget implements TypedValues {
     }
 
     public void setVisibility(int visibility) {
-        propertySet.visibility = visibility;
+        mPropertySet.visibility = visibility;
     }
 
     public String getName() {
@@ -152,28 +152,28 @@ public class MotionWidget implements TypedValues {
     public boolean setValueMotion(int id, int value) {
         switch (id) {
             case MotionType.TYPE_ANIMATE_RELATIVE_TO:
-                motion.mAnimateRelativeTo = value;
+                mMotion.mAnimateRelativeTo = value;
                 break;
             case MotionType.TYPE_ANIMATE_CIRCLEANGLE_TO:
-                motion.mAnimateCircleAngleTo = value;
+                mMotion.mAnimateCircleAngleTo = value;
                 break;
             case MotionType.TYPE_PATHMOTION_ARC:
-                motion.mPathMotionArc = value;
+                mMotion.mPathMotionArc = value;
                 break;
             case MotionType.TYPE_DRAW_PATH:
-                motion.mDrawPath = value;
+                mMotion.mDrawPath = value;
                 break;
             case MotionType.TYPE_POLAR_RELATIVETO:
-                motion.mPolarRelativeTo = value;
+                mMotion.mPolarRelativeTo = value;
                 break;
             case MotionType.TYPE_QUANTIZE_MOTIONSTEPS:
-                motion.mQuantizeMotionSteps = value;
+                mMotion.mQuantizeMotionSteps = value;
                 break;
             case MotionType.TYPE_QUANTIZE_INTERPOLATOR_TYPE:
-                motion.mQuantizeInterpolatorType = value;
+                mMotion.mQuantizeInterpolatorType = value;
                 break; // undefined
             case MotionType.TYPE_QUANTIZE_INTERPOLATOR_ID:
-                motion.mQuantizeInterpolatorID = value;
+                mMotion.mQuantizeInterpolatorID = value;
                 break;
             default:
                 return false;
@@ -185,10 +185,10 @@ public class MotionWidget implements TypedValues {
         switch (id) {
 
             case MotionType.TYPE_EASING:
-                motion.mTransitionEasing = value;
+                mMotion.mTransitionEasing = value;
                 break;
             case MotionType.TYPE_QUANTIZE_INTERPOLATOR:
-                motion.mQuantizeInterpolatorString = value;
+                mMotion.mQuantizeInterpolatorString = value;
                 break;
             default:
                 return false;
@@ -199,13 +199,13 @@ public class MotionWidget implements TypedValues {
     public boolean setValueMotion(int id, float value) {
         switch (id) {
             case MotionType.TYPE_STAGGER:
-                motion.mMotionStagger = value;
+                mMotion.mMotionStagger = value;
                 break;
             case MotionType.TYPE_PATH_ROTATE:
-                motion.mPathRotate = value;
+                mMotion.mPathRotate = value;
                 break;
             case MotionType.TYPE_QUANTIZE_MOTION_PHASE:
-                motion.mQuantizeMotionPhase = value;
+                mMotion.mQuantizeMotionPhase = value;
                 break;
             default:
                 return false;
@@ -401,7 +401,7 @@ public class MotionWidget implements TypedValues {
     }
 
     public int getVisibility() {
-        return propertySet.visibility;
+        return mPropertySet.visibility;
     }
 
     public float getPivotX() {
@@ -413,7 +413,7 @@ public class MotionWidget implements TypedValues {
     }
 
     public float getAlpha() {
-        return propertySet.alpha;
+        return mPropertySet.alpha;
     }
 
     public int getX() {

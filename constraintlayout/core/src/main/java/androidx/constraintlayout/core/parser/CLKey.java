@@ -19,17 +19,17 @@ import java.util.ArrayList;
 
 public class CLKey extends CLContainer {
 
-    private static ArrayList<String> sections = new ArrayList<>();
+    private static ArrayList<String> sSections = new ArrayList<>();
 
     static {
-        sections.add("ConstraintSets");
-        sections.add("Variables");
-        sections.add("Generate");
-        sections.add("Transitions");
-        sections.add("KeyFrames");
-        sections.add("KeyAttributes");
-        sections.add("KeyPositions");
-        sections.add("KeyCycles");
+        sSections.add("ConstraintSets");
+        sSections.add("Variables");
+        sSections.add("Generate");
+        sSections.add("Transitions");
+        sSections.add("KeyFrames");
+        sSections.add("KeyAttributes");
+        sSections.add("KeyPositions");
+        sSections.add("KeyCycles");
     }
 
     public CLKey(char[] content) {
@@ -48,7 +48,9 @@ public class CLKey extends CLContainer {
         return key;
     }
 
-    public String getName() { return content(); }
+    public String getName() {
+        return content();
+    }
 
     protected String toJSON() {
         if (mElements.size() > 0) {
@@ -64,14 +66,14 @@ public class CLKey extends CLContainer {
         if (mElements.size() > 0) {
             json.append(content);
             json.append(": ");
-            if (sections.contains(content)) {
+            if (sSections.contains(content)) {
                 forceIndent = 3;
             }
             if (forceIndent > 0) {
                 json.append(mElements.get(0).toFormattedJSON(indent, forceIndent - 1));
             } else {
                 String val = mElements.get(0).toJSON();
-                if (val.length() + indent < MAX_LINE) {
+                if (val.length() + indent < sMaxLine) {
                     json.append(val);
                 } else {
                     json.append(mElements.get(0).toFormattedJSON(indent, forceIndent - 1));

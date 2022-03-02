@@ -30,7 +30,7 @@ public class CLContainer extends CLElement {
 
     public void add(CLElement element) {
         mElements.add(element);
-        if (CLParser.DEBUG) {
+        if (CLParser.sDebug) {
             System.out.println("added element " + element + " to " + this);
         }
     }

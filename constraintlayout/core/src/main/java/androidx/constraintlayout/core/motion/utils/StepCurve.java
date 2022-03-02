@@ -30,8 +30,8 @@ public class StepCurve extends Easing {
 
     StepCurve(String configString) {
         // done this way for efficiency
-        str = configString;
-        double[] values = new double[str.length() / 2];
+        mStr = configString;
+        double[] values = new double[mStr.length() / 2];
         int start = configString.indexOf('(') + 1;
         int off1 = configString.indexOf(',', start);
         int count = 0;

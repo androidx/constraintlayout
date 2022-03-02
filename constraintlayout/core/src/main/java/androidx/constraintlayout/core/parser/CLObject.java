@@ -56,7 +56,7 @@ public class CLObject extends CLContainer implements Iterable<CLKey> {
             } else {
                 first = false;
             }
-            json.append(element.toFormattedJSON(indent + BASE_INDENT, forceIndent - 1));
+            json.append(element.toFormattedJSON(indent + sBaseIndent, forceIndent - 1));
         }
         json.append("\n");
         addIndent(json, indent);
@@ -70,21 +70,21 @@ public class CLObject extends CLContainer implements Iterable<CLKey> {
     }
 
     private class CLObjectIterator implements Iterator {
-        CLObject myObject;
-        int index = 0;
-        public CLObjectIterator(CLObject clObject) {
-            myObject = clObject;
+        CLObject mObject;
+        int mIndex = 0;
+        CLObjectIterator(CLObject clObject) {
+            mObject = clObject;
         }
 
         @Override
         public boolean hasNext() {
-            return index < myObject.size();
+            return mIndex < mObject.size();
         }
 
         @Override
         public Object next() {
-            CLKey key = (CLKey) myObject.mElements.get(index);
-            index++;
+            CLKey key = (CLKey) mObject.mElements.get(mIndex);
+            mIndex++;
             return key;
         }
     }

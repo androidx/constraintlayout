@@ -15,16 +15,16 @@
  */
 package androidx.constraintlayout.core;
 
+import static org.junit.Assert.assertTrue;
+
 import androidx.constraintlayout.core.scout.Scout;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 import androidx.constraintlayout.core.widgets.Guideline;
 
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
 
-import java.awt.*;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Random;
 

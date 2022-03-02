@@ -17,7 +17,7 @@ package androidx.constraintlayout.core.parser;
 
 public class CLParser {
 
-    static boolean DEBUG = false;
+    static boolean sDebug = false;
 
     private String mContent;
     private boolean mHasComment = false;
@@ -98,9 +98,9 @@ public class CLParser {
                     currentElement = getNextJsonElement(i, c, currentElement, content);
                 }
             } else if (currentElement instanceof CLString) {
-                char ck = content[(int) currentElement.start];
+                char ck = content[(int) currentElement.mStart];
                 if (ck == c) {
-                    currentElement.setStart(currentElement.start + 1);
+                    currentElement.setStart(currentElement.mStart + 1);
                     currentElement.setEnd(i - 1);
                 }
             } else {
@@ -112,9 +112,9 @@ public class CLParser {
                     }
                 }
                 if (currentElement instanceof CLKey || currentElement instanceof CLString) {
-                    char ck = content[(int) currentElement.start];
+                    char ck = content[(int) currentElement.mStart];
                     if ((ck == '\'' || ck == '"') && ck == c) {
-                        currentElement.setStart(currentElement.start + 1);
+                        currentElement.setStart(currentElement.mStart + 1);
                         currentElement.setEnd(i - 1);
                     }
                 }
@@ -144,13 +144,13 @@ public class CLParser {
         // allow us to be more resistant to invalid json, useful during editing.
         while (currentElement != null && !currentElement.isDone()) {
             if (currentElement instanceof CLString) {
-                currentElement.setStart((int) currentElement.start + 1);
+                currentElement.setStart((int) currentElement.mStart + 1);
             }
             currentElement.setEnd(length - 1);
             currentElement = currentElement.getContainer();
         }
 
-        if (DEBUG) {
+        if (sDebug) {
             System.out.println("Root: " + root.toJSON());
         }
 
@@ -242,7 +242,7 @@ public class CLParser {
     private CLElement createElement(CLElement currentElement, int position,
                                          TYPE type, boolean applyStart, char[] content) {
         CLElement newElement = null;
-        if (DEBUG) {
+        if (sDebug) {
             System.out.println("CREATE " + type + " at " + content[position]);
         }
         switch (type) {

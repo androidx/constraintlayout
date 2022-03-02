@@ -38,7 +38,7 @@ public class Oscillator {
     String mCustomType;
     MonotonicCurveFit mCustomCurve;
     int mType;
-    double PI2 = Math.PI * 2;
+    double mPI2 = Math.PI * 2;
     private boolean mNormalized = false;
 
     public Oscillator() {
@@ -126,7 +126,7 @@ public class Oscillator {
         switch (mType) {
             default:
             case SIN_WAVE:
-                return Math.sin(PI2 * (angle));
+                return Math.sin(mPI2 * (angle));
             case SQUARE_WAVE:
                 return Math.signum(0.5 - angle % 1);
             case TRIANGLE_WAVE:
@@ -136,7 +136,7 @@ public class Oscillator {
             case REVERSE_SAW_WAVE:
                 return (1 - ((angle * 2 + 1) % 2));
             case COS_WAVE:
-                return Math.cos(PI2 * (phase + angle));
+                return Math.cos(mPI2 * (phase + angle));
             case BOUNCE:
                 double x = 1 - Math.abs(((angle) * 4) % 4 - 2);
                 return 1 - x * x;
@@ -173,7 +173,7 @@ public class Oscillator {
         switch (mType) {
             default:
             case SIN_WAVE:
-                return PI2 * dangle_dtime * Math.cos(PI2 * angle);
+                return mPI2 * dangle_dtime * Math.cos(mPI2 * angle);
             case SQUARE_WAVE:
                 return 0;
             case TRIANGLE_WAVE:
@@ -183,7 +183,7 @@ public class Oscillator {
             case REVERSE_SAW_WAVE:
                 return -dangle_dtime * 2;
             case COS_WAVE:
-                return -PI2 * dangle_dtime * Math.sin(PI2 * angle);
+                return -mPI2 * dangle_dtime * Math.sin(mPI2 * angle);
             case BOUNCE:
                 return 4 * dangle_dtime * (((angle) * 4 + 2) % 4 - 2);
             case CUSTOM:

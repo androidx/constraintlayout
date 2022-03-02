@@ -35,7 +35,7 @@ public abstract class SplineSet {
     protected CurveFit mCurveFit;
     protected int[] mTimePoints = new int[10];
     protected float[] mValues = new float[10];
-    private int count;
+    private int mCount;
     private String mType;
 
     public void setProperty(TypedValues widget, float t) {
@@ -46,7 +46,7 @@ public abstract class SplineSet {
     public String toString() {
         String str = mType;
         DecimalFormat df = new DecimalFormat("##.##");
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < mCount; i++) {
             str += "[" + mTimePoints[i] + " , " + df.format(mValues[i]) + "] ";
 
         }
@@ -71,25 +71,25 @@ public abstract class SplineSet {
 
 
     public void setPoint(int position, float value) {
-        if (mTimePoints.length < count + 1) {
+        if (mTimePoints.length < mCount + 1) {
             mTimePoints = Arrays.copyOf(mTimePoints, mTimePoints.length * 2);
             mValues = Arrays.copyOf(mValues, mValues.length * 2);
         }
-        mTimePoints[count] = position;
-        mValues[count] = value;
-        count++;
+        mTimePoints[mCount] = position;
+        mValues[mCount] = value;
+        mCount++;
     }
 
     public void setup(int curveType) {
-        if (count == 0) {
+        if (mCount == 0) {
             return;
         }
 
-        Sort.doubleQuickSort(mTimePoints, mValues, 0, count - 1);
+        Sort.doubleQuickSort(mTimePoints, mValues, 0, mCount - 1);
 
         int unique = 1;
 
-        for (int i = 1; i < count; i++) {
+        for (int i = 1; i < mCount; i++) {
             if (mTimePoints[i - 1] != mTimePoints[i]) {
                 unique++;
             }
@@ -98,7 +98,7 @@ public abstract class SplineSet {
         double[] time = new double[unique];
         double[][] values = new double[unique][1];
         int k = 0;
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < mCount; i++) {
             if (i > 0 && mTimePoints[i] == mTimePoints[i - 1]) {
                 continue;
             }
@@ -199,7 +199,8 @@ public abstract class SplineSet {
         }
 
         public void setPoint(int position, float value) {
-            throw new RuntimeException("don't call for custom attribute call setPoint(pos, ConstraintAttribute)");
+            throw new RuntimeException("don't call for custom "
+                    + "attribute call setPoint(pos, ConstraintAttribute)");
         }
 
         public void setPoint(int position, CustomAttribute value) {
@@ -214,16 +215,16 @@ public abstract class SplineSet {
 
 
     private static class CoreSpline extends SplineSet {
-        String type;
-        long start;
+        String mType;
+        long mStart;
 
-        public CoreSpline(String str, long currentTime) {
-            type = str;
-            start = currentTime;
+        CoreSpline(String str, long currentTime) {
+            mType = str;
+            mStart = currentTime;
         }
 
         public void setProperty(TypedValues widget, float t) {
-            int id = widget.getId(type);
+            int id = widget.getId(mType);
             widget.setValue(id, get(t));
         }
     }
@@ -260,7 +261,8 @@ public abstract class SplineSet {
         }
 
         public void setPoint(int position, float value) {
-            throw new RuntimeException("don't call for custom attribute call setPoint(pos, ConstraintAttribute)");
+            throw new RuntimeException("don't call for custom attribute"
+                    + " call setPoint(pos, ConstraintAttribute)");
         }
 
         public void setProperty(TypedValues widget, float t) {

@@ -51,23 +51,23 @@ public class SolverVariable implements Comparable<SolverVariable> {
     private String mName;
 
     public int id = -1;
-    int definitionId = -1;
+    int mDefinitionId = -1;
     public int strength = 0;
     public float computedValue;
     public boolean isFinalValue = false;
 
     static final int MAX_STRENGTH = 9;
-    float[] strengthVector = new float[MAX_STRENGTH];
-    float[] goalStrengthVector = new float[MAX_STRENGTH];
+    float[] mStrengthVector = new float[MAX_STRENGTH];
+    float[] mGoalStrengthVector = new float[MAX_STRENGTH];
 
     Type mType;
 
     ArrayRow[] mClientEquations = new ArrayRow[16];
     int mClientEquationsCount = 0;
     public int usageInRowCount = 0;
-    boolean isSynonym = false;
-    int synonym = -1;
-    float synonymDelta = 0;
+    boolean mIsSynonym = false;
+    int mSynonym = -1;
+    float mSynonymDelta = 0;
 
     /**
      * Type of variables
@@ -135,7 +135,7 @@ public class SolverVariable implements Comparable<SolverVariable> {
 
     void clearStrengths() {
         for (int i = 0; i < MAX_STRENGTH; i++) {
-            strengthVector[i] = 0;
+            mStrengthVector[i] = 0;
         }
     }
 
@@ -143,17 +143,17 @@ public class SolverVariable implements Comparable<SolverVariable> {
         String representation = this + "[";
         boolean negative = false;
         boolean empty = true;
-        for (int j = 0; j < strengthVector.length; j++) {
-            representation += strengthVector[j];
-            if (strengthVector[j] > 0) {
+        for (int j = 0; j < mStrengthVector.length; j++) {
+            representation += mStrengthVector[j];
+            if (mStrengthVector[j] > 0) {
                 negative = false;
-            } else if (strengthVector[j] < 0) {
+            } else if (mStrengthVector[j] < 0) {
                 negative = true;
             }
-            if (strengthVector[j] != 0) {
+            if (mStrengthVector[j] != 0) {
                 empty = false;
             }
-            if (j < strengthVector.length - 1) {
+            if (j < mStrengthVector.length - 1) {
                 representation += ", ";
             } else {
                 representation += "] ";
@@ -226,11 +226,11 @@ public class SolverVariable implements Comparable<SolverVariable> {
         }
         computedValue = value;
         isFinalValue = true;
-        isSynonym = false;
-        synonym = -1;
-        synonymDelta = 0;
+        mIsSynonym = false;
+        mSynonym = -1;
+        mSynonymDelta = 0;
         final int count = mClientEquationsCount;
-        definitionId = -1;
+        mDefinitionId = -1;
         for (int i = 0; i < count; i++) {
             mClientEquations[i].updateFromFinalVariable(system, this, false);
         }
@@ -241,11 +241,11 @@ public class SolverVariable implements Comparable<SolverVariable> {
         if (INTERNAL_DEBUG) {
             System.out.println("Set synonym for " + this + " = " + synonymVariable + " + " + value);
         }
-        isSynonym = true;
-        synonym = synonymVariable.id;
-        synonymDelta = value;
+        mIsSynonym = true;
+        mSynonym = synonymVariable.id;
+        mSynonymDelta = value;
         final int count = mClientEquationsCount;
-        definitionId = -1;
+        mDefinitionId = -1;
         for (int i = 0; i < count; i++) {
             mClientEquations[i].updateFromSynonymVariable(system, this, false);
         }
@@ -258,12 +258,12 @@ public class SolverVariable implements Comparable<SolverVariable> {
         mType = Type.UNKNOWN;
         strength = SolverVariable.STRENGTH_NONE;
         id = -1;
-        definitionId = -1;
+        mDefinitionId = -1;
         computedValue = 0;
         isFinalValue = false;
-        isSynonym = false;
-        synonym = -1;
-        synonymDelta = 0;
+        mIsSynonym = false;
+        mSynonym = -1;
+        mSynonymDelta = 0;
         if (VAR_USE_HASH) {
             mInRows.clear();
         } else {
@@ -275,7 +275,7 @@ public class SolverVariable implements Comparable<SolverVariable> {
         }
         usageInRowCount = 0;
         inGoal = false;
-        Arrays.fill(goalStrengthVector, 0);
+        Arrays.fill(mGoalStrengthVector, 0);
     }
 
     /**
@@ -310,8 +310,8 @@ public class SolverVariable implements Comparable<SolverVariable> {
         String result = "";
         if (INTERNAL_DEBUG) {
             result += mName + "(" + id + "):" + strength;
-            if (isSynonym) {
-                result += ":S(" + synonym + ")";
+            if (mIsSynonym) {
+                result += ":S(" + mSynonym + ")";
             }
             if (isFinalValue) {
                 result += ":F(" + computedValue + ")";

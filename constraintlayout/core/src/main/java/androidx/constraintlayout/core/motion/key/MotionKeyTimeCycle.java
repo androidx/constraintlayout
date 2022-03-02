@@ -44,7 +44,9 @@ public class MotionKeyTimeCycle extends MotionKey {
     private float mTranslationZ = Float.NaN;
     private float mProgress = Float.NaN;
     private int mWaveShape = 0;
-    private String mCustomWaveShape = null; // TODO add support of custom wave shapes in KeyTimeCycle
+
+    // TODO add support of custom wave shapes in KeyTimeCycle
+    private String mCustomWaveShape = null;
     private float mWavePeriod = Float.NaN;
     private float mWaveOffset = 0;
     public static final int KEY_TYPE = 3;
@@ -64,71 +66,84 @@ public class MotionKeyTimeCycle extends MotionKey {
                 String cKey = s.substring(CUSTOM.length() + 1);
                 CustomVariable cValue = mCustom.get(cKey);
                 if (cValue != null) {
-                    ((TimeCycleSplineSet.CustomVarSet) splineSet).setPoint(mFramePosition, cValue, mWavePeriod, mWaveShape, mWaveOffset);
+                    ((TimeCycleSplineSet.CustomVarSet) splineSet)
+                            .setPoint(mFramePosition, cValue, mWavePeriod, mWaveShape, mWaveOffset);
                 }
                 continue;
             }
             switch (s) {
                 case AttributesType.S_ALPHA:
                     if (!Float.isNaN(mAlpha)) {
-                        splineSet.setPoint(mFramePosition, mAlpha, mWavePeriod, mWaveShape, mWaveOffset);
+                        splineSet.setPoint(mFramePosition,
+                                mAlpha, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
 
                 case AttributesType.S_ROTATION_X:
                     if (!Float.isNaN(mRotationX)) {
-                        splineSet.setPoint(mFramePosition, mRotationX, mWavePeriod, mWaveShape, mWaveOffset);
+                        splineSet.setPoint(mFramePosition,
+                                mRotationX, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
                 case AttributesType.S_ROTATION_Y:
                     if (!Float.isNaN(mRotationY)) {
-                        splineSet.setPoint(mFramePosition, mRotationY, mWavePeriod, mWaveShape, mWaveOffset);
+                        splineSet.setPoint(mFramePosition,
+                                mRotationY, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
                 case AttributesType.S_ROTATION_Z:
                     if (!Float.isNaN(mRotation)) {
-                        splineSet.setPoint(mFramePosition, mRotation, mWavePeriod, mWaveShape, mWaveOffset);
+                        splineSet.setPoint(mFramePosition,
+                                mRotation, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
                 case AttributesType.S_PATH_ROTATE:
                     if (!Float.isNaN(mTransitionPathRotate)) {
-                        splineSet.setPoint(mFramePosition, mTransitionPathRotate, mWavePeriod, mWaveShape, mWaveOffset);
+                        splineSet.setPoint(mFramePosition,
+                                mTransitionPathRotate, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
 
                 case AttributesType.S_SCALE_X:
                     if (!Float.isNaN(mScaleX)) {
-                        splineSet.setPoint(mFramePosition, mScaleX, mWavePeriod, mWaveShape, mWaveOffset);
+                        splineSet.setPoint(mFramePosition,
+                                mScaleX, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
                 case AttributesType.S_SCALE_Y:
                     if (!Float.isNaN(mScaleY)) {
-                        splineSet.setPoint(mFramePosition, mScaleY, mWavePeriod, mWaveShape, mWaveOffset);
+                        splineSet.setPoint(mFramePosition,
+                                mScaleY, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
                 case AttributesType.S_TRANSLATION_X:
                     if (!Float.isNaN(mTranslationX)) {
-                        splineSet.setPoint(mFramePosition, mTranslationX, mWavePeriod, mWaveShape, mWaveOffset);
+                        splineSet.setPoint(mFramePosition,
+                                mTranslationX, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
                 case AttributesType.S_TRANSLATION_Y:
                     if (!Float.isNaN(mTranslationY)) {
-                        splineSet.setPoint(mFramePosition, mTranslationY, mWavePeriod, mWaveShape, mWaveOffset);
+                        splineSet.setPoint(mFramePosition,
+                                mTranslationY, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
                 case AttributesType.S_TRANSLATION_Z:
                     if (!Float.isNaN(mTranslationZ)) {
-                        splineSet.setPoint(mFramePosition, mTranslationZ, mWavePeriod, mWaveShape, mWaveOffset);
+                        splineSet.setPoint(mFramePosition,
+                                mTranslationZ, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
                 case AttributesType.S_ELEVATION:
                     if (!Float.isNaN(mTranslationZ)) {
-                        splineSet.setPoint(mFramePosition, mTranslationZ, mWavePeriod, mWaveShape, mWaveOffset);
+                        splineSet.setPoint(mFramePosition,
+                                mTranslationZ, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
                 case AttributesType.S_PROGRESS:
                     if (!Float.isNaN(mProgress)) {
-                        splineSet.setPoint(mFramePosition, mProgress, mWavePeriod, mWaveShape, mWaveOffset);
+                        splineSet.setPoint(mFramePosition,
+                                mProgress, mWavePeriod, mWaveShape, mWaveOffset);
                     }
                     break;
                 default:

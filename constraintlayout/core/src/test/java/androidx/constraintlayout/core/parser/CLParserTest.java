@@ -187,7 +187,7 @@ public class CLParserTest {
             CLElement element = parsedContent.get("spouse");
             if (element instanceof CLToken) {
                 CLToken token = (CLToken) element;
-                assertEquals(CLToken.Type.NULL, token.type);
+                assertEquals(CLToken.Type.NULL, token.mType);
             }
         } catch (CLParsingException e) {
             System.err.println("Exception " + e.reason());
@@ -235,7 +235,7 @@ public class CLParserTest {
             CLElement element = parsedContent.get("spouse");
             if (element instanceof CLToken) {
                 CLToken token = (CLToken) element;
-                assertEquals(CLToken.Type.NULL, token.type);
+                assertEquals(CLToken.Type.NULL, token.mType);
             }
         } catch (CLParsingException e) {
             System.err.println("Exception " + e.reason());

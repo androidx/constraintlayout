@@ -37,7 +37,7 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
 
     private float mAlpha = 1;
     int mVisibilityMode = MotionWidget.VISIBILITY_MODE_NORMAL;
-    int visibility;
+    int mVisibility;
     private boolean mApplyElevation = false;
     private float mElevation = 0;
     private float mRotation = 0;
@@ -63,7 +63,7 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
 
     static final int PERPENDICULAR = 1;
     static final int CARTESIAN = 2;
-    static String[] names = {"position", "x", "y", "width", "height", "pathRotate"};
+    static String[] sNames = {"position", "x", "y", "width", "height", "pathRotate"};
 
     LinkedHashMap<String, CustomVariable> mCustomVariable = new LinkedHashMap<>();
     int mMode = 0; // how was this point computed 1=perpendicular 2=deltaRelative
@@ -92,10 +92,10 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
         if (diff(mElevation, points.mElevation)) {
             keySet.add(TypedValues.AttributesType.S_TRANSLATION_Z);
         }
-        if (visibility != points.visibility
+        if (mVisibility != points.mVisibility
                 && mVisibilityMode == MotionWidget.VISIBILITY_MODE_NORMAL
-                && (visibility == MotionWidget.VISIBLE
-                || points.visibility == MotionWidget.VISIBLE)) {
+                && (mVisibility == MotionWidget.VISIBLE
+                || points.mVisibility == MotionWidget.VISIBLE)) {
             keySet.add(TypedValues.AttributesType.S_ALPHA);
         }
         if (diff(mRotation, points.mRotation)) {
@@ -201,7 +201,7 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
 
     public void applyParameters(MotionWidget view) {
 
-        this.visibility = view.getVisibility();
+        this.mVisibility = view.getVisibility();
         this.mAlpha = (view.getVisibility() != MotionWidget.VISIBLE) ? 0.0f : view.getAlpha();
         this.mApplyElevation = false; // TODO figure a way to cache parameters
 
