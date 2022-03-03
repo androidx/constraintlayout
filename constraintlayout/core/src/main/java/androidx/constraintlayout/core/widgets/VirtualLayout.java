@@ -46,6 +46,10 @@ public class VirtualLayout extends HelperWidget {
     // Accessors
     /////////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * @TODO: add description
+     * @param value
+     */
     public void setPadding(int value) {
         mPaddingLeft = value;
         mPaddingTop = value;
@@ -55,6 +59,10 @@ public class VirtualLayout extends HelperWidget {
         mPaddingEnd = value;
     }
 
+    /**
+     * @TODO: add description
+     * @param value
+     */
     public void setPaddingStart(int value) {
         mPaddingStart = value;
         mResolvedPaddingLeft = value;
@@ -65,11 +73,19 @@ public class VirtualLayout extends HelperWidget {
         mPaddingEnd = value;
     }
 
+    /**
+     * @TODO: add description
+     * @param value
+     */
     public void setPaddingLeft(int value) {
         mPaddingLeft = value;
         mResolvedPaddingLeft = value;
     }
 
+    /**
+     * @TODO: add description
+     * @param isRtl
+     */
     public void applyRtl(boolean isRtl) {
         if (mPaddingStart > 0 || mPaddingEnd > 0) {
             if (isRtl) {
@@ -86,6 +102,10 @@ public class VirtualLayout extends HelperWidget {
         mPaddingTop = value;
     }
 
+    /**
+     * @TODO: add description
+     * @param value
+     */
     public void setPaddingRight(int value) {
         mPaddingRight = value;
         mResolvedPaddingRight = value;
@@ -119,6 +139,10 @@ public class VirtualLayout extends HelperWidget {
         mNeedsCallFromSolver = value;
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public boolean needSolverPass() {
         return mNeedsCallFromSolver;
     }
@@ -136,6 +160,9 @@ public class VirtualLayout extends HelperWidget {
         captureWidgets();
     }
 
+    /**
+     * @TODO: add description
+     */
     public void captureWidgets() {
         for (int i = 0; i < mWidgetsCount; i++) {
             ConstraintWidget widget = mWidgets[i];
@@ -153,6 +180,11 @@ public class VirtualLayout extends HelperWidget {
         return mMeasuredHeight;
     }
 
+    /**
+     * @TODO: add description
+     * @param width
+     * @param height
+     */
     public void setMeasure(int width, int height) {
         mMeasuredWidth = width;
         mMeasuredHeight = height;
@@ -231,6 +263,11 @@ public class VirtualLayout extends HelperWidget {
         widget.setBaselineDistance(mMeasure.measuredBaseline);
     }
 
+    /**
+     * @TODO: add description
+     * @param widgets
+     * @return
+     */
     public boolean contains(HashSet<ConstraintWidget> widgets) {
         for (int i = 0; i < mWidgetsCount; i++) {
             ConstraintWidget widget = mWidgets[i];

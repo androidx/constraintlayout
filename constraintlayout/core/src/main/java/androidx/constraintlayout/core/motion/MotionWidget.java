@@ -90,6 +90,11 @@ public class MotionWidget implements TypedValues {
         return null;
     }
 
+    /**
+     * @TODO: add description
+     * @param mTransformPivotTarget
+     * @return
+     */
     public MotionWidget findViewById(int mTransformPivotTarget) {
         return null;
     }
@@ -102,15 +107,33 @@ public class MotionWidget implements TypedValues {
         return mWidgetFrame.getId();
     }
 
+    /**
+     * @TODO: add description
+     * @param l
+     * @param t
+     * @param r
+     * @param b
+     */
     public void layout(int l, int t, int r, int b) {
         setBounds(l, t, r, b);
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public String toString() {
         return mWidgetFrame.left + ", " + mWidgetFrame.top + ", "
                 + mWidgetFrame.right + ", " + mWidgetFrame.bottom;
     }
 
+    /**
+     * @TODO: add description
+     * @param left
+     * @param top
+     * @param right
+     * @param bottom
+     */
     public void setBounds(int left, int top, int right, int bottom) {
         if (mWidgetFrame == null) {
             mWidgetFrame = new WidgetFrame((ConstraintWidget) null);
@@ -149,6 +172,12 @@ public class MotionWidget implements TypedValues {
         return false;
     }
 
+    /**
+     * @TODO: add description
+     * @param id
+     * @param value
+     * @return
+     */
     public boolean setValueMotion(int id, int value) {
         switch (id) {
             case MotionType.TYPE_ANIMATE_RELATIVE_TO:
@@ -181,6 +210,12 @@ public class MotionWidget implements TypedValues {
         return true;
     }
 
+    /**
+     * @TODO: add description
+     * @param id
+     * @param value
+     * @return
+     */
     public boolean setValueMotion(int id, String value) {
         switch (id) {
 
@@ -196,6 +231,12 @@ public class MotionWidget implements TypedValues {
         return true;
     }
 
+    /**
+     * @TODO: add description
+     * @param id
+     * @param value
+     * @return
+     */
     public boolean setValueMotion(int id, float value) {
         switch (id) {
             case MotionType.TYPE_STAGGER:
@@ -440,26 +481,60 @@ public class MotionWidget implements TypedValues {
         return mWidgetFrame.getCustomAttributeNames();
     }
 
+    /**
+     * @TODO: add description
+     * @param name
+     * @param type
+     * @param value
+     */
     public void setCustomAttribute(String name, int type, float value) {
         mWidgetFrame.setCustomAttribute(name, type, value);
     }
 
+    /**
+     * @TODO: add description
+     * @param name
+     * @param type
+     * @param value
+     */
     public void setCustomAttribute(String name, int type, int value) {
         mWidgetFrame.setCustomAttribute(name, type, value);
     }
 
+    /**
+     * @TODO: add description
+     * @param name
+     * @param type
+     * @param value
+     */
     public void setCustomAttribute(String name, int type, boolean value) {
         mWidgetFrame.setCustomAttribute(name, type, value);
     }
 
+    /**
+     * @TODO: add description
+     * @param name
+     * @param type
+     * @param value
+     */
     public void setCustomAttribute(String name, int type, String value) {
         mWidgetFrame.setCustomAttribute(name, type, value);
     }
 
+    /**
+     * @TODO: add description
+     * @param name
+     * @return
+     */
     public CustomVariable getCustomAttribute(String name) {
         return mWidgetFrame.getCustomAttribute(name);
     }
 
+    /**
+     * @TODO: add description
+     * @param attribute
+     * @param mCache
+     */
     public void setInterpolatedValue(CustomAttribute attribute, float[] mCache) {
         mWidgetFrame.setCustomAttribute(attribute.mName, TypedValues.Custom.TYPE_FLOAT, mCache[0]);
     }

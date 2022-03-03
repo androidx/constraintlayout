@@ -36,6 +36,10 @@ public abstract class MotionKey implements TypedValues {
     public int mType;
     public HashMap<String, CustomVariable> mCustom;
 
+    /**
+     * @TODO: add description
+     * @param attributes
+     */
     public abstract void getAttributeNames(HashSet<String> attributes);
 
     public static final String ALPHA = "alpha";
@@ -112,6 +116,11 @@ public abstract class MotionKey implements TypedValues {
     public void setInterpolation(HashMap<String, Integer> interpolation) {
     }
 
+    /**
+     * @TODO: add description
+     * @param src
+     * @return
+     */
     public MotionKey copy(MotionKey src) {
         mFramePosition = src.mFramePosition;
         mTargetId = src.mTargetId;
@@ -120,8 +129,17 @@ public abstract class MotionKey implements TypedValues {
         return this;
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public abstract MotionKey clone();
 
+    /**
+     * @TODO: add description
+     * @param id
+     * @return
+     */
     public MotionKey setViewId(int id) {
         mTargetId = id;
         return this;
@@ -145,6 +163,12 @@ public abstract class MotionKey implements TypedValues {
         return mFramePosition;
     }
 
+    /**
+     * @TODO: add description
+     * @param type
+     * @param value
+     * @return
+     */
     public boolean setValue(int type, int value) {
 
         switch (type) {
@@ -155,10 +179,22 @@ public abstract class MotionKey implements TypedValues {
         return false;
     }
 
+    /**
+     * @TODO: add description
+     * @param type
+     * @param value
+     * @return
+     */
     public boolean setValue(int type, float value) {
         return false;
     }
 
+    /**
+     * @TODO: add description
+     * @param type
+     * @param value
+     * @return
+     */
     public boolean setValue(int type, String value) {
         switch (type) {
             case TypedValues.TYPE_TARGET:
@@ -168,22 +204,52 @@ public abstract class MotionKey implements TypedValues {
         return false;
     }
 
+    /**
+     * @TODO: add description
+     * @param type
+     * @param value
+     * @return
+     */
     public boolean setValue(int type, boolean value) {
         return false;
     }
 
+    /**
+     * @TODO: add description
+     * @param name
+     * @param type
+     * @param value
+     */
     public void setCustomAttribute(String name, int type, float value) {
         mCustom.put(name, new CustomVariable(name, type, value));
     }
 
+    /**
+     * @TODO: add description
+     * @param name
+     * @param type
+     * @param value
+     */
     public void setCustomAttribute(String name, int type, int value) {
         mCustom.put(name, new CustomVariable(name, type, value));
     }
 
+    /**
+     * @TODO: add description
+     * @param name
+     * @param type
+     * @param value
+     */
     public void setCustomAttribute(String name, int type, boolean value) {
         mCustom.put(name, new CustomVariable(name, type, value));
     }
 
+    /**
+     * @TODO: add description
+     * @param name
+     * @param type
+     * @param value
+     */
     public void setCustomAttribute(String name, int type, String value) {
         mCustom.put(name, new CustomVariable(name, type, value));
     }

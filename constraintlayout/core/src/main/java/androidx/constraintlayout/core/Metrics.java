@@ -67,6 +67,10 @@ public class Metrics {
     public long layouts;
     public long grouping;
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public String toString() {
         return "\n*** Metrics ***\n"
                 + "measures: " + measures + "\n"
@@ -111,6 +115,10 @@ public class Metrics {
                 */
                 ;
     }
+
+    /**
+     * @TODO: add description
+     */
     public void reset() {
         measures = 0;
         widgets = 0;

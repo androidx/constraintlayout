@@ -92,10 +92,20 @@ public class StepCurve extends Easing {
         return ms;
     }
 
+    /**
+     * @TODO: add description
+     * @param x
+     * @return
+     */
     public double getDiff(double x) {
         return mCurveFit.getSlope(x, 0);
     }
 
+    /**
+     * @TODO: add description
+     * @param x
+     * @return
+     */
     public double get(double x) {
         return mCurveFit.getPos(x, 0);
     }

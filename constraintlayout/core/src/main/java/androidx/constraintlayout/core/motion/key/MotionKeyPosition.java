@@ -87,6 +87,16 @@ public class MotionKeyPosition extends MotionKey {
         return mCalculatedPositionY;
     }
 
+    /**
+     * @TODO: add description
+     * @param view
+     * @param start
+     * @param end
+     * @param x
+     * @param y
+     * @param attribute
+     * @param value
+     */
     public void positionAttributes(MotionWidget view,
                                    FloatRect start,
                                    FloatRect end,
@@ -208,6 +218,16 @@ public class MotionKeyPosition extends MotionKey {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param layoutWidth
+     * @param layoutHeight
+     * @param start
+     * @param end
+     * @param x
+     * @param y
+     * @return
+     */
     public boolean intersects(int layoutWidth,
                               int layoutHeight,
                               FloatRect start,
@@ -223,6 +243,11 @@ public class MotionKeyPosition extends MotionKey {
         return false;
     }
 
+    /**
+     * @TODO: add description
+     * @param src
+     * @return
+     */
     public MotionKey copy(MotionKey src) {
         super.copy(src);
         MotionKeyPosition k = (MotionKeyPosition) src;
@@ -240,6 +265,10 @@ public class MotionKeyPosition extends MotionKey {
         return this;
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public MotionKey clone() {
         return new MotionKeyPosition().copy(this);
     }
@@ -270,6 +299,10 @@ public class MotionKeyPosition extends MotionKey {
 
     }
 
+    /**
+     * @TODO: add description
+     * @param splines splines to write values to
+     */
     public void addValues(HashMap<String, SplineSet> splines) {
     }
 

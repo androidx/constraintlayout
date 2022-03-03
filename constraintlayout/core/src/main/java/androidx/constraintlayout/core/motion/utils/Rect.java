@@ -21,10 +21,18 @@ public class Rect {
     public int right;
     public int top;
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public int width() {
         return right - left;
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public int height() {
         return bottom - top;
     }

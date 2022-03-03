@@ -113,6 +113,12 @@ public class MotionKeyCycle extends MotionKey {
 
     }
 
+    /**
+     * @TODO: add description
+     * @param type
+     * @param value
+     * @return
+     */
     public boolean setValue(int type, int value) {
         switch (type) {
             case CycleType.TYPE_CURVE_FIT:
@@ -130,6 +136,12 @@ public class MotionKeyCycle extends MotionKey {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param type
+     * @param value
+     * @return
+     */
     public boolean setValue(int type, String value) {
         switch (type) {
             case CycleType.TYPE_EASING:
@@ -144,6 +156,12 @@ public class MotionKeyCycle extends MotionKey {
 
     }
 
+    /**
+     * @TODO: add description
+     * @param type
+     * @param value
+     * @return
+     */
     public boolean setValue(int type, float value) {
         switch (type) {
             case CycleType.TYPE_ALPHA:
@@ -197,7 +215,11 @@ public class MotionKeyCycle extends MotionKey {
         return true;
     }
 
-
+    /**
+     * @TODO: add description
+     * @param key
+     * @return
+     */
     public float getValue(String key) {
         switch (key) {
             case CycleType.S_ALPHA:
@@ -288,6 +310,10 @@ public class MotionKeyCycle extends MotionKey {
         return -1;
     }
 
+    /**
+     * @TODO: add description
+     * @param oscSet
+     */
     public void addCycleValues(HashMap<String, KeyCycleOscillator> oscSet) {
 
         for (String key : oscSet.keySet()) {
@@ -323,7 +349,9 @@ public class MotionKeyCycle extends MotionKey {
     }
 
 
-
+    /**
+     * @TODO: add description
+     */
     public void dump() {
         System.out.println("MotionKeyCycle{"
                 + "mWaveShape=" + mWaveShape
@@ -334,6 +362,9 @@ public class MotionKeyCycle extends MotionKey {
                 + '}');
     }
 
+    /**
+     * @TODO: add description
+     */
     public void printAttributes() {
         HashSet<String> nameSet = new HashSet<>();
         getAttributeNames(nameSet);

@@ -51,10 +51,20 @@ public class Schlick extends Easing {
         return (mS * (mT - 1) * (mT - 1)) / ((-mS * (mT - x) - x + 1) * (-mS * (mT - x) - x + 1));
     }
 
+    /**
+     * @TODO: add description
+     * @param x
+     * @return
+     */
     public double getDiff(double x) {
         return dfunc(x);
     }
 
+    /**
+     * @TODO: add description
+     * @param x
+     * @return
+     */
     public double get(double x) {
         return func(x);
     }

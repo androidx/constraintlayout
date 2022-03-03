@@ -101,6 +101,11 @@ public class LinearCurveFit extends CurveFit {
         return 0;
     }
 
+    /**
+     * @TODO: add description
+     * @param t
+     * @param v
+     */
     public void getPos(double t, double[] v) {
         final int n = mT.length;
         final int dim = mY[0].length;
@@ -154,6 +159,11 @@ public class LinearCurveFit extends CurveFit {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param t
+     * @param v
+     */
     public void getPos(double t, float[] v) {
         final int n = mT.length;
         final int dim = mY[0].length;
@@ -207,6 +217,12 @@ public class LinearCurveFit extends CurveFit {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param t
+     * @param j
+     * @return
+     */
     public double getPos(double t, int j) {
         final int n = mT.length;
         if (mExtrapolate) {
@@ -241,6 +257,11 @@ public class LinearCurveFit extends CurveFit {
         return 0; // should never reach here
     }
 
+    /**
+     * @TODO: add description
+     * @param t
+     * @param v
+     */
     public void getSlope(double t, double[] v) {
         final int n = mT.length;
         int dim = mY[0].length;
@@ -266,6 +287,12 @@ public class LinearCurveFit extends CurveFit {
         return;
     }
 
+    /**
+     * @TODO: add description
+     * @param t
+     * @param j
+     * @return
+     */
     public double getSlope(double t, int j) {
         final int n = mT.length;
 
