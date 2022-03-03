@@ -42,6 +42,11 @@ public class BarrierReference extends HelperReference {
         return this;
     }
 
+    /**
+     * @TODO: add description
+     * @param value
+     * @return
+     */
     public ConstraintReference margin(int value) {
         mMargin = value;
         return this;
@@ -55,6 +60,9 @@ public class BarrierReference extends HelperReference {
         return mBarrierWidget;
     }
 
+    /**
+     * @TODO: add description
+     */
     public void apply() {
         getHelperWidget();
         int direction = Barrier.LEFT;

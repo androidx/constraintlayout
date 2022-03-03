@@ -75,6 +75,10 @@ public class CLNumber extends CLElement {
         return mValue;
     }
 
+    /**
+     * @TODO: add description
+     * @param value
+     */
     public void putValue(float value) {
         this.mValue = value;
     }

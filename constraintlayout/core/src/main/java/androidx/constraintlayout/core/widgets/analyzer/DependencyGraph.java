@@ -237,6 +237,11 @@ public class DependencyGraph {
         return allResolved;
     }
 
+    /**
+     * @TODO: add description
+     * @param optimizeWrap
+     * @return
+     */
     public boolean directMeasureSetup(boolean optimizeWrap) {
         if (mNeedBuildGraph) {
             for (ConstraintWidget widget : container.mChildren) {
@@ -272,6 +277,12 @@ public class DependencyGraph {
         return true;
     }
 
+    /**
+     * @TODO: add description
+     * @param optimizeWrap
+     * @param orientation
+     * @return
+     */
     public boolean directMeasureWithOrientation(boolean optimizeWrap, int orientation) {
         optimizeWrap &= USE_GROUPS;
 
@@ -590,6 +601,9 @@ public class DependencyGraph {
         return false;
     }
 
+    /**
+     * @TODO: add description
+     */
     public void measureWidgets() {
         for (ConstraintWidget widget : container.mChildren) {
             if (widget.measured) {
@@ -656,6 +670,9 @@ public class DependencyGraph {
 
     ArrayList<RunGroup> mGroups = new ArrayList<>();
 
+    /**
+     * @TODO: add description
+     */
     public void buildGraph() {
         // First, let's identify the overall dependency graph
         buildGraph(mRuns);
@@ -670,6 +687,10 @@ public class DependencyGraph {
         mNeedBuildGraph = false;
     }
 
+    /**
+     * @TODO: add description
+     * @param runs
+     */
     public void buildGraph(ArrayList<WidgetRun> runs) {
         runs.clear();
         mContainer.horizontalRun.clear();

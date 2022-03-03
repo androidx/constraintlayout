@@ -24,10 +24,19 @@ public class CLContainer extends CLElement {
         super(content);
     }
 
+    /**
+     * @TODO: add description
+     * @param content
+     * @return
+     */
     public static CLElement allocate(char[] content) {
         return new CLContainer(content);
     }
 
+    /**
+     * @TODO: add description
+     * @param element
+     */
     public void add(CLElement element) {
         mElements.add(element);
         if (CLParser.sDebug) {
@@ -47,10 +56,18 @@ public class CLContainer extends CLElement {
         return super.toString() + " = <" + list + " >";
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public int size() {
         return mElements.size();
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public ArrayList<String> names() {
         ArrayList<String> names = new ArrayList<>();
         for (CLElement element : mElements) {
@@ -62,6 +79,11 @@ public class CLContainer extends CLElement {
         return names;
     }
 
+    /**
+     * @TODO: add description
+     * @param name
+     * @return
+     */
     public boolean has(String name) {
         for (CLElement element : mElements) {
             if (element instanceof CLKey) {
@@ -74,6 +96,11 @@ public class CLContainer extends CLElement {
         return false;
     }
 
+    /**
+     * @TODO: add description
+     * @param name
+     * @param value
+     */
     public void put(String name, CLElement value) {
         for (CLElement element : mElements) {
             CLKey key = (CLKey) element;
@@ -86,10 +113,19 @@ public class CLContainer extends CLElement {
         mElements.add(key);
     }
 
+    /**
+     * @TODO: add description
+     * @param name
+     * @param value
+     */
     public void putNumber(String name, float value) {
         put(name, new CLNumber(value));
     }
 
+    /**
+     * @TODO: add description
+     * @param name
+     */
     public void remove(String name) {
         ArrayList<CLElement> toRemove = new ArrayList<>();
         for (CLElement element : mElements) {
@@ -107,6 +143,12 @@ public class CLContainer extends CLElement {
   // By name
   /////////////////////////////////////////////////////////////////////////
 
+    /**
+     * @TODO: add description
+     * @param name
+     * @return
+     * @throws CLParsingException
+     */
     public CLElement get(String name) throws CLParsingException {
         for (CLElement element : mElements) {
             CLKey key = (CLKey) element;
@@ -117,6 +159,12 @@ public class CLContainer extends CLElement {
         throw new CLParsingException("no element for key <" + name + ">", this);
     }
 
+    /**
+     * @TODO: add description
+     * @param name
+     * @return
+     * @throws CLParsingException
+     */
     public int getInt(String name) throws CLParsingException {
         CLElement element = get(name);
         if (element != null) {
@@ -126,6 +174,12 @@ public class CLContainer extends CLElement {
             + " found [" + element.getStrClass() + "] : " + element, this);
     }
 
+    /**
+     * @TODO: add description
+     * @param name
+     * @return
+     * @throws CLParsingException
+     */
     public float getFloat(String name) throws CLParsingException {
         CLElement element = get(name);
         if (element != null) {
@@ -135,6 +189,12 @@ public class CLContainer extends CLElement {
             + " found [" + element.getStrClass() + "] : " + element, this);
     }
 
+    /**
+     * @TODO: add description
+     * @param name
+     * @return
+     * @throws CLParsingException
+     */
     public CLArray getArray(String name) throws CLParsingException {
         CLElement element = get(name);
         if (element instanceof CLArray) {
@@ -144,6 +204,12 @@ public class CLContainer extends CLElement {
             + " found [" + element.getStrClass() + "] : " + element, this);
     }
 
+    /**
+     * @TODO: add description
+     * @param name
+     * @return
+     * @throws CLParsingException
+     */
     public CLObject getObject(String name) throws CLParsingException {
         CLElement element = get(name);
         if (element instanceof CLObject) {
@@ -153,6 +219,12 @@ public class CLContainer extends CLElement {
             + " found [" + element.getStrClass() + "] : " + element, this);
     }
 
+    /**
+     * @TODO: add description
+     * @param name
+     * @return
+     * @throws CLParsingException
+     */
     public String getString(String name) throws CLParsingException {
         CLElement element = get(name);
         if (element instanceof CLString) {
@@ -166,6 +238,12 @@ public class CLContainer extends CLElement {
            + " found [" + strClass + "] : " + element, this);
     }
 
+    /**
+     * @TODO: add description
+     * @param name
+     * @return
+     * @throws CLParsingException
+     */
     public boolean getBoolean(String name) throws CLParsingException {
         CLElement element = get(name);
         if (element instanceof CLToken) {
@@ -179,6 +257,11 @@ public class CLContainer extends CLElement {
   // Optional
   /////////////////////////////////////////////////////////////////////////
 
+    /**
+     * @TODO: add description
+     * @param name
+     * @return
+     */
     public CLElement getOrNull(String name) {
         for (CLElement element : mElements) {
             CLKey key = (CLKey) element;
@@ -189,6 +272,11 @@ public class CLContainer extends CLElement {
         return null;
     }
 
+    /**
+     * @TODO: add description
+     * @param name
+     * @return
+     */
     public CLObject getObjectOrNull(String name) {
         CLElement element = getOrNull(name);
         if (element instanceof CLObject) {
@@ -197,6 +285,11 @@ public class CLContainer extends CLElement {
         return null;
     }
 
+    /**
+     * @TODO: add description
+     * @param name
+     * @return
+     */
     public CLArray getArrayOrNull(String name) {
         CLElement element = getOrNull(name);
         if (element instanceof CLArray) {
@@ -205,6 +298,11 @@ public class CLContainer extends CLElement {
         return null;
     }
 
+    /**
+     * @TODO: add description
+     * @param name
+     * @return
+     */
     public String getStringOrNull(String name) {
         CLElement element = getOrNull(name);
         if (element instanceof CLString) {
@@ -213,6 +311,11 @@ public class CLContainer extends CLElement {
         return null;
     }
 
+    /**
+     * @TODO: add description
+     * @param name
+     * @return
+     */
     public float getFloatOrNaN(String name) {
         CLElement element = getOrNull(name);
         if (element instanceof CLNumber) {
@@ -225,6 +328,12 @@ public class CLContainer extends CLElement {
   // By index
   /////////////////////////////////////////////////////////////////////////
 
+    /**
+     * @TODO: add description
+     * @param index
+     * @return
+     * @throws CLParsingException
+     */
     public CLElement get(int index) throws CLParsingException {
         if (index >= 0 && index < mElements.size()) {
             return mElements.get(index);
@@ -232,6 +341,12 @@ public class CLContainer extends CLElement {
         throw new CLParsingException("no element at index " + index, this);
     }
 
+    /**
+     * @TODO: add description
+     * @param index
+     * @return
+     * @throws CLParsingException
+     */
     public int getInt(int index) throws CLParsingException {
         CLElement element = get(index);
         if (element != null) {
@@ -240,6 +355,12 @@ public class CLContainer extends CLElement {
         throw new CLParsingException("no int at index " + index, this);
     }
 
+    /**
+     * @TODO: add description
+     * @param index
+     * @return
+     * @throws CLParsingException
+     */
     public float getFloat(int index) throws CLParsingException {
         CLElement element = get(index);
         if (element != null) {
@@ -248,6 +369,12 @@ public class CLContainer extends CLElement {
         throw new CLParsingException("no float at index " + index, this);
     }
 
+    /**
+     * @TODO: add description
+     * @param index
+     * @return
+     * @throws CLParsingException
+     */
     public CLArray getArray(int index) throws CLParsingException {
         CLElement element = get(index);
         if (element instanceof CLArray) {
@@ -256,6 +383,12 @@ public class CLContainer extends CLElement {
         throw new CLParsingException("no array at index " + index, this);
     }
 
+    /**
+     * @TODO: add description
+     * @param index
+     * @return
+     * @throws CLParsingException
+     */
     public CLObject getObject(int index) throws CLParsingException {
         CLElement element = get(index);
         if (element instanceof CLObject) {
@@ -264,6 +397,12 @@ public class CLContainer extends CLElement {
         throw new CLParsingException("no object at index " + index, this);
     }
 
+    /**
+     * @TODO: add description
+     * @param index
+     * @return
+     * @throws CLParsingException
+     */
     public String getString(int index) throws CLParsingException {
         CLElement element = get(index);
         if (element instanceof CLString) {
@@ -272,6 +411,12 @@ public class CLContainer extends CLElement {
         throw new CLParsingException("no string at index " + index, this);
     }
 
+    /**
+     * @TODO: add description
+     * @param index
+     * @return
+     * @throws CLParsingException
+     */
     public boolean getBoolean(int index) throws CLParsingException {
         CLElement element = get(index);
         if (element instanceof CLToken) {
@@ -284,6 +429,11 @@ public class CLContainer extends CLElement {
   // Optional
   /////////////////////////////////////////////////////////////////////////
 
+    /**
+     * @TODO: add description
+     * @param index
+     * @return
+     */
     public CLElement getOrNull(int index) {
         if (index >= 0 && index < mElements.size()) {
             return mElements.get(index);
@@ -291,6 +441,11 @@ public class CLContainer extends CLElement {
         return null;
     }
 
+    /**
+     * @TODO: add description
+     * @param index
+     * @return
+     */
     public String getStringOrNull(int index) {
         CLElement element = getOrNull(index);
         if (element instanceof CLString) {

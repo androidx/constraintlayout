@@ -69,6 +69,11 @@ public class ConstraintWidgetContainer extends WidgetContainer {
     }
 
 
+    /**
+     * @TODO: add description
+     * @param optimizeWrap
+     * @return
+     */
     public boolean directMeasure(boolean optimizeWrap) {
         return mDependencyGraph.directMeasure(optimizeWrap);
 //        int paddingLeft = getX();
@@ -89,14 +94,28 @@ public class ConstraintWidgetContainer extends WidgetContainer {
 //        return false;
     }
 
+    /**
+     * @TODO: add description
+     * @param optimizeWrap
+     * @return
+     */
     public boolean directMeasureSetup(boolean optimizeWrap) {
         return mDependencyGraph.directMeasureSetup(optimizeWrap);
     }
 
+    /**
+     * @TODO: add description
+     * @param optimizeWrap
+     * @param orientation
+     * @return
+     */
     public boolean directMeasureWithOrientation(boolean optimizeWrap, int orientation) {
         return mDependencyGraph.directMeasureWithOrientation(optimizeWrap, orientation);
     }
 
+    /**
+     * @TODO: add description
+     */
     public void defineTerminalWidgets() {
         mDependencyGraph.defineTerminalWidgets(getHorizontalDimensionBehaviour(),
                 getVerticalDimensionBehaviour());
@@ -125,12 +144,19 @@ public class ConstraintWidgetContainer extends WidgetContainer {
                 lastMeasureWidth, lastMeasureHeight);
     }
 
+    /**
+     * @TODO: add description
+     */
     public void updateHierarchy() {
         mBasicMeasureSolver.updateHierarchy(this);
     }
 
     protected BasicMeasure.Measurer mMeasurer = null;
 
+    /**
+     * @TODO: add description
+     * @param measurer
+     */
     public void setMeasurer(BasicMeasure.Measurer measurer) {
         mMeasurer = measurer;
         mDependencyGraph.setMeasurer(measurer);
@@ -143,6 +169,10 @@ public class ConstraintWidgetContainer extends WidgetContainer {
     private boolean mIsRtl = false;
     public Metrics mMetrics;
 
+    /**
+     * @TODO: add description
+     * @param metrics
+     */
     public void fillMetrics(Metrics metrics) {
         mMetrics = metrics;
         mSystem.fillMetrics(metrics);
@@ -288,6 +318,10 @@ public class ConstraintWidgetContainer extends WidgetContainer {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param left
+     */
     public void addHorizontalWrapMinVariable(ConstraintAnchor left) {
         if (mHorizontalWrapMin == null || mHorizontalWrapMin.get() == null
                 || left.getFinalValue() > mHorizontalWrapMin.get().getFinalValue()) {
@@ -302,6 +336,10 @@ public class ConstraintWidgetContainer extends WidgetContainer {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param right
+     */
     public void addHorizontalWrapMaxVariable(ConstraintAnchor right) {
         if (mHorizontalWrapMax == null || mHorizontalWrapMax.get() == null
                 || right.getFinalValue() > mHorizontalWrapMax.get().getFinalValue()) {
@@ -523,6 +561,15 @@ public class ConstraintWidgetContainer extends WidgetContainer {
 
     public BasicMeasure.Measure mMeasure = new BasicMeasure.Measure();
 
+    /**
+     * @TODO: add description
+     * @param level
+     * @param widget
+     * @param measurer
+     * @param measure
+     * @param measureStrategy
+     * @return
+     */
     public static boolean measure(int level,
                                   ConstraintWidget widget,
                                   BasicMeasure.Measurer measurer,
@@ -1131,6 +1178,10 @@ public class ConstraintWidgetContainer extends WidgetContainer {
         this.mPass = pass;
     }
 
+    /**
+     * @TODO: add description
+     * @param ret
+     */
     public void getSceneString(StringBuilder ret) {
 
         ret.append(stringId + ":{\n");

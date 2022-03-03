@@ -20,6 +20,12 @@ public class CLString extends CLElement {
     public CLString(char[] content) {
         super(content);
     }
+
+    /**
+     * @TODO: add description
+     * @param content
+     * @return
+     */
     public static CLElement allocate(char[] content) {
         return new CLString(content);
     }

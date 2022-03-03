@@ -20,9 +20,19 @@ public class FloatRect {
     public float left;
     public float right;
     public float top;
+
+    /**
+     * @TODO: add description
+     * @return
+     */
     public final float centerX() {
         return (left + right) * 0.5f;
     }
+
+    /**
+     * @TODO: add description
+     * @return
+     */
     public final float centerY() {
         return (top + bottom) * 0.5f;
     }

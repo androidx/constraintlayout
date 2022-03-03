@@ -29,6 +29,10 @@ public class CustomVariable {
     private String mStringValue = null;
     boolean mBooleanValue;
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public CustomVariable copy() {
         return new CustomVariable(this);
     }
@@ -70,6 +74,11 @@ public class CustomVariable {
         mBooleanValue = value;
     }
 
+    /**
+     * @TODO: add description
+     * @param v
+     * @return
+     */
     public static String colorString(int v) {
         String str = "00000000" + Integer.toHexString(v);
         return "#" + str.substring(str.length() - 8);
@@ -189,6 +198,10 @@ public class CustomVariable {
         return Float.NaN;
     }
 
+    /**
+     * @TODO: add description
+     * @param ret
+     */
     public void getValuesToInterpolate(float[] ret) {
         switch (mType) {
             case TypedValues.Custom.TYPE_INT:
@@ -221,6 +234,10 @@ public class CustomVariable {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param value
+     */
     public void setValue(float[] value) {
         switch (mType) {
             case TypedValues.Custom.TYPE_REFERENCE:
@@ -249,6 +266,13 @@ public class CustomVariable {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param hue
+     * @param saturation
+     * @param value
+     * @return
+     */
     public static int hsvToRgb(float hue, float saturation, float value) {
         int h = (int) (hue * 6);
         float f = hue * 6 - h;
@@ -320,6 +344,10 @@ public class CustomVariable {
 
     }
 
+    /**
+     * @TODO: add description
+     * @param value
+     */
     public void setValue(Object value) {
         switch (mType) {
             case TypedValues.Custom.TYPE_REFERENCE:
@@ -353,6 +381,11 @@ public class CustomVariable {
         return c;
     }
 
+    /**
+     * @TODO: add description
+     * @param value
+     * @return
+     */
     public int getInterpolatedColor(float[] value) {
         int r = clamp((int) ((float) Math.pow(value[0], 1.0 / 2.2) * 255.0f));
         int g = clamp((int) ((float) Math.pow(value[1], 1.0 / 2.2) * 255.0f));
@@ -362,6 +395,11 @@ public class CustomVariable {
         return color;
     }
 
+    /**
+     * @TODO: add description
+     * @param view
+     * @param value
+     */
     public void setInterpolatedValue(MotionWidget view, float[] value) {
 
         switch (mType) {
@@ -389,6 +427,14 @@ public class CustomVariable {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param r
+     * @param g
+     * @param b
+     * @param a
+     * @return
+     */
     public static int rgbaTocColor(float r, float g, float b, float a) {
         int ir = clamp((int) (r * 255f));
         int ig = clamp((int) (g * 255f));
@@ -398,6 +444,10 @@ public class CustomVariable {
         return color;
     }
 
+    /**
+     * @TODO: add description
+     * @param view
+     */
     public void applyToWidget(MotionWidget view) {
         switch (mType) {
             case TypedValues.Custom.TYPE_INT:

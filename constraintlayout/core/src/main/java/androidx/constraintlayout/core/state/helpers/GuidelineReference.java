@@ -44,6 +44,11 @@ public class GuidelineReference implements Facade, Reference {
         mState = state;
     }
 
+    /**
+     * @TODO: add description
+     * @param margin
+     * @return
+     */
     public GuidelineReference start(Object margin) {
         mStart = mState.convertDimension(margin);
         mEnd = -1;
@@ -51,6 +56,11 @@ public class GuidelineReference implements Facade, Reference {
         return this;
     }
 
+    /**
+     * @TODO: add description
+     * @param margin
+     * @return
+     */
     public GuidelineReference end(Object margin) {
         mStart = -1;
         mEnd = mState.convertDimension(margin);
@@ -58,6 +68,11 @@ public class GuidelineReference implements Facade, Reference {
         return this;
     }
 
+    /**
+     * @TODO: add description
+     * @param percent
+     * @return
+     */
     public GuidelineReference percent(float percent) {
         mStart = -1;
         mEnd = -1;
@@ -73,6 +88,9 @@ public class GuidelineReference implements Facade, Reference {
         return mOrientation;
     }
 
+    /**
+     * @TODO: add description
+     */
     public void apply() {
         mGuidelineWidget.setOrientation(mOrientation);
         if (mStart != -1) {
