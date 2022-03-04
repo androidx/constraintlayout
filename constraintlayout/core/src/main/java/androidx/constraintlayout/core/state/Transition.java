@@ -32,9 +32,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Transition implements TypedValues {
-    public final static int START = 0;
-    public final static int END = 1;
-    public final static int INTERPOLATED = 2;
+    public static final int START = 0;
+    public static final int END = 1;
+    public static final int INTERPOLATED = 2;
     static final int EASE_IN_OUT = 0;
     static final int EASE_IN = 1;
     static final int EASE_OUT = 2;
@@ -44,8 +44,8 @@ public class Transition implements TypedValues {
     static final int ANTICIPATE = 6;
     private static final int SPLINE_STRING = -1;
     private static final int INTERPOLATOR_REFERENCE_ID = -2;
-    HashMap<Integer, HashMap<String, KeyPosition>> keyPositions = new HashMap<>();
-    private HashMap<String, WidgetState> state = new HashMap<>();
+    HashMap<Integer, HashMap<String, KeyPosition>> mKeyPositions = new HashMap<>();
+    private HashMap<String, WidgetState> mState = new HashMap<>();
     TypedBundle mBundle = new TypedBundle();
     // Interpolation
     private int mDefaultInterpolator = 0;
@@ -72,14 +72,15 @@ public class Transition implements TypedValues {
             case OVERSHOOT:
                 return v -> (float) Easing.getInterpolator("overshoot").get(v);
             case BOUNCE: // TODO make a better bounce
-                return v -> (float) Easing.getInterpolator("spline(0.0, 0.2, 0.4, 0.6, 0.8 ,1.0, 0.8, 1.0, 0.9, 1.0)").get(v);
+                return v -> (float) Easing.getInterpolator("spline(0.0, 0.2, 0.4, 0.6, "
+                        + "0.8 ,1.0, 0.8, 1.0, 0.9, 1.0)").get(v);
         }
         return null;
     }
 
     public KeyPosition findPreviousPosition(String target, int frameNumber) {
         while (frameNumber >= 0) {
-            HashMap<String, KeyPosition> map = keyPositions.get(frameNumber);
+            HashMap<String, KeyPosition> map = mKeyPositions.get(frameNumber);
             if (map != null) {
                 KeyPosition keyPosition = map.get(target);
                 if (keyPosition != null) {
@@ -93,7 +94,7 @@ public class Transition implements TypedValues {
 
     public KeyPosition findNextPosition(String target, int frameNumber) {
         while (frameNumber <= 100) {
-            HashMap<String, KeyPosition> map = keyPositions.get(frameNumber);
+            HashMap<String, KeyPosition> map = mKeyPositions.get(frameNumber);
             if (map != null) {
                 KeyPosition keyPosition = map.get(target);
                 if (keyPosition != null) {
@@ -109,7 +110,7 @@ public class Transition implements TypedValues {
         int numKeyPositions = 0;
         int frameNumber = 0;
         while (frameNumber <= 100) {
-            HashMap<String, KeyPosition> map = keyPositions.get(frameNumber);
+            HashMap<String, KeyPosition> map = mKeyPositions.get(frameNumber);
             if (map != null) {
                 KeyPosition keyPosition = map.get(frame.widget.stringId);
                 if (keyPosition != null) {
@@ -122,20 +123,20 @@ public class Transition implements TypedValues {
     }
 
     public Motion getMotion(String id) {
-        return getWidgetState(id, null, 0).motionControl;
+        return getWidgetState(id, null, 0).mMotionControl;
     }
 
     public void fillKeyPositions(WidgetFrame frame, float[] x, float[] y, float[] pos) {
         int numKeyPositions = 0;
         int frameNumber = 0;
         while (frameNumber <= 100) {
-            HashMap<String, KeyPosition> map = keyPositions.get(frameNumber);
+            HashMap<String, KeyPosition> map = mKeyPositions.get(frameNumber);
             if (map != null) {
                 KeyPosition keyPosition = map.get(frame.widget.stringId);
                 if (keyPosition != null) {
-                    x[numKeyPositions] = keyPosition.x;
-                    y[numKeyPositions] = keyPosition.y;
-                    pos[numKeyPositions] = keyPosition.frame;
+                    x[numKeyPositions] = keyPosition.mX;
+                    y[numKeyPositions] = keyPosition.mY;
+                    pos[numKeyPositions] = keyPosition.mFrame;
                     numKeyPositions++;
                 }
             }
@@ -144,7 +145,7 @@ public class Transition implements TypedValues {
     }
 
     public boolean hasPositionKeyframes() {
-        return keyPositions.size() > 0;
+        return mKeyPositions.size() > 0;
     }
 
     public void setTransitionProperties(TypedBundle bundle) {
@@ -184,15 +185,15 @@ public class Transition implements TypedValues {
     }
 
     public boolean isEmpty() {
-        return state.isEmpty();
+        return mState.isEmpty();
     }
 
     public void clear() {
-        state.clear();
+        mState.clear();
     }
 
     public boolean contains(String key) {
-        return state.containsKey(key);
+        return mState.containsKey(key);
     }
 
     public void addKeyPosition(String target, TypedBundle bundle) {
@@ -216,10 +217,10 @@ public class Transition implements TypedValues {
         getWidgetState(target, null, 0).setKeyPosition(bundle);
 
         KeyPosition keyPosition = new KeyPosition(target, frame, type, x, y);
-        HashMap<String, KeyPosition> map = keyPositions.get(frame);
+        HashMap<String, KeyPosition> map = mKeyPositions.get(frame);
         if (map == null) {
             map = new HashMap<>();
-            keyPositions.put(frame, map);
+            mKeyPositions.put(frame, map);
         }
         map.put(target, keyPosition);
     }
@@ -250,61 +251,63 @@ public class Transition implements TypedValues {
         if (mEasing != null) {
             progress = (float) mEasing.get(progress);
         }
-        for (String key : state.keySet()) {
-            WidgetState widget = state.get(key);
+        for (String key : mState.keySet()) {
+            WidgetState widget = mState.get(key);
             widget.interpolate(parentWidth, parentHeight, progress, this);
         }
     }
 
     public WidgetFrame getStart(String id) {
-        WidgetState widgetState = state.get(id);
+        WidgetState widgetState = mState.get(id);
         if (widgetState == null) {
             return null;
         }
-        return widgetState.start;
+        return widgetState.mStart;
     }
 
     public WidgetFrame getEnd(String id) {
-        WidgetState widgetState = state.get(id);
+        WidgetState widgetState = mState.get(id);
         if (widgetState == null) {
             return null;
         }
-        return widgetState.end;
+        return widgetState.mEnd;
     }
 
     public WidgetFrame getInterpolated(String id) {
-        WidgetState widgetState = state.get(id);
+        WidgetState widgetState = mState.get(id);
         if (widgetState == null) {
             return null;
         }
-        return widgetState.interpolated;
+        return widgetState.mInterpolated;
     }
 
     public float[] getPath(String id) {
-        WidgetState widgetState = state.get(id);
+        WidgetState widgetState = mState.get(id);
         int duration = 1000;
         int frames = duration / 16;
         float[] mPoints = new float[frames * 2];
-        widgetState.motionControl.buildPath(mPoints, frames);
+        widgetState.mMotionControl.buildPath(mPoints, frames);
         return mPoints;
     }
 
     public int getKeyFrames(String id, float[] rectangles, int[] pathMode, int[] position) {
-        WidgetState widgetState = state.get(id);
-        return widgetState.motionControl.buildKeyFrames(rectangles, pathMode, position);
+        WidgetState widgetState = mState.get(id);
+        return widgetState.mMotionControl.buildKeyFrames(rectangles, pathMode, position);
     }
 
     private WidgetState getWidgetState(String widgetId) {
-        return this.state.get(widgetId);
+        return this.mState.get(widgetId);
     }
 
-    private WidgetState getWidgetState(String widgetId, ConstraintWidget child, int transitionState) {
-        WidgetState widgetState = this.state.get(widgetId);
+    private WidgetState getWidgetState(String widgetId,
+                                       ConstraintWidget child,
+                                       int transitionState) {
+        WidgetState widgetState = this.mState.get(widgetId);
         if (widgetState == null) {
             widgetState = new WidgetState();
-            mBundle.applyDelta(widgetState.motionControl);
+            mBundle.applyDelta(widgetState.mMotionControl);
 
-            state.put(widgetId, widgetState);
+            mState.put(widgetId, widgetState);
             if (child != null) {
                 widgetState.update(child, transitionState);
             }
@@ -319,7 +322,7 @@ public class Transition implements TypedValues {
      * @return
      */
     public WidgetFrame getStart(ConstraintWidget child) {
-        return getWidgetState(child.stringId, null, Transition.START).start;
+        return getWidgetState(child.stringId, null, Transition.START).mStart;
     }
 
     /**
@@ -329,7 +332,7 @@ public class Transition implements TypedValues {
      * @return
      */
     public WidgetFrame getEnd(ConstraintWidget child) {
-        return getWidgetState(child.stringId, null, Transition.END).end;
+        return getWidgetState(child.stringId, null, Transition.END).mEnd;
     }
 
     /**
@@ -339,7 +342,7 @@ public class Transition implements TypedValues {
      * @return
      */
     public WidgetFrame getInterpolated(ConstraintWidget child) {
-        return getWidgetState(child.stringId, null, Transition.INTERPOLATED).interpolated;
+        return getWidgetState(child.stringId, null, Transition.INTERPOLATED).mInterpolated;
     }
 
     public Interpolator getInterpolator() {
@@ -351,92 +354,97 @@ public class Transition implements TypedValues {
     }
 
     static class WidgetState {
-        WidgetFrame start;
-        WidgetFrame end;
-        WidgetFrame interpolated;
-        Motion motionControl;
-        MotionWidget motionWidgetStart;
-        MotionWidget motionWidgetEnd;
-        MotionWidget motionWidgetInterpolated;
-        KeyCache myKeyCache = new KeyCache();
-        int myParentHeight = -1;
-        int myParentWidth = -1;
+        WidgetFrame mStart;
+        WidgetFrame mEnd;
+        WidgetFrame mInterpolated;
+        Motion mMotionControl;
+        MotionWidget mMotionWidgetStart;
+        MotionWidget mMotionWidgetEnd;
+        MotionWidget mMotionWidgetInterpolated;
+        KeyCache mKeyCache = new KeyCache();
+        int mParentHeight = -1;
+        int mParentWidth = -1;
 
-        public WidgetState() {
-            start = new WidgetFrame();
-            end = new WidgetFrame();
-            interpolated = new WidgetFrame();
-            motionWidgetStart = new MotionWidget(start);
-            motionWidgetEnd = new MotionWidget(end);
-            motionWidgetInterpolated = new MotionWidget(interpolated);
-            motionControl = new Motion(motionWidgetStart);
-            motionControl.setStart(motionWidgetStart);
-            motionControl.setEnd(motionWidgetEnd);
+        WidgetState() {
+            mStart = new WidgetFrame();
+            mEnd = new WidgetFrame();
+            mInterpolated = new WidgetFrame();
+            mMotionWidgetStart = new MotionWidget(mStart);
+            mMotionWidgetEnd = new MotionWidget(mEnd);
+            mMotionWidgetInterpolated = new MotionWidget(mInterpolated);
+            mMotionControl = new Motion(mMotionWidgetStart);
+            mMotionControl.setStart(mMotionWidgetStart);
+            mMotionControl.setEnd(mMotionWidgetEnd);
         }
 
         public void setKeyPosition(TypedBundle prop) {
             MotionKeyPosition keyPosition = new MotionKeyPosition();
             prop.applyDelta(keyPosition);
-            motionControl.addKey(keyPosition);
+            mMotionControl.addKey(keyPosition);
         }
 
         public void setKeyAttribute(TypedBundle prop) {
             MotionKeyAttributes keyAttributes = new MotionKeyAttributes();
             prop.applyDelta(keyAttributes);
-            motionControl.addKey(keyAttributes);
+            mMotionControl.addKey(keyAttributes);
         }
 
         public void setKeyCycle(TypedBundle prop) {
             MotionKeyCycle keyAttributes = new MotionKeyCycle();
             prop.applyDelta(keyAttributes);
-            motionControl.addKey(keyAttributes);
+            mMotionControl.addKey(keyAttributes);
         }
 
         public void update(ConstraintWidget child, int state) {
             if (state == START) {
-                start.update(child);
-                motionControl.setStart(motionWidgetStart);
+                mStart.update(child);
+                mMotionControl.setStart(mMotionWidgetStart);
             } else if (state == END) {
-                end.update(child);
-                motionControl.setEnd(motionWidgetEnd);
+                mEnd.update(child);
+                mMotionControl.setEnd(mMotionWidgetEnd);
             }
-            myParentWidth = -1;
+            mParentWidth = -1;
         }
 
         public WidgetFrame getFrame(int type) {
             if (type == START) {
-                return start;
+                return mStart;
             } else if (type == END) {
-                return end;
+                return mEnd;
             }
-            return interpolated;
+            return mInterpolated;
         }
 
-        public void interpolate(int parentWidth, int parentHeight, float progress, Transition transition) {
-            if (true || parentHeight != myParentHeight || parentWidth != myParentWidth) {
-                myParentHeight = parentHeight;
-                myParentWidth = parentWidth;
-                motionControl.setup(parentWidth, parentHeight, 1, System.nanoTime());
+        public void interpolate(int parentWidth,
+                                int parentHeight,
+                                float progress,
+                                Transition transition) {
+            if (true || parentHeight != mParentHeight || parentWidth != mParentWidth) {
+                mParentHeight = parentHeight;
+                mParentWidth = parentWidth;
+                mMotionControl.setup(parentWidth, parentHeight, 1, System.nanoTime());
             }
-            WidgetFrame.interpolate(parentWidth, parentHeight, interpolated, start, end, transition, progress);
-            interpolated.interpolatedPos = progress;
-            motionControl.interpolate(motionWidgetInterpolated, progress, System.nanoTime(), myKeyCache);
+            WidgetFrame.interpolate(parentWidth, parentHeight,
+                    mInterpolated, mStart, mEnd, transition, progress);
+            mInterpolated.interpolatedPos = progress;
+            mMotionControl.interpolate(mMotionWidgetInterpolated,
+                    progress, System.nanoTime(), mKeyCache);
         }
     }
 
     static class KeyPosition {
-        int frame;
-        String target;
-        int type;
-        float x;
-        float y;
+        int mFrame;
+        String mTarget;
+        int mType;
+        float mX;
+        float mY;
 
-        public KeyPosition(String target, int frame, int type, float x, float y) {
-            this.target = target;
-            this.frame = frame;
-            this.type = type;
-            this.x = x;
-            this.y = y;
+        KeyPosition(String target, int frame, int type, float x, float y) {
+            this.mTarget = target;
+            this.mFrame = frame;
+            this.mType = type;
+            this.mX = x;
+            this.mY = y;
         }
     }
 }

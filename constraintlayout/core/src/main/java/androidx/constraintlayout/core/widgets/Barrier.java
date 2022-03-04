@@ -37,7 +37,7 @@ public class Barrier extends HelperWidget {
 
     private boolean mAllowsGoneWidget = true;
     private int mMargin = 0;
-    boolean resolved = false;
+    boolean mResolved = false;
 
     public Barrier() {}
     public Barrier(String debugName) {
@@ -86,11 +86,11 @@ public class Barrier extends HelperWidget {
     }
 
     public boolean isResolvedHorizontally() {
-        return resolved;
+        return mResolved;
     }
 
     public boolean isResolvedVertically() {
-        return resolved;
+        return mResolved;
     }
 
     @Override
@@ -159,11 +159,11 @@ public class Barrier extends HelperWidget {
         }
 
         if (USE_RESOLUTION) {
-            if (!resolved) {
+            if (!mResolved) {
                 allSolved();
             }
-            if (resolved) {
-                resolved = false;
+            if (mResolved) {
+                mResolved = false;
                 if (mBarrierType == LEFT || mBarrierType == RIGHT) {
                     system.addEquality(mLeft.mSolverVariable, mX);
                     system.addEquality(mRight.mSolverVariable, mX);
@@ -366,7 +366,7 @@ public class Barrier extends HelperWidget {
                 System.out.println("*** BARRIER " + getDebugName()
                         + " SOLVED TO " + barrierPosition + " ***");
             }
-            resolved = true;
+            mResolved = true;
             return true;
         }
         return false;

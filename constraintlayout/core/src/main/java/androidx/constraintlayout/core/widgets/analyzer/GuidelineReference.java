@@ -23,8 +23,8 @@ class GuidelineReference extends WidgetRun {
 
     GuidelineReference(ConstraintWidget widget) {
         super(widget);
-        widget.horizontalRun.clear();
-        widget.verticalRun.clear();
+        widget.mHorizontalRun.clear();
+        widget.mVerticalRun.clear();
         this.orientation = ((Guideline) widget).getOrientation();
     }
 
@@ -46,8 +46,8 @@ class GuidelineReference extends WidgetRun {
 
     private void addDependency(
             androidx.constraintlayout.core.widgets.analyzer.DependencyNode node) {
-        start.dependencies.add(node);
-        node.targets.add(start);
+        start.mDependencies.add(node);
+        node.mTargets.add(start);
     }
 
     @Override
@@ -60,64 +60,64 @@ class GuidelineReference extends WidgetRun {
         }
         // ready to solve, centering.
         androidx.constraintlayout.core.widgets.analyzer.DependencyNode startTarget =
-                start.targets.get(0);
-        Guideline guideline = (Guideline) widget;
+                start.mTargets.get(0);
+        Guideline guideline = (Guideline) mWidget;
         int startPos = (int) (0.5f + startTarget.value * guideline.getRelativePercent());
         start.resolve(startPos);
     }
 
     @Override
     void apply() {
-        Guideline guideline = (Guideline) widget;
+        Guideline guideline = (Guideline) mWidget;
         int relativeBegin = guideline.getRelativeBegin();
         int relativeEnd = guideline.getRelativeEnd();
         float percent = guideline.getRelativePercent();
         if (guideline.getOrientation() == ConstraintWidget.VERTICAL) {
             if (relativeBegin != -1) {
-                start.targets.add(widget.mParent.horizontalRun.start);
-                widget.mParent.horizontalRun.start.dependencies.add(start);
-                start.margin = relativeBegin;
+                start.mTargets.add(mWidget.mParent.mHorizontalRun.start);
+                mWidget.mParent.mHorizontalRun.start.mDependencies.add(start);
+                start.mMargin = relativeBegin;
             } else if (relativeEnd != -1) {
-                start.targets.add(widget.mParent.horizontalRun.end);
-                widget.mParent.horizontalRun.end.dependencies.add(start);
-                start.margin = -relativeEnd;
+                start.mTargets.add(mWidget.mParent.mHorizontalRun.end);
+                mWidget.mParent.mHorizontalRun.end.mDependencies.add(start);
+                start.mMargin = -relativeEnd;
             } else {
                 start.delegateToWidgetRun = true;
-                start.targets.add(widget.mParent.horizontalRun.end);
-                widget.mParent.horizontalRun.end.dependencies.add(start);
+                start.mTargets.add(mWidget.mParent.mHorizontalRun.end);
+                mWidget.mParent.mHorizontalRun.end.mDependencies.add(start);
             }
             // FIXME -- if we move the DependencyNode directly
             //              in the ConstraintAnchor we'll be good.
-            addDependency(widget.horizontalRun.start);
-            addDependency(widget.horizontalRun.end);
+            addDependency(mWidget.mHorizontalRun.start);
+            addDependency(mWidget.mHorizontalRun.end);
         } else {
             if (relativeBegin != -1) {
-                start.targets.add(widget.mParent.verticalRun.start);
-                widget.mParent.verticalRun.start.dependencies.add(start);
-                start.margin = relativeBegin;
+                start.mTargets.add(mWidget.mParent.mVerticalRun.start);
+                mWidget.mParent.mVerticalRun.start.mDependencies.add(start);
+                start.mMargin = relativeBegin;
             } else if (relativeEnd != -1) {
-                start.targets.add(widget.mParent.verticalRun.end);
-                widget.mParent.verticalRun.end.dependencies.add(start);
-                start.margin = -relativeEnd;
+                start.mTargets.add(mWidget.mParent.mVerticalRun.end);
+                mWidget.mParent.mVerticalRun.end.mDependencies.add(start);
+                start.mMargin = -relativeEnd;
             } else {
                 start.delegateToWidgetRun = true;
-                start.targets.add(widget.mParent.verticalRun.end);
-                widget.mParent.verticalRun.end.dependencies.add(start);
+                start.mTargets.add(mWidget.mParent.mVerticalRun.end);
+                mWidget.mParent.mVerticalRun.end.mDependencies.add(start);
             }
             // FIXME -- if we move the DependencyNode directly
             //              in the ConstraintAnchor we'll be good.
-            addDependency(widget.verticalRun.start);
-            addDependency(widget.verticalRun.end);
+            addDependency(mWidget.mVerticalRun.start);
+            addDependency(mWidget.mVerticalRun.end);
         }
     }
 
     @Override
     public void applyToWidget() {
-        Guideline guideline = (Guideline) widget;
+        Guideline guideline = (Guideline) mWidget;
         if (guideline.getOrientation() == ConstraintWidget.VERTICAL) {
-            widget.setX(start.value);
+            mWidget.setX(start.value);
         } else {
-            widget.setY(start.value);
+            mWidget.setY(start.value);
         }
     }
 }

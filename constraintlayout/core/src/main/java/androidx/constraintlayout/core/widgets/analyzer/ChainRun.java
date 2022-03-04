@@ -29,7 +29,7 @@ import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 import java.util.ArrayList;
 
 public class ChainRun extends WidgetRun {
-    ArrayList<WidgetRun> widgets = new ArrayList<>();
+    ArrayList<WidgetRun> mWidgets = new ArrayList<>();
     private int mChainStyle;
 
     public ChainRun(ConstraintWidget widget, int orientation) {
@@ -42,7 +42,7 @@ public class ChainRun extends WidgetRun {
     public String toString() {
         StringBuilder log = new StringBuilder("ChainRun ");
         log.append((orientation == HORIZONTAL ? "horizontal : " : "vertical : "));
-        for (WidgetRun run : widgets) {
+        for (WidgetRun run : mWidgets) {
             log.append("<");
             log.append(run);
             log.append("> ");
@@ -52,9 +52,9 @@ public class ChainRun extends WidgetRun {
 
     @Override
     boolean supportsWrapComputation() {
-        final int count = widgets.size();
+        final int count = mWidgets.size();
         for (int i = 0; i < count; i++) {
-            WidgetRun run = widgets.get(i);
+            WidgetRun run = mWidgets.get(i);
             if (!run.supportsWrapComputation()) {
                 return false;
             }
@@ -63,53 +63,53 @@ public class ChainRun extends WidgetRun {
     }
 
     public long getWrapDimension() {
-        final int count = widgets.size();
+        final int count = mWidgets.size();
         long wrapDimension = 0;
         for (int i = 0; i < count; i++) {
-            WidgetRun run = widgets.get(i);
-            wrapDimension += run.start.margin;
+            WidgetRun run = mWidgets.get(i);
+            wrapDimension += run.start.mMargin;
             wrapDimension += run.getWrapDimension();
-            wrapDimension += run.end.margin;
+            wrapDimension += run.end.mMargin;
         }
         return wrapDimension;
     }
 
     private void build() {
-        ConstraintWidget current = widget;
+        ConstraintWidget current = mWidget;
         ConstraintWidget previous = current.getPreviousChainMember(orientation);
         while (previous != null) {
             current = previous;
             previous = current.getPreviousChainMember(orientation);
         }
-        widget = current; // first element of the chain
-        widgets.add(current.getRun(orientation));
+        mWidget = current; // first element of the chain
+        mWidgets.add(current.getRun(orientation));
         ConstraintWidget next = current.getNextChainMember(orientation);
         while (next != null) {
             current = next;
-            widgets.add(current.getRun(orientation));
+            mWidgets.add(current.getRun(orientation));
             next = current.getNextChainMember(orientation);
         }
-        for (WidgetRun run : widgets) {
+        for (WidgetRun run : mWidgets) {
             if (orientation == HORIZONTAL) {
-                run.widget.horizontalChainRun = this;
+                run.mWidget.horizontalChainRun = this;
             } else if (orientation == ConstraintWidget.VERTICAL) {
-                run.widget.verticalChainRun = this;
+                run.mWidget.verticalChainRun = this;
             }
         }
         boolean isInRtl = (orientation == HORIZONTAL)
-                && ((ConstraintWidgetContainer) widget.getParent()).isRtl();
-        if (isInRtl && widgets.size() > 1) {
-            widget = widgets.get(widgets.size() - 1).widget;
+                && ((ConstraintWidgetContainer) mWidget.getParent()).isRtl();
+        if (isInRtl && mWidgets.size() > 1) {
+            mWidget = mWidgets.get(mWidgets.size() - 1).mWidget;
         }
         mChainStyle = orientation == HORIZONTAL
-                ? widget.getHorizontalChainStyle() : widget.getVerticalChainStyle();
+                ? mWidget.getHorizontalChainStyle() : mWidget.getVerticalChainStyle();
     }
 
 
     @Override
     void clear() {
-        runGroup = null;
-        for (WidgetRun run : widgets) {
+        mRunGroup = null;
+        for (WidgetRun run : mWidgets) {
             run.clear();
         }
     }
@@ -126,7 +126,7 @@ public class ChainRun extends WidgetRun {
             return;
         }
 
-        ConstraintWidget parent = widget.getParent();
+        ConstraintWidget parent = mWidget.getParent();
         boolean isInRtl = false;
         if (parent instanceof ConstraintWidgetContainer) {
             isInRtl = ((ConstraintWidgetContainer) parent).isRtl();
@@ -136,12 +136,12 @@ public class ChainRun extends WidgetRun {
         int numMatchConstraints = 0;
         float weights = 0;
         int numVisibleWidgets = 0;
-        final int count = widgets.size();
+        final int count = mWidgets.size();
         // let's find the first visible widget...
         int firstVisibleWidget = -1;
         for (int i = 0; i < count; i++) {
-            WidgetRun run = widgets.get(i);
-            if (run.widget.getVisibility() == GONE) {
+            WidgetRun run = mWidgets.get(i);
+            if (run.mWidget.getVisibility() == GONE) {
                 continue;
             }
             firstVisibleWidget = i;
@@ -150,8 +150,8 @@ public class ChainRun extends WidgetRun {
         // now the last visible widget...
         int lastVisibleWidget = -1;
         for (int i = count - 1; i >= 0; i--) {
-            WidgetRun run = widgets.get(i);
-            if (run.widget.getVisibility() == GONE) {
+            WidgetRun run = mWidgets.get(i);
+            if (run.mWidget.getVisibility() == GONE) {
                 continue;
             }
             lastVisibleWidget = i;
@@ -159,33 +159,34 @@ public class ChainRun extends WidgetRun {
         }
         for (int j = 0; j < 2; j++) {
             for (int i = 0; i < count; i++) {
-                WidgetRun run = widgets.get(i);
-                if (run.widget.getVisibility() == GONE) {
+                WidgetRun run = mWidgets.get(i);
+                if (run.mWidget.getVisibility() == GONE) {
                     continue;
                 }
                 numVisibleWidgets++;
                 if (i > 0 && i >= firstVisibleWidget) {
-                    size += run.start.margin;
+                    size += run.start.mMargin;
                 }
-                int dimension = run.dimension.value;
-                boolean treatAsFixed = run.dimensionBehavior != MATCH_CONSTRAINT;
+                int dimension = run.mDimension.value;
+                boolean treatAsFixed = run.mDimensionBehavior != MATCH_CONSTRAINT;
                 if (treatAsFixed) {
-                    if (orientation == HORIZONTAL && !run.widget.horizontalRun.dimension.resolved) {
+                    if (orientation == HORIZONTAL
+                            && !run.mWidget.mHorizontalRun.mDimension.resolved) {
                         return;
                     }
-                    if (orientation == VERTICAL && !run.widget.verticalRun.dimension.resolved) {
+                    if (orientation == VERTICAL && !run.mWidget.mVerticalRun.mDimension.resolved) {
                         return;
                     }
                 } else if (run.matchConstraintsType == MATCH_CONSTRAINT_WRAP && j == 0) {
                     treatAsFixed = true;
-                    dimension = run.dimension.wrapValue;
+                    dimension = run.mDimension.wrapValue;
                     numMatchConstraints++;
-                } else if (run.dimension.resolved) {
+                } else if (run.mDimension.resolved) {
                     treatAsFixed = true;
                 }
                 if (!treatAsFixed) { // only for the first pass
                     numMatchConstraints++;
-                    float weight = run.widget.mWeight[orientation];
+                    float weight = run.mWidget.mWeight[orientation];
                     if (weight >= 0) {
                         weights += weight;
                     }
@@ -193,7 +194,7 @@ public class ChainRun extends WidgetRun {
                     size += dimension;
                 }
                 if (i < count - 1 && i < lastVisibleWidget) {
-                    size += -run.end.margin;
+                    size += -run.end.mMargin;
                 }
             }
             if (size < distance || numMatchConstraints == 0) {
@@ -224,28 +225,28 @@ public class ChainRun extends WidgetRun {
 
             int appliedLimits = 0;
             for (int i = 0; i < count; i++) {
-                WidgetRun run = widgets.get(i);
-                if (run.widget.getVisibility() == GONE) {
+                WidgetRun run = mWidgets.get(i);
+                if (run.mWidget.getVisibility() == GONE) {
                     continue;
                 }
-                if (run.dimensionBehavior == MATCH_CONSTRAINT && !run.dimension.resolved) {
+                if (run.mDimensionBehavior == MATCH_CONSTRAINT && !run.mDimension.resolved) {
                     int dimension = matchConstraintsDimension;
                     if (weights > 0) {
-                        float weight = run.widget.mWeight[orientation];
+                        float weight = run.mWidget.mWeight[orientation];
                         dimension = (int) (0.5f + weight * (distance - size) / weights);
                     }
                     int max;
                     int min;
                     int value = dimension;
                     if (orientation == HORIZONTAL) {
-                        max = run.widget.mMatchConstraintMaxWidth;
-                        min = run.widget.mMatchConstraintMinWidth;
+                        max = run.mWidget.mMatchConstraintMaxWidth;
+                        min = run.mWidget.mMatchConstraintMinWidth;
                     } else {
-                        max = run.widget.mMatchConstraintMaxHeight;
-                        min = run.widget.mMatchConstraintMinHeight;
+                        max = run.mWidget.mMatchConstraintMaxHeight;
+                        min = run.mWidget.mMatchConstraintMinHeight;
                     }
                     if (run.matchConstraintsType == MATCH_CONSTRAINT_WRAP) {
-                        value = Math.min(value, run.dimension.wrapValue);
+                        value = Math.min(value, run.mDimension.wrapValue);
                     }
                     value = Math.max(min, value);
                     if (max > 0) {
@@ -255,7 +256,7 @@ public class ChainRun extends WidgetRun {
                         appliedLimits++;
                         dimension = value;
                     }
-                    run.dimension.resolve(dimension);
+                    run.mDimension.resolve(dimension);
                 }
             }
             if (appliedLimits > 0) {
@@ -263,16 +264,16 @@ public class ChainRun extends WidgetRun {
                 // we have to recompute the sizes
                 size = 0;
                 for (int i = 0; i < count; i++) {
-                    WidgetRun run = widgets.get(i);
-                    if (run.widget.getVisibility() == GONE) {
+                    WidgetRun run = mWidgets.get(i);
+                    if (run.mWidget.getVisibility() == GONE) {
                         continue;
                     }
                     if (i > 0 && i >= firstVisibleWidget) {
-                        size += run.start.margin;
+                        size += run.start.mMargin;
                     }
-                    size += run.dimension.value;
+                    size += run.mDimension.value;
                     if (i < count - 1 && i < lastVisibleWidget) {
-                        size += -run.end.margin;
+                        size += -run.end.mMargin;
                     }
                 }
             }
@@ -306,8 +307,8 @@ public class ChainRun extends WidgetRun {
                 if (isInRtl) {
                     index = count - (i + 1);
                 }
-                WidgetRun run = widgets.get(index);
-                if (run.widget.getVisibility() == GONE) {
+                WidgetRun run = mWidgets.get(index);
+                if (run.mWidget.getVisibility() == GONE) {
                     run.start.resolve(position);
                     run.end.resolve(position);
                     continue;
@@ -321,9 +322,9 @@ public class ChainRun extends WidgetRun {
                 }
                 if (i > 0 && i >= firstVisibleWidget) {
                     if (isInRtl) {
-                        position -= run.start.margin;
+                        position -= run.start.mMargin;
                     } else {
-                        position += run.start.margin;
+                        position += run.start.mMargin;
                     }
                 }
 
@@ -333,10 +334,10 @@ public class ChainRun extends WidgetRun {
                     run.start.resolve(position);
                 }
 
-                int dimension = run.dimension.value;
-                if (run.dimensionBehavior == MATCH_CONSTRAINT
+                int dimension = run.mDimension.value;
+                if (run.mDimensionBehavior == MATCH_CONSTRAINT
                         && run.matchConstraintsType == MATCH_CONSTRAINT_WRAP) {
-                    dimension = run.dimension.wrapValue;
+                    dimension = run.mDimension.wrapValue;
                 }
                 if (isInRtl) {
                     position -= dimension;
@@ -349,12 +350,12 @@ public class ChainRun extends WidgetRun {
                 } else {
                     run.end.resolve(position);
                 }
-                run.resolved = true;
+                run.mResolved = true;
                 if (i < count - 1 && i < lastVisibleWidget) {
                     if (isInRtl) {
-                        position -= -run.end.margin;
+                        position -= -run.end.mMargin;
                     } else {
-                        position += -run.end.margin;
+                        position += -run.end.mMargin;
                     }
                 }
             }
@@ -368,8 +369,8 @@ public class ChainRun extends WidgetRun {
                 if (isInRtl) {
                     index = count - (i + 1);
                 }
-                WidgetRun run = widgets.get(index);
-                if (run.widget.getVisibility() == GONE) {
+                WidgetRun run = mWidgets.get(index);
+                if (run.mWidget.getVisibility() == GONE) {
                     run.start.resolve(position);
                     run.end.resolve(position);
                     continue;
@@ -381,9 +382,9 @@ public class ChainRun extends WidgetRun {
                 }
                 if (i > 0 && i >= firstVisibleWidget) {
                     if (isInRtl) {
-                        position -= run.start.margin;
+                        position -= run.start.mMargin;
                     } else {
-                        position += run.start.margin;
+                        position += run.start.mMargin;
                     }
                 }
 
@@ -393,10 +394,10 @@ public class ChainRun extends WidgetRun {
                     run.start.resolve(position);
                 }
 
-                int dimension = run.dimension.value;
-                if (run.dimensionBehavior == MATCH_CONSTRAINT
+                int dimension = run.mDimension.value;
+                if (run.mDimensionBehavior == MATCH_CONSTRAINT
                         && run.matchConstraintsType == MATCH_CONSTRAINT_WRAP) {
-                    dimension = Math.min(dimension, run.dimension.wrapValue);
+                    dimension = Math.min(dimension, run.mDimension.wrapValue);
                 }
 
                 if (isInRtl) {
@@ -412,15 +413,15 @@ public class ChainRun extends WidgetRun {
                 }
                 if (i < count - 1 && i < lastVisibleWidget) {
                     if (isInRtl) {
-                        position -= -run.end.margin;
+                        position -= -run.end.mMargin;
                     } else {
-                        position += -run.end.margin;
+                        position += -run.end.mMargin;
                     }
                 }
             }
         } else if (mChainStyle == ConstraintWidget.CHAIN_PACKED) {
-            float bias = (orientation == HORIZONTAL) ? widget.getHorizontalBiasPercent()
-                    : widget.getVerticalBiasPercent();
+            float bias = (orientation == HORIZONTAL) ? mWidget.getHorizontalBiasPercent()
+                    : mWidget.getVerticalBiasPercent();
             if (isInRtl) {
                 bias = 1 - bias;
             }
@@ -438,17 +439,17 @@ public class ChainRun extends WidgetRun {
                 if (isInRtl) {
                     index = count - (i + 1);
                 }
-                WidgetRun run = widgets.get(index);
-                if (run.widget.getVisibility() == GONE) {
+                WidgetRun run = mWidgets.get(index);
+                if (run.mWidget.getVisibility() == GONE) {
                     run.start.resolve(position);
                     run.end.resolve(position);
                     continue;
                 }
                 if (i > 0 && i >= firstVisibleWidget) {
                     if (isInRtl) {
-                        position -= run.start.margin;
+                        position -= run.start.mMargin;
                     } else {
-                        position += run.start.margin;
+                        position += run.start.mMargin;
                     }
                 }
                 if (isInRtl) {
@@ -457,10 +458,10 @@ public class ChainRun extends WidgetRun {
                     run.start.resolve(position);
                 }
 
-                int dimension = run.dimension.value;
-                if (run.dimensionBehavior == MATCH_CONSTRAINT
+                int dimension = run.mDimension.value;
+                if (run.mDimensionBehavior == MATCH_CONSTRAINT
                         && run.matchConstraintsType == MATCH_CONSTRAINT_WRAP) {
-                    dimension = run.dimension.wrapValue;
+                    dimension = run.mDimension.wrapValue;
                 }
                 if (isInRtl) {
                     position -= dimension;
@@ -475,9 +476,9 @@ public class ChainRun extends WidgetRun {
                 }
                 if (i < count - 1 && i < lastVisibleWidget) {
                     if (isInRtl) {
-                        position -= -run.end.margin;
+                        position -= -run.end.mMargin;
                     } else {
-                        position += -run.end.margin;
+                        position += -run.end.mMargin;
                     }
                 }
             }
@@ -485,27 +486,27 @@ public class ChainRun extends WidgetRun {
     }
 
     public void applyToWidget() {
-        for (int i = 0; i < widgets.size(); i++) {
-            WidgetRun run = widgets.get(i);
+        for (int i = 0; i < mWidgets.size(); i++) {
+            WidgetRun run = mWidgets.get(i);
             run.applyToWidget();
         }
     }
 
     private ConstraintWidget getFirstVisibleWidget() {
-        for (int i = 0; i < widgets.size(); i++) {
-            WidgetRun run = widgets.get(i);
-            if (run.widget.getVisibility() != GONE) {
-                return run.widget;
+        for (int i = 0; i < mWidgets.size(); i++) {
+            WidgetRun run = mWidgets.get(i);
+            if (run.mWidget.getVisibility() != GONE) {
+                return run.mWidget;
             }
         }
         return null;
     }
 
     private ConstraintWidget getLastVisibleWidget() {
-        for (int i = widgets.size() - 1; i >= 0; i--) {
-            WidgetRun run = widgets.get(i);
-            if (run.widget.getVisibility() != GONE) {
-                return run.widget;
+        for (int i = mWidgets.size() - 1; i >= 0; i--) {
+            WidgetRun run = mWidgets.get(i);
+            if (run.mWidget.getVisibility() != GONE) {
+                return run.mWidget;
             }
         }
         return null;
@@ -514,17 +515,17 @@ public class ChainRun extends WidgetRun {
 
     @Override
     void apply() {
-        for (WidgetRun run : widgets) {
+        for (WidgetRun run : mWidgets) {
             run.apply();
         }
-        int count = widgets.size();
+        int count = mWidgets.size();
         if (count < 1) {
             return;
         }
 
         // get the first and last element of the chain
-        ConstraintWidget firstWidget = widgets.get(0).widget;
-        ConstraintWidget lastWidget = widgets.get(count - 1).widget;
+        ConstraintWidget firstWidget = mWidgets.get(0).mWidget;
+        ConstraintWidget lastWidget = mWidgets.get(count - 1).mWidget;
 
         if (orientation == HORIZONTAL) {
             ConstraintAnchor startAnchor = firstWidget.mLeft;

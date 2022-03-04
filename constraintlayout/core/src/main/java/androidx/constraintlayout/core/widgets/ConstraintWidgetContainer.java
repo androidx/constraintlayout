@@ -321,7 +321,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
         mSystem.addGreaterThan(parentMax, variable, 0, wrapStrength);
     }
 
-    HashSet<ConstraintWidget> widgetsToAdd = new HashSet<>();
+    HashSet<ConstraintWidget> mWidgetsToAdd = new HashSet<>();
 
     /**
      * Add this widget to the solver
@@ -359,12 +359,12 @@ public class ConstraintWidgetContainer extends WidgetContainer {
             }
         }
 
-        widgetsToAdd.clear();
+        mWidgetsToAdd.clear();
         for (int i = 0; i < count; i++) {
             ConstraintWidget widget = mChildren.get(i);
             if (widget.addFirst()) {
                 if (widget instanceof VirtualLayout) {
-                    widgetsToAdd.add(widget);
+                    mWidgetsToAdd.add(widget);
                 } else {
                     widget.addToSolver(system, optimize);
                 }
@@ -373,26 +373,26 @@ public class ConstraintWidgetContainer extends WidgetContainer {
 
         // If we have virtual layouts, we need to add them to the solver in the correct
         // order (in case they reference one another)
-        while (widgetsToAdd.size() > 0) {
-            int numLayouts = widgetsToAdd.size();
+        while (mWidgetsToAdd.size() > 0) {
+            int numLayouts = mWidgetsToAdd.size();
             VirtualLayout layout = null;
-            for (ConstraintWidget widget : widgetsToAdd) {
+            for (ConstraintWidget widget : mWidgetsToAdd) {
                 layout = (VirtualLayout) widget;
 
                 // we'll go through the virtual layouts that references others first, to give
                 // them a shot at setting their constraints.
-                if (layout.contains(widgetsToAdd)) {
+                if (layout.contains(mWidgetsToAdd)) {
                     layout.addToSolver(system, optimize);
-                    widgetsToAdd.remove(layout);
+                    mWidgetsToAdd.remove(layout);
                     break;
                 }
             }
-            if (numLayouts == widgetsToAdd.size()) {
+            if (numLayouts == mWidgetsToAdd.size()) {
                 // looks we didn't find anymore dependency, let's add everything.
-                for (ConstraintWidget widget : widgetsToAdd) {
+                for (ConstraintWidget widget : mWidgetsToAdd) {
                     widget.addToSolver(system, optimize);
                 }
-                widgetsToAdd.clear();
+                mWidgetsToAdd.clear();
             }
         }
 
@@ -663,7 +663,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
         return measure.measuredNeedsSolverPass;
     }
 
-    static int myCounter = 0;
+    static int sMyCounter = 0;
 
     /**
      * Layout the tree of widgets
@@ -711,7 +711,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
         // Only try the direct optimization in the first layout pass
         if (mPass == 0 && Optimizer.enabled(mOptimizationLevel, Optimizer.OPTIMIZATION_DIRECT)) {
             if (FULL_DEBUG) {
-                System.out.println("Direct pass " + myCounter++);
+                System.out.println("Direct pass " + sMyCounter++);
             }
             Direct.solvingPass(this, getMeasurer());
             if (FULL_DEBUG) {
@@ -884,7 +884,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
                 System.out.println("EXCEPTION : " + e);
             }
             if (needsSolving) {
-                needsSolving = updateChildrenFromSolver(mSystem, Optimizer.flags);
+                needsSolving = updateChildrenFromSolver(mSystem, Optimizer.sFlags);
             } else {
                 updateFromSolver(mSystem, optimize);
                 for (int i = 0; i < count; i++) {
@@ -895,7 +895,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
             }
 
             if (hasWrapContent && countSolve < MAX_ITERATIONS
-                    && Optimizer.flags[Optimizer.FLAG_RECOMPUTE_BOUNDS]) {
+                    && Optimizer.sFlags[Optimizer.FLAG_RECOMPUTE_BOUNDS]) {
                 // let's get the new bounds
                 int maxX = 0;
                 int maxY = 0;

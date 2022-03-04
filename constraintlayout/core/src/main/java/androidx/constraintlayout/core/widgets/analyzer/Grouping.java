@@ -162,7 +162,8 @@ public class Grouping {
         }
         ArrayList<WidgetGroup> allDependencyLists = new ArrayList<>();
 
-        if (true || layout.getHorizontalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
+        if (true || layout.getHorizontalDimensionBehaviour()
+                == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
             //horizontalDependencyLists; //new ArrayList<>();
             ArrayList<WidgetGroup> dependencyLists = allDependencyLists;
 
@@ -210,7 +211,8 @@ public class Grouping {
             }
         }
 
-        if (true || layout.getVerticalDimensionBehaviour() == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
+        if (true || layout.getVerticalDimensionBehaviour()
+                == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
             //verticalDependencyLists; //new ArrayList<>();
             ArrayList<WidgetGroup> dependencyLists = allDependencyLists;
 
@@ -375,7 +377,7 @@ public class Grouping {
         final int count = horizontalDependencyLists.size();
         for (int i = 0; i < count; i++) {
             WidgetGroup group = horizontalDependencyLists.get(i);
-            if (groupId == group.id) {
+            if (groupId == group.getId()) {
                 return group;
             }
         }
@@ -397,7 +399,7 @@ public class Grouping {
                     + " dependents of " + constraintWidget.getDebugName()
                     + " group " + group + " widget group id " + groupId);
         }
-        if (groupId != -1 && (group == null || (groupId != group.id))) {
+        if (groupId != -1 && (group == null || (groupId != group.getId()))) {
             // already in a group!
             if (DEBUG_GROUPING) {
                 System.out.println("widget " + constraintWidget.getDebugName()

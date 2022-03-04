@@ -16,7 +16,9 @@
 
 package androidx.constraintlayout.core.widgets;
 
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.*;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.GONE;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_SPREAD;
 
 import androidx.constraintlayout.core.ArrayRow;
 import androidx.constraintlayout.core.LinearSystem;

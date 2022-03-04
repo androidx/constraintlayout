@@ -16,11 +16,10 @@
 
 package androidx.constraintlayout.core.state.helpers;
 
-import androidx.constraintlayout.core.state.ConstraintReference;
-import androidx.constraintlayout.core.widgets.ConstraintWidget;
-import androidx.constraintlayout.core.widgets.Guideline;
 import androidx.constraintlayout.core.state.Reference;
 import androidx.constraintlayout.core.state.State;
+import androidx.constraintlayout.core.widgets.ConstraintWidget;
+import androidx.constraintlayout.core.widgets.Guideline;
 
 public class GuidelineReference implements Facade, Reference {
 
@@ -31,13 +30,13 @@ public class GuidelineReference implements Facade, Reference {
     private int mEnd = -1;
     private float mPercent = 0;
 
-    private Object key;
+    private Object mKey;
 
     public void setKey(Object key) {
-        this.key = key;
+        this.mKey = key;
     }
     public Object getKey() {
-        return key;
+        return mKey;
     }
 
     public GuidelineReference(State state) {

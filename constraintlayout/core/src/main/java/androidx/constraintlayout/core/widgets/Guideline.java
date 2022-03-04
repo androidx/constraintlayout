@@ -37,7 +37,7 @@ public class Guideline extends ConstraintWidget {
     protected float mRelativePercent = -1;
     protected int mRelativeBegin = -1;
     protected int mRelativeEnd = -1;
-    protected boolean guidelineUseRtl = true;
+    protected boolean mGuidelineUseRtl = true;
 
     private ConstraintAnchor mAnchor = mTop;
     private int mOrientation = HORIZONTAL;
@@ -60,7 +60,7 @@ public class Guideline extends ConstraintWidget {
         mRelativePercent = srcGuideline.mRelativePercent;
         mRelativeBegin = srcGuideline.mRelativeBegin;
         mRelativeEnd = srcGuideline.mRelativeEnd;
-        guidelineUseRtl = srcGuideline.guidelineUseRtl;
+        mGuidelineUseRtl = srcGuideline.mGuidelineUseRtl;
         setOrientation(srcGuideline.mOrientation);
     }
 

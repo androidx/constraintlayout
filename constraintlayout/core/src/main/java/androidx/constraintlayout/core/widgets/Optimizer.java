@@ -15,7 +15,9 @@
  */
 package androidx.constraintlayout.core.widgets;
 
-import static androidx.constraintlayout.core.widgets.ConstraintWidget.*;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.DIMENSION_HORIZONTAL;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.DIMENSION_VERTICAL;
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.UNKNOWN;
 
 import androidx.constraintlayout.core.LinearSystem;
 
@@ -47,7 +49,7 @@ public class Optimizer {
             ;
 
     // Internal use.
-    static boolean[] flags = new boolean[3];
+    static boolean[] sFlags = new boolean[3];
     static final int FLAG_USE_OPTIMIZE = 0; // simple enough to use optimizer
     static final int FLAG_CHAIN_DANGLING = 1;
     static final int FLAG_RECOMPUTE_BOUNDS = 2;

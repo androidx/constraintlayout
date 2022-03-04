@@ -32,47 +32,47 @@ import java.util.ArrayList;
  */
 public class WidgetGroup {
     private static final boolean DEBUG = false;
-    ArrayList<ConstraintWidget> widgets = new ArrayList<>();
-    static int count = 0;
-    int id = -1;
-    boolean authoritative = false;
-    int orientation = HORIZONTAL;
-    ArrayList<MeasureResult> results = null;
-    private int moveTo = -1;
+    ArrayList<ConstraintWidget> mWidgets = new ArrayList<>();
+    static int sCount = 0;
+    int mId = -1;
+    boolean mAuthoritative = false;
+    int mOrientation = HORIZONTAL;
+    ArrayList<MeasureResult> mResults = null;
+    private int mMoveTo = -1;
 
     public WidgetGroup(int orientation) {
-        id = count++;
-        this.orientation = orientation;
+        mId = sCount++;
+        this.mOrientation = orientation;
     }
 
     public int getOrientation() {
-        return orientation;
+        return mOrientation;
     }
     public int getId() {
-        return id;
+        return mId;
     }
 
     public boolean add(ConstraintWidget widget) {
-        if (widgets.contains(widget)) {
+        if (mWidgets.contains(widget)) {
             return false;
         }
-        widgets.add(widget);
+        mWidgets.add(widget);
         return true;
     }
 
     public void setAuthoritative(boolean isAuthoritative) {
-        authoritative = isAuthoritative;
+        mAuthoritative = isAuthoritative;
     }
     public boolean isAuthoritative() {
-        return authoritative;
+        return mAuthoritative;
     }
 
     private String getOrientationString() {
-        if (orientation == HORIZONTAL) {
+        if (mOrientation == HORIZONTAL) {
             return "Horizontal";
-        } else if (orientation == VERTICAL) {
+        } else if (mOrientation == VERTICAL) {
             return "Vertical";
-        } else if (orientation == BOTH) {
+        } else if (mOrientation == BOTH) {
             return "Both";
         }
         return "Unknown";
@@ -80,8 +80,8 @@ public class WidgetGroup {
 
     @Override
     public String toString() {
-        String ret = getOrientationString() + " [" + id + "] <";
-        for (ConstraintWidget widget : widgets) {
+        String ret = getOrientationString() + " [" + mId + "] <";
+        for (ConstraintWidget widget : mWidgets) {
             ret += " " + widget.getDebugName();
         }
         ret += " >";
@@ -91,9 +91,9 @@ public class WidgetGroup {
     public void moveTo(int orientation, WidgetGroup widgetGroup) {
         if (DEBUG) {
             System.out.println("Move all widgets (" + this + ") from "
-                    + id + " to " + widgetGroup.getId() + "(" + widgetGroup + ")");
+                    + mId + " to " + widgetGroup.getId() + "(" + widgetGroup + ")");
         }
-        for (ConstraintWidget widget : widgets) {
+        for (ConstraintWidget widget : mWidgets) {
             widgetGroup.add(widget);
             if (orientation == HORIZONTAL) {
                 widget.horizontalGroup = widgetGroup.getId();
@@ -101,11 +101,11 @@ public class WidgetGroup {
                 widget.verticalGroup = widgetGroup.getId();
             }
         }
-        moveTo = widgetGroup.id;
+        mMoveTo = widgetGroup.mId;
     }
 
     public void clear() {
-        widgets.clear();
+        mWidgets.clear();
     }
 
     private int measureWrap(int orientation, ConstraintWidget widget) {
@@ -125,12 +125,12 @@ public class WidgetGroup {
     }
 
     public int measureWrap(LinearSystem system, int orientation) {
-        int count = widgets.size();
+        int count = mWidgets.size();
         if (count == 0) {
             return 0;
         }
         // TODO: add direct wrap computation for simpler cases instead of calling the solver
-        return solverMeasure(system, widgets, orientation);
+        return solverMeasure(system, mWidgets, orientation);
     }
 
     private int solverMeasure(LinearSystem system,
@@ -163,11 +163,11 @@ public class WidgetGroup {
         }
 
         // save results
-        results = new ArrayList<>();
+        mResults = new ArrayList<>();
         for (int i = 0; i < widgets.size(); i++) {
             ConstraintWidget widget = widgets.get(i);
             MeasureResult result = new MeasureResult(widget, system, orientation);
-            results.add(result);
+            mResults.add(result);
         }
 
         if (orientation == HORIZONTAL) {
@@ -184,25 +184,25 @@ public class WidgetGroup {
     }
 
     public void setOrientation(int orientation) {
-        this.orientation = orientation;
+        this.mOrientation = orientation;
     }
 
     public void apply() {
-        if (results == null) {
+        if (mResults == null) {
             return;
         }
-        if (!authoritative) {
+        if (!mAuthoritative) {
             return;
         }
-        for (int i = 0; i < results.size(); i++) {
-            MeasureResult result = results.get(i);
+        for (int i = 0; i < mResults.size(); i++) {
+            MeasureResult result = mResults.get(i);
             result.apply();
         }
     }
 
     public boolean intersectWith(WidgetGroup group) {
-        for (int i = 0; i < widgets.size(); i++) {
-            ConstraintWidget widget = widgets.get(i);
+        for (int i = 0; i < mWidgets.size(); i++) {
+            ConstraintWidget widget = mWidgets.get(i);
             if (group.contains(widget)) {
                 return true;
             }
@@ -211,20 +211,20 @@ public class WidgetGroup {
     }
 
     private boolean contains(ConstraintWidget widget) {
-        return widgets.contains(widget);
+        return mWidgets.contains(widget);
     }
 
     public int size() {
-        return widgets.size();
+        return mWidgets.size();
     }
 
     public void cleanup(ArrayList<WidgetGroup> dependencyLists) {
-        final int count = widgets.size();
-        if (moveTo != -1 && count > 0) {
+        final int count = mWidgets.size();
+        if (mMoveTo != -1 && count > 0) {
             for (int i = 0; i < dependencyLists.size(); i++) {
                 WidgetGroup group = dependencyLists.get(i);
-                if (moveTo == group.id) {
-                    moveTo(orientation, group);
+                if (mMoveTo == group.mId) {
+                    moveTo(mOrientation, group);
                 }
             }
         }
@@ -236,28 +236,28 @@ public class WidgetGroup {
 
 
     class MeasureResult {
-        WeakReference<ConstraintWidget> widgetRef;
-        int left;
-        int top;
-        int right;
-        int bottom;
-        int baseline;
-        int orientation;
+        WeakReference<ConstraintWidget> mWidgetRef;
+        int mLeft;
+        int mTop;
+        int mRight;
+        int mBottom;
+        int mBaseline;
+        int mOrientation;
 
         MeasureResult(ConstraintWidget widget, LinearSystem system, int orientation) {
-            widgetRef = new WeakReference<>(widget);
-            left = system.getObjectVariableValue(widget.mLeft);
-            top = system.getObjectVariableValue(widget.mTop);
-            right = system.getObjectVariableValue(widget.mRight);
-            bottom = system.getObjectVariableValue(widget.mBottom);
-            baseline = system.getObjectVariableValue(widget.mBaseline);
-            this.orientation = orientation;
+            mWidgetRef = new WeakReference<>(widget);
+            mLeft = system.getObjectVariableValue(widget.mLeft);
+            mTop = system.getObjectVariableValue(widget.mTop);
+            mRight = system.getObjectVariableValue(widget.mRight);
+            mBottom = system.getObjectVariableValue(widget.mBottom);
+            mBaseline = system.getObjectVariableValue(widget.mBaseline);
+            this.mOrientation = orientation;
         }
 
         public void apply() {
-            ConstraintWidget widget = widgetRef.get();
+            ConstraintWidget widget = mWidgetRef.get();
             if (widget != null) {
-                widget.setFinalFrame(left, top, right, bottom, baseline, orientation);
+                widget.setFinalFrame(mLeft, mTop, mRight, mBottom, mBaseline, mOrientation);
             }
         }
     }
