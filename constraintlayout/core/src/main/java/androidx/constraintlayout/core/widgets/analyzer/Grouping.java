@@ -43,7 +43,14 @@ public class Grouping {
     private static final boolean DEBUG = false;
     private static final boolean DEBUG_GROUPING = false;
 
-
+    /**
+     * @TODO: add description
+     * @param layoutHorizontal
+     * @param layoutVertical
+     * @param widgetHorizontal
+     * @param widgetVertical
+     * @return
+     */
     public static boolean validInGroup(ConstraintWidget.DimensionBehaviour layoutHorizontal,
                                        ConstraintWidget.DimensionBehaviour layoutVertical,
                                        ConstraintWidget.DimensionBehaviour widgetHorizontal,
@@ -58,6 +65,12 @@ public class Grouping {
         return false;
     }
 
+    /**
+     * @TODO: add description
+     * @param layout
+     * @param measurer
+     * @return
+     */
     public static boolean simpleSolvingPass(ConstraintWidgetContainer layout,
                                             BasicMeasure.Measurer measurer) {
 
@@ -384,6 +397,14 @@ public class Grouping {
         return null;
     }
 
+    /**
+     * @TODO: add description
+     * @param constraintWidget
+     * @param orientation
+     * @param list
+     * @param group
+     * @return
+     */
     public static WidgetGroup findDependents(ConstraintWidget constraintWidget,
                                              int orientation,
                                              ArrayList<WidgetGroup> list,

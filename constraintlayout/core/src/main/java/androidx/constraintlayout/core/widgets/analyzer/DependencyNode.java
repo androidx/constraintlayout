@@ -48,6 +48,10 @@ public class DependencyNode implements Dependency {
                 + mTargets.size() + ":d=" + mDependencies.size() + ">";
     }
 
+    /**
+     * @TODO: add description
+     * @param value
+     */
     public void resolve(int value) {
         if (resolved) {
             return;
@@ -60,6 +64,10 @@ public class DependencyNode implements Dependency {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param node
+     */
     public void update(Dependency node) {
         for (DependencyNode target : mTargets) {
             if (!target.resolved) {
@@ -98,6 +106,10 @@ public class DependencyNode implements Dependency {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param dependency
+     */
     public void addDependency(Dependency dependency) {
         mDependencies.add(dependency);
         if (resolved) {
@@ -105,6 +117,10 @@ public class DependencyNode implements Dependency {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public String name() {
         String definition = mRun.mWidget.getDebugName();
         if (mType == Type.LEFT
@@ -117,6 +133,9 @@ public class DependencyNode implements Dependency {
         return definition;
     }
 
+    /**
+     * @TODO: add description
+     */
     public void clear() {
         mTargets.clear();
         mDependencies.clear();

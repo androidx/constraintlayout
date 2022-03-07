@@ -52,6 +52,10 @@ public class BasicMeasure {
     private final ArrayList<ConstraintWidget> mVariableDimensionsWidgets = new ArrayList<>();
     private Measure mMeasure = new Measure();
 
+    /**
+     * @TODO: add description
+     * @param layout
+     */
     public void updateHierarchy(ConstraintWidgetContainer layout) {
         mVariableDimensionsWidgets.clear();
         final int childCount = layout.mChildren.size();
@@ -504,7 +508,16 @@ public class BasicMeasure {
     }
 
     public interface Measurer {
+        /**
+         * @TODO: add description
+         * @param widget
+         * @param measure
+         */
         void measure(ConstraintWidget widget, Measure measure);
+
+        /**
+         * @TODO: add description
+         */
         void didMeasures();
     }
 

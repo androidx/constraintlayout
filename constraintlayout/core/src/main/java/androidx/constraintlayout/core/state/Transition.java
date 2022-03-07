@@ -55,6 +55,12 @@ public class Transition implements TypedValues {
     private int mDuration = 400;
     private float mStagger = 0.0f;
 
+    /**
+     * @TODO: add description
+     * @param interpolator
+     * @param interpolatorString
+     * @return
+     */
     public static Interpolator getInterpolator(int interpolator, String interpolatorString) {
         switch (interpolator) {
             case SPLINE_STRING:
@@ -78,6 +84,12 @@ public class Transition implements TypedValues {
         return null;
     }
 
+    /**
+     * @TODO: add description
+     * @param target
+     * @param frameNumber
+     * @return
+     */
     public KeyPosition findPreviousPosition(String target, int frameNumber) {
         while (frameNumber >= 0) {
             HashMap<String, KeyPosition> map = mKeyPositions.get(frameNumber);
@@ -92,6 +104,12 @@ public class Transition implements TypedValues {
         return null;
     }
 
+    /**
+     * @TODO: add description
+     * @param target
+     * @param frameNumber
+     * @return
+     */
     public KeyPosition findNextPosition(String target, int frameNumber) {
         while (frameNumber <= 100) {
             HashMap<String, KeyPosition> map = mKeyPositions.get(frameNumber);
@@ -106,6 +124,11 @@ public class Transition implements TypedValues {
         return null;
     }
 
+    /**
+     * @TODO: add description
+     * @param frame
+     * @return
+     */
     public int getNumberKeyPositions(WidgetFrame frame) {
         int numKeyPositions = 0;
         int frameNumber = 0;
@@ -122,10 +145,22 @@ public class Transition implements TypedValues {
         return numKeyPositions;
     }
 
+    /**
+     * @TODO: add description
+     * @param id
+     * @return
+     */
     public Motion getMotion(String id) {
         return getWidgetState(id, null, 0).mMotionControl;
     }
 
+    /**
+     * @TODO: add description
+     * @param frame
+     * @param x
+     * @param y
+     * @param pos
+     */
     public void fillKeyPositions(WidgetFrame frame, float[] x, float[] y, float[] pos) {
         int numKeyPositions = 0;
         int frameNumber = 0;
@@ -144,10 +179,18 @@ public class Transition implements TypedValues {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public boolean hasPositionKeyframes() {
         return mKeyPositions.size() > 0;
     }
 
+    /**
+     * @TODO: add description
+     * @param bundle
+     */
     public void setTransitionProperties(TypedBundle bundle) {
         bundle.applyDelta(mBundle);
         bundle.applyDelta(this);
@@ -188,26 +231,57 @@ public class Transition implements TypedValues {
         return mState.isEmpty();
     }
 
+    /**
+     * @TODO: add description
+     */
     public void clear() {
         mState.clear();
     }
 
+    /**
+     * @TODO: add description
+     * @param key
+     * @return
+     */
     public boolean contains(String key) {
         return mState.containsKey(key);
     }
 
+    /**
+     * @TODO: add description
+     * @param target
+     * @param bundle
+     */
     public void addKeyPosition(String target, TypedBundle bundle) {
         getWidgetState(target, null, 0).setKeyPosition(bundle);
     }
 
+    /**
+     * @TODO: add description
+     * @param target
+     * @param bundle
+     */
     public void addKeyAttribute(String target, TypedBundle bundle) {
         getWidgetState(target, null, 0).setKeyAttribute(bundle);
     }
 
+    /**
+     * @TODO: add description
+     * @param target
+     * @param bundle
+     */
     public void addKeyCycle(String target, TypedBundle bundle) {
         getWidgetState(target, null, 0).setKeyCycle(bundle);
     }
 
+    /**
+     * @TODO: add description
+     * @param target
+     * @param frame
+     * @param type
+     * @param x
+     * @param y
+     */
     public void addKeyPosition(String target, int frame, int type, float x, float y) {
         TypedBundle bundle = new TypedBundle();
         bundle.add(TypedValues.PositionType.TYPE_POSITION_TYPE, 2);
@@ -225,18 +299,37 @@ public class Transition implements TypedValues {
         map.put(target, keyPosition);
     }
 
+    /**
+     * @TODO: add description
+     * @param state
+     * @param widgetId
+     * @param property
+     * @param value
+     */
     public void addCustomFloat(int state, String widgetId, String property, float value) {
         WidgetState widgetState = getWidgetState(widgetId, null, state);
         WidgetFrame frame = widgetState.getFrame(state);
         frame.addCustomFloat(property, value);
     }
 
+    /**
+     * @TODO: add description
+     * @param state
+     * @param widgetId
+     * @param property
+     * @param color
+     */
     public void addCustomColor(int state, String widgetId, String property, int color) {
         WidgetState widgetState = getWidgetState(widgetId, null, state);
         WidgetFrame frame = widgetState.getFrame(state);
         frame.addCustomColor(property, color);
     }
 
+    /**
+     * @TODO: add description
+     * @param container
+     * @param state
+     */
     public void updateFrom(ConstraintWidgetContainer container, int state) {
         final ArrayList<ConstraintWidget> children = container.getChildren();
         final int count = children.size();
@@ -247,6 +340,12 @@ public class Transition implements TypedValues {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param parentWidth
+     * @param parentHeight
+     * @param progress
+     */
     public void interpolate(int parentWidth, int parentHeight, float progress) {
         if (mEasing != null) {
             progress = (float) mEasing.get(progress);
@@ -257,6 +356,11 @@ public class Transition implements TypedValues {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param id
+     * @return
+     */
     public WidgetFrame getStart(String id) {
         WidgetState widgetState = mState.get(id);
         if (widgetState == null) {
@@ -265,6 +369,11 @@ public class Transition implements TypedValues {
         return widgetState.mStart;
     }
 
+    /**
+     * @TODO: add description
+     * @param id
+     * @return
+     */
     public WidgetFrame getEnd(String id) {
         WidgetState widgetState = mState.get(id);
         if (widgetState == null) {
@@ -273,6 +382,11 @@ public class Transition implements TypedValues {
         return widgetState.mEnd;
     }
 
+    /**
+     * @TODO: add description
+     * @param id
+     * @return
+     */
     public WidgetFrame getInterpolated(String id) {
         WidgetState widgetState = mState.get(id);
         if (widgetState == null) {
@@ -281,6 +395,11 @@ public class Transition implements TypedValues {
         return widgetState.mInterpolated;
     }
 
+    /**
+     * @TODO: add description
+     * @param id
+     * @return
+     */
     public float[] getPath(String id) {
         WidgetState widgetState = mState.get(id);
         int duration = 1000;
@@ -290,6 +409,14 @@ public class Transition implements TypedValues {
         return mPoints;
     }
 
+    /**
+     * @TODO: add description
+     * @param id
+     * @param rectangles
+     * @param pathMode
+     * @param position
+     * @return
+     */
     public int getKeyFrames(String id, float[] rectangles, int[] pathMode, int[] position) {
         WidgetState widgetState = mState.get(id);
         return widgetState.mMotionControl.buildKeyFrames(rectangles, pathMode, position);

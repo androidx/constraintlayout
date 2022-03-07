@@ -39,6 +39,11 @@ public class HelperReference extends ConstraintReference implements Facade {
         return mType;
     }
 
+    /**
+     * @TODO: add description
+     * @param objects
+     * @return
+     */
     public HelperReference add(Object... objects) {
         Collections.addAll(mReferences, objects);
         return this;
@@ -57,6 +62,9 @@ public class HelperReference extends ConstraintReference implements Facade {
         return getHelperWidget();
     }
 
+    /**
+     * @TODO: add description
+     */
     public void apply() {
         // nothing
     }

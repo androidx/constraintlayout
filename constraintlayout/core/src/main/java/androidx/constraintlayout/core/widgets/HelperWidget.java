@@ -70,6 +70,12 @@ public class HelperWidget extends ConstraintWidget implements Helper {
         Arrays.fill(mWidgets, null);
     }
 
+    /**
+     * @TODO: add description
+     * @param dependencyLists
+     * @param orientation
+     * @param group
+     */
     public void addDependents(ArrayList<WidgetGroup> dependencyLists,
                               int orientation,
                               WidgetGroup group) {
@@ -83,6 +89,11 @@ public class HelperWidget extends ConstraintWidget implements Helper {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param orientation
+     * @return
+     */
     public int findGroupInDependents(int orientation) {
         for (int i = 0; i < mWidgetsCount; i++) {
             ConstraintWidget widget = mWidgets[i];

@@ -31,6 +31,12 @@ public class ChainReference extends HelperReference {
     public State.Chain getStyle() {
         return State.Chain.SPREAD;
     }
+
+    /**
+     * @TODO: add description
+     * @param style
+     * @return
+     */
     public ChainReference style(State.Chain style) {
         mStyle = style;
         return this;
@@ -38,6 +44,12 @@ public class ChainReference extends HelperReference {
     public float getBias() {
         return mBias;
     }
+
+    /**
+     * @TODO: add description
+     * @param bias
+     * @return
+     */
     public ChainReference bias(float bias) {
         mBias = bias;
         return this;
