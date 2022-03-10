@@ -35,8 +35,8 @@ import com.google.accompanist.coil.rememberCoilPainter
 
 class MainActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
-    private var composeNum = 38
-    private var MAX = 40
+    private var composeNum = 45
+    private var MAX = 44
 
     var map = HashMap<Int, String>();
     val linkServer = LinkServer()
@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
     @ExperimentalMaterialApi
     private fun show(com: ComposeView) {
         println(" $composeNum ")
-        com.setContent() {
+        com.setContent {
             when (composeNum) {
                 0 -> ScreenExample()
                 1 -> ScreenExample()
@@ -134,6 +134,10 @@ class MainActivity : AppCompatActivity() {
 
                 39 -> ExampleLayout()
                 40 -> MotionExample8()
+                41 -> MotionExample9()
+                42 -> MotionExample10()
+                43 -> MotionExample11()
+                44 -> MotionExample12()
                 else -> {
                     composeNum = (composeNum + 40) % 40
                     println(composeNum)

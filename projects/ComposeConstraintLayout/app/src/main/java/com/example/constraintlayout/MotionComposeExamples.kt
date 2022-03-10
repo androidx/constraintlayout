@@ -16,6 +16,7 @@
 
 package com.example.constraintlayout
 
+import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -25,6 +26,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -93,7 +95,10 @@ public fun AnimatedConstraintLayoutExample1() {
             var shape = RoundedCornerShape(10.dp)
             Image( painterResource(id = R.drawable.pepper),"",
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.clip(shape).layoutId("box").fillMaxSize())
+                modifier = Modifier
+                    .clip(shape)
+                    .layoutId("box")
+                    .fillMaxSize())
         }
     }
 }
@@ -1494,4 +1499,335 @@ fun MotionExample10() {
             )
         }
     }
+}
+
+
+@ExperimentalMaterialApi
+@Preview(group = "motion11")
+@Composable
+public fun MotionExample11() {
+    var componentHeight by remember { mutableStateOf(3000f) }
+    val swipeableState = rememberSwipeableState("Bottom")
+    val anchors = mapOf(0f to "Bottom", componentHeight to "Top")
+
+    val mprogress = (swipeableState.offset.value / componentHeight)
+
+    MotionLayout(motionScene = MotionScene(
+        """{
+                Header: { exportAs: 'motion6'},
+                ConstraintSets: {
+                  start: {
+                    box: {
+                      width: 'spread',
+                      height: 220,
+                      start: ['parent', 'start'],
+                      end: ['parent', 'end'],
+                      top: ['parent','top'],
+                      translationZ: 0
+                    },
+                    box1: {
+                      width: '60%',
+                      height: 120,
+                      start: ['parent', 'start'],
+                      end: ['parent', 'end'],
+                      top: ['box','bottom'],
+                      bottom: ['box','bottom'],
+                      translationZ: 1
+                    },
+                      title: {
+                      width: 'spread',
+                      height: 'wrap',
+                      start: ['box1', 'start'],
+                      end: ['parent', 'end', 24],
+                      bottom: ['box1','top', 4],
+                      translationZ: 1
+                    },
+                    circle: {
+                      width: 200,
+                      height: 200,
+                      start: ['parent', 'end'],
+                      end: ['parent', 'end'],
+                      top: ['parent','top', 8], 
+                      translationZ: 1
+                    },
+                    content: {
+                      width: 'spread',
+                      height: 'spread',
+                      start: ['parent', 'start'],
+                      end: ['parent', 'end'],
+                      top: ['box','bottom'],
+                      bottom: ['parent','bottom'],
+                    }
+                  },
+                  end: {
+                    box: {
+                      width: 'spread',
+                      height: 120,
+                      start: ['parent', 'start'],
+                      end: ['parent', 'end'],
+                      top: ['parent','top'], 
+                      translationZ: 1
+                    },
+                    circle: {
+                      width: 120,
+                      height: 120,
+                      start: ['parent', 'start'],
+                      end: ['parent', 'end'],
+                      bottom:  ['parent', 'top'],
+                      top: ['parent','top'],
+                      translationZ: 1
+                    },
+                    box1: {
+                      width: '60%',
+                      height: 120,
+                      start: ['parent', 'start'],
+                      end: ['parent', 'end'],
+                      top: ['parent','top'],
+                      translationZ: 0
+                    },
+                    title: {
+                      width: 'spread',
+                      height: 'wrap',
+                      start: ['box', 'start',16],
+                      end: ['parent', 'end', 16],
+                      bottom: ['box','bottom', 4],
+                      translationZ: 1
+                    },content: {
+                      width: 'spread',
+                      height: 'spread',
+                      start: ['parent', 'start'],
+                      end: ['parent', 'end'],
+                      top: ['box','bottom'],
+                      bottom: ['parent','bottom']
+                    }
+                  }
+                },
+                Transitions: {
+                  default: {
+                    from: 'start',
+                    to: 'end',
+                    pathMotionArc: 'startHorizontal',
+                    KeyFrames: {
+                      KeyPositions: [
+                        {
+                       type: 'parentRelative',
+                           target: ['box1'],
+                           frames: [50],
+                           percentX: [0.5],
+                           percentY: [0.3]
+                        }
+                      ]
+                    }
+                  }
+                }
+            }"""
+    ),
+        progress = mprogress,
+        debug = EnumSet.of(MotionLayoutDebugFlags.NONE),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .swipeable(
+                state = swipeableState,
+                anchors = anchors,
+                // resistance = null,
+                reverseDirection = true,
+                thresholds = { _, _ -> FractionalThreshold(0.3f) },
+                orientation = Orientation.Vertical
+            )
+            .onSizeChanged { size ->
+                componentHeight = size.height.toFloat()
+            }
+    ) {
+        Box(
+            modifier = Modifier
+                .layoutId("content")
+                .background(Color.LightGray)
+        )
+        Box(
+            modifier = Modifier
+                .layoutId("box")
+                .background(Color.Cyan)
+        )
+        Box(
+            modifier = Modifier
+                .layoutId("box1")
+                .background(Color.Green)
+        )
+
+        Text(
+            text = "MotionLayout example",
+            fontSize = 18.sp,
+            modifier = Modifier.layoutId("title")
+        )
+
+        Box(
+            modifier = Modifier
+                .layoutId("circle")
+                .clip(CircleShape)
+                .background(Color.Red)
+        )
+
+    }
+
+}
+
+
+@ExperimentalMaterialApi
+@Preview(group = "motion12")
+@Composable
+public fun MotionExample12() {
+    var componentHeight by remember { mutableStateOf(1000f) }
+    var corners by remember { mutableStateOf(400F) }
+
+    val swipeableState = rememberSwipeableState("Bottom")
+    val anchors = mapOf(0f to "Bottom", componentHeight to "Top")
+
+    val mprogress = (swipeableState.offset.value / componentHeight)
+
+
+    MotionLayout(motionScene = MotionScene(
+        """{
+                Header: { exportAs: 'motion6'},
+                ConstraintSets: {
+                  start: {
+                    circle: {
+                      width: 72,
+                      height: 72,
+                      end: ['parent', 'end',24],
+                      top: ['content','top'],
+                      bottom: ['content','top'],
+                      translationZ: 1
+                    },
+                    box1: {
+                      width: 150,
+                      height: 220,
+                      start: ['parent', 'start',36],
+                      top: ['parent','top',190],
+                      translationZ: 1
+                    },
+                      title: {
+                      width: 'spread',
+                      height: 'wrap',
+                      start: ['box1', 'end', 16],
+                      end: ['parent', 'end', 16],
+                      top: ['content','top', 44],
+                      translationZ: 1
+                    },
+                    content: {
+                      width: 'spread',
+                      height: 'spread',
+                      start: ['parent', 'start'],
+                      end: ['parent', 'end'],
+                      top: ['parent','top', 260],
+                      bottom: ['parent','bottom'],
+                    }
+                  },
+                  end: {circle: {
+                      width: 0,
+                      height: 0,
+                      end: ['parent', 'end',82],
+                      top: ['content','top'],
+                      bottom: ['content','top'],
+                      translationZ: 1
+                    },
+                   box1: {
+                      width: 150,
+                      height: 220,
+                      start: ['parent', 'start',36],
+                      top: ['parent','top',90],
+                      translationZ: 0
+                    },
+                    title: {
+                      width: 'spread',
+                      height: 'wrap',
+                      start: ['parent', 'start',16],
+                      end: ['parent', 'end', 16],
+                      top: ['parent','top', 16],
+                      translationZ: 1
+                    },content: {
+                      width: 'spread',
+                      height: 'spread',
+                      start: ['parent', 'start'],
+                      end: ['parent', 'end'],
+                      top: ['box','bottom'],
+                      bottom: ['parent','bottom'],
+                      translationZ: 1
+                    }
+                  }
+                },
+                Transitions: {
+                  default: {
+                    from: 'start',
+                    to: 'end',
+                    pathMotionArc: 'startHorizontal',
+                    KeyFrames: {
+                      KeyPositions: [
+                        {
+                       type: 'parentRelative',
+                           target: ['box1'],
+                           frames: [40],
+                           percentX: [0.0],
+                           percentY: [-0.18]
+                        }
+                      ],
+                      KeyAttributes: [
+                        {
+                          target: ['box1'],
+                          frames: [50],
+                          rotationZ: [60],
+                          //rotationY: [25], 
+                        }
+                      ]
+                    }
+                  }
+                }
+            }"""
+    ),
+        progress = mprogress,
+        debug = EnumSet.of(MotionLayoutDebugFlags.NONE),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+            .swipeable(
+                state = swipeableState,
+                anchors = anchors,
+                // resistance = null,
+                reverseDirection = true,
+                thresholds = { _, _ -> FractionalThreshold(0.3f) },
+                orientation = Orientation.Vertical
+            )
+            .onSizeChanged { size ->
+                componentHeight = size.height.toFloat()
+                corners = 400 - ((mprogress*100) * 4)
+                Log.d("corners", corners.toString())
+            }
+    ) {
+        Box(
+            modifier = Modifier
+                .layoutId("content")
+                .clip(CutCornerShape(topStart = corners))
+                .background(Color.LightGray)
+        )
+        Box(
+            modifier = Modifier
+                .layoutId("box1")
+                .background(Color.Green)
+        )
+
+        Text(
+            text = "MotionLayout example",
+            fontSize = 18.sp,
+            modifier = Modifier.layoutId("title")
+        )
+
+        Box(
+            modifier = Modifier
+                .layoutId("circle")
+                .clip(CircleShape)
+                .background(Color.Red)
+        )
+
+    }
+
 }
