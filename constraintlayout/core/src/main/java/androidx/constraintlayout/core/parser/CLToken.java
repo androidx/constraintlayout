@@ -19,6 +19,11 @@ public class CLToken extends CLElement {
     int mIndex = 0;
     Type mType = Type.UNKNOWN;
 
+    /**
+     * @TODO: add description
+     * @return
+     * @throws CLParsingException
+     */
     public boolean getBoolean() throws CLParsingException {
         if (mType == Type.TRUE) {
             return true;
@@ -29,6 +34,11 @@ public class CLToken extends CLElement {
         throw new CLParsingException("this token is not a boolean: <" + content() + ">", this);
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     * @throws CLParsingException
+     */
     public boolean isNull() throws CLParsingException {
         if (mType == Type.NULL) {
             return true;
@@ -46,6 +56,11 @@ public class CLToken extends CLElement {
         super(content);
     }
 
+    /**
+     * @TODO: add description
+     * @param content
+     * @return
+     */
     public static CLElement allocate(char[] content) {
         return new CLToken(content);
     }
@@ -69,6 +84,12 @@ public class CLToken extends CLElement {
         return mType;
     }
 
+    /**
+     * @TODO: add description
+     * @param c
+     * @param position
+     * @return
+     */
     public boolean validate(char c, long position) {
         boolean isValid = false;
         switch (mType) {

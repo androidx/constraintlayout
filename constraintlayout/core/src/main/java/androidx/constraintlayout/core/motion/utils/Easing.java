@@ -43,6 +43,11 @@ public class Easing {
     public static String[] NAMED_EASING =
             {STANDARD_NAME, ACCELERATE_NAME, DECELERATE_NAME, LINEAR_NAME};
 
+    /**
+     * @TODO: add description
+     * @param configString
+     * @return
+     */
     public static Easing getInterpolator(String configString) {
         if (configString == null) {
             return null;
@@ -77,14 +82,28 @@ public class Easing {
         return sDefault;
     }
 
+    /**
+     * @TODO: add description
+     * @param x
+     * @return
+     */
     public double get(double x) {
         return x;
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public String toString() {
         return mStr;
     }
 
+    /**
+     * @TODO: add description
+     * @param x
+     * @return
+     */
     public double getDiff(double x) {
         return 1;
     }

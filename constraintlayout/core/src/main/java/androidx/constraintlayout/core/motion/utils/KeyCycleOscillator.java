@@ -39,6 +39,11 @@ public abstract class KeyCycleOscillator {
     public int mVariesBy = 0; // 0 = position, 2=path
     ArrayList<WavePoint> mWavePoints = new ArrayList<>();
 
+    /**
+     * @TODO: add description
+     * @param attribute
+     * @return
+     */
     public static KeyCycleOscillator makeWidgetCycle(String attribute) {
         if (attribute.equals(TypedValues.AttributesType.S_PATH_ROTATE)) {
             return new PathRotateSet(attribute);
@@ -74,11 +79,22 @@ public abstract class KeyCycleOscillator {
             widget.setValue(mTypeId, get(t));
         }
 
+        /**
+         * @TODO: add description
+         * @param view
+         * @param t
+         * @param dx
+         * @param dy
+         */
         public void setPathRotate(MotionWidget view, float t, double dx, double dy) {
             view.setRotationZ(get(t) + (float) Math.toDegrees(Math.atan2(dy, dx)));
         }
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public boolean variesByPath() {
         return mVariesBy == 1;
     }
@@ -113,10 +129,20 @@ public abstract class KeyCycleOscillator {
         mType = type;
     }
 
+    /**
+     * @TODO: add description
+     * @param t
+     * @return
+     */
     public float get(float t) {
         return (float) mCycleOscillator.getValues(t);
     }
 
+    /**
+     * @TODO: add description
+     * @param position
+     * @return
+     */
     public float getSlope(float position) {
         return (float) mCycleOscillator.getSlope(position);
     }
@@ -182,6 +208,10 @@ public abstract class KeyCycleOscillator {
         mWaveString = waveString;
     }
 
+    /**
+     * @TODO: add description
+     * @param pathLength
+     */
     public void setup(float pathLength) {
         int count = mWavePoints.size();
         if (count == 0) {
@@ -415,6 +445,11 @@ public abstract class KeyCycleOscillator {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param widget
+     * @param t
+     */
     public void setProperty(MotionWidget widget, float t) {
 
     }

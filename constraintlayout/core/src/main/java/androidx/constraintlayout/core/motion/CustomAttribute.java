@@ -136,6 +136,10 @@ public class CustomAttribute {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param ret
+     */
     public void getValuesToInterpolate(float[] ret) {
         switch (mType) {
             case INT_TYPE:
@@ -170,6 +174,10 @@ public class CustomAttribute {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param value
+     */
     public void setValue(float[] value) {
         switch (mType) {
             case REFERENCE_TYPE:
@@ -196,6 +204,13 @@ public class CustomAttribute {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param hue
+     * @param saturation
+     * @param value
+     * @return
+     */
     public static int hsvToRgb(float hue, float saturation, float value) {
         int h = (int) (hue * 6);
         float f = hue * 6 - h;
@@ -270,6 +285,10 @@ public class CustomAttribute {
 
     }
 
+    /**
+     * @TODO: add description
+     * @param value
+     */
     public void setValue(Object value) {
         switch (mType) {
             case REFERENCE_TYPE:

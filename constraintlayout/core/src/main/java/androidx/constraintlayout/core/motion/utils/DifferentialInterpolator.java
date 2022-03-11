@@ -16,6 +16,16 @@
 package androidx.constraintlayout.core.motion.utils;
 
 public interface DifferentialInterpolator {
+    /**
+     * @TODO: add description
+     * @param v
+     * @return
+     */
     float getInterpolation(float v);
+
+    /**
+     * @TODO: add description
+     * @return
+     */
     float getVelocity();
 }

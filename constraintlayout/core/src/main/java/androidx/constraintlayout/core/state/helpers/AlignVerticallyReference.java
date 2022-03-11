@@ -28,6 +28,9 @@ public class AlignVerticallyReference extends HelperReference {
         super(state, State.Helper.ALIGN_VERTICALLY);
     }
 
+    /**
+     * @TODO: add description
+     */
     public void apply() {
         for (Object key : mReferences) {
             ConstraintReference reference = mState.constraints(key);

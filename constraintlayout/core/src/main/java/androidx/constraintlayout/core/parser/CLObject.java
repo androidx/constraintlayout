@@ -23,10 +23,19 @@ public class CLObject extends CLContainer implements Iterable<CLKey> {
         super(content);
     }
 
+    /**
+     * @TODO: add description
+     * @param content
+     * @return
+     */
     public static CLObject allocate(char[] content) {
         return new CLObject(content);
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public String toJSON() {
         StringBuilder json = new StringBuilder(getDebugName() + "{ ");
         boolean first = true;
@@ -42,10 +51,20 @@ public class CLObject extends CLContainer implements Iterable<CLKey> {
         return json.toString();
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public String toFormattedJSON() {
         return toFormattedJSON(0, 0);
     }
 
+    /**
+     * @TODO: add description
+     * @param indent
+     * @param forceIndent
+     * @return
+     */
     public String toFormattedJSON(int indent, int forceIndent) {
         StringBuilder json = new StringBuilder(getDebugName());
         json.append("{\n");

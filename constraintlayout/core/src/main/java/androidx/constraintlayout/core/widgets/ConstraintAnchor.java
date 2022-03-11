@@ -37,6 +37,12 @@ public class ConstraintAnchor {
     private int mFinalValue;
     private boolean mHasFinalValue;
 
+    /**
+     * @TODO: add description
+     * @param orientation
+     * @param list
+     * @param group
+     */
     public void findDependents(int orientation, ArrayList<WidgetGroup> list, WidgetGroup group) {
         if (mDependents != null) {
             for (ConstraintAnchor anchor : mDependents) {
@@ -48,6 +54,11 @@ public class ConstraintAnchor {
     public HashSet<ConstraintAnchor> getDependents() {
         return mDependents;
     }
+
+    /**
+     * @TODO: add description
+     * @return
+     */
     public boolean hasDependents() {
         if (mDependents == null) {
             return false;
@@ -55,6 +66,10 @@ public class ConstraintAnchor {
         return mDependents.size() > 0;
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public boolean hasCenteredDependents() {
         if (mDependents == null) {
             return false;
@@ -68,11 +83,19 @@ public class ConstraintAnchor {
         return false;
     }
 
+    /**
+     * @TODO: add description
+     * @param finalValue
+     */
     public void setFinalValue(int finalValue) {
         this.mFinalValue = finalValue;
         this.mHasFinalValue = true;
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public int getFinalValue() {
         if (!mHasFinalValue) {
             return 0;
@@ -80,11 +103,18 @@ public class ConstraintAnchor {
         return mFinalValue;
     }
 
+    /**
+     * @TODO: add description
+     */
     public void resetFinalResolution() {
         mHasFinalValue = false;
         mFinalValue = 0;
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public boolean hasFinalValue() {
         return mHasFinalValue;
     }
@@ -104,6 +134,11 @@ public class ConstraintAnchor {
 
     SolverVariable mSolverVariable;
 
+    /**
+     * @TODO: add description
+     * @param source
+     * @param map
+     */
     public void copyFrom(ConstraintAnchor source, HashMap<ConstraintWidget, ConstraintWidget> map) {
         if (mTarget != null) {
             if (mTarget.mDependents != null) {
