@@ -177,6 +177,9 @@ public class WidgetContainer extends ConstraintWidget {
         }
     }
 
+    /**
+     * @TODO: add description
+     */
     public void removeAllChildren() {
         mChildren.clear();
     }

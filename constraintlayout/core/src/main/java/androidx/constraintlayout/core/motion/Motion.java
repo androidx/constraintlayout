@@ -243,6 +243,10 @@ public class Motion implements TypedValues {
         return mStartMotionPath.mAnimateRelativeTo;
     }
 
+    /**
+     * @TODO: add description
+     * @param motionController
+     */
     public void setupRelative(Motion motionController) {
         mStartMotionPath.setupRelative(motionController, motionController.mStartMotionPath);
         mEndMotionPath.setupRelative(motionController, motionController.mEndMotionPath);
@@ -256,6 +260,12 @@ public class Motion implements TypedValues {
         return mCurrentCenterY;
     }
 
+    /**
+     * @TODO: add description
+     * @param p
+     * @param pos
+     * @param vel
+     */
     public void getCenter(double p, float[] pos, float[] vel) {
         double[] position = new double[4];
         double[] velocity = new double[4];
@@ -496,6 +506,13 @@ public class Motion implements TypedValues {
         return null;
     }
 
+    /**
+     * @TODO: add description
+     * @param keyFrames
+     * @param mode
+     * @param pos
+     * @return
+     */
     public int buildKeyFrames(float[] keyFrames, int[] mode, int[] pos) {
         if (keyFrames != null) {
             int count = 0;
@@ -559,6 +576,12 @@ public class Motion implements TypedValues {
         return points.length;
     }
 
+    /**
+     * @TODO: add description
+     * @param p
+     * @param path
+     * @param offset
+     */
     public void buildRect(float p, float[] path, int offset) {
         p = getAdjustedPosition(p, null);
         mSpline[0].getPos(p, mInterpolateData);
@@ -637,6 +660,10 @@ public class Motion implements TypedValues {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param key
+     */
     public void addKey(MotionKey key) {
         mKeyList.add(key);
         if (DEBUG) {
@@ -1007,6 +1034,10 @@ public class Motion implements TypedValues {
         return mView;
     }
 
+    /**
+     * @TODO: add description
+     * @param mw
+     */
     public void setStart(MotionWidget mw) {
         mStartMotionPath.mTime = 0;
         mStartMotionPath.mPosition = 0;
@@ -1015,6 +1046,10 @@ public class Motion implements TypedValues {
         mStartPoint.setState(mw);
     }
 
+    /**
+     * @TODO: add description
+     * @param mw
+     */
     public void setEnd(MotionWidget mw) {
         mEndMotionPath.mTime = 1;
         mEndMotionPath.mPosition = 1;
@@ -1024,6 +1059,14 @@ public class Motion implements TypedValues {
         mEndPoint.setState(mw);
     }
 
+    /**
+     * @TODO: add description
+     * @param rect
+     * @param v
+     * @param rotation
+     * @param preWidth
+     * @param preHeight
+     */
     public void setStartState(ViewState rect,
                               MotionWidget v,
                               int rotation,
@@ -1554,6 +1597,10 @@ public class Motion implements TypedValues {
         return;
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public int getDrawPath() {
         int mode = mStartMotionPath.mDrawPath;
         for (MotionPaths keyFrame : mMotionPaths) {

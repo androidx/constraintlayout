@@ -26,10 +26,18 @@ public class VelocityMatrix {
     float mRotate;
     private static String sTag = "VelocityMatrix";
 
+    /**
+     * @TODO: add description
+     */
     public void clear() {
         mDScaleX = mDScaleY = mDTranslateX = mDTranslateY = mDRotate = 0;
     }
 
+    /**
+     * @TODO: add description
+     * @param rot
+     * @param position
+     */
     public void setRotationVelocity(SplineSet rot, float position) {
         if (rot != null) {
             mDRotate = rot.getSlope(position);
@@ -37,6 +45,12 @@ public class VelocityMatrix {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param transX
+     * @param transY
+     * @param position
+     */
     public void setTranslationVelocity(SplineSet transX, SplineSet transY, float position) {
 
         if (transX != null) {
@@ -57,12 +71,23 @@ public class VelocityMatrix {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param oscR
+     * @param position
+     */
     public void setRotationVelocity(KeyCycleOscillator oscR, float position) {
         if (oscR != null) {
             mDRotate = oscR.getSlope(position);
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param oscX
+     * @param oscY
+     * @param position
+     */
     public void setTranslationVelocity(KeyCycleOscillator oscX,
                                        KeyCycleOscillator oscY,
                                        float position) {
@@ -76,6 +101,12 @@ public class VelocityMatrix {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param oscSx
+     * @param oscSy
+     * @param position
+     */
     public void setScaleVelocity(KeyCycleOscillator oscSx,
                                  KeyCycleOscillator oscSy,
                                  float position) {

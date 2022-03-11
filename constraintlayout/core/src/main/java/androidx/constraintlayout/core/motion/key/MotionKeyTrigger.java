@@ -119,6 +119,11 @@ public class MotionKeyTrigger extends MotionKey {
         return -1;
     }
 
+    /**
+     * @TODO: add description
+     * @param src
+     * @return
+     */
     public MotionKeyTrigger copy(MotionKey src) {
         super.copy(src);
         MotionKeyTrigger k = (MotionKeyTrigger) src;
@@ -142,6 +147,10 @@ public class MotionKeyTrigger extends MotionKey {
         return this;
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public MotionKey clone() {
         return new MotionKeyTrigger().copy(this);
     }
@@ -160,9 +169,21 @@ public class MotionKeyTrigger extends MotionKey {
             }
         }
     }
+
+    /**
+     * @TODO: add description
+     * @param position
+     * @param child
+     */
     public void conditionallyFire(float position, MotionWidget child) {
     }
 
+    /**
+     * @TODO: add description
+     * @param type
+     * @param value
+     * @return
+     */
     public boolean setValue(int type, int value) {
         switch (type) {
             case TriggerType.TYPE_TRIGGER_RECEIVER:
@@ -190,6 +211,12 @@ public class MotionKeyTrigger extends MotionKey {
         return true;
     }
 
+    /**
+     * @TODO: add description
+     * @param type
+     * @param value
+     * @return
+     */
     public boolean setValue(int type, float value) {
         switch (type) {
             case TriggerType.TYPE_TRIGGER_SLACK:
@@ -201,6 +228,12 @@ public class MotionKeyTrigger extends MotionKey {
         return true;
     }
 
+    /**
+     * @TODO: add description
+     * @param type
+     * @param value
+     * @return
+     */
     public boolean setValue(int type, String value) {
         switch (type) {
             case TriggerType.TYPE_CROSS:
@@ -224,6 +257,12 @@ public class MotionKeyTrigger extends MotionKey {
         return true;
     }
 
+    /**
+     * @TODO: add description
+     * @param type
+     * @param value
+     * @return
+     */
     public boolean setValue(int type, boolean value) {
         switch (type) {
             case TriggerType.TYPE_POST_LAYOUT:

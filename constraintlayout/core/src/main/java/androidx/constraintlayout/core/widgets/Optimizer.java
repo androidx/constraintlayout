@@ -103,6 +103,12 @@ public class Optimizer {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param optimizationLevel
+     * @param optimization
+     * @return
+     */
     public static final boolean enabled(int optimizationLevel, int optimization) {
         return (optimizationLevel & optimization) == optimization;
     }

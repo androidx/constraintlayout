@@ -201,6 +201,12 @@ public class MotionKeyAttributes extends MotionKey {
         return null;
     }
 
+    /**
+     * @TODO: add description
+     * @param type
+     * @param value
+     * @return
+     */
     public boolean setValue(int type, int value) {
 
         switch (type) {
@@ -221,6 +227,12 @@ public class MotionKeyAttributes extends MotionKey {
         return true;
     }
 
+    /**
+     * @TODO: add description
+     * @param type
+     * @param value
+     * @return
+     */
     public boolean setValue(int type, float value) {
         switch (type) {
             case AttributesType.TYPE_ALPHA:
@@ -274,6 +286,10 @@ public class MotionKeyAttributes extends MotionKey {
         return true;
     }
 
+    /**
+     * @TODO: add description
+     * @param interpolation
+     */
     public void setInterpolation(HashMap<String, Integer> interpolation) {
         if (!Float.isNaN(mAlpha)) {
             interpolation.put(AttributesType.S_ALPHA, mCurveFit);
@@ -324,6 +340,12 @@ public class MotionKeyAttributes extends MotionKey {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param type
+     * @param value
+     * @return
+     */
     public boolean setValue(int type, String value) {
         switch (type) {
             case AttributesType.TYPE_EASING:
@@ -348,6 +370,9 @@ public class MotionKeyAttributes extends MotionKey {
         return mCurveFit;
     }
 
+    /**
+     * @TODO: add description
+     */
     public void printAttributes() {
         HashSet<String> nameSet = new HashSet<>();
         getAttributeNames(nameSet);

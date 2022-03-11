@@ -97,6 +97,9 @@ public class State {
         mReferences.put(PARENT, mParent);
     }
 
+    /**
+     * @TODO: add description
+     */
     public void reset() {
         mHelperReferences.clear();
         mTags.clear();
@@ -130,27 +133,57 @@ public class State {
         return new ConstraintReference(this);
     }
 
+    /**
+     * @TODO: add description
+     * @param width
+     * @return
+     */
     public boolean sameFixedWidth(int width) {
         return mParent.getWidth().equalsFixedValue(width);
     }
 
+    /**
+     * @TODO: add description
+     * @param height
+     * @return
+     */
     public boolean sameFixedHeight(int height) {
         return mParent.getHeight().equalsFixedValue(height);
     }
 
+    /**
+     * @TODO: add description
+     * @param dimension
+     * @return
+     */
     public State width(Dimension dimension) {
         return setWidth(dimension);
     }
 
+    /**
+     * @TODO: add description
+     * @param dimension
+     * @return
+     */
     public State height(Dimension dimension) {
         return setHeight(dimension);
     }
 
+    /**
+     * @TODO: add description
+     * @param dimension
+     * @return
+     */
     public State setWidth(Dimension dimension) {
         mParent.setWidth(dimension);
         return this;
     }
 
+    /**
+     * @TODO: add description
+     * @param dimension
+     * @return
+     */
     public State setHeight(Dimension dimension) {
         mParent.setHeight(dimension);
         return this;
@@ -160,6 +193,11 @@ public class State {
         return mReferences.get(key);
     }
 
+    /**
+     * @TODO: add description
+     * @param key
+     * @return
+     */
     public ConstraintReference constraints(Object key) {
         Reference reference = mReferences.get(key);
         if (reference == null) {
@@ -178,6 +216,12 @@ public class State {
         return "__HELPER_KEY_" + mNumHelpers++ + "__";
     }
 
+    /**
+     * @TODO: add description
+     * @param key
+     * @param type
+     * @return
+     */
     public HelperReference helper(Object key, State.Helper type) {
         if (key == null) {
             key = createHelperKey();
@@ -210,14 +254,30 @@ public class State {
         return reference;
     }
 
+    /**
+     * @TODO: add description
+     * @param key
+     * @return
+     */
     public GuidelineReference horizontalGuideline(Object key) {
         return guideline(key, ConstraintWidget.HORIZONTAL);
     }
 
+    /**
+     * @TODO: add description
+     * @param key
+     * @return
+     */
     public GuidelineReference verticalGuideline(Object key) {
         return guideline(key, ConstraintWidget.VERTICAL);
     }
 
+    /**
+     * @TODO: add description
+     * @param key
+     * @param orientation
+     * @return
+     */
     public GuidelineReference guideline(Object key, int orientation) {
         ConstraintReference reference = constraints(key);
         if (reference.getFacade() == null
@@ -230,6 +290,12 @@ public class State {
         return (GuidelineReference) reference.getFacade();
     }
 
+    /**
+     * @TODO: add description
+     * @param key
+     * @param direction
+     * @return
+     */
     public BarrierReference barrier(Object key, Direction direction) {
         ConstraintReference reference = constraints(key);
         if (reference.getFacade() == null || !(reference.getFacade() instanceof BarrierReference)) {
@@ -240,10 +306,19 @@ public class State {
         return (BarrierReference) reference.getFacade();
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public VerticalChainReference verticalChain() {
         return (VerticalChainReference) helper(null, Helper.VERTICAL_CHAIN);
     }
 
+    /**
+     * @TODO: add description
+     * @param references
+     * @return
+     */
     public VerticalChainReference verticalChain(Object... references) {
         VerticalChainReference reference =
                 (VerticalChainReference) helper(null, State.Helper.VERTICAL_CHAIN);
@@ -251,10 +326,19 @@ public class State {
         return reference;
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public HorizontalChainReference horizontalChain() {
         return (HorizontalChainReference) helper(null, Helper.HORIZONTAL_CHAIN);
     }
 
+    /**
+     * @TODO: add description
+     * @param references
+     * @return
+     */
     public HorizontalChainReference horizontalChain(Object... references) {
         HorizontalChainReference reference =
                 (HorizontalChainReference) helper(null, Helper.HORIZONTAL_CHAIN);
@@ -262,6 +346,11 @@ public class State {
         return reference;
     }
 
+    /**
+     * @TODO: add description
+     * @param references
+     * @return
+     */
     public AlignHorizontallyReference centerHorizontally(Object... references) {
         AlignHorizontallyReference reference =
                 (AlignHorizontallyReference) helper(null, Helper.ALIGN_HORIZONTALLY);
@@ -269,6 +358,11 @@ public class State {
         return reference;
     }
 
+    /**
+     * @TODO: add description
+     * @param references
+     * @return
+     */
     public AlignVerticallyReference centerVertically(Object... references) {
         AlignVerticallyReference reference =
                 (AlignVerticallyReference) helper(null, Helper.ALIGN_VERTICALLY);
@@ -276,6 +370,9 @@ public class State {
         return reference;
     }
 
+    /**
+     * @TODO: add description
+     */
     public void directMapping() {
         for (Object key : mReferences.keySet()) {
             Reference ref = constraints(key);
@@ -287,6 +384,11 @@ public class State {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param key
+     * @param view
+     */
     public void map(Object key, Object view) {
         Reference ref = constraints(key);
         if (ref instanceof ConstraintReference) {
@@ -295,6 +397,11 @@ public class State {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param key
+     * @param tag
+     */
     public void setTag(String key, String tag) {
         Reference ref = constraints(key);
         if (ref instanceof ConstraintReference) {
@@ -311,6 +418,11 @@ public class State {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param tag
+     * @return
+     */
     public ArrayList<String> getIdsForTag(String tag) {
         if (mTags.containsKey(tag)) {
             return mTags.get(tag);
@@ -318,6 +430,10 @@ public class State {
         return null;
     }
 
+    /**
+     * @TODO: add description
+     * @param container
+     */
     public void apply(ConstraintWidgetContainer container) {
         container.removeAllChildren();
         mParent.getWidth().apply(this, container, ConstraintWidget.HORIZONTAL);
