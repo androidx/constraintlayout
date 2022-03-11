@@ -596,6 +596,9 @@ public class HorizontalWidgetRun extends WidgetRun {
         end.resolve(start.value + mDimension.value);
     }
 
+    /**
+     * @TODO: add description
+     */
     public void applyToWidget() {
         if (start.resolved) {
             mWidget.setX(start.value);

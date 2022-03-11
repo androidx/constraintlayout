@@ -26,6 +26,9 @@ public class HorizontalChainReference extends ChainReference {
         super(state, State.Helper.HORIZONTAL_CHAIN);
     }
 
+    /**
+     * @TODO: add description
+     */
     public void apply() {
         ConstraintReference first = null;
         ConstraintReference previous = null;
