@@ -87,7 +87,7 @@ import androidx.constraintlayout.widget.R;
  */
 public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageView {
     static class ImageMatrix {
-        float[] m = new float[4 * 5];
+        float[] mArray = new float[4 * 5];
         ColorMatrix mColorMatrix = new ColorMatrix();
         ColorMatrix mTmpColorMatrix = new ColorMatrix();
         float mBrightness = 1;
@@ -99,36 +99,36 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
             float Rf = 0.2999f;
             float Gf = 0.587f;
             float Bf = 0.114f;
-            float S = saturationStrength;
+            float s = saturationStrength;
 
-            float MS = 1.0f - S;
-            float Rt = Rf * MS;
-            float Gt = Gf * MS;
-            float Bt = Bf * MS;
+            float ms = 1.0f - s;
+            float Rt = Rf * ms;
+            float Gt = Gf * ms;
+            float Bt = Bf * ms;
 
-            m[0] = (Rt + S);
-            m[1] = Gt;
-            m[2] = Bt;
-            m[3] = 0;
-            m[4] = 0;
+            mArray[0] = (Rt + s);
+            mArray[1] = Gt;
+            mArray[2] = Bt;
+            mArray[3] = 0;
+            mArray[4] = 0;
 
-            m[5] = Rt;
-            m[6] = (Gt + S);
-            m[7] = Bt;
-            m[8] = 0;
-            m[9] = 0;
+            mArray[5] = Rt;
+            mArray[6] = (Gt + s);
+            mArray[7] = Bt;
+            mArray[8] = 0;
+            mArray[9] = 0;
 
-            m[10] = Rt;
-            m[11] = Gt;
-            m[12] = (Bt + S);
-            m[13] = 0;
-            m[14] = 0;
+            mArray[10] = Rt;
+            mArray[11] = Gt;
+            mArray[12] = (Bt + s);
+            mArray[13] = 0;
+            mArray[14] = 0;
 
-            m[15] = 0;
-            m[16] = 0;
-            m[17] = 0;
-            m[18] = 1;
-            m[19] = 0;
+            mArray[15] = 0;
+            mArray[16] = 0;
+            mArray[17] = 0;
+            mArray[18] = 1;
+            mArray[19] = 0;
         }
 
         private void warmth(float warmth) {
@@ -200,56 +200,56 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
             color_r /= tmpColor_r;
             color_g /= tmpColor_g;
             color_b /= tmpColor_b;
-            m[0] = color_r;
-            m[1] = 0;
-            m[2] = 0;
-            m[3] = 0;
-            m[4] = 0;
+            mArray[0] = color_r;
+            mArray[1] = 0;
+            mArray[2] = 0;
+            mArray[3] = 0;
+            mArray[4] = 0;
 
-            m[5] = 0;
-            m[6] = color_g;
-            m[7] = 0;
-            m[8] = 0;
-            m[9] = 0;
+            mArray[5] = 0;
+            mArray[6] = color_g;
+            mArray[7] = 0;
+            mArray[8] = 0;
+            mArray[9] = 0;
 
-            m[10] = 0;
-            m[11] = 0;
-            m[12] = color_b;
-            m[13] = 0;
-            m[14] = 0;
+            mArray[10] = 0;
+            mArray[11] = 0;
+            mArray[12] = color_b;
+            mArray[13] = 0;
+            mArray[14] = 0;
 
-            m[15] = 0;
-            m[16] = 0;
-            m[17] = 0;
-            m[18] = 1;
-            m[19] = 0;
+            mArray[15] = 0;
+            mArray[16] = 0;
+            mArray[17] = 0;
+            mArray[18] = 1;
+            mArray[19] = 0;
         }
 
         private void brightness(float brightness) {
 
-            m[0] = brightness;
-            m[1] = 0;
-            m[2] = 0;
-            m[3] = 0;
-            m[4] = 0;
+            mArray[0] = brightness;
+            mArray[1] = 0;
+            mArray[2] = 0;
+            mArray[3] = 0;
+            mArray[4] = 0;
 
-            m[5] = 0;
-            m[6] = brightness;
-            m[7] = 0;
-            m[8] = 0;
-            m[9] = 0;
+            mArray[5] = 0;
+            mArray[6] = brightness;
+            mArray[7] = 0;
+            mArray[8] = 0;
+            mArray[9] = 0;
 
-            m[10] = 0;
-            m[11] = 0;
-            m[12] = brightness;
-            m[13] = 0;
-            m[14] = 0;
+            mArray[10] = 0;
+            mArray[11] = 0;
+            mArray[12] = brightness;
+            mArray[13] = 0;
+            mArray[14] = 0;
 
-            m[15] = 0;
-            m[16] = 0;
-            m[17] = 0;
-            m[18] = 1;
-            m[19] = 0;
+            mArray[15] = 0;
+            mArray[16] = 0;
+            mArray[17] = 0;
+            mArray[18] = 1;
+            mArray[19] = 0;
         }
 
         void updateMatrix(ImageView view) {
@@ -257,7 +257,7 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
             boolean filter = false;
             if (mSaturation != 1.0f) {
                 saturation(mSaturation);
-                mColorMatrix.set(m);
+                mColorMatrix.set(mArray);
                 filter = true;
             }
             if (mContrast != 1.0f) {
@@ -267,13 +267,13 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
             }
             if (mWarmth != 1.0f) {
                 warmth(mWarmth);
-                mTmpColorMatrix.set(m);
+                mTmpColorMatrix.set(mArray);
                 mColorMatrix.postConcat(mTmpColorMatrix);
                 filter = true;
             }
             if (mBrightness != 1.0f) {
                 brightness(mBrightness);
-                mTmpColorMatrix.set(m);
+                mTmpColorMatrix.set(mArray);
                 mColorMatrix.postConcat(mTmpColorMatrix);
                 filter = true;
             }

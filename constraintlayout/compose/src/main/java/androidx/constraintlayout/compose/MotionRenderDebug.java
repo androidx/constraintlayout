@@ -43,11 +43,11 @@ class MotionRenderDebug {
     Paint mTextPaint;
     Paint mFillPaint;
     private float[] mRectangle;
-    final int RED_COLOR = 0xFFFFAA33;
-    final int KEYFRAME_COLOR = 0xffe0759a;
-    final int GRAPH_COLOR = 0xFF33AA00;
-    final int SHADOW_COLOR = 0x77000000;
-    final int DIAMOND_SIZE = 10;
+    final int mRedColor = 0xFFFFAA33;
+    final int mKeyframeColor = 0xffe0759a;
+    final int mGraphColor = 0xFF33AA00;
+    final int mShadowColor = 0x77000000;
+    final int mDiamondSize = 10;
     DashPathEffect mDashPathEffect;
     int mKeyFrameCount;
     Rect mBounds = new Rect();
@@ -58,25 +58,25 @@ class MotionRenderDebug {
 
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
-        mPaint.setColor(RED_COLOR);
+        mPaint.setColor(mRedColor);
         mPaint.setStrokeWidth(2);
         mPaint.setStyle(Paint.Style.STROKE);
 
         mPaintKeyframes = new Paint();
         mPaintKeyframes.setAntiAlias(true);
-        mPaintKeyframes.setColor(KEYFRAME_COLOR);
+        mPaintKeyframes.setColor(mKeyframeColor);
         mPaintKeyframes.setStrokeWidth(2);
         mPaintKeyframes.setStyle(Paint.Style.STROKE);
 
         mPaintGraph = new Paint();
         mPaintGraph.setAntiAlias(true);
-        mPaintGraph.setColor(GRAPH_COLOR);
+        mPaintGraph.setColor(mGraphColor);
         mPaintGraph.setStrokeWidth(2);
         mPaintGraph.setStyle(Paint.Style.STROKE);
 
         mTextPaint = new Paint();
         mTextPaint.setAntiAlias(true);
-        mTextPaint.setColor(GRAPH_COLOR);
+        mTextPaint.setColor(mGraphColor);
         mTextPaint.setTextSize(textSize);
         mRectangle = new float[8];
         mFillPaint = new Paint();
@@ -134,16 +134,16 @@ class MotionRenderDebug {
 
             canvas.translate(mShadowTranslate, mShadowTranslate);
 
-            mPaint.setColor(SHADOW_COLOR);
-            mFillPaint.setColor(SHADOW_COLOR);
-            mPaintKeyframes.setColor(SHADOW_COLOR);
-            mPaintGraph.setColor(SHADOW_COLOR);
+            mPaint.setColor(mShadowColor);
+            mFillPaint.setColor(mShadowColor);
+            mPaintKeyframes.setColor(mShadowColor);
+            mPaintGraph.setColor(mShadowColor);
             motionController.buildPath(mPoints, frames);
             drawAll(canvas, mode, mKeyFrameCount, motionController, layoutWidth, layoutHeight);
-            mPaint.setColor(RED_COLOR);
-            mPaintKeyframes.setColor(KEYFRAME_COLOR);
-            mFillPaint.setColor(KEYFRAME_COLOR);
-            mPaintGraph.setColor(GRAPH_COLOR);
+            mPaint.setColor(mRedColor);
+            mPaintKeyframes.setColor(mKeyframeColor);
+            mFillPaint.setColor(mKeyframeColor);
+            mPaintGraph.setColor(mGraphColor);
 
             canvas.translate(-mShadowTranslate, -mShadowTranslate);
             drawAll(canvas, mode, mKeyFrameCount, motionController, layoutWidth, layoutHeight);
@@ -191,10 +191,10 @@ class MotionRenderDebug {
             float x = mKeyFramePoints[i * 2];
             float y = mKeyFramePoints[i * 2 + 1];
             mPath.reset();
-            mPath.moveTo(x, y + DIAMOND_SIZE);
-            mPath.lineTo(x + DIAMOND_SIZE, y);
-            mPath.lineTo(x, y - DIAMOND_SIZE);
-            mPath.lineTo(x - DIAMOND_SIZE, y);
+            mPath.moveTo(x, y + mDiamondSize);
+            mPath.lineTo(x + mDiamondSize, y);
+            mPath.lineTo(x, y - mDiamondSize);
+            mPath.lineTo(x - mDiamondSize, y);
             mPath.close();
 
             MotionPaths framePoint = motionController.getKeyFrame(i - 1);

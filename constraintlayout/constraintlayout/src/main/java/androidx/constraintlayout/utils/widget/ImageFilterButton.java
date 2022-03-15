@@ -186,8 +186,10 @@ public class ImageFilterButton extends androidx.appcompat.widget.AppCompatImageB
     /**
      * gts the pan from the center
      * pan of 1 the image is "all the way to the right"
-     * if the images width is greater than the screen width, pan = 1 results in the left edge lining up
-     * if the images width is less than the screen width, pan = 1 results in the right edges lining up
+     * if the images width is greater than the screen width,
+     *  pan = 1 results in the left edge lining up
+     * if the images width is less than the screen width,
+     *  pan = 1 results in the right edges lining up
      * if image width == screen width it does nothing
      *
      * @return the pan in X. Where 0 is centered = Float. NaN if not set
@@ -199,8 +201,10 @@ public class ImageFilterButton extends androidx.appcompat.widget.AppCompatImageB
     /**
      * gets the pan from the center
      * pan of 1 the image is "all the way to the bottom"
-     * if the images width is greater than the screen height, pan = 1 results in the bottom edge lining up
-     * if the images width is less than the screen height, pan = 1 results in the top edges lining up
+     * if the images width is greater than the screen height,
+     *  pan = 1 results in the bottom edge lining up
+     * if the images width is less than the screen height,
+     *  pan = 1 results in the top edges lining up
      * if image height == screen height it does nothing
      *
      * @return pan in Y. Where 0 is centered

@@ -70,8 +70,8 @@ public class CircularFlow extends VirtualLayout {
     private static final String TAG = "CircularFlow";
     ConstraintLayout mContainer;
     int mViewCenter;
-    private static int DEFAULT_RADIUS = 0;
-    private static float DEFAULT_ANGLE = 0F;
+    private static int sDefaultRadius = 0;
+    private static float sDefaultAngle = 0F;
     /**
      * @hide
      */
@@ -154,10 +154,10 @@ public class CircularFlow extends VirtualLayout {
                     mReferenceRadius = a.getString(attr);
                     setRadius(mReferenceRadius);
                 } else if (attr == R.styleable.ConstraintLayout_Layout_circularflow_defaultAngle) {
-                    mReferenceDefaultAngle = a.getFloat(attr, DEFAULT_ANGLE);
+                    mReferenceDefaultAngle = a.getFloat(attr, sDefaultAngle);
                     setDefaultAngle(mReferenceDefaultAngle);
                 } else if (attr == R.styleable.ConstraintLayout_Layout_circularflow_defaultRadius) {
-                    mReferenceDefaultRadius = a.getDimensionPixelSize(attr, DEFAULT_RADIUS);
+                    mReferenceDefaultRadius = a.getDimensionPixelSize(attr, sDefaultRadius);
                     setDefaultRadius(mReferenceDefaultRadius);
                 }
             }
@@ -192,8 +192,8 @@ public class CircularFlow extends VirtualLayout {
             if (view == null) {
                 continue;
             }
-            int radius = DEFAULT_RADIUS;
-            float angle = DEFAULT_ANGLE;
+            int radius = sDefaultRadius;
+            float angle = sDefaultAngle;
 
             if (mRadius != null && i < mRadius.length) {
                 radius = mRadius[i];
@@ -315,7 +315,8 @@ public class CircularFlow extends VirtualLayout {
     public void updateReference(View view, int radius, float angle) {
         if (!isUpdatable(view)) {
             Log.e("CircularFlow",
-                    "It was not possible to update radius and angle to view with id: " + view.getId());
+                    "It was not possible to update radius and angle to view with id: "
+                            + view.getId());
             return;
         }
         int indexView = indexFromId(view.getId());
@@ -338,7 +339,7 @@ public class CircularFlow extends VirtualLayout {
      * @return
      */
     public void setDefaultAngle(float angle) {
-        DEFAULT_ANGLE = angle;
+        sDefaultAngle = angle;
     }
 
     /**
@@ -348,7 +349,7 @@ public class CircularFlow extends VirtualLayout {
      * @return
      */
     public void setDefaultRadius(int radius) {
-        DEFAULT_RADIUS = radius;
+        sDefaultRadius = radius;
     }
 
     @Override
@@ -479,8 +480,8 @@ public class CircularFlow extends VirtualLayout {
             mRadius = Arrays.copyOf(mRadius, mRadius.length + 1);
         }
 
-        mRadius[mCountRadius] = (int) (Integer.parseInt(radiusString) *
-                myContext.getResources().getDisplayMetrics().density);
+        mRadius[mCountRadius] = (int) (Integer.parseInt(radiusString)
+                * myContext.getResources().getDisplayMetrics().density);
         mCountRadius++;
     }
 

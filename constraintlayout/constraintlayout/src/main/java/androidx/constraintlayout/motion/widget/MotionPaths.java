@@ -51,15 +51,15 @@ class MotionPaths implements Comparable<MotionPaths> {
     static final int PERPENDICULAR = KeyPosition.TYPE_PATH;
     static final int CARTESIAN = KeyPosition.TYPE_CARTESIAN;
     static final int SCREEN =  KeyPosition.TYPE_SCREEN;
-    static String[] names = {"position", "x", "y", "width", "height", "pathRotate"};
+    static String[] sNames = {"position", "x", "y", "width", "height", "pathRotate"};
     Easing mKeyFrameEasing;
     int mDrawPath = 0;
-    float time;
-    float position;
-    float x;
-    float y;
-    float width;
-    float height;
+    float mTime;
+    float mPosition;
+    float mX;
+    float mY;
+    float mWidth;
+    float mHeight;
     float mPathRotate = Float.NaN;
     float mProgress = Float.NaN;
     int mPathMotionArc = UNSET;
@@ -67,11 +67,11 @@ class MotionPaths implements Comparable<MotionPaths> {
     float mRelativeAngle = Float.NaN;
     MotionController mRelativeToController = null;
 
-    LinkedHashMap<String, ConstraintAttribute> attributes = new LinkedHashMap<>();
+    LinkedHashMap<String, ConstraintAttribute> mAttributes = new LinkedHashMap<>();
     int mMode = 0; // how was this point computed 1=perpendicular 2=deltaRelative
     int mAnimateCircleAngleTo; // since angles loop there are 4 ways we can pic direction
 
-    public MotionPaths () {
+    MotionPaths() {
     }
     /**
      * set up with Cartesian
@@ -83,37 +83,37 @@ class MotionPaths implements Comparable<MotionPaths> {
     void initCartesian(KeyPosition c, MotionPaths startTimePoint, MotionPaths endTimePoint) {
         float position = c.mFramePosition / 100f;
         MotionPaths point = this;
-        point.time = position;
+        point.mTime = position;
 
         mDrawPath = c.mDrawPath;
         float scaleWidth = Float.isNaN(c.mPercentWidth) ? position : c.mPercentWidth;
         float scaleHeight = Float.isNaN(c.mPercentHeight) ? position : c.mPercentHeight;
-        float scaleX = endTimePoint.width - startTimePoint.width;
-        float scaleY = endTimePoint.height - startTimePoint.height;
+        float scaleX = endTimePoint.mWidth - startTimePoint.mWidth;
+        float scaleY = endTimePoint.mHeight - startTimePoint.mHeight;
 
-        point.position = point.time;
+        point.mPosition = point.mTime;
 
         float path = position; // the position on the path
 
-        float startCenterX = startTimePoint.x + startTimePoint.width / 2;
-        float startCenterY = startTimePoint.y + startTimePoint.height / 2;
-        float endCenterX = endTimePoint.x + endTimePoint.width / 2;
-        float endCenterY = endTimePoint.y + endTimePoint.height / 2;
+        float startCenterX = startTimePoint.mX + startTimePoint.mWidth / 2;
+        float startCenterY = startTimePoint.mY + startTimePoint.mHeight / 2;
+        float endCenterX = endTimePoint.mX + endTimePoint.mWidth / 2;
+        float endCenterY = endTimePoint.mY + endTimePoint.mHeight / 2;
         float pathVectorX = endCenterX - startCenterX;
         float pathVectorY = endCenterY - startCenterY;
-        point.x = (int) (startTimePoint.x + (pathVectorX) * path - scaleX * scaleWidth / 2);
-        point.y = (int) (startTimePoint.y + (pathVectorY) * path - scaleY * scaleHeight / 2);
-        point.width = (int) (startTimePoint.width + scaleX * scaleWidth);
-        point.height = (int) (startTimePoint.height + scaleY * scaleHeight);
+        point.mX = (int) (startTimePoint.mX + (pathVectorX) * path - scaleX * scaleWidth / 2);
+        point.mY = (int) (startTimePoint.mY + (pathVectorY) * path - scaleY * scaleHeight / 2);
+        point.mWidth = (int) (startTimePoint.mWidth + scaleX * scaleWidth);
+        point.mHeight = (int) (startTimePoint.mHeight + scaleY * scaleHeight);
 
         float dxdx = (Float.isNaN(c.mPercentX)) ? position : c.mPercentX;
         float dydx = (Float.isNaN(c.mAltPercentY)) ? 0 : c.mAltPercentY;
         float dydy = (Float.isNaN(c.mPercentY)) ? position : c.mPercentY;
         float dxdy = (Float.isNaN(c.mAltPercentX)) ? 0 : c.mAltPercentX;
         point.mMode = MotionPaths.CARTESIAN;
-        point.x = (int) (startTimePoint.x + pathVectorX * dxdx + pathVectorY * dxdy
+        point.mX = (int) (startTimePoint.mX + pathVectorX * dxdx + pathVectorY * dxdy
                 - scaleX * scaleWidth / 2);
-        point.y = (int) (startTimePoint.y + pathVectorX * dydx + pathVectorY * dydy
+        point.mY = (int) (startTimePoint.mY + pathVectorX * dydx + pathVectorY * dydy
                 - scaleY * scaleHeight / 2);
 
         point.mKeyFrameEasing = Easing.getInterpolator(c.mTransitionEasing);
@@ -152,33 +152,38 @@ class MotionPaths implements Comparable<MotionPaths> {
 
     void initPolar(int parentWidth, int parentHeight, KeyPosition c, MotionPaths s, MotionPaths e) {
         float position = c.mFramePosition / 100f;
-        this.time = position;
+        this.mTime = position;
         mDrawPath = c.mDrawPath;
         this.mMode = c.mPositionType; // mode and type have same numbering scheme
         float scaleWidth = Float.isNaN(c.mPercentWidth) ? position : c.mPercentWidth;
         float scaleHeight = Float.isNaN(c.mPercentHeight) ? position : c.mPercentHeight;
-        float scaleX = e.width - s.width;
-        float scaleY = e.height - s.height;
-        this.position = this.time;
-        width = (int) (s.width + scaleX * scaleWidth);
-        height = (int) (s.height + scaleY * scaleHeight);
+        float scaleX = e.mWidth - s.mWidth;
+        float scaleY = e.mHeight - s.mHeight;
+        this.mPosition = this.mTime;
+        mWidth = (int) (s.mWidth + scaleX * scaleWidth);
+        mHeight = (int) (s.mHeight + scaleY * scaleHeight);
         float startfactor = 1 - position;
         float endfactor = position;
         switch (c.mPositionType) {
             case KeyPosition.TYPE_SCREEN:
-                this.x = Float.isNaN(c.mPercentX) ? (position * (e.x - s.x) + s.x) : c.mPercentX
+                this.mX = Float.isNaN(c.mPercentX) ? (position * (e.mX - s.mX) + s.mX) : c.mPercentX
                         * Math.min(scaleHeight, scaleWidth);
-                this.y = Float.isNaN(c.mPercentY) ? (position * (e.y - s.y) + s.y) : c.mPercentY;
+                this.mY = Float.isNaN(c.mPercentY)
+                        ? (position * (e.mY - s.mY) + s.mY) : c.mPercentY;
                 break;
 
             case KeyPosition.TYPE_PATH:
-                this.x = (Float.isNaN(c.mPercentX) ? position : c.mPercentX) * (e.x - s.x) + s.x;
-                this.y = (Float.isNaN(c.mPercentY) ? position : c.mPercentY) * (e.y - s.y) + s.y;
+                this.mX = (Float.isNaN(c.mPercentX)
+                        ? position : c.mPercentX) * (e.mX - s.mX) + s.mX;
+                this.mY = (Float.isNaN(c.mPercentY)
+                        ? position : c.mPercentY) * (e.mY - s.mY) + s.mY;
                 break;
             default:
             case KeyPosition.TYPE_CARTESIAN:
-                this.x = (Float.isNaN(c.mPercentX) ? position : c.mPercentX) * (e.x - s.x) + s.x;
-                this.y = (Float.isNaN(c.mPercentY) ? position : c.mPercentY) * (e.y - s.y) + s.y;
+                this.mX = (Float.isNaN(c.mPercentX)
+                        ? position : c.mPercentX) * (e.mX - s.mX) + s.mX;
+                this.mY = (Float.isNaN(c.mPercentY)
+                        ? position : c.mPercentY) * (e.mY - s.mY) + s.mY;
                 break;
         }
 
@@ -188,15 +193,15 @@ class MotionPaths implements Comparable<MotionPaths> {
     }
 
     public void setupRelative(MotionController mc, MotionPaths relative) {
-        double dx = x + width / 2 - relative.x - relative.width / 2;
-        double dy = y + height / 2 - relative.y - relative.height / 2;
+        double dx = mX + mWidth / 2 - relative.mX - relative.mWidth / 2;
+        double dy = mY + mHeight / 2 - relative.mY - relative.mHeight / 2;
         mRelativeToController = mc;
 
-        x = (float) Math.hypot(dy, dx);
+        mX = (float) Math.hypot(dy, dx);
         if (Float.isNaN(mRelativeAngle)) {
-            y = (float) (Math.atan2(dy, dx) + Math.PI / 2);
+            mY = (float) (Math.atan2(dy, dx) + Math.PI / 2);
         } else {
-            y = (float) Math.toRadians(mRelativeAngle);
+            mY = (float) Math.toRadians(mRelativeAngle);
 
         }
     }
@@ -208,38 +213,38 @@ class MotionPaths implements Comparable<MotionPaths> {
                     MotionPaths endTimePoint) {
         float position = c.mFramePosition / 100f;
         MotionPaths point = this;
-        point.time = position;
+        point.mTime = position;
 
         mDrawPath = c.mDrawPath;
         float scaleWidth = Float.isNaN(c.mPercentWidth) ? position : c.mPercentWidth;
         float scaleHeight = Float.isNaN(c.mPercentHeight) ? position : c.mPercentHeight;
 
-        float scaleX = endTimePoint.width - startTimePoint.width;
-        float scaleY = endTimePoint.height - startTimePoint.height;
+        float scaleX = endTimePoint.mWidth - startTimePoint.mWidth;
+        float scaleY = endTimePoint.mHeight - startTimePoint.mHeight;
 
-        point.position = point.time;
+        point.mPosition = point.mTime;
 
         float path = position; // the position on the path
 
-        float startCenterX = startTimePoint.x + startTimePoint.width / 2;
-        float startCenterY = startTimePoint.y + startTimePoint.height / 2;
-        float endCenterX = endTimePoint.x + endTimePoint.width / 2;
-        float endCenterY = endTimePoint.y + endTimePoint.height / 2;
+        float startCenterX = startTimePoint.mX + startTimePoint.mWidth / 2;
+        float startCenterY = startTimePoint.mY + startTimePoint.mHeight / 2;
+        float endCenterX = endTimePoint.mX + endTimePoint.mWidth / 2;
+        float endCenterY = endTimePoint.mY + endTimePoint.mHeight / 2;
         float pathVectorX = endCenterX - startCenterX;
         float pathVectorY = endCenterY - startCenterY;
-        point.x = (int) (startTimePoint.x + (pathVectorX) * path - scaleX * scaleWidth / 2);
-        point.y = (int) (startTimePoint.y + (pathVectorY) * path - scaleY * scaleHeight / 2);
-        point.width = (int) (startTimePoint.width + scaleX * scaleWidth);
-        point.height = (int) (startTimePoint.height + scaleY * scaleHeight);
+        point.mX = (int) (startTimePoint.mX + (pathVectorX) * path - scaleX * scaleWidth / 2);
+        point.mY = (int) (startTimePoint.mY + (pathVectorY) * path - scaleY * scaleHeight / 2);
+        point.mWidth = (int) (startTimePoint.mWidth + scaleX * scaleWidth);
+        point.mHeight = (int) (startTimePoint.mHeight + scaleY * scaleHeight);
 
         point.mMode = MotionPaths.SCREEN;
         if (!Float.isNaN(c.mPercentX)) {
-            parentWidth -= point.width;
-            point.x = (int) (c.mPercentX * parentWidth);
+            parentWidth -= point.mWidth;
+            point.mX = (int) (c.mPercentX * parentWidth);
         }
         if (!Float.isNaN(c.mPercentY)) {
-            parentHeight -= point.height;
-            point.y = (int) (c.mPercentY * parentHeight);
+            parentHeight -= point.mHeight;
+            point.mY = (int) (c.mPercentY * parentHeight);
         }
 
         point.mAnimateRelativeTo = mAnimateRelativeTo;
@@ -251,29 +256,29 @@ class MotionPaths implements Comparable<MotionPaths> {
 
         float position = c.mFramePosition / 100f;
         MotionPaths point = this;
-        point.time = position;
+        point.mTime = position;
 
         mDrawPath = c.mDrawPath;
         float scaleWidth = Float.isNaN(c.mPercentWidth) ? position : c.mPercentWidth;
         float scaleHeight = Float.isNaN(c.mPercentHeight) ? position : c.mPercentHeight;
 
-        float scaleX = endTimePoint.width - startTimePoint.width;
-        float scaleY = endTimePoint.height - startTimePoint.height;
+        float scaleX = endTimePoint.mWidth - startTimePoint.mWidth;
+        float scaleY = endTimePoint.mHeight - startTimePoint.mHeight;
 
-        point.position = point.time;
+        point.mPosition = point.mTime;
 
         float path = Float.isNaN(c.mPercentX) ? position : c.mPercentX; // the position on the path
 
-        float startCenterX = startTimePoint.x + startTimePoint.width / 2;
-        float startCenterY = startTimePoint.y + startTimePoint.height / 2;
-        float endCenterX = endTimePoint.x + endTimePoint.width / 2;
-        float endCenterY = endTimePoint.y + endTimePoint.height / 2;
+        float startCenterX = startTimePoint.mX + startTimePoint.mWidth / 2;
+        float startCenterY = startTimePoint.mY + startTimePoint.mHeight / 2;
+        float endCenterX = endTimePoint.mX + endTimePoint.mWidth / 2;
+        float endCenterY = endTimePoint.mY + endTimePoint.mHeight / 2;
         float pathVectorX = endCenterX - startCenterX;
         float pathVectorY = endCenterY - startCenterY;
-        point.x = (int) (startTimePoint.x + (pathVectorX) * path - scaleX * scaleWidth / 2);
-        point.y = (int) (startTimePoint.y + (pathVectorY) * path - scaleY * scaleHeight / 2);
-        point.width = (int) (startTimePoint.width + scaleX * scaleWidth);
-        point.height = (int) (startTimePoint.height + scaleY * scaleHeight);
+        point.mX = (int) (startTimePoint.mX + (pathVectorX) * path - scaleX * scaleWidth / 2);
+        point.mY = (int) (startTimePoint.mY + (pathVectorY) * path - scaleY * scaleHeight / 2);
+        point.mWidth = (int) (startTimePoint.mWidth + scaleX * scaleWidth);
+        point.mHeight = (int) (startTimePoint.mHeight + scaleY * scaleHeight);
         float perpendicular = Float.isNaN(c.mPercentY) ? 0 : c.mPercentY; // position on the path
         float perpendicularX = -pathVectorY;
         float perpendicularY = pathVectorX;
@@ -281,10 +286,10 @@ class MotionPaths implements Comparable<MotionPaths> {
         float normalX = perpendicularX * perpendicular;
         float normalY = perpendicularY * perpendicular;
         point.mMode = MotionPaths.PERPENDICULAR;
-        point.x = (int) (startTimePoint.x + (pathVectorX) * path - scaleX * scaleWidth / 2);
-        point.y = (int) (startTimePoint.y + (pathVectorY) * path - scaleY * scaleHeight / 2);
-        point.x += normalX;
-        point.y += normalY;
+        point.mX = (int) (startTimePoint.mX + (pathVectorX) * path - scaleX * scaleWidth / 2);
+        point.mY = (int) (startTimePoint.mY + (pathVectorY) * path - scaleY * scaleHeight / 2);
+        point.mX += normalX;
+        point.mY += normalY;
 
         point.mAnimateRelativeTo = mAnimateRelativeTo;
         point.mKeyFrameEasing = Easing.getInterpolator(c.mTransitionEasing);
@@ -312,21 +317,21 @@ class MotionPaths implements Comparable<MotionPaths> {
 
     void different(MotionPaths points, boolean[] mask, String[] custom, boolean arcMode) {
         int c = 0;
-        boolean diffx = diff(x, points.x);
-        boolean diffy = diff(y, points.y);
-        mask[c++] |= diff(position, points.position);
+        boolean diffx = diff(mX, points.mX);
+        boolean diffy = diff(mY, points.mY);
+        mask[c++] |= diff(mPosition, points.mPosition);
         mask[c++] |= diffx | diffy | arcMode;
         mask[c++] |= diffx | diffy | arcMode;
-        mask[c++] |= diff(width, points.width);
-        mask[c++] |= diff(height, points.height);
+        mask[c++] |= diff(mWidth, points.mWidth);
+        mask[c++] |= diff(mHeight, points.mHeight);
 
     }
 
     void getCenter(double p, int[] toUse, double[] data, float[] point, int offset) {
-        float v_x = x;
-        float v_y = y;
-        float v_width = width;
-        float v_height = height;
+        float v_x = mX;
+        float v_y = mY;
+        float v_width = mWidth;
+        float v_height = mHeight;
         float translationX = 0, translationY = 0;
         for (int i = 0; i < toUse.length; i++) {
             float value = (float) data[i];
@@ -370,10 +375,10 @@ class MotionPaths implements Comparable<MotionPaths> {
                    float[] point,
                    double[] vdata,
                    float []velocity) {
-        float v_x = x;
-        float v_y = y;
-        float v_width = width;
-        float v_height = height;
+        float v_x = mX;
+        float v_y = mY;
+        float v_width = mWidth;
+        float v_height = mHeight;
         float dv_x = 0;
         float dv_y = 0;
         float dv_width = 0;
@@ -431,10 +436,10 @@ class MotionPaths implements Comparable<MotionPaths> {
         velocity[1] = dpos_y;
     }
     void getCenterVelocity(double p, int[] toUse, double[] data, float[] point, int offset) {
-        float v_x = x;
-        float v_y = y;
-        float v_width = width;
-        float v_height = height;
+        float v_x = mX;
+        float v_y = mY;
+        float v_width = mWidth;
+        float v_height = mHeight;
         float translationX = 0, translationY = 0;
         for (int i = 0; i < toUse.length; i++) {
             float value = (float) data[i];
@@ -472,10 +477,10 @@ class MotionPaths implements Comparable<MotionPaths> {
     }
 
     void getBounds(int[] toUse, double[] data, float[] point, int offset) {
-        float v_x = x;
-        float v_y = y;
-        float v_width = width;
-        float v_height = height;
+        float v_x = mX;
+        float v_y = mY;
+        float v_width = mWidth;
+        float v_height = mHeight;
         float translationX = 0, translationY = 0;
         for (int i = 0; i < toUse.length; i++) {
             float value = (float) data[i];
@@ -510,10 +515,10 @@ class MotionPaths implements Comparable<MotionPaths> {
                  double[] slope,
                  double[] cycle,
                  boolean mForceMeasure) {
-        float v_x = x;
-        float v_y = y;
-        float v_width = width;
-        float v_height = height;
+        float v_x = mX;
+        float v_y = mY;
+        float v_width = mWidth;
+        float v_height = mHeight;
         float dv_x = 0;
         float dv_y = 0;
         float dv_width = 0;
@@ -545,7 +550,7 @@ class MotionPaths implements Comparable<MotionPaths> {
                     : mTempValue[i] + deltaCycle);
             float dvalue = (float) mTempDelta[i];
             if (DEBUG) {
-                Log.v(TAG, Debug.getName(view) + " set " + names[i]);
+                Log.v(TAG, Debug.getName(view) + " set " + sNames[i]);
             }
             switch (i) {
                 case OFF_POSITION:
@@ -672,10 +677,10 @@ class MotionPaths implements Comparable<MotionPaths> {
     }
 
     void getRect(int[] toUse, double[] data, float[] path, int offset) {
-        float v_x = x;
-        float v_y = y;
-        float v_width = width;
-        float v_height = height;
+        float v_x = mX;
+        float v_y = mY;
+        float v_width = mWidth;
+        float v_height = mHeight;
         float delta_path = 0;
         float rotation = 0;
         float alpha = 0;
@@ -832,7 +837,7 @@ class MotionPaths implements Comparable<MotionPaths> {
             float deltaV = (float) deltaData[i];
             float value = (float) data[i];
             if (DEBUG) {
-                mod += " , D" + names[toUse[i]] + "/Dt= " + deltaV;
+                mod += " , D" + sNames[toUse[i]] + "/Dt= " + deltaV;
             }
             switch (toUse[i]) {
                 case OFF_POSITION:
@@ -891,7 +896,7 @@ class MotionPaths implements Comparable<MotionPaths> {
     }
 
     void fillStandard(double[] data, int[] toUse) {
-        float[] set = {position, x, y, width, height, mPathRotate};
+        float[] set = {mPosition, mX, mY, mWidth, mHeight, mPathRotate};
         int c = 0;
         for (int i = 0; i < toUse.length; i++) {
             if (toUse[i] < set.length) {
@@ -901,11 +906,11 @@ class MotionPaths implements Comparable<MotionPaths> {
     }
 
     boolean hasCustomData(String name) {
-        return attributes.containsKey(name);
+        return mAttributes.containsKey(name);
     }
 
     int getCustomDataCount(String name) {
-        ConstraintAttribute a = attributes.get(name);
+        ConstraintAttribute a = mAttributes.get(name);
         if (a == null) {
             return 0;
         }
@@ -913,7 +918,7 @@ class MotionPaths implements Comparable<MotionPaths> {
     }
 
     int getCustomData(String name, double[] value, int offset) {
-        ConstraintAttribute a = attributes.get(name);
+        ConstraintAttribute a = mAttributes.get(name);
         if (a == null) {
             return 0;
         } else if (a.numberOfInterpolatedValues() == 1) {
@@ -931,15 +936,15 @@ class MotionPaths implements Comparable<MotionPaths> {
     }
 
     void setBounds(float x, float y, float w, float h) {
-        this.x = x;
-        this.y = y;
-        width = w;
-        height = h;
+        this.mX = x;
+        this.mY = y;
+        mWidth = w;
+        mHeight = h;
     }
 
     @Override
     public int compareTo(@NonNull MotionPaths o) {
-        return Float.compare(position, o.position);
+        return Float.compare(mPosition, o.mPosition);
     }
 
     public void applyParameters(ConstraintSet.Constraint c) {
@@ -956,7 +961,7 @@ class MotionPaths implements Comparable<MotionPaths> {
         for (String s : at) {
             ConstraintAttribute attr = c.mCustomConstraints.get(s);
             if (attr != null && attr.isContinuous()) {
-                this.attributes.put(s, attr);
+                this.mAttributes.put(s, attr);
             }
         }
     }

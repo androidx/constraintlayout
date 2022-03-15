@@ -88,8 +88,8 @@ public class CustomSupport {
             Log.e(TAG, "no method " + methodName + " on View \"" + Debug.getName(view) + "\"");
             e.printStackTrace();
         } catch (IllegalAccessException e) {
-            Log.e(TAG, "cannot access method " + methodName + " on View \"" +
-                    Debug.getName(view) + "\"");
+            Log.e(TAG, "cannot access method " + methodName + " on View \""
+                    + Debug.getName(view) + "\"");
             e.printStackTrace();
         } catch (InvocationTargetException e) {
             e.printStackTrace();

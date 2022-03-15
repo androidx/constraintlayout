@@ -37,7 +37,7 @@ public class MotionHelper extends ConstraintHelper implements MotionHelperInterf
     private boolean mUseOnShow = false;
     private boolean mUseOnHide = false;
     private float mProgress;
-    protected View[] views;
+    protected View[] mViews;
 
     public MotionHelper(Context context) {
         super(context);
@@ -102,17 +102,17 @@ public class MotionHelper extends ConstraintHelper implements MotionHelperInterf
     public void setProgress(float progress) {
         mProgress = progress;
         if (this.mCount > 0) {
-            this.views = this.getViews((ConstraintLayout) this.getParent());
+            this.mViews = this.getViews((ConstraintLayout) this.getParent());
 
             for (int i = 0; i < this.mCount; ++i) {
-                View view = this.views[i];
+                View view = this.mViews[i];
                 this.setProgress(view, progress);
             }
         } else {
-            ViewGroup group = (ViewGroup)this.getParent();
+            ViewGroup group = (ViewGroup) this.getParent();
             int count = group.getChildCount();
 
-            for(int i = 0; i < count; ++i) {
+            for (int i = 0; i < count; ++i) {
                 View view = group.getChildAt(i);
                 if (view instanceof MotionHelper) {
                     continue;

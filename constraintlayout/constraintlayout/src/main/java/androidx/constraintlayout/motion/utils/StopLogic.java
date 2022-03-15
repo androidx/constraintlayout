@@ -67,7 +67,8 @@ public class StopLogic extends MotionInterpolator {
     public void config(float currentPos, float destination, float currentVelocity,
                        float maxTime, float maxAcceleration, float maxVelocity) {
         mEngine = mStopLogicEngine;
-        mStopLogicEngine.config(currentPos, destination, currentVelocity, maxTime, maxAcceleration, maxVelocity);
+        mStopLogicEngine.config(currentPos, destination, currentVelocity,
+                maxTime, maxAcceleration, maxVelocity);
     }
 
     /**

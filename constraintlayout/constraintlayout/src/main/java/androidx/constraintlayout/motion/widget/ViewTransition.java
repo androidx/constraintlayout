@@ -57,8 +57,8 @@ import java.util.ArrayList;
  * For asynchronous it will create and drive a MotionController.
  */
 public class ViewTransition {
-    private static String TAG = "ViewTransition";
-    ConstraintSet set;
+    private static String sTAG = "ViewTransition";
+    ConstraintSet mSet;
     public static final String VIEW_TRANSITION_TAG = "ViewTransition";
     public static final String KEY_FRAME_SET_TAG = "KeyFrameSet";
     public static final String CONSTRAINT_OVERRIDE = "ConstraintOverride";
@@ -242,8 +242,8 @@ public class ViewTransition {
                                         mConstraintDelta.mCustomConstraints);
                                 break;
                             default:
-                                Log.e(TAG, Debug.getLoc() + " unknown tag " + tagName);
-                                Log.e(TAG, ".xml:" + parser.getLineNumber());
+                                Log.e(sTAG, Debug.getLoc() + " unknown tag " + tagName);
+                                Log.e(sTAG, ".xml:" + parser.getLineNumber());
                         }
 
                         break;
@@ -355,12 +355,12 @@ public class ViewTransition {
         KeyCache mCache = new KeyCache();
         ViewTransitionController mVtController;
         Interpolator mInterpolator;
-        boolean reverse = false;
+        boolean mReverse = false;
         float mPosition;
         float mDpositionDt;
         long mLastRender;
         Rect mTempRec = new Rect();
-        boolean hold_at_100 = false;
+        boolean mHoldAt100 = false;
 
         Animate(ViewTransitionController controller,
                 MotionController motionController,
@@ -377,15 +377,15 @@ public class ViewTransition {
             mSetsTag = setTag;
             mClearsTag = clearTag;
             if (mode == ONSTATE_ACTION_DOWN_UP) {
-                hold_at_100 = true;
+                mHoldAt100 = true;
             }
             mDpositionDt = (duration == 0) ? Float.MAX_VALUE : 1f / duration;
             mutate();
         }
 
         void reverse(boolean dir) {
-            reverse = dir;
-            if (reverse && mUpDuration != UNSET) {
+            mReverse = dir;
+            if (mReverse && mUpDuration != UNSET) {
                 mDpositionDt = (mUpDuration == 0) ? Float.MAX_VALUE : 1f / mUpDuration;
             }
             mVtController.invalidate();
@@ -393,7 +393,7 @@ public class ViewTransition {
         }
 
         void mutate() {
-            if (reverse) {
+            if (mReverse) {
                 mutateReverse();
             } else {
                 mutateForward();
@@ -450,7 +450,7 @@ public class ViewTransition {
                 if (mClearsTag != UNSET) {
                     mMC.getView().setTag(mClearsTag, null);
                 }
-                if (!hold_at_100) {
+                if (!mHoldAt100) {
                     mVtController.removeAnimation(this);
                 }
             }
@@ -462,7 +462,7 @@ public class ViewTransition {
         public void reactTo(int action, float x, float y) {
             switch (action) {
                 case MotionEvent.ACTION_UP:
-                    if (!reverse) {
+                    if (!mReverse) {
                         reverse(true);
                     }
                     return;
@@ -470,7 +470,7 @@ public class ViewTransition {
                     View view = mMC.getView();
                     view.getHitRect(mTempRec);
                     if (!mTempRec.contains((int) x, (int) y)) {
-                        if (!reverse) {
+                        if (!mReverse) {
                             reverse(true);
                         }
                     }

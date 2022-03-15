@@ -23,7 +23,6 @@ import android.view.View;
 
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.widget.ConstraintHelper;
-
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.R;
 
@@ -111,9 +110,9 @@ public class Layer extends ConstraintHelper {
                         view.setVisibility(visibility);
                     }
                     if (mApplyElevationOnAttach) {
-                        if (elevation > 0 &&
-                                android.os.Build.VERSION.SDK_INT >=
-                                        android.os.Build.VERSION_CODES.LOLLIPOP) {
+                        if (elevation > 0
+                                && android.os.Build.VERSION.SDK_INT
+                                >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                             view.setTranslationZ(view.getTranslationZ() + elevation);
                         }
                     }

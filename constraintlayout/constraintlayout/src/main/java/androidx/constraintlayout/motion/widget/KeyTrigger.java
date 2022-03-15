@@ -390,23 +390,23 @@ public class KeyTrigger extends Key {
         private static final int VT_NEGATIVE_CROSS = 13;
         private static final int VT_POSITIVE_CROSS = 14;
 
-        private static SparseIntArray mAttrMap = new SparseIntArray();
+        private static SparseIntArray sAttrMap = new SparseIntArray();
 
         static {
-            mAttrMap.append(R.styleable.KeyTrigger_framePosition, FRAME_POS);
-            mAttrMap.append(R.styleable.KeyTrigger_onCross, CROSS);
-            mAttrMap.append(R.styleable.KeyTrigger_onNegativeCross, NEGATIVE_CROSS);
-            mAttrMap.append(R.styleable.KeyTrigger_onPositiveCross, POSITIVE_CROSS);
-            mAttrMap.append(R.styleable.KeyTrigger_motionTarget, TARGET_ID);
-            mAttrMap.append(R.styleable.KeyTrigger_triggerId, TRIGGER_ID);
-            mAttrMap.append(R.styleable.KeyTrigger_triggerSlack, TRIGGER_SLACK);
-            mAttrMap.append(R.styleable.KeyTrigger_motion_triggerOnCollision, COLLISION);
-            mAttrMap.append(R.styleable.KeyTrigger_motion_postLayoutCollision, POST_LAYOUT);
-            mAttrMap.append(R.styleable.KeyTrigger_triggerReceiver, TRIGGER_RECEIVER);
-            mAttrMap.append(R.styleable.KeyTrigger_viewTransitionOnCross, VT_CROSS);
-            mAttrMap.append(R.styleable.KeyTrigger_viewTransitionOnNegativeCross,
+            sAttrMap.append(R.styleable.KeyTrigger_framePosition, FRAME_POS);
+            sAttrMap.append(R.styleable.KeyTrigger_onCross, CROSS);
+            sAttrMap.append(R.styleable.KeyTrigger_onNegativeCross, NEGATIVE_CROSS);
+            sAttrMap.append(R.styleable.KeyTrigger_onPositiveCross, POSITIVE_CROSS);
+            sAttrMap.append(R.styleable.KeyTrigger_motionTarget, TARGET_ID);
+            sAttrMap.append(R.styleable.KeyTrigger_triggerId, TRIGGER_ID);
+            sAttrMap.append(R.styleable.KeyTrigger_triggerSlack, TRIGGER_SLACK);
+            sAttrMap.append(R.styleable.KeyTrigger_motion_triggerOnCollision, COLLISION);
+            sAttrMap.append(R.styleable.KeyTrigger_motion_postLayoutCollision, POST_LAYOUT);
+            sAttrMap.append(R.styleable.KeyTrigger_triggerReceiver, TRIGGER_RECEIVER);
+            sAttrMap.append(R.styleable.KeyTrigger_viewTransitionOnCross, VT_CROSS);
+            sAttrMap.append(R.styleable.KeyTrigger_viewTransitionOnNegativeCross,
                     VT_NEGATIVE_CROSS);
-            mAttrMap.append(R.styleable.KeyTrigger_viewTransitionOnPositiveCross,
+            sAttrMap.append(R.styleable.KeyTrigger_viewTransitionOnPositiveCross,
                     VT_POSITIVE_CROSS);
         }
 
@@ -414,7 +414,7 @@ public class KeyTrigger extends Key {
             final int n = a.getIndexCount();
             for (int i = 0; i < n; i++) {
                 int attr = a.getIndex(i);
-                switch (mAttrMap.get(attr)) {
+                switch (sAttrMap.get(attr)) {
                     case FRAME_POS:
                         c.mFramePosition = a.getInteger(attr, c.mFramePosition);
                         c.mFireThreshold = (c.mFramePosition + .5f) / 100f;
@@ -469,8 +469,8 @@ public class KeyTrigger extends Key {
                         c.mViewTransitionOnCross = a.getResourceId(attr, c.mViewTransitionOnCross);
                         break;
                     default:
-                        Log.e(NAME, "unused attribute 0x" + Integer.toHexString(attr) +
-                                "   " + mAttrMap.get(attr));
+                        Log.e(NAME, "unused attribute 0x" + Integer.toHexString(attr)
+                                + "   " + sAttrMap.get(attr));
                         break;
                 }
             }

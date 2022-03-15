@@ -77,7 +77,7 @@ public class MotionScene {
     private SparseArray<ConstraintSet> mConstraintSetMap = new SparseArray<>();
     private HashMap<String, Integer> mConstraintSetIdMap = new HashMap<>();
     private SparseIntArray mDeriveMap = new SparseIntArray();
-    private boolean DEBUG_DESKTOP = false;
+    private boolean mDebugDesktop = false;
     private int mDefaultDuration = 400;
     private int mLayoutDuringTransition = 0;
     public static final int LAYOUT_IGNORE_REQUEST = 0;
@@ -874,8 +874,8 @@ public class MotionScene {
                         R.styleable.OnClick);
                 final int count = a.getIndexCount();
                 for (int i = 0; i < count; i++) {
-                       int attr = a.getIndex(i);
-                       if (attr == R.styleable.OnClick_targetId) {
+                    int attr = a.getIndex(i);
+                    if (attr == R.styleable.OnClick_targetId) {
                         mTargetId = a.getResourceId(attr, mTargetId);
                     } else if (attr == R.styleable.OnClick_clickAction) {
                         mMode = a.getInt(attr, mMode);
@@ -924,7 +924,8 @@ public class MotionScene {
             }
 
             /**
-             * Remove the OnClickListeners (typically called because you are removing the transition)
+             * Remove the OnClickListeners
+             * (typically called because you are removing the transition)
              *
              * @param motionLayout
              */
@@ -1205,7 +1206,7 @@ public class MotionScene {
                         break;
                     case XmlResourceParser.START_TAG:
                         tagName = parser.getName();
-                        if (DEBUG_DESKTOP) {
+                        if (mDebugDesktop) {
                             System.out.println("parsing = " + tagName);
                         }
                         if (DEBUG) {
@@ -1323,7 +1324,7 @@ public class MotionScene {
         if (idString.contains("/")) {
             String tmp = idString.substring(idString.indexOf('/') + 1);
             id = context.getResources().getIdentifier(tmp, "id", context.getPackageName());
-            if (DEBUG_DESKTOP) {
+            if (mDebugDesktop) {
                 System.out.println("id getMap res = " + id);
             }
         }
@@ -1356,8 +1357,8 @@ public class MotionScene {
         XmlPullParser includeParser = res.getXml(resourceId);
         try {
             for (int eventType = includeParser.getEventType();
-                 eventType != XmlResourceParser.END_DOCUMENT;
-                 eventType = includeParser.next()) {
+                    eventType != XmlResourceParser.END_DOCUMENT;
+                    eventType = includeParser.next()) {
                 String tagName = includeParser.getName();
                 if (XmlResourceParser.START_TAG == eventType
                         && CONSTRAINTSET_TAG.equals(tagName)) {
@@ -1389,7 +1390,7 @@ public class MotionScene {
         for (int i = 0; i < count; i++) {
             String name = parser.getAttributeName(i);
             String value = parser.getAttributeValue(i);
-            if (DEBUG_DESKTOP) {
+            if (mDebugDesktop) {
                 System.out.println("id string = " + value);
             }
             switch (name) {
@@ -1451,14 +1452,14 @@ public class MotionScene {
      * @return
      */
     public ConstraintSet getConstraintSet(Context context, String id) {
-        if (DEBUG_DESKTOP) {
+        if (mDebugDesktop) {
             System.out.println("id " + id);
             System.out.println("size " + mConstraintSetMap.size());
         }
         for (int i = 0; i < mConstraintSetMap.size(); i++) {
             int key = mConstraintSetMap.keyAt(i);
             String IdAsString = context.getResources().getResourceName(key);
-            if (DEBUG_DESKTOP) {
+            if (mDebugDesktop) {
                 System.out.println("Id for <" + i + "> is <"
                         + IdAsString + "> looking for <" + id + ">");
             }
@@ -1474,7 +1475,7 @@ public class MotionScene {
     }
 
     ConstraintSet getConstraintSet(int id, int width, int height) {
-        if (DEBUG_DESKTOP) {
+        if (mDebugDesktop) {
             System.out.println("id " + id);
             System.out.println("size " + mConstraintSetMap.size());
         }
@@ -1693,7 +1694,8 @@ public class MotionScene {
                         region = mCurrentTransition.mTouchResponse
                                 .getTouchRegion(mMotionLayout, cache);
                         if (region != null
-                                && (!region.contains(mLastTouchDown.getX(), mLastTouchDown.getY()))) {
+                                && (!region.contains(mLastTouchDown.getX(),
+                                mLastTouchDown.getY()))) {
                             mMotionOutsideRegion = true;
                         } else {
                             mMotionOutsideRegion = false;
@@ -1721,8 +1723,8 @@ public class MotionScene {
                             bestTransitionFor(currentState, dx, dy, mLastTouchDown);
                     if (DEBUG) {
                         Log.v(TAG, Debug.getLocation() + " best Transition For "
-                                + dx + "," + dy + " " +
-                                ((transition == null) ? null
+                                + dx + "," + dy + " "
+                                + ((transition == null) ? null
                                         : transition.debugString(mMotionLayout.getContext())));
                     }
                     if (transition != null) {

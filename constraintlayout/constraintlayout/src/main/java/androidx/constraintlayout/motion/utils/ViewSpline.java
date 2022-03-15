@@ -32,11 +32,22 @@ import java.lang.reflect.Method;
 public abstract class ViewSpline extends SplineSet {
     private static final String TAG = "ViewSpline";
 
+    /**
+     * @TODO: add description
+     * @param str
+     * @param attrList
+     * @return
+     */
     public static ViewSpline makeCustomSpline(String str,
                                               SparseArray<ConstraintAttribute> attrList) {
         return new CustomSet(str, attrList);
     }
 
+    /**
+     * @TODO: add description
+     * @param str
+     * @return
+     */
     public static ViewSpline makeSpline(String str) {
         switch (str) {
             case Key.ALPHA:
@@ -200,6 +211,10 @@ public abstract class ViewSpline extends SplineSet {
             mConstraintAttributeList = attrList;
         }
 
+        /**
+         * @TODO: add description
+         * @param curveType
+         */
         public void setup(int curveType) {
             int size = mConstraintAttributeList.size();
             int dimensionality =

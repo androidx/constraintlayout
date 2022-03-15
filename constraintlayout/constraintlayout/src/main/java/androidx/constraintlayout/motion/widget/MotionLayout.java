@@ -17,6 +17,7 @@
 package androidx.constraintlayout.motion.widget;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
 import static androidx.constraintlayout.motion.widget.MotionScene.Transition.TRANSITION_FLAG_FIRST_DRAW;
 import static androidx.constraintlayout.motion.widget.MotionScene.Transition.TRANSITION_FLAG_INTERCEPT_TOUCH;
 import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID;
@@ -307,7 +308,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * </tr>
  * <tr>
  * <td>maxVelocity</td>
- * <td>limit the maximum velocity (in progress/sec) of the animation will on touch up. Default 4</td>
+ * <td>limit the maximum velocity (in progress/sec) of the animation will on touch up.
+ * Default 4</td>
  * </tr>
  * <tr>
  * <td>dragDirection</td>
@@ -735,7 +737,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * </tr>
  * <tr>
  * <td>curveFit</td>
- * <td>selects a path based on straight lines or a path based on a monotonic spline {linear|spline}</td>
+ * <td>selects a path based on straight lines or a path
+ * based on a monotonic spline {linear|spline}</td>
  * </tr>
  * <tr>
  * <td>transitionEasing</td>
@@ -1065,8 +1068,8 @@ public class MotionLayout extends ConstraintLayout implements
     boolean mInTransition = false;
     boolean mIndirectTransition = false;
     private TransitionListener mTransitionListener;
-    private float lastPos;
-    private float lastY;
+    private float mLastPos;
+    private float mLastY;
     public static final int DEBUG_SHOW_NONE = 0;
     public static final int DEBUG_SHOW_PROGRESS = 1;
     public static final int DEBUG_SHOW_PATH = 2;
@@ -1080,7 +1083,7 @@ public class MotionLayout extends ConstraintLayout implements
 
     private DesignTool mDesignTool;
 
-    boolean firstDown = true;
+    boolean mFirstDown = true;
 
     int mOldWidth;
     int mOldHeight;
@@ -1265,77 +1268,77 @@ public class MotionLayout extends ConstraintLayout implements
     }
 
     private static class MyTracker implements MotionTracker {
-        VelocityTracker tracker;
-        private static MyTracker me = new MyTracker();
+        VelocityTracker mTracker;
+        private static MyTracker sMe = new MyTracker();
 
         public static MyTracker obtain() {
-            me.tracker = VelocityTracker.obtain();
-            return me;
+            sMe.mTracker = VelocityTracker.obtain();
+            return sMe;
         }
 
         @Override
         public void recycle() {
-            if (tracker != null) {
-                tracker.recycle();
-                tracker = null; // not allowed to call after recycle
+            if (mTracker != null) {
+                mTracker.recycle();
+                mTracker = null; // not allowed to call after recycle
             }
         }
 
         @Override
         public void clear() {
-            if (tracker != null) {
-                tracker.clear();
+            if (mTracker != null) {
+                mTracker.clear();
             }
         }
 
         @Override
         public void addMovement(MotionEvent event) {
-            if (tracker != null) {
-                tracker.addMovement(event);
+            if (mTracker != null) {
+                mTracker.addMovement(event);
             }
         }
 
         @Override
         public void computeCurrentVelocity(int units) {
-            if (tracker != null) {
-                tracker.computeCurrentVelocity(units);
+            if (mTracker != null) {
+                mTracker.computeCurrentVelocity(units);
             }
         }
 
         @Override
         public void computeCurrentVelocity(int units, float maxVelocity) {
-            if (tracker != null) {
-                tracker.computeCurrentVelocity(units, maxVelocity);
+            if (mTracker != null) {
+                mTracker.computeCurrentVelocity(units, maxVelocity);
             }
         }
 
         @Override
         public float getXVelocity() {
-            if (tracker != null) {
-                return tracker.getXVelocity();
+            if (mTracker != null) {
+                return mTracker.getXVelocity();
             }
             return 0;
         }
 
         @Override
         public float getYVelocity() {
-            if (tracker != null) {
-                return tracker.getYVelocity();
+            if (mTracker != null) {
+                return mTracker.getYVelocity();
             }
             return 0;
         }
 
         @Override
         public float getXVelocity(int id) {
-            if (tracker != null) {
-                return tracker.getXVelocity(id);
+            if (mTracker != null) {
+                return mTracker.getXVelocity(id);
             }
             return 0;
         }
 
         @Override
         public float getYVelocity(int id) {
-            if (tracker != null) {
+            if (mTracker != null) {
                 return getYVelocity(id);
             }
             return 0;
@@ -1434,8 +1437,8 @@ public class MotionLayout extends ConstraintLayout implements
             rebuildScene();
 
             if (mTransitionLastPosition != pos) {
-                // If the last drawn position isn't the same, we might have to make sure we apply the
-                // corresponding constraintset.
+                // If the last drawn position isn't the same,
+                // we might have to make sure we apply the corresponding constraintset.
                 if (pos == 0) {
                     endTrigger(true);
                     mScene.getConstraintSet(mBeginState).applyTo(this);
@@ -1653,21 +1656,21 @@ public class MotionLayout extends ConstraintLayout implements
     class StateCache {
         float mProgress = Float.NaN;
         float mVelocity = Float.NaN;
-        int startState = UNSET;
-        int endState = UNSET;
-        final String KeyProgress = "motion.progress";
-        final String KeyVelocity = "motion.velocity";
-        final String KeyStartState = "motion.StartState";
-        final String KeyEndState = "motion.EndState";
+        int mStartState = UNSET;
+        int mEndState = UNSET;
+        final String mKeyProgress = "motion.progress";
+        final String mKeyVelocity = "motion.velocity";
+        final String mKeyStartState = "motion.StartState";
+        final String mKeyEndState = "motion.EndState";
 
         void apply() {
-            if (this.startState != UNSET || this.endState != UNSET) {
-                if (this.startState == UNSET) {
-                    transitionToState(endState);
-                } else if (this.endState == UNSET) {
-                    setState(this.startState, -1, -1);
+            if (this.mStartState != UNSET || this.mEndState != UNSET) {
+                if (this.mStartState == UNSET) {
+                    transitionToState(mEndState);
+                } else if (this.mEndState == UNSET) {
+                    setState(this.mStartState, -1, -1);
                 } else {
-                    setTransition(startState, endState);
+                    setTransition(mStartState, mEndState);
                 }
                 setState(TransitionState.SETUP);
             }
@@ -1681,24 +1684,24 @@ public class MotionLayout extends ConstraintLayout implements
             MotionLayout.this.setProgress(this.mProgress, mVelocity);
             this.mProgress = Float.NaN;
             this.mVelocity = Float.NaN;
-            this.startState = UNSET;
-            this.endState = UNSET;
+            this.mStartState = UNSET;
+            this.mEndState = UNSET;
         }
 
         public Bundle getTransitionState() {
             Bundle bundle = new Bundle();
-            bundle.putFloat(KeyProgress, this.mProgress);
-            bundle.putFloat(KeyVelocity, this.mVelocity);
-            bundle.putInt(KeyStartState, this.startState);
-            bundle.putInt(KeyEndState, this.endState);
+            bundle.putFloat(mKeyProgress, this.mProgress);
+            bundle.putFloat(mKeyVelocity, this.mVelocity);
+            bundle.putInt(mKeyStartState, this.mStartState);
+            bundle.putInt(mKeyEndState, this.mEndState);
             return bundle;
         }
 
         public void setTransitionState(Bundle bundle) {
-            this.mProgress = bundle.getFloat(KeyProgress);
-            this.mVelocity = bundle.getFloat(KeyVelocity);
-            this.startState = bundle.getInt(KeyStartState);
-            this.endState = bundle.getInt(KeyEndState);
+            this.mProgress = bundle.getFloat(mKeyProgress);
+            this.mVelocity = bundle.getFloat(mKeyVelocity);
+            this.mStartState = bundle.getInt(mKeyStartState);
+            this.mEndState = bundle.getInt(mKeyEndState);
         }
 
         public void setProgress(float progress) {
@@ -1706,7 +1709,7 @@ public class MotionLayout extends ConstraintLayout implements
         }
 
         public void setEndState(int endState) {
-            this.endState = endState;
+            this.mEndState = endState;
         }
 
         public void setVelocity(float mVelocity) {
@@ -1714,12 +1717,12 @@ public class MotionLayout extends ConstraintLayout implements
         }
 
         public void setStartState(int startState) {
-            this.startState = startState;
+            this.mStartState = startState;
         }
 
         public void recordState() {
-            endState = MotionLayout.this.mEndState;
-            startState = MotionLayout.this.mBeginState;
+            mEndState = MotionLayout.this.mEndState;
+            mStartState = MotionLayout.this.mBeginState;
             mVelocity = MotionLayout.this.getVelocity();
             mProgress = MotionLayout.this.getProgress();
         }
@@ -1727,7 +1730,6 @@ public class MotionLayout extends ConstraintLayout implements
 
     /**
      * Set the transition state as a bundle
-     * @return bundle containing start and end state
      */
     public void setTransitionState(Bundle bundle) {
         if (mStateCache == null) {
@@ -2018,7 +2020,7 @@ public class MotionLayout extends ConstraintLayout implements
                 mCurrentState = currentState;
                 mInterpolator = mStopLogic;
             }
-            break;
+                break;
             case TOUCH_UP_STOP: {
                 // nothing to do
             }
@@ -2113,33 +2115,33 @@ public class MotionLayout extends ConstraintLayout implements
      * Basic deceleration interpolator
      */
     class DecelerateInterpolator extends MotionInterpolator {
-        float initialV = 0;
-        float currentP = 0;
-        float maxA;
+        float mInitialV = 0;
+        float mCurrentP = 0;
+        float mMaxA;
 
         public void config(float velocity, float position, float maxAcceleration) {
-            initialV = velocity;
-            currentP = position;
-            maxA = maxAcceleration;
+            mInitialV = velocity;
+            mCurrentP = position;
+            mMaxA = maxAcceleration;
         }
 
         @Override
         public float getInterpolation(float time) {
-            if (initialV > 0) {
-                if (initialV / maxA < time) {
-                    time = initialV / maxA;
+            if (mInitialV > 0) {
+                if (mInitialV / mMaxA < time) {
+                    time = mInitialV / mMaxA;
                 }
-                mLastVelocity = initialV - maxA * time;
-                float pos = initialV * time - (maxA * time * time) / 2;
-                return pos + currentP;
+                mLastVelocity = mInitialV - mMaxA * time;
+                float pos = mInitialV * time - (mMaxA * time * time) / 2;
+                return pos + mCurrentP;
             } else {
 
-                if (-initialV / maxA < time) {
-                    time = -initialV / maxA;
+                if (-mInitialV / mMaxA < time) {
+                    time = -mInitialV / mMaxA;
                 }
-                mLastVelocity = initialV + maxA * time;
-                float pos = initialV * time + (maxA * time * time) / 2;
-                return pos + currentP;
+                mLastVelocity = mInitialV + mMaxA * time;
+                float pos = mInitialV * time + (mMaxA * time * time) / 2;
+                return pos + mCurrentP;
             }
         }
 
@@ -2745,8 +2747,8 @@ public class MotionLayout extends ConstraintLayout implements
                     ConstraintHelper view = (ConstraintHelper) child.getCompanionWidget();
                     Helper helper = (Helper) child;
                     view.updatePreLayout(base, helper, mapIdToWidget);
-                    androidx.constraintlayout.core.widgets.VirtualLayout virtualLayout
-                            = (androidx.constraintlayout.core.widgets.VirtualLayout) helper;
+                    androidx.constraintlayout.core.widgets.VirtualLayout virtualLayout =
+                            (androidx.constraintlayout.core.widgets.VirtualLayout) helper;
                     virtualLayout.captureWidgets();
                 }
             }
@@ -2789,17 +2791,17 @@ public class MotionLayout extends ConstraintLayout implements
         @SuppressLint("LogConditional")
         private void debugWidget(String str, ConstraintWidget child) {
             String a = " ";
-            a += child.mTop.mTarget != null ?
-                    ("T" + (child.mTop.mTarget.mType == ConstraintAnchor.Type.TOP ? "T" : "B"))
+            a += child.mTop.mTarget != null
+                    ? ("T" + (child.mTop.mTarget.mType == ConstraintAnchor.Type.TOP ? "T" : "B"))
                     : "__";
-            a += child.mBottom.mTarget != null ?
-                    ("B" + (child.mBottom.mTarget.mType == ConstraintAnchor.Type.TOP ? "T" : "B"))
+            a += child.mBottom.mTarget != null
+                    ? ("B" + (child.mBottom.mTarget.mType == ConstraintAnchor.Type.TOP ? "T" : "B"))
                     : "__";
-            a += child.mLeft.mTarget != null ?
-                    ("L" + (child.mLeft.mTarget.mType == ConstraintAnchor.Type.LEFT ? "L" : "R"))
+            a += child.mLeft.mTarget != null
+                    ? ("L" + (child.mLeft.mTarget.mType == ConstraintAnchor.Type.LEFT ? "L" : "R"))
                     : "__";
-            a += child.mRight.mTarget != null ?
-                    ("R" + (child.mRight.mTarget.mType == ConstraintAnchor.Type.LEFT ? "L" : "R"))
+            a += child.mRight.mTarget != null
+                    ? ("R" + (child.mRight.mTarget.mType == ConstraintAnchor.Type.LEFT ? "L" : "R"))
                     : "__";
             Log.v(TAG, str + a + " ---  " + child);
         }
@@ -2863,8 +2865,8 @@ public class MotionLayout extends ConstraintLayout implements
                 mStartWrapHeight = mLayoutStart.getHeight();
                 mEndWrapWidth = mLayoutEnd.getWidth();
                 mEndWrapHeight = mLayoutEnd.getHeight();
-                mMeasureDuringTransition = ((mStartWrapWidth != mEndWrapWidth) ||
-                        (mStartWrapHeight != mEndWrapHeight));
+                mMeasureDuringTransition = ((mStartWrapWidth != mEndWrapWidth)
+                        || (mStartWrapHeight != mEndWrapHeight));
             }
 
             int width = mStartWrapWidth;
@@ -3282,11 +3284,11 @@ public class MotionLayout extends ConstraintLayout implements
         Paint mTextPaint;
         Paint mFillPaint;
         private float[] mRectangle;
-        final int RED_COLOR = 0xFFFFAA33;
-        final int KEYFRAME_COLOR = 0xffe0759a;
-        final int GRAPH_COLOR = 0xFF33AA00;
-        final int SHADOW_COLOR = 0x77000000;
-        final int DIAMOND_SIZE = 10;
+        final int mRedColor = 0xFFFFAA33;
+        final int mKeyframeColor = 0xffe0759a;
+        final int mGraphColor = 0xFF33AA00;
+        final int mShadowColor = 0x77000000;
+        final int mDiamondSize = 10;
         DashPathEffect mDashPathEffect;
         int mKeyFrameCount;
         Rect mBounds = new Rect();
@@ -3296,25 +3298,25 @@ public class MotionLayout extends ConstraintLayout implements
         DevModeDraw() {
             mPaint = new Paint();
             mPaint.setAntiAlias(true);
-            mPaint.setColor(RED_COLOR);
+            mPaint.setColor(mRedColor);
             mPaint.setStrokeWidth(2);
             mPaint.setStyle(Paint.Style.STROKE);
 
             mPaintKeyframes = new Paint();
             mPaintKeyframes.setAntiAlias(true);
-            mPaintKeyframes.setColor(KEYFRAME_COLOR);
+            mPaintKeyframes.setColor(mKeyframeColor);
             mPaintKeyframes.setStrokeWidth(2);
             mPaintKeyframes.setStyle(Paint.Style.STROKE);
 
             mPaintGraph = new Paint();
             mPaintGraph.setAntiAlias(true);
-            mPaintGraph.setColor(GRAPH_COLOR);
+            mPaintGraph.setColor(mGraphColor);
             mPaintGraph.setStrokeWidth(2);
             mPaintGraph.setStyle(Paint.Style.STROKE);
 
             mTextPaint = new Paint();
             mTextPaint.setAntiAlias(true);
-            mTextPaint.setColor(GRAPH_COLOR);
+            mTextPaint.setColor(mGraphColor);
             mTextPaint.setTextSize(12 * getContext().getResources().getDisplayMetrics().density);
             mRectangle = new float[8];
             mFillPaint = new Paint();
@@ -3366,16 +3368,16 @@ public class MotionLayout extends ConstraintLayout implements
 
                     canvas.translate(mShadowTranslate, mShadowTranslate);
 
-                    mPaint.setColor(SHADOW_COLOR);
-                    mFillPaint.setColor(SHADOW_COLOR);
-                    mPaintKeyframes.setColor(SHADOW_COLOR);
-                    mPaintGraph.setColor(SHADOW_COLOR);
+                    mPaint.setColor(mShadowColor);
+                    mFillPaint.setColor(mShadowColor);
+                    mPaintKeyframes.setColor(mShadowColor);
+                    mPaintGraph.setColor(mShadowColor);
                     motionController.buildPath(mPoints, frames);
                     drawAll(canvas, mode, mKeyFrameCount, motionController);
-                    mPaint.setColor(RED_COLOR);
-                    mPaintKeyframes.setColor(KEYFRAME_COLOR);
-                    mFillPaint.setColor(KEYFRAME_COLOR);
-                    mPaintGraph.setColor(GRAPH_COLOR);
+                    mPaint.setColor(mRedColor);
+                    mPaintKeyframes.setColor(mKeyframeColor);
+                    mFillPaint.setColor(mKeyframeColor);
+                    mPaintGraph.setColor(mGraphColor);
 
                     canvas.translate(-mShadowTranslate, -mShadowTranslate);
                     drawAll(canvas, mode, mKeyFrameCount, motionController);
@@ -3428,10 +3430,10 @@ public class MotionLayout extends ConstraintLayout implements
                 float x = mKeyFramePoints[i * 2];
                 float y = mKeyFramePoints[i * 2 + 1];
                 mPath.reset();
-                mPath.moveTo(x, y + DIAMOND_SIZE);
-                mPath.lineTo(x + DIAMOND_SIZE, y);
-                mPath.lineTo(x, y - DIAMOND_SIZE);
-                mPath.lineTo(x - DIAMOND_SIZE, y);
+                mPath.moveTo(x, y + mDiamondSize);
+                mPath.lineTo(x + mDiamondSize, y);
+                mPath.lineTo(x, y - mDiamondSize);
+                mPath.lineTo(x - mDiamondSize, y);
                 mPath.close();
 
                 MotionPaths framePoint = motionController.getKeyFrame(i - 1);
@@ -3805,17 +3807,17 @@ public class MotionLayout extends ConstraintLayout implements
             mTransitionLastPosition = position;
             mTransitionPosition = position;
             mTransitionLastTime = currentTime;
-            int NOT_STOP_LOGIC = 0;
-            int STOP_LOGIC_CONTINUE = 1;
-            int STOP_LOGIC_STOP = 2;
-            int stopLogicDone = NOT_STOP_LOGIC;
+            int notStopLogic = 0;
+            int stopLogicContinue = 1;
+            int stopLogicStop = 2;
+            int stopLogicDone = notStopLogic;
             if (mInterpolator != null && !done) {
                 if (mTemporalInterpolator) {
                     float time = (currentTime - mAnimationStartTime) * 1E-9f;
                     position = mInterpolator.getInterpolation(time);
                     if (mInterpolator == mStopLogic) {
                         boolean dp = mStopLogic.isStopped();
-                        stopLogicDone = (dp) ? STOP_LOGIC_STOP : STOP_LOGIC_CONTINUE;
+                        stopLogicDone = (dp) ? stopLogicStop : stopLogicContinue;
                     }
 
                     if (DEBUG) {
@@ -3829,7 +3831,7 @@ public class MotionLayout extends ConstraintLayout implements
                         float lastVelocity = ((MotionInterpolator) mInterpolator).getVelocity();
                         mLastVelocity = lastVelocity;
                         if (Math.abs(lastVelocity) * mTransitionDuration <= EPSILON
-                                && stopLogicDone == STOP_LOGIC_STOP) {
+                                && stopLogicDone == stopLogicStop) {
                             mInTransition = false;
                         }
                         if (lastVelocity > 0 && position >= 1.0f) {
@@ -3861,7 +3863,7 @@ public class MotionLayout extends ConstraintLayout implements
                 setState(TransitionState.MOVING);
             }
 
-            if (stopLogicDone != STOP_LOGIC_CONTINUE) {
+            if (stopLogicDone != stopLogicContinue) {
                 if ((dir > 0 && position >= mTransitionGoalPosition)
                         || (dir <= 0 && position <= mTransitionGoalPosition)) {
                     position = mTransitionGoalPosition;
@@ -4056,13 +4058,13 @@ public class MotionLayout extends ConstraintLayout implements
             mCurrentState = mScene.getStartId();
             mBeginState = mScene.getStartId();
             if (DEBUG) {
-                Log.v(TAG, " ============= init   end is " +
-                        Debug.getName(getContext(), mEndState));
+                Log.v(TAG, " ============= init   end is "
+                        + Debug.getName(getContext(), mEndState));
             }
             mEndState = mScene.getEndId();
             if (DEBUG) {
-                Log.v(TAG, " ============= init setting end to " +
-                        Debug.getName(getContext(), mEndState));
+                Log.v(TAG, " ============= init setting end to "
+                        + Debug.getName(getContext(), mEndState));
             }
         }
     }
@@ -4457,16 +4459,16 @@ public class MotionLayout extends ConstraintLayout implements
         if (f != null) {
             f.getDpDt(pos, locationX, locationY, mAnchorDpDt);
             float y = v.getY();
-            float deltaPos = pos - lastPos;
-            float deltaY = y - lastY;
+            float deltaPos = pos - mLastPos;
+            float deltaY = y - mLastY;
             float dydp = (deltaPos != 0.0f) ? deltaY / deltaPos : Float.NaN;
             if (DEBUG) {
                 Log.v(TAG, " getAnchorDpDt " + Debug.getName(v) + " "
                         + Debug.getLocation() + " " + Arrays.toString(mAnchorDpDt));
             }
 
-            lastPos = pos;
-            lastY = y;
+            mLastPos = pos;
+            mLastY = y;
         } else {
             String idName = (v == null) ? "" + mTouchAnchorId :
                     v.getContext().getResources().getResourceName(mTouchAnchorId);
