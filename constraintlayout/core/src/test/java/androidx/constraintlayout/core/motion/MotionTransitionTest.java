@@ -17,6 +17,7 @@ package androidx.constraintlayout.core.motion;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import androidx.constraintlayout.core.parser.CLObject;
 import androidx.constraintlayout.core.parser.CLParser;
@@ -69,6 +70,27 @@ public class MotionTransitionTest {
         button1.connect(ConstraintAnchor.Type.LEFT, button0, ConstraintAnchor.Type.LEFT);
         button1.connect(ConstraintAnchor.Type.BOTTOM, button0, ConstraintAnchor.Type.TOP);
         button1.connect(ConstraintAnchor.Type.RIGHT, button0, ConstraintAnchor.Type.RIGHT);
+        root.add(button0);
+        root.add(button1);
+        root.layout();
+        return root;
+    }
+    ConstraintWidgetContainer makeLayout(int w1, int h1, int w2, int h2) {
+        ConstraintWidgetContainer root = new ConstraintWidgetContainer(1000, 1000);
+        root.setDebugName("root");
+        root.stringId = "root";
+        ConstraintWidget button0 = new ConstraintWidget( w1, h1);
+        button0.setDebugName("button0");
+        button0.stringId = "button0";
+
+        ConstraintWidget button1 = new ConstraintWidget(w2, h2);
+        button1.setDebugName("button1");
+        button1.stringId = "button1";
+
+        button0.connect(ConstraintAnchor.Type.LEFT, root, ConstraintAnchor.Type.LEFT);
+        button0.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        button1.connect(ConstraintAnchor.Type.LEFT, button0, ConstraintAnchor.Type.RIGHT);
+        button1.connect(ConstraintAnchor.Type.TOP, button0, ConstraintAnchor.Type.BOTTOM);
         root.add(button0);
         root.add(button1);
         root.layout();
@@ -144,20 +166,30 @@ public class MotionTransitionTest {
         transition.updateFrom(cwc2, Transition.END);
         String jstr =
                 "                  default: {\n"
-                +        "                    from: 'start',   to: 'end',\n"
-                +        "                    pathMotionArc: 'startVertical',\n"
-                +        "                    KeyFrames: {\n"
-                +        "                     KeyPositions: [\n"
-                +        "                     {\n"
-                +        "                      target: ['button1'],\n"
-                +        "                      frames: [25, 50, 75],\n"
-                +        "                      percentX: [0.2, 0.3, 0.7],\n"
-                +        "                      percentY: [0.4, 0.9, 0.7]\n"
-                +        "                      percentHeight: [0.4, 0.9, 0.7]\n"
-                +        "                     }\n"
-                +        "                     ]\n"
-                +        "                  },\n"
-                +        "                  }\n";
+                        + "                    from: 'start',   to: 'end',\n"
+                        + "                    pathMotionArc: 'startVertical',\n"
+                        + "                    onSwipe: { \n"
+                        + "                        anchor : 'button1',\n"
+                        + "                    side: 'top',\n"
+                        + "                        direction: 'up',\n"
+                        + "                        scale: 1,\n"
+                        + "                        threshold: 10,\n"
+                        + "                        mode:  'velocity',\n"
+                        + "                        maxVelocity: 4.0,\n"
+                        + "                        maxAccel: 4.0,\n"
+                        + "                   },      "
+                        + "                    KeyFrames: {\n"
+                        + "                     KeyPositions: [\n"
+                        + "                     {\n"
+                        + "                      target: ['button1'],\n"
+                        + "                      frames: [25, 50, 75],\n"
+                        + "                      percentX: [0.2, 0.3, 0.7],\n"
+                        + "                      percentY: [0.4, 0.9, 0.7]\n"
+                        + "                      percentHeight: [0.4, 0.9, 0.7]\n"
+                        + "                     }\n"
+                        + "                     ]\n"
+                        + "                  },\n"
+                        + "                  }\n";
 
         try {
             CLObject json = CLParser.parse(jstr);
@@ -165,10 +197,17 @@ public class MotionTransitionTest {
         } catch (CLParsingException e) {
             e.printStackTrace();
         }
+        assertTrue(transition.hasOnSwipe());
+        // because a drag of 76 pixels (dy) is 1/10 the distance to travel  it returns 0.1
+        float progress = transition.dragToProgress(0.5f, 10f, 76);
+        assertEquals(0.1f,progress,0.001f);
+
         transition.interpolate(cwc1.getWidth(), cwc1.getHeight(), 0.5f);
+
         WidgetFrame s1 = transition.getStart("button1");
         WidgetFrame e1 = transition.getEnd("button1");
         WidgetFrame f1 = transition.getInterpolated("button1");
+
         assertNotNull(f1);
         assertEquals(20, s1.top);
         assertEquals(0, s1.left);
@@ -182,11 +221,14 @@ public class MotionTransitionTest {
         assertEquals(200, e1.bottom - e1.top);
         assertEquals(20, e1.right - e1.left);
 
-        System.out.println(s1.top + " ," + s1.left + " ----  "
+        print("start  ", s1);
+        print("end    ", e1);
+        print("at(0.5)", f1);
+        System.out.println("start   =" + s1.top + " ," + s1.left + " ----  "
                 + s1.widget.getTop() + " ," + s1.widget.getLeft());
-        System.out.println(e1.top + " ," + e1.left + " ----  "
+        System.out.println("end     =" + e1.top + " ," + e1.left + " ----  "
                 + e1.widget.getTop() + " ," + e1.widget.getLeft());
-        System.out.println(f1.top + " ," + f1.left);
+        System.out.println("at(0.5) =" + f1.top + " ," + f1.left);
 
         assertEquals(736, f1.top);
         assertEquals(267, f1.left);
@@ -196,4 +238,107 @@ public class MotionTransitionTest {
                 + e1.widget.getTop() + " ," + e1.widget.getLeft());
         System.out.println(f1.top + " ," + f1.left);
     }
+    @Test
+    public void testTransitionJson2() {
+        Transition transition = new Transition();
+        ConstraintWidgetContainer cwc1 = makeLayout(100,100,100,100);
+        ConstraintWidgetContainer cwc2 =  makeLayout(500,900,100,100);
+        // button1 move down 800 and to the right 400
+        for (ConstraintWidget child : cwc1.getChildren()) {
+            WidgetFrame wf = transition.getStart(child);
+            wf.widget = child;
+        }
+        transition.updateFrom(cwc1, Transition.START);
+
+        for (ConstraintWidget child : cwc2.getChildren()) {
+            WidgetFrame wf = transition.getEnd(child);
+            wf.widget = child;
+        }
+
+        transition.updateFrom(cwc2, Transition.END);
+        String jstr =
+                "                  default: {\n"
+                        + "                    from: 'start',   to: 'end',\n"
+                        + "                    pathMotionArc: 'startHorizontal',\n"
+                        + "                    onSwipe: { \n"
+                        + "                        anchor :'button1',\n"
+                        + "                    side: 'top',\n"
+                        + "                        direction: 'up',\n"
+                        + "                        scale: 1,\n"
+                        + "                        threshold: 10,\n"
+                        + "                        mode:  'velocity',\n"
+                        + "                        maxVelocity: 4.0,\n"
+                        + "                        maxAccel: 4.0,\n"
+                        + "                   },      "
+                        + "                    KeyFrames: {\n"
+                        + "                     KeyPositions: [\n"
+                        + "                     {\n"
+                        + "                      target: ['button1'],\n"
+                        + "                      frames: [25, 50, 75],\n"
+                        + "                      percentX: [0.2, 0.3, 0.7],\n"
+                        + "                      percentY: [0.4, 0.9, 0.7]\n"
+                        + "                      percentHeight: [0.4, 0.9, 0.7]\n"
+                        + "                     }\n"
+                        + "                     ]\n"
+                        + "                  },\n"
+                        + "                  }\n";
+
+        try {
+            CLObject json = CLParser.parse(jstr);
+            TransitionParser.parse(json, transition);
+        } catch (CLParsingException e) {
+            e.printStackTrace();
+        }
+        assertTrue(transition.hasOnSwipe());
+        // because a drag of 80 pixels (dy) is 1/10 the distance to travel  it returns 0.1
+        float progress = transition.dragToProgress(0.5f, 10f, 80);
+        assertEquals(0.1f,progress,0.001f);
+        progress = transition.dragToProgress(0.3f, 10f, 80);
+        assertEquals(0.1f,progress,0.001f);
+
+        transition.interpolate(cwc1.getWidth(), cwc1.getHeight(), 0.5f);
+
+        WidgetFrame s1 = transition.getStart("button1");
+        WidgetFrame e1 = transition.getEnd("button1");
+        WidgetFrame f1 = transition.getInterpolated("button1");
+
+        assertNotNull(f1);
+        assertEquals(100, s1.top);
+        assertEquals(100, s1.left);
+        assertEquals(900, e1.top);
+        assertEquals(500, e1.left);
+
+        assertEquals(100, s1.bottom - s1.top);
+        assertEquals(100, s1.right - s1.left);
+        assertEquals(100, f1.bottom - f1.top);   // changed because of keyPosition
+        assertEquals(100, f1.right - f1.left);
+        assertEquals(100, e1.bottom - e1.top);
+        assertEquals(100, e1.right - e1.left);
+
+        print("start  ", s1);
+        print("end    ", e1);
+        print("at(0.5)", f1);
+        System.out.println("start   =" + s1.top + " ," + s1.left + " ----  "
+                + s1.widget.getTop() + " ," + s1.widget.getLeft());
+        System.out.println("end     =" + e1.top + " ," + e1.left + " ----  "
+                + e1.widget.getTop() + " ," + e1.widget.getLeft());
+        System.out.println("at(0.5) =" + f1.top + " ," + f1.left);
+
+        assertEquals(810, f1.top);
+        assertEquals(270, f1.left);
+        System.out.println(s1.top + " ," + s1.left + " ----  "
+                + s1.widget.getTop() + " ," + s1.widget.getLeft());
+        System.out.println(e1.top + " ," + e1.left + " ----  "
+                + e1.widget.getTop() + " ," + e1.widget.getLeft());
+        System.out.println(f1.top + " ," + f1.left);
+    }
+
+    void print(String name, WidgetFrame f) {
+        System.out.println(name+" "+ fix(f.left)+","+fix(f.top)+","+fix(f.bottom)+","+fix(f.right));
+    }
+    String fix(int p) {
+        String str = "     "+p;
+        return str.substring(str.length()-4);
+    }
 }
+

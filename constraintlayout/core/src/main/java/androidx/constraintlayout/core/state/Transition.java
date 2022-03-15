@@ -23,6 +23,9 @@ import androidx.constraintlayout.core.motion.key.MotionKeyCycle;
 import androidx.constraintlayout.core.motion.key.MotionKeyPosition;
 import androidx.constraintlayout.core.motion.utils.Easing;
 import androidx.constraintlayout.core.motion.utils.KeyCache;
+import androidx.constraintlayout.core.motion.utils.SpringStopEngine;
+import androidx.constraintlayout.core.motion.utils.StopEngine;
+import androidx.constraintlayout.core.motion.utils.StopLogicEngine;
 import androidx.constraintlayout.core.motion.utils.TypedBundle;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
@@ -54,13 +57,283 @@ public class Transition implements TypedValues {
     private int mAutoTransition = 0;
     private int mDuration = 400;
     private float mStagger = 0.0f;
+    OnSwipe mOnSwipe = null;
+
+    public OnSwipe createOnSwipe() {
+        return mOnSwipe = new OnSwipe();
+    }
+
+    public boolean hasOnSwipe() {
+        return mOnSwipe != null;
+    }
+
+    static class OnSwipe {
+        String mAnchorId;
+        int mAnchorSide;
+        public static  final int  ANCHOR_SIDE_TOP = 0;
+        public static  final int  ANCHOR_SIDE_LEFT = 1;
+        public static  final int  ANCHOR_SIDE_RIGHT = 2;
+        public static  final int  ANCHOR_SIDE_BOTTOM = 3;
+        public static  final int  ANCHOR_SIDE_MIDDLE = 4;
+        public static  final int  ANCHOR_SIDE_START = 5;
+        public static  final int  ANCHOR_SIDE_END = 6;
+        public static  final String[]SIDES = {"top","left","right",
+                "bottom","middle","start","end"};
+        private static final float[][] TOUCH_SIDES = {
+                {0.5f, 0.0f}, // top
+                {0.0f, 0.5f}, // left
+                {1.0f, 0.5f}, // right
+                {0.5f, 1.0f}, // bottom
+                {0.5f, 0.5f}, // middle
+                {0.0f, 0.5f}, // start TODO (dynamically updated)
+                {1.0f, 0.5f}, // end  TODO (dynamically updated)
+        };
+
+        String mRotationCenterId;
+        String mLimitBoundsTo;
+         boolean mDragVertical = true;
+        int mDragDirection = 0;
+        public static  final int  DRAG_UP = 0;
+        public static  final int  DRAG_DOWN = 1;
+        public static  final int  DRAG_LEFT = 2;
+        public static  final int  DRAG_RIGHT = 3;
+        public static  final int  DRAG_START = 4;
+        public static  final int  DRAG_END = 5;
+        public static  final int  DRAG_CLOCKWISE = 6;
+        public static  final int  DRAG_ANTICLOCKWISE = 7;
+        public static  final String[]DIRECTIONS = {"up","down","left","right","start",
+                "end","clockwise","anticlockwise"};
+
+        float  mDragScale = 1;
+        float mDragThreshold  = 10;
+        int mAutoCompleteMode = 0;
+        public static  final int MODE_CONTINUOUS_VELOCITY=0;
+        public static  final int MODE_SPRING=1;
+        public static  final String[]MODE = {"velocity","spring"};
+        float mMaxVelocity  = 4.f;
+        float mMaxAcceleration = 1.2f;
+
+        // On touch up what happens
+        int mOnTouchUp = 0;
+        public static  final int  ON_UP_AUTOCOMPLETE = 0;
+        public static  final int  ON_UP_AUTOCOMPLETE_TO_START = 1;
+        public static  final int  ON_UP_AUTOCOMPLETE_TO_END = 2;
+        public static  final int  ON_UP_STOP = 3;
+        public static  final int  ON_UP_DECELERATE = 4;
+        public static  final int  ON_UP_DECELERATE_AND_COMPLETE = 5;
+        public static  final int  ON_UP_NEVER_COMPLETE_TO_START = 6;
+        public static  final int  ON_UP_NEVER_COMPLETE_TO_END = 7;
+        public static  final String[]TOUCH_UP = {"autocomplete","toStart",
+                "toEnd","stop","decelerate","decelerateComplete",
+                "neverCompleteStart","neverCompleteEnd"};
+
+        float mSpringMass = 1;
+        float mSpringStiffness = 1;
+        float mSpringDamping =  10;
+        float mSpringStopThreshold = 1;
+
+        // In spring mode what happens at the boundary
+        int mSpringBoundary = 0;
+        public static  final int  BOUNDARY_OVERSHOOT = 0;
+        public static  final int  BOUNDARY_BOUNCE_START = 1;
+        public static  final int  BOUNDARY_BOUNCE_END = 2;
+        public static  final int  BOUNDARY_BOUNCE_BOTH = 3;
+        public static  final String[]BOUNDARY = {"overshoot","bounceStart",
+                "bounceEnd","bounceBoth"};
+
+        private static final float[][] TOUCH_DIRECTION = {
+                {0.0f, -1.0f}, // up
+                {0.0f, 1.0f}, // down
+                {-1.0f, 0.0f}, // left
+                {1.0f, 0.0f}, // right
+                {-1.0f, 0.0f}, // start (dynamically updated)
+                {1.0f, 0.0f}, // end  (dynamically updated)
+        };
+        private long mStart;
+
+        float[] getDirection() {
+            return  TOUCH_DIRECTION[mDragDirection];
+        }
+
+        float[] getSide() {
+            return  TOUCH_SIDES[mAnchorSide];
+        }
+        void setAnchorId(String anchorId) {
+            this.mAnchorId = anchorId;
+        }
+
+        void setAnchorSide(int anchorSide) {
+            this.mAnchorSide = anchorSide;
+        }
+
+        void setRotationCenterId(String rotationCenterId) {
+            this.mRotationCenterId = rotationCenterId;
+        }
+
+        void setLimitBoundsTo(String limitBoundsTo) {
+            this.mLimitBoundsTo = limitBoundsTo;
+        }
+
+        void setDragDirection(int dragDirection) {
+            this.mDragDirection = dragDirection;
+            mDragVertical = (mDragDirection < 2);
+        }
+
+        void setDragScale(float dragScale) {
+            if (Float.isNaN(dragScale)){
+                return;
+            }
+            this.mDragScale = dragScale;
+        }
+
+        void setDragThreshold(float dragThreshold) {
+            if (Float.isNaN(dragThreshold)){
+                return;
+            }
+            this.mDragThreshold = dragThreshold;
+        }
+
+        void setAutoCompleteMode(int mAutoCompleteMode) {
+            this.mAutoCompleteMode = mAutoCompleteMode;
+        }
+
+        void setMaxVelocity(float maxVelocity) {
+            if (Float.isNaN(maxVelocity)){
+                return;
+            }
+            this.mMaxVelocity = maxVelocity;
+        }
+
+        void setMaxAcceleration(float maxAcceleration) {
+            if (Float.isNaN(maxAcceleration)){
+                return;
+            }
+            this.mMaxAcceleration = maxAcceleration;
+        }
+
+        void setOnTouchUp(int onTouchUp) {
+            this.mOnTouchUp = onTouchUp;
+        }
+
+        void setSpringMass(float mSpringMass) {
+            if (Float.isNaN(mSpringMass)){
+                return;
+            }
+            this.mSpringMass = mSpringMass;
+        }
+
+        void setSpringStiffness(float mSpringStiffness) {
+            if (Float.isNaN(mSpringStiffness)){
+                return;
+            }
+            this.mSpringStiffness = mSpringStiffness;
+        }
+
+        void setSpringDamping(float mSpringDamping) {
+            if (Float.isNaN(mSpringDamping)){
+                return;
+            }
+            this.mSpringDamping = mSpringDamping;
+        }
+
+        void setSpringStopThreshold(float mSpringStopThreshold) {
+            if (Float.isNaN(mSpringStopThreshold)){
+                return;
+            }
+            this.mSpringStopThreshold = mSpringStopThreshold;
+        }
+
+        void setSpringBoundary(int mSpringBoundary) {
+            this.mSpringBoundary = mSpringBoundary;
+        }
+
+        private StopEngine mEngine;
+
+        void config(float position, float velocity,long start, float duration) {
+            mStart = start;
+            if (mAutoCompleteMode == MODE_CONTINUOUS_VELOCITY) {
+                StopLogicEngine sl;
+                if (mEngine instanceof StopLogicEngine) {
+                    sl = (StopLogicEngine) mEngine;
+                } else {
+                    sl = new StopLogicEngine();
+                }
+
+                sl.config(position, 1, velocity,
+                        duration, mMaxAcceleration,
+                        mMaxVelocity);
+            } else {
+                SpringStopEngine sl;
+                if (mEngine instanceof SpringStopEngine) {
+                    sl = (SpringStopEngine) mEngine;
+                } else {
+                    sl = new SpringStopEngine();
+                }
+                sl.springConfig(position, 1, velocity,
+                        mSpringMass,
+                        mSpringStiffness,
+                        mSpringDamping,
+                        mSpringStopThreshold, mSpringBoundary);
+            }
+        }
+    }
 
     /**
-     * @TODO: add description
-     * @param interpolator
-     * @param interpolatorString
+     * Converts from xy drag to progress
+     * This should be used till touch up
+     * @param currentProgress
+     * @param dx
+     * @param dy
      * @return
      */
+    public float dragToProgress(float currentProgress, float dx, float dy) {
+        if (mOnSwipe == null || mOnSwipe.mAnchorId == null) {
+            WidgetState w = mState.values().stream().findFirst().get();
+            return -dy / w.mParentHeight;
+        }
+            WidgetState base = mState.get(mOnSwipe.mAnchorId);
+            float[] dir = mOnSwipe.getDirection();
+            float[] side = mOnSwipe.getSide();
+            float[] motionDpDt = new float[2];
+            base.mMotionControl.getDpDt(currentProgress, side[0], side[1], motionDpDt);
+            float drag = dx * dir[0] + dy * dir[1];
+            float change = (mOnSwipe.mDragVertical) ? dy / motionDpDt[1] : dx / motionDpDt[0];
+            return change;
+    }
+
+    /**
+     * Set the start of the touch up
+     *
+     * @param currentProgress
+     * @param currentTime
+     * @param velocityX
+     * @param velocityY
+     * @return
+     */
+    public void setTouchUp(float currentProgress,
+                           long currentTime,
+                           float velocityX,
+                           float velocityY) {
+        if (mOnSwipe != null) {
+
+            WidgetState base = mState.get(mOnSwipe.mAnchorId);
+            float[] motionDpDt = new float[2];
+            float[] dir = mOnSwipe.getDirection();
+            float[] side = mOnSwipe.getSide();
+            base.mMotionControl.getDpDt(currentProgress, side[0], side[1], motionDpDt);
+            float drag = velocityX * dir[0] + velocityY * dir[1];
+
+            mOnSwipe.config(currentProgress, drag, currentTime, mDuration);
+        }
+    }
+
+
+    /**
+         * get the interpolater based on a constant or a string
+         * @param interpolator
+         * @param interpolatorString
+         * @return
+         */
     public static Interpolator getInterpolator(int interpolator, String interpolatorString) {
         switch (interpolator) {
             case SPLINE_STRING:

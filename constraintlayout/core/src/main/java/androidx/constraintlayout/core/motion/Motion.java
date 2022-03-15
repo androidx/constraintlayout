@@ -1469,7 +1469,7 @@ public class Motion implements TypedValues {
      * @param locationY   the y location on the view (0 = top, 1 = bottom)
      * @param mAnchorDpDt returns the differential of the motion with respect to the position
      */
-    void getDpDt(float position, float locationX, float locationY, float[] mAnchorDpDt) {
+    public void getDpDt(float position, float locationX, float locationY, float[] mAnchorDpDt) {
         position = getAdjustedPosition(position, mVelocity);
 
         if (mSpline != null) {
