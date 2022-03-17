@@ -317,11 +317,17 @@ public class XmlBasedTest {
                             appAttrs.put(attr, attrValue);
 
                             if (attr.equals("layout_constraintDimensionRatio")) {
+                                // do nothing
                             } else if (attr.equals("layout_constraintGuide_begin")) {
+                                // do nothing
                             } else if (attr.equals("layout_constraintGuide_percent")) {
+                                // do nothing
                             } else if (attr.equals("layout_constraintGuide_end")) {
+                                // do nothing
                             } else if (attr.equals("layout_constraintHorizontal_bias")) {
+                                // do nothing
                             } else if (attr.equals("layout_constraintVertical_bias")) {
+                                // do nothing
                             } else if (attr.startsWith("layout_constraint")) {
                                 widgetConstraints.put(attr, attrValue);
                             }

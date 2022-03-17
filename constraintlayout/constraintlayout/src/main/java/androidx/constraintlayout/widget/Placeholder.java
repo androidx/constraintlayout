@@ -80,7 +80,8 @@ public class Placeholder extends View {
                 if (attr == R.styleable.ConstraintLayout_placeholder_content) {
                     mContentId = a.getResourceId(attr, mContentId);
                 } else {
-                    if (attr == R.styleable.ConstraintLayout_placeholder_placeholder_emptyVisibility) {
+                    if (attr == R.styleable
+                            .ConstraintLayout_placeholder_placeholder_emptyVisibility) {
                         mEmptyVisibility = a.getInt(attr, mEmptyVisibility);
                     }
                 }
@@ -162,9 +163,9 @@ public class Placeholder extends View {
 
         mContent = container.findViewById(mContentId);
         if (mContent != null) {
-            ConstraintLayout.LayoutParams layoutParamsContent = (ConstraintLayout.LayoutParams) mContent
-                    .getLayoutParams();
-            layoutParamsContent.isInPlaceholder = true;
+            ConstraintLayout.LayoutParams layoutParamsContent =
+                    (ConstraintLayout.LayoutParams) mContent.getLayoutParams();
+            layoutParamsContent.mIsInPlaceholder = true;
             mContent.setVisibility(View.VISIBLE);
             setVisibility(View.VISIBLE);
         }
@@ -181,9 +182,9 @@ public class Placeholder extends View {
         }
         if (mContent != null) {
             mContent.setVisibility(VISIBLE); // ???
-            ConstraintLayout.LayoutParams layoutParamsContent = (ConstraintLayout.LayoutParams) mContent
-                    .getLayoutParams();
-            layoutParamsContent.isInPlaceholder = false;
+            ConstraintLayout.LayoutParams layoutParamsContent =
+                    (ConstraintLayout.LayoutParams) mContent.getLayoutParams();
+            layoutParamsContent.mIsInPlaceholder = false;
             mContent = null;
         }
 
@@ -204,18 +205,19 @@ public class Placeholder extends View {
         if (mContent == null) {
             return;
         }
-        ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) getLayoutParams();
+        ConstraintLayout.LayoutParams layoutParams =
+                (ConstraintLayout.LayoutParams) getLayoutParams();
         ConstraintLayout.LayoutParams layoutParamsContent = (ConstraintLayout.LayoutParams) mContent
                 .getLayoutParams();
-        layoutParamsContent.widget.setVisibility(View.VISIBLE);
-        if (layoutParams.widget.getHorizontalDimensionBehaviour()
+        layoutParamsContent.mWidget.setVisibility(View.VISIBLE);
+        if (layoutParams.mWidget.getHorizontalDimensionBehaviour()
                 != ConstraintWidget.DimensionBehaviour.FIXED) {
-            layoutParams.widget.setWidth(layoutParamsContent.widget.getWidth());
+            layoutParams.mWidget.setWidth(layoutParamsContent.mWidget.getWidth());
         }
-        if (layoutParams.widget.getVerticalDimensionBehaviour()
+        if (layoutParams.mWidget.getVerticalDimensionBehaviour()
                 != ConstraintWidget.DimensionBehaviour.FIXED) {
-            layoutParams.widget.setHeight(layoutParamsContent.widget.getHeight());
+            layoutParams.mWidget.setHeight(layoutParamsContent.mWidget.getHeight());
         }
-        layoutParamsContent.widget.setVisibility(View.GONE);
+        layoutParamsContent.mWidget.setVisibility(View.GONE);
     }
 }

@@ -27,6 +27,11 @@ public class CLNumber extends CLElement {
         this.mValue = value;
     }
 
+    /**
+     * @TODO: add description
+     * @param content
+     * @return
+     */
     public static CLElement allocate(char[] content) {
         return new CLNumber(content);
     }
@@ -53,6 +58,10 @@ public class CLNumber extends CLElement {
         return json.toString();
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public boolean isInt() {
         float value = getFloat();
         int intValue = (int) value;

@@ -64,7 +64,7 @@ import androidx.core.widget.TextViewCompat;
  * </ul>
  */
 public class MotionLabel extends View implements FloatLayout {
-    final static String TAG = "MotionLabel";
+    static final String TAG = "MotionLabel";
     TextPaint mPaint = new TextPaint();
     Path mPath = new Path();
     private int mTextFillColor = 0xFFFF;
@@ -109,7 +109,7 @@ public class MotionLabel extends View implements FloatLayout {
     private float mTextureWidth = Float.NaN;
     private float mTextPanX = 0;
     private float mTextPanY = 0;
-    Paint paintCache = new Paint();
+    Paint mPaintCache = new Paint();
     private int mTextureEffect = 0;
 
     public MotionLabel(Context context) {
@@ -403,7 +403,7 @@ public class MotionLabel extends View implements FloatLayout {
 
     Rect mTempRect;
     Paint mTempPaint;
-    float paintTextSize;
+    float mPaintTextSize;
 
     @Override
     public void layout(int l, int t, int r, int b) {
@@ -418,7 +418,7 @@ public class MotionLabel extends View implements FloatLayout {
                 mTempPaint = new Paint();
                 mTempRect = new Rect();
                 mTempPaint.set(mPaint);
-                paintTextSize = mTempPaint.getTextSize();
+                mPaintTextSize = mTempPaint.getTextSize();
             }
 
             mTempPaint.getTextBounds(mText, 0, mText.length(), mTempRect);
@@ -429,9 +429,9 @@ public class MotionLabel extends View implements FloatLayout {
             float vh = mFloatHeight - mPaddingBottom - mPaddingTop;
             if (normalScale) {
                 if (tw * vh > th * vw) { // width limited tw/vw > th/vh
-                    mPaint.setTextSize((paintTextSize * vw) / (tw));
+                    mPaint.setTextSize((mPaintTextSize * vw) / (tw));
                 } else { // height limited
-                    mPaint.setTextSize((paintTextSize * vh) / (th));
+                    mPaint.setTextSize((mPaintTextSize * vh) / (th));
                 }
             } else {
                 scaleText = (tw * vh > th * vw) ? vw / (float) tw : vh / (float) th;
@@ -464,7 +464,7 @@ public class MotionLabel extends View implements FloatLayout {
                 mTempPaint = new Paint();
                 mTempRect = new Rect();
                 mTempPaint.set(mPaint);
-                paintTextSize = mTempPaint.getTextSize();
+                mPaintTextSize = mTempPaint.getTextSize();
             }
             mFloatWidth = r - l;
             mFloatHeight = b - t;
@@ -475,9 +475,9 @@ public class MotionLabel extends View implements FloatLayout {
             float vw = r - l - mPaddingRight - mPaddingLeft;
             float vh = b - t - mPaddingBottom - mPaddingTop;
             if (tw * vh > th * vw) { // width limited tw/vw > th/vh
-                mPaint.setTextSize((paintTextSize * vw) / (tw));
+                mPaint.setTextSize((mPaintTextSize * vw) / (tw));
             } else { // height limited
-                mPaint.setTextSize((paintTextSize * vh) / (th));
+                mPaint.setTextSize((mPaintTextSize * vh) / (th));
             }
             if (mUseOutline || !Float.isNaN(mBaseTextSize)) {
                 buildShape(Float.isNaN(mBaseTextSize) ? 1.0f : mTextSize / mBaseTextSize);
@@ -502,7 +502,7 @@ public class MotionLabel extends View implements FloatLayout {
             mOutlinePositionMatrix = new Matrix();
         }
         if (mUseOutline) {
-            paintCache.set(mPaint);
+            mPaintCache.set(mPaint);
             mOutlinePositionMatrix.reset();
             float x = mPaddingLeft + getHorizontalOffset();
             float y = mPaddingTop + getVerticalOffset();
@@ -530,7 +530,7 @@ public class MotionLabel extends View implements FloatLayout {
             mOutlinePositionMatrix.reset();
             mOutlinePositionMatrix.postTranslate(-x, -y);
             mPath.transform(mOutlinePositionMatrix);
-            mPaint.set(paintCache);
+            mPaint.set(mPaintCache);
         } else {
             float x = mPaddingLeft + getHorizontalOffset();
             float y = mPaddingTop + getVerticalOffset();

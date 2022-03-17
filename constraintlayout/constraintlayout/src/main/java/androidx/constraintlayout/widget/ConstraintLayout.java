@@ -16,6 +16,14 @@
 
 package androidx.constraintlayout.widget;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
+import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_SPREAD;
+import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_WRAP;
+import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID;
+import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.UNSET;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -26,6 +34,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
+import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.core.LinearSystem;
@@ -37,19 +52,8 @@ import androidx.constraintlayout.core.widgets.Guideline;
 import androidx.constraintlayout.core.widgets.Optimizer;
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure;
 
-import android.util.AttributeSet;
-import android.util.Log;
-import android.util.SparseArray;
-import android.util.SparseIntArray;
-import android.view.View;
-import android.view.ViewGroup;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.*;
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * A {@code ConstraintLayout} is a {@link android.view.ViewGroup} which allows you
@@ -695,13 +699,13 @@ public class ConstraintLayout extends ViewGroup {
     // -------------------------------------------------------------------------------------------
 
     class Measurer implements BasicMeasure.Measurer {
-        ConstraintLayout layout;
-        int paddingTop;
-        int paddingBottom;
-        int paddingWidth;
-        int paddingHeight;
-        int layoutWidthSpec;
-        int layoutHeightSpec;
+        ConstraintLayout mLayout;
+        int mPaddingTop;
+        int mPaddingBottom;
+        int mPaddingWidth;
+        int mPaddingHeight;
+        int mLayoutWidthSpec;
+        int mLayoutHeightSpec;
 
         public void captureLayoutInfo(int widthSpec,
                                       int heightSpec,
@@ -709,16 +713,16 @@ public class ConstraintLayout extends ViewGroup {
                                       int bottom,
                                       int width,
                                       int height) {
-            paddingTop = top;
-            paddingBottom = bottom;
-            paddingWidth = width;
-            paddingHeight = height;
-            layoutWidthSpec = widthSpec;
-            layoutHeightSpec = heightSpec;
+            mPaddingTop = top;
+            mPaddingBottom = bottom;
+            mPaddingWidth = width;
+            mPaddingHeight = height;
+            mLayoutWidthSpec = widthSpec;
+            mLayoutHeightSpec = heightSpec;
         }
 
         Measurer(ConstraintLayout l) {
-            layout = l;
+            mLayout = l;
         }
 
         @SuppressLint("WrongCall")
@@ -754,8 +758,8 @@ public class ConstraintLayout extends ViewGroup {
             int horizontalSpec = 0;
             int verticalSpec = 0;
 
-            int heightPadding = paddingTop + paddingBottom;
-            int widthPadding = paddingWidth;
+            int heightPadding = mPaddingTop + mPaddingBottom;
+            int widthPadding = mPaddingWidth;
 
             View child = (View) widget.getCompanionWidget();
 
@@ -766,24 +770,25 @@ public class ConstraintLayout extends ViewGroup {
                 }
                 break;
                 case WRAP_CONTENT: {
-                    horizontalSpec = getChildMeasureSpec(layoutWidthSpec,
+                    horizontalSpec = getChildMeasureSpec(mLayoutWidthSpec,
                             widthPadding, WRAP_CONTENT);
                 }
                 break;
                 case MATCH_PARENT: {
                     // Horizontal spec must account for margin as well as padding here.
-                    horizontalSpec = getChildMeasureSpec(layoutWidthSpec,
+                    horizontalSpec = getChildMeasureSpec(mLayoutWidthSpec,
                             widthPadding + widget.getHorizontalMargin(),
                             LayoutParams.MATCH_PARENT);
                 }
                 break;
                 case MATCH_CONSTRAINT: {
-                    horizontalSpec = getChildMeasureSpec(layoutWidthSpec,
+                    horizontalSpec = getChildMeasureSpec(mLayoutWidthSpec,
                             widthPadding, WRAP_CONTENT);
                     boolean shouldDoWrap = widget.mMatchConstraintDefaultWidth
                             == MATCH_CONSTRAINT_WRAP;
                     if (measure.measureStrategy == BasicMeasure.Measure.TRY_GIVEN_DIMENSIONS
-                        || measure.measureStrategy == BasicMeasure.Measure.USE_GIVEN_DIMENSIONS) {
+                            || measure.measureStrategy
+                            == BasicMeasure.Measure.USE_GIVEN_DIMENSIONS) {
                         // the solver gives us our new dimension,
                         // but if we previously had it measured with
                         // a wrap, it can be incorrect if the other side was also variable.
@@ -814,19 +819,19 @@ public class ConstraintLayout extends ViewGroup {
                 }
                 break;
                 case WRAP_CONTENT: {
-                    verticalSpec = getChildMeasureSpec(layoutHeightSpec,
+                    verticalSpec = getChildMeasureSpec(mLayoutHeightSpec,
                             heightPadding, WRAP_CONTENT);
                 }
                 break;
                 case MATCH_PARENT: {
                     // Vertical spec must account for margin as well as padding here.
-                    verticalSpec = getChildMeasureSpec(layoutHeightSpec,
+                    verticalSpec = getChildMeasureSpec(mLayoutHeightSpec,
                             heightPadding + widget.getVerticalMargin(),
                             LayoutParams.MATCH_PARENT);
                 }
                 break;
                 case MATCH_CONSTRAINT: {
-                    verticalSpec = getChildMeasureSpec(layoutHeightSpec,
+                    verticalSpec = getChildMeasureSpec(mLayoutHeightSpec,
                             heightPadding, WRAP_CONTENT);
                     boolean shouldDoWrap = widget.mMatchConstraintDefaultHeight
                             == MATCH_CONSTRAINT_WRAP;
@@ -994,7 +999,7 @@ public class ConstraintLayout extends ViewGroup {
 
             measure.measuredNeedsSolverPass = (width != measure.horizontalDimension)
                     || (height != measure.verticalDimension);
-            if (params.needsBaseline) {
+            if (params.mNeedsBaseline) {
                 hasBaseline = true;
             }
             if (hasBaseline && baseline != -1 && widget.getBaselineDistance() != baseline) {
@@ -1041,19 +1046,19 @@ public class ConstraintLayout extends ViewGroup {
 
         @Override
         public final void didMeasures() {
-            final int widgetsCount = layout.getChildCount();
+            final int widgetsCount = mLayout.getChildCount();
             for (int i = 0; i < widgetsCount; i++) {
-                final View child = layout.getChildAt(i);
+                final View child = mLayout.getChildAt(i);
                 if (child instanceof Placeholder) {
-                    ((Placeholder) child).updatePostMeasure(layout);
+                    ((Placeholder) child).updatePostMeasure(mLayout);
                 }
             }
             // TODO refactor into an updatePostMeasure interface
-            final int helperCount = layout.mConstraintHelpers.size();
+            final int helperCount = mLayout.mConstraintHelpers.size();
             if (helperCount > 0) {
                 for (int i = 0; i < helperCount; i++) {
-                    ConstraintHelper helper = layout.mConstraintHelpers.get(i);
-                    helper.updatePostMeasure(layout);
+                    ConstraintHelper helper = mLayout.mConstraintHelpers.get(i);
+                    helper.updatePostMeasure(mLayout);
                 }
             }
         }
@@ -1126,16 +1131,16 @@ public class ConstraintLayout extends ViewGroup {
         if (view instanceof androidx.constraintlayout.widget.Guideline) {
             if (!(widget instanceof Guideline)) {
                 LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
-                layoutParams.widget = new Guideline();
-                layoutParams.isGuideline = true;
-                ((Guideline) layoutParams.widget).setOrientation(layoutParams.orientation);
+                layoutParams.mWidget = new Guideline();
+                layoutParams.mIsGuideline = true;
+                ((Guideline) layoutParams.mWidget).setOrientation(layoutParams.orientation);
             }
         }
         if (view instanceof ConstraintHelper) {
             ConstraintHelper helper = (ConstraintHelper) view;
             helper.validateParams();
             LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
-            layoutParams.isHelper = true;
+            layoutParams.mIsHelper = true;
             if (!mConstraintHelpers.contains(helper)) {
                 mConstraintHelpers.add(helper);
             }
@@ -1382,7 +1387,7 @@ public class ConstraintLayout extends ViewGroup {
         layoutParams.helped = false;
 
         widget.setVisibility(child.getVisibility());
-        if (layoutParams.isInPlaceholder) {
+        if (layoutParams.mIsInPlaceholder) {
             widget.setInPlaceholder(true);
             widget.setVisibility(View.GONE);
         }
@@ -1392,11 +1397,11 @@ public class ConstraintLayout extends ViewGroup {
             ConstraintHelper helper = (ConstraintHelper) child;
             helper.resolveRtl(widget, mLayoutWidget.isRtl());
         }
-        if (layoutParams.isGuideline) {
+        if (layoutParams.mIsGuideline) {
             Guideline guideline = (Guideline) widget;
-            int resolvedGuideBegin = layoutParams.resolvedGuideBegin;
-            int resolvedGuideEnd = layoutParams.resolvedGuideEnd;
-            float resolvedGuidePercent = layoutParams.resolvedGuidePercent;
+            int resolvedGuideBegin = layoutParams.mResolvedGuideBegin;
+            int resolvedGuideEnd = layoutParams.mResolvedGuideEnd;
+            float resolvedGuidePercent = layoutParams.mResolvedGuidePercent;
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 resolvedGuideBegin = layoutParams.guideBegin;
                 resolvedGuideEnd = layoutParams.guideEnd;
@@ -1411,13 +1416,13 @@ public class ConstraintLayout extends ViewGroup {
             }
         } else {
             // Get the left/right constraints resolved for RTL
-            int resolvedLeftToLeft = layoutParams.resolvedLeftToLeft;
-            int resolvedLeftToRight = layoutParams.resolvedLeftToRight;
-            int resolvedRightToLeft = layoutParams.resolvedRightToLeft;
-            int resolvedRightToRight = layoutParams.resolvedRightToRight;
-            int resolveGoneLeftMargin = layoutParams.resolveGoneLeftMargin;
-            int resolveGoneRightMargin = layoutParams.resolveGoneRightMargin;
-            float resolvedHorizontalBias = layoutParams.resolvedHorizontalBias;
+            int resolvedLeftToLeft = layoutParams.mResolvedLeftToLeft;
+            int resolvedLeftToRight = layoutParams.mResolvedLeftToRight;
+            int resolvedRightToLeft = layoutParams.mResolvedRightToLeft;
+            int resolvedRightToRight = layoutParams.mResolvedRightToRight;
+            int resolveGoneLeftMargin = layoutParams.mResolveGoneLeftMargin;
+            int resolveGoneRightMargin = layoutParams.mResolveGoneRightMargin;
+            float resolvedHorizontalBias = layoutParams.mResolvedHorizontalBias;
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 // Pre JB MR1, left/right should take precedence, unless they are
@@ -1549,7 +1554,7 @@ public class ConstraintLayout extends ViewGroup {
 
             // FIXME: need to agree on the correct magic value for this
             //  rather than simply using zero.
-            if (!layoutParams.horizontalDimensionFixed) {
+            if (!layoutParams.mHorizontalDimensionFixed) {
                 if (layoutParams.width == MATCH_PARENT) {
                     if (layoutParams.constrainedWidth) {
                         widget.setHorizontalDimensionBehaviour(ConstraintWidget
@@ -1575,7 +1580,7 @@ public class ConstraintLayout extends ViewGroup {
                             .DimensionBehaviour.WRAP_CONTENT);
                 }
             }
-            if (!layoutParams.verticalDimensionFixed) {
+            if (!layoutParams.mVerticalDimensionFixed) {
                 if (layoutParams.height == MATCH_PARENT) {
                     if (layoutParams.constrainedHeight) {
                         widget.setVerticalDimensionBehaviour(ConstraintWidget
@@ -1624,11 +1629,11 @@ public class ConstraintLayout extends ViewGroup {
         View view = mChildrenByIds.get(baselineTarget);
         ConstraintWidget target = idToWidget.get(baselineTarget);
         if (target != null && view != null && view.getLayoutParams() instanceof LayoutParams) {
-            layoutParams.needsBaseline = true;
+            layoutParams.mNeedsBaseline = true;
             if (type == ConstraintAnchor.Type.BASELINE) { // baseline to baseline
                 LayoutParams targetParams = (LayoutParams) view.getLayoutParams();
-                targetParams.needsBaseline = true;
-                targetParams.widget.setHasBaseline(true);
+                targetParams.mNeedsBaseline = true;
+                targetParams.mWidget.setHasBaseline(true);
             }
             ConstraintAnchor baseline = widget.getAnchor(ConstraintAnchor.Type.BASELINE);
             ConstraintAnchor targetAnchor = target.getAnchor(type);
@@ -1654,7 +1659,7 @@ public class ConstraintLayout extends ViewGroup {
             if (view == this) {
                 return mLayoutWidget;
             }
-            return view == null ? null : ((LayoutParams) view.getLayoutParams()).widget;
+            return view == null ? null : ((LayoutParams) view.getLayoutParams()).mWidget;
         }
     }
 
@@ -1669,11 +1674,11 @@ public class ConstraintLayout extends ViewGroup {
         }
         if (view != null) {
             if (view.getLayoutParams() instanceof LayoutParams) {
-                return ((LayoutParams) view.getLayoutParams()).widget;
+                return ((LayoutParams) view.getLayoutParams()).mWidget;
             }
             view.setLayoutParams(generateLayoutParams(view.getLayoutParams()));
             if (view.getLayoutParams() instanceof LayoutParams) {
-                return ((LayoutParams) view.getLayoutParams()).widget;
+                return ((LayoutParams) view.getLayoutParams()).mWidget;
             }
         }
         return null;
@@ -1757,8 +1762,8 @@ public class ConstraintLayout extends ViewGroup {
                                             boolean isWidthMeasuredTooSmall,
                                             boolean isHeightMeasuredTooSmall) {
         int childState = 0;
-        int heightPadding = mMeasurer.paddingHeight;
-        int widthPadding = mMeasurer.paddingWidth;
+        int heightPadding = mMeasurer.mPaddingHeight;
+        int widthPadding = mMeasurer.mPaddingWidth;
 
         int androidLayoutWidth = measuredWidth + widthPadding;
         int androidLayoutHeight = measuredHeight + heightPadding;
@@ -1791,7 +1796,7 @@ public class ConstraintLayout extends ViewGroup {
         if (DEBUG) {
             time = System.currentTimeMillis();
         }
-        mDirtyHierarchy |= dynamicUpdateConstraints( widthMeasureSpec,  heightMeasureSpec);
+        mDirtyHierarchy |= dynamicUpdateConstraints(widthMeasureSpec,  heightMeasureSpec);
 
         boolean sameSpecsAsPreviousMeasure = (mOnMeasureWidthMeasureSpec == widthMeasureSpec
                 && mOnMeasureHeightMeasureSpec == heightMeasureSpec);
@@ -1914,8 +1919,8 @@ public class ConstraintLayout extends ViewGroup {
                                              int heightMode,
                                              int heightSize) {
 
-        int heightPadding = mMeasurer.paddingHeight;
-        int widthPadding = mMeasurer.paddingWidth;
+        int heightPadding = mMeasurer.mPaddingHeight;
+        int widthPadding = mMeasurer.mPaddingWidth;
 
         ConstraintWidget.DimensionBehaviour widthBehaviour =
                 ConstraintWidget.DimensionBehaviour.FIXED;
@@ -2015,19 +2020,19 @@ public class ConstraintLayout extends ViewGroup {
         for (int i = 0; i < widgetsCount; i++) {
             final View child = getChildAt(i);
             LayoutParams params = (LayoutParams) child.getLayoutParams();
-            ConstraintWidget widget = params.widget;
+            ConstraintWidget widget = params.mWidget;
 
             if (child.getVisibility() == GONE
-                    && !params.isGuideline
-                    && !params.isHelper
-                    && !params.isVirtualGroup
+                    && !params.mIsGuideline
+                    && !params.mIsHelper
+                    && !params.mIsVirtualGroup
                     && !isInEditMode) {
                 // If we are in edit mode, let's layout the widget
                 // so that they are at "the right place"
                 // visually in the editor (as we get our positions from layoutlib)
                 continue;
             }
-            if (params.isInPlaceholder) {
+            if (params.mIsInPlaceholder) {
                 continue;
             }
             int l = widget.getX();
@@ -2608,8 +2613,8 @@ public class ConstraintLayout extends ViewGroup {
         // boolean isRtl = false;
         // int layoutDirection = ViewCompat.LAYOUT_DIRECTION_LTR;
 
-        boolean widthSet = true; // need to be set to false when we reactivate this in 3.0
-        boolean heightSet = true; // need to be set to false when we reactivate this in 3.0
+        boolean mWidthSet = true; // need to be set to false when we reactivate this in 3.0
+        boolean mHeightSet = true; // need to be set to false when we reactivate this in 3.0
 
         ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2632,12 +2637,12 @@ public class ConstraintLayout extends ViewGroup {
         /**
          * The ratio between the width and height of the child.
          */
-        float dimensionRatioValue = 0;
+        float mDimensionRatioValue = 0;
 
         /**
          * The child's side to constrain using dimensRatio.
          */
-        int dimensionRatioSide = VERTICAL;
+        int mDimensionRatioSide = VERTICAL;
 
         /**
          * The child's weight that we can use to distribute the available horizontal space
@@ -2815,34 +2820,34 @@ public class ConstraintLayout extends ViewGroup {
         public int wrapBehaviorInParent = WRAP_BEHAVIOR_INCLUDED;
 
         // Internal use only
-        boolean horizontalDimensionFixed = true;
-        boolean verticalDimensionFixed = true;
+        boolean mHorizontalDimensionFixed = true;
+        boolean mVerticalDimensionFixed = true;
 
-        boolean needsBaseline = false;
-        boolean isGuideline = false;
-        boolean isHelper = false;
-        boolean isInPlaceholder = false;
-        boolean isVirtualGroup = false;
+        boolean mNeedsBaseline = false;
+        boolean mIsGuideline = false;
+        boolean mIsHelper = false;
+        boolean mIsInPlaceholder = false;
+        boolean mIsVirtualGroup = false;
 
-        int resolvedLeftToLeft = UNSET;
-        int resolvedLeftToRight = UNSET;
-        int resolvedRightToLeft = UNSET;
-        int resolvedRightToRight = UNSET;
-        int resolveGoneLeftMargin = GONE_UNSET;
-        int resolveGoneRightMargin = GONE_UNSET;
-        float resolvedHorizontalBias = 0.5f;
+        int mResolvedLeftToLeft = UNSET;
+        int mResolvedLeftToRight = UNSET;
+        int mResolvedRightToLeft = UNSET;
+        int mResolvedRightToRight = UNSET;
+        int mResolveGoneLeftMargin = GONE_UNSET;
+        int mResolveGoneRightMargin = GONE_UNSET;
+        float mResolvedHorizontalBias = 0.5f;
 
-        int resolvedGuideBegin;
-        int resolvedGuideEnd;
-        float resolvedGuidePercent;
+        int mResolvedGuideBegin;
+        int mResolvedGuideEnd;
+        float mResolvedGuidePercent;
 
-        ConstraintWidget widget = new ConstraintWidget();
+        ConstraintWidget mWidget = new ConstraintWidget();
 
         /**
          * @suppress
          */
         public ConstraintWidget getConstraintWidget() {
-            return widget;
+            return mWidget;
         }
 
         /**
@@ -2850,15 +2855,15 @@ public class ConstraintLayout extends ViewGroup {
          * @suppress
          */
         public void setWidgetDebugName(String text) {
-            widget.setDebugName(text);
+            mWidget.setDebugName(text);
         }
 
         /**
          * Reset the ConstraintWidget
          */
         public void reset() {
-            if (widget != null) {
-                widget.reset();
+            if (mWidget != null) {
+                mWidget.reset();
             }
         }
 
@@ -2920,8 +2925,8 @@ public class ConstraintLayout extends ViewGroup {
             this.horizontalBias = source.horizontalBias;
             this.verticalBias = source.verticalBias;
             this.dimensionRatio = source.dimensionRatio;
-            this.dimensionRatioValue = source.dimensionRatioValue;
-            this.dimensionRatioSide = source.dimensionRatioSide;
+            this.mDimensionRatioValue = source.mDimensionRatioValue;
+            this.mDimensionRatioSide = source.mDimensionRatioSide;
             this.horizontalWeight = source.horizontalWeight;
             this.verticalWeight = source.verticalWeight;
             this.horizontalChainStyle = source.horizontalChainStyle;
@@ -2939,22 +2944,22 @@ public class ConstraintLayout extends ViewGroup {
             this.editorAbsoluteX = source.editorAbsoluteX;
             this.editorAbsoluteY = source.editorAbsoluteY;
             this.orientation = source.orientation;
-            this.horizontalDimensionFixed = source.horizontalDimensionFixed;
-            this.verticalDimensionFixed = source.verticalDimensionFixed;
-            this.needsBaseline = source.needsBaseline;
-            this.isGuideline = source.isGuideline;
-            this.resolvedLeftToLeft = source.resolvedLeftToLeft;
-            this.resolvedLeftToRight = source.resolvedLeftToRight;
-            this.resolvedRightToLeft = source.resolvedRightToLeft;
-            this.resolvedRightToRight = source.resolvedRightToRight;
-            this.resolveGoneLeftMargin = source.resolveGoneLeftMargin;
-            this.resolveGoneRightMargin = source.resolveGoneRightMargin;
-            this.resolvedHorizontalBias = source.resolvedHorizontalBias;
+            this.mHorizontalDimensionFixed = source.mHorizontalDimensionFixed;
+            this.mVerticalDimensionFixed = source.mVerticalDimensionFixed;
+            this.mNeedsBaseline = source.mNeedsBaseline;
+            this.mIsGuideline = source.mIsGuideline;
+            this.mResolvedLeftToLeft = source.mResolvedLeftToLeft;
+            this.mResolvedLeftToRight = source.mResolvedLeftToRight;
+            this.mResolvedRightToLeft = source.mResolvedRightToLeft;
+            this.mResolvedRightToRight = source.mResolvedRightToRight;
+            this.mResolveGoneLeftMargin = source.mResolveGoneLeftMargin;
+            this.mResolveGoneRightMargin = source.mResolveGoneRightMargin;
+            this.mResolvedHorizontalBias = source.mResolvedHorizontalBias;
             this.constraintTag = source.constraintTag;
             this.wrapBehaviorInParent = source.wrapBehaviorInParent;
-            this.widget = source.widget;
-            this.widthSet = source.widthSet;
-            this.heightSet = source.heightSet;
+            this.mWidget = source.mWidget;
+            this.mWidthSet = source.mWidthSet;
+            this.mHeightSet = source.mHeightSet;
         }
 
         private static class Table {
@@ -3031,7 +3036,7 @@ public class ConstraintLayout extends ViewGroup {
             public static final int LAYOUT_WRAP_BEHAVIOR_IN_PARENT = 66;
             public static final int GUIDELINE_USE_RTL = 67;
 
-            public static final SparseIntArray map = new SparseIntArray();
+            public static final SparseIntArray sMap = new SparseIntArray();
 
             static {
                 ///////////////////////////////////////////////////////////////////////////////////
@@ -3054,123 +3059,127 @@ public class ConstraintLayout extends ViewGroup {
                 // map.append(R.styleable.ConstraintLayout_Layout_android_layout_marginEnd,
                 // LAYOUT_MARGIN_END);
                 //////////////////////////////////////////////////////////////////////////////////
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintWidth,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintWidth,
                         LAYOUT_CONSTRAINT_WIDTH);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHeight,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintHeight,
                         LAYOUT_CONSTRAINT_HEIGHT);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintLeft_toLeftOf,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintLeft_toLeftOf,
                         LAYOUT_CONSTRAINT_LEFT_TO_LEFT_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintLeft_toRightOf,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintLeft_toRightOf,
                         LAYOUT_CONSTRAINT_LEFT_TO_RIGHT_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintRight_toLeftOf,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintRight_toLeftOf,
                         LAYOUT_CONSTRAINT_RIGHT_TO_LEFT_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintRight_toRightOf,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintRight_toRightOf,
                         LAYOUT_CONSTRAINT_RIGHT_TO_RIGHT_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintTop_toTopOf,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintTop_toTopOf,
                         LAYOUT_CONSTRAINT_TOP_TO_TOP_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintTop_toBottomOf,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintTop_toBottomOf,
                         LAYOUT_CONSTRAINT_TOP_TO_BOTTOM_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBottom_toTopOf,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintBottom_toTopOf,
                         LAYOUT_CONSTRAINT_BOTTOM_TO_TOP_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBottom_toBottomOf,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintBottom_toBottomOf,
                         LAYOUT_CONSTRAINT_BOTTOM_TO_BOTTOM_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBaseline_toBaselineOf,
+                sMap.append(
+                        R.styleable.ConstraintLayout_Layout_layout_constraintBaseline_toBaselineOf,
                         LAYOUT_CONSTRAINT_BASELINE_TO_BASELINE_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBaseline_toTopOf,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintBaseline_toTopOf,
                         LAYOUT_CONSTRAINT_BASELINE_TO_TOP_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBaseline_toBottomOf,
+                sMap.append(R.styleable
+                                .ConstraintLayout_Layout_layout_constraintBaseline_toBottomOf,
                         LAYOUT_CONSTRAINT_BASELINE_TO_BOTTOM_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintCircle,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintCircle,
                         LAYOUT_CONSTRAINT_CIRCLE);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintCircleRadius,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintCircleRadius,
                         LAYOUT_CONSTRAINT_CIRCLE_RADIUS);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintCircleAngle,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintCircleAngle,
                         LAYOUT_CONSTRAINT_CIRCLE_ANGLE);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_editor_absoluteX,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_editor_absoluteX,
                         LAYOUT_EDITOR_ABSOLUTEX);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_editor_absoluteY,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_editor_absoluteY,
                         LAYOUT_EDITOR_ABSOLUTEY);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintGuide_begin,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintGuide_begin,
                         LAYOUT_CONSTRAINT_GUIDE_BEGIN);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintGuide_end,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintGuide_end,
                         LAYOUT_CONSTRAINT_GUIDE_END);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintGuide_percent,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintGuide_percent,
                         LAYOUT_CONSTRAINT_GUIDE_PERCENT);
-                map.append(R.styleable.ConstraintLayout_Layout_guidelineUseRtl,
+                sMap.append(R.styleable.ConstraintLayout_Layout_guidelineUseRtl,
                         GUIDELINE_USE_RTL);
-                map.append(R.styleable.ConstraintLayout_Layout_android_orientation,
+                sMap.append(R.styleable.ConstraintLayout_Layout_android_orientation,
                         ANDROID_ORIENTATION);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintStart_toEndOf,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintStart_toEndOf,
                         LAYOUT_CONSTRAINT_START_TO_END_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintStart_toStartOf,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintStart_toStartOf,
                         LAYOUT_CONSTRAINT_START_TO_START_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintEnd_toStartOf,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintEnd_toStartOf,
                         LAYOUT_CONSTRAINT_END_TO_START_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintEnd_toEndOf,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintEnd_toEndOf,
                         LAYOUT_CONSTRAINT_END_TO_END_OF);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginLeft,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginLeft,
                         LAYOUT_GONE_MARGIN_LEFT);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginTop,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginTop,
                         LAYOUT_GONE_MARGIN_TOP);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginRight,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginRight,
                         LAYOUT_GONE_MARGIN_RIGHT);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginBottom,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginBottom,
                         LAYOUT_GONE_MARGIN_BOTTOM);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginStart,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginStart,
                         LAYOUT_GONE_MARGIN_START);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginEnd,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginEnd,
                         LAYOUT_GONE_MARGIN_END);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginBaseline,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_goneMarginBaseline,
                         LAYOUT_GONE_MARGIN_BASELINE);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_marginBaseline,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_marginBaseline,
                         LAYOUT_MARGIN_BASELINE);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHorizontal_bias,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintHorizontal_bias,
                         LAYOUT_CONSTRAINT_HORIZONTAL_BIAS);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintVertical_bias,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintVertical_bias,
                         LAYOUT_CONSTRAINT_VERTICAL_BIAS);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintDimensionRatio,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintDimensionRatio,
                         LAYOUT_CONSTRAINT_DIMENSION_RATIO);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHorizontal_weight,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintHorizontal_weight,
                         LAYOUT_CONSTRAINT_HORIZONTAL_WEIGHT);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintVertical_weight,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintVertical_weight,
                         LAYOUT_CONSTRAINT_VERTICAL_WEIGHT);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHorizontal_chainStyle,
+                sMap.append(
+                        R.styleable.ConstraintLayout_Layout_layout_constraintHorizontal_chainStyle,
                         LAYOUT_CONSTRAINT_HORIZONTAL_CHAINSTYLE);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintVertical_chainStyle,
+                sMap.append(R.styleable
+                                .ConstraintLayout_Layout_layout_constraintVertical_chainStyle,
                         LAYOUT_CONSTRAINT_VERTICAL_CHAINSTYLE);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constrainedWidth,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constrainedWidth,
                         LAYOUT_CONSTRAINED_WIDTH);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constrainedHeight,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constrainedHeight,
                         LAYOUT_CONSTRAINED_HEIGHT);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintWidth_default,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintWidth_default,
                         LAYOUT_CONSTRAINT_WIDTH_DEFAULT);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHeight_default,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintHeight_default,
                         LAYOUT_CONSTRAINT_HEIGHT_DEFAULT);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintWidth_min,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintWidth_min,
                         LAYOUT_CONSTRAINT_WIDTH_MIN);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintWidth_max,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintWidth_max,
                         LAYOUT_CONSTRAINT_WIDTH_MAX);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintWidth_percent,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintWidth_percent,
                         LAYOUT_CONSTRAINT_WIDTH_PERCENT);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHeight_min,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintHeight_min,
                         LAYOUT_CONSTRAINT_HEIGHT_MIN);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHeight_max,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintHeight_max,
                         LAYOUT_CONSTRAINT_HEIGHT_MAX);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintHeight_percent,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintHeight_percent,
                         LAYOUT_CONSTRAINT_HEIGHT_PERCENT);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintLeft_creator,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintLeft_creator,
                         LAYOUT_CONSTRAINT_LEFT_CREATOR);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintTop_creator,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintTop_creator,
                         LAYOUT_CONSTRAINT_TOP_CREATOR);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintRight_creator,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintRight_creator,
                         LAYOUT_CONSTRAINT_RIGHT_CREATOR);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBottom_creator,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintBottom_creator,
                         LAYOUT_CONSTRAINT_BOTTOM_CREATOR);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintBaseline_creator,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintBaseline_creator,
                         LAYOUT_CONSTRAINT_BASELINE_CREATOR);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_constraintTag,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_constraintTag,
                         LAYOUT_CONSTRAINT_TAG);
-                map.append(R.styleable.ConstraintLayout_Layout_layout_wrapBehaviorInParent,
+                sMap.append(R.styleable.ConstraintLayout_Layout_layout_wrapBehaviorInParent,
                         LAYOUT_WRAP_BEHAVIOR_IN_PARENT);
             }
         }
@@ -3205,7 +3214,7 @@ public class ConstraintLayout extends ViewGroup {
             super(c, attrs);
 
             TypedArray a = c.obtainStyledAttributes(attrs, R.styleable.ConstraintLayout_Layout);
-            final int N = a.getIndexCount();
+            final int n = a.getIndexCount();
 
             ///////////////////////////////////////////////////////////////////////////////////////
             // Layout margins handling TODO: re-activate in 3.0
@@ -3244,9 +3253,9 @@ public class ConstraintLayout extends ViewGroup {
             */
             //////////////////////////////////////////////////////////////////////////////////////
 
-            for (int i = 0; i < N; i++) {
+            for (int i = 0; i < n; i++) {
                 int attr = a.getIndex(i);
-                int look = Table.map.get(attr);
+                int look = Table.sMap.get(attr);
                 switch (look) {
                     case Table.UNUSED: {
                         // Skip
@@ -3254,12 +3263,12 @@ public class ConstraintLayout extends ViewGroup {
                     }
                     case Table.LAYOUT_CONSTRAINT_WIDTH: {
                         ConstraintSet.parseDimensionConstraints(this, a, attr, HORIZONTAL);
-                        widthSet = true;
+                        mWidthSet = true;
                         break;
                     }
                     case Table.LAYOUT_CONSTRAINT_HEIGHT: {
                         ConstraintSet.parseDimensionConstraints(this, a, attr, VERTICAL);
-                        heightSet = true;
+                        mHeightSet = true;
                         break;
                     }
                     ///////////////////////////////////////////////////////////////////////////////
@@ -3483,7 +3492,8 @@ public class ConstraintLayout extends ViewGroup {
                     }
                     case Table.LAYOUT_MARGIN_RIGHT: {
                         if (margin == -1 && horizontalMargin == -1) {
-                            originalRightMargin = a.getDimensionPixelSize(attr, originalRightMargin);
+                            originalRightMargin =
+                                a.getDimensionPixelSize(attr, originalRightMargin);
                         }
                         break;
                     }
@@ -3676,9 +3686,9 @@ public class ConstraintLayout extends ViewGroup {
          * validate the layout
          */
         public void validate() {
-            isGuideline = false;
-            horizontalDimensionFixed = true;
-            verticalDimensionFixed = true;
+            mIsGuideline = false;
+            mHorizontalDimensionFixed = true;
+            mVerticalDimensionFixed = true;
             ///////////////////////////////////////////////////////////////////////////////////////
             // Layout margins handling TODO: re-activate in 3.0
             ///////////////////////////////////////////////////////////////////////////////////////
@@ -3691,19 +3701,19 @@ public class ConstraintLayout extends ViewGroup {
             ///////////////////////////////////////////////////////////////////////////////////////
 
             if (width == WRAP_CONTENT && constrainedWidth) {
-                horizontalDimensionFixed = false;
+                mHorizontalDimensionFixed = false;
                 if (matchConstraintDefaultWidth == MATCH_CONSTRAINT_SPREAD) {
                     matchConstraintDefaultWidth = MATCH_CONSTRAINT_WRAP;
                 }
             }
             if (height == WRAP_CONTENT && constrainedHeight) {
-                verticalDimensionFixed = false;
+                mVerticalDimensionFixed = false;
                 if (matchConstraintDefaultHeight == MATCH_CONSTRAINT_SPREAD) {
                     matchConstraintDefaultHeight = MATCH_CONSTRAINT_WRAP;
                 }
             }
             if (width == MATCH_CONSTRAINT || width == MATCH_PARENT) {
-                horizontalDimensionFixed = false;
+                mHorizontalDimensionFixed = false;
                 // We have to reset LayoutParams width/height to WRAP_CONTENT here,
                 // as some widgets like TextView
                 // will use the layout params directly as a hint to know
@@ -3716,7 +3726,7 @@ public class ConstraintLayout extends ViewGroup {
                 }
             }
             if (height == MATCH_CONSTRAINT || height == MATCH_PARENT) {
-                verticalDimensionFixed = false;
+                mVerticalDimensionFixed = false;
                 // We have to reset LayoutParams width/height to WRAP_CONTENT here,
                 // as some widgets like TextView
                 // will use the layout params directly as a hint to know
@@ -3729,13 +3739,13 @@ public class ConstraintLayout extends ViewGroup {
                 }
             }
             if (guidePercent != UNSET || guideBegin != UNSET || guideEnd != UNSET) {
-                isGuideline = true;
-                horizontalDimensionFixed = true;
-                verticalDimensionFixed = true;
-                if (!(widget instanceof Guideline)) {
-                    widget = new Guideline();
+                mIsGuideline = true;
+                mHorizontalDimensionFixed = true;
+                mVerticalDimensionFixed = true;
+                if (!(mWidget instanceof Guideline)) {
+                    mWidget = new Guideline();
                 }
-                ((Guideline) widget).setOrientation(orientation);
+                ((Guideline) mWidget).setOrientation(orientation);
             }
         }
 
@@ -3795,106 +3805,106 @@ public class ConstraintLayout extends ViewGroup {
             }
             ///////////////////////////////////////////////////////////////////////////////////////
 
-            resolvedRightToLeft = UNSET;
-            resolvedRightToRight = UNSET;
-            resolvedLeftToLeft = UNSET;
-            resolvedLeftToRight = UNSET;
+            mResolvedRightToLeft = UNSET;
+            mResolvedRightToRight = UNSET;
+            mResolvedLeftToLeft = UNSET;
+            mResolvedLeftToRight = UNSET;
 
-            resolveGoneLeftMargin = UNSET;
-            resolveGoneRightMargin = UNSET;
-            resolveGoneLeftMargin = goneLeftMargin;
-            resolveGoneRightMargin = goneRightMargin;
-            resolvedHorizontalBias = horizontalBias;
+            mResolveGoneLeftMargin = UNSET;
+            mResolveGoneRightMargin = UNSET;
+            mResolveGoneLeftMargin = goneLeftMargin;
+            mResolveGoneRightMargin = goneRightMargin;
+            mResolvedHorizontalBias = horizontalBias;
 
-            resolvedGuideBegin = guideBegin;
-            resolvedGuideEnd = guideEnd;
-            resolvedGuidePercent = guidePercent;
+            mResolvedGuideBegin = guideBegin;
+            mResolvedGuideEnd = guideEnd;
+            mResolvedGuidePercent = guidePercent;
 
             // Post JB MR1, if start/end are defined, they take precedence over left/right
             if (isRtl) {
                 boolean startEndDefined = false;
                 if (startToEnd != UNSET) {
-                    resolvedRightToLeft = startToEnd;
+                    mResolvedRightToLeft = startToEnd;
                     startEndDefined = true;
                 } else if (startToStart != UNSET) {
-                    resolvedRightToRight = startToStart;
+                    mResolvedRightToRight = startToStart;
                     startEndDefined = true;
                 }
                 if (endToStart != UNSET) {
-                    resolvedLeftToRight = endToStart;
+                    mResolvedLeftToRight = endToStart;
                     startEndDefined = true;
                 }
                 if (endToEnd != UNSET) {
-                    resolvedLeftToLeft = endToEnd;
+                    mResolvedLeftToLeft = endToEnd;
                     startEndDefined = true;
                 }
                 if (goneStartMargin != GONE_UNSET) {
-                    resolveGoneRightMargin = goneStartMargin;
+                    mResolveGoneRightMargin = goneStartMargin;
                 }
                 if (goneEndMargin != GONE_UNSET) {
-                    resolveGoneLeftMargin = goneEndMargin;
+                    mResolveGoneLeftMargin = goneEndMargin;
                 }
                 if (startEndDefined) {
-                    resolvedHorizontalBias = 1 - horizontalBias;
+                    mResolvedHorizontalBias = 1 - horizontalBias;
                 }
 
                 // Only apply to vertical guidelines
-                if (isGuideline && orientation == Guideline.VERTICAL && guidelineUseRtl) {
+                if (mIsGuideline && orientation == Guideline.VERTICAL && guidelineUseRtl) {
                     if (guidePercent != UNSET) {
-                        resolvedGuidePercent = 1 - guidePercent;
-                        resolvedGuideBegin = UNSET;
-                        resolvedGuideEnd = UNSET;
+                        mResolvedGuidePercent = 1 - guidePercent;
+                        mResolvedGuideBegin = UNSET;
+                        mResolvedGuideEnd = UNSET;
                     } else if (guideBegin != UNSET) {
-                        resolvedGuideEnd = guideBegin;
-                        resolvedGuideBegin = UNSET;
-                        resolvedGuidePercent = UNSET;
+                        mResolvedGuideEnd = guideBegin;
+                        mResolvedGuideBegin = UNSET;
+                        mResolvedGuidePercent = UNSET;
                     } else if (guideEnd != UNSET) {
-                        resolvedGuideBegin = guideEnd;
-                        resolvedGuideEnd = UNSET;
-                        resolvedGuidePercent = UNSET;
+                        mResolvedGuideBegin = guideEnd;
+                        mResolvedGuideEnd = UNSET;
+                        mResolvedGuidePercent = UNSET;
                     }
                 }
             } else {
                 if (startToEnd != UNSET) {
-                    resolvedLeftToRight = startToEnd;
+                    mResolvedLeftToRight = startToEnd;
                 }
                 if (startToStart != UNSET) {
-                    resolvedLeftToLeft = startToStart;
+                    mResolvedLeftToLeft = startToStart;
                 }
                 if (endToStart != UNSET) {
-                    resolvedRightToLeft = endToStart;
+                    mResolvedRightToLeft = endToStart;
                 }
                 if (endToEnd != UNSET) {
-                    resolvedRightToRight = endToEnd;
+                    mResolvedRightToRight = endToEnd;
                 }
                 if (goneStartMargin != GONE_UNSET) {
-                    resolveGoneLeftMargin = goneStartMargin;
+                    mResolveGoneLeftMargin = goneStartMargin;
                 }
                 if (goneEndMargin != GONE_UNSET) {
-                    resolveGoneRightMargin = goneEndMargin;
+                    mResolveGoneRightMargin = goneEndMargin;
                 }
             }
             // if no constraint is defined via RTL attributes, use left/right if present
             if (endToStart == UNSET && endToEnd == UNSET
                     && startToStart == UNSET && startToEnd == UNSET) {
                 if (rightToLeft != UNSET) {
-                    resolvedRightToLeft = rightToLeft;
+                    mResolvedRightToLeft = rightToLeft;
                     if (rightMargin <= 0 && originalRightMargin > 0) {
                         rightMargin = originalRightMargin;
                     }
                 } else if (rightToRight != UNSET) {
-                    resolvedRightToRight = rightToRight;
+                    mResolvedRightToRight = rightToRight;
                     if (rightMargin <= 0 && originalRightMargin > 0) {
                         rightMargin = originalRightMargin;
                     }
                 }
                 if (leftToLeft != UNSET) {
-                    resolvedLeftToLeft = leftToLeft;
+                    mResolvedLeftToLeft = leftToLeft;
                     if (leftMargin <= 0 && originalLeftMargin > 0) {
                         leftMargin = originalLeftMargin;
                     }
                 } else if (leftToRight != UNSET) {
-                    resolvedLeftToRight = leftToRight;
+                    mResolvedLeftToRight = leftToRight;
                     if (leftMargin <= 0 && originalLeftMargin > 0) {
                         leftMargin = originalLeftMargin;
                     }
@@ -4011,7 +4021,7 @@ public class ConstraintLayout extends ViewGroup {
         boolean update(int width, int height, int id, View view, LayoutParams params);
     }
 
-    private ArrayList<ValueModifier> modifiers;
+    private ArrayList<ValueModifier> mModifiers;
 
     /**
      * a ValueModify to the ConstraintLayout.
@@ -4020,10 +4030,10 @@ public class ConstraintLayout extends ViewGroup {
      * @param modifier
      */
     public void addValueModifier(ValueModifier modifier) {
-        if (modifiers == null) {
-            modifiers = new ArrayList<>();
+        if (mModifiers == null) {
+            mModifiers = new ArrayList<>();
         }
-        modifiers.add(modifier);
+        mModifiers.add(modifier);
     }
 
     /**
@@ -4035,7 +4045,7 @@ public class ConstraintLayout extends ViewGroup {
         if (modifier == null) {
             return;
         }
-        modifiers.remove(modifier);
+        mModifiers.remove(modifier);
     }
 
     /**
@@ -4045,18 +4055,18 @@ public class ConstraintLayout extends ViewGroup {
      * @return
      */
     protected boolean dynamicUpdateConstraints(int widthMeasureSpec, int heightMeasureSpec) {
-        if (modifiers == null) {
+        if (mModifiers == null) {
             return false;
         }
         boolean dirty = false;
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
-        for (ValueModifier m : modifiers) {
+        for (ValueModifier m : mModifiers) {
             for (ConstraintWidget widget : mLayoutWidget.getChildren()) {
                 View view = (View) widget.getCompanionWidget();
                 int id = view.getId();
                 LayoutParams layoutParams = (LayoutParams) view.getLayoutParams();
-                dirty |= m.update(width, height, id,view, layoutParams);
+                dirty |= m.update(width, height, id, view, layoutParams);
             }
         }
         return dirty;

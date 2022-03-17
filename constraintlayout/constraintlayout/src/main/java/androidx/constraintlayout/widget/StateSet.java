@@ -51,7 +51,7 @@ public class StateSet {
      * @param context
      * @param parser
      */
-    public StateSet(Context context, XmlPullParser parser ) {
+    public StateSet(Context context, XmlPullParser parser) {
         load(context, parser);
     }
 

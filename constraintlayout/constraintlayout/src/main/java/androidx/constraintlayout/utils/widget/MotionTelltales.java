@@ -42,7 +42,7 @@ public class MotionTelltales extends MockView {
     private static final String TAG = "MotionTelltales";
     private Paint mPaintTelltales = new Paint();
     MotionLayout mMotionLayout;
-    float []velocity = new float[2];
+    float[] mVelocity = new float[2];
     Matrix mInvertMatrix = new Matrix();
     int mVelocityMode = MotionLayout.VELOCITY_POST_LAYOUT;
     int mTailColor = Color.MAGENTA;
@@ -123,14 +123,14 @@ public class MotionTelltales extends MockView {
             float py = f[y];
             for (int x = 0; x < f.length; x++) {
                 float px = f[x];
-                mMotionLayout.getViewVelocity(this, px, py, velocity, mVelocityMode);
-                mInvertMatrix.mapVectors(velocity);
+                mMotionLayout.getViewVelocity(this, px, py, mVelocity, mVelocityMode);
+                mInvertMatrix.mapVectors(mVelocity);
 
                 float sx = (width * px);
                 float sy = (height * py);
-                float ex = sx - (velocity[0] * mTailScale);
-                float ey = sy - (velocity[1] * mTailScale);
-                mInvertMatrix.mapVectors(velocity);
+                float ex = sx - (mVelocity[0] * mTailScale);
+                float ey = sy - (mVelocity[1] * mTailScale);
+                mInvertMatrix.mapVectors(mVelocity);
                 canvas.drawLine(sx, sy, ex, ey, mPaintTelltales);
             }
 

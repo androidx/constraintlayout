@@ -98,7 +98,8 @@ public abstract class VirtualLayout extends ConstraintHelper {
                         }
                         if (mApplyElevationOnAttach) {
                             if (elevation > 0
-                                    && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                                    && android.os.Build.VERSION.SDK_INT
+                                    >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                                 view.setTranslationZ(view.getTranslationZ() + elevation);
                             }
                         }

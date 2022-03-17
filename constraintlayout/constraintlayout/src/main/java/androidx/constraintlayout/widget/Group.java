@@ -106,7 +106,7 @@ public class Group extends ConstraintHelper {
     @Override
     public void updatePostLayout(ConstraintLayout container) {
         ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) getLayoutParams();
-        params.widget.setWidth(0);
-        params.widget.setHeight(0);
+        params.mWidget.setWidth(0);
+        params.mWidget.setHeight(0);
     }
 }

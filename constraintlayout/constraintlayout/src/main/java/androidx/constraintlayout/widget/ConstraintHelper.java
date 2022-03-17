@@ -73,7 +73,7 @@ public abstract class ConstraintHelper extends View {
     /**
      * @hide
      */
-    protected Context myContext;
+    protected Context mContext;
     /**
      * @hide
      */
@@ -100,19 +100,19 @@ public abstract class ConstraintHelper extends View {
 
     public ConstraintHelper(Context context) {
         super(context);
-        myContext = context;
+        mContext = context;
         init(null);
     }
 
     public ConstraintHelper(Context context, AttributeSet attrs) {
         super(context, attrs);
-        myContext = context;
+        mContext = context;
         init(attrs);
     }
 
     public ConstraintHelper(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        myContext = context;
+        mContext = context;
         init(attrs);
     }
 
@@ -264,7 +264,7 @@ public abstract class ConstraintHelper extends View {
         ViewGroup.LayoutParams params = getLayoutParams();
         if (params instanceof ConstraintLayout.LayoutParams) {
             ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) params;
-            layoutParams.widget = (ConstraintWidget) mHelperWidget;
+            layoutParams.mWidget = (ConstraintWidget) mHelperWidget;
         }
     }
 
@@ -275,7 +275,7 @@ public abstract class ConstraintHelper extends View {
         if (idString == null || idString.length() == 0) {
             return;
         }
-        if (myContext == null) {
+        if (mContext == null) {
             return;
         }
 
@@ -302,7 +302,7 @@ public abstract class ConstraintHelper extends View {
         if (tagString == null || tagString.length() == 0) {
             return;
         }
-        if (myContext == null) {
+        if (mContext == null) {
             return;
         }
 
@@ -374,8 +374,8 @@ public abstract class ConstraintHelper extends View {
         if (rscId == 0) {
             // this will first try to parse the string id as a number (!) in ResourcesImpl, so
             // let's try that last...
-            rscId = myContext.getResources().getIdentifier(referenceId, "id",
-                    myContext.getPackageName());
+            rscId = mContext.getResources().getIdentifier(referenceId, "id",
+                    mContext.getPackageName());
         }
 
         return rscId;
@@ -393,7 +393,7 @@ public abstract class ConstraintHelper extends View {
         if (idString == null || container == null) {
             return 0;
         }
-        Resources resources = myContext.getResources();
+        Resources resources = mContext.getResources();
         if (resources == null) {
             return 0;
         }

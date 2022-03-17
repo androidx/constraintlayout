@@ -38,6 +38,12 @@ public class SharedValues {
      * interface for listeners
      */
     public interface SharedValuesListener {
+        /**
+         * @TODO: add description
+         * @param key
+         * @param newValue
+         * @param oldValue
+         */
         void onNewValue(int key, int newValue, int oldValue);
     }
 

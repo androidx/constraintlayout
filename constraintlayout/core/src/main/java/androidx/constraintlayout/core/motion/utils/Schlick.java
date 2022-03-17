@@ -24,7 +24,7 @@ package androidx.constraintlayout.core.motion.utils;
 public class Schlick extends Easing {
     private static final boolean DEBUG = false;
     double mS, mT;
-    double eps;
+    double mEps;
 
     Schlick(String configString) {
         // done this way for efficiency
