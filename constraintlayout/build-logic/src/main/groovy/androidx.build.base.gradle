@@ -4,7 +4,7 @@ extensions.create("globalConfig", GlobalConfig, rootProject.layout)
 
 version = providers.gradleProperty("${project.name}.version").forUseAtConfigurationTime().get()
 
-// Configure the project to use the Java 8 compiler
+// Configure the project to use the Java 11 compiler
 pluginManager.withPlugin("java-base") {
     java {
         toolchain {
