@@ -4,7 +4,7 @@ plugins {
 
 tasks.register('checkJavaVersion') {
     def jvmVersion = System.getProperty('java.version')
-    def requiredVersion = System.getenv('JAVA_FOR_TESTS') ?: '1.8'
+    def requiredVersion = System.getenv('JAVA_FOR_TESTS') ?: '1.11'
     if (!jvmVersion.startsWith(requiredVersion)) {
         throw new RuntimeException("Tools need to be compiled with Java $requiredVersion, you are using Java $jvmVersion.")
     }
