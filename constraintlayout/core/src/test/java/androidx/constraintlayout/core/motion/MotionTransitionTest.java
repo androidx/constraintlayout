@@ -31,6 +31,8 @@ import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+
 public class MotionTransitionTest {
 
     ConstraintWidgetContainer makeLayout1() {
@@ -238,8 +240,9 @@ public class MotionTransitionTest {
                 + e1.widget.getTop() + " ," + e1.widget.getLeft());
         System.out.println(f1.top + " ," + f1.left);
     }
+
     @Test
-    public void testTransitionJson2() {
+    public void testTransitionJson2() throws CLParsingException {
         Transition transition = new Transition();
         ConstraintWidgetContainer cwc1 = makeLayout(100,100,100,100);
         ConstraintWidgetContainer cwc2 =  makeLayout(500,900,100,100);
@@ -256,13 +259,13 @@ public class MotionTransitionTest {
         }
 
         transition.updateFrom(cwc2, Transition.END);
-        String jstr =
+        String jsonString =
                 "                  default: {\n"
                         + "                    from: 'start',   to: 'end',\n"
                         + "                    pathMotionArc: 'startHorizontal',\n"
                         + "                    onSwipe: { \n"
                         + "                        anchor :'button1',\n"
-                        + "                    side: 'top',\n"
+                        + "                        side: 'top',\n"
                         + "                        direction: 'up',\n"
                         + "                        scale: 1,\n"
                         + "                        threshold: 10,\n"
@@ -283,12 +286,11 @@ public class MotionTransitionTest {
                         + "                  },\n"
                         + "                  }\n";
 
-        try {
-            CLObject json = CLParser.parse(jstr);
-            TransitionParser.parse(json, transition);
-        } catch (CLParsingException e) {
-            e.printStackTrace();
-        }
+
+        CLObject json = CLParser.parse(jsonString);
+
+        TransitionParser.parse(json, transition);
+
         assertTrue(transition.hasOnSwipe());
         // because a drag of 80 pixels (dy) is 1/10 the distance to travel  it returns 0.1
         float progress = transition.dragToProgress(0.5f, 10f, 80);
@@ -296,6 +298,18 @@ public class MotionTransitionTest {
         progress = transition.dragToProgress(0.3f, 10f, 80);
         assertEquals(0.1f,progress,0.001f);
 
+        float[]pos = new float[100];
+        float[]ratio = new float[100];
+        for (int i = 0; i < ratio.length; i++) {
+            pos[i] =  i/(float)(ratio.length-1);
+            transition.interpolate(cwc1.getWidth(), cwc1.getHeight(), pos[i]);
+
+            ratio[i] =  transition.dragToProgress(pos[i], 10f, 1);
+        }
+        transition.interpolate(cwc1.getWidth(), cwc1.getHeight(), 0.5f);
+
+        String delta = textDraw(80,30, pos , ratio);
+        System.out.println(delta);
         transition.interpolate(cwc1.getWidth(), cwc1.getHeight(), 0.5f);
 
         WidgetFrame s1 = transition.getStart("button1");
@@ -315,6 +329,7 @@ public class MotionTransitionTest {
         assertEquals(100, e1.bottom - e1.top);
         assertEquals(100, e1.right - e1.left);
 
+
         print("start  ", s1);
         print("end    ", e1);
         print("at(0.5)", f1);
@@ -326,11 +341,89 @@ public class MotionTransitionTest {
 
         assertEquals(810, f1.top);
         assertEquals(270, f1.left);
+
+
         System.out.println(s1.top + " ," + s1.left + " ----  "
                 + s1.widget.getTop() + " ," + s1.widget.getLeft());
         System.out.println(e1.top + " ," + e1.left + " ----  "
                 + e1.widget.getTop() + " ," + e1.widget.getLeft());
         System.out.println(f1.top + " ," + f1.left);
+
+        float []xp = new float[200];
+        float []yp = new float[xp.length];
+
+        for (int i = 0; i < yp.length; i++) {
+            float v = yp[i];
+            float p = i/(yp.length-1f);
+
+            transition.interpolate(cwc1.getWidth(), cwc1.getHeight(), p);
+
+            WidgetFrame dynamic = transition.getInterpolated("button1");
+            xp[i] = (dynamic.left+dynamic.right)/2;
+            yp[i] = (dynamic.top+dynamic.bottom)/2;
+        }
+        String str = textDraw(80,30, xp , yp);
+        System.out.println(str);
+        String expect =
+                  "|**                                                                              |\n"
+                + "| **                                                                             |\n"
+                + "|  **                                                                            |\n"
+                + "|    **                                                                          |\n"
+                + "|     **                                                                         |\n"
+                + "|      **                                                                        |\n"
+                + "|        **                                                                      |\n"
+                + "|         **                                                                     |\n"
+                + "|          **                                                                    |\n"
+                + "|           **                                                                   |\n"
+                + "|            *                                                                   |\n"
+                + "|             *                                                                  |\n"
+                + "|             *                                                                  |\n"
+                + "|             **                                                                 |\n"
+                + "|              *                                                                 |\n"
+                + "|              *                                                                 |\n"
+                + "|               *                                                                |\n"
+                + "|               *                                                                |\n"
+                + "|               *                                                                |\n"
+                + "|                *                                                      *********|\n"
+                + "|                *                                               ***** *      ** |\n"
+                + "|                 *                                         ** **           ***  |\n"
+                + "|                 **                                 * ** **              ***    |\n"
+                + "|                  ***                          ** **                   **       |\n"
+                + "|                    **                   **** *                     ***         |\n"
+                + "|                      ************* ****                          ***           |\n"
+                + "|                                                               ***              |\n"
+                + "|                                                             ***                |\n"
+                + "|                                                           **                   |\n"
+                + "|                                                          *                     |\n";
+        assertEquals(expect,str);
+    }
+
+    String textDraw(int dimx,int dimy,float[]x,float[]y) {
+        float minX=x[0],maxX=x[0],minY=y[0],maxY=y[0];
+        String ret = "";
+        for (int i = 0; i < x.length; i++) {
+            minX = Math.min(minX,x[i]);
+            maxX = Math.max(maxX,x[i]);
+            minY = Math.min(minY,y[i]);
+            maxY = Math.max(maxY,y[i]);
+        }
+        char [][]c = new char[dimy][dimx];
+        for (int i = 0; i <dimy; i++) {
+            Arrays.fill(c[i], ' ');
+        }
+        int dimx1 = dimx - 1;
+        int dimy1 = dimy - 1;
+            for (int j = 0; j < x.length; j++) {
+                int xp = (int) ( dimx1*(x[j]-minX)/(maxX-minX));
+                int yp = (int) ( dimy1*(y[j]-minY)/(maxY-minY));
+
+                 c[yp][xp] = '*';
+            }
+
+        for (int i = 0; i < c.length; i++) {
+           ret+="|"+new String(c[i])+"|\n";
+        }
+        return ret;
     }
 
     void print(String name, WidgetFrame f) {
