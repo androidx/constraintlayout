@@ -73,7 +73,7 @@ public abstract class ConstraintHelper extends View {
     /**
      * @hide
      */
-    protected Context mContext;
+    protected Context myContext;
     /**
      * @hide
      */
@@ -100,19 +100,19 @@ public abstract class ConstraintHelper extends View {
 
     public ConstraintHelper(Context context) {
         super(context);
-        mContext = context;
+        myContext = context;
         init(null);
     }
 
     public ConstraintHelper(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mContext = context;
+        myContext = context;
         init(attrs);
     }
 
     public ConstraintHelper(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mContext = context;
+        myContext = context;
         init(attrs);
     }
 
@@ -275,7 +275,7 @@ public abstract class ConstraintHelper extends View {
         if (idString == null || idString.length() == 0) {
             return;
         }
-        if (mContext == null) {
+        if (myContext == null) {
             return;
         }
 
@@ -302,7 +302,7 @@ public abstract class ConstraintHelper extends View {
         if (tagString == null || tagString.length() == 0) {
             return;
         }
-        if (mContext == null) {
+        if (myContext == null) {
             return;
         }
 
@@ -374,8 +374,8 @@ public abstract class ConstraintHelper extends View {
         if (rscId == 0) {
             // this will first try to parse the string id as a number (!) in ResourcesImpl, so
             // let's try that last...
-            rscId = mContext.getResources().getIdentifier(referenceId, "id",
-                    mContext.getPackageName());
+            rscId = myContext.getResources().getIdentifier(referenceId, "id",
+                    myContext.getPackageName());
         }
 
         return rscId;
@@ -393,7 +393,7 @@ public abstract class ConstraintHelper extends View {
         if (idString == null || container == null) {
             return 0;
         }
-        Resources resources = mContext.getResources();
+        Resources resources = myContext.getResources();
         if (resources == null) {
             return 0;
         }

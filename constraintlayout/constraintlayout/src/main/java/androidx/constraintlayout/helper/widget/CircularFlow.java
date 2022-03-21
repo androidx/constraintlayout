@@ -253,7 +253,7 @@ public class CircularFlow extends VirtualLayout {
         mCountRadius++;
         mRadius = getRadius();
         mRadius[mCountRadius - 1] =
-                (int) (radius * mContext.getResources().getDisplayMetrics().density);
+                (int) (radius * myContext.getResources().getDisplayMetrics().density);
         anchorReferences();
     }
 
@@ -276,7 +276,7 @@ public class CircularFlow extends VirtualLayout {
             return;
         }
         mRadius = getRadius();
-        mRadius[indexView] = (int) (radius * mContext.getResources().getDisplayMetrics().density);
+        mRadius[indexView] = (int) (radius * myContext.getResources().getDisplayMetrics().density);
         anchorReferences();
     }
 
@@ -326,7 +326,7 @@ public class CircularFlow extends VirtualLayout {
         if (getRadius().length  > indexView) {
             mRadius = getRadius();
             mRadius[indexView] =
-                    (int) (radius * mContext.getResources().getDisplayMetrics().density);
+                    (int) (radius * myContext.getResources().getDisplayMetrics().density);
         }
         anchorReferences();
     }
@@ -447,7 +447,7 @@ public class CircularFlow extends VirtualLayout {
         if (angleString == null || angleString.length() == 0) {
             return;
         }
-        if (mContext == null) {
+        if (myContext == null) {
             return;
         }
         if (mAngles == null) {
@@ -468,7 +468,7 @@ public class CircularFlow extends VirtualLayout {
         if (radiusString == null || radiusString.length() == 0) {
             return;
         }
-        if (mContext == null) {
+        if (myContext == null) {
             return;
         }
         if (mRadius == null) {
@@ -480,7 +480,7 @@ public class CircularFlow extends VirtualLayout {
         }
 
         mRadius[mCountRadius] = (int) (Integer.parseInt(radiusString) *
-                mContext.getResources().getDisplayMetrics().density);
+                myContext.getResources().getDisplayMetrics().density);
         mCountRadius++;
     }
 
