@@ -128,9 +128,9 @@ public class Transition implements TypedValues {
                 "neverCompleteStart","neverCompleteEnd"};
 
         float mSpringMass = 1;
-        float mSpringStiffness = 1;
+        float mSpringStiffness = 400;
         float mSpringDamping =  10;
-        float mSpringStopThreshold = 1;
+        float mSpringStopThreshold =  0.01f;
 
         // In spring mode what happens at the boundary
         int mSpringBoundary = 0;
@@ -256,7 +256,7 @@ public class Transition implements TypedValues {
                 if (mEngine instanceof StopLogicEngine) {
                     sl = (StopLogicEngine) mEngine;
                 } else {
-                    sl = new StopLogicEngine();
+                    mEngine = sl = new StopLogicEngine();
                 }
 
                 sl.config(position, 1, velocity,
@@ -267,7 +267,7 @@ public class Transition implements TypedValues {
                 if (mEngine instanceof SpringStopEngine) {
                     sl = (SpringStopEngine) mEngine;
                 } else {
-                    sl = new SpringStopEngine();
+                    mEngine =  sl = new SpringStopEngine();
                 }
                 sl.springConfig(position, 1, velocity,
                         mSpringMass,
@@ -276,29 +276,40 @@ public class Transition implements TypedValues {
                         mSpringStopThreshold, mSpringBoundary);
             }
         }
+
+        public float getTouchUpProgress(long currentTime) {
+            float time = (currentTime - mStart) * 1E-9f;
+            return mEngine.getInterpolation(time);
+        }
     }
+
+
 
     /**
      * Converts from xy drag to progress
      * This should be used till touch up
+     *
      * @param currentProgress
-     * @param dx
-     * @param dy
+     * @param baseW parent width
+     * @param baseH parent height
+     * @param dx change in x
+     * @param dy change in y
      * @return
      */
-    public float dragToProgress(float currentProgress, float dx, float dy) {
+    public float dragToProgress(float currentProgress, int baseW, int baseH, float dx, float dy) {
         if (mOnSwipe == null || mOnSwipe.mAnchorId == null) {
             WidgetState w = mState.values().stream().findFirst().get();
             return -dy / w.mParentHeight;
         }
-            WidgetState base = mState.get(mOnSwipe.mAnchorId);
-            float[] dir = mOnSwipe.getDirection();
-            float[] side = mOnSwipe.getSide();
-            float[] motionDpDt = new float[2];
-            base.mMotionControl.getDpDt(currentProgress, side[0], side[1], motionDpDt);
-            float drag = dx * dir[0] + dy * dir[1];
-            float change = (mOnSwipe.mDragVertical) ? dy / motionDpDt[1] : dx / motionDpDt[0];
-            return change;
+        WidgetState base = mState.get(mOnSwipe.mAnchorId);
+        float[] dir = mOnSwipe.getDirection();
+        float[] side = mOnSwipe.getSide();
+        float[] motionDpDt = new float[2];
+        base.interpolate(baseW, baseH, currentProgress, this);
+        base.mMotionControl.getDpDt(currentProgress, side[0], side[1], motionDpDt);
+        float drag = dx * Math.abs(dir[0])  / motionDpDt[0]+ dy * Math.abs(dir[1])/ motionDpDt[1];
+       // float change = (mOnSwipe.mDragVertical) ? dy / motionDpDt[1] : dx / motionDpDt[0];
+        return drag;
     }
 
     /**
@@ -322,11 +333,25 @@ public class Transition implements TypedValues {
             float[] side = mOnSwipe.getSide();
             base.mMotionControl.getDpDt(currentProgress, side[0], side[1], motionDpDt);
             float drag = velocityX * dir[0] + velocityY * dir[1];
-
             mOnSwipe.config(currentProgress, drag, currentTime, mDuration);
         }
     }
 
+    /**
+     * get the current touch up progress current time in nanoseconds
+     * (ideally coming from an animation clock)
+     *
+     * @param currentTime in nanoseconds
+     * @return
+     */
+    public float getTouchUpProgress(long currentTime) {
+        if (mOnSwipe != null) {
+
+            return mOnSwipe.getTouchUpProgress(currentTime);
+        }
+
+        return 0;
+    }
 
     /**
          * get the interpolater based on a constant or a string

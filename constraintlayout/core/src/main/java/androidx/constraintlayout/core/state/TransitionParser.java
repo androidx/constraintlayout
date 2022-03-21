@@ -73,7 +73,6 @@ public class TransitionParser {
         }
 
         CLContainer onSwipe = json.getObjectOrNull("onSwipe");
-        System.out.println(">>>>>>>>>>>> OnSwipe "+ onSwipe);
 
         if (onSwipe != null) {
             parseOnSwipe(onSwipe, transition);
@@ -146,8 +145,6 @@ public class TransitionParser {
         swipe.setSpringStopThreshold(stopThreshold);
         swipe.setSpringBoundary(springBoundary);
         swipe.setRotationCenterId(around);
-        System.out.println(">>>>>>>>>>>> "+ anchor);
-
     }
 
 
