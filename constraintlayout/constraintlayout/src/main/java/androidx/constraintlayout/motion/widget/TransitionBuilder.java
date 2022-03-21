@@ -27,8 +27,6 @@ public class TransitionBuilder {
 
     /**
      * It validates if the motion layout is setup correctly or not. Use this for debugging purposes.
-     *
-     * @return true if layout has valid scene and transition.
      */
     public static void validate(MotionLayout layout) {
         if (layout.mScene == null) {

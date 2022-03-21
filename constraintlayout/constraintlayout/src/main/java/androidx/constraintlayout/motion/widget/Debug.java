@@ -49,7 +49,8 @@ public class Debug {
         n = Math.min(n, st.length - 1);
         for (int i = 1; i <= n; i++) {
             StackTraceElement ste = st[i];
-            String stack = ".(" + st[i].getFileName() + ":" + st[i].getLineNumber() + ") " + st[i].getMethodName();
+            String stack = ".(" + st[i].getFileName() + ":" + st[i].getLineNumber()
+                    + ") " + st[i].getMethodName();
             s += " ";
             Log.v(tag, msg + s + stack + s);
         }
@@ -90,6 +91,10 @@ public class Debug {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param obj
+     */
     public static void dumpPoc(Object obj) {
         StackTraceElement s = new Throwable().getStackTrace()[1];
         String loc = ".(" + s.getFileName() + ":" + s.getLineNumber() + ")";
@@ -284,6 +289,11 @@ public class Debug {
         return ".(" + s.getFileName() + ":" + s.getLineNumber() + ")";
     }
 
+    /**
+     * @TODO: add description
+     * @param layout
+     * @param str
+     */
     public static void dumpLayoutParams(ViewGroup layout, String str) {
         StackTraceElement s = new Throwable().getStackTrace()[1];
         String loc = ".(" + s.getFileName() + ":" + s.getLineNumber() + ") " + str + "  ";
@@ -317,6 +327,11 @@ public class Debug {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param param
+     * @param str
+     */
     public static void dumpLayoutParams(ViewGroup.LayoutParams param, String str) {
         StackTraceElement s = new Throwable().getStackTrace()[1];
         String loc = ".(" + s.getFileName() + ":" + s.getLineNumber() + ") " + str + "  ";

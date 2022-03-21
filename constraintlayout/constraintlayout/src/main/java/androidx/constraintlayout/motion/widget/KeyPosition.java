@@ -121,16 +121,16 @@ public class KeyPosition extends KeyPositionBase {
         mCalculatedPositionY = startY + pathVectorY * mPercentX + perpendicularY * mPercentY;
     }
 
-    private void calcCartesianPosition(float start_x, float start_y,
-                                       float end_x, float end_y) {
-        float pathVectorX = end_x - start_x;
-        float pathVectorY = end_y - start_y;
+    private void calcCartesianPosition(float startX, float startY,
+                                       float endX, float endY) {
+        float pathVectorX = endX - startX;
+        float pathVectorY = endY - startY;
         float dxdx = (Float.isNaN(mPercentX)) ? 0 : mPercentX;
         float dydx = (Float.isNaN(mAltPercentY)) ? 0 : mAltPercentY;
         float dydy = (Float.isNaN(mPercentY)) ? 0 : mPercentY;
         float dxdy = (Float.isNaN(mAltPercentX)) ? 0 : mAltPercentX;
-        mCalculatedPositionX = (int) (start_x + pathVectorX * dxdx + pathVectorY * dxdy);
-        mCalculatedPositionY = (int) (start_y + pathVectorX * dydx + pathVectorY * dydy);
+        mCalculatedPositionX = (int) (startX + pathVectorX * dxdx + pathVectorY * dxdy);
+        mCalculatedPositionY = (int) (startY + pathVectorX * dydx + pathVectorY * dydy);
     }
 
     @Override
@@ -296,28 +296,28 @@ public class KeyPosition extends KeyPositionBase {
         private static final int PERCENT_WIDTH = 11;
         private static final int PERCENT_HEIGHT = 12;
 
-        private static SparseIntArray mAttrMap = new SparseIntArray();
+        private static SparseIntArray sAttrMap = new SparseIntArray();
 
         static {
-            mAttrMap.append(R.styleable.KeyPosition_motionTarget, TARGET_ID);
-            mAttrMap.append(R.styleable.KeyPosition_framePosition, FRAME_POSITION);
-            mAttrMap.append(R.styleable.KeyPosition_transitionEasing, TRANSITION_EASING);
-            mAttrMap.append(R.styleable.KeyPosition_curveFit, CURVE_FIT);
-            mAttrMap.append(R.styleable.KeyPosition_drawPath, DRAW_PATH);
-            mAttrMap.append(R.styleable.KeyPosition_percentX, PERCENT_X);
-            mAttrMap.append(R.styleable.KeyPosition_percentY, PERCENT_Y);
-            mAttrMap.append(R.styleable.KeyPosition_keyPositionType, TYPE);
-            mAttrMap.append(R.styleable.KeyPosition_sizePercent, SIZE_PERCENT);
-            mAttrMap.append(R.styleable.KeyPosition_percentWidth, PERCENT_WIDTH);
-            mAttrMap.append(R.styleable.KeyPosition_percentHeight, PERCENT_HEIGHT);
-            mAttrMap.append(R.styleable.KeyPosition_pathMotionArc, PATH_MOTION_ARC);
+            sAttrMap.append(R.styleable.KeyPosition_motionTarget, TARGET_ID);
+            sAttrMap.append(R.styleable.KeyPosition_framePosition, FRAME_POSITION);
+            sAttrMap.append(R.styleable.KeyPosition_transitionEasing, TRANSITION_EASING);
+            sAttrMap.append(R.styleable.KeyPosition_curveFit, CURVE_FIT);
+            sAttrMap.append(R.styleable.KeyPosition_drawPath, DRAW_PATH);
+            sAttrMap.append(R.styleable.KeyPosition_percentX, PERCENT_X);
+            sAttrMap.append(R.styleable.KeyPosition_percentY, PERCENT_Y);
+            sAttrMap.append(R.styleable.KeyPosition_keyPositionType, TYPE);
+            sAttrMap.append(R.styleable.KeyPosition_sizePercent, SIZE_PERCENT);
+            sAttrMap.append(R.styleable.KeyPosition_percentWidth, PERCENT_WIDTH);
+            sAttrMap.append(R.styleable.KeyPosition_percentHeight, PERCENT_HEIGHT);
+            sAttrMap.append(R.styleable.KeyPosition_pathMotionArc, PATH_MOTION_ARC);
         }
 
         private static void read(KeyPosition c, TypedArray a) {
             final int n = a.getIndexCount();
             for (int i = 0; i < n; i++) {
                 int attr = a.getIndex(i);
-                switch (mAttrMap.get(attr)) {
+                switch (sAttrMap.get(attr)) {
                     case TARGET_ID:
                         if (MotionLayout.IS_IN_EDIT_MODE) {
                             c.mTargetId = a.getResourceId(attr, c.mTargetId);
@@ -371,8 +371,8 @@ public class KeyPosition extends KeyPositionBase {
                         break;
 
                     default:
-                        Log.e(TAG, "unused attribute 0x" + Integer.toHexString(attr) +
-                                "   " + mAttrMap.get(attr));
+                        Log.e(TAG, "unused attribute 0x" + Integer.toHexString(attr)
+                                + "   " + sAttrMap.get(attr));
                         break;
                 }
             }

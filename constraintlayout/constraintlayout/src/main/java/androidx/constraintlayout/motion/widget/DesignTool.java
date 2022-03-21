@@ -16,16 +16,10 @@
 
 package androidx.constraintlayout.motion.widget;
 
-import androidx.constraintlayout.widget.ConstraintSet;
-
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
-
-import androidx.constraintlayout.widget.R;
-
-import java.util.HashMap;
 
 import static androidx.constraintlayout.widget.ConstraintSet.BASELINE;
 import static androidx.constraintlayout.widget.ConstraintSet.BOTTOM;
@@ -37,6 +31,10 @@ import static androidx.constraintlayout.widget.ConstraintSet.START;
 import static androidx.constraintlayout.widget.ConstraintSet.TOP;
 import static androidx.constraintlayout.widget.ConstraintSet.VERTICAL;
 import static androidx.constraintlayout.widget.ConstraintSet.WRAP_CONTENT;
+
+import androidx.constraintlayout.widget.ConstraintSet;
+
+import java.util.HashMap;
 
 /**
  * This is the interface used by androidStudio design surface
@@ -79,39 +77,39 @@ interface ProxyInterface {
  */
 public class DesignTool implements ProxyInterface {
 
-    static final HashMap<Pair<Integer, Integer>, String> allAttributes = new HashMap<>();
-    static final HashMap<String, String> allMargins = new HashMap<>();
+    static final HashMap<Pair<Integer, Integer>, String> sAllAttributes = new HashMap<>();
+    static final HashMap<String, String> sAllMargins = new HashMap<>();
     private static final boolean DEBUG = false;
     private static final String TAG = "DesignTool";
 
     static {
-        allAttributes.put(Pair.create(BOTTOM, BOTTOM), "layout_constraintBottom_toBottomOf");
-        allAttributes.put(Pair.create(BOTTOM, TOP), "layout_constraintBottom_toTopOf");
-        allAttributes.put(Pair.create(TOP, BOTTOM), "layout_constraintTop_toBottomOf");
-        allAttributes.put(Pair.create(TOP, TOP), "layout_constraintTop_toTopOf");
-        allAttributes.put(Pair.create(START, START), "layout_constraintStart_toStartOf");
-        allAttributes.put(Pair.create(START, END), "layout_constraintStart_toEndOf");
-        allAttributes.put(Pair.create(END, START), "layout_constraintEnd_toStartOf");
-        allAttributes.put(Pair.create(END, END), "layout_constraintEnd_toEndOf");
-        allAttributes.put(Pair.create(LEFT, LEFT), "layout_constraintLeft_toLeftOf");
-        allAttributes.put(Pair.create(LEFT, RIGHT), "layout_constraintLeft_toRightOf");
-        allAttributes.put(Pair.create(RIGHT, RIGHT), "layout_constraintRight_toRightOf");
-        allAttributes.put(Pair.create(RIGHT, LEFT), "layout_constraintRight_toLeftOf");
-        allAttributes.put(Pair.create(BASELINE, BASELINE),
+        sAllAttributes.put(Pair.create(BOTTOM, BOTTOM), "layout_constraintBottom_toBottomOf");
+        sAllAttributes.put(Pair.create(BOTTOM, TOP), "layout_constraintBottom_toTopOf");
+        sAllAttributes.put(Pair.create(TOP, BOTTOM), "layout_constraintTop_toBottomOf");
+        sAllAttributes.put(Pair.create(TOP, TOP), "layout_constraintTop_toTopOf");
+        sAllAttributes.put(Pair.create(START, START), "layout_constraintStart_toStartOf");
+        sAllAttributes.put(Pair.create(START, END), "layout_constraintStart_toEndOf");
+        sAllAttributes.put(Pair.create(END, START), "layout_constraintEnd_toStartOf");
+        sAllAttributes.put(Pair.create(END, END), "layout_constraintEnd_toEndOf");
+        sAllAttributes.put(Pair.create(LEFT, LEFT), "layout_constraintLeft_toLeftOf");
+        sAllAttributes.put(Pair.create(LEFT, RIGHT), "layout_constraintLeft_toRightOf");
+        sAllAttributes.put(Pair.create(RIGHT, RIGHT), "layout_constraintRight_toRightOf");
+        sAllAttributes.put(Pair.create(RIGHT, LEFT), "layout_constraintRight_toLeftOf");
+        sAllAttributes.put(Pair.create(BASELINE, BASELINE),
                 "layout_constraintBaseline_toBaselineOf");
 
-        allMargins.put("layout_constraintBottom_toBottomOf", "layout_marginBottom");
-        allMargins.put("layout_constraintBottom_toTopOf", "layout_marginBottom");
-        allMargins.put("layout_constraintTop_toBottomOf", "layout_marginTop");
-        allMargins.put("layout_constraintTop_toTopOf", "layout_marginTop");
-        allMargins.put("layout_constraintStart_toStartOf", "layout_marginStart");
-        allMargins.put("layout_constraintStart_toEndOf", "layout_marginStart");
-        allMargins.put("layout_constraintEnd_toStartOf", "layout_marginEnd");
-        allMargins.put("layout_constraintEnd_toEndOf", "layout_marginEnd");
-        allMargins.put("layout_constraintLeft_toLeftOf", "layout_marginLeft");
-        allMargins.put("layout_constraintLeft_toRightOf", "layout_marginLeft");
-        allMargins.put("layout_constraintRight_toRightOf", "layout_marginRight");
-        allMargins.put("layout_constraintRight_toLeftOf", "layout_marginRight");
+        sAllMargins.put("layout_constraintBottom_toBottomOf", "layout_marginBottom");
+        sAllMargins.put("layout_constraintBottom_toTopOf", "layout_marginBottom");
+        sAllMargins.put("layout_constraintTop_toBottomOf", "layout_marginTop");
+        sAllMargins.put("layout_constraintTop_toTopOf", "layout_marginTop");
+        sAllMargins.put("layout_constraintStart_toStartOf", "layout_marginStart");
+        sAllMargins.put("layout_constraintStart_toEndOf", "layout_marginStart");
+        sAllMargins.put("layout_constraintEnd_toStartOf", "layout_marginEnd");
+        sAllMargins.put("layout_constraintEnd_toEndOf", "layout_marginEnd");
+        sAllMargins.put("layout_constraintLeft_toLeftOf", "layout_marginLeft");
+        sAllMargins.put("layout_constraintLeft_toRightOf", "layout_marginLeft");
+        sAllMargins.put("layout_constraintRight_toRightOf", "layout_marginRight");
+        sAllMargins.put("layout_constraintRight_toLeftOf", "layout_marginRight");
     }
 
     private final MotionLayout mMotionLayout;
@@ -125,7 +123,7 @@ public class DesignTool implements ProxyInterface {
         mMotionLayout = motionLayout;
     }
 
-    private static int GetPxFromDp(int dpi, String value) {
+    private static int getPxFromDp(int dpi, String value) {
         if (value == null) {
             return 0;
         }
@@ -138,27 +136,27 @@ public class DesignTool implements ProxyInterface {
         return dpValue;
     }
 
-    private static void Connect(int dpi,
+    private static void connect(int dpi,
                                 ConstraintSet set,
                                 View view,
                                 HashMap<String, String> attributes,
                                 int from,
                                 int to) {
-        String connection = allAttributes.get(Pair.create(from, to));
+        String connection = sAllAttributes.get(Pair.create(from, to));
         String connectionValue = attributes.get(connection);
 
         if (connectionValue != null) {
             int marginValue = 0;
-            String margin = allMargins.get(connection);
+            String margin = sAllMargins.get(connection);
             if (margin != null) {
-                marginValue = GetPxFromDp(dpi, attributes.get(margin));
+                marginValue = getPxFromDp(dpi, attributes.get(margin));
             }
             int id = Integer.parseInt(connectionValue);
             set.connect(view.getId(), from, id, to, marginValue);
         }
     }
 
-    private static void SetBias(ConstraintSet set,
+    private static void setBias(ConstraintSet set,
                                 View view,
                                 HashMap<String, String> attributes,
                                 int type) {
@@ -176,7 +174,7 @@ public class DesignTool implements ProxyInterface {
         }
     }
 
-    private static void SetDimensions(int dpi,
+    private static void setDimensions(int dpi,
                                       ConstraintSet set,
                                       View view,
                                       HashMap<String, String> attributes,
@@ -189,7 +187,7 @@ public class DesignTool implements ProxyInterface {
         if (dimensionValue != null) {
             int value = WRAP_CONTENT;
             if (!dimensionValue.equalsIgnoreCase("wrap_content")) {
-                value = GetPxFromDp(dpi, dimensionValue);
+                value = getPxFromDp(dpi, dimensionValue);
             }
             if (type == HORIZONTAL) {
                 set.constrainWidth(view.getId(), value);
@@ -199,17 +197,17 @@ public class DesignTool implements ProxyInterface {
         }
     }
 
-    private static void SetAbsolutePositions(int dpi,
+    private static void setAbsolutePositions(int dpi,
                                              ConstraintSet set,
                                              View view,
                                              HashMap<String, String> attributes) {
         String absoluteX = attributes.get("layout_editor_absoluteX");
         if (absoluteX != null) {
-            set.setEditorAbsoluteX(view.getId(), GetPxFromDp(dpi, absoluteX));
+            set.setEditorAbsoluteX(view.getId(), getPxFromDp(dpi, absoluteX));
         }
         String absoluteY = attributes.get("layout_editor_absoluteY");
         if (absoluteY != null) {
-            set.setEditorAbsoluteY(view.getId(), GetPxFromDp(dpi, absoluteY));
+            set.setEditorAbsoluteY(view.getId(), getPxFromDp(dpi, absoluteY));
         }
     }
 
@@ -292,6 +290,10 @@ public class DesignTool implements ProxyInterface {
         mMotionLayout.invalidate();
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public String getStartState() {
         int startId = mMotionLayout.getStartState();
         if (mLastStartStateId == startId) {
@@ -306,6 +308,10 @@ public class DesignTool implements ProxyInterface {
         return mMotionLayout.getConstraintSetNames(startId);
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public String getEndState() {
         int endId = mMotionLayout.getEndState();
 
@@ -539,8 +545,8 @@ public class DesignTool implements ProxyInterface {
         if (mMotionLayout.mScene != null) {
             MotionController controller = mMotionLayout.mFrameArrayList.get(view);
             position = (int) (mMotionLayout.mTransitionPosition * 100);
-            if (controller != null &&
-                    mMotionLayout.mScene.hasKeyFramePosition((View) view, position)) {
+            if (controller != null
+                    && mMotionLayout.mScene.hasKeyFramePosition((View) view, position)) {
                 float fx = controller.getKeyFrameParameter(MotionController.HORIZONTAL_PATH_X,
                         x, y);
                 float fy = controller.getKeyFrameParameter(MotionController.VERTICAL_PATH_Y,
@@ -646,6 +652,13 @@ public class DesignTool implements ProxyInterface {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param type
+     * @param target
+     * @param position
+     * @return
+     */
     public Object getKeyframe(int type, int target, int position) {
         if (mMotionLayout.mScene == null) {
             return null;
@@ -653,6 +666,13 @@ public class DesignTool implements ProxyInterface {
         return mMotionLayout.mScene.getKeyFrame(mMotionLayout.getContext(), type, target, position);
     }
 
+    /**
+     * @TODO: add description
+     * @param viewObject
+     * @param x
+     * @param y
+     * @return
+     */
     public Object getKeyframeAtLocation(Object viewObject, float x, float y) {
         View view = (View) viewObject;
         MotionController motionController = null;
@@ -673,6 +693,16 @@ public class DesignTool implements ProxyInterface {
         return motionController.getPositionKeyframe(layoutWidth, layoutHeight, x, y);
     }
 
+    /**
+     * @TODO: add description
+     * @param keyFrame
+     * @param view
+     * @param x
+     * @param y
+     * @param attribute
+     * @param value
+     * @return
+     */
     public Boolean getPositionKeyframe(Object keyFrame,
                                        Object view,
                                        float x,
@@ -690,6 +720,13 @@ public class DesignTool implements ProxyInterface {
         return false;
     }
 
+    /**
+     * @TODO: add description
+     * @param view
+     * @param type
+     * @param position
+     * @return
+     */
     public Object getKeyframe(Object view, int type, int position) {
         if (mMotionLayout.mScene == null) {
             return null;
@@ -698,6 +735,12 @@ public class DesignTool implements ProxyInterface {
         return mMotionLayout.mScene.getKeyFrame(mMotionLayout.getContext(), type, target, position);
     }
 
+    /**
+     * @TODO: add description
+     * @param keyFrame
+     * @param tag
+     * @param value
+     */
     public void setKeyframe(Object keyFrame, String tag, Object value) {
         if (keyFrame instanceof Key) {
             Key key = (Key) keyFrame;
@@ -735,32 +778,36 @@ public class DesignTool implements ProxyInterface {
 
         set.clear(view.getId());
 
-        SetDimensions(dpi, set, view, attributes, HORIZONTAL);
-        SetDimensions(dpi, set, view, attributes, VERTICAL);
+        setDimensions(dpi, set, view, attributes, HORIZONTAL);
+        setDimensions(dpi, set, view, attributes, VERTICAL);
 
-        Connect(dpi, set, view, attributes, START, START);
-        Connect(dpi, set, view, attributes, START, END);
-        Connect(dpi, set, view, attributes, END, END);
-        Connect(dpi, set, view, attributes, END, START);
-        Connect(dpi, set, view, attributes, LEFT, LEFT);
-        Connect(dpi, set, view, attributes, LEFT, RIGHT);
-        Connect(dpi, set, view, attributes, RIGHT, RIGHT);
-        Connect(dpi, set, view, attributes, RIGHT, LEFT);
-        Connect(dpi, set, view, attributes, TOP, TOP);
-        Connect(dpi, set, view, attributes, TOP, BOTTOM);
-        Connect(dpi, set, view, attributes, BOTTOM, TOP);
-        Connect(dpi, set, view, attributes, BOTTOM, BOTTOM);
-        Connect(dpi, set, view, attributes, BASELINE, BASELINE);
+        connect(dpi, set, view, attributes, START, START);
+        connect(dpi, set, view, attributes, START, END);
+        connect(dpi, set, view, attributes, END, END);
+        connect(dpi, set, view, attributes, END, START);
+        connect(dpi, set, view, attributes, LEFT, LEFT);
+        connect(dpi, set, view, attributes, LEFT, RIGHT);
+        connect(dpi, set, view, attributes, RIGHT, RIGHT);
+        connect(dpi, set, view, attributes, RIGHT, LEFT);
+        connect(dpi, set, view, attributes, TOP, TOP);
+        connect(dpi, set, view, attributes, TOP, BOTTOM);
+        connect(dpi, set, view, attributes, BOTTOM, TOP);
+        connect(dpi, set, view, attributes, BOTTOM, BOTTOM);
+        connect(dpi, set, view, attributes, BASELINE, BASELINE);
 
-        SetBias(set, view, attributes, HORIZONTAL);
-        SetBias(set, view, attributes, VERTICAL);
+        setBias(set, view, attributes, HORIZONTAL);
+        setBias(set, view, attributes, VERTICAL);
 
-        SetAbsolutePositions(dpi, set, view, attributes);
+        setAbsolutePositions(dpi, set, view, attributes);
 
         mMotionLayout.updateState(rscId, set);
         mMotionLayout.requestLayout();
     }
 
+    /**
+     * @TODO: add description
+     * @param set
+     */
     public void dumpConstraintSet(String set) {
         if (mMotionLayout.mScene == null) {
             mMotionLayout.mScene = mSceneCache;

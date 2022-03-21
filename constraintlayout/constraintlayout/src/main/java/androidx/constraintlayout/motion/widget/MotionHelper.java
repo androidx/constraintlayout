@@ -109,10 +109,10 @@ public class MotionHelper extends ConstraintHelper implements MotionHelperInterf
                 this.setProgress(view, progress);
             }
         } else {
-            ViewGroup group = (ViewGroup)this.getParent();
+            ViewGroup group = (ViewGroup) this.getParent();
             int count = group.getChildCount();
 
-            for(int i = 0; i < count; ++i) {
+            for (int i = 0; i < count; ++i) {
                 View view = group.getChildAt(i);
                 if (view instanceof MotionHelper) {
                     continue;

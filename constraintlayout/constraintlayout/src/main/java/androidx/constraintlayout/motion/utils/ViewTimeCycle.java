@@ -208,8 +208,8 @@ public abstract class ViewTimeCycle extends TimeCycleSplineSet {
                                      long time,
                                      double dx,
                                      double dy) {
-            view.setRotation(get(t, time, view, cache) +
-                    (float) Math.toDegrees(Math.atan2(dy, dx)));
+            view.setRotation(get(t, time, view, cache)
+                    + (float) Math.toDegrees(Math.atan2(dy, dx)));
             return mContinue;
         }
     }
@@ -295,6 +295,14 @@ public abstract class ViewTimeCycle extends TimeCycleSplineSet {
             mCurveFit = CurveFit.get(curveType, time, values);
         }
 
+        /**
+         * @TODO: add description
+         * @param position
+         * @param value
+         * @param period
+         * @param shape
+         * @param offset
+         */
         public void setPoint(int position, float value, float period, int shape, float offset) {
             throw new RuntimeException("Wrong call for custom attribute");
         }

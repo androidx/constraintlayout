@@ -409,35 +409,35 @@ public class KeyTimeCycle extends Key {
         private static final int WAVE_SHAPE = 19;
         private static final int WAVE_PERIOD = 20;
         private static final int WAVE_OFFSET = 21;
-        private static SparseIntArray mAttrMap = new SparseIntArray();
+        private static SparseIntArray sAttrMap = new SparseIntArray();
 
         static {
-            mAttrMap.append(R.styleable.KeyTimeCycle_android_alpha, ANDROID_ALPHA);
-            mAttrMap.append(R.styleable.KeyTimeCycle_android_elevation, ANDROID_ELEVATION);
-            mAttrMap.append(R.styleable.KeyTimeCycle_android_rotation, ANDROID_ROTATION);
-            mAttrMap.append(R.styleable.KeyTimeCycle_android_rotationX, ANDROID_ROTATION_X);
-            mAttrMap.append(R.styleable.KeyTimeCycle_android_rotationY, ANDROID_ROTATION_Y);
-            mAttrMap.append(R.styleable.KeyTimeCycle_android_scaleX, ANDROID_SCALE_X);
-            mAttrMap.append(R.styleable.KeyTimeCycle_transitionPathRotate, TRANSITION_PATH_ROTATE);
-            mAttrMap.append(R.styleable.KeyTimeCycle_transitionEasing, TRANSITION_EASING);
-            mAttrMap.append(R.styleable.KeyTimeCycle_motionTarget, TARGET_ID);
-            mAttrMap.append(R.styleable.KeyTimeCycle_framePosition, FRAME_POSITION);
-            mAttrMap.append(R.styleable.KeyTimeCycle_curveFit, CURVE_FIT);
-            mAttrMap.append(R.styleable.KeyTimeCycle_android_scaleY, ANDROID_SCALE_Y);
-            mAttrMap.append(R.styleable.KeyTimeCycle_android_translationX, ANDROID_TRANSLATION_X);
-            mAttrMap.append(R.styleable.KeyTimeCycle_android_translationY, ANDROID_TRANSLATION_Y);
-            mAttrMap.append(R.styleable.KeyTimeCycle_android_translationZ, ANDROID_TRANSLATION_Z);
-            mAttrMap.append(R.styleable.KeyTimeCycle_motionProgress, PROGRESS);
-            mAttrMap.append(R.styleable.KeyTimeCycle_wavePeriod, WAVE_PERIOD);
-            mAttrMap.append(R.styleable.KeyTimeCycle_waveOffset, WAVE_OFFSET);
-            mAttrMap.append(R.styleable.KeyTimeCycle_waveShape, WAVE_SHAPE);
+            sAttrMap.append(R.styleable.KeyTimeCycle_android_alpha, ANDROID_ALPHA);
+            sAttrMap.append(R.styleable.KeyTimeCycle_android_elevation, ANDROID_ELEVATION);
+            sAttrMap.append(R.styleable.KeyTimeCycle_android_rotation, ANDROID_ROTATION);
+            sAttrMap.append(R.styleable.KeyTimeCycle_android_rotationX, ANDROID_ROTATION_X);
+            sAttrMap.append(R.styleable.KeyTimeCycle_android_rotationY, ANDROID_ROTATION_Y);
+            sAttrMap.append(R.styleable.KeyTimeCycle_android_scaleX, ANDROID_SCALE_X);
+            sAttrMap.append(R.styleable.KeyTimeCycle_transitionPathRotate, TRANSITION_PATH_ROTATE);
+            sAttrMap.append(R.styleable.KeyTimeCycle_transitionEasing, TRANSITION_EASING);
+            sAttrMap.append(R.styleable.KeyTimeCycle_motionTarget, TARGET_ID);
+            sAttrMap.append(R.styleable.KeyTimeCycle_framePosition, FRAME_POSITION);
+            sAttrMap.append(R.styleable.KeyTimeCycle_curveFit, CURVE_FIT);
+            sAttrMap.append(R.styleable.KeyTimeCycle_android_scaleY, ANDROID_SCALE_Y);
+            sAttrMap.append(R.styleable.KeyTimeCycle_android_translationX, ANDROID_TRANSLATION_X);
+            sAttrMap.append(R.styleable.KeyTimeCycle_android_translationY, ANDROID_TRANSLATION_Y);
+            sAttrMap.append(R.styleable.KeyTimeCycle_android_translationZ, ANDROID_TRANSLATION_Z);
+            sAttrMap.append(R.styleable.KeyTimeCycle_motionProgress, PROGRESS);
+            sAttrMap.append(R.styleable.KeyTimeCycle_wavePeriod, WAVE_PERIOD);
+            sAttrMap.append(R.styleable.KeyTimeCycle_waveOffset, WAVE_OFFSET);
+            sAttrMap.append(R.styleable.KeyTimeCycle_waveShape, WAVE_SHAPE);
         }
 
         public static void read(KeyTimeCycle c, TypedArray a) {
             final int n = a.getIndexCount();
             for (int i = 0; i < n; i++) {
                 int attr = a.getIndex(i);
-                switch (mAttrMap.get(attr)) {
+                switch (sAttrMap.get(attr)) {
                     case TARGET_ID:
                         if (MotionLayout.IS_IN_EDIT_MODE) {
                             c.mTargetId = a.getResourceId(attr, c.mTargetId);
@@ -519,8 +519,8 @@ public class KeyTimeCycle extends Key {
                         c.mProgress = a.getFloat(attr, c.mProgress);
                         break;
                     default:
-                        Log.e(NAME, "unused attribute 0x" + Integer.toHexString(attr) +
-                                "   " + mAttrMap.get(attr));
+                        Log.e(NAME, "unused attribute 0x" + Integer.toHexString(attr)
+                                + "   " + sAttrMap.get(attr));
                         break;
                 }
             }

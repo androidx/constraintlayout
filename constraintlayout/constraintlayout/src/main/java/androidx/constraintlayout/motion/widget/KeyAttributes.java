@@ -363,34 +363,34 @@ public class KeyAttributes extends Key {
         private static final int ANDROID_PIVOT_X = 19;
         private static final int ANDROID_PIVOT_Y = 20;
 
-        private static SparseIntArray mAttrMap = new SparseIntArray();
+        private static SparseIntArray sAttrMap = new SparseIntArray();
 
         static {
-            mAttrMap.append(R.styleable.KeyAttribute_android_alpha, ANDROID_ALPHA);
-            mAttrMap.append(R.styleable.KeyAttribute_android_elevation, ANDROID_ELEVATION);
-            mAttrMap.append(R.styleable.KeyAttribute_android_rotation, ANDROID_ROTATION);
-            mAttrMap.append(R.styleable.KeyAttribute_android_rotationX, ANDROID_ROTATION_X);
-            mAttrMap.append(R.styleable.KeyAttribute_android_rotationY, ANDROID_ROTATION_Y);
-            mAttrMap.append(R.styleable.KeyAttribute_android_transformPivotX, ANDROID_PIVOT_X);
-            mAttrMap.append(R.styleable.KeyAttribute_android_transformPivotY, ANDROID_PIVOT_Y);
-            mAttrMap.append(R.styleable.KeyAttribute_android_scaleX, ANDROID_SCALE_X);
-            mAttrMap.append(R.styleable.KeyAttribute_transitionPathRotate, TRANSITION_PATH_ROTATE);
-            mAttrMap.append(R.styleable.KeyAttribute_transitionEasing, TRANSITION_EASING);
-            mAttrMap.append(R.styleable.KeyAttribute_motionTarget, TARGET_ID);
-            mAttrMap.append(R.styleable.KeyAttribute_framePosition, FRAME_POSITION);
-            mAttrMap.append(R.styleable.KeyAttribute_curveFit, CURVE_FIT);
-            mAttrMap.append(R.styleable.KeyAttribute_android_scaleY, ANDROID_SCALE_Y);
-            mAttrMap.append(R.styleable.KeyAttribute_android_translationX, ANDROID_TRANSLATION_X);
-            mAttrMap.append(R.styleable.KeyAttribute_android_translationY, ANDROID_TRANSLATION_Y);
-            mAttrMap.append(R.styleable.KeyAttribute_android_translationZ, ANDROID_TRANSLATION_Z);
-            mAttrMap.append(R.styleable.KeyAttribute_motionProgress, PROGRESS);
+            sAttrMap.append(R.styleable.KeyAttribute_android_alpha, ANDROID_ALPHA);
+            sAttrMap.append(R.styleable.KeyAttribute_android_elevation, ANDROID_ELEVATION);
+            sAttrMap.append(R.styleable.KeyAttribute_android_rotation, ANDROID_ROTATION);
+            sAttrMap.append(R.styleable.KeyAttribute_android_rotationX, ANDROID_ROTATION_X);
+            sAttrMap.append(R.styleable.KeyAttribute_android_rotationY, ANDROID_ROTATION_Y);
+            sAttrMap.append(R.styleable.KeyAttribute_android_transformPivotX, ANDROID_PIVOT_X);
+            sAttrMap.append(R.styleable.KeyAttribute_android_transformPivotY, ANDROID_PIVOT_Y);
+            sAttrMap.append(R.styleable.KeyAttribute_android_scaleX, ANDROID_SCALE_X);
+            sAttrMap.append(R.styleable.KeyAttribute_transitionPathRotate, TRANSITION_PATH_ROTATE);
+            sAttrMap.append(R.styleable.KeyAttribute_transitionEasing, TRANSITION_EASING);
+            sAttrMap.append(R.styleable.KeyAttribute_motionTarget, TARGET_ID);
+            sAttrMap.append(R.styleable.KeyAttribute_framePosition, FRAME_POSITION);
+            sAttrMap.append(R.styleable.KeyAttribute_curveFit, CURVE_FIT);
+            sAttrMap.append(R.styleable.KeyAttribute_android_scaleY, ANDROID_SCALE_Y);
+            sAttrMap.append(R.styleable.KeyAttribute_android_translationX, ANDROID_TRANSLATION_X);
+            sAttrMap.append(R.styleable.KeyAttribute_android_translationY, ANDROID_TRANSLATION_Y);
+            sAttrMap.append(R.styleable.KeyAttribute_android_translationZ, ANDROID_TRANSLATION_Z);
+            sAttrMap.append(R.styleable.KeyAttribute_motionProgress, PROGRESS);
         }
 
         public static void read(KeyAttributes c, TypedArray a) {
             final int n = a.getIndexCount();
             for (int i = 0; i < n; i++) {
                 int attr = a.getIndex(i);
-                switch (mAttrMap.get(attr)) {
+                switch (sAttrMap.get(attr)) {
                     case TARGET_ID:
                         if (MotionLayout.IS_IN_EDIT_MODE) {
                             c.mTargetId = a.getResourceId(attr, c.mTargetId);
@@ -459,8 +459,8 @@ public class KeyAttributes extends Key {
                         c.mProgress = a.getFloat(attr, c.mProgress);
                         break;
                     default:
-                        Log.e(NAME, "unused attribute 0x" +
-                                Integer.toHexString(attr) + "   " + mAttrMap.get(attr));
+                        Log.e(NAME, "unused attribute 0x"
+                                + Integer.toHexString(attr) + "   " + sAttrMap.get(attr));
                         break;
                 }
             }

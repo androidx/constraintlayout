@@ -82,8 +82,8 @@ public class KeyFrames {
         try {
             Key key = null;
             for (int eventType = parser.getEventType();
-                 eventType != XmlResourceParser.END_DOCUMENT;
-                 eventType = parser.next()) {
+                    eventType != XmlResourceParser.END_DOCUMENT;
+                    eventType = parser.next()) {
                 switch (eventType) {
                     case XmlResourceParser.START_DOCUMENT:
                         break;
