@@ -87,7 +87,7 @@ import androidx.constraintlayout.widget.R;
  */
 public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageView {
     static class ImageMatrix {
-        float[] mArray = new float[4 * 5];
+        float[] mMatrix = new float[4 * 5];
         ColorMatrix mColorMatrix = new ColorMatrix();
         ColorMatrix mTmpColorMatrix = new ColorMatrix();
         float mBrightness = 1;
@@ -106,29 +106,29 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
             float Gt = Gf * ms;
             float Bt = Bf * ms;
 
-            mArray[0] = (Rt + s);
-            mArray[1] = Gt;
-            mArray[2] = Bt;
-            mArray[3] = 0;
-            mArray[4] = 0;
+            mMatrix[0] = (Rt + s);
+            mMatrix[1] = Gt;
+            mMatrix[2] = Bt;
+            mMatrix[3] = 0;
+            mMatrix[4] = 0;
 
-            mArray[5] = Rt;
-            mArray[6] = (Gt + s);
-            mArray[7] = Bt;
-            mArray[8] = 0;
-            mArray[9] = 0;
+            mMatrix[5] = Rt;
+            mMatrix[6] = (Gt + s);
+            mMatrix[7] = Bt;
+            mMatrix[8] = 0;
+            mMatrix[9] = 0;
 
-            mArray[10] = Rt;
-            mArray[11] = Gt;
-            mArray[12] = (Bt + s);
-            mArray[13] = 0;
-            mArray[14] = 0;
+            mMatrix[10] = Rt;
+            mMatrix[11] = Gt;
+            mMatrix[12] = (Bt + s);
+            mMatrix[13] = 0;
+            mMatrix[14] = 0;
 
-            mArray[15] = 0;
-            mArray[16] = 0;
-            mArray[17] = 0;
-            mArray[18] = 1;
-            mArray[19] = 0;
+            mMatrix[15] = 0;
+            mMatrix[16] = 0;
+            mMatrix[17] = 0;
+            mMatrix[18] = 1;
+            mMatrix[19] = 0;
         }
 
         private void warmth(float warmth) {
@@ -200,56 +200,56 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
             color_r /= tmpColor_r;
             color_g /= tmpColor_g;
             color_b /= tmpColor_b;
-            mArray[0] = color_r;
-            mArray[1] = 0;
-            mArray[2] = 0;
-            mArray[3] = 0;
-            mArray[4] = 0;
+            mMatrix[0] = color_r;
+            mMatrix[1] = 0;
+            mMatrix[2] = 0;
+            mMatrix[3] = 0;
+            mMatrix[4] = 0;
 
-            mArray[5] = 0;
-            mArray[6] = color_g;
-            mArray[7] = 0;
-            mArray[8] = 0;
-            mArray[9] = 0;
+            mMatrix[5] = 0;
+            mMatrix[6] = color_g;
+            mMatrix[7] = 0;
+            mMatrix[8] = 0;
+            mMatrix[9] = 0;
 
-            mArray[10] = 0;
-            mArray[11] = 0;
-            mArray[12] = color_b;
-            mArray[13] = 0;
-            mArray[14] = 0;
+            mMatrix[10] = 0;
+            mMatrix[11] = 0;
+            mMatrix[12] = color_b;
+            mMatrix[13] = 0;
+            mMatrix[14] = 0;
 
-            mArray[15] = 0;
-            mArray[16] = 0;
-            mArray[17] = 0;
-            mArray[18] = 1;
-            mArray[19] = 0;
+            mMatrix[15] = 0;
+            mMatrix[16] = 0;
+            mMatrix[17] = 0;
+            mMatrix[18] = 1;
+            mMatrix[19] = 0;
         }
 
         private void brightness(float brightness) {
 
-            mArray[0] = brightness;
-            mArray[1] = 0;
-            mArray[2] = 0;
-            mArray[3] = 0;
-            mArray[4] = 0;
+            mMatrix[0] = brightness;
+            mMatrix[1] = 0;
+            mMatrix[2] = 0;
+            mMatrix[3] = 0;
+            mMatrix[4] = 0;
 
-            mArray[5] = 0;
-            mArray[6] = brightness;
-            mArray[7] = 0;
-            mArray[8] = 0;
-            mArray[9] = 0;
+            mMatrix[5] = 0;
+            mMatrix[6] = brightness;
+            mMatrix[7] = 0;
+            mMatrix[8] = 0;
+            mMatrix[9] = 0;
 
-            mArray[10] = 0;
-            mArray[11] = 0;
-            mArray[12] = brightness;
-            mArray[13] = 0;
-            mArray[14] = 0;
+            mMatrix[10] = 0;
+            mMatrix[11] = 0;
+            mMatrix[12] = brightness;
+            mMatrix[13] = 0;
+            mMatrix[14] = 0;
 
-            mArray[15] = 0;
-            mArray[16] = 0;
-            mArray[17] = 0;
-            mArray[18] = 1;
-            mArray[19] = 0;
+            mMatrix[15] = 0;
+            mMatrix[16] = 0;
+            mMatrix[17] = 0;
+            mMatrix[18] = 1;
+            mMatrix[19] = 0;
         }
 
         void updateMatrix(ImageView view) {
@@ -257,7 +257,7 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
             boolean filter = false;
             if (mSaturation != 1.0f) {
                 saturation(mSaturation);
-                mColorMatrix.set(mArray);
+                mColorMatrix.set(mMatrix);
                 filter = true;
             }
             if (mContrast != 1.0f) {
@@ -267,13 +267,13 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
             }
             if (mWarmth != 1.0f) {
                 warmth(mWarmth);
-                mTmpColorMatrix.set(mArray);
+                mTmpColorMatrix.set(mMatrix);
                 mColorMatrix.postConcat(mTmpColorMatrix);
                 filter = true;
             }
             if (mBrightness != 1.0f) {
                 brightness(mBrightness);
-                mTmpColorMatrix.set(mArray);
+                mTmpColorMatrix.set(mMatrix);
                 mColorMatrix.postConcat(mTmpColorMatrix);
                 filter = true;
             }

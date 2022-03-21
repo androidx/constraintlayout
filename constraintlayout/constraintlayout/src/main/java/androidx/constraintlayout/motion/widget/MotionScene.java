@@ -77,7 +77,7 @@ public class MotionScene {
     private SparseArray<ConstraintSet> mConstraintSetMap = new SparseArray<>();
     private HashMap<String, Integer> mConstraintSetIdMap = new HashMap<>();
     private SparseIntArray mDeriveMap = new SparseIntArray();
-    private boolean mDebugDesktop = false;
+    private static final boolean DEBUG_DESKTOP = false;
     private int mDefaultDuration = 400;
     private int mLayoutDuringTransition = 0;
     public static final int LAYOUT_IGNORE_REQUEST = 0;
@@ -1206,7 +1206,7 @@ public class MotionScene {
                         break;
                     case XmlResourceParser.START_TAG:
                         tagName = parser.getName();
-                        if (mDebugDesktop) {
+                        if (DEBUG_DESKTOP) {
                             System.out.println("parsing = " + tagName);
                         }
                         if (DEBUG) {
@@ -1324,7 +1324,7 @@ public class MotionScene {
         if (idString.contains("/")) {
             String tmp = idString.substring(idString.indexOf('/') + 1);
             id = context.getResources().getIdentifier(tmp, "id", context.getPackageName());
-            if (mDebugDesktop) {
+            if (DEBUG_DESKTOP) {
                 System.out.println("id getMap res = " + id);
             }
         }
@@ -1390,7 +1390,7 @@ public class MotionScene {
         for (int i = 0; i < count; i++) {
             String name = parser.getAttributeName(i);
             String value = parser.getAttributeValue(i);
-            if (mDebugDesktop) {
+            if (DEBUG_DESKTOP) {
                 System.out.println("id string = " + value);
             }
             switch (name) {
@@ -1452,14 +1452,14 @@ public class MotionScene {
      * @return
      */
     public ConstraintSet getConstraintSet(Context context, String id) {
-        if (mDebugDesktop) {
+        if (DEBUG_DESKTOP) {
             System.out.println("id " + id);
             System.out.println("size " + mConstraintSetMap.size());
         }
         for (int i = 0; i < mConstraintSetMap.size(); i++) {
             int key = mConstraintSetMap.keyAt(i);
             String IdAsString = context.getResources().getResourceName(key);
-            if (mDebugDesktop) {
+            if (DEBUG_DESKTOP) {
                 System.out.println("Id for <" + i + "> is <"
                         + IdAsString + "> looking for <" + id + ">");
             }
@@ -1475,7 +1475,7 @@ public class MotionScene {
     }
 
     ConstraintSet getConstraintSet(int id, int width, int height) {
-        if (mDebugDesktop) {
+        if (DEBUG_DESKTOP) {
             System.out.println("id " + id);
             System.out.println("size " + mConstraintSetMap.size());
         }
