@@ -61,6 +61,12 @@ public class VelocityMatrix {
         }
     }
 
+    /**
+     * @TODO: add description
+     * @param scaleX
+     * @param scaleY
+     * @param position
+     */
     public void setScaleVelocity(SplineSet scaleX, SplineSet scaleY, float position) {
 
         if (scaleX != null) {

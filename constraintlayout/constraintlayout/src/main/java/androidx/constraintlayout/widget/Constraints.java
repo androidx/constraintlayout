@@ -33,7 +33,7 @@ import android.view.ViewGroup;
 public class Constraints extends ViewGroup {
 
     public static final String TAG = "Constraints";
-    ConstraintSet myConstraintSet;
+    ConstraintSet mConstraintSet;
 
     public Constraints(Context context) {
         super(context);
@@ -151,12 +151,12 @@ public class Constraints extends ViewGroup {
      * @return
      */
     public ConstraintSet getConstraintSet() {
-        if (myConstraintSet == null) {
-            myConstraintSet = new ConstraintSet();
+        if (mConstraintSet == null) {
+            mConstraintSet = new ConstraintSet();
         }
         // TODO -- could be more efficient...
-        myConstraintSet.clone(this);
-        return myConstraintSet;
+        mConstraintSet.clone(this);
+        return mConstraintSet;
     }
 
     @Override

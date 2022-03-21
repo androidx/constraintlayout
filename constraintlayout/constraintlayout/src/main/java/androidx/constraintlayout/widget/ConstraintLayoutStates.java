@@ -156,11 +156,11 @@ public class ConstraintLayoutStates {
         int mConstraintID = -1;
         ConstraintSet mConstraintSet;
 
-        public State(Context context, XmlPullParser parser) {
+        State(Context context, XmlPullParser parser) {
             AttributeSet attrs = Xml.asAttributeSet(parser);
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.State);
-            final int N = a.getIndexCount();
-            for (int i = 0; i < N; i++) {
+            final int n = a.getIndexCount();
+            for (int i = 0; i < n; i++) {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.State_android_id) {
                     mId = a.getResourceId(attr, mId);

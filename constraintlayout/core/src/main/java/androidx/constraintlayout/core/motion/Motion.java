@@ -1431,8 +1431,10 @@ public class Motion implements TypedValues {
             int height = b - t;
 
             if (FAVOR_FIXED_SIZE_VIEWS) {
-                l = (int) (mStartMotionPath.mX + (mEndMotionPath.mX - mStartMotionPath.mX) * position);
-                t = (int) (mStartMotionPath.mY + (mEndMotionPath.mY - mStartMotionPath.mY) * position);
+                l = (int) (mStartMotionPath.mX
+                        + (mEndMotionPath.mX - mStartMotionPath.mX) * position);
+                t = (int) (mStartMotionPath.mY
+                        + (mEndMotionPath.mY - mStartMotionPath.mY) * position);
                 width = (int) (mStartMotionPath.mWidth
                         + (mEndMotionPath.mWidth - mStartMotionPath.mWidth) * position);
                 height = (int) (mStartMotionPath.mHeight

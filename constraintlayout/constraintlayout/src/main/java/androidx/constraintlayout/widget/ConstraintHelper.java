@@ -264,7 +264,7 @@ public abstract class ConstraintHelper extends View {
         ViewGroup.LayoutParams params = getLayoutParams();
         if (params instanceof ConstraintLayout.LayoutParams) {
             ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) params;
-            layoutParams.widget = (ConstraintWidget) mHelperWidget;
+            layoutParams.mWidget = (ConstraintWidget) mHelperWidget;
         }
     }
 

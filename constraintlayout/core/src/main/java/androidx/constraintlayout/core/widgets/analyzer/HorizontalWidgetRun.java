@@ -363,7 +363,8 @@ public class HorizontalWidgetRun extends WidgetRun {
                 switch (mWidget.mMatchConstraintDefaultWidth) {
                     case MATCH_CONSTRAINT_RATIO: {
                         if (mWidget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_SPREAD
-                                || mWidget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_RATIO) {
+                                || mWidget.mMatchConstraintDefaultHeight
+                                    == MATCH_CONSTRAINT_RATIO) {
                             DependencyNode secondStart = mWidget.mVerticalRun.start;
                             DependencyNode secondEnd = mWidget.mVerticalRun.end;
                             boolean s1 = mWidget.mLeft.mTarget != null;
@@ -386,7 +387,8 @@ public class HorizontalWidgetRun extends WidgetRun {
                                     computeInsetRatio(sTempDimensions,
                                             x1, x2, y1, y2, ratio, definedSide);
                                     mDimension.resolve(sTempDimensions[HORIZONTAL]);
-                                    mWidget.mVerticalRun.mDimension.resolve(sTempDimensions[VERTICAL]);
+                                    mWidget.mVerticalRun.mDimension
+                                            .resolve(sTempDimensions[VERTICAL]);
                                     return;
                                 }
                                 if (start.resolved && end.resolved) {
@@ -395,12 +397,14 @@ public class HorizontalWidgetRun extends WidgetRun {
                                     }
                                     int x1 = start.value + start.mMargin;
                                     int x2 = end.value - end.mMargin;
-                                    int y1 = secondStart.mTargets.get(0).value + secondStart.mMargin;
+                                    int y1 = secondStart.mTargets.get(0).value
+                                            + secondStart.mMargin;
                                     int y2 = secondEnd.mTargets.get(0).value - secondEnd.mMargin;
                                     computeInsetRatio(sTempDimensions,
                                             x1, x2, y1, y2, ratio, definedSide);
                                     mDimension.resolve(sTempDimensions[HORIZONTAL]);
-                                    mWidget.mVerticalRun.mDimension.resolve(sTempDimensions[VERTICAL]);
+                                    mWidget.mVerticalRun.mDimension
+                                            .resolve(sTempDimensions[VERTICAL]);
                                 }
                                 if (!(start.readyToSolve && end.readyToSolve
                                         && secondStart.readyToSolve

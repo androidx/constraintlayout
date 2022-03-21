@@ -696,10 +696,11 @@ public class WidgetFrame {
         } else {
             ss += "/NULL ";
         }
-        if (mCustom != null)
+        if (mCustom != null) {
             for (String key : mCustom.keySet()) {
                 System.out.println(ss + mCustom.get(key).toString());
             }
+        }
     }
 
     /**
