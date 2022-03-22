@@ -84,7 +84,7 @@ public class Guideline extends View {
     }
 
     /**
-     * @hide
+     * @DoNotShow
      */
     @Override
     public void setVisibility(int visibility) {
@@ -94,7 +94,7 @@ public class Guideline extends View {
      * We are overriding draw and not calling super.draw() here because
      * Helper objects are not displayed on device.
      *
-     * @hide
+     * @DoNotShow
      */
     @SuppressLint("MissingSuperCall")
     @Override
@@ -103,7 +103,7 @@ public class Guideline extends View {
     }
 
     /**
-     * @hide
+     * @DoNotShow
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

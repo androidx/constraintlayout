@@ -17,7 +17,7 @@ package androidx.constraintlayout.motion.widget;
 
 /**
  * Interface to custom float attributes
- * @hide
+ * @DoNotShow
  */
 public interface CustomFloatAttributes {
     /**

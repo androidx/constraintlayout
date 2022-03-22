@@ -21,7 +21,7 @@ import java.util.Arrays;
 /**
  * Provide the engine for cubic spline easing
  *
- * @hide
+ * @DoNotShow
  */
 public class Easing {
     static Easing sDefault = new Easing();

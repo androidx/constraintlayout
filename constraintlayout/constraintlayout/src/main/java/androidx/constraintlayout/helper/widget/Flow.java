@@ -153,7 +153,7 @@ public class Flow extends VirtualLayout {
     }
 
     /**
-     * @hide
+     * @DoNotShow
      *
      * @param widget
      * @param isRtl
@@ -170,7 +170,7 @@ public class Flow extends VirtualLayout {
     }
 
     /**
-     * @hide
+     * @DoNotShow
      *
      * @param layout
      * @param widthMeasureSpec
@@ -193,7 +193,7 @@ public class Flow extends VirtualLayout {
     }
 
     /**
-     * @hide
+     * @DoNotShow
      *
      * @param constraint
      * @param child
@@ -215,7 +215,7 @@ public class Flow extends VirtualLayout {
     }
 
     /**
-     * @hide
+     * @DoNotShow
      *
      * @param attrs
      */

@@ -31,7 +31,7 @@ import java.lang.reflect.Method;
  * Provide the engine for executing cycles.
  * KeyCycleOscillator
  *
- * @hide
+ * @DoNotShow
  */
 public abstract class ViewOscillator extends KeyCycleOscillator {
     private static final String TAG = "ViewOscillator";

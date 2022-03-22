@@ -35,7 +35,7 @@ import java.util.Set;
 
 /**
  * The parses the KeyFrame structure in a MotionScene xml
- * @hide
+ * @DoNotShow
  */
 
 public class KeyFrames {

@@ -18,7 +18,7 @@ package androidx.constraintlayout.core;
 import java.util.ArrayList;
 
 /**
- * @hide
+ * @DoNotShow
  *
  * Utility class to track metrics during the system resolution
  */
