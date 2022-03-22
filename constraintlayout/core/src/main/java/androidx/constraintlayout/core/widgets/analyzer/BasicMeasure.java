@@ -40,6 +40,7 @@ import java.util.ArrayList;
 public class BasicMeasure {
 
     private static final boolean DEBUG = false;
+    private static final boolean DO_NOT_USE = false;
     private static final int MODE_SHIFT = 30;
     public static final int UNSPECIFIED = 0;
     public static final int EXACTLY = 1 << MODE_SHIFT;
@@ -390,7 +391,7 @@ public class BasicMeasure {
                             measureStrategy = Measure.USE_GIVEN_DIMENSIONS;
                         }
                         boolean hasMeasure = measure(measurer, widget, measureStrategy);
-                        if (false && !widget.hasDependencies()) {
+                        if (DO_NOT_USE && !widget.hasDependencies()) {
                             hasMeasure = false;
                         }
                         needSolverPass |= hasMeasure;

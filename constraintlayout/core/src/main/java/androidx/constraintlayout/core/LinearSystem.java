@@ -30,6 +30,7 @@ public class LinearSystem {
 
     public static final boolean FULL_DEBUG = false;
     public static final boolean DEBUG = false;
+    private static final boolean DO_NOT_USE = false;
     public static final boolean MEASURE = false;
 
     private static final boolean DEBUG_CONSTRAINTS = FULL_DEBUG;
@@ -1445,7 +1446,7 @@ public class LinearSystem {
             a.setFinalValue(this, b.computedValue + margin);
             return null;
         }
-        if (false && USE_SYNONYMS && strength == SolverVariable.STRENGTH_FIXED
+        if (DO_NOT_USE && USE_SYNONYMS && strength == SolverVariable.STRENGTH_FIXED
                 && a.mDefinitionId == -1 && margin == 0) {
             if (DEBUG_CONSTRAINTS) {
                 System.out.println("(S) -> " + a + " = " + b + (margin != 0 ? " + " + margin : "")

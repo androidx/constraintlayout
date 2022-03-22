@@ -42,6 +42,7 @@ public class Grouping {
 
     private static final boolean DEBUG = false;
     private static final boolean DEBUG_GROUPING = false;
+    private static final boolean FORCE_USE = true;
 
     /**
      * @TODO: add description
@@ -175,7 +176,7 @@ public class Grouping {
         }
         ArrayList<WidgetGroup> allDependencyLists = new ArrayList<>();
 
-        if (true || layout.getHorizontalDimensionBehaviour()
+        if (FORCE_USE || layout.getHorizontalDimensionBehaviour()
                 == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
             //horizontalDependencyLists; //new ArrayList<>();
             ArrayList<WidgetGroup> dependencyLists = allDependencyLists;
@@ -224,7 +225,7 @@ public class Grouping {
             }
         }
 
-        if (true || layout.getVerticalDimensionBehaviour()
+        if (FORCE_USE || layout.getVerticalDimensionBehaviour()
                 == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
             //verticalDependencyLists; //new ArrayList<>();
             ArrayList<WidgetGroup> dependencyLists = allDependencyLists;

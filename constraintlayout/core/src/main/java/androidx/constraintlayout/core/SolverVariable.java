@@ -28,6 +28,8 @@ public class SolverVariable implements Comparable<SolverVariable> {
 
     private static final boolean INTERNAL_DEBUG = FULL_DEBUG;
     private static final boolean VAR_USE_HASH = false;
+    private static final boolean DO_NOT_USE = false;
+
 
     @SuppressWarnings("WeakerAccess")
     public static final int STRENGTH_NONE = 0;
@@ -239,7 +241,7 @@ public class SolverVariable implements Comparable<SolverVariable> {
      * @param value
      */
     public void setFinalValue(LinearSystem system, float value) {
-        if (false && INTERNAL_DEBUG) {
+        if (DO_NOT_USE && INTERNAL_DEBUG) {
             System.out.println("Set final value for " + this + " of " + value);
         }
         computedValue = value;

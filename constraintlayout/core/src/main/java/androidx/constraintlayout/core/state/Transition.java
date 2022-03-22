@@ -844,11 +844,11 @@ public class Transition implements TypedValues {
                                 int parentHeight,
                                 float progress,
                                 Transition transition) {
-            if (true || parentHeight != mParentHeight || parentWidth != mParentWidth) {
-                mParentHeight = parentHeight;
-                mParentWidth = parentWidth;
-                mMotionControl.setup(parentWidth, parentHeight, 1, System.nanoTime());
-            }
+            // TODO  only update if parentHeight != mParentHeight || parentWidth != mParentWidth) {
+            mParentHeight = parentHeight;
+            mParentWidth = parentWidth;
+            mMotionControl.setup(parentWidth, parentHeight, 1, System.nanoTime());
+
             WidgetFrame.interpolate(parentWidth, parentHeight,
                     mInterpolated, mStart, mEnd, transition, progress);
             mInterpolated.interpolatedPos = progress;

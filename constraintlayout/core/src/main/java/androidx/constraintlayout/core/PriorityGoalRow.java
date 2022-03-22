@@ -107,11 +107,7 @@ public class PriorityGoalRow extends ArrayRow {
                 if (value == comparedValue) {
                     continue;
                 }
-                if (value < comparedValue) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return value < comparedValue;
             }
             return false;
         }

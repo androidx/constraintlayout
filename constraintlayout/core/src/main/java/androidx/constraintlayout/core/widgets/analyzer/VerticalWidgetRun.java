@@ -31,6 +31,7 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.Helper;
 
 public class VerticalWidgetRun extends WidgetRun {
+    private static final boolean FORCE_USE = true;
     public DependencyNode baseline = new DependencyNode(this);
     androidx.constraintlayout.core.widgets.analyzer.DimensionDependency mBaselineDimension = null;
 
@@ -95,7 +96,7 @@ public class VerticalWidgetRun extends WidgetRun {
             }
             default: break;
         }
-        if (true || dependency == mDimension) {
+        if (FORCE_USE || dependency == mDimension) {
             if (mDimension.readyToSolve && !mDimension.resolved) {
                 if (mDimensionBehavior == MATCH_CONSTRAINT) {
                     switch (mWidget.mMatchConstraintDefaultHeight) {
