@@ -37,49 +37,16 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import java.util.HashMap;
 
 /**
- * This is the interface used by androidStudio design surface
- * It is marked with the interface so that java proxy will use the same interface
- * to build a proxy.
- */
-interface ProxyInterface {
-    void setToolPosition(float position);
-
-    long getTransitionTimeMs();
-
-    boolean setKeyFramePosition(Object view, int position, int type, float x, float y);
-
-    int designAccess(int cmd, String type, Object viewObject,
-                     float[] in, int inLength, float[] out, int outLength);
-
-    void setAttributes(int dpi,
-                       String constraintSetId,
-                       Object opaqueView,
-                       Object opaqueAttributes);
-
-    float getKeyFramePosition(Object view, int type, float x, float y);
-
-    void setKeyFrame(Object view, int position, String name, Object value);
-
-    Boolean getPositionKeyframe(Object keyFrame,
-                                Object view,
-                                float x,
-                                float y,
-                                String[] attribute,
-                                float[] value);
-
-    Object getKeyframeAtLocation(Object viewObject, float x, float y);
-}
-
-/**
  * Utility class to manipulate MotionLayout from the layout editor
  *
  * @hide
  */
-public class DesignTool implements ProxyInterface {
+public class DesignTool  {
 
     static final HashMap<Pair<Integer, Integer>, String> sAllAttributes = new HashMap<>();
     static final HashMap<String, String> sAllMargins = new HashMap<>();
     private static final boolean DEBUG = false;
+    private static final boolean DO_NOT_USE = false;
     private static final String TAG = "DesignTool";
 
     static {
@@ -373,7 +340,7 @@ public class DesignTool implements ProxyInterface {
 
         mLastStartState = id;
         mLastEndState = null;
-        if (id == null && false) { // going to base layout
+        if (id == null && DO_NOT_USE) { // going to base layout
             if (mMotionLayout.mScene != null) {
                 mSceneCache = mMotionLayout.mScene;
                 mMotionLayout.mScene = null;

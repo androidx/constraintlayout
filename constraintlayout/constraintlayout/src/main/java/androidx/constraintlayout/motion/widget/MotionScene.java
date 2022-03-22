@@ -792,11 +792,11 @@ public class MotionScene {
          * for automatically switching to.
          *
          * @param enable
-         * @deprecated This method should be called {@code setEnabled}, so that {@code isEnabled}
+         * deprecated This method should be called {@code setEnabled}, so that {@code isEnabled}
          * can be accessed as a <a href="https://developer.android.com/kotlin/interop#property_prefixes">property from Kotlin</a>.
          * Use {@link #setEnabled(boolean)} instead.
          */
-        public void setEnable(boolean enable) {
+        private void setEnable(boolean enable) {
             setEnabled(enable);
         }
 
@@ -1249,7 +1249,9 @@ public class MotionScene {
                                 break;
                             case ONCLICK_TAG:
                                 if (transition != null) {
-                                    transition.addOnClick(context, parser);
+                                    if ( mMotionLayout.isInEditMode() ) {
+                                        transition.addOnClick(context, parser);
+                                    }
                                 }
                                 break;
                             case STATESET_TAG:

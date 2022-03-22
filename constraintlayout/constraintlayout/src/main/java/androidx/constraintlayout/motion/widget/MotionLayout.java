@@ -4181,19 +4181,6 @@ public class MotionLayout extends ConstraintLayout implements
         invalidate();
     }
 
-    /**
-     * Display the debug paths information
-     *
-     * @param showPaths show the paths if true
-     * @// TODO: 10/10/18 remove by beta 1
-     * @suppress
-     * @deprecated will be removed beta 1
-     */
-    public void getDebugMode(boolean showPaths) {
-        mDebugPath = showPaths ? 2 : 1;
-        invalidate();
-    }
-
     private RectF mBoundsCheck = new RectF();
     private View mRegionView = null;
     private Matrix mInverseMatrix = null;

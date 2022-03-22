@@ -54,6 +54,7 @@ import java.util.HashSet;
  */
 public class ConstraintWidget {
     private static final boolean AUTOTAG_CENTER = false;
+    private static final boolean DO_NOT_USE = false;
     protected static final int SOLVER = 1;
     protected static final int DIRECT = 2;
 
@@ -3012,7 +3013,7 @@ public class ConstraintWidget {
             }
         }
 
-        if (false && mResolvedDimensionRatioSide == UNKNOWN) {
+        if (DO_NOT_USE && mResolvedDimensionRatioSide == UNKNOWN) {
             if (hParentWrapContent && !vParentWrapContent) {
                 mResolvedDimensionRatioSide = HORIZONTAL;
             } else if (!hParentWrapContent && vParentWrapContent) {
@@ -3030,7 +3031,7 @@ public class ConstraintWidget {
             }
         }
 
-        if (false && mResolvedDimensionRatioSide == UNKNOWN
+        if (DO_NOT_USE && mResolvedDimensionRatioSide == UNKNOWN
                 && hParentWrapContent && vParentWrapContent) {
             mResolvedDimensionRatio = 1 / mResolvedDimensionRatio;
             mResolvedDimensionRatioSide = VERTICAL;

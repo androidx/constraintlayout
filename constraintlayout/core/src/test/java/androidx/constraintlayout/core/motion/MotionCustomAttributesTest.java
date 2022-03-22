@@ -84,14 +84,13 @@ public class MotionCustomAttributesTest {
         s.mMW2.setCustomAttribute("fish", TypedValues.Custom.TYPE_COLOR, 0xFFFF00FF);
         s.setup();
 
-        if (true || DEBUG) {
-            s.sample(() -> {
-                System.out.println(s.mPos + " "
-                        + Integer.toHexString(
-                                s.mRes.getCustomAttribute("fish")
-                                        .getColorValue()));
-            });
-        }
+        s.sample(() -> {
+            System.out.println(s.mPos + " "
+                    + Integer.toHexString(
+                    s.mRes.getCustomAttribute("fish")
+                            .getColorValue()));
+        });
+
         s.mMotion.interpolate(s.mRes, 0.5f, 1000000 + 1000, s.mCache);
         assertEquals(0xffbababa, s.mRes.getCustomAttribute("fish").getColorValue());
     }
