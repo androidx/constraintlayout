@@ -22,7 +22,7 @@
          * Currently not used but it is anticipated that we will be using it in the
          * KeyMotion
          *
-         * @hide
+         * @DoNotShow
          */
 
         public class HyperSpline extends Interpolator {

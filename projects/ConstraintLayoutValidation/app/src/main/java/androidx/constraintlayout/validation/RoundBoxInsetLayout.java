@@ -366,7 +366,7 @@ public class RoundBoxInsetLayout extends ViewGroup {
      * @attr ref R.styleable#BoxInsetLayout_Layout_boxedEdges
      */
     public static class LayoutParams extends FrameLayout.LayoutParams {
-        /** @hide */
+        /** @DoNotShow */
         @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
         @IntDef({BOX_NONE, BOX_LEFT, BOX_TOP, BOX_RIGHT, BOX_BOTTOM, BOX_ALL})
         @Retention(RetentionPolicy.SOURCE)

@@ -37,7 +37,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 /**
- * @hide
+ * @DoNotShow
  * <b>Added in 1.1</b>
  * <p>
  *     This class manages a set of referenced widgets. HelperWidget objects can be
@@ -62,37 +62,37 @@ import java.util.HashMap;
 public abstract class ConstraintHelper extends View {
 
     /**
-     * @hide
+     * @DoNotShow
      */
     protected int[] mIds = new int[32];
     /**
-     * @hide
+     * @DoNotShow
      */
     protected int mCount;
 
     /**
-     * @hide
+     * @DoNotShow
      */
     protected Context myContext;
     /**
-     * @hide
+     * @DoNotShow
      */
     protected Helper mHelperWidget;
     /**
-     * @hide
+     * @DoNotShow
      */
     protected boolean mUseViewMeasure = false;
     /**
-     * @hide
+     * @DoNotShow
      */
     protected String mReferenceIds;
     /**
-     * @hide
+     * @DoNotShow
      */
     protected String mReferenceTags;
 
     /**
-     * @hide
+     * @DoNotShow
      */
     private View[] mViews = null;
 
@@ -117,7 +117,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
+     * @DoNotShow
      */
     protected void init(AttributeSet attrs) {
         if (attrs != null) {
@@ -220,7 +220,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
+     * @DoNotShow
      */
     private void addRscID(int id) {
         if (id == getId()) {
@@ -234,7 +234,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
+     * @DoNotShow
      */
     @Override
     public void onDraw(Canvas canvas) {
@@ -242,7 +242,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
+     * @DoNotShow
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -254,7 +254,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
+     * @DoNotShow
      * Allows a helper to replace the default ConstraintWidget in LayoutParams by its own subclass
      */
     public void validateParams() {
@@ -269,7 +269,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
+     * @DoNotShow
      */
     private void addID(String idString) {
         if (idString == null || idString.length() == 0) {
@@ -296,7 +296,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @hide
+     * @DoNotShow
      */
     private void addTag(String tagString) {
         if (tagString == null || tagString.length() == 0) {

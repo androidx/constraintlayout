@@ -39,7 +39,7 @@ import java.util.HashMap;
 /**
  * Utility class to manipulate MotionLayout from the layout editor
  *
- * @hide
+ * @DoNotShow
  */
 public class DesignTool  {
 
@@ -245,7 +245,7 @@ public class DesignTool  {
 
     /**
      * @param position
-     * @hide
+     * @DoNotShow
      */
     public void setToolPosition(float position) {
         if (mMotionLayout.mScene == null) {
@@ -458,7 +458,7 @@ public class DesignTool  {
      * @param x
      * @param y
      * @return
-     * @hide
+     * @DoNotShow
      */
     public float getKeyFramePosition(Object view, int type, float x, float y) {
         if (!(view instanceof View)) {
@@ -478,7 +478,7 @@ public class DesignTool  {
      * @param position
      * @param name
      * @param value
-     * @hide
+     * @DoNotShow
      */
     public void setKeyFrame(Object view, int position, String name, Object value) {
         if (DEBUG) {
@@ -502,7 +502,7 @@ public class DesignTool  {
      * @param x
      * @param y
      * @return
-     * @hide
+     * @DoNotShow
      */
     public boolean setKeyFramePosition(Object view, int position, int type, float x, float y) {
         if (!(view instanceof View)) {
@@ -533,7 +533,7 @@ public class DesignTool  {
     /**
      * @param view
      * @param debugMode
-     * @hide
+     * @DoNotShow
      */
     public void setViewDebug(Object view, int debugMode) {
         if (!(view instanceof View)) {

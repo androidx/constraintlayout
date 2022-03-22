@@ -33,7 +33,7 @@ public class Debug {
    *
    * @param msg
    * @param n
-   * @hide
+   * @DoNotShow
    */
   public static void logStack(String msg, int n) {
     StackTraceElement[] st = new Throwable().getStackTrace();

@@ -24,7 +24,7 @@ import java.text.DecimalFormat;
 /**
  * This engine allows manipulation of attributes by wave shapes oscillating in time
  *
- * @hide
+ * @DoNotShow
  */
 public abstract class TimeCycleSplineSet {
     private static final String TAG = "SplineSet";

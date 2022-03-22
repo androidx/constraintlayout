@@ -123,7 +123,7 @@ public class Placeholder extends View {
      * are fine to suppress and ignore.
      *
      * @param canvas
-     * @hide
+     * @DoNotShow
      */
     public void onDraw(Canvas canvas) {
         if (isInEditMode()) {
@@ -152,7 +152,7 @@ public class Placeholder extends View {
 
     /**
      * @param container
-     * @hide
+     * @DoNotShow
      */
     public void updatePreLayout(ConstraintLayout container) {
         if (mContentId == -1) {
@@ -199,7 +199,7 @@ public class Placeholder extends View {
 
     /**
      * @param container
-     * @hide
+     * @DoNotShow
      */
     public void updatePostMeasure(ConstraintLayout container) {
         if (mContent == null) {

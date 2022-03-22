@@ -25,7 +25,7 @@ import java.util.HashSet;
 /**
  * Base class in an element in a KeyFrame
  *
- * @hide
+ * @DoNotShow
  */
 
 public abstract class MotionKey implements TypedValues {
@@ -69,7 +69,7 @@ public abstract class MotionKey implements TypedValues {
      * The values are written to the spline
      *
      * @param splines splines to write values to
-     * @hide
+     * @DoNotShow
      */
     public abstract void addValues(HashMap<String, SplineSet> splines);
 
@@ -78,7 +78,7 @@ public abstract class MotionKey implements TypedValues {
      *
      * @param value
      * @return
-     * @hide
+     * @DoNotShow
      */
     float toFloat(Object value) {
         return (value instanceof Float) ? (Float) value : Float.parseFloat(value.toString());
@@ -89,7 +89,7 @@ public abstract class MotionKey implements TypedValues {
      *
      * @param value
      * @return
-     * @hide
+     * @DoNotShow
      */
     int toInt(Object value) {
         return (value instanceof Integer) ? (Integer) value : Integer.parseInt(value.toString());
@@ -100,7 +100,7 @@ public abstract class MotionKey implements TypedValues {
      *
      * @param value
      * @return
-     * @hide
+     * @DoNotShow
      */
     boolean toBoolean(Object value) {
         return (value instanceof Boolean)

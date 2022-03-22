@@ -54,7 +54,7 @@ public class MotionWidget implements TypedValues {
 
 
     /**
-     * @hide
+     * @DoNotShow
      */
     public static class Motion {
         public int mAnimateRelativeTo = UNSET;

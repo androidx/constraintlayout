@@ -36,7 +36,7 @@ import java.util.HashSet;
  * Defines container for a key frame of for storing KeyTimeCycles.
  * KeyTimeCycles change post layout values of a view.
  *
- * @hide
+ * @DoNotShow
  */
 public class KeyTimeCycle extends Key {
     public static final String WAVE_PERIOD = "wavePeriod";

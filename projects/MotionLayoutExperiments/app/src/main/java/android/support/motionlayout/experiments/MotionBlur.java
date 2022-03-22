@@ -68,7 +68,7 @@ public class MotionBlur extends MotionHelper {
 
     /**
      * @param attrs
-     * @hide
+     * @DoNotShow
      */
     protected void init(AttributeSet attrs) {
         super.init(attrs);
@@ -87,7 +87,7 @@ public class MotionBlur extends MotionHelper {
 
     /**
      * @param container
-     * @hide
+     * @DoNotShow
      */
     @Override
     public void updatePreDraw(ConstraintLayout container) {

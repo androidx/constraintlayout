@@ -1119,7 +1119,7 @@ public class ConstraintWidget {
      * Create all the system variables for this widget
      *
      * @param system
-     * @hide
+     * @DoNotShow
      */
     public void createObjectVariables(LinearSystem system) {
         SolverVariable left = system.createObjectVariable(mLeft);
