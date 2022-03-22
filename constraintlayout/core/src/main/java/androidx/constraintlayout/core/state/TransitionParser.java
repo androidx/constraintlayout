@@ -42,7 +42,7 @@ public class TransitionParser {
         if (pathMotionArc != null) {
             setBundle = true;
             switch (pathMotionArc) {
-
+                // TODO use map
                 case "none":
                     bundle.add(TypedValues.PositionType.TYPE_PATH_MOTION_ARC, 0);
                     break;
@@ -70,6 +70,12 @@ public class TransitionParser {
         }
         if (setBundle) {
             transition.setTransitionProperties(bundle);
+        }
+
+        CLContainer onSwipe = json.getObjectOrNull("onSwipe");
+
+        if (onSwipe != null) {
+            parseOnSwipe(onSwipe, transition);
         }
         CLContainer keyframes = json.getObjectOrNull("KeyFrames");
         if (keyframes == null) return;
@@ -103,6 +109,44 @@ public class TransitionParser {
             }
         }
     }
+
+    private static void parseOnSwipe(CLContainer onSwipe, Transition transition) {
+        String anchor = onSwipe.getStringOrNull("anchor");
+        int side = map(onSwipe.getStringOrNull("side"), Transition.OnSwipe.SIDES);
+        int direction = map(onSwipe.getStringOrNull("direction"), Transition.OnSwipe.DIRECTIONS);
+        float scale = onSwipe.getFloatOrNaN("scale");
+        float threshold = onSwipe.getFloatOrNaN("threshold");
+        float maxVelocity = onSwipe.getFloatOrNaN("maxVelocity");
+        float maxAccel = onSwipe.getFloatOrNaN("maxAccel");
+        String limitBounds = onSwipe.getStringOrNull("limitBounds");
+        int autoCompleteMode = map(onSwipe.getStringOrNull("mode"), Transition.OnSwipe.MODE);
+        int touchUp = map(onSwipe.getStringOrNull("touchUp"), Transition.OnSwipe.TOUCH_UP);
+        float springMass = onSwipe.getFloatOrNaN("springMass");
+        float springStiffness = onSwipe.getFloatOrNaN("springStiffness");
+        float springDamping = onSwipe.getFloatOrNaN("springDamping");
+        float stopThreshold = onSwipe.getFloatOrNaN("stopThreshold");
+        int springBoundary = map(onSwipe.getStringOrNull("springBoundary"), Transition.OnSwipe.DIRECTIONS);
+        String around = onSwipe.getStringOrNull("around");
+
+       Transition.OnSwipe swipe =transition.createOnSwipe();
+        swipe.setAnchorId(anchor);
+        swipe.setAnchorSide(side);
+        swipe.setDragDirection(direction);
+        swipe.setDragScale(scale);
+        swipe.setDragThreshold(threshold);
+        swipe.setMaxVelocity(maxVelocity);
+        swipe.setMaxAcceleration(maxAccel);
+        swipe.setLimitBoundsTo(limitBounds);
+        swipe.setAutoCompleteMode(autoCompleteMode);
+        swipe.setOnTouchUp(touchUp);
+        swipe.setSpringMass(springMass);
+        swipe.setSpringStiffness(springStiffness);
+        swipe.setSpringDamping(springDamping);
+        swipe.setSpringStopThreshold(stopThreshold);
+        swipe.setSpringBoundary(springBoundary);
+        swipe.setRotationCenterId(around);
+    }
+
 
     private static int map(String val, String... types) {
         for (int i = 0; i < types.length; i++) {
