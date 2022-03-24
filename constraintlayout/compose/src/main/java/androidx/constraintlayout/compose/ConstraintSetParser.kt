@@ -628,11 +628,11 @@ internal fun parseWidget(
     val reference = state.constraints(elementName)
     if (reference.width == null) {
         // Default to Wrap when the Dimension has not been assigned
-        reference.width = Wrap()
+        reference.width = createWrap()
     }
     if (reference.height == null) {
         // Default to Wrap when the Dimension has not been assigned
-        reference.height = Wrap()
+        reference.height = createWrap()
     }
     val constraints = element.names() ?: return
     (0 until constraints.size).forEach { i ->
@@ -893,20 +893,20 @@ private fun parseConstraint(
 }
 
 private fun parseDimensionMode(dimensionString: String): Dimension {
-    var dimension: Dimension = Fixed(0)
+    var dimension: Dimension = createFixed(0)
     when (dimensionString) {
-        "wrap" -> dimension = Dimension.Wrap()
-        "preferWrap" -> dimension = Dimension.Suggested(WRAP_DIMENSION)
-        "spread" -> dimension = Dimension.Suggested(SPREAD_DIMENSION)
-        "parent" -> dimension = Dimension.Parent()
+        "wrap" -> dimension = Dimension.createWrap()
+        "preferWrap" -> dimension = Dimension.createSuggested(WRAP_DIMENSION)
+        "spread" -> dimension = Dimension.createSuggested(SPREAD_DIMENSION)
+        "parent" -> dimension = Dimension.createParent()
         else -> {
             if (dimensionString.endsWith('%')) {
                 // parent percent
                 val percentString = dimensionString.substringBefore('%')
                 val percentValue = percentString.toFloat() / 100f
-                dimension = Dimension.Percent(0, percentValue).suggested(0)
+                dimension = Dimension.createPercent(0, percentValue).suggested(0)
             } else if (dimensionString.contains(':')) {
-                dimension = Dimension.Ratio(dimensionString).suggested(SPREAD_DIMENSION)
+                dimension = Dimension.createRatio(dimensionString).suggested(SPREAD_DIMENSION)
             }
         }
     }
@@ -919,11 +919,11 @@ private fun parseDimension(
     state: State
 ): Dimension {
     val dimensionElement = element.get(constraintName)
-    var dimension: Dimension = Fixed(0)
+    var dimension: Dimension = createFixed(0)
     if (dimensionElement is CLString) {
         dimension = parseDimensionMode(dimensionElement.content())
     } else if (dimensionElement is CLNumber) {
-        dimension = Fixed(
+        dimension = createFixed(
             state.convertDimension(
                 Dp(
                     element.getFloat(constraintName)
