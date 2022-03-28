@@ -160,7 +160,6 @@ class ConstrainScope internal constructor(internal val id: Any) {
             addTransform { scaleY(value) }
         }
 
-
     /**
      * The degrees to rotate the content over the horizontal axis.
      */
@@ -476,18 +475,14 @@ class ConstrainScope internal constructor(internal val id: Any) {
         tasks.add { state ->
             state.constraints(id)
                 .alpha(Float.NaN)
-
                 .scaleX(Float.NaN)
                 .scaleY(Float.NaN)
-
                 .rotationX(Float.NaN)
                 .rotationY(Float.NaN)
                 .rotationZ(Float.NaN)
-
                 .translationX(Float.NaN)
                 .translationY(Float.NaN)
                 .translationZ(Float.NaN)
-
                 .pivotX(Float.NaN)
                 .pivotY(Float.NaN)
         }

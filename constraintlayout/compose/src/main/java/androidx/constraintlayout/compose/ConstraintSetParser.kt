@@ -16,8 +16,6 @@
 package androidx.constraintlayout.compose
 
 import androidx.compose.ui.unit.Dp
-import androidx.constraintlayout.core.motion.utils.TypedBundle
-import androidx.constraintlayout.core.motion.utils.TypedValues
 import androidx.constraintlayout.core.parser.CLArray
 import androidx.constraintlayout.core.parser.CLKey
 import androidx.constraintlayout.core.parser.CLNumber
@@ -27,10 +25,14 @@ import androidx.constraintlayout.core.parser.CLParsingException
 import androidx.constraintlayout.core.parser.CLString
 import androidx.constraintlayout.core.state.ConstraintReference
 import androidx.constraintlayout.core.state.Dimension
-import androidx.constraintlayout.core.state.Dimension.*
-import androidx.constraintlayout.core.state.State.Chain.*
+import androidx.constraintlayout.core.state.Dimension.SPREAD_DIMENSION
+import androidx.constraintlayout.core.state.Dimension.WRAP_DIMENSION
+import androidx.constraintlayout.core.state.Dimension.createFixed
+import androidx.constraintlayout.core.state.Dimension.createWrap
+import androidx.constraintlayout.core.state.State.Chain.PACKED
+import androidx.constraintlayout.core.state.State.Chain.SPREAD
+import androidx.constraintlayout.core.state.State.Chain.SPREAD_INSIDE
 import androidx.constraintlayout.core.state.Transition
-import androidx.constraintlayout.core.state.TransitionParser
 import androidx.constraintlayout.core.state.helpers.GuidelineReference
 import androidx.constraintlayout.core.widgets.ConstraintWidget
 import java.lang.Long.parseLong
@@ -160,8 +162,6 @@ internal class OverrideValue(private var value: Float) : GeneratedValue {
         return value
     }
 }
-
-
 
 internal fun parseJSON(content: String, transition: Transition, state: Int) {
     try {
@@ -971,7 +971,7 @@ private fun parseColorString(value: String): Int? {
     }
 }
 
-internal fun lookForType(element: CLObject): String? {
+private fun lookForType(element: CLObject): String? {
     val constraints = element.names() ?: return null
     (0 until constraints.size).forEach { i ->
         val constraintName = constraints[i]

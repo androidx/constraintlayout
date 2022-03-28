@@ -25,7 +25,15 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.LayoutScopeMarker
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
@@ -37,9 +45,19 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.layout.*
+import androidx.compose.ui.layout.Measurable
+import androidx.compose.ui.layout.MeasurePolicy
+import androidx.compose.ui.layout.MeasureScope
+import androidx.compose.ui.layout.MultiMeasureLayout
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.*
+import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastForEach
 import androidx.constraintlayout.core.motion.Motion
@@ -219,9 +237,15 @@ internal inline fun MotionLayoutCore(
         return
     }
 
-    var start: ConstraintSet by remember(motionScene) { mutableStateOf(ConstraintSet(jsonContent = startContent)) }
-    var end: ConstraintSet by remember(motionScene) { mutableStateOf(ConstraintSet(jsonContent = endContent)) }
-    val targetConstraintSet = targetEndContent?.let { ConstraintSet(jsonContent = targetEndContent) }
+    var start: ConstraintSet by remember(motionScene) {
+        mutableStateOf(ConstraintSet(jsonContent = startContent))
+    }
+    var end: ConstraintSet by remember(motionScene) {
+        mutableStateOf(ConstraintSet(jsonContent = endContent))
+    }
+    val targetConstraintSet = targetEndContent?.let {
+        ConstraintSet(jsonContent = targetEndContent)
+    }
 
     val progress = remember { Animatable(0f) }
 
@@ -466,7 +490,7 @@ internal class JSONMotionScene(@Language("json5") content: String) : EditableJSO
     }
 
     override fun getForcedProgress(): Float {
-        return forcedProgress;
+        return forcedProgress
     }
 
     override fun resetForcedProgress() {
@@ -480,7 +504,7 @@ internal class JSONMotionScene(@Language("json5") content: String) : EditableJSO
     override fun onNewContent(content: String) {
         super.onNewContent(content)
         try {
-            parseMotionSceneJSON(this, content);
+            parseMotionSceneJSON(this, content)
         } catch (e: Exception) {
             // nothing (content might be invalid, sent by live edit)
         }
@@ -608,7 +632,7 @@ fun Transition(@Language("json5") content: String): androidx.constraintlayout.co
                 object : androidx.constraintlayout.compose.Transition {
                     override fun applyTo(transition: Transition, type: Int) {
                         try {
-                            TransitionParser.parse(parsed, transition);
+                            TransitionParser.parse(parsed, transition)
                         } catch (e: CLParsingException) {
                             System.err.println("Error parsing JSON $e")
                         }
@@ -741,10 +765,10 @@ internal class MotionMeasurer : Measurer() {
 
         val needsRemeasure = needsRemeasure(constraints)
 
-        if (motionProgress != progress
-            || (layoutInformationReceiver?.getForcedWidth() != Int.MIN_VALUE
-                    && layoutInformationReceiver?.getForcedHeight() != Int.MIN_VALUE)
-            || needsRemeasure
+        if (motionProgress != progress ||
+            (layoutInformationReceiver?.getForcedWidth() != Int.MIN_VALUE &&
+                    layoutInformationReceiver?.getForcedHeight() != Int.MIN_VALUE) ||
+            needsRemeasure
         ) {
             recalculateInterpolation(
                 constraints = constraints,
@@ -775,8 +799,9 @@ internal class MotionMeasurer : Measurer() {
             return true
         }
 
-        if ((constraints.hasFixedHeight  && !state.sameFixedHeight(constraints.maxHeight))
-                    || (constraints.hasFixedWidth && !state.sameFixedWidth(constraints.maxWidth))) {
+        if ((constraints.hasFixedHeight && !state.sameFixedHeight(constraints.maxHeight)) ||
+            (constraints.hasFixedWidth && !state.sameFixedWidth(constraints.maxWidth))
+        ) {
             // Layout size changed
             return true
         }
@@ -859,7 +884,8 @@ internal class MotionMeasurer : Measurer() {
             val currentHeight = placeable?.height
             if (placeable == null
                 || currentWidth != interpolatedFrame.width()
-                || currentHeight != interpolatedFrame.height()) {
+                || currentHeight != interpolatedFrame.height()
+            ) {
                 measurable.measure(
                     Constraints.fixed(interpolatedFrame.width(), interpolatedFrame.height())
                 ).also { newPlaceable ->
@@ -932,13 +958,13 @@ internal class MotionMeasurer : Measurer() {
 
             json.append(" ${child.stringId}: {")
             json.append(" interpolated : ")
-            interpolated.serialize(json, true);
+            interpolated.serialize(json, true)
 
             json.append(", start : ")
-            start.serialize(json);
+            start.serialize(json)
 
             json.append(", end : ")
-            end.serialize(json);
+            end.serialize(json)
             encodeKeyFrames(json, key, mode, pos, count)
             json.append(" path : [")
             for (point in path) {
@@ -993,7 +1019,7 @@ internal class MotionMeasurer : Measurer() {
         drawFrame(startFrame, pathEffect, color)
         drawFrame(endFrame, pathEffect, color)
         var numKeyPositions = transition.getNumberKeyPositions(startFrame)
-        var debugRender = MotionRenderDebug(23f);
+        var debugRender = MotionRenderDebug(23f)
 
         debugRender.draw(
             drawContext.canvas.nativeCanvas, transition.getMotion(startFrame.widget.stringId),
@@ -1019,9 +1045,11 @@ internal class MotionMeasurer : Measurer() {
             for (i in 0..numKeyPositions - 1) {
                 var keyFrameProgress = pos[i] / 100f
                 var frameWidth =
-                    ((1 - keyFrameProgress) * startFrame.width()) + (keyFrameProgress * endFrame.width())
+                    ((1 - keyFrameProgress) * startFrame.width()) +
+                            (keyFrameProgress * endFrame.width())
                 var frameHeight =
-                    ((1 - keyFrameProgress) * startFrame.height()) + (keyFrameProgress * endFrame.height())
+                    ((1 - keyFrameProgress) * startFrame.height()) +
+                            (keyFrameProgress * endFrame.height())
                 var curX = x[i] * parentWidth + frameWidth / 2f
                 var curY = y[i] * parentHeight + frameHeight / 2f
 //                drawLine(
@@ -1125,12 +1153,12 @@ internal class MotionMeasurer : Measurer() {
 
         val interpolatedFrame = transition.getInterpolated(id)
         val color = interpolatedFrame.getCustomColor(name)
-        return Color(color);
+        return Color(color)
     }
 
     fun getCustomFloat(id: String, name: String): Float {
         if (!transition.contains(id)) {
-            return 0f;
+            return 0f
         }
         val startFrame = transition.getStart(id)
         val endFrame = transition.getEnd(id)

@@ -56,6 +56,7 @@ class HorizontalChainScope internal constructor(internal val id: Any) {
 @Stable
 class VerticalChainScope internal constructor(internal val id: Any) {
     internal val tasks = mutableListOf<(State) -> Unit>()
+
     /**
      * Reference to the [ConstraintLayout] itself, which can be used to specify constraints
      * between itself and its children.
@@ -77,7 +78,7 @@ private class ChainVerticalAnchorable constructor(
     tasks: MutableList<(State) -> Unit>,
     private val id: Any,
     index: Int
-): BaseVerticalAnchorable(tasks, index) {
+) : BaseVerticalAnchorable(tasks, index) {
     override fun getConstraintReference(state: State): ConstraintReference =
         state.helper(id, androidx.constraintlayout.core.state.State.Helper.HORIZONTAL_CHAIN)
 }
@@ -86,7 +87,7 @@ private class ChainHorizontalAnchorable constructor(
     tasks: MutableList<(State) -> Unit>,
     private val id: Any,
     index: Int
-): BaseHorizontalAnchorable(tasks, index) {
+) : BaseHorizontalAnchorable(tasks, index) {
     override fun getConstraintReference(state: State): ConstraintReference =
         state.helper(id, androidx.constraintlayout.core.state.State.Helper.VERTICAL_CHAIN)
 }
