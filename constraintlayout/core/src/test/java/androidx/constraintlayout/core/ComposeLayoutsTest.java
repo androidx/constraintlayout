@@ -85,14 +85,14 @@ public class ComposeLayoutsTest {
                 .centerHorizontally(parent)
                 .centerVertically(parent)
                 .startToEnd("guideline")
-                .width(Dimension.Suggested(Dimension.WRAP_DIMENSION))
-                .height(Dimension.Wrap())
+                .width(Dimension.createSuggested(Dimension.WRAP_DIMENSION))
+                .height(Dimension.createWrap())
                 .setView("box");
         state.constraints("divider")
                 .centerHorizontally(parent)
                 .centerVertically(parent)
-                .width(Dimension.Fixed(1))
-                .height(Dimension.Percent(0, 0.8f).suggested(0))
+                .width(Dimension.createFixed(1))
+                .height(Dimension.createPercent(0, 0.8f).suggested(0))
                 .setView("divider");
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(0, 0, 1080, 1977);
         state.apply(root);

@@ -846,16 +846,16 @@ internal class MotionMeasurer : Measurer() {
             // Define the size of the ConstraintLayout.
             state.width(
                 if (constraints.hasFixedWidth) {
-                    Dimension.Fixed(constraints.maxWidth)
+                    Dimension.createFixed(constraints.maxWidth)
                 } else {
-                    Dimension.Wrap().min(constraints.minWidth)
+                    Dimension.createWrap().min(constraints.minWidth)
                 }
             )
             state.height(
                 if (constraints.hasFixedHeight) {
-                    Dimension.Fixed(constraints.maxHeight)
+                    Dimension.createFixed(constraints.maxHeight)
                 } else {
-                    Dimension.Wrap().min(constraints.minHeight)
+                    Dimension.createWrap().min(constraints.minHeight)
                 }
             )
             // Build constraint set and apply it to the state.

@@ -127,8 +127,8 @@ public class ConstraintReference implements Reference {
 
     State.Constraint mLast = null;
 
-    Dimension mHorizontalDimension = Dimension.Fixed(Dimension.WRAP_DIMENSION);
-    Dimension mVerticalDimension = Dimension.Fixed(Dimension.WRAP_DIMENSION);
+    Dimension mHorizontalDimension = Dimension.createFixed(Dimension.WRAP_DIMENSION);
+    Dimension mVerticalDimension = Dimension.createFixed(Dimension.WRAP_DIMENSION);
 
     private Object mView;
     private ConstraintWidget mConstraintWidget;
