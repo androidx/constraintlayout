@@ -488,14 +488,14 @@ interface Dimension {
          * be used instead.
          */
         fun preferredValue(dp: Dp): Dimension.MinCoercible =
-            DimensionDescription { state -> SolverDimension.Suggested(state.convertDimension(dp)).suggested(SPREAD_DIMENSION) }
+            DimensionDescription { state -> SolverDimension.createSuggested(state.convertDimension(dp)).suggested(SPREAD_DIMENSION) }
 
         /**
          * Creates a [Dimension] representing a fixed dp size. The size will not change
          * according to the constraints in the [ConstraintSet].
          */
         fun value(dp: Dp): Dimension =
-            DimensionDescription { state -> SolverDimension.Fixed(state.convertDimension(dp)) }
+            DimensionDescription { state -> SolverDimension.createFixed(state.convertDimension(dp)) }
 
         /**
          * Sets the dimensions to be defined as a ratio of the width and height. The assigned
@@ -509,7 +509,7 @@ interface Dimension {
          * Note that only one dimension should be defined as a ratio.
          */
         fun ratio(ratio: String): Dimension =
-            DimensionDescription { SolverDimension.Ratio(ratio).suggested(SPREAD_DIMENSION) }
+            DimensionDescription { SolverDimension.createRatio(ratio).suggested(SPREAD_DIMENSION) }
 
         /**
          * Links should be specified from both sides corresponding to this dimension, in order for
@@ -521,21 +521,21 @@ interface Dimension {
          * should be used instead.
          */
         val preferredWrapContent: Dimension.Coercible
-            get() = DimensionDescription { SolverDimension.Suggested(WRAP_DIMENSION) }
+            get() = DimensionDescription { SolverDimension.createSuggested(WRAP_DIMENSION) }
 
         /**
          * A fixed [Dimension] with wrap content behavior. The size will not change
          * according to the constraints in the [ConstraintSet].
          */
         val wrapContent: Dimension
-            get() = DimensionDescription { SolverDimension.Fixed(WRAP_DIMENSION) }
+            get() = DimensionDescription { SolverDimension.createFixed(WRAP_DIMENSION) }
 
         /**
          * A fixed [Dimension] that matches the dimensions of the root ConstraintLayout. The size
          * will not change accoring to the constraints in the [ConstraintSet].
          */
         val matchParent: Dimension
-            get() = DimensionDescription { SolverDimension.Parent() }
+            get() = DimensionDescription { SolverDimension.createParent() }
 
         /**
          * Links should be specified from both sides corresponding to this dimension, in order for
@@ -544,14 +544,14 @@ interface Dimension {
          * A [Dimension] that spreads to match constraints.
          */
         val fillToConstraints: Dimension.Coercible
-            get() = DimensionDescription { SolverDimension.Suggested(SPREAD_DIMENSION) }
+            get() = DimensionDescription { SolverDimension.createSuggested(SPREAD_DIMENSION) }
 
         /**
          * A [Dimension] that is a percent of the parent in the corresponding direction.
          */
         fun percent(percent: Float): Dimension =
             // TODO(popam, b/157880732): make this nicer when possible in future solver releases
-            DimensionDescription { SolverDimension.Percent(0, percent).suggested(0) }
+            DimensionDescription { SolverDimension.createPercent(0, percent).suggested(0) }
     }
 }
 
@@ -1198,16 +1198,16 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         // Define the size of the ConstraintLayout.
         state.width(
             if (constraints.hasFixedWidth) {
-                SolverDimension.Fixed(constraints.maxWidth)
+                SolverDimension.createFixed(constraints.maxWidth)
             } else {
-                SolverDimension.Wrap().min(constraints.minWidth)
+                SolverDimension.createWrap().min(constraints.minWidth)
             }
         )
         state.height(
             if (constraints.hasFixedHeight) {
-                SolverDimension.Fixed(constraints.maxHeight)
+                SolverDimension.createFixed(constraints.maxHeight)
             } else {
-                SolverDimension.Wrap().min(constraints.minHeight)
+                SolverDimension.createWrap().min(constraints.minHeight)
             }
         )
         // Build constraint set and apply it to the state.

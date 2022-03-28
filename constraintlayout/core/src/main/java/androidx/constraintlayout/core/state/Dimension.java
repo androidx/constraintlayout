@@ -76,7 +76,7 @@ public class Dimension {
      * @param value
      * @return
      */
-    public static Dimension Suggested(int value) {
+    public static Dimension createSuggested(int value) {
         Dimension dimension = new Dimension();
         dimension.suggested(value);
         return dimension;
@@ -87,7 +87,7 @@ public class Dimension {
      * @param startValue
      * @return
      */
-    public static Dimension Suggested(Object startValue) {
+    public static Dimension createSuggested(Object startValue) {
         Dimension dimension = new Dimension();
         dimension.suggested(startValue);
         return dimension;
@@ -98,7 +98,7 @@ public class Dimension {
      * @param value
      * @return
      */
-    public static Dimension Fixed(int value) {
+    public static Dimension createFixed(int value) {
         Dimension dimension = new Dimension(FIXED_DIMENSION);
         dimension.fixed(value);
         return dimension;
@@ -109,7 +109,7 @@ public class Dimension {
      * @param value
      * @return
      */
-    public static Dimension Fixed(Object value) {
+    public static Dimension createFixed(Object value) {
         Dimension dimension = new Dimension(FIXED_DIMENSION);
         dimension.fixed(value);
         return dimension;
@@ -121,7 +121,7 @@ public class Dimension {
      * @param value
      * @return
      */
-    public static Dimension Percent(Object key, float value) {
+    public static Dimension createPercent(Object key, float value) {
         Dimension dimension = new Dimension(PERCENT_DIMENSION);
         dimension.percent(key, value);
         return dimension;
@@ -131,7 +131,7 @@ public class Dimension {
      * @TODO: add description
      * @return
      */
-    public static Dimension Parent() {
+    public static Dimension createParent() {
         return new Dimension(PARENT_DIMENSION);
     }
 
@@ -139,7 +139,7 @@ public class Dimension {
      * @TODO: add description
      * @return
      */
-    public static Dimension Wrap() {
+    public static Dimension createWrap() {
         return new Dimension(WRAP_DIMENSION);
     }
 
@@ -147,7 +147,7 @@ public class Dimension {
      * @TODO: add description
      * @return
      */
-    public static Dimension Spread() {
+    public static Dimension createSpread() {
         return new Dimension(SPREAD_DIMENSION);
     }
 
@@ -156,7 +156,7 @@ public class Dimension {
      * @param ratio
      * @return
      */
-    public static Dimension Ratio(String ratio) {
+    public static Dimension createRatio(String ratio) {
         Dimension dimension = new Dimension(RATIO_DIMENSION);
         dimension.ratio(ratio);
         return dimension;
