@@ -82,7 +82,6 @@ import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.parser.CLParsingException
 import androidx.constraintlayout.core.state.Dimension.SPREAD_DIMENSION
 import androidx.constraintlayout.core.state.Dimension.WRAP_DIMENSION
-import androidx.constraintlayout.core.state.Dimension.Wrap
 import androidx.constraintlayout.core.state.Registry
 import androidx.constraintlayout.core.state.RegistryCallback
 import androidx.constraintlayout.core.state.WidgetFrame
@@ -530,7 +529,8 @@ interface Dimension {
          */
         fun preferredValue(dp: Dp): Dimension.MinCoercible =
             DimensionDescription { state ->
-                SolverDimension.createSuggested(state.convertDimension(dp)).suggested(SPREAD_DIMENSION)
+                SolverDimension.createSuggested(state.convertDimension(dp))
+                    .suggested(SPREAD_DIMENSION)
             }
 
         /**
