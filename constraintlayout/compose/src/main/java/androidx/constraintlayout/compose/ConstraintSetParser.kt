@@ -25,10 +25,10 @@ import androidx.constraintlayout.core.parser.CLParsingException
 import androidx.constraintlayout.core.parser.CLString
 import androidx.constraintlayout.core.state.ConstraintReference
 import androidx.constraintlayout.core.state.Dimension
-import androidx.constraintlayout.core.state.Dimension.Fixed
 import androidx.constraintlayout.core.state.Dimension.SPREAD_DIMENSION
 import androidx.constraintlayout.core.state.Dimension.WRAP_DIMENSION
-import androidx.constraintlayout.core.state.Dimension.Wrap
+import androidx.constraintlayout.core.state.Dimension.createFixed
+import androidx.constraintlayout.core.state.Dimension.createWrap
 import androidx.constraintlayout.core.state.State.Chain.PACKED
 import androidx.constraintlayout.core.state.State.Chain.SPREAD
 import androidx.constraintlayout.core.state.State.Chain.SPREAD_INSIDE
