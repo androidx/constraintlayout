@@ -60,7 +60,7 @@ internal class JSONConstraintSet(
         try {
             designElements.clear()
             parseDesignElementsJSON(getCurrentContent(), designElements)
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             // nothing (content might be invalid, sent by live edit)
         }
     }
@@ -73,7 +73,7 @@ internal class JSONConstraintSet(
         try {
             parseJSON(getCurrentContent(), state, layoutVariables)
             _isDirty = false
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             // nothing (content might be invalid, sent by live edit)
             _isDirty = true
         }

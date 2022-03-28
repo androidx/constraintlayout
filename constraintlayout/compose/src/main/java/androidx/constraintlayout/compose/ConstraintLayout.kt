@@ -33,36 +33,75 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.RememberObserver
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateObserver
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.*
-import androidx.compose.ui.layout.*
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.GraphicsLayerScope
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.layout.AlignmentLine
+import androidx.compose.ui.layout.FirstBaseline
+import androidx.compose.ui.layout.LayoutIdParentData
+import androidx.compose.ui.layout.Measurable
+import androidx.compose.ui.layout.MeasurePolicy
+import androidx.compose.ui.layout.MeasureScope
+import androidx.compose.ui.layout.MultiMeasureLayout
+import androidx.compose.ui.layout.ParentDataModifier
+import androidx.compose.ui.layout.Placeable
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.InspectorValueInfo
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.*
+import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastForEachIndexed
 import androidx.constraintlayout.core.parser.CLObject
 import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.parser.CLParsingException
-import androidx.constraintlayout.core.state.*
-import androidx.constraintlayout.core.state.Dimension.*
-import androidx.constraintlayout.core.widgets.*
-import androidx.constraintlayout.core.widgets.ConstraintWidget.*
-import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.*
+import androidx.constraintlayout.core.state.Dimension.SPREAD_DIMENSION
+import androidx.constraintlayout.core.state.Dimension.WRAP_DIMENSION
+import androidx.constraintlayout.core.state.Dimension.Wrap
+import androidx.constraintlayout.core.state.Registry
+import androidx.constraintlayout.core.state.RegistryCallback
+import androidx.constraintlayout.core.state.WidgetFrame
+import androidx.constraintlayout.core.widgets.ConstraintWidget
+import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.FIXED
+import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.MATCH_PARENT
+import androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionBehaviour.WRAP_CONTENT
+import androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_SPREAD
+import androidx.constraintlayout.core.widgets.ConstraintWidget.MATCH_CONSTRAINT_WRAP
+import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer
+import androidx.constraintlayout.core.widgets.Guideline
+import androidx.constraintlayout.core.widgets.HelperWidget
+import androidx.constraintlayout.core.widgets.Optimizer
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.TRY_GIVEN_DIMENSIONS
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.Measure.USE_GIVEN_DIMENSIONS
 import kotlinx.coroutines.channels.Channel
 import org.intellij.lang.annotations.Language
-import java.util.*
 
 /**
  * Layout that positions its children according to the constraints between them.
@@ -230,7 +269,8 @@ inline fun ConstraintLayout(
         LaunchedEffect(channel) {
             for (constraints in channel) {
                 val newConstraints = channel.tryReceive().getOrNull() ?: constraints
-                val currentConstraints = if (direction.value == 1) startConstraint else endConstraint
+                val currentConstraints =
+                    if (direction.value == 1) startConstraint else endConstraint
                 if (newConstraints != currentConstraints) {
                     if (direction.value == 1) {
                         endConstraint = newConstraints
@@ -331,8 +371,8 @@ class ConstraintLayoutScope @PublishedApi internal constructor() : ConstraintLay
      * [ConstraintLayout] as part of [Modifier.constrainAs]. To create more references at the
      * same time, see [createRefs].
      */
-    fun createRef() = childrenRefs.getOrNull(childId++) ?:
-        ConstrainedLayoutReference(childId).also { childrenRefs.add(it) }
+    fun createRef() = childrenRefs.getOrNull(childId++)
+        ?: ConstrainedLayoutReference(childId).also { childrenRefs.add(it) }
 
     /**
      * Convenient way to create multiple [ConstrainedLayoutReference]s, which need to be assigned
@@ -341,7 +381,8 @@ class ConstraintLayoutScope @PublishedApi internal constructor() : ConstraintLay
      */
     @Stable
     fun createRefs() =
-            referencesObject ?: ConstrainedLayoutReferences().also { referencesObject = it }
+        referencesObject ?: ConstrainedLayoutReferences().also { referencesObject = it }
+
     private var referencesObject: ConstrainedLayoutReferences? = null
 
     private val ChildrenStartIndex = 0
@@ -488,7 +529,9 @@ interface Dimension {
          * be used instead.
          */
         fun preferredValue(dp: Dp): Dimension.MinCoercible =
-            DimensionDescription { state -> SolverDimension.Suggested(state.convertDimension(dp)).suggested(SPREAD_DIMENSION) }
+            DimensionDescription { state ->
+                SolverDimension.Suggested(state.convertDimension(dp)).suggested(SPREAD_DIMENSION)
+            }
 
         /**
          * Creates a [Dimension] representing a fixed dp size. The size will not change
@@ -582,7 +625,13 @@ val Dimension.Coercible.atMostWrapContent: Dimension.MinCoercible
 /**
  * Sets the lower bound of the current [Dimension] to a fixed [dp] value.
  */
-@Deprecated(message = "Unintended method name, use atLeast(dp) instead", replaceWith = ReplaceWith("this.atLeast(dp)", "androidx.constraintlayout.compose.atLeast"))
+@Deprecated(
+    message = "Unintended method name, use atLeast(dp) instead",
+    replaceWith = ReplaceWith(
+        "this.atLeast(dp)",
+        "androidx.constraintlayout.compose.atLeast"
+    )
+)
 fun Dimension.MinCoercible.atLeastWrapContent(dp: Dp): Dimension =
     (this as DimensionDescription).also { it.min = dp }
 
@@ -650,8 +699,10 @@ internal class DimensionDescription internal constructor(
  */
 @SuppressLint("ComposableNaming")
 @Composable
-fun ConstraintSet(@Language("json5") content : String,
-                  @Language("json5") overrideVariables: String? = null) : ConstraintSet {
+fun ConstraintSet(
+    @Language("json5") content: String,
+    @Language("json5") overrideVariables: String? = null
+): ConstraintSet {
     val constraintset = remember(content, overrideVariables) {
         JSONConstraintSet(content, overrideVariables)
     }
@@ -671,7 +722,7 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
     private var layoutInformationMode: LayoutInfoFlags = LayoutInfoFlags.NONE
     private var layoutInformation = ""
     private var last = System.nanoTime()
-    private var debugName : String? = null
+    private var debugName: String? = null
 
     private var currentContent = content
 
@@ -699,7 +750,7 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
                         return currentContent
                     }
 
-                    override fun currentLayoutInformation() : String {
+                    override fun currentLayoutInformation(): String {
                         return layoutInformation
                     }
 
@@ -708,7 +759,7 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
                     }
 
                     override fun getLastModified(): Long {
-                         return last;
+                        return last
                     }
 
                     override fun setDrawDebug(debugMode: Int) {
@@ -718,7 +769,7 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
                 val registry = Registry.getInstance()
                 registry.register(debugName, callback)
             }
-        } catch (e : CLParsingException) {
+        } catch (e: CLParsingException) {
 
         }
     }
@@ -741,7 +792,7 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
         onNewContent(content)
     }
 
-    fun getCurrentContent() : String{
+    fun getCurrentContent(): String {
         return currentContent
     }
 
@@ -749,7 +800,7 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
         debugName = name
     }
 
-    fun getDebugName() : String?{
+    fun getDebugName(): String? {
         return debugName
     }
 
@@ -770,7 +821,7 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
         layoutInformation = information
     }
 
-    fun getLayoutInformation() : String {
+    fun getLayoutInformation(): String {
         return layoutInformation
     }
 
@@ -798,9 +849,9 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
                     signalUpdate()
                 }
             }
-        } catch (e : CLParsingException) {
+        } catch (e: CLParsingException) {
             // nothing (content might be invalid, sent by live edit)
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             // nothing (content might be invalid, sent by live edit)
         }
     }
@@ -824,17 +875,22 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
     }
 
     protected fun onDrawDebug(debugMode: Int) {
-        when (debugMode) {
-            -1 -> forcedDrawDebug = MotionLayoutDebugFlags.UNKNOWN
-            MotionLayoutDebugFlags.UNKNOWN.ordinal -> forcedDrawDebug = MotionLayoutDebugFlags.UNKNOWN
-            MotionLayoutDebugFlags.NONE.ordinal -> forcedDrawDebug = MotionLayoutDebugFlags.NONE
-            MotionLayoutDebugFlags.SHOW_ALL.ordinal -> forcedDrawDebug = MotionLayoutDebugFlags.SHOW_ALL
+        forcedDrawDebug = when (debugMode) {
+            MotionLayoutDebugFlags.UNKNOWN.ordinal -> MotionLayoutDebugFlags.UNKNOWN
+            MotionLayoutDebugFlags.NONE.ordinal -> MotionLayoutDebugFlags.NONE
+            MotionLayoutDebugFlags.SHOW_ALL.ordinal -> MotionLayoutDebugFlags.SHOW_ALL
+            -1 -> MotionLayoutDebugFlags.UNKNOWN
+            else -> MotionLayoutDebugFlags.UNKNOWN
         }
         signalUpdate()
     }
 }
 
-internal data class DesignElement(var id: String, var type: String, var params: HashMap<String, String>)
+internal data class DesignElement(
+    var id: String,
+    var type: String,
+    var params: HashMap<String, String>
+)
 
 /**
  * Parses the given JSON5 into a [ConstraintSet].
@@ -923,7 +979,7 @@ class State(val density: Density) : SolverState() {
 
 interface LayoutInformationReceiver {
     fun setLayoutInformation(information: String)
-    fun getLayoutInformationMode() : LayoutInfoFlags
+    fun getLayoutInformationMode(): LayoutInfoFlags
     fun getForcedWidth(): Int
     fun getForcedHeight(): Int
 }
@@ -963,7 +1019,7 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             Log.d(
                 "CCL",
                 "Measuring ${measurable.layoutId} with: " +
-                    constraintWidget.toDebugString() + "\n" + measure.toDebugString()
+                        constraintWidget.toDebugString() + "\n" + measure.toDebugString()
             )
         }
 
@@ -1000,11 +1056,11 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         }
 
         if ((measure.measureStrategy == TRY_GIVEN_DIMENSIONS ||
-                measure.measureStrategy == USE_GIVEN_DIMENSIONS) ||
+                    measure.measureStrategy == USE_GIVEN_DIMENSIONS) ||
             !(measure.horizontalBehavior == MATCH_CONSTRAINT &&
-            constraintWidget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_SPREAD &&
-            measure.verticalBehavior == MATCH_CONSTRAINT &&
-            constraintWidget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_SPREAD)
+                    constraintWidget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_SPREAD &&
+                    measure.verticalBehavior == MATCH_CONSTRAINT &&
+                    constraintWidget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_SPREAD)
         ) {
             if (DEBUG) {
                 Log.d("CCL", "Measuring ${measurable.layoutId} with $constraints")
@@ -1070,7 +1126,7 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             .copyFrom(measure)
 
         measure.measuredNeedsSolverPass = measure.measuredWidth != measure.horizontalDimension ||
-            measure.measuredHeight != measure.verticalDimension
+                measure.measuredHeight != measure.verticalDimension
     }
 
     fun addLayoutInformationReceiver(layoutReceiver: LayoutInformationReceiver?) {
@@ -1099,9 +1155,11 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                         json.append(" type: 'vGuideline', ")
                     }
                     json.append(" interpolated: ")
-                    json.append(" { left: ${child.x}, top: ${child.y}, " +
-                            "right: ${child.x + child.width}, " +
-                            "bottom: ${child.y + child.height} }")
+                    json.append(
+                        " { left: ${child.x}, top: ${child.y}, " +
+                                "right: ${child.x + child.width}, " +
+                                "bottom: ${child.y + child.height} }"
+                    )
                     json.append("}, ")
                 }
                 continue
@@ -1116,7 +1174,7 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             }
             json.append(" ${child.stringId}: {")
             json.append(" interpolated : ")
-            frame.serialize(json, true);
+            frame.serialize(json, true)
             json.append("}, ")
         }
         json.append(" }")
@@ -1157,11 +1215,11 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                 Log.d("CCL", "IRH ${currentDimensionResolved}")
             }
             val useDimension = currentDimensionResolved ||
-                (measureStrategy == TRY_GIVEN_DIMENSIONS ||
-                    measureStrategy == USE_GIVEN_DIMENSIONS) &&
-                (measureStrategy == USE_GIVEN_DIMENSIONS ||
-                    matchConstraintDefaultDimension != MATCH_CONSTRAINT_WRAP ||
-                    otherDimensionResolved)
+                    (measureStrategy == TRY_GIVEN_DIMENSIONS ||
+                            measureStrategy == USE_GIVEN_DIMENSIONS) &&
+                    (measureStrategy == USE_GIVEN_DIMENSIONS ||
+                            matchConstraintDefaultDimension != MATCH_CONSTRAINT_WRAP ||
+                            otherDimensionResolved)
             if (DEBUG) {
                 Log.d("CCL", "UD $useDimension")
             }
@@ -1253,7 +1311,7 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                     Log.d(
                         "CCL",
                         "Final measurement for ${measurable.layoutId} " +
-                            "to confirm size ${child.width} ${child.height}"
+                                "to confirm size ${child.width} ${child.height}"
                     )
                 }
                 measurable.measure(Constraints.fixed(child.width, child.height))
@@ -1276,7 +1334,9 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         root.width = constraints.maxWidth
         root.height = constraints.maxHeight
         forcedScaleFactor = Float.NaN
-        if (layoutInformationReceiver != null && layoutInformationReceiver?.getForcedWidth() != Int.MIN_VALUE) {
+        if (layoutInformationReceiver != null &&
+            layoutInformationReceiver?.getForcedWidth() != Int.MIN_VALUE
+        ) {
             val forcedWidth = layoutInformationReceiver!!.getForcedWidth()
             if (forcedWidth > root.width) {
                 val scale = root.width / forcedWidth.toFloat()
@@ -1286,7 +1346,9 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             }
             root.width = forcedWidth
         }
-        if (layoutInformationReceiver != null && layoutInformationReceiver?.getForcedHeight() != Int.MIN_VALUE) {
+        if (layoutInformationReceiver != null &&
+            layoutInformationReceiver?.getForcedHeight() != Int.MIN_VALUE
+        ) {
             val forcedHeight = layoutInformationReceiver!!.getForcedHeight()
             var scaleFactor = 1f
             if (forcedScaleFactor.isNaN()) {
@@ -1355,7 +1417,12 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                 val x = frameCache[measurable]!!.left
                 val y = frameCache[measurable]!!.top
                 val zIndex = if (frame.translationZ.isNaN()) 0f else frame.translationZ
-                placeables[measurable]?.placeWithLayer(x, y, layerBlock = layerBlock, zIndex = zIndex)
+                placeables[measurable]?.placeWithLayer(
+                    x,
+                    y,
+                    layerBlock = layerBlock,
+                    zIndex = zIndex
+                )
             }
         }
         if (layoutInformationReceiver?.getLayoutInformationMode() == LayoutInfoFlags.BOUNDS) {
@@ -1370,8 +1437,8 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         Canvas(modifier = Modifier.matchParentSize()) {
             val w = layoutCurrentWidth * forcedScaleFactor
             val h = layoutCurrentHeight * forcedScaleFactor
-            var dx = (size.width -w) / 2f
-            var dy = (size.height -h) / 2f
+            var dx = (size.width - w) / 2f
+            var dy = (size.height - h) / 2f
             var color = Color.White
             drawLine(color, Offset(dx, dy), Offset(dx + w, dy))
             drawLine(color, Offset(dx + w, dy), Offset(dx + w, dy + h))
@@ -1390,10 +1457,10 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
     private var designElements = arrayListOf<DesignElement>()
 
 
-    private fun getColor(str: String?, defaultColor: Color = Color.Black) : Color {
+    private fun getColor(str: String?, defaultColor: Color = Color.Black): Color {
         if (str != null && str.startsWith('#')) {
             var str2 = str.substring(1)
-            if(str2.length == 6) {
+            if (str2.length == 6) {
                 str2 = "FF$str2"
             }
             try {
@@ -1405,7 +1472,7 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         return defaultColor
     }
 
-    private fun getTextStyle(params: HashMap<String, String>) : TextStyle {
+    private fun getTextStyle(params: HashMap<String, String>): TextStyle {
         val fontSizeString = params["size"]
         var fontSize = TextUnit.Unspecified
         if (fontSizeString != null) {
@@ -1426,20 +1493,26 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                 when (element.type) {
                     "button" -> {
                         val text = element.params["text"] ?: "text"
-                        val colorBackground = getColor(element.params["backgroundColor"], Color.LightGray)
-                        BasicText(modifier = Modifier
-                            .layoutId(id)
-                            .clip(RoundedCornerShape(20))
-                            .background(colorBackground)
-                            .padding(8.dp),
-                            text = text, style = getTextStyle(element.params))
+                        val colorBackground =
+                            getColor(element.params["backgroundColor"], Color.LightGray)
+                        BasicText(
+                            modifier = Modifier
+                                .layoutId(id)
+                                .clip(RoundedCornerShape(20))
+                                .background(colorBackground)
+                                .padding(8.dp),
+                            text = text, style = getTextStyle(element.params)
+                        )
                     }
                     "box" -> {
                         val text = element.params["text"] ?: ""
-                        val colorBackground = getColor(element.params["backgroundColor"], Color.LightGray)
-                        Box(modifier = Modifier
-                            .layoutId(id)
-                            .background(colorBackground)) {
+                        val colorBackground =
+                            getColor(element.params["backgroundColor"], Color.LightGray)
+                        Box(
+                            modifier = Modifier
+                                .layoutId(id)
+                                .background(colorBackground)
+                        ) {
                             BasicText(
                                 modifier = Modifier.padding(8.dp),
                                 text = text, style = getTextStyle(element.params)
@@ -1448,8 +1521,10 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                     }
                     "text" -> {
                         val text = element.params["text"] ?: "text"
-                        BasicText(modifier = Modifier.layoutId(id),
-                            text = text, style = getTextStyle(element.params))
+                        BasicText(
+                            modifier = Modifier.layoutId(id),
+                            text = text, style = getTextStyle(element.params)
+                        )
                     }
                     "textfield" -> {
                         val text = element.params["text"] ?: "text"
@@ -1479,8 +1554,8 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
 }
 
 object DesignElements {
-    var map = HashMap<String, @Composable (String, HashMap<String, String>) -> Unit >()
-    fun define(name: String, function : @Composable (String, HashMap<String, String>) -> Unit) {
+    var map = HashMap<String, @Composable (String, HashMap<String, String>) -> Unit>()
+    fun define(name: String, function: @Composable (String, HashMap<String, String>) -> Unit) {
         map[name] = function
     }
 }
@@ -1513,11 +1588,11 @@ internal typealias SolverChain = androidx.constraintlayout.core.state.State.Chai
 private val DEBUG = false
 private fun ConstraintWidget.toDebugString() =
     "$debugName " +
-        "width $width minWidth $minWidth maxWidth $maxWidth " +
-        "height $height minHeight $minHeight maxHeight $maxHeight " +
-        "HDB $horizontalDimensionBehaviour VDB $verticalDimensionBehaviour " +
-        "MCW $mMatchConstraintDefaultWidth MCH $mMatchConstraintDefaultHeight " +
-        "percentW $mMatchConstraintPercentWidth percentH $mMatchConstraintPercentHeight"
+            "width $width minWidth $minWidth maxWidth $maxWidth " +
+            "height $height minHeight $minHeight maxHeight $maxHeight " +
+            "HDB $horizontalDimensionBehaviour VDB $verticalDimensionBehaviour " +
+            "MCW $mMatchConstraintDefaultWidth MCH $mMatchConstraintDefaultHeight " +
+            "percentW $mMatchConstraintPercentWidth percentH $mMatchConstraintPercentHeight"
 
 private fun BasicMeasure.Measure.toDebugString() =
     "measure strategy is "
