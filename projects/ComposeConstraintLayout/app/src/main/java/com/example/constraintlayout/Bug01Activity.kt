@@ -156,7 +156,7 @@ class Bug01Activity : AppCompatActivity() {
                                 .wrapContentSize()
                                 .background(Color.White)
                         ) {
-                            TestDialogContent(this)
+                            TestDialogContent( )
                         }
                     }
 //                    }
