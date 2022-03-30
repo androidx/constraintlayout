@@ -59,10 +59,18 @@ public class Transition implements TypedValues {
     private float mStagger = 0.0f;
     OnSwipe mOnSwipe = null;
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public OnSwipe createOnSwipe() {
         return mOnSwipe = new OnSwipe();
     }
 
+    /**
+     * @TODO: add description
+     * @return
+     */
     public boolean hasOnSwipe() {
         return mOnSwipe != null;
     }
@@ -77,8 +85,8 @@ public class Transition implements TypedValues {
         public static  final int  ANCHOR_SIDE_MIDDLE = 4;
         public static  final int  ANCHOR_SIDE_START = 5;
         public static  final int  ANCHOR_SIDE_END = 6;
-        public static  final String[]SIDES = {"top","left","right",
-                "bottom","middle","start","end"};
+        public static  final String[]SIDES = {"top", "left", "right",
+                "bottom", "middle", "start", "end"};
         private static final float[][] TOUCH_SIDES = {
                 {0.5f, 0.0f}, // top
                 {0.0f, 0.5f}, // left
@@ -91,7 +99,7 @@ public class Transition implements TypedValues {
 
         String mRotationCenterId;
         String mLimitBoundsTo;
-         boolean mDragVertical = true;
+        boolean mDragVertical = true;
         int mDragDirection = 0;
         public static  final int  DRAG_UP = 0;
         public static  final int  DRAG_DOWN = 1;
@@ -101,15 +109,15 @@ public class Transition implements TypedValues {
         public static  final int  DRAG_END = 5;
         public static  final int  DRAG_CLOCKWISE = 6;
         public static  final int  DRAG_ANTICLOCKWISE = 7;
-        public static  final String[]DIRECTIONS = {"up","down","left","right","start",
-                "end","clockwise","anticlockwise"};
+        public static  final String[]DIRECTIONS = {"up", "down", "left", "right", "start",
+                "end", "clockwise", "anticlockwise"};
 
         float  mDragScale = 1;
         float mDragThreshold  = 10;
         int mAutoCompleteMode = 0;
-        public static  final int MODE_CONTINUOUS_VELOCITY=0;
-        public static  final int MODE_SPRING=1;
-        public static  final String[]MODE = {"velocity","spring"};
+        public static  final int MODE_CONTINUOUS_VELOCITY = 0;
+        public static  final int MODE_SPRING = 1;
+        public static  final String[]MODE = {"velocity", "spring"};
         float mMaxVelocity  = 4.f;
         float mMaxAcceleration = 1.2f;
 
@@ -123,9 +131,9 @@ public class Transition implements TypedValues {
         public static  final int  ON_UP_DECELERATE_AND_COMPLETE = 5;
         public static  final int  ON_UP_NEVER_COMPLETE_TO_START = 6;
         public static  final int  ON_UP_NEVER_COMPLETE_TO_END = 7;
-        public static  final String[]TOUCH_UP = {"autocomplete","toStart",
-                "toEnd","stop","decelerate","decelerateComplete",
-                "neverCompleteStart","neverCompleteEnd"};
+        public static  final String[]TOUCH_UP = {"autocomplete", "toStart",
+                "toEnd", "stop", "decelerate", "decelerateComplete",
+                "neverCompleteStart", "neverCompleteEnd"};
 
         float mSpringMass = 1;
         float mSpringStiffness = 400;
@@ -138,8 +146,8 @@ public class Transition implements TypedValues {
         public static  final int  BOUNDARY_BOUNCE_START = 1;
         public static  final int  BOUNDARY_BOUNCE_END = 2;
         public static  final int  BOUNDARY_BOUNCE_BOTH = 3;
-        public static  final String[]BOUNDARY = {"overshoot","bounceStart",
-                "bounceEnd","bounceBoth"};
+        public static  final String[]BOUNDARY = {"overshoot", "bounceStart",
+                "bounceEnd", "bounceBoth"};
 
         private static final float[][] TOUCH_DIRECTION = {
                 {0.0f, -1.0f}, // up
@@ -180,14 +188,14 @@ public class Transition implements TypedValues {
         }
 
         void setDragScale(float dragScale) {
-            if (Float.isNaN(dragScale)){
+            if (Float.isNaN(dragScale)) {
                 return;
             }
             this.mDragScale = dragScale;
         }
 
         void setDragThreshold(float dragThreshold) {
-            if (Float.isNaN(dragThreshold)){
+            if (Float.isNaN(dragThreshold)) {
                 return;
             }
             this.mDragThreshold = dragThreshold;
@@ -198,14 +206,14 @@ public class Transition implements TypedValues {
         }
 
         void setMaxVelocity(float maxVelocity) {
-            if (Float.isNaN(maxVelocity)){
+            if (Float.isNaN(maxVelocity)) {
                 return;
             }
             this.mMaxVelocity = maxVelocity;
         }
 
         void setMaxAcceleration(float maxAcceleration) {
-            if (Float.isNaN(maxAcceleration)){
+            if (Float.isNaN(maxAcceleration)) {
                 return;
             }
             this.mMaxAcceleration = maxAcceleration;
@@ -216,28 +224,28 @@ public class Transition implements TypedValues {
         }
 
         void setSpringMass(float mSpringMass) {
-            if (Float.isNaN(mSpringMass)){
+            if (Float.isNaN(mSpringMass)) {
                 return;
             }
             this.mSpringMass = mSpringMass;
         }
 
         void setSpringStiffness(float mSpringStiffness) {
-            if (Float.isNaN(mSpringStiffness)){
+            if (Float.isNaN(mSpringStiffness)) {
                 return;
             }
             this.mSpringStiffness = mSpringStiffness;
         }
 
         void setSpringDamping(float mSpringDamping) {
-            if (Float.isNaN(mSpringDamping)){
+            if (Float.isNaN(mSpringDamping)) {
                 return;
             }
             this.mSpringDamping = mSpringDamping;
         }
 
         void setSpringStopThreshold(float mSpringStopThreshold) {
-            if (Float.isNaN(mSpringStopThreshold)){
+            if (Float.isNaN(mSpringStopThreshold)) {
                 return;
             }
             this.mSpringStopThreshold = mSpringStopThreshold;
@@ -249,7 +257,7 @@ public class Transition implements TypedValues {
 
         private StopEngine mEngine;
 
-        void config(float position, float velocity,long start, float duration) {
+        void config(float position, float velocity, long start, float duration) {
             mStart = start;
             if (mAutoCompleteMode == MODE_CONTINUOUS_VELOCITY) {
                 StopLogicEngine sl;
@@ -307,7 +315,7 @@ public class Transition implements TypedValues {
         float[] motionDpDt = new float[2];
         base.interpolate(baseW, baseH, currentProgress, this);
         base.mMotionControl.getDpDt(currentProgress, side[0], side[1], motionDpDt);
-        float drag = dx * Math.abs(dir[0])  / motionDpDt[0]+ dy * Math.abs(dir[1])/ motionDpDt[1];
+        float drag = dx * Math.abs(dir[0])  / motionDpDt[0] + dy * Math.abs(dir[1]) / motionDpDt[1];
        // float change = (mOnSwipe.mDragVertical) ? dy / motionDpDt[1] : dx / motionDpDt[0];
         return drag;
     }
