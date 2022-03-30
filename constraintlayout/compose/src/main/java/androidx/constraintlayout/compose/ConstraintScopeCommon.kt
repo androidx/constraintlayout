@@ -68,7 +68,6 @@ interface BaselineAnchorable {
     )
 }
 
-
 internal abstract class BaseVerticalAnchorable(
     private val tasks: MutableList<(State) -> Unit>,
     private val index: Int

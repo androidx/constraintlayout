@@ -538,7 +538,9 @@ interface Dimension {
          * according to the constraints in the [ConstraintSet].
          */
         fun value(dp: Dp): Dimension =
-            DimensionDescription { state -> SolverDimension.createFixed(state.convertDimension(dp)) }
+            DimensionDescription { state ->
+                SolverDimension.createFixed(state.convertDimension(dp))
+            }
 
         /**
          * Sets the dimensions to be defined as a ratio of the width and height. The assigned
@@ -774,10 +776,7 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
         }
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Accessors
-    ///////////////////////////////////////////////////////////////////////////
-
+    // region Accessors
     fun setUpdateFlag(needsUpdate: MutableState<Long>) {
         updateFlag = needsUpdate
     }
@@ -828,11 +827,9 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
     override fun getLayoutInformationMode(): LayoutInfoFlags {
         return layoutInformationMode
     }
+    // endregion
 
-    ///////////////////////////////////////////////////////////////////////////
-    // on update methods
-    ///////////////////////////////////////////////////////////////////////////
-
+    // region on update methods
     protected open fun onNewContent(content: String) {
         currentContent = content
         try {
@@ -884,6 +881,7 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
         }
         signalUpdate()
     }
+    // endregion
 }
 
 internal data class DesignElement(
@@ -1209,10 +1207,10 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         }
         MATCH_CONSTRAINT -> {
             if (DEBUG) {
-                Log.d("CCL", "Measure strategy ${measureStrategy}")
-                Log.d("CCL", "DW ${matchConstraintDefaultDimension}")
-                Log.d("CCL", "ODR ${otherDimensionResolved}")
-                Log.d("CCL", "IRH ${currentDimensionResolved}")
+                Log.d("CCL", "Measure strategy $measureStrategy")
+                Log.d("CCL", "DW $matchConstraintDefaultDimension")
+                Log.d("CCL", "ODR $otherDimensionResolved")
+                Log.d("CCL", "IRH $currentDimensionResolved")
             }
             val useDimension = currentDimensionResolved ||
                     (measureStrategy == TRY_GIVEN_DIMENSIONS ||
@@ -1455,7 +1453,6 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
     }
 
     private var designElements = arrayListOf<DesignElement>()
-
 
     private fun getColor(str: String?, defaultColor: Color = Color.Black): Color {
         if (str != null && str.startsWith('#')) {

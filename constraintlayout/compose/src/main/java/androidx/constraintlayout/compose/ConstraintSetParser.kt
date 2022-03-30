@@ -32,6 +32,7 @@ import androidx.constraintlayout.core.state.Dimension.createWrap
 import androidx.constraintlayout.core.state.State.Chain.PACKED
 import androidx.constraintlayout.core.state.State.Chain.SPREAD
 import androidx.constraintlayout.core.state.State.Chain.SPREAD_INSIDE
+import androidx.constraintlayout.core.state.State.Direction
 import androidx.constraintlayout.core.state.Transition
 import androidx.constraintlayout.core.state.helpers.GuidelineReference
 import androidx.constraintlayout.core.widgets.ConstraintWidget
@@ -106,7 +107,6 @@ internal class LayoutVariables {
     fun put(elementName: String, elements: ArrayList<String>) {
         arrayIds[elementName] = elements
     }
-
 }
 
 internal interface GeneratedValue {
@@ -126,8 +126,10 @@ internal class Generator(start: Float, private var incrementBy: Float) : Generat
 }
 
 internal class FiniteGenerator(
-    from: Float, to: Float,
-    private var step: Float = 1f, private var prefix: String = "",
+    from: Float,
+    to: Float,
+    private var step: Float = 1f,
+    private var prefix: String = "",
     private var postfix: String = ""
 ) : GeneratedValue {
     private var current: Float = from
@@ -154,7 +156,6 @@ internal class FiniteGenerator(
         }
         return array
     }
-
 }
 
 internal class OverrideValue(private var value: Float) : GeneratedValue {
@@ -482,7 +483,11 @@ internal fun parseGenerate(state: State, layoutVariables: LayoutVariables, json:
 
 internal fun parseChain(orientation: Int, state: State, margins: LayoutVariables, helper: CLArray) {
     val chain =
-        if (orientation == ConstraintWidget.HORIZONTAL) state.horizontalChain() else state.verticalChain()
+        if (orientation == ConstraintWidget.HORIZONTAL) {
+            state.horizontalChain()
+        } else {
+            state.verticalChain()
+        }
     val refs = helper[1]
     if (refs !is CLArray || refs.size() < 1) {
         return
@@ -580,27 +585,27 @@ private fun parseGuidelineParams(
 
 internal fun parseBarrier(
     state: State,
-    elementName: String, element: CLObject
+    elementName: String,
+    element: CLObject
 ) {
-    val reference =
-        state.barrier(elementName, androidx.constraintlayout.core.state.State.Direction.END)
+    val reference = state.barrier(elementName, Direction.END)
     val constraints = element.names() ?: return
     (0 until constraints.size).forEach { i ->
         when (val constraintName = constraints[i]) {
             "direction" -> {
                 when (element.getString(constraintName)) {
-                    "start" -> reference.setBarrierDirection(androidx.constraintlayout.core.state.State.Direction.START)
-                    "end" -> reference.setBarrierDirection(androidx.constraintlayout.core.state.State.Direction.END)
-                    "left" -> reference.setBarrierDirection(androidx.constraintlayout.core.state.State.Direction.LEFT)
-                    "right" -> reference.setBarrierDirection(androidx.constraintlayout.core.state.State.Direction.RIGHT)
-                    "top" -> reference.setBarrierDirection(androidx.constraintlayout.core.state.State.Direction.TOP)
-                    "bottom" -> reference.setBarrierDirection(androidx.constraintlayout.core.state.State.Direction.BOTTOM)
+                    "start" -> reference.setBarrierDirection(Direction.START)
+                    "end" -> reference.setBarrierDirection(Direction.END)
+                    "left" -> reference.setBarrierDirection(Direction.LEFT)
+                    "right" -> reference.setBarrierDirection(Direction.RIGHT)
+                    "top" -> reference.setBarrierDirection(Direction.TOP)
+                    "bottom" -> reference.setBarrierDirection(Direction.BOTTOM)
                 }
             }
             "margin" -> {
-                val margin =  element.getFloatOrNaN(constraintName)
+                val margin = element.getFloatOrNaN(constraintName)
                 if (!margin.isNaN())
-                   reference.margin(margin.toInt())
+                    reference.margin(margin.toInt())
             }
             "contains" -> {
                 val list = element.getArrayOrNull(constraintName)
@@ -609,7 +614,11 @@ internal fun parseBarrier(
                         val elementNameReference = list.get(j).content()
                         val elementReference = state.constraints(elementNameReference)
                         if (PARSER_DEBUG) {
-                            println("Add REFERENCE ($elementNameReference = $elementReference) TO BARRIER ")
+                            println(
+                                "Add REFERENCE " +
+                                        "($elementNameReference = $elementReference) " +
+                                        "TO BARRIER "
+                            )
                         }
                         reference.add(elementReference)
                     }

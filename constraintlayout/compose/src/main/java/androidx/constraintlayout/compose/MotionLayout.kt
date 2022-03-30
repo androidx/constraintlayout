@@ -70,7 +70,7 @@ import androidx.constraintlayout.core.state.WidgetFrame
 import androidx.constraintlayout.core.widgets.Optimizer
 import kotlinx.coroutines.channels.Channel
 import org.intellij.lang.annotations.Language
-import java.util.*
+import java.util.EnumSet
 
 /**
  * Layout that interpolate its children layout given two sets of constraint and
@@ -465,10 +465,7 @@ internal class JSONMotionScene(@Language("json5") content: String) : EditableJSO
         initialization()
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Accessors
-    ///////////////////////////////////////////////////////////////////////////
-
+    // region Accessors
     override fun setConstraintSetContent(name: String, content: String) {
         constraintSetsContent[name] = content
     }
@@ -496,11 +493,9 @@ internal class JSONMotionScene(@Language("json5") content: String) : EditableJSO
     override fun resetForcedProgress() {
         forcedProgress = Float.NaN
     }
+    // endregion
 
-    ///////////////////////////////////////////////////////////////////////////
-    // on update methods
-    ///////////////////////////////////////////////////////////////////////////
-
+    // region On Update Methods
     override fun onNewContent(content: String) {
         super.onNewContent(content)
         try {
@@ -514,7 +509,7 @@ internal class JSONMotionScene(@Language("json5") content: String) : EditableJSO
         forcedProgress = progress
         signalUpdate()
     }
-
+    // endregion
 }
 
 /**
@@ -815,8 +810,8 @@ internal class MotionMeasurer : Measurer() {
             val currentHeight = placeable.height
 
             // Need to recalculate interpolation if the size of any element changed
-            return@fastAny currentWidth != interpolatedFrame.width()
-                    || currentHeight != interpolatedFrame.height()
+            return@fastAny currentWidth != interpolatedFrame.width() ||
+                    currentHeight != interpolatedFrame.height()
         }
     }
 
@@ -882,9 +877,9 @@ internal class MotionMeasurer : Measurer() {
             val placeable = placeables[measurable]
             val currentWidth = placeable?.width
             val currentHeight = placeable?.height
-            if (placeable == null
-                || currentWidth != interpolatedFrame.width()
-                || currentHeight != interpolatedFrame.height()
+            if (placeable == null ||
+                currentWidth != interpolatedFrame.width() ||
+                currentHeight != interpolatedFrame.height()
             ) {
                 measurable.measure(
                     Constraints.fixed(interpolatedFrame.width(), interpolatedFrame.height())
