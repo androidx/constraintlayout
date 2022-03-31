@@ -38,7 +38,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import kotlin.test.assertFailsWith
 
-
 @MediumTest
 @RunWith(AndroidJUnit4::class)
 internal class MotionParserTest {
