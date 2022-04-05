@@ -35,9 +35,10 @@ public class TransitionParser {
      * @param transition Transition Object to write transition to
      * @throws CLParsingException
      */
-    public static void parse(CLObject json, Transition transition) throws CLParsingException {
+    public static void parse(CLObject json, Transition transition, CorePixelDp toPix) throws CLParsingException {
         String pathMotionArc = json.getStringOrNull("pathMotionArc");
         TypedBundle bundle = new TypedBundle();
+        transition.mToPix = toPix;
         boolean setBundle = false;
         if (pathMotionArc != null) {
             setBundle = true;
@@ -257,7 +258,17 @@ public class TransitionParser {
                 TypedValues.AttributesType.TYPE_ROTATION_Z,
                 TypedValues.AttributesType.TYPE_ALPHA
         };
-
+        boolean[] scaleTypes = {
+                false,
+                false,
+                true,
+                true,
+                true,
+                false,
+                false,
+                false,
+                false,
+        };
         TypedBundle[] bundles = new TypedBundle[frames.size()];
         for (int i = 0; i < frames.size(); i++) {
             bundles[i] = new TypedBundle();
@@ -267,7 +278,7 @@ public class TransitionParser {
 
             String attrName = attrNames[k];
             int attrId = attrIds[k];
-
+            boolean scale = scaleTypes[k];
             CLArray arrayValues = keyAttribute.getArrayOrNull(attrName);
             // array must contain one per frame
             if (arrayValues != null && arrayValues.size() != bundles.length) {
@@ -277,11 +288,18 @@ public class TransitionParser {
             }
             if (arrayValues != null) {
                 for (int i = 0; i < bundles.length; i++) {
-                    bundles[i].add(attrId, arrayValues.getFloat(i));
+                    float value = arrayValues.getFloat(i);
+                    if (scale) {
+                        value = transition.mToPix.toPixels(value);
+                    }
+                    bundles[i].add(attrId, value);
                 }
             } else {
                 float value = keyAttribute.getFloatOrNaN(attrName);
                 if (!Float.isNaN(value)) {
+                    if (scale) {
+                        value = transition.mToPix.toPixels(value);
+                    }
                     for (int i = 0; i < bundles.length; i++) {
                         bundles[i].add(attrId, value);
                     }
@@ -341,17 +359,36 @@ public class TransitionParser {
                 TypedValues.CycleType.TYPE_WAVE_OFFSET,
                 TypedValues.CycleType.TYPE_WAVE_PHASE,
         };
+        int[] scaleTypes = {
+                0,
+                0,
+                1,
+                1,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                2,
+                1,
+        };
 
 //  TODO S_WAVE_SHAPE S_CUSTOM_WAVE_SHAPE
         TypedBundle[] bundles = new TypedBundle[frames.size()];
         for (int i = 0; i < bundles.length; i++) {
             bundles[i] = new TypedBundle();
         }
-
+        boolean scaleOffset = false;
+        for (int k = 0; k < attrNames.length; k++) {
+           if ( keyCycleData.has(attrNames[k]) && scaleTypes[k] == 1){
+               scaleOffset = true;
+           }
+        }
         for (int k = 0; k < attrNames.length; k++) {
             String attrName = attrNames[k];
             int attrId = attrIds[k];
-
+            int scale = scaleTypes[k];
             CLArray arrayValues = keyCycleData.getArrayOrNull(attrName);
             // array must contain one per frame
             if (arrayValues != null && arrayValues.size() != bundles.length) {
@@ -362,11 +399,22 @@ public class TransitionParser {
             }
             if (arrayValues != null) {
                 for (int i = 0; i < bundles.length; i++) {
-                    bundles[i].add(attrId, arrayValues.getFloat(i));
+                    float value = arrayValues.getFloat(i);
+                    if (scale == 1) {
+                        value = transition.mToPix.toPixels(value);
+                    } else if (scale == 2 && scaleOffset ) {
+                        value = transition.mToPix.toPixels(value);
+                    }
+                    bundles[i].add(attrId,value);
                 }
             } else {
                 float value = keyCycleData.getFloatOrNaN(attrName);
                 if (!Float.isNaN(value)) {
+                    if (scale == 1) {
+                        value = transition.mToPix.toPixels(value);
+                    } else if (scale == 2 && scaleOffset ) {
+                        value = transition.mToPix.toPixels(value);
+                    }
                     for (int i = 0; i < bundles.length; i++) {
                         bundles[i].add(attrId, value);
                     }
