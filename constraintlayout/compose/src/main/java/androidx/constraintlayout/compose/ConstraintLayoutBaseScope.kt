@@ -72,7 +72,6 @@ abstract class ConstraintLayoutBaseScope {
     @Stable
     data class BaselineAnchor internal constructor(internal val id: Any)
 
-
     /**
      * Specifies additional constraints associated to the horizontal chain identified with [ref].
      */

@@ -38,7 +38,7 @@ interface ConstraintSet {
     fun isDirty(measurables: List<Measurable>): Boolean = true
 }
 
-internal interface DerivedConstraintSet: ConstraintSet {
+internal interface DerivedConstraintSet : ConstraintSet {
     /**
      * [ConstraintSet] that this instance will derive its constraints from.
      *
