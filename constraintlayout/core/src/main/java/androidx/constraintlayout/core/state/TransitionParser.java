@@ -35,10 +35,11 @@ public class TransitionParser {
      * @param transition Transition Object to write transition to
      * @throws CLParsingException
      */
-    public static void parse(CLObject json, Transition transition, CorePixelDp toPix) throws CLParsingException {
+    public static void parse(CLObject json, Transition transition, CorePixelDp dpToPixel)
+            throws CLParsingException {
         String pathMotionArc = json.getStringOrNull("pathMotionArc");
         TypedBundle bundle = new TypedBundle();
-        transition.mToPixel = toPix;
+        transition.mToPixel = dpToPixel;
         boolean setBundle = false;
         if (pathMotionArc != null) {
             setBundle = true;
@@ -114,7 +115,8 @@ public class TransitionParser {
     private static void parseOnSwipe(CLContainer onSwipe, Transition transition) {
         String anchor = onSwipe.getStringOrNull("anchor");
         int side = map(onSwipe.getStringOrNull("side"), Transition.OnSwipe.SIDES);
-        int direction = map(onSwipe.getStringOrNull("direction"), Transition.OnSwipe.DIRECTIONS);
+        int direction = map(onSwipe.getStringOrNull("direction"),
+                Transition.OnSwipe.DIRECTIONS);
         float scale = onSwipe.getFloatOrNaN("scale");
         float threshold = onSwipe.getFloatOrNaN("threshold");
         float maxVelocity = onSwipe.getFloatOrNaN("maxVelocity");
@@ -126,7 +128,8 @@ public class TransitionParser {
         float springStiffness = onSwipe.getFloatOrNaN("springStiffness");
         float springDamping = onSwipe.getFloatOrNaN("springDamping");
         float stopThreshold = onSwipe.getFloatOrNaN("stopThreshold");
-        int springBoundary = map(onSwipe.getStringOrNull("springBoundary"), Transition.OnSwipe.DIRECTIONS);
+        int springBoundary = map(onSwipe.getStringOrNull("springBoundary"),
+                Transition.OnSwipe.DIRECTIONS);
         String around = onSwipe.getStringOrNull("around");
 
        Transition.OnSwipe swipe =transition.createOnSwipe();
