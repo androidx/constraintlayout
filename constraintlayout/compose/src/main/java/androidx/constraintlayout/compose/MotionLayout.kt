@@ -622,7 +622,7 @@ interface Transition {
 @SuppressLint("ComposableNaming")
 @Composable
 fun Transition(@Language("json5") content: String): androidx.constraintlayout.compose.Transition? {
-    val dpToPix = with(LocalDensity.current) { 1.dp.toPx() }
+    val dpToPixel = with(LocalDensity.current) { 1.dp.toPx() }
     val transition = remember(content) {
         val parsed = try {
             CLParser.parse(content)
@@ -636,7 +636,7 @@ fun Transition(@Language("json5") content: String): androidx.constraintlayout.co
                     override fun applyTo(transition: Transition, type: Int) {
                         try {
                             val pixelDp =
-                                CorePixelDp { p -> p * dpToPix }
+                                CorePixelDp { dpValue  -> dpValue  * dpToPixel }
                             TransitionParser.parse(parsed, transition, pixelDp)
                         } catch (e: CLParsingException) {
                             System.err.println("Error parsing JSON $e")

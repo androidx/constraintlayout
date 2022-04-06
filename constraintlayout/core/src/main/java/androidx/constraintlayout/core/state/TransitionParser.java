@@ -38,7 +38,7 @@ public class TransitionParser {
     public static void parse(CLObject json, Transition transition, CorePixelDp toPix) throws CLParsingException {
         String pathMotionArc = json.getStringOrNull("pathMotionArc");
         TypedBundle bundle = new TypedBundle();
-        transition.mToPix = toPix;
+        transition.mToPixel = toPix;
         boolean setBundle = false;
         if (pathMotionArc != null) {
             setBundle = true;
@@ -235,7 +235,7 @@ public class TransitionParser {
             return;
         }
         String transitionEasing = keyAttribute.getStringOrNull("transitionEasing");
-
+        // These present an ordered list of attributes that might be used in a keyCycle
         String[] attrNames = {
                 TypedValues.AttributesType.S_SCALE_X,
                 TypedValues.AttributesType.S_SCALE_Y,
@@ -258,6 +258,7 @@ public class TransitionParser {
                 TypedValues.AttributesType.TYPE_ROTATION_Z,
                 TypedValues.AttributesType.TYPE_ALPHA
         };
+        // if true scale the values from pixels to dp
         boolean[] scaleTypes = {
                 false,
                 false,
@@ -290,7 +291,7 @@ public class TransitionParser {
                 for (int i = 0; i < bundles.length; i++) {
                     float value = arrayValues.getFloat(i);
                     if (scale) {
-                        value = transition.mToPix.toPixels(value);
+                        value = transition.mToPixel.toPixels(value);
                     }
                     bundles[i].add(attrId, value);
                 }
@@ -298,7 +299,7 @@ public class TransitionParser {
                 float value = keyAttribute.getFloatOrNaN(attrName);
                 if (!Float.isNaN(value)) {
                     if (scale) {
-                        value = transition.mToPix.toPixels(value);
+                        value = transition.mToPixel.toPixels(value);
                     }
                     for (int i = 0; i < bundles.length; i++) {
                         bundles[i].add(attrId, value);
@@ -330,7 +331,7 @@ public class TransitionParser {
         CLArray targets = keyCycleData.getArray("target");
         CLArray frames = keyCycleData.getArray("frames");
         String transitionEasing = keyCycleData.getStringOrNull("transitionEasing");
-
+        // These present an ordered list of attributes that might be used in a keyCycle
         String[] attrNames = {
                 TypedValues.CycleType.S_SCALE_X,
                 TypedValues.CycleType.S_SCALE_Y,
@@ -359,6 +360,9 @@ public class TransitionParser {
                 TypedValues.CycleType.TYPE_WAVE_OFFSET,
                 TypedValues.CycleType.TYPE_WAVE_PHASE,
         };
+        // type 0 the values are used as.
+        // type 1 the value is scaled from dp to pixels.
+        // type 2 are scaled if the system has another type 1.
         int[] scaleTypes = {
                 0,
                 0,
@@ -401,9 +405,9 @@ public class TransitionParser {
                 for (int i = 0; i < bundles.length; i++) {
                     float value = arrayValues.getFloat(i);
                     if (scale == 1) {
-                        value = transition.mToPix.toPixels(value);
+                        value = transition.mToPixel.toPixels(value);
                     } else if (scale == 2 && scaleOffset ) {
-                        value = transition.mToPix.toPixels(value);
+                        value = transition.mToPixel.toPixels(value);
                     }
                     bundles[i].add(attrId,value);
                 }
@@ -411,9 +415,9 @@ public class TransitionParser {
                 float value = keyCycleData.getFloatOrNaN(attrName);
                 if (!Float.isNaN(value)) {
                     if (scale == 1) {
-                        value = transition.mToPix.toPixels(value);
+                        value = transition.mToPixel.toPixels(value);
                     } else if (scale == 2 && scaleOffset ) {
-                        value = transition.mToPix.toPixels(value);
+                        value = transition.mToPixel.toPixels(value);
                     }
                     for (int i = 0; i < bundles.length; i++) {
                         bundles[i].add(attrId, value);
