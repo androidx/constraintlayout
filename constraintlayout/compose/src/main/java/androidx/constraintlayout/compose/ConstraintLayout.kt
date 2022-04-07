@@ -840,6 +840,7 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
                     val debug = json.getObjectOrNull("Header")
                     if (debug != null) {
                         debugName = debug.getStringOrNull("exportAs")
+                        layoutInformationMode = LayoutInfoFlags.BOUNDS
                     }
                 }
                 if (!firstTime) {

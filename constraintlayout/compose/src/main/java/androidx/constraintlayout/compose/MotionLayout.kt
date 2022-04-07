@@ -50,6 +50,7 @@ import androidx.compose.ui.layout.MeasurePolicy
 import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.layout.MultiMeasureLayout
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
@@ -63,6 +64,7 @@ import androidx.compose.ui.util.fastForEach
 import androidx.constraintlayout.core.motion.Motion
 import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.parser.CLParsingException
+import androidx.constraintlayout.core.state.CorePixelDp
 import androidx.constraintlayout.core.state.Dimension
 import androidx.constraintlayout.core.state.Transition
 import androidx.constraintlayout.core.state.TransitionParser
@@ -615,6 +617,7 @@ interface Transition {
 @SuppressLint("ComposableNaming")
 @Composable
 fun Transition(@Language("json5") content: String): androidx.constraintlayout.compose.Transition? {
+    val dpToPixel = with(LocalDensity.current) { 1.dp.toPx() }
     val transition = remember(content) {
         val parsed = try {
             CLParser.parse(content)
@@ -627,7 +630,9 @@ fun Transition(@Language("json5") content: String): androidx.constraintlayout.co
                 object : androidx.constraintlayout.compose.Transition {
                     override fun applyTo(transition: Transition, type: Int) {
                         try {
-                            TransitionParser.parse(parsed, transition)
+                            val pixelDp =
+                                CorePixelDp { dpValue  -> dpValue  * dpToPixel }
+                            TransitionParser.parse(parsed, transition, pixelDp)
                         } catch (e: CLParsingException) {
                             System.err.println("Error parsing JSON $e")
                         }

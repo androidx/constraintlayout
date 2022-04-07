@@ -35,9 +35,11 @@ public class TransitionParser {
      * @param transition Transition Object to write transition to
      * @throws CLParsingException
      */
-    public static void parse(CLObject json, Transition transition) throws CLParsingException {
+    public static void parse(CLObject json, Transition transition, CorePixelDp dpToPixel)
+            throws CLParsingException {
         String pathMotionArc = json.getStringOrNull("pathMotionArc");
         TypedBundle bundle = new TypedBundle();
+        transition.mToPixel = dpToPixel;
         boolean setBundle = false;
         if (pathMotionArc != null) {
             setBundle = true;
@@ -113,7 +115,8 @@ public class TransitionParser {
     private static void parseOnSwipe(CLContainer onSwipe, Transition transition) {
         String anchor = onSwipe.getStringOrNull("anchor");
         int side = map(onSwipe.getStringOrNull("side"), Transition.OnSwipe.SIDES);
-        int direction = map(onSwipe.getStringOrNull("direction"), Transition.OnSwipe.DIRECTIONS);
+        int direction = map(onSwipe.getStringOrNull("direction"),
+                Transition.OnSwipe.DIRECTIONS);
         float scale = onSwipe.getFloatOrNaN("scale");
         float threshold = onSwipe.getFloatOrNaN("threshold");
         float maxVelocity = onSwipe.getFloatOrNaN("maxVelocity");
@@ -125,7 +128,8 @@ public class TransitionParser {
         float springStiffness = onSwipe.getFloatOrNaN("springStiffness");
         float springDamping = onSwipe.getFloatOrNaN("springDamping");
         float stopThreshold = onSwipe.getFloatOrNaN("stopThreshold");
-        int springBoundary = map(onSwipe.getStringOrNull("springBoundary"), Transition.OnSwipe.DIRECTIONS);
+        int springBoundary = map(onSwipe.getStringOrNull("springBoundary"),
+                Transition.OnSwipe.DIRECTIONS);
         String around = onSwipe.getStringOrNull("around");
 
        Transition.OnSwipe swipe =transition.createOnSwipe();
@@ -234,7 +238,7 @@ public class TransitionParser {
             return;
         }
         String transitionEasing = keyAttribute.getStringOrNull("transitionEasing");
-
+        // These present an ordered list of attributes that might be used in a keyCycle
         String[] attrNames = {
                 TypedValues.AttributesType.S_SCALE_X,
                 TypedValues.AttributesType.S_SCALE_Y,
@@ -257,7 +261,18 @@ public class TransitionParser {
                 TypedValues.AttributesType.TYPE_ROTATION_Z,
                 TypedValues.AttributesType.TYPE_ALPHA
         };
-
+        // if true scale the values from pixels to dp
+        boolean[] scaleTypes = {
+                false,
+                false,
+                true,
+                true,
+                true,
+                false,
+                false,
+                false,
+                false,
+        };
         TypedBundle[] bundles = new TypedBundle[frames.size()];
         for (int i = 0; i < frames.size(); i++) {
             bundles[i] = new TypedBundle();
@@ -267,7 +282,7 @@ public class TransitionParser {
 
             String attrName = attrNames[k];
             int attrId = attrIds[k];
-
+            boolean scale = scaleTypes[k];
             CLArray arrayValues = keyAttribute.getArrayOrNull(attrName);
             // array must contain one per frame
             if (arrayValues != null && arrayValues.size() != bundles.length) {
@@ -277,11 +292,18 @@ public class TransitionParser {
             }
             if (arrayValues != null) {
                 for (int i = 0; i < bundles.length; i++) {
-                    bundles[i].add(attrId, arrayValues.getFloat(i));
+                    float value = arrayValues.getFloat(i);
+                    if (scale) {
+                        value = transition.mToPixel.toPixels(value);
+                    }
+                    bundles[i].add(attrId, value);
                 }
             } else {
                 float value = keyAttribute.getFloatOrNaN(attrName);
                 if (!Float.isNaN(value)) {
+                    if (scale) {
+                        value = transition.mToPixel.toPixels(value);
+                    }
                     for (int i = 0; i < bundles.length; i++) {
                         bundles[i].add(attrId, value);
                     }
@@ -312,7 +334,7 @@ public class TransitionParser {
         CLArray targets = keyCycleData.getArray("target");
         CLArray frames = keyCycleData.getArray("frames");
         String transitionEasing = keyCycleData.getStringOrNull("transitionEasing");
-
+        // These present an ordered list of attributes that might be used in a keyCycle
         String[] attrNames = {
                 TypedValues.CycleType.S_SCALE_X,
                 TypedValues.CycleType.S_SCALE_Y,
@@ -341,17 +363,39 @@ public class TransitionParser {
                 TypedValues.CycleType.TYPE_WAVE_OFFSET,
                 TypedValues.CycleType.TYPE_WAVE_PHASE,
         };
+        // type 0 the values are used as.
+        // type 1 the value is scaled from dp to pixels.
+        // type 2 are scaled if the system has another type 1.
+        int[] scaleTypes = {
+                0,
+                0,
+                1,
+                1,
+                1,
+                0,
+                0,
+                0,
+                0,
+                0,
+                2,
+                1,
+        };
 
 //  TODO S_WAVE_SHAPE S_CUSTOM_WAVE_SHAPE
         TypedBundle[] bundles = new TypedBundle[frames.size()];
         for (int i = 0; i < bundles.length; i++) {
             bundles[i] = new TypedBundle();
         }
-
+        boolean scaleOffset = false;
+        for (int k = 0; k < attrNames.length; k++) {
+           if ( keyCycleData.has(attrNames[k]) && scaleTypes[k] == 1){
+               scaleOffset = true;
+           }
+        }
         for (int k = 0; k < attrNames.length; k++) {
             String attrName = attrNames[k];
             int attrId = attrIds[k];
-
+            int scale = scaleTypes[k];
             CLArray arrayValues = keyCycleData.getArrayOrNull(attrName);
             // array must contain one per frame
             if (arrayValues != null && arrayValues.size() != bundles.length) {
@@ -362,11 +406,22 @@ public class TransitionParser {
             }
             if (arrayValues != null) {
                 for (int i = 0; i < bundles.length; i++) {
-                    bundles[i].add(attrId, arrayValues.getFloat(i));
+                    float value = arrayValues.getFloat(i);
+                    if (scale == 1) {
+                        value = transition.mToPixel.toPixels(value);
+                    } else if (scale == 2 && scaleOffset ) {
+                        value = transition.mToPixel.toPixels(value);
+                    }
+                    bundles[i].add(attrId,value);
                 }
             } else {
                 float value = keyCycleData.getFloatOrNaN(attrName);
                 if (!Float.isNaN(value)) {
+                    if (scale == 1) {
+                        value = transition.mToPixel.toPixels(value);
+                    } else if (scale == 2 && scaleOffset ) {
+                        value = transition.mToPixel.toPixels(value);
+                    }
                     for (int i = 0; i < bundles.length; i++) {
                         bundles[i].add(attrId, value);
                     }

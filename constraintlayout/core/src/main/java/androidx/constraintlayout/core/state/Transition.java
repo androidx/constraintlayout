@@ -58,6 +58,7 @@ public class Transition implements TypedValues {
     private int mDuration = 400;
     private float mStagger = 0.0f;
     OnSwipe mOnSwipe = null;
+    CorePixelDp mToPixel; // Todo placed here as a temp till the refactor is done
 
     /**
      * @TODO: add description

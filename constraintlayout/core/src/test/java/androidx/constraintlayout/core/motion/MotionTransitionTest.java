@@ -22,6 +22,7 @@ import static org.junit.Assert.assertTrue;
 import androidx.constraintlayout.core.parser.CLObject;
 import androidx.constraintlayout.core.parser.CLParser;
 import androidx.constraintlayout.core.parser.CLParsingException;
+import androidx.constraintlayout.core.state.CorePixelDp;
 import androidx.constraintlayout.core.state.Transition;
 import androidx.constraintlayout.core.state.TransitionParser;
 import androidx.constraintlayout.core.state.WidgetFrame;
@@ -196,7 +197,7 @@ public class MotionTransitionTest {
 
         try {
             CLObject json = CLParser.parse(jstr);
-            TransitionParser.parse(json, transition);
+            TransitionParser.parse(json, transition, dp -> dp);
         } catch (CLParsingException e) {
             e.printStackTrace();
         }
@@ -290,7 +291,7 @@ public class MotionTransitionTest {
 
         CLObject json = CLParser.parse(jsonString);
 
-        TransitionParser.parse(json, transition);
+        TransitionParser.parse(json, transition, dp -> dp);
 
         assertTrue(transition.hasOnSwipe());
         // because a drag of 80 pixels (dy) is 1/10 the distance to travel  it returns 0.1
@@ -551,7 +552,7 @@ public class MotionTransitionTest {
 
         CLObject json = CLParser.parse(jsonString);
 
-        TransitionParser.parse(json, transition);
+        TransitionParser.parse(json, transition, dp -> dp);
         return transition;
     }
 
