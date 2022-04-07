@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.parser.CLParsingException
+import androidx.constraintlayout.core.state.CorePixelDp
 import androidx.constraintlayout.core.state.TransitionParser
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -82,7 +83,7 @@ internal class MotionParserTest {
         """.trimIndent()
         // Parsing transition throws an exception but the Composable should not crash the app
         assertFailsWith<CLParsingException> {
-            TransitionParser.parse(CLParser.parse(transitionContent), coreTransition)
+            TransitionParser.parse(CLParser.parse(transitionContent), coreTransition) { dp -> dp }
         }
         coreTransition = androidx.constraintlayout.core.state.Transition()
         rule.setContent {
