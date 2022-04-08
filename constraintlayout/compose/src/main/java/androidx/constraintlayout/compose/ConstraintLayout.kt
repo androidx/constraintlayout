@@ -930,9 +930,6 @@ fun ConstraintSet(
 class State(val density: Density) : SolverState() {
     var rootIncomingConstraints: Constraints = Constraints()
     lateinit var layoutDirection: LayoutDirection
-    internal val baselineNeeded = mutableListOf<Any>()
-    private var dirtyBaselineNeededWidgets = true
-    private val baselineNeededWidgets = mutableSetOf<ConstraintWidget>()
 
     override fun convertDimension(value: Any?): Int {
         return if (value is Dp) {
@@ -949,26 +946,8 @@ class State(val density: Density) : SolverState() {
         }
         mReferences.clear()
         mReferences[PARENT] = mParent
-        baselineNeeded.clear()
-        dirtyBaselineNeededWidgets = true
+
         super.reset()
-    }
-
-    internal fun baselineNeededFor(id: Any) {
-        baselineNeeded.add(id)
-        dirtyBaselineNeededWidgets = true
-    }
-
-    internal fun isBaselineNeeded(constraintWidget: ConstraintWidget): Boolean {
-        if (dirtyBaselineNeededWidgets) {
-            baselineNeededWidgets.clear()
-            baselineNeeded.forEach { id ->
-                val widget = mReferences[id]?.constraintWidget
-                if (widget != null) baselineNeededWidgets.add(widget)
-            }
-            dirtyBaselineNeededWidgets = false
-        }
-        return constraintWidget in baselineNeededWidgets
     }
 
     internal fun getKeyId(helperWidget: HelperWidget): Any? {
