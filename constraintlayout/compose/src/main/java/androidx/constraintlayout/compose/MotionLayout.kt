@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.LayoutScopeMarker
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ExperimentalComposeApi
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -373,6 +374,7 @@ internal inline fun MotionLayoutCore(
     )
 }
 
+@OptIn(ExperimentalComposeApi::class)
 @PublishedApi
 @Composable
 internal inline fun MotionLayoutCore(
@@ -401,6 +403,7 @@ internal inline fun MotionLayoutCore(
             progressState,
             measurer
         )
+
     measurer.addLayoutInformationReceiver(informationReceiver)
 
     val forcedScaleFactor = measurer.forcedScaleFactor
@@ -413,7 +416,9 @@ internal inline fun MotionLayoutCore(
         Box {
             @Suppress("DEPRECATION")
             (MultiMeasureLayout(
-                modifier = mod.semantics { designInfoProvider = measurer },
+                modifier = mod
+                    .motionPointerInput(measurePolicy, progressState, measurer)
+                    .semantics { designInfoProvider = measurer },
                 measurePolicy = measurePolicy,
                 content = { scope.content() }
             ))
@@ -429,7 +434,9 @@ internal inline fun MotionLayoutCore(
     } else {
         @Suppress("DEPRECATION")
         (MultiMeasureLayout(
-            modifier = modifier.semantics { designInfoProvider = measurer },
+            modifier = modifier
+                .motionPointerInput(measurePolicy, progressState, measurer)
+                .semantics { designInfoProvider = measurer },
             measurePolicy = measurePolicy,
             content = { scope.content() }
         ))
