@@ -64,6 +64,9 @@ import androidx.compose.ui.util.fastForEach
 import androidx.constraintlayout.core.motion.Motion
 import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.parser.CLParsingException
+import androidx.constraintlayout.core.state.ConstraintSetParser
+import androidx.constraintlayout.core.state.ConstraintSetParser.CoreMotionScene
+import androidx.constraintlayout.core.state.ConstraintSetParser.parseMotionSceneJSON
 import androidx.constraintlayout.core.state.CorePixelDp
 import androidx.constraintlayout.core.state.Dimension
 import androidx.constraintlayout.core.state.Transition
@@ -442,17 +445,8 @@ internal inline fun MotionLayoutCore(
  * Information for MotionLayout to animate between multiple [ConstraintSet]s.
  */
 @Immutable
-interface MotionScene {
-    fun setConstraintSetContent(name: String, content: String)
-    fun setTransitionContent(name: String, content: String)
-    fun getConstraintSet(name: String): String?
-    fun getConstraintSet(index: Int): String?
-    fun getTransition(name: String): String?
+interface MotionScene : CoreMotionScene {
     fun setUpdateFlag(needsUpdate: MutableState<Long>)
-    fun setDebugName(name: String?)
-    fun getForcedProgress(): Float
-    fun resetForcedProgress()
-    fun getForcedDrawDebug(): MotionLayoutDebugFlags
 }
 
 internal class JSONMotionScene(@Language("json5") content: String) : EditableJSONLayout(content),
@@ -654,12 +648,6 @@ fun Transition(@Language("json5") content: String): androidx.constraintlayout.co
     return transition.value
 }
 
-enum class MotionLayoutDebugFlags {
-    NONE,
-    SHOW_ALL,
-    UNKNOWN
-}
-
 enum class LayoutInfoFlags {
     NONE,
     BOUNDS
@@ -669,7 +657,7 @@ enum class LayoutInfoFlags {
 @PublishedApi
 internal fun rememberMotionLayoutMeasurePolicy(
     optimizationLevel: Int,
-    debug: EnumSet<MotionLayoutDebugFlags>,
+    debug: EnumSet<ConstraintSetParser.MotionLayoutDebugFlags>,
     needsUpdate: Long,
     constraintSetStart: ConstraintSet,
     constraintSetEnd: ConstraintSet,
