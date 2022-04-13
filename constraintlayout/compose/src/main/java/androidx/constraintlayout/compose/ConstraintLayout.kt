@@ -771,9 +771,7 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
                 val registry = Registry.getInstance()
                 registry.register(debugName, callback)
             }
-        } catch (e: CLParsingException) {
-
-        }
+        } catch (_: CLParsingException) {}
     }
 
     // region Accessors

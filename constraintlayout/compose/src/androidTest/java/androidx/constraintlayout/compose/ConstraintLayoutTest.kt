@@ -17,8 +17,19 @@
 package androidx.constraintlayout.compose
 
 import android.content.Context
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.boundsInParent
@@ -27,18 +38,26 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.node.Ref
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.InspectableValue
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.ValueElement
 import androidx.compose.ui.platform.isDebugInspectorInfoEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.unit.*
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.round
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
-import org.junit.*
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
+import org.junit.Before
+import org.junit.Ignore
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import kotlin.math.roundToInt
 
@@ -101,7 +120,8 @@ class ConstraintLayoutTest {
                             centerTo(parent)
                             width = Dimension.value(1.dp)
                             height = Dimension.fillToConstraints
-                        }.onGloballyPositioned { coordinates ->
+                        }
+                        .onGloballyPositioned { coordinates ->
                             dividerSize.value = coordinates.size
                         }
                 )
@@ -161,7 +181,8 @@ class ConstraintLayoutTest {
                             centerTo(parent)
                             width = Dimension.value(1.dp)
                             height = Dimension.fillToConstraints
-                        }.onGloballyPositioned { coordinates ->
+                        }
+                        .onGloballyPositioned { coordinates ->
                             dividerSize.value = coordinates.size
                         }
                 )
@@ -309,12 +330,17 @@ class ConstraintLayoutTest {
             // which in turns is given by the size of the aspect ratio box.
             // TODO(popam; b/150277566): uncomment
             assertEquals(
-                "broken, display size ${displaySize.width}x${displaySize.height} aspect height ${aspectRatioBoxSize.value!!.width}x${aspectRatioBoxSize.value!!.height}, divider: ${dividerSize.value!!.height}",
+                "broken, display size ${displaySize.width}x${displaySize.height} aspect" +
+                        " height ${aspectRatioBoxSize.value!!.width}x" +
+                        "${aspectRatioBoxSize.value!!.height}, " +
+                        "divider: ${dividerSize.value!!.height}",
                 (aspectRatioBoxSize.value!!.height * 0.8f).roundToInt(),
                 dividerSize.value!!.height
             )
             assertEquals(
-                "broken, aspect height ${aspectRatioBoxSize.value!!.width}x${aspectRatioBoxSize.value!!.height}, divider: ${dividerSize.value!!.height}",
+                "broken, aspect height ${aspectRatioBoxSize.value!!.width}x" +
+                        "${aspectRatioBoxSize.value!!.height}," +
+                        " divider: ${dividerSize.value!!.height}",
                 aspectRatioBoxSize.value!!.width,
                 540
             )
@@ -644,14 +670,14 @@ class ConstraintLayoutTest {
         }
 
         rule.runOnIdle {
-            Assert.assertEquals(50f, position[0])
-            Assert.assertEquals(50f, position[1])
-            Assert.assertEquals(150f, position[2])
-            Assert.assertEquals(150f, position[3])
-            Assert.assertEquals(50f, position[4])
-            Assert.assertEquals(50f, position[5])
-            Assert.assertEquals(150f, position[6])
-            Assert.assertEquals(150f, position[7])
+            assertEquals(50f, position[0])
+            assertEquals(50f, position[1])
+            assertEquals(150f, position[2])
+            assertEquals(150f, position[3])
+            assertEquals(50f, position[4])
+            assertEquals(50f, position[5])
+            assertEquals(150f, position[6])
+            assertEquals(150f, position[7])
         }
     }
 
@@ -691,14 +717,14 @@ class ConstraintLayoutTest {
         }
 
         rule.runOnIdle {
-            Assert.assertEquals(150f, position[0])
-            Assert.assertEquals(50f, position[1])
-            Assert.assertEquals(50f, position[2])
-            Assert.assertEquals(150f, position[3])
-            Assert.assertEquals(150f, position[4])
-            Assert.assertEquals(50f, position[5])
-            Assert.assertEquals(50f, position[6])
-            Assert.assertEquals(150f, position[7])
+            assertEquals(150f, position[0])
+            assertEquals(50f, position[1])
+            assertEquals(50f, position[2])
+            assertEquals(150f, position[3])
+            assertEquals(150f, position[4])
+            assertEquals(50f, position[5])
+            assertEquals(50f, position[6])
+            assertEquals(150f, position[7])
         }
     }
 
@@ -748,10 +774,10 @@ class ConstraintLayoutTest {
         }
 
         rule.runOnIdle {
-            Assert.assertEquals(50f, position[0])
-            Assert.assertEquals(50f, position[1])
-            Assert.assertEquals(151f, position[2])
-            Assert.assertEquals(151f, position[3])
+            assertEquals(50f, position[0])
+            assertEquals(50f, position[1])
+            assertEquals(151f, position[2])
+            assertEquals(151f, position[3])
         }
     }
 
@@ -803,10 +829,10 @@ class ConstraintLayoutTest {
         }
 
         rule.runOnIdle {
-            Assert.assertEquals(151f, position[0])
-            Assert.assertEquals(50f, position[1])
-            Assert.assertEquals(50f, position[2])
-            Assert.assertEquals(151f, position[3])
+            assertEquals(151f, position[0])
+            assertEquals(50f, position[1])
+            assertEquals(50f, position[2])
+            assertEquals(151f, position[3])
         }
     }
 
@@ -866,22 +892,22 @@ class ConstraintLayoutTest {
         }
 
         rule.runOnIdle {
-            Assert.assertEquals(50f, position[0])
-            Assert.assertEquals(50f, position[1])
-            Assert.assertEquals(50f, position[2])
-            Assert.assertEquals(50f, position[3])
-            Assert.assertEquals(49f, position[4])
-            Assert.assertEquals(49f, position[5])
-            Assert.assertEquals(49f, position[6])
-            Assert.assertEquals(49f, position[7])
-            Assert.assertEquals(51f, position[8])
-            Assert.assertEquals(51f, position[9])
-            Assert.assertEquals(51f, position[10])
-            Assert.assertEquals(51f, position[11])
-            Assert.assertEquals(50f, position[12])
-            Assert.assertEquals(50f, position[13])
-            Assert.assertEquals(50f, position[14])
-            Assert.assertEquals(50f, position[15])
+            assertEquals(50f, position[0])
+            assertEquals(50f, position[1])
+            assertEquals(50f, position[2])
+            assertEquals(50f, position[3])
+            assertEquals(49f, position[4])
+            assertEquals(49f, position[5])
+            assertEquals(49f, position[6])
+            assertEquals(49f, position[7])
+            assertEquals(51f, position[8])
+            assertEquals(51f, position[9])
+            assertEquals(51f, position[10])
+            assertEquals(51f, position[11])
+            assertEquals(50f, position[12])
+            assertEquals(50f, position[13])
+            assertEquals(50f, position[14])
+            assertEquals(50f, position[15])
         }
     }
 
@@ -921,22 +947,22 @@ class ConstraintLayoutTest {
         }
 
         rule.runOnIdle {
-            Assert.assertEquals(50f, position[0])
-            Assert.assertEquals(51f, position[1])
-            Assert.assertEquals(49f, position[2])
-            Assert.assertEquals(50f, position[3])
-            Assert.assertEquals(51f, position[4])
-            Assert.assertEquals(50f, position[5])
-            Assert.assertEquals(50f, position[6])
-            Assert.assertEquals(49f, position[7])
-            Assert.assertEquals(49f, position[8])
-            Assert.assertEquals(50f, position[9])
-            Assert.assertEquals(50f, position[10])
-            Assert.assertEquals(51f, position[11])
-            Assert.assertEquals(50f, position[12])
-            Assert.assertEquals(49f, position[13])
-            Assert.assertEquals(51f, position[14])
-            Assert.assertEquals(50f, position[15])
+            assertEquals(50f, position[0])
+            assertEquals(51f, position[1])
+            assertEquals(49f, position[2])
+            assertEquals(50f, position[3])
+            assertEquals(51f, position[4])
+            assertEquals(50f, position[5])
+            assertEquals(50f, position[6])
+            assertEquals(49f, position[7])
+            assertEquals(49f, position[8])
+            assertEquals(50f, position[9])
+            assertEquals(50f, position[10])
+            assertEquals(51f, position[11])
+            assertEquals(50f, position[12])
+            assertEquals(49f, position[13])
+            assertEquals(51f, position[14])
+            assertEquals(50f, position[15])
         }
     }
 
@@ -987,8 +1013,8 @@ class ConstraintLayoutTest {
         }
 
         rule.runOnIdle {
-            Assert.assertEquals(Offset(60f, 60f), position[0])
-            Assert.assertEquals(Offset(61f, 61f), position[1])
+            assertEquals(Offset(60f, 60f), position[0])
+            assertEquals(Offset(61f, 61f), position[1])
         }
     }
 
@@ -1002,7 +1028,7 @@ class ConstraintLayoutTest {
                         start.linkTo(parent.end)
                         start.linkTo(parent.start)
                     }.onGloballyPositioned {
-                        Assert.assertEquals(0f, it.positionInParent().x)
+                        assertEquals(0f, it.positionInParent().x)
                     }
                 )
             }
@@ -1030,8 +1056,8 @@ class ConstraintLayoutTest {
                         start.linkTo(startGuideline)
                         top.linkTo(topGuideline)
                     }.onGloballyPositioned {
-                        Assert.assertEquals(20f, it.boundsInParent().left)
-                        Assert.assertEquals(20f, it.boundsInParent().top)
+                        assertEquals(20f, it.boundsInParent().left)
+                        assertEquals(20f, it.boundsInParent().top)
                     }
                 )
                 Box(
@@ -1039,8 +1065,8 @@ class ConstraintLayoutTest {
                         end.linkTo(endGuideline)
                         bottom.linkTo(bottomGuideline)
                     }.onGloballyPositioned {
-                        Assert.assertEquals(80f, it.boundsInParent().right)
-                        Assert.assertEquals(80f, it.boundsInParent().bottom)
+                        assertEquals(80f, it.boundsInParent().right)
+                        assertEquals(80f, it.boundsInParent().bottom)
                     }
                 )
             }
@@ -1236,9 +1262,9 @@ class ConstraintLayoutTest {
         var box1Position = Offset(-1f, -1f)
         var box2Position = Offset(-1f, -1f)
         val box1PositionUpdater =
-                Modifier.onGloballyPositioned { box1Position = it.positionInRoot() }
+            Modifier.onGloballyPositioned { box1Position = it.positionInRoot() }
         val box2PositionUpdater =
-                Modifier.onGloballyPositioned { box2Position = it.positionInRoot() }
+            Modifier.onGloballyPositioned { box2Position = it.positionInRoot() }
         rule.setContent {
             ConstraintLayout {
                 val (box1, box2) = createRefs()
