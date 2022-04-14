@@ -447,6 +447,7 @@ internal inline fun MotionLayoutCore(
 @Immutable
 interface MotionScene : CoreMotionScene {
     fun setUpdateFlag(needsUpdate: MutableState<Long>)
+    fun getForcedDrawDebug(): MotionLayoutDebugFlags
 }
 
 internal class JSONMotionScene(@Language("json5") content: String) : EditableJSONLayout(content),
@@ -648,6 +649,12 @@ fun Transition(@Language("json5") content: String): androidx.constraintlayout.co
     return transition.value
 }
 
+enum class MotionLayoutDebugFlags {
+    NONE,
+    SHOW_ALL,
+    UNKNOWN
+}
+
 enum class LayoutInfoFlags {
     NONE,
     BOUNDS
@@ -657,7 +664,7 @@ enum class LayoutInfoFlags {
 @PublishedApi
 internal fun rememberMotionLayoutMeasurePolicy(
     optimizationLevel: Int,
-    debug: EnumSet<ConstraintSetParser.MotionLayoutDebugFlags>,
+    debug: EnumSet<MotionLayoutDebugFlags>,
     needsUpdate: Long,
     constraintSetStart: ConstraintSet,
     constraintSetEnd: ConstraintSet,

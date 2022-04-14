@@ -722,8 +722,8 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
     LayoutInformationReceiver {
     private var forcedWidth: Int = Int.MIN_VALUE
     private var forcedHeight: Int = Int.MIN_VALUE
-    private var forcedDrawDebug: ConstraintSetParser.MotionLayoutDebugFlags =
-        ConstraintSetParser.MotionLayoutDebugFlags.UNKNOWN
+    private var forcedDrawDebug: MotionLayoutDebugFlags =
+         MotionLayoutDebugFlags.UNKNOWN
     private var updateFlag: MutableState<Long>? = null
     private var layoutInformationMode: LayoutInfoFlags = LayoutInfoFlags.NONE
     private var layoutInformation = ""
@@ -935,7 +935,7 @@ class State(val density: Density) : SolverState() {
     var rootIncomingConstraints: Constraints = Constraints()
     lateinit var layoutDirection: LayoutDirection
     init {
-        mDpToPixel = CorePixelDp {  dp -> density.density * dp}
+        setDpToPixel { dp -> density.density * dp }
     }
 
 

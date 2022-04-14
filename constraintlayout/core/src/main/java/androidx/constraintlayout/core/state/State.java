@@ -33,7 +33,7 @@ import java.util.HashMap;
  * Represents a full state of a ConstraintLayout
  */
 public class State {
-    public CorePixelDp mDpToPixel;
+    private CorePixelDp mDpToPixel;
     protected HashMap<Object, Reference> mReferences = new HashMap<>();
     protected HashMap<Object, HelperReference> mHelperReferences = new HashMap<>();
     HashMap<String, ArrayList<String>> mTags = new HashMap<>();
@@ -95,6 +95,14 @@ public class State {
 
     public State() {
         mReferences.put(PARENT, mParent);
+    }
+
+    CorePixelDp getDpToPixel() {
+        return mDpToPixel;
+    }
+
+    protected void setDpToPixel(CorePixelDp dpToPixel) {
+        this.mDpToPixel = dpToPixel;
     }
 
     /**

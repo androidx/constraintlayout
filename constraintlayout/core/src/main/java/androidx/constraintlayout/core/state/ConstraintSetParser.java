@@ -44,8 +44,6 @@ public class ConstraintSetParser {
 
         void setDebugName(String name);
 
-        MotionLayoutDebugFlags getForcedDrawDebug();
-
         void resetForcedProgress();
 
         float getForcedProgress();
@@ -710,11 +708,11 @@ public class ConstraintSetParser {
             switch (constraintName) {
                 case "start":
                     int margin = state.convertDimension(params.getFloat(constraintName));
-                    guidelineReference.start(state.mDpToPixel.toPixels(margin));
+                    guidelineReference.start(state.getDpToPixel().toPixels(margin));
                     break;
                 case "end":
                     margin = state.convertDimension(params.getFloat(constraintName));
-                    guidelineReference.end(state.mDpToPixel.toPixels(margin));
+                    guidelineReference.end(state.getDpToPixel().toPixels(margin));
                     break;
                 case "percent":
                     guidelineReference.percent(params.getFloat(constraintName));
@@ -807,11 +805,11 @@ public class ConstraintSetParser {
         for (String constraintName : constraints) {
             switch (constraintName) {
                 case "width":
-                    reference.setWidth(parseDimension(element, constraintName, state, state.mDpToPixel));
+                    reference.setWidth(parseDimension(element, constraintName, state, state.getDpToPixel()));
 
                     break;
                 case "height":
-                    reference.setHeight(parseDimension(element, constraintName, state, state.mDpToPixel));
+                    reference.setHeight(parseDimension(element, constraintName, state, state.getDpToPixel()));
                     break;
                 case "center":
                     String target = element.getString(constraintName);
@@ -972,12 +970,12 @@ public class ConstraintSetParser {
             if (constraint.size() > 2) {
                 CLElement arg2 = constraint.getOrNull(2);
                 margin = layoutVariables.get(arg2);
-                margin = state.convertDimension(state.mDpToPixel.toPixels(margin));
+                margin = state.convertDimension(state.getDpToPixel().toPixels(margin));
             }
             if (constraint.size() > 3) {
                 CLElement arg2 = constraint.getOrNull(3);
                 marginGone = layoutVariables.get(arg2);
-                marginGone = state.convertDimension(state.mDpToPixel.toPixels(margin));
+                marginGone = state.convertDimension(state.getDpToPixel().toPixels(margin));
             }
 
             ConstraintReference targetReference = target.equals("parent")
