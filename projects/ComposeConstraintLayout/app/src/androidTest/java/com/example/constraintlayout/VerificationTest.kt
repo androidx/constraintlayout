@@ -84,7 +84,6 @@ class VerificationTest {
             // Save the result in a composable->result map
             results[fqComposable] = result
         }
-        val baselineResults = parseBaselineResults(baselineRaw)
-        checkTest(baselineResults, results)
+        checkTest(baselineRaw, results)
     }
 }

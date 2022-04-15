@@ -39,6 +39,7 @@ import com.example.constraintlayout.link.MotionLink
 import com.google.accompanist.coil.rememberCoilPainter
 import java.util.*
 
+@OptIn(ExperimentalMaterialApi::class)
 class VerifyActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
     private var composeNum = 0
@@ -109,7 +110,7 @@ class VerifyActivity : AppCompatActivity() {
         }
     }
 
-    @ExperimentalMaterialApi
+    @OptIn(ExperimentalMaterialApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState != null) {
@@ -176,7 +177,6 @@ class VerifyActivity : AppCompatActivity() {
 
     }
 
-    @ExperimentalMaterialApi
     fun printResults() {
 
         for (s in layouts.keys) {
@@ -252,7 +252,6 @@ class VerifyActivity : AppCompatActivity() {
         return null
     }
 
-    @ExperimentalMaterialApi
     fun doNext() {
         if (composeNum == -1) {
             return
@@ -265,7 +264,6 @@ class VerifyActivity : AppCompatActivity() {
         }
     }
 
-    @ExperimentalMaterialApi
     fun getLayout() {
         if (composeNum != 0) {
             link.getLayoutList()
@@ -283,7 +281,6 @@ class VerifyActivity : AppCompatActivity() {
         savedInstanceState.putInt("SHOWNUM", composeNum)
     }
 
-    @ExperimentalMaterialApi
     fun setCompose() {
         if (mFrameLayout!!.childCount > 0) {
             mFrameLayout!!.removeAllViews()
@@ -299,15 +296,13 @@ class VerifyActivity : AppCompatActivity() {
         title = sub;
     }
 
-    @ExperimentalMaterialApi
     fun prev(view: View) {
         composeNum--
         setCompose()
     }
 
-    @ExperimentalMaterialApi
     fun next(view: View) {
         composeNum++
-        setCompose();
+        setCompose()
     }
 }

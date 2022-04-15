@@ -3,10 +3,8 @@ plugins {
     id 'kotlin-android'
 }
 
-def compose_version = '1.0.0'
-
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     defaultConfig {
         applicationId "androidx.constaitnlayout.compose.app"
@@ -93,6 +91,7 @@ configurations.all {
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     kotlinOptions {
         freeCompilerArgs += "-Xopt-in=androidx.constraintlayout.compose.ExperimentalMotionApi"
+        freeCompilerArgs += "-Xopt-in=androidx.compose.material.ExperimentalMaterialApi"
     }
 }
 //configurations.configureEach {
