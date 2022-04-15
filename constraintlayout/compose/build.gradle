@@ -4,18 +4,18 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
-def compose_version = '1.1.0'
-def kotlin_version = "1.6.10"
+def compose_version = '1.0.0'
+def kotlin_version = "1.5.10"
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 30
     useLibrary 'android.test.runner'
     useLibrary 'android.test.base'
 
     defaultConfig {
         minSdkVersion 21
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        targetSdkVersion 31
+        targetSdkVersion 30
     }
 
     compileOptions {
