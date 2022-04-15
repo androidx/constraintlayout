@@ -103,7 +103,7 @@ jobs:
 
     strategy:
       matrix:
-        api-level: [29]
+        api-level: [31]
 
     steps:
       - name: Checkout
