@@ -33,6 +33,12 @@ import androidx.compose.ui.unit.Velocity
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.isActive
 
+/**
+ * Helper modifier for MotionLayout to support OnSwipe in Transitions.
+ *
+ * @see Modifier.pointerInput
+ * @see TransitionHandler
+ */
 @SuppressLint("UnnecessaryComposedModifier")
 @OptIn(ExperimentalComposeApi::class)
 @Suppress("NOTHING_TO_INLINE")
