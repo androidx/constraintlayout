@@ -69,7 +69,7 @@ public class MotionTransitionTest {
         button1.setDebugName("button1");
         button1.stringId = "button1";
         button0.connect(ConstraintAnchor.Type.RIGHT, root, ConstraintAnchor.Type.RIGHT);
-        button0.connect(ConstraintAnchor.Type.TOP, root, ConstraintAnchor.Type.TOP);
+        button0.connect(ConstraintAnchor.Type.BOTTOM, root, ConstraintAnchor.Type.BOTTOM);
         button1.connect(ConstraintAnchor.Type.LEFT, button0, ConstraintAnchor.Type.LEFT);
         button1.connect(ConstraintAnchor.Type.BOTTOM, button0, ConstraintAnchor.Type.TOP);
         button1.connect(ConstraintAnchor.Type.RIGHT, button0, ConstraintAnchor.Type.RIGHT);
@@ -169,15 +169,31 @@ public class MotionTransitionTest {
 
         transition.updateFrom(cwc2, Transition.END);
         String jstr =
-         "                   default: {\n" +
-                 "                      from: 'start',\n" +
-                 "                      to: 'end',\n" +
-                 "                      onSwipe: {\n" +
-                 "                        anchor: 'button0',\n" +
-                 "                        side: 'end',\n" +
-                 "                        direction: 'right',\n" +
-                 "                      }\n" +
-                 "                   }";
+                "                  default: {\n"
+                        + "                    from: 'start',   to: 'end',\n"
+                        + "                    pathMotionArc: 'startVertical',\n"
+                        + "                    onSwipe: { \n"
+                        + "                        anchor : 'button1',\n"
+                        + "                    side: 'top',\n"
+                        + "                        direction: 'up',\n"
+                        + "                        scale: 1,\n"
+                        + "                        threshold: 10,\n"
+                        + "                        mode:  'velocity',\n"
+                        + "                        maxVelocity: 4.0,\n"
+                        + "                        maxAccel: 4.0,\n"
+                        + "                   },      "
+                        + "                    KeyFrames: {\n"
+                        + "                     KeyPositions: [\n"
+                        + "                     {\n"
+                        + "                      target: ['button1'],\n"
+                        + "                      frames: [25, 50, 75],\n"
+                        + "                      percentX: [0.2, 0.3, 0.7],\n"
+                        + "                      percentY: [0.4, 0.5, 0.7]\n"
+                        + "                      percentHeight: [0.4, 0.9, 0.7]\n"
+                        + "                     }\n"
+                        + "                     ]\n"
+                        + "                  },\n"
+                        + "                  }\n";
 
         try {
             CLObject json = CLParser.parse(jstr);
@@ -187,8 +203,7 @@ public class MotionTransitionTest {
         }
         assertTrue(transition.hasOnSwipe());
         // because a drag of 76 pixels (dy) is 1/10 the distance to travel  it returns 0.1
-        float progress = transition.dragToProgress(0f, cwc1.getWidth(), cwc1.getHeight(), 10f, 10f);
-        // FIXME: FAILS WITH NAN
+        float progress = transition.dragToProgress(0.5f, cwc1.getWidth(), cwc1.getHeight(), 10f, 47);
         assertEquals(0.1, progress, 0.001f);
 
         transition.interpolate(cwc1.getWidth(), cwc1.getHeight(), 0.5f);
