@@ -75,8 +75,7 @@ fun OnSwipeExperiment() {
                 anchor: 'box',
                 direction: 'end',
                 side: 'end',
-                mode: '$mode',
-                springStiffness: 300
+                mode: '$mode'
               }
            }
          }
@@ -86,7 +85,7 @@ fun OnSwipeExperiment() {
     Column {
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             Button(onClick = {
-                // OnSwipe does not update our progress, so to reset we need a trick
+                // OnSwipe does not update our progress, need a work around to reset
                 progress = 0.1f
                 progress = 0f
             }) {
@@ -98,8 +97,9 @@ fun OnSwipeExperiment() {
                     else -> "spring"
                 }
             }) {
-                Text(text = "Mode")
+                Text(text = "Change Mode")
             }
+            Text(text = "Current: $mode")
         }
         MotionLayout(
             modifier = Modifier.fillMaxSize(),
