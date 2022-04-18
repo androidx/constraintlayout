@@ -17,6 +17,7 @@
 package com.example.constraintlayout
 
 import junit.framework.TestCase
+import org.junit.Assert.assertEquals
 
 internal fun parseBaselineResults(rawString: String): MutableMap<String, String> {
     return rawString.split(";").mapNotNull {
@@ -30,11 +31,12 @@ internal fun parseBaselineResults(rawString: String): MutableMap<String, String>
 }
 
 internal fun checkTest(
-    baselineResults: MutableMap<String, String>,
+    baselineRaw: String,
     results: Map<String, String>
 ) {
     var failed = false
     var failedCount = 0
+    val baselineResults = parseBaselineResults(baselineRaw)
     for (result in results) {
         if (baselineResults.contains(result.key)) {
             if (baselineResults[result.key] != result.value) {
@@ -66,13 +68,13 @@ internal fun checkTest(
         println("----------")
         println("$failedCount Composables failed")
         println("New Baseline:")
-        val base = results.map { "${it.key}=${it.value}" }.joinToString(";\n")
+        val newResults = results.map { "${it.key}=${it.value}" }.joinToString(";\n")
         // TODO: Find a better way to output the result, so that it's easy to update the
         //  baseline (results.txt), alternatively, reduce the amount of text in the file
 
         // You can update results.txt by placing a breakpoint here in debugging mode and copying
         // the contents of 'base' into the file.
-        TestCase.assertEquals("", base)
+        assertEquals(baselineRaw, newResults)
         println("----------")
     }
 }

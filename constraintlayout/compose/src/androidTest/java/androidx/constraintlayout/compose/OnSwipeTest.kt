@@ -26,9 +26,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.isDebugInspectorInfoEnabled
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.assertPositionInRootIsEqualTo
+import androidx.compose.ui.test.centerY
+import androidx.compose.ui.test.down
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.move
+import androidx.compose.ui.test.movePointerTo
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.performGesture
+import androidx.compose.ui.test.right
+import androidx.compose.ui.test.up
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -117,7 +123,7 @@ class OnSwipeTest {
         val motionSemantic = rule.onNodeWithTag("MyMotion")
         motionSemantic
             .assertExists()
-            .performTouchInput {
+            .performGesture {
                 val start = Offset(right * 0.25f, centerY)
                 val end = Offset(right * 0.5f, centerY)
                 val durationMillis = 500L
@@ -126,27 +132,56 @@ class OnSwipeTest {
                 // Start touch input
                 down(0, start)
 
-                val steps = (durationMillisFloat / eventPeriodMillis.toFloat()).roundToInt()
+                val steps = (durationMillisFloat / 10.toFloat()).roundToInt()
                 var step = 0
 
                 val getPositionAt: (Long) -> Offset = {
                     lerp(start, end, it.toFloat() / durationMillis)
                 }
 
-                var tP = 0L
                 while (step++ < steps) {
                     val progress = step / steps.toFloat()
                     val tn = lerp(0, durationMillis, progress)
-                    updatePointerTo(0, getPositionAt(tn))
-                    move(tn - tP)
-                    tP = tn
+
+                    movePointerTo(0, getPositionAt(tn))
+                    move()
                 }
             }
-        rule.onNodeWithTag("box").assertPositionInRootIsEqualTo(99.dp, 436.dp)
+        // TODO: Uncomment once we can use 1.1.0
+//            .performTouchInput {
+//                val start = Offset(right * 0.25f, centerY)
+//                val end = Offset(right * 0.5f, centerY)
+//                val durationMillis = 500L
+//                val durationMillisFloat = durationMillis.toFloat()
+//
+//                // Start touch input
+//                down(0, start)
+//
+//                val steps = (durationMillisFloat / eventPeriodMillis.toFloat()).roundToInt()
+//                var step = 0
+//
+//                val getPositionAt: (Long) -> Offset = {
+//                    lerp(start, end, it.toFloat() / durationMillis)
+//                }
+//
+//                var tP = 0L
+//                while (step++ < steps) {
+//                    val progress = step / steps.toFloat()
+//                    val tn = lerp(0, durationMillis, progress)
+//                    updatePointerTo(0, getPositionAt(tn))
+//                    move(tn - tP)
+//                    tP = tn
+//                }
+//            }
+        rule.onNodeWithTag("box").assertPositionInRootIsEqualTo(67.dp, 493.dp)
         motionSemantic
-            .performTouchInput {
-                up()
+            .performGesture {
+                up(0)
             }
+        // TODO: Uncomment once we can use 1.1.0
+//            .performTouchInput {
+//                up()
+//            }
         rule.waitForIdle()
         rule.onNodeWithTag("box").assertPositionInRootIsEqualTo(332.dp, 10.dp)
     }

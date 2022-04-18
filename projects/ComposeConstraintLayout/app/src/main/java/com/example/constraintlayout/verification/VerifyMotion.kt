@@ -37,10 +37,9 @@ import androidx.constraintlayout.tools.LinkServer
 import com.example.constraintlayout.R
 import com.example.constraintlayout.link.MotionLink
 import com.google.accompanist.coil.rememberCoilPainter
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
+import java.util.Arrays
 
+@OptIn(ExperimentalMaterialApi::class)
 class VerifyMotion : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
     private var composeNum = 0
@@ -51,7 +50,8 @@ class VerifyMotion : AppCompatActivity() {
     val linkServer = LinkServer()
     lateinit var link: MotionLink
     val layouts = java.util.HashMap<String, String>()
-    val resultList =  HashMap<String,String>()
+    val resultList = HashMap<String, String>()
+
     init {
         defineDesignElements()
         linkServer.start()
@@ -109,7 +109,6 @@ class VerifyMotion : AppCompatActivity() {
         }
     }
 
-    @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState != null) {
@@ -132,7 +131,6 @@ class VerifyMotion : AppCompatActivity() {
         PhoneState(this) // monitor orientation present PhoneState.phoneOrientation
     }
 
-    @OptIn(ExperimentalMaterialApi::class)
     private fun fromLink(event: MotionLink.Event, link: MotionLink) {
         val name = link.layoutNames[link.lastUpdateLayout]
         val str = Arrays.toString(link.layoutNames) + name
@@ -184,7 +182,7 @@ class VerifyMotion : AppCompatActivity() {
 
             var str = readFromRaw(resources.getIdentifier(s, "raw", packageName))
             if (str == null) {
-                Log.e(TAG, " could not find raw/"+s)
+                Log.e(TAG, " could not find raw/" + s)
                 continue
             }
             str = CLParser.parse(str).toFormattedJSON()
@@ -202,7 +200,7 @@ class VerifyMotion : AppCompatActivity() {
             }
 
         }
-        composeNum=-1
+        composeNum = -1
         setCompose();
     }
 
@@ -257,7 +255,6 @@ class VerifyMotion : AppCompatActivity() {
         return null
     }
 
-    @ExperimentalMaterialApi
     fun doNext() {
         if (composeNum == -1) {
             return
@@ -270,7 +267,6 @@ class VerifyMotion : AppCompatActivity() {
         }
     }
 
-    @ExperimentalMaterialApi
     fun getLayout() {
         if (composeNum != 0) {
             link.getLayoutList()
@@ -288,7 +284,6 @@ class VerifyMotion : AppCompatActivity() {
         savedInstanceState.putInt("SHOWNUM", composeNum)
     }
 
-    @ExperimentalMaterialApi
     fun setCompose() {
         if (mFrameLayout!!.childCount > 0) {
             mFrameLayout!!.removeAllViews()

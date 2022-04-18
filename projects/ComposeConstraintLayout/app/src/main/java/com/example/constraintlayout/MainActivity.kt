@@ -165,7 +165,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    @ExperimentalMaterialApi
+    @OptIn(ExperimentalMaterialApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState != null) {
@@ -177,8 +177,8 @@ class MainActivity : AppCompatActivity() {
         }
         setContentView(R.layout.activity_main)
         mFrameLayout = findViewById<FrameLayout>(R.id.frame)
-        setCompose();
-         PhoneState(this) // monitor orientation present PhoneState.phoneOrientation
+        setCompose()
+        PhoneState(this) // monitor orientation present PhoneState.phoneOrientation
     }
 
     override fun onPause() {
