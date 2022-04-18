@@ -874,7 +874,7 @@ public fun MotionExample5() {
     }
 }
 
-@ExperimentalMaterialApi
+@OptIn(ExperimentalMaterialApi::class)
 @Preview(group = "motion6")
 @Composable
 public fun MotionExample6() {
@@ -1502,7 +1502,7 @@ fun MotionExample10() {
 }
 
 
-@ExperimentalMaterialApi
+@OptIn(ExperimentalMaterialApi::class)
 @Preview(group = "motion11")
 @Composable
 public fun MotionExample11() {
@@ -1673,7 +1673,7 @@ public fun MotionExample11() {
 }
 
 
-@ExperimentalMaterialApi
+@OptIn(ExperimentalMaterialApi::class)
 @Preview(group = "motion12")
 @Composable
 public fun MotionExample12() {

@@ -23,8 +23,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.material.Button
-import androidx.compose.material.Text
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.ComposeView
@@ -35,9 +36,9 @@ import com.google.accompanist.coil.rememberCoilPainter
 
 class MainActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
-    private var composeNum = 45
-    private var MAX = 44
-
+    private var composeNum = 0
+    private val START_NUMBER = Int.MAX_VALUE
+    private var demos:ArrayList<CompFunc> = ArrayList()
     var map = HashMap<Int, String>();
     val linkServer = LinkServer()
 
@@ -66,7 +67,8 @@ class MainActivity : AppCompatActivity() {
         DesignElements.define("button-material") {
                 id, params ->
             val text = params["text"] ?: "text"
-            Button(modifier = Modifier.layoutId(id),
+            Button(
+                modifier = Modifier.layoutId(id),
                 onClick = {},
             ) {
                 Text(text = text)
@@ -83,69 +85,85 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    interface CompFunc {
+        @Composable
+        fun Run()
+    }
+
+
+
+    private fun setup() {
+        if (demos.size > 0) {
+            return
+        }
+        demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample2() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample3() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample4() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample5() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample6() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample7() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample8() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample9() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample10() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample11() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample13() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample14() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample15() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample16() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample17() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample18() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample19() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample20() } })
+
+        demos.add(object : CompFunc { @Composable override fun Run() { MotionExample1() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { MotionExample2() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { MotionExample3() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { MotionExample4() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { MotionExample5() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { MotionExample6() } })
+
+        demos.add(object : CompFunc { @Composable override fun Run() { AttributesScale() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { AttributesTranslationXY() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { AttributesRotationZ() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { AttributesRotationXY() } })
+
+        demos.add(object : CompFunc { @Composable override fun Run() { CycleScale() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { CycleTranslationXY() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { CycleRotationZ() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { CycleRotationXY() } })
+
+        demos.add(object : CompFunc { @Composable override fun Run() { MotionExample7() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample21() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample22() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ResizeExample1() } })
+
+        demos.add(object : CompFunc { @Composable override fun Run() { ExampleLayout() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { MotionExample8() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { MotionExample9() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { MotionExample10() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { MotionExample11() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { MotionExample12() } })
+
+        demos.add(object : CompFunc { @Composable override fun Run() { OnSwipeExperiment() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { Example () } })
+        demos.add(object : CompFunc { @Composable override fun Run() { RowColExample () } })
+
+        composeNum =  if (demos.size < START_NUMBER)
+            demos.size - 1 else START_NUMBER
+     }
+
+
     @ExperimentalMaterialApi
     private fun show(com: ComposeView) {
+        setup()
         println(" $composeNum ")
         com.setContent {
-            when (composeNum) {
-                0 -> ScreenExample()
-                1 -> ScreenExample()
-                2 -> ScreenExample2()
-                3 -> ScreenExample3()
-                4 -> ScreenExample4()
-                5 -> ScreenExample5()
-                6 -> ScreenExample6()
-                7 -> ScreenExample7()
-                8 -> ScreenExample8()
-                9 -> ScreenExample9()
-                10 -> ScreenExample10()
-                11 -> ScreenExample11()
-                12 -> ScreenExample12()
-                13 -> ScreenExample13()
-                14 -> ScreenExample14()
-                15 -> ScreenExample15()
-                16 -> ScreenExample16()
-                17 -> ScreenExample17()
-                18 -> ScreenExample18()
-                19 -> ScreenExample19()
-                20 -> ScreenExample20()
-
-                21 -> MotionExample1()
-                22 -> MotionExample2()
-                23 -> MotionExample3()
-                24 -> MotionExample4()
-                25 -> MotionExample5()
-                26 -> MotionExample6()
-
-                27 -> AttributesScale()
-                28 -> AttributesTranslationXY()
-                29 -> AttributesRotationZ()
-                30 -> AttributesRotationXY()
-
-                31 -> CycleScale()
-                32 -> CycleTranslationXY()
-                33 -> CycleRotationZ()
-                34 -> CycleRotationXY()
-
-                35 -> MotionExample7()
-                36 -> ScreenExample21()
-                37 -> ResizeExample1()
-                38 -> ScreenExample22()
-
-                39 -> ExampleLayout()
-                40 -> MotionExample8()
-                41 -> MotionExample9()
-                42 -> MotionExample10()
-                43 -> MotionExample11()
-                44 -> MotionExample12()
-                else -> {
-                    composeNum = (composeNum + 40) % 40
-                    println(composeNum)
-                    ScreenExample()
-                }
-            }
+            composeNum = (composeNum + demos.size) % demos.size
+            demos[composeNum].Run();
         }
     }
+
 
     @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
