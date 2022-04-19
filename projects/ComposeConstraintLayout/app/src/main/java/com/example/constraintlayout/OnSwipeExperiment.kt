@@ -16,6 +16,7 @@
 
 package com.example.constraintlayout
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,6 +34,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.MotionScene
 import androidx.constraintlayout.compose.layoutId
@@ -62,6 +65,7 @@ fun OnSwipeExperiment() {
              Extends: 'start',
              box: {
                clear: ['constraints'],
+                  width: 100, height: 400,
                top: ['parent', 'top', 10],
                end: ['parent', 'end', 10],
              }
@@ -71,10 +75,20 @@ fun OnSwipeExperiment() {
            default: {
               from: 'start',
               to: 'end',
+        KeyFrames: {
+                      KeyPositions: [
+                        {
+                          target: ['box'],
+                          frames: [25, 50, 75],
+                          percentX: [0.25, 0.5, 0.75],
+                          percentY: [0.25, 0.5, 0.75]
+                        }
+                      ],
+                      },
               onSwipe: {
                 anchor: 'box',
                 direction: 'end',
-                side: 'end',
+                side: 'start',
                 mode: '$mode'
               }
            }
