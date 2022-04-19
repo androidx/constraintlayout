@@ -148,6 +148,8 @@ class MainActivity : AppCompatActivity() {
         demos.add(object : CompFunc { @Composable override fun Run() { OnSwipeExperiment() } })
         demos.add(object : CompFunc { @Composable override fun Run() { Example () } })
         demos.add(object : CompFunc { @Composable override fun Run() { RowColExample () } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ShowTwenty  () } })
+        demos.add(object : CompFunc { @Composable override fun Run() { Repro  () } })
 
         composeNum =  if (demos.size < START_NUMBER)
             demos.size - 1 else START_NUMBER

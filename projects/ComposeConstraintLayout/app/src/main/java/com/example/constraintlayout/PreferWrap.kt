@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -34,13 +35,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.MotionScene
 import androidx.constraintlayout.compose.layoutId
+import kotlin.math.roundToInt
 
 
 @Composable
@@ -165,4 +170,99 @@ fun RowColExample(
 
     }
 }
+
+
+@Composable
+fun ShowTwenty() {
+    TwentyPercent(content = {Bigger()})
+}
+
+@Composable
+fun Bigger() {
+Box(modifier = Modifier.wrapContentSize()
+.background(color = Color.Yellow)) {
+
+    var textContent by remember { mutableStateOf("Lorem Ipsum ") }
+    Column(modifier = Modifier.background(Color.LightGray)) {
+        Column() {
+
+            Button(onClick = { textContent += "\n"+textContent + textContent.length
+                Log.d("CL",textContent)}) {
+                Text(text = "Increase Content")
+            }
+            Text(text=textContent)
+        }
+    }
+}
+}
+
+
+@Composable
+fun TwentyPercent(
+    modifier : Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    Layout(
+        modifier = modifier,
+        content = content
+    ) {
+            measurables, constraints ->
+        val placeables = measurables.map { measurable ->
+             val tmp = Constraints(constraints.minWidth, constraints.maxWidth+50, constraints.minHeight+30,constraints.maxHeight+50)
+             measurable.measure(tmp)
+        }
+        layout(constraints.minWidth , constraints.minHeight) {
+            placeables.forEach { placeable ->
+                placeable.placeRelative(x = 0, y = 0)
+            }
+        }
+    }
+}
+
+
+@Composable
+fun Repro() {
+    Box(
+        modifier = Modifier
+            .background(color = Color.Yellow)
+            .paddingScale(0.2f)
+    ) {
+
+        var textContent by remember { mutableStateOf("Lorem Ipsum ") }
+        Column(modifier = Modifier.background(Color.LightGray)) {
+            Column() {
+                Button(onClick = { textContent += "\n" + textContent + textContent.length }) {
+                    Text(text = "Increase Content")
+                }
+                Text(text = textContent)
+            }
+        }
+    }
+}
+
+fun Modifier.paddingScale(paddingFraction: Float): Modifier = layout { measurable, constraints ->
+    // Scale the constraints so that if the child consumes them all we can still be larger by
+    // paddingFraction times.
+    val scaledConstraints = constraints.scale(1 / (1 + paddingFraction))
+    val placeable = measurable.measure(scaledConstraints)
+    val paddingWidth = placeable.width * paddingFraction
+    val paddingHeight = placeable.height * paddingFraction
+    layout(
+        width = (placeable.width + paddingWidth).roundToInt(),
+        height = (placeable.height + paddingHeight).roundToInt()
+    ) {
+        placeable.placeRelative(
+            x = (paddingWidth / 2).roundToInt(),
+            y = (paddingHeight / 2).roundToInt()
+        )
+    }
+}
+
+fun Constraints.scale(fraction: Float) = Constraints(
+    // 0 min constraints is basically saying "wrapContentSize".
+    minWidth = 0,
+    minHeight = 0,
+    maxWidth = if (maxWidth == Constraints.Infinity) maxWidth else (maxWidth * fraction).roundToInt(),
+    maxHeight = if (maxHeight == Constraints.Infinity) maxHeight else (maxHeight * fraction).roundToInt(),
+)
 
