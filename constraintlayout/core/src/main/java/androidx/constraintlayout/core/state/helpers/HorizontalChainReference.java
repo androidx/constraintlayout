@@ -42,16 +42,19 @@ public class HorizontalChainReference extends ChainReference {
             if (first == null) {
                 first = reference;
                 if (mStartToStart != null) {
-                    first.startToStart(mStartToStart).margin(mMarginStart);
+                    first.startToStart(mStartToStart)
+                            .margin(mMarginStart)
+                            .marginGone(mMarginStartGone);
                 } else if (mStartToEnd != null) {
-                    first.startToEnd(mStartToEnd).margin(mMarginStart);
+                    first.startToEnd(mStartToEnd).margin(mMarginStart).marginGone(mMarginStartGone);
                 } else if (mLeftToLeft != null) {
                     // TODO: Hack until we support RTL properly
-                    first.startToStart(mLeftToLeft).margin(mMarginLeft);
+                    first.startToStart(mLeftToLeft).margin(mMarginLeft).marginGone(mMarginLeftGone);
                 } else if (mLeftToRight != null) {
                     // TODO: Hack until we support RTL properly
-                    first.startToEnd(mLeftToRight).margin(mMarginLeft);
+                    first.startToEnd(mLeftToRight).margin(mMarginLeft).marginGone(mMarginLeftGone);
                 } else {
+                    // No constraint declared, default to Parent.
                     first.startToStart(State.PARENT);
                 }
             }
@@ -64,16 +67,17 @@ public class HorizontalChainReference extends ChainReference {
 
         if (previous != null) {
             if (mEndToStart != null) {
-                previous.endToStart(mEndToStart).margin(mMarginEnd);
+                previous.endToStart(mEndToStart).margin(mMarginEnd).marginGone(mMarginEndGone);
             } else if (mEndToEnd != null) {
-                previous.endToEnd(mEndToEnd).margin(mMarginEnd);
+                previous.endToEnd(mEndToEnd).margin(mMarginEnd).marginGone(mMarginEndGone);
             } else if (mRightToLeft != null) {
                 // TODO: Hack until we support RTL properly
-                previous.endToStart(mRightToLeft).margin(mMarginRight);
+                previous.endToStart(mRightToLeft).margin(mMarginRight).marginGone(mMarginRightGone);
             } else if (mRightToRight != null) {
                 // TODO: Hack until we support RTL properly
-                previous.endToEnd(mRightToRight).margin(mMarginRight);
+                previous.endToEnd(mRightToRight).margin(mMarginRight).marginGone(mMarginRightGone);
             } else {
+                // No constraint declared, default to Parent.
                 previous.endToEnd(State.PARENT);
             }
         }
