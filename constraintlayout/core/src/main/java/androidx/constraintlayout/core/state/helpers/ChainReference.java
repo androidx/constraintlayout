@@ -38,5 +38,4 @@ public class ChainReference extends HelperReference {
     public ChainReference bias(float bias) { mBias = bias;
         return this;
     }
-
 }

@@ -71,15 +71,16 @@ public class ConstraintReference implements Reference {
     protected int mMarginRight = 0;
     protected int mMarginStart = 0;
     protected int mMarginEnd = 0;
-    int mMarginTop = 0;
-    int mMarginBottom = 0;
+    protected int mMarginTop = 0;
+    protected int mMarginBottom = 0;
 
-    int mMarginLeftGone = 0;
-    int mMarginRightGone = 0;
-    int mMarginStartGone = 0;
-    int mMarginEndGone = 0;
-    int mMarginTopGone = 0;
-    int mMarginBottomGone = 0;
+    protected int mMarginLeftGone = 0;
+    protected int mMarginRightGone = 0;
+    protected int mMarginStartGone = 0;
+    protected int mMarginEndGone = 0;
+    protected int mMarginTopGone = 0;
+    protected int mMarginBottomGone = 0;
+
     int mMarginBaseline = 0;
     int mMarginBaselineGone = 0;
 

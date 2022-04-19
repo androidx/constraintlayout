@@ -35,6 +35,7 @@ import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
+import androidx.constraintlayout.compose.Visibility
 
 @Preview
 @Composable
@@ -114,7 +115,42 @@ fun Test12() { // Constraint an horizontal chain
             start.linkTo(parent.start, 12.dp)
         }
         constrain(chain1) {
-            start.linkTo(box3.end)
+            start.linkTo(box3.end, 10.dp)
+        }
+    }
+    ThreeBoxChainLayout(constraintSet = constraintSet)
+}
+
+@Preview
+@Composable
+fun Test18() { // Constraint an horizontal chain with gone margins
+    val constraintSet = ConstraintSet {
+        val box1 = createRefFor("box1")
+        val box2 = createRefFor("box2")
+        val box3 = createRefFor("box3")
+        val chain1 = createHorizontalChain(box1, box2, chainStyle = ChainStyle.Spread)
+
+        constrain(box1) {
+            width = Dimension.value(20.dp)
+            height = Dimension.value(20.dp)
+            centerVerticallyTo(parent)
+        }
+        constrain(box2) {
+            width = Dimension.value(20.dp)
+            height = Dimension.value(20.dp)
+            centerVerticallyTo(box1)
+        }
+        constrain(box3) {
+            width = Dimension.value(200.dp)
+            height = Dimension.value(20.dp)
+            top.linkTo(parent.top, 12.dp)
+            start.linkTo(parent.start, 12.dp)
+            visibility = Visibility.Gone
+        }
+        constrain(chain1) {
+            start.linkTo(box3.end, 10.dp, 100.dp)
+            // gone margin with parent should not matter
+            end.linkTo(parent.end, 10.dp, 200.dp)
         }
     }
     ThreeBoxChainLayout(constraintSet = constraintSet)
@@ -146,7 +182,43 @@ fun Test13() { // Constrain a vertical chain
             start.linkTo(parent.start, 12.dp)
         }
         constrain(chain1) {
-            top.linkTo(box3.bottom)
+            top.linkTo(box3.bottom, 10.dp)
+        }
+    }
+    ThreeBoxChainLayout(constraintSet = constraintSet)
+}
+
+@Preview
+@Composable
+fun Test17() { // Constrain a vertical chain with gone margins
+    val constraintSet = ConstraintSet {
+        val box1 = createRefFor("box1")
+        val box2 = createRefFor("box2")
+        val box3 = createRefFor("box3")
+        val chain1 = createVerticalChain(box1, box2, chainStyle = ChainStyle.Spread)
+
+        constrain(box1) {
+            width = Dimension.value(20.dp)
+            height = Dimension.value(20.dp)
+            centerHorizontallyTo(parent)
+        }
+        constrain(box2) {
+            width = Dimension.value(20.dp)
+            height = Dimension.value(20.dp)
+            centerHorizontallyTo(box1)
+        }
+        constrain(box3) {
+            width = Dimension.value(20.dp)
+            height = Dimension.value(200.dp)
+            top.linkTo(parent.top, 12.dp)
+            start.linkTo(parent.start, 12.dp)
+            visibility = Visibility.Gone
+        }
+        constrain(chain1) {
+            // With the gone margin it should basically layout the same as if box3 was visible
+            top.linkTo(box3.bottom, 10.dp, 100.dp)
+            // gone margin with parent should not matter
+            bottom.linkTo(parent.bottom, 10.dp, 200.dp)
         }
     }
     ThreeBoxChainLayout(constraintSet = constraintSet)

@@ -39,10 +39,11 @@ public class VerticalChainReference extends ChainReference {
             if (first == null) {
                 first = reference;
                 if (mTopToTop != null) {
-                    first.topToTop(mTopToTop);
+                    first.topToTop(mTopToTop).margin(mMarginTop).marginGone(mMarginTopGone);
                 } else if (mTopToBottom != null) {
-                    first.topToBottom(mTopToBottom);
+                    first.topToBottom(mTopToBottom).margin(mMarginTop).marginGone(mMarginTopGone);
                 } else {
+                    // No constraint declared, default to Parent.
                     first.topToTop(State.PARENT);
                 }
             }
@@ -55,10 +56,15 @@ public class VerticalChainReference extends ChainReference {
 
         if (previous != null) {
             if (mBottomToTop != null) {
-                previous.bottomToTop(mBottomToTop);
+                previous.bottomToTop(mBottomToTop)
+                        .margin(mMarginBottom)
+                        .marginGone(mMarginBottomGone);
             } else if (mBottomToBottom != null) {
-                previous.bottomToBottom(mBottomToBottom);
+                previous.bottomToBottom(mBottomToBottom)
+                        .margin(mMarginBottom)
+                        .marginGone(mMarginBottomGone);
             } else {
+                // No constraint declared, default to Parent.
                 previous.bottomToBottom(State.PARENT);
             }
         }
@@ -83,5 +89,4 @@ public class VerticalChainReference extends ChainReference {
             }
         }
     }
-
 }
