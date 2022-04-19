@@ -372,7 +372,7 @@ class ConstrainScope internal constructor(internal val id: Any) {
      */
     fun centerHorizontallyTo(
         other: ConstrainedLayoutReference,
-        @FloatRange(from = 0.0f.toDouble(), to = 1.0f.toDouble()) bias: Float = 0.5f
+        @FloatRange(from = 0.0, to = 1.0) bias: Float = 0.5f
     ) {
         linkTo(start = other.start, end = other.end, bias = bias)
     }
@@ -384,7 +384,7 @@ class ConstrainScope internal constructor(internal val id: Any) {
      */
     fun centerVerticallyTo(
         other: ConstrainedLayoutReference,
-        @FloatRange(from = 0.0f.toDouble(), to = 1.0f.toDouble()) bias: Float = 0.5f
+        @FloatRange(from = 0.0, to = 1.0) bias: Float = 0.5f
     ) {
         linkTo(other.top, other.bottom, bias = bias)
     }

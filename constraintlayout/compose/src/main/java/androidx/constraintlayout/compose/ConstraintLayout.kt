@@ -775,9 +775,7 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
                 val registry = Registry.getInstance()
                 registry.register(debugName, callback)
             }
-        } catch (e: CLParsingException) {
-
-        }
+        } catch (_: CLParsingException) {}
     }
 
     // region Accessors
@@ -987,8 +985,10 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
     private val heightConstraintsHolder = IntArray(2)
 
     var forcedScaleFactor = Float.NaN
-    var layoutCurrentWidth: Int = 0
-    var layoutCurrentHeight: Int = 0
+    val layoutCurrentWidth: Int
+        get() = root.width
+    val layoutCurrentHeight: Int
+        get() = root.height
 
     /**
      * Method called by Compose tooling. Returns a JSON string that represents the Constraints
@@ -1348,8 +1348,6 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             }
             root.height = forcedHeight
         }
-        layoutCurrentWidth = root.width
-        layoutCurrentHeight = root.height
     }
 
     fun Placeable.PlacementScope.performLayout(measurables: List<Measurable>) {

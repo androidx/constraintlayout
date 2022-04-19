@@ -61,16 +61,16 @@ public class Transition implements TypedValues {
     CorePixelDp mToPixel; // Todo placed here as a temp till the refactor is done
 
     /**
-     * @TODO: add description
      * @return
+     * @TODO: add description
      */
-    public OnSwipe createOnSwipe() {
+    OnSwipe createOnSwipe() {
         return mOnSwipe = new OnSwipe();
     }
 
     /**
-     * @TODO: add description
      * @return
+     * @TODO: add description
      */
     public boolean hasOnSwipe() {
         return mOnSwipe != null;
@@ -79,14 +79,14 @@ public class Transition implements TypedValues {
     static class OnSwipe {
         String mAnchorId;
         int mAnchorSide;
-        public static  final int  ANCHOR_SIDE_TOP = 0;
-        public static  final int  ANCHOR_SIDE_LEFT = 1;
-        public static  final int  ANCHOR_SIDE_RIGHT = 2;
-        public static  final int  ANCHOR_SIDE_BOTTOM = 3;
-        public static  final int  ANCHOR_SIDE_MIDDLE = 4;
-        public static  final int  ANCHOR_SIDE_START = 5;
-        public static  final int  ANCHOR_SIDE_END = 6;
-        public static  final String[]SIDES = {"top", "left", "right",
+        public static final int ANCHOR_SIDE_TOP = 0;
+        public static final int ANCHOR_SIDE_LEFT = 1;
+        public static final int ANCHOR_SIDE_RIGHT = 2;
+        public static final int ANCHOR_SIDE_BOTTOM = 3;
+        public static final int ANCHOR_SIDE_MIDDLE = 4;
+        public static final int ANCHOR_SIDE_START = 5;
+        public static final int ANCHOR_SIDE_END = 6;
+        public static final String[] SIDES = {"top", "left", "right",
                 "bottom", "middle", "start", "end"};
         private static final float[][] TOUCH_SIDES = {
                 {0.5f, 0.0f}, // top
@@ -102,52 +102,52 @@ public class Transition implements TypedValues {
         String mLimitBoundsTo;
         boolean mDragVertical = true;
         int mDragDirection = 0;
-        public static  final int  DRAG_UP = 0;
-        public static  final int  DRAG_DOWN = 1;
-        public static  final int  DRAG_LEFT = 2;
-        public static  final int  DRAG_RIGHT = 3;
-        public static  final int  DRAG_START = 4;
-        public static  final int  DRAG_END = 5;
-        public static  final int  DRAG_CLOCKWISE = 6;
-        public static  final int  DRAG_ANTICLOCKWISE = 7;
-        public static  final String[]DIRECTIONS = {"up", "down", "left", "right", "start",
+        public static final int DRAG_UP = 0;
+        public static final int DRAG_DOWN = 1;
+        public static final int DRAG_LEFT = 2;
+        public static final int DRAG_RIGHT = 3;
+        public static final int DRAG_START = 4;
+        public static final int DRAG_END = 5;
+        public static final int DRAG_CLOCKWISE = 6;
+        public static final int DRAG_ANTICLOCKWISE = 7;
+        public static final String[] DIRECTIONS = {"up", "down", "left", "right", "start",
                 "end", "clockwise", "anticlockwise"};
 
-        float  mDragScale = 1;
-        float mDragThreshold  = 10;
+        float mDragScale = 1;
+        float mDragThreshold = 10;
         int mAutoCompleteMode = 0;
-        public static  final int MODE_CONTINUOUS_VELOCITY = 0;
-        public static  final int MODE_SPRING = 1;
-        public static  final String[]MODE = {"velocity", "spring"};
-        float mMaxVelocity  = 4.f;
+        public static final int MODE_CONTINUOUS_VELOCITY = 0;
+        public static final int MODE_SPRING = 1;
+        public static final String[] MODE = {"velocity", "spring"};
+        float mMaxVelocity = 4.f;
         float mMaxAcceleration = 1.2f;
 
         // On touch up what happens
         int mOnTouchUp = 0;
-        public static  final int  ON_UP_AUTOCOMPLETE = 0;
-        public static  final int  ON_UP_AUTOCOMPLETE_TO_START = 1;
-        public static  final int  ON_UP_AUTOCOMPLETE_TO_END = 2;
-        public static  final int  ON_UP_STOP = 3;
-        public static  final int  ON_UP_DECELERATE = 4;
-        public static  final int  ON_UP_DECELERATE_AND_COMPLETE = 5;
-        public static  final int  ON_UP_NEVER_COMPLETE_TO_START = 6;
-        public static  final int  ON_UP_NEVER_COMPLETE_TO_END = 7;
-        public static  final String[]TOUCH_UP = {"autocomplete", "toStart",
+        public static final int ON_UP_AUTOCOMPLETE = 0;
+        public static final int ON_UP_AUTOCOMPLETE_TO_START = 1;
+        public static final int ON_UP_AUTOCOMPLETE_TO_END = 2;
+        public static final int ON_UP_STOP = 3;
+        public static final int ON_UP_DECELERATE = 4;
+        public static final int ON_UP_DECELERATE_AND_COMPLETE = 5;
+        public static final int ON_UP_NEVER_COMPLETE_TO_START = 6;
+        public static final int ON_UP_NEVER_COMPLETE_TO_END = 7;
+        public static final String[] TOUCH_UP = {"autocomplete", "toStart",
                 "toEnd", "stop", "decelerate", "decelerateComplete",
                 "neverCompleteStart", "neverCompleteEnd"};
 
         float mSpringMass = 1;
         float mSpringStiffness = 400;
-        float mSpringDamping =  10;
-        float mSpringStopThreshold =  0.01f;
+        float mSpringDamping = 10;
+        float mSpringStopThreshold = 0.01f;
 
         // In spring mode what happens at the boundary
         int mSpringBoundary = 0;
-        public static  final int  BOUNDARY_OVERSHOOT = 0;
-        public static  final int  BOUNDARY_BOUNCE_START = 1;
-        public static  final int  BOUNDARY_BOUNCE_END = 2;
-        public static  final int  BOUNDARY_BOUNCE_BOTH = 3;
-        public static  final String[]BOUNDARY = {"overshoot", "bounceStart",
+        public static final int BOUNDARY_OVERSHOOT = 0;
+        public static final int BOUNDARY_BOUNCE_START = 1;
+        public static final int BOUNDARY_BOUNCE_END = 2;
+        public static final int BOUNDARY_BOUNCE_BOTH = 3;
+        public static final String[] BOUNDARY = {"overshoot", "bounceStart",
                 "bounceEnd", "bounceBoth"};
 
         private static final float[][] TOUCH_DIRECTION = {
@@ -161,12 +161,13 @@ public class Transition implements TypedValues {
         private long mStart;
 
         float[] getDirection() {
-            return  TOUCH_DIRECTION[mDragDirection];
+            return TOUCH_DIRECTION[mDragDirection];
         }
 
         float[] getSide() {
-            return  TOUCH_SIDES[mAnchorSide];
+            return TOUCH_SIDES[mAnchorSide];
         }
+
         void setAnchorId(String anchorId) {
             this.mAnchorId = anchorId;
         }
@@ -276,7 +277,7 @@ public class Transition implements TypedValues {
                 if (mEngine instanceof SpringStopEngine) {
                     sl = (SpringStopEngine) mEngine;
                 } else {
-                    mEngine =  sl = new SpringStopEngine();
+                    mEngine = sl = new SpringStopEngine();
                 }
                 sl.springConfig(position, 1, velocity,
                         mSpringMass,
@@ -293,17 +294,16 @@ public class Transition implements TypedValues {
     }
 
 
-
     /**
      * Converts from xy drag to progress
      * This should be used till touch up
      *
      * @param currentProgress
-     * @param baseW parent width
-     * @param baseH parent height
-     * @param dx change in x
-     * @param dy change in y
-     * @return
+     * @param baseW           parent width
+     * @param baseH           parent height
+     * @param dx              change in x
+     * @param dy              change in y
+     * @return the change in progress
      */
     public float dragToProgress(float currentProgress, int baseW, int baseH, float dx, float dy) {
         if (mOnSwipe == null || mOnSwipe.mAnchorId == null) {
@@ -314,10 +314,11 @@ public class Transition implements TypedValues {
         float[] dir = mOnSwipe.getDirection();
         float[] side = mOnSwipe.getSide();
         float[] motionDpDt = new float[2];
+
         base.interpolate(baseW, baseH, currentProgress, this);
         base.mMotionControl.getDpDt(currentProgress, side[0], side[1], motionDpDt);
-        float drag = dx * Math.abs(dir[0])  / motionDpDt[0] + dy * Math.abs(dir[1]) / motionDpDt[1];
-       // float change = (mOnSwipe.mDragVertical) ? dy / motionDpDt[1] : dx / motionDpDt[0];
+        float drag = dx * Math.abs(dir[0]) / motionDpDt[0] + dy * Math.abs(dir[1]) / motionDpDt[1];
+        // float change = (mOnSwipe.mDragVertical) ? dy / motionDpDt[1] : dx / motionDpDt[0];
         return drag;
     }
 
@@ -363,11 +364,12 @@ public class Transition implements TypedValues {
     }
 
     /**
-         * get the interpolater based on a constant or a string
-         * @param interpolator
-         * @param interpolatorString
-         * @return
-         */
+     * get the interpolater based on a constant or a string
+     *
+     * @param interpolator
+     * @param interpolatorString
+     * @return
+     */
     public static Interpolator getInterpolator(int interpolator, String interpolatorString) {
         switch (interpolator) {
             case SPLINE_STRING:
@@ -392,10 +394,10 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @TODO: add description
      * @param target
      * @param frameNumber
      * @return
+     * @TODO: add description
      */
     public KeyPosition findPreviousPosition(String target, int frameNumber) {
         while (frameNumber >= 0) {
@@ -412,10 +414,10 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @TODO: add description
      * @param target
      * @param frameNumber
      * @return
+     * @TODO: add description
      */
     public KeyPosition findNextPosition(String target, int frameNumber) {
         while (frameNumber <= 100) {
@@ -432,9 +434,9 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @TODO: add description
      * @param frame
      * @return
+     * @TODO: add description
      */
     public int getNumberKeyPositions(WidgetFrame frame) {
         int numKeyPositions = 0;
@@ -453,20 +455,20 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @TODO: add description
      * @param id
      * @return
+     * @TODO: add description
      */
     public Motion getMotion(String id) {
         return getWidgetState(id, null, 0).mMotionControl;
     }
 
     /**
-     * @TODO: add description
      * @param frame
      * @param x
      * @param y
      * @param pos
+     * @TODO: add description
      */
     public void fillKeyPositions(WidgetFrame frame, float[] x, float[] y, float[] pos) {
         int numKeyPositions = 0;
@@ -487,16 +489,16 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @TODO: add description
      * @return
+     * @TODO: add description
      */
     public boolean hasPositionKeyframes() {
         return mKeyPositions.size() > 0;
     }
 
     /**
-     * @TODO: add description
      * @param bundle
+     * @TODO: add description
      */
     public void setTransitionProperties(TypedBundle bundle) {
         bundle.applyDelta(mBundle);
@@ -546,48 +548,48 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @TODO: add description
      * @param key
      * @return
+     * @TODO: add description
      */
     public boolean contains(String key) {
         return mState.containsKey(key);
     }
 
     /**
-     * @TODO: add description
      * @param target
      * @param bundle
+     * @TODO: add description
      */
     public void addKeyPosition(String target, TypedBundle bundle) {
         getWidgetState(target, null, 0).setKeyPosition(bundle);
     }
 
     /**
-     * @TODO: add description
      * @param target
      * @param bundle
+     * @TODO: add description
      */
     public void addKeyAttribute(String target, TypedBundle bundle) {
         getWidgetState(target, null, 0).setKeyAttribute(bundle);
     }
 
     /**
-     * @TODO: add description
      * @param target
      * @param bundle
+     * @TODO: add description
      */
     public void addKeyCycle(String target, TypedBundle bundle) {
         getWidgetState(target, null, 0).setKeyCycle(bundle);
     }
 
     /**
-     * @TODO: add description
      * @param target
      * @param frame
      * @param type
      * @param x
      * @param y
+     * @TODO: add description
      */
     public void addKeyPosition(String target, int frame, int type, float x, float y) {
         TypedBundle bundle = new TypedBundle();
@@ -607,11 +609,11 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @TODO: add description
      * @param state
      * @param widgetId
      * @param property
      * @param value
+     * @TODO: add description
      */
     public void addCustomFloat(int state, String widgetId, String property, float value) {
         WidgetState widgetState = getWidgetState(widgetId, null, state);
@@ -620,11 +622,11 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @TODO: add description
      * @param state
      * @param widgetId
      * @param property
      * @param color
+     * @TODO: add description
      */
     public void addCustomColor(int state, String widgetId, String property, int color) {
         WidgetState widgetState = getWidgetState(widgetId, null, state);
@@ -633,9 +635,9 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @TODO: add description
      * @param container
      * @param state
+     * @TODO: add description
      */
     public void updateFrom(ConstraintWidgetContainer container, int state) {
         final ArrayList<ConstraintWidget> children = container.getChildren();
@@ -648,10 +650,10 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @TODO: add description
      * @param parentWidth
      * @param parentHeight
      * @param progress
+     * @TODO: add description
      */
     public void interpolate(int parentWidth, int parentHeight, float progress) {
         if (mEasing != null) {
@@ -664,9 +666,9 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @TODO: add description
      * @param id
      * @return
+     * @TODO: add description
      */
     public WidgetFrame getStart(String id) {
         WidgetState widgetState = mState.get(id);
@@ -677,9 +679,9 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @TODO: add description
      * @param id
      * @return
+     * @TODO: add description
      */
     public WidgetFrame getEnd(String id) {
         WidgetState widgetState = mState.get(id);
@@ -690,9 +692,9 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @TODO: add description
      * @param id
      * @return
+     * @TODO: add description
      */
     public WidgetFrame getInterpolated(String id) {
         WidgetState widgetState = mState.get(id);
@@ -703,9 +705,9 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @TODO: add description
      * @param id
      * @return
+     * @TODO: add description
      */
     public float[] getPath(String id) {
         WidgetState widgetState = mState.get(id);
@@ -717,12 +719,12 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @TODO: add description
      * @param id
      * @param rectangles
      * @param pathMode
      * @param position
      * @return
+     * @TODO: add description
      */
     public int getKeyFrames(String id, float[] rectangles, int[] pathMode, int[] position) {
         WidgetState widgetState = mState.get(id);
@@ -796,8 +798,8 @@ public class Transition implements TypedValues {
         MotionWidget mMotionWidgetEnd;
         MotionWidget mMotionWidgetInterpolated;
         KeyCache mKeyCache = new KeyCache();
-        int mParentHeight = -1;
-        int mParentWidth = -1;
+        private int mParentHeight = -1;
+        private int mParentWidth = -1;
 
         WidgetState() {
             mStart = new WidgetFrame();

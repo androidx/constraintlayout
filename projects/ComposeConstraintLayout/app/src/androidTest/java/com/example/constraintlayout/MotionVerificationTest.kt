@@ -91,8 +91,7 @@ class MotionVerificationTest {
             results[fqComposable] =
                 MotionTestResult(boundsStart, boundsMidPoint, boundsEnd).printString()
         }
-        val baselineResults = parseBaselineResults(baselineRaw)
-        checkTest(baselineResults, results)
+        checkTest(baselineRaw, results)
     }
 
     private fun fetchBounds(): List<Rect> {

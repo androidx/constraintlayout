@@ -2,17 +2,14 @@ apply plugin: 'com.android.library'
 //apply plugin: 'maven'
 apply plugin: 'kotlin-android'
 
-def compose_version = '1.0.0'
-
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 30
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
 
     sourceSets{
@@ -46,7 +43,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerVersion "1.5.10"
+        kotlinCompilerVersion kotlin_version
         kotlinCompilerExtensionVersion compose_version
     }
 
