@@ -16,7 +16,6 @@
 
 package androidx.constraintlayout.core.state.helpers;
 
-import androidx.constraintlayout.core.state.ConstraintReference;
 import androidx.constraintlayout.core.state.HelperReference;
 import androidx.constraintlayout.core.state.State;
 
