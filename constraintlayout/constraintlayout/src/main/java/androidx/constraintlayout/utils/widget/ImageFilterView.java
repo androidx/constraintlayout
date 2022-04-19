@@ -445,7 +445,7 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
      * @param resId id of drawable
      */
     public void setAltImageResource(int resId) {
-        mAltDrawable = AppCompatResources.getDrawable(getContext(), resId).mutate();
+        mAltDrawable = AppCompatResources.getDrawable(getContext(), resId);
         setAltImageDrawable(mAltDrawable);
     }
 
