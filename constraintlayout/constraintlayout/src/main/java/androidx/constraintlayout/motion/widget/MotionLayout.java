@@ -4761,13 +4761,25 @@ public class MotionLayout extends ConstraintLayout implements
     }
 
     /**
+     * Get the id's of all constraintSets with the matching types
+     *
+     * @return
+     */
+    public int[] getMatchingConstraintSetIds(String ... types) {
+        if (mScene == null) {
+            return null;
+        }
+        return mScene.getMatchingConstraintSetIds(types);
+    }
+
+    /**
      * Get the ConstraintSet associated with an id
-     * This returns a link to the constraintset
+     * This returns a link to the constraintSet
      * But in most cases can be used.
      * createConstraintSet makes a copy which is more expensive.
      *
-     * @param id
-     * @return
+     * @param id of the constraintSet
+     * @return ConstraintSet of MotionLayout
      * @see #cloneConstraintSet(int)
      */
     public ConstraintSet getConstraintSet(int id) {

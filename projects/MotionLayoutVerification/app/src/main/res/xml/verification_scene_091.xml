@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto"
+    motion:defaultDuration="2000">
+
+    <!--========================================================-->
+
+    <ConstraintSet
+        android:id="@+id/a1" motion:constraintSetTypes="a,1">
+        <ConstraintOverride
+            android:id="@+id/view"
+            motion:layout_constraintHorizontal_bias="0"
+            motion:layout_constraintVertical_bias="0"/>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/a2" motion:constraintSetTypes="a,2">
+        <ConstraintOverride
+            android:id="@id/view"
+            motion:layout_constraintHorizontal_bias="0"
+            motion:layout_constraintVertical_bias="0.5"/>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/a3" motion:constraintSetTypes="a,3">
+        <ConstraintOverride
+            android:id="@id/view"
+            motion:layout_constraintHorizontal_bias="0"
+            motion:layout_constraintVertical_bias="1"/>
+    </ConstraintSet>
+    <!--========================================================-->
+
+    <ConstraintSet
+        android:id="@+id/b1" motion:constraintSetTypes="b,1">
+        <ConstraintOverride
+            android:id="@id/view"
+            motion:layout_constraintHorizontal_bias="0.5"
+            motion:layout_constraintVertical_bias="0"/>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/b2" motion:constraintSetTypes="b,2">
+        <ConstraintOverride
+            android:id="@id/view"
+            motion:layout_constraintHorizontal_bias="0.5"
+            motion:layout_constraintVertical_bias="0.5"/>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/b3" motion:constraintSetTypes="b,3">
+        <ConstraintOverride
+            android:id="@id/view"
+            motion:layout_constraintHorizontal_bias="0.5"
+            motion:layout_constraintVertical_bias="1"/>
+    </ConstraintSet>
+<!--========================================================-->
+    <ConstraintSet
+        android:id="@+id/c1" motion:constraintSetTypes="c,1">
+        <ConstraintOverride
+            android:id="@id/view"
+            motion:layout_constraintHorizontal_bias="1"
+            motion:layout_constraintVertical_bias="0"/>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/c2" motion:constraintSetTypes="c,2">
+        <ConstraintOverride
+            android:id="@id/view"
+            motion:layout_constraintHorizontal_bias="1"
+            motion:layout_constraintVertical_bias="0.5"/>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/c3" motion:constraintSetTypes="c,3">
+        <ConstraintOverride
+            android:id="@id/view"
+            motion:layout_constraintHorizontal_bias="1"
+            motion:layout_constraintVertical_bias="1"/>
+    </ConstraintSet>
+
+
+    <Transition
+        motion:constraintSetEnd="@id/a1"
+        motion:constraintSetStart="@id/c3"
+        motion:duration="3000"
+        motion:autoTransition="animateToStart"
+        motion:motionInterpolator="linear"
+        >
+
+    </Transition>
+
+
+</MotionScene>

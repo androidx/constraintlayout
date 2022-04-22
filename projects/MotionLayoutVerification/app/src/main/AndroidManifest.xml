@@ -45,6 +45,7 @@
         <activity android:name=".CheckSetProgress" />
         <activity android:name=".CheckDumpJson" />
         <activity android:name=".CheckCLPlugin"/>
+        <activity android:name=".CheckCSTypes"/>
     </application>
 
 </manifest>
