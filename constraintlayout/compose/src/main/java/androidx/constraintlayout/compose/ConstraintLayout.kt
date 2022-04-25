@@ -62,7 +62,6 @@ import androidx.compose.ui.layout.ParentDataModifier
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.InspectorValueInfo
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
@@ -82,7 +81,6 @@ import androidx.constraintlayout.core.parser.CLObject
 import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.parser.CLParsingException
 import androidx.constraintlayout.core.state.ConstraintSetParser
-import androidx.constraintlayout.core.state.CorePixelDp
 import androidx.constraintlayout.core.state.Dimension.SPREAD_DIMENSION
 import androidx.constraintlayout.core.state.Dimension.WRAP_DIMENSION
 import androidx.constraintlayout.core.state.Registry
@@ -946,13 +944,6 @@ class State(val density: Density) : SolverState() {
     }
 
     override fun reset() {
-        // TODO(b/158197001): this should likely be done by the solver
-        mReferences.forEach { ref ->
-            ref.value?.constraintWidget?.reset()
-        }
-        mReferences.clear()
-        mReferences[PARENT] = mParent
-
         super.reset()
     }
 

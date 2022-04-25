@@ -16,6 +16,7 @@
 
 package androidx.constraintlayout.core.state;
 
+import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.parser.CLArray;
 import androidx.constraintlayout.core.parser.CLElement;
 import androidx.constraintlayout.core.parser.CLKey;
@@ -30,28 +31,10 @@ import androidx.constraintlayout.core.state.helpers.GuidelineReference;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class ConstraintSetParser {
-
-    public interface CoreMotionScene {
-
-        void setTransitionContent(String elementName, String toJSON);
-
-        String getConstraintSet(String ext);
-
-        void setConstraintSetContent(String csName, String toJSON);
-
-        void setDebugName(String name);
-
-        void resetForcedProgress();
-
-        float getForcedProgress();
-
-        String getTransition(String str);
-
-        String getConstraintSet(int index);
-    }
 
     private static final boolean PARSER_DEBUG = false;
 
@@ -81,6 +64,10 @@ public class ConstraintSetParser {
         }
     }
 
+    /**
+     * Provide the storage for managing Variables in the system.
+     * When the json has a variable:{   } section this is used.
+     */
     public static class LayoutVariables {
         HashMap<String, Integer> margins = new HashMap<>();
         HashMap<String, GeneratedValue> generators = new HashMap<>();
@@ -154,6 +141,9 @@ public class ConstraintSetParser {
         float value();
     }
 
+    /**
+     * Generate a floating point value
+     */
     static class Generator implements GeneratedValue {
         float mStart = 0;
         float mIncrementBy = 0;
@@ -175,6 +165,9 @@ public class ConstraintSetParser {
         }
     }
 
+    /**
+     * Generate values like button1, button2 etc.
+     */
     static class FiniteGenerator implements GeneratedValue {
         float mFrom = 0;
         float mTo = 0;
@@ -248,6 +241,12 @@ public class ConstraintSetParser {
 
     //==================== end Motion Scene =========================
 
+    /**
+     * Parse and populate a transition
+     * @param content JSON string to parse
+     * @param transition The Transition to be populated
+     * @param state @TODO what is this
+     */
     public static void parseJSON(String content, Transition transition, int state) {
         try {
             CLObject json = CLParser.parse(content);
@@ -287,6 +286,12 @@ public class ConstraintSetParser {
         }
     }
 
+    /**
+     * Parse and build a motionScene
+     * @Todo this should be in a MotionScene / MotionSceneParser
+     * @param scene
+     * @param content
+     */
     public static void parseMotionSceneJSON(CoreMotionScene scene, String content) {
         try {
             CLObject json = CLParser.parse(content);
@@ -316,35 +321,59 @@ public class ConstraintSetParser {
         }
     }
 
+    /**
+     * Parse ConstraintSets and populate MotionScene
+     * @param scene
+     * @param json
+     * @throws CLParsingException
+     */
     static void parseConstraintSets(CoreMotionScene scene, CLObject json) throws CLParsingException {
+        Utils.log("parseConstraintSets ");
         ArrayList<String> constraintSetNames = json.names();
         if (constraintSetNames == null) {
             return;
         }
+        Utils.log("parseConstraintSets "+ Arrays.toString(constraintSetNames.toArray()));
+
         for (String csName : constraintSetNames) {
+            Utils.log("parseConstraintSets "+csName);
+
             CLObject constraintSet = json.getObject(csName);
             boolean added = false;
             String ext = constraintSet.getStringOrNull("Extends");
-            if (ext == null || ext.isEmpty()) {
-                continue;
-            }
-            String base = scene.getConstraintSet(ext);
-            if (base == null) {
-                continue;
-            }
-            CLObject baseJson = CLParser.parse(base);
-            ArrayList<String> widgetsOverride = constraintSet.names();
-            if (widgetsOverride == null) {
-                continue;
-            }
-            for (String widgetOverrideName : widgetsOverride) {
-                CLElement value = constraintSet.get(widgetOverrideName);
-                if (value instanceof CLObject) {
-                    override(baseJson, widgetOverrideName, (CLObject) value);
+            if (ext != null && !ext.isEmpty()) {
+
+                Utils.log("parseConstraintSets " + csName);
+
+                String base = scene.getConstraintSet(ext);
+                if (base == null) {
+                    continue;
                 }
+                Utils.log("parseConstraintSets " + csName);
+
+                CLObject baseJson = CLParser.parse(base);
+                ArrayList<String> widgetsOverride = constraintSet.names();
+                if (widgetsOverride == null) {
+                    continue;
+                }
+                Utils.log("parseConstraintSets " + csName);
+
+                for (String widgetOverrideName : widgetsOverride) {
+                    CLElement value = constraintSet.get(widgetOverrideName);
+                    if (value instanceof CLObject) {
+                        override(baseJson, widgetOverrideName, (CLObject) value);
+                    }
+                }
+                Utils.log("parseConstraintSets  setConstraintSetContent" + csName);
+
+                scene.setConstraintSetContent(csName, baseJson.toJSON());
+                added = true;
             }
-            scene.setConstraintSetContent(csName, baseJson.toJSON());
+            if (!added) {
+                scene.setConstraintSetContent(csName, constraintSet.toJSON());
+            }
         }
+
     }
 
     static void override(CLObject baseJson, String name, CLObject overrideValue) throws CLParsingException {
@@ -608,6 +637,7 @@ public class ConstraintSetParser {
             return;
         }
         for (String elementName : elements) {
+            Utils.log("parseGenerate "+elementName);
             CLElement element = json.get(elementName);
             ArrayList<String> arrayIds = layoutVariables.getList(elementName);
             if (arrayIds != null && element instanceof CLObject) {

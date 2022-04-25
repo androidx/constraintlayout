@@ -101,14 +101,23 @@ public class State {
         return mDpToPixel;
     }
 
-    protected void setDpToPixel(CorePixelDp dpToPixel) {
+    /**
+     * Set the function that converts dp to Pixels
+     * @param dpToPixel
+     */
+    public void setDpToPixel(CorePixelDp dpToPixel) {
         this.mDpToPixel = dpToPixel;
     }
 
     /**
-     * @TODO: add description
+     * Clear the state
      */
     public void reset() {
+        for (Object ref : mReferences.keySet()) {
+            mReferences.get(ref).getConstraintWidget().reset();
+        }
+        mReferences.clear();
+        mReferences.put(PARENT, mParent);
         mHelperReferences.clear();
         mTags.clear();
         mBaselineNeeded.clear();
@@ -448,6 +457,7 @@ public class State {
         container.removeAllChildren();
         mParent.getWidth().apply(this, container, ConstraintWidget.HORIZONTAL);
         mParent.getHeight().apply(this, container, ConstraintWidget.VERTICAL);
+        // add helper refrences
         for (Object key : mHelperReferences.keySet()) {
             HelperReference reference = mHelperReferences.get(key);
             HelperWidget helperWidget = reference.getHelperWidget();
