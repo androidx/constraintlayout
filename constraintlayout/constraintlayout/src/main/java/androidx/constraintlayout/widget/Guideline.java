@@ -58,8 +58,32 @@ import android.view.View;
  * {@link ConstraintSet#setGuidelineEnd}
  * and {@link ConstraintSet#setGuidelinePercent} functions in {@link ConstraintSet}.
  * <p>
- * Example of a {@code Button} constrained to a vertical {@code Guideline}:<br>
- * {@sample resources/examples/Guideline.xml Guideline}
+ *   Example of a {@code Button} constrained to a vertical {@code Guideline}:
+ *   <pre>
+ *     <androidx.constraintlayout.widget.ConstraintLayout
+ *         xmlns:android="http://schemas.android.com/apk/res/android"
+ *         xmlns:app="http://schemas.android.com/apk/res-auto"
+ *         xmlns:tools="http://schemas.android.com/tools"
+ *         android:layout_width="match_parent"
+ *         android:layout_height="match_parent">
+ *
+ *         <androidx.constraintlayout.widget.Guideline
+ *             android:layout_width="wrap_content"
+ *             android:layout_height="wrap_content"
+ *             android:id="@+id/guideline"
+ *             app:layout_constraintGuide_begin="100dp"
+ *             android:orientation="vertical"/>
+ *         <Button
+ *             android:text="Button"
+ *             android:layout_width="wrap_content"
+ *             android:layout_height="wrap_content"
+ *             android:id="@+id/button"
+ *             app:layout_constraintLeft_toLeftOf="@+id/guideline"
+ *             android:layout_marginTop="16dp"
+ *             app:layout_constraintTop_toTopOf="parent" />
+ *     </androidx.constraintlayout.widget.ConstraintLayout>
+ *  </pre>
+ * <p/>
  */
 public class Guideline extends View {
     private boolean mFilterRedundantCalls = true;

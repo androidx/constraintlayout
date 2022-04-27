@@ -560,7 +560,7 @@ import java.util.HashMap;
  */
 public class ConstraintLayout extends ViewGroup {
     /**
-     * @suppress
+     * @DoNotShow
      */
     public static final String VERSION = "ConstraintLayout-2.1.3";
     private static final String TAG = "ConstraintLayout";
@@ -602,7 +602,7 @@ public class ConstraintLayout extends ViewGroup {
     private SparseArray<ConstraintWidget> mTempMapIdToWidget = new SparseArray<>();
 
     /**
-     * @suppress
+     * @DoNotShow
      */
     public static final int DESIGN_INFO_ID = 0;
     private ConstraintsChangedListener mConstraintsChangedListener;
@@ -623,7 +623,7 @@ public class ConstraintLayout extends ViewGroup {
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      */
     public void setDesignInformation(int type, Object value1, Object value2) {
         if (type == DESIGN_INFO_ID
@@ -643,7 +643,7 @@ public class ConstraintLayout extends ViewGroup {
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      */
     public Object getDesignInformation(int type, Object value) {
         if (type == DESIGN_INFO_ID && value instanceof String) {
@@ -682,7 +682,7 @@ public class ConstraintLayout extends ViewGroup {
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      */
     @Override
     public void setId(int id) {
@@ -1122,7 +1122,7 @@ public class ConstraintLayout extends ViewGroup {
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      */
     @Override
     public void onViewAdded(View view) {
@@ -1150,7 +1150,7 @@ public class ConstraintLayout extends ViewGroup {
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      */
     @Override
     public void onViewRemoved(View view) {
@@ -1666,7 +1666,7 @@ public class ConstraintLayout extends ViewGroup {
     /**
      * @param view
      * @return
-     * @suppress
+     * @DoNotShow
      */
     public final ConstraintWidget getViewWidget(View view) {
         if (view == this) {
@@ -1686,7 +1686,7 @@ public class ConstraintLayout extends ViewGroup {
 
     /**
      * @param metrics
-     * @suppress Fills metrics object
+     * @DoNotShow Fills metrics object
      */
     public void fillMetrics(Metrics metrics) {
         mMetrics = metrics;
@@ -2114,7 +2114,7 @@ public class ConstraintLayout extends ViewGroup {
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      */
     @Override
     public LayoutParams generateLayoutParams(AttributeSet attrs) {
@@ -2158,14 +2158,14 @@ public class ConstraintLayout extends ViewGroup {
     /**
      * @param id the view id
      * @return the child view, can return null
-     * @suppress Return a direct child view by its id if it exists
+     * @DoNotShow Return a direct child view by its id if it exists
      */
     public View getViewById(int id) {
         return mChildrenByIds.get(id);
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      */
     @Override
     protected void dispatchDraw(Canvas canvas) {
@@ -2844,7 +2844,7 @@ public class ConstraintLayout extends ViewGroup {
         ConstraintWidget mWidget = new ConstraintWidget();
 
         /**
-         * @suppress
+         * @DoNotShow
          */
         public ConstraintWidget getConstraintWidget() {
             return mWidget;
@@ -2852,7 +2852,7 @@ public class ConstraintLayout extends ViewGroup {
 
         /**
          * @param text
-         * @suppress
+         * @DoNotShow
          */
         public void setWidgetDebugName(String text) {
             mWidget.setDebugName(text);
@@ -3950,7 +3950,7 @@ public class ConstraintLayout extends ViewGroup {
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      *
      * @return
      */
