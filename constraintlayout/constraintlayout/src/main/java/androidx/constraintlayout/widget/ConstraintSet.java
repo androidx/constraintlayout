@@ -73,9 +73,45 @@ import java.util.Set;
  * <li>
  * from a ConstraintLayout <br> {@code c.clone(constraintLayout);}
  * </li>
- * </ul><p>
- * Example code:<br>
- * {@sample resources/examples/ExampleConstraintSet.java Example}
+ * </ul>
+ * <p>
+ *  Example code:
+ *  <pre>
+ *      import android.content.Context;
+ *      import android.os.Bundle;
+ *      import android.support.constraint.ConstraintLayout;
+ *      import android.support.constraint.ConstraintSet;
+ *      import android.support.transition.TransitionManager;
+ *      import android.support.v7.app.AppCompatActivity;
+ *      import android.view.View;
+ *
+ *      public class MainActivity extends AppCompatActivity {
+ *          ConstraintSet mConstraintSet1 = new ConstraintSet(); // create a Constraint Set
+ *          ConstraintSet mConstraintSet2 = new ConstraintSet(); // create a Constraint Set
+ *          ConstraintLayout mConstraintLayout; // cache the ConstraintLayout
+ *          boolean mOld = true;
+ *
+ *          @Override
+ *          protected void onCreate(Bundle savedInstanceState) {
+ *              super.onCreate(savedInstanceState);
+ *              Context context = this;
+ *              mConstraintSet2.clone(context, R.layout.state2); // get constraints from layout
+ *              setContentView(R.layout.state1);
+ *              mConstraintLayout = (ConstraintLayout) findViewById(R.id.activity_main);
+ *              mConstraintSet1.clone(mConstraintLayout); // get constraints from ConstraintSet
+ *          }
+ *
+ *          public void foo(View view) {
+ *              TransitionManager.beginDelayedTransition(mConstraintLayout);
+ *              if (mOld = !mOld) {
+ *                  mConstraintSet1.applyTo(mConstraintLayout); // set new constraints
+ *              }  else {
+ *                  mConstraintSet2.applyTo(mConstraintLayout); // set new constraints
+ *              }
+ *          }
+ *      }
+ *  <pre/>
+ * <p/>
  */
 public class ConstraintSet {
     private static final String TAG = "ConstraintSet";
@@ -876,7 +912,7 @@ public class ConstraintSet {
                     case INTERNAL_MATCH_PARENT: {
                         finalValue = value;
                     }
-                        break;
+                    break;
                     case INTERNAL_MATCH_CONSTRAINT: {
                         finalValue = MATCH_CONSTRAINT;
                     }
@@ -1107,7 +1143,7 @@ public class ConstraintSet {
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      */
     public static class Layout {
         public boolean mIsGuideline = false;
@@ -1709,7 +1745,7 @@ public class ConstraintSet {
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      */
     public static class Transform {
         public boolean mApply = false;
@@ -1836,7 +1872,7 @@ public class ConstraintSet {
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      */
     public static class PropertySet {
         public boolean mApply = false;
@@ -1880,7 +1916,7 @@ public class ConstraintSet {
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      */
     public static class Motion {
         public boolean mApply = false;
@@ -2011,7 +2047,7 @@ public class ConstraintSet {
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      */
     public static class Constraint {
         int mViewId;
@@ -3722,14 +3758,14 @@ public class ConstraintSet {
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      */
     public void setEditorAbsoluteX(int viewId, int position) {
         get(viewId).layout.editorAbsoluteX = position;
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      */
     public void setEditorAbsoluteY(int viewId, int position) {
         get(viewId).layout.editorAbsoluteY = position;
@@ -4434,8 +4470,8 @@ public class ConstraintSet {
         try {
 
             for (int eventType = parser.getEventType();
-                    eventType != XmlResourceParser.END_DOCUMENT;
-                    eventType = parser.next()) {
+                 eventType != XmlResourceParser.END_DOCUMENT;
+                 eventType = parser.next()) {
                 switch (eventType) {
                     case XmlResourceParser.START_DOCUMENT:
                         document = parser.getName();
@@ -4479,8 +4515,8 @@ public class ConstraintSet {
         try {
             Constraint constraint = null;
             for (int eventType = parser.getEventType();
-                    eventType != XmlResourceParser.END_DOCUMENT;
-                    eventType = parser.next()) {
+                 eventType != XmlResourceParser.END_DOCUMENT;
+                 eventType = parser.next()) {
                 switch (eventType) {
                     case XmlResourceParser.START_DOCUMENT:
                         String document = parser.getName();
@@ -5703,7 +5739,7 @@ public class ConstraintSet {
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      */
     public Constraint getConstraint(int id) {
         if (mConstraints.containsKey(id)) {
@@ -5713,7 +5749,7 @@ public class ConstraintSet {
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      */
     public int[] getKnownIds() {
         Integer[] arr = mConstraints.keySet().toArray(new Integer[0]);

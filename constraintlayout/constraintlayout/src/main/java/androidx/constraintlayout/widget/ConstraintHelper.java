@@ -416,7 +416,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      */
     protected void setIds(String idList) {
         mReferenceIds = idList;
@@ -437,7 +437,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      */
     protected void setReferenceTags(String tagList) {
         mReferenceTags = tagList;
@@ -458,7 +458,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      * @param container
      */
     protected void applyLayoutFeatures(ConstraintLayout container) {
@@ -482,7 +482,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      */
     protected void applyLayoutFeatures() {
         ViewParent parent = getParent();
@@ -492,12 +492,12 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      */
     protected void applyLayoutFeaturesInConstraintSet(ConstraintLayout container) {}
 
     /**
-     * @suppress
+     * @DoNotShow
      * Allows a helper a chance to update its internal object pre layout or
      * set up connections for the pointed elements
      *
@@ -562,7 +562,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      * Allows a helper a chance to update its internal object post layout or
      * set up connections for the pointed elements
      *
@@ -573,7 +573,7 @@ public abstract class ConstraintHelper extends View {
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      * @param container
      */
     public void updatePostMeasure(ConstraintLayout container) {

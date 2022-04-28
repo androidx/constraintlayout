@@ -4174,7 +4174,7 @@ public class MotionLayout extends ConstraintLayout implements
      * Display the debugging information such as paths information
      *
      * @param debugMode integer representing various debug modes
-     * @suppress
+     * @DoNotShow
      */
     public void setDebugMode(int debugMode) {
         mDebugPath = debugMode;
@@ -4663,7 +4663,7 @@ public class MotionLayout extends ConstraintLayout implements
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      */
     public DesignTool getDesignTool() {
         if (mDesignTool == null) {
@@ -4673,7 +4673,7 @@ public class MotionLayout extends ConstraintLayout implements
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      */
     @Override
     public void onViewAdded(View view) {
@@ -4707,7 +4707,7 @@ public class MotionLayout extends ConstraintLayout implements
     }
 
     /**
-     * @suppress
+     * @DoNotShow
      */
     @Override
     public void onViewRemoved(View view) {
@@ -4876,7 +4876,7 @@ public class MotionLayout extends ConstraintLayout implements
     /**
      * Not sure we want this
      *
-     * @suppress
+     * @DoNotShow
      */
     public void updateState() {
         mModel.initFrom(mLayoutWidget,
@@ -4954,7 +4954,7 @@ public class MotionLayout extends ConstraintLayout implements
      *
      * @param id String id (without the "@+id/")
      * @return the integer id of the string
-     * @suppress
+     * @DoNotShow
      */
     int lookUpConstraintId(String id) {
         if (mScene == null) {
