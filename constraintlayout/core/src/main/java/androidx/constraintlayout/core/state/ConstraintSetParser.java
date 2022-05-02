@@ -187,8 +187,8 @@ public class ConstraintSetParser {
             mFrom = from;
             mTo = to;
             mStep = step;
-            mPrefix = prefix;
-            mPostfix = postfix;
+            mPrefix = (prefix==null)?"":prefix;
+            mPostfix = (postfix==null)?"":postfix;
             mMax = to;
             mInitial = from;
         }
@@ -328,35 +328,26 @@ public class ConstraintSetParser {
      * @throws CLParsingException
      */
     static void parseConstraintSets(CoreMotionScene scene, CLObject json) throws CLParsingException {
-        Utils.log("parseConstraintSets ");
         ArrayList<String> constraintSetNames = json.names();
         if (constraintSetNames == null) {
             return;
         }
-        Utils.log("parseConstraintSets "+ Arrays.toString(constraintSetNames.toArray()));
 
         for (String csName : constraintSetNames) {
-            Utils.log("parseConstraintSets "+csName);
-
             CLObject constraintSet = json.getObject(csName);
             boolean added = false;
             String ext = constraintSet.getStringOrNull("Extends");
             if (ext != null && !ext.isEmpty()) {
-
-                Utils.log("parseConstraintSets " + csName);
-
                 String base = scene.getConstraintSet(ext);
                 if (base == null) {
                     continue;
                 }
-                Utils.log("parseConstraintSets " + csName);
 
                 CLObject baseJson = CLParser.parse(base);
                 ArrayList<String> widgetsOverride = constraintSet.names();
                 if (widgetsOverride == null) {
                     continue;
                 }
-                Utils.log("parseConstraintSets " + csName);
 
                 for (String widgetOverrideName : widgetsOverride) {
                     CLElement value = constraintSet.get(widgetOverrideName);
@@ -364,7 +355,6 @@ public class ConstraintSetParser {
                         override(baseJson, widgetOverrideName, (CLObject) value);
                     }
                 }
-                Utils.log("parseConstraintSets  setConstraintSetContent" + csName);
 
                 scene.setConstraintSetContent(csName, baseJson.toJSON());
                 added = true;
@@ -637,7 +627,6 @@ public class ConstraintSetParser {
             return;
         }
         for (String elementName : elements) {
-            Utils.log("parseGenerate "+elementName);
             CLElement element = json.get(elementName);
             ArrayList<String> arrayIds = layoutVariables.getList(elementName);
             if (arrayIds != null && element instanceof CLObject) {
@@ -836,7 +825,6 @@ public class ConstraintSetParser {
             switch (constraintName) {
                 case "width":
                     reference.setWidth(parseDimension(element, constraintName, state, state.getDpToPixel()));
-
                     break;
                 case "height":
                     reference.setHeight(parseDimension(element, constraintName, state, state.getDpToPixel()));
