@@ -46,17 +46,17 @@ public class ArrayRow implements LinearSystem.Row {
 
         /**
          * @TODO: add description
-         * @param i
+         * @param index
          * @return
          */
-        SolverVariable getVariable(int i);
+        SolverVariable getVariable(int index);
 
         /**
          * @TODO: add description
-         * @param i
+         * @param index
          * @return
          */
-        float getVariableValue(int i);
+        float getVariableValue(int index);
 
         /**
          * @TODO: add description
@@ -84,10 +84,10 @@ public class ArrayRow implements LinearSystem.Row {
 
         /**
          * @TODO: add description
-         * @param v
+         * @param variable
          * @return
          */
-        boolean contains(SolverVariable v);
+        boolean contains(SolverVariable variable);
 
         /**
          * @TODO: add description
@@ -123,19 +123,19 @@ public class ArrayRow implements LinearSystem.Row {
 
         /**
          * @TODO: add description
-         * @param var
+         * @param v
          * @param value
          * @param removeFromDefinition
          */
-        void add(SolverVariable var, float value, boolean removeFromDefinition);
+        void add(SolverVariable v, float value, boolean removeFromDefinition);
 
         /**
          * @TODO: add description
-         * @param definition
+         * @param def
          * @param removeFromDefinition
          * @return
          */
-        float use(ArrayRow definition, boolean removeFromDefinition);
+        float use(ArrayRow def, boolean removeFromDefinition);
     }
 
     boolean mIsSimpleDefinition = false;
