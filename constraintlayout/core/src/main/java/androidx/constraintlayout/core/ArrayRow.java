@@ -131,11 +131,11 @@ public class ArrayRow implements LinearSystem.Row {
 
         /**
          * @TODO: add description
-         * @param def
+         * @param definition
          * @param removeFromDefinition
          * @return
          */
-        float use(ArrayRow def, boolean removeFromDefinition);
+        float use(ArrayRow definition, boolean removeFromDefinition);
     }
 
     boolean mIsSimpleDefinition = false;

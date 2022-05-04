@@ -80,14 +80,14 @@ public class SpringStopEngine implements StopEngine {
     }
 
     @Override
-    public float getVelocity(float x) {
+    public float getVelocity(float time) {
         return (float) mV;
     }
 
     @Override
-    public float getInterpolation(float v) {
-        compute(v - mLastTime);
-        mLastTime = v;
+    public float getInterpolation(float time) {
+        compute(time - mLastTime);
+        mLastTime = time;
         return (float) (mPos);
     }
 
