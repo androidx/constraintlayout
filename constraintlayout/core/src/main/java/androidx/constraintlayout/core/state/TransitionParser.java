@@ -197,7 +197,7 @@ public class TransitionParser {
             bundle.clear();
             bundle.add(TypedValues.PositionType.TYPE_POSITION_TYPE, pos_type);
             if (curveFit != null) {
-                map(bundle, TypedValues.PositionType.TYPE_CURVE_FIT,
+                map(bundle, TypedValues.PositionType.TYPE_CURVE_FIT, curveFit,
                         "spline", "linear");
             }
             bundle.addIfNotNull(TypedValues.PositionType.TYPE_TRANSITION_EASING, transitionEasing);
