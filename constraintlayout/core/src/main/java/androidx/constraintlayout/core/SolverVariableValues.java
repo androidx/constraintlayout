@@ -426,11 +426,11 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
     }
 
     @Override
-    public float use(ArrayRow def, boolean removeFromDefinition) {
-        float value = get(def.mVariable);
-        remove(def.mVariable, removeFromDefinition);
+    public float use(ArrayRow definition, boolean removeFromDefinition) {
+        float value = get(definition.mVariable);
+        remove(definition.mVariable, removeFromDefinition);
         if (false) {
-            ArrayRow.ArrayRowVariables definitionVariables = def.variables;
+            ArrayRow.ArrayRowVariables definitionVariables = definition.variables;
             int definitionSize = definitionVariables.getCurrentSize();
             for (int i = 0; i < definitionSize; i++) {
                 SolverVariable definitionVariable = definitionVariables.getVariable(i);
@@ -439,16 +439,16 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
             }
             return value;
         }
-        SolverVariableValues definition = (SolverVariableValues) def.variables;
-        final int definitionSize = definition.getCurrentSize();
-        int j = definition.mHead;
+        SolverVariableValues localDef = (SolverVariableValues) definition.variables;
+        final int definitionSize = localDef.getCurrentSize();
+        int j = localDef.mHead;
         if (false) {
             for (int i = 0; i < definitionSize; i++) {
-                float definitionValue = definition.mValues[j];
+                float definitionValue = localDef.mValues[j];
                 SolverVariable definitionVariable =
-                        mCache.mIndexedVariables[definition.mVariables[j]];
+                        mCache.mIndexedVariables[localDef.mVariables[j]];
                 add(definitionVariable, definitionValue * value, removeFromDefinition);
-                j = definition.mNext[j];
+                j = localDef.mNext[j];
                 if (j == mNone) {
                     break;
                 }
@@ -456,10 +456,10 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
         } else {
             j = 0;
             for (int i = 0; j < definitionSize; i++) {
-                if (definition.mVariables[i] != mNone) {
-                    float definitionValue = definition.mValues[i];
+                if (localDef.mVariables[i] != mNone) {
+                    float definitionValue = localDef.mValues[i];
                     SolverVariable definitionVariable =
-                            mCache.mIndexedVariables[definition.mVariables[i]];
+                            mCache.mIndexedVariables[localDef.mVariables[i]];
                     add(definitionVariable, definitionValue * value, removeFromDefinition);
                     j++;
                 }

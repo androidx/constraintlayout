@@ -27,17 +27,17 @@ public interface StopEngine {
 
     /**
      * @TODO: add description
-     * @param x
+     * @param time
      * @return
      */
-    float getVelocity(float x);
+    float getVelocity(float time);
 
     /**
      * @TODO: add description
-     * @param v
+     * @param time
      * @return
      */
-    float getInterpolation(float v);
+    float getInterpolation(float time);
 
     /**
      * @TODO: add description
