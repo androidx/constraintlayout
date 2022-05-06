@@ -1,0 +1,17 @@
+apply plugin: 'java-library'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+sourceSets{
+    main {
+        main.java.srcDirs = ['../../../constraintlayout/core/src/main/java']
+        test.java.srcDirs = ['../../../constraintlayout/core/src/test']
+    }
+}
+
+dependencies {
+    testImplementation "junit:junit:4.13.1"
+}

@@ -16,86 +16,97 @@
 
 package com.example.composemail.ui.home
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
+import androidx.compose.material.Text
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.composemail.LocalWidthSizeClass
 import com.example.composemail.model.ComposeMailModel
+import com.example.composemail.ui.home.toptoolbar.TopToolbar
 import com.example.composemail.ui.mails.MailList
-import com.example.composemail.ui.newmail.ComposeNewMail
-import com.example.composemail.ui.newmail.MotionLayoutMail
+import com.example.composemail.ui.mails.MailListState
+import com.example.composemail.ui.newmail.NewMailButton
+import com.example.composemail.ui.newmail.NewMailLayoutState
+import com.example.composemail.ui.newmail.rememberNewMailState
 
 @Composable
-fun ComposeMailHome() {
+fun ComposeMailHome(modifier: Modifier = Modifier) {
     val mailModel: ComposeMailModel = viewModel()
-    Column(
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxSize()
-    ) {
-        SearchBar(Modifier.fillMaxWidth())
-        Spacer(modifier = Modifier.height(12.dp))
-        Text(
-            text = "Inbox",
-            style = MaterialTheme.typography.h6
-        )
-        MailList(
+    val listState = remember { MailListState() }
+    val newMailState = rememberNewMailState(initialLayoutState = NewMailLayoutState.Fab)
+    Row(modifier = Modifier.fillMaxSize()) {
+        Box(
             modifier = Modifier
-                .weight(1.0f, true)
-                .fillMaxWidth(),
-            observableConversationsInfo = mailModel.observableConversations,
-            onRequestMoreConversations = mailModel::loadMoreMails
-        )
+                .fillMaxHeight()
+                .weight(1f)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
+                TopToolbar(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp),
+                    selectionCount = listState.selectedCount,
+                    onUnselectAll = listState::unselectAll
+                )
+                Text(
+                    modifier = Modifier.padding(horizontal = 4.dp),
+                    text = "Inbox",
+                    style = MaterialTheme.typography.h6
+                )
+                MailList(
+                    modifier = Modifier
+                        .padding(horizontal = 4.dp)
+                        .weight(1.0f, true)
+                        .fillMaxWidth(),
+                    listState = listState,
+                    observableConversations = mailModel.conversations
+                )
+            }
+            NewMailButton(
+                modifier = Modifier.fillMaxSize(),
+                state = newMailState
+            )
+        }
+        if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
+            OutlinedButton(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(1f),
+                onClick = { /*TODO*/ }
+            ) {
+                Text(text = "Hello World!")
+            }
+        }
     }
-
-    // TODO: MotionLayoutMail Composable still needs some work
-//    MotionLayoutMail(modifier = Modifier.fillMaxSize())
 }
 
-@Composable
-fun SearchBar(
-    modifier: Modifier = Modifier
-) {
-    var placeholder: String by remember { mutableStateOf("Search in mails") }
-    OutlinedTextField(
-        modifier = modifier
-            .clip(RoundedCornerShape(32.dp))
-            .background(Color(0x14003C96))
-            .onFocusChanged {
-                placeholder = if (it.isFocused) {
-                    "I'm not implemented yet!"
-                } else {
-                    "Search in mails"
-                }
-            },
-        value = "",
-        onValueChange = { newText ->
 
-        },
-        placeholder = {
-            Text(text = placeholder)
-        },
-        leadingIcon = {
-            Icon(imageVector = Icons.Default.Search, contentDescription = null)
-        },
-        singleLine = true,
-        shape = MaterialTheme.shapes.small,
-        colors = TextFieldDefaults.textFieldColors(
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
-        )
-    )
+@Composable
+fun Home2(modifier: Modifier = Modifier) {
+    when (LocalWidthSizeClass.current) {
+        WindowWidthSizeClass.Expanded -> {
+
+        }
+        else -> {
+
+        }
+    }
 }

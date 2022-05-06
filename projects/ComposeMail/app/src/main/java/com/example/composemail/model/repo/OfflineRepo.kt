@@ -20,14 +20,14 @@ import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.res.Resources
 import android.net.Uri
+import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import com.example.composemail.R
 import com.example.composemail.model.data.Contact
 import com.example.composemail.model.data.MailEntryInfo
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.time.Instant
-import java.util.*
-import kotlin.collections.ArrayList
+import java.util.Date
 
 private val names = listOf(
     "Jacob",
@@ -50,6 +50,8 @@ private val names = listOf(
     "Madison",
     "Daniel",
 )
+
+private val contentLines = LoremIpsum(200).values.first().split(" ")
 
 class OfflineRepository(
     private val resources: Resources
@@ -86,7 +88,9 @@ class OfflineRepository(
         TODO("Not yet implemented")
     }
 
-    override suspend fun getNextSetOfConversations(amount: Int): List<MailEntryInfo> {
+    private var pageCounter = 0
+
+    override suspend fun getNextSetOfConversations(amount: Int): MailConversationsResponse {
         val conversations = ArrayList<MailEntryInfo>(amount)
         val delayAmount = if (isFirstRequest) 0L else 200L
         for (i in 0..amount) {
@@ -94,18 +98,22 @@ class OfflineRepository(
             delay(delayAmount)
         }
         isFirstRequest = false
-        return conversations
+        return MailConversationsResponse(
+            conversations,
+            pageCounter++
+        )
     }
 
     @SuppressLint("SimpleDateFormat")
     private fun createNewTimestamp(): String {
-        val range = IntRange(1800, 3600*4)
+        val range = IntRange(1800, 3600 * 4)
         lastTime -= range.random()
         return SimpleDateFormat("hh:mma").format(Date.from(Instant.ofEpochSecond(lastTime)))
     }
 
     private fun createNewConversation(): MailEntryInfo {
         val name = names.random()
+        val shortContent = contentLines.shuffled().take(10).joinToString(" ")
         return MailEntryInfo(
             id = currentId++,
             from = Contact(
@@ -116,7 +124,7 @@ class OfflineRepository(
             ),
             timestamp = createNewTimestamp(),
             subject = "Subject of this mail",
-            shortContent = "Lorem Ipsum something something"
+            shortContent = shortContent
         )
     }
 

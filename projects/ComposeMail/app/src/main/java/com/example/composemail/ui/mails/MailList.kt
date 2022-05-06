@@ -16,64 +16,36 @@
 
 package com.example.composemail.ui.mails
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.runtime.*
-import androidx.compose.runtime.State
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
+import androidx.compose.ui.unit.dp
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemsIndexed
 import com.example.composemail.model.data.MailEntryInfo
-import com.example.composemail.model.ConversationsInfo
-
-private const val REFRESH_THRESHOLD = 5
+import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun MailList(
     modifier: Modifier = Modifier,
-    observableConversationsInfo: LiveData<ConversationsInfo>,
-    onRequestMoreConversations: () -> Unit
+    listState: MailListState,
+    observableConversations: Flow<PagingData<MailEntryInfo>>
 ) {
-    val mailsInfo = observableConversationsInfo.mObserveAsState()
-    val mailEntryInfoList: List<MailEntryInfo?> = mailsInfo.value!!.items
-    val lastIndex = mailEntryInfoList.lastIndex
-    val state = remember { MailsListState(mailEntryInfoList.size) }
-    val allowLoading = mailEntryInfoList.size > state.listSize || !state.hasRequestedOnce
+    val lazyMailItems: LazyPagingItems<MailEntryInfo> =
+        observableConversations.collectAsLazyPagingItems()
 
     LazyColumn(
-        modifier = modifier
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        itemsIndexed(mailEntryInfoList) { index: Int, item: MailEntryInfo? ->
-            MailItem(info = item)
-            if (allowLoading) {
-                if (index > REFRESH_THRESHOLD && index == (lastIndex - REFRESH_THRESHOLD)) {
-                    state.listSize = mailEntryInfoList.size
-                    state.hasRequestedOnce = true
-                    onRequestMoreConversations()
-                }
-            }
+        itemsIndexed(lazyMailItems) { index, mailItem ->
+            MailItem(
+                info = mailItem,
+                state = listState.stateFor(mailItem?.id)
+            )
         }
     }
 }
-
-@Composable
-private fun <T> LiveData<T>.mObserveAsState(): State<T?> {
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val state = remember { mutableStateOf(value, neverEqualPolicy()) } // List not compared structurally, this is best anyways, to support the loading indicator.
-    DisposableEffect(this, lifecycleOwner) {
-        val observer = Observer<T> {
-            state.value = it
-        }
-        observe(lifecycleOwner, observer)
-        onDispose {
-            removeObserver(observer)
-        }
-    }
-    return state
-}
-
-private data class MailsListState(
-    var listSize: Int,
-    var hasRequestedOnce: Boolean = false
-)

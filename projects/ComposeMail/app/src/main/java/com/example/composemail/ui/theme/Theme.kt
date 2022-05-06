@@ -17,31 +17,38 @@
 package com.example.composemail.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
-
-private val DarkColorPalette = darkColors(
-        primary = Purple200,
-        primaryVariant = Purple700,
-        secondary = Teal200
-)
+import androidx.compose.ui.graphics.Color
 
 private val LightColorPalette = lightColors(
-        primary = Purple500,
-        primaryVariant = Purple700,
-        secondary = Teal200
+    primary = Color(0xFF6200EE),
+    primaryVariant = Color(0xFF3700B3),
+    secondary = Color(0xFF03DAC5),
+    onSecondary = Color(0xFFECECEC)
 
-        /* Other default colors to override
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
+    /* Other default colors to override
+background = Color.White,
+surface = Color.White,
+onPrimary = Color.White,
+onSecondary = Color.Black,
+onBackground = Color.Black,
+onSurface = Color.Black,
+*/
 )
+
+private val DarkColorPalette = darkColors(
+    primary = Color(0xFFBB86FC),
+    primaryVariant = Color(0xFF3700B3),
+    secondary = Color(0xFF03DAC5),
+    onSecondary = Color(0xFFFCFCFC)
+)
+
+val Colors.textBackgroundColor: Color
+    get() = Color(0xFFADB7C5)
 
 @Composable
 fun ComposeMailTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
@@ -52,9 +59,9 @@ fun ComposeMailTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Compo
     }
 
     MaterialTheme(
-            colors = colors,
-            typography = Typography,
-            shapes = Shapes,
-            content = content
+        colors = colors,
+        typography = Typography,
+        shapes = Shapes,
+        content = content
     )
 }

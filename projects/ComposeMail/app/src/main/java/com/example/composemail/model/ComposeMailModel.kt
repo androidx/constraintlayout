@@ -17,50 +17,54 @@
 package com.example.composemail.model
 
 import android.app.Application
-import androidx.compose.runtime.Immutable
-import androidx.lifecycle.*
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.AndroidViewModel
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.example.composemail.model.data.MailEntryInfo
+import com.example.composemail.model.paging.MailsSource
 import com.example.composemail.model.repo.MailRepository
 import com.example.composemail.model.repo.OfflineRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.Flow
 
 private const val LOAD_LIMIT = 15
+private const val REFRESH_THRESHOLD = 5
 
-class ComposeMailModel(application: Application): AndroidViewModel(application) {
-    private val mailRepo: MailRepository = OfflineRepository(getApplication<Application>().resources)
+class ComposeMailModel(application: Application) : AndroidViewModel(application) {
+    private val mailRepo: MailRepository =
+        OfflineRepository(getApplication<Application>().resources)
 
-    private val _composeMailState = MutableLiveData<ComposeMailState>()
-    val composeMailState: LiveData<ComposeMailState> = _composeMailState
+    private val selectedConversations = mutableSetOf<Int>()
 
-    private val conversations = mutableListOf<MailEntryInfo>()
+    private val _isInSelection: MutableState<Boolean> = mutableStateOf(false)
 
-    private val _conversationsLiveData:  MutableLiveData<ConversationsInfo> =
-        MutableLiveData(ConversationsInfo(conversations))
-    val observableConversations: LiveData<ConversationsInfo> = _conversationsLiveData
+    val conversations: Flow<PagingData<MailEntryInfo>> = Pager(
+        config = PagingConfig(
+            pageSize = LOAD_LIMIT,
+            enablePlaceholders = true,
+            prefetchDistance = REFRESH_THRESHOLD,
+            initialLoadSize = LOAD_LIMIT
+        )
+    ) {
+        MailsSource(mailRepo)
+    }.flow
 
-    init {
-        loadMoreMails()
+    val isInSelection
+        get() = _isInSelection.value
+
+    fun toggleSelected(id: Int) {
+        if (selectedConversations.contains(id)) {
+            selectedConversations.remove(id)
+        } else {
+            selectedConversations.add(id)
+        }
+        _isInSelection.value = selectedConversations.isNotEmpty()
     }
 
-    fun loadMoreMails() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                val newMails = mailRepo.getNextSetOfConversations(LOAD_LIMIT)
-                conversations.addAll(newMails)
-            }
-            _conversationsLiveData.value = ConversationsInfo(conversations.toCollection(mutableListOf<MailEntryInfo?>()).apply { add(null) })
-        }
+    fun unselectAll() {
+        selectedConversations.clear()
+        _isInSelection.value = false
     }
 }
-
-data class ComposeMailState(
-    val openedMailEntryInfo: MailEntryInfo? = null,
-    val isWritingNewMail: Boolean = false
-)
-
-@Immutable
-data class ConversationsInfo(
-    val items: List<MailEntryInfo?>
-)
