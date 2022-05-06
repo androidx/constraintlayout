@@ -220,7 +220,7 @@ inline fun MotionLayoutMail(
                 .layoutId("picture")
                 .clip(RoundedCornerShape(10.dp))
                 .clickable { onSelectedMail(info.id) },
-            painter = rememberImagePainter(data = (info.from.profilePic).toString()),
+            painter = rememberImagePainter(data = info.from.profilePic.toString()),
             contentDescription = null
         )
         Image(
