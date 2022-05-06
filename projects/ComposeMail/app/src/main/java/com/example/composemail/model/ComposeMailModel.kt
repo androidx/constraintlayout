@@ -36,9 +36,10 @@ class ComposeMailModel(application: Application) : AndroidViewModel(application)
     private val mailRepo: MailRepository =
         OfflineRepository(getApplication<Application>().resources)
 
-    private val selectedConversations = mutableSetOf<Int>()
+    private var _openedMail: MutableState<MailEntryInfo?> = mutableStateOf(null)
 
-    private val _isInSelection: MutableState<Boolean> = mutableStateOf(false)
+    val openedMail: MailEntryInfo?
+        get() = _openedMail.value
 
     val conversations: Flow<PagingData<MailEntryInfo>> = Pager(
         config = PagingConfig(
@@ -51,20 +52,11 @@ class ComposeMailModel(application: Application) : AndroidViewModel(application)
         MailsSource(mailRepo)
     }.flow
 
-    val isInSelection
-        get() = _isInSelection.value
-
-    fun toggleSelected(id: Int) {
-        if (selectedConversations.contains(id)) {
-            selectedConversations.remove(id)
-        } else {
-            selectedConversations.add(id)
-        }
-        _isInSelection.value = selectedConversations.isNotEmpty()
+    fun openMail(id: Int) {
+        // TODO: Support opening a conversation
     }
 
-    fun unselectAll() {
-        selectedConversations.clear()
-        _isInSelection.value = false
+    fun closeMail() {
+
     }
 }

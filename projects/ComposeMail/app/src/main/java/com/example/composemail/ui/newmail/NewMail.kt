@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2022 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.example.composemail.ui.newmail
 
 import androidx.compose.animation.core.tween
@@ -33,6 +49,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -239,11 +256,13 @@ private fun messageMotionScene(initialState: NewMailLayoutState): MotionScene {
     )
 }
 
+@Suppress("NOTHING_TO_INLINE")
 @Composable
 internal inline fun MotionLayoutScope.MotionMessageContent(
     state: NewMailState
 ) {
     val currentState = state.currentState
+    val focusManager = LocalFocusManager.current
     val dialogName = remember(currentState) {
         when (currentState) {
             NewMailLayoutState.Mini -> "Draft"
@@ -287,7 +306,10 @@ internal inline fun MotionLayoutScope.MotionMessageContent(
         color = motionColor("title", "content"),
         style = MaterialTheme.typography.h6
     )
-    MessageWidget(modifier = Modifier.layoutId("content"))
+    MessageWidget(modifier = Modifier.layoutId("content"), onDelete = {
+        focusManager.clearFocus()
+        state.setToFab()
+    })
 //            MessageWidgetCol(
 //                modifier = Modifier
 //                    .layoutId("content")
@@ -404,7 +426,10 @@ private fun MessageWidgetPreview() {
 
 @Suppress("NOTHING_TO_INLINE")
 @Composable
-internal inline fun MessageWidget(modifier: Modifier) {
+internal inline fun MessageWidget(
+    modifier: Modifier,
+    noinline onDelete: () -> Unit = {}
+) {
     val constraintSet = remember {
         ConstraintSet(
             """
@@ -427,13 +452,13 @@ internal inline fun MessageWidget(modifier: Modifier) {
                       top: ['subject', 'bottom', 8],
                       bottom: ['gl1', 'bottom', 4],
                     },
-                    send: {
+                    delete: {
                       height: 'spread',
                       top: ['gl1', 'bottom', 0],
                       bottom: ['parent', 'bottom', 4],
                       start: ['parent', 'start', 0]
                     },
-                    delete: {
+                    send: {
                       height: 'spread',
                       top: ['gl1', 'bottom', 0],
                       bottom: ['parent', 'bottom', 4],
@@ -473,17 +498,22 @@ internal inline fun MessageWidget(modifier: Modifier) {
                 Text("Message")
             }
         )
-        Button(modifier = Modifier.layoutId("delete"), onClick = { /*TODO*/ }) {
-            Row {
+        Button(
+            modifier = Modifier.layoutId("send"),
+            onClick = onDelete // TODO: Do something different for Send onClick
+        ) {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(text = "Send")
-                Spacer(modifier = Modifier.width(8.dp))
                 Icon(
                     imageVector = Icons.Default.Send,
                     contentDescription = "Send Mail",
                 )
             }
         }
-        Button(modifier = Modifier.layoutId("send"), onClick = { /*TODO*/ }) {
+        Button(
+            modifier = Modifier.layoutId("delete"),
+            onClick = onDelete
+        ) {
             Icon(
                 imageVector = Icons.Default.Delete,
                 contentDescription = "Delete Draft",
