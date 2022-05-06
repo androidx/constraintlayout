@@ -413,7 +413,7 @@ public class MotionScene {
      * Get the id's of all constraintSets with the matching types
      * @return
      */
-    public int[] getMatchingConstraintSetIds(String ... types) {
+    public int[] getMatchingStateLabels(String ... types) {
         int[] ids = new int[mConstraintSetMap.size()];
 
         int count = 0;
@@ -421,9 +421,8 @@ public class MotionScene {
         for (int i = 0; i < ids.length; i++) {
             ConstraintSet set  = mConstraintSetMap.valueAt(i);
             int id = mConstraintSetMap.keyAt(i);
-            if (set.matchesTypes(types)) {
-                String []s = set.getConstraintSetTypes();
-                String name = Debug.getName(mMotionLayout.getContext(), id);
+            if (set.matchesLabels(types)) {
+                String []s = set.getStateLabels();
                 ids[count++] = id;
             }
         }
@@ -1426,8 +1425,8 @@ public class MotionScene {
                 case "deriveConstraintsFrom":
                     derivedId = getId(context, value);
                     break;
-                case "constraintSetTypes":
-                    set.setConstraintSetTypes(value);
+                case "stateLabels":
+                    set.setStateLabels(value);
                     break;
                 case "constraintRotate":
                     try {

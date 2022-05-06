@@ -17,7 +17,6 @@
 package androidx.constraintlayout.motion.widget;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-
 import static androidx.constraintlayout.motion.widget.MotionScene.Transition.TRANSITION_FLAG_FIRST_DRAW;
 import static androidx.constraintlayout.motion.widget.MotionScene.Transition.TRANSITION_FLAG_INTERCEPT_TOUCH;
 import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID;
@@ -48,6 +47,7 @@ import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.widget.TextView;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -4753,7 +4753,8 @@ public class MotionLayout extends ConstraintLayout implements
      *
      * @return
      */
-    public int[] getConstraintSetIds() {
+    public  @IdRes
+    int[] getConstraintSetIds() {
         if (mScene == null) {
             return null;
         }
@@ -4769,7 +4770,7 @@ public class MotionLayout extends ConstraintLayout implements
         if (mScene == null) {
             return null;
         }
-        return mScene.getMatchingConstraintSetIds(types);
+        return mScene.getMatchingStateLabels(types);
     }
 
     /**

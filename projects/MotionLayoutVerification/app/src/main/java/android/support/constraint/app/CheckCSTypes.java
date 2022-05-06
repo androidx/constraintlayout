@@ -39,7 +39,7 @@ public class CheckCSTypes extends AppCompatActivity {
     }
 
     public void move(View v) {
-      String[]types =  ml.getConstraintSet(ml.getCurrentState()).getConstraintSetTypes();
+      String[]types =  ml.getConstraintSet(ml.getCurrentState()).getStateLabels();
       int  id =  v.getId();
         Log.v(TAG, Debug.getLoc()+" "+Debug.getName(getApplicationContext(), id));
           char a = types[0].charAt(0);

@@ -89,7 +89,7 @@ public class ConstraintSet {
     private boolean mValidate;
     public String mIdString;
     public String derivedState = "";
-    private String []mMatchTypes = new String[0];
+    private String [] mMatchLabels = new String[0];
     public static final int ROTATE_NONE = 0;
     public static final int ROTATE_PORTRATE_OF_RIGHT = 1;
     public static final int ROTATE_PORTRATE_OF_LEFT = 2;
@@ -1115,8 +1115,8 @@ public class ConstraintSet {
      *
      * @return an array of type strings
      */
-    public String[] getConstraintSetTypes() {
-        return Arrays.copyOf(mMatchTypes, mMatchTypes.length);
+    public String[] getStateLabels() {
+        return Arrays.copyOf(mMatchLabels, mMatchLabels.length);
     }
 
     /**
@@ -1125,17 +1125,29 @@ public class ConstraintSet {
      * with a series of string to define properties of a ConstraintSet
      * @param types a comer seprated array of strings.
      */
-    public void setConstraintSetTypes(String types) {
-         mMatchTypes = types.split(",");
-        for (int i = 0; i < mMatchTypes.length; i++) {
-             mMatchTypes[i] = mMatchTypes[i].trim();
+    public void setStateLabels(String types) {
+         mMatchLabels = types.split(",");
+        for (int i = 0; i < mMatchLabels.length; i++) {
+             mMatchLabels[i] = mMatchLabels[i].trim();
+        }
+    }
+    /**
+     * Set the types associated with this ConstraintSet
+     * The types mechanism allows you to tag the constraint set
+     * with a series of string to define properties of a ConstraintSet
+     * @param types a comer seprated array of strings.
+     */
+    public void setStateLabelsList(String... types) {
+        mMatchLabels = types;
+        for (int i = 0; i < mMatchLabels.length; i++) {
+            mMatchLabels[i] = mMatchLabels[i].trim();
         }
     }
 
-    public boolean matchesTypes(String...types) {
+    public boolean matchesLabels(String...types) {
         for (String type : types) {
             boolean match = false;
-            for (String matchType : mMatchTypes) {
+            for (String matchType : mMatchLabels) {
                 if (matchType.equals(type)) {
                     match = true;
                     break;
