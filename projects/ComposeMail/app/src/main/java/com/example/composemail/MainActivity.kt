@@ -23,26 +23,49 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ProvidableCompositionLocal
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.constraintlayout.compose.MotionLayout
 import com.example.composemail.ui.home.ComposeMailHome
 import com.example.composemail.ui.theme.ComposeMailTheme
 
+@ExperimentalMaterial3WindowSizeClassApi
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ComposeMailTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
-                    ComposeMailHome()
+            val windowSizeClass = calculateWindowSizeClass(activity = this)
+            println(windowSizeClass)
+            CompositionLocalProvider(
+                LocalWidthSizeClass provides windowSizeClass.widthSizeClass,
+                LocalHeightSizeClass provides windowSizeClass.heightSizeClass
+            ) {
+                ComposeMailTheme {
+                    // A surface container using the 'background' color from the theme
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colors.background
+                    ) {
+                        ComposeMailHome()
+                    }
                 }
             }
         }
     }
 }
+
+val LocalHeightSizeClass: ProvidableCompositionLocal<WindowHeightSizeClass> =
+    compositionLocalOf { WindowHeightSizeClass.Compact }
+
+val LocalWidthSizeClass: ProvidableCompositionLocal<WindowWidthSizeClass> =
+    compositionLocalOf { WindowWidthSizeClass.Compact }
 
 @Composable
 fun Greeting(name: String) {

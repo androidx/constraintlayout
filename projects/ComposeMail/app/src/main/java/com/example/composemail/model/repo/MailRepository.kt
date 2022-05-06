@@ -21,5 +21,10 @@ import com.example.composemail.model.data.MailEntryInfo
 interface MailRepository {
     suspend fun connect()
 
-    suspend fun getNextSetOfConversations(amount: Int): List<MailEntryInfo>
+    suspend fun getNextSetOfConversations(amount: Int): MailConversationsResponse
 }
+
+data class MailConversationsResponse(
+    val conversations: List<MailEntryInfo>,
+    val page: Int
+)

@@ -21,9 +21,9 @@ pluginManagement {
         mavenCentral()
     }
     plugins {
-        id 'com.android.application' version '7.0.0'
-        id 'com.android.library' version '7.0.0'
-        id 'org.jetbrains.kotlin.android' version '1.5.30'
+        id 'com.android.application' version '7.0.3'
+        id 'com.android.library' version '7.0.3'
+        id 'org.jetbrains.kotlin.android' version '1.6.10'
     }
 }
 dependencyResolutionManagement {
@@ -33,5 +33,7 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "ComposeMail"
+rootProject.name = "ComposeMailToT"
 include ':app'
+include ':compose'
+include ':core'

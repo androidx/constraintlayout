@@ -16,11 +16,18 @@
 
 package com.example.composemail.ui.mails
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
@@ -28,10 +35,17 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.text.style.TextOverflow
@@ -41,10 +55,12 @@ import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.MotionScene
 import coil.compose.rememberImagePainter
 import com.example.composemail.model.data.MailEntryInfo
+import com.example.composemail.ui.theme.textBackgroundColor
 
 @Composable
 fun MailItem(
     modifier: Modifier = Modifier,
+    state: MailItemState = MailItemState(-1) { _, _ -> },
     info: MailEntryInfo?
 ) {
     val shouldAnimate = remember { info == null }
@@ -55,16 +71,30 @@ fun MailItem(
         startsEmpty = shouldAnimate,
         targetId = csTarget,
         onSelectedMail = {
-            csTarget = if (csTarget == "flipped") "normal" else "flipped"
+            state.setSelected(!state.isSelected)
         }
     )
-
-    if (shouldAnimate && info != null && csTarget == null) {
-        SideEffect {
-            csTarget = "normal"
+    if (shouldAnimate) {
+        if (info != null && csTarget == null) {
+            SideEffect {
+                csTarget = "normal"
+            }
+        }
+    } else {
+        if (info != null) {
+            val nextState = if (state.isSelected) {
+                "flipped"
+            } else {
+                "normal"
+            }
+            SideEffect {
+                csTarget = nextState
+            }
         }
     }
 }
+
+const val ANIMATION_DURATION: Int = 400
 
 @Suppress("NOTHING_TO_INLINE", "EXPERIMENTAL_API_USAGE")
 @Composable
@@ -73,18 +103,22 @@ inline fun MotionLayoutMail(
     info: MailEntryInfo,
     startsEmpty: Boolean,
     targetId: String?,
-    crossinline onSelectedMail: (Int) -> Unit
+    crossinline onSelectedMail: (id: Int) -> Unit
 ) {
-    val startId = if(startsEmpty) "empty" else "normal"
-    val endId = if(startsEmpty) "normal" else "empty"
-    MotionLayout(
-        modifier = modifier
-            .fillMaxSize()
-            .clip(RectangleShape)
-            .padding(8.dp),
-        constraintSetName = targetId,
-        animationSpec = tween(400),
-        motionScene = MotionScene(content = """
+    val backgroundColor by animateColorAsState(
+        targetValue = if (targetId == "flipped") {
+            MaterialTheme.colors.textBackgroundColor
+        } else {
+            MaterialTheme.colors.background
+        },
+        animationSpec = tween<Color>(ANIMATION_DURATION)
+    )
+    val startId = if (startsEmpty) "empty" else "normal"
+    val endId = if (startsEmpty) "normal" else "empty"
+
+    val motionSceneContent = remember(startId, endId) {
+        //language=json5
+        """
 {
   ConstraintSets: {
     normal: {
@@ -150,10 +184,36 @@ inline fun MotionLayoutMail(
     default: {
       from: '$startId',
       to: '$endId',
+    },  
+    flip: {
+      from: 'normal',
+      to: 'flipped',
+      KeyFrames: {
+        KeyAttributes: [
+          {
+            target: ['picture', 'check'],
+            frames: [50],
+            scaleX: [0.6],
+            scaleY: [0.6]
+          },
+        ]
+      }
     }
   }
-}
-    """.trimIndent())
+}"""
+    }
+    MotionLayout(
+        modifier = modifier
+            .background(
+                color = backgroundColor,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .fillMaxSize()
+            .clip(RectangleShape)
+            .padding(8.dp),
+        constraintSetName = targetId,
+        animationSpec = tween<Float>(ANIMATION_DURATION),
+        motionScene = MotionScene(content = motionSceneContent)
     ) {
         Image(
             modifier = Modifier
@@ -169,6 +229,7 @@ inline fun MotionLayoutMail(
                 .clip(RoundedCornerShape(10.dp))
                 .background(MaterialTheme.colors.secondary),
             imageVector = Icons.Default.Check,
+            colorFilter = ColorFilter.tint(MaterialTheme.colors.onSecondary),
             contentDescription = null
         )
         MailContent(
@@ -221,7 +282,7 @@ inline fun MailContent(
 
 @Preview
 @Composable
-fun PreviewConversation() {
+private fun PreviewConversationLoading() {
     var info: MailEntryInfo? by remember { mutableStateOf(null) }
     Column(
         modifier = Modifier.size(300.dp, 200.dp)
@@ -233,4 +294,12 @@ fun PreviewConversation() {
             info = info
         )
     }
+}
+
+@Preview
+@Composable
+private fun PreviewConversation() {
+    MailItem(
+        info = MailEntryInfo.Default
+    )
 }
