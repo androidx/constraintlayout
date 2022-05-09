@@ -881,7 +881,7 @@ public class ArrayRow implements LinearSystem.Row {
      * @param row
      */
     @Override
-    public void initFromRow(LinearSystem.Row row) {
+    public void initFromRow(@SuppressWarnings("HiddenTypeParameter") LinearSystem.Row row) {
         if (row instanceof ArrayRow) {
             ArrayRow copiedRow = (ArrayRow) row;
             mVariable = null;
