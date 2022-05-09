@@ -57,6 +57,7 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.MotionLayoutScope
 import androidx.constraintlayout.compose.MotionScene
+import com.example.composemail.ui.components.CheapText
 
 @Preview
 @Composable
@@ -300,7 +301,7 @@ internal inline fun MotionLayoutScope.MotionMessageContent(
             else -> state.setToFull()
         }
     }
-    Text(
+    CheapText(
         text = dialogName,
         modifier = Modifier.layoutId("title"),
         color = motionColor("title", "content"),
@@ -477,7 +478,7 @@ internal inline fun MessageWidget(
             value = "",
             onValueChange = {},
             label = {
-                Text("To")
+                CheapText("To")
             }
         )
         OutlinedTextField(
@@ -485,7 +486,7 @@ internal inline fun MessageWidget(
             value = "",
             onValueChange = {},
             label = {
-                Text("Subject")
+                CheapText("Subject")
             }
         )
         OutlinedTextField(
@@ -495,7 +496,7 @@ internal inline fun MessageWidget(
             value = "",
             onValueChange = {},
             label = {
-                Text("Message")
+                CheapText("Message")
             }
         )
         Button(
@@ -503,7 +504,7 @@ internal inline fun MessageWidget(
             onClick = onDelete // TODO: Do something different for Send onClick
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(text = "Send")
+                CheapText(text = "Send")
                 Icon(
                     imageVector = Icons.Default.Send,
                     contentDescription = "Send Mail",
