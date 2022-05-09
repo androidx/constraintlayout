@@ -128,3 +128,61 @@ fun OnSwipeExperiment() {
         }
     }
 }
+
+
+
+@Preview
+@Composable
+fun OnSwipeSample1() {
+
+   var scene =
+        """
+       {
+         ConstraintSets: {
+           start: {
+             box: {
+               width: 50, height: 50,
+               bottom: ['parent', 'bottom', 10],
+               start: ['parent', 'start', 10],
+             }
+           },
+           end: {
+       
+             box: {
+                width: 50, height: 50,
+                top: ['parent', 'top', 10],
+                end: ['parent', 'end', 10],
+             }
+           }
+         },
+         Transitions: {
+           default: {
+              from: 'start',
+              to: 'end',
+              onSwipe: {
+                anchor: 'box',
+                maxVelocity: 4.2,
+                maxAccel: 3,
+                direction: 'end',
+                side: 'start',
+                mode: 'linear'
+              }
+           }
+         }
+       }
+        """.trimIndent()
+
+    Column {
+        MotionLayout(
+            modifier = Modifier.fillMaxSize().background(Color.White),
+            motionScene = MotionScene(content = scene),
+        ) {
+            Box(
+                modifier = Modifier
+                    .background(Color.Red)
+                    .layoutId("box")
+            )
+        }
+    }
+}
+

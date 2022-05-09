@@ -28,6 +28,7 @@ import androidx.constraintlayout.core.motion.utils.StopEngine;
 import androidx.constraintlayout.core.motion.utils.StopLogicEngine;
 import androidx.constraintlayout.core.motion.utils.TypedBundle;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
+import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Transition implements TypedValues {
+    private static final boolean DEBUG = false;
     public static final int START = 0;
     public static final int END = 1;
     public static final int INTERPOLATED = 2;
@@ -77,6 +79,7 @@ public class Transition implements TypedValues {
     }
 
     static class OnSwipe {
+
         String mAnchorId;
         int mAnchorSide;
         public static final int ANCHOR_SIDE_TOP = 0;
@@ -259,6 +262,37 @@ public class Transition implements TypedValues {
 
         private StopEngine mEngine;
 
+        float getDestinationPosition(float currentPosition, float velocity, float duration) {
+            switch (mOnTouchUp) {
+                case ON_UP_AUTOCOMPLETE_TO_START:
+                case ON_UP_NEVER_COMPLETE_TO_END:
+                    return 0;
+                case ON_UP_AUTOCOMPLETE_TO_END:
+                case ON_UP_NEVER_COMPLETE_TO_START:
+                    return 1;
+                case ON_UP_STOP:
+                    return Float.NaN;
+                case ON_UP_AUTOCOMPLETE:
+                case ON_UP_DECELERATE:
+                case ON_UP_DECELERATE_AND_COMPLETE:
+            }
+            float peek = currentPosition + velocity * duration / 3;
+            float travel = velocity * duration / 3;
+            if (velocity < 0) {
+                peek = currentPosition - velocity * velocity / (2 * mMaxAcceleration);
+                travel = velocity * duration / 3;
+            }
+            if (DEBUG) {
+                Utils.log(" currentPosition = " + currentPosition);
+                Utils.log("        velocity = " + velocity);
+                Utils.log("       c + t = p   = " + currentPosition + " + " + travel + " = " + peek);
+
+                Utils.log("            peek = " + peek);
+                Utils.log("mMaxAcceleration = " + mMaxAcceleration);
+            }
+            return peek > .5 ? 1 : 0;
+        }
+
         void config(float position, float velocity, long start, float duration) {
             mStart = start;
             if (mAutoCompleteMode == MODE_CONTINUOUS_VELOCITY) {
@@ -268,8 +302,8 @@ public class Transition implements TypedValues {
                 } else {
                     mEngine = sl = new StopLogicEngine();
                 }
-
-                sl.config(position, 1, velocity,
+                float destination = getDestinationPosition(position, velocity, duration);
+                sl.config(position, destination, velocity,
                         duration, mMaxAcceleration,
                         mMaxVelocity);
             } else {
@@ -290,6 +324,26 @@ public class Transition implements TypedValues {
         public float getTouchUpProgress(long currentTime) {
             float time = (currentTime - mStart) * 1E-9f;
             return mEngine.getInterpolation(time);
+        }
+
+        public void printInfo() {
+            if (mAutoCompleteMode == MODE_CONTINUOUS_VELOCITY) {
+                System.out.println("velocity = " + mEngine.getVelocity());
+                System.out.println("mMaxAcceleration = " + mMaxAcceleration);
+                System.out.println("mMaxVelocity = " + mMaxVelocity);
+            } else {
+                System.out.println("mSpringMass          = " + mSpringMass);
+                System.out.println("mSpringStiffness     = " + mSpringStiffness);
+                System.out.println("mSpringDamping       = " + mSpringDamping);
+                System.out.println("mSpringStopThreshold = " + mSpringStopThreshold);
+                System.out.println("mSpringBoundary      = " + mSpringBoundary);
+            }
+        }
+
+        public boolean isStopped(float progress) {
+            if (mOnTouchUp == ON_UP_STOP)
+                return true;
+          return   (0 < progress && progress < 1f);
         }
     }
 
@@ -327,8 +381,8 @@ public class Transition implements TypedValues {
      *
      * @param currentProgress
      * @param currentTime
-     * @param velocityX
-     * @param velocityY
+     * @param velocityX       pixels per millisecond
+     * @param velocityY       pixels per millisecond
      * @return
      */
     public void setTouchUp(float currentProgress,
@@ -336,14 +390,36 @@ public class Transition implements TypedValues {
                            float velocityX,
                            float velocityY) {
         if (mOnSwipe != null) {
-
+            if (DEBUG) {
+                Utils.log(" >>> velocity x,y = " + velocityX + " , " + velocityY);
+            }
             WidgetState base = mState.get(mOnSwipe.mAnchorId);
             float[] motionDpDt = new float[2];
             float[] dir = mOnSwipe.getDirection();
             float[] side = mOnSwipe.getSide();
             base.mMotionControl.getDpDt(currentProgress, side[0], side[1], motionDpDt);
-            float drag = velocityX * dir[0] + velocityY * dir[1];
+            float movementInDir = dir[0] * motionDpDt[0]
+                    + dir[1] * motionDpDt[1];
+            if (Math.abs(movementInDir) < 0.01) {
+                if (DEBUG) {
+                    Utils.log(" >>> cap minimum v!! ");
+                }
+                motionDpDt[0] = .01f;
+                motionDpDt[1] = .01f;
+            }
+
+            float drag = (dir[0] != 0) ? velocityX / motionDpDt[0]
+                    : velocityY / motionDpDt[1];
+
+            if (DEBUG) {
+                Utils.log(" >>> velocity        " + drag);
+                Utils.log(" >>> mDuration       " + mDuration);
+                Utils.log(" >>> currentProgress " + currentProgress);
+            }
             mOnSwipe.config(currentProgress, drag, currentTime, mDuration);
+            if (DEBUG) {
+                mOnSwipe.printInfo();
+            }
         }
     }
 
@@ -356,12 +432,17 @@ public class Transition implements TypedValues {
      */
     public float getTouchUpProgress(long currentTime) {
         if (mOnSwipe != null) {
-
             return mOnSwipe.getTouchUpProgress(currentTime);
         }
 
         return 0;
     }
+
+    public boolean isTouchNotDone(float newProgress) {
+
+        return   mOnSwipe.isStopped(newProgress);
+    }
+
 
     /**
      * get the interpolater based on a constant or a string

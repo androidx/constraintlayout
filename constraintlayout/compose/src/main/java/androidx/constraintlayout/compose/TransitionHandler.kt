@@ -58,7 +58,7 @@ internal class TransitionHandler(
      * swipe at the given [timeNanos].
      */
     fun onTouchUp(timeNanos: Long, velocity: Velocity) {
-        transition.setTouchUp(progressState.value, timeNanos, velocity.x, velocity.y)
+        transition.setTouchUp(progressState.value, timeNanos, -velocity.x, -velocity.y)
     }
 
     /**
@@ -75,9 +75,6 @@ internal class TransitionHandler(
      * Returns true if the progress is still expected to be updated by [updateProgressWhileTouchUp].
      */
     fun pendingProgressWhileTouchUp(): Boolean {
-        // TODO: Should instead be able to ask the Transition object if it needs animating
-        return (abs(newProgress - 1f) > 0.0001f && abs(newProgress) > 0.0001f) || abs(
-            newProgress - lastProgress
-        ) > 0.001f
+        return transition.isTouchNotDone(newProgress);
     }
 }
