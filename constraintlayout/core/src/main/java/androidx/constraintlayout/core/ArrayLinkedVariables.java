@@ -539,7 +539,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
     }
 
     /**
-     * Get the next index in in mArrayIndices given the current one
+     * Get the next index in mArrayIndices given the current one
      * @param index
      * @return
      */

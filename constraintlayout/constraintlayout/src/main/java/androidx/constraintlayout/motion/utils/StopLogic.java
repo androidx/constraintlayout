@@ -56,7 +56,7 @@ public class StopLogic extends MotionInterpolator {
     }
 
     /**
-     * Configure the stop logic base on the paramenters
+     * Configure the stop logic base on the parameters
      * @param currentPos   start position
      * @param destination  the ending position
      * @param currentVelocity  the starting velocity
