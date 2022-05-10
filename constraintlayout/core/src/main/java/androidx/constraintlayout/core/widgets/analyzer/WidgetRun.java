@@ -38,17 +38,23 @@ public abstract class WidgetRun implements Dependency {
     public DependencyNode start = new DependencyNode(this);
     public DependencyNode end = new DependencyNode(this);
 
+    @SuppressWarnings("HiddenTypeParameter")
     protected RunType mRunType = RunType.NONE;
 
     public WidgetRun(ConstraintWidget widget) {
         this.mWidget = widget;
     }
 
+    @SuppressWarnings("HiddenAbstractMethod")
     abstract void clear();
+    @SuppressWarnings("HiddenAbstractMethod")
     abstract void apply();
+    @SuppressWarnings("HiddenAbstractMethod")
     abstract void applyToWidget();
+    @SuppressWarnings("HiddenAbstractMethod")
     abstract void reset();
 
+    @SuppressWarnings("HiddenAbstractMethod")
     abstract boolean supportsWrapComputation();
 
     public boolean isDimensionResolved() {
@@ -311,7 +317,7 @@ public abstract class WidgetRun implements Dependency {
     protected final void addTarget(DependencyNode node,
                                    DependencyNode target,
                                    int marginFactor,
-                                   DimensionDependency dimensionDependency) {
+                                   @SuppressWarnings("HiddenTypeParameter") DimensionDependency dimensionDependency) {
         node.mTargets.add(target);
         node.mTargets.add(mDimension);
         node.mMarginFactor = marginFactor;
