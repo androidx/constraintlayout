@@ -38,10 +38,12 @@ public abstract class Key {
     String mTargetString = null;
     protected int mType;
 
+    @SuppressWarnings("HiddenAbstractMethod")
     abstract void load(Context context, AttributeSet attrs);
 
     HashMap<String, ConstraintAttribute> mCustomConstraints;
 
+    @SuppressWarnings("HiddenAbstractMethod")
     abstract void getAttributeNames(HashSet<String> attributes);
 
     public static final String ALPHA = "alpha";
