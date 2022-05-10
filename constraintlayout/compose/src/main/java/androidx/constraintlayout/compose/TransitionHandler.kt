@@ -34,14 +34,11 @@ internal class TransitionHandler(
         get() = motionMeasurer.transition
 
     private var newProgress: Float = -1f
-    private var lastProgress: Float = progressState.value
-
 
     /**
      * The [progressState] is updated based on the [Offset] from a single drag event.
      */
     fun updateProgressOnDrag(dragAmount: Offset) {
-        lastProgress = progressState.value
         val progressDelta = transition.dragToProgress(
             progressState.value,
             motionMeasurer.layoutCurrentWidth,
@@ -58,7 +55,7 @@ internal class TransitionHandler(
      * swipe at the given [timeNanos].
      */
     fun onTouchUp(timeNanos: Long, velocity: Velocity) {
-        transition.setTouchUp(progressState.value, timeNanos, -velocity.x, -velocity.y)
+        transition.setTouchUp(progressState.value, timeNanos, velocity.x, velocity.y)
     }
 
     /**
@@ -66,7 +63,6 @@ internal class TransitionHandler(
      * touch gestures.
      */
     fun updateProgressWhileTouchUp(timeNanos: Long) {
-        lastProgress = progressState.value
         newProgress =  transition.getTouchUpProgress(timeNanos)
         progressState.value = newProgress
     }

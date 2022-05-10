@@ -89,7 +89,10 @@ fun OnSwipeExperiment() {
                 anchor: 'box',
                 direction: 'end',
                 side: 'start',
-                mode: '$mode'
+                mode: '$mode',
+                springMass: 2,
+                springDamping: 5,
+                springStiffness: 10,
               }
            }
          }
@@ -107,7 +110,7 @@ fun OnSwipeExperiment() {
             }
             Button(onClick = {
                 mode = when (mode) {
-                    "spring" -> "linear"
+                    "spring" -> "velocity"
                     else -> "spring"
                 }
             }) {
