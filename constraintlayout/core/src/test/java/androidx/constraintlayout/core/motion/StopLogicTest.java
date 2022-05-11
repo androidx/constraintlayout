@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package  androidx.constraintlayout.core.motion;
+package androidx.constraintlayout.core.motion;
 
 import static org.junit.Assert.assertEquals;
 
@@ -30,108 +30,210 @@ public class StopLogicTest {
     public void cruseDecelerate() {
         //cruse decelerate
         StopLogicEngine stop = new StopLogicEngine();
-        float currentPos = 0.9f;
+        float position = 0.9f;
         float destination = 1;
         float currentVelocity = 0.2f;
         float maxTime = 0.9f;
         float maxAcceleration = 3.2f;
-        float maxVelocity =  3.2f;
-        stop.config(currentPos, destination, currentVelocity, maxTime, maxAcceleration, maxVelocity);
-        System.out.println(stop.debug("check1",0));
-        verify(stop,currentPos,maxTime);
+        float maxVelocity = 3.2f;
+        stop.config(position, destination, currentVelocity, maxTime, maxAcceleration, maxVelocity);
+        System.out.println(stop.debug("check1", 0));
+        String expect = ""
+                + "|*                                                           | 0.0\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|                                                            | 0.357\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|                                                            | 0.714\n"
+                + "|                                                            |\n"
+                + "|**********                                                  |\n"
+                + "|          *************************                         |\n"
+                + "|                                   *********************** *| 1.0\n"
+                + "0.0                                                      0.885\n";
+        assertEquals(expect, verify(stop, position, maxTime));
     }
 
     @Test
     public void backwardAccelerateDecelerate() {
         // backward accelerate, decelerate
         StopLogicEngine stop = new StopLogicEngine();
-        float currentPos = 0.9f;
+        float position = 0.9f;
         float destination = 1;
         float currentVelocity = -0.2f;
         float maxTime = 0.9f;
         float maxAcceleration = 3.2f;
-        float maxVelocity =  3.2f;
-        stop.config(currentPos, destination, currentVelocity, maxTime, maxAcceleration, maxVelocity);
-        System.out.println(stop.debug("check1",0));
-        verify(stop,currentPos,maxTime);
+        float maxVelocity = 3.2f;
+        stop.config(position, destination, currentVelocity, maxTime, maxAcceleration, maxVelocity);
+        System.out.println(stop.debug("check1", 0));
+        String expect = ""
+                + "|*                                                           | 0.0\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|                                                            | 0.357\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|                                                            | 0.714\n"
+                + "|                                                            |\n"
+                + "|**************                                              |\n"
+                + "|              **************                                |\n"
+                + "|                            ****************************** *| 1.0\n"
+                + "0.0                                                      0.885\n";
+        assertEquals(expect, verify(stop, position, maxTime));
     }
-
 
     @Test
     public void hardStop() {
         StopLogicEngine stop = new StopLogicEngine();
-        float currentPos = 0.9f;
+        float position = 0.9f;
         float destination = 1;
         float currentVelocity = 1.8f;
         float maxTime = 0.9f;
         float maxAcceleration = 3.2f;
-        float maxVelocity =  3.2f;
-        stop.config(currentPos, destination, currentVelocity, maxTime, maxAcceleration, maxVelocity);
-        System.out.println(stop.debug("check1",0));
-        verify(stop,currentPos,maxTime);
+        float maxVelocity = 3.2f;
+        stop.config(position, destination, currentVelocity, maxTime, maxAcceleration, maxVelocity);
+        System.out.println(stop.debug("check1", 0));
+        String expect = ""
+                + "|*                                                           | 0.0\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|                                                            | 0.357\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|                                                            | 0.714\n"
+                + "|                                                            |\n"
+                + "|**                                                          |\n"
+                + "|  ******                                                    |\n"
+                + "|        ************************************************** *| 1.0\n"
+                + "0.0                                                      0.885\n";
+        assertEquals(expect, verify(stop, position, maxTime));
     }
 
     @Test
     public void accelerateCruseDecelerate() {
         StopLogicEngine stop = new StopLogicEngine();
-        float currentPos = 0.3f;
+        float position = 0.3f;
         float destination = 1;
         float currentVelocity = 0.1f;
         float maxTime = 0.9f;
         float maxAcceleration = 3.2f;
-        float maxVelocity =  1.2f;
-        stop.config(currentPos, destination, currentVelocity, maxTime, maxAcceleration, maxVelocity);
-        System.out.println(stop.debug("check1",0));
-        verify(stop,currentPos,maxTime);
+        float maxVelocity = 1.2f;
+        stop.config(position, destination, currentVelocity, maxTime, maxAcceleration, maxVelocity);
+        System.out.println(stop.debug("check1", 0));
+        String expect = ""
+                + "|*                                                           | 0.0\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|***********                                                 |\n"
+                + "|           ******                                           | 0.356\n"
+                + "|                 *****                                      |\n"
+                + "|                      ****                                  |\n"
+                + "|                          ***                               |\n"
+                + "|                             ****                           |\n"
+                + "|                                 ****                       | 0.712\n"
+                + "|                                     *****                  |\n"
+                + "|                                          *****             |\n"
+                + "|                                               ***********  |\n"
+                + "|                                                           *| 0.997\n"
+                + "0.0                                                      0.885\n";
+        assertEquals(expect, verify(stop, position, maxTime));
     }
+
     @Test
     public void accelerateDecelerate() {
         StopLogicEngine stop = new StopLogicEngine();
-        float currentPos = 0.3f;
+        float position = 0.3f;
         float destination = 1;
         float currentVelocity = 0.2f;
         float maxTime = 0.9f;
         float maxAcceleration = 3.2f;
-        float maxVelocity =  3.2f;
-        stop.config(currentPos, destination, currentVelocity, maxTime, maxAcceleration, maxVelocity);
-        System.out.println(stop.debug("check1",0));
-        verify(stop,currentPos,maxTime);
+        float maxVelocity = 3.2f;
+        stop.config(position, destination, currentVelocity, maxTime, maxAcceleration, maxVelocity);
+        System.out.println(stop.debug("check1", 0));
+        String expect = ""
+                + "|*                                                           | 0.0\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|*********                                                   |\n"
+                + "|         ******                                             | 0.357\n"
+                + "|               *****                                        |\n"
+                + "|                    ****                                    |\n"
+                + "|                        ***                                 |\n"
+                + "|                           ***                              |\n"
+                + "|                              ****                          | 0.714\n"
+                + "|                                  ****                      |\n"
+                + "|                                      ******                |\n"
+                + "|                                            **************  |\n"
+                + "|                                                           *| 1.0\n"
+                + "0.0                                                      0.885\n";
+        assertEquals(expect, verify(stop, position, maxTime));
     }
 
     @Test
     public void backwardAccelerateCruseDecelerate() {
         StopLogicEngine stop = new StopLogicEngine();
-        float currentPos = 0.5f;
+        float position = 0.5f;
         float destination = 1;
         float currentVelocity = -0.6f;
         float maxTime = 0.9f;
         float maxAcceleration = 5.2f;
-        float maxVelocity =  1.2f;
-        stop.config(currentPos, destination, currentVelocity, maxTime, maxAcceleration, maxVelocity);
-        System.out.println(stop.debug("check1",0));
-        verify(stop,currentPos,maxTime);
+        float maxVelocity = 1.2f;
+        stop.config(position, destination, currentVelocity, maxTime, maxAcceleration, maxVelocity);
+        System.out.println(stop.debug("check1", 0));
+        String expect = ""
+                + "|*                                                           | 0.0\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|                                                            |\n"
+                + "|                                                            | 0.357\n"
+                + "| ***************                                            |\n"
+                + "|*               *****                                       |\n"
+                + "|                     ****                                   |\n"
+                + "|                         ****                               |\n"
+                + "|                             ****                           | 0.714\n"
+                + "|                                 ****                       |\n"
+                + "|                                     *****                  |\n"
+                + "|                                          **********        |\n"
+                + "|                                                    ****** *| 1.0\n"
+                + "0.0                                                      0.885\n";
+        assertEquals(expect, verify(stop, position, maxTime));
     }
 
-   private static void verify(StopLogicEngine stop,float currentPos,float maxTime) {
-
-       float p =  stop.getInterpolation(0);
-
-       assertEquals(p, currentPos, 0.0001);
-       int count = 120;
-       float step = maxTime/(count-1);
-       float []x = new float[count];
-       float []y = new float[count];
-       int c = 0;
-       for (float t = 0; t < maxTime; t+=step) {
-           p  = stop.getInterpolation(t);
-           x[c] = t;
-           y[c] = p;
-           c++;
-       }
-       System.out.println( textDraw(count,count/4,x,y,false));
+    private static String verify(StopLogicEngine stop, float position, float maxTime) {
+        float p = stop.getInterpolation(0);
+        assertEquals(p, position, 0.0001);
+        int count = 60;
+        float step = maxTime / (count - 1);
+        float[] x = new float[count];
+        float[] y = new float[count];
+        int c = 0;
+        for (float t = 0; t < maxTime; t += step) {
+            p = stop.getInterpolation(t);
+            x[c] = t;
+            y[c] = p;
+            c++;
+        }
+        String ret = textDraw(count, count / 4, x, y, false);
+        System.out.println(ret);
+        return ret;
     }
 
-   static String textDraw(int dimx, int dimy, float[] x, float[] y, boolean flip) {
+    static String textDraw(int dimx, int dimy, float[] x, float[] y, boolean flip) {
         float minX = x[0], maxX = x[0], minY = y[0], maxY = y[0];
         String ret = "";
         for (int i = 0; i < x.length; i++) {
@@ -173,6 +275,4 @@ public class StopLogicTest {
         s = s.substring(0, dimx - maxStr.length() + 2) + maxStr + "\n";
         return ret + s;
     }
-
-
 }

@@ -35,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -124,6 +125,7 @@ fun OnSwipeExperiment() {
             modifier = Modifier.fillMaxSize(),
             motionScene = MotionScene(content = motionSceneContent),
             progress = progress
+
         ) {
             Box(
                 modifier = Modifier
@@ -253,11 +255,13 @@ fun OnSwipeSample2() {
 fun MultiSwipe() {
 
     val mode = arrayOf("velocity", "spring")
-    val touchUp = arrayOf( "autocomplete", "toStart",
-    "toEnd", "stop", "decelerate",
-    "neverCompleteStart", "neverCompleteEnd");
+    val touchUp = arrayOf(
+        "autocomplete", "toStart",
+        "toEnd", "stop", "decelerate",
+        "neverCompleteStart", "neverCompleteEnd"
+    );
     val endWidth = arrayOf(50, 200)
-     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         for (i in 0..28) {
 
             Box(
@@ -266,7 +270,11 @@ fun MultiSwipe() {
                     .fillMaxWidth()
                     .background(Color.LightGray)
             )
-            SimpleSwipe(mode=mode[i%2], endWidth = endWidth[(i/2)%2], touchUp = touchUp[(i/4)%7])
+            SimpleSwipe(
+                mode = mode[i % 2],
+                endWidth = endWidth[(i / 2) % 2],
+                touchUp = touchUp[(i / 4) % 7]
+            )
         }
     }
 
@@ -275,7 +283,7 @@ fun MultiSwipe() {
 
 
 @Composable
-fun SimpleSwipe(mode: String,endWidth:Int, touchUp: String) {
+fun SimpleSwipe(mode: String, endWidth: Int, touchUp: String) {
     var title = "($mode $endWidth $touchUp)"
     var scene =
         """
@@ -288,13 +296,20 @@ fun SimpleSwipe(mode: String,endWidth:Int, touchUp: String) {
                 bottom: ['parent', 'bottom', 0],
                 top: ['parent', 'top', 0],
                 end: ['parent', 'end', 0],
+                 custom: { 
+                        mValue: 0.0,
+                        back: '#FFFFFF'
+                      },
            },
              box: {
                width: 50, height: 50,
                bottom: ['parent', 'bottom', 0],
                start: ['parent', 'start', 70],
                top: ['parent', 'top', 0],
-
+               rotationZ: 0,
+               custom: { 
+                         boxColor: '#FF00FFFF'
+                      },
              }
            },
            end: {
@@ -304,12 +319,22 @@ fun SimpleSwipe(mode: String,endWidth:Int, touchUp: String) {
                 bottom: ['parent', 'bottom', 0],
                 top: ['parent', 'top', 0],
                 end: ['parent', 'end', 0],
+                custom: { 
+                        mValue: 100.0,
+                         back: '#FF88FF'
+                      },
            },
              box: {
                 width: $endWidth, height: 50,
                 bottom: ['parent', 'bottom', 0],
                 top: ['parent', 'top', 0],
                 end: ['parent', 'end', 70],
+                rotationZ: 360,
+
+                 custom: { 
+                         boxColor: '#FF00FF00'
+                      },
+                
              }
            }
          },
@@ -329,7 +354,7 @@ fun SimpleSwipe(mode: String,endWidth:Int, touchUp: String) {
        }
         """.trimIndent()
 
-//    Column {
+
     MotionLayout(
         modifier = Modifier
             .height(70.dp)
@@ -337,10 +362,19 @@ fun SimpleSwipe(mode: String,endWidth:Int, touchUp: String) {
             .background(Color.White),
         motionScene = MotionScene(content = scene),
     ) {
-        Text(text = title,  modifier = Modifier.layoutId("title") ,textAlign = TextAlign.Center,)
+
+        var prop = motionProperties("title")
+        val progress = prop.value.float("mValue")
+        val col = prop.value.color("back")
+
+        Text(
+            text = "$title  $progress", modifier = Modifier
+                .layoutId("title")
+                .background(col), textAlign = TextAlign.Center
+        )
         Box(
             modifier = Modifier
-                .background(Color.Green)
+                .background(motionProperties("box").value.color("boxColor"))
                 .layoutId("box")
         )
 //        }

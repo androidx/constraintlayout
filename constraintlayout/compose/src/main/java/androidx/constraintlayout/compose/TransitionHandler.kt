@@ -20,6 +20,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.Velocity
 import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
 /**
  * Helper class that handles the interactions between Compose and
@@ -47,7 +49,7 @@ internal class TransitionHandler(
             dragAmount.y
         )
         newProgress = progressState.value + progressDelta
-        newProgress = Math.max(Math.min(newProgress, 1f), 0f)
+        newProgress = max(min(newProgress, 1f), 0f)
         progressState.value = newProgress
     }
 
