@@ -141,7 +141,7 @@ public class Transition implements TypedValues {
 
         float mSpringMass = 1;
         float mSpringStiffness = 400;
-        float mSpringDamping = 100;
+        float mSpringDamping = 10;
         float mSpringStopThreshold = 0.01f;
 
         // In spring mode what happens at the boundary
@@ -357,7 +357,7 @@ public class Transition implements TypedValues {
 
         public boolean isNotDone(float progress) {
             if (mOnTouchUp == ON_UP_STOP)
-                return true;
+                return false;
             if (mEngine instanceof SpringStopEngine) {
                 return !mEngine.isStopped();
             }
@@ -389,8 +389,12 @@ public class Transition implements TypedValues {
 
         base.interpolate(baseW, baseH, currentProgress, this);
         base.mMotionControl.getDpDt(currentProgress, side[0], side[1], motionDpDt);
-        float drag = dx * Math.abs(dir[0]) / motionDpDt[0] + dy * Math.abs(dir[1]) / motionDpDt[1];
+        float drag = (dir[0] != 0) ? dx * Math.abs(dir[0]) / motionDpDt[0]
+                : dy * Math.abs(dir[1]) / motionDpDt[1];
         // float change = (mOnSwipe.mDragVertical) ? dy / motionDpDt[1] : dx / motionDpDt[0];
+        if (DEBUG) {
+            Utils.log(" drag " + drag);
+        }
         return drag;
     }
 
@@ -434,7 +438,7 @@ public class Transition implements TypedValues {
                 Utils.log(" >>> mDuration       " + mDuration);
                 Utils.log(" >>> currentProgress " + currentProgress);
             }
-            mOnSwipe.config(currentProgress, drag, currentTime, mDuration);
+            mOnSwipe.config(currentProgress, drag, currentTime, mDuration * 1E-3f);
             if (DEBUG) {
                 mOnSwipe.printInfo();
             }

@@ -47,6 +47,7 @@ internal class TransitionHandler(
             dragAmount.y
         )
         newProgress = progressState.value + progressDelta
+        newProgress = Math.max(Math.min(newProgress, 1f), 0f)
         progressState.value = newProgress
     }
 
