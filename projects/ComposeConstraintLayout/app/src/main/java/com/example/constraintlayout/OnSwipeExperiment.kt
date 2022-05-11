@@ -168,7 +168,7 @@ fun OnSwipeSample1() {
                 maxAccel: 3,
                 direction: 'end',
                 side: 'start',
-                mode: 'linear'
+                mode: 'velocity'
               }
            }
          }
@@ -183,6 +183,60 @@ fun OnSwipeSample1() {
             Box(
                 modifier = Modifier
                     .background(Color.Red)
+                    .layoutId("box")
+            )
+        }
+    }
+}
+
+
+@Preview
+@Composable
+fun OnSwipeSample2() {
+
+    var scene =
+        """
+       {
+         ConstraintSets: {
+           start: {
+             box: {
+               width: 50, height: 50,
+               bottom: ['parent', 'bottom', 70],
+               start: ['parent', 'start', 70],
+             }
+           },
+           end: {
+       
+             box: {
+                width: 50, height: 50,
+                top: ['parent', 'top', 70],
+                end: ['parent', 'end', 70],
+             }
+           }
+         },
+         Transitions: {
+           default: {
+              from: 'start',
+              to: 'end',
+              onSwipe: {
+                anchor: 'box',
+                direction: 'end',
+                side: 'start',
+                mode: 'spring'
+              }
+           }
+         }
+       }
+        """.trimIndent()
+
+    Column {
+        MotionLayout(
+            modifier = Modifier.fillMaxSize().background(Color.White),
+            motionScene = MotionScene(content = scene),
+        ) {
+            Box(
+                modifier = Modifier
+                    .background(Color.Green)
                     .layoutId("box")
             )
         }

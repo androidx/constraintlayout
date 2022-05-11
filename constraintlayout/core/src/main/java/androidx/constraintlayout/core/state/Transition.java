@@ -141,7 +141,7 @@ public class Transition implements TypedValues {
 
         float mSpringMass = 1;
         float mSpringStiffness = 400;
-        float mSpringDamping = 10;
+        float mSpringDamping = 100;
         float mSpringStopThreshold = 0.01f;
 
         // In spring mode what happens at the boundary
@@ -295,6 +295,7 @@ public class Transition implements TypedValues {
 
         void config(float position, float velocity, long start, float duration) {
             mStart = start;
+            float destination = getDestinationPosition(position, velocity, duration);
             if (mAutoCompleteMode == MODE_CONTINUOUS_VELOCITY) {
                 StopLogicEngine sl;
                 if (mEngine instanceof StopLogicEngine) {
@@ -302,10 +303,14 @@ public class Transition implements TypedValues {
                 } else {
                     mEngine = sl = new StopLogicEngine();
                 }
-                float destination = getDestinationPosition(position, velocity, duration);
+
                 sl.config(position, destination, velocity,
                         duration, mMaxAcceleration,
                         mMaxVelocity);
+                Utils.log("     destination  = " + destination);
+                Utils.log("            v in  = " + velocity);
+                Utils.log("            v out = " + sl.getVelocity());
+                lastp = position;
             } else {
                 SpringStopEngine sl;
                 if (mEngine instanceof SpringStopEngine) {
@@ -313,17 +318,27 @@ public class Transition implements TypedValues {
                 } else {
                     mEngine = sl = new SpringStopEngine();
                 }
-                sl.springConfig(position, 1, velocity,
+
+                sl.springConfig(position, destination, velocity,
                         mSpringMass,
                         mSpringStiffness,
                         mSpringDamping,
                         mSpringStopThreshold, mSpringBoundary);
+
+
             }
         }
 
+        float lastp;
+
         public float getTouchUpProgress(long currentTime) {
             float time = (currentTime - mStart) * 1E-9f;
-            return mEngine.getInterpolation(time);
+            float p = mEngine.getInterpolation(time);
+            if (DEBUG) {
+                Utils.log("            v out = " + mEngine.getVelocity() + " " + (p - lastp) * 90);
+            }
+            lastp = p;
+            return p;
         }
 
         public void printInfo() {
@@ -340,10 +355,13 @@ public class Transition implements TypedValues {
             }
         }
 
-        public boolean isStopped(float progress) {
+        public boolean isNotDone(float progress) {
             if (mOnTouchUp == ON_UP_STOP)
                 return true;
-          return   (0 < progress && progress < 1f);
+            if (mEngine instanceof SpringStopEngine) {
+                return !mEngine.isStopped();
+            }
+            return (0 < progress && progress < 1f);
         }
     }
 
@@ -439,8 +457,7 @@ public class Transition implements TypedValues {
     }
 
     public boolean isTouchNotDone(float newProgress) {
-
-        return   mOnSwipe.isStopped(newProgress);
+        return mOnSwipe.isNotDone(newProgress);
     }
 
 

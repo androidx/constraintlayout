@@ -147,6 +147,7 @@ class MainActivity : AppCompatActivity() {
 
         demos.add(object : CompFunc { @Composable override fun Run() { OnSwipeExperiment() } })
         demos.add(object : CompFunc { @Composable override fun Run() { OnSwipeSample1() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { OnSwipeSample2() } })
         demos.add(object : CompFunc { @Composable override fun Run() { Example () } })
         demos.add(object : CompFunc { @Composable override fun Run() { RowColExample () } })
         demos.add(object : CompFunc { @Composable override fun Run() { ShowTwenty  () } })
