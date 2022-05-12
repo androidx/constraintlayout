@@ -20,6 +20,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.Velocity
 import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
 /**
  * Helper class that handles the interactions between Compose and
@@ -34,14 +36,11 @@ internal class TransitionHandler(
         get() = motionMeasurer.transition
 
     private var newProgress: Float = -1f
-    private var lastProgress: Float = progressState.value
-
 
     /**
      * The [progressState] is updated based on the [Offset] from a single drag event.
      */
     fun updateProgressOnDrag(dragAmount: Offset) {
-        lastProgress = progressState.value
         val progressDelta = transition.dragToProgress(
             progressState.value,
             motionMeasurer.layoutCurrentWidth,
@@ -50,6 +49,7 @@ internal class TransitionHandler(
             dragAmount.y
         )
         newProgress = progressState.value + progressDelta
+        newProgress = max(min(newProgress, 1f), 0f)
         progressState.value = newProgress
     }
 
@@ -66,7 +66,6 @@ internal class TransitionHandler(
      * touch gestures.
      */
     fun updateProgressWhileTouchUp(timeNanos: Long) {
-        lastProgress = progressState.value
         newProgress =  transition.getTouchUpProgress(timeNanos)
         progressState.value = newProgress
     }
@@ -75,9 +74,6 @@ internal class TransitionHandler(
      * Returns true if the progress is still expected to be updated by [updateProgressWhileTouchUp].
      */
     fun pendingProgressWhileTouchUp(): Boolean {
-        // TODO: Should instead be able to ask the Transition object if it needs animating
-        return (abs(newProgress - 1f) > 0.0001f && abs(newProgress) > 0.0001f) || abs(
-            newProgress - lastProgress
-        ) > 0.001f
+        return transition.isTouchNotDone(newProgress);
     }
 }

@@ -37,7 +37,7 @@ import com.google.accompanist.coil.rememberCoilPainter
 class MainActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
     private var composeNum = 0
-    private val START_NUMBER = Int.MAX_VALUE
+    private val START_NUMBER = 44
     private var demos:ArrayList<CompFunc> = ArrayList()
     var map = HashMap<Int, String>();
     val linkServer = LinkServer()
@@ -146,6 +146,10 @@ class MainActivity : AppCompatActivity() {
         demos.add(object : CompFunc { @Composable override fun Run() { MotionExample12() } })
 
         demos.add(object : CompFunc { @Composable override fun Run() { OnSwipeExperiment() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { OnSwipeSample1() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { OnSwipeSample2() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { MultiSwipe() } })
+
         demos.add(object : CompFunc { @Composable override fun Run() { Example () } })
         demos.add(object : CompFunc { @Composable override fun Run() { RowColExample () } })
         demos.add(object : CompFunc { @Composable override fun Run() { ShowTwenty  () } })

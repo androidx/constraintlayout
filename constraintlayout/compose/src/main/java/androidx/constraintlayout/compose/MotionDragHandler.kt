@@ -125,7 +125,7 @@ internal inline fun Modifier.motionPointerInput(
                 )
             }
         ) { change, dragAmount ->
-            velocityTracker.addPosition(change.uptimeMillis, dragAmount)
+            velocityTracker.addPosition(change.uptimeMillis, change.position)
             // As dragging is done, pass the dragAmount to update the MotionLayout progress.
             dragChannel.trySend(MotionDragState.onDrag(dragAmount))
         }
