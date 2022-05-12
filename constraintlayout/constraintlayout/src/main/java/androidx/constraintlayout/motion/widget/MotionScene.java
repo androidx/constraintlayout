@@ -48,6 +48,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -406,6 +407,26 @@ public class MotionScene {
             ids[i] = mConstraintSetMap.keyAt(i);
         }
         return ids;
+    }
+
+    /**
+     * Get the id's of all constraintSets with the matching types
+     * @return
+     */
+    public int[] getMatchingStateLabels(String ... types) {
+        int[] ids = new int[mConstraintSetMap.size()];
+
+        int count = 0;
+
+        for (int i = 0; i < ids.length; i++) {
+            ConstraintSet set  = mConstraintSetMap.valueAt(i);
+            int id = mConstraintSetMap.keyAt(i);
+            if (set.matchesLabels(types)) {
+                String []s = set.getStateLabels();
+                ids[count++] = id;
+            }
+        }
+        return Arrays.copyOf(ids,count);
     }
 
     /**
@@ -1404,6 +1425,9 @@ public class MotionScene {
                     break;
                 case "deriveConstraintsFrom":
                     derivedId = getId(context, value);
+                    break;
+                case "stateLabels":
+                    set.setStateLabels(value);
                     break;
                 case "constraintRotate":
                     try {
