@@ -17,9 +17,12 @@
 package androidx.constraintlayout.compose
 
 import androidx.compose.ui.layout.Measurable
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.core.parser.CLKey
 import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.parser.CLParsingException
+import androidx.constraintlayout.core.state.ConstraintSetParser
 import androidx.constraintlayout.core.state.Transition
 import org.intellij.lang.annotations.Language
 import java.util.ArrayList
@@ -51,15 +54,15 @@ internal class JSONConstraintSet(
 
     // Only called by MotionLayout in MotionMeasurer
     override fun applyTo(transition: Transition, type: Int) {
-        val layoutVariables = LayoutVariables()
+        val layoutVariables = ConstraintSetParser.LayoutVariables()
         applyLayoutVariables(layoutVariables)
-        parseJSON(getCurrentContent(), transition, type)
+       ConstraintSetParser.parseJSON(getCurrentContent(), transition, type)
     }
 
-    fun emitDesignElements(designElements: ArrayList<DesignElement>) {
+    fun emitDesignElements(designElements: ArrayList<ConstraintSetParser.DesignElement>) {
         try {
             designElements.clear()
-            parseDesignElementsJSON(getCurrentContent(), designElements)
+            ConstraintSetParser.parseDesignElementsJSON(getCurrentContent(), designElements)
         } catch (e: Exception) {
             // nothing (content might be invalid, sent by live edit)
         }
@@ -67,11 +70,12 @@ internal class JSONConstraintSet(
 
     // Called by both MotionLayout & ConstraintLayout measurers
     override fun applyToState(state: State) {
-        val layoutVariables = LayoutVariables()
+        val layoutVariables = ConstraintSetParser.LayoutVariables()
         applyLayoutVariables(layoutVariables)
         // TODO: Need to better handle half parsed JSON and/or incorrect states.
         try {
-            parseJSON(getCurrentContent(), state, layoutVariables)
+            ConstraintSetParser.parseJSON(getCurrentContent(), state, layoutVariables)
+
             _isDirty = false
         } catch (e: Exception) {
             // nothing (content might be invalid, sent by live edit)
@@ -89,7 +93,8 @@ internal class JSONConstraintSet(
         return this
     }
 
-    private fun applyLayoutVariables(layoutVariables: LayoutVariables) {
+
+    private fun applyLayoutVariables(layoutVariables: ConstraintSetParser.LayoutVariables) {
         if (overrideVariables != null) {
             try {
                 val variables = CLParser.parse(overrideVariables)

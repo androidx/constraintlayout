@@ -80,6 +80,7 @@ import androidx.compose.ui.util.fastForEachIndexed
 import androidx.constraintlayout.core.parser.CLObject
 import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.parser.CLParsingException
+import androidx.constraintlayout.core.state.ConstraintSetParser
 import androidx.constraintlayout.core.state.Dimension.SPREAD_DIMENSION
 import androidx.constraintlayout.core.state.Dimension.WRAP_DIMENSION
 import androidx.constraintlayout.core.state.Registry
@@ -719,7 +720,8 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
     LayoutInformationReceiver {
     private var forcedWidth: Int = Int.MIN_VALUE
     private var forcedHeight: Int = Int.MIN_VALUE
-    private var forcedDrawDebug: MotionLayoutDebugFlags = MotionLayoutDebugFlags.UNKNOWN
+    private var forcedDrawDebug: MotionLayoutDebugFlags =
+         MotionLayoutDebugFlags.UNKNOWN
     private var updateFlag: MutableState<Long>? = null
     private var layoutInformationMode: LayoutInfoFlags = LayoutInfoFlags.NONE
     private var layoutInformation = ""
@@ -928,9 +930,10 @@ fun ConstraintSet(
 class State(val density: Density) : SolverState() {
     var rootIncomingConstraints: Constraints = Constraints()
     lateinit var layoutDirection: LayoutDirection
-    internal val baselineNeeded = mutableListOf<Any>()
-    private var dirtyBaselineNeededWidgets = true
-    private val baselineNeededWidgets = mutableSetOf<ConstraintWidget>()
+    init {
+        setDpToPixel { dp -> density.density * dp }
+    }
+
 
     override fun convertDimension(value: Any?): Int {
         return if (value is Dp) {
@@ -941,32 +944,7 @@ class State(val density: Density) : SolverState() {
     }
 
     override fun reset() {
-        // TODO(b/158197001): this should likely be done by the solver
-        mReferences.forEach { ref ->
-            ref.value?.constraintWidget?.reset()
-        }
-        mReferences.clear()
-        mReferences[PARENT] = mParent
-        baselineNeeded.clear()
-        dirtyBaselineNeededWidgets = true
         super.reset()
-    }
-
-    internal fun baselineNeededFor(id: Any) {
-        baselineNeeded.add(id)
-        dirtyBaselineNeededWidgets = true
-    }
-
-    internal fun isBaselineNeeded(constraintWidget: ConstraintWidget): Boolean {
-        if (dirtyBaselineNeededWidgets) {
-            baselineNeededWidgets.clear()
-            baselineNeeded.forEach { id ->
-                val widget = mReferences[id]?.constraintWidget
-                if (widget != null) baselineNeededWidgets.add(widget)
-            }
-            dirtyBaselineNeededWidgets = false
-        }
-        return constraintWidget in baselineNeededWidgets
     }
 
     internal fun getKeyId(helperWidget: HelperWidget): Any? {
@@ -1451,7 +1429,7 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         }
     }
 
-    private var designElements = arrayListOf<DesignElement>()
+    private var designElements = arrayListOf<ConstraintSetParser.DesignElement>()
 
     private fun getColor(str: String?, defaultColor: Color = Color.Black): Color {
         if (str != null && str.startsWith('#')) {

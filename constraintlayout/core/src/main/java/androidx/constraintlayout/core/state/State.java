@@ -33,7 +33,7 @@ import java.util.HashMap;
  * Represents a full state of a ConstraintLayout
  */
 public class State {
-
+    private CorePixelDp mDpToPixel;
     protected HashMap<Object, Reference> mReferences = new HashMap<>();
     protected HashMap<Object, HelperReference> mHelperReferences = new HashMap<>();
     HashMap<String, ArrayList<String>> mTags = new HashMap<>();
@@ -97,12 +97,31 @@ public class State {
         mReferences.put(PARENT, mParent);
     }
 
+    CorePixelDp getDpToPixel() {
+        return mDpToPixel;
+    }
+
     /**
-     * @TODO: add description
+     * Set the function that converts dp to Pixels
+     * @param dpToPixel
+     */
+    public void setDpToPixel(CorePixelDp dpToPixel) {
+        this.mDpToPixel = dpToPixel;
+    }
+
+    /**
+     * Clear the state
      */
     public void reset() {
+        for (Object ref : mReferences.keySet()) {
+            mReferences.get(ref).getConstraintWidget().reset();
+        }
+        mReferences.clear();
+        mReferences.put(PARENT, mParent);
         mHelperReferences.clear();
         mTags.clear();
+        mBaselineNeeded.clear();
+        mDirtyBaselineNeededWidgets = true;
     }
 
     /**
@@ -438,6 +457,7 @@ public class State {
         container.removeAllChildren();
         mParent.getWidth().apply(this, container, ConstraintWidget.HORIZONTAL);
         mParent.getHeight().apply(this, container, ConstraintWidget.VERTICAL);
+        // add helper refrences
         for (Object key : mHelperReferences.keySet()) {
             HelperReference reference = mHelperReferences.get(key);
             HelperWidget helperWidget = reference.getHelperWidget();
@@ -519,5 +539,32 @@ public class State {
                 widget.stringId = key.toString();
             }
         }
+    }
+
+    // ================= add baseline code================================
+    ArrayList<Object> mBaselineNeeded = new ArrayList<>();
+    ArrayList<ConstraintWidget> mBaselineNeededWidgets = new ArrayList<>();
+    boolean mDirtyBaselineNeededWidgets = true;
+
+    /**
+     * Baseline is needed for this object
+     * @param id
+     */
+    public void baselineNeededFor(Object id) {
+        mBaselineNeeded.add(id);
+        mDirtyBaselineNeededWidgets = true;
+    }
+
+    public boolean isBaselineNeeded(ConstraintWidget constraintWidget) {
+        if (mDirtyBaselineNeededWidgets) {
+            mBaselineNeededWidgets.clear();
+            for (Object id : mBaselineNeeded) {
+                ConstraintWidget widget = mReferences.get(id).getConstraintWidget();
+                if (widget != null) mBaselineNeededWidgets.add(widget);
+            }
+
+            mDirtyBaselineNeededWidgets = false;
+        }
+        return mBaselineNeededWidgets.contains(constraintWidget);
     }
 }
