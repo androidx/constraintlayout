@@ -21,7 +21,6 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.runtime.ExperimentalComposeApi
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.monotonicFrameClock
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -31,7 +30,9 @@ import androidx.compose.ui.input.pointer.util.VelocityTracker
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.Velocity
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.isActive
+import java.lang.Math.abs
 
 /**
  * Helper modifier for MotionLayout to support OnSwipe in Transitions.
@@ -40,12 +41,37 @@ import kotlinx.coroutines.isActive
  * @see TransitionHandler
  */
 @SuppressLint("UnnecessaryComposedModifier")
-@OptIn(ExperimentalComposeApi::class)
 @Suppress("NOTHING_TO_INLINE")
 @PublishedApi
 internal inline fun Modifier.motionPointerInput(
     key: Any = Unit,
     progressState: MutableState<Float>,
+    measurer: MotionMeasurer
+): Modifier {
+    val motionProgress: MotionProgress =
+        object : MotionProgress {
+            override val progress: Float
+                get() = progressState.value
+
+            override suspend fun updateProgress(newProgress: Float) {
+                progressState.value = newProgress
+            }
+        }
+    return this.motionPointerInput(key, motionProgress, measurer)
+}
+
+/**
+ * Helper modifier for MotionLayout to support OnSwipe in Transitions.
+ *
+ * @see Modifier.pointerInput
+ * @see TransitionHandler
+ */
+@SuppressLint("UnnecessaryComposedModifier")
+@Suppress("NOTHING_TO_INLINE")
+@PublishedApi
+internal inline fun Modifier.motionPointerInput(
+    key: Any = Unit,
+    motionProgress: MotionProgress,
     measurer: MotionMeasurer
 ): Modifier = composed(
     inspectorInfo = debugInspectorInfo {
@@ -58,7 +84,7 @@ internal inline fun Modifier.motionPointerInput(
         return@composed this
     }
     val swipeHandler = remember(key) {
-        TransitionHandler(motionMeasurer = measurer, progressState = progressState)
+        TransitionHandler(motionMeasurer = measurer, motionProgress = motionProgress)
     }
     val dragChannel = remember(key) { Channel<MotionDragState>(Channel.CONFLATED) }
 
@@ -68,31 +94,19 @@ internal inline fun Modifier.motionPointerInput(
         while (coroutineContext.isActive) {
             if (isTouchUp && swipeHandler.pendingProgressWhileTouchUp()) {
                 // Loop until there's no need to update the progress or the there's a touch down
-                coroutineContext.monotonicFrameClock.withFrameNanos { timeNanos ->
-                    if (!this@effectScope.isActive) {
-                        // TODO: This check might be unnecessary
-                        return@withFrameNanos
-                    }
-                    swipeHandler.updateProgressWhileTouchUp(timeNanos = timeNanos)
-                }
+                swipeHandler.updateProgressWhileTouchUp()
+                // TODO: Once the progress while Up ends, snap the progress to target (0 or 1)
             } else {
                 if (dragState == null) {
                     // TODO: Investigate if it's worth skipping some drag events
                     dragState = dragChannel.receive()
                 }
+                coroutineContext.ensureActive()
                 isTouchUp = !dragState.isDragging
-                coroutineContext.monotonicFrameClock.withFrameNanos { timeNanos ->
-                    if (!this@effectScope.isActive) {
-                        return@withFrameNanos
-                    }
-                    if (dragState!!.isDragging) {
-                        swipeHandler.updateProgressOnDrag(dragAmount = dragState!!.dragAmount)
-                    } else {
-                        swipeHandler.onTouchUp(
-                            timeNanos = timeNanos,
-                            velocity = dragState!!.velocity
-                        )
-                    }
+                if (isTouchUp) {
+                    swipeHandler.onTouchUp(velocity = dragState.velocity)
+                } else {
+                    swipeHandler.updateProgressOnDrag(dragAmount = dragState.dragAmount)
                 }
                 dragState = null
             }

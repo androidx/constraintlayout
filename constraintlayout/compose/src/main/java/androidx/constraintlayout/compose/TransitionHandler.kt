@@ -16,64 +16,66 @@
 
 package androidx.constraintlayout.compose
 
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.ExperimentalComposeApi
+import androidx.compose.runtime.monotonicFrameClock
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.Velocity
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
+import kotlin.coroutines.coroutineContext
 
 /**
  * Helper class that handles the interactions between Compose and
  * [androidx.constraintlayout.core.state.Transition].
  */
+@OptIn(ExperimentalComposeApi::class)
 @PublishedApi
 internal class TransitionHandler(
     private val motionMeasurer: MotionMeasurer,
-    private val progressState: MutableState<Float>
-    ) {
+    private val motionProgress: MotionProgress
+) {
     private val transition: androidx.constraintlayout.core.state.Transition
         get() = motionMeasurer.transition
 
-    private var newProgress: Float = -1f
-
     /**
-     * The [progressState] is updated based on the [Offset] from a single drag event.
+     * The [motionProgress] is updated based on the [Offset] from a single drag event.
      */
-    fun updateProgressOnDrag(dragAmount: Offset) {
+    suspend fun updateProgressOnDrag(dragAmount: Offset) {
         val progressDelta = transition.dragToProgress(
-            progressState.value,
+            motionProgress.progress,
             motionMeasurer.layoutCurrentWidth,
             motionMeasurer.layoutCurrentHeight,
             dragAmount.x,
             dragAmount.y
         )
-        newProgress = progressState.value + progressDelta
-        newProgress = max(min(newProgress, 1f), 0f)
-        progressState.value = newProgress
+        var newProgress = motionProgress.progress + progressDelta
+        newProgress = newProgress.coerceIn(0f, 1f)
+        motionProgress.updateProgress(newProgress)
     }
 
     /**
      * Called when a swipe event ends, sets up the underlying Transition with the [velocity] of the
-     * swipe at the given [timeNanos].
+     * swipe at the next frame..
      */
-    fun onTouchUp(timeNanos: Long, velocity: Velocity) {
-        transition.setTouchUp(progressState.value, timeNanos, velocity.x, velocity.y)
+    suspend fun onTouchUp(velocity: Velocity) {
+        coroutineContext.monotonicFrameClock.withFrameNanos { timeNanos ->
+            transition.setTouchUp(motionProgress.progress, timeNanos, velocity.x, velocity.y)
+        }
     }
 
     /**
-     * Call to update the [progressState] after a swipe has ended and as long as there are no other
+     * Call to update the [motionProgress] after a swipe has ended and as long as there are no other
      * touch gestures.
      */
-    fun updateProgressWhileTouchUp(timeNanos: Long) {
-        newProgress =  transition.getTouchUpProgress(timeNanos)
-        progressState.value = newProgress
+    suspend fun updateProgressWhileTouchUp() {
+        val newProgress = coroutineContext.monotonicFrameClock.withFrameNanos { timeNanos ->
+            transition.getTouchUpProgress(timeNanos)
+        }
+        motionProgress.updateProgress(newProgress)
     }
 
     /**
      * Returns true if the progress is still expected to be updated by [updateProgressWhileTouchUp].
      */
     fun pendingProgressWhileTouchUp(): Boolean {
-        return transition.isTouchNotDone(newProgress);
+        return transition.isTouchNotDone(motionProgress.progress)
     }
 }

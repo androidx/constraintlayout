@@ -16,6 +16,7 @@
 
 package androidx.constraintlayout.compose
 
+import androidx.constraintlayout.core.state.ConstraintSetParser
 import androidx.constraintlayout.core.state.Transition
 import org.intellij.lang.annotations.Language
 import org.junit.Test
@@ -36,6 +37,6 @@ internal class ConstraintSetParserKtTest {
               }
             }
         """.trimIndent()
-        parseJSON(content, coreTransition, 0) // Should finish successfully
+        ConstraintSetParser.parseJSON(content, coreTransition, 0) // Should finish successfully
     }
 }

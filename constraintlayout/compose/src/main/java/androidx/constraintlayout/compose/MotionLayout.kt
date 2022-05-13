@@ -18,12 +18,10 @@ package androidx.constraintlayout.compose
 
 import android.annotation.SuppressLint
 import android.graphics.Matrix
+import android.util.Log
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.LayoutScopeMarker
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ExperimentalComposeApi
@@ -31,11 +29,13 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -393,8 +393,8 @@ internal inline fun MotionLayoutCore(
     crossinline content: @Composable MotionLayoutScope.() -> Unit
 ) {
     val measurer = remember { MotionMeasurer() }
-    val scope = remember { MotionLayoutScope(measurer) }
     val progressState = remember { mutableStateOf(0f) }
+    val scope = remember { MotionLayoutScope(measurer, progressState) }
     progressState.value = progress
     val measurePolicy =
         rememberMotionLayoutMeasurePolicy(
@@ -411,21 +411,13 @@ internal inline fun MotionLayoutCore(
     measurer.addLayoutInformationReceiver(informationReceiver)
 
     val forcedScaleFactor = measurer.forcedScaleFactor
+
+    var debugModifications: Modifier = Modifier
     if (!debug.contains(MotionLayoutDebugFlags.NONE) || !forcedScaleFactor.isNaN()) {
-        var mod = modifier
         if (!forcedScaleFactor.isNaN()) {
-            mod = modifier.scale(measurer.forcedScaleFactor)
+            debugModifications = debugModifications.scale(forcedScaleFactor)
         }
-        // FIXME: Consider removing this Box wrapper, it breaks the expected behavior of the layout
-        Box {
-            @Suppress("DEPRECATION")
-            (MultiMeasureLayout(
-                modifier = mod
-                    .motionPointerInput(measurePolicy, progressState, measurer)
-                    .semantics { designInfoProvider = measurer },
-                measurePolicy = measurePolicy,
-                content = { scope.content() }
-            ))
+        debugModifications = debugModifications.drawBehind {
             with(measurer) {
                 if (!forcedScaleFactor.isNaN()) {
                     drawDebugBounds(forcedScaleFactor)
@@ -435,16 +427,117 @@ internal inline fun MotionLayoutCore(
                 }
             }
         }
-    } else {
-        @Suppress("DEPRECATION")
-        (MultiMeasureLayout(
-            modifier = modifier
-                .motionPointerInput(measurePolicy, progressState, measurer)
-                .semantics { designInfoProvider = measurer },
-            measurePolicy = measurePolicy,
-            content = { scope.content() }
-        ))
     }
+    @Suppress("DEPRECATION")
+    (MultiMeasureLayout(
+        modifier = modifier
+            .then(debugModifications)
+            .motionPointerInput(measurePolicy, progressState, measurer)
+            .semantics { designInfoProvider = measurer },
+        measurePolicy = measurePolicy,
+        content = { scope.content() }
+    ))
+}
+
+@OptIn(ExperimentalComposeApi::class)
+@ExperimentalMotionApi
+@Composable
+inline fun MotionLayout(
+    modifier: Modifier = Modifier,
+    optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
+    motionLayoutState: MotionLayoutState,
+    motionScene: MotionScene,
+    crossinline content: @Composable MotionLayoutScope.() -> Unit
+) {
+    MotionLayoutCore(
+        modifier = modifier,
+        optimizationLevel = optimizationLevel,
+        motionLayoutState = motionLayoutState as MotionLayoutStateImpl,
+        motionScene = motionScene,
+        content = content
+    )
+}
+
+@PublishedApi
+@OptIn(ExperimentalComposeApi::class)
+@ExperimentalMotionApi
+@Composable
+internal inline fun MotionLayoutCore(
+    modifier: Modifier = Modifier,
+    optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
+    motionLayoutState: MotionLayoutStateImpl,
+    motionScene: MotionScene,
+    crossinline content: @Composable MotionLayoutScope.() -> Unit
+) {
+    val measurer = remember(motionLayoutState, motionScene) { MotionMeasurer() }
+    val scope = remember(motionLayoutState, motionScene) {
+        MotionLayoutScope(measurer, motionLayoutState.progressState)
+    }
+
+    val transitionContent = remember(motionScene) {
+        motionScene.getTransition("default")
+    }
+
+    val transition: androidx.constraintlayout.compose.Transition? =
+        transitionContent?.let { Transition(it) }
+
+    val startId = transition?.getStartConstraintSetId() ?: "start"
+    val endId = transition?.getEndConstraintSetId() ?: "end"
+
+    val startContent = remember(motionScene) {
+        motionScene.getConstraintSet(startId) ?: motionScene.getConstraintSet(0)
+    }
+    val endContent = remember(motionScene) {
+        motionScene.getConstraintSet(endId) ?: motionScene.getConstraintSet(1)
+    }
+
+    if (startContent == null || endContent == null) {
+        return
+    }
+
+    val start = ConstraintSet(startContent)
+    val end = ConstraintSet(endContent)
+    val debug = EnumSet.of(motionLayoutState.debugMode)
+
+    val measurePolicy =
+        rememberMotionLayoutMeasurePolicy(
+            optimizationLevel,
+            debug,
+            motionScene,
+            start,
+            end,
+            transition,
+            motionLayoutState.progressState,
+            measurer
+        )
+
+    val forcedScaleFactor = measurer.forcedScaleFactor
+
+    var debugModifications: Modifier = Modifier
+    if (!debug.contains(MotionLayoutDebugFlags.NONE) || !forcedScaleFactor.isNaN()) {
+        if (!forcedScaleFactor.isNaN()) {
+            debugModifications = debugModifications.scale(forcedScaleFactor)
+        }
+        debugModifications = debugModifications.drawBehind {
+            with(measurer) {
+                if (!forcedScaleFactor.isNaN()) {
+                    drawDebugBounds(forcedScaleFactor)
+                }
+                if (!debug.contains(MotionLayoutDebugFlags.NONE)) {
+                    drawDebug()
+                }
+            }
+        }
+    }
+    @Suppress("DEPRECATION")
+    (MultiMeasureLayout(
+        modifier = modifier
+            .then(debugModifications)
+            .motionPointerInput(measurePolicy, motionLayoutState.motionProgress, measurer)
+            .semantics { designInfoProvider = measurer },
+        measurePolicy = measurePolicy,
+        content = { scope.content() }
+    ))
 }
 
 /**
@@ -529,7 +622,10 @@ fun MotionScene(@Language("json5") content: String): MotionScene {
 }
 
 @LayoutScopeMarker
-class MotionLayoutScope @PublishedApi internal constructor(measurer: MotionMeasurer) {
+class MotionLayoutScope @PublishedApi internal constructor(
+    measurer: MotionMeasurer,
+    private val progressState: State<Float>
+) {
     private var myMeasurer = measurer
 
     class MotionProperties internal constructor(
@@ -571,30 +667,51 @@ class MotionLayoutScope @PublishedApi internal constructor(measurer: MotionMeasu
     }
 
     @Composable
-    fun motionProperties(id: String): MutableState<MotionProperties> = remember {
-        mutableStateOf(MotionProperties(id, null, myMeasurer))
-    }
+    fun motionProperties(id: String): State<MotionProperties> =
+    // TODO: Make properly observable, passing the progressState as a remember 'key' is a hack
+        //  to make it work as observable
+        remember(id, progressState.value) {
+            mutableStateOf(MotionProperties(id, null, myMeasurer))
+        }
 
+    /**
+     * FIXME: This implementation is not observable
+     */
     fun motionProperties(id: String, tag: String): MotionProperties {
         return MotionProperties(id, tag, myMeasurer)
     }
 
+    /**
+     * FIXME: This implementation is not observable
+     */
     fun motionColor(id: String, name: String): Color {
         return myMeasurer.getCustomColor(id, name)
     }
 
+    /**
+     * FIXME: This implementation is not observable
+     */
     fun motionFloat(id: String, name: String): Float {
         return myMeasurer.getCustomFloat(id, name)
     }
 
+    /**
+     * FIXME: This implementation is not observable
+     */
     fun motionInt(id: String, name: String): Int {
         return myMeasurer.getCustomFloat(id, name).toInt()
     }
 
+    /**
+     * FIXME: This implementation is not observable
+     */
     fun motionDistance(id: String, name: String): Dp {
         return myMeasurer.getCustomFloat(id, name).dp
     }
 
+    /**
+     * FIXME: This implementation is not observable
+     */
     fun motionFontSize(id: String, name: String): TextUnit {
         return myMeasurer.getCustomFloat(id, name).sp
     }
@@ -623,19 +740,26 @@ fun Transition(@Language("json5") content: String): androidx.constraintlayout.co
         val parsed = try {
             CLParser.parse(content)
         } catch (e: CLParsingException) {
-            System.err.println("Error parsing JSON $e")
+            Log.e("CML", "Error parsing JSON $e")
             null
         }
         mutableStateOf(
             if (parsed != null) {
                 object : androidx.constraintlayout.compose.Transition {
+                    val pixelDp = CorePixelDp { dpValue -> dpValue * dpToPixel }
+
+                    // TODO: there's probably a better way to do this, since there's no reason to
+                    //  call `applyTo` more than once
+                    var applied = false
+
                     override fun applyTo(transition: Transition, type: Int) {
                         try {
-                            val pixelDp =
-                                CorePixelDp { dpValue  -> dpValue  * dpToPixel }
-                            TransitionParser.parse(parsed, transition, pixelDp)
+                            if (!applied) {
+                                TransitionParser.parse(parsed, transition, pixelDp)
+                                applied = true
+                            }
                         } catch (e: CLParsingException) {
-                            System.err.println("Error parsing JSON $e")
+                            Log.e("CML", "Error parsing JSON $e")
                         }
                     }
 
@@ -681,6 +805,46 @@ internal fun rememberMotionLayoutMeasurePolicy(
     optimizationLevel,
     debug,
     needsUpdate,
+    constraintSetStart,
+    constraintSetEnd,
+    transition
+) {
+    measurer.initWith(constraintSetStart, constraintSetEnd, transition, progress.value)
+    MeasurePolicy { measurables, constraints ->
+        val layoutSize = measurer.performInterpolationMeasure(
+            constraints,
+            layoutDirection,
+            constraintSetStart,
+            constraintSetEnd,
+            transition,
+            measurables,
+            optimizationLevel,
+            progress.value,
+            this
+        )
+        layout(layoutSize.width, layoutSize.height) {
+            with(measurer) {
+                performLayout(measurables)
+            }
+        }
+    }
+}
+
+@Composable
+@PublishedApi
+internal fun rememberMotionLayoutMeasurePolicy(
+    optimizationLevel: Int,
+    debug: EnumSet<MotionLayoutDebugFlags>,
+    motionScene: MotionScene,
+    constraintSetStart: ConstraintSet,
+    constraintSetEnd: ConstraintSet,
+    transition: androidx.constraintlayout.compose.Transition?,
+    progress: State<Float>,
+    measurer: MotionMeasurer
+) = remember(
+    optimizationLevel,
+    debug,
+    motionScene,
     constraintSetStart,
     constraintSetEnd,
     transition
@@ -871,6 +1035,8 @@ internal class MotionMeasurer : Measurer() {
                 optimizationLevel, constraintSetEnd, measurables, constraints
             )
             this.transition.updateFrom(root, Transition.END)
+
+            // TODO: Call might be unnecessary, see implementation
             transition?.applyTo(this.transition, 0)
         }
 
@@ -978,34 +1144,31 @@ internal class MotionMeasurer : Measurer() {
         layoutInformationReceiver?.setLayoutInformation(json.toString())
     }
 
-    @Composable
-    fun BoxScope.drawDebug() {
-        Canvas(modifier = Modifier.matchParentSize()) {
-            var index = 0
-            val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
-            for (child in root.children) {
-                val startFrame = transition.getStart(child)
-                val endFrame = transition.getEnd(child)
-                translate(2f, 2f) {
-                    drawFrameDebug(
-                        size.width,
-                        size.height,
-                        startFrame,
-                        endFrame,
-                        pathEffect,
-                        Color.White
-                    )
-                }
+    fun DrawScope.drawDebug() {
+        var index = 0
+        val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+        for (child in root.children) {
+            val startFrame = transition.getStart(child)
+            val endFrame = transition.getEnd(child)
+            translate(2f, 2f) {
                 drawFrameDebug(
                     size.width,
                     size.height,
                     startFrame,
                     endFrame,
                     pathEffect,
-                    Color.Blue
+                    Color.White
                 )
-                index++
             }
+            drawFrameDebug(
+                size.width,
+                size.height,
+                startFrame,
+                endFrame,
+                pathEffect,
+                Color.Blue
+            )
+            index++
         }
     }
 
