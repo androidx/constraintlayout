@@ -51,6 +51,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.GraphicsLayerScope
 import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.FirstBaseline
 import androidx.compose.ui.layout.LayoutIdParentData
@@ -1410,23 +1411,27 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
     @Composable
     fun BoxScope.drawDebugBounds(forcedScaleFactor: Float) {
         Canvas(modifier = Modifier.matchParentSize()) {
-            val w = layoutCurrentWidth * forcedScaleFactor
-            val h = layoutCurrentHeight * forcedScaleFactor
-            var dx = (size.width - w) / 2f
-            var dy = (size.height - h) / 2f
-            var color = Color.White
-            drawLine(color, Offset(dx, dy), Offset(dx + w, dy))
-            drawLine(color, Offset(dx + w, dy), Offset(dx + w, dy + h))
-            drawLine(color, Offset(dx + w, dy + h), Offset(dx, dy + h))
-            drawLine(color, Offset(dx, dy + h), Offset(dx, dy))
-            dx += 1
-            dy += 1
-            color = Color.Black
-            drawLine(color, Offset(dx, dy), Offset(dx + w, dy))
-            drawLine(color, Offset(dx + w, dy), Offset(dx + w, dy + h))
-            drawLine(color, Offset(dx + w, dy + h), Offset(dx, dy + h))
-            drawLine(color, Offset(dx, dy + h), Offset(dx, dy))
+            drawDebugBounds(forcedScaleFactor)
         }
+    }
+
+    fun DrawScope.drawDebugBounds(forcedScaleFactor: Float) {
+        val w = layoutCurrentWidth * forcedScaleFactor
+        val h = layoutCurrentHeight * forcedScaleFactor
+        var dx = (size.width - w) / 2f
+        var dy = (size.height - h) / 2f
+        var color = Color.White
+        drawLine(color, Offset(dx, dy), Offset(dx + w, dy))
+        drawLine(color, Offset(dx + w, dy), Offset(dx + w, dy + h))
+        drawLine(color, Offset(dx + w, dy + h), Offset(dx, dy + h))
+        drawLine(color, Offset(dx, dy + h), Offset(dx, dy))
+        dx += 1
+        dy += 1
+        color = Color.Black
+        drawLine(color, Offset(dx, dy), Offset(dx + w, dy))
+        drawLine(color, Offset(dx + w, dy), Offset(dx + w, dy + h))
+        drawLine(color, Offset(dx + w, dy + h), Offset(dx, dy + h))
+        drawLine(color, Offset(dx, dy + h), Offset(dx, dy))
     }
 
     private var designElements = arrayListOf<ConstraintSetParser.DesignElement>()
