@@ -119,6 +119,10 @@ public class SpringStopEngine implements StopEngine {
     }
 
     private void compute(double dt) {
+        if (dt <= 0) {
+            // Nothing to compute if there's no time difference
+            return;
+        }
 
         double k = mStiffness;
         double c = mDamping;
