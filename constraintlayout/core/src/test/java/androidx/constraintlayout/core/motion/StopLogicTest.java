@@ -18,6 +18,8 @@ package androidx.constraintlayout.core.motion;
 
 import static org.junit.Assert.assertEquals;
 
+import androidx.constraintlayout.core.motion.utils.SpringStopEngine;
+import androidx.constraintlayout.core.motion.utils.StopEngine;
 import androidx.constraintlayout.core.motion.utils.StopLogicEngine;
 
 import org.junit.Test;
@@ -25,6 +27,46 @@ import org.junit.Test;
 import java.util.Arrays;
 
 public class StopLogicTest {
+
+    @Test
+    public void basicSpring() {
+        SpringStopEngine stop = new SpringStopEngine();
+        float position = 0.3f;
+        float destination = 1f;
+        float currentVelocity = 0.2f;
+        float maxTime = 0.9f;
+        float mass = 1f;
+        float stiffness = 100f;
+        float damping = 50f;
+        float stopThreshold = 0f;
+        int springBoundary = 0;
+        stop.springConfig(position,
+                destination,
+                currentVelocity,
+                mass,
+                stiffness,
+                damping,
+                stopThreshold,
+                springBoundary);
+        String expect = "" +
+                "|*                                                           | 0.0\n" +
+                "|                                                            |\n" +
+                "|                                                            |\n" +
+                "|                                                            |\n" +
+                "|**                                                          |\n" +
+                "|  ****                                                      | 0.316\n" +
+                "|      ***                                                   |\n" +
+                "|         ****                                               |\n" +
+                "|             ****                                           |\n" +
+                "|                 *****                                      |\n" +
+                "|                      ******                                | 0.632\n" +
+                "|                            *******                         |\n" +
+                "|                                   **********               |\n" +
+                "|                                             *************  |\n" +
+                "|                                                           *| 0.885\n" +
+                "0.0                                                      0.885\n";
+        assertEquals(expect, verify(stop, position, maxTime));
+    }
 
     @Test
     public void cruseDecelerate() {
@@ -214,7 +256,7 @@ public class StopLogicTest {
         assertEquals(expect, verify(stop, position, maxTime));
     }
 
-    private static String verify(StopLogicEngine stop, float position, float maxTime) {
+    private static String verify(StopEngine stop, float position, float maxTime) {
         float p = stop.getInterpolation(0);
         assertEquals(p, position, 0.0001);
         int count = 60;
