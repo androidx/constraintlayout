@@ -198,10 +198,42 @@ internal class MotionLayoutStateImpl(
  * Returns a [MotionLayoutState], it can be used to observe and animate the progress value of a
  * [MotionLayout] Composable.
  *
+ * - To animate on click:
+ * ```
+ * @Composable
+ * fun MyComposable() {
+ *   val motionState = rememberMotionLayoutState()
+ *   Column {
+ *     MotionLayout(motionLayoutState = motionState, motionScene = MotionScene(<your-json>)) {
+ *       <your-composables>
+ *     }
+ *     Button(
+ *       // Animate the associated MotionLayout to end (progress = 1f)
+ *       onClick = { motionState.animateTo(1f, spring()) }
+ *     ) {
+ *       Text(text = "Send")
+ *     }
+ *   }
+ * }
+ * ```
+ * - Use the current progress value:
+ * ```
+ * @Composable
+ * fun MyComposable() {
+ *   val motionState = rememberMotionLayoutState()
+ *   Column {
+ *     MotionLayout(motionLayoutState = motionState, motionScene = MotionScene(<your-json>)) {
+ *       <your-composables>
+ *     }
+ *     // Text will recompose during MotionLayout animation with the current progress value
+ *     Text(text = "Value: ${motionState.currentProgress}")
+ *   }
+ * }
+ * ```
+ *
  * Returns the same instance if [key] is equal to the previous composition, otherwise produces and
  * remembers a new instance.
  */
-@Suppress("NOTHING_TO_INLINE")
 @ExperimentalMotionApi
 @Composable
 fun rememberMotionLayoutState(
