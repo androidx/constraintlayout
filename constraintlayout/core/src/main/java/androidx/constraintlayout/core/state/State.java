@@ -555,6 +555,11 @@ public class State {
         mDirtyBaselineNeededWidgets = true;
     }
 
+    /**
+     * Does this constraintWidget need a baseline
+     * @param constraintWidget
+     * @return true if the constraintWidget needs a baseline
+     */
     public boolean isBaselineNeeded(ConstraintWidget constraintWidget) {
         if (mDirtyBaselineNeededWidgets) {
             mBaselineNeededWidgets.clear();
