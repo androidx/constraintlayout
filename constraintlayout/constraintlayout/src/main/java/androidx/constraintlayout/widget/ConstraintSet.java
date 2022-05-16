@@ -913,7 +913,7 @@ public class ConstraintSet {
                     case INTERNAL_MATCH_PARENT: {
                         finalValue = value;
                     }
-                    break;
+                        break;
                     case INTERNAL_MATCH_CONSTRAINT: {
                         finalValue = MATCH_CONSTRAINT;
                     }
@@ -1162,9 +1162,9 @@ public class ConstraintSet {
      * @param types a comer seprated array of strings.
      */
     public void setStateLabels(String types) {
-         mMatchLabels = types.split(",");
+        mMatchLabels = types.split(",");
         for (int i = 0; i < mMatchLabels.length; i++) {
-             mMatchLabels[i] = mMatchLabels[i].trim();
+            mMatchLabels[i] = mMatchLabels[i].trim();
         }
     }
     /**
@@ -4530,8 +4530,8 @@ public class ConstraintSet {
         try {
 
             for (int eventType = parser.getEventType();
-                 eventType != XmlResourceParser.END_DOCUMENT;
-                 eventType = parser.next()) {
+                    eventType != XmlResourceParser.END_DOCUMENT;
+                    eventType = parser.next()) {
                 switch (eventType) {
                     case XmlResourceParser.START_DOCUMENT:
                         document = parser.getName();
@@ -4575,8 +4575,8 @@ public class ConstraintSet {
         try {
             Constraint constraint = null;
             for (int eventType = parser.getEventType();
-                 eventType != XmlResourceParser.END_DOCUMENT;
-                 eventType = parser.next()) {
+                    eventType != XmlResourceParser.END_DOCUMENT;
+                    eventType = parser.next()) {
                 switch (eventType) {
                     case XmlResourceParser.START_DOCUMENT:
                         String document = parser.getName();
