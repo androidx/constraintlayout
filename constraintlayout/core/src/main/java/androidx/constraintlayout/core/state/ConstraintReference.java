@@ -20,6 +20,7 @@ import static androidx.constraintlayout.core.widgets.ConstraintWidget.HORIZONTAL
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.UNKNOWN;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
 
+import androidx.constraintlayout.core.motion.utils.TypedBundle;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.state.helpers.Facade;
 import androidx.constraintlayout.core.widgets.ConstraintAnchor;
@@ -136,6 +137,8 @@ public class ConstraintReference implements Reference {
 
     private HashMap<String, Integer> mCustomColors = new HashMap<>();
     private HashMap<String, Float> mCustomFloats = new HashMap<>();
+
+    TypedBundle mMotionProperties = null;
 
     /**
      * @TODO: add description
@@ -1290,6 +1293,7 @@ public class ConstraintReference implements Reference {
         mConstraintWidget.frame.alpha = mAlpha;
         mConstraintWidget.frame.visibility = mVisibility;
         mConstraintWidget.setVisibility(mVisibility);
+        mConstraintWidget.frame.setMotionAttributes(mMotionProperties);
         if (mCustomColors != null) {
             for (String key : mCustomColors.keySet()) {
                 Integer color = mCustomColors.get(key);

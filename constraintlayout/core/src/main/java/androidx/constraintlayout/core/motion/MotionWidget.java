@@ -17,6 +17,7 @@
 package androidx.constraintlayout.core.motion;
 
 import androidx.constraintlayout.core.motion.utils.TypedValues;
+import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.state.WidgetFrame;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
@@ -146,15 +147,32 @@ public class MotionWidget implements TypedValues {
 
     public MotionWidget(WidgetFrame f) {
         mWidgetFrame = f;
+        Utils.log(" MotionWidget "+f.getId());
     }
 
+    /**
+     * This populates the motion attributes from widgetFrame to the MotionWidget
+     */
+    public void updateMotion() {
+        Utils.log("  id= "+mWidgetFrame.getId());
+
+        if (mWidgetFrame.getMotionProperties() != null) {
+            Utils.logStack(" motionsetup ",3);
+            Utils.log(mWidgetFrame.getMotionProperties().toString());
+            mWidgetFrame.getMotionProperties().applyDelta(this);
+        }
+    }
     @Override
     public boolean setValue(int id, int value) {
-        return setValueAttributes(id, value);
-    }
+        boolean set = setValueAttributes(id, value);
+        if (set) {
+            return true;
+        }
+        return setValueMotion(id, value);    }
 
     @Override
     public boolean setValue(int id, float value) {
+        Utils.log(" id = "+id+ " (should be "+ MotionType.TYPE_PATHMOTION_ARC+")");
         boolean set = setValueAttributes(id, value);
         if (set) {
             return true;
@@ -179,6 +197,7 @@ public class MotionWidget implements TypedValues {
      * @return
      */
     public boolean setValueMotion(int id, int value) {
+        Utils.log(" setting motion ");
         switch (id) {
             case MotionType.TYPE_ANIMATE_RELATIVE_TO:
                 mMotion.mAnimateRelativeTo = value;
@@ -187,6 +206,7 @@ public class MotionWidget implements TypedValues {
                 mMotion.mAnimateCircleAngleTo = value;
                 break;
             case MotionType.TYPE_PATHMOTION_ARC:
+                Utils.log(" setting motion ");
                 mMotion.mPathMotionArc = value;
                 break;
             case MotionType.TYPE_DRAW_PATH:

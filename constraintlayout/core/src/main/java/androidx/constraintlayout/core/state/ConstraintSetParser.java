@@ -16,6 +16,8 @@
 
 package androidx.constraintlayout.core.state;
 
+import androidx.constraintlayout.core.motion.utils.TypedBundle;
+import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.parser.CLArray;
 import androidx.constraintlayout.core.parser.CLElement;
@@ -31,7 +33,6 @@ import androidx.constraintlayout.core.state.helpers.GuidelineReference;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class ConstraintSetParser {
@@ -935,6 +936,9 @@ public class ConstraintSetParser {
                 case "custom":
                     parseCustomProperties(element, reference, constraintName);
                     break;
+                case "motion":
+                    parseMotionProperties(element.get(constraintName), reference);
+                    break;
                 default:
                     parseConstraint(state, layoutVariables, element, reference, constraintName);
 
@@ -970,6 +974,83 @@ public class ConstraintSetParser {
         }
 
 
+    }
+
+    private static int map(String val, String... types) {
+        for (int i = 0; i < types.length; i++) {
+            if (types[i].equals(val)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
+    /**
+     * parse the motion section of a constraint
+     * <pre>
+     * csetName: {
+     *   idToConstrain : {
+     *       motion: {
+     *          pathArc : 'startVertical'
+     *          relativeTo: 'id'
+     *          easing: 'curve'
+     *          stagger: '2'
+     *          quantize: steps or [steps, 'interpolator' phase ]
+     *       }
+     *   }
+     * }
+     * </pre>
+     * @param element
+     * @param reference
+     * @throws CLParsingException
+     */
+    private static void parseMotionProperties(
+            CLElement element,
+            ConstraintReference reference
+    ) throws CLParsingException {
+        if (!(element instanceof CLObject)) {
+            return;
+        }
+        CLObject obj = (CLObject) element;
+        TypedBundle motionProperties = new TypedBundle();
+        ArrayList<String> constraints = obj.names();
+        if (constraints == null) {
+            Utils.log(" constraints == nul ");
+
+            return;
+        }
+        for (String constraintName : constraints) {
+            Utils.log(" constraintName "+constraintName);
+
+            switch (constraintName) {
+                case "pathArc":
+                    Utils.log(" parse = pathArch");
+                    String val = obj.getString(constraintName);
+                    int ord = map(val, "none", "startVertical", "startHorizontal", "flip");
+                    if (ord == -1) {
+                        System.err.println(obj.getLine()+" pathArc = '" + val + "'");
+                        break;
+                    }
+                    Utils.log(" parse = pathArch "+ord);
+                    motionProperties.add(TypedValues.MotionType.TYPE_PATHMOTION_ARC, ord);
+                    break;
+                case "relativeTo":
+                    motionProperties.add(TypedValues.MotionType.TYPE_ANIMATE_RELATIVE_TO,
+                            obj.getString(constraintName));
+                    break;
+                case "easing":
+                    motionProperties.add(TypedValues.MotionType.TYPE_EASING, obj.getString(constraintName));
+                    break;
+                case "stagger":
+                    motionProperties.add(TypedValues.MotionType.TYPE_STAGGER,  obj.getFloat(constraintName));
+                    break;
+                case "quantize":
+                    motionProperties.add(TypedValues.MotionType.TYPE_QUANTIZE_INTERPOLATOR_TYPE, 3);
+                    break;
+            }
+        }
+        reference.mMotionProperties = motionProperties;
     }
 
     static void parseConstraint(

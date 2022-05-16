@@ -699,7 +699,7 @@ public class Motion implements TypedValues {
             }
         }
 
-        if (mPathMotionArc != UNSET) {
+        if (mPathMotionArc != UNSET && mStartMotionPath.mPathMotionArc == UNSET) {
             mStartMotionPath.mPathMotionArc = mPathMotionArc;
         }
 

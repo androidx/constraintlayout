@@ -832,7 +832,7 @@ public class Transition implements TypedValues {
         if (widgetState == null) {
             widgetState = new WidgetState();
             mBundle.applyDelta(widgetState.mMotionControl);
-
+            widgetState.mMotionWidgetStart.updateMotion();
             mState.put(widgetId, widgetState);
             if (child != null) {
                 widgetState.update(child, transitionState);
@@ -934,6 +934,7 @@ public class Transition implements TypedValues {
         public void update(ConstraintWidget child, int state) {
             if (state == START) {
                 mStart.update(child);
+                mMotionWidgetStart.updateMotion();
                 mMotionControl.setStart(mMotionWidgetStart);
             } else if (state == END) {
                 mEnd.update(child);
