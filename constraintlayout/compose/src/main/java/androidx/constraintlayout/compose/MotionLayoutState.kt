@@ -195,8 +195,8 @@ internal class MotionLayoutStateImpl(
 }
 
 /**
- * Returns a [MotionLayoutState], it can be used to observe and animate the progress value of a
- * [MotionLayout] Composable.
+ * Returns a [MotionLayoutState], when passed to a [MotionLayout] Composable it can be used to
+ * observe and animate its internal progress value.
  *
  * - To animate on click:
  * ```
@@ -232,7 +232,7 @@ internal class MotionLayoutStateImpl(
  * ```
  *
  * Returns the same instance if [key] is equal to the previous composition, otherwise produces and
- * remembers a new instance.
+ * remembers a new instance (with the given initial values).
  */
 @ExperimentalMotionApi
 @Composable
