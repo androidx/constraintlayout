@@ -104,6 +104,11 @@ public class ConstraintSetParser {
 
         }
 
+        /**
+         * insert an override variable
+         * @param elementName the name
+         * @param value the value a float
+         */
         public void putOverride(String elementName, float value) {
             GeneratedValue generator = new OverrideValue(value);
             generators.put(elementName, generator);
@@ -450,6 +455,14 @@ public class ConstraintSetParser {
         }
     }
 
+    /**
+     * Top leve parsing of the json ConstraintSet supporting
+     * "Variables", "Helpers", "Generate", guidelines, and barriers
+     * @param content the JSON string
+     * @param state the state to populate
+     * @param layoutVariables the variables to override
+     * @throws CLParsingException
+     */
     public static void parseJSON(String content, State state, LayoutVariables layoutVariables) throws CLParsingException {
         try {
             CLObject json = CLParser.parse(content);
@@ -555,6 +568,12 @@ public class ConstraintSetParser {
         }
     }
 
+    /**
+     * parse the Design time elements.
+     * @param content the json
+     * @param list output the list of design elements
+     * @throws CLParsingException
+     */
     public static void parseDesignElementsJSON(String content, ArrayList<DesignElement> list) throws CLParsingException {
         CLObject json = CLParser.parse(content);
         ArrayList<String> elements = json.names();

@@ -1180,6 +1180,11 @@ public class ConstraintSet {
         }
     }
 
+    /**
+     * Test if the list of strings matches labels defined on this constraintSet
+     * @param types list of types
+     * @return true if all types are in the labeles
+     */
     public boolean matchesLabels(String...types) {
         for (String type : types) {
             boolean match = false;
