@@ -868,9 +868,11 @@ public class ConstraintSet {
                 }
                 if (from.mTargetString.matches(potential.layout.mConstraintTag)) {
                     from.mDelta.applyDelta(potential);
-                    //noinspection unchecked
-                    potential.mCustomConstraints.putAll(
-                            (HashMap<String, ConstraintAttribute>) from.mCustomConstraints.clone());
+
+                    @SuppressWarnings("unchecked")
+                    HashMap<String, ConstraintAttribute> fromClone =
+                            (HashMap<String, ConstraintAttribute>) from.mCustomConstraints.clone();
+                    potential.mCustomConstraints.putAll(fromClone);
                 }
             }
         }
