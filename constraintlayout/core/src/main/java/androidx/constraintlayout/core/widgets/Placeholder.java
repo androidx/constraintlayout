@@ -29,10 +29,6 @@ public class Placeholder extends VirtualLayout {
 
     /**
      * @TODO: add description
-     * @param widthMode
-     * @param widthSize
-     * @param heightMode
-     * @param heightSize
      */
     public void measure(int widthMode, int widthSize, int heightMode, int heightSize) {
         int width = 0;

@@ -22,25 +22,21 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget;
 public interface Reference {
     /**
      * @TODO: add description
-     * @return
      */
     ConstraintWidget getConstraintWidget();
 
     /**
      * @TODO: add description
-     * @param widget
      */
     void setConstraintWidget(ConstraintWidget widget);
 
     /**
      * @TODO: add description
-     * @param key
      */
     void setKey(Object key);
 
     /**
      * @TODO: add description
-     * @return
      */
     Object getKey();
 
@@ -51,7 +47,6 @@ public interface Reference {
 
     /**
      * @TODO: add description
-     * @return
      */
     Facade getFacade();
 }

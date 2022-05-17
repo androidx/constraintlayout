@@ -71,7 +71,6 @@ public class Guideline extends ConstraintWidget {
 
     /**
      * @TODO: add description
-     * @return
      */
     public int getRelativeBehaviour() {
         if (mRelativePercent != -1) {
@@ -88,7 +87,6 @@ public class Guideline extends ConstraintWidget {
 
     /**
      * @TODO: add description
-     * @param orientation
      */
     public void setOrientation(int orientation) {
         if (mOrientation == orientation) {
@@ -114,8 +112,6 @@ public class Guideline extends ConstraintWidget {
 
     /**
      * Specify the xml type for the container
-     *
-     * @return
      */
     @Override
     public String getType() {
@@ -139,14 +135,14 @@ public class Guideline extends ConstraintWidget {
                     return mAnchor;
                 }
             }
-                break;
+            break;
             case TOP:
             case BOTTOM: {
                 if (mOrientation == HORIZONTAL) {
                     return mAnchor;
                 }
             }
-                break;
+            break;
             case BASELINE:
             case CENTER:
             case CENTER_X:
@@ -159,7 +155,6 @@ public class Guideline extends ConstraintWidget {
 
     /**
      * @TODO: add description
-     * @param value
      */
     public void setGuidePercent(int value) {
         setGuidePercent(value / 100f);
@@ -167,7 +162,6 @@ public class Guideline extends ConstraintWidget {
 
     /**
      * @TODO: add description
-     * @param value
      */
     public void setGuidePercent(float value) {
         if (value > -1) {
@@ -179,7 +173,6 @@ public class Guideline extends ConstraintWidget {
 
     /**
      * @TODO: add description
-     * @param value
      */
     public void setGuideBegin(int value) {
         if (value > -1) {
@@ -191,7 +184,6 @@ public class Guideline extends ConstraintWidget {
 
     /**
      * @TODO: add description
-     * @param value
      */
     public void setGuideEnd(int value) {
         if (value > -1) {
@@ -215,7 +207,6 @@ public class Guideline extends ConstraintWidget {
 
     /**
      * @TODO: add description
-     * @param position
      */
     public void setFinalValue(int position) {
         if (LinearSystem.FULL_DEBUG) {
@@ -250,12 +241,12 @@ public class Guideline extends ConstraintWidget {
         ConstraintAnchor begin = parent.getAnchor(ConstraintAnchor.Type.LEFT);
         ConstraintAnchor end = parent.getAnchor(ConstraintAnchor.Type.RIGHT);
         boolean parentWrapContent = mParent != null
-                ? mParent.mListDimensionBehaviors[DIMENSION_HORIZONTAL] == WRAP_CONTENT : false;
+                && mParent.mListDimensionBehaviors[DIMENSION_HORIZONTAL] == WRAP_CONTENT;
         if (mOrientation == HORIZONTAL) {
             begin = parent.getAnchor(ConstraintAnchor.Type.TOP);
             end = parent.getAnchor(ConstraintAnchor.Type.BOTTOM);
             parentWrapContent = mParent != null
-                    ? mParent.mListDimensionBehaviors[DIMENSION_VERTICAL] == WRAP_CONTENT : false;
+                    && mParent.mListDimensionBehaviors[DIMENSION_VERTICAL] == WRAP_CONTENT;
         }
         if (mResolved && mAnchor.hasFinalValue()) {
             SolverVariable guide = system.createObjectVariable(mAnchor);

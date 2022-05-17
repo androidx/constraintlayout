@@ -15,11 +15,11 @@
  */
 package androidx.constraintlayout.core;
 
+import static org.junit.Assert.assertEquals;
+
 import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
-
-import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 

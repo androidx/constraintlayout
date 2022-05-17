@@ -54,8 +54,8 @@ public class ConstraintSetParser {
         }
 
         DesignElement(String id,
-                      String type,
-                      HashMap<String, String> params) {
+                String type,
+                HashMap<String, String> params) {
             mId = id;
             mType = type;
             mParams = params;
@@ -85,11 +85,11 @@ public class ConstraintSetParser {
         }
 
         void put(String elementName,
-                 float from,
-                 float to,
-                 float step,
-                 String prefix,
-                 String postfix) {
+                float from,
+                float to,
+                float step,
+                String prefix,
+                String postfix) {
             if (mGenerators.containsKey(elementName)) {
                 if (mGenerators.get(elementName) instanceof OverrideValue) {
                     return;
@@ -104,8 +104,9 @@ public class ConstraintSetParser {
 
         /**
          * insert an override variable
+         *
          * @param elementName the name
-         * @param value the value a float
+         * @param value       the value a float
          */
         public void putOverride(String elementName, float value) {
             GeneratedValue generator = new OverrideValue(value);
@@ -183,10 +184,10 @@ public class ConstraintSetParser {
         float mMax;
 
         FiniteGenerator(float from,
-                        float to,
-                        float step,
-                        String prefix,
-                        String postfix) {
+                float to,
+                float step,
+                String prefix,
+                String postfix) {
             mFrom = from;
             mTo = to;
             mStep = step;
@@ -246,9 +247,10 @@ public class ConstraintSetParser {
 
     /**
      * Parse and populate a transition
-     * @param content JSON string to parse
+     *
+     * @param content    JSON string to parse
      * @param transition The Transition to be populated
-     * @param state @TODO what is this
+     * @param state      @TODO what is this
      */
     public static void parseJSON(String content, Transition transition, int state) {
         try {
@@ -292,9 +294,8 @@ public class ConstraintSetParser {
 
     /**
      * Parse and build a motionScene
+     *
      * @Todo this should be in a MotionScene / MotionSceneParser
-     * @param scene
-     * @param content
      */
     public static void parseMotionSceneJSON(CoreMotionScene scene, String content) {
         try {
@@ -327,12 +328,9 @@ public class ConstraintSetParser {
 
     /**
      * Parse ConstraintSets and populate MotionScene
-     * @param scene
-     * @param json
-     * @throws CLParsingException
      */
     static void parseConstraintSets(CoreMotionScene scene,
-                                    CLObject json) throws CLParsingException {
+            CLObject json) throws CLParsingException {
         ArrayList<String> constraintSetNames = json.names();
         if (constraintSetNames == null) {
             return;
@@ -372,7 +370,7 @@ public class ConstraintSetParser {
     }
 
     static void override(CLObject baseJson,
-                         String name, CLObject overrideValue) throws CLParsingException {
+            String name, CLObject overrideValue) throws CLParsingException {
         if (!baseJson.has(name)) {
             baseJson.put(name, overrideValue);
         } else {
@@ -428,10 +426,6 @@ public class ConstraintSetParser {
 
     /**
      * Parse the Transition
-     *
-     * @param scene
-     * @param json
-     * @throws CLParsingException
      */
     static void parseTransitions(CoreMotionScene scene, CLObject json) throws CLParsingException {
         ArrayList<String> elements = json.names();
@@ -445,9 +439,6 @@ public class ConstraintSetParser {
 
     /**
      * Used to parse for "export"
-     *
-     * @param scene
-     * @param json
      */
     static void parseHeader(CoreMotionScene scene, CLObject json) {
         String name = json.getStringOrNull("export");
@@ -459,13 +450,13 @@ public class ConstraintSetParser {
     /**
      * Top leve parsing of the json ConstraintSet supporting
      * "Variables", "Helpers", "Generate", guidelines, and barriers
-     * @param content the JSON string
-     * @param state the state to populate
+     *
+     * @param content         the JSON string
+     * @param state           the state to populate
      * @param layoutVariables the variables to override
-     * @throws CLParsingException
      */
     public static void parseJSON(String content, State state,
-                                 LayoutVariables layoutVariables) throws CLParsingException {
+            LayoutVariables layoutVariables) throws CLParsingException {
         try {
             CLObject json = CLParser.parse(content);
             ArrayList<String> elements = json.names();
@@ -534,8 +525,8 @@ public class ConstraintSetParser {
     }
 
     private static void parseVariables(State state,
-                                       LayoutVariables layoutVariables,
-                                       CLObject json) throws CLParsingException {
+            LayoutVariables layoutVariables,
+            CLObject json) throws CLParsingException {
         ArrayList<String> elements = json.names();
         if (elements == null) {
             return;
@@ -575,9 +566,9 @@ public class ConstraintSetParser {
 
     /**
      * parse the Design time elements.
+     *
      * @param content the json
-     * @param list output the list of design elements
-     * @throws CLParsingException
+     * @param list    output the list of design elements
      */
     public static void parseDesignElementsJSON(
             String content, ArrayList<DesignElement> list) throws CLParsingException {
@@ -627,8 +618,8 @@ public class ConstraintSetParser {
     }
 
     static void parseHelpers(State state,
-                             LayoutVariables layoutVariables,
-                             CLArray element) throws CLParsingException {
+            LayoutVariables layoutVariables,
+            CLArray element) throws CLParsingException {
         for (int i = 0; i < element.size(); i++) {
             CLElement helper = element.get(i);
             if (helper instanceof CLArray) {
@@ -654,8 +645,8 @@ public class ConstraintSetParser {
     }
 
     static void parseGenerate(State state,
-                              LayoutVariables layoutVariables,
-                              CLObject json) throws CLParsingException {
+            LayoutVariables layoutVariables,
+            CLObject json) throws CLParsingException {
         ArrayList<String> elements = json.names();
         if (elements == null) {
             return;
@@ -672,7 +663,7 @@ public class ConstraintSetParser {
     }
 
     static void parseChain(int orientation, State state,
-                           LayoutVariables margins, CLArray helper) throws CLParsingException {
+            LayoutVariables margins, CLArray helper) throws CLParsingException {
         ChainReference chain = (orientation == ConstraintWidget.HORIZONTAL)
                 ? state.horizontalChain() : state.verticalChain();
         CLElement refs = helper.get(1);
@@ -731,7 +722,7 @@ public class ConstraintSetParser {
 
 
     static void parseGuideline(int orientation,
-                               State state, CLArray helper) throws CLParsingException {
+            State state, CLArray helper) throws CLParsingException {
         CLElement params = helper.get(1);
         if (!(params instanceof CLObject)) {
             return;
@@ -1187,9 +1178,9 @@ public class ConstraintSetParser {
     }
 
     static Dimension parseDimension(CLObject element,
-                                    String constraintName,
-                                    State state,
-                                    CorePixelDp dpToPixels) throws CLParsingException {
+            String constraintName,
+            State state,
+            CorePixelDp dpToPixels) throws CLParsingException {
         CLElement dimensionElement = element.get(constraintName);
         Dimension dimension = Dimension.createFixed(0);
         if (dimensionElement instanceof CLString) {
@@ -1230,7 +1221,6 @@ public class ConstraintSetParser {
     /**
      * parse a color string
      *
-     * @param value
      * @return -1 if it cannot parse unsigned long
      */
     static long parseColorString(String value) {

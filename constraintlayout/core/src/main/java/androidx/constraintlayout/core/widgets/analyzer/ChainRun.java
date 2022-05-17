@@ -64,7 +64,6 @@ public class ChainRun extends WidgetRun {
 
     /**
      * @TODO: add description
-     * @return
      */
     public long getWrapDimension() {
         final int count = mWidgets.size();

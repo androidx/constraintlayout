@@ -46,7 +46,7 @@ public class MotionKeyTrigger extends MotionKey {
     private String mPositiveCross = null;
     private int mTriggerID = UNSET;
     private int mTriggerCollisionId = UNSET;
-//   TODO private MotionWidget mTriggerCollisionView = null;
+    //   TODO private MotionWidget mTriggerCollisionView = null;
     float mTriggerSlack = .1f;
     private boolean mFireCrossReset = true;
     private boolean mFireNegativeReset = true;
@@ -121,8 +121,6 @@ public class MotionKeyTrigger extends MotionKey {
 
     /**
      * @TODO: add description
-     * @param src
-     * @return
      */
     public MotionKeyTrigger copy(MotionKey src) {
         super.copy(src);
@@ -149,11 +147,11 @@ public class MotionKeyTrigger extends MotionKey {
 
     /**
      * @TODO: add description
-     * @return
      */
     public MotionKey clone() {
         return new MotionKeyTrigger().copy(this);
     }
+
     private void fireCustom(String str, MotionWidget widget) {
         boolean callAll = str.length() == 1;
         if (!callAll) {
@@ -172,17 +170,12 @@ public class MotionKeyTrigger extends MotionKey {
 
     /**
      * @TODO: add description
-     * @param position
-     * @param child
      */
     public void conditionallyFire(float position, MotionWidget child) {
     }
 
     /**
      * @TODO: add description
-     * @param type
-     * @param value
-     * @return
      */
     public boolean setValue(int type, int value) {
         switch (type) {
@@ -213,9 +206,6 @@ public class MotionKeyTrigger extends MotionKey {
 
     /**
      * @TODO: add description
-     * @param type
-     * @param value
-     * @return
      */
     public boolean setValue(int type, float value) {
         switch (type) {
@@ -230,9 +220,6 @@ public class MotionKeyTrigger extends MotionKey {
 
     /**
      * @TODO: add description
-     * @param type
-     * @param value
-     * @return
      */
     public boolean setValue(int type, String value) {
         switch (type) {
@@ -259,9 +246,6 @@ public class MotionKeyTrigger extends MotionKey {
 
     /**
      * @TODO: add description
-     * @param type
-     * @param value
-     * @return
      */
     public boolean setValue(int type, boolean value) {
         switch (type) {

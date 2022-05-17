@@ -28,10 +28,11 @@ import java.util.Arrays;
  * Simple Utilities used by the Inference system
  */
 public class Utils {
-    private static DecimalFormat sDF = new DecimalFormat("0.0#####");
+    private static final DecimalFormat sDF = new DecimalFormat("0.0#####");
+
     /**
      * Calculate the maximum of an array
-     * @param array
+     *
      * @return the index of the maximum
      */
     static int max(float[] array) {
@@ -49,7 +50,6 @@ public class Utils {
     /**
      * Calculate the maximum of a 2D array
      *
-     * @param array
      * @param result the index of the maximum filled by the function
      * @return the value of the maximum probabilities
      */
@@ -73,8 +73,6 @@ public class Utils {
 
     /**
      * convert an array of floats to fixed length strings
-     * @param a
-     * @return
      */
     static String toS(float[] a) {
         String s = "[";
@@ -106,7 +104,6 @@ public class Utils {
 
     /**
      * Fill a 2D array of floats with 0.0
-     * @param array
      */
     static void zero(float[][] array) {
         for (float[] aFloat : array) {
@@ -119,7 +116,6 @@ public class Utils {
      *
      * @param start table of range starts
      * @param end   table of range ends
-     * @return
      */
     public static int gaps(int[] start, int[] end) {
         Arrays.sort(start);
@@ -209,9 +205,6 @@ public class Utils {
 
     /**
      * Sort a list of integers and remove duplicates
-     *
-     * @param list
-     * @return
      */
     static int[] sortUnique(int[] list) {
         Arrays.sort(list);
@@ -234,9 +227,6 @@ public class Utils {
 
     /**
      * print a string that is a fixed width of size used in debugging
-     *
-     * @param s
-     * @param size
      */
     static void fwPrint(String s, int size) {
         s += "                                             ";
@@ -247,9 +237,6 @@ public class Utils {
 
     /**
      * Get the bounding box around a list of widgets
-     *
-     * @param widgets
-     * @return
      */
     static Rectangle getBoundingBox(ArrayList<ConstraintWidget> widgets) {
         Rectangle all = null;

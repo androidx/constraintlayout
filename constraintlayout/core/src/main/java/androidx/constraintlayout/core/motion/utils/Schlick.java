@@ -19,7 +19,6 @@ package androidx.constraintlayout.core.motion.utils;
 /**
  * Schlick’s bias and gain functions
  * curve for use in an easing function including quantize functions
- *
  */
 public class Schlick extends Easing {
     private static final boolean DEBUG = false;
@@ -53,8 +52,6 @@ public class Schlick extends Easing {
 
     /**
      * @TODO: add description
-     * @param x
-     * @return
      */
     public double getDiff(double x) {
         return dfunc(x);
@@ -62,8 +59,6 @@ public class Schlick extends Easing {
 
     /**
      * @TODO: add description
-     * @param x
-     * @return
      */
     public double get(double x) {
         return func(x);

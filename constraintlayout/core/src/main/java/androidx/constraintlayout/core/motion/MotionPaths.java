@@ -72,10 +72,6 @@ public class MotionPaths implements Comparable<MotionPaths> {
 
     /**
      * set up with Cartesian
-     *
-     * @param c
-     * @param startTimePoint
-     * @param endTimePoint
      */
     void initCartesian(MotionKeyPosition c, MotionPaths startTimePoint, MotionPaths endTimePoint) {
         float position = c.mFramePosition / 100f;
@@ -119,16 +115,12 @@ public class MotionPaths implements Comparable<MotionPaths> {
 
     /**
      * takes the new keyPosition
-     *
-     * @param c
-     * @param startTimePoint
-     * @param endTimePoint
      */
     public MotionPaths(int parentWidth,
-                       int parentHeight,
-                       MotionKeyPosition c,
-                       MotionPaths startTimePoint,
-                       MotionPaths endTimePoint) {
+            int parentHeight,
+            MotionKeyPosition c,
+            MotionPaths startTimePoint,
+            MotionPaths endTimePoint) {
         if (startTimePoint.mAnimateRelativeTo != UNSET) {
             initPolar(parentWidth, parentHeight, c, startTimePoint, endTimePoint);
             return;
@@ -148,10 +140,10 @@ public class MotionPaths implements Comparable<MotionPaths> {
     }
 
     void initPolar(int parentWidth,
-                   int parentHeight,
-                   MotionKeyPosition c,
-                   MotionPaths s,
-                   MotionPaths e) {
+            int parentHeight,
+            MotionKeyPosition c,
+            MotionPaths s,
+            MotionPaths e) {
         float position = c.mFramePosition / 100f;
         this.mTime = position;
         mDrawPath = c.mDrawPath;
@@ -195,8 +187,6 @@ public class MotionPaths implements Comparable<MotionPaths> {
 
     /**
      * @TODO: add description
-     * @param mc
-     * @param relative
      */
     public void setupRelative(Motion mc, MotionPaths relative) {
         double dx = mX + mWidth / 2 - relative.mX - relative.mWidth / 2;
@@ -213,10 +203,10 @@ public class MotionPaths implements Comparable<MotionPaths> {
     }
 
     void initScreen(int parentWidth,
-                    int parentHeight,
-                    MotionKeyPosition c,
-                    MotionPaths startTimePoint,
-                    MotionPaths endTimePoint) {
+            int parentHeight,
+            MotionKeyPosition c,
+            MotionPaths startTimePoint,
+            MotionPaths endTimePoint) {
         float position = c.mFramePosition / 100f;
         MotionPaths point = this;
         point.mTime = position;
@@ -377,11 +367,11 @@ public class MotionPaths implements Comparable<MotionPaths> {
     }
 
     void getCenter(double p,
-                   int[] toUse,
-                   double[] data,
-                   float[] point,
-                   double[] vdata,
-                   float[] velocity) {
+            int[] toUse,
+            double[] data,
+            float[] point,
+            double[] vdata,
+            float[] velocity) {
         float v_x = mX;
         float v_y = mY;
         float v_width = mWidth;
@@ -517,11 +507,11 @@ public class MotionPaths implements Comparable<MotionPaths> {
 
     // Called on the start Time Point
     void setView(float position,
-                 MotionWidget view,
-                 int[] toUse,
-                 double[] data,
-                 double[] slope,
-                 double[] cycle) {
+            MotionWidget view,
+            int[] toUse,
+            double[] data,
+            double[] slope,
+            double[] cycle) {
         float v_x = mX;
         float v_y = mY;
         float v_width = mWidth;
@@ -635,7 +625,7 @@ public class MotionPaths implements Comparable<MotionPaths> {
             }
         }
 
-       // Todo: develop a concept of Float layout in MotionWidget widget.layout(float ...)
+        // Todo: develop a concept of Float layout in MotionWidget widget.layout(float ...)
         int l = (int) (0.5f + v_x);
         int t = (int) (0.5f + v_y);
         int r = (int) (0.5f + v_x + v_width);
@@ -789,20 +779,13 @@ public class MotionPaths implements Comparable<MotionPaths> {
 
     /**
      * mAnchorDpDt
-     *
-     * @param locationX
-     * @param locationY
-     * @param mAnchorDpDt
-     * @param toUse
-     * @param deltaData
-     * @param data
      */
     void setDpDt(float locationX,
-                 float locationY,
-                 float[] mAnchorDpDt,
-                 int[] toUse,
-                 double[] deltaData,
-                 double[] data) {
+            float locationY,
+            float[] mAnchorDpDt,
+            int[] toUse,
+            double[] deltaData,
+            double[] data) {
 
         float d_x = 0;
         float d_y = 0;
@@ -933,7 +916,6 @@ public class MotionPaths implements Comparable<MotionPaths> {
 
     /**
      * @TODO: add description
-     * @param c
      */
     public void applyParameters(MotionWidget c) {
         MotionPaths point = this;
@@ -956,7 +938,6 @@ public class MotionPaths implements Comparable<MotionPaths> {
 
     /**
      * @TODO: add description
-     * @param toOrbit
      */
     public void configureRelativeTo(Motion toOrbit) {
         double[] p = toOrbit.getPos(mProgress); // get the position in the orbit

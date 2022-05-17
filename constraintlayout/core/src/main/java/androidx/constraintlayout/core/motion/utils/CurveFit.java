@@ -30,10 +30,6 @@ public abstract class CurveFit {
 
     /**
      * @TODO: add description
-     * @param type
-     * @param time
-     * @param y
-     * @return
      */
     public static CurveFit get(int type, double[] time, double[][] y) {
         if (time.length == 1) {
@@ -51,10 +47,6 @@ public abstract class CurveFit {
 
     /**
      * @TODO: add description
-     * @param arcModes
-     * @param time
-     * @param y
-     * @return
      */
     public static CurveFit getArc(int[] arcModes, double[] time, double[][] y) {
         return new ArcCurveFit(arcModes, time, y);
@@ -62,44 +54,31 @@ public abstract class CurveFit {
 
     /**
      * @TODO: add description
-     * @param t
-     * @param v
      */
     public abstract void getPos(double t, double[] v);
 
     /**
      * @TODO: add description
-     * @param t
-     * @param v
      */
     public abstract void getPos(double t, float[] v);
 
     /**
      * @TODO: add description
-     * @param t
-     * @param j
-     * @return
      */
     public abstract double getPos(double t, int j);
 
     /**
      * @TODO: add description
-     * @param t
-     * @param v
      */
     public abstract void getSlope(double t, double[] v);
 
     /**
      * @TODO: add description
-     * @param t
-     * @param j
-     * @return
      */
     public abstract double getSlope(double t, int j);
 
     /**
      * @TODO: add description
-     * @return
      */
     public abstract double[] getTimePoints();
 

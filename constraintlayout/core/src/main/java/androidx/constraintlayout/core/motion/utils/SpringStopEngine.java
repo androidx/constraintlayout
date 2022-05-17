@@ -50,23 +50,15 @@ public class SpringStopEngine implements StopEngine {
 
     /**
      * @TODO: add description
-     * @param currentPos
-     * @param target
-     * @param currentVelocity
-     * @param mass
-     * @param stiffness
-     * @param damping
-     * @param stopThreshold
-     * @param boundaryMode
      */
     public void springConfig(float currentPos,
-                             float target,
-                             float currentVelocity,
-                             float mass,
-                             float stiffness,
-                             float damping,
-                             float stopThreshold,
-                             int boundaryMode) {
+            float target,
+            float currentVelocity,
+            float mass,
+            float stiffness,
+            float damping,
+            float stopThreshold,
+            int boundaryMode) {
         mTargetPos = target;
         mDamping = damping;
         mInitialized = false;
@@ -93,7 +85,6 @@ public class SpringStopEngine implements StopEngine {
 
     /**
      * @TODO: add description
-     * @return
      */
     public float getAcceleration() {
         double k = mStiffness;

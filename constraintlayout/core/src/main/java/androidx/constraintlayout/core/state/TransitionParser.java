@@ -33,7 +33,6 @@ public class TransitionParser {
      *
      * @param json       Transition Object to parse.
      * @param transition Transition Object to write transition to
-     * @throws CLParsingException
      */
     public static void parse(CLObject json, Transition transition, CorePixelDp dpToPixel)
             throws CLParsingException {
@@ -170,7 +169,7 @@ public class TransitionParser {
     }
 
     private static void parseKeyPosition(CLObject keyPosition,
-                                         Transition transition) throws CLParsingException {
+            Transition transition) throws CLParsingException {
         TypedBundle bundle = new TypedBundle();
         CLArray targets = keyPosition.getArray("target");
         CLArray frames = keyPosition.getArray("frames");
@@ -221,14 +220,14 @@ public class TransitionParser {
     }
 
     private static void set(TypedBundle bundle, int type,
-                            CLArray array, int index) throws CLParsingException {
+            CLArray array, int index) throws CLParsingException {
         if (array != null) {
             bundle.add(type, array.getFloat(index));
         }
     }
 
     private static void parseKeyAttribute(CLObject keyAttribute,
-                                          Transition transition) throws CLParsingException {
+            Transition transition) throws CLParsingException {
         CLArray targets = keyAttribute.getArrayOrNull("target");
         if (targets == null) {
             return;
@@ -330,7 +329,7 @@ public class TransitionParser {
     }
 
     private static void parseKeyCycle(CLObject keyCycleData,
-                                      Transition transition) throws CLParsingException {
+            Transition transition) throws CLParsingException {
         CLArray targets = keyCycleData.getArray("target");
         CLArray frames = keyCycleData.getArray("frames");
         String transitionEasing = keyCycleData.getStringOrNull("transitionEasing");

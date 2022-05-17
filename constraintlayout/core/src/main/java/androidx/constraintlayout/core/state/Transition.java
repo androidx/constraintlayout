@@ -49,21 +49,20 @@ public class Transition implements TypedValues {
     static final int ANTICIPATE = 6;
     private static final int SPLINE_STRING = -1;
     private static final int INTERPOLATOR_REFERENCE_ID = -2;
-    private HashMap<Integer, HashMap<String, KeyPosition>> mKeyPositions = new HashMap<>();
-    private HashMap<String, WidgetState> mState = new HashMap<>();
-    private TypedBundle mBundle = new TypedBundle();
+    private final HashMap<Integer, HashMap<String, KeyPosition>> mKeyPositions = new HashMap<>();
+    private final HashMap<String, WidgetState> mState = new HashMap<>();
+    private final TypedBundle mBundle = new TypedBundle();
     // Interpolation
-    private int mDefaultInterpolator = 0;
+    private final int mDefaultInterpolator = 0;
     private String mDefaultInterpolatorString = null;
     private Easing mEasing = null;
-    private int mAutoTransition = 0;
-    private int mDuration = 400;
+    private final int mAutoTransition = 0;
+    private final int mDuration = 400;
     private float mStagger = 0.0f;
     private OnSwipe mOnSwipe = null;
     CorePixelDp mToPixel; // Todo placed here as a temp till the refactor is done
 
     /**
-     * @return
      * @TODO: add description
      */
     @SuppressWarnings("HiddenTypeParameter")
@@ -72,7 +71,6 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @return
      * @TODO: add description
      */
     public boolean hasOnSwipe() {
@@ -357,11 +355,10 @@ public class Transition implements TypedValues {
      * Converts from xy drag to progress
      * This should be used till touch up
      *
-     * @param currentProgress
-     * @param baseW           parent width
-     * @param baseH           parent height
-     * @param dx              change in x
-     * @param dy              change in y
+     * @param baseW parent width
+     * @param baseH parent height
+     * @param dx    change in x
+     * @param dy    change in y
      * @return the change in progress
      */
     public float dragToProgress(float currentProgress, int baseW, int baseH, float dx, float dy) {
@@ -393,9 +390,9 @@ public class Transition implements TypedValues {
      * @param velocityY       pixels per millisecond
      */
     public void setTouchUp(float currentProgress,
-                           long currentTime,
-                           float velocityX,
-                           float velocityY) {
+            long currentTime,
+            float velocityX,
+            float velocityY) {
         if (mOnSwipe != null) {
             if (DEBUG) {
                 Utils.log(" >>> velocity x,y = " + velocityX + " , " + velocityY);
@@ -454,10 +451,6 @@ public class Transition implements TypedValues {
 
     /**
      * get the interpolater based on a constant or a string
-     *
-     * @param interpolator
-     * @param interpolatorString
-     * @return
      */
     public static Interpolator getInterpolator(int interpolator, String interpolatorString) {
         switch (interpolator) {
@@ -483,9 +476,6 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @param target
-     * @param frameNumber
-     * @return
      * @TODO: add description
      */
     @SuppressWarnings("HiddenTypeParameter")
@@ -504,9 +494,6 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @param target
-     * @param frameNumber
-     * @return
      * @TODO: add description
      */
     @SuppressWarnings("HiddenTypeParameter")
@@ -525,8 +512,6 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @param frame
-     * @return
      * @TODO: add description
      */
     public int getNumberKeyPositions(WidgetFrame frame) {
@@ -546,8 +531,6 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @param id
-     * @return
      * @TODO: add description
      */
     public Motion getMotion(String id) {
@@ -555,10 +538,6 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @param frame
-     * @param x
-     * @param y
-     * @param pos
      * @TODO: add description
      */
     public void fillKeyPositions(WidgetFrame frame, float[] x, float[] y, float[] pos) {
@@ -580,7 +559,6 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @return
      * @TODO: add description
      */
     public boolean hasPositionKeyframes() {
@@ -588,7 +566,6 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @param bundle
      * @TODO: add description
      */
     public void setTransitionProperties(TypedBundle bundle) {
@@ -639,8 +616,6 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @param key
-     * @return
      * @TODO: add description
      */
     public boolean contains(String key) {
@@ -648,8 +623,6 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @param target
-     * @param bundle
      * @TODO: add description
      */
     public void addKeyPosition(String target, TypedBundle bundle) {
@@ -657,8 +630,6 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @param target
-     * @param bundle
      * @TODO: add description
      */
     public void addKeyAttribute(String target, TypedBundle bundle) {
@@ -666,8 +637,6 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @param target
-     * @param bundle
      * @TODO: add description
      */
     public void addKeyCycle(String target, TypedBundle bundle) {
@@ -675,11 +644,6 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @param target
-     * @param frame
-     * @param type
-     * @param x
-     * @param y
      * @TODO: add description
      */
     public void addKeyPosition(String target, int frame, int type, float x, float y) {
@@ -700,10 +664,6 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @param state
-     * @param widgetId
-     * @param property
-     * @param value
      * @TODO: add description
      */
     public void addCustomFloat(int state, String widgetId, String property, float value) {
@@ -713,10 +673,6 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @param state
-     * @param widgetId
-     * @param property
-     * @param color
      * @TODO: add description
      */
     public void addCustomColor(int state, String widgetId, String property, int color) {
@@ -726,8 +682,6 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @param container
-     * @param state
      * @TODO: add description
      */
     public void updateFrom(ConstraintWidgetContainer container, int state) {
@@ -741,9 +695,6 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @param parentWidth
-     * @param parentHeight
-     * @param progress
      * @TODO: add description
      */
     public void interpolate(int parentWidth, int parentHeight, float progress) {
@@ -757,8 +708,6 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @param id
-     * @return
      * @TODO: add description
      */
     public WidgetFrame getStart(String id) {
@@ -770,8 +719,6 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @param id
-     * @return
      * @TODO: add description
      */
     public WidgetFrame getEnd(String id) {
@@ -783,8 +730,6 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @param id
-     * @return
      * @TODO: add description
      */
     public WidgetFrame getInterpolated(String id) {
@@ -796,8 +741,6 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @param id
-     * @return
      * @TODO: add description
      */
     public float[] getPath(String id) {
@@ -810,11 +753,6 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @param id
-     * @param rectangles
-     * @param pathMode
-     * @param position
-     * @return
      * @TODO: add description
      */
     public int getKeyFrames(String id, float[] rectangles, int[] pathMode, int[] position) {
@@ -827,8 +765,8 @@ public class Transition implements TypedValues {
     }
 
     private WidgetState getWidgetState(String widgetId,
-                                       ConstraintWidget child,
-                                       int transitionState) {
+            ConstraintWidget child,
+            int transitionState) {
         WidgetState widgetState = this.mState.get(widgetId);
         if (widgetState == null) {
             widgetState = new WidgetState();
@@ -844,9 +782,6 @@ public class Transition implements TypedValues {
 
     /**
      * Used in debug draw
-     *
-     * @param child
-     * @return
      */
     public WidgetFrame getStart(ConstraintWidget child) {
         return getWidgetState(child.stringId, null, Transition.START).mStart;
@@ -854,9 +789,6 @@ public class Transition implements TypedValues {
 
     /**
      * Used in debug draw
-     *
-     * @param child
-     * @return
      */
     public WidgetFrame getEnd(ConstraintWidget child) {
         return getWidgetState(child.stringId, null, Transition.END).mEnd;
@@ -864,9 +796,6 @@ public class Transition implements TypedValues {
 
     /**
      * Used after the interpolation
-     *
-     * @param child
-     * @return
      */
     public WidgetFrame getInterpolated(ConstraintWidget child) {
         return getWidgetState(child.stringId, null, Transition.INTERPOLATED).mInterpolated;
@@ -874,8 +803,6 @@ public class Transition implements TypedValues {
 
     /**
      * This gets the interpolator being used
-     *
-     * @return
      */
     public Interpolator getInterpolator() {
         return getInterpolator(mDefaultInterpolator, mDefaultInterpolatorString);
@@ -883,8 +810,6 @@ public class Transition implements TypedValues {
 
     /**
      * This gets the auto transition mode being used
-     *
-     * @return
      */
     public int getAutoTransition() {
         return mAutoTransition;
@@ -953,9 +878,9 @@ public class Transition implements TypedValues {
         }
 
         public void interpolate(int parentWidth,
-                                int parentHeight,
-                                float progress,
-                                Transition transition) {
+                int parentHeight,
+                float progress,
+                Transition transition) {
             // TODO  only update if parentHeight != mParentHeight || parentWidth != mParentWidth) {
             mParentHeight = parentHeight;
             mParentWidth = parentWidth;

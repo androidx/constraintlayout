@@ -31,7 +31,7 @@ public class ArrayLinkedVariablesTest {
         Cache cache = new Cache();
         ArrayRow row = new ArrayRow(cache);
         ArrayLinkedVariables variables = new ArrayLinkedVariables(row, cache);
-        SolverVariable []v = new SolverVariable[9];
+        SolverVariable[] v = new SolverVariable[9];
         for (int i = 0; i < v.length; i++) {
             int p = i ^ 3;
             v[i] = new SolverVariable("dog" + p + "(" + i + ")" + p,

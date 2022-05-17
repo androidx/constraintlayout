@@ -25,10 +25,10 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
 
     private static final boolean DEBUG = false;
     private static final boolean HASH = true;
-    private static float sEpsilon = 0.001f;
+    private static final float sEpsilon = 0.001f;
     private final int mNone = -1;
     private int mSize = 16;
-    private int mHashSize = 16;
+    private final int mHashSize = 16;
 
     int[] mKeys = new int[mSize];
     int[] mNextKeys = new int[mSize];
@@ -256,6 +256,7 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
             }
         }
     }
+
     private void removeFromHashMap(SolverVariable variable) {
         if (DEBUG) {
             System.out.println(this.hashCode() + " hash remove " + variable.id);
@@ -274,7 +275,7 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
             mKeys[hash] = mNextKeys[key];
             mNextKeys[key] = mNone;
         } else {
-            while (mNextKeys[key] != mNone && mVariables[mNextKeys[key]] != id)  {
+            while (mNextKeys[key] != mNone && mVariables[mNextKeys[key]] != id) {
                 key = mNextKeys[key];
             }
             int currentKey = mNextKeys[key];

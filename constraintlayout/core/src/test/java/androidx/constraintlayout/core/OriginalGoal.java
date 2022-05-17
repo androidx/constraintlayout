@@ -28,11 +28,13 @@ public class OriginalGoal {
     class GoalElement {
         float[] mStrengths = new float[sMax];
         SolverVariable mVariable;
+
         void clearStrengths() {
             for (int i = 0; i < sMax; i++) {
                 mStrengths[i] = 0;
             }
         }
+
         public String toString() {
             String representation = mVariable + "[";
             for (int j = 0; j < mStrengths.length; j++) {
