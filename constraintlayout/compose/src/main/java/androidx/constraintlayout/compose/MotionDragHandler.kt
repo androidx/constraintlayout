@@ -18,7 +18,6 @@ package androidx.constraintlayout.compose
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.runtime.ExperimentalComposeApi
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
@@ -32,7 +31,6 @@ import androidx.compose.ui.unit.Velocity
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.isActive
-import java.lang.Math.abs
 
 /**
  * Helper modifier for MotionLayout to support OnSwipe in Transitions.

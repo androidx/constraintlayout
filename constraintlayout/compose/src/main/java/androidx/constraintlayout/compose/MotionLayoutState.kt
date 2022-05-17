@@ -152,7 +152,6 @@ internal class MotionLayoutStateImpl(
     internal val debugMode: MotionLayoutDebugFlags
         get() = debugModeState.value
 
-
     // TODO: Remove once we substitute uses of `progressState` with MotionProgress
     /**
      * Internal [State] for the progress.

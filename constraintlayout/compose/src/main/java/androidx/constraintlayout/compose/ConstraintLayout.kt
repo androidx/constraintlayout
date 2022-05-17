@@ -935,7 +935,6 @@ class State(val density: Density) : SolverState() {
         setDpToPixel { dp -> density.density * dp }
     }
 
-
     override fun convertDimension(value: Any?): Int {
         return if (value is Dp) {
             with(density) { value.roundToPx() }
