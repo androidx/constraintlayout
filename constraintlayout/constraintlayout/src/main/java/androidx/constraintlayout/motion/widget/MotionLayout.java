@@ -17,6 +17,7 @@
 package androidx.constraintlayout.motion.widget;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
 import static androidx.constraintlayout.motion.widget.MotionScene.Transition.TRANSITION_FLAG_FIRST_DRAW;
 import static androidx.constraintlayout.motion.widget.MotionScene.Transition.TRANSITION_FLAG_INTERCEPT_TOUCH;
 import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID;
@@ -4754,7 +4755,7 @@ public class MotionLayout extends ConstraintLayout implements
      * @return
      */
     public  @IdRes
-    int[] getConstraintSetIds() {
+            int[] getConstraintSetIds() {
         if (mScene == null) {
             return null;
         }

@@ -426,7 +426,7 @@ public class MotionScene {
                 ids[count++] = id;
             }
         }
-        return Arrays.copyOf(ids,count);
+        return Arrays.copyOf(ids, count);
     }
 
     /**

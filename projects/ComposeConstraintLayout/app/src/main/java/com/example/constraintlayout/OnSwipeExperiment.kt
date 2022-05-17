@@ -16,6 +16,7 @@
 
 package com.example.constraintlayout
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,23 +36,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.MotionLayout
+import androidx.constraintlayout.compose.MotionLayoutDebugFlags
 import androidx.constraintlayout.compose.MotionScene
 import androidx.constraintlayout.compose.layoutId
+import androidx.constraintlayout.compose.rememberMotionLayoutState
 
 @Preview
 @Composable
 fun OnSwipeExperiment() {
-    var progress by remember {
-        mutableStateOf(0.0f)
-    }
     var mode by remember {
         mutableStateOf("spring")
     }
+    var toEnd by remember { mutableStateOf(true) }
+    val motionLayoutState = rememberMotionLayoutState(key = mode)
+
     val motionSceneContent = remember(mode) {
         // language=json5
         """
@@ -61,7 +63,10 @@ fun OnSwipeExperiment() {
              box: {
                width: 50, height: 50,
                bottom: ['parent', 'bottom', 10],
-               start: ['parent', 'start', 10]
+               start: ['parent', 'start', 10],
+               custom: {
+                 bColor: '#ff0000'
+               }
              }
            },
            end: {
@@ -71,6 +76,9 @@ fun OnSwipeExperiment() {
                   width: 100, height: 400,
                top: ['parent', 'top', 10],
                end: ['parent', 'end', 10],
+               custom: {
+                 bColor: '#0000ff'
+               }
              }
            }
          },
@@ -78,24 +86,22 @@ fun OnSwipeExperiment() {
            default: {
               from: 'start',
               to: 'end',
-        KeyFrames: {
-                      KeyPositions: [
-                        {
-                          target: ['box'],
-                          frames: [25, 50, 75],
-                          percentX: [0.25, 0.5, 0.75],
-                          percentY: [0.25, 0.5, 0.75]
-                        }
-                      ],
-                      },
+              KeyFrames: {
+                KeyPositions: [{
+                  target: ['box'],
+                  frames: [25, 50, 75],
+                  percentX: [0.25, 0.5, 0.75],
+                  percentY: [0.25, 0.5, 0.75]
+                }],
+              },
               onSwipe: {
                 anchor: 'box',
                 direction: 'end',
                 side: 'start',
                 mode: '$mode',
-                springMass: 2,
-                springDamping: 5,
-                springStiffness: 10,
+                springMass: 1,
+                springDamping: 10,
+                springStiffness: 70,
               }
            }
          }
@@ -104,12 +110,24 @@ fun OnSwipeExperiment() {
     }
     Column {
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            Button(onClick = {
-                // OnSwipe does not update our progress, need a work around to reset
-                progress = 0.1f
-                progress = 0f
-            }) {
+            Button(onClick = { motionLayoutState.snapTo(0f) }) {
                 Text(text = "Reset")
+            }
+            Button(onClick = {
+                val target = if (toEnd) 1f else 0f
+                motionLayoutState.animateTo(target, tween(2000))
+                toEnd = !toEnd
+            }) {
+                Text(text = if (toEnd) "End" else "Start")
+            }
+            Button(onClick = {
+                if (motionLayoutState.isInDebugMode) {
+                    motionLayoutState.setDebugMode(MotionLayoutDebugFlags.NONE)
+                } else {
+                    motionLayoutState.setDebugMode(MotionLayoutDebugFlags.SHOW_ALL)
+                }
+            }) {
+                Text("Debug")
             }
             Button(onClick = {
                 mode = when (mode) {
@@ -117,22 +135,23 @@ fun OnSwipeExperiment() {
                     else -> "spring"
                 }
             }) {
-                Text(text = "Change Mode")
+                Text(text = "Mode: $mode")
             }
-            Text(text = "Current: $mode")
         }
         MotionLayout(
-            modifier = Modifier.fillMaxSize(),
-            motionScene = MotionScene(content = motionSceneContent),
-            progress = progress
-
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1.0f, fill = true),
+            motionLayoutState = motionLayoutState,
+            motionScene = MotionScene(content = motionSceneContent)
         ) {
             Box(
                 modifier = Modifier
-                    .background(Color.Red)
+                    .background(motionProperties(id = "box").value.color("bColor"))
                     .layoutId("box")
             )
         }
+        Text(text = "Current progress: ${motionLayoutState.currentProgress}")
     }
 }
 
@@ -259,11 +278,10 @@ fun MultiSwipe() {
         "autocomplete", "toStart",
         "toEnd", "stop", "decelerate",
         "neverCompleteStart", "neverCompleteEnd"
-    );
+    )
     val endWidth = arrayOf(50, 200)
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         for (i in 0..28) {
-
             Box(
                 modifier = Modifier
                     .height(20.dp)
@@ -277,8 +295,6 @@ fun MultiSwipe() {
             )
         }
     }
-
-
 }
 
 
@@ -354,15 +370,13 @@ fun SimpleSwipe(mode: String, endWidth: Int, touchUp: String) {
        }
         """.trimIndent()
 
-
     MotionLayout(
         modifier = Modifier
             .height(70.dp)
             .fillMaxWidth()
             .background(Color.White),
-        motionScene = MotionScene(content = scene),
+        motionScene = MotionScene(content = scene)
     ) {
-
         var prop = motionProperties("title")
         val progress = prop.value.float("mValue")
         val col = prop.value.color("back")
@@ -377,7 +391,6 @@ fun SimpleSwipe(mode: String, endWidth: Int, touchUp: String) {
                 .background(motionProperties("box").value.color("boxColor"))
                 .layoutId("box")
         )
-//        }
     }
 }
 

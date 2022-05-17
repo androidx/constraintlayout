@@ -132,7 +132,7 @@ public class TransitionParser {
                 Transition.OnSwipe.DIRECTIONS);
         String around = onSwipe.getStringOrNull("around");
 
-       Transition.OnSwipe swipe =transition.createOnSwipe();
+        Transition.OnSwipe swipe = transition.createOnSwipe();
         swipe.setAnchorId(anchor);
         swipe.setAnchorSide(side);
         swipe.setDragDirection(direction);
@@ -388,9 +388,9 @@ public class TransitionParser {
         }
         boolean scaleOffset = false;
         for (int k = 0; k < attrNames.length; k++) {
-           if ( keyCycleData.has(attrNames[k]) && scaleTypes[k] == 1){
-               scaleOffset = true;
-           }
+            if (keyCycleData.has(attrNames[k]) && scaleTypes[k] == 1) {
+                scaleOffset = true;
+            }
         }
         for (int k = 0; k < attrNames.length; k++) {
             String attrName = attrNames[k];
@@ -409,17 +409,17 @@ public class TransitionParser {
                     float value = arrayValues.getFloat(i);
                     if (scale == 1) {
                         value = transition.mToPixel.toPixels(value);
-                    } else if (scale == 2 && scaleOffset ) {
+                    } else if (scale == 2 && scaleOffset) {
                         value = transition.mToPixel.toPixels(value);
                     }
-                    bundles[i].add(attrId,value);
+                    bundles[i].add(attrId, value);
                 }
             } else {
                 float value = keyCycleData.getFloatOrNaN(attrName);
                 if (!Float.isNaN(value)) {
                     if (scale == 1) {
                         value = transition.mToPixel.toPixels(value);
-                    } else if (scale == 2 && scaleOffset ) {
+                    } else if (scale == 2 && scaleOffset) {
                         value = transition.mToPixel.toPixels(value);
                     }
                     for (int i = 0; i < bundles.length; i++) {

@@ -15,46 +15,36 @@
  */
 package androidx.constraintlayout.core.cl;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
-import androidx.constraintlayout.core.parser.CLObject;
-import androidx.constraintlayout.core.parser.CLParser;
 import androidx.constraintlayout.core.parser.CLParsingException;
 import androidx.constraintlayout.core.state.ConstraintReference;
 import androidx.constraintlayout.core.state.ConstraintSetParser;
 import androidx.constraintlayout.core.state.State;
 import androidx.constraintlayout.core.state.Transition;
-import androidx.constraintlayout.core.state.TransitionParser;
-import androidx.constraintlayout.core.state.WidgetFrame;
-import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 
 import org.junit.Test;
 
-import java.util.Arrays;
-
 public class ConstraintSetParserTest {
 
     @Test
     public void testSimpleConstraintSet1() throws CLParsingException {
-        String jsonString = "     n" +
-
-                "                  start: {\n" +
-                "                    id1: {\n" +
-                "                      width: 40, height: 40,\n" +
-                "                      start:  ['parent', 'start' , 16],\n" +
-                "                      bottom: ['parent', 'bottom', 16]\n" +
-                "                    }\n" +
-                "                  },\n";
+        String jsonString = "     n"
+                + "                  start: {\n"
+                + "                    id1: {\n"
+                + "                      width: 40, height: 40,\n"
+                + "                      start:  ['parent', 'start' , 16],\n"
+                + "                      bottom: ['parent', 'bottom', 16]\n"
+                + "                    }\n"
+                + "                  },\n";
 
         State state = new State();
         System.out.println(">>>>>> testSimpleConstraintSet1 <<<<<<");
         state.setDpToPixel(dp -> dp);
         ConstraintSetParser.LayoutVariables vars = new ConstraintSetParser.LayoutVariables();
-        ConstraintWidgetContainer root = new ConstraintWidgetContainer(1000,1000);
+        ConstraintWidgetContainer root = new ConstraintWidgetContainer(1000, 1000);
         ConstraintWidget idWidget =  new ConstraintWidget();
         idWidget.stringId = "id1";
         ConstraintSetParser.parseJSON(jsonString, state, vars);
@@ -64,14 +54,14 @@ public class ConstraintSetParserTest {
         assertNotNull(id1);
         state.reset();
 
-        System.out.println(">>>>>> "+root.stringId);
+        System.out.println(">>>>>> " + root.stringId);
         for (ConstraintWidget child : root.getChildren()) {
-            System.out.println(">>>>>> "+child.stringId);
+            System.out.println(">>>>>>  " + child.stringId);
         }
         state.apply(root);
         System.out.print("children: ");
         for (ConstraintWidget child : root.getChildren()) {
-            System.out.print(" "+child.stringId);
+            System.out.print(" " + child.stringId);
         }
         System.out.println();
         System.out.println(">>>>>> testSimpleConstraintSet1 <<<<<<");
@@ -80,33 +70,33 @@ public class ConstraintSetParserTest {
 
     @Test
     public void testSimpleConstraintSet2() {
-        String jsonString = "    {\n" +
-                "                Header: { exportAs: 'mtest01'},\n" +
-                "                \n" +
-                "                ConstraintSets: {\n" +
-                "                  start: {\n" +
-                "                    id1: {\n" +
-                "                      width: 40, height: 40,\n" +
-                "                      start:  ['parent', 'start' , 16],\n" +
-                "                      bottom: ['parent', 'bottom', 16]\n" +
-                "                    }\n" +
-                "                  },\n" +
-                "                  \n" +
-                "                  end: {\n" +
-                "                    id1: {\n" +
-                "                      width: 40, height: 40,\n" +
-                "                      end: ['parent', 'end', 16],\n" +
-                "                      top: ['parent', 'top', 16]\n" +
-                "                    }\n" +
-                "                  }\n" +
-                "                },\n" +
-                "                \n" +
-                "                Transitions: {\n" +
-                "                  default: {\n" +
-                "                    from: 'start',   to: 'end',\n" +
-                "                  }\n" +
-                "                }\n" +
-                "            }";
+        String jsonString = "    {\n"
+                + "                Header: { exportAs: 'mtest01'},\n"
+                + "                \n"
+                + "                ConstraintSets: {\n"
+                + "                  start: {\n"
+                + "                    id1: {\n"
+                + "                      width: 40, height: 40,\n"
+                + "                      start:  ['parent', 'start' , 16],\n"
+                + "                      bottom: ['parent', 'bottom', 16]\n"
+                + "                    }\n"
+                + "                  },\n"
+                + "                  \n"
+                + "                  end: {\n"
+                + "                    id1: {\n"
+                + "                      width: 40, height: 40,\n"
+                + "                      end: ['parent', 'end', 16],\n"
+                + "                      top: ['parent', 'top', 16]\n"
+                + "                    }\n"
+                + "                  }\n"
+                + "                },\n"
+                + "                \n"
+                + "                Transitions: {\n"
+                + "                  default: {\n"
+                + "                    from: 'start',   to: 'end',\n"
+                + "                  }\n"
+                + "                }\n"
+                + "            }";
 
         Transition transition = new Transition();
         ConstraintSetParser.parseJSON(jsonString, transition, 0);

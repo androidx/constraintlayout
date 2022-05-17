@@ -41,6 +41,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -49,6 +50,7 @@ import kotlin.math.roundToInt
 /**
  * Run with Pixel 3 API 30.
  */
+@Ignore("Swipe doesn't seem to animate when touch is up, not reproducible")
 @OptIn(ExperimentalMotionApi::class)
 @MediumTest
 @RunWith(AndroidJUnit4::class)

@@ -317,7 +317,8 @@ public abstract class WidgetRun implements Dependency {
     protected final void addTarget(DependencyNode node,
                                    DependencyNode target,
                                    int marginFactor,
-                                   @SuppressWarnings("HiddenTypeParameter") DimensionDependency dimensionDependency) {
+                                   @SuppressWarnings("HiddenTypeParameter") DimensionDependency
+                                           dimensionDependency) {
         node.mTargets.add(target);
         node.mTargets.add(mDimension);
         node.mMarginFactor = marginFactor;
