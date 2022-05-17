@@ -457,7 +457,7 @@ public class State {
         container.removeAllChildren();
         mParent.getWidth().apply(this, container, ConstraintWidget.HORIZONTAL);
         mParent.getHeight().apply(this, container, ConstraintWidget.VERTICAL);
-        // add helper refrences
+        // add helper references
         for (Object key : mHelperReferences.keySet()) {
             HelperReference reference = mHelperReferences.get(key);
             HelperWidget helperWidget = reference.getHelperWidget();
