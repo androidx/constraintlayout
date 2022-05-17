@@ -730,7 +730,8 @@ public class DesignTool {
                               Object opaqueView,
                               Object opaqueAttributes) {
         View view = (View) opaqueView;
-        //noinspection unchecked
+
+        @SuppressWarnings("unchecked")
         HashMap<String, String> attributes = (opaqueAttributes instanceof HashMap) ?
                 (HashMap<String, String>) opaqueAttributes : new HashMap<>();
 

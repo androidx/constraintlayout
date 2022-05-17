@@ -121,8 +121,8 @@ public class Motion implements TypedValues {
 
     // if set, pivot point is maintained as the other object
     private MotionWidget mTransformPivotView = null;
-    private final int mQuantizeMotionSteps = UNSET;
-    private final float mQuantizeMotionPhase = Float.NaN;
+    private int mQuantizeMotionSteps = UNSET;
+    private float mQuantizeMotionPhase = Float.NaN;
     private DifferentialInterpolator mQuantizeMotionInterpolator = null;
     private boolean mNoMovement = false;
 
