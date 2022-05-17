@@ -1782,8 +1782,11 @@ public class Motion implements TypedValues {
     }
 
     /**
-     * Get the motionStagger valule if they are not using positions
-     * @return
+     * The values set in
+     * motion: {
+     *          stagger: '2'
+     *       }
+     * @return value from motion: { stagger: ? } or NaN if not set
      */
     public float getMotionStagger() {
         return mMotionStagger;
