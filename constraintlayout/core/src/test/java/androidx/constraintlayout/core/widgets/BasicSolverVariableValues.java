@@ -26,7 +26,7 @@ import java.util.Comparator;
 
 public class BasicSolverVariableValues implements ArrayRow.ArrayRowVariables {
 
-    private static float sEpsilon = 0.001f;
+    private static final float sEpsilon = 0.001f;
 
     class Item {
         SolverVariable mVariable;

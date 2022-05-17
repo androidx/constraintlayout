@@ -19,6 +19,8 @@ package androidx.constraintlayout.core;
 import static androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.EXACTLY;
 import static androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.UNSPECIFIED;
 
+import static org.junit.Assert.assertEquals;
+
 import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
@@ -26,8 +28,6 @@ import androidx.constraintlayout.core.widgets.Flow;
 import androidx.constraintlayout.core.widgets.Optimizer;
 import androidx.constraintlayout.core.widgets.VirtualLayout;
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure;
-
-import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 

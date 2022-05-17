@@ -22,7 +22,7 @@ import androidx.constraintlayout.core.state.State;
 
 public class AlignVerticallyReference extends HelperReference {
 
-    private float mBias = 0.5f;
+    private final float mBias = 0.5f;
 
     public AlignVerticallyReference(State state) {
         super(state, State.Helper.ALIGN_VERTICALLY);

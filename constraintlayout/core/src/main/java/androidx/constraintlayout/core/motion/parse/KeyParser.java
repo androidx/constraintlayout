@@ -75,8 +75,6 @@ public class KeyParser {
 
     /**
      * @TODO: add description
-     * @param str
-     * @return
      */
     public static TypedBundle parseAttributes(String str) {
         return parse(str, TypedValues.AttributesType::getId, TypedValues.AttributesType::getType);
@@ -84,7 +82,6 @@ public class KeyParser {
 
     /**
      * @TODO: add description
-     * @param args
      */
     public static void main(String[] args) {
         String str = "{"

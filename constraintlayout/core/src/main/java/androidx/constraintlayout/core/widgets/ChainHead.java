@@ -44,7 +44,7 @@ public class ChainHead {
     int mTotalSize;
     int mTotalMargins;
     boolean mOptimizable;
-    private int mOrientation;
+    private final int mOrientation;
     private boolean mIsRtl = false;
     protected boolean mHasUndefinedWeights;
     protected boolean mHasDefinedWeights;
@@ -71,13 +71,12 @@ public class ChainHead {
      *
      * @param widget      the widget to test
      * @param orientation current orientation, HORIZONTAL or VERTICAL
-     * @return
      */
     private static boolean isMatchConstraintEqualityCandidate(ConstraintWidget widget,
-                                                              int orientation) {
+            int orientation) {
         return widget.getVisibility() != ConstraintWidget.GONE
                 && widget.mListDimensionBehaviors[orientation]
-                    == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+                == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
                 && (widget.mResolvedMatchConstraintDefault[orientation] == MATCH_CONSTRAINT_SPREAD
                 || widget.mResolvedMatchConstraintDefault[orientation] == MATCH_CONSTRAINT_RATIO);
     }
@@ -115,11 +114,11 @@ public class ChainHead {
                 if (widget.mListDimensionBehaviors[mOrientation]
                         == DimensionBehaviour.MATCH_CONSTRAINT) {
                     if (widget.mResolvedMatchConstraintDefault[mOrientation]
-                                == MATCH_CONSTRAINT_SPREAD
+                            == MATCH_CONSTRAINT_SPREAD
                             || widget.mResolvedMatchConstraintDefault[mOrientation]
-                                == MATCH_CONSTRAINT_RATIO
+                            == MATCH_CONSTRAINT_RATIO
                             || widget.mResolvedMatchConstraintDefault[mOrientation]
-                                == MATCH_CONSTRAINT_PERCENT) {
+                            == MATCH_CONSTRAINT_PERCENT) {
                         mWidgetsMatchCount++;
                         // Note: Might cause an issue if we support MATCH_CONSTRAINT_RATIO_RESOLVED
                         // in chain optimization. (we currently don't)

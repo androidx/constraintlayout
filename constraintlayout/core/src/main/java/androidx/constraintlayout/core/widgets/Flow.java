@@ -70,7 +70,7 @@ public class Flow extends VirtualLayout {
 
     private int mOrientation = HORIZONTAL;
 
-    private ArrayList<WidgetsList> mChainList = new ArrayList<>();
+    private final ArrayList<WidgetsList> mChainList = new ArrayList<>();
 
     // Aligned management
 
@@ -253,10 +253,6 @@ public class Flow extends VirtualLayout {
 
     /**
      * @TODO: add description
-     * @param widthMode
-     * @param widthSize
-     * @param heightMode
-     * @param heightSize
      */
     public void measure(int widthMode, int widthSize, int heightMode, int heightSize) {
         if (mWidgetsCount > 0 && !measureChildren()) {
@@ -390,9 +386,9 @@ public class Flow extends VirtualLayout {
         private int mMax = 0;
 
         WidgetsList(int orientation,
-                           ConstraintAnchor left, ConstraintAnchor top,
-                           ConstraintAnchor right, ConstraintAnchor bottom,
-                           int max) {
+                ConstraintAnchor left, ConstraintAnchor top,
+                ConstraintAnchor right, ConstraintAnchor bottom,
+                int max) {
             mOrientation = orientation;
             mLeft = left;
             mTop = top;
@@ -406,9 +402,9 @@ public class Flow extends VirtualLayout {
         }
 
         public void setup(int orientation, ConstraintAnchor left, ConstraintAnchor top,
-                          ConstraintAnchor right, ConstraintAnchor bottom,
-                          int paddingLeft, int paddingTop, int paddingRight, int paddingBottom,
-                          int max) {
+                ConstraintAnchor right, ConstraintAnchor bottom,
+                int paddingLeft, int paddingTop, int paddingRight, int paddingBottom,
+                int max) {
             mOrientation = orientation;
             mLeft = left;
             mTop = top;
@@ -823,17 +819,17 @@ public class Flow extends VirtualLayout {
 
     /**
      * Measure the virtual layout using a list of chains for the children
+     *
      * @param widgets     list of widgets
-     * @param count
      * @param orientation the layout orientation (horizontal or vertical)
      * @param max         the maximum available space
      * @param measured    output parameters -- will contain the resulting measure
      */
     private void measureChainWrap(ConstraintWidget[] widgets,
-                                  int count,
-                                  int orientation,
-                                  int max,
-                                  int[] measured) {
+            int count,
+            int orientation,
+            int max,
+            int[] measured) {
         if (count == 0) {
             return;
         }
@@ -916,8 +912,8 @@ public class Flow extends VirtualLayout {
         int maxHeight = 0;
 
         boolean needInternalMeasure =
-                    getHorizontalDimensionBehaviour() == DimensionBehaviour.WRAP_CONTENT
-                 || getVerticalDimensionBehaviour() == DimensionBehaviour.WRAP_CONTENT;
+                getHorizontalDimensionBehaviour() == DimensionBehaviour.WRAP_CONTENT
+                        || getVerticalDimensionBehaviour() == DimensionBehaviour.WRAP_CONTENT;
 
         if (nbMatchConstraintsWidgets > 0 && needInternalMeasure) {
             // we have to remeasure them.
@@ -982,17 +978,17 @@ public class Flow extends VirtualLayout {
 
     /**
      * Measure the virtual layout using a list of chains for the children in new "fixed way"
-     *  @param widgets     list of widgets
-     * @param count
+     *
+     * @param widgets     list of widgets
      * @param orientation the layout orientation (horizontal or vertical)
      * @param max         the maximum available space
      * @param measured    output parameters -- will contain the resulting measure
      */
     private void measureChainWrap_new(ConstraintWidget[] widgets,
-                                      int count,
-                                      int orientation,
-                                      int max,
-                                      int[] measured) {
+            int count,
+            int orientation,
+            int max,
+            int[] measured) {
         if (count == 0) {
             return;
         }
@@ -1147,17 +1143,17 @@ public class Flow extends VirtualLayout {
 
     /**
      * Measure the virtual layout using a single chain for the children
-     *  @param widgets     list of widgets
-     * @param count
+     *
+     * @param widgets     list of widgets
      * @param orientation the layout orientation (horizontal or vertical)
      * @param max         the maximum available space
      * @param measured    output parameters -- will contain the resulting measure
      */
     private void measureNoWrap(ConstraintWidget[] widgets,
-                               int count,
-                               int orientation,
-                               int max,
-                               int[] measured) {
+            int count,
+            int orientation,
+            int max,
+            int[] measured) {
         if (count == 0) {
             return;
         }
@@ -1194,10 +1190,10 @@ public class Flow extends VirtualLayout {
      * @param measured    output parameters -- will contain the resulting measure
      */
     private void measureAligned(ConstraintWidget[] widgets,
-                                int count,
-                                int orientation,
-                                int max,
-                                int[] measured) {
+            int count,
+            int orientation,
+            int max,
+            int[] measured) {
         boolean done = false;
         int rows = 0;
         int cols = 0;
@@ -1448,7 +1444,7 @@ public class Flow extends VirtualLayout {
     /**
      * Add this widget to the solver
      *
-     * @param system the solver we want to add the widget to
+     * @param system   the solver we want to add the widget to
      * @param optimize true if {@link Optimizer#OPTIMIZATION_GRAPH} is on
      */
     @Override
@@ -1463,7 +1459,8 @@ public class Flow extends VirtualLayout {
                     WidgetsList list = mChainList.get(i);
                     list.createConstraints(isInRtl, i, i == count - 1);
                 }
-            } break;
+            }
+            break;
             case WRAP_NONE: {
                 if (mChainList.size() > 0) {
                     WidgetsList list = mChainList.get(0);
@@ -1481,7 +1478,8 @@ public class Flow extends VirtualLayout {
                     WidgetsList list = mChainList.get(i);
                     list.createConstraints(isInRtl, i, i == count - 1);
                 }
-            } break;
+            }
+            break;
         }
         needsCallbackFromSolver(false);
     }

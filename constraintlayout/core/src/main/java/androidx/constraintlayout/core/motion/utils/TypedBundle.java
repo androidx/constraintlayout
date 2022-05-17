@@ -39,8 +39,6 @@ public class TypedBundle {
 
     /**
      * @TODO: add description
-     * @param type
-     * @return
      */
     public int getInteger(int type) {
         for (int i = 0; i < mCountInt; i++) {
@@ -53,8 +51,6 @@ public class TypedBundle {
 
     /**
      * @TODO: add description
-     * @param type
-     * @param value
      */
     public void add(int type, int value) {
         if (mCountInt >= mTypeInt.length) {
@@ -67,8 +63,6 @@ public class TypedBundle {
 
     /**
      * @TODO: add description
-     * @param type
-     * @param value
      */
     public void add(int type, float value) {
         if (mCountFloat >= mTypeFloat.length) {
@@ -81,8 +75,6 @@ public class TypedBundle {
 
     /**
      * @TODO: add description
-     * @param type
-     * @param value
      */
     public void addIfNotNull(int type, String value) {
         if (value != null) {
@@ -92,8 +84,6 @@ public class TypedBundle {
 
     /**
      * @TODO: add description
-     * @param type
-     * @param value
      */
     public void add(int type, String value) {
         if (mCountString >= mTypeString.length) {
@@ -106,8 +96,6 @@ public class TypedBundle {
 
     /**
      * @TODO: add description
-     * @param type
-     * @param value
      */
     public void add(int type, boolean value) {
         if (mCountBoolean >= mTypeBoolean.length) {
@@ -120,7 +108,6 @@ public class TypedBundle {
 
     /**
      * @TODO: add description
-     * @param values
      */
     public void applyDelta(TypedValues values) {
         for (int i = 0; i < mCountInt; i++) {
@@ -139,7 +126,6 @@ public class TypedBundle {
 
     /**
      * @TODO: add description
-     * @param values
      */
     public void applyDelta(TypedBundle values) {
         for (int i = 0; i < mCountInt; i++) {

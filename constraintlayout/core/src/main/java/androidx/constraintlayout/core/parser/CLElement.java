@@ -32,7 +32,6 @@ public class CLElement {
 
     /**
      * @TODO: add description
-     * @return
      */
     public boolean notStarted() {
         return mStart == -1;
@@ -57,8 +56,6 @@ public class CLElement {
 
     /**
      * The character index this element was started on
-     *
-     * @return
      */
     public long getStart() {
         return this.mStart;
@@ -66,8 +63,6 @@ public class CLElement {
 
     /**
      * The character index this element was ended on
-     *
-     * @return
      */
     public long getEnd() {
         return this.mEnd;
@@ -75,7 +70,6 @@ public class CLElement {
 
     /**
      * @TODO: add description
-     * @param end
      */
     public void setEnd(long end) {
         if (this.mEnd != Long.MAX_VALUE) {
@@ -121,7 +115,6 @@ public class CLElement {
 
     /**
      * @TODO: add description
-     * @return
      */
     public String content() {
         String content = new String(mContent);
@@ -157,7 +150,6 @@ public class CLElement {
 
     /**
      * @TODO: add description
-     * @return
      */
     public int getInt() {
         if (this instanceof CLNumber) {
@@ -168,7 +160,6 @@ public class CLElement {
 
     /**
      * @TODO: add description
-     * @return
      */
     public float getFloat() {
         if (this instanceof CLNumber) {

@@ -177,11 +177,12 @@ public class CLParserTest {
             CLObject parsedContent = CLParser.parse(test);
             assertEquals("John", parsedContent.getString("firstName"));
             assertEquals("{ firstName: 'John', lastName: 'Smith', isAlive: true, "
-                    + "age: 27, address: { streetAddress: '21 2nd Street', city: 'New York', "
-                    + "state: 'NY', postalCode: '10021-3100' }, "
-                    + "phoneNumbers: [{ type: 'home', number: '212 555-1234' }, "
-                    + "{ type: 'office', number: '646 555-4567' }], "
-                    + "children: [], spouse: null }",
+                            + "age: 27, address: { streetAddress: '21 2nd Street', city: 'New "
+                            + "York', "
+                            + "state: 'NY', postalCode: '10021-3100' }, "
+                            + "phoneNumbers: [{ type: 'home', number: '212 555-1234' }, "
+                            + "{ type: 'office', number: '646 555-4567' }], "
+                            + "children: [], spouse: null }",
                     parsedContent.toJSON());
             assertEquals(2, parsedContent.getArray("phoneNumbers").size());
             CLElement element = parsedContent.get("spouse");
@@ -247,21 +248,21 @@ public class CLParserTest {
     @Test
     public void testJSON5() {
         String test = "{\n"
-                      + "  // comments\n  unquoted: 'and you can quote me on that',\n"
-                      + "  singleQuotes: 'I can use \"double quotes\" here',\n"
-                      // "  hexadecimal: 0xdecaf,\n" +
-                      + "  leadingDecimalPoint: .8675309, andTrailing: 8675309.,\n"
-                      + "  positiveSign: +1,\n"
-                      + "  trailingComma: 'in objects', andIn: ['arrays',],\n"
-                      + "  \"backwardsCompatible\": \"with JSON\",\n"
-                      + "}";
+                + "  // comments\n  unquoted: 'and you can quote me on that',\n"
+                + "  singleQuotes: 'I can use \"double quotes\" here',\n"
+                // "  hexadecimal: 0xdecaf,\n" +
+                + "  leadingDecimalPoint: .8675309, andTrailing: 8675309.,\n"
+                + "  positiveSign: +1,\n"
+                + "  trailingComma: 'in objects', andIn: ['arrays',],\n"
+                + "  \"backwardsCompatible\": \"with JSON\",\n"
+                + "}";
         try {
             CLObject parsedContent = CLParser.parse(test);
             assertEquals("{ unquoted: 'and you can quote me on that', "
-                    + "singleQuotes: 'I can use \"double quotes\" here', "
-                    + "leadingDecimalPoint: 0.8675309, andTrailing: 8675309, "
-                    + "positiveSign: 1, trailingComma: 'in objects', "
-                    + "andIn: ['arrays'], backwardsCompatible: 'with JSON' }",
+                            + "singleQuotes: 'I can use \"double quotes\" here', "
+                            + "leadingDecimalPoint: 0.8675309, andTrailing: 8675309, "
+                            + "positiveSign: 1, trailingComma: 'in objects', "
+                            + "andIn: ['arrays'], backwardsCompatible: 'with JSON' }",
                     parsedContent.toJSON());
         } catch (CLParsingException e) {
             System.err.println("Exception " + e.reason());
@@ -273,13 +274,13 @@ public class CLParserTest {
     @Test
     public void testConstraints() {
         String test = "{\n"
-                      + "  g1 : { type: 'vGuideline', start: 44 },\n"
-                      + "  g2 : { type: 'vGuideline', end: 44 },\n"
-                      + "  image: {\n"
-                      + "    width: 201, height: 179,\n"
-                      + "    top: ['parent','top', 32],\n"
-                      + "    start: 'g1'\n"
-                      + "  },\n";
+                + "  g1 : { type: 'vGuideline', start: 44 },\n"
+                + "  g2 : { type: 'vGuideline', end: 44 },\n"
+                + "  image: {\n"
+                + "    width: 201, height: 179,\n"
+                + "    top: ['parent','top', 32],\n"
+                + "    start: 'g1'\n"
+                + "  },\n";
         try {
             CLObject parsedContent = CLParser.parse(test);
             assertEquals("{ g1: { type: 'vGuideline', start: 44 }, "
@@ -403,12 +404,13 @@ public class CLParserTest {
         try {
             CLObject parsedContent = CLParser.parse(test);
             assertEquals("{ ConstraintSets: { start: { a: { width: 40, height: 40, "
-                    + "start: ['parent', 'start', 16], bottom: ['parent', 'bottom', 16] } }, "
-                    + "end: { a: { width: 40, height: 40, end: ['parent', 'end', 16],"
+                            + "start: ['parent', 'start', 16], bottom: ['parent', 'bottom', 16] }"
+                            + " }, "
+                            + "end: { a: { width: 40, height: 40, end: ['parent', 'end', 16],"
                             + " top: ['parent', 'top', 16] } } }, "
-                    + "Transitions: { default: { from: 'start', to: 'end', "
+                            + "Transitions: { default: { from: 'start', to: 'end', "
                             + "pathMotionArc: 'startHorizontal', "
-                    + "KeyFrames: { KeyAttributes: [{ target: ['a'], frames: [25, 50], "
+                            + "KeyFrames: { KeyAttributes: [{ target: ['a'], frames: [25, 50], "
                             + "scaleX: 3, scaleY: 0.3 }] } } } }",
                     parsedContent.toJSON());
             CLObject transitions = parsedContent.getObject("Transitions");

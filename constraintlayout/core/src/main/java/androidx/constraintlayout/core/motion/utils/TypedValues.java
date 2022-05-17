@@ -29,8 +29,6 @@ public interface TypedValues {
     /**
      * Used to set integer values
      *
-     * @param id
-     * @param value
      * @return true if it accepted the value
      */
     boolean setValue(int id, int value);
@@ -38,8 +36,6 @@ public interface TypedValues {
     /**
      * Used to set float values
      *
-     * @param id
-     * @param value
      * @return true if it accepted the value
      */
     boolean setValue(int id, float value);
@@ -47,8 +43,6 @@ public interface TypedValues {
     /**
      * Used to set String values
      *
-     * @param id
-     * @param value
      * @return true if it accepted the value
      */
     boolean setValue(int id, String value);
@@ -56,16 +50,12 @@ public interface TypedValues {
     /**
      * Used to set boolean values
      *
-     * @param id
-     * @param value
      * @return true if it accepted the value
      */
     boolean setValue(int id, boolean value);
 
     /**
      * @TODO: add description
-     * @param name
-     * @return
      */
     int getId(String name);
 

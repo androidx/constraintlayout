@@ -58,7 +58,6 @@ public class MotionKeyTimeCycle extends MotionKey {
 
     /**
      * @TODO: add description
-     * @param splines
      */
     public void addTimeValues(HashMap<String, TimeCycleSplineSet> splines) {
         for (String s : splines.keySet()) {
@@ -162,9 +161,6 @@ public class MotionKeyTimeCycle extends MotionKey {
 
     /**
      * @TODO: add description
-     * @param type
-     * @param value
-     * @return
      */
     public boolean setValue(int type, int value) {
 
@@ -183,9 +179,6 @@ public class MotionKeyTimeCycle extends MotionKey {
 
     /**
      * @TODO: add description
-     * @param type
-     * @param value
-     * @return
      */
     public boolean setValue(int type, float value) {
         switch (type) {
@@ -242,9 +235,6 @@ public class MotionKeyTimeCycle extends MotionKey {
 
     /**
      * @TODO: add description
-     * @param type
-     * @param value
-     * @return
      */
     public boolean setValue(int type, String value) {
         switch (type) {
@@ -263,9 +253,6 @@ public class MotionKeyTimeCycle extends MotionKey {
 
     /**
      * @TODO: add description
-     * @param type
-     * @param value
-     * @return
      */
     public boolean setValue(int type, boolean value) {
         return super.setValue(type, value);
@@ -273,8 +260,6 @@ public class MotionKeyTimeCycle extends MotionKey {
 
     /**
      * @TODO: add description
-     * @param src
-     * @return
      */
     public MotionKeyTimeCycle copy(MotionKey src) {
         super.copy(src);
@@ -343,7 +328,6 @@ public class MotionKeyTimeCycle extends MotionKey {
 
     /**
      * @TODO: add description
-     * @return
      */
     public MotionKey clone() {
         return new MotionKeyTimeCycle().copy(this);

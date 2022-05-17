@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class CLKey extends CLContainer {
 
-    private static ArrayList<String> sSections = new ArrayList<>();
+    private static final ArrayList<String> sSections = new ArrayList<>();
 
     static {
         sSections.add("ConstraintSets");
@@ -38,8 +38,6 @@ public class CLKey extends CLContainer {
 
     /**
      * @TODO: add description
-     * @param content
-     * @return
      */
     public static CLElement allocate(char[] content) {
         return new CLKey(content);
@@ -47,9 +45,6 @@ public class CLKey extends CLContainer {
 
     /**
      * @TODO: add description
-     * @param name
-     * @param value
-     * @return
      */
     public static CLElement allocate(String name, CLElement value) {
         CLKey key = new CLKey(name.toCharArray());
@@ -97,7 +92,6 @@ public class CLKey extends CLContainer {
 
     /**
      * @TODO: add description
-     * @param value
      */
     public void set(CLElement value) {
         if (mElements.size() > 0) {
@@ -109,7 +103,6 @@ public class CLKey extends CLContainer {
 
     /**
      * @TODO: add description
-     * @return
      */
     public CLElement getValue() {
         if (mElements.size() > 0) {

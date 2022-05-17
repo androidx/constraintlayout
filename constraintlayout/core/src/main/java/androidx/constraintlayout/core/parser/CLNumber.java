@@ -18,6 +18,7 @@ package androidx.constraintlayout.core.parser;
 public class CLNumber extends CLElement {
 
     float mValue = Float.NaN;
+
     public CLNumber(char[] content) {
         super(content);
     }
@@ -29,8 +30,6 @@ public class CLNumber extends CLElement {
 
     /**
      * @TODO: add description
-     * @param content
-     * @return
      */
     public static CLElement allocate(char[] content) {
         return new CLNumber(content);
@@ -60,7 +59,6 @@ public class CLNumber extends CLElement {
 
     /**
      * @TODO: add description
-     * @return
      */
     public boolean isInt() {
         float value = getFloat();
@@ -86,7 +84,6 @@ public class CLNumber extends CLElement {
 
     /**
      * @TODO: add description
-     * @param value
      */
     public void putValue(float value) {
         this.mValue = value;

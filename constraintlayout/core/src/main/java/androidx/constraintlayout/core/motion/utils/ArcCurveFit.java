@@ -34,7 +34,7 @@ public class ArcCurveFit extends CurveFit {
     private static final int START_LINEAR = 3;
     private final double[] mTime;
     Arc[] mArcs;
-    private boolean mExtrapolate = true;
+    private final boolean mExtrapolate = true;
 
     @Override
     public void getPos(double t, double[] v) {
@@ -283,7 +283,7 @@ public class ArcCurveFit extends CurveFit {
 
     private static class Arc {
         private static final String TAG = "Arc";
-        private static double[] sOurPercent = new double[91];
+        private static final double[] sOurPercent = new double[91];
         double[] mLut;
         double mArcDistance;
         double mTime1;
