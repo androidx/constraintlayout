@@ -734,7 +734,6 @@ public class WidgetFrame {
     }
 
     void setMotionAttributes(TypedBundle motionProperties) {
-        Utils.log(" setting props "+getId()+ " " + motionProperties);
         mMotionProperties = motionProperties;
     }
 

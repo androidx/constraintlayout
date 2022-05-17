@@ -737,6 +737,7 @@ public class Transition implements TypedValues {
             WidgetState widgetState = getWidgetState(child.stringId, null, state);
             widgetState.update(child, state);
         }
+        calcStagger();
     }
 
     /**
@@ -832,7 +833,8 @@ public class Transition implements TypedValues {
         if (widgetState == null) {
             widgetState = new WidgetState();
             mBundle.applyDelta(widgetState.mMotionControl);
-            widgetState.mMotionWidgetStart.updateMotion();
+            widgetState.mMotionWidgetStart.updateMotion( widgetState.mMotionWidgetStart);
+            widgetState.mMotionWidgetStart.updateMotion( widgetState.mMotionControl);
             mState.put(widgetId, widgetState);
             if (child != null) {
                 widgetState.update(child, transitionState);
@@ -934,7 +936,7 @@ public class Transition implements TypedValues {
         public void update(ConstraintWidget child, int state) {
             if (state == START) {
                 mStart.update(child);
-                mMotionWidgetStart.updateMotion();
+                mMotionWidgetStart.updateMotion(mMotionWidgetStart);
                 mMotionControl.setStart(mMotionWidgetStart);
             } else if (state == END) {
                 mEnd.update(child);
@@ -982,6 +984,87 @@ public class Transition implements TypedValues {
             this.mType = type;
             this.mX = x;
             this.mY = y;
+        }
+    }
+
+    public void calcStagger() {
+        if (mStagger == 0.0f) {
+            return;
+        }
+        boolean flip = mStagger < 0.0;
+
+        float stagger = Math.abs(mStagger);
+        float min = Float.MAX_VALUE, max = -Float.MAX_VALUE;
+        int n = mState.size();
+        boolean useMotionStagger = false;
+
+        for (String widgetId : mState.keySet()) {
+            WidgetState widgetState = mState.get(widgetId);
+            Motion f = widgetState.mMotionControl;
+            if (!Float.isNaN(f.getMotionStagger())) {
+                useMotionStagger = true;
+                break;
+            }
+        }
+        if (useMotionStagger) {
+            for (String widgetId : mState.keySet()) {
+                WidgetState widgetState = mState.get(widgetId);
+                Motion f = widgetState.mMotionControl;
+                float widgetStagger = f.getMotionStagger();
+                if (!Float.isNaN(widgetStagger)) {
+                    min = Math.min(min, widgetStagger);
+                    max = Math.max(max, widgetStagger);
+                }
+            }
+
+            for (String widgetId : mState.keySet()) {
+                WidgetState widgetState = mState.get(widgetId);
+                Motion f = widgetState.mMotionControl;
+
+                float widgetStagger = f.getMotionStagger();
+                if (!Float.isNaN(widgetStagger)) {
+                    float scale = 1 / (1 - stagger);
+
+                    float offset = stagger - stagger * (widgetStagger- (min)) / (max - (min));
+                    if (flip) {
+                        offset =  stagger - stagger
+                                * ((max - widgetStagger) / (max - min));
+                    }
+                    f.setStaggerScale(scale);
+                    f.setStaggerOffset(offset);
+                }
+            }
+
+        } else {
+            for (String widgetId : mState.keySet()) {
+                WidgetState widgetState = mState.get(widgetId);
+                Motion f = widgetState.mMotionControl;
+                float x = f.getFinalX();
+                float y = f.getFinalY();
+                float widgetStagger = x + y;
+                min = Math.min(min, widgetStagger);
+                max = Math.max(max, widgetStagger);
+            }
+
+            Utils.log("min " + min + " max " + max);
+
+            for (String widgetId : mState.keySet()) {
+                WidgetState widgetState = mState.get(widgetId);
+                Motion f = widgetState.mMotionControl;
+                float x = f.getFinalX();
+                float y = f.getFinalY();
+                float widgetStagger = x + y;
+                float offset = stagger - stagger * (widgetStagger - (min)) / (max - (min));
+                if (flip) {
+                    offset = stagger - stagger
+                            * ((max - widgetStagger) / (max - min));
+                }
+
+                float scale = 1 / (1 - stagger);
+                Utils.log("1 / (1 - mStagger) =  " + scale + " offset= " + offset);
+                f.setStaggerScale(scale);
+                f.setStaggerOffset(offset);
+            }
         }
     }
 }

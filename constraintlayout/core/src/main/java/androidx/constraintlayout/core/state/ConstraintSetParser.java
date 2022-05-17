@@ -16,9 +16,12 @@
 
 package androidx.constraintlayout.core.state;
 
+import static androidx.constraintlayout.core.motion.utils.TypedValues.MotionType.TYPE_QUANTIZE_INTERPOLATOR_TYPE;
+import static androidx.constraintlayout.core.motion.utils.TypedValues.MotionType.TYPE_QUANTIZE_MOTIONSTEPS;
+import static androidx.constraintlayout.core.motion.utils.TypedValues.MotionType.TYPE_QUANTIZE_MOTION_PHASE;
+
 import androidx.constraintlayout.core.motion.utils.TypedBundle;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
-import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.parser.CLArray;
 import androidx.constraintlayout.core.parser.CLElement;
 import androidx.constraintlayout.core.parser.CLKey;
@@ -1013,44 +1016,54 @@ public class ConstraintSetParser {
             return;
         }
         CLObject obj = (CLObject) element;
-        TypedBundle motionProperties = new TypedBundle();
+        TypedBundle bundle = new TypedBundle();
         ArrayList<String> constraints = obj.names();
         if (constraints == null) {
-            Utils.log(" constraints == nul ");
-
             return;
         }
         for (String constraintName : constraints) {
-            Utils.log(" constraintName "+constraintName);
 
             switch (constraintName) {
                 case "pathArc":
-                    Utils.log(" parse = pathArch");
                     String val = obj.getString(constraintName);
                     int ord = map(val, "none", "startVertical", "startHorizontal", "flip");
                     if (ord == -1) {
                         System.err.println(obj.getLine()+" pathArc = '" + val + "'");
                         break;
                     }
-                    Utils.log(" parse = pathArch "+ord);
-                    motionProperties.add(TypedValues.MotionType.TYPE_PATHMOTION_ARC, ord);
+                    bundle.add(TypedValues.MotionType.TYPE_PATHMOTION_ARC, ord);
                     break;
                 case "relativeTo":
-                    motionProperties.add(TypedValues.MotionType.TYPE_ANIMATE_RELATIVE_TO,
+                    bundle.add(TypedValues.MotionType.TYPE_ANIMATE_RELATIVE_TO,
                             obj.getString(constraintName));
                     break;
                 case "easing":
-                    motionProperties.add(TypedValues.MotionType.TYPE_EASING, obj.getString(constraintName));
+                    bundle.add(TypedValues.MotionType.TYPE_EASING, obj.getString(constraintName));
                     break;
                 case "stagger":
-                    motionProperties.add(TypedValues.MotionType.TYPE_STAGGER,  obj.getFloat(constraintName));
+                    bundle.add(TypedValues.MotionType.TYPE_STAGGER,  obj.getFloat(constraintName));
                     break;
                 case "quantize":
-                    motionProperties.add(TypedValues.MotionType.TYPE_QUANTIZE_INTERPOLATOR_TYPE, 3);
+                    CLElement quant = obj.get(constraintName);
+                    if (quant instanceof  CLArray) {
+                        CLArray array = (CLArray) quant;
+                        int len = array.size();
+                        if (len > 0) {
+                            bundle.add(TYPE_QUANTIZE_MOTIONSTEPS, array.getInt(0));
+                            if (len > 1) {
+                                bundle.add(TYPE_QUANTIZE_INTERPOLATOR_TYPE, array.getString(1));
+                                if (len > 2) {
+                                    bundle.add(TYPE_QUANTIZE_MOTION_PHASE, array.getFloat(2));
+                                }
+                            }
+                        }
+                    } else {
+                        bundle.add(TYPE_QUANTIZE_MOTIONSTEPS, obj.getInt(constraintName));
+                    }
                     break;
             }
         }
-        reference.mMotionProperties = motionProperties;
+        reference.mMotionProperties = bundle;
     }
 
     static void parseConstraint(

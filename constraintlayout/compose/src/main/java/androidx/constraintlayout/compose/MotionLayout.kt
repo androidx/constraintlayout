@@ -146,7 +146,7 @@ inline fun MotionLayout(
  */
 @ExperimentalMotionApi
 @Composable
-inline fun MotionLayout(
+inline fun  MotionLayout(
     motionScene: MotionScene,
     constraintSetName: String? = null,
     animationSpec: AnimationSpec<Float> = tween<Float>(),

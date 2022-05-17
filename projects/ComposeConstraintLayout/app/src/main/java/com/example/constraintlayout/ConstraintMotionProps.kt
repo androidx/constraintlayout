@@ -16,16 +16,11 @@
 
 package com.example.constraintlayout
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -35,10 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.MotionLayoutDebugFlags
 import androidx.constraintlayout.compose.MotionScene
@@ -47,7 +39,7 @@ import java.util.*
 
 @Preview
 @Composable
-fun MotionInConstraints() {
+fun MotionArc() {
 
     var scene =
         """
@@ -58,6 +50,11 @@ fun MotionInConstraints() {
                width: 50, height: 50,
                bottom: ['parent', 'bottom', 10],
                start: ['parent', 'start', 10],
+             },
+               title: {
+                   top: ['parent', 'top', 10],
+               start: ['parent', 'start', 10],
+                end: ['parent', 'end', 10],
              },
                box2: {
                width: 50, height: 50,
@@ -74,6 +71,11 @@ fun MotionInConstraints() {
                        top: ['parent', 'top', 10],
                        end: ['parent', 'end', 10],
                     },
+              title: {
+                 top: ['parent', 'top', 10],
+               start: ['parent', 'start', 10],
+                end: ['parent', 'end', 10],
+             },
              box2: {
                 width: 50, height: 50,
                 top: ['parent', 'top', 40],
@@ -101,10 +103,14 @@ fun MotionInConstraints() {
 
     Column {
         MotionLayout(
-            modifier = Modifier.fillMaxSize().background(Color.LightGray),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.LightGray),
             motionScene = MotionScene(content = scene),
             debug= EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
         ) {
+            Text(text = "pathArc motion attributes",
+                modifier = Modifier.layoutId("title"))
             Box(
                 modifier = Modifier
                     .background(Color.Red)
@@ -119,3 +125,605 @@ fun MotionInConstraints() {
     }
 }
 
+
+@Preview
+@Composable
+fun MotionEasing() {
+
+    var scene =
+        """
+       {
+         ConstraintSets: {
+           start: {
+             box1: {
+               width: 50, height: 50,
+               bottom: ['parent', 'bottom', 10],
+               start: ['parent', 'start', 10],
+             },
+               title: {
+                   top: ['parent', 'top', 10],
+               start: ['parent', 'start', 10],
+                end: ['parent', 'end', 10],
+             },
+               box2: {
+               width: 50, height: 50,
+               bottom: ['parent', 'bottom', 10],
+               start: ['parent', 'start', 10],
+               motion: {
+                  pathArc : 'startHorizontal',
+                  easing: 'overshoot'
+               }
+             }
+           },
+           end: {
+               box1: {
+                       width: 50, height: 50,
+                       top: ['parent', 'top', 60],
+                       end: ['parent', 'end', 60],
+                    },
+              title: {
+                 top: ['parent', 'top', 10],
+               start: ['parent', 'start', 10],
+                end: ['parent', 'end', 10],
+             },
+             box2: {
+                width: 50, height: 50,
+                top: ['parent', 'top', 60],
+                end: ['parent', 'end', 10],
+             }
+           }
+         },
+         Transitions: {
+           default: {
+              from: 'start',
+              to: 'end',
+               pathMotionArc : 'none',
+              onSwipe: {
+                anchor: 'box1',
+                maxVelocity: 4.2,
+                maxAccel: 3,
+                direction: 'end',
+                side: 'start',
+                mode: 'velocity'
+              }
+           }
+         }
+       }
+        """.trimIndent()
+
+    Column {
+        MotionLayout(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.LightGray),
+            motionScene = MotionScene(content = scene),
+            debug= EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
+        ) {
+            Text(text = " easing motion attributes ",
+                modifier = Modifier.layoutId("title"))
+            Box(
+                modifier = Modifier
+                    .background(Color.Red)
+                    .layoutId("box1")
+            )
+            Box(
+                modifier = Modifier
+                    .background(Color.Green)
+                    .layoutId("box2")
+            )
+        }
+    }
+}
+
+
+@Preview
+@Composable
+fun MotionQuantize1() {
+
+    var scene =
+        """
+       {
+         ConstraintSets: {
+           start: {
+             box1: {
+               width: 50, height: 50,
+               bottom: ['parent', 'bottom', 10],
+               start: ['parent', 'start', 10],
+             },
+               title: {
+                   top: ['parent', 'top', 10],
+               start: ['parent', 'start', 10],
+                end: ['parent', 'end', 10],
+             },
+               box2: {
+               width: 50, height: 50,
+               bottom: ['parent', 'bottom', 10],
+               start: ['parent', 'start', 10],
+               motion: {
+                  pathArc : 'startHorizontal',
+                  quantize: 12
+               }
+             }
+           },
+           end: {
+               box1: {
+                       width: 50, height: 50,
+                       top: ['parent', 'top', 60],
+                       end: ['parent', 'end', 60],
+                    },
+              title: {
+                 top: ['parent', 'top', 10],
+               start: ['parent', 'start', 10],
+                end: ['parent', 'end', 10],
+             },
+             box2: {
+                width: 50, height: 50,
+                top: ['parent', 'top', 60],
+                end: ['parent', 'end', 10],
+             }
+           }
+         },
+         Transitions: {
+           default: {
+              from: 'start',
+              to: 'end',
+               pathMotionArc : 'none',
+              onSwipe: {
+                anchor: 'box1',
+                maxVelocity: 4.2,
+                maxAccel: 3,
+                direction: 'end',
+                side: 'start',
+                mode: 'velocity'
+              }
+           }
+         }
+       }
+        """.trimIndent()
+
+    Column {
+        MotionLayout(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.LightGray),
+            motionScene = MotionScene(content = scene),
+            debug= EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
+        ) {
+            Text(text = " Quantize Constraint motion ",
+                modifier = Modifier
+                    .layoutId("title")
+                    .background(Color.Gray))
+            Box(
+                modifier = Modifier
+                    .background(Color.Red)
+                    .layoutId("box1")
+            )
+            Box(
+                modifier = Modifier
+                    .background(Color.Green)
+                    .layoutId("box2")
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun MotionQuantize2() {
+    var currentState by remember { mutableStateOf<String?>("start") }
+    var scene =
+        """
+       {
+         ConstraintSets: {
+           start: {
+             box1: {
+               width: 50, height: 50,
+               bottom: ['parent', 'bottom', 10],
+               start: ['parent', 'start', 10],
+             },
+               title: {
+                   height: 50,
+                   top: ['parent', 'top', 10],
+               start: ['parent', 'start', 10],
+                end: ['parent', 'end', 10],
+             },
+               box2: {
+               width: 50, height: 50,
+               bottom: ['parent', 'bottom', 10],
+               start: ['parent', 'start', 10],
+               motion: {
+                  pathArc : 'startHorizontal',
+                  quantize: [6, 'overshoot', 32]
+               }
+             }
+           },
+           end: {
+               box1: {
+                       width: 50, height: 50,
+                       top: ['parent', 'top', 60],
+                       end: ['parent', 'end', 60],
+                    },
+              title: {
+                 height: 50,
+                 top: ['parent', 'top', 10],
+               start: ['parent', 'start', 10],
+                end: ['parent', 'end', 10],
+             },
+             box2: {
+                width: 50, height: 50,
+                top: ['parent', 'top', 60],
+                end: ['parent', 'end', 10],
+             }
+           }
+         },
+         Transitions: {
+           default: {
+              from: 'start',
+              to: 'end',
+              duration: 2000,
+               pathMotionArc : 'none',
+              onSwipe: {
+                anchor: 'box1',
+                maxVelocity: 4.2,
+                maxAccel: 3,
+                direction: 'end',
+                side: 'start',
+                mode: 'velocity'
+              }
+           }
+         }
+       }
+        """.trimIndent()
+
+    Column {
+        MotionLayout(
+            animationSpec = tween<Float>(2000),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.LightGray),
+            constraintSetName = currentState,
+            motionScene = MotionScene(content = scene),
+            debug= EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
+        ) {
+            Button( onClick = { currentState = if (currentState == "start") "end" else "start"  },
+
+                modifier = Modifier
+                    .layoutId("title")
+                    .background(Color.Gray)) {
+                Text(text =" Complex Quantize Constraint motion ", )
+            }
+            Box(
+                modifier = Modifier
+                    .background(Color.Red)
+                    .layoutId("box1")
+            )
+            Box(
+                modifier = Modifier
+                    .background(Color.Green)
+                    .layoutId("box2")
+            )
+        }
+    }
+}
+
+
+@Preview
+@Composable
+fun MotionStagger1() {
+    var currentState by remember { mutableStateOf<String?>("start") }
+    var scene =
+        """
+       {
+         ConstraintSets: {
+           start: {
+             box1: {
+               width: 50, height: 50,
+               bottom: ['parent', 'bottom', 10],
+               start: ['parent', 'start', 10],
+             },
+               title: {
+                   height: 50,
+                   top: ['parent', 'top', 10],
+               start: ['parent', 'start', 10],
+                end: ['parent', 'end', 10],
+             },
+               box2: {
+               width: 50, height: 50,
+               bottom: ['parent', 'bottom', 10],
+               start: ['parent', 'start', 10],
+               motion: {
+                  pathArc : 'startHorizontal',
+                  stagger: 1,
+               }
+             },
+             box3: {
+               width: 50, height: 50,
+               bottom: ['parent', 'bottom', 10],
+               start: ['parent', 'start', 10],
+               motion: {
+                  pathArc : 'startHorizontal',
+                  stagger: 1,
+         
+               }
+             },
+             box4: {
+               width: 50, height: 50,
+               bottom: ['parent', 'bottom', 10],
+               start: ['parent', 'start', 10],
+               motion: {
+                  pathArc : 'startHorizontal',
+                  stagger: 2,
+         
+               }
+             },
+             
+             box5: {
+               width: 50, height: 50,
+               bottom: ['parent', 'bottom', 10],
+               start: ['parent', 'start', 10],
+               motion: {
+                  pathArc : 'startHorizontal',
+                  stagger: 2,
+         
+               }
+             },
+              box6: {
+               width: 50, height: 50,
+               bottom: ['parent', 'bottom', 10],
+               start: ['parent', 'start', 10],
+               motion: {
+                  pathArc : 'startHorizontal',
+                  stagger: 3,
+         
+               }
+             }
+           },
+           end: {
+               box1: {
+                       width: 50, height: 50,
+                       top: ['parent', 'top', 60],
+                       end: ['parent', 'end', 60],
+                    },
+              title: {
+                 height: 50,
+                 top: ['parent', 'top', 10],
+               start: ['parent', 'start', 10],
+                end: ['parent', 'end', 10],
+             },
+             box2: {
+                width: 50, height: 50,
+                top: ['parent', 'top', 60],
+                end: ['parent', 'end', 10],
+             },
+             box3: {
+                width: 50, height: 50,
+                top: ['parent', 'top', 110],
+                end: ['parent', 'end', 10],
+             },
+             box4: {
+                width: 50, height: 50,
+                top: ['parent', 'top', 160],
+                end: ['parent', 'end', 10],
+             },
+             box5: {
+                width: 50, height: 50,
+                top: ['parent', 'top', 210],
+                end: ['parent', 'end', 10],
+             },
+             box6: {
+                width: 50, height: 50,
+                top: ['parent', 'top', 260],
+                end: ['parent', 'end', 10],
+             }
+           }
+         },
+         Transitions: {
+           default: {
+              from: 'start',
+              to: 'end',
+              duration: 2000,
+               pathMotionArc : 'none',
+               staggered: 0.4,
+              onSwipe: {
+                anchor: 'box1',
+                maxVelocity: 4.2,
+                maxAccel: 3,
+                direction: 'end',
+                side: 'start',
+                mode: 'velocity'
+              }
+           }
+         }
+       }
+        """.trimIndent()
+
+    Column {
+        MotionLayout(
+            animationSpec = tween<Float>(2000),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.LightGray),
+            constraintSetName = currentState,
+            motionScene = MotionScene(content = scene),
+            debug= EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
+        ) {
+            Button( onClick = { currentState = if (currentState == "start") "end" else "start"  },
+
+                modifier = Modifier
+                    .layoutId("title")
+                    .background(Color.Gray)) {
+                Text(text =" Complex Quantize Constraint motion ", )
+            }
+            Box(
+                modifier = Modifier
+                    .background(Color.Red)
+                    .layoutId("box1")
+            )
+            for (i in 2..6) {
+                val c = Color(0f, 0.4f+i/10f, i/10f)
+                Box(
+                    modifier = Modifier
+                        .background(c)
+                        .layoutId("box$i")
+                )
+            }
+
+        }
+    }
+}
+
+@Preview
+@Composable
+fun MotionStagger2() {
+    var currentState by remember { mutableStateOf<String?>("start") }
+    var scene =
+        """
+       {
+         ConstraintSets: {
+           start: {
+             box1: {
+               width: 50, height: 50,
+               bottom: ['parent', 'bottom', 10],
+               start: ['parent', 'start', 10],
+             },
+               title: {
+                   height: 50,
+                   top: ['parent', 'top', 10],
+               start: ['parent', 'start', 10],
+                end: ['parent', 'end', 10],
+             },
+               box2: {
+               width: 50, height: 50,
+               bottom: ['parent', 'bottom', 10],
+               start: ['parent', 'start', 10],
+               motion: {
+                  pathArc : 'startHorizontal',
+               }
+             },
+             box3: {
+               width: 50, height: 50,
+               bottom: ['parent', 'bottom', 60],
+               start: ['parent', 'start', 10],
+               motion: {
+                  pathArc : 'startHorizontal',
+               }
+             },
+             box4: {
+               width: 50, height: 50,
+               bottom: ['parent', 'bottom', 110],
+               start: ['parent', 'start', 10],
+               motion: {
+                  pathArc : 'startHorizontal',         
+               }
+             },
+             
+             box5: {
+               width: 50, height: 50,
+               bottom: ['parent', 'bottom',  160],
+               start: ['parent', 'start', 10],
+               motion: {
+                  pathArc : 'startHorizontal',         
+               }
+             },
+              box6: {
+               width: 50, height: 50,
+               bottom: ['parent', 'bottom', 210],
+               start: ['parent', 'start', 10],
+               motion: {
+                  pathArc : 'startHorizontal',         
+               }
+             }
+           },
+           end: {
+               box1: {
+                       width: 50, height: 50,
+                       top: ['parent', 'top', 60],
+                       end: ['parent', 'end', 60],
+                    },
+              title: {
+                 height: 50,
+                 top: ['parent', 'top', 10],
+               start: ['parent', 'start', 10],
+                end: ['parent', 'end', 10],
+             },
+             box2: {
+                width: 50, height: 50,
+                top: ['parent', 'top', 60],
+                end: ['parent', 'end', 10],
+             },
+             box3: {
+                width: 50, height: 50,
+                top: ['parent', 'top', 110],
+                end: ['parent', 'end', 10],
+             },
+             box4: {
+                width: 50, height: 50,
+                top: ['parent', 'top', 160],
+                end: ['parent', 'end', 10],
+             },
+             box5: {
+                width: 50, height: 50,
+                top: ['parent', 'top', 210],
+                end: ['parent', 'end', 10],
+             },
+             box6: {
+                width: 50, height: 50,
+                top: ['parent', 'top', 260],
+                end: ['parent', 'end', 10],
+             }
+           }
+         },
+         Transitions: {
+           default: {
+              from: 'start',
+              to: 'end',
+              duration: 2000,
+               pathMotionArc : 'none',
+               staggered: -0.4,
+              onSwipe: {
+                anchor: 'box1',
+                maxVelocity: 4.2,
+                maxAccel: 3,
+                direction: 'end',
+                side: 'start',
+                mode: 'velocity'
+              }
+           }
+         }
+       }
+        """.trimIndent()
+
+    Column {
+        MotionLayout(
+            animationSpec = tween<Float>(2000),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.LightGray),
+            constraintSetName = currentState,
+            motionScene = MotionScene(content = scene),
+            debug= EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
+        ) {
+            Button( onClick = { currentState = if (currentState == "start") "end" else "start"  },
+
+                modifier = Modifier
+                    .layoutId("title")
+                    .background(Color.Gray)) {
+                Text(text =" Complex Quantize Constraint motion ", )
+            }
+            Box(
+                modifier = Modifier
+                    .background(Color.Red)
+                    .layoutId("box1")
+            )
+            for (i in 2..6) {
+                val c = Color(0f, 0.4f+i/10f, i/10f)
+                Box(
+                    modifier = Modifier
+                        .background(c)
+                        .layoutId("box$i")
+                )
+            }
+
+        }
+    }
+}

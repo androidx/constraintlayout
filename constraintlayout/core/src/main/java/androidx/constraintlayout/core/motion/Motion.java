@@ -34,6 +34,7 @@ import androidx.constraintlayout.core.motion.utils.KeyFrameArray;
 import androidx.constraintlayout.core.motion.utils.Rect;
 import androidx.constraintlayout.core.motion.utils.SplineSet;
 import androidx.constraintlayout.core.motion.utils.TimeCycleSplineSet;
+import androidx.constraintlayout.core.motion.utils.TypedBundle;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.motion.utils.VelocityMatrix;
@@ -1044,6 +1045,10 @@ public class Motion implements TypedValues {
         mStartMotionPath.setBounds(mw.getX(), mw.getY(), mw.getWidth(), mw.getHeight());
         mStartMotionPath.applyParameters(mw);
         mStartPoint.setState(mw);
+        TypedBundle p = mw.getWidgetFrame().getMotionProperties();
+        if (p != null) {
+            p.applyDelta(this);
+        }
     }
 
     /**
@@ -1714,9 +1719,13 @@ public class Motion implements TypedValues {
 
     @Override
     public boolean setValue(int id, int value) {
+        String name = TypedValues.getField(TypedValues.MotionType.class,id);
         switch (id) {
             case TypedValues.PositionType.TYPE_PATH_MOTION_ARC:
                 setPathMotionArc(value);
+                return true;
+            case TypedValues.MotionType.TYPE_QUANTIZE_MOTIONSTEPS:
+                 mQuantizeMotionSteps = value;
                 return true;
             case TypedValues.TransitionType.TYPE_AUTO_TRANSITION:
                // TODO add support for auto transitions mAutoTransition = value;
@@ -1727,15 +1736,20 @@ public class Motion implements TypedValues {
 
     @Override
     public boolean setValue(int id, float value) {
+        if (MotionType.TYPE_QUANTIZE_MOTION_PHASE == id) {
+            mQuantizeMotionPhase =  value;
+        } else if (MotionType.TYPE_STAGGER == id) {
+            mMotionStagger = value;
+        }
         return false;
     }
 
     @Override
     public boolean setValue(int id, String value) {
-        if (TransitionType.TYPE_INTERPOLATOR == id) {
-            System.out.println("TYPE_INTERPOLATOR  " + value);
+        if (TransitionType.TYPE_INTERPOLATOR == id || MotionType.TYPE_QUANTIZE_INTERPOLATOR_TYPE == id) {
             mQuantizeMotionInterpolator = getInterpolator(SPLINE_STRING, value, 0);
         }
+
         return false;
     }
 
@@ -1747,5 +1761,28 @@ public class Motion implements TypedValues {
     @Override
     public int getId(String name) {
         return 0;
+    }
+    /**
+     * Set stagger scale
+     * @param staggerScale
+     */
+    public void setStaggerScale(float staggerScale) {
+        mStaggerScale = staggerScale;
+    }
+
+    /**
+     * set the offset used in calculating stagger launches
+     * @param staggerOffset
+     */
+    public void setStaggerOffset(float staggerOffset) {
+        mStaggerOffset = staggerOffset;
+    }
+
+    /**
+     * Get the motionStagger valule if they are not using positions
+     * @return
+     */
+    public float getMotionStagger() {
+        return mMotionStagger;
     }
 }
