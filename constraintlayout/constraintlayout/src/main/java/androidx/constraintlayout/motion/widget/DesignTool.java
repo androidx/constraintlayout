@@ -16,11 +16,6 @@
 
 package androidx.constraintlayout.motion.widget;
 
-import android.util.Log;
-import android.util.Pair;
-import android.view.View;
-import android.view.ViewGroup;
-
 import static androidx.constraintlayout.widget.ConstraintSet.BASELINE;
 import static androidx.constraintlayout.widget.ConstraintSet.BOTTOM;
 import static androidx.constraintlayout.widget.ConstraintSet.END;
@@ -32,6 +27,11 @@ import static androidx.constraintlayout.widget.ConstraintSet.TOP;
 import static androidx.constraintlayout.widget.ConstraintSet.VERTICAL;
 import static androidx.constraintlayout.widget.ConstraintSet.WRAP_CONTENT;
 
+import android.util.Log;
+import android.util.Pair;
+import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.constraintlayout.widget.ConstraintSet;
 
 import java.util.HashMap;
@@ -41,7 +41,7 @@ import java.util.HashMap;
  *
  * @DoNotShow
  */
-public class DesignTool  {
+public class DesignTool {
 
     static final HashMap<Pair<Integer, Integer>, String> sAllAttributes = new HashMap<>();
     static final HashMap<String, String> sAllMargins = new HashMap<>();
@@ -730,7 +730,9 @@ public class DesignTool  {
                               Object opaqueView,
                               Object opaqueAttributes) {
         View view = (View) opaqueView;
-        HashMap<String, String> attributes = (HashMap<String, String>) opaqueAttributes;
+        //noinspection unchecked
+        HashMap<String, String> attributes = (opaqueAttributes instanceof HashMap) ?
+                (HashMap<String, String>) opaqueAttributes : new HashMap<>();
 
         int rscId = mMotionLayout.lookUpConstraintId(constraintSetId);
         ConstraintSet set = mMotionLayout.mScene.getConstraintSet(rscId);

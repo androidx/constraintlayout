@@ -853,24 +853,25 @@ public class ConstraintSet {
      */
     public void applyDeltaFrom(ConstraintSet cs) {
         for (Constraint from : cs.mConstraints.values()) {
-            if (from.mDelta != null) {
-                if (from.mTargetString != null) {
-                    int count = 0;
-                    for (int key : mConstraints.keySet()) {
-                        Constraint potential = getConstraint(key);
-                        if (potential.layout.mConstraintTag != null) {
-                            if (from.mTargetString.matches(potential.layout.mConstraintTag)) {
-                                from.mDelta.applyDelta(potential);
-                                potential.mCustomConstraints.putAll(
-                                        (HashMap) from.mCustomConstraints.clone());
-                            }
-                        }
-                    }
-                } else {
-                    Constraint constraint = getConstraint(from.mViewId);
-                    from.mDelta.applyDelta(constraint);
+            if (from.mDelta == null) {
+                continue;
+            }
+            if (from.mTargetString == null) {
+                Constraint constraint = getConstraint(from.mViewId);
+                from.mDelta.applyDelta(constraint);
+                continue;
+            }
+            for (int key : mConstraints.keySet()) {
+                Constraint potential = getConstraint(key);
+                if (potential.layout.mConstraintTag == null) {
+                    continue;
                 }
-
+                if (from.mTargetString.matches(potential.layout.mConstraintTag)) {
+                    from.mDelta.applyDelta(potential);
+                    //noinspection unchecked
+                    potential.mCustomConstraints.putAll(
+                            (HashMap<String, ConstraintAttribute>) from.mCustomConstraints.clone());
+                }
             }
         }
     }

@@ -634,7 +634,7 @@ class MotionLayoutScope @PublishedApi internal constructor(
         measurer: MotionMeasurer
     ) {
         private var myId = id
-        private var myTag = null
+        private var myTag = tag
         private var myMeasurer = measurer
 
         fun id(): String {
@@ -1203,8 +1203,6 @@ internal class MotionMeasurer : Measurer() {
             var y = FloatArray(numKeyPositions)
             var pos = FloatArray(numKeyPositions)
             transition.fillKeyPositions(startFrame, x, y, pos)
-            var prex = startFrame.centerX()
-            var prey = startFrame.centerY()
 
             for (i in 0..numKeyPositions - 1) {
                 var keyFrameProgress = pos[i] / 100f
@@ -1233,8 +1231,6 @@ internal class MotionMeasurer : Measurer() {
 
                 var stroke = Stroke(width = 3f)
                 drawPath(path, color, 1f, stroke)
-                prex = curX
-                prey = curY
             }
 //            drawLine(
 //                start = Offset(prex, prey),
