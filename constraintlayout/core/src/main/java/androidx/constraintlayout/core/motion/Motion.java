@@ -1719,7 +1719,6 @@ public class Motion implements TypedValues {
 
     @Override
     public boolean setValue(int id, int value) {
-        String name = TypedValues.getField(TypedValues.MotionType.class,id);
         switch (id) {
             case TypedValues.PositionType.TYPE_PATH_MOTION_ARC:
                 setPathMotionArc(value);
