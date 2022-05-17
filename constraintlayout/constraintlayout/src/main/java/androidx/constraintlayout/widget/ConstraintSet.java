@@ -1159,7 +1159,7 @@ public class ConstraintSet {
      * Set the types associated with this ConstraintSet
      * The types mechanism allows you to tag the constraint set
      * with a series of string to define properties of a ConstraintSet
-     * @param types a comer seprated array of strings.
+     * @param types a comer separated array of strings.
      */
     public void setStateLabels(String types) {
         mMatchLabels = types.split(",");
@@ -1171,7 +1171,7 @@ public class ConstraintSet {
      * Set the types associated with this ConstraintSet
      * The types mechanism allows you to tag the constraint set
      * with a series of string to define properties of a ConstraintSet
-     * @param types a comer seprated array of strings.
+     * @param types a comer separated array of strings.
      */
     public void setStateLabelsList(String... types) {
         mMatchLabels = types;
@@ -1183,7 +1183,7 @@ public class ConstraintSet {
     /**
      * Test if the list of strings matches labels defined on this constraintSet
      * @param types list of types
-     * @return true if all types are in the labeles
+     * @return true if all types are in the labels
      */
     public boolean matchesLabels(String...types) {
         for (String type : types) {
