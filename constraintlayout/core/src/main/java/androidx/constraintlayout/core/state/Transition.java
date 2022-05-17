@@ -834,7 +834,6 @@ public class Transition implements TypedValues {
         if (widgetState == null) {
             widgetState = new WidgetState();
             mBundle.applyDelta(widgetState.mMotionControl);
-            widgetState.mMotionWidgetStart.updateMotion( widgetState.mMotionWidgetStart);
             widgetState.mMotionWidgetStart.updateMotion( widgetState.mMotionControl);
             mState.put(widgetId, widgetState);
             if (child != null) {

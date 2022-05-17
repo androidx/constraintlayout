@@ -18,10 +18,8 @@ package androidx.constraintlayout.core.state;
 
 import androidx.constraintlayout.core.motion.CustomAttribute;
 import androidx.constraintlayout.core.motion.CustomVariable;
-import androidx.constraintlayout.core.motion.Motion;
 import androidx.constraintlayout.core.motion.utils.TypedBundle;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
-import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.parser.CLElement;
 import androidx.constraintlayout.core.parser.CLKey;
 import androidx.constraintlayout.core.parser.CLNumber;
