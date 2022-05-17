@@ -37,7 +37,7 @@ import com.google.accompanist.coil.rememberCoilPainter
 class MainActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
     private var composeNum = 0
-    private val START_NUMBER = 44
+    private val START_NUMBER = 50
     private var demos:ArrayList<CompFunc> = ArrayList()
     var map = HashMap<Int, String>();
     val linkServer = LinkServer()
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
 
         map.put(24, "scaleX/Y")
         map.put(25, "tanslationX/Y")
-       // map.put(26, "rotationZ")
+       // map.put(26, "rotationZ")Mo
         map.put(27, "rotationXY")
         map.put(28, "Cycle Scale")
         map.put(29, "Cycle TranslationXY")
@@ -149,6 +149,12 @@ class MainActivity : AppCompatActivity() {
         demos.add(object : CompFunc { @Composable override fun Run() { OnSwipeSample1() } })
         demos.add(object : CompFunc { @Composable override fun Run() { OnSwipeSample2() } })
         demos.add(object : CompFunc { @Composable override fun Run() { MultiSwipe() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { MotionArc() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { MotionEasing() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { MotionQuantize1() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { MotionQuantize2() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { MotionStagger1() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { MotionStagger2() } })
 
         demos.add(object : CompFunc { @Composable override fun Run() { Example () } })
         demos.add(object : CompFunc { @Composable override fun Run() { RowColExample () } })

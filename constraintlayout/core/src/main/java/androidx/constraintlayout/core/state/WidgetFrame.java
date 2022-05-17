@@ -18,6 +18,7 @@ package androidx.constraintlayout.core.state;
 
 import androidx.constraintlayout.core.motion.CustomAttribute;
 import androidx.constraintlayout.core.motion.CustomVariable;
+import androidx.constraintlayout.core.motion.utils.TypedBundle;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
 import androidx.constraintlayout.core.parser.CLElement;
 import androidx.constraintlayout.core.parser.CLKey;
@@ -66,6 +67,8 @@ public class WidgetFrame {
     public final HashMap<String, CustomVariable> mCustom = new HashMap<>();
 
     public String name = null;
+
+    TypedBundle mMotionProperties;
 
     /**
      * @TODO: add description
@@ -116,7 +119,7 @@ public class WidgetFrame {
         scaleY = frame.scaleY;
         alpha = frame.alpha;
         visibility = frame.visibility;
-
+        setMotionAttributes(frame.mMotionProperties);
         mCustom.clear();
         if (frame != null) {
             for (CustomVariable c : frame.mCustom.values()) {
@@ -726,5 +729,18 @@ public class WidgetFrame {
      * @param mTempValues
      */
     public void setCustomValue(CustomAttribute valueAt, float[] mTempValues) {
+    }
+
+    void setMotionAttributes(TypedBundle motionProperties) {
+        mMotionProperties = motionProperties;
+    }
+
+    /**
+     *  get the property bundle associated with MotionAttributes
+     *
+     * @return the property bundle associated with MotionAttributes or null
+     */
+    public TypedBundle getMotionProperties() {
+        return mMotionProperties;
     }
 }

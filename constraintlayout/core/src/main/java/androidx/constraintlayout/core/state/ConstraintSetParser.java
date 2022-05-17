@@ -16,6 +16,13 @@
 
 package androidx.constraintlayout.core.state;
 
+import static androidx.constraintlayout.core.motion.utils.TypedValues.MotionType.TYPE_QUANTIZE_INTERPOLATOR_TYPE;
+import static androidx.constraintlayout.core.motion.utils.TypedValues.MotionType.TYPE_QUANTIZE_MOTIONSTEPS;
+import static androidx.constraintlayout.core.motion.utils.TypedValues.MotionType.TYPE_QUANTIZE_MOTION_PHASE;
+
+import androidx.constraintlayout.core.motion.utils.TypedBundle;
+import androidx.constraintlayout.core.motion.utils.TypedValues;
+ 
 import androidx.constraintlayout.core.parser.CLArray;
 import androidx.constraintlayout.core.parser.CLElement;
 import androidx.constraintlayout.core.parser.CLKey;
@@ -975,6 +982,9 @@ public class ConstraintSetParser {
                 case "custom":
                     parseCustomProperties(element, reference, constraintName);
                     break;
+                case "motion":
+                    parseMotionProperties(element.get(constraintName), reference);
+                    break;
                 default:
                     parseConstraint(state, layoutVariables, element, reference, constraintName);
 
@@ -1008,8 +1018,93 @@ public class ConstraintSetParser {
                 }
             }
         }
+    }
+
+    private static int indexOf(String val, String... types) {
+        for (int i = 0; i < types.length; i++) {
+            if (types[i].equals(val)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
 
+    /**
+     * parse the motion section of a constraint
+     * <pre>
+     * csetName: {
+     *   idToConstrain : {
+     *       motion: {
+     *          pathArc : 'startVertical'
+     *          relativeTo: 'id'
+     *          easing: 'curve'
+     *          stagger: '2'
+     *          quantize: steps or [steps, 'interpolator' phase ]
+     *       }
+     *   }
+     * }
+     * </pre>
+     * @param element
+     * @param reference
+     * @throws CLParsingException
+     */
+    private static void parseMotionProperties(
+            CLElement element,
+            ConstraintReference reference
+    ) throws CLParsingException {
+        if (!(element instanceof CLObject)) {
+            return;
+        }
+        CLObject obj = (CLObject) element;
+        TypedBundle bundle = new TypedBundle();
+        ArrayList<String> constraints = obj.names();
+        if (constraints == null) {
+            return;
+        }
+        for (String constraintName : constraints) {
+
+            switch (constraintName) {
+                case "pathArc":
+                    String val = obj.getString(constraintName);
+                    int ord = indexOf(val, "none", "startVertical", "startHorizontal", "flip");
+                    if (ord == -1) {
+                        System.err.println(obj.getLine()+" pathArc = '" + val + "'");
+                        break;
+                    }
+                    bundle.add(TypedValues.MotionType.TYPE_PATHMOTION_ARC, ord);
+                    break;
+                case "relativeTo":
+                    bundle.add(TypedValues.MotionType.TYPE_ANIMATE_RELATIVE_TO,
+                            obj.getString(constraintName));
+                    break;
+                case "easing":
+                    bundle.add(TypedValues.MotionType.TYPE_EASING, obj.getString(constraintName));
+                    break;
+                case "stagger":
+                    bundle.add(TypedValues.MotionType.TYPE_STAGGER,  obj.getFloat(constraintName));
+                    break;
+                case "quantize":
+                    CLElement quant = obj.get(constraintName);
+                    if (quant instanceof  CLArray) {
+                        CLArray array = (CLArray) quant;
+                        int len = array.size();
+                        if (len > 0) {
+                            bundle.add(TYPE_QUANTIZE_MOTIONSTEPS, array.getInt(0));
+                            if (len > 1) {
+                                bundle.add(TYPE_QUANTIZE_INTERPOLATOR_TYPE, array.getString(1));
+                                if (len > 2) {
+                                    bundle.add(TYPE_QUANTIZE_MOTION_PHASE, array.getFloat(2));
+                                }
+                            }
+                        }
+                    } else {
+                        bundle.add(TYPE_QUANTIZE_MOTIONSTEPS, obj.getInt(constraintName));
+                    }
+                    break;
+            }
+        }
+        reference.mMotionProperties = bundle;
     }
 
     static void parseConstraint(

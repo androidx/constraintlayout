@@ -1010,7 +1010,7 @@ public fun ScreenExample12() {
 
     Column {
         Button(onClick = { animateToEnd = !animateToEnd }) {
-            Text(text = "Run")
+            Text(text = "Run ScreenExample12")
         }
         MotionLayout(cs1, cs2,
             progress = progress,
@@ -1086,7 +1086,7 @@ public fun ScreenExample13() {
         }
 
         Button(onClick = { animateToEnd = !animateToEnd }) {
-            Text(text = "Run")
+            Text(text = "Run ScreenExample13")
         }
     }
 }
@@ -1218,7 +1218,7 @@ public fun ScreenExample15() {
         }
 
         Button(onClick = { animateToEnd = !animateToEnd }) {
-            Text(text = "Run")
+            Text(text = "Run ScreenExample15")
         }
     }
 }
@@ -1286,7 +1286,7 @@ public fun ScreenExample16() {
         }
 
         Button(onClick = { animateToEnd = !animateToEnd }) {
-            Text(text = "Run")
+            Text(text = "Run ScreenExample16")
         }
     }
 }
@@ -1353,7 +1353,7 @@ public fun ScreenExample17() {
         }
 
         Button(onClick = { animateToEnd = !animateToEnd }) {
-            Text(text = "Run")
+            Text(text = "Run ScreenExample17")
         }
     }
 }
@@ -1408,6 +1408,12 @@ public fun ScreenExample18() {
         top: ['a', 'top', 20]
       }
     }
+  },
+  transition: {
+   default: {
+      from: 'start',
+      to: 'end',
+      }
   }
 }
 """),
@@ -1422,7 +1428,7 @@ public fun ScreenExample18() {
         }
 
         Button(onClick = { animateToEnd = !animateToEnd }) {
-            Text(text = "Run")
+            Text(text = "Run ScreenExample18")
         }
     }
 }
@@ -1438,7 +1444,7 @@ public fun ScreenExample19() {
 
     Column {
         Button(onClick = { animateToEnd = !animateToEnd }) {
-            Text(text = "Run")
+            Text(text = "Run exemple19")
         }
         MotionLayout(motionScene = MotionScene("""{
                 Header: {

@@ -148,10 +148,21 @@ public class MotionWidget implements TypedValues {
         mWidgetFrame = f;
     }
 
+    /**
+     * This populates the motion attributes from widgetFrame to the MotionWidget
+     */
+    public void updateMotion(TypedValues toUpdate) {
+        if (mWidgetFrame.getMotionProperties() != null) {
+            mWidgetFrame.getMotionProperties().applyDelta(toUpdate);
+        }
+    }
     @Override
     public boolean setValue(int id, int value) {
-        return setValueAttributes(id, value);
-    }
+        boolean set = setValueAttributes(id, value);
+        if (set) {
+            return true;
+        }
+        return setValueMotion(id, value);    }
 
     @Override
     public boolean setValue(int id, float value) {

@@ -165,4 +165,14 @@ public class TypedBundle {
         mCountFloat = 0;
         mCountInt = 0;
     }
+
+    @Override
+    public String toString() {
+        return "TypedBundle{" +
+                "mCountInt=" + mCountInt +
+                ", mCountFloat=" + mCountFloat +
+                ", mCountString=" + mCountString +
+                ", mCountBoolean=" + mCountBoolean +
+                '}';
+    }
 }
