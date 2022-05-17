@@ -453,7 +453,7 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
      * Set the alternative Image Drawable used in cross fading.
      * @param altDrawable of drawable
      */
-    public void setAltImageDrawable (Drawable altDrawable) {
+    public void setAltImageDrawable(Drawable altDrawable) {
         mAltDrawable = altDrawable.mutate();
         mLayers[0] = mDrawable;
         mLayers[1] = mAltDrawable;

@@ -22,7 +22,6 @@ import static org.junit.Assert.assertTrue;
 import androidx.constraintlayout.core.parser.CLObject;
 import androidx.constraintlayout.core.parser.CLParser;
 import androidx.constraintlayout.core.parser.CLParsingException;
-import androidx.constraintlayout.core.state.CorePixelDp;
 import androidx.constraintlayout.core.state.Transition;
 import androidx.constraintlayout.core.state.TransitionParser;
 import androidx.constraintlayout.core.state.WidgetFrame;
@@ -203,7 +202,8 @@ public class MotionTransitionTest {
         }
         assertTrue(transition.hasOnSwipe());
         // because a drag of 76 pixels (dy) is 1/10 the distance to travel  it returns 0.1
-        float progress = transition.dragToProgress(0.5f, cwc1.getWidth(), cwc1.getHeight(), 10f, 47);
+        float progress = transition.dragToProgress(0.5f,
+                cwc1.getWidth(), cwc1.getHeight(), 10f, 47);
         assertEquals(0.1, progress, 0.001f);
 
         transition.interpolate(cwc1.getWidth(), cwc1.getHeight(), 0.5f);
@@ -295,7 +295,8 @@ public class MotionTransitionTest {
 
         assertTrue(transition.hasOnSwipe());
         // because a drag of 80 pixels (dy) is 1/10 the distance to travel  it returns 0.1
-        float progress = transition.dragToProgress(0.5f, cwc1.getWidth(), cwc1.getHeight(), 10f, 80);
+        float progress = transition.dragToProgress(0.5f,
+                cwc1.getWidth(), cwc1.getHeight(), 10f, 80);
 //        assertEquals(0.1f, progress, 0.001f);
 //        progress = transition.dragToProgress(0.3f, 10f, 80);
 //        assertEquals(0.1f, progress, 0.001f);
@@ -308,7 +309,8 @@ public class MotionTransitionTest {
 
         for (int i = 0; i < ratio.length; i++) {
             pos[i] = i / (float) (ratio.length - 1);
-            ratio[i] = transition.dragToProgress(pos[i], cwc1.getWidth(), cwc1.getHeight(), 10f, 100);
+            ratio[i] = transition.dragToProgress(pos[i],
+                    cwc1.getWidth(), cwc1.getHeight(), 10f, 100);
         }
 
         transition.interpolate(cwc1.getWidth(), cwc1.getHeight(), 0.5f);
@@ -362,8 +364,8 @@ public class MotionTransitionTest {
         }
         String str = textDraw(80, 30, xp, yp, false);
         System.out.println(str);
-        String expect
-                = "|***                                                                             | 150.0\n"
+        String expect =
+                  "|***                                                                             | 150.0\n"
                 + "|  ****                                                                          |\n"
                 + "|      ****                                                                      |\n"
                 + "|         ****                                                                   |\n"
@@ -400,8 +402,8 @@ public class MotionTransitionTest {
 
     @Test
     public void testTransitionOnSwipe1() throws CLParsingException {
-        String onSwipeString
-                = "                    onSwipe: { \n"
+        String onSwipeString =
+                  "                    onSwipe: { \n"
                 + "                        anchor :'button1',\n"
                 + "                        side: 'top',\n"
                 + "                        direction: 'up',\n"
@@ -429,8 +431,8 @@ public class MotionTransitionTest {
         System.out.println(result = textDraw(80, 30, pos, ratio, true));
         System.out.println("=============== Calculate touch progress");
 
-        String expect
-                = "|                                                  *                             | 0.173\n"
+        String expect =
+                  "|                                                  *                             | 0.173\n"
                 + "|                                                ** *                            |\n"
                 + "|                                               *    **                          |\n"
                 + "|                                               *      *                         |\n"
@@ -477,8 +479,8 @@ public class MotionTransitionTest {
         }
         System.out.println(result = textDraw(80, 30, pos, ratio, true));
         System.out.println("=============== 3");
-        expect
-                = "|           *                                                                    | 1.222\n"
+        expect =
+                  "|           *                                                                    | 1.222\n"
                 + "|          ****                                                                  |\n"
                 + "|              *                                                                 |\n"
                 + "|         *     *                                                                |\n"
@@ -601,7 +603,8 @@ public class MotionTransitionTest {
     }
 
     void print(String name, WidgetFrame f) {
-        System.out.println(name + " " + fix(f.left) + "," + fix(f.top) + "," + fix(f.bottom) + "," + fix(f.right));
+        System.out.println(name + " " + fix(f.left) + ","
+                + fix(f.top) + "," + fix(f.bottom) + "," + fix(f.right));
     }
 
     String fix(int p) {

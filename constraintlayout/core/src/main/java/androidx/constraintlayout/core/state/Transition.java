@@ -343,8 +343,9 @@ public class Transition implements TypedValues {
         }
 
         public boolean isNotDone(float progress) {
-            if (mOnTouchUp == ON_UP_STOP)
+            if (mOnTouchUp == ON_UP_STOP) {
                 return false;
+            }
             if (mEngine instanceof SpringStopEngine) {
                 return !mEngine.isStopped();
             }
