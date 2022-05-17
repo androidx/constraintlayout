@@ -1018,11 +1018,9 @@ public class ConstraintSetParser {
                 }
             }
         }
-
-
     }
 
-    private static int map(String val, String... types) {
+    private static int indexOf(String val, String... types) {
         for (int i = 0; i < types.length; i++) {
             if (types[i].equals(val)) {
                 return i;
@@ -1069,7 +1067,7 @@ public class ConstraintSetParser {
             switch (constraintName) {
                 case "pathArc":
                     String val = obj.getString(constraintName);
-                    int ord = map(val, "none", "startVertical", "startHorizontal", "flip");
+                    int ord = indexOf(val, "none", "startVertical", "startHorizontal", "flip");
                     if (ord == -1) {
                         System.err.println(obj.getLine()+" pathArc = '" + val + "'");
                         break;

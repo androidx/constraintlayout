@@ -1047,8 +1047,6 @@ public class Transition implements TypedValues {
                 max = Math.max(max, widgetStagger);
             }
 
-            Utils.log("min " + min + " max " + max);
-
             for (String widgetId : mState.keySet()) {
                 WidgetState widgetState = mState.get(widgetId);
                 Motion f = widgetState.mMotionControl;
@@ -1062,7 +1060,6 @@ public class Transition implements TypedValues {
                 }
 
                 float scale = 1 / (1 - stagger);
-                Utils.log("1 / (1 - mStagger) =  " + scale + " offset= " + offset);
                 f.setStaggerScale(scale);
                 f.setStaggerOffset(offset);
             }

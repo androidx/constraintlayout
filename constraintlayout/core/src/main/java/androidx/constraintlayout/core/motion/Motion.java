@@ -1737,8 +1737,11 @@ public class Motion implements TypedValues {
     public boolean setValue(int id, float value) {
         if (MotionType.TYPE_QUANTIZE_MOTION_PHASE == id) {
             mQuantizeMotionPhase =  value;
-        } else if (MotionType.TYPE_STAGGER == id) {
+            return true;
+        }
+        if (MotionType.TYPE_STAGGER == id) {
             mMotionStagger = value;
+            return true;
         }
         return false;
     }
@@ -1747,6 +1750,7 @@ public class Motion implements TypedValues {
     public boolean setValue(int id, String value) {
         if (TransitionType.TYPE_INTERPOLATOR == id || MotionType.TYPE_QUANTIZE_INTERPOLATOR_TYPE == id) {
             mQuantizeMotionInterpolator = getInterpolator(SPLINE_STRING, value, 0);
+            return true;
         }
 
         return false;
@@ -1771,7 +1775,7 @@ public class Motion implements TypedValues {
 
     /**
      * set the offset used in calculating stagger launches
-     * @param staggerOffset
+     * @param staggerOffset fraction of progress before this controller runs
      */
     public void setStaggerOffset(float staggerOffset) {
         mStaggerOffset = staggerOffset;

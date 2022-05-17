@@ -84,11 +84,11 @@ public class CLObject extends CLContainer implements Iterable<CLKey> {
     }
 
     @Override
-    public Iterator iterator() {
+    public Iterator<CLKey> iterator() {
         return new CLObjectIterator(this);
     }
 
-    private class CLObjectIterator implements Iterator {
+    private class CLObjectIterator implements Iterator<CLKey> {
         CLObject mObject;
         int mIndex = 0;
         CLObjectIterator(CLObject clObject) {
@@ -101,7 +101,7 @@ public class CLObject extends CLContainer implements Iterable<CLKey> {
         }
 
         @Override
-        public Object next() {
+        public CLKey next() {
             CLKey key = (CLKey) mObject.mElements.get(mIndex);
             mIndex++;
             return key;
