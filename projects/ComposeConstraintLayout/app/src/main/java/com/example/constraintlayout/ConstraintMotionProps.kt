@@ -552,7 +552,7 @@ fun MotionStagger1() {
                 modifier = Modifier
                     .layoutId("title")
                     .background(Color.Gray)) {
-                Text(text =" Complex Quantize Constraint motion ", )
+                Text(text =" Custom Stagger (1, 2, 2) ", )
             }
             Box(
                 modifier = Modifier
@@ -708,7 +708,7 @@ fun MotionStagger2() {
                 modifier = Modifier
                     .layoutId("title")
                     .background(Color.Gray)) {
-                Text(text =" Complex Quantize Constraint motion ", )
+                Text(text =" Default Stagger with arch mode ", )
             }
             Box(
                 modifier = Modifier
@@ -724,6 +724,99 @@ fun MotionStagger2() {
                 )
             }
 
+        }
+    }
+}
+
+
+
+@Preview
+@Composable
+fun MotionOrbit1() {
+
+    var scene =
+        """
+       {
+         ConstraintSets: {
+           start: {
+             box1: {
+               width: 50, height: 50,
+               bottom: ['parent', 'bottom', 10],
+               start: ['parent', 'start', 10],
+             },
+               title: {
+                   top: ['parent', 'top', 10],
+               start: ['parent', 'start', 10],
+                end: ['parent', 'end', 10],
+             },
+               box2: {
+               width: 50, height: 50,
+               bottom: ['parent', 'bottom', 10],
+               start: ['parent', 'start', 10],
+               motion: {
+                  pathArc : 'startHorizontal',
+                  relativeTo: 'box1'
+               }
+             }
+           },
+           end: {
+               box1: {
+                       width: 50, height: 50,
+                       top: ['parent', 'top', 60],
+                       end: ['parent', 'end', 60],
+                    },
+              title: {
+                 top: ['parent', 'top', 10],
+               start: ['parent', 'start', 10],
+                end: ['parent', 'end', 10],
+             },
+             box2: {
+                width: 50, height: 50,
+                top: ['parent', 'top', 60],
+                end: ['parent', 'end', 10],
+             }
+           }
+         },
+         Transitions: {
+           default: {
+              from: 'start',
+              to: 'end',
+               pathMotionArc : 'none',
+              onSwipe: {
+                anchor: 'box1',
+                maxVelocity: 4.2,
+                maxAccel: 3,
+                direction: 'end',
+                side: 'start',
+                mode: 'velocity'
+              }
+           }
+         }
+       }
+        """.trimIndent()
+
+    Column {
+        MotionLayout(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.LightGray),
+            motionScene = MotionScene(content = scene),
+            debug= EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
+        ) {
+            Text(text = " Orbit the red ",
+                modifier = Modifier
+                    .layoutId("title")
+                    .background(Color.Gray))
+            Box(
+                modifier = Modifier
+                    .background(Color.Red)
+                    .layoutId("box1")
+            )
+            Box(
+                modifier = Modifier
+                    .background(Color.Green)
+                    .layoutId("box2")
+            )
         }
     }
 }
