@@ -17,8 +17,6 @@
 package androidx.constraintlayout.compose
 
 import androidx.compose.ui.layout.Measurable
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.core.parser.CLKey
 import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.parser.CLParsingException
@@ -92,7 +90,6 @@ internal class JSONConstraintSet(
         overridedVariables[name] = value
         return this
     }
-
 
     private fun applyLayoutVariables(layoutVariables: ConstraintSetParser.LayoutVariables) {
         if (overrideVariables != null) {

@@ -853,24 +853,25 @@ public class ConstraintSet {
      */
     public void applyDeltaFrom(ConstraintSet cs) {
         for (Constraint from : cs.mConstraints.values()) {
-            if (from.mDelta != null) {
-                if (from.mTargetString != null) {
-                    int count = 0;
-                    for (int key : mConstraints.keySet()) {
-                        Constraint potential = getConstraint(key);
-                        if (potential.layout.mConstraintTag != null) {
-                            if (from.mTargetString.matches(potential.layout.mConstraintTag)) {
-                                from.mDelta.applyDelta(potential);
-                                potential.mCustomConstraints.putAll(
-                                        (HashMap) from.mCustomConstraints.clone());
-                            }
-                        }
-                    }
-                } else {
-                    Constraint constraint = getConstraint(from.mViewId);
-                    from.mDelta.applyDelta(constraint);
+            if (from.mDelta == null) {
+                continue;
+            }
+            if (from.mTargetString == null) {
+                Constraint constraint = getConstraint(from.mViewId);
+                from.mDelta.applyDelta(constraint);
+                continue;
+            }
+            for (int key : mConstraints.keySet()) {
+                Constraint potential = getConstraint(key);
+                if (potential.layout.mConstraintTag == null) {
+                    continue;
                 }
-
+                if (from.mTargetString.matches(potential.layout.mConstraintTag)) {
+                    from.mDelta.applyDelta(potential);
+                    //noinspection unchecked
+                    potential.mCustomConstraints.putAll(
+                            (HashMap<String, ConstraintAttribute>) from.mCustomConstraints.clone());
+                }
             }
         }
     }
@@ -1159,7 +1160,7 @@ public class ConstraintSet {
      * Set the types associated with this ConstraintSet
      * The types mechanism allows you to tag the constraint set
      * with a series of string to define properties of a ConstraintSet
-     * @param types a comer seprated array of strings.
+     * @param types a comer separated array of strings.
      */
     public void setStateLabels(String types) {
         mMatchLabels = types.split(",");
@@ -1171,7 +1172,7 @@ public class ConstraintSet {
      * Set the types associated with this ConstraintSet
      * The types mechanism allows you to tag the constraint set
      * with a series of string to define properties of a ConstraintSet
-     * @param types a comer seprated array of strings.
+     * @param types a comer separated array of strings.
      */
     public void setStateLabelsList(String... types) {
         mMatchLabels = types;
@@ -1183,7 +1184,7 @@ public class ConstraintSet {
     /**
      * Test if the list of strings matches labels defined on this constraintSet
      * @param types list of types
-     * @return true if all types are in the labeles
+     * @return true if all types are in the labels
      */
     public boolean matchesLabels(String...types) {
         for (String type : types) {

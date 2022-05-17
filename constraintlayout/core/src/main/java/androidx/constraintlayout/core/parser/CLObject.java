@@ -24,7 +24,7 @@ public class CLObject extends CLContainer implements Iterable<CLKey> {
     }
 
     /**
-     * @TODO: add description
+     * Allocate a CLObject around an array of chars
      * @param content
      * @return
      */
@@ -33,7 +33,7 @@ public class CLObject extends CLContainer implements Iterable<CLKey> {
     }
 
     /**
-     * @TODO: add description
+     * Returns objet as a JSON5 String
      * @return
      */
     public String toJSON() {
@@ -52,7 +52,7 @@ public class CLObject extends CLContainer implements Iterable<CLKey> {
     }
 
     /**
-     * @TODO: add description
+     * Returns a object as a formatted JSON5 String
      * @return
      */
     public String toFormattedJSON() {
@@ -60,7 +60,7 @@ public class CLObject extends CLContainer implements Iterable<CLKey> {
     }
 
     /**
-     * @TODO: add description
+     * Returns as a formatted JSON5 String with an indentation
      * @param indent
      * @param forceIndent
      * @return
