@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Grid Expriements</string>
+    <string name="large_text">
+        Grid is a new helper to assist Android developers create a Grid pattern</string>
+</resources>

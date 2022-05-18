@@ -302,6 +302,18 @@
 
     <!-- =============================== End Carousel =============================== -->
 
+    <!-- ======================================Grid===================================== -->
+    <declare-styleable name="Grid">
+        <attr name="grid_rows" format="integer" />
+        <attr name="grid_columns" format="integer" />
+        <attr name="grid_spans" format="string"/>
+        <attr name="grid_skips" format="string"/>
+        <attr name="grid_orientation" format="string"/>
+        <attr name="grid_horizontalGaps" format="integer" />
+        <attr name="grid_verticalGaps" format="integer" />
+    </declare-styleable>
+    <!-- =============================== End Grid =============================== -->
+
     <!-- =============================== Start FadeMove =============================== -->
 
     <declare-styleable name="MotionEffect">
@@ -1794,5 +1806,4 @@
         <attr name="ifTagSet" format="reference"/>
         <attr name="ifTagNotSet" format="reference"/>
     </declare-styleable>
-
 </resources>
