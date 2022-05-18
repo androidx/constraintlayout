@@ -106,8 +106,8 @@ public class MotionCustomAttributesTest {
             s.sample(() -> {
                 System.out.println(s.mPos + " "
                         + Integer.toHexString(
-                        s.mRes.getCustomAttribute("fish")
-                                .getColorValue()));
+                                s.mRes.getCustomAttribute("fish")
+                                        .getColorValue()));
             });
         }
         s.mMotion.interpolate(s.mRes, 0.5f, 1000000 + 1000, s.mCache);

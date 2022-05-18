@@ -33,6 +33,7 @@ public class CLParsingException extends Exception {
 
     /**
      * @TODO: add description
+     * @return
      */
     public String reason() {
         return mReason + " (" + mElementClass + " at line " + mLineNumber + ")";

@@ -28,13 +28,14 @@ import static androidx.constraintlayout.core.widgets.ConstraintWidget.UNKNOWN;
 import static androidx.constraintlayout.core.widgets.ConstraintWidget.VERTICAL;
 import static androidx.constraintlayout.core.widgets.analyzer.WidgetRun.RunType.CENTER;
 
+
 import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.Helper;
 
 public class HorizontalWidgetRun extends WidgetRun {
 
-    private static final int[] sTempDimensions = new int[2];
+    private static int[] sTempDimensions = new int[2];
 
     public HorizontalWidgetRun(ConstraintWidget widget) {
         super(widget);
@@ -70,7 +71,10 @@ public class HorizontalWidgetRun extends WidgetRun {
     @Override
     boolean supportsWrapComputation() {
         if (super.mDimensionBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT) {
-            return super.mWidget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_SPREAD;
+            if (super.mWidget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_SPREAD) {
+                return true;
+            }
+            return false;
         }
         return true;
     }
@@ -232,13 +236,12 @@ public class HorizontalWidgetRun extends WidgetRun {
                         // the work is done in the update()
                     }
                     break;
-                    default:
-                        break;
+                    default: break;
                 }
             }
             if (mWidget.mListAnchors[ConstraintWidget.ANCHOR_LEFT].mTarget != null
                     && mWidget.mListAnchors[ConstraintWidget.ANCHOR_RIGHT].mTarget
-                    != null) { // <-s-d-e->
+                        != null) { // <-s-d-e->
 
                 if (mWidget.isInHorizontalChain()) {
                     start.mMargin = mWidget.mListAnchors[ConstraintWidget.ANCHOR_LEFT].getMargin();
@@ -298,12 +301,12 @@ public class HorizontalWidgetRun extends WidgetRun {
     }
 
     private void computeInsetRatio(int[] dimensions,
-            int x1,
-            int x2,
-            int y1,
-            int y2,
-            float ratio,
-            int side) {
+                                   int x1,
+                                   int x2,
+                                   int y1,
+                                   int y2,
+                                   float ratio,
+                                   int side) {
         int dx = x2 - x1;
         int dy = y2 - y1;
         switch (side) {
@@ -333,8 +336,7 @@ public class HorizontalWidgetRun extends WidgetRun {
                 dimensions[VERTICAL] = verticalSide;
             }
             break;
-            default:
-                break;
+            default: break;
         }
     }
 
@@ -353,8 +355,7 @@ public class HorizontalWidgetRun extends WidgetRun {
                 updateRunCenter(dependency, mWidget.mLeft, mWidget.mRight, HORIZONTAL);
                 return;
             }
-            default:
-                break;
+            default: break;
         }
 
         if (!mDimension.resolved) {
@@ -363,7 +364,7 @@ public class HorizontalWidgetRun extends WidgetRun {
                     case MATCH_CONSTRAINT_RATIO: {
                         if (mWidget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_SPREAD
                                 || mWidget.mMatchConstraintDefaultHeight
-                                == MATCH_CONSTRAINT_RATIO) {
+                                    == MATCH_CONSTRAINT_RATIO) {
                             DependencyNode secondStart = mWidget.mVerticalRun.start;
                             DependencyNode secondEnd = mWidget.mVerticalRun.end;
                             boolean s1 = mWidget.mLeft.mTarget != null;
@@ -439,7 +440,7 @@ public class HorizontalWidgetRun extends WidgetRun {
                                         mDimension.resolve(ldx);
                                         mWidget.mVerticalRun.mDimension.resolve(ldy);
                                     }
-                                    break;
+                                        break;
                                     case VERTICAL: {
                                         int dx = x2 - x1;
                                         int ldx = getLimitedDimension(dx, HORIZONTAL);
@@ -452,8 +453,7 @@ public class HorizontalWidgetRun extends WidgetRun {
                                         mWidget.mVerticalRun.mDimension.resolve(ldy);
                                     }
                                     break;
-                                    default:
-                                        break;
+                                    default: break;
                                 }
                             } else if (s2 && e2) {
                                 if (!(secondStart.readyToSolve && secondEnd.readyToSolve)) {
@@ -476,7 +476,7 @@ public class HorizontalWidgetRun extends WidgetRun {
                                         mDimension.resolve(ldx);
                                         mWidget.mVerticalRun.mDimension.resolve(ldy);
                                     }
-                                    break;
+                                        break;
                                     case HORIZONTAL: {
                                         int dy = y2 - y1;
                                         int ldy = getLimitedDimension(dy, VERTICAL);
@@ -489,8 +489,7 @@ public class HorizontalWidgetRun extends WidgetRun {
                                         mWidget.mVerticalRun.mDimension.resolve(ldy);
                                     }
                                     break;
-                                    default:
-                                        break;
+                                    default: break;
                                 }
                             }
                         } else {
@@ -512,8 +511,7 @@ public class HorizontalWidgetRun extends WidgetRun {
                                             * mWidget.getDimensionRatio());
                                 }
                                 break;
-                                default:
-                                    break;
+                                default: break;
                             }
                             mDimension.resolve(size);
                         }
@@ -531,8 +529,7 @@ public class HorizontalWidgetRun extends WidgetRun {
                         }
                     }
                     break;
-                    default:
-                        break;
+                    default: break;
                 }
             }
         }

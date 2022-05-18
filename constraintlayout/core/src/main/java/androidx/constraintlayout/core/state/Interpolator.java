@@ -19,6 +19,8 @@ package androidx.constraintlayout.core.state;
 public interface Interpolator {
     /**
      * @TODO: add description
+     * @param input
+     * @return
      */
     float getInterpolation(float input);
 }

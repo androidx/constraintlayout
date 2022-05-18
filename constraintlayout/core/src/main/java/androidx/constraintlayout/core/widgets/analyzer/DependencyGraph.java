@@ -40,14 +40,14 @@ import java.util.HashSet;
 
 public class DependencyGraph {
     private static final boolean USE_GROUPS = true;
-    private final ConstraintWidgetContainer mWidgetcontainer;
+    private ConstraintWidgetContainer mWidgetcontainer;
     private boolean mNeedBuildGraph = true;
     private boolean mNeedRedoMeasures = true;
-    private final ConstraintWidgetContainer mContainer;
-    private final ArrayList<WidgetRun> mRuns = new ArrayList<>();
+    private ConstraintWidgetContainer mContainer;
+    private ArrayList<WidgetRun> mRuns = new ArrayList<>();
 
     // TODO: Unused, should we delete?
-    private final ArrayList<RunGroup> mRunGroups = new ArrayList<>();
+    private ArrayList<RunGroup> mRunGroups = new ArrayList<>();
 
     public DependencyGraph(ConstraintWidgetContainer container) {
         this.mWidgetcontainer = container;
@@ -55,7 +55,7 @@ public class DependencyGraph {
     }
 
     private BasicMeasure.Measurer mMeasurer = null;
-    private final BasicMeasure.Measure mMeasure = new BasicMeasure.Measure();
+    private BasicMeasure.Measure mMeasure = new BasicMeasure.Measure();
 
     public void setMeasurer(BasicMeasure.Measurer measurer) {
         mMeasurer = measurer;
@@ -75,9 +75,11 @@ public class DependencyGraph {
     /**
      * Find and mark terminal widgets (trailing widgets) -- they are the only
      * ones we need to care for wrap_content checks
+     * @param horizontalBehavior
+     * @param verticalBehavior
      */
     public void defineTerminalWidgets(ConstraintWidget.DimensionBehaviour horizontalBehavior,
-            ConstraintWidget.DimensionBehaviour verticalBehavior) {
+                                      ConstraintWidget.DimensionBehaviour verticalBehavior) {
         if (mNeedBuildGraph) {
             buildGraph();
 
@@ -180,9 +182,9 @@ public class DependencyGraph {
         // one dimension before the other
 
         if (mWidgetcontainer.mListDimensionBehaviors[HORIZONTAL]
-                == ConstraintWidget.DimensionBehaviour.FIXED
+                    == ConstraintWidget.DimensionBehaviour.FIXED
                 || mWidgetcontainer.mListDimensionBehaviors[HORIZONTAL]
-                == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
+                    == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
 
             // solve horizontal dimension
             int x2 = x1 + mWidgetcontainer.getWidth();
@@ -237,6 +239,8 @@ public class DependencyGraph {
 
     /**
      * @TODO: add description
+     * @param optimizeWrap
+     * @return
      */
     public boolean directMeasureSetup(boolean optimizeWrap) {
         if (mNeedBuildGraph) {
@@ -275,6 +279,9 @@ public class DependencyGraph {
 
     /**
      * @TODO: add description
+     * @param optimizeWrap
+     * @param orientation
+     * @return
      */
     public boolean directMeasureWithOrientation(boolean optimizeWrap, int orientation) {
         optimizeWrap &= USE_GROUPS;
@@ -289,7 +296,7 @@ public class DependencyGraph {
 
         // If we have to support wrap, let's see if we can compute it directly
         if (optimizeWrap && (originalHorizontalDimension == WRAP_CONTENT
-                || originalVerticalDimension == WRAP_CONTENT)) {
+                                || originalVerticalDimension == WRAP_CONTENT)) {
             for (WidgetRun run : mRuns) {
                 if (run.orientation == orientation
                         && !run.supportsWrapComputation()) {
@@ -380,12 +387,16 @@ public class DependencyGraph {
      * Convenience function to fill in the measure spec
      *
      * @param widget the widget to measure
+     * @param horizontalBehavior
+     * @param horizontalDimension
+     * @param verticalBehavior
+     * @param verticalDimension
      */
     private void measure(ConstraintWidget widget,
-            ConstraintWidget.DimensionBehaviour horizontalBehavior,
-            int horizontalDimension,
-            ConstraintWidget.DimensionBehaviour verticalBehavior,
-            int verticalDimension) {
+                         ConstraintWidget.DimensionBehaviour horizontalBehavior,
+                         int horizontalDimension,
+                         ConstraintWidget.DimensionBehaviour verticalBehavior,
+                         int verticalDimension) {
         mMeasure.horizontalBehavior = horizontalBehavior;
         mMeasure.verticalBehavior = verticalBehavior;
         mMeasure.horizontalDimension = horizontalDimension;
@@ -453,7 +464,7 @@ public class DependencyGraph {
 
             if ((horizontal == MATCH_PARENT || horizontal == FIXED || horizontal == WRAP_CONTENT)
                     && (vertical == MATCH_PARENT
-                    || vertical == FIXED || vertical == WRAP_CONTENT)) {
+                        || vertical == FIXED || vertical == WRAP_CONTENT)) {
                 int width = widget.getWidth();
                 if (horizontal == MATCH_PARENT) {
                     width = constraintWidgetContainer.getWidth()
@@ -493,7 +504,7 @@ public class DependencyGraph {
                         == ConstraintWidget.MATCH_CONSTRAINT_PERCENT) {
                     if (constraintWidgetContainer.mListDimensionBehaviors[HORIZONTAL] == FIXED
                             || constraintWidgetContainer.mListDimensionBehaviors[HORIZONTAL]
-                            == MATCH_PARENT) {
+                                == MATCH_PARENT) {
                         float percent = widget.mMatchConstraintPercentWidth;
                         int width = (int) (0.5f + percent * constraintWidgetContainer.getWidth());
                         int height = widget.getHeight();
@@ -538,10 +549,10 @@ public class DependencyGraph {
                     widget.mVerticalRun.mDimension.wrapValue = widget.getHeight();
                     continue;
                 } else if (widget.mMatchConstraintDefaultHeight
-                        == ConstraintWidget.MATCH_CONSTRAINT_PERCENT) {
+                            == ConstraintWidget.MATCH_CONSTRAINT_PERCENT) {
                     if (constraintWidgetContainer.mListDimensionBehaviors[VERTICAL] == FIXED
                             || constraintWidgetContainer.mListDimensionBehaviors[VERTICAL]
-                            == MATCH_PARENT) {
+                                == MATCH_PARENT) {
                         float percent = widget.mMatchConstraintPercentHeight;
                         int width = widget.getWidth();
                         int height = (int) (0.5f + percent * constraintWidgetContainer.getHeight());
@@ -555,7 +566,7 @@ public class DependencyGraph {
                     // let's verify we have both constraints
                     if (widget.mListAnchors[ConstraintWidget.ANCHOR_TOP].mTarget == null
                             || widget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].mTarget
-                            == null) {
+                                == null) {
                         measure(widget, WRAP_CONTENT, 0, vertical, 0);
                         widget.mHorizontalRun.mDimension.resolve(widget.getWidth());
                         widget.mVerticalRun.mDimension.resolve(widget.getHeight());
@@ -571,9 +582,9 @@ public class DependencyGraph {
                     widget.mHorizontalRun.mDimension.wrapValue = widget.getWidth();
                     widget.mVerticalRun.mDimension.wrapValue = widget.getHeight();
                 } else if (widget.mMatchConstraintDefaultHeight
-                        == ConstraintWidget.MATCH_CONSTRAINT_PERCENT
+                            == ConstraintWidget.MATCH_CONSTRAINT_PERCENT
                         && widget.mMatchConstraintDefaultWidth
-                        == ConstraintWidget.MATCH_CONSTRAINT_PERCENT
+                            == ConstraintWidget.MATCH_CONSTRAINT_PERCENT
                         && constraintWidgetContainer.mListDimensionBehaviors[HORIZONTAL] == FIXED
                         && constraintWidgetContainer.mListDimensionBehaviors[VERTICAL] == FIXED) {
                     float horizPercent = widget.mMatchConstraintPercentWidth;
@@ -605,11 +616,11 @@ public class DependencyGraph {
 
             boolean horizWrap = horiz == WRAP_CONTENT
                     || (horiz == MATCH_CONSTRAINT
-                    && horizMatchConstraintsType == MATCH_CONSTRAINT_WRAP);
+                        && horizMatchConstraintsType == MATCH_CONSTRAINT_WRAP);
 
             boolean vertWrap = vert == WRAP_CONTENT
                     || (vert == MATCH_CONSTRAINT
-                    && vertMatchConstraintsType == MATCH_CONSTRAINT_WRAP);
+                        && vertMatchConstraintsType == MATCH_CONSTRAINT_WRAP);
 
             boolean horizResolved = widget.mHorizontalRun.mDimension.resolved;
             boolean vertResolved = widget.mVerticalRun.mDimension.resolved;
@@ -678,6 +689,7 @@ public class DependencyGraph {
 
     /**
      * @TODO: add description
+     * @param runs
      */
     public void buildGraph(ArrayList<WidgetRun> runs) {
         runs.clear();
@@ -736,6 +748,7 @@ public class DependencyGraph {
     }
 
 
+
     private void displayGraph() {
         String content = "digraph {\n";
         for (WidgetRun run : mRuns) {
@@ -746,11 +759,11 @@ public class DependencyGraph {
     }
 
     private void applyGroup(DependencyNode node,
-            int orientation,
-            int direction,
-            DependencyNode end,
-            ArrayList<RunGroup> groups,
-            RunGroup group) {
+                            int orientation,
+                            int direction,
+                            DependencyNode end,
+                            ArrayList<RunGroup> groups,
+                            RunGroup group) {
         WidgetRun run = node.mRun;
         if (run.mRunGroup != null
                 || run == mWidgetcontainer.mHorizontalRun || run == mWidgetcontainer.mVerticalRun) {
@@ -834,8 +847,8 @@ public class DependencyGraph {
 
 
     private String generateDisplayNode(DependencyNode node,
-            boolean centeredConnection,
-            String content) {
+                                       boolean centeredConnection,
+                                       String content) {
         StringBuilder contentBuilder = new StringBuilder(content);
         for (DependencyNode target : node.mTargets) {
             String constraint = "\n" + node.name();
@@ -872,7 +885,7 @@ public class DependencyGraph {
         StringBuilder definition = new StringBuilder(name);
         ConstraintWidget.DimensionBehaviour behaviour =
                 orientation == HORIZONTAL ? run.mWidget.getHorizontalDimensionBehaviour()
-                        : run.mWidget.getVerticalDimensionBehaviour();
+                : run.mWidget.getVerticalDimensionBehaviour();
         RunGroup runGroup = run.mRunGroup;
 
         if (orientation == HORIZONTAL) {

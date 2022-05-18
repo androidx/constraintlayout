@@ -31,8 +31,8 @@ import java.util.HashMap;
  */
 class LinearEquation {
 
-    private final ArrayList<EquationVariable> mLeftSide = new ArrayList<>();
-    private final ArrayList<EquationVariable> mRightSide = new ArrayList<>();
+    private ArrayList<EquationVariable> mLeftSide = new ArrayList<>();
+    private ArrayList<EquationVariable> mRightSide = new ArrayList<>();
     private ArrayList<EquationVariable> mCurrentSide = null;
 
     public boolean isNull() {
@@ -42,8 +42,10 @@ class LinearEquation {
         if (mLeftSide.size() == 1 && mRightSide.size() == 1) {
             EquationVariable v1 = mLeftSide.get(0);
             EquationVariable v2 = mRightSide.get(0);
-            return v1.isConstant() && v2.isConstant()
-                    && v1.getAmount().isNull() && v2.getAmount().isNull();
+            if (v1.isConstant() && v2.isConstant()
+                    && v1.getAmount().isNull() && v2.getAmount().isNull()) {
+                return true;
+            }
         }
         return false;
     }
@@ -61,11 +63,9 @@ class LinearEquation {
     static String getNextArtificialVariableName() {
         return "a" + ++sArtificialIndex;
     }
-
     static String getNextSlackVariableName() {
         return "s" + ++sSlackIndex;
     }
-
     static String getNextErrorVariableName() {
         return "e" + ++sErrorIndex;
     }
@@ -81,7 +81,6 @@ class LinearEquation {
 
     /**
      * Copy constructor
-     *
      * @param equation to copy
      */
     LinearEquation(LinearEquation equation) {
@@ -102,7 +101,7 @@ class LinearEquation {
 
     /**
      * Transform a LinearEquation into a Row
-     *
+     * @param linearSystem
      * @param e linear equation
      * @return a Row object
      */
@@ -153,7 +152,6 @@ class LinearEquation {
 
     /**
      * Remove {@link EquationVariable} pointing to {@link SolverVariable}
-     *
      * @param v the {@link SolverVariable} we want to remove from the equation
      */
     public void remove(SolverVariable v) {
@@ -184,7 +182,6 @@ class LinearEquation {
 
     /**
      * Set the current equation system for this equation
-     *
      * @param system the equation system this equation belongs to
      */
     public void setSystem(LinearSystem system) {
@@ -193,7 +190,6 @@ class LinearEquation {
 
     /**
      * Set the equality operator for the equation, and switch the current side to the right side
-     *
      * @return this
      */
     public LinearEquation equalsTo() {
@@ -203,7 +199,6 @@ class LinearEquation {
 
     /**
      * Set the greater than operator for the equation, and switch the current side to the right side
-     *
      * @return this
      */
     public LinearEquation greaterThan() {
@@ -214,7 +209,6 @@ class LinearEquation {
 
     /**
      * Set the lower than operator for the equation, and switch the current side to the right side
-     *
      * @return this
      */
     public LinearEquation lowerThan() {
@@ -252,7 +246,6 @@ class LinearEquation {
 
     /**
      * Simplify an array of {@link EquationVariable}
-     *
      * @param side Array of EquationVariable
      */
     private void simplifySide(ArrayList<EquationVariable> side) {
@@ -387,7 +380,6 @@ class LinearEquation {
     /**
      * Pivot this equation on the variable --
      * e.g. the variable will be the only term on the left side of the equation.
-     *
      * @param variable variable pivoted on
      */
     public void pivot(SolverVariable variable) {
@@ -427,7 +419,6 @@ class LinearEquation {
 
     /**
      * Returns true if the constant is negative
-     *
      * @return true if the constant is negative.
      */
     public boolean hasNegativeConstant() {
@@ -445,7 +436,6 @@ class LinearEquation {
     /**
      * If present, returns the constant on the right side of the equation.
      * The equation is expected to be balanced before using this function.
-     *
      * @return The equation constant
      */
     public Amount getConstant() {
@@ -475,7 +465,6 @@ class LinearEquation {
 
     /**
      * Returns the first unconstrained variable encountered in this equation
-     *
      * @return an unconstrained variable or null if none are found
      */
     public EquationVariable getFirstUnconstrainedVariable() {
@@ -496,7 +485,6 @@ class LinearEquation {
 
     /**
      * Returns the basic variable of the equation
-     *
      * @return basic variable
      */
     public EquationVariable getLeftVariable() {
@@ -509,7 +497,6 @@ class LinearEquation {
     /**
      * Replace the variable v in this equation (left or right side)
      * by the right side of the equation l
-     *
      * @param v the variable to replace
      * @param l the equation we use to replace it with
      */
@@ -521,9 +508,8 @@ class LinearEquation {
     /**
      * Convenience function to replace the variable v possibly contained inside list
      * by the right side of the equation l
-     *
-     * @param v    the variable to replace
-     * @param l    the equation we use to replace it with
+     * @param v the variable to replace
+     * @param l the equation we use to replace it with
      * @param list the list of {@link EquationVariable} to work on
      */
     private void replace(SolverVariable v, LinearEquation l, ArrayList<EquationVariable> list) {
@@ -543,8 +529,7 @@ class LinearEquation {
      * Returns the {@link EquationVariable} associated to
      * the {@link SolverVariable} found in the
      * list of {@link EquationVariable}
-     *
-     * @param v    the variable to find
+     * @param v the variable to find
      * @param list list the list of {@link EquationVariable} to search in
      * @return the associated {@link EquationVariable}
      */
@@ -560,7 +545,6 @@ class LinearEquation {
 
     /**
      * Accessor for the right side of the equation.
-     *
      * @return the equation's right side.
      */
     public ArrayList<EquationVariable> getRightSide() {
@@ -569,7 +553,6 @@ class LinearEquation {
 
     /**
      * Returns true if this equation contains a give variable
-     *
      * @param solverVariable the variable we are looking for
      * @return true if found, false if not.
      */
@@ -577,13 +560,15 @@ class LinearEquation {
         if (find(solverVariable, mLeftSide) != null) {
             return true;
         }
-        return find(solverVariable, mRightSide) != null;
+        if (find(solverVariable, mRightSide) != null) {
+            return true;
+        }
+        return false;
     }
 
     /**
      * Returns the {@link EquationVariable} associated with a given
      * {@link SolverVariable} in this equation
-     *
      * @param solverVariable the variable we are looking for
      * @return the {@link EquationVariable} associated if found, otherwise null
      */
@@ -677,7 +662,7 @@ class LinearEquation {
      * Convenience function to add a variable, based on {@link LinearEquation#var(String) var)}
      *
      * @param amount the variable's amount
-     * @param name   the variable's name
+     * @param name the variable's name
      * @return this
      */
     public LinearEquation plus(int amount, String name) {
@@ -702,7 +687,7 @@ class LinearEquation {
      * based on {@link LinearEquation#var(String) var)}
      *
      * @param amount the variable's amount
-     * @param name   the variable's name
+     * @param name the variable's name
      * @return this
      */
     public LinearEquation minus(int amount, String name) {
@@ -781,7 +766,6 @@ class LinearEquation {
 
     /**
      * Add an error variable to the current side
-     *
      * @return this
      */
     public LinearEquation withError() {
@@ -837,7 +821,6 @@ class LinearEquation {
 
     /**
      * Add a slack variable to the current side
-     *
      * @return this
      */
     public LinearEquation withSlack() {
@@ -864,18 +847,9 @@ class LinearEquation {
         String result = "";
         result = sideToString(mLeftSide);
         switch (mType) {
-            case EQUALS: {
-                result += "= ";
-                break;
-            }
-            case LOWER_THAN: {
-                result += "<= ";
-                break;
-            }
-            case GREATER_THAN: {
-                result += ">= ";
-                break;
-            }
+            case EQUALS: { result += "= "; break; }
+            case LOWER_THAN: { result += "<= "; break; }
+            case GREATER_THAN: { result += ">= "; break; }
         }
         result += sideToString(mRightSide);
         return result.trim();
@@ -883,7 +857,6 @@ class LinearEquation {
 
     /**
      * Returns a string representation of an array of {@link EquationVariable}
-     *
      * @param side array of {@link EquationVariable}
      * @return a String representation of the array of variables
      */

@@ -91,6 +91,8 @@ public class StopLogicEngine implements StopEngine {
 
     /**
      * @TODO: add description
+     * @param x
+     * @return
      */
     public float getVelocity(float x) {
         if (x <= mStage1Duration) {
@@ -145,9 +147,15 @@ public class StopLogicEngine implements StopEngine {
 
     /**
      * @TODO: add description
+     * @param currentPos
+     * @param destination
+     * @param currentVelocity
+     * @param maxTime
+     * @param maxAcceleration
+     * @param maxVelocity
      */
     public void config(float currentPos, float destination, float currentVelocity,
-            float maxTime, float maxAcceleration, float maxVelocity) {
+                       float maxTime, float maxAcceleration, float maxVelocity) {
         mDone = false;
         mStartPosition = currentPos;
         mBackwards = (currentPos > destination);
@@ -161,6 +169,8 @@ public class StopLogicEngine implements StopEngine {
 
     /**
      * @TODO: add description
+     * @param v
+     * @return
      */
     public float getInterpolation(float v) {
         float y = calcY(v);
@@ -178,7 +188,7 @@ public class StopLogicEngine implements StopEngine {
     }
 
     private void setup(float velocity, float distance, float maxAcceleration, float maxVelocity,
-            float maxTime) {
+                       float maxTime) {
         mDone = false;
         if (velocity == 0) {
             velocity = 0.0001f;

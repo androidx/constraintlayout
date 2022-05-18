@@ -46,23 +46,34 @@ public class Grouping {
 
     /**
      * @TODO: add description
+     * @param layoutHorizontal
+     * @param layoutVertical
+     * @param widgetHorizontal
+     * @param widgetVertical
+     * @return
      */
     public static boolean validInGroup(ConstraintWidget.DimensionBehaviour layoutHorizontal,
-            ConstraintWidget.DimensionBehaviour layoutVertical,
-            ConstraintWidget.DimensionBehaviour widgetHorizontal,
-            ConstraintWidget.DimensionBehaviour widgetVertical) {
+                                       ConstraintWidget.DimensionBehaviour layoutVertical,
+                                       ConstraintWidget.DimensionBehaviour widgetHorizontal,
+                                       ConstraintWidget.DimensionBehaviour widgetVertical) {
         boolean fixedHorizontal = widgetHorizontal == FIXED || widgetHorizontal == WRAP_CONTENT
                 || (widgetHorizontal == MATCH_PARENT && layoutHorizontal != WRAP_CONTENT);
         boolean fixedVertical = widgetVertical == FIXED || widgetVertical == WRAP_CONTENT
                 || (widgetVertical == MATCH_PARENT && layoutVertical != WRAP_CONTENT);
-        return fixedHorizontal || fixedVertical;
+        if (fixedHorizontal || fixedVertical) {
+            return true;
+        }
+        return false;
     }
 
     /**
      * @TODO: add description
+     * @param layout
+     * @param measurer
+     * @return
      */
     public static boolean simpleSolvingPass(ConstraintWidgetContainer layout,
-            BasicMeasure.Measurer measurer) {
+                                            BasicMeasure.Measurer measurer) {
 
         if (DEBUG) {
             System.out.println("*** GROUP SOLVING ***");
@@ -376,7 +387,7 @@ public class Grouping {
     }
 
     private static WidgetGroup findGroup(ArrayList<WidgetGroup> horizontalDependencyLists,
-            int groupId) {
+                                         int groupId) {
         final int count = horizontalDependencyLists.size();
         for (int i = 0; i < count; i++) {
             WidgetGroup group = horizontalDependencyLists.get(i);
@@ -389,11 +400,16 @@ public class Grouping {
 
     /**
      * @TODO: add description
+     * @param constraintWidget
+     * @param orientation
+     * @param list
+     * @param group
+     * @return
      */
     public static WidgetGroup findDependents(ConstraintWidget constraintWidget,
-            int orientation,
-            ArrayList<WidgetGroup> list,
-            WidgetGroup group) {
+                                             int orientation,
+                                             ArrayList<WidgetGroup> list,
+                                             WidgetGroup group) {
         int groupId = -1;
         if (orientation == ConstraintWidget.HORIZONTAL) {
             groupId = constraintWidget.horizontalGroup;

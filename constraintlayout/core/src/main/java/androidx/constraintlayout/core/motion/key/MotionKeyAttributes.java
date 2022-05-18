@@ -203,6 +203,9 @@ public class MotionKeyAttributes extends MotionKey {
 
     /**
      * @TODO: add description
+     * @param type
+     * @param value
+     * @return
      */
     public boolean setValue(int type, int value) {
 
@@ -226,6 +229,9 @@ public class MotionKeyAttributes extends MotionKey {
 
     /**
      * @TODO: add description
+     * @param type
+     * @param value
+     * @return
      */
     public boolean setValue(int type, float value) {
         switch (type) {
@@ -282,6 +288,7 @@ public class MotionKeyAttributes extends MotionKey {
 
     /**
      * @TODO: add description
+     * @param interpolation
      */
     public void setInterpolation(HashMap<String, Integer> interpolation) {
         if (!Float.isNaN(mAlpha)) {
@@ -335,6 +342,9 @@ public class MotionKeyAttributes extends MotionKey {
 
     /**
      * @TODO: add description
+     * @param type
+     * @param value
+     * @return
      */
     public boolean setValue(int type, String value) {
         switch (type) {
@@ -368,7 +378,7 @@ public class MotionKeyAttributes extends MotionKey {
         getAttributeNames(nameSet);
 
         System.out.println(" ------------- " + mFramePosition + " -------------");
-        String[] names = nameSet.toArray(new String[0]);
+        String[]names = nameSet.toArray(new String[0]);
         for (int i = 0; i < names.length; i++) {
             int id = AttributesType.getId(names[i]);
             System.out.println(names[i] + ":" + getFloatValue(id));

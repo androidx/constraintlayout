@@ -27,7 +27,7 @@ import androidx.constraintlayout.core.LinearSystem;
 public class Optimizer {
 
     // Optimization levels (mask)
-    public static final int OPTIMIZATION_NONE = 0;
+    public static final int OPTIMIZATION_NONE  = 0;
     public static final int OPTIMIZATION_DIRECT = 1;
     public static final int OPTIMIZATION_BARRIER = 1 << 1;
     public static final int OPTIMIZATION_CHAIN = 1 << 2;
@@ -42,10 +42,11 @@ public class Optimizer {
     public static final int OPTIMIZATION_STANDARD = OPTIMIZATION_DIRECT
             /* | OPTIMIZATION_GROUPING */
             /* | OPTIMIZATION_DEPENDENCY_ORDERING */
-            | OPTIMIZATION_CACHE_MEASURES
+               | OPTIMIZATION_CACHE_MEASURES
             /* | OPTIMIZATION_GRAPH */
             /* | OPTIMIZATION_GRAPH_WRAP */
-            /* | OPTIMIZATION_DIMENSIONS */;
+            /* | OPTIMIZATION_DIMENSIONS */
+            ;
 
     // Internal use.
     static boolean[] sFlags = new boolean[3];
@@ -55,16 +56,20 @@ public class Optimizer {
 
     /**
      * Looks at optimizing match_parent
+     *
+     * @param container
+     * @param system
+     * @param widget
      */
     static void checkMatchParent(ConstraintWidgetContainer container,
-            LinearSystem system,
-            ConstraintWidget widget) {
+                                 LinearSystem system,
+                                 ConstraintWidget widget) {
         widget.mHorizontalResolution = UNKNOWN;
         widget.mVerticalResolution = UNKNOWN;
         if (container.mListDimensionBehaviors[DIMENSION_HORIZONTAL]
-                != ConstraintWidget.DimensionBehaviour.WRAP_CONTENT
+                    != ConstraintWidget.DimensionBehaviour.WRAP_CONTENT
                 && widget.mListDimensionBehaviors[DIMENSION_HORIZONTAL]
-                == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
+                    == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
 
             int left = widget.mLeft.mMargin;
             int right = container.getWidth() - widget.mRight.mMargin;
@@ -77,9 +82,9 @@ public class Optimizer {
             widget.setHorizontalDimension(left, right);
         }
         if (container.mListDimensionBehaviors[DIMENSION_VERTICAL]
-                != ConstraintWidget.DimensionBehaviour.WRAP_CONTENT
+                    != ConstraintWidget.DimensionBehaviour.WRAP_CONTENT
                 && widget.mListDimensionBehaviors[DIMENSION_VERTICAL]
-                == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
+                    == ConstraintWidget.DimensionBehaviour.MATCH_PARENT) {
 
             int top = widget.mTop.mMargin;
             int bottom = container.getHeight() - widget.mBottom.mMargin;
@@ -100,6 +105,9 @@ public class Optimizer {
 
     /**
      * @TODO: add description
+     * @param optimizationLevel
+     * @param optimization
+     * @return
      */
     public static final boolean enabled(int optimizationLevel, int optimization) {
         return (optimizationLevel & optimization) == optimization;

@@ -29,6 +29,10 @@ public class KeyCache {
 
     /**
      * @TODO: add description
+     * @param view
+     * @param type
+     * @param element
+     * @param value
      */
     public void setFloatValue(Object view, String type, int element, float value) {
         if (!mMap.containsKey(view)) {
@@ -64,6 +68,10 @@ public class KeyCache {
 
     /**
      * @TODO: add description
+     * @param view
+     * @param type
+     * @param element
+     * @return
      */
     public float getFloatValue(Object view, String type, int element) {
         if (!mMap.containsKey(view)) {

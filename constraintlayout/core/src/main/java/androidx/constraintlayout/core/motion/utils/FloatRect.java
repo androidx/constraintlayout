@@ -23,6 +23,7 @@ public class FloatRect {
 
     /**
      * @TODO: add description
+     * @return
      */
     public final float centerX() {
         return (left + right) * 0.5f;
@@ -30,6 +31,7 @@ public class FloatRect {
 
     /**
      * @TODO: add description
+     * @return
      */
     public final float centerY() {
         return (top + bottom) * 0.5f;

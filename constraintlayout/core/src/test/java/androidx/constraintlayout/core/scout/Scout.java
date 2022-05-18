@@ -38,6 +38,8 @@ public class Scout {
 
     /**
      * Recursive decent of widget tree inferring constraints on ConstraintWidgetContainer
+     *
+     * @param base
      */
     public static void inferConstraints(WidgetContainer base) {
         if (base == null) {

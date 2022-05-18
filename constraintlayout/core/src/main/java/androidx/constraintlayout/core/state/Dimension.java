@@ -47,10 +47,16 @@ public class Dimension {
     /**
      * Returns true if the dimension is a fixed dimension of
      * the same given value
+     *
+     * @param value
+     * @return
      */
     public boolean equalsFixedValue(int value) {
-        return mInitialValue == null
-                && mValue == value;
+        if (mInitialValue == null
+                && mValue == value) {
+            return true;
+        }
+        return false;
     }
 
     public enum Type {
@@ -60,15 +66,15 @@ public class Dimension {
         MATCH_CONSTRAINT
     }
 
-    private Dimension() {
-    }
-
+    private Dimension() {}
     private Dimension(Object type) {
         mInitialValue = type;
     }
 
     /**
      * @TODO: add description
+     * @param value
+     * @return
      */
     public static Dimension createSuggested(int value) {
         Dimension dimension = new Dimension();
@@ -78,6 +84,8 @@ public class Dimension {
 
     /**
      * @TODO: add description
+     * @param startValue
+     * @return
      */
     public static Dimension createSuggested(Object startValue) {
         Dimension dimension = new Dimension();
@@ -87,6 +95,8 @@ public class Dimension {
 
     /**
      * @TODO: add description
+     * @param value
+     * @return
      */
     public static Dimension createFixed(int value) {
         Dimension dimension = new Dimension(FIXED_DIMENSION);
@@ -96,6 +106,8 @@ public class Dimension {
 
     /**
      * @TODO: add description
+     * @param value
+     * @return
      */
     public static Dimension createFixed(Object value) {
         Dimension dimension = new Dimension(FIXED_DIMENSION);
@@ -105,6 +117,9 @@ public class Dimension {
 
     /**
      * @TODO: add description
+     * @param key
+     * @param value
+     * @return
      */
     public static Dimension createPercent(Object key, float value) {
         Dimension dimension = new Dimension(PERCENT_DIMENSION);
@@ -114,6 +129,7 @@ public class Dimension {
 
     /**
      * @TODO: add description
+     * @return
      */
     public static Dimension createParent() {
         return new Dimension(PARENT_DIMENSION);
@@ -121,6 +137,7 @@ public class Dimension {
 
     /**
      * @TODO: add description
+     * @return
      */
     public static Dimension createWrap() {
         return new Dimension(WRAP_DIMENSION);
@@ -128,6 +145,7 @@ public class Dimension {
 
     /**
      * @TODO: add description
+     * @return
      */
     public static Dimension createSpread() {
         return new Dimension(SPREAD_DIMENSION);
@@ -135,6 +153,8 @@ public class Dimension {
 
     /**
      * @TODO: add description
+     * @param ratio
+     * @return
      */
     public static Dimension createRatio(String ratio) {
         Dimension dimension = new Dimension(RATIO_DIMENSION);
@@ -144,6 +164,9 @@ public class Dimension {
 
     /**
      * @TODO: add description
+     * @param key
+     * @param value
+     * @return
      */
     public Dimension percent(Object key, float value) {
         mPercent = value;
@@ -152,6 +175,8 @@ public class Dimension {
 
     /**
      * @TODO: add description
+     * @param value
+     * @return
      */
     public Dimension min(int value) {
         if (value >= 0) {
@@ -162,6 +187,8 @@ public class Dimension {
 
     /**
      * @TODO: add description
+     * @param value
+     * @return
      */
     public Dimension min(Object value) {
         if (value == WRAP_DIMENSION) {
@@ -172,6 +199,8 @@ public class Dimension {
 
     /**
      * @TODO: add description
+     * @param value
+     * @return
      */
     public Dimension max(int value) {
         if (mMax >= 0) {
@@ -182,6 +211,8 @@ public class Dimension {
 
     /**
      * @TODO: add description
+     * @param value
+     * @return
      */
     public Dimension max(Object value) {
         if (value == WRAP_DIMENSION && mIsSuggested) {
@@ -193,6 +224,8 @@ public class Dimension {
 
     /**
      * @TODO: add description
+     * @param value
+     * @return
      */
     public Dimension suggested(int value) {
         mIsSuggested = true;
@@ -204,6 +237,8 @@ public class Dimension {
 
     /**
      * @TODO: add description
+     * @param value
+     * @return
      */
     public Dimension suggested(Object value) {
         mInitialValue = value;
@@ -213,6 +248,8 @@ public class Dimension {
 
     /**
      * @TODO: add description
+     * @param value
+     * @return
      */
     public Dimension fixed(Object value) {
         mInitialValue = value;
@@ -225,6 +262,8 @@ public class Dimension {
 
     /**
      * @TODO: add description
+     * @param value
+     * @return
      */
     public Dimension fixed(int value) {
         mInitialValue = null;
@@ -234,6 +273,8 @@ public class Dimension {
 
     /**
      * @TODO: add description
+     * @param ratio
+     * @return
      */
     public Dimension ratio(String ratio) { // WxH ratio
         mRatioString = ratio;
@@ -252,6 +293,8 @@ public class Dimension {
 
     /**
      * Apply the dimension to the given constraint widget
+     * @param constraintWidget
+     * @param orientation
      */
     public void apply(State state, ConstraintWidget constraintWidget, int orientation) {
         if (mRatioString != null) {

@@ -26,6 +26,10 @@ public class Rectangle {
 
     /**
      * @TODO: add description
+     * @param x
+     * @param y
+     * @param width
+     * @param height
      */
     public void setBounds(int x, int y, int width, int height) {
         this.x = x;
@@ -33,7 +37,6 @@ public class Rectangle {
         this.width = width;
         this.height = height;
     }
-
     void grow(int w, int h) {
         x -= w;
         y -= h;
@@ -48,6 +51,9 @@ public class Rectangle {
 
     /**
      * @TODO: add description
+     * @param x
+     * @param y
+     * @return
      */
     public boolean contains(int x, int y) {
         return x >= this.x && x < this.x + this.width
@@ -57,7 +63,6 @@ public class Rectangle {
     public int getCenterX() {
         return (x + width) / 2;
     }
-
     public int getCenterY() {
         return (y + height) / 2;
     }

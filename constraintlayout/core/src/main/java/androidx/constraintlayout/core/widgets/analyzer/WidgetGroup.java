@@ -48,13 +48,14 @@ public class WidgetGroup {
     public int getOrientation() {
         return mOrientation;
     }
-
     public int getId() {
         return mId;
     }
 
     /**
      * @TODO: add description
+     * @param widget
+     * @return
      */
     public boolean add(ConstraintWidget widget) {
         if (mWidgets.contains(widget)) {
@@ -67,7 +68,6 @@ public class WidgetGroup {
     public void setAuthoritative(boolean isAuthoritative) {
         mAuthoritative = isAuthoritative;
     }
-
     public boolean isAuthoritative() {
         return mAuthoritative;
     }
@@ -95,6 +95,8 @@ public class WidgetGroup {
 
     /**
      * @TODO: add description
+     * @param orientation
+     * @param widgetGroup
      */
     public void moveTo(int orientation, WidgetGroup widgetGroup) {
         if (DEBUG) {
@@ -137,6 +139,9 @@ public class WidgetGroup {
 
     /**
      * @TODO: add description
+     * @param system
+     * @param orientation
+     * @return
      */
     public int measureWrap(LinearSystem system, int orientation) {
         int count = mWidgets.size();
@@ -148,8 +153,8 @@ public class WidgetGroup {
     }
 
     private int solverMeasure(LinearSystem system,
-            ArrayList<ConstraintWidget> widgets,
-            int orientation) {
+                              ArrayList<ConstraintWidget> widgets,
+                              int orientation) {
         ConstraintWidgetContainer container =
                 (ConstraintWidgetContainer) widgets.get(0).getParent();
         system.reset();
@@ -219,6 +224,8 @@ public class WidgetGroup {
 
     /**
      * @TODO: add description
+     * @param group
+     * @return
      */
     public boolean intersectWith(WidgetGroup group) {
         for (int i = 0; i < mWidgets.size(); i++) {
@@ -236,6 +243,7 @@ public class WidgetGroup {
 
     /**
      * @TODO: add description
+     * @return
      */
     public int size() {
         return mWidgets.size();
@@ -243,6 +251,7 @@ public class WidgetGroup {
 
     /**
      * @TODO: add description
+     * @param dependencyLists
      */
     public void cleanup(ArrayList<WidgetGroup> dependencyLists) {
         final int count = mWidgets.size();

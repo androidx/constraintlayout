@@ -21,6 +21,8 @@ public class CLToken extends CLElement {
 
     /**
      * @TODO: add description
+     * @return
+     * @throws CLParsingException
      */
     public boolean getBoolean() throws CLParsingException {
         if (mType == Type.TRUE) {
@@ -34,6 +36,8 @@ public class CLToken extends CLElement {
 
     /**
      * @TODO: add description
+     * @return
+     * @throws CLParsingException
      */
     public boolean isNull() throws CLParsingException {
         if (mType == Type.NULL) {
@@ -42,7 +46,7 @@ public class CLToken extends CLElement {
         throw new CLParsingException("this token is not a null: <" + content() + ">", this);
     }
 
-    enum Type {UNKNOWN, TRUE, FALSE, NULL}
+    enum Type { UNKNOWN, TRUE, FALSE, NULL }
 
     char[] mTokenTrue = "true".toCharArray();
     char[] mTokenFalse = "false".toCharArray();
@@ -54,6 +58,8 @@ public class CLToken extends CLElement {
 
     /**
      * @TODO: add description
+     * @param content
+     * @return
      */
     public static CLElement allocate(char[] content) {
         return new CLToken(content);
@@ -81,6 +87,9 @@ public class CLToken extends CLElement {
 
     /**
      * @TODO: add description
+     * @param c
+     * @param position
+     * @return
      */
     public boolean validate(char c, long position) {
         boolean isValid = false;
@@ -90,22 +99,19 @@ public class CLToken extends CLElement {
                 if (isValid && mIndex + 1 == mTokenTrue.length) {
                     setEnd(position);
                 }
-            }
-            break;
+            } break;
             case FALSE: {
                 isValid = (mTokenFalse[mIndex] == c);
                 if (isValid && mIndex + 1 == mTokenFalse.length) {
                     setEnd(position);
                 }
-            }
-            break;
+            } break;
             case NULL: {
                 isValid = (mTokenNull[mIndex] == c);
                 if (isValid && mIndex + 1 == mTokenNull.length) {
                     setEnd(position);
                 }
-            }
-            break;
+            } break;
             case UNKNOWN: {
                 if (mTokenTrue[mIndex] == c) {
                     mType = Type.TRUE;

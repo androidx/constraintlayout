@@ -73,7 +73,10 @@ public class VerticalWidgetRun extends WidgetRun {
     @Override
     boolean supportsWrapComputation() {
         if (super.mDimensionBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT) {
-            return super.mWidget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_SPREAD;
+            if (super.mWidget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_SPREAD) {
+                return true;
+            }
+            return false;
         }
         return true;
     }
@@ -83,18 +86,15 @@ public class VerticalWidgetRun extends WidgetRun {
         switch (mRunType) {
             case START: {
                 updateRunStart(dependency);
-            }
-            break;
+            } break;
             case END: {
                 updateRunEnd(dependency);
-            }
-            break;
+            } break;
             case CENTER: {
                 updateRunCenter(dependency, mWidget.mTop, mWidget.mBottom, VERTICAL);
                 return;
             }
-            default:
-                break;
+            default: break;
         }
         if (FORCE_USE || dependency == mDimension) {
             if (mDimension.readyToSolve && !mDimension.resolved) {
@@ -108,25 +108,20 @@ public class VerticalWidgetRun extends WidgetRun {
                                     case ConstraintWidget.HORIZONTAL: {
                                         size = (int) (0.5f + mWidget.mHorizontalRun.mDimension.value
                                                 * mWidget.getDimensionRatio());
-                                    }
-                                    break;
+                                    } break;
                                     case ConstraintWidget.VERTICAL: {
                                         size = (int) (0.5f + mWidget.mHorizontalRun.mDimension.value
                                                 / mWidget.getDimensionRatio());
-                                    }
-                                    break;
+                                    } break;
                                     case ConstraintWidget.UNKNOWN: {
                                         size = (int) (0.5f + mWidget.mHorizontalRun.mDimension.value
                                                 / mWidget.getDimensionRatio());
-                                    }
-                                    break;
-                                    default:
-                                        break;
+                                    } break;
+                                    default: break;
                                 }
                                 mDimension.resolve(size);
                             }
-                        }
-                        break;
+                        } break;
                         case MATCH_CONSTRAINT_PERCENT: {
                             ConstraintWidget parent = mWidget.getParent();
                             if (parent != null) {
@@ -137,10 +132,8 @@ public class VerticalWidgetRun extends WidgetRun {
                                     mDimension.resolve(size);
                                 }
                             }
-                        }
-                        break;
-                        default:
-                            break;
+                        } break;
+                        default: break;
                     }
                 }
             }
@@ -257,7 +250,7 @@ public class VerticalWidgetRun extends WidgetRun {
         if (mDimension.resolved && mWidget.measured) {
             if (mWidget.mListAnchors[ConstraintWidget.ANCHOR_TOP].mTarget != null
                     && mWidget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].mTarget
-                    != null) { // <-s-e->
+                        != null) { // <-s-e->
                 if (mWidget.isInVerticalChain()) {
                     start.mMargin = mWidget.mListAnchors[ConstraintWidget.ANCHOR_TOP].getMargin();
                     end.mMargin = -mWidget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].getMargin();
@@ -343,8 +336,7 @@ public class VerticalWidgetRun extends WidgetRun {
                             mDimension.mDependencies.add(start);
                             mDimension.mDependencies.add(end);
                         }
-                    }
-                    break;
+                    } break;
                     case MATCH_CONSTRAINT_PERCENT: {
                         // we need to look up the parent dimension
                         ConstraintWidget parent = mWidget.getParent();
@@ -357,21 +349,18 @@ public class VerticalWidgetRun extends WidgetRun {
                         mDimension.delegateToWidgetRun = true;
                         mDimension.mDependencies.add(start);
                         mDimension.mDependencies.add(end);
-                    }
-                    break;
+                    } break;
                     case MATCH_CONSTRAINT_SPREAD: {
                         // the work is done in the update()
-                    }
-                    break;
-                    default:
-                        break;
+                    } break;
+                    default: break;
                 }
             } else {
                 mDimension.addDependency(this);
             }
             if (mWidget.mListAnchors[ConstraintWidget.ANCHOR_TOP].mTarget != null
                     && mWidget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].mTarget
-                    != null) { // <-s-d-e->
+                        != null) { // <-s-d-e->
                 if (mWidget.isInVerticalChain()) {
                     start.mMargin = mWidget.mListAnchors[ConstraintWidget.ANCHOR_TOP].getMargin();
                     end.mMargin = -mWidget.mListAnchors[ConstraintWidget.ANCHOR_BOTTOM].getMargin();

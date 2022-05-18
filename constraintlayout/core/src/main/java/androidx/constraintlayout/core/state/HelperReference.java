@@ -41,6 +41,8 @@ public class HelperReference extends ConstraintReference implements Facade {
 
     /**
      * @TODO: add description
+     * @param objects
+     * @return
      */
     public HelperReference add(Object... objects) {
         Collections.addAll(mReferences, objects);

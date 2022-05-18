@@ -25,6 +25,8 @@ public class CLObject extends CLContainer implements Iterable<CLKey> {
 
     /**
      * Allocate a CLObject around an array of chars
+     * @param content
+     * @return
      */
     public static CLObject allocate(char[] content) {
         return new CLObject(content);
@@ -32,6 +34,7 @@ public class CLObject extends CLContainer implements Iterable<CLKey> {
 
     /**
      * Returns objet as a JSON5 String
+     * @return
      */
     public String toJSON() {
         StringBuilder json = new StringBuilder(getDebugName() + "{ ");
@@ -50,6 +53,7 @@ public class CLObject extends CLContainer implements Iterable<CLKey> {
 
     /**
      * Returns a object as a formatted JSON5 String
+     * @return
      */
     public String toFormattedJSON() {
         return toFormattedJSON(0, 0);
@@ -57,6 +61,9 @@ public class CLObject extends CLContainer implements Iterable<CLKey> {
 
     /**
      * Returns as a formatted JSON5 String with an indentation
+     * @param indent
+     * @param forceIndent
+     * @return
      */
     public String toFormattedJSON(int indent, int forceIndent) {
         StringBuilder json = new StringBuilder(getDebugName());
@@ -84,7 +91,6 @@ public class CLObject extends CLContainer implements Iterable<CLKey> {
     private class CLObjectIterator implements Iterator<CLKey> {
         CLObject mObject;
         int mIndex = 0;
-
         CLObjectIterator(CLObject clObject) {
             mObject = clObject;
         }

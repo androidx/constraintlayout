@@ -38,6 +38,7 @@ public abstract class MotionKey implements TypedValues {
 
     /**
      * @TODO: add description
+     * @param attributes
      */
     public abstract void getAttributeNames(HashSet<String> attributes);
 
@@ -75,6 +76,8 @@ public abstract class MotionKey implements TypedValues {
     /**
      * Return the float given a value. If the value is a "Float" object it is casted
      *
+     * @param value
+     * @return
      * @DoNotShow
      */
     float toFloat(Object value) {
@@ -84,6 +87,8 @@ public abstract class MotionKey implements TypedValues {
     /**
      * Return the int version of an object if the value is an Integer object it is casted.
      *
+     * @param value
+     * @return
      * @DoNotShow
      */
     int toInt(Object value) {
@@ -93,6 +98,8 @@ public abstract class MotionKey implements TypedValues {
     /**
      * Return the boolean version this object if the object is a Boolean it is casted.
      *
+     * @param value
+     * @return
      * @DoNotShow
      */
     boolean toBoolean(Object value) {
@@ -103,12 +110,16 @@ public abstract class MotionKey implements TypedValues {
     /**
      * Key frame can specify the type of interpolation it wants on various attributes
      * For each string it set it to -1, CurveFit.LINEAR or  CurveFit.SPLINE
+     *
+     * @param interpolation
      */
     public void setInterpolation(HashMap<String, Integer> interpolation) {
     }
 
     /**
      * @TODO: add description
+     * @param src
+     * @return
      */
     public MotionKey copy(MotionKey src) {
         mFramePosition = src.mFramePosition;
@@ -120,11 +131,14 @@ public abstract class MotionKey implements TypedValues {
 
     /**
      * @TODO: add description
+     * @return
      */
     public abstract MotionKey clone();
 
     /**
      * @TODO: add description
+     * @param id
+     * @return
      */
     public MotionKey setViewId(int id) {
         mTargetId = id;
@@ -133,6 +147,8 @@ public abstract class MotionKey implements TypedValues {
 
     /**
      * sets the frame position
+     *
+     * @param pos
      */
     public void setFramePosition(int pos) {
         mFramePosition = pos;
@@ -140,6 +156,8 @@ public abstract class MotionKey implements TypedValues {
 
     /**
      * Gets the current frame position
+     *
+     * @return
      */
     public int getFramePosition() {
         return mFramePosition;
@@ -147,6 +165,9 @@ public abstract class MotionKey implements TypedValues {
 
     /**
      * @TODO: add description
+     * @param type
+     * @param value
+     * @return
      */
     public boolean setValue(int type, int value) {
 
@@ -160,6 +181,9 @@ public abstract class MotionKey implements TypedValues {
 
     /**
      * @TODO: add description
+     * @param type
+     * @param value
+     * @return
      */
     public boolean setValue(int type, float value) {
         return false;
@@ -167,6 +191,9 @@ public abstract class MotionKey implements TypedValues {
 
     /**
      * @TODO: add description
+     * @param type
+     * @param value
+     * @return
      */
     public boolean setValue(int type, String value) {
         switch (type) {
@@ -179,6 +206,9 @@ public abstract class MotionKey implements TypedValues {
 
     /**
      * @TODO: add description
+     * @param type
+     * @param value
+     * @return
      */
     public boolean setValue(int type, boolean value) {
         return false;
@@ -186,6 +216,9 @@ public abstract class MotionKey implements TypedValues {
 
     /**
      * @TODO: add description
+     * @param name
+     * @param type
+     * @param value
      */
     public void setCustomAttribute(String name, int type, float value) {
         mCustom.put(name, new CustomVariable(name, type, value));
@@ -193,6 +226,9 @@ public abstract class MotionKey implements TypedValues {
 
     /**
      * @TODO: add description
+     * @param name
+     * @param type
+     * @param value
      */
     public void setCustomAttribute(String name, int type, int value) {
         mCustom.put(name, new CustomVariable(name, type, value));
@@ -200,6 +236,9 @@ public abstract class MotionKey implements TypedValues {
 
     /**
      * @TODO: add description
+     * @param name
+     * @param type
+     * @param value
      */
     public void setCustomAttribute(String name, int type, boolean value) {
         mCustom.put(name, new CustomVariable(name, type, value));
@@ -207,6 +246,9 @@ public abstract class MotionKey implements TypedValues {
 
     /**
      * @TODO: add description
+     * @param name
+     * @param type
+     * @param value
      */
     public void setCustomAttribute(String name, int type, String value) {
         mCustom.put(name, new CustomVariable(name, type, value));

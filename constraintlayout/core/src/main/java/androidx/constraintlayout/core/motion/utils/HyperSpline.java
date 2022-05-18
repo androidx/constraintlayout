@@ -46,6 +46,7 @@ public class HyperSpline {
 
     /**
      * @TODO: add description
+     * @param points
      */
     public void setup(double[][] points) {
         mDimensionality = points[0].length;
@@ -77,6 +78,8 @@ public class HyperSpline {
 
     /**
      * @TODO: add description
+     * @param p
+     * @param v
      */
     public void getVelocity(double p, double[] v) {
         double pos = p * mTotalLength;
@@ -92,6 +95,8 @@ public class HyperSpline {
 
     /**
      * @TODO: add description
+     * @param p
+     * @param x
      */
     public void getPos(double p, double[] x) {
         double pos = p * mTotalLength;
@@ -107,6 +112,8 @@ public class HyperSpline {
 
     /**
      * @TODO: add description
+     * @param p
+     * @param x
      */
     public void getPos(double p, float[] x) {
         double pos = p * mTotalLength;
@@ -122,6 +129,9 @@ public class HyperSpline {
 
     /**
      * @TODO: add description
+     * @param p
+     * @param splineNumber
+     * @return
      */
     public double getPos(double p, int splineNumber) {
         double pos = p * mTotalLength;
@@ -135,6 +145,8 @@ public class HyperSpline {
 
     /**
      * @TODO: add description
+     * @param curve
+     * @return
      */
     public double approxLength(Cubic[] curve) {
         double sum = 0;
@@ -206,6 +218,8 @@ public class HyperSpline {
 
         /**
          * @TODO: add description
+         * @param u
+         * @return
          */
         public double eval(double u) {
             return (((mD * u) + mC) * u + mB) * u + mA;
@@ -213,6 +227,8 @@ public class HyperSpline {
 
         /**
          * @TODO: add description
+         * @param v
+         * @return
          */
         public double vel(double v) {
             //  (((mD * u) + mC) * u + mB) * u + mA

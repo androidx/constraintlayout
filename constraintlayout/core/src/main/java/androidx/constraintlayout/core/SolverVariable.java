@@ -106,12 +106,9 @@ public class SolverVariable implements Comparable<SolverVariable> {
             return prefix + sUniqueErrorId;
         }
         switch (type) {
-            case UNRESTRICTED:
-                return "U" + ++sUniqueUnrestrictedId;
-            case CONSTANT:
-                return "C" + ++sUniqueConstantId;
-            case SLACK:
-                return "S" + ++sUniqueSlackId;
+            case UNRESTRICTED: return "U" + ++sUniqueUnrestrictedId;
+            case CONSTANT: return "C" + ++sUniqueConstantId;
+            case SLACK: return "S" + ++sUniqueSlackId;
             case ERROR: {
                 return "e" + ++sUniqueErrorId;
             }
@@ -123,8 +120,7 @@ public class SolverVariable implements Comparable<SolverVariable> {
 
     /**
      * Base constructor
-     *
-     * @param name the variable name
+     *  @param name the variable name
      * @param type the type of the variable
      */
     public SolverVariable(String name, Type type) {
@@ -179,6 +175,7 @@ public class SolverVariable implements Comparable<SolverVariable> {
 
     /**
      * @TODO: add description
+     * @param row
      */
     public final void addToRow(ArrayRow row) {
         if (VAR_USE_HASH) {
@@ -199,6 +196,7 @@ public class SolverVariable implements Comparable<SolverVariable> {
 
     /**
      * @TODO: add description
+     * @param row
      */
     public final void removeFromRow(ArrayRow row) {
         if (VAR_USE_HASH) {
@@ -219,6 +217,8 @@ public class SolverVariable implements Comparable<SolverVariable> {
 
     /**
      * @TODO: add description
+     * @param system
+     * @param definition
      */
     public final void updateReferencesWithNewDefinition(LinearSystem system, ArrayRow definition) {
         if (VAR_USE_HASH) {
@@ -237,6 +237,8 @@ public class SolverVariable implements Comparable<SolverVariable> {
 
     /**
      * @TODO: add description
+     * @param system
+     * @param value
      */
     public void setFinalValue(LinearSystem system, float value) {
         if (DO_NOT_USE && INTERNAL_DEBUG) {
@@ -257,6 +259,9 @@ public class SolverVariable implements Comparable<SolverVariable> {
 
     /**
      * @TODO: add description
+     * @param system
+     * @param synonymVariable
+     * @param value
      */
     public void setSynonym(LinearSystem system, SolverVariable synonymVariable, float value) {
         if (INTERNAL_DEBUG) {
@@ -317,6 +322,8 @@ public class SolverVariable implements Comparable<SolverVariable> {
 
     /**
      * @TODO: add description
+     * @param type
+     * @param prefix
      */
     public void setType(Type type, String prefix) {
         mType = type;

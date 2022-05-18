@@ -45,6 +45,8 @@ public class Easing {
 
     /**
      * @TODO: add description
+     * @param configString
+     * @return
      */
     public static Easing getInterpolator(String configString) {
         if (configString == null) {
@@ -82,6 +84,8 @@ public class Easing {
 
     /**
      * @TODO: add description
+     * @param x
+     * @return
      */
     public double get(double x) {
         return x;
@@ -89,6 +93,7 @@ public class Easing {
 
     /**
      * @TODO: add description
+     * @return
      */
     public String toString() {
         return mStr;
@@ -96,6 +101,8 @@ public class Easing {
 
     /**
      * @TODO: add description
+     * @param x
+     * @return
      */
     public double getDiff(double x) {
         return 1;
@@ -103,8 +110,8 @@ public class Easing {
 
     static class CubicEasing extends Easing {
 
-        private static final double sError = 0.01;
-        private static final double sDError = 0.0001;
+        private static double sError = 0.01;
+        private static double sDError = 0.0001;
         double mX1, mY1, mX2, mY2;
 
         CubicEasing(String configString) {

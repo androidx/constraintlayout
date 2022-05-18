@@ -17,11 +17,13 @@ package androidx.constraintlayout.core.parser;
 
 public class CLArray extends CLContainer {
     public CLArray(char[] content) {
-        super(content);
+    super(content);
     }
 
     /**
      * @TODO: add description
+     * @param content
+     * @return
      */
     public static CLElement allocate(char[] content) {
         return new CLArray(content);

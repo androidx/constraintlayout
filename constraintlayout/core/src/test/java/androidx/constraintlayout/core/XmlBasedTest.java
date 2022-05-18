@@ -67,11 +67,11 @@ public class XmlBasedTest {
         int mGonMargin = Integer.MIN_VALUE;
     }
 
-    private static final HashMap<String, Integer> sVisibilityMap = new HashMap<>();
-    private static final Map<String, Integer> sStringWidthMap = new HashMap<String, Integer>();
-    private static final Map<String, Integer> sStringHeightMap = new HashMap<String, Integer>();
-    private static final Map<String, Integer> sButtonWidthMap = new HashMap<String, Integer>();
-    private static final Map<String, Integer> sButtonHeightMap = new HashMap<String, Integer>();
+    private static HashMap<String, Integer> sVisibilityMap = new HashMap<>();
+    private static Map<String, Integer> sStringWidthMap = new HashMap<String, Integer>();
+    private static Map<String, Integer> sStringHeightMap = new HashMap<String, Integer>();
+    private static Map<String, Integer> sButtonWidthMap = new HashMap<String, Integer>();
+    private static Map<String, Integer> sButtonHeightMap = new HashMap<String, Integer>();
 
     static {
         sVisibilityMap.put("gone", ConstraintWidget.GONE);
@@ -101,7 +101,7 @@ public class XmlBasedTest {
     public void testAccessToResources() {
         String dirName = getDir();
         assertTrue(" could not find dir " + dirName, new File(dirName).exists());
-        Object[][] names = genListOfName();
+        Object[][]  names =  genListOfName();
         assertTrue(" Could not get Path " + dirName, names.length > 1);
     }
 
@@ -113,7 +113,6 @@ public class XmlBasedTest {
 
         return System.getProperty("user.dir") + "/src/test/resources/";
     }
-
     @Parameterized.Parameters
     public static Object[][] genListOfName() {
 
@@ -211,6 +210,10 @@ public class XmlBasedTest {
 
     /**
      * Compare two string containing comer separated integers
+     *
+     * @param a
+     * @param b
+     * @return
      */
     private boolean isSame(String a, String b) {
         if (a == null || b == null) {
@@ -241,6 +244,9 @@ public class XmlBasedTest {
     /**
      * Simple dimension parser
      * Multiply dp units by 3 because we simulate a screen with 3 pixels per dp
+     *
+     * @param dim
+     * @return
      */
     static int parseDim(String dim) {
         if (dim.endsWith("dp")) {
@@ -254,6 +260,8 @@ public class XmlBasedTest {
 
     /**
      * parse the XML file
+     *
+     * @param fileName
      */
     private void parseXML(String fileName) {
         System.err.println(fileName);
@@ -274,9 +282,9 @@ public class XmlBasedTest {
             }
 
             public void startElement(String namespaceURI,
-                    String localName,
-                    String qName,
-                    Attributes attributes)
+                                     String localName,
+                                     String qName,
+                                     Attributes attributes)
                     throws SAXException {
 
                 if (qName != null) {

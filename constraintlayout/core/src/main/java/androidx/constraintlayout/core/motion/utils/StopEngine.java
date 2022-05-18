@@ -19,26 +19,35 @@ package androidx.constraintlayout.core.motion.utils;
 public interface StopEngine {
     /**
      * @TODO: add description
+     * @param desc
+     * @param time
+     * @return
      */
     String debug(String desc, float time);
 
     /**
      * @TODO: add description
+     * @param time
+     * @return
      */
     float getVelocity(float time);
 
     /**
      * @TODO: add description
+     * @param time
+     * @return
      */
     float getInterpolation(float time);
 
     /**
      * @TODO: add description
+     * @return
      */
     float getVelocity();
 
     /**
      * @TODO: add description
+     * @return
      */
     boolean isStopped();
 }

@@ -40,26 +40,35 @@ public class ArrayRow implements LinearSystem.Row {
 
         /**
          * @TODO: add description
+         * @return
          */
         int getCurrentSize();
 
         /**
          * @TODO: add description
+         * @param index
+         * @return
          */
         SolverVariable getVariable(int index);
 
         /**
          * @TODO: add description
+         * @param index
+         * @return
          */
         float getVariableValue(int index);
 
         /**
          * @TODO: add description
+         * @param variable
+         * @return
          */
         float get(SolverVariable variable);
 
         /**
          * @TODO: add description
+         * @param variable
+         * @return
          */
         int indexOf(SolverVariable variable);
 
@@ -75,16 +84,21 @@ public class ArrayRow implements LinearSystem.Row {
 
         /**
          * @TODO: add description
+         * @param variable
+         * @return
          */
         boolean contains(SolverVariable variable);
 
         /**
          * @TODO: add description
+         * @param variable
+         * @param value
          */
         void put(SolverVariable variable, float value);
 
         /**
          * @TODO: add description
+         * @return
          */
         int sizeInBytes();
 
@@ -95,29 +109,38 @@ public class ArrayRow implements LinearSystem.Row {
 
         /**
          * @TODO: add description
+         * @param v
+         * @param removeFromDefinition
+         * @return
          */
         float remove(SolverVariable v, boolean removeFromDefinition);
 
         /**
          * @TODO: add description
+         * @param amount
          */
         void divideByAmount(float amount);
 
         /**
          * @TODO: add description
+         * @param v
+         * @param value
+         * @param removeFromDefinition
          */
         void add(SolverVariable v, float value, boolean removeFromDefinition);
 
         /**
          * @TODO: add description
+         * @param definition
+         * @param removeFromDefinition
+         * @return
          */
         float use(ArrayRow definition, boolean removeFromDefinition);
     }
 
     boolean mIsSimpleDefinition = false;
 
-    public ArrayRow() {
-    }
+    public ArrayRow() {}
 
     public ArrayRow(Cache cache) {
         variables = new ArrayLinkedVariables(this, cache);
@@ -129,11 +152,12 @@ public class ArrayRow implements LinearSystem.Row {
                 (mVariable == null)
                         || (mVariable.mType != SolverVariable.Type.UNRESTRICTED
                         && mConstantValue < 0)
-        );
+            );
     }
 
     /**
      * @TODO: add description
+     * @return
      */
     public String toString() {
         return toReadableString();
@@ -216,6 +240,9 @@ public class ArrayRow implements LinearSystem.Row {
 
     /**
      * @TODO: add description
+     * @param variable
+     * @param value
+     * @return
      */
     public ArrayRow createRowEquals(SolverVariable variable, int value) {
         if (value < 0) {
@@ -230,10 +257,14 @@ public class ArrayRow implements LinearSystem.Row {
 
     /**
      * @TODO: add description
+     * @param variableA
+     * @param variableB
+     * @param margin
+     * @return
      */
     public ArrayRow createRowEquals(SolverVariable variableA,
-            SolverVariable variableB,
-            int margin) {
+                                    SolverVariable variableB,
+                                    int margin) {
         boolean inverse = false;
         if (margin != 0) {
             int m = margin;
@@ -255,6 +286,9 @@ public class ArrayRow implements LinearSystem.Row {
 
     /**
      * @TODO: add description
+     * @param error
+     * @param sign
+     * @return
      */
     ArrayRow addSingleError(SolverVariable error, int sign) {
         variables.put(error, (float) sign);
@@ -263,10 +297,15 @@ public class ArrayRow implements LinearSystem.Row {
 
     /**
      * @TODO: add description
+     * @param variableA
+     * @param variableB
+     * @param slack
+     * @param margin
+     * @return
      */
     public ArrayRow createRowGreaterThan(SolverVariable variableA,
-            SolverVariable variableB, SolverVariable slack,
-            int margin) {
+                                         SolverVariable variableB, SolverVariable slack,
+                                         int margin) {
         boolean inverse = false;
         if (margin != 0) {
             int m = margin;
@@ -290,6 +329,10 @@ public class ArrayRow implements LinearSystem.Row {
 
     /**
      * @TODO: add description
+     * @param a
+     * @param b
+     * @param slack
+     * @return
      */
     public ArrayRow createRowGreaterThan(SolverVariable a, int b, SolverVariable slack) {
         mConstantValue = b;
@@ -299,9 +342,14 @@ public class ArrayRow implements LinearSystem.Row {
 
     /**
      * @TODO: add description
+     * @param variableA
+     * @param variableB
+     * @param slack
+     * @param margin
+     * @return
      */
     public ArrayRow createRowLowerThan(SolverVariable variableA, SolverVariable variableB,
-            SolverVariable slack, int margin) {
+                                       SolverVariable slack, int margin) {
         boolean inverse = false;
         if (margin != 0) {
             int m = margin;
@@ -325,13 +373,21 @@ public class ArrayRow implements LinearSystem.Row {
 
     /**
      * @TODO: add description
+     * @param currentWeight
+     * @param totalWeights
+     * @param nextWeight
+     * @param variableStartA
+     * @param variableEndA
+     * @param variableStartB
+     * @param variableEndB
+     * @return
      */
     public ArrayRow createRowEqualMatchDimensions(float currentWeight,
-            float totalWeights, float nextWeight,
-            SolverVariable variableStartA,
-            SolverVariable variableEndA,
-            SolverVariable variableStartB,
-            SolverVariable variableEndB) {
+                                                  float totalWeights, float nextWeight,
+                                                  SolverVariable variableStartA,
+                                                  SolverVariable variableEndA,
+                                                  SolverVariable variableStartB,
+                                                  SolverVariable variableEndB) {
         mConstantValue = 0;
         if (totalWeights == 0 || (currentWeight == nextWeight)) {
             // endA - startA == endB - startB
@@ -365,13 +421,25 @@ public class ArrayRow implements LinearSystem.Row {
 
     /**
      * @TODO: add description
+     * @param currentWeight
+     * @param totalWeights
+     * @param nextWeight
+     * @param variableStartA
+     * @param marginStartA
+     * @param variableEndA
+     * @param marginEndA
+     * @param variableStartB
+     * @param marginStartB
+     * @param variableEndB
+     * @param marginEndB
+     * @return
      */
     public ArrayRow createRowEqualDimension(float currentWeight,
-            float totalWeights, float nextWeight,
-            SolverVariable variableStartA, int marginStartA,
-            SolverVariable variableEndA, int marginEndA,
-            SolverVariable variableStartB, int marginStartB,
-            SolverVariable variableEndB, int marginEndB) {
+                                            float totalWeights, float nextWeight,
+                                            SolverVariable variableStartA, int marginStartA,
+                                            SolverVariable variableEndA, int marginEndA,
+                                            SolverVariable variableStartB, int marginStartB,
+                                            SolverVariable variableEndB, int marginEndB) {
         if (totalWeights == 0 || (currentWeight == nextWeight)) {
             // endA - startA + marginStartA + marginEndA
             //      == endB - startB + marginStartB + marginEndB
@@ -404,8 +472,8 @@ public class ArrayRow implements LinearSystem.Row {
     }
 
     ArrayRow createRowCentering(SolverVariable variableA, SolverVariable variableB,
-            int marginA, float bias, SolverVariable variableC,
-            SolverVariable variableD, int marginB) {
+                                int marginA, float bias, SolverVariable variableC,
+                                SolverVariable variableD, int marginB) {
         if (variableB == variableC) {
             // centering on the same position
             // B - A == D - B
@@ -453,6 +521,9 @@ public class ArrayRow implements LinearSystem.Row {
 
     /**
      * @TODO: add description
+     * @param system
+     * @param strength
+     * @return
      */
     public ArrayRow addError(LinearSystem system, int strength) {
         variables.put(system.createErrorVariable(strength, "ep"), 1);
@@ -461,7 +532,7 @@ public class ArrayRow implements LinearSystem.Row {
     }
 
     ArrayRow createRowDimensionPercent(SolverVariable variableA,
-            SolverVariable variableC, float percent) {
+                                       SolverVariable variableC, float percent) {
         variables.put(variableA, -1);
         variables.put(variableC, percent);
         return this;
@@ -475,12 +546,12 @@ public class ArrayRow implements LinearSystem.Row {
      * @param variableB variable B
      * @param variableC variable C
      * @param variableD variable D
-     * @param ratio     ratio between AB and CD
+     * @param ratio ratio between AB and CD
      * @return the row
      */
     public ArrayRow createRowDimensionRatio(SolverVariable variableA, SolverVariable variableB,
-            SolverVariable variableC, SolverVariable variableD,
-            float ratio) {
+                                            SolverVariable variableC, SolverVariable variableD,
+                                            float ratio) {
         // A = B + (C - D) * ratio
         variables.put(variableA, -1);
         variables.put(variableB, 1);
@@ -491,12 +562,19 @@ public class ArrayRow implements LinearSystem.Row {
 
     /**
      * Create a constraint to express At + (Ab-At)/2 = Bt + (Bb-Bt)/2 - angle
+     *
+     * @param at
+     * @param ab
+     * @param bt
+     * @param bb
+     * @param angleComponent
+     * @return
      */
     public ArrayRow createRowWithAngle(SolverVariable at,
-            SolverVariable ab,
-            SolverVariable bt,
-            SolverVariable bb,
-            float angleComponent) {
+                                       SolverVariable ab,
+                                       SolverVariable bt,
+                                       SolverVariable bb,
+                                       float angleComponent) {
         variables.put(bt, 0.5f);
         variables.put(bb, 0.5f);
         variables.put(at, -0.5f);
@@ -616,7 +694,8 @@ public class ArrayRow implements LinearSystem.Row {
      * in one of the rows. This function is called while choosing the subject of a new row.
      *
      * @param variable the variable to check for
-     * @param system   the linear system we check
+     * @param system the linear system we check
+     * @return
      */
     private boolean isNew(SolverVariable variable, LinearSystem system) {
         if (FULL_NEW_CHECK) {
@@ -664,8 +743,8 @@ public class ArrayRow implements LinearSystem.Row {
 
     @Override
     public void updateFromRow(LinearSystem system,
-            ArrayRow definition,
-            boolean removeFromDefinition) {
+                              ArrayRow definition,
+                              boolean removeFromDefinition) {
         float value = variables.use(definition, removeFromDefinition);
 
         mConstantValue += definition.mConstantValue * value;
@@ -681,10 +760,13 @@ public class ArrayRow implements LinearSystem.Row {
 
     /**
      * @TODO: add description
+     * @param system
+     * @param variable
+     * @param removeFromDefinition
      */
     public void updateFromFinalVariable(LinearSystem system,
-            SolverVariable variable,
-            boolean removeFromDefinition) {
+                                        SolverVariable variable,
+                                        boolean removeFromDefinition) {
         if (variable == null || !variable.isFinalValue) {
             return;
         }
@@ -703,10 +785,13 @@ public class ArrayRow implements LinearSystem.Row {
 
     /**
      * @TODO: add description
+     * @param system
+     * @param variable
+     * @param removeFromDefinition
      */
     public void updateFromSynonymVariable(LinearSystem system,
-            SolverVariable variable,
-            boolean removeFromDefinition) {
+                                          SolverVariable variable,
+                                          boolean removeFromDefinition) {
         if (variable == null || !variable.mIsSynonym) {
             return;
         }
@@ -772,6 +857,8 @@ public class ArrayRow implements LinearSystem.Row {
 
     /**
      * @TODO: add description
+     * @param exclude
+     * @return
      */
     public SolverVariable pickPivot(SolverVariable exclude) {
         return pickPivotInVariables(null, exclude);
@@ -791,6 +878,7 @@ public class ArrayRow implements LinearSystem.Row {
 
     /**
      * Used to initiate a goal from a given row (to see if we can remove an extra var)
+     * @param row
      */
     @Override
     public void initFromRow(@SuppressWarnings("HiddenTypeParameter") LinearSystem.Row row) {

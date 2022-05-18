@@ -71,6 +71,8 @@ public class ConstraintWidgetContainer extends WidgetContainer {
 
     /**
      * @TODO: add description
+     * @param optimizeWrap
+     * @return
      */
     public boolean directMeasure(boolean optimizeWrap) {
         return mDependencyGraph.directMeasure(optimizeWrap);
@@ -94,6 +96,8 @@ public class ConstraintWidgetContainer extends WidgetContainer {
 
     /**
      * @TODO: add description
+     * @param optimizeWrap
+     * @return
      */
     public boolean directMeasureSetup(boolean optimizeWrap) {
         return mDependencyGraph.directMeasureSetup(optimizeWrap);
@@ -101,6 +105,9 @@ public class ConstraintWidgetContainer extends WidgetContainer {
 
     /**
      * @TODO: add description
+     * @param optimizeWrap
+     * @param orientation
+     * @return
      */
     public boolean directMeasureWithOrientation(boolean optimizeWrap, int orientation) {
         return mDependencyGraph.directMeasureWithOrientation(optimizeWrap, orientation);
@@ -118,10 +125,18 @@ public class ConstraintWidgetContainer extends WidgetContainer {
 
     /**
      * Measure the layout
+     *
+     * @param optimizationLevel
+     * @param widthMode
+     * @param widthSize
+     * @param heightMode
+     * @param heightSize
+     * @param paddingX
+     * @param paddingY
      */
     public long measure(int optimizationLevel, int widthMode, int widthSize,
-            int heightMode, int heightSize, int lastMeasureWidth,
-            int lastMeasureHeight, int paddingX, int paddingY) {
+                        int heightMode, int heightSize, int lastMeasureWidth,
+                        int lastMeasureHeight, int paddingX, int paddingY) {
         mPaddingLeft = paddingX;
         mPaddingTop = paddingY;
         return mBasicMeasureSolver.solverMeasure(this, optimizationLevel, paddingX, paddingY,
@@ -140,6 +155,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
 
     /**
      * @TODO: add description
+     * @param measurer
      */
     public void setMeasurer(BasicMeasure.Measurer measurer) {
         mMeasurer = measurer;
@@ -155,6 +171,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
 
     /**
      * @TODO: add description
+     * @param metrics
      */
     public void fillMetrics(Metrics metrics) {
         mMetrics = metrics;
@@ -230,11 +247,13 @@ public class ConstraintWidgetContainer extends WidgetContainer {
      */
     public void setOptimizationLevel(int value) {
         mOptimizationLevel = value;
-        LinearSystem.USE_DEPENDENCY_ORDERING = optimizeFor(Optimizer.OPTIMIZATION_DEPENDENCY_ORDERING);
+        mSystem.USE_DEPENDENCY_ORDERING = optimizeFor(Optimizer.OPTIMIZATION_DEPENDENCY_ORDERING);
     }
 
     /**
      * Returns the current optimization level
+     *
+     * @return
      */
     public int getOptimizationLevel() {
         return mOptimizationLevel;
@@ -242,6 +261,9 @@ public class ConstraintWidgetContainer extends WidgetContainer {
 
     /**
      * Returns true if the given feature should be optimized
+     *
+     * @param feature
+     * @return
      */
     public boolean optimizeFor(int feature) {
         return (mOptimizationLevel & feature) == feature;
@@ -249,6 +271,8 @@ public class ConstraintWidgetContainer extends WidgetContainer {
 
     /**
      * Specify the xml type for the container
+     *
+     * @return
      */
     @Override
     public String getType() {
@@ -296,6 +320,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
 
     /**
      * @TODO: add description
+     * @param left
      */
     public void addHorizontalWrapMinVariable(ConstraintAnchor left) {
         if (mHorizontalWrapMin == null || mHorizontalWrapMin.get() == null
@@ -313,6 +338,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
 
     /**
      * @TODO: add description
+     * @param right
      */
     public void addHorizontalWrapMaxVariable(ConstraintAnchor right) {
         if (mHorizontalWrapMax == null || mHorizontalWrapMax.get() == null
@@ -537,12 +563,18 @@ public class ConstraintWidgetContainer extends WidgetContainer {
 
     /**
      * @TODO: add description
+     * @param level
+     * @param widget
+     * @param measurer
+     * @param measure
+     * @param measureStrategy
+     * @return
      */
     public static boolean measure(int level,
-            ConstraintWidget widget,
-            BasicMeasure.Measurer measurer,
-            BasicMeasure.Measure measure,
-            int measureStrategy) {
+                                  ConstraintWidget widget,
+                                  BasicMeasure.Measurer measurer,
+                                  BasicMeasure.Measure measure,
+                                  int measureStrategy) {
         if (DEBUG) {
             System.out.println(Direct.ls(level) + "(M) call to measure " + widget.getDebugName());
         }
@@ -822,9 +854,12 @@ public class ConstraintWidgetContainer extends WidgetContainer {
                 || optimizeFor(Optimizer.OPTIMIZATION_GRAPH_WRAP);
 
         mSystem.graphOptimizer = false;
+        mSystem.newgraphOptimizer = false;
 
-        mSystem.newgraphOptimizer = mOptimizationLevel != Optimizer.OPTIMIZATION_NONE
-                && useGraphOptimizer;
+        if (mOptimizationLevel != Optimizer.OPTIMIZATION_NONE
+                && useGraphOptimizer) {
+            mSystem.newgraphOptimizer = true;
+        }
 
         int countSolve = 0;
         final List<ConstraintWidget> allChildren = mChildren;
@@ -1093,7 +1128,8 @@ public class ConstraintWidgetContainer extends WidgetContainer {
     /**
      * Add the chain which constraintWidget is part of. Called by ConstraintWidget::addToSolver()
      *
-     * @param type HORIZONTAL or VERTICAL chain
+     * @param constraintWidget
+     * @param type             HORIZONTAL or VERTICAL chain
      */
     void addChain(ConstraintWidget constraintWidget, int type) {
         ConstraintWidget widget = constraintWidget;
@@ -1136,6 +1172,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
 
     /**
      * Keep track of the # of passes
+     * @param pass
      */
     public void setPass(int pass) {
         this.mPass = pass;
@@ -1143,6 +1180,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
 
     /**
      * @TODO: add description
+     * @param ret
      */
     public void getSceneString(StringBuilder ret) {
 

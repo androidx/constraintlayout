@@ -72,6 +72,7 @@ public class WidgetFrame {
 
     /**
      * @TODO: add description
+     * @return
      */
     public int width() {
         return Math.max(0, right - left);
@@ -79,6 +80,7 @@ public class WidgetFrame {
 
     /**
      * @TODO: add description
+     * @return
      */
     public int height() {
         return Math.max(0, bottom - top);
@@ -102,6 +104,7 @@ public class WidgetFrame {
 
     /**
      * @TODO: add description
+     * @param frame
      */
     public void updateAttributes(WidgetFrame frame) {
         pivotX = frame.pivotX;
@@ -139,14 +142,21 @@ public class WidgetFrame {
 
     /**
      * @TODO: add description
+     * @param parentWidth
+     * @param parentHeight
+     * @param frame
+     * @param start
+     * @param end
+     * @param transition
+     * @param progress
      */
     public static void interpolate(int parentWidth,
-            int parentHeight,
-            WidgetFrame frame,
-            WidgetFrame start,
-            WidgetFrame end,
-            Transition transition,
-            float progress) {
+                                   int parentHeight,
+                                   WidgetFrame frame,
+                                   WidgetFrame start,
+                                   WidgetFrame end,
+                                   Transition transition,
+                                   float progress) {
         int frameNumber = (int) (progress * 100);
         int startX = start.left;
         int startY = start.top;
@@ -296,6 +306,7 @@ public class WidgetFrame {
 
     /**
      * @TODO: add description
+     * @return
      */
     public float centerX() {
         return left + (right - left) / 2f;
@@ -303,6 +314,7 @@ public class WidgetFrame {
 
     /**
      * @TODO: add description
+     * @return
      */
     public float centerY() {
         return top + (bottom - top) / 2f;
@@ -310,6 +322,7 @@ public class WidgetFrame {
 
     /**
      * @TODO: add description
+     * @return
      */
     public WidgetFrame update() {
         if (widget != null) {
@@ -325,6 +338,8 @@ public class WidgetFrame {
 
     /**
      * @TODO: add description
+     * @param widget
+     * @return
      */
     public WidgetFrame update(ConstraintWidget widget) {
         if (widget == null) {
@@ -338,6 +353,8 @@ public class WidgetFrame {
 
     /**
      * @TODO: add description
+     * @param name
+     * @param color
      */
     public void addCustomColor(String name, int color) {
         setCustomAttribute(name, TypedValues.Custom.TYPE_COLOR, color);
@@ -345,6 +362,8 @@ public class WidgetFrame {
 
     /**
      * @TODO: add description
+     * @param name
+     * @return
      */
     public int getCustomColor(String name) {
         if (mCustom.containsKey(name)) {
@@ -355,6 +374,8 @@ public class WidgetFrame {
 
     /**
      * @TODO: add description
+     * @param name
+     * @param value
      */
     public void addCustomFloat(String name, float value) {
         setCustomAttribute(name, TypedValues.Custom.TYPE_FLOAT, value);
@@ -362,6 +383,8 @@ public class WidgetFrame {
 
     /**
      * @TODO: add description
+     * @param name
+     * @return
      */
     public float getCustomFloat(String name) {
         if (mCustom.containsKey(name)) {
@@ -372,6 +395,9 @@ public class WidgetFrame {
 
     /**
      * @TODO: add description
+     * @param name
+     * @param type
+     * @param value
      */
     public void setCustomAttribute(String name, int type, float value) {
         if (mCustom.containsKey(name)) {
@@ -383,6 +409,9 @@ public class WidgetFrame {
 
     /**
      * @TODO: add description
+     * @param name
+     * @param type
+     * @param value
      */
     public void setCustomAttribute(String name, int type, int value) {
         if (mCustom.containsKey(name)) {
@@ -394,6 +423,9 @@ public class WidgetFrame {
 
     /**
      * @TODO: add description
+     * @param name
+     * @param type
+     * @param value
      */
     public void setCustomAttribute(String name, int type, boolean value) {
         if (mCustom.containsKey(name)) {
@@ -405,6 +437,9 @@ public class WidgetFrame {
 
     /**
      * @TODO: add description
+     * @param name
+     * @param type
+     * @param value
      */
     public void setCustomAttribute(String name, int type, String value) {
         if (mCustom.containsKey(name)) {
@@ -416,6 +451,8 @@ public class WidgetFrame {
 
     /**
      * @TODO: add description
+     * @param name
+     * @return
      */
     public CustomVariable getCustomAttribute(String name) {
         return mCustom.get(name);
@@ -427,6 +464,10 @@ public class WidgetFrame {
 
     /**
      * @TODO: add description
+     * @param key
+     * @param value
+     * @return
+     * @throws CLParsingException
      */
     public boolean setValue(String key, CLElement value) throws CLParsingException {
         switch (key) {
@@ -493,6 +534,7 @@ public class WidgetFrame {
 
     /**
      * @TODO: add description
+     * @return
      */
     public String getId() {
         if (widget == null) {
@@ -524,6 +566,8 @@ public class WidgetFrame {
 
     /**
      * @TODO: add description
+     * @param ret
+     * @return
      */
     public StringBuilder serialize(StringBuilder ret) {
         return serialize(ret, false);
@@ -531,6 +575,10 @@ public class WidgetFrame {
 
     /**
      * If true also send the phone orientation
+     *
+     * @param ret
+     * @param sendPhoneOrientation
+     * @return
      */
     public StringBuilder serialize(StringBuilder ret, boolean sendPhoneOrientation) {
         WidgetFrame frame = this;
@@ -660,6 +708,7 @@ public class WidgetFrame {
 
     /**
      * For debugging only
+     * @param str
      */
     void logv(String str) {
         StackTraceElement s = new Throwable().getStackTrace()[1];
@@ -676,6 +725,8 @@ public class WidgetFrame {
 
     /**
      * @TODO: add description
+     * @param valueAt
+     * @param mTempValues
      */
     public void setCustomValue(CustomAttribute valueAt, float[] mTempValues) {
     }

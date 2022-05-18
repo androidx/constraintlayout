@@ -736,7 +736,7 @@ public class WidgetsPositioningTest {
         assertEquals(a.getLeft() - root.getLeft(), root.getRight() - a.getRight());
         assertEquals(a.getTop() - root.getTop(), root.getBottom() - a.getBottom());
     }
-    /*
+     /*
      * Insert the widgets in all permutations
      * (to test that the insert order
      * doesn't impact the resolution)

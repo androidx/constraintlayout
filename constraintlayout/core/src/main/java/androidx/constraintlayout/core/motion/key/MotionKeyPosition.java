@@ -58,7 +58,7 @@ public class MotionKeyPosition extends MotionKey {
     }
 
     private void calcPathPosition(float startX, float startY,
-            float endX, float endY) {
+                                  float endX, float endY) {
         float pathVectorX = endX - startX;
         float pathVectorY = endY - startY;
         float perpendicularX = -pathVectorY;
@@ -68,7 +68,7 @@ public class MotionKeyPosition extends MotionKey {
     }
 
     private void calcCartesianPosition(float startX, float startY,
-            float endX, float endY) {
+                                       float endX, float endY) {
         float pathVectorX = endX - startX;
         float pathVectorY = endY - startY;
         float dxdx = (Float.isNaN(mPercentX)) ? 0 : mPercentX;
@@ -89,14 +89,21 @@ public class MotionKeyPosition extends MotionKey {
 
     /**
      * @TODO: add description
+     * @param view
+     * @param start
+     * @param end
+     * @param x
+     * @param y
+     * @param attribute
+     * @param value
      */
     public void positionAttributes(MotionWidget view,
-            FloatRect start,
-            FloatRect end,
-            float x,
-            float y,
-            String[] attribute,
-            float[] value) {
+                                   FloatRect start,
+                                   FloatRect end,
+                                   float x,
+                                   float y,
+                                   String[] attribute,
+                                   float[] value) {
         switch (mPositionType) {
 
             case TYPE_PATH:
@@ -114,11 +121,11 @@ public class MotionKeyPosition extends MotionKey {
     }
 
     void positionPathAttributes(FloatRect start,
-            FloatRect end,
-            float x,
-            float y,
-            String[] attribute,
-            float[] value) {
+                                FloatRect end,
+                                float x,
+                                float y,
+                                String[] attribute,
+                                float[] value) {
         float startCenterX = start.centerX();
         float startCenterY = start.centerY();
         float endCenterX = end.centerX();
@@ -151,12 +158,12 @@ public class MotionKeyPosition extends MotionKey {
     }
 
     void positionScreenAttributes(MotionWidget view,
-            FloatRect start,
-            FloatRect end,
-            float x,
-            float y,
-            String[] attribute,
-            float[] value) {
+                                  FloatRect start,
+                                  FloatRect end,
+                                  float x,
+                                  float y,
+                                  String[] attribute,
+                                  float[] value) {
         float startCenterX = start.centerX();
         float startCenterY = start.centerY();
         float endCenterX = end.centerX();
@@ -184,11 +191,11 @@ public class MotionKeyPosition extends MotionKey {
     }
 
     void positionCartAttributes(FloatRect start,
-            FloatRect end,
-            float x,
-            float y,
-            String[] attribute,
-            float[] value) {
+                                FloatRect end,
+                                float x,
+                                float y,
+                                String[] attribute,
+                                float[] value) {
         float startCenterX = start.centerX();
         float startCenterY = start.centerY();
         float endCenterX = end.centerX();
@@ -213,21 +220,33 @@ public class MotionKeyPosition extends MotionKey {
 
     /**
      * @TODO: add description
+     * @param layoutWidth
+     * @param layoutHeight
+     * @param start
+     * @param end
+     * @param x
+     * @param y
+     * @return
      */
     public boolean intersects(int layoutWidth,
-            int layoutHeight,
-            FloatRect start,
-            FloatRect end,
-            float x,
-            float y) {
+                              int layoutHeight,
+                              FloatRect start,
+                              FloatRect end,
+                              float x,
+                              float y) {
         calcPosition(layoutWidth, layoutHeight, start.centerX(),
                 start.centerY(), end.centerX(), end.centerY());
-        return (Math.abs(x - mCalculatedPositionX) < SELECTION_SLOPE)
-                && (Math.abs(y - mCalculatedPositionY) < SELECTION_SLOPE);
+        if ((Math.abs(x - mCalculatedPositionX) < SELECTION_SLOPE)
+                && (Math.abs(y - mCalculatedPositionY) < SELECTION_SLOPE)) {
+            return true;
+        }
+        return false;
     }
 
     /**
      * @TODO: add description
+     * @param src
+     * @return
      */
     public MotionKey copy(MotionKey src) {
         super.copy(src);
@@ -248,17 +267,18 @@ public class MotionKeyPosition extends MotionKey {
 
     /**
      * @TODO: add description
+     * @return
      */
     public MotionKey clone() {
         return new MotionKeyPosition().copy(this);
     }
 
     void calcPosition(int layoutWidth,
-            int layoutHeight,
-            float startX,
-            float startY,
-            float endX,
-            float endY) {
+                      int layoutHeight,
+                      float startX,
+                      float startY,
+                      float endX,
+                      float endY) {
         switch (mPositionType) {
             case TYPE_SCREEN:
                 calcScreenPosition(layoutWidth, layoutHeight);
@@ -280,8 +300,8 @@ public class MotionKeyPosition extends MotionKey {
     }
 
     /**
-     * @param splines splines to write values to
      * @TODO: add description
+     * @param splines splines to write values to
      */
     public void addValues(HashMap<String, SplineSet> splines) {
     }
@@ -334,7 +354,7 @@ public class MotionKeyPosition extends MotionKey {
     public boolean setValue(int type, String value) {
         switch (type) {
             case PositionType.TYPE_TRANSITION_EASING:
-                mTransitionEasing = value;
+                mTransitionEasing = value.toString();
                 break;
             default:
                 return super.setValue(type, value);

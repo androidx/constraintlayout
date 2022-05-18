@@ -182,7 +182,6 @@ public class MotionKeyPositionTest {
 
         assertEquals("400, 325, 460, 385", res.toString());
     }
-
     class Scene {
         MotionWidget mMW1 = new MotionWidget();
         MotionWidget mMW2 = new MotionWidget();
@@ -211,7 +210,6 @@ public class MotionKeyPositionTest {
             }
         }
     }
-
     @Test
     public void keyPosition3x() {
         Scene s = new Scene();

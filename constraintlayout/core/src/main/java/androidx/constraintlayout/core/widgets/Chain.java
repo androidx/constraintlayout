@@ -38,10 +38,10 @@ public class Chain {
     /**
      * Apply specific rules for dealing with chains of widgets.
      * Chains are defined as a list of widget linked together with bi-directional connections
-     *
-     * @param constraintWidgetContainer root container
-     * @param system                    the linear system we add the equations to
-     * @param orientation               HORIZONTAL or VERTICAL
+     *  @param constraintWidgetContainer root container
+     * @param system the linear system we add the equations to
+     * @param widgets
+     * @param orientation HORIZONTAL or VERTICAL
      */
     public static void applyChainConstraints(
             ConstraintWidgetContainer constraintWidgetContainer,
@@ -80,14 +80,14 @@ public class Chain {
      * Apply specific rules for dealing with chains of widgets.
      * Chains are defined as a list of widget linked together with bi-directional connections
      *
-     * @param container   the root container
-     * @param system      the linear system we add the equations to
+     * @param container the root container
+     * @param system the linear system we add the equations to
      * @param orientation HORIZONTAL or VERTICAL
-     * @param offset      0 or 2 to accommodate for HORIZONTAL / VERTICAL
-     * @param chainHead   a chain represented by its main elements
+     * @param offset 0 or 2 to accommodate for HORIZONTAL / VERTICAL
+     * @param chainHead a chain represented by its main elements
      */
     static void applyChainConstraints(ConstraintWidgetContainer container, LinearSystem system,
-            int orientation, int offset, ChainHead chainHead) {
+                                      int orientation, int offset, ChainHead chainHead) {
         ConstraintWidget first = chainHead.mFirst;
         ConstraintWidget last = chainHead.mLast;
         ConstraintWidget firstVisibleWidget = chainHead.mFirstVisibleWidget;
@@ -121,7 +121,7 @@ public class Chain {
 
         if (USE_CHAIN_OPTIMIZATION && !isWrapContent
                 && Direct.solveChain(container, system, orientation, offset, chainHead,
-                isChainSpread, isChainSpreadInside, isChainPacked)) {
+                    isChainSpread, isChainSpreadInside, isChainPacked)) {
             if (LinearSystem.FULL_DEBUG) {
                 System.out.println("### CHAIN FULLY SOLVED! ###");
             }
@@ -143,8 +143,8 @@ public class Chain {
             int margin = begin.getMargin();
             boolean isSpreadOnly = widget.mListDimensionBehaviors[orientation]
                     == DimensionBehaviour.MATCH_CONSTRAINT
-                    && widget.mResolvedMatchConstraintDefault[orientation]
-                    == MATCH_CONSTRAINT_SPREAD;
+                        && widget.mResolvedMatchConstraintDefault[orientation]
+                            == MATCH_CONSTRAINT_SPREAD;
 
             if (begin.mTarget != null && widget != first) {
                 margin += begin.mTarget.getMargin();
@@ -176,7 +176,7 @@ public class Chain {
             if (isWrapContent) {
                 if (widget.getVisibility() != ConstraintWidget.GONE
                         && widget.mListDimensionBehaviors[orientation]
-                        == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT) {
+                            == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT) {
                     system.addGreaterThan(widget.mListAnchors[offset + 1].mSolverVariable,
                             widget.mListAnchors[offset].mSolverVariable, 0,
                             SolverVariable.STRENGTH_EQUALITY);
@@ -209,8 +209,8 @@ public class Chain {
             ConstraintAnchor end = lastVisibleWidget.mListAnchors[offset + 1];
             boolean isSpreadOnly = lastVisibleWidget.mListDimensionBehaviors[orientation]
                     == DimensionBehaviour.MATCH_CONSTRAINT
-                    && lastVisibleWidget.mResolvedMatchConstraintDefault[orientation]
-                    == MATCH_CONSTRAINT_SPREAD;
+                            && lastVisibleWidget.mResolvedMatchConstraintDefault[orientation]
+                                == MATCH_CONSTRAINT_SPREAD;
             if (isSpreadOnly && !isChainPacked && end.mTarget.mOwner == container) {
                 system.addEquality(end.mSolverVariable, end.mTarget.mSolverVariable,
                         -end.getMargin(), SolverVariable.STRENGTH_EQUALITY);

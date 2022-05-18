@@ -23,6 +23,7 @@ public class ViewState {
 
     /**
      * @TODO: add description
+     * @param v
      */
     public void getState(MotionWidget v) {
         left = (int) v.getLeft();
@@ -34,6 +35,7 @@ public class ViewState {
 
     /**
      * @TODO: add description
+     * @return
      */
     public int width() {
         return right - left;
@@ -41,6 +43,7 @@ public class ViewState {
 
     /**
      * @TODO: add description
+     * @return
      */
     public int height() {
         return bottom - top;

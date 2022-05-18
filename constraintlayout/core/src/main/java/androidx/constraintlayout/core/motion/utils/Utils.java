@@ -22,6 +22,8 @@ import java.net.Socket;
 public class Utils {
     /**
      * @TODO: add description
+     * @param tag
+     * @param value
      */
     public static void log(String tag, String value) {
         System.out.println(tag + " : " + value);
@@ -29,6 +31,8 @@ public class Utils {
 
     /**
      * @TODO: add description
+     * @param tag
+     * @param value
      */
     public static void loge(String tag, String value) {
         System.err.println(tag + " : " + value);
@@ -36,6 +40,7 @@ public class Utils {
 
     /**
      * @TODO: add description
+     * @param str
      */
     public static void socketSend(String str) {
         try {
@@ -59,6 +64,8 @@ public class Utils {
 
     /**
      * @TODO: add description
+     * @param value
+     * @return
      */
     public int getInterpolatedColor(float[] value) {
         int r = clamp((int) ((float) Math.pow(value[0], 1.0 / 2.2) * 255.0f));
@@ -71,6 +78,11 @@ public class Utils {
 
     /**
      * @TODO: add description
+     * @param r
+     * @param g
+     * @param b
+     * @param a
+     * @return
      */
     public static int rgbaTocColor(float r, float g, float b, float a) {
         int ir = clamp((int) (r * 255f));
@@ -80,22 +92,22 @@ public class Utils {
         int color = (ia << 24) | (ir << 16) | (ig << 8) | ib;
         return color;
     }
-
     public interface DebugHandle {
         /**
          * @TODO: add description
+         * @param str
          */
         void message(String str);
     }
-
     static DebugHandle sOurHandle;
-
     public static void setDebugHandle(DebugHandle handle) {
         sOurHandle = handle;
     }
 
     /**
      * @TODO: add description
+     * @param msg
+     * @param n
      */
     public static void logStack(String msg, int n) {
         StackTraceElement[] st = new Throwable().getStackTrace();
@@ -112,12 +124,13 @@ public class Utils {
 
     /**
      * @TODO: add description
+     * @param str
      */
     public static void log(String str) {
         StackTraceElement s = new Throwable().getStackTrace()[1];
-        String methodName = s.getMethodName();
+        String methodName =  s.getMethodName();
         methodName = (methodName + "                  ").substring(0, 17);
-        String npad = "    ".substring(Integer.toString(s.getLineNumber()).length());
+        String  npad = "    ".substring(Integer.toString(s.getLineNumber()).length());
         String ss = ".(" + s.getFileName() + ":" + s.getLineNumber() + ")" + npad + methodName;
         System.out.println(ss + " " + str);
         if (sOurHandle != null) {

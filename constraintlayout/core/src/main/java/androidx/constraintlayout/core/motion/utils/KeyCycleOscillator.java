@@ -41,6 +41,8 @@ public abstract class KeyCycleOscillator {
 
     /**
      * @TODO: add description
+     * @param attribute
+     * @return
      */
     public static KeyCycleOscillator makeWidgetCycle(String attribute) {
         if (attribute.equals(TypedValues.AttributesType.S_PATH_ROTATE)) {
@@ -79,6 +81,10 @@ public abstract class KeyCycleOscillator {
 
         /**
          * @TODO: add description
+         * @param view
+         * @param t
+         * @param dx
+         * @param dy
          */
         public void setPathRotate(MotionWidget view, float t, double dx, double dy) {
             view.setRotationZ(get(t) + (float) Math.toDegrees(Math.atan2(dy, dx)));
@@ -87,6 +93,7 @@ public abstract class KeyCycleOscillator {
 
     /**
      * @TODO: add description
+     * @return
      */
     public boolean variesByPath() {
         return mVariesBy == 1;
@@ -124,6 +131,8 @@ public abstract class KeyCycleOscillator {
 
     /**
      * @TODO: add description
+     * @param t
+     * @return
      */
     public float get(float t) {
         return (float) mCycleOscillator.getValues(t);
@@ -131,6 +140,8 @@ public abstract class KeyCycleOscillator {
 
     /**
      * @TODO: add description
+     * @param position
+     * @return
      */
     public float getSlope(float position) {
         return (float) mCycleOscillator.getSlope(position);
@@ -155,14 +166,14 @@ public abstract class KeyCycleOscillator {
      * @param custom        The ConstraintAttribute used to set the value
      */
     public void setPoint(int framePosition,
-            int shape,
-            String waveString,
-            int variesBy,
-            float period,
-            float offset,
-            float phase,
-            float value,
-            Object custom) {
+                         int shape,
+                         String waveString,
+                         int variesBy,
+                         float period,
+                         float offset,
+                         float phase,
+                         float value,
+                         Object custom) {
         mWavePoints.add(new WavePoint(framePosition, period, offset, phase, value));
         if (variesBy != -1) {
             mVariesBy = variesBy;
@@ -182,13 +193,13 @@ public abstract class KeyCycleOscillator {
      * @param value         the adder
      */
     public void setPoint(int framePosition,
-            int shape,
-            String waveString,
-            int variesBy,
-            float period,
-            float offset,
-            float phase,
-            float value) {
+                         int shape,
+                         String waveString,
+                         int variesBy,
+                         float period,
+                         float offset,
+                         float phase,
+                         float value) {
         mWavePoints.add(new WavePoint(framePosition, period, offset, phase, value));
         if (variesBy != -1) {
             mVariesBy = variesBy;
@@ -199,6 +210,7 @@ public abstract class KeyCycleOscillator {
 
     /**
      * @TODO: add description
+     * @param pathLength
      */
     public void setup(float pathLength) {
         int count = mWavePoints.size();
@@ -384,14 +396,18 @@ public abstract class KeyCycleOscillator {
         }
 
         /**
-         *
+         * @param index
+         * @param framePosition
+         * @param wavePeriod
+         * @param offset
+         * @param values
          */
         public void setPoint(int index,
-                int framePosition,
-                float wavePeriod,
-                float offset,
-                float phase,
-                float values) {
+                             int framePosition,
+                             float wavePeriod,
+                             float offset,
+                             float phase,
+                             float values) {
             mPosition[index] = framePosition / 100.0;
             mPeriod[index] = wavePeriod;
             mOffsetArr[index] = offset;
@@ -431,6 +447,8 @@ public abstract class KeyCycleOscillator {
 
     /**
      * @TODO: add description
+     * @param widget
+     * @param t
      */
     public void setProperty(MotionWidget widget, float t) {
 

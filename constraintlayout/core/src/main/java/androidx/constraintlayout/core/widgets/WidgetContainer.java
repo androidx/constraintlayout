@@ -19,7 +19,6 @@ package androidx.constraintlayout.core.widgets;
 import androidx.constraintlayout.core.Cache;
 
 import java.util.ArrayList;
-
 /**
  * A container of ConstraintWidget
  */

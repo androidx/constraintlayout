@@ -15,8 +15,7 @@
  */
 package androidx.constraintlayout.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -90,7 +89,7 @@ public class LinearSystemTest {
     public void testPriorityBasic() {
         add(new LinearEquation(mLS).var(2, "Xm").equalsTo().var("Xl").plus("Xr"));
         add(new LinearEquation(mLS).var("Xl").plus(10).lowerThan().var("Xr"));
-        //       add(new LinearEquation(s).var("Xl").greaterThan().var(0));
+ //       add(new LinearEquation(s).var("Xl").greaterThan().var(0));
         add(new LinearEquation(mLS).var("Xr").lowerThan().var(100));
         add(new LinearEquation(mLS).var("Xm").equalsTo().var(50), 2);
         add(new LinearEquation(mLS).var("Xl").equalsTo().var(30), 1);

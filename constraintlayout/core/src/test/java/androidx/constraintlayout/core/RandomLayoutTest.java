@@ -55,6 +55,7 @@ public class RandomLayoutTest {
      * @param sizeRatio 0 = all small ones, 100 = all big ones
      * @param width     the width of the bounding rectangle
      * @param height    the height of the bounding rectangle
+     * @return
      */
     static ArrayList<Rectangle> random(long seed, int count, int sizeRatio, int width, int height) {
         ArrayList<Rectangle> recs = new ArrayList<Rectangle>();
@@ -181,6 +182,10 @@ public class RandomLayoutTest {
 
     /**
      * Compare two string containing comer separated integers
+     *
+     * @param a
+     * @param b
+     * @return
      */
     private boolean isSame(String a, String b) {
         if (a == null || b == null) {

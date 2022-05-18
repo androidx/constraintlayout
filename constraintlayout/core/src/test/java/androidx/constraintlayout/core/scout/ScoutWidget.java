@@ -35,12 +35,12 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
     private float mY;
     private float mWidth;
     private float mHeight;
-    private final float mBaseLine;
-    private final ScoutWidget mParent;
+    private float mBaseLine;
+    private ScoutWidget mParent;
     private float mRootDistance;
-    private final float[] mDistToRootCache = new float[]{-1, -1, -1, -1};
+    private float[] mDistToRootCache = new float[] { -1, -1, -1, -1 };
     ConstraintWidget mConstraintWidget;
-    private final boolean mKeepExistingConnections = true;
+    private boolean mKeepExistingConnections = true;
     private Rectangle mRectangle;
 
     public ScoutWidget(ConstraintWidget constraintWidget, ScoutWidget parent) {
@@ -59,6 +59,9 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
     /**
      * Sets the order root first
      * followed by outside to inside, top to bottom, left to right
+     *
+     * @param scoutWidget
+     * @return
      */
     @Override
     public int compareTo(ScoutWidget scoutWidget) {
@@ -88,6 +91,8 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
 
     /**
      * is this a guideline
+     *
+     * @return
      */
     public boolean isGuideline() {
         return mConstraintWidget instanceof Guideline;
@@ -95,6 +100,8 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
 
     /**
      * is guideline vertical
+     *
+     * @return
      */
     public boolean isVerticalGuideline() {
         if (mConstraintWidget instanceof Guideline) {
@@ -106,6 +113,8 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
 
     /**
      * is this a horizontal guide line on the image
+     *
+     * @return
      */
     public boolean isHorizontalGuideline() {
         if (mConstraintWidget instanceof Guideline) {
@@ -117,6 +126,9 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
 
     /**
      * Wrap an array of ConstraintWidgets into an array of InferWidgets
+     *
+     * @param array
+     * @return
      */
     public static ScoutWidget[] create(ConstraintWidget[] array) {
         ScoutWidget[] ret = new ScoutWidget[array.length];
@@ -214,6 +226,7 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
      * map integer direction to ConstraintAnchor.Type
      *
      * @param dir integer direction
+     * @return
      */
     private static ConstraintAnchor.Type lookupType(Direction dir) {
         switch (dir) {
@@ -250,7 +263,7 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
 
         if (mKeepExistingConnections && (anchor1.isConnected() || anchor2.isConnected())) {
             if (anchor1.isConnected() ^ anchor2.isConnected()) {
-                return false;
+                return  false;
             }
             if (anchor1.isConnected()
                     && (anchor1.getTarget().getOwner() != to1.mConstraintWidget)) {
@@ -315,7 +328,10 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
 
     /**
      * Get the gap between two specific edges of widgets
-     *
+     * @param widget1
+     * @param direction1
+     * @param widget2
+     * @param direction2
      * @return distance in dp
      */
     private static int gap(ConstraintWidget widget1, Direction direction1,
@@ -333,6 +349,9 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
 
     /**
      * Get the position of a edge of a widget
+     * @param widget
+     * @param direction
+     * @return
      */
     private static int getPos(ConstraintWidget widget, Direction direction) {
         switch (direction) {
@@ -383,14 +402,14 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
 
 
     private static void connect(ConstraintWidget fromWidget, ConstraintAnchor.Type fromType,
-            ConstraintWidget toWidget, ConstraintAnchor.Type toType, int gap) {
+                                ConstraintWidget toWidget, ConstraintAnchor.Type toType, int gap) {
         fromWidget.connect(fromType, toWidget, toType, gap);
 //        fromWidget.getAnchor(fromType).setConnectionCreator(ConstraintAnchor.SCOUT_CREATOR);
     }
 
     private static void connectWeak(ConstraintWidget fromWidget,
-            ConstraintAnchor.Type fromType, ConstraintWidget toWidget,
-            ConstraintAnchor.Type toType, int gap) {
+                                    ConstraintAnchor.Type fromType, ConstraintWidget toWidget,
+                                    ConstraintAnchor.Type toType, int gap) {
         fromWidget.connect(fromType, toWidget, toType, gap);
 //        fromWidget.connect(fromType, toWidget, toType, gap, ConstraintAnchor.Strength.WEAK);
 //        fromWidget.getAnchor(fromType).setConnectionCreator(ConstraintAnchor.SCOUT_CREATOR);
@@ -402,6 +421,7 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
      * @param dir  the direction of the connection
      * @param to   the widget to connect to
      * @param cDir the direction of
+     * @param gap
      * @return false if unable to apply
      */
     boolean setConstraint(int dir, ScoutWidget to, int cDir, float gap) {
@@ -413,7 +433,10 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
 
         if (mKeepExistingConnections) {
             if (anchor.isConnected()) {
-                return anchor.getTarget().getOwner() == to.mConstraintWidget;
+                if (anchor.getTarget().getOwner() != to.mConstraintWidget) {
+                    return false;
+                }
+                return true;
             }
             if (dir == Direction.BASE.getDirection()) {
                 if (mConstraintWidget.getAnchor(ConstraintAnchor.Type.BOTTOM).isConnected()) {
@@ -470,7 +493,10 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
         float gap = 8f;
 
         if (mKeepExistingConnections && anchor.isConnected()) {
-            return anchor.getTarget().getOwner() == to.mConstraintWidget;
+            if (anchor.getTarget().getOwner() != to.mConstraintWidget) {
+                return false;
+            }
+            return true;
         }
 
         if (anchor.isConnectionAllowed(to.mConstraintWidget)) {
@@ -489,6 +515,8 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
     /**
      * calculates the distance between two widgets (assumed to be rectangles)
      *
+     * @param a
+     * @param b
      * @return the distance between two widgets at there closest point to each other
      */
     static float distance(ScoutWidget a, ScoutWidget b) {
@@ -568,6 +596,10 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
     /**
      * Gets the neighbour in that direction or root
      * TODO better support for large widgets with several neighbouring widgets
+     *
+     * @param dir
+     * @param list
+     * @return
      */
     public ScoutWidget getNeighbor(Direction dir, ScoutWidget[] list) {
         ScoutWidget neigh = list[0];
@@ -671,6 +703,7 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
     /**
      * is the widet connected in that direction
      *
+     * @param direction
      * @return true if connected
      */
     public boolean isConnected(Direction direction) {
@@ -680,17 +713,23 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
     /**
      * is the distance to the Root Cached
      *
+     * @param direction
      * @return true if distance to root has been cached
      */
     private boolean isDistanceToRootCache(Direction direction) {
         int directionOrdinal = direction.getDirection();
         Float f = mDistToRootCache[directionOrdinal];
-        // depends on any comparison involving Float.NaN returns false
-        return f >= 0;
+        if (f < 0) {  // depends on any comparison involving Float.NaN returns false
+            return false;
+        }
+        return true;
     }
 
     /**
      * Get the cache distance to the root
+     *
+     * @param d
+     * @param value
      */
     private void cacheRootDistance(Direction d, float value) {
         mDistToRootCache[d.getDirection()] = value;
@@ -820,8 +859,8 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
     /**
      * Calculate the gap in to the nearest widget
      *
-     * @param direction the direction to check
-     * @param list      list of other widgets (root == list[0])
+     * @param direction  the direction to check
+     * @param list list of other widgets (root == list[0])
      * @return the distance on that side
      */
     public int gap(Direction direction, ScoutWidget[] list) {
@@ -924,7 +963,7 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
     };
 
     public int rootDistanceY() {
-        if (mConstraintWidget == null || mConstraintWidget.getParent() == null) {
+        if (mConstraintWidget == null ||  mConstraintWidget.getParent() == null) {
             return 0;
         }
         int rootHeight = mConstraintWidget.getParent().getHeight();

@@ -59,6 +59,7 @@ public abstract class TimeCycleSplineSet {
 
     /**
      * @param period cycles per second
+     * @return
      */
     protected float calcWave(float period) {
         float p = period;
@@ -92,6 +93,11 @@ public abstract class TimeCycleSplineSet {
 
     /**
      * @TODO: add description
+     * @param position
+     * @param value
+     * @param period
+     * @param shape
+     * @param offset
      */
     public void setPoint(int position, float value, float period, int shape, float offset) {
         mTimePoints[mCount] = position;
@@ -104,7 +110,7 @@ public abstract class TimeCycleSplineSet {
 
     public static class CustomSet extends TimeCycleSplineSet {
         String mAttributeName;
-        KeyFrameArray.CustomArray mConstraintAttributeList;
+        KeyFrameArray.CustomArray  mConstraintAttributeList;
         KeyFrameArray.FloatArray mWaveProperties = new KeyFrameArray.FloatArray();
         float[] mTempValues;
         float[] mCache;
@@ -116,6 +122,7 @@ public abstract class TimeCycleSplineSet {
 
         /**
          * @TODO: add description
+         * @param curveType
          */
         public void setup(int curveType) {
             int size = mConstraintAttributeList.size();
@@ -141,6 +148,11 @@ public abstract class TimeCycleSplineSet {
 
         /**
          * @TODO: add description
+         * @param position
+         * @param value
+         * @param period
+         * @param shape
+         * @param offset
          */
         public void setPoint(int position, float value, float period, int shape, float offset) {
             throw new RuntimeException("don't call for custom attribute "
@@ -149,12 +161,17 @@ public abstract class TimeCycleSplineSet {
 
         /**
          * @TODO: add description
+         * @param position
+         * @param value
+         * @param period
+         * @param shape
+         * @param offset
          */
         public void setPoint(int position,
-                CustomAttribute value,
-                float period,
-                int shape,
-                float offset) {
+                             CustomAttribute value,
+                             float period,
+                             int shape,
+                             float offset) {
             mConstraintAttributeList.append(position, value);
             mWaveProperties.append(position, new float[]{period, offset});
             mWaveShape = Math.max(mWaveShape, shape); // the highest value shape is chosen
@@ -162,6 +179,11 @@ public abstract class TimeCycleSplineSet {
 
         /**
          * @TODO: add description
+         * @param view
+         * @param t
+         * @param time
+         * @param cache
+         * @return
          */
         public boolean setProperty(MotionWidget view, float t, long time, KeyCache cache) {
             mCurveFit.getPos(t, mTempValues);
@@ -194,6 +216,7 @@ public abstract class TimeCycleSplineSet {
 
     /**
      * @TODO: add description
+     * @param curveType
      */
     public void setup(int curveType) {
         if (mCount == 0) {
@@ -270,6 +293,8 @@ public abstract class TimeCycleSplineSet {
     }
 
 
+
+
     public static class CustomVarSet extends TimeCycleSplineSet {
         String mAttributeName;
         KeyFrameArray.CustomVar mConstraintAttributeList;
@@ -284,6 +309,7 @@ public abstract class TimeCycleSplineSet {
 
         /**
          * @TODO: add description
+         * @param curveType
          */
         public void setup(int curveType) {
             int size = mConstraintAttributeList.size();
@@ -309,6 +335,11 @@ public abstract class TimeCycleSplineSet {
 
         /**
          * @TODO: add description
+         * @param position
+         * @param value
+         * @param period
+         * @param shape
+         * @param offset
          */
         public void setPoint(int position, float value, float period, int shape, float offset) {
             throw new RuntimeException("don't call for custom attribute "
@@ -317,12 +348,17 @@ public abstract class TimeCycleSplineSet {
 
         /**
          * @TODO: add description
+         * @param position
+         * @param value
+         * @param period
+         * @param shape
+         * @param offset
          */
         public void setPoint(int position,
-                CustomVariable value,
-                float period,
-                int shape,
-                float offset) {
+                             CustomVariable value,
+                             float period,
+                             int shape,
+                             float offset) {
             mConstraintAttributeList.append(position, value);
             mWaveProperties.append(position, new float[]{period, offset});
             mWaveShape = Math.max(mWaveShape, shape); // the highest value shape is chosen
@@ -330,6 +366,11 @@ public abstract class TimeCycleSplineSet {
 
         /**
          * @TODO: add description
+         * @param view
+         * @param t
+         * @param time
+         * @param cache
+         * @return
          */
         public boolean setProperty(MotionWidget view, float t, long time, KeyCache cache) {
             mCurveFit.getPos(t, mTempValues);

@@ -61,7 +61,7 @@ public class LinearSystem {
     /*
      * The goal that is used when minimizing the system.
      */
-    private final Row mGoal;
+    private Row mGoal;
 
     private int mTableSize = 32; // default table size for the allocation
     private int mMaxColumns = mTableSize;
@@ -106,6 +106,7 @@ public class LinearSystem {
 
     /**
      * @TODO: add description
+     * @param metrics
      */
     public void fillMetrics(Metrics metrics) {
         sMetrics = metrics;
@@ -117,24 +118,17 @@ public class LinearSystem {
 
     interface Row {
         SolverVariable getPivotCandidate(LinearSystem system, boolean[] avoid);
-
         void clear();
-
         void initFromRow(Row row);
-
         void addError(SolverVariable variable);
-
         void updateFromSystem(LinearSystem system);
-
         SolverVariable getKey();
-
         boolean isEmpty();
 
         void updateFromRow(LinearSystem system, ArrayRow definition, boolean b);
-
         void updateFromFinalVariable(LinearSystem system,
-                SolverVariable variable,
-                boolean removeFromDefinition);
+                                     SolverVariable variable,
+                                     boolean removeFromDefinition);
     }
 
     /*--------------------------------------------------------------------------------------------*/
@@ -232,6 +226,8 @@ public class LinearSystem {
 
     /**
      * @TODO: add description
+     * @param anchor
+     * @return
      */
     public SolverVariable createObjectVariable(Object anchor) {
         if (anchor == null) {
@@ -268,6 +264,7 @@ public class LinearSystem {
 
     /**
      * @TODO: add description
+     * @return
      */
     public ArrayRow createRow() {
         ArrayRow row;
@@ -294,6 +291,7 @@ public class LinearSystem {
 
     /**
      * @TODO: add description
+     * @return
      */
     public SolverVariable createSlackVariable() {
         if (sMetrics != null) {
@@ -312,6 +310,7 @@ public class LinearSystem {
 
     /**
      * @TODO: add description
+     * @return
      */
     public SolverVariable createExtraVariable() {
         if (sMetrics != null) {
@@ -372,6 +371,9 @@ public class LinearSystem {
 
     /**
      * @TODO: add description
+     * @param strength
+     * @param prefix
+     * @return
      */
     public SolverVariable createErrorVariable(int strength, String prefix) {
         if (sMetrics != null) {
@@ -392,7 +394,6 @@ public class LinearSystem {
 
     /**
      * Returns a SolverVariable instance of the given type
-     *
      * @param type type of the SolverVariable
      * @return instance of SolverVariable
      */
@@ -419,7 +420,6 @@ public class LinearSystem {
 
     /**
      * Simple accessor for the current goal. Used when minimizing the system's goal.
-     *
      * @return the current goal.
      */
     Row getGoal() {
@@ -440,6 +440,8 @@ public class LinearSystem {
 
     /**
      * @TODO: add description
+     * @param object
+     * @return
      */
     public int getObjectVariableValue(Object object) {
         ConstraintAnchor anchor = (ConstraintAnchor) object;
@@ -524,7 +526,6 @@ public class LinearSystem {
 
     /**
      * Minimize the given goal with the current system.
-     *
      * @param goal the goal to minimize.
      */
     void minimizeGoal(Row goal) throws Exception {
@@ -584,7 +585,6 @@ public class LinearSystem {
 
     /**
      * Add the equation to the system
-     *
      * @param row the equation we want to add expressed as a system row.
      */
     public void addConstraint(ArrayRow row) {
@@ -723,6 +723,7 @@ public class LinearSystem {
 
     /**
      * @TODO: add description
+     * @param row
      */
     public void removeRow(ArrayRow row) {
         if (row.mIsSimpleDefinition && row.mVariable != null) {
@@ -749,8 +750,8 @@ public class LinearSystem {
 
     /**
      * Optimize the system given a goal to minimize. The system should be in BFS form.
-     *
      * @param goal goal to optimize.
+     * @param b
      * @return number of iterations.
      */
     private int optimize(Row goal, boolean b) {
@@ -903,7 +904,6 @@ public class LinearSystem {
 
     /**
      * Make sure that the system is in Basic Feasible Solved form (BFS).
-     *
      * @param goal the row representing the system goal
      * @return number of iterations
      */
@@ -1169,7 +1169,6 @@ public class LinearSystem {
     public int getNumEquations() {
         return mNumRows;
     }
-
     @SuppressWarnings("unused")
     public int getNumVariables() {
         return mVariablesID;
@@ -1264,10 +1263,9 @@ public class LinearSystem {
 
     /**
      * Add an equation of the form a >= b + margin
-     *
-     * @param a        variable a
-     * @param b        variable b
-     * @param margin   margin
+     * @param a variable a
+     * @param b variable b
+     * @param margin margin
      * @param strength strength used
      */
     public void addGreaterThan(SolverVariable a, SolverVariable b, int margin, int strength) {
@@ -1288,11 +1286,15 @@ public class LinearSystem {
 
     /**
      * @TODO: add description
+     * @param a
+     * @param b
+     * @param margin
+     * @param hasMatchConstraintWidgets
      */
     public void addGreaterBarrier(SolverVariable a,
-            SolverVariable b,
-            int margin,
-            boolean hasMatchConstraintWidgets) {
+                                  SolverVariable b,
+                                  int margin,
+                                  boolean hasMatchConstraintWidgets) {
         if (DEBUG_CONSTRAINTS) {
             System.out.println("-> Barrier " + a + " >= " + b);
         }
@@ -1305,10 +1307,9 @@ public class LinearSystem {
 
     /**
      * Add an equation of the form a <= b + margin
-     *
-     * @param a        variable a
-     * @param b        variable b
-     * @param margin   margin
+     * @param a variable a
+     * @param b variable b
+     * @param margin margin
      * @param strength strength used
      */
     public void addLowerThan(SolverVariable a, SolverVariable b, int margin, int strength) {
@@ -1329,11 +1330,15 @@ public class LinearSystem {
 
     /**
      * @TODO: add description
+     * @param a
+     * @param b
+     * @param margin
+     * @param hasMatchConstraintWidgets
      */
     public void addLowerBarrier(SolverVariable a,
-            SolverVariable b,
-            int margin,
-            boolean hasMatchConstraintWidgets) {
+                                SolverVariable b,
+                                int margin,
+                                boolean hasMatchConstraintWidgets) {
         if (DEBUG_CONSTRAINTS) {
             System.out.println("-> Barrier " + a + " <= " + b);
         }
@@ -1346,18 +1351,17 @@ public class LinearSystem {
 
     /**
      * Add an equation of the form (1 - bias) * (a - b) = bias * (c - d)
-     *
-     * @param a        variable a
-     * @param b        variable b
-     * @param m1       margin 1
-     * @param bias     bias between ab - cd
-     * @param c        variable c
-     * @param d        variable d
-     * @param m2       margin 2
+     * @param a variable a
+     * @param b variable b
+     * @param m1 margin 1
+     * @param bias bias between ab - cd
+     * @param c variable c
+     * @param d variable d
+     * @param m2 margin 2
      * @param strength strength used
      */
     public void addCentering(SolverVariable a, SolverVariable b, int m1, float bias,
-            SolverVariable c, SolverVariable d, int m2, int strength) {
+                             SolverVariable c, SolverVariable d, int m2, int strength) {
         if (DEBUG_CONSTRAINTS) {
             System.out.println("-> [center bias: " + bias + "] : " + a + " - " + b
                     + " - " + m1
@@ -1374,13 +1378,19 @@ public class LinearSystem {
 
     /**
      * @TODO: add description
+     * @param a
+     * @param b
+     * @param c
+     * @param d
+     * @param ratio
+     * @param strength
      */
     public void addRatio(SolverVariable a,
-            SolverVariable b,
-            SolverVariable c,
-            SolverVariable d,
-            float ratio,
-            int strength) {
+                         SolverVariable b,
+                         SolverVariable c,
+                         SolverVariable d,
+                         float ratio,
+                         int strength) {
         if (DEBUG_CONSTRAINTS) {
             System.out.println("-> [ratio: " + ratio + "] : " + a + " = " + b
                     + " + (" + c + " - " + d + ") * " + ratio + " " + getDisplayStrength(strength));
@@ -1395,6 +1405,9 @@ public class LinearSystem {
 
     /**
      * @TODO: add description
+     * @param a
+     * @param b
+     * @param margin
      */
     public void addSynonym(SolverVariable a, SolverVariable b, int margin) {
         if (a.mDefinitionId == -1 && margin == 0) {
@@ -1418,10 +1431,9 @@ public class LinearSystem {
 
     /**
      * Add an equation of the form a = b + margin
-     *
-     * @param a        variable a
-     * @param b        variable b
-     * @param margin   margin used
+     * @param a variable a
+     * @param b variable b
+     * @param margin margin used
      * @param strength strength used
      */
     public ArrayRow addEquality(SolverVariable a, SolverVariable b, int margin, int strength) {
@@ -1467,8 +1479,7 @@ public class LinearSystem {
 
     /**
      * Add an equation of the form a = value
-     *
-     * @param a     variable a
+     * @param a variable a
      * @param value the value we set
      */
     public void addEquality(SolverVariable a, int value) {
@@ -1512,17 +1523,16 @@ public class LinearSystem {
 
     /**
      * Create a constraint to express A = C * percent
-     *
      * @param linearSystem the system we create the row on
-     * @param variableA    variable a
-     * @param variableC    variable c
-     * @param percent      the percent used
+     * @param variableA variable a
+     * @param variableC variable c
+     * @param percent the percent used
      * @return the created row
      */
     public static ArrayRow createRowDimensionPercent(LinearSystem linearSystem,
-            SolverVariable variableA,
-            SolverVariable variableC,
-            float percent) {
+                                                     SolverVariable variableA,
+                                                     SolverVariable variableC,
+                                                     float percent) {
         if (DEBUG_CONSTRAINTS) {
             System.out.println("-> " + variableA + " = " + variableC + " * " + percent);
         }
@@ -1534,13 +1544,15 @@ public class LinearSystem {
      * Add the equations constraining a widget center to another widget center, positioned
      * on a circle, following an angle and radius
      *
-     * @param angle  from 0 to 360
+     * @param widget
+     * @param target
+     * @param angle from 0 to 360
      * @param radius the distance between the two centers
      */
     public void addCenterPoint(ConstraintWidget widget,
-            ConstraintWidget target,
-            float angle,
-            int radius) {
+                               ConstraintWidget target,
+                               float angle,
+                               int radius) {
 
         SolverVariable Al = createObjectVariable(widget.getAnchor(ConstraintAnchor.Type.LEFT));
         SolverVariable At = createObjectVariable(widget.getAnchor(ConstraintAnchor.Type.TOP));

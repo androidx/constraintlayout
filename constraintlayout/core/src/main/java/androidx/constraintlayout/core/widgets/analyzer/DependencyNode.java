@@ -24,10 +24,8 @@ public class DependencyNode implements Dependency {
     public boolean delegateToWidgetRun = false;
     public boolean readyToSolve = false;
 
-    enum Type {
-        UNKNOWN, HORIZONTAL_DIMENSION, VERTICAL_DIMENSION,
-        LEFT, RIGHT, TOP, BOTTOM, BASELINE
-    }
+    enum Type { UNKNOWN, HORIZONTAL_DIMENSION, VERTICAL_DIMENSION,
+        LEFT, RIGHT, TOP, BOTTOM, BASELINE }
 
     WidgetRun mRun;
     Type mType = Type.UNKNOWN;
@@ -40,19 +38,19 @@ public class DependencyNode implements Dependency {
     public DependencyNode(WidgetRun run) {
         this.mRun = run;
     }
-
     List<Dependency> mDependencies = new ArrayList<>();
     List<DependencyNode> mTargets = new ArrayList<>();
 
     @Override
     public String toString() {
         return mRun.mWidget.getDebugName() + ":" + mType + "("
-                + (resolved ? value : "unresolved") + ") <t="
+            + (resolved ? value : "unresolved") + ") <t="
                 + mTargets.size() + ":d=" + mDependencies.size() + ">";
     }
 
     /**
      * @TODO: add description
+     * @param value
      */
     public void resolve(int value) {
         if (resolved) {
@@ -68,6 +66,7 @@ public class DependencyNode implements Dependency {
 
     /**
      * @TODO: add description
+     * @param node
      */
     public void update(Dependency node) {
         for (DependencyNode target : mTargets) {
@@ -109,6 +108,7 @@ public class DependencyNode implements Dependency {
 
     /**
      * @TODO: add description
+     * @param dependency
      */
     public void addDependency(Dependency dependency) {
         mDependencies.add(dependency);
@@ -119,6 +119,7 @@ public class DependencyNode implements Dependency {
 
     /**
      * @TODO: add description
+     * @return
      */
     public String name() {
         String definition = mRun.mWidget.getDebugName();

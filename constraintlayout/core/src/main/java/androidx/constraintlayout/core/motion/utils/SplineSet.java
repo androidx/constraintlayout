@@ -40,6 +40,8 @@ public abstract class SplineSet {
 
     /**
      * @TODO: add description
+     * @param widget
+     * @param t
      */
     public void setProperty(TypedValues widget, float t) {
         widget.setValue(TypedValues.AttributesType.getId(mType), get(t));
@@ -62,6 +64,8 @@ public abstract class SplineSet {
 
     /**
      * @TODO: add description
+     * @param t
+     * @return
      */
     public float get(float t) {
         return (float) mCurveFit.getPos(t, 0);
@@ -69,6 +73,8 @@ public abstract class SplineSet {
 
     /**
      * @TODO: add description
+     * @param t
+     * @return
      */
     public float getSlope(float t) {
         return (float) mCurveFit.getSlope(t, 0);
@@ -80,6 +86,8 @@ public abstract class SplineSet {
 
     /**
      * @TODO: add description
+     * @param position
+     * @param value
      */
     public void setPoint(int position, float value) {
         if (mTimePoints.length < mCount + 1) {
@@ -93,6 +101,7 @@ public abstract class SplineSet {
 
     /**
      * @TODO: add description
+     * @param curveType
      */
     public void setup(int curveType) {
         if (mCount == 0) {
@@ -126,6 +135,9 @@ public abstract class SplineSet {
 
     /**
      * @TODO: add description
+     * @param str
+     * @param attrList
+     * @return
      */
     public static SplineSet makeCustomSpline(String str, KeyFrameArray.CustomArray attrList) {
         return new CustomSet(str, attrList);
@@ -133,6 +145,9 @@ public abstract class SplineSet {
 
     /**
      * @TODO: add description
+     * @param str
+     * @param attrList
+     * @return
      */
     public static SplineSet makeCustomSplineSet(String str, KeyFrameArray.CustomVar attrList) {
         return new CustomSpline(str, attrList);
@@ -140,6 +155,9 @@ public abstract class SplineSet {
 
     /**
      * @TODO: add description
+     * @param str
+     * @param currentTime
+     * @return
      */
     public static SplineSet makeSpline(String str, long currentTime) {
 
@@ -202,6 +220,7 @@ public abstract class SplineSet {
 
         /**
          * @TODO: add description
+         * @param curveType
          */
         public void setup(int curveType) {
             int size = mConstraintAttributeList.size();
@@ -226,6 +245,8 @@ public abstract class SplineSet {
 
         /**
          * @TODO: add description
+         * @param position
+         * @param value
          */
         public void setPoint(int position, float value) {
             throw new RuntimeException("don't call for custom "
@@ -234,6 +255,8 @@ public abstract class SplineSet {
 
         /**
          * @TODO: add description
+         * @param position
+         * @param value
          */
         public void setPoint(int position, CustomAttribute value) {
             mConstraintAttributeList.append(position, value);
@@ -241,6 +264,8 @@ public abstract class SplineSet {
 
         /**
          * @TODO: add description
+         * @param view
+         * @param t
          */
         public void setProperty(WidgetFrame view, float t) {
             mCurveFit.getPos(t, mTempValues);
@@ -276,6 +301,7 @@ public abstract class SplineSet {
 
         /**
          * @TODO: add description
+         * @param curveType
          */
         public void setup(int curveType) {
             int size = mConstraintAttributeList.size();
@@ -300,6 +326,8 @@ public abstract class SplineSet {
 
         /**
          * @TODO: add description
+         * @param position
+         * @param value
          */
         public void setPoint(int position, float value) {
             throw new RuntimeException("don't call for custom attribute"
@@ -308,6 +336,8 @@ public abstract class SplineSet {
 
         /**
          * @TODO: add description
+         * @param widget
+         * @param t
          */
         public void setProperty(TypedValues widget, float t) {
             setProperty((MotionWidget) widget, t);
@@ -315,6 +345,8 @@ public abstract class SplineSet {
 
         /**
          * @TODO: add description
+         * @param position
+         * @param value
          */
         public void setPoint(int position, CustomVariable value) {
             mConstraintAttributeList.append(position, value);
@@ -322,6 +354,8 @@ public abstract class SplineSet {
 
         /**
          * @TODO: add description
+         * @param view
+         * @param t
          */
         public void setProperty(MotionWidget view, float t) {
             mCurveFit.getPos(t, mTempValues);

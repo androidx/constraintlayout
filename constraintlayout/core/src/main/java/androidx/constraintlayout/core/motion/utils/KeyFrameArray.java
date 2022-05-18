@@ -56,6 +56,7 @@ public class KeyFrameArray {
 
         /**
          * @TODO: add description
+         * @return
          */
         public int size() {
             return mCount;
@@ -63,6 +64,8 @@ public class KeyFrameArray {
 
         /**
          * @TODO: add description
+         * @param i
+         * @return
          */
         public CustomAttribute valueAt(int i) {
             return mValues[mKeys[i]];
@@ -70,6 +73,8 @@ public class KeyFrameArray {
 
         /**
          * @TODO: add description
+         * @param i
+         * @return
          */
         public int keyAt(int i) {
             return mKeys[i];
@@ -77,6 +82,8 @@ public class KeyFrameArray {
 
         /**
          * @TODO: add description
+         * @param position
+         * @param value
          */
         public void append(int position, CustomAttribute value) {
             if (mValues[position] != null) {
@@ -89,6 +96,7 @@ public class KeyFrameArray {
 
         /**
          * @TODO: add description
+         * @param position
          */
         public void remove(int position) {
             mValues[position] = null;
@@ -106,7 +114,6 @@ public class KeyFrameArray {
             mCount--;
         }
     }
-
     // =================================== CustomVar =================================
     public static class CustomVar {
         int[] mKeys = new int[101];
@@ -141,6 +148,7 @@ public class KeyFrameArray {
 
         /**
          * @TODO: add description
+         * @return
          */
         public int size() {
             return mCount;
@@ -148,6 +156,8 @@ public class KeyFrameArray {
 
         /**
          * @TODO: add description
+         * @param i
+         * @return
          */
         public CustomVariable valueAt(int i) {
             return mValues[mKeys[i]];
@@ -155,6 +165,8 @@ public class KeyFrameArray {
 
         /**
          * @TODO: add description
+         * @param i
+         * @return
          */
         public int keyAt(int i) {
             return mKeys[i];
@@ -162,6 +174,8 @@ public class KeyFrameArray {
 
         /**
          * @TODO: add description
+         * @param position
+         * @param value
          */
         public void append(int position, CustomVariable value) {
             if (mValues[position] != null) {
@@ -174,6 +188,7 @@ public class KeyFrameArray {
 
         /**
          * @TODO: add description
+         * @param position
          */
         public void remove(int position) {
             mValues[position] = null;
@@ -191,7 +206,6 @@ public class KeyFrameArray {
             mCount--;
         }
     }
-
     // =================================== FloatArray ======================================
     static class FloatArray {
         int[] mKeys = new int[101];

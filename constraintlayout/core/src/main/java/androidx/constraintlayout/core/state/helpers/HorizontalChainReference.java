@@ -93,12 +93,10 @@ public class HorizontalChainReference extends ChainReference {
         switch (mStyle) {
             case SPREAD: {
                 first.setHorizontalChainStyle(ConstraintWidget.CHAIN_SPREAD);
-            }
-            break;
+            } break;
             case SPREAD_INSIDE: {
                 first.setHorizontalChainStyle(ConstraintWidget.CHAIN_SPREAD_INSIDE);
-            }
-            break;
+            } break;
             case PACKED: {
                 first.setHorizontalChainStyle(ConstraintWidget.CHAIN_PACKED);
             }

@@ -21,6 +21,7 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget;
 public interface Facade {
     /**
      * @TODO: add description
+     * @return
      */
     ConstraintWidget getConstraintWidget();
 

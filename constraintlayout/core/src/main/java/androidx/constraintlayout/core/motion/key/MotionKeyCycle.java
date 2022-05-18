@@ -115,6 +115,9 @@ public class MotionKeyCycle extends MotionKey {
 
     /**
      * @TODO: add description
+     * @param type
+     * @param value
+     * @return
      */
     public boolean setValue(int type, int value) {
         switch (type) {
@@ -135,6 +138,9 @@ public class MotionKeyCycle extends MotionKey {
 
     /**
      * @TODO: add description
+     * @param type
+     * @param value
+     * @return
      */
     public boolean setValue(int type, String value) {
         switch (type) {
@@ -152,6 +158,9 @@ public class MotionKeyCycle extends MotionKey {
 
     /**
      * @TODO: add description
+     * @param type
+     * @param value
+     * @return
      */
     public boolean setValue(int type, float value) {
         switch (type) {
@@ -208,6 +217,8 @@ public class MotionKeyCycle extends MotionKey {
 
     /**
      * @TODO: add description
+     * @param key
+     * @return
      */
     public float getValue(String key) {
         switch (key) {
@@ -301,6 +312,7 @@ public class MotionKeyCycle extends MotionKey {
 
     /**
      * @TODO: add description
+     * @param oscSet
      */
     public void addCycleValues(HashMap<String, KeyCycleOscillator> oscSet) {
 
@@ -364,7 +376,7 @@ public class MotionKeyCycle extends MotionKey {
                 + ", Offset=" + mWaveOffset
                 + ", Phase=" + mWavePhase
                 + '}');
-        String[] names = nameSet.toArray(new String[0]);
+        String[]names = nameSet.toArray(new String[0]);
         for (int i = 0; i < names.length; i++) {
             int id = AttributesType.getId(names[i]);
             Utils.log(names[i] + ":" + getValue(names[i]));

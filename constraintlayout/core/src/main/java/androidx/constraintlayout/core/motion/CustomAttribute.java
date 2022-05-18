@@ -41,7 +41,7 @@ public class CustomAttribute {
     private static final String TAG = "TransitionLayout";
     private boolean mMethod = false;
     String mName;
-    private final AttributeType mType;
+    private AttributeType mType;
     private int mIntegerValue;
     private float mFloatValue;
     private String mStringValue;
@@ -65,6 +65,8 @@ public class CustomAttribute {
 
     /**
      * Continuous types are interpolated they are fired only at
+     *
+     * @return
      */
     public boolean isContinuous() {
         switch (mType) {
@@ -136,6 +138,7 @@ public class CustomAttribute {
 
     /**
      * @TODO: add description
+     * @param ret
      */
     public void getValuesToInterpolate(float[] ret) {
         switch (mType) {
@@ -167,13 +170,13 @@ public class CustomAttribute {
             case DIMENSION_TYPE:
                 ret[0] = mFloatValue;
                 break;
-            default:
-                break;
+            default: break;
         }
     }
 
     /**
      * @TODO: add description
+     * @param value
      */
     public void setValue(float[] value) {
         switch (mType) {
@@ -197,13 +200,16 @@ public class CustomAttribute {
             case DIMENSION_TYPE:
                 mFloatValue = value[0];
                 break;
-            default:
-                break;
+            default: break;
         }
     }
 
     /**
      * @TODO: add description
+     * @param hue
+     * @param saturation
+     * @param value
+     * @return
      */
     public static int hsvToRgb(float hue, float saturation, float value) {
         int h = (int) (hue * 6);
@@ -232,6 +238,9 @@ public class CustomAttribute {
 
     /**
      * test if the two attributes are different
+     *
+     * @param customAttribute
+     * @return
      */
     public boolean diff(CustomAttribute customAttribute) {
         if (customAttribute == null || mType != customAttribute.mType) {
@@ -278,6 +287,7 @@ public class CustomAttribute {
 
     /**
      * @TODO: add description
+     * @param value
      */
     public void setValue(Object value) {
         switch (mType) {
@@ -301,8 +311,7 @@ public class CustomAttribute {
             case DIMENSION_TYPE:
                 mFloatValue = (Float) value;
                 break;
-            default:
-                break;
+            default: break;
         }
     }
 

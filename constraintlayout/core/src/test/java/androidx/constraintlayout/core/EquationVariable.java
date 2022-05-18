@@ -23,26 +23,23 @@ class EquationVariable {
 
     private Amount mAmount = null;
     private SolverVariable mVariable = null;
-
     /**
      * Base constructor
-     *
      * @param system the {@link LinearSystem linear system} this equation variable belongs to
      * @param amount the amount associated with this variable
-     * @param name   the variable name
-     * @param type   the variable type
+     * @param name the variable name
+     * @param type the variable type
      */
     EquationVariable(LinearSystem system,
-            Amount amount,
-            String name,
-            SolverVariable.Type type) {
+                     Amount amount,
+                     String name,
+                     SolverVariable.Type type) {
         mAmount = amount;
         mVariable = system.getVariable(name, type);
     }
 
     /**
      * Alternate constructor, will set the type to be {@link SolverVariable.Type CONSTANT}
-     *
      * @param amount the amount associated with this variable
      */
     EquationVariable(Amount amount) {
@@ -51,22 +48,20 @@ class EquationVariable {
 
     /**
      * Alternate constructor, will construct an amount given an integer number
-     *
      * @param system the {@link LinearSystem linear system} this equation variable belongs to
      * @param amount the amount associated with this variable
-     * @param name   the variable name
-     * @param type   the variable type
+     * @param name the variable name
+     * @param type the variable type
      */
     EquationVariable(LinearSystem system,
-            int amount, String name,
-            SolverVariable.Type type) {
+                     int amount, String name,
+                     SolverVariable.Type type) {
         mAmount = new Amount(amount);
         mVariable = system.getVariable(name, type);
     }
 
     /**
      * Alternate constructor, will set the type to be {@link SolverVariable.Type CONSTANT}
-     *
      * @param system the {@link LinearSystem linear system} this equation variable belongs to
      * @param amount the amount associated with this variable
      */
@@ -76,10 +71,9 @@ class EquationVariable {
 
     /**
      * Alternate constructor, will set the factor to be one by default
-     *
      * @param system the {@link LinearSystem linear system} this equation variable belongs to
-     * @param name   the variable name
-     * @param type   the variable type
+     * @param name the variable name
+     * @param type the variable type
      */
     EquationVariable(LinearSystem system, String name, SolverVariable.Type type) {
         mAmount = new Amount(1);
@@ -88,8 +82,7 @@ class EquationVariable {
 
     /**
      * Alternate constructor, will multiply an amount to a given {@link EquationVariable}
-     *
-     * @param amount   the amount given
+     * @param amount the amount given
      * @param variable the variable we'll multiply
      */
     EquationVariable(Amount amount, EquationVariable variable) {
@@ -100,7 +93,6 @@ class EquationVariable {
 
     /**
      * Copy constructor
-     *
      * @param v variable to copy
      */
     EquationVariable(EquationVariable v) {
@@ -110,7 +102,6 @@ class EquationVariable {
 
     /**
      * Accessor for the variable's name
-     *
      * @return the variable's name
      */
     public String getName() {
@@ -122,7 +113,6 @@ class EquationVariable {
 
     /**
      * Accessor for the variable's type
-     *
      * @return the variable's type
      */
     public SolverVariable.Type getType() {
@@ -134,7 +124,6 @@ class EquationVariable {
 
     /**
      * Accessor for the {@link SolverVariable}
-     *
      * @return the {@link SolverVariable}
      */
     public SolverVariable getSolverVariable() {
@@ -143,7 +132,6 @@ class EquationVariable {
 
     /**
      * Returns true if this is a constant
-     *
      * @return true if a constant
      */
     public boolean isConstant() {
@@ -152,7 +140,6 @@ class EquationVariable {
 
     /**
      * Accessor to retrieve the amount associated with this variable
-     *
      * @return amount
      */
     public Amount getAmount() {
@@ -161,7 +148,6 @@ class EquationVariable {
 
     /**
      * Accessor to set the amount associated with this variable
-     *
      * @param amount the amount associated with this variable
      */
     public void setAmount(Amount amount) {
@@ -170,7 +156,6 @@ class EquationVariable {
 
     /**
      * Inverse the current amount (from negative to positive or the reverse)
-     *
      * @return this
      */
     public EquationVariable inverse() {
@@ -180,7 +165,6 @@ class EquationVariable {
 
     /**
      * Returns true if the variables are isCompatible (same type, same name)
-     *
      * @param variable another variable to compare this one to
      * @return true if isCompatible.
      */
@@ -195,7 +179,6 @@ class EquationVariable {
 
     /**
      * Add an amount from another variable to this variable
-     *
      * @param variable variable added
      */
     public void add(EquationVariable variable) {
@@ -206,7 +189,6 @@ class EquationVariable {
 
     /**
      * Subtract an amount from another variable to this variable
-     *
      * @param variable variable added
      */
     public void subtract(EquationVariable variable) {
@@ -217,7 +199,6 @@ class EquationVariable {
 
     /**
      * Multiply an amount from another variable to this variable
-     *
      * @param variable variable multiplied
      */
     public void multiply(EquationVariable variable) {
@@ -226,7 +207,6 @@ class EquationVariable {
 
     /**
      * Multiply this variable by a given amount
-     *
      * @param amount specified amount multiplied
      */
     public void multiply(Amount amount) {
@@ -235,7 +215,6 @@ class EquationVariable {
 
     /**
      * Divide an amount from another variable to this variable
-     *
      * @param variable variable dividing
      */
     public void divide(EquationVariable variable) {
@@ -258,7 +237,6 @@ class EquationVariable {
 
     /**
      * Returns a string displaying the sign of the variable (positive or negative, e.g. + or -)
-     *
      * @return sign of the variable as a string, either + or -
      */
     public String signString() {

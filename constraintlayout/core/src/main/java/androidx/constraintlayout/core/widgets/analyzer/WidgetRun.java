@@ -47,13 +47,10 @@ public abstract class WidgetRun implements Dependency {
 
     @SuppressWarnings("HiddenAbstractMethod")
     abstract void clear();
-
     @SuppressWarnings("HiddenAbstractMethod")
     abstract void apply();
-
     @SuppressWarnings("HiddenAbstractMethod")
     abstract void applyToWidget();
-
     @SuppressWarnings("HiddenAbstractMethod")
     abstract void reset();
 
@@ -66,6 +63,7 @@ public abstract class WidgetRun implements Dependency {
 
     /**
      * @TODO: add description
+     * @return
      */
     public boolean isCenterConnection() {
         int connections = 0;
@@ -88,6 +86,8 @@ public abstract class WidgetRun implements Dependency {
 
     /**
      * @TODO: add description
+     * @param direction
+     * @return
      */
     public long wrapSize(int direction) {
         if (mDimension.resolved) {
@@ -117,38 +117,32 @@ public abstract class WidgetRun implements Dependency {
             case LEFT: {
                 HorizontalWidgetRun run = targetWidget.mHorizontalRun;
                 target = run.start;
-            }
-            break;
+            } break;
             case RIGHT: {
                 HorizontalWidgetRun run = targetWidget.mHorizontalRun;
                 target = run.end;
-            }
-            break;
+            } break;
             case TOP: {
                 VerticalWidgetRun run = targetWidget.mVerticalRun;
                 target = run.start;
-            }
-            break;
+            } break;
             case BASELINE: {
                 VerticalWidgetRun run = targetWidget.mVerticalRun;
                 target = run.baseline;
-            }
-            break;
+            } break;
             case BOTTOM: {
                 VerticalWidgetRun run = targetWidget.mVerticalRun;
                 target = run.end;
-            }
-            break;
-            default:
-                break;
+            } break;
+            default: break;
         }
         return target;
     }
 
     protected void updateRunCenter(Dependency dependency,
-            ConstraintAnchor startAnchor,
-            ConstraintAnchor endAnchor,
-            int orientation) {
+                                   ConstraintAnchor startAnchor,
+                                   ConstraintAnchor endAnchor,
+                                   int orientation) {
         DependencyNode startTarget = getTarget(startAnchor);
         DependencyNode endTarget = getTarget(endAnchor);
 
@@ -222,10 +216,10 @@ public abstract class WidgetRun implements Dependency {
             break;
             case MATCH_CONSTRAINT_RATIO: {
                 if (mWidget.mHorizontalRun.mDimensionBehavior
-                        == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+                            == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
                         && mWidget.mHorizontalRun.matchConstraintsType == MATCH_CONSTRAINT_RATIO
                         && mWidget.mVerticalRun.mDimensionBehavior
-                        == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+                            == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
                         && mWidget.mVerticalRun.matchConstraintsType == MATCH_CONSTRAINT_RATIO) {
                     // pof
                 } else {
@@ -244,8 +238,7 @@ public abstract class WidgetRun implements Dependency {
                 }
             }
             break;
-            default:
-                break;
+            default: break;
         }
     }
 
@@ -259,9 +252,9 @@ public abstract class WidgetRun implements Dependency {
 
     /**
      * @TODO: add description
+     * @param dependency
      */
-    public void update(Dependency dependency) {
-    }
+    public void update(Dependency dependency) {}
 
     protected final int getLimitedDimension(int dimension, int orientation) {
         if (orientation == HORIZONTAL) {
@@ -302,31 +295,30 @@ public abstract class WidgetRun implements Dependency {
             case LEFT: {
                 target = run.start;
             }
-            break;
+                break;
             case BOTTOM:
             case RIGHT: {
                 target = run.end;
             }
-            break;
-            default:
                 break;
+            default: break;
         }
         return target;
     }
 
     protected final void addTarget(DependencyNode node,
-            DependencyNode target,
-            int margin) {
+                                   DependencyNode target,
+                                   int margin) {
         node.mTargets.add(target);
         node.mMargin = margin;
         target.mDependencies.add(node);
     }
 
     protected final void addTarget(DependencyNode node,
-            DependencyNode target,
-            int marginFactor,
-            @SuppressWarnings("HiddenTypeParameter") DimensionDependency
-                    dimensionDependency) {
+                                   DependencyNode target,
+                                   int marginFactor,
+                                   @SuppressWarnings("HiddenTypeParameter") DimensionDependency
+                                           dimensionDependency) {
         node.mTargets.add(target);
         node.mTargets.add(mDimension);
         node.mMarginFactor = marginFactor;
@@ -337,6 +329,7 @@ public abstract class WidgetRun implements Dependency {
 
     /**
      * @TODO: add description
+     * @return
      */
     public long getWrapDimension() {
         if (mDimension.resolved) {
@@ -349,5 +342,5 @@ public abstract class WidgetRun implements Dependency {
         return mResolved;
     }
 
-    enum RunType {NONE, START, END, CENTER}
+    enum RunType { NONE, START, END, CENTER }
 }

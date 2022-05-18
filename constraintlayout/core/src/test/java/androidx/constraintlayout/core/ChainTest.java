@@ -899,8 +899,8 @@ public class ChainTest {
     }
 
     private void checkVerticalPositions(ConstraintWidget a,
-            ConstraintWidget b,
-            ConstraintWidget c) {
+                                        ConstraintWidget b,
+                                        ConstraintWidget c) {
         assertEquals(a.getTop() <= a.getBottom(), true);
         assertEquals(a.getBottom() <= b.getTop(), true);
         assertEquals(b.getTop() <= b.getBottom(), true);

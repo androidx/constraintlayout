@@ -105,7 +105,7 @@ public class ScoutProbabilities {
         mBinaryProbability = new float[mLen][2][mLen * 2][mLen * 2];
         mBinaryBias = new float[mLen][2][mLen * 2][mLen * 2];
         Direction[][] directions =
-                {{Direction.NORTH, Direction.SOUTH}, {Direction.WEST, Direction.EAST}};
+                { { Direction.NORTH, Direction.SOUTH }, { Direction.WEST, Direction.EAST } };
         for (int i = 1; i < mLen; i++) {
             for (int horizontal = 0; horizontal < 2; horizontal++) { // vert=0 or horizantal=1
                 Direction[] sides = directions[horizontal];
@@ -139,6 +139,8 @@ public class ScoutProbabilities {
 
     /**
      * This applies a constraint set suggested by the Inference tables
+     *
+     * @param list
      */
     public void applyConstraints(ScoutWidget[] list) {
 
@@ -159,6 +161,7 @@ public class ScoutProbabilities {
 
     /**
      * Find and connect widgets centered over other widgets
+     * @param list
      */
     private void pickCenterOverlap(ScoutWidget[] list) {
         // find any widget centered over the edge of another
@@ -200,6 +203,8 @@ public class ScoutProbabilities {
 
     /**
      * force structure for column cases
+     *
+     * @param list
      */
     private void pickColumnWidgets(ScoutWidget[] list) {
         ScoutWidget[] w = new ScoutWidget[list.length - 1];
@@ -212,7 +217,7 @@ public class ScoutProbabilities {
                 int n = Integer.compare(w1.mConstraintWidget.getX(), w2.mConstraintWidget.getX());
                 if (n == 0) {
                     n = Integer.compare(w1.mConstraintWidget.getWidth(),
-                            w2.mConstraintWidget.getWidth());
+                                        w2.mConstraintWidget.getWidth());
                 }
                 return n;
             }
@@ -328,26 +333,26 @@ public class ScoutProbabilities {
 
                 for (int i = bestToConnect + 1; i < widgets.length; i++) {
                     widgets[i].setCentered(1, widgets[i - 1], widgets[i - 1],
-                            Direction.WEST,
-                            Direction.EAST, 0);
+                                           Direction.WEST,
+                                           Direction.EAST, 0);
                 }
                 for (int i = 1; i <= bestToConnect; i++) {
                     widgets[i - 1].setCentered(1, widgets[i], widgets[i],
-                            Direction.WEST,
-                            Direction.EAST, 0);
+                                               Direction.WEST,
+                                               Direction.EAST, 0);
                 }
             } else {
                 if (reverse) {
                     for (int i = 1; i < widgets.length; i++) {
                         widgets[i - 1].setCentered(0, widgets[i], widgets[i],
-                                Direction.WEST,
-                                Direction.EAST, 0);
+                                                   Direction.WEST,
+                                                   Direction.EAST, 0);
                     }
                 } else {
                     for (int i = 1; i < widgets.length; i++) {
                         widgets[i].setCentered(0, widgets[i - 1], widgets[i - 1],
-                                Direction.WEST,
-                                Direction.EAST, 0);
+                                               Direction.WEST,
+                                               Direction.EAST, 0);
                     }
                 }
             }
@@ -361,6 +366,8 @@ public class ScoutProbabilities {
 
     /**
      * This searches for baseline connections with a very narrow tolerance
+     *
+     * @param list
      */
     private void pickBaseLineConnections(ScoutWidget[] list) {
         final int baseline = Direction.BASE.getDirection();
@@ -411,12 +418,12 @@ public class ScoutProbabilities {
     /**
      * This searches for centered connections
      *
-     * @param list            widgets (0 is root)
+     * @param list widgets (0 is root)
      * @param checkResizeable if true will attempt to make a stretchable widget
      */
     private void pickCenteredConnections(ScoutWidget[] list, boolean checkResizeable) {
         Direction[][] side =
-                {{Direction.NORTH, Direction.SOUTH}, {Direction.WEST, Direction.EAST}};
+                { { Direction.NORTH, Direction.SOUTH }, { Direction.WEST, Direction.EAST } };
         int[] dualIndex = new int[2];
         for (int i = 1; i < mLen; i++) {
             float[][][] widgetBinaryProbability = mBinaryProbability[i];
@@ -478,10 +485,10 @@ public class ScoutProbabilities {
         int height = list[0].mConstraintWidget.getWidth();
         int maxWidthMargin = (width * maxMarginPercent) / 100;
         int maxHeightMargin = (height * maxMarginPercent) / 100;
-        int[] maxMargin = {maxHeightMargin, maxWidthMargin};
+        int[] maxMargin = { maxHeightMargin, maxWidthMargin };
         final int west = Direction.WEST.getDirection();
         // pick generic connections
-        int[][] dirTypes = {{north, south}, {west, east}};
+        int[][] dirTypes = { { north, south }, { west, east } };
         for (int i = mLen - 1; i > 0; i--) {
             float[][] widgetProbability = mProbability[i];
 
@@ -556,15 +563,17 @@ public class ScoutProbabilities {
 
     /**
      * pick weak constraints
+     *
+     * @param list
      */
     private void pickWeakConstraints(ScoutWidget[] list) {
         Direction[] directions =
-                {Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST};
+                { Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST };
         ScoutWidget[][] candidates = new ScoutWidget[directions.length][]; // no arrays of generics
         ScoutWidget[] maxCandidate = new ScoutWidget[directions.length];
         ScoutWidget centeredVertical = null;
         ScoutWidget centeredHorizontal = null;
-        float[] maxDist = {-1, -1, -1, -1};
+        float[] maxDist = { -1, -1, -1, -1 };
 
         // find the biggest widget centered
         for (int i = 1; i < list.length; i++) {
@@ -582,7 +591,7 @@ public class ScoutProbabilities {
             }
         }
         ScoutWidget[] centeredMax =
-                {centeredVertical, centeredVertical, centeredHorizontal, centeredHorizontal};
+                { centeredVertical, centeredVertical, centeredHorizontal, centeredHorizontal };
         // build table of widgets open from each direction
         for (int j = 0; j < directions.length; j++) {
             Direction direction = directions[j];
@@ -790,7 +799,7 @@ public class ScoutProbabilities {
         // distance normalizing scale factor
         float scale = 0.5f
                 * ((orientation == Direction.ORIENTATION_VERTICAL) ? from.getParent().getHeight() :
-                from.getParent().getWidth());
+                        from.getParent().getWidth());
         Direction fromLeft = Direction.getDirections(orientation)[0];
         Direction fromRight = Direction.getDirections(orientation)[1];
 
@@ -836,6 +845,8 @@ public class ScoutProbabilities {
 
     /**
      * Print the Tables
+     *
+     * @param list
      */
     public void printTable(ScoutWidget[] list) {
         printCenterTable(list);
@@ -844,6 +855,8 @@ public class ScoutProbabilities {
 
     /**
      * Print the tables involved int centering the widgets
+     *
+     * @param list
      */
     public void printCenterTable(ScoutWidget[] list) {
         // PRINT DEBUG
@@ -880,6 +893,8 @@ public class ScoutProbabilities {
 
     /**
      * Prints the tables involved in the normal widget asociations.
+     *
+     * @param list
      */
     public void printBaseTable(ScoutWidget[] list) {
         // PRINT DEBUG

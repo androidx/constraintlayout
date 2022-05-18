@@ -19,8 +19,6 @@ package androidx.constraintlayout.core;
 import static androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.EXACTLY;
 import static androidx.constraintlayout.core.widgets.analyzer.BasicMeasure.WRAP_CONTENT;
 
-import static org.junit.Assert.assertEquals;
-
 import androidx.constraintlayout.core.widgets.Barrier;
 import androidx.constraintlayout.core.widgets.ConstraintAnchor;
 import androidx.constraintlayout.core.widgets.ConstraintWidget;
@@ -28,6 +26,8 @@ import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 import androidx.constraintlayout.core.widgets.Guideline;
 import androidx.constraintlayout.core.widgets.Optimizer;
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure;
+
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -542,7 +542,7 @@ public class BasicTest {
         assertEquals(d.getLeft(), 432);
         assertEquals(d.getTop(), -28, 2);
         assertEquals(d.getWidth(), 100);
-        assertEquals(d.getHeight(), 30);
+        assertEquals(d.getHeight(),  30);
 
         root.measure(Optimizer.OPTIMIZATION_GRAPH,
                 BasicMeasure.WRAP_CONTENT, 0, BasicMeasure.WRAP_CONTENT, 0, 0, 0, 0, 0);
@@ -568,7 +568,7 @@ public class BasicTest {
         assertEquals(d.getLeft(), 432);
         assertEquals(d.getTop(), -28, 2);
         assertEquals(d.getWidth(), 100);
-        assertEquals(d.getHeight(), 30);
+        assertEquals(d.getHeight(),  30);
     }
 
     @Test
@@ -643,7 +643,7 @@ public class BasicTest {
         assertEquals(d.getLeft(), 276);
         assertEquals(d.getTop(), -28, 2);
         assertEquals(d.getWidth(), 100);
-        assertEquals(d.getHeight(), 30);
+        assertEquals(d.getHeight(),  30);
 
         root.measure(Optimizer.OPTIMIZATION_GRAPH,
                 BasicMeasure.WRAP_CONTENT, 0, BasicMeasure.WRAP_CONTENT, 0, 0, 0, 0, 0);
@@ -669,7 +669,7 @@ public class BasicTest {
         assertEquals(d.getLeft(), 276);
         assertEquals(d.getTop(), -28, 2);
         assertEquals(d.getWidth(), 100);
-        assertEquals(d.getHeight(), 30);
+        assertEquals(d.getHeight(),  30);
     }
 
     @Test
@@ -744,7 +744,7 @@ public class BasicTest {
         assertEquals(d.getLeft(), 289);
         assertEquals(d.getTop(), -28, 2);
         assertEquals(d.getWidth(), 100);
-        assertEquals(d.getHeight(), 30);
+        assertEquals(d.getHeight(),  30);
 
         root.measure(Optimizer.OPTIMIZATION_GRAPH,
                 BasicMeasure.WRAP_CONTENT, 0, BasicMeasure.WRAP_CONTENT, 0, 0, 0, 0, 0);
@@ -770,7 +770,7 @@ public class BasicTest {
         assertEquals(d.getLeft(), 289);
         assertEquals(d.getTop(), -28, 2);
         assertEquals(d.getWidth(), 100);
-        assertEquals(d.getHeight(), 30);
+        assertEquals(d.getHeight(),  30);
     }
 
     @Test
@@ -927,7 +927,7 @@ public class BasicTest {
         }
     }
 
-    public void applyChain(int direction, ConstraintWidget... widgets) {
+    public void applyChain(int direction, ConstraintWidget ... widgets) {
         ConstraintWidget previous = widgets[0];
         for (int i = 1; i < widgets.length; i++) {
             ConstraintWidget widget = widgets[i];

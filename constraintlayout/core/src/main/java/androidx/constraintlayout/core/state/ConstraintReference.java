@@ -52,6 +52,8 @@ public class ConstraintReference implements Reference {
     public interface ConstraintReferenceFactory {
         /**
          * @TODO: add description
+         * @param state
+         * @return
          */
         ConstraintReference create(State state);
     }
@@ -133,13 +135,14 @@ public class ConstraintReference implements Reference {
     private Object mView;
     private ConstraintWidget mConstraintWidget;
 
-    private final HashMap<String, Integer> mCustomColors = new HashMap<>();
+    private HashMap<String, Integer> mCustomColors = new HashMap<>();
     private HashMap<String, Float> mCustomFloats = new HashMap<>();
 
     TypedBundle mMotionProperties = null;
 
     /**
      * @TODO: add description
+     * @param view
      */
     public void setView(Object view) {
         mView = view;
@@ -154,6 +157,7 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param facade
      */
     public void setFacade(Facade facade) {
         mFacade = facade;
@@ -168,6 +172,7 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param widget
      */
     public void setConstraintWidget(ConstraintWidget widget) {
         if (widget == null) {
@@ -188,6 +193,7 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @return
      */
     public ConstraintWidget createConstraintWidget() {
         return new ConstraintWidget(
@@ -214,7 +220,7 @@ public class ConstraintReference implements Reference {
     }
 
     /**
-     * Validate the constraints
+     *  Validate the constraints
      */
     public void validate() throws IncorrectConstraintException {
         ArrayList<String> errors = new ArrayList<>();
@@ -269,6 +275,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param chainStyle
+     * @return
      */
     public int getVerticalChainStyle(int chainStyle) {
         return mVerticalChainStyle;
@@ -292,6 +300,7 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @return
      */
     public ConstraintReference clearVertical() {
         top().clear();
@@ -302,6 +311,7 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @return
      */
     public ConstraintReference clearHorizontal() {
         start().clear();
@@ -314,49 +324,41 @@ public class ConstraintReference implements Reference {
     public float getTranslationX() {
         return mTranslationX;
     }
-
     public float getTranslationY() {
         return mTranslationY;
     }
-
     public float getTranslationZ() {
         return mTranslationZ;
     }
-
     public float getScaleX() {
         return mScaleX;
     }
-
     public float getScaleY() {
         return mScaleY;
     }
-
     public float getAlpha() {
         return mAlpha;
     }
-
     public float getPivotX() {
         return mPivotX;
     }
-
     public float getPivotY() {
         return mPivotY;
     }
-
     public float getRotationX() {
         return mRotationX;
     }
-
     public float getRotationY() {
         return mRotationY;
     }
-
     public float getRotationZ() {
         return mRotationZ;
     }
 
     /**
      * @TODO: add description
+     * @param x
+     * @return
      */
     public ConstraintReference pivotX(float x) {
         mPivotX = x;
@@ -365,6 +367,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param y
+     * @return
      */
     public ConstraintReference pivotY(float y) {
         mPivotY = y;
@@ -373,6 +377,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param x
+     * @return
      */
     public ConstraintReference rotationX(float x) {
         mRotationX = x;
@@ -381,6 +387,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param y
+     * @return
      */
     public ConstraintReference rotationY(float y) {
         mRotationY = y;
@@ -389,6 +397,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param z
+     * @return
      */
     public ConstraintReference rotationZ(float z) {
         mRotationZ = z;
@@ -397,6 +407,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param x
+     * @return
      */
     public ConstraintReference translationX(float x) {
         mTranslationX = x;
@@ -405,6 +417,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param y
+     * @return
      */
     public ConstraintReference translationY(float y) {
         mTranslationY = y;
@@ -413,6 +427,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param z
+     * @return
      */
     public ConstraintReference translationZ(float z) {
         mTranslationZ = z;
@@ -421,6 +437,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param x
+     * @return
      */
     public ConstraintReference scaleX(float x) {
         mScaleX = x;
@@ -429,6 +447,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param y
+     * @return
      */
     public ConstraintReference scaleY(float y) {
         mScaleY = y;
@@ -437,6 +457,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param alpha
+     * @return
      */
     public ConstraintReference alpha(float alpha) {
         mAlpha = alpha;
@@ -445,6 +467,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param visibility
+     * @return
      */
     public ConstraintReference visibility(int visibility) {
         mVisibility = visibility;
@@ -453,6 +477,7 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @return
      */
     public ConstraintReference left() {
         if (mLeftToLeft != null) {
@@ -465,6 +490,7 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @return
      */
     public ConstraintReference right() {
         if (mRightToLeft != null) {
@@ -477,6 +503,7 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @return
      */
     public ConstraintReference start() {
         if (mStartToStart != null) {
@@ -489,6 +516,7 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @return
      */
     public ConstraintReference end() {
         if (mEndToStart != null) {
@@ -501,6 +529,7 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @return
      */
     public ConstraintReference top() {
         if (mTopToTop != null) {
@@ -513,6 +542,7 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @return
      */
     public ConstraintReference bottom() {
         if (mBottomToTop != null) {
@@ -525,6 +555,7 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @return
      */
     public ConstraintReference baseline() {
         mLast = State.Constraint.BASELINE_TO_BASELINE;
@@ -533,6 +564,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param name
+     * @param color
      */
     public void addCustomColor(String name, int color) {
         mCustomColors.put(name, color);
@@ -540,6 +573,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param name
+     * @param value
      */
     public void addCustomFloat(String name, float value) {
         if (mCustomFloats == null) {
@@ -568,6 +603,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param reference
+     * @return
      */
     public ConstraintReference leftToLeft(Object reference) {
         mLast = State.Constraint.LEFT_TO_LEFT;
@@ -577,6 +614,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param reference
+     * @return
      */
     public ConstraintReference leftToRight(Object reference) {
         mLast = State.Constraint.LEFT_TO_RIGHT;
@@ -586,6 +625,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param reference
+     * @return
      */
     public ConstraintReference rightToLeft(Object reference) {
         mLast = State.Constraint.RIGHT_TO_LEFT;
@@ -595,6 +636,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param reference
+     * @return
      */
     public ConstraintReference rightToRight(Object reference) {
         mLast = State.Constraint.RIGHT_TO_RIGHT;
@@ -604,6 +647,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param reference
+     * @return
      */
     public ConstraintReference startToStart(Object reference) {
         mLast = State.Constraint.START_TO_START;
@@ -613,6 +658,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param reference
+     * @return
      */
     public ConstraintReference startToEnd(Object reference) {
         mLast = State.Constraint.START_TO_END;
@@ -622,6 +669,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param reference
+     * @return
      */
     public ConstraintReference endToStart(Object reference) {
         mLast = State.Constraint.END_TO_START;
@@ -631,6 +680,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param reference
+     * @return
      */
     public ConstraintReference endToEnd(Object reference) {
         mLast = State.Constraint.END_TO_END;
@@ -640,6 +691,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param reference
+     * @return
      */
     public ConstraintReference topToTop(Object reference) {
         mLast = State.Constraint.TOP_TO_TOP;
@@ -649,6 +702,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param reference
+     * @return
      */
     public ConstraintReference topToBottom(Object reference) {
         mLast = State.Constraint.TOP_TO_BOTTOM;
@@ -658,6 +713,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param reference
+     * @return
      */
     public ConstraintReference bottomToTop(Object reference) {
         mLast = State.Constraint.BOTTOM_TO_TOP;
@@ -667,6 +724,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param reference
+     * @return
      */
     public ConstraintReference bottomToBottom(Object reference) {
         mLast = State.Constraint.BOTTOM_TO_BOTTOM;
@@ -676,6 +735,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param reference
+     * @return
      */
     public ConstraintReference baselineToBaseline(Object reference) {
         mLast = State.Constraint.BASELINE_TO_BASELINE;
@@ -685,6 +746,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param reference
+     * @return
      */
     public ConstraintReference baselineToTop(Object reference) {
         mLast = State.Constraint.BASELINE_TO_TOP;
@@ -694,6 +757,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param reference
+     * @return
      */
     public ConstraintReference baselineToBottom(Object reference) {
         mLast = State.Constraint.BASELINE_TO_BOTTOM;
@@ -703,6 +768,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param reference
+     * @return
      */
     public ConstraintReference centerHorizontally(Object reference) {
         Object ref = get(reference);
@@ -715,6 +782,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param reference
+     * @return
      */
     public ConstraintReference centerVertically(Object reference) {
         Object ref = get(reference);
@@ -727,6 +796,10 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param reference
+     * @param angle
+     * @param distance
+     * @return
      */
     public ConstraintReference circularConstraint(Object reference, float angle, float distance) {
         Object ref = get(reference);
@@ -739,6 +812,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param dimension
+     * @return
      */
     public ConstraintReference width(Dimension dimension) {
         return setWidth(dimension);
@@ -746,6 +821,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param dimension
+     * @return
      */
     public ConstraintReference height(Dimension dimension) {
         return setHeight(dimension);
@@ -757,6 +834,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param dimension
+     * @return
      */
     public ConstraintReference setWidth(Dimension dimension) {
         mHorizontalDimension = dimension;
@@ -769,6 +848,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param dimension
+     * @return
      */
     public ConstraintReference setHeight(Dimension dimension) {
         mVerticalDimension = dimension;
@@ -777,6 +858,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param marginValue
+     * @return
      */
     public ConstraintReference margin(Object marginValue) {
         return margin(mState.convertDimension(marginValue));
@@ -784,6 +867,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param marginGoneValue
+     * @return
      */
     public ConstraintReference marginGone(Object marginGoneValue) {
         return marginGone(mState.convertDimension(marginGoneValue));
@@ -791,6 +876,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param value
+     * @return
      */
     public ConstraintReference margin(int value) {
         if (mLast != null) {
@@ -799,44 +886,42 @@ public class ConstraintReference implements Reference {
                 case LEFT_TO_RIGHT: {
                     mMarginLeft = value;
                 }
-                break;
+                    break;
                 case RIGHT_TO_LEFT:
                 case RIGHT_TO_RIGHT: {
                     mMarginRight = value;
                 }
-                break;
+                    break;
                 case START_TO_START:
                 case START_TO_END: {
                     mMarginStart = value;
                 }
-                break;
+                    break;
                 case END_TO_START:
                 case END_TO_END: {
                     mMarginEnd = value;
                 }
-                break;
+                    break;
                 case TOP_TO_TOP:
                 case TOP_TO_BOTTOM: {
                     mMarginTop = value;
                 }
-                break;
+                    break;
                 case BOTTOM_TO_TOP:
                 case BOTTOM_TO_BOTTOM: {
                     mMarginBottom = value;
                 }
-                break;
+                    break;
                 case BASELINE_TO_BOTTOM:
                 case BASELINE_TO_TOP:
                 case BASELINE_TO_BASELINE: {
                     mMarginBaseline = value;
                 }
-                break;
+                    break;
                 case CIRCULAR_CONSTRAINT: {
                     mCircularDistance = value;
-                }
-                break;
-                default:
-                    break;
+                } break;
+                default: break;
             }
         } else {
             mMarginLeft = value;
@@ -851,6 +936,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param value
+     * @return
      */
     public ConstraintReference marginGone(int value) {
         if (mLast != null) {
@@ -859,40 +946,39 @@ public class ConstraintReference implements Reference {
                 case LEFT_TO_RIGHT: {
                     mMarginLeftGone = value;
                 }
-                break;
+                    break;
                 case RIGHT_TO_LEFT:
                 case RIGHT_TO_RIGHT: {
                     mMarginRightGone = value;
                 }
-                break;
+                    break;
                 case START_TO_START:
                 case START_TO_END: {
                     mMarginStartGone = value;
                 }
-                break;
+                    break;
                 case END_TO_START:
                 case END_TO_END: {
                     mMarginEndGone = value;
                 }
-                break;
+                    break;
                 case TOP_TO_TOP:
                 case TOP_TO_BOTTOM: {
                     mMarginTopGone = value;
                 }
-                break;
+                    break;
                 case BOTTOM_TO_TOP:
                 case BOTTOM_TO_BOTTOM: {
                     mMarginBottomGone = value;
                 }
-                break;
+                    break;
                 case BASELINE_TO_TOP:
                 case BASELINE_TO_BOTTOM:
                 case BASELINE_TO_BASELINE: {
                     mMarginBaselineGone = value;
                 }
-                break;
-                default:
                     break;
+                default: break;
             }
         } else {
             mMarginLeftGone = value;
@@ -907,6 +993,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param value
+     * @return
      */
     public ConstraintReference horizontalBias(float value) {
         mHorizontalBias = value;
@@ -915,6 +1003,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param value
+     * @return
      */
     public ConstraintReference verticalBias(float value) {
         mVerticalBias = value;
@@ -923,6 +1013,8 @@ public class ConstraintReference implements Reference {
 
     /**
      * @TODO: add description
+     * @param value
+     * @return
      */
     public ConstraintReference bias(float value) {
         if (mLast == null) {
@@ -940,7 +1032,7 @@ public class ConstraintReference implements Reference {
             case END_TO_END: {
                 mHorizontalBias = value;
             }
-            break;
+                break;
             case CENTER_VERTICALLY:
             case TOP_TO_TOP:
             case TOP_TO_BOTTOM:
@@ -948,15 +1040,15 @@ public class ConstraintReference implements Reference {
             case BOTTOM_TO_BOTTOM: {
                 mVerticalBias = value;
             }
-            break;
-            default:
                 break;
+            default: break;
         }
         return this;
     }
 
     /**
      * @TODO: add description
+     * @return
      */
     public ConstraintReference clear() {
         if (mLast != null) {
@@ -968,7 +1060,7 @@ public class ConstraintReference implements Reference {
                     mMarginLeft = 0;
                     mMarginLeftGone = 0;
                 }
-                break;
+                    break;
                 case RIGHT_TO_LEFT:
                 case RIGHT_TO_RIGHT: {
                     mRightToLeft = null;
@@ -976,7 +1068,7 @@ public class ConstraintReference implements Reference {
                     mMarginRight = 0;
                     mMarginRightGone = 0;
                 }
-                break;
+                    break;
                 case START_TO_START:
                 case START_TO_END: {
                     mStartToStart = null;
@@ -984,7 +1076,7 @@ public class ConstraintReference implements Reference {
                     mMarginStart = 0;
                     mMarginStartGone = 0;
                 }
-                break;
+                    break;
                 case END_TO_START:
                 case END_TO_END: {
                     mEndToStart = null;
@@ -992,7 +1084,7 @@ public class ConstraintReference implements Reference {
                     mMarginEnd = 0;
                     mMarginEndGone = 0;
                 }
-                break;
+                    break;
                 case TOP_TO_TOP:
                 case TOP_TO_BOTTOM: {
                     mTopToTop = null;
@@ -1000,7 +1092,7 @@ public class ConstraintReference implements Reference {
                     mMarginTop = 0;
                     mMarginTopGone = 0;
                 }
-                break;
+                    break;
                 case BOTTOM_TO_TOP:
                 case BOTTOM_TO_BOTTOM: {
                     mBottomToTop = null;
@@ -1008,7 +1100,7 @@ public class ConstraintReference implements Reference {
                     mMarginBottom = 0;
                     mMarginBottomGone = 0;
                 }
-                break;
+                    break;
                 case BASELINE_TO_BASELINE: {
                     mBaselineToBaseline = null;
                 }
@@ -1017,8 +1109,7 @@ public class ConstraintReference implements Reference {
                     mCircularConstraint = null;
                 }
                 break;
-                default:
-                    break;
+                default: break;
             }
         } else {
             mLeftToLeft = null;
@@ -1062,99 +1153,81 @@ public class ConstraintReference implements Reference {
     }
 
     private void applyConnection(ConstraintWidget widget,
-            Object opaqueTarget,
-            State.Constraint type) {
+                                 Object opaqueTarget,
+                                 State.Constraint type) {
         ConstraintWidget target = getTarget(opaqueTarget);
         if (target == null) {
             return;
         }
         switch (type) {
             // TODO: apply RTL
-            default:
-                break;
+            default: break;
         }
         switch (type) {
             case START_TO_START: {
                 widget.getAnchor(ConstraintAnchor.Type.LEFT).connect(target.getAnchor(
                         ConstraintAnchor.Type.LEFT), mMarginStart, mMarginStartGone, false);
-            }
-            break;
+            } break;
             case START_TO_END: {
                 widget.getAnchor(ConstraintAnchor.Type.LEFT).connect(target.getAnchor(
                         ConstraintAnchor.Type.RIGHT), mMarginStart, mMarginStartGone, false);
-            }
-            break;
+            } break;
             case END_TO_START: {
                 widget.getAnchor(ConstraintAnchor.Type.RIGHT).connect(target.getAnchor(
                         ConstraintAnchor.Type.LEFT), mMarginEnd, mMarginEndGone, false);
-            }
-            break;
+            } break;
             case END_TO_END: {
                 widget.getAnchor(ConstraintAnchor.Type.RIGHT).connect(target.getAnchor(
                         ConstraintAnchor.Type.RIGHT), mMarginEnd, mMarginEndGone, false);
-            }
-            break;
+            } break;
             case LEFT_TO_LEFT: {
                 widget.getAnchor(ConstraintAnchor.Type.LEFT).connect(target.getAnchor(
                         ConstraintAnchor.Type.LEFT), mMarginLeft, mMarginLeftGone, false);
-            }
-            break;
+            } break;
             case LEFT_TO_RIGHT: {
                 widget.getAnchor(ConstraintAnchor.Type.LEFT).connect(target.getAnchor(
                         ConstraintAnchor.Type.RIGHT), mMarginLeft, mMarginLeftGone, false);
-            }
-            break;
+            } break;
             case RIGHT_TO_LEFT: {
                 widget.getAnchor(ConstraintAnchor.Type.RIGHT).connect(target.getAnchor(
                         ConstraintAnchor.Type.LEFT), mMarginRight, mMarginRightGone, false);
-            }
-            break;
+            } break;
             case RIGHT_TO_RIGHT: {
                 widget.getAnchor(ConstraintAnchor.Type.RIGHT).connect(target.getAnchor(
                         ConstraintAnchor.Type.RIGHT), mMarginRight, mMarginRightGone, false);
-            }
-            break;
+            } break;
             case TOP_TO_TOP: {
                 widget.getAnchor(ConstraintAnchor.Type.TOP).connect(target.getAnchor(
                         ConstraintAnchor.Type.TOP), mMarginTop, mMarginTopGone, false);
-            }
-            break;
+            } break;
             case TOP_TO_BOTTOM: {
                 widget.getAnchor(ConstraintAnchor.Type.TOP).connect(target.getAnchor(
                         ConstraintAnchor.Type.BOTTOM), mMarginTop, mMarginTopGone, false);
-            }
-            break;
+            } break;
             case BOTTOM_TO_TOP: {
                 widget.getAnchor(ConstraintAnchor.Type.BOTTOM).connect(target.getAnchor(
                         ConstraintAnchor.Type.TOP), mMarginBottom, mMarginBottomGone, false);
-            }
-            break;
+            } break;
             case BOTTOM_TO_BOTTOM: {
                 widget.getAnchor(ConstraintAnchor.Type.BOTTOM).connect(target.getAnchor(
                         ConstraintAnchor.Type.BOTTOM), mMarginBottom, mMarginBottomGone, false);
-            }
-            break;
+            } break;
             case BASELINE_TO_BASELINE: {
                 widget.immediateConnect(ConstraintAnchor.Type.BASELINE, target,
                         ConstraintAnchor.Type.BASELINE, mMarginBaseline, mMarginBaselineGone);
-            }
-            break;
+            } break;
             case BASELINE_TO_TOP: {
                 widget.immediateConnect(ConstraintAnchor.Type.BASELINE,
                         target, ConstraintAnchor.Type.TOP, mMarginBaseline, mMarginBaselineGone);
-            }
-            break;
+            } break;
             case BASELINE_TO_BOTTOM: {
                 widget.immediateConnect(ConstraintAnchor.Type.BASELINE, target,
                         ConstraintAnchor.Type.BOTTOM, mMarginBaseline, mMarginBaselineGone);
-            }
-            break;
+            } break;
             case CIRCULAR_CONSTRAINT: {
                 widget.connectCircularConstraint(target, mCircularAngle, (int) mCircularDistance);
-            }
-            break;
-            default:
-                break;
+            } break;
+            default: break;
         }
     }
 

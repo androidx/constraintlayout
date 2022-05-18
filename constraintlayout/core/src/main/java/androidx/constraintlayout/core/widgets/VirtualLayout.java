@@ -20,7 +20,10 @@ import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure;
 import java.util.HashSet;
 
 /**
- * @DoNotShow Base class for Virtual layouts
+ * @DoNotShow
+ *
+ * Base class for Virtual layouts
+ *
  */
 public class VirtualLayout extends HelperWidget {
 
@@ -45,6 +48,7 @@ public class VirtualLayout extends HelperWidget {
 
     /**
      * @TODO: add description
+     * @param value
      */
     public void setPadding(int value) {
         mPaddingLeft = value;
@@ -57,6 +61,7 @@ public class VirtualLayout extends HelperWidget {
 
     /**
      * @TODO: add description
+     * @param value
      */
     public void setPaddingStart(int value) {
         mPaddingStart = value;
@@ -70,6 +75,7 @@ public class VirtualLayout extends HelperWidget {
 
     /**
      * @TODO: add description
+     * @param value
      */
     public void setPaddingLeft(int value) {
         mPaddingLeft = value;
@@ -78,6 +84,7 @@ public class VirtualLayout extends HelperWidget {
 
     /**
      * @TODO: add description
+     * @param isRtl
      */
     public void applyRtl(boolean isRtl) {
         if (mPaddingStart > 0 || mPaddingEnd > 0) {
@@ -97,6 +104,7 @@ public class VirtualLayout extends HelperWidget {
 
     /**
      * @TODO: add description
+     * @param value
      */
     public void setPaddingRight(int value) {
         mPaddingRight = value;
@@ -133,6 +141,7 @@ public class VirtualLayout extends HelperWidget {
 
     /**
      * @TODO: add description
+     * @return
      */
     public boolean needSolverPass() {
         return mNeedsCallFromSolver;
@@ -144,6 +153,10 @@ public class VirtualLayout extends HelperWidget {
 
     /**
      * @TODO: add description
+     * @param widthMode
+     * @param widthSize
+     * @param heightMode
+     * @param heightSize
      */
     public void measure(int widthMode, int widthSize, int heightMode, int heightSize) {
         // nothing
@@ -176,6 +189,8 @@ public class VirtualLayout extends HelperWidget {
 
     /**
      * @TODO: add description
+     * @param width
+     * @param height
      */
     public void setMeasure(int width, int height) {
         mMeasuredWidth = width;
@@ -236,10 +251,10 @@ public class VirtualLayout extends HelperWidget {
     BasicMeasure.Measurer mMeasurer = null;
 
     protected void measure(ConstraintWidget widget,
-            ConstraintWidget.DimensionBehaviour horizontalBehavior,
-            int horizontalDimension,
-            ConstraintWidget.DimensionBehaviour verticalBehavior,
-            int verticalDimension) {
+                         ConstraintWidget.DimensionBehaviour horizontalBehavior,
+                           int horizontalDimension,
+                         ConstraintWidget.DimensionBehaviour verticalBehavior,
+                           int verticalDimension) {
         while (mMeasurer == null && getParent() != null) {
             ConstraintWidgetContainer parent = (ConstraintWidgetContainer) getParent();
             mMeasurer = parent.getMeasurer();
@@ -257,6 +272,8 @@ public class VirtualLayout extends HelperWidget {
 
     /**
      * @TODO: add description
+     * @param widgets
+     * @return
      */
     public boolean contains(HashSet<ConstraintWidget> widgets) {
         for (int i = 0; i < mWidgetsCount; i++) {

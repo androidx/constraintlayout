@@ -23,15 +23,15 @@ public class CLString extends CLElement {
 
     /**
      * @TODO: add description
+     * @param content
+     * @return
      */
     public static CLElement allocate(char[] content) {
         return new CLString(content);
     }
-
     protected String toJSON() {
         return "'" + content() + "'";
     }
-
     protected String toFormattedJSON(int indent, int forceIndent) {
         StringBuilder json = new StringBuilder();
         addIndent(json, indent);

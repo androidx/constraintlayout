@@ -25,8 +25,7 @@ class Amount {
 
     /**
      * Base constructor, set the numerator and denominator.
-     *
-     * @param numerator   the numerator
+     * @param numerator the numerator
      * @param denominator the denominator
      */
     Amount(int numerator, int denominator) {
@@ -37,7 +36,6 @@ class Amount {
 
     /**
      * Alternate constructor, set the numerator, with the denominator set to one.
-     *
      * @param numerator the amount's value
      */
     Amount(int numerator) {
@@ -53,8 +51,7 @@ class Amount {
 
     /**
      * Set the numerator and denominator directly
-     *
-     * @param numerator   numerator
+     * @param numerator numerator
      * @param denominator denominator
      */
     public void set(int numerator, int denominator) {
@@ -65,7 +62,6 @@ class Amount {
 
     /**
      * Add an amount to the current one.
-     *
      * @param amount amount to add
      * @return this
      */
@@ -82,7 +78,6 @@ class Amount {
 
     /**
      * Add an integer amount
-     *
      * @param amount amount to add
      * @return this
      */
@@ -93,7 +88,6 @@ class Amount {
 
     /**
      * Subtract an amount to the current one.
-     *
      * @param amount amount to subtract
      * @return this
      */
@@ -110,7 +104,6 @@ class Amount {
 
     /**
      * Multiply an amount with the current one.
-     *
      * @param amount amount to multiply by
      * @return this
      */
@@ -123,7 +116,6 @@ class Amount {
 
     /**
      * Divide the current amount by the given amount.
-     *
      * @param amount amount to divide by
      * @return this
      */
@@ -138,7 +130,6 @@ class Amount {
 
     /**
      * Inverse the current amount as a fraction (e.g. a/b becomes b/a)
-     *
      * @return this
      */
     public Amount inverseFraction() {
@@ -151,7 +142,6 @@ class Amount {
 
     /**
      * Inverse the current amount (positive to negative or negative to positive)
-     *
      * @return this
      */
     public Amount inverse() {
@@ -162,7 +152,6 @@ class Amount {
 
     /**
      * Accessor for the numerator
-     *
      * @return the numerator
      */
     public int getNumerator() {
@@ -171,7 +160,6 @@ class Amount {
 
     /**
      * Accessor for the denominator
-     *
      * @return the denominator
      */
     public int getDenominator() {
@@ -180,7 +168,6 @@ class Amount {
 
     /**
      * Override equals method
-     *
      * @param o compared object
      * @return true if the compared object is equals to this one (same numerator and denominator)
      */
@@ -225,7 +212,6 @@ class Amount {
 
     /**
      * Iterative Binary GCD algorithm
-     *
      * @param u first number
      * @param v second number
      * @return Greater Common Divisor
@@ -263,9 +249,7 @@ class Amount {
                 v >>= 1;
             }
             if (u > v) {
-                int t = v;
-                v = u;
-                u = t;
+                int t = v; v = u; u = t;
             }
             v = v - u;
         } while (v != 0);
@@ -274,7 +258,6 @@ class Amount {
 
     /**
      * Returns true if the Amount is equals to one
-     *
      * @return true if the Amount is equals to one
      */
     public boolean isOne() {
@@ -283,7 +266,6 @@ class Amount {
 
     /**
      * Returns true if the Amount is equals to minus one
-     *
      * @return true if the Amount is equals to minus one
      */
     public boolean isMinusOne() {
@@ -292,7 +274,6 @@ class Amount {
 
     /**
      * Returns true if the Amount is positive.
-     *
      * @return true if the Amount is positive.
      */
     public boolean isPositive() {
@@ -301,7 +282,6 @@ class Amount {
 
     /**
      * Returns true if the Amount is negative.
-     *
      * @return true if the Amount is negative.
      */
     public boolean isNegative() {
@@ -310,7 +290,6 @@ class Amount {
 
     /**
      * Returns true if the value is zero
-     *
      * @return true if the value is zero
      */
     public boolean isNull() {
@@ -327,7 +306,6 @@ class Amount {
 
     /**
      * Returns the float value of the Amount
-     *
      * @return the float value
      */
     public float toFloat() {
@@ -339,7 +317,6 @@ class Amount {
 
     /**
      * Override the toString() method to display the amount (possibly as a fraction)
-     *
      * @return formatted string
      */
     @Override

@@ -45,7 +45,7 @@ public class ConstraintSetParserTest {
         state.setDpToPixel(dp -> dp);
         ConstraintSetParser.LayoutVariables vars = new ConstraintSetParser.LayoutVariables();
         ConstraintWidgetContainer root = new ConstraintWidgetContainer(1000, 1000);
-        ConstraintWidget idWidget = new ConstraintWidget();
+        ConstraintWidget idWidget =  new ConstraintWidget();
         idWidget.stringId = "id1";
         ConstraintSetParser.parseJSON(jsonString, state, vars);
         root.add(idWidget);

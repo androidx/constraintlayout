@@ -23,6 +23,7 @@ public class Rect {
 
     /**
      * @TODO: add description
+     * @return
      */
     public int width() {
         return right - left;
@@ -30,6 +31,7 @@ public class Rect {
 
     /**
      * @TODO: add description
+     * @return
      */
     public int height() {
         return bottom - top;
