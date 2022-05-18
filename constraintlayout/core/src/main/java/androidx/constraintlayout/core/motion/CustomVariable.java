@@ -31,7 +31,6 @@ public class CustomVariable {
 
     /**
      * @TODO: add description
-     * @return
      */
     public CustomVariable copy() {
         return new CustomVariable(this);
@@ -76,8 +75,6 @@ public class CustomVariable {
 
     /**
      * @TODO: add description
-     * @param v
-     * @return
      */
     public static String colorString(int v) {
         String str = "00000000" + Integer.toHexString(v);
@@ -130,8 +127,6 @@ public class CustomVariable {
 
     /**
      * Continuous types are interpolated they are fired only at
-     *
-     * @return
      */
     public boolean isContinuous() {
         switch (mType) {
@@ -200,7 +195,6 @@ public class CustomVariable {
 
     /**
      * @TODO: add description
-     * @param ret
      */
     public void getValuesToInterpolate(float[] ret) {
         switch (mType) {
@@ -236,7 +230,6 @@ public class CustomVariable {
 
     /**
      * @TODO: add description
-     * @param value
      */
     public void setValue(float[] value) {
         switch (mType) {
@@ -268,10 +261,6 @@ public class CustomVariable {
 
     /**
      * @TODO: add description
-     * @param hue
-     * @param saturation
-     * @param value
-     * @return
      */
     public static int hsvToRgb(float hue, float saturation, float value) {
         int h = (int) (hue * 6);
@@ -300,9 +289,6 @@ public class CustomVariable {
 
     /**
      * test if the two attributes are different
-     *
-     * @param customAttribute
-     * @return
      */
     public boolean diff(CustomVariable customAttribute) {
         if (customAttribute == null || mType != customAttribute.mType) {
@@ -346,7 +332,6 @@ public class CustomVariable {
 
     /**
      * @TODO: add description
-     * @param value
      */
     public void setValue(Object value) {
         switch (mType) {
@@ -383,8 +368,6 @@ public class CustomVariable {
 
     /**
      * @TODO: add description
-     * @param value
-     * @return
      */
     public int getInterpolatedColor(float[] value) {
         int r = clamp((int) ((float) Math.pow(value[0], 1.0 / 2.2) * 255.0f));
@@ -397,8 +380,6 @@ public class CustomVariable {
 
     /**
      * @TODO: add description
-     * @param view
-     * @param value
      */
     public void setInterpolatedValue(MotionWidget view, float[] value) {
 
@@ -429,11 +410,6 @@ public class CustomVariable {
 
     /**
      * @TODO: add description
-     * @param r
-     * @param g
-     * @param b
-     * @param a
-     * @return
      */
     public static int rgbaTocColor(float r, float g, float b, float a) {
         int ir = clamp((int) (r * 255f));
@@ -446,7 +422,6 @@ public class CustomVariable {
 
     /**
      * @TODO: add description
-     * @param view
      */
     public void applyToWidget(MotionWidget view) {
         switch (mType) {

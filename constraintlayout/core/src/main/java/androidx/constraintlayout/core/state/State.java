@@ -103,7 +103,6 @@ public class State {
 
     /**
      * Set the function that converts dp to Pixels
-     * @param dpToPixel
      */
     public void setDpToPixel(CorePixelDp dpToPixel) {
         this.mDpToPixel = dpToPixel;
@@ -130,7 +129,6 @@ public class State {
      * via an object, not directly an int.
      *
      * @param value the object to convert from
-     * @return
      */
     public int convertDimension(Object value) {
         if (value instanceof Float) {
@@ -144,9 +142,6 @@ public class State {
 
     /**
      * Create a new reference given a key.
-     *
-     * @param key
-     * @return
      */
     public ConstraintReference createConstraintReference(Object key) {
         return new ConstraintReference(this);
@@ -154,8 +149,6 @@ public class State {
 
     /**
      * @TODO: add description
-     * @param width
-     * @return
      */
     public boolean sameFixedWidth(int width) {
         return mParent.getWidth().equalsFixedValue(width);
@@ -163,8 +156,6 @@ public class State {
 
     /**
      * @TODO: add description
-     * @param height
-     * @return
      */
     public boolean sameFixedHeight(int height) {
         return mParent.getHeight().equalsFixedValue(height);
@@ -172,8 +163,6 @@ public class State {
 
     /**
      * @TODO: add description
-     * @param dimension
-     * @return
      */
     public State width(Dimension dimension) {
         return setWidth(dimension);
@@ -181,8 +170,6 @@ public class State {
 
     /**
      * @TODO: add description
-     * @param dimension
-     * @return
      */
     public State height(Dimension dimension) {
         return setHeight(dimension);
@@ -190,8 +177,6 @@ public class State {
 
     /**
      * @TODO: add description
-     * @param dimension
-     * @return
      */
     public State setWidth(Dimension dimension) {
         mParent.setWidth(dimension);
@@ -200,8 +185,6 @@ public class State {
 
     /**
      * @TODO: add description
-     * @param dimension
-     * @return
      */
     public State setHeight(Dimension dimension) {
         mParent.setHeight(dimension);
@@ -214,8 +197,6 @@ public class State {
 
     /**
      * @TODO: add description
-     * @param key
-     * @return
      */
     public ConstraintReference constraints(Object key) {
         Reference reference = mReferences.get(key);
@@ -231,15 +212,13 @@ public class State {
     }
 
     private int mNumHelpers = 0;
+
     private String createHelperKey() {
         return "__HELPER_KEY_" + mNumHelpers++ + "__";
     }
 
     /**
      * @TODO: add description
-     * @param key
-     * @param type
-     * @return
      */
     public HelperReference helper(Object key, State.Helper type) {
         if (key == null) {
@@ -250,19 +229,24 @@ public class State {
             switch (type) {
                 case HORIZONTAL_CHAIN: {
                     reference = new HorizontalChainReference(this);
-                } break;
+                }
+                break;
                 case VERTICAL_CHAIN: {
                     reference = new VerticalChainReference(this);
-                } break;
+                }
+                break;
                 case ALIGN_HORIZONTALLY: {
                     reference = new AlignHorizontallyReference(this);
-                } break;
+                }
+                break;
                 case ALIGN_VERTICALLY: {
                     reference = new AlignVerticallyReference(this);
-                } break;
+                }
+                break;
                 case BARRIER: {
                     reference = new BarrierReference(this);
-                } break;
+                }
+                break;
                 default: {
                     reference = new HelperReference(this, type);
                 }
@@ -275,8 +259,6 @@ public class State {
 
     /**
      * @TODO: add description
-     * @param key
-     * @return
      */
     public GuidelineReference horizontalGuideline(Object key) {
         return guideline(key, ConstraintWidget.HORIZONTAL);
@@ -284,8 +266,6 @@ public class State {
 
     /**
      * @TODO: add description
-     * @param key
-     * @return
      */
     public GuidelineReference verticalGuideline(Object key) {
         return guideline(key, ConstraintWidget.VERTICAL);
@@ -293,9 +273,6 @@ public class State {
 
     /**
      * @TODO: add description
-     * @param key
-     * @param orientation
-     * @return
      */
     public GuidelineReference guideline(Object key, int orientation) {
         ConstraintReference reference = constraints(key);
@@ -311,9 +288,6 @@ public class State {
 
     /**
      * @TODO: add description
-     * @param key
-     * @param direction
-     * @return
      */
     public BarrierReference barrier(Object key, Direction direction) {
         ConstraintReference reference = constraints(key);
@@ -327,7 +301,6 @@ public class State {
 
     /**
      * @TODO: add description
-     * @return
      */
     public VerticalChainReference verticalChain() {
         return (VerticalChainReference) helper(null, Helper.VERTICAL_CHAIN);
@@ -335,8 +308,6 @@ public class State {
 
     /**
      * @TODO: add description
-     * @param references
-     * @return
      */
     public VerticalChainReference verticalChain(Object... references) {
         VerticalChainReference reference =
@@ -347,7 +318,6 @@ public class State {
 
     /**
      * @TODO: add description
-     * @return
      */
     public HorizontalChainReference horizontalChain() {
         return (HorizontalChainReference) helper(null, Helper.HORIZONTAL_CHAIN);
@@ -355,8 +325,6 @@ public class State {
 
     /**
      * @TODO: add description
-     * @param references
-     * @return
      */
     public HorizontalChainReference horizontalChain(Object... references) {
         HorizontalChainReference reference =
@@ -367,8 +335,6 @@ public class State {
 
     /**
      * @TODO: add description
-     * @param references
-     * @return
      */
     public AlignHorizontallyReference centerHorizontally(Object... references) {
         AlignHorizontallyReference reference =
@@ -379,8 +345,6 @@ public class State {
 
     /**
      * @TODO: add description
-     * @param references
-     * @return
      */
     public AlignVerticallyReference centerVertically(Object... references) {
         AlignVerticallyReference reference =
@@ -405,8 +369,6 @@ public class State {
 
     /**
      * @TODO: add description
-     * @param key
-     * @param view
      */
     public void map(Object key, Object view) {
         Reference ref = constraints(key);
@@ -418,8 +380,6 @@ public class State {
 
     /**
      * @TODO: add description
-     * @param key
-     * @param tag
      */
     public void setTag(String key, String tag) {
         Reference ref = constraints(key);
@@ -439,8 +399,6 @@ public class State {
 
     /**
      * @TODO: add description
-     * @param tag
-     * @return
      */
     public ArrayList<String> getIdsForTag(String tag) {
         if (mTags.containsKey(tag)) {
@@ -451,7 +409,6 @@ public class State {
 
     /**
      * @TODO: add description
-     * @param container
      */
     public void apply(ConstraintWidgetContainer container) {
         container.removeAllChildren();
@@ -548,7 +505,6 @@ public class State {
 
     /**
      * Baseline is needed for this object
-     * @param id
      */
     public void baselineNeededFor(Object id) {
         mBaselineNeeded.add(id);
@@ -557,7 +513,7 @@ public class State {
 
     /**
      * Does this constraintWidget need a baseline
-     * @param constraintWidget
+     *
      * @return true if the constraintWidget needs a baseline
      */
     public boolean isBaselineNeeded(ConstraintWidget constraintWidget) {

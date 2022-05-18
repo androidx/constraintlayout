@@ -256,6 +256,7 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
             }
         }
     }
+
     private void removeFromHashMap(SolverVariable variable) {
         if (DEBUG) {
             System.out.println(this.hashCode() + " hash remove " + variable.id);
@@ -274,7 +275,7 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
             mKeys[hash] = mNextKeys[key];
             mNextKeys[key] = mNone;
         } else {
-            while (mNextKeys[key] != mNone && mVariables[mNextKeys[key]] != id)  {
+            while (mNextKeys[key] != mNone && mVariables[mNextKeys[key]] != id) {
                 key = mNextKeys[key];
             }
             int currentKey = mNextKeys[key];

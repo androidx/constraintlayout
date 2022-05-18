@@ -1431,8 +1431,8 @@ public class OptimizationsTest {
         root.layout();
 
         System.out.println(" direct: -> A: " + a + " guideline: " + guidelineStart
-                + " ebnd " + guidelineEnd + " B: " + b +  " C: "  + c + " D: " + d);
-        System.out.println(" direct: -> A2: " + a2 + " B2: " + b2 +  " C2: "  + c2 + " D2: " + d2);
+                + " ebnd " + guidelineEnd + " B: " + b + " C: " + c + " D: " + d);
+        System.out.println(" direct: -> A2: " + a2 + " B2: " + b2 + " C2: " + c2 + " D2: " + d2);
 
         assertEquals(a.getLeft(), 30);
         assertEquals(b.getLeft(), 50);
@@ -1447,7 +1447,7 @@ public class OptimizationsTest {
     }
 
     private void chainConnect(Type start, ConstraintWidget startTarget, Type end,
-                              ConstraintWidget endTarget, ConstraintWidget ... widgets) {
+            ConstraintWidget endTarget, ConstraintWidget... widgets) {
         widgets[0].connect(start, startTarget, start);
         ConstraintWidget previousWidget = null;
         for (int i = 0; i < widgets.length; i++) {
@@ -1515,8 +1515,8 @@ public class OptimizationsTest {
         root.layout();
 
         System.out.println(" direct: -> A: " + a + " guideline: " + guidelineStart
-                + " ebnd " + guidelineEnd + " B: " + b +  " C: "  + c + " D: " + d);
-        System.out.println(" direct: -> A2: " + a2 + " B2: " + b2 +  " C2: "  + c2 + " D2: " + d2);
+                + " ebnd " + guidelineEnd + " B: " + b + " C: " + c + " D: " + d);
+        System.out.println(" direct: -> A2: " + a2 + " B2: " + b2 + " C2: " + c2 + " D2: " + d2);
 
         assertEquals(a.getTop(), 30);
         assertEquals(b.getTop(), 50);
@@ -1590,7 +1590,7 @@ public class OptimizationsTest {
         root.setHeight(600);
         root.layout();
 
-        System.out.println(" direct: -> A: " + a + " B: " + b +  " C: "  + c);
+        System.out.println(" direct: -> A: " + a + " B: " + b + " C: " + c);
 
         assertEquals(a.getTop(), 0);
         assertEquals(b.getTop(), 290);
@@ -1628,7 +1628,7 @@ public class OptimizationsTest {
         root.layout();
 
         System.out.println(" direct: -> root: " + root + " A: " + a + " B: " + b
-                +  " C: "  + c + " Barrier: " + barrier.getTop());
+                + " C: " + c + " Barrier: " + barrier.getTop());
 
         assertEquals(a.getLeft(), 0);
         assertEquals(a.getTop(), 0);

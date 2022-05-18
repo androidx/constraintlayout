@@ -19,6 +19,7 @@ package androidx.constraintlayout.core.state;
 public interface CorePixelDp {
     /**
      * Convert dp to pixels
+     *
      * @param dp the value in dip
      * @return the value in pixels
      */

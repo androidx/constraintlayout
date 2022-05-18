@@ -58,7 +58,6 @@ final class Pools {
          *
          * @param instance The instance to release.
          * @return Whether the instance was put in the pool.
-         *
          * @throws IllegalStateException If the instance is already in the pool.
          */
         boolean release(T instance);
@@ -67,7 +66,7 @@ final class Pools {
          * Try releasing all instances at the same time
          *
          * @param variables the variables to release
-         * @param count the number of variables to release
+         * @param count     the number of variables to release
          */
         void releaseAll(T[] variables, int count);
     }
@@ -90,7 +89,6 @@ final class Pools {
          * Creates a new instance.
          *
          * @param maxPoolSize The max pool size.
-         *
          * @throws IllegalArgumentException If the max pool size is less than zero.
          */
         SimplePool(int maxPoolSize) {

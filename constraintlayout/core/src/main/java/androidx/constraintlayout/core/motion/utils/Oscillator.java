@@ -51,8 +51,6 @@ public class Oscillator {
 
     /**
      * @TODO: add description
-     * @param type
-     * @param customType
      */
     public void setType(int type, String customType) {
         mType = type;
@@ -64,8 +62,6 @@ public class Oscillator {
 
     /**
      * @TODO: add description
-     * @param position
-     * @param period
      */
     public void addPoint(double position, float period) {
         int len = mPeriod.length + 1;
@@ -133,9 +129,6 @@ public class Oscillator {
 
     /**
      * @TODO: add description
-     * @param time
-     * @param phase
-     * @return
      */
     public double getValue(double time, double phase) {
         double angle = phase + getP(time); // angle is / by 360
@@ -184,10 +177,6 @@ public class Oscillator {
 
     /**
      * @TODO: add description
-     * @param time
-     * @param phase
-     * @param dphase
-     * @return
      */
     public double getSlope(double time, double phase, double dphase) {
         double angle = phase + getP(time);

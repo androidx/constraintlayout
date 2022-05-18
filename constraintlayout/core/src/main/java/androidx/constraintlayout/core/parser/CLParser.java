@@ -27,9 +27,6 @@ public class CLParser {
 
     /**
      * @TODO: add description
-     * @param string
-     * @return
-     * @throws CLParsingException
      */
     public static CLObject parse(String string) throws CLParsingException {
         return (new CLParser(string)).parse();
@@ -41,8 +38,6 @@ public class CLParser {
 
     /**
      * @TODO: add description
-     * @return
-     * @throws CLParsingException
      */
     public CLObject parse() throws CLParsingException {
         CLObject root = null;
@@ -169,7 +164,7 @@ public class CLParser {
     }
 
     private CLElement getNextJsonElement(int position, char c, CLElement currentElement,
-                                                char[] content) throws CLParsingException {
+            char[] content) throws CLParsingException {
         switch (c) {
             case ' ':
             case ':':
@@ -177,9 +172,9 @@ public class CLParser {
             case '\t':
             case '\r':
             case '\n': {
-            // skip space
+                // skip space
             }
-                break;
+            break;
             case '{': {
                 currentElement = createElement(currentElement,
                         position, TYPE.OBJECT, true, content);
@@ -196,7 +191,7 @@ public class CLParser {
                 currentElement = currentElement.getContainer();
                 currentElement.setEnd(position);
             }
-                break;
+            break;
             case '"':
             case '\'': {
                 if (currentElement instanceof CLObject) {
@@ -207,7 +202,7 @@ public class CLParser {
                             position, TYPE.STRING, true, content);
                 }
             }
-                break;
+            break;
             case '/': {
                 if (position + 1 < content.length && content[position + 1] == '/') {
                     mHasComment = true;
@@ -230,7 +225,7 @@ public class CLParser {
                 currentElement = createElement(currentElement,
                         position, TYPE.NUMBER, true, content);
             }
-                break;
+            break;
             default: {
                 if (currentElement instanceof CLContainer
                         && !(currentElement instanceof CLObject)) {
@@ -251,7 +246,7 @@ public class CLParser {
     }
 
     private CLElement createElement(CLElement currentElement, int position,
-                                         TYPE type, boolean applyStart, char[] content) {
+            TYPE type, boolean applyStart, char[] content) {
         CLElement newElement = null;
         if (sDebug) {
             System.out.println("CREATE " + type + " at " + content[position]);
@@ -283,7 +278,8 @@ public class CLParser {
                 newElement = CLToken.allocate(content);
             }
             break;
-            default: break;
+            default:
+                break;
         }
         if (newElement == null) {
             return null;

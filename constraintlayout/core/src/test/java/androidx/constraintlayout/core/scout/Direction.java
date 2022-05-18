@@ -31,8 +31,8 @@ public enum Direction {
     static final int ORIENTATION_HORIZONTAL = 1;
 
     private static Direction[] sAllDirections = Direction.values();
-    private static Direction[] sVertical = { NORTH, SOUTH, BASE };
-    private static Direction[] sHorizontal = { WEST, EAST };
+    private static Direction[] sVertical = {NORTH, SOUTH, BASE};
+    private static Direction[] sHorizontal = {WEST, EAST};
 
     Direction(int n) {
         mDirection = n;
@@ -108,7 +108,6 @@ public enum Direction {
     /**
      * convert from an ordinal of direction to actual direction
      *
-     * @param directionInteger
      * @return Enum member equivalent to integer
      */
     static Direction get(int directionInteger) {

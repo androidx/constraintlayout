@@ -39,9 +39,6 @@ public class ConstraintAnchor {
 
     /**
      * @TODO: add description
-     * @param orientation
-     * @param list
-     * @param group
      */
     public void findDependents(int orientation, ArrayList<WidgetGroup> list, WidgetGroup group) {
         if (mDependents != null) {
@@ -57,7 +54,6 @@ public class ConstraintAnchor {
 
     /**
      * @TODO: add description
-     * @return
      */
     public boolean hasDependents() {
         if (mDependents == null) {
@@ -68,7 +64,6 @@ public class ConstraintAnchor {
 
     /**
      * @TODO: add description
-     * @return
      */
     public boolean hasCenteredDependents() {
         if (mDependents == null) {
@@ -85,7 +80,6 @@ public class ConstraintAnchor {
 
     /**
      * @TODO: add description
-     * @param finalValue
      */
     public void setFinalValue(int finalValue) {
         this.mFinalValue = finalValue;
@@ -94,7 +88,6 @@ public class ConstraintAnchor {
 
     /**
      * @TODO: add description
-     * @return
      */
     public int getFinalValue() {
         if (!mHasFinalValue) {
@@ -113,7 +106,6 @@ public class ConstraintAnchor {
 
     /**
      * @TODO: add description
-     * @return
      */
     public boolean hasFinalValue() {
         return mHasFinalValue;
@@ -122,7 +114,7 @@ public class ConstraintAnchor {
     /**
      * Define the type of anchor
      */
-    public enum Type { NONE, LEFT, TOP, RIGHT, BOTTOM, BASELINE, CENTER, CENTER_X, CENTER_Y }
+    public enum Type {NONE, LEFT, TOP, RIGHT, BOTTOM, BASELINE, CENTER, CENTER_X, CENTER_Y}
 
     private static final int UNSET_GONE_MARGIN = Integer.MIN_VALUE;
 
@@ -136,8 +128,6 @@ public class ConstraintAnchor {
 
     /**
      * @TODO: add description
-     * @param source
-     * @param map
      */
     public void copyFrom(ConstraintAnchor source, HashMap<ConstraintWidget, ConstraintWidget> map) {
         if (mTarget != null) {
@@ -164,8 +154,9 @@ public class ConstraintAnchor {
 
     /**
      * Constructor
+     *
      * @param owner the widget owner of this anchor.
-     * @param type the anchor type.
+     * @param type  the anchor type.
      */
     public ConstraintAnchor(ConstraintWidget owner, Type type) {
         mOwner = owner;
@@ -174,7 +165,6 @@ public class ConstraintAnchor {
 
     /**
      * Return the solver variable for this anchor
-     * @return
      */
     public SolverVariable getSolverVariable() {
         return mSolverVariable;
@@ -193,6 +183,7 @@ public class ConstraintAnchor {
 
     /**
      * Return the anchor's owner
+     *
      * @return the Widget owning the anchor
      */
     public ConstraintWidget getOwner() {
@@ -201,6 +192,7 @@ public class ConstraintAnchor {
 
     /**
      * Return the type of the anchor
+     *
      * @return type of the anchor.
      */
     public Type getType() {
@@ -209,6 +201,7 @@ public class ConstraintAnchor {
 
     /**
      * Return the connection's margin from this anchor to its target.
+     *
      * @return the margin value. 0 if not connected.
      */
     public int getMargin() {
@@ -224,6 +217,7 @@ public class ConstraintAnchor {
 
     /**
      * Return the connection's target (null if not connected)
+     *
      * @return the ConstraintAnchor target
      */
     public ConstraintAnchor getTarget() {
@@ -251,14 +245,10 @@ public class ConstraintAnchor {
     /**
      * Connects this anchor to another one.
      *
-     * @param toAnchor
-     * @param margin
-     * @param goneMargin
-     * @param forceConnection
      * @return true if the connection succeeds.
      */
     public boolean connect(ConstraintAnchor toAnchor, int margin, int goneMargin,
-                           boolean forceConnection) {
+            boolean forceConnection) {
         if (toAnchor == null) {
             reset();
             return true;
@@ -281,8 +271,7 @@ public class ConstraintAnchor {
 
     /**
      * Connects this anchor to another one.
-     * @param toAnchor
-     * @param margin
+     *
      * @return true if the connection succeeds.
      */
     public boolean connect(ConstraintAnchor toAnchor, int margin) {
@@ -291,6 +280,7 @@ public class ConstraintAnchor {
 
     /**
      * Returns the connection status of this anchor
+     *
      * @return true if the anchor is connected to another one.
      */
     public boolean isConnected() {
@@ -299,6 +289,7 @@ public class ConstraintAnchor {
 
     /**
      * Checks if the connection to a given anchor is valid.
+     *
      * @param anchor the anchor we want to connect to
      * @return true if it's a compatible anchor
      */
@@ -408,6 +399,7 @@ public class ConstraintAnchor {
 
     /**
      * Set the margin of the connection (if there's one)
+     *
      * @param margin the new margin of the connection
      */
     public void setMargin(int margin) {
@@ -418,6 +410,7 @@ public class ConstraintAnchor {
 
     /**
      * Set the gone margin of the connection (if there's one)
+     *
      * @param margin the new margin of the connection
      */
     public void setGoneMargin(int margin) {
@@ -459,8 +452,7 @@ public class ConstraintAnchor {
     }
 
     /**
-     *
-     *  Return true if we can connect this anchor to this target.
+     * Return true if we can connect this anchor to this target.
      * We recursively follow connections in order to detect eventual cycles; if we
      * do we disallow the connection.
      * We also only allow connections to direct parent, siblings, and descendants.
@@ -505,7 +497,6 @@ public class ConstraintAnchor {
     /**
      * Recursive with check for loop
      *
-     * @param target
      * @param checked set of things already checked
      * @return true if it is connected to me
      */
@@ -532,6 +523,7 @@ public class ConstraintAnchor {
 
     /**
      * Returns the opposite anchor to this one
+     *
      * @return opposite anchor
      */
     public final ConstraintAnchor getOpposite() {

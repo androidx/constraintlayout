@@ -102,7 +102,7 @@ public class MotionParsingTest {
                 expectlist.add(split[i]);
             }
         }
-        String []expect = expectlist.toArray(new String[0]);
+        String[] expect = expectlist.toArray(new String[0]);
         String[] result = attrs.toArray(new String[0]);
         Arrays.sort(result);
         Arrays.sort(expect);

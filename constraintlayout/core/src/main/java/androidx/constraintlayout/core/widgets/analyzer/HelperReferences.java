@@ -69,7 +69,8 @@ class HelperReferences extends WidgetRun {
                     }
                     addDependency(mWidget.mHorizontalRun.start);
                     addDependency(mWidget.mHorizontalRun.end);
-                } break;
+                }
+                break;
                 case Barrier.RIGHT: {
                     start.mType = DependencyNode.Type.RIGHT;
                     for (int i = 0; i < barrier.mWidgetsCount; i++) {
@@ -86,7 +87,8 @@ class HelperReferences extends WidgetRun {
                     }
                     addDependency(mWidget.mHorizontalRun.start);
                     addDependency(mWidget.mHorizontalRun.end);
-                } break;
+                }
+                break;
                 case Barrier.TOP: {
                     start.mType = DependencyNode.Type.TOP;
                     for (int i = 0; i < barrier.mWidgetsCount; i++) {
@@ -103,7 +105,8 @@ class HelperReferences extends WidgetRun {
                     }
                     addDependency(mWidget.mVerticalRun.start);
                     addDependency(mWidget.mVerticalRun.end);
-                } break;
+                }
+                break;
                 case Barrier.BOTTOM: {
                     start.mType = DependencyNode.Type.BOTTOM;
                     for (int i = 0; i < barrier.mWidgetsCount; i++) {
@@ -120,7 +123,8 @@ class HelperReferences extends WidgetRun {
                     }
                     addDependency(mWidget.mVerticalRun.start);
                     addDependency(mWidget.mVerticalRun.end);
-                } break;
+                }
+                break;
             }
         }
     }

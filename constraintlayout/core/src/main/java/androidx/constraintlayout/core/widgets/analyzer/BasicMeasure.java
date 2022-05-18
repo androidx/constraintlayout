@@ -55,7 +55,6 @@ public class BasicMeasure {
 
     /**
      * @TODO: add description
-     * @param layout
      */
     public void updateHierarchy(ConstraintWidgetContainer layout) {
         mVariableDimensionsWidgets.clear();
@@ -63,9 +62,9 @@ public class BasicMeasure {
         for (int i = 0; i < childCount; i++) {
             ConstraintWidget widget = layout.mChildren.get(i);
             if (widget.getHorizontalDimensionBehaviour()
-                        == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
+                    == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT
                     || widget.getVerticalDimensionBehaviour()
-                        == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT) {
+                    == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT) {
                 mVariableDimensionsWidgets.add(widget);
             }
         }
@@ -149,10 +148,10 @@ public class BasicMeasure {
     }
 
     private void solveLinearSystem(ConstraintWidgetContainer layout,
-                                   String reason,
-                                   int pass,
-                                   int w,
-                                   int h) {
+            String reason,
+            int pass,
+            int w,
+            int h) {
         long startLayout;
         if (LinearSystem.MEASURE) {
             startLayout = System.nanoTime();
@@ -179,23 +178,14 @@ public class BasicMeasure {
 
     /**
      * Called by ConstraintLayout onMeasure()
-     *
-     * @param layout
-     * @param optimizationLevel
-     * @param widthMode
-     * @param widthSize
-     * @param heightMode
-     * @param heightSize
-     * @param lastMeasureWidth
-     * @param lastMeasureHeight
      */
     public long solverMeasure(ConstraintWidgetContainer layout,
-                              int optimizationLevel,
-                              int paddingX, int paddingY,
-                              int widthMode, int widthSize,
-                              int heightMode, int heightSize,
-                              int lastMeasureWidth,
-                              int lastMeasureHeight) {
+            int optimizationLevel,
+            int paddingX, int paddingY,
+            int widthMode, int widthSize,
+            int heightMode, int heightSize,
+            int lastMeasureWidth,
+            int lastMeasureHeight) {
         Measurer measurer = layout.getMeasurer();
         long layoutTime = 0;
 
@@ -425,7 +415,7 @@ public class BasicMeasure {
                             if (containerWrapHeight && widget.getBottom() > minHeight) {
                                 int h = widget.getBottom()
                                         + widget.getAnchor(ConstraintAnchor.Type.BOTTOM)
-                                                .getMargin();
+                                        .getMargin();
                                 minHeight = Math.max(minHeight, h);
                             }
                             if (DEBUG) {
@@ -466,8 +456,8 @@ public class BasicMeasure {
     /**
      * Convenience function to fill in the measure spec
      *
-     * @param measurer the measurer callback
-     * @param widget the widget to measure
+     * @param measurer        the measurer callback
+     * @param widget          the widget to measure
      * @param measureStrategy how to use the current ConstraintWidget dimensions during the measure
      * @return true if needs another solver pass
      */
@@ -511,8 +501,6 @@ public class BasicMeasure {
     public interface Measurer {
         /**
          * @TODO: add description
-         * @param widget
-         * @param measure
          */
         void measure(ConstraintWidget widget, Measure measure);
 

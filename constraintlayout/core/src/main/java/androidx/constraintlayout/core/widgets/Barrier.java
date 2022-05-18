@@ -39,7 +39,9 @@ public class Barrier extends HelperWidget {
     private int mMargin = 0;
     boolean mResolved = false;
 
-    public Barrier() {}
+    public Barrier() {
+    }
+
     public Barrier(String debugName) {
         setDebugName(debugName);
     }
@@ -65,10 +67,10 @@ public class Barrier extends HelperWidget {
      * Find if this barrier supports gone widgets.
      *
      * @return true if this barrier supports gone widgets, otherwise false
-     *
      * @deprecated This method should be called {@code getAllowsGoneWidget}
-     *  such that {@code allowsGoneWidget}
-     * can be accessed as a property from Kotlin; {@see https://android.github.io/kotlin-guides/interop.html#property-prefixes}.
+     * such that {@code allowsGoneWidget}
+     * can be accessed as a property from Kotlin; {@see https://android.github
+     * .io/kotlin-guides/interop.html#property-prefixes}.
      * Use {@link #getAllowsGoneWidget()} instead.
      */
     @Deprecated
@@ -133,7 +135,7 @@ public class Barrier extends HelperWidget {
     /**
      * Add this widget to the solver
      *
-     * @param system the solver we want to add the widget to
+     * @param system   the solver we want to add the widget to
      * @param optimize true if {@link Optimizer#OPTIMIZATION_GRAPH} is on
      */
     @Override
@@ -186,13 +188,13 @@ public class Barrier extends HelperWidget {
             }
             if ((mBarrierType == LEFT || mBarrierType == RIGHT)
                     && (widget.getHorizontalDimensionBehaviour()
-                        == DimensionBehaviour.MATCH_CONSTRAINT)
+                    == DimensionBehaviour.MATCH_CONSTRAINT)
                     && widget.mLeft.mTarget != null && widget.mRight.mTarget != null) {
                 hasMatchConstraintWidgets = true;
                 break;
             } else if ((mBarrierType == TOP || mBarrierType == BOTTOM)
                     && (widget.getVerticalDimensionBehaviour()
-                        == DimensionBehaviour.MATCH_CONSTRAINT)
+                    == DimensionBehaviour.MATCH_CONSTRAINT)
                     && widget.mTop.mTarget != null && widget.mBottom.mTarget != null) {
                 hasMatchConstraintWidgets = true;
                 break;
@@ -288,7 +290,6 @@ public class Barrier extends HelperWidget {
 
     /**
      * @TODO: add description
-     * @return
      */
     public int getOrientation() {
         switch (mBarrierType) {
@@ -304,7 +305,6 @@ public class Barrier extends HelperWidget {
 
     /**
      * @TODO: add description
-     * @return
      */
     public boolean allSolved() {
         if (!USE_RESOLUTION) {

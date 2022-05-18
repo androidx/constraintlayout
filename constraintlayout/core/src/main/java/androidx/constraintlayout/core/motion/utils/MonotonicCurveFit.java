@@ -276,15 +276,13 @@ public class MonotonicCurveFit extends CurveFit {
 
     /**
      * Cubic Hermite spline
-     *
-     * @return
      */
     private static double interpolate(double h,
-                                      double x,
-                                      double y1,
-                                      double y2,
-                                      double t1,
-                                      double t2) {
+            double x,
+            double y1,
+            double y2,
+            double t1,
+            double t2) {
         double x2 = x * x;
         double x3 = x2 * x;
         return -2 * x3 * y2 + 3 * x2 * y2 + 2 * x3 * y1 - 3 * x2 * y1 + y1
@@ -294,8 +292,6 @@ public class MonotonicCurveFit extends CurveFit {
 
     /**
      * Cubic Hermite spline slope differentiated
-     *
-     * @return
      */
     private static double diff(double h, double x, double y1, double y2, double t1, double t2) {
         double x2 = x * x;
@@ -305,9 +301,6 @@ public class MonotonicCurveFit extends CurveFit {
 
     /**
      * This builds a monotonic spline to be used as a wave function
-     *
-     * @param configString
-     * @return
      */
     public static MonotonicCurveFit buildWave(String configString) {
         // done this way for efficiency

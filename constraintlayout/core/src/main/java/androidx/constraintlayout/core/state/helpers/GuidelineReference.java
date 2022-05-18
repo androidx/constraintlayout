@@ -35,6 +35,7 @@ public class GuidelineReference implements Facade, Reference {
     public void setKey(Object key) {
         this.mKey = key;
     }
+
     public Object getKey() {
         return mKey;
     }
@@ -45,8 +46,6 @@ public class GuidelineReference implements Facade, Reference {
 
     /**
      * @TODO: add description
-     * @param margin
-     * @return
      */
     public GuidelineReference start(Object margin) {
         mStart = mState.convertDimension(margin);
@@ -57,8 +56,6 @@ public class GuidelineReference implements Facade, Reference {
 
     /**
      * @TODO: add description
-     * @param margin
-     * @return
      */
     public GuidelineReference end(Object margin) {
         mStart = -1;
@@ -69,8 +66,6 @@ public class GuidelineReference implements Facade, Reference {
 
     /**
      * @TODO: add description
-     * @param percent
-     * @return
      */
     public GuidelineReference percent(float percent) {
         mStart = -1;

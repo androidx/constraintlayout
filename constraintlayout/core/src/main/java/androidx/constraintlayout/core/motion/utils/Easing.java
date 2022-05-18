@@ -45,8 +45,6 @@ public class Easing {
 
     /**
      * @TODO: add description
-     * @param configString
-     * @return
      */
     public static Easing getInterpolator(String configString) {
         if (configString == null) {
@@ -84,8 +82,6 @@ public class Easing {
 
     /**
      * @TODO: add description
-     * @param x
-     * @return
      */
     public double get(double x) {
         return x;
@@ -93,7 +89,6 @@ public class Easing {
 
     /**
      * @TODO: add description
-     * @return
      */
     public String toString() {
         return mStr;
@@ -101,8 +96,6 @@ public class Easing {
 
     /**
      * @TODO: add description
-     * @param x
-     * @return
      */
     public double getDiff(double x) {
         return 1;

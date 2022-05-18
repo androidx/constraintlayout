@@ -44,8 +44,6 @@ public class BarrierReference extends HelperReference {
 
     /**
      * @TODO: add description
-     * @param value
-     * @return
      */
     public ConstraintReference margin(int value) {
         mMargin = value;
@@ -71,16 +69,17 @@ public class BarrierReference extends HelperReference {
             case START: {
                 // TODO: handle RTL
             }
-                break;
+            break;
             case RIGHT:
             case END: {
                 // TODO: handle RTL
                 direction = Barrier.RIGHT;
             }
-                break;
+            break;
             case TOP: {
                 direction = Barrier.TOP;
-            } break;
+            }
+            break;
             case BOTTOM: {
                 direction = Barrier.BOTTOM;
             }

@@ -81,9 +81,6 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
 
     /**
      * Given the start and end points define Keys that need to be built
-     *
-     * @param points
-     * @param keySet
      */
     void different(MotionConstrainedPoint points, HashSet<String> keySet) {
         if (diff(mAlpha, points.mAlpha)) {
@@ -306,7 +303,6 @@ class MotionConstrainedPoint implements Comparable<MotionConstrainedPoint> {
 
     /**
      * @param rect     assumes pre rotated
-     * @param view
      * @param rotation mode Surface.ROTATION_0,Surface.ROTATION_90...
      */
     public void setState(Rect rect, MotionWidget view, int rotation, float prevous) {

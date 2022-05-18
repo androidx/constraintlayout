@@ -16,6 +16,8 @@
 
 package androidx.constraintlayout.core;
 
+import static org.junit.Assert.assertEquals;
+
 import androidx.constraintlayout.core.state.ConstraintReference;
 import androidx.constraintlayout.core.state.Dimension;
 import androidx.constraintlayout.core.state.State;
@@ -23,8 +25,6 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 import androidx.constraintlayout.core.widgets.Optimizer;
 import androidx.constraintlayout.core.widgets.analyzer.BasicMeasure;
-
-import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -60,7 +60,7 @@ public class ComposeLayoutsTest {
             }
             if (verticalBehavior == ConstraintWidget.DimensionBehaviour.FIXED) {
                 measure.measuredHeight = verticalDimension;
-            } else  if (verticalBehavior == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
+            } else if (verticalBehavior == ConstraintWidget.DimensionBehaviour.WRAP_CONTENT) {
                 if (widget.getCompanionWidget().equals("box")) {
                     measure.measuredHeight = measure.measuredWidth / 2;
                 }

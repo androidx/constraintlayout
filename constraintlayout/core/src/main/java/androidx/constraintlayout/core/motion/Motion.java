@@ -147,9 +147,6 @@ public class Motion implements TypedValues {
 
     /**
      * provides access to MotionPath objects
-     *
-     * @param i
-     * @return
      */
     public MotionPaths getKeyFrame(int i) {
         return mMotionPaths.get(i);
@@ -246,7 +243,6 @@ public class Motion implements TypedValues {
 
     /**
      * @TODO: add description
-     * @param motionController
      */
     public void setupRelative(Motion motionController) {
         mStartMotionPath.setupRelative(motionController, motionController.mStartMotionPath);
@@ -263,9 +259,6 @@ public class Motion implements TypedValues {
 
     /**
      * @TODO: add description
-     * @param p
-     * @param pos
-     * @param vel
      */
     public void getCenter(double p, float[] pos, float[] vel) {
         double[] position = new double[4];
@@ -282,8 +275,7 @@ public class Motion implements TypedValues {
      * x coordinate of "time" 0.0 mPoints[point.length-1] is filled with the y coordinate of "time"
      * 1.0
      *
-     * @param points     array to fill (should be 2x the number of mPoints
-     * @param pointCount
+     * @param points array to fill (should be 2x the number of mPoints
      */
     public void buildPath(float[] points, int pointCount) {
         float mils = 1.0f / (pointCount - 1);
@@ -372,8 +364,7 @@ public class Motion implements TypedValues {
      * x coordinate of "time" 0.0 mPoints[point.length-1] is filled with the y coordinate of "time"
      * 1.0
      *
-     * @param bounds     array to fill (should be 2x the number of mPoints
-     * @param pointCount
+     * @param bounds array to fill (should be 2x the number of mPoints
      * @return number of key frames
      */
     void buildBounds(float[] bounds, int pointCount) {
@@ -509,10 +500,6 @@ public class Motion implements TypedValues {
 
     /**
      * @TODO: add description
-     * @param keyFrames
-     * @param mode
-     * @param pos
-     * @return
      */
     public int buildKeyFrames(float[] keyFrames, int[] mode, int[] pos) {
         if (keyFrames != null) {
@@ -579,9 +566,6 @@ public class Motion implements TypedValues {
 
     /**
      * @TODO: add description
-     * @param p
-     * @param path
-     * @param offset
      */
     public void buildRect(float p, float[] path, int offset) {
         p = getAdjustedPosition(p, null);
@@ -663,7 +647,6 @@ public class Motion implements TypedValues {
 
     /**
      * @TODO: add description
-     * @param key
      */
     public void addKey(MotionKey key) {
         mKeyList.add(key);
@@ -681,9 +664,9 @@ public class Motion implements TypedValues {
      * Spines are evaluated
      */
     public void setup(int parentWidth,
-                      int parentHeight,
-                      float transitionDuration,
-                      long currentTime) {
+            int parentHeight,
+            float transitionDuration,
+            long currentTime) {
         HashSet<String> springAttributes = new HashSet<>(); // attributes we need to interpolate
         HashSet<String> timeCycleAttributes = new HashSet<>(); // attributes we need to interpolate
         HashSet<String> splineAttributes = new HashSet<>(); // attributes we need to interpolate
@@ -748,7 +731,7 @@ public class Motion implements TypedValues {
             for (String attribute : splineAttributes) {
                 SplineSet splineSets;
                 if (attribute.startsWith("CUSTOM,")) {
-                    KeyFrameArray.CustomVar attrList = new  KeyFrameArray.CustomVar();
+                    KeyFrameArray.CustomVar attrList = new KeyFrameArray.CustomVar();
                     String customAttributeName = attribute.split(",")[1];
                     for (MotionKey key : mKeyList) {
                         if (key.mCustom == null) {
@@ -806,7 +789,7 @@ public class Motion implements TypedValues {
 
                 SplineSet splineSets = null;
                 if (attribute.startsWith("CUSTOM,")) {
-                    KeyFrameArray.CustomVar attrList = new  KeyFrameArray.CustomVar();
+                    KeyFrameArray.CustomVar attrList = new KeyFrameArray.CustomVar();
                     String customAttributeName = attribute.split(",")[1];
                     for (MotionKey key : mKeyList) {
                         if (key.mCustom == null) {
@@ -1014,8 +997,6 @@ public class Motion implements TypedValues {
 
     /**
      * Debug string
-     *
-     * @return
      */
     public String toString() {
         return " start: x: " + mStartMotionPath.mX + " y: " + mStartMotionPath.mY
@@ -1037,7 +1018,6 @@ public class Motion implements TypedValues {
 
     /**
      * @TODO: add description
-     * @param mw
      */
     public void setStart(MotionWidget mw) {
         mStartMotionPath.mTime = 0;
@@ -1053,7 +1033,6 @@ public class Motion implements TypedValues {
 
     /**
      * @TODO: add description
-     * @param mw
      */
     public void setEnd(MotionWidget mw) {
         mEndMotionPath.mTime = 1;
@@ -1066,17 +1045,12 @@ public class Motion implements TypedValues {
 
     /**
      * @TODO: add description
-     * @param rect
-     * @param v
-     * @param rotation
-     * @param preWidth
-     * @param preHeight
      */
     public void setStartState(ViewState rect,
-                              MotionWidget v,
-                              int rotation,
-                              int preWidth,
-                              int preHeight) {
+            MotionWidget v,
+            int rotation,
+            int preWidth,
+            int preHeight) {
         mStartMotionPath.mTime = 0;
         mStartMotionPath.mPosition = 0;
         int cx, cy;
@@ -1178,8 +1152,8 @@ public class Motion implements TypedValues {
     private static final int INTERPOLATOR_UNDEFINED = -3;
 
     private static DifferentialInterpolator getInterpolator(int type,
-                                                            String interpolatorString,
-                                                            int id) {
+            String interpolatorString,
+            int id) {
         switch (type) {
             case SPLINE_STRING:
                 final Easing easing = Easing.getInterpolator(interpolatorString);
@@ -1298,16 +1272,12 @@ public class Motion implements TypedValues {
     /**
      * The main driver of interpolation
      *
-     * @param child
-     * @param globalPosition
-     * @param time
-     * @param keyCache
      * @return do you need to keep animating
      */
     public boolean interpolate(MotionWidget child,
-                               float globalPosition,
-                               long time,
-                               KeyCache keyCache) {
+            float globalPosition,
+            long time,
+            KeyCache keyCache) {
         boolean timeAnimation = false;
         float position = getAdjustedPosition(globalPosition, null);
         // This quantize the position into steps e.g. 4 steps = 0-0.25,0.25-0.50 etc
@@ -1523,11 +1493,11 @@ public class Motion implements TypedValues {
      * @param mAnchorDpDt returns the differential of the motion with respect to the position
      */
     void getPostLayoutDvDp(float position,
-                           int width,
-                           int height,
-                           float locationX,
-                           float locationY,
-                           float[] mAnchorDpDt) {
+            int width,
+            int height,
+            float locationX,
+            float locationY,
+            float[] mAnchorDpDt) {
         if (DEBUG) {
             Utils.log(TAG, " position= " + position
                     + " location= " + locationX + " , " + locationY);
@@ -1606,7 +1576,6 @@ public class Motion implements TypedValues {
 
     /**
      * @TODO: add description
-     * @return
      */
     public int getDrawPath() {
         int mode = mStartMotionPath.mDrawPath;
@@ -1627,11 +1596,11 @@ public class Motion implements TypedValues {
     }
 
     void positionKeyframe(MotionWidget view,
-                          MotionKeyPosition key,
-                          float x,
-                          float y,
-                          String[] attribute,
-                          float[] value) {
+            MotionKeyPosition key,
+            float x,
+            float y,
+            String[] attribute,
+            float[] value) {
         FloatRect start = new FloatRect();
         start.left = mStartMotionPath.mX;
         start.top = mStartMotionPath.mY;
@@ -1724,10 +1693,10 @@ public class Motion implements TypedValues {
                 setPathMotionArc(value);
                 return true;
             case TypedValues.MotionType.TYPE_QUANTIZE_MOTIONSTEPS:
-                 mQuantizeMotionSteps = value;
+                mQuantizeMotionSteps = value;
                 return true;
             case TypedValues.TransitionType.TYPE_AUTO_TRANSITION:
-               // TODO add support for auto transitions mAutoTransition = value;
+                // TODO add support for auto transitions mAutoTransition = value;
                 return true;
         }
         return false;
@@ -1736,7 +1705,7 @@ public class Motion implements TypedValues {
     @Override
     public boolean setValue(int id, float value) {
         if (MotionType.TYPE_QUANTIZE_MOTION_PHASE == id) {
-            mQuantizeMotionPhase =  value;
+            mQuantizeMotionPhase = value;
             return true;
         }
         if (MotionType.TYPE_STAGGER == id) {
@@ -1748,7 +1717,8 @@ public class Motion implements TypedValues {
 
     @Override
     public boolean setValue(int id, String value) {
-        if (TransitionType.TYPE_INTERPOLATOR == id || MotionType.TYPE_QUANTIZE_INTERPOLATOR_TYPE == id) {
+        if (TransitionType.TYPE_INTERPOLATOR == id
+                || MotionType.TYPE_QUANTIZE_INTERPOLATOR_TYPE == id) {
             mQuantizeMotionInterpolator = getInterpolator(SPLINE_STRING, value, 0);
             return true;
         }
@@ -1765,9 +1735,9 @@ public class Motion implements TypedValues {
     public int getId(String name) {
         return 0;
     }
+
     /**
      * Set stagger scale
-     * @param staggerScale
      */
     public void setStaggerScale(float staggerScale) {
         mStaggerScale = staggerScale;
@@ -1775,6 +1745,7 @@ public class Motion implements TypedValues {
 
     /**
      * set the offset used in calculating stagger launches
+     *
      * @param staggerOffset fraction of progress before this controller runs
      */
     public void setStaggerOffset(float staggerOffset) {
@@ -1784,8 +1755,9 @@ public class Motion implements TypedValues {
     /**
      * The values set in
      * motion: {
-     *          stagger: '2'
-     *       }
+     * stagger: '2'
+     * }
+     *
      * @return value from motion: { stagger: ? } or NaN if not set
      */
     public float getMotionStagger() {

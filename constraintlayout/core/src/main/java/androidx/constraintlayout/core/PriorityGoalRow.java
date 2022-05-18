@@ -168,7 +168,7 @@ public class PriorityGoalRow extends ArrayRow {
             }
             mAccessor.init(variable);
             if (pivot == NOT_FOUND) {
-                if (mAccessor.isNegative())  {
+                if (mAccessor.isNegative()) {
                     pivot = i;
                 }
             } else if (mAccessor.isSmallerThan(mArrayGoals[pivot])) {
@@ -231,8 +231,8 @@ public class PriorityGoalRow extends ArrayRow {
 
     @Override
     public void updateFromRow(LinearSystem system,
-                              ArrayRow definition,
-                              boolean removeFromDefinition) {
+            ArrayRow definition,
+            boolean removeFromDefinition) {
         SolverVariable goalVariable = definition.mVariable;
         if (goalVariable == null) {
             return;

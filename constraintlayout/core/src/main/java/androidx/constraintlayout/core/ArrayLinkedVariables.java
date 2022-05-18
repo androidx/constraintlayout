@@ -103,8 +103,9 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
 
     /**
      * Constructor
+     *
      * @param arrayRow the row owning us
-     * @param cache instances cache
+     * @param cache    instances cache
      */
     ArrayLinkedVariables(ArrayRow arrayRow, Cache cache) {
         mRow = arrayRow;
@@ -120,7 +121,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
      * Insert a variable with a given value in the linked list
      *
      * @param variable the variable to add in the list
-     * @param value the value of the variable
+     * @param value    the value of the variable
      */
     public final void put(SolverVariable variable, float value) {
         if (value == 0) {
@@ -157,7 +158,8 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
             if (mArrayIndices[current] < variable.id) {
                 previous = current;
             }
-            current = mArrayNextIndices[current]; counter++;
+            current = mArrayNextIndices[current];
+            counter++;
         }
 
         // Not found, we need to insert
@@ -226,9 +228,9 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
      *
      * The code is broadly identical to the put() method, only differing
      * in in-line deletion, and of course doing an add rather than a put
-     *  @param variable the variable we want to add
-     * @param value its value
-     * @param removeFromDefinition
+     *
+     * @param variable the variable we want to add
+     * @param value    its value
      */
     public void add(SolverVariable variable, float value, boolean removeFromDefinition) {
         if (value > -sEpsilon && value < sEpsilon) {
@@ -286,7 +288,8 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
             if (mArrayIndices[current] < variable.id) {
                 previous = current;
             }
-            current = mArrayNextIndices[current]; counter++;
+            current = mArrayNextIndices[current];
+            counter++;
         }
 
         // Not found, we need to insert
@@ -349,8 +352,8 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
 
     /**
      * Update the current list with a new definition
+     *
      * @param definition the row containing the definition
-     * @param removeFromDefinition
      */
     @Override
     public float use(ArrayRow definition, boolean removeFromDefinition) {
@@ -370,7 +373,6 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
      * Remove a variable from the list
      *
      * @param variable the variable we want to remove
-     * @param removeFromDefinition
      * @return the value of the removed variable
      */
     public final float remove(SolverVariable variable, boolean removeFromDefinition) {
@@ -405,7 +407,8 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
                 return mArrayValues[current];
             }
             previous = current;
-            current = mArrayNextIndices[current]; counter++;
+            current = mArrayNextIndices[current];
+            counter++;
         }
         return 0;
     }
@@ -421,7 +424,8 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
             if (variable != null) {
                 variable.removeFromRow(mRow);
             }
-            current = mArrayNextIndices[current]; counter++;
+            current = mArrayNextIndices[current];
+            counter++;
         }
 
         mHead = NONE;
@@ -446,7 +450,8 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
             if (mArrayIndices[current] == variable.id) {
                 return true;
             }
-            current = mArrayNextIndices[current]; counter++;
+            current = mArrayNextIndices[current];
+            counter++;
         }
         return false;
     }
@@ -462,11 +467,11 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
             if (mArrayIndices[current] == variable.id) {
                 return current;
             }
-            current = mArrayNextIndices[current]; counter++;
+            current = mArrayNextIndices[current];
+            counter++;
         }
         return -1;
     }
-
 
 
     /**
@@ -481,7 +486,8 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
             if (mArrayValues[current] > 0) {
                 return true;
             }
-            current = mArrayNextIndices[current]; counter++;
+            current = mArrayNextIndices[current];
+            counter++;
         }
         return false;
     }
@@ -494,7 +500,8 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
         int counter = 0;
         while (current != NONE && counter < mCurrentSize) {
             mArrayValues[current] *= -1;
-            current = mArrayNextIndices[current]; counter++;
+            current = mArrayNextIndices[current];
+            counter++;
         }
     }
 
@@ -509,21 +516,21 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
         int counter = 0;
         while (current != NONE && counter < mCurrentSize) {
             mArrayValues[current] /= amount;
-            current = mArrayNextIndices[current]; counter++;
+            current = mArrayNextIndices[current];
+            counter++;
         }
     }
 
     public int getHead() {
         return mHead;
     }
+
     public int getCurrentSize() {
         return mCurrentSize;
     }
 
     /**
      * get Id in mCache.mIndexedVariables given the index
-     * @param index
-     * @return
      */
     public final int getId(int index) {
         return mArrayIndices[index];
@@ -531,8 +538,6 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
 
     /**
      * get value in mArrayValues given the index
-     * @param index
-     * @return
      */
     public final float getValue(int index) {
         return mArrayValues[index];
@@ -540,8 +545,6 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
 
     /**
      * Get the next index in mArrayIndices given the current one
-     * @param index
-     * @return
      */
     public final int getNextIndice(int index) {
         return mArrayNextIndices[index];
@@ -550,6 +553,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
     /**
      * TODO: check if still needed
      * Return a pivot candidate
+     *
      * @return return a variable we can pivot on
      */
     SolverVariable getPivotCandidate() {
@@ -568,7 +572,8 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
                         pivot = v;
                     }
                 }
-                current = mArrayNextIndices[current]; counter++;
+                current = mArrayNextIndices[current];
+                counter++;
             }
             return pivot;
         }
@@ -588,7 +593,8 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
             if (counter == index) {
                 return mCache.mIndexedVariables[mArrayIndices[current]];
             }
-            current = mArrayNextIndices[current]; counter++;
+            current = mArrayNextIndices[current];
+            counter++;
         }
         return null;
     }
@@ -606,13 +612,15 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
             if (counter == index) {
                 return mArrayValues[current];
             }
-            current = mArrayNextIndices[current]; counter++;
+            current = mArrayNextIndices[current];
+            counter++;
         }
         return 0;
     }
 
     /**
      * Return the value of a variable, 0 if not found
+     *
      * @param v the variable we are looking up
      * @return the value of the found variable, or 0 if not found
      */
@@ -631,6 +639,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
 
     /**
      * Show size in bytes
+     *
      * @return size in bytes
      */
     public int sizeInBytes() {
@@ -670,7 +679,8 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
             result += " -> ";
             result += mArrayValues[current] + " : ";
             result += mCache.mIndexedVariables[mArrayIndices[current]];
-            current = mArrayNextIndices[current]; counter++;
+            current = mArrayNextIndices[current];
+            counter++;
         }
         return result;
     }

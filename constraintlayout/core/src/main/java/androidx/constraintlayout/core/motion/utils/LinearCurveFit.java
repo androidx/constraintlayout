@@ -56,7 +56,6 @@ public class LinearCurveFit extends CurveFit {
      * (Added for future work)
      *
      * @param t the point to calculate the length to
-     * @return
      */
     private double getLength2D(double t) {
         if (Double.isNaN(mTotalLength)) {
@@ -103,8 +102,6 @@ public class LinearCurveFit extends CurveFit {
 
     /**
      * @TODO: add description
-     * @param t
-     * @param v
      */
     public void getPos(double t, double[] v) {
         final int n = mT.length;
@@ -161,8 +158,6 @@ public class LinearCurveFit extends CurveFit {
 
     /**
      * @TODO: add description
-     * @param t
-     * @param v
      */
     public void getPos(double t, float[] v) {
         final int n = mT.length;
@@ -219,9 +214,6 @@ public class LinearCurveFit extends CurveFit {
 
     /**
      * @TODO: add description
-     * @param t
-     * @param j
-     * @return
      */
     public double getPos(double t, int j) {
         final int n = mT.length;
@@ -259,8 +251,6 @@ public class LinearCurveFit extends CurveFit {
 
     /**
      * @TODO: add description
-     * @param t
-     * @param v
      */
     public void getSlope(double t, double[] v) {
         final int n = mT.length;
@@ -289,9 +279,6 @@ public class LinearCurveFit extends CurveFit {
 
     /**
      * @TODO: add description
-     * @param t
-     * @param j
-     * @return
      */
     public double getSlope(double t, int j) {
         final int n = mT.length;
