@@ -37,7 +37,7 @@ public class MotionArcCurveTest {
 
         };
         CurveFit spline = CurveFit.getArc(mode, time, points);
-        System.out.println();
+        System.out.println("");
         for (int i = 0; i < time.length; i++) {
             assertEquals(points[i][0], spline.getPos(time[i], 0), 0.001);
             assertEquals(points[i][1], spline.getPos(time[i], 1), 0.001);

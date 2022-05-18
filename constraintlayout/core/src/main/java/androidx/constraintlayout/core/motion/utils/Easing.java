@@ -103,8 +103,8 @@ public class Easing {
 
     static class CubicEasing extends Easing {
 
-        private static final double sError = 0.01;
-        private static final double sDError = 0.0001;
+        private static double sError = 0.01;
+        private static double sDError = 0.0001;
         double mX1, mY1, mX2, mY2;
 
         CubicEasing(String configString) {

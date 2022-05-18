@@ -25,10 +25,10 @@ import java.util.Arrays;
  */
 public class MonotonicCurveFit extends CurveFit {
     private static final String TAG = "MonotonicCurveFit";
-    private final double[] mT;
-    private final double[][] mY;
-    private final double[][] mTangent;
-    private final boolean mExtrapolate = true;
+    private double[] mT;
+    private double[][] mY;
+    private double[][] mTangent;
+    private boolean mExtrapolate = true;
     double[] mSlopeTemp;
 
     public MonotonicCurveFit(double[] time, double[][] y) {

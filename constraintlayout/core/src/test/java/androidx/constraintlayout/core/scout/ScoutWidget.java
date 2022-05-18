@@ -35,12 +35,12 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
     private float mY;
     private float mWidth;
     private float mHeight;
-    private final float mBaseLine;
-    private final ScoutWidget mParent;
+    private float mBaseLine;
+    private ScoutWidget mParent;
     private float mRootDistance;
-    private final float[] mDistToRootCache = new float[]{-1, -1, -1, -1};
+    private float[] mDistToRootCache = new float[]{-1, -1, -1, -1};
     ConstraintWidget mConstraintWidget;
-    private final boolean mKeepExistingConnections = true;
+    private boolean mKeepExistingConnections = true;
     private Rectangle mRectangle;
 
     public ScoutWidget(ConstraintWidget constraintWidget, ScoutWidget parent) {
@@ -413,7 +413,10 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
 
         if (mKeepExistingConnections) {
             if (anchor.isConnected()) {
-                return anchor.getTarget().getOwner() == to.mConstraintWidget;
+                if (anchor.getTarget().getOwner() != to.mConstraintWidget) {
+                    return false;
+                }
+                return true;
             }
             if (dir == Direction.BASE.getDirection()) {
                 if (mConstraintWidget.getAnchor(ConstraintAnchor.Type.BOTTOM).isConnected()) {
@@ -470,7 +473,10 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
         float gap = 8f;
 
         if (mKeepExistingConnections && anchor.isConnected()) {
-            return anchor.getTarget().getOwner() == to.mConstraintWidget;
+            if (anchor.getTarget().getOwner() != to.mConstraintWidget) {
+                return false;
+            }
+            return true;
         }
 
         if (anchor.isConnectionAllowed(to.mConstraintWidget)) {
@@ -685,8 +691,10 @@ public class ScoutWidget implements Comparable<ScoutWidget> {
     private boolean isDistanceToRootCache(Direction direction) {
         int directionOrdinal = direction.getDirection();
         Float f = mDistToRootCache[directionOrdinal];
-        // depends on any comparison involving Float.NaN returns false
-        return f >= 0;
+        if (f < 0) {  // depends on any comparison involving Float.NaN returns false
+            return false;
+        }
+        return true;
     }
 
     /**

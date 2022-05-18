@@ -222,8 +222,11 @@ public class MotionKeyPosition extends MotionKey {
             float y) {
         calcPosition(layoutWidth, layoutHeight, start.centerX(),
                 start.centerY(), end.centerX(), end.centerY());
-        return (Math.abs(x - mCalculatedPositionX) < SELECTION_SLOPE)
-                && (Math.abs(y - mCalculatedPositionY) < SELECTION_SLOPE);
+        if ((Math.abs(x - mCalculatedPositionX) < SELECTION_SLOPE)
+                && (Math.abs(y - mCalculatedPositionY) < SELECTION_SLOPE)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -334,7 +337,7 @@ public class MotionKeyPosition extends MotionKey {
     public boolean setValue(int type, String value) {
         switch (type) {
             case PositionType.TYPE_TRANSITION_EASING:
-                mTransitionEasing = value;
+                mTransitionEasing = value.toString();
                 break;
             default:
                 return super.setValue(type, value);

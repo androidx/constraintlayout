@@ -145,13 +145,15 @@ public class MotionWidget implements TypedValues {
             mWidgetFrame.getMotionProperties().applyDelta(toUpdate);
         }
     }
+
     @Override
     public boolean setValue(int id, int value) {
         boolean set = setValueAttributes(id, value);
         if (set) {
             return true;
         }
-        return setValueMotion(id, value);    }
+        return setValueMotion(id, value);
+    }
 
     @Override
     public boolean setValue(int id, float value) {

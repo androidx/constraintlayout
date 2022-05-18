@@ -73,7 +73,10 @@ public class VerticalWidgetRun extends WidgetRun {
     @Override
     boolean supportsWrapComputation() {
         if (super.mDimensionBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT) {
-            return super.mWidget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_SPREAD;
+            if (super.mWidget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_SPREAD) {
+                return true;
+            }
+            return false;
         }
         return true;
     }

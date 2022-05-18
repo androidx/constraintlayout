@@ -23,7 +23,7 @@ import androidx.constraintlayout.core.motion.utils.TypedValues;
 public class CustomVariable {
     private static final String TAG = "TransitionLayout";
     String mName;
-    private final int mType;
+    private int mType;
     private int mIntegerValue = Integer.MIN_VALUE;
     private float mFloatValue = Float.NaN;
     private String mStringValue = null;

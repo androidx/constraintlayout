@@ -685,7 +685,7 @@ public class WidgetFrame {
     }
 
     /**
-     *  get the property bundle associated with MotionAttributes
+     * get the property bundle associated with MotionAttributes
      *
      * @return the property bundle associated with MotionAttributes or null
      */

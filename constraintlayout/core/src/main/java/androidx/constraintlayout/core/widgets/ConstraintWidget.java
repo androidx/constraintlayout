@@ -76,8 +76,8 @@ public class ConstraintWidget {
     public boolean[] isTerminalWidget = {true, true};
     boolean mResolvedHasRatio = false;
     private boolean mMeasureRequested = true;
-    private final boolean mOptimizeWrapO = false;
-    private final boolean mOptimizeWrapOnResolved = true;
+    private boolean mOptimizeWrapO = false;
+    private boolean mOptimizeWrapOnResolved = true;
 
     private int mWidthOverride = -1;
     private int mHeightOverride = -1;
@@ -506,7 +506,7 @@ public class ConstraintWidget {
     public ConstraintAnchor[] mListAnchors = {mLeft, mRight, mTop, mBottom, mBaseline, mCenter};
     protected ArrayList<ConstraintAnchor> mAnchors = new ArrayList<>();
 
-    private final boolean[] mIsInBarrier = new boolean[2];
+    private boolean[] mIsInBarrier = new boolean[2];
 
     // The horizontal and vertical behaviour for the widgets' dimensions
     static final int DIMENSION_HORIZONTAL = 0;
@@ -722,6 +722,7 @@ public class ConstraintWidget {
         ret.append(value);
         ret.append(",");
         ret.append(whichSide);
+        ret.append("");
         ret.append("],\n");
     }
 
@@ -2358,8 +2359,11 @@ public class ConstraintWidget {
      * @return true if in a horizontal chain
      */
     public boolean isInHorizontalChain() {
-        return (mLeft.mTarget != null && mLeft.mTarget.mTarget == mLeft)
-                || (mRight.mTarget != null && mRight.mTarget.mTarget == mRight);
+        if ((mLeft.mTarget != null && mLeft.mTarget.mTarget == mLeft)
+                || (mRight.mTarget != null && mRight.mTarget.mTarget == mRight)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -2437,8 +2441,11 @@ public class ConstraintWidget {
      * @return true if in a vertical chain
      */
     public boolean isInVerticalChain() {
-        return (mTop.mTarget != null && mTop.mTarget.mTarget == mTop)
-                || (mBottom.mTarget != null && mBottom.mTarget.mTarget == mBottom);
+        if ((mTop.mTarget != null && mTop.mTarget.mTarget == mTop)
+                || (mBottom.mTarget != null && mBottom.mTarget.mTarget == mBottom)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -2516,9 +2523,9 @@ public class ConstraintWidget {
         boolean verticalParentWrapContent = false;
         if (mParent != null) {
             horizontalParentWrapContent = mParent != null
-                    && mParent.mListDimensionBehaviors[DIMENSION_HORIZONTAL] == WRAP_CONTENT;
+                    ? mParent.mListDimensionBehaviors[DIMENSION_HORIZONTAL] == WRAP_CONTENT : false;
             verticalParentWrapContent = mParent != null
-                    && mParent.mListDimensionBehaviors[DIMENSION_VERTICAL] == WRAP_CONTENT;
+                    ? mParent.mListDimensionBehaviors[DIMENSION_VERTICAL] == WRAP_CONTENT : false;
 
             switch (mWrapBehaviorInParent) {
                 case WRAP_BEHAVIOR_SKIPPED: {
@@ -2759,7 +2766,10 @@ public class ConstraintWidget {
             width = 0;
         }
 
-        boolean applyPosition = !mCenter.isConnected();
+        boolean applyPosition = true;
+        if (mCenter.isConnected()) {
+            applyPosition = false;
+        }
 
         boolean isInHorizontalBarrier = mIsInBarrier[HORIZONTAL];
         boolean isInVerticalBarrier = mIsInBarrier[VERTICAL];
@@ -3012,8 +3022,8 @@ public class ConstraintWidget {
         SolverVariable beginTarget = system.createObjectVariable(beginAnchor.getTarget());
         SolverVariable endTarget = system.createObjectVariable(endAnchor.getTarget());
 
-        if (LinearSystem.getMetrics() != null) {
-            LinearSystem.getMetrics().nonresolvedWidgets++;
+        if (system.getMetrics() != null) {
+            system.getMetrics().nonresolvedWidgets++;
         }
 
         boolean isBeginConnected = beginAnchor.isConnected();
@@ -3135,8 +3145,10 @@ public class ConstraintWidget {
                     dimension = Math.max(dimension, matchMinDimension);
                 }
                 if (matchMaxDimension > 0) {
-                    boolean applyLimit =
-                            !parentWrapContent || matchConstraintDefault != MATCH_CONSTRAINT_WRAP;
+                    boolean applyLimit = true;
+                    if (parentWrapContent && matchConstraintDefault == MATCH_CONSTRAINT_WRAP) {
+                        applyLimit = false;
+                    }
                     if (applyLimit) {
                         system.addLowerThan(end, begin,
                                 matchMaxDimension, SolverVariable.STRENGTH_FIXED);
@@ -3196,9 +3208,13 @@ public class ConstraintWidget {
                     // then we can contribute (as the ratio widget may not be enough by itself)
                     // to it.
                     ConstraintWidget target = mBaseline.mTarget.mOwner;
-                    applyEnd = target.mDimensionRatio != 0
+                    if (target.mDimensionRatio != 0
                             && target.mListDimensionBehaviors[0] == MATCH_CONSTRAINT
-                            && target.mListDimensionBehaviors[1] == MATCH_CONSTRAINT;
+                            && target.mListDimensionBehaviors[1] == MATCH_CONSTRAINT) {
+                        applyEnd = true;
+                    } else {
+                        applyEnd = false;
+                    }
                 }
                 if (applyEnd) {
                     if (FULL_DEBUG) {

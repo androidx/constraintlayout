@@ -49,15 +49,15 @@ public class Transition implements TypedValues {
     static final int ANTICIPATE = 6;
     private static final int SPLINE_STRING = -1;
     private static final int INTERPOLATOR_REFERENCE_ID = -2;
-    private final HashMap<Integer, HashMap<String, KeyPosition>> mKeyPositions = new HashMap<>();
-    private final HashMap<String, WidgetState> mState = new HashMap<>();
-    private final TypedBundle mBundle = new TypedBundle();
+    private HashMap<Integer, HashMap<String, KeyPosition>> mKeyPositions = new HashMap<>();
+    private HashMap<String, WidgetState> mState = new HashMap<>();
+    private TypedBundle mBundle = new TypedBundle();
     // Interpolation
-    private final int mDefaultInterpolator = 0;
+    private int mDefaultInterpolator = 0;
     private String mDefaultInterpolatorString = null;
     private Easing mEasing = null;
-    private final int mAutoTransition = 0;
-    private final int mDuration = 400;
+    private int mAutoTransition = 0;
+    private int mDuration = 400;
     private float mStagger = 0.0f;
     private OnSwipe mOnSwipe = null;
     CorePixelDp mToPixel; // Todo placed here as a temp till the refactor is done
@@ -772,7 +772,7 @@ public class Transition implements TypedValues {
         if (widgetState == null) {
             widgetState = new WidgetState();
             mBundle.applyDelta(widgetState.mMotionControl);
-            widgetState.mMotionWidgetStart.updateMotion( widgetState.mMotionControl);
+            widgetState.mMotionWidgetStart.updateMotion(widgetState.mMotionControl);
             mState.put(widgetId, widgetState);
             if (child != null) {
                 widgetState.update(child, transitionState);
@@ -950,9 +950,9 @@ public class Transition implements TypedValues {
                 if (!Float.isNaN(widgetStagger)) {
                     float scale = 1 / (1 - stagger);
 
-                    float offset = stagger - stagger * (widgetStagger- (min)) / (max - (min));
+                    float offset = stagger - stagger * (widgetStagger - (min)) / (max - (min));
                     if (flip) {
-                        offset =  stagger - stagger
+                        offset = stagger - stagger
                                 * ((max - widgetStagger) / (max - min));
                     }
                     f.setStaggerScale(scale);

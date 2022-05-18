@@ -87,7 +87,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
 
     // flag to keep trace if we did a full pass of the array or not, see above description
     private boolean mDidFillOnce = false;
-    private static final float sEpsilon = 0.001f;
+    private static float sEpsilon = 0.001f;
 
     // Example of a basic loop
     // current or previous point to mArrayIndices

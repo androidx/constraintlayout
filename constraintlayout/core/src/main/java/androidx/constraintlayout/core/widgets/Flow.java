@@ -70,7 +70,7 @@ public class Flow extends VirtualLayout {
 
     private int mOrientation = HORIZONTAL;
 
-    private final ArrayList<WidgetsList> mChainList = new ArrayList<>();
+    private ArrayList<WidgetsList> mChainList = new ArrayList<>();
 
     // Aligned management
 

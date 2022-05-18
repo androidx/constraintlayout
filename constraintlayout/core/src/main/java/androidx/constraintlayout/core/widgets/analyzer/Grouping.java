@@ -55,7 +55,10 @@ public class Grouping {
                 || (widgetHorizontal == MATCH_PARENT && layoutHorizontal != WRAP_CONTENT);
         boolean fixedVertical = widgetVertical == FIXED || widgetVertical == WRAP_CONTENT
                 || (widgetVertical == MATCH_PARENT && layoutVertical != WRAP_CONTENT);
-        return fixedHorizontal || fixedVertical;
+        if (fixedHorizontal || fixedVertical) {
+            return true;
+        }
+        return false;
     }
 
     /**

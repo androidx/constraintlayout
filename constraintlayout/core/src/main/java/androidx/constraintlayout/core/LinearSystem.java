@@ -61,7 +61,7 @@ public class LinearSystem {
     /*
      * The goal that is used when minimizing the system.
      */
-    private final Row mGoal;
+    private Row mGoal;
 
     private int mTableSize = 32; // default table size for the allocation
     private int mMaxColumns = mTableSize;

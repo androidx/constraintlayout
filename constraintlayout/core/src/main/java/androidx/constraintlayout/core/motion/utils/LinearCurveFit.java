@@ -23,10 +23,10 @@ package androidx.constraintlayout.core.motion.utils;
  */
 public class LinearCurveFit extends CurveFit {
     private static final String TAG = "LinearCurveFit";
-    private final double[] mT;
-    private final double[][] mY;
+    private double[] mT;
+    private double[][] mY;
     private double mTotalLength = Double.NaN;
-    private final boolean mExtrapolate = true;
+    private boolean mExtrapolate = true;
     double[] mSlopeTemp;
 
     public LinearCurveFit(double[] time, double[][] y) {

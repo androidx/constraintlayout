@@ -230,7 +230,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
      */
     public void setOptimizationLevel(int value) {
         mOptimizationLevel = value;
-        LinearSystem.USE_DEPENDENCY_ORDERING = optimizeFor(Optimizer.OPTIMIZATION_DEPENDENCY_ORDERING);
+        mSystem.USE_DEPENDENCY_ORDERING = optimizeFor(Optimizer.OPTIMIZATION_DEPENDENCY_ORDERING);
     }
 
     /**
@@ -822,9 +822,12 @@ public class ConstraintWidgetContainer extends WidgetContainer {
                 || optimizeFor(Optimizer.OPTIMIZATION_GRAPH_WRAP);
 
         mSystem.graphOptimizer = false;
+        mSystem.newgraphOptimizer = false;
 
-        mSystem.newgraphOptimizer = mOptimizationLevel != Optimizer.OPTIMIZATION_NONE
-                && useGraphOptimizer;
+        if (mOptimizationLevel != Optimizer.OPTIMIZATION_NONE
+                && useGraphOptimizer) {
+            mSystem.newgraphOptimizer = true;
+        }
 
         int countSolve = 0;
         final List<ConstraintWidget> allChildren = mChildren;

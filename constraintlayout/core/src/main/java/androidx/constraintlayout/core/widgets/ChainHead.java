@@ -44,7 +44,7 @@ public class ChainHead {
     int mTotalSize;
     int mTotalMargins;
     boolean mOptimizable;
-    private final int mOrientation;
+    private int mOrientation;
     private boolean mIsRtl = false;
     protected boolean mHasUndefinedWeights;
     protected boolean mHasDefinedWeights;

@@ -81,11 +81,11 @@ public class Motion implements TypedValues {
     int mId;
     String mConstraintTag;
     private int mCurveFitType = UNSET;
-    private final MotionPaths mStartMotionPath = new MotionPaths();
-    private final MotionPaths mEndMotionPath = new MotionPaths();
+    private MotionPaths mStartMotionPath = new MotionPaths();
+    private MotionPaths mEndMotionPath = new MotionPaths();
 
-    private final MotionConstrainedPoint mStartPoint = new MotionConstrainedPoint();
-    private final MotionConstrainedPoint mEndPoint = new MotionConstrainedPoint();
+    private MotionConstrainedPoint mStartPoint = new MotionConstrainedPoint();
+    private MotionConstrainedPoint mEndPoint = new MotionConstrainedPoint();
 
     // spline 0 is the generic one that process all the standard attributes
     private CurveFit[] mSpline;
@@ -100,12 +100,12 @@ public class Motion implements TypedValues {
 
     private String[] mAttributeNames;  // the names of the custom attributes
     private int[] mAttributeInterpolatorCount; // how many interpolators for each custom attribute
-    private final int mMaxDimension = 4;
-    private final float[] mValuesBuff = new float[mMaxDimension];
-    private final ArrayList<MotionPaths> mMotionPaths = new ArrayList<>();
-    private final float[] mVelocity = new float[1]; // used as a temp buffer to return values
+    private int mMaxDimension = 4;
+    private float[] mValuesBuff = new float[mMaxDimension];
+    private ArrayList<MotionPaths> mMotionPaths = new ArrayList<>();
+    private float[] mVelocity = new float[1]; // used as a temp buffer to return values
 
-    private final ArrayList<MotionKey> mKeyList = new ArrayList<>(); // List of key frame items
+    private ArrayList<MotionKey> mKeyList = new ArrayList<>(); // List of key frame items
 
     // splines to calculate for use TimeCycles
     private HashMap<String, TimeCycleSplineSet> mTimeCycleAttributesMap;
@@ -1693,7 +1693,7 @@ public class Motion implements TypedValues {
                 setPathMotionArc(value);
                 return true;
             case TypedValues.MotionType.TYPE_QUANTIZE_MOTIONSTEPS:
-                 mQuantizeMotionSteps = value;
+                mQuantizeMotionSteps = value;
                 return true;
             case TypedValues.TransitionType.TYPE_AUTO_TRANSITION:
                 // TODO add support for auto transitions mAutoTransition = value;
@@ -1705,7 +1705,7 @@ public class Motion implements TypedValues {
     @Override
     public boolean setValue(int id, float value) {
         if (MotionType.TYPE_QUANTIZE_MOTION_PHASE == id) {
-            mQuantizeMotionPhase =  value;
+            mQuantizeMotionPhase = value;
             return true;
         }
         if (MotionType.TYPE_STAGGER == id) {
@@ -1717,7 +1717,8 @@ public class Motion implements TypedValues {
 
     @Override
     public boolean setValue(int id, String value) {
-        if (TransitionType.TYPE_INTERPOLATOR == id || MotionType.TYPE_QUANTIZE_INTERPOLATOR_TYPE == id) {
+        if (TransitionType.TYPE_INTERPOLATOR == id
+                || MotionType.TYPE_QUANTIZE_INTERPOLATOR_TYPE == id) {
             mQuantizeMotionInterpolator = getInterpolator(SPLINE_STRING, value, 0);
             return true;
         }
@@ -1734,9 +1735,9 @@ public class Motion implements TypedValues {
     public int getId(String name) {
         return 0;
     }
+
     /**
      * Set stagger scale
-     * @param staggerScale
      */
     public void setStaggerScale(float staggerScale) {
         mStaggerScale = staggerScale;
@@ -1744,6 +1745,7 @@ public class Motion implements TypedValues {
 
     /**
      * set the offset used in calculating stagger launches
+     *
      * @param staggerOffset fraction of progress before this controller runs
      */
     public void setStaggerOffset(float staggerOffset) {
@@ -1753,8 +1755,9 @@ public class Motion implements TypedValues {
     /**
      * The values set in
      * motion: {
-     *          stagger: '2'
-     *       }
+     * stagger: '2'
+     * }
+     *
      * @return value from motion: { stagger: ? } or NaN if not set
      */
     public float getMotionStagger() {

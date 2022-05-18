@@ -31,8 +31,8 @@ import java.util.HashMap;
  */
 class LinearEquation {
 
-    private final ArrayList<EquationVariable> mLeftSide = new ArrayList<>();
-    private final ArrayList<EquationVariable> mRightSide = new ArrayList<>();
+    private ArrayList<EquationVariable> mLeftSide = new ArrayList<>();
+    private ArrayList<EquationVariable> mRightSide = new ArrayList<>();
     private ArrayList<EquationVariable> mCurrentSide = null;
 
     public boolean isNull() {
@@ -42,8 +42,10 @@ class LinearEquation {
         if (mLeftSide.size() == 1 && mRightSide.size() == 1) {
             EquationVariable v1 = mLeftSide.get(0);
             EquationVariable v2 = mRightSide.get(0);
-            return v1.isConstant() && v2.isConstant()
-                    && v1.getAmount().isNull() && v2.getAmount().isNull();
+            if (v1.isConstant() && v2.isConstant()
+                    && v1.getAmount().isNull() && v2.getAmount().isNull()) {
+                return true;
+            }
         }
         return false;
     }
@@ -577,7 +579,10 @@ class LinearEquation {
         if (find(solverVariable, mLeftSide) != null) {
             return true;
         }
-        return find(solverVariable, mRightSide) != null;
+        if (find(solverVariable, mRightSide) != null) {
+            return true;
+        }
+        return false;
     }
 
     /**

@@ -49,8 +49,11 @@ public class Dimension {
      * the same given value
      */
     public boolean equalsFixedValue(int value) {
-        return mInitialValue == null
-                && mValue == value;
+        if (mInitialValue == null
+                && mValue == value) {
+            return true;
+        }
+        return false;
     }
 
     public enum Type {

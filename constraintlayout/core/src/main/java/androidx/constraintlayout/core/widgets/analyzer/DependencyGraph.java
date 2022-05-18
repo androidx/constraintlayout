@@ -40,14 +40,14 @@ import java.util.HashSet;
 
 public class DependencyGraph {
     private static final boolean USE_GROUPS = true;
-    private final ConstraintWidgetContainer mWidgetcontainer;
+    private ConstraintWidgetContainer mWidgetcontainer;
     private boolean mNeedBuildGraph = true;
     private boolean mNeedRedoMeasures = true;
-    private final ConstraintWidgetContainer mContainer;
-    private final ArrayList<WidgetRun> mRuns = new ArrayList<>();
+    private ConstraintWidgetContainer mContainer;
+    private ArrayList<WidgetRun> mRuns = new ArrayList<>();
 
     // TODO: Unused, should we delete?
-    private final ArrayList<RunGroup> mRunGroups = new ArrayList<>();
+    private ArrayList<RunGroup> mRunGroups = new ArrayList<>();
 
     public DependencyGraph(ConstraintWidgetContainer container) {
         this.mWidgetcontainer = container;
@@ -55,7 +55,7 @@ public class DependencyGraph {
     }
 
     private BasicMeasure.Measurer mMeasurer = null;
-    private final BasicMeasure.Measure mMeasure = new BasicMeasure.Measure();
+    private BasicMeasure.Measure mMeasure = new BasicMeasure.Measure();
 
     public void setMeasurer(BasicMeasure.Measurer measurer) {
         mMeasurer = measurer;

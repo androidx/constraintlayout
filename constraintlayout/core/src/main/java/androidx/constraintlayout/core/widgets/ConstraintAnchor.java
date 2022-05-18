@@ -299,8 +299,11 @@ public class ConstraintAnchor {
         }
         Type target = anchor.getType();
         if (target == mType) {
-            return mType != Type.BASELINE
-                    || (anchor.getOwner().hasBaseline() && getOwner().hasBaseline());
+            if (mType == Type.BASELINE
+                    && (!anchor.getOwner().hasBaseline() || !getOwner().hasBaseline())) {
+                return false;
+            }
+            return true;
         }
         switch (mType) {
             case CENTER: {
@@ -325,7 +328,10 @@ public class ConstraintAnchor {
                 return isCompatible;
             }
             case BASELINE: {
-                return target != Type.LEFT && target != Type.RIGHT;
+                if (target == Type.LEFT || target == Type.RIGHT) {
+                    return false;
+                }
+                return true;
             }
             case CENTER_X:
             case CENTER_Y:
@@ -482,8 +488,10 @@ public class ConstraintAnchor {
         if (parent == target) { // allow connections to parent
             return true;
         }
-        // allow if we share the same parent
-        return target.getParent() == parent;
+        if (target.getParent() == parent) { // allow if we share the same parent
+            return true;
+        }
+        return false;
     }
 
     /**

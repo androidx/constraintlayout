@@ -25,10 +25,10 @@ public class SolverVariableValues implements ArrayRow.ArrayRowVariables {
 
     private static final boolean DEBUG = false;
     private static final boolean HASH = true;
-    private static final float sEpsilon = 0.001f;
+    private static float sEpsilon = 0.001f;
     private final int mNone = -1;
     private int mSize = 16;
-    private final int mHashSize = 16;
+    private int mHashSize = 16;
 
     int[] mKeys = new int[mSize];
     int[] mNextKeys = new int[mSize];

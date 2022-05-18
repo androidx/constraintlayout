@@ -133,7 +133,7 @@ public class ConstraintReference implements Reference {
     private Object mView;
     private ConstraintWidget mConstraintWidget;
 
-    private final HashMap<String, Integer> mCustomColors = new HashMap<>();
+    private HashMap<String, Integer> mCustomColors = new HashMap<>();
     private HashMap<String, Float> mCustomFloats = new HashMap<>();
 
     TypedBundle mMotionProperties = null;

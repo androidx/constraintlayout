@@ -26,7 +26,7 @@ public class Registry {
         return sRegistry;
     }
 
-    private final HashMap<String, RegistryCallback> mCallbacks = new HashMap<>();
+    private HashMap<String, RegistryCallback> mCallbacks = new HashMap<>();
 
     /**
      * @TODO: add description

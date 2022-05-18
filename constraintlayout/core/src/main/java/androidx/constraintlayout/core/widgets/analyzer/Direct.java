@@ -43,7 +43,7 @@ public class Direct {
 
     private static final boolean DEBUG = LinearSystem.FULL_DEBUG;
     private static final boolean APPLY_MATCH_PARENT = false;
-    private static final BasicMeasure.Measure sMeasure = new BasicMeasure.Measure();
+    private static BasicMeasure.Measure sMeasure = new BasicMeasure.Measure();
     private static final boolean EARLY_TERMINATION = true; // feature flag -- remove after release.
 
     private static int sHcount = 0;

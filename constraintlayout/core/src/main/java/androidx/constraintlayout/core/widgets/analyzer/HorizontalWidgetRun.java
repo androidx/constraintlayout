@@ -34,7 +34,7 @@ import androidx.constraintlayout.core.widgets.Helper;
 
 public class HorizontalWidgetRun extends WidgetRun {
 
-    private static final int[] sTempDimensions = new int[2];
+    private static int[] sTempDimensions = new int[2];
 
     public HorizontalWidgetRun(ConstraintWidget widget) {
         super(widget);
@@ -70,7 +70,10 @@ public class HorizontalWidgetRun extends WidgetRun {
     @Override
     boolean supportsWrapComputation() {
         if (super.mDimensionBehavior == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT) {
-            return super.mWidget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_SPREAD;
+            if (super.mWidget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_SPREAD) {
+                return true;
+            }
+            return false;
         }
         return true;
     }

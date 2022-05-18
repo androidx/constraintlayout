@@ -26,7 +26,7 @@ public class PriorityGoalRow extends ArrayRow {
     private static final float EPSILON = 0.0001f;
     private static final boolean DEBUG = false;
 
-    private final int mTableSize = 128;
+    private int mTableSize = 128;
     private SolverVariable[] mArrayGoals = new SolverVariable[mTableSize];
     private SolverVariable[] mSortArray = new SolverVariable[mTableSize];
     private int mNumGoals = 0;

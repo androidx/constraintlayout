@@ -51,7 +51,7 @@ public class BasicMeasure {
     public static final int FIXED = -3;
 
     private final ArrayList<ConstraintWidget> mVariableDimensionsWidgets = new ArrayList<>();
-    private final Measure mMeasure = new Measure();
+    private Measure mMeasure = new Measure();
 
     /**
      * @TODO: add description
@@ -71,7 +71,7 @@ public class BasicMeasure {
         layout.invalidateGraph();
     }
 
-    private final ConstraintWidgetContainer mConstraintWidgetContainer;
+    private ConstraintWidgetContainer mConstraintWidgetContainer;
 
     public BasicMeasure(ConstraintWidgetContainer constraintWidgetContainer) {
         this.mConstraintWidgetContainer = constraintWidgetContainer;

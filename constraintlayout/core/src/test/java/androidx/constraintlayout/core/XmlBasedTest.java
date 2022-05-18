@@ -67,11 +67,11 @@ public class XmlBasedTest {
         int mGonMargin = Integer.MIN_VALUE;
     }
 
-    private static final HashMap<String, Integer> sVisibilityMap = new HashMap<>();
-    private static final Map<String, Integer> sStringWidthMap = new HashMap<String, Integer>();
-    private static final Map<String, Integer> sStringHeightMap = new HashMap<String, Integer>();
-    private static final Map<String, Integer> sButtonWidthMap = new HashMap<String, Integer>();
-    private static final Map<String, Integer> sButtonHeightMap = new HashMap<String, Integer>();
+    private static HashMap<String, Integer> sVisibilityMap = new HashMap<>();
+    private static Map<String, Integer> sStringWidthMap = new HashMap<String, Integer>();
+    private static Map<String, Integer> sStringHeightMap = new HashMap<String, Integer>();
+    private static Map<String, Integer> sButtonWidthMap = new HashMap<String, Integer>();
+    private static Map<String, Integer> sButtonHeightMap = new HashMap<String, Integer>();
 
     static {
         sVisibilityMap.put("gone", ConstraintWidget.GONE);

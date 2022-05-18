@@ -30,9 +30,9 @@ public enum Direction {
     static final int ORIENTATION_VERTICAL = 0;
     static final int ORIENTATION_HORIZONTAL = 1;
 
-    private static final Direction[] sAllDirections = Direction.values();
-    private static final Direction[] sVertical = {NORTH, SOUTH, BASE};
-    private static final Direction[] sHorizontal = {WEST, EAST};
+    private static Direction[] sAllDirections = Direction.values();
+    private static Direction[] sVertical = {NORTH, SOUTH, BASE};
+    private static Direction[] sHorizontal = {WEST, EAST};
 
     Direction(int n) {
         mDirection = n;

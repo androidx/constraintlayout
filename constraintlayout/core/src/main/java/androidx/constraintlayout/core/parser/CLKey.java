@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class CLKey extends CLContainer {
 
-    private static final ArrayList<String> sSections = new ArrayList<>();
+    private static ArrayList<String> sSections = new ArrayList<>();
 
     static {
         sSections.add("ConstraintSets");

@@ -41,7 +41,7 @@ public class CustomAttribute {
     private static final String TAG = "TransitionLayout";
     private boolean mMethod = false;
     String mName;
-    private final AttributeType mType;
+    private AttributeType mType;
     private int mIntegerValue;
     private float mFloatValue;
     private String mStringValue;

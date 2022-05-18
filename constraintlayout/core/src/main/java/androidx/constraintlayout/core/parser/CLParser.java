@@ -19,7 +19,7 @@ public class CLParser {
 
     static boolean sDebug = false;
 
-    private final String mContent;
+    private String mContent;
     private boolean mHasComment = false;
     private int mLineNumber;
 

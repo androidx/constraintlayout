@@ -22,7 +22,6 @@ import static androidx.constraintlayout.core.motion.utils.TypedValues.MotionType
 
 import androidx.constraintlayout.core.motion.utils.TypedBundle;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
- 
 import androidx.constraintlayout.core.parser.CLArray;
 import androidx.constraintlayout.core.parser.CLElement;
 import androidx.constraintlayout.core.parser.CLKey;
@@ -1036,9 +1035,6 @@ public class ConstraintSetParser {
      *   }
      * }
      * </pre>
-     * @param element
-     * @param reference
-     * @throws CLParsingException
      */
     private static void parseMotionProperties(
             CLElement element,
@@ -1060,7 +1056,7 @@ public class ConstraintSetParser {
                     String val = obj.getString(constraintName);
                     int ord = indexOf(val, "none", "startVertical", "startHorizontal", "flip");
                     if (ord == -1) {
-                        System.err.println(obj.getLine()+" pathArc = '" + val + "'");
+                        System.err.println(obj.getLine() + " pathArc = '" + val + "'");
                         break;
                     }
                     bundle.add(TypedValues.MotionType.TYPE_PATHMOTION_ARC, ord);
@@ -1073,11 +1069,11 @@ public class ConstraintSetParser {
                     bundle.add(TypedValues.MotionType.TYPE_EASING, obj.getString(constraintName));
                     break;
                 case "stagger":
-                    bundle.add(TypedValues.MotionType.TYPE_STAGGER,  obj.getFloat(constraintName));
+                    bundle.add(TypedValues.MotionType.TYPE_STAGGER, obj.getFloat(constraintName));
                     break;
                 case "quantize":
                     CLElement quant = obj.get(constraintName);
-                    if (quant instanceof  CLArray) {
+                    if (quant instanceof CLArray) {
                         CLArray array = (CLArray) quant;
                         int len = array.size();
                         if (len > 0) {
