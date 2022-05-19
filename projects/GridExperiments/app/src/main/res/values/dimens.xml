@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="radius">68dp</dimen>
+    <dimen name="radius2">48dp</dimen>
+    <dimen name="extension">-0.6</dimen>
+</resources>
