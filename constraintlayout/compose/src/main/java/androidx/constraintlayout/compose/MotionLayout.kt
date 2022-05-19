@@ -73,9 +73,9 @@ import androidx.constraintlayout.core.state.Transition
 import androidx.constraintlayout.core.state.TransitionParser
 import androidx.constraintlayout.core.state.WidgetFrame
 import androidx.constraintlayout.core.widgets.Optimizer
+import java.util.EnumSet
 import kotlinx.coroutines.channels.Channel
 import org.intellij.lang.annotations.Language
-import java.util.EnumSet
 
 /**
  * Layout that interpolate its children layout given two sets of constraint and
@@ -722,7 +722,8 @@ class MotionLayoutScope @PublishedApi internal constructor(
  */
 @Immutable
 interface Transition {
-    fun applyTo(transition: Transition, type: Int)
+    fun applyAllTo(transition: Transition, type: Int)
+    fun applyKeyFramesTo(transition: Transition)
     fun getStartConstraintSetId(): String
     fun getEndConstraintSetId(): String
 }
@@ -748,16 +749,17 @@ fun Transition(@Language("json5") content: String): androidx.constraintlayout.co
                 object : androidx.constraintlayout.compose.Transition {
                     val pixelDp = CorePixelDp { dpValue -> dpValue * dpToPixel }
 
-                    // TODO: there's probably a better way to do this, since there's no reason to
-                    //  call `applyTo` more than once
-                    var applied = false
-
-                    override fun applyTo(transition: Transition, type: Int) {
+                    override fun applyAllTo(transition: Transition, type: Int) {
                         try {
-                            if (!applied) {
-                                TransitionParser.parse(parsed, transition, pixelDp)
-                                applied = true
-                            }
+                            TransitionParser.parse(parsed, transition, pixelDp)
+                        } catch (e: CLParsingException) {
+                            Log.e("CML", "Error parsing JSON $e")
+                        }
+                    }
+
+                    override fun applyKeyFramesTo(transition: Transition) {
+                        try {
+                            TransitionParser.parseKeyFrames(parsed, transition)
                         } catch (e: CLParsingException) {
                             Log.e("CML", "Error parsing JSON $e")
                         }
@@ -1035,9 +1037,7 @@ internal class MotionMeasurer : Measurer() {
                 optimizationLevel, constraintSetEnd, measurables, constraints
             )
             this.transition.updateFrom(root, Transition.END)
-
-            // TODO: Call might be unnecessary, see implementation
-            transition?.applyTo(this.transition, 0)
+            transition?.applyKeyFramesTo(this.transition)
         }
 
         this.transition.interpolate(root.width, root.height, progress)
@@ -1342,7 +1342,7 @@ internal class MotionMeasurer : Measurer() {
         start.applyTo(this.transition, Transition.START)
         end.applyTo(this.transition, Transition.END)
         this.transition.interpolate(0, 0, progress)
-        transition?.applyTo(this.transition, 0)
+        transition?.applyAllTo(this.transition, 0)
     }
 }
 
