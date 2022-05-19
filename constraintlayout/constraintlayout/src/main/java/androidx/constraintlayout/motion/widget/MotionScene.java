@@ -1271,7 +1271,7 @@ public class MotionScene {
                                 break;
                             case ONCLICK_TAG:
                                 if (transition != null) {
-                                    if (mMotionLayout.isInEditMode()) {
+                                    if (!mMotionLayout.isInEditMode()) {
                                         transition.addOnClick(context, parser);
                                     }
                                 }

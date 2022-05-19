@@ -82,6 +82,7 @@ public class DeviceConnection {
             reader = new Reader(socket.getInputStream());
             writer = new Writer(socket.getOutputStream());
         } catch (IOException e) {
+            System.err.println("Did you \"adb forward tcp:4242 tcp:4242\"");
             e.printStackTrace();
         }
     }
