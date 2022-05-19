@@ -668,18 +668,18 @@ public class Grid extends VirtualLayout {
         return d;
     }
 
-    public void setStrSpans(String strSpans) {
-        mStrSpans = strSpans;
-    }
-
+    /**
+     * get the string value of spans
+     * @return the string value of spans
+     */
     public String getStrSpans() {
         return mStrSpans;
     }
 
-    public void setStrSkips(String strSkips) {
-        mStrSkips = strSkips;
-    }
-
+    /**
+     * get the string value of skips
+     * @return the string value of skips
+     */
     public String getStrSkips() {
         return mStrSkips;
     }
