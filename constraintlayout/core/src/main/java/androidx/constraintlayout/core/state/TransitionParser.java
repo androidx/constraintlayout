@@ -78,37 +78,7 @@ public class TransitionParser {
         if (onSwipe != null) {
             parseOnSwipe(onSwipe, transition);
         }
-        CLContainer keyframes = json.getObjectOrNull("KeyFrames");
-        if (keyframes == null) return;
-        CLArray keyPositions = keyframes.getArrayOrNull("KeyPositions");
-        if (keyPositions != null) {
-
-            for (int i = 0; i < keyPositions.size(); i++) {
-                CLElement keyPosition = keyPositions.get(i);
-                if (keyPosition instanceof CLObject) {
-                    parseKeyPosition((CLObject) keyPosition, transition);
-                }
-            }
-        }
-        CLArray keyAttributes = keyframes.getArrayOrNull("KeyAttributes");
-        if (keyAttributes != null) {
-            for (int i = 0; i < keyAttributes.size(); i++) {
-
-                CLElement keyAttribute = keyAttributes.get(i);
-                if (keyAttribute instanceof CLObject) {
-                    parseKeyAttribute((CLObject) keyAttribute, transition);
-                }
-            }
-        }
-        CLArray keyCycles = keyframes.getArrayOrNull("KeyCycles");
-        if (keyCycles != null) {
-            for (int i = 0; i < keyCycles.size(); i++) {
-                CLElement keyCycle = keyCycles.get(i);
-                if (keyCycle instanceof CLObject) {
-                    parseKeyCycle((CLObject) keyCycle, transition);
-                }
-            }
-        }
+        parseKeyFrames(json, transition);
     }
 
     private static void parseOnSwipe(CLContainer onSwipe, Transition transition) {
@@ -167,6 +137,46 @@ public class TransitionParser {
             }
         }
     }
+
+    /**
+     * Parses {@code KeyFrames} attributes from the {@link CLObject} into {@link  Transition}.
+     *
+     * @param transitionCLObject the CLObject for the root transition json
+     * @param transition         core object that holds the state of the Transition
+     */
+    public static void parseKeyFrames(CLObject transitionCLObject, Transition transition)
+            throws CLParsingException {
+        CLContainer keyframes = transitionCLObject.getObjectOrNull("KeyFrames");
+        if (keyframes == null) return;
+        CLArray keyPositions = keyframes.getArrayOrNull("KeyPositions");
+        if (keyPositions != null) {
+            for (int i = 0; i < keyPositions.size(); i++) {
+                CLElement keyPosition = keyPositions.get(i);
+                if (keyPosition instanceof CLObject) {
+                    parseKeyPosition((CLObject) keyPosition, transition);
+                }
+            }
+        }
+        CLArray keyAttributes = keyframes.getArrayOrNull("KeyAttributes");
+        if (keyAttributes != null) {
+            for (int i = 0; i < keyAttributes.size(); i++) {
+                CLElement keyAttribute = keyAttributes.get(i);
+                if (keyAttribute instanceof CLObject) {
+                    parseKeyAttribute((CLObject) keyAttribute, transition);
+                }
+            }
+        }
+        CLArray keyCycles = keyframes.getArrayOrNull("KeyCycles");
+        if (keyCycles != null) {
+            for (int i = 0; i < keyCycles.size(); i++) {
+                CLElement keyCycle = keyCycles.get(i);
+                if (keyCycle instanceof CLObject) {
+                    parseKeyCycle((CLObject) keyCycle, transition);
+                }
+            }
+        }
+    }
+
 
     private static void parseKeyPosition(CLObject keyPosition,
             Transition transition) throws CLParsingException {
