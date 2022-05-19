@@ -63,6 +63,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastForEach
 import androidx.constraintlayout.core.motion.Motion
+import androidx.constraintlayout.core.parser.CLObject
 import androidx.constraintlayout.core.parser.CLParser
 import androidx.constraintlayout.core.parser.CLParsingException
 import androidx.constraintlayout.core.state.ConstraintSetParser.parseMotionSceneJSON
@@ -184,7 +185,7 @@ inline fun MotionLayout(
     MotionLayoutCore(
         start = start,
         end = end,
-        transition = transition,
+        transition = transition as? TransitionImpl,
         progress = progress,
         debug = debug,
         informationReceiver = informationReceiver,
@@ -368,7 +369,7 @@ internal inline fun MotionLayoutCore(
     MotionLayoutCore(
         start = start,
         end = end,
-        transition = transition,
+        transition = transition as? TransitionImpl,
         progress = usedProgress,
         debug = usedDebugMode,
         informationReceiver = motionScene as? LayoutInformationReceiver,
@@ -384,7 +385,7 @@ internal inline fun MotionLayoutCore(
 internal inline fun MotionLayoutCore(
     start: ConstraintSet,
     end: ConstraintSet,
-    transition: androidx.constraintlayout.compose.Transition? = null,
+    transition: TransitionImpl? = null,
     progress: Float,
     debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     informationReceiver: LayoutInformationReceiver? = null,
@@ -506,7 +507,7 @@ internal inline fun MotionLayoutCore(
             motionScene,
             start,
             end,
-            transition,
+            transition as? TransitionImpl,
             motionLayoutState.progressState,
             measurer
         )
@@ -722,10 +723,50 @@ class MotionLayoutScope @PublishedApi internal constructor(
  */
 @Immutable
 interface Transition {
-    fun applyAllTo(transition: Transition, type: Int)
-    fun applyKeyFramesTo(transition: Transition)
     fun getStartConstraintSetId(): String
     fun getEndConstraintSetId(): String
+}
+
+/**
+ * Subclass of [Transition] for internal use.
+ *
+ * Used to reduced the exposed API from [Transition].
+ */
+internal class TransitionImpl(
+    private val parsedTransition: CLObject,
+    private val pixelDp: CorePixelDp
+) : androidx.constraintlayout.compose.Transition {
+
+    /**
+     * Applies all Transition properties to [transition].
+     */
+    fun applyAllTo(transition: Transition, type: Int) {
+        try {
+            TransitionParser.parse(parsedTransition, transition, pixelDp)
+        } catch (e: CLParsingException) {
+            Log.e("CML", "Error parsing JSON $e")
+        }
+    }
+
+    /**
+     * Applies only the KeyFrame related properties (KeyCycles, KeyAttributes, KeyPositions) to
+     * [transition], which effectively sets the respective parameters for each WidgetState.
+     */
+    fun applyKeyFramesTo(transition: Transition) {
+        try {
+            TransitionParser.parseKeyFrames(parsedTransition, transition)
+        } catch (e: CLParsingException) {
+            Log.e("CML", "Error parsing JSON $e")
+        }
+    }
+
+    override fun getStartConstraintSetId(): String {
+        return parsedTransition.getStringOrNull("from") ?: "start"
+    }
+
+    override fun getEndConstraintSetId(): String {
+        return parsedTransition.getStringOrNull("to") ?: "end"
+    }
 }
 
 /**
@@ -746,33 +787,8 @@ fun Transition(@Language("json5") content: String): androidx.constraintlayout.co
         }
         mutableStateOf(
             if (parsed != null) {
-                object : androidx.constraintlayout.compose.Transition {
-                    val pixelDp = CorePixelDp { dpValue -> dpValue * dpToPixel }
-
-                    override fun applyAllTo(transition: Transition, type: Int) {
-                        try {
-                            TransitionParser.parse(parsed, transition, pixelDp)
-                        } catch (e: CLParsingException) {
-                            Log.e("CML", "Error parsing JSON $e")
-                        }
-                    }
-
-                    override fun applyKeyFramesTo(transition: Transition) {
-                        try {
-                            TransitionParser.parseKeyFrames(parsed, transition)
-                        } catch (e: CLParsingException) {
-                            Log.e("CML", "Error parsing JSON $e")
-                        }
-                    }
-
-                    override fun getStartConstraintSetId(): String {
-                        return parsed.getStringOrNull("from") ?: "start"
-                    }
-
-                    override fun getEndConstraintSetId(): String {
-                        return parsed.getStringOrNull("to") ?: "end"
-                    }
-                }
+                val pixelDp = CorePixelDp { dpValue -> dpValue * dpToPixel }
+                TransitionImpl(parsed, pixelDp)
             } else {
                 null
             }
@@ -800,7 +816,7 @@ internal fun rememberMotionLayoutMeasurePolicy(
     needsUpdate: Long,
     constraintSetStart: ConstraintSet,
     constraintSetEnd: ConstraintSet,
-    transition: androidx.constraintlayout.compose.Transition?,
+    transition: TransitionImpl?,
     progress: MutableState<Float>,
     measurer: MotionMeasurer
 ) = remember(
@@ -840,7 +856,7 @@ internal fun rememberMotionLayoutMeasurePolicy(
     motionScene: MotionScene,
     constraintSetStart: ConstraintSet,
     constraintSetEnd: ConstraintSet,
-    transition: androidx.constraintlayout.compose.Transition?,
+    transition: TransitionImpl?,
     progress: State<Float>,
     measurer: MotionMeasurer
 ) = remember(
@@ -921,7 +937,7 @@ internal class MotionMeasurer : Measurer() {
         layoutDirection: LayoutDirection,
         constraintSetStart: ConstraintSet,
         constraintSetEnd: ConstraintSet,
-        transition: androidx.constraintlayout.compose.Transition?,
+        transition: TransitionImpl?,
         measurables: List<Measurable>,
         optimizationLevel: Int,
         progress: Float,
@@ -999,7 +1015,7 @@ internal class MotionMeasurer : Measurer() {
         layoutDirection: LayoutDirection,
         constraintSetStart: ConstraintSet,
         constraintSetEnd: ConstraintSet,
-        transition: androidx.constraintlayout.compose.Transition?,
+        transition: TransitionImpl?,
         measurables: List<Measurable>,
         optimizationLevel: Int,
         progress: Float,
@@ -1335,7 +1351,7 @@ internal class MotionMeasurer : Measurer() {
     fun initWith(
         start: ConstraintSet,
         end: ConstraintSet,
-        transition: androidx.constraintlayout.compose.Transition?,
+        transition: TransitionImpl?,
         progress: Float
     ) {
         clearConstraintSets()
