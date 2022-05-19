@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 
@@ -36,7 +37,42 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Grid helper class
+ * A helper class that helps arrange widgets in a grid form
+ *
+ * <h2>Grid</h2>
+ * <table summary="Grid attributes">
+ *   <tr>
+ *     <th>Attributes</th><th>Description</th>
+ *   </tr>
+ *   <tr>
+ *     <td>grid_rows</td>
+ *     <td>Indicates the number of rows will be created for the grid form.</td>
+ *   </tr>
+ *   <tr>
+ *     <td>grid_columns</td>
+ *     <td>Indicates the number of columns will be created for the grid form.</td>
+ *   </tr>
+ *   <tr>
+ *     <td>grid_spans</td>
+ *     <td>Offers the capability to span a widget across multiple rows and columns</td>
+ *   </tr>
+ *   <tr>
+ *     <td>grid_skips</td>
+ *     <td>Enables skip certain positions in the grid and leave them empty</td>
+ *   </tr>
+ *   <tr>
+ *     <td>grid_orientation</td>
+ *     <td>Defines how the associated widgets will be arranged - vertically or horizontally</td>
+ *   </tr>
+ *   <tr>
+ *     <td>grid_horizontalGaps</td>
+ *     <td>Adds margin horizontally between widgets</td>
+ *   </tr>
+ *   <tr>
+ *      <td>grid_verticalGaps</td>
+ *     <td>Adds margin vertically between widgets</td>
+ *   </tr>
+ * </table>
  */
 public class Grid extends VirtualLayout {
     private static final String TAG = "Grid";
@@ -95,6 +131,16 @@ public class Grid extends VirtualLayout {
     private int mNextAvailableIndex = 0;
 
     /**
+     * Indicates whether the input attributes need to be validated
+     */
+    private boolean mValidateInputs;
+
+    /**
+     * Indicates whether to use RTL layout direction
+     */
+    private boolean mUseRtl;
+
+    /**
      * A integer matrix that tracks the positions that are occupied by skips and spans
      * true: available position
      * false: non-available position
@@ -106,7 +152,9 @@ public class Grid extends VirtualLayout {
      */
     Set<Integer> mSpanIds = new HashSet<>();
 
-
+    /**
+     * class that stores the relevant span information
+     */
     static class Span {
         int mId;
         int mStartRow;
@@ -188,6 +236,12 @@ public class Grid extends VirtualLayout {
                     mHorizontalGaps = a.getInteger(attr, 0);
                 } else if (attr == R.styleable.Grid_grid_verticalGaps) {
                     mVerticalGaps = a.getInteger(attr, 0);
+                } else if (attr == R.styleable.Grid_grid_validateInputs) {
+                    // @TODO handle validation
+                    mValidateInputs = a.getBoolean(attr, false);
+                }  else if (attr == R.styleable.Grid_grid_useRtl) {
+                    // @TODO handle RTL
+                    mUseRtl = a.getBoolean(attr, false);
                 }
             }
 
@@ -206,16 +260,19 @@ public class Grid extends VirtualLayout {
 
         if (mStrSkips != null && !mStrSkips.trim().isEmpty()) {
             HashMap<Integer, Pair<Integer, Integer>> mSkipMap = parseSkips(mStrSkips);
-            handleSkips(mSkipMap);
+            if (mSkipMap != null) {
+                handleSkips(mSkipMap);
+            }
         }
 
         if (mStrSpans != null && !mStrSpans.trim().isEmpty()) {
             Span[] mSpans = parseSpans(mStrSpans);
-            handleSpans(mSpans);
+            if (mSpans != null) {
+                handleSpans(mSpans);
+            }
         }
 
         arrangeWidgets();
-
     }
 
     /**
@@ -254,7 +311,7 @@ public class Grid extends VirtualLayout {
     }
 
     /**
-     *
+     * get a new Guideline based on the specified orientation and position
      * @param context the context
      * @param orientation orientation of a Guideline
      * @param position position of a Guideline
@@ -341,6 +398,7 @@ public class Grid extends VirtualLayout {
      * @return a Pair with row and column as its values.
      */
     private Pair<Integer, Integer> getPositionByIndex(int index) {
+        // @TODO handle RTL
         int row;
         int col;
 
@@ -379,6 +437,12 @@ public class Grid extends VirtualLayout {
         return new Pair<>(position.first, position.second);
     }
 
+    /**
+     * Handle the gravity. The value could be t, r, b, l, s, e, tl, br, etc.
+     * t = top, r = right, b = bottom l = left, s = start, e = end
+     * @param viewId the id of a view
+     * @param gravity the gravity
+     */
     private void handleGravity(int viewId, String gravity) {
         for (int i = 0; i < gravity.length(); i++) {
             // @TODO handle RTL
@@ -401,18 +465,38 @@ public class Grid extends VirtualLayout {
                 case 'e':
                     mConstraintSet.setHorizontalBias(viewId, 1);
                     break;
+                default:
+                    Log.w(TAG, "unknown gravity value: " + gravity.charAt(i));
             }
         }
     }
 
     /**
+     * Check if the value of the Spans is valid
+     * @param mStrSpans spans in string format
+     * @return true if it is valid else false
+     */
+    private boolean isSpansValid(String mStrSpans) {
+        // TODO: check string has a valid format.
+        return true;
+    }
+
+    /**
      * Parse the spans in the string format into a span object
-     * the format of a span is viewId|startPosition:rowSpanxcolumnSpan-gravity
+     * the format of a span is viewId|index:rowSpanxcolumnSpan-gravity
+     * viewID - The id of a view in the constraint_referenced_ids list
+     * index - the index of the starting position
+     * row_span - The number of rows to span
+     * col_span- The number of columns to span
+     * gravity (optional) - letters t, l, b, r, s ,e = top, left, bottom, right, start, end.
+     *  Two letters could be used together (e.g., tl, br, etc.)
      * @param strSpans Grid spans in the string format
      * @return a HashMap contains span information of individual views.
      */
     private Span[] parseSpans(String strSpans) {
-        // TODO: check string has a valid format.
+        if (!isSpansValid(strSpans)) {
+            return null;
+        }
 
         String[] spans = strSpans.split(",");
         Span[] spanArray = new Span[spans.length];
@@ -421,14 +505,14 @@ public class Grid extends VirtualLayout {
             String[] idAndRest = spans[i].trim().split(":");
             String[] startPositionAndRest = idAndRest[1].split("#");
             String[] rowSpanAndRest = startPositionAndRest[1].split("x");
-            String[] ColSpanAndGravity = rowSpanAndRest[1].split("-");
+            String[] colSpanAndGravity = rowSpanAndRest[1].split("-");
 
             int id = findId(mContainer, idAndRest[0]);
             Pair<Integer, Integer> startPosition =
                     getPositionByIndex(Integer.parseInt(startPositionAndRest[0]));
             int rowSpan = Integer.parseInt(rowSpanAndRest[0]);
-            int columnSpan = Integer.parseInt(ColSpanAndGravity[0]);
-            String gravity = ColSpanAndGravity.length > 1 ? ColSpanAndGravity[1] : "";
+            int columnSpan = Integer.parseInt(colSpanAndGravity[0]);
+            String gravity = colSpanAndGravity.length > 1 ? colSpanAndGravity[1] : "";
 
             spanArray[i] = new Span(id, startPosition.first, startPosition.second,
                     rowSpan, columnSpan, gravity);
@@ -442,10 +526,6 @@ public class Grid extends VirtualLayout {
      * @return true if the input spans is valid else false
      */
     private boolean handleSpans(Span[] spans) {
-        if (spans == null || spans.length == 0) {
-            return true;
-        }
-
         for (Span span : spans) {
             if (!invalidatePositions(span.mStartRow, span.mStartColumn,
                     span.mRowSpan, span.mColumnSpan)) {
@@ -460,14 +540,29 @@ public class Grid extends VirtualLayout {
     }
 
     /**
+     * Check if the value of the skips is valid
+     * @param mStrSkips skips in string format
+     * @return true if it is valid else false
+     */
+    private boolean isSkipsValid(String mStrSkips) {
+        // TODO: check string has a valid format.
+        return true;
+    }
+
+    /**
      * parse the skips in the string format into a HashMap<index, row_span, col_span>>
-     * the format of the input string is index:row_spanxcol_span. Index implies the sequential
-     * position in the grid (orientation would affect the value)
+     * the format of the input string is index:row_spanxcol_span.
+     * index - the index of the starting position
+     * row_span - the number of rows to span
+     * col_span- the number of columns to span
      * @param strSkips string format of skips
      * @return a hashmap that contains skip information.
      */
     private HashMap<Integer, Pair<Integer, Integer>> parseSkips(String strSkips) {
         // TODO: check string has a valid format.
+        if (!isSkipsValid(strSkips)) {
+            return null;
+        }
 
         HashMap<Integer, Pair<Integer, Integer>> skipMap = new HashMap<>();
 
@@ -489,10 +584,6 @@ public class Grid extends VirtualLayout {
      * @return true if all the skips are valid else false
      */
     private boolean handleSkips(HashMap<Integer, Pair<Integer, Integer>> skipsMap) {
-        if (skipsMap == null || skipsMap.isEmpty()) {
-            return true;
-        }
-
         Pair<Integer, Integer> startPosition;
         for (Map.Entry<Integer, Pair<Integer, Integer>> entry : skipsMap.entrySet()) {
             startPosition = getPositionByIndex(entry.getKey());
@@ -516,7 +607,8 @@ public class Grid extends VirtualLayout {
                                         int rowSpan, int columnSpan) {
         for (int i = startRow; i < startRow + rowSpan; i++) {
             for (int j = startColumn; j < startColumn + columnSpan; j++) {
-                if (!mPositionMatrix[i][j]) {
+                if (i >= mPositionMatrix.length || j >= mPositionMatrix[0].length
+                        || !mPositionMatrix[i][j]) {
                     // the position is already occupied.
                     return false;
                 }
@@ -574,5 +666,21 @@ public class Grid extends VirtualLayout {
             d[i] = min + i * (max - min) / (positions - 1);
         }
         return d;
+    }
+
+    public void setStrSpans(String strSpans) {
+        mStrSpans = strSpans;
+    }
+
+    public String getStrSpans() {
+        return mStrSpans;
+    }
+
+    public void setStrSkips(String strSkips) {
+        mStrSkips = strSkips;
+    }
+
+    public String getStrSkips() {
+        return mStrSkips;
     }
 }
