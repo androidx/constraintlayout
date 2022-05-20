@@ -51,7 +51,7 @@ private val names = listOf(
     "Daniel",
 )
 
-private val contentLines = LoremIpsum(200).values.first().split(" ")
+private val contentLines = LoremIpsum(100).values.first().filter { it != '\n' }.split(" ")
 
 class OfflineRepository(
     private val resources: Resources

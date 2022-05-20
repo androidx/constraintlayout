@@ -34,8 +34,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.composemail.LocalWidthSizeClass
 import com.example.composemail.model.ComposeMailModel
+import com.example.composemail.ui.compositionlocal.LocalWidthSizeClass
 import com.example.composemail.ui.home.toptoolbar.TopToolbar
 import com.example.composemail.ui.mails.MailList
 import com.example.composemail.ui.mails.MailListState
@@ -44,7 +44,7 @@ import com.example.composemail.ui.newmail.NewMailLayoutState
 import com.example.composemail.ui.newmail.rememberNewMailState
 
 @Composable
-fun ComposeMailHome(modifier: Modifier = Modifier) {
+fun ComposeMailHome() {
     val mailModel: ComposeMailModel = viewModel()
     val listState = remember { MailListState() }
     val newMailState = rememberNewMailState(initialLayoutState = NewMailLayoutState.Fab)
@@ -86,27 +86,15 @@ fun ComposeMailHome(modifier: Modifier = Modifier) {
             )
         }
         if (LocalWidthSizeClass.current != WindowWidthSizeClass.Compact) {
+            // TODO: Use MotionLayout to transition between size changes
             OutlinedButton(
                 modifier = Modifier
                     .fillMaxHeight()
                     .weight(1f),
                 onClick = { /*TODO*/ }
             ) {
-                Text(text = "Hello World!")
+                Text(text = "Not Yet Implemented")
             }
-        }
-    }
-}
-
-
-@Composable
-fun Home2(modifier: Modifier = Modifier) {
-    when (LocalWidthSizeClass.current) {
-        WindowWidthSizeClass.Expanded -> {
-
-        }
-        else -> {
-
         }
     }
 }

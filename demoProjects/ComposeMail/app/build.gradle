@@ -35,10 +35,24 @@ android {
         }
     }
 
+    signingConfigs {
+        debug {
+            // For Linux & mac:
+            storeFile file(System.getenv("HOME") + '/.android/debug.keystore')
+            // For Windows:
+            // storeFile file('/Users/USERNAME/.android/debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+    }
+
     buildTypes {
         release {
+            // Prefer to use release build variant to run the app for better performance
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
         }
     }
     compileOptions {
@@ -64,21 +78,21 @@ android {
 dependencies {
     implementation 'androidx.core:core-ktx:1.7.0'
 
-    implementation 'androidx.paging:paging-common:3.1.1'
-    implementation 'androidx.paging:paging-common-ktx:3.1.1'
+    implementation "androidx.paging:paging-common:$paging_version"
+    implementation "androidx.paging:paging-common-ktx:$paging_version"
 
-    implementation 'androidx.compose.material3:material3-window-size-class:1.0.0-alpha10'
+    implementation 'androidx.compose.material3:material3-window-size-class:1.0.0-alpha12'
 
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
 
-    implementation "androidx.paging:paging-compose:1.0.0-alpha14"
+    implementation "androidx.paging:paging-compose:$paging_compose_version"
 
-    // implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0"
-    implementation project(':core')
-    implementation project(':compose')
+     implementation "androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha01"
+//    implementation project(':core')
+//    implementation project(':compose')
 
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1'
 
@@ -100,7 +114,6 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
         freeCompilerArgs += "-opt-in=androidx.constraintlayout.compose.ExperimentalMotionApi"
         freeCompilerArgs += "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi"
         freeCompilerArgs += "-opt-in=androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi"
-
 
         // For older than Kotlin 1.6.0
 //        freeCompilerArgs += "-Xopt-in=androidx.constraintlayout.compose.ExperimentalMotionApi"

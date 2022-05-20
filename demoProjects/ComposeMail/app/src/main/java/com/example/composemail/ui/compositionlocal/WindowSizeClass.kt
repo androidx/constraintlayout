@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
-package com.example.composemail.ui.utils
+package com.example.composemail.ui.compositionlocal
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.constraintlayout.compose.ConstraintSet
-import androidx.constraintlayout.compose.ConstraintSetScope
+import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.runtime.ProvidableCompositionLocal
+import androidx.compose.runtime.compositionLocalOf
 
+val LocalHeightSizeClass: ProvidableCompositionLocal<WindowHeightSizeClass> =
+    compositionLocalOf { WindowHeightSizeClass.Compact }
 
-@Composable
-fun rememberConstraintSet(
-    key: Any = Unit,
-    constraints: ConstraintSetScope.() -> Unit
-): ConstraintSet {
-    val constraintSet = remember(key) {
-        ConstraintSet(constraints)
-    }
-    return constraintSet
-}
+val LocalWidthSizeClass: ProvidableCompositionLocal<WindowWidthSizeClass> =
+    compositionLocalOf { WindowWidthSizeClass.Compact }

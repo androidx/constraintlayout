@@ -33,46 +33,28 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.composemail.ui.theme.textBackgroundColor
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchBar(
     modifier: Modifier = Modifier
 ) {
     var placeholder: String by remember { mutableStateOf("Search in mails") }
-    val focusRequester = remember { FocusRequester() }
     OutlinedTextField(
         modifier = modifier
             .clip(RoundedCornerShape(32.dp))
             .background(MaterialTheme.colors.textBackgroundColor)
-            .focusRequester(focusRequester)
             .onFocusChanged {
                 placeholder = if (it.isFocused) {
                     "I'm not implemented yet!"
                 } else {
                     "Search in mails"
-                }
-            }
-            .onKeyEvent {
-                if (it.key == Key.Back) {
-                    // TODO: DOESN'T WORK
-                    focusRequester.freeFocus()
-                    true
-                } else {
-                    false
                 }
             },
 

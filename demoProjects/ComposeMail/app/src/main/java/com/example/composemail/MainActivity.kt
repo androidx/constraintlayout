@@ -24,15 +24,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.ProvidableCompositionLocal
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.composemail.ui.compositionlocal.LocalHeightSizeClass
+import com.example.composemail.ui.compositionlocal.LocalWidthSizeClass
 import com.example.composemail.ui.home.ComposeMailHome
 import com.example.composemail.ui.theme.ComposeMailTheme
 
@@ -60,12 +58,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-val LocalHeightSizeClass: ProvidableCompositionLocal<WindowHeightSizeClass> =
-    compositionLocalOf { WindowHeightSizeClass.Compact }
-
-val LocalWidthSizeClass: ProvidableCompositionLocal<WindowWidthSizeClass> =
-    compositionLocalOf { WindowWidthSizeClass.Compact }
 
 @Composable
 fun Greeting(name: String) {
