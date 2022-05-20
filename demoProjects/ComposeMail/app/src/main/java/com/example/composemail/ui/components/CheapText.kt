@@ -16,20 +16,31 @@
 
 package com.example.composemail.ui.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 
+/**
+ * [Text] Composable constrained to one line for better animation performance.
+ */
 @Suppress("NOTHING_TO_INLINE")
 @Composable
 inline fun CheapText(
     text: String,
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,
-    style: TextStyle = LocalTextStyle.current
+    style: TextStyle = LocalTextStyle.current,
+    overflow: TextOverflow = TextOverflow.Clip
 ) {
     Text(
         text = text,
@@ -37,6 +48,29 @@ inline fun CheapText(
         color = color,
         style = style,
         maxLines = 1,
-        softWrap = false
+        overflow = overflow,
     )
+}
+
+@Preview
+@Composable
+private fun CheapTextPreview() {
+    Column(Modifier.fillMaxSize()) {
+        Text(text = "Normal")
+        Column(
+            Modifier
+                .width(40.dp)
+                .background(Color.LightGray)) {
+            Text(text = "Hello \nWorld!")
+            Text(text = "This is a very very long text")
+        }
+        Text(text = "Cheap")
+        Column(
+            Modifier
+                .width(40.dp)
+                .background(Color.LightGray)) {
+            CheapText(text = "Hello \nWorld!")
+            CheapText(text = "This is a very very long text")
+        }
+    }
 }

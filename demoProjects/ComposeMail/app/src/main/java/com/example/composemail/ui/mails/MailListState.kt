@@ -25,6 +25,9 @@ class MailListState {
 
     private val _selectedCount = mutableStateOf(0)
 
+    val selectedIDs: Collection<Int>
+        get() = selectedTracker.toList()
+
     val selectedCount
         get() = _selectedCount.value
 
@@ -32,10 +35,16 @@ class MailListState {
         conversationStatesById.values.forEach { it.setSelected(false) }
     }
 
+    /**
+     * Returns an instance of [MailItemState] for the given [id].
+     *
+     * Repeated calls for the same [id] will return the same [MailItemState] instance.
+     */
     fun stateFor(id: Int?): MailItemState {
         val nextId = id ?: -1
         return conversationStatesById.computeIfAbsent(nextId) {
             MailItemState(nextId) { id, isSelected ->
+                // Track which items are selected
                 if (isSelected) {
                     selectedTracker.add(id)
                 } else {

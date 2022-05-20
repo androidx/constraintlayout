@@ -41,7 +41,7 @@ fun MailList(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        itemsIndexed(lazyMailItems) { index, mailItem ->
+        itemsIndexed(lazyMailItems) { _, mailItem ->
             MailItem(
                 info = mailItem,
                 state = listState.stateFor(mailItem?.id)

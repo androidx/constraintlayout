@@ -68,7 +68,6 @@ fun TopToolbar(
         } else {
             SearchToolbar(modifier = modifier.padding(4.dp))
         }
-
     }
 }
 

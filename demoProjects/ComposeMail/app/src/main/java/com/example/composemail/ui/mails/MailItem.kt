@@ -55,6 +55,7 @@ import androidx.constraintlayout.compose.MotionLayout
 import androidx.constraintlayout.compose.MotionScene
 import coil.compose.rememberImagePainter
 import com.example.composemail.model.data.MailEntryInfo
+import com.example.composemail.ui.components.CheapText
 import com.example.composemail.ui.theme.textBackgroundColor
 
 @Composable
@@ -259,22 +260,20 @@ inline fun MailContent(
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Row(horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(
+            CheapText(
                 modifier = Modifier.weight(1.0f, true),
                 text = info.from.name,
                 style = MaterialTheme.typography.body1,
-                maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            Text(
+            CheapText(
                 text = info.timestamp,
                 style = MaterialTheme.typography.body2,
             )
         }
-        Text(
+        CheapText(
             text = info.shortContent,
             style = MaterialTheme.typography.body2,
-            maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
     }

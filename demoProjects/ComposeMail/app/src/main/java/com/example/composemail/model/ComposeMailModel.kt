@@ -53,10 +53,10 @@ class ComposeMailModel(application: Application) : AndroidViewModel(application)
     }.flow
 
     fun openMail(id: Int) {
-        // TODO: Support opening a conversation
+        // TODO: Support opening a mail/thread
     }
 
     fun closeMail() {
-
+        // TODO: Support opening a mail/thread
     }
 }

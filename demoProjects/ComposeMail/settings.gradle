@@ -33,7 +33,7 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "ComposeMailToT"
+rootProject.name = "ComposeMail"
 include ':app'
 include ':compose'
 include ':core'
