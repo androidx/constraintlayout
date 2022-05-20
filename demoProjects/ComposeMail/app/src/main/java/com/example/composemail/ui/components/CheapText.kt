@@ -60,7 +60,8 @@ private fun CheapTextPreview() {
         Column(
             Modifier
                 .width(40.dp)
-                .background(Color.LightGray)) {
+                .background(Color.LightGray)
+        ) {
             Text(text = "Hello \nWorld!")
             Text(text = "This is a very very long text")
         }
@@ -68,7 +69,8 @@ private fun CheapTextPreview() {
         Column(
             Modifier
                 .width(40.dp)
-                .background(Color.LightGray)) {
+                .background(Color.LightGray)
+        ) {
             CheapText(text = "Hello \nWorld!")
             CheapText(text = "This is a very very long text")
         }

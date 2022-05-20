@@ -36,7 +36,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -64,65 +63,60 @@ fun MailItem(
     state: MailItemState = MailItemState(-1) { _, _ -> },
     info: MailEntryInfo?
 ) {
-    val shouldAnimate = remember { info == null }
-    var csTarget: String? by remember { mutableStateOf(null) }
+    val csTarget: MotionMailState =
+        when {
+            info == null -> MotionMailState.Loading
+            state.isSelected -> MotionMailState.Selected
+            else -> MotionMailState.Normal
+        }
     MotionLayoutMail(
         modifier = modifier,
         info = info ?: MailEntryInfo.Default,
-        startsEmpty = shouldAnimate,
-        targetId = csTarget,
+        targetState = csTarget,
         onSelectedMail = {
+            // Toggle selection
             state.setSelected(!state.isSelected)
         }
     )
-    if (shouldAnimate) {
-        if (info != null && csTarget == null) {
-            SideEffect {
-                csTarget = "normal"
-            }
-        }
-    } else {
-        if (info != null) {
-            val nextState = if (state.isSelected) {
-                "flipped"
-            } else {
-                "normal"
-            }
-            SideEffect {
-                csTarget = nextState
-            }
-        }
-    }
 }
 
 const val ANIMATION_DURATION: Int = 400
+
+enum class MotionMailState(val tag: String) {
+    Loading("empty"),
+    Normal("normal"),
+    Selected("flipped")
+}
 
 @Suppress("NOTHING_TO_INLINE", "EXPERIMENTAL_API_USAGE")
 @Composable
 inline fun MotionLayoutMail(
     modifier: Modifier = Modifier,
     info: MailEntryInfo,
-    startsEmpty: Boolean,
-    targetId: String?,
+    targetState: MotionMailState,
     crossinline onSelectedMail: (id: Int) -> Unit
 ) {
     val backgroundColor by animateColorAsState(
-        targetValue = if (targetId == "flipped") {
-            MaterialTheme.colors.textBackgroundColor
-        } else {
-            MaterialTheme.colors.background
+        targetValue = when (targetState) {
+            MotionMailState.Selected -> MaterialTheme.colors.textBackgroundColor
+            else -> MaterialTheme.colors.background
         },
         animationSpec = tween<Color>(ANIMATION_DURATION)
     )
-    val startId = if (startsEmpty) "empty" else "normal"
-    val endId = if (startsEmpty) "normal" else "empty"
+    val initialStart = remember { targetState }
+    val initialEnd = remember {
+        when (initialStart) {
+            MotionMailState.Loading -> MotionMailState.Normal
+            else -> MotionMailState.Loading
+        }
+    }
 
-    val motionSceneContent = remember(startId, endId) {
+    val motionSceneContent = remember {
         //language=json5
         """
 {
   ConstraintSets: {
-    normal: {
+    ${MotionMailState.Normal.tag}: {
       picture: {
         width: 60, height: 60,
         centerVertically: 'parent',
@@ -146,8 +140,8 @@ inline fun MotionLayoutMail(
         end: ['parent', 'start', 32]
       }
     },
-    flipped: {
-      Extends: 'normal',
+    ${MotionMailState.Selected.tag}: {
+      Extends: '${MotionMailState.Normal.tag}',
       picture: {
         rotationY: -180,
         alpha: 0.0
@@ -157,7 +151,7 @@ inline fun MotionLayoutMail(
         alpha: 1.0
       }
     },
-    empty: {
+    ${MotionMailState.Loading.tag}: {
       picture: {
         width: 60, height: 60,
         top: ['content', 'top', 0],
@@ -183,12 +177,12 @@ inline fun MotionLayoutMail(
   },
   Transitions: {
     default: {
-      from: '$startId',
-      to: '$endId',
+      from: '${initialStart.tag}',
+      to: '${initialEnd.tag}',
     },  
     flip: {
-      from: 'normal',
-      to: 'flipped',
+      from: '${MotionMailState.Normal.tag}',
+      to: '${MotionMailState.Selected.tag}',
       KeyFrames: {
         KeyAttributes: [
           {
@@ -212,7 +206,7 @@ inline fun MotionLayoutMail(
             .fillMaxSize()
             .clip(RectangleShape)
             .padding(8.dp),
-        constraintSetName = targetId,
+        constraintSetName = targetState.tag,
         animationSpec = tween<Float>(ANIMATION_DURATION),
         motionScene = MotionScene(content = motionSceneContent)
     ) {
@@ -241,7 +235,7 @@ inline fun MotionLayoutMail(
             modifier = Modifier.layoutId("loading"),
             contentAlignment = Alignment.Center
         ) {
-            // TODO: Find a good way of not composing this when animation ends
+            // TODO: Find a way of not composing this (or stop the animation) when transition ends
             CircularProgressIndicator(
                 modifier = Modifier.size(40.dp)
             )
