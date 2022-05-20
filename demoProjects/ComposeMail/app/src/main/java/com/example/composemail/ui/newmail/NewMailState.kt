@@ -23,10 +23,10 @@ import androidx.compose.runtime.remember
 @Suppress("NOTHING_TO_INLINE")
 @Composable
 inline fun rememberNewMailState(
-    vararg keys: Any? = arrayOf(Unit),
+    key: Any = Unit,
     initialLayoutState: NewMailLayoutState
 ): NewMailState {
-    return remember(*keys) { NewMailState(initialLayoutState) }
+    return remember(key) { NewMailState(initialLayoutState) }
 }
 
 class NewMailState(initialLayoutState: NewMailLayoutState) {
