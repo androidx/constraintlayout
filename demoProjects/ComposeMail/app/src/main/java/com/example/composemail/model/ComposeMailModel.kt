@@ -44,6 +44,7 @@ class ComposeMailModel(application: Application) : AndroidViewModel(application)
     val conversations: Flow<PagingData<MailEntryInfo>> = Pager(
         config = PagingConfig(
             pageSize = LOAD_LIMIT,
+            // Enable placeholders when loading indicators are supported, see MailItem.kt
             enablePlaceholders = true,
             prefetchDistance = REFRESH_THRESHOLD,
             initialLoadSize = LOAD_LIMIT
