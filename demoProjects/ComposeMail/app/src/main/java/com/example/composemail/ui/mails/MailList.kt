@@ -34,6 +34,7 @@ fun MailList(
     listState: MailListState,
     observableConversations: Flow<PagingData<MailEntryInfo>>
 ) {
+    // The items provided through the model using Pager through a Flow
     val lazyMailItems: LazyPagingItems<MailEntryInfo> =
         observableConversations.collectAsLazyPagingItems()
 
@@ -41,10 +42,14 @@ fun MailList(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        itemsIndexed(lazyMailItems) { _, mailItem ->
+        itemsIndexed(lazyMailItems) { _, mailInfo ->
+            // The Pager, configured with placeholders may initially provide
+            // a null mailInfo when it reaches the current end of the list,
+            // it will then provide a non-null mailInfo for the same Composable,
+            // MailItem animates the transition from those two values
             MailItem(
-                info = mailItem,
-                state = listState.stateFor(mailItem?.id)
+                info = mailInfo,
+                state = listState.stateFor(mailInfo?.id)
             )
         }
     }

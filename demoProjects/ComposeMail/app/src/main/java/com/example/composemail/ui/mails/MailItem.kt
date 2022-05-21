@@ -57,22 +57,36 @@ import com.example.composemail.model.data.MailEntryInfo
 import com.example.composemail.ui.components.CheapText
 import com.example.composemail.ui.theme.textBackgroundColor
 
+/**
+ * Composable to display a mail entry, given by [MailEntryInfo].
+ *
+ * When [info] is null, it will display a loading indicator, if the info
+ * then changes to not-null it will animate the transition to show the info and
+ * dismiss the loading indicator.
+ *
+ * @see PreviewConversationLoading
+ */
 @Composable
 fun MailItem(
     modifier: Modifier = Modifier,
     state: MailItemState = MailItemState(-1) { _, _ -> },
     info: MailEntryInfo?
 ) {
-    val csTarget: MotionMailState =
+    // The layout (as a ConstraintSet ID) we want the Composable to take,
+    // MotionLayout will animate the transition to that layout
+    val targetState: MotionMailState =
         when {
+            // No info to display, show a Loading state
             info == null -> MotionMailState.Loading
+            // The item is selected, show as selected
             state.isSelected -> MotionMailState.Selected
+            // The 'normal' state that just displays the given info
             else -> MotionMailState.Normal
         }
     MotionLayoutMail(
         modifier = modifier,
         info = info ?: MailEntryInfo.Default,
-        targetState = csTarget,
+        targetState = targetState,
         onSelectedMail = {
             // Toggle selection
             state.setSelected(!state.isSelected)
@@ -82,6 +96,11 @@ fun MailItem(
 
 const val ANIMATION_DURATION: Int = 400
 
+/**
+ * An enum that represents the different layout states of the Composable.
+ *
+ * Each corresponds to a ConstraintSet in the MotionScene.
+ */
 enum class MotionMailState(val tag: String) {
     Loading("empty"),
     Normal("normal"),

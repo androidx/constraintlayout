@@ -33,6 +33,8 @@ class MailsSource(private val mailRepo: MailRepository) : PagingSource<Int, Mail
             data = nextMails.conversations,
             prevKey = if (nextPage == 0) null else nextMails.page - 1,
             nextKey = nextMails.page + 1,
+            // An additional item that will work as a loading placeholder
+            // while the next page is produced
             itemsAfter = 1
         )
     }
