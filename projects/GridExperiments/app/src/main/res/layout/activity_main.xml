@@ -12,6 +12,7 @@
         app:constraint_referenced_ids="btn0,btn1,btn2,btn3"
         app:grid_columns="3"
         app:grid_rows="3"
+        app:grid_columnWeights="3,1,2"
         app:grid_horizontalGaps="10"
         app:grid_verticalGaps="10"
         app:grid_orientation="horizontal"
