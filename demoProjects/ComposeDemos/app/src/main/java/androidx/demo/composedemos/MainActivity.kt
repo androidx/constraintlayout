@@ -70,7 +70,7 @@ public fun  Login(name: String) {
         targetValue = if (animateToEnd) 1f else 0f,
         animationSpec = tween(6000)
     )
-    Column {
+    Column {build
         MotionLayout(
             modifier = Modifier
                 .fillMaxWidth()

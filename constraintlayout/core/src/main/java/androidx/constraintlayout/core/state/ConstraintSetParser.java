@@ -22,6 +22,7 @@ import static androidx.constraintlayout.core.motion.utils.TypedValues.MotionType
 
 import androidx.constraintlayout.core.motion.utils.TypedBundle;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
+import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.parser.CLArray;
 import androidx.constraintlayout.core.parser.CLElement;
 import androidx.constraintlayout.core.parser.CLKey;
@@ -514,6 +515,16 @@ public class ConstraintSetParser {
                                     case "barrier":
                                         parseBarrier(state, elementName, (CLObject) element);
                                         break;
+                                    case "vChain":
+                                    case "hChain":
+                                        parseChainType(
+                                                type,
+                                                state,
+                                                elementName,
+                                                layoutVariables,
+                                                (CLObject) element
+                                        );
+                                        break;
                                 }
                             } else {
                                 parseWidget(state, layoutVariables,
@@ -724,6 +735,83 @@ public class ConstraintSetParser {
                 }
             }
         }
+    }
+
+    /**
+     * Support parsing Chain in the following manner
+     * chainId : {
+     *      type:'hChain'  // or vChain
+     *      contains: ['id1', 'id2', 'id3' ]
+     *      contains: [['id', weight, marginL ,marginR], 'id2', 'id3' ]
+     *      start: ['parent', 'start',0],
+     *      end: ['parent', 'end',0],
+     *      top: ['parent', 'top',0],
+     *      bottom: ['parent', 'bottom',0],
+     *      style: 'spread'
+     * }
+
+     * @throws CLParsingException
+     */
+    static void parseChainType(String orientation,
+            State state,
+            String chainName,
+            LayoutVariables margins,
+            CLObject object ) throws CLParsingException {
+
+
+        ChainReference chain = (orientation.charAt(0) == 'h')
+                ? state.horizontalChain() : state.verticalChain();
+       chain.setKey(chainName);
+
+
+        for (String params : object.names()) {
+            switch (params) {
+                case "contains" :
+                    CLElement refs =object.get(params);
+                    if (!(refs instanceof CLArray) || ((CLArray) refs).size() < 1) {
+                        System.err.println(chainName+" contains should be an array \""+refs.content()+"\"");
+                        return;
+                    }
+                    for (int i = 0; i < ((CLArray) refs).size(); i++) {
+                        chain.add(((CLArray) refs).getString(i));
+                    }
+                    break;
+                case "start" :
+                case "end" :
+                case "top" :
+                case "bottom" :
+                case "left":
+                case "right":
+                    parseConstraint(  state, margins,  object, chain, params );
+                    break;
+                case "style" :
+
+                    CLElement styleObject =object.get(params);
+                    String styleValue;
+                    if (styleObject instanceof CLArray && ((CLArray) styleObject).size() > 1) {
+                        styleValue = ((CLArray) styleObject).getString(0);
+                        float biasValue = ((CLArray) styleObject).getFloat(1);
+                        chain.bias(biasValue);
+                    } else {
+                        styleValue = styleObject.content();
+                    }
+                    switch (styleValue) {
+                        case "packed":
+                            chain.style(State.Chain.PACKED);
+                            break;
+                        case "spread_inside":
+                            chain.style(State.Chain.SPREAD_INSIDE);
+                            break;
+                        default:
+                            chain.style(State.Chain.SPREAD);
+                            break;
+                    }
+
+                    break;
+            }
+        }
+        Utils.log(" ");
+
     }
 
 
