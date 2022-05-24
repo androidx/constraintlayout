@@ -82,6 +82,9 @@ import java.util.Set;
 public class Grid extends VirtualLayout {
     private static final String TAG = "Grid";
     private static final String VERTICAL = "vertical";
+    private static final String HORIZONTAL = "horizontal";
+    private final int mMaxRows = 50; // maximum number of rows can be specified.
+    private final int mMaxColumns = 50; // maximum number of columns can be specified.
     private final ConstraintSet mConstraintSet = new ConstraintSet();
     ConstraintLayout mContainer;
 
@@ -444,11 +447,21 @@ public class Grid extends VirtualLayout {
     }
 
     /**
-     * Check if the value of the skips is valid
-     * @param str skips in string format
+     * Check if the value of the spans/skips is valid
+     * @param str spans/skips in string format
      * @return true if it is valid else false
      */
     private boolean isSpansValid(String str) {
+        // TODO: check string has a valid format.
+        return true;
+    }
+
+    /**
+     * Check if the value of the rowWeights or columnsWeights is valid
+     * @param str rowWeights/columnsWeights in string format
+     * @return true if it is valid else false
+     */
+    private boolean isWeightsValid(String str) {
         // TODO: check string has a valid format.
         return true;
     }
@@ -574,6 +587,84 @@ public class Grid extends VirtualLayout {
     }
 
     /**
+     * get the value of rows
+     * @return the value of rows
+     */
+    public int getRows() {
+        return mRows;
+    }
+
+    /**
+     * set new rows value and also invoke initVariables and invalidate
+     * @param rows new rows value
+     * @return true if it succeeds otherwise false
+     */
+    public boolean setRows(int rows) {
+        if (rows < 2 || rows > mMaxRows) {
+            return false;
+        }
+
+        mRows = rows;
+        initVariables();
+        invalidate();
+        return true;
+    }
+
+    /**
+     * get the value of columns
+     * @return the value of columns
+     */
+    public int getColumns() {
+        return mColumns;
+    }
+
+    /**
+     * set new columns value and also invoke initVariables and invalidate
+     * @param columns new rows value
+     * @return true if it succeeds otherwise false
+     */
+    public boolean setColumns(int columns) {
+        if (columns < 2 || columns > mMaxColumns) {
+            return false;
+        }
+
+        mColumns = columns;
+        initVariables();
+        invalidate();
+        return true;
+    }
+
+
+    /**
+     * get the value of orientation
+     * @return the value of orientation
+     */
+    public String getOrientation() {
+        return mOrientation;
+    }
+
+    /**
+     * set new orientation value and also invoke invalidate
+     * @param orientation new orientation value
+     * @return true if it succeeds otherwise false
+     */
+    public boolean setOrientation(String orientation) {
+        if (!(orientation.equals(HORIZONTAL) || orientation.equals(VERTICAL))) {
+            return false;
+        }
+
+        if (orientation.equals(mOrientation)) {
+            return true;
+        }
+
+        mOrientation = orientation;
+        invalidate();
+        return true;
+
+    }
+
+
+    /**
      * get the string value of spans
      * @return the string value of spans
      */
@@ -582,7 +673,7 @@ public class Grid extends VirtualLayout {
     }
 
     /**
-     * set new spans value and also invoke requestLayout
+     * set new spans value and also invoke invalidate
      * @param spans new spans value
      * @return true if it succeeds otherwise false
      */
@@ -591,7 +682,7 @@ public class Grid extends VirtualLayout {
             return false;
         }
         mStrSpans = spans;
-        requestLayout();
+        invalidate();
         return true;
     }
 
@@ -604,7 +695,7 @@ public class Grid extends VirtualLayout {
     }
 
     /**
-     * set new skips value and also invoke requestLayout
+     * set new skips value and also invoke invalidate
      * @param skips new spans value
      * @return true if it succeeds otherwise false
      */
@@ -613,7 +704,53 @@ public class Grid extends VirtualLayout {
             return false;
         }
         mStrSkips = skips;
-        requestLayout();
+        invalidate();
+        return true;
+    }
+
+    /**
+     * get the string value of rowWeights
+     * @return the string value of rowWeights
+     */
+    public String getRowWeights() {
+        return mStrRowWeights;
+    }
+
+    /**
+     * set new rowWeights value and also invoke invalidate
+     * @param rowWeights new rowWeights value
+     * @return rue if it succeeds otherwise false
+     */
+    public Boolean setRowWeights(String rowWeights) {
+        if (!isWeightsValid(rowWeights)) {
+            return false;
+        }
+
+        mStrRowWeights = rowWeights;
+        invalidate();
+        return true;
+    }
+
+    /**
+     * get the string value of columnWeights
+     * @return the string value of columnWeights
+     */
+    public String getColumnWeights() {
+        return mStrColumnWeights;
+    }
+
+    /**
+     * set new columnWeights value and also invoke invalidate
+     * @param columnWeights new columnWeights value
+     * @return rue if it succeeds otherwise false
+     */
+    public Boolean setColumnWeights(String columnWeights) {
+        if (!isWeightsValid(columnWeights)) {
+            return false;
+        }
+
+        mStrColumnWeights = columnWeights;
+        invalidate();
         return true;
     }
 }
