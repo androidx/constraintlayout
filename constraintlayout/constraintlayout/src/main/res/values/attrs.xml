@@ -308,6 +308,8 @@
         <attr name="grid_columns" format="integer" />
         <attr name="grid_spans" format="string"/>
         <attr name="grid_skips" format="string"/>
+        <attr name="grid_rowWeights" format="string"/>
+        <attr name="grid_columnWeights" format="string"/>
         <attr name="grid_orientation" format="string"/>
         <attr name="grid_horizontalGaps" format="integer" />
         <attr name="grid_verticalGaps" format="integer" />
