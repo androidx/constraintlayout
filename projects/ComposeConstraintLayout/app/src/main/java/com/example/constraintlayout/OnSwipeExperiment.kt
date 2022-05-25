@@ -260,6 +260,76 @@ fun OnSwipeSample2() {
                 .background(Color.White),
             motionScene = MotionScene(content = scene),
         ) {
+            Text(
+                text = "on Swipe example \n"+
+                    "  onSwipe: {\n" +
+                    "                anchor: 'box',\n" +
+                    "                direction: 'end',\n" +
+                    "                side: 'start',\n" +
+                    "                mode: 'spring'\n" +
+                    "              }"
+            )
+            Box(
+                modifier = Modifier
+                    .background(Color.Green)
+                    .layoutId("box")
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun OnSwipeSample3() {
+
+    var scene =
+        """
+       {
+         ConstraintSets: {
+           start: {
+             box: {
+               width: 50, height: 50,
+               bottom: ['parent', 'bottom', 70],
+               start: ['parent', 'start', 170],
+             }
+           },
+           end: {
+       
+             box: {
+                width: 50, height: 50,
+                top: ['parent', 'top', 170],
+                end: ['parent', 'end', 170],
+             }
+           }
+         },
+         Transitions: {
+           default: {
+              from: 'start',
+              to: 'end',
+              onSwipe: {
+               direction: 'end',
+               mode: 'spring',
+               scale: .3,
+              }
+           }
+         }
+       }
+        """.trimIndent()
+
+    Column {
+        MotionLayout(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White),
+            motionScene = MotionScene(content = scene),
+        ) {
+            Text(
+                text = "on Swipe example \n"+
+                    "  onSwipe: {\n" +
+                    "               direction: 'end',\n" +
+                    "               mode: 'spring'\n" +
+                    "              }"
+            )
             Box(
                 modifier = Modifier
                     .background(Color.Green)

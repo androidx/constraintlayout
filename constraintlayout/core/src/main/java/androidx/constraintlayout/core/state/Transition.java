@@ -33,6 +33,7 @@ import androidx.constraintlayout.core.widgets.ConstraintWidget;
 import androidx.constraintlayout.core.widgets.ConstraintWidgetContainer;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class Transition implements TypedValues {
@@ -78,7 +79,7 @@ public class Transition implements TypedValues {
     }
 
     static class OnSwipe {
-        private String mAnchorId;
+        String mAnchorId;
         private int mAnchorSide;
         private StopEngine mEngine;
         public static final int ANCHOR_SIDE_TOP = 0;
@@ -161,6 +162,10 @@ public class Transition implements TypedValues {
                 {1.0f, 0.0f}, // end  (dynamically updated)
         };
         private long mStart;
+
+        float getScale() {
+            return mDragScale;
+        }
 
         float[] getDirection() {
             return TOUCH_DIRECTION[mDragDirection];
@@ -362,9 +367,27 @@ public class Transition implements TypedValues {
      * @return the change in progress
      */
     public float dragToProgress(float currentProgress, int baseW, int baseH, float dx, float dy) {
-        if (mOnSwipe == null || mOnSwipe.mAnchorId == null) {
-            WidgetState w = mState.values().stream().findFirst().get();
-            return -dy / w.mParentHeight;
+        Collection<WidgetState> widgets = mState.values();
+        WidgetState childWidget = null;
+        for (WidgetState widget : widgets) {
+            childWidget = widget;
+            break;
+        }
+        if (mOnSwipe == null || childWidget == null) {
+            if (childWidget != null) {
+                return -dy / childWidget.mParentHeight;
+            }
+            return 1.0f;
+        }
+        if (mOnSwipe.mAnchorId == null) {
+
+            float[] dir = mOnSwipe.getDirection();
+            float motionDpDtX = childWidget.mParentHeight;
+            float motionDpDtY = childWidget.mParentHeight;
+
+            float drag = (dir[0] != 0) ? dx * Math.abs(dir[0]) / motionDpDtX
+                    : dy * Math.abs(dir[1]) / motionDpDtY;
+            return drag * mOnSwipe.getScale();
         }
         WidgetState base = mState.get(mOnSwipe.mAnchorId);
         float[] dir = mOnSwipe.getDirection();
@@ -378,7 +401,7 @@ public class Transition implements TypedValues {
         if (DEBUG) {
             Utils.log(" drag " + drag);
         }
-        return drag;
+        return drag * mOnSwipe.getScale();
     }
 
     /**
@@ -412,7 +435,7 @@ public class Transition implements TypedValues {
             }
 
             float drag = (dir[0] != 0) ? velocityX / motionDpDt[0] : velocityY / motionDpDt[1];
-
+            drag *= mOnSwipe.getScale();
             if (DEBUG) {
                 Utils.log(" >>> velocity        " + drag);
                 Utils.log(" >>> mDuration       " + mDuration);
@@ -825,8 +848,8 @@ public class Transition implements TypedValues {
         MotionWidget mMotionWidgetEnd;
         MotionWidget mMotionWidgetInterpolated;
         KeyCache mKeyCache = new KeyCache();
-        private int mParentHeight = -1;
-        private int mParentWidth = -1;
+        int mParentHeight = -1;
+        int mParentWidth = -1;
 
         WidgetState() {
             mStart = new WidgetFrame();
