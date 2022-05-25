@@ -54,8 +54,8 @@ public class VerticalChainReference extends ChainReference {
             if (previous != null) {
                 String preKey = previous.getKey().toString();
                 String refKey = reference.getKey().toString();
-                previous.bottomToTop(reference.getKey()).margin(getPostMargin(preKey));;
-                reference.topToBottom(previous.getKey()).margin(getPreMargin(refKey));;;
+                previous.bottomToTop(reference.getKey()).margin(getPostMargin(preKey));
+                reference.topToBottom(previous.getKey()).margin(getPreMargin(refKey));
             }
             reference.setHorizontalChainWeight(getWeight(key.toString()));
             previous = reference;

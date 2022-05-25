@@ -22,7 +22,6 @@ import static androidx.constraintlayout.core.motion.utils.TypedValues.MotionType
 
 import androidx.constraintlayout.core.motion.utils.TypedBundle;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
-import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.parser.CLArray;
 import androidx.constraintlayout.core.parser.CLElement;
 import androidx.constraintlayout.core.parser.CLKey;
@@ -777,31 +776,30 @@ public class ConstraintSetParser {
                     }
                     for (int i = 0; i < ((CLArray) refs).size(); i++) {
                         CLElement chainElement = ((CLArray) refs).get(i);
-                        Utils.log("================ " + i + " " + chainElement.getClass() + "  "
-                                + chainElement.content());
                         if (chainElement instanceof CLArray) {
                             CLArray array = (CLArray) chainElement;
-                            if (array.size() == 1) {
-                                chain.add(array.get(0).content());
-                            } else {
+                            if (array.size() > 0) {
                                 String id = array.get(0).content();
+                                chain.add(id);
                                 float weight = Float.NaN;
                                 float preMargin = Float.NaN;
                                 float postMargin = Float.NaN;
-
-                                if (array.size() >= 2) {
-                                    weight = array.getFloat(1);
-                                    if (array.size() >= 3) {
+                                switch (array.size()) {
+                                    case 2: // sets only the weight
+                                        weight = array.getFloat(1);
+                                        break;
+                                    case 3: // sets the pre and post margin to the 2 arg
+                                        weight = array.getFloat(1);
                                         postMargin = preMargin = toPix(state, array.getFloat(2));
-                                        if (array.size() >= 4) {
-                                            postMargin =  toPix(state, array.getFloat(3));
-                                        }
-                                    }
+                                        break;
+                                    case 4: // sets the pre and post margin
+                                        weight = array.getFloat(1);
+                                        preMargin = toPix(state, array.getFloat(2));
+                                        postMargin = toPix(state, array.getFloat(3));
+                                        break;
                                 }
-
                                 chain.addChainElement(id, weight, preMargin, postMargin);
                             }
-
                         } else {
                             chain.add(chainElement.content());
                         }
@@ -841,10 +839,7 @@ public class ConstraintSetParser {
                     break;
             }
         }
-        Utils.log(" ");
-
     }
-
 
     static void parseGuideline(int orientation,
             State state, CLArray helper) throws CLParsingException {
@@ -856,7 +851,6 @@ public class ConstraintSetParser {
         if (guidelineId == null) return;
         parseGuidelineParams(orientation, state, guidelineId, (CLObject) params);
     }
-
 
     static void parseGuidelineParams(
             int orientation,
@@ -1099,9 +1093,7 @@ public class ConstraintSetParser {
 
             }
         }
-
     }
-
 
     static void parseCustomProperties(
             CLObject element,
@@ -1137,7 +1129,6 @@ public class ConstraintSetParser {
         }
         return -1;
     }
-
 
     /**
      * parse the motion section of a constraint
