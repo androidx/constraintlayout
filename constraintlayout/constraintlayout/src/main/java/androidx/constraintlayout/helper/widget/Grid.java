@@ -233,17 +233,32 @@ public class Grid extends VirtualLayout {
         mContainer = (ConstraintLayout) getParent();
         mConstraintSet.clone(mContainer);
 
-        generateGrid();
+        generateGrid(false);
     }
 
     /**
      * generate the Grid form based on the input attributes
+     * @param isUpdate whether to update the existing grid (true) or create a new one (false)
      * @return true if all the inputs are valid else false
      */
-    private boolean generateGrid() {
+    private boolean generateGrid(boolean isUpdate) {
+        if (mContainer == null || mConstraintSet == null) {
+            return false;
+        }
+
+        if (isUpdate) {
+            for (int i = 0; i < mPositionMatrix.length; i++) {
+                for (int j = 0; j < mPositionMatrix[0].length; j++) {
+                    mPositionMatrix[i][j] = true;
+                }
+            }
+            mSpanIds.clear();
+        }
+
+        mNextAvailableIndex = 0;
         boolean isSuccess = true;
 
-        createGuidelines(mRows, mColumns);
+        createGuidelines(mRows, mColumns, isUpdate);
 
         if (mStrSkips != null && !mStrSkips.trim().isEmpty()) {
             HashMap<Integer, Pair<Integer, Integer>> mSkipMap = parseSpans(mStrSkips);
@@ -305,8 +320,9 @@ public class Grid extends VirtualLayout {
      * create vertical and horizontal guidelines based on mRows and mColumns
      * @param rows number of rows is required for grid
      * @param columns number of columns is required for grid
+     * @param isUpdate whether to update existing guidelines (true) or create new ones (false)
      */
-    private void createGuidelines(int rows, int columns) {
+    private void createGuidelines(int rows, int columns, boolean isUpdate) {
         float[] rowWeights = parseWeights(rows, mStrRowWeights);
         float[] columnWeights = parseWeights(columns, mStrColumnWeights);
 
@@ -316,11 +332,21 @@ public class Grid extends VirtualLayout {
                 columns + 1, columnWeights);
 
         for (int i = 0; i < mHorizontalGuideLines.length; i++) {
+            if (isUpdate) {
+                updateGuideLinePosition(mHorizontalGuideLines[i], horizontalPositions[i]);
+                continue;
+            }
+
             mHorizontalGuideLines[i] = getNewGuideline(myContext,
                     ConstraintLayout.LayoutParams.HORIZONTAL, horizontalPositions[i]);
             mContainer.addView(mHorizontalGuideLines[i]);
         }
         for (int i = 0; i < mVerticalGuideLines.length; i++) {
+            if (isUpdate) {
+                updateGuideLinePosition(mVerticalGuideLines[i], verticalPositions[i]);
+                continue;
+            }
+
             mVerticalGuideLines[i] = getNewGuideline(myContext,
                     ConstraintLayout.LayoutParams.VERTICAL, verticalPositions[i]);
             mContainer.addView(mVerticalGuideLines[i]);
@@ -345,6 +371,13 @@ public class Grid extends VirtualLayout {
         guideline.setLayoutParams(lp);
 
         return guideline;
+    }
+
+    private void updateGuideLinePosition(Guideline guideline, float position) {
+        ConstraintLayout.LayoutParams params =
+                (ConstraintLayout.LayoutParams) guideline.getLayoutParams();
+        params.guidePercent = position;
+        guideline.setLayoutParams(params);
     }
 
     /**
@@ -604,8 +637,13 @@ public class Grid extends VirtualLayout {
             return false;
         }
 
+        if (mRows == rows) {
+            return true;
+        }
+
         mRows = rows;
         initVariables();
+        generateGrid(false);
         invalidate();
         return true;
     }
@@ -628,8 +666,13 @@ public class Grid extends VirtualLayout {
             return false;
         }
 
+        if (mColumns == columns) {
+            return true;
+        }
+
         mColumns = columns;
         initVariables();
+        generateGrid(false);
         invalidate();
         return true;
     }
@@ -653,16 +696,16 @@ public class Grid extends VirtualLayout {
             return false;
         }
 
-        if (orientation.equals(mOrientation)) {
+        if (mOrientation != null && mOrientation.equals(orientation)) {
             return true;
         }
 
         mOrientation = orientation;
+        generateGrid(true);
         invalidate();
         return true;
 
     }
-
 
     /**
      * get the string value of spans
@@ -681,7 +724,13 @@ public class Grid extends VirtualLayout {
         if (!isSpansValid(spans)) {
             return false;
         }
+
+        if (mStrSpans != null && mStrSpans.equals(spans)) {
+            return true;
+        }
+
         mStrSpans = spans;
+        generateGrid(true);
         invalidate();
         return true;
     }
@@ -703,7 +752,13 @@ public class Grid extends VirtualLayout {
         if (!isSpansValid(skips)) {
             return false;
         }
+
+        if (mStrSkips != null && mStrSkips.equals(skips)) {
+            return true;
+        }
+
         mStrSkips = skips;
+        generateGrid(true);
         invalidate();
         return true;
     }
@@ -719,14 +774,19 @@ public class Grid extends VirtualLayout {
     /**
      * set new rowWeights value and also invoke invalidate
      * @param rowWeights new rowWeights value
-     * @return rue if it succeeds otherwise false
+     * @return true if it succeeds otherwise false
      */
     public Boolean setRowWeights(String rowWeights) {
         if (!isWeightsValid(rowWeights)) {
             return false;
         }
 
+        if (mStrRowWeights != null && mStrRowWeights.equals(rowWeights)) {
+            return true;
+        }
+
         mStrRowWeights = rowWeights;
+        generateGrid(true);
         invalidate();
         return true;
     }
@@ -742,14 +802,75 @@ public class Grid extends VirtualLayout {
     /**
      * set new columnWeights value and also invoke invalidate
      * @param columnWeights new columnWeights value
-     * @return rue if it succeeds otherwise false
+     * @return true if it succeeds otherwise false
      */
     public Boolean setColumnWeights(String columnWeights) {
         if (!isWeightsValid(columnWeights)) {
             return false;
         }
 
+        if (mStrColumnWeights != null && mStrColumnWeights.equals(columnWeights)) {
+            return true;
+        }
+
         mStrColumnWeights = columnWeights;
+        generateGrid(true);
+        invalidate();
+        return true;
+    }
+
+    /**
+     * get the value of horizontalGaps
+     * @return the value of horizontalGaps
+     */
+    public int getHorizontalGaps() {
+        return mHorizontalGaps;
+    }
+
+    /**
+     *  set new horizontalGaps value and also invoke invalidate
+     * @param horizontalGaps new horizontalGaps value
+     * @return true if it succeeds otherwise false
+     */
+    public boolean setHorizontalGaps(int horizontalGaps) {
+        if (horizontalGaps < 0) {
+            return false;
+        }
+
+        if (mHorizontalGaps == horizontalGaps) {
+            return true;
+        }
+
+        mHorizontalGaps = horizontalGaps;
+        generateGrid(true);
+        invalidate();
+        return true;
+    }
+
+    /**
+     * get the value of verticalGaps
+     * @return the value of verticalGaps
+     */
+    public int getVerticalGaps() {
+        return mVerticalGaps;
+    }
+
+    /**
+     * set new verticalGaps value and also invoke invalidate
+     * @param verticalGaps new verticalGaps value
+     * @return true if it succeeds otherwise false
+     */
+    public boolean setVerticalGaps(int verticalGaps) {
+        if (verticalGaps < 0) {
+            return false;
+        }
+
+        if (mVerticalGaps == verticalGaps) {
+            return true;
+        }
+
+        mVerticalGaps = verticalGaps;
+        generateGrid(true);
         invalidate();
         return true;
     }
