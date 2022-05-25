@@ -95,9 +95,9 @@ class MotionRenderDebug {
     }
 
     public void draw(Canvas canvas,
-                     HashMap<String, Motion> frameArrayList,
-                     int duration, int debugPath,
-                     int layoutWidth, int layoutHeight) {
+            HashMap<String, Motion> frameArrayList,
+            int duration, int debugPath,
+            int layoutWidth, int layoutHeight) {
         if (frameArrayList == null || frameArrayList.size() == 0) {
             return;
         }
@@ -111,9 +111,9 @@ class MotionRenderDebug {
     }
 
     public void draw(Canvas canvas,
-                     Motion motionController,
-                     int duration, int debugPath,
-                     int layoutWidth, int layoutHeight) {
+            Motion motionController,
+            int duration, int debugPath,
+            int layoutWidth, int layoutHeight) {
         int mode = motionController.getDrawPath();
         if (debugPath > 0 && mode == Motion.DRAW_PATH_NONE) {
             mode = Motion.DRAW_PATH_BASIC;
@@ -156,7 +156,7 @@ class MotionRenderDebug {
 
 
     public void drawAll(Canvas canvas, int mode, int keyFrames, Motion motionController,
-                        int layoutWidth, int layoutHeight) {
+            int layoutWidth, int layoutHeight) {
         if (mode == Motion.DRAW_PATH_AS_CONFIGURED) {
             drawPathAsConfigured(canvas);
         }
@@ -175,7 +175,7 @@ class MotionRenderDebug {
     }
 
     private void drawTicks(Canvas canvas, int mode, int keyFrames, Motion motionController,
-                           int layoutWidth, int layoutHeight) {
+            int layoutWidth, int layoutHeight) {
         int viewWidth = 0;
         int viewHeight = 0;
         if (motionController.getView() != null) {
@@ -330,7 +330,7 @@ class MotionRenderDebug {
     }
 
     private void drawPathScreenTicks(Canvas canvas, float x, float y, int viewWidth, int viewHeight,
-                                     int layoutWidth, int layoutHeight) {
+            int layoutWidth, int layoutHeight) {
         float x1 = 0;
         float y1 = 0;
         float x2 = 1;

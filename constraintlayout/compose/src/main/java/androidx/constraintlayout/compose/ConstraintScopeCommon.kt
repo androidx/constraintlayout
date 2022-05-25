@@ -121,7 +121,7 @@ internal abstract class BaseHorizontalAnchorable(
 
 internal object AnchorFunctions {
     val verticalAnchorFunctions:
-            Array<Array<ConstraintReference.(Any, LayoutDirection) -> ConstraintReference>> =
+        Array<Array<ConstraintReference.(Any, LayoutDirection) -> ConstraintReference>> =
         arrayOf(
             arrayOf(
                 { other, layoutDirection ->
@@ -180,7 +180,7 @@ internal object AnchorFunctions {
         }
 
     val horizontalAnchorFunctions:
-            Array<Array<ConstraintReference.(Any) -> ConstraintReference>> = arrayOf(
+        Array<Array<ConstraintReference.(Any) -> ConstraintReference>> = arrayOf(
         arrayOf(
             { other -> topToBottom(null); baselineToBaseline(null); topToTop(other) },
             { other -> topToTop(null); baselineToBaseline(null); topToBottom(other) }

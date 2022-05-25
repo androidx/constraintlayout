@@ -16,16 +16,11 @@
 
 package androidx.constraintlayout.compose
 
-import android.annotation.SuppressLint
-import android.graphics.Matrix
-import android.util.Log
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.LayoutScopeMarker
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ExperimentalComposeApi
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
@@ -37,46 +32,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.translate
-import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasurePolicy
-import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.layout.MultiMeasureLayout
-import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.util.fastAny
-import androidx.compose.ui.util.fastForEach
-import androidx.constraintlayout.core.motion.Motion
-import androidx.constraintlayout.core.parser.CLObject
-import androidx.constraintlayout.core.parser.CLParser
-import androidx.constraintlayout.core.parser.CLParsingException
-import androidx.constraintlayout.core.state.ConstraintSetParser.parseMotionSceneJSON
-import androidx.constraintlayout.core.state.CoreMotionScene
-import androidx.constraintlayout.core.state.CorePixelDp
-import androidx.constraintlayout.core.state.Dimension
-import androidx.constraintlayout.core.state.Transition
-import androidx.constraintlayout.core.state.TransitionParser
-import androidx.constraintlayout.core.state.WidgetFrame
 import androidx.constraintlayout.core.widgets.Optimizer
 import java.util.EnumSet
 import kotlinx.coroutines.channels.Channel
-import org.intellij.lang.annotations.Language
 
 /**
  * Layout that interpolate its children layout given two sets of constraint and
@@ -88,7 +54,7 @@ import org.intellij.lang.annotations.Language
 inline fun MotionLayout(
     start: ConstraintSet,
     end: ConstraintSet,
-    transition: androidx.constraintlayout.compose.Transition? = null,
+    transition: Transition? = null,
     progress: Float,
     debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     modifier: Modifier = Modifier,
@@ -147,7 +113,7 @@ inline fun MotionLayout(
  */
 @ExperimentalMotionApi
 @Composable
-inline fun  MotionLayout(
+inline fun MotionLayout(
     motionScene: MotionScene,
     constraintSetName: String? = null,
     animationSpec: AnimationSpec<Float> = tween<Float>(),
@@ -379,7 +345,6 @@ internal inline fun MotionLayoutCore(
     )
 }
 
-@OptIn(ExperimentalComposeApi::class)
 @PublishedApi
 @Composable
 internal inline fun MotionLayoutCore(
@@ -440,7 +405,6 @@ internal inline fun MotionLayoutCore(
     ))
 }
 
-@OptIn(ExperimentalComposeApi::class)
 @ExperimentalMotionApi
 @Composable
 inline fun MotionLayout(
@@ -460,7 +424,6 @@ inline fun MotionLayout(
 }
 
 @PublishedApi
-@OptIn(ExperimentalComposeApi::class)
 @ExperimentalMotionApi
 @Composable
 internal inline fun MotionLayoutCore(
@@ -539,87 +502,6 @@ internal inline fun MotionLayoutCore(
         measurePolicy = measurePolicy,
         content = { scope.content() }
     ))
-}
-
-/**
- * Information for MotionLayout to animate between multiple [ConstraintSet]s.
- */
-@Immutable
-interface MotionScene : CoreMotionScene {
-    fun setUpdateFlag(needsUpdate: MutableState<Long>)
-    fun getForcedDrawDebug(): MotionLayoutDebugFlags
-}
-
-internal class JSONMotionScene(@Language("json5") content: String) : EditableJSONLayout(content),
-    MotionScene {
-
-    private val constraintSetsContent = HashMap<String, String>()
-    private val transitionsContent = HashMap<String, String>()
-    private var forcedProgress: Float = Float.NaN
-
-    init {
-        // call parent init here so that hashmaps are created
-        initialization()
-    }
-
-    // region Accessors
-    override fun setConstraintSetContent(name: String, content: String) {
-        constraintSetsContent[name] = content
-    }
-
-    override fun setTransitionContent(name: String, content: String) {
-        transitionsContent[name] = content
-    }
-
-    override fun getConstraintSet(name: String): String? {
-        return constraintSetsContent[name]
-    }
-
-    override fun getConstraintSet(index: Int): String? {
-        return constraintSetsContent.values.elementAtOrNull(index)
-    }
-
-    override fun getTransition(name: String): String? {
-        return transitionsContent[name]
-    }
-
-    override fun getForcedProgress(): Float {
-        return forcedProgress
-    }
-
-    override fun resetForcedProgress() {
-        forcedProgress = Float.NaN
-    }
-    // endregion
-
-    // region On Update Methods
-    override fun onNewContent(content: String) {
-        super.onNewContent(content)
-        try {
-            parseMotionSceneJSON(this, content)
-        } catch (e: Exception) {
-            // nothing (content might be invalid, sent by live edit)
-        }
-    }
-
-    override fun onNewProgress(progress: Float) {
-        forcedProgress = progress
-        signalUpdate()
-    }
-    // endregion
-}
-
-/**
- * Parses the given JSON5 into a [MotionScene].
- *
- * See the official [Github Wiki](https://github.com/androidx/constraintlayout/wiki/Compose-MotionLayout-JSON-Syntax) to learn the syntax.
- */
-@SuppressLint("ComposableNaming")
-@Composable
-fun MotionScene(@Language("json5") content: String): MotionScene {
-    return remember(content) {
-        JSONMotionScene(content)
-    }
 }
 
 @LayoutScopeMarker
@@ -718,94 +600,10 @@ class MotionLayoutScope @PublishedApi internal constructor(
     }
 }
 
-/**
- * Defines interpolation parameters between two [ConstraintSet]s.
- */
-@Immutable
-interface Transition {
-    fun getStartConstraintSetId(): String
-    fun getEndConstraintSetId(): String
-}
-
-/**
- * Subclass of [Transition] for internal use.
- *
- * Used to reduced the exposed API from [Transition].
- */
-internal class TransitionImpl(
-    private val parsedTransition: CLObject,
-    private val pixelDp: CorePixelDp
-) : androidx.constraintlayout.compose.Transition {
-
-    /**
-     * Applies all Transition properties to [transition].
-     */
-    fun applyAllTo(transition: Transition, type: Int) {
-        try {
-            TransitionParser.parse(parsedTransition, transition, pixelDp)
-        } catch (e: CLParsingException) {
-            Log.e("CML", "Error parsing JSON $e")
-        }
-    }
-
-    /**
-     * Applies only the KeyFrame related properties (KeyCycles, KeyAttributes, KeyPositions) to
-     * [transition], which effectively sets the respective parameters for each WidgetState.
-     */
-    fun applyKeyFramesTo(transition: Transition) {
-        try {
-            TransitionParser.parseKeyFrames(parsedTransition, transition)
-        } catch (e: CLParsingException) {
-            Log.e("CML", "Error parsing JSON $e")
-        }
-    }
-
-    override fun getStartConstraintSetId(): String {
-        return parsedTransition.getStringOrNull("from") ?: "start"
-    }
-
-    override fun getEndConstraintSetId(): String {
-        return parsedTransition.getStringOrNull("to") ?: "end"
-    }
-}
-
-/**
- * Parses the given JSON5 into a [Transition].
- *
- * See the official [Github Wiki](https://github.com/androidx/constraintlayout/wiki/Compose-MotionLayout-JSON-Syntax#transitions) to learn the syntax.
- */
-@SuppressLint("ComposableNaming")
-@Composable
-fun Transition(@Language("json5") content: String): androidx.constraintlayout.compose.Transition? {
-    val dpToPixel = with(LocalDensity.current) { 1.dp.toPx() }
-    val transition = remember(content) {
-        val parsed = try {
-            CLParser.parse(content)
-        } catch (e: CLParsingException) {
-            Log.e("CML", "Error parsing JSON $e")
-            null
-        }
-        mutableStateOf(
-            if (parsed != null) {
-                val pixelDp = CorePixelDp { dpValue -> dpValue * dpToPixel }
-                TransitionImpl(parsed, pixelDp)
-            } else {
-                null
-            }
-        )
-    }
-    return transition.value
-}
-
 enum class MotionLayoutDebugFlags {
     NONE,
     SHOW_ALL,
     UNKNOWN
-}
-
-enum class LayoutInfoFlags {
-    NONE,
-    BOUNDS
 }
 
 @Composable
@@ -887,479 +685,3 @@ internal fun rememberMotionLayoutMeasurePolicy(
         }
     }
 }
-
-@PublishedApi
-internal class MotionMeasurer : Measurer() {
-    private var motionProgress = 0f
-    val transition = Transition()
-
-    fun getProgress(): Float {
-        return motionProgress
-    }
-
-    // TODO: Explicitly declare `getDesignInfo` so that studio tooling can identify the method, also
-    //  make sure that the constraints/dimensions returned are for the start/current ConstraintSet
-
-    private fun measureConstraintSet(
-        optimizationLevel: Int,
-        constraintSet: ConstraintSet,
-        measurables: List<Measurable>,
-        constraints: Constraints
-    ) {
-        state.reset()
-        constraintSet.applyTo(state, measurables)
-        state.apply(root)
-        root.children.fastForEach { it.isAnimated = true }
-        applyRootSize(constraints)
-        root.updateHierarchy()
-
-        if (DEBUG) {
-            root.debugName = "ConstraintLayout"
-            root.children.forEach { child ->
-                child.debugName =
-                    (child.companionWidget as? Measurable)?.layoutId?.toString() ?: "NOTAG"
-            }
-        }
-
-        root.children.forEach { child ->
-            val measurable = (child.companionWidget as? Measurable)
-            val id = measurable?.layoutId ?: measurable?.constraintLayoutId
-            child.stringId = id?.toString()
-        }
-
-        root.optimizationLevel = optimizationLevel
-        // No need to set sizes and size modes as we passed them to the state above.
-        root.measure(Optimizer.OPTIMIZATION_NONE, 0, 0, 0, 0, 0, 0, 0, 0)
-    }
-
-    fun performInterpolationMeasure(
-        constraints: Constraints,
-        layoutDirection: LayoutDirection,
-        constraintSetStart: ConstraintSet,
-        constraintSetEnd: ConstraintSet,
-        transition: TransitionImpl?,
-        measurables: List<Measurable>,
-        optimizationLevel: Int,
-        progress: Float,
-        measureScope: MeasureScope
-    ): IntSize {
-        this.density = measureScope
-        this.measureScope = measureScope
-
-        val needsRemeasure = needsRemeasure(constraints)
-
-        if (motionProgress != progress ||
-            (layoutInformationReceiver?.getForcedWidth() != Int.MIN_VALUE &&
-                    layoutInformationReceiver?.getForcedHeight() != Int.MIN_VALUE) ||
-            needsRemeasure
-        ) {
-            recalculateInterpolation(
-                constraints = constraints,
-                layoutDirection = layoutDirection,
-                constraintSetStart = constraintSetStart,
-                constraintSetEnd = constraintSetEnd,
-                transition = transition,
-                measurables = measurables,
-                optimizationLevel = optimizationLevel,
-                progress = progress,
-                remeasure = needsRemeasure
-            )
-        }
-        return IntSize(root.width, root.height)
-    }
-
-    /**
-     * Indicates if the layout requires measuring before computing the interpolation.
-     *
-     * This might happen if the size of MotionLayout or any of its children changed.
-     *
-     * MotionLayout size might change from its parent Layout, and in some cases the children size
-     * might change (eg: A Text layout has a longer string appended).
-     */
-    private fun needsRemeasure(constraints: Constraints): Boolean {
-        if (this.transition.isEmpty || frameCache.isEmpty()) {
-            // Nothing measured (by MotionMeasurer)
-            return true
-        }
-
-        if ((constraints.hasFixedHeight && !state.sameFixedHeight(constraints.maxHeight)) ||
-            (constraints.hasFixedWidth && !state.sameFixedWidth(constraints.maxWidth))
-        ) {
-            // Layout size changed
-            return true
-        }
-
-        return root.children.fastAny { child ->
-            // Check if measurables have changed their size
-            val measurable = (child.companionWidget as? Measurable) ?: return@fastAny false
-            val interpolatedFrame = this.transition.getInterpolated(child) ?: return@fastAny false
-            val placeable = placeables[measurable] ?: return@fastAny false
-            val currentWidth = placeable.width
-            val currentHeight = placeable.height
-
-            // Need to recalculate interpolation if the size of any element changed
-            return@fastAny currentWidth != interpolatedFrame.width() ||
-                    currentHeight != interpolatedFrame.height()
-        }
-    }
-
-    /**
-     * Remeasures based on [constraintSetStart] and [constraintSetEnd] if needed.
-     *
-     * Runs the interpolation for the given [progress].
-     *
-     * Finally, updates the [Measurable]s dimension if they changed during interpolation.
-     */
-    private fun recalculateInterpolation(
-        constraints: Constraints,
-        layoutDirection: LayoutDirection,
-        constraintSetStart: ConstraintSet,
-        constraintSetEnd: ConstraintSet,
-        transition: TransitionImpl?,
-        measurables: List<Measurable>,
-        optimizationLevel: Int,
-        progress: Float,
-        remeasure: Boolean
-    ) {
-        motionProgress = progress
-        if (remeasure) {
-            this.transition.clear()
-            resetMeasureState()
-            state.reset()
-            // Define the size of the ConstraintLayout.
-            state.width(
-                if (constraints.hasFixedWidth) {
-                    Dimension.createFixed(constraints.maxWidth)
-                } else {
-                    Dimension.createWrap().min(constraints.minWidth)
-                }
-            )
-            state.height(
-                if (constraints.hasFixedHeight) {
-                    Dimension.createFixed(constraints.maxHeight)
-                } else {
-                    Dimension.createWrap().min(constraints.minHeight)
-                }
-            )
-            // Build constraint set and apply it to the state.
-            state.rootIncomingConstraints = constraints
-            state.layoutDirection = layoutDirection
-
-            measureConstraintSet(
-                optimizationLevel, constraintSetStart, measurables, constraints
-            )
-            this.transition.updateFrom(root, Transition.START)
-            measureConstraintSet(
-                optimizationLevel, constraintSetEnd, measurables, constraints
-            )
-            this.transition.updateFrom(root, Transition.END)
-            transition?.applyKeyFramesTo(this.transition)
-        }
-
-        this.transition.interpolate(root.width, root.height, progress)
-
-        root.children.fastForEach { child ->
-            // Update measurables to the interpolated dimensions
-            val measurable = (child.companionWidget as? Measurable) ?: return@fastForEach
-            val interpolatedFrame = this.transition.getInterpolated(child) ?: return@fastForEach
-            val placeable = placeables[measurable]
-            val currentWidth = placeable?.width
-            val currentHeight = placeable?.height
-            if (placeable == null ||
-                currentWidth != interpolatedFrame.width() ||
-                currentHeight != interpolatedFrame.height()
-            ) {
-                measurable.measure(
-                    Constraints.fixed(interpolatedFrame.width(), interpolatedFrame.height())
-                ).also { newPlaceable ->
-                    placeables[measurable] = newPlaceable
-                }
-            }
-            frameCache[measurable] = interpolatedFrame
-        }
-
-        if (layoutInformationReceiver?.getLayoutInformationMode() == LayoutInfoFlags.BOUNDS) {
-            computeLayoutResult()
-        }
-    }
-
-    private fun encodeKeyFrames(
-        json: StringBuilder,
-        location: FloatArray,
-        types: IntArray,
-        progress: IntArray,
-        count: Int
-    ) {
-        if (count == 0) {
-            return
-        }
-        json.append("keyTypes : [")
-        for (i in 0 until count) {
-            val m = types[i]
-            json.append(" $m,")
-        }
-        json.append("],\n")
-
-        json.append("keyPos : [")
-        for (i in 0 until count * 2) {
-            val f = location[i]
-            json.append(" $f,")
-        }
-        json.append("],\n ")
-
-        json.append("keyFrames : [")
-        for (i in 0 until count) {
-            val f = progress[i]
-            json.append(" $f,")
-        }
-        json.append("],\n ")
-    }
-
-    fun encodeRoot(json: StringBuilder) {
-        json.append("  root: {")
-        json.append("interpolated: { left:  0,")
-        json.append("  top:  0,")
-        json.append("  right:   ${root.width} ,")
-        json.append("  bottom:  ${root.height} ,")
-        json.append(" } }")
-    }
-
-    override fun computeLayoutResult() {
-        val json = StringBuilder()
-        json.append("{ ")
-        encodeRoot(json)
-        val mode = IntArray(50)
-        val pos = IntArray(50)
-        var key = FloatArray(100)
-
-        for (child in root.children) {
-            val start = transition.getStart(child.stringId)
-            val end = transition.getEnd(child.stringId)
-            val interpolated = transition.getInterpolated(child.stringId)
-            val path = transition.getPath(child.stringId)
-            val count = transition.getKeyFrames(child.stringId, key, mode, pos)
-
-            json.append(" ${child.stringId}: {")
-            json.append(" interpolated : ")
-            interpolated.serialize(json, true)
-
-            json.append(", start : ")
-            start.serialize(json)
-
-            json.append(", end : ")
-            end.serialize(json)
-            encodeKeyFrames(json, key, mode, pos, count)
-            json.append(" path : [")
-            for (point in path) {
-                json.append(" $point ,")
-            }
-            json.append(" ] ")
-            json.append("}, ")
-        }
-        json.append(" }")
-        layoutInformationReceiver?.setLayoutInformation(json.toString())
-    }
-
-    fun DrawScope.drawDebug() {
-        var index = 0
-        val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
-        for (child in root.children) {
-            val startFrame = transition.getStart(child)
-            val endFrame = transition.getEnd(child)
-            translate(2f, 2f) {
-                drawFrameDebug(
-                    size.width,
-                    size.height,
-                    startFrame,
-                    endFrame,
-                    pathEffect,
-                    Color.White
-                )
-            }
-            drawFrameDebug(
-                size.width,
-                size.height,
-                startFrame,
-                endFrame,
-                pathEffect,
-                Color.Blue
-            )
-            index++
-        }
-    }
-
-    private fun DrawScope.drawFrameDebug(
-        parentWidth: Float,
-        parentHeight: Float,
-        startFrame: WidgetFrame,
-        endFrame: WidgetFrame,
-        pathEffect: PathEffect,
-        color: Color
-    ) {
-        drawFrame(startFrame, pathEffect, color)
-        drawFrame(endFrame, pathEffect, color)
-        var numKeyPositions = transition.getNumberKeyPositions(startFrame)
-        var debugRender = MotionRenderDebug(23f)
-
-        debugRender.draw(
-            drawContext.canvas.nativeCanvas, transition.getMotion(startFrame.widget.stringId),
-            1000, Motion.DRAW_PATH_BASIC,
-            parentWidth.toInt(), parentHeight.toInt()
-        )
-        if (numKeyPositions == 0) {
-//            drawLine(
-//                start = Offset(startFrame.centerX(), startFrame.centerY()),
-//                end = Offset(endFrame.centerX(), endFrame.centerY()),
-//                color = color,
-//                strokeWidth = 3f,
-//                pathEffect = pathEffect
-//            )
-        } else {
-            var x = FloatArray(numKeyPositions)
-            var y = FloatArray(numKeyPositions)
-            var pos = FloatArray(numKeyPositions)
-            transition.fillKeyPositions(startFrame, x, y, pos)
-
-            for (i in 0..numKeyPositions - 1) {
-                var keyFrameProgress = pos[i] / 100f
-                var frameWidth =
-                    ((1 - keyFrameProgress) * startFrame.width()) +
-                            (keyFrameProgress * endFrame.width())
-                var frameHeight =
-                    ((1 - keyFrameProgress) * startFrame.height()) +
-                            (keyFrameProgress * endFrame.height())
-                var curX = x[i] * parentWidth + frameWidth / 2f
-                var curY = y[i] * parentHeight + frameHeight / 2f
-//                drawLine(
-//                    start = Offset(prex, prey),
-//                    end = Offset(curX, curY),
-//                    color = color,
-//                    strokeWidth = 3f,
-//                    pathEffect = pathEffect
-//                )
-                var path = Path()
-                var pathSize = 20f
-                path.moveTo(curX - pathSize, curY)
-                path.lineTo(curX, curY + pathSize)
-                path.lineTo(curX + pathSize, curY)
-                path.lineTo(curX, curY - pathSize)
-                path.close()
-
-                var stroke = Stroke(width = 3f)
-                drawPath(path, color, 1f, stroke)
-            }
-//            drawLine(
-//                start = Offset(prex, prey),
-//                end = Offset(endFrame.centerX(), endFrame.centerY()),
-//                color = color,
-//                strokeWidth = 3f,
-//                pathEffect = pathEffect
-//            )
-        }
-    }
-
-    private fun DrawScope.drawFrame(
-        frame: WidgetFrame,
-        pathEffect: PathEffect,
-        color: Color
-    ) {
-        if (frame.isDefaultTransform) {
-            var drawStyle = Stroke(width = 3f, pathEffect = pathEffect)
-            drawRect(
-                color, Offset(frame.left.toFloat(), frame.top.toFloat()),
-                Size(frame.width().toFloat(), frame.height().toFloat()), style = drawStyle
-            )
-        } else {
-            var matrix = Matrix()
-            if (!frame.rotationZ.isNaN()) {
-                matrix.preRotate(frame.rotationZ, frame.centerX(), frame.centerY())
-            }
-            var scaleX = if (frame.scaleX.isNaN()) 1f else frame.scaleX
-            var scaleY = if (frame.scaleY.isNaN()) 1f else frame.scaleY
-            matrix.preScale(
-                scaleX,
-                scaleY,
-                frame.centerX(),
-                frame.centerY()
-            )
-            var points = floatArrayOf(
-                frame.left.toFloat(), frame.top.toFloat(),
-                frame.right.toFloat(), frame.top.toFloat(),
-                frame.right.toFloat(), frame.bottom.toFloat(),
-                frame.left.toFloat(), frame.bottom.toFloat()
-            )
-            matrix.mapPoints(points)
-            drawLine(
-                start = Offset(points[0], points[1]),
-                end = Offset(points[2], points[3]),
-                color = color,
-                strokeWidth = 3f,
-                pathEffect = pathEffect
-            )
-            drawLine(
-                start = Offset(points[2], points[3]),
-                end = Offset(points[4], points[5]),
-                color = color,
-                strokeWidth = 3f,
-                pathEffect = pathEffect
-            )
-            drawLine(
-                start = Offset(points[4], points[5]),
-                end = Offset(points[6], points[7]),
-                color = color,
-                strokeWidth = 3f,
-                pathEffect = pathEffect
-            )
-            drawLine(
-                start = Offset(points[6], points[7]),
-                end = Offset(points[0], points[1]),
-                color = color,
-                strokeWidth = 3f,
-                pathEffect = pathEffect
-            )
-        }
-    }
-
-    fun getCustomColor(id: String, name: String): Color {
-        if (!transition.contains(id)) {
-            return Color.Black
-        }
-
-        transition.interpolate(root.width, root.height, motionProgress)
-
-        val interpolatedFrame = transition.getInterpolated(id)
-        val color = interpolatedFrame.getCustomColor(name)
-        return Color(color)
-    }
-
-    fun getCustomFloat(id: String, name: String): Float {
-        if (!transition.contains(id)) {
-            return 0f
-        }
-        val startFrame = transition.getStart(id)
-        val endFrame = transition.getEnd(id)
-        val startFloat = startFrame.getCustomFloat(name)
-        val endFloat = endFrame.getCustomFloat(name)
-        return (1f - motionProgress) * startFloat + motionProgress * endFloat
-    }
-
-    fun clearConstraintSets() {
-        transition.clear()
-        frameCache.clear()
-    }
-
-    fun initWith(
-        start: ConstraintSet,
-        end: ConstraintSet,
-        transition: TransitionImpl?,
-        progress: Float
-    ) {
-        clearConstraintSets()
-        start.applyTo(this.transition, Transition.START)
-        end.applyTo(this.transition, Transition.END)
-        this.transition.interpolate(0, 0, progress)
-        transition?.applyAllTo(this.transition, 0)
-    }
-}
-
-private val DEBUG = false

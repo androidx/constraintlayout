@@ -481,7 +481,7 @@ private class ConstraintLayoutParentData(
     override val layoutId: Any = ref.id
 
     override fun equals(other: Any?) = other is ConstraintLayoutParentData &&
-            ref.id == other.ref.id && constrain == other.constrain
+        ref.id == other.ref.id && constrain == other.constrain
 
     override fun hashCode() = ref.id.hashCode() * 31 + constrain.hashCode()
 }
@@ -722,7 +722,7 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
     private var forcedWidth: Int = Int.MIN_VALUE
     private var forcedHeight: Int = Int.MIN_VALUE
     private var forcedDrawDebug: MotionLayoutDebugFlags =
-         MotionLayoutDebugFlags.UNKNOWN
+        MotionLayoutDebugFlags.UNKNOWN
     private var updateFlag: MutableState<Long>? = null
     private var layoutInformationMode: LayoutInfoFlags = LayoutInfoFlags.NONE
     private var layoutInformation = ""
@@ -774,7 +774,8 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
                 val registry = Registry.getInstance()
                 registry.register(debugName, callback)
             }
-        } catch (_: CLParsingException) {}
+        } catch (_: CLParsingException) {
+        }
     }
 
     // region Accessors
@@ -931,6 +932,7 @@ fun ConstraintSet(
 class State(val density: Density) : SolverState() {
     var rootIncomingConstraints: Constraints = Constraints()
     lateinit var layoutDirection: LayoutDirection
+
     init {
         setDpToPixel { dp -> density.density * dp }
     }
@@ -996,7 +998,7 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             Log.d(
                 "CCL",
                 "Measuring ${measurable.layoutId} with: " +
-                        constraintWidget.toDebugString() + "\n" + measure.toDebugString()
+                    constraintWidget.toDebugString() + "\n"
             )
         }
 
@@ -1033,11 +1035,11 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
         }
 
         if ((measure.measureStrategy == TRY_GIVEN_DIMENSIONS ||
-                    measure.measureStrategy == USE_GIVEN_DIMENSIONS) ||
+                measure.measureStrategy == USE_GIVEN_DIMENSIONS) ||
             !(measure.horizontalBehavior == MATCH_CONSTRAINT &&
-                    constraintWidget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_SPREAD &&
-                    measure.verticalBehavior == MATCH_CONSTRAINT &&
-                    constraintWidget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_SPREAD)
+                constraintWidget.mMatchConstraintDefaultWidth == MATCH_CONSTRAINT_SPREAD &&
+                measure.verticalBehavior == MATCH_CONSTRAINT &&
+                constraintWidget.mMatchConstraintDefaultHeight == MATCH_CONSTRAINT_SPREAD)
         ) {
             if (DEBUG) {
                 Log.d("CCL", "Measuring ${measurable.layoutId} with $constraints")
@@ -1103,7 +1105,7 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
             .copyFrom(measure)
 
         measure.measuredNeedsSolverPass = measure.measuredWidth != measure.horizontalDimension ||
-                measure.measuredHeight != measure.verticalDimension
+            measure.measuredHeight != measure.verticalDimension
     }
 
     fun addLayoutInformationReceiver(layoutReceiver: LayoutInformationReceiver?) {
@@ -1134,8 +1136,8 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                     json.append(" interpolated: ")
                     json.append(
                         " { left: ${child.x}, top: ${child.y}, " +
-                                "right: ${child.x + child.width}, " +
-                                "bottom: ${child.y + child.height} }"
+                            "right: ${child.x + child.width}, " +
+                            "bottom: ${child.y + child.height} }"
                     )
                     json.append("}, ")
                 }
@@ -1192,11 +1194,11 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                 Log.d("CCL", "IRH $currentDimensionResolved")
             }
             val useDimension = currentDimensionResolved ||
-                    (measureStrategy == TRY_GIVEN_DIMENSIONS ||
-                            measureStrategy == USE_GIVEN_DIMENSIONS) &&
-                    (measureStrategy == USE_GIVEN_DIMENSIONS ||
-                            matchConstraintDefaultDimension != MATCH_CONSTRAINT_WRAP ||
-                            otherDimensionResolved)
+                (measureStrategy == TRY_GIVEN_DIMENSIONS ||
+                    measureStrategy == USE_GIVEN_DIMENSIONS) &&
+                (measureStrategy == USE_GIVEN_DIMENSIONS ||
+                    matchConstraintDefaultDimension != MATCH_CONSTRAINT_WRAP ||
+                    otherDimensionResolved)
             if (DEBUG) {
                 Log.d("CCL", "UD $useDimension")
             }
@@ -1288,7 +1290,7 @@ internal open class Measurer : BasicMeasure.Measurer, DesignInfoProvider {
                     Log.d(
                         "CCL",
                         "Final measurement for ${measurable.layoutId} " +
-                                "to confirm size ${child.width} ${child.height}"
+                            "to confirm size ${child.width} ${child.height}"
                     )
                 }
                 measurable.measure(Constraints.fixed(child.width, child.height))
@@ -1566,11 +1568,13 @@ internal typealias SolverChain = androidx.constraintlayout.core.state.State.Chai
 private val DEBUG = false
 private fun ConstraintWidget.toDebugString() =
     "$debugName " +
-            "width $width minWidth $minWidth maxWidth $maxWidth " +
-            "height $height minHeight $minHeight maxHeight $maxHeight " +
-            "HDB $horizontalDimensionBehaviour VDB $verticalDimensionBehaviour " +
-            "MCW $mMatchConstraintDefaultWidth MCH $mMatchConstraintDefaultHeight " +
-            "percentW $mMatchConstraintPercentWidth percentH $mMatchConstraintPercentHeight"
+        "width $width minWidth $minWidth maxWidth $maxWidth " +
+        "height $height minHeight $minHeight maxHeight $maxHeight " +
+        "HDB $horizontalDimensionBehaviour VDB $verticalDimensionBehaviour " +
+        "MCW $mMatchConstraintDefaultWidth MCH $mMatchConstraintDefaultHeight " +
+        "percentW $mMatchConstraintPercentWidth percentH $mMatchConstraintPercentHeight"
 
-private fun BasicMeasure.Measure.toDebugString() =
-    "measure strategy is "
+enum class LayoutInfoFlags {
+    NONE,
+    BOUNDS
+}
