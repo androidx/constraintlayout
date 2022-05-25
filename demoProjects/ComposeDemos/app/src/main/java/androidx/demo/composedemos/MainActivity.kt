@@ -61,7 +61,6 @@ fun DefaultPreview() {
 }
 
 @OptIn(ExperimentalMotionApi::class)
-@Preview(group = "motion8")
 @Composable
 public fun  Login(name: String) {
     var animateToEnd by remember { mutableStateOf(false) }

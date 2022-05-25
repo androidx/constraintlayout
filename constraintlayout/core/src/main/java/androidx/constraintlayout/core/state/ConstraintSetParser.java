@@ -514,6 +514,16 @@ public class ConstraintSetParser {
                                     case "barrier":
                                         parseBarrier(state, elementName, (CLObject) element);
                                         break;
+                                    case "vChain":
+                                    case "hChain":
+                                        parseChainType(
+                                                type,
+                                                state,
+                                                elementName,
+                                                layoutVariables,
+                                                (CLObject) element
+                                        );
+                                        break;
                                 }
                             } else {
                                 parseWidget(state, layoutVariables,
@@ -726,6 +736,110 @@ public class ConstraintSetParser {
         }
     }
 
+    private static float toPix(State state, float dp){
+       return state.getDpToPixel().toPixels(dp);
+    }
+    /**
+     * Support parsing Chain in the following manner
+     * chainId : {
+     *      type:'hChain'  // or vChain
+     *      contains: ['id1', 'id2', 'id3' ]
+     *      contains: [['id', weight, marginL ,marginR], 'id2', 'id3' ]
+     *      start: ['parent', 'start',0],
+     *      end: ['parent', 'end',0],
+     *      top: ['parent', 'top',0],
+     *      bottom: ['parent', 'bottom',0],
+     *      style: 'spread'
+     * }
+
+     * @throws CLParsingException
+     */
+    private static void parseChainType(String orientation,
+            State state,
+            String chainName,
+            LayoutVariables margins,
+            CLObject object) throws CLParsingException {
+
+        ChainReference chain = (orientation.charAt(0) == 'h')
+                ? state.horizontalChain() : state.verticalChain();
+        chain.setKey(chainName);
+
+        for (String params : object.names()) {
+            switch (params) {
+                case "contains":
+                    CLElement refs = object.get(params);
+                    if (!(refs instanceof CLArray) || ((CLArray) refs).size() < 1) {
+                        System.err.println(
+                                chainName + " contains should be an array \"" + refs.content()
+                                        + "\"");
+                        return;
+                    }
+                    for (int i = 0; i < ((CLArray) refs).size(); i++) {
+                        CLElement chainElement = ((CLArray) refs).get(i);
+                        if (chainElement instanceof CLArray) {
+                            CLArray array = (CLArray) chainElement;
+                            if (array.size() > 0) {
+                                String id = array.get(0).content();
+                                chain.add(id);
+                                float weight = Float.NaN;
+                                float preMargin = Float.NaN;
+                                float postMargin = Float.NaN;
+                                switch (array.size()) {
+                                    case 2: // sets only the weight
+                                        weight = array.getFloat(1);
+                                        break;
+                                    case 3: // sets the pre and post margin to the 2 arg
+                                        weight = array.getFloat(1);
+                                        postMargin = preMargin = toPix(state, array.getFloat(2));
+                                        break;
+                                    case 4: // sets the pre and post margin
+                                        weight = array.getFloat(1);
+                                        preMargin = toPix(state, array.getFloat(2));
+                                        postMargin = toPix(state, array.getFloat(3));
+                                        break;
+                                }
+                                chain.addChainElement(id, weight, preMargin, postMargin);
+                            }
+                        } else {
+                            chain.add(chainElement.content());
+                        }
+                    }
+                    break;
+                case "start":
+                case "end":
+                case "top":
+                case "bottom":
+                case "left":
+                case "right":
+                    parseConstraint(state, margins, object, chain, params);
+                    break;
+                case "style":
+
+                    CLElement styleObject = object.get(params);
+                    String styleValue;
+                    if (styleObject instanceof CLArray && ((CLArray) styleObject).size() > 1) {
+                        styleValue = ((CLArray) styleObject).getString(0);
+                        float biasValue = ((CLArray) styleObject).getFloat(1);
+                        chain.bias(biasValue);
+                    } else {
+                        styleValue = styleObject.content();
+                    }
+                    switch (styleValue) {
+                        case "packed":
+                            chain.style(State.Chain.PACKED);
+                            break;
+                        case "spread_inside":
+                            chain.style(State.Chain.SPREAD_INSIDE);
+                            break;
+                        default:
+                            chain.style(State.Chain.SPREAD);
+                            break;
+                    }
+
+                    break;
+            }
+        }
+    }
 
     static void parseGuideline(int orientation,
             State state, CLArray helper) throws CLParsingException {
@@ -737,7 +851,6 @@ public class ConstraintSetParser {
         if (guidelineId == null) return;
         parseGuidelineParams(orientation, state, guidelineId, (CLObject) params);
     }
-
 
     static void parseGuidelineParams(
             int orientation,
@@ -980,9 +1093,7 @@ public class ConstraintSetParser {
 
             }
         }
-
     }
-
 
     static void parseCustomProperties(
             CLObject element,
@@ -1018,7 +1129,6 @@ public class ConstraintSetParser {
         }
         return -1;
     }
-
 
     /**
      * parse the motion section of a constraint

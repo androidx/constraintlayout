@@ -37,7 +37,7 @@ import com.google.accompanist.coil.rememberCoilPainter
 class MainActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
     private var composeNum = 0
-    private val START_NUMBER = 50
+    private val START_NUMBER = 6
     private var demos:ArrayList<CompFunc> = ArrayList()
     var map = HashMap<Int, String>();
     val linkServer = LinkServer()
@@ -102,6 +102,11 @@ class MainActivity : AppCompatActivity() {
         demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample4() } })
         demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample5() } })
         demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample6() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ChainNew1() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ChainNew2() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ChainNew3() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { ChainNew4() } })
+
         demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample7() } })
         demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample8() } })
         demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample9() } })
