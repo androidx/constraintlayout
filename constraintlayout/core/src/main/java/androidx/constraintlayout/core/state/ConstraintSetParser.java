@@ -754,7 +754,7 @@ public class ConstraintSetParser {
 
      * @throws CLParsingException
      */
-    static void parseChainType(String orientation,
+    private static void parseChainType(String orientation,
             State state,
             String chainName,
             LayoutVariables margins,

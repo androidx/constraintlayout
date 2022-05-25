@@ -61,7 +61,6 @@ fun DefaultPreview() {
 }
 
 @OptIn(ExperimentalMotionApi::class)
-@Preview(group = "motion8")
 @Composable
 public fun  Login(name: String) {
     var animateToEnd by remember { mutableStateOf(false) }
@@ -70,7 +69,7 @@ public fun  Login(name: String) {
         targetValue = if (animateToEnd) 1f else 0f,
         animationSpec = tween(6000)
     )
-    Column {build
+    Column {
         MotionLayout(
             modifier = Modifier
                 .fillMaxWidth()
