@@ -23,8 +23,6 @@ import androidx.constraintlayout.core.parser.CLParsingException
 import androidx.constraintlayout.core.state.ConstraintSetParser
 import androidx.constraintlayout.core.state.Transition
 import org.intellij.lang.annotations.Language
-import java.util.ArrayList
-import java.util.HashMap
 
 internal class JSONConstraintSet(
     @Language("json5") content: String,
@@ -54,7 +52,7 @@ internal class JSONConstraintSet(
     override fun applyTo(transition: Transition, type: Int) {
         val layoutVariables = ConstraintSetParser.LayoutVariables()
         applyLayoutVariables(layoutVariables)
-       ConstraintSetParser.parseJSON(getCurrentContent(), transition, type)
+        ConstraintSetParser.parseJSON(getCurrentContent(), transition, type)
     }
 
     fun emitDesignElements(designElements: ArrayList<ConstraintSetParser.DesignElement>) {
