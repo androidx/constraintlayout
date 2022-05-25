@@ -16,11 +16,19 @@
 
 package android.support.constraint.app;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.helper.widget.Grid;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * MainActivity for Grid helper
@@ -47,12 +55,32 @@ public class MainActivity extends AppCompatActivity {
     private String[] mSkips = new String[] {"", "0:1x2, 4:1x1"};
     private String[] mSpans = new String[] {"", "6:1x2"};
     private String[] mOrientations = new String[] {"horizontal", "vertical"};
-
+    private static String LAYOUT_TO_USE = "layout";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.responsive);
+        Bundle extra = getIntent().getExtras();
+        if (extra == null) {
+            LinearLayout linearLayout = new LinearLayout(this,null);
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
+            setContentView(linearLayout);
+
+             int []layouts = getLayouts();// you could { R.layout.responsive, R.layout.activity_main,
+            for (int i = 0; i < layouts.length; i++) {
+                final int layout = layouts[i];
+                Button button = new Button(this,null);
+                button.setText(getResources().getResourceEntryName(layout));
+                linearLayout.addView(button);
+                button.setOnClickListener(v->{
+                    Intent intent=  new Intent( this,MainActivity.class);
+                    intent.putExtra(LAYOUT_TO_USE , layout );
+                    startActivity(intent);
+                });
+            }
+            return;
+        }
+        setContentView(extra.getInt(LAYOUT_TO_USE));
 
         mGrid = findViewById(R.id.grid);
         mGrid.setRows(mSizes[0]);
@@ -64,6 +92,25 @@ public class MainActivity extends AppCompatActivity {
         mGrid.setVerticalGaps(mGaps[0]);
         mGrid.setHorizontalGaps(mGaps[0]);
         mGrid.setOrientation(mOrientations[0]);
+    }
+
+    private static int[] getLayouts( ) {
+        ArrayList<String> list = new ArrayList<>();
+        Field[] f = R.layout.class.getDeclaredFields();
+
+        int []ret = new int[f.length];
+         int count = 0;
+        for (int i = 0; i < f.length; i++) {
+            try {
+                String name = f[i].getName();
+                if (!name.contains("_") || name.equals("activity_main")) {
+                    ret[count++] = f[i].getInt(null);
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        return Arrays.copyOf(ret,count);
     }
 
     /**
