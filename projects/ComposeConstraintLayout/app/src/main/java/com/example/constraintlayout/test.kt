@@ -16,23 +16,37 @@
 
 package com.example.constraintlayout
 
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.*
-import java.util.*
+import java.util.EnumSet
 
 @Preview
 @Composable
@@ -962,15 +976,51 @@ public fun ScreenExample11() {
                 .fillMaxSize()
                 .background(Color.White)
         ) {
-            Box(modifier = Modifier.layoutId("h1").width(100.dp).height(60.dp).background(Color.Red))
-            Box(modifier = Modifier.layoutId("h2").width(100.dp).height(60.dp).background(Color.Green))
-            Box(modifier = Modifier.layoutId("h3").width(100.dp).height(60.dp).background(Color.Blue))
-            Box(modifier = Modifier.layoutId("h4").width(100.dp).height(60.dp).background(Color.Gray))
-            Box(modifier = Modifier.layoutId("h5").width(100.dp).height(60.dp).background(Color.Yellow))
-            Box(modifier = Modifier.layoutId("h6").width(100.dp).height(60.dp).background(Color.Cyan))
-            Box(modifier = Modifier.layoutId("h7").width(100.dp).height(60.dp).background(Color.Magenta))
-            Box(modifier = Modifier.layoutId("h8").width(100.dp).height(60.dp).background(Color.Red))
-            Box(modifier = Modifier.layoutId("h9").width(100.dp).height(60.dp).background(Color.DarkGray))
+            Box(modifier = Modifier
+                .layoutId("h1")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.Red))
+            Box(modifier = Modifier
+                .layoutId("h2")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.Green))
+            Box(modifier = Modifier
+                .layoutId("h3")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.Blue))
+            Box(modifier = Modifier
+                .layoutId("h4")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.Gray))
+            Box(modifier = Modifier
+                .layoutId("h5")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.Yellow))
+            Box(modifier = Modifier
+                .layoutId("h6")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.Cyan))
+            Box(modifier = Modifier
+                .layoutId("h7")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.Magenta))
+            Box(modifier = Modifier
+                .layoutId("h8")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.Red))
+            Box(modifier = Modifier
+                .layoutId("h9")
+                .width(100.dp)
+                .height(60.dp)
+                .background(Color.DarkGray))
         }
     }
 }
@@ -1502,29 +1552,41 @@ public fun ScreenExample19() {
 public fun ScreenExample21() {
     ConstraintLayout {
         val (image, text1, text2, text3) = createRefs()
-        Box(Modifier.size(50.dp)
-            .background(Color.Blue).constrainAs(image) {
-            start.linkTo(parent.start, margin = 16.dp)
-            centerVerticallyTo(parent)
-        })
-        Box(Modifier.size(100.dp, 30.dp)
-            .background(Color.Blue).constrainAs(text1) {
-            top.linkTo(parent.top)
-            linkTo(image.end, parent.end, 16.dp, 16.dp)
-            width = Dimension.preferredWrapContent
-        })
-        Box(Modifier.size(200.dp, 30.dp)
-            .background(Color.Blue).constrainAs(text2) {
-            top.linkTo(text1.bottom, margin = 16.dp)
-            linkTo(image.end, parent.end, 16.dp, 16.dp)
-            width = Dimension.preferredWrapContent
-        })
-        Box(Modifier.size(300.dp, 30.dp)
-            .background(Color.Blue).constrainAs(text3) {
-            top.linkTo(text2.bottom, margin = 16.dp)
-            linkTo(image.end, parent.end, 16.dp, 16.dp)
-            width = Dimension.preferredWrapContent
-        })
+        Box(
+            Modifier
+                .size(50.dp)
+                .background(Color.Blue)
+                .constrainAs(image) {
+                    start.linkTo(parent.start, margin = 16.dp)
+                    centerVerticallyTo(parent)
+                })
+        Box(
+            Modifier
+                .size(100.dp, 30.dp)
+                .background(Color.Blue)
+                .constrainAs(text1) {
+                    top.linkTo(parent.top)
+                    linkTo(image.end, parent.end, 16.dp, 16.dp)
+                    width = Dimension.preferredWrapContent
+                })
+        Box(
+            Modifier
+                .size(200.dp, 30.dp)
+                .background(Color.Blue)
+                .constrainAs(text2) {
+                    top.linkTo(text1.bottom, margin = 16.dp)
+                    linkTo(image.end, parent.end, 16.dp, 16.dp)
+                    width = Dimension.preferredWrapContent
+                })
+        Box(
+            Modifier
+                .size(300.dp, 30.dp)
+                .background(Color.Blue)
+                .constrainAs(text3) {
+                    top.linkTo(text2.bottom, margin = 16.dp)
+                    linkTo(image.end, parent.end, 16.dp, 16.dp)
+                    width = Dimension.preferredWrapContent
+                })
     }
 }
 
@@ -1603,11 +1665,9 @@ public fun ScreenExample22() {
     }
 }
 
-
-
 @Preview(group = "new4")
 @Composable
-public fun ChainNew() {
+public fun ChainNew1() {
     ConstraintLayout(
         ConstraintSet("""
             {
@@ -1655,7 +1715,99 @@ public fun ChainNew() {
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Text(text = "chain!")
+        Text(text = "chain2.0!")
+        Button(
+            modifier = Modifier.layoutId("a"),
+            onClick = {},
+        ) {
+            Text(text = "A")
+        }
+        Button(
+            modifier = Modifier.layoutId("b"),
+            onClick = {},
+        ) {
+            Text(text = "B")
+        }
+        Button(
+            modifier = Modifier.layoutId("c"),
+            onClick = {},
+        ) {
+            Text(text = "C")
+        }
+        Button(
+            modifier = Modifier.layoutId("d"),
+            onClick = {},
+        ) {
+            Text(text = "D")
+        }
+        Button(
+            modifier = Modifier.layoutId("e"),
+            onClick = {},
+        ) {
+            Text(text = "E")
+        }
+        Button(
+            modifier = Modifier.layoutId("f"),
+            onClick = {},
+        ) {
+            Text(text = "F")
+        }
+    }
+}
+
+@Preview(group = "new4")
+@Composable
+public fun ChainNew2() {
+    ConstraintLayout(
+        ConstraintSet("""
+            {
+              Variables: {
+                bottom: 20
+              },
+              Helpers: [
+ 
+                ['vGuideline', {
+                  id: 'leftGuideline1', start: 100
+                }],
+                ['hGuideline', {
+                  id: 'topGuideline1', percent: 0.5
+                }]
+              ],
+              chain1: { 
+                type: 'hChain',
+                contains: [['a',2,0],['b',0.3,70,3],'c'],
+                start: ['leftGuideline1', 'start'],
+                style: 'packed',
+                  end: ['parent', 'end',32],
+              },
+              chain2: { 
+                type: 'hChain',
+                contains: ['d','e','f'],
+              },
+               chain3: { 
+                type: 'vChain',
+                contains: ['d','e','f'],
+                 bottom: ['topGuideline1', 'top']
+              },             
+              
+              a: {
+              width: 'spread',
+                bottom: ['b', 'bottom' ]
+              },
+              b: {
+               width: 'spread',
+                centerVertically: 'parent'
+              },
+              c: {
+               width: 'spread',
+                 bottom: ['b', 'bottom' ]
+              }
+            }
+        """),
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Text(text = "chain2.1!")
         Button(
             modifier = Modifier.layoutId("a"),
             onClick = {},
@@ -1696,8 +1848,211 @@ public fun ChainNew() {
 }
 
 
+@Preview(group = "new4")
+@Composable
+public fun ChainNew3() {
+    ConstraintLayout(
+        ConstraintSet("""
+            {
+              Variables: {
+                bottom: 20
+              },
+              Helpers: [
+ 
+                ['vGuideline', {
+                  id: 'leftGuideline1', start: 100
+                }],
+                ['hGuideline', {
+                  id: 'topGuideline1', percent: 0.5
+                }]
+              ],
+              chain1: { 
+                type: 'hChain',
+                contains: ['a1','b1','c1','d1'],
+                start: ['leftGuideline1', 'start'],
+                style: 'spread',
+                  end: ['parent', 'end',32],
+              },
+               chain2: { 
+                type: 'hChain',
+                contains: ['a2','b2','c2','d2'],
+    
+                style: 'spread_inside',
+           
+              },
+             
+              a1: { centerVertically: 'parent' ,vBias: 0.0 },
+              b1: { centerVertically: 'a1' },
+              c1: { centerVertically: 'a1' },
+              d1: { centerVertically: 'a1' },
+              
+              a2: { centerVertically: 'parent',vBias: 0.3 },
+              b2: { centerVertically: 'a2' },
+              c2: { centerVertically: 'a2' },
+              d2: { centerVertically: 'a2' }, 
+              
+             chain3: { 
+                type: 'hChain',
+                contains: [ ['a3',2,6,23],['b3',3,23],'c3',['d3',1,32]],
+              },
+              a3: { width:'spread', centerVertically: 'parent',vBias: 0.6},
+              b3: { width:'spread',centerVertically: 'a3' },
+              c3: { width:'spread', centerVertically: 'a3' },
+              d3: { width:'spread',centerVertically: 'a3' }, 
+              
+             chain4: { 
+                type: 'hChain',
+                contains: ['a4','b4','c4','d4'],
+                
+                style: 'packed',
+
+              },
+              a4: {width:'spread', centerVertically: 'parent',vBias: 0.8},
+              b4: { centerVertically: 'a4' },
+              c4: {width:'spread', centerVertically: 'a4' },
+              d4: { centerVertically: 'a4' }, 
+              
+                           chain5: { 
+                type: 'hChain',
+                contains: ['a5','b5','c5','d5'],
+                start: ['leftGuideline1', 'start'],
+                style: 'packed',
+
+              },
+              a5: { centerVertically: 'parent',vBias: 0.9},
+              b5: { centerVertically: 'a5' },
+              c5: { centerVertically: 'a5' },
+              d5: { centerVertically: 'a5' }, 
+              
+            }
+        """
+         ),
+        modifier = Modifier
+            .fillMaxSize().background(Color.LightGray)
+    ) {
+        Text(text = "chain2.3!")
+        for (k in 1..5) {
+            for (i in 0..3) {
+                val title = ('a' + i).toString() + k;
+                val c = Color(0f, 0.4f + i / 10f, i / 10f)
+
+                Button(
+                    modifier = Modifier.layoutId(title),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = c),
+                    onClick = {},
+                ) {
+                    Text(text = title)
+                }
+            }
+        }
+
+    }
+}
 
 
+
+
+
+@Preview(group = "new4")
+@Composable
+public fun ChainNew4() {
+    ConstraintLayout(
+        ConstraintSet("""
+            {
+              Variables: {
+                bottom: 20
+              },
+              Helpers: [
+ 
+                ['hGuideline', {
+                  id: 'leftGuideline1', start: 100
+                }],
+                ['hGuideline', {
+                  id: 'topGuideline1', percent: 0.5
+                }]
+              ],
+              chain1: { 
+                type: 'vChain',
+                contains: ['a1','b1','c1','d1'],
+                start: ['leftGuideline1', 'start'],
+                style: 'spread',
+                  end: ['parent', 'end',32],
+              },
+               chain2: { 
+                type: 'vChain',
+                contains: ['a2','b2','c2','d2'],
+    
+                style: 'spread_inside',
+           
+              },
+             
+              a1: { centerHorizontally: 'parent' ,hBias: 0.0 },
+              b1: { centerHorizontally: 'a1' },
+              c1: { centerHorizontally: 'a1' },
+              d1: { centerHorizontally: 'a1' },
+              
+              a2: { centerHorizontally: 'parent',hBias: 0.3 },
+              b2: { centerHorizontally: 'a2' },
+              c2: { centerHorizontally: 'a2' },
+              d2: { centerHorizontally: 'a2' }, 
+              
+             chain3: {
+                type: 'vChain',
+                contains: [ ['a3',2,6,1],['b3',3,23],'c3',['d3',1,32]],
+              },
+              a3: { height:'spread', centerHorizontally: 'parent',hvBias: 0.6},
+              b3: { height:'spread',centerHorizontally: 'a3' },
+              c3: { height:'spread', centerHorizontally: 'a3' },
+              d3: { height:'spread',centerHorizontally: 'a3' }, 
+              
+             chain4: { 
+                type: 'vChain',
+                contains: [['a4',2,6,4],'b4','c4','d4'],
+                
+                style: 'packed',
+
+              },
+              a4: {height:'spread', centerHorizontally: 'parent',hBias: 0.8},
+              b4: { centerHorizontally: 'a4' },
+              c4: {height:'spread', centerHorizontally: 'a4' },
+              d4: { centerHorizontally: 'a4' }, 
+              
+                           chain5: { 
+                type: 'vChain',
+                contains: ['a5','b5','c5','d5'],
+                top: ['leftGuideline1', 'top'],
+                style: 'packed',
+
+              },
+              a5: { centerHorizontally: 'parent',hBias: 0.9},
+              b5: { centerHorizontally: 'a5' },
+              c5: { centerHorizontally: 'a5' },
+              d5: { centerHorizontally: 'a5' }, 
+              
+            }
+        """
+        ),
+        modifier = Modifier
+            .fillMaxSize().background(Color.LightGray)
+    ) {
+        Text(text = "chain2.3!")
+        for (k in 1..5) {
+            for (i in 0..3) {
+                val title = ('a' + i).toString() + k;
+                val c = Color(0f, 0.4f + i / 10f, i / 10f)
+
+                Button(
+                    modifier = Modifier.layoutId(title),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = c),
+                    onClick = {},
+                ) {
+                    Text(text = title)
+                }
+            }
+        }
+
+    }
+}
 
 
 

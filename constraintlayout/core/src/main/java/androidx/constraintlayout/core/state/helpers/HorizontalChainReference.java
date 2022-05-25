@@ -39,6 +39,7 @@ public class HorizontalChainReference extends ChainReference {
 
         for (Object key : mReferences) {
             ConstraintReference reference = mState.constraints(key);
+
             if (first == null) {
                 first = reference;
                 if (mStartToStart != null) {
@@ -55,13 +56,17 @@ public class HorizontalChainReference extends ChainReference {
                     first.startToEnd(mLeftToRight).margin(mMarginLeft).marginGone(mMarginLeftGone);
                 } else {
                     // No constraint declared, default to Parent.
-                    first.startToStart(State.PARENT);
+                    String refKey = reference.getKey().toString();
+                    first.startToStart(State.PARENT).margin(getPreMargin(refKey));
                 }
             }
             if (previous != null) {
-                previous.endToStart(reference.getKey());
-                reference.startToEnd(previous.getKey());
+                String preKey = previous.getKey().toString();
+                String refKey = reference.getKey().toString();
+                previous.endToStart(reference.getKey()).margin(getPostMargin(preKey));
+                reference.startToEnd(previous.getKey()).margin(getPreMargin(refKey));;
             }
+            reference.setHorizontalChainWeight(getWeight(key.toString()));
             previous = reference;
         }
 
@@ -78,7 +83,8 @@ public class HorizontalChainReference extends ChainReference {
                 previous.endToEnd(mRightToRight).margin(mMarginRight).marginGone(mMarginRightGone);
             } else {
                 // No constraint declared, default to Parent.
-                previous.endToEnd(State.PARENT);
+                String preKey = previous.getKey().toString();
+                previous.endToEnd(State.PARENT).margin(getPostMargin(preKey));
             }
         }
 

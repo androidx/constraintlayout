@@ -737,6 +737,9 @@ public class ConstraintSetParser {
         }
     }
 
+    private static float toPix(State state, float dp){
+       return state.getDpToPixel().toPixels(dp);
+    }
     /**
      * Support parsing Chain in the following manner
      * chainId : {
@@ -756,37 +759,65 @@ public class ConstraintSetParser {
             State state,
             String chainName,
             LayoutVariables margins,
-            CLObject object ) throws CLParsingException {
-
+            CLObject object) throws CLParsingException {
 
         ChainReference chain = (orientation.charAt(0) == 'h')
                 ? state.horizontalChain() : state.verticalChain();
-       chain.setKey(chainName);
-
+        chain.setKey(chainName);
 
         for (String params : object.names()) {
             switch (params) {
-                case "contains" :
-                    CLElement refs =object.get(params);
+                case "contains":
+                    CLElement refs = object.get(params);
                     if (!(refs instanceof CLArray) || ((CLArray) refs).size() < 1) {
-                        System.err.println(chainName+" contains should be an array \""+refs.content()+"\"");
+                        System.err.println(
+                                chainName + " contains should be an array \"" + refs.content()
+                                        + "\"");
                         return;
                     }
                     for (int i = 0; i < ((CLArray) refs).size(); i++) {
-                        chain.add(((CLArray) refs).getString(i));
+                        CLElement chainElement = ((CLArray) refs).get(i);
+                        Utils.log("================ " + i + " " + chainElement.getClass() + "  "
+                                + chainElement.content());
+                        if (chainElement instanceof CLArray) {
+                            CLArray array = (CLArray) chainElement;
+                            if (array.size() == 1) {
+                                chain.add(array.get(0).content());
+                            } else {
+                                String id = array.get(0).content();
+                                float weight = Float.NaN;
+                                float preMargin = Float.NaN;
+                                float postMargin = Float.NaN;
+
+                                if (array.size() >= 2) {
+                                    weight = array.getFloat(1);
+                                    if (array.size() >= 3) {
+                                        postMargin = preMargin = toPix(state, array.getFloat(2));
+                                        if (array.size() >= 4) {
+                                            postMargin =  toPix(state, array.getFloat(3));
+                                        }
+                                    }
+                                }
+
+                                chain.addChainElement(id, weight, preMargin, postMargin);
+                            }
+
+                        } else {
+                            chain.add(chainElement.content());
+                        }
                     }
                     break;
-                case "start" :
-                case "end" :
-                case "top" :
-                case "bottom" :
+                case "start":
+                case "end":
+                case "top":
+                case "bottom":
                 case "left":
                 case "right":
-                    parseConstraint(  state, margins,  object, chain, params );
+                    parseConstraint(state, margins, object, chain, params);
                     break;
-                case "style" :
+                case "style":
 
-                    CLElement styleObject =object.get(params);
+                    CLElement styleObject = object.get(params);
                     String styleValue;
                     if (styleObject instanceof CLArray && ((CLArray) styleObject).size() > 1) {
                         styleValue = ((CLArray) styleObject).getString(0);

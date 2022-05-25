@@ -19,9 +19,15 @@ package androidx.constraintlayout.core.state.helpers;
 import androidx.constraintlayout.core.state.HelperReference;
 import androidx.constraintlayout.core.state.State;
 
+import java.util.HashMap;
+
 public class ChainReference extends HelperReference {
 
     protected float mBias = 0.5f;
+    protected HashMap<String ,Float> mMapWeights;
+    protected HashMap<String,Float> mMapPreMargin;
+    protected HashMap<String,Float> mMapPostMargin;
+
     protected State.Chain mStyle = State.Chain.SPREAD;
 
     public ChainReference(State state, State.Helper type) {
@@ -38,6 +44,52 @@ public class ChainReference extends HelperReference {
     public ChainReference style(State.Chain style) {
         mStyle = style;
         return this;
+    }
+
+    public void addChainElement(String id, float weight, float preMargin, float  postMargin ) {
+        super.add(id);
+        if (!Float.isNaN(weight)) {
+            if (mMapWeights == null) {
+                mMapWeights = new HashMap<>();
+            }
+            mMapWeights.put(id, weight);
+        }
+        if (!Float.isNaN(preMargin)) {
+            if (mMapPreMargin == null) {
+                mMapPreMargin = new HashMap<>();
+            }
+            mMapPreMargin.put(id, preMargin);
+        }
+        if (!Float.isNaN(postMargin)) {
+            if (mMapPostMargin == null) {
+                mMapPostMargin = new HashMap<>();
+            }
+            mMapPostMargin.put(id, postMargin);
+        }
+    }
+
+  protected float getWeight(String id) {
+       if (mMapWeights == null) {
+           return -1;
+       }
+       if (mMapWeights.containsKey(id)) {
+           return mMapWeights.get(id);
+       }
+       return 1;
+    }
+
+    protected float getPostMargin(String id) {
+        if (mMapPostMargin != null  && mMapPostMargin.containsKey(id)) {
+            return mMapPostMargin.get(id);
+        }
+        return 0;
+    }
+
+    protected float getPreMargin(String id) {
+        if (mMapPreMargin != null  && mMapPreMargin.containsKey(id)) {
+            return mMapPreMargin.get(id);
+        }
+        return 0;
     }
 
     public float getBias() {
