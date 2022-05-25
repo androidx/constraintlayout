@@ -777,8 +777,6 @@ public class ConstraintSetParser {
                     }
                     for (int i = 0; i < ((CLArray) refs).size(); i++) {
                         CLElement chainElement = ((CLArray) refs).get(i);
-                        Utils.log("================ " + i + " " + chainElement.getClass() + "  "
-                                + chainElement.content());
                         if (chainElement instanceof CLArray) {
                             CLArray array = (CLArray) chainElement;
                             if (array.size() == 1) {
@@ -841,10 +839,7 @@ public class ConstraintSetParser {
                     break;
             }
         }
-        Utils.log(" ");
-
     }
-
 
     static void parseGuideline(int orientation,
             State state, CLArray helper) throws CLParsingException {
@@ -856,7 +851,6 @@ public class ConstraintSetParser {
         if (guidelineId == null) return;
         parseGuidelineParams(orientation, state, guidelineId, (CLObject) params);
     }
-
 
     static void parseGuidelineParams(
             int orientation,
@@ -1099,9 +1093,7 @@ public class ConstraintSetParser {
 
             }
         }
-
     }
-
 
     static void parseCustomProperties(
             CLObject element,
@@ -1137,7 +1129,6 @@ public class ConstraintSetParser {
         }
         return -1;
     }
-
 
     /**
      * parse the motion section of a constraint

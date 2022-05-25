@@ -64,7 +64,7 @@ public class HorizontalChainReference extends ChainReference {
                 String preKey = previous.getKey().toString();
                 String refKey = reference.getKey().toString();
                 previous.endToStart(reference.getKey()).margin(getPostMargin(preKey));
-                reference.startToEnd(previous.getKey()).margin(getPreMargin(refKey));;
+                reference.startToEnd(previous.getKey()).margin(getPreMargin(refKey));
             }
             reference.setHorizontalChainWeight(getWeight(key.toString()));
             previous = reference;
