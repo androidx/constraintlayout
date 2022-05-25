@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.*
 import java.util.*
+import kotlin.math.absoluteValue
 
 
 @Preview(group = "constraintlayout1")
@@ -1672,19 +1673,11 @@ public fun MotionExample11() {
 
 }
 
-
-@OptIn(ExperimentalMaterialApi::class)
 @Preview(group = "motion12")
 @Composable
-public fun MotionExample12() {
-    var componentHeight by remember { mutableStateOf(1000f) }
-    var corners by remember { mutableStateOf(400F) }
-
-    val swipeableState = rememberSwipeableState("Bottom")
-    val anchors = mapOf(0f to "Bottom", componentHeight to "Top")
-
-    val mprogress = (swipeableState.offset.value / componentHeight)
-
+fun MotionExample12() {
+    val motionState = rememberMotionLayoutState()
+    val corners = 400 - ((motionState.currentProgress * 100) * 4).coerceAtMost(400f)
 
     MotionLayout(motionScene = MotionScene(
         """{
@@ -1761,6 +1754,13 @@ public fun MotionExample12() {
                     from: 'start',
                     to: 'end',
                     pathMotionArc: 'startHorizontal',
+                    onSwipe: {
+                      anchor: 'content',
+                      direction: 'up',
+                      side: 'top',
+                      mode: 'velocity',
+                      touchUp: 'decelerateComplete'
+                    },
                     KeyFrames: {
                       KeyPositions: [
                         {
@@ -1784,24 +1784,10 @@ public fun MotionExample12() {
                 }
             }"""
     ),
-        progress = mprogress,
-        debug = EnumSet.of(MotionLayoutDebugFlags.NONE),
+        motionLayoutState = motionState,
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
-            .swipeable(
-                state = swipeableState,
-                anchors = anchors,
-                // resistance = null,
-                reverseDirection = true,
-                thresholds = { _, _ -> FractionalThreshold(0.3f) },
-                orientation = Orientation.Vertical
-            )
-            .onSizeChanged { size ->
-                componentHeight = size.height.toFloat()
-                corners = 400 - ((mprogress*100) * 4)
-                Log.d("corners", corners.toString())
-            }
     ) {
         Box(
             modifier = Modifier
@@ -1814,20 +1800,16 @@ public fun MotionExample12() {
                 .layoutId("box1")
                 .background(Color.Green)
         )
-
         Text(
             text = "MotionLayout example",
             fontSize = 18.sp,
             modifier = Modifier.layoutId("title")
         )
-
         Box(
             modifier = Modifier
                 .layoutId("circle")
                 .clip(CircleShape)
                 .background(Color.Red)
         )
-
     }
-
 }

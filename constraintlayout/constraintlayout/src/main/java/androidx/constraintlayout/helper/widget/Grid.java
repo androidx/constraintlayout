@@ -16,12 +16,9 @@
 package androidx.constraintlayout.helper.widget;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.Pair;
-import android.view.View;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -53,6 +50,14 @@ import java.util.Set;
  *     <td>Indicates the number of columns will be created for the grid form.</td>
  *   </tr>
  *   <tr>
+ *     <td>grid_rowWeights</td>
+ *     <td>Specifies the weight of each row in the grid form (default value is 1).</td>
+ *   </tr>
+ *   <tr>
+ *     <td>grid_columnWeights</td>
+ *     <td>Specifies the weight of each column in the grid form (default value is 1).</td>
+ *   </tr>
+ *   <tr>
  *     <td>grid_spans</td>
  *     <td>Offers the capability to span a widget across multiple rows and columns</td>
  *   </tr>
@@ -77,6 +82,9 @@ import java.util.Set;
 public class Grid extends VirtualLayout {
     private static final String TAG = "Grid";
     private static final String VERTICAL = "vertical";
+    private static final String HORIZONTAL = "horizontal";
+    private final int mMaxRows = 50; // maximum number of rows can be specified.
+    private final int mMaxColumns = 50; // maximum number of columns can be specified.
     private final ConstraintSet mConstraintSet = new ConstraintSet();
     ConstraintLayout mContainer;
 
@@ -109,6 +117,16 @@ public class Grid extends VirtualLayout {
      * string format of the input Skips
      */
     private String mStrSkips;
+
+    /**
+     * string format of the row weight
+     */
+    private String mStrRowWeights;
+
+    /**
+     * string format of the column weight
+     */
+    private String mStrColumnWeights;
 
     /**
      * Horizontal gaps in Dp
@@ -152,52 +170,6 @@ public class Grid extends VirtualLayout {
      */
     Set<Integer> mSpanIds = new HashSet<>();
 
-    /**
-     * class that stores the relevant span information
-     */
-    static class Span {
-        int mId;
-        int mStartRow;
-        int mStartColumn;
-        int mRowSpan;
-        int mColumnSpan;
-        String mGravity;
-
-        Span(int id, int startRow, int startColumn,
-                    int rowSpan, int columnSpan, String gravity) {
-            this.mId = id;
-            this.mStartRow = startRow;
-            this.mStartColumn = startColumn;
-            this.mRowSpan = rowSpan;
-            this.mColumnSpan = columnSpan;
-            this.mGravity = gravity;
-        }
-
-        public int getId() {
-            return mId;
-        }
-
-        public int getStartRow() {
-            return mStartRow;
-        }
-
-        public int getStartColumn() {
-            return mStartColumn;
-        }
-
-        public int getRowSpan() {
-            return mRowSpan;
-        }
-
-        public int getColumnSpan() {
-            return mColumnSpan;
-        }
-
-        public String getGravity() {
-            return mGravity;
-        }
-    }
-
     public Grid(Context context) {
         super(context);
     }
@@ -230,7 +202,11 @@ public class Grid extends VirtualLayout {
                     mStrSpans = a.getString(attr);
                 } else if (attr == R.styleable.Grid_grid_skips) {
                     mStrSkips = a.getString(attr);
-                } else if (attr == R.styleable.Grid_grid_orientation) {
+                }  else if (attr == R.styleable.Grid_grid_rowWeights) {
+                    mStrRowWeights = a.getString(attr);
+                }  else if (attr == R.styleable.Grid_grid_columnWeights) {
+                    mStrColumnWeights = a.getString(attr);
+                }  else if (attr == R.styleable.Grid_grid_orientation) {
                     mOrientation = a.getString(attr);
                 } else if (attr == R.styleable.Grid_grid_horizontalGaps) {
                     mHorizontalGaps = a.getInteger(attr, 0);
@@ -256,23 +232,52 @@ public class Grid extends VirtualLayout {
 
         mContainer = (ConstraintLayout) getParent();
         mConstraintSet.clone(mContainer);
-        createGuidelines(mRows, mColumns);
+
+        generateGrid(false);
+    }
+
+    /**
+     * generate the Grid form based on the input attributes
+     * @param isUpdate whether to update the existing grid (true) or create a new one (false)
+     * @return true if all the inputs are valid else false
+     */
+    private boolean generateGrid(boolean isUpdate) {
+        if (mContainer == null || mConstraintSet == null) {
+            return false;
+        }
+
+        if (isUpdate) {
+            for (int i = 0; i < mPositionMatrix.length; i++) {
+                for (int j = 0; j < mPositionMatrix[0].length; j++) {
+                    mPositionMatrix[i][j] = true;
+                }
+            }
+            mSpanIds.clear();
+        }
+
+        mNextAvailableIndex = 0;
+        boolean isSuccess = true;
+
+        createGuidelines(mRows, mColumns, isUpdate);
 
         if (mStrSkips != null && !mStrSkips.trim().isEmpty()) {
-            HashMap<Integer, Pair<Integer, Integer>> mSkipMap = parseSkips(mStrSkips);
+            HashMap<Integer, Pair<Integer, Integer>> mSkipMap = parseSpans(mStrSkips);
             if (mSkipMap != null) {
-                handleSkips(mSkipMap);
+                isSuccess &= handleSkips(mSkipMap);
             }
         }
 
         if (mStrSpans != null && !mStrSpans.trim().isEmpty()) {
-            Span[] mSpans = parseSpans(mStrSpans);
+            HashMap<Integer, Pair<Integer, Integer>> mSpans = parseSpans(mStrSpans);
             if (mSpans != null) {
-                handleSpans(mSpans);
+                isSuccess &= handleSpans(mIds, mSpans);
             }
         }
+        isSuccess &= arrangeWidgets();
 
-        arrangeWidgets();
+        mConstraintSet.applyTo(mContainer);
+
+        return isSuccess || !mValidateInputs;
     }
 
     /**
@@ -289,21 +294,59 @@ public class Grid extends VirtualLayout {
     }
 
     /**
+     * parse the weights/pads in the string format into a float array
+     * @param size size of the return array
+     * @param str  weights/pads in a string format
+     * @return a float array with weights/pads values
+     */
+    private float[] parseWeights(int size, String str) {
+        if (str == null || str.trim().isEmpty()) {
+            return null;
+        }
+
+        String[] values = str.split(",");
+        if (values.length != size) {
+            return null;
+        }
+
+        float[] arr = new float[size];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = Float.parseFloat(values[i].trim());
+        }
+        return arr;
+    }
+
+    /**
      * create vertical and horizontal guidelines based on mRows and mColumns
      * @param rows number of rows is required for grid
      * @param columns number of columns is required for grid
+     * @param isUpdate whether to update existing guidelines (true) or create new ones (false)
      */
-    private void createGuidelines(int rows, int columns) {
+    private void createGuidelines(int rows, int columns, boolean isUpdate) {
+        float[] rowWeights = parseWeights(rows, mStrRowWeights);
+        float[] columnWeights = parseWeights(columns, mStrColumnWeights);
 
-        float[] horizontalPositions = getLinspace(0, 1, rows + 1);
-        float[] verticalPositions = getLinspace(0, 1, columns + 1);
+        float[] horizontalPositions = getLinePositions(0, 1,
+                rows + 1, rowWeights);
+        float[] verticalPositions = getLinePositions(0, 1,
+                columns + 1, columnWeights);
 
         for (int i = 0; i < mHorizontalGuideLines.length; i++) {
+            if (isUpdate) {
+                updateGuideLinePosition(mHorizontalGuideLines[i], horizontalPositions[i]);
+                continue;
+            }
+
             mHorizontalGuideLines[i] = getNewGuideline(myContext,
                     ConstraintLayout.LayoutParams.HORIZONTAL, horizontalPositions[i]);
             mContainer.addView(mHorizontalGuideLines[i]);
         }
         for (int i = 0; i < mVerticalGuideLines.length; i++) {
+            if (isUpdate) {
+                updateGuideLinePosition(mVerticalGuideLines[i], verticalPositions[i]);
+                continue;
+            }
+
             mVerticalGuideLines[i] = getNewGuideline(myContext,
                     ConstraintLayout.LayoutParams.VERTICAL, verticalPositions[i]);
             mContainer.addView(mVerticalGuideLines[i]);
@@ -330,15 +373,21 @@ public class Grid extends VirtualLayout {
         return guideline;
     }
 
+    private void updateGuideLinePosition(Guideline guideline, float position) {
+        ConstraintLayout.LayoutParams params =
+                (ConstraintLayout.LayoutParams) guideline.getLayoutParams();
+        params.guidePercent = position;
+        guideline.setLayoutParams(params);
+    }
+
     /**
      * Connect the view to the corresponding guidelines based on the input params
      * @param viewId the Id of the view
      * @param row row position to place the view
      * @param column column position to place the view
-     * @param gravity gravity info, including  top, left, bottom, right, guideline,start,end
      */
     private void connectView(int viewId, int row, int column, int rowSpan, int columnSpan,
-                             int horizontalGaps, int verticalGaps, String gravity) {
+                             int horizontalGaps, int verticalGaps) {
 
         // @TODO handle RTL
         // connect Start of the view
@@ -358,13 +407,6 @@ public class Grid extends VirtualLayout {
         mConstraintSet.connect(viewId, ConstraintSet.BOTTOM,
                 mHorizontalGuideLines[row + rowSpan].getId(),
                 ConstraintSet.TOP, verticalGaps);
-
-        // handle gravity
-        if (!gravity.trim().equals("")) {
-            handleGravity(viewId, gravity);
-        }
-
-        mConstraintSet.applyTo(mContainer);
     }
 
     /**
@@ -387,7 +429,7 @@ public class Grid extends VirtualLayout {
                 return false;
             }
             connectView(mIds[i], position.first, position.second,
-                    1, 1, mHorizontalGaps, mVerticalGaps, "");
+                    1, 1, mHorizontalGaps, mVerticalGaps);
         }
         return true;
     }
@@ -438,135 +480,42 @@ public class Grid extends VirtualLayout {
     }
 
     /**
-     * Handle the gravity. The value could be t, r, b, l, s, e, tl, br, etc.
-     * t = top, r = right, b = bottom l = left, s = start, e = end
-     * @param viewId the id of a view
-     * @param gravity the gravity
-     */
-    private void handleGravity(int viewId, String gravity) {
-        for (int i = 0; i < gravity.length(); i++) {
-            // @TODO handle RTL
-            switch (gravity.charAt(i)) {
-                case 't':
-                    mConstraintSet.setVerticalBias(viewId, 0);
-                    break;
-                case 'r':
-                    mConstraintSet.setHorizontalBias(viewId, 1);
-                    break;
-                case 'b':
-                    mConstraintSet.setVerticalBias(viewId, 1);
-                    break;
-                case 'l':
-                    mConstraintSet.setHorizontalBias(viewId, 0);
-                    break;
-                case 's':
-                    mConstraintSet.setHorizontalBias(viewId, 0);
-                    break;
-                case 'e':
-                    mConstraintSet.setHorizontalBias(viewId, 1);
-                    break;
-                default:
-                    Log.w(TAG, "unknown gravity value: " + gravity.charAt(i));
-            }
-        }
-    }
-
-    /**
-     * Check if the value of the Spans is valid
-     * @param mStrSpans spans in string format
+     * Check if the value of the spans/skips is valid
+     * @param str spans/skips in string format
      * @return true if it is valid else false
      */
-    private boolean isSpansValid(String mStrSpans) {
+    private boolean isSpansValid(String str) {
         // TODO: check string has a valid format.
         return true;
     }
 
     /**
-     * Parse the spans in the string format into a span object
-     * the format of a span is viewId|index:rowSpanxcolumnSpan-gravity
-     * viewID - The id of a view in the constraint_referenced_ids list
-     * index - the index of the starting position
-     * row_span - The number of rows to span
-     * col_span- The number of columns to span
-     * gravity (optional) - letters t, l, b, r, s ,e = top, left, bottom, right, start, end.
-     *  Two letters could be used together (e.g., tl, br, etc.)
-     * @param strSpans Grid spans in the string format
-     * @return a HashMap contains span information of individual views.
-     */
-    private Span[] parseSpans(String strSpans) {
-        if (!isSpansValid(strSpans)) {
-            return null;
-        }
-
-        String[] spans = strSpans.split(",");
-        Span[] spanArray = new Span[spans.length];
-
-        for (int i = 0; i < spans.length; i++) {
-            String[] idAndRest = spans[i].trim().split(":");
-            String[] startPositionAndRest = idAndRest[1].split("#");
-            String[] rowSpanAndRest = startPositionAndRest[1].split("x");
-            String[] colSpanAndGravity = rowSpanAndRest[1].split("-");
-
-            int id = findId(mContainer, idAndRest[0]);
-            Pair<Integer, Integer> startPosition =
-                    getPositionByIndex(Integer.parseInt(startPositionAndRest[0]));
-            int rowSpan = Integer.parseInt(rowSpanAndRest[0]);
-            int columnSpan = Integer.parseInt(colSpanAndGravity[0]);
-            String gravity = colSpanAndGravity.length > 1 ? colSpanAndGravity[1] : "";
-
-            spanArray[i] = new Span(id, startPosition.first, startPosition.second,
-                    rowSpan, columnSpan, gravity);
-        }
-        return spanArray;
-    }
-
-    /**
-     * Handle the span use cases
-     * @param spans a array of span object
-     * @return true if the input spans is valid else false
-     */
-    private boolean handleSpans(Span[] spans) {
-        for (Span span : spans) {
-            if (!invalidatePositions(span.mStartRow, span.mStartColumn,
-                    span.mRowSpan, span.mColumnSpan)) {
-                // Try to place the widget to the skipped space
-                return false;
-            }
-            connectView(span.mId, span.mStartRow, span.mStartColumn, span.mRowSpan,
-                    span.mColumnSpan, mHorizontalGaps, mVerticalGaps, span.mGravity);
-            mSpanIds.add(span.mId);
-        }
-        return true;
-    }
-
-    /**
-     * Check if the value of the skips is valid
-     * @param mStrSkips skips in string format
+     * Check if the value of the rowWeights or columnsWeights is valid
+     * @param str rowWeights/columnsWeights in string format
      * @return true if it is valid else false
      */
-    private boolean isSkipsValid(String mStrSkips) {
+    private boolean isWeightsValid(String str) {
         // TODO: check string has a valid format.
         return true;
     }
 
     /**
-     * parse the skips in the string format into a HashMap<index, row_span, col_span>>
+     * parse the skips/spans in the string format into a HashMap<index, row_span, col_span>>
      * the format of the input string is index:row_spanxcol_span.
      * index - the index of the starting position
      * row_span - the number of rows to span
      * col_span- the number of columns to span
-     * @param strSkips string format of skips
+     * @param str string format of skips or spans
      * @return a hashmap that contains skip information.
      */
-    private HashMap<Integer, Pair<Integer, Integer>> parseSkips(String strSkips) {
-        // TODO: check string has a valid format.
-        if (!isSkipsValid(strSkips)) {
+    private HashMap<Integer, Pair<Integer, Integer>> parseSpans(String str) {
+        if (!isSpansValid(str)) {
             return null;
         }
 
         HashMap<Integer, Pair<Integer, Integer>> skipMap = new HashMap<>();
 
-        String[] skips = strSkips.split(",");
+        String[] skips = str.split(",");
         String[] indexAndSpan;
         String[] rowAndCol;
         for (String skip: skips) {
@@ -576,6 +525,29 @@ public class Grid extends VirtualLayout {
                     new Pair<>(Integer.parseInt(rowAndCol[0]), Integer.parseInt(rowAndCol[1])));
         }
         return skipMap;
+    }
+
+    /**
+     * Handle the span use cases
+     * @param spansMap a hashmap that contains span information
+     * @return true if the input spans is valid else false
+     */
+    private boolean handleSpans(int[] mId, HashMap<Integer, Pair<Integer, Integer>> spansMap) {
+        int mIdIndex = 0;
+        Pair<Integer, Integer> startPosition;
+        for (Map.Entry<Integer, Pair<Integer, Integer>> entry : spansMap.entrySet()) {
+            startPosition = getPositionByIndex(entry.getKey());
+            if (!invalidatePositions(startPosition.first, startPosition.second,
+                    entry.getValue().first, entry.getValue().second)) {
+                return false;
+            }
+            connectView(mId[mIdIndex], startPosition.first, startPosition.second,
+                    entry.getValue().first,  entry.getValue().second,
+                    mHorizontalGaps, mVerticalGaps);
+            mSpanIds.add(mId[mIdIndex]);
+            mIdIndex++;
+        }
+        return true;
     }
 
     /**
@@ -618,69 +590,288 @@ public class Grid extends VirtualLayout {
         return true;
     }
 
-    // From ConstraintHelper -> move to a util function
     /**
-     * Iterate through the container's children to find a matching id.
-     * Slow path, seems necessary to handle dynamic modules resolution...
-     *
-     * @param container the parent container - a ConstraintLayout in this case
-     * @param idString the string format of a view Id
-     * @return the actual viewId in Integer
+     * Generate line positions (for the Guideline positioning)
+     * @param min min value of the linear spaced positions
+     *      * @param max max value of the linear spaced positions
+     * @param numPositions number of positions is required
+     * @param weights a float array for space weights
+     * @return a float array of the corresponding positions
      */
-    private int findId(ConstraintLayout container, String idString) {
-        if (idString == null || container == null) {
-            return 0;
+    private float[] getLinePositions(float min, float max, int numPositions, float[] weights) {
+        if (weights != null && numPositions - 1 != weights.length) {
+            return null;
         }
-        Resources resources = myContext.getResources();
-        if (resources == null) {
-            return 0;
+
+        float[] positions = new float[numPositions];
+        int weightSum = 0;
+        for (int i = 0; i < numPositions - 1; i++) {
+            weightSum += weights != null ? weights[i] : 1;
         }
-        final int count = container.getChildCount();
-        for (int j = 0; j < count; j++) {
-            View child = container.getChildAt(j);
-            if (child.getId() != -1) {
-                String res = null;
-                try {
-                    res = resources.getResourceEntryName(child.getId());
-                } catch (android.content.res.Resources.NotFoundException e) {
-                    // nothing
-                }
-                if (idString.equals(res)) {
-                    return child.getId();
-                }
-            }
+
+        float availableSpace = max - min;
+        float baseWeight = availableSpace / weightSum;
+        positions[0] = min;
+        for (int i = 0; i < numPositions - 1; i++) {
+            float w = weights != null ? weights[i] : 1;
+            positions[i + 1] = positions[i] + w * baseWeight;
         }
-        return 0;
+        return positions;
     }
 
     /**
-     * Generate linearly spaced positions (for the Guideline positioning)
-     * @param min min value of the linear spaced positions
-     * @param max max value of the linear spaced positions
-     * @param positions number of positions in the space
-     * @return an float array of the corresponding positions
+     * get the value of rows
+     * @return the value of rows
      */
-    private float[] getLinspace(float min, float max, int positions) {
-        float[] d = new float[positions];
-        for (int i = 0; i < positions; i++) {
-            d[i] = min + i * (max - min) / (positions - 1);
+    public int getRows() {
+        return mRows;
+    }
+
+    /**
+     * set new rows value and also invoke initVariables and invalidate
+     * @param rows new rows value
+     * @return true if it succeeds otherwise false
+     */
+    public boolean setRows(int rows) {
+        if (rows < 2 || rows > mMaxRows) {
+            return false;
         }
-        return d;
+
+        if (mRows == rows) {
+            return true;
+        }
+
+        mRows = rows;
+        initVariables();
+        generateGrid(false);
+        invalidate();
+        return true;
+    }
+
+    /**
+     * get the value of columns
+     * @return the value of columns
+     */
+    public int getColumns() {
+        return mColumns;
+    }
+
+    /**
+     * set new columns value and also invoke initVariables and invalidate
+     * @param columns new rows value
+     * @return true if it succeeds otherwise false
+     */
+    public boolean setColumns(int columns) {
+        if (columns < 2 || columns > mMaxColumns) {
+            return false;
+        }
+
+        if (mColumns == columns) {
+            return true;
+        }
+
+        mColumns = columns;
+        initVariables();
+        generateGrid(false);
+        invalidate();
+        return true;
+    }
+
+
+    /**
+     * get the value of orientation
+     * @return the value of orientation
+     */
+    public String getOrientation() {
+        return mOrientation;
+    }
+
+    /**
+     * set new orientation value and also invoke invalidate
+     * @param orientation new orientation value
+     * @return true if it succeeds otherwise false
+     */
+    public boolean setOrientation(String orientation) {
+        if (!(orientation.equals(HORIZONTAL) || orientation.equals(VERTICAL))) {
+            return false;
+        }
+
+        if (mOrientation != null && mOrientation.equals(orientation)) {
+            return true;
+        }
+
+        mOrientation = orientation;
+        generateGrid(true);
+        invalidate();
+        return true;
+
     }
 
     /**
      * get the string value of spans
      * @return the string value of spans
      */
-    public String getStrSpans() {
+    public String getSpans() {
         return mStrSpans;
+    }
+
+    /**
+     * set new spans value and also invoke invalidate
+     * @param spans new spans value
+     * @return true if it succeeds otherwise false
+     */
+    public Boolean setSpans(String spans) {
+        if (!isSpansValid(spans)) {
+            return false;
+        }
+
+        if (mStrSpans != null && mStrSpans.equals(spans)) {
+            return true;
+        }
+
+        mStrSpans = spans;
+        generateGrid(true);
+        invalidate();
+        return true;
     }
 
     /**
      * get the string value of skips
      * @return the string value of skips
      */
-    public String getStrSkips() {
+    public String getSkips() {
         return mStrSkips;
+    }
+
+    /**
+     * set new skips value and also invoke invalidate
+     * @param skips new spans value
+     * @return true if it succeeds otherwise false
+     */
+    public Boolean setSkips(String skips) {
+        if (!isSpansValid(skips)) {
+            return false;
+        }
+
+        if (mStrSkips != null && mStrSkips.equals(skips)) {
+            return true;
+        }
+
+        mStrSkips = skips;
+        generateGrid(true);
+        invalidate();
+        return true;
+    }
+
+    /**
+     * get the string value of rowWeights
+     * @return the string value of rowWeights
+     */
+    public String getRowWeights() {
+        return mStrRowWeights;
+    }
+
+    /**
+     * set new rowWeights value and also invoke invalidate
+     * @param rowWeights new rowWeights value
+     * @return true if it succeeds otherwise false
+     */
+    public Boolean setRowWeights(String rowWeights) {
+        if (!isWeightsValid(rowWeights)) {
+            return false;
+        }
+
+        if (mStrRowWeights != null && mStrRowWeights.equals(rowWeights)) {
+            return true;
+        }
+
+        mStrRowWeights = rowWeights;
+        generateGrid(true);
+        invalidate();
+        return true;
+    }
+
+    /**
+     * get the string value of columnWeights
+     * @return the string value of columnWeights
+     */
+    public String getColumnWeights() {
+        return mStrColumnWeights;
+    }
+
+    /**
+     * set new columnWeights value and also invoke invalidate
+     * @param columnWeights new columnWeights value
+     * @return true if it succeeds otherwise false
+     */
+    public Boolean setColumnWeights(String columnWeights) {
+        if (!isWeightsValid(columnWeights)) {
+            return false;
+        }
+
+        if (mStrColumnWeights != null && mStrColumnWeights.equals(columnWeights)) {
+            return true;
+        }
+
+        mStrColumnWeights = columnWeights;
+        generateGrid(true);
+        invalidate();
+        return true;
+    }
+
+    /**
+     * get the value of horizontalGaps
+     * @return the value of horizontalGaps
+     */
+    public int getHorizontalGaps() {
+        return mHorizontalGaps;
+    }
+
+    /**
+     *  set new horizontalGaps value and also invoke invalidate
+     * @param horizontalGaps new horizontalGaps value
+     * @return true if it succeeds otherwise false
+     */
+    public boolean setHorizontalGaps(int horizontalGaps) {
+        if (horizontalGaps < 0) {
+            return false;
+        }
+
+        if (mHorizontalGaps == horizontalGaps) {
+            return true;
+        }
+
+        mHorizontalGaps = horizontalGaps;
+        generateGrid(true);
+        invalidate();
+        return true;
+    }
+
+    /**
+     * get the value of verticalGaps
+     * @return the value of verticalGaps
+     */
+    public int getVerticalGaps() {
+        return mVerticalGaps;
+    }
+
+    /**
+     * set new verticalGaps value and also invoke invalidate
+     * @param verticalGaps new verticalGaps value
+     * @return true if it succeeds otherwise false
+     */
+    public boolean setVerticalGaps(int verticalGaps) {
+        if (verticalGaps < 0) {
+            return false;
+        }
+
+        if (mVerticalGaps == verticalGaps) {
+            return true;
+        }
+
+        mVerticalGaps = verticalGaps;
+        generateGrid(true);
+        invalidate();
+        return true;
     }
 }
