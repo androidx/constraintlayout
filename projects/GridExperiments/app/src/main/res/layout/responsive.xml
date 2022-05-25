@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="500dp">
+
+        <androidx.constraintlayout.helper.widget.Grid
+            android:id="@+id/grid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:constraint_referenced_ids="btn0,btn1,btn2,btn3"
+            app:grid_columns="4"
+            app:grid_rows="4"
+            app:grid_skips="0:1x2, 4:1x1"
+            app:grid_spans="6:1x2"
+            app:grid_verticalGaps="20"
+            app:grid_horizontalGaps="20"
+            app:grid_rowWeights="1,2,1,1"
+            app:grid_columnWeights="1,2,1,1"
+            app:grid_orientation="vertical" />
+
+        <Button
+            android:id="@+id/btn0"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="O"
+            android:textSize="30dp"
+            app:layout_constraintDimensionRatio="1:1"
+            tools:layout_editor_absoluteX="278dp"
+            tools:layout_editor_absoluteY="57dp" />
+
+        <Button
+            android:id="@+id/btn1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="X"
+            android:textSize="30dp"
+            app:layout_constraintDimensionRatio="1:1"
+            tools:layout_editor_absoluteX="4dp"
+            tools:layout_editor_absoluteY="301dp" />
+
+        <Button
+            android:id="@+id/btn2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="X"
+            android:textSize="30dp"
+            app:layout_constraintDimensionRatio="1:1"
+            tools:layout_editor_absoluteX="278dp"
+            tools:layout_editor_absoluteY="301dp" />
+
+        <Button
+            android:id="@+id/btn3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="O"
+            android:textSize="30dp"
+            app:layout_constraintDimensionRatio="1:1"
+            tools:layout_editor_absoluteX="141dp"
+            tools:layout_editor_absoluteY="545dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/row"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:textSize="12dp"
+            android:text="Rows"
+            android:onClick="toggleRows"/>
+
+        <Button
+            android:id="@+id/column"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:textSize="12dp"
+            android:text="Cols"
+            android:onClick="toggleColumns"/>
+
+        <Button
+            android:id="@+id/rowWeights"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:textSize="12dp"
+            android:text="rWeight"
+            android:onClick="toggleRowWeights"/>
+
+        <Button
+            android:id="@+id/colWeights"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:text="CWeight"
+            android:textSize="12dp"
+            android:onClick="toggleColWeights"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/hGaps"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:textSize="12dp"
+            android:text="hGaps"
+            android:onClick="toggleHorizontalGaps"/>
+
+        <Button
+            android:id="@+id/vGaps"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:textSize="12dp"
+            android:text="vGaps"
+            android:onClick="toggleVerticalGaps"/>
+
+        <Button
+            android:id="@+id/skips"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:textSize="12dp"
+            android:text="skips"
+            android:onClick="toggleSkips"/>
+
+        <Button
+            android:id="@+id/spans"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:text="spans"
+            android:textSize="12dp"
+            android:onClick="toggleSpans"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/orientation"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:textSize="12dp"
+            android:text="orientation"
+            android:onClick="toggleOrientation"/>
+
+        <Button
+            android:id="@+id/all"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:textSize="12dp"
+            android:text="all"
+            android:onClick="toggleAll"/>
+
+        <Button
+            android:id="@+id/restore"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:textSize="12dp"
+            android:text="restore"
+            android:onClick="restore"/>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
