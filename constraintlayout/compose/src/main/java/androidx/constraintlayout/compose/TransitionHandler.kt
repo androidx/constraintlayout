@@ -38,15 +38,15 @@ internal class TransitionHandler(
     /**
      * The [motionProgress] is updated based on the [Offset] from a single drag event.
      */
-    suspend fun updateProgressOnDrag(dragAmount: Offset) {
+    fun updateProgressOnDrag(dragAmount: Offset) {
         val progressDelta = transition.dragToProgress(
-            motionProgress.progress,
+            motionProgress.currentProgress,
             motionMeasurer.layoutCurrentWidth,
             motionMeasurer.layoutCurrentHeight,
             dragAmount.x,
             dragAmount.y
         )
-        var newProgress = motionProgress.progress + progressDelta
+        var newProgress = motionProgress.currentProgress + progressDelta
         newProgress = newProgress.coerceIn(0f, 1f)
         motionProgress.updateProgress(newProgress)
     }
@@ -57,7 +57,7 @@ internal class TransitionHandler(
      */
     suspend fun onTouchUp(velocity: Velocity) {
         coroutineContext.monotonicFrameClock.withFrameNanos { timeNanos ->
-            transition.setTouchUp(motionProgress.progress, timeNanos, velocity.x, velocity.y)
+            transition.setTouchUp(motionProgress.currentProgress, timeNanos, velocity.x, velocity.y)
         }
     }
 
@@ -76,6 +76,6 @@ internal class TransitionHandler(
      * Returns true if the progress is still expected to be updated by [updateProgressWhileTouchUp].
      */
     fun pendingProgressWhileTouchUp(): Boolean {
-        return transition.isTouchNotDone(motionProgress.progress)
+        return transition.isTouchNotDone(motionProgress.currentProgress)
     }
 }

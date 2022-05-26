@@ -19,7 +19,6 @@ package androidx.constraintlayout.compose
 import android.annotation.SuppressLint
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -31,32 +30,6 @@ import androidx.compose.ui.unit.Velocity
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.isActive
-
-/**
- * Helper modifier for MotionLayout to support OnSwipe in Transitions.
- *
- * @see Modifier.pointerInput
- * @see TransitionHandler
- */
-@SuppressLint("UnnecessaryComposedModifier")
-@Suppress("NOTHING_TO_INLINE")
-@PublishedApi
-internal inline fun Modifier.motionPointerInput(
-    key: Any = Unit,
-    progressState: MutableState<Float>,
-    measurer: MotionMeasurer
-): Modifier {
-    val motionProgress: MotionProgress =
-        object : MotionProgress {
-            override val progress: Float
-                get() = progressState.value
-
-            override suspend fun updateProgress(newProgress: Float) {
-                progressState.value = newProgress
-            }
-        }
-    return this.motionPointerInput(key, motionProgress, measurer)
-}
 
 /**
  * Helper modifier for MotionLayout to support OnSwipe in Transitions.

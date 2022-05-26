@@ -22,12 +22,12 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.LayoutScopeMarker
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -35,6 +35,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.MeasurePolicy
 import androidx.compose.ui.layout.MultiMeasureLayout
+import androidx.compose.ui.node.Ref
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
@@ -43,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.core.widgets.Optimizer
 import java.util.EnumSet
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.launch
 
 /**
  * Layout that interpolate its children layout given two sets of constraint and
@@ -61,12 +63,13 @@ inline fun MotionLayout(
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
     crossinline content: @Composable MotionLayoutScope.() -> Unit
 ) {
-    MotionLayout(
+    val motionProgress = createAndUpdateMotionProgress(progress = progress)
+    MotionLayoutCore(
         start = start,
         end = end,
-        transition = transition,
-        progress = progress,
-        debug = debug,
+        transition = transition as? TransitionImpl,
+        motionProgress = motionProgress,
+        debugFlag = debug.firstOrNull() ?: MotionLayoutDebugFlags.NONE,
         informationReceiver = null,
         modifier = modifier,
         optimizationLevel = optimizationLevel,
@@ -127,7 +130,7 @@ inline fun MotionLayout(
         motionScene = motionScene,
         constraintSetName = constraintSetName,
         animationSpec = animationSpec,
-        debug = debug,
+        debugFlag = debug.firstOrNull() ?: MotionLayoutDebugFlags.NONE,
         modifier = modifier,
         optimizationLevel = optimizationLevel,
         finishedAnimationListener = finishedAnimationListener,
@@ -135,25 +138,27 @@ inline fun MotionLayout(
     )
 }
 
+@Suppress("NOTHING_TO_INLINE")
 @ExperimentalMotionApi
 @Composable
 inline fun MotionLayout(
     start: ConstraintSet,
     end: ConstraintSet,
-    transition: androidx.constraintlayout.compose.Transition? = null,
+    transition: Transition? = null,
     progress: Float,
     debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     informationReceiver: LayoutInformationReceiver? = null,
     modifier: Modifier = Modifier,
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
-    crossinline content: @Composable MotionLayoutScope.() -> Unit
+    crossinline content: @Composable (MotionLayoutScope.() -> Unit)
 ) {
+    val motionProgress = createAndUpdateMotionProgress(progress = progress)
     MotionLayoutCore(
         start = start,
         end = end,
         transition = transition as? TransitionImpl,
-        progress = progress,
-        debug = debug,
+        motionProgress = motionProgress,
+        debugFlag = debug.firstOrNull() ?: MotionLayoutDebugFlags.NONE,
         informationReceiver = informationReceiver,
         modifier = modifier,
         optimizationLevel = optimizationLevel,
@@ -168,7 +173,7 @@ internal inline fun MotionLayoutCore(
     motionScene: MotionScene,
     constraintSetName: String? = null,
     animationSpec: AnimationSpec<Float> = tween<Float>(),
-    debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
+    debugFlag: MotionLayoutDebugFlags = MotionLayoutDebugFlags.NONE,
     modifier: Modifier = Modifier,
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
     noinline finishedAnimationListener: (() -> Unit)? = null,
@@ -177,32 +182,21 @@ internal inline fun MotionLayoutCore(
     val needsUpdate = remember {
         mutableStateOf(0L)
     }
-    motionScene.setUpdateFlag(needsUpdate)
-
-    var usedDebugMode = debug
-    if (motionScene.getForcedDrawDebug() != MotionLayoutDebugFlags.UNKNOWN) {
-        usedDebugMode = EnumSet.of(motionScene.getForcedDrawDebug())
-    }
 
     val transitionContent = remember(motionScene, needsUpdate.value) {
         motionScene.getTransition("default")
     }
 
-    val transition: androidx.constraintlayout.compose.Transition? =
+    val transition: Transition? =
         transitionContent?.let { Transition(it) }
 
-    val startId = transition?.getStartConstraintSetId() ?: "start"
-    val endId = transition?.getEndConstraintSetId() ?: "end"
-
     val startContent = remember(motionScene, needsUpdate.value) {
+        val startId = transition?.getStartConstraintSetId() ?: "start"
         motionScene.getConstraintSet(startId) ?: motionScene.getConstraintSet(0)
     }
     val endContent = remember(motionScene, needsUpdate.value) {
+        val endId = transition?.getEndConstraintSetId() ?: "end"
         motionScene.getConstraintSet(endId) ?: motionScene.getConstraintSet(1)
-    }
-
-    val targetEndContent = remember(motionScene, constraintSetName) {
-        constraintSetName?.let { motionScene.getConstraintSet(constraintSetName) }
     }
 
     if (startContent == null || endContent == null) {
@@ -215,8 +209,10 @@ internal inline fun MotionLayoutCore(
     var end: ConstraintSet by remember(motionScene) {
         mutableStateOf(ConstraintSet(jsonContent = endContent))
     }
-    val targetConstraintSet = targetEndContent?.let {
-        ConstraintSet(jsonContent = targetEndContent)
+
+    val targetConstraintSet = remember(motionScene, constraintSetName) {
+        val targetEndContent = constraintSetName?.let { motionScene.getConstraintSet(constraintSetName) }
+        targetEndContent?.let { ConstraintSet(targetEndContent) }
     }
 
     val progress = remember { Animatable(0f) }
@@ -249,32 +245,26 @@ internal inline fun MotionLayoutCore(
         }
     }
 
-    val lastOutsideProgress = remember { mutableStateOf(0f) }
-    val forcedProgress = motionScene.getForcedProgress()
-
-    val currentProgress =
-        if (!forcedProgress.isNaN() && lastOutsideProgress.value == progress.value) {
-            forcedProgress
-        } else {
-            motionScene.resetForcedProgress()
-            progress.value
+    val scope = rememberCoroutineScope()
+    val motionProgress = remember {
+        MotionProgress.fromState(progress.asState()) {
+            scope.launch { progress.snapTo(it) }
         }
-
-    lastOutsideProgress.value = progress.value
-
-    MotionLayout(
+    }
+    MotionLayoutCore(
         start = start,
         end = end,
-        transition = transition,
-        progress = currentProgress,
-        debug = usedDebugMode,
-        informationReceiver = motionScene as? JSONMotionScene,
+        transition = transition as? TransitionImpl,
+        motionProgress = motionProgress,
+        debugFlag = debugFlag,
+        informationReceiver = motionScene as? LayoutInformationReceiver,
         modifier = modifier,
         optimizationLevel = optimizationLevel,
         content = content
     )
 }
 
+@ExperimentalMotionApi
 @PublishedApi
 @Composable
 internal inline fun MotionLayoutCore(
@@ -285,59 +275,34 @@ internal inline fun MotionLayoutCore(
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
     crossinline content: @Composable (MotionLayoutScope.() -> Unit),
 ) {
-    val needsUpdate = remember {
-        mutableStateOf(0L)
-    }
-    motionScene.setUpdateFlag(needsUpdate)
-
-    var usedDebugMode = debug
-    if (motionScene.getForcedDrawDebug() != MotionLayoutDebugFlags.UNKNOWN) {
-        usedDebugMode = EnumSet.of(motionScene.getForcedDrawDebug())
-    }
-
-    val transitionContent = remember(motionScene, needsUpdate.value) {
+    val transitionContent = remember(motionScene) {
         motionScene.getTransition("default")
     }
 
-    val transition: androidx.constraintlayout.compose.Transition? =
+    val transition: Transition? =
         transitionContent?.let { Transition(it) }
 
-    val startId = transition?.getStartConstraintSetId() ?: "start"
-    val endId = transition?.getEndConstraintSetId() ?: "end"
-
-    val startContent = remember(motionScene, needsUpdate.value) {
-        motionScene.getConstraintSet(startId) ?: motionScene.getConstraintSet(0)
+    val start = remember(motionScene) {
+        val startId = transition?.getStartConstraintSetId() ?: "start"
+        val startContent = motionScene.getConstraintSet(startId) ?: motionScene.getConstraintSet(0)
+        startContent?.let { ConstraintSet(it) }
     }
-    val endContent = remember(motionScene, needsUpdate.value) {
-        motionScene.getConstraintSet(endId) ?: motionScene.getConstraintSet(1)
+    val end = remember(motionScene) {
+        val endId = transition?.getEndConstraintSetId() ?: "end"
+        val endContent = motionScene.getConstraintSet(endId) ?: motionScene.getConstraintSet(1)
+        endContent?.let { ConstraintSet(it) }
     }
 
-    if (startContent == null || endContent == null) {
+    if (start == null || end == null) {
         return
     }
 
-    val start = ConstraintSet(startContent)
-    val end = ConstraintSet(endContent)
-
-    var lastOutsideProgress by remember {
-        mutableStateOf(0f)
-    }
-    val forcedProgress = motionScene.getForcedProgress()
-    var usedProgress = progress
-    if (!forcedProgress.isNaN() && lastOutsideProgress == progress) {
-        usedProgress = forcedProgress
-    } else {
-        motionScene.resetForcedProgress()
-    }
-    @Suppress("UNUSED_VALUE")
-    lastOutsideProgress = progress
-
-    MotionLayoutCore(
+    MotionLayout(
         start = start,
         end = end,
-        transition = transition as? TransitionImpl,
-        progress = usedProgress,
-        debug = usedDebugMode,
+        transition = transition,
+        progress = progress,
+        debug = debug,
         informationReceiver = motionScene as? LayoutInformationReceiver,
         modifier = modifier,
         optimizationLevel = optimizationLevel,
@@ -345,32 +310,46 @@ internal inline fun MotionLayoutCore(
     )
 }
 
+@ExperimentalMotionApi
 @PublishedApi
 @Composable
 internal inline fun MotionLayoutCore(
     start: ConstraintSet,
     end: ConstraintSet,
     transition: TransitionImpl? = null,
-    progress: Float,
-    debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
+    motionProgress: MotionProgress,
+    debugFlag: MotionLayoutDebugFlags = MotionLayoutDebugFlags.NONE,
     informationReceiver: LayoutInformationReceiver? = null,
     modifier: Modifier = Modifier,
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
     crossinline content: @Composable MotionLayoutScope.() -> Unit
 ) {
+    // TODO: Merge this snippet with UpdateWithForcedIfNoUserChange
+    val needsUpdate = remember { mutableStateOf(0L) }
+    needsUpdate.value // Read the value to allow recomposition from informationReceiver
+    informationReceiver?.setUpdateFlag(needsUpdate)
+
+    UpdateWithForcedIfNoUserChange(
+        motionProgress = motionProgress,
+        informationReceiver = informationReceiver
+    )
+
+    var usedDebugMode = debugFlag
+    val forcedDebug = informationReceiver?.getForcedDrawDebug()
+    if (forcedDebug != null && forcedDebug != MotionLayoutDebugFlags.UNKNOWN) {
+        usedDebugMode = forcedDebug
+    }
     val measurer = remember { MotionMeasurer() }
-    val progressState = remember { mutableStateOf(0f) }
-    val scope = remember { MotionLayoutScope(measurer, progressState) }
-    progressState.value = progress
+    val scope = remember { MotionLayoutScope(measurer, motionProgress) }
+    val debug = EnumSet.of(usedDebugMode)
     val measurePolicy =
         rememberMotionLayoutMeasurePolicy(
             optimizationLevel,
             debug,
-            0,
             start,
             end,
             transition,
-            progressState,
+            motionProgress,
             measurer
         )
 
@@ -398,7 +377,7 @@ internal inline fun MotionLayoutCore(
     (MultiMeasureLayout(
         modifier = modifier
             .then(debugModifications)
-            .motionPointerInput(measurePolicy, progressState, measurer)
+            .motionPointerInput(measurePolicy, motionProgress, measurer)
             .semantics { designInfoProvider = measurer },
         measurePolicy = measurePolicy,
         content = { scope.content() }
@@ -433,16 +412,11 @@ internal inline fun MotionLayoutCore(
     motionScene: MotionScene,
     crossinline content: @Composable MotionLayoutScope.() -> Unit
 ) {
-    val measurer = remember(motionLayoutState, motionScene) { MotionMeasurer() }
-    val scope = remember(motionLayoutState, motionScene) {
-        MotionLayoutScope(measurer, motionLayoutState.progressState)
-    }
-
     val transitionContent = remember(motionScene) {
         motionScene.getTransition("default")
     }
 
-    val transition: androidx.constraintlayout.compose.Transition? =
+    val transition: Transition? =
         transitionContent?.let { Transition(it) }
 
     val startId = transition?.getStartConstraintSetId() ?: "start"
@@ -461,53 +435,23 @@ internal inline fun MotionLayoutCore(
 
     val start = ConstraintSet(startContent)
     val end = ConstraintSet(endContent)
-    val debug = EnumSet.of(motionLayoutState.debugMode)
-
-    val measurePolicy =
-        rememberMotionLayoutMeasurePolicy(
-            optimizationLevel,
-            debug,
-            motionScene,
-            start,
-            end,
-            transition as? TransitionImpl,
-            motionLayoutState.progressState,
-            measurer
-        )
-
-    val forcedScaleFactor = measurer.forcedScaleFactor
-
-    var debugModifications: Modifier = Modifier
-    if (!debug.contains(MotionLayoutDebugFlags.NONE) || !forcedScaleFactor.isNaN()) {
-        if (!forcedScaleFactor.isNaN()) {
-            debugModifications = debugModifications.scale(forcedScaleFactor)
-        }
-        debugModifications = debugModifications.drawBehind {
-            with(measurer) {
-                if (!forcedScaleFactor.isNaN()) {
-                    drawDebugBounds(forcedScaleFactor)
-                }
-                if (!debug.contains(MotionLayoutDebugFlags.NONE)) {
-                    drawDebug()
-                }
-            }
-        }
-    }
-    @Suppress("DEPRECATION")
-    (MultiMeasureLayout(
-        modifier = modifier
-            .then(debugModifications)
-            .motionPointerInput(measurePolicy, motionLayoutState.motionProgress, measurer)
-            .semantics { designInfoProvider = measurer },
-        measurePolicy = measurePolicy,
-        content = { scope.content() }
-    ))
+    MotionLayoutCore(
+        start = start,
+        end = end,
+        transition = transition as? TransitionImpl,
+        motionProgress = motionLayoutState.motionProgress,
+        debugFlag = motionLayoutState.debugMode,
+        informationReceiver = motionScene as? JSONMotionScene,
+        modifier = modifier,
+        optimizationLevel = optimizationLevel,
+        content = content
+    )
 }
 
 @LayoutScopeMarker
 class MotionLayoutScope @PublishedApi internal constructor(
     measurer: MotionMeasurer,
-    private val progressState: State<Float>
+    private val progressState: MotionProgress
 ) {
     private var myMeasurer = measurer
 
@@ -553,7 +497,7 @@ class MotionLayoutScope @PublishedApi internal constructor(
     fun motionProperties(id: String): State<MotionProperties> =
     // TODO: Make properly observable, passing the progressState as a remember 'key' is a hack
         //  to make it work as observable
-        remember(id, progressState.value) {
+        remember(id, progressState.currentProgress) {
             mutableStateOf(MotionProperties(id, null, myMeasurer))
         }
 
@@ -611,21 +555,24 @@ enum class MotionLayoutDebugFlags {
 internal fun rememberMotionLayoutMeasurePolicy(
     optimizationLevel: Int,
     debug: EnumSet<MotionLayoutDebugFlags>,
-    needsUpdate: Long,
     constraintSetStart: ConstraintSet,
     constraintSetEnd: ConstraintSet,
     transition: TransitionImpl?,
-    progress: MutableState<Float>,
+    motionProgress: MotionProgress,
     measurer: MotionMeasurer
 ) = remember(
     optimizationLevel,
     debug,
-    needsUpdate,
     constraintSetStart,
     constraintSetEnd,
     transition
 ) {
-    measurer.initWith(constraintSetStart, constraintSetEnd, transition, progress.value)
+    measurer.initWith(
+        constraintSetStart,
+        constraintSetEnd,
+        transition,
+        motionProgress.currentProgress
+    )
     MeasurePolicy { measurables, constraints ->
         val layoutSize = measurer.performInterpolationMeasure(
             constraints,
@@ -635,7 +582,7 @@ internal fun rememberMotionLayoutMeasurePolicy(
             transition,
             measurables,
             optimizationLevel,
-            progress.value,
+            motionProgress.currentProgress,
             this
         )
         layout(layoutSize.width, layoutSize.height) {
@@ -646,42 +593,53 @@ internal fun rememberMotionLayoutMeasurePolicy(
     }
 }
 
-@Composable
+/**
+ * Updates [motionProgress] from changes in [LayoutInformationReceiver.getForcedProgress].
+ *
+ * User changes, (reflected in [MotionProgress.currentProgress]) take priority.
+ */
 @PublishedApi
-internal fun rememberMotionLayoutMeasurePolicy(
-    optimizationLevel: Int,
-    debug: EnumSet<MotionLayoutDebugFlags>,
-    motionScene: MotionScene,
-    constraintSetStart: ConstraintSet,
-    constraintSetEnd: ConstraintSet,
-    transition: TransitionImpl?,
-    progress: State<Float>,
-    measurer: MotionMeasurer
-) = remember(
-    optimizationLevel,
-    debug,
-    motionScene,
-    constraintSetStart,
-    constraintSetEnd,
-    transition
+@Composable
+internal fun UpdateWithForcedIfNoUserChange(
+    motionProgress: MotionProgress,
+    informationReceiver: LayoutInformationReceiver?
 ) {
-    measurer.initWith(constraintSetStart, constraintSetEnd, transition, progress.value)
-    MeasurePolicy { measurables, constraints ->
-        val layoutSize = measurer.performInterpolationMeasure(
-            constraints,
-            layoutDirection,
-            constraintSetStart,
-            constraintSetEnd,
-            transition,
-            measurables,
-            optimizationLevel,
-            progress.value,
-            this
-        )
-        layout(layoutSize.width, layoutSize.height) {
-            with(measurer) {
-                performLayout(measurables)
-            }
-        }
+    if (informationReceiver == null) {
+        return
     }
+    val currentUserProgress = motionProgress.currentProgress
+    val forcedProgress = informationReceiver.getForcedProgress()
+
+    // Save the initial progress
+    val lastUserProgress = remember { Ref<Float>().apply { value = currentUserProgress} }
+
+    if (!forcedProgress.isNaN() && lastUserProgress.value == currentUserProgress) {
+        // Use the forced progress if the user progress hasn't changed
+        motionProgress.updateProgress(forcedProgress)
+    } else {
+        informationReceiver.resetForcedProgress()
+    }
+    lastUserProgress.value = currentUserProgress
+}
+
+/**
+ * Creates a [MotionProgress] that may be manipulated internally, but can also be updated by user
+ * calls with different [progress] values.
+ *
+ * @param progress User progress, if changed, updates the underlying [MotionProgress]
+ * @return A [MotionProgress] instance that may change from internal or external calls
+ */
+@Suppress("NOTHING_TO_INLINE")
+@PublishedApi
+@Composable
+internal inline fun createAndUpdateMotionProgress(progress: Float): MotionProgress {
+    val motionProgress = remember {
+        MotionProgress.fromMutableState(mutableStateOf(progress))
+    }
+    val last = remember { Ref<Float>().apply { value = progress } }
+    if (last.value != progress) {
+        // Update on progress change
+        motionProgress.updateProgress(progress)
+    }
+    return motionProgress
 }

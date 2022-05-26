@@ -16,6 +16,7 @@
 
 package androidx.constraintlayout.compose
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.layout.Measurable
 import androidx.constraintlayout.core.parser.CLKey
 import androidx.constraintlayout.core.parser.CLParser
@@ -24,6 +25,7 @@ import androidx.constraintlayout.core.state.ConstraintSetParser
 import androidx.constraintlayout.core.state.Transition
 import org.intellij.lang.annotations.Language
 
+@Immutable
 internal class JSONConstraintSet(
     @Language("json5") content: String,
     @Language("json5") overrideVariables: String? = null,
@@ -71,7 +73,6 @@ internal class JSONConstraintSet(
         // TODO: Need to better handle half parsed JSON and/or incorrect states.
         try {
             ConstraintSetParser.parseJSON(getCurrentContent(), state, layoutVariables)
-
             _isDirty = false
         } catch (e: Exception) {
             // nothing (content might be invalid, sent by live edit)
@@ -106,5 +107,18 @@ internal class JSONConstraintSet(
         for (name in overridedVariables.keys) {
             layoutVariables.putOverride(name, overridedVariables[name]!!)
         }
+    }
+
+    override fun resetForcedProgress() {
+        // Nothing for ConstraintSet
+    }
+
+    override fun getForcedProgress(): Float {
+        // Nothing for ConstraintSet
+        return 0f
+    }
+
+    override fun onNewProgress(progress: Float) {
+        // Nothing for ConstraintSet
     }
 }

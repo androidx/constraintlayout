@@ -103,7 +103,7 @@ internal class MotionLayoutStateImpl(
     /**
      * The underlying object that holds the progress value for a [MotionLayout] Composable.
      *
-     * Manipulated using the [Animatable] API, exposed internally with [progressState] and
+     * Manipulated using the [Animatable] API, exposed internally with
      * [motionProgress]; and externally with [currentProgress], [animateTo] and [snapTo].
      */
     private val animatableProgress = Animatable(initialProgress)
@@ -152,27 +152,12 @@ internal class MotionLayoutStateImpl(
     internal val debugMode: MotionLayoutDebugFlags
         get() = debugModeState.value
 
-    // TODO: Remove once we substitute uses of `progressState` with MotionProgress
-    /**
-     * Internal [State] for the progress.
-     *
-     * Prefer to use [motionProgress] instead.
-     */
-    @PublishedApi
-    internal val progressState: State<Float> = animatableProgress.asState()
-
     /**
      * Object used by MotionLayout internals to read and update the progress.
      */
     @PublishedApi
-    internal val motionProgress: MotionProgress = object : MotionProgress {
-        override val progress: Float
-            get() = progressState.value
-
-        override suspend fun updateProgress(newProgress: Float) {
-            animatableProgress.snapTo(newProgress)
-        }
-    }
+    internal val motionProgress: MotionProgress =
+        MotionProgress.fromState(animatableProgress.asState(), ::snapTo)
 
     override val currentProgress: Float
         get() = animatableProgress.value
@@ -275,7 +260,25 @@ internal interface MotionAnimationCommand {
  */
 @PublishedApi
 internal interface MotionProgress {
-    val progress: Float
+    val currentProgress: Float
 
-    suspend fun updateProgress(newProgress: Float)
+    fun updateProgress(newProgress: Float)
+
+    companion object {
+        fun fromMutableState(mutableProgress: MutableState<Float>): MotionProgress =
+            fromState(mutableProgress) { mutableProgress.value = it }
+
+        fun fromState(
+            progressState: State<Float>,
+            onUpdate:  (newProgress: Float) -> Unit
+        ): MotionProgress =
+            object : MotionProgress {
+                override val currentProgress: Float
+                    get() = progressState.value
+
+                override fun updateProgress(newProgress: Float) {
+                    onUpdate(newProgress)
+                }
+            }
+    }
 }

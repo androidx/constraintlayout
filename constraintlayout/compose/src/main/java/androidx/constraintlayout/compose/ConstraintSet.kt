@@ -38,6 +38,7 @@ interface ConstraintSet {
     fun isDirty(measurables: List<Measurable>): Boolean = true
 }
 
+@Immutable
 internal interface DerivedConstraintSet : ConstraintSet {
     /**
      * [ConstraintSet] that this instance will derive its constraints from.

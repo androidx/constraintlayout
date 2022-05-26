@@ -1649,7 +1649,7 @@ public fun ScreenExample20() {
 
 @Preview(group = "guidelines")
 @Composable
-public fun ScreenExample22() {
+fun Playground() {
     ConstraintLayout(
         ConstraintSet("""
         {
