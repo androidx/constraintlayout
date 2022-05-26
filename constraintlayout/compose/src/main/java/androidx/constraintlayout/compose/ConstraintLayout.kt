@@ -658,7 +658,7 @@ fun Dimension.MaxCoercible.atMost(dp: Dp): Dimension =
     (this as DimensionDescription).also { it.max = dp }
 
 /**
- * Sets the upper bound of the current [Dimension] to be the [Wrap] size of the child.
+ * Sets the upper bound of the current [Dimension] to be the [WRAP_DIMENSION] size of the child.
  */
 val Dimension.MaxCoercible.atMostWrapContent: Dimension
     get() = (this as DimensionDescription).also { it.maxSymbol = WRAP_DIMENSION }
@@ -779,7 +779,7 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
     }
 
     // region Accessors
-    fun setUpdateFlag(needsUpdate: MutableState<Long>) {
+    override fun setUpdateFlag(needsUpdate: MutableState<Long>) {
         updateFlag = needsUpdate
     }
 
@@ -805,7 +805,7 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
         return debugName
     }
 
-    fun getForcedDrawDebug(): MotionLayoutDebugFlags {
+    override fun getForcedDrawDebug(): MotionLayoutDebugFlags {
         return forcedDrawDebug
     }
 
@@ -854,10 +854,6 @@ internal abstract class EditableJSONLayout(@Language("json5") content: String) :
         } catch (e: Exception) {
             // nothing (content might be invalid, sent by live edit)
         }
-    }
-
-    protected open fun onNewProgress(progress: Float) {
-        // nothing for ConstraintSet
     }
 
     fun onNewDimensions(width: Int, height: Int) {
@@ -959,6 +955,20 @@ interface LayoutInformationReceiver {
     fun getLayoutInformationMode(): LayoutInfoFlags
     fun getForcedWidth(): Int
     fun getForcedHeight(): Int
+    fun setUpdateFlag(needsUpdate: MutableState<Long>)
+    fun getForcedDrawDebug(): MotionLayoutDebugFlags
+
+    /**
+     * reset the force progress flag
+     */
+    fun resetForcedProgress()
+
+    /**
+     * Get the progress of the force progress
+     */
+    fun getForcedProgress(): Float
+
+    fun onNewProgress(progress: Float)
 }
 
 @PublishedApi

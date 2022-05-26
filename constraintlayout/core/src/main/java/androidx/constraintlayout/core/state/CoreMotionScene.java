@@ -49,16 +49,6 @@ public interface CoreMotionScene {
     void setDebugName(String name);
 
     /**
-     * reset the force progress flag
-     */
-    void resetForcedProgress();
-
-    /**
-     * Get the progress of the force progress
-     */
-    float getForcedProgress();
-
-    /**
      * get a transition give the name
      *
      * @param str the name of the transition

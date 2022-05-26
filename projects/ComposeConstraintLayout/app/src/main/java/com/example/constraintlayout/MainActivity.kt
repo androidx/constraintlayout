@@ -140,7 +140,7 @@ class MainActivity : AppCompatActivity() {
 
         demos.add(object : CompFunc { @Composable override fun Run() { MotionExample7() } })
         demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample21() } })
-        demos.add(object : CompFunc { @Composable override fun Run() { ScreenExample22() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { Playground() } })
         demos.add(object : CompFunc { @Composable override fun Run() { ResizeExample1() } })
 
         demos.add(object : CompFunc { @Composable override fun Run() { ExampleLayout() } })

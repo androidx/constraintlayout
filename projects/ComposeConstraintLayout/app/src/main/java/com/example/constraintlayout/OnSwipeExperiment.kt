@@ -58,6 +58,7 @@ fun OnSwipeExperiment() {
         // language=json5
         """
        {
+         Header: { exportAs: 'swipeExpr' },
          ConstraintSets: {
            start: {
              box: {

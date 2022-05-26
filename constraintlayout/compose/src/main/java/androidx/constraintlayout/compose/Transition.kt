@@ -20,7 +20,6 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
@@ -56,16 +55,14 @@ fun Transition(@Language("json5") content: String): Transition? {
             Log.e("CML", "Error parsing JSON $e")
             null
         }
-        mutableStateOf(
-            if (parsed != null) {
-                val pixelDp = CorePixelDp { dpValue -> dpValue * dpToPixel }
-                TransitionImpl(parsed, pixelDp)
-            } else {
-                null
-            }
-        )
+        if (parsed != null) {
+            val pixelDp = CorePixelDp { dpValue -> dpValue * dpToPixel }
+            TransitionImpl(parsed, pixelDp)
+        } else {
+            null
+        }
     }
-    return transition.value
+    return transition
 }
 
 /**

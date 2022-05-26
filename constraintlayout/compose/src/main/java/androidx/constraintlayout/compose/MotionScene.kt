@@ -19,7 +19,6 @@ package androidx.constraintlayout.compose
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.constraintlayout.core.state.ConstraintSetParser
 import androidx.constraintlayout.core.state.CoreMotionScene
@@ -30,10 +29,7 @@ import org.intellij.lang.annotations.Language
  * Information for MotionLayout to animate between multiple [ConstraintSet]s.
  */
 @Immutable
-interface MotionScene : CoreMotionScene {
-    fun setUpdateFlag(needsUpdate: MutableState<Long>)
-    fun getForcedDrawDebug(): MotionLayoutDebugFlags
-}
+interface MotionScene : CoreMotionScene
 
 /**
  * Parses the given JSON5 into a [MotionScene].
