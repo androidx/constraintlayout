@@ -12,8 +12,8 @@
         app:constraint_referenced_ids="calculatorText,btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9,star,btn0,pound,call"
         app:grid_columns="3"
         app:grid_rows="6"
-        app:grid_horizontalGaps="5"
-        app:grid_verticalGaps="5"
+        app:grid_horizontalGaps="5dp"
+        app:grid_verticalGaps="5dp"
         app:grid_orientation="horizontal"
         app:grid_spans="0:1x3"
         app:grid_skips="15:1x1"/>

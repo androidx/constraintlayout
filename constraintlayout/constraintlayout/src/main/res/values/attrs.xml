@@ -310,9 +310,12 @@
         <attr name="grid_skips" format="string"/>
         <attr name="grid_rowWeights" format="string"/>
         <attr name="grid_columnWeights" format="string"/>
-        <attr name="grid_orientation" format="string"/>
-        <attr name="grid_horizontalGaps" format="integer" />
-        <attr name="grid_verticalGaps" format="integer" />
+        <attr name="grid_orientation"  format="enum">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+        </attr>
+        <attr name="grid_horizontalGaps" format="dimension" />
+        <attr name="grid_verticalGaps" format="dimension" />
         <attr name="grid_validateInputs" format="boolean" />
         <attr name="grid_useRtl" format="boolean" />
     </declare-styleable>

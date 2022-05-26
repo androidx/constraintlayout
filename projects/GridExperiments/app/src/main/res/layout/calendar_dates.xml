@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/date10"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date11"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date12"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date13"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date14"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date15"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date16"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date20"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date21"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date22"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date23"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date24"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date25"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date26"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date30"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date31"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date32"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date33"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date34"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date35"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date36"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date40"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date41"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date42"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date43"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date44"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date45"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date46"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date50"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date51"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date52"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date53"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date54"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date55"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date56"
+        style="@style/dates"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date00"
+        style="@style/day_style"
+        android:text="1" />
+
+    <TextView
+        android:id="@+id/date01"
+        style="@style/day_style"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date02"
+        style="@style/day_style"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date03"
+        style="@style/day_style"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date04"
+        style="@style/day_style"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date05"
+        style="@style/day_style"
+        android:text="1"
+        android:textSize="10pt" />
+
+    <TextView
+        android:id="@+id/date06"
+        style="@style/day_style"
+        android:text="1"
+        android:textSize="10pt" />
+
+</merge>

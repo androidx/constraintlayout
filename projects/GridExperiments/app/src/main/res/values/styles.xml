@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="dates">
+    <item name="android:layout_width">0dp</item>
+    <item name="android:layout_height">0dp</item>
+        <item name="android:background">#fff</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">10pt</item>
+
+    </style>
+    <style name="day_style">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:background">#AA6CAA</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">10pt</item>
+
+    </style>
+</resources>

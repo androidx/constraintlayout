@@ -13,8 +13,8 @@
         app:grid_columns="3"
         app:grid_rows="3"
         app:grid_columnWeights="3,1,2"
-        app:grid_horizontalGaps="10"
-        app:grid_verticalGaps="10"
+        app:grid_horizontalGaps="10dp"
+        app:grid_verticalGaps="10dp"
         app:grid_orientation="horizontal"
         app:grid_skips="0:1x2,4:1x1,6:1x1" />
 

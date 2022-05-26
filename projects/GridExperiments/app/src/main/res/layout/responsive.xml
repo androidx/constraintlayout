@@ -19,8 +19,8 @@
             app:grid_rows="4"
             app:grid_skips="0:1x2, 4:1x1"
             app:grid_spans="6:1x2"
-            app:grid_verticalGaps="20"
-            app:grid_horizontalGaps="20"
+            app:grid_verticalGaps="20dp"
+            app:grid_horizontalGaps="20dp"
             app:grid_rowWeights="1,2,1,1"
             app:grid_columnWeights="1,2,1,1"
             app:grid_orientation="vertical" />
