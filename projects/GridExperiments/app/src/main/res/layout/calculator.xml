@@ -12,8 +12,8 @@
         app:constraint_referenced_ids="calculatorText,btn0,clear,neg,percent,div,btn7,btn8,btn9,mult,btn4,btn5,btn6,sub,btn1,btn2,btn3,plus,btn0,dot,equal"
         app:grid_columns="4"
         app:grid_rows="7"
-        app:grid_horizontalGaps="5"
-        app:grid_verticalGaps="5"
+        app:grid_horizontalGaps="5dp"
+        app:grid_verticalGaps="5dp"
         app:grid_orientation="horizontal"
         app:grid_spans="0:2x4,24:1x2" />
 

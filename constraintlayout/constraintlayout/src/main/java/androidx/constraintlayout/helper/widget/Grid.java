@@ -18,8 +18,10 @@ package androidx.constraintlayout.helper.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.Pair;
 
+import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.Guideline;
@@ -81,8 +83,8 @@ import java.util.Set;
  */
 public class Grid extends VirtualLayout {
     private static final String TAG = "Grid";
-    private static final String VERTICAL = "vertical";
-    private static final String HORIZONTAL = "horizontal";
+    public static final int VERTICAL = 1;
+    public static final int HORIZONTAL = 0;
     private final int mMaxRows = 50; // maximum number of rows can be specified.
     private final int mMaxColumns = 50; // maximum number of columns can be specified.
     private final ConstraintSet mConstraintSet = new ConstraintSet();
@@ -131,17 +133,17 @@ public class Grid extends VirtualLayout {
     /**
      * Horizontal gaps in Dp
      */
-    private int mHorizontalGaps;
+    private float mHorizontalGaps;
 
     /**
      * Vertical gaps in Dp
      */
-    private int mVerticalGaps;
+    private float mVerticalGaps;
 
     /**
      * orientation of the view arrangement - vertical or horizontal
      */
-    private String mOrientation;
+    private int mOrientation = 0; // default value is horizontal
 
     /**
      * Indicates what is the next available position to place an widget
@@ -207,11 +209,11 @@ public class Grid extends VirtualLayout {
                 }  else if (attr == R.styleable.Grid_grid_columnWeights) {
                     mStrColumnWeights = a.getString(attr);
                 }  else if (attr == R.styleable.Grid_grid_orientation) {
-                    mOrientation = a.getString(attr);
+                    mOrientation = a.getInt(attr,0);
                 } else if (attr == R.styleable.Grid_grid_horizontalGaps) {
-                    mHorizontalGaps = a.getInteger(attr, 0);
+                    mHorizontalGaps = a.getDimension(attr, 0);
                 } else if (attr == R.styleable.Grid_grid_verticalGaps) {
-                    mVerticalGaps = a.getInteger(attr, 0);
+                    mVerticalGaps = a.getDimension(attr, 0);
                 } else if (attr == R.styleable.Grid_grid_validateInputs) {
                     // @TODO handle validation
                     mValidateInputs = a.getBoolean(attr, false);
@@ -220,7 +222,7 @@ public class Grid extends VirtualLayout {
                     mUseRtl = a.getBoolean(attr, false);
                 }
             }
-
+Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
             initVariables();
             a.recycle();
         }
@@ -387,26 +389,26 @@ public class Grid extends VirtualLayout {
      * @param column column position to place the view
      */
     private void connectView(int viewId, int row, int column, int rowSpan, int columnSpan,
-                             int horizontalGaps, int verticalGaps) {
+                             float horizontalGaps, float verticalGaps) {
 
         // @TODO handle RTL
         // connect Start of the view
         mConstraintSet.connect(viewId, ConstraintSet.START,
-                mVerticalGuideLines[column].getId(), ConstraintSet.END, horizontalGaps);
+                mVerticalGuideLines[column].getId(), ConstraintSet.END,(int) horizontalGaps);
 
         // connect Top of the view
         mConstraintSet.connect(viewId, ConstraintSet.TOP,
-                mHorizontalGuideLines[row].getId(), ConstraintSet.BOTTOM, verticalGaps);
+                mHorizontalGuideLines[row].getId(), ConstraintSet.BOTTOM, (int) verticalGaps);
 
         // connect End of the view
         mConstraintSet.connect(viewId, ConstraintSet.END,
                 mVerticalGuideLines[column + columnSpan].getId(),
-                ConstraintSet.START, horizontalGaps);
+                ConstraintSet.START, (int) horizontalGaps);
 
         // connect Bottom of the view
         mConstraintSet.connect(viewId, ConstraintSet.BOTTOM,
                 mHorizontalGuideLines[row + rowSpan].getId(),
-                ConstraintSet.TOP, verticalGaps);
+                ConstraintSet.TOP,(int) verticalGaps);
     }
 
     /**
@@ -444,7 +446,7 @@ public class Grid extends VirtualLayout {
         int row;
         int col;
 
-        if (mOrientation.equals(VERTICAL)) {
+        if (mOrientation == 1) {
             row = index % mRows;
             col = index / mRows;
         } else {
@@ -662,6 +664,7 @@ public class Grid extends VirtualLayout {
      * @return true if it succeeds otherwise false
      */
     public boolean setColumns(int columns) {
+        Debug.logStack(TAG, " >>>>>>>>>>>>> col " + columns, 5);
         if (columns < 2 || columns > mMaxColumns) {
             return false;
         }
@@ -682,7 +685,7 @@ public class Grid extends VirtualLayout {
      * get the value of orientation
      * @return the value of orientation
      */
-    public String getOrientation() {
+    public int getOrientation() {
         return mOrientation;
     }
 
@@ -691,12 +694,12 @@ public class Grid extends VirtualLayout {
      * @param orientation new orientation value
      * @return true if it succeeds otherwise false
      */
-    public boolean setOrientation(String orientation) {
-        if (!(orientation.equals(HORIZONTAL) || orientation.equals(VERTICAL))) {
+    public boolean setOrientation(int orientation) {
+        if (!(orientation == HORIZONTAL || orientation == VERTICAL)) {
             return false;
         }
 
-        if (mOrientation != null && mOrientation.equals(orientation)) {
+        if (mOrientation == orientation) {
             return true;
         }
 
@@ -823,7 +826,7 @@ public class Grid extends VirtualLayout {
      * get the value of horizontalGaps
      * @return the value of horizontalGaps
      */
-    public int getHorizontalGaps() {
+    public float getHorizontalGaps() {
         return mHorizontalGaps;
     }
 
@@ -832,7 +835,7 @@ public class Grid extends VirtualLayout {
      * @param horizontalGaps new horizontalGaps value
      * @return true if it succeeds otherwise false
      */
-    public boolean setHorizontalGaps(int horizontalGaps) {
+    public boolean setHorizontalGaps(float horizontalGaps) {
         if (horizontalGaps < 0) {
             return false;
         }
@@ -851,7 +854,7 @@ public class Grid extends VirtualLayout {
      * get the value of verticalGaps
      * @return the value of verticalGaps
      */
-    public int getVerticalGaps() {
+    public float getVerticalGaps() {
         return mVerticalGaps;
     }
 
@@ -860,7 +863,7 @@ public class Grid extends VirtualLayout {
      * @param verticalGaps new verticalGaps value
      * @return true if it succeeds otherwise false
      */
-    public boolean setVerticalGaps(int verticalGaps) {
+    public boolean setVerticalGaps(float verticalGaps) {
         if (verticalGaps < 0) {
             return false;
         }
