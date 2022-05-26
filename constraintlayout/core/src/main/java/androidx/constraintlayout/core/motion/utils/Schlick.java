@@ -17,7 +17,7 @@
 package androidx.constraintlayout.core.motion.utils;
 
 /**
- * Schlick’s bias and gain functions
+ * Schlick's bias and gain functions
  * curve for use in an easing function including quantize functions
  */
 public class Schlick extends Easing {
