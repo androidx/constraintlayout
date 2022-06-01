@@ -17,17 +17,20 @@ package androidx.constraintlayout.helper.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Pair;
+import android.view.View;
 
 import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.constraintlayout.widget.Guideline;
 import androidx.constraintlayout.widget.R;
 import androidx.constraintlayout.widget.VirtualLayout;
-import androidx.core.view.ViewCompat;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -88,6 +91,8 @@ public class Grid extends VirtualLayout {
     private final int mMaxRows = 50; // maximum number of rows can be specified.
     private final int mMaxColumns = 50; // maximum number of columns can be specified.
     private final ConstraintSet mConstraintSet = new ConstraintSet();
+    private Paint mPaint = new Paint();
+    private View[] mBoxViews;
     ConstraintLayout mContainer;
 
     /**
@@ -99,16 +104,6 @@ public class Grid extends VirtualLayout {
      * number of columns of the grid
      */
     private int mColumns;
-
-    /**
-     * an Guideline array to store all the vertical guidelines
-     */
-    private Guideline[] mVerticalGuideLines;
-
-    /**
-     * an Guideline array to store all the horizontal guidelines
-     */
-    private Guideline[] mHorizontalGuideLines;
 
     /**
      * string format of the input Spans
@@ -143,7 +138,7 @@ public class Grid extends VirtualLayout {
     /**
      * orientation of the view arrangement - vertical or horizontal
      */
-    private int mOrientation = 0; // default value is horizontal
+    private int mOrientation;
 
     /**
      * Indicates what is the next available position to place an widget
@@ -171,6 +166,11 @@ public class Grid extends VirtualLayout {
      * Store the view ids of handled spans
      */
     Set<Integer> mSpanIds = new HashSet<>();
+
+    /**
+     * Ids boxViews where to specify constraints
+     */
+    private int[] mAnchorIds;
 
     public Grid(Context context) {
         super(context);
@@ -209,7 +209,7 @@ public class Grid extends VirtualLayout {
                 }  else if (attr == R.styleable.Grid_grid_columnWeights) {
                     mStrColumnWeights = a.getString(attr);
                 }  else if (attr == R.styleable.Grid_grid_orientation) {
-                    mOrientation = a.getInt(attr,0);
+                    mOrientation = a.getInt(attr, 0);
                 } else if (attr == R.styleable.Grid_grid_horizontalGaps) {
                     mHorizontalGaps = a.getDimension(attr, 0);
                 } else if (attr == R.styleable.Grid_grid_verticalGaps) {
@@ -222,7 +222,7 @@ public class Grid extends VirtualLayout {
                     mUseRtl = a.getBoolean(attr, false);
                 }
             }
-Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
+            Log.v(TAG, " >>>>>>>>>>> col = " + mColumns);
             initVariables();
             a.recycle();
         }
@@ -260,7 +260,7 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
         mNextAvailableIndex = 0;
         boolean isSuccess = true;
 
-        createGuidelines(mRows, mColumns, isUpdate);
+        buildBoxes(isUpdate);
 
         if (mStrSkips != null && !mStrSkips.trim().isEmpty()) {
             HashMap<Integer, Pair<Integer, Integer>> mSkipMap = parseSpans(mStrSkips);
@@ -290,9 +290,6 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
         for (boolean[] row: mPositionMatrix) {
             Arrays.fill(row, true);
         }
-
-        mHorizontalGuideLines = new Guideline[mRows + 1];
-        mVerticalGuideLines = new Guideline[mColumns + 1];
     }
 
     /**
@@ -319,71 +316,7 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
     }
 
     /**
-     * create vertical and horizontal guidelines based on mRows and mColumns
-     * @param rows number of rows is required for grid
-     * @param columns number of columns is required for grid
-     * @param isUpdate whether to update existing guidelines (true) or create new ones (false)
-     */
-    private void createGuidelines(int rows, int columns, boolean isUpdate) {
-        float[] rowWeights = parseWeights(rows, mStrRowWeights);
-        float[] columnWeights = parseWeights(columns, mStrColumnWeights);
-
-        float[] horizontalPositions = getLinePositions(0, 1,
-                rows + 1, rowWeights);
-        float[] verticalPositions = getLinePositions(0, 1,
-                columns + 1, columnWeights);
-
-        for (int i = 0; i < mHorizontalGuideLines.length; i++) {
-            if (isUpdate) {
-                updateGuideLinePosition(mHorizontalGuideLines[i], horizontalPositions[i]);
-                continue;
-            }
-
-            mHorizontalGuideLines[i] = getNewGuideline(myContext,
-                    ConstraintLayout.LayoutParams.HORIZONTAL, horizontalPositions[i]);
-            mContainer.addView(mHorizontalGuideLines[i]);
-        }
-        for (int i = 0; i < mVerticalGuideLines.length; i++) {
-            if (isUpdate) {
-                updateGuideLinePosition(mVerticalGuideLines[i], verticalPositions[i]);
-                continue;
-            }
-
-            mVerticalGuideLines[i] = getNewGuideline(myContext,
-                    ConstraintLayout.LayoutParams.VERTICAL, verticalPositions[i]);
-            mContainer.addView(mVerticalGuideLines[i]);
-        }
-    }
-
-    /**
-     * get a new Guideline based on the specified orientation and position
-     * @param context the context
-     * @param orientation orientation of a Guideline
-     * @param position position of a Guideline
-     * @return a Guideline
-     */
-    private Guideline getNewGuideline(Context context, int orientation, float position) {
-        Guideline guideline = new Guideline(context);
-        guideline.setId(ViewCompat.generateViewId());
-        ConstraintLayout.LayoutParams lp =
-                new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT,
-                        ConstraintLayout.LayoutParams.WRAP_CONTENT);
-        lp.orientation = orientation;
-        lp.guidePercent = position;
-        guideline.setLayoutParams(lp);
-
-        return guideline;
-    }
-
-    private void updateGuideLinePosition(Guideline guideline, float position) {
-        ConstraintLayout.LayoutParams params =
-                (ConstraintLayout.LayoutParams) guideline.getLayoutParams();
-        params.guidePercent = position;
-        guideline.setLayoutParams(params);
-    }
-
-    /**
-     * Connect the view to the corresponding guidelines based on the input params
+     * Connect the view to the corresponding viewBoxes based on the input params
      * @param viewId the Id of the view
      * @param row row position to place the view
      * @param column column position to place the view
@@ -392,23 +325,30 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
                              float horizontalGaps, float verticalGaps) {
 
         // @TODO handle RTL
+        int leftSide = column == 0 ? ConstraintSet.START : ConstraintSet.END;
+        int topSide = row == 0 ? ConstraintSet.TOP : ConstraintSet.BOTTOM;
+        int rightSide = column + columnSpan == mColumns ? ConstraintSet.END : ConstraintSet.START;
+        int bottomSide = row + rowSpan == mRows ? ConstraintSet.BOTTOM : ConstraintSet.TOP;
+
         // connect Start of the view
         mConstraintSet.connect(viewId, ConstraintSet.START,
-                mVerticalGuideLines[column].getId(), ConstraintSet.END,(int) horizontalGaps);
+                mAnchorIds[column], leftSide, (int) horizontalGaps / 2);
 
         // connect Top of the view
         mConstraintSet.connect(viewId, ConstraintSet.TOP,
-                mHorizontalGuideLines[row].getId(), ConstraintSet.BOTTOM, (int) verticalGaps);
+                mAnchorIds[row], topSide, (int) verticalGaps / 2);
 
         // connect End of the view
+        int rightIndex = rightSide
+                == ConstraintSet.END ? mAnchorIds.length - 1 : column + columnSpan;
         mConstraintSet.connect(viewId, ConstraintSet.END,
-                mVerticalGuideLines[column + columnSpan].getId(),
-                ConstraintSet.START, (int) horizontalGaps);
+                mAnchorIds[rightIndex], rightSide, (int) horizontalGaps / 2);
 
         // connect Bottom of the view
+        int bottomIndex = bottomSide
+                == ConstraintSet.BOTTOM ? mAnchorIds.length - 1 : row + rowSpan;
         mConstraintSet.connect(viewId, ConstraintSet.BOTTOM,
-                mHorizontalGuideLines[row + rowSpan].getId(),
-                ConstraintSet.TOP,(int) verticalGaps);
+                mAnchorIds[bottomIndex], bottomSide, (int) verticalGaps / 2);
     }
 
     /**
@@ -575,7 +515,7 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
      * @param startColumn the column of the staring position
      * @param rowSpan how many rows to span
      * @param columnSpan how many columns to span
-     * @return true if we could properly invalidate the positions esle false
+     * @return true if we could properly invalidate the positions else false
      */
     private boolean invalidatePositions(int startRow, int startColumn,
                                         int rowSpan, int columnSpan) {
@@ -593,7 +533,7 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
     }
 
     /**
-     * Generate line positions (for the Guideline positioning)
+     * Generate line positions (for the viewBoxes positioning)
      * @param min min value of the linear spaced positions
      *      * @param max max value of the linear spaced positions
      * @param numPositions number of positions is required
@@ -619,6 +559,104 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
             positions[i + 1] = positions[i] + w * baseWeight;
         }
         return positions;
+    }
+
+    /**
+     * Visualize the boxViews that are used to constraint widgets.
+     * @param canvas canvas to visualize the boxViews
+     */
+    @Override
+    public void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        // Visualize the viewBoxes if isInEditMode() is true
+//        if (!isInEditMode()) {
+//            return;
+//        }
+        mPaint.setColor(Color.RED);
+        mPaint.setStyle(Paint.Style.FILL);
+        int myTop = getTop();
+        int myLeft = getLeft();
+        int myBottom = getBottom();
+        int myRight = getRight();
+        for (int i = 0; i < mBoxViews.length; i++) {
+            View box = mBoxViews[i];
+            int l = box.getLeft() - myLeft;
+            int t = box.getTop() - myTop;
+            int r = box.getRight() - myLeft;
+            int b = box.getBottom() - myTop;
+            canvas.drawRect(l, 0, r, myBottom - myTop, mPaint);
+            canvas.drawRect(0, t, myRight - myLeft, b, mPaint);
+        }
+    }
+
+    /**
+     * create boxViews for constraining widgets
+     * @param isUpdate whether to update existing boxViews (true) or create new ones (false)
+     */
+    private void buildBoxes(boolean isUpdate) {
+        float[] rowWeights = parseWeights(mRows, mStrRowWeights);
+        float[] columnWeights = parseWeights(mColumns, mStrColumnWeights);
+
+        float[] verticalPositions = getLinePositions(0, 1,
+                mRows + 1, rowWeights);
+        float[] horizontalPositions = getLinePositions(0, 1,
+                mColumns + 1, columnWeights);
+
+        // if the attr update dosen't invovle rows or columns, we only need to
+        // update the positions of the boxVies.
+        if (isUpdate) {
+            for (int i = 0; i < mBoxViews.length; i++) {
+                int row = Math.min(mRows - 2, i);
+                int col = Math.min(mColumns - 2, i);
+                updateBoxPosition(mBoxViews[i], horizontalPositions[col + 1],
+                        verticalPositions[row + 1]);
+            }
+            return;
+        }
+
+        int boxCount = Math.max(mRows - 1, mColumns - 1);
+        mAnchorIds = new int[boxCount + 2];
+        int gridId = getId();
+        mAnchorIds[0] = gridId;
+        mAnchorIds[mAnchorIds.length - 1] = gridId;
+
+        if (mBoxViews == null || !isUpdate) {
+            mBoxViews = new View[boxCount];
+            for (int i = 0; i < mBoxViews.length; i++) {
+                mBoxViews[i] = new View(getContext()); // need to remove old Views
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    mBoxViews[i].setId(View.generateViewId());
+                }
+                ConstraintLayout.LayoutParams params =
+                        new ConstraintLayout.LayoutParams(1, 1);
+                int row = Math.min(mRows - 2, i);
+                int col = Math.min(mColumns - 2, i);
+
+                params.leftToLeft = gridId;
+                params.topToTop = gridId;
+                params.bottomToBottom = gridId;
+                params.rightToRight = gridId;
+                params.horizontalBias = horizontalPositions[col + 1];
+                params.verticalBias = verticalPositions[row + 1];
+                mContainer.addView(mBoxViews[i], params);
+                mAnchorIds[i + 1] = mBoxViews[i].getId();
+            }
+        }
+    }
+
+    /**
+     * Update the horizontal and vertical postion of a box view
+     * @param box box View to be updated
+     * @param horizontalPosition horizontal position
+     * @param verticalPosition vertical position
+     */
+    private void updateBoxPosition(View box,
+                                   float horizontalPosition, float verticalPosition) {
+        ConstraintLayout.LayoutParams params =
+                (ConstraintLayout.LayoutParams) box.getLayoutParams();
+        params.horizontalBias = horizontalPosition;
+        params.verticalBias = verticalPosition;
+        box.setLayoutParams(params);
     }
 
     /**
@@ -707,7 +745,6 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
         generateGrid(true);
         invalidate();
         return true;
-
     }
 
     /**
