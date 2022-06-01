@@ -321,8 +321,7 @@ public class Grid extends VirtualLayout {
      * @param row row position to place the view
      * @param column column position to place the view
      */
-    private void connectView(int viewId, int row, int column, int rowSpan, int columnSpan,
-                             float horizontalGaps, float verticalGaps) {
+    private void connectView(int viewId, int row, int column, int rowSpan, int columnSpan) {
 
         // @TODO handle RTL
         int leftSide = column == 0 ? ConstraintSet.START : ConstraintSet.END;
@@ -331,24 +330,22 @@ public class Grid extends VirtualLayout {
         int bottomSide = row + rowSpan == mRows ? ConstraintSet.BOTTOM : ConstraintSet.TOP;
 
         // connect Start of the view
-        mConstraintSet.connect(viewId, ConstraintSet.START,
-                mAnchorIds[column], leftSide, (int) horizontalGaps / 2);
+        mConstraintSet.connect(viewId, ConstraintSet.START, mAnchorIds[column], leftSide);
 
         // connect Top of the view
-        mConstraintSet.connect(viewId, ConstraintSet.TOP,
-                mAnchorIds[row], topSide, (int) verticalGaps / 2);
+        mConstraintSet.connect(viewId, ConstraintSet.TOP, mAnchorIds[row], topSide);
 
         // connect End of the view
         int rightIndex = rightSide
                 == ConstraintSet.END ? mAnchorIds.length - 1 : column + columnSpan;
         mConstraintSet.connect(viewId, ConstraintSet.END,
-                mAnchorIds[rightIndex], rightSide, (int) horizontalGaps / 2);
+                mAnchorIds[rightIndex], rightSide);
 
         // connect Bottom of the view
         int bottomIndex = bottomSide
                 == ConstraintSet.BOTTOM ? mAnchorIds.length - 1 : row + rowSpan;
         mConstraintSet.connect(viewId, ConstraintSet.BOTTOM,
-                mAnchorIds[bottomIndex], bottomSide, (int) verticalGaps / 2);
+                mAnchorIds[bottomIndex], bottomSide);
     }
 
     /**
@@ -370,8 +367,7 @@ public class Grid extends VirtualLayout {
                 // no more available position.
                 return false;
             }
-            connectView(mIds[i], position.first, position.second,
-                    1, 1, mHorizontalGaps, mVerticalGaps);
+            connectView(mIds[i], position.first, position.second, 1, 1);
         }
         return true;
     }
@@ -484,8 +480,7 @@ public class Grid extends VirtualLayout {
                 return false;
             }
             connectView(mId[mIdIndex], startPosition.first, startPosition.second,
-                    entry.getValue().first,  entry.getValue().second,
-                    mHorizontalGaps, mVerticalGaps);
+                    entry.getValue().first,  entry.getValue().second);
             mSpanIds.add(mId[mIdIndex]);
             mIdIndex++;
         }
@@ -569,9 +564,9 @@ public class Grid extends VirtualLayout {
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         // Visualize the viewBoxes if isInEditMode() is true
-//        if (!isInEditMode()) {
-//            return;
-//        }
+        if (!isInEditMode()) {
+            return;
+        }
         mPaint.setColor(Color.RED);
         mPaint.setStyle(Paint.Style.FILL);
         int myTop = getTop();
@@ -619,6 +614,9 @@ public class Grid extends VirtualLayout {
         int gridId = getId();
         mAnchorIds[0] = gridId;
         mAnchorIds[mAnchorIds.length - 1] = gridId;
+        int boxWidth = mHorizontalGaps == 0 ? 1 : (int) mHorizontalGaps;
+        int boxHeight = mVerticalGaps == 0 ? 1: (int) mVerticalGaps;
+
 
         if (mBoxViews == null || !isUpdate) {
             mBoxViews = new View[boxCount];
@@ -628,7 +626,7 @@ public class Grid extends VirtualLayout {
                     mBoxViews[i].setId(View.generateViewId());
                 }
                 ConstraintLayout.LayoutParams params =
-                        new ConstraintLayout.LayoutParams(1, 1);
+                        new ConstraintLayout.LayoutParams(boxWidth, boxHeight);
                 int row = Math.min(mRows - 2, i);
                 int col = Math.min(mColumns - 2, i);
 
@@ -638,6 +636,8 @@ public class Grid extends VirtualLayout {
                 params.rightToRight = gridId;
                 params.horizontalBias = horizontalPositions[col + 1];
                 params.verticalBias = verticalPositions[row + 1];
+                params.leftMargin = mHorizontalGaps == 0 ? 0 : -(int) mHorizontalGaps;
+                params.topMargin = mHorizontalGaps == 0 ? 0 : -(int) mVerticalGaps;
                 mContainer.addView(mBoxViews[i], params);
                 mAnchorIds[i + 1] = mBoxViews[i].getId();
             }
