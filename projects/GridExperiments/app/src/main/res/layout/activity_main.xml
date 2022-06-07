@@ -9,14 +9,28 @@
         android:id="@+id/grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:constraint_referenced_ids="btn0,btn1,btn2,btn3"
+        android:layout_margin="30dp"
+        app:constraint_referenced_ids="innerGrid,btn0,btn1,btn2,btn3"
         app:grid_columns="3"
         app:grid_rows="3"
-        app:grid_columnWeights="3,1,2"
+        app:grid_horizontalGaps="10dp"
+        app:grid_verticalGaps="10dp"
+        app:grid_orientation="horizontal"
+        app:grid_skips="1:1x1,4:1x1,6:1x1" />
+
+    <androidx.constraintlayout.helper.widget.Grid
+        android:id="@+id/innerGrid"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        app:constraint_referenced_ids="btn4,btn5,btn6,btn7"
+        app:grid_columns="3"
+        app:grid_rows="3"
         app:grid_horizontalGaps="10dp"
         app:grid_verticalGaps="10dp"
         app:grid_orientation="horizontal"
         app:grid_skips="0:1x2,4:1x1,6:1x1" />
+
 
     <Button
         android:id="@+id/btn0"
@@ -54,6 +68,46 @@
         android:layout_height="0dp"
         android:text="O"
         android:textSize="30dp"
+        app:layout_constraintDimensionRatio="1:1"
+        tools:layout_editor_absoluteX="141dp"
+        tools:layout_editor_absoluteY="545dp" />
+
+    <Button
+        android:id="@+id/btn4"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:text="O"
+        android:textSize="10dp"
+        app:layout_constraintDimensionRatio="1:1"
+        tools:layout_editor_absoluteX="278dp"
+        tools:layout_editor_absoluteY="57dp" />
+
+    <Button
+        android:id="@+id/btn5"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:text="X"
+        android:textSize="10dp"
+        app:layout_constraintDimensionRatio="1:1"
+        tools:layout_editor_absoluteX="4dp"
+        tools:layout_editor_absoluteY="301dp" />
+
+    <Button
+        android:id="@+id/btn6"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:text="X"
+        android:textSize="10dp"
+        app:layout_constraintDimensionRatio="1:1"
+        tools:layout_editor_absoluteX="278dp"
+        tools:layout_editor_absoluteY="301dp" />
+
+    <Button
+        android:id="@+id/btn7"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:text="O"
+        android:textSize="10dp"
         app:layout_constraintDimensionRatio="1:1"
         tools:layout_editor_absoluteX="141dp"
         tools:layout_editor_absoluteY="545dp" />

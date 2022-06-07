@@ -168,9 +168,9 @@ public class Grid extends VirtualLayout {
     Set<Integer> mSpanIds = new HashSet<>();
 
     /**
-     * Ids boxViews where to specify constraints
+     * Ids of the boxViews
      */
-    private int[] mAnchorIds;
+    private int[] mBoxViewIds;
 
     public Grid(Context context) {
         super(context);
@@ -260,7 +260,7 @@ public class Grid extends VirtualLayout {
         mNextAvailableIndex = 0;
         boolean isSuccess = true;
 
-        buildBoxes(isUpdate);
+        buildBoxes();
 
         if (mStrSkips != null && !mStrSkips.trim().isEmpty()) {
             HashMap<Integer, Pair<Integer, Integer>> mSkipMap = parseSpans(mStrSkips);
@@ -324,28 +324,18 @@ public class Grid extends VirtualLayout {
     private void connectView(int viewId, int row, int column, int rowSpan, int columnSpan) {
 
         // @TODO handle RTL
-        int leftSide = column == 0 ? ConstraintSet.START : ConstraintSet.END;
-        int topSide = row == 0 ? ConstraintSet.TOP : ConstraintSet.BOTTOM;
-        int rightSide = column + columnSpan == mColumns ? ConstraintSet.END : ConstraintSet.START;
-        int bottomSide = row + rowSpan == mRows ? ConstraintSet.BOTTOM : ConstraintSet.TOP;
-
         // connect Start of the view
-        mConstraintSet.connect(viewId, ConstraintSet.START, mAnchorIds[column], leftSide);
+        mConstraintSet.connect(viewId, ConstraintSet.LEFT, mBoxViewIds[column], ConstraintSet.LEFT);
 
         // connect Top of the view
-        mConstraintSet.connect(viewId, ConstraintSet.TOP, mAnchorIds[row], topSide);
+        mConstraintSet.connect(viewId, ConstraintSet.TOP, mBoxViewIds[row], ConstraintSet.TOP);
 
-        // connect End of the view
-        int rightIndex = rightSide
-                == ConstraintSet.END ? mAnchorIds.length - 1 : column + columnSpan;
-        mConstraintSet.connect(viewId, ConstraintSet.END,
-                mAnchorIds[rightIndex], rightSide);
+        mConstraintSet.connect(viewId, ConstraintSet.RIGHT,
+                mBoxViewIds[column + columnSpan - 1], ConstraintSet.RIGHT);
 
         // connect Bottom of the view
-        int bottomIndex = bottomSide
-                == ConstraintSet.BOTTOM ? mAnchorIds.length - 1 : row + rowSpan;
         mConstraintSet.connect(viewId, ConstraintSet.BOTTOM,
-                mAnchorIds[bottomIndex], bottomSide);
+                mBoxViewIds[row + rowSpan - 1], ConstraintSet.BOTTOM);
     }
 
     /**
@@ -528,35 +518,6 @@ public class Grid extends VirtualLayout {
     }
 
     /**
-     * Generate line positions (for the viewBoxes positioning)
-     * @param min min value of the linear spaced positions
-     *      * @param max max value of the linear spaced positions
-     * @param numPositions number of positions is required
-     * @param weights a float array for space weights
-     * @return a float array of the corresponding positions
-     */
-    private float[] getLinePositions(float min, float max, int numPositions, float[] weights) {
-        if (weights != null && numPositions - 1 != weights.length) {
-            return null;
-        }
-
-        float[] positions = new float[numPositions];
-        int weightSum = 0;
-        for (int i = 0; i < numPositions - 1; i++) {
-            weightSum += weights != null ? weights[i] : 1;
-        }
-
-        float availableSpace = max - min;
-        float baseWeight = availableSpace / weightSum;
-        positions[0] = min;
-        for (int i = 0; i < numPositions - 1; i++) {
-            float w = weights != null ? weights[i] : 1;
-            positions[i + 1] = positions[i] + w * baseWeight;
-        }
-        return positions;
-    }
-
-    /**
      * Visualize the boxViews that are used to constraint widgets.
      * @param canvas canvas to visualize the boxViews
      */
@@ -568,7 +529,7 @@ public class Grid extends VirtualLayout {
             return;
         }
         mPaint.setColor(Color.RED);
-        mPaint.setStyle(Paint.Style.FILL);
+        mPaint.setStyle(Paint.Style.STROKE);
         int myTop = getTop();
         int myLeft = getLeft();
         int myBottom = getBottom();
@@ -585,78 +546,100 @@ public class Grid extends VirtualLayout {
     }
 
     /**
-     * create boxViews for constraining widgets
-     * @param isUpdate whether to update existing boxViews (true) or create new ones (false)
+     * Set chain between boxView horzontally
      */
-    private void buildBoxes(boolean isUpdate) {
-        float[] rowWeights = parseWeights(mRows, mStrRowWeights);
+    private void setBoxViewHorizontalChains() {
+        int gridId = getId();
+        int maxVal = Math.max(mRows, mColumns);
+        int minVal = Math.min(mRows, mColumns);
         float[] columnWeights = parseWeights(mColumns, mStrColumnWeights);
 
-        float[] verticalPositions = getLinePositions(0, 1,
-                mRows + 1, rowWeights);
-        float[] horizontalPositions = getLinePositions(0, 1,
-                mColumns + 1, columnWeights);
-
-        // if the attr update dosen't invovle rows or columns, we only need to
-        // update the positions of the boxVies.
-        if (isUpdate) {
-            for (int i = 0; i < mBoxViews.length; i++) {
-                int row = Math.min(mRows - 2, i);
-                int col = Math.min(mColumns - 2, i);
-                updateBoxPosition(mBoxViews[i], horizontalPositions[col + 1],
-                        verticalPositions[row + 1]);
+        // chain all the views on the longer side (either horizontal or vertical)
+        if (maxVal == mColumns) {
+            mConstraintSet.createHorizontalChain(gridId, ConstraintSet.LEFT, gridId,
+                    ConstraintSet.RIGHT, mBoxViewIds, columnWeights,
+                    ConstraintSet.CHAIN_SPREAD_INSIDE);
+            for (int i = 1; i < mBoxViews.length; i++) {
+                mConstraintSet.setMargin(mBoxViewIds[i], ConstraintSet.LEFT, (int) mHorizontalGaps);
             }
             return;
         }
 
-        int boxCount = Math.max(mRows - 1, mColumns - 1);
-        mAnchorIds = new int[boxCount + 2];
-        int gridId = getId();
-        mAnchorIds[0] = gridId;
-        mAnchorIds[mAnchorIds.length - 1] = gridId;
-        int boxWidth = mHorizontalGaps == 0 ? 1 : (int) mHorizontalGaps;
-        int boxHeight = mVerticalGaps == 0 ? 1: (int) mVerticalGaps;
-
-
-        if (mBoxViews == null || !isUpdate) {
-            mBoxViews = new View[boxCount];
-            for (int i = 0; i < mBoxViews.length; i++) {
-                mBoxViews[i] = new View(getContext()); // need to remove old Views
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    mBoxViews[i].setId(View.generateViewId());
-                }
-                ConstraintLayout.LayoutParams params =
-                        new ConstraintLayout.LayoutParams(boxWidth, boxHeight);
-                int row = Math.min(mRows - 2, i);
-                int col = Math.min(mColumns - 2, i);
-
-                params.leftToLeft = gridId;
-                params.topToTop = gridId;
-                params.bottomToBottom = gridId;
-                params.rightToRight = gridId;
-                params.horizontalBias = horizontalPositions[col + 1];
-                params.verticalBias = verticalPositions[row + 1];
-                params.leftMargin = mHorizontalGaps == 0 ? 0 : -(int) mHorizontalGaps;
-                params.topMargin = mHorizontalGaps == 0 ? 0 : -(int) mVerticalGaps;
-                mContainer.addView(mBoxViews[i], params);
-                mAnchorIds[i + 1] = mBoxViews[i].getId();
+        // chain partial veriws on the shorter side (either horizontal or vertical)
+        // add constraints to the parent for the non-chained views
+        mConstraintSet.createHorizontalChain(gridId, ConstraintSet.LEFT, gridId,
+                ConstraintSet.RIGHT, Arrays.copyOf(mBoxViewIds, minVal), columnWeights,
+                ConstraintSet.CHAIN_SPREAD_INSIDE);
+        for (int i = 1; i < mBoxViews.length; i++) {
+            if (i < minVal) {
+                mConstraintSet.setMargin(mBoxViewIds[i], ConstraintSet.LEFT, (int) mHorizontalGaps);
+            } else {
+                mConstraintSet.connect(mBoxViewIds[i], ConstraintSet.LEFT,
+                        gridId, ConstraintSet.LEFT);
+                mConstraintSet.connect(mBoxViewIds[i], ConstraintSet.RIGHT,
+                        gridId, ConstraintSet.RIGHT);
             }
         }
     }
 
     /**
-     * Update the horizontal and vertical postion of a box view
-     * @param box box View to be updated
-     * @param horizontalPosition horizontal position
-     * @param verticalPosition vertical position
+     * Set chain between boxView vertically
      */
-    private void updateBoxPosition(View box,
-                                   float horizontalPosition, float verticalPosition) {
-        ConstraintLayout.LayoutParams params =
-                (ConstraintLayout.LayoutParams) box.getLayoutParams();
-        params.horizontalBias = horizontalPosition;
-        params.verticalBias = verticalPosition;
-        box.setLayoutParams(params);
+    private void setBoxViewVerticalChains() {
+        int gridId = getId();
+        int maxVal = Math.max(mRows, mColumns);
+        int minVal = Math.min(mRows, mColumns);
+        float[] rowWeights = parseWeights(mRows, mStrRowWeights);
+
+        // chain all the views on the longer side (either horizontal or vertical)
+        if (maxVal == mRows) {
+            mConstraintSet.createVerticalChain(gridId, ConstraintSet.TOP, gridId,
+                    ConstraintSet.BOTTOM, mBoxViewIds, rowWeights,
+                    ConstraintSet.CHAIN_SPREAD_INSIDE);
+            for (int i = 1; i < mBoxViews.length; i++) {
+                mConstraintSet.setMargin(mBoxViewIds[i], ConstraintSet.TOP, (int) mVerticalGaps);
+            }
+            return;
+        }
+
+        // chain partial veriws on the shorter side (either horizontal or vertical)
+        // add constraints to the parent for the non-chained views
+        mConstraintSet.createVerticalChain(gridId, ConstraintSet.TOP, gridId,
+                ConstraintSet.BOTTOM, Arrays.copyOf(mBoxViewIds, minVal), rowWeights,
+                ConstraintSet.CHAIN_SPREAD_INSIDE);
+        for (int i = 1; i < mBoxViews.length; i++) {
+            if (i < minVal) {
+                mConstraintSet.setMargin(mBoxViewIds[i], ConstraintSet.TOP, (int) mVerticalGaps);
+            } else {
+                mConstraintSet.connect(mBoxViewIds[i], ConstraintSet.TOP,
+                        gridId, ConstraintSet.TOP);
+                mConstraintSet.connect(mBoxViewIds[i], ConstraintSet.BOTTOM,
+                        gridId, ConstraintSet.BOTTOM);
+            }
+        }
+    }
+
+    /**
+     * create boxViews for constraining widgets
+     */
+    private void buildBoxes() {
+        int boxCount = Math.max(mRows, mColumns);
+        mBoxViews = new View[boxCount];
+        mBoxViewIds = new int[boxCount];
+        for (int i = 0; i < mBoxViews.length; i++) {
+            mBoxViews[i] = new View(getContext()); // need to remove old Views
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                mBoxViews[i].setId(View.generateViewId());
+            }
+            ConstraintLayout.LayoutParams params =
+                    new ConstraintLayout.LayoutParams(0, 0);
+
+            mContainer.addView(mBoxViews[i], params);
+            mBoxViewIds[i] = mBoxViews[i].getId();
+        }
+
+        setBoxViewVerticalChains();
+        setBoxViewHorizontalChains();
     }
 
     /**
