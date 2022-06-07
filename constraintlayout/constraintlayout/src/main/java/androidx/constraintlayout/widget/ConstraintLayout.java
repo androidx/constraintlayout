@@ -18,7 +18,6 @@ package androidx.constraintlayout.widget;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-
 import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_SPREAD;
 import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_WRAP;
 import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID;
@@ -2872,11 +2871,15 @@ public class ConstraintLayout extends ViewGroup {
         /**
          * Create a LayoutParams base on an existing layout Params
          *
-         * @param source the Layout Params to be copied
+         * @param params the Layout Params to be copied
          */
-        public LayoutParams(LayoutParams source) {
-            super(source);
+        public LayoutParams(ViewGroup.LayoutParams params) {
+            super(params);
 
+            if (!(params instanceof LayoutParams)) {
+                return;
+            }
+            LayoutParams source = (LayoutParams) params;
             ///////////////////////////////////////////////////////////////////////////////////////
             // Layout margins handling TODO: re-activate in 3.0
             ///////////////////////////////////////////////////////////////////////////////////////
@@ -3751,10 +3754,6 @@ public class ConstraintLayout extends ViewGroup {
 
         public LayoutParams(int width, int height) {
             super(width, height);
-        }
-
-        public LayoutParams(ViewGroup.LayoutParams source) {
-            super(source);
         }
 
         /**
