@@ -26,7 +26,6 @@ import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 
-import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.R;
@@ -653,22 +652,20 @@ public class Grid extends VirtualLayout {
     /**
      * set new rows value and also invoke initVariables and invalidate
      * @param rows new rows value
-     * @return true if it succeeds otherwise false
      */
-    public boolean setRows(int rows) {
+    public void setRows(int rows) {
         if (rows < 2 || rows > mMaxRows) {
-            return false;
+            return;
         }
 
         if (mRows == rows) {
-            return true;
+            return;
         }
 
         mRows = rows;
         initVariables();
         generateGrid(false);
         invalidate();
-        return true;
     }
 
     /**
@@ -682,25 +679,21 @@ public class Grid extends VirtualLayout {
     /**
      * set new columns value and also invoke initVariables and invalidate
      * @param columns new rows value
-     * @return true if it succeeds otherwise false
      */
-    public boolean setColumns(int columns) {
-        Debug.logStack(TAG, " >>>>>>>>>>>>> col " + columns, 5);
+    public void setColumns(int columns) {
         if (columns < 2 || columns > mMaxColumns) {
-            return false;
+            return;
         }
 
         if (mColumns == columns) {
-            return true;
+            return;
         }
 
         mColumns = columns;
         initVariables();
         generateGrid(false);
         invalidate();
-        return true;
     }
-
 
     /**
      * get the value of orientation
@@ -713,21 +706,19 @@ public class Grid extends VirtualLayout {
     /**
      * set new orientation value and also invoke invalidate
      * @param orientation new orientation value
-     * @return true if it succeeds otherwise false
      */
-    public boolean setOrientation(int orientation) {
+    public void setOrientation(int orientation) {
         if (!(orientation == HORIZONTAL || orientation == VERTICAL)) {
-            return false;
+            return;
         }
 
         if (mOrientation == orientation) {
-            return true;
+            return;
         }
 
         mOrientation = orientation;
         generateGrid(true);
         invalidate();
-        return true;
     }
 
     /**
@@ -741,21 +732,19 @@ public class Grid extends VirtualLayout {
     /**
      * set new spans value and also invoke invalidate
      * @param spans new spans value
-     * @return true if it succeeds otherwise false
      */
-    public Boolean setSpans(String spans) {
+    public void setSpans(String spans) {
         if (!isSpansValid(spans)) {
-            return false;
+            return;
         }
 
         if (mStrSpans != null && mStrSpans.equals(spans)) {
-            return true;
+            return;
         }
 
         mStrSpans = spans;
         generateGrid(true);
         invalidate();
-        return true;
     }
 
     /**
@@ -769,21 +758,19 @@ public class Grid extends VirtualLayout {
     /**
      * set new skips value and also invoke invalidate
      * @param skips new spans value
-     * @return true if it succeeds otherwise false
      */
-    public Boolean setSkips(String skips) {
+    public void setSkips(String skips) {
         if (!isSpansValid(skips)) {
-            return false;
+            return;
         }
 
         if (mStrSkips != null && mStrSkips.equals(skips)) {
-            return true;
+            return;
         }
 
         mStrSkips = skips;
         generateGrid(true);
         invalidate();
-        return true;
     }
 
     /**
@@ -797,21 +784,19 @@ public class Grid extends VirtualLayout {
     /**
      * set new rowWeights value and also invoke invalidate
      * @param rowWeights new rowWeights value
-     * @return true if it succeeds otherwise false
      */
-    public Boolean setRowWeights(String rowWeights) {
+    public void setRowWeights(String rowWeights) {
         if (!isWeightsValid(rowWeights)) {
-            return false;
+            return;
         }
 
         if (mStrRowWeights != null && mStrRowWeights.equals(rowWeights)) {
-            return true;
+            return;
         }
 
         mStrRowWeights = rowWeights;
         generateGrid(true);
         invalidate();
-        return true;
     }
 
     /**
@@ -825,21 +810,19 @@ public class Grid extends VirtualLayout {
     /**
      * set new columnWeights value and also invoke invalidate
      * @param columnWeights new columnWeights value
-     * @return true if it succeeds otherwise false
      */
-    public Boolean setColumnWeights(String columnWeights) {
+    public void setColumnWeights(String columnWeights) {
         if (!isWeightsValid(columnWeights)) {
-            return false;
+            return;
         }
 
         if (mStrColumnWeights != null && mStrColumnWeights.equals(columnWeights)) {
-            return true;
+            return;
         }
 
         mStrColumnWeights = columnWeights;
         generateGrid(true);
         invalidate();
-        return true;
     }
 
     /**
@@ -853,21 +836,19 @@ public class Grid extends VirtualLayout {
     /**
      *  set new horizontalGaps value and also invoke invalidate
      * @param horizontalGaps new horizontalGaps value
-     * @return true if it succeeds otherwise false
      */
-    public boolean setHorizontalGaps(float horizontalGaps) {
+    public void setHorizontalGaps(float horizontalGaps) {
         if (horizontalGaps < 0) {
-            return false;
+            return;
         }
 
         if (mHorizontalGaps == horizontalGaps) {
-            return true;
+            return;
         }
 
         mHorizontalGaps = horizontalGaps;
         generateGrid(true);
         invalidate();
-        return true;
     }
 
     /**
@@ -881,20 +862,18 @@ public class Grid extends VirtualLayout {
     /**
      * set new verticalGaps value and also invoke invalidate
      * @param verticalGaps new verticalGaps value
-     * @return true if it succeeds otherwise false
      */
-    public boolean setVerticalGaps(float verticalGaps) {
+    public void setVerticalGaps(float verticalGaps) {
         if (verticalGaps < 0) {
-            return false;
+            return;
         }
 
         if (mVerticalGaps == verticalGaps) {
-            return true;
+            return;
         }
 
         mVerticalGaps = verticalGaps;
         generateGrid(true);
         invalidate();
-        return true;
     }
 }
