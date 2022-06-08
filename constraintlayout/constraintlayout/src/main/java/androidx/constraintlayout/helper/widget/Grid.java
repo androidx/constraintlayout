@@ -23,7 +23,6 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.Pair;
 import android.view.View;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -32,9 +31,7 @@ import androidx.constraintlayout.widget.R;
 import androidx.constraintlayout.widget.VirtualLayout;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -243,7 +240,7 @@ public class Grid extends VirtualLayout {
      * @return true if all the inputs are valid else false
      */
     private boolean generateGrid(boolean isUpdate) {
-        if (mContainer == null || mConstraintSet == null) {
+        if (mContainer == null || mConstraintSet == null || mRows < 2 || mColumns < 2) {
             return false;
         }
 
@@ -262,14 +259,14 @@ public class Grid extends VirtualLayout {
         buildBoxes();
 
         if (mStrSkips != null && !mStrSkips.trim().isEmpty()) {
-            HashMap<Integer, Pair<Integer, Integer>> mSkipMap = parseSpans(mStrSkips);
-            if (mSkipMap != null) {
-                isSuccess &= handleSkips(mSkipMap);
+            int[][] mSkips = parseSpans(mStrSkips);
+            if (mSkips != null) {
+                isSuccess &= handleSkips(mSkips);
             }
         }
 
         if (mStrSpans != null && !mStrSpans.trim().isEmpty()) {
-            HashMap<Integer, Pair<Integer, Integer>> mSpans = parseSpans(mStrSpans);
+            int[][] mSpans = parseSpans(mStrSpans);
             if (mSpans != null) {
                 isSuccess &= handleSpans(mIds, mSpans);
             }
@@ -342,7 +339,7 @@ public class Grid extends VirtualLayout {
      * @return true if all the widgets can be arranged properly else false
      */
     private boolean arrangeWidgets() {
-        Pair<Integer, Integer> position;
+        int[] position;
 
         // @TODO handle RTL
         for (int i = 0; i < mCount; i++) {
@@ -352,11 +349,11 @@ public class Grid extends VirtualLayout {
             }
 
             position = getNextPosition();
-            if (position.first == -1) {
+            if (position[0] == -1) {
                 // no more available position.
                 return false;
             }
-            connectView(mIds[i], position.first, position.second, 1, 1);
+            connectView(mIds[i], position[0], position[1], 1, 1);
         }
         return true;
     }
@@ -364,9 +361,9 @@ public class Grid extends VirtualLayout {
     /**
      * Convert a 1D index to a 2D index that has index for row and index for column
      * @param index index in 1D
-     * @return a Pair with row and column as its values.
+     * @return a int[] with row and column as its values.
      */
-    private Pair<Integer, Integer> getPositionByIndex(int index) {
+    private int[] getPositionByIndex(int index) {
         // @TODO handle RTL
         int row;
         int col;
@@ -378,32 +375,32 @@ public class Grid extends VirtualLayout {
             row = index / mColumns;
             col = index % mColumns;
         }
-        return new Pair<>(row, col);
+        return new int[] {row, col};
     }
 
     /**
      * Get the next available position for widget arrangement.
-     * @return Pair<row, column>
+     * @return int[] -> [row, column]
      */
-    private Pair<Integer, Integer> getNextPosition() {
-        Pair<Integer, Integer> position = new Pair<>(0, 0);
+    private int[] getNextPosition() {
+        int[] position = new int[] {0, 0};
         boolean positionFound = false;
 
         while (!positionFound) {
             if (mNextAvailableIndex >= mRows * mColumns) {
-                return new Pair<>(-1,  -1);
+                return new int[] {-1, -1};
             }
 
             position = getPositionByIndex(mNextAvailableIndex);
 
-            if (mPositionMatrix[position.first][position.second]) {
-                mPositionMatrix[position.first][position.second] = false;
+            if (mPositionMatrix[position[0]][position[1]]) {
+                mPositionMatrix[position[0]][position[1]] = false;
                 positionFound = true;
             }
 
             mNextAvailableIndex++;
         }
-        return new Pair<>(position.first, position.second);
+        return position;
     }
 
     /**
@@ -427,71 +424,72 @@ public class Grid extends VirtualLayout {
     }
 
     /**
-     * parse the skips/spans in the string format into a HashMap<index, row_span, col_span>>
+     * parse the skips/spans in the string format into a int matrix
+     * that each row has the information - [index, row_span, col_span]
      * the format of the input string is index:row_spanxcol_span.
      * index - the index of the starting position
      * row_span - the number of rows to span
      * col_span- the number of columns to span
      * @param str string format of skips or spans
-     * @return a hashmap that contains skip information.
+     * @return a int matrix that contains skip information.
      */
-    private HashMap<Integer, Pair<Integer, Integer>> parseSpans(String str) {
+    private int[][] parseSpans(String str) {
         if (!isSpansValid(str)) {
             return null;
         }
 
-        HashMap<Integer, Pair<Integer, Integer>> skipMap = new HashMap<>();
+        String[] spans = str.split(",");
+        int[][] spanMatrix = new int[spans.length][3];
 
-        String[] skips = str.split(",");
         String[] indexAndSpan;
         String[] rowAndCol;
-        for (String skip: skips) {
-            indexAndSpan = skip.trim().split(":");
+        for (int i = 0; i < spans.length; i++) {
+            indexAndSpan = spans[i].trim().split(":");
             rowAndCol = indexAndSpan[1].split("x");
-            skipMap.put(Integer.parseInt(indexAndSpan[0]),
-                    new Pair<>(Integer.parseInt(rowAndCol[0]), Integer.parseInt(rowAndCol[1])));
+            spanMatrix[i][0] = Integer.parseInt(indexAndSpan[0]);
+            spanMatrix[i][1] = Integer.parseInt(rowAndCol[0]);
+            spanMatrix[i][2] = Integer.parseInt(rowAndCol[1]);
         }
-        return skipMap;
+        return spanMatrix;
     }
 
     /**
      * Handle the span use cases
-     * @param spansMap a hashmap that contains span information
+     * @param spansMatrix a int matrix that contains span information
      * @return true if the input spans is valid else false
      */
-    private boolean handleSpans(int[] mId, HashMap<Integer, Pair<Integer, Integer>> spansMap) {
-        int mIdIndex = 0;
-        Pair<Integer, Integer> startPosition;
-        for (Map.Entry<Integer, Pair<Integer, Integer>> entry : spansMap.entrySet()) {
-            startPosition = getPositionByIndex(entry.getKey());
-            if (!invalidatePositions(startPosition.first, startPosition.second,
-                    entry.getValue().first, entry.getValue().second)) {
+    private boolean handleSpans(int[] mId, int[][] spansMatrix) {
+        int[] startPosition;
+        for (int i = 0; i < spansMatrix.length; i++) {
+            startPosition = getPositionByIndex(spansMatrix[i][0]);
+            if (!invalidatePositions(startPosition[0], startPosition[1],
+                    spansMatrix[i][1], spansMatrix[i][2])) {
                 return false;
             }
-            connectView(mId[mIdIndex], startPosition.first, startPosition.second,
-                    entry.getValue().first,  entry.getValue().second);
-            mSpanIds.add(mId[mIdIndex]);
-            mIdIndex++;
+            connectView(mId[i], startPosition[0], startPosition[1],
+                    spansMatrix[i][1],  spansMatrix[i][2]);
+            mSpanIds.add(mId[i]);
         }
         return true;
     }
 
     /**
      * Make positions in the grid unavailable based on the skips attr
-     * @param skipsMap a hashmap that contains skip information
+     * @param skipsMatrix a int matrix that contains skip information
      * @return true if all the skips are valid else false
      */
-    private boolean handleSkips(HashMap<Integer, Pair<Integer, Integer>> skipsMap) {
-        Pair<Integer, Integer> startPosition;
-        for (Map.Entry<Integer, Pair<Integer, Integer>> entry : skipsMap.entrySet()) {
-            startPosition = getPositionByIndex(entry.getKey());
-            if (!invalidatePositions(startPosition.first, startPosition.second,
-                     entry.getValue().first, entry.getValue().second)) {
+    private boolean handleSkips(int[][] skipsMatrix) {
+        int[] startPosition;
+        for(int i = 0; i < skipsMatrix.length; i++) {
+            startPosition = getPositionByIndex(skipsMatrix[i][0]);
+            if (!invalidatePositions(startPosition[0], startPosition[1],
+                    skipsMatrix[i][1], skipsMatrix[i][2])) {
                 return false;
             }
         }
         return true;
     }
+
 
     /**
      * Make the specified positions in the grid unavailable.
