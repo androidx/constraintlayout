@@ -98,7 +98,7 @@ public class TransitionParser {
         float springDamping = onSwipe.getFloatOrNaN("springDamping");
         float stopThreshold = onSwipe.getFloatOrNaN("stopThreshold");
         int springBoundary = map(onSwipe.getStringOrNull("springBoundary"),
-                Transition.OnSwipe.DIRECTIONS);
+                Transition.OnSwipe.BOUNDARY);
         String around = onSwipe.getStringOrNull("around");
 
         Transition.OnSwipe swipe = transition.createOnSwipe();
