@@ -337,7 +337,7 @@ public class Grid extends VirtualLayout {
      * @return true if all the widgets can be arranged properly else false
      */
     private boolean arrangeWidgets() {
-        int[] position;
+        int position;
 
         // @TODO handle RTL
         for (int i = 0; i < mCount; i++) {
@@ -347,11 +347,13 @@ public class Grid extends VirtualLayout {
             }
 
             position = getNextPosition();
-            if (position[0] == -1) {
+            int row = getRowByIndex(position);
+            int col = getColByIndex(position);
+            if (position == -1) {
                 // no more available position.
                 return false;
             }
-            connectView(mIds[i], position[0], position[1], 1, 1);
+            connectView(mIds[i], row, col, 1, 1);
         }
         return true;
     }
@@ -361,38 +363,68 @@ public class Grid extends VirtualLayout {
      * @param index index in 1D
      * @return a int[] with row and column as its values.
      */
-    private int[] getPositionByIndex(int index) {
-        // @TODO handle RTL
-        int row;
-        int col;
-
+//    private int[] getPositionByIndex(int index) {
+//        // @TODO handle RTL
+//        int row;
+//        int col;
+//
+//        if (mOrientation == 1) {
+//            row = index % mRows;
+//            col = index / mRows;
+//        } else {
+//            row = index / mColumns;
+//            col = index % mColumns;
+//        }
+//        return new int[] {row, col};
+//    }
+    /**
+     * Convert a 1D index to a 2D index that has index for row and index for column
+     * @param index index in 1D
+     * @return row as its values.
+     */
+    private int getRowByIndex(int index) {
         if (mOrientation == 1) {
-            row = index % mRows;
-            col = index / mRows;
+            return   index % mRows;
+
         } else {
-            row = index / mColumns;
-            col = index % mColumns;
+            return index / mColumns;
+
         }
-        return new int[] {row, col};
     }
+    /**
+     * Convert a 1D index to a 2D index that has index for row and index for column
+     * @param index index in 1D
+     * @return column as its values.
+     */
+    private int getColByIndex(int index) {
+        if (mOrientation == 1) {
+            return index / mRows;
+        } else {
+            return index % mColumns;
+        }
+    }
+
 
     /**
      * Get the next available position for widget arrangement.
      * @return int[] -> [row, column]
      */
-    private int[] getNextPosition() {
-        int[] position = new int[] {0, 0};
+    private int getNextPosition() {
+      //  int[] position = new int[] {0, 0};
+        int position = 0;
         boolean positionFound = false;
 
         while (!positionFound) {
             if (mNextAvailableIndex >= mRows * mColumns) {
-                return new int[] {-1, -1};
+                return -1;
             }
 
-            position = getPositionByIndex(mNextAvailableIndex);
-
-            if (mPositionMatrix[position[0]][position[1]]) {
-                mPositionMatrix[position[0]][position[1]] = false;
+           // position = getPositionByIndex(mNextAvailableIndex);
+            position = mNextAvailableIndex;
+            int row = getRowByIndex(mNextAvailableIndex);
+            int col = getColByIndex(mNextAvailableIndex);
+            if (mPositionMatrix[row][col]) {
+                mPositionMatrix[row][col] = false;
                 positionFound = true;
             }
 
@@ -457,14 +489,14 @@ public class Grid extends VirtualLayout {
      * @return true if the input spans is valid else false
      */
     private boolean handleSpans(int[] mId, int[][] spansMatrix) {
-        int[] startPosition;
         for (int i = 0; i < spansMatrix.length; i++) {
-            startPosition = getPositionByIndex(spansMatrix[i][0]);
-            if (!invalidatePositions(startPosition[0], startPosition[1],
+            int row = getRowByIndex(spansMatrix[i][0]);
+            int col = getColByIndex(spansMatrix[i][0]);
+            if (!invalidatePositions(row, col,
                     spansMatrix[i][1], spansMatrix[i][2])) {
                 return false;
             }
-            connectView(mId[i], startPosition[0], startPosition[1],
+            connectView(mId[i], row, col,
                     spansMatrix[i][1],  spansMatrix[i][2]);
             mSpanIds.add(mId[i]);
         }
@@ -477,10 +509,10 @@ public class Grid extends VirtualLayout {
      * @return true if all the skips are valid else false
      */
     private boolean handleSkips(int[][] skipsMatrix) {
-        int[] startPosition;
         for(int i = 0; i < skipsMatrix.length; i++) {
-            startPosition = getPositionByIndex(skipsMatrix[i][0]);
-            if (!invalidatePositions(startPosition[0], startPosition[1],
+            int row = getRowByIndex(skipsMatrix[i][0]);
+            int col = getColByIndex(skipsMatrix[i][0]);
+            if (!invalidatePositions(row, col,
                     skipsMatrix[i][1], skipsMatrix[i][2])) {
                 return false;
             }
