@@ -87,16 +87,18 @@ public class MainActivity extends AppCompatActivity {
         if (layout == R.layout.calendar) {
             fillCal(0);
         }
-//        mGrid = findViewById(R.id.grid);
-//        mGrid.setRows(mSizes[0]);
-//        mGrid.setColumns(mSizes[0]);
-//        mGrid.setRowWeights(mThreeWeights[0]);
-//        mGrid.setColumnWeights(mThreeWeights[0]);
-//        mGrid.setSkips(mSkips[0]);
-//        mGrid.setSpans(mSpans[0]);
-//        mGrid.setVerticalGaps(mGaps[0]);
-//        mGrid.setHorizontalGaps(mGaps[0]);
-//        mGrid.setOrientation(mOrientation);
+        if (layout == R.layout.responsive) {
+            mGrid = findViewById(R.id.grid);
+            mGrid.setRows(mSizes[0]);
+            mGrid.setColumns(mSizes[0]);
+            mGrid.setRowWeights(mThreeWeights[0]);
+            mGrid.setColumnWeights(mThreeWeights[0]);
+            mGrid.setSkips(mSkips[0]);
+            mGrid.setSpans(mSpans[0]);
+            mGrid.setVerticalGaps(mGaps[0]);
+            mGrid.setHorizontalGaps(mGaps[0]);
+            mGrid.setOrientation(mOrientation);
+        }
     }
     int mMonth = 0;
     public void nextPrev(View v) {
