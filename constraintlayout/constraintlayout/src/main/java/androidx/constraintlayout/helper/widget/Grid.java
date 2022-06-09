@@ -106,7 +106,7 @@ public class Grid extends VirtualLayout {
     private int mColumns;
 
     /**
-     * number of columns of the grid
+     * number of columns set by the XML or API
      */
     private int mColumnsSet;
 
@@ -202,9 +202,9 @@ public class Grid extends VirtualLayout {
             for (int i = 0; i < n; i++) {
                 int attr = a.getIndex(i);
                 if (attr == R.styleable.Grid_grid_rows) {
-                    mRowsSet = a.getInteger(attr, 1);
+                    mRowsSet = a.getInteger(attr, 0);
                 } else if (attr == R.styleable.Grid_grid_columns) {
-                    mColumnsSet = a.getInteger(attr, 1);
+                    mColumnsSet = a.getInteger(attr, 0);
                 } else if (attr == R.styleable.Grid_grid_spans) {
                     mStrSpans = a.getString(attr);
                 } else if (attr == R.styleable.Grid_grid_skips) {
