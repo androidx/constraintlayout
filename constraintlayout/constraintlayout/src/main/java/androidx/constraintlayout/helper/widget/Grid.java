@@ -234,6 +234,11 @@ public class Grid extends VirtualLayout {
         }
     }
 
+    /**
+     * Compute the actual rows and columns given what was set
+     * if 0,0 find the most square rows and columns that fits
+     * if 0,n or n,0 scale to fit
+     */
     private void updateActualRowsAndColumns() {
         if (mRowsSet == 0 || mColumnsSet == 0) {
             if (mColumnsSet > 0) {
