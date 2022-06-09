@@ -17,22 +17,21 @@ package androidx.constraintlayout.helper.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.Pair;
+import android.view.View;
 
-import androidx.constraintlayout.motion.widget.Debug;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.constraintlayout.widget.Guideline;
 import androidx.constraintlayout.widget.R;
 import androidx.constraintlayout.widget.VirtualLayout;
-import androidx.core.view.ViewCompat;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -88,6 +87,8 @@ public class Grid extends VirtualLayout {
     private final int mMaxRows = 50; // maximum number of rows can be specified.
     private final int mMaxColumns = 50; // maximum number of columns can be specified.
     private final ConstraintSet mConstraintSet = new ConstraintSet();
+    private Paint mPaint = new Paint();
+    private View[] mBoxViews;
     ConstraintLayout mContainer;
 
     /**
@@ -99,16 +100,6 @@ public class Grid extends VirtualLayout {
      * number of columns of the grid
      */
     private int mColumns;
-
-    /**
-     * an Guideline array to store all the vertical guidelines
-     */
-    private Guideline[] mVerticalGuideLines;
-
-    /**
-     * an Guideline array to store all the horizontal guidelines
-     */
-    private Guideline[] mHorizontalGuideLines;
 
     /**
      * string format of the input Spans
@@ -143,7 +134,7 @@ public class Grid extends VirtualLayout {
     /**
      * orientation of the view arrangement - vertical or horizontal
      */
-    private int mOrientation = 0; // default value is horizontal
+    private int mOrientation;
 
     /**
      * Indicates what is the next available position to place an widget
@@ -171,6 +162,11 @@ public class Grid extends VirtualLayout {
      * Store the view ids of handled spans
      */
     Set<Integer> mSpanIds = new HashSet<>();
+
+    /**
+     * Ids of the boxViews
+     */
+    private int[] mBoxViewIds;
 
     public Grid(Context context) {
         super(context);
@@ -209,7 +205,7 @@ public class Grid extends VirtualLayout {
                 }  else if (attr == R.styleable.Grid_grid_columnWeights) {
                     mStrColumnWeights = a.getString(attr);
                 }  else if (attr == R.styleable.Grid_grid_orientation) {
-                    mOrientation = a.getInt(attr,0);
+                    mOrientation = a.getInt(attr, 0);
                 } else if (attr == R.styleable.Grid_grid_horizontalGaps) {
                     mHorizontalGaps = a.getDimension(attr, 0);
                 } else if (attr == R.styleable.Grid_grid_verticalGaps) {
@@ -222,7 +218,7 @@ public class Grid extends VirtualLayout {
                     mUseRtl = a.getBoolean(attr, false);
                 }
             }
-Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
+            Log.v(TAG, " >>>>>>>>>>> col = " + mColumns);
             initVariables();
             a.recycle();
         }
@@ -244,7 +240,7 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
      * @return true if all the inputs are valid else false
      */
     private boolean generateGrid(boolean isUpdate) {
-        if (mContainer == null || mConstraintSet == null) {
+        if (mContainer == null || mConstraintSet == null || mRows < 2 || mColumns < 2) {
             return false;
         }
 
@@ -260,17 +256,17 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
         mNextAvailableIndex = 0;
         boolean isSuccess = true;
 
-        createGuidelines(mRows, mColumns, isUpdate);
+        buildBoxes();
 
         if (mStrSkips != null && !mStrSkips.trim().isEmpty()) {
-            HashMap<Integer, Pair<Integer, Integer>> mSkipMap = parseSpans(mStrSkips);
-            if (mSkipMap != null) {
-                isSuccess &= handleSkips(mSkipMap);
+            int[][] mSkips = parseSpans(mStrSkips);
+            if (mSkips != null) {
+                isSuccess &= handleSkips(mSkips);
             }
         }
 
         if (mStrSpans != null && !mStrSpans.trim().isEmpty()) {
-            HashMap<Integer, Pair<Integer, Integer>> mSpans = parseSpans(mStrSpans);
+            int[][] mSpans = parseSpans(mStrSpans);
             if (mSpans != null) {
                 isSuccess &= handleSpans(mIds, mSpans);
             }
@@ -290,9 +286,6 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
         for (boolean[] row: mPositionMatrix) {
             Arrays.fill(row, true);
         }
-
-        mHorizontalGuideLines = new Guideline[mRows + 1];
-        mVerticalGuideLines = new Guideline[mColumns + 1];
     }
 
     /**
@@ -319,96 +312,26 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
     }
 
     /**
-     * create vertical and horizontal guidelines based on mRows and mColumns
-     * @param rows number of rows is required for grid
-     * @param columns number of columns is required for grid
-     * @param isUpdate whether to update existing guidelines (true) or create new ones (false)
-     */
-    private void createGuidelines(int rows, int columns, boolean isUpdate) {
-        float[] rowWeights = parseWeights(rows, mStrRowWeights);
-        float[] columnWeights = parseWeights(columns, mStrColumnWeights);
-
-        float[] horizontalPositions = getLinePositions(0, 1,
-                rows + 1, rowWeights);
-        float[] verticalPositions = getLinePositions(0, 1,
-                columns + 1, columnWeights);
-
-        for (int i = 0; i < mHorizontalGuideLines.length; i++) {
-            if (isUpdate) {
-                updateGuideLinePosition(mHorizontalGuideLines[i], horizontalPositions[i]);
-                continue;
-            }
-
-            mHorizontalGuideLines[i] = getNewGuideline(myContext,
-                    ConstraintLayout.LayoutParams.HORIZONTAL, horizontalPositions[i]);
-            mContainer.addView(mHorizontalGuideLines[i]);
-        }
-        for (int i = 0; i < mVerticalGuideLines.length; i++) {
-            if (isUpdate) {
-                updateGuideLinePosition(mVerticalGuideLines[i], verticalPositions[i]);
-                continue;
-            }
-
-            mVerticalGuideLines[i] = getNewGuideline(myContext,
-                    ConstraintLayout.LayoutParams.VERTICAL, verticalPositions[i]);
-            mContainer.addView(mVerticalGuideLines[i]);
-        }
-    }
-
-    /**
-     * get a new Guideline based on the specified orientation and position
-     * @param context the context
-     * @param orientation orientation of a Guideline
-     * @param position position of a Guideline
-     * @return a Guideline
-     */
-    private Guideline getNewGuideline(Context context, int orientation, float position) {
-        Guideline guideline = new Guideline(context);
-        guideline.setId(ViewCompat.generateViewId());
-        ConstraintLayout.LayoutParams lp =
-                new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT,
-                        ConstraintLayout.LayoutParams.WRAP_CONTENT);
-        lp.orientation = orientation;
-        lp.guidePercent = position;
-        guideline.setLayoutParams(lp);
-
-        return guideline;
-    }
-
-    private void updateGuideLinePosition(Guideline guideline, float position) {
-        ConstraintLayout.LayoutParams params =
-                (ConstraintLayout.LayoutParams) guideline.getLayoutParams();
-        params.guidePercent = position;
-        guideline.setLayoutParams(params);
-    }
-
-    /**
-     * Connect the view to the corresponding guidelines based on the input params
+     * Connect the view to the corresponding viewBoxes based on the input params
      * @param viewId the Id of the view
      * @param row row position to place the view
      * @param column column position to place the view
      */
-    private void connectView(int viewId, int row, int column, int rowSpan, int columnSpan,
-                             float horizontalGaps, float verticalGaps) {
+    private void connectView(int viewId, int row, int column, int rowSpan, int columnSpan) {
 
         // @TODO handle RTL
         // connect Start of the view
-        mConstraintSet.connect(viewId, ConstraintSet.START,
-                mVerticalGuideLines[column].getId(), ConstraintSet.END,(int) horizontalGaps);
+        mConstraintSet.connect(viewId, ConstraintSet.LEFT, mBoxViewIds[column], ConstraintSet.LEFT);
 
         // connect Top of the view
-        mConstraintSet.connect(viewId, ConstraintSet.TOP,
-                mHorizontalGuideLines[row].getId(), ConstraintSet.BOTTOM, (int) verticalGaps);
+        mConstraintSet.connect(viewId, ConstraintSet.TOP, mBoxViewIds[row], ConstraintSet.TOP);
 
-        // connect End of the view
-        mConstraintSet.connect(viewId, ConstraintSet.END,
-                mVerticalGuideLines[column + columnSpan].getId(),
-                ConstraintSet.START, (int) horizontalGaps);
+        mConstraintSet.connect(viewId, ConstraintSet.RIGHT,
+                mBoxViewIds[column + columnSpan - 1], ConstraintSet.RIGHT);
 
         // connect Bottom of the view
         mConstraintSet.connect(viewId, ConstraintSet.BOTTOM,
-                mHorizontalGuideLines[row + rowSpan].getId(),
-                ConstraintSet.TOP,(int) verticalGaps);
+                mBoxViewIds[row + rowSpan - 1], ConstraintSet.BOTTOM);
     }
 
     /**
@@ -416,7 +339,7 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
      * @return true if all the widgets can be arranged properly else false
      */
     private boolean arrangeWidgets() {
-        Pair<Integer, Integer> position;
+        int[] position;
 
         // @TODO handle RTL
         for (int i = 0; i < mCount; i++) {
@@ -426,12 +349,11 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
             }
 
             position = getNextPosition();
-            if (position.first == -1) {
+            if (position[0] == -1) {
                 // no more available position.
                 return false;
             }
-            connectView(mIds[i], position.first, position.second,
-                    1, 1, mHorizontalGaps, mVerticalGaps);
+            connectView(mIds[i], position[0], position[1], 1, 1);
         }
         return true;
     }
@@ -439,9 +361,9 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
     /**
      * Convert a 1D index to a 2D index that has index for row and index for column
      * @param index index in 1D
-     * @return a Pair with row and column as its values.
+     * @return a int[] with row and column as its values.
      */
-    private Pair<Integer, Integer> getPositionByIndex(int index) {
+    private int[] getPositionByIndex(int index) {
         // @TODO handle RTL
         int row;
         int col;
@@ -453,32 +375,32 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
             row = index / mColumns;
             col = index % mColumns;
         }
-        return new Pair<>(row, col);
+        return new int[] {row, col};
     }
 
     /**
      * Get the next available position for widget arrangement.
-     * @return Pair<row, column>
+     * @return int[] -> [row, column]
      */
-    private Pair<Integer, Integer> getNextPosition() {
-        Pair<Integer, Integer> position = new Pair<>(0, 0);
+    private int[] getNextPosition() {
+        int[] position = new int[] {0, 0};
         boolean positionFound = false;
 
         while (!positionFound) {
             if (mNextAvailableIndex >= mRows * mColumns) {
-                return new Pair<>(-1,  -1);
+                return new int[] {-1, -1};
             }
 
             position = getPositionByIndex(mNextAvailableIndex);
 
-            if (mPositionMatrix[position.first][position.second]) {
-                mPositionMatrix[position.first][position.second] = false;
+            if (mPositionMatrix[position[0]][position[1]]) {
+                mPositionMatrix[position[0]][position[1]] = false;
                 positionFound = true;
             }
 
             mNextAvailableIndex++;
         }
-        return new Pair<>(position.first, position.second);
+        return position;
     }
 
     /**
@@ -502,72 +424,72 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
     }
 
     /**
-     * parse the skips/spans in the string format into a HashMap<index, row_span, col_span>>
+     * parse the skips/spans in the string format into a int matrix
+     * that each row has the information - [index, row_span, col_span]
      * the format of the input string is index:row_spanxcol_span.
      * index - the index of the starting position
      * row_span - the number of rows to span
      * col_span- the number of columns to span
      * @param str string format of skips or spans
-     * @return a hashmap that contains skip information.
+     * @return a int matrix that contains skip information.
      */
-    private HashMap<Integer, Pair<Integer, Integer>> parseSpans(String str) {
+    private int[][] parseSpans(String str) {
         if (!isSpansValid(str)) {
             return null;
         }
 
-        HashMap<Integer, Pair<Integer, Integer>> skipMap = new HashMap<>();
+        String[] spans = str.split(",");
+        int[][] spanMatrix = new int[spans.length][3];
 
-        String[] skips = str.split(",");
         String[] indexAndSpan;
         String[] rowAndCol;
-        for (String skip: skips) {
-            indexAndSpan = skip.trim().split(":");
+        for (int i = 0; i < spans.length; i++) {
+            indexAndSpan = spans[i].trim().split(":");
             rowAndCol = indexAndSpan[1].split("x");
-            skipMap.put(Integer.parseInt(indexAndSpan[0]),
-                    new Pair<>(Integer.parseInt(rowAndCol[0]), Integer.parseInt(rowAndCol[1])));
+            spanMatrix[i][0] = Integer.parseInt(indexAndSpan[0]);
+            spanMatrix[i][1] = Integer.parseInt(rowAndCol[0]);
+            spanMatrix[i][2] = Integer.parseInt(rowAndCol[1]);
         }
-        return skipMap;
+        return spanMatrix;
     }
 
     /**
      * Handle the span use cases
-     * @param spansMap a hashmap that contains span information
+     * @param spansMatrix a int matrix that contains span information
      * @return true if the input spans is valid else false
      */
-    private boolean handleSpans(int[] mId, HashMap<Integer, Pair<Integer, Integer>> spansMap) {
-        int mIdIndex = 0;
-        Pair<Integer, Integer> startPosition;
-        for (Map.Entry<Integer, Pair<Integer, Integer>> entry : spansMap.entrySet()) {
-            startPosition = getPositionByIndex(entry.getKey());
-            if (!invalidatePositions(startPosition.first, startPosition.second,
-                    entry.getValue().first, entry.getValue().second)) {
+    private boolean handleSpans(int[] mId, int[][] spansMatrix) {
+        int[] startPosition;
+        for (int i = 0; i < spansMatrix.length; i++) {
+            startPosition = getPositionByIndex(spansMatrix[i][0]);
+            if (!invalidatePositions(startPosition[0], startPosition[1],
+                    spansMatrix[i][1], spansMatrix[i][2])) {
                 return false;
             }
-            connectView(mId[mIdIndex], startPosition.first, startPosition.second,
-                    entry.getValue().first,  entry.getValue().second,
-                    mHorizontalGaps, mVerticalGaps);
-            mSpanIds.add(mId[mIdIndex]);
-            mIdIndex++;
+            connectView(mId[i], startPosition[0], startPosition[1],
+                    spansMatrix[i][1],  spansMatrix[i][2]);
+            mSpanIds.add(mId[i]);
         }
         return true;
     }
 
     /**
      * Make positions in the grid unavailable based on the skips attr
-     * @param skipsMap a hashmap that contains skip information
+     * @param skipsMatrix a int matrix that contains skip information
      * @return true if all the skips are valid else false
      */
-    private boolean handleSkips(HashMap<Integer, Pair<Integer, Integer>> skipsMap) {
-        Pair<Integer, Integer> startPosition;
-        for (Map.Entry<Integer, Pair<Integer, Integer>> entry : skipsMap.entrySet()) {
-            startPosition = getPositionByIndex(entry.getKey());
-            if (!invalidatePositions(startPosition.first, startPosition.second,
-                     entry.getValue().first, entry.getValue().second)) {
+    private boolean handleSkips(int[][] skipsMatrix) {
+        int[] startPosition;
+        for(int i = 0; i < skipsMatrix.length; i++) {
+            startPosition = getPositionByIndex(skipsMatrix[i][0]);
+            if (!invalidatePositions(startPosition[0], startPosition[1],
+                    skipsMatrix[i][1], skipsMatrix[i][2])) {
                 return false;
             }
         }
         return true;
     }
+
 
     /**
      * Make the specified positions in the grid unavailable.
@@ -575,7 +497,7 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
      * @param startColumn the column of the staring position
      * @param rowSpan how many rows to span
      * @param columnSpan how many columns to span
-     * @return true if we could properly invalidate the positions esle false
+     * @return true if we could properly invalidate the positions else false
      */
     private boolean invalidatePositions(int startRow, int startColumn,
                                         int rowSpan, int columnSpan) {
@@ -593,32 +515,128 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
     }
 
     /**
-     * Generate line positions (for the Guideline positioning)
-     * @param min min value of the linear spaced positions
-     *      * @param max max value of the linear spaced positions
-     * @param numPositions number of positions is required
-     * @param weights a float array for space weights
-     * @return a float array of the corresponding positions
+     * Visualize the boxViews that are used to constraint widgets.
+     * @param canvas canvas to visualize the boxViews
      */
-    private float[] getLinePositions(float min, float max, int numPositions, float[] weights) {
-        if (weights != null && numPositions - 1 != weights.length) {
-            return null;
+    @Override
+    public void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        // Visualize the viewBoxes if isInEditMode() is true
+        if (!isInEditMode()) {
+            return;
+        }
+        mPaint.setColor(Color.RED);
+        mPaint.setStyle(Paint.Style.STROKE);
+        int myTop = getTop();
+        int myLeft = getLeft();
+        int myBottom = getBottom();
+        int myRight = getRight();
+        for (int i = 0; i < mBoxViews.length; i++) {
+            View box = mBoxViews[i];
+            int l = box.getLeft() - myLeft;
+            int t = box.getTop() - myTop;
+            int r = box.getRight() - myLeft;
+            int b = box.getBottom() - myTop;
+            canvas.drawRect(l, 0, r, myBottom - myTop, mPaint);
+            canvas.drawRect(0, t, myRight - myLeft, b, mPaint);
+        }
+    }
+
+    /**
+     * Set chain between boxView horzontally
+     */
+    private void setBoxViewHorizontalChains() {
+        int gridId = getId();
+        int maxVal = Math.max(mRows, mColumns);
+        int minVal = Math.min(mRows, mColumns);
+        float[] columnWeights = parseWeights(mColumns, mStrColumnWeights);
+
+        // chain all the views on the longer side (either horizontal or vertical)
+        if (maxVal == mColumns) {
+            mConstraintSet.createHorizontalChain(gridId, ConstraintSet.LEFT, gridId,
+                    ConstraintSet.RIGHT, mBoxViewIds, columnWeights,
+                    ConstraintSet.CHAIN_SPREAD_INSIDE);
+            for (int i = 1; i < mBoxViews.length; i++) {
+                mConstraintSet.setMargin(mBoxViewIds[i], ConstraintSet.LEFT, (int) mHorizontalGaps);
+            }
+            return;
         }
 
-        float[] positions = new float[numPositions];
-        int weightSum = 0;
-        for (int i = 0; i < numPositions - 1; i++) {
-            weightSum += weights != null ? weights[i] : 1;
+        // chain partial veriws on the shorter side (either horizontal or vertical)
+        // add constraints to the parent for the non-chained views
+        mConstraintSet.createHorizontalChain(gridId, ConstraintSet.LEFT, gridId,
+                ConstraintSet.RIGHT, Arrays.copyOf(mBoxViewIds, minVal), columnWeights,
+                ConstraintSet.CHAIN_SPREAD_INSIDE);
+        for (int i = 1; i < mBoxViews.length; i++) {
+            if (i < minVal) {
+                mConstraintSet.setMargin(mBoxViewIds[i], ConstraintSet.LEFT, (int) mHorizontalGaps);
+            } else {
+                mConstraintSet.connect(mBoxViewIds[i], ConstraintSet.LEFT,
+                        gridId, ConstraintSet.LEFT);
+                mConstraintSet.connect(mBoxViewIds[i], ConstraintSet.RIGHT,
+                        gridId, ConstraintSet.RIGHT);
+            }
+        }
+    }
+
+    /**
+     * Set chain between boxView vertically
+     */
+    private void setBoxViewVerticalChains() {
+        int gridId = getId();
+        int maxVal = Math.max(mRows, mColumns);
+        int minVal = Math.min(mRows, mColumns);
+        float[] rowWeights = parseWeights(mRows, mStrRowWeights);
+
+        // chain all the views on the longer side (either horizontal or vertical)
+        if (maxVal == mRows) {
+            mConstraintSet.createVerticalChain(gridId, ConstraintSet.TOP, gridId,
+                    ConstraintSet.BOTTOM, mBoxViewIds, rowWeights,
+                    ConstraintSet.CHAIN_SPREAD_INSIDE);
+            for (int i = 1; i < mBoxViews.length; i++) {
+                mConstraintSet.setMargin(mBoxViewIds[i], ConstraintSet.TOP, (int) mVerticalGaps);
+            }
+            return;
         }
 
-        float availableSpace = max - min;
-        float baseWeight = availableSpace / weightSum;
-        positions[0] = min;
-        for (int i = 0; i < numPositions - 1; i++) {
-            float w = weights != null ? weights[i] : 1;
-            positions[i + 1] = positions[i] + w * baseWeight;
+        // chain partial veriws on the shorter side (either horizontal or vertical)
+        // add constraints to the parent for the non-chained views
+        mConstraintSet.createVerticalChain(gridId, ConstraintSet.TOP, gridId,
+                ConstraintSet.BOTTOM, Arrays.copyOf(mBoxViewIds, minVal), rowWeights,
+                ConstraintSet.CHAIN_SPREAD_INSIDE);
+        for (int i = 1; i < mBoxViews.length; i++) {
+            if (i < minVal) {
+                mConstraintSet.setMargin(mBoxViewIds[i], ConstraintSet.TOP, (int) mVerticalGaps);
+            } else {
+                mConstraintSet.connect(mBoxViewIds[i], ConstraintSet.TOP,
+                        gridId, ConstraintSet.TOP);
+                mConstraintSet.connect(mBoxViewIds[i], ConstraintSet.BOTTOM,
+                        gridId, ConstraintSet.BOTTOM);
+            }
         }
-        return positions;
+    }
+
+    /**
+     * create boxViews for constraining widgets
+     */
+    private void buildBoxes() {
+        int boxCount = Math.max(mRows, mColumns);
+        mBoxViews = new View[boxCount];
+        mBoxViewIds = new int[boxCount];
+        for (int i = 0; i < mBoxViews.length; i++) {
+            mBoxViews[i] = new View(getContext()); // need to remove old Views
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                mBoxViews[i].setId(View.generateViewId());
+            }
+            ConstraintLayout.LayoutParams params =
+                    new ConstraintLayout.LayoutParams(0, 0);
+
+            mContainer.addView(mBoxViews[i], params);
+            mBoxViewIds[i] = mBoxViews[i].getId();
+        }
+
+        setBoxViewVerticalChains();
+        setBoxViewHorizontalChains();
     }
 
     /**
@@ -632,22 +650,20 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
     /**
      * set new rows value and also invoke initVariables and invalidate
      * @param rows new rows value
-     * @return true if it succeeds otherwise false
      */
-    public boolean setRows(int rows) {
+    public void setRows(int rows) {
         if (rows < 2 || rows > mMaxRows) {
-            return false;
+            return;
         }
 
         if (mRows == rows) {
-            return true;
+            return;
         }
 
         mRows = rows;
         initVariables();
         generateGrid(false);
         invalidate();
-        return true;
     }
 
     /**
@@ -661,25 +677,21 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
     /**
      * set new columns value and also invoke initVariables and invalidate
      * @param columns new rows value
-     * @return true if it succeeds otherwise false
      */
-    public boolean setColumns(int columns) {
-        Debug.logStack(TAG, " >>>>>>>>>>>>> col " + columns, 5);
+    public void setColumns(int columns) {
         if (columns < 2 || columns > mMaxColumns) {
-            return false;
+            return;
         }
 
         if (mColumns == columns) {
-            return true;
+            return;
         }
 
         mColumns = columns;
         initVariables();
         generateGrid(false);
         invalidate();
-        return true;
     }
-
 
     /**
      * get the value of orientation
@@ -692,22 +704,19 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
     /**
      * set new orientation value and also invoke invalidate
      * @param orientation new orientation value
-     * @return true if it succeeds otherwise false
      */
-    public boolean setOrientation(int orientation) {
+    public void setOrientation(int orientation) {
         if (!(orientation == HORIZONTAL || orientation == VERTICAL)) {
-            return false;
+            return;
         }
 
         if (mOrientation == orientation) {
-            return true;
+            return;
         }
 
         mOrientation = orientation;
         generateGrid(true);
         invalidate();
-        return true;
-
     }
 
     /**
@@ -721,21 +730,19 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
     /**
      * set new spans value and also invoke invalidate
      * @param spans new spans value
-     * @return true if it succeeds otherwise false
      */
-    public Boolean setSpans(String spans) {
+    public void setSpans(String spans) {
         if (!isSpansValid(spans)) {
-            return false;
+            return;
         }
 
         if (mStrSpans != null && mStrSpans.equals(spans)) {
-            return true;
+            return;
         }
 
         mStrSpans = spans;
         generateGrid(true);
         invalidate();
-        return true;
     }
 
     /**
@@ -749,21 +756,19 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
     /**
      * set new skips value and also invoke invalidate
      * @param skips new spans value
-     * @return true if it succeeds otherwise false
      */
-    public Boolean setSkips(String skips) {
+    public void setSkips(String skips) {
         if (!isSpansValid(skips)) {
-            return false;
+            return;
         }
 
         if (mStrSkips != null && mStrSkips.equals(skips)) {
-            return true;
+            return;
         }
 
         mStrSkips = skips;
         generateGrid(true);
         invalidate();
-        return true;
     }
 
     /**
@@ -777,21 +782,19 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
     /**
      * set new rowWeights value and also invoke invalidate
      * @param rowWeights new rowWeights value
-     * @return true if it succeeds otherwise false
      */
-    public Boolean setRowWeights(String rowWeights) {
+    public void setRowWeights(String rowWeights) {
         if (!isWeightsValid(rowWeights)) {
-            return false;
+            return;
         }
 
         if (mStrRowWeights != null && mStrRowWeights.equals(rowWeights)) {
-            return true;
+            return;
         }
 
         mStrRowWeights = rowWeights;
         generateGrid(true);
         invalidate();
-        return true;
     }
 
     /**
@@ -805,21 +808,19 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
     /**
      * set new columnWeights value and also invoke invalidate
      * @param columnWeights new columnWeights value
-     * @return true if it succeeds otherwise false
      */
-    public Boolean setColumnWeights(String columnWeights) {
+    public void setColumnWeights(String columnWeights) {
         if (!isWeightsValid(columnWeights)) {
-            return false;
+            return;
         }
 
         if (mStrColumnWeights != null && mStrColumnWeights.equals(columnWeights)) {
-            return true;
+            return;
         }
 
         mStrColumnWeights = columnWeights;
         generateGrid(true);
         invalidate();
-        return true;
     }
 
     /**
@@ -833,21 +834,19 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
     /**
      *  set new horizontalGaps value and also invoke invalidate
      * @param horizontalGaps new horizontalGaps value
-     * @return true if it succeeds otherwise false
      */
-    public boolean setHorizontalGaps(float horizontalGaps) {
+    public void setHorizontalGaps(float horizontalGaps) {
         if (horizontalGaps < 0) {
-            return false;
+            return;
         }
 
         if (mHorizontalGaps == horizontalGaps) {
-            return true;
+            return;
         }
 
         mHorizontalGaps = horizontalGaps;
         generateGrid(true);
         invalidate();
-        return true;
     }
 
     /**
@@ -861,20 +860,18 @@ Log.v(TAG, " >>>>>>>>>>> col = "+mColumns);
     /**
      * set new verticalGaps value and also invoke invalidate
      * @param verticalGaps new verticalGaps value
-     * @return true if it succeeds otherwise false
      */
-    public boolean setVerticalGaps(float verticalGaps) {
+    public void setVerticalGaps(float verticalGaps) {
         if (verticalGaps < 0) {
-            return false;
+            return;
         }
 
         if (mVerticalGaps == verticalGaps) {
-            return true;
+            return;
         }
 
         mVerticalGaps = verticalGaps;
         generateGrid(true);
         invalidate();
-        return true;
     }
 }
