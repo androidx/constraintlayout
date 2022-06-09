@@ -15,6 +15,7 @@
  */
 package androidx.constraintlayout.helper.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -22,7 +23,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -87,7 +87,6 @@ public class Grid extends VirtualLayout {
     private final int mMaxRows = 50; // maximum number of rows can be specified.
     private final int mMaxColumns = 50; // maximum number of columns can be specified.
     private final ConstraintSet mConstraintSet = new ConstraintSet();
-    private Paint mPaint = new Paint();
     private View[] mBoxViews;
     ConstraintLayout mContainer;
 
@@ -218,7 +217,6 @@ public class Grid extends VirtualLayout {
                     mUseRtl = a.getBoolean(attr, false);
                 }
             }
-            Log.v(TAG, " >>>>>>>>>>> col = " + mColumns);
             initVariables();
             a.recycle();
         }
@@ -525,20 +523,22 @@ public class Grid extends VirtualLayout {
         if (!isInEditMode()) {
             return;
         }
-        mPaint.setColor(Color.RED);
-        mPaint.setStyle(Paint.Style.STROKE);
+        @SuppressLint("DrawAllocation")
+        Paint paint = new Paint(); // only used in design time
+
+        paint.setColor(Color.RED);
+        paint.setStyle(Paint.Style.STROKE);
         int myTop = getTop();
         int myLeft = getLeft();
         int myBottom = getBottom();
         int myRight = getRight();
-        for (int i = 0; i < mBoxViews.length; i++) {
-            View box = mBoxViews[i];
+        for (View box : mBoxViews) {
             int l = box.getLeft() - myLeft;
             int t = box.getTop() - myTop;
             int r = box.getRight() - myLeft;
             int b = box.getBottom() - myTop;
-            canvas.drawRect(l, 0, r, myBottom - myTop, mPaint);
-            canvas.drawRect(0, t, myRight - myLeft, b, mPaint);
+            canvas.drawRect(l, 0, r, myBottom - myTop, paint);
+            canvas.drawRect(0, t, myRight - myLeft, b, paint);
         }
     }
 
