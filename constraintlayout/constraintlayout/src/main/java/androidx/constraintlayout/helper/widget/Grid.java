@@ -26,7 +26,6 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.constraintlayout.widget.R;
 import androidx.constraintlayout.widget.VirtualLayout;
 
@@ -84,11 +83,11 @@ public class Grid extends VirtualLayout {
     private static final String TAG = "Grid";
     public static final int VERTICAL = 1;
     public static final int HORIZONTAL = 0;
+    private static final boolean DEBUG_BOXES = false;
     private final int mMaxRows = 50; // maximum number of rows can be specified.
     private final int mMaxColumns = 50; // maximum number of columns can be specified.
     // private final ConstraintSet mConstraintSet = new ConstraintSet();
-    private final boolean USE_CSET = false;
-     private final ConstraintSet mConstraintSet = (USE_CSET)?  new ConstraintSet(): null;
+
     private View[] mBoxViews;
     ConstraintLayout mContainer;
 
@@ -211,11 +210,11 @@ public class Grid extends VirtualLayout {
                     mStrSpans = a.getString(attr);
                 } else if (attr == R.styleable.Grid_grid_skips) {
                     mStrSkips = a.getString(attr);
-                }  else if (attr == R.styleable.Grid_grid_rowWeights) {
+                } else if (attr == R.styleable.Grid_grid_rowWeights) {
                     mStrRowWeights = a.getString(attr);
-                }  else if (attr == R.styleable.Grid_grid_columnWeights) {
+                } else if (attr == R.styleable.Grid_grid_columnWeights) {
                     mStrColumnWeights = a.getString(attr);
-                }  else if (attr == R.styleable.Grid_grid_orientation) {
+                } else if (attr == R.styleable.Grid_grid_orientation) {
                     mOrientation = a.getInt(attr, 0);
                 } else if (attr == R.styleable.Grid_grid_horizontalGaps) {
                     mHorizontalGaps = a.getDimension(attr, 0);
@@ -224,7 +223,7 @@ public class Grid extends VirtualLayout {
                 } else if (attr == R.styleable.Grid_grid_validateInputs) {
                     // @TODO handle validation
                     mValidateInputs = a.getBoolean(attr, false);
-                }  else if (attr == R.styleable.Grid_grid_useRtl) {
+                } else if (attr == R.styleable.Grid_grid_useRtl) {
                     // @TODO handle RTL
                     mUseRtl = a.getBoolean(attr, false);
                 }
@@ -245,13 +244,13 @@ public class Grid extends VirtualLayout {
         if (mRowsSet == 0 || mColumnsSet == 0) {
             if (mColumnsSet > 0) {
                 mColumns = mColumnsSet;
-                mRows = (mCount + mColumns -1) / mColumnsSet; // round up
-            } else  if (mRowsSet > 0) {
+                mRows = (mCount + mColumns - 1) / mColumnsSet; // round up
+            } else if (mRowsSet > 0) {
                 mRows = mRowsSet;
-                mColumns= (mCount + mRowsSet -1) / mRowsSet; // round up
+                mColumns = (mCount + mRowsSet - 1) / mRowsSet; // round up
             } else { // as close to square as possible favoring more rows
-                mRows = (int)  (1.5 + Math.sqrt(mCount));
-                mColumns = (mCount + mRows -1) / mRows;
+                mRows = (int) (1.5 + Math.sqrt(mCount));
+                mColumns = (mCount + mRows - 1) / mRows;
             }
         } else {
             mRows = mRowsSet;
@@ -264,18 +263,18 @@ public class Grid extends VirtualLayout {
         super.onAttachedToWindow();
 
         mContainer = (ConstraintLayout) getParent();
-       if (USE_CSET) mConstraintSet.clone(mContainer);
 
         generateGrid(false);
     }
 
     /**
      * generate the Grid form based on the input attributes
+     *
      * @param isUpdate whether to update the existing grid (true) or create a new one (false)
      * @return true if all the inputs are valid else false
      */
     private boolean generateGrid(boolean isUpdate) {
-        if (mContainer == null ||  mRows < 1 || mColumns < 1) {
+        if (mContainer == null || mRows < 1 || mColumns < 1) {
             return false;
         }
 
@@ -308,8 +307,7 @@ public class Grid extends VirtualLayout {
         }
         isSuccess &= arrangeWidgets();
 
-        if (USE_CSET)  mConstraintSet.applyTo(mContainer);
-        else mContainer.requestLayout();
+        mContainer.requestLayout();
         applyLayoutFeatures();
         return isSuccess || !mValidateInputs;
     }
@@ -319,13 +317,14 @@ public class Grid extends VirtualLayout {
      */
     private void initVariables() {
         mPositionMatrix = new boolean[mRows][mColumns];
-        for (boolean[] row: mPositionMatrix) {
+        for (boolean[] row : mPositionMatrix) {
             Arrays.fill(row, true);
         }
     }
 
     /**
      * parse the weights/pads in the string format into a float array
+     *
      * @param size size of the return array
      * @param str  weights/pads in a string format
      * @return a float array with weights/pads values
@@ -350,46 +349,33 @@ public class Grid extends VirtualLayout {
     private ConstraintLayout.LayoutParams params(View v) {
         return (ConstraintLayout.LayoutParams) v.getLayoutParams();
     }
+
     /**
      * Connect the view to the corresponding viewBoxes based on the input params
-     * @param viewId the Id of the view
-     * @param row row position to place the view
+     *
+     * @param view   the Id of the view
+     * @param row    row position to place the view
      * @param column column position to place the view
      */
-    private void connectView(int viewId, int row, int column, int rowSpan, int columnSpan) {
-
-        // @TODO handle RTL
-        // connect Start of the view
-        mConstraintSet.connect(viewId, ConstraintSet.LEFT, mBoxViewIds[column], ConstraintSet.LEFT);
-
-        // connect Top of the view
-        mConstraintSet.connect(viewId, ConstraintSet.TOP, mBoxViewIds[row], ConstraintSet.TOP);
-
-        mConstraintSet.connect(viewId, ConstraintSet.RIGHT,
-                mBoxViewIds[column + columnSpan - 1], ConstraintSet.RIGHT);
-
-        // connect Bottom of the view
-        mConstraintSet.connect(viewId, ConstraintSet.BOTTOM,
-                mBoxViewIds[row + rowSpan - 1], ConstraintSet.BOTTOM);
-    }
 
     private void connectView(View view, int row, int column, int rowSpan, int columnSpan) {
         ConstraintLayout.LayoutParams params = params(view);
         // @TODO handle RTL
-
+        // Connect the 4 sides
         params.leftToLeft = mBoxViewIds[column];
         params.topToTop = mBoxViewIds[row];
-        params.rightToRight =  mBoxViewIds[column + columnSpan - 1];
-        params.bottomToBottom =  mBoxViewIds[row + rowSpan - 1];
+        params.rightToRight = mBoxViewIds[column + columnSpan - 1];
+        params.bottomToBottom = mBoxViewIds[row + rowSpan - 1];
     }
 
     /**
      * Arrange the views in the constraint_referenced_ids
+     *
      * @return true if all the widgets can be arranged properly else false
      */
     private boolean arrangeWidgets() {
         int position;
-        View[]views = getViews(mContainer);
+        View[] views = getViews(mContainer);
         // @TODO handle RTL
         for (int i = 0; i < mCount; i++) {
             if (mSpanIds.contains(mIds[i])) {
@@ -404,23 +390,21 @@ public class Grid extends VirtualLayout {
                 // no more available position.
                 return false;
             }
-        if (USE_CSET) {
-            connectView(mIds[i], row, col, 1, 1);
-        } else {
+
             connectView(views[i], row, col, 1, 1);
-        }
         }
         return true;
     }
 
     /**
      * Convert a 1D index to a 2D index that has index for row and index for column
+     *
      * @param index index in 1D
      * @return row as its values.
      */
     private int getRowByIndex(int index) {
         if (mOrientation == 1) {
-            return   index % mRows;
+            return index % mRows;
 
         } else {
             return index / mColumns;
@@ -430,6 +414,7 @@ public class Grid extends VirtualLayout {
 
     /**
      * Convert a 1D index to a 2D index that has index for row and index for column
+     *
      * @param index index in 1D
      * @return column as its values.
      */
@@ -443,10 +428,11 @@ public class Grid extends VirtualLayout {
 
     /**
      * Get the next available position for widget arrangement.
+     *
      * @return int[] -> [row, column]
      */
     private int getNextPosition() {
-      //  int[] position = new int[] {0, 0};
+        //  int[] position = new int[] {0, 0};
         int position = 0;
         boolean positionFound = false;
 
@@ -455,7 +441,7 @@ public class Grid extends VirtualLayout {
                 return -1;
             }
 
-           // position = getPositionByIndex(mNextAvailableIndex);
+            // position = getPositionByIndex(mNextAvailableIndex);
             position = mNextAvailableIndex;
             int row = getRowByIndex(mNextAvailableIndex);
             int col = getColByIndex(mNextAvailableIndex);
@@ -471,6 +457,7 @@ public class Grid extends VirtualLayout {
 
     /**
      * Check if the value of the spans/skips is valid
+     *
      * @param str spans/skips in string format
      * @return true if it is valid else false
      */
@@ -481,6 +468,7 @@ public class Grid extends VirtualLayout {
 
     /**
      * Check if the value of the rowWeights or columnsWeights is valid
+     *
      * @param str rowWeights/columnsWeights in string format
      * @return true if it is valid else false
      */
@@ -496,6 +484,7 @@ public class Grid extends VirtualLayout {
      * index - the index of the starting position
      * row_span - the number of rows to span
      * col_span- the number of columns to span
+     *
      * @param str string format of skips or spans
      * @return a int matrix that contains skip information.
      */
@@ -521,11 +510,12 @@ public class Grid extends VirtualLayout {
 
     /**
      * Handle the span use cases
+     *
      * @param spansMatrix a int matrix that contains span information
      * @return true if the input spans is valid else false
      */
     private boolean handleSpans(int[] mId, int[][] spansMatrix) {
-        View []views = getViews(mContainer);
+        View[] views = getViews(mContainer);
         for (int i = 0; i < spansMatrix.length; i++) {
             int row = getRowByIndex(spansMatrix[i][0]);
             int col = getColByIndex(spansMatrix[i][0]);
@@ -533,13 +523,10 @@ public class Grid extends VirtualLayout {
                     spansMatrix[i][1], spansMatrix[i][2])) {
                 return false;
             }
-            if (USE_CSET) {
-                connectView(mId[i], row, col,
-                        spansMatrix[i][1], spansMatrix[i][2]);
-            } else {
-                connectView(views[i], row, col,
-                        spansMatrix[i][1], spansMatrix[i][2]);
-            }
+
+            connectView(views[i], row, col,
+                    spansMatrix[i][1], spansMatrix[i][2]);
+
             mSpanIds.add(mId[i]);
         }
         return true;
@@ -547,11 +534,12 @@ public class Grid extends VirtualLayout {
 
     /**
      * Make positions in the grid unavailable based on the skips attr
+     *
      * @param skipsMatrix a int matrix that contains skip information
      * @return true if all the skips are valid else false
      */
     private boolean handleSkips(int[][] skipsMatrix) {
-        for(int i = 0; i < skipsMatrix.length; i++) {
+        for (int i = 0; i < skipsMatrix.length; i++) {
             int row = getRowByIndex(skipsMatrix[i][0]);
             int col = getColByIndex(skipsMatrix[i][0]);
             if (!invalidatePositions(row, col,
@@ -564,10 +552,11 @@ public class Grid extends VirtualLayout {
 
     /**
      * Make the specified positions in the grid unavailable.
-     * @param startRow the row of the staring position
+     *
+     * @param startRow    the row of the staring position
      * @param startColumn the column of the staring position
-     * @param rowSpan how many rows to span
-     * @param columnSpan how many columns to span
+     * @param rowSpan     how many rows to span
+     * @param columnSpan  how many columns to span
      * @return true if we could properly invalidate the positions else false
      */
     private boolean invalidatePositions(int startRow, int startColumn,
@@ -587,6 +576,7 @@ public class Grid extends VirtualLayout {
 
     /**
      * Visualize the boxViews that are used to constraint widgets.
+     *
      * @param canvas canvas to visualize the boxViews
      */
     @Override
@@ -616,54 +606,14 @@ public class Grid extends VirtualLayout {
     }
 
     /**
-     * Set chain between boxView horzontally
+     * Set chain between boxView horizontally
      */
-    private void setBoxViewHorizontalChains_cset() {
-        int gridId = getId();
-        int maxVal = Math.max(mRows, mColumns);
-        int minVal = Math.min(mRows, mColumns);
-        float[] columnWeights = parseWeights(mColumns, mStrColumnWeights);
-
-        // chain all the views on the longer side (either horizontal or vertical)
-        if (mColumns == 1) {
-            mConstraintSet.center(mBoxViewIds[0], gridId, ConstraintSet.LEFT, 0, gridId,
-                    ConstraintSet.RIGHT, 0, 0.5f);
-            return;
-        }
-        if (maxVal == mColumns) {
-            mConstraintSet.createHorizontalChain(gridId, ConstraintSet.LEFT, gridId,
-                    ConstraintSet.RIGHT, mBoxViewIds, columnWeights,
-                    ConstraintSet.CHAIN_SPREAD_INSIDE);
-            for (int i = 1; i < mBoxViews.length; i++) {
-                mConstraintSet.setMargin(mBoxViewIds[i], ConstraintSet.LEFT, (int) mHorizontalGaps);
-            }
-            return;
-        }
-
-    // chain partial veriws on the shorter side (either horizontal or vertical)
-    // add constraints to the parent for the non-chained views
-        mConstraintSet.createHorizontalChain(gridId, ConstraintSet.LEFT, gridId,
-    ConstraintSet.RIGHT, Arrays.copyOf(mBoxViewIds, minVal), columnWeights,
-    ConstraintSet.CHAIN_SPREAD_INSIDE);
-
-        for (int i = 1; i < mBoxViews.length; i++) {
-        if (i < minVal) {
-            mConstraintSet.setMargin(mBoxViewIds[i], ConstraintSet.LEFT, (int) mHorizontalGaps);
-        } else {
-            mConstraintSet.connect(mBoxViewIds[i], ConstraintSet.LEFT,
-                    gridId, ConstraintSet.LEFT);
-            mConstraintSet.connect(mBoxViewIds[i], ConstraintSet.RIGHT,
-                    gridId, ConstraintSet.RIGHT);
-        }
-    }
-}
-
     private void setBoxViewHorizontalChains() {
         int gridId = getId();
         int maxVal = Math.max(mRows, mColumns);
-        int minVal = Math.min(mRows, mColumns);
+
         float[] columnWeights = parseWeights(mColumns, mStrColumnWeights);
-        ConstraintLayout.LayoutParams params= params(mBoxViews[0]);
+        ConstraintLayout.LayoutParams params = params(mBoxViews[0]);
         // chain all the views on the longer side (either horizontal or vertical)
         if (mColumns == 1) {
             params.leftToLeft = gridId;
@@ -671,78 +621,45 @@ public class Grid extends VirtualLayout {
             return;
         }
 
-            for (int i = 0; i < mColumns; i++) {
-                params = params(mBoxViews[i]);
-                if (columnWeights != null) {
-                    params.horizontalWeight = columnWeights[i];
-                }
-                if (i > 0) {
-                    params.leftToRight = mBoxViewIds[i - 1];
-                } else {
-                    params.leftToLeft =  gridId;
-                }
-                if (i < mColumns - 1) {
-                    params.rightToLeft = mBoxViewIds[i + 1];
-                } else {
-                    params.rightToRight =  gridId;
-                }
-                if (i > 0) {
-                    params.leftMargin = (int) mHorizontalGaps;
-                }
-            }
 
+        //  chains are grid <- box <-> box <-> box -> grid
+
+        for (int i = 0; i < mColumns; i++) {
+            params = params(mBoxViews[i]);
+            if (columnWeights != null) {
+                params.horizontalWeight = columnWeights[i];
+            }
+            if (i > 0) {
+                params.leftToRight = mBoxViewIds[i - 1];
+            } else {
+                params.leftToLeft = gridId;
+            }
+            if (i < mColumns - 1) {
+                params.rightToLeft = mBoxViewIds[i + 1];
+            } else {
+                params.rightToRight = gridId;
+            }
+            if (i > 0) {
+                params.leftMargin = (int) mHorizontalGaps;
+            }
+        }
+        // excess boxes are connected to grid those sides are not use
+        // for efficiency they should be connected to parent
         for (int i = mColumns; i < maxVal; i++) {
             params = params(mBoxViews[i]);
-            params.leftToLeft =  gridId;
-            params.rightToRight =  gridId;
+            params.leftToLeft = gridId;
+            params.rightToRight = gridId;
         }
     }
 
     /**
      * Set chain between boxView vertically
      */
-    private void setBoxViewVerticalChains_cset() {
-        int gridId = getId();
-        int maxVal = Math.max(mRows, mColumns);
-        int minVal = Math.min(mRows, mColumns);
-        float[] rowWeights = parseWeights(mRows, mStrRowWeights);
 
-        // chain all the views on the longer side (either horizontal or vertical)
-        if (mRows == 1) {
-            mConstraintSet.center(mBoxViewIds[0], gridId, ConstraintSet.TOP, 0, gridId,
-                    ConstraintSet.BOTTOM, 0, 0.5f);
-            return;
-        }
-        if (maxVal == mRows) {
-            mConstraintSet.createVerticalChain(gridId, ConstraintSet.TOP, gridId,
-                    ConstraintSet.BOTTOM, mBoxViewIds, rowWeights,
-                    ConstraintSet.CHAIN_SPREAD_INSIDE);
-            for (int i = 1; i < mBoxViews.length; i++) {
-                mConstraintSet.setMargin(mBoxViewIds[i], ConstraintSet.TOP, (int) mVerticalGaps);
-            }
-            return;
-        }
-
-        // chain partial veriws on the shorter side (either horizontal or vertical)
-        // add constraints to the parent for the non-chained views
-        mConstraintSet.createVerticalChain(gridId, ConstraintSet.TOP, gridId,
-                ConstraintSet.BOTTOM, Arrays.copyOf(mBoxViewIds, minVal), rowWeights,
-                ConstraintSet.CHAIN_SPREAD_INSIDE);
-        for (int i = 1; i < mBoxViews.length; i++) {
-            if (i < minVal) {
-                mConstraintSet.setMargin(mBoxViewIds[i], ConstraintSet.TOP, (int) mVerticalGaps);
-            } else {
-                mConstraintSet.connect(mBoxViewIds[i], ConstraintSet.TOP,
-                        gridId, ConstraintSet.TOP);
-                mConstraintSet.connect(mBoxViewIds[i], ConstraintSet.BOTTOM,
-                        gridId, ConstraintSet.BOTTOM);
-            }
-        }
-    }
     private void setBoxViewVerticalChains() {
         int gridId = getId();
         int maxVal = Math.max(mRows, mColumns);
-        int minVal = Math.min(mRows, mColumns);
+
         float[] rowWeights = parseWeights(mRows, mStrRowWeights);
         ConstraintLayout.LayoutParams params;
         // chain all the views on the longer side (either horizontal or vertical)
@@ -752,7 +669,7 @@ public class Grid extends VirtualLayout {
             params.bottomToBottom = gridId;
             return;
         }
-
+        // chains are constrained like this: grid <- box <-> box <-> box -> grid
         for (int i = 0; i < mRows; i++) {
             params = params(mBoxViews[i]);
             if (rowWeights != null) {
@@ -761,32 +678,37 @@ public class Grid extends VirtualLayout {
             if (i > 0) {
                 params.topToBottom = mBoxViewIds[i - 1];
             } else {
-                params.topToTop =  gridId;
+                params.topToTop = gridId;
             }
             if (i < mRows - 1) {
                 params.bottomToTop = mBoxViewIds[i + 1];
             } else {
-                params.bottomToBottom =  gridId;
+                params.bottomToBottom = gridId;
             }
             if (i > 0) {
                 params.topMargin = (int) mHorizontalGaps;
             }
         }
+
+        // excess boxes are connected to grid those sides are not use
+        // for efficiency they should be connected to parent
         for (int i = mRows; i < maxVal; i++) {
             params = params(mBoxViews[i]);
-            params.topToTop =  gridId;
-            params.bottomToBottom =  gridId;
+            params.topToTop = gridId;
+            params.bottomToBottom = gridId;
         }
     }
 
     private View makeNewView() {
-        View v =    new View(getContext());
+        View v = new View(getContext());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             v.setId(View.generateViewId());
         }
-        v.setVisibility(VISIBLE);
-        v.setBackgroundColor(0xFF880088);
-        v.setTag(CHILD_TAG); // mark is owned by GRID
+        v.setVisibility(INVISIBLE);
+        if (DEBUG_BOXES) {
+            v.setVisibility(VISIBLE);
+            v.setBackgroundColor(0xFF880088);
+        }
         ConstraintLayout.LayoutParams params =
                 new ConstraintLayout.LayoutParams(0, 0);
 
@@ -828,18 +750,13 @@ public class Grid extends VirtualLayout {
             mBoxViewIds[i] = mBoxViews[i].getId();
         }
 
-        if (USE_CSET) {
-            setBoxViewVerticalChains_cset();
-            setBoxViewHorizontalChains_cset();
-
-        } else {
-            setBoxViewVerticalChains();
-            setBoxViewHorizontalChains();
-        }
+        setBoxViewVerticalChains();
+        setBoxViewHorizontalChains();
     }
 
     /**
      * get the value of rows
+     *
      * @return the value of rows
      */
     public int getRows() {
@@ -848,6 +765,7 @@ public class Grid extends VirtualLayout {
 
     /**
      * set new rows value and also invoke initVariables and invalidate
+     *
      * @param rows new rows value
      */
     public void setRows(int rows) {
@@ -869,6 +787,7 @@ public class Grid extends VirtualLayout {
 
     /**
      * get the value of columns
+     *
      * @return the value of columns
      */
     public int getColumns() {
@@ -877,6 +796,7 @@ public class Grid extends VirtualLayout {
 
     /**
      * set new columns value and also invoke initVariables and invalidate
+     *
      * @param columns new rows value
      */
     public void setColumns(int columns) {
@@ -898,6 +818,7 @@ public class Grid extends VirtualLayout {
 
     /**
      * get the value of orientation
+     *
      * @return the value of orientation
      */
     public int getOrientation() {
@@ -906,6 +827,7 @@ public class Grid extends VirtualLayout {
 
     /**
      * set new orientation value and also invoke invalidate
+     *
      * @param orientation new orientation value
      */
     public void setOrientation(int orientation) {
@@ -924,6 +846,7 @@ public class Grid extends VirtualLayout {
 
     /**
      * get the string value of spans
+     *
      * @return the string value of spans
      */
     public String getSpans() {
@@ -932,6 +855,7 @@ public class Grid extends VirtualLayout {
 
     /**
      * set new spans value and also invoke invalidate
+     *
      * @param spans new spans value
      */
     public void setSpans(CharSequence spans) {
@@ -950,6 +874,7 @@ public class Grid extends VirtualLayout {
 
     /**
      * get the string value of skips
+     *
      * @return the string value of skips
      */
     public String getSkips() {
@@ -958,6 +883,7 @@ public class Grid extends VirtualLayout {
 
     /**
      * set new skips value and also invoke invalidate
+     *
      * @param skips new spans value
      */
     public void setSkips(String skips) {
@@ -976,6 +902,7 @@ public class Grid extends VirtualLayout {
 
     /**
      * get the string value of rowWeights
+     *
      * @return the string value of rowWeights
      */
     public String getRowWeights() {
@@ -984,6 +911,7 @@ public class Grid extends VirtualLayout {
 
     /**
      * set new rowWeights value and also invoke invalidate
+     *
      * @param rowWeights new rowWeights value
      */
     public void setRowWeights(String rowWeights) {
@@ -1002,6 +930,7 @@ public class Grid extends VirtualLayout {
 
     /**
      * get the string value of columnWeights
+     *
      * @return the string value of columnWeights
      */
     public String getColumnWeights() {
@@ -1010,6 +939,7 @@ public class Grid extends VirtualLayout {
 
     /**
      * set new columnWeights value and also invoke invalidate
+     *
      * @param columnWeights new columnWeights value
      */
     public void setColumnWeights(String columnWeights) {
@@ -1028,6 +958,7 @@ public class Grid extends VirtualLayout {
 
     /**
      * get the value of horizontalGaps
+     *
      * @return the value of horizontalGaps
      */
     public float getHorizontalGaps() {
@@ -1035,7 +966,8 @@ public class Grid extends VirtualLayout {
     }
 
     /**
-     *  set new horizontalGaps value and also invoke invalidate
+     * set new horizontalGaps value and also invoke invalidate
+     *
      * @param horizontalGaps new horizontalGaps value
      */
     public void setHorizontalGaps(float horizontalGaps) {
@@ -1054,6 +986,7 @@ public class Grid extends VirtualLayout {
 
     /**
      * get the value of verticalGaps
+     *
      * @return the value of verticalGaps
      */
     public float getVerticalGaps() {
@@ -1062,6 +995,7 @@ public class Grid extends VirtualLayout {
 
     /**
      * set new verticalGaps value and also invoke invalidate
+     *
      * @param verticalGaps new verticalGaps value
      */
     public void setVerticalGaps(float verticalGaps) {
