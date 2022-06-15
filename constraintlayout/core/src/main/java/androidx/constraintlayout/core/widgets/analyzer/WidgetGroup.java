@@ -261,7 +261,7 @@ public class WidgetGroup {
     }
 
 
-    class MeasureResult {
+    static class MeasureResult {
         WeakReference<ConstraintWidget> mWidgetRef;
         int mLeft;
         int mTop;

@@ -121,6 +121,7 @@ public abstract class MotionKey implements TypedValues {
     /**
      * @TODO: add description
      */
+    @Override
     public abstract MotionKey clone();
 
     /**
@@ -148,6 +149,7 @@ public abstract class MotionKey implements TypedValues {
     /**
      * @TODO: add description
      */
+    @Override
     public boolean setValue(int type, int value) {
 
         switch (type) {
@@ -161,6 +163,7 @@ public abstract class MotionKey implements TypedValues {
     /**
      * @TODO: add description
      */
+    @Override
     public boolean setValue(int type, float value) {
         return false;
     }
@@ -168,6 +171,7 @@ public abstract class MotionKey implements TypedValues {
     /**
      * @TODO: add description
      */
+    @Override
     public boolean setValue(int type, String value) {
         switch (type) {
             case TypedValues.TYPE_TARGET:
@@ -180,6 +184,7 @@ public abstract class MotionKey implements TypedValues {
     /**
      * @TODO: add description
      */
+    @Override
     public boolean setValue(int type, boolean value) {
         return false;
     }

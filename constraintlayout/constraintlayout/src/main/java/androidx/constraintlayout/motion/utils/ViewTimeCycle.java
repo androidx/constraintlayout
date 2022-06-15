@@ -272,6 +272,7 @@ public abstract class ViewTimeCycle extends TimeCycleSplineSet {
          * Setup the curve
          * @param curveType
          */
+        @Override
         public void setup(int curveType) {
             int size = mConstraintAttributeList.size();
             int dimensionality =
@@ -303,6 +304,7 @@ public abstract class ViewTimeCycle extends TimeCycleSplineSet {
          * @param shape
          * @param offset
          */
+        @Override
         public void setPoint(int position, float value, float period, int shape, float offset) {
             throw new RuntimeException("Wrong call for custom attribute");
         }

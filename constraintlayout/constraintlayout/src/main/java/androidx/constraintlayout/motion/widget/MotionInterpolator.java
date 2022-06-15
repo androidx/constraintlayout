@@ -28,6 +28,7 @@ public abstract class MotionInterpolator implements Interpolator {
      * @param v
      * @return
      */
+    @Override
     public abstract float getInterpolation(float v);
 
     /**

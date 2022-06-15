@@ -136,6 +136,7 @@ public class KeyTimeCycle extends Key {
      *
      * @param interpolation
      */
+    @Override
     public void setInterpolation(HashMap<String, Integer> interpolation) {
         if (mCurveFit == -1) {
             return;
@@ -357,6 +358,7 @@ public class KeyTimeCycle extends Key {
      * @param src to be copied
      * @return self
      */
+    @Override
     public Key copy(Key src) {
         super.copy(src);
         KeyTimeCycle k = (KeyTimeCycle) src;
@@ -385,6 +387,7 @@ public class KeyTimeCycle extends Key {
      *
      * @return
      */
+    @Override
     public Key clone() {
         return new KeyTimeCycle().copy(this);
     }

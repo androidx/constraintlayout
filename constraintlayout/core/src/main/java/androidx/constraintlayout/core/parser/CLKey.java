@@ -58,6 +58,7 @@ public class CLKey extends CLContainer {
         return content();
     }
 
+    @Override
     protected String toJSON() {
         if (mElements.size() > 0) {
             return getDebugName() + content() + ": " + mElements.get(0).toJSON();
@@ -65,6 +66,7 @@ public class CLKey extends CLContainer {
         return getDebugName() + content() + ": <> ";
     }
 
+    @Override
     protected String toFormattedJSON(int indent, int forceIndent) {
         StringBuilder json = new StringBuilder(getDebugName());
         addIndent(json, indent);

@@ -27,6 +27,7 @@ public class CLArray extends CLContainer {
         return new CLArray(content);
     }
 
+    @Override
     protected String toJSON() {
         StringBuilder content = new StringBuilder(getDebugName() + "[");
         boolean first = true;
@@ -41,6 +42,7 @@ public class CLArray extends CLContainer {
         return content + "]";
     }
 
+    @Override
     protected String toFormattedJSON(int indent, int forceIndent) {
         StringBuilder json = new StringBuilder();
         String val = toJSON();

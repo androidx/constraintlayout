@@ -35,7 +35,6 @@ import java.util.Set;
  * Utility class to encapsulate layout of a widget
  */
 public class WidgetFrame {
-    private static final boolean OLD_SYSTEM = true;
     public ConstraintWidget widget = null;
     public int left = 0;
     public int top = 0;
@@ -507,7 +506,6 @@ public class WidgetFrame {
         for (int i = 0; i < n; i++) {
             CLElement tmp = obj.get(i);
             CLKey k = ((CLKey) tmp);
-            String name = k.content();
             CLElement v = k.getValue();
             String vStr = v.content();
             if (vStr.matches("#[0-9a-fA-F]+")) {

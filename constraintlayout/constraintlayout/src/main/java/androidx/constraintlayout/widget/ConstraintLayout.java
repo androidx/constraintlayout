@@ -801,8 +801,8 @@ public class ConstraintLayout extends ViewGroup {
                                 == BasicMeasure.Measure.USE_GIVEN_DIMENSIONS
                                             || !shouldDoWrap
                                             || (shouldDoWrap && otherDimensionStable)
-                                            || (child instanceof Placeholder)
-                                            || (widget.isResolvedHorizontally());
+                                            || child instanceof Placeholder
+                                            || widget.isResolvedHorizontally();
                         if (useCurrent) {
                             horizontalSpec = MeasureSpec.makeMeasureSpec(widget.getWidth(),
                                     MeasureSpec.EXACTLY);

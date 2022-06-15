@@ -1473,7 +1473,7 @@ public class MotionLayout extends ConstraintLayout implements
             mTransitionGoalPosition = 0;
         }
         mTransitionLastTime =
-                (transition.isTransitionFlag(TRANSITION_FLAG_FIRST_DRAW)) ? -1 : getNanoTime();
+                transition.isTransitionFlag(TRANSITION_FLAG_FIRST_DRAW) ? -1 : getNanoTime();
         if (DEBUG) {
             Log.v(TAG, Debug.getLocation() + "  new mTransitionLastPosition = "
                     + mTransitionLastPosition + "");
@@ -1910,7 +1910,7 @@ public class MotionLayout extends ConstraintLayout implements
                 }
                 float x = f.getFinalX();
                 float y = f.getFinalY();
-                float mdist = (flip) ? (y - x) : (y + x);
+                float mdist = flip ? (y - x) : (y + x);
                 min = Math.min(min, mdist);
                 max = Math.max(max, mdist);
             }
@@ -1944,9 +1944,9 @@ public class MotionLayout extends ConstraintLayout implements
                     MotionController f = mFrameArrayList.get(getChildAt(i));
                     float x = f.getFinalX();
                     float y = f.getFinalY();
-                    float mdist = (flip) ? (y - x) : (y + x);
+                    float mdist = flip ? (y - x) : (y + x);
                     f.mStaggerScale = 1 / (1 - stagger);
-                    f.mStaggerOffset = stagger - stagger * (mdist - (min)) / (max - (min));
+                    f.mStaggerOffset = stagger - stagger * (mdist - min) / (max - min);
                 }
             }
         }
@@ -2519,7 +2519,7 @@ public class MotionLayout extends ConstraintLayout implements
                 float x = f.getFinalX();
                 float y = f.getFinalY();
                 f.mStaggerScale = 1 / (1 - stagger);
-                f.mStaggerOffset = stagger - stagger * (x + y - (min)) / (max - (min));
+                f.mStaggerOffset = stagger - stagger * (x + y - min) / (max - min);
             }
         }
 
@@ -2723,8 +2723,8 @@ public class MotionLayout extends ConstraintLayout implements
                     if (view instanceof Barrier) {
                         ((Barrier) view).validateParams();
                         if (DEBUG) {
-                            Log.v(TAG, ">>>>>>>>>> Barrier " + (Debug.getName(getContext(),
-                                    ((Barrier) view).getReferencedIds())));
+                            Log.v(TAG, ">>>>>>>>>> Barrier " + Debug.getName(getContext(),
+                                    ((Barrier) view).getReferencedIds()));
                         }
                     }
                 }
@@ -3001,7 +3001,7 @@ public class MotionLayout extends ConstraintLayout implements
 
     @Override
     public void requestLayout() {
-        if (!(mMeasureDuringTransition)) {
+        if (!mMeasureDuringTransition) {
             if (mCurrentState == UNSET && mScene != null
                     && mScene.mCurrentTransition != null) {
                 int mode = mScene.mCurrentTransition.getLayoutDuringTransition();
@@ -3779,8 +3779,8 @@ public class MotionLayout extends ConstraintLayout implements
         }
 
         boolean newState = false;
-        if (mKeepAnimating || mInTransition
-                && (force || mTransitionGoalPosition != mTransitionLastPosition)) {
+        if (mKeepAnimating || (mInTransition
+                && (force || mTransitionGoalPosition != mTransitionLastPosition))) {
             float dir = Math.signum(mTransitionGoalPosition - mTransitionLastPosition);
             long currentTime = getNanoTime();
 
@@ -3818,7 +3818,7 @@ public class MotionLayout extends ConstraintLayout implements
                     position = mInterpolator.getInterpolation(time);
                     if (mInterpolator == mStopLogic) {
                         boolean dp = mStopLogic.isStopped();
-                        stopLogicDone = (dp) ? stopLogicStop : stopLogicContinue;
+                        stopLogicDone = dp ? stopLogicStop : stopLogicContinue;
                     }
 
                     if (DEBUG) {
@@ -4037,10 +4037,10 @@ public class MotionLayout extends ConstraintLayout implements
                     apply = a.getBoolean(attr, apply);
                 } else if (attr == R.styleable.MotionLayout_showPaths) {
                     if (mDebugPath == 0) { // favor motionDebug
-                        mDebugPath = (a.getBoolean(attr, false)) ? DEBUG_SHOW_PATH : 0;
+                        mDebugPath = a.getBoolean(attr, false) ? DEBUG_SHOW_PATH : 0;
                     }
                 } else if (attr == R.styleable.MotionLayout_motionDebug) {
-                    mDebugPath = (a.getInt(attr, 0));
+                    mDebugPath = a.getInt(attr, 0);
                 }
             }
             a.recycle();
@@ -4281,7 +4281,7 @@ public class MotionLayout extends ConstraintLayout implements
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     RectF region = touchResponse.getTouchRegion(this, new RectF());
                     if (region != null
-                            && (!region.contains(event.getX(), event.getY()))) {
+                            && !region.contains(event.getX(), event.getY())) {
                         return false;
                     }
                 }

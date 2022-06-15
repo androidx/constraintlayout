@@ -135,6 +135,7 @@ public class ArrayRow implements LinearSystem.Row {
     /**
      * @TODO: add description
      */
+    @Override
     public String toString() {
         return toReadableString();
     }
@@ -682,6 +683,7 @@ public class ArrayRow implements LinearSystem.Row {
     /**
      * @TODO: add description
      */
+    @Override
     public void updateFromFinalVariable(LinearSystem system,
             SolverVariable variable,
             boolean removeFromDefinition) {

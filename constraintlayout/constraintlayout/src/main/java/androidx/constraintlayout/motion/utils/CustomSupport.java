@@ -29,7 +29,7 @@ import java.lang.reflect.Method;
 
 public class CustomSupport {
     private static final String TAG = "CustomSupport";
-
+    private static final boolean DEBUG = false;
     /**
      * sets the interpolated value
      * @param att
@@ -83,6 +83,10 @@ public class CustomSupport {
                     method = viewClass.getMethod(methodName, Float.TYPE);
                     method.invoke(view, value[0]);
                     break;
+                default:
+                    if (DEBUG) {
+                        Log.v(TAG, att.getType().toString());
+                    }
             }
         } catch (NoSuchMethodException e) {
             Log.e(TAG, "no method " + methodName + " on View \"" + Debug.getName(view) + "\"");

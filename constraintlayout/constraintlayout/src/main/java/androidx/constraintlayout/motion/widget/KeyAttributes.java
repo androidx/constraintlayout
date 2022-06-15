@@ -138,6 +138,7 @@ public class KeyAttributes extends Key {
      * create the interpolations associated with this KeyAttribute
      * @param interpolation will be added to with keyAttributes
      */
+    @Override
     public void setInterpolation(HashMap<String, Integer> interpolation) {
         if (mCurveFit == -1) {
             return;
@@ -472,6 +473,7 @@ public class KeyAttributes extends Key {
      * @param src to be copied
      * @return self
      */
+    @Override
     public Key copy(Key src) {
         super.copy(src);
         KeyAttributes k = (KeyAttributes) src;
@@ -498,6 +500,7 @@ public class KeyAttributes extends Key {
      * Clone this KeyAttributes
      * @return
      */
+    @Override
     public Key clone() {
         return new KeyAttributes().copy(this);
     }

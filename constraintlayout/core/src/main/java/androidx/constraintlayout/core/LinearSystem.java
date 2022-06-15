@@ -86,7 +86,7 @@ public class LinearSystem {
     public static Metrics sMetrics;
     private Row mTempGoal;
 
-    class ValuesRow extends ArrayRow {
+    static class ValuesRow extends ArrayRow {
         ValuesRow(Cache cache) {
             variables = new SolverVariableValues(this, cache);
         }
