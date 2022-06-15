@@ -217,10 +217,12 @@ public class Guideline extends ConstraintWidget {
         mResolved = true;
     }
 
+    @Override
     public boolean isResolvedHorizontally() {
         return mResolved;
     }
 
+    @Override
     public boolean isResolvedVertically() {
         return mResolved;
     }

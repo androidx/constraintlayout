@@ -69,6 +69,7 @@ public class DependencyNode implements Dependency {
     /**
      * @TODO: add description
      */
+    @Override
     public void update(Dependency node) {
         for (DependencyNode target : mTargets) {
             if (!target.resolved) {

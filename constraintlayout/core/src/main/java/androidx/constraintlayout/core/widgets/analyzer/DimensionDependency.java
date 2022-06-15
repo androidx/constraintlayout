@@ -29,6 +29,7 @@ class DimensionDependency extends DependencyNode {
         }
     }
 
+    @Override
     public void resolve(int value) {
         if (resolved) {
             return;

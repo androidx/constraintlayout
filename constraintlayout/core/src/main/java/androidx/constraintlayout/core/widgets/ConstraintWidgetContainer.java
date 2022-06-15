@@ -449,7 +449,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
                     }
                 } else {
                     Optimizer.checkMatchParent(this, system, widget);
-                    if (!(widget.addFirst())) {
+                    if (!widget.addFirst()) {
                         widget.addToSolver(system, optimize);
                     }
                 }
@@ -758,7 +758,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
                         && !(child instanceof Guideline)
                         && !(child instanceof Barrier)
                         && !(child instanceof VirtualLayout)
-                        && !(child.isInVirtualLayout())) {
+                        && !child.isInVirtualLayout()) {
                     DimensionBehaviour widthBehavior = child.getDimensionBehaviour(HORIZONTAL);
                     DimensionBehaviour heightBehavior = child.getDimensionBehaviour(VERTICAL);
 
@@ -785,7 +785,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
 
         if (count > 2 && (originalHorizontalDimensionBehaviour == WRAP_CONTENT
                 || originalVerticalDimensionBehaviour == WRAP_CONTENT)
-                && (Optimizer.enabled(mOptimizationLevel, Optimizer.OPTIMIZATION_GROUPING))) {
+                && Optimizer.enabled(mOptimizationLevel, Optimizer.OPTIMIZATION_GROUPING)) {
             if (Grouping.simpleSolvingPass(this, getMeasurer())) {
                 if (originalHorizontalDimensionBehaviour == WRAP_CONTENT) {
                     if (preW < getWidth() && preW > 0) {
@@ -1147,6 +1147,7 @@ public class ConstraintWidgetContainer extends WidgetContainer {
     /**
      * @TODO: add description
      */
+    @Override
     public void getSceneString(StringBuilder ret) {
 
         ret.append(stringId + ":{\n");

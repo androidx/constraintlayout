@@ -482,10 +482,10 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
         ) {
             return;
         }
-        float panX = (Float.isNaN(mPanX)) ? 0 : mPanX;
-        float panY = (Float.isNaN(mPanY)) ? 0 : mPanY;
-        float zoom = (Float.isNaN(mZoom)) ? 1 : mZoom;
-        float rota = (Float.isNaN(mRotate)) ? 0 : mRotate;
+        float panX = Float.isNaN(mPanX) ? 0 : mPanX;
+        float panY = Float.isNaN(mPanY) ? 0 : mPanY;
+        float zoom = Float.isNaN(mZoom) ? 1 : mZoom;
+        float rota = Float.isNaN(mRotate) ? 0 : mRotate;
         Matrix imageMatrix = new Matrix();
         imageMatrix.reset();
         float iw = getDrawable().getIntrinsicWidth();
@@ -660,7 +660,7 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
             if (!mOverlay) {
                 mLayer.getDrawable(0).setAlpha((int) (255 * (1 - mCrossfade)));
             }
-            mLayer.getDrawable(1).setAlpha((int) (255 * (mCrossfade)));
+            mLayer.getDrawable(1).setAlpha((int) (255 * mCrossfade));
             super.setImageDrawable(mLayer);
         }
     }

@@ -478,6 +478,7 @@ public class VerticalWidgetRun extends WidgetRun {
     /**
      * @TODO: add description
      */
+    @Override
     public void applyToWidget() {
         if (start.resolved) {
             mWidget.setY(start.value);
