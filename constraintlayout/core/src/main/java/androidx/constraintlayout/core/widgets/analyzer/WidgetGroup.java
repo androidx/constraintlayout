@@ -100,6 +100,8 @@ public class WidgetGroup {
         if (DEBUG) {
             System.out.println("Move all widgets (" + this + ") from "
                     + mId + " to " + widgetGroup.getId() + "(" + widgetGroup + ")");
+            System.out.println("" +
+                    "do not call  "+ measureWrap(  orientation, new ConstraintWidget()));
         }
         for (ConstraintWidget widget : mWidgets) {
             widgetGroup.add(widget);
@@ -261,7 +263,7 @@ public class WidgetGroup {
     }
 
 
-    class MeasureResult {
+    static class MeasureResult {
         WeakReference<ConstraintWidget> mWidgetRef;
         int mLeft;
         int mTop;

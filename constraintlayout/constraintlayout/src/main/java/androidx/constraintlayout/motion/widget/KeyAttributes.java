@@ -491,6 +491,7 @@ public class KeyAttributes extends Key {
         mTranslationY = k.mTranslationY;
         mTranslationZ = k.mTranslationZ;
         mProgress = k.mProgress;
+        mTransitionEasing = k.mTransitionEasing;
         return this;
     }
 

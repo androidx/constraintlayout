@@ -739,11 +739,17 @@ public class ConstraintWidget {
         serializeAttribute(ret, "matchMin", matchConstraintMin, 0);
         serializeAttribute(ret, "matchDef", matchConstraintDefault, MATCH_CONSTRAINT_SPREAD);
         serializeAttribute(ret, "matchPercent", matchConstraintDefault, 1);
+        serializeAttribute(ret, "matchConstraintPercent", matchConstraintPercent, 1);
+        serializeAttribute(ret, "weight", weight, 1);
+        serializeAttribute(ret, "override", override, 1);
+
         ret.append("},\n");
     }
 
     /**
-     * @TODO: add description
+     * Serialize the anchors for JSON5 output
+     * @param ret StringBuilder to be populated
+     * @return the same string builder to alow chaining
      */
     public StringBuilder serialize(StringBuilder ret) {
         ret.append("{\n");
@@ -1084,12 +1090,12 @@ public class ConstraintWidget {
      * @DoNotShow
      */
     public void createObjectVariables(LinearSystem system) {
-        SolverVariable left = system.createObjectVariable(mLeft);
-        SolverVariable top = system.createObjectVariable(mTop);
-        SolverVariable right = system.createObjectVariable(mRight);
-        SolverVariable bottom = system.createObjectVariable(mBottom);
+        system.createObjectVariable(mLeft);
+        system.createObjectVariable(mTop);
+        system.createObjectVariable(mRight);
+        system.createObjectVariable(mBottom);
         if (mBaselineDistance > 0) {
-            SolverVariable baseline = system.createObjectVariable(mBaseline);
+            system.createObjectVariable(mBaseline);
         }
     }
 

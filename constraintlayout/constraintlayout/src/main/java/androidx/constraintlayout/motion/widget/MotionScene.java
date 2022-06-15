@@ -810,19 +810,6 @@ public class MotionScene {
         }
 
         /**
-         * Enable or disable the Transition. If a Transition is disabled it is not eligible
-         * for automatically switching to.
-         *
-         * @param enable
-         * deprecated This method should be called {@code setEnabled}, so that {@code isEnabled}
-         * can be accessed as a <a href="https://developer.android.com/kotlin/interop#property_prefixes">property from Kotlin</a>.
-         * Use {@link #setEnabled(boolean)} instead.
-         */
-        private void setEnable(boolean enable) {
-            setEnabled(enable);
-        }
-
-        /**
          * enable or disable the Transition. If a Transition is disabled it is not eligible
          * for automatically switching to.
          *

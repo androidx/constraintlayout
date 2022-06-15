@@ -605,7 +605,7 @@ public class ConstraintLayout extends ViewGroup {
      * @DoNotShow
      */
     public static final int DESIGN_INFO_ID = 0;
-    private ConstraintsChangedListener mConstraintsChangedListener;
+   // private ConstraintsChangedListener mConstraintsChangedListener;
     private Metrics mMetrics;
 
     private static SharedValues sSharedValues = null;
@@ -802,7 +802,7 @@ public class ConstraintLayout extends ViewGroup {
                                             || !shouldDoWrap
                                             || (shouldDoWrap && otherDimensionStable)
                                             || (child instanceof Placeholder)
-                                            || (widget.isResolvedHorizontally());
+                                            || widget.isResolvedHorizontally();
                         if (useCurrent) {
                             horizontalSpec = MeasureSpec.makeMeasureSpec(widget.getWidth(),
                                     MeasureSpec.EXACTLY);
@@ -851,7 +851,7 @@ public class ConstraintLayout extends ViewGroup {
                                             || !shouldDoWrap
                                             || (shouldDoWrap && otherDimensionStable)
                                             || (child instanceof Placeholder)
-                                            || (widget.isResolvedVertically());
+                                            || widget.isResolvedVertically();
                         if (useCurrent) {
                             verticalSpec = MeasureSpec.makeMeasureSpec(widget.getHeight(),
                                     MeasureSpec.EXACTLY);
@@ -2195,6 +2195,7 @@ public class ConstraintLayout extends ViewGroup {
                 Object tag = child.getTag();
                 if (tag != null && tag instanceof String) {
                     String coordinates = (String) tag;
+                    @SuppressWarnings("StringSplitter")
                     String[] split = coordinates.split(",");
                     if (split.length == 4) {
                         int x = Integer.parseInt(split[0]);
@@ -2267,7 +2268,7 @@ public class ConstraintLayout extends ViewGroup {
      * @param constraintsChangedListener
      */
     public void setOnConstraintsChanged(ConstraintsChangedListener constraintsChangedListener) {
-        this.mConstraintsChangedListener = constraintsChangedListener;
+       // this.mConstraintsChangedListener = constraintsChangedListener;
         if (mConstraintLayoutSpec != null) {
             mConstraintLayoutSpec.setOnConstraintsChanged(constraintsChangedListener);
         }
