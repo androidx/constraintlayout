@@ -123,6 +123,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
      * @param variable the variable to add in the list
      * @param value    the value of the variable
      */
+    @Override
     public final void put(SolverVariable variable, float value) {
         if (value == 0) {
             remove(variable, true);
@@ -232,6 +233,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
      * @param variable the variable we want to add
      * @param value    its value
      */
+    @Override
     public void add(SolverVariable variable, float value, boolean removeFromDefinition) {
         if (value > -sEpsilon && value < sEpsilon) {
             return;
@@ -375,6 +377,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
      * @param variable the variable we want to remove
      * @return the value of the removed variable
      */
+    @Override
     public final float remove(SolverVariable variable, boolean removeFromDefinition) {
         if (mCandidate == variable) {
             mCandidate = null;
@@ -416,6 +419,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
     /**
      * Clear the list of variables
      */
+    @Override
     public final void clear() {
         int current = mHead;
         int counter = 0;
@@ -440,6 +444,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
      * @param variable the variable we are looking for
      * @return return true if we found the variable
      */
+    @Override
     public boolean contains(SolverVariable variable) {
         if (mHead == NONE) {
             return false;
@@ -495,6 +500,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
     /**
      * Invert the values of all the variables in the list
      */
+    @Override
     public void invert() {
         int current = mHead;
         int counter = 0;
@@ -511,6 +517,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
      *
      * @param amount amount to divide by
      */
+    @Override
     public void divideByAmount(float amount) {
         int current = mHead;
         int counter = 0;
@@ -525,6 +532,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
         return mHead;
     }
 
+    @Override
     public int getCurrentSize() {
         return mCurrentSize;
     }
@@ -586,6 +594,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
      * @param index the index of the variable we want to return
      * @return the variable found, or null
      */
+    @Override
     public SolverVariable getVariable(int index) {
         int current = mHead;
         int counter = 0;
@@ -605,6 +614,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
      * @param index the index of the variable we want to look up
      * @return the value of the found variable, or 0 if not found
      */
+    @Override
     public float getVariableValue(int index) {
         int current = mHead;
         int counter = 0;
@@ -624,6 +634,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
      * @param v the variable we are looking up
      * @return the value of the found variable, or 0 if not found
      */
+    @Override
     public final float get(SolverVariable v) {
         int current = mHead;
         int counter = 0;
@@ -642,6 +653,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
      *
      * @return size in bytes
      */
+    @Override
     public int sizeInBytes() {
         int size = 0;
         size += 3 * (mArrayIndices.length * 4);
@@ -652,6 +664,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
     /**
      * print out the variables and their values
      */
+    @Override
     public void display() {
         int count = mCurrentSize;
         System.out.print("{ ");

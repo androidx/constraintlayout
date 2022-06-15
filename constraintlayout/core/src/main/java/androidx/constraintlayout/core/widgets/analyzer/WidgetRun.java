@@ -260,6 +260,7 @@ public abstract class WidgetRun implements Dependency {
     /**
      * @TODO: add description
      */
+    @Override
     public void update(Dependency dependency) {
     }
 

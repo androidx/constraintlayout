@@ -609,6 +609,7 @@ public class HorizontalWidgetRun extends WidgetRun {
     /**
      * @TODO: add description
      */
+    @Override
     public void applyToWidget() {
         if (start.resolved) {
             mWidget.setX(start.value);
