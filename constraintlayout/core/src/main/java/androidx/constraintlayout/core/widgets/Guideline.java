@@ -118,12 +118,28 @@ public class Guideline extends ConstraintWidget {
         return "Guideline";
     }
 
+    /**
+     * get the orientation VERTICAL or HORIZONTAL
+     * @return orientation
+     */
     public int getOrientation() {
         return mOrientation;
     }
 
+    /**
+     * set the minimum position
+     * @param minimum
+     */
     public void setMinimumPosition(int minimum) {
         mMinimumPosition = minimum;
+    }
+
+    /**
+     * Get the Minimum Position
+     * @return the Minimum Position
+     */
+    public int getMinimumPosition() {
+        return mMinimumPosition;
     }
 
     @Override
@@ -217,14 +233,15 @@ public class Guideline extends ConstraintWidget {
         mResolved = true;
     }
 
+    @Override
     public boolean isResolvedHorizontally() {
         return mResolved;
     }
 
+    @Override
     public boolean isResolvedVertically() {
         return mResolved;
     }
-
 
     @Override
     public void addToSolver(LinearSystem system, boolean optimize) {

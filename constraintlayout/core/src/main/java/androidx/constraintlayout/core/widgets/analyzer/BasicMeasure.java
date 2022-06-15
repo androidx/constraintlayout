@@ -206,11 +206,11 @@ public class BasicMeasure {
                 boolean matchHeight = child.getVerticalDimensionBehaviour()
                         == ConstraintWidget.DimensionBehaviour.MATCH_CONSTRAINT;
                 boolean ratio = matchWidth && matchHeight && child.getDimensionRatio() > 0;
-                if (child.isInHorizontalChain() && (ratio)) {
+                if (child.isInHorizontalChain() && ratio) {
                     optimize = false;
                     break;
                 }
-                if (child.isInVerticalChain() && (ratio)) {
+                if (child.isInVerticalChain() && ratio) {
                     optimize = false;
                     break;
                 }

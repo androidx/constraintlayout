@@ -96,6 +96,11 @@ public abstract class ConstraintHelper extends View {
      */
     private View[] mViews = null;
 
+    /**
+     * @DoNotShow
+     */
+    protected final static String CHILD_TAG = "CONSTRAINT_LAYOUT_HELPER_CHILD";
+
     protected HashMap<Integer, String> mMap = new HashMap<>();
 
     public ConstraintHelper(Context context) {
@@ -701,5 +706,16 @@ public abstract class ConstraintHelper extends View {
             }
         }
         return index;
+    }
+
+    /**
+     * hook for helpers to apply parameters in MotionLayout
+     */
+    public void applyHelperParams() {
+
+    }
+
+    public static boolean isChildOfHelper(View v) {
+       return CHILD_TAG == v.getTag();
     }
 }

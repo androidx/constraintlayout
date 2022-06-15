@@ -377,6 +377,7 @@ public class KeyTimeCycle extends Key {
         mTranslationX = k.mTranslationX;
         mTranslationY = k.mTranslationY;
         mTranslationZ = k.mTranslationZ;
+        mCustomWaveShape = k.mCustomWaveShape;
         return this;
     }
 

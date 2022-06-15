@@ -144,7 +144,9 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
                 float colorR, colorG, colorB;
                 if (centiKelvin > 66) {
                     float tmp = centiKelvin - 60.f;
-                    colorR = (329.698727446f * (float) Math.pow(tmp, -0.1332047592f));
+                    // colorR = (329.698727446f * (float) Math.pow(tmp, -0.1332047592f))
+                    // colorG = (288.1221695283f * (float) Math.pow(tmp, 0.0755148492f))
+                    colorR = (329.69873f * (float) Math.pow(tmp, -0.1332047592f));
                     colorG = (288.1221695283f * (float) Math.pow(tmp, 0.0755148492f));
 
                 } else {
@@ -153,8 +155,9 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
                 }
                 if (centiKelvin < 66) {
                     if (centiKelvin > 19) {
-                        colorB = (138.5177312231f
-                                * (float) Math.log(centiKelvin - 10) - 305.0447927307f);
+                        // 138.5177312231f * (float) Math.log(centiKelvin - 10) - 305.0447927307f);
+                        colorB = (138.51773f
+                                * (float) Math.log(centiKelvin - 10) - 305.0448f);
                     } else {
                         colorB = 0;
                     }
@@ -175,17 +178,20 @@ public class ImageFilterView extends androidx.appcompat.widget.AppCompatImageVie
                 float colorR, colorG, colorB;
                 if (centiKelvin > 66) {
                     float tmp = centiKelvin - 60.f;
-                    colorR = (329.698727446f * (float) Math.pow(tmp, -0.1332047592f));
-                    colorG = (288.1221695283f * (float) Math.pow(tmp, 0.0755148492f));
+                    //  colorR = (329.698727446f * (float) Math.pow(tmp, -0.1332047592f));
+                    //  colorG = (288.1221695283f * (float) Math.pow(tmp, 0.0755148492f));
+                    colorR = (329.69873f * (float) Math.pow(tmp, -0.13320476f));
+                    colorG = (288.12216f * (float) Math.pow(tmp, 0.075514849f));
 
                 } else {
-                    colorG = (99.4708025861f * (float) Math.log(centiKelvin) - 161.1195681661f);
+                    //float of (99.4708025861f * (float) Math.log(centiKelvin) - 161.1195681661f);
+                    colorG = (99.4708f * (float) Math.log(centiKelvin) - 161.11957f);
                     colorR = 255;
                 }
                 if (centiKelvin < 66) {
                     if (centiKelvin > 19) {
-                        colorB = (138.5177312231f
-                                * (float) Math.log(centiKelvin - 10) - 305.0447927307f);
+                        //float of (138.5177312231 * Math.log(centiKelvin - 10) - 305.0447927307);
+                        colorB = (138.51773f * (float) Math.log(centiKelvin - 10) - 305.0448f);
                     } else {
                         colorB = 0;
                     }

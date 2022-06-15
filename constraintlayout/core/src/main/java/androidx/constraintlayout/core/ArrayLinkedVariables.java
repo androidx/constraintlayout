@@ -41,7 +41,7 @@ public class ArrayLinkedVariables implements ArrayRow.ArrayRowVariables {
     private static final boolean DEBUG = false;
 
     static final int NONE = -1;
-    private static final boolean FULL_NEW_CHECK = false; // full validation (debug purposes)
+    // private static final boolean FULL_NEW_CHECK = false   full validation (debug purposes)
 
     int mCurrentSize = 0; // current size, accessed by ArrayRow and LinearSystem
 

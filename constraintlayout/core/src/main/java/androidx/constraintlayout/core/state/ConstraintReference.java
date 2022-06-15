@@ -208,6 +208,9 @@ public class ConstraintReference implements Reference {
         }
 
         @Override
+        public String  getMessage() { return toString(); }
+
+        @Override
         public String toString() {
             return "IncorrectConstraintException: " + mErrors.toString();
         }
