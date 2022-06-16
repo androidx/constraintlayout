@@ -861,7 +861,7 @@ fun MotionOrbit2() {
              },
              box2: {
                 width: 50, height: 50,
-                circular: ['box1', 900, 70],
+                circular: ['box1', 1800, 70],
              }
            }
          },
@@ -869,7 +869,17 @@ fun MotionOrbit2() {
            default: {
               from: 'start',
               to: 'end',
-               pathMotionArc : 'none',
+               KeyFrames: {
+                KeyPositions: [
+          {
+            target: ['box1'],
+            type: 'deltaRelative',
+            frames: [50],
+            percentX: [    0.7],
+            percentY: [    0.5]
+          }
+        ]
+               },
               onSwipe: {
                 anchor: 'box1',
                 maxVelocity: 4.2,
