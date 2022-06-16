@@ -122,7 +122,6 @@ public class MotionPaths implements Comparable<MotionPaths> {
             MotionKeyPosition c,
             MotionPaths startTimePoint,
             MotionPaths endTimePoint) {
-        Utils.log(" ===================== setup start "+startTimePoint.mId+" : "+ startTimePoint.mAnimateRelativeTo );
         if (startTimePoint.mAnimateRelativeTo != null) {
             initPolar(parentWidth, parentHeight, c, startTimePoint, endTimePoint);
             return;
@@ -197,18 +196,12 @@ public class MotionPaths implements Comparable<MotionPaths> {
         double dx = mX + mWidth / 2 - relative.mX - relative.mWidth / 2;
         double dy = mY + mHeight / 2 - relative.mY - relative.mHeight / 2;
         mRelativeToController = mc;
-        Utils.log(mId+":  my       ===  "+mX+" , "+mY);
-        Utils.log(mId+": relative ===  "+relative.mX+" , "+relative.mY);
-        Utils.log(mId+": delta    ===  "+dx+" , "+dy);
+
         mX = (float) Math.hypot(dy, dx);
         if (Float.isNaN(mRelativeAngle)) {
-
             mY = (float) (Math.atan2(dy, dx) + Math.PI / 2);
-            Utils.log(mId+": compute ===  "+Math.toDegrees(mY));
         } else {
             mY = (float) Math.toRadians(mRelativeAngle);
-            Utils.log(mId+": defined ===  "+Math.toDegrees(mY));
-
         }
     }
 
@@ -936,7 +929,10 @@ public class MotionPaths implements Comparable<MotionPaths> {
         point.mDrawPath = c.mMotion.mDrawPath;
         point.mAnimateCircleAngleTo = c.mMotion.mAnimateCircleAngleTo;
         point.mProgress = c.mPropertySet.mProgress;
-       // point.mRelativeAngle = 0; // c.layout.circleAngle;
+        if (c.mWidgetFrame != null && c.mWidgetFrame.widget != null) {
+            point.mRelativeAngle = c.mWidgetFrame.widget.mCircleConstraintAngle;
+        }
+
         Set<String> at = c.getCustomAttributeNames();
         for (String s : at) {
             CustomVariable attr = c.getCustomAttribute(s);

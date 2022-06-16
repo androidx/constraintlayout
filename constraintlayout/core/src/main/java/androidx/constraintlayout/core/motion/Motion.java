@@ -254,9 +254,7 @@ public class Motion implements TypedValues {
         if (mRelativeMotion == null) {
             return;
         }
-        Utils.log("start ");
         mStartMotionPath.setupRelative(mRelativeMotion, mRelativeMotion.mStartMotionPath);
-        Utils.log("end");
         mEndMotionPath.setupRelative(mRelativeMotion, mRelativeMotion.mEndMotionPath);
     }
 
@@ -1737,7 +1735,6 @@ public class Motion implements TypedValues {
         }
         if ( MotionType.TYPE_ANIMATE_RELATIVE_TO == id) {
              mStartMotionPath.mAnimateRelativeTo = value;
-            Utils.logStack("mAnimateRelativeTo= "+value,6);
              return true;
         }
         return false;
