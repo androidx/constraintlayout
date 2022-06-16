@@ -57,7 +57,7 @@ public class MotionWidget implements TypedValues {
      * @DoNotShow
      */
     public static class Motion {
-        public int mAnimateRelativeTo = UNSET;
+        public String mAnimateRelativeTo = null;
         public int mAnimateCircleAngleTo = 0;
         public String mTransitionEasing = null;
         public int mPathMotionArc = UNSET;
@@ -166,6 +166,10 @@ public class MotionWidget implements TypedValues {
 
     @Override
     public boolean setValue(int id, String value) {
+        if (id == MotionType.TYPE_ANIMATE_RELATIVE_TO) {
+            mMotion.mAnimateRelativeTo = value;
+            return true;
+        }
         return setValueMotion(id, value);
     }
 
@@ -179,9 +183,6 @@ public class MotionWidget implements TypedValues {
      */
     public boolean setValueMotion(int id, int value) {
         switch (id) {
-            case MotionType.TYPE_ANIMATE_RELATIVE_TO:
-                mMotion.mAnimateRelativeTo = value;
-                break;
             case MotionType.TYPE_ANIMATE_CIRCLEANGLE_TO:
                 mMotion.mAnimateCircleAngleTo = value;
                 break;
