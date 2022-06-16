@@ -742,7 +742,7 @@ fun MotionOrbit1() {
              box1: {
                width: 50, height: 50,
                bottom: ['parent', 'bottom', 10],
-               start: ['parent', 'start', 10],
+               start: ['parent', 'start', 80],
              },
                title: {
                    top: ['parent', 'top', 10],
@@ -754,7 +754,6 @@ fun MotionOrbit1() {
                bottom: ['parent', 'bottom', 10],
                start: ['parent', 'start', 10],
                motion: {
-                  pathArc : 'startHorizontal',
                   relativeTo: 'box1'
                }
              }
@@ -763,7 +762,7 @@ fun MotionOrbit1() {
                box1: {
                        width: 50, height: 50,
                        top: ['parent', 'top', 60],
-                       end: ['parent', 'end', 60],
+                       end: ['parent', 'end', 80],
                     },
               title: {
                  top: ['parent', 'top', 10],

@@ -47,6 +47,7 @@ public class MotionPaths implements Comparable<MotionPaths> {
     public static final int CARTESIAN = MotionKeyPosition.TYPE_CARTESIAN;
     public static final int SCREEN = MotionKeyPosition.TYPE_SCREEN;
     static String[] sNames = {"position", "x", "y", "width", "height", "pathRotate"};
+    public String mId;
     Easing mKeyFrameEasing;
     int mDrawPath = 0;
     float mTime;
@@ -58,7 +59,7 @@ public class MotionPaths implements Comparable<MotionPaths> {
     float mPathRotate = Float.NaN;
     float mProgress = Float.NaN;
     int mPathMotionArc = UNSET;
-    int mAnimateRelativeTo = UNSET;
+    String mAnimateRelativeTo = null;
     float mRelativeAngle = Float.NaN;
     Motion mRelativeToController = null;
 
@@ -121,7 +122,8 @@ public class MotionPaths implements Comparable<MotionPaths> {
             MotionKeyPosition c,
             MotionPaths startTimePoint,
             MotionPaths endTimePoint) {
-        if (startTimePoint.mAnimateRelativeTo != UNSET) {
+        Utils.log(" ===================== setup start "+startTimePoint.mId+" : "+ startTimePoint.mAnimateRelativeTo );
+        if (startTimePoint.mAnimateRelativeTo != null) {
             initPolar(parentWidth, parentHeight, c, startTimePoint, endTimePoint);
             return;
         }
@@ -157,6 +159,9 @@ public class MotionPaths implements Comparable<MotionPaths> {
         mHeight = (int) (s.mHeight + scaleY * scaleHeight);
         float startfactor = 1 - position;
         float endfactor = position;
+        Utils.log(mId+": start "+s.mX+","+s.mY);
+        Utils.log(mId+": end "+e.mX+","+e.mY);
+        Utils.log(mId+": mAnimateRelativeTo "+e.mAnimateRelativeTo);
         switch (c.mPositionType) {
             case MotionKeyPosition.TYPE_SCREEN:
                 this.mX = Float.isNaN(c.mPercentX) ? (position * (e.mX - s.mX) + s.mX)
@@ -192,12 +197,17 @@ public class MotionPaths implements Comparable<MotionPaths> {
         double dx = mX + mWidth / 2 - relative.mX - relative.mWidth / 2;
         double dy = mY + mHeight / 2 - relative.mY - relative.mHeight / 2;
         mRelativeToController = mc;
-
+        Utils.log(mId+":  my       ===  "+mX+" , "+mY);
+        Utils.log(mId+": relative ===  "+relative.mX+" , "+relative.mY);
+        Utils.log(mId+": delta    ===  "+dx+" , "+dy);
         mX = (float) Math.hypot(dy, dx);
         if (Float.isNaN(mRelativeAngle)) {
+
             mY = (float) (Math.atan2(dy, dx) + Math.PI / 2);
+            Utils.log(mId+": compute ===  "+Math.toDegrees(mY));
         } else {
             mY = (float) Math.toRadians(mRelativeAngle);
+            Utils.log(mId+": defined ===  "+Math.toDegrees(mY));
 
         }
     }
@@ -926,7 +936,7 @@ public class MotionPaths implements Comparable<MotionPaths> {
         point.mDrawPath = c.mMotion.mDrawPath;
         point.mAnimateCircleAngleTo = c.mMotion.mAnimateCircleAngleTo;
         point.mProgress = c.mPropertySet.mProgress;
-        point.mRelativeAngle = 0; // c.layout.circleAngle;
+       // point.mRelativeAngle = 0; // c.layout.circleAngle;
         Set<String> at = c.getCustomAttributeNames();
         for (String s : at) {
             CustomVariable attr = c.getCustomAttribute(s);

@@ -31,6 +31,8 @@ import androidx.constraintlayout.core.motion.utils.FloatRect;
 import androidx.constraintlayout.core.motion.utils.KeyCache;
 import androidx.constraintlayout.core.motion.utils.KeyCycleOscillator;
 import androidx.constraintlayout.core.motion.utils.KeyFrameArray;
+import androidx.constraintlayout.core.motion.utils.NonNull;
+import androidx.constraintlayout.core.motion.utils.Nullable;
 import androidx.constraintlayout.core.motion.utils.Rect;
 import androidx.constraintlayout.core.motion.utils.SplineSet;
 import androidx.constraintlayout.core.motion.utils.TimeCycleSplineSet;
@@ -78,7 +80,7 @@ public class Motion implements TypedValues {
     private static final boolean DEBUG = false;
     private static final boolean FAVOR_FIXED_SIZE_VIEWS = false;
     MotionWidget mView;
-    int mId;
+    public String mId;
     String mConstraintTag;
     private int mCurveFitType = UNSET;
     private MotionPaths mStartMotionPath = new MotionPaths();
@@ -125,7 +127,7 @@ public class Motion implements TypedValues {
     private float mQuantizeMotionPhase = Float.NaN;
     private DifferentialInterpolator mQuantizeMotionInterpolator = null;
     private boolean mNoMovement = false;
-
+    Motion mRelativeMotion;
     /**
      * Get the view to pivot around
      *
@@ -237,16 +239,25 @@ public class Motion implements TypedValues {
      *
      * @return the view id of the view this is in polar mode to or -1 if not in polar
      */
-    public int getAnimateRelativeTo() {
+    @Nullable
+    public String getAnimateRelativeTo() {
         return mStartMotionPath.mAnimateRelativeTo;
     }
 
     /**
-     * @TODO: add description
+     * set up the motion to be relative to this other motionController
      */
     public void setupRelative(Motion motionController) {
-        mStartMotionPath.setupRelative(motionController, motionController.mStartMotionPath);
-        mEndMotionPath.setupRelative(motionController, motionController.mEndMotionPath);
+        mRelativeMotion = motionController;
+    }
+    private void setupRelative() {
+        if (mRelativeMotion == null) {
+            return;
+        }
+        Utils.log("start ");
+        mStartMotionPath.setupRelative(mRelativeMotion, mRelativeMotion.mStartMotionPath);
+        Utils.log("end");
+        mEndMotionPath.setupRelative(mRelativeMotion, mRelativeMotion.mEndMotionPath);
     }
 
     public float getCenterX() {
@@ -673,6 +684,8 @@ public class Motion implements TypedValues {
         HashSet<String> cycleAttributes = new HashSet<>(); // attributes we need to oscillate
         HashMap<String, Integer> interpolation = new HashMap<>();
         ArrayList<MotionKeyTrigger> triggerList = null;
+
+        setupRelative();
         if (DEBUG) {
             if (mKeyList == null) {
                 Utils.log(TAG, ">>>>>>>>>>>>>>> mKeyList==null");
@@ -1722,7 +1735,11 @@ public class Motion implements TypedValues {
             mQuantizeMotionInterpolator = getInterpolator(SPLINE_STRING, value, 0);
             return true;
         }
-
+        if ( MotionType.TYPE_ANIMATE_RELATIVE_TO == id) {
+             mStartMotionPath.mAnimateRelativeTo = value;
+            Utils.logStack("mAnimateRelativeTo= "+value,6);
+             return true;
+        }
         return false;
     }
 
@@ -1762,5 +1779,10 @@ public class Motion implements TypedValues {
      */
     public float getMotionStagger() {
         return mMotionStagger;
+    }
+
+    public void setIdString(String stringId) {
+        mId = stringId;
+        mStartMotionPath.mId = mId;
     }
 }
