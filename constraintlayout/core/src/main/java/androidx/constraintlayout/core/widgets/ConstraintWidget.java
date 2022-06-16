@@ -23,6 +23,7 @@ import static androidx.constraintlayout.core.widgets.ConstraintWidget.DimensionB
 import androidx.constraintlayout.core.Cache;
 import androidx.constraintlayout.core.LinearSystem;
 import androidx.constraintlayout.core.SolverVariable;
+import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.state.WidgetFrame;
 import androidx.constraintlayout.core.widgets.analyzer.ChainRun;
 import androidx.constraintlayout.core.widgets.analyzer.HorizontalWidgetRun;
@@ -361,7 +362,7 @@ public class ConstraintWidget {
     float mResolvedDimensionRatio = 1.0f;
 
     private int[] mMaxDimension = {Integer.MAX_VALUE, Integer.MAX_VALUE};
-    private float mCircleConstraintAngle = 0;
+    public float mCircleConstraintAngle = Float.NaN;
     private boolean mHasBaseline = false;
     private boolean mInPlaceholder;
 
@@ -602,7 +603,7 @@ public class ConstraintWidget {
         mCenterY.reset();
         mCenter.reset();
         mParent = null;
-        mCircleConstraintAngle = 0;
+        mCircleConstraintAngle = Float.NaN;
         mWidth = 0;
         mHeight = 0;
         mDimensionRatio = 0;
@@ -676,7 +677,7 @@ public class ConstraintWidget {
     }
 
     private void serializeCircle(StringBuilder ret, ConstraintAnchor a, float angle) {
-        if (a.mTarget == null) {
+        if (a.mTarget == null || Float.isNaN(angle)) {
             return;
         }
 
@@ -3583,6 +3584,8 @@ public class ConstraintWidget {
 
         mMaxDimension = Arrays.copyOf(src.mMaxDimension, src.mMaxDimension.length);
         mCircleConstraintAngle = src.mCircleConstraintAngle;
+        Utils.logStack(" copying angle = "+mCircleConstraintAngle, 5);
+
         mHasBaseline = src.mHasBaseline;
         mInPlaceholder = src.mInPlaceholder;
 

@@ -163,6 +163,7 @@ class MainActivity : AppCompatActivity() {
         demos.add(object : CompFunc { @Composable override fun Run() { MotionStagger1() } })
         demos.add(object : CompFunc { @Composable override fun Run() { MotionStagger2() } })
         demos.add(object : CompFunc { @Composable override fun Run() { MotionOrbit1() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { MotionOrbit2() } })
 
         demos.add(object : CompFunc { @Composable override fun Run() { Example () } })
         demos.add(object : CompFunc { @Composable override fun Run() { RowColExample () } })
