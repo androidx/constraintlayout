@@ -18,6 +18,7 @@ package androidx.constraintlayout.core.state;
 
 import androidx.constraintlayout.core.motion.utils.TypedBundle;
 import androidx.constraintlayout.core.motion.utils.TypedValues;
+import androidx.constraintlayout.core.motion.utils.Utils;
 import androidx.constraintlayout.core.parser.CLArray;
 import androidx.constraintlayout.core.parser.CLContainer;
 import androidx.constraintlayout.core.parser.CLElement;
@@ -133,7 +134,7 @@ public class TransitionParser {
     private static void map(TypedBundle bundle, int type, String val, String... types) {
         for (int i = 0; i < types.length; i++) {
             if (types[i].equals(val)) {
-                bundle.add(TypedValues.PositionType.TYPE_PATH_MOTION_ARC, i);
+                bundle.add(type, i);
             }
         }
     }

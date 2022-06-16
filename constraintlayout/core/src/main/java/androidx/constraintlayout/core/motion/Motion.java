@@ -82,7 +82,7 @@ public class Motion implements TypedValues {
     MotionWidget mView;
     public String mId;
     String mConstraintTag;
-    private int mCurveFitType = UNSET;
+    private int mCurveFitType = CurveFit.SPLINE;
     private MotionPaths mStartMotionPath = new MotionPaths();
     private MotionPaths mEndMotionPath = new MotionPaths();
 
@@ -945,6 +945,7 @@ public class Motion implements TypedValues {
             mSpline[i + 1] = CurveFit.get(mCurveFitType, timePoints, splinePoints);
         }
 
+        // Spline for positions
         mSpline[0] = CurveFit.get(mCurveFitType, timePoint, splineData);
         // --------------------------- SUPPORT ARC MODE --------------
         if (points[0].mPathMotionArc != UNSET) {
