@@ -705,33 +705,23 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @TODO: add description
+     * Update container of parameters for the state
+     * @param container contains all the widget parameters
+     * @param state starting or ending
      */
     public void updateFrom(ConstraintWidgetContainer container, int state) {
         final ArrayList<ConstraintWidget> children = container.getChildren();
         final int count = children.size();
-        WidgetState [] states = new WidgetState[count];
-        boolean relative = false;
+        WidgetState[] states = new WidgetState[count];
+
         for (int i = 0; i < count; i++) {
             ConstraintWidget child = children.get(i);
             WidgetState widgetState = getWidgetState(child.stringId, null, state);
             states[i] = widgetState;
             widgetState.update(child, state);
-           String id =  widgetState.getPathRelativeId();
+            String id = widgetState.getPathRelativeId();
             if (id != null) {
-                relative = true;
-            }
-        }
-        if (relative) {
-            for (int i = 0; i < count; i++) {
-                ConstraintWidget child = children.get(i);
-                WidgetState widgetState = getWidgetState(child.stringId, null, state);
-                states[i] = widgetState;
-                String id = widgetState.getPathRelativeId();
-                if (id != null) {
-                     widgetState.setPathRelative(getWidgetState(id, null, state));
-
-                }
+                widgetState.setPathRelative(getWidgetState(id, null, state));
             }
         }
 

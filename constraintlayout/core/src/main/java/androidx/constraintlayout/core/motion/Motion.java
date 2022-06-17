@@ -31,7 +31,6 @@ import androidx.constraintlayout.core.motion.utils.FloatRect;
 import androidx.constraintlayout.core.motion.utils.KeyCache;
 import androidx.constraintlayout.core.motion.utils.KeyCycleOscillator;
 import androidx.constraintlayout.core.motion.utils.KeyFrameArray;
-import androidx.constraintlayout.core.motion.utils.NonNull;
 import androidx.constraintlayout.core.motion.utils.Nullable;
 import androidx.constraintlayout.core.motion.utils.Rect;
 import androidx.constraintlayout.core.motion.utils.SplineSet;
@@ -250,6 +249,7 @@ public class Motion implements TypedValues {
     public void setupRelative(Motion motionController) {
         mRelativeMotion = motionController;
     }
+
     private void setupRelative() {
         if (mRelativeMotion == null) {
             return;
@@ -1734,9 +1734,9 @@ public class Motion implements TypedValues {
             mQuantizeMotionInterpolator = getInterpolator(SPLINE_STRING, value, 0);
             return true;
         }
-        if ( MotionType.TYPE_ANIMATE_RELATIVE_TO == id) {
-             mStartMotionPath.mAnimateRelativeTo = value;
-             return true;
+        if (MotionType.TYPE_ANIMATE_RELATIVE_TO == id) {
+            mStartMotionPath.mAnimateRelativeTo = value;
+            return true;
         }
         return false;
     }
