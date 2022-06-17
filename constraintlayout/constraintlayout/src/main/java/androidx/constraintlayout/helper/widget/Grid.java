@@ -655,7 +655,6 @@ public class Grid extends VirtualLayout {
     /**
      * Set chain between boxView vertically
      */
-
     private void setBoxViewVerticalChains() {
         int gridId = getId();
         int maxVal = Math.max(mRows, mColumns);
