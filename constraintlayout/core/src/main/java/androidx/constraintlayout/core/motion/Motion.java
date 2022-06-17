@@ -31,7 +31,6 @@ import androidx.constraintlayout.core.motion.utils.FloatRect;
 import androidx.constraintlayout.core.motion.utils.KeyCache;
 import androidx.constraintlayout.core.motion.utils.KeyCycleOscillator;
 import androidx.constraintlayout.core.motion.utils.KeyFrameArray;
-import androidx.constraintlayout.core.motion.utils.Nullable;
 import androidx.constraintlayout.core.motion.utils.Rect;
 import androidx.constraintlayout.core.motion.utils.SplineSet;
 import androidx.constraintlayout.core.motion.utils.TimeCycleSplineSet;
@@ -238,7 +237,6 @@ public class Motion implements TypedValues {
      *
      * @return the view id of the view this is in polar mode to or -1 if not in polar
      */
-    @Nullable
     public String getAnimateRelativeTo() {
         return mStartMotionPath.mAnimateRelativeTo;
     }
