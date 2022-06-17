@@ -571,8 +571,7 @@ public class Grid extends VirtualLayout {
             return;
         }
         @SuppressLint("DrawAllocation")
-        Paint paint = new Paint(); // only used in design time
-
+        Paint paint = new Paint(); // used only during design time
         paint.setColor(Color.RED);
         paint.setStyle(Paint.Style.STROKE);
         int myTop = getTop();
