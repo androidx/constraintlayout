@@ -158,9 +158,7 @@ public class MotionPaths implements Comparable<MotionPaths> {
         mHeight = (int) (s.mHeight + scaleY * scaleHeight);
         float startfactor = 1 - position;
         float endfactor = position;
-        Utils.log(mId+": start "+s.mX+","+s.mY);
-        Utils.log(mId+": end "+e.mX+","+e.mY);
-        Utils.log(mId+": mAnimateRelativeTo "+e.mAnimateRelativeTo);
+
         switch (c.mPositionType) {
             case MotionKeyPosition.TYPE_SCREEN:
                 this.mX = Float.isNaN(c.mPercentX) ? (position * (e.mX - s.mX) + s.mX)
