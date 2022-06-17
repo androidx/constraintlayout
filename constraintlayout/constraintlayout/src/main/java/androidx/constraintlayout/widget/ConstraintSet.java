@@ -4585,7 +4585,7 @@ public class ConstraintSet {
                     case XmlResourceParser.START_TAG:
                         tagName = parser.getName();
                         if (DEBUG) {
-                            Log.v(TAG, Debug.getLoc() +" " +document+ " tagName=" + tagName);
+                            Log.v(TAG, Debug.getLoc() + " " + document + " tagName=" + tagName);
                         }
                         switch (tagName) {
                             case "Constraint":

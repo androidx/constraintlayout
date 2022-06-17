@@ -767,7 +767,7 @@ public class LinearSystem {
             System.out.println("\n****************************");
             System.out.println("*       OPTIMIZATION       *");
             System.out.println("* mNumColumns: " + mNumColumns);
-            System.out.println("* GOAL: " + goal+ " "+ b);
+            System.out.println("* GOAL: " + goal + " " + b);
             System.out.println("****************************\n");
         }
 
