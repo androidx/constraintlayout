@@ -2982,7 +2982,6 @@ public class ConstraintSet {
 
         connect(chainIds[0], TOP, topId, topSide, 0);
         for (int i = 1; i < chainIds.length; i++) {
-            int chainId = chainIds[i];
             connect(chainIds[i], TOP, chainIds[i - 1], BOTTOM, 0);
             connect(chainIds[i - 1], BOTTOM, chainIds[i], TOP, 0);
             if (weights != null) {
@@ -3064,7 +3063,6 @@ public class ConstraintSet {
         get(chainIds[0]).layout.horizontalChainStyle = style;
         connect(chainIds[0], left, leftId, leftSide, UNSET);
         for (int i = 1; i < chainIds.length; i++) {
-            int chainId = chainIds[i];
             connect(chainIds[i], left, chainIds[i - 1], right, UNSET);
             connect(chainIds[i - 1], right, chainIds[i], left, UNSET);
             if (weights != null) {
@@ -4588,7 +4586,7 @@ public class ConstraintSet {
                     case XmlResourceParser.START_TAG:
                         tagName = parser.getName();
                         if (DEBUG) {
-                            Log.v(TAG, Debug.getLoc() + " view .... tagName=" + tagName);
+                            Log.v(TAG, Debug.getLoc() + " " + document + " tagName=" + tagName);
                         }
                         switch (tagName) {
                             case "Constraint":
@@ -4718,12 +4716,12 @@ public class ConstraintSet {
         AttributeSet attrs = Xml.asAttributeSet(parser);
         Constraint c = new Constraint();
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ConstraintOverride);
-        populateOverride(context, c, a);
+        populateOverride(c, a);
         a.recycle();
         return c;
     }
 
-    private static void populateOverride(Context ctx, Constraint c, TypedArray a) {
+    private static void populateOverride(Constraint c, TypedArray a) {
 
         final int count = a.getIndexCount();
         TypedValue type;
@@ -5355,7 +5353,7 @@ public class ConstraintSet {
 
     private void populateConstraint(Context ctx, Constraint c, TypedArray a, boolean override) {
         if (override) {
-            populateOverride(ctx, c, a);
+            populateOverride(c, a);
             return;
         }
         final int count = a.getIndexCount();
@@ -5853,6 +5851,16 @@ public class ConstraintSet {
     }
 
     /**
+     * If true perform validation checks when parsing ConstraintSets
+     * This will slow down parsing and should only be used for debugging
+     *
+     * @param validate
+     */
+    public boolean isValidateOnParse() {
+        return mValidate;
+    }
+
+    /**
      * Dump the contents
      *
      * @param scene
@@ -6323,7 +6331,12 @@ public class ConstraintSet {
         private void writeGuideline(int orientation,
                                     int guideBegin,
                                     int guideEnd,
-                                    float guidePercent) {
+                                    float guidePercent) throws IOException {
+            writeVariable("'orientation'", orientation);
+            writeVariable("'guideBegin'", guideBegin);
+            writeVariable("'guideEnd'", guideEnd);
+            writeVariable("'guidePercent'", guidePercent);
+
         }
 
 

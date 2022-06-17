@@ -18,7 +18,6 @@ package androidx.constraintlayout.widget;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-
 import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_SPREAD;
 import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_WRAP;
 import static androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID;
@@ -605,7 +604,7 @@ public class ConstraintLayout extends ViewGroup {
      * @DoNotShow
      */
     public static final int DESIGN_INFO_ID = 0;
-    private ConstraintsChangedListener mConstraintsChangedListener;
+   // private ConstraintsChangedListener mConstraintsChangedListener;
     private Metrics mMetrics;
 
     private static SharedValues sSharedValues = null;
@@ -851,7 +850,7 @@ public class ConstraintLayout extends ViewGroup {
                                             || !shouldDoWrap
                                             || (shouldDoWrap && otherDimensionStable)
                                             || (child instanceof Placeholder)
-                                            || (widget.isResolvedVertically());
+                                            || widget.isResolvedVertically();
                         if (useCurrent) {
                             verticalSpec = MeasureSpec.makeMeasureSpec(widget.getHeight(),
                                     MeasureSpec.EXACTLY);
@@ -2195,6 +2194,7 @@ public class ConstraintLayout extends ViewGroup {
                 Object tag = child.getTag();
                 if (tag != null && tag instanceof String) {
                     String coordinates = (String) tag;
+                    @SuppressWarnings("StringSplitter")
                     String[] split = coordinates.split(",");
                     if (split.length == 4) {
                         int x = Integer.parseInt(split[0]);
@@ -2267,7 +2267,7 @@ public class ConstraintLayout extends ViewGroup {
      * @param constraintsChangedListener
      */
     public void setOnConstraintsChanged(ConstraintsChangedListener constraintsChangedListener) {
-        this.mConstraintsChangedListener = constraintsChangedListener;
+       // this.mConstraintsChangedListener = constraintsChangedListener;
         if (mConstraintLayoutSpec != null) {
             mConstraintLayoutSpec.setOnConstraintsChanged(constraintsChangedListener);
         }
@@ -2872,11 +2872,15 @@ public class ConstraintLayout extends ViewGroup {
         /**
          * Create a LayoutParams base on an existing layout Params
          *
-         * @param source the Layout Params to be copied
+         * @param params the Layout Params to be copied
          */
-        public LayoutParams(LayoutParams source) {
-            super(source);
+        public LayoutParams(ViewGroup.LayoutParams params) {
+            super(params);
 
+            if (!(params instanceof LayoutParams)) {
+                return;
+            }
+            LayoutParams source = (LayoutParams) params;
             ///////////////////////////////////////////////////////////////////////////////////////
             // Layout margins handling TODO: re-activate in 3.0
             ///////////////////////////////////////////////////////////////////////////////////////
@@ -3751,10 +3755,6 @@ public class ConstraintLayout extends ViewGroup {
 
         public LayoutParams(int width, int height) {
             super(width, height);
-        }
-
-        public LayoutParams(ViewGroup.LayoutParams source) {
-            super(source);
         }
 
         /**

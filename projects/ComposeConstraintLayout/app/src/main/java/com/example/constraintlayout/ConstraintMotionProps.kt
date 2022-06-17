@@ -742,7 +742,7 @@ fun MotionOrbit1() {
              box1: {
                width: 50, height: 50,
                bottom: ['parent', 'bottom', 10],
-               start: ['parent', 'start', 10],
+               start: ['parent', 'start', 80],
              },
                title: {
                    top: ['parent', 'top', 10],
@@ -754,7 +754,6 @@ fun MotionOrbit1() {
                bottom: ['parent', 'bottom', 10],
                start: ['parent', 'start', 10],
                motion: {
-                  pathArc : 'startHorizontal',
                   relativeTo: 'box1'
                }
              }
@@ -763,7 +762,7 @@ fun MotionOrbit1() {
                box1: {
                        width: 50, height: 50,
                        top: ['parent', 'top', 60],
-                       end: ['parent', 'end', 60],
+                       end: ['parent', 'end', 80],
                     },
               title: {
                  top: ['parent', 'top', 10],
@@ -820,3 +819,103 @@ fun MotionOrbit1() {
         }
     }
 }
+
+
+@Preview
+@Composable
+fun MotionOrbit2() {
+
+    var scene =
+        """
+       {
+         ConstraintSets: {
+           start: {
+             box1: {
+               width: 50, height: 50,
+               bottom: ['parent', 'bottom', 10],
+               start: ['parent', 'start', 80],
+             },
+               title: {
+                   top: ['parent', 'top', 10],
+               start: ['parent', 'start', 10],
+                end: ['parent', 'end', 10],
+             },
+               box2: {
+               width: 50, height: 50,
+               circular: ['box1',90, 70],
+               motion: {
+                  relativeTo: 'box1'
+               }
+             }
+           },
+           end: {
+               box1: {
+                       width: 50, height: 50,
+                       top: ['parent', 'top', 60],
+                       end: ['parent', 'end', 80],
+                    },
+              title: {
+                 top: ['parent', 'top', 10],
+               start: ['parent', 'start', 10],
+                end: ['parent', 'end', 10],
+             },
+             box2: {
+                width: 50, height: 50,
+                circular: ['box1', 1800, 70],
+             }
+           }
+         },
+         Transitions: {
+           default: {
+              from: 'start',
+              to: 'end',
+               KeyFrames: {
+                KeyPositions: [
+          {
+            target: ['box1'],
+            type: 'deltaRelative',
+            frames: [50],
+            percentX: [    0.7],
+            percentY: [    0.5]
+          }
+        ]
+               },
+              onSwipe: {
+                anchor: 'box1',
+                maxVelocity: 4.2,
+                maxAccel: 3,
+                direction: 'end',
+                side: 'start',
+                mode: 'velocity'
+              }
+           }
+         }
+       }
+        """.trimIndent()
+
+    Column {
+        MotionLayout(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.LightGray),
+            motionScene = MotionScene(content = scene),
+            debug= EnumSet.of(MotionLayoutDebugFlags.SHOW_ALL),
+        ) {
+            Text(text = " Orbit the red ",
+                modifier = Modifier
+                    .layoutId("title")
+                    .background(Color.Gray))
+            Box(
+                modifier = Modifier
+                    .background(Color.Red)
+                    .layoutId("box1")
+            )
+            Box(
+                modifier = Modifier
+                    .background(Color.Green)
+                    .layoutId("box2")
+            )
+        }
+    }
+}
+

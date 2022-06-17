@@ -705,16 +705,26 @@ public class Transition implements TypedValues {
     }
 
     /**
-     * @TODO: add description
+     * Update container of parameters for the state
+     * @param container contains all the widget parameters
+     * @param state starting or ending
      */
     public void updateFrom(ConstraintWidgetContainer container, int state) {
         final ArrayList<ConstraintWidget> children = container.getChildren();
         final int count = children.size();
+        WidgetState[] states = new WidgetState[count];
+
         for (int i = 0; i < count; i++) {
             ConstraintWidget child = children.get(i);
             WidgetState widgetState = getWidgetState(child.stringId, null, state);
+            states[i] = widgetState;
             widgetState.update(child, state);
+            String id = widgetState.getPathRelativeId();
+            if (id != null) {
+                widgetState.setPathRelative(getWidgetState(id, null, state));
+            }
         }
+
         calcStagger();
     }
 
@@ -844,6 +854,7 @@ public class Transition implements TypedValues {
         WidgetFrame mEnd;
         WidgetFrame mInterpolated;
         Motion mMotionControl;
+        boolean mNeedSetup = true;
         MotionWidget mMotionWidgetStart;
         MotionWidget mMotionWidgetEnd;
         MotionWidget mMotionWidgetInterpolated;
@@ -886,11 +897,21 @@ public class Transition implements TypedValues {
                 mStart.update(child);
                 mMotionWidgetStart.updateMotion(mMotionWidgetStart);
                 mMotionControl.setStart(mMotionWidgetStart);
+                mNeedSetup = true;
             } else if (state == END) {
                 mEnd.update(child);
                 mMotionControl.setEnd(mMotionWidgetEnd);
+                mNeedSetup = true;
             }
             mParentWidth = -1;
+        }
+
+        /**
+         * Return the id of the widget to animate relative to
+         * @return id of widget or null
+         */
+       String getPathRelativeId() {
+            return mMotionControl.getAnimateRelativeTo();
         }
 
         public WidgetFrame getFrame(int type) {
@@ -909,13 +930,19 @@ public class Transition implements TypedValues {
             // TODO  only update if parentHeight != mParentHeight || parentWidth != mParentWidth) {
             mParentHeight = parentHeight;
             mParentWidth = parentWidth;
-            mMotionControl.setup(parentWidth, parentHeight, 1, System.nanoTime());
-
+            if (mNeedSetup) {
+                mMotionControl.setup(parentWidth, parentHeight, 1, System.nanoTime());
+                mNeedSetup = false;
+            }
             WidgetFrame.interpolate(parentWidth, parentHeight,
                     mInterpolated, mStart, mEnd, transition, progress);
             mInterpolated.interpolatedPos = progress;
             mMotionControl.interpolate(mMotionWidgetInterpolated,
                     progress, System.nanoTime(), mKeyCache);
+        }
+
+        public void setPathRelative(WidgetState widgetState) {
+            mMotionControl.setupRelative( widgetState.mMotionControl);
         }
     }
 

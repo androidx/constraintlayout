@@ -328,13 +328,13 @@ public class LinearSystem {
         return variable;
     }
 
-    private void addError(ArrayRow row) {
-        row.addError(this, SolverVariable.STRENGTH_NONE);
-    }
-
-    private void addSingleError(ArrayRow row, int sign) {
-        addSingleError(row, sign, SolverVariable.STRENGTH_NONE);
-    }
+//    private void addError(ArrayRow row)
+//        row.addError(this, SolverVariable.STRENGTH_NONE);
+//
+//
+//    private void addSingleError(ArrayRow row, int sign)
+//        addSingleError(row, sign, SolverVariable.STRENGTH_NONE);
+//
 
     void addSingleError(ArrayRow row, int sign, int strength) {
         String prefix = null;
@@ -767,7 +767,7 @@ public class LinearSystem {
             System.out.println("\n****************************");
             System.out.println("*       OPTIMIZATION       *");
             System.out.println("* mNumColumns: " + mNumColumns);
-            System.out.println("* GOAL: " + goal);
+            System.out.println("* GOAL: " + goal + " " + b);
             System.out.println("****************************\n");
         }
 
@@ -1402,11 +1402,11 @@ public class LinearSystem {
                 System.out.println("(S) -> " + a + " = " + b + (margin != 0 ? " + " + margin : ""));
             }
             if (b.mIsSynonym) {
-                margin += b.mSynonymDelta;
+                margin += (int) b.mSynonymDelta;
                 b = mCache.mIndexedVariables[b.mSynonym];
             }
             if (a.mIsSynonym) {
-                margin -= a.mSynonymDelta;
+                margin -= (int) a.mSynonymDelta;
                 a = mCache.mIndexedVariables[a.mSynonym];
             } else {
                 a.setSynonym(this, b, 0);
@@ -1441,11 +1441,11 @@ public class LinearSystem {
                         + " " + getDisplayStrength(strength));
             }
             if (b.mIsSynonym) {
-                margin += b.mSynonymDelta;
+                margin += (int) b.mSynonymDelta;
                 b = mCache.mIndexedVariables[b.mSynonym];
             }
             if (a.mIsSynonym) {
-                margin -= a.mSynonymDelta;
+                margin -= (int) a.mSynonymDelta;
                 a = mCache.mIndexedVariables[a.mSynonym];
             } else {
                 a.setSynonym(this, b, margin);

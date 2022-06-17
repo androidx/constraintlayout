@@ -37,7 +37,7 @@ import com.google.accompanist.coil.rememberCoilPainter
 class MainActivity : AppCompatActivity() {
     private var mFrameLayout: FrameLayout? = null
     private var composeNum = 0
-    private val START_NUMBER = 48
+    private val START_NUMBER = 58
     private var demos:ArrayList<CompFunc> = ArrayList()
     var map = HashMap<Int, String>();
     val linkServer = LinkServer()
@@ -162,6 +162,8 @@ class MainActivity : AppCompatActivity() {
         demos.add(object : CompFunc { @Composable override fun Run() { MotionQuantize2() } })
         demos.add(object : CompFunc { @Composable override fun Run() { MotionStagger1() } })
         demos.add(object : CompFunc { @Composable override fun Run() { MotionStagger2() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { MotionOrbit1() } })
+        demos.add(object : CompFunc { @Composable override fun Run() { MotionOrbit2() } })
 
         demos.add(object : CompFunc { @Composable override fun Run() { Example () } })
         demos.add(object : CompFunc { @Composable override fun Run() { RowColExample () } })

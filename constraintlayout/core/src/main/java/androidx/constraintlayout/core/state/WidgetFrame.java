@@ -163,8 +163,8 @@ public class WidgetFrame {
 
         if (start.visibility == ConstraintWidget.GONE) {
             // On visibility gone, keep the same size to do an alpha to zero
-            startX -= endWidth / 2f;
-            startY -= endHeight / 2f;
+            startX -= (int) (endWidth / 2f);
+            startY -= (int) (endHeight / 2f);
             startWidth = endWidth;
             startHeight = endHeight;
             if (Float.isNaN(startAlpha)) {
@@ -175,8 +175,8 @@ public class WidgetFrame {
 
         if (end.visibility == ConstraintWidget.GONE) {
             // On visibility gone, keep the same size to do an alpha to zero
-            endX -= startWidth / 2f;
-            endY -= startHeight / 2f;
+            endX -= (int) (startWidth / 2f);
+            endY -= (int) (startHeight / 2f);
             endWidth = startWidth;
             endHeight = startHeight;
             if (Float.isNaN(endAlpha)) {
@@ -510,11 +510,11 @@ public class WidgetFrame {
             String vStr = v.content();
             if (vStr.matches("#[0-9a-fA-F]+")) {
                 int color = Integer.parseInt(vStr.substring(1), 16);
-                setCustomAttribute(k.content(), TypedValues.Custom.TYPE_COLOR, color);
+                setCustomAttribute(name, TypedValues.Custom.TYPE_COLOR, color);
             } else if (v instanceof CLNumber) {
-                setCustomAttribute(k.content(), TypedValues.Custom.TYPE_FLOAT, v.getFloat());
+                setCustomAttribute(name, TypedValues.Custom.TYPE_FLOAT, v.getFloat());
             } else {
-                setCustomAttribute(k.content(), TypedValues.Custom.TYPE_STRING, vStr);
+                setCustomAttribute(name, TypedValues.Custom.TYPE_STRING, vStr);
 
             }
         }

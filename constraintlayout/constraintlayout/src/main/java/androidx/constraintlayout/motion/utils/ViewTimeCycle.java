@@ -261,8 +261,8 @@ public abstract class ViewTimeCycle extends TimeCycleSplineSet {
         SparseArray<ConstraintAttribute> mConstraintAttributeList;
         SparseArray<float[]> mWaveProperties = new SparseArray<>();
         float[] mTempValues;
-        float[] mCache;
 
+        @SuppressWarnings("StringSplitter")
         public CustomSet(String attribute, SparseArray<ConstraintAttribute> attrList) {
             mAttributeName = attribute.split(",")[1];
             mConstraintAttributeList = attrList;

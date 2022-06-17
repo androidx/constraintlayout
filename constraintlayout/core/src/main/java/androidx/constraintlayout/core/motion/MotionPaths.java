@@ -47,6 +47,7 @@ public class MotionPaths implements Comparable<MotionPaths> {
     public static final int CARTESIAN = MotionKeyPosition.TYPE_CARTESIAN;
     public static final int SCREEN = MotionKeyPosition.TYPE_SCREEN;
     static String[] sNames = {"position", "x", "y", "width", "height", "pathRotate"};
+    public String mId;
     Easing mKeyFrameEasing;
     int mDrawPath = 0;
     float mTime;
@@ -58,7 +59,7 @@ public class MotionPaths implements Comparable<MotionPaths> {
     float mPathRotate = Float.NaN;
     float mProgress = Float.NaN;
     int mPathMotionArc = UNSET;
-    int mAnimateRelativeTo = UNSET;
+    String mAnimateRelativeTo = null;
     float mRelativeAngle = Float.NaN;
     Motion mRelativeToController = null;
 
@@ -121,7 +122,7 @@ public class MotionPaths implements Comparable<MotionPaths> {
             MotionKeyPosition c,
             MotionPaths startTimePoint,
             MotionPaths endTimePoint) {
-        if (startTimePoint.mAnimateRelativeTo != UNSET) {
+        if (startTimePoint.mAnimateRelativeTo != null) {
             initPolar(parentWidth, parentHeight, c, startTimePoint, endTimePoint);
             return;
         }
@@ -157,6 +158,7 @@ public class MotionPaths implements Comparable<MotionPaths> {
         mHeight = (int) (s.mHeight + scaleY * scaleHeight);
         float startfactor = 1 - position;
         float endfactor = position;
+
         switch (c.mPositionType) {
             case MotionKeyPosition.TYPE_SCREEN:
                 this.mX = Float.isNaN(c.mPercentX) ? (position * (e.mX - s.mX) + s.mX)
@@ -198,7 +200,6 @@ public class MotionPaths implements Comparable<MotionPaths> {
             mY = (float) (Math.atan2(dy, dx) + Math.PI / 2);
         } else {
             mY = (float) Math.toRadians(mRelativeAngle);
-
         }
     }
 
@@ -926,7 +927,10 @@ public class MotionPaths implements Comparable<MotionPaths> {
         point.mDrawPath = c.mMotion.mDrawPath;
         point.mAnimateCircleAngleTo = c.mMotion.mAnimateCircleAngleTo;
         point.mProgress = c.mPropertySet.mProgress;
-        point.mRelativeAngle = 0; // c.layout.circleAngle;
+        if (c.mWidgetFrame != null && c.mWidgetFrame.widget != null) {
+            point.mRelativeAngle = c.mWidgetFrame.widget.mCircleConstraintAngle;
+        }
+
         Set<String> at = c.getCustomAttributeNames();
         for (String s : at) {
             CustomVariable attr = c.getCustomAttribute(s);

@@ -45,6 +45,7 @@ public class DependencyGraph {
     private boolean mNeedRedoMeasures = true;
     private ConstraintWidgetContainer mContainer;
     private ArrayList<WidgetRun> mRuns = new ArrayList<>();
+    private static final boolean DEBUG = false;
 
     // TODO: Unused, should we delete?
     private ArrayList<RunGroup> mRunGroups = new ArrayList<>();
@@ -731,8 +732,9 @@ public class DependencyGraph {
             }
             run.apply();
         }
-
-//        displayGraph();
+        if (DEBUG) {
+            displayGraph();
+        }
     }
 
 
@@ -988,7 +990,7 @@ public class DependencyGraph {
         StringBuilder sb = new StringBuilder(content);
 
         if (!(root instanceof HelperReferences) && start.mDependencies.isEmpty()
-                && end.mDependencies.isEmpty() & start.mTargets.isEmpty()
+                && end.mDependencies.isEmpty() && start.mTargets.isEmpty()
                 && end.mTargets.isEmpty()) {
             return content;
         }
