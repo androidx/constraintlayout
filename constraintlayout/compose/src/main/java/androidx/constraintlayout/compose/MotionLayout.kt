@@ -56,10 +56,10 @@ import kotlinx.coroutines.launch
 inline fun MotionLayout(
     start: ConstraintSet,
     end: ConstraintSet,
+    modifier: Modifier = Modifier,
     transition: Transition? = null,
     progress: Float,
     debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
-    modifier: Modifier = Modifier,
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
     crossinline content: @Composable MotionLayoutScope.() -> Unit
 ) {
@@ -87,8 +87,8 @@ inline fun MotionLayout(
 inline fun MotionLayout(
     motionScene: MotionScene,
     progress: Float,
-    debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     modifier: Modifier = Modifier,
+    debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
     crossinline content: @Composable (MotionLayoutScope.() -> Unit),
 ) {
@@ -118,10 +118,10 @@ inline fun MotionLayout(
 @Composable
 inline fun MotionLayout(
     motionScene: MotionScene,
-    constraintSetName: String? = null,
-    animationSpec: AnimationSpec<Float> = tween<Float>(),
-    debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     modifier: Modifier = Modifier,
+    constraintSetName: String? = null,
+    animationSpec: AnimationSpec<Float> = tween(),
+    debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
     noinline finishedAnimationListener: (() -> Unit)? = null,
     crossinline content: @Composable (MotionLayoutScope.() -> Unit)
@@ -144,11 +144,11 @@ inline fun MotionLayout(
 inline fun MotionLayout(
     start: ConstraintSet,
     end: ConstraintSet,
+    modifier: Modifier = Modifier,
     transition: Transition? = null,
     progress: Float,
     debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     informationReceiver: LayoutInformationReceiver? = null,
-    modifier: Modifier = Modifier,
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
     crossinline content: @Composable (MotionLayoutScope.() -> Unit)
 ) {
@@ -166,15 +166,15 @@ inline fun MotionLayout(
     )
 }
 
-@OptIn(ExperimentalMotionApi::class)
+@ExperimentalMotionApi
 @PublishedApi
 @Composable
 internal inline fun MotionLayoutCore(
     motionScene: MotionScene,
-    constraintSetName: String? = null,
-    animationSpec: AnimationSpec<Float> = tween<Float>(),
-    debugFlag: MotionLayoutDebugFlags = MotionLayoutDebugFlags.NONE,
     modifier: Modifier = Modifier,
+    constraintSetName: String? = null,
+    animationSpec: AnimationSpec<Float> = tween(),
+    debugFlag: MotionLayoutDebugFlags = MotionLayoutDebugFlags.NONE,
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
     noinline finishedAnimationListener: (() -> Unit)? = null,
     crossinline content: @Composable (MotionLayoutScope.() -> Unit)
@@ -211,7 +211,8 @@ internal inline fun MotionLayoutCore(
     }
 
     val targetConstraintSet = remember(motionScene, constraintSetName) {
-        val targetEndContent = constraintSetName?.let { motionScene.getConstraintSet(constraintSetName) }
+        val targetEndContent =
+            constraintSetName?.let { motionScene.getConstraintSet(constraintSetName) }
         targetEndContent?.let { ConstraintSet(targetEndContent) }
     }
 
@@ -270,8 +271,8 @@ internal inline fun MotionLayoutCore(
 internal inline fun MotionLayoutCore(
     motionScene: MotionScene,
     progress: Float,
-    debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     modifier: Modifier = Modifier,
+    debug: EnumSet<MotionLayoutDebugFlags> = EnumSet.of(MotionLayoutDebugFlags.NONE),
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
     crossinline content: @Composable (MotionLayoutScope.() -> Unit),
 ) {
@@ -316,11 +317,11 @@ internal inline fun MotionLayoutCore(
 internal inline fun MotionLayoutCore(
     start: ConstraintSet,
     end: ConstraintSet,
+    modifier: Modifier = Modifier,
     transition: TransitionImpl? = null,
     motionProgress: MotionProgress,
     debugFlag: MotionLayoutDebugFlags = MotionLayoutDebugFlags.NONE,
     informationReceiver: LayoutInformationReceiver? = null,
-    modifier: Modifier = Modifier,
     optimizationLevel: Int = Optimizer.OPTIMIZATION_STANDARD,
     crossinline content: @Composable MotionLayoutScope.() -> Unit
 ) {
@@ -448,6 +449,7 @@ internal inline fun MotionLayoutCore(
     )
 }
 
+@Suppress("unused")
 @LayoutScopeMarker
 class MotionLayoutScope @PublishedApi internal constructor(
     measurer: MotionMeasurer,
@@ -611,7 +613,7 @@ internal fun UpdateWithForcedIfNoUserChange(
     val forcedProgress = informationReceiver.getForcedProgress()
 
     // Save the initial progress
-    val lastUserProgress = remember { Ref<Float>().apply { value = currentUserProgress} }
+    val lastUserProgress = remember { Ref<Float>().apply { value = currentUserProgress } }
 
     if (!forcedProgress.isNaN() && lastUserProgress.value == currentUserProgress) {
         // Use the forced progress if the user progress hasn't changed
