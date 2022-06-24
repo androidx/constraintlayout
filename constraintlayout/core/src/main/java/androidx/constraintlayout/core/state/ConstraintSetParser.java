@@ -780,7 +780,6 @@ public class ConstraintSetParser {
                             CLArray array = (CLArray) chainElement;
                             if (array.size() > 0) {
                                 String id = array.get(0).content();
-                                chain.add(id);
                                 float weight = Float.NaN;
                                 float preMargin = Float.NaN;
                                 float postMargin = Float.NaN;

@@ -16,6 +16,8 @@
 
 package androidx.constraintlayout.core.state.helpers;
 
+import static androidx.constraintlayout.core.widgets.ConstraintWidget.UNKNOWN;
+
 import androidx.constraintlayout.core.state.HelperReference;
 import androidx.constraintlayout.core.state.State;
 
@@ -70,12 +72,12 @@ public class ChainReference extends HelperReference {
 
   protected float getWeight(String id) {
        if (mMapWeights == null) {
-           return -1;
+           return UNKNOWN;
        }
        if (mMapWeights.containsKey(id)) {
            return mMapWeights.get(id);
        }
-       return 1;
+       return UNKNOWN;
     }
 
     protected float getPostMargin(String id) {
